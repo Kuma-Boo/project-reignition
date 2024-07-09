@@ -21,6 +21,9 @@ public partial class PteroEggManager : Node3D
 
 	public override void _Ready()
 	{
+		StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveNestStatus));
+		CharacterController.instance.Connect(CharacterController.SignalName.Knockback, new(this, MethodName.Frighten));
+
 		for (int i = 0; i < GetChildCount(); i++)
 		{
 			Node node = GetChild(i);
@@ -37,6 +40,23 @@ public partial class PteroEggManager : Node3D
 			eggs[i].SetType(eggModels[type].Instantiate<Node3D>());
 			nests[GenerateEggPair(i)].SetType(signModels[type].Instantiate<Node3D>());
 		}
+	}
+
+	private void SaveNestStatus()
+	{
+		for (int i = 0; i < eggs.Count; i++)
+		{
+			eggs[i].IgnoreRespawn = eggs[i].IsReturnedToNest;
+		}
+	}
+
+	private void Frighten()
+	{
+		if (heldEggs.Count == 0)
+			return;
+
+		heldEggs[0].Frighten();
+		heldEggs.RemoveAt(0);
 	}
 
 	private Array<int> excludedTypes = []; // Eggs that have already been generated

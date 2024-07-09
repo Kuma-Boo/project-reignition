@@ -23,13 +23,12 @@ public partial class PteroEgg : Area3D
 	/// <summary> Has the egg been returned to the nest successfully? </summary>
 	public bool IsReturnedToNest { get; private set; }
 	/// <summary> Has this egg been saved at a checkpoint? </summary>
-	private bool ignoreRespawn;
+	public bool IgnoreRespawn { get; set; }
 
-	private float followDistance;
 	private Vector3 followVelocity;
 	private readonly float MinDistance = .5f;
 	private readonly float FollowDistanceIncrement = 1.5f;
-	private readonly float FollowSmoothing = 10.0f;
+	private readonly float FollowSmoothing = 5.0f;
 
 	private float returnTravelRatio;
 	private SpawnData spawnData;
@@ -40,11 +39,8 @@ public partial class PteroEgg : Area3D
 	{
 		Root = GetNodeOrNull<Node3D>(root);
 		Animator = GetNodeOrNull<AnimationPlayer>(animator);
-
 		spawnData = new SpawnData(GetParent(), Transform);
 		StageSettings.instance.ConnectRespawnSignal(this);
-		StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveNestStatus));
-		Character.Connect(CharacterController.SignalName.Knockback, new(this, MethodName.Frighten));
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -52,54 +48,59 @@ public partial class PteroEgg : Area3D
 		if (IsReturnedToNest) return;
 
 		if (IsHeld)
-		{
-			float smoothing = FollowSmoothing;
-			Vector3 targetPosition = Character.GlobalPosition + (Character.PathFollower.Back() * followDistance);
-
-			int eggIndex = PteroEggManager.heldEggs.IndexOf(this);
-			Vector3 referencePosition = eggIndex == 0 ? Character.GlobalPosition : PteroEggManager.heldEggs[eggIndex - 1].GlobalPosition;
-			float distanceSquared = GlobalPosition.DistanceSquaredTo(referencePosition);
-			if (distanceSquared < Mathf.Pow(MinDistance, 2.0f)) // Extra snappy when things are too close
-			{
-				smoothing = 5.0f;
-				targetPosition = GlobalPosition - (GlobalPosition.DirectionTo(referencePosition) * MinDistance);
-			}
-
-			// Update position to trail player
-			GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref followVelocity, smoothing * PhysicsManager.physicsDelta);
-		}
+			UpdateHeldPosition();
 		else if (IsReturningToNest)
+			ReturnToNest();
+	}
+
+	private void UpdateHeldPosition()
+	{
+		int eggIndex = PteroEggManager.heldEggs.IndexOf(this);
+		Vector3 referencePosition = eggIndex == 0 ? Character.GlobalPosition : PteroEggManager.heldEggs[eggIndex - 1].GlobalPosition;
+		float distanceSquared = GlobalPosition.DistanceSquaredTo(referencePosition);
+
+		float smoothing = FollowSmoothing;
+		Vector3 targetPosition = referencePosition + (Character.PathFollower.Back() * FollowDistanceIncrement);
+
+		if (distanceSquared < Mathf.Pow(MinDistance, 2.0f)) // Extra snappy when things are too close
 		{
-			if (Mathf.IsZeroApprox(returnTravelRatio))
-				Animator.Play("returned", .2f);
+			smoothing = 3.0f;
+			targetPosition = GlobalPosition - (GlobalPosition.DirectionTo(referencePosition) * MinDistance);
+		}
 
-			returnTravelRatio = Mathf.MoveToward(returnTravelRatio, 1f, PhysicsManager.physicsDelta);
-			GlobalPosition = returnArc.InterpolatePositionRatio(returnTravelRatio);
+		// Update position to trail player
+		GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref followVelocity, smoothing * PhysicsManager.physicsDelta);
+	}
 
-			if (Mathf.IsEqualApprox(returnTravelRatio, 1))
-			{
-				Animator.Play("sleep", .1f);
-				IsReturnedToNest = true;
-				IsReturningToNest = false;
-				EmitSignal(SignalName.Returned);
-			}
+	private void ReturnToNest()
+	{
+		if (Mathf.IsZeroApprox(returnTravelRatio))
+			Animator.Play("returned", .2f);
+
+		returnTravelRatio = Mathf.MoveToward(returnTravelRatio, 1f, PhysicsManager.physicsDelta);
+		GlobalPosition = returnArc.InterpolatePositionRatio(returnTravelRatio);
+
+		if (Mathf.IsEqualApprox(returnTravelRatio, 1))
+		{
+			Animator.Play("sleep", .1f);
+			IsReturnedToNest = true;
+			IsReturningToNest = false;
+			EmitSignal(SignalName.Returned);
 		}
 	}
 
-	private void SaveNestStatus() => ignoreRespawn = IsReturnedToNest;
+	private void SaveNestStatus() => IgnoreRespawn = IsReturnedToNest;
 
 	public void Frighten() // Called when the player takes damage or respawns
 	{
 		if (!IsHeld) return;
 		if (PteroEggManager.heldEggs.IndexOf(this) == 0)
 			Animator.Play("frighten");
-
-		followDistance -= FollowDistanceIncrement;
 	}
 
 	private void Respawn()
 	{
-		if (ignoreRespawn) return; // Don't respawn if we're already at the nest. Don't force the player to redo stuff they already did.
+		if (IgnoreRespawn) return; // Don't respawn if we're already at the nest. Don't force the player to redo stuff they already did.
 
 		if (IsHeld)
 			PteroEggManager.heldEggs.Remove(this);
@@ -123,7 +124,7 @@ public partial class PteroEgg : Area3D
 		if (IsHeld) return;
 
 		PteroEggManager.heldEggs.Add(this);
-		followDistance = FollowDistanceIncrement * PteroEggManager.heldEggs.Count;
+		Animator.Play("pick-up", .1f);
 	}
 
 	public void ReturnToNest(PteroNest nest)
@@ -134,6 +135,6 @@ public partial class PteroEgg : Area3D
 		IsReturningToNest = true;
 
 		returnTravelRatio = 0f;
-		returnArc = LaunchSettings.Create(GlobalPosition, nest.GlobalPosition, 4f, true);
+		returnArc = LaunchSettings.Create(GlobalPosition, nest.GlobalPosition, 5f, true);
 	}
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://ctht326ugrail"]
+[gd_scene load_steps=43 format=3 uid="uid://ctht326ugrail"]
 
 [ext_resource type="Resource" uid="uid://c1so6lm4litfn" path="res://resource/level data/dinosaur jungle/Act3DinoEgg.tres" id="2_rdr8o"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_d4xxv"]
@@ -36,21 +36,48 @@
 [ext_resource type="PackedScene" uid="uid://8imymng7so3h" path="res://object/enemy/majin/data/dino jungle/BlueMajin.tscn" id="33_5onlh"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="34_8p3er"]
 [ext_resource type="PackedScene" uid="uid://dadka31wrx5f4" path="res://object/enemy/majin/data/dino jungle/GreenMajin.tscn" id="35_6rhcf"]
-[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="36_g1jfw"]
-[ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="37_vcc2n"]
+[ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="38_uc7po"]
+
+[sub_resource type="Curve" id="Curve_kpny5"]
+min_value = -2.0
+max_value = 2.0
+_data = [Vector2(0, 2.98023e-08), 0.0, 0.0, 0, 0, Vector2(0.3, -2), 0.0, 0.0, 0, 0, Vector2(0.7, 2), 0.0, 0.0, 0, 0, Vector2(1, 2.98023e-08), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_exeik"]
+min_value = -2.0
+_data = [Vector2(0, 2.98023e-08), 0.0, 5.71009, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.7, -2), 0.0, 0.0, 0, 0, Vector2(1, 2.98023e-08), 15.5569, 0.0, 0, 0]
+point_count = 4
 
 [sub_resource type="Curve" id="Curve_sbtd2"]
 max_value = 3.0
 _data = [Vector2(0, 0), 0.0, 0.912133, 0, 0, Vector2(1, 3), 4.88802, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="BoxShape3D" id="91"]
-size = Vector3(9.4, 11.5, 2)
+[sub_resource type="Curve" id="Curve_tu72v"]
+min_value = -2.0
+max_value = 2.0
+_data = [Vector2(0, 2.98023e-08), 0.0, 8.37917, 0, 0, Vector2(0.3, 1.2), 0.0, 0.0, 0, 0, Vector2(0.7, -1.2), 0.0, 0.0, 0, 0, Vector2(1, 2.98023e-08), 8.80306, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_yp0sg"]
+min_value = -1.0
+_data = [Vector2(0, 0), 0.0, 3.29252, 0, 0, Vector2(0.3, 0.4), 0.0, 0.0, 0, 0, Vector2(0.7, -0.8), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), 5.0752, 0.0, 0, 0]
+point_count = 4
 
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("20_8sfob")]
 Data = ExtResource("2_rdr8o")
+
+[node name="Head" parent="Static/Common/Dino" index="2"]
+transform = Transform3D(0.999979, -8.9407e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -1.01328e-06, 1, 0.000292879, 1.33514e-05, 19.7418, 38.526)
+
+[node name="DemoCamera" parent="Static" index="5"]
+transform = Transform3D(-0.748955, 0, 0.662621, 0, 1, 0, -0.662621, 0, -0.748955, 119.668, 35.9585, -70.5782)
+
+[node name="Camera" parent="Static/DemoCamera" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.978148, 0.207912, 0, -0.207912, 0.978148, 0, 0, 0)
 
 [node name="PteroEggAct" type="Node3D" parent="."]
 
@@ -60,97 +87,101 @@ metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="PteroEggAct/SpawnPosition" instance=ExtResource("3_d4xxv")]
 
-[node name="Eggs" type="Node3D" parent="PteroEggAct"]
+[node name="EggManager" type="Node3D" parent="PteroEggAct"]
 script = ExtResource("3_sb6wl")
 eggModels = Array[PackedScene]([ExtResource("5_vx1bv"), ExtResource("6_8o175"), ExtResource("7_c0185"), ExtResource("8_v7j0q"), ExtResource("9_4bx44"), ExtResource("10_cjbhd"), ExtResource("11_ka0tt"), ExtResource("12_3jluy"), ExtResource("13_ty2l6")])
 signModels = Array[PackedScene]([ExtResource("14_2g018"), ExtResource("15_uibsg"), ExtResource("16_jdbi7"), ExtResource("17_5p0w1"), ExtResource("18_v2apd"), ExtResource("19_q5svs"), ExtResource("20_5om1x"), ExtResource("21_rojyr"), ExtResource("22_6va58")])
 
-[node name="PteroEgg1" parent="PteroEggAct/Eggs" instance=ExtResource("22_00ptn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6, -2, 25.6)
+[node name="PteroEgg1" parent="PteroEggAct/EggManager" instance=ExtResource("22_00ptn")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 7.6, -2, 25.6)
 
-[node name="PteroEgg2" parent="PteroEggAct/Eggs" instance=ExtResource("22_00ptn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -91.9, -1.63872, 202.6)
+[node name="PteroEgg2" parent="PteroEggAct/EggManager" instance=ExtResource("22_00ptn")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -91.9, -1.63872, 202.6)
 
-[node name="PteroEgg3" parent="PteroEggAct/Eggs" instance=ExtResource("22_00ptn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -139, 7, -42.8)
+[node name="PteroEgg3" parent="PteroEggAct/EggManager" instance=ExtResource("22_00ptn")]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, -139, 7, -42.8)
 
-[node name="PteroEgg4" parent="PteroEggAct/Eggs" instance=ExtResource("22_00ptn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -86.3, 5.8, -31.4)
+[node name="PteroEgg4" parent="PteroEggAct/EggManager" instance=ExtResource("22_00ptn")]
+transform = Transform3D(0.444369, 0, 0.895844, 0, 1, 0, -0.895844, 0, 0.444369, -86.3, 5.8, -31.4)
 
-[node name="EggNest1" parent="PteroEggAct/Eggs" instance=ExtResource("23_xhqyv")]
+[node name="EggNest1" parent="PteroEggAct/EggManager" instance=ExtResource("23_xhqyv")]
 transform = Transform3D(-0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, -0.422618, -16.4, 24.3, 150.6)
 
-[node name="EggNest2" parent="PteroEggAct/Eggs" instance=ExtResource("23_xhqyv")]
+[node name="EggNest2" parent="PteroEggAct/EggManager" instance=ExtResource("23_xhqyv")]
 transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, -168, 5.9, 62.5)
 
-[node name="EggNest3" parent="PteroEggAct/Eggs" instance=ExtResource("23_xhqyv")]
+[node name="EggNest3" parent="PteroEggAct/EggManager" instance=ExtResource("23_xhqyv")]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -119.3, -2.1, -75.1)
 
-[node name="EggNest4" parent="PteroEggAct/Eggs" instance=ExtResource("23_xhqyv")]
+[node name="EggNest4" parent="PteroEggAct/EggManager" instance=ExtResource("23_xhqyv")]
 transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, -91.3, 2.2, 46.9)
 
 [node name="Start" type="Node3D" parent="PteroEggAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.385, 0, 4.639)
 
 [node name="Rings1" type="Node3D" parent="PteroEggAct/Start"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.148, 0, -6.918)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.948, -1.2, -7.318)
 script = ExtResource("24_0cv4e")
 Generate = false
-Source = null
+Source = ExtResource("25_wc55u")
 Amount = 6
-Shape = 0
-Orientation = 0
+Shape = 2
+Path = NodePath("../../../Static/Path/LeftPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Ring7" parent="PteroEggAct/Start/Rings1" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0621872, -1.25, -0.152366)
+[node name="Child01" parent="PteroEggAct/Start/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000160217, 0, -6.58035e-05)
 
-[node name="Ring8" parent="PteroEggAct/Start/Rings1" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.92496, -1.25, 0.620561)
+[node name="Child02" parent="PteroEggAct/Start/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.85824, 0, 0.755513)
 
-[node name="Ring9" parent="PteroEggAct/Start/Rings1" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.78051, -1.25, 1.40903)
+[node name="Child03" parent="PteroEggAct/Start/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70945, 0, 1.53242)
 
-[node name="Ring10" parent="PteroEggAct/Start/Rings1" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.61445, -1.25, 2.2111)
+[node name="Child04" parent="PteroEggAct/Start/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55134, 0, 2.33531)
 
-[node name="Ring11" parent="PteroEggAct/Start/Rings1" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.45959, -1.25, 3.04657)
+[node name="Child05" parent="PteroEggAct/Start/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.38137, 0, 3.16949)
 
-[node name="Ring12" parent="PteroEggAct/Start/Rings1" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2761, -1.25, 3.90424)
+[node name="Child06" parent="PteroEggAct/Start/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.19643, 0, 4.04117)
 
 [node name="Rings2" type="Node3D" parent="PteroEggAct/Start"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.148, 0, -6.918)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.348, -1.2, -6.218)
 script = ExtResource("24_0cv4e")
 Generate = false
-Source = null
+Source = ExtResource("25_wc55u")
 Amount = 6
-Shape = 0
-Orientation = 0
+Shape = 2
+Path = NodePath("../../../Static/Path/LeftPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Ring" parent="PteroEggAct/Start/Rings2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.318012, -1.25, 0.772539)
+[node name="Child01" parent="PteroEggAct/Start/Rings2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.05176e-05, 0, 1.43051e-05)
 
-[node name="Ring2" parent="PteroEggAct/Start/Rings2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.53768, -1.25, 1.54252)
+[node name="Child02" parent="PteroEggAct/Start/Rings2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.84747, 0, 0.75154)
 
-[node name="Ring3" parent="PteroEggAct/Start/Rings2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.38445, -1.25, 2.32726)
+[node name="Child03" parent="PteroEggAct/Start/Rings2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.68507, 0, 1.52325)
 
-[node name="Ring4" parent="PteroEggAct/Start/Rings2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.20771, -1.25, 3.12464)
+[node name="Child04" parent="PteroEggAct/Start/Rings2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5105, 0, 2.3196)
 
-[node name="Ring5" parent="PteroEggAct/Start/Rings2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.03962, -1.25, 3.95411)
+[node name="Child05" parent="PteroEggAct/Start/Rings2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.32085, 0, 3.14555)
 
-[node name="Ring6" parent="PteroEggAct/Start/Rings2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.84001, -1.25, 4.80414)
+[node name="Child06" parent="PteroEggAct/Start/Rings2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.1123, 0, 4.00683)
 
 [node name="Pearl1" type="Node3D" parent="PteroEggAct/Start"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.559, 0, 3.321)
@@ -351,7 +382,7 @@ transform = Transform3D(-0.984806, 0, 0.173654, 0, 1, 0, -0.173654, 0, -0.984806
 "Attack Settings/Flame Aggression Radius" = 20
 "Attack Settings/Attack Instantly" = false
 
-[node name="Rings" type="Node3D" parent="PteroEggAct/LotusGroup"]
+[node name="Rings1" type="Node3D" parent="PteroEggAct/LotusGroup"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.762, 8.942, 73.008)
 script = ExtResource("24_0cv4e")
 Generate = false
@@ -362,28 +393,28 @@ Orientation = 0
 "Ring Size" = 3.0
 "Ring Ratio" = 1.0
 
-[node name="Child01" parent="PteroEggAct/LotusGroup/Rings" instance=ExtResource("25_wc55u")]
+[node name="Child01" parent="PteroEggAct/LotusGroup/Rings1" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
 
-[node name="Child02" parent="PteroEggAct/LotusGroup/Rings" instance=ExtResource("25_wc55u")]
+[node name="Child02" parent="PteroEggAct/LotusGroup/Rings1" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.12132, 0, 2.12132)
 
-[node name="Child03" parent="PteroEggAct/LotusGroup/Rings" instance=ExtResource("25_wc55u")]
+[node name="Child03" parent="PteroEggAct/LotusGroup/Rings1" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.31134e-07, 0, 3)
 
-[node name="Child04" parent="PteroEggAct/LotusGroup/Rings" instance=ExtResource("25_wc55u")]
+[node name="Child04" parent="PteroEggAct/LotusGroup/Rings1" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.12132, 0, 2.12132)
 
-[node name="Child05" parent="PteroEggAct/LotusGroup/Rings" instance=ExtResource("25_wc55u")]
+[node name="Child05" parent="PteroEggAct/LotusGroup/Rings1" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -2.62268e-07)
 
-[node name="Child06" parent="PteroEggAct/LotusGroup/Rings" instance=ExtResource("25_wc55u")]
+[node name="Child06" parent="PteroEggAct/LotusGroup/Rings1" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.12132, 0, -2.12132)
 
-[node name="Child07" parent="PteroEggAct/LotusGroup/Rings" instance=ExtResource("25_wc55u")]
+[node name="Child07" parent="PteroEggAct/LotusGroup/Rings1" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.57746e-08, 0, -3)
 
-[node name="Child08" parent="PteroEggAct/LotusGroup/Rings" instance=ExtResource("25_wc55u")]
+[node name="Child08" parent="PteroEggAct/LotusGroup/Rings1" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.12132, 0, -2.12132)
 
 [node name="Rings2" type="Node3D" parent="PteroEggAct/LotusGroup"]
@@ -431,47 +462,49 @@ distance = 14.0
 
 [node name="Boat1" type="Node3D" parent="PteroEggAct"]
 
-[node name="Rings" type="Node3D" parent="PteroEggAct/Boat1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.37, -5.187, 149.257)
+[node name="Rings1" type="Node3D" parent="PteroEggAct/Boat1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.37, -5, 149.257)
 script = ExtResource("24_0cv4e")
 Generate = false
-Source = null
+Source = ExtResource("25_wc55u")
 Amount = 8
-Shape = 0
-Orientation = 0
+Shape = 2
+Path = NodePath("../../../Static/Path/Boat1Path")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
 Spacing = 2.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Ring9" parent="PteroEggAct/Boat1/Rings" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00500488, 0.186999, -0.0129395)
+[node name="Child01" parent="PteroEggAct/Boat1/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.14441e-05, 0, 1.52588e-05)
 
-[node name="Ring10" parent="PteroEggAct/Boat1/Rings" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.68035, 0.186999, 1.09465)
+[node name="Child02" parent="PteroEggAct/Boat1/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.66478, 0, 1.10011)
 
-[node name="Ring11" parent="PteroEggAct/Boat1/Rings" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.14386, 0.186999, 2.45444)
+[node name="Child03" parent="PteroEggAct/Boat1/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.12749, 0, 2.45743)
 
-[node name="Ring12" parent="PteroEggAct/Boat1/Rings" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.37575, 0.186999, 4.02042)
+[node name="Child04" parent="PteroEggAct/Boat1/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.36216, 0, 4.02576)
 
-[node name="Ring13" parent="PteroEggAct/Boat1/Rings" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.39252, 0.186999, 5.75363)
+[node name="Child05" parent="PteroEggAct/Boat1/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.37337, 0, 5.74777)
 
-[node name="Ring14" parent="PteroEggAct/Boat1/Rings" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.20728, 0.186999, 7.58968)
+[node name="Child06" parent="PteroEggAct/Boat1/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.18527, 0, 7.57301)
 
-[node name="Ring15" parent="PteroEggAct/Boat1/Rings" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.85036, 0.186999, 9.48726)
+[node name="Child07" parent="PteroEggAct/Boat1/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.82849, 0, 9.46489)
 
-[node name="Ring16" parent="PteroEggAct/Boat1/Rings" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.35271, 0.186999, 11.4238)
+[node name="Child08" parent="PteroEggAct/Boat1/Rings1" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.33204, 0, 11.3991)
 
 [node name="WaterRock" parent="PteroEggAct/Boat1" instance=ExtResource("29_lns4b")]
 transform = Transform3D(0.851116, 0, 0.524978, 0, 1, 0, -0.524978, 0, 0.851116, -51.485, -5.72845, 165.772)
 
 [node name="Rings2" type="Node3D" parent="PteroEggAct/Boat1"]
-transform = Transform3D(-0.998308, 0, 0.0581386, 0, 1, 0, -0.0581386, 0, -0.998308, -58.6858, -5.187, 177.871)
+transform = Transform3D(-0.998308, 0, 0.0581386, 0, 1, 0, -0.0581386, 0, -0.998308, -58.686, -5, 177.871)
 script = ExtResource("24_0cv4e")
 Generate = false
 Source = null
@@ -506,7 +539,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
 
 [node name="Rings3" type="Node3D" parent="PteroEggAct/Boat1"]
-transform = Transform3D(-0.998308, 0, 0.0581386, 0, 1, 0, -0.0581386, 0, -0.998308, -57.2962, -5.187, 177.952)
+transform = Transform3D(-0.998308, 0, 0.0581386, 0, 1, 0, -0.0581386, 0, -0.998308, -57.296, -5, 177.952)
 script = ExtResource("24_0cv4e")
 Generate = false
 Source = null
@@ -544,82 +577,82 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
 transform = Transform3D(-0.727377, 0, 0.686238, 0, 1, 0, -0.686238, 0, -0.727377, -59.825, 0, 214.293)
 script = ExtResource("24_0cv4e")
 Generate = false
-Source = null
+Source = ExtResource("25_wc55u")
 Amount = 20
 Shape = 0
-Orientation = 0
-Spacing = 0.0
-"Horizontal Offset" = null
+Orientation = 1
+Spacing = 1.4
+"Horizontal Offset" = SubResource("Curve_kpny5")
 "Vertical Offset" = null
 
-[node name="Ring9" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+[node name="Child01" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 0, 0)
 
-[node name="Ring10" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.59505, 1.36842, 0)
+[node name="Child02" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.163073, 1.4, 0)
 
-[node name="Ring11" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.144912, 2.73684, 0)
+[node name="Child03" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565896, 2.8, 0)
 
-[node name="Ring12" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.294935, 4.10526, 0)
+[node name="Child04" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.07887, 4.2, 0)
 
-[node name="Ring13" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.669012, 5.47368, 0)
+[node name="Child05" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.57241, 5.6, 0)
 
-[node name="Ring14" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92184, 6.84211, 0)
+[node name="Child06" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.91692, 7, 0)
 
-[node name="Ring15" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.998383, 8.21053, 0)
+[node name="Child07" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.98179, 8.4, 0)
 
-[node name="Ring16" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8946, 9.57895, 0)
+[node name="Child08" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.68893, 9.8, 0)
 
-[node name="Ring29" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.660556, 10.9474, 0)
+[node name="Child09" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1227, 11.2, 0)
 
-[node name="Ring30" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.340524, 12.3158, 0)
+[node name="Child10" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.392459, 12.6, 0)
 
-[node name="Ring31" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0212251, 13.6842, 0)
+[node name="Child11" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.392459, 14, 0)
 
-[node name="Ring32" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38042, 15.0526, 0)
+[node name="Child12" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1227, 15.4, 0)
 
-[node name="Ring33" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.69279, 16.4211, 0)
+[node name="Child13" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.68893, 16.8, 0)
 
-[node name="Ring34" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.914063, 17.7895, 0)
+[node name="Child14" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.98179, 18.2, 0)
 
-[node name="Ring35" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.999967, 19.1579, 0)
+[node name="Child15" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91692, 19.6, 0)
 
-[node name="Ring36" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.911682, 20.5263, 0)
+[node name="Child16" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.57241, 21, 0)
 
-[node name="Ring37" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.667449, 21.8947, 0)
+[node name="Child17" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.07887, 22.4, 0)
 
-[node name="Ring38" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309599, 23.2632, 0)
+[node name="Child18" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565896, 23.8, 0)
 
-[node name="Ring39" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.119535, 24.6316, 0)
+[node name="Child19" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.163073, 25.2, 0)
 
-[node name="Ring40" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.577617, 26, 0)
+[node name="Child20" parent="PteroEggAct/Boat1/Rings4" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 26.6, 0)
 
 [node name="Switch" parent="PteroEggAct/Boat1" instance=ExtResource("30_5pmxi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -89.201, -1.54498, 214.719)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -86.201, -1.54498, 217.719)
 
-[node name="RingCuller" type="Node3D" parent="PteroEggAct/Boat1/Switch"]
+[node name="RingCull" type="Node3D" parent="PteroEggAct/Boat1/Switch"]
 script = ExtResource("31_uxx68")
 
-[node name="Rings" type="Node3D" parent="PteroEggAct/Boat1/Switch"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.392, 0, -5.88899)
+[node name="Rings" type="Node3D" parent="PteroEggAct/Boat1/Switch/RingCull"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.392, 0, -8.88899)
 script = ExtResource("24_0cv4e")
 Generate = false
 Source = null
@@ -630,34 +663,34 @@ Spacing = 1.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Ring" parent="PteroEggAct/Boat1/Switch/Rings" instance=ExtResource("25_wc55u")]
+[node name="Ring" parent="PteroEggAct/Boat1/Switch/RingCull/Rings" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.107491, 0.544984, -0.0250549)
 
-[node name="Ring2" parent="PteroEggAct/Boat1/Switch/Rings" instance=ExtResource("25_wc55u")]
+[node name="Ring2" parent="PteroEggAct/Boat1/Switch/RingCull/Rings" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0754395, 0.544984, -1.01265)
 
-[node name="Ring3" parent="PteroEggAct/Boat1/Switch/Rings" instance=ExtResource("25_wc55u")]
+[node name="Ring3" parent="PteroEggAct/Boat1/Switch/RingCull/Rings" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.213959, 0.544984, -1.99879)
 
-[node name="Ring4" parent="PteroEggAct/Boat1/Switch/Rings" instance=ExtResource("25_wc55u")]
+[node name="Ring4" parent="PteroEggAct/Boat1/Switch/RingCull/Rings" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.312401, 0.544984, -2.98972)
 
-[node name="Ring5" parent="PteroEggAct/Boat1/Switch/Rings" instance=ExtResource("25_wc55u")]
+[node name="Ring5" parent="PteroEggAct/Boat1/Switch/RingCull/Rings" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.373619, 0.544984, -3.99048)
 
-[node name="Ring6" parent="PteroEggAct/Boat1/Switch/Rings" instance=ExtResource("25_wc55u")]
+[node name="Ring6" parent="PteroEggAct/Boat1/Switch/RingCull/Rings" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.399353, 0.544984, -4.9939)
 
-[node name="Ring7" parent="PteroEggAct/Boat1/Switch/Rings" instance=ExtResource("25_wc55u")]
+[node name="Ring7" parent="PteroEggAct/Boat1/Switch/RingCull/Rings" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.392044, 0.544984, -5.99219)
 
-[node name="Ring8" parent="PteroEggAct/Boat1/Switch/Rings" instance=ExtResource("25_wc55u")]
+[node name="Ring8" parent="PteroEggAct/Boat1/Switch/RingCull/Rings" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.354149, 0.544984, -6.98982)
 
-[node name="Ring19" parent="PteroEggAct/Boat1/Switch/Rings" instance=ExtResource("25_wc55u")]
+[node name="Ring19" parent="PteroEggAct/Boat1/Switch/RingCull/Rings" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.286613, 0.544984, -7.98489)
 
-[node name="Ring20" parent="PteroEggAct/Boat1/Switch/Rings" instance=ExtResource("25_wc55u")]
+[node name="Ring20" parent="PteroEggAct/Boat1/Switch/RingCull/Rings" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.184792, 0.544984, -8.97487)
 
 [node name="Boat2" type="Node3D" parent="PteroEggAct"]
@@ -696,76 +729,78 @@ transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, 
 transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, -121.978, -5.54945, 90.9335)
 
 [node name="Ring" type="Node3D" parent="PteroEggAct/Boat2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -96.31, -5.56, 71.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -96.31, -5, 71.1)
 script = ExtResource("24_0cv4e")
 Generate = false
-Source = null
+Source = ExtResource("25_wc55u")
 Amount = 20
-Shape = 0
-Orientation = 0
+Shape = 2
+Path = NodePath("../../../Static/Path/Boat3Path")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
 Spacing = 1.5
-"Horizontal Offset" = null
+"Horizontal Offset" = SubResource("Curve_exeik")
 "Vertical Offset" = null
 
-[node name="Ring" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0199432, 0, 0.00623322)
+[node name="Child01" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.15527e-05, 0, -0.000221252)
 
-[node name="Ring2" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.393646, 0, 1.45882)
+[node name="Child02" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.325401, 0, 1.49053)
 
-[node name="Ring3" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.806976, 0, 2.91628)
+[node name="Child03" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.726204, 0, 2.96381)
 
-[node name="Ring4" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25586, 0, 4.36347)
+[node name="Child04" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.21076, 0, 4.41148)
 
-[node name="Ring5" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.77451, 0, 5.78185)
+[node name="Child05" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.78667, 0, 5.82427)
 
-[node name="Ring6" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.39533, 0, 7.1496)
+[node name="Child06" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.46057, 0, 7.1919)
 
-[node name="Ring7" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.17373, 0, 8.46347)
+[node name="Child07" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.24646, 0, 8.49749)
 
-[node name="Ring8" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.16702, 0, 9.65011)
+[node name="Child08" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.25843, 0, 9.65395)
 
-[node name="Ring9" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.3354, 0, 10.7014)
+[node name="Child09" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.46825, 0, 10.6543)
 
-[node name="Ring10" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.63029, 0, 11.6357)
+[node name="Child10" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7983, 0, 11.5317)
 
-[node name="Ring11" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.0034, 0, 12.4735)
+[node name="Child11" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.17616, 0, 12.3283)
 
-[node name="Ring12" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.40937, 0, 13.2399)
+[node name="Child12" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.53535, 0, 13.095)
 
-[node name="Ring13" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.8045, 0, 13.9631)
+[node name="Child13" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.816, 0, 13.8907)
 
-[node name="Ring14" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.155, 0, 14.6834)
+[node name="Child14" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.9655, 0, 14.7816)
 
-[node name="Ring15" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.4263, 0, 15.4392)
+[node name="Child15" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.9796, 0, 15.7976)
 
-[node name="Ring16" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.6197, 0, 16.3182)
+[node name="Child16" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.9525, 0, 16.864)
 
-[node name="Ring17" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.676, 0, 17.3408)
+[node name="Child17" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.8885, 0, 18.0102)
 
-[node name="Ring18" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.6177, 0, 18.4476)
+[node name="Child18" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.7599, 0, 19.2454)
 
-[node name="Ring19" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5054, 0, 19.5942)
+[node name="Child19" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.5629, 0, 20.5918)
 
-[node name="Ring20" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.4015, 0, 20.7474)
+[node name="Child20" parent="PteroEggAct/Boat2/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.2956, 0, 22.0723)
 
 [node name="Island" type="Node3D" parent="PteroEggAct"]
 
@@ -844,151 +879,115 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -135.72, -6.02245, 23.84)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -145.538, -6.02245, 14.3452)
 
 [node name="Ring" type="Node3D" parent="PteroEggAct/Boat3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -141.49, -5.25, 32.07)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -141.49, -5, 32.07)
 script = ExtResource("24_0cv4e")
 Generate = false
-Source = null
+Source = ExtResource("25_wc55u")
 Amount = 15
-Shape = 0
-Orientation = 0
+Shape = 2
+Path = NodePath("../../../Static/Path/Boat4Path")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
 Spacing = 1.0
-"Horizontal Offset" = null
+"Horizontal Offset" = SubResource("Curve_tu72v")
 "Vertical Offset" = null
 
-[node name="Ring" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.259216, 0, -0.136353)
+[node name="Child01" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 0, 0.0001297)
 
-[node name="Ring2" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.321259, 0, -1.19081)
+[node name="Child02" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.147324, 0, -1.09769)
 
-[node name="Ring3" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.373322, 0, -2.18536)
+[node name="Child03" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.220612, 0, -2.11839)
 
-[node name="Ring4" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.380371, 0, -3.12389)
+[node name="Child04" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.212265, 0, -3.08876)
 
-[node name="Ring5" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.305084, 0, -4.02351)
+[node name="Child05" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.120422, 0, -4.03024)
 
-[node name="Ring6" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0364685, 0, -4.88568)
+[node name="Child06" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14653, 0, -4.94831)
 
-[node name="Ring7" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.505157, 0, -5.7697)
+[node name="Child07" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.695663, 0, -5.85855)
 
-[node name="Ring8" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.18832, 0, -6.70602)
+[node name="Child08" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.37393, 0, -6.80144)
 
-[node name="Ring9" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.87718, 0, -7.72079)
+[node name="Child09" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.01772, 0, -7.79141)
 
-[node name="Ring10" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.43665, 0, -8.78488)
+[node name="Child10" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.46255, 0, -8.81998)
 
-[node name="Ring11" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7339, 0, -9.87328)
+[node name="Child11" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.55211, 0, -9.85848)
 
-[node name="Ring12" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.66663, 0, -10.9187)
+[node name="Child12" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.39659, 0, -10.8836)
 
-[node name="Ring28" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.42584, 0, -11.9358)
+[node name="Child13" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.07866, 0, -11.8845)
 
-[node name="Ring29" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02481, 0, -12.9056)
+[node name="Child14" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.58177, 0, -12.8461)
 
-[node name="Ring30" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.38461, 0, -13.8016)
+[node name="Child15" parent="PteroEggAct/Boat3/Ring" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.890198, 0, -13.7518)
 
 [node name="Ring2" type="Node3D" parent="PteroEggAct/Boat3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -156.7, -5.25, -3.22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -156.5, -5, -3.62)
 script = ExtResource("24_0cv4e")
 Generate = false
-Source = null
+Source = ExtResource("25_wc55u")
 Amount = 12
-Shape = 0
-Orientation = 0
+Shape = 2
+Path = NodePath("../../../Static/Path/Boat4Path")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
 Spacing = 1.0
-"Horizontal Offset" = null
+"Horizontal Offset" = SubResource("Curve_yp0sg")
 "Vertical Offset" = null
 
-[node name="Ring" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269211, 0, -0.421148)
+[node name="Child01" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52588e-05, 0, 5.00679e-06)
 
-[node name="Ring2" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.787582, 0, -0.661108)
+[node name="Child02" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.979599, 0, -0.304217)
 
-[node name="Ring3" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.83653, 0, -0.893508)
+[node name="Child03" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.90533, 0, -0.695552)
 
-[node name="Ring4" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7914, 0, -1.24526)
+[node name="Child04" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.79454, 0, -1.14937)
 
-[node name="Ring5" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.61351, 0, -1.81155)
+[node name="Child05" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.62758, 0, -1.70462)
 
-[node name="Ring6" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.35837, 0, -2.51351)
+[node name="Child06" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3497, 0, -2.46477)
 
-[node name="Ring7" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.06224, 0, -3.27848)
+[node name="Child07" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.03549, 0, -3.29697)
 
-[node name="Ring8" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.77316, 0, -4.04575)
+[node name="Child08" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.76442, 0, -4.05323)
 
-[node name="Ring9" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.52992, 0, -4.7493)
+[node name="Child09" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.60983, 0, -4.59402)
 
-[node name="Ring10" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.36546, 0, -5.32078)
+[node name="Child10" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.549, 0, -4.95922)
 
-[node name="Ring11" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.26678, 0, -5.76192)
+[node name="Child11" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.55591, 0, -5.19779)
 
-[node name="Ring12" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.21396, 0, -6.10972)
-
-[node name="LeftPath" type="Node3D" parent="PteroEggAct"]
-
-[node name="GreenMajin" parent="PteroEggAct/LeftPath" instance=ExtResource("35_6rhcf")]
-transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -76.8037, 5.792, -26.4819)
-"Spawn Settings/Spawn Travel Time" = 1.0
-"Spawn Settings/Spawn Delay" = 0.0
-"Spawn Settings/Spawn Offset" = Vector3(-30, 0, 0)
-"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
-"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
-
-[node name="GreenMajin2" parent="PteroEggAct/LeftPath" instance=ExtResource("35_6rhcf")]
-transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -71.7546, 7.226, -25.2419)
-"Spawn Settings/Spawn Travel Time" = 1.0
-"Spawn Settings/Spawn Delay" = 0.0
-"Spawn Settings/Spawn Offset" = Vector3(30, 0, -5)
-"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
-"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
-
-[node name="GreenMajin3" parent="PteroEggAct/LeftPath" instance=ExtResource("35_6rhcf")]
-transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -67.7612, 9.28, -22.519)
-"Spawn Settings/Spawn Travel Time" = 1.0
-"Spawn Settings/Spawn Delay" = 0.0
-"Spawn Settings/Spawn Offset" = Vector3(30, 0, -5)
-"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
-"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+[node name="Child12" parent="PteroEggAct/Boat3/Ring2" instance=ExtResource("25_wc55u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.62512, 0, -5.32305)
 
 [node name="RightPath" type="Node3D" parent="PteroEggAct"]
-
-[node name="DinoJump" parent="PteroEggAct/RightPath" instance=ExtResource("36_g1jfw")]
-transform = Transform3D(0.230615, 0, -0.973045, 0, 1, 0, 0.973045, 0, 0.230615, -125.275, 8.004, -46.2981)
-
-[node name="JumpTo" type="Node3D" parent="PteroEggAct/RightPath/DinoJump"]
-transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, 0, 0)
-script = ExtResource("37_vcc2n")
-
-[node name="Target" type="Node3D" parent="PteroEggAct/RightPath/DinoJump/JumpTo"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.11, -21.99)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PteroEggAct/RightPath/DinoJump"]
-transform = Transform3D(1, 7.45058e-08, 2.98023e-08, 0, 0.802122, 0.59716, 1.49012e-08, -0.59716, 0.802123, -1.53992, 1.20635, -2.28776)
-shape = SubResource("91")
 
 [node name="EnemyStone" parent="PteroEggAct/RightPath" instance=ExtResource("34_8p3er")]
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -139.003, 8.004, -42.795)
@@ -1114,11 +1113,50 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90211, 0, -0.618034)
 [node name="Ring10" parent="PteroEggAct/RightPath/Ring2" instance=ExtResource("25_wc55u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.17557, 0, -1.61803)
 
-[connection signal="Returned" from="PteroEggAct/Eggs/PteroEgg1" to="Static" method="IncrementObjective"]
-[connection signal="Returned" from="PteroEggAct/Eggs/PteroEgg2" to="Static" method="IncrementObjective"]
-[connection signal="Returned" from="PteroEggAct/Eggs/PteroEgg3" to="Static" method="IncrementObjective"]
-[connection signal="Returned" from="PteroEggAct/Eggs/PteroEgg4" to="Static" method="IncrementObjective"]
-[connection signal="Activated" from="PteroEggAct/Boat1/Switch" to="PteroEggAct/Boat1/Switch/RingCuller" method="ActivateNode"]
+[node name="LeftPath" type="Node3D" parent="PteroEggAct"]
+
+[node name="Cactus1" parent="PteroEggAct/LeftPath" instance=ExtResource("38_uc7po")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -146.977, -2.08299, -63.3201)
+
+[node name="Cactus2" parent="PteroEggAct/LeftPath" instance=ExtResource("38_uc7po")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -146.977, -0.482988, -63.3201)
+
+[node name="Cactus3" parent="PteroEggAct/LeftPath" instance=ExtResource("38_uc7po")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -146.977, 1.11701, -63.3201)
+
+[node name="GreenMajin1" parent="PteroEggAct/LeftPath" instance=ExtResource("35_6rhcf")]
+transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -76.8037, 5.792, -26.4819)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-30, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[node name="GreenMajin2" parent="PteroEggAct/LeftPath" instance=ExtResource("35_6rhcf")]
+transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -71.7546, 7.226, -25.2419)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(30, 0, -5)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[node name="GreenMajin3" parent="PteroEggAct/LeftPath" instance=ExtResource("35_6rhcf")]
+transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -67.7612, 9.28, -22.519)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(30, 0, -5)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[connection signal="Staggered" from="Static/Common/Object/BoatSection1/Boat" to="PteroEggAct/EggManager" method="Frighten"]
+[connection signal="Staggered" from="Static/Common/Object/DoubleBoatSection/Boat2" to="PteroEggAct/EggManager" method="Frighten"]
+[connection signal="Staggered" from="Static/Common/Object/DoubleBoatSection/Boat3" to="PteroEggAct/EggManager" method="Frighten"]
+[connection signal="Staggered" from="Static/Common/Object/EndingBoatSection/Boat4" to="PteroEggAct/EggManager" method="Frighten"]
+[connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg1" to="Static" method="IncrementObjective"]
+[connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg2" to="Static" method="IncrementObjective"]
+[connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg3" to="Static" method="IncrementObjective"]
+[connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg4" to="Static" method="IncrementObjective"]
+[connection signal="Activated" from="PteroEggAct/Boat1/Switch" to="PteroEggAct/Boat1/Switch/RingCull" method="Activate"]
 [connection signal="Defeated" from="PteroEggAct/Island/BlueMajin" to="PteroEggAct/Island/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="PteroEggAct/Island/BlueMajin" to="PteroEggAct/Island/EnemyStone2" method="IncrementCounter"]
 [connection signal="Defeated" from="PteroEggAct/Island/BlueMajin" to="PteroEggAct/Island/EnemyStone3" method="IncrementCounter"]
@@ -1134,3 +1172,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.17557, 0, -1.61803)
 [connection signal="Defeated" from="PteroEggAct/RightPath/BlueMajin" to="PteroEggAct/RightPath/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="PteroEggAct/RightPath/BlueMajin2" to="PteroEggAct/RightPath/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="PteroEggAct/RightPath/BlueMajin3" to="PteroEggAct/RightPath/EnemyStone" method="IncrementCounter"]
+[connection signal="Shattered" from="PteroEggAct/LeftPath/Cactus1" to="PteroEggAct/LeftPath/Cactus2" method="Shatter"]
+[connection signal="Shattered" from="PteroEggAct/LeftPath/Cactus1" to="PteroEggAct/LeftPath/Cactus3" method="Shatter"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]
