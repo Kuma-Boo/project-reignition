@@ -40,6 +40,7 @@ namespace Project.Gameplay.Objects
 				SoundManager.instance.PlayRingSFX();
 			}
 
+			BonusManager.instance.AddRingChain();
 			Animator.Play("collect");
 			base.Collect();
 		}
