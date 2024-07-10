@@ -27,12 +27,9 @@
 [ext_resource type="Material" uid="uid://c5pcrpavpyreh" path="res://object/enemy/majin/data/particle/material/Majin Defeat Process Material.tres" id="16_ck7oa"]
 [ext_resource type="Material" uid="uid://do5esuoehqh56" path="res://object/enemy/majin/data/particle/material/Majin Flash Process Material.tres" id="24_rwypk"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qrrup"]
-radius = 0.4
-height = 1.4
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vs3xy"]
-radius = 0.8
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mlr0h"]
+radius = 0.6
+height = 1.5
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_xbynq"]
 height = 0.5
@@ -182,7 +179,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Hitbox/SpinCollisionShape3D:disabled")
+tracks/7/path = NodePath("ChestAttachment/Hitbox/SpinCollisionShape3D:disabled")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -252,16 +249,142 @@ tracks/12/keys = {
 "values": [Vector3(1, 1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_hrty8"]
-resource_name = "despawn"
+[sub_resource type="Animation" id="Animation_1j3bl"]
+resource_name = "defeat"
 length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("FX/SpawnFX/SpawnSFX")
+tracks/0/path = NodePath("FX/StrikeSFX")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_o85fj"]
+resource_name = "despawn"
+length = 0.666669
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/FireFX/FlameAttack:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FX/DefeatFX:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FX/DefeatFX/DefeatLetter")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FX/DefeatFX/DefeatSplatter:lifetime")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.1, 0.5]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("FX/DefeatFX/DefeatSplatter")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"restart"
+}, {
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FX/DefeatFX/DefeatSmoke")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("FX/Flash")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Root:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("FX/SpawnFX/SpawnSFX")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -594,6 +717,24 @@ tracks/9/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_hrty8"]
+resource_name = "launch-end"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/SpawnFX/SpawnSFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
 [sub_resource type="Animation" id="Animation_aucka"]
 resource_name = "spawn"
 length = 0.5
@@ -685,7 +826,7 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Hitbox/SpinCollisionShape3D:disabled")
+tracks/0/path = NodePath("ChestAttachment/Hitbox/SpinCollisionShape3D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -702,24 +843,6 @@ tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("FX/StaggerSFX")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_1j3bl"]
-resource_name = "strike"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FX/StrikeSFX")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -830,68 +953,70 @@ tracks/6/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stb46"]
 _data = {
 "RESET": SubResource("Animation_ojgnd"),
-"despawn": SubResource("Animation_hrty8"),
+"defeat": SubResource("Animation_1j3bl"),
+"despawn": SubResource("Animation_o85fj"),
 "explode": SubResource("Animation_xx2t8"),
 "fire-end": SubResource("Animation_thps5"),
 "fire-start": SubResource("Animation_c8j0n"),
+"launch-end": SubResource("Animation_hrty8"),
 "spawn": SubResource("Animation_aucka"),
 "spin": SubResource("Animation_1nwld"),
 "stagger": SubResource("Animation_13cad"),
-"strike": SubResource("Animation_1j3bl"),
 "travel": SubResource("Animation_y1q6p")
 }
 
-[node name="Majin" type="StaticBody3D" node_paths=PackedStringArray("fireRoot", "root", "collider", "hurtbox", "rangeCollider", "animationTree", "animationPlayer") groups=["enemy", "wall"]]
-collision_layer = 8
-collision_mask = 8
+[node name="Majin" type="Node3D"]
 script = ExtResource("1")
 "Spawn Settings/Spawn Travel Time" = 0.0
+"Spawn Interval Settings/Enable Spawn Interval" = false
 "Rotation Settings/Track Player" = true
 "Attack Settings/Attack Type" = 0
 "Defeat Settings/Enable Enemy Launching" = false
-fireRoot = NodePath("FX/FireFX")
+flameRoot = NodePath("FX/FireFX")
+hitboxAttachment = NodePath("ChestAttachment")
 pearlAmount = 15
 damagePlayer = true
 root = NodePath("Root")
-collider = NodePath("CollisionShape3D")
-hurtbox = NodePath("Hitbox")
+hurtbox = NodePath("ChestAttachment/Hitbox")
+collider = NodePath("")
 rangeCollider = NodePath("Range/CollisionShape3D")
 animationTree = NodePath("AnimationTree")
 animationPlayer = NodePath("AnimationPlayer")
 
 [node name="Root" type="Node3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_qrrup")
+[node name="ChestAttachment" type="BoneAttachment3D" parent="."]
+transform = Transform3D(1, -4.37115e-08, 4.37115e-08, 4.37115e-08, 1, 9.55347e-16, -4.37115e-08, 9.55346e-16, 1, -3.75753e-20, 1.085, 0)
+use_external_skeleton = true
+external_skeleton = NodePath("")
 
-[node name="Hitbox" type="Area3D" parent="." node_paths=PackedStringArray("enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+[node name="Hitbox" type="Area3D" parent="ChestAttachment" node_paths=PackedStringArray("enemy")]
+transform = Transform3D(1, -4.17596e-23, 0, -4.17596e-23, 1, 0, 0, 0, 1, 0, 0.15, 0)
 collision_layer = 12
 collision_mask = 2
 script = ExtResource("2_onhwc")
-enemy = NodePath("..")
+enemy = NodePath("../..")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
-shape = SubResource("CapsuleShape3D_vs3xy")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ChestAttachment/Hitbox"]
+transform = Transform3D(1, -4.17596e-23, 0, -4.17596e-23, 1, 0, 0, 0, 1, 0, 0.1, 0)
+shape = SubResource("CapsuleShape3D_mlr0h")
 
-[node name="SpinCollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+[node name="SpinCollisionShape3D" type="CollisionShape3D" parent="ChestAttachment/Hitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("CylinderShape3D_xbynq")
 disabled = true
 
-[node name="CrateHitbox" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+[node name="EnvironmentCollider" type="StaticBody3D" parent="ChestAttachment" groups=["enemy", "wall"]]
+transform = Transform3D(1, -4.17596e-23, 0, -4.17597e-23, 1, 0, 0, 0, 1, 0, 0.15, -1.05879e-22)
 collision_layer = 8
 collision_mask = 0
-monitoring = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CrateHitbox"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
-shape = SubResource("CapsuleShape3D_qrrup")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ChestAttachment/EnvironmentCollider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+shape = SubResource("CapsuleShape3D_mlr0h")
 
 [node name="Range" type="Area3D" parent="."]
+visible = false
 collision_layer = 0
 collision_mask = 2
 monitorable = false
@@ -915,7 +1040,7 @@ emitting = false
 amount = 32
 lifetime = 0.4
 one_shot = true
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
 local_coords = true
@@ -933,7 +1058,7 @@ amount = 16
 lifetime = 0.4
 one_shot = true
 explosiveness = 0.2
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
 process_material = ExtResource("5_fva2p")
@@ -948,7 +1073,7 @@ emitting = false
 amount = 32
 lifetime = 0.4
 speed_scale = 1.2
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
 local_coords = true
@@ -983,7 +1108,7 @@ stream = ExtResource("5_xr0sx")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
-bus = &"SFX"
+bus = &"GAME SFX"
 script = ExtResource("9_4bnd7")
 groupKey = &"majin_flame"
 
@@ -1001,7 +1126,7 @@ one_shot = true
 speed_scale = 2.5
 explosiveness = 0.4
 randomness = 0.4
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
 process_material = ExtResource("8_awltq")
@@ -1015,7 +1140,7 @@ extra_cull_margin = 16384.0
 emitting = false
 lifetime = 0.8
 one_shot = true
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
 process_material = ExtResource("10_xll44")
@@ -1027,7 +1152,7 @@ attenuation_model = 3
 unit_size = 100.0
 max_db = 0.0
 max_distance = 200.0
-bus = &"SFX"
+bus = &"GAME SFX"
 script = ExtResource("9_4bnd7")
 groupKey = &"majin_spawn"
 
@@ -1043,7 +1168,7 @@ lifetime = 0.8
 one_shot = true
 explosiveness = 0.6
 randomness = 0.4
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = ExtResource("13_imgj3")
@@ -1058,7 +1183,7 @@ emitting = false
 lifetime = 1.2
 one_shot = true
 explosiveness = 0.6
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = ExtResource("14_05hpu")
@@ -1072,7 +1197,7 @@ emitting = false
 lifetime = 0.5
 one_shot = true
 explosiveness = 0.4
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = ExtResource("16_ck7oa")
@@ -1083,21 +1208,21 @@ stream = ExtResource("12_2cawu")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="StrikeSFX" type="AudioStreamPlayer3D" parent="FX"]
 stream = ExtResource("13_470oy")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="TravelSFX" type="AudioStreamPlayer3D" parent="FX"]
 stream = ExtResource("14_41brs")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
-bus = &"SFX"
+bus = &"GAME SFX"
 script = ExtResource("9_4bnd7")
 groupKey = &"majin_travel"
 
@@ -1110,7 +1235,7 @@ emitting = false
 amount = 1
 lifetime = 0.15
 one_shot = true
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 local_coords = true
@@ -1123,12 +1248,18 @@ tree_root = ExtResource("9_osrkc")
 parameters/defeat_transition/current_state = "disabled"
 parameters/defeat_transition/transition_request = ""
 parameters/defeat_transition/current_index = 1
+parameters/despawn_trigger/active = false
+parameters/despawn_trigger/internal_active = false
+parameters/despawn_trigger/request = 0
 parameters/fidget_transition/current_state = ""
 parameters/fidget_transition/transition_request = ""
 parameters/fidget_transition/current_index = -1
 parameters/fidget_trigger/active = false
 parameters/fidget_trigger/internal_active = false
 parameters/fidget_trigger/request = 0
+parameters/hit_transition/current_state = "stagger"
+parameters/hit_transition/transition_request = ""
+parameters/hit_transition/current_index = 0
 parameters/hit_trigger/active = false
 parameters/hit_trigger/internal_active = false
 parameters/hit_trigger/request = 0
@@ -1140,21 +1271,21 @@ parameters/move_transition/current_state = "disabled"
 parameters/move_transition/transition_request = ""
 parameters/move_transition/current_index = 1
 parameters/seek/seek_request = -1.0
+parameters/spawn_trigger/active = false
+parameters/spawn_trigger/internal_active = false
+parameters/spawn_trigger/request = 0
 parameters/state_transition/current_state = ""
 parameters/state_transition/transition_request = ""
 parameters/state_transition/current_index = 0
-parameters/teleport_trigger/active = false
-parameters/teleport_trigger/internal_active = false
-parameters/teleport_trigger/request = 0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_stb46")
 }
-next/despawn = &"explode"
+next/launch-end = &"explode"
 
-[connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
-[connection signal="area_exited" from="Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="ChestAttachment/Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="ChestAttachment/Hitbox" to="." method="OnExited"]
 [connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
 [connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
 [connection signal="area_entered" from="FX/FireFX/FlameHitbox" to="FX/FireFX/FlameHitbox" method="OnEntered"]

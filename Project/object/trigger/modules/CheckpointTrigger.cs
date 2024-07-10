@@ -11,10 +11,12 @@ namespace Project.Gameplay.Triggers
 		public Path3D CameraPath { get; private set; }
 		public CameraSettingsResource CameraSettings;
 
-		public override void Activate() => StageSettings.instance.SetCheckpoint(this);
+		private StageSettings Stage => StageSettings.instance;
 
-		public void UpdateCheckpointData()
+		public override void Activate()
 		{
+			Stage.SetCheckpoint(this);
+
 			PlayerPath = CharacterController.instance.PathFollower.ActivePath; // Store current player path
 			CameraPath = CharacterController.instance.Camera.PathFollower.ActivePath; // Store current camera path
 			CameraSettings = CharacterController.instance.Camera.ActiveSettings;

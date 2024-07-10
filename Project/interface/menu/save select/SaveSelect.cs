@@ -55,6 +55,8 @@ namespace Project.Interface.Menus
 		public override void OpenSubmenu()
 		{
 			SaveManager.ActiveSaveSlotIndex = _saveOptions[ACTIVE_SAVE_OPTION_INDEX].SaveIndex;
+			SaveManager.ActiveSkillRing.LoadFromActiveData();
+
 			if (SaveManager.ActiveGameData.IsNewFile())
 			{
 				SaveManager.ResetSaveData(SaveManager.ActiveSaveSlotIndex);

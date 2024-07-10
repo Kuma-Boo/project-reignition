@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://153wwjnd7nv6"]
+[gd_scene load_steps=30 format=3 uid="uid://153wwjnd7nv6"]
 
 [ext_resource type="PackedScene" uid="uid://dbyn2iyw87kug" path="res://object/stage/common/resource/model/FlyingPot.gltf" id="1"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/FlyingPot.cs" id="2"]
@@ -11,15 +11,9 @@
 [ext_resource type="Material" uid="uid://b1b035gwom0w5" path="res://object/stage/common/resource/model/material/Flying Pot Spark Process Material.tres" id="8_m5xym"]
 [ext_resource type="Material" uid="uid://6n0fwrc1jr14" path="res://object/stage/common/resource/model/material/Flying Pot Spark.tres" id="8_wn8by"]
 [ext_resource type="Material" uid="uid://bef3nf037vgw8" path="res://object/stage/common/resource/model/material/Flying Pot Shine.tres" id="9_ctkoe"]
-[ext_resource type="Animation" uid="uid://clwi3nonmba68" path="res://object/stage/common/resource/model/animation/flying pot/pot-idle-loop.res" id="9_utj4d"]
 [ext_resource type="AudioStream" uid="uid://b75ytouytm73f" path="res://sound/sfx/objects/flying pot enter.wav" id="12_0cgd7"]
 [ext_resource type="AudioStream" uid="uid://cjnqa17j2mmww" path="res://sound/sfx/objects/flying pot exit.wav" id="13_43524"]
 [ext_resource type="AudioStream" uid="uid://c0f0a8fdabdrf" path="res://sound/sfx/objects/wing.wav" id="14_uh57a"]
-[ext_resource type="Animation" uid="uid://cmwxxfe7emgju" path="res://object/stage/common/resource/model/animation/flying pot/pot-action.res" id="15_0ox7b"]
-[ext_resource type="Animation" uid="uid://bsdjn3l3f6082" path="res://object/stage/common/resource/model/animation/flying pot/pot-fall.res" id="15_3gwdj"]
-[ext_resource type="Animation" uid="uid://6ewambjq30xr" path="res://object/stage/common/resource/model/animation/flying pot/pot-flap.res" id="15_hk68t"]
-[ext_resource type="Animation" uid="uid://dbg3qnp5e5pcq" path="res://object/stage/common/resource/model/animation/flying pot/pot-idle.res" id="16_yyima"]
-[ext_resource type="Animation" uid="uid://cskcpwrjlxjli" path="res://object/stage/common/resource/model/animation/flying pot/RESET.res" id="17_8oe2m"]
 
 [sub_resource type="SphereShape3D" id="3"]
 radius = 0.8
@@ -47,16 +41,6 @@ material = ExtResource("8_wn8by")
 size = Vector2(1, 1)
 orientation = 2
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_n5734"]
-_data = {
-"RESET": ExtResource("17_8oe2m"),
-"pot-action": ExtResource("15_0ox7b"),
-"pot-fall": ExtResource("15_3gwdj"),
-"pot-flap": ExtResource("15_hk68t"),
-"pot-idle": ExtResource("16_yyima"),
-"pot-idle-loop": ExtResource("9_utj4d")
-}
-
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wgyli"]
 animation = &"pot-action"
 
@@ -64,68 +48,50 @@ animation = &"pot-action"
 filter_enabled = true
 filters = ["../VFX/ShineParticles", "../VFX/SparkParticles", "FlyingPotRoot/Skeleton3D:pot"]
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_14huu"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x6vcn"]
 animation = &"pot-fall"
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8x7it"]
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_83ww4"]
+xfade_time = 0.2
+input_0/name = "disabled"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "enabled"
+input_1/auto_advance = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yusvq"]
 animation = &"pot-flap"
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_o14qy"]
-animation = &"pot-idle-loop"
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_d7y0w"]
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sadct"]
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_6s8u0"]
+fadein_time = 0.05
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5rf63"]
 animation = &"pot-idle"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ckfxd"]
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_x38cu"]
-xfade_time = 0.05
-priority = 0
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ychbk"]
-xfade_time = 0.05
-priority = 0
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6cq74"]
-xfade_time = 0.2
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_meeos"]
-xfade_time = 0.05
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_36hbt"]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sa17a"]
-xfade_time = 0.05
-priority = 0
-
-[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_rv0an"]
-states/pot-fall/node = SubResource("AnimationNodeAnimation_14huu")
-states/pot-fall/position = Vector2(447.474, 9.84281)
-states/pot-flap/node = SubResource("AnimationNodeAnimation_8x7it")
-states/pot-flap/position = Vector2(324.688, 9.87425)
-states/pot-idle/node = SubResource("AnimationNodeAnimation_sadct")
-states/pot-idle/position = Vector2(447.438, 100.102)
-states/pot-idle-loop/node = SubResource("AnimationNodeAnimation_o14qy")
-states/pot-idle-loop/position = Vector2(324.288, 99.9776)
-transitions = ["Start", "pot-idle-loop", SubResource("AnimationNodeStateMachineTransition_ckfxd"), "pot-idle-loop", "pot-flap", SubResource("AnimationNodeStateMachineTransition_x38cu"), "pot-fall", "pot-flap", SubResource("AnimationNodeStateMachineTransition_ychbk"), "pot-flap", "pot-fall", SubResource("AnimationNodeStateMachineTransition_6cq74"), "pot-idle", "pot-idle-loop", SubResource("AnimationNodeStateMachineTransition_meeos"), "pot-fall", "pot-idle", SubResource("AnimationNodeStateMachineTransition_36hbt"), "pot-idle", "pot-flap", SubResource("AnimationNodeStateMachineTransition_sa17a")]
-graph_offset = Vector2(-15, -28)
-
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_v4aem"]
-graph_offset = Vector2(-363.63, 14.5045)
+graph_offset = Vector2(-866.627, -4.56219)
 nodes/action_anim/node = SubResource("AnimationNodeAnimation_wgyli")
-nodes/action_anim/position = Vector2(0, 208)
-nodes/action_trigger/node = SubResource("AnimationNodeOneShot_hr07p")
-nodes/action_trigger/position = Vector2(160, 48)
+nodes/action_anim/position = Vector2(0, 240)
+nodes/enter_trigger/node = SubResource("AnimationNodeOneShot_hr07p")
+nodes/enter_trigger/position = Vector2(160, 48)
+nodes/fall_anim/node = SubResource("AnimationNodeAnimation_x6vcn")
+nodes/fall_anim/position = Vector2(-660, 200)
+nodes/fall_transition/node = SubResource("AnimationNodeTransition_83ww4")
+nodes/fall_transition/position = Vector2(-340, 0)
+nodes/flap_anim/node = SubResource("AnimationNodeAnimation_yusvq")
+nodes/flap_anim/position = Vector2(-380, 200)
+nodes/flap_speed/node = SubResource("AnimationNodeTimeScale_d7y0w")
+nodes/flap_speed/position = Vector2(-220, 160)
+nodes/flap_trigger/node = SubResource("AnimationNodeOneShot_6s8u0")
+nodes/flap_trigger/position = Vector2(-60, 40)
+nodes/idle_anim/node = SubResource("AnimationNodeAnimation_5rf63")
+nodes/idle_anim/position = Vector2(-660, 20)
 nodes/output/position = Vector2(320, 48)
-nodes/wing_state/node = SubResource("AnimationNodeStateMachine_rv0an")
-nodes/wing_state/position = Vector2(0, 48)
-node_connections = [&"action_trigger", 0, &"wing_state", &"action_trigger", 1, &"action_anim", &"output", 0, &"action_trigger"]
+node_connections = [&"enter_trigger", 0, &"flap_trigger", &"enter_trigger", 1, &"action_anim", &"fall_transition", 0, &"idle_anim", &"fall_transition", 1, &"fall_anim", &"flap_speed", 0, &"flap_anim", &"flap_trigger", 0, &"fall_transition", &"flap_trigger", 1, &"flap_speed", &"output", 0, &"enter_trigger"]
 
 [node name="FlyingPot" type="Node3D" node_paths=PackedStringArray("root", "lockonArea", "environmentCollider", "animationTree", "enterSFX", "exitSFX")]
 script = ExtResource("2")
@@ -142,6 +108,7 @@ exitSFX = NodePath("Root/SFX/ExitSFX")
 [node name="FlyingPot" parent="Root" instance=ExtResource("1")]
 
 [node name="Skeleton3D" parent="Root/FlyingPot/FlyingPotRoot" index="0"]
+bones/0/position = Vector3(0, -0.0352, 0)
 bones/0/rotation = Quaternion(-0.707107, -1.15202e-07, -1.15202e-07, 0.707107)
 bones/1/rotation = Quaternion(0.616938, -0.345525, 0.345525, 0.616938)
 bones/2/rotation = Quaternion(-3.71876e-07, 1.07894e-06, 0.446424, 0.894822)
@@ -173,7 +140,7 @@ emitting = false
 amount = 12
 lifetime = 0.8
 preprocess = 1.0
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 transform_align = 3
 process_material = ExtResource("4_8d8qk")
@@ -184,7 +151,7 @@ layers = 32
 emitting = false
 lifetime = 1.5
 preprocess = 1.0
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 process_material = ExtResource("6_s7d7r")
 draw_pass_1 = SubResource("PlaneMesh_x18td")
@@ -197,7 +164,7 @@ amount = 16
 lifetime = 0.6
 one_shot = true
 explosiveness = 0.95
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 process_material = ExtResource("8_5bysa")
 draw_pass_1 = SubResource("PlaneMesh_eilr1")
@@ -210,7 +177,7 @@ amount = 16
 lifetime = 0.6
 one_shot = true
 explosiveness = 0.4
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 process_material = ExtResource("8_m5xym")
 draw_pass_1 = SubResource("PlaneMesh_x428s")
@@ -220,12 +187,12 @@ draw_pass_1 = SubResource("PlaneMesh_x428s")
 [node name="EnterSFX" type="AudioStreamPlayer" parent="Root/SFX"]
 stream = ExtResource("12_0cgd7")
 volume_db = -6.0
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="ExitSFX" type="AudioStreamPlayer" parent="Root/SFX"]
 stream = ExtResource("13_43524")
 volume_db = -6.0
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="WingSFX" type="AudioStreamPlayer3D" parent="Root/SFX"]
 stream = ExtResource("14_uh57a")
@@ -233,20 +200,24 @@ max_db = 0.0
 max_distance = 50.0
 max_polyphony = 2
 panning_strength = 0.2
-bus = &"SFX"
+bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 10000.0
 
 [node name="AnimationTree" type="AnimationTree" parent="Root"]
 active = false
 root_node = NodePath("../FlyingPot")
-libraries = {
-"": SubResource("AnimationLibrary_n5734")
-}
 tree_root = SubResource("AnimationNodeBlendTree_v4aem")
 anim_player = NodePath("../FlyingPot/AnimationPlayer")
-parameters/action_trigger/active = false
-parameters/action_trigger/internal_active = false
-parameters/action_trigger/request = 0
+parameters/enter_trigger/active = false
+parameters/enter_trigger/internal_active = false
+parameters/enter_trigger/request = 0
+parameters/fall_transition/current_state = "disabled"
+parameters/fall_transition/transition_request = ""
+parameters/fall_transition/current_index = 0
+parameters/flap_speed/scale = 1.0
+parameters/flap_trigger/active = false
+parameters/flap_trigger/internal_active = false
+parameters/flap_trigger/request = 0
 
 [connection signal="area_entered" from="Root/LockonTarget" to="." method="PlayerEntered"]
 [connection signal="area_exited" from="Root/LockonTarget" to="." method="PlayerExited"]

@@ -25,21 +25,21 @@ namespace Project.Gameplay.Objects
 		/// <summary> Keeps track of whether the skeleton's range was already triggered. </summary>
 		private bool wasSpawned;
 		/// <summary> How long to stay shattered when isImmortal is true. </summary>
-		private const float IMMORTAL_RESPAWN_TIME = 1.5f;
+		private const float ImmortalRespawnTime = 1.5f;
 
-		private AnimationNodeStateMachinePlayback AnimationState => animationTree.Get(ANIMATION_STATE_PLAYBACK).Obj as AnimationNodeStateMachinePlayback;
-		private readonly StringName ANIMATION_STATE_PLAYBACK = "parameters/playback";
-		private readonly StringName SPAWN_ANIMATION = "spawn";
-		private readonly StringName ATTACK_ANIMATION = "attack";
-		private readonly StringName SHATTER_RESET_ANIMATION = "shatter-reset";
-		private readonly StringName RESET_ANIMATION = "RESET";
-		private readonly StringName DEFEAT_ANIMATION = "defeat";
-		private readonly StringName DAMAGE_ANIMATION = "damage";
+		private AnimationNodeStateMachinePlayback AnimationState => AnimationTree.Get(AnimationPlayback).Obj as AnimationNodeStateMachinePlayback;
+		private readonly StringName AnimationPlayback = "parameters/playback";
+		private readonly StringName SpawnAnimation = "spawn";
+		private readonly StringName AttackAnimation = "attack";
+		private readonly StringName ShatterResetAnimation = "shatter-reset";
+		private readonly StringName ResetAnimation = "RESET";
+		private readonly StringName DefeatAnimation = "defeat";
+		private readonly StringName DamageAnimation = "damage";
 
 		protected override void SetUp()
 		{
 			base.SetUp();
-			animationTree.Active = true;
+			AnimationTree.Active = true;
 		}
 
 
@@ -59,18 +59,20 @@ namespace Project.Gameplay.Objects
 
 			wasSpawned = false;
 
-			if (spawnMode != SpawnModes.Always)
+			if (SpawnMode != SpawnModes.Always)
+			{
 				Spawn();
+			}
 			else
 			{
-				AnimationState.Start(SHATTER_RESET_ANIMATION);
-				animationPlayer.Play(RESET_ANIMATION);
+				AnimationState.Start(ShatterResetAnimation);
+				AnimationPlayer.Play(ResetAnimation);
 			}
 		}
 
 		protected override void EnterRange()
 		{
-			if (wasSpawned || spawnMode == SpawnModes.Signal) return;
+			if (wasSpawned || SpawnMode == SpawnModes.Signal) return;
 			Spawn();
 		}
 
@@ -83,8 +85,8 @@ namespace Project.Gameplay.Objects
 
 			currentHealth = maxHealth; //Reset health
 
-			animationPlayer.Play(SPAWN_ANIMATION);
-			AnimationState.Travel(SPAWN_ANIMATION);
+			AnimationPlayer.Play(SpawnAnimation);
+			AnimationState.Travel(SpawnAnimation);
 
 			stateTimer = attackDelayCurve.Sample(Runtime.randomNumberGenerator.Randf()); //Queue next attack
 			base.Spawn();
@@ -95,15 +97,15 @@ namespace Project.Gameplay.Objects
 			if (IsActive)
 			{
 				TrackPlayer();
-				root.Rotation = new Vector3(root.Rotation.X, currentRotation, root.Rotation.Z);
+				Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
 
 				if (IsHitboxEnabled && !isAttacking) //Update attack
 				{
 					stateTimer = Mathf.MoveToward(stateTimer, 0, PhysicsManager.physicsDelta);
 					if (Mathf.IsZeroApprox(stateTimer))
 					{
-						AnimationState.Travel(ATTACK_ANIMATION);
-						animationPlayer.Play(ATTACK_ANIMATION);
+						AnimationState.Travel(AttackAnimation);
+						AnimationPlayer.Play(AttackAnimation);
 						stateTimer = attackDelayCurve.Sample(Runtime.randomNumberGenerator.Randf()); //Queue next attack
 					}
 				}
@@ -121,20 +123,20 @@ namespace Project.Gameplay.Objects
 			base.Defeat();
 
 			IsActive = false;
-			AnimationState.Travel(isImmortal ? DAMAGE_ANIMATION : DEFEAT_ANIMATION);
-			animationPlayer.Play(isImmortal ? DAMAGE_ANIMATION : DEFEAT_ANIMATION);
+			AnimationState.Travel(isImmortal ? DamageAnimation : DefeatAnimation);
+			AnimationPlayer.Play(isImmortal ? DamageAnimation : DefeatAnimation);
 
 			Character.MovementAngle = Character.PathFollower.ForwardAngle; //More consistent direction
 
 			if (isImmortal)
-				stateTimer = IMMORTAL_RESPAWN_TIME;
+				stateTimer = ImmortalRespawnTime;
 		}
 
 		public void OnHurtboxEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
 
-			interactionCounter++;
+			IsInteracting = true;
 			isHurtboxInteraction = true;
 		}
 
@@ -142,7 +144,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (!a.IsInGroup("player")) return;
 
-			interactionCounter--;
+			IsInteracting = false;
 			isHurtboxInteraction = false;
 		}
 	}

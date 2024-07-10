@@ -14,7 +14,9 @@ namespace Project.Editor.StageObjectPreviewer
 
 		private Node target;
 		private Control viewportOverlay;
-		public static Camera3D editorCam;
+		private static Camera3D editorCam;
+		private readonly Color DefaultDrawColor = Colors.Blue;
+		private readonly Color SpecialDrawColor = Colors.Red;
 
 		public override bool _Handles(GodotObject var) => true;
 		public override void _Edit(GodotObject var)
@@ -43,15 +45,11 @@ namespace Project.Editor.StageObjectPreviewer
 			viewportOverlay = overlay;
 
 			if (target is Launcher)
-				DrawLaunchSettings((target as Launcher).GetLaunchSettings(), DEFAULT_DRAW_COLOR.Lerp(SPECIAL_DRAW_COLOR, (target as Launcher).GetLaunchRatio()));
+				DrawLaunchSettings((target as Launcher).GetLaunchSettings(), DefaultDrawColor.Lerp(SpecialDrawColor, (target as Launcher).GetLaunchRatio()));
 			else if (target is JumpTrigger)
-				DrawLaunchSettings((target as JumpTrigger).GetLaunchSettings(), DEFAULT_DRAW_COLOR);
-			else if (target is Catapult)
-				DrawLaunchSettings((target as Catapult).GetLaunchSettings(), DEFAULT_DRAW_COLOR.Lerp(SPECIAL_DRAW_COLOR, (target as Catapult).launchPower));
-			else if (target is LaunchRing)
-				DrawLaunchSettings((target as LaunchRing).GetLaunchSettings(), DEFAULT_DRAW_COLOR.Lerp(SPECIAL_DRAW_COLOR, (target as LaunchRing).LaunchRatio));
+				DrawLaunchSettings((target as JumpTrigger).GetLaunchSettings(), DefaultDrawColor);
 			else if (target is GasTank)
-				DrawLaunchSettings((target as GasTank).GetLaunchSettings(), DEFAULT_DRAW_COLOR);
+				DrawLaunchSettings((target as GasTank).GetLaunchSettings(), DefaultDrawColor);
 			else if (target is ItemBox)
 				UpdateItemBox();
 			else if (target is FlyingPot)
@@ -61,7 +59,10 @@ namespace Project.Editor.StageObjectPreviewer
 			else if (target is MovingObject)
 				UpdateMovingObject();
 			else if (target is Majin)
-				UpdateMajinPath();
+				DrawMajin();
+
+			if (target is Enemy)
+				DrawEnemy();
 		}
 
 		private void UpdatePot()
@@ -83,14 +84,14 @@ namespace Project.Editor.StageObjectPreviewer
 					pointsList[i] = editorCam.UnprojectPosition(points[i]);
 			}
 
-			viewportOverlay.DrawPolyline(pointsList, DEFAULT_DRAW_COLOR, 1, true);
+			viewportOverlay.DrawPolyline(pointsList, DefaultDrawColor, 1, true);
 		}
 
 		private void UpdateDriftCorner()
 		{
 			DriftTrigger trigger = target as DriftTrigger;
-			DrawLine(trigger.GlobalPosition, trigger.MiddlePosition, DEFAULT_DRAW_COLOR);
-			DrawLine(trigger.MiddlePosition, trigger.EndPosition, SPECIAL_DRAW_COLOR);
+			DrawLine(trigger.GlobalPosition, trigger.MiddlePosition, DefaultDrawColor);
+			DrawLine(trigger.MiddlePosition, trigger.EndPosition, SpecialDrawColor);
 		}
 
 		private void UpdateItemBox()
@@ -99,7 +100,7 @@ namespace Project.Editor.StageObjectPreviewer
 
 			if (box.spawnPearls) return;
 
-			DrawLaunchSettings(box.GetLaunchSettings(), DEFAULT_DRAW_COLOR);
+			DrawLaunchSettings(box.GetLaunchSettings(), DefaultDrawColor);
 		}
 
 		private void UpdateMovingObject()
@@ -107,7 +108,7 @@ namespace Project.Editor.StageObjectPreviewer
 			MovingObject obj = target as MovingObject;
 			if (obj.IsMovementInvalid()) return; //Don't draw
 
-			Array<Vector2> points = new();
+			Array<Vector2> points = [];
 
 			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 			{
@@ -121,50 +122,72 @@ namespace Project.Editor.StageObjectPreviewer
 
 			Vector2[] pointsList = new Vector2[points.Count];
 			points.CopyTo(pointsList, 0);
-			viewportOverlay.DrawPolyline(pointsList, DEFAULT_DRAW_COLOR, 1, true);
+			viewportOverlay.DrawPolyline(pointsList, DefaultDrawColor, 1, true);
 
+			obj.ApplyEditorPosition();
 			Vector3 startingPoint = obj.InterpolatePosition(obj.StartingOffset);
 			if (!editorCam.IsPositionBehind(startingPoint))
-				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(startingPoint), 5f, SPECIAL_DRAW_COLOR);
+				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(startingPoint), 5f, SpecialDrawColor);
 		}
 
+		private void DrawEnemy()
+		{
+			Enemy enemy = target as Enemy;
+			if (enemy.rangeOverride == -1 || enemy.SpawnMode != Enemy.SpawnModes.Range)
+				return;
 
-		private void UpdateMajinPath()
+			DrawPerspectiveCircle(enemy.GlobalPosition, Basis.Identity, enemy.rangeOverride, Vector3.Forward, Vector3.Up, DefaultDrawColor);
+		}
+
+		private void DrawMajin()
 		{
 			Majin majin = target as Majin;
-			if (majin.SpawnTravelDisabled) return;
+			if (majin.SpawnTravelEnabled)
+				DrawMajinPath(majin);
 
+			if (majin.IsDefeatLaunchEnabled &&
+				editorCam.IsPositionInFrustum(majin.OriginalPosition) &&
+				editorCam.IsPositionInFrustum(majin.CalculateLaunchPosition()))
+			{
+				viewportOverlay.DrawLine(editorCam.UnprojectPosition(majin.OriginalPosition), editorCam.UnprojectPosition(majin.CalculateLaunchPosition()), SpecialDrawColor, 1, true);
+			}
+
+			if (majin.IsRedMajin && majin.FlameAggressionRadius != 0)
+				DrawPerspectiveCircle(majin.GlobalPosition, Basis.Identity, majin.FlameAggressionRadius, Vector3.Forward, Vector3.Up, SpecialDrawColor);
+		}
+
+		private void DrawMajinPath(Majin majin)
+		{
 			// Draw each of the handles
-			if (!editorCam.IsPositionBehind(majin.SpawnPosition))
-				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.SpawnPosition), 5f, SPECIAL_DRAW_COLOR);
-			if (!editorCam.IsPositionBehind(majin.InHandle))
-				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.InHandle), 5f, SPECIAL_DRAW_COLOR);
-			if (!editorCam.IsPositionBehind(majin.OutHandle))
-				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.OutHandle), 5f, SPECIAL_DRAW_COLOR);
+			if (editorCam.IsPositionInFrustum(majin.SpawnPosition))
+				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.SpawnPosition), 5f, SpecialDrawColor);
+			if (editorCam.IsPositionInFrustum(majin.InHandle))
+				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.InHandle), 5f, SpecialDrawColor);
+			if (editorCam.IsPositionInFrustum(majin.OutHandle))
+				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.OutHandle), 5f, SpecialDrawColor);
+
 
 			// Draw the spawn curve
-			Array<Vector2> points = new();
+			Array<Vector2> points = [];
 
 			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 			{
 				float simulationRatio = i / ((float)PREVIEW_RESOLUTION - 1);
 				Vector3 position = majin.CalculateTravelPosition(simulationRatio);
-				if (!editorCam.IsPositionBehind(position))
+				if (editorCam.IsPositionInFrustum(position))
 					points.Add(editorCam.UnprojectPosition(position));
 			}
 
-			if (points.Count < 2) return; //Can't draw!!!
+			if (points.Count < 2) return; // Can't draw!!!
 
 			Vector2[] pointsList = new Vector2[points.Count];
 			points.CopyTo(pointsList, 0);
-			viewportOverlay.DrawPolyline(pointsList, DEFAULT_DRAW_COLOR, 1, true);
+			viewportOverlay.DrawPolyline(pointsList, DefaultDrawColor, 1, true);
 		}
 
-		private readonly Color DEFAULT_DRAW_COLOR = Colors.Blue;
-		private readonly Color SPECIAL_DRAW_COLOR = Colors.Red;
-		private void DrawLaunchSettings(LaunchSettings LaunchSettings, Color overrideColor)
+		private void DrawLaunchSettings(LaunchSettings LaunchSettings, Color col)
 		{
-			Array<Vector2> points = new();
+			Array<Vector2> points = [];
 
 			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
 			{
@@ -178,28 +201,25 @@ namespace Project.Editor.StageObjectPreviewer
 
 			Vector2[] pointsList = new Vector2[points.Count];
 			points.CopyTo(pointsList, 0);
-			viewportOverlay.DrawPolyline(pointsList, overrideColor, 1, true);
+			viewportOverlay.DrawPolyline(pointsList, col, 1, true);
 		}
 
 
 		private void DrawPerspectiveCircle(Vector3 center, Basis basis, float radius, Vector3 startingAxis, Vector3 rotationAxis, Color col)
 		{
-			Array<Vector3> points = new();
-			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
+			Array<Vector2> points = [];
+
+			for (int i = 0; i < PREVIEW_RESOLUTION + 1; i++)
 			{
 				float angle = Mathf.Tau * ((float)i / PREVIEW_RESOLUTION);
-				points.Add(center + basis * startingAxis.Rotated(rotationAxis, angle).Normalized() * radius);
+				Vector3 position = center + (basis * startingAxis.Rotated(rotationAxis, angle).Normalized() * radius);
+				if (!editorCam.IsPositionBehind(position))
+					points.Add(editorCam.UnprojectPosition(position));
 			}
 
-			Vector2 start = editorCam.UnprojectPosition(points[0]);
-			Vector2 end = editorCam.UnprojectPosition(points[points.Count - 1]);
-			viewportOverlay.DrawLine(start, end, col);
-			for (int i = 1; i < points.Count; i++)
-			{
-				start = editorCam.UnprojectPosition(points[i - 1]);
-				end = editorCam.UnprojectPosition(points[i]);
-				viewportOverlay.DrawLine(start, end, col);
-			}
+			Vector2[] pointsList = new Vector2[points.Count];
+			points.CopyTo(pointsList, 0);
+			viewportOverlay.DrawPolyline(pointsList, col, 1, true);
 		}
 
 

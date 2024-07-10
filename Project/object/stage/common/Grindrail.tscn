@@ -1,44 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://dvoongbmetjfh"]
+[gd_scene load_steps=2 format=3 uid="uid://dvoongbmetjfh"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/GrindRail.cs" id="1_k4svk"]
-[ext_resource type="AudioStream" uid="uid://n4glservh4l2" path="res://sound/sfx/objects/grind rail.wav" id="2_p52bi"]
-[ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="3_fogeh"]
-[ext_resource type="Material" uid="uid://3j0tx2hxvynp" path="res://object/stage/common/resource/model/material/Grindrail Sparks Process Material.tres" id="3_oi74r"]
 
-[sub_resource type="QuadMesh" id="QuadMesh_qnfqm"]
-material = ExtResource("3_fogeh")
-size = Vector2(0.05, 1)
-center_offset = Vector3(0, 0.4, 0)
-
-[node name="Grindrail" type="Area3D" node_paths=PackedStringArray("sfx", "grindParticles")]
+[node name="Grindrail" type="Area3D"]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("1_k4svk")
-sfx = NodePath("SFX")
-grindParticles = NodePath("GrindrailSparksParticle")
-
-[node name="SFX" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_p52bi")
-pitch_scale = 1.2
-bus = &"SFX"
-
-[node name="GrindrailSparksParticle" type="GPUParticles3D" parent="."]
-layers = 32
-cast_shadow = 0
-extra_cull_margin = 16384.0
-gi_mode = 0
-emitting = false
-amount = 32
-lifetime = 0.4
-randomness = 0.2
-fixed_fps = 60
-interpolate = false
-visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
-local_coords = true
-transform_align = 2
-process_material = ExtResource("3_oi74r")
-draw_pass_1 = SubResource("QuadMesh_qnfqm")
+startCapPath = NodePath("")
+endCapPath = NodePath("")
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
 [connection signal="area_exited" from="." to="." method="OnExited"]

@@ -77,7 +77,7 @@ namespace Project.Gameplay.Triggers
 		#endregion
 
 		/// <summary> Only activate this StageTrigger once per respawn? </summary>
-		private bool isOneShot = false;
+		private bool isOneShot;
 		/// <summary> For keeping track of oneshot triggers. </summary>
 		private bool wasTriggered;
 		private RespawnModes respawnMode = RespawnModes.CheckpointBefore;
@@ -154,7 +154,7 @@ namespace Project.Gameplay.Triggers
 
 		public void OnEntered(Area3D a)
 		{
-			if (!a.IsInGroup("player")) return;
+			if (!a.IsInGroup("player detection")) return;
 
 			//Determine whether activation is successful
 			if (triggerMode == TriggerModes.OnExit)
@@ -172,7 +172,7 @@ namespace Project.Gameplay.Triggers
 
 		public void OnExited(Area3D a)
 		{
-			if (!a.IsInGroup("player")) return;
+			if (!a.IsInGroup("player detection")) return;
 
 			//Determine whether deactivation is successful
 			if (triggerMode == TriggerModes.OnEnter)

@@ -156,28 +156,40 @@ public partial class MovingObject : Node3D
 	private bool isPaused;
 	private const float PauseSmoothing = .1f;
 
-	[Export]
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
+	private NodePath root;
 	/// <summary> Object to actually move. </summary>
-	private Node3D root;
-	[Export]
+	private Node3D Root;
+	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
+	private NodePath animator;
 	/// <summary> Object to actually move. </summary>
-	private AnimationPlayer animator;
+	private AnimationPlayer Animator;
 	[Export(PropertyHint.Range, "0,2,.1")]
 	private float animatorSpeedScale = 1.0f;
 
 	public override void _EnterTree()
 	{
-		if (Engine.IsEditorHint()) return;
+		Root = GetNodeOrNull<Node3D>(root);
 
-		if (animator != null)
-			animator.SpeedScale = animatorSpeedScale;
+		if (Engine.IsEditorHint())
+		{
+			CallDeferred(MethodName.ApplyEditorPosition);
+			return;
+		}
 
-		Reset();
+		Animator = GetNodeOrNull<AnimationPlayer>(animator);
+
+		if (Animator != null)
+			Animator.SpeedScale = animatorSpeedScale;
+
+		StageSettings.instance.ConnectRespawnSignal(this);
+		Respawn();
 	}
 
 	public override void _PhysicsProcess(double _)
 	{
 		if (Engine.IsEditorHint()) return;
+
 		if (IsMovementInvalid()) return; // No movement
 		if (isPaused && !smoothPausing) return;
 
@@ -188,19 +200,30 @@ public partial class MovingObject : Node3D
 		if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) // Rollover
 			currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength) * Mathf.Sign(cycleLength);
 
-		if (root?.IsInsideTree() == true)
-			root.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
+		if (Root?.IsInsideTree() == true)
+			Root.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
+	}
+
+	public void ApplyEditorPosition()
+	{
+		if (Root?.IsInsideTree() != true)
+			return;
+
+		Root.GlobalPosition = InterpolatePosition(StartingOffset);
 	}
 
 	public void Pause() => isPaused = true;
 	public void Unpause() => isPaused = false;
 
 	/// <summary> Resets currentTime to StartingOffset. </summary>
-	public void Reset()
+	public void Respawn()
 	{
 		TimeScale = 1f;
 		isPaused = startPaused;
 		currentTime = StartingOffset * Mathf.Abs(cycleLength);
+
+		if (Root?.IsInsideTree() == true)
+			Root.GlobalPosition = InterpolatePosition(currentTime);
 	}
 
 	public Vector3 InterpolatePosition(float ratio)

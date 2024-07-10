@@ -1,0 +1,707 @@
+[gd_scene load_steps=41 format=3 uid="uid://ci04gau0040rg"]
+
+[ext_resource type="Script" path="res://interface/menu/notification/NotificationMenu.cs" id="1_7xnur"]
+[ext_resource type="AudioStream" uid="uid://485xkalxjomp" path="res://sound/sfx/system/jingle ring get.mp3" id="2_uhj5u"]
+[ext_resource type="AudioStream" uid="uid://gdiwd0rtpun2" path="res://sound/sfx/system/jingle omake get.mp3" id="3_jt3ou"]
+[ext_resource type="AudioStream" uid="uid://bh1gucfr247pn" path="res://sound/sfx/system/jingle skill get.mp3" id="4_hp0wl"]
+[ext_resource type="AudioStream" uid="uid://dgybrdt0i5sok" path="res://sound/sfx/system/special book open.wav" id="5_vsnqd"]
+[ext_resource type="Texture2D" uid="uid://itsivjx72cpr" path="res://interface/menu/notification/texture/unlock/skill.png" id="6_v6u11"]
+[ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="7_uowj0"]
+[ext_resource type="Texture2D" uid="uid://pen6e1hcd7t4" path="res://interface/gameplay/results/texture/experience sparkle.png" id="8_es8i3"]
+[ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="9_vyo4i"]
+[ext_resource type="PackedScene" uid="uid://c4ohuqlywe4f" path="res://interface/menu/Description.tscn" id="10_g1v76"]
+[ext_resource type="Texture2D" uid="uid://b4w47kkx8kjio" path="res://interface/menu/notification/texture/unlock/special book.png" id="11_k5rc2"]
+[ext_resource type="Texture2D" uid="uid://da6jb15675sp6" path="res://interface/menu/notification/texture/unlock/world.png" id="12_e2h81"]
+[ext_resource type="Texture2D" uid="uid://d2mqgifc4818o" path="res://interface/menu/notification/texture/unlock/party.png" id="13_kn6xp"]
+[ext_resource type="Texture2D" uid="uid://b666drksnrgwy" path="res://interface/menu/notification/texture/world rings/yellow world ring.png" id="14_mb3ky"]
+[ext_resource type="Texture2D" uid="uid://dcvaq0mdjkc7" path="res://interface/menu/notification/texture/world rings/green world ring.png" id="15_fxf86"]
+[ext_resource type="Texture2D" uid="uid://cle88ijcdlkjy" path="res://interface/menu/notification/texture/world rings/red world ring.png" id="16_j3awc"]
+[ext_resource type="Texture2D" uid="uid://bfohyht6px555" path="res://interface/menu/notification/texture/world rings/blue world ring.png" id="17_qkiwy"]
+[ext_resource type="Texture2D" uid="uid://brxj2lkt58dq8" path="res://interface/menu/notification/texture/world rings/aqua world ring.png" id="18_6fx0y"]
+[ext_resource type="Texture2D" uid="uid://br52aj4hc6q8f" path="res://interface/menu/notification/texture/world rings/white world ring.png" id="19_7mab2"]
+[ext_resource type="Texture2D" uid="uid://dbuetj2bnrf8l" path="res://interface/menu/notification/texture/world rings/purple world ring.png" id="20_ax853"]
+[ext_resource type="Texture2D" uid="uid://bru3w825fdq08" path="res://interface/menu/notification/texture/unlock/mission.png" id="21_bnm8b"]
+
+[sub_resource type="Curve" id="Curve_xq84k"]
+_data = [Vector2(0, 0.15425), 0.0, 9.99847, 0, 0, Vector2(0.0952381, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.4249, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_pjon3"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_xq84k")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gij8y"]
+lifetime_randomness = 0.8
+particle_flag_disable_z = true
+particle_flag_damping_as_friction = true
+angle_max = 360.0
+direction = Vector3(0, 0, 1)
+spread = 180.0
+flatness = 0.8
+initial_velocity_min = 1000.0
+initial_velocity_max = 1000.0
+gravity = Vector3(0, 0, 0)
+damping_min = 0.05
+damping_max = 0.05
+scale_min = 2.0
+scale_max = 5.0
+alpha_curve = SubResource("CurveTexture_pjon3")
+
+[sub_resource type="Animation" id="Animation_xcge0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Background:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Background/NavigationButtons:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Background/Sprite:texture")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_v6u11")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Background/Sprite:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_fgoi0"]
+resource_name = "init"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Background:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/NavigationButtons:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Background/Sprite:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_u585n"]
+resource_name = "unlock"
+length = 0.16667
+step = 0.0333333
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Background/Description")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"ShowDescription"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Explosion")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Background/Sprite:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.166667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"EnableProcessing"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Background/NavigationButtons:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Background/Sprite:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_f8l5g"]
+resource_name = "unlock_mission"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/SkillJingle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("21_bnm8b")]
+}
+
+[sub_resource type="Animation" id="Animation_bryie"]
+resource_name = "unlock_page"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/ExtraJingle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_k5rc2")]
+}
+
+[sub_resource type="Animation" id="Animation_h14m2"]
+resource_name = "unlock_party"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/ExtraJingle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("13_kn6xp")]
+}
+
+[sub_resource type="Animation" id="Animation_85p5m"]
+resource_name = "unlock_ring_dinosaur_jungle"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/WorldRingJingle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("15_fxf86")]
+}
+
+[sub_resource type="Animation" id="Animation_u5423"]
+resource_name = "unlock_ring_evil_foundry"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/WorldRingJingle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("16_j3awc")]
+}
+
+[sub_resource type="Animation" id="Animation_kix3b"]
+resource_name = "unlock_ring_levitated_ruin"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/WorldRingJingle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("17_qkiwy")]
+}
+
+[sub_resource type="Animation" id="Animation_2k4oq"]
+resource_name = "unlock_ring_night_palace"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/WorldRingJingle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("20_ax853")]
+}
+
+[sub_resource type="Animation" id="Animation_0a0s7"]
+resource_name = "unlock_ring_pirate_storm"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/WorldRingJingle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("18_6fx0y")]
+}
+
+[sub_resource type="Animation" id="Animation_otoh7"]
+resource_name = "unlock_ring_sand_oasis"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/WorldRingJingle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("14_mb3ky")]
+}
+
+[sub_resource type="Animation" id="Animation_x5ssx"]
+resource_name = "unlock_ring_skeleton_dome"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/WorldRingJingle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("19_7mab2")]
+}
+
+[sub_resource type="Animation" id="Animation_uo60i"]
+resource_name = "unlock_skill"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/SkillJingle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_v6u11")]
+}
+
+[sub_resource type="Animation" id="Animation_0psw2"]
+resource_name = "unlock_world"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/PageJingle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("12_e2h81")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cyy10"]
+_data = {
+"RESET": SubResource("Animation_xcge0"),
+"init": SubResource("Animation_fgoi0"),
+"unlock": SubResource("Animation_u585n"),
+"unlock_mission": SubResource("Animation_f8l5g"),
+"unlock_page": SubResource("Animation_bryie"),
+"unlock_party": SubResource("Animation_h14m2"),
+"unlock_ring_dinosaur_jungle": SubResource("Animation_85p5m"),
+"unlock_ring_evil_foundry": SubResource("Animation_u5423"),
+"unlock_ring_levitated_ruin": SubResource("Animation_kix3b"),
+"unlock_ring_night_palace": SubResource("Animation_2k4oq"),
+"unlock_ring_pirate_storm": SubResource("Animation_0a0s7"),
+"unlock_ring_sand_oasis": SubResource("Animation_otoh7"),
+"unlock_ring_skeleton_dome": SubResource("Animation_x5ssx"),
+"unlock_skill": SubResource("Animation_uo60i"),
+"unlock_world": SubResource("Animation_0psw2")
+}
+
+[node name="NotificationMenu" type="Control" node_paths=PackedStringArray("description", "animator")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7xnur")
+description = NodePath("Background/Description")
+animator = NodePath("AnimationPlayer")
+
+[node name="SFX" type="Node" parent="."]
+
+[node name="WorldRingJingle" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("2_uhj5u")
+bus = &"SFX"
+
+[node name="ExtraJingle" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("3_jt3ou")
+bus = &"SFX"
+
+[node name="SkillJingle" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("4_hp0wl")
+bus = &"SFX"
+
+[node name="PageJingle" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("5_vsnqd")
+bus = &"SFX"
+
+[node name="Background" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+metadata/_edit_lock_ = true
+
+[node name="Sprite" type="TextureRect" parent="Background"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 712.0
+offset_right = -708.0
+offset_bottom = -312.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(250, 384)
+texture = ExtResource("6_v6u11")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Explosion" type="GPUParticles2D" parent="Background"]
+material = ExtResource("7_uowj0")
+position = Vector2(960, 384)
+emitting = false
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_gij8y")
+texture = ExtResource("8_es8i3")
+lifetime = 1.5
+one_shot = true
+explosiveness = 1.0
+randomness = 0.3
+fixed_fps = 0
+
+[node name="NavigationButtons" type="HBoxContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 448.0
+offset_top = 704.0
+offset_right = -446.0
+offset_bottom = -312.0
+theme_override_constants/separation = 64
+alignment = 2
+
+[node name="Next" parent="Background/NavigationButtons" instance=ExtResource("9_vyo4i")]
+layout_mode = 2
+actionKey = "sys_next"
+inputKey = "button_jump"
+
+[node name="Description" parent="Background" instance=ExtResource("10_g1v76")]
+layout_mode = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_cyy10")
+}

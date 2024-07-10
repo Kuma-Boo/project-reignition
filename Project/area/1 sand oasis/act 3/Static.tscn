@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://7kcasi6v1odv"]
+[gd_scene load_steps=32 format=3 uid="uid://7kcasi6v1odv"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_fxxlg"]
 [ext_resource type="PackedScene" uid="uid://ctpgc4qaiar68" path="res://area/1 sand oasis/act 3/environment/collision/Collision.tscn" id="1_wbafh"]
@@ -17,7 +17,6 @@
 [ext_resource type="PackedScene" uid="uid://bom1n0hvfixo1" path="res://area/1 sand oasis/data/BGM.tscn" id="10_f773a"]
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="12_pipgr"]
 [ext_resource type="PackedScene" uid="uid://semhlskb8slv" path="res://area/1 sand oasis/act 3/environment/model/LightBlocker.gltf" id="14_5tb48"]
-[ext_resource type="Environment" uid="uid://cxq4u3gsbysnj" path="res://area/1 sand oasis/act 3/environment/Environment.tres" id="15_r8c8n"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kh3tl"]
 size = Vector3(15, 20, 60)
@@ -453,6 +452,58 @@ _data = {
 "demo3": SubResource("Animation_820jq")
 }
 
+[sub_resource type="Gradient" id="Gradient_hldb2"]
+offsets = PackedFloat32Array(0.585714)
+colors = PackedColorArray(1, 0.33, 0.33, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5dnou"]
+gradient = SubResource("Gradient_hldb2")
+
+[sub_resource type="Gradient" id="Gradient_fdvqy"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.216495, 0.42268, 0.505155, 0.608247, 0.809278)
+colors = PackedColorArray(1, 0, 0.9, 1, 1, 0, 0.483334, 1, 1, 0.483333, 0, 1, 0.74676, 0.84, 0.6888, 1, 0, 0.6, 1, 1, 0, 0.380392, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bn0qu"]
+gradient = SubResource("Gradient_fdvqy")
+fill_from = Vector2(1, 0.957265)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_yhk3m"]
+panorama = SubResource("GradientTexture2D_bn0qu")
+
+[sub_resource type="Sky" id="Sky_cdpwp"]
+sky_material = SubResource("PanoramaSkyMaterial_yhk3m")
+radiance_size = 1
+
+[sub_resource type="Environment" id="Environment_i6k4x"]
+background_mode = 2
+sky = SubResource("Sky_cdpwp")
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_sky_contribution = 0.8
+ambient_light_energy = 3.13
+reflected_light_source = 2
+tonemap_mode = 2
+tonemap_exposure = 1.2
+tonemap_white = 1.3
+ssil_enabled = true
+ssil_sharpness = 0.9
+ssil_normal_rejection = 0.8
+glow_enabled = true
+glow_intensity = 1.38
+glow_strength = 0.63
+glow_bloom = 0.05
+glow_blend_mode = 1
+glow_hdr_threshold = 3.0
+glow_map_strength = 0.13
+glow_map = SubResource("GradientTexture1D_5dnou")
+fog_enabled = true
+fog_light_color = Color(1, 0.147443, 0.181214, 1)
+fog_density = 0.0001
+fog_sky_affect = 0.0
+adjustment_enabled = true
+adjustment_saturation = 1.2
+
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_fxxlg")
 InitialCameraSettings = ExtResource("2_lhfq0")
@@ -670,7 +721,7 @@ curve = ExtResource("8_5ae3c")
 
 [node name="Camera" type="Camera3D" parent="DemoCamera"]
 cull_mask = 62
-fov = 60.0
+fov = 70.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DemoCamera"]
 libraries = {
@@ -683,7 +734,7 @@ next/demo3 = &"demo1"
 [node name="BGM" parent="." instance=ExtResource("10_f773a")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("15_r8c8n")
+environment = SubResource("Environment_i6k4x")
 
 [node name="DepthRenderer" parent="." instance=ExtResource("12_pipgr")]
 
