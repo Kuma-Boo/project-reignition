@@ -155,6 +155,8 @@ public partial class Runtime : Node
 
 		for (int i = tweeningPearls.Count - 1; i >= 0; i--)
 			tweeningPearls[i].Despawn();
+
+		SoundManager.instance.StopAllPearlSFX();
 	}
 
 	private void KillPearlTween(Tween tween)
