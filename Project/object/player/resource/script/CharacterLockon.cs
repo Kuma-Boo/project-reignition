@@ -85,8 +85,10 @@ public partial class CharacterLockon : Node3D
 
 		if (IsMonitoring && (!IsBounceLockoutActive || CanInterruptBounce))
 		{
-			Node3D currentTarget = Target;
 			float closestDistance = Mathf.Inf; // Current closest target
+			Node3D currentTarget = Target;
+			if (currentTarget != null)
+				closestDistance = currentTarget.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
 
 			// Check whether to pick a new target
 			for (int i = 0; i < activeTargets.Count; i++)
@@ -122,20 +124,25 @@ public partial class CharacterLockon : Node3D
 			TargetState targetState = IsTargetValid(Target); // Validate homing attack target
 
 			if ((IsHomingAttacking && targetState == TargetState.NotInList) ||
-				(!IsHomingAttacking && targetState != TargetState.Valid) ||
-				(Target.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten()) < DistanceFudgeAmount &&
-				Character.IsHoldingDirection(Character.PathFollower.ForwardAngle)))
+				(!IsHomingAttacking && targetState != TargetState.Valid))
 			{
-				ResetLockonTarget();
-				return;
+				Target = null;
 			}
-
-			// Check Height
-			bool isTargetAttackable = IsHomingAttacking ||
-				(Target.GlobalPosition.Y <= Character.CenterPosition.Y + (Character.CollisionSize.Y * 2.0f) &&
-				Character.ActionState != CharacterController.ActionStates.JumpDash);
-			Vector2 screenPos = Character.Camera.ConvertToScreenSpace(Target.GlobalPosition);
-			UpdateLockonReticle(screenPos, isTargetAttackable);
+			else if (!IsHomingAttacking &&
+				Target.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten()) < DistanceFudgeAmount &&
+				Character.IsHoldingDirection(Character.PathFollower.ForwardAngle))
+			{
+				Target = null;
+			}
+			else
+			{
+				// Check Height
+				bool isTargetAttackable = IsHomingAttacking ||
+					(Target.GlobalPosition.Y <= Character.CenterPosition.Y + (Character.CollisionSize.Y * 2.0f) &&
+					Character.ActionState != CharacterController.ActionStates.JumpDash);
+				Vector2 screenPos = Character.Camera.ConvertToScreenSpace(Target.GlobalPosition);
+				UpdateLockonReticle(screenPos, isTargetAttackable);
+			}
 		}
 
 		if (Target == null && wasTargetChanged) // Disable UI
