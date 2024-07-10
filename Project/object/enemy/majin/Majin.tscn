@@ -248,17 +248,23 @@ tracks/12/keys = {
 "update": 0,
 "values": [Vector3(1, 1, 1)]
 }
-tracks/13/type = "value"
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/path = NodePath("ChestAttachment/EnvironmentCollider/CollisionShape3D:disabled")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/keys = {
+
+[sub_resource type="Animation" id="Animation_1j3bl"]
+resource_name = "defeat"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/StrikeSFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_o85fj"]
@@ -812,18 +818,6 @@ tracks/5/keys = {
 "method": &"PlayInGroup"
 }]
 }
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("ChestAttachment/EnvironmentCollider/CollisionShape3D:disabled")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
 
 [sub_resource type="Animation" id="Animation_1nwld"]
 resource_name = "spin"
@@ -955,48 +949,6 @@ tracks/6/keys = {
 "update": 0,
 "values": [Vector3(0.001, 0.001, 0.001), Vector3(1, 1, 1)]
 }
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("ChestAttachment/EnvironmentCollider/CollisionShape3D:disabled")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="Animation" id="Animation_1j3bl"]
-resource_name = "defeat"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FX/StrikeSFX")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("ChestAttachment/EnvironmentCollider/CollisionShape3D:disabled")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stb46"]
 _data = {
@@ -1026,7 +978,7 @@ pearlAmount = 15
 damagePlayer = true
 root = NodePath("Root")
 hurtbox = NodePath("ChestAttachment/Hitbox")
-collider = NodePath("ChestAttachment/EnvironmentCollider/CollisionShape3D")
+collider = NodePath("")
 rangeCollider = NodePath("Range/CollisionShape3D")
 animationTree = NodePath("AnimationTree")
 animationPlayer = NodePath("AnimationPlayer")
