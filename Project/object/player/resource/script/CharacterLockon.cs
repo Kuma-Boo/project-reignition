@@ -253,7 +253,10 @@ public partial class CharacterLockon : Node3D
 	{
 		bounceInterruptTimer = Mathf.MoveToward(bounceInterruptTimer, 0, PhysicsManager.physicsDelta);
 		if (Mathf.IsZeroApprox(bounceInterruptTimer))
+		{
 			CanInterruptBounce = true;
+			UpdateLockonTargets();
+		}
 
 		Character.MoveSpeed = Mathf.MoveToward(Character.MoveSpeed, 0f, Character.GroundSettings.friction * PhysicsManager.physicsDelta);
 		Character.VerticalSpeed -= Runtime.GRAVITY * PhysicsManager.physicsDelta;
