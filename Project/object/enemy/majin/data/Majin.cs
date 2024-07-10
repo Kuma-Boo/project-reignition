@@ -446,6 +446,7 @@ public partial class Majin : Enemy
 			tweener.TweenProperty(this, "global_position", CalculateLaunchPosition(), defeatLaunchTime);
 			tweener.TweenProperty(this, "rotation", Rotation + targetRotation, defeatLaunchTime * 2.0f).SetEase(Tween.EaseType.In);
 			tweener.TweenCallback(Callable.From(() => AnimationPlayer.Play("launch-end"))).SetDelay(defeatLaunchTime * .5f);
+			tweener.TweenCallback(Callable.From(() => SetHitboxStatus(false, false))).SetDelay(defeatLaunchTime);
 		}
 		else
 		{
