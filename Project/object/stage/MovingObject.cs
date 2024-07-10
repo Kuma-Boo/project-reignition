@@ -156,25 +156,31 @@ public partial class MovingObject : Node3D
 	private bool isPaused;
 	private const float PauseSmoothing = .1f;
 
-	[Export]
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
+	private NodePath root;
 	/// <summary> Object to actually move. </summary>
-	private Node3D root;
-	[Export]
+	private Node3D Root;
+	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
+	private NodePath animator;
 	/// <summary> Object to actually move. </summary>
-	private AnimationPlayer animator;
+	private AnimationPlayer Animator;
 	[Export(PropertyHint.Range, "0,2,.1")]
 	private float animatorSpeedScale = 1.0f;
 
 	public override void _EnterTree()
 	{
+		Root = GetNodeOrNull<Node3D>(root);
+
 		if (Engine.IsEditorHint())
 		{
 			CallDeferred(MethodName.ApplyEditorPosition);
 			return;
 		}
 
-		if (animator != null)
-			animator.SpeedScale = animatorSpeedScale;
+		Animator = GetNodeOrNull<AnimationPlayer>(animator);
+
+		if (Animator != null)
+			Animator.SpeedScale = animatorSpeedScale;
 
 		StageSettings.instance.ConnectRespawnSignal(this);
 		Respawn();
@@ -194,16 +200,16 @@ public partial class MovingObject : Node3D
 		if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) // Rollover
 			currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength) * Mathf.Sign(cycleLength);
 
-		if (root?.IsInsideTree() == true)
-			root.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
+		if (Root?.IsInsideTree() == true)
+			Root.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
 	}
 
 	public void ApplyEditorPosition()
 	{
-		if (root?.IsInsideTree() != true)
+		if (Root?.IsInsideTree() != true)
 			return;
 
-		root.GlobalPosition = InterpolatePosition(StartingOffset);
+		Root.GlobalPosition = InterpolatePosition(StartingOffset);
 	}
 
 	public void Pause() => isPaused = true;
@@ -216,8 +222,8 @@ public partial class MovingObject : Node3D
 		isPaused = startPaused;
 		currentTime = StartingOffset * Mathf.Abs(cycleLength);
 
-		if (root?.IsInsideTree() == true)
-			root.GlobalPosition = InterpolatePosition(currentTime);
+		if (Root?.IsInsideTree() == true)
+			Root.GlobalPosition = InterpolatePosition(currentTime);
 	}
 
 	public Vector3 InterpolatePosition(float ratio)

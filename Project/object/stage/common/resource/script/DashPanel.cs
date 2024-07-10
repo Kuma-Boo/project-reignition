@@ -12,9 +12,12 @@ public partial class DashPanel : Area3D
 	[Export]
 	private bool alignToPath; //Forces the player to stay aligned to the path. Useful when a dash panel is right before a corner.
 
-	[Export]
-	private AudioStreamPlayer3D sfxPlayer;
+	[Export(PropertyHint.NodePathValidTypes, "AudioStreamPlayer3D")]
+	private NodePath sfxPlayer;
+	private AudioStreamPlayer3D SfxPlayer { get; set; }
 	private CharacterController Character => CharacterController.instance;
+
+	public override void _Ready() => SfxPlayer = GetNodeOrNull<AudioStreamPlayer3D>(sfxPlayer);
 
 	public override void _PhysicsProcess(double _)
 	{
@@ -29,7 +32,7 @@ public partial class DashPanel : Area3D
 	{
 		if (!Character.IsOnGround) return; //Can't activate when player is in the air
 
-		sfxPlayer.Play();
+		SfxPlayer.Play();
 		isQueued = false;
 		Character.ResetActionState();
 
