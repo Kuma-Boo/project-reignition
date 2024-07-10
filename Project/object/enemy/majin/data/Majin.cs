@@ -252,14 +252,18 @@ public partial class Majin : Enemy
 	{
 		Vector3 launchVector = defeatLaunchDirection;
 		if (launchVector.IsEqualApprox(Vector3.Zero) && !Engine.IsEditorHint()) // Calculate launch direction
+		{
 			launchVector = (Character.Animator.Back() + (Character.Animator.Up() * .2f)).Normalized();
+			launchVector = launchVector.Normalized() * Mathf.Clamp(Character.MoveSpeed, 5, 20);
+		}
 		else if (isDefeatLocalTransform)
+		{
 			launchVector = GlobalTransform.Basis * launchVector;
+		}
 
 		launchVector = launchVector.Rotated(Vector3.Up, Mathf.Pi); // Fix forward direction
-		if (!Engine.IsEditorHint())
-			launchVector = launchVector.Normalized() * Mathf.Clamp(Character.MoveSpeed, 5, 20);
-		return OriginalPosition + launchVector;
+
+		return GlobalPosition + launchVector;
 	}
 
 	/// <summary> Responsible for handling tweens (i.e. Spawning/Default launching) </summary>

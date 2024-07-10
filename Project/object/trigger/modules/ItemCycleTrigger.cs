@@ -46,7 +46,6 @@ public partial class ItemCycleTrigger : StageTriggerModule
 
 	public override void Activate()
 	{
-		GD.Print("Cycled.");
 		if (itemCycles.Count == 0 || !isCycleFlagSet) return;
 
 		// Cycle items
@@ -79,7 +78,6 @@ public partial class ItemCycleTrigger : StageTriggerModule
 
 	private void OnCheckpointEntered(Area3D a)
 	{
-		GD.Print("Checkpoint Entered.");
 		if (!a.IsInGroup("player detection")) return;
 		isCycleFlagSet = true;
 	}
