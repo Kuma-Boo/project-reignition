@@ -953,7 +953,7 @@ namespace Project.Gameplay.Bosses
 
 		public void ProcessHitboxCollision()
 		{
-			if (Character.Lockon.IsHomingAttacking || Character.Lockon.IsBouncingLockoutActive) return; // Player's homing attack always takes priority.
+			if (Character.Lockon.IsHomingAttacking || Character.Lockon.IsBounceLockoutActive) return; // Player's homing attack always takes priority.
 			if (damageState == DamageState.Knockback) return; // Boss is in knockback and can't damage the player.
 
 			if (Character.Skills.IsSpeedBreakActive)
@@ -990,7 +990,7 @@ namespace Project.Gameplay.Bosses
 
 		private void ProcessFlyingEyeCollision()
 		{
-			if (Character.Lockon.IsBouncingLockoutActive) return; // Player just finished a homing attack
+			if (Character.Lockon.IsBounceLockoutActive) return; // Player just finished a homing attack
 
 			if (Character.Skills.IsSpeedBreakActive) // Special attack
 				return;

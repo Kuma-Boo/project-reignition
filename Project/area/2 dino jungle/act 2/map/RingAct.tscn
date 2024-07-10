@@ -20,7 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://dadka31wrx5f4" path="res://object/enemy/majin/data/dino jungle/GreenMajin.tscn" id="18_7rfl2"]
 [ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="19_37g7b"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="19_aiunq"]
-[ext_resource type="Resource" uid="uid://x3j0chytjj1w" path="res://area/2 dino jungle/act 2/camera/RightCatapultCam.tres" id="19_hhytg"]
+[ext_resource type="Resource" uid="uid://ctcjx8l5t1ppn" path="res://area/2 dino jungle/act 2/camera/RightCatapultCam.tres" id="19_hhytg"]
 [ext_resource type="PackedScene" uid="uid://bjkwrplubhwil" path="res://area/2 dino jungle/object/platform/CactusPlatform.tscn" id="20_4d8pg"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="20_cyl5y"]
 [ext_resource type="PackedScene" uid="uid://cbpudluma1oux" path="res://object/stage/destructable/Crate.tscn" id="24_w4kk3"]
@@ -100,7 +100,6 @@ transform = Transform3D(-0.999577, 0, -0.0290788, 0, 1, 0, 0.0290788, 0, -0.9995
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 2.0
 "Attack Settings/Flame Aggression Radius" = 20
-"Attack Settings/Attack Instantly" = false
 rangeOverride = 43
 
 [node name="RedMajin3" parent="RingAct/LotusGroup" instance=ExtResource("8_g3ynl")]
@@ -115,7 +114,6 @@ transform = Transform3D(-0.983294, 0, 0.182024, 0, 1, 0, -0.182024, 0, -0.983294
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 2.0
 "Attack Settings/Flame Aggression Radius" = 20
-"Attack Settings/Attack Instantly" = false
 rangeOverride = 60
 
 [node name="EnemyStone3" parent="RingAct/LotusGroup" instance=ExtResource("17_oc0to")]
@@ -134,7 +132,6 @@ transform = Transform3D(-0.920298, 0, -0.391218, 0, 1, 0, 0.391218, 0, -0.920298
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 2.0
 "Attack Settings/Flame Aggression Radius" = 25
-"Attack Settings/Attack Instantly" = false
 rangeOverride = 28
 
 [node name="GreenMajin2" parent="RingAct/LotusGroup" instance=ExtResource("18_7rfl2")]
@@ -178,7 +175,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3003, 23.3747, 119.404)
 [node name="BlueMajin" parent="RingAct/WaterFall" instance=ExtResource("16_vv7l1")]
 transform = Transform3D(0.706057, 0, -0.708155, 0, 1, 0, 0.708155, 0, 0.706057, -10.7893, -4.08512, 17.783)
 
-[node name="Movementscript" type="Node3D" parent="RingAct/WaterFall" node_paths=PackedStringArray("root")]
+[node name="Movementscript" type="Node3D" parent="RingAct/WaterFall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.0637, -10.9149, 25.7309)
 script = ExtResource("13_pbwnh")
 Movement/Mode = 1
@@ -187,7 +184,7 @@ Movement/Mode = 1
 Movement/Distance = 13.0
 Movement/Angle = 0.0
 "Vertical Orientation" = true
-root = NodePath("GreenMajin")
+root = NodePath("")
 
 [node name="GreenMajin" parent="RingAct/WaterFall/Movementscript" instance=ExtResource("18_7rfl2")]
 transform = Transform3D(-0.680273, 0, 0.732959, 0, 1, 0, -0.732959, 0, -0.680273, 0, 0, 0)
@@ -375,8 +372,6 @@ transform = Transform3D(0.993138, 0, -0.116948, 0, 1, 0, 0.116948, 0, 0.993138, 
 transform = Transform3D(0.998134, 0, -0.061066, 0, 1, 0, 0.061066, 0, 0.998134, -0.161163, -1.46323, -0.904526)
 "Attack Settings/Flame Active Time" = 7.0
 "Attack Settings/Flame Inactive Time" = 2.0
-"Attack Settings/Flame Aggression Radius" = 0
-"Attack Settings/Attack Instantly" = false
 
 [node name="EnemyStone" parent="RingAct/SpringPath" instance=ExtResource("17_oc0to")]
 transform = Transform3D(0.983553, 0, -0.180622, 0, 1, 0, 0.180622, 0, 0.983553, -0.00967216, -2.85863, -0.708801)
@@ -397,15 +392,9 @@ transform = Transform3D(1.00418, 0, 0.717358, 0, 1.28474, 0, -0.717358, 0, 1.004
 
 [node name="WaterRock7" parent="RingAct/Boat2" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("12_tybq2")]
 transform = Transform3D(1.0109, 0, 0.707844, 0, 1.28474, 0, -0.707844, 0, 1.0109, -116.532, -5.65945, 134.912)
-root = NodePath("../WaterRock/Root")
-pieceRoot = NodePath("../WaterRock/WhiteRockPieces")
-animator = NodePath("../WaterRock/AnimationPlayer")
 
 [node name="WaterRock6" parent="RingAct/Boat2" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("12_tybq2")]
 transform = Transform3D(1.0109, 0, 0.707844, 0, 1.28474, 0, -0.707844, 0, 1.0109, -104.66, -5.65945, 126.6)
-root = NodePath("../WaterRock/Root")
-pieceRoot = NodePath("../WaterRock/WhiteRockPieces")
-animator = NodePath("../WaterRock/AnimationPlayer")
 
 [node name="SpikeBall" parent="RingAct/Boat2" instance=ExtResource("15_ojd7p")]
 transform = Transform3D(0.612599, 0, 0.790394, 0, 1, 0, -0.790394, 0, 0.612599, -98.5681, -5.875, 145.687)
@@ -606,8 +595,6 @@ transform = Transform3D(-0.0290879, 0, 0.999577, 0, 1, 0, -0.999577, 0, -0.02908
 "Rotation Settings/Rotation Time" = 3.0
 "Attack Settings/Flame Active Time" = 4.0
 "Attack Settings/Flame Inactive Time" = 3.0
-"Attack Settings/Flame Aggression Radius" = 0
-"Attack Settings/Attack Instantly" = false
 rangeOverride = 15
 
 [node name="RedMajin2" parent="RingAct/Island" instance=ExtResource("8_g3ynl")]
@@ -616,8 +603,6 @@ transform = Transform3D(0.422616, 0, 0.906309, 0, 1, 0, -0.906309, 0, 0.422616, 
 "Rotation Settings/Rotation Time" = 1.0
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 3.0
-"Attack Settings/Flame Aggression Radius" = 0
-"Attack Settings/Attack Instantly" = false
 rangeOverride = 20
 
 [node name="RedMajin3" parent="RingAct/Island" instance=ExtResource("8_g3ynl")]
@@ -626,8 +611,6 @@ transform = Transform3D(0.906307, 0, 0.422619, 0, 1, 0, -0.422619, 0, 0.906307, 
 "Rotation Settings/Rotation Time" = 1.0
 "Attack Settings/Flame Active Time" = 6.0
 "Attack Settings/Flame Inactive Time" = 3.0
-"Attack Settings/Flame Aggression Radius" = 0
-"Attack Settings/Attack Instantly" = false
 rangeOverride = 10
 
 [node name="EnemyStone" parent="RingAct/Island" instance=ExtResource("17_oc0to")]
@@ -648,7 +631,7 @@ enemyCount = 3
 
 [node name="MovingObjects" type="Node3D" parent="RingAct/Island"]
 
-[node name="MovingITBOXF" type="Node3D" parent="RingAct/Island/MovingObjects" node_paths=PackedStringArray("root")]
+[node name="MovingITBOXF" type="Node3D" parent="RingAct/Island/MovingObjects"]
 transform = Transform3D(0.949661, 0, -0.31328, 0, 1, 0, 0.31328, 0, 0.949661, -177.939, 18.6185, 79.5156)
 script = ExtResource("13_pbwnh")
 Movement/Mode = 1
@@ -660,11 +643,10 @@ Movement/Angle = -90.0
 root = NodePath("ItemBoxFlying")
 
 [node name="ItemBoxFlying" parent="RingAct/Island/MovingObjects/MovingITBOXF" instance=ExtResource("20_cyl5y")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 50
 
-[node name="MovingITBOXF2" type="Node3D" parent="RingAct/Island/MovingObjects" node_paths=PackedStringArray("root")]
+[node name="MovingITBOXF2" type="Node3D" parent="RingAct/Island/MovingObjects"]
 transform = Transform3D(0.949661, 0, -0.31328, 0, 1, 0, 0.31328, 0, 0.949661, -172.528, 18.6185, 70.0313)
 script = ExtResource("13_pbwnh")
 Movement/Mode = 1

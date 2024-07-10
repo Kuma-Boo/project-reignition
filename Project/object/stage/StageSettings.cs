@@ -478,6 +478,7 @@ public partial class StageSettings : Node3D
 		GetTree().CreateTimer(wasSuccessful ? Data.CompletionDelay : FAIL_COMPLETION_DELAY).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.StartCompletionDemo));
 
 		BGMPlayer.StageMusicPaused = true;
+		SoundManager.instance.CancelDialog();
 		Interface.PauseMenu.AllowPausing = false;
 		LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
 

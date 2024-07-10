@@ -236,22 +236,13 @@ public partial class Enemy : Node3D
 		if (IsInteractionProcessed)
 			return;
 
-		if ((Character.Lockon.IsBouncingLockoutActive &&
+		if ((Character.Lockon.IsBounceLockoutActive &&
 			Character.ActionState == CharacterController.ActionStates.Normal) ||
 			!IsHitboxEnabled)
 		{
 			return;
 		}
 
-		if (Character.ActionState == CharacterController.ActionStates.JumpDash)
-		{
-			UpdateLockon();
-			Character.Lockon.StartBounce(IsDefeated);
-		}
-		else if (damagePlayer && Character.AttackState == CharacterController.AttackStates.None)
-		{
-			Character.StartKnockback();
-		}
 		switch (Character.AttackState)
 		{
 			case CharacterController.AttackStates.OneShot:
@@ -263,6 +254,16 @@ public partial class Enemy : Node3D
 			case CharacterController.AttackStates.Strong:
 				TakeDamage(2);
 				break;
+		}
+
+		if (Character.ActionState == CharacterController.ActionStates.JumpDash)
+		{
+			UpdateLockon();
+			Character.Lockon.StartBounce(IsDefeated);
+		}
+		else if (damagePlayer && Character.AttackState == CharacterController.AttackStates.None)
+		{
+			Character.StartKnockback();
 		}
 
 		SetInteractionProcessed();

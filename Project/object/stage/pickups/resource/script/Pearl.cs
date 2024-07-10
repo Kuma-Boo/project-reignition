@@ -12,7 +12,7 @@ public partial class Pearl : Pickup
 	private CollisionShape3D Collider { get; set; }
 	private bool isCollected;
 
-	private Tween tweener;
+	public Tween Tweener { get; set; }
 	private SoundManager Sound => SoundManager.instance;
 
 	protected override void SetUp()
@@ -24,7 +24,7 @@ public partial class Pearl : Pickup
 
 	public override void Respawn()
 	{
-		tweener?.Kill();
+		Tweener?.Kill();
 
 		isCollected = false;
 		Basis = Basis.Identity;
@@ -34,17 +34,17 @@ public partial class Pearl : Pickup
 
 	protected override void Collect()
 	{
-		if (isCollected) return;
+		if (isCollected || !IsInsideTree()) return;
 
 		Transform3D t = GlobalTransform;
 		GetParent().RemoveChild(this);
 		Character.AddChild(this);
 		GlobalTransform = t;
 
-		tweener?.Kill();
+		Tweener?.Kill();
 
 		// Collection tween
-		tweener = CreateTween().SetTrans(Tween.TransitionType.Sine);
+		Tweener = CreateTween().SetTrans(Tween.TransitionType.Sine);
 		float distance = Runtime.randomNumberGenerator.RandfRange(.2f, .8f);
 		float height = Runtime.randomNumberGenerator.RandfRange(.2f, .5f);
 		Vector3 endPoint = new(distance, height, -.5f);
@@ -62,12 +62,12 @@ public partial class Pearl : Pickup
 			midPoint.Z *= -1;
 		}
 
-		tweener.TweenProperty(this, "position", midPoint, .2f);
-		tweener.TweenProperty(this, "position", endPoint, .2f).SetEase(Tween.EaseType.In);
-		tweener.Parallel().TweenProperty(this, "scale", Vector3.One * .001f, .2f).SetEase(Tween.EaseType.In);
+		Tweener.TweenProperty(this, "position", midPoint, .2f);
+		Tweener.TweenProperty(this, "position", endPoint, .2f).SetEase(Tween.EaseType.In);
+		Tweener.Parallel().TweenProperty(this, "scale", Vector3.One * .001f, .2f).SetEase(Tween.EaseType.In);
 
-		tweener.Parallel().TweenCallback(Callable.From(() => Character.Skills.ModifySoulGauge(isRichPearl ? 20 : 1)));
-		tweener.TweenCallback(new Callable(this, MethodName.Despawn)).SetDelay(3f);
+		Tweener.Parallel().TweenCallback(Callable.From(() => Character.Skills.ModifySoulGauge(isRichPearl ? 20 : 1)));
+		Tweener.TweenCallback(new Callable(this, MethodName.Despawn)).SetDelay(3f);
 
 		if (isRichPearl) // Play the correct sfx
 			Sound.PlayRichPearlSFX();

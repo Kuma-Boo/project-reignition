@@ -44,7 +44,7 @@ public partial class Seed : Area3D
 
 		if (Character.ActionState == CharacterController.ActionStates.JumpDash ||
 			Character.Lockon.IsHomingAttacking ||
-			Character.Lockon.IsBouncingLockoutActive)
+			Character.Lockon.IsBounceLockoutActive)
 		{
 			Character.Lockon.StartBounce();
 			return;
