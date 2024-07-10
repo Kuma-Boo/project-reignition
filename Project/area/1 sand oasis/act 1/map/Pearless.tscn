@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=3 uid="uid://dfdgvtxq4tvdr"]
+[gd_scene load_steps=87 format=3 uid="uid://dfdgvtxq4tvdr"]
 
 [ext_resource type="PackedScene" uid="uid://tvjx2wghc06t" path="res://area/1 sand oasis/act 1/Static.tscn" id="1_ataus"]
 [ext_resource type="Resource" uid="uid://buxlwonrl5bsn" path="res://resource/level data/sand oasis/Act1Pearless.tres" id="2_r2us6"]
@@ -28,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="37_wogy5"]
 [ext_resource type="PackedScene" uid="uid://b6ilbxxvqailo" path="res://area/1 sand oasis/object/pillar/CircularPillar.tscn" id="38_egind"]
 [ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="39_r67gk"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="40_1p3ox"]
 [ext_resource type="PackedScene" uid="uid://c3nre8sxl3opx" path="res://area/1 sand oasis/object/Spear.tscn" id="49_s3da8"]
 [ext_resource type="AudioStream" uid="uid://nt3hfpyab807" path="res://sound/sfx/stage/sand oasis/spear travel.wav" id="50_0y3m1"]
 [ext_resource type="AudioStream" uid="uid://woaepnu8f5m" path="res://sound/sfx/stage/sand oasis/spear impact.wav" id="51_2g1wa"]
@@ -6433,6 +6434,9 @@ max_value = 2.0
 _data = [Vector2(0, 0), 0.0, 20.5192, 0, 0, Vector2(0.253731, -1.51287), 0.0, 0.0, 0, 0, Vector2(0.497512, 1.40257), 0.0, 0.0, 0, 0, Vector2(0.753731, -1.65625), 0.0, 0.0, 0, 0, Vector2(1, 0), -18.1048, 0.0, 0, 0]
 point_count = 5
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_utuvw"]
+size = Vector3(25.5488, 8.99207, 1)
+
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_ataus")]
@@ -10348,6 +10352,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 
 [node name="Child10" parent="PearlessAct/Beach/Pearls8" instance=ExtResource("9_y4pw5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.5)
+
+[node name="Goal" parent="PearlessAct/Beach" instance=ExtResource("40_1p3ox")]
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, -246.101, 34.3708, -100.553)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PearlessAct/Beach/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, -8.35187e-23, 0, -8.35187e-23, 1, 1.24426, -1.67883, 0)
+shape = SubResource("BoxShape3D_utuvw")
 
 [connection signal="Activated" from="PearlessAct/CullingMap/HallwayLoad" to="PearlessAct/Hallway" method="Activate"]
 [connection signal="Deactivated" from="PearlessAct/CullingMap/HallwayLoad" to="PearlessAct/Hallway" method="Deactivate"]
