@@ -352,6 +352,10 @@ transform = Transform3D(-0.920298, 0, -0.391218, 0, 1, 0, 0.391218, 0, -0.920298
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 1.0
 "Attack Settings/Flame Aggression Radius" = 25
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 1.0
+"Defeat Settings/Launch Direction" = Vector3(0, 10, 5)
+"Defeat Settings/Local Transform" = true
 rangeOverride = 30
 
 [node name="RedMajin2" parent="PteroEggAct/Start" instance=ExtResource("27_lu3gx")]
@@ -366,6 +370,10 @@ transform = Transform3D(-0.999577, 0, -0.0290788, 0, 1, 0, 0.0290788, 0, -0.9995
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 1.0
 "Attack Settings/Flame Aggression Radius" = 20
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 1.0
+"Defeat Settings/Launch Direction" = Vector3(0, 10, 5)
+"Defeat Settings/Local Transform" = true
 SpawnMode = 1
 
 [node name="RedMajin3" parent="PteroEggAct/Start" instance=ExtResource("27_lu3gx")]
@@ -380,6 +388,10 @@ transform = Transform3D(-0.983294, 0, 0.182024, 0, 1, 0, -0.182024, 0, -0.983294
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 1.0
 "Attack Settings/Flame Aggression Radius" = 20
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 1.0
+"Defeat Settings/Launch Direction" = Vector3(0, 10, 5)
+"Defeat Settings/Local Transform" = true
 SpawnMode = 1
 
 [node name="Rings4" type="Node3D" parent="PteroEggAct/Start"]
@@ -1181,6 +1193,8 @@ transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622
 [connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg2" to="Static" method="IncrementObjective"]
 [connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg3" to="Static" method="IncrementObjective"]
 [connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg4" to="Static" method="IncrementObjective"]
+[connection signal="Spawned" from="PteroEggAct/Start/RedMajin1" to="PteroEggAct/Start/RedMajin2" method="Spawn"]
+[connection signal="Spawned" from="PteroEggAct/Start/RedMajin1" to="PteroEggAct/Start/RedMajin3" method="Spawn"]
 [connection signal="Activated" from="PteroEggAct/Boat1/Switch" to="PteroEggAct/Boat1/Switch/CullingTrigger" method="Activate"]
 [connection signal="Respawned" from="PteroEggAct/Boat1/Switch" to="PteroEggAct/Boat1/Switch/CullingTrigger" method="Deactivate"]
 [connection signal="Defeated" from="PteroEggAct/LongIsland/BlueMajin1" to="PteroEggAct/LongIsland/EnemyStone1" method="IncrementCounter"]
