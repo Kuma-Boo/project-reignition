@@ -12,11 +12,17 @@ namespace Project.Gameplay.Objects
 
 		public void OnEntered(Area3D a)
 		{
-			if (!a.IsInGroup("player")) return;
+			if (!a.IsInGroup("player detection")) return;
 
 			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.None)
 			{
 				Stage.FinishLevel(true); // Mission was simply to reach the goal
+				return;
+			}
+
+			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Race)
+			{
+				Stage.FinishLevel(Stage.IsRaceActive); // Mission was simply to reach the goal
 				return;
 			}
 

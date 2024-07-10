@@ -1,12 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://lfv1agmmvi7j"]
+[gd_scene load_steps=27 format=3 uid="uid://lfv1agmmvi7j"]
 
 [ext_resource type="PackedScene" uid="uid://e2x7vee4w5gg" path="res://object/enemy/flower/data/model/Seed.gltf" id="1_vd2ic"]
 [ext_resource type="Script" path="res://object/enemy/flower/data/Seed.cs" id="2_ay1nr"]
-[ext_resource type="Material" uid="uid://b3cw6w8vrp87n" path="res://object/enemy/flower/data/model/material/Seed Base Particle.tres" id="3_6k1j1"]
 [ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="4_gep6e"]
-[ext_resource type="Material" uid="uid://dfexukcpmjne8" path="res://object/enemy/flower/data/model/material/Seed Ember Particle.tres" id="5_j5d2c"]
-[ext_resource type="Material" uid="uid://c3jne04l667ho" path="res://object/enemy/flower/data/model/material/Seed Center Particle.tres" id="5_kuphg"]
-[ext_resource type="Material" uid="uid://db4kropnhyudk" path="res://effect/particle/material/Ember Blue.tres" id="7_0a8cb"]
+[ext_resource type="Material" uid="uid://db4kropnhyudk" path="res://effect/particle/material/Ember Blue Billboard.tres" id="7_0a8cb"]
 [ext_resource type="AudioStream" uid="uid://bten5v4c2la5m" path="res://sound/sfx/enemy/flower/flower seed.wav" id="8_k4dfh"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tlqsk"]
@@ -206,12 +203,99 @@ _data = {
 "move": SubResource("Animation_2ndw7")
 }
 
+[sub_resource type="Gradient" id="Gradient_wig65"]
+offsets = PackedFloat32Array(0, 0.474273, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2le1e"]
+gradient = SubResource("Gradient_wig65")
+
+[sub_resource type="Curve" id="Curve_nh37p"]
+_data = [Vector2(0, 0), 0.0, 2.8, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_igl0k"]
+width = 64
+curve = SubResource("Curve_nh37p")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cv8po"]
+particle_flag_rotate_y = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.4
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.8
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 60.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_igl0k")
+color = Color(1, 0.658824, 0, 0.223529)
+color_ramp = SubResource("GradientTexture1D_2le1e")
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_pj74e"]
 material = ExtResource("4_gep6e")
 orientation = 2
 
+[sub_resource type="Gradient" id="Gradient_mjemk"]
+offsets = PackedFloat32Array(0, 0.474273, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_62p1x"]
+gradient = SubResource("Gradient_mjemk")
+
+[sub_resource type="Curve" id="Curve_aqlim"]
+_data = [Vector2(0, 0), 0.0, 2.8, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3xber"]
+width = 64
+curve = SubResource("Curve_aqlim")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_78os0"]
+lifetime_randomness = 0.3
+emission_shape = 2
+emission_sphere_radius = 0.2
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 60.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_3xber")
+color = Color(0.980392, 0.415686, 0, 1)
+color_ramp = SubResource("GradientTexture1D_62p1x")
+
 [sub_resource type="QuadMesh" id="QuadMesh_l8ruh"]
 material = ExtResource("4_gep6e")
+
+[sub_resource type="Curve" id="Curve_801ma"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_snlyn"]
+width = 64
+curve = SubResource("Curve_801ma")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fn82k"]
+lifetime_randomness = 1.0
+emission_shape = 2
+emission_sphere_radius = 0.5
+direction = Vector3(0, 1, 0)
+spread = 60.0
+initial_velocity_min = 2.0
+initial_velocity_max = 6.0
+scale_min = 0.2
+scale_max = 0.4
+scale_curve = SubResource("CurveTexture_snlyn")
+color = Color(1, 0.282353, 0, 1)
+hue_variation_max = 0.09
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_d078f"]
 material = ExtResource("7_0a8cb")
@@ -232,10 +316,10 @@ animator = NodePath("AnimationPlayer")
 shape = SubResource("SphereShape3D_tlqsk")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "move"
 libraries = {
 "": SubResource("AnimationLibrary_q5grg")
 }
+autoplay = "move"
 
 [node name="VFX" type="Node3D" parent="."]
 
@@ -246,7 +330,7 @@ one_shot = true
 explosiveness = 1.0
 fixed_fps = 0
 interpolate = false
-process_material = ExtResource("3_6k1j1")
+process_material = SubResource("ParticleProcessMaterial_cv8po")
 draw_pass_1 = SubResource("PlaneMesh_pj74e")
 
 [node name="Center" type="GPUParticles3D" parent="VFX"]
@@ -260,7 +344,7 @@ one_shot = true
 explosiveness = 1.0
 fixed_fps = 0
 interpolate = false
-process_material = ExtResource("5_kuphg")
+process_material = SubResource("ParticleProcessMaterial_78os0")
 draw_pass_1 = SubResource("QuadMesh_l8ruh")
 
 [node name="Ember" type="GPUParticles3D" parent="VFX"]
@@ -271,7 +355,7 @@ one_shot = true
 explosiveness = 1.0
 fixed_fps = 0
 interpolate = false
-process_material = ExtResource("5_j5d2c")
+process_material = SubResource("ParticleProcessMaterial_fn82k")
 draw_pass_1 = SubResource("PlaneMesh_d078f")
 
 [node name="SFX" type="Node3D" parent="."]

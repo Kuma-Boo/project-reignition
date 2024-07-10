@@ -59,15 +59,19 @@ public partial class CharacterLockon : Node3D
 	{
 		IsHomingAttacking = true;
 		IsPerfectHomingAttack = monitoringPerfectHomingAttack;
+		Character.AttackState = CharacterController.AttackStates.Weak;
+
 		if (IsPerfectHomingAttack)
 		{
 			perfectSFX.Play();
 			lockonAnimator.Play("perfect-strike");
+			Character.AttackState = CharacterController.AttackStates.Strong;
 		}
 	}
 
 	public void StopHomingAttack()
 	{
+		Character.AttackState = CharacterController.AttackStates.None;
 		IsHomingAttacking = false;
 		IsPerfectHomingAttack = false;
 		Character.ResetActionState();
@@ -142,7 +146,7 @@ public partial class CharacterLockon : Node3D
 		{
 			// Check Height
 			bool isTargetAttackable = IsHomingAttacking ||
-				(Target.GlobalPosition.Y <= Character.CenterPosition.Y + (Character.CollisionRadius * 2.0f) &&
+				(Target.GlobalPosition.Y <= Character.CenterPosition.Y + (Character.CollisionSize.Y * 2.0f) &&
 				Character.ActionState != CharacterController.ActionStates.JumpDash);
 			Vector2 screenPos = Character.Camera.ConvertToScreenSpace(Target.GlobalPosition);
 			UpdateLockonReticle(screenPos, isTargetAttackable);
@@ -165,7 +169,7 @@ public partial class CharacterLockon : Node3D
 			return TargetState.Invisible;
 
 		// Raycast for obstacles
-		Vector3 castPosition = Character.GlobalPosition;
+		Vector3 castPosition = Character.CenterPosition;
 		if (Character.VerticalSpeed < 0)
 			castPosition += Character.UpDirection * Character.VerticalSpeed * PhysicsManager.physicsDelta;
 		Vector3 castVector = t.GlobalPosition - castPosition;
@@ -174,13 +178,32 @@ public partial class CharacterLockon : Node3D
 
 		if (h && h.collidedObject != t)
 		{
-			if (!h.collidedObject.IsInGroup("level wall") || Mathf.Abs(h.normal.Dot(castVector)) < .5f)
+			if (!h.collidedObject.IsInGroup("level wall") ||
+				Mathf.Abs(h.normal.Dot(castVector)) < .5f)
+			{
+				// Hit an obstacle
 				return TargetState.HitObstacle;
+			}
+
+			if (h.collidedObject.IsInGroup("level wall")) // Cast a new ray from the collision point
+			{
+				castPosition = h.point + (h.direction.Normalized() * .1f);
+				castVector = t.GlobalPosition - castPosition;
+				h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
+				DebugManager.DrawRay(castPosition, castVector, Colors.Red);
+
+				if (h && h.collidedObject != t)
+					return TargetState.HitObstacle;
+			}
 		}
 
 		float distance = t.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
-		if (distance < DISTANCE_FUDGE_AMOUNT && Character.IsHoldingDirection(Character.PathFollower.ForwardAngle))
+		if (distance < DISTANCE_FUDGE_AMOUNT &&
+			Character.IsHoldingDirection(Character.PathFollower.ForwardAngle) &&
+			!IsBouncingLockoutActive)
+		{
 			return TargetState.PlayerIgnored;
+		}
 
 		return TargetState.Valid;
 	}

@@ -10,7 +10,7 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class CameraController : Node3D
 {
-	public const float DefaultFov = 60;
+	public const float DefaultFov = 70;
 
 	[ExportGroup("Components")]
 	[Export]
@@ -82,31 +82,35 @@ public partial class CameraController : Node3D
 	/// <summary> Used to focus onto multi-HP enemies, bosses, etc. Not to be confused with CharacterLockon.Target. </summary>
 	public Node3D LockonTarget { get; set; }
 	private bool IsLockonCameraActive => LockonTarget != null || Character.Lockon.IsHomingAttacking || Character.Lockon.IsBouncingLockoutActive;
-	/// <summary> [0 -> 1] ratio of how much to focus onto LockonTarget. </summary>
+	/// <summary> [0 -> 1] ratio of how much to use the lockon camera. </summary>
 	private float lockonBlend;
 	private float lockonBlendVelocity;
+	/// <summary> [0 -> 1] ratio of how much to focus onto LockonTarget. </summary>
+	private float lockonTargetBlend;
+	private float lockonTargetBlendVelocity;
 	/// <summary> Snappier blend when lockon is active to keep things in frame. </summary>
-	private const float LOCKON_BLEND_IN_SMOOTHING = .2f;
+	private const float LockonBlendInSmoothing = 5.0f;
 	/// <summary> More smoothing/slower blend when resetting lockonBlend. </summary>
-	private const float LOCKON_BLEND_OUT_SMOOTHING = .4f;
+	private const float LockonBlendOutSmoothing = 20.0f;
 	/// <summary> How much extra distance to add when performing a homing attack. </summary>
-	private const float LOCKON_DISTANCE = 2.5f;
+	private const float LockonDistance = 3f;
 	private void UpdateLockonTarget()
 	{
+		if (LockonTarget?.IsInsideTree() == false) // Invalid LockonTarget
+			LockonTarget = null;
+
 		float targetBlend = 0;
-		float smoothing = LOCKON_BLEND_OUT_SMOOTHING;
+		float smoothing = LockonBlendOutSmoothing;
 
 		// Lockon is active
 		if (IsLockonCameraActive)
 		{
 			targetBlend = 1;
-			smoothing = LOCKON_BLEND_IN_SMOOTHING;
+			smoothing = LockonBlendInSmoothing;
 		}
 
-		if (LockonTarget?.IsInsideTree() == false) // Invalid LockonTarget
-			LockonTarget = null;
-
-		lockonBlend = ExtensionMethods.SmoothDamp(lockonBlend, targetBlend, ref lockonBlendVelocity, smoothing);
+		lockonBlend = ExtensionMethods.SmoothDamp(lockonBlend, targetBlend, ref lockonBlendVelocity, smoothing * PhysicsManager.physicsDelta);
+		lockonTargetBlend = ExtensionMethods.SmoothDamp(lockonTargetBlend, LockonTarget == null ? 0 : 1, ref lockonTargetBlendVelocity, smoothing * PhysicsManager.physicsDelta);
 	}
 
 	#region Gameplay Camera
@@ -274,7 +278,7 @@ public partial class CameraController : Node3D
 		cameraRoot.GlobalTransform = cameraTransform; // Update transform
 
 		Camera.Fov = fov; // Update fov
-		RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_PLAYER_SCREEN_POSITION, ConvertToScreenSpace(Character.GlobalPosition) / Runtime.SCREEN_SIZE);
+		RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_PLAYER_SCREEN_POSITION, ConvertToScreenSpace(Character.CenterPosition) / Runtime.SCREEN_SIZE);
 
 		if (SnapFlag) // Reset flag after camera was updated
 			SnapFlag = false;
@@ -372,16 +376,15 @@ public partial class CameraController : Node3D
 			// Calculate distance
 			float targetDistance = settings.distance;
 			if (Character.IsMovingBackward)
-			{
-				if (PathFollower.Progress < settings.backstepDistance && !PathFollower.Loop)
-					targetDistance += settings.backstepDistance - (settings.backstepDistance - PathFollower.Progress);
-				else
-					targetDistance += settings.backstepDistance;
-			}
+				targetDistance += settings.backstepDistance;
 
 			if (!settings.ignoreHomingAttackDistance && IsLockonCameraActive)
-				targetDistance += LOCKON_DISTANCE;
-			data.blendData.DistanceSmoothDamp(targetDistance, SnapFlag);
+				targetDistance += LockonDistance;
+
+			if (PathFollower.Progress < targetDistance && !PathFollower.Loop)
+				targetDistance = PathFollower.Progress;
+
+			data.blendData.DistanceSmoothDamp(targetDistance, Character.IsMovingBackward, SnapFlag);
 
 			// Calculate targetAngles when DistanceMode is set to Sample.
 			float sampledTargetYawAngle = targetYawAngle;
@@ -410,8 +413,7 @@ public partial class CameraController : Node3D
 			{
 				// Negative number -> Concave, Positive number -> Convex.
 				float slopeDifference = sampledForward.Y - PathFollower.Forward().Y;
-				if (Mathf.Abs(slopeDifference) > .05f) // Deadzone to prevent jittering
-					data.blendData.SampleBlend = slopeDifference < 0 ? 1.0f : 0.0f;
+				data.blendData.SampleBlend = Mathf.Lerp(data.blendData.SampleBlend, slopeDifference < 0 ? 1.0f : 0.0f, .1f);
 			}
 			else if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Sample)
 			{
@@ -492,7 +494,7 @@ public partial class CameraController : Node3D
 				delta.X = 0; // Ignore x axis for pitch tracking
 				data.blendData.lockonPitchTracking = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
 			}
-			data.pitchTracking += data.blendData.lockonPitchTracking * lockonBlend;
+			data.pitchTracking += data.blendData.lockonPitchTracking * lockonTargetBlend;
 		}
 
 		if (!data.blendData.WasInitialized)
@@ -741,18 +743,18 @@ public partial class CameraBlendData : GodotObject
 	public float distance;
 	/// <summary> Distance smoothdamp velocity. </summary>
 	private float distanceVelocity;
-	public const float DISTANCE_SMOOTHING = 20.0f;
+	public const float DistanceSmoothing = 10.0f;
 
-	public void DistanceSmoothDamp(float target, bool snap)
+	public void DistanceSmoothDamp(float target, bool movingBackwards, bool snap)
 	{
-		if (snap || !WasInitialized)
+		if (snap || !WasInitialized || (movingBackwards && target < distance))
 		{
 			distance = target;
 			distanceVelocity = 0;
 			return;
 		}
 
-		distance = ExtensionMethods.SmoothDamp(distance, target, ref distanceVelocity, DISTANCE_SMOOTHING * PhysicsManager.physicsDelta);
+		distance = ExtensionMethods.SmoothDamp(distance, target, ref distanceVelocity, DistanceSmoothing * PhysicsManager.physicsDelta);
 	}
 
 	/// <summary> Has this blend data been processed before? </summary>

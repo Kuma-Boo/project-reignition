@@ -169,7 +169,7 @@ public partial class Catapult : Launcher
 
 	public void OnEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 		StartProcessing();
 
 		if (currentState != CatapultState.Disabled) return; // Already in the catapult

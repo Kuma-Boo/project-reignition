@@ -7,15 +7,22 @@ namespace Project.Gameplay.Objects
 	{
 		[Export]
 		private bool isRichRing;
-		[Export]
-		private AnimationPlayer animator;
+		[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
+		private NodePath animator;
+		private AnimationPlayer Animator { get; set; }
+
+		protected override void SetUp()
+		{
+			Animator = GetNodeOrNull<AnimationPlayer>(animator);
+			base.SetUp();
+		}
 
 		public override void Respawn()
 		{
 			base.Respawn();
 
-			animator.Play("RESET");
-			animator.Queue("loop");
+			Animator.Play("RESET");
+			Animator.Queue("loop");
 		}
 
 		protected override void Collect()
@@ -33,7 +40,8 @@ namespace Project.Gameplay.Objects
 				SoundManager.instance.PlayRingSFX();
 			}
 
-			animator.Play("collect");
+			BonusManager.instance.AddRingChain();
+			Animator.Play("collect");
 			base.Collect();
 		}
 	}

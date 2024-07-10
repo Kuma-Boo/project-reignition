@@ -287,6 +287,7 @@ public partial class StageSettings : Node3D
 	public void IncrementObjective()
 	{
 		CurrentObjectiveCount++;
+		CurrentObjectiveCount = Mathf.Clamp(CurrentObjectiveCount, 0, Data.MissionObjectiveCount);
 		EmitSignal(SignalName.ObjectiveChanged);
 
 		if (Data.MissionObjectiveCount == 0) // i.e. Sand Oasis's "Don't break the jars!" mission.
@@ -389,13 +390,24 @@ public partial class StageSettings : Node3D
 	[Signal]
 	public delegate void TriggeredCheckpointEventHandler();
 	public Triggers.CheckpointTrigger CurrentCheckpoint { get; private set; }
+	private int CheckpointScore { get; set; }
+	private int CheckpointObjectiveCount { get; set; }
+	private int SavedScore { get; set; }
+	private int SavedObjectiveCount { get; set; }
 	public void SetCheckpoint(Triggers.CheckpointTrigger checkpoint)
 	{
 		if (checkpoint == CurrentCheckpoint) return; // Already at this checkpoint
 
 		CurrentCheckpoint = checkpoint;
-		checkpoint.UpdateCheckpointData();
+		SavedScore = CurrentScore;
+		SavedObjectiveCount = CurrentObjectiveCount;
 		EmitSignal(SignalName.TriggeredCheckpoint);
+	}
+
+	public void RevertToCheckpointData()
+	{
+		ResetObjective(SavedObjectiveCount);
+		UpdateScore(SavedScore, MathModeEnum.Replace);
 	}
 
 	[Signal]
@@ -451,6 +463,8 @@ public partial class StageSettings : Node3D
 	}
 	public LevelStateEnum LevelState { get; private set; }
 	public bool IsLevelIngame => LevelState == LevelStateEnum.Ingame;
+	/// <summary> Flag for keeping track of Uhu's race status. </summary>
+	public bool IsRaceActive { get; set; }
 	private const float FAIL_COMPLETION_DELAY = 1.5f; // Mission fails always have a delay of 1.5 seconds
 	public void FinishLevel(bool wasSuccessful)
 	{
