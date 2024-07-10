@@ -236,7 +236,7 @@ public partial class Enemy : Node3D
 		if (IsInteractionProcessed)
 			return;
 
-		if ((Character.Lockon.IsBouncingLockoutActive &&
+		if ((Character.Lockon.IsBounceLockoutActive &&
 			Character.ActionState == CharacterController.ActionStates.Normal) ||
 			!IsHitboxEnabled)
 		{

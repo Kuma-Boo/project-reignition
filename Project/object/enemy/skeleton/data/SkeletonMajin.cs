@@ -45,7 +45,7 @@ namespace Project.Gameplay.Objects
 
 		protected override void UpdateInteraction()
 		{
-			if (Character.Lockon.IsBouncingLockoutActive || !IsHitboxEnabled) return;
+			if (Character.Lockon.IsBounceLockoutActive || !IsHitboxEnabled) return;
 
 			if (isAttacking && !isHurtboxInteraction && !Character.Skills.IsSpeedBreakActive)
 				Character.StartKnockback();

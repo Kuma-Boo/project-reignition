@@ -40,7 +40,7 @@ public partial class CharacterLockon : Node3D
 		HitObstacle,
 	}
 	/// <summary> Targets whose squared distance is within this range will prioritize height instead of distance. </summary>
-	private readonly float DISTANCE_FUDGE_AMOUNT = 1f;
+	private readonly float DistanceFudgeAmount = 1f;
 	private readonly Array<Node3D> activeTargets = []; // List of targetable objects
 
 	/// <summary> Enables detection of new lockonTargets. </summary>
@@ -83,24 +83,10 @@ public partial class CharacterLockon : Node3D
 		wasTargetChanged = false;
 		GlobalRotation = Vector3.Up * Character.PathFollower.ForwardAngle;
 
-		if (IsMonitoring)
+		if (IsMonitoring && (!IsBounceLockoutActive || CanInterruptBounce))
 		{
 			Node3D currentTarget = Target;
 			float closestDistance = Mathf.Inf; // Current closest target
-
-			// Current lockon target starts as the closest target
-			if (Target?.IsInsideTree() == true)
-			{
-				closestDistance = Target.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
-
-				if (closestDistance < DISTANCE_FUDGE_AMOUNT && Character.IsHoldingDirection(Character.PathFollower.ForwardAngle))
-				{
-					// Allow the player to stop targeting objects directly beneath them
-					currentTarget = null;
-					closestDistance = Mathf.Inf;
-					ResetLockonTarget();
-				}
-			}
 
 			// Check whether to pick a new target
 			for (int i = 0; i < activeTargets.Count; i++)
@@ -116,9 +102,9 @@ public partial class CharacterLockon : Node3D
 
 				if (currentTarget != null)
 				{
-					if (dst > closestDistance + DISTANCE_FUDGE_AMOUNT)
+					if (dst > closestDistance + DistanceFudgeAmount)
 						continue; // Check whether the object is close enough to be considered
-					else if (dst > closestDistance - DISTANCE_FUDGE_AMOUNT && activeTargets[i].GlobalPosition.Y <= currentTarget.GlobalPosition.Y)
+					else if (dst > closestDistance - DistanceFudgeAmount && activeTargets[i].GlobalPosition.Y <= currentTarget.GlobalPosition.Y)
 						continue; // Within fudge range, decide priority based on height
 				}
 
@@ -133,17 +119,17 @@ public partial class CharacterLockon : Node3D
 
 		if (Target != null) // Validate current lockon target
 		{
-			TargetState targetState = IsTargetValid(Target);
+			TargetState targetState = IsTargetValid(Target); // Validate homing attack target
 
 			if ((IsHomingAttacking && targetState == TargetState.NotInList) ||
-				(!IsHomingAttacking && targetState != TargetState.Valid)) // Validate homing attack target
+				(!IsHomingAttacking && targetState != TargetState.Valid) ||
+				(Target.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten()) < DistanceFudgeAmount &&
+				Character.IsHoldingDirection(Character.PathFollower.ForwardAngle)))
 			{
-				Target = null;
+				ResetLockonTarget();
+				return;
 			}
-		}
 
-		if (Target != null)
-		{
 			// Check Height
 			bool isTargetAttackable = IsHomingAttacking ||
 				(Target.GlobalPosition.Y <= Character.CenterPosition.Y + (Character.CollisionSize.Y * 2.0f) &&
@@ -151,10 +137,9 @@ public partial class CharacterLockon : Node3D
 			Vector2 screenPos = Character.Camera.ConvertToScreenSpace(Target.GlobalPosition);
 			UpdateLockonReticle(screenPos, isTargetAttackable);
 		}
-		else if (wasTargetChanged) // Disable UI
-		{
+
+		if (Target == null && wasTargetChanged) // Disable UI
 			DisableLockonReticle();
-		}
 	}
 
 	private TargetState IsTargetValid(Node3D t)
@@ -198,9 +183,9 @@ public partial class CharacterLockon : Node3D
 		}
 
 		float distance = t.GlobalPosition.Flatten().DistanceSquaredTo(Character.GlobalPosition.Flatten());
-		if (distance < DISTANCE_FUDGE_AMOUNT &&
+		if (distance < DistanceFudgeAmount &&
 			Character.IsHoldingDirection(Character.PathFollower.ForwardAngle) &&
-			!IsBouncingLockoutActive)
+			!IsBounceLockoutActive)
 		{
 			return TargetState.PlayerIgnored;
 		}
@@ -254,7 +239,7 @@ public partial class CharacterLockon : Node3D
 	/// <summary> Used to determine whether targeting is enabled or not. </summary>
 	private float bounceInterruptTimer;
 	/// <summary> Used to determine whether character's lockout is active. </summary>
-	public bool IsBouncingLockoutActive => Character.ActiveLockoutData == bounceLockoutSettings;
+	public bool IsBounceLockoutActive => Character.ActiveLockoutData == bounceLockoutSettings;
 	public bool CanInterruptBounce { get; private set; }
 
 	public void UpdateBounce()
@@ -278,7 +263,7 @@ public partial class CharacterLockon : Node3D
 			Character.MoveSpeed = 0; // Reset speed
 
 			bool applySnapping = false;
-			if (!IsBouncingLockoutActive)
+			if (!IsBounceLockoutActive)
 			{
 				if (Target is Area3D)
 					applySnapping = areaTrigger.GetOverlappingAreas().Contains(Target as Area3D);
@@ -295,7 +280,7 @@ public partial class CharacterLockon : Node3D
 			Character.MoveSpeed = -bounceSpeed;
 		}
 
-		if (IsBouncingLockoutActive) return;
+		if (IsBounceLockoutActive) return;
 
 		Character.CanJumpDash = true;
 		Character.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);

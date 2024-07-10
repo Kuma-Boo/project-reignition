@@ -796,7 +796,7 @@ namespace Project.Gameplay
 					break;
 
 				default: // Normal air actions
-					if (Lockon.IsBouncingLockoutActive)
+					if (Lockon.IsBounceLockoutActive)
 					{
 						Lockon.UpdateBounce();
 
@@ -814,7 +814,7 @@ namespace Project.Gameplay
 
 		private void ApplyGravity()
 		{
-			if (Lockon.IsBouncingLockoutActive) return; // Don't apply gravity when bouncing!
+			if (Lockon.IsBounceLockoutActive) return; // Don't apply gravity when bouncing!
 
 			VerticalSpeed = Mathf.MoveToward(VerticalSpeed, Runtime.MAX_GRAVITY, Runtime.GRAVITY * PhysicsManager.physicsDelta);
 		}
@@ -950,7 +950,7 @@ namespace Project.Gameplay
 			IsMovingBackward = false; // Can't jumpdash backwards!
 			SetActionState(ActionStates.JumpDash);
 
-			if (Lockon.IsBouncingLockoutActive) // Interrupt lockout
+			if (Lockon.IsBounceLockoutActive) // Interrupt lockout
 				RemoveLockoutData(Lockon.bounceLockoutSettings);
 
 			if (Lockon.Target == null || !Lockon.IsTargetAttackable) // Normal jumpdash
