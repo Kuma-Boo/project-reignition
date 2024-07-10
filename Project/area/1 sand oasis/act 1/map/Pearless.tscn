@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://dfdgvtxq4tvdr"]
+[gd_scene load_steps=85 format=3 uid="uid://dfdgvtxq4tvdr"]
 
 [ext_resource type="PackedScene" uid="uid://tvjx2wghc06t" path="res://area/1 sand oasis/act 1/Static.tscn" id="1_ataus"]
 [ext_resource type="Resource" uid="uid://buxlwonrl5bsn" path="res://resource/level data/sand oasis/Act1Pearless.tres" id="2_r2us6"]
@@ -26,6 +26,8 @@
 [ext_resource type="PackedScene" uid="uid://cp32qqdvukmxh" path="res://area/1 sand oasis/object/grindrail/Grindrail05.tscn" id="32_ioccf"]
 [ext_resource type="PackedScene" uid="uid://cyabnlg7vd3v6" path="res://area/1 sand oasis/object/grindrail/Grindrail04.tscn" id="33_wynyj"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="37_wogy5"]
+[ext_resource type="PackedScene" uid="uid://b6ilbxxvqailo" path="res://area/1 sand oasis/object/pillar/CircularPillar.tscn" id="38_egind"]
+[ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="39_r67gk"]
 [ext_resource type="PackedScene" uid="uid://c3nre8sxl3opx" path="res://area/1 sand oasis/object/Spear.tscn" id="49_s3da8"]
 [ext_resource type="AudioStream" uid="uid://nt3hfpyab807" path="res://sound/sfx/stage/sand oasis/spear travel.wav" id="50_0y3m1"]
 [ext_resource type="AudioStream" uid="uid://woaepnu8f5m" path="res://sound/sfx/stage/sand oasis/spear impact.wav" id="51_2g1wa"]
@@ -2770,6 +2772,10 @@ _data = {
 
 [sub_resource type="BoxShape3D" id="175"]
 size = Vector3(2, 10, 10)
+
+[sub_resource type="Curve" id="Curve_p7vgf"]
+_data = [Vector2(0, 0), 0.0, 4.75169, 0, 0, Vector2(0.497512, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.94381, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Animation" id="Animation_mntv7"]
 length = 0.001
@@ -6421,6 +6427,12 @@ _data = {
 "event": SubResource("Animation_3v1hl")
 }
 
+[sub_resource type="Curve" id="Curve_s736t"]
+min_value = -2.0
+max_value = 2.0
+_data = [Vector2(0, 0), 0.0, 20.5192, 0, 0, Vector2(0.253731, -1.51287), 0.0, 0.0, 0, 0, Vector2(0.497512, 1.40257), 0.0, 0.0, 0, 0, Vector2(0.753731, -1.65625), 0.0, 0.0, 0, 0, Vector2(1, 0), -18.1048, 0.0, 0, 0]
+point_count = 5
+
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_ataus")]
@@ -8068,8 +8080,125 @@ script = ExtResource("6_lx5d5")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
 
+[node name="Pearlys" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(0.81836, 0, 0.574706, 0, 1, 0, -0.574706, 0, 0.81836, 46.3315, 0.428371, 38.5966)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/Pearlys" instance=ExtResource("9_y4pw5")]
+
+[node name="Child02" parent="PearlessAct/Beach/Pearlys" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="PearlessAct/Beach/Pearlys" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="PearlessAct/Beach/Pearlys" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="PearlessAct/Beach/Pearlys" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child06" parent="PearlessAct/Beach/Pearlys" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child07" parent="PearlessAct/Beach/Pearlys" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child08" parent="PearlessAct/Beach/Pearlys" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+
+[node name="Child09" parent="PearlessAct/Beach/Pearlys" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child10" parent="PearlessAct/Beach/Pearlys" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.5)
+
+[node name="Pearlcurve" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(0.789019, 0, 0.614368, 0, 1, 0, -0.614368, 0, 0.789019, 61.6989, 0.428371, 71.6081)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_p7vgf")
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/Pearlcurve" instance=ExtResource("9_y4pw5")]
+
+[node name="Child02" parent="PearlessAct/Beach/Pearlcurve" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.544952, 0, -2)
+
+[node name="Child03" parent="PearlessAct/Beach/Pearlcurve" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.856655, 0, -4)
+
+[node name="Child04" parent="PearlessAct/Beach/Pearlcurve" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.986819, 0, -6)
+
+[node name="Child05" parent="PearlessAct/Beach/Pearlcurve" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.987298, 0, -8)
+
+[node name="Child06" parent="PearlessAct/Beach/Pearlcurve" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.865132, 0, -10)
+
+[node name="Child07" parent="PearlessAct/Beach/Pearlcurve" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.558286, 0, -12)
+
+[node name="Child08" parent="PearlessAct/Beach/Pearlcurve" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Pearl" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(0.893057, 0, 0.449943, 0, 1, 0, -0.449943, 0, 0.893057, 45.6701, 0.428371, 71.413)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/Pearl" instance=ExtResource("9_y4pw5")]
+
+[node name="Child02" parent="PearlessAct/Beach/Pearl" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="PearlessAct/Beach/Pearl" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="PearlessAct/Beach/Pearl" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="PearlessAct/Beach/Pearl" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child06" parent="PearlessAct/Beach/Pearl" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child07" parent="PearlessAct/Beach/Pearl" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child08" parent="PearlessAct/Beach/Pearl" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+
+[node name="Child09" parent="PearlessAct/Beach/Pearl" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child10" parent="PearlessAct/Beach/Pearl" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.5)
+
 [node name="RingsM1" type="Node3D" parent="PearlessAct/Beach"]
-transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, 71.2027, 0.428371, 90.4355)
+transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, 70.6375, 0.428371, 90.9098)
 script = ExtResource("7_7yyi2")
 Generate = false
 Source = null
@@ -8124,8 +8253,40 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.40713, 0, -39)
 [node name="Ring30" parent="PearlessAct/Beach/RingsM1" instance=ExtResource("8_exvfq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.87184, 0, -42)
 
-[node name="GrindrailM1" parent="PearlessAct/Beach" instance=ExtResource("32_ioccf")]
-transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 63.3499, 0.150002, 71.0109)
+[node name="Grindrail" parent="PearlessAct/Beach" instance=ExtResource("33_wynyj")]
+transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 54.2348, 0.150002, 57.9931)
+
+[node name="Rings" type="Node3D" parent="PearlessAct/Beach/Grindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.10352e-05, 0.831051, -27.4111)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("8_exvfq")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/Grindrail/Rings" instance=ExtResource("8_exvfq")]
+
+[node name="Child02" parent="PearlessAct/Beach/Grindrail/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="PearlessAct/Beach/Grindrail/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="PearlessAct/Beach/Grindrail/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="PearlessAct/Beach/Grindrail/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child06" parent="PearlessAct/Beach/Grindrail/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child07" parent="PearlessAct/Beach/Grindrail/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 
 [node name="SpearGroup1" parent="PearlessAct/Beach" instance=ExtResource("4_brs0h")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53, 0, 64)
@@ -8300,12 +8461,44 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6.10352e-05)
 "State Lengths/active" = 0.1
 stateLengths = PackedFloat32Array(1, 0, 0.1)
 
-[node name="PearlRing1" type="Node3D" parent="PearlessAct/Beach"]
-transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 34.5542, 0.328968, 36.2674)
+[node name="Pearlring" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(0.861212, 0, 0.508245, 0, 1, 0, -0.508245, 0, 0.861212, 22.8884, 0.328968, 31.8385)
 script = ExtResource("7_7yyi2")
 Generate = false
 Source = ExtResource("9_y4pw5")
-Amount = 5
+Amount = 7
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.0
+"Ring Ratio" = 0.5
+
+[node name="Child01" parent="PearlessAct/Beach/Pearlring" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Beach/Pearlring" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.866025, 0.5, 0)
+
+[node name="Child03" parent="PearlessAct/Beach/Pearlring" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.866025, 0)
+
+[node name="Child04" parent="PearlessAct/Beach/Pearlring" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.74228e-08, 1, 0)
+
+[node name="Child05" parent="PearlessAct/Beach/Pearlring" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.866025, 0)
+
+[node name="Child06" parent="PearlessAct/Beach/Pearlring" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.866025, 0.5, 0)
+
+[node name="Child07" parent="PearlessAct/Beach/Pearlring" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
+
+[node name="PearlRing1" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(0.861212, 0, 0.508245, 0, 1, 0, -0.508245, 0, 0.861212, 31.2075, 0.328968, 35.6468)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 7
 Shape = 1
 Orientation = 1
 "Ring Size" = 1.0
@@ -8315,15 +8508,21 @@ Orientation = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 
 [node name="Child02" parent="PearlessAct/Beach/PearlRing1" instance=ExtResource("9_y4pw5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707107, 0.707107, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.866025, 0.5, 0)
 
 [node name="Child03" parent="PearlessAct/Beach/PearlRing1" instance=ExtResource("9_y4pw5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.37114e-08, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.866025, 0)
 
 [node name="Child04" parent="PearlessAct/Beach/PearlRing1" instance=ExtResource("9_y4pw5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.707107, 0.707107, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.74228e-08, 1, 0)
 
 [node name="Child05" parent="PearlessAct/Beach/PearlRing1" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.866025, 0)
+
+[node name="Child06" parent="PearlessAct/Beach/PearlRing1" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.866025, 0.5, 0)
+
+[node name="Child07" parent="PearlessAct/Beach/PearlRing1" instance=ExtResource("9_y4pw5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
 
 [node name="SpearGroup2" parent="PearlessAct/Beach" instance=ExtResource("4_brs0h")]
@@ -8486,7 +8685,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6.10352e-05)
 stateLengths = PackedFloat32Array(1, 0, 0.1)
 
 [node name="PearlRing2" type="Node3D" parent="PearlessAct/Beach"]
-transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 23.7752, 0.328968, 21.6053)
+transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 24.6514, 0.328968, 20.9918)
 script = ExtResource("7_7yyi2")
 Generate = false
 Source = ExtResource("9_y4pw5")
@@ -8512,7 +8711,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.707107, 0.707107, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
 
 [node name="SpikeGroup3" type="Node3D" parent="PearlessAct/Beach"]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 17.5945, -0.0999985, 24.6591)
+transform = Transform3D(0.831703, 0, 0.555222, 0, 1, 0, -0.555222, 0, 0.831703, 18.2196, -0.0999985, 23.101)
 
 [node name="SpikePanel1" parent="PearlessAct/Beach/SpikeGroup3" instance=ExtResource("57_4h45r")]
 "State Lengths/inactive" = 1.0
@@ -8546,12 +8745,47 @@ stateLengths = PackedFloat32Array(1, 0, 0.1)
 [node name="GrindrailM2" parent="PearlessAct/Beach" instance=ExtResource("32_ioccf")]
 transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, 15.2055, 0.150002, 13.1707)
 
+[node name="Ring" type="Node3D" parent="PearlessAct/Beach/GrindrailM2"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0.630211, -4.37537)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("8_exvfq")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/GrindrailM2/Ring" instance=ExtResource("8_exvfq")]
+
+[node name="Child02" parent="PearlessAct/Beach/GrindrailM2/Ring" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="PearlessAct/Beach/GrindrailM2/Ring" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="PearlessAct/Beach/GrindrailM2/Ring" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="PearlessAct/Beach/GrindrailM2/Ring" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="PearlessAct/Beach/GrindrailM2/Ring" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="PearlessAct/Beach/GrindrailM2/Ring" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="PearlessAct/Beach/GrindrailM2/Ring" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
 [node name="PearlRing3" type="Node3D" parent="PearlessAct/Beach"]
-transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, 12.0963, 0.328968, 10.5457)
+transform = Transform3D(0.723413, 0, 0.690415, 0, 1, 0, -0.690415, 0, 0.723413, 19.3842, 0.328968, 8.53711)
 script = ExtResource("7_7yyi2")
 Generate = false
 Source = ExtResource("9_y4pw5")
-Amount = 5
+Amount = 7
 Shape = 1
 Orientation = 1
 "Ring Size" = 1.0
@@ -8561,15 +8795,21 @@ Orientation = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 
 [node name="Child02" parent="PearlessAct/Beach/PearlRing3" instance=ExtResource("9_y4pw5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707107, 0.707107, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.866025, 0.5, 0)
 
 [node name="Child03" parent="PearlessAct/Beach/PearlRing3" instance=ExtResource("9_y4pw5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.37114e-08, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.866025, 0)
 
 [node name="Child04" parent="PearlessAct/Beach/PearlRing3" instance=ExtResource("9_y4pw5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.707107, 0.707107, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.74228e-08, 1, 0)
 
 [node name="Child05" parent="PearlessAct/Beach/PearlRing3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.866025, 0)
+
+[node name="Child06" parent="PearlessAct/Beach/PearlRing3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.866025, 0.5, 0)
+
+[node name="Child07" parent="PearlessAct/Beach/PearlRing3" instance=ExtResource("9_y4pw5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
 
 [node name="SpearGroup3" parent="PearlessAct/Beach" instance=ExtResource("4_brs0h")]
@@ -8729,6 +8969,84 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6.10352e-05)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.1
 stateLengths = PackedFloat32Array(0.2, 0, 0.1)
+
+[node name="ObjectGenerator2" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(0.616734, 0, 0.787171, 0, 1, 0, -0.787171, 0, 0.616734, -33.2256, 0.328968, -7.37415)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 5
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.0
+"Ring Ratio" = 0.5
+
+[node name="Child01" parent="PearlessAct/Beach/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Beach/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707107, 0.707107, 0)
+
+[node name="Child03" parent="PearlessAct/Beach/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.74228e-08, 1, 0)
+
+[node name="Child04" parent="PearlessAct/Beach/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.707107, 0.707107, 0)
+
+[node name="Child05" parent="PearlessAct/Beach/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
+
+[node name="ObjectGenerator3" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(0.609094, 0, 0.793098, 0, 1, 0, -0.793098, 0, 0.609094, -3.92038, 0.328968, 7.57135)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 5
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.0
+"Ring Ratio" = 0.5
+
+[node name="Child01" parent="PearlessAct/Beach/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Beach/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707107, 0.707107, 0)
+
+[node name="Child03" parent="PearlessAct/Beach/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.74228e-08, 1, 0)
+
+[node name="Child04" parent="PearlessAct/Beach/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.707107, 0.707107, 0)
+
+[node name="Child05" parent="PearlessAct/Beach/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
+
+[node name="ObjectGenerator" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(0.641155, 0, 0.767411, 0, 1, 0, -0.767411, 0, 0.641155, 8.61728, 0.328968, 12.8328)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 5
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.0
+"Ring Ratio" = 0.5
+
+[node name="Child01" parent="PearlessAct/Beach/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Beach/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707107, 0.707107, 0)
+
+[node name="Child03" parent="PearlessAct/Beach/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.74228e-08, 1, 0)
+
+[node name="Child04" parent="PearlessAct/Beach/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.707107, 0.707107, 0)
+
+[node name="Child05" parent="PearlessAct/Beach/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
 
 [node name="FallingPillarGroup1" parent="PearlessAct/Beach" instance=ExtResource("4_brs0h")]
 transform = Transform3D(0.573576, 0, 0.819152, 0, 1, 0, -0.819152, 0, 0.573576, 2, -0.0999985, 0.799988)
@@ -9043,7 +9361,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.707107, 0.707107, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
 
 [node name="PearlRing5" type="Node3D" parent="PearlessAct/Beach"]
-transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, -41.6767, 0.328968, -28.048)
+transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, -47.2273, 0.328968, -38.8357)
 script = ExtResource("7_7yyi2")
 Generate = false
 Source = ExtResource("9_y4pw5")
@@ -9283,67 +9601,76 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -36)
 [node name="Child20" parent="PearlessAct/Beach/Pearls" instance=ExtResource("9_y4pw5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -38)
 
-[node name="GrindrailL1" parent="PearlessAct/Beach" instance=ExtResource("33_wynyj")]
-transform = Transform3D(0.292372, 0, 0.956305, 0, 1, 0, -0.956305, 0, 0.292372, -151.966, 10.3, -71.9575)
-
-[node name="GrindrailR1" parent="PearlessAct/Beach" instance=ExtResource("33_wynyj")]
-transform = Transform3D(0.292372, 0, 0.956305, 0, 1, 0, -0.956305, 0, 0.292372, -146.411, 10.3, -90.1276)
-
-[node name="Rings" type="Node3D" parent="PearlessAct/Beach/GrindrailR1"]
-transform = Transform3D(1, 0, -1.19209e-07, 0, 1, 0, 1.19209e-07, 0, 1, 0, 1.1, -3)
+[node name="Rings" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(0.292372, 0, 0.956305, 0, 1, 0, -0.956305, 0, 0.292372, -154.23, 19.1814, -83.3862)
 script = ExtResource("7_7yyi2")
 Generate = false
-Source = null
-Amount = 15
+Source = ExtResource("8_exvfq")
+Amount = 20
 Shape = 0
 Orientation = 0
-Spacing = 3.8
-"Horizontal Offset" = null
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_s736t")
 "Vertical Offset" = null
 
-[node name="Ring5" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
+[node name="Child01" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
 
-[node name="Ring6" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.8)
+[node name="Child02" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.510114, 0, -2)
 
-[node name="Ring7" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.6)
+[node name="Child03" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.174434, 0, -4)
 
-[node name="Ring8" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.4)
+[node name="Child04" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.566202, 0, -6)
 
-[node name="Ring9" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.2)
+[node name="Child05" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.27096, 0, -8)
 
-[node name="Ring10" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
+[node name="Child06" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50013, 0, -10)
 
-[node name="Ring11" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.8)
+[node name="Child07" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.04227, 0, -12)
 
-[node name="Ring12" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26.6)
+[node name="Child08" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.184172, 0, -14)
 
-[node name="Ring13" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30.4)
+[node name="Child09" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.722091, 0, -16)
 
-[node name="Ring14" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -34.2)
+[node name="Child10" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.32446, 0, -18)
 
-[node name="Ring15" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
+[node name="Child11" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2953, 0, -20)
+
+[node name="Child12" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.672003, 0, -22)
+
+[node name="Child13" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.233437, 0, -24)
+
+[node name="Child14" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.10287, 0, -26)
+
+[node name="Child15" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61813, 0, -28)
+
+[node name="Child16" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.48143, 0, -30)
+
+[node name="Child17" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.801353, 0, -32)
+
+[node name="Child18" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0243289, 0, -34)
+
+[node name="Child19" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.394503, 0, -36)
+
+[node name="Child20" parent="PearlessAct/Beach/Rings" instance=ExtResource("8_exvfq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -38)
-
-[node name="Ring16" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -41.8)
-
-[node name="Ring17" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45.6)
-
-[node name="Ring18" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -49.4)
-
-[node name="Ring19" parent="PearlessAct/Beach/GrindrailR1/Rings" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -53.2)
 
 [node name="BeachCrateGroup" type="Node3D" parent="PearlessAct/Beach"]
 transform = Transform3D(0.292372, 0, 0.956305, 0, 1, 0, -0.956305, 0, 0.292372, -165.032, 19.25, -86.41)
@@ -9368,32 +9695,32 @@ Source = ExtResource("8_exvfq")
 Amount = 8
 Shape = 0
 Orientation = 0
-Spacing = 1.5
+Spacing = 1.2
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
 [node name="Child01" parent="PearlessAct/Beach/RingsM5" instance=ExtResource("8_exvfq")]
 
 [node name="Child02" parent="PearlessAct/Beach/RingsM5" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
 
 [node name="Child03" parent="PearlessAct/Beach/RingsM5" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
 
 [node name="Child04" parent="PearlessAct/Beach/RingsM5" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
 
 [node name="Child05" parent="PearlessAct/Beach/RingsM5" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
 
 [node name="Child06" parent="PearlessAct/Beach/RingsM5" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
 [node name="Child07" parent="PearlessAct/Beach/RingsM5" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
 
 [node name="Child08" parent="PearlessAct/Beach/RingsM5" instance=ExtResource("8_exvfq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
 
 [node name="DashPanelL3" parent="PearlessAct/Beach" instance=ExtResource("10_f6xss")]
 transform = Transform3D(-2.25465e-07, 0.173649, -0.98481, -2.60963e-07, 0.984808, 0.173651, 1, 1.71363e-07, -4.78821e-07, -241.558, 10.3221, -99.3659)
@@ -9457,6 +9784,570 @@ transform = Transform3D(0.813233, 0, -0.581938, 0, 1, 0, 0.581938, 0, 0.813233, 
 transform = Transform3D(0.948202, 0, -0.317669, 0, 1, 0, 0.317669, 0, 0.948202, -148.741, 10.4835, -81.4879)
 distance = 10.0
 launchDirection = 1
+voiceKey = &""
+
+[node name="ObjectGenerator" type="Node3D" parent="PearlessAct/Beach/Spring"]
+transform = Transform3D(-2.98023e-08, 0, 1, 0, 1, 0, -1, 0, -2.98023e-08, 4.74756, 2.46686, -0.161743)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 10
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="PearlessAct/Beach/Spring/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Beach/Spring/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0.587785, 0)
+
+[node name="Child03" parent="PearlessAct/Beach/Spring/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0.951057, 0)
+
+[node name="Child04" parent="PearlessAct/Beach/Spring/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0.951057, 0)
+
+[node name="Child05" parent="PearlessAct/Beach/Spring/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0.587785, 0)
+
+[node name="Child06" parent="PearlessAct/Beach/Spring/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
+
+[node name="Child07" parent="PearlessAct/Beach/Spring/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, -0.587785, 0)
+
+[node name="Child08" parent="PearlessAct/Beach/Spring/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, -0.951057, 0)
+
+[node name="Child09" parent="PearlessAct/Beach/Spring/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, -0.951056, 0)
+
+[node name="Child10" parent="PearlessAct/Beach/Spring/ObjectGenerator" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, -0.587785, 0)
+
+[node name="ObjectGenerator2" type="Node3D" parent="PearlessAct/Beach/Spring"]
+transform = Transform3D(-2.98023e-08, 0, 1, 0, 1, 0, -1, 0, -2.98023e-08, 4.74756, 2.46686, -0.161743)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 14
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.8
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.62174, 0.780991, 0)
+
+[node name="Child03" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12228, 1.4073, 0)
+
+[node name="Child04" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.400537, 1.75487, 0)
+
+[node name="Child05" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.400538, 1.75487, 0)
+
+[node name="Child06" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.12228, 1.4073, 0)
+
+[node name="Child07" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.62174, 0.78099, 0)
+
+[node name="Child08" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, -1.57361e-07, 0)
+
+[node name="Child09" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.62174, -0.780991, 0)
+
+[node name="Child10" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.12228, -1.4073, 0)
+
+[node name="Child11" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.400538, -1.75487, 0)
+
+[node name="Child12" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.400538, -1.75487, 0)
+
+[node name="Child13" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12228, -1.4073, 0)
+
+[node name="Child14" parent="PearlessAct/Beach/Spring/ObjectGenerator2" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.62174, -0.780991, 0)
+
+[node name="ObjectGenerator3" type="Node3D" parent="PearlessAct/Beach/Spring"]
+transform = Transform3D(-2.98023e-08, 0, 1, 0, 1, 0, -1, 0, -2.98023e-08, 4.74756, 2.46686, -0.161743)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 19
+Shape = 1
+Orientation = 1
+"Ring Size" = 2.7
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 0, 0)
+
+[node name="Child02" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.55371, 0.876689, 0)
+
+[node name="Child03" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.13068, 1.65837, 0)
+
+[node name="Child04" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47676, 2.26035, 0)
+
+[node name="Child05" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.662811, 2.61738, 0)
+
+[node name="Child06" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.222964, 2.69078, 0)
+
+[node name="Child07" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08458, 2.47259, 0)
+
+[node name="Child08" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.82866, 1.98645, 0)
+
+[node name="Child09" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.37458, 1.28506, 0)
+
+[node name="Child10" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.66318, 0.444406, 0)
+
+[node name="Child11" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.66318, -0.444405, 0)
+
+[node name="Child12" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.37458, -1.28506, 0)
+
+[node name="Child13" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.82866, -1.98645, 0)
+
+[node name="Child14" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08458, -2.47259, 0)
+
+[node name="Child15" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.222964, -2.69078, 0)
+
+[node name="Child16" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.662811, -2.61738, 0)
+
+[node name="Child17" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47676, -2.26035, 0)
+
+[node name="Child18" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.13068, -1.65837, 0)
+
+[node name="Child19" parent="PearlessAct/Beach/Spring/ObjectGenerator3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.55371, -0.876689, 0)
+
+[node name="CircularPillar" parent="PearlessAct/Beach" instance=ExtResource("38_egind")]
+transform = Transform3D(0.413947, 0, -0.910301, 0, 1, 0, 0.910301, 0, 0.413947, -192.564, 18.5075, -90.2109)
+
+[node name="CircularPillar2" parent="PearlessAct/Beach" instance=ExtResource("38_egind")]
+transform = Transform3D(0.413947, 0, -0.910301, 0, 1, 0, 0.910301, 0, 0.413947, -190.223, 18.5075, -98.9484)
+
+[node name="CircularPillar3" parent="PearlessAct/Beach" instance=ExtResource("38_egind")]
+transform = Transform3D(0.413947, 0, -0.910301, 0, 1, 0, 0.910301, 0, 0.413947, -197.433, 18.5075, -101.087)
+
+[node name="CircularPillar4" parent="PearlessAct/Beach" instance=ExtResource("38_egind")]
+transform = Transform3D(0.413947, 0, -0.910301, 0, 1, 0, 0.910301, 0, 0.413947, -205.25, 18.5075, -103.182)
+
+[node name="CircularPillar5" parent="PearlessAct/Beach" instance=ExtResource("38_egind")]
+transform = Transform3D(0.413947, 0, -0.910301, 0, 1, 0, 0.910301, 0, 0.413947, -199.765, 18.5075, -92.3822)
+
+[node name="CircularPillar6" parent="PearlessAct/Beach" instance=ExtResource("38_egind")]
+transform = Transform3D(0.413947, 0, -0.910301, 0, 1, 0, 0.910301, 0, 0.413947, -207.583, 18.5075, -94.4769)
+
+[node name="PillarGroup" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(-0.240567, 0, -0.970633, 0, 1, 0, 0.970633, 0, -0.240567, -167.932, 9.92021, -98.85)
+
+[node name="CircularPillar9" parent="PearlessAct/Beach/PillarGroup" instance=ExtResource("38_egind")]
+transform = Transform3D(0.99844, 0, -0.055839, 0, 1, 0, 0.055839, 0, 0.99844, 3.36612, 0, 7.45557)
+
+[node name="CircularPillar10" parent="PearlessAct/Beach/PillarGroup" instance=ExtResource("38_egind")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.91061, 0, -6.10352e-05)
+
+[node name="PillarGroup2" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(-0.240567, 0, -0.970633, 0, 1, 0, 0.970633, 0, -0.240567, -172.284, 9.92021, -81.2925)
+
+[node name="CircularPillar9" parent="PearlessAct/Beach/PillarGroup2" instance=ExtResource("38_egind")]
+transform = Transform3D(0.99844, 0, -0.055839, 0, 1, 0, 0.055839, 0, 0.99844, -0.492279, 0, 7.23975)
+
+[node name="CircularPillar10" parent="PearlessAct/Beach/PillarGroup2" instance=ExtResource("38_egind")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.19604, 0, 0)
+
+[node name="richpearls" type="Node3D" parent="PearlessAct/Beach/PillarGroup2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.575573, 0)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("39_r67gk")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/PillarGroup2/richpearls" instance=ExtResource("39_r67gk")]
+
+[node name="Child02" parent="PearlessAct/Beach/PillarGroup2/richpearls" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Child03" parent="PearlessAct/Beach/PillarGroup2/richpearls" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+
+[node name="Child04" parent="PearlessAct/Beach/PillarGroup2/richpearls" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+
+[node name="Child05" parent="PearlessAct/Beach/PillarGroup2/richpearls" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="Child06" parent="PearlessAct/Beach/PillarGroup2/richpearls" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child07" parent="PearlessAct/Beach/PillarGroup2/richpearls" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="richpearls2" type="Node3D" parent="PearlessAct/Beach/PillarGroup2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.25305, 0.575573, 13.2972)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("39_r67gk")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/PillarGroup2/richpearls2" instance=ExtResource("39_r67gk")]
+
+[node name="Child02" parent="PearlessAct/Beach/PillarGroup2/richpearls2" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Child03" parent="PearlessAct/Beach/PillarGroup2/richpearls2" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+
+[node name="Child04" parent="PearlessAct/Beach/PillarGroup2/richpearls2" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+
+[node name="Child05" parent="PearlessAct/Beach/PillarGroup2/richpearls2" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="Child06" parent="PearlessAct/Beach/PillarGroup2/richpearls2" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child07" parent="PearlessAct/Beach/PillarGroup2/richpearls2" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="richpearls3" type="Node3D" parent="PearlessAct/Beach/PillarGroup2"]
+transform = Transform3D(0.999231, 0, -0.039225, 0, 1, 0, 0.039225, 0, 0.999231, -14.2219, 0.575573, 0.00299072)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("39_r67gk")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/PillarGroup2/richpearls3" instance=ExtResource("39_r67gk")]
+
+[node name="Child02" parent="PearlessAct/Beach/PillarGroup2/richpearls3" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Child03" parent="PearlessAct/Beach/PillarGroup2/richpearls3" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+
+[node name="Child04" parent="PearlessAct/Beach/PillarGroup2/richpearls3" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+
+[node name="Child05" parent="PearlessAct/Beach/PillarGroup2/richpearls3" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="Child06" parent="PearlessAct/Beach/PillarGroup2/richpearls3" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child07" parent="PearlessAct/Beach/PillarGroup2/richpearls3" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="richpearls4" type="Node3D" parent="PearlessAct/Beach/PillarGroup2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.2884, 0.575573, 12.6965)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("39_r67gk")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/PillarGroup2/richpearls4" instance=ExtResource("39_r67gk")]
+
+[node name="Child02" parent="PearlessAct/Beach/PillarGroup2/richpearls4" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Child03" parent="PearlessAct/Beach/PillarGroup2/richpearls4" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+
+[node name="Child04" parent="PearlessAct/Beach/PillarGroup2/richpearls4" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+
+[node name="Child05" parent="PearlessAct/Beach/PillarGroup2/richpearls4" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="Child06" parent="PearlessAct/Beach/PillarGroup2/richpearls4" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child07" parent="PearlessAct/Beach/PillarGroup2/richpearls4" instance=ExtResource("39_r67gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="Pearls3" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(0.434367, 0, -0.900738, 0, 1, 0, 0.900738, 0, 0.434367, -233.668, 10.4745, -107.597)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 9
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/Pearls3" instance=ExtResource("9_y4pw5")]
+
+[node name="Child02" parent="PearlessAct/Beach/Pearls3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Child03" parent="PearlessAct/Beach/Pearls3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+
+[node name="Child04" parent="PearlessAct/Beach/Pearls3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+
+[node name="Child05" parent="PearlessAct/Beach/Pearls3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="Child06" parent="PearlessAct/Beach/Pearls3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child07" parent="PearlessAct/Beach/Pearls3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="Child08" parent="PearlessAct/Beach/Pearls3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.8)
+
+[node name="Child09" parent="PearlessAct/Beach/Pearls3" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.2)
+
+[node name="Pearls4" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(0.434367, 0, -0.900738, 0, 1, 0, 0.900738, 0, 0.434367, -233.668, 11.2905, -107.597)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 9
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/Pearls4" instance=ExtResource("9_y4pw5")]
+
+[node name="Child02" parent="PearlessAct/Beach/Pearls4" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Child03" parent="PearlessAct/Beach/Pearls4" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+
+[node name="Child04" parent="PearlessAct/Beach/Pearls4" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+
+[node name="Child05" parent="PearlessAct/Beach/Pearls4" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="Child06" parent="PearlessAct/Beach/Pearls4" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child07" parent="PearlessAct/Beach/Pearls4" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="Child08" parent="PearlessAct/Beach/Pearls4" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.8)
+
+[node name="Child09" parent="PearlessAct/Beach/Pearls4" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.2)
+
+[node name="Pearls5" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(0.434367, 0, -0.900738, 0, 1, 0, 0.900738, 0, 0.434367, -233.668, 12.2985, -107.597)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 9
+Shape = 0
+Orientation = 0
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/Pearls5" instance=ExtResource("9_y4pw5")]
+
+[node name="Child02" parent="PearlessAct/Beach/Pearls5" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Child03" parent="PearlessAct/Beach/Pearls5" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+
+[node name="Child04" parent="PearlessAct/Beach/Pearls5" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+
+[node name="Child05" parent="PearlessAct/Beach/Pearls5" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="Child06" parent="PearlessAct/Beach/Pearls5" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="Child07" parent="PearlessAct/Beach/Pearls5" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="Child08" parent="PearlessAct/Beach/Pearls5" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.8)
+
+[node name="Child09" parent="PearlessAct/Beach/Pearls5" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.2)
+
+[node name="Pearls6" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(-0.47788, 0, -0.878426, 0, 1, 0, 0.878426, 0, -0.47788, -230.163, 10.4289, -94.2262)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/Pearls6" instance=ExtResource("9_y4pw5")]
+
+[node name="Child02" parent="PearlessAct/Beach/Pearls6" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="PearlessAct/Beach/Pearls6" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="PearlessAct/Beach/Pearls6" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="PearlessAct/Beach/Pearls6" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child06" parent="PearlessAct/Beach/Pearls6" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child07" parent="PearlessAct/Beach/Pearls6" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child08" parent="PearlessAct/Beach/Pearls6" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+
+[node name="Child09" parent="PearlessAct/Beach/Pearls6" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child10" parent="PearlessAct/Beach/Pearls6" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.5)
+
+[node name="Pearls7" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(-0.47788, 0, -0.878426, 0, 1, 0, 0.878426, 0, -0.47788, -230.163, 11.2175, -94.2262)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/Pearls7" instance=ExtResource("9_y4pw5")]
+
+[node name="Child02" parent="PearlessAct/Beach/Pearls7" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="PearlessAct/Beach/Pearls7" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="PearlessAct/Beach/Pearls7" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="PearlessAct/Beach/Pearls7" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child06" parent="PearlessAct/Beach/Pearls7" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child07" parent="PearlessAct/Beach/Pearls7" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child08" parent="PearlessAct/Beach/Pearls7" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+
+[node name="Child09" parent="PearlessAct/Beach/Pearls7" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child10" parent="PearlessAct/Beach/Pearls7" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.5)
+
+[node name="Pearls8" type="Node3D" parent="PearlessAct/Beach"]
+transform = Transform3D(-0.47788, 0, -0.878426, 0, 1, 0, 0.878426, 0, -0.47788, -230.163, 12.1385, -94.2262)
+script = ExtResource("7_7yyi2")
+Generate = false
+Source = ExtResource("9_y4pw5")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PearlessAct/Beach/Pearls8" instance=ExtResource("9_y4pw5")]
+
+[node name="Child02" parent="PearlessAct/Beach/Pearls8" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="PearlessAct/Beach/Pearls8" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="PearlessAct/Beach/Pearls8" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="PearlessAct/Beach/Pearls8" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child06" parent="PearlessAct/Beach/Pearls8" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child07" parent="PearlessAct/Beach/Pearls8" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child08" parent="PearlessAct/Beach/Pearls8" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+
+[node name="Child09" parent="PearlessAct/Beach/Pearls8" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child10" parent="PearlessAct/Beach/Pearls8" instance=ExtResource("9_y4pw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.5)
 
 [connection signal="Activated" from="PearlessAct/CullingMap/HallwayLoad" to="PearlessAct/Hallway" method="Activate"]
 [connection signal="Deactivated" from="PearlessAct/CullingMap/HallwayLoad" to="PearlessAct/Hallway" method="Deactivate"]
