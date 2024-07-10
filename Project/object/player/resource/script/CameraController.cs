@@ -62,6 +62,7 @@ public partial class CameraController : Node3D
 		{
 			SettingsResource = StageSettings.instance.CurrentCheckpoint.CameraSettings,
 		});
+		SnapFlag = true;
 	}
 
 	public override void _PhysicsProcess(double _)
