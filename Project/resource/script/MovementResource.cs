@@ -6,7 +6,6 @@ namespace Project.Gameplay;
 /// <summary>
 /// Contains data of movement settings. Leave values at -1 to ignore (primarily for skill overrides)
 /// </summary>
-
 public partial class MovementResource : Resource
 {
 	[Export]
@@ -28,6 +27,15 @@ public partial class MovementResource : Resource
 		speed = 0;
 		traction = 0;
 		friction = 0;
+	}
+
+	public MovementResource(int speed, int traction, int friction, int overspeed, int turnaround)
+	{
+		this.speed = speed;
+		this.traction = traction;
+		this.friction = friction;
+		this.overspeedFriction = overspeed;
+		this.turnaround = turnaround;
 	}
 
 	//Figures out whether to speed up or slow down depending on the input
