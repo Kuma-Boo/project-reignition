@@ -490,13 +490,7 @@ namespace Project.Gameplay
 		public bool IsMovingBackward { get; set; }
 
 		/// <summary> How much speed to lose when turning sharply. </summary>
-		private const float TURNING_SPEED_LOSS = .02f;
-		/// <summary> How quickly to turn when moving slowly. </summary>
-		private const float MIN_TURN_AMOUNT = .12f;
-		/// <summary> How quickly to turn when moving at top speed. </summary>
-		private const float MAX_TURN_AMOUNT = .6f;
-		/// <summary> How quickly to turnaround when at top speed. </summary>
-		private const float RUN_TURNAROUND_SPEED = .24f;
+		private const float TurningSpeedLoss = .02f;
 		/// <summary> Maximum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 		private const float MAX_TURNAROUND_ANGLE = Mathf.Pi * .75f;
 		/// <summary> Updates MoveSpeed. What else do you need know? </summary>
@@ -654,20 +648,20 @@ namespace Project.Gameplay
 			}
 
 			// Normal turning
-			float maxTurnAmount = MAX_TURN_AMOUNT;
+			float maxTurnAmount = Skills.MaxTurnAmount;
 			float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
 			// Is the player trying to recenter themselves?
 			bool isTurningAround = IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
 			if (isTurningAround)
-				maxTurnAmount = RUN_TURNAROUND_SPEED;
+				maxTurnAmount = Skills.TurnTurnaround;
 
-			float turnSmoothing = Mathf.Lerp(MIN_TURN_AMOUNT, maxTurnAmount, speedRatio);
+			float turnSmoothing = Mathf.Lerp(Skills.MinTurnAmount, maxTurnAmount, speedRatio);
 
 			if (IsSpeedLossActive())
 			{
 				// Calculate turn delta, relative to ground speed
 				float speedLossRatio = speedRatio * deltaAngle / MAX_TURNAROUND_ANGLE;
-				MoveSpeed -= GroundSettings.Speed * turningSpeedCurve.Sample(speedLossRatio) * TURNING_SPEED_LOSS;
+				MoveSpeed -= GroundSettings.Speed * turningSpeedCurve.Sample(speedLossRatio) * TurningSpeedLoss;
 				if (MoveSpeed < 0)
 					MoveSpeed = 0;
 			}
@@ -1065,7 +1059,7 @@ namespace Project.Gameplay
 					if (!IsHoldingDirection(PathFollower.BackAngle))
 					{
 						float targetMovementAngle = ExtensionMethods.ClampAngleRange(GetTargetMovementAngle(), PathFollower.ForwardAngle, MAX_SLIDE_ADJUSTMENT);
-						MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, MIN_TURN_AMOUNT);
+						MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, Skills.MinTurnAmount);
 					}
 
 					// Influence speed
