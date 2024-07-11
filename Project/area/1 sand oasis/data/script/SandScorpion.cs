@@ -295,7 +295,7 @@ namespace Project.Gameplay.Bosses
 
 
 		/// <summary> Fastest possible movement speed, based on the player's top speed. </summary>
-		private float CharacterTopSpeed => Character.Skills.GroundSettings.speed;
+		private float CharacterTopSpeed => Character.Skills.GroundSettings.Speed;
 
 		private float MoveSpeed { get; set; }
 		private float moveSpeedVelocity;

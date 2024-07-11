@@ -295,18 +295,18 @@ public partial class CameraController : Node3D
 	}
 
 	/// <summary> Angle to use when transforming from world space to camera space. </summary>
-	private float xformAngle;
+	public float XformAngle { get; private set; }
 	/// <summary> Previous xform angle used right before the last camera change. </summary>
 	private float previousXformAngle;
 	private float xformBlend = 1;
 	private readonly float XformSmoothing = 1.5f;
-	public float TransformAngle(float angle) => xformAngle + angle;
+	public float TransformAngle(float angle) => XformAngle + angle;
 
 	/// <summary> Starts blending the xform angle. </summary>
 	private void StartXformBlend()
 	{
 		xformBlend = 0;
-		previousXformAngle = xformAngle;
+		previousXformAngle = XformAngle;
 	}
 
 	/// <summary> Blends xform angles for smoother inputs between camera cuts. </summary>
@@ -324,7 +324,7 @@ public partial class CameraController : Node3D
 		}
 
 		xformBlend = Mathf.MoveToward(xformBlend, 1, XformSmoothing * PhysicsManager.physicsDelta);
-		xformAngle = Mathf.LerpAngle(previousXformAngle, targetXformAngle, xformBlend);
+		XformAngle = Mathf.LerpAngle(previousXformAngle, targetXformAngle, xformBlend);
 	}
 
 	public void SnapXform() => xformBlend = 1;

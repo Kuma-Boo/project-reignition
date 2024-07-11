@@ -188,11 +188,10 @@ public partial class PathTraveller : Node3D
 
 	private void UpdateAnimation()
 	{
-
 		// Update animations
 		if (root != null) // Update visual rotations
 		{
-			float turnAmount = (currentTurnAmount.X / turnSpeed) - (Character.PathFollower.DeltaAngle * 20.0f);
+			float turnAmount = (currentTurnAmount.X / turnSpeed) - (Character.PathFollower.DeltaAngle * 5.0f);
 			float tiltAmount = Mathf.DegToRad(rotationAmount) * tiltRatio * turnAmount;
 			root.Rotation = Vector3.Zero;
 
