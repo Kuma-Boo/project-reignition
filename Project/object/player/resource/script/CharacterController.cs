@@ -195,6 +195,8 @@ namespace Project.Gameplay
 				// Reduce sensitivity when player is running
 				if (speedRatio > CharacterAnimator.RunRatio)
 					strafeAngle = ExtensionMethods.ClampAngleRange(strafeAngle, 0, Mathf.Pi * .25f);
+				if (IsMovingBackward)
+					strafeAngle *= -1;
 
 				return baseAngle - strafeAngle;
 			}
