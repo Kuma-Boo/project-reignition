@@ -184,18 +184,22 @@ namespace Project.Gameplay
 			return delta < Mathf.Pi * .45f;
 		}
 
-		/// <summary> Returns the input angle based on the camera view. </summary>
-		public float GetInputAngle()
+		private float GetStrafeAngle()
 		{
-			if (Skills.IsSkillEquipped(SkillKey.Autorun))
+			float targetAngle = GetInputAngle(true);
+			return targetAngle + (PathFollower.DeltaAngle * .5f);
+		}
+
+		/// <summary> Returns the input angle based on the camera view. </summary>
+		public float GetInputAngle(bool strafeMode = false)
+		{
+			if (Skills.IsSkillEquipped(SkillKey.Autorun) || strafeMode)
 			{
 				float baseAngle = InputVector.Y <= 0 ? PathFollower.ForwardAngle : PathFollower.BackAngle;
-				float strafeAngle = InputVector.X * Mathf.Pi * .5f;
-				float speedRatio = GroundSettings.GetSpeedRatioClamped(MoveSpeed);
-				// Reduce sensitivity when player is running
-				if (speedRatio > CharacterAnimator.RunRatio)
-					strafeAngle = ExtensionMethods.ClampAngleRange(strafeAngle, 0, Mathf.Pi * .25f);
+				float strafeAngle = InputVector.X * Mathf.Pi * .25f;
 				if (IsMovingBackward)
+					strafeAngle *= -1;
+				if (ExtensionMethods.DotAngle(Camera.XformAngle, PathFollower.ForwardAngle) < 0)
 					strafeAngle *= -1;
 
 				return baseAngle - strafeAngle;
@@ -246,18 +250,6 @@ namespace Project.Gameplay
 
 			return GetInputAngle();
 		}
-
-		private float GetStrafeAngle()
-		{
-			float targetAngle = GetInputAngle();
-			if (InputVector.IsZeroApprox())
-				return PathFollower.ForwardAngle + (PathFollower.DeltaAngle * .5f);
-			else if (IsHoldingDirection(PathFollower.BackAngle))
-				return ExtensionMethods.ReflectAngle(targetAngle, PathFollower.ForwardAngle + (PathFollower.DeltaAngle * .5f));
-
-			return targetAngle;
-		}
-
 
 		private float jumpBufferTimer;
 		private float actionBufferTimer;
@@ -622,7 +614,7 @@ namespace Project.Gameplay
 				pathControlAmount = 0; // Don't use path influence if space mode is supposed to be relative to the player
 			}
 
-			float targetMovementAngle = GetTargetMovementAngle() + pathControlAmount;
+			float targetMovementAngle = GetTargetMovementAngle();// + pathControlAmount;
 			if (IsLockoutActive &&
 				ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace) // Direction is being overridden
 			{
