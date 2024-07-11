@@ -196,7 +196,7 @@ namespace Project.Gameplay
 			if (Skills.IsSkillEquipped(SkillKey.Autorun) || strafeMode)
 			{
 				float baseAngle = InputVector.Y <= SaveManager.Config.deadZone ? PathFollower.ForwardAngle : PathFollower.BackAngle;
-				float strafeAngle = InputVector.X * Mathf.Pi * .25f;
+				float strafeAngle = InputVector.X * MaxTurningAdjustment;
 				if (IsMovingBackward)
 					strafeAngle *= -1;
 				if (ExtensionMethods.DotAngle(Camera.XformAngle, PathFollower.ForwardAngle) < 0)
@@ -586,6 +586,8 @@ namespace Project.Gameplay
 		private bool turnInstantly;
 		/// <summary> Amount to blend between free and replace modes. </summary>
 		private float strafeBlend;
+		/// <summary> Maximum amount the player can turn when running at full speed. </summary>
+		private const float MaxTurningAdjustment = Mathf.Pi * .25f;
 		/// <summary> Updates Turning. Read the function names. </summary>
 		private void UpdateTurning()
 		{
@@ -638,13 +640,14 @@ namespace Project.Gameplay
 			if (speedRatio > CharacterAnimator.RunRatio)
 			{
 				if (Runtime.Instance.IsUsingController &&
-					IsHoldingDirection(PathFollower.ForwardAngle + pathControlAmount) &&
+					IsHoldingDirection(PathFollower.ForwardAngle) &&
+					Mathf.Abs(inputDeltaAngle) < MaxTurningAdjustment &&
 					!Skills.IsSkillEquipped(SkillKey.Autorun)) // Remap controls to provide more analog detail
 				{
 					targetMovementAngle -= inputDeltaAngle * .5f;
 				}
 
-				targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .25f);
+				targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, PathFollower.ForwardAngle, MaxTurningAdjustment);
 			}
 
 			// Normal turning
@@ -653,7 +656,9 @@ namespace Project.Gameplay
 			// Is the player trying to recenter themselves?
 			bool isTurningAround = IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
 			if (isTurningAround)
+			{
 				maxTurnAmount = Skills.TurnTurnaround;
+			}
 
 			float turnSmoothing = Mathf.Lerp(Skills.MinTurnAmount, maxTurnAmount, speedRatio);
 
@@ -1144,7 +1149,7 @@ namespace Project.Gameplay
 			MoveSpeed = Skills.BackflipSettings.Speed;
 
 			IsMovingBackward = true;
-			MovementAngle = GetInputAngle();
+			MovementAngle = PathFollower.BackAngle;
 
 			VerticalSpeed = Runtime.CalculateJumpPower(backflipHeight);
 
