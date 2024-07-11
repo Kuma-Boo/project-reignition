@@ -39,7 +39,7 @@ public partial class DashPanel : Area3D
 		//Only apply speed boost when player is moving slow. Don't slow them down!
 		if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < speedRatio)
 		{
-			Character.MoveSpeed = Character.GroundSettings.speed * speedRatio;
+			Character.MoveSpeed = Character.GroundSettings.Speed * speedRatio;
 			Character.Effect.PlayVoice("dash panel");
 		}
 

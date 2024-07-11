@@ -70,5 +70,8 @@ public partial class SkillResource : Resource
 
 	/// <summary> Does this skill build off of a previous skill? </summary>
 	[Export]
-	public SkillResource AugmentSkill { get; private set; }
+	public int SkillVariationIndex { get; private set; }
+	/// <summary> Does this skill build off of a previous skill? </summary>
+	[Export]
+	public SkillResource BaseSkill { get; private set; }
 }

@@ -120,7 +120,7 @@ public partial class GrindRail : Area3D
 	/// <summary> Is a jump currently being buffered? </summary>
 	private float jumpBufferTimer;
 	/// <summary> Basic measure for attaching at the end of the rail. </summary>
-	private float RailFudgeFactor => Skills.GrindSettings.speed * PhysicsManager.physicsDelta;
+	private float RailFudgeFactor => Skills.GrindSettings.Speed * PhysicsManager.physicsDelta;
 	private const float JumpbufferLength = .2f;
 	/// <summary> How "magnetic" the rail is. Early 3D Sonic games had a habit of putting this too low. </summary>
 	private const float GrindrailSnapping = 1.0f;
@@ -144,7 +144,7 @@ public partial class GrindRail : Area3D
 			return;
 
 		// Ignore grinds that would immediately put the player into a wall
-		if (CheckWall(Skills.GrindSettings.speed * PhysicsManager.physicsDelta)) return;
+		if (CheckWall(Skills.GrindSettings.Speed * PhysicsManager.physicsDelta)) return;
 
 		delta = pathFollower.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - pathFollower.GlobalPosition);
 		delta.Y -= Character.VerticalSpeed * PhysicsManager.physicsDelta;
@@ -199,7 +199,7 @@ public partial class GrindRail : Area3D
 
 		Character.IsMovingBackward = false;
 		Character.LandOnGround(); // Rail counts as being on the ground
-		Character.MoveSpeed = Skills.GrindSettings.speed; // Start at the correct speed
+		Character.MoveSpeed = Skills.GrindSettings.Speed; // Start at the correct speed
 		Character.VerticalSpeed = 0f;
 
 		Character.Animator.ExternalAngle = 0; // Reset rotation
@@ -385,7 +385,7 @@ public partial class GrindRail : Area3D
 		float targetSpeed = Skills.perfectShuffleSpeed;
 		if (Mathf.IsZeroApprox(perfectChargeTimer))
 		{
-			targetSpeed = Skills.GrindSettings.speed;
+			targetSpeed = Skills.GrindSettings.Speed;
 			allowBonuses = false;
 		}
 

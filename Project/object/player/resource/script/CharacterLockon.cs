@@ -258,7 +258,7 @@ public partial class CharacterLockon : Node3D
 			UpdateLockonTargets();
 		}
 
-		Character.MoveSpeed = Mathf.MoveToward(Character.MoveSpeed, 0f, Character.GroundSettings.friction * PhysicsManager.physicsDelta);
+		Character.MoveSpeed = Mathf.MoveToward(Character.MoveSpeed, 0f, Character.GroundSettings.Friction * PhysicsManager.physicsDelta);
 		Character.VerticalSpeed -= Runtime.GRAVITY * PhysicsManager.physicsDelta;
 	}
 

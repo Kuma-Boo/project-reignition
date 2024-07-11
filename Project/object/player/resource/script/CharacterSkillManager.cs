@@ -120,57 +120,54 @@ public partial class CharacterSkillManager : Node
 		// Create MovementSettings based on skills
 		GroundSettings = new()
 		{
-			speed = baseGroundSpeed,
-			traction = baseGroundTraction,
-			friction = baseGroundFriction,
-			overspeed = baseGroundOverspeed,
-			turnaround = baseGroundTurnaround
+			Speed = baseGroundSpeed,
+			Traction = baseGroundTraction,
+			Friction = baseGroundFriction,
+			Overspeed = baseGroundOverspeed,
+			Turnaround = baseGroundTurnaround,
 		};
 
 		AirSettings = new()
 		{
-			speed = baseAirSpeed,
-			traction = baseAirTraction,
-			friction = baseAirFriction,
-			overspeed = baseAirOverspeed,
-			turnaround = baseAirTurnaround,
-			clampTurnaround = true
+			Speed = baseAirSpeed,
+			Traction = baseAirTraction,
+			Friction = baseAirFriction,
+			Overspeed = baseAirOverspeed,
+			Turnaround = baseAirTurnaround,
 		};
 
 		BackflipSettings = new()
 		{
-			speed = baseBackflipSpeed,
-			traction = baseBackflipTraction,
-			friction = baseBackflipFriction,
-			overspeed = baseBackflipOverspeed,
-			turnaround = baseBackflipTurnaround,
-			clampTurnaround = true
+			Speed = baseBackflipSpeed,
+			Traction = baseBackflipTraction,
+			Friction = baseBackflipFriction,
+			Overspeed = baseBackflipOverspeed,
+			Turnaround = baseBackflipTurnaround,
 		};
 
 		BackstepSettings = new()
 		{
-			speed = baseBackstepSpeed,
-			traction = baseBackstepTraction,
-			friction = baseBackstepFriction,
-			overspeed = baseBackstepOverspeed,
-			turnaround = baseBackstepTurnaround
+			Speed = baseBackstepSpeed,
+			Traction = baseBackstepTraction,
+			Friction = baseBackstepFriction,
+			Overspeed = baseBackstepOverspeed,
+			Turnaround = baseBackstepTurnaround,
 		};
 
 		SlideSettings = new()
 		{
-			speed = baseSlideSpeed,
-			traction = baseSlideTraction,
-			friction = baseSlideFriction,
-			overspeed = baseSlideOverspeed,
-			turnaround = baseSlideTurnaround
+			Speed = baseSlideSpeed,
+			Traction = baseSlideTraction,
+			Friction = baseSlideFriction,
+			Overspeed = baseSlideOverspeed,
+			Turnaround = baseSlideTurnaround
 		};
 
 		GrindSettings = new()
 		{
-			speed = baseGrindSpeed,
-			friction = baseGrindFriction,
-			turnaround = baseGrindTurnaround,
-			clampTurnaround = true
+			Speed = baseGrindSpeed,
+			Friction = baseGrindFriction,
+			Turnaround = baseGrindTurnaround,
 		};
 	}
 
@@ -405,7 +402,7 @@ public partial class CharacterSkillManager : Node
 			speedBreakSFX.Stream = speedBreakDeactivate;
 			speedBreakSFX.Play();
 
-			Character.MoveSpeed = Character.GroundSettings.speed; // Override speed
+			Character.MoveSpeed = GroundSettings.Speed; // Override speed
 			Character.CollisionMask = normalCollisionMask; // Reset collision layer
 			Character.Effect.StopSpeedBreak();
 			Character.AttackState = CharacterController.AttackStates.None;
@@ -440,51 +437,37 @@ public partial class CharacterSkillManager : Node
 /// </summary>
 public struct MovementSetting
 {
-	[Export]
-	public bool clampTurnaround; // Don't allow reversing into negative numbers
-
-	[Export(PropertyHint.Range, "-1, 256")]
-	public int speed = -1;
-	[Export(PropertyHint.Range, "-1, 256")]
-	public int traction = -1; // Speed up rate
-	[Export(PropertyHint.Range, "-1, 256")]
-	public int friction = -1; // Slow down rate
-	[Export(PropertyHint.Range, "-1, 256")]
-	public int overspeed = -1; // Slow down rate when going faster than speed
-	[Export(PropertyHint.Range, "-1, 256")]
-	public int turnaround = -1; // Skidding
+	public int Speed { get; set; }
+	public int Traction { get; set; } // Speed up rate
+	public int Friction { get; set; } // Slow down rate
+	public int Overspeed { get; set; } // Slow down rate when going faster than speed
+	public int Turnaround { get; set; } // Skidding
 
 	public MovementSetting()
 	{
-		speed = 0;
-		traction = 0;
-		friction = 0;
+		Speed = 0;
+		Traction = 0;
+		Friction = 0;
 	}
 
 	// Figures out whether to speed up or slow down depending on the input
-	public float Interpolate(float spd, float input)
+	public float Interpolate(float currentSpeed, float input)
 	{
-		float targetSpeed = speed * input;
-		float delta = traction;
+		float delta = Traction;
+		float targetSpeed = Speed * input;
+		targetSpeed = Mathf.Max(targetSpeed, 0);
 
-		if (Mathf.Abs(spd) > speed)
-			delta = overspeed;
+		if (Mathf.Abs(currentSpeed) > Speed)
+			delta = Overspeed;
 
 		if (input == 0) // Deccelerate
-		{
-			targetSpeed = 0;
-			delta = friction;
-		}
-		else if (!Mathf.IsZeroApprox(spd) && Mathf.Sign(targetSpeed) != Mathf.Sign(speed)) // Turnaround
-		{
-			delta = turnaround;
-			if (clampTurnaround)
-				targetSpeed = 0;
-		}
+			delta = Friction;
+		else if (!Mathf.IsZeroApprox(currentSpeed) && Mathf.Sign(targetSpeed) != Mathf.Sign(Speed)) // Turnaround
+			delta = Turnaround;
 
-		return Mathf.MoveToward(spd, targetSpeed, delta * PhysicsManager.physicsDelta);
+		return Mathf.MoveToward(currentSpeed, targetSpeed, delta * PhysicsManager.physicsDelta);
 	}
 
-	public float GetSpeedRatio(float spd) => spd / speed;
+	public float GetSpeedRatio(float spd) => spd / Speed;
 	public float GetSpeedRatioClamped(float spd) => Mathf.Clamp(GetSpeedRatio(spd), -1f, 1f);
 }
