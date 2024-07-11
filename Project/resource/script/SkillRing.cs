@@ -160,10 +160,12 @@ public class SkillRing
 /// <summary> Dev keys for all possible skills in the game, in numerical order. </summary>
 public enum SkillKey
 {
+	// Control skills
+	Autorun,
+
 	// Passive skills
 	AllRounder, // Reduces acceleration loss caused by steep terrain
 	PearlRange, // Makes collecting pearls easier
-	RingRange, // Makes collecting rings easier
 
 	// Ring skills
 	RingSpawn, // Start with some rings at the game's start
@@ -187,5 +189,10 @@ public enum SkillKey
 	PerfectHomingAttack, // Perfect homing attack, Colors Ultimate style
 
 	DriftExperience, // Manually perform a drift for more speed and points/exp
+
+	CrestWind,
+	CrestFire,
+	CrestDark,
+
 	Max, // Number of skills
 }
