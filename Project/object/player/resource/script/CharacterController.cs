@@ -606,15 +606,19 @@ namespace Project.Gameplay
 			if (Mathf.IsZeroApprox(MoveSpeed) && Input.IsActionPressed("button_brake"))
 				return;
 
-			float pathControlAmount = PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
+			float pathControlAmount = PathFollower.DeltaAngle * .5f;//PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
 			if (IsLockoutActive &&
 				(ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Global ||
-				ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Local))
+				ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Local ||
+				ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe))
 			{
 				pathControlAmount = 0; // Don't use path influence if space mode is supposed to be relative to the player
 			}
 
-			float targetMovementAngle = GetTargetMovementAngle();// + pathControlAmount;
+			if (Skills.IsSpeedBreakActive || Skills.IsSkillEquipped(SkillKey.Autorun))
+				pathControlAmount = 0; // Don't use path influence during speedbreak/autorun
+
+			float targetMovementAngle = GetTargetMovementAngle() + pathControlAmount;
 			if (IsLockoutActive &&
 				ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace) // Direction is being overridden
 			{
@@ -661,7 +665,7 @@ namespace Project.Gameplay
 			if (IsSpeedLossActive())
 			{
 				// Calculate turn delta, relative to ground speed
-				float speedLossRatio = (speedRatio * deltaAngle) / MAX_TURNAROUND_ANGLE;
+				float speedLossRatio = speedRatio * deltaAngle / MAX_TURNAROUND_ANGLE;
 				MoveSpeed -= GroundSettings.Speed * turningSpeedCurve.Sample(speedLossRatio) * TURNING_SPEED_LOSS;
 				if (MoveSpeed < 0)
 					MoveSpeed = 0;
@@ -690,13 +694,15 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakActive) return false;
 
 			// Don't apply turning speed loss when moving quickly and holding the direction of the pathfollower
-			if (IsHoldingDirection(PathFollower.ForwardAngle) && GroundSettings.GetSpeedRatio(MoveSpeed) > .5f)
+			if (IsHoldingDirection(PathFollower.ForwardAngle, true) && GroundSettings.GetSpeedRatio(MoveSpeed) > .5f)
 				return false;
 
 			// Or when overriding speed/direction
 			if (IsLockoutActive &&
 			(ActiveLockoutData.overrideSpeed || ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free))
+			{
 				return false;
+			}
 
 			return true;
 		}
