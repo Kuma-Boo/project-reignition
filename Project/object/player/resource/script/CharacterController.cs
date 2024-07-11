@@ -606,16 +606,12 @@ namespace Project.Gameplay
 			if (Mathf.IsZeroApprox(MoveSpeed) && Input.IsActionPressed("button_brake"))
 				return;
 
-			float pathControlAmount = PathFollower.DeltaAngle * .5f;//PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
-			if (IsLockoutActive &&
-				(ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Global ||
-				ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Local ||
-				ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe))
-			{
-				pathControlAmount = 0; // Don't use path influence if space mode is supposed to be relative to the player
-			}
+			float pathControlAmount = PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
+			bool isPathDeltaLockoutActive = IsLockoutActive &&
+				(ActiveLockoutData.spaceMode != LockoutResource.SpaceModes.Camera ||
+				ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe); // Ignore path delta under certain lockout situations
 
-			if (Skills.IsSpeedBreakActive || Skills.IsSkillEquipped(SkillKey.Autorun))
+			if (Skills.IsSpeedBreakActive || Skills.IsSkillEquipped(SkillKey.Autorun) || isPathDeltaLockoutActive)
 				pathControlAmount = 0; // Don't use path influence during speedbreak/autorun
 
 			float targetMovementAngle = GetTargetMovementAngle() + pathControlAmount;
@@ -653,6 +649,7 @@ namespace Project.Gameplay
 				targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .25f);
 			}
 
+			// Normal turning
 			float maxTurnAmount = MAX_TURN_AMOUNT;
 			float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
 			// Is the player trying to recenter themselves?
@@ -675,14 +672,16 @@ namespace Project.Gameplay
 
 			// Strafe implementation
 			if (Skills.IsSpeedBreakActive ||
-				(IsLockoutActive && ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe) ||
-				Skills.IsSkillEquipped(SkillKey.Autorun))
+				Skills.IsSkillEquipped(SkillKey.Autorun) ||
+				(IsLockoutActive && ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe))
 			{
 				if (InputVector.IsZeroApprox())
 					strafeBlend = Mathf.MoveToward(strafeBlend, 1.0f, PhysicsManager.physicsDelta);
 				else
 					strafeBlend = 0;
 
+				if (!isPathDeltaLockoutActive)
+					MovementAngle += PathFollower.DeltaAngle;
 				MovementAngle = Mathf.LerpAngle(MovementAngle, targetMovementAngle, strafeBlend);
 			}
 		}
