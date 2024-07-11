@@ -69,6 +69,7 @@ public partial class DashPanel : Area3D
 			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward(), Character.PathFollower.Up());
 		}
 
+		Character.Animator.StopBrake();
 		Character.AddLockoutData(lockout);
 	}
 }

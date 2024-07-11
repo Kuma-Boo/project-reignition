@@ -195,7 +195,7 @@ namespace Project.Gameplay
 		{
 			if (Skills.IsSkillEquipped(SkillKey.Autorun) || strafeMode)
 			{
-				float baseAngle = InputVector.Y <= 0 ? PathFollower.ForwardAngle : PathFollower.BackAngle;
+				float baseAngle = InputVector.Y <= SaveManager.Config.deadZone ? PathFollower.ForwardAngle : PathFollower.BackAngle;
 				float strafeAngle = InputVector.X * Mathf.Pi * .25f;
 				if (IsMovingBackward)
 					strafeAngle *= -1;
@@ -643,8 +643,12 @@ namespace Project.Gameplay
 			// Reduce sensitivity when player is running
 			if (speedRatio > CharacterAnimator.RunRatio)
 			{
-				if (Runtime.Instance.IsUsingController && IsHoldingDirection(PathFollower.ForwardAngle + pathControlAmount)) // Remap controls to provide more analog detail
+				if (Runtime.Instance.IsUsingController &&
+					IsHoldingDirection(PathFollower.ForwardAngle + pathControlAmount) &&
+					!Skills.IsSkillEquipped(SkillKey.Autorun)) // Remap controls to provide more analog detail
+				{
 					targetMovementAngle -= inputDeltaAngle * .5f;
+				}
 
 				targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, PathFollower.ForwardAngle, Mathf.Pi * .25f);
 			}
