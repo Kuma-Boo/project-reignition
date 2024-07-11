@@ -62,13 +62,21 @@ public partial class CameraController : Node3D
 		{
 			SettingsResource = StageSettings.instance.CurrentCheckpoint.CameraSettings,
 		});
+		SnapFlag = true;
 	}
 
 	public override void _PhysicsProcess(double _)
 	{
 		PathFollower.Resync();
-		//Don't update the camera when the player is defeated
-		if (Character.IsDefeated) return;
+
+		// Don't update the camera when the player is defeated from a DeathTrigger
+		if (IsDefeatFreezeActive)
+		{
+			if (Character.IsDefeated)
+				return;
+
+			IsDefeatFreezeActive = false;
+		}
 
 		UpdateGameplayCamera();
 	}
@@ -79,9 +87,11 @@ public partial class CameraController : Node3D
 			UpdateFreeCam();
 	}
 
+	/// <summary> Enabled when the camera should freeze due to a DeathTrigger. </summary>
+	public bool IsDefeatFreezeActive { get; set; }
 	/// <summary> Used to focus onto multi-HP enemies, bosses, etc. Not to be confused with CharacterLockon.Target. </summary>
 	public Node3D LockonTarget { get; set; }
-	private bool IsLockonCameraActive => LockonTarget != null || Character.Lockon.IsHomingAttacking || Character.Lockon.IsBouncingLockoutActive;
+	private bool IsLockonCameraActive => LockonTarget != null || Character.Lockon.IsHomingAttacking || Character.Lockon.IsBounceLockoutActive;
 	/// <summary> [0 -> 1] ratio of how much to use the lockon camera. </summary>
 	private float lockonBlend;
 	private float lockonBlendVelocity;
@@ -110,7 +120,7 @@ public partial class CameraController : Node3D
 		}
 
 		lockonBlend = ExtensionMethods.SmoothDamp(lockonBlend, targetBlend, ref lockonBlendVelocity, smoothing * PhysicsManager.physicsDelta);
-		lockonTargetBlend = ExtensionMethods.SmoothDamp(lockonTargetBlend, LockonTarget == null ? 0 : 1, ref lockonTargetBlendVelocity, smoothing * PhysicsManager.physicsDelta);
+		lockonTargetBlend = ExtensionMethods.SmoothDamp(lockonTargetBlend, LockonTarget == null ? 0 : 1, ref lockonTargetBlendVelocity, LockonBlendOutSmoothing * PhysicsManager.physicsDelta);
 	}
 
 	#region Gameplay Camera
@@ -285,18 +295,18 @@ public partial class CameraController : Node3D
 	}
 
 	/// <summary> Angle to use when transforming from world space to camera space. </summary>
-	private float xformAngle;
+	public float XformAngle { get; private set; }
 	/// <summary> Previous xform angle used right before the last camera change. </summary>
 	private float previousXformAngle;
 	private float xformBlend = 1;
 	private readonly float XformSmoothing = 1.5f;
-	public float TransformAngle(float angle) => xformAngle + angle;
+	public float TransformAngle(float angle) => XformAngle + angle;
 
 	/// <summary> Starts blending the xform angle. </summary>
 	private void StartXformBlend()
 	{
 		xformBlend = 0;
-		previousXformAngle = xformAngle;
+		previousXformAngle = XformAngle;
 	}
 
 	/// <summary> Blends xform angles for smoother inputs between camera cuts. </summary>
@@ -314,7 +324,7 @@ public partial class CameraController : Node3D
 		}
 
 		xformBlend = Mathf.MoveToward(xformBlend, 1, XformSmoothing * PhysicsManager.physicsDelta);
-		xformAngle = Mathf.LerpAngle(previousXformAngle, targetXformAngle, xformBlend);
+		XformAngle = Mathf.LerpAngle(previousXformAngle, targetXformAngle, xformBlend);
 	}
 
 	public void SnapXform() => xformBlend = 1;

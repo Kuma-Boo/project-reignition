@@ -137,6 +137,7 @@ public partial class FlowerMajin : Enemy
 			if (Character.Lockon.IsHomingAttacking)
 			{
 				Character.Lockon.StartBounce(false);
+				UpdateLockon();
 
 				if (weakDefense)
 					StartStaggerState();
@@ -171,6 +172,7 @@ public partial class FlowerMajin : Enemy
 	protected override void Defeat()
 	{
 		AnimationTree.Set(DefeatTransition, EnabledConstant);
+		SetHitboxStatus(false);
 		base.Defeat();
 	}
 

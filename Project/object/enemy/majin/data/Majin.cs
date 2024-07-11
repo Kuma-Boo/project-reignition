@@ -252,14 +252,18 @@ public partial class Majin : Enemy
 	{
 		Vector3 launchVector = defeatLaunchDirection;
 		if (launchVector.IsEqualApprox(Vector3.Zero) && !Engine.IsEditorHint()) // Calculate launch direction
+		{
 			launchVector = (Character.Animator.Back() + (Character.Animator.Up() * .2f)).Normalized();
+			launchVector = launchVector.Normalized() * Mathf.Clamp(Character.MoveSpeed, 5, 20);
+		}
 		else if (isDefeatLocalTransform)
+		{
 			launchVector = GlobalTransform.Basis * launchVector;
+		}
 
 		launchVector = launchVector.Rotated(Vector3.Up, Mathf.Pi); // Fix forward direction
-		if (!Engine.IsEditorHint())
-			launchVector = launchVector.Normalized() * Mathf.Clamp(Character.MoveSpeed, 5, 20);
-		return OriginalPosition + launchVector;
+
+		return GlobalPosition + launchVector;
 	}
 
 	/// <summary> Responsible for handling tweens (i.e. Spawning/Default launching) </summary>
@@ -420,7 +424,7 @@ public partial class Majin : Enemy
 	protected override void Defeat()
 	{
 		base.Defeat();
-		SetHitboxStatus(false, true);
+		SetHitboxStatus(false, IsDefeatLaunchEnabled);
 
 		AnimationPlayer.Play("defeat");
 		if (IsDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))
@@ -442,6 +446,7 @@ public partial class Majin : Enemy
 			tweener.TweenProperty(this, "global_position", CalculateLaunchPosition(), defeatLaunchTime);
 			tweener.TweenProperty(this, "rotation", Rotation + targetRotation, defeatLaunchTime * 2.0f).SetEase(Tween.EaseType.In);
 			tweener.TweenCallback(Callable.From(() => AnimationPlayer.Play("launch-end"))).SetDelay(defeatLaunchTime * .5f);
+			tweener.TweenCallback(Callable.From(() => SetHitboxStatus(false, false))).SetDelay(defeatLaunchTime);
 		}
 		else
 		{

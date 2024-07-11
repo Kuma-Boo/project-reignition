@@ -317,6 +317,11 @@ public partial class SoundManager : Node
 
 	public void PlayRichPearlSFX() => richPearlSFX.Play();
 
+	public void StopAllPearlSFX()
+	{
+		for (int i = 0; i < pearlSFXList.Count; i++)
+			pearlSFXList[i].Stop();
+	}
 
 	private readonly Dictionary<StringName, int> sfxGroups = [];
 	public float AddGroupSFX(StringName key)

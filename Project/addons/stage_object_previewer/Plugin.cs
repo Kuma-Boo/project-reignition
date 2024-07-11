@@ -145,6 +145,13 @@ namespace Project.Editor.StageObjectPreviewer
 			if (majin.SpawnTravelEnabled)
 				DrawMajinPath(majin);
 
+			if (majin.IsDefeatLaunchEnabled &&
+				editorCam.IsPositionInFrustum(majin.OriginalPosition) &&
+				editorCam.IsPositionInFrustum(majin.CalculateLaunchPosition()))
+			{
+				viewportOverlay.DrawLine(editorCam.UnprojectPosition(majin.OriginalPosition), editorCam.UnprojectPosition(majin.CalculateLaunchPosition()), SpecialDrawColor, 1, true);
+			}
+
 			if (majin.IsRedMajin && majin.FlameAggressionRadius != 0)
 				DrawPerspectiveCircle(majin.GlobalPosition, Basis.Identity, majin.FlameAggressionRadius, Vector3.Forward, Vector3.Up, SpecialDrawColor);
 		}
@@ -159,12 +166,6 @@ namespace Project.Editor.StageObjectPreviewer
 			if (editorCam.IsPositionInFrustum(majin.OutHandle))
 				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.OutHandle), 5f, SpecialDrawColor);
 
-			if (majin.IsDefeatLaunchEnabled &&
-				editorCam.IsPositionInFrustum(majin.OriginalPosition) &&
-				editorCam.IsPositionInFrustum(majin.CalculateLaunchPosition()))
-			{
-				viewportOverlay.DrawLine(editorCam.UnprojectPosition(majin.OriginalPosition), editorCam.UnprojectPosition(majin.CalculateLaunchPosition()), SpecialDrawColor, 1, true);
-			}
 
 			// Draw the spawn curve
 			Array<Vector2> points = [];
