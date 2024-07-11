@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=3 uid="uid://tvjx2wghc06t"]
+[gd_scene load_steps=91 format=3 uid="uid://tvjx2wghc06t"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_0njhg"]
 [ext_resource type="PackedScene" uid="uid://c2ckwltf2j1kv" path="res://area/1 sand oasis/act 1/environment/collision/Collision.tscn" id="1_pkods"]
@@ -22,7 +22,6 @@
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/1 sand oasis/data/skybox/Skybox.tscn" id="12_qxfqh"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="13_3nlok"]
 [ext_resource type="PackedScene" uid="uid://wpj0smmgjk01" path="res://area/1 sand oasis/act 1/environment/sandfall event/SandfallEvent.tscn" id="13_6o732"]
-[ext_resource type="PackedScene" uid="uid://bom1n0hvfixo1" path="res://area/1 sand oasis/data/BGM.tscn" id="14_ej622"]
 [ext_resource type="Resource" uid="uid://djudi0tysqcu8" path="res://area/1 sand oasis/act 1/camera/ZipperCam.tres" id="15_68xag"]
 [ext_resource type="Resource" uid="uid://ck1uq7jg5cvr3" path="res://area/1 sand oasis/act 1/camera/UTurnCam.tres" id="15_f08sq"]
 [ext_resource type="Resource" uid="uid://j5fi2xlxml4n" path="res://area/1 sand oasis/act 1/camera/WallClimbBottomCam.tres" id="16_td0s2"]
@@ -59,6 +58,8 @@
 [ext_resource type="Curve3D" uid="uid://b4qnnk3nkq7i4" path="res://area/1 sand oasis/act 1/environment/path/BeachPath.tres" id="41_tujp6"]
 [ext_resource type="Curve3D" uid="uid://dyf3xaw47l0tm" path="res://area/1 sand oasis/act 1/environment/path/EndingPath.tres" id="45_mavj3"]
 [ext_resource type="PackedScene" uid="uid://co2akledxygt2" path="res://effect/sun/Sun.tscn" id="45_tmkcr"]
+[ext_resource type="AudioStream" uid="uid://kji8e3p1p2uy" path="res://sound/ost/adventure disc/3 Let The Speed Mend It.mp3" id="56_bmss0"]
+[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="57_sbm18"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_eqslh"]
 
@@ -1509,7 +1510,13 @@ next/demo1 = &"demo2"
 next/demo2 = &"demo3"
 next/demo3 = &"demo1"
 
-[node name="BGM" parent="." instance=ExtResource("14_ej622")]
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("56_bmss0")
+bus = &"BGM"
+script = ExtResource("57_sbm18")
+loopStartPosition = 15.869
+loopEndPosition = 205.12
+isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_wea48")
