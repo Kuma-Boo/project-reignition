@@ -11,11 +11,16 @@ namespace Project.Gameplay.Objects
 		private NodePath animator;
 		private AnimationPlayer Animator { get; set; }
 
+		protected override void SetUp()
+		{
+			Animator = GetNodeOrNull<AnimationPlayer>(animator);
+			base.SetUp();
+		}
+
 		public override void Respawn()
 		{
 			base.Respawn();
 
-			Animator = GetNodeOrNull<AnimationPlayer>(animator);
 			Animator.Play("RESET");
 			Animator.Queue("loop");
 		}
@@ -35,6 +40,7 @@ namespace Project.Gameplay.Objects
 				SoundManager.instance.PlayRingSFX();
 			}
 
+			BonusManager.instance.AddRingChain();
 			Animator.Play("collect");
 			base.Collect();
 		}

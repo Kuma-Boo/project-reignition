@@ -57,7 +57,7 @@ public partial class BonusManager : VBoxContainer
 
 	private int ringChain;
 	/// <summary> Increases the current ring chain. </summary>
-	private void AddRingChain()
+	public void AddRingChain()
 	{
 		ringChain++;
 
