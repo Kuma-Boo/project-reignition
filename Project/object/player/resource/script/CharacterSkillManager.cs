@@ -96,18 +96,23 @@ public partial class CharacterSkillManager : Node
 	[Export]
 	public float perfectShuffleSpeed;
 	[Export]
-	public MovementResource grindSettings; // Settings for grinding on rails
+	private int baseGrindSpeed;
+	[Export]
+	private int baseGrindFriction;
+	[Export]
+	private int baseGrindTurnaround;
 
 	[ExportGroup("Sidle Settings")]
 	[Export]
 	public Curve sidleMovementCurve;
 
 	// References to the actual movement settings being used
-	public MovementResource GroundSettings { get; private set; }
-	public MovementResource AirSettings { get; private set; }
-	public MovementResource BackflipSettings { get; private set; }
-	public MovementResource BackstepSettings { get; private set; }
-	public MovementResource SlideSettings { get; private set; }
+	public MovementSetting GroundSettings { get; private set; }
+	public MovementSetting AirSettings { get; private set; }
+	public MovementSetting BackflipSettings { get; private set; }
+	public MovementSetting BackstepSettings { get; private set; }
+	public MovementSetting SlideSettings { get; private set; }
+	public MovementSetting GrindSettings { get; private set; }
 
 	private void SetUpStats() // Stuff like upgradable speed, increased handling, etc.
 	{
@@ -118,8 +123,8 @@ public partial class CharacterSkillManager : Node
 			speed = baseGroundSpeed,
 			traction = baseGroundTraction,
 			friction = baseGroundFriction,
-			overspeedFriction = baseGroundOverspeed,
-			turnaround = baseGroundTurnaround,
+			overspeed = baseGroundOverspeed,
+			turnaround = baseGroundTurnaround
 		};
 
 		AirSettings = new()
@@ -127,9 +132,9 @@ public partial class CharacterSkillManager : Node
 			speed = baseAirSpeed,
 			traction = baseAirTraction,
 			friction = baseAirFriction,
-			overspeedFriction = baseAirOverspeed,
+			overspeed = baseAirOverspeed,
 			turnaround = baseAirTurnaround,
-			clampTurnaround = true,
+			clampTurnaround = true
 		};
 
 		BackflipSettings = new()
@@ -137,9 +142,9 @@ public partial class CharacterSkillManager : Node
 			speed = baseBackflipSpeed,
 			traction = baseBackflipTraction,
 			friction = baseBackflipFriction,
-			overspeedFriction = baseBackflipOverspeed,
+			overspeed = baseBackflipOverspeed,
 			turnaround = baseBackflipTurnaround,
-			clampTurnaround = true,
+			clampTurnaround = true
 		};
 
 		BackstepSettings = new()
@@ -147,8 +152,8 @@ public partial class CharacterSkillManager : Node
 			speed = baseBackstepSpeed,
 			traction = baseBackstepTraction,
 			friction = baseBackstepFriction,
-			overspeedFriction = baseBackstepOverspeed,
-			turnaround = baseBackstepTurnaround,
+			overspeed = baseBackstepOverspeed,
+			turnaround = baseBackstepTurnaround
 		};
 
 		SlideSettings = new()
@@ -156,8 +161,16 @@ public partial class CharacterSkillManager : Node
 			speed = baseSlideSpeed,
 			traction = baseSlideTraction,
 			friction = baseSlideFriction,
-			overspeedFriction = baseSlideOverspeed,
-			turnaround = baseSlideTurnaround,
+			overspeed = baseSlideOverspeed,
+			turnaround = baseSlideTurnaround
+		};
+
+		GrindSettings = new()
+		{
+			speed = baseGrindSpeed,
+			friction = baseGrindFriction,
+			turnaround = baseGrindTurnaround,
+			clampTurnaround = true
 		};
 	}
 
@@ -420,4 +433,58 @@ public partial class CharacterSkillManager : Node
 	/// <summary> Returns a string representing the soul gauge for menus to display. </summary>
 	public string TextDisplay => $"{SoulPower}/{MaxSoulPower}";
 	#endregion
+}
+
+/// <summary>
+/// Contains data of movement settings. Leave values at -1 to ignore (primarily for skill overrides)
+/// </summary>
+public struct MovementSetting
+{
+	[Export]
+	public bool clampTurnaround; // Don't allow reversing into negative numbers
+
+	[Export(PropertyHint.Range, "-1, 256")]
+	public int speed = -1;
+	[Export(PropertyHint.Range, "-1, 256")]
+	public int traction = -1; // Speed up rate
+	[Export(PropertyHint.Range, "-1, 256")]
+	public int friction = -1; // Slow down rate
+	[Export(PropertyHint.Range, "-1, 256")]
+	public int overspeed = -1; // Slow down rate when going faster than speed
+	[Export(PropertyHint.Range, "-1, 256")]
+	public int turnaround = -1; // Skidding
+
+	public MovementSetting()
+	{
+		speed = 0;
+		traction = 0;
+		friction = 0;
+	}
+
+	// Figures out whether to speed up or slow down depending on the input
+	public float Interpolate(float spd, float input)
+	{
+		float targetSpeed = speed * input;
+		float delta = traction;
+
+		if (Mathf.Abs(spd) > speed)
+			delta = overspeed;
+
+		if (input == 0) // Deccelerate
+		{
+			targetSpeed = 0;
+			delta = friction;
+		}
+		else if (!Mathf.IsZeroApprox(spd) && Mathf.Sign(targetSpeed) != Mathf.Sign(speed)) // Turnaround
+		{
+			delta = turnaround;
+			if (clampTurnaround)
+				targetSpeed = 0;
+		}
+
+		return Mathf.MoveToward(spd, targetSpeed, delta * PhysicsManager.physicsDelta);
+	}
+
+	public float GetSpeedRatio(float spd) => spd / speed;
+	public float GetSpeedRatioClamped(float spd) => Mathf.Clamp(GetSpeedRatio(spd), -1f, 1f);
 }

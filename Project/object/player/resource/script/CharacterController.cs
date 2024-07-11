@@ -468,9 +468,9 @@ namespace Project.Gameplay
 			UpdateActions();
 		}
 
-		public MovementResource GroundSettings => Skills.GroundSettings;
-		public MovementResource AirSettings => Skills.AirSettings;
-		public MovementResource BackstepSettings => Skills.BackstepSettings;
+		public MovementSetting GroundSettings => Skills.GroundSettings;
+		public MovementSetting AirSettings => Skills.AirSettings;
+		public MovementSetting BackstepSettings => Skills.BackstepSettings;
 
 		[Export]
 		/// <summary> Determines how speed is lost when turning. </summary>
@@ -690,7 +690,7 @@ namespace Project.Gameplay
 		}
 
 
-		private MovementResource ActiveMovementSettings
+		private MovementSetting ActiveMovementSettings
 		{
 			get
 			{

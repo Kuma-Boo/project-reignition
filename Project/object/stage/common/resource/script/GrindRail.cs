@@ -120,7 +120,7 @@ public partial class GrindRail : Area3D
 	/// <summary> Is a jump currently being buffered? </summary>
 	private float jumpBufferTimer;
 	/// <summary> Basic measure for attaching at the end of the rail. </summary>
-	private float RailFudgeFactor => Skills.grindSettings.speed * PhysicsManager.physicsDelta;
+	private float RailFudgeFactor => Skills.GrindSettings.speed * PhysicsManager.physicsDelta;
 	private const float JumpbufferLength = .2f;
 	/// <summary> How "magnetic" the rail is. Early 3D Sonic games had a habit of putting this too low. </summary>
 	private const float GrindrailSnapping = 1.0f;
@@ -144,7 +144,7 @@ public partial class GrindRail : Area3D
 			return;
 
 		// Ignore grinds that would immediately put the player into a wall
-		if (CheckWall(Skills.grindSettings.speed * PhysicsManager.physicsDelta)) return;
+		if (CheckWall(Skills.GrindSettings.speed * PhysicsManager.physicsDelta)) return;
 
 		delta = pathFollower.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - pathFollower.GlobalPosition);
 		delta.Y -= Character.VerticalSpeed * PhysicsManager.physicsDelta;
@@ -199,7 +199,7 @@ public partial class GrindRail : Area3D
 
 		Character.IsMovingBackward = false;
 		Character.LandOnGround(); // Rail counts as being on the ground
-		Character.MoveSpeed = Skills.grindSettings.speed; // Start at the correct speed
+		Character.MoveSpeed = Skills.GrindSettings.speed; // Start at the correct speed
 		Character.VerticalSpeed = 0f;
 
 		Character.Animator.ExternalAngle = 0; // Reset rotation
@@ -298,7 +298,7 @@ public partial class GrindRail : Area3D
 		pathFollower.Progress += movementDelta;
 		pathFollower.ProgressRatio = Mathf.Clamp(pathFollower.ProgressRatio, 0.0f, 1.0f);
 		Character.UpdateExternalControl(true);
-		Character.Animator.UpdateBalanceSpeed(Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed));
+		Character.Animator.UpdateBalanceSpeed(Character.Skills.GrindSettings.GetSpeedRatioClamped(Character.MoveSpeed));
 		if (Mathf.IsEqualApprox(pathFollower.ProgressRatio, 1) || Mathf.IsZeroApprox(Character.MoveSpeed)) // Disconnect from the rail
 			Deactivate();
 	}
@@ -370,11 +370,11 @@ public partial class GrindRail : Area3D
 		Character.Animator.UpdateBalanceCrouch(isCharging && !Character.Animator.IsBalanceShuffleActive);
 		if (!Character.Animator.IsBalanceShuffleActive) // Only slow down when not shuffling
 		{
-			float speedRatio = Character.Skills.grindSettings.GetSpeedRatioClamped(Character.MoveSpeed);
+			float speedRatio = Character.Skills.GrindSettings.GetSpeedRatioClamped(Character.MoveSpeed);
 			Character.Effect.UpdateGrindFX(speedRatio);
 
 			if (Mathf.IsZeroApprox(perfectChargeTimer))
-				Character.MoveSpeed = Skills.grindSettings.Interpolate(Character.MoveSpeed, isCharging ? 0f : -1f);
+				Character.MoveSpeed = Skills.GrindSettings.Interpolate(Character.MoveSpeed, isCharging ? 0f : -1f);
 		}
 
 		Character.Animator.UpdateBalancing(isCharging ? 0.0f : Character.Animator.CalculateTurnRatio());
@@ -385,7 +385,7 @@ public partial class GrindRail : Area3D
 		float targetSpeed = Skills.perfectShuffleSpeed;
 		if (Mathf.IsZeroApprox(perfectChargeTimer))
 		{
-			targetSpeed = Skills.grindSettings.speed;
+			targetSpeed = Skills.GrindSettings.speed;
 			allowBonuses = false;
 		}
 

@@ -197,7 +197,7 @@ public partial class LockoutResource : Resource
 		OnLand = 2,
 	}
 
-	public float ApplySpeed(float currentSpeed, MovementResource movementSettings)
+	public float ApplySpeed(float currentSpeed, MovementSetting movementSettings)
 	{
 		// Override speed to the correct value
 		float targetSpd = movementSettings.speed * speedRatio;
