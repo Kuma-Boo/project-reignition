@@ -556,9 +556,9 @@ public partial class SaveManager : Node
 	}
 
 	// <summary> Deletes a save file at the given index
-	public static void DeleteSaveData()
+	public static void DeleteSaveData(int index)
 	{
-		string saveNumber = ActiveSaveSlotIndex.ToString("00");
+		string saveNumber = index.ToString("00");
 		string savePath = SaveDirectory + $"save{saveNumber}.dat";
 
 		OS.MoveToTrash(ProjectSettings.GlobalizePath(savePath));

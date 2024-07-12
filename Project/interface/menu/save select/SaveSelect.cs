@@ -98,7 +98,7 @@ public partial class SaveSelect : Menu
 		if (SaveManager.GameSaveSlots[saveIndex].IsNewFile()) // Nothing to delete!
 			return;
 
-		SaveManager.DeleteSaveData(); // Move the save game's file to the system trash
+		SaveManager.DeleteSaveData(saveIndex); // Move the save game's file to the system trash
 		SaveManager.ResetSaveData(saveIndex, false); // Reset SaveManager's loaded GameData
 		UpdateSaveOptions();
 	}
