@@ -278,9 +278,16 @@ public partial class Enemy : Node3D
 	{
 		IsInteractionProcessed = true;
 		// Connect a signal
-		Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot);
+		if (!Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+			Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot);
 	}
-	protected void ResetInteractionProcessed() => IsInteractionProcessed = false;
+	protected void ResetInteractionProcessed()
+	{
+		IsInteractionProcessed = false;
+
+		if (Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+			Character.Disconnect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
+	}
 
 	/// <summary> Current local rotation of the enemy. </summary>
 	protected float currentRotation;
