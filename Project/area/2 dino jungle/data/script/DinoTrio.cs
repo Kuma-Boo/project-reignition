@@ -122,9 +122,9 @@ public partial class DinoTrio : PathFollow3D
 		}
 
 		// Normal chasing
-		float targetSpeed = Mathf.Clamp(Character.MoveSpeed - Processor.SpeedDifference, 0, Character.Skills.GroundSettings.speed);
+		float targetSpeed = Mathf.Clamp(Character.MoveSpeed - Processor.SpeedDifference, 0, Character.Skills.GroundSettings.Speed);
 		if (Mathf.Abs(DeltaProgress) > DinoTrioProcessor.AttackOffset)
-			targetSpeed = Character.Skills.GroundSettings.speed - Processor.SpeedDifference;
+			targetSpeed = Character.Skills.GroundSettings.Speed - Processor.SpeedDifference;
 
 		moveSpeed = Mathf.MoveToward(moveSpeed, targetSpeed, traction * PhysicsManager.physicsDelta);
 

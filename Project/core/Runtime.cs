@@ -12,7 +12,6 @@ public partial class Runtime : Node
 	public static readonly Vector2I SCREEN_SIZE = new(1920, 1080); // Working resolution is 1080p
 	public static readonly Vector2I HALF_SCREEN_SIZE = (Vector2I)((Vector2)SCREEN_SIZE * .5f);
 
-
 	public override void _EnterTree()
 	{
 		Instance = this;
@@ -20,6 +19,10 @@ public partial class Runtime : Node
 		Interface.Menus.Menu.SetUpMemory();
 	}
 
+	public override void _Ready()
+	{
+		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, Callable.From(ClearPearls));
+	}
 
 	public override void _Process(double _)
 	{
@@ -70,25 +73,28 @@ public partial class Runtime : Node
 
 	public SphereShape3D PearlCollisionShape = new();
 	public SphereShape3D RichPearlCollisionShape = new();
-	[Export] public PackedScene pearlScene;
+	[Export]
+	public PackedScene pearlScene;
 
 	/// <summary> Pool of auto-collected pearls used whenever enemies are defeated or itemboxes are opened. </summary>
-	private readonly Array<Gameplay.Objects.Pearl> pearlPool = new();
+	private readonly Array<Gameplay.Objects.Pearl> pearlPool = [];
+	private readonly Array<Gameplay.Objects.Pearl> tweeningPearls = [];
+	private readonly Array<Tween> pearlTweens = [];
 
-	private const float PEARL_NORMAL_COLLISION = .4f;
-	private const float RICH_PEARL_NORMAL_COLLISION = .6f;
+	private const float PearlCollisionSize = .4f;
+	private const float RichPearlCollisionSize = .6f;
 
 	public void UpdatePearlCollisionShapes(float sizeMultiplier = 1f)
 	{
-		PearlCollisionShape.Radius = PEARL_NORMAL_COLLISION * sizeMultiplier;
-		RichPearlCollisionShape.Radius = RICH_PEARL_NORMAL_COLLISION * sizeMultiplier;
+		PearlCollisionShape.Radius = PearlCollisionSize * sizeMultiplier;
+		RichPearlCollisionShape.Radius = RichPearlCollisionSize * sizeMultiplier;
 	}
 
-	private const float PEARL_MIN_TRAVEL_TIME = .2f;
-	private const float PEARL_MAX_TRAVEL_TIME = .4f;
+	private const float PearlMinTravelTime = .2f;
+	private const float PearlMaxTravelTime = .4f;
 
 	/// <summary> Maximum random delay used to prevent pearls from "clumping."  </summary>
-	private const float PEARL_DELAY_RANGE = .4f;
+	private const float PearlDelayRange = .4f;
 
 	public void SpawnPearls(int amount, Vector3 spawnPosition, Vector2 radius, float heightOffset = 0)
 	{
@@ -108,10 +114,11 @@ public partial class Runtime : Node
 				pearl = pearlScene.Instantiate<Gameplay.Objects.Pearl>();
 				pearl.DisableAutoRespawning = true; // Don't auto-respawn
 				pearl.Monitoring = pearl.Monitorable = false; // Unlike normal pearls, these are automatically collected
-				pearl.Connect(Gameplay.Objects.Pearl.SignalName.Despawned, Callable.From(() => pearlPool.Add(pearl)));
+				pearl.Connect(Gameplay.Objects.Pearl.SignalName.Despawned, Callable.From(() => RepoolPearl(pearl)));
 			}
 
 			AddChild(pearl);
+			tweeningPearls.Add(pearl);
 			pearl.Respawn();
 
 			Vector3 spawnOffset = new(randomNumberGenerator.RandfRange(-radius.X, radius.X),
@@ -119,20 +126,47 @@ public partial class Runtime : Node
 				randomNumberGenerator.RandfRange(-radius.X, radius.X));
 			spawnOffset.Y += heightOffset;
 
-			float travelTime = randomNumberGenerator.RandfRange(PEARL_MIN_TRAVEL_TIME, PEARL_MAX_TRAVEL_TIME);
-			float delay = randomNumberGenerator.RandfRange(0, PEARL_DELAY_RANGE);
+			float travelTime = randomNumberGenerator.RandfRange(PearlMinTravelTime, PearlMaxTravelTime);
+			float delay = randomNumberGenerator.RandfRange(0, PearlDelayRange);
 			tween.TweenProperty(pearl, "global_position", spawnPosition + spawnOffset, travelTime).From(spawnPosition)
 				.SetDelay(delay);
 			tween.TweenCallback(new Callable(pearl, Gameplay.Objects.Pickup.MethodName.Collect))
 				.SetDelay(travelTime + delay);
 		}
 
+		pearlTweens.Add(tween);
+
 		tween.Play();
-		tween.Connect(Tween.SignalName.Finished, Callable.From(() => tween.Kill())); // Kill tween after completing
+		tween.Connect(Tween.SignalName.Finished, Callable.From(() => KillPearlTween(tween))); // Kill tween after completing
 	}
 
-	#endregion
+	private void RepoolPearl(Gameplay.Objects.Pearl pearl)
+	{
+		if (!pearlPool.Contains(pearl))
+			pearlPool.Add(pearl);
 
+		tweeningPearls.Remove(pearl);
+	}
+
+	private void ClearPearls()
+	{
+		for (int i = pearlTweens.Count - 1; i >= 0; i--)
+			KillPearlTween(pearlTweens[i]);
+
+		for (int i = tweeningPearls.Count - 1; i >= 0; i--)
+			tweeningPearls[i].Despawn();
+
+		SoundManager.instance.StopAllPearlSFX();
+	}
+
+	private void KillPearlTween(Tween tween)
+	{
+		if (tween?.IsValid() == true)
+			tween.Kill();
+
+		pearlTweens.Remove(tween);
+	}
+	#endregion
 
 	/// <summary> Emitted when the active controller changes. </summary>
 	[Signal]

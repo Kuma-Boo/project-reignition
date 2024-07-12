@@ -18,8 +18,8 @@ public partial class Enemy : Node3D
 	public delegate void DefeatedEventHandler();
 
 	[Export]
-	protected SpawnModes spawnMode;
-	protected enum SpawnModes
+	public SpawnModes SpawnMode { get; protected set; }
+	public enum SpawnModes
 	{
 		Range, // Use Range trigger
 		Signal, // External Signal
@@ -122,8 +122,13 @@ public partial class Enemy : Node3D
 
 		UpdateEnemy();
 
-		if (!IsDefeated && IsInteracting)
+		if (IsDefeated)
+			return;
+
+		if (IsInteracting)
 			UpdateInteraction();
+		else if (IsInteractionProcessed && Character.AttackState == CharacterController.AttackStates.None)
+			ResetInteractionProcessed();
 	}
 
 	public virtual void Unload() => QueueFree();
@@ -137,8 +142,8 @@ public partial class Enemy : Node3D
 		SetHitboxStatus(true);
 		ResetInteractionProcessed();
 
-		if (spawnMode == SpawnModes.Always ||
-			(spawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
+		if (SpawnMode == SpawnModes.Always ||
+			(SpawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
 		{
 			EnterRange();
 		}
@@ -185,7 +190,6 @@ public partial class Enemy : Node3D
 	/// </summary>
 	protected virtual void Defeat()
 	{
-		SetHitboxStatus(false);
 		Character.Camera.LockonTarget = null;
 		Character.Lockon.CallDeferred(CharacterLockon.MethodName.ResetLockonTarget);
 		BonusManager.instance.AddEnemyChain();
@@ -204,12 +208,12 @@ public partial class Enemy : Node3D
 	protected virtual void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, GlobalPosition, new Vector2(2, 1.5f), 1.5f);
 
 	protected bool IsHitboxEnabled { get; private set; }
-	protected void SetHitboxStatus(bool isEnabled)
+	protected void SetHitboxStatus(bool isEnabled, bool hurtboxOnly = false)
 	{
 		IsHitboxEnabled = isEnabled;
 
 		// Update environment collider
-		if (Collider != null)
+		if (Collider != null && !hurtboxOnly)
 			Collider.Disabled = !IsHitboxEnabled;
 
 		// Update hurtbox
@@ -223,7 +227,7 @@ public partial class Enemy : Node3D
 	protected bool IsInRange { get; set; }
 	protected virtual void EnterRange()
 	{
-		if (spawnMode == SpawnModes.Signal) return;
+		if (SpawnMode == SpawnModes.Signal) return;
 		Spawn();
 	}
 	protected virtual void ExitRange() { }
@@ -237,22 +241,13 @@ public partial class Enemy : Node3D
 		if (IsInteractionProcessed)
 			return;
 
-		if ((Character.Lockon.IsBouncingLockoutActive &&
+		if ((Character.Lockon.IsBounceLockoutActive &&
 			Character.ActionState == CharacterController.ActionStates.Normal) ||
 			!IsHitboxEnabled)
 		{
 			return;
 		}
 
-		if (Character.ActionState == CharacterController.ActionStates.JumpDash)
-		{
-			UpdateLockon();
-			Character.Lockon.StartBounce(IsDefeated);
-		}
-		else if (damagePlayer && Character.AttackState == CharacterController.AttackStates.None)
-		{
-			Character.StartKnockback();
-		}
 		switch (Character.AttackState)
 		{
 			case CharacterController.AttackStates.OneShot:
@@ -266,6 +261,16 @@ public partial class Enemy : Node3D
 				break;
 		}
 
+		if (Character.ActionState == CharacterController.ActionStates.JumpDash)
+		{
+			UpdateLockon();
+			Character.Lockon.StartBounce(IsDefeated);
+		}
+		else if (damagePlayer && Character.AttackState == CharacterController.AttackStates.None)
+		{
+			Character.StartKnockback();
+		}
+
 		SetInteractionProcessed();
 	}
 
@@ -273,9 +278,16 @@ public partial class Enemy : Node3D
 	{
 		IsInteractionProcessed = true;
 		// Connect a signal
-		Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot);
+		if (!Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+			Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot);
 	}
-	protected void ResetInteractionProcessed() => IsInteractionProcessed = false;
+	protected void ResetInteractionProcessed()
+	{
+		IsInteractionProcessed = false;
+
+		if (Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+			Character.Disconnect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
+	}
 
 	/// <summary> Current local rotation of the enemy. </summary>
 	protected float currentRotation;

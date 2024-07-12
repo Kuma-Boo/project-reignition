@@ -121,14 +121,19 @@ public partial class TimedHazard : Hazard
 	[Export]
 	private float[] stateLengths = [];
 
-	[Export]
-	private AnimationPlayer animator;
-	[Export]
-	private Timer timer;
+	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
+	private NodePath animator;
+	private AnimationPlayer Animator;
+	[Export(PropertyHint.NodePathValidTypes, "Timer")]
+	private NodePath timer;
+	private Timer Timer;
 
 	public override void _Ready()
 	{
 		if (Engine.IsEditorHint()) return;
+
+		Animator = GetNodeOrNull<AnimationPlayer>(animator);
+		Timer = GetNodeOrNull<Timer>(timer);
 
 		currentStateIndex = Mathf.Clamp(currentStateIndex, 0, stateNames.Count);
 		if (currentStateIndex < stateLengths.Length)
@@ -164,12 +169,12 @@ public partial class TimedHazard : Hazard
 			targetWaitTime += stateLengths[currentStateIndex];
 
 		// Update Animation
-		if (animator.HasAnimation(stateNames[currentStateIndex]))
+		if (Animator.HasAnimation(stateNames[currentStateIndex]))
 		{
-			animator.Play(stateNames[currentStateIndex]);
-			animator.Seek(0, true);
+			Animator.Play(stateNames[currentStateIndex]);
+			Animator.Seek(0, true);
 
-			targetWaitTime += animator.CurrentAnimationLength; // Add animation length
+			targetWaitTime += Animator.CurrentAnimationLength; // Add animation length
 		}
 
 		if (autoAdvance)
@@ -184,8 +189,8 @@ public partial class TimedHazard : Hazard
 		}
 		else
 		{
-			timer.WaitTime = time;
-			timer.Start();
+			Timer.WaitTime = time;
+			Timer.Start();
 		}
 	}
 }

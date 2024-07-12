@@ -249,6 +249,24 @@ tracks/12/keys = {
 "values": [Vector3(1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_1j3bl"]
+resource_name = "defeat"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/StrikeSFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
 [sub_resource type="Animation" id="Animation_o85fj"]
 resource_name = "despawn"
 length = 0.666669
@@ -836,24 +854,6 @@ tracks/0/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_1j3bl"]
-resource_name = "strike"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FX/StrikeSFX")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-
 [sub_resource type="Animation" id="Animation_y1q6p"]
 resource_name = "travel"
 length = 0.5
@@ -953,6 +953,7 @@ tracks/6/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stb46"]
 _data = {
 "RESET": SubResource("Animation_ojgnd"),
+"defeat": SubResource("Animation_1j3bl"),
 "despawn": SubResource("Animation_o85fj"),
 "explode": SubResource("Animation_xx2t8"),
 "fire-end": SubResource("Animation_thps5"),
@@ -961,11 +962,10 @@ _data = {
 "spawn": SubResource("Animation_aucka"),
 "spin": SubResource("Animation_1nwld"),
 "stagger": SubResource("Animation_13cad"),
-"strike": SubResource("Animation_1j3bl"),
 "travel": SubResource("Animation_y1q6p")
 }
 
-[node name="Majin" type="Node3D" groups=["enemy", "wall"]]
+[node name="Majin" type="Node3D"]
 script = ExtResource("1")
 "Spawn Settings/Spawn Travel Time" = 0.0
 "Spawn Interval Settings/Enable Spawn Interval" = false
@@ -1006,8 +1006,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("CylinderShape3D_xbynq")
 disabled = true
 
-[node name="EnvironmentCollider" type="StaticBody3D" parent="ChestAttachment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+[node name="EnvironmentCollider" type="StaticBody3D" parent="ChestAttachment" groups=["enemy", "wall"]]
+transform = Transform3D(1, -4.17596e-23, 0, -4.17597e-23, 1, 0, 0, 0, 1, 0, 0.15, -1.05879e-22)
 collision_layer = 8
 collision_mask = 0
 

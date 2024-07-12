@@ -10,22 +10,29 @@ public partial class ControlOption : Control
 	public delegate void SwapMappingEventHandler(StringName id, InputEvent e); // Emitted when a remap results in a mapping swap
 
 	[Export]
-	private Label actionLabel;
-	[Export]
-	private Label inputLabel;
-	[Export]
-	private Control awaitingInput;
-	[Export]
-	private TextureRect keyTextureRect;
-	[Export]
-	private TextureRect axisTextureRect;
-	[Export]
-	private TextureRect buttonTextureRect;
+	public StringName InputId { get; private set; }
+
+	[ExportGroup("Components")]
+	[Export(PropertyHint.NodePathValidTypes, "Label")]
+	private NodePath actionLabel;
+	private Label ActionLabel { get; set; }
+	[Export(PropertyHint.NodePathValidTypes, "Label")]
+	private NodePath inputLabel;
+	private Label InputLabel { get; set; }
+	[Export(PropertyHint.NodePathValidTypes, "Control")]
+	private NodePath awaitingInput;
+	private Control AwaitingInput { get; set; }
+	[Export(PropertyHint.NodePathValidTypes, "TextureRect")]
+	private NodePath keyTextureRect;
+	private TextureRect KeyTextureRect { get; set; }
+	[Export(PropertyHint.NodePathValidTypes, "TextureRect")]
+	private NodePath axisTextureRect;
+	private TextureRect AxisTextureRect { get; set; }
+	[Export(PropertyHint.NodePathValidTypes, "TextureRect")]
+	private NodePath buttonTextureRect;
+	private TextureRect ButtonTextureRect { get; set; }
 	[Export(PropertyHint.ArrayType, "ControllerSpriteResource")]
 	private ControllerSpriteResource[] controllerResources;
-
-	[Export]
-	public StringName InputId { get; private set; }
 
 	public bool IsReady => state == RemapState.Ready;
 
@@ -39,7 +46,14 @@ public partial class ControlOption : Control
 
 	public override void _Ready()
 	{
-		actionLabel.Text = Tr(InputId.ToString());
+		ActionLabel = GetNodeOrNull<Label>(actionLabel);
+		InputLabel = GetNodeOrNull<Label>(inputLabel);
+		AwaitingInput = GetNodeOrNull<Control>(awaitingInput);
+		KeyTextureRect = GetNodeOrNull<TextureRect>(keyTextureRect);
+		AxisTextureRect = GetNodeOrNull<TextureRect>(axisTextureRect);
+		ButtonTextureRect = GetNodeOrNull<TextureRect>(buttonTextureRect);
+
+		ActionLabel.Text = Tr(InputId.ToString());
 		SaveConfig();
 		RedrawBinding();
 		Runtime.Instance.Connect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
@@ -245,8 +259,6 @@ public partial class ControlOption : Control
 		{
 			switch (key.Keycode)
 			{
-				case Key.Shift:
-				case Key.Ctrl:
 				case Key.Alt:
 				case Key.Meta:
 				case Key.Numlock:
@@ -261,10 +273,10 @@ public partial class ControlOption : Control
 
 	public void RedrawBinding()
 	{
-		keyTextureRect.Modulate = Colors.Transparent;
-		buttonTextureRect.Modulate = Colors.Transparent;
-		axisTextureRect.Modulate = Colors.Transparent;
-		awaitingInput.Visible = state == RemapState.Listening;
+		KeyTextureRect.Modulate = Colors.Transparent;
+		ButtonTextureRect.Modulate = Colors.Transparent;
+		AxisTextureRect.Modulate = Colors.Transparent;
+		AwaitingInput.Visible = state == RemapState.Listening;
 
 		if (!IsReady)
 			return;
@@ -275,28 +287,28 @@ public partial class ControlOption : Control
 		{
 			if (eventList[i] is InputEventJoypadButton button1)
 			{
-				buttonTextureRect.Modulate = Colors.White;
+				ButtonTextureRect.Modulate = Colors.White;
 
 				JoyButton button = button1.ButtonIndex;
-				buttonTextureRect.Texture = controllerResources[(int)Runtime.Instance.GetActiveControllerType() - 1].buttons[(int)button];
+				ButtonTextureRect.Texture = controllerResources[(int)Runtime.Instance.GetActiveControllerType() - 1].buttons[(int)button];
 				continue;
 			}
 
 			if (eventList[i] is InputEventJoypadMotion motion)
 			{
-				axisTextureRect.Modulate = Colors.White;
+				AxisTextureRect.Modulate = Colors.White;
 				int axis = Runtime.Instance.ControllerAxisToIndex(motion);
-				axisTextureRect.Texture = controllerResources[(int)Runtime.Instance.GetActiveControllerType() - 1].axis[axis];
+				AxisTextureRect.Texture = controllerResources[(int)Runtime.Instance.GetActiveControllerType() - 1].axis[axis];
 				continue;
 			}
 
 			if (eventList[i] is InputEventKey key)
 			{
-				keyTextureRect.Modulate = Colors.White;
+				KeyTextureRect.Modulate = Colors.White;
 
-				inputLabel.Text = Runtime.Instance.GetKeyLabel(key.Keycode);
-				int keySpriteIndex = inputLabel.Text.Length <= 3 ? 0 : 1;
-				keyTextureRect.Texture = controllerResources[^1].buttons[keySpriteIndex]; // Last controller resource should be the keyboard sprites
+				InputLabel.Text = Runtime.Instance.GetKeyLabel(key.Keycode);
+				int keySpriteIndex = InputLabel.Text.Length <= 3 ? 0 : 1;
+				KeyTextureRect.Texture = controllerResources[^1].buttons[keySpriteIndex]; // Last controller resource should be the keyboard sprites
 			}
 		}
 	}
