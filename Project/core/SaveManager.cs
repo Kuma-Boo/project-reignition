@@ -545,33 +545,24 @@ public partial class SaveManager : Node
 		}
 	}
 
-	/// <summary> Frees game data at the given index, then creates default data in it's place. </summary>
-	public static void ResetSaveData(int index)
-	{
-		GameSaveSlots[index].Free();
-		GameSaveSlots[index] = GameData.DefaultData;
-		
-	}
-
-	//<summary> Frees game data at the given index, starts the game at level 1 instead of 0
-	public static void ResetSaveData(int index, bool startLevel1)
+	//<summary> Frees game data at the given index
+	public static void ResetSaveData(int index, bool asNewSaveFile)
 	{
 		GameSaveSlots[index].Free();
 		GameSaveSlots[index] = GameData.DefaultData;
 
-		if (startLevel1)
-		GameSaveSlots[index].level = 1;
+		if (asNewSaveFile) // Set level to be 1 so game recognizes save game as valid
+			GameSaveSlots[index].level = 1;
 	}
 
 	// <summary> Deletes a save file at the given index
 	public static void DeleteSaveData()
 	{
 		string saveNumber = ActiveSaveSlotIndex.ToString("00");
-		string savePath = SaveDirectory + $"save{saveNumber}.dat";	
-		
+		string savePath = SaveDirectory + $"save{saveNumber}.dat";
+
 		OS.MoveToTrash(ProjectSettings.GlobalizePath(savePath));
 		GD.Print("Deleting save");
-		
 	}
 
 	public partial class GameData : GodotObject
