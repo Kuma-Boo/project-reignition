@@ -74,8 +74,14 @@ public partial class Pearl : Pickup
 		else
 			Sound.PlayPearlSFX();
 
-		StageSettings.instance.UpdateScore(isRichPearl ? 5 : 1, StageSettings.MathModeEnum.Add);
 		isCollected = true;
+
+		StageSettings.instance.UpdateScore(isRichPearl ? 5 : 1, StageSettings.MathModeEnum.Add);
+		if (StageSettings.instance.Data.MissionType == LevelDataResource.MissionTypes.Pearl &&
+			StageSettings.instance.Data.MissionObjectiveCount == 0)
+		{
+			StageSettings.instance.FinishLevel(false);
+		}
 		base.Collect();
 	}
 }

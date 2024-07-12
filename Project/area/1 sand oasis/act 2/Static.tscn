@@ -11,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://d0qnlfq8f7nfg" path="res://area/1 sand oasis/act 2/environment/05Slope.tscn" id="5_c5ona"]
 [ext_resource type="PackedScene" uid="uid://cwtjamqykuvwt" path="res://area/1 sand oasis/act 2/environment/06End.tscn" id="6_2ngjg"]
 [ext_resource type="Curve3D" uid="uid://dny4rc3cmd8ss" path="res://area/1 sand oasis/act 2/environment/path/BeachPath.tres" id="9_28qpb"]
-[ext_resource type="PackedScene" uid="uid://bom1n0hvfixo1" path="res://area/1 sand oasis/data/BGM.tscn" id="9_f1xur"]
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/1 sand oasis/data/skybox/Skybox.tscn" id="9_hrwu5"]
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="11_bmkuu"]
 [ext_resource type="Curve3D" uid="uid://cfe75qcv7gap7" path="res://area/1 sand oasis/act 2/environment/path/UTurnPath.tres" id="11_emj1x"]
@@ -33,9 +32,10 @@
 [ext_resource type="Resource" uid="uid://dqgebfmms4iqa" path="res://area/1 sand oasis/act 2/camera/FieldCam.tres" id="18_tep6q"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="20_662ia"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="21_tnfaf"]
-[ext_resource type="AudioStream" uid="uid://bmkg2n6r0wy3f" path="res://sound/ost/bonus disc/Sand Oasis Act 2.mp3" id="21_yo7ty"]
+[ext_resource type="AudioStream" uid="uid://btny7mardoxn7" path="res://sound/ost/bonus disc/Sand Oasis Act 2.mp3" id="21_yo7ty"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="28_s8f82"]
 [ext_resource type="PackedScene" uid="uid://bxso4ejxqcm4k" path="res://area/1 sand oasis/act 2/completion/CompletionDemo.gltf" id="34_7u7yr"]
+[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="36_o3cna"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_50thi"]
 size = Vector3(20, 30, 2.5)
@@ -614,11 +614,13 @@ curve = ExtResource("14_5rbnr")
 cull_mask = 1054
 fov = 45.0
 
-[node name="BGM" parent="." instance=ExtResource("9_f1xur")]
+[node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("21_yo7ty")
-volume_db = 12.0
-loopStartPosition = 5.3
-loopEndPosition = 90.7
+bus = &"BGM"
+script = ExtResource("36_o3cna")
+loopStartPosition = 12.46
+loopEndPosition = 90.42
+isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_raoto")

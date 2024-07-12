@@ -31,6 +31,7 @@ namespace Project.Gameplay
 			Stage.Connect(StageSettings.SignalName.LevelDemoStarted, new Callable(this, MethodName.OnLevelDemoStarted));
 
 			SnapToGround();
+			ChangeHitbox("RESET");
 		}
 
 		public override void _PhysicsProcess(double _)
@@ -988,6 +989,7 @@ namespace Project.Gameplay
 				Lockon.StartHomingAttack(); // Start Homing attack
 				Animator.StartSpin(2.0f);
 				Effect.StartSpinFX();
+				ChangeHitbox("spin");
 				UpdateJumpDash();
 			}
 		}
@@ -1001,6 +1003,7 @@ namespace Project.Gameplay
 					MovementAngle = PathFollower.ForwardAngle;
 					Lockon.StopHomingAttack();
 					StartJumpDash();
+					ChangeHitbox("RESET");
 					return;
 				}
 
