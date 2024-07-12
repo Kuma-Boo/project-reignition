@@ -197,15 +197,15 @@ public partial class LockoutResource : Resource
 		OnLand = 2,
 	}
 
-	public float ApplySpeed(float currentSpeed, MovementResource movementSettings)
+	public float ApplySpeed(float currentSpeed, MovementSetting movementSettings)
 	{
 		// Override speed to the correct value
-		float targetSpd = movementSettings.speed * speedRatio;
+		float targetSpd = movementSettings.Speed * speedRatio;
 		float delta = Core.PhysicsManager.physicsDelta;
 		if (currentSpeed <= targetSpd) // Accelerate using traction
-			delta *= movementSettings.traction * tractionMultiplier;
+			delta *= movementSettings.Traction * tractionMultiplier;
 		else // Slow down with friction
-			delta *= movementSettings.friction * frictionMultiplier;
+			delta *= movementSettings.Friction * frictionMultiplier;
 
 		if (tractionMultiplier < 0) // Snap speed (i.e. Dash Panels)
 			return targetSpd;

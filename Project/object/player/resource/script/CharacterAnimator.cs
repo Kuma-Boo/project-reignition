@@ -328,9 +328,13 @@ public partial class CharacterAnimator : Node3D
 	public float CalculateTurnRatio()
 	{
 		float referenceAngle = Character.IsMovingBackward ? Character.PathFollower.ForwardAngle : Character.MovementAngle;
-		float inputAngle = Character.GetInputAngle() + (Character.PathFollower.DeltaAngle * PathTurnStrength);
-		float delta = ExtensionMethods.SignedDeltaAngleRad(referenceAngle, inputAngle);
+		float inputAngle = Character.PathFollower.DeltaAngle * PathTurnStrength;
+		if (Character.IsLockoutActive && Character.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace)
+			inputAngle += referenceAngle;
+		else
+			inputAngle += Character.GetInputAngle();
 
+		float delta = ExtensionMethods.SignedDeltaAngleRad(referenceAngle, inputAngle);
 		if (ExtensionMethods.DotAngle(referenceAngle, inputAngle) < 0) // Input is backwards
 			delta = -ExtensionMethods.SignedDeltaAngleRad(referenceAngle + Mathf.Pi, inputAngle);
 

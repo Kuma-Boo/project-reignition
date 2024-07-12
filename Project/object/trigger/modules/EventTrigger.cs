@@ -277,7 +277,7 @@ public partial class EventTrigger : StageTriggerModule
 		if (characterExitLockout != null)
 			Character.AddLockoutData(characterExitLockout);
 
-		Character.MoveSpeed = normalizeExitMoveSpeed ? Character.GroundSettings.speed * characterExitMoveSpeed : characterExitMoveSpeed;
+		Character.MoveSpeed = normalizeExitMoveSpeed ? Character.GroundSettings.Speed * characterExitMoveSpeed : characterExitMoveSpeed;
 		Character.VerticalSpeed = characterExitVerticalSpeed;
 
 		// Re-enable break skills
