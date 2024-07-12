@@ -29,16 +29,20 @@ namespace Project.Interface.Menus
 				_saveOptions.Add(option);
 				option.SetUp();
 			}
+			
 		}
 
 		public override void _PhysicsProcess(double _)
 		{
 			base._PhysicsProcess(_);
 			scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * SCROLLBAR_HEIGHT * scrollRatio, ref scrollbarVelocity, SCROLL_SMOOTHING);
+			
 		}
 
 		protected override void UpdateSelection()
 		{
+			
+
 			// Only listen for vertical scrolling
 			int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
 			if (inputSign == 0) return;
@@ -50,16 +54,20 @@ namespace Project.Interface.Menus
 
 			if (!isSelectionScrolling)
 				StartSelectionTimer();
+			
+
+			
+			
 		}
 
 		public override void OpenSubmenu()
 		{
-			SaveManager.ActiveSaveSlotIndex = _saveOptions[ACTIVE_SAVE_OPTION_INDEX].SaveIndex;
-			SaveManager.ActiveSkillRing.LoadFromActiveData();
+			SaveManager.ActiveSaveSlotIndex = _saveOptions[ACTIVE_SAVE_OPTION_INDEX].SaveIndex; 
+			SaveManager.ActiveSkillRing.LoadFromActiveData(); 
 
 			if (SaveManager.ActiveGameData.IsNewFile())
 			{
-				SaveManager.ResetSaveData(SaveManager.ActiveSaveSlotIndex);
+				SaveManager.ResetSaveData(SaveManager.ActiveSaveSlotIndex, true); 
 				SaveManager.SaveGameData();
 
 				if (!DebugManager.Instance.UseDemoSave)
@@ -75,8 +83,24 @@ namespace Project.Interface.Menus
 				}
 			}
 
-			menuMemory[MemoryKeys.WorldSelect] = (int)SaveManager.ActiveGameData.lastPlayedWorld;
+			menuMemory[MemoryKeys.WorldSelect] = (int)SaveManager.ActiveGameData.lastPlayedWorld; //Set the world selection to the last played world
 			_submenus[0].ShowMenu();
+			
+		}
+
+		//Deletes the currently selected save
+		protected override void Select()
+		{
+			SaveManager.ActiveSaveSlotIndex = _saveOptions[ACTIVE_SAVE_OPTION_INDEX].SaveIndex;
+
+			if (SaveManager.ActiveGameData.IsNewFile() == false)
+			{
+				SaveManager.ResetSaveData(SaveManager.ActiveSaveSlotIndex);
+				SaveManager.DeleteSaveData();
+				UpdateSaveOptions();
+				
+			}
+			
 		}
 
 		/// <summary>  Updates the visual data on all save options. </summary>

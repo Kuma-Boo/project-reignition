@@ -127,6 +127,8 @@ namespace Project.Interface.Menus
 				Confirm();
 			else if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("escape"))
 				Cancel();
+			else if (Input.IsActionJustPressed("button_select"))
+				Select();
 			else if (Input.GetVector("move_left", "move_right", "move_up", "move_down").Length() > SaveManager.Config.deadZone)
 			{
 				if (Mathf.IsZeroApprox(cursorSelectionTimer))
@@ -177,6 +179,14 @@ namespace Project.Interface.Menus
 		{
 			if (animator != null && animator.HasAnimation(CANCEL_ANIMATION))
 				animator.Play(CANCEL_ANIMATION);
+		}
+
+		//<summary>
+		//Called when the Select button is pressed
+		//</summary>
+		protected virtual void Select()
+		{
+
 		}
 
 		/// <summary>

@@ -529,7 +529,7 @@ public partial class SaveManager : Node
 		// Set up default game data/menu game data
 		GameData.DefaultData = new()
 		{
-			level = 1,
+			level = 0,
 			lastPlayedWorld = WorldEnum.LostPrologue,
 		};
 
@@ -550,6 +550,28 @@ public partial class SaveManager : Node
 	{
 		GameSaveSlots[index].Free();
 		GameSaveSlots[index] = GameData.DefaultData;
+		
+	}
+
+	//<summary> Frees game data at the given index, starts the game at level 1 instead of 0
+	public static void ResetSaveData(int index, bool startLevel1)
+	{
+		GameSaveSlots[index].Free();
+		GameSaveSlots[index] = GameData.DefaultData;
+
+		if (startLevel1)
+		GameSaveSlots[index].level = 1;
+	}
+
+	// <summary> Deletes a save file at the given index
+	public static void DeleteSaveData()
+	{
+		string saveNumber = ActiveSaveSlotIndex.ToString("00");
+		string savePath = SaveDirectory + $"save{saveNumber}.dat";	
+		
+		OS.MoveToTrash(ProjectSettings.GlobalizePath(savePath));
+		GD.Print("Deleting save");
+		
 	}
 
 	public partial class GameData : GodotObject
