@@ -984,6 +984,7 @@ namespace Project.Gameplay
 				Lockon.StartHomingAttack(); // Start Homing attack
 				Animator.StartSpin(2.0f);
 				Effect.StartSpinFX();
+				ChangeHitbox("spin");
 				UpdateJumpDash();
 			}
 		}
