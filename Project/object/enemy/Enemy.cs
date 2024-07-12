@@ -122,8 +122,13 @@ public partial class Enemy : Node3D
 
 		UpdateEnemy();
 
-		if (!IsDefeated && IsInteracting)
+		if (IsDefeated)
+			return;
+
+		if (IsInteracting)
 			UpdateInteraction();
+		else if (IsInteractionProcessed && Character.AttackState == CharacterController.AttackStates.None)
+			ResetInteractionProcessed();
 	}
 
 	public virtual void Unload() => QueueFree();
