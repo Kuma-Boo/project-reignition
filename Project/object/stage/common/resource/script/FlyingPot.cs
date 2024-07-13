@@ -214,7 +214,7 @@ public partial class FlyingPot : Node3D
 		if (!Mathf.IsZeroApprox(localPosition.Y)) // Fall
 		{
 			// Update velocity
-			velocity -= Runtime.GRAVITY * PhysicsManager.physicsDelta; // Floaty fall
+			velocity -= Runtime.Gravity * PhysicsManager.physicsDelta; // Floaty fall
 			if (velocity < MaxGravity)
 				velocity = MaxGravity;
 

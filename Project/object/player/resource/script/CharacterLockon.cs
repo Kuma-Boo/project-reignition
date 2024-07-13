@@ -259,7 +259,7 @@ public partial class CharacterLockon : Node3D
 		}
 
 		Character.MoveSpeed = Mathf.MoveToward(Character.MoveSpeed, 0f, Character.GroundSettings.Friction * PhysicsManager.physicsDelta);
-		Character.VerticalSpeed -= Runtime.GRAVITY * PhysicsManager.physicsDelta;
+		Character.VerticalSpeed -= Runtime.Gravity * PhysicsManager.physicsDelta;
 	}
 
 	public void StartBounce(bool bounceUpward = true) // Bounce the player

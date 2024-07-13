@@ -837,7 +837,7 @@ namespace Project.Gameplay
 		{
 			if (Lockon.IsBounceLockoutActive) return; // Don't apply gravity when bouncing!
 
-			VerticalSpeed = Mathf.MoveToward(VerticalSpeed, Runtime.MAX_GRAVITY, Runtime.GRAVITY * PhysicsManager.physicsDelta);
+			VerticalSpeed = Mathf.MoveToward(VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
 		}
 
 		private bool canLandingBoost;
@@ -1260,7 +1260,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			VerticalSpeed -= Runtime.GRAVITY * PhysicsManager.physicsDelta;
+			VerticalSpeed -= Runtime.Gravity * PhysicsManager.physicsDelta;
 			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, DAMAGE_FRICTION * PhysicsManager.physicsDelta);
 		}
 
@@ -1803,7 +1803,7 @@ namespace Project.Gameplay
 			}
 			else
 			{
-				orientationResetFactor = VerticalSpeed * .2f / Runtime.MAX_GRAVITY;
+				orientationResetFactor = VerticalSpeed * .2f / Runtime.MaxGravity;
 			}
 
 			UpDirection = UpDirection.Lerp(targetUpDirection, Mathf.Clamp(orientationResetFactor, 0f, 1f)).Normalized();
@@ -2083,7 +2083,7 @@ namespace Project.Gameplay
 			Skills.DisableBreakSkills();
 
 			if (Stage.LevelState == StageSettings.LevelStateEnum.Failed || Stage.Data.CompletionLockout == null)
-				AddLockoutData(Runtime.Instance.StopLockout);
+				AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 			else
 				AddLockoutData(Stage.Data.CompletionLockout);
 		}
@@ -2091,7 +2091,7 @@ namespace Project.Gameplay
 		private void OnLevelDemoStarted()
 		{
 			MoveSpeed = 0;
-			AddLockoutData(Runtime.Instance.StopLockout);
+			AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 		}
 
 		public void OnObjectCollisionExit(Node3D body)

@@ -288,7 +288,7 @@ public partial class CameraController : Node3D
 		cameraRoot.GlobalTransform = cameraTransform; // Update transform
 
 		Camera.Fov = fov; // Update fov
-		RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_PLAYER_SCREEN_POSITION, ConvertToScreenSpace(Character.CenterPosition) / Runtime.SCREEN_SIZE);
+		RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_PLAYER_SCREEN_POSITION, ConvertToScreenSpace(Character.CenterPosition) / Runtime.ScreenSize);
 
 		if (SnapFlag) // Reset flag after camera was updated
 			SnapFlag = false;

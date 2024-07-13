@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=225 format=3 uid="uid://biwe75w273iq7"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=226 format=3 uid="uid://biwe75w273iq7"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8m3pk"]
 animation = &"ActionLibrary/backflip"
@@ -841,6 +841,9 @@ fadeout_time = 0.1
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_y04wd"]
 animation = &"EventLibrary/completion-crouching"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_c8ug4"]
+animation = &"EventLibrary/completion-standing"
+
 [sub_resource type="AnimationNodeAnimation" id="131"]
 animation = &"EventLibrary/countdown"
 
@@ -854,23 +857,28 @@ allow_transition_to_self = true
 input_0/name = "countdown"
 input_0/auto_advance = false
 input_0/reset = true
-input_1/name = "completion_crouching"
+input_1/name = "completion_standing"
 input_1/auto_advance = false
 input_1/reset = true
-input_2/name = "so_a1_sandfall_event"
+input_2/name = "completion_crouching"
 input_2/auto_advance = false
 input_2/reset = true
-input_3/name = "dj_a1_river_event"
+input_3/name = "so_a1_sandfall_event"
 input_3/auto_advance = false
 input_3/reset = true
+input_4/name = "dj_a1_river_event"
+input_4/auto_advance = false
+input_4/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d1kei"]
 animation = &"EventLibrary/so_a1_sandfall_event"
 
 [sub_resource type="AnimationNodeBlendTree" id="132"]
-graph_offset = Vector2(-840.966, 26.0526)
+graph_offset = Vector2(-913.738, 187.137)
 nodes/completion_crouch_anim/node = SubResource("AnimationNodeAnimation_y04wd")
-nodes/completion_crouch_anim/position = Vector2(-594.526, 226.347)
+nodes/completion_crouch_anim/position = Vector2(-620, 280)
+nodes/completion_standing_anim/node = SubResource("AnimationNodeAnimation_c8ug4")
+nodes/completion_standing_anim/position = Vector2(-620, 160)
 nodes/countdown/node = SubResource("131")
 nodes/countdown/position = Vector2(-400, 40)
 nodes/dj_a1_river_event/node = SubResource("AnimationNodeAnimation_sak77")
@@ -882,7 +890,7 @@ nodes/oneshot_transition/position = Vector2(-16, 144)
 nodes/output/position = Vector2(336, 144)
 nodes/so_a1_sandfall_event/node = SubResource("AnimationNodeAnimation_d1kei")
 nodes/so_a1_sandfall_event/position = Vector2(-740, 480)
-node_connections = [&"oneshot_seek", 0, &"oneshot_transition", &"oneshot_transition", 0, &"countdown", &"oneshot_transition", 1, &"completion_crouch_anim", &"oneshot_transition", 2, &"so_a1_sandfall_event", &"oneshot_transition", 3, &"dj_a1_river_event", &"output", 0, &"oneshot_seek"]
+node_connections = [&"oneshot_seek", 0, &"oneshot_transition", &"oneshot_transition", 0, &"countdown", &"oneshot_transition", 1, &"completion_standing_anim", &"oneshot_transition", 2, &"completion_crouch_anim", &"oneshot_transition", 3, &"so_a1_sandfall_event", &"oneshot_transition", 4, &"dj_a1_river_event", &"output", 0, &"oneshot_seek"]
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_fl47a"]
 
@@ -1122,7 +1130,7 @@ input_4/auto_advance = false
 input_4/reset = true
 
 [resource]
-graph_offset = Vector2(-546.943, 37.596)
+graph_offset = Vector2(-916.85, 57.8814)
 nodes/air_tree/node = SubResource("AnimationNodeBlendTree_2rvqt")
 nodes/air_tree/position = Vector2(-1120, 112)
 nodes/balance_tree/node = SubResource("AnimationNodeBlendTree_gi378")
