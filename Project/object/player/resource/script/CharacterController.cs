@@ -191,32 +191,32 @@ namespace Project.Gameplay
 			Auto, // Allow for backstep when holding backwards
 		}
 
-		/// <summary> Returns the input angle based on the camera view. </summary>
-		public float GetInputAngle(InputCalculationMode strafeMode = InputCalculationMode.Normal)
+		public float GetStrafeAngle(bool allowBackstep = false)
 		{
-			if (strafeMode != InputCalculationMode.Normal)
+			bool backwardsCamera = ExtensionMethods.DotAngle(Camera.XformAngle, PathFollower.ForwardAngle) < 0;
+			float baseAngle = PathFollower.ForwardAngle;
+			if (allowBackstep &&
+				Skills.IsSkillEquipped(SkillKey.Autorun)) // Check for backstep
 			{
-				bool backwardsCamera = ExtensionMethods.DotAngle(Camera.XformAngle, PathFollower.ForwardAngle) < 0;
-				float baseAngle = PathFollower.ForwardAngle;
-				if (strafeMode == InputCalculationMode.Auto &&
-					Skills.IsSkillEquipped(SkillKey.Autorun)) // Check for backstep
+				if ((!backwardsCamera && InputVector.Y > SaveManager.Config.deadZone) ||
+					(backwardsCamera && -InputVector.Y > SaveManager.Config.deadZone))
 				{
-					if ((!backwardsCamera && InputVector.Y > SaveManager.Config.deadZone) ||
-						(backwardsCamera && -InputVector.Y > SaveManager.Config.deadZone))
-					{
-						baseAngle = PathFollower.BackAngle;
-					}
+					baseAngle = PathFollower.BackAngle;
 				}
-
-				float strafeAngle = InputVector.X * MaxTurningAdjustment;
-				if (IsMovingBackward)
-					strafeAngle *= -1;
-				if (backwardsCamera)
-					strafeAngle *= -1;
-
-				return baseAngle - strafeAngle;
 			}
 
+			float strafeAngle = InputVector.X * MaxTurningAdjustment;
+			if (IsMovingBackward)
+				strafeAngle *= -1;
+			if (backwardsCamera)
+				strafeAngle *= -1;
+
+			return baseAngle - strafeAngle;
+		}
+
+		/// <summary> Returns the input angle based on the camera view. </summary>
+		public float GetInputAngle()
+		{
 			if (InputVector.IsZeroApprox()) // Invalid input, no change
 				return MovementAngle;
 
@@ -234,7 +234,7 @@ namespace Project.Gameplay
 			if (IsLockoutActive && ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free)
 			{
 				if (ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
-					return GetInputAngle(InputCalculationMode.Strafe);
+					return GetStrafeAngle();
 
 				float targetAngle = Mathf.DegToRad(ActiveLockoutData.movementAngle);
 				if (ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Camera)
@@ -258,9 +258,12 @@ namespace Project.Gameplay
 			}
 
 			if (Skills.IsSpeedBreakActive)
-				return GetInputAngle(InputCalculationMode.Strafe);
+				return GetStrafeAngle();
 
-			return GetInputAngle(InputCalculationMode.Auto);
+			if (Skills.IsSkillEquipped(SkillKey.Autorun))
+				return GetStrafeAngle(true);
+
+			return GetInputAngle();
 		}
 
 		private float jumpBufferTimer;
@@ -525,7 +528,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			float inputAngle = GetInputAngle(InputCalculationMode.Auto);
+			float inputAngle = GetInputAngle();
 			float inputLength = inputCurve.Sample(InputVector.Length()); // Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
 
 			float targetMovementAngle = GetTargetMovementAngle();
