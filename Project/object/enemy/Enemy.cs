@@ -279,7 +279,7 @@ public partial class Enemy : Node3D
 		IsInteractionProcessed = true;
 		// Connect a signal
 		if (!Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-			Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot);
+			Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
 	}
 	protected void ResetInteractionProcessed()
 	{

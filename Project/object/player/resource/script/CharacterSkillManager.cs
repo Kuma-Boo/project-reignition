@@ -34,6 +34,15 @@ public partial class CharacterSkillManager : Node
 	private int baseGroundOverspeed;
 	[Export]
 	private int baseGroundTurnaround;
+	/// <summary> How quickly to turn when moving slowly. </summary>
+	[Export]
+	public float MinTurnAmount { get; private set; }
+	/// <summary> How quickly to turn when moving at top speed. </summary>
+	[Export]
+	public float MaxTurnAmount { get; private set; }
+	/// <summary> How quickly to turnaround when at top speed. </summary>
+	[Export]
+	public float TurnTurnaround { get; private set; }
 
 	[ExportSubgroup("Air Settings")]
 	// Default air settings
