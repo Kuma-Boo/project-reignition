@@ -10,6 +10,9 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class CameraController : Node3D
 {
+	[Signal]
+	public delegate void StartCompletionEventHandler();
+
 	public const float DefaultFov = 70;
 
 	[ExportGroup("Components")]
@@ -158,9 +161,17 @@ public partial class CameraController : Node3D
 		UpdateGameplayCamera();
 	}
 
+	public bool UsingCompletionCamera { get; private set; }
+	public void StartCompletionCamera()
+	{
+		EmitSignal(SignalName.StartCompletion);
+		UsingCompletionCamera = true;
+	}
+
 	/// <summary> Changes the current camera settings. </summary>
 	public void UpdateCameraSettings(CameraBlendData data, bool enableXformBlend = false)
 	{
+		if (UsingCompletionCamera) return;
 		if (data.SettingsResource == null) return; // Invalid data
 
 		if (Mathf.IsZeroApprox(data.BlendTime)) // Cut transition

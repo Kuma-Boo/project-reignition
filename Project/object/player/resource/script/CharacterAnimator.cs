@@ -183,7 +183,10 @@ public partial class CharacterAnimator : Node3D
 			StageSettings.instance.Data.CompletionAnimation == LevelDataResource.CompletionAnimationType.ThumbsUp)
 		{
 			if (!(bool)animationTree.Get(OneshotActive))
-				PlayOneshotAnimation((Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) > .1f) ? "completion_standing" : "completion_crouching", .2f);
+			{
+				PlayOneshotAnimation((Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) > .5f) ? "completion_standing" : "completion_crouching", .2f);
+				Character.Camera.StartCompletionCamera();
+			}
 
 			return;
 		}
