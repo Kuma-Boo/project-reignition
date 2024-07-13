@@ -197,7 +197,7 @@ public partial class Enemy : Node3D
 
 		// Automatically increment objective count
 		if (StageSettings.instance.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
-			StageSettings.instance.IncrementObjective();
+			StageSettings.instance.CallDeferred(StageSettings.MethodName.IncrementObjective);
 
 		EmitSignal(SignalName.Defeated);
 	}
