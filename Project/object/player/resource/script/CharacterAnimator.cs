@@ -73,14 +73,17 @@ public partial class CharacterAnimator : Node3D
 
 		// Prevent sluggish transitions into gameplay
 		DisabledSpeedSmoothing = true;
-		oneShotTransition.FadeInTime = oneShotTransition.FadeOutTime = 0;
+		oneShotTransition.FadeOutTime = 0;
 	}
 
 	private readonly StringName OneshotTrigger = "parameters/oneshot_trigger/request";
 	private readonly StringName OneshotSeek = "parameters/oneshot_tree/oneshot_seek/current";
+	private readonly StringName OneshotActive = "parameters/oneshot_trigger/active";
+	private readonly StringName OneshotCurrent = "parameters/oneshot_tree/oneshot_transition/current_state";
 	private readonly StringName OneshotTransition = "parameters/oneshot_tree/oneshot_transition/transition_request";
-	public void PlayOneshotAnimation(StringName animation) // Play a specific one-shot animation
+	public void PlayOneshotAnimation(StringName animation, float fadein = 0) // Play a specific one-shot animation
 	{
+		oneShotTransition.FadeInTime = fadein;
 		animationTree.Set(OneshotTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		animationTree.Set(OneshotSeek, 0);
 		animationTree.Set(OneshotTransition, animation);
@@ -176,6 +179,15 @@ public partial class CharacterAnimator : Node3D
 
 	private void GroundAnimations()
 	{
+		if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Success &&
+			StageSettings.instance.Data.CompletionAnimation == LevelDataResource.CompletionAnimationType.ThumbsUp)
+		{
+			if (!(bool)animationTree.Get(OneshotActive))
+				PlayOneshotAnimation("completion_crouching", .2f);
+
+			return;
+		}
+
 		Character.Effect.IsEmittingStepDust = !Mathf.IsZeroApprox(Character.MoveSpeed); // Emit step dust based on speed
 
 		if (Character.Skills.IsSpeedBreakCharging) return;
