@@ -249,9 +249,6 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakCharging)
 				return PathFollower.ForwardAngle;
 
-			if (Skills.IsSpeedBreakActive)
-				return GetStrafeAngle();
-
 			if (IsLockoutActive && ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free)
 			{
 				if (ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
@@ -277,6 +274,9 @@ namespace Project.Gameplay
 
 				return targetAngle;
 			}
+
+			if (Skills.IsSpeedBreakActive)
+				return GetStrafeAngle();
 
 			if (Skills.IsSkillEquipped(SkillKey.Autorun))
 				return GetStrafeAngle(true);
