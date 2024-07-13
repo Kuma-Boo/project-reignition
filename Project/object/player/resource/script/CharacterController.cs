@@ -590,7 +590,7 @@ namespace Project.Gameplay
 		/// <summary> Maximum amount the player can turn when running at full speed. </summary>
 		private const float MaxTurningAdjustment = Mathf.Pi * .25f;
 		/// <summary> Maximum amount the player can turn when running at full speed. </summary>
-		private const float TurningDampingRange = Mathf.Pi * .3f;
+		private const float TurningDampingRange = Mathf.Pi * .35f;
 		/// <summary> Updates Turning. Read the function names. </summary>
 		private void UpdateTurning()
 		{
