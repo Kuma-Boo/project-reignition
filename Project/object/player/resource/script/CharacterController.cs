@@ -173,7 +173,6 @@ namespace Project.Gameplay
 		public Vector2 InputVector => Input.GetVector("move_left", "move_right", "move_up", "move_down", SaveManager.Config.deadZone);
 		public float InputHorizontal => Input.GetAxis("move_left", "move_right");
 		public float InputVertical => Input.GetAxis("move_up", "move_down");
-		private bool isAxisTapped; // Was the left stick tapped?
 
 		/// <summary> Is the player holding in the specified direction? </summary>
 		public bool IsHoldingDirection(float refAngle, bool allowNullInputs = default)
@@ -185,18 +184,15 @@ namespace Project.Gameplay
 			return delta < Mathf.Pi * .45f;
 		}
 
-		private float GetStrafeAngle()
-		{
-			float targetAngle = GetInputAngle(true);
-			return targetAngle + (PathFollower.DeltaAngle * .5f);
-		}
-
 		/// <summary> Returns the input angle based on the camera view. </summary>
 		public float GetInputAngle(bool strafeMode = false)
 		{
-			if (Skills.IsSkillEquipped(SkillKey.Autorun) || strafeMode)
+			if (strafeMode)
 			{
-				float baseAngle = InputVector.Y <= SaveManager.Config.deadZone ? PathFollower.ForwardAngle : PathFollower.BackAngle;
+				float baseAngle = PathFollower.ForwardAngle;
+				if (!strafeMode && InputVector.Y > SaveManager.Config.deadZone)
+					baseAngle = PathFollower.BackAngle;
+
 				float strafeAngle = InputVector.X * MaxTurningAdjustment;
 				if (IsMovingBackward)
 					strafeAngle *= -1;
@@ -223,7 +219,7 @@ namespace Project.Gameplay
 			if (IsLockoutActive && ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free)
 			{
 				if (ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
-					return GetStrafeAngle();
+					return GetInputAngle(true);
 
 				float targetAngle = Mathf.DegToRad(ActiveLockoutData.movementAngle);
 				if (ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Camera)
@@ -247,9 +243,9 @@ namespace Project.Gameplay
 			}
 
 			if (Skills.IsSpeedBreakActive)
-				return GetStrafeAngle();
+				return GetInputAngle(true);
 
-			return GetInputAngle();
+			return GetInputAngle(Skills.IsSkillEquipped(SkillKey.Autorun));
 		}
 
 		private float jumpBufferTimer;
@@ -514,7 +510,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			float inputAngle = GetInputAngle();
+			float inputAngle = GetInputAngle(Skills.IsSkillEquipped(SkillKey.Autorun));
 			float inputLength = inputCurve.Sample(InputVector.Length()); // Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
 
 			float targetMovementAngle = GetTargetMovementAngle();
@@ -611,10 +607,13 @@ namespace Project.Gameplay
 
 			float pathControlAmount = PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
 			bool isPathDeltaLockoutActive = IsLockoutActive &&
-				(ActiveLockoutData.spaceMode != LockoutResource.SpaceModes.Camera ||
+				ActiveLockoutData.spaceMode != LockoutResource.SpaceModes.Camera; // Ignore path delta under certain lockout situations
+			bool isUsingStrafeControls = Skills.IsSpeedBreakActive ||
+				Skills.IsSkillEquipped(SkillKey.Autorun) ||
+				(IsLockoutActive &&
 				ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe); // Ignore path delta under certain lockout situations
 
-			if (Skills.IsSpeedBreakActive || Skills.IsSkillEquipped(SkillKey.Autorun) || isPathDeltaLockoutActive)
+			if (isUsingStrafeControls || isPathDeltaLockoutActive)
 				pathControlAmount = 0; // Don't use path influence during speedbreak/autorun
 
 			float targetMovementAngle = GetTargetMovementAngle() + pathControlAmount;
@@ -646,8 +645,7 @@ namespace Project.Gameplay
 
 			if (Runtime.Instance.IsUsingController &&
 				IsHoldingDirection(PathFollower.ForwardAngle) &&
-				Mathf.Abs(inputDeltaAngle) < TurningDampingRange &&
-				!Skills.IsSkillEquipped(SkillKey.Autorun)) // Remap controls to provide more analog detail
+				Mathf.Abs(inputDeltaAngle) < TurningDampingRange) // Remap controls to provide more analog detail
 			{
 				targetMovementAngle -= inputDeltaAngle * .5f;
 			}
@@ -680,9 +678,7 @@ namespace Project.Gameplay
 			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle + pathControlAmount, targetMovementAngle, ref turningVelocity, turnSmoothing);
 
 			// Strafe implementation
-			if (Skills.IsSpeedBreakActive ||
-				Skills.IsSkillEquipped(SkillKey.Autorun) ||
-				(IsLockoutActive && ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe))
+			if (isUsingStrafeControls)
 			{
 				if (InputVector.IsZeroApprox())
 					strafeBlend = Mathf.MoveToward(strafeBlend, 1.0f, PhysicsManager.physicsDelta);
