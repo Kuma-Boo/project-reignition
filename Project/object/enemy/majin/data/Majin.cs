@@ -268,8 +268,8 @@ public partial class Majin : Enemy
 
 	/// <summary> Responsible for handling tweens (i.e. Spawning/Default launching) </summary>
 	private Tween tweener;
-	/// <summary> Responsible for handling spawn toggles </summary>
-	private Timer timer;
+	/// <summary> Responsible for handling spawn toggling. </summary>
+	private float timer = -1;
 
 	/// <summary> Should this majin rotate to face the player? </summary>
 	private bool trackPlayer = true;
@@ -326,18 +326,6 @@ public partial class Majin : Enemy
 		FlameRoot = GetNodeOrNull<Node3D>(flameRoot);
 		HitboxAttachment = GetNodeOrNull<BoneAttachment3D>(hitboxAttachment);
 		calculationBasis = GlobalBasis; // Cache GlobalBasis for calculations
-		if (SpawnIntervalEnabled)
-		{
-			timer = new()
-			{
-				ProcessCallback = Timer.TimerProcessCallback.Physics,
-				OneShot = true
-			};
-
-			timer.Connect(Timer.SignalName.Timeout, new(this, MethodName.ToggleSpawnState));
-			AddChild(timer);
-		}
-
 		base.SetUp();
 
 		AnimationTree.Active = true;
@@ -356,7 +344,7 @@ public partial class Majin : Enemy
 	{
 		// Kill any active tweens
 		tweener?.Kill();
-		timer?.Stop();
+		timer = -1;
 
 		isSpawning = false;
 		finishedTraveling = false;
@@ -459,6 +447,9 @@ public partial class Majin : Enemy
 	{
 		if (Engine.IsEditorHint()) return; // In Editor
 
+		if (SpawnIntervalEnabled)
+			UpdateSpawnInterval();
+
 		if (isSpawning)
 		{
 			UpdateTravel();
@@ -510,6 +501,22 @@ public partial class Majin : Enemy
 	{
 		Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
 		FlameRoot.Rotation = Vector3.Up * currentRotation;
+	}
+
+	private void UpdateSpawnInterval()
+	{
+		if (Mathf.IsEqualApprox(timer, -1)) // Spawn intervals haven't started yet
+			return;
+
+		timer = Mathf.MoveToward(timer, 0, PhysicsManager.physicsDelta);
+		if (!Mathf.IsZeroApprox(timer))
+			return;
+
+		if (Character.Lockon.IsHomingAttacking)
+			return;
+
+		timer = -1;
+		ToggleSpawnState();
 	}
 
 	private float idleFactorVelocity;
@@ -669,7 +676,7 @@ public partial class Majin : Enemy
 	{
 		if (IsDefeated) // Remove from the scene tree
 		{
-			timer?.Stop();
+			timer = -1;
 			base.Despawn();
 			return;
 		}
@@ -750,7 +757,7 @@ public partial class Majin : Enemy
 		}
 
 		if (SpawnIntervalEnabled)
-			timer.Start(SeparateDespawninterval ? despawnIntervalDelay : spawnIntervalDelay);
+			timer = SeparateDespawninterval ? despawnIntervalDelay : spawnIntervalDelay;
 	}
 
 	private void FinishDespawning()
@@ -758,7 +765,7 @@ public partial class Majin : Enemy
 		IsActive = false;
 
 		if (SpawnIntervalEnabled)
-			timer.Start(spawnIntervalDelay);
+			timer = spawnIntervalDelay;
 	}
 
 	/// <summary> Called after spin attack's windup animation. </summary>
