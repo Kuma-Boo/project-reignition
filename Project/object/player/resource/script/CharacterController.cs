@@ -177,10 +177,19 @@ namespace Project.Gameplay
 		/// <summary> Is the player holding in the specified direction? </summary>
 		public bool IsHoldingDirection(float refAngle, bool allowNullInputs = default)
 		{
-			if (!allowNullInputs && InputVector.IsZeroApprox())
-				return false;
+			if (!allowNullInputs)
+			{
+				if (InputVector.IsZeroApprox())
+					return false;
 
-			float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(), refAngle);
+				if (Skills.IsSkillEquipped(SkillKey.Autorun) &&
+					Mathf.Abs(InputVector.Y) < SaveManager.Config.deadZone)
+				{
+					return false;
+				}
+			}
+
+			float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(true), refAngle);
 			return delta < Mathf.Pi * .45f;
 		}
 
@@ -193,22 +202,28 @@ namespace Project.Gameplay
 
 		public float GetStrafeAngle(bool allowBackstep = false)
 		{
-			bool backwardsCamera = ExtensionMethods.DotAngle(Camera.XformAngle, PathFollower.ForwardAngle) < 0;
+			CameraSettingsResource.ControlModeEnum controlMode = Camera.ActiveSettings.controlMode;
+			Vector2 inputs = InputVector;
+
+			if (controlMode == CameraSettingsResource.ControlModeEnum.Sidescrolling)
+				GD.PushWarning("Sidescrolling Control Mode Hasn't Been Implemented!");
+
+			if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
+				inputs.X *= -1;
+
 			float baseAngle = PathFollower.ForwardAngle;
 			if (allowBackstep &&
 				Skills.IsSkillEquipped(SkillKey.Autorun)) // Check for backstep
 			{
-				if ((!backwardsCamera && InputVector.Y > SaveManager.Config.deadZone) ||
-					(backwardsCamera && -InputVector.Y > SaveManager.Config.deadZone))
-				{
+				if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
+					inputs.Y *= -1;
+
+				if (inputs.Y > SaveManager.Config.deadZone)
 					baseAngle = PathFollower.BackAngle;
-				}
 			}
 
-			float strafeAngle = InputVector.X * MaxTurningAdjustment;
+			float strafeAngle = inputs.X * MaxTurningAdjustment;
 			if (IsMovingBackward)
-				strafeAngle *= -1;
-			if (backwardsCamera)
 				strafeAngle *= -1;
 
 			return baseAngle - strafeAngle;
@@ -241,13 +256,6 @@ namespace Project.Gameplay
 			{
 				if (ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
 					return GetStrafeAngle();
-
-				if (Skills.IsSkillEquipped(SkillKey.Autorun) &&
-					ActiveLockoutData.priority != -1 &&
-					ActiveLockoutData.priority != LockoutResource.MaxPriority) // Autorun overrides most lockouts
-				{
-					return GetStrafeAngle(true);
-				}
 
 				float targetAngle = Mathf.DegToRad(ActiveLockoutData.movementAngle);
 				if (ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Camera)
@@ -726,6 +734,9 @@ namespace Project.Gameplay
 		{
 			// Speedbreak is overriding speed
 			if (Skills.IsSpeedBreakActive) return false;
+
+			// Autorun disables speed loss
+			if (Skills.IsSkillEquipped(SkillKey.Autorun)) return false;
 
 			// Don't apply turning speed loss when moving quickly and holding the direction of the pathfollower
 			if (IsHoldingDirection(PathFollower.ForwardAngle, true) && GroundSettings.GetSpeedRatio(MoveSpeed) > .5f)
