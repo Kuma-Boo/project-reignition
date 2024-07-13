@@ -215,8 +215,11 @@ namespace Project.Gameplay
 		}
 
 		/// <summary> Returns the input angle based on the camera view. </summary>
-		public float GetInputAngle()
+		public float GetInputAngle(bool autoConvertStrafeInputs = false)
 		{
+			if (autoConvertStrafeInputs && Skills.IsSkillEquipped(SkillKey.Autorun))
+				return GetStrafeAngle(true);
+
 			if (InputVector.IsZeroApprox()) // Invalid input, no change
 				return MovementAngle;
 
@@ -231,10 +234,20 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakCharging)
 				return PathFollower.ForwardAngle;
 
+			if (Skills.IsSpeedBreakActive)
+				return GetStrafeAngle();
+
 			if (IsLockoutActive && ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free)
 			{
 				if (ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
 					return GetStrafeAngle();
+
+				if (Skills.IsSkillEquipped(SkillKey.Autorun) &&
+					ActiveLockoutData.priority != -1 &&
+					ActiveLockoutData.priority != LockoutResource.MaxPriority) // Autorun overrides most lockouts
+				{
+					return GetStrafeAngle(true);
+				}
 
 				float targetAngle = Mathf.DegToRad(ActiveLockoutData.movementAngle);
 				if (ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.Camera)
@@ -256,9 +269,6 @@ namespace Project.Gameplay
 
 				return targetAngle;
 			}
-
-			if (Skills.IsSpeedBreakActive)
-				return GetStrafeAngle();
 
 			if (Skills.IsSkillEquipped(SkillKey.Autorun))
 				return GetStrafeAngle(true);
@@ -307,7 +317,7 @@ namespace Project.Gameplay
 				if (lockoutDataList.Count >= 2) // List only needs to be sorted if there are multiple elements on it
 					lockoutDataList.Sort(new LockoutResource.Comparer());
 
-				if (ActiveLockoutData != null && ActiveLockoutData.priority == -1) // Remove current lockout?
+				if (ActiveLockoutData?.priority == -1) // Remove current lockout?
 					RemoveLockoutData(ActiveLockoutData);
 
 				if (resource.priority == -1) // Exclude from priority, take over immediately
@@ -316,7 +326,9 @@ namespace Project.Gameplay
 					ProcessCurrentLockoutData();
 			}
 			else if (ActiveLockoutData == resource) // Reset lockout timer
+			{
 				lockoutTimer = 0;
+			}
 		}
 
 		/// <summary>
@@ -528,7 +540,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			float inputAngle = GetInputAngle();
+			float inputAngle = GetInputAngle(true);
 			float inputLength = inputCurve.Sample(InputVector.Length()); // Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
 
 			float targetMovementAngle = GetTargetMovementAngle();
