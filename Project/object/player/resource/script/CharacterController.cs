@@ -696,7 +696,7 @@ namespace Project.Gameplay
 			float maxTurnAmount = Skills.MaxTurnAmount;
 			float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
 			// Is the player trying to recenter themselves?
-			bool isTurningAround = IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
+			bool isTurningAround = !IsHoldingDirection(PathFollower.BackAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
 			if (isTurningAround)
 			{
 				maxTurnAmount = Skills.TurnTurnaround;
