@@ -70,6 +70,9 @@ public partial class CameraController : Node3D
 
 	public override void _PhysicsProcess(double _)
 	{
+		if (GetTree().Paused)
+			return;
+
 		PathFollower.Resync();
 
 		// Don't update the camera when the player is defeated from a DeathTrigger
