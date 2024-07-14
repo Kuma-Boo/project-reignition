@@ -576,8 +576,8 @@ public partial class CameraController : Node3D
 	private bool isFreeCamTilting;
 
 	private bool isFreeCamLocked;
-	private Vector3 freeCamLockedPosition;
-	private Vector3 freeCamLockedRotation;
+	private Vector3 freeCamPosition;
+	private Vector3 freeCamRotation;
 
 	private void UpdateFreeCam()
 	{
@@ -606,8 +606,7 @@ public partial class CameraController : Node3D
 		if (Input.IsActionJustPressed("debug_free_cam_lock"))
 		{
 			isFreeCamLocked = !isFreeCamLocked;
-			freeCamLockedPosition = FreeCamRoot.GlobalPosition;
-			freeCamLockedRotation = new(Camera.RotationDegrees.X, FreeCamRoot.GlobalRotationDegrees.Y, Camera.RotationDegrees.Z);
+			freeCamPosition = FreeCamRoot.GlobalPosition;
 			GD.Print($"Free cam lock set to {isFreeCamLocked}.");
 		}
 
@@ -636,8 +635,9 @@ public partial class CameraController : Node3D
 		freecamMovementVector = freecamMovementVector.SmoothDamp(targetDirection * targetMoveSpeed, ref freecamVelocity, FREE_CAM_POSITION_SMOOTHING);
 		FreeCamRoot.GlobalTranslate(freecamMovementVector * PhysicsManager.normalDelta);
 
+		DebugManager.Instance.RedrawCamData(FreeCamRoot.GlobalPosition, freeCamRotation);
 		if (isFreeCamLocked)
-			UpdateFreeCamData(freeCamLockedPosition, freeCamLockedRotation);
+			UpdateFreeCamData(freeCamPosition, freeCamRotation);
 	}
 
 	private void ToggleFreeCam()
@@ -678,6 +678,9 @@ public partial class CameraController : Node3D
 
 		if (e is InputEventMouseMotion)
 		{
+			if (isFreeCamLocked)
+				return;
+
 			if (isFreeCamRotating)
 			{
 				FreeCamRoot.RotateObjectLocal(Vector3.Up, Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.X) * MOUSE_SENSITIVITY);
@@ -687,6 +690,9 @@ public partial class CameraController : Node3D
 			{
 				Camera.RotateObjectLocal(Vector3.Forward, Mathf.DegToRad((e as InputEventMouseMotion).Relative.X) * MOUSE_SENSITIVITY);
 			}
+
+			Camera.RotationDegrees = Camera.RotationDegrees.RemoveVertical();
+			freeCamRotation = new(Camera.RotationDegrees.X, FreeCamRoot.GlobalRotationDegrees.Y, Camera.RotationDegrees.Z);
 		}
 		else if (e is InputEventMouseButton emb)
 		{
@@ -694,12 +700,12 @@ public partial class CameraController : Node3D
 			{
 				if (emb.ButtonIndex == MouseButton.WheelUp)
 				{
-					freecamMovespeed += 5;
+					freecamMovespeed += 2;
 					GD.Print($"Free cam Speed set to {freecamMovespeed}.");
 				}
 				if (emb.ButtonIndex == MouseButton.WheelDown)
 				{
-					freecamMovespeed -= 5;
+					freecamMovespeed -= 2;
 					if (freecamMovespeed < 0)
 						freecamMovespeed = 0;
 					GD.Print($"Free cam Speed set to {freecamMovespeed}.");
