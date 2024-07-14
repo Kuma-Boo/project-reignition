@@ -24,6 +24,10 @@ public partial class LevelResult : Control
 	private BGMPlayer bgm;
 	[Export]
 	private AnimationPlayer animator;
+	[Export]
+	private AudioStreamPlayer resultsVoicePlayer;
+	[Export]
+	private SFXLibraryResource resultsVoiceLibrary;
 
 	private bool isProcessing;
 	private bool isFadingBgm;
@@ -120,4 +124,14 @@ public partial class LevelResult : Control
 	public void SetInputProcessing(bool value) => isProcessing = value;
 	/// <summary> Mutes the gameplay sfx audio channel. </summary>
 	public void MuteGameplaySoundEffects() => SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 0);
+
+	public void PlayRankQuote()
+	{
+		int voiceIndex = 0;
+		if (Stage.LevelState != StageSettings.LevelStateEnum.Failed)
+			voiceIndex = SaveManager.ActiveGameData.GetRank(Stage.Data.LevelID) + 1;
+
+		resultsVoicePlayer.Stream = resultsVoiceLibrary.GetStream(voiceIndex, (int)SaveManager.Config.voiceLanguage);
+		resultsVoicePlayer.Play();
+	}
 }

@@ -125,6 +125,8 @@ public partial class BonusManager : VBoxContainer
 	{
 		FinishRingChain();
 		FinishEnemyChain();
+		while (bonusQueue.Count != 0)
+			PlayBonus(); // Count all bonuses immediately
 	}
 
 	public void CancelBonuses()

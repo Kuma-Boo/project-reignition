@@ -102,7 +102,7 @@ public partial class StageSettings : Node3D
 	}
 
 	[Signal]
-	public delegate void ReflectionProbesCalculatedEventHandler();
+	public delegate void LevelStartedEventHandler();
 	private int probeFrameCounter;
 	private const int PROBE_FRAME_COUNT_LENGTH = 90;
 	public override void _Process(double _)
@@ -121,7 +121,7 @@ public partial class StageSettings : Node3D
 			{
 				LevelState = LevelStateEnum.Ingame;
 				TransitionManager.FinishTransition();
-				EmitSignal(SignalName.ReflectionProbesCalculated);
+				EmitSignal(SignalName.LevelStarted);
 			}
 
 			return;

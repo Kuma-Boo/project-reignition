@@ -12,11 +12,11 @@ public partial class TimedHazard : Hazard
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
 	{
-		Array<Dictionary> properties = new()
-			{
+		Array<Dictionary> properties =
+			[
 				ExtensionMethods.CreateProperty("Current State", Variant.Type.Int, PropertyHint.Enum, GetStateNames()),
 				ExtensionMethods.CreateProperty("Auto Advance", Variant.Type.Bool)
-			};
+			];
 
 		if (autoAdvance)
 		{
@@ -136,6 +136,11 @@ public partial class TimedHazard : Hazard
 		Timer = GetNodeOrNull<Timer>(timer);
 
 		currentStateIndex = Mathf.Clamp(currentStateIndex, 0, stateNames.Count);
+		Interface.Countdown.Instance.Connect(Interface.Countdown.SignalName.CountdownFinished, new(this, MethodName.StartHazard), (uint)ConnectFlags.OneShot);
+	}
+
+	private void StartHazard()
+	{
 		if (currentStateIndex < stateLengths.Length)
 			StartTimer(stateLengths[currentStateIndex] - startingTime);
 		else

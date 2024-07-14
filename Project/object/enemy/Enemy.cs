@@ -190,6 +190,7 @@ public partial class Enemy : Node3D
 	/// </summary>
 	protected virtual void Defeat()
 	{
+		currentHealth = 0;
 		Character.Camera.LockonTarget = null;
 		Character.Lockon.CallDeferred(CharacterLockon.MethodName.ResetLockonTarget);
 		BonusManager.instance.AddEnemyChain();
