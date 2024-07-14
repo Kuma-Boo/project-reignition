@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://x75n4o5i62bp"]
+[gd_scene load_steps=28 format=3 uid="uid://x75n4o5i62bp"]
 
 [ext_resource type="PackedScene" uid="uid://gnw1drjjo5gi" path="res://area/2 dino jungle/act 2/Static.tscn" id="1_d36bn"]
 [ext_resource type="Resource" uid="uid://pe2kawmnuf4i" path="res://resource/level data/dinosaur jungle/Act3MajinEgg.tres" id="2_j27ox"]
@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="18_mc10r"]
 [ext_resource type="PackedScene" uid="uid://dadka31wrx5f4" path="res://object/enemy/majin/data/dino jungle/GreenMajin.tscn" id="19_q8otw"]
 [ext_resource type="Resource" uid="uid://ctcjx8l5t1ppn" path="res://area/2 dino jungle/act 2/camera/RightCatapultCam.tres" id="20_6tkmq"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="20_u12nk"]
 
 [sub_resource type="Curve" id="Curve_8eiuu"]
 min_value = -2.0
@@ -43,6 +44,9 @@ point_count = 4
 min_value = -1.0
 _data = [Vector2(0, 0), 0.0, 3.29252, 0, 0, Vector2(0.3, 0.4), 0.0, 0.0, 0, 0, Vector2(0.7, -0.8), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), 5.0752, 0.0, 0, 0]
 point_count = 4
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r1te7"]
+size = Vector3(15.147, 13.9202, 1)
 
 [node name="Stage" type="Node"]
 
@@ -115,6 +119,9 @@ transform = Transform3D(2.25, 0, 0, 0, 1, 0, 0, 0, 2.25, 0, -9999, 0)
 [node name="Spring1" parent="Static/Common/SpringPath" index="0"]
 transform = Transform3D(0.747024, -0.575731, 0.332397, 0, 0.499998, 0.866027, -0.664797, -0.646942, 0.373511, -0.557, -9999, -3.073)
 
+[node name="DinoSwitchRight" parent="Static/Common/Dino/DinoBridge" index="0"]
+transform = Transform3D(1, 0, -1.19209e-07, 0, 1, 0, 1.19209e-07, 0, 1, 43.215, -9999, 71.262)
+
 [node name="Head" parent="Static/Common/Dino" index="2"]
 transform = Transform3D(0.999979, -8.9407e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -1.01328e-06, 1, 0.000292879, 1.33514e-05, 19.7418, 38.526)
 
@@ -131,6 +138,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, -2, -5.5)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="NoPearlsAct/SpawnPosition" instance=ExtResource("3_04u77")]
+transform = Transform3D(0.154555, 0, 0.987984, 0, 1, 0, -0.987984, 0, 0.154555, 0, 0, 0)
 
 [node name="Start" type="Node3D" parent="NoPearlsAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.385, 0, 4.639)
@@ -2629,10 +2637,238 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.908904, 0, -1.31677)
 [node name="Child13" parent="NoPearlsAct/Boat3/Pearls30" instance=ExtResource("7_da5pr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.41673, 0, -0.743556)
 
+[node name="Pearls31" type="Node3D" parent="NoPearlsAct/Boat3"]
+transform = Transform3D(0.961856, 0, -0.273556, 0, 1, 0, 0.273556, 0, 0.961856, -166.444, -1.69309, -31.0159)
+script = ExtResource("5_w0p7i")
+Generate = false
+Source = ExtResource("7_da5pr")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/RightPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.3
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="NoPearlsAct/Boat3/Pearls31" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000183105, 0, -0.000617981)
+
+[node name="Child02" parent="NoPearlsAct/Boat3/Pearls31" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.369522, 0, -1.28165)
+
+[node name="Child03" parent="NoPearlsAct/Boat3/Pearls31" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.745544, 0, -2.55799)
+
+[node name="Child04" parent="NoPearlsAct/Boat3/Pearls31" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.13229, 0, -3.84169)
+
+[node name="Child05" parent="NoPearlsAct/Boat3/Pearls31" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52748, 0, -5.12259)
+
+[node name="Child06" parent="NoPearlsAct/Boat3/Pearls31" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.93408, 0, -6.40636)
+
+[node name="Child07" parent="NoPearlsAct/Boat3/Pearls31" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.35493, 0, -7.69561)
+
+[node name="Child08" parent="NoPearlsAct/Boat3/Pearls31" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.79544, 0, -8.99633)
+
+[node name="Child09" parent="NoPearlsAct/Boat3/Pearls31" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.26682, 0, -10.3217)
+
+[node name="Child10" parent="NoPearlsAct/Boat3/Pearls31" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.80029, 0, -11.7129)
+
+[node name="Pearls32" type="Node3D" parent="NoPearlsAct/Boat3"]
+transform = Transform3D(0.992398, 0, 0.123065, 0, 1, 0, -0.123065, 0, 0.992398, -149.146, -1.78224, -50.5746)
+script = ExtResource("5_w0p7i")
+Generate = false
+Source = ExtResource("7_da5pr")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/RightPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.1
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="NoPearlsAct/Boat3/Pearls32" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0032959, 0, 0.00260925)
+
+[node name="Child02" parent="NoPearlsAct/Boat3/Pearls32" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.03349, 0, 0.800041)
+
+[node name="Child03" parent="NoPearlsAct/Boat3/Pearls32" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.06015, 0, 1.56426)
+
+[node name="Child04" parent="NoPearlsAct/Boat3/Pearls32" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.08772, 0, 2.30237)
+
+[node name="Child05" parent="NoPearlsAct/Boat3/Pearls32" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.11972, 0, 3.0191)
+
+[node name="Child06" parent="NoPearlsAct/Boat3/Pearls32" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.15848, 0, 3.71736)
+
+[node name="Child07" parent="NoPearlsAct/Boat3/Pearls32" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.20584, 0, 4.39902)
+
+[node name="Child08" parent="NoPearlsAct/Boat3/Pearls32" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.26349, 0, 5.0653)
+
+[node name="Child09" parent="NoPearlsAct/Boat3/Pearls32" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.33304, 0, 5.71698)
+
+[node name="Child10" parent="NoPearlsAct/Boat3/Pearls32" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.41612, 0, 6.35444)
+
+[node name="Pearls33" type="Node3D" parent="NoPearlsAct/Boat3"]
+transform = Transform3D(0.992398, 0, 0.123065, 0, 1, 0, -0.123065, 0, 0.992398, -145.814, -1.78224, -70.7695)
+script = ExtResource("5_w0p7i")
+Generate = false
+Source = ExtResource("7_da5pr")
+Amount = 8
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.8
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="NoPearlsAct/Boat3/Pearls33" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 0)
+
+[node name="Child02" parent="NoPearlsAct/Boat3/Pearls33" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565685, 0, 0.565685)
+
+[node name="Child03" parent="NoPearlsAct/Boat3/Pearls33" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.99382e-08, 0, 0.8)
+
+[node name="Child04" parent="NoPearlsAct/Boat3/Pearls33" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565686, 0, 0.565685)
+
+[node name="Child05" parent="NoPearlsAct/Boat3/Pearls33" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, -6.99382e-08)
+
+[node name="Child06" parent="NoPearlsAct/Boat3/Pearls33" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, 0, -0.565686)
+
+[node name="Child07" parent="NoPearlsAct/Boat3/Pearls33" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.39876e-07, 0, -0.8)
+
+[node name="Child08" parent="NoPearlsAct/Boat3/Pearls33" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565686, 0, -0.565685)
+
+[node name="Pearls34" type="Node3D" parent="NoPearlsAct/Boat3"]
+transform = Transform3D(0.992398, 0, 0.123065, 0, 1, 0, -0.123065, 0, 0.992398, -131.575, -1.55677, -76.3348)
+script = ExtResource("5_w0p7i")
+Generate = false
+Source = ExtResource("7_da5pr")
+Amount = 8
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.8
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="NoPearlsAct/Boat3/Pearls34" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 0)
+
+[node name="Child02" parent="NoPearlsAct/Boat3/Pearls34" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565685, 0, 0.565685)
+
+[node name="Child03" parent="NoPearlsAct/Boat3/Pearls34" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.99382e-08, 0, 0.8)
+
+[node name="Child04" parent="NoPearlsAct/Boat3/Pearls34" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565686, 0, 0.565685)
+
+[node name="Child05" parent="NoPearlsAct/Boat3/Pearls34" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, -6.99382e-08)
+
+[node name="Child06" parent="NoPearlsAct/Boat3/Pearls34" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, 0, -0.565686)
+
+[node name="Child07" parent="NoPearlsAct/Boat3/Pearls34" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.39876e-07, 0, -0.8)
+
+[node name="Child08" parent="NoPearlsAct/Boat3/Pearls34" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565686, 0, -0.565685)
+
+[node name="Pearls35" type="Node3D" parent="NoPearlsAct/Boat3"]
+transform = Transform3D(0.992398, 0, 0.123065, 0, 1, 0, -0.123065, 0, 0.992398, -118.661, -1.55677, -73.0804)
+script = ExtResource("5_w0p7i")
+Generate = false
+Source = ExtResource("7_da5pr")
+Amount = 8
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.8
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="NoPearlsAct/Boat3/Pearls35" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 0)
+
+[node name="Child02" parent="NoPearlsAct/Boat3/Pearls35" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565685, 0, 0.565685)
+
+[node name="Child03" parent="NoPearlsAct/Boat3/Pearls35" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.99382e-08, 0, 0.8)
+
+[node name="Child04" parent="NoPearlsAct/Boat3/Pearls35" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565686, 0, 0.565685)
+
+[node name="Child05" parent="NoPearlsAct/Boat3/Pearls35" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, -6.99382e-08)
+
+[node name="Child06" parent="NoPearlsAct/Boat3/Pearls35" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, 0, -0.565686)
+
+[node name="Child07" parent="NoPearlsAct/Boat3/Pearls35" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.39876e-07, 0, -0.8)
+
+[node name="Child08" parent="NoPearlsAct/Boat3/Pearls35" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565686, 0, -0.565685)
+
+[node name="Pearls36" type="Node3D" parent="NoPearlsAct/Boat3"]
+transform = Transform3D(0.992398, 0, 0.123065, 0, 1, 0, -0.123065, 0, 0.992398, -85.5041, 6.36392, -30.8557)
+script = ExtResource("5_w0p7i")
+Generate = false
+Source = ExtResource("7_da5pr")
+Amount = 8
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.8
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="NoPearlsAct/Boat3/Pearls36" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 0)
+
+[node name="Child02" parent="NoPearlsAct/Boat3/Pearls36" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565685, 0, 0.565685)
+
+[node name="Child03" parent="NoPearlsAct/Boat3/Pearls36" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.99382e-08, 0, 0.8)
+
+[node name="Child04" parent="NoPearlsAct/Boat3/Pearls36" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565686, 0, 0.565685)
+
+[node name="Child05" parent="NoPearlsAct/Boat3/Pearls36" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, -6.99382e-08)
+
+[node name="Child06" parent="NoPearlsAct/Boat3/Pearls36" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, 0, -0.565686)
+
+[node name="Child07" parent="NoPearlsAct/Boat3/Pearls36" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.39876e-07, 0, -0.8)
+
+[node name="Child08" parent="NoPearlsAct/Boat3/Pearls36" instance=ExtResource("7_da5pr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565686, 0, -0.565685)
+
 [node name="LeftPath" type="Node3D" parent="NoPearlsAct"]
 
 [node name="GreenMajin" parent="NoPearlsAct/LeftPath" instance=ExtResource("19_q8otw")]
-transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -76.8037, 5.792, -26.4819)
+transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -80.2312, 6.28196, -28.3142)
 "Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(-30, 0, 0)
@@ -2640,7 +2876,7 @@ transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 
 [node name="GreenMajin2" parent="NoPearlsAct/LeftPath" instance=ExtResource("19_q8otw")]
-transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -71.7546, 7.226, -25.2419)
+transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -60.745, 2.13204, -19.5417)
 "Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(30, 0, -5)
@@ -2648,12 +2884,19 @@ transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 
 [node name="GreenMajin3" parent="NoPearlsAct/LeftPath" instance=ExtResource("19_q8otw")]
-transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -67.7612, 9.28, -22.519)
+transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622, -48.9422, 2.13204, -15.6382)
 "Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(30, 0, -5)
 "Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[node name="Goal" parent="NoPearlsAct/LeftPath" instance=ExtResource("20_u12nk")]
+transform = Transform3D(-0.415392, 0, -0.909642, 0, 1, 0, 0.909642, 0, -0.415392, -36.0481, 6.09289, -8.19116)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NoPearlsAct/LeftPath/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.416253, -2.43396, 0.436794)
+shape = SubResource("BoxShape3D_r1te7")
 
 [node name="RightPath" type="Node3D" parent="NoPearlsAct"]
 
