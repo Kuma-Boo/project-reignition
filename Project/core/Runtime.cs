@@ -62,7 +62,10 @@ public partial class Runtime : Node
 
 	private void UpdateShaderTime()
 	{
-		shaderTime += PhysicsManager.normalDelta;
+		if (GetTree().Paused)
+			return;
+
+		shaderTime += PhysicsManager.normalDelta * (float)Engine.TimeScale;
 		if (shaderTime > ShaderTimeRollover)
 			shaderTime -= ShaderTimeRollover; // Copied from original shader time's rollover
 		RenderingServer.GlobalShaderParameterSet(ShaderTimeParameter, shaderTime);

@@ -173,38 +173,67 @@ namespace Project.Gameplay
 		public Vector2 InputVector => Input.GetVector("move_left", "move_right", "move_up", "move_down", SaveManager.Config.deadZone);
 		public float InputHorizontal => Input.GetAxis("move_left", "move_right");
 		public float InputVertical => Input.GetAxis("move_up", "move_down");
-		private bool isAxisTapped; // Was the left stick tapped?
 
 		/// <summary> Is the player holding in the specified direction? </summary>
 		public bool IsHoldingDirection(float refAngle, bool allowNullInputs = default)
 		{
-			if (!allowNullInputs && InputVector.IsZeroApprox())
-				return false;
+			if (!allowNullInputs)
+			{
+				if (InputVector.IsZeroApprox())
+					return false;
 
-			float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(), refAngle);
+				if (Skills.IsSkillEquipped(SkillKey.Autorun) &&
+					Mathf.Abs(InputVector.Y) < SaveManager.Config.deadZone)
+				{
+					return false;
+				}
+			}
+
+			float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(true), refAngle);
 			return delta < Mathf.Pi * .45f;
 		}
 
-		private float GetStrafeAngle()
+		public enum InputCalculationMode
 		{
-			float targetAngle = GetInputAngle(true);
-			return targetAngle + (PathFollower.DeltaAngle * .5f);
+			Normal,
+			Strafe,
+			Auto, // Allow for backstep when holding backwards
+		}
+
+		public float GetStrafeAngle(bool allowBackstep = false)
+		{
+			CameraSettingsResource.ControlModeEnum controlMode = Camera.ActiveSettings.controlMode;
+			Vector2 inputs = InputVector;
+
+			if (controlMode == CameraSettingsResource.ControlModeEnum.Sidescrolling)
+				GD.PushWarning("Sidescrolling Control Mode Hasn't Been Implemented!");
+
+			if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
+				inputs.X *= -1;
+
+			float baseAngle = PathFollower.ForwardAngle;
+			if (allowBackstep &&
+				Skills.IsSkillEquipped(SkillKey.Autorun)) // Check for backstep
+			{
+				if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
+					inputs.Y *= -1;
+
+				if (inputs.Y > SaveManager.Config.deadZone)
+					baseAngle = PathFollower.BackAngle;
+			}
+
+			float strafeAngle = inputs.X * MaxTurningAdjustment;
+			if (IsMovingBackward)
+				strafeAngle *= -1;
+
+			return baseAngle - strafeAngle;
 		}
 
 		/// <summary> Returns the input angle based on the camera view. </summary>
-		public float GetInputAngle(bool strafeMode = false)
+		public float GetInputAngle(bool autoConvertStrafeInputs = false)
 		{
-			if (Skills.IsSkillEquipped(SkillKey.Autorun) || strafeMode)
-			{
-				float baseAngle = InputVector.Y <= SaveManager.Config.deadZone ? PathFollower.ForwardAngle : PathFollower.BackAngle;
-				float strafeAngle = InputVector.X * MaxTurningAdjustment;
-				if (IsMovingBackward)
-					strafeAngle *= -1;
-				if (ExtensionMethods.DotAngle(Camera.XformAngle, PathFollower.ForwardAngle) < 0)
-					strafeAngle *= -1;
-
-				return baseAngle - strafeAngle;
-			}
+			if (autoConvertStrafeInputs && Skills.IsSkillEquipped(SkillKey.Autorun))
+				return GetStrafeAngle(true);
 
 			if (InputVector.IsZeroApprox()) // Invalid input, no change
 				return MovementAngle;
@@ -248,6 +277,9 @@ namespace Project.Gameplay
 
 			if (Skills.IsSpeedBreakActive)
 				return GetStrafeAngle();
+
+			if (Skills.IsSkillEquipped(SkillKey.Autorun))
+				return GetStrafeAngle(true);
 
 			return GetInputAngle();
 		}
@@ -293,7 +325,7 @@ namespace Project.Gameplay
 				if (lockoutDataList.Count >= 2) // List only needs to be sorted if there are multiple elements on it
 					lockoutDataList.Sort(new LockoutResource.Comparer());
 
-				if (ActiveLockoutData != null && ActiveLockoutData.priority == -1) // Remove current lockout?
+				if (ActiveLockoutData?.priority == -1) // Remove current lockout?
 					RemoveLockoutData(ActiveLockoutData);
 
 				if (resource.priority == -1) // Exclude from priority, take over immediately
@@ -302,7 +334,9 @@ namespace Project.Gameplay
 					ProcessCurrentLockoutData();
 			}
 			else if (ActiveLockoutData == resource) // Reset lockout timer
+			{
 				lockoutTimer = 0;
+			}
 		}
 
 		/// <summary>
@@ -514,7 +548,7 @@ namespace Project.Gameplay
 				return;
 			}
 
-			float inputAngle = GetInputAngle();
+			float inputAngle = GetInputAngle(true);
 			float inputLength = inputCurve.Sample(InputVector.Length()); // Limits top speed; Modified depending on the LockoutResource.directionOverrideMode
 
 			float targetMovementAngle = GetTargetMovementAngle();
@@ -611,10 +645,13 @@ namespace Project.Gameplay
 
 			float pathControlAmount = PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
 			bool isPathDeltaLockoutActive = IsLockoutActive &&
-				(ActiveLockoutData.spaceMode != LockoutResource.SpaceModes.Camera ||
+				ActiveLockoutData.spaceMode != LockoutResource.SpaceModes.Camera; // Ignore path delta under certain lockout situations
+			bool isUsingStrafeControls = Skills.IsSpeedBreakActive ||
+				Skills.IsSkillEquipped(SkillKey.Autorun) ||
+				(IsLockoutActive &&
 				ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe); // Ignore path delta under certain lockout situations
 
-			if (Skills.IsSpeedBreakActive || Skills.IsSkillEquipped(SkillKey.Autorun) || isPathDeltaLockoutActive)
+			if (isUsingStrafeControls || isPathDeltaLockoutActive)
 				pathControlAmount = 0; // Don't use path influence during speedbreak/autorun
 
 			float targetMovementAngle = GetTargetMovementAngle() + pathControlAmount;
@@ -646,8 +683,7 @@ namespace Project.Gameplay
 
 			if (Runtime.Instance.IsUsingController &&
 				IsHoldingDirection(PathFollower.ForwardAngle) &&
-				Mathf.Abs(inputDeltaAngle) < TurningDampingRange &&
-				!Skills.IsSkillEquipped(SkillKey.Autorun)) // Remap controls to provide more analog detail
+				Mathf.Abs(inputDeltaAngle) < TurningDampingRange) // Remap controls to provide more analog detail
 			{
 				targetMovementAngle -= inputDeltaAngle * .5f;
 			}
@@ -660,7 +696,7 @@ namespace Project.Gameplay
 			float maxTurnAmount = Skills.MaxTurnAmount;
 			float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
 			// Is the player trying to recenter themselves?
-			bool isTurningAround = IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
+			bool isTurningAround = !IsHoldingDirection(PathFollower.BackAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
 			if (isTurningAround)
 			{
 				maxTurnAmount = Skills.TurnTurnaround;
@@ -680,9 +716,7 @@ namespace Project.Gameplay
 			MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle + pathControlAmount, targetMovementAngle, ref turningVelocity, turnSmoothing);
 
 			// Strafe implementation
-			if (Skills.IsSpeedBreakActive ||
-				Skills.IsSkillEquipped(SkillKey.Autorun) ||
-				(IsLockoutActive && ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe))
+			if (isUsingStrafeControls)
 			{
 				if (InputVector.IsZeroApprox())
 					strafeBlend = Mathf.MoveToward(strafeBlend, 1.0f, PhysicsManager.physicsDelta);
@@ -700,6 +734,9 @@ namespace Project.Gameplay
 		{
 			// Speedbreak is overriding speed
 			if (Skills.IsSpeedBreakActive) return false;
+
+			// Autorun disables speed loss
+			if (Skills.IsSkillEquipped(SkillKey.Autorun)) return false;
 
 			// Don't apply turning speed loss when moving quickly and holding the direction of the pathfollower
 			if (IsHoldingDirection(PathFollower.ForwardAngle, true) && GroundSettings.GetSpeedRatio(MoveSpeed) > .5f)
