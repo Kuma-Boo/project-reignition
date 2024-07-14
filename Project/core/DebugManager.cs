@@ -54,8 +54,6 @@ public partial class DebugManager : Node2D
 		if (!OS.IsDebugBuild()) //Don't do anything in real build
 			return;
 
-		RedrawCamData();
-
 		if (isAdvancingFrame)
 		{
 			GetTree().Paused = true;
@@ -315,24 +313,21 @@ public partial class DebugManager : Node2D
 
 	[Export]
 	private LineEdit[] freeCamData;
-	private void RedrawCamData()
+	public void RedrawCamData(Vector3 position, Vector3 rotation)
 	{
-		if (!IsInstanceValid(CharacterController.instance) || !CharacterController.instance.IsInsideTree()) return;
-
 		for (int i = 0; i < freeCamData.Length; i++)
 		{
 			if (freeCamData[i].HasFocus())
 				return;
 		}
 
-		CameraController cam = CharacterController.instance.Camera;
-		freeCamData[0].Text = cam.FreeCamRoot.GlobalPosition.X.ToString();
-		freeCamData[1].Text = cam.FreeCamRoot.GlobalPosition.Y.ToString();
-		freeCamData[2].Text = cam.FreeCamRoot.GlobalPosition.Z.ToString();
+		freeCamData[0].Text = position.X.ToString();
+		freeCamData[1].Text = position.Y.ToString();
+		freeCamData[2].Text = position.Z.ToString();
 
-		freeCamData[3].Text = cam.Camera.RotationDegrees.X.ToString();
-		freeCamData[4].Text = cam.FreeCamRoot.GlobalRotationDegrees.Y.ToString();
-		freeCamData[5].Text = cam.Camera.RotationDegrees.Z.ToString();
+		freeCamData[3].Text = rotation.X.ToString();
+		freeCamData[4].Text = rotation.Y.ToString();
+		freeCamData[5].Text = rotation.Z.ToString();
 	}
 
 	private void UpdateCamData(string newData)
