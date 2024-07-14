@@ -390,12 +390,16 @@ public partial class Majin : Enemy
 		base.TakeDamage(amount);
 	}
 
+	public void DisableFlameAttack()
+	{
+		if (isFlameActive)
+			ToggleFlameAttack();
+	}
+
 	private void Stagger()
 	{
 		staggerTimer = StaggerLength;
-
-		if (isFlameActive)
-			ToggleFlameAttack();
+		DisableFlameAttack();
 
 		if (Character.AttackState == CharacterController.AttackStates.None)
 		{
@@ -578,9 +582,7 @@ public partial class Majin : Enemy
 	{
 		if (!IsInRange || isFidgetActive) // Out of range or fidget is active
 		{
-			if (isFlameActive)
-				ToggleFlameAttack();
-
+			DisableFlameAttack();
 			return;
 		}
 
