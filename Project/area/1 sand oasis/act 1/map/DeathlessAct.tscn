@@ -32,6 +32,9 @@
 [ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="28_y5rtn"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="30_q71cr"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ly0fh"]
+size = Vector3(10, 20, 5)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_ulmyf"]
 size = Vector3(15, 20, 2.5)
 
@@ -1266,9 +1269,6 @@ _data = {
 "RESET": SubResource("Animation_bwy4c"),
 "event": SubResource("Animation_f872i")
 }
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ly0fh"]
-size = Vector3(10, 20, 5)
 
 [sub_resource type="Animation" id="Animation_8iix5"]
 length = 0.001
@@ -2870,6 +2870,13 @@ transform = Transform3D(0.924353, 0, -0.381538, 0, 1, 0, 0.381538, 0, 0.924353, 
 
 [node name="CharacterSpawn" parent="DeathlessAct/SpawnPosition" instance=ExtResource("3_vokyw")]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+
+[node name="Wall" type="StaticBody3D" parent="DeathlessAct/SpawnPosition" groups=["wall"]]
+transform = Transform3D(0.996195, 0, -0.0871558, 0, 1, 0, 0.0871558, 0, 0.996195, 0.457993, 0, -7.51041)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/SpawnPosition/Wall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ly0fh")
 
 [node name="CullingMap" type="Node3D" parent="DeathlessAct"]
 
