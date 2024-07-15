@@ -1415,7 +1415,7 @@ namespace Project.Gameplay
 		/// <summary> Called when the player is returning to a checkpoint. </summary>
 		public void StartRespawn(bool debugRespawn = false)
 		{
-			if (ActionState == ActionStates.Teleport || IsDefeated) return;
+			if (ActionState == ActionStates.Teleport || IsDefeated || !Stage.IsLevelIngame) return;
 
 			DefeatPlayer();
 
