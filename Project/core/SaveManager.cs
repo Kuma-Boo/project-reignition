@@ -561,6 +561,8 @@ public partial class SaveManager : Node
 		string saveNumber = index.ToString("00");
 		string savePath = SaveDirectory + $"save{saveNumber}.dat";
 
+		if (!FileAccess.FileExists(savePath))
+			return;
 		OS.MoveToTrash(ProjectSettings.GlobalizePath(savePath));
 		GD.Print("Deleting save");
 	}
