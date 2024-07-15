@@ -63,6 +63,10 @@ namespace Project.Gameplay
 				case MovementStates.External:
 					StopExternal();
 					break;
+				case MovementStates.Launcher:
+					if (activeLauncher != null)
+						FinishLauncher();
+					break;
 			}
 
 			canLandingBoost = false; // Disable landing boost temporarily
@@ -1549,12 +1553,11 @@ namespace Project.Gameplay
 		private Objects.Launcher activeLauncher;
 		public void StartLauncher(LaunchSettings data, Objects.Launcher newLauncher = null)
 		{
-			if (MovementState == MovementStates.Launcher)
+			if (MovementState == MovementStates.Launcher &&
+				activeLauncher != null &&
+				activeLauncher == newLauncher)
 			{
-				if (activeLauncher != null && activeLauncher == newLauncher)
-					return; // Already launching that!
-
-				FinishLauncher();
+				return; // Already launching that!
 			}
 
 			ResetMovementState();
