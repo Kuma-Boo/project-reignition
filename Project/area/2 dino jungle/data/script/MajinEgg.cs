@@ -34,6 +34,9 @@ namespace Project.Gameplay.Objects
 
 		private void UpdateInteraction()
 		{
+			if (isShattered)
+				return;
+
 			if (Character.Skills.IsSpeedBreakActive) // Instantly shatter
 			{
 				Shatter();
