@@ -34,6 +34,9 @@ namespace Project.Gameplay.Objects
 
 		private void UpdateInteraction()
 		{
+			if (isShattered)
+				return;
+
 			if (Character.Skills.IsSpeedBreakActive) // Instantly shatter
 			{
 				Shatter();
@@ -54,7 +57,11 @@ namespace Project.Gameplay.Objects
 				else
 					animator.Play("crack-01");
 
+				Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
 				Character.Lockon.StartBounce(false);
+
+				if (!isShattered)
+					Character.Camera.SetDeferred("LockonTarget", this);
 			}
 		}
 
@@ -65,6 +72,7 @@ namespace Project.Gameplay.Objects
 			if (permanentlyDestroyed)
 				return;
 
+			isShattered = false;
 			currentHealth = MaxHealth;
 		}
 

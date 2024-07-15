@@ -16,6 +16,7 @@ public partial class CharacterSkillManager : Node
 
 		// Determine the size of the soul gauge
 		MaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
+		timeBreakAnimator.Play("RESET");
 		SetUpStats();
 		SetUpSkills();
 	}
@@ -235,6 +236,8 @@ public partial class CharacterSkillManager : Node
 	private bool isSpeedBreakEnabled = true;
 	private bool isTimeBreakEnabled = true;
 
+	[Export]
+	private AnimationPlayer speedBreakAnimator;
 	// Audio clips
 	[Export]
 	private AudioStream speedBreakActivate;
@@ -243,6 +246,8 @@ public partial class CharacterSkillManager : Node
 	// Audio players
 	[Export]
 	private AudioStreamPlayer speedBreakSFX;
+	[Export]
+	private AnimationPlayer timeBreakAnimator;
 	[Export]
 	private AudioStreamPlayer timeBreakSFX;
 	[Export]
@@ -272,21 +277,15 @@ public partial class CharacterSkillManager : Node
 	}
 
 	private int timeBreakDrainTimer;
-	private const int TIME_BREAK_SOUL_DRAIN_INTERVAL = 3; // Drain 1 point every x frames
-	private const float SATURATION_ADJUSTMENT_SPEED = 10.0f;
+	private const int TimeBreakSoulDrainInterval = 3; // Drain 1 point every x frames
 	private void UpdateTimeBreak()
 	{
-		// Update timebreak satutration visuals
-		float targetSaturation = IsTimeBreakActive ? 0.2f : StageSettings.instance.StartingSaturation;
-		StageSettings.instance.Environment.Environment.AdjustmentSaturation =
-			Mathf.MoveToward(StageSettings.instance.Environment.Environment.AdjustmentSaturation, targetSaturation, SATURATION_ADJUSTMENT_SPEED * PhysicsManager.physicsDelta);
-
 		if (IsTimeBreakActive)
 		{
 			if (timeBreakDrainTimer <= 0)
 			{
 				ModifySoulGauge(-1);
-				timeBreakDrainTimer = TIME_BREAK_SOUL_DRAIN_INTERVAL;
+				timeBreakDrainTimer = TimeBreakSoulDrainInterval;
 			}
 			timeBreakDrainTimer--;
 
@@ -367,7 +366,7 @@ public partial class CharacterSkillManager : Node
 
 		if (IsTimeBreakActive)
 		{
-			Character.Effect.StartTimeBreak();
+			timeBreakAnimator.Play("start");
 			Character.Effect.PlayVoice("time break");
 			BGMPlayer.SetStageMusicVolume(-80f);
 
@@ -378,7 +377,7 @@ public partial class CharacterSkillManager : Node
 		}
 		else
 		{
-			Character.Effect.StopTimeBreak();
+			timeBreakAnimator.Play("stop");
 			breakTimer = BREAK_SKILLS_COOLDOWN;
 			BGMPlayer.SetStageMusicVolume(0f);
 
@@ -397,23 +396,22 @@ public partial class CharacterSkillManager : Node
 
 		if (IsSpeedBreakActive)
 		{
-			Character.MovementAngle = Character.PathFollower.ForwardAngle;
+			speedBreakAnimator.Play("start");
 			Character.Effect.PlayVoice("speed break");
+			Character.MovementAngle = Character.PathFollower.ForwardAngle;
 			Character.CollisionMask = Runtime.Instance.environmentMask; // Don't collide with any objects
 			Character.Animator.SpeedBreak();
-			Character.Effect.StartSpeedBreak();
 			Character.ChangeHitbox("speed break");
-
 			Character.AttackState = CharacterController.AttackStates.OneShot;
 		}
 		else
 		{
+			speedBreakAnimator.Play("stop");
 			speedBreakSFX.Stream = speedBreakDeactivate;
 			speedBreakSFX.Play();
 
 			Character.MoveSpeed = GroundSettings.Speed; // Override speed
 			Character.CollisionMask = normalCollisionMask; // Reset collision layer
-			Character.Effect.StopSpeedBreak();
 			Character.AttackState = CharacterController.AttackStates.None;
 			Character.ChangeHitbox("RESET");
 		}

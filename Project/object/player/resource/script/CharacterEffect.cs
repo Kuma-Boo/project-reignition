@@ -47,10 +47,6 @@ public partial class CharacterEffect : Node3D
 	public Trail3D trailFX;
 	[Export]
 	public MeshInstance3D spinFX;
-	[Export]
-	private AnimationPlayer timeBreakAnimator;
-	[Export]
-	private AnimationPlayer speedBreakAnimator;
 	/// <summary> VFX for drifting dust. </summary>
 	[Export]
 	private GpuParticles3D dustParticle;
@@ -62,12 +58,6 @@ public partial class CharacterEffect : Node3D
 
 	public void StartSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 0.0f, .2f);
 	public void StopSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 1.0f, .2f);
-
-	public void StartTimeBreak() => timeBreakAnimator.Play("start");
-	public void StopTimeBreak() => timeBreakAnimator.Play("stop");
-
-	public void StartSpeedBreak() => speedBreakAnimator.Play("start");
-	public void StopSpeedBreak() => speedBreakAnimator.Play("stop");
 
 	[Export]
 	private GpuParticles3D windParticle;

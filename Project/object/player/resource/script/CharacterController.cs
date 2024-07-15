@@ -63,6 +63,10 @@ namespace Project.Gameplay
 				case MovementStates.External:
 					StopExternal();
 					break;
+				case MovementStates.Launcher:
+					if (activeLauncher != null)
+						FinishLauncher();
+					break;
 			}
 
 			canLandingBoost = false; // Disable landing boost temporarily
@@ -117,6 +121,7 @@ namespace Project.Gameplay
 			}
 			else if (ActionState == ActionStates.JumpDash) // Stop trail VFX
 			{
+				ChangeHitbox("RESET");
 				Effect.StopSpinFX();
 				Effect.StopTrailFX();
 				Animator.ResetState();
@@ -1414,7 +1419,7 @@ namespace Project.Gameplay
 		/// <summary> Called when the player is returning to a checkpoint. </summary>
 		public void StartRespawn(bool debugRespawn = false)
 		{
-			if (ActionState == ActionStates.Teleport || IsDefeated) return;
+			if (ActionState == ActionStates.Teleport || IsDefeated || !Stage.IsLevelIngame) return;
 
 			DefeatPlayer();
 
@@ -1548,12 +1553,11 @@ namespace Project.Gameplay
 		private Objects.Launcher activeLauncher;
 		public void StartLauncher(LaunchSettings data, Objects.Launcher newLauncher = null)
 		{
-			if (MovementState == MovementStates.Launcher)
+			if (MovementState == MovementStates.Launcher &&
+				activeLauncher != null &&
+				activeLauncher == newLauncher)
 			{
-				if (activeLauncher != null && activeLauncher == newLauncher)
-					return; // Already launching that!
-
-				FinishLauncher();
+				return; // Already launching that!
 			}
 
 			ResetMovementState();

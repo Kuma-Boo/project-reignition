@@ -345,6 +345,7 @@ public partial class PauseMenu : Node
 	}
 
 	private void EnableInteraction() => AllowPausing = true;
+	private float unpausedSpeed;
 	private void TogglePause()
 	{
 		canMoveCursor = false; //Disable cursor movement
@@ -362,6 +363,12 @@ public partial class PauseMenu : Node
 			UpdateSelection(0);
 			UpdateCursorPosition();
 			animator.Set(ShowTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			unpausedSpeed = (float)Engine.TimeScale;
+			Engine.TimeScale = 1.0f;
+		}
+		else
+		{
+			Engine.TimeScale = unpausedSpeed;
 		}
 	}
 

@@ -37,8 +37,6 @@ public partial class StageSettings : Node3D
 			LevelState = LevelStateEnum.Ingame;
 		else
 			LevelState = LevelStateEnum.Loading;
-
-		StartingSaturation = Environment.Environment.AdjustmentSaturation;
 	}
 
 	public override void _Ready()
@@ -514,7 +512,6 @@ public partial class StageSettings : Node3D
 	/// <summary> Reference to active area's WorldEnvironment node. </summary>
 	[Export]
 	public WorldEnvironment Environment { get; private set; }
-	public float StartingSaturation { get; private set; }
 }
 
 public struct SpawnData(Node parent, Transform3D transform)
