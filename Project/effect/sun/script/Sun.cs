@@ -55,7 +55,7 @@ namespace Project
 			currentOcclusion = ExtensionMethods.SmoothDamp(currentOcclusion, isOccluded ? 1f : 0f, ref currentOcclusionVelocity, OCCLUSION_SMOOTHING);
 			RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_SUN_OCCLUSION, currentOcclusion);
 
-			screenUV = Camera.ConvertToScreenSpace(GlobalPosition) / Runtime.SCREEN_SIZE;
+			screenUV = Camera.ConvertToScreenSpace(GlobalPosition) / Runtime.ScreenSize;
 			if ((screenUV - previousScreenUV).LengthSquared() * 100.0f > movementThreshold)
 				currentMovement = 0f;
 			previousScreenUV = screenUV;

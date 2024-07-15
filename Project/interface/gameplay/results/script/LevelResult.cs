@@ -24,6 +24,10 @@ public partial class LevelResult : Control
 	private BGMPlayer bgm;
 	[Export]
 	private AnimationPlayer animator;
+	[Export]
+	private AudioStreamPlayer resultsVoicePlayer;
+	[Export]
+	private SFXLibraryResource resultsVoiceLibrary;
 
 	private bool isProcessing;
 	private bool isFadingBgm;
@@ -70,7 +74,7 @@ public partial class LevelResult : Control
 		time.Text = Stage.DisplayTime;
 
 		ring.Text = Stage.RingBonus.ToString();
-		technical.Text = "x" + Stage.TechnicalBonus.ToString("0.0", CultureInfo.InvariantCulture);
+		technical.Text = "×" + Stage.TechnicalBonus.ToString("0.0", CultureInfo.InvariantCulture);
 		total.Text = Stage.TotalScore.ToString();
 
 		// Calculate rank AFTER tallying final score
@@ -108,16 +112,28 @@ public partial class LevelResult : Control
 					NotificationMenu.AddNotification(NotificationMenu.NotificationType.Mission, "unlock_mission");
 				}
 			}
+
+			// Only write these when the stage is a success
+			SaveManager.ActiveGameData.SetHighScore(Stage.Data.LevelID, Stage.TotalScore);
+			SaveManager.ActiveGameData.SetBestTime(Stage.Data.LevelID, Stage.CurrentTime);
 		}
 
-		// Write to file
-		SaveManager.ActiveGameData.SetClearStatus(Stage.Data.LevelID, clearStatus);
-		SaveManager.ActiveGameData.SetHighScore(Stage.Data.LevelID, Stage.TotalScore);
-		SaveManager.ActiveGameData.SetBestTime(Stage.Data.LevelID, Stage.CurrentTime);
+		// Write common save file
 		SaveManager.ActiveGameData.SetRank(Stage.Data.LevelID, rank);
+		SaveManager.ActiveGameData.SetClearStatus(Stage.Data.LevelID, clearStatus);
 	}
 
 	public void SetInputProcessing(bool value) => isProcessing = value;
 	/// <summary> Mutes the gameplay sfx audio channel. </summary>
 	public void MuteGameplaySoundEffects() => SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 0);
+
+	public void PlayRankQuote()
+	{
+		int voiceIndex = 0;
+		if (Stage.LevelState != StageSettings.LevelStateEnum.Failed)
+			voiceIndex = SaveManager.ActiveGameData.GetRank(Stage.Data.LevelID) + 1;
+
+		resultsVoicePlayer.Stream = resultsVoiceLibrary.GetStream(voiceIndex, (int)SaveManager.Config.voiceLanguage);
+		resultsVoicePlayer.Play();
+	}
 }

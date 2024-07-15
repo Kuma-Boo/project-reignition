@@ -18,8 +18,8 @@ public partial class Enemy : Node3D
 	public delegate void DefeatedEventHandler();
 
 	[Export]
-	protected SpawnModes spawnMode;
-	protected enum SpawnModes
+	public SpawnModes SpawnMode { get; protected set; }
+	public enum SpawnModes
 	{
 		Range, // Use Range trigger
 		Signal, // External Signal
@@ -35,24 +35,34 @@ public partial class Enemy : Node3D
 	[Export]
 	protected int maxHealth = 1;
 	protected int currentHealth;
+	/// <summary> Does this enemy damage the player when it is touched? </summary>
 	[Export]
-	protected bool damagePlayer; // Does this enemy hurt the player on touch?
+	protected bool damagePlayer;
 
 	[ExportGroup("Components")]
-	[Export]
-	protected Node3D root;
-	[Export]
-	protected CollisionShape3D collider; // Environmental collider. Disabled when defeated (For death animations, etc)
-	[Export]
-	protected Area3D hurtbox; // Lockon/Hitbox collider. Disabled when defeated (For death animations, etc)
-	[Export]
-	protected CollisionShape3D rangeCollider; // Range trigger
-	[Export]
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
+	private NodePath root;
+	protected Node3D Root { get; private set; }
+	[Export(PropertyHint.NodePathValidTypes, "Area3D")]
+	private NodePath hurtbox;
+	/// <summary> Lockon/Hitbox collider. Disabled when defeated (For death animations, etc). </summary>
+	protected Area3D Hurtbox { get; private set; }
+	[Export(PropertyHint.NodePathValidTypes, "CollisionShape3D")]
+	private NodePath collider;
+	/// <summary> Environmental collider. Disabled when defeated (For death animations, etc). </summary>
+	protected CollisionShape3D Collider { get; private set; }
+	[Export(PropertyHint.NodePathValidTypes, "CollisionShape3D")]
+	private NodePath rangeCollider;
+	/// <summary> Reference to the enemy's range collider. </summary>
+	protected CollisionShape3D RangeCollider { get; private set; }
+	[Export(PropertyHint.NodePathValidTypes, "AnimationTree")]
+	private NodePath animationTree;
 	/// <summary> Animation tree for enemy character. </summary>
-	protected AnimationTree animationTree;
-	[Export]
+	protected AnimationTree AnimationTree { get; private set; }
+	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
+	private NodePath animationPlayer;
 	/// <summary> Animator for event animations. </summary>
-	protected AnimationPlayer animationPlayer;
+	protected AnimationPlayer AnimationPlayer { get; private set; }
 
 	protected SpawnData SpawnData { get; private set; }
 	protected CharacterController Character => CharacterController.instance;
@@ -62,24 +72,37 @@ public partial class Enemy : Node3D
 	public override void _Ready() => SetUp();
 	protected virtual void SetUp()
 	{
+		// Get components
+		Root = GetNodeOrNull<Node3D>(root);
+		Hurtbox = GetNodeOrNull<Area3D>(hurtbox);
+		Collider = GetNodeOrNull<CollisionShape3D>(collider);
+		RangeCollider = GetNodeOrNull<CollisionShape3D>(rangeCollider);
+		AnimationTree = GetNodeOrNull<AnimationTree>(animationTree);
+		AnimationPlayer = GetNodeOrNull<AnimationPlayer>(animationPlayer);
+
 		SpawnData = new(GetParent(), Transform);
 		StageSettings.instance.ConnectRespawnSignal(this);
 		StageSettings.instance.ConnectUnloadSignal(this);
 		Respawn();
 
-		if (rangeCollider == null)
+		InitializeRangeCollider();
+	}
+
+	private void InitializeRangeCollider()
+	{
+		if (RangeCollider == null)
 			return;
 
 		if (rangeOverride == 0) // Disable range collider
 		{
-			rangeCollider.Disabled = true;
+			RangeCollider.Disabled = true;
 			return;
 		}
 
 		// Resize range trigger
 		if (CollisionShapeList.TryGetValue(rangeOverride, out CylinderShape3D shape))
 		{
-			rangeCollider.Shape = shape;
+			RangeCollider.Shape = shape;
 			return;
 		}
 
@@ -89,7 +112,7 @@ public partial class Enemy : Node3D
 			Radius = rangeOverride,
 			Height = 30
 		};
-		rangeCollider.Shape = cylinderShape;
+		RangeCollider.Shape = cylinderShape;
 		CollisionShapeList.Add(rangeOverride, cylinderShape);
 	}
 
@@ -99,8 +122,13 @@ public partial class Enemy : Node3D
 
 		UpdateEnemy();
 
-		if (!IsDefeated && IsInteracting)
+		if (IsDefeated)
+			return;
+
+		if (IsInteracting)
 			UpdateInteraction();
+		else if (IsInteractionProcessed && Character.AttackState == CharacterController.AttackStates.None)
+			ResetInteractionProcessed();
 	}
 
 	public virtual void Unload() => QueueFree();
@@ -112,9 +140,10 @@ public partial class Enemy : Node3D
 		currentHealth = maxHealth;
 
 		SetHitboxStatus(true);
+		ResetInteractionProcessed();
 
-		if (spawnMode == SpawnModes.Always ||
-			(spawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
+		if (SpawnMode == SpawnModes.Always ||
+			(SpawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
 		{
 			EnterRange();
 		}
@@ -136,16 +165,13 @@ public partial class Enemy : Node3D
 	/// <summary> Override this from an inherited class. </summary>
 	protected virtual void UpdateEnemy() { }
 
-	public virtual void TakeHomingAttackDamage()
+	public virtual void UpdateLockon()
 	{
-		if (Character.Lockon.IsPerfectHomingAttack)
-			currentHealth--; // Take an extra point of damage
-
-		TakeDamage(1);
-		Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
+		if (Character.Lockon.IsHomingAttacking)
+			Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
 
 		if (!IsDefeated)
-			Character.Camera.SetDeferred("LockonTarget", hurtbox);
+			Character.Camera.SetDeferred("LockonTarget", Hurtbox);
 	}
 
 	public virtual void TakeDamage(int amount = -1)
@@ -155,9 +181,8 @@ public partial class Enemy : Node3D
 		else
 			currentHealth -= amount;
 
-		if (!IsDefeated) return;
-
-		Defeat();
+		if (IsDefeated)
+			Defeat();
 	}
 
 	/// <summary>
@@ -165,14 +190,15 @@ public partial class Enemy : Node3D
 	/// </summary>
 	protected virtual void Defeat()
 	{
-		SetHitboxStatus(false);
+		currentHealth = 0;
 		Character.Camera.LockonTarget = null;
 		Character.Lockon.CallDeferred(CharacterLockon.MethodName.ResetLockonTarget);
 		BonusManager.instance.AddEnemyChain();
+		StageSettings.instance.UpdateScore(50 * maxHealth, StageSettings.MathModeEnum.Add); // Add points based on max health
 
 		// Automatically increment objective count
 		if (StageSettings.instance.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
-			StageSettings.instance.IncrementObjective();
+			StageSettings.instance.CallDeferred(StageSettings.MethodName.IncrementObjective);
 
 		EmitSignal(SignalName.Defeated);
 	}
@@ -183,17 +209,17 @@ public partial class Enemy : Node3D
 	protected virtual void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, GlobalPosition, new Vector2(2, 1.5f), 1.5f);
 
 	protected bool IsHitboxEnabled { get; private set; }
-	protected void SetHitboxStatus(bool isEnabled)
+	protected void SetHitboxStatus(bool isEnabled, bool hurtboxOnly = false)
 	{
 		IsHitboxEnabled = isEnabled;
 
 		// Update environment collider
-		if (collider != null)
-			collider.Disabled = !IsHitboxEnabled;
+		if (Collider != null && !hurtboxOnly)
+			Collider.Disabled = !IsHitboxEnabled;
 
 		// Update hurtbox
-		if (hurtbox != null)
-			hurtbox.Monitorable = hurtbox.Monitoring = IsHitboxEnabled;
+		if (Hurtbox != null)
+			Hurtbox.Monitorable = Hurtbox.Monitoring = IsHitboxEnabled;
 	}
 
 	/// <summary> Is the enemy currently active? </summary>
@@ -202,50 +228,72 @@ public partial class Enemy : Node3D
 	protected bool IsInRange { get; set; }
 	protected virtual void EnterRange()
 	{
-		if (spawnMode == SpawnModes.Signal) return;
+		if (SpawnMode == SpawnModes.Signal) return;
 		Spawn();
 	}
 	protected virtual void ExitRange() { }
 
-	// True when colliding with the player
-	protected bool IsInteracting => interactionCounter != 0;
-	protected int interactionCounter;
+	/// <summary> True when colliding with the player. </summary>
+	protected bool IsInteracting { get; set; }
+	/// <summary> True when a particular interaction has already been processed. </summary>
+	protected bool IsInteractionProcessed { get; private set; }
 	protected virtual void UpdateInteraction()
 	{
-		if ((Character.Lockon.IsBouncingLockoutActive &&
+		if (IsInteractionProcessed)
+			return;
+
+		if ((Character.Lockon.IsBounceLockoutActive &&
 			Character.ActionState == CharacterController.ActionStates.Normal) ||
 			!IsHitboxEnabled)
 		{
 			return;
 		}
 
-		if (Character.Skills.IsSpeedBreakActive) // For now, speed break kills enemies instantly
+		switch (Character.AttackState)
 		{
-			Defeat();
+			case CharacterController.AttackStates.OneShot:
+				Defeat();
+				break;
+			case CharacterController.AttackStates.Weak:
+				TakeDamage(1);
+				break;
+			case CharacterController.AttackStates.Strong:
+				TakeDamage(2);
+				break;
 		}
-		else if (Character.MovementState == CharacterController.MovementStates.Launcher) // Launcher kills enemies instantly
+
+		if (Character.ActionState == CharacterController.ActionStates.JumpDash)
 		{
-			Defeat();
-		}
-		else if (Character.Skills.IsAttacking)
-		{
-			TakeDamage(1);
-		}
-		else if (Character.ActionState == CharacterController.ActionStates.JumpDash)
-		{
-			TakeHomingAttackDamage();
+			UpdateLockon();
 			Character.Lockon.StartBounce(IsDefeated);
 		}
-		else if (damagePlayer)
+		else if (damagePlayer && Character.AttackState == CharacterController.AttackStates.None)
 		{
 			Character.StartKnockback();
 		}
+
+		SetInteractionProcessed();
+	}
+
+	protected void SetInteractionProcessed()
+	{
+		IsInteractionProcessed = true;
+		// Connect a signal
+		if (!Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+			Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
+	}
+	protected void ResetInteractionProcessed()
+	{
+		IsInteractionProcessed = false;
+
+		if (Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+			Character.Disconnect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
 	}
 
 	/// <summary> Current local rotation of the enemy. </summary>
 	protected float currentRotation;
 	protected float rotationVelocity;
-	protected const float TRACKING_SMOOTHING = .2f;
+	protected const float TrackingSmoothing = .2f;
 	/// <summary>
 	/// Updates current rotation to track the player.
 	/// </summary>
@@ -253,24 +301,32 @@ public partial class Enemy : Node3D
 	{
 		float targetRotation = ExtensionMethods.Flatten(GlobalPosition - Character.GlobalPosition).AngleTo(Vector2.Up);
 		targetRotation -= GlobalRotation.Y; // Rotation is in local space
-		currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, TRACKING_SMOOTHING);
+		currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, TrackingSmoothing);
 	}
+
+	protected virtual void StartUhuBounce() { }
 
 	public void OnEntered(Area3D a)
 	{
+		if (a.IsInGroup("uhu"))
+		{
+			StartUhuBounce();
+			return;
+		}
+
 		if (!a.IsInGroup("player")) return;
-		interactionCounter++;
+		IsInteracting = true;
 	}
 
 	public void OnExited(Area3D a)
 	{
 		if (!a.IsInGroup("player")) return;
-		interactionCounter--;
+		IsInteracting = false;
 	}
 
 	public void OnRangeEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 
 		EnterRange();
 		IsInRange = true;
@@ -278,7 +334,7 @@ public partial class Enemy : Node3D
 
 	public void OnRangeExited(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player detection")) return;
 
 		ExitRange();
 		IsInRange = false;

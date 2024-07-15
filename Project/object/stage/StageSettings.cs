@@ -37,8 +37,6 @@ public partial class StageSettings : Node3D
 			LevelState = LevelStateEnum.Ingame;
 		else
 			LevelState = LevelStateEnum.Loading;
-
-		StartingSaturation = Environment.Environment.AdjustmentSaturation;
 	}
 
 	public override void _Ready()
@@ -102,7 +100,7 @@ public partial class StageSettings : Node3D
 	}
 
 	[Signal]
-	public delegate void ReflectionProbesCalculatedEventHandler();
+	public delegate void LevelStartedEventHandler();
 	private int probeFrameCounter;
 	private const int PROBE_FRAME_COUNT_LENGTH = 90;
 	public override void _Process(double _)
@@ -121,7 +119,7 @@ public partial class StageSettings : Node3D
 			{
 				LevelState = LevelStateEnum.Ingame;
 				TransitionManager.FinishTransition();
-				EmitSignal(SignalName.ReflectionProbesCalculated);
+				EmitSignal(SignalName.LevelStarted);
 			}
 
 			return;
@@ -287,6 +285,7 @@ public partial class StageSettings : Node3D
 	public void IncrementObjective()
 	{
 		CurrentObjectiveCount++;
+		CurrentObjectiveCount = Mathf.Clamp(CurrentObjectiveCount, 0, Data.MissionObjectiveCount);
 		EmitSignal(SignalName.ObjectiveChanged);
 
 		if (Data.MissionObjectiveCount == 0) // i.e. Sand Oasis's "Don't break the jars!" mission.
@@ -389,13 +388,24 @@ public partial class StageSettings : Node3D
 	[Signal]
 	public delegate void TriggeredCheckpointEventHandler();
 	public Triggers.CheckpointTrigger CurrentCheckpoint { get; private set; }
+	private int CheckpointScore { get; set; }
+	private int CheckpointObjectiveCount { get; set; }
+	private int SavedScore { get; set; }
+	private int SavedObjectiveCount { get; set; }
 	public void SetCheckpoint(Triggers.CheckpointTrigger checkpoint)
 	{
 		if (checkpoint == CurrentCheckpoint) return; // Already at this checkpoint
 
 		CurrentCheckpoint = checkpoint;
-		checkpoint.UpdateCheckpointData();
+		SavedScore = CurrentScore;
+		SavedObjectiveCount = CurrentObjectiveCount;
 		EmitSignal(SignalName.TriggeredCheckpoint);
+	}
+
+	public void RevertToCheckpointData()
+	{
+		ResetObjective(SavedObjectiveCount);
+		UpdateScore(SavedScore, MathModeEnum.Replace);
 	}
 
 	[Signal]
@@ -451,6 +461,8 @@ public partial class StageSettings : Node3D
 	}
 	public LevelStateEnum LevelState { get; private set; }
 	public bool IsLevelIngame => LevelState == LevelStateEnum.Ingame;
+	/// <summary> Flag for keeping track of Uhu's race status. </summary>
+	public bool IsRaceActive { get; set; }
 	private const float FAIL_COMPLETION_DELAY = 1.5f; // Mission fails always have a delay of 1.5 seconds
 	public void FinishLevel(bool wasSuccessful)
 	{
@@ -464,6 +476,7 @@ public partial class StageSettings : Node3D
 		GetTree().CreateTimer(wasSuccessful ? Data.CompletionDelay : FAIL_COMPLETION_DELAY).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.StartCompletionDemo));
 
 		BGMPlayer.StageMusicPaused = true;
+		SoundManager.instance.CancelDialog();
 		Interface.PauseMenu.AllowPausing = false;
 		LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
 
@@ -499,7 +512,6 @@ public partial class StageSettings : Node3D
 	/// <summary> Reference to active area's WorldEnvironment node. </summary>
 	[Export]
 	public WorldEnvironment Environment { get; private set; }
-	public float StartingSaturation { get; private set; }
 }
 
 public struct SpawnData(Node parent, Transform3D transform)

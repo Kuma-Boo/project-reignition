@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://ctt8k8ju64i3l"]
+[gd_scene load_steps=29 format=3 uid="uid://ctt8k8ju64i3l"]
 
 [ext_resource type="PackedScene" uid="uid://ci1q4ubgknkjc" path="res://object/enemy/flower/data/model/FlowerMajin.gltf" id="1_g4mq2"]
 [ext_resource type="Script" path="res://object/enemy/flower/data/FlowerMajin.cs" id="2_14l8s"]
@@ -34,6 +34,9 @@ animation = &"attack"
 fadein_time = 0.2
 fadeout_time = 0.2
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qywhx"]
+animation = &"boop"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sbp8h"]
 animation = &"defeat"
 
@@ -50,6 +53,18 @@ input_1/reset = true
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_278i4"]
 animation = &"hide"
 
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_tgmbm"]
+input_0/name = "stagger"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "boop"
+input_1/auto_advance = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_g2vvp"]
+fadein_time = 0.04
+fadeout_time = 0.2
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_h3v7l"]
 animation = &"passive"
 
@@ -58,9 +73,6 @@ animation = &"show"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jjxgh"]
 animation = &"stagger"
-
-[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_g2vvp"]
-fadeout_time = 0.1
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_swlia"]
 xfade_time = 0.1
@@ -78,37 +90,41 @@ input_3/auto_advance = true
 input_3/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_efgxh"]
-graph_offset = Vector2(-1101.01, -3.77692)
+graph_offset = Vector2(-861.162, -34.9173)
 nodes/aggressive_anim/node = SubResource("AnimationNodeAnimation_4gv11")
 nodes/aggressive_anim/position = Vector2(-820, 180)
 nodes/attack_anim/node = SubResource("AnimationNodeAnimation_k515p")
-nodes/attack_anim/position = Vector2(-460, 320)
+nodes/attack_anim/position = Vector2(-560, 280)
 nodes/attack_trigger/node = SubResource("AnimationNodeOneShot_6uh1d")
 nodes/attack_trigger/position = Vector2(-300, 20)
+nodes/boop_anim/node = SubResource("AnimationNodeAnimation_qywhx")
+nodes/boop_anim/position = Vector2(-360, 400)
 nodes/defeat_anim/node = SubResource("AnimationNodeAnimation_sbp8h")
-nodes/defeat_anim/position = Vector2(-80, -120)
+nodes/defeat_anim/position = Vector2(0, -140)
 nodes/defeat_transition/node = SubResource("AnimationNodeTransition_xxd37")
-nodes/defeat_transition/position = Vector2(120, -60)
+nodes/defeat_transition/position = Vector2(200, -80)
 nodes/hide_anim/node = SubResource("AnimationNodeAnimation_278i4")
 nodes/hide_anim/position = Vector2(-720, 320)
-nodes/output/position = Vector2(340, 20)
+nodes/hit_transition/node = SubResource("AnimationNodeTransition_tgmbm")
+nodes/hit_transition/position = Vector2(-200, 240)
+nodes/hit_trigger/node = SubResource("AnimationNodeOneShot_g2vvp")
+nodes/hit_trigger/position = Vector2(0, 0)
+nodes/output/position = Vector2(420, 0)
 nodes/passive_anim/node = SubResource("AnimationNodeAnimation_h3v7l")
 nodes/passive_anim/position = Vector2(-760, -40)
 nodes/show_anim/node = SubResource("AnimationNodeAnimation_qkjx6")
 nodes/show_anim/position = Vector2(-800, 60)
 nodes/stagger_anim/node = SubResource("AnimationNodeAnimation_jjxgh")
-nodes/stagger_anim/position = Vector2(-240, 260)
-nodes/stagger_trigger/node = SubResource("AnimationNodeOneShot_g2vvp")
-nodes/stagger_trigger/position = Vector2(-80, 20)
+nodes/stagger_anim/position = Vector2(-360, 260)
 nodes/state_transition/node = SubResource("AnimationNodeTransition_swlia")
 nodes/state_transition/position = Vector2(-560, 60)
-node_connections = [&"attack_trigger", 0, &"state_transition", &"attack_trigger", 1, &"attack_anim", &"defeat_transition", 0, &"defeat_anim", &"defeat_transition", 1, &"stagger_trigger", &"output", 0, &"defeat_transition", &"stagger_trigger", 0, &"attack_trigger", &"stagger_trigger", 1, &"stagger_anim", &"state_transition", 0, &"passive_anim", &"state_transition", 1, &"show_anim", &"state_transition", 2, &"aggressive_anim", &"state_transition", 3, &"hide_anim"]
+node_connections = [&"attack_trigger", 0, &"state_transition", &"attack_trigger", 1, &"attack_anim", &"defeat_transition", 0, &"defeat_anim", &"defeat_transition", 1, &"hit_trigger", &"hit_transition", 0, &"stagger_anim", &"hit_transition", 1, &"boop_anim", &"hit_trigger", 0, &"attack_trigger", &"hit_trigger", 1, &"hit_transition", &"output", 0, &"defeat_transition", &"state_transition", 0, &"passive_anim", &"state_transition", 1, &"show_anim", &"state_transition", 2, &"aggressive_anim", &"state_transition", 3, &"hide_anim"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_1avlv"]
 height = 15.0
 radius = 30.0
 
-[node name="FlowerMajin" type="StaticBody3D" node_paths=PackedStringArray("root", "collider", "hurtbox", "rangeCollider", "animationTree")]
+[node name="FlowerMajin" type="StaticBody3D"]
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("2_14l8s")
@@ -120,8 +136,8 @@ seed = ExtResource("3_xwrdv")
 pearlAmount = 25
 maxHealth = 3
 root = NodePath("FlowerMajin")
-collider = NodePath("CollisionShape3D")
 hurtbox = NodePath("HeadAttachment/Hitbox")
+collider = NodePath("CollisionShape3D")
 rangeCollider = NodePath("Range/CollisionShape3D")
 animationTree = NodePath("AnimationTree")
 
@@ -172,7 +188,6 @@ disabled = true
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 shape = SubResource("CapsuleShape3D_iip0l")
-disabled = true
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 active = false
@@ -185,12 +200,15 @@ parameters/attack_trigger/request = 0
 parameters/defeat_transition/current_state = "disabled"
 parameters/defeat_transition/transition_request = ""
 parameters/defeat_transition/current_index = 1
-parameters/stagger_trigger/active = false
-parameters/stagger_trigger/internal_active = false
-parameters/stagger_trigger/request = 0
-parameters/state_transition/current_state = "aggressive"
+parameters/hit_transition/current_state = "stagger"
+parameters/hit_transition/transition_request = ""
+parameters/hit_transition/current_index = 0
+parameters/hit_trigger/active = false
+parameters/hit_trigger/internal_active = false
+parameters/hit_trigger/request = 0
+parameters/state_transition/current_state = "passive"
 parameters/state_transition/transition_request = ""
-parameters/state_transition/current_index = 2
+parameters/state_transition/current_index = 0
 
 [node name="Range" type="Area3D" parent="."]
 collision_layer = 0

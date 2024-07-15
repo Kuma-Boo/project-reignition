@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://7kcasi6v1odv"]
+[gd_scene load_steps=33 format=3 uid="uid://7kcasi6v1odv"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_fxxlg"]
 [ext_resource type="PackedScene" uid="uid://ctpgc4qaiar68" path="res://area/1 sand oasis/act 3/environment/collision/Collision.tscn" id="1_wbafh"]
@@ -14,9 +14,10 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="7_77hua"]
 [ext_resource type="PackedScene" uid="uid://dj37itfdjb74j" path="res://area/1 sand oasis/act 3/environment/02Descent.tscn" id="7_dg1ex"]
 [ext_resource type="Curve3D" uid="uid://27uwgglqp1g6" path="res://area/1 sand oasis/act 3/environment/path/MainPath.tres" id="8_5ae3c"]
-[ext_resource type="PackedScene" uid="uid://bom1n0hvfixo1" path="res://area/1 sand oasis/data/BGM.tscn" id="10_f773a"]
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="12_pipgr"]
 [ext_resource type="PackedScene" uid="uid://semhlskb8slv" path="res://area/1 sand oasis/act 3/environment/model/LightBlocker.gltf" id="14_5tb48"]
+[ext_resource type="AudioStream" uid="uid://ds4hdcdcfcwmj" path="res://sound/ost/bonus disc/Sand Oasis Act 3.mp3" id="16_7drhp"]
+[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="17_5dd51"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kh3tl"]
 size = Vector3(15, 20, 60)
@@ -731,7 +732,13 @@ next/demo1 = &"demo2"
 next/demo2 = &"demo3"
 next/demo3 = &"demo1"
 
-[node name="BGM" parent="." instance=ExtResource("10_f773a")]
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("16_7drhp")
+bus = &"BGM"
+script = ExtResource("17_5dd51")
+loopStartPosition = 5.33
+loopEndPosition = 90.67
+isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_i6k4x")

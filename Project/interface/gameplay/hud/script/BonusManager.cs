@@ -57,7 +57,7 @@ public partial class BonusManager : VBoxContainer
 
 	private int ringChain;
 	/// <summary> Increases the current ring chain. </summary>
-	private void AddRingChain()
+	public void AddRingChain()
 	{
 		ringChain++;
 
@@ -99,7 +99,7 @@ public partial class BonusManager : VBoxContainer
 	/// <summary> Checks whether the enemy chain should end. </summary>
 	public void UpdateEnemyChain()
 	{
-		if (!Character.IsOnGround) return; // Chain is never counted when the player is in the air
+		if (Character.JustLandedOnGround || !Character.IsOnGround) return; // Chain is never counted when the player is in the air
 		if (Character.MovementState != CharacterController.MovementStates.Normal) return; // Chains only end during normal movement
 		if (Character.Skills.IsSpeedBreakActive)
 		{
@@ -121,7 +121,20 @@ public partial class BonusManager : VBoxContainer
 	}
 
 	/// <summary> Called when the level is completed. Forces all bonuses to be counted. </summary>
-	private void OnLevelCompleted() => FinishRingChain();
+	private void OnLevelCompleted()
+	{
+		FinishRingChain();
+		FinishEnemyChain();
+		while (bonusQueue.Count != 0)
+			PlayBonus(); // Count all bonuses immediately
+	}
+
+	public void CancelBonuses()
+	{
+		ringChain = 0;
+		enemyChain = 0;
+		enemyChainTimer = 0;
+	}
 }
 
 public enum BonusType
@@ -156,7 +169,7 @@ public readonly struct BonusData(BonusType type, int amount = 0)
 				// 10 rings -> 100 pts
 				return 100;
 			case BonusType.Enemy:
-				return Mathf.Clamp(Amount, 2, 10) * 50; // +50 pts per enemy up to 10 (500 pts)
+				return Mathf.Clamp(Amount, 2, 10) * 200; // +200 pts per enemy up to 10 (2000 pts)
 			case BonusType.Drift:
 				return 500;
 			case BonusType.Grindstep:
@@ -175,7 +188,6 @@ public readonly struct BonusData(BonusType type, int amount = 0)
 			case BonusType.Ring:
 				return "bonus_ring";
 			case BonusType.Enemy:
-				return "bonus_enemy";
 			case BonusType.Boss:
 				return "bonus_enemy";
 			case BonusType.Drift:

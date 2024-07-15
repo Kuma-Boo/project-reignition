@@ -21,6 +21,12 @@ public partial class LevelDataResource : Resource
 		Chain, // Chain rings together
 	}
 
+	public enum CompletionAnimationType
+	{
+		None, // Sonic just stands there
+		ThumbsUp, // Thumbs up variation is determined by character's speed...
+	}
+
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
 	{
@@ -53,10 +59,11 @@ public partial class LevelDataResource : Resource
 		properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Time", Variant.Type.Int));
 
 		if (!SkipScore)
-			properties.Add(ExtensionMethods.CreateProperty("Ranking/Score Requirement", Variant.Type.Int, PropertyHint.Range, "0,99999999,100"));
+			properties.Add(ExtensionMethods.CreateProperty("Ranking/Score Requirement", Variant.Type.Int, PropertyHint.Range, "0,999999,100"));
 
 		properties.Add(ExtensionMethods.CreateProperty("Completion/Delay", Variant.Type.Float, PropertyHint.Range, "0,5,.1"));
 		properties.Add(ExtensionMethods.CreateProperty("Completion/Lockout", Variant.Type.Object)); //, PropertyHint.ResourceType, "LockoutResource"));
+		properties.Add(ExtensionMethods.CreateProperty("Completion/Animation", Variant.Type.Int, PropertyHint.Enum, CompletionAnimation.EnumToString()));
 		properties.Add(ExtensionMethods.CreateProperty("Completion/Unlock Stage", Variant.Type.Array, PropertyHint.ArrayType,
 		$"{Variant.Type.Object:D}/{PropertyHint.ResourceType:D}:LevelDataResource"));
 		properties.Add(ExtensionMethods.CreateProperty("Completion/Unlock World", Variant.Type.Int, PropertyHint.Enum,
@@ -110,6 +117,8 @@ public partial class LevelDataResource : Resource
 				return CompletionDelay;
 			case "Completion/Lockout":
 				return CompletionLockout;
+			case "Completion/Animation":
+				return (int)CompletionAnimation;
 			case "Completion/Unlock Stage":
 				return UnlockStage;
 			case "Completion/Unlock World":
@@ -186,6 +195,9 @@ public partial class LevelDataResource : Resource
 			case "Completion/Lockout":
 				CompletionLockout = (LockoutResource)value;
 				break;
+			case "Completion/Animation":
+				CompletionAnimation = (CompletionAnimationType)(int)value;
+				break;
 			case "Completion/Unlock Stage":
 				UnlockStage = (Array<LevelDataResource>)value;
 				break;
@@ -242,6 +254,8 @@ public partial class LevelDataResource : Resource
 	public float CompletionDelay { get; private set; }
 	/// <summary> Control lockout to apply when the level is completed. Leave null to use Runtime.Instance.StopLockout. </summary>
 	public LockoutResource CompletionLockout { get; private set; }
+	/// <summary> Should Sonic give a thumbs up when the level is completed? </summary>
+	public CompletionAnimationType CompletionAnimation { get; private set; }
 	/// <summary> List of stages to unlock when the level is completed. </summary>
 	public Array<LevelDataResource> UnlockStage { get; private set; }
 	/// <summary> World to unlock when the level is completed. </summary>

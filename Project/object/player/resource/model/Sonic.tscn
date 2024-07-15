@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterAnimator.cs" id="2_3qp24"]
 [ext_resource type="PackedScene" uid="uid://gp7nom61rmtj" path="res://object/player/resource/component/Effect.tscn" id="3_5mek6"]
 [ext_resource type="PackedScene" uid="uid://clet3u3mrcb8g" path="res://object/player/resource/effect/countdown/CountdownBoostParticle.tscn" id="3_hb6te"]
-[ext_resource type="Material" uid="uid://db4kropnhyudk" path="res://effect/particle/material/Ember Blue.tres" id="4_h35vj"]
+[ext_resource type="Material" uid="uid://db4kropnhyudk" path="res://effect/particle/material/Ember Blue Billboard.tres" id="4_1bbht"]
 [ext_resource type="PackedScene" uid="uid://c2bl1sk5cfyq3" path="res://object/player/resource/effect/countdown/CountdownFlameParticle.tscn" id="4_js45q"]
 [ext_resource type="AnimationLibrary" uid="uid://dhcxjlduawy8d" path="res://object/player/resource/model/animation/ActionLibrary.gltf" id="5_21j6r"]
 [ext_resource type="AnimationLibrary" uid="uid://dck4cudd7a66a" path="res://object/player/resource/model/animation/BalanceLibrary.gltf" id="5_a0jad"]
@@ -20,10 +20,9 @@
 [ext_resource type="AudioStream" uid="uid://c5did7u4f8gq2" path="res://sound/sfx/player/flame countdown 1.wav" id="12_3lyoq"]
 
 [sub_resource type="Curve" id="Curve_skwgn"]
-min_value = 1.0
 max_value = 2.0
-_data = [Vector2(0, 1.2), 0.0, 0.0, 0, 0, Vector2(0.5, 1.7), 1.5, 1.5, 0, 0, Vector2(0.8, 2), 0.0, 0.0, 0, 0, Vector2(1, 1.4), -6.5, 0.0, 0, 0]
-point_count = 4
+_data = [Vector2(0, 0.4), 0.0, 6.66444, 0, 0, Vector2(0.5, 2), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Curve" id="Curve_6pc5r"]
 _data = [Vector2(0, 0), 0.0, 5.05237, 0, 0, Vector2(0.621993, 1), 0.0, 0.0, 0, 0, Vector2(0.99999, 0), -6.37551, 0.0, 0, 0]
@@ -51,7 +50,7 @@ color = Color(0, 0.686275, 1, 0.196078)
 alpha_curve = SubResource("CurveTexture_csox3")
 
 [sub_resource type="QuadMesh" id="QuadMesh_yuhe8"]
-material = ExtResource("4_h35vj")
+material = ExtResource("4_1bbht")
 
 [sub_resource type="QuadMesh" id="QuadMesh_qfnk1"]
 material = ExtResource("7_hfxq8")
@@ -503,7 +502,7 @@ process_material = SubResource("ParticleProcessMaterial_ny081")
 draw_pass_1 = SubResource("QuadMesh_vcbic")
 
 [node name="RFoot" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="5"]
-transform = Transform3D(1, -6.92779e-14, -5.1853e-13, 5.12881e-13, 9.54606e-08, 0.999999, -1.77636e-14, -0.999998, 1.13156e-07, -0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, -1.02496e-12, -6.143e-13, 6.16757e-13, 2.03494e-07, 0.999999, -9.71667e-13, -0.999998, 2.21189e-07, -0.0397276, 0.155469, 0.00205613)
 bone_name = "r_foot"
 bone_idx = 58
 
@@ -511,7 +510,7 @@ bone_idx = 58
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, -0.085, -0.15)
 
 [node name="LFoot" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="6"]
-transform = Transform3D(1, -3.55271e-15, 6.16018e-12, -6.22079e-12, 5.9139e-08, 1, 1.19016e-13, -1, 6.37956e-08, 0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, 1.06581e-14, 6.15422e-12, -6.2165e-12, 1.07381e-06, 1, 1.33227e-13, -1, 1.07894e-06, 0.0397276, 0.155469, 0.00205613)
 bone_name = "l_foot"
 bone_idx = 3
 
@@ -575,11 +574,12 @@ parameters/air_tree/stomp_trigger/internal_active = false
 parameters/air_tree/stomp_trigger/request = 0
 parameters/balance_tree/balance_speed/scale = 1.0
 parameters/balance_tree/balance_state/balance_left_blend/blend_position = 0
-parameters/balance_tree/balance_state/balance_right_blend/blend_position = 0
+parameters/balance_tree/balance_state/balance_right_blend/blend_position = 0.000741243
+parameters/balance_tree/crouch_add/add_amount = 0.0
+parameters/balance_tree/direction_transition/current_state = "right"
+parameters/balance_tree/direction_transition/transition_request = ""
+parameters/balance_tree/direction_transition/current_index = 0
 parameters/balance_tree/grindstep_speed/scale = 1.2
-parameters/balance_tree/grindstep_transition/current_state = "pose-01"
-parameters/balance_tree/grindstep_transition/transition_request = "pose-01"
-parameters/balance_tree/grindstep_transition/current_index = 0
 parameters/balance_tree/grindstep_trigger/active = false
 parameters/balance_tree/grindstep_trigger/internal_active = false
 parameters/balance_tree/grindstep_trigger/request = 0

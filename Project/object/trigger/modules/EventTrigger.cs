@@ -271,12 +271,13 @@ public partial class EventTrigger : StageTriggerModule
 		Character.Animator.SnapRotation(Character.MovementAngle);
 		Character.Animator.CancelOneshot(characterFadeoutTime);
 		Character.Animator.DisabledSpeedSmoothing = true;
+		Character.Animator.ResetState(0);
 		Character.ResetMovementState();
 
 		if (characterExitLockout != null)
 			Character.AddLockoutData(characterExitLockout);
 
-		Character.MoveSpeed = normalizeExitMoveSpeed ? Character.GroundSettings.speed * characterExitMoveSpeed : characterExitMoveSpeed;
+		Character.MoveSpeed = normalizeExitMoveSpeed ? Character.GroundSettings.Speed * characterExitMoveSpeed : characterExitMoveSpeed;
 		Character.VerticalSpeed = characterExitVerticalSpeed;
 
 		// Re-enable break skills

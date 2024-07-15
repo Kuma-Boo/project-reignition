@@ -80,12 +80,12 @@ public partial class ObjectGenerator : Node3D
 
 		if (shape == SpawnShape.Ring)
 		{
-			properties.Add(ExtensionMethods.CreateProperty("Ring Size", Variant.Type.Float, PropertyHint.Range, "0,12"));
+			properties.Add(ExtensionMethods.CreateProperty("Ring Size", Variant.Type.Float, PropertyHint.Range, "0,12,.1"));
 			properties.Add(ExtensionMethods.CreateProperty("Ring Ratio", Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
 		}
 		else if (shape != SpawnShape.Launcher)
 		{
-			properties.Add(ExtensionMethods.CreateProperty("Spacing", Variant.Type.Float, PropertyHint.Range, "0,12"));
+			properties.Add(ExtensionMethods.CreateProperty("Spacing", Variant.Type.Float, PropertyHint.Range, "0,12,.1"));
 			properties.Add(ExtensionMethods.CreateProperty("Horizontal Offset", Variant.Type.Object, PropertyHint.ResourceType, "Curve"));
 			properties.Add(ExtensionMethods.CreateProperty("Vertical Offset", Variant.Type.Object, PropertyHint.ResourceType, "Curve"));
 		}
@@ -332,7 +332,7 @@ public partial class ObjectGenerator : Node3D
 
 	private void SpawnNode(Vector3 pos, bool globalPosition = default)
 	{
-		Node3D obj = source.Instantiate<Node3D>();
+		Node3D obj = source.Instantiate<Node3D>(PackedScene.GenEditState.Instance);
 		obj.Name = "Child" + currentChildCount.ToString("00"); //Set name
 		currentChildCount++;
 		AddChild(obj);

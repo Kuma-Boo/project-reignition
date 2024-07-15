@@ -1,7 +1,8 @@
-[gd_scene load_steps=18 format=3 uid="uid://cp0tqv3rfejma"]
+[gd_scene load_steps=19 format=3 uid="uid://cp0tqv3rfejma"]
 
 [ext_resource type="Resource" uid="uid://cebx3pfwr3320" path="res://resource/level data/sand oasis/Boss.tres" id="2_0b1r8"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_ks0kr"]
+[ext_resource type="Resource" uid="uid://dfnoufphu8gfl" path="res://area/1 sand oasis/boss/data/BossCamera.tres" id="3_vu0v2"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_gkkbo"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="8_atfm6"]
 [ext_resource type="PackedScene" uid="uid://dr0pf7vprim86" path="res://area/1 sand oasis/boss/data/SandScorpion.tscn" id="8_sawvf"]
@@ -51,6 +52,7 @@ point_count = 1
 
 [node name="Static" parent="." instance=ExtResource("9_qrt26")]
 Data = ExtResource("2_0b1r8")
+InitialCameraSettings = ExtResource("3_vu0v2")
 
 [node name="BossAct" type="Node3D" parent="."]
 
@@ -66,7 +68,7 @@ bossPathFollower = NodePath("../../Static/Path/MainPath/BossPathFollower")
 [node name="ItemCycle" parent="BossAct" instance=ExtResource("8_wt7kt")]
 transform = Transform3D(-0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, -0.642788, 158, 9, -175)
 
-[node name="ItemCycle" type="Node3D" parent="BossAct/ItemCycle" node_paths=PackedStringArray("checkpointTrigger")]
+[node name="ItemCycle" type="Node3D" parent="BossAct/ItemCycle"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 script = ExtResource("9_dh0s2")
 checkpointTrigger = NodePath("../Checkpoint")

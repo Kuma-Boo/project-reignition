@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://rh85bh20fk6r"]
+[gd_scene load_steps=53 format=3 uid="uid://rh85bh20fk6r"]
 
 [ext_resource type="Script" path="res://object/enemy/majin/data/Majin.cs" id="1"]
 [ext_resource type="Script" path="res://object/enemy/EnemyHurtbox.cs" id="2_onhwc"]
@@ -27,12 +27,9 @@
 [ext_resource type="Material" uid="uid://c5pcrpavpyreh" path="res://object/enemy/majin/data/particle/material/Majin Defeat Process Material.tres" id="16_ck7oa"]
 [ext_resource type="Material" uid="uid://do5esuoehqh56" path="res://object/enemy/majin/data/particle/material/Majin Flash Process Material.tres" id="24_rwypk"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qrrup"]
-radius = 0.4
-height = 1.4
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vs3xy"]
-radius = 0.8
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mlr0h"]
+radius = 0.6
+height = 1.5
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_xbynq"]
 height = 0.5
@@ -182,7 +179,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Hitbox/SpinCollisionShape3D:disabled")
+tracks/7/path = NodePath("ChestAttachment/Hitbox/SpinCollisionShape3D:disabled")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -250,6 +247,24 @@ tracks/12/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_1j3bl"]
+resource_name = "defeat"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/StrikeSFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_o85fj"]
@@ -811,7 +826,7 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Hitbox/SpinCollisionShape3D:disabled")
+tracks/0/path = NodePath("ChestAttachment/Hitbox/SpinCollisionShape3D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -828,24 +843,6 @@ tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("FX/StaggerSFX")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_1j3bl"]
-resource_name = "strike"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FX/StrikeSFX")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -956,6 +953,7 @@ tracks/6/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stb46"]
 _data = {
 "RESET": SubResource("Animation_ojgnd"),
+"defeat": SubResource("Animation_1j3bl"),
 "despawn": SubResource("Animation_o85fj"),
 "explode": SubResource("Animation_xx2t8"),
 "fire-end": SubResource("Animation_thps5"),
@@ -964,60 +962,58 @@ _data = {
 "spawn": SubResource("Animation_aucka"),
 "spin": SubResource("Animation_1nwld"),
 "stagger": SubResource("Animation_13cad"),
-"strike": SubResource("Animation_1j3bl"),
 "travel": SubResource("Animation_y1q6p")
 }
 
-[node name="Majin" type="StaticBody3D" node_paths=PackedStringArray("fireRoot", "root", "collider", "hurtbox", "rangeCollider", "animationTree", "animationPlayer") groups=["enemy", "wall"]]
-collision_layer = 8
-collision_mask = 8
+[node name="Majin" type="Node3D"]
 script = ExtResource("1")
 "Spawn Settings/Spawn Travel Time" = 0.0
 "Spawn Interval Settings/Enable Spawn Interval" = false
 "Rotation Settings/Track Player" = true
 "Attack Settings/Attack Type" = 0
 "Defeat Settings/Enable Enemy Launching" = false
-fireRoot = NodePath("FX/FireFX")
+flameRoot = NodePath("FX/FireFX")
+hitboxAttachment = NodePath("ChestAttachment")
 pearlAmount = 15
 damagePlayer = true
 root = NodePath("Root")
-collider = NodePath("CollisionShape3D")
-hurtbox = NodePath("Hitbox")
+hurtbox = NodePath("ChestAttachment/Hitbox")
+collider = NodePath("ChestAttachment/EnvironmentCollider/CollisionShape3D")
 rangeCollider = NodePath("Range/CollisionShape3D")
 animationTree = NodePath("AnimationTree")
 animationPlayer = NodePath("AnimationPlayer")
 
 [node name="Root" type="Node3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_qrrup")
+[node name="ChestAttachment" type="BoneAttachment3D" parent="."]
+transform = Transform3D(1, -4.37115e-08, 4.37115e-08, 4.37115e-08, 1, 9.55347e-16, -4.37115e-08, 9.55346e-16, 1, -3.75753e-20, 1.085, 0)
+use_external_skeleton = true
+external_skeleton = NodePath("")
 
-[node name="Hitbox" type="Area3D" parent="." node_paths=PackedStringArray("enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+[node name="Hitbox" type="Area3D" parent="ChestAttachment" node_paths=PackedStringArray("enemy")]
+transform = Transform3D(1, -4.17596e-23, 0, -4.17596e-23, 1, 0, 0, 0, 1, 0, 0.15, 0)
 collision_layer = 12
 collision_mask = 2
 script = ExtResource("2_onhwc")
-enemy = NodePath("..")
+enemy = NodePath("../..")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
-shape = SubResource("CapsuleShape3D_vs3xy")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ChestAttachment/Hitbox"]
+transform = Transform3D(1, -4.17596e-23, 0, -4.17596e-23, 1, 0, 0, 0, 1, 0, 0.1, 0)
+shape = SubResource("CapsuleShape3D_mlr0h")
 
-[node name="SpinCollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+[node name="SpinCollisionShape3D" type="CollisionShape3D" parent="ChestAttachment/Hitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("CylinderShape3D_xbynq")
 disabled = true
 
-[node name="CrateHitbox" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+[node name="EnvironmentCollider" type="StaticBody3D" parent="ChestAttachment" groups=["enemy", "wall"]]
+transform = Transform3D(1, -4.17596e-23, 0, -4.17597e-23, 1, 0, 0, 0, 1, 0, 0.15, -1.05879e-22)
 collision_layer = 8
 collision_mask = 0
-monitoring = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CrateHitbox"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
-shape = SubResource("CapsuleShape3D_qrrup")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ChestAttachment/EnvironmentCollider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+shape = SubResource("CapsuleShape3D_mlr0h")
 
 [node name="Range" type="Area3D" parent="."]
 visible = false
@@ -1252,12 +1248,18 @@ tree_root = ExtResource("9_osrkc")
 parameters/defeat_transition/current_state = "disabled"
 parameters/defeat_transition/transition_request = ""
 parameters/defeat_transition/current_index = 1
+parameters/despawn_trigger/active = false
+parameters/despawn_trigger/internal_active = false
+parameters/despawn_trigger/request = 0
 parameters/fidget_transition/current_state = ""
 parameters/fidget_transition/transition_request = ""
 parameters/fidget_transition/current_index = -1
 parameters/fidget_trigger/active = false
 parameters/fidget_trigger/internal_active = false
 parameters/fidget_trigger/request = 0
+parameters/hit_transition/current_state = "stagger"
+parameters/hit_transition/transition_request = ""
+parameters/hit_transition/current_index = 0
 parameters/hit_trigger/active = false
 parameters/hit_trigger/internal_active = false
 parameters/hit_trigger/request = 0
@@ -1269,12 +1271,12 @@ parameters/move_transition/current_state = "disabled"
 parameters/move_transition/transition_request = ""
 parameters/move_transition/current_index = 1
 parameters/seek/seek_request = -1.0
+parameters/spawn_trigger/active = false
+parameters/spawn_trigger/internal_active = false
+parameters/spawn_trigger/request = 0
 parameters/state_transition/current_state = ""
 parameters/state_transition/transition_request = ""
 parameters/state_transition/current_index = 0
-parameters/teleport_trigger/active = false
-parameters/teleport_trigger/internal_active = false
-parameters/teleport_trigger/request = 0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -1282,8 +1284,8 @@ libraries = {
 }
 next/launch-end = &"explode"
 
-[connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
-[connection signal="area_exited" from="Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="ChestAttachment/Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="ChestAttachment/Hitbox" to="." method="OnExited"]
 [connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
 [connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
 [connection signal="area_entered" from="FX/FireFX/FlameHitbox" to="FX/FireFX/FlameHitbox" method="OnEntered"]
