@@ -117,6 +117,7 @@ namespace Project.Gameplay
 			}
 			else if (ActionState == ActionStates.JumpDash) // Stop trail VFX
 			{
+				ChangeHitbox("RESET");
 				Effect.StopSpinFX();
 				Effect.StopTrailFX();
 				Animator.ResetState();
