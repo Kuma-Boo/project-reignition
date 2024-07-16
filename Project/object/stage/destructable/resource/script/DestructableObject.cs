@@ -240,7 +240,7 @@ public partial class DestructableObject : Node3D
 	{
 		if (isShattered) return;
 
-		if (!a.IsInGroup("player") && !a.IsInGroup("stackable"))
+		if (!a.IsInGroup("player") && !a.IsInGroup("player detection") && !a.IsInGroup("stackable"))
 		{
 			if (FlagSetting.HasFlag(ShatterFlags.ObjectCollision))
 				Shatter();
@@ -251,13 +251,11 @@ public partial class DestructableObject : Node3D
 		isInteractingWithPlayer = true;
 	}
 
-
 	public void OnExited(Area3D a)
 	{
 		if (a.IsInGroup("player"))
 			isInteractingWithPlayer = false;
 	}
-
 
 	private void ProcessPlayerCollision()
 	{
@@ -272,7 +270,7 @@ public partial class DestructableObject : Node3D
 		{
 			Shatter();
 		}
-		else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Character.Skills.IsAttacking)
+		else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Character.AttackState != CharacterController.AttackStates.None)
 		{
 			Shatter();
 		}
@@ -285,7 +283,6 @@ public partial class DestructableObject : Node3D
 			Character.StartKnockback();
 		}
 	}
-
 
 	public void OnBodyEntered(Node3D b)
 	{

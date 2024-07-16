@@ -1,18 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://d3ppk3bftcyht"]
+[gd_scene load_steps=4 format=3 uid="uid://d3ppk3bftcyht"]
 
 [ext_resource type="PackedScene" uid="uid://b3085r3lh6m4g" path="res://area/2 dino jungle/act 1/environment/collision/Collision.gltf" id="1_7uosp"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_77j5w"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ovbg5"]
+size = Vector3(10, 20, 5)
+
 [node name="Collision" instance=ExtResource("1_7uosp")]
 
-[node name="StaticBody3D" parent="Wall" index="0" groups=["level wall", "wall"]]
+[node name="StaticBody3D" parent="Wall" index="0" groups=["wall"]]
 
 [node name="WallDinoRightOneWay" parent="." index="1"]
 script = ExtResource("2_77j5w")
 
+[node name="StaticBody3D" parent="WallDinoRightOneWay" index="0" groups=["level wall", "wall"]]
+
 [node name="WallDinoLeftOneWay" parent="." index="2"]
 script = ExtResource("2_77j5w")
 startEnabled = true
+
+[node name="StaticBody3D" parent="WallDinoLeftOneWay" index="0" groups=["wall"]]
 
 [node name="StaticBody3D" parent="FloorPavement" index="0" groups=["floor", "pavement"]]
 
@@ -27,11 +34,25 @@ script = ExtResource("2_77j5w")
 
 [node name="StaticBody3D" parent="FloorDinoRight" index="0" groups=["floor"]]
 
+[node name="LDinoPathWall" type="StaticBody3D" parent="FloorDinoRight" index="1"]
+transform = Transform3D(9.92095e-10, 0, -1, 0, 1, 0, 1, 0, 9.92095e-10, -465.996, -277, -1119.62)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FloorDinoRight/LDinoPathWall" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ovbg5")
+
 [node name="FloorDinoLeft" parent="." index="8"]
 script = ExtResource("2_77j5w")
 startEnabled = true
 
 [node name="StaticBody3D" parent="FloorDinoLeft" index="0" groups=["floor"]]
+
+[node name="RDinoPathWall" type="StaticBody3D" parent="FloorDinoLeft" index="1"]
+transform = Transform3D(1, 0, 4.47035e-08, 0, 1, 0, -4.47035e-08, 0, 1, -473.496, -277, -1127.12)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FloorDinoLeft/RDinoPathWall" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ovbg5")
 
 [node name="CaveOneWay" parent="." index="9"]
 script = ExtResource("2_77j5w")
@@ -51,6 +72,8 @@ script = ExtResource("2_77j5w")
 [node name="WallDinoOneWay" parent="." index="13"]
 script = ExtResource("2_77j5w")
 startEnabled = true
+
+[node name="StaticBody3D" parent="WallDinoOneWay" index="0" groups=["wall"]]
 
 [node name="StaticBody3D" parent="Ceiling" index="0" groups=["ceiling"]]
 

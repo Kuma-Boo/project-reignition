@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://interface/menu/options/script/Options.cs" id="1_yejdm"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="2_x1aix"]
-[ext_resource type="PackedScene" uid="uid://c4kdj2x0c8h4m" path="res://object/player/Sonic.tscn" id="3_4o0co"]
+[ext_resource type="PackedScene" uid="uid://c4kdj2x0c8h4m" path="res://object/player/Player.tscn" id="3_4o0co"]
 [ext_resource type="Resource" uid="uid://dt1prgn1x2xgg" path="res://interface/menu/options/resource/OptionCamera.tres" id="3_jnp5r"]
 [ext_resource type="Resource" uid="uid://bmc5r7uecj7vi" path="res://resource/level data/Options.tres" id="4_3wn11"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="4_g52h3"]
@@ -1361,7 +1361,7 @@ videoLabels = [NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/Displa
 audioLabels = [NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MainLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MusicLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/SFXLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/VoiceLabel")]
 languageLabels = [NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/UseSubtitleLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/TextLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/VoiceLabel")]
 controlLabels = [NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/ControllerLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/DeadzoneLabel")]
-controlMappingOptions = [NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveUp"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveDown"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveRight"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Jump"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Action"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/SpeedBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/TimeBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Pause")]
+controlMappingOptions = [NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveUp"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveDown"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveRight"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Jump"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Action"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Brake"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/SpeedBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/TimeBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Pause")]
 bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
 isProcessing = true
@@ -1515,7 +1515,7 @@ emitting = false
 amount = 128
 lifetime = 2.0
 preprocess = 5.0
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-4, 0, -4, 8, 8, 8)
 local_coords = true
@@ -2264,6 +2264,10 @@ InputId = &"button_jump"
 layout_mode = 2
 InputId = &"button_action"
 
+[node name="Brake" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+InputId = &"button_brake"
+
 [node name="SpeedBreak" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
 InputId = &"button_speedbreak"
@@ -2342,8 +2346,8 @@ script = ExtResource("19_agawd")
 loopStartPosition = 30.264
 loopEndPosition = 95.0
 
-[connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="." method="LockPlayer"]
 [connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="." method="EnableProcessing"]
+[connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="." method="LockPlayer"]
 
 [editable path="ControlBook/Collision"]
 [editable path="ControlBook/ControlBook"]

@@ -18,7 +18,7 @@ public partial class LockoutResource : Resource
 			ExtensionMethods.CreateProperty("General/Lockout Length", Variant.Type.Float, PropertyHint.Range, "0,20,.1"),
 			ExtensionMethods.CreateProperty("General/Recenter Player", Variant.Type.Bool),
 			ExtensionMethods.CreateProperty("General/Invincible", Variant.Type.Bool),
-			ExtensionMethods.CreateProperty("General/Priority", Variant.Type.Int, PropertyHint.Range, "0, 32"),
+			ExtensionMethods.CreateProperty("General/Priority", Variant.Type.Int, PropertyHint.Range, $"-1, {MaxPriority}"),
 			ExtensionMethods.CreateProperty("Actions/Reset Actions", Variant.Type.Bool),
 			ExtensionMethods.CreateProperty("Actions/Disable Actions", Variant.Type.Bool),
 			ExtensionMethods.CreateProperty("Actions/Reset Flags", Variant.Type.Int, PropertyHint.Flags, resetFlags.EnumToString()),
@@ -151,6 +151,8 @@ public partial class LockoutResource : Resource
 	public float length;
 	/// <summary> Lockouts with lower priorities will be unable to override higher priority lockouts. Priorities of -1 will be removed when overridden. </summary>
 	public int priority;
+	/// <summary> The maximum priority allowed. </summary>
+	public const int MaxPriority = 32;
 	/// <summary> Collided enemies will be destroyed if this is enabled. Otherwise, the player can still take damage.</summary>
 	public bool invincible;
 
@@ -197,15 +199,15 @@ public partial class LockoutResource : Resource
 		OnLand = 2,
 	}
 
-	public float ApplySpeed(float currentSpeed, MovementResource movementSettings)
+	public float ApplySpeed(float currentSpeed, MovementSetting movementSettings)
 	{
 		// Override speed to the correct value
-		float targetSpd = movementSettings.speed * speedRatio;
+		float targetSpd = movementSettings.Speed * speedRatio;
 		float delta = Core.PhysicsManager.physicsDelta;
 		if (currentSpeed <= targetSpd) // Accelerate using traction
-			delta *= movementSettings.traction * tractionMultiplier;
+			delta *= movementSettings.Traction * tractionMultiplier;
 		else // Slow down with friction
-			delta *= movementSettings.friction * frictionMultiplier;
+			delta *= movementSettings.Friction * frictionMultiplier;
 
 		if (tractionMultiplier < 0) // Snap speed (i.e. Dash Panels)
 			return targetSpd;

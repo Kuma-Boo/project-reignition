@@ -24,19 +24,19 @@ public partial class SaveManager : Node
 		if (OS.IsDebugBuild()) // Editor build, use custom configuration
 		{
 			// Default debug settings for testing from the editor.
-			Config.isMasterMuted = AudioServer.IsBusMute((int)AudioBuses.Master);
-			Config.isBgmMuted = AudioServer.IsBusMute((int)AudioBuses.Bgm);
-			Config.isSfxMuted = AudioServer.IsBusMute((int)AudioBuses.Sfx);
-			Config.isVoiceMuted = AudioServer.IsBusMute((int)AudioBuses.Voice);
+			Config.isMasterMuted = AudioServer.IsBusMute((int)SoundManager.AudioBuses.Master);
+			Config.isBgmMuted = AudioServer.IsBusMute((int)SoundManager.AudioBuses.Bgm);
+			Config.isSfxMuted = AudioServer.IsBusMute((int)SoundManager.AudioBuses.Sfx);
+			Config.isVoiceMuted = AudioServer.IsBusMute((int)SoundManager.AudioBuses.Voice);
 
 			Config.masterVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Master)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)SoundManager.AudioBuses.Master)) * 100);
 			Config.bgmVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Bgm)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)SoundManager.AudioBuses.Bgm)) * 100);
 			Config.sfxVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Sfx)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)SoundManager.AudioBuses.Sfx)) * 100);
 			Config.voiceVolume =
-				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)AudioBuses.Voice)) * 100);
+				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)SoundManager.AudioBuses.Voice)) * 100);
 			ApplyConfig();
 		}
 	}
@@ -84,15 +84,6 @@ public partial class SaveManager : Node
 		Count
 	}
 
-	private enum AudioBuses
-	{
-		Master,
-		Bgm,
-		Sfx,
-		Voice,
-		Count
-	}
-
 	public static readonly Vector2I[] WindowSizes =
 	[
 		new(640, 360), // 360p
@@ -134,7 +125,7 @@ public partial class SaveManager : Node
 
 		// Controls
 		public float deadZone = .5f;
-		public ControllerType controllerType = ControllerType.PlayStation;
+		public ControllerType controllerType = ControllerType.Automatic;
 		public Dictionary inputConfiguration = new();
 
 		// Language
@@ -377,10 +368,10 @@ public partial class SaveManager : Node
 				break;
 		}
 
-		SetAudioBusVolume((int)AudioBuses.Master, Config.masterVolume, Config.isMasterMuted);
-		SetAudioBusVolume((int)AudioBuses.Bgm, Config.bgmVolume, Config.isBgmMuted);
-		SetAudioBusVolume((int)AudioBuses.Sfx, Config.sfxVolume, Config.isSfxMuted);
-		SetAudioBusVolume((int)AudioBuses.Voice, Config.voiceVolume, Config.isVoiceMuted);
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.Master, Config.masterVolume, Config.isMasterMuted);
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.Bgm, Config.bgmVolume, Config.isBgmMuted);
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.Sfx, Config.sfxVolume, Config.isSfxMuted);
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.Voice, Config.voiceVolume, Config.isVoiceMuted);
 
 		Instance.EmitSignal(SignalName.ConfigApplied);
 	}
@@ -461,21 +452,11 @@ public partial class SaveManager : Node
 		}
 	}
 
-	/// <summary> Changes the volume of an audio bus channel. </summary>
-	public static void SetAudioBusVolume(int bus, int volumePercentage, bool isMuted = default)
-	{
-		if (volumePercentage == 0)
-			isMuted = true;
-
-		AudioServer.SetBusMute(bus, isMuted); // Mute or unmute
-		AudioServer.SetBusVolumeDb(bus, Mathf.LinearToDb(volumePercentage * .01f));
-	}
-
 	#endregion
 
 	#region Game data
 	/// <summary> Longest amount of playtime that can be displayed on the file select. (99:59:59 in seconds) </summary>
-	public const int MAX_PLAY_TIME = 359999;
+	public const int MaxPlayTime = 359999;
 
 	public enum WorldEnum
 	{
@@ -500,7 +481,7 @@ public partial class SaveManager : Node
 				return GameSaveSlots[ActiveSaveSlotIndex];
 
 			// Default to save slot 1 when running the game from the editor
-			return OS.IsDebugBuild() ? GameSaveSlots[0] : null;
+			return GameData.DefaultData;
 		}
 	}
 
@@ -545,12 +526,21 @@ public partial class SaveManager : Node
 			}
 		}
 
-		// Debug game data
-		if (OS.IsDebugBuild()) // For testing
+		// Set up default game data/menu game data
+		GameData.DefaultData = new()
 		{
-			ActiveSaveSlotIndex = 0;
-			GameSaveSlots[ActiveSaveSlotIndex] = GameData.DefaultData();
-			ActiveGameData.UnlockAllWorlds();
+			level = 1,
+			lastPlayedWorld = WorldEnum.LostPrologue,
+		};
+
+		// TODO Replace this with the tutorial key
+		GameData.DefaultData.UnlockStage("so_a1_main");
+		GameData.DefaultData.UnlockWorld(WorldEnum.LostPrologue);
+		GameData.DefaultData.UnlockWorld(WorldEnum.SandOasis);
+
+		if (DebugManager.Instance.UseDemoSave || OS.IsDebugBuild()) // Unlock all worlds in the demo
+		{
+			GameData.DefaultData.UnlockAllWorlds();
 			ActiveSkillRing.LoadFromActiveData();
 		}
 	}
@@ -559,7 +549,7 @@ public partial class SaveManager : Node
 	public static void ResetSaveData(int index)
 	{
 		GameSaveSlots[index].Free();
-		GameSaveSlots[index] = GameData.DefaultData();
+		GameSaveSlots[index] = GameData.DefaultData;
 	}
 
 	public partial class GameData : GodotObject
@@ -571,7 +561,7 @@ public partial class SaveManager : Node
 		public Array<WorldEnum> worldRingsCollected = [];
 		/// <summary> List of worlds unlocked. </summary>
 		public Array<WorldEnum> worldsUnlocked = [];
-		/// <summary> List of worlds unlocked. </summary>
+		/// <summary> List of stages unlocked. </summary>
 		public Array<string> stagesUnlocked = [];
 
 		/// <summary> Player level, from 1 -> 99 </summary>
@@ -816,19 +806,26 @@ public partial class SaveManager : Node
 			// WorldEnum data
 			if (dictionary.TryGetValue(nameof(lastPlayedWorld), out Variant var))
 				lastPlayedWorld = (WorldEnum)(int)var;
-			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var))
+			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var) && var.VariantType == Variant.Type.Array)
 			{
 				Array<int> worlds = (Array<int>)var;
 				for (int i = 0; i < worlds.Count; i++)
 					worldsUnlocked.Add((WorldEnum)worlds[i]);
 			}
-			if (dictionary.TryGetValue(nameof(worldRingsCollected), out var))
+			else
+			{
+				// Update save data from old format (unlock everything to prevent softlocks)
+				for (int i = 0; i < (int)WorldEnum.Max; i++)
+					worldsUnlocked.Add((WorldEnum)i);
+			}
+
+			if (dictionary.TryGetValue(nameof(worldRingsCollected), out var) && var.VariantType == Variant.Type.Array)
 			{
 				Array<int> worlds = (Array<int>)var;
 				for (int i = 0; i < worlds.Count; i++)
 					worldRingsCollected.Add((WorldEnum)worlds[i]);
 			}
-			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var))
+			if (dictionary.TryGetValue(nameof(stagesUnlocked), out var) && var.VariantType == Variant.Type.Array)
 				stagesUnlocked = (Array<string>)var;
 
 			if (dictionary.TryGetValue(nameof(levelData), out var))
@@ -873,23 +870,7 @@ public partial class SaveManager : Node
 		}
 
 		/// <summary> Creates a new GameData object that contains default values. </summary>
-		public static GameData DefaultData()
-		{
-			GameData data = new()
-			{
-				level = 1,
-				lastPlayedWorld = WorldEnum.LostPrologue,
-			};
-
-			// TODO Replace this with the tutorial key
-			data.UnlockStage("so_a1_main");
-			data.UnlockWorld(WorldEnum.SandOasis);
-
-			if (DebugManager.Instance.UseDemoSave) // Unlock all worlds in the demo
-				data.UnlockAllWorlds();
-
-			return data;
-		}
+		public static GameData DefaultData;
 	}
 	#endregion
 }

@@ -1,5 +1,4 @@
 shader_type canvas_item;
-render_mode blend_add;
 
 global uniform float time;
 
@@ -8,29 +7,40 @@ uniform sampler2D screen_texture : hint_screen_texture;
 uniform int iterations;
 uniform float rotation_step : hint_range(0.0, 0.1, 0.01) = .1;
 uniform float rotation_speed : hint_range(0.0, 5.0, 0.1) = 2.0;
+uniform float glow_strength : hint_range(0.0, 2.0, 0.1) = 1.0;
 uniform float opacity : hint_range(0.0, 1.0, 0.1) = .1;
+uniform float brightness : hint_range(0.0, 2.0, 0.1) = 1.0;
+uniform float contrast : hint_range(0.0, 2.0, 0.1) = 1.0;
+uniform float saturation : hint_range(0.0, 2.0, 0.1) = 1.0;
 
-vec2 rotate(vec2 uv, float angle)
+vec2 rotate(vec2 uv, vec2 pivot, float angle)
 {
-	mat2 rotation = mat2(vec2(sin(angle), -cos(angle)), vec2(cos(angle), sin(angle)));
-	
-	uv -= vec2(0.5);
+	mat2 rotation = mat2(vec2(cos(angle), -sin(angle)), vec2(sin(angle), cos(angle)));
+	uv -= pivot;
 	uv = uv * rotation;
-	uv += vec2(0.5);
+	uv += pivot;
 	return uv;
 }
 
-
 void fragment()
 {
-	float layer_factor = (opacity * .5) / float(iterations);
-	vec2 screen_uv = FRAGCOORD.xy / (1.0 / SCREEN_PIXEL_SIZE).xy;
-	vec3 col = texture(screen_texture, screen_uv).rgb;
-	vec2 uv = UV * vec2(1.0, .6) + vec2(0.0, 0.15);
+	vec3 screen_col = texture(screen_texture, SCREEN_UV).rgb;
+	vec3 break_col = screen_col.rgb;
+	
+	break_col = mix(vec3(0.0), break_col, brightness);
+	break_col = mix(vec3(0.5), break_col, contrast);
+	float average = (break_col.r + break_col.g + break_col.b) / 3.0f;
+	break_col = mix(vec3(average), break_col, saturation);
+	
+	float layer_factor = (glow_strength  * (length(vec2(0.5) - UV) * 1.5)) / float(iterations);
 	for (int i = 0; i < iterations; i++)
 	{
 		float rotation_amount = float(i) * rotation_step + time * rotation_speed;
-		COLOR.a += (1.0 - texture(lut, rotate(uv, rotation_amount)).a) * layer_factor;
-		COLOR.a += (1.0 - texture(lut, rotate(uv, -rotation_amount)).a) * layer_factor;
+		vec2 uv_right = rotate(UV, vec2(0.5), rotation_amount);
+		vec2 uv_left = rotate(UV, vec2(0.5), -rotation_amount);
+		break_col.rgb += texture(lut, uv_right).rgb * layer_factor;
+		break_col.rgb += texture(lut, uv_left).rgb * layer_factor;
 	}
+	
+	COLOR.rgb = mix(screen_col, break_col, opacity);
 }

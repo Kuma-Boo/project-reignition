@@ -1,8 +1,82 @@
-[gd_scene load_steps=4 format=3 uid="uid://cgq7hgxh4d6eq"]
+[gd_scene load_steps=14 format=3 uid="uid://cgq7hgxh4d6eq"]
 
 [ext_resource type="PackedScene" uid="uid://dpw86wjdw8trm" path="res://area/2 dino jungle/act 1/environment/model/05Crossing.gltf" id="1_6qv6k"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_os26k"]
 [ext_resource type="Texture2D" uid="uid://7pafelkxhvjj" path="res://area/2 dino jungle/data/texture/blob_shadow.png" id="3_iayqa"]
+[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="3_5tgt3"]
+[ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://area/1 sand oasis/data/particle/material/Water Dust.tres" id="4_4e3lo"]
+
+[sub_resource type="Curve" id="Curve_adhss"]
+_data = [Vector2(0, 0), 0.0, 8.26422, 0, 0, Vector2(0.315451, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_4ccka"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_adhss")
+
+[sub_resource type="Curve" id="Curve_rk8op"]
+max_value = 3.0
+_data = [Vector2(0, 1), 0.0, -0.156841, 0, 0, Vector2(0.9, 3), 2.22222, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_mqtbg"]
+width = 64
+curve = SubResource("Curve_rk8op")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wiymy"]
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_box_extents = Vector3(5, 1, 5)
+angle_max = 360.0
+direction = Vector3(0, -0.2, 1)
+spread = 20.0
+initial_velocity_min = 20.0
+initial_velocity_max = 30.0
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_mqtbg")
+alpha_curve = SubResource("CurveTexture_4ccka")
+
+[sub_resource type="QuadMesh" id="QuadMesh_05qu3"]
+material = ExtResource("3_5tgt3")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ic73j"]
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_box_extents = Vector3(5, 1, 5)
+angle_max = 360.0
+direction = Vector3(0, 1, 0.5)
+spread = 50.0
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+gravity = Vector3(0, -20, 0)
+damping_min = 15.0
+damping_max = 30.0
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_mqtbg")
+alpha_curve = SubResource("CurveTexture_4ccka")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_aq6yt"]
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_box_extents = Vector3(8, 1, 1)
+angle_max = 360.0
+direction = Vector3(0, 1, 0.5)
+spread = 50.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, -20, 0)
+damping_min = 15.0
+damping_max = 30.0
+scale_min = 8.0
+scale_max = 15.0
+scale_curve = SubResource("CurveTexture_mqtbg")
+alpha_curve = SubResource("CurveTexture_4ccka")
+
+[sub_resource type="QuadMesh" id="QuadMesh_wfyat"]
+material = ExtResource("4_4e3lo")
 
 [node name="05Crossing" instance=ExtResource("1_6qv6k")]
 script = ExtResource("2_os26k")
@@ -460,3 +534,89 @@ lower_fade = 0.0642741
 distance_fade_enabled = true
 distance_fade_length = 40.0
 cull_mask = 6
+
+[node name="RiverVFX1" type="Node3D" parent="." index="33"]
+transform = Transform3D(1.31134e-07, 0, -1, 1.03184e-12, 1, -2.0659e-12, 1, -1.03184e-12, 1.31134e-07, -324.329, -206.9, -915.41)
+
+[node name="SplatterTop" type="GPUParticles3D" parent="RiverVFX1" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 8.1531e-20, 0, 0, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+amount = 48
+preprocess = 2.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-8, -15, -4, 16, 20, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_wiymy")
+draw_pass_1 = SubResource("QuadMesh_05qu3")
+
+[node name="SplatterBottom" type="GPUParticles3D" parent="RiverVFX1" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 8.1531e-20, 0, 0, 1, 0, -73, 24)
+layers = 32
+cast_shadow = 0
+amount = 32
+preprocess = 2.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-8, -15, -4, 16, 20, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_ic73j")
+draw_pass_1 = SubResource("QuadMesh_05qu3")
+
+[node name="DustBottom" type="GPUParticles3D" parent="RiverVFX1" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 8.1531e-20, 0, 0, 1, 0, -74, 24)
+layers = 32
+cast_shadow = 0
+amount = 32
+lifetime = 0.5
+preprocess = 2.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-8, -15, -4, 16, 20, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_aq6yt")
+draw_pass_1 = SubResource("QuadMesh_wfyat")
+
+[node name="RiverVFX2" type="Node3D" parent="." index="34"]
+transform = Transform3D(-0.866025, 0, -0.5, 5.1592e-13, 1, -2.9595e-12, 0.5, -1.03184e-12, -0.866025, -297.539, -208.9, -951.462)
+
+[node name="SplatterTop" type="GPUParticles3D" parent="RiverVFX2" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 8.1531e-20, 0, 0, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+amount = 48
+preprocess = 2.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-8, -15, -4, 16, 20, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_wiymy")
+draw_pass_1 = SubResource("QuadMesh_05qu3")
+
+[node name="SplatterBottom" type="GPUParticles3D" parent="RiverVFX2" index="1"]
+transform = Transform3D(1, 0, 0, -1.0842e-19, 1, 2.1684e-19, 0, 0, 1, 0, -71, 24)
+layers = 32
+cast_shadow = 0
+amount = 32
+preprocess = 2.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-8, -15, -4, 16, 20, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_ic73j")
+draw_pass_1 = SubResource("QuadMesh_05qu3")
+
+[node name="DustBottom" type="GPUParticles3D" parent="RiverVFX2" index="2"]
+transform = Transform3D(1, 0, 0, -1.0842e-19, 1, 2.1684e-19, 0, 0, 1, 0, -72, 24)
+layers = 32
+cast_shadow = 0
+amount = 32
+lifetime = 0.5
+preprocess = 2.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-8, -15, -4, 16, 20, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_aq6yt")
+draw_pass_1 = SubResource("QuadMesh_wfyat")

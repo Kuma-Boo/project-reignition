@@ -16,6 +16,12 @@ public partial class CharacterEffect : Node3D
 		SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechEnd, new Callable(this, MethodName.UnmuteGameplayVoice));
 	}
 
+	public override void _PhysicsProcess(double _)
+	{
+		if (isFadingRailSFX)
+			isFadingRailSFX = SoundManager.FadeAudioPlayer(grindrailSfx);
+	}
+
 	public readonly StringName JumpSfx = "jump";
 	public readonly StringName JumpDashSfx = "jump dash";
 	public readonly StringName SlideSfx = "slide";
@@ -24,10 +30,9 @@ public partial class CharacterEffect : Node3D
 	private readonly StringName StompSfx = "stomp";
 	private readonly StringName WindSfx = "wind";
 
-
 	#region Actions
 	// Actions (Jumping, sliding, etc)
-	[ExportGroup("Actions")]
+	[ExportCategory("Actions")]
 	[Export]
 	private SFXLibraryResource actionSFXLibrary;
 	[Export]
@@ -42,10 +47,6 @@ public partial class CharacterEffect : Node3D
 	public Trail3D trailFX;
 	[Export]
 	public MeshInstance3D spinFX;
-	[Export]
-	private AnimationPlayer timeBreakAnimator;
-	[Export]
-	private AnimationPlayer speedBreakAnimator;
 	/// <summary> VFX for drifting dust. </summary>
 	[Export]
 	private GpuParticles3D dustParticle;
@@ -57,12 +58,6 @@ public partial class CharacterEffect : Node3D
 
 	public void StartSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 0.0f, .2f);
 	public void StopSpinFX() => CreateTween().TweenProperty(spinFX, "transparency", 1.0f, .2f);
-
-	public void StartTimeBreak() => timeBreakAnimator.Play("start");
-	public void StopTimeBreak() => timeBreakAnimator.Play("stop");
-
-	public void StartSpeedBreak() => speedBreakAnimator.Play("start");
-	public void StopSpeedBreak() => speedBreakAnimator.Play("stop");
 
 	[Export]
 	private GpuParticles3D windParticle;
@@ -78,14 +73,63 @@ public partial class CharacterEffect : Node3D
 	{
 		stompFX.SetEmitting(true);
 		PlayActionSFX(StompSfx);
-
 	}
 	public void StopStompFX() => stompFX.SetEmitting(false);
+
+	[Export]
+	private GpuParticles3D chargeFX;
+	[Export]
+	private GpuParticles3D fullChargeFX;
+	public void StartChargeFX()
+	{
+		chargeFX.Emitting = true;
+		chargeFX.Visible = true;
+	}
+
+	public void StopChargeFX()
+	{
+		chargeFX.Emitting = false;
+		fullChargeFX.Emitting = false;
+	}
+
+	[Export]
+	private GpuParticles3D grindrailVfx;
+	[Export]
+	private GpuParticles3D grindrailBurstVfx;
+	[Export]
+	private AudioStreamPlayer grindrailSfx;
+	private bool isFadingRailSFX;
+	public void StartGrindFX()
+	{
+		grindrailVfx.Emitting = true;
+		isFadingRailSFX = false;
+		grindrailSfx.VolumeDb = 0f;
+		grindrailSfx.Play();
+	}
+
+	public void FullGrindChargeFX()
+	{
+		chargeFX.Emitting = false;
+		chargeFX.Visible = false;
+		fullChargeFX.Emitting = true;
+		grindrailBurstVfx.Restart();
+	}
+
+	public void UpdateGrindFX(float speedRatio)
+	{
+		grindrailSfx.VolumeDb = -9f * Mathf.SmoothStep(0, 1, 1 - speedRatio); // Set sfx volume based on speed
+	}
+
+	public void StopGrindFX()
+	{
+		isFadingRailSFX = true; // Start fading sound effect
+		grindrailVfx.Emitting = false;
+		StopChargeFX();
+	}
 	#endregion
 
-
 	#region Ground
-	[ExportGroup("Ground Interactions")]
+	[ExportCategory("Ground Interactions")]
 	// SFX for different ground materials (footsteps, landing, etc)
 	[Export]
 	private SFXLibraryResource materialSFXLibrary;
@@ -119,8 +163,7 @@ public partial class CharacterEffect : Node3D
 		}
 	}
 
-
-	[ExportSubgroup("Landing VFX")]
+	[ExportGroup("Landing VFX")]
 	/// <summary> Sand landing VFX. </summary>
 	[Export]
 	private GpuParticles3D landingSandParticle;
@@ -130,7 +173,6 @@ public partial class CharacterEffect : Node3D
 		landingChannel.Play();
 		landingSandParticle.Restart();
 	}
-
 
 	/// <summary>
 	/// Plays water splash sfx and vfx.
@@ -143,7 +185,6 @@ public partial class CharacterEffect : Node3D
 		landingWaterParticle.RestartGroup();
 	}
 
-
 	/// <summary> VFX for landing with a dust cloud. </summary>
 	[Export]
 	private GpuParticles3D landingDustParticle;
@@ -154,8 +195,7 @@ public partial class CharacterEffect : Node3D
 		landingDustParticle.Restart();
 	}
 
-
-	[ExportSubgroup("Step VFX")]
+	[ExportGroup("Step VFX")]
 	[Export]
 	/// <summary> Emitters responsible for dust when moving on the ground. </summary>
 	private GroupGpuParticles3D[] stepEmitters;
@@ -190,7 +230,6 @@ public partial class CharacterEffect : Node3D
 		}
 	}
 
-
 	/// <summary> Plays FXs that occur the moment a foot strikes the ground (i.e. SFX, Footprints, etc.). </summary>
 	public void PlayFootstepFX(bool isRightFoot)
 	{
@@ -211,14 +250,12 @@ public partial class CharacterEffect : Node3D
 			case 6: // Water
 				CreateSplashFootFX(isRightFoot); // Create a ripple at the player's foot
 				break;
-			default:
-				break;
 		}
 	}
 
 	[Export]
 	private PackedScene footprintDecal;
-	private readonly List<Node3D> footprintDecalList = new();
+	private readonly List<Node3D> footprintDecalList = [];
 	private void CreateSandFootFX(Transform3D spawnTransform)
 	{
 		Node3D activeFootprintDecal = null;
@@ -253,10 +290,9 @@ public partial class CharacterEffect : Node3D
 	{
 		waterStep.GlobalPosition = isRightFoot ? rightFoot.GlobalPosition : leftFoot.GlobalPosition;
 
-		uint flags = (uint)GpuParticles3D.EmitFlags.Position + (uint)GpuParticles3D.EmitFlags.Velocity;
+		const uint flags = (uint)GpuParticles3D.EmitFlags.Position + (uint)GpuParticles3D.EmitFlags.Velocity;
 		waterStep.EmitParticle(waterStep.GlobalTransform, CharacterController.instance.Velocity * .2f, Colors.White, Colors.White, flags);
 	}
-
 
 	public void UpdateGroundType(Node collision)
 	{
@@ -277,8 +313,7 @@ public partial class CharacterEffect : Node3D
 	}
 	#endregion
 
-
-	[ExportGroup("Voices")]
+	[ExportCategory("Voices")]
 	[Export]
 	public SFXLibraryResource voiceLibrary;
 	[Export]
@@ -289,13 +324,15 @@ public partial class CharacterEffect : Node3D
 		voiceChannel.Play();
 	}
 
-	private void MuteGameplayVoice() //Kills channel
+	/// <summary> Stops any currently active voice clip and mutes the voice channel. </summary>
+	private void MuteGameplayVoice()
 	{
 		voiceChannel.Stop();
 		voiceChannel.VolumeDb = -80f;
 	}
 
-	private void UnmuteGameplayVoice() //Stops any currently active voice clip and resets channel volume
+	/// <summary> Stops any currently active voice clip and resets channel volume. </summary>
+	private void UnmuteGameplayVoice()
 	{
 		voiceChannel.Stop();
 		voiceChannel.VolumeDb = 0f;

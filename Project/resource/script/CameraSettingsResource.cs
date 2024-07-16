@@ -24,6 +24,7 @@ public partial class CameraSettingsResource : Resource
 	private const string PITCH_OVERRIDE_KEY = "Rotation/Pitch Override Mode";
 	private const string YAW_OVERRIDE_KEY = "Rotation/Yaw Override Mode";
 	private const string TILT_KEY = "Rotation/Follow Path Tilt";
+	private const string CONTROL_MODE_KEY = "Rotation/Control Mode";
 	private const string CONTROL_INFLUENCE_KEY = "Rotation/Control Influence";
 
 	private const string VIEW_OFFSET_KEY = "View/Offset";
@@ -76,6 +77,7 @@ public partial class CameraSettingsResource : Resource
 			properties.Add(ExtensionMethods.CreateProperty(PITCH_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, pitchOverrideMode.EnumToString()));
 			properties.Add(ExtensionMethods.CreateProperty(YAW_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, yawOverrideMode.EnumToString()));
 			properties.Add(ExtensionMethods.CreateProperty(TILT_KEY, Variant.Type.Bool));
+			properties.Add(ExtensionMethods.CreateProperty(CONTROL_MODE_KEY, Variant.Type.Int, PropertyHint.Enum, controlMode.EnumToString()));
 			properties.Add(ExtensionMethods.CreateProperty(CONTROL_INFLUENCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,3,.01"));
 		}
 
@@ -124,6 +126,8 @@ public partial class CameraSettingsResource : Resource
 				return (int)yawOverrideMode;
 			case TILT_KEY:
 				return followPathTilt;
+			case CONTROL_MODE_KEY:
+				return (int)controlMode;
 			case CONTROL_INFLUENCE_KEY:
 				return pathControlInfluence;
 
@@ -204,6 +208,9 @@ public partial class CameraSettingsResource : Resource
 			case TILT_KEY:
 				followPathTilt = (bool)value;
 				break;
+			case CONTROL_MODE_KEY:
+				controlMode = (ControlModeEnum)(int)value;
+				break;
 			case CONTROL_INFLUENCE_KEY:
 				pathControlInfluence = (float)value;
 				break;
@@ -256,6 +263,15 @@ public partial class CameraSettingsResource : Resource
 	public float yawAngle;
 	/// <summary> Should the camera tilt (Z rotation) with the path? </summary>
 	public bool followPathTilt;
+	/// <summary> Determines how inputs should be read (mostly for Autorun/Legacy skills). </summary>
+	public ControlModeEnum controlMode;
+	public enum ControlModeEnum
+	{
+		Normal, // Forward is forward and backwards is backwards
+		Reverse, // Invert forward and backwards
+		Sidescrolling // Alter inputs to be faced on IsFacingRight
+	}
+
 	/// <summary> How closely to follow the path. </summary>
 	public float pathControlInfluence;
 	/// <summary> How should pitch be applied? </summary>

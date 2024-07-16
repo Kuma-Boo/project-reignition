@@ -1,10 +1,9 @@
-[gd_scene load_steps=27 format=3 uid="uid://cexusptfk1osy"]
+[gd_scene load_steps=35 format=3 uid="uid://cexusptfk1osy"]
 
 [ext_resource type="Resource" uid="uid://bvgmr6otpd1o0" path="res://resource/level data/sand oasis/Act1Race.tres" id="2_6245g"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_jytk8"]
+[ext_resource type="Curve3D" path="res://area/1 sand oasis/act 1/environment/path/UhuPath.tres" id="4_5kxmd"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="4_f3m4h"]
-[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_ncewo"]
-[ext_resource type="Curve3D" uid="uid://dict5g5k6l4qt" path="res://area/1 sand oasis/act 1/environment/path/OasisPath.tres" id="4_pv4fg"]
 [ext_resource type="PackedScene" uid="uid://dc1ik7p6xlh0a" path="res://object/stage/genie/Uhu.tscn" id="5_l41di"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="5_nopxn"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="6_ckw71"]
@@ -16,6 +15,13 @@
 [ext_resource type="PackedScene" uid="uid://cbpudluma1oux" path="res://object/stage/destructable/Crate.tscn" id="12_v7tgu"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="13_7eemm"]
 [ext_resource type="PackedScene" uid="uid://tvjx2wghc06t" path="res://area/1 sand oasis/act 1/Static.tscn" id="15_cc3yv"]
+[ext_resource type="PackedScene" uid="uid://c7ngh7hqsl0lm" path="res://area/1 sand oasis/data/particle/FallingWaterSplatterParticle.tscn" id="20_56m3m"]
+[ext_resource type="AudioStream" uid="uid://y3tubvl50kyv" path="res://sound/sfx/stage/sand oasis/pillar fall.wav" id="20_fnrur"]
+[ext_resource type="AudioStream" uid="uid://20yid7bsdhcu" path="res://sound/sfx/stage/sand oasis/pillar impact.wav" id="21_74kwp"]
+[ext_resource type="PackedScene" uid="uid://bx40lvnpwhjmi" path="res://area/1 sand oasis/data/particle/FallingSandDustParticle.tscn" id="22_56jp1"]
+[ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="22_lleab"]
+[ext_resource type="AudioStream" uid="uid://djpvx5de1666k" path="res://sound/sfx/stage/sand oasis/pillar crate impact.wav" id="23_gg7b2"]
+[ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="23_x8plt"]
 
 [sub_resource type="Animation" id="Animation_h5pa1"]
 length = 0.001
@@ -29,7 +35,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [2.0]
+"values": [0.5]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -41,7 +47,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [-1.0]
+"values": [-2.0]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -53,15 +59,13 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [5.0]
+"values": [3.0]
 }
 
-[sub_resource type="Animation" id="Animation_3gp1j"]
-resource_name = "finished"
-
 [sub_resource type="Animation" id="Animation_hkjw2"]
-resource_name = "movement"
+resource_name = "race"
 length = 63.0
+step = 0.02
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -69,134 +73,1145 @@ tracks/0/path = NodePath("Uhu:v_offset")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 1.5, 1.7, 2, 8, 8.2, 8.48, 46, 46.5, 47, 49, 50, 51, 53.3, 53.6, 54, 54.5, 54.8, 55.2, 55.7, 56, 56.4, 59, 59.5, 59.7, 60.5, 61.5),
+"transitions": PackedFloat32Array(1, 0.5, 2, 1, 0.5, 2, 1, 0.5, 2, 2, 0.5, 2, 1, 0.5, 2, 1, 0.5, 2, 1, 0.5, 2, 1, 0.5, 2, 1, 2, 1),
 "update": 0,
-"values": [2.0]
+"values": [0.0, 0.0, 2.0, 0.0, 0.0, 2.0, 0.0, 0.0, 4.0, 0.0, 0.0, 5.0, 0.0, 0.0, 2.0, 0.0, 0.0, 2.0, 0.0, 0.0, 2.0, 0.0, 0.0, 6.0, 5.0, 5.0, 0.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/path = NodePath("Uhu:h_offset")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 14, 14.7, 15.2, 15.6, 17, 19, 24.6, 25.4, 25.9, 26.5, 27.2, 28.5, 29, 30, 34.3, 35.9, 37.3, 42, 43.5, 44.5, 44.8, 45.7, 46.2, 48.5),
+"transitions": PackedFloat32Array(1e-05, 1, 1e-05, 1, 1, 1, 1e-05, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, -1.0, -1.0, 0.0, 1.0, 0.0, 0.0, 1.5, 1.5, 0.5, -0.5, -0.4, -0.4, 0.0, 2.0, 2.0, -1.5, 0.0, -1.5, 1.0, 2.0, -1.0, 2.0, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Uhu:progress")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.5, 2, 4.5, 5, 5.5, 9, 9.8, 10.3, 12.5, 13, 13.5, 14.7, 15.2, 16.6, 19, 24, 25.4, 25.9, 27.2, 28.5, 29, 30, 30.2, 33, 42, 44.5, 45.1, 45.5, 47, 48.5, 49, 50, 51, 59, 59.5, 63),
+"transitions": PackedFloat32Array(1.5, 1.1, 1, 0.75, 1.2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.75, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [3.0, 15.0, 22.0, 60.0, 66.0, 70.0, 142.0, 164.4, 189.4, 240.0, 248.0, 268.0, 297.0, 317.0, 351.0, 404.0, 522.0, 550.0, 570.0, 605.0, 631.0, 651.0, 667.0, 668.0, 790.0, 1000.0, 1045.0, 1052.0, 1055.0, 1075.0, 1108.0, 1110.0, 1112.0, 1120.0, 1178.0, 1180.0, 1215.0]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Uhu")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(63),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"FinishRace"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sdxff"]
+_data = {
+"RESET": SubResource("Animation_h5pa1"),
+"race": SubResource("Animation_hkjw2")
+}
+
+[sub_resource type="Animation" id="Animation_qu8eg"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pillar1/SquarePillar1:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pillar1/SquarePillar1:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [-1.0]
+"values": [Vector3(0, 0, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Uhu:progress")
+tracks/2/path = NodePath("Pillar1/FallingSandDustParticle1:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 63),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [5.0, 1215.0]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_sdxff"]
-_data = {
-"RESET": SubResource("Animation_h5pa1"),
-"finished": SubResource("Animation_3gp1j"),
-"movement": SubResource("Animation_hkjw2")
-}
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_uxgup"]
-size = Vector3(2, 30, 28)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_3bv3v"]
-size = Vector3(2, 10, 2)
-
-[sub_resource type="Animation" id="102"]
-resource_name = "RESET"
-length = 0.001
-
-[sub_resource type="Animation" id="101"]
-resource_name = "event"
-length = 1.33333
-step = 0.0416667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SquarePillar1:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.08333),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(21.2658, 0.44693, -7.6972), Vector3(21.2523, 1.02649, -7.54251)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SquarePillar1:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1.08333),
-"transitions": PackedFloat32Array(2, 1),
-"update": 0,
-"values": [Vector3(0, -0.0872665, 0), Vector3(1.91986, -0.0872665, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SquarePillar2:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.166667, 1.16667),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector3(30.3087, 1.15955, -6.59003), Vector3(30.3087, 1.15955, -6.59003), Vector3(30.3087, 1.55347, -6.52057)]
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("SquarePillar2:rotation")
+tracks/3/path = NodePath("Pillar1/FallingWaterSplatterParticle1:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.166667, 1.16667),
-"transitions": PackedFloat32Array(1, 2, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(1.86925, 0, 0)]
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("SquarePillar3:position")
+tracks/4/path = NodePath("Pillar2/SquarePillar2:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.333333, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(39.4638, 1.49049, -4.87015), Vector3(39.4638, 1.49049, -4.87015), Vector3(39.4638, 2.66427, -4.62067)]
+"values": [Vector3(0, 0, 0)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("SquarePillar3:rotation")
+tracks/5/path = NodePath("Pillar2/SquarePillar2:rotation")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.333333, 1),
-"transitions": PackedFloat32Array(1, 2, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(1.78024, 0, 0)]
+"values": [Vector3(0, 0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Pillar2/FallingSandDustParticle2:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Pillar2/FallingWaterSplatterParticle2:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Pillar3/SquarePillar3:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Pillar3/SquarePillar3:rotation")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Pillar3/FallingSandDustParticle3:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Pillar3/FallingWaterSplatterParticle3:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Pillar4/SquarePillar4:position")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Pillar4/SquarePillar4:rotation")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Pillar4/FallingSandDustParticle4:visible")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Pillar4/FallingWaterSplatterParticle4:visible")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_8a7u8"]
+[sub_resource type="Animation" id="Animation_xwjem"]
+resource_name = "event"
+length = 2.0
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pillar1/SquarePillar1:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.16667),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.5, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pillar1/SquarePillar1:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.16667),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(1.88496, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pillar1/FallingSandDustParticle1:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.08333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pillar1/FallingWaterSplatterParticle1:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1.08333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Pillar1/FallingSandDustParticle1")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1.08333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Pillar1/SquarePillar1/ImpactSFX1")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(1.16667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Pillar1/SquarePillar1/FallingSFX1:playing")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Pillar1/SquarePillar1/FallingSFX1:volume_db")
+tracks/7/interp = 2
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.0833333, 1, 1.20833),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Pillar2/SquarePillar2:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.166667, 1.25),
+"transitions": PackedFloat32Array(1, 2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0.5, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Pillar2/SquarePillar2:rotation")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.166667, 1.25),
+"transitions": PackedFloat32Array(1, 2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(1.8326, 0, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Pillar2/FallingSandDustParticle2:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 1.16667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Pillar2/FallingWaterSplatterParticle2:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 1.16667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/12/type = "method"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Pillar2/FallingSandDustParticle2")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(1.16667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/13/type = "method"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Pillar2/SquarePillar2/ImpactSFX2")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(1.25),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Pillar2/SquarePillar2/FallingSFX2:playing")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 1.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Pillar2/SquarePillar2/FallingSFX2:volume_db")
+tracks/15/interp = 2
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0.166667, 0.25, 1.25, 1.45833),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Pillar3/SquarePillar3:position")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.336, 1.33333),
+"transitions": PackedFloat32Array(1, 2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0.5, 0)]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Pillar3/SquarePillar3:rotation")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0, 0.336, 1.33333),
+"transitions": PackedFloat32Array(1, 2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(1.74533, 0, 0)]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Pillar3/FallingSandDustParticle3:visible")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0, 1.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Pillar3/FallingWaterSplatterParticle3:visible")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0, 1.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/20/type = "method"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Pillar3/FallingSandDustParticle3")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(1.25),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/21/type = "method"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("Pillar3/SquarePillar3/ImpactSFX3")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(1.25),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("Pillar3/SquarePillar3/FallingSFX3:playing")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(0.25, 1.41667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("Pillar3/SquarePillar3/FallingSFX3:volume_db")
+tracks/23/interp = 2
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(0, 0.0833333, 1.41667, 1.625),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/24/type = "value"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("Pillar4/SquarePillar4:position")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.41667),
+"transitions": PackedFloat32Array(1, 2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0.5, 0)]
+}
+tracks/25/type = "value"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("Pillar4/SquarePillar4:rotation")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.41667),
+"transitions": PackedFloat32Array(1, 2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(1.88496, 0, 0)]
+}
+tracks/26/type = "value"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("Pillar4/FallingSandDustParticle4:visible")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(0.5, 1.33333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("Pillar4/FallingWaterSplatterParticle4:visible")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"times": PackedFloat32Array(0.5, 1.33333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/28/type = "method"
+tracks/28/imported = false
+tracks/28/enabled = true
+tracks/28/path = NodePath("Pillar4/FallingSandDustParticle4")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = {
+"times": PackedFloat32Array(1.33333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/29/type = "method"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("Pillar4/SquarePillar4/ImpactSFX4")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(1.33333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("Pillar4/SquarePillar4/FallingSFX4:playing")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0.25, 1.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("Pillar4/SquarePillar4/FallingSFX4:volume_db")
+tracks/31/interp = 2
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0.5, 0.583333, 1.25, 1.45833),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jopbp"]
 _data = {
-"RESET": SubResource("102"),
-"event": SubResource("101")
+"RESET": SubResource("Animation_qu8eg"),
+"event": SubResource("Animation_xwjem")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o0htl"]
+size = Vector3(2, 30, 28)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_af382"]
+size = Vector3(2, 10, 2)
+
+[sub_resource type="Animation" id="Animation_dg0ha"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pillar1/SquarePillar1:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pillar1/SquarePillar1:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pillar2/SquarePillar2:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pillar2/SquarePillar2:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Pillar3/SquarePillar3:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Pillar3/SquarePillar3:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Pillar1/FallingSandDustParticle1:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Pillar2/FallingSandDustParticle2:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Pillar3/FallingSandDustParticle3:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("../../PillarCrateGroup/Crate1")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Respawn"
+}]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("../../PillarCrateGroup/Crate2")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Respawn"
+}]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("../../PillarCrateGroup/Crate3")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Respawn"
+}]
+}
+tracks/12/type = "method"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("../../PillarCrateGroup/Crate4")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Respawn"
+}]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Pillar1/SquarePillar1/FallingSFX1:playing")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Pillar2/SquarePillar2/FallingSFX2:playing")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Pillar3/SquarePillar3/FallingSFX3:playing")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_wt2mc"]
+resource_name = "event"
+length = 1.66667
+step = 0.0416667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pillar1/SquarePillar1:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.16667),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.5, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pillar1/SquarePillar1:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.16667),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(1.88496, 0, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pillar1/FallingSandDustParticle1")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1.08333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pillar2/SquarePillar2:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.166667, 1.25),
+"transitions": PackedFloat32Array(1, 2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0.5, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Pillar2/SquarePillar2:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.166667, 1.25),
+"transitions": PackedFloat32Array(1, 2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(1.8326, 0, 0)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Pillar2/FallingSandDustParticle2")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(1.16667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Pillar3/SquarePillar3:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.336, 1.08333),
+"transitions": PackedFloat32Array(1, 2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0.5, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Pillar3/SquarePillar3:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.336, 1.08333),
+"transitions": PackedFloat32Array(1, 2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(1.74533, 0, 0)]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Pillar3/FallingSandDustParticle3")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Pillar1/FallingSandDustParticle1:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 1.08333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Pillar2/FallingSandDustParticle2:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 1.16667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Pillar3/FallingSandDustParticle3:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/12/type = "method"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Pillar1/SquarePillar1/ImpactSFX1")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(1.16667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/13/type = "method"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Pillar2/SquarePillar2/ImpactSFX2")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(1.25),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/14/type = "method"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Pillar3/SquarePillar3/ImpactSFX3")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Pillar1/SquarePillar1/FallingSFX1:playing")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Pillar1/SquarePillar1/FallingSFX1:volume_db")
+tracks/16/interp = 2
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.0833333, 1, 1.20833),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Pillar2/SquarePillar2/FallingSFX2:playing")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0, 1.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Pillar2/SquarePillar2/FallingSFX2:volume_db")
+tracks/18/interp = 2
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0.166667, 0.25, 1.25, 1.45833),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Pillar3/SquarePillar3/FallingSFX3:playing")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0, 1.16667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Pillar3/SquarePillar3/FallingSFX3:volume_db")
+tracks/20/interp = 2
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0, 0.0833333, 1.16667, 1.375),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_b43v8"]
+_data = {
+"RESET": SubResource("Animation_dg0ha"),
+"event": SubResource("Animation_wt2mc")
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_go0i7"]
@@ -216,29 +1231,25 @@ metadata/_edit_lock_ = true
 [node name="CharacterSpawn" parent="RaceAct/SpawnPosition" instance=ExtResource("2_jytk8")]
 
 [node name="Uhu" type="Node3D" parent="RaceAct"]
-visible = false
 
 [node name="UhuPath" type="Path3D" parent="RaceAct/Uhu"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.194, 75.003, 5.155)
-curve = ExtResource("4_pv4fg")
+curve = ExtResource("4_5kxmd")
 
-[node name="Uhu" parent="RaceAct/Uhu/UhuPath" instance=ExtResource("5_l41di")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999999, -1, 2, -5.00717)
-progress = 5.0
-h_offset = -1.0
-v_offset = 2.0
-rotation_mode = 0
+[node name="Uhu" parent="RaceAct/Uhu/UhuPath" node_paths=PackedStringArray("animator") instance=ExtResource("5_l41di")]
+transform = Transform3D(-0.999835, 0, -8.74104e-08, 0, 0.999841, 0, 8.74084e-08, 0, -0.999858, 2, 0.5, -2.99994)
+progress = 3.0
+h_offset = -2.0
+v_offset = 0.5
+animator = NodePath("../AnimationPlayer")
+maxProgress = 1215.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="RaceAct/Uhu/UhuPath"]
 libraries = {
 "": SubResource("AnimationLibrary_sdxff")
 }
-autoplay = "finished"
 
 [node name="Start" type="Node3D" parent="RaceAct"]
-script = ExtResource("4_ncewo")
-startEnabled = true
-saveVisibilityOnCheckpoint = true
 
 [node name="RingM1" type="Node3D" parent="RaceAct/Start"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 64.935, 76, -62.11)
@@ -625,7 +1636,7 @@ length = 0.4
 transform = Transform3D(0.822068, -0.392532, -0.412459, 0.314545, 0.916898, -0.245682, 0.474621, 0.0722307, 0.877221, -203.825, -45.276, -135.184)
 
 [node name="PearlRing1" type="Node3D" parent="RaceAct/Start/PearlRings"]
-transform = Transform3D(0.922487, 0.122313, -0.366147, -0.0107528, 0.956252, 0.292349, 0.385886, -0.265751, 0.883445, -2.87442, 2.26659, 13.6889)
+transform = Transform3D(0.922487, 0.122313, -0.366147, -0.0107528, 0.956252, 0.292349, 0.385886, -0.265751, 0.883445, -2.75212, 3.22285, 13.4231)
 script = ExtResource("4_f3m4h")
 Generate = false
 Source = null
@@ -667,7 +1678,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.247214, -0.760845, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.647214, -0.470228, 0)
 
 [node name="PearlRing2" type="Node3D" parent="RaceAct/Start/PearlRings"]
-transform = Transform3D(0.254195, 0.33781, 0.90624, 0.319477, 0.85509, -0.408354, -0.912864, 0.393325, 0.109437, -19.6311, 5.84105, -28.0171)
+transform = Transform3D(0.254195, 0.33781, 0.906239, 0.319477, 0.85509, -0.408354, -0.912864, 0.393325, 0.109437, -19.4029, 6.38605, -27.8724)
 script = ExtResource("4_f3m4h")
 Generate = false
 Source = null
@@ -752,9 +1763,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.703845, -0.511373, 0)
 
 [node name="Oasis" type="Node3D" parent="RaceAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -327, -44, -193)
-script = ExtResource("4_ncewo")
-startEnabled = true
-saveVisibilityOnCheckpoint = true
 
 [node name="DashPanelM1" parent="RaceAct/Oasis" instance=ExtResource("6_ckw71")]
 transform = Transform3D(0.883737, -0.0118025, -0.467835, -0.0455648, 0.992762, -0.111117, 0.46576, 0.119515, 0.876803, 64.3456, -4.28308, 50.9162)
@@ -768,27 +1776,191 @@ length = 0.4
 transform = Transform3D(-0.0506857, 0.0291905, -0.998288, 0.444802, 0.895621, 0.00360461, 0.894193, -0.443858, -0.0583793, 5.689, -4.47555, 77.3419)
 length = 0.4
 
-[node name="CircularPillarGroup" type="Node3D" parent="RaceAct/Oasis"]
-transform = Transform3D(0.953936, 0.235572, 0.185774, -0.290489, 0.880039, 0.375697, -0.074985, -0.412355, 0.907931, -33.3707, -3.31727, 67.6622)
+[node name="CircularPillarGroup1" type="Node3D" parent="RaceAct/Oasis"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.3708, -3.31728, 67.6622)
 
-[node name="CircularPillar1" parent="RaceAct/Oasis/CircularPillarGroup" instance=ExtResource("8_d855e")]
-transform = Transform3D(1, -5.58794e-09, 0, 7.45058e-09, 1, -2.98023e-08, 0, 0, 1, 0, -7.62939e-06, 0)
+[node name="CircularPillar1" parent="RaceAct/Oasis/CircularPillarGroup1" instance=ExtResource("8_d855e")]
+transform = Transform3D(0.953936, 0.235572, 0.185774, -0.290489, 0.880039, 0.375696, -0.074985, -0.412355, 0.907932, 0, 0, 0)
 
-[node name="CircularPillar2" parent="RaceAct/Oasis/CircularPillarGroup" instance=ExtResource("8_d855e")]
-transform = Transform3D(0.978465, 0.199112, 0.0544033, -0.205096, 0.967556, 0.147543, -0.0232591, -0.155525, 0.987558, -8.5694, 0.552658, -7.6505)
+[node name="CircularPillar2" parent="RaceAct/Oasis/CircularPillarGroup1" instance=ExtResource("8_d855e")]
+transform = Transform3D(0.880757, 0.388977, 0.270117, -0.473464, 0.735218, 0.485064, -0.00991543, -0.555114, 0.831715, -9.4657, 0.101414, -6.53143)
 
-[node name="CircularPillar3" parent="RaceAct/Oasis/CircularPillarGroup" instance=ExtResource("8_d855e")]
-transform = Transform3D(0.928034, 0.36661, 0.0659499, -0.370687, 0.926361, 0.0666843, -0.0366449, -0.0863329, 0.995592, -14.9546, 1.72015, -16.3301)
+[node name="CircularPillar3" parent="RaceAct/Oasis/CircularPillarGroup1" instance=ExtResource("8_d855e")]
+transform = Transform3D(0.791154, 0.551908, 0.263575, -0.60957, 0.676303, 0.413568, 0.049995, -0.487864, 0.871487, -17.4593, -0.0812988, -15.1469)
 
-[node name="FallingPillars" parent="RaceAct/Oasis" instance=ExtResource("9_jio4r")]
+[node name="CircularPillarGroup2" type="Node3D" parent="RaceAct/Oasis"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.9809, -7.56947, 32.0236)
+
+[node name="CircularPillar1" parent="RaceAct/Oasis/CircularPillarGroup2" instance=ExtResource("8_d855e")]
+transform = Transform3D(0.929881, 0.359611, 0.0774719, -0.367513, 0.917334, 0.153077, -0.0160199, -0.170815, 0.985172, -0.0316467, -0.29567, 0.0698395)
+
+[node name="CircularPillar2" parent="RaceAct/Oasis/CircularPillarGroup2" instance=ExtResource("8_d855e")]
+transform = Transform3D(0.922478, 0.377581, 0.0804193, -0.385252, 0.913763, 0.128899, -0.0248138, -0.14989, 0.988392, -5.51364, 0.0744324, -11.0434)
+
+[node name="CircularPillar3" parent="RaceAct/Oasis/CircularPillarGroup2" instance=ExtResource("8_d855e")]
+transform = Transform3D(0.923313, 0.380457, 0.0524141, -0.383433, 0.920936, 0.0696917, -0.0217549, -0.0844454, 0.996191, -8.84702, 0.146912, -23.3577)
+
+[node name="FallingPillarGroup1" parent="RaceAct/Oasis" instance=ExtResource("9_jio4r")]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -74.315, -3.6, -52.055)
+collision_layer = 0
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Event" type="Node3D" parent="RaceAct/Oasis/FallingPillarGroup1" node_paths=PackedStringArray("animator")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039978, 0, 54.61)
+script = ExtResource("10_k73yc")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
+
+[node name="Pillar1" type="Node3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event"]
+transform = Transform3D(0.256992, 0.47172, 0.843468, -0.00484295, 0.873398, -0.486984, -0.966402, 0.121066, 0.226741, -0.399963, 0.990498, -23.112)
+
+[node name="SquarePillar1" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar1" groups=["crusher"] instance=ExtResource("11_evogq")]
+
+[node name="FallingSFX1" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar1/SquarePillar1"]
+transform = Transform3D(0.999999, -2.38419e-07, -4.17233e-07, -7.45058e-09, 0.999999, -9.13627e-07, 0, -1.11759e-08, 0.999998, 0, 0, 0)
+stream = ExtResource("20_fnrur")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar1/SquarePillar1"]
+stream = ExtResource("21_74kwp")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="FallingSandDustParticle1" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar1" instance=ExtResource("22_56jp1")]
+transform = Transform3D(0.999991, 0, 0, 1.49012e-08, 0.999999, 2.51457e-08, 0, -1.86265e-08, 0.999992, 0, -1.00002, 5.00003)
+visible = false
+
+[node name="FallingWaterSplatterParticle1" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar1" instance=ExtResource("20_56m3m")]
+transform = Transform3D(1, -7.45058e-09, 0, 7.45058e-09, 1, 1.86265e-09, 0, 1.76951e-08, 1, 0, -1, 5)
+visible = false
+
+[node name="Pillar2" type="Node3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event"]
+transform = Transform3D(0.480024, 0.4608, 0.746488, -0.0167351, 0.855588, -0.517388, -0.877097, 0.235865, 0.418415, 4.14017, 0.909695, -34.6519)
+
+[node name="SquarePillar2" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar2" groups=["crusher"] instance=ExtResource("11_evogq")]
+
+[node name="FallingSFX2" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar2/SquarePillar2"]
+stream = ExtResource("20_fnrur")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar2/SquarePillar2"]
+stream = ExtResource("21_74kwp")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="FallingSandDustParticle2" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar2" instance=ExtResource("22_56jp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 5)
+visible = false
+
+[node name="FallingWaterSplatterParticle2" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar2" instance=ExtResource("20_56m3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 5)
+visible = false
+
+[node name="Pillar3" type="Node3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event"]
+transform = Transform3D(0.554901, 0.457852, 0.694594, -0.00126469, 0.835394, -0.549653, -0.831918, 0.304124, 0.464139, 11.3092, 0.739349, -45.5965)
+
+[node name="SquarePillar3" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar3" groups=["crusher"] instance=ExtResource("11_evogq")]
+
+[node name="FallingSFX3" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar3/SquarePillar3"]
+stream = ExtResource("20_fnrur")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar3/SquarePillar3"]
+stream = ExtResource("21_74kwp")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="FallingSandDustParticle3" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar3" instance=ExtResource("22_56jp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 5)
+visible = false
+
+[node name="FallingWaterSplatterParticle3" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar3" instance=ExtResource("20_56m3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 5)
+visible = false
+
+[node name="Pillar4" type="Node3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event"]
+transform = Transform3D(0.717857, 0.382887, 0.581448, -0.0357083, 0.854334, -0.518501, -0.695276, 0.351446, 0.626962, 20.3762, 0.73996, -55.4239)
+
+[node name="SquarePillar4" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar4" groups=["crusher"] instance=ExtResource("11_evogq")]
+
+[node name="FallingSFX4" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar4/SquarePillar4"]
+stream = ExtResource("20_fnrur")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="ImpactSFX4" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar4/SquarePillar4"]
+stream = ExtResource("21_74kwp")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="FallingSandDustParticle4" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar4" instance=ExtResource("22_56jp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 5)
+visible = false
+
+[node name="FallingWaterSplatterParticle4" parent="RaceAct/Oasis/FallingPillarGroup1/Event/Pillar4" instance=ExtResource("20_56m3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 5)
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RaceAct/Oasis/FallingPillarGroup1/Event"]
+callback_mode_process = 0
+libraries = {
+"": SubResource("AnimationLibrary_jopbp")
+}
+speed_scale = 0.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RaceAct/Oasis/FallingPillarGroup1"]
+transform = Transform3D(-4.47035e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1, 2.98023e-08, -2.98023e-08, 0.039978, 3.004, 54.61)
+shape = SubResource("BoxShape3D_o0htl")
+
+[node name="ItemBoxMover" type="Node3D" parent="RaceAct/Oasis"]
+transform = Transform3D(0.198267, 0.166366, -0.965926, -0.642788, 0.766044, 0, 0.739942, 0.620885, 0.258819, -14.5643, -2.13561, -75.8566)
+script = ExtResource("22_lleab")
+Movement/Mode = 1
+"Movement/Cycle Length" = 6.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 4.0
+Movement/Angle = 0.0
+"Vertical Orientation" = true
+root = NodePath("ItemBoxFlying")
+
+[node name="ItemBoxFlying" parent="RaceAct/Oasis/ItemBoxMover" instance=ExtResource("23_x8plt")]
+transform = Transform3D(1.00001, -2.98023e-07, -1.25915e-05, -1.60933e-06, 1.00001, 1.47223e-05, 1.08778e-06, -2.38419e-07, 1, 0, 0, 0)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 100
+
+[node name="FallingPillarGroup2" parent="RaceAct/Oasis" instance=ExtResource("9_jio4r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.354, -3.6, -78.994)
 collision_layer = 0
+OneShot = true
+"Respawn Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RaceAct/Oasis/FallingPillars"]
-transform = Transform3D(-0.973597, 0.109191, -0.20046, -0.020731, 0.832249, 0.554014, 0.227326, 0.543543, -0.808012, 0.0400085, 3.004, 0.610016)
-shape = SubResource("BoxShape3D_uxgup")
-
-[node name="Event" type="Node3D" parent="RaceAct/Oasis/FallingPillars" node_paths=PackedStringArray("animator")]
+[node name="Event" type="Node3D" parent="RaceAct/Oasis/FallingPillarGroup2" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0400085, 0, 0.610016)
 script = ExtResource("10_k73yc")
 "Trigger Settings/Automatically Respawn" = false
@@ -796,44 +1968,132 @@ script = ExtResource("10_k73yc")
 "Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
-[node name="SquarePillar1" parent="RaceAct/Oasis/FallingPillars/Event" groups=["crusher"] instance=ExtResource("11_evogq")]
-transform = Transform3D(0.996187, -0.000990084, -0.0871494, 0, 0.999934, -0.0113599, 0.0871551, 0.0113167, 0.996123, 21.2648, 0.491512, -7.6853)
+[node name="Pillar1" type="Node3D" parent="RaceAct/Oasis/FallingPillarGroup2/Event"]
+transform = Transform3D(0.996187, 0, -0.0871551, 0, 1, 0, 0.0871551, 0, 0.996187, 21.2658, 0.44693, -7.6972)
 
-[node name="SquarePillar2" parent="RaceAct/Oasis/FallingPillars/Event" groups=["crusher"] instance=ExtResource("11_evogq")]
-transform = Transform3D(0.999994, 0, 0, 0, 1, 0, 0, 0, 0.999994, 30.3087, 1.15955, -6.59003)
+[node name="SquarePillar1" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar1" groups=["crusher"] instance=ExtResource("11_evogq")]
 
-[node name="SquarePillar3" parent="RaceAct/Oasis/FallingPillars/Event" groups=["crusher"] instance=ExtResource("11_evogq")]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 39.4638, 1.49049, -4.87015)
+[node name="FallingSFX1" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar1/SquarePillar1"]
+transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
+stream = ExtResource("20_fnrur")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
 
-[node name="BoxCrusher" type="Area3D" parent="RaceAct/Oasis/FallingPillars/Event/SquarePillar3"]
+[node name="ImpactSFX1" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar1/SquarePillar1"]
+stream = ExtResource("21_74kwp")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="FallingSandDustParticle1" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar1" instance=ExtResource("22_56jp1")]
+transform = Transform3D(1, -3.72529e-09, 0, 0, 0.965926, -0.258819, 2.98023e-08, 0.258819, 0.965926, 0, -1, 5)
+visible = false
+
+[node name="Pillar2" type="Node3D" parent="RaceAct/Oasis/FallingPillarGroup2/Event"]
+transform = Transform3D(0.99589, -0.0871557, -0.0243912, 0.0871291, 0.996195, -0.00213395, 0.0244844, 0, 0.999694, 30.707, 1.1944, -6.58023)
+
+[node name="SquarePillar2" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar2" groups=["crusher"] instance=ExtResource("11_evogq")]
+
+[node name="FallingSFX2" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar2/SquarePillar2"]
+transform = Transform3D(1.00001, 1.86265e-09, 8.19564e-08, -1.86265e-09, 1.00001, -3.30806e-06, 2.32831e-09, 0, 1, 0, 0, 0)
+stream = ExtResource("20_fnrur")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="ImpactSFX2" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar2/SquarePillar2"]
+stream = ExtResource("21_74kwp")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="FallingSandDustParticle2" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar2" instance=ExtResource("22_56jp1")]
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965925, 0, -1, 5)
+visible = false
+
+[node name="Pillar3" type="Node3D" parent="RaceAct/Oasis/FallingPillarGroup2/Event"]
+transform = Transform3D(0.989665, -0.139088, -0.0348995, 0.139173, 0.990267, 0, 0.0345599, -0.00485707, 0.999391, 39.6212, 1.81554, -4.87015)
+
+[node name="SquarePillar3" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar3" groups=["crusher"] instance=ExtResource("11_evogq")]
+
+[node name="FallingSFX3" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar3/SquarePillar3"]
+transform = Transform3D(1, -3.72529e-08, 5.21541e-08, 0, 1, 4.61936e-07, -7.91624e-09, 0, 1, 0, 0, 0)
+stream = ExtResource("20_fnrur")
+attenuation_model = 3
+volume_db = -80.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="ImpactSFX3" type="AudioStreamPlayer3D" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar3/SquarePillar3"]
+transform = Transform3D(1, -3.72529e-08, 5.16884e-08, 0, 1, 4.47035e-07, -7.91624e-09, 0, 1, 0, 0, 0)
+stream = ExtResource("23_gg7b2")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="BoxCrusher" type="Area3D" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar3/SquarePillar3"]
 collision_layer = 8
 collision_mask = 0
 monitoring = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RaceAct/Oasis/FallingPillars/Event/SquarePillar3/BoxCrusher"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar3/SquarePillar3/BoxCrusher"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
-shape = SubResource("BoxShape3D_3bv3v")
+shape = SubResource("BoxShape3D_af382")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="RaceAct/Oasis/FallingPillars/Event"]
+[node name="FallingSandDustParticle3" parent="RaceAct/Oasis/FallingPillarGroup2/Event/Pillar3" instance=ExtResource("22_56jp1")]
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, -1, 5)
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RaceAct/Oasis/FallingPillarGroup2/Event"]
 callback_mode_process = 0
 libraries = {
-"": SubResource("AnimationLibrary_8a7u8")
+"": SubResource("AnimationLibrary_b43v8")
 }
+speed_scale = 0.95
 
-[node name="CrateGroup" type="Node3D" parent="RaceAct/Oasis"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.206, -1.49564, -79.337)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RaceAct/Oasis/FallingPillarGroup2"]
+transform = Transform3D(-0.973597, 0.109191, -0.20046, -0.020731, 0.832249, 0.554014, 0.227326, 0.543543, -0.808012, 0.0400085, 3.004, 0.610016)
+shape = SubResource("BoxShape3D_o0htl")
 
-[node name="Crate1" parent="RaceAct/Oasis/CrateGroup" instance=ExtResource("12_v7tgu")]
+[node name="PillarCrateGroup" type="Node3D" parent="RaceAct/Oasis"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.206, -1.4956, -79.337)
+
+[node name="Crate1" parent="RaceAct/Oasis/PillarCrateGroup" instance=ExtResource("12_v7tgu")]
 transform = Transform3D(0.972474, -0.172987, -0.156106, 0.156106, 0.98106, -0.114681, 0.172987, 0.0871557, 0.98106, 0, 0, 0)
+disableRespawn = true
 
-[node name="Crate2" parent="RaceAct/Oasis/CrateGroup" instance=ExtResource("12_v7tgu")]
+[node name="Shatter" parent="RaceAct/Oasis/PillarCrateGroup/Crate1/Root/SFX" index="0"]
+volume_db = -80.0
+
+[node name="Crate2" parent="RaceAct/Oasis/PillarCrateGroup" instance=ExtResource("12_v7tgu")]
 transform = Transform3D(0.982379, -0.172988, -0.0707545, 0.165507, 0.98106, -0.100639, 0.0868237, 0.0871556, 0.992404, -0.298004, -0.16264, 1.09201)
+disableRespawn = true
 
-[node name="Crate3" parent="RaceAct/Oasis/CrateGroup" instance=ExtResource("12_v7tgu")]
+[node name="Shatter" parent="RaceAct/Oasis/PillarCrateGroup/Crate2/Root/SFX" index="0"]
+volume_db = -80.0
+
+[node name="Crate3" parent="RaceAct/Oasis/PillarCrateGroup" instance=ExtResource("12_v7tgu")]
 transform = Transform3D(0.982379, -0.172988, -0.0707545, 0.165507, 0.98106, -0.100639, 0.0868237, 0.0871556, 0.992404, 0.0119934, -0.213799, 2.28299)
+disableRespawn = true
 
-[node name="Crate4" parent="RaceAct/Oasis/CrateGroup" instance=ExtResource("12_v7tgu")]
+[node name="Shatter" parent="RaceAct/Oasis/PillarCrateGroup/Crate3/Root/SFX" index="0"]
+volume_db = -80.0
+
+[node name="Crate4" parent="RaceAct/Oasis/PillarCrateGroup" instance=ExtResource("12_v7tgu")]
 transform = Transform3D(0.97297, -0.172988, -0.152981, 0.156473, 0.98106, -0.114179, 0.169836, 0.0871556, 0.981611, -0.165985, -0.347111, 3.431)
+disableRespawn = true
+
+[node name="Shatter" parent="RaceAct/Oasis/PillarCrateGroup/Crate4/Root/SFX" index="0"]
+volume_db = -80.0
 
 [node name="Goal" parent="RaceAct/Oasis" instance=ExtResource("13_7eemm")]
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, 77, 12, -59.5)
@@ -841,3 +2101,8 @@ transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RaceAct/Oasis/Goal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
 shape = SubResource("BoxShape3D_go0i7")
+
+[editable path="RaceAct/Oasis/PillarCrateGroup/Crate1"]
+[editable path="RaceAct/Oasis/PillarCrateGroup/Crate2"]
+[editable path="RaceAct/Oasis/PillarCrateGroup/Crate3"]
+[editable path="RaceAct/Oasis/PillarCrateGroup/Crate4"]

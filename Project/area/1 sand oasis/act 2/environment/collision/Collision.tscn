@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://ulwu7thf2lga"]
+
+[ext_resource type="PackedScene" uid="uid://bodcy3q7wrpkn" path="res://area/1 sand oasis/act 2/environment/collision/Collision.gltf" id="1_aw4gr"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_adx24"]
+
+[node name="Collision" instance=ExtResource("1_aw4gr")]
+
+[node name="StaticBody3D" parent="Ceiling" index="0" groups=["ceiling"]]
+
+[node name="StaticBody3D" parent="FloorPavement" index="0" groups=["floor", "pavement"]]
+
+[node name="StaticBody3D" parent="FloorSand" index="0" groups=["floor", "sand"]]
+
+[node name="IslandOneWay" parent="." index="3"]
+script = ExtResource("2_adx24")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="UTurnOneWay" parent="." index="4"]
+script = ExtResource("2_adx24")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="StaticBody3D" parent="Wall" index="0" groups=["level wall", "wall"]]

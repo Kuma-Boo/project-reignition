@@ -18,6 +18,7 @@ namespace Project.Gameplay.Triggers
 		public override void Activate()
 		{
 			//TODO Play VFX
+			Character.Camera.IsDefeatFreezeActive = true;
 			Character.StartRespawn();
 			Character.Effect.PlayVoice("fall");
 

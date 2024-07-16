@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dsc7pj6pi03xg"]
+[gd_scene load_steps=5 format=3 uid="uid://dsc7pj6pi03xg"]
 
 [ext_resource type="PackedScene" uid="uid://dn77mij3pq1jn" path="res://area/2 dino jungle/object/model/dino/DinoPara.gltf" id="1_6lqcg"]
 [ext_resource type="AudioStream" uid="uid://dji6cwnnskkr6" path="res://sound/sfx/stage/dinosaur jungle/dino para.wav" id="2_o028y"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="3_j7aau"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kfmls"]
 radius = 0.729095
@@ -36,19 +37,38 @@ bones/17/scale = Vector3(1, 1, 1)
 stream = ExtResource("2_o028y")
 attenuation_model = 3
 max_distance = 100.0
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="Head" type="BoneAttachment3D" parent="." index="3"]
-transform = Transform3D(1, 2.68431e-08, -4.28509e-07, -4.16082e-07, -0.185597, -0.982626, -1.05906e-07, 0.982626, -0.185597, 3.64973e-07, 6.40692, 8.30832)
+transform = Transform3D(1, 2.68441e-08, -4.28509e-07, -4.16082e-07, -0.185597, -0.982626, -1.05908e-07, 0.982626, -0.185597, 3.64975e-07, 6.40692, 8.30832)
 bone_name = "head"
 bone_idx = 5
 use_external_skeleton = true
 external_skeleton = NodePath("../DinoParaRoot/Skeleton3D")
 
-[node name="Hitbox" type="StaticBody3D" parent="Head" index="0"]
+[node name="StaticBody" type="StaticBody3D" parent="Head" index="0"]
 transform = Transform3D(0.994381, -0.10568, 0.00610432, 0.0956115, 0.871908, -0.480245, 0.0454297, 0.478131, 0.877113, -4.71299e-07, 1.54055, -1.00335)
 collision_layer = 8
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/Hitbox" index="0"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/StaticBody" index="0"]
 shape = SubResource("CapsuleShape3D_kfmls")
+
+[node name="AreaTrigger" type="Area3D" parent="Head" index="1"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+
+[node name="Hitbox" type="Node3D" parent="Head/AreaTrigger" index="0"]
+script = ExtResource("3_j7aau")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/AreaTrigger" index="1"]
+transform = Transform3D(0.994381, -0.10568, 0.00610432, 0.0956115, 0.871908, -0.480245, 0.0454297, 0.478131, 0.877113, -4.71299e-07, 1.54055, -1.00335)
+shape = SubResource("CapsuleShape3D_kfmls")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Head/AreaTrigger" index="2"]
+transform = Transform3D(0.994381, -0.10568, 0.00610432, 0.0956115, 0.871908, -0.480245, 0.0454297, 0.478131, 0.877113, -1.50773e-06, -0.981498, -3.58003)
+shape = SubResource("CapsuleShape3D_kfmls")
+
+[connection signal="area_entered" from="Head/AreaTrigger" to="Head/AreaTrigger/Hitbox" method="OnEntered"]
+[connection signal="area_exited" from="Head/AreaTrigger" to="Head/AreaTrigger/Hitbox" method="OnExited"]

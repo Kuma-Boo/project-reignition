@@ -33,7 +33,7 @@ namespace Project.Gameplay.Objects
 
 		public void OnEntered(Area3D a)
 		{
-			if (!a.IsInGroup("player")) return;
+			if (!a.IsInGroup("player detection")) return;
 			if (Character.ActionState == CharacterController.ActionStates.Teleport) return; // Don't allow collections during teleport/respawn
 
 			CallDeferred(MethodName.Collect);

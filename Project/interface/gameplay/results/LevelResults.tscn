@@ -1,12 +1,14 @@
-[gd_scene load_steps=26 format=3 uid="uid://x03eut8s4p3l"]
+[gd_scene load_steps=31 format=3 uid="uid://x03eut8s4p3l"]
 
 [ext_resource type="AudioStream" uid="uid://dbv5ecruxgfsy" path="res://sound/ost/jingle/Stage Clear.mp3" id="1"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="2"]
+[ext_resource type="Resource" uid="uid://cf1j44s01044o" path="res://resource/preset/sfx library/ResultsVoiceLibrary.tres" id="2_50vl2"]
 [ext_resource type="Texture2D" uid="uid://daym7a6tnri40" path="res://interface/gameplay/results/texture/bronze.png" id="3"]
 [ext_resource type="Script" path="res://interface/gameplay/results/script/LevelResult.cs" id="4"]
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="4_wm6jc"]
 [ext_resource type="Texture2D" uid="uid://bmwc4e25fnuqd" path="res://interface/gameplay/results/texture/result atlas.png" id="5"]
 [ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/bitmap fonts/HUD Numbers.fnt" id="5_iuphe"]
+[ext_resource type="FontFile" uid="uid://cjn5owdvvkfrb" path="res://interface/font/bitmap fonts/Experience Results.fnt" id="6_452md"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="6_ms8ry"]
 [ext_resource type="Texture2D" uid="uid://covowu2nyy2gi" path="res://interface/gameplay/results/text/results en.png" id="7"]
 [ext_resource type="AudioStream" uid="uid://djog8y22u5a43" path="res://sound/sfx/system/result success.wav" id="8_5re71"]
@@ -15,6 +17,18 @@
 [ext_resource type="AudioStream" uid="uid://biwixrje8ahed" path="res://sound/sfx/system/result fail.wav" id="9_xr8rf"]
 [ext_resource type="AudioStream" uid="uid://sm8k2fwwnwnk" path="res://sound/sfx/system/result data.wav" id="10_m50k4"]
 [ext_resource type="AudioStream" uid="uid://b4nrxor8mt3ef" path="res://sound/sfx/system/result rank.wav" id="11_w8yyn"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_gpy6d"]
+font = ExtResource("6_452md")
+font_size = 72
+
+[sub_resource type="LabelSettings" id="LabelSettings_jtfgt"]
+font = ExtResource("6_452md")
+font_size = 48
+
+[sub_resource type="LabelSettings" id="LabelSettings_076ox"]
+font = ExtResource("6_452md")
+font_size = 92
 
 [sub_resource type="Animation" id="2"]
 length = 0.001
@@ -397,10 +411,10 @@ tracks/31/path = NodePath("Data/Labels/ResultsBar:position")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.001),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(-1088, 288)]
+"values": [Vector2(-1088, 288), Vector2(-1088, 272)]
 }
 tracks/32/type = "value"
 tracks/32/imported = false
@@ -597,7 +611,7 @@ tracks/7/keys = {
 "times": PackedFloat32Array(0, 1.666, 2.33333),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
-"values": [Vector2(-1088, 288), Vector2(-1088, 288), Vector2(448, 288)]
+"values": [Vector2(-1088, 272), Vector2(-1088, 272), Vector2(448, 272)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -706,6 +720,23 @@ tracks/15/keys = {
 }, {
 "args": [0.0],
 "method": &"play"
+}]
+}
+tracks/16/type = "method"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath(".")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 0.333333),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"MuteGameplaySoundEffects"
+}, {
+"args": [],
+"method": &"PlayRankQuote"
 }]
 }
 
@@ -1070,7 +1101,7 @@ tracks/8/keys = {
 "times": PackedFloat32Array(0, 1.666, 2.33333),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
-"values": [Vector2(-1088, 288), Vector2(-1088, 288), Vector2(448, 288)]
+"values": [Vector2(-1088, 272), Vector2(-1088, 272), Vector2(448, 272)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -1196,6 +1227,23 @@ tracks/17/keys = {
 "values": [{
 "args": [0.0],
 "method": &"play"
+}]
+}
+tracks/18/type = "method"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath(".")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0, 3.33333),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"MuteGameplaySoundEffects"
+}, {
+"args": [],
+"method": &"PlayRankQuote"
 }]
 }
 
@@ -1519,7 +1567,7 @@ _data = {
 "success-start": SubResource("1")
 }
 
-[node name="LevelResults" type="Control" node_paths=PackedStringArray("score", "time", "ring", "technical", "total", "bgm", "animator")]
+[node name="LevelResults" type="Control" node_paths=PackedStringArray("score", "time", "ring", "technical", "total", "bgm", "animator", "resultsVoicePlayer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1534,6 +1582,9 @@ technical = NodePath("Data/Labels/Technical/Value")
 total = NodePath("Data/Labels/Total/Value")
 bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
+resultsVoicePlayer = NodePath("ResultsVoice")
+resultsVoiceLibrary = ExtResource("2_50vl2")
+metadata/_edit_lock_ = true
 
 [node name="Header" type="Node2D" parent="."]
 position = Vector2(960, 232)
@@ -1623,6 +1674,7 @@ layout_mode = 1
 anchors_preset = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
+metadata/_edit_lock_ = true
 
 [node name="Medal" type="Sprite2D" parent="Data"]
 position = Vector2(1456, -160)
@@ -1632,47 +1684,55 @@ texture = ExtResource("3")
 [node name="Labels" type="Node2D" parent="Data"]
 position = Vector2(512, 488)
 
-[node name="Score" type="Sprite2D" parent="Data/Labels"]
+[node name="Score" type="Label" parent="Data/Labels"]
 modulate = Color(1, 1, 1, 0)
-position = Vector2(-16, -128)
-scale = Vector2(1.12, 1.12)
-texture = ExtResource("7")
-centered = false
-region_enabled = true
-region_rect = Rect2(588, 240, 436, 56)
+offset_left = -16.0
+offset_top = -128.0
+offset_right = 512.0
+offset_bottom = -40.0
+pivot_offset = Vector2(0, 36)
+text = "result_score"
+label_settings = SubResource("LabelSettings_gpy6d")
+vertical_alignment = 1
+uppercase = true
 
 [node name="Value" type="Label" parent="Data/Labels/Score"]
-offset_top = -5.0
-offset_right = 891.0
-offset_bottom = 62.0
-scale = Vector2(0.85, 0.85)
-pivot_offset = Vector2(0, 32)
-theme_override_fonts/font = ExtResource("5_iuphe")
-theme_override_font_sizes/font_size = 64
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 464.0
+offset_right = 848.0
+grow_vertical = 2
 text = "00000000"
+label_settings = SubResource("LabelSettings_gpy6d")
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Time" type="Sprite2D" parent="Data/Labels"]
+[node name="Time" type="Label" parent="Data/Labels"]
 modulate = Color(1, 1, 1, 0)
-position = Vector2(-16, -56)
-scale = Vector2(1.12, 1.12)
-texture = ExtResource("7")
-centered = false
-region_enabled = true
-region_rect = Rect2(88, 240, 448, 56)
+offset_left = -16.0
+offset_top = -56.0
+offset_right = 512.0
+offset_bottom = 32.0
+pivot_offset = Vector2(0, 36)
+text = "result_time"
+label_settings = SubResource("LabelSettings_gpy6d")
+vertical_alignment = 1
+uppercase = true
 
 [node name="Value" type="Label" parent="Data/Labels/Time"]
-offset_top = -5.0
-offset_right = 891.0
-offset_bottom = 62.0
-scale = Vector2(0.85, 0.85)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 464.0
+offset_right = 848.0
+grow_vertical = 2
 pivot_offset = Vector2(0, 32)
-theme_override_fonts/font = ExtResource("5_iuphe")
-theme_override_font_sizes/font_size = 64
 text = "00:00.00"
+label_settings = SubResource("LabelSettings_gpy6d")
 horizontal_alignment = 2
 vertical_alignment = 1
+uppercase = true
 
 [node name="Decals" type="Node2D" parent="Data/Labels"]
 modulate = Color(1, 1, 1, 0)
@@ -1692,47 +1752,58 @@ texture = ExtResource("5")
 region_enabled = true
 region_rect = Rect2(-8, 0, 1032, 64)
 
-[node name="Ring" type="Sprite2D" parent="Data/Labels"]
+[node name="Ring" type="Label" parent="Data/Labels"]
 modulate = Color(1, 1, 1, 0)
-position = Vector2(0, 112)
-scale = Vector2(1.12, 1.12)
-texture = ExtResource("7")
-centered = false
-region_enabled = true
-region_rect = Rect2(88, 448, 448, 40)
+offset_top = 96.0
+offset_right = 448.0
+offset_bottom = 176.0
+pivot_offset = Vector2(0, 40)
+text = "result_ring"
+label_settings = SubResource("LabelSettings_jtfgt")
+vertical_alignment = 1
+uppercase = true
 
 [node name="Value" type="Label" parent="Data/Labels/Ring"]
-offset_left = 514.286
-offset_top = -7.0
-offset_right = 869.286
-offset_bottom = 60.0
-scale = Vector2(0.8, 0.8)
-pivot_offset = Vector2(0, 32)
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 448.0
+offset_right = 896.0
+grow_horizontal = 0
+grow_vertical = 2
+pivot_offset = Vector2(0, 46)
 theme_override_fonts/font = ExtResource("5_iuphe")
 theme_override_font_sizes/font_size = 64
 text = "2400"
+label_settings = SubResource("LabelSettings_gpy6d")
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Technical" type="Sprite2D" parent="Data/Labels"]
+[node name="Technical" type="Label" parent="Data/Labels"]
 modulate = Color(1, 1, 1, 0)
-position = Vector2(0, 184)
-scale = Vector2(1.12, 1.12)
-texture = ExtResource("7")
-centered = false
-region_enabled = true
-region_rect = Rect2(88, 496, 448, 48)
+offset_top = 184.0
+offset_right = 448.0
+offset_bottom = 264.0
+pivot_offset = Vector2(0, 40)
+text = "result_technical"
+label_settings = SubResource("LabelSettings_jtfgt")
+vertical_alignment = 1
+uppercase = true
 
 [node name="Value" type="Label" parent="Data/Labels/Technical"]
-offset_left = 514.286
-offset_top = -7.0
-offset_right = 870.286
-offset_bottom = 60.0
-scale = Vector2(0.8, 0.8)
-pivot_offset = Vector2(0, 32)
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 0.9
+offset_left = 448.0
+offset_top = -8.0
+offset_right = 896.0
+grow_horizontal = 0
+grow_vertical = 2
+pivot_offset = Vector2(0, 46)
 theme_override_fonts/font = ExtResource("5_iuphe")
 theme_override_font_sizes/font_size = 64
-text = "x2.0"
+text = "×2.0"
+label_settings = SubResource("LabelSettings_gpy6d")
 horizontal_alignment = 2
 vertical_alignment = 1
 
@@ -1743,24 +1814,30 @@ texture = ExtResource("5")
 region_enabled = true
 region_rect = Rect2(-8, 72, 984, 64)
 
-[node name="Total" type="Sprite2D" parent="Data/Labels"]
+[node name="Total" type="Label" parent="Data/Labels"]
 modulate = Color(1, 1, 1, 0)
-position = Vector2(-48, 315.84)
-scale = Vector2(1.12, 1.12)
-texture = ExtResource("7")
-centered = false
-region_enabled = true
-region_rect = Rect2(592, 432, 336, 72)
+offset_left = -40.0
+offset_top = 296.0
+offset_right = 448.0
+offset_bottom = 388.0
+pivot_offset = Vector2(0, 36)
+text = "result_total"
+label_settings = SubResource("LabelSettings_076ox")
+vertical_alignment = 1
+uppercase = true
 
 [node name="Value" type="Label" parent="Data/Labels/Total"]
-offset_top = 3.57141
-offset_right = 891.0
-offset_bottom = 70.5714
-scale = Vector2(1.0038, 1)
-pivot_offset = Vector2(0, 32)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 488.0
+offset_right = 984.0
+grow_vertical = 2
+pivot_offset = Vector2(0, 46)
 theme_override_fonts/font = ExtResource("5_iuphe")
 theme_override_font_sizes/font_size = 64
 text = "0000000"
+label_settings = SubResource("LabelSettings_076ox")
 horizontal_alignment = 2
 vertical_alignment = 1
 
@@ -1810,6 +1887,9 @@ bus = &"SFX"
 [node name="RankSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_w8yyn")
 bus = &"SFX"
+
+[node name="ResultsVoice" type="AudioStreamPlayer" parent="."]
+bus = &"VOICE"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

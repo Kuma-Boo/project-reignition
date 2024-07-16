@@ -35,7 +35,7 @@ public struct LaunchSettings
 	/// <summary> Was this launch settings initialized? </summary>
 	public bool IsInitialized { get; private set; }
 	public bool IsLauncherFinished(float t) => t + PhysicsManager.physicsDelta >= TotalTravelTime;
-	private static float Gravity => -Runtime.GRAVITY; // Use the same gravity as the character controller
+	private static float Gravity => -Runtime.Gravity; // Use the same gravity as the character controller
 
 	/// <summary>
 	/// Get the current position, using t -> [0 <-> 1]. Lerps when launch data is invalid.
@@ -96,7 +96,11 @@ public struct LaunchSettings
 		};
 
 		if (relativeToEnd)
+		{
 			data.middleHeight += delta.Y;
+			if (data.middleHeight < 0)
+				data.middleHeight = 0;
+		}
 
 		data.Initialize();
 		return data;

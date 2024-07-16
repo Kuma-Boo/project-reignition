@@ -16,61 +16,170 @@ public partial class CharacterSkillManager : Node
 
 		// Determine the size of the soul gauge
 		MaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
+		timeBreakAnimator.Play("RESET");
 		SetUpStats();
 		SetUpSkills();
 	}
 
 	#region Stats
-	[ExportCategory("Stats")]
+	[ExportGroup("Stats")]
+	[ExportSubgroup("Ground Settings")]
+	// Default ground settings
 	[Export]
-	private MovementResource groundSettings; // Default ground settings
+	private int baseGroundSpeed;
+	[Export]
+	private int baseGroundTraction;
+	[Export]
+	private int baseGroundFriction;
+	[Export]
+	private int baseGroundOverspeed;
+	[Export]
+	private int baseGroundTurnaround;
+	/// <summary> How quickly to turn when moving slowly. </summary>
+	[Export]
+	public float MinTurnAmount { get; private set; }
+	/// <summary> How quickly to turn when moving at top speed. </summary>
+	[Export]
+	public float MaxTurnAmount { get; private set; }
+	/// <summary> How quickly to turnaround when at top speed. </summary>
+	[Export]
+	public float TurnTurnaround { get; private set; }
 
+	[ExportSubgroup("Air Settings")]
+	// Default air settings
 	[Export]
-	private MovementResource airSettings; // Default air settings
+	private int baseAirSpeed;
+	[Export]
+	private int baseAirTraction;
+	[Export]
+	private int baseAirFriction;
+	[Export]
+	private int baseAirOverspeed;
+	[Export]
+	private int baseAirTurnaround;
 	[Export]
 	public float accelerationJumpSpeed;
 	[Export]
 	public float homingAttackSpeed;
 	[Export]
+	public float perfectHomingAttackSpeed;
+	[Export]
 	public float homingAttackAcceleration;
 
+	[ExportSubgroup("Slide Settings")]
+	// Default slide settings
 	[Export]
-	private MovementResource slideSettings; // Default slide settings
+	private int baseSlideSpeed;
+	[Export]
+	private int baseSlideTraction;
+	[Export]
+	private int baseSlideFriction;
+	[Export]
+	private int baseSlideOverspeed;
+	[Export]
+	private int baseSlideTurnaround;
 
-	// While there aren't any upgrades for the following movement skills, they're here for consistancy
+	// While there aren't any upgrades for the following movement skills, they're here for consistency
+	[ExportGroup("Static Action Settings")]
 	[Export]
-	private MovementResource backflipSettings;
+	private int baseBackflipSpeed;
 	[Export]
-	private MovementResource backstepSettings;
+	private int baseBackflipTraction;
+	[Export]
+	private int baseBackflipFriction;
+	[Export]
+	private int baseBackflipOverspeed;
+	[Export]
+	private int baseBackflipTurnaround;
+	[Export]
+	private int baseBackstepSpeed;
+	[Export]
+	private int baseBackstepTraction;
+	[Export]
+	private int baseBackstepFriction;
+	[Export]
+	private int baseBackstepOverspeed;
+	[Export]
+	private int baseBackstepTurnaround;
 
-	[ExportCategory("Grind Settings")]
+	[ExportGroup("Grind Settings")]
 	[Export]
 	public float perfectShuffleSpeed;
 	[Export]
-	public MovementResource grindSettings; // Settings for grinding on rails
+	private int baseGrindSpeed;
+	[Export]
+	private int baseGrindFriction;
+	[Export]
+	private int baseGrindTurnaround;
 
-	[ExportCategory("Sidle Settings")]
+	[ExportGroup("Sidle Settings")]
 	[Export]
 	public Curve sidleMovementCurve;
 
-	// References to the actual values being used
-	public MovementResource GroundSettings { get; private set; }
-	public MovementResource AirSettings { get; private set; }
-	public MovementResource BackflipSettings { get; private set; }
-	public MovementResource BackstepSettings { get; private set; }
-	public MovementResource SlideSettings { get; private set; }
+	// References to the actual movement settings being used
+	public MovementSetting GroundSettings { get; private set; }
+	public MovementSetting AirSettings { get; private set; }
+	public MovementSetting BackflipSettings { get; private set; }
+	public MovementSetting BackstepSettings { get; private set; }
+	public MovementSetting SlideSettings { get; private set; }
+	public MovementSetting GrindSettings { get; private set; }
 
 	private void SetUpStats() // Stuff like upgradable speed, increased handling, etc.
 	{
 		// TODO Interpolate values based on skill ring settings
-		GroundSettings = groundSettings;
-		AirSettings = airSettings;
-		BackflipSettings = backflipSettings;
-		BackstepSettings = backstepSettings;
+		// Create MovementSettings based on skills
+		GroundSettings = new()
+		{
+			Speed = baseGroundSpeed,
+			Traction = baseGroundTraction,
+			Friction = baseGroundFriction,
+			Overspeed = baseGroundOverspeed,
+			Turnaround = baseGroundTurnaround,
+		};
 
-		SlideSettings = slideSettings;
+		AirSettings = new()
+		{
+			Speed = baseAirSpeed,
+			Traction = baseAirTraction,
+			Friction = baseAirFriction,
+			Overspeed = baseAirOverspeed,
+			Turnaround = baseAirTurnaround,
+		};
+
+		BackflipSettings = new()
+		{
+			Speed = baseBackflipSpeed,
+			Traction = baseBackflipTraction,
+			Friction = baseBackflipFriction,
+			Overspeed = baseBackflipOverspeed,
+			Turnaround = baseBackflipTurnaround,
+		};
+
+		BackstepSettings = new()
+		{
+			Speed = baseBackstepSpeed,
+			Traction = baseBackstepTraction,
+			Friction = baseBackstepFriction,
+			Overspeed = baseBackstepOverspeed,
+			Turnaround = baseBackstepTurnaround,
+		};
+
+		SlideSettings = new()
+		{
+			Speed = baseSlideSpeed,
+			Traction = baseSlideTraction,
+			Friction = baseSlideFriction,
+			Overspeed = baseSlideOverspeed,
+			Turnaround = baseSlideTurnaround
+		};
+
+		GrindSettings = new()
+		{
+			Speed = baseGrindSpeed,
+			Friction = baseGrindFriction,
+			Turnaround = baseGrindTurnaround,
+		};
 	}
-
 
 	#endregion
 
@@ -78,7 +187,7 @@ public partial class CharacterSkillManager : Node
 	private SkillRing SkillRing => SaveManager.ActiveSkillRing;
 	public bool IsSkillEquipped(SkillKey key) => SkillRing.IsSkillEquipped(key);
 
-	[ExportCategory("Countdown Skills")]
+	[ExportGroup("Countdown Skills")]
 	[Export]
 	public float countdownBoostSpeed;
 
@@ -91,8 +200,6 @@ public partial class CharacterSkillManager : Node
 	[Export]
 	public float landingDashSpeed;
 
-	public bool IsAttacking { get; set; } // Is the player using an attack skill? (i.e Any of the fire skills)
-
 	private void SetUpSkills()
 	{
 		// Expand hitbox if skills is equipped
@@ -101,6 +208,7 @@ public partial class CharacterSkillManager : Node
 	#endregion
 
 	#region Soul Skills
+	[ExportGroup("Soul Skills")]
 	private uint normalCollisionMask;
 	public bool IsTimeBreakEnabled
 	{
@@ -128,6 +236,8 @@ public partial class CharacterSkillManager : Node
 	private bool isSpeedBreakEnabled = true;
 	private bool isTimeBreakEnabled = true;
 
+	[Export]
+	private AnimationPlayer speedBreakAnimator;
 	// Audio clips
 	[Export]
 	private AudioStream speedBreakActivate;
@@ -136,6 +246,8 @@ public partial class CharacterSkillManager : Node
 	// Audio players
 	[Export]
 	private AudioStreamPlayer speedBreakSFX;
+	[Export]
+	private AnimationPlayer timeBreakAnimator;
 	[Export]
 	private AudioStreamPlayer timeBreakSFX;
 	[Export]
@@ -165,21 +277,15 @@ public partial class CharacterSkillManager : Node
 	}
 
 	private int timeBreakDrainTimer;
-	private const int TIME_BREAK_SOUL_DRAIN_INTERVAL = 3; // Drain 1 point every x frames
-	private const float SATURATION_ADJUSTMENT_SPEED = 10.0f;
+	private const int TimeBreakSoulDrainInterval = 3; // Drain 1 point every x frames
 	private void UpdateTimeBreak()
 	{
-		// Update timebreak satutration visuals
-		float targetSaturation = IsTimeBreakActive ? 0.2f : StageSettings.instance.StartingSaturation;
-		StageSettings.instance.Environment.Environment.AdjustmentSaturation =
-			Mathf.MoveToward(StageSettings.instance.Environment.Environment.AdjustmentSaturation, targetSaturation, SATURATION_ADJUSTMENT_SPEED * PhysicsManager.physicsDelta);
-
 		if (IsTimeBreakActive)
 		{
 			if (timeBreakDrainTimer <= 0)
 			{
 				ModifySoulGauge(-1);
-				timeBreakDrainTimer = TIME_BREAK_SOUL_DRAIN_INTERVAL;
+				timeBreakDrainTimer = TimeBreakSoulDrainInterval;
 			}
 			timeBreakDrainTimer--;
 
@@ -260,7 +366,7 @@ public partial class CharacterSkillManager : Node
 
 		if (IsTimeBreakActive)
 		{
-			Character.Effect.StartTimeBreak();
+			timeBreakAnimator.Play("start");
 			Character.Effect.PlayVoice("time break");
 			BGMPlayer.SetStageMusicVolume(-80f);
 
@@ -271,7 +377,7 @@ public partial class CharacterSkillManager : Node
 		}
 		else
 		{
-			Character.Effect.StopTimeBreak();
+			timeBreakAnimator.Play("stop");
 			breakTimer = BREAK_SKILLS_COOLDOWN;
 			BGMPlayer.SetStageMusicVolume(0f);
 
@@ -282,6 +388,7 @@ public partial class CharacterSkillManager : Node
 	public void ToggleSpeedBreak()
 	{
 		Character.ResetActionState();
+
 		IsSpeedBreakActive = !IsSpeedBreakActive;
 		SoundManager.IsBreakChannelMuted = IsSpeedBreakActive;
 		breakTimer = IsSpeedBreakActive ? SPEEDBREAK_DELAY : BREAK_SKILLS_COOLDOWN;
@@ -289,20 +396,24 @@ public partial class CharacterSkillManager : Node
 
 		if (IsSpeedBreakActive)
 		{
-			Character.MovementAngle = Character.PathFollower.ForwardAngle;
+			speedBreakAnimator.Play("start");
 			Character.Effect.PlayVoice("speed break");
+			Character.MovementAngle = Character.PathFollower.ForwardAngle;
 			Character.CollisionMask = Runtime.Instance.environmentMask; // Don't collide with any objects
 			Character.Animator.SpeedBreak();
-			Character.Effect.StartSpeedBreak();
+			Character.ChangeHitbox("speed break");
+			Character.AttackState = CharacterController.AttackStates.OneShot;
 		}
 		else
 		{
+			speedBreakAnimator.Play("stop");
 			speedBreakSFX.Stream = speedBreakDeactivate;
 			speedBreakSFX.Play();
 
-			Character.MoveSpeed = Character.GroundSettings.speed; // Override speed
+			Character.MoveSpeed = GroundSettings.Speed; // Override speed
 			Character.CollisionMask = normalCollisionMask; // Reset collision layer
-			Character.Effect.StopSpeedBreak();
+			Character.AttackState = CharacterController.AttackStates.None;
+			Character.ChangeHitbox("RESET");
 		}
 
 		HeadsUpDisplay.instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);
@@ -326,4 +437,44 @@ public partial class CharacterSkillManager : Node
 	/// <summary> Returns a string representing the soul gauge for menus to display. </summary>
 	public string TextDisplay => $"{SoulPower}/{MaxSoulPower}";
 	#endregion
+}
+
+/// <summary>
+/// Contains data of movement settings. Leave values at -1 to ignore (primarily for skill overrides)
+/// </summary>
+public struct MovementSetting
+{
+	public int Speed { get; set; }
+	public int Traction { get; set; } // Speed up rate
+	public int Friction { get; set; } // Slow down rate
+	public int Overspeed { get; set; } // Slow down rate when going faster than speed
+	public int Turnaround { get; set; } // Skidding
+
+	public MovementSetting()
+	{
+		Speed = 0;
+		Traction = 0;
+		Friction = 0;
+	}
+
+	// Figures out whether to speed up or slow down depending on the input
+	public float Interpolate(float currentSpeed, float input)
+	{
+		float delta = Traction;
+		float targetSpeed = Speed * input;
+		targetSpeed = Mathf.Max(targetSpeed, 0);
+
+		if (Mathf.Abs(currentSpeed) > Speed)
+			delta = Overspeed;
+
+		if (input == 0) // Deccelerate
+			delta = Friction;
+		else if (!Mathf.IsZeroApprox(currentSpeed) && Mathf.Sign(targetSpeed) != Mathf.Sign(Speed)) // Turnaround
+			delta = Turnaround;
+
+		return Mathf.MoveToward(currentSpeed, targetSpeed, delta * PhysicsManager.physicsDelta);
+	}
+
+	public float GetSpeedRatio(float spd) => spd / Speed;
+	public float GetSpeedRatioClamped(float spd) => Mathf.Clamp(GetSpeedRatio(spd), -1f, 1f);
 }

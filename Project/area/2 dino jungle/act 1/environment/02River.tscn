@@ -1,7 +1,95 @@
-[gd_scene load_steps=3 format=3 uid="uid://iij01cwh2ttg"]
+[gd_scene load_steps=15 format=3 uid="uid://iij01cwh2ttg"]
 
 [ext_resource type="PackedScene" uid="uid://canu1eivc25eg" path="res://area/2 dino jungle/act 1/environment/model/02River.gltf" id="1_82et5"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_684l8"]
+[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="3_shwo2"]
+[ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://area/1 sand oasis/data/particle/material/Water Dust.tres" id="4_yyoqj"]
+
+[sub_resource type="Curve" id="Curve_i8bjx"]
+_data = [Vector2(0, 0), 0.0, 8.26422, 0, 0, Vector2(0.315451, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_4ccka"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_i8bjx")
+
+[sub_resource type="Curve" id="Curve_xwfet"]
+max_value = 3.0
+_data = [Vector2(0, 1), 0.0, -0.156841, 0, 0, Vector2(0.9, 3), 2.22222, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_mqtbg"]
+width = 64
+curve = SubResource("Curve_xwfet")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t1aqk"]
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_box_extents = Vector3(5, 1, 5)
+angle_max = 360.0
+direction = Vector3(0, -0.2, 1)
+spread = 20.0
+initial_velocity_min = 20.0
+initial_velocity_max = 30.0
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_mqtbg")
+alpha_curve = SubResource("CurveTexture_4ccka")
+
+[sub_resource type="QuadMesh" id="QuadMesh_lvycm"]
+material = ExtResource("3_shwo2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3m3bl"]
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_box_extents = Vector3(5, 1, 5)
+angle_max = 360.0
+direction = Vector3(0, 1, 0.5)
+spread = 50.0
+initial_velocity_min = 15.0
+initial_velocity_max = 30.0
+gravity = Vector3(0, -20, 0)
+damping_min = 15.0
+damping_max = 30.0
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_mqtbg")
+alpha_curve = SubResource("CurveTexture_4ccka")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0ugq5"]
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_box_extents = Vector3(8, 1, 1)
+angle_max = 360.0
+direction = Vector3(0, 1, 0.5)
+spread = 50.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, -20, 0)
+damping_min = 15.0
+damping_max = 30.0
+scale_min = 5.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_mqtbg")
+alpha_curve = SubResource("CurveTexture_4ccka")
+
+[sub_resource type="QuadMesh" id="QuadMesh_wwvw4"]
+material = ExtResource("4_yyoqj")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_d0rop"]
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_box_extents = Vector3(8, 1, 5)
+angle_max = 360.0
+direction = Vector3(0, -0.2, 1)
+spread = 20.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_mqtbg")
+alpha_curve = SubResource("CurveTexture_4ccka")
 
 [node name="02River" instance=ExtResource("1_82et5")]
 script = ExtResource("2_684l8")
@@ -22,63 +110,63 @@ layers = 2
 [node name="stg020_p02_Mesh_3" parent="." index="3"]
 layers = 2
 
-[node name="stg020_o07_Mesh_2" parent="." index="4"]
+[node name="stg020_o02_Mesh_6" parent="." index="4"]
 layers = 2
 cast_shadow = 0
 
-[node name="stg020_o02_Mesh_6" parent="." index="5"]
+[node name="stg020_o02_Mesh_7" parent="." index="5"]
 layers = 2
 cast_shadow = 0
 
-[node name="stg020_o02_Mesh_7" parent="." index="6"]
+[node name="stg020_p09_Mesh_14" parent="." index="6"]
 layers = 2
 cast_shadow = 0
 
-[node name="stg020_p09_Mesh_14" parent="." index="7"]
+[node name="stg020_p02_Mesh_21" parent="." index="7"]
+layers = 2
+
+[node name="stg020_p02_Mesh_7" parent="." index="8"]
+layers = 2
+
+[node name="stg020_p02_Mesh_25" parent="." index="9"]
+layers = 2
+
+[node name="stg020_p02_Mesh_6" parent="." index="10"]
+layers = 2
+
+[node name="stg020_p02_Mesh_14" parent="." index="11"]
+layers = 2
+
+[node name="stg020_p02_Mesh_0" parent="." index="12"]
+layers = 2
+
+[node name="stg020_p02_Mesh_18" parent="." index="13"]
+layers = 2
+
+[node name="stg020_p02_Mesh_9" parent="." index="14"]
+layers = 2
+
+[node name="stg020_p02_Mesh_16" parent="." index="15"]
+layers = 2
+
+[node name="stg020_p01_Mesh_43" parent="." index="16"]
+layers = 2
+
+[node name="stg020_p02_Mesh_12" parent="." index="17"]
+layers = 2
+
+[node name="stg020_p07_Mesh_2" parent="." index="18"]
 layers = 2
 cast_shadow = 0
 
-[node name="stg020_p02_Mesh_21" parent="." index="8"]
+[node name="stg020_p09_Mesh_7" parent="." index="19"]
 layers = 2
 
-[node name="stg020_p02_Mesh_7" parent="." index="9"]
-layers = 2
-
-[node name="stg020_p02_Mesh_25" parent="." index="10"]
-layers = 2
-
-[node name="stg020_p02_Mesh_6" parent="." index="11"]
-layers = 2
-
-[node name="stg020_p02_Mesh_14" parent="." index="12"]
-layers = 2
-
-[node name="stg020_p02_Mesh_0" parent="." index="13"]
-layers = 2
-
-[node name="stg020_p02_Mesh_18" parent="." index="14"]
-layers = 2
-
-[node name="stg020_p02_Mesh_9" parent="." index="15"]
-layers = 2
-
-[node name="stg020_p02_Mesh_16" parent="." index="16"]
-layers = 2
-
-[node name="stg020_p01_Mesh_43" parent="." index="17"]
-layers = 2
-
-[node name="stg020_p02_Mesh_12" parent="." index="18"]
-layers = 2
-
-[node name="stg020_p07_Mesh_2" parent="." index="19"]
+[node name="stg020_a02_Mesh_0" parent="." index="20"]
 layers = 2
 cast_shadow = 0
 
-[node name="stg020_p09_Mesh_7" parent="." index="20"]
-layers = 2
-
-[node name="stg020_a02_Mesh_0" parent="." index="21"]
+[node name="stg020_o01_Mesh_15_001" parent="." index="21"]
 layers = 2
 cast_shadow = 0
 
@@ -121,3 +209,59 @@ cull_mask = 65
 ambient_mode = 2
 ambient_color = Color(0.811765, 1, 1, 1)
 ambient_color_energy = 0.1
+
+[node name="RiverVFX" type="Node3D" parent="." index="29"]
+transform = Transform3D(-4.37114e-08, 0, 1, -1.03184e-12, 1, -2.0659e-12, -1, -1.03184e-12, -4.37114e-08, -216.353, -31.8998, -495.675)
+
+[node name="SplatterTop" type="GPUParticles3D" parent="RiverVFX" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 4.51032e-20, 0, 0, 1, 0, 0, -7)
+layers = 32
+cast_shadow = 0
+amount = 48
+preprocess = 2.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-8, -15, -4, 16, 20, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_t1aqk")
+draw_pass_1 = SubResource("QuadMesh_lvycm")
+
+[node name="SplatterBottom" type="GPUParticles3D" parent="RiverVFX" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 4.51032e-20, 0, 0, 1, 0, -63, 17)
+layers = 32
+cast_shadow = 0
+amount = 32
+preprocess = 2.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-8, -15, -4, 16, 20, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_3m3bl")
+draw_pass_1 = SubResource("QuadMesh_lvycm")
+
+[node name="DustBottom" type="GPUParticles3D" parent="RiverVFX" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 4.51032e-20, 0, 0, 1, 0, -64, 17)
+layers = 32
+cast_shadow = 0
+amount = 48
+lifetime = 0.5
+preprocess = 2.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-8, -15, -4, 16, 20, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_0ugq5")
+draw_pass_1 = SubResource("QuadMesh_wwvw4")
+
+[node name="SplatterTop" type="GPUParticles3D" parent="." index="30"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, -3.09774e-12, 8.74228e-08, -1.03184e-12, -1, -362.447, -209.1, -600.369)
+layers = 32
+cast_shadow = 0
+amount = 48
+preprocess = 2.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-8, -15, -4, 16, 20, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_d0rop")
+draw_pass_1 = SubResource("QuadMesh_lvycm")

@@ -68,12 +68,29 @@ public partial class ExperienceResult : Control
 	private int levelupRequirement;
 	/// <summary> Experience points needed for the previous level up. </summary>
 	private int previousLevelupRequirement;
-	/// <summary> Not 100% accurate to the original game, but very close. </summary>
-	private static int CalculateLevelUpRequirement(int level) => (8000 * level) + (8000 * level * (SaveManager.ActiveGameData.level / 10));
+	/// <summary> More exp is granted in PR, so the levelup requirements are higher than the original game. </summary>
+	private static int CalculateLevelUpRequirement(int level) => level == MaxLevel ? 99999999 : (LevelInterval * level) + (LevelInterval * (level / 10));
+	/// <summary> Converts exp amount to level amount. Mostly used to fix corrupt save data. </summary>
+	private static int CalculateLevel(int exp)
+	{
+		// There's a way to do this mathematically, but I haven't taken discrete mathematics yet so here's a while loop instead
+		int currentLevel = 1;
+		while (exp >= CalculateLevelUpRequirement(currentLevel))
+			currentLevel++;
+
+		return currentLevel;
+	}
+	private const int MaxLevel = 99;
+	private const int LevelInterval = 10000;
 
 	private StageSettings Stage => StageSettings.instance;
 
-	public override void _Ready() => useMissionExp = SaveManager.ActiveGameData.GetClearStatus(Stage.Data.LevelID) != SaveManager.GameData.LevelStatus.Cleared;
+	public override void _Ready()
+	{
+		SaveManager.ActiveGameData.level = CalculateLevel(SaveManager.ActiveGameData.exp); // Update from old save data, just in case
+		SaveManager.ActiveGameData.level = Mathf.Min(SaveManager.ActiveGameData.level, MaxLevel);
+		useMissionExp = SaveManager.ActiveGameData.GetClearStatus(Stage.Data.LevelID) != SaveManager.GameData.LevelStatus.Cleared;
+	}
 
 	public override void _PhysicsProcess(double _)
 	{
@@ -104,11 +121,9 @@ public partial class ExperienceResult : Control
 		SaveManager.ActiveGameData.exp = Mathf.CeilToInt(interpolatedExp);
 		RedrawData();
 
-		if (SaveManager.ActiveGameData.exp >= levelupRequirement) // Level up
+		if (SaveManager.ActiveGameData.exp >= levelupRequirement && SaveManager.ActiveGameData.level < MaxLevel) // Level up
 		{
-			SaveManager.ActiveGameData.exp = levelupRequirement;
 			ProcessLevelUp();
-			RedrawData();
 			return;
 		}
 
@@ -126,14 +141,15 @@ public partial class ExperienceResult : Control
 	private void RedrawData()
 	{
 		float expRatio = (SaveManager.ActiveGameData.exp - previousLevelupRequirement) / ((float)levelupRequirement - previousLevelupRequirement);
+		expRatio = Mathf.Clamp(expRatio, 0, 1);
 		expFill.Scale = new(expRatio, 1);
 		expLabel.Text = $"{ExtensionMethods.FormatMenuNumber(SaveManager.ActiveGameData.exp)}/{ExtensionMethods.FormatMenuNumber(levelupRequirement)}";
 
 		int addedExp = Mathf.CeilToInt(interpolatedExp) - startingExp;
 		scoreExp = Mathf.CeilToInt(Math.Clamp(Stage.TotalScore - addedExp, 0, Stage.TotalScore));
-		skillExp = Mathf.CeilToInt(Math.Clamp((Stage.CurrentEXP + Stage.TotalScore) - addedExp, 0, Stage.CurrentEXP));
+		skillExp = Mathf.CeilToInt(Math.Clamp(Stage.CurrentEXP + Stage.TotalScore - addedExp, 0, Stage.CurrentEXP));
 		if (useMissionExp)
-			missionExp = Mathf.CeilToInt(Math.Clamp((Stage.CurrentEXP + Stage.TotalScore + Stage.Data.FirstClearBonus) - addedExp, 0, Stage.Data.FirstClearBonus));
+			missionExp = Mathf.CeilToInt(Math.Clamp(Stage.CurrentEXP + Stage.TotalScore + Stage.Data.FirstClearBonus - addedExp, 0, Stage.Data.FirstClearBonus));
 
 		scoreLabel.Text = ExtensionMethods.FormatMenuNumber(scoreExp);
 		skillLabel.Text = ExtensionMethods.FormatMenuNumber(skillExp);
@@ -161,6 +177,13 @@ public partial class ExperienceResult : Control
 
 		while (SaveManager.ActiveGameData.exp >= levelupRequirement)
 		{
+			if (SaveManager.ActiveGameData.level >= MaxLevel)
+			{
+				SaveManager.ActiveGameData.level = MaxLevel;
+				SaveManager.ActiveGameData.exp = targetExp;
+				break;
+			}
+
 			// Level up
 			if (!isLevelUpShown)
 			{
@@ -172,7 +195,7 @@ public partial class ExperienceResult : Control
 
 			expInterpolation = 0.0f;
 			levelsGained++;
-			SaveManager.ActiveGameData.level++;
+			SaveManager.ActiveGameData.level = Mathf.Min(SaveManager.ActiveGameData.level + 1, MaxLevel);
 			previousLevelupRequirement = levelupRequirement;
 			levelupRequirement = CalculateLevelUpRequirement(SaveManager.ActiveGameData.level); // Update level up requirement
 		}
@@ -197,6 +220,9 @@ public partial class ExperienceResult : Control
 		soulLabel.Text = maxSoulPower.ToString("000");
 		soulLabel.GetParent<Control>().Visible = soulGaugeGain != 0;
 
+		expFill.Scale = Vector2.One; // Ensure exp bar is full
+		expLabel.Text = $"{ExtensionMethods.FormatMenuNumber(previousLevelupRequirement)}/{ExtensionMethods.FormatMenuNumber(previousLevelupRequirement)}";
+
 		if (animator.CurrentAnimation != ShowLevelUpAnimation)
 			animator.Play(LevelUpAnimation);
 	}
@@ -209,6 +235,7 @@ public partial class ExperienceResult : Control
 		startingExp = SaveManager.ActiveGameData.exp;
 		targetExp = startingExp + Stage.TotalScore; // Add exp from score
 		targetExp += Stage.CurrentEXP; // Add exp from skills
+		targetExp = Mathf.Min(targetExp, CalculateLevelUpRequirement(MaxLevel));
 
 		if (useMissionExp) // Add mission bonus
 		{
@@ -247,7 +274,7 @@ public partial class ExperienceResult : Control
 
 	private void FinishMenu()
 	{
-		// Emit a signal; Transition is handled by UnlockResult.cs
+		// Emit a signal; Transition is handled by NotificationMenu.cs
 		isFadingBgm = true;
 		EmitSignal(SignalName.Finished);
 	}

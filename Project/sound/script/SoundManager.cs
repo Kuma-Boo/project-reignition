@@ -9,6 +9,17 @@ public partial class SoundManager : Node
 	public static SoundManager instance;
 	public static int LanguageIndex => SaveManager.UseEnglishVoices ? 0 : 1;
 
+	public enum AudioBuses
+	{
+		Master,
+		Bgm,
+		Sfx,
+		Voice,
+		GameSfx,
+		BreakSfx,
+		Count
+	}
+
 	public override void _Ready()
 	{
 		instance = this;
@@ -19,6 +30,24 @@ public partial class SoundManager : Node
 		// Cancel Dialog when switching to a new scene
 		TransitionManager.instance.Connect(TransitionManager.SignalName.SceneChanged, new(this, MethodName.CancelDialog));
 	}
+
+	#region Audio Bus
+	/// <summary> Sets whether the break channel is muted or not (for muting environments) </summary>
+	public static bool IsBreakChannelMuted
+	{
+		set => AudioServer.SetBusMute((int)AudioBuses.BreakSfx, value);
+	}
+
+	/// <summary> Changes the volume of an audio bus channel. </summary>
+	public static void SetAudioBusVolume(AudioBuses bus, int volumePercentage, bool isMuted = default)
+	{
+		if (volumePercentage == 0)
+			isMuted = true;
+
+		AudioServer.SetBusMute((int)bus, isMuted); // Mute or unmute
+		AudioServer.SetBusVolumeDb((int)bus, Mathf.LinearToDb(volumePercentage * .01f));
+	}
+	#endregion
 
 	#region Dialog
 	public bool IsDialogActive { get; private set; }
@@ -47,7 +76,7 @@ public partial class SoundManager : Node
 		currentDialog = dialog;
 		currentDialogIndex = 0;
 		if (currentDialog.randomize)
-			currentDialogIndex = Runtime.randomNumberGenerator.RandiRange(0, currentDialog.DialogCount);
+			currentDialogIndex = Runtime.randomNumberGenerator.RandiRange(0, currentDialog.DialogCount - 1);
 		UpdateDialog(true);
 	}
 
@@ -288,6 +317,11 @@ public partial class SoundManager : Node
 
 	public void PlayRichPearlSFX() => richPearlSFX.Play();
 
+	public void StopAllPearlSFX()
+	{
+		for (int i = 0; i < pearlSFXList.Count; i++)
+			pearlSFXList[i].Stop();
+	}
 
 	private readonly Dictionary<StringName, int> sfxGroups = [];
 	public float AddGroupSFX(StringName key)
@@ -316,14 +350,6 @@ public partial class SoundManager : Node
 			return Mathf.LinearToDb(1.0f / value);
 
 		return 0.0f; // Don't modify db
-	}
-
-	/// <summary>
-	/// Sets whether the break channel is muted or not (for muting environments)
-	/// </summary>
-	public static bool IsBreakChannelMuted
-	{
-		set => AudioServer.SetBusMute(AudioServer.GetBusIndex("BREAK"), value);
 	}
 	#endregion
 }
