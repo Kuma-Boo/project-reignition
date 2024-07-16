@@ -154,8 +154,11 @@ public partial class CharacterLockon : Node3D
 		if (!activeTargets.Contains(t)) // Not in target list anymore (target hitbox may have been disabled)
 			return TargetState.NotInList;
 
-		if (Character.ActionState == CharacterController.ActionStates.Damaged) // Character is busy
+		if (Character.ActionState == CharacterController.ActionStates.Damaged ||
+			!StageSettings.instance.IsLevelIngame) // Character is busy
+		{
 			return TargetState.PlayerBusy;
+		}
 
 		if (!t.IsVisibleInTree() || !Character.Camera.IsOnScreen(t.GlobalPosition)) // Not visible
 			return TargetState.Invisible;
