@@ -25,11 +25,11 @@ public partial class Runtime : Node
 	{
 		UpdateShaderTime();
 
-		if (SaveManager.ActiveGameData != null)
-		{
-			SaveManager.ActiveGameData.playTime = Mathf.MoveToward(SaveManager.ActiveGameData.playTime,
-				SaveManager.MaxPlayTime, PhysicsManager.normalDelta);
-		}
+		if (SaveManager.ActiveSaveSlotIndex == -1)
+			return;
+
+		SaveManager.ActiveGameData.playTime = Mathf.MoveToward(SaveManager.ActiveGameData.playTime,
+			SaveManager.MaxPlayTime, PhysicsManager.normalDelta);
 	}
 
 	/// <summary> Collision layer for the environment. </summary>
