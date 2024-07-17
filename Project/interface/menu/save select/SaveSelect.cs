@@ -44,18 +44,6 @@ public partial class SaveSelect : Menu
 
 	protected override void ProcessMenu()
 	{
-		if (!isDeleteMenuActive && Input.IsActionJustPressed("button_select"))
-		{
-			int saveIndex = _saveOptions[ActiveSaveOptionIndex].SaveIndex;
-			if (SaveManager.GameSaveSlots[saveIndex].IsNewFile()) //Check if a save file is new 
-				return;
-
-			deleteAnimator.Play("show");
-			isDeleteMenuActive = true;
-			isDeleteSelected = false;
-			return;
-		}
-
 		if (isDeleteMenuActive)
 		{
 			if (Input.IsActionJustPressed("button_jump"))
@@ -79,6 +67,17 @@ public partial class SaveSelect : Menu
 				CancelDeleteMenu();
 				return;
 			}
+		}
+		else if (Input.IsActionJustPressed("button_pause"))
+		{
+			int saveIndex = _saveOptions[ActiveSaveOptionIndex].SaveIndex;
+			if (SaveManager.GameSaveSlots[saveIndex].IsNewFile()) // Check if a save file is new
+				return;
+
+			deleteAnimator.Play("show");
+			isDeleteMenuActive = true;
+			isDeleteSelected = false;
+			return;
 		}
 
 		base.ProcessMenu();
