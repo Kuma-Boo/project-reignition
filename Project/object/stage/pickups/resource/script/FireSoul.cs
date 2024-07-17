@@ -1,34 +1,64 @@
 using Godot;
 using Project.Core;
 
-namespace Project.Gameplay.Objects
+namespace Project.Gameplay.Objects;
+
+public partial class FireSoul : Pickup
 {
-	public partial class FireSoul : Pickup
+	[Export(PropertyHint.Range, "1, 3")]
+	public int fireSoulIndex = 1; // Which fire soul is this?
+	private bool isCollected;
+	private bool isCollectedInCheckpoint;
+	private bool isCollectedInSaveFile;
+	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
+	private NodePath animator;
+	private AnimationPlayer Animator;
+
+	protected override void SetUp()
 	{
-		[Export(PropertyHint.Range, "1, 3")]
-		public int fireSoulIndex = 1; // Which fire soul is this?
-		private bool isCollected; // Determined by save data
-		[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
-		private NodePath animator;
-		private AnimationPlayer Animator;
+		Animator = GetNodeOrNull<AnimationPlayer>(animator);
 
-		protected override void SetUp()
-		{
-			base.SetUp();
+		base.SetUp();
 
-			Animator = GetNodeOrNull<AnimationPlayer>(animator);
+		// Check save data
+		isCollectedInSaveFile = SaveManager.ActiveGameData.IsFireSoulCollected(Stage.Data.LevelID, fireSoulIndex);
+		if (isCollectedInSaveFile)
+			Despawn();
+	}
 
-			// Check save data
-			isCollected = SaveManager.ActiveGameData.IsFireSoulCollected(Stage.Data.LevelID, fireSoulIndex);
-			if (isCollected)
-				Despawn();
-		}
+	protected override void Collect()
+	{
+		if (isCollected)
+			return;
 
-		protected override void Collect()
-		{
-			// Write save data
+		isCollected = true;
+		Animator.Play("collect");
+		StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint), (uint)ConnectFlags.OneShot);
+	}
+
+	public override void Respawn()
+	{
+		if (isCollectedInSaveFile || isCollectedInCheckpoint) // Was already collected
+			return;
+
+		isCollected = false;
+		Animator.Play("RESET");
+		Animator.Advance(0.0);
+		Animator.Play("loop");
+
+		if (StageSettings.instance.IsConnected(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint)))
+			StageSettings.instance.Disconnect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint));
+
+		base.Respawn();
+	}
+
+	private void SaveCheckpoint() => isCollectedInCheckpoint = true;
+
+	public override void Unload()
+	{
+		if (isCollected) // Write save data
 			SaveManager.ActiveGameData.SetFireSoulCollected(Stage.Data.LevelID, fireSoulIndex, true);
-			Animator.Play("collect");
-		}
+
+		base.Unload();
 	}
 }
