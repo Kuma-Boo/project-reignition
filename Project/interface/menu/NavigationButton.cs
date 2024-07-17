@@ -14,15 +14,22 @@ public partial class NavigationButton : Node
 	private ControllerSpriteResource[] controllerResources;
 
 	[ExportCategory("Components")]
-	[Export]
-	private Label buttonLabel;
-	[Export]
-	private TextureRect buttonTextureRect;
-	[Export]
-	private Label actionLabel;
+	[Export(PropertyHint.NodePathValidTypes, "Label")]
+	private NodePath buttonLabel;
+	private Label ButtonLabel { get; set; }
+	[Export(PropertyHint.NodePathValidTypes, "TextureRect")]
+	private NodePath buttonTextureRect;
+	private TextureRect ButtonTextureRect { get; set; }
+	[Export(PropertyHint.NodePathValidTypes, "Label")]
+	private NodePath actionLabel;
+	private Label ActionLabel { get; set; }
 
 	public override void _Ready()
 	{
+		ButtonLabel = GetNodeOrNull<Label>(buttonLabel);
+		ButtonTextureRect = GetNodeOrNull<TextureRect>(buttonTextureRect);
+		ActionLabel = GetNodeOrNull<Label>(actionLabel);
+
 		Runtime.Instance.Connect(Runtime.SignalName.ControllerChanged, new(this, MethodName.Redraw));
 		SaveManager.Instance.Connect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.Redraw));
 		Redraw();
@@ -37,7 +44,7 @@ public partial class NavigationButton : Node
 	private void Redraw(int _) => Redraw();
 	private void Redraw()
 	{
-		actionLabel.Text = Tr(actionKey);
+		ActionLabel.Text = Tr(actionKey);
 
 		Array<InputEvent> eventList = InputMap.ActionGetEvents(inputKey);
 
@@ -58,27 +65,27 @@ public partial class NavigationButton : Node
 		if (Runtime.Instance.IsUsingController)
 		{
 			if (button == null && motion == null) return;
-			buttonLabel.Visible = false;
+			ButtonLabel.Visible = false;
 
 			int controllerIndex = (int)Runtime.Instance.GetActiveControllerType() - 1;
 
 			if (button != null) // Prioritize using buttons over axis icons
 			{
-				buttonTextureRect.Texture = controllerResources[controllerIndex].buttons[(int)button.ButtonIndex];
+				ButtonTextureRect.Texture = controllerResources[controllerIndex].buttons[(int)button.ButtonIndex];
 				return;
 			}
 
 			int axis = Runtime.Instance.ControllerAxisToIndex(motion);
-			buttonTextureRect.Texture = controllerResources[controllerIndex].axis[axis];
+			ButtonTextureRect.Texture = controllerResources[controllerIndex].axis[axis];
 			return;
 		}
 
 		// Keyboard
 		if (key == null) return;
 
-		buttonLabel.Visible = true;
-		buttonLabel.Text = Runtime.Instance.GetKeyLabel(key.Keycode);
-		int keySpriteIndex = buttonLabel.Text.Length <= 3 ? 0 : 1;
-		buttonTextureRect.Texture = controllerResources[^1].buttons[keySpriteIndex]; // Last controller resource should be the keyboard sprites
+		ButtonLabel.Visible = true;
+		ButtonLabel.Text = Runtime.Instance.GetKeyLabel(key.Keycode);
+		int keySpriteIndex = ButtonLabel.Text.Length <= 3 ? 0 : 1;
+		ButtonTextureRect.Texture = controllerResources[^1].buttons[keySpriteIndex]; // Last controller resource should be the keyboard sprites
 	}
 }

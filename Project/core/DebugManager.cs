@@ -42,7 +42,7 @@ public partial class DebugManager : Node2D
 		SetUpSkills();
 	}
 
-	public override void _PhysicsProcess(double _)
+	public override void _Process(double _)
 	{
 		if (Input.IsActionJustPressed("toggle_fullscreen")) // Global shortcut used in final build as well
 		{
@@ -70,7 +70,6 @@ public partial class DebugManager : Node2D
 
 		if (Input.IsActionJustPressed("debug_pause"))
 			GetTree().Paused = !IsPaused;
-
 
 		if (Input.IsActionJustPressed("debug_window_small"))
 		{
