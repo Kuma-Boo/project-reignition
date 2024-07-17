@@ -119,7 +119,7 @@ public partial class CameraController : Node3D
 		float smoothing = LockonBlendOutSmoothing;
 
 		// Lockon is active
-		if (IsLockonCameraActive)
+		if (!ActiveSettings.ignoreHomingAttack && IsLockonCameraActive)
 		{
 			targetBlend = 1;
 			smoothing = LockonBlendInSmoothing;
@@ -402,7 +402,7 @@ public partial class CameraController : Node3D
 			if (Character.IsMovingBackward)
 				targetDistance += settings.backstepDistance;
 
-			if (!settings.ignoreHomingAttackDistance && IsLockonCameraActive)
+			if (!settings.ignoreHomingAttack && IsLockonCameraActive)
 				targetDistance += LockonDistance;
 
 			if (PathFollower.Progress < targetDistance && !PathFollower.Loop)
@@ -500,6 +500,7 @@ public partial class CameraController : Node3D
 				if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate) // Rotational tracking
 				{
 					delta.X = 0; // Ignore x axis for pitch tracking
+					delta.Y -= settings.viewportOffset.Y;
 					data.pitchTracking = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
 					targetPitchTracking = data.pitchTracking;
 				}
@@ -511,7 +512,7 @@ public partial class CameraController : Node3D
 			data.CalculatePosition(Character.CenterPosition);
 			data.precalculatedPosition = AddTrackingOffset(data.precalculatedPosition, data);
 
-			if (IsLockonCameraActive && LockonTarget != null)
+			if (!settings.ignoreHomingAttack && IsLockonCameraActive && LockonTarget != null)
 			{
 				globalDelta = LockonTarget.GlobalPosition.Lerp(Character.CenterPosition, .5f) - data.precalculatedPosition;
 				delta = data.offsetBasis.Inverse() * globalDelta;

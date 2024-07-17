@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dib3s0hwoc66i"]
+[gd_scene load_steps=26 format=3 uid="uid://dib3s0hwoc66i"]
 
 [ext_resource type="PackedScene" uid="uid://7kcasi6v1odv" path="res://area/1 sand oasis/act 3/Static.tscn" id="1_rpqg6"]
 [ext_resource type="Resource" uid="uid://daswhq4xeo514" path="res://resource/level data/sand oasis/Act3Rampage.tres" id="2_fqwll"]
@@ -17,6 +17,9 @@
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="14_vbq4m"]
 [ext_resource type="Script" path="res://object/trigger/modules/ItemCycleTrigger.cs" id="15_0f11n"]
 [ext_resource type="PackedScene" uid="uid://d4bv4ulvmin0y" path="res://object/enemy/majin/data/sand oasis/GreenMajin.tscn" id="17_gxwn8"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="18_vp6fq"]
+[ext_resource type="Resource" uid="uid://cc45ga2vy7wse" path="res://area/1 sand oasis/act 3/camera/RampageEnemyCam.tres" id="19_7x56d"]
+[ext_resource type="Resource" uid="uid://dghu64iynmk7k" path="res://area/1 sand oasis/act 3/camera/LowerCam.tres" id="20_cd83g"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wbgfo"]
 size = Vector3(15, 20, 2.5)
@@ -36,12 +39,18 @@ point_count = 2
 [sub_resource type="BoxShape3D" id="BoxShape3D_xxv6r"]
 size = Vector3(15, 20, 2.5)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_165ws"]
+size = Vector3(20, 15, 100)
+
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_rpqg6")]
 Data = ExtResource("2_fqwll")
 metadata/_edit_group_ = true
 metadata/_edit_lock_ = true
+
+[node name="Skybox" parent="Static/Visuals" index="6"]
+visible = false
 
 [node name="RingChainAct" type="Node3D" parent="."]
 
@@ -8359,6 +8368,21 @@ monitorable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RingChainAct/LapCycle/Checkpoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_xxv6r")
+
+[node name="BottomEnemyCam" parent="." instance=ExtResource("4_n7xu7")]
+transform = Transform3D(0.934689, 0, -0.355466, 0, 1, 0, 0.355466, 0, 0.934689, 0, -37.4, 0)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Cam" type="Node3D" parent="BottomEnemyCam"]
+script = ExtResource("18_vp6fq")
+transitionTime = 0.5
+settings = ExtResource("19_7x56d")
+previousSettings = ExtResource("20_cd83g")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BottomEnemyCam"]
+shape = SubResource("BoxShape3D_165ws")
 
 [connection signal="Activated" from="RingChainAct/CullingMap/DescentTopL" to="RingChainAct/Lap01/DescentTop" method="Activate"]
 [connection signal="Activated" from="RingChainAct/CullingMap/DescentTopL" to="RingChainAct/Lap02/DescentTop" method="Activate"]
