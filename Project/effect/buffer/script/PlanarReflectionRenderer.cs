@@ -89,7 +89,7 @@ public partial class PlanarReflectionRenderer : Node3D
 		if (Engine.IsEditorHint())
 			reflectionViewport.Size = (Vector2I)GameplayCamera.GetViewport().GetVisibleRect().Size;
 		else
-			reflectionViewport.Size = Runtime.HALF_SCREEN_SIZE;
+			reflectionViewport.Size = Runtime.HalfScreenSize;
 
 		reflectionViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
 	}

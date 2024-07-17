@@ -1,8 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://boo3c0dnk36vn"]
+[gd_scene load_steps=13 format=3 uid="uid://boo3c0dnk36vn"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CameraController.cs" id="2"]
 [ext_resource type="Resource" uid="uid://dhevcck1smng1" path="res://resource/preset/camera/common/DefaultCam.tres" id="2_hi8xo"]
 [ext_resource type="PackedScene" uid="uid://qmsgr6kswk87" path="res://object/player/resource/component/PathFollower.tscn" id="3_f65nj"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="3_vpygn"]
+[ext_resource type="Resource" uid="uid://dsc0vixphfyh" path="res://resource/preset/camera/common/CompletionCam.tres" id="4_j4rb3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m64j3"]
 specular_mode = 2
@@ -56,6 +58,7 @@ _data = {
 }
 
 [node name="Camera" type="Node3D" node_paths=PackedStringArray("Camera", "FreeCamRoot", "cameraRoot", "debugMesh", "crossfade", "crossfadeAnimator", "PathFollower")]
+process_mode = 3
 script = ExtResource("2")
 Camera = NodePath("CameraRoot/FreecamRoot/Camera")
 FreeCamRoot = NodePath("CameraRoot/FreecamRoot")
@@ -65,6 +68,11 @@ crossfade = NodePath("Crossfade")
 crossfadeAnimator = NodePath("Crossfade/AnimationPlayer")
 PathFollower = NodePath("PathFollower")
 defaultSettings = ExtResource("2_hi8xo")
+
+[node name="CompletionCamera" type="Node3D" parent="."]
+script = ExtResource("3_vpygn")
+transitionTime = 0.2
+settings = ExtResource("4_j4rb3")
 
 [node name="CameraRoot" type="Node3D" parent="."]
 
@@ -102,3 +110,5 @@ libraries = {
 }
 
 [node name="PathFollower" parent="." instance=ExtResource("3_f65nj")]
+
+[connection signal="StartCompletion" from="." to="CompletionCamera" method="Activate"]

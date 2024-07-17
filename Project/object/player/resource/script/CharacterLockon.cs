@@ -154,14 +154,17 @@ public partial class CharacterLockon : Node3D
 		if (!activeTargets.Contains(t)) // Not in target list anymore (target hitbox may have been disabled)
 			return TargetState.NotInList;
 
-		if (Character.ActionState == CharacterController.ActionStates.Damaged) // Character is busy
+		if (Character.ActionState == CharacterController.ActionStates.Damaged ||
+			!StageSettings.instance.IsLevelIngame) // Character is busy
+		{
 			return TargetState.PlayerBusy;
+		}
 
 		if (!t.IsVisibleInTree() || !Character.Camera.IsOnScreen(t.GlobalPosition)) // Not visible
 			return TargetState.Invisible;
 
 		// Raycast for obstacles
-		Vector3 castPosition = Character.CenterPosition;
+		Vector3 castPosition = Character.CollisionPosition;
 		if (Character.VerticalSpeed < 0)
 			castPosition += Character.UpDirection * Character.VerticalSpeed * PhysicsManager.physicsDelta;
 		Vector3 castVector = t.GlobalPosition - castPosition;
@@ -171,7 +174,7 @@ public partial class CharacterLockon : Node3D
 		if (h && h.collidedObject != t)
 		{
 			if (!h.collidedObject.IsInGroup("level wall") ||
-				Mathf.Abs(h.normal.Dot(castVector)) < .5f)
+				h.normal.AngleTo(Vector3.Up) > Mathf.Pi * .4f)
 			{
 				// Hit an obstacle
 				return TargetState.HitObstacle;
@@ -186,6 +189,23 @@ public partial class CharacterLockon : Node3D
 
 				if (h && h.collidedObject != t)
 					return TargetState.HitObstacle;
+			}
+		}
+
+		// Check from the floor if nothing was hit
+		Vector3 castOffset = Vector3.Up * Character.CollisionSize.Y * .5f;
+		castPosition = Character.GlobalPosition + castOffset;
+		if (Character.VerticalSpeed < 0)
+			castPosition += Character.UpDirection * Character.VerticalSpeed * PhysicsManager.physicsDelta;
+		castVector = t.GlobalPosition - castOffset - castPosition;
+		h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
+		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
+		if (h && h.collidedObject != t)
+		{
+			if (!h.collidedObject.IsInGroup("level wall") &&
+				h.normal.AngleTo(Vector3.Up) > Mathf.Pi * .4f)
+			{
+				return TargetState.HitObstacle;
 			}
 		}
 
@@ -259,7 +279,7 @@ public partial class CharacterLockon : Node3D
 		}
 
 		Character.MoveSpeed = Mathf.MoveToward(Character.MoveSpeed, 0f, Character.GroundSettings.Friction * PhysicsManager.physicsDelta);
-		Character.VerticalSpeed -= Runtime.GRAVITY * PhysicsManager.physicsDelta;
+		Character.VerticalSpeed -= Runtime.Gravity * PhysicsManager.physicsDelta;
 	}
 
 	public void StartBounce(bool bounceUpward = true) // Bounce the player

@@ -10,6 +10,9 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class CameraController : Node3D
 {
+	[Signal]
+	public delegate void StartCompletionEventHandler();
+
 	public const float DefaultFov = 70;
 
 	[ExportGroup("Components")]
@@ -67,6 +70,9 @@ public partial class CameraController : Node3D
 
 	public override void _PhysicsProcess(double _)
 	{
+		if (GetTree().Paused)
+			return;
+
 		PathFollower.Resync();
 
 		// Don't update the camera when the player is defeated from a DeathTrigger
@@ -113,7 +119,7 @@ public partial class CameraController : Node3D
 		float smoothing = LockonBlendOutSmoothing;
 
 		// Lockon is active
-		if (IsLockonCameraActive)
+		if (!ActiveSettings.ignoreHomingAttack && IsLockonCameraActive)
 		{
 			targetBlend = 1;
 			smoothing = LockonBlendInSmoothing;
@@ -158,9 +164,17 @@ public partial class CameraController : Node3D
 		UpdateGameplayCamera();
 	}
 
+	public bool UsingCompletionCamera { get; private set; }
+	public void StartCompletionCamera()
+	{
+		EmitSignal(SignalName.StartCompletion);
+		UsingCompletionCamera = true;
+	}
+
 	/// <summary> Changes the current camera settings. </summary>
 	public void UpdateCameraSettings(CameraBlendData data, bool enableXformBlend = false)
 	{
+		if (UsingCompletionCamera) return;
 		if (data.SettingsResource == null) return; // Invalid data
 
 		if (Mathf.IsZeroApprox(data.BlendTime)) // Cut transition
@@ -288,7 +302,7 @@ public partial class CameraController : Node3D
 		cameraRoot.GlobalTransform = cameraTransform; // Update transform
 
 		Camera.Fov = fov; // Update fov
-		RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_PLAYER_SCREEN_POSITION, ConvertToScreenSpace(Character.CenterPosition) / Runtime.SCREEN_SIZE);
+		RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_PLAYER_SCREEN_POSITION, ConvertToScreenSpace(Character.CenterPosition) / Runtime.ScreenSize);
 
 		if (SnapFlag) // Reset flag after camera was updated
 			SnapFlag = false;
@@ -388,7 +402,7 @@ public partial class CameraController : Node3D
 			if (Character.IsMovingBackward)
 				targetDistance += settings.backstepDistance;
 
-			if (!settings.ignoreHomingAttackDistance && IsLockonCameraActive)
+			if (!settings.ignoreHomingAttack && IsLockonCameraActive)
 				targetDistance += LockonDistance;
 
 			if (PathFollower.Progress < targetDistance && !PathFollower.Loop)
@@ -486,6 +500,7 @@ public partial class CameraController : Node3D
 				if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate) // Rotational tracking
 				{
 					delta.X = 0; // Ignore x axis for pitch tracking
+					delta.Y -= settings.viewportOffset.Y;
 					data.pitchTracking = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
 					targetPitchTracking = data.pitchTracking;
 				}
@@ -497,7 +512,7 @@ public partial class CameraController : Node3D
 			data.CalculatePosition(Character.CenterPosition);
 			data.precalculatedPosition = AddTrackingOffset(data.precalculatedPosition, data);
 
-			if (IsLockonCameraActive && LockonTarget != null)
+			if (!settings.ignoreHomingAttack && IsLockonCameraActive && LockonTarget != null)
 			{
 				globalDelta = LockonTarget.GlobalPosition.Lerp(Character.CenterPosition, .5f) - data.precalculatedPosition;
 				delta = data.offsetBasis.Inverse() * globalDelta;
@@ -562,8 +577,8 @@ public partial class CameraController : Node3D
 	private bool isFreeCamTilting;
 
 	private bool isFreeCamLocked;
-	private Vector3 freeCamLockedPosition;
-	private Vector3 freeCamLockedRotation;
+	private Vector3 freeCamPosition;
+	private Vector3 freeCamRotation;
 
 	private void UpdateFreeCam()
 	{
@@ -592,8 +607,7 @@ public partial class CameraController : Node3D
 		if (Input.IsActionJustPressed("debug_free_cam_lock"))
 		{
 			isFreeCamLocked = !isFreeCamLocked;
-			freeCamLockedPosition = FreeCamRoot.GlobalPosition;
-			freeCamLockedRotation = new(Camera.RotationDegrees.X, FreeCamRoot.GlobalRotationDegrees.Y, Camera.RotationDegrees.Z);
+			freeCamPosition = FreeCamRoot.GlobalPosition;
 			GD.Print($"Free cam lock set to {isFreeCamLocked}.");
 		}
 
@@ -622,8 +636,9 @@ public partial class CameraController : Node3D
 		freecamMovementVector = freecamMovementVector.SmoothDamp(targetDirection * targetMoveSpeed, ref freecamVelocity, FREE_CAM_POSITION_SMOOTHING);
 		FreeCamRoot.GlobalTranslate(freecamMovementVector * PhysicsManager.normalDelta);
 
+		DebugManager.Instance.RedrawCamData(FreeCamRoot.GlobalPosition, freeCamRotation);
 		if (isFreeCamLocked)
-			UpdateFreeCamData(freeCamLockedPosition, freeCamLockedRotation);
+			UpdateFreeCamData(freeCamPosition, freeCamRotation);
 	}
 
 	private void ToggleFreeCam()
@@ -664,6 +679,9 @@ public partial class CameraController : Node3D
 
 		if (e is InputEventMouseMotion)
 		{
+			if (isFreeCamLocked)
+				return;
+
 			if (isFreeCamRotating)
 			{
 				FreeCamRoot.RotateObjectLocal(Vector3.Up, Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.X) * MOUSE_SENSITIVITY);
@@ -673,6 +691,9 @@ public partial class CameraController : Node3D
 			{
 				Camera.RotateObjectLocal(Vector3.Forward, Mathf.DegToRad((e as InputEventMouseMotion).Relative.X) * MOUSE_SENSITIVITY);
 			}
+
+			Camera.RotationDegrees = Camera.RotationDegrees.RemoveVertical();
+			freeCamRotation = new(Camera.RotationDegrees.X, FreeCamRoot.GlobalRotationDegrees.Y, Camera.RotationDegrees.Z);
 		}
 		else if (e is InputEventMouseButton emb)
 		{
@@ -680,12 +701,12 @@ public partial class CameraController : Node3D
 			{
 				if (emb.ButtonIndex == MouseButton.WheelUp)
 				{
-					freecamMovespeed += 5;
+					freecamMovespeed += 2;
 					GD.Print($"Free cam Speed set to {freecamMovespeed}.");
 				}
 				if (emb.ButtonIndex == MouseButton.WheelDown)
 				{
-					freecamMovespeed -= 5;
+					freecamMovespeed -= 2;
 					if (freecamMovespeed < 0)
 						freecamMovespeed = 0;
 					GD.Print($"Free cam Speed set to {freecamMovespeed}.");

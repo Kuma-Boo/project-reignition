@@ -456,7 +456,7 @@ public partial class SaveManager : Node
 
 	#region Game data
 	/// <summary> Longest amount of playtime that can be displayed on the file select. (99:59:59 in seconds) </summary>
-	public const int MAX_PLAY_TIME = 359999;
+	public const int MaxPlayTime = 359999;
 
 	public enum WorldEnum
 	{

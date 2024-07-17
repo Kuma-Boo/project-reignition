@@ -99,7 +99,7 @@ namespace Project.Gameplay.Bosses
 			StageSettings.instance.ConnectUnloadSignal(this);
 			StageSettings.instance.ConnectRespawnSignal(this);
 
-			StageSettings.instance.Connect(StageSettings.SignalName.ReflectionProbesCalculated, new(this, MethodName.StartIntroduction));
+			StageSettings.instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.StartIntroduction));
 		}
 
 
@@ -224,7 +224,7 @@ namespace Project.Gameplay.Bosses
 			eventAnimator.Advance(0.0);
 
 			Character.Visible = false;
-			Character.AddLockoutData(Runtime.Instance.StopLockout);
+			Character.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 			Interface.PauseMenu.AllowPausing = false;
 
 			// Award 1000 points for defeating the boss

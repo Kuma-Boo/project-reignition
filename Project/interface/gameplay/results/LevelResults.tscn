@@ -1,7 +1,8 @@
-[gd_scene load_steps=30 format=3 uid="uid://x03eut8s4p3l"]
+[gd_scene load_steps=31 format=3 uid="uid://x03eut8s4p3l"]
 
 [ext_resource type="AudioStream" uid="uid://dbv5ecruxgfsy" path="res://sound/ost/jingle/Stage Clear.mp3" id="1"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="2"]
+[ext_resource type="Resource" uid="uid://cf1j44s01044o" path="res://resource/preset/sfx library/ResultsVoiceLibrary.tres" id="2_50vl2"]
 [ext_resource type="Texture2D" uid="uid://daym7a6tnri40" path="res://interface/gameplay/results/texture/bronze.png" id="3"]
 [ext_resource type="Script" path="res://interface/gameplay/results/script/LevelResult.cs" id="4"]
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="4_wm6jc"]
@@ -728,11 +729,14 @@ tracks/16/path = NodePath(".")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.333333),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
 "method": &"MuteGameplaySoundEffects"
+}, {
+"args": [],
+"method": &"PlayRankQuote"
 }]
 }
 
@@ -1232,11 +1236,14 @@ tracks/18/path = NodePath(".")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 3.33333),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
 "method": &"MuteGameplaySoundEffects"
+}, {
+"args": [],
+"method": &"PlayRankQuote"
 }]
 }
 
@@ -1560,7 +1567,7 @@ _data = {
 "success-start": SubResource("1")
 }
 
-[node name="LevelResults" type="Control" node_paths=PackedStringArray("score", "time", "ring", "technical", "total", "bgm", "animator")]
+[node name="LevelResults" type="Control" node_paths=PackedStringArray("score", "time", "ring", "technical", "total", "bgm", "animator", "resultsVoicePlayer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1575,6 +1582,8 @@ technical = NodePath("Data/Labels/Technical/Value")
 total = NodePath("Data/Labels/Total/Value")
 bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
+resultsVoicePlayer = NodePath("ResultsVoice")
+resultsVoiceLibrary = ExtResource("2_50vl2")
 metadata/_edit_lock_ = true
 
 [node name="Header" type="Node2D" parent="."]
@@ -1878,6 +1887,9 @@ bus = &"SFX"
 [node name="RankSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_w8yyn")
 bus = &"SFX"
+
+[node name="ResultsVoice" type="AudioStreamPlayer" parent="."]
+bus = &"VOICE"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

@@ -1,16 +1,16 @@
-using System;
 using Godot;
 using Godot.Collections;
 using Project.Gameplay;
 
 namespace Project.Core;
+
 public partial class Runtime : Node
 {
 	public static Runtime Instance;
 
 	public static readonly RandomNumberGenerator randomNumberGenerator = new();
-	public static readonly Vector2I SCREEN_SIZE = new(1920, 1080); // Working resolution is 1080p
-	public static readonly Vector2I HALF_SCREEN_SIZE = (Vector2I)((Vector2)SCREEN_SIZE * .5f);
+	public static readonly Vector2I ScreenSize = new(1920, 1080); // Working resolution is 1080p
+	public static readonly Vector2I HalfScreenSize = (Vector2I)((Vector2)ScreenSize * .5f);
 
 	public override void _EnterTree()
 	{
@@ -19,18 +19,17 @@ public partial class Runtime : Node
 		Interface.Menus.Menu.SetUpMemory();
 	}
 
-	public override void _Ready()
-	{
-		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, Callable.From(ClearPearls));
-	}
+	public override void _Ready() => TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, Callable.From(ClearPearls));
 
 	public override void _Process(double _)
 	{
 		UpdateShaderTime();
 
 		if (SaveManager.ActiveGameData != null)
+		{
 			SaveManager.ActiveGameData.playTime = Mathf.MoveToward(SaveManager.ActiveGameData.playTime,
-				SaveManager.MAX_PLAY_TIME, PhysicsManager.normalDelta);
+				SaveManager.MaxPlayTime, PhysicsManager.normalDelta);
+		}
 	}
 
 	/// <summary> Collision layer for the environment. </summary>
@@ -45,32 +44,34 @@ public partial class Runtime : Node
 	[Export(PropertyHint.Layers3DPhysics)]
 	public uint particleCollisionMask;
 
-	/// <summary> Lockout used for stopping the player. </summary>
+	/// <summary> The default lockout used when a stage is finished. </summary>
 	[Export]
-	public LockoutResource StopLockout { get; private set; }
+	public LockoutResource DefaultCompletionLockout { get; private set; }
 
 	[Export]
 	/// <summary> Reference to the complete skill list. </summary>
 	public SkillListResource SkillList { get; private set; }
 
-	public static readonly float GRAVITY = 28.0f;
-	public static readonly float MAX_GRAVITY = -48.0f;
-	public static float CalculateJumpPower(float height) => Mathf.Sqrt(2 * Runtime.GRAVITY * height);
+	public static readonly float Gravity = 28.0f;
+	public static readonly float MaxGravity = -48.0f;
+	public static float CalculateJumpPower(float height) => Mathf.Sqrt(2 * Gravity * height);
 
 	private float shaderTime;
-	private const float SHADER_ROLLOVER = 3600f;
-	private readonly StringName SHADER_GLOBAL_TIME = "time";
+	private const float ShaderTimeRollover = 3600f;
+	private readonly StringName ShaderTimeParameter = "time";
 
 	private void UpdateShaderTime()
 	{
-		shaderTime += PhysicsManager.normalDelta;
-		if (shaderTime > SHADER_ROLLOVER)
-			shaderTime -= SHADER_ROLLOVER; // Copied from original shader time's rollover
-		RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_TIME, shaderTime);
+		if (GetTree().Paused)
+			return;
+
+		shaderTime += PhysicsManager.normalDelta * (float)Engine.TimeScale;
+		if (shaderTime > ShaderTimeRollover)
+			shaderTime -= ShaderTimeRollover; // Copied from original shader time's rollover
+		RenderingServer.GlobalShaderParameterSet(ShaderTimeParameter, shaderTime);
 	}
 
 	#region Pearl Stuff
-
 	public SphereShape3D PearlCollisionShape = new();
 	public SphereShape3D RichPearlCollisionShape = new();
 	[Export]
@@ -195,7 +196,6 @@ public partial class Runtime : Node
 		return SaveManager.ControllerType.Xbox; // Default to XBox
 	}
 
-
 	public int ControllerAxisToIndex(InputEventJoypadMotion motion)
 	{
 		int axis = (int)motion.Axis;
@@ -204,7 +204,6 @@ public partial class Runtime : Node
 		else
 			return axis + 4;
 	}
-
 
 	public override void _Input(InputEvent e)
 	{
@@ -234,7 +233,6 @@ public partial class Runtime : Node
 
 		e.Dispose();
 	}
-
 
 	public string GetKeyLabel(Key key)
 	{
