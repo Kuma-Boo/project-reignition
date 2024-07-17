@@ -193,10 +193,11 @@ public partial class CharacterLockon : Node3D
 		}
 
 		// Check from the floor if nothing was hit
-		castPosition = Character.GlobalPosition;
+		Vector3 castOffset = Vector3.Up * Character.CollisionSize.Y * .5f;
+		castPosition = Character.GlobalPosition + castOffset;
 		if (Character.VerticalSpeed < 0)
 			castPosition += Character.UpDirection * Character.VerticalSpeed * PhysicsManager.physicsDelta;
-		castVector = t.GlobalPosition - (Vector3.Up * Character.CollisionSize.Y) - castPosition;
+		castVector = t.GlobalPosition - castOffset - castPosition;
 		h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
 		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
 		if (h && h.collidedObject != t)
