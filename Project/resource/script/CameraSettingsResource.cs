@@ -110,7 +110,7 @@ public partial class CameraSettingsResource : Resource
 			case BACKSTEP_DISTANCE_KEY:
 				return backstepDistance;
 			case HOMING_ATTACK_DISTANCE_KEY:
-				return ignoreHomingAttackDistance;
+				return ignoreHomingAttack;
 			case DISTANCE_MODE_KEY:
 				return (int)distanceCalculationMode;
 			case SAMPLE_OFFSET_KEY:
@@ -182,7 +182,7 @@ public partial class CameraSettingsResource : Resource
 				backstepDistance = (float)value;
 				break;
 			case HOMING_ATTACK_DISTANCE_KEY:
-				ignoreHomingAttackDistance = (bool)value;
+				ignoreHomingAttack = (bool)value;
 				break;
 			case DISTANCE_MODE_KEY:
 				distanceCalculationMode = (DistanceModeEnum)(int)value;
@@ -288,8 +288,8 @@ public partial class CameraSettingsResource : Resource
 	public float distance;
 	/// <summary> Extra distance to add when backstepping. </summary>
 	public float backstepDistance;
-	/// <summary> Don't add more distance when performing a homing attack? </summary>
-	public bool ignoreHomingAttackDistance;
+	/// <summary> Don't apply the homing attack camera? </summary>
+	public bool ignoreHomingAttack;
 	/// <summary> How to calculate distance. </summary>
 	public DistanceModeEnum distanceCalculationMode;
 	public enum DistanceModeEnum
