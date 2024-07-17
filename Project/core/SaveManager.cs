@@ -17,9 +17,9 @@ public partial class SaveManager : Node
 	public override void _EnterTree()
 	{
 		Instance = this;
+		MenuData = GameData.CreateDefaultData(); // Create a default game data object for the menu
 
 		LoadConfig();
-		LoadGameData();
 
 		if (OS.IsDebugBuild()) // Editor build, use custom configuration
 		{
@@ -480,22 +480,26 @@ public partial class SaveManager : Node
 			if (ActiveSaveSlotIndex != -1)
 				return GameSaveSlots[ActiveSaveSlotIndex];
 
-			// Default to save slot 1 when running the game from the editor
-			return GameData.DefaultData;
+			// Default to default data when running the game from the editor
+			return MenuData;
 		}
 	}
 
+	/// <summary> Game Data to use during the menu so things don't break. </summary>
+	public static GameData MenuData { get; set; }
 	/// <summary> Current skill ring. </summary>
-	public static SkillRing ActiveSkillRing = new();
-	public static GameData[] GameSaveSlots = new GameData[MAX_SAVE_SLOTS]; // List of all saves created.
-	public const int MAX_SAVE_SLOTS = 9; // Maximum number of save slots that can be created.
+	public readonly static SkillRing ActiveSkillRing = new();
+	/// <summary> List of all saves created. </summary>
+	public readonly static GameData[] GameSaveSlots = new GameData[SaveSlotCount];
+	/// <summary> Maximum number of save slots that can be created. </summary>
+	public const int SaveSlotCount = 9;
 
 	/// <summary> Saves active game data to a file. </summary>
 	public static void SaveGameData()
 	{
 		if (ActiveSaveSlotIndex == -1) return; // Invalid save slot
 
-		// TODO Write save data to a file.
+		// Write save data to a file.
 		string saveNumber = ActiveSaveSlotIndex.ToString("00");
 		FileAccess file = FileAccess.Open(SaveDirectory + $"save{saveNumber}.dat", FileAccess.ModeFlags.Write);
 
@@ -504,10 +508,6 @@ public partial class SaveManager : Node
 			file.StoreString(Json.Stringify(ActiveGameData.ToDictionary(), "\t"));
 			file.Close();
 		}
-		else
-		{
-			// TODO Show an error message to the player? 
-		}
 	}
 
 	/// <summary> Preloads game data so it can be displayed on menus. </summary>
@@ -515,7 +515,7 @@ public partial class SaveManager : Node
 	{
 		for (int i = 0; i < GameSaveSlots.Length; i++)
 		{
-			GameSaveSlots[i] = new();
+			GameSaveSlots[i] = GameData.CreateDefaultData();
 
 			string saveNumber = i.ToString("00");
 			FileAccess file = FileAccess.Open(SaveDirectory + $"save{saveNumber}.dat", FileAccess.ModeFlags.Read);
@@ -525,33 +525,14 @@ public partial class SaveManager : Node
 				file.Close();
 			}
 		}
-
-		// Set up default game data/menu game data
-		GameData.DefaultData = new()
-		{
-			level = 0,
-			lastPlayedWorld = WorldEnum.LostPrologue,
-		};
-
-		// TODO Replace this with the tutorial key
-		GameData.DefaultData.UnlockStage("so_a1_main");
-		GameData.DefaultData.UnlockWorld(WorldEnum.LostPrologue);
-		GameData.DefaultData.UnlockWorld(WorldEnum.SandOasis);
-
-		if (DebugManager.Instance.UseDemoSave || OS.IsDebugBuild()) // Unlock all worlds in the demo
-		{
-			GameData.DefaultData.UnlockAllWorlds();
-			ActiveSkillRing.LoadFromActiveData();
-		}
 	}
 
 	//<summary> Frees game data at the given index
-	public static void ResetSaveData(int index, bool asNewSaveFile)
+	public static void ResetSaveData(int index, bool asEmptyFile)
 	{
-		GameSaveSlots[index].Free();
-		GameSaveSlots[index] = GameData.DefaultData;
+		GameSaveSlots[index] = GameData.CreateDefaultData();
 
-		if (asNewSaveFile) // Set level to be 1 so game recognizes save game as valid
+		if (!asEmptyFile) // Set level to be 1 so files aren't read as empty
 			GameSaveSlots[index].level = 1;
 	}
 
@@ -567,17 +548,17 @@ public partial class SaveManager : Node
 		GD.Print("Deleting save");
 	}
 
-	public partial class GameData : GodotObject
+	public class GameData
 	{
 		/// <summary> Which area was the player in last? (Used for save select) </summary>
 		public WorldEnum lastPlayedWorld;
 
 		/// <summary> List of world rings collected. </summary>
-		public Array<WorldEnum> worldRingsCollected = [];
+		public Array<WorldEnum> worldRingsCollected;
 		/// <summary> List of worlds unlocked. </summary>
-		public Array<WorldEnum> worldsUnlocked = [];
+		public Array<WorldEnum> worldsUnlocked;
 		/// <summary> List of stages unlocked. </summary>
-		public Array<string> stagesUnlocked = [];
+		public Array<string> stagesUnlocked;
 
 		/// <summary> Player level, from 1 -> 99 </summary>
 		public int level;
@@ -589,7 +570,7 @@ public partial class SaveManager : Node
 		/// <summary> Total playtime, in seconds. </summary>
 		public float playTime;
 
-		public Array<SkillKey> equippedSkills = [];
+		public Array<SkillKey> equippedSkills;
 		/// <summary> Total number of fire souls the player collected. </summary>
 		public int FireSoulCount { get; private set; }
 		/// <summary> Total number of gold medals the player has collected. </summary>
@@ -885,7 +866,26 @@ public partial class SaveManager : Node
 		}
 
 		/// <summary> Creates a new GameData object that contains default values. </summary>
-		public static GameData DefaultData;
+		public static GameData CreateDefaultData()
+		{
+			// Set up default game data/menu game data
+			GameData data = new()
+			{
+				worldRingsCollected = [],
+				worldsUnlocked = [],
+				stagesUnlocked = [],
+				equippedSkills = [],
+				level = 0,
+				lastPlayedWorld = WorldEnum.LostPrologue
+			};
+
+			// TODO Replace this with the tutorial key
+			data.UnlockStage("so_a1_main");
+			data.UnlockWorld(WorldEnum.LostPrologue);
+			data.UnlockWorld(WorldEnum.SandOasis); // Lock this in the final build
+
+			return data;
+		}
 	}
 	#endregion
 }

@@ -18,20 +18,15 @@ public partial class SaveSelect : Menu
 	private readonly Array<SaveOption> _saveOptions = [];
 	private const int ActiveSaveOptionIndex = 3; // Corresponds to the center save option
 
-
-
-
 	[Export]
 	private AnimationPlayer deleteAnimator;
 	private bool isDeleteMenuActive;
 	private bool isDeleteSelected;
 
-
-
 	protected override void SetUp()
 	{
 		VerticalSelection = menuMemory[MemoryKeys.SaveSelect];
-		scrollRatio = VerticalSelection / (SaveManager.MAX_SAVE_SLOTS - 1.0f);
+		scrollRatio = VerticalSelection / (SaveManager.SaveSlotCount - 1.0f);
 
 		for (int i = 0; i < saveOptions.Count; i++)
 		{
@@ -52,16 +47,13 @@ public partial class SaveSelect : Menu
 		if (!isDeleteMenuActive && Input.IsActionJustPressed("button_select"))
 		{
 			int saveIndex = _saveOptions[ActiveSaveOptionIndex].SaveIndex;
-			
 			if (SaveManager.GameSaveSlots[saveIndex].IsNewFile()) //Check if a save file is new 
 				return;
 
 			deleteAnimator.Play("show");
 			isDeleteMenuActive = true;
 			isDeleteSelected = false;
-			
 			return;
-		
 		}
 
 		if (isDeleteMenuActive)
@@ -87,10 +79,7 @@ public partial class SaveSelect : Menu
 				CancelDeleteMenu();
 				return;
 			}
-			
-
 		}
-
 
 		base.ProcessMenu();
 	}
@@ -100,51 +89,51 @@ public partial class SaveSelect : Menu
 		if (isDeleteMenuActive)
 		{
 			int input = Mathf.Sign(Input.GetAxis("move_left", "move_right"));
-			if (input > 0 && isDeleteSelected || input < 0 && !isDeleteSelected)
+			if ((input > 0 && isDeleteSelected) ||
+				(input < 0 && !isDeleteSelected))
 			{
 				isDeleteSelected = !isDeleteSelected;
 				deleteAnimator.Play(isDeleteSelected ? "select-yes" : "select-no");
 			}
+
 			return;
 		}
-		else
-		{
-			// Only listen for vertical scrolling
-			int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
-			if (inputSign == 0) return;
 
-			VerticalSelection = WrapSelection(VerticalSelection + inputSign, SaveManager.MAX_SAVE_SLOTS);
-			animator.Play(inputSign < 0 ? SCROLL_UP_ANIMATION : SCROLL_DOWN_ANIMATION);
-			scrollRatio = VerticalSelection / (SaveManager.MAX_SAVE_SLOTS - 1.0f);
-			menuMemory[MemoryKeys.SaveSelect] = VerticalSelection;
+		// Only listen for vertical scrolling
+		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		if (inputSign == 0) return;
 
-			if (!isSelectionScrolling)
-				StartSelectionTimer();
-		}
-		
+		VerticalSelection = WrapSelection(VerticalSelection + inputSign, SaveManager.SaveSlotCount);
+		animator.Play(inputSign < 0 ? SCROLL_UP_ANIMATION : SCROLL_DOWN_ANIMATION);
+		scrollRatio = VerticalSelection / (SaveManager.SaveSlotCount - 1.0f);
+		menuMemory[MemoryKeys.SaveSelect] = VerticalSelection;
+
+		if (!isSelectionScrolling)
+			StartSelectionTimer();
 	}
 
 	public override void OpenSubmenu()
 	{
-		
 		SaveManager.ActiveSaveSlotIndex = _saveOptions[ActiveSaveOptionIndex].SaveIndex;
 		SaveManager.ActiveSkillRing.LoadFromActiveData();
 
+		if (DebugManager.Instance.UseDemoSave || OS.IsDebugBuild()) // Unlock all worlds in the demo
+			SaveManager.ActiveGameData.UnlockAllWorlds();
+
 		if (SaveManager.ActiveGameData.IsNewFile())
 		{
-			SaveManager.ResetSaveData(SaveManager.ActiveSaveSlotIndex, true);
+			SaveManager.ResetSaveData(SaveManager.ActiveSaveSlotIndex, false);
 			SaveManager.SaveGameData();
 
-			if (!DebugManager.Instance.UseDemoSave)
+			if (!DebugManager.Instance.UseDemoSave) // Don't load into cutscenes in the demo
 			{
-				// Load directly into the first cutscene.
+				// Load directly into the first cutscene
 				TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}1.tscn");
 				TransitionManager.StartTransition(new()
 				{
 					color = Colors.Black,
 					inSpeed = 1f,
 				});
-				return;
 			}
 		}
 
@@ -152,6 +141,11 @@ public partial class SaveSelect : Menu
 		_submenus[0].ShowMenu();
 	}
 
+	public override void ShowMenu()
+	{
+		SaveManager.LoadGameData(); // Check for file updates
+		base.ShowMenu();
+	}
 
 	private void CancelDeleteMenu()
 	{
@@ -164,18 +158,15 @@ public partial class SaveSelect : Menu
 		isDeleteMenuActive = false;
 		deleteAnimator.Play("hide");
 	}
+
 	/// <summary> Deletes the currently selected save file. </summary>
 	private void DeleteSaveFile()
 	{
 		int saveIndex = _saveOptions[ActiveSaveOptionIndex].SaveIndex; // Get the currently selected save index
 
-		//Since this check is being done by the info box, we can remove it
-		//if (SaveManager.GameSaveSlots[saveIndex].IsNewFile()) // Nothing to delete!
-			//return;
-
-		SaveManager.ResetSaveData(saveIndex, false); // Reset SaveManager's loaded GameData
+		SaveManager.ResetSaveData(saveIndex, true); // Reset SaveManager's loaded GameData
 		SaveManager.DeleteSaveData(saveIndex); // Move the save game's file to the system trash
-		
+
 		UpdateSaveOptions();
 	}
 
@@ -185,7 +176,7 @@ public partial class SaveSelect : Menu
 		for (int i = 0; i < _saveOptions.Count; i++)
 		{
 			int saveIndex = VerticalSelection + (i - ActiveSaveOptionIndex);
-			saveIndex = WrapSelection(saveIndex, SaveManager.MAX_SAVE_SLOTS);
+			saveIndex = WrapSelection(saveIndex, SaveManager.SaveSlotCount);
 			_saveOptions[i].SaveIndex = saveIndex;
 		}
 	}
