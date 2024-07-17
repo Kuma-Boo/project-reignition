@@ -116,9 +116,6 @@ public partial class SaveSelect : Menu
 		SaveManager.ActiveSaveSlotIndex = _saveOptions[ActiveSaveOptionIndex].SaveIndex;
 		SaveManager.ActiveSkillRing.LoadFromActiveData();
 
-		if (DebugManager.Instance.UseDemoSave || OS.IsDebugBuild()) // Unlock all worlds in the demo
-			SaveManager.ActiveGameData.UnlockAllWorlds();
-
 		if (SaveManager.ActiveGameData.IsNewFile())
 		{
 			SaveManager.ResetSaveData(SaveManager.ActiveSaveSlotIndex, false);
@@ -135,6 +132,9 @@ public partial class SaveSelect : Menu
 				});
 			}
 		}
+
+		if (DebugManager.Instance.UseDemoSave || OS.IsDebugBuild()) // Unlock all worlds in the demo
+			SaveManager.ActiveGameData.UnlockAllWorlds();
 
 		menuMemory[MemoryKeys.WorldSelect] = (int)SaveManager.ActiveGameData.lastPlayedWorld; // Set the world selection to the last played world
 		_submenus[0].ShowMenu();
