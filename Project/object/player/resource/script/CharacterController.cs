@@ -271,7 +271,7 @@ namespace Project.Gameplay
 				// Check if we're trying to turn around
 				if (!Skills.IsSpeedBreakActive && ActiveLockoutData.allowReversing)
 				{
-					if (turnInstantly)
+					if (turnInstantly && !InputVector.IsZeroApprox())
 						IsMovingBackward = IsHoldingDirection(PathFollower.BackAngle);
 
 					if (IsMovingBackward)
