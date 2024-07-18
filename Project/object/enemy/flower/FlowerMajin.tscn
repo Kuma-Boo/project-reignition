@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://ctt8k8ju64i3l"]
+[gd_scene load_steps=30 format=3 uid="uid://ctt8k8ju64i3l"]
 
 [ext_resource type="PackedScene" uid="uid://ci1q4ubgknkjc" path="res://object/enemy/flower/data/model/FlowerMajin.gltf" id="1_g4mq2"]
 [ext_resource type="Script" path="res://object/enemy/flower/data/FlowerMajin.cs" id="2_14l8s"]
@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://d24exv6ljc387" path="res://sound/sfx/enemy/flower/flower show.wav" id="4_rhe6s"]
 [ext_resource type="AudioStream" uid="uid://bts22xjnayshr" path="res://sound/sfx/enemy/flower/flower aggressive.wav" id="4_wnk87"]
 [ext_resource type="AudioStream" uid="uid://0viimwo4ungd" path="res://sound/sfx/enemy/flower/flower attack.wav" id="5_6oumr"]
+[ext_resource type="PackedScene" uid="uid://cb3g1o7g8tyc5" path="res://object/enemy/flower/Petal.tscn" id="5_glesf"]
 [ext_resource type="AudioStream" uid="uid://djkjwq28o5v4k" path="res://sound/sfx/enemy/flower/flower defeated.wav" id="5_ijj0t"]
 [ext_resource type="AudioStream" uid="uid://bageplss4yb7m" path="res://sound/sfx/enemy/flower/flower hit.wav" id="5_qbppd"]
 
@@ -136,54 +137,135 @@ seed = ExtResource("3_xwrdv")
 pearlAmount = 25
 maxHealth = 3
 root = NodePath("FlowerMajin")
-hurtbox = NodePath("HeadAttachment/Hitbox")
+hurtbox = NodePath("Attachments/HeadAttachment/Hitbox")
 collider = NodePath("CollisionShape3D")
 rangeCollider = NodePath("Range/CollisionShape3D")
 animationTree = NodePath("AnimationTree")
+animationPlayer = NodePath("")
 
 [node name="FlowerMajin" parent="." instance=ExtResource("1_g4mq2")]
 
 [node name="Skeleton3D" parent="FlowerMajin/FlowerMajinRoot" index="0"]
+bones/3/rotation = Quaternion(0.5, 0.500001, -0.499999, 0.5)
 bones/5/rotation = Quaternion(0.788207, 3.55024e-06, 3.59382e-06, 0.615411)
 bones/6/rotation = Quaternion(0.811243, 2.31053e-06, 2.3554e-06, 0.584709)
+bones/6/scale = Vector3(1, 1, 1)
 bones/7/rotation = Quaternion(1.35284e-06, 0.771369, 0.636388, 1.52788e-06)
 bones/9/rotation = Quaternion(0.34726, 0.687727, 0.533292, -0.349347)
+bones/9/scale = Vector3(1, 1, 1)
+bones/10/scale = Vector3(1, 1, 1)
 bones/11/rotation = Quaternion(-0.555687, -0.395338, -0.310163, 0.662359)
+bones/11/scale = Vector3(1, 1, 1)
 bones/13/rotation = Quaternion(-0.636387, 1.40078e-07, 1.51694e-07, 0.77137)
+bones/15/scale = Vector3(1, 1, 1)
+bones/16/scale = Vector3(1, 1, 1)
 bones/17/rotation = Quaternion(-0.555687, 0.395338, 0.310163, 0.662359)
+bones/17/scale = Vector3(1, 1, 1)
 bones/19/rotation = Quaternion(1, -2.7093e-08, -2.7093e-08, -1.76105e-06)
 bones/21/rotation = Quaternion(-0.0311811, -1.3108e-12, 1.0463e-08, 0.999514)
+bones/21/scale = Vector3(1, 1, 1)
 bones/22/rotation = Quaternion(0.999995, -4.83984e-08, -4.83984e-08, -0.00308345)
 
 [node name="FlowerMajinBodyMesh" parent="FlowerMajin/FlowerMajinRoot/Skeleton3D" index="0"]
 extra_cull_margin = 2.0
 
-[node name="HeadAttachment" type="BoneAttachment3D" parent="."]
+[node name="Attachments" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55756e-08, 2.65659, 8.22544e-06)
+
+[node name="HeadAttachment" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.53994e-07, -0.680025, 0.840521)
 bone_name = "head_attachment"
 bone_idx = 0
 use_external_skeleton = true
-external_skeleton = NodePath("../FlowerMajin/FlowerMajinRoot/Skeleton3D")
+external_skeleton = NodePath("../../FlowerMajin/FlowerMajinRoot/Skeleton3D")
 
-[node name="Hitbox" type="Area3D" parent="HeadAttachment" node_paths=PackedStringArray("enemy")]
+[node name="Hitbox" type="Area3D" parent="Attachments/HeadAttachment" node_paths=PackedStringArray("enemy")]
 transform = Transform3D(1, 8.9407e-08, -5.52989e-08, -5.4948e-08, 1, 2.46649e-08, 5.52989e-08, -2.4665e-08, 1, 0, 0.25, -4.54747e-13)
 collision_layer = 12
 collision_mask = 2
 script = ExtResource("4_d2c7i")
-enemy = NodePath("../..")
+enemy = NodePath("../../..")
 
-[node name="HeadCollisionShape" type="CollisionShape3D" parent="HeadAttachment/Hitbox"]
+[node name="HeadCollisionShape" type="CollisionShape3D" parent="Attachments/HeadAttachment/Hitbox"]
 shape = SubResource("SphereShape3D_4r0or")
 
-[node name="PetalCollisionShape" type="CollisionShape3D" parent="HeadAttachment/Hitbox"]
+[node name="PetalCollisionShape" type="CollisionShape3D" parent="Attachments/HeadAttachment/Hitbox"]
 transform = Transform3D(1, 0, 1.77636e-15, -1.36394e-15, 0.422618, -0.906308, 0, 0.906308, 0.422618, 0, -0.0422618, -0.0906308)
 shape = SubResource("CylinderShape3D_xhbgn")
 disabled = true
 
-[node name="BulbCollisionShape" type="CollisionShape3D" parent="HeadAttachment/Hitbox"]
+[node name="BulbCollisionShape" type="CollisionShape3D" parent="Attachments/HeadAttachment/Hitbox"]
 transform = Transform3D(1, -1.36395e-15, 0, -1.36394e-15, 1, 0, 0, 0, 1, 3.72529e-09, 0.4, 0)
 shape = SubResource("SphereShape3D_w6adf")
 disabled = true
+
+[node name="PetalBack" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(1, -4.94614e-07, 2.40839e-07, 4.24568e-07, 0.972265, 0.233882, -3.4984e-07, -0.233882, 0.972265, 1.45742e-07, -0.511243, 0.587308)
+bone_name = "petal_back01"
+bone_idx = 13
+use_external_skeleton = true
+external_skeleton = NodePath("../../FlowerMajin/FlowerMajinRoot/Skeleton3D")
+
+[node name="PetalFront" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(-1, -4.23107e-08, 4.3036e-06, 1.95638e-06, -0.895137, 0.44579, 3.83345e-06, 0.44579, 0.895137, 1.45742e-07, -0.511243, 0.587308)
+bone_name = "petal_front01"
+bone_idx = 7
+use_external_skeleton = true
+external_skeleton = NodePath("../../FlowerMajin/FlowerMajinRoot/Skeleton3D")
+
+[node name="PetalFrontL" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(-0.514735, 0.854031, -0.0753555, -0.763654, -0.416755, 0.493101, 0.389719, 0.311362, 0.866702, 1.25378e-07, -0.511243, 0.587308)
+bone_name = "l_petal_front01"
+bone_idx = 9
+use_external_skeleton = true
+external_skeleton = NodePath("../../FlowerMajin/FlowerMajinRoot/Skeleton3D")
+
+[node name="PetalFrontR" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(-0.514735, -0.854031, 0.075356, 0.763654, -0.416755, 0.493101, -0.389718, 0.311362, 0.866702, 2.20745e-07, -0.511243, 0.587308)
+bone_name = "r_petal_front01"
+bone_idx = 15
+use_external_skeleton = true
+external_skeleton = NodePath("../../FlowerMajin/FlowerMajinRoot/Skeleton3D")
+
+[node name="PetalBackL" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(0.495014, 0.866315, -0.066773, -0.806302, 0.486639, 0.336242, 0.323786, -0.112606, 0.939405, 1.25378e-07, -0.511243, 0.587308)
+bone_name = "l_petal_back01"
+bone_idx = 11
+use_external_skeleton = true
+external_skeleton = NodePath("../../FlowerMajin/FlowerMajinRoot/Skeleton3D")
+
+[node name="PetalBackR" type="BoneAttachment3D" parent="Attachments"]
+transform = Transform3D(0.495014, -0.866315, 0.0667735, 0.806302, 0.48664, 0.336242, -0.323786, -0.112605, 0.939405, 2.20745e-07, -0.511243, 0.587308)
+bone_name = "r_petal_back01"
+bone_idx = 17
+use_external_skeleton = true
+external_skeleton = NodePath("../../FlowerMajin/FlowerMajinRoot/Skeleton3D")
+
+[node name="Petals" type="Node3D" parent="."]
+
+[node name="PetalBack" parent="Petals" node_paths=PackedStringArray("attachment") instance=ExtResource("5_glesf")]
+visible = false
+attachment = NodePath("../../Attachments/PetalBack")
+
+[node name="PetalFront" parent="Petals" node_paths=PackedStringArray("attachment") instance=ExtResource("5_glesf")]
+visible = false
+attachment = NodePath("../../Attachments/PetalFront")
+
+[node name="PetalFrontL" parent="Petals" node_paths=PackedStringArray("attachment") instance=ExtResource("5_glesf")]
+visible = false
+attachment = NodePath("../../Attachments/PetalFrontL")
+
+[node name="PetalFrontR" parent="Petals" node_paths=PackedStringArray("attachment") instance=ExtResource("5_glesf")]
+visible = false
+attachment = NodePath("../../Attachments/PetalFrontR")
+
+[node name="PetalBackL" parent="Petals" node_paths=PackedStringArray("attachment") instance=ExtResource("5_glesf")]
+visible = false
+attachment = NodePath("../../Attachments/PetalBackL")
+
+[node name="PetalBackR" parent="Petals" node_paths=PackedStringArray("attachment") instance=ExtResource("5_glesf")]
+visible = false
+attachment = NodePath("../../Attachments/PetalBackR")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
@@ -253,8 +335,8 @@ max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
 
-[connection signal="area_entered" from="HeadAttachment/Hitbox" to="." method="OnEntered"]
-[connection signal="area_exited" from="HeadAttachment/Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="Attachments/HeadAttachment/Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="Attachments/HeadAttachment/Hitbox" to="." method="OnExited"]
 [connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
 [connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
 

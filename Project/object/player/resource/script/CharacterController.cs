@@ -1969,7 +1969,7 @@ namespace Project.Gameplay
 			if (ActionState == ActionStates.Backflip)
 				return;
 
-			float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(wallHit.normal, IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
+			float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(wallHit.normal.RemoveVertical(), IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
 			if (wallDelta >= Mathf.Pi * .75f) // Process wall collision 
 			{
 				if (ActionState == ActionStates.JumpDash &&
@@ -1982,8 +1982,8 @@ namespace Project.Gameplay
 					return;
 				}
 
-				// Cancel speed break (only when recenter lockout ISN'T active)
-				if (Skills.IsSpeedBreakActive && !(IsLockoutActive && ActiveLockoutData.recenterPlayer))
+				// Cancel speed break
+				if (Skills.IsSpeedBreakActive)
 				{
 					float pathDelta = ExtensionMethods.DeltaAngleRad(PathFollower.BackAngle, ExtensionMethods.CalculateForwardAngle(wallHit.normal));
 					if (pathDelta >= Mathf.Pi * .25f) // Snap to path direction
@@ -2003,10 +2003,14 @@ namespace Project.Gameplay
 				}
 
 				// Running into wall head-on
-				if (wallDelta >= Mathf.Pi * .9f && wallHit.distance <= CollisionSize.X + CollisionPadding)
+				if (wallDelta >= Mathf.Pi * .8f)
 				{
+					if (wallHit.distance <= CollisionSize.X + CollisionPadding)
+						MoveSpeed = 0; // Kill speed
+					else if (wallHit.distance <= CollisionSize.X + CollisionPadding + (MoveSpeed * PhysicsManager.physicsDelta))
+						MoveSpeed *= .9f; // Slow down drastically
+
 					IsOnWall = true;
-					MoveSpeed = 0; // Kill speed
 					return;
 				}
 			}
