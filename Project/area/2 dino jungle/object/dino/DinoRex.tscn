@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bhiih5oodiq1w"]
+[gd_scene load_steps=53 format=3 uid="uid://bhiih5oodiq1w"]
 
 [ext_resource type="PackedScene" uid="uid://kf3gvnm0grys" path="res://area/2 dino jungle/object/model/dino/DinoRex.gltf" id="1_0u7i8"]
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/DinoRex.cs" id="2_bhtui"]
@@ -8,6 +8,11 @@
 [ext_resource type="AudioStream" uid="uid://bw4qvlkbw3txi" path="res://sound/sfx/stage/dinosaur jungle/dino rex tail.wav" id="6_ckcwt"]
 [ext_resource type="Material" uid="uid://cqly2cta75k4b" path="res://effect/particle/material/object/Dino Rex Splatter.tres" id="6_pkepj"]
 [ext_resource type="AudioStream" uid="uid://bw1umu0vr1x0w" path="res://sound/sfx/stage/dinosaur jungle/dino rex stomp.wav" id="7_gbx4p"]
+[ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="8_udsnq"]
+[ext_resource type="Material" uid="uid://cctsu5ymh5eev" path="res://effect/particle/material/environment/Common Splatter.tres" id="9_go28t"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="9_orqws"]
+[ext_resource type="Material" uid="uid://72qi5wpg8kme" path="res://area/1 sand oasis/boss/effect/material/Sand Scorpion Splatter Add.tres" id="11_rb5j1"]
+[ext_resource type="Material" uid="uid://b0d1elaiai7pc" path="res://effect/particle/material/object/Dino Rex Rock.tres" id="12_3ebhh"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6krsp"]
 radius = 2.95079
@@ -81,7 +86,6 @@ animation = &"rex-tail-attack"
 animation = &"rex-upper-bite"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k1n0y"]
-graph_offset = Vector2(-999, -89)
 nodes/attack_transition/node = SubResource("AnimationNodeTransition_n5c84")
 nodes/attack_transition/position = Vector2(-200, 360)
 nodes/attack_trigger/node = SubResource("AnimationNodeOneShot_m5hed")
@@ -137,6 +141,133 @@ alpha_curve = SubResource("CurveTexture_f4wp2")
 [sub_resource type="QuadMesh" id="QuadMesh_aceec"]
 material = ExtResource("6_pkepj")
 
+[sub_resource type="Curve" id="Curve_w76g0"]
+_data = [Vector2(0, 0.100845), 0.0, 12.3101, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(0.99999, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_i5sji"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_w76g0")
+
+[sub_resource type="Curve" id="Curve_xmemy"]
+_data = [Vector2(0, 0.0596621), 0.0, 13.8076, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_s5v2k"]
+width = 64
+curve = SubResource("Curve_xmemy")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_540qx"]
+lifetime_randomness = 0.4
+emission_shape_scale = Vector3(1, 1, 2)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.0
+angle_max = 360.0
+direction = Vector3(0, 0, 1)
+spread = 80.0
+flatness = 0.2
+initial_velocity_min = 10.0
+initial_velocity_max = 15.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -10.0
+linear_accel_max = -10.0
+scale_min = 8.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_s5v2k")
+alpha_curve = SubResource("CurveTexture_i5sji")
+
+[sub_resource type="QuadMesh" id="QuadMesh_vcsgx"]
+material = ExtResource("8_udsnq")
+
+[sub_resource type="CurveTexture" id="CurveTexture_ecwpv"]
+width = 64
+curve = SubResource("Curve_xmemy")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5c6el"]
+lifetime_randomness = 0.4
+emission_shape_scale = Vector3(1, 1, 2)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.0
+angle_max = 360.0
+direction = Vector3(0, 0, 1)
+spread = 50.0
+flatness = 0.2
+initial_velocity_min = 15.0
+initial_velocity_max = 40.0
+linear_accel_min = -10.0
+linear_accel_max = -10.0
+scale_min = 5.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_ecwpv")
+alpha_curve = SubResource("CurveTexture_i5sji")
+
+[sub_resource type="QuadMesh" id="QuadMesh_pqie5"]
+material = ExtResource("9_go28t")
+
+[sub_resource type="Curve" id="Curve_p8b6g"]
+_data = [Vector2(0, 0.23812), 0.0, 2.6397, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jvqwr"]
+width = 64
+curve = SubResource("Curve_p8b6g")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4xusv"]
+lifetime_randomness = 0.4
+particle_flag_rotate_y = true
+emission_shape_scale = Vector3(1, 1, 3)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.0
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 50.0
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 10.0
+scale_max = 20.0
+scale_curve = SubResource("CurveTexture_jvqwr")
+alpha_curve = SubResource("CurveTexture_i5sji")
+
+[sub_resource type="QuadMesh" id="QuadMesh_86vcv"]
+material = ExtResource("11_rb5j1")
+size = Vector2(0.3, 1)
+center_offset = Vector3(0, 0.3, 0)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_b6smd"]
+lifetime_randomness = 0.4
+particle_flag_rotate_y = true
+emission_shape_scale = Vector3(1, 1, 2)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 2.0
+emission_ring_inner_radius = 1.0
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 30.0
+initial_velocity_max = 50.0
+angular_velocity_min = 40.0
+angular_velocity_max = 200.0
+gravity = Vector3(0, -50, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_jvqwr")
+alpha_curve = SubResource("CurveTexture_i5sji")
+
+[sub_resource type="QuadMesh" id="QuadMesh_vy2t6"]
+material = ExtResource("12_3ebhh")
+
 [node name="DinoRex" type="Node3D" node_paths=PackedStringArray("root", "animationTree")]
 script = ExtResource("2_bhtui")
 root = NodePath("DinoRex")
@@ -176,7 +307,7 @@ visible = false
 script = ExtResource("3_hvxnl")
 
 [node name="Head" type="BoneAttachment3D" parent="Hitboxes"]
-transform = Transform3D(1, 1.47884e-07, 8.91874e-07, 7.75577e-07, -0.647226, -0.762295, 4.64515e-07, 0.762297, -0.647228, 7.82143e-07, 16.6175, 14.4996)
+transform = Transform3D(1, 1.25778e-07, 9.08174e-07, 9.08162e-07, -0.271781, -0.962357, 1.25782e-07, 0.962359, -0.271782, 5.98236e-07, 20.1698, 15.4159)
 bone_name = "head"
 bone_idx = 8
 use_external_skeleton = true
@@ -191,7 +322,7 @@ transform = Transform3D(1, 2.77112e-13, 6.14619e-13, -2.84217e-14, 0.983593, -0.
 shape = SubResource("CapsuleShape3D_6krsp")
 
 [node name="Tail2" type="BoneAttachment3D" parent="Hitboxes"]
-transform = Transform3D(0.993989, -0.0114593, 0.108881, -0.108911, -0.204959, 0.972692, 0.0111699, -0.978703, -0.204975, -0.248948, 10.8306, -17.033)
+transform = Transform3D(1, 1.53779e-06, -2.18018e-12, -3.45418e-12, 3.6385e-06, 1, 1.53779e-06, -1, 3.6385e-06, 1.63317e-05, 16.0001, -15.8623)
 bone_name = "tail2"
 bone_idx = 3
 use_external_skeleton = true
@@ -207,7 +338,7 @@ transform = Transform3D(1, 4.65661e-10, 4.22006e-09, 4.65661e-10, 1, 0, -2.67755
 shape = SubResource("CylinderShape3D_pbbs6")
 
 [node name="Tail3" type="BoneAttachment3D" parent="Hitboxes"]
-transform = Transform3D(0.998059, -0.00461208, 0.06211, -0.062187, -0.128559, 0.98975, 0.00341998, -0.991691, -0.128596, -0.345565, 9.10251, -25.2848)
+transform = Transform3D(1, 1.6262e-06, -2.59969e-12, -3.95011e-12, 4.00362e-06, 1, 1.6262e-06, -1, 4.00362e-06, 2.92974e-05, 16.0001, -24.2937)
 bone_name = "tail3"
 bone_idx = 4
 use_external_skeleton = true
@@ -222,7 +353,7 @@ transform = Transform3D(1, 1.86265e-09, 3.72529e-09, -7.45058e-09, 1, -2.98023e-
 shape = SubResource("CylinderShape3D_yxbpx")
 
 [node name="Tail4" type="BoneAttachment3D" parent="Hitboxes"]
-transform = Transform3D(0.999889, -0.00133213, 0.0148165, -0.0148612, -0.0447026, 0.99889, -0.000668325, -0.998999, -0.0447174, -0.374129, 8.30632, -31.4266)
+transform = Transform3D(1, 1.657e-06, -2.9032e-12, -4.28024e-12, 4.3116e-06, 1, 1.657e-06, -1, 4.3116e-06, 3.93688e-05, 16.0001, -30.4869)
 bone_name = "tail4"
 bone_idx = 5
 use_external_skeleton = true
@@ -332,7 +463,7 @@ parameters/step_trigger/internal_active = false
 parameters/step_trigger/request = 0
 
 [node name="Head" type="BoneAttachment3D" parent="."]
-transform = Transform3D(1, 1.47884e-07, 8.91874e-07, 7.75577e-07, -0.647226, -0.762295, 4.64515e-07, 0.762297, -0.647228, 7.82143e-07, 16.6175, 14.4996)
+transform = Transform3D(1, 1.25778e-07, 9.08174e-07, 9.08162e-07, -0.271781, -0.962357, 1.25782e-07, 0.962359, -0.271782, 5.98236e-07, 20.1698, 15.4159)
 bone_name = "head"
 bone_idx = 8
 use_external_skeleton = true
@@ -372,9 +503,9 @@ process_material = SubResource("ParticleProcessMaterial_lto8l")
 draw_pass_1 = SubResource("QuadMesh_aceec")
 
 [node name="Tail" type="BoneAttachment3D" parent="."]
-transform = Transform3D(0.999889, -0.00133213, 0.0148165, -0.0148612, -0.0447026, 0.99889, -0.000668325, -0.998999, -0.0447174, -0.374129, 8.30632, -31.4266)
-bone_name = "tail4"
-bone_idx = 5
+transform = Transform3D(1, 1.6262e-06, -2.59969e-12, -3.95011e-12, 4.00362e-06, 1, 1.6262e-06, -1, 4.00362e-06, 2.92974e-05, 16.0001, -24.2937)
+bone_name = "tail3"
+bone_idx = 4
 use_external_skeleton = true
 external_skeleton = NodePath("../DinoRex/DinoRexRoot/Skeleton3D")
 
@@ -384,6 +515,71 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
+
+[node name="SandDust" type="GPUParticles3D" parent="Tail" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 1.77533e-09, -1.11759e-08, 1, -2.79397e-09, -2.73576e-09, -2.79397e-09, 1, 1.19209e-07, 3.5, -1.1)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 1.5
+one_shot = true
+speed_scale = 1.5
+explosiveness = 0.9
+randomness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-11, -11, -5, 22, 22, 26)
+process_material = SubResource("ParticleProcessMaterial_540qx")
+draw_pass_1 = SubResource("QuadMesh_vcsgx")
+script = ExtResource("9_orqws")
+subSystems = [NodePath("SandSplatterDust"), NodePath("SandScorpionDust"), NodePath("RockVFX")]
+
+[node name="SandSplatterDust" type="GPUParticles3D" parent="Tail/SandDust"]
+transform = Transform3D(1, 0, -1.30972e-16, 0, 1, 2.27374e-13, 8.06646e-17, 0, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.8
+randomness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-11, -11, -5, 22, 22, 26)
+process_material = SubResource("ParticleProcessMaterial_5c6el")
+draw_pass_1 = SubResource("QuadMesh_pqie5")
+
+[node name="SandScorpionDust" type="GPUParticles3D" parent="Tail/SandDust"]
+transform = Transform3D(1, -2.1207e-16, 0, 0, -4.37112e-08, -1, 8.06646e-17, 1, -4.37112e-08, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.8
+randomness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-11, -15, -14, 22, 30, 26)
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_4xusv")
+draw_pass_1 = SubResource("QuadMesh_86vcv")
+
+[node name="RockVFX" type="GPUParticles3D" parent="Tail/SandDust"]
+transform = Transform3D(1, -2.12937e-16, 0, 0, -4.37108e-08, -1, 8.06646e-17, 1, -4.3711e-08, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.8
+randomness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-11, -15, -14, 22, 30, 26)
+process_material = SubResource("ParticleProcessMaterial_b6smd")
+draw_pass_1 = SubResource("QuadMesh_vy2t6")
 
 [node name="LFoot" type="BoneAttachment3D" parent="."]
 transform = Transform3D(0.999995, 0.00133534, 0.00293999, 0.00315156, -0.601867, -0.79859, 0.000703092, 0.798595, -0.601868, 3.41146, 4.11659, -1.85302)

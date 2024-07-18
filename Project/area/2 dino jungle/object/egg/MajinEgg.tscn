@@ -1,12 +1,29 @@
-[gd_scene load_steps=11 format=3 uid="uid://b3f5ifmjlskc1"]
+[gd_scene load_steps=15 format=3 uid="uid://b3f5ifmjlskc1"]
 
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/MajinEgg.cs" id="1_5tg85"]
 [ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="2_i1bv0"]
 [ext_resource type="PackedScene" uid="uid://c34ddk8gnnf4g" path="res://area/2 dino jungle/object/model/egg/MajinEgg.gltf" id="2_n5tno"]
 [ext_resource type="PackedScene" uid="uid://latc2gabduom" path="res://area/2 dino jungle/object/model/egg/MajinEggPieces.gltf" id="3_wvnnc"]
+[ext_resource type="Material" uid="uid://b4vmiws2hdmhs" path="res://object/enemy/majin/data/particle/material/Majin Spawn Smoke Process Material.tres" id="5_50pv3"]
+[ext_resource type="Texture2D" uid="uid://cpjydx5buf0av" path="res://effect/particle/texture/teleport dust.png" id="6_uwvmd"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_l2s66"]
 radius = 0.75
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eiiup"]
+transparency = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("6_uwvmd")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_yogxi"]
+material = SubResource("StandardMaterial3D_eiiup")
 
 [sub_resource type="Animation" id="Animation_lmbi4"]
 length = 0.001
@@ -333,6 +350,18 @@ tracks/26/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 0, 0)]
+}
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("SpawnSmoke:visible")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_snh4q"]
@@ -982,6 +1011,32 @@ tracks/4/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpawnSmoke:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.001),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpawnSmoke")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_15mo0"]
 _data = {
@@ -1055,6 +1110,21 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
 shape = SubResource("SphereShape3D_l2s66")
+
+[node name="SpawnSmoke" type="GPUParticles3D" parent="."]
+visible = false
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 0.8
+one_shot = true
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
+process_material = ExtResource("5_50pv3")
+draw_pass_1 = SubResource("QuadMesh_yogxi")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
