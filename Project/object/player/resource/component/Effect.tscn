@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=61 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -6,10 +6,11 @@
 [ext_resource type="Resource" uid="uid://b74ouv2g73ny2" path="res://resource/preset/sfx library/MaterialSFXLibrary.tres" id="5_h4i1s"]
 [ext_resource type="Material" uid="uid://3j0tx2hxvynp" path="res://object/stage/common/resource/model/material/Grindrail Sparks Process Material.tres" id="6_v3ger"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="7_8immp"]
-[ext_resource type="PackedScene" uid="uid://bls68nf485o5s" path="res://object/player/resource/effect/DustParticle.tscn" id="8_svcok"]
+[ext_resource type="Material" uid="uid://dq0lfa7romdhx" path="res://object/player/resource/effect/material/Dust Process Material.tres" id="9_8eyt1"]
 [ext_resource type="Material" uid="uid://bduajl86aiq4o" path="res://object/player/resource/effect/material/Trail Material.tres" id="9_on86l"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/Trail3D.cs" id="10_1mog6"]
 [ext_resource type="PackedScene" uid="uid://d4niu0q5cqdvj" path="res://object/player/resource/effect/landing/LandingWaterParticle.tscn" id="10_8wlk5"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="10_xhcyf"]
 [ext_resource type="PackedScene" uid="uid://d2h4veiykf6nn" path="res://object/player/resource/effect/landing/LandingDustParticle.tscn" id="11_kh13g"]
 [ext_resource type="Material" uid="uid://dhlpdpuxf2cwi" path="res://object/player/resource/effect/material/Spin Material.tres" id="11_lk1sb"]
 [ext_resource type="PackedScene" uid="uid://bmx51bju4lg72" path="res://object/player/resource/effect/landing/LandingSandParticle.tscn" id="11_un14r"]
@@ -63,6 +64,9 @@ scale_curve = SubResource("CurveXYZTexture_rr6dn")
 material = ExtResource("7_8immp")
 size = Vector2(0.1, 1)
 center_offset = Vector3(0, 0.25, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_g63sh"]
+material = ExtResource("10_xhcyf")
 
 [sub_resource type="Curve" id="Curve_bi8dp"]
 _data = [Vector2(0, 1), 0.0, -0.0371234, 0, 0, Vector2(0.8, 0), 0.0, 0.0, 0, 0]
@@ -247,14 +251,12 @@ material = ExtResource("7_8immp")
 size = Vector2(0.05, 0.5)
 center_offset = Vector3(0, 0.25, 0)
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "timeBreakAnimator", "speedBreakAnimator", "dustParticle", "windParticle", "stompFX", "chargeFX", "fullChargeFX", "grindrailVfx", "grindrailBurstVfx", "grindrailSfx", "footstepChannel", "landingChannel", "landingSandParticle", "landingWaterParticle", "landingDustParticle", "stepEmitters", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "dustParticle", "windParticle", "stompFX", "chargeFX", "fullChargeFX", "grindrailVfx", "grindrailBurstVfx", "grindrailSfx", "footstepChannel", "landingChannel", "landingSandParticle", "landingWaterParticle", "landingDustParticle", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
 trailFX = NodePath("VFX/ActionFX/TrailMesh")
 spinFX = NodePath("VFX/ActionFX/SpinMesh")
-timeBreakAnimator = NodePath("")
-speedBreakAnimator = NodePath("")
 dustParticle = NodePath("VFX/ActionFX/DustParticle")
 windParticle = NodePath("VFX/ActionFX/Wind")
 stompFX = NodePath("VFX/ActionFX/Stomp")
@@ -331,8 +333,20 @@ draw_pass_1 = SubResource("QuadMesh_dlv4t")
 
 [node name="ActionFX" type="Node3D" parent="VFX"]
 
-[node name="DustParticle" parent="VFX/ActionFX" instance=ExtResource("8_svcok")]
+[node name="DustParticle" type="GPUParticles3D" parent="VFX/ActionFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = ExtResource("9_8eyt1")
+draw_pass_1 = SubResource("QuadMesh_g63sh")
 
 [node name="TrailMesh" type="Node3D" parent="VFX/ActionFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
