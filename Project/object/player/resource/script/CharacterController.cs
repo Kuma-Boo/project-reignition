@@ -24,6 +24,7 @@ namespace Project.Gameplay
 			Path3D startingPath = Stage.CalculateStartingPath(GlobalPosition);
 			PathFollower.SetActivePath(startingPath); // Attempt to autoload the stage's default path
 			Camera.PathFollower.SetActivePath(startingPath);
+			Camera.LimitToPathDistance = !Camera.PathFollower.Loop;
 
 			GetParent<Triggers.CheckpointTrigger>().Activate(); // Save initial checkpoint
 			Stage.UpdateRingCount(Skills.StartingRingCount, StageSettings.MathModeEnum.Replace); // Start with the proper ring count
