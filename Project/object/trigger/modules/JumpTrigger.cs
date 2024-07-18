@@ -36,7 +36,9 @@ public partial class JumpTrigger : StageTriggerModule
 	public override void Activate()
 	{
 		Character.StartLauncher(GetLaunchSettings());
-		Character.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.FinishJump), (uint)ConnectFlags.OneShot);
 		Character.CanJumpDash = false;
+
+		if (!Character.IsConnected(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.FinishJump)))
+			Character.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.FinishJump), (uint)ConnectFlags.OneShot);
 	}
 }
