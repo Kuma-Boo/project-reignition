@@ -208,7 +208,7 @@ public partial class EventTrigger : StageTriggerModule
 
 	public override void Deactivate()
 	{
-		if (isOneShot && isActivated) return;
+		if (isOneShot && !isActivated) return;
 
 		PlayAnimation(DeactivateEventAnimation);
 		EmitSignal(SignalName.Deactivated);
@@ -243,7 +243,6 @@ public partial class EventTrigger : StageTriggerModule
 		if (!characterAnimation.IsEmpty)
 			Character.Animator.PlayOneshotAnimation(characterAnimation);
 	}
-
 
 	#region Event Animation
 	private NodePath playerStandin;
