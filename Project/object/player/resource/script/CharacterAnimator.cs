@@ -501,9 +501,9 @@ public partial class CharacterAnimator : Node3D
 		animationTree.Set(CrouchTransition, DisabledConstant);
 	}
 
-	public void StartInvincibility()
+	public void StartInvincibility(float speedScale)
 	{
-		eventAnimationPlayer.Play("invincibility");
+		eventAnimationPlayer.Play("invincibility", -1, speedScale);
 		eventAnimationPlayer.Seek(0.0, true);
 	}
 
@@ -619,6 +619,8 @@ public partial class CharacterAnimator : Node3D
 	private readonly StringName ShuffleLeft = "balance-left-shuffle";
 	private readonly StringName BalanceRight = "balance_right_blend";
 	private readonly StringName BalanceLeft = "balance_left_blend";
+	private readonly StringName BalanceStaggerLeft = "balance_left_stagger";
+	private readonly StringName BalanceStaggerRight = "balance_right_stagger";
 
 	private readonly StringName BalanceRightLean = "parameters/balance_tree/balance_state/balance_right_blend/blend_position";
 	private readonly StringName BalanceLeftLean = "parameters/balance_tree/balance_state/balance_left_blend/blend_position";
@@ -647,6 +649,11 @@ public partial class CharacterAnimator : Node3D
 		float target = isCrouching ? 1.0f : 0.0f;
 		current = Mathf.Lerp(current, target, .2f);
 		animationTree.Set(BalanceCrouchAdd, current);
+	}
+
+	public void StartBalanceStagger()
+	{
+		BalanceStatePlayback.Travel(isFacingRight ? BalanceStaggerRight : BalanceStaggerLeft, true);
 	}
 
 	private readonly StringName BalanceGrindstepTrigger = "parameters/balance_tree/grindstep_trigger/request";

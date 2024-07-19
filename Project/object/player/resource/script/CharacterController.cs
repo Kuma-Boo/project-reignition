@@ -1254,12 +1254,12 @@ namespace Project.Gameplay
 		#region Damage & Invincibility
 		public bool IsInvincible => invincibilityTimer != 0;
 		private float invincibilityTimer;
-		private const float INVINCIBILITY_LENGTH = 5f;
+		private const float InvincibilityLength = 5f;
 
-		public void StartInvincibility()
+		public void StartInvincibility(float timeScale = 1)
 		{
-			invincibilityTimer = INVINCIBILITY_LENGTH;
-			Animator.StartInvincibility();
+			invincibilityTimer = InvincibilityLength / timeScale;
+			Animator.StartInvincibility(timeScale);
 		}
 
 		private void UpdateInvincibility()
