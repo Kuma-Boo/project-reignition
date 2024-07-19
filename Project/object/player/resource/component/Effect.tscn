@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=93 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -202,6 +202,15 @@ width = 64
 texture_mode = 1
 curve = SubResource("Curve_kt25w")
 
+[sub_resource type="Gradient" id="Gradient_4b6sr"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.0919732, 0.392977, 0.643813)
+colors = PackedColorArray(0.117647, 0.117647, 0.117647, 1, 0.392157, 0.392157, 0.392157, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ftecu"]
+gradient = SubResource("Gradient_4b6sr")
+width = 64
+
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_o5lyk"]
 lifetime_randomness = 0.8
 emission_shape = 6
@@ -221,6 +230,7 @@ damping_min = 1.0
 damping_max = 2.0
 scale_min = 0.05
 scale_max = 0.15
+color_initial_ramp = SubResource("GradientTexture1D_ftecu")
 alpha_curve = SubResource("CurveTexture_kwvbn")
 hue_variation_max = 0.12
 
@@ -438,6 +448,7 @@ damping_max = 3.0
 scale_min = 0.05
 scale_max = 0.15
 scale_curve = SubResource("CurveTexture_frntb")
+color_initial_ramp = SubResource("GradientTexture1D_ftecu")
 alpha_curve = SubResource("CurveTexture_kwvbn")
 hue_variation_max = 0.12
 
@@ -709,7 +720,7 @@ draw_pass_1 = SubResource("QuadMesh_qvron")
 layers = 32
 cast_shadow = 0
 emitting = false
-amount = 16
+amount = 32
 lifetime = 0.8
 fixed_fps = 0
 interpolate = false
