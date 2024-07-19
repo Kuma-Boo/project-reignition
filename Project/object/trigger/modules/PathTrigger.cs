@@ -12,13 +12,17 @@ public partial class PathTrigger : StageTriggerModule
 
 	private Path3D playerDeactivatePath;
 	private Path3D cameraDeactivatePath;
+	private bool deactivateLimitCameraDistance;
 
-	[Export]
 	/// <summary> Should the path be assigned to the player? </summary>
-	public bool affectPlayer = true;
 	[Export]
+	public bool affectPlayer = true;
 	/// <summary> Should the path be assigned to the camera? </summary>
+	[Export]
 	public bool affectCamera = true;
+	/// <summary> Should this path limit the camera's maximum distance? </summary>
+	[Export]
+	public bool limitCameraDistanceToPath;
 
 	public override void Activate()
 	{
@@ -31,7 +35,10 @@ public partial class PathTrigger : StageTriggerModule
 		if (affectCamera)
 		{
 			cameraDeactivatePath ??= Character.Camera.PathFollower.ActivePath;
+			deactivateLimitCameraDistance = Character.Camera.LimitToPathDistance;
+
 			Character.Camera.PathFollower.SetActivePath(path);
+			Character.Camera.LimitToPathDistance = limitCameraDistanceToPath;
 		}
 	}
 
@@ -42,6 +49,9 @@ public partial class PathTrigger : StageTriggerModule
 			Character.PathFollower.SetActivePath(playerDeactivatePath);
 
 		if (affectCamera && Character.Camera.PathFollower.ActivePath == path)
+		{
 			Character.Camera.PathFollower.SetActivePath(cameraDeactivatePath);
+			Character.Camera.LimitToPathDistance = limitCameraDistanceToPath;
+		}
 	}
 }

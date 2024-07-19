@@ -45,7 +45,7 @@ public partial class CameraController : Node3D
 	{
 		if (Engine.IsEditorHint()) return;
 
-		//Apply default settings
+		// Apply default settings
 		CameraSettingsResource targetSettings = (StageSettings.instance?.InitialCameraSettings) ?? defaultSettings;
 
 		SnapXform();
@@ -60,7 +60,7 @@ public partial class CameraController : Node3D
 	public void Respawn()
 	{
 		SnapXform();
-		//Revert camera settings
+		// Revert camera settings
 		UpdateCameraSettings(new CameraBlendData()
 		{
 			SettingsResource = StageSettings.instance.CurrentCheckpoint.CameraSettings,
@@ -132,6 +132,8 @@ public partial class CameraController : Node3D
 	#region Gameplay Camera
 	/// <summary> Skips smoothing for the current frame. </summary>
 	public bool SnapFlag { get; set; }
+	/// <summary> Determines whether the camera's distance will be limited by its path. </summary>
+	public bool LimitToPathDistance { get; set; }
 
 	[Export]
 	/// <summary> Default camera settings to use when nothing is set. </summary>
@@ -405,8 +407,12 @@ public partial class CameraController : Node3D
 			if (!settings.ignoreHomingAttack && IsLockonCameraActive)
 				targetDistance += LockonDistance;
 
-			if (PathFollower.Progress < targetDistance && !PathFollower.Loop)
+			if (PathFollower.Progress < targetDistance &&
+				!PathFollower.Loop &&
+				LimitToPathDistance)
+			{
 				targetDistance = PathFollower.Progress;
+			}
 
 			data.blendData.DistanceSmoothDamp(targetDistance, Character.IsMovingBackward, SnapFlag);
 

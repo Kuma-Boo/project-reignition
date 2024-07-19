@@ -24,6 +24,7 @@ namespace Project.Gameplay
 			Path3D startingPath = Stage.CalculateStartingPath(GlobalPosition);
 			PathFollower.SetActivePath(startingPath); // Attempt to autoload the stage's default path
 			Camera.PathFollower.SetActivePath(startingPath);
+			Camera.LimitToPathDistance = !Camera.PathFollower.Loop;
 
 			GetParent<Triggers.CheckpointTrigger>().Activate(); // Save initial checkpoint
 			Stage.UpdateRingCount(Skills.StartingRingCount, StageSettings.MathModeEnum.Replace); // Start with the proper ring count
@@ -270,7 +271,7 @@ namespace Project.Gameplay
 				// Check if we're trying to turn around
 				if (!Skills.IsSpeedBreakActive && ActiveLockoutData.allowReversing)
 				{
-					if (turnInstantly)
+					if (turnInstantly && !InputVector.IsZeroApprox())
 						IsMovingBackward = IsHoldingDirection(PathFollower.BackAngle);
 
 					if (IsMovingBackward)
@@ -1492,8 +1493,8 @@ namespace Project.Gameplay
 			TransitionManager.FinishTransition();
 		}
 
-		private const float TELEPORT_START_FX_LENGTH = .2f;
-		private const float TELEPORT_END_FX_LENGTH = .5f;
+		private const float TeleportStartFXLength = .2f;
+		private const float TeleportEndFXLength = .5f;
 		/// <summary>
 		/// Teleports the player to a specific location. Use TeleportSettings to have more control of how teleport occurs.
 		/// </summary>
@@ -1507,7 +1508,7 @@ namespace Project.Gameplay
 			if (trigger.enableStartFX)
 			{
 				Animator.StartTeleport();
-				await ToSignal(GetTree().CreateTimer(TELEPORT_START_FX_LENGTH, false), SceneTreeTimer.SignalName.Timeout);
+				await ToSignal(GetTree().CreateTimer(TeleportStartFXLength, false), SceneTreeTimer.SignalName.Timeout);
 			}
 
 			if (trigger.crossfade)
@@ -1524,7 +1525,7 @@ namespace Project.Gameplay
 			if (trigger.enableEndFX)
 			{
 				Animator.StopTeleport();
-				await ToSignal(GetTree().CreateTimer(TELEPORT_END_FX_LENGTH, false), SceneTreeTimer.SignalName.Timeout);
+				await ToSignal(GetTree().CreateTimer(TeleportEndFXLength, false), SceneTreeTimer.SignalName.Timeout);
 			}
 
 			ResetActionState();
@@ -1851,7 +1852,7 @@ namespace Project.Gameplay
 			Lockon.ResetLockonTarget();
 
 			if (IsCountdownActive) return;
-			if (IsDefeated && ActionState == ActionStates.Teleport) return; // Return early when respawning
+			if (IsDefeated || ActionState == ActionStates.Teleport) return; // Return early when respawning
 
 			ResetActionState();
 			JustLandedOnGround = true;

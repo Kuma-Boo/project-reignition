@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=3 uid="uid://gnw1drjjo5gi"]
+[gd_scene load_steps=75 format=3 uid="uid://gnw1drjjo5gi"]
 
 [ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="1_d384b"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_tbi4j"]
@@ -28,6 +28,7 @@
 [ext_resource type="Curve3D" uid="uid://bg2q177r6xuk2" path="res://area/2 dino jungle/act 2/environment/path/WaterfallIslandPath.tres" id="28_ffyye"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="28_kp8ug"]
 [ext_resource type="Curve3D" uid="uid://6pncj40ntr3" path="res://area/2 dino jungle/act 2/environment/path/FlyingPotIslandPath.tres" id="29_6kh3l"]
+[ext_resource type="Resource" uid="uid://drdka3lr4y2uj" path="res://area/2 dino jungle/act 2/camera/SpringPathJumpPanelCam.tres" id="29_aj4vj"]
 [ext_resource type="Resource" uid="uid://ds714gqim7fr5" path="res://area/2 dino jungle/act 2/camera/WaterfallBoatJumpCam.tres" id="29_ce0eu"]
 [ext_resource type="PackedScene" uid="uid://crkwyskdhsk6u" path="res://area/2 dino jungle/act 2/environment/collision/Collision.tscn" id="29_eiiea"]
 [ext_resource type="Curve3D" uid="uid://d0chnrowxrdqr" path="res://area/2 dino jungle/act 2/environment/path/Boat2Path.tres" id="29_op4b4"]
@@ -35,6 +36,7 @@
 [ext_resource type="Curve3D" uid="uid://w8h5534v6fiq" path="res://area/2 dino jungle/act 2/environment/path/LongIslandPath.tres" id="30_1ygta"]
 [ext_resource type="Curve3D" uid="uid://bja4oq6bs1v0d" path="res://area/2 dino jungle/act 2/environment/path/Boat3Path.tres" id="30_gs7yc"]
 [ext_resource type="Resource" uid="uid://dndax2nia3heh" path="res://area/2 dino jungle/act 2/camera/LongIslandCam.tres" id="30_iftkg"]
+[ext_resource type="Resource" uid="uid://dg12ph41x1pvn" path="res://area/2 dino jungle/act 2/camera/SpringPathEndCam.tres" id="30_pxcko"]
 [ext_resource type="PackedScene" uid="uid://dhudcebp1ql1o" path="res://area/2 dino jungle/act 2/environment/DJAct2.tscn" id="30_ymmwk"]
 [ext_resource type="Curve3D" uid="uid://fxnof15fo2q" path="res://area/2 dino jungle/act 2/environment/path/Boat4Path.tres" id="31_hajvb"]
 [ext_resource type="Resource" uid="uid://beueclos3dx1p" path="res://area/2 dino jungle/act 2/camera/WaterfallCam.tres" id="31_lavsx"]
@@ -54,7 +56,6 @@
 [ext_resource type="Environment" uid="uid://dfwf2f7c3ljwg" path="res://area/2 dino jungle/data/Environment.tres" id="36_vlkax"]
 [ext_resource type="Resource" uid="uid://ji20l0l30t4i" path="res://area/2 dino jungle/act 2/camera/DinoCam.tres" id="40_87ag4"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="41_4yhlb"]
-
 
 [sub_resource type="BoxShape3D" id="19"]
 size = Vector3(500, 20, 500)
@@ -768,6 +769,13 @@ voiceKey = &""
 [node name="JumpTriggers" type="Node3D" parent="Common/SpringPath"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.855, 19.7955, -108.076)
 
+[node name="StaticCam" type="Node3D" parent="Common/SpringPath/JumpTriggers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, -16, -18)
+script = ExtResource("8_srgif")
+transitionTime = 0.5
+transitionType = 1
+settings = ExtResource("31_teiyu")
+
 [node name="Jump1" type="Node3D" parent="Common/SpringPath/JumpTriggers"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -6.3, -5.7)
 script = ExtResource("12_t28j3")
@@ -795,12 +803,25 @@ middleHeight = 12.0
 finalHeight = 9.0
 distance = 49.0
 
+[node name="Cam" type="Node3D" parent="Common/SpringPath/JumpPanel"]
+transform = Transform3D(0.719846, -0.604023, 0.34202, 0.642788, 0.766044, 0, -0.262003, 0.219846, 0.939693, -0.358374, 10.2604, 48.7001)
+script = ExtResource("8_srgif")
+transitionTime = 0.5
+settings = ExtResource("29_aj4vj")
+
 [node name="Spring" parent="Common/SpringPath/JumpPanel" instance=ExtResource("7_t54v7")]
 transform = Transform3D(0.719846, -0.604023, 0.34202, 0.642788, 0.766044, 0, -0.262003, 0.219846, 0.939693, -0.358374, 10.2604, 48.7001)
 middleHeight = 20.0
 finalHeight = -26.095
 distance = 30.0
 voiceKey = &""
+
+[node name="Cam" type="Node3D" parent="Common/SpringPath/JumpPanel/Spring"]
+script = ExtResource("8_srgif")
+transitionTime = 2.0
+deactivationTransitionTime = 0.5
+settings = ExtResource("30_pxcko")
+previousSettings = ExtResource("2_14mqj")
 
 [node name="Path" type="Node3D" parent="Common/SpringPath/JumpPanel/Spring" node_paths=PackedStringArray("path")]
 script = ExtResource("14_nk68g")
@@ -822,10 +843,10 @@ respawnAnimation = 2
 transform = Transform3D(0.999997, 0, -0.0023039, 0, 1, 0, 0.0023039, 0, 0.999997, -0.00138664, 0, 1.00031)
 
 [node name="DinoSwitchRight" parent="Common/Dino/DinoBridge" instance=ExtResource("16_i7wrh")]
-transform = Transform3D(1, 0, -1.19209e-07, 0, 1, 0, 1.19209e-07, 0, 1, 43.2149, 18.227, 71.2619)
+transform = Transform3D(1, 0, -1.19209e-07, 0, 1, 0, 1.19209e-07, 0, 1, 43.215, 18.33, 71.262)
 
 [node name="DinoSwitchLeft" parent="Common/Dino/DinoBridge" instance=ExtResource("16_i7wrh")]
-transform = Transform3D(1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, 1, 40.7799, 18.227, 76.2739)
+transform = Transform3D(1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, 1, 40.78, 18.33, 76.274)
 
 [node name="DinoLockout" parent="Common/Dino/DinoBridge" instance=ExtResource("11_3ntm7")]
 transform = Transform3D(0.972006, -1.35515e-08, -0.234955, 1.70625e-08, 1, 1.291e-08, 0.234955, -1.65575e-08, 0.972006, -6.26522, 34.652, -6.34328)
@@ -1173,14 +1194,18 @@ environment = ExtResource("36_vlkax")
 [connection signal="JumpFinished" from="Common/Object/EndingBoatSection/EndL/JumpTrigger" to="Collision/IslandOneWay" method="Activate"]
 [connection signal="JumpFinished" from="Common/Object/EndingBoatSection/EndL/JumpTrigger" to="Common/Object/EndingBoatSection/EndL/JumpTrigger/Path" method="Activate"]
 [connection signal="Activated" from="Common/SpringPath/Spring1" to="Collision/IslandOneWay" method="Deactivate"]
+[connection signal="Deactivated" from="Common/SpringPath/Spring3" to="Common/SpringPath/JumpTriggers/StaticCam" method="Activate"]
 [connection signal="Deactivated" from="Common/SpringPath/Spring3" to="Common/SpringPath/JumpTriggers/Jump1" method="Activate" flags=3]
 [connection signal="JumpFinished" from="Common/SpringPath/JumpTriggers/Jump1" to="Common/SpringPath/JumpTriggers/Jump1/Jump2" method="Activate" flags=3]
 [connection signal="JumpFinished" from="Common/SpringPath/JumpTriggers/Jump1/Jump2" to="Collision/IslandOneWay" method="Activate"]
 [connection signal="JumpFinished" from="Common/SpringPath/JumpTriggers/Jump1/Jump2" to="Common/SpringPath/JumpTriggers/Jump1/Jump2/Path" method="Activate"]
 [connection signal="JumpFinished" from="Common/SpringPath/JumpTriggers/Jump1/Jump2" to="Common/SpringPath/JumpTriggers/Jump1/Jump2/Camera" method="Activate"]
 [connection signal="Activated" from="Common/SpringPath/JumpPanel" to="Collision/IslandOneWay" method="Deactivate"]
-[connection signal="Activated" from="Common/SpringPath/JumpPanel/Spring" to="Common/SpringPath/JumpPanel/Spring/Path" method="Activate"]
+[connection signal="Activated" from="Common/SpringPath/JumpPanel" to="Common/SpringPath/JumpPanel/Cam" method="Activate"]
+[connection signal="Activated" from="Common/SpringPath/JumpPanel/Spring" to="Common/SpringPath/JumpPanel/Spring/Cam" method="Activate"]
 [connection signal="Deactivated" from="Common/SpringPath/JumpPanel/Spring" to="Collision/IslandOneWay" method="Activate"]
+[connection signal="Deactivated" from="Common/SpringPath/JumpPanel/Spring" to="Common/SpringPath/JumpPanel/Spring/Cam" method="Deactivate"]
+[connection signal="Deactivated" from="Common/SpringPath/JumpPanel/Spring" to="Common/SpringPath/JumpPanel/Spring/Path" method="Activate"]
 [connection signal="Activated" from="Common/Dino" to="Common/Dino/DinoBridge/DinoSwitchRight" method="Activate"]
 [connection signal="Activated" from="Common/Dino" to="Common/Dino/DinoBridge/DinoSwitchLeft" method="Activate"]
 [connection signal="Activated" from="Common/Dino/DinoBridge/DinoSwitchRight" to="Common/Dino" method="Activate"]

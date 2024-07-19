@@ -179,6 +179,8 @@ public partial class CharacterAnimator : Node3D
 
 	private void GroundAnimations()
 	{
+		Character.Effect.IsEmittingStepDust = !Mathf.IsZeroApprox(Character.MoveSpeed); // Emit step dust based on speed
+
 		if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Success &&
 			StageSettings.instance.Data.CompletionAnimation == LevelDataResource.CompletionAnimationType.ThumbsUp)
 		{
@@ -190,8 +192,6 @@ public partial class CharacterAnimator : Node3D
 
 			return;
 		}
-
-		Character.Effect.IsEmittingStepDust = !Mathf.IsZeroApprox(Character.MoveSpeed); // Emit step dust based on speed
 
 		if (Character.Skills.IsSpeedBreakCharging) return;
 
