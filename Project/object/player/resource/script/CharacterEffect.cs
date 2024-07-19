@@ -99,12 +99,16 @@ public partial class CharacterEffect : Node3D
 	[Export]
 	private AudioStreamPlayer grindrailSfx;
 	private bool isFadingRailSFX;
-	public void StartGrindFX()
+	public void StartGrindFX(bool resetSFX)
 	{
 		grindrailVfx.Emitting = true;
 		isFadingRailSFX = false;
-		grindrailSfx.VolumeDb = 0f;
-		grindrailSfx.Play();
+
+		if (resetSFX)
+		{
+			grindrailSfx.VolumeDb = 0f;
+			grindrailSfx.Play();
+		}
 	}
 
 	public void FullGrindChargeFX()

@@ -207,7 +207,7 @@ public partial class GrindRail : Area3D
 		Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
 
 		// Reset FX
-		Character.Effect.StartGrindFX();
+		Character.Effect.StartGrindFX(true);
 
 		Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.Deactivate));
 		Character.Connect(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.Deactivate));
@@ -390,7 +390,7 @@ public partial class GrindRail : Area3D
 		}
 
 		Character.MoveSpeed = targetSpeed;
-		Character.Effect.StartGrindFX();
+		Character.Effect.StartGrindFX(false);
 		Character.Animator.StartGrindShuffle();
 
 		if (allowBonuses)
