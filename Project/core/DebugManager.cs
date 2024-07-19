@@ -7,7 +7,7 @@ namespace Project.Core;
 
 public partial class DebugManager : Node2D
 {
-	public static DebugManager Instance;
+	public static DebugManager Instance { get; set; }
 
 	[Signal]
 	public delegate void FullscreenToggledEventHandler();
@@ -42,7 +42,7 @@ public partial class DebugManager : Node2D
 		SetUpSkills();
 	}
 
-	public override void _Process(double _)
+	public override void _PhysicsProcess(double _)
 	{
 		if (Input.IsActionJustPressed("toggle_fullscreen")) // Global shortcut used in final build as well
 		{
@@ -92,14 +92,19 @@ public partial class DebugManager : Node2D
 		if (Input.IsActionJustPressed("debug_restart"))
 		{
 			if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(CharacterController.instance))
+			{
 				CharacterController.instance.StartRespawn(true);
+			}
 			else
 			{
 				TransitionManager.QueueSceneChange(string.Empty);
 				TransitionManager.StartTransition(new());
 			}
 		}
+	}
 
+	public override void _Process(double _)
+	{
 		if (line3d.Count + line2d.Count != 0 && !IsPaused) // Queue Raycast Redraw
 			QueueRedraw();
 	}
