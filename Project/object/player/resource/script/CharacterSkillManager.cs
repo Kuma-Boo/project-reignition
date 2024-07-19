@@ -431,7 +431,13 @@ public partial class CharacterSkillManager : Node
 	public void ModifySoulGauge(int amount)
 	{
 		SoulPower = Mathf.Clamp(SoulPower + amount, 0, MaxSoulPower);
-		HeadsUpDisplay.instance?.ModifySoulGauge((float)SoulPower / MaxSoulPower, IsSoulGaugeCharged);
+		float ratio;
+		if (SoulPower < MinimumSoulPower)
+			ratio = SoulPower / (float)MinimumSoulPower;
+		else
+			ratio = (SoulPower - MinimumSoulPower) / ((float)MaxSoulPower - MinimumSoulPower);
+
+		HeadsUpDisplay.instance?.ModifySoulGauge(ratio, IsSoulGaugeCharged);
 	}
 
 	/// <summary> Returns a string representing the soul gauge for menus to display. </summary>
