@@ -298,8 +298,6 @@ public partial class CharacterEffect : Node3D
 
 	public void UpdateGroundType(Node collision)
 	{
-		groundMaterial = MaterialEnum.Count; // Set ground material to an invalid value temporarily
-
 		// Loop through material keys and see if anything matches
 		for (int i = 0; i < materialSFXLibrary.KeyCount; i++)
 		{
@@ -309,7 +307,7 @@ public partial class CharacterEffect : Node3D
 			return;
 		}
 
-		if (groundMaterial == MaterialEnum.Count) // Avoid being spammed with warnings
+		if (groundMaterial != MaterialEnum.Pavement) // Avoid being spammed with warnings
 		{
 			GD.PushWarning($"'{collision.Name}' isn't in any sound groups found in CharacterSound.cs.");
 			groundMaterial = MaterialEnum.Pavement; // Default to pavement
