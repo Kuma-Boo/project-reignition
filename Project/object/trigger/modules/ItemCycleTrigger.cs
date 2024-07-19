@@ -5,10 +5,7 @@ namespace Project.Gameplay.Triggers;
 
 public partial class ItemCycleTrigger : StageTriggerModule
 {
-	[Export(PropertyHint.NodePathValidTypes, "Area3D")]
-	private NodePath checkpointTrigger;
-	private Area3D CheckpointTrigger { get; set; }
-
+	private bool ignoreCheckpoint; // Is the player moving backward through the level (ignore checkpoints)?
 	private bool itemCycleRespawnEnabled = true; // Respawn items when cycling?
 	private bool isCycleFlagSet; // Should we trigger an item switch?
 	private int itemCycleIndex; // Active item set
@@ -16,22 +13,34 @@ public partial class ItemCycleTrigger : StageTriggerModule
 	// Make sure itemCycle triggers are monitoring and collide with the player
 	[Export]
 	private Array<NodePath> itemCycles = [];
-	private readonly Array<CullingTrigger> _itemCycles = [];
+	[Export]
+	private Array<NodePath> transitionNodes = [];
+	private readonly Array<CullingTrigger> ItemCycles = [];
+	private readonly Array<CullingTrigger> Transitions = [];
 	public override void _Ready()
 	{
-		CheckpointTrigger = GetNodeOrNull<Area3D>(checkpointTrigger);
-		CheckpointTrigger.Connect(Area3D.SignalName.AreaEntered, new Callable(this, MethodName.OnCheckpointEntered));
-
 		for (int i = 0; i < itemCycles.Count; i++)
 		{
 			CullingTrigger trigger = GetNodeOrNull<CullingTrigger>(itemCycles[i]); // Empty item cycle
 			if (trigger == null)
 			{
-				_itemCycles.Add(null);
+				ItemCycles.Add(null);
 				continue;
 			}
 
-			_itemCycles.Add(trigger);
+			ItemCycles.Add(trigger);
+		}
+
+		for (int i = 0; i < transitionNodes.Count; i++)
+		{
+			CullingTrigger trigger = GetNodeOrNull<CullingTrigger>(transitionNodes[i]); // Empty item cycle
+			if (trigger == null)
+			{
+				Transitions.Add(null);
+				continue;
+			}
+
+			Transitions.Add(trigger);
 		}
 	}
 
@@ -46,6 +55,8 @@ public partial class ItemCycleTrigger : StageTriggerModule
 
 	public override void Activate()
 	{
+		ignoreCheckpoint = false;
+
 		if (itemCycles.Count == 0 || !isCycleFlagSet) return;
 
 		// Cycle items
@@ -60,25 +71,48 @@ public partial class ItemCycleTrigger : StageTriggerModule
 		isCycleFlagSet = false;
 	}
 
+	public override void Deactivate() => ignoreCheckpoint = true;
+
 	private void DespawnItemCycle()
 	{
-		if (_itemCycles[itemCycleIndex] == null)
+		if (ItemCycles[itemCycleIndex] == null)
 			return;
 
-		_itemCycles[itemCycleIndex].Deactivate(); // Despawn current item cycle
+		ItemCycles[itemCycleIndex].Deactivate(); // Despawn current item cycle
 	}
 
 	private void SpawnItemCycle()
 	{
-		if (_itemCycles[itemCycleIndex] == null)
+		if (ItemCycles[itemCycleIndex] == null)
 			return;
 
-		_itemCycles[itemCycleIndex].Activate(); // Spawn current item cycle
+		ItemCycles[itemCycleIndex].Activate(); // Spawn current item cycle
 	}
 
-	private void OnCheckpointEntered(Area3D a)
+	private void OnCheckpointActivated()
 	{
-		if (!a.IsInGroup("player detection")) return;
+		if (ignoreCheckpoint) return;
+
+		// Change the transition if needed
+		if (Transitions.Count > itemCycleIndex)
+			Transitions[itemCycleIndex]?.Deactivate();
+		if (Transitions.Count > itemCycleIndex + 1)
+			Transitions[itemCycleIndex + 1]?.Activate();
+
 		isCycleFlagSet = true;
+	}
+
+	private void OnCheckpointDeactivated()
+	{
+		// Revert to the current lap's transition if needed
+		if (Transitions.Count > itemCycleIndex)
+			Transitions[itemCycleIndex]?.Activate();
+		if (Transitions.Count > itemCycleIndex + 1)
+			Transitions[itemCycleIndex + 1]?.Deactivate();
+
+		if (isCycleFlagSet)
+			isCycleFlagSet = false;
+		else
+			ignoreCheckpoint = true; // Player must be moving backwards
 	}
 }
