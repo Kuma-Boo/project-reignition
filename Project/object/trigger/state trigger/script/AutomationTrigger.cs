@@ -100,6 +100,9 @@ public partial class AutomationTrigger : Area3D
 		Character.Animator.ExternalAngle = 0;
 		Character.Animator.SnapRotation(Character.Animator.ExternalAngle); // Rotate to follow pathfollower
 		Character.IsMovingBackward = false; // Prevent getting stuck in backstep animation
+
+		if (Character.Animator.IsBrakeAnimationActive)
+			Character.Animator.StopBrake();
 	}
 
 	private void Deactivate()
