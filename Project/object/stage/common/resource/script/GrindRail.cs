@@ -374,7 +374,7 @@ public partial class GrindRail : Area3D
 			Character.Effect.UpdateGrindFX(speedRatio);
 
 			if (Mathf.IsZeroApprox(perfectChargeTimer))
-				Character.MoveSpeed = Skills.GrindSettings.Interpolate(Character.MoveSpeed, isCharging ? 0f : -1f);
+				Character.MoveSpeed = Skills.GrindSettings.UpdateInterpolate(Character.MoveSpeed, isCharging ? 0f : -1f);
 		}
 
 		Character.Animator.UpdateBalancing(isCharging ? 0.0f : Character.Animator.CalculateTurnRatio());

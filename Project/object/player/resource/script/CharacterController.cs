@@ -511,7 +511,7 @@ namespace Project.Gameplay
 			UpdateTurning();
 			IsMovingBackward = ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.BackAngle) < Mathf.Pi * .4f; // Moving backwards
 
-			UpdateSlopeSpd();
+			UpdateSlopeSpeed();
 			UpdateActions();
 		}
 
@@ -550,7 +550,7 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakActive)
 			{
 				if (Skills.IsSpeedBreakOverrideActive)
-					MoveSpeed = ActiveMovementSettings.Interpolate(Skills.speedBreakSpeed, 1.0f);
+					MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Skills.speedBreakSpeed, 1.0f);
 				return;
 			}
 
@@ -575,7 +575,7 @@ namespace Project.Gameplay
 				}
 				else if (ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
 				{
-					MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, inputLength);
+					MoveSpeed = ActiveMovementSettings.UpdateInterpolate(MoveSpeed, inputLength);
 					return;
 				}
 			}
@@ -585,7 +585,7 @@ namespace Project.Gameplay
 
 			if (Mathf.IsZeroApprox(inputLength) && !Animator.IsBrakeAnimationActive) // Basic slow down
 			{
-				MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, 0);
+				MoveSpeed = ActiveMovementSettings.UpdateInterpolate(MoveSpeed, 0);
 			}
 			else
 			{
@@ -593,7 +593,7 @@ namespace Project.Gameplay
 				bool isTurningAround = deltaAngle > MAX_TURNAROUND_ANGLE || Input.IsActionPressed("button_brake");
 				if (isTurningAround || Animator.IsBrakeAnimationActive) // Skid to a stop
 				{
-					MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, -1);
+					MoveSpeed = ActiveMovementSettings.UpdateInterpolate(MoveSpeed, -1);
 					Animator.StartBrake();
 				}
 				else
@@ -607,11 +607,11 @@ namespace Project.Gameplay
 						MoveSpeed = Mathf.Lerp(MoveSpeed, ActiveMovementSettings.Speed * ActiveMovementSettings.GetSpeedRatio(BackstepSettings.Speed), .05f * inputLength);
 
 					if (ActionState == ActionStates.AccelJump)
-						MoveSpeed = GroundSettings.Interpolate(MoveSpeed, inputLength);
+						MoveSpeed = GroundSettings.UpdateInterpolate(MoveSpeed, inputLength);
 					else if (ActionState == ActionStates.JumpDash)
 						MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, AirSettings.Friction * PhysicsManager.physicsDelta);
 					else
-						MoveSpeed = ActiveMovementSettings.Interpolate(MoveSpeed, inputLength); // Accelerate based on input strength/input direction
+						MoveSpeed = ActiveMovementSettings.UpdateInterpolate(MoveSpeed, inputLength); // Accelerate based on input strength/input direction
 				}
 			}
 
@@ -768,37 +768,45 @@ namespace Project.Gameplay
 			}
 		}
 
+		/// <summary> How much is the slope currently influencing the player? </summary>
+		private float slopeRatio;
 		/// <summary> How much should the steepest slope affect the player? </summary>
-		private const float SLOPE_INFLUENCE_STRENGTH = .2f;
+		private const float SlopeInfluenceStrength = .2f;
 		/// <summary> Slopes that are shallower than Mathf.PI * threshold are ignored. </summary>
-		private const float SLOPE_THRESHOLD = .2f;
-		private void UpdateSlopeSpd()
+		private const float SlopeThreshold = .2f;
+		private void UpdateSlopeSpeed()
 		{
+			slopeRatio = 0;
+
 			if (Mathf.IsZeroApprox(MoveSpeed) || IsMovingBackward) return; // Idle/Backstepping isn't affected by slopes
 			if (!IsOnGround) return; // Slope is too shallow or not on the ground
 			if (IsLockoutActive && ActiveLockoutData.ignoreSlopes) return; // Lockout is ignoring slopes
 
 			// Calculate slope influence
-			float slopeInfluenceRatio = PathFollower.Forward().Dot(Vector3.Up);
-			if (Mathf.Abs(slopeInfluenceRatio) <= SLOPE_THRESHOLD) return;
+			slopeRatio = PathFollower.Forward().Dot(Vector3.Up);
+			if (Mathf.Abs(slopeRatio) <= SlopeThreshold) return;
 
-			slopeInfluenceRatio = Mathf.Lerp(-SLOPE_INFLUENCE_STRENGTH, SLOPE_INFLUENCE_STRENGTH, slopeInfluenceRatio);
-			if (slopeInfluenceRatio > 0 && Skills.IsSkillEquipped(SkillKey.AllRounder)) // Cancel slope influence when moving upwards
-				slopeInfluenceRatio = 0;
+			slopeRatio = Mathf.Lerp(-SlopeInfluenceStrength, SlopeInfluenceStrength, slopeRatio);
+			if (slopeRatio > 0 && Skills.IsSkillEquipped(SkillKey.AllRounder)) // Cancel slope influence when moving upwards
+				slopeRatio = 0;
+
+			// Slope speeds are ignored when sliding downhill and already moving faster than the max slideSpeed + slopeInfluence
+			if (ActionState == ActionStates.Sliding && MoveSpeed >= Skills.SlideSettings.Speed && slopeRatio < 0)
+				return;
 
 			if (IsHoldingDirection(PathFollower.ForwardAngle)) // Accelerating
 			{
-				if (slopeInfluenceRatio < 0f) // Downhill
-					MoveSpeed += GroundSettings.Traction * Mathf.Abs(slopeInfluenceRatio) * PhysicsManager.physicsDelta; // Uncapped
+				if (slopeRatio < 0f) // Downhill
+					MoveSpeed += GroundSettings.Traction * Mathf.Abs(slopeRatio) * PhysicsManager.physicsDelta; // Uncapped
 				else if (GroundSettings.GetSpeedRatioClamped(MoveSpeed) < 1f) // Uphill; Reduce acceleration (Only when not at top speed)
-					MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, GroundSettings.Traction * slopeInfluenceRatio * PhysicsManager.physicsDelta);
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, GroundSettings.Traction * slopeRatio * PhysicsManager.physicsDelta);
 			}
 			else if (MoveSpeed > 0f) // Decceleration (Only applied when actually moving)
 			{
-				if (slopeInfluenceRatio < 0f) // Re-apply some speed when moving downhill
-					MoveSpeed = Mathf.MoveToward(MoveSpeed, GroundSettings.Speed, GroundSettings.Friction * Mathf.Abs(slopeInfluenceRatio) * PhysicsManager.physicsDelta);
+				if (slopeRatio < 0f) // Re-apply some speed when moving downhill
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, GroundSettings.Speed, GroundSettings.Friction * Mathf.Abs(slopeRatio) * PhysicsManager.physicsDelta);
 				else // Increase friction when moving uphill
-					MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, GroundSettings.Friction * slopeInfluenceRatio * PhysicsManager.physicsDelta);
+					MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, GroundSettings.Friction * slopeRatio * PhysicsManager.physicsDelta);
 			}
 		}
 
@@ -1076,8 +1084,8 @@ namespace Project.Gameplay
 		{
 			if (!IsOnWall && !IsMovingBackward && MoveSpeed != 0)
 			{
-				if (MoveSpeed <= Skills.SlideSettings.Speed)
-					MoveSpeed = Skills.SlideSettings.Speed;
+				if (MoveSpeed <= Skills.InitialSlideSpeed)
+					MoveSpeed = Skills.InitialSlideSpeed;
 
 				Effect.PlayActionSFX(Effect.SlideSfx);
 				SetActionState(ActionStates.Sliding);
@@ -1105,20 +1113,24 @@ namespace Project.Gameplay
 					ChangeHitbox("crouch");
 				}
 			}
-			else
+			else if (ActionState == ActionStates.Sliding)
 			{
-				if (ActionState == ActionStates.Sliding)
-				{
-					// Influence speed
-					if (IsHoldingDirection(PathFollower.ForwardAngle))
-						MoveSpeed = Skills.SlideSettings.Interpolate(MoveSpeed, -(1 - InputVector.Length()));
-					else
-						MoveSpeed = Skills.SlideSettings.Interpolate(MoveSpeed, -InputVector.Length());
-				}
-				else if (ActionState == ActionStates.Crouching)
-				{
-					MoveSpeed *= .5f;
-				}
+				Skills.UpdateSlideSpeed(slopeRatio, SlopeInfluenceStrength);
+
+				// Influence speed based on input strength
+				float inputAmount = -.5f; // Start halfway
+				if (IsHoldingDirection(PathFollower.ForwardAngle))
+					inputAmount = -(1 - InputVector.Length()) * .5f; // 0 to -0.5
+				else if (IsHoldingDirection(PathFollower.BackAngle))
+					inputAmount = -(1 + InputVector.Length()) * .5f; // -0.5 to -1
+
+				inputAmount -= slopeRatio * SlopeInfluenceStrength;
+				MoveSpeed = Skills.SlideSettings.UpdateSlide(MoveSpeed, inputAmount);
+				GD.Print($"Slope Input is {inputAmount}. Movespeed is {MoveSpeed}");
+			}
+			else if (ActionState == ActionStates.Crouching)
+			{
+				MoveSpeed *= .5f;
 			}
 
 			if (!Input.IsActionPressed("button_action") && !Animator.IsSlideTransitionActive)
@@ -1201,11 +1213,11 @@ namespace Project.Gameplay
 		private void UpdateBackflip()
 		{
 			if (IsHoldingDirection(PathFollower.ForwardAngle)) // Influence backflip direction slightly
-				MoveSpeed = Skills.BackflipSettings.Interpolate(MoveSpeed, -1);
+				MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, -1);
 			else if (IsHoldingDirection(PathFollower.BackAngle))
-				MoveSpeed = Skills.BackflipSettings.Interpolate(MoveSpeed, InputVector.Length());
+				MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, InputVector.Length());
 			else if (Mathf.IsZeroApprox(InputVector.Length()))
-				MoveSpeed = Skills.BackflipSettings.Interpolate(MoveSpeed, 0);
+				MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, 0);
 
 			if (IsOnGround)
 				ResetActionState();

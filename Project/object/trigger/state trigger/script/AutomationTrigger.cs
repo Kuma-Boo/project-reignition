@@ -62,7 +62,7 @@ public partial class AutomationTrigger : Area3D
 			if (Character.IsLockoutActive && Character.ActiveLockoutData.overrideSpeed)
 				Character.MoveSpeed = Character.ActiveLockoutData.ApplySpeed(Character.MoveSpeed, Character.GroundSettings);
 			else
-				Character.MoveSpeed = Character.GroundSettings.Interpolate(Character.MoveSpeed, 1); // Move to max speed
+				Character.MoveSpeed = Character.GroundSettings.UpdateInterpolate(Character.MoveSpeed, 1); // Move to max speed
 		}
 
 		Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;

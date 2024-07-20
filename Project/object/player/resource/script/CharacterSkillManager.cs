@@ -67,6 +67,9 @@ public partial class CharacterSkillManager : Node
 	public float homingAttackAcceleration;
 
 	[ExportSubgroup("Slide Settings")]
+	/// <summary> Slide speed when starting from a standstill. </summary>
+	[Export]
+	public int InitialSlideSpeed { get; private set; }
 	// Default slide settings
 	[Export]
 	private int baseSlideSpeed;
@@ -78,6 +81,32 @@ public partial class CharacterSkillManager : Node
 	private int baseSlideOverspeed;
 	[Export]
 	private int baseSlideTurnaround;
+	[Export(PropertyHint.Range, "0,1,.1f")]
+	private float skillOneFrictionRatio = .5f;
+	[Export(PropertyHint.Range, "0,1,.1f")]
+	private float slideSlopeSpeedInfluence = .5f;
+
+	/// <summary> Updates slide settings to take slope ratio into account. </summary>
+	public void UpdateSlideSpeed(float slopeRatio, float slopeStrength)
+	{
+		// Calculate top speed
+		SlideSettings.Speed = GroundSettings.Speed * (1 - (slopeRatio * slideSlopeSpeedInfluence));
+		float slopeInfluence = slopeRatio * slopeStrength;
+		GD.Print(slopeInfluence);
+		float frictionRatio = GetSlidingFrictionRatio();
+		SlideSettings.Friction = baseSlideFriction * frictionRatio * (1 + slopeInfluence);
+		SlideSettings.Overspeed = baseSlideOverspeed * frictionRatio * (1 + slopeInfluence);
+		SlideSettings.Traction = Mathf.Lerp(0, baseSlideTraction, Mathf.Clamp(-slopeInfluence, 0, 1));
+	}
+
+	/// <summary> Calculates sliding's friction ratio based on skills. </summary>
+	public float GetSlidingFrictionRatio()
+	{
+		if (IsSkillEquipped(SkillKey.SlideDistance))
+			return skillOneFrictionRatio;
+
+		return 1.0f;
+	}
 
 	// While there aren't any upgrades for the following movement skills, they're here for consistency
 	[ExportGroup("Static Action Settings")]
@@ -164,12 +193,13 @@ public partial class CharacterSkillManager : Node
 			Turnaround = baseBackstepTurnaround,
 		};
 
+		float frictionRatio = GetSlidingFrictionRatio();
 		SlideSettings = new()
 		{
 			Speed = baseSlideSpeed,
 			Traction = baseSlideTraction,
-			Friction = baseSlideFriction,
-			Overspeed = baseSlideOverspeed,
+			Friction = baseSlideFriction * frictionRatio,
+			Overspeed = baseSlideOverspeed * frictionRatio,
 			Turnaround = baseSlideTurnaround
 		};
 
@@ -180,7 +210,6 @@ public partial class CharacterSkillManager : Node
 			Turnaround = baseGrindTurnaround,
 		};
 	}
-
 	#endregion
 
 	#region Skills
@@ -448,13 +477,13 @@ public partial class CharacterSkillManager : Node
 /// <summary>
 /// Contains data of movement settings. Leave values at -1 to ignore (primarily for skill overrides)
 /// </summary>
-public struct MovementSetting
+public class MovementSetting
 {
-	public int Speed { get; set; }
-	public int Traction { get; set; } // Speed up rate
-	public int Friction { get; set; } // Slow down rate
-	public int Overspeed { get; set; } // Slow down rate when going faster than speed
-	public int Turnaround { get; set; } // Skidding
+	public float Speed { get; set; }
+	public float Traction { get; set; } // Speed up rate
+	public float Friction { get; set; } // Slow down rate
+	public float Overspeed { get; set; } // Slow down rate when going faster than speed
+	public float Turnaround { get; set; } // Skidding
 
 	public MovementSetting()
 	{
@@ -463,8 +492,8 @@ public struct MovementSetting
 		Friction = 0;
 	}
 
-	// Figures out whether to speed up or slow down depending on the input
-	public float Interpolate(float currentSpeed, float input)
+	/// <summary> Interpolates between speeds based on input. </summary>
+	public float UpdateInterpolate(float currentSpeed, float input)
 	{
 		float delta = Traction;
 		float targetSpeed = Speed * input;
@@ -479,6 +508,37 @@ public struct MovementSetting
 			delta = Turnaround;
 
 		return Mathf.MoveToward(currentSpeed, targetSpeed, delta * PhysicsManager.physicsDelta);
+	}
+
+	/// <summary> Special addition mode for Sliding. Does NOT support negative speeds. </summary>
+	public float UpdateSlide(float currentSpeed, float input)
+	{
+		bool clampFinalSpeed = Mathf.Abs(currentSpeed) <= Speed;
+		if (Mathf.Abs(currentSpeed) > Speed) // Reduce by overspeed
+		{
+			currentSpeed -= Overspeed * PhysicsManager.physicsDelta;
+			if (Mathf.Abs(currentSpeed) > Speed && (Mathf.IsZeroApprox(input) || input > 0)) // Allow overspeed sliding
+				return currentSpeed;
+		}
+
+		if (input > 0) // Accelerate
+		{
+			if (!clampFinalSpeed)
+				currentSpeed = Speed;
+			else
+				currentSpeed += Traction * input * PhysicsManager.physicsDelta;
+		}
+		else
+		{
+			// Deccelerate and Turnaround
+			currentSpeed -= Mathf.Lerp(Friction, Turnaround, Mathf.Abs(input)) * PhysicsManager.physicsDelta;
+			clampFinalSpeed = Mathf.Abs(currentSpeed) <= Speed;
+		}
+
+		if (clampFinalSpeed)
+			currentSpeed = Mathf.Clamp(currentSpeed, 0, Speed);
+
+		return currentSpeed;
 	}
 
 	public float GetSpeedRatio(float spd) => spd / Speed;

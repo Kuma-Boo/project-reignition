@@ -175,6 +175,7 @@ public enum SkillKey
 	// Slide skills
 	SlideAttack, // Replace slide with an attack
 	SlideDefense, // Intangible to attacks when sliding
+	SlideDistance, // Allows sliding to last longer
 
 	// Stomp skills
 	StompDash, // Gives a speed boost when stomping/jump canceling
