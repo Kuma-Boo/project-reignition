@@ -139,11 +139,6 @@ public class SkillRing
 		UpdateTotalCost();
 	}
 
-	public void SortByCost()
-	{
-
-	}
-
 	/// <summary> Sorts skill resources based on their key (number). </summary>
 	public class KeySorter : IComparer<SkillResource>
 	{
@@ -154,6 +149,17 @@ public class SkillRing
 	public class CostSorter : IComparer<SkillResource>
 	{
 		int IComparer<SkillResource>.Compare(SkillResource x, SkillResource y) => x.Key.CompareTo(y.Key);
+	}
+
+	/// <summary> Sorts skill resources based on their key augment index. </summary>
+	public class AugmentSorter : IComparer<SkillResource>
+	{
+		int IComparer<SkillResource>.Compare(SkillResource x, SkillResource y)
+		{
+			if (x.AugmentIndex == y.AugmentIndex)
+				GD.PushWarning($"Augment {x.ResourcePath} and {y.ResourcePath} contain the same augment index of {x.AugmentIndex}!");
+			return x.AugmentIndex.CompareTo(y.AugmentIndex);
+		}
 	}
 }
 

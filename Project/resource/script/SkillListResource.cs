@@ -2,6 +2,8 @@ using Godot;
 using Godot.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System;
 
 namespace Project.Gameplay;
 
@@ -28,20 +30,22 @@ public partial class SkillListResource : Resource
 	private Array<SkillResource> skills = [];
 
 	/// <summary> Gets the matching skill based on a SkillKey. </summary>
-	public SkillResource GetSkill(SkillKey key)
+	public SkillResource GetSkill(SkillKey key, bool baseSkillOnly = true)
 	{
 		if (key == SkillKey.Max)
 			return null;
 
 		foreach (var skill in skills)
 		{
-			if (skill.Key == key)
+			if (skill.Key == key && (!baseSkillOnly || !skill.IsAugment))
 				return skill;
 		}
 
 		GD.PushWarning($"Couldn't find a skill with the key: {key}!");
 		return null;
 	}
+
+	private const string FileExtension = ".tres";
 
 	// Rebuilds the skill list
 	private void RebuildSkillList()
@@ -52,47 +56,118 @@ public partial class SkillListResource : Resource
 		skills.Clear();
 
 		// Load skills from skill directory
-		for (int i = 0; i < (int)SkillKey.Max; i++)
+		DirAccess directory = DirAccess.Open(skillResourcePath);
+		Array<string> files = new(directory.GetFiles());
+
+		// Populate skill list
+		for (int i = files.Count - 1; i >= 0; i--)
 		{
-			SkillKey key = (SkillKey)i;
-			string targetFile = skillResourcePath + key.ToString() + ".tres";
-			if (!ResourceLoader.Exists(targetFile))
+			string targetFile = skillResourcePath + files[i];
+			Resource resource = ResourceLoader.Load(targetFile);
+			if (resource is not SkillResource) // Not a skill resource
 			{
-				GD.Print($"Couldn't find file {targetFile}.");
+				files.RemoveAt(i);
 				continue;
 			}
 
-			SkillResource skill = ResourceLoader.Load<SkillResource>(targetFile, "SkillResource");
-			skills.Add(skill);
-			if (skill.Key != key) // Make sure keys are set up correctly
-				skill.Key = key;
+			skills.Insert(0, resource as SkillResource);
+			files[i] = files[i].Replace(FileExtension, string.Empty); // Remove file extension
+		}
 
-			ResourceSaver.Singleton.Save(skill, targetFile, ResourceSaver.SaverFlags.None);
+		// Make sure keys are set up correctly
+		for (int i = 0; i < skills.Count; i++)
+		{
+			// Attempt to match file names (without numbers) with SkillKey
+			if (!Enum.TryParse(Regex.Replace(files[i], "[0-9]", string.Empty), out SkillKey key))
+				continue;
 
-			// Make sure conflicting skills stay in sync with each other
-			if (skill.SkillConflicts != null)
+			skills[i].Key = key;
+			skills[i].Augments?.Clear(); // Clear augments (they'll be added on the next pass)
+			ResourceSaver.Singleton.Save(skills[i], skillResourcePath + files[i] + FileExtension, ResourceSaver.SaverFlags.ChangePath); // Save skill resource
+		}
+
+		// Make sure conflicting skills stay in sync with each other
+		foreach (SkillResource skill in skills)
+		{
+			if (skill.SkillConflicts == null) // Skill has no conflicts
+				continue;
+
+			for (int j = skill.SkillConflicts.Count - 1; j >= 0; j--)
 			{
-				for (int j = skill.SkillConflicts.Count - 1; j >= 0; j--)
+				if (skill.SkillConflicts[j] == skill.Key) // Make sure skills don't conflict with themselves
 				{
-					if (skill.SkillConflicts[j] == skill.Key)
-					{
-						skill.SkillConflicts.RemoveAt(j);
-						continue;
-					}
-
-					targetFile = skillResourcePath + skill.SkillConflicts[j].ToString() + ".tres";
-					SkillResource conflict = ResourceLoader.Load<SkillResource>(targetFile, "SkillResource");
-					if (conflict.SkillConflicts.Contains(skill.Key)) // Conflicts are synced, continue...
-						continue;
-
-					// Resync conflicts
-					conflict.SkillConflicts.Add(skill.Key);
-					ResourceSaver.Singleton.Save(skill, targetFile, ResourceSaver.SaverFlags.None);
+					skill.SkillConflicts.RemoveAt(j);
+					continue;
 				}
+
+				SkillResource conflict = GetSkill(skill.SkillConflicts[j]); // Get the base version of the conflicting skill
+				if (conflict == null)
+				{
+					skill.SkillConflicts.RemoveAt(j);
+					GD.Print($"Couldn't find base skill for {skill.SkillConflicts[j]}.");
+					continue;
+				}
+
+				if (conflict.SkillConflicts?.Contains(skill.Key) == true) // Conflicts are synced, continue...
+					continue;
+
+				if (conflict.SkillConflicts == null)
+					conflict.SkillConflicts = [];
+
+				// Make sure file can be saved
+				int fileIndex = files.IndexOf(conflict.Key.ToString());
+				if (fileIndex == -1)
+				{
+					GD.PushWarning($"Couldn't save skill conflict between {skill.ResourcePath} and {conflict.ResourcePath}!");
+					continue;
+				}
+				// Resync conflicts
+				conflict.SkillConflicts.Add(skill.Key);
+
+				// Save the conflicting skill resource
+				string targetFilePath = skillResourcePath + files[fileIndex] + ".tres";
+				ResourceSaver.Singleton.Save(skill, targetFilePath, ResourceSaver.SaverFlags.None);
 			}
 		}
 
-		// Reorder skill list
+		// Update augments
+		for (int i = skills.Count - 1; i >= 0; i--)
+		{
+			SkillResource baseSkill = GetSkill(skills[i].Key);
+			if (!skills[i].IsAugment) // Not an augment
+			{
+				if (baseSkill != skills[i]) // Log a warning for duplicate skills
+					GD.PushWarning($"{baseSkill.ResourcePath} and {skills[i].ResourcePath} use the same SkillKey. Make sure one of them is configured to be an augment.");
+
+				continue;
+			}
+
+			if (baseSkill.Augments == null) // Reset augments if null
+				baseSkill.Augments = [];
+
+			// Make sure file can be saved
+			int fileIndex = files.IndexOf(baseSkill.Key.ToString());
+			if (fileIndex == -1)
+			{
+				GD.PushWarning($"Couldn't update {skills[i].ResourcePath}'s base skill ({baseSkill.ResourcePath}) augment list!");
+				continue;
+			}
+
+			// Update base skill list
+			baseSkill.Augments.Add(skills[i]);
+			List<SkillResource> augmentList = [.. baseSkill.Augments.ToArray()];
+			augmentList.Sort(new SkillRing.AugmentSorter());
+
+			baseSkill.Augments.Clear();
+			baseSkill.Augments.AddRange(augmentList);
+
+			// Save the base skill resource
+			string targetFilePath = skillResourcePath + files[fileIndex] + ".tres";
+			ResourceSaver.Singleton.Save(skills[i], targetFilePath, ResourceSaver.SaverFlags.None);
+			skills.RemoveAt(i); // Remove the skill from the main skill list
+		}
+
+		// Reorder skill list based on skill number
 		List<SkillResource> skillList = [.. skills.ToArray()];
 		skillList.Sort(new SkillRing.KeySorter());
 

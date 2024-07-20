@@ -69,9 +69,10 @@ public partial class SkillResource : Resource
 	public Array<SkillKey> SkillConflicts { get; set; }
 
 	/// <summary> Does this skill build off of a previous skill? </summary>
+	public bool IsAugment => AugmentIndex != 0;
 	[Export]
-	public int SkillVariationIndex { get; private set; }
-	/// <summary> Does this skill build off of a previous skill? </summary>
+	public int AugmentIndex { get; private set; }
+	/// <summary> List of skill augments. </summary>
 	[Export]
-	public SkillResource BaseSkill { get; private set; }
+	public Array<SkillResource> Augments { get; set; }
 }
