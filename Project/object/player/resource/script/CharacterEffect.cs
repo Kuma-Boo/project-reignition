@@ -77,6 +77,11 @@ public partial class CharacterEffect : Node3D
 	public void StopStompFX() => stompFX.SetEmitting(false);
 
 	[Export]
+	private GroupGpuParticles3D aegisSlideParticle;
+	public void StartAegisFX() => aegisSlideParticle.SetEmitting(true);
+	public void StopAegisFX() => aegisSlideParticle.SetEmitting(false);
+
+	[Export]
 	private GpuParticles3D chargeFX;
 	[Export]
 	private GpuParticles3D fullChargeFX;

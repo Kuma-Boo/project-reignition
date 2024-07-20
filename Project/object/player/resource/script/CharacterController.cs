@@ -117,6 +117,9 @@ namespace Project.Gameplay
 		{
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
 			{
+				if (Skills.IsSkillEquipped(SkillKey.SlideDefense))
+					Effect.StopAegisFX();
+
 				ChangeHitbox("RESET");
 				Animator.StopCrouching();
 			}
@@ -1089,6 +1092,10 @@ namespace Project.Gameplay
 
 				Effect.PlayActionSFX(Effect.SlideSfx);
 				SetActionState(ActionStates.Sliding);
+
+				if (Skills.IsSkillEquipped(SkillKey.SlideDefense))
+					Effect.StartAegisFX();
+
 				ChangeHitbox("slide");
 			}
 			else
@@ -1108,6 +1115,9 @@ namespace Project.Gameplay
 
 				if (ActionState == ActionStates.Sliding)
 				{
+					if (Skills.IsSkillEquipped(SkillKey.SlideDefense))
+						Effect.StopAegisFX();
+
 					ActionState = ActionStates.Crouching;
 					Animator.ToggleSliding();
 					ChangeHitbox("crouch");
@@ -1263,7 +1273,8 @@ namespace Project.Gameplay
 		#endregion
 
 		#region Damage & Invincibility
-		public bool IsInvincible => invincibilityTimer != 0;
+		public bool IsInvincible => invincibilityTimer != 0 ||
+			(Skills.IsSkillEquipped(SkillKey.SlideDefense) && ActionState == ActionStates.Sliding);
 		private float invincibilityTimer;
 		private const float InvincibilityLength = 5f;
 
