@@ -92,6 +92,9 @@ public partial class SidleTrigger : Area3D
 
 	private void UpdateSidle()
 	{
+		if (!StageSettings.instance.IsLevelIngame || Character.IsDefeated)
+			return;
+
 		// Check ground
 		Vector3 castVector = Vector3.Down * Character.CollisionSize.X * 2.0f;
 		RaycastHit hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
