@@ -1126,7 +1126,6 @@ namespace Project.Gameplay
 
 				inputAmount -= slopeRatio * SlopeInfluenceStrength;
 				MoveSpeed = Skills.SlideSettings.UpdateSlide(MoveSpeed, inputAmount);
-				GD.Print($"Slope Input is {inputAmount}. Movespeed is {MoveSpeed}");
 			}
 			else if (ActionState == ActionStates.Crouching)
 			{

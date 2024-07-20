@@ -92,7 +92,6 @@ public partial class CharacterSkillManager : Node
 		// Calculate top speed
 		SlideSettings.Speed = GroundSettings.Speed * (1 - (slopeRatio * slideSlopeSpeedInfluence));
 		float slopeInfluence = slopeRatio * slopeStrength;
-		GD.Print(slopeInfluence);
 		float frictionRatio = GetSlidingFrictionRatio();
 		SlideSettings.Friction = baseSlideFriction * frictionRatio * (1 + slopeInfluence);
 		SlideSettings.Overspeed = baseSlideOverspeed * frictionRatio * (1 + slopeInfluence);
