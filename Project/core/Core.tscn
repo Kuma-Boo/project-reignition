@@ -18,19 +18,19 @@
 [node name="Core" type="Node"]
 process_mode = 3
 
-[node name="DebugManager" type="Node2D" parent="." node_paths=PackedStringArray("debugMenuRoot", "skillSelectButton", "skillToggleButton", "freeCamData")]
+[node name="DebugManager" type="Node2D" parent="." node_paths=PackedStringArray("debugMenuRoot", "skillSelectButton", "skillToggleButton", "skillAugmentSlider", "freeCamData")]
 top_level = true
 script = ExtResource("3_exwps")
 debugMenuRoot = NodePath("CanvasLayer/Menu")
 skillSelectButton = NodePath("CanvasLayer/Menu/Tabs/Gameplay/Options/SkillSelect")
 skillToggleButton = NodePath("CanvasLayer/Menu/Tabs/Gameplay/Options/SkillToggle")
+skillAugmentSlider = NodePath("CanvasLayer/Menu/Tabs/Gameplay/Options/SkillAugment")
 freeCamData = [NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamPosition/X"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamPosition/Y"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamPosition/Z"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamRotation/Pitch"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamRotation/Yaw"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamRotation/Roll")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="DebugManager"]
 layer = 128
 
 [node name="Menu" type="ColorRect" parent="DebugManager/CanvasLayer"]
-visible = false
 offset_right = 448.0
 offset_bottom = 1080.0
 focus_mode = 1
@@ -172,6 +172,16 @@ layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 32
 fit_to_longest_item = false
+
+[node name="SkillAugment" type="HSlider" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+min_value = -5.0
+max_value = 5.0
+rounded = true
+scrollable = false
+tick_count = 11
+ticks_on_borders = true
 
 [node name="SkillToggle" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options"]
 layout_mode = 2
@@ -424,6 +434,7 @@ vertical_alignment = 1
 [connection signal="pressed" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/SavePosition" to="DebugManager" method="SaveCustomCheckpoint"]
 [connection signal="pressed" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/LoadPosition" to="DebugManager" method="LoadCustomCheckpoint"]
 [connection signal="item_selected" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/SkillSelect" to="DebugManager" method="OnSkillSelected"]
+[connection signal="value_changed" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/SkillAugment" to="DebugManager" method="OnSkillAugmentChanged"]
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/SkillToggle" to="DebugManager" method="OnSkillToggled"]
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/HUD" to="DebugManager" method="ToggleHUD"]
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/Countdown" to="DebugManager" method="ToggleCountdownVisibility"]

@@ -571,6 +571,7 @@ public partial class SaveManager : Node
 		public float playTime;
 
 		public Array<SkillKey> equippedSkills;
+		public Dictionary<SkillKey, int> equippedAugments;
 		/// <summary> Total number of fire souls the player collected. </summary>
 		public int FireSoulCount { get; private set; }
 		/// <summary> Total number of gold medals the player has collected. </summary>

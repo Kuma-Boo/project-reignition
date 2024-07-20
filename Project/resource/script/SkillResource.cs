@@ -75,4 +75,19 @@ public partial class SkillResource : Resource
 	/// <summary> List of skill augments. </summary>
 	[Export]
 	public Array<SkillResource> Augments { get; set; }
+
+	/// <summary> Returns an augment based on its index. Only call this on the base skill to avoid issues. </summary>
+	public SkillResource GetAugment(int augmentIndex)
+	{
+		if (augmentIndex == 0) // Return the base skill
+			return this;
+
+		foreach (SkillResource augment in Augments)
+		{
+			if (augment.AugmentIndex == augmentIndex)
+				return augment;
+		}
+
+		return null;
+	}
 }

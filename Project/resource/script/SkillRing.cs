@@ -1,15 +1,18 @@
 using Godot;
 using Godot.Collections;
 using Project.Core;
-using System.Collections.Generic;
 
 namespace Project.Gameplay;
 
 public class SkillRing
 {
-	public bool IsSkillEquipped(SkillKey key) => EquippedSkills.Contains(key);
 	/// <summary> List of equipped skills. </summary>
 	public Array<SkillKey> EquippedSkills => SaveManager.ActiveGameData.equippedSkills;
+	/// <summary> List of equipped Augments. </summary>
+	public Dictionary<SkillKey, int> EquippedAugments => SaveManager.ActiveGameData.equippedAugments;
+	public bool IsSkillEquipped(SkillKey key) => EquippedSkills.Contains(key);
+	public int GetAugmentIndex(SkillKey key) => EquippedAugments.TryGetValue(key, out int currentAugmentIndex) ? currentAugmentIndex : 0;
+
 	/// <summary> Cost of all equipped skills. </summary>
 	public int TotalCost { get; private set; }
 	/// <summary> Amount of available skill points. </summary>
@@ -91,6 +94,38 @@ public class SkillRing
 		return false;
 	}
 
+	public bool EquipAugment(SkillKey key, int augmentIndex, bool allowSkillPointOverflow = false)
+	{
+		SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(key);
+
+		if (baseSkill.Augments == null || baseSkill.Augments.Count == 0)
+			return false; // Not an augment skill!
+
+		SkillResource augment = baseSkill.GetAugment(augmentIndex);
+		if (augment == null)
+		{
+			GD.PushError($"Couldn't find augment with index {augmentIndex} on skill {baseSkill.Key}!");
+			return false;
+		}
+
+		int currentCost = baseSkill.GetAugment(GetAugmentIndex(key)).Cost;
+		if (!allowSkillPointOverflow) // Check for total cost
+		{
+			int targetTotalCost = TotalCost - currentCost + augment.Cost;
+			if (targetTotalCost > MaxSkillPoints)
+				return false; // Too expensive!
+		}
+
+		if (EquippedAugments.ContainsKey(key))
+			EquippedAugments[key] = augmentIndex;
+		else
+			EquippedAugments.Add(key, augmentIndex);
+
+		TotalCost -= currentCost; // Refund currently equipped cost
+		TotalCost += augment.Cost; // Take skill points
+		return true;
+	}
+
 	/// <summary> Checks whether a skill is unlocked on the active save file. </summary>
 	public bool IsSkillUnlocked(SkillKey key)
 	{
@@ -140,21 +175,21 @@ public class SkillRing
 	}
 
 	/// <summary> Sorts skill resources based on their key (number). </summary>
-	public class KeySorter : IComparer<SkillResource>
+	public class KeySorter : System.Collections.Generic.IComparer<SkillResource>
 	{
-		int IComparer<SkillResource>.Compare(SkillResource x, SkillResource y) => x.Key.CompareTo(y.Key);
+		int System.Collections.Generic.IComparer<SkillResource>.Compare(SkillResource x, SkillResource y) => x.Key.CompareTo(y.Key);
 	}
 
 	/// <summary> Sorts skill resources based on their cost. </summary>
-	public class CostSorter : IComparer<SkillResource>
+	public class CostSorter : System.Collections.Generic.IComparer<SkillResource>
 	{
-		int IComparer<SkillResource>.Compare(SkillResource x, SkillResource y) => x.Key.CompareTo(y.Key);
+		int System.Collections.Generic.IComparer<SkillResource>.Compare(SkillResource x, SkillResource y) => x.Key.CompareTo(y.Key);
 	}
 
 	/// <summary> Sorts skill resources based on their key augment index. </summary>
-	public class AugmentSorter : IComparer<SkillResource>
+	public class AugmentSorter : System.Collections.Generic.IComparer<SkillResource>
 	{
-		int IComparer<SkillResource>.Compare(SkillResource x, SkillResource y)
+		int System.Collections.Generic.IComparer<SkillResource>.Compare(SkillResource x, SkillResource y)
 		{
 			if (x.AugmentIndex == y.AugmentIndex)
 				GD.PushWarning($"Augment {x.ResourcePath} and {y.ResourcePath} contain the same augment index of {x.AugmentIndex}!");

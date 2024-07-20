@@ -236,6 +236,8 @@ public partial class DebugManager : Node2D
 	private OptionButton skillSelectButton;
 	[Export]
 	private Button skillToggleButton;
+	[Export]
+	private Slider skillAugmentSlider;
 	private void SetUpSkills()
 	{
 		for (int i = 0; i < (int)SkillKey.Max; i++)
@@ -246,10 +248,31 @@ public partial class DebugManager : Node2D
 		skillSelectButton.Select(0);
 	}
 
-	private void OnSkillSelected(int skillIndex)
+	public void OnSkillSelected(int skillIndex)
 	{
+		if (skillIndex == -1)
+			skillIndex = skillSelectButton.Selected;
+
 		SkillKey key = (SkillKey)skillIndex;
 		skillToggleButton.ButtonPressed = SaveManager.ActiveSkillRing.EquippedSkills.Contains(key);
+
+		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key, true);
+
+		if (skill.Augments == null || skill.Augments.Count == 0)
+		{
+			skillAugmentSlider.Editable = false;
+			skillAugmentSlider.Value = 0;
+			return;
+		}
+
+		skillAugmentSlider.Editable = true;
+		skillAugmentSlider.MinValue = Mathf.Max(skill.Augments[0].AugmentIndex, 0);
+		skillAugmentSlider.MaxValue = Mathf.Max(skill.Augments[^1].AugmentIndex, 0);
+		skillAugmentSlider.TickCount = Mathf.RoundToInt(Mathf.Abs(skillAugmentSlider.MaxValue - skillAugmentSlider.MinValue) + 1);
+		if (SaveManager.ActiveSkillRing.EquippedAugments.TryGetValue(key, out int value))
+			skillAugmentSlider.Value = value;
+		else
+			skillAugmentSlider.Value = 0;
 	}
 
 	private void OnSkillToggled(bool toggled)
@@ -263,6 +286,12 @@ public partial class DebugManager : Node2D
 		}
 
 		SaveManager.ActiveSkillRing.UnequipSkill(key);
+	}
+
+	private void OnSkillAugmentChanged(float value)
+	{
+		int augmentValue = Mathf.RoundToInt(value);
+		SaveManager.ActiveSkillRing.EquipAugment((SkillKey)skillSelectButton.Selected, augmentValue, true);
 	}
 	#endregion
 
