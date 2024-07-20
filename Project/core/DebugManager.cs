@@ -266,9 +266,9 @@ public partial class DebugManager : Node2D
 		}
 
 		skillAugmentSlider.Editable = true;
-		skillAugmentSlider.MinValue = Mathf.Max(skill.Augments[0].AugmentIndex, 0);
+		skillAugmentSlider.MinValue = skill.Augments[0].AugmentIndex < 0 ? skill.Augments[0].AugmentIndex : 0;
 		skillAugmentSlider.MaxValue = Mathf.Max(skill.Augments[^1].AugmentIndex, 0);
-		skillAugmentSlider.TickCount = Mathf.RoundToInt(Mathf.Abs(skillAugmentSlider.MaxValue - skillAugmentSlider.MinValue) + 1);
+		skillAugmentSlider.TickCount = skill.Augments.Count + 1;
 		if (SaveManager.ActiveSkillRing.EquippedAugments.TryGetValue(key, out int value))
 			skillAugmentSlider.Value = value;
 		else

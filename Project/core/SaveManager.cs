@@ -794,6 +794,7 @@ public partial class SaveManager : Node
 				{ nameof(exp), exp },
 				{ nameof(playTime), Mathf.RoundToInt(playTime) },
 				{ nameof(equippedSkills), equippedSkills },
+				{ nameof(equippedAugments), equippedAugments },
 			};
 		}
 
@@ -842,6 +843,18 @@ public partial class SaveManager : Node
 					equippedSkills.Add((SkillKey)skills[i]);
 			}
 
+			if (dictionary.TryGetValue(nameof(equippedAugments), out var))
+			{
+				Dictionary<int, int> augments = (Dictionary<int, int>)var;
+				int[] augmentKeys = [.. augments.Keys];
+
+				for (int i = 0; i < augmentKeys.Length; i++)
+				{
+					SkillKey key = (SkillKey)augmentKeys[i];
+					equippedAugments.Add(key, augments[augmentKeys[i]]);
+				}
+			}
+
 			// Update runtime data based on save data
 			StringName[] keys = levelData.Keys.ToArray();
 			for (int i = 0; i < keys.Length; i++)
@@ -876,6 +889,7 @@ public partial class SaveManager : Node
 				worldsUnlocked = [],
 				stagesUnlocked = [],
 				equippedSkills = [],
+				equippedAugments = [],
 				level = 0,
 				lastPlayedWorld = WorldEnum.LostPrologue
 			};

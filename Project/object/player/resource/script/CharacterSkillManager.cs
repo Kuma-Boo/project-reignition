@@ -82,7 +82,11 @@ public partial class CharacterSkillManager : Node
 	[Export]
 	private int baseSlideTurnaround;
 	[Export(PropertyHint.Range, "0,1,.1f")]
-	private float skillOneFrictionRatio = .5f;
+	private float slideDistanceLowFrictionRatio = .6f;
+	[Export(PropertyHint.Range, "0,1,.1f")]
+	private float slideDistanceMediumFrictionRatio = .4f;
+	[Export(PropertyHint.Range, "0,1,.1f")]
+	private float slideDistanceHighFrictionRatio = .2f;
 	[Export(PropertyHint.Range, "0,1,.1f")]
 	private float slideSlopeSpeedInfluence = .5f;
 
@@ -102,7 +106,20 @@ public partial class CharacterSkillManager : Node
 	public float GetSlidingFrictionRatio()
 	{
 		if (IsSkillEquipped(SkillKey.SlideDistance))
-			return skillOneFrictionRatio;
+		{
+			switch (GetAugmentIndex(SkillKey.SlideDistance))
+			{
+				case 0:
+					return slideDistanceLowFrictionRatio;
+				case 1:
+					return slideDistanceMediumFrictionRatio;
+				case 2:
+					return slideDistanceHighFrictionRatio;
+				default:
+					GD.PushError($"Slide augment {GetAugmentIndex(SkillKey.SlideDistance)} isn't implemented.");
+					break;
+			}
+		}
 
 		return 1.0f;
 	}
@@ -214,6 +231,7 @@ public partial class CharacterSkillManager : Node
 	#region Skills
 	private SkillRing SkillRing => SaveManager.ActiveSkillRing;
 	public bool IsSkillEquipped(SkillKey key) => SkillRing.IsSkillEquipped(key);
+	public int GetAugmentIndex(SkillKey key) => SkillRing.GetAugmentIndex(key);
 
 	[ExportGroup("Countdown Skills")]
 	[Export]
