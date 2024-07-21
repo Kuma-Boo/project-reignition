@@ -113,6 +113,8 @@ public partial class SkillSelect : Menu
 
 			cursor.Position = Vector2.Up * -AugmentSelection * ScrollInterval;
 			UpdateCursor();
+
+			UpdateDescription();
 			return;
 		}
 
@@ -146,10 +148,30 @@ public partial class SkillSelect : Menu
 
 			UpdateCursor();
 			optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * ScrollInterval);
-			description.SetText(currentSkillOptionList[VerticalSelection].Skill.DescriptionKey);
+
+			UpdateDescription();
 		}
 
 		// TODO Change sort method when speedbreak is pressed
+	}
+
+	private void UpdateDescription()
+	{
+		if (IsEditingAugment)
+		{
+			if (AugmentSelection == 0)
+				description.SetText(currentSkillOptionList[VerticalSelection].Skill.DescriptionKey);
+			else
+				description.SetText(currentSkillOptionList[VerticalSelection].augments[AugmentSelection - 1].Skill.DescriptionKey);
+
+			return;
+		}
+
+		int augmentIndex = ActiveSkillRing.GetAugmentIndex(currentSkillOptionList[VerticalSelection].Skill.Key);
+		if (currentSkillOptionList[VerticalSelection].Skill.HasAugments && augmentIndex != 0)
+			description.SetText(currentSkillOptionList[VerticalSelection].augments[augmentIndex - 1].Skill.DescriptionKey);
+		else
+			description.SetText(currentSkillOptionList[VerticalSelection].Skill.DescriptionKey);
 	}
 
 	private void UpdateCursor()
@@ -219,7 +241,7 @@ public partial class SkillSelect : Menu
 			}
 		}
 
-		description.SetText(currentSkillOptionList[VerticalSelection].Skill.DescriptionKey);
+		UpdateDescription();
 		levelLabel.Text = Tr("skill_select_level").Replace("0", SaveManager.ActiveGameData.level.ToString("00"));
 	}
 
