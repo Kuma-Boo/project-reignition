@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Godot;
 using Godot.Collections;
@@ -780,6 +781,14 @@ public partial class SaveManager : Node
 		/// <summary> Creates a dictionary based on GameData. </summary>
 		public Dictionary ToDictionary()
 		{
+			Dictionary<string, int> augmentDictionary = [];
+
+			for (int i = 0; i < equippedAugments.Keys.Count; i++)
+			{
+				SkillKey key = equippedAugments.Keys.ToArray()[i];
+				augmentDictionary.Add(key.ToString(), equippedAugments[key]);
+			}
+
 			return new()
 			{
 				// WorldEnum data
@@ -850,8 +859,8 @@ public partial class SaveManager : Node
 
 				for (int i = 0; i < augmentKeys.Length; i++)
 				{
-					SkillKey key = (SkillKey)augmentKeys[i].ToInt();
-					equippedAugments.Add(key, augments[augmentKeys[i]]);
+					if (!Enum.TryParse(augmentKeys[i], out SkillKey key))
+						equippedAugments.Add(key, augments[augmentKeys[i]]);
 				}
 			}
 

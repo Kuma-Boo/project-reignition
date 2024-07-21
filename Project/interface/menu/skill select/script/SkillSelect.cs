@@ -195,7 +195,10 @@ public partial class SkillSelect : Menu
 			SkillKey key = (SkillKey)i;
 			skillOptionList[i].Visible = SaveManager.ActiveSkillRing.IsSkillUnlocked(key);
 			if (!skillOptionList[i].Visible)
+			{
+				GD.Print(key);
 				continue;
+			}
 
 			currentSkillOptionList.Add(skillOptionList[i]);
 

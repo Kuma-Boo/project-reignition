@@ -37,6 +37,7 @@ public partial class SkillListResource : Resource
 
 		foreach (var skill in skills)
 		{
+			GD.PrintT(skill.Key, key, skill.IsAugment);
 			if (skill.Key == key && !skill.IsAugment)
 				return skill;
 		}
@@ -94,13 +95,19 @@ public partial class SkillListResource : Resource
 
 			for (int j = skill.SkillConflicts.Count - 1; j >= 0; j--)
 			{
-				if (skill.SkillConflicts[j] == skill.Key) // Make sure skills don't conflict with themselves
+				if (!Enum.TryParse(skill.SkillConflicts[j], out SkillKey conflictKey))
+				{
+					GD.PushWarning($"Couldn't find conflict {skill.SkillConflicts[j]} on skill {skill.ResourcePath}.");
+					continue;
+				}
+
+				if (conflictKey == skill.Key) // Make sure skills don't conflict with themselves
 				{
 					skill.SkillConflicts.RemoveAt(j);
 					continue;
 				}
 
-				SkillResource conflict = GetSkill(skill.SkillConflicts[j]); // Get the base version of the conflicting skill
+				SkillResource conflict = GetSkill(conflictKey); // Get the base version of the conflicting skill
 				if (conflict == null)
 				{
 					skill.SkillConflicts.RemoveAt(j);
@@ -108,7 +115,7 @@ public partial class SkillListResource : Resource
 					continue;
 				}
 
-				if (conflict.SkillConflicts?.Contains(skill.Key) == true) // Conflicts are synced, continue...
+				if (conflict.SkillConflicts?.Contains(skill.Key.ToString()) == true) // Conflicts are synced, continue...
 					continue;
 
 				if (conflict.SkillConflicts == null)
@@ -122,7 +129,7 @@ public partial class SkillListResource : Resource
 					continue;
 				}
 				// Resync conflicts
-				conflict.SkillConflicts.Add(skill.Key);
+				conflict.SkillConflicts.Add(skill.Key.ToString());
 
 				// Save the conflicting skill resource
 				string targetFilePath = skillResourcePath + files[fileIndex] + ".tres";

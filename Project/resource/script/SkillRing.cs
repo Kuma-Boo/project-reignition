@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Godot.Collections;
 using Project.Core;
@@ -55,12 +56,15 @@ public class SkillRing
 		if (skill.SkillConflicts == null)
 			return SkillKey.Max;
 
-		foreach (SkillKey conflict in skill.SkillConflicts)
+		foreach (string conflict in skill.SkillConflicts)
 		{
-			if (!IsSkillEquipped(conflict))
+			if (!Enum.TryParse(conflict, out SkillKey conflictKey))
 				continue;
 
-			return conflict;
+			if (!IsSkillEquipped(conflictKey))
+				continue;
+
+			return conflictKey;
 		}
 
 		return SkillKey.Max; // No conflicts
@@ -227,11 +231,13 @@ public enum SkillKey
 	// Passive skills
 	AllRounder, // Reduces acceleration loss caused by steep terrain
 	PearlRange, // Makes collecting pearls easier
+	PearlRespawn, // Allows cheating death with enough soul power
+	PearlDamage, // Reduces the amount of soul power lost when taking damage
 
 	// Ring skills
 	RingSpawn, // Start with some rings at the game's start
 	RingRespawn, // Respawn with a few rings handy
-	RingDamage, // Reduce the number of rings lost when taking damage
+	RingDamage, // Reduces the number of rings lost when taking damage
 
 	// Slide skills
 	SlideAttack, // Replace slide with an attack

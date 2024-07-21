@@ -470,10 +470,9 @@ public partial class CharacterSkillManager : Node
 	public int SoulPower { get; private set; } // Current soul power
 	public int MaxSoulPower { get; private set; } // Calculated on start
 
-	private bool IsSoulGaugeEmpty => !StageSettings.instance.IsControlTest && SoulPower == 0;
-	private bool IsSoulGaugeCharged => StageSettings.instance.IsControlTest || SoulPower >= MinimumSoulPower;
-
-	private const int MinimumSoulPower = 50; // Minimum amount of soul power needed to use soul skills.
+	public bool IsSoulGaugeEmpty => !StageSettings.instance.IsControlTest && SoulPower == 0;
+	public bool IsSoulGaugeCharged => StageSettings.instance.IsControlTest || SoulPower >= MinimumSoulPower;
+	public const int MinimumSoulPower = 50; // Minimum amount of soul power needed to use soul skills.
 	public void ModifySoulGauge(int amount)
 	{
 		SoulPower = Mathf.Clamp(SoulPower + amount, 0, MaxSoulPower);

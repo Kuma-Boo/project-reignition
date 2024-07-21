@@ -86,7 +86,7 @@ public partial class SkillResource : Resource
 
 	/// <summary> Reference to a skill that creates a conflict with the current skill. </summary>
 	[Export]
-	public Array<SkillKey> SkillConflicts { get; set; }
+	public Array<string> SkillConflicts { get; set; }
 
 	/// <summary> Does this skill have augments? </summary>
 	public bool HasAugments => Augments != null && Augments.Count != 0;

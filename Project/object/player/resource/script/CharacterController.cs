@@ -1399,18 +1399,46 @@ namespace Project.Gameplay
 			// No rings; Respawn
 			if (Stage.CurrentRingCount == 0)
 			{
-				Effect.PlayVoice("defeat");
-				StartRespawn();
-				return;
+				if (Skills.IsSkillEquipped(SkillKey.PearlRespawn) && Skills.IsSoulGaugeCharged)
+				{
+					// Lose soul power and continue
+					Skills.ModifySoulGauge(-CharacterSkillManager.MinimumSoulPower);
+				}
+				else
+				{
+					Effect.PlayVoice("defeat");
+					StartRespawn();
+					return;
+				}
 			}
 
 			Effect.PlayVoice("hurt");
 
+			int ringLoss = 20;
 			// Lose soul power
-			Skills.ModifySoulGauge(-Mathf.FloorToInt(Skills.SoulPower * .5f));
+			if (Skills.IsSkillEquipped(SkillKey.PearlDamage))
+			{
+				if (Skills.GetAugmentIndex(SkillKey.PearlDamage) == 1) // Damage augment
+				{
+					ringLoss *= 2;
+					Skills.ModifySoulGauge(-Mathf.FloorToInt(Skills.SoulPower * .1f));
+				}
+				else
+				{
+					Skills.ModifySoulGauge(-Mathf.FloorToInt(Skills.SoulPower * .2f));
+				}
+			}
+			else
+			{
+				Skills.ModifySoulGauge(-Mathf.FloorToInt(Skills.SoulPower * .5f));
+			}
+
+			if (Skills.IsSkillEquipped(SkillKey.RingDamage))
+				ringLoss -= 10;
 
 			// Lose rings
-			Stage.UpdateRingCount(Skills.IsSkillEquipped(SkillKey.RingDamage) ? 10 : 20, StageSettings.MathModeEnum.Subtract);
+			ringLoss = Mathf.Max(ringLoss, 0);
+			Stage.UpdateRingCount(ringLoss, StageSettings.MathModeEnum.Subtract);
 			Stage.IncrementDamageCount();
 
 			// Level failed
