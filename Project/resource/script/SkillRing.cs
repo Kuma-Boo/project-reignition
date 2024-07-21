@@ -57,92 +57,101 @@ public class SkillRing
 	}
 
 	/// <summary> Equips a skill onto the skill ring. </summary>
-	public bool EquipSkill(SkillKey key, bool allowSkillPointOverflow = false)
+	public bool EquipSkill(SkillKey key, int augmentIndex = 0, bool allowSkillPointOverflow = false)
 	{
-		if (EquippedSkills.Contains(key))
+		if (EquippedSkills.Contains(key) && augmentIndex == GetAugmentIndex(key))
 			return false; // Already equipped
 
-		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
-		SkillResource conflict = Runtime.Instance.SkillList.GetSkill(SaveManager.ActiveSkillRing.IsConflictingSkillEquipped(skill));
+		SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(key);
+
+		// Process conflicts
+		SkillResource conflict = Runtime.Instance.SkillList.GetSkill(SaveManager.ActiveSkillRing.IsConflictingSkillEquipped(baseSkill));
 		if (conflict != null)
 		{
-			GD.Print($"You cannot equip {conflict.NameKey} when {skill.NameKey} is active.");
+			GD.Print($"You cannot equip {conflict.NameKey} when {baseSkill.NameKey} is active.");
 			return false;
 		}
 
+		// Process augments
+		if (baseSkill.Augments != null && baseSkill.Augments.Count != 0)
+		{
+			SkillResource augment = baseSkill.GetAugment(augmentIndex);
+			if (augment == null)
+			{
+				GD.PushError($"Couldn't find augment with index {augmentIndex} on skill {baseSkill.Key}!");
+				return false;
+			}
+
+			int currentCost = IsSkillEquipped(key) ? baseSkill.GetAugment(GetAugmentIndex(key)).Cost : 0;
+			if (!allowSkillPointOverflow) // Check for total cost
+			{
+				int targetTotalCost = TotalCost - currentCost + augment.Cost;
+				if (targetTotalCost > MaxSkillPoints)
+					return false; // Too expensive!
+			}
+
+			if (!EquippedSkills.Contains(key))
+				EquippedSkills.Add(key);
+			TotalCost -= currentCost; // Refund currently equipped cost
+			TotalCost += augment.Cost; // Take skill points
+
+			// Update augment index
+			if (EquippedAugments.ContainsKey(key))
+				EquippedAugments[key] = augmentIndex;
+			else
+				EquippedAugments.Add(key, augmentIndex);
+			GD.Print(augmentIndex);
+
+			return true;
+		}
+
+		// Not an augment skill
 		if (!allowSkillPointOverflow) // Check for total cost
 		{
-			int targetTotalCost = TotalCost + skill.Cost;
+			int targetTotalCost = TotalCost + baseSkill.Cost;
 			if (targetTotalCost > MaxSkillPoints)
 				return false; // Too expensive!
 		}
 
-		EquippedSkills.Add(key);
-		TotalCost += skill.Cost; // Take skill points
+		if (!EquippedSkills.Contains(key))
+			EquippedSkills.Add(key);
+		TotalCost += baseSkill.Cost; // Take skill points
 		return true;
 	}
 
 	/// <summary> Unequips a skill from the skill ring. </summary>
-	public bool UnequipSkill(SkillKey key)
+	public bool UnequipSkill(SkillKey key, int augmentIndex = 0)
 	{
+		GD.PrintT(augmentIndex, GetAugmentIndex(key));
+
+		if (augmentIndex != GetAugmentIndex(key))
+			return false; // Augment index mismatch
+
 		if (EquippedSkills.Remove(key))
 		{
-			TotalCost -= Runtime.Instance.SkillList.GetSkill(key).Cost; // Refund skill points
+			SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(key);
+			SkillResource augment = baseSkill.GetAugment(augmentIndex);
+			TotalCost -= augment.Cost; // Refund skill points
 			return true;
 		}
 
 		return false;
 	}
 
-	public bool EquipAugment(SkillKey key, int augmentIndex, bool allowSkillPointOverflow = false)
-	{
-		SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(key);
-
-		if (baseSkill.Augments == null || baseSkill.Augments.Count == 0)
-			return false; // Not an augment skill!
-
-		SkillResource augment = baseSkill.GetAugment(augmentIndex);
-		if (augment == null)
-		{
-			GD.PushError($"Couldn't find augment with index {augmentIndex} on skill {baseSkill.Key}!");
-			return false;
-		}
-
-		int currentCost = baseSkill.GetAugment(GetAugmentIndex(key)).Cost;
-		if (!allowSkillPointOverflow) // Check for total cost
-		{
-			int targetTotalCost = TotalCost - currentCost + augment.Cost;
-			if (targetTotalCost > MaxSkillPoints)
-				return false; // Too expensive!
-		}
-
-		if (EquippedAugments.ContainsKey(key))
-			EquippedAugments[key] = augmentIndex;
-		else
-			EquippedAugments.Add(key, augmentIndex);
-
-		TotalCost -= currentCost; // Refund currently equipped cost
-		TotalCost += augment.Cost; // Take skill points
-		return true;
-	}
-
 	/// <summary> Checks whether a skill is unlocked on the active save file. </summary>
-	public bool IsSkillUnlocked(SkillKey key)
-	{
-		if (DebugManager.Instance.UseDemoSave)
-			return true;
-
-		if (IsSkillEquipped(key)) // Equipped skills should be unlocked automatically to allow the player to unequip them...
-			return true;
-
-		return IsSkillUnlocked(Runtime.Instance.SkillList.GetSkill(key));
-	}
+	public bool IsSkillUnlocked(SkillKey key) => IsSkillUnlocked(Runtime.Instance.SkillList.GetSkill(key));
 
 	/// <summary> Overload method for checking a skill resource directly. </summary>
 	public bool IsSkillUnlocked(SkillResource skill)
 	{
 		if (skill == null) // Skill hasn't been created yet...
 			return false;
+
+		if (DebugManager.Instance.UseDemoSave)
+			return true;
+
+		if (IsSkillEquipped(skill.Key)) // Equipped skills should be unlocked automatically to allow the player to unequip them...
+			return true;
 
 		if (SaveManager.ActiveGameData.level < skill.LevelRequirement) // Under-leveled
 			return false;

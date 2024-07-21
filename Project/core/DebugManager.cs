@@ -281,7 +281,7 @@ public partial class DebugManager : Node2D
 
 		if (toggled)
 		{
-			SaveManager.ActiveSkillRing.EquipSkill(key, true);
+			SaveManager.ActiveSkillRing.EquipSkill(key, 0, true);
 			return;
 		}
 
@@ -291,7 +291,7 @@ public partial class DebugManager : Node2D
 	private void OnSkillAugmentChanged(float value)
 	{
 		int augmentValue = Mathf.RoundToInt(value);
-		SaveManager.ActiveSkillRing.EquipAugment((SkillKey)skillSelectButton.Selected, augmentValue, true);
+		SaveManager.ActiveSkillRing.EquipSkill((SkillKey)skillSelectButton.Selected, augmentValue, true);
 	}
 	#endregion
 

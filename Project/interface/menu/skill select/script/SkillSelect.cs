@@ -174,9 +174,6 @@ public partial class SkillSelect : Menu
 
 	protected override void Confirm()
 	{
-		if (IsEditingAugment)
-			return;
-
 		if (!ToggleSkill())
 			return;
 
@@ -190,6 +187,17 @@ public partial class SkillSelect : Menu
 		foreach (SkillOption option in currentSkillOptionList)
 			option.Redraw();
 
+		if (IsEditingAugment)
+		{
+			foreach (Node option in augmentContainer.GetChildren())
+			{
+				if (option is not SkillOption)
+					continue;
+
+				((SkillOption)option).Redraw();
+			}
+		}
+
 		description.SetText(currentSkillOptionList[VerticalSelection].Skill.DescriptionKey);
 		levelLabel.Text = Tr("skill_select_level").Replace("0", SaveManager.ActiveGameData.level.ToString("00"));
 	}
@@ -197,21 +205,23 @@ public partial class SkillSelect : Menu
 	private bool ToggleSkill()
 	{
 		SkillKey key = currentSkillOptionList[VerticalSelection].Skill.Key;
-		if (currentSkillOptionList[VerticalSelection].HasUnlockedAugments())
+		if (!IsEditingAugment && currentSkillOptionList[VerticalSelection].HasUnlockedAugments()) // Open the augment menu
 		{
 			ShowAugmentMenu();
 			return false;
 		}
 
-		if (ActiveSkillRing.UnequipSkill(key))
+		if (ActiveSkillRing.UnequipSkill(key, IsEditingAugment ? AugmentSelection : 0))
 		{
 			animator.Play("unequip");
+			GD.Print("Unequipped");
 			return true;
 		}
 
-		if (ActiveSkillRing.EquipSkill(key))
+		if (ActiveSkillRing.EquipSkill(key, IsEditingAugment ? AugmentSelection : 0))
 		{
 			animator.Play("equip");
+			GD.Print("Equipped");
 			return true;
 		}
 
@@ -225,19 +235,21 @@ public partial class SkillSelect : Menu
 		animator.Play("augment-show");
 		IsEditingAugment = true;
 		DisableProcessing();
+		SkillOption baseSkill = currentSkillOptionList[VerticalSelection];
 
-		for (int i = 0; i < currentSkillOptionList[VerticalSelection].augments.Count; i++)
+		for (int i = 0; i < baseSkill.augments.Count; i++)
 		{
-			SkillOption augment = currentSkillOptionList[VerticalSelection].augments[i];
+			SkillOption augment = baseSkill.augments[i];
 			augment.Visible = true;
 
 			if (!SaveManager.ActiveSkillRing.IsSkillUnlocked(augment.Skill)) // Don't add locked skills
 				continue;
 
-			if (augment.IsInsideTree() && augment.GetParent() == currentSkillOptionList[VerticalSelection])
-				currentSkillOptionList[VerticalSelection].RemoveChild(augment);
-
-			augmentContainer.CallDeferred("add_child", augment);
+			if (augment.IsInsideTree() && augment.GetParent() == baseSkill)
+			{
+				baseSkill.RemoveChild(augment);
+				augmentContainer.CallDeferred("add_child", augment);
+			}
 		}
 	}
 
@@ -256,21 +268,44 @@ public partial class SkillSelect : Menu
 			augment.Visible = false;
 
 			if (augment.IsInsideTree() && augment.GetParent() == augmentContainer)
+			{
 				augmentContainer.RemoveChild(augment);
-
-			currentSkillOptionList[VerticalSelection].CallDeferred("add_child", augment);
+				currentSkillOptionList[VerticalSelection].CallDeferred("add_child", augment);
+			}
 		}
 
 		EnableProcessing();
 	}
 
-	private void SnapCursor()
+	private void ToggleAugmentMenu()
 	{
+		SkillOption baseSkill = currentSkillOptionList[VerticalSelection];
 		if (IsEditingAugment)
+		{
 			cursorPosition = SaveManager.ActiveSkillRing.GetAugmentIndex(currentSkillOptionList[VerticalSelection].Skill.Key);
+
+			// Move the base skill option to the augment menu
+			currentSkillOptionList[VerticalSelection].Number = 0;
+			currentSkillOptionList[VerticalSelection].Redraw();
+			currentSkillOptionList[VerticalSelection].GetParent().RemoveChild(baseSkill);
+			augmentContainer.CallDeferred("add_child", baseSkill);
+			augmentContainer.CallDeferred("move_child", baseSkill, baseSkill.GetAugmentPosition());
+
+			for (int i = 0; i < baseSkill.augments.Count; i++)
+				augmentContainer.CallDeferred("move_child", baseSkill.augments[i], i + 1);
+		}
 		else
+		{
 			cursorPosition = VerticalSelection - scrollAmount;
 
+			// Move the correct skill to the skill menu
+			currentSkillOptionList[VerticalSelection].Number = VerticalSelection + 1;
+			augmentContainer.RemoveChild(currentSkillOptionList[VerticalSelection]);
+			optionContainer.CallDeferred("add_child", currentSkillOptionList[VerticalSelection]);
+			optionContainer.CallDeferred("move_child", currentSkillOptionList[VerticalSelection], VerticalSelection);
+		}
+
+		Redraw();
 		cursor.Position = Vector2.Up * -cursorPosition * ScrollInterval;
 	}
 }

@@ -25,13 +25,18 @@ public partial class SkillOption : Control
 
 	public void Initialize()
 	{
+		if (Skill == null)
+		{
+			animator.Play("no-skill");
+			return;
+		}
+
 		// Update all the data that doesn't change
 		animator.Play(Skill.Element.ToString().ToLower());
 		animator.Advance(0);
 		animator.Play(Skill.Category.ToString().ToLower());
 		animator.Advance(0);
 
-		numberLabel.Text = Number.ToString("00");
 		nameLabel.Text = Skill.NameKey;
 		costLabel.Text = Skill.Cost.ToString("00");
 		Redraw();
@@ -39,15 +44,28 @@ public partial class SkillOption : Control
 
 	public void Redraw()
 	{
+		if (Skill == null)
+			return;
+
+		numberLabel.Text = Number.ToString("00");
 		// Redraw equip status
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(Skill.Key))
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(Skill.Key) &&
+		SaveManager.ActiveSkillRing.GetAugmentIndex(Skill.Key) == Skill.AugmentIndex)
+		{
 			animator.Play("equipped");
+		}
 		else if (ActiveSkillRing.TotalCost + Skill.Cost > ActiveSkillRing.MaxSkillPoints)
+		{
 			animator.Play("expensive");
+		}
 		else if (ActiveSkillRing.IsConflictingSkillEquipped(Skill) != SkillKey.Max)
+		{
 			animator.Play("conflict");
+		}
 		else
+		{
 			animator.Play("unequipped");
+		}
 
 		animator.Advance(0);
 	}
@@ -61,5 +79,17 @@ public partial class SkillOption : Control
 		}
 
 		return false;
+	}
+
+	public int GetAugmentPosition()
+	{
+		int index = 0;
+		for (int i = 0; i < augments.Count; i++)
+		{
+			if (augments[i].Skill.AugmentIndex < 0)
+				index++;
+		}
+
+		return index;
 	}
 }
