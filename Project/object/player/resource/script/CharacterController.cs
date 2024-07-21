@@ -824,13 +824,17 @@ namespace Project.Gameplay
 
 		private void UpdateGroundActions()
 		{
-			if (Mathf.IsEqualApprox(GroundSettings.GetSpeedRatioClamped(MoveSpeed), 1.0f))
+			if (GroundSettings.GetSpeedRatioClamped(MoveSpeed) > CharacterAnimator.RunRatio)
 			{
 				if (Skills.IsSkillEquipped(SkillKey.CrestWind))
 					Skills.ActivateWindCrest();
 
 				if (Skills.IsSkillEquipped(SkillKey.CrestDark))
 					Skills.ActivateDarkCrest();
+			}
+			else
+			{
+				Skills.ResetCrestTimer();
 			}
 
 			if (IsLockoutActive) // Controls locked out
