@@ -177,35 +177,11 @@ public partial class SkillSelect : Menu
 
 			currentSkillOptionList.Add(skillOptionList[i]);
 
-			/* Process augments
+			// Process augments
 			if (!skillOptionList[i].Skill.HasAugments)
 				continue;
 
-			int augmentIndex = ActiveSkillRing.GetAugmentIndex(key);
-			for (int j = 0; j < skillOptionList[i].augments.Count; j++)
-			{
-				if (j == augmentIndex)
-				{
-					// Use the equipped augment instead of the base skill
-					skillOptionList[i].augments[j].Number = i + 1;
-					skillOptionList[i].augments[j].Visible = true;
-					optionContainer.AddChild(skillOptionList[i].augments[j]);
-
-					if (skillOptionList[i].GetParent() != this)
-					{
-						skillOptionList[i].Visible = false;
-						optionContainer.RemoveChild(skillOptionList[i]);
-						AddChild(skillOptionList[i]);
-					}
-				}
-				else if (skillOptionList[i].augments[j].GetParent() != this)
-				{
-					skillOptionList[i].augments[j].Visible = false;
-					skillOptionList[i].augments[j].GetParent().RemoveChild(skillOptionList[i].augments[j]);
-					AddChild(skillOptionList[i].augments[j]);
-				}
-			}
-			*/
+			UpdateAugmentHierarchy(skillOptionList[i], i);
 		}
 
 		Redraw();
@@ -272,7 +248,6 @@ public partial class SkillSelect : Menu
 	}
 
 	private int AugmentSelection { get; set; }
-
 	private void ShowAugmentMenu()
 	{
 		animator.Play("augment-show");
@@ -343,6 +318,7 @@ public partial class SkillSelect : Menu
 			for (int i = 0; i < baseSkill.augments.Count; i++)
 			{
 				int index = baseSkill.augments[i].Skill.AugmentIndex;
+				baseSkill.augments[i].Number = index;
 				augmentContainer.CallDeferred("move_child", baseSkill.augments[i], index < 0 ? i : i + 1);
 			}
 		}
@@ -360,5 +336,50 @@ public partial class SkillSelect : Menu
 
 		CallDeferred(MethodName.Redraw);
 		cursor.Position = Vector2.Up * -cursorPosition * ScrollInterval;
+	}
+
+	/// <summary> Updates a skill option so the correct augment appears on the skill select menu. </summary>
+	private void UpdateAugmentHierarchy(SkillOption baseSkill, int index)
+	{
+		SkillKey key = baseSkill.Skill.Key;
+		SkillOption shownSkill = baseSkill;
+		int augmentIndex = ActiveSkillRing.GetAugmentIndex(key) - 1;
+		for (int i = 0; i < baseSkill.augments.Count; i++)
+		{
+			if (i == augmentIndex)
+			{
+				shownSkill = baseSkill.augments[i];
+				continue;
+			}
+
+			baseSkill.augments[i].Visible = false;
+			if (baseSkill.augments[i].GetParent() != this)
+			{
+				baseSkill.augments[i].GetParent().RemoveChild(baseSkill.augments[i]);
+				CallDeferred("add_child", baseSkill.augments[i]);
+			}
+		}
+
+		// Use the equipped augment instead of the base skill
+		shownSkill.Number = index + 1;
+		shownSkill.Visible = true;
+
+		// Move the active augment to the correct position in the skill menu
+		if (shownSkill.GetParent() != optionContainer)
+		{
+			shownSkill.GetParent().RemoveChild(shownSkill);
+			optionContainer.CallDeferred("add_child", shownSkill);
+			optionContainer.CallDeferred("move_child", shownSkill, index);
+			shownSkill.CallDeferred(SkillOption.MethodName.Redraw);
+		}
+
+		// Move the base skill if needed
+		if (shownSkill != baseSkill && baseSkill.GetParent() != this)
+		{
+			baseSkill.Number = 0;
+			baseSkill.Visible = false;
+			optionContainer.RemoveChild(baseSkill);
+			CallDeferred("add_child", baseSkill);
+		}
 	}
 }
