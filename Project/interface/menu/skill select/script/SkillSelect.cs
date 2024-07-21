@@ -321,7 +321,7 @@ public partial class SkillSelect : Menu
 			optionContainer.CallDeferred("move_child", skillOption, VerticalSelection);
 		}
 
-		Redraw();
+		CallDeferred(MethodName.Redraw);
 		cursor.Position = Vector2.Up * -cursorPosition * ScrollInterval;
 	}
 }
