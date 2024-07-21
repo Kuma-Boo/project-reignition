@@ -256,9 +256,9 @@ public partial class DebugManager : Node2D
 		SkillKey key = (SkillKey)skillIndex;
 		skillToggleButton.ButtonPressed = SaveManager.ActiveSkillRing.EquippedSkills.Contains(key);
 
-		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key, true);
+		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
 
-		if (skill.Augments == null || skill.Augments.Count == 0)
+		if (!skill.HasAugments)
 		{
 			skillAugmentSlider.Editable = false;
 			skillAugmentSlider.Value = 0;

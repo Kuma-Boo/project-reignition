@@ -88,6 +88,8 @@ public partial class SkillResource : Resource
 	[Export]
 	public Array<SkillKey> SkillConflicts { get; set; }
 
+	/// <summary> Does this skill have augments? </summary>
+	public bool HasAugments => Augments != null && Augments.Count != 0;
 	/// <summary> Does this skill build off of a previous skill? </summary>
 	public bool IsAugment => AugmentIndex != 0;
 	[Export]

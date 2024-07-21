@@ -36,7 +36,17 @@ public class SkillRing
 	{
 		TotalCost = 0;
 		for (int i = 0; i < EquippedSkills.Count; i++)
-			TotalCost += Runtime.Instance.SkillList.GetSkill(EquippedSkills[i]).Cost;
+		{
+			SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(EquippedSkills[i]);
+			int augmentIndex = GetAugmentIndex(EquippedSkills[i]);
+			if (augmentIndex == 0)
+			{
+				TotalCost += baseSkill.Cost;
+				continue;
+			}
+
+			TotalCost += baseSkill.Augments[augmentIndex - 1].Cost;
+		}
 	}
 
 	/// <summary> Checks whether a conflicting skill is already equipped. </summary>
@@ -193,7 +203,7 @@ public class SkillRing
 	/// <summary> Sorts skill resources based on their cost. </summary>
 	public class CostSorter : System.Collections.Generic.IComparer<SkillResource>
 	{
-		int System.Collections.Generic.IComparer<SkillResource>.Compare(SkillResource x, SkillResource y) => x.Key.CompareTo(y.Key);
+		int System.Collections.Generic.IComparer<SkillResource>.Compare(SkillResource x, SkillResource y) => x.Cost.CompareTo(y.Cost);
 	}
 
 	/// <summary> Sorts skill resources based on their key augment index. </summary>

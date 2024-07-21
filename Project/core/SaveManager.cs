@@ -845,12 +845,12 @@ public partial class SaveManager : Node
 
 			if (dictionary.TryGetValue(nameof(equippedAugments), out var))
 			{
-				Dictionary<int, int> augments = (Dictionary<int, int>)var;
-				int[] augmentKeys = [.. augments.Keys];
+				Dictionary<string, int> augments = (Dictionary<string, int>)var;
+				string[] augmentKeys = [.. augments.Keys];
 
 				for (int i = 0; i < augmentKeys.Length; i++)
 				{
-					SkillKey key = (SkillKey)augmentKeys[i];
+					SkillKey key = (SkillKey)augmentKeys[i].ToInt();
 					equippedAugments.Add(key, augments[augmentKeys[i]]);
 				}
 			}

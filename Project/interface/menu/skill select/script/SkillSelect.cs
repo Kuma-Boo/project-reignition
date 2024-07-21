@@ -50,19 +50,23 @@ public partial class SkillSelect : Menu
 		for (int i = 0; i < (int)SkillKey.Max; i++)
 		{
 			SkillKey key = (SkillKey)i;
+			SkillResource skill = SkillList.GetSkill(key);
 
-			if (SkillList.GetSkill(key) == null)
+			if (skill == null)
+			{
+				skillOptionList.Add(null);
 				continue;
+			}
 
 			SkillOption newSkill = skillOption.Instantiate<SkillOption>();
-			newSkill.Skill = SkillList.GetSkill(key);
+			newSkill.Skill = skill;
 			newSkill.Number = i + 1;
 			newSkill.Initialize();
 
-			optionContainer.AddChild(newSkill);
 			skillOptionList.Add(newSkill);
+			optionContainer.AddChild(newSkill);
 
-			if (newSkill.Skill.Augments == null) // Create augments
+			if (!newSkill.Skill.HasAugments) // Skip augments
 				continue;
 
 			for (int j = 0; j < newSkill.Skill.Augments.Count; j++)
@@ -71,11 +75,10 @@ public partial class SkillSelect : Menu
 				newAugment.Skill = newSkill.Skill.Augments[j];
 				newAugment.Number = newAugment.Skill.AugmentIndex;
 				newAugment.Initialize();
-				newSkill.augments.Add(newAugment);
-
-				// Augments are added as direct children to the skill select menu
-				AddChild(newAugment);
 				newAugment.Visible = false;
+
+				AddChild(newAugment); // Augments are added as direct children to the skill select menu
+				newSkill.augments.Add(newAugment);
 			}
 		}
 
@@ -127,7 +130,7 @@ public partial class SkillSelect : Menu
 			else
 			{
 				// Update scroll
-				if (VerticalSelection == 0 || VerticalSelection == skillOptionList.Count - 1)
+				if (VerticalSelection == 0 || VerticalSelection == currentSkillOptionList.Count - 1)
 					cursorPosition = scrollAmount = VerticalSelection;
 				else if ((inputSign < 0 && cursorPosition == 1) || (inputSign > 0 && cursorPosition == 6))
 					scrollAmount += inputSign;
@@ -164,10 +167,45 @@ public partial class SkillSelect : Menu
 		currentSkillOptionList.Clear();
 		for (int i = 0; i < skillOptionList.Count; i++)
 		{
+			if (skillOptionList[i] == null)
+				continue;
+
 			SkillKey key = (SkillKey)i;
 			skillOptionList[i].Visible = SaveManager.ActiveSkillRing.IsSkillUnlocked(key);
-			if (skillOptionList[i].Visible)
-				currentSkillOptionList.Add(skillOptionList[i]);
+			if (!skillOptionList[i].Visible)
+				continue;
+
+			currentSkillOptionList.Add(skillOptionList[i]);
+
+			/* Process augments
+			if (!skillOptionList[i].Skill.HasAugments)
+				continue;
+
+			int augmentIndex = ActiveSkillRing.GetAugmentIndex(key);
+			for (int j = 0; j < skillOptionList[i].augments.Count; j++)
+			{
+				if (j == augmentIndex)
+				{
+					// Use the equipped augment instead of the base skill
+					skillOptionList[i].augments[j].Number = i + 1;
+					skillOptionList[i].augments[j].Visible = true;
+					optionContainer.AddChild(skillOptionList[i].augments[j]);
+
+					if (skillOptionList[i].GetParent() != this)
+					{
+						skillOptionList[i].Visible = false;
+						optionContainer.RemoveChild(skillOptionList[i]);
+						AddChild(skillOptionList[i]);
+					}
+				}
+				else if (skillOptionList[i].augments[j].GetParent() != this)
+				{
+					skillOptionList[i].augments[j].Visible = false;
+					skillOptionList[i].augments[j].GetParent().RemoveChild(skillOptionList[i].augments[j]);
+					AddChild(skillOptionList[i].augments[j]);
+				}
+			}
+			*/
 		}
 
 		Redraw();
@@ -221,14 +259,12 @@ public partial class SkillSelect : Menu
 		if (ActiveSkillRing.UnequipSkill(key, IsEditingAugment ? AugmentSelection : 0))
 		{
 			animator.Play("unequip");
-			GD.Print("Unequipped");
 			return true;
 		}
 
 		if (ActiveSkillRing.EquipSkill(key, IsEditingAugment ? AugmentSelection : 0))
 		{
 			animator.Play("equip");
-			GD.Print("Equipped");
 			return true;
 		}
 
@@ -294,6 +330,7 @@ public partial class SkillSelect : Menu
 		if (IsEditingAugment)
 		{
 			cursorPosition = augmentIndex;
+			AugmentSelection = augmentIndex;
 
 			// Move the skill option node to the augment menu
 			SkillOption skillOption = optionContainer.GetChild<SkillOption>(VerticalSelection);

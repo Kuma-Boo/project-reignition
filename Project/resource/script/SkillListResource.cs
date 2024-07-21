@@ -29,15 +29,15 @@ public partial class SkillListResource : Resource
 	[Export(PropertyHint.ArrayType, "SkillResource")]
 	private Array<SkillResource> skills = [];
 
-	/// <summary> Gets the matching skill based on a SkillKey. </summary>
-	public SkillResource GetSkill(SkillKey key, bool baseSkillOnly = true)
+	/// <summary> Gets the matching Base SkillResource from a SkillKey. </summary>
+	public SkillResource GetSkill(SkillKey key)
 	{
 		if (key == SkillKey.Max)
 			return null;
 
 		foreach (var skill in skills)
 		{
-			if (skill.Key == key && (!baseSkillOnly || !skill.IsAugment))
+			if (skill.Key == key && !skill.IsAugment)
 				return skill;
 		}
 
@@ -142,7 +142,7 @@ public partial class SkillListResource : Resource
 				continue;
 			}
 
-			if (baseSkill.Augments == null) // Reset augments if null
+			if (!baseSkill.HasAugments) // Reset augments if null
 				baseSkill.Augments = [];
 
 			// Make sure file can be saved
