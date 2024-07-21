@@ -803,7 +803,7 @@ public partial class SaveManager : Node
 				{ nameof(exp), exp },
 				{ nameof(playTime), Mathf.RoundToInt(playTime) },
 				{ nameof(equippedSkills), equippedSkills },
-				{ nameof(equippedAugments), equippedAugments },
+				{ nameof(equippedAugments), augmentDictionary },
 			};
 		}
 

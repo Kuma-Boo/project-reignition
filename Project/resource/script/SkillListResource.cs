@@ -37,7 +37,6 @@ public partial class SkillListResource : Resource
 
 		foreach (var skill in skills)
 		{
-			GD.PrintT(skill.Key, key, skill.IsAugment);
 			if (skill.Key == key && !skill.IsAugment)
 				return skill;
 		}

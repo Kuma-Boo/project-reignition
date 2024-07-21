@@ -312,9 +312,10 @@ public partial class SkillSelect : Menu
 
 	private void OnAugmentClosed()
 	{
-		for (int i = 0; i < augmentContainer.GetChildCount(); i++)
+		for (int i = augmentContainer.GetChildCount() - 1; i >= 0; i--)
 		{
 			SkillOption augment = augmentContainer.GetChild<SkillOption>(i);
+			GD.Print($"Removing {augment.Skill.Key}");
 			augment.Visible = false;
 			augmentContainer.RemoveChild(augment);
 			CallDeferred("add_child", augment);
