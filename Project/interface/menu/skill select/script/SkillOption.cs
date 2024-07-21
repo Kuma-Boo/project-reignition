@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using Project.Core;
 using Project.Gameplay;
 
@@ -19,6 +20,8 @@ public partial class SkillOption : Control
 	[Export]
 	private AnimationPlayer animator;
 	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
+
+	public readonly Array<SkillOption> augments = [];
 
 	public void Initialize()
 	{
@@ -47,5 +50,16 @@ public partial class SkillOption : Control
 			animator.Play("unequipped");
 
 		animator.Advance(0);
+	}
+
+	public bool HasUnlockedAugments()
+	{
+		for (int i = 0; i < augments.Count; i++)
+		{
+			if (SaveManager.ActiveSkillRing.IsSkillUnlocked(augments[i].Skill))
+				return true;
+		}
+
+		return false;
 	}
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bt32kmhyoo7ec"]
+[gd_scene load_steps=29 format=3 uid="uid://bt32kmhyoo7ec"]
 
 [ext_resource type="Script" path="res://interface/menu/skill select/script/SkillSelect.cs" id="1_v1nov"]
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="2_ww16u"]
@@ -169,6 +169,30 @@ tracks/5/path = NodePath("Content/Clip:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Content/Clip/Options:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Content/Clip/AugmentOptions:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -539,9 +563,142 @@ tracks/0/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_q1d8y"]
+resource_name = "augment-show"
+step = 0.0333333
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2997, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"SnapCursor"
+}, {
+"args": [],
+"method": &"EnableProcessing"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Content/Clip/Options:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Content/Clip/AugmentOptions:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Content/CursorOrigin/Cursor/AnimationPlayer")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.333333, 0.500003),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": ["hide", -1, 1.0, false],
+"method": &"play"
+}, {
+"args": ["show", -1, 1.0, false],
+"method": &"play"
+}, {
+"args": ["loop", -1, 1.0, false],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_t1p3u"]
+resource_name = "augment-hide"
+length = 0.50001
+step = 0.0333333
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2997, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"SnapCursor"
+}, {
+"args": [],
+"method": &"OnAugmentClosed"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Content/Clip/Options:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Content/Clip/AugmentOptions:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Content/CursorOrigin/Cursor/AnimationPlayer")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.333333, 0.500003),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": ["hide", -1, 1.0, false],
+"method": &"play"
+}, {
+"args": ["show", -1, 1.0, false],
+"method": &"play"
+}, {
+"args": ["loop", -1, 1.0, false],
+"method": &"play"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wky6r"]
 _data = {
 "RESET": SubResource("Animation_ax45n"),
+"augment-hide": SubResource("Animation_t1p3u"),
+"augment-show": SubResource("Animation_q1d8y"),
 "equip": SubResource("Animation_qo4fo"),
 "hide": SubResource("Animation_r372w"),
 "select": SubResource("Animation_ug8bd"),
@@ -549,7 +706,7 @@ _data = {
 "unequip": SubResource("Animation_tf8ok")
 }
 
-[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "description", "scrollbar", "skillPointFill", "levelLabel", "skillPointLabel", "animator")]
+[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "augmentContainer", "cursor", "description", "scrollbar", "skillPointFill", "levelLabel", "skillPointLabel", "animator")]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 15
@@ -560,6 +717,7 @@ grow_vertical = 2
 script = ExtResource("1_v1nov")
 skillOption = ExtResource("4_sgi6g")
 optionContainer = NodePath("Content/Clip/Options")
+augmentContainer = NodePath("Content/Clip/AugmentOptions")
 cursor = NodePath("Content/CursorOrigin/Cursor")
 description = NodePath("Description")
 scrollbar = NodePath("Content/Window/ScrollBar/ScrollPosition")
@@ -736,6 +894,15 @@ size_flags_horizontal = 0
 metadata/_edit_group_ = true
 
 [node name="Options" type="VBoxContainer" parent="Content/Clip"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 883.0
+grow_horizontal = 2
+theme_override_constants/separation = -1
+
+[node name="AugmentOptions" type="VBoxContainer" parent="Content/Clip"]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0

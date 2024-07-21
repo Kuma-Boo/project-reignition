@@ -60,9 +60,29 @@ public partial class SkillResource : Resource
 	/// <summary> Converts the internal key to snake case for localization. </summary>
 	public string NameString => Key.ToString().ToSnakeCase();
 	/// <summary> Returns the localization key for this skill. </summary>
-	public StringName NameKey => $"skill_{NameString}";
+	public StringName NameKey
+	{
+		get
+		{
+			StringName name = $"skill_{NameString}";
+			if (IsAugment)
+				name += AugmentIndex.ToString();
+
+			return name;
+		}
+	}
 	/// <summary> Returns the localization description key for this skill. </summary>
-	public StringName DescriptionKey => $"skill_{NameString}_description";
+	public StringName DescriptionKey
+	{
+		get
+		{
+			StringName description = $"skill_{NameString}_description";
+			if (IsAugment)
+				description += AugmentIndex.ToString();
+
+			return description;
+		}
+	}
 
 	/// <summary> Reference to a skill that creates a conflict with the current skill. </summary>
 	[Export]

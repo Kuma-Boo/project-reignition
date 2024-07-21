@@ -135,8 +135,12 @@ public class SkillRing
 		if (IsSkillEquipped(key)) // Equipped skills should be unlocked automatically to allow the player to unequip them...
 			return true;
 
-		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
+		return IsSkillUnlocked(Runtime.Instance.SkillList.GetSkill(key));
+	}
 
+	/// <summary> Overload method for checking a skill resource directly. </summary>
+	public bool IsSkillUnlocked(SkillResource skill)
+	{
 		if (skill == null) // Skill hasn't been created yet...
 			return false;
 
