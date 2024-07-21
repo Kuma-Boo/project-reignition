@@ -72,7 +72,9 @@ public partial class SkillSelect : Menu
 				newAugment.Number = newAugment.Skill.AugmentIndex;
 				newAugment.Initialize();
 				newSkill.augments.Add(newAugment);
-				newSkill.AddChild(newAugment);
+
+				// Augments are added as direct children to the skill select menu
+				AddChild(newAugment);
 				newAugment.Visible = false;
 			}
 		}
@@ -184,8 +186,13 @@ public partial class SkillSelect : Menu
 	{
 		skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
 		skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);
-		foreach (SkillOption option in currentSkillOptionList)
-			option.Redraw();
+		foreach (Node option in optionContainer.GetChildren())
+		{
+			if (option is not SkillOption)
+				continue;
+
+			((SkillOption)option).Redraw();
+		}
 
 		if (IsEditingAugment)
 		{
@@ -237,6 +244,13 @@ public partial class SkillSelect : Menu
 		DisableProcessing();
 		SkillOption baseSkill = currentSkillOptionList[VerticalSelection];
 
+		if (baseSkill.GetParent() == this)
+		{
+			RemoveChild(baseSkill);
+			augmentContainer.CallDeferred("add_child", baseSkill);
+			baseSkill.Visible = true;
+		}
+
 		for (int i = 0; i < baseSkill.augments.Count; i++)
 		{
 			SkillOption augment = baseSkill.augments[i];
@@ -245,9 +259,9 @@ public partial class SkillSelect : Menu
 			if (!SaveManager.ActiveSkillRing.IsSkillUnlocked(augment.Skill)) // Don't add locked skills
 				continue;
 
-			if (augment.IsInsideTree() && augment.GetParent() == baseSkill)
+			if (augment.GetParent() == this)
 			{
-				baseSkill.RemoveChild(augment);
+				augment.GetParent().RemoveChild(augment);
 				augmentContainer.CallDeferred("add_child", augment);
 			}
 		}
@@ -266,12 +280,8 @@ public partial class SkillSelect : Menu
 		{
 			SkillOption augment = augmentContainer.GetChild<SkillOption>(i);
 			augment.Visible = false;
-
-			if (augment.IsInsideTree() && augment.GetParent() == augmentContainer)
-			{
-				augmentContainer.RemoveChild(augment);
-				currentSkillOptionList[VerticalSelection].CallDeferred("add_child", augment);
-			}
+			augmentContainer.RemoveChild(augment);
+			CallDeferred("add_child", augment);
 		}
 
 		EnableProcessing();
@@ -280,29 +290,35 @@ public partial class SkillSelect : Menu
 	private void ToggleAugmentMenu()
 	{
 		SkillOption baseSkill = currentSkillOptionList[VerticalSelection];
+		int augmentIndex = SaveManager.ActiveSkillRing.GetAugmentIndex(currentSkillOptionList[VerticalSelection].Skill.Key);
 		if (IsEditingAugment)
 		{
-			cursorPosition = SaveManager.ActiveSkillRing.GetAugmentIndex(currentSkillOptionList[VerticalSelection].Skill.Key);
+			cursorPosition = augmentIndex;
 
-			// Move the base skill option to the augment menu
-			currentSkillOptionList[VerticalSelection].Number = 0;
-			currentSkillOptionList[VerticalSelection].Redraw();
-			currentSkillOptionList[VerticalSelection].GetParent().RemoveChild(baseSkill);
-			augmentContainer.CallDeferred("add_child", baseSkill);
-			augmentContainer.CallDeferred("move_child", baseSkill, baseSkill.GetAugmentPosition());
+			// Move the skill option node to the augment menu
+			SkillOption skillOption = optionContainer.GetChild<SkillOption>(VerticalSelection);
+			skillOption.Number = skillOption.Skill.AugmentIndex;
+			optionContainer.RemoveChild(skillOption);
+			augmentContainer.CallDeferred("add_child", skillOption);
 
+			// Sort augment options
+			augmentContainer.CallDeferred("move_child", baseSkill, baseSkill.GetAugmentOffset());
 			for (int i = 0; i < baseSkill.augments.Count; i++)
-				augmentContainer.CallDeferred("move_child", baseSkill.augments[i], i + 1);
+			{
+				int index = baseSkill.augments[i].Skill.AugmentIndex;
+				augmentContainer.CallDeferred("move_child", baseSkill.augments[i], index < 0 ? i : i + 1);
+			}
 		}
 		else
 		{
 			cursorPosition = VerticalSelection - scrollAmount;
 
-			// Move the correct skill to the skill menu
-			currentSkillOptionList[VerticalSelection].Number = VerticalSelection + 1;
-			augmentContainer.RemoveChild(currentSkillOptionList[VerticalSelection]);
-			optionContainer.CallDeferred("add_child", currentSkillOptionList[VerticalSelection]);
-			optionContainer.CallDeferred("move_child", currentSkillOptionList[VerticalSelection], VerticalSelection);
+			// Move the correct skill augment node to the skill option menu
+			SkillOption skillOption = augmentContainer.GetChild<SkillOption>(augmentIndex);
+			skillOption.Number = VerticalSelection + 1;
+			augmentContainer.RemoveChild(skillOption);
+			optionContainer.CallDeferred("add_child", skillOption);
+			optionContainer.CallDeferred("move_child", skillOption, VerticalSelection);
 		}
 
 		Redraw();

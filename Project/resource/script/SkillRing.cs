@@ -100,7 +100,6 @@ public class SkillRing
 				EquippedAugments[key] = augmentIndex;
 			else
 				EquippedAugments.Add(key, augmentIndex);
-			GD.Print(augmentIndex);
 
 			return true;
 		}
@@ -122,8 +121,6 @@ public class SkillRing
 	/// <summary> Unequips a skill from the skill ring. </summary>
 	public bool UnequipSkill(SkillKey key, int augmentIndex = 0)
 	{
-		GD.PrintT(augmentIndex, GetAugmentIndex(key));
-
 		if (augmentIndex != GetAugmentIndex(key))
 			return false; // Augment index mismatch
 

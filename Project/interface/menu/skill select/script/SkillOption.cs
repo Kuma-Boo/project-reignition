@@ -81,15 +81,15 @@ public partial class SkillOption : Control
 		return false;
 	}
 
-	public int GetAugmentPosition()
+	public int GetAugmentOffset()
 	{
-		int index = 0;
+		int offset = 0;
 		for (int i = 0; i < augments.Count; i++)
 		{
 			if (augments[i].Skill.AugmentIndex < 0)
-				index++;
+				offset++;
 		}
 
-		return index;
+		return offset;
 	}
 }
