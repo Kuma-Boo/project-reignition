@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=123 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -13,6 +13,8 @@
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="10_xhcyf"]
 [ext_resource type="PackedScene" uid="uid://d2h4veiykf6nn" path="res://object/player/resource/effect/landing/LandingDustParticle.tscn" id="11_kh13g"]
 [ext_resource type="Material" uid="uid://dhlpdpuxf2cwi" path="res://object/player/resource/effect/material/Spin Material.tres" id="11_lk1sb"]
+[ext_resource type="ArrayMesh" uid="uid://i2yganupvdy7" path="res://object/player/resource/effect/model/CrestDarkFX.res" id="11_p2jvq"]
+[ext_resource type="ArrayMesh" uid="uid://xjhpdbayj0gd" path="res://object/player/resource/effect/model/ExpertDriftFX.res" id="11_sq88t"]
 [ext_resource type="PackedScene" uid="uid://bmx51bju4lg72" path="res://object/player/resource/effect/landing/LandingSandParticle.tscn" id="11_un14r"]
 [ext_resource type="Texture2D" uid="uid://cm6hder0accd6" path="res://object/player/resource/effect/texture/aegis feather.png" id="17_qxei6"]
 [ext_resource type="Texture2D" uid="uid://dyumkeul6m5d" path="res://object/player/resource/effect/texture/aegis dust.png" id="18_yfxek"]
@@ -69,6 +71,140 @@ center_offset = Vector3(0, 0.25, 0)
 
 [sub_resource type="QuadMesh" id="QuadMesh_g63sh"]
 material = ExtResource("10_xhcyf")
+
+[sub_resource type="Curve" id="Curve_kt25w"]
+_data = [Vector2(0, 0), 0.0, 25.7652, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_kwvbn"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_kt25w")
+
+[sub_resource type="Gradient" id="Gradient_ff8al"]
+offsets = PackedFloat32Array(0.582447, 0.795213)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bn53t"]
+gradient = SubResource("Gradient_ff8al")
+width = 64
+
+[sub_resource type="Curve" id="Curve_gwqta"]
+_data = [Vector2(0.1, 0.1), 0.0, 7.38504, 0, 0, Vector2(0.3, 1), 1.63485, 1.63485, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_mtpdx"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_nvina"]
+width = 64
+curve_x = SubResource("Curve_gwqta")
+curve_y = SubResource("Curve_mtpdx")
+curve_z = SubResource("Curve_gwqta")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_j4hvy"]
+lifetime_randomness = 0.4
+particle_flag_rotate_y = true
+angle_max = 180.0
+gravity = Vector3(0, 0, 0)
+scale_min = 1.2
+scale_max = 1.5
+scale_curve = SubResource("CurveXYZTexture_nvina")
+color = Color(0.854375, 0.000579494, 0.854585, 0.588235)
+color_initial_ramp = SubResource("GradientTexture1D_bn53t")
+alpha_curve = SubResource("CurveTexture_kwvbn")
+hue_variation_min = -0.05
+hue_variation_max = 0.05
+
+[sub_resource type="Gradient" id="Gradient_fsk5e"]
+offsets = PackedFloat32Array(0.202128, 0.816489)
+colors = PackedColorArray(0.196078, 0, 0.701961, 1, 0.54902, 0, 0.701961, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_16f0u"]
+gradient = SubResource("Gradient_fsk5e")
+width = 64
+
+[sub_resource type="Gradient" id="Gradient_bbnln"]
+offsets = PackedFloat32Array(0, 0.0739796, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2r5b0"]
+gradient = SubResource("Gradient_bbnln")
+width = 64
+
+[sub_resource type="Curve" id="Curve_468hu"]
+max_value = 2.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ftcpn"]
+width = 64
+curve = SubResource("Curve_468hu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ceml1"]
+emission_shape = 1
+emission_sphere_radius = 0.2
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+damping_min = 3.0
+damping_max = 3.0
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_ftcpn")
+color_ramp = SubResource("GradientTexture1D_2r5b0")
+color_initial_ramp = SubResource("GradientTexture1D_16f0u")
+hue_variation_min = -0.05
+hue_variation_max = 0.05
+
+[sub_resource type="Gradient" id="Gradient_vt6me"]
+offsets = PackedFloat32Array(0.135638, 0.327128, 0.542553, 1)
+colors = PackedColorArray(0, 0, 0, 0.196078, 0, 0, 0, 1, 0.295133, 5.40268e-05, 0.291682, 1, 0.251174, 0.0827401, 0.285693, 0.322409)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_djd1f"]
+gradient = SubResource("Gradient_vt6me")
+width = 64
+
+[sub_resource type="Curve" id="Curve_ne6d3"]
+_data = [Vector2(0, 0.00472581), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_x7qoh"]
+width = 64
+curve = SubResource("Curve_ne6d3")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rp7dm"]
+lifetime_randomness = 0.3
+particle_flag_rotate_y = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.3
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.0
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 90.0
+initial_velocity_min = 1.0
+initial_velocity_max = 3.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -2.0
+linear_accel_max = 2.0
+radial_accel_min = -5.0
+radial_accel_max = 5.0
+damping_min = 1.0
+damping_max = 2.0
+scale_min = 0.2
+scale_curve = SubResource("CurveTexture_x7qoh")
+color = Color(0.533037, 0.533037, 0.533037, 1)
+color_ramp = SubResource("GradientTexture1D_2r5b0")
+color_initial_ramp = SubResource("GradientTexture1D_djd1f")
+alpha_curve = SubResource("CurveTexture_kwvbn")
+hue_variation_min = -0.05
+hue_variation_max = 0.05
 
 [sub_resource type="Curve" id="Curve_bi8dp"]
 _data = [Vector2(0, 1), 0.0, -0.0371234, 0, 0, Vector2(0.8, 0), 0.0, 0.0, 0, 0]
@@ -194,15 +330,6 @@ alpha_curve = SubResource("CurveTexture_5h5ag")
 material = ExtResource("20_rtch5")
 size = Vector2(0.5, 5)
 center_offset = Vector3(0, 3, 0)
-
-[sub_resource type="Curve" id="Curve_kt25w"]
-_data = [Vector2(0, 0), 0.0, 25.7652, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_kwvbn"]
-width = 64
-texture_mode = 1
-curve = SubResource("Curve_kt25w")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kmn7j"]
 lifetime_randomness = 0.4
@@ -552,7 +679,7 @@ material = ExtResource("7_8immp")
 size = Vector2(0.05, 0.5)
 center_offset = Vector3(0, 0.25, 0)
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "dustParticle", "windParticle", "stompFX", "aegisSlideParticle", "chargeFX", "fullChargeFX", "grindrailVfx", "grindrailBurstVfx", "grindrailSfx", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "dustParticle", "windParticle", "stompFX", "aegisSlideParticle", "expertDriftParticle", "darkCrestParticle", "chargeFX", "fullChargeFX", "grindrailVfx", "grindrailBurstVfx", "grindrailSfx", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
@@ -562,6 +689,8 @@ dustParticle = NodePath("VFX/ActionFX/DustParticle")
 windParticle = NodePath("VFX/ActionFX/Wind")
 stompFX = NodePath("VFX/ActionFX/Stomp")
 aegisSlideParticle = NodePath("VFX/ActionFX/AegisFeather")
+expertDriftParticle = NodePath("VFX/ActionFX/ExpertDriftFXParticle")
+darkCrestParticle = NodePath("VFX/ActionFX/DarkCrestParticle")
 chargeFX = NodePath("VFX/ChargeFX/ChargeParticles")
 fullChargeFX = NodePath("VFX/ChargeFX/FullChargeParticles")
 grindrailVfx = NodePath("VFX/GrindrailSparksParticle")
@@ -647,6 +776,64 @@ interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = ExtResource("9_8eyt1")
 draw_pass_1 = SubResource("QuadMesh_g63sh")
+
+[node name="ExpertDriftFXParticle" type="GPUParticles3D" parent="VFX/ActionFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+lifetime = 1.2
+one_shot = true
+preprocess = 0.15
+explosiveness = 0.7
+randomness = 0.6
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+draw_order = 3
+process_material = SubResource("ParticleProcessMaterial_j4hvy")
+draw_pass_1 = ExtResource("11_sq88t")
+
+[node name="DarkCrestParticle" type="GPUParticles3D" parent="VFX/ActionFX" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 0.5
+one_shot = true
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_ceml1")
+draw_pass_1 = SubResource("QuadMesh_g63sh")
+script = ExtResource("21_nenuf")
+subSystems = [NodePath("DarkCrestFXParticle")]
+
+[node name="DarkCrestFXParticle" type="GPUParticles3D" parent="VFX/ActionFX/DarkCrestParticle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+amount = 64
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+draw_order = 3
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_rp7dm")
+draw_pass_1 = ExtResource("11_p2jvq")
 
 [node name="TrailMesh" type="Node3D" parent="VFX/ActionFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

@@ -82,6 +82,17 @@ public partial class CharacterEffect : Node3D
 	public void StopAegisFX() => aegisSlideParticle.SetEmitting(false);
 
 	[Export]
+	private GpuParticles3D expertDriftParticle;
+	public void PlayExpertDriftFX() => expertDriftParticle.Restart();
+
+	[Export]
+	private GroupGpuParticles3D darkCrestParticle;
+	public void PlayDarkCrest() => darkCrestParticle.RestartGroup();
+	[Export]
+	private GroupGpuParticles3D windCrestParticle;
+	public void PlayWindCrest() => GD.Print("Unimplemented.");
+
+	[Export]
 	private GpuParticles3D chargeFX;
 	[Export]
 	private GpuParticles3D fullChargeFX;

@@ -245,12 +245,92 @@ public partial class CharacterSkillManager : Node
 	/// <summary> Minimum speed when landing on the ground and holding forward. Makes Sonic feel faster. </summary>
 	[Export]
 	public float landingDashSpeed;
+	private bool AllowCrestSkill;
 
 	private void SetUpSkills()
 	{
 		// Expand hitbox if skills is equipped
 		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
+
+		InitializeCrestSkills();
 	}
+
+	private void InitializeCrestSkills()
+	{
+		int crestRequirement;
+		SkillResource.SkillElement crestType;
+		if (SkillRing.IsSkillEquipped(SkillKey.CrestWind))
+		{
+			crestRequirement = 10;
+			crestType = SkillResource.SkillElement.Wind;
+		}
+		else if (SkillRing.IsSkillEquipped(SkillKey.CrestFire))
+		{
+			crestRequirement = 8;
+			crestType = SkillResource.SkillElement.Fire;
+		}
+		else if (SkillRing.IsSkillEquipped(SkillKey.CrestDark))
+		{
+			crestRequirement = 6;
+			crestType = SkillResource.SkillElement.Dark;
+		}
+		else
+		{
+			// No crest skills equipped
+			return;
+		}
+
+		foreach (SkillKey key in SkillRing.EquippedSkills)
+		{
+			if (Runtime.Instance.SkillList.GetSkill(key).Element != crestType)
+				continue;
+
+			crestRequirement--;
+			if (crestRequirement > 0)
+				continue;
+
+			AllowCrestSkill = true;
+			break;
+		}
+	}
+
+	private float crestTimer;
+	private readonly float CrestInterval = 1.0f;
+	private readonly int DarkCrestSoulAmount = 3;
+	public void ActivateWindCrest()
+	{
+		if (!AllowCrestSkill)
+			return;
+
+		if (UpdateCrestTimer())
+			Character.Effect.PlayWindCrest();
+	}
+
+	public void ActivateDarkCrest()
+	{
+		if (!AllowCrestSkill)
+			return;
+
+		if (UpdateCrestTimer())
+		{
+			Character.Effect.PlayDarkCrest();
+			ModifySoulGauge(DarkCrestSoulAmount);
+		}
+	}
+
+	private bool UpdateCrestTimer()
+	{
+		if (Mathf.IsZeroApprox(crestTimer))
+		{
+			crestTimer = CrestInterval;
+			return true;
+		}
+
+		crestTimer = Mathf.MoveToward(crestTimer, 0, PhysicsManager.physicsDelta);
+		return false;
+	}
+
+	public void ResetCrestTimer() => crestTimer = 0;
 	#endregion
 
 	#region Soul Skills

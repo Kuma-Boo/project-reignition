@@ -55,6 +55,8 @@ public partial class DriftTrigger : Area3D
 	[Export]
 	private AudioStreamPlayer sfx;
 	[Export]
+	private AudioStreamPlayer expertSfx;
+	[Export]
 	private LockoutResource lockout;
 	private float startingVolume;
 	private bool isFadingSFX;
@@ -162,6 +164,12 @@ public partial class DriftTrigger : Area3D
 			{
 				driftResult = DriftResults.Success;
 				driftAnimationTimer = LaunchAnimationLength;
+
+				if (isManualDrift)
+				{
+					expertSfx.Play();
+					Character.Effect.PlayExpertDriftFX();
+				}
 			}
 			else // Too early! Fail drift attempt and play a special animation
 			{
@@ -174,7 +182,7 @@ public partial class DriftTrigger : Area3D
 			return;
 		}
 
-		if (distance >= .1f) return;
+		if (distance >= .3f) return;
 
 		// Slid to a stop
 		driftResult = DriftResults.WaitFail;
@@ -193,7 +201,7 @@ public partial class DriftTrigger : Area3D
 		{
 			Character.Animator.ResetState(0f);
 		}
-		else
+		else if (driftResult != DriftResults.WaitFail)
 		{
 			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(ExitDirection, Character.PathFollower.Up());
 			Character.MovementAngle -= Mathf.Pi * .1f * Character.InputVector.X;

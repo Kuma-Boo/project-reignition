@@ -824,6 +824,15 @@ namespace Project.Gameplay
 
 		private void UpdateGroundActions()
 		{
+			if (Mathf.IsEqualApprox(GroundSettings.GetSpeedRatioClamped(MoveSpeed), 1.0f))
+			{
+				if (Skills.IsSkillEquipped(SkillKey.CrestWind))
+					Skills.ActivateWindCrest();
+
+				if (Skills.IsSkillEquipped(SkillKey.CrestDark))
+					Skills.ActivateDarkCrest();
+			}
+
 			if (IsLockoutActive) // Controls locked out
 			{
 				if (ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnLand) && JustLandedOnGround) // Cancel lockout
@@ -835,7 +844,9 @@ namespace Project.Gameplay
 			if (Skills.IsSpeedBreakActive) return;
 
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
+			{
 				UpdateCrouching();
+			}
 			else if (actionBufferTimer != 0)
 			{
 				StartCrouching();
@@ -848,9 +859,13 @@ namespace Project.Gameplay
 
 				if (IsHoldingDirection(PathFollower.BackAngle) && (!IsLockoutActive ||
 				ActiveLockoutData.movementMode == LockoutResource.MovementModes.Free || ActiveLockoutData.allowReversing))
+				{
 					StartBackflip();
+				}
 				else
+				{
 					Jump();
+				}
 
 				if (IsLockoutActive && ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump))
 					RemoveLockoutData(ActiveLockoutData);
