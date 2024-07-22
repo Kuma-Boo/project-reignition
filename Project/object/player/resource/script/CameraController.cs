@@ -582,6 +582,29 @@ public partial class CameraController : Node3D
 		shakeSettings.Add(settings);
 	}
 
+	public void StopRespawnShakes()
+	{
+		for (int i = shakeSettings.Count - 1; i >= 0; i--)
+		{
+			if (shakeSettings[i].persistBetweenRespawns)
+				continue;
+
+			shakeSettings[i].Dispose();
+			shakeSettings.RemoveAt(i);
+		}
+	}
+
+	/// <summary> Starts a medium camera shake. </summary>
+	public void StartMediumCameraShake(float length = .2f)
+	{
+		StartCameraShake(new()
+		{
+			magnitude = Vector3.One.RemoveDepth() * .5f,
+			intensity = Vector3.One * 50.0f,
+			duration = length,
+		});
+	}
+
 	private void UpdateScreenShake()
 	{
 		ShakeRotation = Vector3.Zero;
@@ -589,6 +612,7 @@ public partial class CameraController : Node3D
 		{
 			if (shakeSettings[i].IsFinished)
 			{
+				shakeSettings[i].Dispose();
 				shakeSettings.RemoveAt(i);
 				continue;
 			}
@@ -599,26 +623,34 @@ public partial class CameraController : Node3D
 		}
 	}
 
-	public class CameraShakeSettings
+	public partial class CameraShakeSettings : GodotObject
 	{
 		/// <summary> How much the camera rotates. </summary>
-		public Vector3 magnitude;
+		public Vector3 magnitude = Vector3.One;
 		/// <summary> How quickly the camera shifts between rotations. </summary>
-		public Vector3 intensity;
+		public Vector3 intensity = Vector3.One * 50.0f;
 		/// <summary> How random phases should increase from each other. </summary>
-		public float randomness;
-		/// <summary> Camera shake fade in time. </summary>
-		public float fadeIn;
-		/// <summary> How long camera shake lasts (excluding fade times). </summary>
-		public float duration;
-		/// <summary> Camera shake fade out time. </summary>
-		public float fadeOut;
-		/// <summary> Total camera shake time. </summary>
-		public float TotalTime { get; private set; }
+		public float randomness = 1f;
 		/// <summary> Actual value used to sample the sin curve. </summary>
 		public Vector3 phaseOffset;
+		/// <summary> The origin of the camera's shake. </summary>
+		public Vector3 origin;
+		/// <summary> Maximum distance before camera shake is ignored. 0 means always shake. </summary>
+		public float maximumDistance;
+
+		/// <summary> Should this camera shake continue even after being respawned? </summary>
+		public bool persistBetweenRespawns = false;
+
 		/// <summary> Camera's current time. </summary>
 		public float currentTime;
+		/// <summary> Camera shake fade in time. </summary>
+		public float fadeIn = 0.05f;
+		/// <summary> How long camera shake lasts (excluding fade times). </summary>
+		public float duration = 0.2f;
+		/// <summary> Camera shake fade out time. </summary>
+		public float fadeOut = 0.5f;
+		/// <summary> Total camera shake time. </summary>
+		public float TotalTime { get; private set; }
 		public bool IsFinished => currentTime >= TotalTime;
 
 		public void Initialize()
