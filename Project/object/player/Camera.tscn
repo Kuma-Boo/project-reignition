@@ -1,25 +1,15 @@
-[gd_scene load_steps=17 format=3 uid="uid://boo3c0dnk36vn"]
+[gd_scene load_steps=16 format=3 uid="uid://boo3c0dnk36vn"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CameraController.cs" id="2"]
 [ext_resource type="Resource" uid="uid://dhevcck1smng1" path="res://resource/preset/camera/common/DefaultCam.tres" id="2_hi8xo"]
 [ext_resource type="PackedScene" uid="uid://qmsgr6kswk87" path="res://object/player/resource/component/PathFollower.tscn" id="3_f65nj"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="3_vpygn"]
 [ext_resource type="Resource" uid="uid://dsc0vixphfyh" path="res://resource/preset/camera/common/CompletionCam.tres" id="4_j4rb3"]
-[ext_resource type="Shader" path="res://effect/shader/MotionBlur.gdshader" id="5_bqkda"]
+[ext_resource type="Material" uid="uid://d0hh75dmbmq84" path="res://object/player/resource/effect/material/Motion Blur.tres" id="5_ty5ku"]
 [ext_resource type="Script" path="res://object/player/resource/script/MotionBlur.cs" id="6_4abjr"]
 
 [sub_resource type="PlaneMesh" id="1"]
 size = Vector2(40, 20)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_h45ax"]
-render_priority = -128
-shader = ExtResource("5_bqkda")
-shader_parameter/linear_velocity = Vector3(1, 0, 0)
-shader_parameter/angular_velocity = Vector3(0, 0, 0)
-shader_parameter/iteration_count = 2
-shader_parameter/intensity = 0.2
-shader_parameter/startRadius = 0.5
-shader_parameter/opacity = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m64j3"]
 specular_mode = 2
@@ -101,12 +91,11 @@ size = 0.1
 
 [node name="MotionBlur" type="MeshInstance3D" parent="CameraRoot/FreecamRoot/Camera" node_paths=PackedStringArray("camera")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -2)
-visible = false
 cast_shadow = 0
 mesh = SubResource("1")
-surface_material_override/0 = SubResource("ShaderMaterial_h45ax")
+surface_material_override/0 = ExtResource("5_ty5ku")
 script = ExtResource("6_4abjr")
-material = SubResource("ShaderMaterial_h45ax")
+material = ExtResource("5_ty5ku")
 camera = NodePath("..")
 
 [node name="Debug" type="MeshInstance3D" parent="CameraRoot"]
