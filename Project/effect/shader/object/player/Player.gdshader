@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode diffuse_burley, depth_prepass_alpha;
+render_mode diffuse_burley, depth_draw_always;
 
 uniform sampler2D albedo : hint_default_black, source_color;
 uniform sampler2D specular : hint_default_black;

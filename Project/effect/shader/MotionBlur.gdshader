@@ -1,7 +1,7 @@
 shader_type spatial;
 render_mode depth_test_disabled, depth_draw_never, unshaded, cull_disabled;
 
-uniform vec3 linear_velocity;
+uniform vec3 linear_velocity = vec3(1, 0, 0);
 uniform vec3 angular_velocity; // radians
 uniform sampler2D depth_texture : hint_depth_texture, repeat_disable;
 uniform sampler2D screen_texture : hint_screen_texture, repeat_disable;
@@ -37,16 +37,19 @@ void fragment()
 	
 	vec3 col = vec3(0.0);
 	float counter = 0.0;
+	
 	if (length(r) >= startRadius)
 	{
 		for (int i = 0; i < iteration_count; i++)
 		{
 			vec2 offset = pixel_diff_ndc * (float(i) / float(iteration_count) - 0.5) * intensity; 
-			col += textureLod(screen_texture, SCREEN_UV + offset,0.0).rgb;
+			col += textureLod(screen_texture, SCREEN_UV + offset, 0.0).rgb;
 			counter++;
 		}
 		ALBEDO = col / counter;
 	}
 	else
 		ALBEDO = textureLod(screen_texture, SCREEN_UV, 0.0).rgb;
+	
+	ALPHA = opacity;
 }
