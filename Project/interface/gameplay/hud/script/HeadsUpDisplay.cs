@@ -11,10 +11,10 @@ public partial class HeadsUpDisplay : Control
 	public static HeadsUpDisplay instance;
 	private StageSettings Stage => StageSettings.instance;
 
+	public override void _EnterTree() => instance = this;
+
 	public override void _Ready()
 	{
-		instance = this;
-
 		InitializeRankPreviewer();
 		InitializeRings();
 		InitializeObjectives();
@@ -45,13 +45,13 @@ public partial class HeadsUpDisplay : Control
 	[Export]
 	private AnimationTree ringAnimator;
 
-	private const string RING_LABEL_FORMAT = "000";
-	private readonly StringName ENABLED_PARAMETER = "enabled";
-	private readonly StringName DISABLED_PARAMETER = "disabled";
+	private const string RingLabelFormat = "000";
+	private readonly StringName EnabledParameter = "enabled";
+	private readonly StringName DisabledParameter = "disabled";
 
-	private readonly StringName RING_GAIN_PARAMETER = "parameters/gain_trigger/request";
-	private readonly StringName RING_LOSS_PARAMETER = "parameters/loss_trigger/request";
-	private readonly StringName RINGLESS_PARAMETER = "parameters/ringless_transition/transition_request";
+	private readonly StringName RingGainParameter = "parameters/gain_trigger/request";
+	private readonly StringName RingLossParameter = "parameters/loss_trigger/request";
+	private readonly StringName RinglessParameter = "parameters/ringless_transition/transition_request";
 
 	private void InitializeRings()
 	{
@@ -60,12 +60,10 @@ public partial class HeadsUpDisplay : Control
 		{
 			maxRingLabel.Visible = ringDividerSprite.Visible = Stage.Data.MissionType == LevelDataResource.MissionTypes.Ring; // Show/Hide max ring count
 			if (maxRingLabel.Visible)
-				maxRingLabel.Text = Stage.Data.MissionObjectiveCount.ToString(RING_LABEL_FORMAT);
+				maxRingLabel.Text = Stage.Data.MissionObjectiveCount.ToString(RingLabelFormat);
 
-			int startingRingCount = 0; // TODO Determine by skills
 			ringAnimator.Active = true;
-			UpdateRingCount(startingRingCount, true);
-			Stage.UpdateRingCount(startingRingCount, StageSettings.MathModeEnum.Replace, true);
+			UpdateRingCount(Stage.CurrentRingCount, true);
 		}
 	}
 
@@ -74,16 +72,18 @@ public partial class HeadsUpDisplay : Control
 		if (!disableAnimations && amount != 0) // Play animation
 		{
 			if (amount > 0)
-				ringAnimator.Set(RING_GAIN_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			{
+				ringAnimator.Set(RingGainParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			}
 			else
 			{
 				ringLossLabel.Text = amount.ToString();
-				ringAnimator.Set(RING_LOSS_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+				ringAnimator.Set(RingLossParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			}
 		}
 
-		ringAnimator.Set(RINGLESS_PARAMETER, Stage.CurrentRingCount == 0 ? ENABLED_PARAMETER : DISABLED_PARAMETER);
-		ringLabel.Text = Stage.CurrentRingCount.ToString(RING_LABEL_FORMAT);
+		ringAnimator.Set(RinglessParameter, Stage.CurrentRingCount == 0 ? EnabledParameter : DisabledParameter);
+		ringLabel.Text = Stage.CurrentRingCount.ToString(RingLabelFormat);
 	}
 	#endregion
 
