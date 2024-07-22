@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://boo3c0dnk36vn"]
+[gd_scene load_steps=15 format=3 uid="uid://boo3c0dnk36vn"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CameraController.cs" id="2"]
 [ext_resource type="Resource" uid="uid://dhevcck1smng1" path="res://resource/preset/camera/common/DefaultCam.tres" id="2_hi8xo"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="3_vpygn"]
 [ext_resource type="Resource" uid="uid://dsc0vixphfyh" path="res://resource/preset/camera/common/CompletionCam.tres" id="4_j4rb3"]
 [ext_resource type="Material" uid="uid://d0hh75dmbmq84" path="res://object/player/resource/effect/material/Motion Blur.tres" id="5_ty5ku"]
-[ext_resource type="Script" path="res://object/player/resource/script/MotionBlur.cs" id="6_4abjr"]
 
 [sub_resource type="PlaneMesh" id="1"]
 size = Vector2(40, 20)
@@ -71,6 +70,7 @@ cameraRoot = NodePath("CameraRoot")
 debugMesh = NodePath("CameraRoot/Debug")
 PathFollower = NodePath("PathFollower")
 defaultSettings = ExtResource("2_hi8xo")
+motionBlurMaterial = ExtResource("5_ty5ku")
 crossfade = NodePath("Crossfade")
 crossfadeAnimator = NodePath("Crossfade/AnimationPlayer")
 
@@ -89,14 +89,11 @@ current = true
 fov = 70.0
 size = 0.1
 
-[node name="MotionBlur" type="MeshInstance3D" parent="CameraRoot/FreecamRoot/Camera" node_paths=PackedStringArray("camera")]
+[node name="MotionBlur" type="MeshInstance3D" parent="CameraRoot/FreecamRoot/Camera"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -2)
 cast_shadow = 0
 mesh = SubResource("1")
 surface_material_override/0 = ExtResource("5_ty5ku")
-script = ExtResource("6_4abjr")
-material = ExtResource("5_ty5ku")
-camera = NodePath("..")
 
 [node name="Debug" type="MeshInstance3D" parent="CameraRoot"]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)

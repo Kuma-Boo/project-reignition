@@ -48,6 +48,7 @@ public partial class CameraController : Node3D
 			SettingsResource = targetSettings,
 		});
 
+		motionBlurMaterial.SetShaderParameter(OpacityParameter, 0);
 		Runtime.Instance.Connect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
 	}
 
@@ -79,6 +80,8 @@ public partial class CameraController : Node3D
 		}
 
 		UpdateGameplayCamera();
+		UpdateScreenShake();
+		UpdateMotionBlur();
 	}
 
 	public override void _Process(double _)
@@ -277,7 +280,6 @@ public partial class CameraController : Node3D
 		cameraRoot.GlobalTransform = cameraTransform; // Update transform
 		Camera.Fov = fov; // Update fov
 
-		UpdateScreenShake();
 		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreePosition, ConvertToScreenSpace(Character.CenterPosition) / Runtime.ScreenSize);
 
 		if (SnapFlag) // Reset flag after camera was updated
@@ -547,6 +549,46 @@ public partial class CameraController : Node3D
 
 	#region Effects
 	[ExportGroup("Effects")]
+	[Export]
+	private ShaderMaterial motionBlurMaterial;
+	private Vector3 previousCameraPosition;
+	private Quaternion previousCameraRotation;
+
+	public int motionBlurRequests;
+
+	private readonly string OpacityParameter = "opacity";
+	private readonly string LinearVelocityParameter = "linear_velocity";
+	private readonly string AngularVelocityParameter = "angular_velocity";
+
+	private void UpdateMotionBlur()
+	{
+		if (motionBlurMaterial == null || !SaveManager.Config.useMotionBlur)
+			return;
+
+		float opacity = (float)motionBlurMaterial.GetShaderParameter(OpacityParameter);
+		opacity = Mathf.MoveToward(opacity, motionBlurRequests == 0 ? 0 : 1f, 5.0f * PhysicsManager.physicsDelta);
+		motionBlurMaterial.SetShaderParameter(OpacityParameter, opacity);
+
+		motionBlurMaterial.SetShaderParameter(LinearVelocityParameter, CalculateLinearVelocity());
+		motionBlurMaterial.SetShaderParameter(AngularVelocityParameter, CalculateAngularVelocity());
+
+		previousCameraPosition = Camera.GlobalPosition;
+		previousCameraRotation = Camera.GlobalBasis.GetRotationQuaternion();
+	}
+
+	private Vector3 CalculateLinearVelocity() => Camera.GlobalPosition - previousCameraPosition;
+	private Vector3 CalculateAngularVelocity()
+	{
+		Quaternion rotation = Camera.GlobalBasis.GetRotationQuaternion();
+		Quaternion rotationDifference = rotation - previousCameraRotation;
+		Quaternion rotationConjugate = new(-rotation.X, -rotation.Y, -rotation.Z, rotation.W);
+		Quaternion angularRotation = rotationDifference * 2.0f * rotationConjugate;
+		return new Vector3(angularRotation.X, angularRotation.Y, angularRotation.Z);
+	}
+
+	public void RequestMotionBlur() => motionBlurRequests++;
+	public void UnrequestMotionBlur() => motionBlurRequests--;
+
 	[Export]
 	private TextureRect crossfade;
 	[Export]

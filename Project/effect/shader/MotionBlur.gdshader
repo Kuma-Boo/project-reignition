@@ -43,7 +43,10 @@ void fragment()
 		for (int i = 0; i < iteration_count; i++)
 		{
 			vec2 offset = pixel_diff_ndc * (float(i) / float(iteration_count) - 0.5) * intensity; 
-			col += textureLod(screen_texture, SCREEN_UV + offset, 0.0).rgb;
+			vec2 uv = SCREEN_UV + offset;
+			uv.x = clamp(uv.x, 0, 1);
+			uv.y = clamp(uv.y, 0, 1);
+			col += textureLod(screen_texture, uv, 0.0).rgb;
 			counter++;
 		}
 		ALBEDO = col / counter;

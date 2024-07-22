@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode diffuse_burley, depth_draw_never;
+render_mode diffuse_burley, depth_draw_always;
 
 uniform sampler2D specular : hint_default_black;
 uniform float rim_bias : hint_range(0, 5) = .5;

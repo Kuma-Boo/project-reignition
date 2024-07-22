@@ -502,6 +502,7 @@ public partial class CharacterSkillManager : Node
 		{
 			timeBreakAnimator.Play("start");
 			Character.Effect.PlayVoice("time break");
+			Character.Camera.RequestMotionBlur();
 			BGMPlayer.SetStageMusicVolume(-80f);
 
 			// Reset volume and play
@@ -512,9 +513,9 @@ public partial class CharacterSkillManager : Node
 		else
 		{
 			timeBreakAnimator.Play("stop");
+			Character.Camera.UnrequestMotionBlur();
 			breakTimer = BreakSkillsCooldown;
 			BGMPlayer.SetStageMusicVolume(0f);
-
 			HeadsUpDisplay.instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);
 		}
 	}
@@ -537,6 +538,7 @@ public partial class CharacterSkillManager : Node
 			Character.Animator.SpeedBreak();
 			Character.ChangeHitbox("speed break");
 			Character.AttackState = CharacterController.AttackStates.OneShot;
+			Character.Camera.RequestMotionBlur();
 		}
 		else
 		{
@@ -548,6 +550,7 @@ public partial class CharacterSkillManager : Node
 			Character.CollisionMask = normalCollisionMask; // Reset collision layer
 			Character.AttackState = CharacterController.AttackStates.None;
 			Character.ChangeHitbox("RESET");
+			Character.Camera.UnrequestMotionBlur();
 		}
 
 		HeadsUpDisplay.instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);

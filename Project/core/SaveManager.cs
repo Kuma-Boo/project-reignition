@@ -110,6 +110,7 @@ public partial class SaveManager : Node
 		public RenderingServer.ViewportScaling3DMode resizeMode = RenderingServer.ViewportScaling3DMode.Bilinear;
 		public int antiAliasing = 1; // Default to FXAA
 		public bool useHDBloom = true;
+		public bool useMotionBlur = false;
 		public QualitySetting softShadowQuality = QualitySetting.Medium;
 		public QualitySetting postProcessingQuality = QualitySetting.Medium;
 		public QualitySetting reflectionQuality = QualitySetting.High;
