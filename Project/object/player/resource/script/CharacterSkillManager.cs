@@ -253,6 +253,7 @@ public partial class CharacterSkillManager : Node
 		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
 
 		InitializeCrestSkills();
+		speedbreakOverlayMaterial.SetShaderParameter(SpeedbreakOverlayOpacityKey, 0);
 	}
 
 	private void InitializeCrestSkills()
@@ -380,6 +381,8 @@ public partial class CharacterSkillManager : Node
 	private AudioStreamPlayer heartbeatSFX;
 
 	[Export]
+	public ShaderMaterial speedbreakOverlayMaterial;
+	[Export]
 	public float speedBreakSpeed; // Movement speed during speed break
 	public bool IsTimeBreakActive { get; private set; }
 	public bool IsSpeedBreakActive { get; private set; }
@@ -387,9 +390,10 @@ public partial class CharacterSkillManager : Node
 	public bool IsUsingBreakSkills => IsTimeBreakActive || IsSpeedBreakActive;
 
 	private float breakTimer; // Timer for break skills
-	private const float SPEEDBREAK_DELAY = 0.4f; // Time to say SPEED BREAK!
-	private const float BREAK_SKILLS_COOLDOWN = 1f; // Prevent skill spam
-	public const float TIME_BREAK_RATIO = .6f; // Time scale
+	public const float TimebreakRatio = .6f; // Time scale
+	private const float SpeedBreakDelay = 0.4f; // Time to say SPEED BREAK!
+	private const float BreakSkillsCooldown = 1f; // Prevent skill spam
+	private readonly string SpeedbreakOverlayOpacityKey = "opacity";
 
 	public void UpdateSoulSkills()
 	{
@@ -437,6 +441,10 @@ public partial class CharacterSkillManager : Node
 
 	private void UpdateSpeedBreak()
 	{
+		float currentOpacity = (float)speedbreakOverlayMaterial.GetShaderParameter(SpeedbreakOverlayOpacityKey);
+		currentOpacity = Mathf.MoveToward(currentOpacity, IsSpeedBreakActive ? 1 : 0, 20.0f * PhysicsManager.physicsDelta);
+		speedbreakOverlayMaterial.SetShaderParameter(SpeedbreakOverlayOpacityKey, currentOpacity);
+
 		if (IsSpeedBreakActive)
 		{
 			if (Mathf.IsZeroApprox(breakTimer))
@@ -488,7 +496,7 @@ public partial class CharacterSkillManager : Node
 		timeBreakDrainTimer = 0;
 		IsTimeBreakActive = !IsTimeBreakActive;
 		SoundManager.IsBreakChannelMuted = IsTimeBreakActive;
-		Engine.TimeScale = IsTimeBreakActive ? TIME_BREAK_RATIO : 1f;
+		Engine.TimeScale = IsTimeBreakActive ? TimebreakRatio : 1f;
 
 		if (IsTimeBreakActive)
 		{
@@ -504,7 +512,7 @@ public partial class CharacterSkillManager : Node
 		else
 		{
 			timeBreakAnimator.Play("stop");
-			breakTimer = BREAK_SKILLS_COOLDOWN;
+			breakTimer = BreakSkillsCooldown;
 			BGMPlayer.SetStageMusicVolume(0f);
 
 			HeadsUpDisplay.instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);
@@ -517,7 +525,7 @@ public partial class CharacterSkillManager : Node
 
 		IsSpeedBreakActive = !IsSpeedBreakActive;
 		SoundManager.IsBreakChannelMuted = IsSpeedBreakActive;
-		breakTimer = IsSpeedBreakActive ? SPEEDBREAK_DELAY : BREAK_SKILLS_COOLDOWN;
+		breakTimer = IsSpeedBreakActive ? SpeedBreakDelay : BreakSkillsCooldown;
 		IsSpeedBreakOverrideActive = false; // Always disable override
 
 		if (IsSpeedBreakActive)
