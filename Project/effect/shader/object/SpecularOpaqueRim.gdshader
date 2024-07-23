@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode diffuse_burley, depth_draw_always;
+render_mode diffuse_burley, depth_prepass_alpha;
 
 uniform sampler2D albedo : hint_default_black, source_color;
 uniform sampler2D specular : hint_default_black;
@@ -27,6 +27,7 @@ void fragment()
 	
 	//Calculate specularity
 	spec *= view;
+	ALPHA = 1.0;
 	ROUGHNESS = roughness;
 	SPECULAR = clamp(spec * specular_multiplier, 0, 1);
 	ALBEDO = col.rgb;

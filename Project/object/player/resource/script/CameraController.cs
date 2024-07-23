@@ -33,7 +33,7 @@ public partial class CameraController : Node3D
 	public CharacterPathFollower PathFollower { get; private set; }
 	private CharacterController Character => CharacterController.instance;
 
-	private readonly StringName ShaderPlayerScreePosition = new("player_screen_position");
+	private readonly StringName ShaderPlayerScreenPosition = new("player_screen_position");
 
 	public void Initialize()
 	{
@@ -79,9 +79,9 @@ public partial class CameraController : Node3D
 			IsDefeatFreezeActive = false;
 		}
 
-		UpdateGameplayCamera();
-		UpdateScreenShake();
 		UpdateMotionBlur();
+		UpdateScreenShake();
+		UpdateGameplayCamera();
 	}
 
 	public override void _Process(double _)
@@ -280,7 +280,7 @@ public partial class CameraController : Node3D
 		cameraRoot.GlobalTransform = cameraTransform; // Update transform
 		Camera.Fov = fov; // Update fov
 
-		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreePosition, ConvertToScreenSpace(Character.CenterPosition) / Runtime.ScreenSize);
+		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Character.CenterPosition) / Runtime.ScreenSize);
 
 		if (SnapFlag) // Reset flag after camera was updated
 			SnapFlag = false;
@@ -556,6 +556,8 @@ public partial class CameraController : Node3D
 
 	public int motionBlurRequests;
 
+	private readonly float TimeBreakMotionBlurStrength = 2.0f;
+	private readonly float MotionBlurStrength = .5f;
 	private readonly string OpacityParameter = "opacity";
 	private readonly string LinearVelocityParameter = "linear_velocity";
 	private readonly string AngularVelocityParameter = "angular_velocity";
@@ -566,7 +568,7 @@ public partial class CameraController : Node3D
 			return;
 
 		float opacity = (float)motionBlurMaterial.GetShaderParameter(OpacityParameter);
-		opacity = Mathf.MoveToward(opacity, motionBlurRequests == 0 ? 0 : 1f, 5.0f * PhysicsManager.physicsDelta);
+		opacity = Mathf.MoveToward(opacity, motionBlurRequests == 0 ? 0 : 1, 5.0f * PhysicsManager.physicsDelta);
 		motionBlurMaterial.SetShaderParameter(OpacityParameter, opacity);
 
 		motionBlurMaterial.SetShaderParameter(LinearVelocityParameter, CalculateLinearVelocity());
@@ -576,14 +578,25 @@ public partial class CameraController : Node3D
 		previousCameraRotation = Camera.GlobalBasis.GetRotationQuaternion();
 	}
 
-	private Vector3 CalculateLinearVelocity() => Camera.GlobalPosition - previousCameraPosition;
+	private Vector3 CalculateLinearVelocity()
+	{
+		Vector3 velocity = Camera.GlobalPosition - previousCameraPosition;
+		if (!Mathf.IsZeroApprox(Engine.TimeScale))
+			velocity /= (float)Engine.TimeScale;
+
+		if (Character.Skills.IsTimeBreakActive)
+			return velocity * TimeBreakMotionBlurStrength;
+
+		return velocity * MotionBlurStrength;
+	}
+
 	private Vector3 CalculateAngularVelocity()
 	{
 		Quaternion rotation = Camera.GlobalBasis.GetRotationQuaternion();
 		Quaternion rotationDifference = rotation - previousCameraRotation;
 		Quaternion rotationConjugate = new(-rotation.X, -rotation.Y, -rotation.Z, rotation.W);
 		Quaternion angularRotation = rotationDifference * 2.0f * rotationConjugate;
-		return new Vector3(angularRotation.X, angularRotation.Y, angularRotation.Z);
+		return new Vector3(angularRotation.X, angularRotation.Y, angularRotation.Z) * MotionBlurStrength;
 	}
 
 	public void RequestMotionBlur() => motionBlurRequests++;
@@ -661,7 +674,7 @@ public partial class CameraController : Node3D
 
 			Vector3 rotationAmount = shakeSettings[i].SimulateShake(PhysicsManager.physicsDelta);
 			ShakeRotation += rotationAmount * PhysicsManager.physicsDelta;
-			cameraRoot.Rotation += rotationAmount * PhysicsManager.physicsDelta;
+			cameraRoot.Rotation += rotationAmount * PhysicsManager.physicsDelta * SaveManager.Config.screenShake * 0.01f;
 		}
 	}
 
@@ -808,6 +821,8 @@ public partial class CameraController : Node3D
 		DebugManager.Instance.RedrawCamData(FreeCamRoot.GlobalPosition, freeCamRotation);
 		if (isFreeCamLocked)
 			UpdateFreeCamData(freeCamPosition, freeCamRotation);
+		else
+			UpdateMotionBlur();
 	}
 
 	private void ToggleFreeCam()

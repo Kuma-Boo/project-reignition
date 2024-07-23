@@ -6,7 +6,7 @@ uniform vec3 angular_velocity; // radians
 uniform sampler2D depth_texture : hint_depth_texture, repeat_disable;
 uniform sampler2D screen_texture : hint_screen_texture, repeat_disable;
 uniform int iteration_count : hint_range(2, 50);
-uniform float intensity : hint_range(0, 1);
+uniform float intensity : hint_range(0, 10);
 uniform float startRadius;
 
 uniform float opacity : hint_range(0, 1);
@@ -42,7 +42,7 @@ void fragment()
 	{
 		for (int i = 0; i < iteration_count; i++)
 		{
-			vec2 offset = pixel_diff_ndc * (float(i) / float(iteration_count) - 0.5) * intensity; 
+			vec2 offset = pixel_diff_ndc * (float(i) / float(iteration_count) - 0.5) * intensity;
 			vec2 uv = SCREEN_UV + offset;
 			uv.x = clamp(uv.x, 0, 1);
 			uv.y = clamp(uv.y, 0, 1);

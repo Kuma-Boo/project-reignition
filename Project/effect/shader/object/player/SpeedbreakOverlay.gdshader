@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode diffuse_burley, depth_draw_always;
+render_mode diffuse_burley, depth_draw_never;
 
 uniform sampler2D specular : hint_default_black;
 uniform float rim_bias : hint_range(0, 5) = .5;
@@ -26,5 +26,5 @@ void fragment()
 	spec *= view;
 	ALBEDO = rim_color.rgb;
 	ALPHA = rim * opacity;
-	EMISSION = clamp(vec3(rim) * rim * rim_color.rgb * NORMAL.g, vec3(0.0), vec3(1.0)) * emission;
+	EMISSION = clamp(vec3(rim) * rim * rim_color.rgb * NORMAL.g, vec3(0.0), vec3(1.0)) * emission * opacity;
 }

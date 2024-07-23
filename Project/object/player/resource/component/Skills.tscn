@@ -153,9 +153,10 @@ shader_parameter/factor_texture = SubResource("GradientTexture2D_0q2jh")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fb7an"]
 shader = ExtResource("10_6bh0u")
-shader_parameter/blur_power = 0.0
-shader_parameter/blur_clarity = 5.0
-shader_parameter/sampling_count = 10
+shader_parameter/blur_power = 0.1
+shader_parameter/max_blur_power = 0.1
+shader_parameter/blur_clarity = 2.0
+shader_parameter/sampling_count = 4
 
 [sub_resource type="Animation" id="Animation_d5ix5"]
 length = 0.001
@@ -198,38 +199,38 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:material:shader_parameter/blur_power")
+tracks/3/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
+"values": [false]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:visible")
+tracks/4/path = NodePath("SpeedBreak/Streaks:emitting")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
+"update": 1,
 "values": [false]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("SpeedBreak/Streaks:emitting")
+tracks/5/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:color")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_45gst"]
@@ -285,26 +286,26 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:material:shader_parameter/blur_power")
+tracks/4/path = NodePath("SpeedBreak/Streaks:emitting")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [0.0, 0.0, 0.01]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SpeedBreak/Streaks:emitting")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:color")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_i45wl"]
@@ -352,34 +353,34 @@ tracks/3/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(1),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [false]
+"values": [true, false]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:material:shader_parameter/blur_power")
+tracks/4/path = NodePath("SpeedBreak/Streaks:emitting")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.01, 0.0]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SpeedBreak/Streaks:emitting")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:color")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5ilpv"]
@@ -483,6 +484,7 @@ process_material = SubResource("ParticleProcessMaterial_p1qjv")
 draw_pass_1 = SubResource("QuadMesh_tw248")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="SpeedBreak"]
+layer = -10
 
 [node name="ScreenShockBB" type="BackBufferCopy" parent="SpeedBreak/CanvasLayer"]
 position = Vector2(6.10352e-05, -6.10352e-05)

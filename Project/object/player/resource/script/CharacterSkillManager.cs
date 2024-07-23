@@ -442,7 +442,7 @@ public partial class CharacterSkillManager : Node
 	private void UpdateSpeedBreak()
 	{
 		float currentOpacity = (float)speedbreakOverlayMaterial.GetShaderParameter(SpeedbreakOverlayOpacityKey);
-		currentOpacity = Mathf.MoveToward(currentOpacity, IsSpeedBreakActive ? 1 : 0, 20.0f * PhysicsManager.physicsDelta);
+		currentOpacity = Mathf.MoveToward(currentOpacity, IsSpeedBreakActive ? 1 : 0, 5.0f * PhysicsManager.physicsDelta);
 		speedbreakOverlayMaterial.SetShaderParameter(SpeedbreakOverlayOpacityKey, currentOpacity);
 
 		if (IsSpeedBreakActive)
