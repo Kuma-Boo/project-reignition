@@ -874,7 +874,7 @@ public partial class SaveManager : Node
 
 				for (int i = 0; i < augmentKeys.Length; i++)
 				{
-					if (!Enum.TryParse(augmentKeys[i], out SkillKey key))
+					if (Enum.TryParse(augmentKeys[i], out SkillKey key))
 						equippedAugments.Add(key, augments[augmentKeys[i]]);
 				}
 			}
