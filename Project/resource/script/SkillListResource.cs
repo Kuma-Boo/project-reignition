@@ -169,7 +169,7 @@ public partial class SkillListResource : Resource
 
 			// Save the base skill resource
 			string targetFilePath = skillResourcePath + files[fileIndex] + ".tres";
-			ResourceSaver.Singleton.Save(skills[i], targetFilePath, ResourceSaver.SaverFlags.None);
+			ResourceSaver.Singleton.Save(baseSkill, targetFilePath, ResourceSaver.SaverFlags.None);
 			skills.RemoveAt(i); // Remove the skill from the main skill list
 		}
 
