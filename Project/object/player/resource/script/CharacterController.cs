@@ -1440,7 +1440,7 @@ namespace Project.Gameplay
 			{
 				if (Skills.GetAugmentIndex(SkillKey.PearlDamage) == 1) // Damage augment
 				{
-					ringLoss *= 2;
+					ringLoss += 20;
 					Skills.ModifySoulGauge(-Mathf.FloorToInt(Skills.SoulPower * .1f));
 				}
 				else
@@ -1453,10 +1453,10 @@ namespace Project.Gameplay
 				Skills.ModifySoulGauge(-Mathf.FloorToInt(Skills.SoulPower * .5f));
 			}
 
-			if (Skills.IsSkillEquipped(SkillKey.RingDamage))
-				ringLoss -= 10;
-
 			if (Skills.IsSkillEquipped(SkillKey.SpeedUp) && Skills.GetAugmentIndex(SkillKey.SpeedUp) == 3)
+				ringLoss += 20;
+
+			if (Skills.IsSkillEquipped(SkillKey.RingDamage))
 				ringLoss -= 10;
 
 			// Lose rings
