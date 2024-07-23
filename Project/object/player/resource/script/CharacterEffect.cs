@@ -61,7 +61,7 @@ public partial class CharacterEffect : Node3D
 
 	[Export]
 	private GpuParticles3D windParticle;
-	public void StartWind()
+	public void PlayWindFX()
 	{
 		windParticle.Restart();
 		PlayActionSFX(WindSfx);
@@ -87,10 +87,10 @@ public partial class CharacterEffect : Node3D
 
 	[Export]
 	private GroupGpuParticles3D darkCrestParticle;
-	public void PlayDarkCrest() => darkCrestParticle.RestartGroup();
+	public void PlayDarkCrestFX() => darkCrestParticle.RestartGroup();
 	[Export]
 	private GroupGpuParticles3D windCrestParticle;
-	public void PlayWindCrest() => GD.Print("Unimplemented.");
+	public void PlayWindCrestFX() => windCrestParticle.RestartGroup();
 
 	[Export]
 	private GpuParticles3D chargeFX;

@@ -823,6 +823,8 @@ public partial class SaveManager : Node
 			// WorldEnum data
 			if (dictionary.TryGetValue(nameof(lastPlayedWorld), out Variant var))
 				lastPlayedWorld = (WorldEnum)(int)var;
+
+			worldsUnlocked.Clear();
 			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var) && var.VariantType == Variant.Type.Array)
 			{
 				Array<int> worlds = (Array<int>)var;
@@ -836,6 +838,7 @@ public partial class SaveManager : Node
 					worldsUnlocked.Add((WorldEnum)i);
 			}
 
+			worldRingsCollected.Clear();
 			if (dictionary.TryGetValue(nameof(worldRingsCollected), out var) && var.VariantType == Variant.Type.Array)
 			{
 				Array<int> worlds = (Array<int>)var;
@@ -857,6 +860,7 @@ public partial class SaveManager : Node
 
 			if (dictionary.TryGetValue(nameof(equippedSkills), out var))
 			{
+				equippedSkills.Clear();
 				Array<int> skills = (Array<int>)var;
 				for (int i = 0; i < skills.Count; i++)
 					equippedSkills.Add((SkillKey)skills[i]);
@@ -864,6 +868,7 @@ public partial class SaveManager : Node
 
 			if (dictionary.TryGetValue(nameof(equippedAugments), out var))
 			{
+				equippedAugments.Clear();
 				Dictionary<string, int> augments = (Dictionary<string, int>)var;
 				string[] augmentKeys = [.. augments.Keys];
 

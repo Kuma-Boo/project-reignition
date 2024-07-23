@@ -258,6 +258,12 @@ public partial class CharacterSkillManager : Node
 
 	private void InitializeCrestSkills()
 	{
+		if (OS.IsDebugBuild()) // Always allow crest skills when playing the game from the editor
+		{
+			AllowCrestSkill = true;
+			return;
+		}
+
 		int crestRequirement;
 		SkillResource.SkillElement crestType;
 		if (SkillRing.IsSkillEquipped(SkillKey.CrestWind))
@@ -295,18 +301,21 @@ public partial class CharacterSkillManager : Node
 		}
 	}
 
-	private float crestTimer;
-	private readonly float CrestInterval = 1.0f;
-	private readonly int DarkCrestSoulAmount = 3;
+	private readonly float WindCrestSpeedMultiplier = 1.5f;
 	public void ActivateWindCrest()
 	{
-		if (!AllowCrestSkill || IsUsingBreakSkills)
+		if (!AllowCrestSkill || IsUsingBreakSkills || StageSettings.instance.CurrentRingCount == 0)
 			return;
 
 		if (UpdateCrestTimer())
-			Character.Effect.PlayWindCrest();
+		{
+			Character.MoveSpeed *= WindCrestSpeedMultiplier;
+			StageSettings.instance.UpdateRingCount(1, StageSettings.MathModeEnum.Subtract, true);
+			Character.Effect.PlayWindCrestFX();
+		}
 	}
 
+	private readonly int DarkCrestSoulAmount = 3;
 	public void ActivateDarkCrest()
 	{
 		if (!AllowCrestSkill || IsUsingBreakSkills)
@@ -314,11 +323,13 @@ public partial class CharacterSkillManager : Node
 
 		if (UpdateCrestTimer())
 		{
-			Character.Effect.PlayDarkCrest();
+			Character.Effect.PlayDarkCrestFX();
 			ModifySoulGauge(DarkCrestSoulAmount);
 		}
 	}
 
+	private float crestTimer;
+	private readonly float CrestInterval = 1.0f;
 	private bool UpdateCrestTimer()
 	{
 		if (Mathf.IsEqualApprox(crestTimer, CrestInterval))

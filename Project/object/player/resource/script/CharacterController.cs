@@ -929,7 +929,7 @@ namespace Project.Gameplay
 			// Only apply landing boost when holding forward to avoid accidents (See Sonic and the Black Knight)
 			if (IsHoldingDirection(PathFollower.ForwardAngle))
 			{
-				Effect.StartWind();
+				Effect.PlayWindFX();
 				MovementAngle = PathFollower.ForwardAngle;
 				MoveSpeed = Mathf.Max(MoveSpeed, Skills.landingDashSpeed);
 			}
@@ -2153,7 +2153,7 @@ namespace Project.Gameplay
 		{
 			if (Skills.IsSkillEquipped(SkillKey.RocketStart) && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) // Successful starting boost
 			{
-				Effect.StartWind();
+				Effect.PlayWindFX();
 				MoveSpeed = Skills.countdownBoostSpeed;
 				AddLockoutData(new LockoutResource()
 				{
