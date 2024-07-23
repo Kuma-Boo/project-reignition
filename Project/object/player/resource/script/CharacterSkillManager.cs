@@ -300,7 +300,7 @@ public partial class CharacterSkillManager : Node
 	private readonly int DarkCrestSoulAmount = 3;
 	public void ActivateWindCrest()
 	{
-		if (!AllowCrestSkill)
+		if (!AllowCrestSkill || IsUsingBreakSkills)
 			return;
 
 		if (UpdateCrestTimer())
@@ -309,7 +309,7 @@ public partial class CharacterSkillManager : Node
 
 	public void ActivateDarkCrest()
 	{
-		if (!AllowCrestSkill)
+		if (!AllowCrestSkill || IsUsingBreakSkills)
 			return;
 
 		if (UpdateCrestTimer())
@@ -321,13 +321,13 @@ public partial class CharacterSkillManager : Node
 
 	private bool UpdateCrestTimer()
 	{
-		if (Mathf.IsZeroApprox(crestTimer))
+		if (Mathf.IsEqualApprox(crestTimer, CrestInterval))
 		{
-			crestTimer = CrestInterval;
+			crestTimer = 0;
 			return true;
 		}
 
-		crestTimer = Mathf.MoveToward(crestTimer, 0, PhysicsManager.physicsDelta);
+		crestTimer = Mathf.MoveToward(crestTimer, CrestInterval, PhysicsManager.physicsDelta);
 		return false;
 	}
 

@@ -824,7 +824,8 @@ namespace Project.Gameplay
 
 		private void UpdateGroundActions()
 		{
-			if (GroundSettings.GetSpeedRatioClamped(MoveSpeed) > CharacterAnimator.RunRatio)
+			if (GroundSettings.GetSpeedRatioClamped(MoveSpeed) > CharacterAnimator.RunRatio &&
+				Stage.IsLevelIngame)
 			{
 				if (Skills.IsSkillEquipped(SkillKey.CrestWind))
 					Skills.ActivateWindCrest();
