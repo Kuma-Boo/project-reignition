@@ -27,12 +27,6 @@ public partial class CharacterSkillManager : Node
 	// Default ground settings
 	[Export]
 	public int baseGroundSpeed;
-	[Export(PropertyHint.Range, "1,2,.1f")]
-	private float groundSpeedLowRatio = 1.1f;
-	[Export(PropertyHint.Range, "1,2,.1f")]
-	private float groundSpeedMediumRatio = 1.3f;
-	[Export(PropertyHint.Range, "1,2,.1f")]
-	private float groundSpeedHighRatio = 1.5f;
 	[Export]
 	private int baseGroundTraction;
 	[Export]
@@ -50,6 +44,14 @@ public partial class CharacterSkillManager : Node
 	/// <summary> How quickly to turnaround when at top speed. </summary>
 	[Export]
 	public float TurnTurnaround { get; private set; }
+	[Export(PropertyHint.Range, "1,2,.1f")]
+	private float groundSpeedLowRatio = 1.1f;
+	[Export(PropertyHint.Range, "1,2,.1f")]
+	private float groundSpeedMediumRatio = 1.3f;
+	[Export(PropertyHint.Range, "1,2,.1f")]
+	private float groundSpeedHighRatio = 1.5f;
+	[Export(PropertyHint.Range, "1,5,.1f")]
+	private float tractionHighRatio = 2f;
 
 	public float GetBaseSpeedRatio()
 	{
@@ -69,6 +71,8 @@ public partial class CharacterSkillManager : Node
 
 		return 1.0f;
 	}
+
+	private float GetTractionRatio() => IsSkillEquipped(SkillKey.AccelerationUp) ? tractionHighRatio : 1.0f;
 
 	[ExportSubgroup("Air Settings")]
 	// Default air settings
@@ -196,12 +200,11 @@ public partial class CharacterSkillManager : Node
 
 	private void SetUpStats() // Stuff like upgradable speed, increased handling, etc.
 	{
-		// TODO Interpolate values based on skill ring settings
 		// Create MovementSettings based on skills
 		GroundSettings = new()
 		{
 			Speed = baseGroundSpeed * GetBaseSpeedRatio(),
-			Traction = baseGroundTraction,
+			Traction = baseGroundTraction * GetTractionRatio(),
 			Friction = baseGroundFriction,
 			Overspeed = baseGroundOverspeed,
 			Turnaround = baseGroundTurnaround,
