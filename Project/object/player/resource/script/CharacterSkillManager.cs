@@ -27,6 +27,12 @@ public partial class CharacterSkillManager : Node
 	// Default ground settings
 	[Export]
 	private int baseGroundSpeed;
+	[Export(PropertyHint.Range, "1,2,.1f")]
+	private float groundSpeedLowRatio = 1.1f;
+	[Export(PropertyHint.Range, "1,2,.1f")]
+	private float groundSpeedMediumRatio = 1.3f;
+	[Export(PropertyHint.Range, "1,2,.1f")]
+	private float groundSpeedHighRatio = 1.5f;
 	[Export]
 	private int baseGroundTraction;
 	[Export]
@@ -44,6 +50,25 @@ public partial class CharacterSkillManager : Node
 	/// <summary> How quickly to turnaround when at top speed. </summary>
 	[Export]
 	public float TurnTurnaround { get; private set; }
+
+	public float GetBaseSpeedRatio()
+	{
+		if (IsSkillEquipped(SkillKey.SpeedUp))
+		{
+			switch (GetAugmentIndex(SkillKey.SpeedUp))
+			{
+				case 0:
+					return groundSpeedLowRatio;
+				case 1:
+					return groundSpeedMediumRatio;
+				case 2:
+				case 3:
+					return groundSpeedHighRatio;
+			}
+		}
+
+		return 1.0f;
+	}
 
 	[ExportSubgroup("Air Settings")]
 	// Default air settings
@@ -175,7 +200,7 @@ public partial class CharacterSkillManager : Node
 		// Create MovementSettings based on skills
 		GroundSettings = new()
 		{
-			Speed = baseGroundSpeed,
+			Speed = baseGroundSpeed * GetBaseSpeedRatio(),
 			Traction = baseGroundTraction,
 			Friction = baseGroundFriction,
 			Overspeed = baseGroundOverspeed,
@@ -246,7 +271,6 @@ public partial class CharacterSkillManager : Node
 	[Export]
 	public float landingDashSpeed;
 	private bool AllowCrestSkill;
-
 	private void SetUpSkills()
 	{
 		// Expand hitbox if skills is equipped
@@ -304,12 +328,17 @@ public partial class CharacterSkillManager : Node
 	private readonly float WindCrestSpeedMultiplier = 1.5f;
 	public void ActivateWindCrest()
 	{
-		if (!AllowCrestSkill || IsUsingBreakSkills || StageSettings.instance.CurrentRingCount == 0)
+		if (!AllowCrestSkill ||
+			IsUsingBreakSkills ||
+			Character.ActionState != CharacterController.ActionStates.Normal ||
+			StageSettings.instance.CurrentRingCount == 0)
+		{
 			return;
+		}
 
 		if (UpdateCrestTimer())
 		{
-			Character.MoveSpeed *= WindCrestSpeedMultiplier;
+			Character.MoveSpeed = Mathf.Max(Character.MoveSpeed, GroundSettings.Speed * WindCrestSpeedMultiplier);
 			StageSettings.instance.UpdateRingCount(1, StageSettings.MathModeEnum.Subtract, true);
 			Character.Effect.PlayWindCrestFX();
 		}

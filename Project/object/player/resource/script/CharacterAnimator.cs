@@ -241,7 +241,7 @@ public partial class CharacterAnimator : Node3D
 				else if (speedRatio >= RunRatio) // Running
 				{
 					float extraSpeed = Mathf.Clamp((speedRatio - 1.0f) * 5.0f, 0f, 2f);
-					targetAnimationSpeed = 2.5f + extraSpeed;
+					targetAnimationSpeed = (2.5f + extraSpeed) * Character.Skills.GetBaseSpeedRatio();
 				}
 				else // Jogging
 				{

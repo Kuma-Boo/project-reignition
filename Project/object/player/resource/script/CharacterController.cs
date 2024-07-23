@@ -1456,6 +1456,9 @@ namespace Project.Gameplay
 			if (Skills.IsSkillEquipped(SkillKey.RingDamage))
 				ringLoss -= 10;
 
+			if (Skills.IsSkillEquipped(SkillKey.SpeedUp) && Skills.GetAugmentIndex(SkillKey.SpeedUp) == 3)
+				ringLoss -= 10;
+
 			// Lose rings
 			ringLoss = Mathf.Max(ringLoss, 0);
 			Stage.UpdateRingCount(ringLoss, StageSettings.MathModeEnum.Subtract);
