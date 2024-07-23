@@ -51,8 +51,10 @@ public class SkillRing
 	}
 
 	/// <summary> Checks whether a conflicting skill is already equipped. </summary>
-	public SkillKey IsConflictingSkillEquipped(SkillResource skill)
+	public SkillKey IsConflictingSkillEquipped(SkillKey key)
 	{
+		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
+
 		if (skill.SkillConflicts == null)
 			return SkillKey.Max;
 
@@ -79,7 +81,8 @@ public class SkillRing
 		SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(key);
 
 		// Process conflicts
-		SkillResource conflict = Runtime.Instance.SkillList.GetSkill(SaveManager.ActiveSkillRing.IsConflictingSkillEquipped(baseSkill));
+		SkillKey conflictingKey = SaveManager.ActiveSkillRing.IsConflictingSkillEquipped(baseSkill.Key);
+		SkillResource conflict = Runtime.Instance.SkillList.GetSkill(conflictingKey);
 		if (conflict != null)
 		{
 			GD.Print($"You cannot equip {conflict.NameKey} when {baseSkill.NameKey} is active.");
@@ -87,7 +90,7 @@ public class SkillRing
 		}
 
 		// Process augments
-		if (baseSkill.Augments != null && baseSkill.Augments.Count != 0)
+		if (baseSkill.HasAugments)
 		{
 			SkillResource augment = baseSkill.GetAugment(augmentIndex);
 			if (augment == null)
@@ -228,6 +231,8 @@ public enum SkillKey
 	// Control skills
 	Autorun,
 	SpeedUp, // Increases Sonic's top speed
+	SlowTurn, // Decreases Sonic's turning sensitivity
+	QuickTurn, // Increases Sonic's turning sensitivity
 	TractionUp, // Increases Sonic's traction
 	TurnaroundUp, // Increases Sonic's friction
 

@@ -35,15 +35,6 @@ public partial class CharacterSkillManager : Node
 	private int baseGroundOverspeed;
 	[Export]
 	private int baseGroundTurnaround;
-	/// <summary> How quickly to turn when moving slowly. </summary>
-	[Export]
-	public float MinTurnAmount { get; private set; }
-	/// <summary> How quickly to turn when moving at top speed. </summary>
-	[Export]
-	public float MaxTurnAmount { get; private set; }
-	/// <summary> How quickly to turnaround when at top speed. </summary>
-	[Export]
-	public float TurnTurnaround { get; private set; }
 	[Export(PropertyHint.Range, "1,2,.1f")]
 	private float groundSpeedLowRatio = 1.1f;
 	[Export(PropertyHint.Range, "1,2,.1f")]
@@ -97,6 +88,57 @@ public partial class CharacterSkillManager : Node
 	public float perfectHomingAttackSpeed;
 	[Export]
 	public float homingAttackAcceleration;
+
+	[ExportSubgroup("Turn Settings")]
+	[Export]
+	private float baseMinTurn = .1f;
+	[Export]
+	private float baseMaxTurn = .4f;
+	[Export]
+	private float baseTurnTurnaround = .25f;
+	[Export(PropertyHint.Range, "0,5,.1f")]
+	private float quickTurnLowRatio = .9f;
+	[Export(PropertyHint.Range, "0,5,.1f")]
+	private float quickTurnMediumRatio = .7f;
+	[Export(PropertyHint.Range, "0,5,.1f")]
+	private float quickTurnHighRatio = .5f;
+	[Export(PropertyHint.Range, "0,5,.1f")]
+	private float slowTurnLowRatio = 1.2f;
+	[Export(PropertyHint.Range, "0,5,.1f")]
+	private float slowTurnMediumRatio = 1.5f;
+	[Export(PropertyHint.Range, "0,5,.1f")]
+	private float slowTurnHighRatio = 2f;
+
+	/// <summary> How quickly to turn when moving slowly. </summary>
+	public float MinTurnAmount { get; private set; }
+	/// <summary> How quickly to turn when moving at top speed. </summary>
+	public float MaxTurnAmount { get; private set; }
+	/// <summary> How quickly to turnaround when at top speed. </summary>
+	public float TurnTurnaround { get; private set; }
+	public float GetTurnRatio()
+	{
+		if (IsSkillEquipped(SkillKey.QuickTurn))
+		{
+			return GetAugmentIndex(SkillKey.QuickTurn) switch
+			{
+				1 => quickTurnMediumRatio,
+				2 => quickTurnHighRatio,
+				_ => quickTurnLowRatio,
+			};
+		}
+
+		if (IsSkillEquipped(SkillKey.SlowTurn))
+		{
+			return GetAugmentIndex(SkillKey.SlowTurn) switch
+			{
+				1 => slowTurnMediumRatio,
+				2 => slowTurnHighRatio,
+				_ => slowTurnLowRatio,
+			};
+		}
+
+		return 1.0f;
+	}
 
 	[ExportSubgroup("Slide Settings")]
 	/// <summary> Slide speed when starting from a standstill. </summary>
@@ -256,6 +298,10 @@ public partial class CharacterSkillManager : Node
 			Friction = baseGrindFriction,
 			Turnaround = baseGrindTurnaround,
 		};
+
+		MinTurnAmount = baseMinTurn;
+		MaxTurnAmount = baseMaxTurn * GetTurnRatio();
+		TurnTurnaround = baseTurnTurnaround * Mathf.Min(GetTurnRatio(), 1f);
 	}
 	#endregion
 

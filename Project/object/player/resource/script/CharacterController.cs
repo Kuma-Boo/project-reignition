@@ -707,9 +707,7 @@ namespace Project.Gameplay
 			// Is the player trying to recenter themselves?
 			bool isTurningAround = !IsHoldingDirection(PathFollower.BackAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
 			if (isTurningAround)
-			{
 				maxTurnAmount = Skills.TurnTurnaround;
-			}
 
 			float turnSmoothing = Mathf.Lerp(Skills.MinTurnAmount, maxTurnAmount, speedRatio);
 
