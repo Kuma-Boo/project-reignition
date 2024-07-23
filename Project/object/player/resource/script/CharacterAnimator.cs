@@ -229,6 +229,7 @@ public partial class CharacterAnimator : Node3D
 			}
 			else // Moving forward
 			{
+				float trueSpeedRatio = Character.MoveSpeed / Character.Skills.baseGroundSpeed;
 				if (DisabledSpeedSmoothing)
 					idleBlend = 1;
 				else
@@ -238,18 +239,18 @@ public partial class CharacterAnimator : Node3D
 				{
 					targetAnimationSpeed = 4f;
 				}
-				else if (speedRatio >= RunRatio) // Running
+				else if (trueSpeedRatio >= RunRatio) // Running
 				{
-					float extraSpeed = Mathf.Clamp((speedRatio - 1.0f) * 5.0f, 0f, 2f);
-					targetAnimationSpeed = (2.5f + extraSpeed) * Character.Skills.GetBaseSpeedRatio();
+					float extraSpeed = Mathf.Clamp((trueSpeedRatio - 1.0f) * 5.0f, 0f, 2f);
+					targetAnimationSpeed = 2.5f + extraSpeed;
 				}
 				else // Jogging
 				{
-					targetAnimationSpeed = movementAnimationSpeedCurve.Sample(speedRatio / RunRatio); // Normalize speed ratio
+					targetAnimationSpeed = movementAnimationSpeedCurve.Sample(trueSpeedRatio / RunRatio); // Normalize speed ratio
 
 					// Speed up animation if player is trying to start running
 					if (Character.InputVector.Length() >= .5f &&
-						speedRatio < .3f &&
+						trueSpeedRatio < .3f &&
 						!Character.IsOnWall())
 					{
 						targetAnimationSpeed = 2.5f;

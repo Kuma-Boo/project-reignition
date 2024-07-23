@@ -26,7 +26,7 @@ public partial class CharacterSkillManager : Node
 	[ExportSubgroup("Ground Settings")]
 	// Default ground settings
 	[Export]
-	private int baseGroundSpeed;
+	public int baseGroundSpeed;
 	[Export(PropertyHint.Range, "1,2,.1f")]
 	private float groundSpeedLowRatio = 1.1f;
 	[Export(PropertyHint.Range, "1,2,.1f")]
