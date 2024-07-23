@@ -111,6 +111,7 @@ public partial class SaveManager : Node
 		public int antiAliasing = 1; // Default to FXAA
 		public bool useHDBloom = true;
 		public bool useMotionBlur = true;
+		public bool useScreenShake = true;
 		public int screenShake = 100;
 		public QualitySetting softShadowQuality = QualitySetting.Medium;
 		public QualitySetting postProcessingQuality = QualitySetting.Medium;
@@ -139,7 +140,7 @@ public partial class SaveManager : Node
 		/// <summary> Creates a dictionary based on config data. </summary>
 		public Dictionary ToDictionary()
 		{
-			Dictionary dictionary = new()
+			return new()
 			{
 				// Video
 				{ nameof(targetDisplay), targetDisplay },
@@ -155,6 +156,9 @@ public partial class SaveManager : Node
 				{ nameof(softShadowQuality), (int)softShadowQuality },
 				{ nameof(postProcessingQuality), (int)postProcessingQuality },
 				{ nameof(reflectionQuality), (int)reflectionQuality },
+				{ nameof(useMotionBlur), useMotionBlur },
+				{ nameof(useScreenShake), useScreenShake },
+				{ nameof(screenShake), screenShake },
 
 				// Audio
 				{ nameof(isMasterMuted), isMasterMuted },
@@ -175,8 +179,6 @@ public partial class SaveManager : Node
 				{ nameof(voiceLanguage), (int)voiceLanguage },
 				{ nameof(textLanguage), (int)textLanguage },
 			};
-
-			return dictionary;
 		}
 
 		/// <summary> Sets config data based on dictionary. </summary>
@@ -208,6 +210,12 @@ public partial class SaveManager : Node
 				postProcessingQuality = (QualitySetting)(int)var;
 			if (dictionary.TryGetValue(nameof(reflectionQuality), out var))
 				reflectionQuality = (QualitySetting)(int)var;
+			if (dictionary.TryGetValue(nameof(useMotionBlur), out var))
+				useMotionBlur = (bool)var;
+			if (dictionary.TryGetValue(nameof(useScreenShake), out var))
+				useScreenShake = (bool)var;
+			if (dictionary.TryGetValue(nameof(screenShake), out var))
+				screenShake = (int)var;
 
 			if (dictionary.TryGetValue(nameof(isMasterMuted), out var))
 				isMasterMuted = (bool)var;

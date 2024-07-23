@@ -79,9 +79,9 @@ public partial class CameraController : Node3D
 			IsDefeatFreezeActive = false;
 		}
 
-		UpdateMotionBlur();
-		UpdateScreenShake();
 		UpdateGameplayCamera();
+		UpdateScreenShake();
+		UpdateMotionBlur();
 	}
 
 	public override void _Process(double _)
@@ -628,7 +628,6 @@ public partial class CameraController : Node3D
 		UpdateGameplayCamera();
 	}
 
-	public Vector3 ShakeRotation { get; set; }
 	private readonly List<CameraShakeSettings> shakeSettings = [];
 
 	public void StartCameraShake(CameraShakeSettings settings)
@@ -654,7 +653,7 @@ public partial class CameraController : Node3D
 	{
 		StartCameraShake(new()
 		{
-			magnitude = Vector3.One.RemoveDepth() * .5f,
+			magnitude = Vector3.One.RemoveDepth() * .4f,
 			intensity = Vector3.One * 50.0f,
 			duration = length,
 		});
@@ -662,7 +661,10 @@ public partial class CameraController : Node3D
 
 	private void UpdateScreenShake()
 	{
-		ShakeRotation = Vector3.Zero;
+		if (!SaveManager.Config.useScreenShake)
+			return;
+
+		float screenShakeRatio = PhysicsManager.physicsDelta * SaveManager.Config.screenShake * 0.01f;
 		for (int i = shakeSettings.Count - 1; i >= 0; i--)
 		{
 			if (shakeSettings[i].IsFinished)
@@ -673,8 +675,7 @@ public partial class CameraController : Node3D
 			}
 
 			Vector3 rotationAmount = shakeSettings[i].SimulateShake(PhysicsManager.physicsDelta);
-			ShakeRotation += rotationAmount * PhysicsManager.physicsDelta;
-			cameraRoot.Rotation += rotationAmount * PhysicsManager.physicsDelta * SaveManager.Config.screenShake * 0.01f;
+			cameraRoot.Rotation += rotationAmount * screenShakeRatio;
 		}
 	}
 

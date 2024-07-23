@@ -324,8 +324,10 @@ public partial class Options : Menu
 			videoLabels[8].Text = CalculateQualityString(SaveManager.Config.softShadowQuality);
 		videoLabels[9].Text = CalculateQualityString(SaveManager.Config.postProcessingQuality);
 		videoLabels[10].Text = CalculateQualityString(SaveManager.Config.reflectionQuality);
+		videoLabels[11].Text = SaveManager.Config.useMotionBlur ? ENABLED_STRING : DISABLED_STRING;
+		videoLabels[12].Text = SaveManager.Config.useScreenShake ? $"{SaveManager.Config.screenShake}%" : DISABLED_STRING;
 
-		audioLabels[0].Text = SaveManager.Config.isMasterMuted ? MUTE_STRING : $"{SaveManager.Config.masterVolume}% ";
+		audioLabels[0].Text = SaveManager.Config.isMasterMuted ? MUTE_STRING : $"{SaveManager.Config.masterVolume}%";
 		audioLabels[1].Text = SaveManager.Config.isBgmMuted ? MUTE_STRING : $"{SaveManager.Config.bgmVolume}%";
 		audioLabels[2].Text = SaveManager.Config.isSfxMuted ? MUTE_STRING : $"{SaveManager.Config.sfxVolume}%";
 		audioLabels[3].Text = SaveManager.Config.isVoiceMuted ? MUTE_STRING : $"{SaveManager.Config.voiceVolume}%";
@@ -472,10 +474,7 @@ public partial class Options : Menu
 		else if (VerticalSelection == 4)
 		{
 			SaveManager.Config.renderScale += direction * 10;
-			if (SaveManager.Config.renderScale < 50)
-				SaveManager.Config.renderScale = 150;
-			else if (SaveManager.Config.renderScale >= 150)
-				SaveManager.Config.renderScale = 50;
+			SaveManager.Config.renderScale = Mathf.Clamp(SaveManager.Config.renderScale, 50, 150);
 		}
 		else if (VerticalSelection == 5)
 		{
@@ -509,6 +508,18 @@ public partial class Options : Menu
 			int reflectionQuality = (int)SaveManager.Config.reflectionQuality;
 			reflectionQuality = WrapSelection(reflectionQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.reflectionQuality = (SaveManager.QualitySetting)reflectionQuality;
+		}
+		else if (VerticalSelection == 11)
+		{
+			SaveManager.Config.useMotionBlur = !SaveManager.Config.useMotionBlur;
+		}
+		else if (VerticalSelection == 12)
+		{
+			if (!IsSlideVolumeValid(SaveManager.Config.screenShake, direction))
+				return false;
+
+			SaveManager.Config.useScreenShake = true;
+			SaveManager.Config.screenShake = SlideVolume(SaveManager.Config.screenShake, direction);
 		}
 
 		return true;
@@ -619,6 +630,10 @@ public partial class Options : Menu
 		{
 			SaveManager.Config.useFullscreen = !SaveManager.Config.useFullscreen;
 			SaveManager.Config.windowSize = FindLargestWindowResolution();
+		}
+		else if (VerticalSelection == 12)
+		{
+			SaveManager.Config.useScreenShake = !SaveManager.Config.useScreenShake;
 		}
 		else
 		{

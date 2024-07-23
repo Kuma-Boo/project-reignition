@@ -226,7 +226,7 @@ public partial class DebugManager : Node2D
 	private void ToggleInfiniteRings(bool enabled)
 	{
 		InfiniteRings = enabled;
-		StageSettings.instance.UpdateRingCount(0, StageSettings.MathModeEnum.Replace, true);
+		StageSettings.instance?.UpdateRingCount(0, StageSettings.MathModeEnum.Replace, true);
 	}
 	/// <summary> Skip countdowns for faster debugging. </summary>
 	public bool SkipCountdown { get; private set; }
