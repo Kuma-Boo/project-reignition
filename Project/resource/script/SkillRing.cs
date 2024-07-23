@@ -228,7 +228,8 @@ public enum SkillKey
 	// Control skills
 	Autorun,
 	SpeedUp, // Increases Sonic's top speed
-	AccelerationUp, // Increases Sonic's traction
+	TractionUp, // Increases Sonic's traction
+	TurnaroundUp, // Increases Sonic's friction
 
 	// Passive skills
 	AllRounder, // Reduces acceleration loss caused by steep terrain

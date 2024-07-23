@@ -52,6 +52,8 @@ public partial class CharacterSkillManager : Node
 	private float groundSpeedHighRatio = 1.5f;
 	[Export(PropertyHint.Range, "1,5,.1f")]
 	private float tractionHighRatio = 2f;
+	[Export(PropertyHint.Range, "1,5,.1f")]
+	private float turnaroundHighRatio = 2f;
 
 	public float GetBaseSpeedRatio()
 	{
@@ -72,7 +74,8 @@ public partial class CharacterSkillManager : Node
 		return 1.0f;
 	}
 
-	private float GetTractionRatio() => IsSkillEquipped(SkillKey.AccelerationUp) ? tractionHighRatio : 1.0f;
+	private float GetTractionRatio() => IsSkillEquipped(SkillKey.TractionUp) ? tractionHighRatio : 1.0f;
+	private float GetTurnaroundRatio() => IsSkillEquipped(SkillKey.TurnaroundUp) ? turnaroundHighRatio : 1.0f;
 
 	[ExportSubgroup("Air Settings")]
 	// Default air settings
@@ -207,7 +210,7 @@ public partial class CharacterSkillManager : Node
 			Traction = baseGroundTraction * GetTractionRatio(),
 			Friction = baseGroundFriction,
 			Overspeed = baseGroundOverspeed,
-			Turnaround = baseGroundTurnaround,
+			Turnaround = baseGroundTurnaround * GetTurnaroundRatio(),
 		};
 
 		AirSettings = new()
