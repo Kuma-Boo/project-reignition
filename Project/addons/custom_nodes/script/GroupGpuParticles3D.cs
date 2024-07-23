@@ -14,6 +14,8 @@ public partial class GroupGpuParticles3D : GpuParticles3D
 	public bool IsGroupEmitting { get; private set; }
 	[Export]
 	private bool EditorRestartGroup { get; set; }
+	[Export]
+	private bool EditorStopGroup { get; set; }
 
 	public void SetEmitting(bool value)
 	{
@@ -37,6 +39,9 @@ public partial class GroupGpuParticles3D : GpuParticles3D
 	{
 		if (EditorRestartGroup)
 			RestartGroup();
+
+		if (EditorStopGroup)
+			SetEmitting(false);
 
 		base._PhysicsProcess(delta);
 
