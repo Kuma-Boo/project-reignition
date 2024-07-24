@@ -1,4 +1,4 @@
-[gd_scene load_steps=167 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=168 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -240,6 +240,29 @@ lightmap_size_hint = Vector2i(4, 27)
 material = ExtResource("20_rtch5")
 size = Vector2(0.5, 5)
 center_offset = Vector3(0, 3, 0)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_eiurf"]
+lifetime_randomness = 0.4
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.3
+angle_min = -45.0
+angle_max = 45.0
+direction = Vector3(0, 1, 0)
+spread = 20.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = 1.0
+linear_accel_max = 8.0
+radial_accel_min = 5.0
+radial_accel_max = 10.0
+alpha_curve = SubResource("CurveTexture_o0jhf")
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+anim_offset_max = 1.0
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kmn7j"]
 lifetime_randomness = 0.4
@@ -968,29 +991,30 @@ alpha_curve = SubResource("CurveTexture_5h5ag")
 [sub_resource type="QuadMesh" id="QuadMesh_uttkp"]
 material = ExtResource("31_4gjme")
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "dustParticle", "windParticle", "stompFX", "aegisSlideParticle", "expertDriftParticle", "darkCrestParticle", "windCrestParticle", "chargeFX", "fullChargeFX", "grindrailVfx", "grindrailBurstVfx", "grindrailSfx", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("actionChannel", "trailFX", "spinFX", "dustParticle", "windParticle", "fireParticle", "stompParticle", "aegisSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "grindrailSfx", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 actionChannel = NodePath("SFX/ActionChannel")
 trailFX = NodePath("VFX/ActionFX/TrailMesh")
 spinFX = NodePath("VFX/ActionFX/SpinMesh")
-dustParticle = NodePath("VFX/ActionFX/DustParticle")
+dustParticle = NodePath("VFX/ActionFX/Dust")
 windParticle = NodePath("VFX/ActionFX/Wind")
-stompFX = NodePath("VFX/ActionFX/Stomp")
+fireParticle = NodePath("VFX/ActionFX/Fire")
+stompParticle = NodePath("VFX/ActionFX/Stomp")
 aegisSlideParticle = NodePath("VFX/ActionFX/AegisFeather")
-expertDriftParticle = NodePath("VFX/ActionFX/ExpertDriftFXParticle")
+darkSpiralParticle = NodePath("VFX/ActionFX/DarkSpiral")
 darkCrestParticle = NodePath("VFX/CrestFX/DarkCrestParticle")
 windCrestParticle = NodePath("VFX/CrestFX/WindCrestParticle")
-chargeFX = NodePath("VFX/RailFX/ChargeParticles")
-fullChargeFX = NodePath("VFX/RailFX/FullChargeParticles")
-grindrailVfx = NodePath("VFX/RailFX/GrindrailSparksParticle")
-grindrailBurstVfx = NodePath("VFX/RailFX/GrindrailBurstParticle")
+chargeParticle = NodePath("VFX/RailFX/Charge")
+fullChargeParticle = NodePath("VFX/RailFX/FullCharge")
+grindrailSparkParticle = NodePath("VFX/RailFX/GrindrailSparks")
+grindrailBurstParticle = NodePath("VFX/RailFX/GrindrailBurst")
 grindrailSfx = NodePath("SFX/GrindrailSFX")
 materialSFXLibrary = ExtResource("5_h4i1s")
 footstepChannel = NodePath("SFX/FootstepChannel")
 landingChannel = NodePath("SFX/LandingChannel")
-landingParticles = [NodePath("VFX/LandingFX/LandingDustParticle"), NodePath("VFX/LandingFX/LandingSandParticle"), NodePath("VFX/LandingFX/LandingGrassParticle"), null, null, null, NodePath("VFX/LandingFX/LandingWaterParticle")]
-stepEmitters = [NodePath("VFX/StepFX/PavementStepParticle"), NodePath("VFX/StepFX/SandStepParticle"), NodePath("VFX/StepFX/GrassStepParticle"), null, null, null, NodePath("VFX/StepFX/WaterStepParticle")]
+landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, null, null, NodePath("VFX/LandingFX/LandingWater")]
+stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, null, null, NodePath("VFX/StepFX/WaterStep")]
 footprintDecal = ExtResource("4_8hf43")
 waterStep = NodePath("VFX/StepFX/WaterStepRing")
 voiceLibrary = ExtResource("33_pyanb")
@@ -1020,7 +1044,7 @@ bus = &"GAME SFX"
 
 [node name="ActionFX" type="Node3D" parent="VFX"]
 
-[node name="DustParticle" type="GPUParticles3D" parent="VFX/ActionFX"]
+[node name="Dust" type="GPUParticles3D" parent="VFX/ActionFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 layers = 32
 cast_shadow = 0
@@ -1035,7 +1059,7 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_vj0ti")
 draw_pass_1 = SubResource("QuadMesh_g63sh")
 
-[node name="ExpertDriftFXParticle" type="GPUParticles3D" parent="VFX/ActionFX"]
+[node name="DarkSpiral" type="GPUParticles3D" parent="VFX/ActionFX"]
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
@@ -1088,6 +1112,7 @@ process_material = SubResource("ParticleProcessMaterial_bhvq3")
 draw_pass_1 = SubResource("QuadMesh_xguqr")
 script = ExtResource("21_nenuf")
 subSystems = [NodePath("Flame")]
+EditorStopGroup = true
 
 [node name="Flame" type="GPUParticles3D" parent="VFX/ActionFX/Stomp"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0.5)
@@ -1121,6 +1146,22 @@ transform_align = 2
 process_material = SubResource("ParticleProcessMaterial_c4e0w")
 draw_pass_1 = SubResource("QuadMesh_6vbwi")
 
+[node name="Fire" type="GPUParticles3D" parent="VFX/ActionFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.4
+one_shot = true
+preprocess = 0.1
+explosiveness = 0.8
+randomness = 0.3
+fixed_fps = 60
+interpolate = false
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_eiurf")
+draw_pass_1 = SubResource("QuadMesh_y03cx")
+
 [node name="AegisFeather" type="GPUParticles3D" parent="VFX/ActionFX" node_paths=PackedStringArray("subSystems")]
 layers = 32
 emitting = false
@@ -1143,7 +1184,7 @@ draw_pass_1 = SubResource("QuadMesh_nrasy")
 
 [node name="LandingFX" type="Node3D" parent="VFX"]
 
-[node name="LandingWaterParticle" type="GPUParticles3D" parent="VFX/LandingFX" node_paths=PackedStringArray("subSystems")]
+[node name="LandingWater" type="GPUParticles3D" parent="VFX/LandingFX" node_paths=PackedStringArray("subSystems")]
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
@@ -1160,7 +1201,7 @@ draw_pass_1 = SubResource("PlaneMesh_xc2cj")
 script = ExtResource("21_nenuf")
 subSystems = [NodePath("Splash"), NodePath("Splatter")]
 
-[node name="Splash" type="GPUParticles3D" parent="VFX/LandingFX/LandingWaterParticle"]
+[node name="Splash" type="GPUParticles3D" parent="VFX/LandingFX/LandingWater"]
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
@@ -1175,7 +1216,7 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_r6jjp")
 draw_pass_1 = SubResource("QuadMesh_jr0lt")
 
-[node name="Splatter" type="GPUParticles3D" parent="VFX/LandingFX/LandingWaterParticle"]
+[node name="Splatter" type="GPUParticles3D" parent="VFX/LandingFX/LandingWater"]
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
@@ -1189,7 +1230,7 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_60tjv")
 draw_pass_1 = SubResource("QuadMesh_ftpuj")
 
-[node name="LandingSandParticle" type="GPUParticles3D" parent="VFX/LandingFX"]
+[node name="LandingSand" type="GPUParticles3D" parent="VFX/LandingFX"]
 unique_name_in_owner = true
 layers = 32
 transparency = 0.5
@@ -1208,7 +1249,7 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_crf5v")
 draw_pass_1 = SubResource("QuadMesh_m77c2")
 
-[node name="LandingDustParticle" type="GPUParticles3D" parent="VFX/LandingFX"]
+[node name="LandingDust" type="GPUParticles3D" parent="VFX/LandingFX"]
 layers = 32
 transparency = 0.8
 cast_shadow = 0
@@ -1226,7 +1267,7 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_dh0gg")
 draw_pass_1 = SubResource("QuadMesh_eevac")
 
-[node name="LandingGrassParticle" type="GPUParticles3D" parent="VFX/LandingFX"]
+[node name="LandingGrass" type="GPUParticles3D" parent="VFX/LandingFX"]
 layers = 32
 cast_shadow = 0
 emitting = false
@@ -1254,7 +1295,7 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_6of7b")
 draw_pass_1 = SubResource("PlaneMesh_0dgfc")
 
-[node name="WaterStepParticle" type="GPUParticles3D" parent="VFX/StepFX"]
+[node name="WaterStep" type="GPUParticles3D" parent="VFX/StepFX"]
 layers = 32
 cast_shadow = 0
 gi_mode = 0
@@ -1265,7 +1306,7 @@ interpolate = false
 process_material = SubResource("ParticleProcessMaterial_6ya5t")
 draw_pass_1 = SubResource("QuadMesh_002my")
 
-[node name="PavementStepParticle" type="GPUParticles3D" parent="VFX/StepFX"]
+[node name="PavementStep" type="GPUParticles3D" parent="VFX/StepFX"]
 layers = 32
 cast_shadow = 0
 gi_mode = 0
@@ -1276,7 +1317,7 @@ interpolate = false
 process_material = SubResource("ParticleProcessMaterial_k03e6")
 draw_pass_1 = SubResource("QuadMesh_gwbmp")
 
-[node name="SandStepParticle" type="GPUParticles3D" parent="VFX/StepFX" node_paths=PackedStringArray("subSystems")]
+[node name="SandStep" type="GPUParticles3D" parent="VFX/StepFX" node_paths=PackedStringArray("subSystems")]
 layers = 32
 transparency = 0.4
 cast_shadow = 0
@@ -1288,9 +1329,9 @@ interpolate = false
 process_material = SubResource("ParticleProcessMaterial_y45yr")
 draw_pass_1 = SubResource("QuadMesh_mxqfn")
 script = ExtResource("21_nenuf")
-subSystems = [NodePath("SandSplatter")]
+subSystems = [NodePath("Splatter")]
 
-[node name="SandSplatter" type="GPUParticles3D" parent="VFX/StepFX/SandStepParticle"]
+[node name="Splatter" type="GPUParticles3D" parent="VFX/StepFX/SandStep"]
 layers = 32
 cast_shadow = 0
 gi_mode = 0
@@ -1301,7 +1342,7 @@ interpolate = false
 process_material = SubResource("ParticleProcessMaterial_q7wh5")
 draw_pass_1 = SubResource("QuadMesh_qvron")
 
-[node name="GrassStepParticle" type="GPUParticles3D" parent="VFX/StepFX"]
+[node name="GrassStep" type="GPUParticles3D" parent="VFX/StepFX"]
 layers = 32
 cast_shadow = 0
 emitting = false
@@ -1314,7 +1355,7 @@ draw_pass_1 = SubResource("QuadMesh_vbyha")
 
 [node name="RailFX" type="Node3D" parent="VFX"]
 
-[node name="ChargeParticles" type="GPUParticles3D" parent="VFX/RailFX"]
+[node name="Charge" type="GPUParticles3D" parent="VFX/RailFX"]
 layers = 32
 cast_shadow = 0
 emitting = false
@@ -1327,7 +1368,7 @@ transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_q1f2b")
 draw_pass_1 = SubResource("QuadMesh_fco1t")
 
-[node name="FullChargeParticles" type="GPUParticles3D" parent="VFX/RailFX"]
+[node name="FullCharge" type="GPUParticles3D" parent="VFX/RailFX"]
 layers = 32
 cast_shadow = 0
 emitting = false
@@ -1340,7 +1381,7 @@ transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_q1f2b")
 draw_pass_1 = SubResource("QuadMesh_bhy5y")
 
-[node name="GrindrailSparksParticle" type="GPUParticles3D" parent="VFX/RailFX"]
+[node name="GrindrailSparks" type="GPUParticles3D" parent="VFX/RailFX"]
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
@@ -1357,7 +1398,7 @@ transform_align = 2
 process_material = ExtResource("6_v3ger")
 draw_pass_1 = SubResource("QuadMesh_mnxd4")
 
-[node name="GrindrailBurstParticle" type="GPUParticles3D" parent="VFX/RailFX"]
+[node name="GrindrailBurst" type="GPUParticles3D" parent="VFX/RailFX"]
 layers = 32
 cast_shadow = 0
 emitting = false

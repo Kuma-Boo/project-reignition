@@ -29,6 +29,8 @@ public partial class CharacterEffect : Node3D
 	public readonly StringName SidleSfx = "sidle";
 	private readonly StringName StompSfx = "stomp";
 	private readonly StringName WindSfx = "wind";
+	private readonly StringName FireSfx = "fire";
+	private readonly StringName DarkSfx = "dark";
 
 	#region Actions
 	// Actions (Jumping, sliding, etc)
@@ -68,13 +70,21 @@ public partial class CharacterEffect : Node3D
 	}
 
 	[Export]
-	private GroupGpuParticles3D stompFX;
+	private GpuParticles3D fireParticle;
+	public void PlayFireFX()
+	{
+		fireParticle.Restart();
+		PlayActionSFX(FireSfx);
+	}
+
+	[Export]
+	private GroupGpuParticles3D stompParticle;
 	public void StartStompFX()
 	{
-		stompFX.SetEmitting(true);
+		stompParticle.SetEmitting(true);
 		PlayActionSFX(StompSfx);
 	}
-	public void StopStompFX() => stompFX.SetEmitting(false);
+	public void StopStompFX() => stompParticle.SetEmitting(false);
 
 	[Export]
 	private GroupGpuParticles3D aegisSlideParticle;
@@ -82,8 +92,12 @@ public partial class CharacterEffect : Node3D
 	public void StopAegisFX() => aegisSlideParticle.SetEmitting(false);
 
 	[Export]
-	private GpuParticles3D expertDriftParticle;
-	public void PlayExpertDriftFX() => expertDriftParticle.Restart();
+	private GpuParticles3D darkSpiralParticle;
+	public void PlayDarkSpiralFX()
+	{
+		darkSpiralParticle.Restart();
+		PlayActionSFX(DarkSfx);
+	}
 
 	[Export]
 	private GroupGpuParticles3D darkCrestParticle;
@@ -93,31 +107,31 @@ public partial class CharacterEffect : Node3D
 	public void PlayWindCrestFX() => windCrestParticle.RestartGroup();
 
 	[Export]
-	private GpuParticles3D chargeFX;
+	private GpuParticles3D chargeParticle;
 	[Export]
-	private GpuParticles3D fullChargeFX;
+	private GpuParticles3D fullChargeParticle;
 	public void StartChargeFX()
 	{
-		chargeFX.Emitting = true;
-		chargeFX.Visible = true;
+		chargeParticle.Emitting = true;
+		chargeParticle.Visible = true;
 	}
 
 	public void StopChargeFX()
 	{
-		chargeFX.Emitting = false;
-		fullChargeFX.Emitting = false;
+		chargeParticle.Emitting = false;
+		fullChargeParticle.Emitting = false;
 	}
 
 	[Export]
-	private GpuParticles3D grindrailVfx;
+	private GpuParticles3D grindrailSparkParticle;
 	[Export]
-	private GpuParticles3D grindrailBurstVfx;
+	private GpuParticles3D grindrailBurstParticle;
 	[Export]
 	private AudioStreamPlayer grindrailSfx;
 	private bool isFadingRailSFX;
 	public void StartGrindFX(bool resetSFX)
 	{
-		grindrailVfx.Emitting = true;
+		grindrailSparkParticle.Emitting = true;
 		isFadingRailSFX = false;
 
 		if (resetSFX)
@@ -129,10 +143,10 @@ public partial class CharacterEffect : Node3D
 
 	public void FullGrindChargeFX()
 	{
-		chargeFX.Emitting = false;
-		chargeFX.Visible = false;
-		fullChargeFX.Emitting = true;
-		grindrailBurstVfx.Restart();
+		chargeParticle.Emitting = false;
+		chargeParticle.Visible = false;
+		fullChargeParticle.Emitting = true;
+		grindrailBurstParticle.Restart();
 	}
 
 	public void UpdateGrindFX(float speedRatio)
@@ -143,7 +157,7 @@ public partial class CharacterEffect : Node3D
 	public void StopGrindFX()
 	{
 		isFadingRailSFX = true; // Start fading sound effect
-		grindrailVfx.Emitting = false;
+		grindrailSparkParticle.Emitting = false;
 		StopChargeFX();
 	}
 	#endregion

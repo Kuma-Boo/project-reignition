@@ -255,17 +255,26 @@ public enum SkillKey
 	// Stomp skills
 	StompDash, // Gives a speed boost when stomping/jump canceling
 	StompAttack, // Replace jump cancel with an attack
-	RocketStart, // Press a button during countdown for a speedboost
 
 	// Jump skills
-	RankPreview, // Shows the current rank on the heads-up display
+	AccelJumpAttack, // Increases attack power of accel jump
+
+	// Landing skills
+	LandDash, // Gives a speed boost when landing
+
+	// Special skills
+	RocketStart, // Press a button during countdown for a speedboost
 	DownCancel, // Negate knockback by pressing the jump button
 	SplashJump, // Bounce the player when jump dashing into an obstacle
-	LandDash, // Gives a speed boost when landing
-	PerfectHomingAttack, // Perfect homing attack, Colors Ultimate style
 
+	// Experience skills
 	DriftExperience, // Manually perform a drift for more speed and points/exp
 
+	// New skills
+	RankPreview, // Shows the current rank on the heads-up display
+	PerfectHomingAttack, // Perfect homing attack, Colors Ultimate style
+
+	// Crest skills
 	CrestWind,
 	CrestFire,
 	CrestDark,

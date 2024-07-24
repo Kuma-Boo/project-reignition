@@ -998,6 +998,12 @@ namespace Project.Gameplay
 			Animator.JumpAccelAnimation();
 			VerticalSpeed = 5f; // Consistant accel jump height
 			isAccelerationJumpQueued = false; // Stop listening for an acceleration jump
+
+			if (Skills.IsSkillEquipped(SkillKey.AccelJumpAttack))
+			{
+				Effect.PlayFireFX();
+				AttackState = AttackStates.Weak;
+			}
 		}
 		#endregion
 
@@ -1453,7 +1459,11 @@ namespace Project.Gameplay
 				Skills.ModifySoulGauge(-Mathf.FloorToInt(Skills.SoulPower * .5f));
 			}
 
+			// Add in defense lowering augments
 			if (Skills.IsSkillEquipped(SkillKey.SpeedUp) && Skills.GetAugmentIndex(SkillKey.SpeedUp) == 3)
+				ringLoss += 20;
+
+			if (Skills.IsSkillEquipped(SkillKey.AccelJumpAttack) && Skills.GetAugmentIndex(SkillKey.AccelJumpAttack) == 1)
 				ringLoss += 20;
 
 			if (Skills.IsSkillEquipped(SkillKey.RingDamage))

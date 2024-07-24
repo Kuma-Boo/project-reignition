@@ -55,8 +55,6 @@ public partial class DriftTrigger : Area3D
 	[Export]
 	private AudioStreamPlayer sfx;
 	[Export]
-	private AudioStreamPlayer expertSfx;
-	[Export]
 	private LockoutResource lockout;
 	private float startingVolume;
 	private bool isFadingSFX;
@@ -166,10 +164,7 @@ public partial class DriftTrigger : Area3D
 				driftAnimationTimer = LaunchAnimationLength;
 
 				if (isManualDrift)
-				{
-					expertSfx.Play();
-					Character.Effect.PlayExpertDriftFX();
-				}
+					Character.Effect.PlayDarkSpiralFX();
 			}
 			else // Too early! Fail drift attempt and play a special animation?
 			{
