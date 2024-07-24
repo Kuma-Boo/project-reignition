@@ -827,6 +827,16 @@ namespace Project.Gameplay
 
 		private void UpdateGroundActions()
 		{
+			if (IsLockoutActive) // Controls locked out
+			{
+				if (ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnLand) && JustLandedOnGround) // Cancel lockout
+					RemoveLockoutData(ActiveLockoutData);
+				else if (ActiveLockoutData.disableActions)
+					return;
+			}
+
+			if (Skills.IsSpeedBreakActive) return;
+
 			if (GroundSettings.GetSpeedRatioClamped(MoveSpeed) > CharacterAnimator.RunRatio &&
 				Stage.IsLevelIngame)
 			{
@@ -840,16 +850,6 @@ namespace Project.Gameplay
 			{
 				Skills.ResetCrestTimer();
 			}
-
-			if (IsLockoutActive) // Controls locked out
-			{
-				if (ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnLand) && JustLandedOnGround) // Cancel lockout
-					RemoveLockoutData(ActiveLockoutData);
-				else if (ActiveLockoutData.disableActions)
-					return;
-			}
-
-			if (Skills.IsSpeedBreakActive) return;
 
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
 			{
@@ -1121,6 +1121,7 @@ namespace Project.Gameplay
 
 				Effect.PlayActionSFX(Effect.SlideSfx);
 				SetActionState(ActionStates.Sliding);
+				ChangeHitbox("slide");
 
 				if (Skills.IsSkillEquipped(SkillKey.SlideDefense))
 					Effect.StartAegisFX();
@@ -1129,9 +1130,8 @@ namespace Project.Gameplay
 					Effect.PlayFireFX();
 					Effect.StartVolcanoFX();
 					AttackState = AttackStates.Weak;
+					ChangeHitbox("volcano-slide");
 				}
-
-				ChangeHitbox("slide");
 			}
 			else
 			{
