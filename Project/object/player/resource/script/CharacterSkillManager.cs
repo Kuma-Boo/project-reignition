@@ -17,6 +17,7 @@ public partial class CharacterSkillManager : Node
 		// Determine the size of the soul gauge
 		MaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
 		timeBreakAnimator.Play("RESET");
+
 		SetUpStats();
 		SetUpSkills();
 	}
@@ -623,6 +624,9 @@ public partial class CharacterSkillManager : Node
 
 		if (IsSpeedBreakActive)
 		{
+			speedBreakAnimator.Play(SaveManager.Config.useMotionBlur ? "enable-blur" : "disable-blur");
+			speedBreakAnimator.Advance(0.0);
+
 			speedBreakAnimator.Play("start");
 			Character.Effect.PlayVoice("speed break");
 			Character.MovementAngle = Character.PathFollower.ForwardAngle;
