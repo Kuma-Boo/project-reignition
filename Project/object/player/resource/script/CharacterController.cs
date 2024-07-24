@@ -184,7 +184,7 @@ namespace Project.Gameplay
 		public float InputVertical => Input.GetAxis("move_up", "move_down");
 
 		/// <summary> Is the player holding in the specified direction? </summary>
-		public bool IsHoldingDirection(float refAngle, bool allowNullInputs = default)
+		public bool IsHoldingDirection(float refAngle, bool allowNullInputs = default, bool rawInputs = false)
 		{
 			if (!allowNullInputs)
 			{
@@ -198,7 +198,7 @@ namespace Project.Gameplay
 				}
 			}
 
-			float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(true), refAngle);
+			float delta = ExtensionMethods.DeltaAngleRad(GetInputAngle(!rawInputs), refAngle);
 			return delta < Mathf.Pi * .45f;
 		}
 

@@ -307,9 +307,9 @@ public partial class GrindRail : Area3D
 	{
 		jumpBufferTimer = 0;
 
-		//Check if the player is holding a direction parallel to rail and start a grindstep
-		isGrindstepping = Character.IsHoldingDirection(Character.MovementAngle + (Mathf.Pi * .5f)) ||
-			Character.IsHoldingDirection(Character.MovementAngle - (Mathf.Pi * .5f));
+		// Check if the player is holding a direction parallel to rail and start a grindstep
+		isGrindstepping = Character.IsHoldingDirection(Character.MovementAngle + (Mathf.Pi * .5f), true, false) ||
+			Character.IsHoldingDirection(Character.MovementAngle - (Mathf.Pi * .5f), true, false);
 
 		Deactivate();
 		if (isGrindstepping) // Grindstepping
