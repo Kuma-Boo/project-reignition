@@ -119,6 +119,11 @@ namespace Project.Gameplay
 			{
 				if (Skills.IsSkillEquipped(SkillKey.SlideDefense))
 					Effect.StopAegisFX();
+				if (Skills.IsSkillEquipped(SkillKey.SlideAttack))
+				{
+					AttackState = AttackStates.None;
+					Effect.StopVolcanoFX();
+				}
 
 				ChangeHitbox("RESET");
 				Animator.StopCrouching();
@@ -1119,6 +1124,12 @@ namespace Project.Gameplay
 
 				if (Skills.IsSkillEquipped(SkillKey.SlideDefense))
 					Effect.StartAegisFX();
+				if (Skills.IsSkillEquipped(SkillKey.SlideAttack))
+				{
+					Effect.PlayFireFX();
+					Effect.StartVolcanoFX();
+					AttackState = AttackStates.Weak;
+				}
 
 				ChangeHitbox("slide");
 			}
@@ -1141,6 +1152,11 @@ namespace Project.Gameplay
 				{
 					if (Skills.IsSkillEquipped(SkillKey.SlideDefense))
 						Effect.StopAegisFX();
+					if (Skills.IsSkillEquipped(SkillKey.SlideAttack))
+					{
+						Effect.StopVolcanoFX();
+						AttackState = AttackStates.None;
+					}
 
 					ActionState = ActionStates.Crouching;
 					Animator.ToggleSliding();

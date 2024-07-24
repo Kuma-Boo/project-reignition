@@ -115,6 +115,10 @@ public partial class CharacterEffect : Node3D
 	private GroupGpuParticles3D aegisSlideParticle;
 	public void StartAegisFX() => aegisSlideParticle.SetEmitting(true);
 	public void StopAegisFX() => aegisSlideParticle.SetEmitting(false);
+	[Export]
+	private GroupGpuParticles3D volcanoSlideParticle;
+	public void StartVolcanoFX() => volcanoSlideParticle.SetEmitting(true);
+	public void StopVolcanoFX() => volcanoSlideParticle.SetEmitting(false);
 
 	[Export]
 	private GpuParticles3D darkSpiralParticle;
@@ -246,6 +250,7 @@ public partial class CharacterEffect : Node3D
 	public void PlayLandingWaterFX()
 	{
 		PlayActionSFX(SplashSfx);
+		GD.PrintT((int)MaterialEnum.Water, landingParticles[(int)MaterialEnum.Water], landingParticles.Length);
 		(landingParticles[(int)MaterialEnum.Water] as GroupGpuParticles3D).RestartGroup();
 	}
 
