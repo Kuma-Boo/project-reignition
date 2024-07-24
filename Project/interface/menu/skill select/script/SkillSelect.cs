@@ -193,8 +193,9 @@ public partial class SkillSelect : Menu
 				continue;
 
 			SkillKey key = (SkillKey)i;
-			skillOptionList[i].Visible = SaveManager.ActiveSkillRing.IsSkillUnlocked(key);
-			if (!skillOptionList[i].Visible)
+			skillOptionList[i].Visible = false;
+
+			if (!SaveManager.ActiveSkillRing.IsSkillUnlocked(key))
 			{
 				GD.Print(key);
 				continue;
@@ -204,7 +205,10 @@ public partial class SkillSelect : Menu
 
 			// Process augments
 			if (!skillOptionList[i].Skill.HasAugments)
+			{
+				skillOptionList[i].Visible = true;
 				continue;
+			}
 
 			UpdateAugmentHierarchy(skillOptionList[i], i);
 		}
@@ -368,6 +372,8 @@ public partial class SkillSelect : Menu
 	{
 		SkillKey key = baseSkill.Skill.Key;
 		SkillOption shownSkill = baseSkill;
+		baseSkill.Visible = false;
+
 		int augmentIndex = ActiveSkillRing.GetAugmentIndex(key) - 1;
 		for (int i = 0; i < baseSkill.augments.Count; i++)
 		{
