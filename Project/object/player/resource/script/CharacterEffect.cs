@@ -250,7 +250,6 @@ public partial class CharacterEffect : Node3D
 	public void PlayLandingWaterFX()
 	{
 		PlayActionSFX(SplashSfx);
-		GD.PrintT((int)MaterialEnum.Water, landingParticles[(int)MaterialEnum.Water], landingParticles.Length);
 		(landingParticles[(int)MaterialEnum.Water] as GroupGpuParticles3D).RestartGroup();
 	}
 
