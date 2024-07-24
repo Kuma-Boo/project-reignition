@@ -37,12 +37,37 @@ public partial class CharacterEffect : Node3D
 	[ExportGroup("Skill Effects")]
 	[Export]
 	private SFXLibraryResource actionSFXLibrary;
-	[Export]
-	private AudioStreamPlayer actionChannel; //Channel for playing action sound effects
+	private readonly List<AudioStreamPlayer> actionChannels = []; // Audio channels for playing action sound effects
 	public void PlayActionSFX(StringName key)
 	{
-		actionChannel.Stream = actionSFXLibrary.GetStream(key);
-		actionChannel.Play();
+		AudioStreamPlayer targetChannel = null;
+		AudioStream targetStream = actionSFXLibrary.GetStream(key);
+
+		foreach (AudioStreamPlayer actionChannel in actionChannels)
+		{
+			if (actionChannel.Playing &&
+				actionChannel.Stream != targetStream)
+			{
+				// Audio channel is already busy
+				continue;
+			}
+
+			targetChannel = actionChannel;
+		}
+
+		if (targetChannel == null) // Add new target channels as needed
+		{
+			targetChannel = new AudioStreamPlayer()
+			{
+				Bus = "GAME SFX"
+			};
+
+			GetChild(0).AddChild(targetChannel);
+			actionChannels.Add(targetChannel);
+		}
+
+		targetChannel.Stream = targetStream;
+		targetChannel.Play();
 	}
 
 	[Export]
