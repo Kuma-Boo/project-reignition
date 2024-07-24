@@ -1147,10 +1147,12 @@ namespace Project.Gameplay
 
 				// Influence speed based on input strength
 				float inputAmount = -.5f; // Start halfway
-				if (IsHoldingDirection(PathFollower.ForwardAngle))
-					inputAmount = -(1 - InputVector.Length()) * .5f; // 0 to -0.5
-				else if (IsHoldingDirection(PathFollower.BackAngle))
+				if (IsHoldingDirection(PathFollower.BackAngle))
 					inputAmount = -(1 + InputVector.Length()) * .5f; // -0.5 to -1
+				else if (Skills.IsSkillEquipped(SkillKey.Autorun))
+					inputAmount = 0;
+				else if (IsHoldingDirection(PathFollower.ForwardAngle))
+					inputAmount = -(1 - InputVector.Length()) * .5f; // 0 to -0.5
 
 				inputAmount -= slopeRatio * SlopeInfluenceStrength;
 				MoveSpeed = Skills.SlideSettings.UpdateSlide(MoveSpeed, inputAmount);
