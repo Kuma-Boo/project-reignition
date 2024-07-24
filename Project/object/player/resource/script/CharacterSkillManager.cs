@@ -43,6 +43,10 @@ public partial class CharacterSkillManager : Node
 	[Export(PropertyHint.Range, "1,2,.1f")]
 	private float groundSpeedHighRatio = 1.5f;
 	[Export(PropertyHint.Range, "1,5,.1f")]
+	private float tractionLowRatio = 1.2f;
+	[Export(PropertyHint.Range, "1,5,.1f")]
+	private float tractionMediumRatio = 1.5f;
+	[Export(PropertyHint.Range, "1,5,.1f")]
 	private float tractionHighRatio = 2f;
 	[Export(PropertyHint.Range, "1,5,.1f")]
 	private float turnaroundHighRatio = 2f;
@@ -66,7 +70,25 @@ public partial class CharacterSkillManager : Node
 		return 1.0f;
 	}
 
-	private float GetTractionRatio() => IsSkillEquipped(SkillKey.TractionUp) ? tractionHighRatio : 1.0f;
+	private float GetTractionRatio()
+	{
+		if (IsSkillEquipped(SkillKey.TractionUp))
+		{
+			switch (GetAugmentIndex(SkillKey.TractionUp))
+			{
+				case 0:
+					return tractionLowRatio;
+				case 1:
+					return tractionMediumRatio;
+				case 2:
+				case 3:
+					return tractionHighRatio;
+			}
+		}
+
+		return 1.0f;
+	}
+
 	private float GetTurnaroundRatio() => IsSkillEquipped(SkillKey.TurnaroundUp) ? turnaroundHighRatio : 1.0f;
 
 	[ExportSubgroup("Air Settings")]

@@ -1479,9 +1479,13 @@ namespace Project.Gameplay
 			if (Skills.IsSkillEquipped(SkillKey.SpeedUp) && Skills.GetAugmentIndex(SkillKey.SpeedUp) == 3)
 				ringLoss += 20;
 
+			if (Skills.IsSkillEquipped(SkillKey.TractionUp) && Skills.GetAugmentIndex(SkillKey.TractionUp) == 3)
+				ringLoss += 20;
+
 			if (Skills.IsSkillEquipped(SkillKey.AccelJumpAttack) && Skills.GetAugmentIndex(SkillKey.AccelJumpAttack) == 1)
 				ringLoss += 20;
 
+			// Defense up
 			if (Skills.IsSkillEquipped(SkillKey.RingDamage))
 				ringLoss -= 10;
 
