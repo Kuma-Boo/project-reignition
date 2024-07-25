@@ -1,4 +1,4 @@
-[gd_scene load_steps=172 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=173 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://b74ouv2g73ny2" path="res://resource/preset/sfx library/MaterialSFXLibrary.tres" id="5_h4i1s"]
 [ext_resource type="Material" uid="uid://3j0tx2hxvynp" path="res://object/stage/common/resource/model/material/Grindrail Sparks Process Material.tres" id="6_v3ger"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="7_8immp"]
-[ext_resource type="Material" uid="uid://bduajl86aiq4o" path="res://object/player/resource/effect/material/Trail Material.tres" id="9_on86l"]
+[ext_resource type="Material" uid="uid://bduajl86aiq4o" path="res://object/player/resource/effect/material/Player Trail Material.tres" id="9_on86l"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/Trail3D.cs" id="10_1mog6"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="10_xhcyf"]
 [ext_resource type="Material" uid="uid://dhlpdpuxf2cwi" path="res://object/player/resource/effect/material/Spin Material.tres" id="11_lk1sb"]
@@ -112,9 +112,13 @@ alpha_curve = SubResource("CurveTexture_kwvbn")
 hue_variation_min = -0.05
 hue_variation_max = 0.05
 
-[sub_resource type="Curve" id="Curve_bi8dp"]
-_data = [Vector2(0, 1), 0.0, -0.0371234, 0, 0, Vector2(0.8, 0), 0.0, 0.0, 0, 0]
-point_count = 2
+[sub_resource type="Curve" id="Curve_r8a0k"]
+_data = [Vector2(0.0425532, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_5i4ya"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="SphereMesh" id="SphereMesh_0nuab"]
 radius = 0.4
@@ -1121,7 +1125,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("10_1mog6")
 IsPlayerTrail = true
 distanceDeadzone = 0.01
-transparencyCurve = SubResource("Curve_bi8dp")
+lifetimeCurve = SubResource("Curve_r8a0k")
+positionCurve = SubResource("Curve_5i4ya")
 layer = 32
 material = ExtResource("9_on86l")
 

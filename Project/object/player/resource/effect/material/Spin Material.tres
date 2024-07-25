@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://dhlpdpuxf2cwi"]
+[gd_resource type="ShaderMaterial" load_steps=7 format=3 uid="uid://dhlpdpuxf2cwi"]
 
 [ext_resource type="Shader" path="res://effect/shader/object/player/HomingAttack.gdshader" id="1_r5ek3"]
 [ext_resource type="Texture2D" uid="uid://l13owmpxqol5" path="res://object/player/resource/effect/texture/homing attack trail.png" id="2_ak0v2"]
@@ -12,12 +12,23 @@ metadata/_snap_enabled = true
 width = 64
 curve = SubResource("Curve_v0t8y")
 
+[sub_resource type="Curve" id="Curve_p8ln6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveTexture" id="CurveTexture_dptfe"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_p8ln6")
+
 [resource]
 render_priority = 0
 shader = ExtResource("1_r5ek3")
-shader_parameter/intensity = 0.6
+shader_parameter/intensity = 3.0
+shader_parameter/hue_shift = 0.0
 shader_parameter/scroll_speed = Vector2(5, 0.5)
 shader_parameter/opacity = 4.0
 shader_parameter/softness = 4.0
+shader_parameter/opacity_curve = SubResource("CurveTexture_dptfe")
 shader_parameter/albedo = ExtResource("2_ak0v2")
 shader_parameter/lut = SubResource("CurveTexture_g5n3t")

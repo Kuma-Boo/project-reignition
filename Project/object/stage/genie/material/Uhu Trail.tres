@@ -1,0 +1,34 @@
+[gd_resource type="ShaderMaterial" load_steps=7 format=3 uid="uid://c8ctul6a8utn2"]
+
+[ext_resource type="Shader" path="res://effect/shader/object/player/HomingAttack.gdshader" id="1_lpm05"]
+[ext_resource type="Texture2D" uid="uid://l13owmpxqol5" path="res://object/player/resource/effect/texture/homing attack trail.png" id="2_lraum"]
+
+[sub_resource type="Curve" id="Curve_v0t8y"]
+_data = [Vector2(0, 1), 0.0, -1.30233, 0, 0, Vector2(1, 1), 1.14328, 0.0, 0, 0]
+point_count = 2
+metadata/_snap_enabled = true
+
+[sub_resource type="CurveTexture" id="CurveTexture_g5n3t"]
+width = 64
+curve = SubResource("Curve_v0t8y")
+
+[sub_resource type="Curve" id="Curve_pij7f"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 0.2), 3.2925, 3.2925, 0, 0, Vector2(0.534574, 0.0861386), 0.0, 0.0, 0, 0, Vector2(0.75266, 0.112423), 0.0, 0.0, 0, 0, Vector2(0.9, 0.2), -4.36794, -4.36794, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="CurveTexture" id="CurveTexture_hg17r"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_pij7f")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_lpm05")
+shader_parameter/intensity = 5.0
+shader_parameter/hue_shift = 0.0
+shader_parameter/scroll_speed = Vector2(2, 0.5)
+shader_parameter/opacity = 2.5
+shader_parameter/softness = 0.0
+shader_parameter/opacity_curve = SubResource("CurveTexture_hg17r")
+shader_parameter/albedo = ExtResource("2_lraum")
+shader_parameter/lut = SubResource("CurveTexture_g5n3t")

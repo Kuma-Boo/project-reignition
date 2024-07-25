@@ -355,14 +355,9 @@ public partial class CharacterSkillManager : Node
 		speedbreakOverlayMaterial.SetShaderParameter(SpeedbreakOverlayOpacityKey, 0);
 	}
 
+	private readonly float CrestOfFlameHueOffset = .45f;
 	private void InitializeCrestSkills()
 	{
-		if (OS.IsDebugBuild()) // Always allow crest skills when playing the game from the editor
-		{
-			AllowCrestSkill = true;
-			return;
-		}
-
 		int crestRequirement;
 		SkillResource.SkillElement crestType;
 		if (SkillRing.IsSkillEquipped(SkillKey.CrestWind))
@@ -398,6 +393,12 @@ public partial class CharacterSkillManager : Node
 			AllowCrestSkill = true;
 			break;
 		}
+
+		if (!AllowCrestSkill && OS.IsDebugBuild()) // Always allow crest skills when playing the game from the editor
+			AllowCrestSkill = true;
+
+		// Update crest of flame's trail color
+		Character.Effect.UpdateTrailHueShift(AllowCrestSkill && crestType == SkillResource.SkillElement.Fire ? CrestOfFlameHueOffset : 0f);
 	}
 
 	private readonly float WindCrestSpeedMultiplier = 1.5f;

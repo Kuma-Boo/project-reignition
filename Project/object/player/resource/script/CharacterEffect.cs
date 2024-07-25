@@ -74,6 +74,12 @@ public partial class CharacterEffect : Node3D
 	public Trail3D trailFX;
 	[Export]
 	public MeshInstance3D spinFX;
+	public void UpdateTrailHueShift(float hueShift)
+	{
+		(trailFX.material as ShaderMaterial).SetShaderParameter("hue_shift", hueShift);
+		(spinFX.MaterialOverride as ShaderMaterial).SetShaderParameter("hue_shift", hueShift);
+	}
+
 	/// <summary> VFX for drifting dust. </summary>
 	[Export]
 	private GpuParticles3D dustParticle;
