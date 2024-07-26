@@ -259,12 +259,17 @@ public enum SkillKey
 	// Jump skills
 	AccelJumpAttack, // Increases attack power of accel jump
 
+	// Backflip skills
+	// Backflip, // TODO Replace Secret Rings backstep with a backflip?
+	BackstepAttack, // Increases attack power of Backflip
+
 	// Landing skills
 	LandDash, // Gives a speed boost when landing
 
 	// Special skills
 	RocketStart, // Press a button during countdown for a speedboost
 	DownCancel, // Negate knockback by pressing the jump button
+	FireSoulLockon, // Allows locking onto fire souls
 	SplashJump, // Bounce the player when jump dashing into an obstacle
 
 	// Experience skills

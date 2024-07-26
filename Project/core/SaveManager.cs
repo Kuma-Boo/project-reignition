@@ -799,6 +799,14 @@ public partial class SaveManager : Node
 				augmentDictionary.Add(key.ToString(), equippedAugments[key]);
 			}
 
+			Array<string> skillDictionary = [];
+
+			for (int i = 0; i < equippedSkills.Count; i++)
+			{
+				SkillKey key = equippedSkills[i];
+				skillDictionary.Add(key.ToString());
+			}
+
 			return new()
 			{
 				// WorldEnum data
@@ -812,7 +820,7 @@ public partial class SaveManager : Node
 				{ nameof(level), level },
 				{ nameof(exp), exp },
 				{ nameof(playTime), Mathf.RoundToInt(playTime) },
-				{ nameof(equippedSkills), equippedSkills },
+				{ nameof(equippedSkills), skillDictionary },
 				{ nameof(equippedAugments), augmentDictionary },
 			};
 		}
@@ -861,9 +869,13 @@ public partial class SaveManager : Node
 			if (dictionary.TryGetValue(nameof(equippedSkills), out var))
 			{
 				equippedSkills.Clear();
-				Array<int> skills = (Array<int>)var;
+
+				Array<string> skills = (Array<string>)var;
 				for (int i = 0; i < skills.Count; i++)
-					equippedSkills.Add((SkillKey)skills[i]);
+				{
+					if (Enum.TryParse(skills[i], out SkillKey key))
+						equippedSkills.Add(key);
+				}
 			}
 
 			if (dictionary.TryGetValue(nameof(equippedAugments), out var))
