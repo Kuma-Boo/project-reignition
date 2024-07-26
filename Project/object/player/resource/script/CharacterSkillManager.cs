@@ -433,6 +433,30 @@ public partial class CharacterSkillManager : Node
 		}
 	}
 
+	public void ActivateFireCrest()
+	{
+		if (!AllowCrestSkill)
+			return;
+
+		Character.Effect.PlayFireFX();
+		Character.Effect.StartVolcanoFX();
+	}
+
+	public void DeactivateFireCrest(bool burst)
+	{
+		if (!AllowCrestSkill)
+			return;
+
+		Character.Effect.StopVolcanoFX();
+		if (burst)
+		{
+			Character.Effect.PlayFireCrestFX();
+			Character.AttackState = CharacterController.AttackStates.Weak;
+			Character.SetActionState(CharacterController.ActionStates.JumpDash);
+			Character.ChangeHitbox("fire-crest");
+		}
+	}
+
 	private float crestTimer;
 	private readonly float CrestInterval = 1.0f;
 	private bool UpdateCrestTimer()

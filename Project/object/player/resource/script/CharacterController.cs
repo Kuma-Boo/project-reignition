@@ -113,7 +113,7 @@ namespace Project.Gameplay
 		}
 
 		public void ResetActionState() => SetActionState(ActionStates.Normal);
-		private void SetActionState(ActionStates newState)
+		public void SetActionState(ActionStates newState)
 		{
 			if (ActionState == ActionStates.Crouching || ActionState == ActionStates.Sliding)
 			{
@@ -134,6 +134,8 @@ namespace Project.Gameplay
 				Effect.StopSpinFX();
 				Effect.StopTrailFX();
 				Animator.ResetState();
+				if (Skills.IsSkillEquipped(SkillKey.CrestFire))
+					Skills.DeactivateFireCrest(false);
 			}
 			else if (ActionState == ActionStates.Stomping)
 			{
@@ -1053,6 +1055,8 @@ namespace Project.Gameplay
 
 			Effect.PlayActionSFX(Effect.JumpDashSfx);
 			Effect.StartTrailFX();
+			if (Skills.IsSkillEquipped(SkillKey.CrestFire))
+				Skills.ActivateFireCrest();
 
 			CanJumpDash = false;
 			IsMovingBackward = false; // Can't jumpdash backwards!
@@ -1772,6 +1776,7 @@ namespace Project.Gameplay
 		{
 			hitboxAnimator.Play(hitboxAnimation);
 			hitboxAnimator.Advance(0);
+			hitboxAnimator.Play(hitboxAnimation);
 		}
 
 		/// <summary> Center of collision calculations </summary>

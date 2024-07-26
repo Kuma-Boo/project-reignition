@@ -142,6 +142,10 @@ public partial class CharacterEffect : Node3D
 	public void PlayWindCrestFX() => windCrestParticle.RestartGroup();
 
 	[Export]
+	private GroupGpuParticles3D fireCrestParticle;
+	public void PlayFireCrestFX() => fireCrestParticle.RestartGroup();
+
+	[Export]
 	private GpuParticles3D chargeParticle;
 	[Export]
 	private GpuParticles3D fullChargeParticle;

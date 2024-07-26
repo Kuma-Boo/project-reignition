@@ -1,4 +1,4 @@
-[gd_scene load_steps=173 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=189 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -12,7 +12,8 @@
 [ext_resource type="Material" uid="uid://dhlpdpuxf2cwi" path="res://object/player/resource/effect/material/Spin Material.tres" id="11_lk1sb"]
 [ext_resource type="ArrayMesh" uid="uid://i2yganupvdy7" path="res://object/player/resource/effect/model/CrestDarkFX.res" id="11_p2jvq"]
 [ext_resource type="ArrayMesh" uid="uid://xjhpdbayj0gd" path="res://object/player/resource/effect/model/ExpertDriftFX.res" id="11_sq88t"]
-[ext_resource type="Texture2D" uid="uid://dpllw4lrjbvnm" path="res://object/player/resource/effect/texture/volcano ember.png" id="15_8o65b"]
+[ext_resource type="Texture2D" uid="uid://dpllw4lrjbvnm" path="res://object/player/resource/effect/texture/fire ember.png" id="15_8o65b"]
+[ext_resource type="Texture2D" uid="uid://r1g1i2dyjwue" path="res://object/player/resource/effect/texture/fire lingering.png" id="16_urtk5"]
 [ext_resource type="Texture2D" uid="uid://cm6hder0accd6" path="res://object/player/resource/effect/texture/aegis feather.png" id="17_qxei6"]
 [ext_resource type="ArrayMesh" uid="uid://ce83fnfx4ei27" path="res://object/player/resource/effect/model/WindCycloneFX.res" id="18_0tfkp"]
 [ext_resource type="Material" uid="uid://cfj2lar13vb43" path="res://effect/particle/material/environment/Water Splash Ripple.tres" id="18_1h3ie"]
@@ -32,6 +33,8 @@
 [ext_resource type="Material" uid="uid://ca62uiedbfw5x" path="res://effect/particle/material/Ember Blue.tres" id="29_j5i12"]
 [ext_resource type="Material" uid="uid://bvpcekopblbht" path="res://object/player/resource/effect/material/Crest Wind Spark.tres" id="31_4gjme"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
+[ext_resource type="Shader" path="res://effect/shader/particle/AnimatedNonbillboard.gdshader" id="34_fub5g"]
+[ext_resource type="Texture2D" uid="uid://cn2jkjpa6m0ut" path="res://object/stage/common/resource/model/texture/goal flame detail atlas.png" id="34_ss1rs"]
 
 [sub_resource type="Gradient" id="Gradient_bbnln"]
 offsets = PackedFloat32Array(0, 0.0739796, 1)
@@ -269,17 +272,17 @@ anim_speed_min = 1.0
 anim_speed_max = 1.0
 anim_offset_max = 1.0
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kmn7j"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_01fov"]
 lifetime_randomness = 0.4
 emission_shape_offset = Vector3(0, 0.2, 0.2)
 emission_shape = 2
 emission_sphere_radius = 0.3
 angle_max = 360.0
-direction = Vector3(0, 0.5, -1)
-spread = 60.0
+direction = Vector3(0, 0.3, -1)
+spread = 30.0
 flatness = 1.0
-initial_velocity_min = 2.0
-initial_velocity_max = 4.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
 angular_velocity_min = -250.0
 angular_velocity_max = -50.0
 gravity = Vector3(0, -2, 0)
@@ -287,7 +290,48 @@ linear_accel_min = -3.0
 linear_accel_max = -2.0
 radial_accel_max = 3.0
 scale_min = 0.2
-scale_max = 0.4
+scale_max = 0.6
+alpha_curve = SubResource("CurveTexture_kwvbn")
+anim_speed_min = 1.0
+anim_speed_max = 2.0
+anim_offset_max = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vkxri"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("16_urtk5")
+texture_repeat = false
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 4
+particles_anim_loop = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_dpw2b"]
+material = SubResource("StandardMaterial3D_vkxri")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kmn7j"]
+lifetime_randomness = 0.4
+emission_shape_offset = Vector3(0, 0.2, 0.2)
+emission_shape = 2
+emission_sphere_radius = 0.3
+angle_max = 360.0
+direction = Vector3(0, 0.5, -1)
+spread = 30.0
+flatness = 1.0
+initial_velocity_min = 4.0
+initial_velocity_max = 8.0
+angular_velocity_min = -250.0
+angular_velocity_max = -50.0
+gravity = Vector3(0, -2, 0)
+linear_accel_min = -3.0
+linear_accel_max = -2.0
+radial_accel_max = 3.0
+scale_min = 0.05
+scale_max = 0.1
 alpha_curve = SubResource("CurveTexture_kwvbn")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p8qbd"]
@@ -1036,7 +1080,77 @@ alpha_curve = SubResource("CurveTexture_5h5ag")
 [sub_resource type="QuadMesh" id="QuadMesh_uttkp"]
 material = ExtResource("31_4gjme")
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "dustParticle", "windParticle", "fireParticle", "stompParticle", "aegisSlideParticle", "volcanoSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "grindrailSfx", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
+[sub_resource type="Curve" id="Curve_wdggm"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_2asa6"]
+_data = [Vector2(0, 0), 0.0, 5.34484, 0, 0, Vector2(1, 0.5), -1.67525, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_r84q6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_jberk"]
+width = 64
+curve_x = SubResource("Curve_wdggm")
+curve_y = SubResource("Curve_2asa6")
+curve_z = SubResource("Curve_r84q6")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7xdyn"]
+lifetime_randomness = 0.4
+particle_flag_rotate_y = true
+angle_max = 360.0
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 2.0
+scale_curve = SubResource("CurveXYZTexture_jberk")
+alpha_curve = SubResource("CurveTexture_5h5ag")
+anim_speed_min = 1.0
+anim_speed_max = 2.0
+anim_offset_max = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jvmug"]
+render_priority = 0
+shader = ExtResource("34_fub5g")
+shader_parameter/particles_anim_h_frames = 8
+shader_parameter/particles_anim_v_frames = 8
+shader_parameter/particles_anim_loop = true
+shader_parameter/uv_scale = Vector2(1, -1)
+shader_parameter/albedo = ExtResource("34_ss1rs")
+
+[sub_resource type="QuadMesh" id="QuadMesh_3u0a1"]
+material = SubResource("ShaderMaterial_jvmug")
+size = Vector2(0.5, 2)
+center_offset = Vector3(0, -0.5, 0)
+
+[sub_resource type="Curve" id="Curve_2ohbq"]
+_data = [Vector2(0, 0.4), 0.0, 3.28018, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_nf18u"]
+width = 64
+curve = SubResource("Curve_2ohbq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bseex"]
+lifetime_randomness = 0.6
+emission_shape = 2
+emission_sphere_radius = 4.0
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_nf18u")
+alpha_curve = SubResource("CurveTexture_5h5ag")
+anim_speed_min = 1.0
+anim_speed_max = 2.0
+anim_offset_max = 1.0
+
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "dustParticle", "windParticle", "fireParticle", "stompParticle", "aegisSlideParticle", "volcanoSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "fireCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "grindrailSfx", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 trailFX = NodePath("VFX/ActionFX/TrailMesh")
@@ -1046,10 +1160,11 @@ windParticle = NodePath("VFX/ActionFX/Wind")
 fireParticle = NodePath("VFX/ActionFX/Fire")
 stompParticle = NodePath("VFX/ActionFX/Stomp")
 aegisSlideParticle = NodePath("VFX/ActionFX/AegisFeather")
-volcanoSlideParticle = NodePath("VFX/ActionFX/VolcanoEmber")
+volcanoSlideParticle = NodePath("VFX/ActionFX/FireLingering")
 darkSpiralParticle = NodePath("VFX/ActionFX/DarkSpiral")
 darkCrestParticle = NodePath("VFX/CrestFX/DarkCrestParticle")
 windCrestParticle = NodePath("VFX/CrestFX/WindCrestParticle")
+fireCrestParticle = NodePath("VFX/CrestFX/FireCrestParticle")
 chargeParticle = NodePath("VFX/RailFX/Charge")
 fullChargeParticle = NodePath("VFX/RailFX/FullCharge")
 grindrailSparkParticle = NodePath("VFX/RailFX/GrindrailSparks")
@@ -1204,25 +1319,35 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_eiurf")
 draw_pass_1 = SubResource("QuadMesh_y03cx")
 
-[node name="VolcanoEmber" type="GPUParticles3D" parent="VFX/ActionFX" node_paths=PackedStringArray("subSystems")]
+[node name="FireLingering" type="GPUParticles3D" parent="VFX/ActionFX" node_paths=PackedStringArray("subSystems")]
 layers = 32
 emitting = false
 lifetime = 0.8
 fixed_fps = 0
 interpolate = false
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_01fov")
+draw_pass_1 = SubResource("QuadMesh_dpw2b")
+script = ExtResource("21_nenuf")
+subSystems = [NodePath("Ember"), NodePath("Flames")]
+
+[node name="Ember" type="GPUParticles3D" parent="VFX/ActionFX/FireLingering"]
+layers = 32
+emitting = false
+lifetime = 0.8
+fixed_fps = 0
+interpolate = false
+local_coords = true
 process_material = SubResource("ParticleProcessMaterial_kmn7j")
 draw_pass_1 = SubResource("QuadMesh_7f3yc")
-script = ExtResource("21_nenuf")
-subSystems = [NodePath("Flames")]
 
-[node name="Flames" type="GPUParticles3D" parent="VFX/ActionFX/VolcanoEmber"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+[node name="Flames" type="GPUParticles3D" parent="VFX/ActionFX/FireLingering"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 layers = 32
 cast_shadow = 0
 emitting = false
 amount = 16
 lifetime = 0.4
-preprocess = 0.1
 randomness = 0.3
 fixed_fps = 60
 interpolate = false
@@ -1569,3 +1694,34 @@ local_coords = true
 draw_order = 3
 process_material = SubResource("ParticleProcessMaterial_itlko")
 draw_pass_1 = SubResource("QuadMesh_uttkp")
+
+[node name="FireCrestParticle" type="GPUParticles3D" parent="VFX/CrestFX" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 128
+lifetime = 0.25
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_7xdyn")
+draw_pass_1 = SubResource("QuadMesh_3u0a1")
+script = ExtResource("21_nenuf")
+subSystems = [NodePath("ExplosionRing")]
+
+[node name="ExplosionRing" type="GPUParticles3D" parent="VFX/CrestFX/FireCrestParticle"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 128
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_bseex")
+draw_pass_1 = SubResource("QuadMesh_dpw2b")
