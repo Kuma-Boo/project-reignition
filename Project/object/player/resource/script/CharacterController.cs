@@ -1519,18 +1519,9 @@ namespace Project.Gameplay
 			Effect.PlayVoice("hurt");
 
 			int ringLoss = 20;
-			if (Skills.IsSkillEquipped(SkillKey.RingPearlConvert))
+			if (Skills.IsSkillEquipped(SkillKey.RingLossConvert)) // Don't lose ANY soul power when ring -> soul conversion skill is active
 			{
-				Effect.PlayDarkSpiralFX();
-				if (Skills.GetAugmentIndex(SkillKey.RingPearlConvert) == 1) // Damage augment
-				{
-					ringLoss += 20;
-					Skills.ModifySoulGauge(50);
-				}
-				else
-				{
-					Skills.ModifySoulGauge(20);
-				}
+				Effect.PlayDarkSpiralFX(); // Play a VFX instead
 			}
 			else if (Skills.IsSkillEquipped(SkillKey.PearlDamage)) // Lose soul power
 			{
@@ -1550,6 +1541,9 @@ namespace Project.Gameplay
 			}
 
 			// Add in defense lowering augments
+			if (Skills.IsSkillEquipped(SkillKey.RingLossConvert) && Skills.GetAugmentIndex(SkillKey.RingLossConvert) == 1)
+				ringLoss += 20;
+
 			if (Skills.IsSkillEquipped(SkillKey.SpeedUp) && Skills.GetAugmentIndex(SkillKey.SpeedUp) == 3)
 				ringLoss += 20;
 

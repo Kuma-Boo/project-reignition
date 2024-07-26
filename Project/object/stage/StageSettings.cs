@@ -321,6 +321,10 @@ public partial class StageSettings : Node3D
 			FinishLevel(true);
 		}
 
+		// Soul barrier
+		if (mode == MathModeEnum.Subtract && CharacterController.instance.Skills.IsSkillEquipped(SkillKey.RingLossConvert))
+			CharacterController.instance.Skills.ModifySoulGauge(amount * 2);
+
 		if (DebugManager.Instance.InfiniteRings) // Infinite ring cheat
 			CurrentRingCount = 999;
 
