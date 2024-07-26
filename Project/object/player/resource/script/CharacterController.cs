@@ -138,7 +138,8 @@ namespace Project.Gameplay
 				if (Skills.IsSkillEquipped(SkillKey.CrestFire))
 					Skills.DeactivateFireCrest(false);
 			}
-			else if (ActionState == ActionStates.AccelJump)
+			else if (ActionState == ActionStates.AccelJump ||
+				ActionState == ActionStates.Backflip)
 			{
 				AttackState = AttackStates.None;
 			}
@@ -1268,6 +1269,12 @@ namespace Project.Gameplay
 
 			Effect.PlayActionSFX(Effect.JumpSfx);
 			Animator.BackflipAnimation();
+
+			if (Skills.IsSkillEquipped(SkillKey.BackstepAttack))
+			{
+				Effect.PlayFireFX();
+				AttackState = AttackStates.Weak;
+			}
 		}
 
 		private void UpdateBackflip()
