@@ -1055,6 +1055,7 @@ animator = NodePath("AnimationPlayer")
 [node name="Shatter" type="Node3D" parent="." node_paths=PackedStringArray("root", "pieceRoot", "animator")]
 script = ExtResource("2_i1bv0")
 pieceMass = 2.0
+disableRespawn = true
 root = NodePath("MajinEgg")
 pieceRoot = NodePath("MajinEggPieces")
 animator = NodePath("../AnimationPlayer")
@@ -1131,6 +1132,7 @@ libraries = {
 "": SubResource("AnimationLibrary_15mo0")
 }
 
+[connection signal="Respawned" from="." to="Shatter" method="Respawn"]
 [connection signal="Shattered" from="." to="Shatter" method="Shatter"]
 [connection signal="area_entered" from="Hitbox" to="." method="AreaEntered"]
 [connection signal="area_exited" from="Hitbox" to="." method="AreaExited"]

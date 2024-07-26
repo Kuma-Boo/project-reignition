@@ -95,6 +95,7 @@ namespace Project.Gameplay
 			Strong, // Double Damage -- Perfect homing attacks
 			OneShot, // Destroy enemies immediately (i.e. Speedbreak and Crest of Fire)
 		}
+		public void ResetAttackState() => attackState = AttackStates.None;
 
 		public ActionStates ActionState { get; private set; }
 		public enum ActionStates // Actions that can happen in the Normal MovementState
@@ -136,6 +137,10 @@ namespace Project.Gameplay
 				Animator.ResetState();
 				if (Skills.IsSkillEquipped(SkillKey.CrestFire))
 					Skills.DeactivateFireCrest(false);
+			}
+			else if (ActionState == ActionStates.AccelJump)
+			{
+				AttackState = AttackStates.None;
 			}
 			else if (ActionState == ActionStates.Stomping)
 			{
