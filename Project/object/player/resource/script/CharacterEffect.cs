@@ -127,6 +127,11 @@ public partial class CharacterEffect : Node3D
 	public void StopVolcanoFX() => volcanoSlideParticle.SetEmitting(false);
 
 	[Export]
+	private GroupGpuParticles3D soulSlideParticle;
+	public void StartSoulSlideFX() => soulSlideParticle.SetEmitting(true);
+	public void StopSoulSlideFX() => soulSlideParticle.SetEmitting(false);
+
+	[Export]
 	private GpuParticles3D darkSpiralParticle;
 	public void PlayDarkSpiralFX()
 	{

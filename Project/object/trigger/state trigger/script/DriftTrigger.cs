@@ -141,7 +141,7 @@ public partial class DriftTrigger : Area3D
 		float volume = distance / slideDistance;
 		sfx.VolumeDb = Mathf.SmoothStep(startingVolume, -80f, volume);
 
-		bool isManualDrift = Character.Skills.IsSkillEquipped(SkillKey.DriftExperience);
+		bool isManualDrift = Character.Skills.IsSkillEquipped(SkillKey.DriftExp);
 		bool isAttemptingDrift = ((Input.IsActionJustPressed("button_action") && isManualDrift) ||
 			(!isManualDrift && distance <= InputWindowDistance)) && driftResult != DriftResults.TimingFail;
 

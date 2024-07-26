@@ -235,25 +235,17 @@ public enum SkillKey
 	TurnaroundUp, // Increases Sonic's friction
 	SlowTurn, // Decreases Sonic's turning sensitivity
 	QuickTurn, // Increases Sonic's turning sensitivity
-
-	// Passive skills
 	AllRounder, // Reduces acceleration loss caused by steep terrain
-	PearlRange, // Makes collecting pearls easier
-	PearlRespawn, // Allows cheating death with enough soul power
-	PearlDamage, // Reduces the amount of soul power lost when taking damage
-
-	// Ring skills
-	RingSpawn, // Start with some rings at the game's start
-	RingRespawn, // Respawn with a few rings handy
-	RingDamage, // Reduces the number of rings lost when taking damage
 
 	// Slide skills
 	SlideAttack, // Replace slide with an attack
 	SlideDefense, // Intangible to attacks when sliding
+	SlideExp, // Grants EXP when sliding
 	SlideDistance, // Allows sliding to last longer
 
 	// Stomp skills
 	StompDash, // Gives a speed boost when stomping/jump canceling
+	StompExp, // Grants exp when landing
 	StompAttack, // Replace jump cancel with an attack
 
 	// Jump skills
@@ -267,6 +259,18 @@ public enum SkillKey
 	LandDash, // Gives a speed boost when landing
 	LandSoul, // Increases soul gauge when landing
 
+	// Passive skills
+	PearlRange, // Makes collecting pearls easier
+	PearlRespawn, // Allows cheating death with enough soul power
+	PearlDamage, // Reduces the amount of soul power lost when taking damage
+	RingLossConvert, // Increases soul power when taking damage
+	RingPearlConvert, // Converts rings to pearls when collected
+
+	// Ring skills
+	RingSpawn, // Start with some rings at the game's start
+	RingRespawn, // Respawn with a few rings handy
+	RingDamage, // Reduces the number of rings lost when taking damage
+
 	// Special skills
 	RocketStart, // Press a button during countdown for a speedboost
 	DownCancel, // Negate knockback by pressing the jump button
@@ -274,7 +278,7 @@ public enum SkillKey
 	SplashJump, // Bounce the player when jump dashing into an obstacle
 
 	// Experience skills
-	DriftExperience, // Manually perform a drift for more speed and points/exp
+	DriftExp, // Manually perform a drift for more speed and points/exp
 
 	// New skills
 	RankPreview, // Shows the current rank on the heads-up display

@@ -125,6 +125,8 @@ namespace Project.Gameplay
 					AttackState = AttackStates.None;
 					Effect.StopVolcanoFX();
 				}
+				if (Skills.IsSkillEquipped(SkillKey.SlideExp))
+					Effect.StopSoulSlideFX();
 
 				ChangeHitbox("RESET");
 				Animator.StopCrouching();
@@ -949,11 +951,15 @@ namespace Project.Gameplay
 
 		private void CheckLandingSoul()
 		{
-			if (ActionState == ActionStates.Stomping)
-				return;
+			// Bonus EXP
+			if (Skills.IsSkillEquipped(SkillKey.StompExp) && ActionState == ActionStates.Stomping)
+			{
+				Effect.PlayDarkSpiralFX();
+				Stage.CurrentEXP += 2;
+			}
 
 			// Increase soul gauge
-			if (Skills.IsSkillEquipped(SkillKey.LandSoul))
+			if (Skills.IsSkillEquipped(SkillKey.LandSoul) && ActionState != ActionStates.Stomping)
 			{
 				Effect.PlayDarkSpiralFX();
 
@@ -1172,6 +1178,12 @@ namespace Project.Gameplay
 					AttackState = AttackStates.Weak;
 					ChangeHitbox("volcano-slide");
 				}
+				if (Skills.IsSkillEquipped(SkillKey.SlideExp))
+				{
+					Skills.StartSoulSlide();
+					Effect.StartSoulSlideFX();
+					Effect.PlayDarkSpiralFX();
+				}
 			}
 			else
 			{
@@ -1197,6 +1209,8 @@ namespace Project.Gameplay
 						Effect.StopVolcanoFX();
 						AttackState = AttackStates.None;
 					}
+					if (Skills.IsSkillEquipped(SkillKey.SlideExp))
+						Effect.StopSoulSlideFX();
 
 					ActionState = ActionStates.Crouching;
 					Animator.ToggleSliding();
@@ -1206,6 +1220,8 @@ namespace Project.Gameplay
 			else if (ActionState == ActionStates.Sliding)
 			{
 				Skills.UpdateSlideSpeed(slopeRatio, SlopeInfluenceStrength);
+				if (Skills.IsSkillEquipped(SkillKey.SlideExp))
+					Skills.UpdateSoulSlide();
 
 				// Influence speed based on input strength
 				float inputAmount = -.5f; // Start halfway
@@ -1503,8 +1519,20 @@ namespace Project.Gameplay
 			Effect.PlayVoice("hurt");
 
 			int ringLoss = 20;
-			// Lose soul power
-			if (Skills.IsSkillEquipped(SkillKey.PearlDamage))
+			if (Skills.IsSkillEquipped(SkillKey.RingPearlConvert))
+			{
+				Effect.PlayDarkSpiralFX();
+				if (Skills.GetAugmentIndex(SkillKey.RingPearlConvert) == 1) // Damage augment
+				{
+					ringLoss += 20;
+					Skills.ModifySoulGauge(50);
+				}
+				else
+				{
+					Skills.ModifySoulGauge(20);
+				}
+			}
+			else if (Skills.IsSkillEquipped(SkillKey.PearlDamage)) // Lose soul power
 			{
 				if (Skills.GetAugmentIndex(SkillKey.PearlDamage) == 1) // Damage augment
 				{

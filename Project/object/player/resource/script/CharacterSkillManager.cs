@@ -199,6 +199,19 @@ public partial class CharacterSkillManager : Node
 		SlideSettings.Traction = Mathf.Lerp(0, baseSlideTraction, Mathf.Clamp(-slopeInfluence, 0, 1));
 	}
 
+	private float soulSlideTimer;
+	private readonly float SoulSlideInterval = .5f;
+	public void StartSoulSlide() => soulSlideTimer = 0;
+	public void UpdateSoulSlide()
+	{
+		soulSlideTimer += PhysicsManager.physicsDelta;
+		if (SoulSlideInterval > soulSlideTimer)
+		{
+			soulSlideTimer -= SoulSlideInterval;
+			StageSettings.instance.CurrentEXP++;
+		}
+	}
+
 	/// <summary> Calculates sliding's friction ratio based on skills. </summary>
 	public float GetSlidingFrictionRatio()
 	{
