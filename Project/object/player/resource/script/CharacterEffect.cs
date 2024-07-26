@@ -118,6 +118,13 @@ public partial class CharacterEffect : Node3D
 	public void StopStompFX() => stompParticle.SetEmitting(false);
 
 	[Export]
+	private GroupGpuParticles3D splashJumpParticle;
+	public void PlaySplashJumpFX()
+	{
+		splashJumpParticle.RestartGroup();
+	}
+
+	[Export]
 	private GroupGpuParticles3D aegisSlideParticle;
 	public void StartAegisFX() => aegisSlideParticle.SetEmitting(true);
 	public void StopAegisFX() => aegisSlideParticle.SetEmitting(false);
