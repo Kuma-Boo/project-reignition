@@ -199,8 +199,10 @@ public partial class GrindRail : Area3D
 
 		Character.IsMovingBackward = false;
 		Character.LandOnGround(); // Rail counts as being on the ground
-		Character.MoveSpeed = Skills.GrindSettings.Speed; // Start at the correct speed
 		Character.VerticalSpeed = 0f;
+		Character.MoveSpeed = Skills.GrindSettings.Speed * Skills.CalculateGrindSpeedRatio(); // Start at the correct speed
+		if (Skills.IsSkillEquipped(SkillKey.GrindUp) && Skills.GetAugmentIndex(SkillKey.GrindUp) == 3)
+			StageSettings.instance.UpdateRingCount(5, StageSettings.MathModeEnum.Subtract, true);
 
 		Character.Animator.ExternalAngle = 0; // Reset rotation
 		Character.Animator.StartBalancing();

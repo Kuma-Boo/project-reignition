@@ -225,9 +225,6 @@ public partial class CharacterSkillManager : Node
 					return slideDistanceMediumFrictionRatio;
 				case 2:
 					return slideDistanceHighFrictionRatio;
-				default:
-					GD.PushError($"Slide augment {GetAugmentIndex(SkillKey.SlideDistance)} isn't implemented.");
-					break;
 			}
 		}
 
@@ -266,6 +263,29 @@ public partial class CharacterSkillManager : Node
 	private int baseGrindFriction;
 	[Export]
 	private int baseGrindTurnaround;
+	[Export(PropertyHint.Range, "1,2,.1f")]
+	private float grindLowRatio = 1.1f;
+	[Export(PropertyHint.Range, "1,2,.1f")]
+	private float grindMediumRatio = 1.3f;
+	[Export(PropertyHint.Range, "1,2,.1f")]
+	private float grindHighRatio = 1.5f;
+	public float CalculateGrindSpeedRatio()
+	{
+		if (IsSkillEquipped(SkillKey.GrindUp))
+		{
+			switch (GetAugmentIndex(SkillKey.GrindUp))
+			{
+				case 0:
+					return grindLowRatio;
+				case 1:
+					return grindMediumRatio;
+				case 2:
+					return grindHighRatio;
+			}
+		}
+
+		return 1.0f;
+	}
 
 	[ExportGroup("Sidle Settings")]
 	[Export]
