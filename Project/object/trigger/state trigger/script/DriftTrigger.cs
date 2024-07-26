@@ -164,7 +164,11 @@ public partial class DriftTrigger : Area3D
 				driftAnimationTimer = LaunchAnimationLength;
 
 				if (isManualDrift)
+				{
+					BonusManager.instance.QueueBonus(new(BonusType.EXP, 100));
+					Character.Skills.ModifySoulGauge(10); // Not written in skill description, but that's what the original game does -_-
 					Character.Effect.PlayDarkSpiralFX();
+				}
 			}
 			else // Too early! Fail drift attempt and play a special animation?
 			{

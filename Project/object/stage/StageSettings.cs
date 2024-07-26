@@ -327,7 +327,7 @@ public partial class StageSettings : Node3D
 		EmitSignal(SignalName.RingChanged, CurrentRingCount - previousAmount, disableAnimations);
 	}
 
-	public int CurrentEXP { get; private set; } // How much exp is the player earning from this stage?
+	public int CurrentEXP { get; set; } // How much exp is the player earning from this stage?
 
 	// Time
 	[Signal]

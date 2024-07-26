@@ -70,7 +70,7 @@ namespace Project.Gameplay
 					break;
 			}
 
-			canLandingBoost = false; // Disable landing boost temporarily
+			allowLandingSkills = false; // Disable landing skills temporarily
 			MovementState = MovementStates.Normal;
 			Skills.IsSpeedBreakEnabled = Skills.IsTimeBreakEnabled = true; // Reenable soul skills
 		}
@@ -929,13 +929,14 @@ namespace Project.Gameplay
 			VerticalSpeed = Mathf.MoveToward(VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
 		}
 
-		private bool canLandingBoost;
+		private bool allowLandingSkills;
 		private void CheckLandingBoost()
 		{
-			if (!canLandingBoost) return;
-			canLandingBoost = false; // Reset landing boost
+			bool applyLandingBoost = (Skills.IsSkillEquipped(SkillKey.StompDash) && ActionState == ActionStates.Stomping) ||
+				(Skills.IsSkillEquipped(SkillKey.LandDash) && ActionState != ActionStates.Stomping);
 
-			if (MovementState != MovementStates.Normal) return;
+			if (!applyLandingBoost)
+				return;
 
 			// Only apply landing boost when holding forward to avoid accidents (See Sonic and the Black Knight)
 			if (IsHoldingDirection(PathFollower.ForwardAngle))
@@ -943,6 +944,35 @@ namespace Project.Gameplay
 				Effect.PlayWindFX();
 				MovementAngle = PathFollower.ForwardAngle;
 				MoveSpeed = Mathf.Max(MoveSpeed, Skills.landingDashSpeed);
+			}
+		}
+
+		private void CheckLandingSoul()
+		{
+			if (ActionState == ActionStates.Stomping)
+				return;
+
+			// Increase soul gauge
+			if (Skills.IsSkillEquipped(SkillKey.LandSoul))
+			{
+				Effect.PlayDarkSpiralFX();
+
+				switch (Skills.GetAugmentIndex(SkillKey.LandSoul))
+				{
+					case 0:
+						Skills.ModifySoulGauge(1);
+						break;
+					case 1:
+						Skills.ModifySoulGauge(2);
+						break;
+					case 2:
+						Skills.ModifySoulGauge(4);
+						break;
+					case 3:
+						Skills.ModifySoulGauge(4 + (Mathf.Min(Stage.CurrentRingCount, 5) * 2));
+						Stage.UpdateRingCount(5, StageSettings.MathModeEnum.Subtract, true);
+						break;
+				}
 			}
 		}
 
@@ -961,7 +991,7 @@ namespace Project.Gameplay
 			IsJumpClamped = false;
 			IsOnGround = false;
 			CanJumpDash = true;
-			canLandingBoost = Skills.IsSkillEquipped(SkillKey.LandDash);
+			allowLandingSkills = true;
 			SetActionState(ActionStates.Jumping);
 			VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
 
@@ -1234,7 +1264,7 @@ namespace Project.Gameplay
 			actionBufferTimer = 0;
 			MoveSpeed = 0; // Kill horizontal speed
 
-			canLandingBoost = Skills.IsSkillEquipped(SkillKey.StompDash);
+			allowLandingSkills = true;
 
 			Lockon.IsMonitoring = false;
 			if (Lockon.IsHomingAttacking)
@@ -1974,14 +2004,23 @@ namespace Project.Gameplay
 			if (IsCountdownActive) return;
 			if (IsDefeated || ActionState == ActionStates.Teleport) return; // Return early when respawning
 
+			if (Stage.IsLevelIngame) // Only check landing skills and play FX when ingame
+			{
+				if (allowLandingSkills && MovementState == MovementStates.Normal)
+				{
+					// Apply landing skills
+					CheckLandingBoost();
+					CheckLandingSoul();
+				}
+
+				allowLandingSkills = false;
+
+				// Play FX
+				Effect.PlayLandingFX();
+			}
+
 			ResetActionState();
 			JustLandedOnGround = true;
-
-			if (!Stage.IsLevelIngame) return; // Return early when not ingame
-			CheckLandingBoost(); // Landing boost skill
-
-			// Play FX
-			Effect.PlayLandingFX();
 		}
 
 		/// <summary> Checks whether raycast collider is tagged properly. </summary>

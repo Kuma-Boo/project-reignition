@@ -265,6 +265,7 @@ public enum SkillKey
 
 	// Landing skills
 	LandDash, // Gives a speed boost when landing
+	LandSoul, // Increases soul gauge when landing
 
 	// Special skills
 	RocketStart, // Press a button during countdown for a speedboost
