@@ -260,7 +260,6 @@ public partial class EventTrigger : StageTriggerModule
 	private float characterExitMoveSpeed;
 	private float characterExitVerticalSpeed;
 
-
 	/// <summary> Resets the character's movement state. </summary>
 	public void FinishEvent()
 	{

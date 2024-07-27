@@ -29,24 +29,57 @@ public partial class CharacterEffect : Node3D
 	public readonly StringName SidleSfx = "sidle";
 	private readonly StringName StompSfx = "stomp";
 	private readonly StringName WindSfx = "wind";
+	private readonly StringName FireSfx = "fire";
+	private readonly StringName DarkSfx = "dark";
 
 	#region Actions
 	// Actions (Jumping, sliding, etc)
 	[ExportGroup("Skill Effects")]
 	[Export]
 	private SFXLibraryResource actionSFXLibrary;
-	[Export]
-	private AudioStreamPlayer actionChannel; //Channel for playing action sound effects
+	private readonly List<AudioStreamPlayer> actionChannels = []; // Audio channels for playing action sound effects
 	public void PlayActionSFX(StringName key)
 	{
-		actionChannel.Stream = actionSFXLibrary.GetStream(key);
-		actionChannel.Play();
+		AudioStreamPlayer targetChannel = null;
+		AudioStream targetStream = actionSFXLibrary.GetStream(key);
+
+		foreach (AudioStreamPlayer actionChannel in actionChannels)
+		{
+			if (actionChannel.Playing &&
+				actionChannel.Stream != targetStream)
+			{
+				// Audio channel is already busy
+				continue;
+			}
+
+			targetChannel = actionChannel;
+		}
+
+		if (targetChannel == null) // Add new target channels as needed
+		{
+			targetChannel = new AudioStreamPlayer()
+			{
+				Bus = "GAME SFX"
+			};
+
+			GetChild(0).AddChild(targetChannel);
+			actionChannels.Add(targetChannel);
+		}
+
+		targetChannel.Stream = targetStream;
+		targetChannel.Play();
 	}
 
 	[Export]
 	public Trail3D trailFX;
 	[Export]
 	public MeshInstance3D spinFX;
+	public void UpdateTrailHueShift(float hueShift)
+	{
+		(trailFX.material as ShaderMaterial).SetShaderParameter("hue_shift", hueShift);
+		(spinFX.MaterialOverride as ShaderMaterial).SetShaderParameter("hue_shift", hueShift);
+	}
+
 	/// <summary> VFX for drifting dust. </summary>
 	[Export]
 	private GpuParticles3D dustParticle;
@@ -61,47 +94,95 @@ public partial class CharacterEffect : Node3D
 
 	[Export]
 	private GpuParticles3D windParticle;
-	public void StartWind()
+	public void PlayWindFX()
 	{
 		windParticle.Restart();
 		PlayActionSFX(WindSfx);
 	}
 
 	[Export]
-	private GroupGpuParticles3D stompFX;
-	public void StartStompFX()
+	private GpuParticles3D fireParticle;
+	public void PlayFireFX()
 	{
-		stompFX.SetEmitting(true);
-		PlayActionSFX(StompSfx);
+		fireParticle.Restart();
+		PlayActionSFX(FireSfx);
 	}
-	public void StopStompFX() => stompFX.SetEmitting(false);
 
 	[Export]
-	private GpuParticles3D chargeFX;
+	private GroupGpuParticles3D stompParticle;
+	public void StartStompFX()
+	{
+		stompParticle.SetEmitting(true);
+		PlayActionSFX(StompSfx);
+	}
+	public void StopStompFX() => stompParticle.SetEmitting(false);
+
 	[Export]
-	private GpuParticles3D fullChargeFX;
+	private GroupGpuParticles3D splashJumpParticle;
+	public void PlaySplashJumpFX()
+	{
+		splashJumpParticle.RestartGroup();
+	}
+
+	[Export]
+	private GroupGpuParticles3D aegisSlideParticle;
+	public void StartAegisFX() => aegisSlideParticle.SetEmitting(true);
+	public void StopAegisFX() => aegisSlideParticle.SetEmitting(false);
+	[Export]
+	private GroupGpuParticles3D volcanoSlideParticle;
+	public void StartVolcanoFX() => volcanoSlideParticle.SetEmitting(true);
+	public void StopVolcanoFX() => volcanoSlideParticle.SetEmitting(false);
+
+	[Export]
+	private GroupGpuParticles3D soulSlideParticle;
+	public void StartSoulSlideFX() => soulSlideParticle.SetEmitting(true);
+	public void StopSoulSlideFX() => soulSlideParticle.SetEmitting(false);
+
+	[Export]
+	private GpuParticles3D darkSpiralParticle;
+	public void PlayDarkSpiralFX()
+	{
+		darkSpiralParticle.Restart();
+		PlayActionSFX(DarkSfx);
+	}
+
+	[Export]
+	private GroupGpuParticles3D darkCrestParticle;
+	public void PlayDarkCrestFX() => darkCrestParticle.RestartGroup();
+	[Export]
+	private GroupGpuParticles3D windCrestParticle;
+	public void PlayWindCrestFX() => windCrestParticle.RestartGroup();
+
+	[Export]
+	private GroupGpuParticles3D fireCrestParticle;
+	public void PlayFireCrestFX() => fireCrestParticle.RestartGroup();
+
+	[Export]
+	private GpuParticles3D chargeParticle;
+	[Export]
+	private GpuParticles3D fullChargeParticle;
 	public void StartChargeFX()
 	{
-		chargeFX.Emitting = true;
-		chargeFX.Visible = true;
+		chargeParticle.Emitting = true;
+		chargeParticle.Visible = true;
 	}
 
 	public void StopChargeFX()
 	{
-		chargeFX.Emitting = false;
-		fullChargeFX.Emitting = false;
+		chargeParticle.Emitting = false;
+		fullChargeParticle.Emitting = false;
 	}
 
 	[Export]
-	private GpuParticles3D grindrailVfx;
+	private GpuParticles3D grindrailSparkParticle;
 	[Export]
-	private GpuParticles3D grindrailBurstVfx;
+	private GpuParticles3D grindrailBurstParticle;
 	[Export]
 	private AudioStreamPlayer grindrailSfx;
 	private bool isFadingRailSFX;
 	public void StartGrindFX(bool resetSFX)
 	{
-		grindrailVfx.Emitting = true;
+		grindrailSparkParticle.Emitting = true;
 		isFadingRailSFX = false;
 
 		if (resetSFX)
@@ -113,10 +194,10 @@ public partial class CharacterEffect : Node3D
 
 	public void FullGrindChargeFX()
 	{
-		chargeFX.Emitting = false;
-		chargeFX.Visible = false;
-		fullChargeFX.Emitting = true;
-		grindrailBurstVfx.Restart();
+		chargeParticle.Emitting = false;
+		chargeParticle.Visible = false;
+		fullChargeParticle.Emitting = true;
+		grindrailBurstParticle.Restart();
 	}
 
 	public void UpdateGrindFX(float speedRatio)
@@ -127,7 +208,7 @@ public partial class CharacterEffect : Node3D
 	public void StopGrindFX()
 	{
 		isFadingRailSFX = true; // Start fading sound effect
-		grindrailVfx.Emitting = false;
+		grindrailSparkParticle.Emitting = false;
 		StopChargeFX();
 	}
 	#endregion

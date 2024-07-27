@@ -62,7 +62,7 @@ public partial class AutomationTrigger : Area3D
 			if (Character.IsLockoutActive && Character.ActiveLockoutData.overrideSpeed)
 				Character.MoveSpeed = Character.ActiveLockoutData.ApplySpeed(Character.MoveSpeed, Character.GroundSettings);
 			else
-				Character.MoveSpeed = Character.GroundSettings.Interpolate(Character.MoveSpeed, 1); // Move to max speed
+				Character.MoveSpeed = Character.GroundSettings.UpdateInterpolate(Character.MoveSpeed, 1); // Move to max speed
 		}
 
 		Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
@@ -100,6 +100,9 @@ public partial class AutomationTrigger : Area3D
 		Character.Animator.ExternalAngle = 0;
 		Character.Animator.SnapRotation(Character.Animator.ExternalAngle); // Rotate to follow pathfollower
 		Character.IsMovingBackward = false; // Prevent getting stuck in backstep animation
+
+		if (Character.Animator.IsBrakeAnimationActive)
+			Character.Animator.StopBrake();
 	}
 
 	private void Deactivate()

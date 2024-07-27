@@ -71,11 +71,18 @@ public partial class CharacterLockon : Node3D
 
 	public void StopHomingAttack()
 	{
-		Character.AttackState = CharacterController.AttackStates.None;
 		IsHomingAttacking = false;
 		IsPerfectHomingAttack = false;
-		Character.ResetActionState();
 		ResetLockonTarget();
+
+		if (Character.Skills.IsSkillEquipped(SkillKey.CrestFire) && IsBounceLockoutActive)
+		{
+			Character.Skills.DeactivateFireCrest(true);
+			return;
+		}
+
+		Character.AttackState = CharacterController.AttackStates.None;
+		Character.ResetActionState();
 	}
 
 	public void UpdateLockonTargets()

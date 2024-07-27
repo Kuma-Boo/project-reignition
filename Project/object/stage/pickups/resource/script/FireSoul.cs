@@ -23,7 +23,12 @@ public partial class FireSoul : Pickup
 		// Check save data
 		isCollectedInSaveFile = SaveManager.ActiveGameData.IsFireSoulCollected(Stage.Data.LevelID, fireSoulIndex);
 		if (isCollectedInSaveFile)
+		{
 			Despawn();
+			return;
+		}
+
+		UpdateLockon();
 	}
 
 	protected override void Collect()
@@ -43,13 +48,23 @@ public partial class FireSoul : Pickup
 
 		isCollected = false;
 		Animator.Play("RESET");
-		Animator.Advance(0.0);
+		Animator.Advance(0);
+		UpdateLockon();
 		Animator.Play("loop");
 
 		if (StageSettings.instance.IsConnected(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint)))
 			StageSettings.instance.Disconnect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint));
 
 		base.Respawn();
+	}
+
+	private void UpdateLockon()
+	{
+		if (Character.Skills.IsSkillEquipped(SkillKey.FireSoulLockon))
+		{
+			Animator.Play("enable-lockon");
+			Animator.Advance(0);
+		}
 	}
 
 	private void SaveCheckpoint() => isCollectedInCheckpoint = true;

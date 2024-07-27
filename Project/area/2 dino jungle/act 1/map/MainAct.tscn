@@ -2348,7 +2348,7 @@ path = NodePath("../../../../Static/Path/RiverPath")
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 0.766998, 2.6837, 18.454)
 script = ExtResource("7_ys7sj")
 delays = [0.0, 0.4, 4.0, 0.0]
-displayLength = [2.0, 0.5, 0.0, null]
+displayLength = [0.0, 0.5, 0.0, null]
 textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
 
 [node name="RiverEvent" parent="MainAct/RiverEvent/Event" instance=ExtResource("19_rr5sk")]
@@ -5735,6 +5735,7 @@ Movement/Angle = -90.0
 startPaused = true
 smoothPausing = true
 root = NodePath("FlowerMajin3")
+animator = NodePath("")
 
 [node name="FlowerMajin3" parent="MainAct/Crossing/FlowerMajinMover" instance=ExtResource("47_fimbn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -6.10352e-05)
@@ -6992,7 +6993,9 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="JumpFinished" from="MainAct/CavernBoat/BoatStartTrigger/Jump" to="MainAct/CavernBoat/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/CavernBoat/BoatEndTrigger" to="MainAct/CavernBoat/Boat" method="Deactivate"]
 [connection signal="JumpFinished" from="MainAct/CavernBoat/BoatEndTrigger/Jump" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
+[connection signal="Activated" from="MainAct/End/JumpPanel1" to="Static/Collision/FeedingTunnelOneWay" method="Deactivate"]
 [connection signal="Activated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Activate"]
+[connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
 [connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Deactivate"]
 
 [editable path="Static"]

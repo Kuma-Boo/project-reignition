@@ -52,7 +52,6 @@ public partial class SaveSelect : Menu
 				{
 					deleteAnimator.Play("confirm");
 					DeleteSaveFile();
-					deleteAnimator.Play("hide");
 					isDeleteMenuActive = false;
 					return;
 				}
@@ -138,6 +137,8 @@ public partial class SaveSelect : Menu
 
 		menuMemory[MemoryKeys.WorldSelect] = (int)SaveManager.ActiveGameData.lastPlayedWorld; // Set the world selection to the last played world
 		_submenus[0].ShowMenu();
+
+		DebugManager.Instance.OnSkillSelected(-1); // Update Debug Menu
 	}
 
 	public override void ShowMenu()

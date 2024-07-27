@@ -1,14 +1,18 @@
-[gd_scene load_steps=32 format=3 uid="uid://bemb37fo0seak"]
+[gd_scene load_steps=43 format=3 uid="uid://bemb37fo0seak"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterSkillManager.cs" id="1_rj66u"]
 [ext_resource type="AudioStream" uid="uid://dgg82ed3pd114" path="res://sound/sfx/player/speed break end.wav" id="3_di5ls"]
+[ext_resource type="Material" uid="uid://bklx3tbpw7s8e" path="res://object/player/resource/model/material/SpeedbreakOverlay.tres" id="4_4fsut"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/TimeBreak.gdshader" id="6_lb0wt"]
 [ext_resource type="Texture2D" uid="uid://47a1wqak6nce" path="res://object/player/resource/effect/texture/time break.png" id="7_0xj5j"]
-[ext_resource type="Texture2D" uid="uid://ch2re1xkc00aj" path="res://object/player/resource/effect/texture/speed break streak.png" id="8_o68sk"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/ScreenShock.gdshader" id="9_3ptpg"]
 [ext_resource type="AudioStream" uid="uid://c0ht8bcbttefh" path="res://sound/sfx/player/speed break.wav" id="9_800f8"]
+[ext_resource type="Material" uid="uid://cckx4ey0wayq2" path="res://object/player/resource/effect/material/Speedbreak Streak.tres" id="9_isg35"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/SpeedBreak.gdshader" id="10_6bh0u"]
 [ext_resource type="AudioStream" uid="uid://byvon80bojscd" path="res://sound/sfx/player/heartbeat.wav" id="10_fl25x"]
+[ext_resource type="ArrayMesh" uid="uid://cnxw6wvbmkkar" path="res://object/player/resource/effect/model/SpeedbreakFX.res" id="10_wn37a"]
+[ext_resource type="ArrayMesh" uid="uid://cljse54cbo2oh" path="res://object/player/resource/effect/model/SpeedbreakTallFX.res" id="11_6mnos"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="11_h5y28"]
 [ext_resource type="AudioStream" uid="uid://ci25ma2gyy8iq" path="res://sound/sfx/player/time break pad.ogg" id="12_vkf5a"]
 
 [sub_resource type="Curve" id="Curve_jakcp"]
@@ -115,22 +119,64 @@ color = Color(1.8, 1.2, 0, 1)
 alpha_curve = SubResource("CurveTexture_j21f5")
 hue_variation_min = -0.05
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p28i4"]
-transparency = 1
-blend_mode = 1
-cull_mode = 2
-shading_mode = 0
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("8_o68sk")
-distance_fade_mode = 1
-distance_fade_min_distance = 0.1
-distance_fade_max_distance = 0.5
-
 [sub_resource type="QuadMesh" id="QuadMesh_tw248"]
-material = SubResource("StandardMaterial3D_p28i4")
+material = ExtResource("9_isg35")
 size = Vector2(1, 50)
 center_offset = Vector3(0, 25, 0)
+
+[sub_resource type="Curve" id="Curve_bog00"]
+_data = [Vector2(0, 0), 0.0, 7.30253, 0, 0, Vector2(0.231383, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_7g8ig"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_bog00")
+
+[sub_resource type="Curve" id="Curve_bjari"]
+_data = [Vector2(0, 0), 0.0, 0.304004, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_vv7xb"]
+width = 64
+curve = SubResource("Curve_bjari")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_84mxu"]
+lifetime_randomness = 0.5
+emission_shape_offset = Vector3(0.5, 0, 0)
+direction = Vector3(0, 1, 0)
+spread = 120.0
+flatness = 1.0
+initial_velocity_min = 0.5
+initial_velocity_max = 3.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = 20.0
+radial_accel_max = 30.0
+scale_min = 1.5
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_vv7xb")
+color = Color(1, 0.356863, 0.184314, 1)
+alpha_curve = SubResource("CurveTexture_7g8ig")
+hue_variation_max = 0.05
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_74ibn"]
+lifetime_randomness = 0.5
+emission_shape_offset = Vector3(1, 0, 0)
+emission_shape = 2
+emission_sphere_radius = 0.5
+direction = Vector3(2, 1, 0)
+spread = 60.0
+flatness = 1.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = 5.0
+linear_accel_max = 20.0
+radial_accel_max = 20.0
+scale_min = 1.5
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_vv7xb")
+color = Color(1, 0.356863, 0.184314, 1)
+alpha_curve = SubResource("CurveTexture_7g8ig")
+hue_variation_max = 0.05
 
 [sub_resource type="Gradient" id="Gradient_6311d"]
 interpolation_mode = 2
@@ -152,16 +198,17 @@ shader_parameter/factor_texture = SubResource("GradientTexture2D_0q2jh")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fb7an"]
 shader = ExtResource("10_6bh0u")
-shader_parameter/blur_power = 0.0
-shader_parameter/blur_clarity = 5.0
-shader_parameter/sampling_count = 10
+shader_parameter/blur_power = 0.1
+shader_parameter/max_blur_power = 0.1
+shader_parameter/blur_clarity = 2.0
+shader_parameter/sampling_count = 4
 
 [sub_resource type="Animation" id="Animation_d5ix5"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SpeedBreak/ScreenShock:visible")
+tracks/0/path = NodePath("SpeedBreak/CanvasLayer/ScreenShockBB/ScreenShock:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -173,7 +220,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SpeedBreak/ScreenShock:scale")
+tracks/1/path = NodePath("SpeedBreak/CanvasLayer/ScreenShockBB/ScreenShock:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -185,7 +232,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SpeedBreak/ScreenShock:material:shader_parameter/height")
+tracks/2/path = NodePath("SpeedBreak/CanvasLayer/ScreenShockBB/ScreenShock:material:shader_parameter/height")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -197,38 +244,70 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("SpeedBreak/BackBufferCopy/RadialBlur:visible")
+tracks/3/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
+"update": 0,
 "values": [false]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("SpeedBreak/BackBufferCopy/RadialBlur:material:shader_parameter/blur_power")
+tracks/4/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:color")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("SpeedBreak/Streaks:emitting")
+tracks/5/path = NodePath("SpeedBreak/CanvasLayer/BlurBB:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_s5n5e"]
+resource_name = "disable-blur"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpeedBreak/CanvasLayer/BlurBB:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
 "values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_n18pi"]
+resource_name = "enable-blur"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpeedBreak/CanvasLayer/BlurBB:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_45gst"]
@@ -236,7 +315,7 @@ resource_name = "start"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SpeedBreak/ScreenShock:visible")
+tracks/0/path = NodePath("SpeedBreak/CanvasLayer/ScreenShockBB/ScreenShock:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -248,7 +327,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SpeedBreak/ScreenShock:scale")
+tracks/1/path = NodePath("SpeedBreak/CanvasLayer/ScreenShockBB/ScreenShock:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -260,7 +339,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SpeedBreak/ScreenShock:material:shader_parameter/height")
+tracks/2/path = NodePath("SpeedBreak/CanvasLayer/ScreenShockBB/ScreenShock:material:shader_parameter/height")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -272,38 +351,40 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("SpeedBreak/BackBufferCopy/RadialBlur:material:shader_parameter/blur_power")
+tracks/3/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0, 0.0, 0.01]
+"values": [true]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("SpeedBreak/BackBufferCopy/RadialBlur:visible")
+tracks/4/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:color")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"times": PackedFloat32Array(0, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
-tracks/5/type = "value"
+tracks/5/type = "method"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("SpeedBreak/Streaks:emitting")
+tracks/5/path = NodePath("SpeedBreak/Cluster")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.2),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"values": [{
+"args": [true],
+"method": &"SetEmitting"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_i45wl"]
@@ -311,7 +392,7 @@ resource_name = "stop"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SpeedBreak/ScreenShock:visible")
+tracks/0/path = NodePath("SpeedBreak/CanvasLayer/ScreenShockBB/ScreenShock:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -323,7 +404,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SpeedBreak/ScreenShock:scale")
+tracks/1/path = NodePath("SpeedBreak/CanvasLayer/ScreenShockBB/ScreenShock:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -335,7 +416,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SpeedBreak/ScreenShock:material:shader_parameter/height")
+tracks/2/path = NodePath("SpeedBreak/CanvasLayer/ScreenShockBB/ScreenShock:material:shader_parameter/height")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -347,57 +428,58 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("SpeedBreak/BackBufferCopy/RadialBlur:material:shader_parameter/blur_power")
+tracks/3/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.2),
+"times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [0.01, 0.0]
+"values": [true, false]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("SpeedBreak/BackBufferCopy/RadialBlur:visible")
+tracks/4/path = NodePath("SpeedBreak/CanvasLayer/BlurBB/RadialBlur:color")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(1),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
-tracks/5/type = "value"
+tracks/5/type = "method"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("SpeedBreak/Streaks:emitting")
+tracks/5/path = NodePath("SpeedBreak/Cluster")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"values": [{
+"args": [false],
+"method": &"SetEmitting"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5ilpv"]
 _data = {
 "RESET": SubResource("Animation_d5ix5"),
+"disable-blur": SubResource("Animation_s5n5e"),
+"enable-blur": SubResource("Animation_n18pi"),
 "start": SubResource("Animation_45gst"),
 "stop": SubResource("Animation_i45wl")
 }
 
-[node name="Skills" type="Node3D" node_paths=PackedStringArray("timeBreakAnimator", "speedBreakAnimator", "speedBreakSFX", "timeBreakSFX", "heartbeatSFX")]
+[node name="Skills" type="Node3D" node_paths=PackedStringArray("speedBreakAnimator", "speedBreakSFX", "timeBreakAnimator", "timeBreakSFX", "heartbeatSFX")]
 script = ExtResource("1_rj66u")
 baseGroundSpeed = 28
 baseGroundTraction = 8
 baseGroundFriction = 28
 baseGroundOverspeed = 14
 baseGroundTurnaround = 54
-MinTurnAmount = 0.1
-MaxTurnAmount = 0.4
-TurnTurnaround = 0.25
 baseAirSpeed = 14
 baseAirTraction = 18
 baseAirFriction = 24
@@ -407,11 +489,11 @@ accelerationJumpSpeed = 36.0
 homingAttackSpeed = 50.0
 perfectHomingAttackSpeed = 100.0
 homingAttackAcceleration = 200.0
-baseSlideSpeed = 12
-baseSlideTraction = 18
+InitialSlideSpeed = 12
+baseSlideTraction = 4
 baseSlideFriction = 8
-baseSlideOverspeed = 8
-baseSlideTurnaround = 16
+baseSlideOverspeed = 16
+baseSlideTurnaround = 32
 baseBackflipSpeed = 20
 baseBackflipTraction = 16
 baseBackflipFriction = 32
@@ -429,13 +511,14 @@ baseGrindTurnaround = 6
 sidleMovementCurve = SubResource("Curve_jakcp")
 countdownBoostSpeed = 32.0
 landingDashSpeed = 32.0
-timeBreakAnimator = NodePath("TimeBreak/AnimationPlayer")
 speedBreakAnimator = NodePath("SpeedBreak/AnimationPlayer")
 speedBreakActivate = ExtResource("9_800f8")
 speedBreakDeactivate = ExtResource("3_di5ls")
 speedBreakSFX = NodePath("SpeedBreakSFX")
+timeBreakAnimator = NodePath("TimeBreak/AnimationPlayer")
 timeBreakSFX = NodePath("TimeBreakSFX")
 heartbeatSFX = NodePath("HeartbeatSFX")
+speedbreakOverlayMaterial = ExtResource("4_4fsut")
 speedBreakSpeed = 64.0
 
 [node name="SpeedBreakSFX" type="AudioStreamPlayer" parent="."]
@@ -470,6 +553,7 @@ libraries = {
 
 [node name="Streaks" type="GPUParticles3D" parent="SpeedBreak"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 4.1128e-08)
+visible = false
 layers = 32
 emitting = false
 amount = 32
@@ -480,25 +564,67 @@ transform_align = 2
 process_material = SubResource("ParticleProcessMaterial_p1qjv")
 draw_pass_1 = SubResource("QuadMesh_tw248")
 
-[node name="ScreenShock" type="ColorRect" parent="SpeedBreak"]
+[node name="Cluster" type="GPUParticles3D" parent="SpeedBreak" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1.31134e-07, -4.37114e-08, 1, 4.37114e-08, 1, 4.37114e-08, -1, 4.37114e-08, 1.31134e-07, 0, 0.3, 1.4)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 64
+lifetime = 0.2
+randomness = 0.2
+fixed_fps = 60
+interpolate = false
+local_coords = true
+draw_order = 3
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_84mxu")
+draw_pass_1 = ExtResource("10_wn37a")
+script = ExtResource("11_h5y28")
+subSystems = [NodePath("Streak")]
+
+[node name="Streak" type="GPUParticles3D" parent="SpeedBreak/Cluster"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.37338e-15, 0, -1.37338e-15, 1, -1, 4.37114e-08, 1.31134e-07)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.4
+randomness = 0.2
+fixed_fps = 60
+interpolate = false
+local_coords = true
+draw_order = 3
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_74ibn")
+draw_pass_1 = ExtResource("11_6mnos")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="SpeedBreak"]
+layer = -10
+
+[node name="ScreenShockBB" type="BackBufferCopy" parent="SpeedBreak/CanvasLayer"]
+position = Vector2(6.10352e-05, -6.10352e-05)
+copy_mode = 2
+rect = Rect2(0, 0, 1920, 1080)
+
+[node name="ScreenShock" type="ColorRect" parent="SpeedBreak/CanvasLayer/ScreenShockBB"]
 visible = false
 material = SubResource("ShaderMaterial_er50h")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 6.10352e-05
-offset_top = -6.10352e-05
+offset_right = -0.00012207
+offset_bottom = 0.00012207
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(960, 540)
 mouse_filter = 2
 metadata/_edit_lock_ = true
 
-[node name="BackBufferCopy" type="BackBufferCopy" parent="SpeedBreak"]
+[node name="BlurBB" type="BackBufferCopy" parent="SpeedBreak/CanvasLayer"]
 copy_mode = 2
 rect = Rect2(0, 0, 1920, 1080)
 
-[node name="RadialBlur" type="ColorRect" parent="SpeedBreak/BackBufferCopy"]
+[node name="RadialBlur" type="ColorRect" parent="SpeedBreak/CanvasLayer/BlurBB"]
 visible = false
 material = SubResource("ShaderMaterial_fb7an")
 anchors_preset = 15
