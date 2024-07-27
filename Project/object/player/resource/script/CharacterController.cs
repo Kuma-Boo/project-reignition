@@ -652,11 +652,8 @@ namespace Project.Gameplay
 		/// <summary> Updates Turning. Read the function names. </summary>
 		private void UpdateTurning()
 		{
-			if (ActionState == ActionStates.Backflip &&
-				!IsHoldingDirection(PathFollower.BackAngle))
-			{
+			if (ActionState == ActionStates.Backflip)
 				return;
-			}
 
 			if (ActionState == ActionStates.Stomping ||
 				ActionState == ActionStates.Crouching)
@@ -1300,6 +1297,8 @@ namespace Project.Gameplay
 		#region Backflip
 		[Export]
 		public float backflipHeight;
+		/// <summary> How much can the player adjust their angle while backflipping? </summary>
+		private const float MaxBackflipAdjustment = Mathf.Pi * .25f;
 		private void StartBackflip()
 		{
 			CanJumpDash = true;
@@ -1325,12 +1324,33 @@ namespace Project.Gameplay
 
 		private void UpdateBackflip()
 		{
-			if (IsHoldingDirection(PathFollower.ForwardAngle)) // Influence backflip direction slightly
+			if (IsHoldingDirection(PathFollower.ForwardAngle))
+			{
 				MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, -1);
-			else if (IsHoldingDirection(PathFollower.BackAngle))
-				MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, InputVector.Length());
-			else if (Mathf.IsZeroApprox(InputVector.Length()))
-				MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, 0);
+			}
+			else
+			{
+				float targetMovementAngle = ExtensionMethods.ClampAngleRange(GetTargetMovementAngle(), PathFollower.BackAngle, MaxBackflipAdjustment);
+				float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.BackAngle);
+				if (Runtime.Instance.IsUsingController &&
+					IsHoldingDirection(PathFollower.BackAngle) &&
+					Mathf.Abs(inputDeltaAngle) < TurningDampingRange) // Remap controls to provide more analog detail
+				{
+					targetMovementAngle -= inputDeltaAngle * .5f;
+				}
+
+				// Normal turning
+				float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.BackAngle);
+				// Is the player trying to recenter themselves?
+				bool isTurningAround = !IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
+				float turnAmount = isTurningAround ? Skills.TurnTurnaround : Skills.MaxTurnAmount;
+				MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnAmount);
+
+				if (IsHoldingDirection(PathFollower.BackAngle))
+					MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, InputVector.Length());
+				else if (Mathf.IsZeroApprox(InputVector.Length()))
+					MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, 0);
+			}
 
 			if (IsOnGround)
 				ResetActionState();
