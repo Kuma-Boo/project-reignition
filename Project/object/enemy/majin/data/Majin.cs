@@ -2,679 +2,778 @@ using Godot;
 using Godot.Collections;
 using Project.Core;
 
-namespace Project.Gameplay
+namespace Project.Gameplay;
+
+/// <summary> Most common enemy type in Secret Rings. </summary>
+[Tool]
+public partial class Majin : Enemy
 {
-	/// <summary>
-	/// Most common enemy type in Secret Rings.
-	/// </summary>
-	[Tool]
-	public partial class Majin : Enemy
+	[Signal]
+	public delegate void SpinStartedEventHandler();
+
+	#region Editor
+	public override Array<Dictionary> _GetPropertyList()
 	{
-		#region Editor
-		public override Array<Dictionary> _GetPropertyList()
-		{
-			Array<Dictionary> properties = new()
-			{
+		Array<Dictionary> properties =
+			[
 				ExtensionMethods.CreateProperty("Spawn Settings/Spawn Travel Time", Variant.Type.Float, PropertyHint.Range, "0,2,.1")
-			};
+			];
 
-			if (!SpawnTravelDisabled)
-			{
-				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Delay", Variant.Type.Float, PropertyHint.Range, "0,2,.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Offset", Variant.Type.Vector3));
-				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn In Offset", Variant.Type.Vector3));
-				properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Out Offset", Variant.Type.Vector3));
-			}
-
-			properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Track Player", Variant.Type.Bool));
-			if (!trackPlayer)
-				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Rotation Time", Variant.Type.Float));
-
-			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Attack Type", Variant.Type.Int, PropertyHint.Enum, attackType.EnumToString()));
-			if (attackType == AttackTypes.Fire) // Show relevant fire-related settings
-			{
-				properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Active Time", Variant.Type.Float, PropertyHint.Range, "0.1,10,.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Inactive Time", Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
-			}
-
-			properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Enable Enemy Launching", Variant.Type.Bool));
-
-			if (isDefeatLaunchEnabled)
-			{
-				properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Launch Time", Variant.Type.Float, PropertyHint.Range, "0.1,1,0.1"));
-				properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Launch Direction", Variant.Type.Vector3));
-				properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Local Transform", Variant.Type.Bool));
-			}
-
-			return properties;
+		if (SpawnTravelEnabled)
+		{
+			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Delay", Variant.Type.Float, PropertyHint.Range, "0,2,.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Offset", Variant.Type.Vector3));
+			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn In Offset", Variant.Type.Vector3));
+			properties.Add(ExtensionMethods.CreateProperty("Spawn Settings/Spawn Out Offset", Variant.Type.Vector3));
 		}
 
-		public override Variant _Get(StringName property)
+		properties.Add(ExtensionMethods.CreateProperty("Spawn Interval Settings/Enable Spawn Interval", Variant.Type.Bool));
+		if (SpawnIntervalEnabled)
 		{
-			switch ((string)property)
-			{
-				case "Spawn Settings/Spawn Travel Time":
-					return spawnTravelTime;
-				case "Spawn Settings/Spawn Delay":
-					return spawnDelay;
-				case "Spawn Settings/Spawn Offset":
-					return spawnOffset;
-				case "Spawn Settings/Spawn In Offset":
-					return spawnInOffset;
-				case "Spawn Settings/Spawn Out Offset":
-					return spawnOutOffset;
-
-				case "Rotation Settings/Track Player":
-					return trackPlayer;
-				case "Rotation Settings/Rotation Time":
-					return rotationTime;
-
-				case "Attack Settings/Attack Type":
-					return (int)attackType;
-				case "Attack Settings/Flame Active Time":
-					return flameActiveTime;
-				case "Attack Settings/Flame Inactive Time":
-					return flameInactiveTime;
-
-				case "Defeat Settings/Enable Enemy Launching":
-					return isDefeatLaunchEnabled;
-				case "Defeat Settings/Launch Time":
-					return defeatLaunchTime;
-				case "Defeat Settings/Launch Direction":
-					return defeatLaunchDirection;
-				case "Defeat Settings/Local Transform":
-					return isDefeatLocalTransform;
-			}
-
-			return base._Get(property);
+			properties.Add(ExtensionMethods.CreateProperty("Spawn Interval Settings/Spawn Delay", Variant.Type.Float, PropertyHint.Range, "0.1,10,.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Spawn Interval Settings/Separate Despawn Interval", Variant.Type.Bool));
+			if (SeparateDespawninterval)
+				properties.Add(ExtensionMethods.CreateProperty("Spawn Interval Settings/Despawn Delay", Variant.Type.Float, PropertyHint.Range, "0.1,10,.1"));
 		}
 
-		public override bool _Set(StringName property, Variant value)
+		properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Track Player", Variant.Type.Bool));
+		if (!trackPlayer)
+			properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Rotation Time", Variant.Type.Float));
+
+		properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Attack Type", Variant.Type.Int, PropertyHint.Enum, attackType.EnumToString()));
+		if (IsRedMajin) // Show relevant fire-related settings
 		{
-			switch ((string)property)
-			{
-				case "Spawn Settings/Spawn Travel Time":
-					bool toggle = SpawnTravelDisabled != Mathf.IsZeroApprox((float)value);
-					spawnTravelTime = (float)value;
+			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Active Time", Variant.Type.Float, PropertyHint.Range, "0.1,10,.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Inactive Time", Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Flame Aggression Radius", Variant.Type.Int, PropertyHint.Range, "0,100,1"));
+			properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Attack Instantly", Variant.Type.Bool));
+		}
 
-					if (toggle)
-						NotifyPropertyListChanged();
-					break;
-				case "Spawn Settings/Spawn Delay":
-					spawnDelay = (float)value;
-					break;
-				case "Spawn Settings/Spawn Offset":
-					spawnOffset = (Vector3)value;
-					break;
-				case "Spawn Settings/Spawn In Offset":
-					spawnInOffset = (Vector3)value;
-					break;
-				case "Spawn Settings/Spawn Out Offset":
-					spawnOutOffset = (Vector3)value;
-					break;
+		properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Enable Enemy Launching", Variant.Type.Bool));
 
-				case "Rotation Settings/Track Player":
-					trackPlayer = (bool)value;
+		if (IsDefeatLaunchEnabled)
+		{
+			properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Launch Time", Variant.Type.Float, PropertyHint.Range, "0.1,1,0.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Launch Direction", Variant.Type.Vector3));
+			properties.Add(ExtensionMethods.CreateProperty("Defeat Settings/Local Transform", Variant.Type.Bool));
+		}
+
+		return properties;
+	}
+
+	public override Variant _Get(StringName property)
+	{
+		switch ((string)property)
+		{
+			case "Spawn Settings/Spawn Travel Time":
+				return spawnTravelTime;
+			case "Spawn Settings/Spawn Delay":
+				return spawnDelay;
+			case "Spawn Settings/Spawn Offset":
+				return spawnOffset;
+			case "Spawn Settings/Spawn In Offset":
+				return spawnInOffset;
+			case "Spawn Settings/Spawn Out Offset":
+				return spawnOutOffset;
+			case "Spawn Interval Settings/Enable Spawn Interval":
+				return SpawnIntervalEnabled;
+			case "Spawn Interval Settings/Spawn Delay":
+				return spawnIntervalDelay;
+			case "Spawn Interval Settings/Separate Despawn Interval":
+				return SeparateDespawninterval;
+			case "Spawn Interval Settings/Despawn Delay":
+				return despawnIntervalDelay;
+
+			case "Rotation Settings/Track Player":
+				return trackPlayer;
+			case "Rotation Settings/Rotation Time":
+				return rotationTime;
+
+			case "Attack Settings/Attack Type":
+				return (int)attackType;
+			case "Attack Settings/Flame Active Time":
+				return flameActiveTime;
+			case "Attack Settings/Flame Inactive Time":
+				return flameInactiveTime;
+			case "Attack Settings/Flame Aggression Radius":
+				return FlameAggressionRadius;
+			case "Attack Settings/Attack Instantly":
+				return isInstantFlame;
+
+			case "Defeat Settings/Enable Enemy Launching":
+				return IsDefeatLaunchEnabled;
+			case "Defeat Settings/Launch Time":
+				return defeatLaunchTime;
+			case "Defeat Settings/Launch Direction":
+				return defeatLaunchDirection;
+			case "Defeat Settings/Local Transform":
+				return isDefeatLocalTransform;
+		}
+
+		return base._Get(property);
+	}
+
+	public override bool _Set(StringName property, Variant value)
+	{
+		switch ((string)property)
+		{
+			case "Spawn Settings/Spawn Travel Time":
+				bool toggle = SpawnTravelEnabled == Mathf.IsZeroApprox((float)value);
+				spawnTravelTime = (float)value;
+
+				if (toggle)
 					NotifyPropertyListChanged();
-					break;
-				case "Rotation Settings/Rotation Time":
-					rotationTime = Mathf.RoundToInt((float)value * 10.0f) * .1f;
-					break;
+				break;
+			case "Spawn Settings/Spawn Delay":
+				spawnDelay = (float)value;
+				break;
+			case "Spawn Settings/Spawn Offset":
+				spawnOffset = (Vector3)value;
+				break;
+			case "Spawn Settings/Spawn In Offset":
+				spawnInOffset = (Vector3)value;
+				break;
+			case "Spawn Settings/Spawn Out Offset":
+				spawnOutOffset = (Vector3)value;
+				break;
+			case "Spawn Interval Settings/Enable Spawn Interval":
+				spawnIntervalDelay = (bool)value ? 1 : 0;
+				NotifyPropertyListChanged();
+				break;
+			case "Spawn Interval Settings/Spawn Delay":
+				spawnIntervalDelay = (float)value;
+				break;
+			case "Spawn Interval Settings/Separate Despawn Interval":
+				despawnIntervalDelay = (bool)value ? 1 : 0;
+				NotifyPropertyListChanged();
+				break;
+			case "Spawn Interval Settings/Despawn Delay":
+				despawnIntervalDelay = (float)value;
+				break;
 
-				case "Attack Settings/Attack Type":
-					attackType = (AttackTypes)(int)value;
-					NotifyPropertyListChanged();
-					break;
-				case "Attack Settings/Flame Active Time":
-					flameActiveTime = (float)value;
-					break;
-				case "Attack Settings/Flame Inactive Time":
-					flameInactiveTime = (float)value;
-					break;
+			case "Rotation Settings/Track Player":
+				trackPlayer = (bool)value;
+				NotifyPropertyListChanged();
+				break;
+			case "Rotation Settings/Rotation Time":
+				rotationTime = Mathf.RoundToInt((float)value * 10.0f) * .1f;
+				break;
 
-				case "Defeat Settings/Enable Enemy Launching":
-					isDefeatLaunchEnabled = (bool)value;
-					NotifyPropertyListChanged();
-					break;
-				case "Defeat Settings/Launch Time":
-					defeatLaunchTime = (float)value;
-					break;
-				case "Defeat Settings/Launch Direction":
-					defeatLaunchDirection = (Vector3)value;
-					break;
-				case "Defeat Settings/Local Transform":
-					isDefeatLocalTransform = (bool)value;
-					break;
+			case "Attack Settings/Attack Type":
+				attackType = (AttackTypes)(int)value;
+				NotifyPropertyListChanged();
+				break;
+			case "Attack Settings/Flame Active Time":
+				flameActiveTime = (float)value;
+				break;
+			case "Attack Settings/Flame Inactive Time":
+				flameInactiveTime = (float)value;
+				break;
+			case "Attack Settings/Flame Aggression Radius":
+				FlameAggressionRadius = (int)value;
+				break;
+			case "Attack Settings/Attack Instantly":
+				isInstantFlame = (bool)value;
+				break;
 
-				default:
-					return false;
-			}
+			case "Defeat Settings/Enable Enemy Launching":
+				IsDefeatLaunchEnabled = (bool)value;
+				NotifyPropertyListChanged();
+				break;
+			case "Defeat Settings/Launch Time":
+				defeatLaunchTime = (float)value;
+				break;
+			case "Defeat Settings/Launch Direction":
+				defeatLaunchDirection = (Vector3)value;
+				break;
+			case "Defeat Settings/Local Transform":
+				isDefeatLocalTransform = (bool)value;
+				break;
 
-			return true;
-		}
-		#endregion
-
-		[Export]
-		private Node3D fireRoot;
-		private AnimationNodeBlendTree animatorRoot;
-		private AnimationNodeTransition moveTransition;
-		private AnimationNodeTransition stateTransition;
-		private AnimationNodeStateMachinePlayback spinState;
-		private AnimationNodeStateMachinePlayback fireState;
-
-		private bool isSpawning;
-		private float currentTravelRatio;
-		/// <summary> How long does spawn traveling take? Set to 0 to spawn instantly. </summary>
-		private float spawnTravelTime;
-		/// <summary> How long should spawning be delayed? </summary>
-		private float spawnDelay;
-		/// <summary> Where to spawn from (Added with OriginalPosition) </summary>
-		private Vector3 spawnOffset;
-		/// <summary> In handle for spawn traveling. Use this to shape the general curve. </summary>
-		private Vector3 spawnInOffset;
-		/// <summary> Out handle for spawn traveling. Use this to add a final bit of rotation easing. </summary>
-		private Vector3 spawnOutOffset;
-		public bool SpawnTravelDisabled => Mathf.IsZeroApprox(spawnTravelTime);
-		public Basis CalculationBasis => Engine.IsEditorHint() ? GlobalBasis : GetParent<Node3D>().GlobalBasis.Inverse() * calculationBasis;
-		private Basis calculationBasis;
-		/// <summary> Local Position to be after spawning is complete. </summary>
-		private Vector3 OriginalPosition => Engine.IsEditorHint() ? GlobalPosition : SpawnData.spawnTransform.Origin;
-		public Vector3 SpawnPosition => OriginalPosition + CalculationBasis * spawnOffset;
-		public Vector3 InHandle => SpawnPosition + CalculationBasis * spawnInOffset;
-		public Vector3 OutHandle => OriginalPosition + CalculationBasis * spawnOutOffset;
-
-		/// <summary> Use this to launch the enemy when defeated. </summary>
-		private bool isDefeatLaunchEnabled;
-		/// <summary> Use local transform for launch direction? </summary>
-		private bool isDefeatLocalTransform = true;
-		/// <summary> How long should the enemy be launched?  </summary>
-		private float defeatLaunchTime = .5f;
-		/// <summary> Direction to launch. Leave at Vector3.Zero to automatically calculate. </summary>
-		private Vector3 defeatLaunchDirection;
-
-		/// <summary> Responsible for handling tweens (i.e. Spawning/Default launching) </summary>
-		private Tween tweener;
-
-		/// <summary> Should this majin rotate to face the player? </summary>
-		private bool trackPlayer = true;
-		/// <summary> How long to complete a rotation cycle when trackPlayer is false. </summary>
-		private float rotationTime;
-
-		private float rotationAmount;
-
-		private AttackTypes attackType;
-		private enum AttackTypes
-		{
-			Disabled, // Just idle
-			Spin, // Spin like a top
-			Fire, // Spit fire out
+			default:
+				return false;
 		}
 
-		private float flameActiveTime = 1.0f;
-		private float flameInactiveTime;
-		/// <summary> Timer to keep track of flame cycles. </summary>
-		private float flameTimer;
-		/// <summary> Is the flame attack currently active? </summary>
-		private bool isFlameActive;
-		/// <summary> Timer to keep track of stagger length. </summary>
-		private float staggerTimer;
-		private const float STAGGER_LENGTH = 1.2f;
+		return true;
+	}
+	#endregion
 
-		/// <summary> Reference to the MovingObject.cs node being used. (Must be the direct parent of the Majin node.) </summary>
-		private MovingObject movementController;
+	[Export(PropertyHint.NodeType, "Node3D")]
+	private NodePath flameRoot;
+	private Node3D FlameRoot { get; set; }
+	[Export(PropertyHint.NodeType, "BoneAttachment3D")]
+	private NodePath hitboxAttachment;
+	private BoneAttachment3D HitboxAttachment { get; set; }
+	private AnimationNodeBlendTree animatorRoot;
+	private AnimationNodeTransition moveTransition;
+	private AnimationNodeTransition stateTransition;
+	private AnimationNodeStateMachinePlayback spinState;
+	private AnimationNodeStateMachinePlayback fireState;
 
-		// Animation parameters
-		private readonly StringName IDLE_STATE = "idle";
-		private readonly StringName SPIN_STATE = "spin";
-		private readonly StringName FIRE_STATE = "fire";
-		private readonly StringName STATE_REQUEST_PARAMETER = "parameters/state_transition/transition_request";
+	private bool isSpawning;
+	private float currentTravelRatio;
+	/// <summary> How long does spawn traveling take? Set to 0 to spawn instantly. </summary>
+	private float spawnTravelTime;
+	/// <summary> How long should spawning be delayed? </summary>
+	private float spawnDelay;
+	/// <summary> Where to spawn from (Added with OriginalPosition) </summary>
+	private Vector3 spawnOffset;
+	/// <summary> In handle for spawn traveling. Use this to shape the general curve. </summary>
+	private Vector3 spawnInOffset;
+	/// <summary> Out handle for spawn traveling. Use this to add a final bit of rotation easing. </summary>
+	private Vector3 spawnOutOffset;
+	/// <summary> Should the majin spawn/despawn on loop? </summary>
+	private bool SpawnIntervalEnabled => !Mathf.IsZeroApprox(spawnIntervalDelay);
+	/// <summary> Should the majin have a unique despawn interval? </summary>
+	private bool SeparateDespawninterval => !Mathf.IsZeroApprox(despawnIntervalDelay);
+	/// <summary> How long should spawning be delayed? </summary>
+	private float spawnIntervalDelay;
+	/// <summary> How long should spawning be delayed? </summary>
+	private float despawnIntervalDelay;
+	private bool finishedTraveling;
+	public bool SpawnTravelEnabled => !Mathf.IsZeroApprox(spawnTravelTime);
+	public Basis CalculationBasis => Engine.IsEditorHint() ? GlobalBasis : GetParent<Node3D>().GlobalBasis.Inverse() * calculationBasis;
+	private Basis calculationBasis;
+	/// <summary> Local Position to be after spawning is complete. </summary>
+	public Vector3 OriginalPosition => Engine.IsEditorHint() ? GlobalPosition : SpawnData.spawnTransform.Origin;
+	public Vector3 SpawnPosition => OriginalPosition + (CalculationBasis * spawnOffset);
+	public Vector3 InHandle => SpawnPosition + (CalculationBasis * spawnInOffset);
+	public Vector3 OutHandle => OriginalPosition + (CalculationBasis * spawnOutOffset);
 
-		private readonly StringName ENABLED_STATE = "enabled";
-		private readonly StringName DISABLED_STATE = "disabled";
-		private readonly StringName MOVE_TRANSITION_PARAMETER = "parameters/move_transition/transition_request";
-		private readonly StringName MOVE_BLEND_PARAMETER = "parameters/move_blend/blend_position";
-		private readonly StringName TELEPORT_PARAMETER = "parameters/teleport_trigger/request";
-
-		private const float MOVE_TRANSITION_LENGTH = .4f;
-
-		protected override void SetUp()
+	/// <summary> Use this to launch the enemy when defeated. </summary>
+	public bool IsDefeatLaunchEnabled { get; private set; }
+	/// <summary> Use local transform for launch direction? </summary>
+	private bool isDefeatLocalTransform = true;
+	/// <summary> How long should the enemy be launched?  </summary>
+	private float defeatLaunchTime = .5f;
+	/// <summary> Direction to launch. Leave at Vector3.Zero to automatically calculate. </summary>
+	private Vector3 defeatLaunchDirection;
+	public Vector3 CalculateLaunchPosition()
+	{
+		Vector3 launchVector = defeatLaunchDirection;
+		if (launchVector.IsEqualApprox(Vector3.Zero) && !Engine.IsEditorHint()) // Calculate launch direction
 		{
-			if (Engine.IsEditorHint()) return; // In Editor
-
-			calculationBasis = GlobalBasis; // Cache GlobalBasis for calculations
-			animationTree.Active = true;
-			animatorRoot = animationTree.TreeRoot as AnimationNodeBlendTree;
-			moveTransition = animatorRoot.GetNode("move_transition") as AnimationNodeTransition;
-			stateTransition = animatorRoot.GetNode("state_transition") as AnimationNodeTransition;
-			fireState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/fire_state/playback");
-			spinState = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/spin_state/playback");
-
-			if (attackType == AttackTypes.Spin) // Try to get movement controller parent
-				movementController = GetParentOrNull<MovingObject>();
-
-			base.SetUp();
+			launchVector = (Character.Animator.Back() + (Character.Animator.Up() * .2f)).Normalized();
+			launchVector = launchVector.Normalized() * Mathf.Clamp(Character.MoveSpeed, 5, 20);
+		}
+		else if (isDefeatLocalTransform)
+		{
+			launchVector = GlobalTransform.Basis * launchVector;
 		}
 
-		public override void Respawn()
+		launchVector = launchVector.Rotated(Vector3.Up, Mathf.Pi); // Fix forward direction
+
+		return GlobalPosition + launchVector;
+	}
+
+	/// <summary> Responsible for handling tweens (i.e. Spawning/Default launching) </summary>
+	private Tween tweener;
+	/// <summary> Responsible for handling spawn toggling. </summary>
+	private float timer = -1;
+
+	/// <summary> Should this majin rotate to face the player? </summary>
+	private bool trackPlayer = true;
+	/// <summary> How long to complete a rotation cycle when trackPlayer is false. </summary>
+	private float rotationTime;
+	private float rotationAmount;
+
+	private AttackTypes attackType;
+	private enum AttackTypes
+	{
+		Disabled, // Just idle
+		Spin, // Spin like a top
+		Fire, // Spit fire out
+	}
+
+	public bool IsRedMajin => attackType == AttackTypes.Fire;
+	/// <summary> Only become aggressive within a certain radius? </summary>
+	public int FlameAggressionRadius { get; private set; }
+	/// <summary> Is the flame attack currently active? </summary>
+	private bool isFlameActive;
+	private float flameActiveTime = 1.0f;
+	private float flameInactiveTime;
+	/// <summary> Should the fire majin attack instantly when its range is entered? </summary>
+	private bool isInstantFlame;
+	/// <summary> Timer to keep track of flame cycles. </summary>
+	private float flameTimer;
+
+	/// <summary> Timer to keep track of stagger length. </summary>
+	private float staggerTimer;
+	private const float StaggerLength = 1.2f;
+
+	// Animation parameters
+	private readonly StringName IdleState = "idle";
+	private readonly StringName SpinState = "spin";
+	private readonly StringName FireState = "fire";
+	private readonly StringName StateRequestParameter = "parameters/state_transition/transition_request";
+
+	private readonly StringName EnabledState = "enabled";
+	private readonly StringName DisabledState = "disabled";
+	private readonly StringName MoveTransition = "parameters/move_transition/transition_request";
+	private readonly StringName MoveBlend = "parameters/move_blend/blend_position";
+	private readonly StringName SpawnTrigger = "parameters/spawn_trigger/request";
+	private readonly StringName DespawnTrigger = "parameters/despawn_trigger/request";
+	private readonly StringName HitTransition = "parameters/hit_transition/transition_request";
+	private readonly StringName StaggerState = "stagger";
+	private readonly StringName BoopState = "boop";
+
+	private const float MovementTransitionLength = .4f;
+
+	protected override void SetUp()
+	{
+		if (Engine.IsEditorHint()) return; // In Editor
+
+		FlameRoot = GetNodeOrNull<Node3D>(flameRoot);
+		HitboxAttachment = GetNodeOrNull<BoneAttachment3D>(hitboxAttachment);
+		calculationBasis = GlobalBasis; // Cache GlobalBasis for calculations
+		base.SetUp();
+
+		AnimationTree.Active = true;
+		animatorRoot = AnimationTree.TreeRoot as AnimationNodeBlendTree;
+		moveTransition = animatorRoot.GetNode("move_transition") as AnimationNodeTransition;
+		stateTransition = animatorRoot.GetNode("state_transition") as AnimationNodeTransition;
+		fireState = (AnimationNodeStateMachinePlayback)AnimationTree.Get("parameters/fire_state/playback");
+		spinState = (AnimationNodeStateMachinePlayback)AnimationTree.Get("parameters/spin_state/playback");
+
+		// Skeleton3D node is always 3 nodes away from the root node
+		HitboxAttachment.SetExternalSkeleton(HitboxAttachment.GetPathTo(Root.GetChild(0).GetChild(0).GetChild(0)));
+		HitboxAttachment.BoneIdx = 0;
+	}
+
+	public override void Respawn()
+	{
+		// Kill any active tweens
+		tweener?.Kill();
+		timer = -1;
+
+		isSpawning = false;
+		finishedTraveling = false;
+
+		AnimationPlayer.Play("RESET");
+		AnimationPlayer.Advance(0);
+
+		// Reset rotation
+		if (!trackPlayer && !Mathf.IsZeroApprox(rotationTime)) // Precalculate rotation amount
+			rotationAmount = Mathf.Tau / rotationTime;
+
+		rotationVelocity = 0;
+		currentRotation = 0;
+		ApplyRotation();
+
+		// Reset idle movement
+		idleFactorVelocity = 0;
+		AnimationTree.Set(IdleFactorParameter, 0);
+		AnimationTree.Set(DefeatTransitionParameter, DisabledState);
+
+		// Reset stagger
+		staggerTimer = 0;
+
+		// Reset flame attack
+		if (IsRedMajin)
 		{
-			if (tweener != null) // Kill any active tweens
-				tweener.Kill();
-
-			base.Respawn();
-			isSpawning = false;
-
-			animationPlayer.Play("RESET");
-			animationPlayer.Advance(0);
-
-			// Reset rotation
-			if (!trackPlayer && !Mathf.IsZeroApprox(rotationTime)) // Precalculate rotation amount
-				rotationAmount = Mathf.Tau / rotationTime;
-
-			rotationVelocity = 0;
-			currentRotation = 0;
-			UpdateRotation();
-
-			// Reset idle movement
-			idleFactorVelocity = 0;
-			animationTree.Set(IDLE_FACTOR_PARAMETER, 0);
-			animationTree.Set(DEFEAT_TRANSITION_PARAMETER, DISABLED_STATE);
-
-			if (movementController != null) // Reset/Pause movement
-			{
-				movementController.Reset();
-				movementController.TimeScale = 0;
-			}
-
-			// Reset stagger
-			staggerTimer = 0;
-
-			// Reset flame attack
-			flameTimer = 0;
 			isFlameActive = false;
-
-			if (spawnMode == SpawnModes.Always ||
-			(spawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
-				EnterRange();
-			else // Start hidden
-			{
-				Visible = false;
-				SetHitboxStatus(false);
-			}
+			flameTimer = (FlameAggressionRadius != 0 || isInstantFlame) ? flameInactiveTime : 0;
 		}
 
+		base.Respawn();
 
-		public override void TakePlayerDamage()
+		if (!isSpawning) // Start hidden
 		{
-			Stagger();
-			base.TakePlayerDamage();
-
-			if (!IsDefeated)
-				animationPlayer.Play("stagger");
+			Visible = false;
+			SetHitboxStatus(false);
 		}
+	}
 
+	public override void TakeDamage(int amount = -1)
+	{
+		Stagger();
+		base.TakeDamage(amount);
+	}
 
-		public override void TakeExternalDamage(int amount = -1)
+	public void DisableFlameAttack()
+	{
+		if (isFlameActive)
+			ToggleFlameAttack();
+	}
+
+	private void Stagger()
+	{
+		staggerTimer = StaggerLength;
+		DisableFlameAttack();
+
+		if (Character.AttackState == CharacterController.AttackStates.None)
 		{
-			Stagger();
-			base.TakeExternalDamage(amount);
+			AnimationTree.Set(HitTransition, BoopState);
 		}
-
-
-		private void Stagger()
+		else
 		{
-			staggerTimer = STAGGER_LENGTH;
-
-			if (isFlameActive)
-				ToggleFlameAttack();
-
-			animationTree.Set(HIT_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			AnimationTree.Set(HitTransition, StaggerState);
+			AnimationPlayer.Play("stagger");
 		}
+		AnimationTree.Set(HitTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
 
+	protected override void Defeat()
+	{
+		base.Defeat();
+		SetHitboxStatus(false, IsDefeatLaunchEnabled);
 
-		protected override void Defeat()
+		AnimationPlayer.Play("defeat");
+		if (IsDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))
 		{
-			base.Defeat();
+			// Kill any existing tween
+			tweener?.Kill();
 
-			animationPlayer.Play("strike");
-			if (isDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))
-			{
-				if (tweener != null) // Kill any existing tween
-					tweener.Kill();
+			AnimationTree.Set(DefeatTransitionParameter, EnabledState);
+			AnimationTree.Set(HitTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 
-				animationTree.Set(DEFEAT_TRANSITION_PARAMETER, ENABLED_STATE);
-				animationTree.Set(HIT_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+			Vector3 targetRotation = Vector3.Up * Mathf.Tau * 2.0f;
+			if (Runtime.randomNumberGenerator.Randf() > .5f)
+				targetRotation *= -1;
 
-				Vector3 launchDirection = defeatLaunchDirection;
-				if (launchDirection.IsEqualApprox(Vector3.Zero)) // Calculate launch direction
-					launchDirection = (Character.Animator.Back() + Character.Animator.Up() * .2f).Normalized();
-				else if (isDefeatLocalTransform)
-					launchDirection = GlobalTransform.Basis * launchDirection;
+			targetRotation += Vector3.Left * Mathf.Pi * .25f;
 
-				launchDirection = launchDirection.Rotated(Vector3.Up, Mathf.Pi); // Fix forward direction
-				launchDirection = launchDirection.Normalized() * Mathf.Clamp(Character.MoveSpeed, 5, 20);
-
-				Vector3 targetRotation = Vector3.Up * Mathf.Tau * 2.0f;
-				if (Runtime.randomNumberGenerator.Randf() > .5f)
-					targetRotation *= -1;
-
-				targetRotation += Vector3.Left * Mathf.Pi * .25f;
-
-				// Get knocked back
-				tweener = CreateTween().SetParallel();
-				tweener.TweenProperty(this, "global_position", GlobalPosition + launchDirection, defeatLaunchTime);
-				tweener.TweenProperty(this, "rotation", Rotation + targetRotation, defeatLaunchTime * 2.0f).SetEase(Tween.EaseType.In);
-				tweener.TweenCallback(Callable.From(() => animationPlayer.Play("despawn"))).SetDelay(defeatLaunchTime * .5f);
-			}
-			else
-			{
-				animationPlayer.Advance(0.0);
-				animationPlayer.Play("explode");
-			}
+			// Get knocked back
+			tweener = CreateTween().SetParallel();
+			tweener.TweenProperty(this, "global_position", CalculateLaunchPosition(), defeatLaunchTime);
+			tweener.TweenProperty(this, "rotation", Rotation + targetRotation, defeatLaunchTime * 2.0f).SetEase(Tween.EaseType.In);
+			tweener.TweenCallback(Callable.From(() => AnimationPlayer.Play("launch-end"))).SetDelay(defeatLaunchTime * .5f);
+			tweener.TweenCallback(Callable.From(() => SetHitboxStatus(false, false))).SetDelay(defeatLaunchTime);
 		}
-
-		protected override void UpdateEnemy()
+		else
 		{
-			if (Engine.IsEditorHint()) return; // In Editor
-
-			if (isSpawning)
-			{
-				UpdateTravel();
-				return;
-			}
-
-			if (!IsActive) return; // Hasn't spawned yet
-			if (IsDefeated) return; // Already defeated
-
-			if (staggerTimer != 0)
-			{
-				staggerTimer = Mathf.MoveToward(staggerTimer, 0, PhysicsManager.physicsDelta);
-				return;
-			}
-
-			if (attackType == AttackTypes.Fire)
-				UpdateFlameAttack();
-
-			// Update rotation
-			if (IsInRange)
-			{
-				if (trackPlayer) // Rotate to face player
-					TrackPlayer();
-				else if (!Mathf.IsZeroApprox(rotationTime))
-				{
-					rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, TRACKING_SMOOTHING);
-					currentRotation = ExtensionMethods.ModAngle(currentRotation + PhysicsManager.physicsDelta * rotationVelocity);
-				}
-			}
-			else
-				currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TRACKING_SMOOTHING);
-
-			UpdateRotation();
-			UpdateFidgets();
+			AnimationPlayer.Advance(0.0);
+			AnimationPlayer.Play("explode");
 		}
+	}
 
+	protected override void UpdateEnemy()
+	{
+		if (Engine.IsEditorHint()) return; // In Editor
 
+		if (SpawnIntervalEnabled)
+			UpdateSpawnInterval();
 
-		protected override void UpdateInteraction()
+		if (isSpawning)
 		{
-			if (!IsHitboxEnabled) return;
-
-			if (Character.Lockon.IsBouncingLockoutActive && Character.ActionState == CharacterController.ActionStates.Normal)
-			{
-				Stagger();
-				Character.Lockon.StartBounce(IsDefeated);
-				return;
-			}
-
-			base.UpdateInteraction();
+			UpdateTravel();
+			return;
 		}
 
+		if (!IsActive) return; // Hasn't spawned yet
+		if (IsDefeated) return; // Already defeated
 
-		private float idleFactorVelocity;
-		private const float IDLE_FACTOR_SMOOTHING = 30.0f; // Idle movement strength smoothing
+		if (staggerTimer != 0)
+		{
+			staggerTimer = Mathf.MoveToward(staggerTimer, 0, PhysicsManager.physicsDelta);
+			return;
+		}
 
+		if (IsRedMajin)
+			UpdateFlameAttack();
 
-		private bool isFidgetActive;
-		private int fidgetIndex; // Index of the current fidget animation.
-		private float fidgetTimer; // Keeps track of how long it's been since the last fidget
+		UpdateRotation();
+		ApplyRotation();
+		UpdateFidgets();
+	}
 
-		private readonly StringName[] FIDGET_ANIMATIONS = {
+	private void UpdateRotation()
+	{
+		bool OutsideFlameAggression = IsRedMajin && !isFlameActive && !IsInFlameAggressionRange();
+		if (OutsideFlameAggression || !IsInRange)
+		{
+			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TrackingSmoothing);
+			if (OutsideFlameAggression && !isFlameActive)
+				flameTimer = flameInactiveTime;
+			return;
+		}
+
+		if (trackPlayer) // Rotate to face player
+		{
+			TrackPlayer();
+			return;
+		}
+
+		if (!Mathf.IsZeroApprox(rotationTime))
+		{
+			rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, TrackingSmoothing);
+			currentRotation = ExtensionMethods.ModAngle(currentRotation + (PhysicsManager.physicsDelta * rotationVelocity));
+		}
+	}
+
+	private void ApplyRotation()
+	{
+		Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
+		FlameRoot.Rotation = Vector3.Up * currentRotation;
+	}
+
+	private void UpdateSpawnInterval()
+	{
+		if (Mathf.IsEqualApprox(timer, -1)) // Spawn intervals haven't started yet
+			return;
+
+		timer = Mathf.MoveToward(timer, 0, PhysicsManager.physicsDelta);
+		if (!Mathf.IsZeroApprox(timer))
+			return;
+
+		if (Character.Lockon.IsHomingAttacking)
+			return;
+
+		timer = -1;
+		ToggleSpawnState();
+	}
+
+	private float idleFactorVelocity;
+	private const float IDLE_FACTOR_SMOOTHING = 30.0f; // Idle movement strength smoothing
+
+	private bool isFidgetActive;
+	private int fidgetIndex; // Index of the current fidget animation.
+	private float fidgetTimer; // Keeps track of how long it's been since the last fidget
+
+	private readonly StringName[] FidgetAnimations = [
 			"flip",
-			"fight"
-		};
+			"fight",
+			"survey",
+		];
 
-		private readonly StringName HIT_TRIGGER_PARAMETER = "parameters/hit_trigger/request";
-		private readonly StringName DEFEAT_TRANSITION_PARAMETER = "parameters/defeat_transition/transition_request";
+	private readonly StringName HitTrigger = "parameters/hit_trigger/request";
+	private readonly StringName DefeatTransitionParameter = "parameters/defeat_transition/transition_request";
 
-		private readonly StringName IDLE_FACTOR_PARAMETER = "parameters/idle_movement_factor/add_amount";
-		private readonly StringName FIDGET_TRANSITION_PARAMETER = "parameters/fidget_transition/transition_request"; // Sets the fidget animation
-		private readonly StringName FIDGET_TRIGGER_PARAMETER = "parameters/fidget_trigger/request"; // Currently fidgeting? Set StringName
-		private readonly StringName FIDGET_TRIGGER_STATE_PARAMETER = "parameters/fidget_trigger/active"; // Get StringName
-		private const float FIDGET_FREQUENCY = 3f; // How often to fidget
+	private readonly StringName IdleFactorParameter = "parameters/idle_movement_factor/add_amount";
+	private readonly StringName FidgetTransition = "parameters/fidget_transition/transition_request"; // Sets the fidget animation
+	private readonly StringName FidgetTrigger = "parameters/fidget_trigger/request"; // Currently fidgeting? Set StringName
+	private readonly StringName FidgetTriggerState = "parameters/fidget_trigger/active"; // Get StringName
+	private const float FidgetFrequency = 3f; // How often to fidget
 
-		/// <summary>
-		/// Updates fidgets and idle movement.
-		/// </summary>
-		private void UpdateFidgets()
+	/// <summary> Updates fidgets and idle movement. </summary>
+	private void UpdateFidgets()
+	{
+		if (attackType == AttackTypes.Spin) return; // No need to process fidgets when in AttackTypes.Spin
+
+		float targetIdleFactor = 1.0f;
+		if (isFidgetActive) // Adjust movement strength based on fidget
 		{
-			if (attackType == AttackTypes.Spin) return; // No need to process fidgets when in AttackTypes.Spin
+			if (fidgetIndex == 0)
+				targetIdleFactor = 0.0f;
+			else if (fidgetIndex == 1)
+				targetIdleFactor = 0.5f;
 
-			float targetIdleFactor = 1.0f;
-			if (isFidgetActive) // Adjust movement strength based on fidget
+			isFidgetActive = (bool)AnimationTree.Get(FidgetTriggerState);
+		}
+		else if (attackType != AttackTypes.Fire || !IsInRange) // Wait for fidget to start
+		{
+			fidgetTimer += PhysicsManager.physicsDelta;
+			if (fidgetTimer > FidgetFrequency) // Start fidget
 			{
-				if (fidgetIndex == 0)
-					targetIdleFactor = 0.0f;
-				else if (fidgetIndex == 1)
-					targetIdleFactor = 0.5f;
-
-				isFidgetActive = (bool)animationTree.Get(FIDGET_TRIGGER_STATE_PARAMETER);
+				fidgetTimer = 0; // Reset timer
+				fidgetIndex = Runtime.randomNumberGenerator.RandiRange(0, FidgetAnimations.Length - 1);
+				AnimationTree.Set(FidgetTransition, FidgetAnimations[fidgetIndex]);
+				AnimationTree.Set(FidgetTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+				isFidgetActive = true;
 			}
-			else if (attackType != AttackTypes.Fire || !IsInRange) // Wait for fidget to start
-			{
-				fidgetTimer += PhysicsManager.physicsDelta;
-				if (fidgetTimer > FIDGET_FREQUENCY) // Start fidget
-				{
-					fidgetTimer = 0; // Reset timer
-					fidgetIndex = Runtime.randomNumberGenerator.RandiRange(0, FIDGET_ANIMATIONS.Length - 1);
-					animationTree.Set(FIDGET_TRANSITION_PARAMETER, FIDGET_ANIMATIONS[fidgetIndex]);
-					animationTree.Set(FIDGET_TRIGGER_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-					isFidgetActive = true;
-				}
-			}
-
-			float idleFactor = (float)animationTree.Get(IDLE_FACTOR_PARAMETER);
-			idleFactor = ExtensionMethods.SmoothDamp(idleFactor, targetIdleFactor, ref idleFactorVelocity, IDLE_FACTOR_SMOOTHING * PhysicsManager.physicsDelta);
-			animationTree.Set(IDLE_FACTOR_PARAMETER, idleFactor);
 		}
 
-		private void UpdateRotation()
+		float idleFactor = (float)AnimationTree.Get(IdleFactorParameter);
+		idleFactor = ExtensionMethods.SmoothDamp(idleFactor, targetIdleFactor, ref idleFactorVelocity, IDLE_FACTOR_SMOOTHING * PhysicsManager.physicsDelta);
+		AnimationTree.Set(IdleFactorParameter, idleFactor);
+	}
+
+	private void UpdateFlameAttack()
+	{
+		if (!IsInRange || isFidgetActive) // Out of range or fidget is active
 		{
-			root.Rotation = new Vector3(root.Rotation.X, currentRotation, root.Rotation.Z);
-			fireRoot.Rotation = Vector3.Up * currentRotation;
+			DisableFlameAttack();
+			return;
 		}
 
-		private void UpdateFlameAttack()
-		{
-			if (!IsInRange || isFidgetActive) // Out of range or fidget is active
-			{
-				if (isFlameActive)
-					ToggleFlameAttack();
+		if (Mathf.IsZeroApprox(flameInactiveTime) && isFlameActive) return; // Always activated
 
+		if (isFlameActive)
+		{
+			flameTimer = Mathf.MoveToward(flameTimer, flameActiveTime, PhysicsManager.physicsDelta);
+			if (Mathf.IsEqualApprox(flameTimer, flameActiveTime)) // Switch off
+				ToggleFlameAttack();
+		}
+		else
+		{
+			// Return early if the player is outside of the majin's aggression radius
+			if (!Mathf.IsZeroApprox(FlameAggressionRadius) && !IsInFlameAggressionRange())
 				return;
-			}
 
-			if (Mathf.IsZeroApprox(flameInactiveTime) && isFlameActive) return; // Always activated
+			flameTimer = Mathf.MoveToward(flameTimer, flameInactiveTime, PhysicsManager.physicsDelta);
+			if (Mathf.IsEqualApprox(flameTimer, flameInactiveTime)) // Switch on
+				ToggleFlameAttack();
+		}
+	}
 
-			if (isFlameActive)
-			{
-				flameTimer = Mathf.MoveToward(flameTimer, flameActiveTime, PhysicsManager.physicsDelta);
-				if (Mathf.IsEqualApprox(flameTimer, flameActiveTime)) // Switch off
-					ToggleFlameAttack();
-			}
-			else
-			{
-				flameTimer = Mathf.MoveToward(flameTimer, flameInactiveTime, PhysicsManager.physicsDelta);
-				if (Mathf.IsEqualApprox(flameTimer, flameInactiveTime)) // Switch on
-					ToggleFlameAttack();
-			}
+	private bool IsInFlameAggressionRange()
+	{
+		if (FlameAggressionRadius == 0)
+			return true;
+
+		float distance = (GlobalPosition - Character.GlobalPosition).Flatten().LengthSquared();
+		// Because raising to the 2nd power is better than taking a square root...
+		return distance < Mathf.Pow(FlameAggressionRadius, 2);
+	}
+
+	private void ToggleFlameAttack()
+	{
+		isFlameActive = !isFlameActive;
+
+		if (isFlameActive) // Start fire attack
+		{
+			AnimationPlayer.Play("fire-start");
+			fireState.Travel("attack-fire-start");
+			stateTransition.XfadeTime = 0.1;
+			AnimationTree.Set(StateRequestParameter, FireState);
+		}
+		else // Stop flame attack
+		{
+			AnimationPlayer.Play("fire-end");
+			AnimationPlayer.Advance(0.0);
+			fireState.Travel("attack-fire-end");
+			stateTransition.XfadeTime = 0.4;
+			AnimationTree.Set(StateRequestParameter, IdleState);
 		}
 
-		private void ToggleFlameAttack()
+		flameTimer = 0; // Reset timer
+	}
+
+	protected override void Spawn()
+	{
+		if (isSpawning || IsActive || IsDefeated) return;
+
+		isSpawning = true;
+		SetDeferred("visible", true);
+
+		tweener?.Kill();
+		tweener = CreateTween().SetProcessMode(Tween.TweenProcessMode.Physics);
+
+		AnimationTree.Set(StateRequestParameter, IdleState); // Idle
+
+		if (SpawnTravelEnabled && !finishedTraveling) // Travel
 		{
-			isFlameActive = !isFlameActive;
+			currentTravelRatio = 0;
+			Position = SpawnPosition;
 
-			if (isFlameActive) // Start fire attack
-			{
-				animationPlayer.Play("fire-start");
-				fireState.Travel("attack-fire-start");
-				stateTransition.XfadeTime = 0.1;
-				animationTree.Set(STATE_REQUEST_PARAMETER, FIRE_STATE);
-			}
-			else // Stop flame attack
-			{
-				animationPlayer.Play("fire-end");
-				animationPlayer.Advance(0.0);
-				fireState.Travel("attack-fire-end");
-				stateTransition.XfadeTime = 0.4;
-				animationTree.Set(STATE_REQUEST_PARAMETER, IDLE_STATE);
-			}
+			AnimationPlayer.Play("travel");
+			tweener.TweenProperty(this, nameof(currentTravelRatio), 1, spawnTravelTime).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.InOut).SetDelay(spawnDelay);
+			tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning));
 
-			flameTimer = 0; // Reset timer
+			moveTransition.XfadeTime = 0;
+			AnimationTree.Set(MoveTransition, EnabledState); // Travel animation
+		}
+		else // Spawn instantly
+		{
+			AnimationPlayer.Play("spawn");
+			AnimationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(.5f); // Delay by length of teleport animation
 		}
 
-		protected override void EnterRange()
+		AnimationPlayer.Advance(0.0);
+		base.Spawn();
+	}
+
+	public override void Despawn()
+	{
+		if (IsDefeated) // Remove from the scene tree
 		{
-			if (spawnMode == SpawnModes.Signal) return;
+			timer = -1;
+			base.Despawn();
+			return;
+		}
+
+		tweener?.Kill();
+		tweener = CreateTween().SetProcessMode(Tween.TweenProcessMode.Physics);
+
+		SetHitboxStatus(false);
+		AnimationPlayer.Play("despawn");
+		AnimationTree.Set(DespawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		tweener.TweenCallback(new Callable(this, MethodName.FinishDespawning)).SetDelay(.5f); // Delay by length of teleport animation
+		EmitSignal(SignalName.Despawned);
+	}
+
+	protected override void StartUhuBounce()
+	{
+		AnimationTree.Set(HitTransition, BoopState);
+		AnimationTree.Set(HitTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	public void ToggleSpawnState()
+	{
+		if (IsDefeated)
+			return;
+
+		if (IsActive)
+			Despawn();
+		else
 			Spawn();
-		}
+	}
 
+	private void UpdateTravel()
+	{
+		// Calculate tangent (rotation)
+		Vector3 velocity = CalculationBasis.Inverse() * CalculateTravelVelocity(currentTravelRatio).Normalized();
+		if (Mathf.Abs(velocity.Dot(Vector3.Up)) < .9f && !velocity.IsZeroApprox())
+			currentRotation = -velocity.SignedAngleTo(Vector3.Back, Vector3.Up);
 
-		protected override void Spawn()
+		Position = CalculateTravelPosition(currentTravelRatio);
+		ApplyRotation();
+
+		// TODO Update animations
+		Vector3 acceleration = CalculationBasis.Inverse() * CalculateTravelAcceleration(currentTravelRatio).Normalized();
+		Vector2 moveBlend = new(acceleration.X, Mathf.Clamp(velocity.Y, 0, 1));
+		if (Mathf.IsZeroApprox(acceleration.X))
+			moveBlend.Y = velocity.Y;
+		AnimationTree.Set(MoveBlend, moveBlend);
+	}
+
+	/// <summary> Use Bezier interpolation to get the majin's position. </summary>
+	public Vector3 CalculateTravelPosition(float t) => SpawnPosition.BezierInterpolate(InHandle, OutHandle, OriginalPosition, t);
+	/// <summary> The derivative is the majin's velocity. </summary>
+	public Vector3 CalculateTravelVelocity(float t) => SpawnPosition.BezierDerivative(InHandle, OutHandle, OriginalPosition, t);
+	/// <summary> The derivative of velocity is the majin's acceleration. </summary>
+	public Vector3 CalculateTravelAcceleration(float t) => CalculateTravelVelocity(t).BezierDerivative(InHandle, OutHandle, OriginalPosition, t);
+
+	private void FinishSpawning()
+	{
+		IsActive = true;
+		isSpawning = false;
+		finishedTraveling = true;
+		SetHitboxStatus(true);
+
+		if (SpawnTravelEnabled)
 		{
-			if (isSpawning || IsActive) return;
-
-			isSpawning = true;
-			SetDeferred("visible", true);
-
-			if (tweener != null)
-				tweener.Kill();
-			tweener = CreateTween().SetProcessMode(Tween.TweenProcessMode.Physics);
-
-			animationTree.Set(STATE_REQUEST_PARAMETER, IDLE_STATE); // Idle
-
-			if (SpawnTravelDisabled) // Spawn instantly
-			{
-				animationPlayer.Play("spawn");
-				animationTree.Set(TELEPORT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-				tweener.TweenCallback(new(this, MethodName.FinishSpawning)).SetDelay(.5f); // Delay by length of teleport animation
-			}
-			else // Travel
-			{
-				currentTravelRatio = 0;
-				Position = SpawnPosition;
-
-				animationPlayer.Play("travel");
-				tweener.TweenProperty(this, nameof(currentTravelRatio), 1, spawnTravelTime).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.InOut).SetDelay(spawnDelay);
-				tweener.TweenCallback(new(this, MethodName.FinishSpawning));
-
-				moveTransition.XfadeTime = 0;
-				animationTree.Set(MOVE_TRANSITION_PARAMETER, ENABLED_STATE); // Travel animation
-			}
-
-			animationPlayer.Advance(0.0);
-			base.Spawn();
+			moveTransition.XfadeTime = MovementTransitionLength;
+			AnimationTree.Set(MoveTransition, DisabledState); // Stopped moving
 		}
 
-
-		private void UpdateTravel()
+		if (attackType == AttackTypes.Spin)
 		{
-			// Calculate tangent (rotation)
-			Vector3 velocity = CalculationBasis.Inverse() * CalculateTravelVelocity(currentTravelRatio).Normalized();
-			if (Mathf.Abs(velocity.Dot(Vector3.Up)) < .9f)
-				currentRotation = -velocity.SignedAngleTo(Vector3.Back, Vector3.Up);
+			spinState.Travel("attack-spin-start");
+			AnimationTree.Set(StateRequestParameter, SpinState);
 
-			Position = CalculateTravelPosition(currentTravelRatio);
-			UpdateRotation();
-
-			// TODO Update animations
-			Vector3 acceleration = CalculationBasis.Inverse() * CalculateTravelAcceleration(currentTravelRatio).Normalized();
-			Vector2 moveBlend = new(acceleration.X, Mathf.Clamp(velocity.Y, 0, 1));
-			if (Mathf.IsZeroApprox(acceleration.X))
-				moveBlend.Y = velocity.Y;
-			animationTree.Set(MOVE_BLEND_PARAMETER, moveBlend);
+			tweener?.Kill();
+			tweener = CreateTween();
+			tweener.TweenCallback(new Callable(this, MethodName.OnSpinActivated)).SetDelay(0.3f); // Delay spin activation by windup animation length
 		}
 
+		if (SpawnIntervalEnabled)
+			timer = SeparateDespawninterval ? despawnIntervalDelay : spawnIntervalDelay;
+	}
 
-		public Vector3 CalculateTravelPosition(float t)
-		{
-			if (!spawnInOffset.IsZeroApprox() || !spawnOutOffset.IsZeroApprox()) // Use cubic bezier interpolation
-			{
-				Vector3 a = SpawnPosition.Lerp(InHandle, t);
-				Vector3 b = InHandle.Lerp(OutHandle, t);
-				Vector3 c = OutHandle.Lerp(OriginalPosition, t);
+	private void FinishDespawning()
+	{
+		IsActive = false;
 
-				Vector3 d = a.Lerp(b, t);
-				Vector3 e = b.Lerp(c, t);
+		if (SpawnIntervalEnabled)
+			timer = spawnIntervalDelay;
+	}
 
-				return d.Lerp(e, t);
-			}
-
-			return SpawnPosition.Lerp(OriginalPosition, t);
-		}
-
-
-		public Vector3 CalculateTravelVelocity(float t)
-		{
-			return SpawnPosition * (-3 * Mathf.Pow(t, 2) + 6 * t - 3) +
-			InHandle * (9 * Mathf.Pow(t, 2) - 12 * t + 3) +
-			OutHandle * (-9 * Mathf.Pow(t, 2) + 6 * t) +
-			OriginalPosition * (3 * Mathf.Pow(t, 2));
-		}
-
-
-		public Vector3 CalculateTravelAcceleration(float t)
-		{
-			return SpawnPosition * (-6 * t + 6) +
-			InHandle * (18 * t - 12) +
-			OutHandle * (-18 * t + 6) +
-			OriginalPosition * (6 * t);
-		}
-
-
-		private void FinishSpawning()
-		{
-			IsActive = true;
-			isSpawning = false;
-			SetHitboxStatus(true);
-
-			if (!SpawnTravelDisabled)
-			{
-				moveTransition.XfadeTime = MOVE_TRANSITION_LENGTH;
-				animationTree.Set(MOVE_TRANSITION_PARAMETER, DISABLED_STATE); // Stopped moving
-			}
-
-			if (attackType == AttackTypes.Spin)
-			{
-				spinState.Travel("attack-spin-start");
-				animationTree.Set(STATE_REQUEST_PARAMETER, SPIN_STATE);
-
-				if (tweener != null)
-					tweener.Kill();
-
-				tweener = CreateTween();
-				tweener.TweenCallback(new Callable(this, MethodName.OnSpinActivated)).SetDelay(0.3f); // Delay spin activation by windup animation length
-			}
-		}
-
-
-		/// <summary>
-		/// Called after spin attack's windup animation.
-		/// </summary>
-		private void OnSpinActivated()
-		{
-			animationPlayer.Play("spin");
-
-			if (movementController != null) // Start movement
-				movementController.TimeScale = 1;
-		}
+	/// <summary> Called after spin attack's windup animation. </summary>
+	public void OnSpinActivated()
+	{
+		AnimationPlayer.Play("spin");
+		EmitSignal(SignalName.SpinStarted);
 	}
 }

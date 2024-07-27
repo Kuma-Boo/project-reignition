@@ -3,145 +3,519 @@ using Godot.Collections;
 using Project.Core;
 using Project.Gameplay;
 
-namespace Project.Interface.Menus
+namespace Project.Interface.Menus;
+
+public partial class SkillSelect : Menu
 {
-	public partial class SkillSelect : Menu
+	[Export]
+	private PackedScene skillOption;
+	[Export]
+	private VBoxContainer optionContainer;
+	[Export]
+	private VBoxContainer augmentContainer;
+	[Export]
+	private Node2D cursor;
+	[Export]
+	private Description description;
+	[Export]
+	private Sprite2D scrollbar;
+	[Export]
+	private Sprite2D skillPointFill;
+	[Export]
+	private Label levelLabel;
+	[Export]
+	private Label skillPointLabel;
+	[Export]
+	private AnimationPlayer alertAnimator;
+	[Export]
+	private Label alertLabel;
+	private int AlertSelection;
+	private bool IsAlertMenuActive { get; set; }
+
+	private bool IsEditingAugment { get; set; }
+
+	private SkillListResource SkillList => Runtime.Instance.SkillList;
+	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
+
+	private int cursorPosition;
+
+	private int scrollAmount;
+	private float scrollRatio;
+	private Vector2 scrollVelocity;
+	private const float ScrollSmoothing = .05f;
+	/// <summary> How much to scroll per skill. </summary>
+	private readonly int ScrollInterval = 63;
+	/// <summary> Number of skills on a single page. </summary>
+	private readonly int PageSize = 8;
+
+	private Array<SkillOption> skillOptionList = [];
+	private Array<SkillOption> currentSkillOptionList = [];
+
+	protected override void SetUp()
 	{
-		[Export]
-		private PackedScene skillOption;
-		[Export]
-		private VBoxContainer optionContainer;
-		[Export]
-		private Node2D cursor;
-		[Export]
-		private Description description;
-		[Export]
-		private Sprite2D scrollbar;
-		[Export]
-		private Sprite2D skillPointFill;
-		[Export]
-		private Label skillPointLabel;
-
-		private SkillListResource MasterSkillList => Runtime.Instance.masterSkillList;
-		private SkillRing ActiveSkillRing => SaveManager.ActiveGameData.skillRing;
-
-		private int cursorPosition;
-
-
-		private int scrollAmount;
-		private float scrollRatio;
-		private Vector2 scrollVelocity;
-		private const float SCROLL_SMOOTHING = .05f;
-		/// <summary> How much to scroll per skill. </summary>
-		private readonly int SCROLL_INTERVAL = 63;
-		/// <summary> Number of skills on a single page. </summary>
-		private readonly int PAGE_SIZE = 8;
-
-		private Array<SkillOption> skillList = new();
-
-		protected override void SetUp()
+		for (int i = 0; i < (int)SkillKey.Max; i++)
 		{
-			for (int i = 0; i < (int)SkillKeyEnum.Max; i++)
-			{
-				SkillOption newSkill = skillOption.Instantiate<SkillOption>();
-				newSkill.Key = (SkillKeyEnum)i;
-				newSkill.Number = i + 1;
-				newSkill.Cost = MasterSkillList.GetSkillCost(newSkill.Key);
-				newSkill.IsSkillActive = ActiveSkillRing.equippedSkills.Contains(newSkill.Key);
-				newSkill.RedrawData();
+			SkillKey key = (SkillKey)i;
+			SkillResource skill = SkillList.GetSkill(key);
 
-				optionContainer.AddChild(newSkill);
-				skillList.Add(newSkill);
+			if (skill == null)
+			{
+				skillOptionList.Add(null);
+				continue;
 			}
 
-			description.ShowDescription();
-			description.SetText(skillList[VerticalSelection].DescriptionKey);
+			SkillOption newSkill = skillOption.Instantiate<SkillOption>();
+			newSkill.Skill = skill;
+			newSkill.Number = i + 1;
+			newSkill.Initialize();
 
-			Redraw();
-			base.SetUp();
-		}
+			skillOptionList.Add(newSkill);
+			optionContainer.AddChild(newSkill);
 
+			if (!newSkill.Skill.HasAugments) // Skip augments
+				continue;
 
-		public override void _Process(double _)
-		{
-			scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * (160 * scrollRatio - 80), ref scrollVelocity, SCROLL_SMOOTHING);
-		}
-
-
-		protected override void UpdateSelection()
-		{
-			int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
-			if (inputSign != 0)
+			for (int j = 0; j < newSkill.Skill.Augments.Count; j++)
 			{
-				VerticalSelection = WrapSelection(VerticalSelection + inputSign, (int)SkillKeyEnum.Max);
+				SkillOption newAugment = skillOption.Instantiate<SkillOption>();
+				newAugment.Skill = newSkill.Skill.Augments[j];
+				newAugment.Number = newAugment.Skill.AugmentIndex;
+				newAugment.Initialize();
+				newAugment.Visible = false;
 
-				if (VerticalSelection == 0 || VerticalSelection == (int)SkillKeyEnum.Max - 1)
+				AddChild(newAugment); // Augments are added as direct children to the skill select menu
+				newSkill.augments.Add(newAugment);
+			}
+		}
+
+		base.SetUp();
+	}
+
+	public override void _Process(double _)
+	{
+		float targetScrollPosition = (160 * scrollRatio) - 80;
+		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, ScrollSmoothing);
+	}
+
+	protected override void Cancel()
+	{
+		if (IsAlertMenuActive)
+		{
+			if (AlertSelection == 1)
+			{
+				AlertSelection = 0;
+				alertAnimator.Play("select-no");
+				alertAnimator.Advance(0.0);
+			}
+
+			alertAnimator.Play("hide");
+			return;
+		}
+
+		if (IsEditingAugment)
+		{
+			HideAugmentMenu();
+			return;
+		}
+
+		SaveManager.SaveGameData();
+		animator.Play("hide");
+	}
+
+	protected override void UpdateSelection()
+	{
+		if (IsAlertMenuActive)
+		{
+			int input = Mathf.Sign(Input.GetAxis("move_left", "move_right"));
+			if (input < 0 && AlertSelection == 0)
+			{
+				AlertSelection = 1;
+				alertAnimator.Play("select-yes");
+			}
+			else if (input > 0 && AlertSelection == 1)
+			{
+				AlertSelection = 0;
+				alertAnimator.Play("select-no");
+			}
+
+			return;
+		}
+
+		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		if (IsEditingAugment)
+		{
+			if (inputSign != 0)
+				AugmentSelection = WrapSelection(AugmentSelection + inputSign, augmentContainer.GetChildCount());
+
+			cursor.Position = Vector2.Up * -AugmentSelection * ScrollInterval;
+			UpdateCursor();
+
+			UpdateDescription();
+			return;
+		}
+
+		if (inputSign != 0)
+		{
+			VerticalSelection = WrapSelection(VerticalSelection + inputSign, currentSkillOptionList.Count);
+
+			if (currentSkillOptionList.Count <= PageSize)
+			{
+				// Disable scrolling
+				scrollAmount = 0;
+				scrollRatio = 0;
+				cursorPosition = VerticalSelection;
+			}
+			else
+			{
+				// Update scroll
+				if (VerticalSelection == 0 || VerticalSelection == currentSkillOptionList.Count - 1)
 					cursorPosition = scrollAmount = VerticalSelection;
 				else if ((inputSign < 0 && cursorPosition == 1) || (inputSign > 0 && cursorPosition == 6))
 					scrollAmount += inputSign;
 				else
 					cursorPosition += inputSign;
 
-				scrollAmount = Mathf.Clamp(scrollAmount, 0, (int)SkillKeyEnum.Max - PAGE_SIZE);
-				scrollRatio = (float)scrollAmount / ((int)SkillKeyEnum.Max - PAGE_SIZE);
-				cursorPosition = Mathf.Clamp(cursorPosition, 0, PAGE_SIZE - 1);
-				optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * SCROLL_INTERVAL);
-				cursor.Position = Vector2.Up * -cursorPosition * SCROLL_INTERVAL;
-				description.SetText(skillList[VerticalSelection].DescriptionKey);
-
-				animator.Play("select");
-				if (!isSelectionScrolling)
-					StartSelectionTimer();
-
-				return;
+				scrollAmount = Mathf.Clamp(scrollAmount, 0, currentSkillOptionList.Count - PageSize);
+				scrollRatio = (float)scrollAmount / (currentSkillOptionList.Count - PageSize);
+				cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
 			}
 
-			// TODO Change sort method when horizontal input is detected
+			cursor.Position = Vector2.Up * -cursorPosition * ScrollInterval;
+
+			UpdateCursor();
+			optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * ScrollInterval);
+
+			UpdateDescription();
 		}
 
+		// TODO Change sort method when speedbreak is pressed
+	}
 
-		protected override void Confirm()
+	private void UpdateDescription()
+	{
+		if (IsEditingAugment)
 		{
-			if (!ToggleSkill(skillList[VerticalSelection].Key))
-				return;
+			if (AugmentSelection == 0)
+				description.SetText(currentSkillOptionList[VerticalSelection].Skill.DescriptionKey);
+			else
+				description.SetText(currentSkillOptionList[VerticalSelection].augments[AugmentSelection - 1].Skill.DescriptionKey);
 
-			Redraw();
+			return;
 		}
 
+		int augmentIndex = ActiveSkillRing.GetAugmentIndex(currentSkillOptionList[VerticalSelection].Skill.Key);
+		if (currentSkillOptionList[VerticalSelection].Skill.HasAugments && augmentIndex != 0)
+			description.SetText(currentSkillOptionList[VerticalSelection].augments[augmentIndex - 1].Skill.DescriptionKey);
+		else
+			description.SetText(currentSkillOptionList[VerticalSelection].Skill.DescriptionKey);
+	}
 
-		private void Redraw()
+	private void UpdateCursor()
+	{
+		animator.Play("select");
+		animator.Seek(0);
+		animator.Advance(0);
+		if (!isSelectionScrolling)
+			StartSelectionTimer();
+	}
+
+	public override void ShowMenu()
+	{
+		// Update visible skill list to account for multiple save files
+		currentSkillOptionList.Clear();
+		for (int i = 0; i < skillOptionList.Count; i++)
 		{
-			skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
-			skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);
-			skillList[VerticalSelection].IsSkillActive = ActiveSkillRing.equippedSkills.Contains(skillList[VerticalSelection].Key);
-		}
+			if (skillOptionList[i] == null)
+				continue;
 
+			SkillKey key = (SkillKey)i;
+			skillOptionList[i].Visible = false;
 
-		private bool ToggleSkill(SkillKeyEnum key)
-		{
-			if (ActiveSkillRing.equippedSkills.Contains(key))
+			if (!SaveManager.ActiveSkillRing.IsSkillUnlocked(key))
 			{
-				ActiveSkillRing.equippedSkills.Remove(key);
-				ActiveSkillRing.TotalCost -= MasterSkillList.GetSkillCost(key);
-				animator.Play("unequip");
-				return true;
+				GD.Print(key);
+				continue;
 			}
 
-			// Ensure the player has enough skill points
-			int targetTotalCost = ActiveSkillRing.TotalCost + MasterSkillList.GetSkillCost(key);
-			if (targetTotalCost > ActiveSkillRing.MaxSkillPoints)
-				return false;
+			currentSkillOptionList.Add(skillOptionList[i]);
 
-			ActiveSkillRing.equippedSkills.Add(key);
-			ActiveSkillRing.TotalCost = targetTotalCost;
+			// Process augments
+			if (!skillOptionList[i].Skill.HasAugments)
+			{
+				skillOptionList[i].Visible = true;
+				continue;
+			}
+
+			UpdateAugmentHierarchy(skillOptionList[i], i);
+		}
+
+		Redraw();
+		base.ShowMenu();
+	}
+
+	protected override void Confirm()
+	{
+		if (IsAlertMenuActive)
+		{
+			if (AlertSelection == 1)
+			{
+				// Toggle skills
+				SwapConflictSkills();
+				alertAnimator.Play("confirm");
+			}
+			else
+			{
+				alertAnimator.Play("hide");
+			}
+
+			return;
+		}
+
+		if (!ToggleSkill())
+			return;
+
+		Redraw();
+	}
+
+	private void Redraw()
+	{
+		skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
+		skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);
+		foreach (Node option in optionContainer.GetChildren())
+		{
+			if (option is not SkillOption)
+				continue;
+
+			((SkillOption)option).Redraw();
+		}
+
+		if (IsEditingAugment)
+		{
+			foreach (Node option in augmentContainer.GetChildren())
+			{
+				if (option is not SkillOption)
+					continue;
+
+				((SkillOption)option).Redraw();
+			}
+		}
+
+		UpdateDescription();
+		levelLabel.Text = Tr("skill_select_level").Replace("0", SaveManager.ActiveGameData.level.ToString("00"));
+	}
+
+	private void SwapConflictSkills()
+	{
+		// NOTE: It's technically possible to put the game into an "illegal" state by having multiple conflicting skills
+		// Be mindful when designing skill conflicts to avoid this
+		SkillResource baseSkill = currentSkillOptionList[VerticalSelection].Skill;
+		if (IsEditingAugment)
+			baseSkill = baseSkill.GetAugment(AugmentSelection);
+		SkillResource conflictingSkill = ActiveSkillRing.GetConflictingSkill(baseSkill.Key);
+
+		if (ActiveSkillRing.UnequipSkill(conflictingSkill.Key, ActiveSkillRing.GetAugmentIndex(conflictingSkill.Key)))
+			ActiveSkillRing.EquipSkill(baseSkill.Key, IsEditingAugment ? AugmentSelection : 0);
+
+		Redraw();
+	}
+
+	private bool ToggleSkill()
+	{
+		SkillKey key = currentSkillOptionList[VerticalSelection].Skill.Key;
+		if (!IsEditingAugment && currentSkillOptionList[VerticalSelection].HasUnlockedAugments()) // Open the augment menu
+		{
+			ShowAugmentMenu();
+			return false;
+		}
+
+		if (ActiveSkillRing.UnequipSkill(key, IsEditingAugment ? AugmentSelection : 0))
+		{
+			animator.Play("unequip");
+			return true;
+		}
+
+		SkillEquipStatusEnum status = ActiveSkillRing.EquipSkill(key, IsEditingAugment ? AugmentSelection : 0);
+		if (status == SkillEquipStatusEnum.Success)
+		{
 			animator.Play("equip");
 			return true;
 		}
 
-
-		private void SortMenuByCost()
+		if (status == SkillEquipStatusEnum.Conflict ||
+			status == SkillEquipStatusEnum.Expensive)
 		{
+			// Open alert menu
+			IsAlertMenuActive = true;
+			alertAnimator.Play("RESET");
+			alertAnimator.Advance(0.0);
 
+			if (status == SkillEquipStatusEnum.Conflict)
+			{
+				SkillResource baseSkill = currentSkillOptionList[VerticalSelection].Skill;
+				if (IsEditingAugment)
+					baseSkill = baseSkill.GetAugment(AugmentSelection);
+				SkillResource conflictingSkill = ActiveSkillRing.GetConflictingSkill(baseSkill.Key);
+
+				alertLabel.Text = Tr("skill_conflict");
+				alertLabel.Text = alertLabel.Text.Replace("SKILL", Tr(baseSkill.NameKey));
+				alertLabel.Text = alertLabel.Text.Replace("CONFLICT", Tr(conflictingSkill.NameKey));
+				AlertSelection = 0; // Set to "No"
+			}
+			else
+			{
+				alertLabel.Text = Tr("skill_sp_shortage");
+				AlertSelection = -1; // Disable Selection
+				alertAnimator.Play("select-cancel");
+				alertAnimator.Advance(0.0);
+			}
+
+			alertAnimator.Play("show");
+		}
+
+		return false; // Something failed
+	}
+
+	public void AlertMenuClosed()
+	{
+		IsAlertMenuActive = false;
+		EnableProcessing();
+	}
+
+	private int AugmentSelection { get; set; }
+	private void ShowAugmentMenu()
+	{
+		animator.Play("augment-show");
+		IsEditingAugment = true;
+		DisableProcessing();
+		SkillOption baseSkill = currentSkillOptionList[VerticalSelection];
+
+		if (baseSkill.GetParent() == this)
+		{
+			RemoveChild(baseSkill);
+			augmentContainer.CallDeferred("add_child", baseSkill);
+			baseSkill.Visible = true;
+		}
+
+		for (int i = 0; i < baseSkill.augments.Count; i++)
+		{
+			SkillOption augment = baseSkill.augments[i];
+			augment.Visible = true;
+
+			if (!SaveManager.ActiveSkillRing.IsSkillUnlocked(augment.Skill)) // Don't add locked skills
+				continue;
+
+			if (augment.GetParent() == this)
+			{
+				augment.GetParent().RemoveChild(augment);
+				augmentContainer.CallDeferred("add_child", augment);
+			}
+		}
+	}
+
+	private void HideAugmentMenu()
+	{
+		animator.Play("augment-hide");
+		IsEditingAugment = false;
+		DisableProcessing();
+	}
+
+	private void OnAugmentClosed()
+	{
+		for (int i = augmentContainer.GetChildCount() - 1; i >= 0; i--)
+		{
+			SkillOption augment = augmentContainer.GetChild<SkillOption>(i);
+			augment.Visible = false;
+			augmentContainer.RemoveChild(augment);
+			CallDeferred("add_child", augment);
+		}
+
+		EnableProcessing();
+	}
+
+	private void ToggleAugmentMenu()
+	{
+		SkillOption baseSkill = currentSkillOptionList[VerticalSelection];
+		int augmentIndex = SaveManager.ActiveSkillRing.GetAugmentIndex(currentSkillOptionList[VerticalSelection].Skill.Key);
+		if (IsEditingAugment)
+		{
+			cursorPosition = augmentIndex;
+			AugmentSelection = augmentIndex;
+
+			// Move the skill option node to the augment menu
+			SkillOption skillOption = optionContainer.GetChild<SkillOption>(VerticalSelection);
+			skillOption.Number = skillOption.Skill.AugmentIndex;
+			optionContainer.RemoveChild(skillOption);
+			augmentContainer.CallDeferred("add_child", skillOption);
+
+			// Sort augment options
+			augmentContainer.CallDeferred("move_child", baseSkill, baseSkill.GetAugmentOffset());
+			for (int i = 0; i < baseSkill.augments.Count; i++)
+			{
+				int index = baseSkill.augments[i].Skill.AugmentIndex;
+				baseSkill.augments[i].Number = index;
+				augmentContainer.CallDeferred("move_child", baseSkill.augments[i], index < 0 ? i : i + 1);
+			}
+		}
+		else
+		{
+			cursorPosition = VerticalSelection - scrollAmount;
+
+			// Move the correct skill augment node to the skill option menu
+			SkillOption skillOption = augmentContainer.GetChild<SkillOption>(augmentIndex);
+			skillOption.Number = VerticalSelection + 1;
+			augmentContainer.RemoveChild(skillOption);
+			optionContainer.CallDeferred("add_child", skillOption);
+			optionContainer.CallDeferred("move_child", skillOption, VerticalSelection);
+		}
+
+		CallDeferred(MethodName.Redraw);
+		cursor.Position = Vector2.Up * -cursorPosition * ScrollInterval;
+	}
+
+	/// <summary> Updates a skill option so the correct augment appears on the skill select menu. </summary>
+	private void UpdateAugmentHierarchy(SkillOption baseSkill, int index)
+	{
+		SkillKey key = baseSkill.Skill.Key;
+		SkillOption shownSkill = baseSkill;
+		baseSkill.Visible = false;
+
+		int augmentIndex = ActiveSkillRing.GetAugmentIndex(key) - 1;
+		for (int i = 0; i < baseSkill.augments.Count; i++)
+		{
+			if (i == augmentIndex)
+			{
+				shownSkill = baseSkill.augments[i];
+				continue;
+			}
+
+			baseSkill.augments[i].Visible = false;
+			if (baseSkill.augments[i].GetParent() != this)
+			{
+				baseSkill.augments[i].GetParent().RemoveChild(baseSkill.augments[i]);
+				CallDeferred("add_child", baseSkill.augments[i]);
+			}
+		}
+
+		// Use the equipped augment instead of the base skill
+		shownSkill.Number = index + 1;
+		shownSkill.Visible = true;
+
+		// Move the active augment to the correct position in the skill menu
+		if (shownSkill.GetParent() != optionContainer)
+		{
+			shownSkill.GetParent().RemoveChild(shownSkill);
+			optionContainer.CallDeferred("add_child", shownSkill);
+			optionContainer.CallDeferred("move_child", shownSkill, index);
+			shownSkill.CallDeferred(SkillOption.MethodName.Redraw);
+		}
+
+		// Move the base skill if needed
+		if (shownSkill != baseSkill && baseSkill.GetParent() != this)
+		{
+			baseSkill.Number = 0;
+			baseSkill.Visible = false;
+			optionContainer.RemoveChild(baseSkill);
+			CallDeferred("add_child", baseSkill);
 		}
 	}
 }

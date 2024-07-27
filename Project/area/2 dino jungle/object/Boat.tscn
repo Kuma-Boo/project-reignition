@@ -1,12 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://cuplakh6fkalc"]
+[gd_scene load_steps=24 format=3 uid="uid://cuplakh6fkalc"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/PathTraveller.cs" id="1_712du"]
+[ext_resource type="AudioStream" uid="uid://wkorboffjxyb" path="res://sound/sfx/stage/dinosaur jungle/boat obstacle.wav" id="3_054if"]
 [ext_resource type="PackedScene" uid="uid://basm3ynnw1lsn" path="res://area/2 dino jungle/object/model/Boat.gltf" id="3_tcnkk"]
+[ext_resource type="AudioStream" uid="uid://cmhlue3eei3q" path="res://sound/sfx/stage/dinosaur jungle/boat activation.wav" id="4_6u5lf"]
+[ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://area/1 sand oasis/data/particle/material/Water Dust.tres" id="5_piq17"]
+[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="6_go3or"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_yrin3"]
-radius = 0.4
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_j10iq"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_4arkh"]
+radius = 0.3
 
 [sub_resource type="Animation" id="Animation_5h4yi"]
 length = 0.001
@@ -34,6 +36,86 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector3(1, 1, 1)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Dust:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Splatter:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_kiirj"]
+resource_name = "activate"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Dust:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Splatter:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_vb4b4"]
+resource_name = "deactivate"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Dust:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Splatter:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_nxpop"]
 resource_name = "despawn"
@@ -46,10 +128,10 @@ tracks/0/path = NodePath("Boat/BoatMesh:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.166667, 0.333333),
-"transitions": PackedFloat32Array(0.5, 1.5, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0.2, 0.1), Vector3(0, 0, 0)]
+"values": [Vector3(0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -58,10 +140,10 @@ tracks/1/path = NodePath("Boat:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.330964),
-"transitions": PackedFloat32Array(3, 1),
+"times": PackedFloat32Array(0, 0.166667, 0.333333, 0.6),
+"transitions": PackedFloat32Array(0.5, 3, 1, 1),
 "update": 0,
-"values": [Vector3(1, 1, 1), Vector3(0, 0, 0)]
+"values": [Vector3(1, 1, 1), Vector3(1.2, 1.2, 1.2), Vector3(1, 1, 1), Vector3(0, 0, 0)]
 }
 tracks/2/type = "method"
 tracks/2/imported = false
@@ -89,10 +171,10 @@ tracks/0/path = NodePath("Boat/BoatMesh:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.166667, 0.333333),
-"transitions": PackedFloat32Array(1, 1.5, 0.5),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0.2, 0.1), Vector3(0, 0, 0)]
+"values": [Vector3(0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -101,70 +183,156 @@ tracks/1/path = NodePath("Boat:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.333333),
-"transitions": PackedFloat32Array(1, 3),
+"times": PackedFloat32Array(0, 0.266666, 0.333333),
+"transitions": PackedFloat32Array(0.5, 3, 1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(1, 1, 1)]
+"values": [Vector3(0, 0, 0), Vector3(1.2, 1.2, 1.2), Vector3(1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_e4dfs"]
 _data = {
 "RESET": SubResource("Animation_5h4yi"),
+"activate": SubResource("Animation_kiirj"),
+"deactivate": SubResource("Animation_vb4b4"),
 "despawn": SubResource("Animation_nxpop"),
 "respawn": SubResource("Animation_a6uw5")
 }
 
-[node name="Boat" type="Node3D" node_paths=PackedStringArray("root", "playerPosition", "animator")]
+[sub_resource type="Curve" id="Curve_epdva"]
+_data = [Vector2(0, 0), 0.0, 8.26422, 0, 0, Vector2(0.315451, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_iec2d"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_epdva")
+
+[sub_resource type="Curve" id="Curve_6yph8"]
+max_value = 3.0
+_data = [Vector2(0, 1.00924), 0.0, 0.0, 0, 0, Vector2(1, 3), 5.9698, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hjsy6"]
+width = 64
+curve = SubResource("Curve_6yph8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_e1bar"]
+lifetime_randomness = 0.5
+direction = Vector3(0, 0, -1)
+spread = 10.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_hjsy6")
+alpha_curve = SubResource("CurveTexture_iec2d")
+
+[sub_resource type="QuadMesh" id="QuadMesh_cgxm1"]
+material = ExtResource("5_piq17")
+
+[sub_resource type="Curve" id="Curve_hfg2x"]
+_data = [Vector2(0, 0.223047), 0.0, 2.93434, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.8), -0.61032, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_gkr3x"]
+width = 64
+curve = SubResource("Curve_hfg2x")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8gouu"]
+emission_shape = 3
+emission_box_extents = Vector3(1, 0, 2)
+angle_max = 360.0
+direction = Vector3(0, 0, -1)
+spread = 20.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+angular_velocity_min = -20.0
+angular_velocity_max = 20.0
+damping_min = 5.0
+damping_max = 10.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_gkr3x")
+alpha_curve = SubResource("CurveTexture_iec2d")
+
+[sub_resource type="QuadMesh" id="QuadMesh_sodww"]
+material = ExtResource("6_go3or")
+
+[node name="Boat" type="Node3D" node_paths=PackedStringArray("root", "localRoot", "playerPosition", "animator")]
 script = ExtResource("1_712du")
-root = NodePath("Boat/BoatMesh")
-playerPosition = NodePath("Boat/BoatRipple/PlayerPosition")
+maxSpeed = 20.0
+turnSpeed = 15.0
+isVerticalMovementDisabled = true
+rotationAmount = 30.0
+bounds = Vector2(20, 0)
+autosetBounds = true
+root = NodePath("Boat")
+localRoot = NodePath("Boat/BoatMesh")
+playerPosition = NodePath("Boat/BoatMesh/PlayerPosition")
 animator = NodePath("AnimationPlayer")
 
 [node name="Boat" parent="." instance=ExtResource("3_tcnkk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
 
 [node name="BoatRipple" parent="Boat" index="0"]
 cast_shadow = 0
 
-[node name="PlayerPosition" type="Node3D" parent="Boat/BoatRipple" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
-
 [node name="BoatMesh" parent="Boat" index="1"]
 cast_shadow = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
-shape = SubResource("SphereShape3D_yrin3")
+[node name="PlayerPosition" type="Node3D" parent="Boat/BoatMesh" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 
-[node name="Activation" type="Area3D" parent="."]
-collision_layer = 8
-collision_mask = 2
-monitorable = false
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Activation"]
-shape = SubResource("SphereShape3D_j10iq")
-
-[node name="Hurtbox" type="Area3D" parent="."]
+[node name="Trigger" type="Area3D" parent="Boat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.4)
 collision_layer = 8
 collision_mask = 8
-monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Boat/Trigger"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -5.68248e-08, -1.3)
+shape = SubResource("CylinderShape3D_4arkh")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_e4dfs")
 }
 
-[node name="FrontOrientationChecker" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.5)
-enabled = false
-target_position = Vector3(0, -5, 0)
+[node name="Damage" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_054if")
+bus = &"GAME SFX"
 
-[node name="RearOrientationChecker" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.5)
-enabled = false
-target_position = Vector3(0, -5, 0)
+[node name="Activate" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_6u5lf")
+bus = &"GAME SFX"
 
-[connection signal="area_entered" from="Activation" to="." method="PlayerEntered"]
+[node name="Dust" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, -1.03406e-12, 0, -1.03184e-12, 1, 0.000174165, 0.000175476, -2.2)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.5
+randomness = 0.81
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_e1bar")
+draw_pass_1 = SubResource("QuadMesh_cgxm1")
+
+[node name="Splatter" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, -1.03406e-12, 0, -1.03184e-12, 1, -6.03199e-05, 0.000179768, -2.00041)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_8gouu")
+draw_pass_1 = SubResource("QuadMesh_sodww")
+
+[connection signal="Activated" from="." to="Activate" method="play"]
+[connection signal="Damaged" from="." to="Damage" method="play"]
+[connection signal="Staggered" from="." to="Damage" method="play"]
+[connection signal="body_entered" from="Boat/Trigger" to="." method="OnBodyEntered"]
 
 [editable path="Boat"]

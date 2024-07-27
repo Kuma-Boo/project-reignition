@@ -1,11 +1,11 @@
 [gd_scene load_steps=12 format=3 uid="uid://cx75joue8tyuv"]
 
 [ext_resource type="Script" path="res://core/PhysicsManager.cs" id="2_phpky"]
+[ext_resource type="Resource" uid="uid://b8sc7aw2om4rw" path="res://resource/preset/lockout/run/StopRecenterLockout.tres" id="3_2cwqh"]
 [ext_resource type="Script" path="res://core/DebugManager.cs" id="3_exwps"]
 [ext_resource type="Script" path="res://core/Runtime.cs" id="4_15wji"]
-[ext_resource type="Resource" uid="uid://bxgjkovm2u880" path="res://resource/preset/lockout/run/StopLockout.tres" id="4_71aq3"]
 [ext_resource type="Script" path="res://core/SaveManager.cs" id="4_au3sm"]
-[ext_resource type="Resource" uid="uid://xatl072kgtjs" path="res://resource/preset/skill list/MasterSkillList.tres" id="5_32mxc"]
+[ext_resource type="Resource" uid="uid://xatl072kgtjs" path="res://resource/skills/_SkillList.tres" id="5_32mxc"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="7_wy237"]
 [ext_resource type="Script" path="res://core/ShaderManager.cs" id="8_toy1n"]
 
@@ -18,14 +18,17 @@
 [node name="Core" type="Node"]
 process_mode = 3
 
-[node name="DebugManager" type="Node2D" parent="." node_paths=PackedStringArray("debugMenuRoot", "freeCamData")]
+[node name="DebugManager" type="Node2D" parent="." node_paths=PackedStringArray("debugMenuRoot", "skillSelectButton", "skillToggleButton", "skillAugmentSlider", "freeCamData")]
 top_level = true
 script = ExtResource("3_exwps")
 debugMenuRoot = NodePath("CanvasLayer/Menu")
+skillSelectButton = NodePath("CanvasLayer/Menu/Tabs/Gameplay/Options/SkillSelect")
+skillToggleButton = NodePath("CanvasLayer/Menu/Tabs/Gameplay/Options/SkillToggle")
+skillAugmentSlider = NodePath("CanvasLayer/Menu/Tabs/Gameplay/Options/SkillAugment")
 freeCamData = [NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamPosition/X"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamPosition/Y"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamPosition/Z"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamRotation/Pitch"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamRotation/Yaw"), NodePath("CanvasLayer/Menu/Tabs/Promo/Options/CamRotation/Roll")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="DebugManager"]
-layer = 127
+layer = 128
 
 [node name="Menu" type="ColorRect" parent="DebugManager/CanvasLayer"]
 visible = false
@@ -49,8 +52,11 @@ offset_bottom = 516.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 16
+current_tab = 1
+tab_focus_mode = 0
 
 [node name="Debug" type="Control" parent="DebugManager/CanvasLayer/Menu/Tabs"]
+visible = false
 layout_mode = 2
 
 [node name="Options" type="VBoxContainer" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug"]
@@ -65,35 +71,6 @@ offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 16
-
-[node name="Preset" type="HBoxContainer" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options"]
-visible = false
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="Preset" type="LineEdit" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/Preset"]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-placeholder_text = "Preset"
-alignment = 1
-max_length = 8
-
-[node name="Save" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/Preset"]
-layout_mode = 2
-focus_mode = 0
-theme_override_font_sizes/font_size = 36
-toggle_mode = true
-button_pressed = true
-text = "Save"
-
-[node name="Load" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options/Preset"]
-layout_mode = 2
-focus_mode = 0
-theme_override_font_sizes/font_size = 36
-toggle_mode = true
-button_pressed = true
-text = "Load"
 
 [node name="DebugRays" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Debug/Options"]
 layout_mode = 2
@@ -131,7 +108,6 @@ toggle_mode = true
 text = "Draw Camera"
 
 [node name="Gameplay" type="Control" parent="DebugManager/CanvasLayer/Menu/Tabs"]
-visible = false
 layout_mode = 2
 
 [node name="Options" type="VBoxContainer" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay"]
@@ -169,35 +145,51 @@ theme_override_font_sizes/font_size = 36
 toggle_mode = true
 text = "Inifinite Ring"
 
-[node name="Checkpoint" type="Control" parent="DebugManager/CanvasLayer/Menu/Tabs"]
-visible = false
+[node name="CheckpointLabel" type="Label" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options"]
 layout_mode = 2
-focus_mode = 1
+theme_override_font_sizes/font_size = 32
+text = "Checkpoints"
 
-[node name="Options" type="VBoxContainer" parent="DebugManager/CanvasLayer/Menu/Tabs/Checkpoint"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 24.0
-offset_top = 25.0
-offset_right = -22.0
-offset_bottom = -24.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 16
-
-[node name="Save" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Checkpoint/Options"]
+[node name="SavePosition" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options"]
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 36
-text = "Save CKP"
+text = "Save Position"
 
-[node name="Load" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Checkpoint/Options"]
+[node name="LoadPosition" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options"]
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 36
-text = "Load CKP"
+text = "Load Position"
+
+[node name="SkillLabel" type="Label" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Skills"
+
+[node name="SkillSelect" type="OptionButton" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 32
+fit_to_longest_item = false
+
+[node name="SkillAugment" type="HSlider" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+min_value = -5.0
+max_value = 5.0
+rounded = true
+scrollable = false
+tick_count = 11
+ticks_on_borders = true
+
+[node name="SkillToggle" type="Button" parent="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 32
+toggle_mode = true
+text = "Equip Skill"
 
 [node name="Promo" type="Control" parent="DebugManager/CanvasLayer/Menu/Tabs"]
 visible = false
@@ -315,13 +307,12 @@ max_length = 5
 select_all_on_focus = true
 
 [node name="Runtime" type="Node" parent="."]
-process_mode = 1
 script = ExtResource("4_15wji")
 environmentMask = 1
 particleCollisionLayer = 32
 particleCollisionMask = 59
-StopLockout = ExtResource("4_71aq3")
-masterSkillList = ExtResource("5_32mxc")
+DefaultCompletionLockout = ExtResource("3_2cwqh")
+SkillList = ExtResource("5_32mxc")
 pearlScene = ExtResource("7_wy237")
 
 [node name="SaveManager" type="Node" parent="."]
@@ -403,7 +394,7 @@ transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, 0, 0)
 layers = 1048575
 emitting = false
 preprocess = 10.0
-fixed_fps = 60
+fixed_fps = 0
 fract_delta = false
 draw_pass_1 = SubResource("QuadMesh_nm6s7")
 
@@ -413,7 +404,7 @@ layers = 1048575
 cast_shadow = 0
 emitting = false
 preprocess = 10.0
-fixed_fps = 60
+fixed_fps = 0
 fract_delta = false
 draw_pass_1 = SubResource("QuadMesh_nm6s7")
 
@@ -441,8 +432,11 @@ vertical_alignment = 1
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/Countdown" to="DebugManager" method="ToggleCountdown"]
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/InfiniteSoul" to="DebugManager" method="ToggleInfiniteSoul"]
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/InfiniteRing" to="DebugManager" method="ToggleInfiniteRings"]
-[connection signal="pressed" from="DebugManager/CanvasLayer/Menu/Tabs/Checkpoint/Options/Save" to="DebugManager" method="SaveCustomCheckpoint"]
-[connection signal="pressed" from="DebugManager/CanvasLayer/Menu/Tabs/Checkpoint/Options/Load" to="DebugManager" method="LoadCustomCheckpoint"]
+[connection signal="pressed" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/SavePosition" to="DebugManager" method="SaveCustomCheckpoint"]
+[connection signal="pressed" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/LoadPosition" to="DebugManager" method="LoadCustomCheckpoint"]
+[connection signal="item_selected" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/SkillSelect" to="DebugManager" method="OnSkillSelected"]
+[connection signal="value_changed" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/SkillAugment" to="DebugManager" method="OnSkillAugmentChanged"]
+[connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Gameplay/Options/SkillToggle" to="DebugManager" method="OnSkillToggled"]
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/HUD" to="DebugManager" method="ToggleHUD"]
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/Countdown" to="DebugManager" method="ToggleCountdownVisibility"]
 [connection signal="toggled" from="DebugManager/CanvasLayer/Menu/Tabs/Promo/Options/Dialog" to="DebugManager" method="ToggleDialog"]

@@ -7,33 +7,47 @@ namespace Project.Gameplay.Objects
 	{
 		[Export]
 		private bool isRichRing;
-		[Export]
-		private AnimationPlayer animator;
+		[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
+		private NodePath animator;
+		private AnimationPlayer Animator { get; set; }
+
+		protected override void SetUp()
+		{
+			Animator = GetNodeOrNull<AnimationPlayer>(animator);
+			base.SetUp();
+		}
 
 		public override void Respawn()
 		{
 			base.Respawn();
 
-			animator.Play("RESET");
-			animator.Queue("loop");
+			Animator.Play("RESET");
+			Animator.Queue("loop");
 		}
 
 		protected override void Collect()
 		{
 			if (isRichRing)
 			{
-				Stage.UpdateScore(100, StageSettings.MathModeEnum.Add);
-				Stage.UpdateRingCount(20, StageSettings.MathModeEnum.Add);
 				SoundManager.instance.PlayRichRingSFX();
+				Stage.UpdateScore(100, StageSettings.MathModeEnum.Add);
+				if (Character.Skills.IsSkillEquipped(SkillKey.RingPearlConvert))
+					Character.Skills.ModifySoulGauge(40);
+				else
+					Stage.UpdateRingCount(20, StageSettings.MathModeEnum.Add);
 			}
 			else
 			{
-				Stage.UpdateScore(10, StageSettings.MathModeEnum.Add);
-				Stage.UpdateRingCount(1, StageSettings.MathModeEnum.Add);
 				SoundManager.instance.PlayRingSFX();
+				Stage.UpdateScore(10, StageSettings.MathModeEnum.Add);
+				if (Character.Skills.IsSkillEquipped(SkillKey.RingPearlConvert))
+					Character.Skills.ModifySoulGauge(2);
+				else
+					Stage.UpdateRingCount(1, StageSettings.MathModeEnum.Add);
 			}
 
-			animator.Play("collect");
+			BonusManager.instance.AddRingChain();
+			Animator.Play("collect");
 			base.Collect();
 		}
 	}

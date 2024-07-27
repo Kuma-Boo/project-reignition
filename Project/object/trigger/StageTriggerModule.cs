@@ -10,8 +10,20 @@ namespace Project.Gameplay.Triggers
 	{
 		protected CharacterController Character => CharacterController.instance;
 
-		public virtual void Activate(Area3D _) => Activate();
-		public virtual void Deactivate(Area3D _) => Deactivate();
+		public virtual void Activate(Area3D a)
+		{
+			if (!a.IsInGroup("player detection"))
+				return;
+
+			Activate();
+		}
+		public virtual void Deactivate(Area3D a)
+		{
+			if (!a.IsInGroup("player detection"))
+				return;
+
+			Deactivate();
+		}
 
 		public virtual void Activate() { }
 		public virtual void Deactivate() { }

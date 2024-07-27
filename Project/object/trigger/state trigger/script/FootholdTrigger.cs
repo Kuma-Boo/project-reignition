@@ -6,14 +6,14 @@ namespace Project.Gameplay.Triggers
 	{
 		public void OnEntered(Area3D a)
 		{
-			if (!a.IsInGroup("player")) return;
+			if (!a.IsInGroup("player detection")) return;
 
 			SidleTrigger.CurrentFoothold = this;
 		}
 
 		public void OnExited(Area3D a)
 		{
-			if (!a.IsInGroup("player")) return;
+			if (!a.IsInGroup("player detection")) return;
 
 			if (SidleTrigger.CurrentFoothold == this)
 				SidleTrigger.CurrentFoothold = null;

@@ -1,13 +1,14 @@
-[gd_scene load_steps=18 format=3 uid="uid://dnfwvf2akhf1v"]
+[gd_scene load_steps=20 format=3 uid="uid://dnfwvf2akhf1v"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/TimedHazard.cs" id="1_srdx0"]
 [ext_resource type="PackedScene" uid="uid://b1tirama0dt1b" path="res://area/1 sand oasis/object/model/FlameShooter.gltf" id="1_wwv3q"]
 [ext_resource type="Material" uid="uid://bbinn23j8d0we" path="res://area/1 sand oasis/data/material/Flame Shooter Base Process Material.tres" id="3_4n1tk"]
 [ext_resource type="Material" uid="uid://ckje67air1flv" path="res://area/1 sand oasis/data/particle/material/Flame Shooter Base Flame.tres" id="4_yfx5b"]
-[ext_resource type="Material" uid="uid://d200b5pyic62o" path="res://area/1 sand oasis/data/particle/material/Flame Shooter Explosion Flame.tres" id="5_2kp5f"]
 [ext_resource type="Material" uid="uid://c640g0eqwoeu3" path="res://area/1 sand oasis/data/material/Flame Shooter Explosion Process Material.tres" id="5_el5o5"]
 [ext_resource type="AudioStream" uid="uid://bs3ovsaon27bd" path="res://sound/sfx/objects/flame shooter.wav" id="5_kt73t"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="6_76o3t"]
+[ext_resource type="Shader" path="res://effect/shader/particle/ParticleLocalBillboard.gdshader" id="6_lx0m3"]
+[ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="7_csnr6"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_hqwbi"]
 radius = 0.4
@@ -26,8 +27,16 @@ material = ExtResource("4_yfx5b")
 size = Vector2(2, 4)
 center_offset = Vector3(0, 2, 0)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gx563"]
+render_priority = 0
+shader = ExtResource("6_lx0m3")
+shader_parameter/particles_anim_loop = false
+shader_parameter/particles_anim_h_frames = 4
+shader_parameter/particles_anim_v_frames = 4
+shader_parameter/albedo = ExtResource("7_csnr6")
+
 [sub_resource type="QuadMesh" id="QuadMesh_gcb82"]
-material = ExtResource("5_2kp5f")
+material = SubResource("ShaderMaterial_gx563")
 size = Vector2(2, 5)
 center_offset = Vector3(0, 2.5, 0)
 
@@ -55,7 +64,7 @@ tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
+"update": 0,
 "values": [false]
 }
 tracks/2/type = "value"
@@ -95,7 +104,7 @@ tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
+"update": 0,
 "values": [true]
 }
 tracks/2/type = "value"
@@ -149,7 +158,7 @@ tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
+"update": 0,
 "values": [false]
 }
 tracks/2/type = "value"
@@ -172,7 +181,7 @@ _data = {
 "inactive": SubResource("Animation_1683u")
 }
 
-[node name="FlameShooter" type="Node3D" node_paths=PackedStringArray("animator", "timer")]
+[node name="FlameShooter" type="Node3D"]
 script = ExtResource("1_srdx0")
 "Current State" = 0
 "Auto Advance" = true
@@ -180,7 +189,7 @@ script = ExtResource("1_srdx0")
 "State Lengths/inactive" = 0.5
 "State Lengths/active" = 1.0
 stateNames = [&"inactive", &"active"]
-stateLengths = [0.5, 1.0]
+stateLengths = PackedFloat32Array(0.5, 1)
 animator = NodePath("AnimationPlayer")
 timer = NodePath("Timer")
 
@@ -209,7 +218,7 @@ cast_shadow = 0
 gi_mode = 0
 amount = 4
 preprocess = 2.0
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-0.4, -0.5, -0.4, 0.8, 1.5, 0.8)
 local_coords = true
@@ -225,7 +234,7 @@ emitting = false
 amount = 4
 lifetime = 0.5
 explosiveness = 0.5
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
 local_coords = true
@@ -241,7 +250,7 @@ emitting = false
 amount = 2
 lifetime = 0.5
 explosiveness = 0.4
-fixed_fps = 60
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
 local_coords = true
@@ -252,7 +261,7 @@ draw_pass_1 = SubResource("QuadMesh_gcb82")
 stream = ExtResource("5_kt73t")
 max_db = 0.0
 max_distance = 50.0
-bus = &"SFX"
+bus = &"GAME SFX"
 script = ExtResource("6_76o3t")
 groupKey = &"flame_shooter"
 

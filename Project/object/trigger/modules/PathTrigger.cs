@@ -1,39 +1,57 @@
 using Godot;
 
-namespace Project.Gameplay.Triggers
+namespace Project.Gameplay.Triggers;
+
+/// <summary>
+/// Sets the player's active path to <see cref="path"/>
+/// </summary>
+public partial class PathTrigger : StageTriggerModule
 {
-	/// <summary>
-	/// Sets the player's active path to <see cref="path"/>
-	/// </summary>
-	public partial class PathTrigger : StageTriggerModule
+	[Export(PropertyHint.NodePathValidTypes, "Path3D")]
+	private Path3D path;
+
+	private Path3D playerDeactivatePath;
+	private Path3D cameraDeactivatePath;
+	private bool deactivateLimitCameraDistance;
+
+	/// <summary> Should the path be assigned to the player? </summary>
+	[Export]
+	public bool affectPlayer = true;
+	/// <summary> Should the path be assigned to the camera? </summary>
+	[Export]
+	public bool affectCamera = true;
+	/// <summary> Should this path limit the camera's maximum distance? </summary>
+	[Export]
+	public bool limitCameraDistanceToPath;
+
+	public override void Activate()
 	{
-		[Export(PropertyHint.NodePathValidTypes, "Path3D")]
-		private Path3D path;
-
-		[Export]
-		/// <summary> Should the path be assigned to the player? </summary>
-		public bool affectPlayer = true;
-		[Export]
-		/// <summary> Should the path be assigned to the camera? </summary>
-		public bool affectCamera = true;
-
-		public override void Activate()
+		if (affectPlayer)
 		{
-			if (affectPlayer)
-				Character.PathFollower.SetActivePath(path);
-
-			if (affectCamera)
-				Character.Camera.PathFollower.SetActivePath(path);
+			playerDeactivatePath ??= Character.PathFollower.ActivePath;
+			Character.PathFollower.SetActivePath(path);
 		}
 
-		public override void Deactivate()
+		if (affectCamera)
 		{
-			//Ensure player's path hasn't already been changed
-			if (affectPlayer && Character.PathFollower.ActivePath == path)
-				Character.PathFollower.SetActivePath(Character.PathFollower.PreviousPath);
+			cameraDeactivatePath ??= Character.Camera.PathFollower.ActivePath;
+			deactivateLimitCameraDistance = Character.Camera.LimitToPathDistance;
 
-			if (affectCamera && Character.Camera.PathFollower.ActivePath == path)
-				Character.Camera.PathFollower.SetActivePath(Character.Camera.PathFollower.PreviousPath);
+			Character.Camera.PathFollower.SetActivePath(path);
+			Character.Camera.LimitToPathDistance = limitCameraDistanceToPath;
+		}
+	}
+
+	public override void Deactivate()
+	{
+		//Ensure player's path hasn't already been changed
+		if (affectPlayer && Character.PathFollower.ActivePath == path)
+			Character.PathFollower.SetActivePath(playerDeactivatePath);
+
+		if (affectCamera && Character.Camera.PathFollower.ActivePath == path)
+		{
+			Character.Camera.PathFollower.SetActivePath(cameraDeactivatePath);
+			Character.Camera.LimitToPathDistance = limitCameraDistanceToPath;
 		}
 	}
 }

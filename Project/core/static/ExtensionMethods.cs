@@ -23,16 +23,28 @@ namespace Project
 
 
 		/// <summary> Creates a property dictionary to be used in _GetPropertyList(). </summary>
-		public static Dictionary CreateProperty(string name, Variant.Type type, PropertyHint hint = PropertyHint.None, string hint_string = "")
+		public static Dictionary CreateProperty(string name, Variant.Type type, PropertyHint hint = PropertyHint.None, string hint_string = "", PropertyUsageFlags usage = PropertyUsageFlags.Default)
 		{
-			Dictionary dictionary = new()
+			return new()
 			{
 				{ "name", name },
 				{ "type", (long)type },
 				{ "hint", (long)hint },
-				{ "hint_string", hint_string }
+				{ "hint_string", hint_string },
+				{ "usage", (long)usage }
 			};
-			return dictionary;
+		}
+
+		public static Dictionary CreateCategory(string name)
+		{
+			return new()
+			{
+				{ "name", name },
+				{ "type", (long)Variant.Type.Nil },
+				{ "hint", (long)PropertyHint.None },
+				{ "hint_string", string.Empty },
+				{ "usage", (int)PropertyUsageFlags.Category }
+			};
 		}
 
 		/// <summary> Returns a string containing all enum values. For Inspector. </summary>
@@ -82,6 +94,7 @@ namespace Project
 		public static Vector3 Right(this Node3D s) => s.GlobalTransform.Basis.X.Normalized();
 		public static Vector3 Left(this Node3D s) => -s.GlobalTransform.Basis.X.Normalized();
 
+		public static Vector3 RemoveDepth(this Vector3 v) => new(v.X, v.Y, 0);
 		public static Vector3 RemoveVertical(this Vector3 v) => new(v.X, 0, v.Z);
 		public static Vector2 Flatten(this Vector3 v) => new(v.X, v.Z);
 
@@ -135,7 +148,6 @@ namespace Project
 
 			float min = reference - range;
 			float max = reference + range;
-
 			if (value > min && value < max) //Input is between the two angles, no need to clamp
 				return value;
 
@@ -259,11 +271,8 @@ namespace Project
 			return output;
 		}
 
-
-		/// <summary> Formats exp into the typical format displayed on menus. </summary>
-		public static string FormatEXP(int exp) => exp.ToString("0000000") + "e";
-		/// <summary> Formats a score into the typical format displayed on menus. </summary>
-		public static string FormatScore(int score) => score.ToString("00000000");
+		/// <summary> Formats a number to eight digits. The typical format displayed on menus. </summary>
+		public static string FormatMenuNumber(int score) => score.ToString("00000000");
 		/// <summary> Formats a number of seconds into the typical format displayed on menus. </summary>
 		public static string FormatTime(float time)
 		{

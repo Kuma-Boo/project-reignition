@@ -4,18 +4,12 @@
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="1_q51ix"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="2_k2q3r"]
 
-[sub_resource type="SphereShape3D" id="3"]
-radius = 0.85
-
-[sub_resource type="SphereShape3D" id="2"]
-radius = 0.9
-
 [sub_resource type="Animation" id="Animation_pujat"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SpikeBall:rotation")
+tracks/0/path = NodePath("../SpikeBall:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -31,7 +25,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SpikeBall:rotation")
+tracks/0/path = NodePath("../SpikeBall:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -47,7 +41,13 @@ _data = {
 "idle-loop": SubResource("Animation_6mi5p")
 }
 
-[node name="SpikeBall" type="Node3D" node_paths=PackedStringArray("root", "animator")]
+[sub_resource type="SphereShape3D" id="3"]
+radius = 0.85
+
+[sub_resource type="SphereShape3D" id="2"]
+radius = 0.9
+
+[node name="SpikeBall" type="Node3D"]
 script = ExtResource("1_q51ix")
 Movement/Mode = 1
 "Movement/Cycle Length" = 0.0
@@ -58,15 +58,24 @@ Movement/Angle = 0.0
 root = NodePath("Root")
 animator = NodePath("Root/AnimationPlayer")
 
-[node name="Root" type="StaticBody3D" parent="." groups=["damage boat"]]
-collision_layer = 8
-collision_mask = 0
+[node name="Root" type="Node3D" parent="."]
 script = ExtResource("2_k2q3r")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Root"]
+root_node = NodePath("../StaticBody3D")
+libraries = {
+"": SubResource("AnimationLibrary_jat4b")
+}
+autoplay = "idle-loop"
 
 [node name="SpikeBall" parent="Root" instance=ExtResource("1")]
 transform = Transform3D(0.999996, 0, 0, 0, 1, 0, 0, 0, 0.999996, 0, 0, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Root"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Root"]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/StaticBody3D"]
 shape = SubResource("3")
 
 [node name="Hitbox" type="Area3D" parent="Root"]
@@ -76,12 +85,6 @@ monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Hitbox"]
 shape = SubResource("2")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Root"]
-autoplay = "idle-loop"
-libraries = {
-"": SubResource("AnimationLibrary_jat4b")
-}
 
 [connection signal="area_entered" from="Root/Hitbox" to="Root" method="OnEntered"]
 [connection signal="area_exited" from="Root/Hitbox" to="Root" method="OnExited"]

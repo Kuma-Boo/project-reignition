@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://7kcasi6v1odv"]
+[gd_scene load_steps=33 format=3 uid="uid://7kcasi6v1odv"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_fxxlg"]
 [ext_resource type="PackedScene" uid="uid://ctpgc4qaiar68" path="res://area/1 sand oasis/act 3/environment/collision/Collision.tscn" id="1_wbafh"]
@@ -11,16 +11,16 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="5_qbof6"]
 [ext_resource type="PackedScene" uid="uid://cymqt8ap7er5w" path="res://area/1 sand oasis/act 3/environment/03LowerHall.tscn" id="6_86hsj"]
 [ext_resource type="Resource" uid="uid://3v6x6mv157fq" path="res://area/1 sand oasis/act 3/camera/HallCam.tres" id="6_gwtbf"]
+[ext_resource type="Resource" uid="uid://dghu64iynmk7k" path="res://area/1 sand oasis/act 3/camera/LowerCam.tres" id="7_3ls0m"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="7_77hua"]
 [ext_resource type="PackedScene" uid="uid://dj37itfdjb74j" path="res://area/1 sand oasis/act 3/environment/02Descent.tscn" id="7_dg1ex"]
 [ext_resource type="Curve3D" uid="uid://27uwgglqp1g6" path="res://area/1 sand oasis/act 3/environment/path/MainPath.tres" id="8_5ae3c"]
-[ext_resource type="PackedScene" uid="uid://bom1n0hvfixo1" path="res://area/1 sand oasis/data/BGM.tscn" id="10_f773a"]
-[ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="12_pipgr"]
 [ext_resource type="PackedScene" uid="uid://semhlskb8slv" path="res://area/1 sand oasis/act 3/environment/model/LightBlocker.gltf" id="14_5tb48"]
-[ext_resource type="Environment" uid="uid://cxq4u3gsbysnj" path="res://area/1 sand oasis/act 3/environment/Environment.tres" id="15_r8c8n"]
+[ext_resource type="AudioStream" uid="uid://ds4hdcdcfcwmj" path="res://sound/ost/bonus disc/Sand Oasis Act 3.mp3" id="16_7drhp"]
+[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="17_5dd51"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kh3tl"]
-size = Vector3(15, 20, 60)
+size = Vector3(15, 20, 66)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nwi4p"]
 size = Vector3(15, 20, 2.5)
@@ -453,6 +453,58 @@ _data = {
 "demo3": SubResource("Animation_820jq")
 }
 
+[sub_resource type="Gradient" id="Gradient_hldb2"]
+offsets = PackedFloat32Array(0.585714)
+colors = PackedColorArray(1, 0.33, 0.33, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5dnou"]
+gradient = SubResource("Gradient_hldb2")
+
+[sub_resource type="Gradient" id="Gradient_fdvqy"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.216495, 0.42268, 0.505155, 0.608247, 0.809278)
+colors = PackedColorArray(1, 0, 0.9, 1, 1, 0, 0.483334, 1, 1, 0.483333, 0, 1, 0.74676, 0.84, 0.6888, 1, 0, 0.6, 1, 1, 0, 0.380392, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bn0qu"]
+gradient = SubResource("Gradient_fdvqy")
+fill_from = Vector2(1, 0.957265)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_yhk3m"]
+panorama = SubResource("GradientTexture2D_bn0qu")
+
+[sub_resource type="Sky" id="Sky_cdpwp"]
+sky_material = SubResource("PanoramaSkyMaterial_yhk3m")
+radiance_size = 1
+
+[sub_resource type="Environment" id="Environment_i6k4x"]
+background_mode = 2
+sky = SubResource("Sky_cdpwp")
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_sky_contribution = 0.8
+ambient_light_energy = 3.13
+reflected_light_source = 2
+tonemap_mode = 2
+tonemap_exposure = 1.2
+tonemap_white = 1.3
+ssil_enabled = true
+ssil_sharpness = 0.9
+ssil_normal_rejection = 0.8
+glow_enabled = true
+glow_intensity = 1.38
+glow_strength = 0.63
+glow_bloom = 0.05
+glow_blend_mode = 1
+glow_hdr_threshold = 3.0
+glow_map_strength = 0.13
+glow_map = SubResource("GradientTexture1D_5dnou")
+fog_enabled = true
+fog_light_color = Color(1, 0.147443, 0.181214, 1)
+fog_density = 0.0001
+fog_sky_affect = 0.0
+adjustment_enabled = true
+adjustment_saturation = 1.2
+
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_fxxlg")
 InitialCameraSettings = ExtResource("2_lhfq0")
@@ -464,10 +516,9 @@ Environment = NodePath("WorldEnvironment")
 visible = false
 
 [node name="Trigger" type="Node3D" parent="."]
-visible = false
 
 [node name="HallCam1" parent="Trigger" instance=ExtResource("3_vakpl")]
-transform = Transform3D(-0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.939693, 31.5121, -50, -81.186)
+transform = Transform3D(-0.93274, 0, 0.36055, 0, 1, 0, -0.36055, 0, -0.93274, 31.5372, -50, -81.1763)
 "Trigger Mode" = 2
 "Enter Mode" = 0
 "Exit Mode" = 0
@@ -481,8 +532,23 @@ settings = ExtResource("6_gwtbf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_kh3tl")
 
+[node name="LowerCam" parent="Trigger" instance=ExtResource("3_vakpl")]
+transform = Transform3D(-0.934628, 0, 0.355629, 0, 1, 0, -0.355629, 0, -0.934628, -19.3097, -50, 49.3039)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/LowerCam"]
+script = ExtResource("5_qbof6")
+transitionTime = 1.0
+settings = ExtResource("7_3ls0m")
+previousSettings = ExtResource("6_gwtbf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/LowerCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_nwi4p")
+
 [node name="HallCam2" parent="Trigger" instance=ExtResource("3_vakpl")]
-transform = Transform3D(-0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.939693, -27.9994, -50, 82.3205)
+transform = Transform3D(-0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.939693, -31.5702, -50, 81.0208)
 "Trigger Mode" = 2
 "Enter Mode" = 0
 "Exit Mode" = 0
@@ -493,8 +559,23 @@ transitionTime = 0.5
 settings = ExtResource("6_gwtbf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/HallCam2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8147e-06, 8, 3)
 shape = SubResource("BoxShape3D_kh3tl")
+
+[node name="UpperCam" parent="Trigger" instance=ExtResource("3_vakpl")]
+transform = Transform3D(-0.934628, 0, 0.355629, 0, 1, 0, -0.355629, 0, -0.934628, 43.3861, -50, -111.941)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/UpperCam"]
+script = ExtResource("5_qbof6")
+transitionTime = 0.5
+settings = ExtResource("2_lhfq0")
+previousSettings = ExtResource("6_gwtbf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/UpperCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_nwi4p")
 
 [node name="Checkpoint" type="Node3D" parent="Trigger"]
 
@@ -619,32 +700,29 @@ shape = SubResource("BoxShape3D_nwi4p")
 [node name="04Ascent" parent="Visuals" instance=ExtResource("5_m10wp")]
 
 [node name="Skybox" parent="Visuals" instance=ExtResource("2_1co7j")]
+transform = Transform3D(0.693201, 0, 0.720745, 0, 1, 0, -0.720745, 0, 0.693201, -56.7324, 0, -529.891)
 
 [node name="Lighting" type="Node3D" parent="Visuals"]
 
 [node name="InteriorLighting" type="DirectionalLight3D" parent="Visuals/Lighting"]
 transform = Transform3D(-0.430447, -0.709785, 0.557603, 0.899382, -0.285031, 0.331465, -0.0763344, 0.644176, 0.761059, 0, 0, 0)
-visible = false
 layers = 1024
 light_color = Color(0.741176, 0.678431, 0.45098, 1)
 light_energy = 1.2
 light_cull_mask = 4293918724
-shadow_enabled = true
 directional_shadow_max_distance = 50.0
 
 [node name="ObjectLighting" type="DirectionalLight3D" parent="Visuals/Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
 light_color = Color(1, 0.815686, 0.411765, 1)
-light_energy = 1.2
+light_energy = 0.5
 light_cull_mask = 4293918785
-shadow_enabled = true
 directional_shadow_mode = 0
 directional_shadow_max_distance = 50.0
 
 [node name="ExteriorLighting" type="DirectionalLight3D" parent="Visuals/Lighting"]
 transform = Transform3D(0.999903, -0.00751763, -0.0117013, 0.00859073, -0.327816, 0.944703, -0.0109378, -0.944712, -0.327719, 0, 0, 0)
-visible = false
 layers = 1024
 light_color = Color(0.85098, 0.807843, 0.705882, 1)
 light_energy = 1.5
@@ -683,12 +761,16 @@ next/demo1 = &"demo2"
 next/demo2 = &"demo3"
 next/demo3 = &"demo1"
 
-[node name="BGM" parent="." instance=ExtResource("10_f773a")]
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("16_7drhp")
+bus = &"BGM"
+script = ExtResource("17_5dd51")
+loopStartPosition = 5.33
+loopEndPosition = 90.67
+isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("15_r8c8n")
-
-[node name="DepthRenderer" parent="." instance=ExtResource("12_pipgr")]
+environment = SubResource("Environment_i6k4x")
 
 [connection signal="Activated" from="Visuals/CullingMap/02L" to="Visuals/02Descent" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/02L" to="Visuals/02Descent" method="Deactivate"]

@@ -1,17 +1,267 @@
-[gd_scene load_steps=3 format=3 uid="uid://dhb5ti1oiktuk"]
+[gd_scene load_steps=19 format=3 uid="uid://dhb5ti1oiktuk"]
 
 [ext_resource type="PackedScene" uid="uid://c0lo56q5efgix" path="res://area/2 dino jungle/object/model/Cactus.gltf" id="1_ak5kj"]
+[ext_resource type="Script" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_jgpvl"]
+[ext_resource type="AudioStream" uid="uid://cyf66w7fa7ojs" path="res://sound/sfx/stage/dinosaur jungle/shatter cactus.wav" id="3_4bbtf"]
+[ext_resource type="PackedScene" uid="uid://dedeevpox2rih" path="res://area/2 dino jungle/object/model/CactusPieces.gltf" id="3_865ei"]
+[ext_resource type="Material" uid="uid://bq1q3tp1cq76v" path="res://effect/particle/material/explosion/Explosion Smoke Add.tres" id="5_ffo6u"]
+[ext_resource type="Material" uid="uid://c44vqexptrgf5" path="res://effect/particle/material/environment/Cactus Splatter.tres" id="6_x5bkb"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_717xn"]
 radius = 1.0
 
-[node name="Cactus" type="Area3D"]
+[sub_resource type="Animation" id="Animation_qn240"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Trigger:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_r5e3u"]
+resource_name = "shatter"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Trigger:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Shatter")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Explosion")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Drops")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xs2lq"]
+_data = {
+"RESET": SubResource("Animation_qn240"),
+"shatter": SubResource("Animation_r5e3u")
+}
+
+[sub_resource type="Curve" id="Curve_pgh5i"]
+_data = [Vector2(0, 0), 0.0, 11.4721, 0, 0, Vector2(0.218884, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.84297, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_mxdjc"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_pgh5i")
+
+[sub_resource type="Curve" id="Curve_gy8ul"]
+max_value = 5.0
+_data = [Vector2(0, 1), 0.0, 112.941, 0, 0, Vector2(0.1, 5), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_uk3w4"]
+width = 64
+curve = SubResource("Curve_gy8ul")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_svviv"]
+lifetime_randomness = 0.4
+angle_min = -30.0
+angle_max = 30.0
+direction = Vector3(0, 1, 0)
+spread = 60.0
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -40.0
+linear_accel_max = -20.0
+scale_min = 0.5
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_uk3w4")
+color = Color(0.631373, 1, 0.65098, 0.588235)
+alpha_curve = SubResource("CurveTexture_mxdjc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ecu6k"]
+material = ExtResource("5_ffo6u")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lfbmj"]
+lifetime_randomness = 0.4
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 30.0
+initial_velocity_max = 30.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -100.0
+linear_accel_max = -20.0
+damping_min = 5.0
+damping_max = 10.0
+scale_min = 0.4
+scale_curve = SubResource("CurveTexture_uk3w4")
+alpha_curve = SubResource("CurveTexture_mxdjc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_8w7ci"]
+material = ExtResource("6_x5bkb")
+
+[node name="Cactus" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
+script = ExtResource("1_jgpvl")
+pieceMass = 0.2
+damagePlayer = true
+root = NodePath("Root")
+pieceRoot = NodePath("CactusPieces")
+animator = NodePath("AnimationPlayer")
+shatterFlags = 18
+
+[node name="Root" type="StaticBody3D" parent="." groups=["wall"]]
 collision_layer = 8
-collision_mask = 2
-monitorable = false
+collision_mask = 0
 
-[node name="Cactus" parent="." instance=ExtResource("1_ak5kj")]
+[node name="Cactus" parent="Root" instance=ExtResource("1_ak5kj")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("SphereShape3D_717xn")
+
+[node name="CactusPieces" parent="." instance=ExtResource("3_865ei")]
+visible = false
+
+[node name="Trigger" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 10
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("SphereShape3D_717xn")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_xs2lq")
+}
+
+[node name="Shatter" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_4bbtf")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+
+[node name="Explosion" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-8, -4, -8, 16, 16, 16)
+process_material = SubResource("ParticleProcessMaterial_svviv")
+draw_pass_1 = SubResource("QuadMesh_ecu6k")
+
+[node name="Drops" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-8, -4, -8, 16, 16, 16)
+process_material = SubResource("ParticleProcessMaterial_lfbmj")
+draw_pass_1 = SubResource("QuadMesh_8w7ci")
+
+[connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Trigger" to="." method="OnExited"]

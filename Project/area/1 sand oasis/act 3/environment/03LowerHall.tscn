@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cymqt8ap7er5w"]
+[gd_scene load_steps=7 format=3 uid="uid://cymqt8ap7er5w"]
 
 [ext_resource type="PackedScene" uid="uid://bx8golkndh8ph" path="res://area/1 sand oasis/act 3/environment/model/03LowerHall.gltf" id="1_bsict"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_prflr"]
 [ext_resource type="PackedScene" uid="uid://wnnthoykndrj" path="res://effect/particle/Lantern.tscn" id="3_2e86l"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_g6qwp"]
+[ext_resource type="Texture2D" uid="uid://bnamc3sj4l00m" path="res://area/1 sand oasis/data/texture/floor glow.png" id="4_pkns8"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_837af"]
 size = Vector3(20, 20, 2.5)
@@ -169,6 +170,16 @@ transform = Transform3D(0.2, -7.21645e-16, 0, -2.63678e-16, 0.2, 9.4369e-16, 0, 
 [node name="Lantern18" parent="LanternGroup1" index="17" instance=ExtResource("3_2e86l")]
 transform = Transform3D(0.2, -1.76248e-15, 0, -2.63678e-16, 0.2, 9.4369e-16, 0, -3.94129e-15, 0.2, 2.03362, 0.466656, -24.307)
 
+[node name="Decal" type="Decal" parent="LanternGroup1" index="18"]
+transform = Transform3D(1, 2.77556e-16, -2.08616e-07, -5.62606e-13, 1, 7.59837e-13, 2.08616e-07, 0, 1, 0.0918999, -2.68898, 4.18906)
+size = Vector3(5.91354, 14.2323, 66.2674)
+texture_emission = ExtResource("4_pkns8")
+emission_energy = 0.1
+modulate = Color(1, 0.2, 0, 1)
+normal_fade = 0.1
+upper_fade = 1.0
+lower_fade = 1.0
+
 [node name="LanternGroup2" type="Node3D" parent="." index="25"]
 transform = Transform3D(0.93358, 0, -0.358368, 0, 1, 0, 0.358368, 0, 0.93358, -2.99003e-08, -45, -5.27224e-09)
 script = ExtResource("2_prflr")
@@ -283,6 +294,16 @@ transform = Transform3D(0.2, -8.46545e-16, 0, -2.63678e-16, 0.2, 9.4369e-16, 0, 
 [node name="Lantern18" parent="LanternGroup3" index="17" instance=ExtResource("3_2e86l")]
 transform = Transform3D(0.2, -1.88738e-15, 0, -2.63678e-16, 0.2, 9.4369e-16, 0, -4.10783e-15, 0.2, 2.09039, 0.466656, -24.3605)
 
+[node name="Decal" type="Decal" parent="LanternGroup3" index="18"]
+transform = Transform3D(1, 2.77556e-16, -2.08616e-07, -5.60829e-13, 1, 7.59393e-13, 2.08616e-07, 0, 1, 0.0919018, -2.68898, 4.18906)
+size = Vector3(5.91354, 14.2323, 66.2674)
+texture_emission = ExtResource("4_pkns8")
+emission_energy = 0.1
+modulate = Color(1, 0.2, 0, 1)
+normal_fade = 0.1
+upper_fade = 1.0
+lower_fade = 1.0
+
 [node name="Lantern1L" parent="." index="27" instance=ExtResource("4_g6qwp")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.00127816, -43.4, 189.812)
 "Trigger Mode" = 2
@@ -328,7 +349,7 @@ transform = Transform3D(-0.935734, -1.49502e-08, 0.352707, -1.49192e-08, 1, 2.80
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_837af")
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="32"]
+[node name="EnvironmentProbe" type="ReflectionProbe" parent="." index="32"]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, -40, 0)
 layers = 4
 size = Vector3(190, 36, 419)
@@ -336,6 +357,41 @@ interior = true
 cull_mask = 4
 ambient_mode = 2
 ambient_color = Color(1, 1, 1, 1)
+ambient_color_energy = 0.25
+
+[node name="ObjectProbe1" type="ReflectionProbe" parent="." index="33"]
+transform = Transform3D(0.928324, 0, -0.371773, 0, 1, 0, 0.371773, 0, 0.928324, -18.0657, -42.9929, 156.444)
+layers = 65
+max_distance = 100.0
+size = Vector3(99.483, 34.5463, 88.1684)
+origin_offset = Vector3(0, 0, -9.43164)
+interior = true
+cull_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.688, 0.7944, 0.8, 1)
+ambient_color_energy = 0.13
+
+[node name="ObjectProbe2" type="ReflectionProbe" parent="." index="34"]
+transform = Transform3D(0.925342, 0, -0.379133, 0, 1, 0, 0.379133, 0, 0.925342, 2.66715, -44.6929, -8.11778)
+layers = 65
+max_distance = 100.0
+size = Vector3(190, 26.6141, 272.047)
+interior = true
+cull_mask = 65
+ambient_mode = 2
+ambient_color = Color(1, 0.358667, 0.26, 1)
+ambient_color_energy = 0.2
+
+[node name="ObjectProbe3" type="ReflectionProbe" parent="." index="35"]
+transform = Transform3D(-0.34284, 0, -0.939394, 0, 1, 0, 0.939394, 0, -0.34284, 23.3859, -33.5483, -170.524)
+layers = 65
+max_distance = 100.0
+size = Vector3(112.255, 30.5234, 112.874)
+interior = true
+cull_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.688, 0.7944, 0.8, 1)
+ambient_color_energy = 0.13
 
 [connection signal="Activated" from="Lantern1L" to="LanternGroup1" method="Activate"]
 [connection signal="Deactivated" from="Lantern1L" to="LanternGroup1" method="Deactivate"]

@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://cx36fswvjfblm"]
+[gd_scene load_steps=11 format=3 uid="uid://cx36fswvjfblm"]
 
 [ext_resource type="PackedScene" uid="uid://doqf6vg48viny" path="res://object/stage/destructable/resource/model/EnemyStone.gltf" id="1"]
 [ext_resource type="PackedScene" uid="uid://cwfl2n4f8rimp" path="res://object/stage/destructable/resource/model/EnemyStoneAdd.gltf" id="4"]
 [ext_resource type="Script" path="res://object/stage/destructable/resource/script/EnemyStone.cs" id="5"]
 [ext_resource type="AudioStream" uid="uid://j3f85cjp15bw" path="res://sound/sfx/objects/enemy stone.wav" id="5_0q0l0"]
 [ext_resource type="PackedScene" uid="uid://b2vnxqonrlts7" path="res://object/stage/destructable/resource/model/EnemyStonePieces.gltf" id="5_i1rql"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="6_kr1m5"]
 
 [sub_resource type="BoxShape3D" id="17"]
 size = Vector3(2, 2, 2)
@@ -123,8 +124,8 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0.05),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [0.0],
-"method": &"play"
+"args": [],
+"method": &"PlayInGroup"
 }]
 }
 tracks/5/type = "method"
@@ -182,4 +183,6 @@ stream = ExtResource("5_0q0l0")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
-bus = &"SFX"
+bus = &"GAME SFX"
+script = ExtResource("6_kr1m5")
+groupKey = &"enemy_stone"

@@ -90,6 +90,7 @@ _data = {
 [node name="Jar" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
 script = ExtResource("2_l0n6o")
 pieceMass = 0.6
+shakeScreenOnShatter = false
 stopPlayerOnShatter = true
 root = NodePath("Root")
 pieceRoot = NodePath("JarPieces")
@@ -97,6 +98,7 @@ animator = NodePath("AnimationPlayer")
 shatterFlags = 31
 
 [node name="Root" type="StaticBody3D" parent="." groups=["wall"]]
+collision_layer = 8
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Root"]
@@ -122,7 +124,7 @@ stream = ExtResource("4_040ue")
 max_db = 0.0
 pitch_scale = 0.86
 max_distance = 100.0
-bus = &"SFX"
+bus = &"GAME SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

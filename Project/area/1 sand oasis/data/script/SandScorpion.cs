@@ -99,7 +99,7 @@ namespace Project.Gameplay.Bosses
 			StageSettings.instance.ConnectUnloadSignal(this);
 			StageSettings.instance.ConnectRespawnSignal(this);
 
-			StageSettings.instance.Connect(StageSettings.SignalName.ReflectionProbesCalculated, new(this, MethodName.StartIntroduction));
+			StageSettings.instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.StartIntroduction));
 		}
 
 
@@ -224,7 +224,7 @@ namespace Project.Gameplay.Bosses
 			eventAnimator.Advance(0.0);
 
 			Character.Visible = false;
-			Character.AddLockoutData(Runtime.Instance.StopLockout);
+			Character.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 			Interface.PauseMenu.AllowPausing = false;
 
 			// Award 1000 points for defeating the boss
@@ -295,7 +295,7 @@ namespace Project.Gameplay.Bosses
 
 
 		/// <summary> Fastest possible movement speed, based on the player's top speed. </summary>
-		private float CharacterTopSpeed => Character.Skills.GroundSettings.speed;
+		private float CharacterTopSpeed => Character.Skills.GroundSettings.Speed;
 
 		private float MoveSpeed { get; set; }
 		private float moveSpeedVelocity;
@@ -953,7 +953,7 @@ namespace Project.Gameplay.Bosses
 
 		public void ProcessHitboxCollision()
 		{
-			if (Character.Lockon.IsHomingAttacking || Character.Lockon.IsBouncingLockoutActive) return; // Player's homing attack always takes priority.
+			if (Character.Lockon.IsHomingAttacking || Character.Lockon.IsBounceLockoutActive) return; // Player's homing attack always takes priority.
 			if (damageState == DamageState.Knockback) return; // Boss is in knockback and can't damage the player.
 
 			if (Character.Skills.IsSpeedBreakActive)
@@ -990,7 +990,7 @@ namespace Project.Gameplay.Bosses
 
 		private void ProcessFlyingEyeCollision()
 		{
-			if (Character.Lockon.IsBouncingLockoutActive) return; // Player just finished a homing attack
+			if (Character.Lockon.IsBounceLockoutActive) return; // Player just finished a homing attack
 
 			if (Character.Skills.IsSpeedBreakActive) // Special attack
 				return;
