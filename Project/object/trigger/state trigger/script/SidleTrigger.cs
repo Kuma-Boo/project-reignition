@@ -63,7 +63,7 @@ public partial class SidleTrigger : Area3D
 			else
 				UpdateSidleDamage();
 		}
-		else if (Character.IsOnGround)
+		else if (Character.IsOnGround && Character.MovementState == CharacterController.MovementStates.Normal)
 		{
 			if (Character.ActionState == CharacterController.ActionStates.Normal)
 				StartSidle(); // Allows player to slide through sidle section if they know what they're doing
