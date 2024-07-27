@@ -204,6 +204,7 @@ public partial class CharacterAnimator : Node3D
 		{
 			ResetGroundTree();
 			animationTree.Set(LandTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 			groundTransition.XfadeTime = .05f;
 			animationTree.Set(GroundTransition, EnabledConstant);
 			StopHurt();
@@ -412,6 +413,13 @@ public partial class CharacterAnimator : Node3D
 		animationTree.Set(AirStateTransition, FallState);
 		animationTree.Set(BackflipTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		animationTree.Set(BrakeTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+	}
+
+	private readonly StringName SplashJumpTrigger = "parameters/air_tree/splash_jump_trigger/request";
+	public void SplashJumpAnimation()
+	{
+		animationTree.Set(AirStateTransition, FallState);
+		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
 	private readonly StringName BounceTransition = "parameters/air_tree/bounce_transition/transition_request";

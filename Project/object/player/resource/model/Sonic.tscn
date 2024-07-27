@@ -350,9 +350,11 @@ animationTree = NodePath("AnimationTree")
 eventAnimationPlayer = NodePath("EventAnimationPlayer")
 movementAnimationSpeedCurve = SubResource("Curve_skwgn")
 
-[node name="Effect" parent="." index="0" node_paths=PackedStringArray("rightFoot", "leftFoot") instance=ExtResource("3_5mek6")]
+[node name="Effect" parent="." index="0" node_paths=PackedStringArray("rightFoot", "leftFoot", "landingParticles", "stepEmitters") instance=ExtResource("3_5mek6")]
 rightFoot = NodePath("../SonicRoot/GeneralSkeleton/RFoot/SoleOffset")
 leftFoot = NodePath("../SonicRoot/GeneralSkeleton/LFoot/SoleOffset")
+landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, null, null, NodePath("VFX/LandingFX/LandingWater")]
+stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, null, null, NodePath("VFX/StepFX/WaterStep")]
 
 [node name="TeleportFX" type="Node3D" parent="Effect" index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -503,7 +505,7 @@ process_material = SubResource("ParticleProcessMaterial_ny081")
 draw_pass_1 = SubResource("QuadMesh_vcbic")
 
 [node name="RFoot" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="5"]
-transform = Transform3D(1, -1.02496e-12, -6.143e-13, 6.16757e-13, 2.03494e-07, 0.999999, -9.71667e-13, -0.999998, 2.21189e-07, -0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, -6.92779e-14, -5.1853e-13, 5.12881e-13, 9.54606e-08, 0.999999, -1.77636e-14, -0.999998, 1.13156e-07, -0.0397276, 0.155469, 0.00205613)
 bone_name = "r_foot"
 bone_idx = 58
 
@@ -511,7 +513,7 @@ bone_idx = 58
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, -0.085, -0.15)
 
 [node name="LFoot" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="6"]
-transform = Transform3D(1, 1.06581e-14, 6.15422e-12, -6.2165e-12, 1.07381e-06, 1, 1.33227e-13, -1, 1.07894e-06, 0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, -3.55271e-15, 6.16018e-12, -6.22079e-12, 5.9139e-08, 1, 1.19016e-13, -1, 6.37956e-08, 0.0397276, 0.155469, 0.00205613)
 bone_name = "l_foot"
 bone_idx = 3
 
@@ -551,6 +553,7 @@ active = false
 callback_mode_process = 0
 tree_root = ExtResource("8_sfnih")
 anim_player = NodePath("../AnimationPlayer")
+parameters/air_tree/TimeScale/scale = 1.2
 parameters/air_tree/backflip_trigger/active = false
 parameters/air_tree/backflip_trigger/internal_active = false
 parameters/air_tree/backflip_trigger/request = 0
@@ -564,9 +567,12 @@ parameters/air_tree/fall_speed/scale = 1.0
 parameters/air_tree/fall_trigger/active = false
 parameters/air_tree/fall_trigger/internal_active = false
 parameters/air_tree/fall_trigger/request = 0
-parameters/air_tree/jump_accel_trigger/active = true
-parameters/air_tree/jump_accel_trigger/internal_active = true
+parameters/air_tree/jump_accel_trigger/active = false
+parameters/air_tree/jump_accel_trigger/internal_active = false
 parameters/air_tree/jump_accel_trigger/request = 0
+parameters/air_tree/splash_jump_trigger/active = false
+parameters/air_tree/splash_jump_trigger/internal_active = false
+parameters/air_tree/splash_jump_trigger/request = 0
 parameters/air_tree/state_transition/current_state = "fall"
 parameters/air_tree/state_transition/transition_request = ""
 parameters/air_tree/state_transition/current_index = 0

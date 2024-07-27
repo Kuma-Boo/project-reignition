@@ -2161,7 +2161,7 @@ namespace Project.Gameplay
 					// Perform a splash jump
 					Lockon.StopHomingAttack();
 					Effect.PlaySplashJumpFX();
-					// TODO Play animation
+					Animator.SplashJumpAnimation();
 					VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight * .5f);
 					return;
 				}
