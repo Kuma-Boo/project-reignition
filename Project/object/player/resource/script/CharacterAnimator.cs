@@ -510,6 +510,18 @@ public partial class CharacterAnimator : Node3D
 		animationTree.Set(CrouchTransition, DisabledConstant);
 	}
 
+	public void StartMotionBlur()
+	{
+		eventAnimationPlayer.Play("blur-start");
+		eventAnimationPlayer.Advance(0.0);
+	}
+
+	public void StopMotionBlur()
+	{
+		eventAnimationPlayer.Play("blur-stop");
+		eventAnimationPlayer.Advance(0.0);
+	}
+
 	public void StartInvincibility(float speedScale)
 	{
 		eventAnimationPlayer.Play("invincibility", -1, speedScale);
