@@ -146,7 +146,8 @@ public partial class SFXLibraryResource : Resource
 		duplicateKeyChecker.Clear();
 	}
 	#endregion
-
+	[Export]
+	private SFXLibraryResource fallbackResource;
 	[ExportGroup("DON'T EDIT THESE DIRECTLY!")]
 	[Export]
 	private Array<StringName> keys;
@@ -179,26 +180,32 @@ public partial class SFXLibraryResource : Resource
 
 		if (keyIndex == -1)
 		{
+			if (fallbackResource != null) // Fallback if possible
+				return fallbackResource.GetStream(key, channel, sfxIndex);
+
 			GD.PrintErr($"Couldn't find sfx '{key}'!");
 			return null;
 		}
 
-		int maxIndex = streams[channel][keyIndex].Count; //Get max random index
+		int maxIndex = streams[channel][keyIndex].Count; // Get max random index
 
-		if (maxIndex == 0) //No sound effect found
+		if (maxIndex == 0) // No sound effect found
 		{
+			if (fallbackResource != null) // Fallback if possible
+				return fallbackResource.GetStream(key, channel, sfxIndex);
+
 			GD.PrintErr($"No sfx found for '{key}' on channel {channel}!");
 			return null;
 		}
 
-		if (maxIndex == 1) //Randomization isn't possible with only one sfx.
+		if (maxIndex == 1) // Randomization isn't possible with only one sfx.
 			sfxIndex = 0;
-		else if (sfxIndex == -1) //Randomize sfx
+		else if (sfxIndex == -1) // Randomize sfx
 			sfxIndex = Runtime.randomNumberGenerator.RandiRange(0, maxIndex - 1);
 
 		return streams[channel][keyIndex][sfxIndex];
 	}
-	public AudioStream GetStream(int index, int channel = 0, int sfxIndex = -1) => GetStream(GetKeyByIndex(index), channel, sfxIndex);
 
+	public AudioStream GetStream(int index, int channel = 0, int sfxIndex = -1) => GetStream(GetKeyByIndex(index), channel, sfxIndex);
 	public StringName GetKeyByIndex(int index) => keys[index];
 }
