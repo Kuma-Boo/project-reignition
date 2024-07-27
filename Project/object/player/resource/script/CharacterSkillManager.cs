@@ -608,6 +608,9 @@ public partial class CharacterSkillManager : Node
 		{
 			if (!IsTimeBreakEnabled) return;
 			if (!IsSoulGaugeCharged) return;
+			if (Character.ActionState == CharacterController.ActionStates.Teleport) return; // Can't time break during teleports
+			if (Character.IsDefeated) return;
+
 			ToggleTimeBreak();
 		}
 	}
@@ -658,7 +661,8 @@ public partial class CharacterSkillManager : Node
 			if (!IsSoulGaugeCharged) return;
 			if (!IsSpeedBreakEnabled) return;
 			if (Character.MovementState == CharacterController.MovementStates.Launcher) return; // Can't speed break during launchers
-			if (!Character.IsOnGround) return;
+			if (Character.ActionState == CharacterController.ActionStates.Teleport) return; // Can't speed break during teleports
+			if (!Character.IsOnGround || Character.IsDefeated) return;
 
 			ToggleSpeedBreak();
 		}
