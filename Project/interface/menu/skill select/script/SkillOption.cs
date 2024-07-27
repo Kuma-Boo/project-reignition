@@ -54,7 +54,7 @@ public partial class SkillOption : Control
 		{
 			animator.Play("equipped");
 		}
-		else if (ActiveSkillRing.TotalCost + Skill.Cost > ActiveSkillRing.MaxSkillPoints)
+		else if (IsTooExpensive())
 		{
 			animator.Play("expensive");
 		}
@@ -68,6 +68,21 @@ public partial class SkillOption : Control
 		}
 
 		animator.Advance(0);
+	}
+
+	private bool IsTooExpensive()
+	{
+		int predictedCost = ActiveSkillRing.TotalCost + Skill.Cost;
+
+		if (ActiveSkillRing.IsSkillEquipped(Skill.Key) && (Skill.IsAugment || Skill.HasAugments))
+		{
+			// Take augment costs into account
+			int augmentIndex = ActiveSkillRing.GetAugmentIndex(Skill.Key);
+			SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(Skill.Key);
+			predictedCost -= baseSkill.GetAugment(augmentIndex).Cost;
+		}
+
+		return predictedCost > ActiveSkillRing.MaxSkillPoints;
 	}
 
 	public bool HasUnlockedAugments()
