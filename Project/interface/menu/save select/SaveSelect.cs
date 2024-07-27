@@ -52,7 +52,6 @@ public partial class SaveSelect : Menu
 				{
 					deleteAnimator.Play("confirm");
 					DeleteSaveFile();
-					deleteAnimator.Play("hide");
 					isDeleteMenuActive = false;
 					return;
 				}
