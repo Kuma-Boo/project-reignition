@@ -18,6 +18,8 @@ public partial class DestructableObject : Node3D
 	[Export(PropertyHint.Range, "-128,128")]
 	private float gravityScale = 1;
 	[Export]
+	public bool shakeScreenOnShatter = true;
+	[Export]
 	/// <summary> Stop the player when being shattered? </summary>
 	private bool stopPlayerOnShatter;
 	[Export]
@@ -53,7 +55,7 @@ public partial class DestructableObject : Node3D
 	private bool bouncePlayerOnJumpDash;
 	[Export]
 	private bool snapPlayerOnBounce = true;
-	private const float SHATTER_STRENGTH = 10.0f;
+	private const float ShatterStrength = 10.0f;
 
 	private ShatterFlags FlagSetting => (ShatterFlags)shatterFlags;
 	private CharacterController Character => CharacterController.instance;
@@ -70,7 +72,6 @@ public partial class DestructableObject : Node3D
 		public Vector3 scale;
 		public Vector3 position; // Local transform to spawn with
 	}
-
 
 	public override void _Ready()
 	{
@@ -191,7 +192,6 @@ public partial class DestructableObject : Node3D
 		pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
 	}
 
-
 	public virtual void Shatter() // Call this from a signal
 	{
 		if (isShattered) return;
@@ -200,12 +200,15 @@ public partial class DestructableObject : Node3D
 		if (animator?.HasAnimation("shatter") == true)
 			animator.Play("shatter");
 
+		if (shakeScreenOnShatter)
+			Character.Camera.StartMediumCameraShake();
+
 		pieceRoot.Visible = true; // Make sure piece root is visible
 		pieceRoot.ProcessMode = ProcessModeEnum.Inherit;
 		pieceRoot.GlobalTransform = root.GlobalTransform; // Copy root transform
 
 		Vector3 shatterPoint = root.GlobalPosition;
-		float shatterStrength = SHATTER_STRENGTH;
+		float shatterStrength = ShatterStrength;
 		if (isInteractingWithPlayer && !Character.Skills.IsSpeedBreakActive) // Directional shatter
 		{
 			// Kill character's speed
@@ -231,16 +234,14 @@ public partial class DestructableObject : Node3D
 		EmitSignal(SignalName.Shattered);
 	}
 
-
 	// Prevent memory leakage
 	public void Unload() => pieces.Clear();
-
 
 	public void OnEntered(Area3D a)
 	{
 		if (isShattered) return;
 
-		if (!a.IsInGroup("player") && !a.IsInGroup("stackable"))
+		if (!a.IsInGroup("player") && !a.IsInGroup("player detection") && !a.IsInGroup("stackable"))
 		{
 			if (FlagSetting.HasFlag(ShatterFlags.ObjectCollision))
 				Shatter();
@@ -251,13 +252,11 @@ public partial class DestructableObject : Node3D
 		isInteractingWithPlayer = true;
 	}
 
-
 	public void OnExited(Area3D a)
 	{
 		if (a.IsInGroup("player"))
 			isInteractingWithPlayer = false;
 	}
-
 
 	private void ProcessPlayerCollision()
 	{
@@ -272,7 +271,7 @@ public partial class DestructableObject : Node3D
 		{
 			Shatter();
 		}
-		else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Character.Skills.IsAttacking)
+		else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Character.AttackState != CharacterController.AttackStates.None)
 		{
 			Shatter();
 		}
@@ -285,7 +284,6 @@ public partial class DestructableObject : Node3D
 			Character.StartKnockback();
 		}
 	}
-
 
 	public void OnBodyEntered(Node3D b)
 	{

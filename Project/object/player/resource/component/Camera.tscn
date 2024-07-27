@@ -1,0 +1,125 @@
+[gd_scene load_steps=15 format=3 uid="uid://boo3c0dnk36vn"]
+
+[ext_resource type="Script" path="res://object/player/resource/script/CameraController.cs" id="2"]
+[ext_resource type="Resource" uid="uid://dhevcck1smng1" path="res://resource/preset/camera/common/DefaultCam.tres" id="2_hi8xo"]
+[ext_resource type="PackedScene" uid="uid://qmsgr6kswk87" path="res://object/player/resource/component/PathFollower.tscn" id="3_f65nj"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="3_vpygn"]
+[ext_resource type="Resource" uid="uid://dsc0vixphfyh" path="res://resource/preset/camera/common/CompletionCam.tres" id="4_j4rb3"]
+[ext_resource type="Material" uid="uid://d0hh75dmbmq84" path="res://object/player/resource/effect/material/Motion Blur Material.tres" id="5_ty5ku"]
+
+[sub_resource type="PlaneMesh" id="1"]
+size = Vector2(40, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m64j3"]
+specular_mode = 2
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_qj2p2"]
+height = 1.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_iasr2"]
+size = Vector3(0.25, 0.544, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fcqlu"]
+specular_mode = 2
+albedo_color = Color(0, 0, 1, 1)
+
+[sub_resource type="Animation" id="6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="5"]
+resource_name = "activate"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mih1k"]
+_data = {
+"RESET": SubResource("6"),
+"activate": SubResource("5")
+}
+
+[node name="Camera" type="Node3D" node_paths=PackedStringArray("Camera", "FreeCamRoot", "cameraRoot", "debugMesh", "PathFollower", "crossfade", "crossfadeAnimator")]
+process_mode = 3
+script = ExtResource("2")
+Camera = NodePath("CameraRoot/FreecamRoot/Camera")
+FreeCamRoot = NodePath("CameraRoot/FreecamRoot")
+cameraRoot = NodePath("CameraRoot")
+debugMesh = NodePath("CameraRoot/Debug")
+PathFollower = NodePath("PathFollower")
+defaultSettings = ExtResource("2_hi8xo")
+motionBlurMaterial = ExtResource("5_ty5ku")
+crossfade = NodePath("Crossfade")
+crossfadeAnimator = NodePath("Crossfade/AnimationPlayer")
+
+[node name="CompletionCamera" type="Node3D" parent="."]
+script = ExtResource("3_vpygn")
+transitionTime = 0.2
+settings = ExtResource("4_j4rb3")
+
+[node name="CameraRoot" type="Node3D" parent="."]
+
+[node name="FreecamRoot" type="Node3D" parent="CameraRoot"]
+
+[node name="Camera" type="Camera3D" parent="CameraRoot/FreecamRoot"]
+cull_mask = 32767
+current = true
+fov = 70.0
+size = 0.1
+
+[node name="MotionBlur" type="MeshInstance3D" parent="CameraRoot/FreecamRoot/Camera"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -2)
+cast_shadow = 0
+mesh = SubResource("1")
+surface_material_override/0 = ExtResource("5_ty5ku")
+
+[node name="Debug" type="MeshInstance3D" parent="CameraRoot"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_m64j3")
+mesh = SubResource("CapsuleMesh_qj2p2")
+
+[node name="Direction" type="MeshInstance3D" parent="CameraRoot/Debug"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+mesh = SubResource("BoxMesh_iasr2")
+surface_material_override/0 = SubResource("StandardMaterial3D_fcqlu")
+
+[node name="Crossfade" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Crossfade"]
+libraries = {
+"": SubResource("AnimationLibrary_mih1k")
+}
+
+[node name="PathFollower" parent="." instance=ExtResource("3_f65nj")]
+
+[connection signal="StartCompletion" from="." to="CompletionCamera" method="Activate"]

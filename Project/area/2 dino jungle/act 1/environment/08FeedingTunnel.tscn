@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bh513knx8203u"]
+[gd_scene load_steps=4 format=3 uid="uid://bh513knx8203u"]
 
 [ext_resource type="PackedScene" uid="uid://ds6wu6w80jbou" path="res://area/2 dino jungle/act 1/environment/model/08FeedingTunnel.gltf" id="1_34qap"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_qbhlx"]
+[ext_resource type="Texture2D" uid="uid://7pafelkxhvjj" path="res://area/2 dino jungle/data/texture/blob_shadow.png" id="3_hhe30"]
 
 [node name="08FeedingTunnel" instance=ExtResource("1_34qap")]
 script = ExtResource("2_qbhlx")
@@ -10,6 +11,7 @@ isStageVisuals = true
 
 [node name="stg020_o05_Mesh_0" parent="." index="0"]
 layers = 2
+cast_shadow = 0
 
 [node name="stg020_a06_Mesh_0" parent="." index="1"]
 layers = 2
@@ -54,13 +56,141 @@ size = Vector3(203.62, 213.499, 295.293)
 cull_mask = 2
 ambient_mode = 2
 ambient_color = Color(1, 1, 1, 1)
-ambient_color_energy = 0.5
+ambient_color_energy = 0.3
 
-[node name="ObjectReflectionProbe" type="ReflectionProbe" parent="." index="12"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -655.582, -193.768, -1109.05)
+[node name="ObjectReflectionProbeUpper" type="ReflectionProbe" parent="." index="12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -633.472, -239.648, -1052)
 layers = 1024
-size = Vector3(203.62, 213.499, 295.293)
+size = Vector3(159.4, 69.7336, 181.193)
+interior = true
 cull_mask = 65
 ambient_mode = 2
-ambient_color = Color(1, 1, 1, 1)
-ambient_color_energy = 0.5
+ambient_color = Color(0.86, 1, 0.988333, 1)
+ambient_color_energy = 0.1
+
+[node name="ObjectReflectionProbeLower" type="ReflectionProbe" parent="." index="13"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -672.101, -281.297, -1024.09)
+layers = 1024
+size = Vector3(82.141, 17.2761, 125.382)
+interior = true
+cull_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.86, 1, 0.988333, 1)
+ambient_color_energy = 0.05
+
+[node name="Decal" type="Decal" parent="." index="14"]
+transform = Transform3D(0.976623, 0, 0.214956, 0, 1, 0, -0.214956, 0, 0.976623, -666.098, -277.568, -1051.52)
+size = Vector3(24.8878, 12.0745, 81.7451)
+texture_albedo = ExtResource("3_hhe30")
+emission_energy = 0.0
+albedo_mix = 0.75
+upper_fade = 0.000106268
+lower_fade = 6.72722e-05
+cull_mask = 65
+
+[node name="Decal2" type="Decal" parent="." index="15"]
+transform = Transform3D(0.871795, 0, -0.48987, 0, 1, 0, 0.48987, 0, 0.871795, -683.514, -277.568, -1056.03)
+size = Vector3(24.8878, 12.0745, 81.7451)
+texture_albedo = ExtResource("3_hhe30")
+emission_energy = 0.0
+albedo_mix = 0.75
+upper_fade = 0.000106268
+lower_fade = 6.72722e-05
+cull_mask = 65
+
+[node name="Decal3" type="Decal" parent="." index="16"]
+transform = Transform3D(0.465243, 0, -0.885182, 0, 1, 0, 0.885182, 0, 0.465243, -691.623, -277.568, -1071.55)
+size = Vector3(24.8878, 12.0745, 81.7451)
+texture_albedo = ExtResource("3_hhe30")
+emission_energy = 0.0
+albedo_mix = 0.75
+upper_fade = 0.000106268
+lower_fade = 6.72722e-05
+cull_mask = 65
+
+[node name="Decal4" type="Decal" parent="." index="17"]
+transform = Transform3D(0.465243, 0, -0.885182, 0, 1, 0, 0.885182, 0, 0.465243, -641.133, -281.467, -1058.77)
+size = Vector3(48.0061, 14.4476, 48.736)
+texture_albedo = ExtResource("3_hhe30")
+emission_energy = 0.0
+albedo_mix = 0.75
+upper_fade = 0.0980737
+lower_fade = 6.72722e-05
+cull_mask = 65
+
+[node name="DecalEnd" type="Decal" parent="." index="18"]
+transform = Transform3D(0.976623, 0, 0.214956, 0, 1, 0, -0.214956, 0, 0.976623, -728.039, -260.871, -1073.24)
+size = Vector3(38.2806, 31.2615, 42.9234)
+texture_albedo = ExtResource("3_hhe30")
+emission_energy = 0.0
+albedo_mix = 0.7
+upper_fade = 0.000106268
+lower_fade = 6.72722e-05
+cull_mask = 65
+
+[node name="blobShadows" type="Node3D" parent="." index="19"]
+
+[node name="Decal7" type="Decal" parent="blobShadows" index="0"]
+transform = Transform3D(0.465243, 0, -0.885182, 0, 1, 0, 0.885182, 0, 0.465243, -672.832, -277.055, -1052.37)
+size = Vector3(5.62103, 0.511597, 3.15527)
+texture_albedo = ExtResource("3_hhe30")
+emission_energy = 0.0
+upper_fade = 1.0
+lower_fade = 6.72722e-05
+cull_mask = 6
+
+[node name="Decal8" type="Decal" parent="blobShadows" index="1"]
+transform = Transform3D(0.465243, 0, -0.885182, 0, 1, 0, 0.885182, 0, 0.465243, -678.174, -277.055, -1054.25)
+size = Vector3(5.62103, 0.511597, 3.15527)
+texture_albedo = ExtResource("3_hhe30")
+emission_energy = 0.0
+upper_fade = 1.0
+lower_fade = 6.72722e-05
+cull_mask = 6
+
+[node name="Decal9" type="Decal" parent="blobShadows" index="2"]
+transform = Transform3D(0.465243, 0, -0.885182, 0, 1, 0, 0.885182, 0, 0.465243, -688.824, -277.11, -1058.38)
+size = Vector3(5.62103, 0.511597, 3.15527)
+texture_albedo = ExtResource("3_hhe30")
+emission_energy = 0.0
+upper_fade = 1.0
+lower_fade = 0.80686
+cull_mask = 6
+
+[node name="Decal10" type="Decal" parent="blobShadows" index="3"]
+transform = Transform3D(0.465243, 0, -0.885182, 0, 1, 0, 0.885182, 0, 0.465243, -688.343, -277.11, -1064.35)
+size = Vector3(5.62103, 0.511597, 3.15527)
+texture_albedo = ExtResource("3_hhe30")
+emission_energy = 0.0
+upper_fade = 1.0
+lower_fade = 0.80686
+cull_mask = 6
+
+[node name="Decal11" type="Decal" parent="blobShadows" index="4"]
+transform = Transform3D(0.465243, 0, -0.885182, 0, 1, 0, 0.885182, 0, 0.465243, -697.425, -277.11, -1082.25)
+size = Vector3(5.62103, 0.511597, 3.15527)
+texture_albedo = ExtResource("3_hhe30")
+emission_energy = 0.0
+upper_fade = 1.0
+lower_fade = 0.80686
+cull_mask = 6
+
+[node name="Decal12" type="Decal" parent="blobShadows" index="5"]
+transform = Transform3D(0.465243, 0, -0.885182, 0, 1, 0, 0.885182, 0, 0.465243, -699.938, -265.579, -1062.77)
+size = Vector3(9.70971, 0.511597, 4.3537)
+texture_albedo = ExtResource("3_hhe30")
+emission_energy = 0.0
+albedo_mix = 0.72
+upper_fade = 1.0
+lower_fade = 0.80686
+cull_mask = 6
+
+[node name="Decal13" type="Decal" parent="blobShadows" index="6"]
+transform = Transform3D(0.337686, 0, -0.941258, 0, 1, 0, 0.941258, 0, 0.337686, -700.707, -265.579, -1065.2)
+size = Vector3(8.61071, 0.511597, 4.3537)
+texture_albedo = ExtResource("3_hhe30")
+emission_energy = 0.0
+albedo_mix = 0.72
+upper_fade = 1.0
+lower_fade = 0.80686
+cull_mask = 6

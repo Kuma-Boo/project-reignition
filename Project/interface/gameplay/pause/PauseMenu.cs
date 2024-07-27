@@ -95,7 +95,9 @@ public partial class PauseMenu : Node
 		{
 			PauseSkill pauseSkill = pauseSkillScene.Instantiate<PauseSkill>();
 			pauseSkill.Skill = Runtime.Instance.SkillList.GetSkill(key);
-			pauseSkill.Skill = Runtime.Instance.SkillList.GetSkill(key);
+			if (pauseSkill.Skill.HasAugments)
+				pauseSkill.Skill = pauseSkill.Skill.GetAugment(SaveManager.ActiveSkillRing.GetAugmentIndex(key));
+			pauseSkill.Initialize();
 			skillContainer.AddChild(pauseSkill);
 		}
 	}
@@ -339,12 +341,13 @@ public partial class PauseMenu : Node
 
 	private void UpdateSkillDescription()
 	{
-		SkillKey key = SaveManager.ActiveSkillRing.EquippedSkills[currentSelection];
-		description.SetText(Runtime.Instance.SkillList.GetSkill(key).DescriptionKey);
+		PauseSkill pauseSkill = skillContainer.GetChild<PauseSkill>(currentSelection);
+		description.SetText(pauseSkill.Skill.DescriptionKey);
 		description.ShowDescription();
 	}
 
 	private void EnableInteraction() => AllowPausing = true;
+	private float unpausedSpeed;
 	private void TogglePause()
 	{
 		canMoveCursor = false; //Disable cursor movement
@@ -362,6 +365,12 @@ public partial class PauseMenu : Node
 			UpdateSelection(0);
 			UpdateCursorPosition();
 			animator.Set(ShowTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			unpausedSpeed = (float)Engine.TimeScale;
+			Engine.TimeScale = 1.0f;
+		}
+		else
+		{
+			Engine.TimeScale = unpausedSpeed;
 		}
 	}
 

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Godot;
 using Godot.Collections;
@@ -17,9 +18,9 @@ public partial class SaveManager : Node
 	public override void _EnterTree()
 	{
 		Instance = this;
+		MenuData = GameData.CreateDefaultData(); // Create a default game data object for the menu
 
 		LoadConfig();
-		LoadGameData();
 
 		if (OS.IsDebugBuild()) // Editor build, use custom configuration
 		{
@@ -109,6 +110,9 @@ public partial class SaveManager : Node
 		public RenderingServer.ViewportScaling3DMode resizeMode = RenderingServer.ViewportScaling3DMode.Bilinear;
 		public int antiAliasing = 1; // Default to FXAA
 		public bool useHDBloom = true;
+		public bool useMotionBlur = true;
+		public bool useScreenShake = true;
+		public int screenShake = 100;
 		public QualitySetting softShadowQuality = QualitySetting.Medium;
 		public QualitySetting postProcessingQuality = QualitySetting.Medium;
 		public QualitySetting reflectionQuality = QualitySetting.High;
@@ -136,7 +140,7 @@ public partial class SaveManager : Node
 		/// <summary> Creates a dictionary based on config data. </summary>
 		public Dictionary ToDictionary()
 		{
-			Dictionary dictionary = new()
+			return new()
 			{
 				// Video
 				{ nameof(targetDisplay), targetDisplay },
@@ -152,6 +156,9 @@ public partial class SaveManager : Node
 				{ nameof(softShadowQuality), (int)softShadowQuality },
 				{ nameof(postProcessingQuality), (int)postProcessingQuality },
 				{ nameof(reflectionQuality), (int)reflectionQuality },
+				{ nameof(useMotionBlur), useMotionBlur },
+				{ nameof(useScreenShake), useScreenShake },
+				{ nameof(screenShake), screenShake },
 
 				// Audio
 				{ nameof(isMasterMuted), isMasterMuted },
@@ -172,8 +179,6 @@ public partial class SaveManager : Node
 				{ nameof(voiceLanguage), (int)voiceLanguage },
 				{ nameof(textLanguage), (int)textLanguage },
 			};
-
-			return dictionary;
 		}
 
 		/// <summary> Sets config data based on dictionary. </summary>
@@ -205,6 +210,12 @@ public partial class SaveManager : Node
 				postProcessingQuality = (QualitySetting)(int)var;
 			if (dictionary.TryGetValue(nameof(reflectionQuality), out var))
 				reflectionQuality = (QualitySetting)(int)var;
+			if (dictionary.TryGetValue(nameof(useMotionBlur), out var))
+				useMotionBlur = (bool)var;
+			if (dictionary.TryGetValue(nameof(useScreenShake), out var))
+				useScreenShake = (bool)var;
+			if (dictionary.TryGetValue(nameof(screenShake), out var))
+				screenShake = (int)var;
 
 			if (dictionary.TryGetValue(nameof(isMasterMuted), out var))
 				isMasterMuted = (bool)var;
@@ -456,7 +467,7 @@ public partial class SaveManager : Node
 
 	#region Game data
 	/// <summary> Longest amount of playtime that can be displayed on the file select. (99:59:59 in seconds) </summary>
-	public const int MAX_PLAY_TIME = 359999;
+	public const int MaxPlayTime = 359999;
 
 	public enum WorldEnum
 	{
@@ -480,22 +491,26 @@ public partial class SaveManager : Node
 			if (ActiveSaveSlotIndex != -1)
 				return GameSaveSlots[ActiveSaveSlotIndex];
 
-			// Default to save slot 1 when running the game from the editor
-			return GameData.DefaultData;
+			// Default to default data when running the game from the editor
+			return MenuData;
 		}
 	}
 
+	/// <summary> Game Data to use during the menu so things don't break. </summary>
+	public static GameData MenuData { get; set; }
 	/// <summary> Current skill ring. </summary>
-	public static SkillRing ActiveSkillRing = new();
-	public static GameData[] GameSaveSlots = new GameData[MAX_SAVE_SLOTS]; // List of all saves created.
-	public const int MAX_SAVE_SLOTS = 9; // Maximum number of save slots that can be created.
+	public readonly static SkillRing ActiveSkillRing = new();
+	/// <summary> List of all saves created. </summary>
+	public readonly static GameData[] GameSaveSlots = new GameData[SaveSlotCount];
+	/// <summary> Maximum number of save slots that can be created. </summary>
+	public const int SaveSlotCount = 9;
 
 	/// <summary> Saves active game data to a file. </summary>
 	public static void SaveGameData()
 	{
 		if (ActiveSaveSlotIndex == -1) return; // Invalid save slot
 
-		// TODO Write save data to a file.
+		// Write save data to a file.
 		string saveNumber = ActiveSaveSlotIndex.ToString("00");
 		FileAccess file = FileAccess.Open(SaveDirectory + $"save{saveNumber}.dat", FileAccess.ModeFlags.Write);
 
@@ -504,10 +519,6 @@ public partial class SaveManager : Node
 			file.StoreString(Json.Stringify(ActiveGameData.ToDictionary(), "\t"));
 			file.Close();
 		}
-		else
-		{
-			// TODO Show an error message to the player? 
-		}
 	}
 
 	/// <summary> Preloads game data so it can be displayed on menus. </summary>
@@ -515,7 +526,7 @@ public partial class SaveManager : Node
 	{
 		for (int i = 0; i < GameSaveSlots.Length; i++)
 		{
-			GameSaveSlots[i] = new();
+			GameSaveSlots[i] = GameData.CreateDefaultData();
 
 			string saveNumber = i.ToString("00");
 			FileAccess file = FileAccess.Open(SaveDirectory + $"save{saveNumber}.dat", FileAccess.ModeFlags.Read);
@@ -525,44 +536,40 @@ public partial class SaveManager : Node
 				file.Close();
 			}
 		}
-
-		// Set up default game data/menu game data
-		GameData.DefaultData = new()
-		{
-			level = 1,
-			lastPlayedWorld = WorldEnum.LostPrologue,
-		};
-
-		// TODO Replace this with the tutorial key
-		GameData.DefaultData.UnlockStage("so_a1_main");
-		GameData.DefaultData.UnlockWorld(WorldEnum.LostPrologue);
-		GameData.DefaultData.UnlockWorld(WorldEnum.SandOasis);
-
-		if (DebugManager.Instance.UseDemoSave || OS.IsDebugBuild()) // Unlock all worlds in the demo
-		{
-			GameData.DefaultData.UnlockAllWorlds();
-			ActiveSkillRing.LoadFromActiveData();
-		}
 	}
 
-	/// <summary> Frees game data at the given index, then creates default data in it's place. </summary>
-	public static void ResetSaveData(int index)
+	//<summary> Frees game data at the given index
+	public static void ResetSaveData(int index, bool asEmptyFile)
 	{
-		GameSaveSlots[index].Free();
-		GameSaveSlots[index] = GameData.DefaultData;
+		GameSaveSlots[index] = GameData.CreateDefaultData();
+
+		if (!asEmptyFile) // Set level to be 1 so files aren't read as empty
+			GameSaveSlots[index].level = 1;
 	}
 
-	public partial class GameData : GodotObject
+	// <summary> Deletes a save file at the given index
+	public static void DeleteSaveData(int index)
+	{
+		string saveNumber = index.ToString("00");
+		string savePath = SaveDirectory + $"save{saveNumber}.dat";
+
+		if (!FileAccess.FileExists(savePath))
+			return;
+		OS.MoveToTrash(ProjectSettings.GlobalizePath(savePath));
+		GD.Print("Deleting save");
+	}
+
+	public class GameData
 	{
 		/// <summary> Which area was the player in last? (Used for save select) </summary>
 		public WorldEnum lastPlayedWorld;
 
 		/// <summary> List of world rings collected. </summary>
-		public Array<WorldEnum> worldRingsCollected = [];
+		public Array<WorldEnum> worldRingsCollected;
 		/// <summary> List of worlds unlocked. </summary>
-		public Array<WorldEnum> worldsUnlocked = [];
-		/// <summary> List of worlds unlocked. </summary>
-		public Array<string> stagesUnlocked = [];
+		public Array<WorldEnum> worldsUnlocked;
+		/// <summary> List of stages unlocked. </summary>
+		public Array<string> stagesUnlocked;
 
 		/// <summary> Player level, from 1 -> 99 </summary>
 		public int level;
@@ -574,7 +581,8 @@ public partial class SaveManager : Node
 		/// <summary> Total playtime, in seconds. </summary>
 		public float playTime;
 
-		public Array<SkillKey> equippedSkills = [];
+		public Array<SkillKey> equippedSkills;
+		public Dictionary<SkillKey, int> equippedAugments;
 		/// <summary> Total number of fire souls the player collected. </summary>
 		public int FireSoulCount { get; private set; }
 		/// <summary> Total number of gold medals the player has collected. </summary>
@@ -783,6 +791,22 @@ public partial class SaveManager : Node
 		/// <summary> Creates a dictionary based on GameData. </summary>
 		public Dictionary ToDictionary()
 		{
+			Dictionary<string, int> augmentDictionary = [];
+
+			for (int i = 0; i < equippedAugments.Keys.Count; i++)
+			{
+				SkillKey key = equippedAugments.Keys.ToArray()[i];
+				augmentDictionary.Add(key.ToString(), equippedAugments[key]);
+			}
+
+			Array<string> skillDictionary = [];
+
+			for (int i = 0; i < equippedSkills.Count; i++)
+			{
+				SkillKey key = equippedSkills[i];
+				skillDictionary.Add(key.ToString());
+			}
+
 			return new()
 			{
 				// WorldEnum data
@@ -796,7 +820,8 @@ public partial class SaveManager : Node
 				{ nameof(level), level },
 				{ nameof(exp), exp },
 				{ nameof(playTime), Mathf.RoundToInt(playTime) },
-				{ nameof(equippedSkills), equippedSkills },
+				{ nameof(equippedSkills), skillDictionary },
+				{ nameof(equippedAugments), augmentDictionary },
 			};
 		}
 
@@ -806,19 +831,29 @@ public partial class SaveManager : Node
 			// WorldEnum data
 			if (dictionary.TryGetValue(nameof(lastPlayedWorld), out Variant var))
 				lastPlayedWorld = (WorldEnum)(int)var;
-			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var))
+
+			worldsUnlocked.Clear();
+			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var) && var.VariantType == Variant.Type.Array)
 			{
 				Array<int> worlds = (Array<int>)var;
 				for (int i = 0; i < worlds.Count; i++)
 					worldsUnlocked.Add((WorldEnum)worlds[i]);
 			}
-			if (dictionary.TryGetValue(nameof(worldRingsCollected), out var))
+			else
+			{
+				// Update save data from old format (unlock everything to prevent softlocks)
+				for (int i = 0; i < (int)WorldEnum.Max; i++)
+					worldsUnlocked.Add((WorldEnum)i);
+			}
+
+			worldRingsCollected.Clear();
+			if (dictionary.TryGetValue(nameof(worldRingsCollected), out var) && var.VariantType == Variant.Type.Array)
 			{
 				Array<int> worlds = (Array<int>)var;
 				for (int i = 0; i < worlds.Count; i++)
 					worldRingsCollected.Add((WorldEnum)worlds[i]);
 			}
-			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var))
+			if (dictionary.TryGetValue(nameof(stagesUnlocked), out var) && var.VariantType == Variant.Type.Array)
 				stagesUnlocked = (Array<string>)var;
 
 			if (dictionary.TryGetValue(nameof(levelData), out var))
@@ -833,9 +868,27 @@ public partial class SaveManager : Node
 
 			if (dictionary.TryGetValue(nameof(equippedSkills), out var))
 			{
-				Array<int> skills = (Array<int>)var;
+				equippedSkills.Clear();
+
+				Array<string> skills = (Array<string>)var;
 				for (int i = 0; i < skills.Count; i++)
-					equippedSkills.Add((SkillKey)skills[i]);
+				{
+					if (Enum.TryParse(skills[i], out SkillKey key))
+						equippedSkills.Add(key);
+				}
+			}
+
+			if (dictionary.TryGetValue(nameof(equippedAugments), out var))
+			{
+				equippedAugments.Clear();
+				Dictionary<string, int> augments = (Dictionary<string, int>)var;
+				string[] augmentKeys = [.. augments.Keys];
+
+				for (int i = 0; i < augmentKeys.Length; i++)
+				{
+					if (Enum.TryParse(augmentKeys[i], out SkillKey key))
+						equippedAugments.Add(key, augments[augmentKeys[i]]);
+				}
 			}
 
 			// Update runtime data based on save data
@@ -863,7 +916,27 @@ public partial class SaveManager : Node
 		}
 
 		/// <summary> Creates a new GameData object that contains default values. </summary>
-		public static GameData DefaultData;
+		public static GameData CreateDefaultData()
+		{
+			// Set up default game data/menu game data
+			GameData data = new()
+			{
+				worldRingsCollected = [],
+				worldsUnlocked = [],
+				stagesUnlocked = [],
+				equippedSkills = [],
+				equippedAugments = [],
+				level = 0,
+				lastPlayedWorld = WorldEnum.LostPrologue
+			};
+
+			// TODO Replace this with the tutorial key
+			data.UnlockStage("so_a1_main");
+			data.UnlockWorld(WorldEnum.LostPrologue);
+			data.UnlockWorld(WorldEnum.SandOasis); // Lock this in the final build
+
+			return data;
+		}
 	}
 	#endregion
 }

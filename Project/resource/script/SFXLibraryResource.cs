@@ -198,6 +198,7 @@ public partial class SFXLibraryResource : Resource
 
 		return streams[channel][keyIndex][sfxIndex];
 	}
+	public AudioStream GetStream(int index, int channel = 0, int sfxIndex = -1) => GetStream(GetKeyByIndex(index), channel, sfxIndex);
 
 	public StringName GetKeyByIndex(int index) => keys[index];
 }

@@ -44,20 +44,23 @@ public partial class BonusManager : VBoxContainer
 
 		MoveChild(bonus, 0); // Re-order to appear first
 		bonus.ShowBonus(bonusData); // Activate bonus
+		bonusesActive++;
+
+		if (bonusData.Type == BonusType.EXP)
+		{
+			StageSettings.instance.CurrentEXP += bonusData.Amount;
+			return;
+		}
 
 		// Update score
 		StageSettings.instance.UpdateScore(bonusData.CalculateBonusPoints(), StageSettings.MathModeEnum.Add);
-
-		// TODO Update exp based on skills?
-
-		bonusesActive++;
 	}
 
 	private void BonusFinished() => bonusesActive--;
 
 	private int ringChain;
 	/// <summary> Increases the current ring chain. </summary>
-	private void AddRingChain()
+	public void AddRingChain()
 	{
 		ringChain++;
 
@@ -121,7 +124,20 @@ public partial class BonusManager : VBoxContainer
 	}
 
 	/// <summary> Called when the level is completed. Forces all bonuses to be counted. </summary>
-	private void OnLevelCompleted() => FinishRingChain();
+	private void OnLevelCompleted()
+	{
+		FinishRingChain();
+		FinishEnemyChain();
+		while (bonusQueue.Count != 0)
+			PlayBonus(); // Count all bonuses immediately
+	}
+
+	public void CancelBonuses()
+	{
+		ringChain = 0;
+		enemyChain = 0;
+		enemyChainTimer = 0;
+	}
 }
 
 public enum BonusType
@@ -132,13 +148,14 @@ public enum BonusType
 	Drift,
 	Grindstep,
 	GrindShuffle,
+	EXP,
 }
 
 public readonly struct BonusData(BonusType type, int amount = 0)
 {
-	public BonusType Type { get; } = type;
-	public StringName Key { get; } = GetKeyLabel(type);
-	public int Amount { get; } = amount;
+	public BonusType Type => type;
+	public StringName Key => GetKeyLabel(type).ToString().Replace("0", Amount.ToString());
+	public int Amount => amount;
 
 	public int CalculateBonusPoints()
 	{
@@ -183,6 +200,8 @@ public readonly struct BonusData(BonusType type, int amount = 0)
 				return "bonus_grindstep";
 			case BonusType.GrindShuffle:
 				return "bonus_grind_shuffle";
+			case BonusType.EXP:
+				return TranslationServer.Translate("bonus_exp"); // TODO Replace with localized string
 			default:
 				return string.Empty;
 		}

@@ -12,9 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://brtel7tjfbqu1" path="res://area/1 sand oasis/boss/Static.tscn" id="9_qrt26"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="10_a21kh"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_h301n"]
-size = Vector3(24, 20, 4)
-
 [sub_resource type="Curve" id="Curve_5arqb"]
 max_value = 2.5
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 0), 0.0, 15.0, 1, 0, Vector2(0.5, 2.5), 0.0, 0.0, 0, 0, Vector2(1, 2.5), 0.0, 0.0, 0, 0]
@@ -48,6 +45,9 @@ max_value = 2.0
 _data = [Vector2(0, 2), 0.0, 0.0, 0, 0]
 point_count = 1
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_h301n"]
+size = Vector3(24, 20, 4)
+
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("9_qrt26")]
@@ -64,28 +64,6 @@ metadata/_edit_lock_ = true
 [node name="SandScorpion" parent="BossAct" node_paths=PackedStringArray("bossPathFollower") instance=ExtResource("8_sawvf")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -60)
 bossPathFollower = NodePath("../../Static/Path/MainPath/BossPathFollower")
-
-[node name="ItemCycle" parent="BossAct" instance=ExtResource("8_wt7kt")]
-transform = Transform3D(-0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, -0.642788, 158, 9, -175)
-
-[node name="ItemCycle" type="Node3D" parent="BossAct/ItemCycle" node_paths=PackedStringArray("checkpointTrigger")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
-script = ExtResource("9_dh0s2")
-checkpointTrigger = NodePath("../Checkpoint")
-itemCycles = [NodePath("../../Lap01"), NodePath("../../Lap02"), NodePath("../../Lap03"), null]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/ItemCycle"]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
-shape = SubResource("BoxShape3D_h301n")
-
-[node name="Checkpoint" type="Area3D" parent="BossAct/ItemCycle"]
-transform = Transform3D(0.996195, 0, -0.0871559, 0, 1, 0, 0.0871559, 0, 0.996195, 353.014, 0, -116.983)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/ItemCycle/Checkpoint"]
-shape = SubResource("BoxShape3D_h301n")
 
 [node name="Lap01" type="Node3D" parent="BossAct"]
 script = ExtResource("4_gkkbo")
@@ -2303,3 +2281,29 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
 
 [node name="Child05" parent="BossAct/Lap03/Pearl03/PearlsR03" instance=ExtResource("10_a21kh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
+
+[node name="ItemCycle" parent="BossAct" instance=ExtResource("8_wt7kt")]
+transform = Transform3D(-0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, -0.642788, 158, 9, -175)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Cycle" type="Node3D" parent="BossAct/ItemCycle"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("9_dh0s2")
+itemCycles = [NodePath("../../Lap01"), NodePath("../../Lap02"), NodePath("../../Lap03"), null]
+
+[node name="Checkpoint" parent="BossAct/ItemCycle" instance=ExtResource("8_wt7kt")]
+transform = Transform3D(0.996195, 0, -0.087156, 0, 1, 0, 0.087156, 0, 0.996195, 353.014, 0, -116.983)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/ItemCycle/Checkpoint"]
+transform = Transform3D(1, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_h301n")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/ItemCycle"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_h301n")
+
+[connection signal="Activated" from="BossAct/ItemCycle/Checkpoint" to="BossAct/ItemCycle/Cycle" method="OnCheckpointActivated"]
+[connection signal="Deactivated" from="BossAct/ItemCycle/Checkpoint" to="BossAct/ItemCycle/Cycle" method="OnCheckpointDeactivated"]

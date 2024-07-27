@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://skx536edn7yd"]
+[gd_scene load_steps=54 format=3 uid="uid://skx536edn7yd"]
 
 [ext_resource type="PackedScene" uid="uid://g7vhevg8ipxh" path="res://area/1 sand oasis/act 2/environment/01Opening.tscn" id="1_vn5mm"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_yumdi"]
@@ -11,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://d0qnlfq8f7nfg" path="res://area/1 sand oasis/act 2/environment/05Slope.tscn" id="5_c5ona"]
 [ext_resource type="PackedScene" uid="uid://cwtjamqykuvwt" path="res://area/1 sand oasis/act 2/environment/06End.tscn" id="6_2ngjg"]
 [ext_resource type="Curve3D" uid="uid://dny4rc3cmd8ss" path="res://area/1 sand oasis/act 2/environment/path/BeachPath.tres" id="9_28qpb"]
-[ext_resource type="PackedScene" uid="uid://bom1n0hvfixo1" path="res://area/1 sand oasis/data/BGM.tscn" id="9_f1xur"]
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/1 sand oasis/data/skybox/Skybox.tscn" id="9_hrwu5"]
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="11_bmkuu"]
 [ext_resource type="Curve3D" uid="uid://cfe75qcv7gap7" path="res://area/1 sand oasis/act 2/environment/path/UTurnPath.tres" id="11_emj1x"]
@@ -21,7 +20,7 @@
 [ext_resource type="Curve3D" uid="uid://582epg0j4r4n" path="res://area/1 sand oasis/act 2/environment/path/IslandEndPath.tres" id="12_n178a"]
 [ext_resource type="Resource" uid="uid://ciydxi827mhpa" path="res://area/1 sand oasis/act 2/camera/ZipperCam.tres" id="13_awkcy"]
 [ext_resource type="Curve3D" uid="uid://dgxqpipn3h2k5" path="res://area/1 sand oasis/act 2/environment/path/IslandPath.tres" id="13_u061t"]
-[ext_resource type="Curve3D" uid="uid://ct1vxqp41jv0v" path="res://area/1 sand oasis/act 2/environment/path/OasisPath.tres" id="14_5rbnr"]
+[ext_resource type="Curve3D" path="res://area/1 sand oasis/act 2/environment/path/OasisPath.tres" id="14_5rbnr"]
 [ext_resource type="Resource" uid="uid://2fjme1iwx0lp" path="res://area/1 sand oasis/act 2/camera/Island1Cam.tres" id="14_vafaf"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="14_ydmtp"]
 [ext_resource type="Resource" uid="uid://dthkk6hcrbrke" path="res://area/1 sand oasis/act 2/camera/ForestCam.tres" id="15_b1ktf"]
@@ -32,10 +31,11 @@
 [ext_resource type="Resource" uid="uid://cgukfohc8s0wh" path="res://area/1 sand oasis/act 2/camera/OasisCam.tres" id="17_dd3sk"]
 [ext_resource type="Resource" uid="uid://dqgebfmms4iqa" path="res://area/1 sand oasis/act 2/camera/FieldCam.tres" id="18_tep6q"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="20_662ia"]
-[ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/RecenterLockout.tres" id="21_tnfaf"]
-[ext_resource type="AudioStream" uid="uid://bmkg2n6r0wy3f" path="res://sound/ost/bonus disc/Sand Oasis Act 2.mp3" id="21_yo7ty"]
+[ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="21_tnfaf"]
+[ext_resource type="AudioStream" uid="uid://btny7mardoxn7" path="res://sound/ost/bonus disc/Sand Oasis Act 2.mp3" id="21_yo7ty"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="28_s8f82"]
 [ext_resource type="PackedScene" uid="uid://bxso4ejxqcm4k" path="res://area/1 sand oasis/act 2/completion/CompletionDemo.gltf" id="34_7u7yr"]
+[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="36_o3cna"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_50thi"]
 size = Vector3(20, 30, 2.5)
@@ -43,6 +43,9 @@ size = Vector3(20, 30, 2.5)
 [sub_resource type="PlaneMesh" id="PlaneMesh_vii8o"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_txqy7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cytmx"]
+size = Vector3(10, 30, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rbfsu"]
 size = Vector3(40, 20, 2.5)
@@ -394,7 +397,7 @@ settings = ExtResource("16_nyn0u")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Hall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_50thi")
+shape = SubResource("BoxShape3D_cytmx")
 
 [node name="Island" parent="Trigger/Camera" instance=ExtResource("3_i2fbd")]
 transform = Transform3D(-4.37114e-08, 0.0436194, 0.999048, 0, 0.999048, -0.0436194, -1, -1.90666e-09, -4.36698e-08, 48.1404, -45.8957, -435.921)
@@ -506,6 +509,7 @@ affectCamera = false
 [node name="DeactivatePath" type="Node3D" parent="Trigger/Object/UTurn" node_paths=PackedStringArray("path")]
 script = ExtResource("12_lmyha")
 path = NodePath("../../../../Paths/IslandEndPath")
+limitCameraDistanceToPath = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/UTurn"]
 shape = SubResource("SphereShape3D_apnef")
@@ -614,11 +618,13 @@ curve = ExtResource("14_5rbnr")
 cull_mask = 1054
 fov = 45.0
 
-[node name="BGM" parent="." instance=ExtResource("9_f1xur")]
+[node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("21_yo7ty")
-volume_db = 12.0
-loopStartPosition = 5.3
-loopEndPosition = 90.7
+bus = &"BGM"
+script = ExtResource("36_o3cna")
+loopStartPosition = 12.46
+loopEndPosition = 90.42
+isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_raoto")

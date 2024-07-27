@@ -23,11 +23,6 @@ public partial class PhysicsManager : Node3D
 		UpdatePhysicsState();
 	}
 
-	public const string PLAYER_GROUP = "player";
-	public const string ENEMY_TAG = "enemy";
-
-	public const float COLLISION_PADDING = 0.02f;
-
 	public const uint ENVIRONMENT_COLLISION_MASK = 1; //Collision mask for environment
 	private const string RAYCAST_POSITION = "position";
 	private const string RAYCAST_NORMAL = "normal";

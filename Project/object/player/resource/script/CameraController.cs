@@ -10,6 +10,9 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class CameraController : Node3D
 {
+	[Signal]
+	public delegate void StartCompletionEventHandler();
+
 	public const float DefaultFov = 70;
 
 	[ExportGroup("Components")]
@@ -26,23 +29,17 @@ public partial class CameraController : Node3D
 	public bool IsBehindCamera(Vector3 worldSpace) => Camera.IsPositionBehind(worldSpace);
 
 	[Export]
-	private TextureRect crossfade;
-	[Export]
-	private AnimationPlayer crossfadeAnimator;
-	public bool IsCrossfading => crossfadeAnimator.IsPlaying();
-
-	[Export]
 	/// <summary> Camera's pathfollower. Different than Character.PathFollower. </summary>
 	public CharacterPathFollower PathFollower { get; private set; }
 	private CharacterController Character => CharacterController.instance;
 
-	private readonly StringName SHADER_GLOBAL_PLAYER_SCREEN_POSITION = new("player_screen_position");
+	private readonly StringName ShaderPlayerScreenPosition = new("player_screen_position");
 
 	public void Initialize()
 	{
 		if (Engine.IsEditorHint()) return;
 
-		//Apply default settings
+		// Apply default settings
 		CameraSettingsResource targetSettings = (StageSettings.instance?.InitialCameraSettings) ?? defaultSettings;
 
 		SnapXform();
@@ -51,26 +48,40 @@ public partial class CameraController : Node3D
 			SettingsResource = targetSettings,
 		});
 
+		motionBlurMaterial.SetShaderParameter(OpacityParameter, 0);
 		Runtime.Instance.Connect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
 	}
 
 	public void Respawn()
 	{
 		SnapXform();
-		//Revert camera settings
+		// Revert camera settings
 		UpdateCameraSettings(new CameraBlendData()
 		{
 			SettingsResource = StageSettings.instance.CurrentCheckpoint.CameraSettings,
 		});
+		SnapFlag = true;
 	}
 
 	public override void _PhysicsProcess(double _)
 	{
+		if (GetTree().Paused)
+			return;
+
 		PathFollower.Resync();
-		//Don't update the camera when the player is defeated
-		if (Character.IsDefeated) return;
+
+		// Don't update the camera when the player is defeated from a DeathTrigger
+		if (IsDefeatFreezeActive)
+		{
+			if (Character.IsDefeated)
+				return;
+
+			IsDefeatFreezeActive = false;
+		}
 
 		UpdateGameplayCamera();
+		UpdateScreenShake();
+		UpdateMotionBlur();
 	}
 
 	public override void _Process(double _)
@@ -79,39 +90,47 @@ public partial class CameraController : Node3D
 			UpdateFreeCam();
 	}
 
+	/// <summary> Enabled when the camera should freeze due to a DeathTrigger. </summary>
+	public bool IsDefeatFreezeActive { get; set; }
 	/// <summary> Used to focus onto multi-HP enemies, bosses, etc. Not to be confused with CharacterLockon.Target. </summary>
 	public Node3D LockonTarget { get; set; }
-	private bool IsLockonCameraActive => LockonTarget != null || Character.Lockon.IsHomingAttacking || Character.Lockon.IsBouncingLockoutActive;
-	/// <summary> [0 -> 1] ratio of how much to focus onto LockonTarget. </summary>
+	private bool IsLockonCameraActive => LockonTarget != null || Character.Lockon.IsHomingAttacking || Character.Lockon.IsBounceLockoutActive;
+	/// <summary> [0 -> 1] ratio of how much to use the lockon camera. </summary>
 	private float lockonBlend;
 	private float lockonBlendVelocity;
+	/// <summary> [0 -> 1] ratio of how much to focus onto LockonTarget. </summary>
+	private float lockonTargetBlend;
+	private float lockonTargetBlendVelocity;
 	/// <summary> Snappier blend when lockon is active to keep things in frame. </summary>
-	private const float LockonBlendInSmoothing = .2f;
+	private const float LockonBlendInSmoothing = 5.0f;
 	/// <summary> More smoothing/slower blend when resetting lockonBlend. </summary>
-	private const float LockonBlendOutSmoothing = .4f;
+	private const float LockonBlendOutSmoothing = 20.0f;
 	/// <summary> How much extra distance to add when performing a homing attack. </summary>
 	private const float LockonDistance = 3f;
 	private void UpdateLockonTarget()
 	{
+		if (LockonTarget?.IsInsideTree() == false) // Invalid LockonTarget
+			LockonTarget = null;
+
 		float targetBlend = 0;
 		float smoothing = LockonBlendOutSmoothing;
 
 		// Lockon is active
-		if (IsLockonCameraActive)
+		if (!ActiveSettings.ignoreHomingAttack && IsLockonCameraActive)
 		{
 			targetBlend = 1;
 			smoothing = LockonBlendInSmoothing;
 		}
 
-		if (LockonTarget?.IsInsideTree() == false) // Invalid LockonTarget
-			LockonTarget = null;
-
-		lockonBlend = ExtensionMethods.SmoothDamp(lockonBlend, targetBlend, ref lockonBlendVelocity, smoothing);
+		lockonBlend = ExtensionMethods.SmoothDamp(lockonBlend, targetBlend, ref lockonBlendVelocity, smoothing * PhysicsManager.physicsDelta);
+		lockonTargetBlend = ExtensionMethods.SmoothDamp(lockonTargetBlend, LockonTarget == null ? 0 : 1, ref lockonTargetBlendVelocity, LockonBlendOutSmoothing * PhysicsManager.physicsDelta);
 	}
 
 	#region Gameplay Camera
 	/// <summary> Skips smoothing for the current frame. </summary>
 	public bool SnapFlag { get; set; }
+	/// <summary> Determines whether the camera's distance will be limited by its path. </summary>
+	public bool LimitToPathDistance { get; set; }
 
 	[Export]
 	/// <summary> Default camera settings to use when nothing is set. </summary>
@@ -123,30 +142,17 @@ public partial class CameraController : Node3D
 	/// <summary> A list of all camera settings that are influencing camera. </summary>
 	private readonly List<CameraBlendData> CameraBlendList = [];
 
-	public void StartCrossfade(float speed = 1.0f)
+	public bool UsingCompletionCamera { get; private set; }
+	public void StartCompletionCamera()
 	{
-		// Already crossfading
-		if (IsCrossfading)
-			return;
-
-		// Update the crossfade texture
-		ImageTexture tex = new();
-		tex.SetImage(GetViewport().GetTexture().GetImage());
-		crossfade.Texture = tex;
-		crossfadeAnimator.Play("activate");// Start crossfade animation
-		crossfadeAnimator.SpeedScale = speed;
-
-		if (!StageSettings.instance.IsLevelIngame)
-			return;
-
-		// Warp the camera
-		SnapFlag = true;
-		UpdateGameplayCamera();
+		EmitSignal(SignalName.StartCompletion);
+		UsingCompletionCamera = true;
 	}
 
 	/// <summary> Changes the current camera settings. </summary>
 	public void UpdateCameraSettings(CameraBlendData data, bool enableXformBlend = false)
 	{
+		if (UsingCompletionCamera) return;
 		if (data.SettingsResource == null) return; // Invalid data
 
 		if (Mathf.IsZeroApprox(data.BlendTime)) // Cut transition
@@ -272,27 +278,27 @@ public partial class CameraController : Node3D
 		cameraTransform.Origin += cameraTransform.Basis.Y * viewportOffset.Y;
 
 		cameraRoot.GlobalTransform = cameraTransform; // Update transform
-
 		Camera.Fov = fov; // Update fov
-		RenderingServer.GlobalShaderParameterSet(SHADER_GLOBAL_PLAYER_SCREEN_POSITION, ConvertToScreenSpace(Character.CenterPosition) / Runtime.SCREEN_SIZE);
+
+		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Character.CenterPosition) / Runtime.ScreenSize);
 
 		if (SnapFlag) // Reset flag after camera was updated
 			SnapFlag = false;
 	}
 
 	/// <summary> Angle to use when transforming from world space to camera space. </summary>
-	private float xformAngle;
+	public float XformAngle { get; private set; }
 	/// <summary> Previous xform angle used right before the last camera change. </summary>
 	private float previousXformAngle;
 	private float xformBlend = 1;
 	private readonly float XformSmoothing = 1.5f;
-	public float TransformAngle(float angle) => xformAngle + angle;
+	public float TransformAngle(float angle) => XformAngle + angle;
 
 	/// <summary> Starts blending the xform angle. </summary>
 	private void StartXformBlend()
 	{
 		xformBlend = 0;
-		previousXformAngle = xformAngle;
+		previousXformAngle = XformAngle;
 	}
 
 	/// <summary> Blends xform angles for smoother inputs between camera cuts. </summary>
@@ -310,7 +316,7 @@ public partial class CameraController : Node3D
 		}
 
 		xformBlend = Mathf.MoveToward(xformBlend, 1, XformSmoothing * PhysicsManager.physicsDelta);
-		xformAngle = Mathf.LerpAngle(previousXformAngle, targetXformAngle, xformBlend);
+		XformAngle = Mathf.LerpAngle(previousXformAngle, targetXformAngle, xformBlend);
 	}
 
 	public void SnapXform() => xformBlend = 1;
@@ -374,11 +380,15 @@ public partial class CameraController : Node3D
 			if (Character.IsMovingBackward)
 				targetDistance += settings.backstepDistance;
 
-			if (!settings.ignoreHomingAttackDistance && IsLockonCameraActive)
+			if (!settings.ignoreHomingAttack && IsLockonCameraActive)
 				targetDistance += LockonDistance;
 
-			if (PathFollower.Progress < targetDistance && !PathFollower.Loop)
+			if (PathFollower.Progress < targetDistance &&
+				!PathFollower.Loop &&
+				LimitToPathDistance)
+			{
 				targetDistance = PathFollower.Progress;
+			}
 
 			data.blendData.DistanceSmoothDamp(targetDistance, Character.IsMovingBackward, SnapFlag);
 
@@ -472,6 +482,7 @@ public partial class CameraController : Node3D
 				if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate) // Rotational tracking
 				{
 					delta.X = 0; // Ignore x axis for pitch tracking
+					delta.Y -= settings.viewportOffset.Y;
 					data.pitchTracking = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
 					targetPitchTracking = data.pitchTracking;
 				}
@@ -483,14 +494,14 @@ public partial class CameraController : Node3D
 			data.CalculatePosition(Character.CenterPosition);
 			data.precalculatedPosition = AddTrackingOffset(data.precalculatedPosition, data);
 
-			if (IsLockonCameraActive && LockonTarget != null)
+			if (!settings.ignoreHomingAttack && IsLockonCameraActive && LockonTarget != null)
 			{
 				globalDelta = LockonTarget.GlobalPosition.Lerp(Character.CenterPosition, .5f) - data.precalculatedPosition;
 				delta = data.offsetBasis.Inverse() * globalDelta;
 				delta.X = 0; // Ignore x axis for pitch tracking
 				data.blendData.lockonPitchTracking = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
 			}
-			data.pitchTracking += data.blendData.lockonPitchTracking * lockonBlend;
+			data.pitchTracking += data.blendData.lockonPitchTracking * lockonTargetBlend;
 		}
 
 		if (!data.blendData.WasInitialized)
@@ -536,6 +547,207 @@ public partial class CameraController : Node3D
 	}
 	#endregion
 
+	#region Effects
+	[ExportGroup("Effects")]
+	[Export]
+	private ShaderMaterial motionBlurMaterial;
+	private Vector3 previousCameraPosition;
+	private Quaternion previousCameraRotation;
+
+	public int motionBlurRequests;
+
+	private readonly float TimeBreakMotionBlurStrength = 2.0f;
+	private readonly float MotionBlurStrength = .5f;
+	private readonly string OpacityParameter = "opacity";
+	private readonly string LinearVelocityParameter = "linear_velocity";
+	private readonly string AngularVelocityParameter = "angular_velocity";
+
+	private void UpdateMotionBlur()
+	{
+		if (motionBlurMaterial == null || !SaveManager.Config.useMotionBlur)
+			return;
+
+		float opacity = (float)motionBlurMaterial.GetShaderParameter(OpacityParameter);
+		opacity = Mathf.MoveToward(opacity, motionBlurRequests == 0 ? 0 : 1, 5.0f * PhysicsManager.physicsDelta);
+		motionBlurMaterial.SetShaderParameter(OpacityParameter, opacity);
+
+		motionBlurMaterial.SetShaderParameter(LinearVelocityParameter, CalculateLinearVelocity());
+		motionBlurMaterial.SetShaderParameter(AngularVelocityParameter, CalculateAngularVelocity());
+
+		previousCameraPosition = Camera.GlobalPosition;
+		previousCameraRotation = Camera.GlobalBasis.GetRotationQuaternion();
+	}
+
+	private Vector3 CalculateLinearVelocity()
+	{
+		Vector3 velocity = Camera.GlobalPosition - previousCameraPosition;
+		if (!Mathf.IsZeroApprox(Engine.TimeScale))
+			velocity /= (float)Engine.TimeScale;
+
+		if (Character.Skills.IsTimeBreakActive)
+			return velocity * TimeBreakMotionBlurStrength;
+
+		return velocity * MotionBlurStrength;
+	}
+
+	private Vector3 CalculateAngularVelocity()
+	{
+		Quaternion rotation = Camera.GlobalBasis.GetRotationQuaternion();
+		Quaternion rotationDifference = rotation - previousCameraRotation;
+		Quaternion rotationConjugate = new(-rotation.X, -rotation.Y, -rotation.Z, rotation.W);
+		Quaternion angularRotation = rotationDifference * 2.0f * rotationConjugate;
+		return new Vector3(angularRotation.X, angularRotation.Y, angularRotation.Z) * MotionBlurStrength;
+	}
+
+	public void RequestMotionBlur() => motionBlurRequests++;
+	public void UnrequestMotionBlur() => motionBlurRequests--;
+
+	[Export]
+	private TextureRect crossfade;
+	[Export]
+	private AnimationPlayer crossfadeAnimator;
+	public bool IsCrossfading => crossfadeAnimator.IsPlaying();
+	public void StartCrossfade(float speed = 1.0f)
+	{
+		// Already crossfading
+		if (IsCrossfading)
+			return;
+
+		// Update the crossfade texture
+		ImageTexture tex = new();
+		tex.SetImage(GetViewport().GetTexture().GetImage());
+		crossfade.Texture = tex;
+		crossfadeAnimator.Play("activate");// Start crossfade animation
+		crossfadeAnimator.SpeedScale = speed;
+
+		if (!StageSettings.instance.IsLevelIngame)
+			return;
+
+		// Warp the camera
+		SnapFlag = true;
+		UpdateGameplayCamera();
+	}
+
+	private readonly List<CameraShakeSettings> shakeSettings = [];
+
+	public void StartCameraShake(CameraShakeSettings settings)
+	{
+		settings.Initialize();
+		shakeSettings.Add(settings);
+	}
+
+	public void StopRespawnShakes()
+	{
+		for (int i = shakeSettings.Count - 1; i >= 0; i--)
+		{
+			if (shakeSettings[i].persistBetweenRespawns)
+				continue;
+
+			shakeSettings[i].Dispose();
+			shakeSettings.RemoveAt(i);
+		}
+	}
+
+	/// <summary> Starts a medium camera shake. </summary>
+	public void StartMediumCameraShake(float length = .2f)
+	{
+		StartCameraShake(new()
+		{
+			magnitude = Vector3.One.RemoveDepth() * .4f,
+			intensity = Vector3.One * 50.0f,
+			duration = length,
+		});
+	}
+
+	private void UpdateScreenShake()
+	{
+		if (!SaveManager.Config.useScreenShake)
+			return;
+
+		float screenShakeRatio = PhysicsManager.physicsDelta * SaveManager.Config.screenShake * 0.01f;
+		for (int i = shakeSettings.Count - 1; i >= 0; i--)
+		{
+			if (shakeSettings[i].IsFinished)
+			{
+				shakeSettings[i].Dispose();
+				shakeSettings.RemoveAt(i);
+				continue;
+			}
+
+			Vector3 rotationAmount = shakeSettings[i].SimulateShake(PhysicsManager.physicsDelta);
+			cameraRoot.Rotation += rotationAmount * screenShakeRatio;
+		}
+	}
+
+	public partial class CameraShakeSettings : GodotObject
+	{
+		/// <summary> How much the camera rotates. </summary>
+		public Vector3 magnitude = Vector3.One;
+		/// <summary> How quickly the camera shifts between rotations. </summary>
+		public Vector3 intensity = Vector3.One * 50.0f;
+		/// <summary> How random phases should increase from each other. </summary>
+		public float randomness = 1f;
+		/// <summary> Actual value used to sample the sin curve. </summary>
+		public Vector3 phaseOffset;
+		/// <summary> The origin of the camera's shake. </summary>
+		public Vector3 origin;
+		/// <summary> Maximum distance before camera shake is ignored. 0 means always shake. </summary>
+		public float maximumDistance;
+
+		/// <summary> Should this camera shake continue even after being respawned? </summary>
+		public bool persistBetweenRespawns = false;
+
+		/// <summary> Camera's current time. </summary>
+		public float currentTime;
+		/// <summary> Camera shake fade in time. </summary>
+		public float fadeIn = 0.05f;
+		/// <summary> How long camera shake lasts (excluding fade times). </summary>
+		public float duration = 0.2f;
+		/// <summary> Camera shake fade out time. </summary>
+		public float fadeOut = 0.5f;
+		/// <summary> Total camera shake time. </summary>
+		public float TotalTime { get; private set; }
+		public bool IsFinished => currentTime >= TotalTime;
+
+		public void Initialize()
+		{
+			TotalTime = fadeIn + duration + fadeOut;
+
+			// Randomize phase offset
+			phaseOffset = new(
+				Runtime.randomNumberGenerator.Randf() * Mathf.Tau,
+				Runtime.randomNumberGenerator.Randf() * Mathf.Tau,
+				Runtime.randomNumberGenerator.Randf() * Mathf.Tau);
+		}
+
+		public Vector3 SimulateShake(float deltaTime)
+		{
+			// Update times and phase offsets
+			currentTime += deltaTime;
+			phaseOffset.X += (deltaTime * intensity.X) + (deltaTime * Runtime.randomNumberGenerator.Randf() * randomness);
+			phaseOffset.Y += (deltaTime * intensity.Y) + (deltaTime * Runtime.randomNumberGenerator.Randf() * randomness);
+			phaseOffset.Z += (deltaTime * intensity.Z) + (deltaTime * Runtime.randomNumberGenerator.Randf() * randomness);
+
+			// Sample sin wave
+			Vector3 shake = new(Mathf.Sin(phaseOffset.X), Mathf.Sin(phaseOffset.Y), Mathf.Sin(phaseOffset.Z));
+			shake *= magnitude;
+			return shake * CalculateRatio();
+		}
+
+		private float CalculateRatio()
+		{
+			float ratio = 1.0f;
+			if (currentTime < fadeIn) // Fading in
+				ratio = currentTime / fadeIn;
+			else if (currentTime >= fadeIn + duration) // Fading out
+				ratio = 1.0f - ((currentTime - (fadeIn + duration)) / fadeOut);
+			ratio = Mathf.Clamp(ratio, 0f, 1f);
+			ratio = Mathf.Pow(ratio, 2.0f);
+			return ratio;
+		}
+	}
+	#endregion
+
 	#region Free Cam
 	private float freecamMovespeed = 20;
 	private Vector3 freecamMovementVector;
@@ -548,8 +760,8 @@ public partial class CameraController : Node3D
 	private bool isFreeCamTilting;
 
 	private bool isFreeCamLocked;
-	private Vector3 freeCamLockedPosition;
-	private Vector3 freeCamLockedRotation;
+	private Vector3 freeCamPosition;
+	private Vector3 freeCamRotation;
 
 	private void UpdateFreeCam()
 	{
@@ -578,8 +790,7 @@ public partial class CameraController : Node3D
 		if (Input.IsActionJustPressed("debug_free_cam_lock"))
 		{
 			isFreeCamLocked = !isFreeCamLocked;
-			freeCamLockedPosition = FreeCamRoot.GlobalPosition;
-			freeCamLockedRotation = new(Camera.RotationDegrees.X, FreeCamRoot.GlobalRotationDegrees.Y, Camera.RotationDegrees.Z);
+			freeCamPosition = FreeCamRoot.GlobalPosition;
 			GD.Print($"Free cam lock set to {isFreeCamLocked}.");
 		}
 
@@ -608,8 +819,11 @@ public partial class CameraController : Node3D
 		freecamMovementVector = freecamMovementVector.SmoothDamp(targetDirection * targetMoveSpeed, ref freecamVelocity, FREE_CAM_POSITION_SMOOTHING);
 		FreeCamRoot.GlobalTranslate(freecamMovementVector * PhysicsManager.normalDelta);
 
+		DebugManager.Instance.RedrawCamData(FreeCamRoot.GlobalPosition, freeCamRotation);
 		if (isFreeCamLocked)
-			UpdateFreeCamData(freeCamLockedPosition, freeCamLockedRotation);
+			UpdateFreeCamData(freeCamPosition, freeCamRotation);
+		else
+			UpdateMotionBlur();
 	}
 
 	private void ToggleFreeCam()
@@ -650,6 +864,9 @@ public partial class CameraController : Node3D
 
 		if (e is InputEventMouseMotion)
 		{
+			if (isFreeCamLocked)
+				return;
+
 			if (isFreeCamRotating)
 			{
 				FreeCamRoot.RotateObjectLocal(Vector3.Up, Mathf.DegToRad(-(e as InputEventMouseMotion).Relative.X) * MOUSE_SENSITIVITY);
@@ -659,6 +876,9 @@ public partial class CameraController : Node3D
 			{
 				Camera.RotateObjectLocal(Vector3.Forward, Mathf.DegToRad((e as InputEventMouseMotion).Relative.X) * MOUSE_SENSITIVITY);
 			}
+
+			Camera.RotationDegrees = Camera.RotationDegrees.RemoveVertical();
+			freeCamRotation = new(Camera.RotationDegrees.X, FreeCamRoot.GlobalRotationDegrees.Y, Camera.RotationDegrees.Z);
 		}
 		else if (e is InputEventMouseButton emb)
 		{
@@ -666,12 +886,12 @@ public partial class CameraController : Node3D
 			{
 				if (emb.ButtonIndex == MouseButton.WheelUp)
 				{
-					freecamMovespeed += 5;
+					freecamMovespeed += 2;
 					GD.Print($"Free cam Speed set to {freecamMovespeed}.");
 				}
 				if (emb.ButtonIndex == MouseButton.WheelDown)
 				{
-					freecamMovespeed -= 5;
+					freecamMovespeed -= 2;
 					if (freecamMovespeed < 0)
 						freecamMovespeed = 0;
 					GD.Print($"Free cam Speed set to {freecamMovespeed}.");

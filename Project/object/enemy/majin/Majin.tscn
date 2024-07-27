@@ -29,7 +29,6 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mlr0h"]
 radius = 0.6
-height = 1.5
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_xbynq"]
 height = 0.5
@@ -221,32 +220,50 @@ tracks/10/loop_wrap = true
 tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
+"update": 0,
 "values": [true]
 }
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("FX/DefeatFX/DefeatSplatter:lifetime")
+tracks/11/path = NodePath("Root:scale")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.5]
+"values": [Vector3(1, 1, 1)]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Root:scale")
+tracks/12/path = NodePath("FX/DefeatFX/DefeatSplatter:lifetime")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(1, 1, 1)]
+"values": [0.5]
+}
+
+[sub_resource type="Animation" id="Animation_1j3bl"]
+resource_name = "defeat"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/StrikeSFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_o85fj"]
@@ -357,7 +374,7 @@ tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0, 0.666667),
 "transitions": PackedFloat32Array(1, 1),
-"update": 1,
+"update": 0,
 "values": [true, false]
 }
 tracks/8/type = "method"
@@ -500,7 +517,7 @@ tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
-"update": 1,
+"update": 0,
 "values": [true, false]
 }
 
@@ -783,7 +800,7 @@ tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 1),
-"update": 1,
+"update": 0,
 "values": [false, true]
 }
 tracks/5/type = "method"
@@ -825,24 +842,6 @@ tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("FX/StaggerSFX")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_1j3bl"]
-resource_name = "strike"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FX/StrikeSFX")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -920,16 +919,28 @@ tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 1),
-"update": 1,
+"update": 0,
 "values": [false, true]
 }
-tracks/5/type = "method"
+tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("FX/TravelSFX")
+tracks/5/path = NodePath("Root:scale")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.001, 0.001, 0.001), Vector3(1, 1, 1)]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("FX/TravelSFX")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -937,22 +948,11 @@ tracks/5/keys = {
 "method": &"PlayInGroup"
 }]
 }
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("Root:scale")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0.001, 0.001, 0.001), Vector3(1, 1, 1)]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stb46"]
 _data = {
 "RESET": SubResource("Animation_ojgnd"),
+"defeat": SubResource("Animation_1j3bl"),
 "despawn": SubResource("Animation_o85fj"),
 "explode": SubResource("Animation_xx2t8"),
 "fire-end": SubResource("Animation_thps5"),
@@ -961,11 +961,10 @@ _data = {
 "spawn": SubResource("Animation_aucka"),
 "spin": SubResource("Animation_1nwld"),
 "stagger": SubResource("Animation_13cad"),
-"strike": SubResource("Animation_1j3bl"),
 "travel": SubResource("Animation_y1q6p")
 }
 
-[node name="Majin" type="Node3D" groups=["enemy", "wall"]]
+[node name="Majin" type="Node3D"]
 script = ExtResource("1")
 "Spawn Settings/Spawn Travel Time" = 0.0
 "Spawn Interval Settings/Enable Spawn Interval" = false
@@ -1006,8 +1005,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("CylinderShape3D_xbynq")
 disabled = true
 
-[node name="EnvironmentCollider" type="StaticBody3D" parent="ChestAttachment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+[node name="EnvironmentCollider" type="StaticBody3D" parent="ChestAttachment" groups=["enemy", "wall"]]
+transform = Transform3D(1, -4.17596e-23, 0, -4.17597e-23, 1, 0, 0, 0, 1, 0, 0.15, -1.05879e-22)
 collision_layer = 8
 collision_mask = 0
 
@@ -1072,7 +1071,6 @@ gi_mode = 0
 emitting = false
 amount = 32
 lifetime = 0.4
-speed_scale = 1.2
 fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
@@ -1257,6 +1255,9 @@ parameters/fidget_transition/current_index = -1
 parameters/fidget_trigger/active = false
 parameters/fidget_trigger/internal_active = false
 parameters/fidget_trigger/request = 0
+parameters/hit_transition/current_state = "stagger"
+parameters/hit_transition/transition_request = ""
+parameters/hit_transition/current_index = 0
 parameters/hit_trigger/active = false
 parameters/hit_trigger/internal_active = false
 parameters/hit_trigger/request = 0

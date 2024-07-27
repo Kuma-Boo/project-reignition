@@ -60,11 +60,56 @@ public partial class SkillResource : Resource
 	/// <summary> Converts the internal key to snake case for localization. </summary>
 	public string NameString => Key.ToString().ToSnakeCase();
 	/// <summary> Returns the localization key for this skill. </summary>
-	public StringName NameKey => $"skill_{NameString}";
+	public StringName NameKey
+	{
+		get
+		{
+			StringName name = $"skill_{NameString}";
+			if (IsAugment)
+				name += AugmentIndex.ToString();
+
+			return name;
+		}
+	}
 	/// <summary> Returns the localization description key for this skill. </summary>
-	public StringName DescriptionKey => $"skill_{NameString}_description";
+	public StringName DescriptionKey
+	{
+		get
+		{
+			StringName description = $"skill_{NameString}_description";
+			if (IsAugment)
+				description += AugmentIndex.ToString();
+
+			return description;
+		}
+	}
 
 	/// <summary> Reference to a skill that creates a conflict with the current skill. </summary>
 	[Export]
-	public Array<SkillKey> SkillConflicts { get; set; }
+	public Array<string> SkillConflicts { get; set; }
+
+	/// <summary> Does this skill have augments? </summary>
+	public bool HasAugments => Augments != null && Augments.Count != 0;
+	/// <summary> Does this skill build off of a previous skill? </summary>
+	public bool IsAugment => AugmentIndex != 0;
+	[Export]
+	public int AugmentIndex { get; private set; }
+	/// <summary> List of skill augments. </summary>
+	[Export]
+	public Array<SkillResource> Augments { get; set; }
+
+	/// <summary> Returns an augment based on its index. Only call this on the base skill to avoid issues. </summary>
+	public SkillResource GetAugment(int augmentIndex)
+	{
+		if (augmentIndex == 0) // Return the base skill
+			return this;
+
+		foreach (SkillResource augment in Augments)
+		{
+			if (augment.AugmentIndex == augmentIndex)
+				return augment;
+		}
+
+		return null;
+	}
 }

@@ -12,7 +12,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="9_uj3dw"]
 [ext_resource type="PackedScene" uid="uid://junmdgv0jj83" path="res://area/2 dino jungle/object/dino/DinoTrioGroup.tscn" id="10_3r4lq"]
 [ext_resource type="PackedScene" uid="uid://dumttajjtpqta" path="res://area/2 dino jungle/act 1/environment/river event/RiverEvent.tscn" id="19_rr5sk"]
-[ext_resource type="Resource" uid="uid://bc7jtdg5d7q8c" path="res://area/2 dino jungle/act 1/environment/river event/AlignLockout.tres" id="20_gl5qy"]
+[ext_resource type="Resource" uid="uid://bc7jtdg5d7q8c" path="res://area/2 dino jungle/act 1/environment/river event/RiverAlignLockout.tres" id="20_gl5qy"]
 [ext_resource type="Resource" uid="uid://uu106ennix16" path="res://resource/preset/camera/common/WallBackstepCam.tres" id="26_qkiaj"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="27_dpcvf"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="27_l6k7w"]
@@ -2348,7 +2348,7 @@ path = NodePath("../../../../Static/Path/RiverPath")
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 0.766998, 2.6837, 18.454)
 script = ExtResource("7_ys7sj")
 delays = [0.0, 0.4, 4.0, 0.0]
-displayLength = [2.0, 0.5, 0.0, null]
+displayLength = [0.0, 0.5, 0.0, null]
 textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
 
 [node name="RiverEvent" parent="MainAct/RiverEvent/Event" instance=ExtResource("19_rr5sk")]
@@ -2366,7 +2366,6 @@ saveVisibilityOnCheckpoint = true
 [node name="Boat" parent="MainAct/River" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("44_j45ek")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8.895, 0, 4.405)
 maxSpeed = 30.0
-tiltAmount = 45.0
 path = NodePath("../../../Static/Path/RiverPath")
 pathFollower = NodePath("../../../Static/Path/RiverPath/RiverBoatPathFollower")
 
@@ -4973,14 +4972,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.1632, 3.56262, -187.861)
 
 [node name="GreenMajin2" parent="MainAct/Cave/CactusPlatform2" instance=ExtResource("59_fvrl3")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.5, 0.0999756)
-spawnMode = 1
 
 [node name="CactusPlatform3" parent="MainAct/Cave" instance=ExtResource("51_xmrkn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -69.2632, 7.56262, -189.061)
 
 [node name="GreenMajin3" parent="MainAct/Cave/CactusPlatform3" instance=ExtResource("59_fvrl3")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.199997, 0)
-spawnMode = 1
 
 [node name="GrassPillar2" parent="MainAct/Cave" instance=ExtResource("50_sikom")]
 transform = Transform3D(1.18177, 0, 0.208378, 0, 1.2, 0, -0.208378, 0, 1.18177, -82.334, -1.1, -194.373)
@@ -5709,7 +5706,6 @@ transform = Transform3D(0.573577, 0, -0.819152, 0, 1, 0, 0.819152, 0, 0.573577, 
 "Rotation Settings/Rotation Time" = 1.0
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 2.0
-"Attack Settings/Flame Aggression Radius" = 0
 
 [node name="ItemBoxFlying1" parent="MainAct/Crossing" instance=ExtResource("37_8fetv")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 151, 2.5, -97)
@@ -5727,7 +5723,7 @@ disableAttacking = true
 transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 113.67, -12, -176.108)
 disableAttacking = true
 
-[node name="FlowerMajinMover" type="Node3D" parent="MainAct/Crossing" node_paths=PackedStringArray("root")]
+[node name="FlowerMajinMover" type="Node3D" parent="MainAct/Crossing"]
 transform = Transform3D(0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, 0.34202, 103.23, -12, -179.588)
 script = ExtResource("47_r25bh")
 Movement/Mode = 1
@@ -5739,6 +5735,7 @@ Movement/Angle = -90.0
 startPaused = true
 smoothPausing = true
 root = NodePath("FlowerMajin3")
+animator = NodePath("")
 
 [node name="FlowerMajin3" parent="MainAct/Crossing/FlowerMajinMover" instance=ExtResource("47_fimbn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -6.10352e-05)
@@ -5804,7 +5801,6 @@ transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -489.34, -
 [node name="Boat" parent="MainAct/CavernBoat" node_paths=PackedStringArray("path", "pathFollower") instance=ExtResource("44_j45ek")]
 maxSpeed = 10.0
 turnSpeed = 12.0
-tiltAmount = 45.0
 path = NodePath("../../../Static/Path/BoatPath")
 pathFollower = NodePath("../../../Static/Path/BoatPath/CavernBoatPathFollower")
 
@@ -6507,7 +6503,6 @@ transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615
 
 [node name="End" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -742, -262, -1073)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -6680,10 +6675,10 @@ finalHeight = 5.0
 voiceKey = &""
 
 [node name="JumpPanel1" parent="MainAct/End" instance=ExtResource("53_8w2hc")]
-transform = Transform3D(-0.379456, 0, -0.92521, 0, 1, 0, 0.92521, 0, -0.379456, -19.6684, 16.3, 27.6837)
+transform = Transform3D(-0.38107, 0, -0.924546, 0, 1, 0, 0.924546, 0, -0.38107, -17.9166, 16.3, 28.5856)
 middleHeight = 2.0
-finalHeight = -12.0
-distance = 31.0
+finalHeight = -15.0
+distance = 33.0
 
 [node name="Camera" type="Node3D" parent="MainAct/End/JumpPanel1"]
 script = ExtResource("27_dpcvf")
@@ -6998,10 +6993,14 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="JumpFinished" from="MainAct/CavernBoat/BoatStartTrigger/Jump" to="MainAct/CavernBoat/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/CavernBoat/BoatEndTrigger" to="MainAct/CavernBoat/Boat" method="Deactivate"]
 [connection signal="JumpFinished" from="MainAct/CavernBoat/BoatEndTrigger/Jump" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
+[connection signal="Activated" from="MainAct/End/JumpPanel1" to="Static/Collision/FeedingTunnelOneWay" method="Deactivate"]
 [connection signal="Activated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Activate"]
+[connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
 [connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Deactivate"]
 
 [editable path="Static"]
+[editable path="Static/Visuals/03Cave"]
+[editable path="Static/Visuals/03CaveSky"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara1"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara2"]
 [editable path="Static/CompletionDemo"]

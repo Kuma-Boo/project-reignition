@@ -208,7 +208,7 @@ public partial class EventTrigger : StageTriggerModule
 
 	public override void Deactivate()
 	{
-		if (isOneShot && isActivated) return;
+		if (isOneShot && !isActivated) return;
 
 		PlayAnimation(DeactivateEventAnimation);
 		EmitSignal(SignalName.Deactivated);
@@ -244,7 +244,6 @@ public partial class EventTrigger : StageTriggerModule
 			Character.Animator.PlayOneshotAnimation(characterAnimation);
 	}
 
-
 	#region Event Animation
 	private NodePath playerStandin;
 	/// <summary> Lockout to apply when character finishes event. </summary>
@@ -261,7 +260,6 @@ public partial class EventTrigger : StageTriggerModule
 	private float characterExitMoveSpeed;
 	private float characterExitVerticalSpeed;
 
-
 	/// <summary> Resets the character's movement state. </summary>
 	public void FinishEvent()
 	{
@@ -277,7 +275,7 @@ public partial class EventTrigger : StageTriggerModule
 		if (characterExitLockout != null)
 			Character.AddLockoutData(characterExitLockout);
 
-		Character.MoveSpeed = normalizeExitMoveSpeed ? Character.GroundSettings.speed * characterExitMoveSpeed : characterExitMoveSpeed;
+		Character.MoveSpeed = normalizeExitMoveSpeed ? Character.GroundSettings.Speed * characterExitMoveSpeed : characterExitMoveSpeed;
 		Character.VerticalSpeed = characterExitVerticalSpeed;
 
 		// Re-enable break skills

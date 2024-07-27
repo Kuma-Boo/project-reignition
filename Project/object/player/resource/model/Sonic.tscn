@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://wfh54hnc028k"]
+[gd_scene load_steps=45 format=3 uid="uid://wfh54hnc028k"]
 
 [ext_resource type="PackedScene" uid="uid://b5jl3vv1j1fck" path="res://object/player/resource/model/Sonic.gltf" id="1_ea3e1"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterAnimator.cs" id="2_3qp24"]
@@ -14,15 +14,17 @@
 [ext_resource type="Material" uid="uid://dsn3x4u283jxc" path="res://effect/particle/material/Teleport Spark.tres" id="7_hfxq8"]
 [ext_resource type="AudioStream" uid="uid://pbwii8b4qu3s" path="res://sound/sfx/player/teleport start.wav" id="7_wb174"]
 [ext_resource type="AnimationLibrary" uid="uid://bo26mw8v8m0eh" path="res://object/player/resource/model/animation/EventLibrary.gltf" id="8_7bg0r"]
+[ext_resource type="Material" uid="uid://bklx3tbpw7s8e" path="res://object/player/resource/model/material/SpeedbreakOverlay.tres" id="8_ds2lb"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://biwe75w273iq7" path="res://object/player/resource/model/animation/animation tree/Root.tres" id="8_sfnih"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="10_iki8q"]
 [ext_resource type="Resource" uid="uid://ce3ywymj0dq0j" path="res://resource/preset/camera/common/InheritCam.tres" id="11_ihqo8"]
 [ext_resource type="AudioStream" uid="uid://c5did7u4f8gq2" path="res://sound/sfx/player/flame countdown 1.wav" id="12_3lyoq"]
+[ext_resource type="Material" uid="uid://cyphajdqgwnj8" path="res://object/player/resource/model/material/BodyTransparent.tres" id="16_icvwi"]
 
 [sub_resource type="Curve" id="Curve_skwgn"]
-max_value = 2.0
-_data = [Vector2(0, 0.4), 0.0, 6.66444, 0, 0, Vector2(0.5, 2), 0.0, 0.0, 0, 0]
-point_count = 2
+max_value = 2.5
+_data = [Vector2(0, 0.4), 0.0, 3.2, 0, 1, Vector2(0.5, 2), 2.00651, 2.00651, 0, 0, Vector2(1, 2.5), 0.147263, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Curve" id="Curve_6pc5r"]
 _data = [Vector2(0, 0), 0.0, 5.05237, 0, 0, Vector2(0.621993, 1), 0.0, 0.0, 0, 0, Vector2(0.99999, 0), -6.37551, 0.0, 0, 0]
@@ -343,16 +345,19 @@ _data = {
 "teleport-start": SubResource("Animation_jxy1t")
 }
 
-[node name="Sonic" node_paths=PackedStringArray("animationTree", "eventAnimationPlayer") instance=ExtResource("1_ea3e1")]
+[node name="Sonic" node_paths=PackedStringArray("animationTree", "eventAnimationPlayer", "bodyMesh") instance=ExtResource("1_ea3e1")]
 script = ExtResource("2_3qp24")
 animationTree = NodePath("AnimationTree")
 eventAnimationPlayer = NodePath("EventAnimationPlayer")
+bodyMesh = NodePath("SonicRoot/GeneralSkeleton/BodyMesh")
+blurOverrideMaterial = ExtResource("16_icvwi")
 movementAnimationSpeedCurve = SubResource("Curve_skwgn")
 
-[node name="Effect" parent="." index="0" node_paths=PackedStringArray("rightFoot", "leftFoot", "stepEmitters") instance=ExtResource("3_5mek6")]
+[node name="Effect" parent="." index="0" node_paths=PackedStringArray("rightFoot", "leftFoot", "landingParticles", "stepEmitters") instance=ExtResource("3_5mek6")]
 rightFoot = NodePath("../SonicRoot/GeneralSkeleton/RFoot/SoleOffset")
 leftFoot = NodePath("../SonicRoot/GeneralSkeleton/LFoot/SoleOffset")
-stepEmitters = [NodePath("VFX/StepFX/PavementStepParticle"), NodePath("VFX/StepFX/SandStepParticle"), null, null, null, null, NodePath("VFX/StepFX/WaterStepParticle")]
+landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, null, null, NodePath("VFX/LandingFX/LandingWater")]
+stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, null, null, NodePath("VFX/StepFX/WaterStep")]
 
 [node name="TeleportFX" type="Node3D" parent="Effect" index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -460,6 +465,7 @@ bones/59/rotation = Quaternion(0.996924, -1.09643e-15, -1.39458e-14, -0.0783794)
 
 [node name="BodyMesh" parent="SonicRoot/GeneralSkeleton" index="0"]
 layers = 64
+material_overlay = ExtResource("8_ds2lb")
 
 [node name="LEye" parent="SonicRoot/GeneralSkeleton" index="1"]
 layers = 64
@@ -502,7 +508,7 @@ process_material = SubResource("ParticleProcessMaterial_ny081")
 draw_pass_1 = SubResource("QuadMesh_vcbic")
 
 [node name="RFoot" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="5"]
-transform = Transform3D(1, -6.92779e-14, -5.1853e-13, 5.12881e-13, 9.54606e-08, 0.999999, -1.77636e-14, -0.999998, 1.13156e-07, -0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, -1.02496e-12, -6.143e-13, 6.16757e-13, 2.03494e-07, 0.999999, -9.71667e-13, -0.999998, 2.21189e-07, -0.0397276, 0.155469, 0.00205613)
 bone_name = "r_foot"
 bone_idx = 58
 
@@ -510,7 +516,7 @@ bone_idx = 58
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, -0.085, -0.15)
 
 [node name="LFoot" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="6"]
-transform = Transform3D(1, -3.55271e-15, 6.16018e-12, -6.22079e-12, 5.9139e-08, 1, 1.19016e-13, -1, 6.37956e-08, 0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, 1.06581e-14, 6.15422e-12, -6.2165e-12, 1.07381e-06, 1, 1.33227e-13, -1, 1.07894e-06, 0.0397276, 0.155469, 0.00205613)
 bone_name = "l_foot"
 bone_idx = 3
 
@@ -550,6 +556,7 @@ active = false
 callback_mode_process = 0
 tree_root = ExtResource("8_sfnih")
 anim_player = NodePath("../AnimationPlayer")
+parameters/air_tree/TimeScale/scale = 1.2
 parameters/air_tree/backflip_trigger/active = false
 parameters/air_tree/backflip_trigger/internal_active = false
 parameters/air_tree/backflip_trigger/request = 0
@@ -563,9 +570,12 @@ parameters/air_tree/fall_speed/scale = 1.0
 parameters/air_tree/fall_trigger/active = false
 parameters/air_tree/fall_trigger/internal_active = false
 parameters/air_tree/fall_trigger/request = 0
-parameters/air_tree/jump_accel_trigger/active = true
-parameters/air_tree/jump_accel_trigger/internal_active = true
+parameters/air_tree/jump_accel_trigger/active = false
+parameters/air_tree/jump_accel_trigger/internal_active = false
 parameters/air_tree/jump_accel_trigger/request = 0
+parameters/air_tree/splash_jump_trigger/active = false
+parameters/air_tree/splash_jump_trigger/internal_active = false
+parameters/air_tree/splash_jump_trigger/request = 0
 parameters/air_tree/state_transition/current_state = "fall"
 parameters/air_tree/state_transition/transition_request = ""
 parameters/air_tree/state_transition/current_index = 0
@@ -583,6 +593,9 @@ parameters/balance_tree/grindstep_speed/scale = 1.2
 parameters/balance_tree/grindstep_trigger/active = false
 parameters/balance_tree/grindstep_trigger/internal_active = false
 parameters/balance_tree/grindstep_trigger/request = 0
+parameters/balance_tree/stagger_trigger/active = false
+parameters/balance_tree/stagger_trigger/internal_active = false
+parameters/balance_tree/stagger_trigger/request = 0
 parameters/balance_tree/wind_add/add_amount = 1.0
 parameters/balance_tree/wind_blend/blend_position = 0.0
 parameters/drift_tree/direction_transition/current_state = "left"
@@ -598,7 +611,7 @@ parameters/ground_tree/brake_trigger/request = 0
 parameters/ground_tree/crouch_transition/current_state = "disabled"
 parameters/ground_tree/crouch_transition/transition_request = ""
 parameters/ground_tree/crouch_transition/current_index = 0
-parameters/ground_tree/forward_blend/blend_position = 0
+parameters/ground_tree/forward_blend/blend_position = 0.0
 parameters/ground_tree/forward_seek/seek_request = -1.0
 parameters/ground_tree/ground_seek/seek_request = -1.0
 parameters/ground_tree/ground_speed/scale = 1.0

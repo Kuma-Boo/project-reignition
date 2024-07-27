@@ -12,7 +12,7 @@ public partial class PauseSkill : Control
 	[Export]
 	public AnimationPlayer animator;
 
-	public override void _Ready()
+	public void Initialize()
 	{
 		nameLabel.Text = Skill.NameKey;
 
