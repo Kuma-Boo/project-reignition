@@ -50,6 +50,17 @@ public class SkillRing
 		}
 	}
 
+	/// <summary> Returns the precise skill resource that is conflicting with a given skill key. </summary>
+	public SkillResource GetConflictingSkill(SkillKey key)
+	{
+		SkillKey conflictKey = IsConflictingSkillEquipped(key);
+		SkillResource conflict = Runtime.Instance.SkillList.GetSkill(conflictKey);
+		if (conflict.IsAugment)
+			return conflict.GetAugment(GetAugmentIndex(conflictKey));
+
+		return conflict;
+	}
+
 	/// <summary> Checks whether a conflicting skill is already equipped. </summary>
 	public SkillKey IsConflictingSkillEquipped(SkillKey key)
 	{
@@ -73,10 +84,10 @@ public class SkillRing
 	}
 
 	/// <summary> Equips a skill onto the skill ring. </summary>
-	public bool EquipSkill(SkillKey key, int augmentIndex = 0, bool allowSkillPointOverflow = false)
+	public SkillEquipStatusEnum EquipSkill(SkillKey key, int augmentIndex = 0, bool allowSkillPointOverflow = false)
 	{
 		if (EquippedSkills.Contains(key) && augmentIndex == GetAugmentIndex(key))
-			return false; // Already equipped
+			return SkillEquipStatusEnum.Equipped; // Already equipped
 
 		SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(key);
 
@@ -86,7 +97,7 @@ public class SkillRing
 		if (conflict != null)
 		{
 			GD.Print($"You cannot equip {conflict.NameKey} when {baseSkill.NameKey} is active.");
-			return false;
+			return SkillEquipStatusEnum.Conflict;
 		}
 
 		// Process augments
@@ -96,7 +107,7 @@ public class SkillRing
 			if (augment == null)
 			{
 				GD.PushError($"Couldn't find augment with index {augmentIndex} on skill {baseSkill.Key}!");
-				return false;
+				return SkillEquipStatusEnum.Missing;
 			}
 
 			int currentCost = IsSkillEquipped(key) ? baseSkill.GetAugment(GetAugmentIndex(key)).Cost : 0;
@@ -104,7 +115,7 @@ public class SkillRing
 			{
 				int targetTotalCost = TotalCost - currentCost + augment.Cost;
 				if (targetTotalCost > MaxSkillPoints)
-					return false; // Too expensive!
+					return SkillEquipStatusEnum.Expensive; // Too expensive!
 			}
 
 			if (!EquippedSkills.Contains(key))
@@ -118,7 +129,7 @@ public class SkillRing
 			else
 				EquippedAugments.Add(key, augmentIndex);
 
-			return true;
+			return SkillEquipStatusEnum.Success;
 		}
 
 		// Not an augment skill
@@ -126,13 +137,13 @@ public class SkillRing
 		{
 			int targetTotalCost = TotalCost + baseSkill.Cost;
 			if (targetTotalCost > MaxSkillPoints)
-				return false; // Too expensive!
+				return SkillEquipStatusEnum.Expensive; // Too expensive!
 		}
 
 		if (!EquippedSkills.Contains(key))
 			EquippedSkills.Add(key);
 		TotalCost += baseSkill.Cost; // Take skill points
-		return true;
+		return SkillEquipStatusEnum.Success;
 	}
 
 	/// <summary> Unequips a skill from the skill ring. </summary>
@@ -223,6 +234,17 @@ public class SkillRing
 			return x.AugmentIndex.CompareTo(y.AugmentIndex);
 		}
 	}
+}
+
+/// <summary> Return values for equipping skills. </summary>
+public enum SkillEquipStatusEnum
+{
+	Success,
+	Expensive,
+	Conflict,
+	// Should never be called from the actual game
+	Equipped,
+	Missing,
 }
 
 /// <summary> Dev keys for all possible skills in the game, in numerical order. </summary>

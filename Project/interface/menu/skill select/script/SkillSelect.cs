@@ -25,6 +25,12 @@ public partial class SkillSelect : Menu
 	private Label levelLabel;
 	[Export]
 	private Label skillPointLabel;
+	[Export]
+	private AnimationPlayer alertAnimator;
+	[Export]
+	private Label alertLabel;
+	private int AlertSelection;
+	private bool IsAlertMenuActive { get; set; }
 
 	private bool IsEditingAugment { get; set; }
 
@@ -93,6 +99,19 @@ public partial class SkillSelect : Menu
 
 	protected override void Cancel()
 	{
+		if (IsAlertMenuActive)
+		{
+			if (AlertSelection == 1)
+			{
+				AlertSelection = 0;
+				alertAnimator.Play("select-no");
+				alertAnimator.Advance(0.0);
+			}
+
+			alertAnimator.Play("hide");
+			return;
+		}
+
 		if (IsEditingAugment)
 		{
 			HideAugmentMenu();
@@ -105,6 +124,23 @@ public partial class SkillSelect : Menu
 
 	protected override void UpdateSelection()
 	{
+		if (IsAlertMenuActive)
+		{
+			int input = Mathf.Sign(Input.GetAxis("move_left", "move_right"));
+			if (input < 0 && AlertSelection == 0)
+			{
+				AlertSelection = 1;
+				alertAnimator.Play("select-yes");
+			}
+			else if (input > 0 && AlertSelection == 1)
+			{
+				AlertSelection = 0;
+				alertAnimator.Play("select-no");
+			}
+
+			return;
+		}
+
 		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
 		if (IsEditingAugment)
 		{
@@ -219,6 +255,22 @@ public partial class SkillSelect : Menu
 
 	protected override void Confirm()
 	{
+		if (IsAlertMenuActive)
+		{
+			if (AlertSelection == 1)
+			{
+				// Toggle skills
+				SwapConflictSkills();
+				alertAnimator.Play("confirm");
+			}
+			else
+			{
+				alertAnimator.Play("hide");
+			}
+
+			return;
+		}
+
 		if (!ToggleSkill())
 			return;
 
@@ -252,6 +304,21 @@ public partial class SkillSelect : Menu
 		levelLabel.Text = Tr("skill_select_level").Replace("0", SaveManager.ActiveGameData.level.ToString("00"));
 	}
 
+	private void SwapConflictSkills()
+	{
+		// NOTE: It's technically possible to put the game into an "illegal" state by having multiple conflicting skills
+		// Be mindful when designing skill conflicts to avoid this
+		SkillResource baseSkill = currentSkillOptionList[VerticalSelection].Skill;
+		if (IsEditingAugment)
+			baseSkill = baseSkill.GetAugment(AugmentSelection);
+		SkillResource conflictingSkill = ActiveSkillRing.GetConflictingSkill(baseSkill.Key);
+
+		if (ActiveSkillRing.UnequipSkill(conflictingSkill.Key, ActiveSkillRing.GetAugmentIndex(conflictingSkill.Key)))
+			ActiveSkillRing.EquipSkill(baseSkill.Key, IsEditingAugment ? AugmentSelection : 0);
+
+		Redraw();
+	}
+
 	private bool ToggleSkill()
 	{
 		SkillKey key = currentSkillOptionList[VerticalSelection].Skill.Key;
@@ -267,13 +334,51 @@ public partial class SkillSelect : Menu
 			return true;
 		}
 
-		if (ActiveSkillRing.EquipSkill(key, IsEditingAugment ? AugmentSelection : 0))
+		SkillEquipStatusEnum status = ActiveSkillRing.EquipSkill(key, IsEditingAugment ? AugmentSelection : 0);
+		if (status == SkillEquipStatusEnum.Success)
 		{
 			animator.Play("equip");
 			return true;
 		}
 
+		if (status == SkillEquipStatusEnum.Conflict ||
+			status == SkillEquipStatusEnum.Expensive)
+		{
+			// Open alert menu
+			IsAlertMenuActive = true;
+			alertAnimator.Play("RESET");
+			alertAnimator.Advance(0.0);
+
+			if (status == SkillEquipStatusEnum.Conflict)
+			{
+				SkillResource baseSkill = currentSkillOptionList[VerticalSelection].Skill;
+				if (IsEditingAugment)
+					baseSkill = baseSkill.GetAugment(AugmentSelection);
+				SkillResource conflictingSkill = ActiveSkillRing.GetConflictingSkill(baseSkill.Key);
+
+				alertLabel.Text = Tr("skill_conflict");
+				alertLabel.Text = alertLabel.Text.Replace("SKILL", Tr(baseSkill.NameKey));
+				alertLabel.Text = alertLabel.Text.Replace("CONFLICT", Tr(conflictingSkill.NameKey));
+				AlertSelection = 0; // Set to "No"
+			}
+			else
+			{
+				alertLabel.Text = Tr("skill_sp_shortage");
+				AlertSelection = -1; // Disable Selection
+				alertAnimator.Play("select-cancel");
+				alertAnimator.Advance(0.0);
+			}
+
+			alertAnimator.Play("show");
+		}
+
 		return false; // Something failed
+	}
+
+	public void AlertMenuClosed()
+	{
+		IsAlertMenuActive = false;
+		EnableProcessing();
 	}
 
 	private int AugmentSelection { get; set; }
