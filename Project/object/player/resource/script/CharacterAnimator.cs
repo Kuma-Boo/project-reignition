@@ -12,6 +12,11 @@ public partial class CharacterAnimator : Node3D
 	private AnimationTree animationTree;
 	[Export]
 	private AnimationPlayer eventAnimationPlayer;
+	[Export]
+	private MeshInstance3D bodyMesh;
+	[Export]
+	private ShaderMaterial blurOverrideMaterial;
+
 	private CharacterController Character => CharacterController.instance;
 
 	/// <summary> Reference to the root blend tree of the animation tree. </summary>
@@ -510,17 +515,8 @@ public partial class CharacterAnimator : Node3D
 		animationTree.Set(CrouchTransition, DisabledConstant);
 	}
 
-	public void StartMotionBlur()
-	{
-		eventAnimationPlayer.Play("blur-start");
-		eventAnimationPlayer.Advance(0.0);
-	}
-
-	public void StopMotionBlur()
-	{
-		eventAnimationPlayer.Play("blur-stop");
-		eventAnimationPlayer.Advance(0.0);
-	}
+	public void StartMotionBlur() => bodyMesh.MaterialOverride = blurOverrideMaterial;
+	public void StopMotionBlur() => bodyMesh.MaterialOverride = null;
 
 	public void StartInvincibility(float speedScale)
 	{

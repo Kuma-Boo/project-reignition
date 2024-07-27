@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://wfh54hnc028k"]
+[gd_scene load_steps=45 format=3 uid="uid://wfh54hnc028k"]
 
 [ext_resource type="PackedScene" uid="uid://b5jl3vv1j1fck" path="res://object/player/resource/model/Sonic.gltf" id="1_ea3e1"]
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterAnimator.cs" id="2_3qp24"]
@@ -177,18 +177,6 @@ tracks/4/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0)]
 }
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SonicRoot/GeneralSkeleton/BodyMesh:material_override")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [null]
-}
 
 [sub_resource type="Animation" id="Animation_3gene"]
 resource_name = "invincibility"
@@ -349,52 +337,20 @@ tracks/4/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_1w45w"]
-resource_name = "blur-start"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SonicRoot/GeneralSkeleton/BodyMesh:material_override")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("16_icvwi")]
-}
-
-[sub_resource type="Animation" id="Animation_7eqc1"]
-resource_name = "blur-stop"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SonicRoot/GeneralSkeleton/BodyMesh:material_override")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [null]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r0udk"]
 _data = {
 "RESET": SubResource("Animation_tuy1q"),
-"blur-start": SubResource("Animation_1w45w"),
-"blur-stop": SubResource("Animation_7eqc1"),
 "invincibility": SubResource("Animation_3gene"),
 "teleport-end": SubResource("Animation_ju8e7"),
 "teleport-start": SubResource("Animation_jxy1t")
 }
 
-[node name="Sonic" node_paths=PackedStringArray("animationTree", "eventAnimationPlayer") instance=ExtResource("1_ea3e1")]
+[node name="Sonic" node_paths=PackedStringArray("animationTree", "eventAnimationPlayer", "bodyMesh") instance=ExtResource("1_ea3e1")]
 script = ExtResource("2_3qp24")
 animationTree = NodePath("AnimationTree")
 eventAnimationPlayer = NodePath("EventAnimationPlayer")
+bodyMesh = NodePath("SonicRoot/GeneralSkeleton/BodyMesh")
+blurOverrideMaterial = ExtResource("16_icvwi")
 movementAnimationSpeedCurve = SubResource("Curve_skwgn")
 
 [node name="Effect" parent="." index="0" node_paths=PackedStringArray("rightFoot", "leftFoot", "landingParticles", "stepEmitters") instance=ExtResource("3_5mek6")]
