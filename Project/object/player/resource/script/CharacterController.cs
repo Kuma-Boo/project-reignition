@@ -1807,7 +1807,7 @@ namespace Project.Gameplay
 				}
 
 				GlobalPosition = targetPosition;
-				VerticalSpeed = heightDelta / PhysicsManager.physicsDelta;
+				VerticalSpeed = heightDelta;
 
 				if (heightDelta < 0) // Only check ground when falling
 					CheckGround();
