@@ -496,9 +496,7 @@ public partial class StageSettings : Node3D
 		EmitSignal(SignalName.LevelDemoStarted);
 
 		if (completionAnimator == null) return;
-
 		OnCameraDemoAdvance();
-		GD.Print(completionAnimator.CurrentAnimation);
 	}
 
 	/// <summary> Completion demo advanced, play a crossfade. </summary>
@@ -508,7 +506,6 @@ public partial class StageSettings : Node3D
 		if (completionAnimationIndex > 3)
 			completionAnimationIndex = 1;
 		completionAnimator.Play($"demo{completionAnimationIndex}");
-		GD.Print(completionAnimator.CurrentAnimation);
 		CharacterController.instance.Camera.StartCrossfade();
 	}
 
