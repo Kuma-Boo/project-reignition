@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=3 uid="uid://gnw1drjjo5gi"]
+[gd_scene load_steps=92 format=3 uid="uid://gnw1drjjo5gi"]
 
 [ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="1_d384b"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_tbi4j"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="6_wsjb6"]
 [ext_resource type="Texture2D" uid="uid://c3bqvqq7wqmbd" path="res://area/1 sand oasis/data/skybox/model/texture/cloud base.png" id="7_7ryth"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="7_t54v7"]
+[ext_resource type="PackedScene" uid="uid://co2akledxygt2" path="res://effect/sun/Sun.tscn" id="7_vdjbb"]
 [ext_resource type="Texture2D" uid="uid://huba8wtdkbyl" path="res://area/1 sand oasis/data/skybox/model/texture/cloud clip mask.png" id="8_a1cqo"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="8_srgif"]
 [ext_resource type="Texture2D" uid="uid://buvo6ko7q7533" path="res://area/1 sand oasis/data/skybox/model/texture/cloud detail.png" id="9_kqas4"]
@@ -56,8 +57,10 @@
 [ext_resource type="PackedScene" uid="uid://bqikfuweybrc6" path="res://area/2 dino jungle/data/BGM.tscn" id="35_dxojr"]
 [ext_resource type="Resource" uid="uid://ji20l0l30t4i" path="res://area/2 dino jungle/act 2/camera/DinoCam.tres" id="40_87ag4"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="41_4yhlb"]
+[ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="58_hh6gi"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slcyf"]
+blend_mode = 1
 specular_mode = 2
 disable_fog = true
 albedo_color = Color(0, 0, 0, 1)
@@ -67,6 +70,10 @@ emission_energy_multiplier = 16.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_j1d0d"]
 material = SubResource("StandardMaterial3D_slcyf")
+radius = 150.0
+height = 0.001
+radial_segments = 16
+rings = 1
 
 [sub_resource type="Shader" id="Shader_cx426"]
 code = "shader_type spatial;
@@ -490,7 +497,6 @@ tonemap_mode = 2
 tonemap_exposure = 1.1
 tonemap_white = 1.1
 ssao_enabled = true
-ssil_enabled = true
 glow_enabled = true
 glow_levels/1 = 6.0
 glow_levels/2 = 3.0
@@ -509,7 +515,7 @@ fog_light_energy = 16.0
 fog_sun_scatter = 0.16
 fog_density = 0.0039
 fog_aerial_perspective = 0.99
-fog_height = 4.0
+fog_height = -10.0
 fog_height_density = 0.02
 volumetric_fog_density = 1.0
 volumetric_fog_albedo = Color(0, 0, 0, 1)
@@ -534,22 +540,30 @@ visible = false
 
 [node name="Visuals" type="Node3D" parent="."]
 
-[node name="Sun" type="DirectionalLight3D" parent="Visuals"]
-transform = Transform3D(0.228268, 0.335226, 0.914066, -0.967225, 0.185334, 0.173573, -0.111221, -0.923729, 0.366545, 0, 0, 0)
+[node name="SunLight" type="DirectionalLight3D" parent="Visuals"]
+transform = Transform3D(0.677295, -0.166719, 0.716573, -0.716148, 0.073717, 0.694044, -0.168534, -0.983245, -0.0694674, 0, 0, 0)
 layers = 1024
 light_color = Color(1, 0.8475, 0.39, 1)
 light_energy = 0.5
-light_cull_mask = 4293918723
+light_cull_mask = 4293918722
 shadow_enabled = true
-directional_shadow_max_distance = 40.0
-directional_shadow_pancake_size = 0.0
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 50.0
 sky_mode = 1
 
-[node name="Player" type="DirectionalLight3D" parent="Visuals"]
+[node name="PlayerLight" type="DirectionalLight3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
 light_cull_mask = 4293918784
-shadow_enabled = true
+directional_shadow_mode = 0
+sky_mode = 1
+
+[node name="ObjectLight" type="DirectionalLight3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(1, 0.742507, 0.37436, 1)
+light_energy = 1.5
+light_cull_mask = 4293918721
 directional_shadow_mode = 0
 directional_shadow_max_distance = 5.0
 sky_mode = 1
@@ -559,10 +573,15 @@ sky_mode = 1
 [node name="PlanarReflectionRenderer" parent="Visuals" instance=ExtResource("32_2v3ne")]
 reflectionMaterials = [ExtResource("33_kheyr")]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(166.802, 0, 0, 0, 166.802, 0, 0, 0, 166.802, 713.701, 157.94, 229.161)
+[node name="Sun" parent="Visuals" instance=ExtResource("7_vdjbb")]
+transform = Transform3D(-0.129148, 0, -0.483033, 0, 0.5, 0, 0.483033, 0, -0.129148, 713.701, 157.94, 229.161)
+
+[node name="Bloom" type="MeshInstance3D" parent="Visuals/Sun"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 16
 cast_shadow = 0
 mesh = SubResource("SphereMesh_j1d0d")
+skeleton = NodePath("../..")
 
 [node name="LowClouds" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(0.131701, 0, 0.150515, 0, 0.54, 0, -0.150515, 0, 0.131701, 0, -350, 0)
@@ -1345,6 +1364,8 @@ next/demo2 = &"demo3"
 next/demo3 = &"demo1"
 
 [node name="BGM" parent="." instance=ExtResource("35_dxojr")]
+
+[node name="DepthRenderer" parent="." instance=ExtResource("58_hh6gi")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_kepwq")
