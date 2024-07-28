@@ -63,7 +63,7 @@ public partial class SidleTrigger : Area3D
 			else
 				UpdateSidleDamage();
 		}
-		else if (Character.IsOnGround)
+		else if (Character.IsOnGround && Character.MovementState == CharacterController.MovementStates.Normal)
 		{
 			if (Character.ActionState == CharacterController.ActionStates.Normal)
 				StartSidle(); // Allows player to slide through sidle section if they know what they're doing
@@ -92,6 +92,9 @@ public partial class SidleTrigger : Area3D
 
 	private void UpdateSidle()
 	{
+		if (!StageSettings.instance.IsLevelIngame || Character.IsDefeated)
+			return;
+
 		// Check ground
 		Vector3 castVector = Vector3.Down * Character.CollisionSize.X * 2.0f;
 		RaycastHit hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
@@ -317,7 +320,9 @@ public partial class SidleTrigger : Area3D
 
 		isInteractingWithPlayer = false;
 		Character.RemoveLockoutData(lockout);
-		Character.Skills.IsSpeedBreakEnabled = true; // Re-enable speed break
+
+		if (Character.MovementState == CharacterController.MovementStates.Normal)
+			Character.Skills.IsSpeedBreakEnabled = true; // Re-enable speed break
 
 		StopSidle();
 		EmitSignal(SignalName.Deactivated); // Deactivate signals

@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://7kcasi6v1odv"]
+[gd_scene load_steps=33 format=3 uid="uid://7kcasi6v1odv"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_fxxlg"]
 [ext_resource type="PackedScene" uid="uid://ctpgc4qaiar68" path="res://area/1 sand oasis/act 3/environment/collision/Collision.tscn" id="1_wbafh"]
@@ -15,7 +15,6 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="7_77hua"]
 [ext_resource type="PackedScene" uid="uid://dj37itfdjb74j" path="res://area/1 sand oasis/act 3/environment/02Descent.tscn" id="7_dg1ex"]
 [ext_resource type="Curve3D" uid="uid://27uwgglqp1g6" path="res://area/1 sand oasis/act 3/environment/path/MainPath.tres" id="8_5ae3c"]
-[ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="12_pipgr"]
 [ext_resource type="PackedScene" uid="uid://semhlskb8slv" path="res://area/1 sand oasis/act 3/environment/model/LightBlocker.gltf" id="14_5tb48"]
 [ext_resource type="AudioStream" uid="uid://ds4hdcdcfcwmj" path="res://sound/ost/bonus disc/Sand Oasis Act 3.mp3" id="16_7drhp"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="17_5dd51"]
@@ -563,6 +562,21 @@ settings = ExtResource("6_gwtbf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8147e-06, 8, 3)
 shape = SubResource("BoxShape3D_kh3tl")
 
+[node name="UpperCam" parent="Trigger" instance=ExtResource("3_vakpl")]
+transform = Transform3D(-0.934628, 0, 0.355629, 0, 1, 0, -0.355629, 0, -0.934628, 43.3861, -50, -111.941)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/UpperCam"]
+script = ExtResource("5_qbof6")
+transitionTime = 0.5
+settings = ExtResource("2_lhfq0")
+previousSettings = ExtResource("6_gwtbf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/UpperCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_nwi4p")
+
 [node name="Checkpoint" type="Node3D" parent="Trigger"]
 
 [node name="Checkpoint1" parent="Trigger/Checkpoint" instance=ExtResource("3_vakpl")]
@@ -757,8 +771,6 @@ isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_i6k4x")
-
-[node name="DepthRenderer" parent="." instance=ExtResource("12_pipgr")]
 
 [connection signal="Activated" from="Visuals/CullingMap/02L" to="Visuals/02Descent" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/02L" to="Visuals/02Descent" method="Deactivate"]

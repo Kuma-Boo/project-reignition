@@ -9915,23 +9915,21 @@ shape = SubResource("BoxShape3D_wbgfo")
 
 [node name="LapCycle" parent="JarAct" instance=ExtResource("19_u6uco")]
 transform = Transform3D(0.93358, 0, 0.358368, 0, 1, 0, -0.358368, 0, 0.93358, 5.109, 0, 13.219)
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="Cycle" type="Node3D" parent="JarAct/LapCycle"]
 script = ExtResource("20_t2x05")
-checkpointTrigger = NodePath("../Checkpoint")
 itemCycles = [NodePath("../../Lap01"), NodePath("../../Lap02"), NodePath("../../Lap03")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="JarAct/LapCycle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_wbgfo")
-
-[node name="Checkpoint" type="Area3D" parent="JarAct/LapCycle"]
+[node name="Checkpoint" parent="JarAct/LapCycle" instance=ExtResource("19_u6uco")]
 transform = Transform3D(-0.740523, 0, 0.672031, 0, 1, 0, -0.672031, 0, -0.740523, -8.40966, -50, -4.96902)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="JarAct/LapCycle/Checkpoint"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -9.53674e-07, 8, 0)
+shape = SubResource("BoxShape3D_wbgfo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="JarAct/LapCycle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_wbgfo")
 
@@ -10168,3 +10166,5 @@ shape = SubResource("BoxShape3D_wbgfo")
 [connection signal="Shattered" from="JarAct/Lap03/AscentTop/FlameJarGroup3/Jar" to="Static" method="IncrementObjective"]
 [connection signal="Shattered" from="JarAct/Lap03/UpperHall/JarL" to="Static" method="IncrementObjective"]
 [connection signal="Shattered" from="JarAct/Lap03/UpperHall/JarR" to="Static" method="IncrementObjective"]
+[connection signal="Activated" from="JarAct/LapCycle/Checkpoint" to="JarAct/LapCycle/Cycle" method="OnCheckpointActivated"]
+[connection signal="Deactivated" from="JarAct/LapCycle/Checkpoint" to="JarAct/LapCycle/Cycle" method="OnCheckpointDeactivated"]

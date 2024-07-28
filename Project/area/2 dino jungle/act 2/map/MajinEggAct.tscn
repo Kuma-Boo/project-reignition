@@ -70,8 +70,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -167.816, 5.8609, 65.545)
 [node name="MajinEgg4" parent="MajinEggAct/Eggs" instance=ExtResource("4_tr8l6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.803, 14.5638, 83.305)
 
-[node name="MajinEgg5" parent="MajinEggAct/Eggs" instance=ExtResource("4_tr8l6")]
+[node name="CullingTrigger" type="Node3D" parent="MajinEggAct/Eggs"]
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -139.003, 7.00621, -42.795)
+script = ExtResource("17_sfykn")
+
+[node name="MajinEgg5" parent="MajinEggAct/Eggs/CullingTrigger" instance=ExtResource("4_tr8l6")]
 
 [node name="MajinEgg6" parent="MajinEggAct/Eggs" instance=ExtResource("4_tr8l6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -95.102, 3.92764, -9.386)
@@ -1126,7 +1129,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 [connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg2" to="Static" method="IncrementObjective"]
 [connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg3" to="Static" method="IncrementObjective"]
 [connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg4" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg5" to="Static" method="IncrementObjective"]
+[connection signal="Shattered" from="MajinEggAct/Eggs/CullingTrigger/MajinEgg5" to="Static" method="IncrementObjective"]
 [connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg6" to="Static" method="IncrementObjective"]
 [connection signal="Spawned" from="MajinEggAct/Start/RedMajin1" to="MajinEggAct/Start/RedMajin2" method="Spawn"]
 [connection signal="Spawned" from="MajinEggAct/Start/RedMajin1" to="MajinEggAct/Start/RedMajin3" method="Spawn"]
@@ -1149,6 +1152,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 [connection signal="Defeated" from="MajinEggAct/RightPath/BlueMajin1" to="MajinEggAct/RightPath/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MajinEggAct/RightPath/BlueMajin2" to="MajinEggAct/RightPath/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MajinEggAct/RightPath/BlueMajin3" to="MajinEggAct/RightPath/EnemyStone" method="IncrementCounter"]
+[connection signal="Shattered" from="MajinEggAct/RightPath/EnemyStone" to="MajinEggAct/Eggs/CullingTrigger" method="Activate"]
 [connection signal="Deactivated" from="MajinEggAct/RightPath/Catapult" to="MajinEggAct/RightPath/Catapult/Camera" method="Deactivate"]
 [connection signal="PlayerEntered" from="MajinEggAct/RightPath/Catapult" to="MajinEggAct/RightPath/Catapult/Camera" method="Activate"]
 [connection signal="PlayerExited" from="MajinEggAct/RightPath/Catapult" to="MajinEggAct/RightPath/Catapult/Camera" method="Deactivate"]

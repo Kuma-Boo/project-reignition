@@ -12,6 +12,7 @@ void fragment()
 	vec4 col = texture(albedo, uv) * COLOR;
 	ALBEDO = col.rgb;
 	ALPHA = col.a;
+	ALPHA_SCISSOR_THRESHOLD = .99;
 	SPECULAR = 0.0;
 }
 

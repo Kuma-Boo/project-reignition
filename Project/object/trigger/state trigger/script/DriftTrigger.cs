@@ -66,7 +66,7 @@ public partial class DriftTrigger : Area3D
 	/// <summary> Length of animation when player succeeds. </summary>
 	private const float LaunchAnimationLength = .4f;
 	/// <summary> Length of animation when player faceplants. </summary>
-	private const float FAilAnimationLength = .8f;
+	private const float FailAnimationLength = .8f;
 
 	public override void _PhysicsProcess(double _)
 	{
@@ -126,7 +126,7 @@ public partial class DriftTrigger : Area3D
 
 	private void UpdateDrift()
 	{
-		if (driftResult != DriftResults.Waiting) return; // Drift was already failed
+		if (driftResult != DriftResults.Waiting && driftResult != DriftResults.TimingFail) return; // Drift was already failed
 
 		Vector3 targetPosition = MiddlePosition + (this.Back() * InputWindowDistance);
 
@@ -141,9 +141,9 @@ public partial class DriftTrigger : Area3D
 		float volume = distance / slideDistance;
 		sfx.VolumeDb = Mathf.SmoothStep(startingVolume, -80f, volume);
 
-		bool isManualDrift = Character.Skills.IsSkillEquipped(SkillKey.DriftExperience);
-		bool isAttemptingDrift = (Input.IsActionJustPressed("button_action") && isManualDrift) ||
-			(!isManualDrift && distance <= InputWindowDistance);
+		bool isManualDrift = Character.Skills.IsSkillEquipped(SkillKey.DriftExp);
+		bool isAttemptingDrift = ((Input.IsActionJustPressed("button_action") && isManualDrift) ||
+			(!isManualDrift && distance <= InputWindowDistance)) && driftResult != DriftResults.TimingFail;
 
 		if (Input.IsActionJustPressed("button_jump")) // Allow character to jump out of drift at any time
 		{
@@ -162,11 +162,19 @@ public partial class DriftTrigger : Area3D
 			{
 				driftResult = DriftResults.Success;
 				driftAnimationTimer = LaunchAnimationLength;
+
+				if (isManualDrift)
+				{
+					BonusManager.instance.QueueBonus(new(BonusType.EXP, 100));
+					Character.Skills.ModifySoulGauge(10); // Not written in skill description, but that's what the original game does -_-
+					Character.Effect.PlayDarkSpiralFX();
+				}
 			}
-			else // Too early! Fail drift attempt and play a special animation
+			else // Too early! Fail drift attempt and play a special animation?
 			{
 				driftResult = DriftResults.TimingFail;
-				driftAnimationTimer = FAilAnimationLength;
+				driftAnimationTimer = FailAnimationLength;
+				return;
 			}
 
 			ApplyBonus();
@@ -174,7 +182,7 @@ public partial class DriftTrigger : Area3D
 			return;
 		}
 
-		if (distance >= .1f) return;
+		if (distance >= .3f) return;
 
 		// Slid to a stop
 		driftResult = DriftResults.WaitFail;
@@ -193,7 +201,7 @@ public partial class DriftTrigger : Area3D
 		{
 			Character.Animator.ResetState(0f);
 		}
-		else
+		else if (driftResult == DriftResults.Success)
 		{
 			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(ExitDirection, Character.PathFollower.Up());
 			Character.MovementAngle -= Mathf.Pi * .1f * Character.InputVector.X;

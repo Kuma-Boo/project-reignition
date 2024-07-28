@@ -2348,7 +2348,7 @@ path = NodePath("../../../../Static/Path/RiverPath")
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 0.766998, 2.6837, 18.454)
 script = ExtResource("7_ys7sj")
 delays = [0.0, 0.4, 4.0, 0.0]
-displayLength = [2.0, 0.5, 0.0, null]
+displayLength = [0.0, 0.5, 0.0, null]
 textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
 
 [node name="RiverEvent" parent="MainAct/RiverEvent/Event" instance=ExtResource("19_rr5sk")]
@@ -6507,7 +6507,6 @@ transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615
 
 [node name="End" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -742, -262, -1073)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -6680,10 +6679,10 @@ finalHeight = 5.0
 voiceKey = &""
 
 [node name="JumpPanel1" parent="MainAct/End" instance=ExtResource("53_8w2hc")]
-transform = Transform3D(-0.38684, 0, -0.922147, 0, 1, 0, 0.922147, 0, -0.38684, -17.9644, 16.1514, 28.552)
+transform = Transform3D(-0.38107, 0, -0.924546, 0, 1, 0, 0.924546, 0, -0.38107, -17.9166, 16.3, 28.5856)
 middleHeight = 2.0
-finalHeight = -12.0
-distance = 33.5
+finalHeight = -15.0
+distance = 33.0
 
 [node name="Camera" type="Node3D" parent="MainAct/End/JumpPanel1"]
 script = ExtResource("27_dpcvf")
@@ -6998,7 +6997,9 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="JumpFinished" from="MainAct/CavernBoat/BoatStartTrigger/Jump" to="MainAct/CavernBoat/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/CavernBoat/BoatEndTrigger" to="MainAct/CavernBoat/Boat" method="Deactivate"]
 [connection signal="JumpFinished" from="MainAct/CavernBoat/BoatEndTrigger/Jump" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
+[connection signal="Activated" from="MainAct/End/JumpPanel1" to="Static/Collision/FeedingTunnelOneWay" method="Deactivate"]
 [connection signal="Activated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Activate"]
+[connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
 [connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Deactivate"]
 
 [editable path="Static"]

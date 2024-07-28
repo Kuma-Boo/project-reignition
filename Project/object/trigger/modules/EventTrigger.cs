@@ -208,7 +208,7 @@ public partial class EventTrigger : StageTriggerModule
 
 	public override void Deactivate()
 	{
-		if (isOneShot && isActivated) return;
+		if (isOneShot && !isActivated) return;
 
 		PlayAnimation(DeactivateEventAnimation);
 		EmitSignal(SignalName.Deactivated);
@@ -244,7 +244,6 @@ public partial class EventTrigger : StageTriggerModule
 			Character.Animator.PlayOneshotAnimation(characterAnimation);
 	}
 
-
 	#region Event Animation
 	private NodePath playerStandin;
 	/// <summary> Lockout to apply when character finishes event. </summary>
@@ -260,7 +259,6 @@ public partial class EventTrigger : StageTriggerModule
 	private bool normalizeExitMoveSpeed = true;
 	private float characterExitMoveSpeed;
 	private float characterExitVerticalSpeed;
-
 
 	/// <summary> Resets the character's movement state. </summary>
 	public void FinishEvent()

@@ -300,7 +300,8 @@ public partial class PathTraveller : Node3D
 	{
 		EmitSignal(SignalName.Staggered);
 
-		// TODO Play stagger animation
+		Character.StartInvincibility(5f);
+		Character.Animator.StartBalanceStagger();
 		currentSpeed = speedVelocity = 0;
 		currentTurnAmount = turnVelocity = Vector2.Zero;
 	}

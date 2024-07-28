@@ -199,15 +199,17 @@ public partial class GrindRail : Area3D
 
 		Character.IsMovingBackward = false;
 		Character.LandOnGround(); // Rail counts as being on the ground
-		Character.MoveSpeed = Skills.GrindSettings.Speed; // Start at the correct speed
 		Character.VerticalSpeed = 0f;
+		Character.MoveSpeed = Skills.GrindSettings.Speed * Skills.CalculateGrindSpeedRatio(); // Start at the correct speed
+		if (Skills.IsSkillEquipped(SkillKey.GrindUp) && Skills.GetAugmentIndex(SkillKey.GrindUp) == 3)
+			StageSettings.instance.UpdateRingCount(5, StageSettings.MathModeEnum.Subtract, true);
 
 		Character.Animator.ExternalAngle = 0; // Reset rotation
 		Character.Animator.StartBalancing();
 		Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
 
 		// Reset FX
-		Character.Effect.StartGrindFX();
+		Character.Effect.StartGrindFX(true);
 
 		Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.Deactivate));
 		Character.Connect(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.Deactivate));
@@ -307,9 +309,9 @@ public partial class GrindRail : Area3D
 	{
 		jumpBufferTimer = 0;
 
-		//Check if the player is holding a direction parallel to rail and start a grindstep
-		isGrindstepping = Character.IsHoldingDirection(Character.MovementAngle + (Mathf.Pi * .5f)) ||
-			Character.IsHoldingDirection(Character.MovementAngle - (Mathf.Pi * .5f));
+		// Check if the player is holding a direction parallel to rail and start a grindstep
+		isGrindstepping = Character.IsHoldingDirection(Character.MovementAngle + (Mathf.Pi * .5f), true, false) ||
+			Character.IsHoldingDirection(Character.MovementAngle - (Mathf.Pi * .5f), true, false);
 
 		Deactivate();
 		if (isGrindstepping) // Grindstepping
@@ -374,7 +376,7 @@ public partial class GrindRail : Area3D
 			Character.Effect.UpdateGrindFX(speedRatio);
 
 			if (Mathf.IsZeroApprox(perfectChargeTimer))
-				Character.MoveSpeed = Skills.GrindSettings.Interpolate(Character.MoveSpeed, isCharging ? 0f : -1f);
+				Character.MoveSpeed = Skills.GrindSettings.UpdateInterpolate(Character.MoveSpeed, isCharging ? 0f : -1f);
 		}
 
 		Character.Animator.UpdateBalancing(isCharging ? 0.0f : Character.Animator.CalculateTurnRatio());
@@ -390,7 +392,7 @@ public partial class GrindRail : Area3D
 		}
 
 		Character.MoveSpeed = targetSpeed;
-		Character.Effect.StartGrindFX();
+		Character.Effect.StartGrindFX(false);
 		Character.Animator.StartGrindShuffle();
 
 		if (allowBonuses)

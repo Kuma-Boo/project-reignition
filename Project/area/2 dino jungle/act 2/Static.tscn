@@ -105,7 +105,7 @@ void fragment()
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bt6sn"]
 render_priority = 0
 shader = SubResource("Shader_cx426")
-shader_parameter/albedo_mult = Color(0.51, 0.238, 0, 1)
+shader_parameter/albedo_mult = Color(1, 0.876088, 0.804464, 1)
 shader_parameter/scroll_speed = 0.1
 shader_parameter/albedo = ExtResource("7_7ryth")
 shader_parameter/detail = ExtResource("9_kqas4")
@@ -145,7 +145,7 @@ bind/1/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -1100, 450)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nqpjm"]
 render_priority = 0
 shader = SubResource("Shader_cx426")
-shader_parameter/albedo_mult = Color(0, 0.315, 0.42, 1)
+shader_parameter/albedo_mult = Color(0.944196, 0.626845, 0.43289, 1)
 shader_parameter/scroll_speed = 0.05
 shader_parameter/albedo = ExtResource("7_7ryth")
 shader_parameter/detail = ExtResource("9_kqas4")
@@ -478,7 +478,7 @@ sun_curve = 0.0494817
 sky_material = SubResource("ProceduralSkyMaterial_momc4")
 radiance_size = 0
 
-[sub_resource type="Environment" id="Environment_7mf3y"]
+[sub_resource type="Environment" id="Environment_kepwq"]
 background_mode = 2
 background_color = Color(1, 1, 1, 1)
 sky = SubResource("Sky_mdvy0")
@@ -509,8 +509,8 @@ fog_light_energy = 16.0
 fog_sun_scatter = 0.16
 fog_density = 0.0039
 fog_aerial_perspective = 0.99
-fog_height = 4.12
-fog_height_density = 0.0228
+fog_height = 4.0
+fog_height_density = 0.02
 volumetric_fog_density = 1.0
 volumetric_fog_albedo = Color(0, 0, 0, 1)
 volumetric_fog_length = 0.63
@@ -536,11 +536,22 @@ visible = false
 
 [node name="Sun" type="DirectionalLight3D" parent="Visuals"]
 transform = Transform3D(0.228268, 0.335226, 0.914066, -0.967225, 0.185334, 0.173573, -0.111221, -0.923729, 0.366545, 0, 0, 0)
+layers = 1024
 light_color = Color(1, 0.8475, 0.39, 1)
 light_energy = 0.5
 light_cull_mask = 4293918723
 shadow_enabled = true
+directional_shadow_max_distance = 40.0
 directional_shadow_pancake_size = 0.0
+sky_mode = 1
+
+[node name="Player" type="DirectionalLight3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_cull_mask = 4293918784
+shadow_enabled = true
+directional_shadow_mode = 0
+directional_shadow_max_distance = 5.0
 sky_mode = 1
 
 [node name="DJAct2" parent="Visuals" instance=ExtResource("30_ymmwk")]
@@ -556,6 +567,7 @@ mesh = SubResource("SphereMesh_j1d0d")
 [node name="LowClouds" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(0.131701, 0, 0.150515, 0, 0.54, 0, -0.150515, 0, 0.131701, 0, -350, 0)
 layers = 16
+cast_shadow = 0
 gi_mode = 0
 mesh = SubResource("ArrayMesh_qwplh")
 skin = SubResource("Skin_rycle")
@@ -563,6 +575,7 @@ skin = SubResource("Skin_rycle")
 [node name="LowClouds2" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(0.131701, 0, 0.150515, 0, 0.54, 0, -0.150515, 0, 0.131701, 0, -110.121, 0)
 layers = 16
+cast_shadow = 0
 gi_mode = 0
 mesh = SubResource("ArrayMesh_lf5rh")
 skin = SubResource("Skin_rycle")
@@ -1334,7 +1347,7 @@ next/demo3 = &"demo1"
 [node name="BGM" parent="." instance=ExtResource("35_dxojr")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_7mf3y")
+environment = SubResource("Environment_kepwq")
 
 [connection signal="Activated" from="Common/Object/Spring" to="Collision/IslandOneWay" method="Deactivate"]
 [connection signal="Activated" from="Common/Object/Spring" to="Common/Object/Spring/Camera" method="Activate"]

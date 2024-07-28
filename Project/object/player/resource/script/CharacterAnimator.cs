@@ -12,6 +12,11 @@ public partial class CharacterAnimator : Node3D
 	private AnimationTree animationTree;
 	[Export]
 	private AnimationPlayer eventAnimationPlayer;
+	[Export]
+	private MeshInstance3D bodyMesh;
+	[Export]
+	private ShaderMaterial blurOverrideMaterial;
+
 	private CharacterController Character => CharacterController.instance;
 
 	/// <summary> Reference to the root blend tree of the animation tree. </summary>
@@ -179,6 +184,8 @@ public partial class CharacterAnimator : Node3D
 
 	private void GroundAnimations()
 	{
+		Character.Effect.IsEmittingStepDust = !Mathf.IsZeroApprox(Character.MoveSpeed); // Emit step dust based on speed
+
 		if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Success &&
 			StageSettings.instance.Data.CompletionAnimation == LevelDataResource.CompletionAnimationType.ThumbsUp)
 		{
@@ -191,8 +198,6 @@ public partial class CharacterAnimator : Node3D
 			return;
 		}
 
-		Character.Effect.IsEmittingStepDust = !Mathf.IsZeroApprox(Character.MoveSpeed); // Emit step dust based on speed
-
 		if (Character.Skills.IsSpeedBreakCharging) return;
 
 		float idleBlend = (float)animationTree.Get(IdleBlend);
@@ -204,6 +209,7 @@ public partial class CharacterAnimator : Node3D
 		{
 			ResetGroundTree();
 			animationTree.Set(LandTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 			groundTransition.XfadeTime = .05f;
 			animationTree.Set(GroundTransition, EnabledConstant);
 			StopHurt();
@@ -229,6 +235,7 @@ public partial class CharacterAnimator : Node3D
 			}
 			else // Moving forward
 			{
+				float trueSpeedRatio = Character.MoveSpeed / Character.Skills.baseGroundSpeed;
 				if (DisabledSpeedSmoothing)
 					idleBlend = 1;
 				else
@@ -238,18 +245,18 @@ public partial class CharacterAnimator : Node3D
 				{
 					targetAnimationSpeed = 4f;
 				}
-				else if (speedRatio >= RunRatio) // Running
+				else if (trueSpeedRatio >= RunRatio) // Running
 				{
-					float extraSpeed = Mathf.Clamp((speedRatio - 1.0f) * 5.0f, 0f, 2f);
+					float extraSpeed = Mathf.Clamp((trueSpeedRatio - 1.0f) * 5.0f, 0f, 2f);
 					targetAnimationSpeed = 2.5f + extraSpeed;
 				}
 				else // Jogging
 				{
-					targetAnimationSpeed = movementAnimationSpeedCurve.Sample(speedRatio / RunRatio); // Normalize speed ratio
+					targetAnimationSpeed = movementAnimationSpeedCurve.Sample(trueSpeedRatio / RunRatio); // Normalize speed ratio
 
 					// Speed up animation if player is trying to start running
 					if (Character.InputVector.Length() >= .5f &&
-						speedRatio < .3f &&
+						trueSpeedRatio < .3f &&
 						!Character.IsOnWall())
 					{
 						targetAnimationSpeed = 2.5f;
@@ -413,6 +420,13 @@ public partial class CharacterAnimator : Node3D
 		animationTree.Set(BrakeTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
+	private readonly StringName SplashJumpTrigger = "parameters/air_tree/splash_jump_trigger/request";
+	public void SplashJumpAnimation()
+	{
+		animationTree.Set(AirStateTransition, FallState);
+		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
 	private readonly StringName BounceTransition = "parameters/air_tree/bounce_transition/transition_request";
 	private readonly StringName BounceTrigger = "parameters/air_tree/bounce_trigger/request";
 	private const int BounceVariationCount = 4;
@@ -501,9 +515,12 @@ public partial class CharacterAnimator : Node3D
 		animationTree.Set(CrouchTransition, DisabledConstant);
 	}
 
-	public void StartInvincibility()
+	public void StartMotionBlur() => bodyMesh.MaterialOverride = blurOverrideMaterial;
+	public void StopMotionBlur() => bodyMesh.MaterialOverride = null;
+
+	public void StartInvincibility(float speedScale)
 	{
-		eventAnimationPlayer.Play("invincibility");
+		eventAnimationPlayer.Play("invincibility", -1, speedScale);
 		eventAnimationPlayer.Seek(0.0, true);
 	}
 
@@ -619,6 +636,8 @@ public partial class CharacterAnimator : Node3D
 	private readonly StringName ShuffleLeft = "balance-left-shuffle";
 	private readonly StringName BalanceRight = "balance_right_blend";
 	private readonly StringName BalanceLeft = "balance_left_blend";
+	private readonly StringName BalanceStaggerLeft = "balance_left_stagger";
+	private readonly StringName BalanceStaggerRight = "balance_right_stagger";
 
 	private readonly StringName BalanceRightLean = "parameters/balance_tree/balance_state/balance_right_blend/blend_position";
 	private readonly StringName BalanceLeftLean = "parameters/balance_tree/balance_state/balance_left_blend/blend_position";
@@ -647,6 +666,11 @@ public partial class CharacterAnimator : Node3D
 		float target = isCrouching ? 1.0f : 0.0f;
 		current = Mathf.Lerp(current, target, .2f);
 		animationTree.Set(BalanceCrouchAdd, current);
+	}
+
+	public void StartBalanceStagger()
+	{
+		BalanceStatePlayback.Travel(isFacingRight ? BalanceStaggerRight : BalanceStaggerLeft, true);
 	}
 
 	private readonly StringName BalanceGrindstepTrigger = "parameters/balance_tree/grindstep_trigger/request";

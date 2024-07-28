@@ -252,6 +252,9 @@ public partial class Enemy : Node3D
 		switch (Character.AttackState)
 		{
 			case CharacterController.AttackStates.OneShot:
+				if (Character.Skills.IsSpeedBreakActive) // Shake the camera
+					Character.Camera.StartMediumCameraShake();
+
 				Defeat();
 				break;
 			case CharacterController.AttackStates.Weak:
