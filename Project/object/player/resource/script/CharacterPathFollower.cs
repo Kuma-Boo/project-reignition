@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay
 {
@@ -88,7 +89,20 @@ namespace Project.Gameplay
 		public Vector3 CalculateDeltaPosition(Vector3 globalPosition) => Basis.Inverse() * (globalPosition - GlobalPosition);
 
 		/// <summary> Is the pathfollower ahead of the reference point? </summary>
-		public bool IsAheadOfPoint(Vector3 pos) => Progress > GetProgress(pos);
+		public bool IsAheadOfPoint(Vector3 pos)
+		{
+			if (Progress > GetProgress(pos))
+				return true;
+
+			// Fallback -- Check the player's PREVIOUS position
+			float comparisionPoint = Progress;
+			if (Character.IsMovingBackward)
+				comparisionPoint += Character.MoveSpeed * PhysicsManager.physicsDelta;
+			else
+				comparisionPoint -= Character.MoveSpeed * PhysicsManager.physicsDelta;
+
+			return comparisionPoint > GetProgress(pos);
+		}
 
 		/// <summary> Returns the progress of a given position, from [0 <-> PathLength]. </summary>
 		public float GetProgress(Vector3 pos) => ActivePath.Curve.GetClosestOffset(pos - ActivePath.GlobalPosition);
