@@ -70,7 +70,7 @@ emission_energy_multiplier = 16.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_j1d0d"]
 material = SubResource("StandardMaterial3D_slcyf")
-radius = 150.0
+radius = 100.0
 height = 0.001
 radial_segments = 16
 rings = 1
@@ -113,7 +113,7 @@ void fragment()
 render_priority = 0
 shader = SubResource("Shader_cx426")
 shader_parameter/albedo_mult = Color(1, 0.876088, 0.804464, 1)
-shader_parameter/scroll_speed = 0.1
+shader_parameter/scroll_speed = 0.05
 shader_parameter/albedo = ExtResource("7_7ryth")
 shader_parameter/detail = ExtResource("9_kqas4")
 shader_parameter/clip_mask = ExtResource("8_a1cqo")
@@ -153,7 +153,7 @@ bind/1/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -1100, 450)
 render_priority = 0
 shader = SubResource("Shader_cx426")
 shader_parameter/albedo_mult = Color(0.944196, 0.626845, 0.43289, 1)
-shader_parameter/scroll_speed = 0.05
+shader_parameter/scroll_speed = 0.03
 shader_parameter/albedo = ExtResource("7_7ryth")
 shader_parameter/detail = ExtResource("9_kqas4")
 shader_parameter/clip_mask = ExtResource("8_a1cqo")
@@ -473,10 +473,10 @@ gradient = SubResource("Gradient_cqgqf")
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_momc4"]
 sky_top_color = Color(0, 0.654902, 1, 1)
-sky_horizon_color = Color(0.97, 0.695167, 0, 1)
+sky_horizon_color = Color(0.97, 0.8051, 0.388, 1)
 sky_curve = 0.395852
-ground_bottom_color = Color(1, 0.483333, 0, 1)
-ground_horizon_color = Color(0.97, 0.695167, 0, 1)
+ground_bottom_color = Color(0.322521, 0.672199, 1, 1)
+ground_horizon_color = Color(0.97, 0.8051, 0.388, 1)
 ground_curve = 0.393966
 sun_angle_max = 44.12
 sun_curve = 0.0494817
@@ -510,12 +510,12 @@ glow_hdr_threshold = 1.81
 glow_map_strength = 1.0
 glow_map = SubResource("GradientTexture1D_c8gs3")
 fog_enabled = true
-fog_light_color = Color(0, 0.596078, 1, 1)
-fog_light_energy = 16.0
+fog_light_color = Color(0.878891, 0.445513, 3.85046e-07, 1)
+fog_light_energy = 8.0
 fog_sun_scatter = 0.16
-fog_density = 0.0039
-fog_aerial_perspective = 0.99
-fog_height = -10.0
+fog_density = 0.003
+fog_aerial_perspective = 0.97
+fog_height = 5.0
 fog_height_density = 0.02
 volumetric_fog_density = 1.0
 volumetric_fog_albedo = Color(0, 0, 0, 1)
@@ -545,7 +545,7 @@ transform = Transform3D(0.677295, -0.166719, 0.716573, -0.716148, 0.073717, 0.69
 layers = 1024
 light_color = Color(1, 0.8475, 0.39, 1)
 light_energy = 0.5
-light_cull_mask = 4293918722
+light_cull_mask = 4293918787
 shadow_enabled = true
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 50.0
@@ -554,15 +554,16 @@ sky_mode = 1
 [node name="PlayerLight" type="DirectionalLight3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
+light_color = Color(1, 0.752941, 0.784314, 1)
+light_energy = 0.5
 light_cull_mask = 4293918784
-directional_shadow_mode = 0
 sky_mode = 1
 
 [node name="ObjectLight" type="DirectionalLight3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
 light_color = Color(1, 0.742507, 0.37436, 1)
-light_energy = 1.5
+light_energy = 0.6
 light_cull_mask = 4293918721
 directional_shadow_mode = 0
 directional_shadow_max_distance = 5.0
@@ -574,10 +575,10 @@ sky_mode = 1
 reflectionMaterials = [ExtResource("33_kheyr")]
 
 [node name="Sun" parent="Visuals" instance=ExtResource("7_vdjbb")]
-transform = Transform3D(-0.129148, 0, -0.483033, 0, 0.5, 0, 0.483033, 0, -0.129148, 713.701, 157.94, 229.161)
+transform = Transform3D(-0.0774888, -0.0750109, -0.279944, 0, 0.289778, -0.0776457, 0.28982, -0.0200556, -0.0748484, 702.979, 199.359, 226.294)
 
 [node name="Bloom" type="MeshInstance3D" parent="Visuals/Sun"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(3.33333, -1.78814e-07, -1.49012e-08, -1.49012e-08, 1.49012e-08, 3.33333, -2.38419e-07, -3.33333, 1.19209e-07, 0, 0, 0)
 layers = 16
 cast_shadow = 0
 mesh = SubResource("SphereMesh_j1d0d")
