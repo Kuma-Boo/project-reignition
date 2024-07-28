@@ -1807,7 +1807,7 @@ namespace Project.Gameplay
 				}
 
 				GlobalPosition = targetPosition;
-				VerticalSpeed = heightDelta;
+				VerticalSpeed = heightDelta / PhysicsManager.physicsDelta;
 
 				if (heightDelta < 0) // Only check ground when falling
 					CheckGround();
@@ -1817,7 +1817,7 @@ namespace Project.Gameplay
 					FinishLauncher();
 					IsMovingBackward = false;
 					MoveSpeed = LaunchSettings.HorizontalVelocity * .5f; // Prevent too much movement
-					VerticalSpeed = LaunchSettings.FinalVerticalVelocity;
+					VerticalSpeed = IsOnGround ? 0 : LaunchSettings.FinalVerticalVelocity;
 				}
 
 				launcherTime += PhysicsManager.physicsDelta;
