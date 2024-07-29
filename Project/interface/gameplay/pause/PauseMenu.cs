@@ -49,6 +49,8 @@ public partial class PauseMenu : Node
 	[Export]
 	private AnimationPlayer skillCursorAnimator;
 	[Export]
+	private Sprite2D skillScrollbar;
+	[Export]
 	private PackedScene pauseSkillScene;
 	[Export]
 	private int[] rectVerticalValues;
