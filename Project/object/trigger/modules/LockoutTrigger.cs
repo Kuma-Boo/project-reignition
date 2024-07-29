@@ -10,7 +10,20 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		public LockoutResource lockoutData;
 
-		public override void Activate() => Character.AddLockoutData(lockoutData);
-		public override void Deactivate() => Character.RemoveLockoutData(lockoutData);
+		public override void Activate()
+		{
+			Character.AddLockoutData(lockoutData);
+
+			if (!Character.IsConnected(CharacterController.SignalName.Defeated, new(this, MethodName.Deactivate)))
+				Character.Connect(CharacterController.SignalName.Defeated, new(this, MethodName.Deactivate), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
+		}
+
+		public override void Deactivate()
+		{
+			Character.RemoveLockoutData(lockoutData);
+
+			if (Character.IsConnected(CharacterController.SignalName.Defeated, new(this, MethodName.Deactivate)))
+				Character.Disconnect(CharacterController.SignalName.Defeated, new(this, MethodName.Deactivate));
+		}
 	}
 }

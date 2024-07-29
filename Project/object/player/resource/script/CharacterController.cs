@@ -380,8 +380,8 @@ namespace Project.Gameplay
 		{
 			if (IsLockoutActive && lockoutDataList.Count == 0) // Disable lockout
 				SetLockoutData(null);
-			else if (ActiveLockoutData != lockoutDataList[lockoutDataList.Count - 1]) // Change to current data (Highest priority, last on the list)
-				SetLockoutData(lockoutDataList[lockoutDataList.Count - 1]);
+			else if (ActiveLockoutData != lockoutDataList[^1]) // Change to current data (Highest priority, last on the list)
+				SetLockoutData(lockoutDataList[^1]);
 		}
 
 		private void SetLockoutData(LockoutResource resource)
@@ -1590,6 +1590,8 @@ namespace Project.Gameplay
 			}
 		}
 
+		[Signal]
+		public delegate void DefeatedEventHandler();
 		/// <summary> True while the player is defeated but hasn't respawned yet. </summary>
 		public bool IsDefeated { get; private set; }
 		private void DefeatPlayer()
@@ -1606,6 +1608,8 @@ namespace Project.Gameplay
 				Skills.ToggleTimeBreak();
 			if (Skills.IsSpeedBreakActive)
 				Skills.ToggleSpeedBreak();
+
+			EmitSignal(SignalName.Defeated);
 		}
 
 		/// <summary> Called when the player is returning to a checkpoint. </summary>
