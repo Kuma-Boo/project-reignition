@@ -1519,6 +1519,7 @@ namespace Project.Gameplay
 		{
 			if (!Stage.IsLevelIngame) return;
 
+			allowLandingSkills = false; // Disable landing skills
 			SetActionState(ActionStates.Damaged);
 
 			// No rings; Respawn
@@ -1648,7 +1649,7 @@ namespace Project.Gameplay
 		private void ProcessRespawn()
 		{
 			ResetActionState();
-			MovementState = MovementStates.Normal;
+			ResetMovementState();
 
 			invincibilityTimer = 0;
 			Teleport(Stage.CurrentCheckpoint);
