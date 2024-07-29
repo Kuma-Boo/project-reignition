@@ -379,6 +379,7 @@ public partial class CharacterAnimator : Node3D
 		animationTree.Set(BounceTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(BackflipTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(StompTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
 	public void JumpAnimation()

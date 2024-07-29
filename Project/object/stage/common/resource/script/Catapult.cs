@@ -21,7 +21,7 @@ public partial class Catapult : Launcher
 		Disabled,
 		Enter,
 		Control,
-		Eject,
+		Launch,
 	}
 
 	private float targetLaunchPower;
@@ -50,28 +50,26 @@ public partial class Catapult : Launcher
 			return;
 		}
 
-		if (!isProcessing)
-		{
-			if (aimSFX.Playing)
-				SoundManager.FadeAudioPlayer(aimSFX);
+		if (!isProcessing && aimSFX.Playing)
+			SoundManager.FadeAudioPlayer(aimSFX);
 
-			return;
-		}
-
-		if (currentState == CatapultState.Eject) // Launch the player at the right time
-		{
-			if (armNode.Rotation.X > Mathf.Pi * .5f)
-			{
-				Activate();
-				return;
-			}
-
-			Character.UpdateExternalControl();
-			return;
-		}
+		if (currentState == CatapultState.Launch) // Launch the player at the right time
+			ProcessLaunch();
 
 		if (currentState == CatapultState.Control)
 			ProcessControls();
+	}
+
+	private void ProcessLaunch()
+	{
+		tweener.CustomStep(PhysicsManager.physicsDelta);
+		if (Character.MovementState == CharacterController.MovementStates.External && Character.ExternalController == this)
+			Character.UpdateExternalControl();
+
+		if (armNode.Rotation.X < Mathf.Pi * .5f)
+			return;
+
+		Activate();
 	}
 
 	private void ProcessControls()
@@ -79,13 +77,13 @@ public partial class Catapult : Launcher
 		// Check for state changes
 		if (Input.IsActionJustPressed("button_jump"))
 		{
-			EjectPlayer(true);
+			LaunchPlayer(true);
 			return;
 		}
 
 		if (Input.IsActionJustPressed("button_action"))
 		{
-			EjectPlayer(false);
+			LaunchPlayer(false);
 			return;
 		}
 
@@ -123,10 +121,12 @@ public partial class Catapult : Launcher
 		enterSFX.Play();
 	}
 
-	private void EjectPlayer(bool isCancel)
+	private void LaunchPlayer(bool isCancel)
 	{
-		currentState = CatapultState.Eject;
+		currentState = CatapultState.Launch;
+
 		tweener = CreateTween();
+		tweener.SetProcessMode(Tween.TweenProcessMode.Physics);
 
 		if (isCancel)
 		{
@@ -138,6 +138,7 @@ public partial class Catapult : Launcher
 		{
 			tweener.TweenProperty(armNode, "rotation", Vector3.Right * Mathf.Pi, .25f * (launchRatio + 1)).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			tweener.TweenProperty(armNode, "rotation", Vector3.Zero, .4f).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
+			tweener.Pause();
 		}
 
 		tweener.TweenCallback(new Callable(this, MethodName.StopProcessing));
@@ -153,7 +154,9 @@ public partial class Catapult : Launcher
 
 	private void CancelCatapult()
 	{
-		if (currentState != CatapultState.Eject) return;
+		if (currentState != CatapultState.Launch)
+			return;
+
 		currentState = CatapultState.Disabled;
 
 		// Have the player jump out backwards
@@ -169,10 +172,13 @@ public partial class Catapult : Launcher
 
 	public void OnEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player detection")) return;
-		StartProcessing();
+		if (!a.IsInGroup("player detection"))
+			return;
 
-		if (currentState != CatapultState.Disabled) return; // Already in the catapult
+		if (currentState != CatapultState.Disabled)
+			return; // Already in the catapult
+
+		StartProcessing();
 		currentState = CatapultState.Enter; // Start entering
 
 		// Disable break skills

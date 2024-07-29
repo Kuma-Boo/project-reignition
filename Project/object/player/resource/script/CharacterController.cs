@@ -380,8 +380,8 @@ namespace Project.Gameplay
 		{
 			if (IsLockoutActive && lockoutDataList.Count == 0) // Disable lockout
 				SetLockoutData(null);
-			else if (ActiveLockoutData != lockoutDataList[lockoutDataList.Count - 1]) // Change to current data (Highest priority, last on the list)
-				SetLockoutData(lockoutDataList[lockoutDataList.Count - 1]);
+			else if (ActiveLockoutData != lockoutDataList[^1]) // Change to current data (Highest priority, last on the list)
+				SetLockoutData(lockoutDataList[^1]);
 		}
 
 		private void SetLockoutData(LockoutResource resource)
@@ -1398,7 +1398,8 @@ namespace Project.Gameplay
 
 		#region Damage & Invincibility
 		public bool IsInvincible => invincibilityTimer != 0 ||
-			(Skills.IsSkillEquipped(SkillKey.SlideDefense) && ActionState == ActionStates.Sliding);
+			(Skills.IsSkillEquipped(SkillKey.SlideDefense) && ActionState == ActionStates.Sliding) ||
+			ActionState == ActionStates.Teleport;
 		private float invincibilityTimer;
 		private const float InvincibilityLength = 5f;
 
@@ -1590,6 +1591,8 @@ namespace Project.Gameplay
 			}
 		}
 
+		[Signal]
+		public delegate void DefeatedEventHandler();
 		/// <summary> True while the player is defeated but hasn't respawned yet. </summary>
 		public bool IsDefeated { get; private set; }
 		private void DefeatPlayer()
@@ -1606,12 +1609,14 @@ namespace Project.Gameplay
 				Skills.ToggleTimeBreak();
 			if (Skills.IsSpeedBreakActive)
 				Skills.ToggleSpeedBreak();
+
+			EmitSignal(SignalName.Defeated);
 		}
 
 		/// <summary> Called when the player is returning to a checkpoint. </summary>
 		public void StartRespawn(bool debugRespawn = false)
 		{
-			if (ActionState == ActionStates.Teleport || IsDefeated || !Stage.IsLevelIngame) return;
+			if (TransitionManager.IsTransitionActive || ActionState == ActionStates.Teleport || IsDefeated || !Stage.IsLevelIngame) return;
 
 			DefeatPlayer();
 
@@ -1680,6 +1685,7 @@ namespace Project.Gameplay
 			Stage.RespawnObjects();
 			Stage.IncrementRespawnCount();
 			Stage.UpdateRingCount(Skills.RespawnRingCount, StageSettings.MathModeEnum.Replace, true); // Reset ring count
+			invincibilityTimer = 0; // Reset invincibility
 
 			TransitionManager.FinishTransition();
 		}
