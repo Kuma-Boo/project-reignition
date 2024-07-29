@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://cpp5a2r0k4fuk"]
+[gd_scene load_steps=30 format=3 uid="uid://cpp5a2r0k4fuk"]
 
 [ext_resource type="PackedScene" uid="uid://skx536edn7yd" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_55rea"]
 [ext_resource type="Resource" uid="uid://cqwbx4ruhjsg2" path="res://resource/level data/sand oasis/Act2Jarless.tres" id="2_l6vbo"]
@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://cyabnlg7vd3v6" path="res://area/1 sand oasis/object/grindrail/Grindrail04.tscn" id="16_j2bv4"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="22_lh7v0"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="23_thiw1"]
+[ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="24_f3dpc"]
 [ext_resource type="PackedScene" uid="uid://k2xbli7x0pwd" path="res://area/1 sand oasis/object/pillar/SquarePillarShort.tscn" id="24_npsoo"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4tft5"]
@@ -38,6 +39,9 @@ point_count = 6
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hqpy5"]
 size = Vector3(36.9868, 12.769, 4.60156)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_psvua"]
+size = Vector3(15, 20, 5)
 
 [node name="World" type="Node"]
 
@@ -169,11 +173,9 @@ transform = Transform3D(-8.9407e-08, 0, -1, 0, 1, 0, 1, 0, -8.9407e-08, 25.0001,
 
 [node name="FlameShooter1" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
 transform = Transform3D(0, -8.9407e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -8.9407e-08, 34, 5, 12.1999)
-stateLengths = PackedFloat32Array(0.5, 1)
 
 [node name="FlameShooter2" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
 transform = Transform3D(0, -8.9407e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -8.9407e-08, 34, 4, 12.1999)
-stateLengths = PackedFloat32Array(0.5, 1)
 
 [node name="FlameShooter3" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
 transform = Transform3D(3.09086e-08, 0.707107, -0.707107, 1, 4.37114e-08, 8.74228e-08, 9.27259e-08, -0.707107, -0.707107, 41.7781, 1, 21.3922)
@@ -234,19 +236,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 0, -25)
 
 [node name="FlameShooter5" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
 transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 49.2733, 0.000205994, 25.7761)
-stateLengths = PackedFloat32Array(0.5, 1)
 
 [node name="FlameShooter6" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
 transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 48.5663, 0.000152588, 26.4832)
-stateLengths = PackedFloat32Array(0.5, 1)
 
-[node name="FlameShooter7" parent="JarlessAct/Interior" node_paths=PackedStringArray("animator", "timer") instance=ExtResource("8_s432p")]
+[node name="FlameShooter7" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
 transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 57.9, 0.000205994, 31.8571)
-stateLengths = PackedFloat32Array(0.5, 1)
 
 [node name="FlameShooter8" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
 transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 57.193, 0.000152588, 32.5643)
-stateLengths = PackedFloat32Array(0.5, 1)
 
 [node name="PearlRing" type="Node3D" parent="JarlessAct/Interior"]
 transform = Transform3D(-0.707107, -1.03964e-07, -0.707107, -8.74228e-08, 1, -5.96046e-08, 0.707107, 1.96704e-08, -0.707107, 71.0499, 2.50015, 46.9917)
@@ -304,15 +302,12 @@ stateLengths = PackedFloat32Array(3, 2)
 [node name="FlameShooter11" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
 transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 71.0215, -6.10352e-05, 72.7255)
 "Current State" = 1
-stateLengths = PackedFloat32Array(0.5, 1)
 
 [node name="FlameShooter12" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
 transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 73.6215, -6.10352e-05, 97.4254)
-stateLengths = PackedFloat32Array(0.5, 1)
 
 [node name="FlameShooter13" parent="JarlessAct/Interior" instance=ExtResource("8_s432p")]
 transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 71.0215, -6.10352e-05, 124.925)
-stateLengths = PackedFloat32Array(0.5, 1)
 
 [node name="Rings3" type="Node3D" parent="JarlessAct/Interior"]
 transform = Transform3D(-1, -1.03964e-07, 0, -1.03964e-07, 1, 1.96704e-08, 0, 1.96704e-08, -1, 72.282, 0.700203, 61.8816)
@@ -1453,6 +1448,35 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -1.738, 
 
 [node name="SquarePillarShort8" parent="JarlessAct/Oasis" instance=ExtResource("24_npsoo")]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -5.221, 0, 79.056)
+
+[node name="DialogTriggers" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -91.038, -85.258, -327.899)
+
+[node name="SOTrigger" parent="DialogTriggers" instance=ExtResource("4_ixlpu")]
+transform = Transform3D(0.674122, 0, 0.73862, 0, 1, 0, -0.73862, 0, 0.674122, -72.6315, 9.10676, -49.0457)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="DialogTriggers/SOTrigger"]
+script = ExtResource("24_f3dpc")
+textKeys = ["oas_return_sh", "oas_return_so"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/SOTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_psvua")
+
+[node name="DestoryEggTrigger2" parent="DialogTriggers" instance=ExtResource("4_ixlpu")]
+transform = Transform3D(0.674122, 0, 0.73862, 0, 1, 0, -0.73862, 0, 0.674122, 33.0273, 43.4599, 165.441)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="DialogTriggers/DestoryEggTrigger2"]
+script = ExtResource("24_f3dpc")
+textKeys = ["oas_return_sh", "oas_return_so"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/DestoryEggTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_psvua")
 
 [connection signal="Activated" from="JarlessAct/CullingMap/InteriorU" to="JarlessAct/Interior" method="Deactivate"]
 [connection signal="Deactivated" from="JarlessAct/CullingMap/InteriorU" to="JarlessAct/Interior" method="Activate"]
