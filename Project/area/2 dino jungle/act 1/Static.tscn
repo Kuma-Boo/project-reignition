@@ -582,15 +582,8 @@ transform = Transform3D(0.378511, -0.88248, -0.27921, 0.0545048, 0.322381, -0.94
 [node name="CaveLightEvent" type="Node3D" parent="Lighting" node_paths=PackedStringArray("animator")]
 script = ExtResource("16_vyk20")
 "Trigger Settings/Automatically Respawn" = false
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Player Stand-in" = NodePath("AnimationPlayer")
-"Player Event Settings/Animation" = &""
-"Player Event Settings/Animation Fadeout Time" = 0.0
-"Player Event Settings/Position Smoothing" = 0.2
-"Player Event Settings/Normalize Exit Move Speed" = true
-"Player Event Settings/Exit Move Speed" = 0.0
-"Player Event Settings/Exit Vertical Speed" = 0.0
-"Player Event Settings/Exit Lockout" = null
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
 [node name="PlayerLight" type="DirectionalLight3D" parent="Lighting/CaveLightEvent"]
@@ -1668,12 +1661,12 @@ transform = Transform3D(1, 2.98023e-08, -4.24683e-07, -4.16082e-07, -0.185597, -
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670.544, -283.473, -1075.94)
 
 [node name="StartTrigger" parent="Trigger/Object/FeedingRecenterTrigger" instance=ExtResource("15_86eng")]
-transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, 27.0068, 0, 19.8425)
+transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, 27.0068, 4.70001, 19.8425)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/FeedingRecenterTrigger/StartTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, 1, 0)
 shape = SubResource("BoxShape3D_74bek")
 
 [node name="StopTrigger" parent="Trigger/Object/FeedingRecenterTrigger" instance=ExtResource("15_86eng")]
@@ -2067,7 +2060,7 @@ transitionTime = 0.5
 settings = ExtResource("52_tpulw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/DinoFeedingRocksBitesCam"]
-transform = Transform3D(0.966518, 0, -0.256648, 0, 1, 0, 0.256648, 0, 0.966518, -20.7731, 7.29648, 12.7622)
+transform = Transform3D(0.966518, 0, -0.256648, 0, 1, 0, 0.256648, 0, 0.966518, -20.7731, 8.89648, 12.7621)
 shape = SubResource("BoxShape3D_mxt57")
 
 [node name="BackstepWallCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
@@ -2409,7 +2402,6 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Deactivated" from="Trigger/Object/IslandRecenterTrigger/StartTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/IslandRecenterTrigger/StopTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/IslandRecenterTrigger/StopTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Deactivate"]
-[connection signal="Deactivated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Activate"]
 [connection signal="area_entered" from="Trigger/Lighting/CavernEnter" to="Lighting/CaveLightEvent/PlayerLight" method="_on_cavern_enter_area_entered"]
 [connection signal="area_entered" from="Trigger/Lighting/CavernExit" to="Lighting/CaveLightEvent/PlayerLight" method="_on_cavern_exit_area_entered"]
 
