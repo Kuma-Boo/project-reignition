@@ -378,6 +378,9 @@ public partial class PauseMenu : Node
 
 		if (isActive) // Reset selection
 		{
+			// Reset cursors
+			skillCursorAnimator.Play("RESET");
+
 			UpdateSelection(0);
 			UpdateCursorPosition();
 			animator.Set(ShowTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
