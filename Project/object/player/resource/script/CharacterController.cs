@@ -440,8 +440,10 @@ namespace Project.Gameplay
 		[Signal]
 		public delegate void ExternalControlCompletedEventHandler();
 
+		/// <summary> Reference to the external object currently controlling the player. Returns null if the player isn't being externally controlled. </summary>
+		public Node ExternalController { get => MovementState == MovementStates.External ? externalController : null; }
 		/// <summary> Reference to the external object currently controlling the player </summary>
-		public Node ExternalController { get; private set; }
+		private Node externalController;
 		public Node3D ExternalParent { get; private set; }
 		private Vector3 externalOffset;
 		private float externalSmoothing;
@@ -451,7 +453,7 @@ namespace Project.Gameplay
 
 		public void StartExternal(Node controller, Node3D followObject = null, float smoothing = 0f, bool allowSpeedBreak = false)
 		{
-			ExternalController = controller;
+			externalController = controller;
 
 			ResetActionState();
 			ResetMovementState();
