@@ -73,6 +73,8 @@ public partial class SaveManager : Node
 		Italian,
 		French,
 		Spanish,
+		BrazilianPortuguese,
+		Polish,
 		Count
 	}
 
@@ -456,6 +458,12 @@ public partial class SaveManager : Node
 				break;
 			case TextLanguage.German:
 				TranslationServer.SetLocale("de");
+				break;
+			case TextLanguage.BrazilianPortuguese:
+				TranslationServer.SetLocale("pt_BR");
+				break;
+			case TextLanguage.Polish:
+				TranslationServer.SetLocale("pl");
 				break;
 			default:
 				TranslationServer.SetLocale(UseEnglishVoices ? "en" : "en_US");
