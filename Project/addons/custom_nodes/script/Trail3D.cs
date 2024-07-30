@@ -121,19 +121,17 @@ namespace Project.CustomNodes
 			}
 		}
 
-
 		private void AddPoint()
 		{
 			if (points.Count == 0)
 				previousPosition = trailMeshInstance.GlobalPosition + this.Back();
 
-			Vector3 tangentDirection = this.Back().Normalized();
+			Vector3 tangentDirection = (previousPosition - trailMeshInstance.GlobalPosition).Normalized();
 			Vector3 upDirection = tangentDirection.Rotated(this.Right(), Mathf.Pi * .5f);
 			points.Add(new(GlobalPosition, upDirection, tangentDirection));
 			pointLifetimes.Add(0);
 			previousPosition = trailMeshInstance.GlobalPosition;
 		}
-
 
 		private void RemovePoint(int index)
 		{
