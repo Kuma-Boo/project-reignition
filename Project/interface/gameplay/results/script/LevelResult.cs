@@ -58,30 +58,24 @@ public partial class LevelResult : Control
 			// Determine which scene to load without connecting it
 			if (Input.IsActionJustPressed("button_action")) // Retry stage
 			{
-				//if (Stage.LevelStateEnum != StageStateEnum.Failed)
-				//Stage.StackedEXP += Stage.TotalScore; //Adds the total score to a stacked exp
-
-				//TransitionManager.instance.QueuedScene = string.Empty;
 				TransitionManager.QueueSceneChange(string.Empty);
 				TransitionManager.StartTransition(new()
 				{
+					inSpeed = .5f,
+					outSpeed = .5f,
 					color = Colors.Black,
-					inSpeed = 1f,
-					outSpeed = .5f
+					disableAutoTransition = true
 				});
-				
 			}
 			else// if (Level.storyEventIndex == 0) // Load main menu
 			{
 				TransitionManager.instance.QueuedScene = TransitionManager.MENU_SCENE_PATH;
 				EmitSignal(SignalName.ContinuePressed);
 			}
-				
+
 			// TODO Load story event
 			//TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}{Level.storyEventIndex}.tscn");
-
 			// Actual scene transition is handled by the experience results screen (which is connected via this signal)
-			
 		}
 	}
 
