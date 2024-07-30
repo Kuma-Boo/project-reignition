@@ -254,7 +254,7 @@ public partial class ExperienceResult : Control
 		TransitionManager.StartTransition(new()
 		{
 			color = Colors.Black,
-			inSpeed = 1f,
+			inSpeed = 0.5f,
 			outSpeed = .5f
 		});
 	}
