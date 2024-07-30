@@ -2053,7 +2053,7 @@ namespace Project.Gameplay
 			Lockon.ResetLockonTarget();
 
 			if (IsCountdownActive) return;
-			if (IsDefeated || ActionState == ActionStates.Teleport) return; // Return early when respawning
+			if (ActionState == ActionStates.Teleport) return; // Return early when respawning
 
 			if (Stage.IsLevelIngame) // Only check landing skills and play FX when ingame
 			{
