@@ -1,4 +1,4 @@
-[gd_scene load_steps=145 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=146 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -100,6 +100,7 @@
 [ext_resource type="Curve3D" uid="uid://d1cd8xa7wprvy" path="res://area/2 dino jungle/act 1/environment/path/EndMiddlePath.tres" id="80_4h07x"]
 [ext_resource type="Curve3D" uid="uid://dkof5hnvrvbuu" path="res://area/2 dino jungle/act 1/environment/path/EndTopPath.tres" id="81_vy7ml"]
 [ext_resource type="PackedScene" uid="uid://6cdlojevxvu7" path="res://area/2 dino jungle/act 1/completion/CompletionDemo.gltf" id="89_i1ci7"]
+[ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelIslandJumpPath.tres" id="91_mavbd"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ibe76"]
 size = Vector3(20, 20, 5)
@@ -723,18 +724,18 @@ path = NodePath("../../../../Path/FeedingTunnelExitPath")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_74bek")
 
-[node name="EndMiddleIslandPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
-transform = Transform3D(-0.373927, 0, -0.927458, 0, 1, 0, 0.927458, 0, -0.373927, -769.544, -245.575, -1048.27)
+[node name="FeedingTunnelIslandJumpPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
+transform = Transform3D(0.089868, 0, -0.995953, 0, 1, 0, 0.995953, 0, 0.089868, -757.268, -250.075, -1033.32)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="Path" type="Node3D" parent="Trigger/Path/EndMiddleIslandPath" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="Trigger/Path/FeedingTunnelIslandJumpPath" node_paths=PackedStringArray("path")]
 script = ExtResource("35_vf0rg")
-path = NodePath("../../../../Path/EndMiddleIslandPath")
+path = NodePath("../../../../Path/FeedingTunnelIslandJumpPath")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/EndMiddleIslandPath"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Path/FeedingTunnelIslandJumpPath"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
+shape = SubResource("BoxShape3D_c5pbm")
 
 [node name="EndIslandPath" parent="Trigger/Path" instance=ExtResource("15_86eng")]
 transform = Transform3D(-0.33946, 0, -0.94062, 0, 1, 0, 0.94062, 0, -0.33946, -808.64, -269.575, -1094.12)
@@ -986,9 +987,8 @@ shape = SubResource("BoxShape3D_7jbaj")
 transform = Transform3D(1.49012e-08, 1.48943e-09, 1, -1.13133e-08, 1, -1.48943e-09, -1, -1.13133e-08, 1.49012e-08, 51.062, -101, -213.807)
 shape = SubResource("BoxShape3D_7jbaj")
 
-[node name="CavernSFX" parent="Trigger/Object" instance=ExtResource("15_86eng")]
+[node name="CavernSFX" type="Node3D" parent="Trigger/Object"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -552.803, -280.9, -1094.96)
-"Enter Mode" = 0
 
 [node name="RiverBGSFX1" type="AudioStreamPlayer3D" parent="Trigger/Object/CavernSFX"]
 stream = ExtResource("24_rs3ip")
@@ -1688,7 +1688,7 @@ lockoutData = ExtResource("24_0y0cf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -758.911, -265.473, -1039)
 
 [node name="StartTrigger" parent="Trigger/Object/IslandRecenterTrigger" instance=ExtResource("15_86eng")]
-transform = Transform3D(0.752691, 0, -0.658374, 0, 1, 0, 0.658374, 0, 0.752691, -3.30157, -0.454224, -14.6886)
+transform = Transform3D(0.752691, 0, -0.658374, 0, 1, 0, 0.658374, 0, 0.752691, -3.95996, -0.454224, -13.9359)
 "Trigger Mode" = 2
 "Enter Mode" = 0
 "Exit Mode" = 2
@@ -2275,8 +2275,12 @@ curve = ExtResource("57_h6v6r")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -642.422, -265.596, -1075.18)
 curve = ExtResource("58_xpyy1")
 
+[node name="FeedingTunnelIslandJumpPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -761.63, -251.692, -1034.34)
+curve = ExtResource("91_mavbd")
+
 [node name="EndMiddleIslandPath" type="Path3D" parent="Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -757.914, -259.802, -1043.49)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -789.088, -259.802, -1056.51)
 curve = ExtResource("59_mdw42")
 
 [node name="EndIslandPath" type="Path3D" parent="Path"]
