@@ -159,12 +159,10 @@ public partial class EventTrigger : StageTriggerModule
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (Engine.IsEditorHint()) return;
-
-		if (playerStandin == null)
+		if (Engine.IsEditorHint())
 			return;
 
-		if (Character.MovementState != CharacterController.MovementStates.External || Character.ExternalController != this)
+		if (playerStandin == null || Character.ExternalController != this)
 			return;
 
 		Character.UpdateExternalControl();

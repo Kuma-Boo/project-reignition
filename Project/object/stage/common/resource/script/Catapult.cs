@@ -50,22 +50,27 @@ public partial class Catapult : Launcher
 			return;
 		}
 
-		if (!isProcessing && aimSFX.Playing)
+		if (aimSFX.Playing && Character.ExternalController != this)
 			SoundManager.FadeAudioPlayer(aimSFX);
 
-		if (currentState == CatapultState.Launch) // Launch the player at the right time
-			ProcessLaunch();
-
-		if (currentState == CatapultState.Control)
-			ProcessControls();
+		switch (currentState)
+		{
+			case CatapultState.Launch: // Launch the player at the right time
+				ProcessLaunch();
+				break;
+			case CatapultState.Control:
+				ProcessControls();
+				break;
+		}
 	}
 
 	private void ProcessLaunch()
 	{
 		tweener.CustomStep(PhysicsManager.physicsDelta);
-		if (Character.MovementState == CharacterController.MovementStates.External && Character.ExternalController == this)
-			Character.UpdateExternalControl();
+		if (Character.ExternalController != this)
+			return;
 
+		Character.UpdateExternalControl();
 		if (armNode.Rotation.X < Mathf.Pi * .5f)
 			return;
 
@@ -112,6 +117,7 @@ public partial class Catapult : Launcher
 		Character.StartExternal(this, playerPositionNode);
 		Character.Effect.StartSpinFX();
 		Character.Animator.StartSpin(3f);
+		Character.Animator.SnapRotation(0);
 
 		launchRatio = 1f;
 		targetLaunchPower = 0f;
@@ -136,6 +142,7 @@ public partial class Catapult : Launcher
 		}
 		else
 		{
+			PlayLaunchSfx(); // Play launching sfx
 			tweener.TweenProperty(armNode, "rotation", Vector3.Right * Mathf.Pi, .25f * (launchRatio + 1)).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			tweener.TweenProperty(armNode, "rotation", Vector3.Zero, .4f).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
 			tweener.Pause();
@@ -148,7 +155,6 @@ public partial class Catapult : Launcher
 	{
 		// Cheat launch power slightly towards extremes
 		launchRatio = Mathf.SmoothStep(0, 1, launchRatio);
-		currentState = CatapultState.Disabled;
 		base.Activate();
 	}
 
@@ -166,6 +172,8 @@ public partial class Catapult : Launcher
 		var settings = LaunchSettings.Create(Character.GlobalPosition, destination, 1f);
 		settings.IsJump = true;
 		Character.StartLauncher(settings);
+		Character.MovementAngle = Character.PathFollower.ForwardAngle;
+		Character.Animator.SnapRotation(Character.MovementAngle); // Reset visual rotation
 		enterSFX.Play();
 		EmitSignal(SignalName.PlayerExited);
 	}
@@ -193,5 +201,9 @@ public partial class Catapult : Launcher
 	}
 
 	private void StartProcessing() => isProcessing = true;
-	private void StopProcessing() => isProcessing = false;
+	private void StopProcessing()
+	{
+		isProcessing = false;
+		currentState = CatapultState.Disabled;
+	}
 }
