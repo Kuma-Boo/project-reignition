@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cu6lpq7q82grk"]
+[gd_scene load_steps=19 format=3 uid="uid://cu6lpq7q82grk"]
 
 [ext_resource type="PackedScene" uid="uid://bpe2f7mqbqm5p" path="res://object/stage/pickups/resource/model/RedRing.gltf" id="2"]
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/FireSoul.cs" id="3"]
@@ -75,6 +75,30 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:monitorable")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".:collision_layer")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
 }
 
 [sub_resource type="Animation" id="Animation_fuxoe"]
@@ -171,6 +195,34 @@ tracks/6/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_viic3"]
+resource_name = "enable-lockon"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:monitorable")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:collision_layer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+
 [sub_resource type="Animation" id="5"]
 resource_name = "loop"
 length = 1.5
@@ -201,10 +253,39 @@ tracks/1/keys = {
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_viic3"]
+resource_name = "enable-lockon"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:monitorable")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:collision_layer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_e5wth"]
 _data = {
 "RESET": SubResource("4"),
 "collect": SubResource("Animation_fuxoe"),
+"enable-lockon": SubResource("Animation_viic3"),
 "loop": SubResource("5")
 }
 
@@ -255,6 +336,7 @@ amount = 12
 lifetime = 0.4
 one_shot = true
 explosiveness = 0.5
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-1.5, -1.5, -1.5, 3, 3, 3)
 process_material = ExtResource("6_y1djn")
@@ -267,6 +349,7 @@ amount = 32
 lifetime = 0.3
 preprocess = 1.0
 explosiveness = 0.2
+fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-0.8, -0.8, -0.8, 1.6, 1.6, 1.6)
 process_material = ExtResource("3_75fjl")

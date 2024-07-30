@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Godot;
 using Godot.Collections;
@@ -72,6 +73,8 @@ public partial class SaveManager : Node
 		Italian,
 		French,
 		Spanish,
+		BrazilianPortuguese,
+		Polish,
 		Count
 	}
 
@@ -109,6 +112,9 @@ public partial class SaveManager : Node
 		public RenderingServer.ViewportScaling3DMode resizeMode = RenderingServer.ViewportScaling3DMode.Bilinear;
 		public int antiAliasing = 1; // Default to FXAA
 		public bool useHDBloom = true;
+		public bool useMotionBlur = true;
+		public bool useScreenShake = true;
+		public int screenShake = 100;
 		public QualitySetting softShadowQuality = QualitySetting.Medium;
 		public QualitySetting postProcessingQuality = QualitySetting.Medium;
 		public QualitySetting reflectionQuality = QualitySetting.High;
@@ -136,7 +142,7 @@ public partial class SaveManager : Node
 		/// <summary> Creates a dictionary based on config data. </summary>
 		public Dictionary ToDictionary()
 		{
-			Dictionary dictionary = new()
+			return new()
 			{
 				// Video
 				{ nameof(targetDisplay), targetDisplay },
@@ -152,6 +158,9 @@ public partial class SaveManager : Node
 				{ nameof(softShadowQuality), (int)softShadowQuality },
 				{ nameof(postProcessingQuality), (int)postProcessingQuality },
 				{ nameof(reflectionQuality), (int)reflectionQuality },
+				{ nameof(useMotionBlur), useMotionBlur },
+				{ nameof(useScreenShake), useScreenShake },
+				{ nameof(screenShake), screenShake },
 
 				// Audio
 				{ nameof(isMasterMuted), isMasterMuted },
@@ -172,8 +181,6 @@ public partial class SaveManager : Node
 				{ nameof(voiceLanguage), (int)voiceLanguage },
 				{ nameof(textLanguage), (int)textLanguage },
 			};
-
-			return dictionary;
 		}
 
 		/// <summary> Sets config data based on dictionary. </summary>
@@ -205,6 +212,12 @@ public partial class SaveManager : Node
 				postProcessingQuality = (QualitySetting)(int)var;
 			if (dictionary.TryGetValue(nameof(reflectionQuality), out var))
 				reflectionQuality = (QualitySetting)(int)var;
+			if (dictionary.TryGetValue(nameof(useMotionBlur), out var))
+				useMotionBlur = (bool)var;
+			if (dictionary.TryGetValue(nameof(useScreenShake), out var))
+				useScreenShake = (bool)var;
+			if (dictionary.TryGetValue(nameof(screenShake), out var))
+				screenShake = (int)var;
 
 			if (dictionary.TryGetValue(nameof(isMasterMuted), out var))
 				isMasterMuted = (bool)var;
@@ -446,6 +459,12 @@ public partial class SaveManager : Node
 			case TextLanguage.German:
 				TranslationServer.SetLocale("de");
 				break;
+			case TextLanguage.BrazilianPortuguese:
+				TranslationServer.SetLocale("pt_BR");
+				break;
+			case TextLanguage.Polish:
+				TranslationServer.SetLocale("pl");
+				break;
 			default:
 				TranslationServer.SetLocale(UseEnglishVoices ? "en" : "en_US");
 				break;
@@ -571,6 +590,7 @@ public partial class SaveManager : Node
 		public float playTime;
 
 		public Array<SkillKey> equippedSkills;
+		public Dictionary<SkillKey, int> equippedAugments;
 		/// <summary> Total number of fire souls the player collected. </summary>
 		public int FireSoulCount { get; private set; }
 		/// <summary> Total number of gold medals the player has collected. </summary>
@@ -779,6 +799,22 @@ public partial class SaveManager : Node
 		/// <summary> Creates a dictionary based on GameData. </summary>
 		public Dictionary ToDictionary()
 		{
+			Dictionary<string, int> augmentDictionary = [];
+
+			for (int i = 0; i < equippedAugments.Keys.Count; i++)
+			{
+				SkillKey key = equippedAugments.Keys.ToArray()[i];
+				augmentDictionary.Add(key.ToString(), equippedAugments[key]);
+			}
+
+			Array<string> skillDictionary = [];
+
+			for (int i = 0; i < equippedSkills.Count; i++)
+			{
+				SkillKey key = equippedSkills[i];
+				skillDictionary.Add(key.ToString());
+			}
+
 			return new()
 			{
 				// WorldEnum data
@@ -792,7 +828,8 @@ public partial class SaveManager : Node
 				{ nameof(level), level },
 				{ nameof(exp), exp },
 				{ nameof(playTime), Mathf.RoundToInt(playTime) },
-				{ nameof(equippedSkills), equippedSkills },
+				{ nameof(equippedSkills), skillDictionary },
+				{ nameof(equippedAugments), augmentDictionary },
 			};
 		}
 
@@ -802,6 +839,8 @@ public partial class SaveManager : Node
 			// WorldEnum data
 			if (dictionary.TryGetValue(nameof(lastPlayedWorld), out Variant var))
 				lastPlayedWorld = (WorldEnum)(int)var;
+
+			worldsUnlocked.Clear();
 			if (dictionary.TryGetValue(nameof(worldsUnlocked), out var) && var.VariantType == Variant.Type.Array)
 			{
 				Array<int> worlds = (Array<int>)var;
@@ -815,6 +854,7 @@ public partial class SaveManager : Node
 					worldsUnlocked.Add((WorldEnum)i);
 			}
 
+			worldRingsCollected.Clear();
 			if (dictionary.TryGetValue(nameof(worldRingsCollected), out var) && var.VariantType == Variant.Type.Array)
 			{
 				Array<int> worlds = (Array<int>)var;
@@ -836,9 +876,27 @@ public partial class SaveManager : Node
 
 			if (dictionary.TryGetValue(nameof(equippedSkills), out var))
 			{
-				Array<int> skills = (Array<int>)var;
+				equippedSkills.Clear();
+
+				Array<string> skills = (Array<string>)var;
 				for (int i = 0; i < skills.Count; i++)
-					equippedSkills.Add((SkillKey)skills[i]);
+				{
+					if (Enum.TryParse(skills[i], out SkillKey key))
+						equippedSkills.Add(key);
+				}
+			}
+
+			if (dictionary.TryGetValue(nameof(equippedAugments), out var))
+			{
+				equippedAugments.Clear();
+				Dictionary<string, int> augments = (Dictionary<string, int>)var;
+				string[] augmentKeys = [.. augments.Keys];
+
+				for (int i = 0; i < augmentKeys.Length; i++)
+				{
+					if (Enum.TryParse(augmentKeys[i], out SkillKey key))
+						equippedAugments.Add(key, augments[augmentKeys[i]]);
+				}
 			}
 
 			// Update runtime data based on save data
@@ -875,6 +933,7 @@ public partial class SaveManager : Node
 				worldsUnlocked = [],
 				stagesUnlocked = [],
 				equippedSkills = [],
+				equippedAugments = [],
 				level = 0,
 				lastPlayedWorld = WorldEnum.LostPrologue
 			};

@@ -6,15 +6,20 @@ namespace Project.Gameplay.Objects
 	{
 		[Signal]
 		public delegate void ShatteredEventHandler();
+		[Signal]
+		public delegate void RespawnedEventHandler();
 		[Export]
 		private AnimationPlayer animator;
 
 		private bool isShattered;
 		private bool permanentlyDestroyed;
-		private bool interactingWithPlayer;
 		private float currentHealth;
 		private readonly int MaxHealth = 3;
 		private CharacterController Character => CharacterController.instance;
+		/// <summary> True when colliding with the player. </summary>
+		private bool IsInteracting { get; set; }
+		/// <summary> True when a particular interaction has already been processed. </summary>
+		private bool IsInteractionProcessed { get; set; }
 
 		public override void _Ready()
 		{
@@ -26,10 +31,10 @@ namespace Project.Gameplay.Objects
 
 		public override void _PhysicsProcess(double _)
 		{
-			if (!interactingWithPlayer)
-				return;
-
-			UpdateInteraction();
+			if (IsInteracting)
+				UpdateInteraction();
+			else if (IsInteractionProcessed && Character.AttackState == CharacterController.AttackStates.None)
+				ResetInteractionProcessed();
 		}
 
 		private void UpdateInteraction()
@@ -37,32 +42,64 @@ namespace Project.Gameplay.Objects
 			if (isShattered)
 				return;
 
-			if (Character.Skills.IsSpeedBreakActive) // Instantly shatter
+			if (IsInteractionProcessed)
+				return;
+
+			if (Character.Lockon.IsBounceLockoutActive &&
+				Character.ActionState == CharacterController.ActionStates.Normal)
 			{
-				Shatter();
 				return;
 			}
 
-			// TODO Rework to allow attack skills
-			if (Character.Lockon.IsHomingAttacking) // Take Damage
+			switch (Character.AttackState)
 			{
-				currentHealth--;
-				if (Character.Lockon.IsPerfectHomingAttack) // Double damage
-					currentHealth--;
-
-				if (currentHealth <= 0)
+				case CharacterController.AttackStates.OneShot:
 					Shatter();
-				else if (currentHealth == 1)
-					animator.Play("crack-02");
-				else
-					animator.Play("crack-01");
+					break;
+				case CharacterController.AttackStates.Weak:
+					currentHealth--;
+					break;
+				case CharacterController.AttackStates.Strong:
+					currentHealth -= 2;
+					break;
+			}
 
-				Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
-				Character.Lockon.StartBounce(false);
+			if (currentHealth <= 0)
+				Shatter();
+			else if (currentHealth == 1)
+				animator.Play("crack-02");
+			else if (currentHealth == 2)
+				animator.Play("crack-01");
+
+			if (Character.ActionState == CharacterController.ActionStates.JumpDash)
+			{
+				// Copied from Enemy.cs UpdateLockon method
+				if (Character.Lockon.IsHomingAttacking)
+					Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
 
 				if (!isShattered)
 					Character.Camera.SetDeferred("LockonTarget", this);
+
+				Character.Lockon.StartBounce(isShattered);
 			}
+
+			SetInteractionProcessed();
+		}
+
+		private void SetInteractionProcessed()
+		{
+			IsInteractionProcessed = true;
+			// Connect a signal
+			if (!Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+				Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
+		}
+
+		private void ResetInteractionProcessed()
+		{
+			IsInteractionProcessed = false;
+
+			if (Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+				Character.Disconnect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
 		}
 
 		private void SaveDestructionStatus() => permanentlyDestroyed = isShattered;
@@ -74,6 +111,7 @@ namespace Project.Gameplay.Objects
 
 			isShattered = false;
 			currentHealth = MaxHealth;
+			EmitSignal(SignalName.Respawned);
 		}
 
 		private void Shatter()
@@ -85,14 +123,14 @@ namespace Project.Gameplay.Objects
 		public void AreaEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
-			interactingWithPlayer = true;
+			IsInteracting = true;
 			UpdateInteraction();
 		}
 
 		public void AreaExited(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
-			interactingWithPlayer = false;
+			IsInteracting = false;
 		}
 	}
 }

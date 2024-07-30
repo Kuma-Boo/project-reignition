@@ -1,11 +1,11 @@
-[gd_scene load_steps=28 format=3 uid="uid://dc1ik7p6xlh0a"]
+[gd_scene load_steps=29 format=3 uid="uid://dc1ik7p6xlh0a"]
 
 [ext_resource type="Material" uid="uid://bxgvc6gx60btc" path="res://object/stage/genie/material/Uhu.tres" id="1_hnp5r"]
 [ext_resource type="Script" path="res://object/stage/genie/Uhu.cs" id="1_hq5a4"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/Trail3D.cs" id="2_eubro"]
 [ext_resource type="Texture2D" uid="uid://ch6m32qbjicy7" path="res://object/stage/genie/texture/genie glow.png" id="3_7rm62"]
 [ext_resource type="Material" uid="uid://bm6mblpuw33xo" path="res://object/stage/genie/material/Wind.tres" id="3_qpv05"]
-[ext_resource type="Material" uid="uid://bduajl86aiq4o" path="res://object/player/resource/effect/material/Trail Material.tres" id="4_1jhar"]
+[ext_resource type="Material" uid="uid://c8ctul6a8utn2" path="res://object/stage/genie/material/Uhu Trail.tres" id="4_gjuqx"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0o2g1"]
 size = Vector2(1, 1)
@@ -13,9 +13,13 @@ orientation = 2
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_in4ae"]
 
-[sub_resource type="Curve" id="Curve_bi8dp"]
-_data = [Vector2(0, 1), 0.0, -0.0371234, 0, 0, Vector2(0.8, 0), 0.0, 0.0, 0, 0]
-point_count = 2
+[sub_resource type="Curve" id="Curve_r8a0k"]
+_data = [Vector2(0.0425532, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_5i4ya"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Gradient" id="Gradient_iydui"]
 offsets = PackedFloat32Array(0, 0.250965, 0.494208, 0.737452, 1)
@@ -153,9 +157,10 @@ shape = SubResource("SphereShape3D_in4ae")
 
 [node name="Trail" type="Node3D" parent="Root/Base"]
 script = ExtResource("2_eubro")
-transparencyCurve = SubResource("Curve_bi8dp")
+lifetimeCurve = SubResource("Curve_r8a0k")
+positionCurve = SubResource("Curve_5i4ya")
 layer = 32
-material = ExtResource("4_1jhar")
+material = ExtResource("4_gjuqx")
 
 [node name="GlowParticle" type="GPUParticles3D" parent="Root/Base"]
 layers = 32

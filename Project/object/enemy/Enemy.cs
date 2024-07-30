@@ -68,6 +68,7 @@ public partial class Enemy : Node3D
 	protected CharacterController Character => CharacterController.instance;
 
 	protected bool IsDefeated => currentHealth <= 0;
+	protected bool IsSpeedbreakDefeat { get; private set; }
 
 	public override void _Ready() => SetUp();
 	protected virtual void SetUp()
@@ -138,6 +139,8 @@ public partial class Enemy : Node3D
 
 		SpawnData.Respawn(this);
 		currentHealth = maxHealth;
+
+		IsSpeedbreakDefeat = false;
 
 		SetHitboxStatus(true);
 		ResetInteractionProcessed();
@@ -252,6 +255,10 @@ public partial class Enemy : Node3D
 		switch (Character.AttackState)
 		{
 			case CharacterController.AttackStates.OneShot:
+				IsSpeedbreakDefeat = Character.Skills.IsSpeedBreakActive;
+				if (IsSpeedbreakDefeat) // Shake the camera
+					Character.Camera.StartMediumCameraShake();
+
 				Defeat();
 				break;
 			case CharacterController.AttackStates.Weak:

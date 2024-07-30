@@ -17,7 +17,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/ItemCycleTrigger.cs" id="21_7g1t0"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wbgfo"]
-size = Vector3(15, 20, 2.5)
+size = Vector3(15, 20, 5)
 
 [sub_resource type="Curve" id="Curve_boxaq"]
 min_value = -2.0
@@ -32,10 +32,10 @@ _data = [Vector2(0, 0), 0.0, -5.5, 0, 1, Vector2(1, -5.5), -5.5, 0.0, 1, 0]
 point_count = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b7rsu"]
-size = Vector3(15, 20, 2.5)
+size = Vector3(15, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xxv6r"]
-size = Vector3(15, 20, 2.5)
+size = Vector3(15, 20, 5)
 
 [node name="Stage" type="Node"]
 
@@ -11120,24 +11120,20 @@ shape = SubResource("BoxShape3D_b7rsu")
 
 [node name="LapCycle" parent="RingChainAct" instance=ExtResource("4_hw2vm")]
 transform = Transform3D(0.93358, 0, 0.358368, 0, 1, 0, -0.358368, 0, 0.93358, 5.109, 0, 13.219)
-visible = false
+"Trigger Mode" = 2
+"Exit Mode" = 2
 
 [node name="Cycle" type="Node3D" parent="RingChainAct/LapCycle"]
 script = ExtResource("21_7g1t0")
-checkpointTrigger = NodePath("../Checkpoint")
 itemCycles = [NodePath("../../Lap01"), NodePath("../../Lap02"), NodePath("../../Lap03")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RingChainAct/LapCycle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_xxv6r")
-
-[node name="Checkpoint" type="Area3D" parent="RingChainAct/LapCycle"]
-transform = Transform3D(-0.740523, 0, 0.672031, 0, 1, 0, -0.672031, 0, -0.740523, -8.40966, -50, -4.96902)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
+[node name="Checkpoint" parent="RingChainAct/LapCycle" instance=ExtResource("4_hw2vm")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RingChainAct/LapCycle/Checkpoint"]
+transform = Transform3D(-0.740523, 0, 0.672031, 0, 1, 0, -0.672031, 0, -0.740523, -8.40966, -42, -4.96902)
+shape = SubResource("BoxShape3D_xxv6r")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RingChainAct/LapCycle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_xxv6r")
 
@@ -11221,5 +11217,5 @@ shape = SubResource("BoxShape3D_xxv6r")
 [connection signal="Deactivated" from="RingChainAct/Lap02/AscentBottom/Switch" to="RingChainAct/Lap02/AscentBottom/Switch/CullingTrigger" method="Deactivate"]
 [connection signal="Activated" from="RingChainAct/Lap02/AscentTop/Switch" to="RingChainAct/Lap02/AscentTop/Switch/CullingTrigger" method="Activate"]
 [connection signal="Deactivated" from="RingChainAct/Lap02/AscentTop/Switch" to="RingChainAct/Lap02/AscentTop/Switch/CullingTrigger" method="Deactivate"]
-
-[editable path="Static"]
+[connection signal="Activated" from="RingChainAct/LapCycle/Checkpoint" to="RingChainAct/LapCycle/Cycle" method="OnCheckpointActivated"]
+[connection signal="Deactivated" from="RingChainAct/LapCycle/Checkpoint" to="RingChainAct/LapCycle/Cycle" method="OnCheckpointDeactivated"]

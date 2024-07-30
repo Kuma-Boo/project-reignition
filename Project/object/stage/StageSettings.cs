@@ -321,13 +321,17 @@ public partial class StageSettings : Node3D
 			FinishLevel(true);
 		}
 
+		// Soul barrier
+		if (mode == MathModeEnum.Subtract && CharacterController.instance.Skills.IsSkillEquipped(SkillKey.RingLossConvert))
+			CharacterController.instance.Skills.ModifySoulGauge(amount * 2);
+
 		if (DebugManager.Instance.InfiniteRings) // Infinite ring cheat
 			CurrentRingCount = 999;
 
 		EmitSignal(SignalName.RingChanged, CurrentRingCount - previousAmount, disableAnimations);
 	}
 
-	public int CurrentEXP { get; private set; } // How much exp is the player earning from this stage?
+	public int CurrentEXP { get; set; } // How much exp is the player earning from this stage?
 
 	// Time
 	[Signal]
@@ -486,15 +490,13 @@ public partial class StageSettings : Node3D
 	/// <summary> Camera demo that gets enabled after the level is cleared. </summary>
 	[Export]
 	private AnimationPlayer completionAnimator;
-	private int completionAnimationIndex = 1;
+	private int completionAnimationIndex;
 	private void StartCompletionDemo()
 	{
 		EmitSignal(SignalName.LevelDemoStarted);
 
 		if (completionAnimator == null) return;
-
 		OnCameraDemoAdvance();
-		completionAnimator.Play("demo1");
 	}
 
 	/// <summary> Completion demo advanced, play a crossfade. </summary>

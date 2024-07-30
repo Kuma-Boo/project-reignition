@@ -144,6 +144,14 @@ public partial class DinoRex : Node3D
 
 	public void OnReturnToIdle(Area3D _) => targetState = RexStates.Idle;
 
+	private void PlayScreenShake()
+	{
+		CharacterController.instance.Camera.StartCameraShake(new()
+		{
+			magnitude = Vector3.One.RemoveDepth() * 2.0f,
+		});
+	}
+
 	private void StartAttack()
 	{
 		if (isAttacking)

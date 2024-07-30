@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://01yi2epoqrkm"]
+
+[ext_resource type="Material" uid="uid://lyepuu3rjs87" path="res://effect/particle/material/Lantern Process Material.tres" id="1_qhcjc"]
+[ext_resource type="Material" uid="uid://dito0mk420nbo" path="res://effect/particle/material/flame/Flame Lantern.tres" id="2_8qe83"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_ny0je"]
+material = ExtResource("2_8qe83")
+size = Vector2(2.5, 2.5)
+center_offset = Vector3(0, 1.25, 0)
+
+[node name="Lantern" type="GPUParticles3D"]
+layers = 32
+amount = 4
+lifetime = 1.5
+preprocess = 2.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -1, -2, 4, 4, 4)
+local_coords = true
+process_material = ExtResource("1_qhcjc")
+draw_pass_1 = SubResource("QuadMesh_ny0je")

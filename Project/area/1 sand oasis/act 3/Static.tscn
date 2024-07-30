@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://dx3nq2bnotxl3" path="res://area/1 sand oasis/act 3/camera/StartCam.tres" id="2_lhfq0"]
 [ext_resource type="PackedScene" uid="uid://bgg1qa2ad1gbh" path="res://area/1 sand oasis/act 3/environment/00Exterior.tscn" id="3_5ndpe"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_vakpl"]
+[ext_resource type="Resource" uid="uid://b57nulf6d3pq4" path="res://area/1 sand oasis/data/DialogLibrary.tres" id="3_xy7mm"]
 [ext_resource type="PackedScene" uid="uid://bdy7ivd82yprv" path="res://area/1 sand oasis/act 3/environment/01MainHall.tscn" id="4_l4am4"]
 [ext_resource type="PackedScene" uid="uid://b1dvfuglm1ahd" path="res://area/1 sand oasis/act 3/environment/04Ascent.tscn" id="5_m10wp"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="5_qbof6"]
@@ -15,7 +16,6 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="7_77hua"]
 [ext_resource type="PackedScene" uid="uid://dj37itfdjb74j" path="res://area/1 sand oasis/act 3/environment/02Descent.tscn" id="7_dg1ex"]
 [ext_resource type="Curve3D" uid="uid://27uwgglqp1g6" path="res://area/1 sand oasis/act 3/environment/path/MainPath.tres" id="8_5ae3c"]
-[ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="12_pipgr"]
 [ext_resource type="PackedScene" uid="uid://semhlskb8slv" path="res://area/1 sand oasis/act 3/environment/model/LightBlocker.gltf" id="14_5tb48"]
 [ext_resource type="AudioStream" uid="uid://ds4hdcdcfcwmj" path="res://sound/ost/bonus disc/Sand Oasis Act 3.mp3" id="16_7drhp"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="17_5dd51"]
@@ -24,7 +24,7 @@
 size = Vector3(15, 20, 66)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nwi4p"]
-size = Vector3(15, 20, 2.5)
+size = Vector3(15, 20, 5)
 
 [sub_resource type="Animation" id="Animation_hknyw"]
 length = 0.001
@@ -509,6 +509,7 @@ adjustment_saturation = 1.2
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_fxxlg")
 InitialCameraSettings = ExtResource("2_lhfq0")
+dialogLibrary = ExtResource("3_xy7mm")
 pathParent = NodePath("Path")
 completionAnimator = NodePath("DemoCamera/AnimationPlayer")
 Environment = NodePath("WorldEnvironment")
@@ -772,8 +773,6 @@ isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_i6k4x")
-
-[node name="DepthRenderer" parent="." instance=ExtResource("12_pipgr")]
 
 [connection signal="Activated" from="Visuals/CullingMap/02L" to="Visuals/02Descent" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/02L" to="Visuals/02Descent" method="Deactivate"]

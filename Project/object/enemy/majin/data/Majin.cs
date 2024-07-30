@@ -416,10 +416,11 @@ public partial class Majin : Enemy
 	protected override void Defeat()
 	{
 		base.Defeat();
+
 		SetHitboxStatus(false, IsDefeatLaunchEnabled);
 
 		AnimationPlayer.Play("defeat");
-		if (IsDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))
+		if (!IsSpeedbreakDefeat && IsDefeatLaunchEnabled && !Mathf.IsZeroApprox(defeatLaunchTime))
 		{
 			// Kill any existing tween
 			tweener?.Kill();
@@ -444,6 +445,9 @@ public partial class Majin : Enemy
 		{
 			AnimationPlayer.Advance(0.0);
 			AnimationPlayer.Play("explode");
+
+			if (IsSpeedbreakDefeat) // Skip defeat animation and explode instantly
+				AnimationPlayer.Advance(0.5);
 		}
 	}
 
@@ -461,7 +465,13 @@ public partial class Majin : Enemy
 		}
 
 		if (!IsActive) return; // Hasn't spawned yet
-		if (IsDefeated) return; // Already defeated
+		if (IsDefeated)
+		{
+			if (IsSpeedbreakDefeat) // Cheat particle effects to stay onscreen
+				GlobalPosition += Character.GetPositionDelta();
+
+			return; // Already defeated
+		}
 
 		if (staggerTimer != 0)
 		{

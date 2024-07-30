@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://skx536edn7yd"]
+[gd_scene load_steps=55 format=3 uid="uid://skx536edn7yd"]
 
 [ext_resource type="PackedScene" uid="uid://g7vhevg8ipxh" path="res://area/1 sand oasis/act 2/environment/01Opening.tscn" id="1_vn5mm"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_yumdi"]
@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://wo1vjhfjnj70" path="res://area/1 sand oasis/act 1/camera/InteriorCam.tres" id="2_57nsp"]
 [ext_resource type="PackedScene" uid="uid://cndqbo16qru3q" path="res://area/1 sand oasis/act 2/environment/03Forest.tscn" id="3_2hkcl"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="3_i2fbd"]
+[ext_resource type="Resource" uid="uid://b57nulf6d3pq4" path="res://area/1 sand oasis/data/DialogLibrary.tres" id="3_mmv1d"]
 [ext_resource type="PackedScene" uid="uid://ulwu7thf2lga" path="res://area/1 sand oasis/act 2/environment/collision/Collision.tscn" id="3_we3ty"]
 [ext_resource type="PackedScene" uid="uid://djfx1n8sukn0x" path="res://area/1 sand oasis/act 2/environment/04Oasis.tscn" id="4_yda5x"]
 [ext_resource type="PackedScene" uid="uid://d0qnlfq8f7nfg" path="res://area/1 sand oasis/act 2/environment/05Slope.tscn" id="5_c5ona"]
@@ -20,7 +21,7 @@
 [ext_resource type="Curve3D" uid="uid://582epg0j4r4n" path="res://area/1 sand oasis/act 2/environment/path/IslandEndPath.tres" id="12_n178a"]
 [ext_resource type="Resource" uid="uid://ciydxi827mhpa" path="res://area/1 sand oasis/act 2/camera/ZipperCam.tres" id="13_awkcy"]
 [ext_resource type="Curve3D" uid="uid://dgxqpipn3h2k5" path="res://area/1 sand oasis/act 2/environment/path/IslandPath.tres" id="13_u061t"]
-[ext_resource type="Curve3D" uid="uid://ct1vxqp41jv0v" path="res://area/1 sand oasis/act 2/environment/path/OasisPath.tres" id="14_5rbnr"]
+[ext_resource type="Curve3D" path="res://area/1 sand oasis/act 2/environment/path/OasisPath.tres" id="14_5rbnr"]
 [ext_resource type="Resource" uid="uid://2fjme1iwx0lp" path="res://area/1 sand oasis/act 2/camera/Island1Cam.tres" id="14_vafaf"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="14_ydmtp"]
 [ext_resource type="Resource" uid="uid://dthkk6hcrbrke" path="res://area/1 sand oasis/act 2/camera/ForestCam.tres" id="15_b1ktf"]
@@ -48,7 +49,7 @@ size = Vector3(20, 30, 2.5)
 size = Vector3(10, 30, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rbfsu"]
-size = Vector3(40, 20, 2.5)
+size = Vector3(40, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sa337"]
 size = Vector3(40, 46, 30)
@@ -126,6 +127,7 @@ adjustment_saturation = 1.2
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_yumdi")
 InitialCameraSettings = ExtResource("2_57nsp")
+dialogLibrary = ExtResource("3_mmv1d")
 pathParent = NodePath("Paths")
 completionAnimator = NodePath("CompletionDemo/AnimationPlayer")
 Environment = NodePath("WorldEnvironment")
@@ -509,6 +511,7 @@ affectCamera = false
 [node name="DeactivatePath" type="Node3D" parent="Trigger/Object/UTurn" node_paths=PackedStringArray("path")]
 script = ExtResource("12_lmyha")
 path = NodePath("../../../../Paths/IslandEndPath")
+limitCameraDistanceToPath = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/UTurn"]
 shape = SubResource("SphereShape3D_apnef")

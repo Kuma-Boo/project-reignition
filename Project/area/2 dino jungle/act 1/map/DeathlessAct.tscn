@@ -37,7 +37,7 @@
 [ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="67_rc23u"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5oh23"]
-size = Vector3(20, 20, 2.5)
+size = Vector3(20, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mynxt"]
 size = Vector3(12, 20, 3)
@@ -51,7 +51,7 @@ _data = [Vector2(0, 0.567536), 0.0, -4.55979, 0, 0, Vector2(0.00162866, 1.27607)
 point_count = 13
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qg6tk"]
-size = Vector3(20, 20, 2.5)
+size = Vector3(20, 20, 5)
 
 [sub_resource type="Curve" id="Curve_uq24a"]
 max_value = 2.0
@@ -64,7 +64,7 @@ _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1.275), 3.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7im1x"]
-size = Vector3(15, 20, 2.5)
+size = Vector3(15, 20, 5)
 
 [node name="Stage" type="Node"]
 
@@ -692,7 +692,6 @@ transform = Transform3D(0.992669, 0.120865, 0, -0.120865, 0.992669, 0, 0, 0, 1, 
 passiveLength = 0.5
 preAttackLength = 4.0
 rangeOverride = 15
-animationPlayer = NodePath("")
 
 [node name="End" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -741.951, -262.137, -1073.05)
@@ -719,10 +718,10 @@ finalHeight = 5.0
 voiceKey = &""
 
 [node name="JumpPanel1" parent="MainAct/End" instance=ExtResource("35_6bbv0")]
-transform = Transform3D(-0.379456, 0, -0.92521, 0, 1, 0, 0.92521, 0, -0.379456, -19.6684, 16.3, 27.6837)
+transform = Transform3D(-0.381071, 0, -0.924547, 0, 1, 0, 0.924547, 0, -0.381071, -17.9166, 16.3, 28.5856)
 middleHeight = 2.0
-finalHeight = -12.0
-distance = 31.0
+finalHeight = -15.0
+distance = 33.0
 
 [node name="Camera" type="Node3D" parent="MainAct/End/JumpPanel1"]
 script = ExtResource("22_0v6ed")
@@ -955,7 +954,7 @@ transform = Transform3D(0.181858, 0, -0.983325, 0, 1, 0, 0.983325, 0, 0.181858, 
 rangeOverride = 8
 
 [node name="BlueMajin2" parent="MainAct/End" instance=ExtResource("44_o661y")]
-transform = Transform3D(0.563944, 0, -0.825813, 0, 1, 0, 0.825813, 0, 0.563944, -11.1414, 1.87354, 42.4509)
+transform = Transform3D(0.563944, 0, -0.825813, 0, 1, 0, 0.825813, 0, 0.563944, -10.8666, 1.87354, 42.8533)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 5, -20)
@@ -964,7 +963,7 @@ transform = Transform3D(0.563944, 0, -0.825813, 0, 1, 0, 0.825813, 0, 0.563944, 
 rangeOverride = 12
 
 [node name="BlueMajin3" parent="MainAct/End" instance=ExtResource("44_o661y")]
-transform = Transform3D(0.621216, 0, -0.783639, 0, 1, 0, 0.783639, 0, 0.621216, -8.61224, 2.89893, 39.8485)
+transform = Transform3D(0.851772, 0, -0.523911, 0, 1, 0, 0.523911, 0, 0.851772, -8.35669, 2.69891, 40.0057)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(25, 5, -10)
@@ -982,7 +981,7 @@ transform = Transform3D(-0.887349, 0, -0.461099, 0, 1, 0, 0.461099, 0, -0.887349
 rangeOverride = 10
 
 [node name="BlueMajin5" parent="MainAct/End" instance=ExtResource("44_o661y")]
-transform = Transform3D(-0.687924, 0, -0.725783, 0, 1, 0, 0.725783, 0, -0.687924, -17.847, 11.4534, 38.9224)
+transform = Transform3D(-0.687924, 0, -0.725783, 0, 1, 0, 0.725783, 0, -0.687924, -18.4661, 11.3534, 39.5756)
 "Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 2)
@@ -1077,11 +1076,14 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="Activated" from="MainAct/FeedingTunnel/MajinTrigger2" to="MainAct/FeedingTunnel/GreenMajin5" method="Spawn"]
 [connection signal="Spawned" from="MainAct/FeedingTunnel/GreenMajin3" to="MainAct/FeedingTunnel/GreenMajin4" method="Spawn"]
 [connection signal="Spawned" from="MainAct/FeedingTunnel/GreenMajin3" to="MainAct/FeedingTunnel/GreenMajin5" method="Spawn"]
+[connection signal="Activated" from="MainAct/End/JumpPanel1" to="Static/Collision/FeedingTunnelOneWay" method="Deactivate"]
 [connection signal="Activated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Activate"]
+[connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
 [connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Deactivate"]
 [connection signal="Shattered" from="MainAct/End/Cactus1" to="MainAct/End/Cactus2" method="Shatter"]
 
 [editable path="Static"]
+[editable path="Static/Visuals/03CaveSky"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara1"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara2"]
 [editable path="Static/CompletionDemo"]

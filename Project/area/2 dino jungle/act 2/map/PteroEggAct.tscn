@@ -1,8 +1,9 @@
-[gd_scene load_steps=43 format=3 uid="uid://ctht326ugrail"]
+[gd_scene load_steps=51 format=3 uid="uid://ctht326ugrail"]
 
 [ext_resource type="Resource" uid="uid://c1so6lm4litfn" path="res://resource/level data/dinosaur jungle/Act3DinoEgg.tres" id="2_rdr8o"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_d4xxv"]
 [ext_resource type="Script" path="res://area/2 dino jungle/data/script/PteroEggManager.cs" id="3_sb6wl"]
+[ext_resource type="Resource" uid="uid://dgl1qo3c2ocum" path="res://area/2 dino jungle/data/DialogLibrary.tres" id="3_tvr0h"]
 [ext_resource type="PackedScene" uid="uid://h4jvujle488r" path="res://area/2 dino jungle/object/model/egg/EggGreenDot.gltf" id="5_vx1bv"]
 [ext_resource type="PackedScene" uid="uid://dc2y3sshnnswg" path="res://area/2 dino jungle/object/model/egg/EggGreenStar.gltf" id="6_8o175"]
 [ext_resource type="PackedScene" uid="uid://c5n27dg6aktc6" path="res://area/2 dino jungle/object/model/egg/EggGreenStripe.gltf" id="7_c0185"]
@@ -28,7 +29,9 @@
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="25_wc55u"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="26_76jx5"]
 [ext_resource type="PackedScene" uid="uid://dermptym044v8" path="res://object/enemy/majin/data/dino jungle/RedMajin.tscn" id="27_lu3gx"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="27_ql3o4"]
 [ext_resource type="PackedScene" uid="uid://mhhtlvsxmugl" path="res://object/stage/common/Catapult.tscn" id="28_4k1cr"]
+[ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="28_ywp30"]
 [ext_resource type="PackedScene" uid="uid://e43vdgi280co" path="res://area/2 dino jungle/object/rock/WaterRock.tscn" id="29_lns4b"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="30_5pmxi"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="31_g5xlt"]
@@ -38,6 +41,21 @@
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="34_8p3er"]
 [ext_resource type="PackedScene" uid="uid://dadka31wrx5f4" path="res://object/enemy/majin/data/dino jungle/GreenMajin.tscn" id="35_6rhcf"]
 [ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="38_uc7po"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_timwm"]
+size = Vector3(15, 20, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u43ql"]
+size = Vector3(15, 20, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iqplf"]
+size = Vector3(15, 20, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fyr3i"]
+size = Vector3(15, 20, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_palxw"]
+size = Vector3(15, 20, 5)
 
 [sub_resource type="Curve" id="Curve_dnox2"]
 min_value = -2.0
@@ -65,6 +83,7 @@ point_count = 4
 
 [node name="Static" parent="." instance=ExtResource("20_8sfob")]
 Data = ExtResource("2_rdr8o")
+dialogLibrary = ExtResource("3_tvr0h")
 
 [node name="Head" parent="Static/Common/Dino" index="2"]
 transform = Transform3D(0.999979, -8.9407e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -1.01328e-06, 1, 0.000292879, 1.33514e-05, 19.7418, 38.526)
@@ -94,8 +113,11 @@ transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 
 [node name="PteroEgg2" parent="PteroEggAct/EggManager" instance=ExtResource("22_00ptn")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -91.9, -1.63872, 202.6)
 
-[node name="PteroEgg3" parent="PteroEggAct/EggManager" instance=ExtResource("22_00ptn")]
+[node name="CullingTrigger" type="Node3D" parent="PteroEggAct/EggManager"]
 transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, -139, 7, -42.8)
+script = ExtResource("31_uxx68")
+
+[node name="PteroEgg3" parent="PteroEggAct/EggManager/CullingTrigger" instance=ExtResource("22_00ptn")]
 
 [node name="PteroEgg4" parent="PteroEggAct/EggManager" instance=ExtResource("22_00ptn")]
 transform = Transform3D(0.444369, 0, 0.895844, 0, 1, 0, -0.895844, 0, 0.444369, -86.3, 5.8, -31.4)
@@ -111,6 +133,113 @@ transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 
 
 [node name="EggNest4" parent="PteroEggAct/EggManager" instance=ExtResource("23_xhqyv")]
 transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, -91.3, 2.2, 46.9)
+
+[node name="DialogTriggers" type="Node3D" parent="PteroEggAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.7545, 7.06699, -1.19521)
+
+[node name="SO_SHEggTrigger" parent="PteroEggAct/DialogTriggers" instance=ExtResource("27_ql3o4")]
+transform = Transform3D(0.945285, 0, 0.326245, 0, 1, 0, -0.326245, 0, 0.945285, 18.2275, -20.4906, 26.436)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="PteroEggAct/DialogTriggers/SO_SHEggTrigger"]
+script = ExtResource("28_ywp30")
+textKeys = ["din_egg_so", "din_egg_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PteroEggAct/DialogTriggers/SO_SHEggTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_timwm")
+
+[node name="SO_SHEggTrigger2" parent="PteroEggAct/DialogTriggers" instance=ExtResource("27_ql3o4")]
+transform = Transform3D(-0.208082, 0, 0.978111, 0, 1, 0, -0.978111, 0, -0.208082, -5.3985, 16.6549, 151.459)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="PteroEggAct/DialogTriggers/SO_SHEggTrigger2"]
+script = ExtResource("28_ywp30")
+textKeys = ["din_nest_so", "din_nest_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PteroEggAct/DialogTriggers/SO_SHEggTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_timwm")
+
+[node name="IronBallsDialogTrigger" parent="PteroEggAct/DialogTriggers" instance=ExtResource("27_ql3o4")]
+transform = Transform3D(0.715315, 0, 0.698802, 0, 1, 0, -0.698802, 0, 0.715315, -80.2647, -13.6344, 146.18)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="PteroEggAct/DialogTriggers/IronBallsDialogTrigger"]
+script = ExtResource("28_ywp30")
+textKeys = ["din_ball_hint_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PteroEggAct/DialogTriggers/IronBallsDialogTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_u43ql")
+
+[node name="SO_SHVictoryDialogTrigger" parent="PteroEggAct/DialogTriggers" instance=ExtResource("27_ql3o4")]
+transform = Transform3D(0.969578, 0, 0.244783, 0, 1, 0, -0.244783, 0, 0.969578, -170.82, -5.27594, 93.9948)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="PteroEggAct/DialogTriggers/SO_SHVictoryDialogTrigger"]
+script = ExtResource("28_ywp30")
+textKeys = ["common_victory2_so", "common_victory2_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PteroEggAct/DialogTriggers/SO_SHVictoryDialogTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_iqplf")
+
+[node name="SO_SHVictoryDialogTrigger2" parent="PteroEggAct/DialogTriggers" instance=ExtResource("27_ql3o4")]
+transform = Transform3D(0.969578, 0, 0.244783, 0, 1, 0, -0.244783, 0, 0.969578, -123.191, -5.27593, 35.6185)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="PteroEggAct/DialogTriggers/SO_SHVictoryDialogTrigger2"]
+script = ExtResource("28_ywp30")
+textKeys = ["common_victory2_so", "common_victory2_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PteroEggAct/DialogTriggers/SO_SHVictoryDialogTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_iqplf")
+
+[node name="SO_SHDialogTrigger2" parent="PteroEggAct/DialogTriggers" instance=ExtResource("27_ql3o4")]
+transform = Transform3D(0.52013, 0, -0.854087, 0, 1, 0, 0.854087, 0, 0.52013, -136.085, -3.07231, -38.9532)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="PteroEggAct/DialogTriggers/SO_SHDialogTrigger2"]
+script = ExtResource("28_ywp30")
+textKeys = ["common_enemy5_so"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PteroEggAct/DialogTriggers/SO_SHDialogTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_fyr3i")
+
+[node name="SO_SHDialogTrigger3" parent="PteroEggAct/DialogTriggers" instance=ExtResource("27_ql3o4")]
+transform = Transform3D(-0.427121, 0, -0.904194, 0, 1, 0, 0.904194, 0, -0.427121, -73.5397, -3.03978, -27.4271)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="PteroEggAct/DialogTriggers/SO_SHDialogTrigger3"]
+script = ExtResource("28_ywp30")
+textKeys = ["common_enemy7_so", "common_enemy7_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PteroEggAct/DialogTriggers/SO_SHDialogTrigger3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_fyr3i")
+
+[node name="SHDialogTrigger2" parent="PteroEggAct/DialogTriggers" instance=ExtResource("27_ql3o4")]
+transform = Transform3D(-0.57402, 0, -0.818842, 0, 1, 0, 0.818842, 0, -0.57402, -29.0619, -9.40221, -8.40789)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="PteroEggAct/DialogTriggers/SHDialogTrigger2"]
+script = ExtResource("28_ywp30")
+textKeys = ["common_lap_sh", "common_lap_so"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PteroEggAct/DialogTriggers/SHDialogTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_palxw")
 
 [node name="Start" type="Node3D" parent="PteroEggAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.385, 0, 4.639)
@@ -1187,14 +1316,18 @@ transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622
 "Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 
+[connection signal="Staggered" from="Static/Common/Object/BoatSection1/Boat" to="PteroEggAct/EggManager" method="Frighten"]
+[connection signal="Staggered" from="Static/Common/Object/DoubleBoatSection/Boat2" to="PteroEggAct/EggManager" method="Frighten"]
+[connection signal="Staggered" from="Static/Common/Object/DoubleBoatSection/Boat3" to="PteroEggAct/EggManager" method="Frighten"]
+[connection signal="Staggered" from="Static/Common/Object/EndingBoatSection/Boat4" to="PteroEggAct/EggManager" method="Frighten"]
 [connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg1" to="Static" method="IncrementObjective"]
 [connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg2" to="Static" method="IncrementObjective"]
-[connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg3" to="Static" method="IncrementObjective"]
+[connection signal="Returned" from="PteroEggAct/EggManager/CullingTrigger/PteroEgg3" to="Static" method="IncrementObjective"]
 [connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg4" to="Static" method="IncrementObjective"]
 [connection signal="Spawned" from="PteroEggAct/Start/RedMajin1" to="PteroEggAct/Start/RedMajin2" method="Spawn"]
 [connection signal="Spawned" from="PteroEggAct/Start/RedMajin1" to="PteroEggAct/Start/RedMajin3" method="Spawn"]
 [connection signal="Activated" from="PteroEggAct/Boat1/Switch" to="PteroEggAct/Boat1/Switch/CullingTrigger" method="Activate"]
-[connection signal="Deactivated" from="PteroEggAct/Boat1/Switch" to="PteroEggAct/Boat1/Switch/CullingTrigger" method="Deactivate"]
+[connection signal="Respawned" from="PteroEggAct/Boat1/Switch" to="PteroEggAct/Boat1/Switch/CullingTrigger" method="Deactivate"]
 [connection signal="Defeated" from="PteroEggAct/LongIsland/BlueMajin1" to="PteroEggAct/LongIsland/EnemyStone1" method="IncrementCounter"]
 [connection signal="Defeated" from="PteroEggAct/LongIsland/BlueMajin1" to="PteroEggAct/LongIsland/EnemyStone2" method="IncrementCounter"]
 [connection signal="Defeated" from="PteroEggAct/LongIsland/BlueMajin1" to="PteroEggAct/LongIsland/EnemyStone3" method="IncrementCounter"]
@@ -1207,6 +1340,7 @@ transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622
 [connection signal="Defeated" from="PteroEggAct/LongIsland/BlueMajin3" to="PteroEggAct/LongIsland/EnemyStone2" method="IncrementCounter"]
 [connection signal="Defeated" from="PteroEggAct/LongIsland/BlueMajin3" to="PteroEggAct/LongIsland/EnemyStone3" method="IncrementCounter"]
 [connection signal="Defeated" from="PteroEggAct/LongIsland/BlueMajin3" to="PteroEggAct/LongIsland/EnemyStone4" method="IncrementCounter"]
+[connection signal="Shattered" from="PteroEggAct/RightPath/EnemyStone" to="PteroEggAct/EggManager/CullingTrigger" method="Activate"]
 [connection signal="Defeated" from="PteroEggAct/RightPath/BlueMajin1" to="PteroEggAct/RightPath/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="PteroEggAct/RightPath/BlueMajin2" to="PteroEggAct/RightPath/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="PteroEggAct/RightPath/BlueMajin3" to="PteroEggAct/RightPath/EnemyStone" method="IncrementCounter"]

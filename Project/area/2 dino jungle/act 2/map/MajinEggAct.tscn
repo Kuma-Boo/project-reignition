@@ -1,9 +1,12 @@
-[gd_scene load_steps=25 format=3 uid="uid://drl5b6e5kwx7m"]
+[gd_scene load_steps=29 format=3 uid="uid://drl5b6e5kwx7m"]
 
 [ext_resource type="PackedScene" uid="uid://gnw1drjjo5gi" path="res://area/2 dino jungle/act 2/Static.tscn" id="1_xei2o"]
 [ext_resource type="Resource" uid="uid://pe2kawmnuf4i" path="res://resource/level data/dinosaur jungle/Act3MajinEgg.tres" id="2_e8m24"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_ehs8u"]
+[ext_resource type="Resource" uid="uid://dgl1qo3c2ocum" path="res://area/2 dino jungle/data/DialogLibrary.tres" id="3_fcbh7"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_2s1jg"]
 [ext_resource type="PackedScene" uid="uid://b3f5ifmjlskc1" path="res://area/2 dino jungle/object/egg/MajinEgg.tscn" id="4_tr8l6"]
+[ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="5_577g8"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_npuk7"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_x45nj"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="8_ud6kd"]
@@ -20,6 +23,9 @@
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="20_qu7dv"]
 [ext_resource type="PackedScene" uid="uid://dadka31wrx5f4" path="res://object/enemy/majin/data/dino jungle/GreenMajin.tscn" id="21_51mfu"]
 [ext_resource type="Resource" uid="uid://ctcjx8l5t1ppn" path="res://area/2 dino jungle/act 2/camera/RightCatapultCam.tres" id="22_j1wdt"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kelnp"]
+size = Vector3(15, 20, 5)
 
 [sub_resource type="Curve" id="Curve_8eiuu"]
 min_value = -2.0
@@ -47,6 +53,7 @@ point_count = 4
 
 [node name="Static" parent="." instance=ExtResource("1_xei2o")]
 Data = ExtResource("2_e8m24")
+dialogLibrary = ExtResource("3_fcbh7")
 
 [node name="MajinEggAct" type="Node3D" parent="."]
 
@@ -55,6 +62,100 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, -2, -5.5)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MajinEggAct/SpawnPosition" instance=ExtResource("3_ehs8u")]
+
+[node name="DialogTriggers" type="Node3D" parent="MajinEggAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.485, 0, 0)
+
+[node name="DestoryEggTrigger" parent="MajinEggAct/DialogTriggers" instance=ExtResource("4_2s1jg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.4716, -3.36349, 72.4388)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MajinEggAct/DialogTriggers/DestoryEggTrigger"]
+script = ExtResource("5_577g8")
+textKeys = ["din_majin_egg_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MajinEggAct/DialogTriggers/DestoryEggTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_kelnp")
+
+[node name="IronBallsDialogTrigger" parent="MajinEggAct/DialogTriggers" instance=ExtResource("4_2s1jg")]
+transform = Transform3D(0.715315, 0, 0.698802, 0, 1, 0, -0.698802, 0, 0.715315, -80.2647, -5.27594, 146.18)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MajinEggAct/DialogTriggers/IronBallsDialogTrigger"]
+script = ExtResource("5_577g8")
+textKeys = ["din_ball_hint_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MajinEggAct/DialogTriggers/IronBallsDialogTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_kelnp")
+
+[node name="MajinDialogTrigger" parent="MajinEggAct/DialogTriggers" instance=ExtResource("4_2s1jg")]
+transform = Transform3D(-0.113723, 0, 0.993512, 0, 1, 0, -0.993512, 0, -0.113723, -146.491, -5.27594, 104.299)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MajinEggAct/DialogTriggers/MajinDialogTrigger"]
+script = ExtResource("5_577g8")
+textKeys = ["common_enemy_so", "common_enemy_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MajinEggAct/DialogTriggers/MajinDialogTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_kelnp")
+
+[node name="SO_SHVictoryDialogTrigger" parent="MajinEggAct/DialogTriggers" instance=ExtResource("4_2s1jg")]
+transform = Transform3D(0.969578, 0, 0.244783, 0, 1, 0, -0.244783, 0, 0.969578, -170.82, -5.27594, 93.9948)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MajinEggAct/DialogTriggers/SO_SHVictoryDialogTrigger"]
+script = ExtResource("5_577g8")
+textKeys = ["common_victory_so", "common_victory_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MajinEggAct/DialogTriggers/SO_SHVictoryDialogTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_kelnp")
+
+[node name="SO_SHDialogTrigger2" parent="MajinEggAct/DialogTriggers" instance=ExtResource("4_2s1jg")]
+transform = Transform3D(0.52013, 0, -0.854087, 0, 1, 0, 0.854087, 0, 0.52013, -135.771, -4.13576, -39.1941)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MajinEggAct/DialogTriggers/SO_SHDialogTrigger2"]
+script = ExtResource("5_577g8")
+textKeys = ["common_enemy6_so", "common_enemy6_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MajinEggAct/DialogTriggers/SO_SHDialogTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_kelnp")
+
+[node name="SHDialogTrigger" parent="MajinEggAct/DialogTriggers" instance=ExtResource("4_2s1jg")]
+transform = Transform3D(-0.57402, 0, -0.818842, 0, 1, 0, 0.818842, 0, -0.57402, -73.6265, -4.13576, -28.8911)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MajinEggAct/DialogTriggers/SHDialogTrigger"]
+script = ExtResource("5_577g8")
+textKeys = ["common_enemy5_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MajinEggAct/DialogTriggers/SHDialogTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_kelnp")
+
+[node name="SHDialogTrigger2" parent="MajinEggAct/DialogTriggers" instance=ExtResource("4_2s1jg")]
+transform = Transform3D(-0.57402, 0, -0.818842, 0, 1, 0, 0.818842, 0, -0.57402, -29.0619, -4.13576, -8.40789)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MajinEggAct/DialogTriggers/SHDialogTrigger2"]
+script = ExtResource("5_577g8")
+textKeys = ["common_lap_sh", "common_lap_so"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MajinEggAct/DialogTriggers/SHDialogTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_kelnp")
 
 [node name="Eggs" type="Node3D" parent="MajinEggAct"]
 
@@ -70,8 +171,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -167.816, 5.8609, 65.545)
 [node name="MajinEgg4" parent="MajinEggAct/Eggs" instance=ExtResource("4_tr8l6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.803, 14.5638, 83.305)
 
-[node name="MajinEgg5" parent="MajinEggAct/Eggs" instance=ExtResource("4_tr8l6")]
+[node name="CullingTrigger" type="Node3D" parent="MajinEggAct/Eggs"]
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -139.003, 7.00621, -42.795)
+script = ExtResource("17_sfykn")
+
+[node name="MajinEgg5" parent="MajinEggAct/Eggs/CullingTrigger" instance=ExtResource("4_tr8l6")]
 
 [node name="MajinEgg6" parent="MajinEggAct/Eggs" instance=ExtResource("4_tr8l6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -95.102, 3.92764, -9.386)
@@ -1126,7 +1230,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 [connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg2" to="Static" method="IncrementObjective"]
 [connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg3" to="Static" method="IncrementObjective"]
 [connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg4" to="Static" method="IncrementObjective"]
-[connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg5" to="Static" method="IncrementObjective"]
+[connection signal="Shattered" from="MajinEggAct/Eggs/CullingTrigger/MajinEgg5" to="Static" method="IncrementObjective"]
 [connection signal="Shattered" from="MajinEggAct/Eggs/MajinEgg6" to="Static" method="IncrementObjective"]
 [connection signal="Spawned" from="MajinEggAct/Start/RedMajin1" to="MajinEggAct/Start/RedMajin2" method="Spawn"]
 [connection signal="Spawned" from="MajinEggAct/Start/RedMajin1" to="MajinEggAct/Start/RedMajin3" method="Spawn"]
@@ -1149,6 +1253,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
 [connection signal="Defeated" from="MajinEggAct/RightPath/BlueMajin1" to="MajinEggAct/RightPath/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MajinEggAct/RightPath/BlueMajin2" to="MajinEggAct/RightPath/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MajinEggAct/RightPath/BlueMajin3" to="MajinEggAct/RightPath/EnemyStone" method="IncrementCounter"]
+[connection signal="Shattered" from="MajinEggAct/RightPath/EnemyStone" to="MajinEggAct/Eggs/CullingTrigger" method="Activate"]
 [connection signal="Deactivated" from="MajinEggAct/RightPath/Catapult" to="MajinEggAct/RightPath/Catapult/Camera" method="Deactivate"]
 [connection signal="PlayerEntered" from="MajinEggAct/RightPath/Catapult" to="MajinEggAct/RightPath/Catapult/Camera" method="Activate"]
 [connection signal="PlayerExited" from="MajinEggAct/RightPath/Catapult" to="MajinEggAct/RightPath/Catapult/Camera" method="Deactivate"]

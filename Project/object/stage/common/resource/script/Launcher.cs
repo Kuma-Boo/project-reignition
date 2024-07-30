@@ -158,7 +158,11 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		return settings;
 	}
 
-	public virtual void Activate(Area3D _) => Activate();
+	public virtual void Activate(Area3D a)
+	{
+		if (!a.IsInGroup("player detection")) return;
+		Activate();
+	}
 	public virtual void Activate()
 	{
 		EmitSignal(SignalName.Activated);

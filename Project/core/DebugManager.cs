@@ -7,7 +7,7 @@ namespace Project.Core;
 
 public partial class DebugManager : Node2D
 {
-	public static DebugManager Instance;
+	public static DebugManager Instance { get; set; }
 
 	[Signal]
 	public delegate void FullscreenToggledEventHandler();
@@ -42,7 +42,7 @@ public partial class DebugManager : Node2D
 		SetUpSkills();
 	}
 
-	public override void _Process(double _)
+	public override void _PhysicsProcess(double _)
 	{
 		if (Input.IsActionJustPressed("toggle_fullscreen")) // Global shortcut used in final build as well
 		{
@@ -92,14 +92,19 @@ public partial class DebugManager : Node2D
 		if (Input.IsActionJustPressed("debug_restart"))
 		{
 			if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(CharacterController.instance))
+			{
 				CharacterController.instance.StartRespawn(true);
+			}
 			else
 			{
 				TransitionManager.QueueSceneChange(string.Empty);
 				TransitionManager.StartTransition(new());
 			}
 		}
+	}
 
+	public override void _Process(double _)
+	{
 		if (line3d.Count + line2d.Count != 0 && !IsPaused) // Queue Raycast Redraw
 			QueueRedraw();
 	}
@@ -221,7 +226,7 @@ public partial class DebugManager : Node2D
 	private void ToggleInfiniteRings(bool enabled)
 	{
 		InfiniteRings = enabled;
-		StageSettings.instance.UpdateRingCount(0, StageSettings.MathModeEnum.Replace, true);
+		StageSettings.instance?.UpdateRingCount(0, StageSettings.MathModeEnum.Replace, true);
 	}
 	/// <summary> Skip countdowns for faster debugging. </summary>
 	public bool SkipCountdown { get; private set; }
@@ -231,6 +236,8 @@ public partial class DebugManager : Node2D
 	private OptionButton skillSelectButton;
 	[Export]
 	private Button skillToggleButton;
+	[Export]
+	private Slider skillAugmentSlider;
 	private void SetUpSkills()
 	{
 		for (int i = 0; i < (int)SkillKey.Max; i++)
@@ -241,10 +248,31 @@ public partial class DebugManager : Node2D
 		skillSelectButton.Select(0);
 	}
 
-	private void OnSkillSelected(int skillIndex)
+	public void OnSkillSelected(int skillIndex)
 	{
+		if (skillIndex == -1)
+			skillIndex = skillSelectButton.Selected;
+
 		SkillKey key = (SkillKey)skillIndex;
 		skillToggleButton.ButtonPressed = SaveManager.ActiveSkillRing.EquippedSkills.Contains(key);
+
+		SkillResource skill = Runtime.Instance.SkillList.GetSkill(key);
+
+		if (!skill.HasAugments)
+		{
+			skillAugmentSlider.Editable = false;
+			skillAugmentSlider.Value = 0;
+			return;
+		}
+
+		skillAugmentSlider.Editable = true;
+		skillAugmentSlider.MinValue = skill.Augments[0].AugmentIndex < 0 ? skill.Augments[0].AugmentIndex : 0;
+		skillAugmentSlider.MaxValue = Mathf.Max(skill.Augments[^1].AugmentIndex, 0);
+		skillAugmentSlider.TickCount = skill.Augments.Count + 1;
+		if (SaveManager.ActiveSkillRing.EquippedAugments.TryGetValue(key, out int value))
+			skillAugmentSlider.Value = value;
+		else
+			skillAugmentSlider.Value = 0;
 	}
 
 	private void OnSkillToggled(bool toggled)
@@ -253,11 +281,17 @@ public partial class DebugManager : Node2D
 
 		if (toggled)
 		{
-			SaveManager.ActiveSkillRing.EquipSkill(key, true);
+			SaveManager.ActiveSkillRing.EquipSkill(key, 0, true);
 			return;
 		}
 
 		SaveManager.ActiveSkillRing.UnequipSkill(key);
+	}
+
+	private void OnSkillAugmentChanged(float value)
+	{
+		int augmentValue = Mathf.RoundToInt(value);
+		SaveManager.ActiveSkillRing.EquipSkill((SkillKey)skillSelectButton.Selected, augmentValue, true);
 	}
 	#endregion
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://cufdusdk0inmc"]
+[gd_scene load_steps=40 format=3 uid="uid://cufdusdk0inmc"]
 
 [ext_resource type="Script" path="res://interface/menu/save select/SaveSelect.cs" id="1_5ttjj"]
 [ext_resource type="PackedScene" uid="uid://dk6qdykjn185j" path="res://interface/menu/save select/SaveOption.tscn" id="2_xu0jl"]
@@ -11,7 +11,6 @@
 [ext_resource type="AudioStream" uid="uid://cl54rftw5aiyf" path="res://sound/sfx/system/menu cancel.wav" id="9_l15xe"]
 [ext_resource type="AudioStream" uid="uid://l2e1do1wwkg" path="res://sound/sfx/system/menu confirm.wav" id="10_2gd04"]
 [ext_resource type="AudioStream" uid="uid://dc6pp0ugxo4e3" path="res://sound/sfx/system/menu pause.wav" id="11_djv0y"]
-[ext_resource type="Script" path="res://interface/menu/level select/script/ReadyMenu.cs" id="11_ntpxr"]
 [ext_resource type="Texture2D" uid="uid://bgtxik1dsbu0u" path="res://interface/menu/level select/texture/ready text/ready en.png" id="12_lt1ht"]
 [ext_resource type="FontFile" uid="uid://bsoin3p4iygoo" path="res://interface/font/otf/Chiaro Std B.otf" id="13_gd0lx"]
 
@@ -2449,7 +2448,6 @@ tracks/4/keys = {
 
 [sub_resource type="Animation" id="Animation_yred1"]
 resource_name = "confirm"
-length = 0.6
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -2464,13 +2462,25 @@ tracks/0/keys = {
 "method": &"play"
 }]
 }
-tracks/1/type = "method"
+tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Menu/Parent/Text/Cursor/CursorAnimationPlayer")
+tracks/1/path = NodePath(".:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Menu/Parent/Text/Cursor/CursorAnimationPlayer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -2478,21 +2488,21 @@ tracks/1/keys = {
 "method": &"play"
 }]
 }
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("..")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.6),
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("..")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
 "method": &"DisableProcessing"
 }, {
 "args": [],
-"method": &"StartQuitTransition"
+"method": &"EnableProcessing"
 }]
 }
 
@@ -3095,7 +3105,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("11_ntpxr")
 metadata/_edit_lock_ = true
 
 [node name="Fade" type="ColorRect" parent="DeleteMenu"]

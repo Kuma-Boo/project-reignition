@@ -23,16 +23,18 @@ namespace Project.CustomNodes
 		[Export]
 		private float lifetime = .5f; // How long each point should live
 		[Export]
-		private Curve transparencyCurve;
-		private const float ATTACK_TRAIL_UV_STEP = .01f; // How much of the uv each segment should take up
+		private Curve lifetimeCurve;
+		[Export]
+		private Curve positionCurve;
+		private const float TrailUVStep = .01f; // How much of the uv each segment should take up
 
 		[Export(PropertyHint.Layers3DRender)]
 		private uint layer;
 		[Export]
 		public Material material;
 
-		private readonly List<Point> points = new(); // Data of each point
-		private readonly List<float> pointLifetimes = new(); // Lifetime of each point
+		private readonly List<Point> points = []; // Data of each point
+		private readonly List<float> pointLifetimes = []; // Lifetime of each point
 
 		public override void _Ready()
 		{
@@ -85,7 +87,7 @@ namespace Project.CustomNodes
 					points[i].position += Gameplay.CharacterController.instance.Animator.Back() * Gameplay.CharacterController.instance.MoveSpeed * PhysicsManager.physicsDelta;
 			}
 
-			previousPosition = points[points.Count - 1].position;
+			previousPosition = points[^1].position;
 
 			for (int y = 0; y < resolution; y++)
 			{
@@ -96,22 +98,23 @@ namespace Project.CustomNodes
 				for (int x = 0; x < points.Count; x++)
 				{
 					float xFactor = x / (points.Count - 1.0f);
-					float transparency = Mathf.Clamp(transparencyCurve.Sample(pointLifetimes[x] / lifetime), 0f, 1f);
+					float transparency = Mathf.Clamp(lifetimeCurve.Sample(pointLifetimes[x] / lifetime), 0f, 1f);
+					transparency *= Mathf.Clamp(positionCurve.Sample(xFactor), 0f, 1f);
 
 					Vector3 normal01 = points[x].normal.Rotated(points[x].tangent, angleIncrement * y);
 					Vector3 normal02 = normal01.Rotated(points[x].tangent, angleIncrement);
 					Vector3 surfaceNormal = (normal01 + normal02) * .5f;
-					trailMesh.SurfaceSetUV(new Vector2(x * ATTACK_TRAIL_UV_STEP, yFactor01));
+					trailMesh.SurfaceSetUV(new Vector2(x * TrailUVStep, yFactor01));
 					trailMesh.SurfaceSetUV2(new Vector2(xFactor, yFactor01));
-					trailMesh.SurfaceSetNormal(surfaceNormal);
-					trailMesh.SurfaceAddVertex(ToLocal(points[x].position + normal01 * radius));
 					trailMesh.SurfaceSetColor(new(Colors.White, transparency));
+					trailMesh.SurfaceSetNormal(surfaceNormal);
+					trailMesh.SurfaceAddVertex(ToLocal(points[x].position + (normal01 * radius)));
 
-					trailMesh.SurfaceSetUV(new Vector2(x * ATTACK_TRAIL_UV_STEP, yFactor02));
+					trailMesh.SurfaceSetUV(new Vector2(x * TrailUVStep, yFactor02));
 					trailMesh.SurfaceSetUV2(new Vector2(xFactor, yFactor01));
-					trailMesh.SurfaceSetNormal(surfaceNormal);
-					trailMesh.SurfaceAddVertex(ToLocal(points[x].position + normal02 * radius));
 					trailMesh.SurfaceSetColor(new(Colors.White, transparency));
+					trailMesh.SurfaceSetNormal(surfaceNormal);
+					trailMesh.SurfaceAddVertex(ToLocal(points[x].position + (normal02 * radius)));
 				}
 
 				trailMesh.SurfaceEnd();

@@ -56,6 +56,9 @@ public partial class PauseMenu : Node
 	private Sprite2D levelSprite;
 	private PauseSkill[] skills;
 	private int skillScrollOffset;
+	[Export]
+	private Sprite2D skillScrollbar;
+	private Vector2 scrollVelocity;
 
 	private bool isActive;
 	private enum Submenu
@@ -76,6 +79,7 @@ public partial class PauseMenu : Node
 	private readonly StringName StatusHideTrigger = "parameters/status_hide_trigger/request";
 	private readonly StringName StatusSelectionTransition = "parameters/status_selection/transition_request";
 	private readonly StringName ValueSelectionTransition = "parameters/value_selection/transition_request";
+	private const float ScrollSmoothing = .05f;
 
 	public override void _Ready()
 	{
@@ -87,6 +91,8 @@ public partial class PauseMenu : Node
 		);
 
 		noSkillLabel.Visible = SaveManager.ActiveSkillRing.EquippedSkills.Count == 0;
+		skillScrollbar.GetParent<Node2D>().Visible = SaveManager.ActiveSkillRing.EquippedSkills.Count != 0;
+
 		skills = new PauseSkill[SaveManager.ActiveSkillRing.EquippedSkills.Count];
 		skillContainer.SetDeferred("size", new Vector2(skillContainer.Size.X, skills.Length * 60));
 
@@ -95,7 +101,9 @@ public partial class PauseMenu : Node
 		{
 			PauseSkill pauseSkill = pauseSkillScene.Instantiate<PauseSkill>();
 			pauseSkill.Skill = Runtime.Instance.SkillList.GetSkill(key);
-			pauseSkill.Skill = Runtime.Instance.SkillList.GetSkill(key);
+			if (pauseSkill.Skill.HasAugments)
+				pauseSkill.Skill = pauseSkill.Skill.GetAugment(SaveManager.ActiveSkillRing.GetAugmentIndex(key));
+			pauseSkill.Initialize();
 			skillContainer.AddChild(pauseSkill);
 		}
 	}
@@ -103,6 +111,16 @@ public partial class PauseMenu : Node
 	public override void _PhysicsProcess(double delta)
 	{
 		if (!AllowPausing || !Stage.IsLevelIngame || TransitionManager.IsTransitionActive) return;
+
+		if (skillScrollbar.IsVisibleInTree())
+		{
+			float denominator = SaveManager.ActiveSkillRing.EquippedSkills.Count - 1;
+			if (denominator > 0)
+			{
+				float targetPosition = Mathf.Lerp(-80, 80, skillSelection / denominator);
+				skillScrollbar.Position = skillScrollbar.Position.SmoothDamp(Vector2.Right * targetPosition, ref scrollVelocity, ScrollSmoothing);
+			}
+		}
 
 		if (Input.IsActionJustPressed("button_pause"))
 		{
@@ -339,8 +357,8 @@ public partial class PauseMenu : Node
 
 	private void UpdateSkillDescription()
 	{
-		SkillKey key = SaveManager.ActiveSkillRing.EquippedSkills[currentSelection];
-		description.SetText(Runtime.Instance.SkillList.GetSkill(key).DescriptionKey);
+		PauseSkill pauseSkill = skillContainer.GetChild<PauseSkill>(currentSelection);
+		description.SetText(pauseSkill.Skill.DescriptionKey);
 		description.ShowDescription();
 	}
 
@@ -348,8 +366,8 @@ public partial class PauseMenu : Node
 	private float unpausedSpeed;
 	private void TogglePause()
 	{
-		canMoveCursor = false; //Disable cursor movement
-		AllowPausing = false; //Disable pause inputs during the animation
+		canMoveCursor = false; // Disable cursor movement
+		AllowPausing = false; // Disable pause inputs during the animation
 
 		isActive = !isActive;
 		animator.Set(ConfirmEnabledTransition, "false");
@@ -358,8 +376,11 @@ public partial class PauseMenu : Node
 		else
 			animator.Set(StateRequest, "status-hide");
 
-		if (isActive) //Reset selection
+		if (isActive) // Reset selection
 		{
+			// Reset cursors
+			skillCursorAnimator.Play("RESET");
+
 			UpdateSelection(0);
 			UpdateCursorPosition();
 			animator.Set(ShowTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);

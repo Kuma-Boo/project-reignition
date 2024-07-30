@@ -66,7 +66,6 @@
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="68_wfrq5"]
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="69_kptet"]
 
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_1mwhh"]
 size = Vector3(100, 100, 250)
 
@@ -96,7 +95,7 @@ _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -1), -2.4, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7im1x"]
-size = Vector3(15, 20, 2.5)
+size = Vector3(15, 20, 5)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_af8b2"]
 
@@ -156,8 +155,8 @@ min_value = -1.0
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -0.6), -2.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_y0gjs"]
-radius = 2.0
+[sub_resource type="BoxShape3D" id="BoxShape3D_spxmb"]
+size = Vector3(2, 2, 5)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_mwx1a"]
 radius = 0.2
@@ -2349,7 +2348,7 @@ path = NodePath("../../../../Static/Path/RiverPath")
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 0.766998, 2.6837, 18.454)
 script = ExtResource("7_ys7sj")
 delays = [0.0, 0.4, 4.0, 0.0]
-displayLength = [2.0, 0.5, 0.0, null]
+displayLength = [0.0, 0.5, 0.0, null]
 textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
 
 [node name="RiverEvent" parent="MainAct/RiverEvent/Event" instance=ExtResource("19_rr5sk")]
@@ -2361,6 +2360,7 @@ shape = SubResource("BoxShape3D_7im1x")
 
 [node name="River" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -190, -95, -495)
+visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -5020,7 +5020,7 @@ transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926
 length = 10.0
 
 [node name="SpiralAutomationTrigger" parent="MainAct/Spiral" instance=ExtResource("48_5fd6j")]
-transform = Transform3D(-0.980615, 0, 0.195946, 0, 1, 0, -0.195946, 0, -0.980615, -0.360779, 1.03506, 2.17096)
+transform = Transform3D(-0.896487, 0, 0.443071, 0, 1, 0, -0.443071, 0, -0.896487, 0.340881, 1.23506, -0.228577)
 endPoint = 365.0
 ignoreDirection = true
 
@@ -5029,7 +5029,7 @@ script = ExtResource("27_l6k7w")
 path = NodePath("../../../../Static/Path/SpiralAutomationPath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Spiral/SpiralAutomationTrigger"]
-shape = SubResource("SphereShape3D_y0gjs")
+shape = SubResource("BoxShape3D_spxmb")
 
 [node name="JumpChainGroup" type="Node3D" parent="MainAct/Spiral"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.53418, 7.55009, 12.727)
@@ -5736,6 +5736,7 @@ Movement/Angle = -90.0
 startPaused = true
 smoothPausing = true
 root = NodePath("FlowerMajin3")
+animator = NodePath("")
 
 [node name="FlowerMajin3" parent="MainAct/Crossing/FlowerMajinMover" instance=ExtResource("47_fimbn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -6.10352e-05)
@@ -6503,7 +6504,6 @@ transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615
 
 [node name="End" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -742, -262, -1073)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -6676,10 +6676,10 @@ finalHeight = 5.0
 voiceKey = &""
 
 [node name="JumpPanel1" parent="MainAct/End" instance=ExtResource("53_8w2hc")]
-transform = Transform3D(-0.379456, 0, -0.92521, 0, 1, 0, 0.92521, 0, -0.379456, -19.6684, 16.3, 27.6837)
+transform = Transform3D(-0.38107, 0, -0.924546, 0, 1, 0, 0.924546, 0, -0.38107, -17.9166, 16.3, 28.5856)
 middleHeight = 2.0
-finalHeight = -12.0
-distance = 31.0
+finalHeight = -15.0
+distance = 33.0
 
 [node name="Camera" type="Node3D" parent="MainAct/End/JumpPanel1"]
 script = ExtResource("27_dpcvf")
@@ -6994,10 +6994,14 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="JumpFinished" from="MainAct/CavernBoat/BoatStartTrigger/Jump" to="MainAct/CavernBoat/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/CavernBoat/BoatEndTrigger" to="MainAct/CavernBoat/Boat" method="Deactivate"]
 [connection signal="JumpFinished" from="MainAct/CavernBoat/BoatEndTrigger/Jump" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
+[connection signal="Activated" from="MainAct/End/JumpPanel1" to="Static/Collision/FeedingTunnelOneWay" method="Deactivate"]
 [connection signal="Activated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Activate"]
+[connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
 [connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Deactivate"]
 
 [editable path="Static"]
+[editable path="Static/Visuals/03Cave"]
+[editable path="Static/Visuals/03CaveSky"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara1"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara2"]
 [editable path="Static/CompletionDemo"]

@@ -1,9 +1,8 @@
-[gd_scene load_steps=133 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=145 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
 [ext_resource type="Resource" uid="uid://dgl1qo3c2ocum" path="res://area/2 dino jungle/data/DialogLibrary.tres" id="2_2vrnn"]
-[ext_resource type="Environment" uid="uid://dfwf2f7c3ljwg" path="res://area/2 dino jungle/data/Environment.tres" id="4_gsi68"]
 [ext_resource type="PackedScene" uid="uid://c5dih136fv3wc" path="res://area/2 dino jungle/act 1/environment/01Chase.tscn" id="5_8hbmi"]
 [ext_resource type="PackedScene" uid="uid://iij01cwh2ttg" path="res://area/2 dino jungle/act 1/environment/02River.tscn" id="6_51sf7"]
 [ext_resource type="PackedScene" uid="uid://8hi2u5lp8ujo" path="res://area/2 dino jungle/act 1/environment/03Cave.tscn" id="7_fyuv1"]
@@ -103,19 +102,74 @@
 [ext_resource type="PackedScene" uid="uid://6cdlojevxvu7" path="res://area/2 dino jungle/act 1/completion/CompletionDemo.gltf" id="89_i1ci7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ibe76"]
-size = Vector3(20, 20, 2.5)
+size = Vector3(20, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3fp3q"]
 size = Vector3(20, 30, 2.5)
 
+[sub_resource type="Animation" id="Animation_fgslk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../CaveLightEvent/PlayerLight:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.7]
+}
+
+[sub_resource type="Animation" id="Animation_m17ve"]
+resource_name = "event"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../CaveLightEvent/PlayerLight:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.7, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_avq68"]
+resource_name = "event-deactivate"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../CaveLightEvent/PlayerLight:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.7]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_c8ckv"]
+_data = {
+"RESET": SubResource("Animation_fgslk"),
+"event": SubResource("Animation_m17ve"),
+"event-deactivate": SubResource("Animation_avq68")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c6wh8"]
+size = Vector3(66, 44, 143)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_74bek"]
-size = Vector3(10, 20, 2.5)
+size = Vector3(10, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c5pbm"]
-size = Vector3(5, 20, 2.5)
+size = Vector3(5, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7jbaj"]
-size = Vector3(24.2676, 20, 2.5)
+size = Vector3(24.2676, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x053g"]
 size = Vector3(218, 2, 244)
@@ -155,7 +209,7 @@ alpha_curve = SubResource("CurveTexture_w0yt8")
 material = ExtResource("35_oqyu5")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qrtnt"]
-size = Vector3(6, 20, 2.5)
+size = Vector3(6, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_u63uw"]
 size = Vector3(14, 50, 95)
@@ -284,6 +338,67 @@ size = Vector3(8, 10, 15)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hyom4"]
 size = Vector3(5.72754, 10.5288, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xaffb"]
+size = Vector3(15.1752, 29.3977, 18.1023)
+
+[sub_resource type="Gradient" id="Gradient_4ngna"]
+offsets = PackedFloat32Array(0, 0.0465116, 0.914634, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.028, 0, 0.06, 1, 0.95, 0.94525, 0.9025, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_k3y72"]
+gradient = SubResource("Gradient_4ngna")
+
+[sub_resource type="Gradient" id="Gradient_u78s8"]
+interpolation_mode = 1
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.331933, 0.760504)
+colors = PackedColorArray(0.7912, 0.92, 0.6992, 1, 0.786652, 0.968601, 1, 1, 0.471192, 0.639781, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_l2wdy"]
+gradient = SubResource("Gradient_u78s8")
+use_hdr = true
+fill_from = Vector2(1, 1)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_kkar1"]
+panorama = SubResource("GradientTexture2D_l2wdy")
+
+[sub_resource type="Sky" id="Sky_c8n2c"]
+sky_material = SubResource("PanoramaSkyMaterial_kkar1")
+
+[sub_resource type="Environment" id="Environment_f4b5x"]
+background_mode = 1
+background_color = Color(1, 1, 1, 1)
+sky = SubResource("Sky_c8n2c")
+ambient_light_source = 3
+ambient_light_color = Color(0.214362, 0.28108, 0.476243, 1)
+ambient_light_sky_contribution = 0.27
+ambient_light_energy = 0.0
+reflected_light_source = 1
+tonemap_mode = 2
+tonemap_exposure = 1.1
+tonemap_white = 1.1
+ssao_intensity = 1.59
+ssao_power = 2.89781
+ssil_enabled = true
+glow_enabled = true
+glow_levels/1 = 0.1
+glow_levels/2 = 9.19
+glow_levels/4 = 0.5
+glow_levels/5 = 0.0
+glow_levels/6 = 1.0
+glow_intensity = 0.1
+glow_strength = 1.04
+glow_bloom = 0.01
+glow_blend_mode = 1
+glow_hdr_threshold = 1.2
+glow_map_strength = 1.0
+fog_enabled = true
+fog_light_color = Color(0.4275, 0.482125, 0.57, 1)
+fog_density = 0.0005
+adjustment_enabled = true
+adjustment_saturation = 1.1
+adjustment_color_correction = SubResource("GradientTexture1D_k3y72")
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_hpjme")
@@ -422,12 +537,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
 [node name="09B-L" parent="Visuals/CullingMap" instance=ExtResource("15_86eng")]
-transform = Transform3D(0.784171, 0, -0.620546, 0, 1, 0, 0.620546, 0, 0.784171, -764.024, -265.845, -1051.65)
+transform = Transform3D(0.738562, 0, -0.674187, 0, 1, 0, 0.674187, 0, 0.738562, -753.92, -265.845, -1062.78)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/09B-L"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
 [node name="01Chase" parent="Visuals" instance=ExtResource("5_8hbmi")]
@@ -457,32 +572,77 @@ startEnabled = true
 
 [node name="09Scenery" parent="Visuals" instance=ExtResource("13_53845")]
 
-[node name="Lighting" type="Node3D" parent="Visuals"]
-
-[node name="ObjectLight" type="DirectionalLight3D" parent="Visuals/Lighting"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-layers = 1024
-light_color = Color(0.969945, 0.966589, 0.886628, 1)
-light_energy = 0.7
-light_cull_mask = 4293918785
-directional_shadow_mode = 0
-directional_shadow_max_distance = 0.0
-
-[node name="EnvironmentLight" type="DirectionalLight3D" parent="Visuals/Lighting"]
-transform = Transform3D(1, 0, 0, 0, -0.081956, 0.996636, 0, -0.996636, -0.081956, 0, 0, 0)
-layers = 1024
-light_color = Color(0.752, 0.94, 0.924333, 1)
-light_energy = 1.2
-light_cull_mask = 4293918722
-shadow_enabled = true
-directional_shadow_mode = 1
-directional_shadow_split_1 = 0.2
-directional_shadow_max_distance = 50.0
-
 [node name="Skybox" parent="Visuals" instance=ExtResource("14_jkuak")]
 
 [node name="Sun" parent="Visuals/Skybox" instance=ExtResource("14_tj504")]
-transform = Transform3D(0.380209, -0.775037, -0.504736, -0.0410142, 0.531054, -0.846345, 0.923991, 0.34249, 0.170124, 883.765, 303.007, -1278.92)
+transform = Transform3D(0.378511, -0.88248, -0.27921, 0.0545048, 0.322381, -0.94504, 0.923991, 0.34249, 0.170124, 295.05, 478.315, -1214.41)
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="CaveLightEvent" type="Node3D" parent="Lighting" node_paths=PackedStringArray("animator")]
+script = ExtResource("16_vyk20")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
+
+[node name="PlayerLight" type="DirectionalLight3D" parent="Lighting/CaveLightEvent"]
+transform = Transform3D(1, 0, 0, 0, -0.20658, 0.97843, 0, -0.97843, -0.20658, 0, 0, 0)
+layers = 1024
+light_color = Color(0.97, 0.96418, 0.7954, 1)
+light_energy = 0.7
+light_cull_mask = 4293918784
+shadow_blur = 10.0
+directional_shadow_mode = 0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Lighting/CaveLightEvent"]
+root_node = NodePath("../../CaveTrigger")
+libraries = {
+"": SubResource("AnimationLibrary_c8ckv")
+}
+
+[node name="CaveTrigger" parent="Lighting" instance=ExtResource("15_86eng")]
+transform = Transform3D(-0.212945, 0, 0.977064, 0, 1, 0, -0.977064, 0, -0.212945, -555.679, -281, -1093.48)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/CaveTrigger"]
+transform = Transform3D(0.999998, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 0.999998, -2.00049, 20, -11.75)
+shape = SubResource("BoxShape3D_c6wh8")
+
+[node name="ObjectLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -0.20658, 0.97843, 0, -0.97843, -0.20658, 0, 0, 0)
+layers = 1024
+light_color = Color(0.97, 0.96418, 0.7954, 1)
+light_energy = 0.7
+light_cull_mask = 4293918721
+shadow_blur = 10.0
+directional_shadow_mode = 0
+
+[node name="EnvironmentLightOutside" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(0.754297, -0.599137, 0.26846, -0.391321, -0.0819558, 0.916598, -0.527166, -0.796441, -0.296274, 0, 2.16971, 0)
+layers = 1024
+light_color = Color(0.94, 0.90052, 0.7426, 1)
+light_energy = 1.3
+light_cull_mask = 4293918722
+shadow_enabled = true
+directional_shadow_mode = 1
+directional_shadow_blend_splits = true
+directional_shadow_fade_start = 0.9
+directional_shadow_max_distance = 75.0
+
+[node name="EnvironmentLightInterior" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1.19249e-08, 1, 0, -1, 1.19249e-08, -367.208, -218.635, -643.37)
+layers = 1024
+light_color = Color(0.94, 0.90052, 0.7426, 1)
+light_energy = 0.2
+light_cull_mask = 4293918724
+shadow_enabled = true
+shadow_bias = 0.02
+directional_shadow_mode = 1
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 50.0
 
 [node name="Trigger" type="Node3D" parent="."]
 
@@ -1501,12 +1661,12 @@ transform = Transform3D(1, 2.98023e-08, -4.24683e-07, -4.16082e-07, -0.185597, -
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670.544, -283.473, -1075.94)
 
 [node name="StartTrigger" parent="Trigger/Object/FeedingRecenterTrigger" instance=ExtResource("15_86eng")]
-transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, 27.0068, 0, 19.8425)
+transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, 27.0068, 4.70001, 19.8425)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/FeedingRecenterTrigger/StartTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, 1, 0)
 shape = SubResource("BoxShape3D_74bek")
 
 [node name="StopTrigger" parent="Trigger/Object/FeedingRecenterTrigger" instance=ExtResource("15_86eng")]
@@ -1900,7 +2060,7 @@ transitionTime = 0.5
 settings = ExtResource("52_tpulw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/DinoFeedingRocksBitesCam"]
-transform = Transform3D(0.966518, 0, -0.256648, 0, 1, 0, 0.256648, 0, 0.966518, -20.7731, 7.29648, 12.7622)
+transform = Transform3D(0.966518, 0, -0.256648, 0, 1, 0, 0.256648, 0, 0.966518, -20.7731, 8.89648, 12.7621)
 shape = SubResource("BoxShape3D_mxt57")
 
 [node name="BackstepWallCam" parent="Trigger/Camera" instance=ExtResource("15_86eng")]
@@ -2018,6 +2178,28 @@ reflectionRenderer = NodePath("../../../../PlanarReflectionRenderer")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
+[node name="Lighting" type="Node3D" parent="Trigger"]
+
+[node name="CavernEnter" type="Area3D" parent="Trigger/Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -570.943, -244.376, -1096.23)
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Lighting/CavernEnter"]
+transform = Transform3D(0.996154, 0, 0.0876252, 0, 1, 0, -0.0876252, 0, 0.996154, 67.4445, -35.9698, -11.246)
+shape = SubResource("BoxShape3D_xaffb")
+
+[node name="CavernExit" type="Area3D" parent="Trigger/Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -570.943, -244.376, -1096.23)
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Lighting/CavernExit"]
+transform = Transform3D(0.711989, 0, 0.70219, 0, 1, 0, -0.70219, 0, 0.711989, -60.9026, -27.0661, 37.8761)
+shape = SubResource("BoxShape3D_xaffb")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Lighting/CavernExit"]
+transform = Transform3D(0.711989, 0, 0.70219, 0, 1, 0, -0.70219, 0, 0.711989, 106.569, -27.0661, -31.0936)
+shape = SubResource("BoxShape3D_xaffb")
+
 [node name="Path" type="Node3D" parent="."]
 
 [node name="ChasePath" type="Path3D" parent="Path"]
@@ -2113,7 +2295,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -877.841, -254.575, -1092.6)
 curve = ExtResource("81_vy7ml")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("4_gsi68")
+environment = SubResource("Environment_f4b5x")
 
 [node name="BGM" parent="." instance=ExtResource("36_8otvo")]
 
@@ -2165,6 +2347,8 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Deactivated" from="Visuals/CullingMap/09-L" to="Visuals/09End" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/09B-L" to="Visuals/09Scenery" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/09B-L" to="Visuals/09Scenery" method="Deactivate"]
+[connection signal="Activated" from="Lighting/CaveTrigger" to="Lighting/CaveLightEvent" method="Activate"]
+[connection signal="Deactivated" from="Lighting/CaveTrigger" to="Lighting/CaveLightEvent" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/RiverSFX" to="Trigger/Object/RiverSFX/RiverSFX1" method="play"]
 [connection signal="Activated" from="Trigger/Object/RiverSFX" to="Trigger/Object/RiverSFX/RiverSFX2" method="play"]
 [connection signal="Activated" from="Trigger/Object/RiverSFX" to="Trigger/Object/RiverSFX/RiverSFX3" method="play"]
@@ -2218,8 +2402,10 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Deactivated" from="Trigger/Object/IslandRecenterTrigger/StartTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/IslandRecenterTrigger/StopTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/IslandRecenterTrigger/StopTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Deactivate"]
-[connection signal="Deactivated" from="Trigger/Object/SidleTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Activate"]
+[connection signal="area_entered" from="Trigger/Lighting/CavernEnter" to="Lighting/CaveLightEvent/PlayerLight" method="_on_cavern_enter_area_entered"]
+[connection signal="area_entered" from="Trigger/Lighting/CavernExit" to="Lighting/CaveLightEvent/PlayerLight" method="_on_cavern_exit_area_entered"]
 
+[editable path="Visuals/03CaveSky"]
 [editable path="Trigger/Object/DinoParaGroup/DinoPara1"]
 [editable path="Trigger/Object/DinoParaGroup/DinoPara2"]
 [editable path="CompletionDemo"]
