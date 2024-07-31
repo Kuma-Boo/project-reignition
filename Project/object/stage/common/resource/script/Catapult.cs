@@ -200,6 +200,14 @@ public partial class Catapult : Launcher
 		EmitSignal(SignalName.PlayerEntered);
 	}
 
+	protected override void PlayLaunchSfx()
+	{
+		if (IsSfxActive)
+			return;
+
+		base.PlayLaunchSfx();
+	}
+
 	private void StartProcessing() => isProcessing = true;
 	private void StopProcessing()
 	{

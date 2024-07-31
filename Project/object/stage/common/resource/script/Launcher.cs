@@ -166,7 +166,6 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	public virtual void Activate()
 	{
 		EmitSignal(SignalName.Activated);
-
 		PlayLaunchSfx();
 
 		if (voiceKey?.IsEmpty == false)
@@ -205,11 +204,8 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	[Export]
 	/// <summary> Optional SFX player. </summary>
 	private AudioStreamPlayer3D sfxPlayer;
-	protected void PlayLaunchSfx()
-	{
-		if (sfxPlayer?.Playing == false)
-			sfxPlayer.Play();
-	}
+	protected bool IsSfxActive => sfxPlayer.Playing;
+	protected virtual void PlayLaunchSfx() => sfxPlayer.Play();
 	[Export]
 	/// <summary> Option voice to play. </summary>
 	private StringName voiceKey;
