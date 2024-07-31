@@ -82,7 +82,8 @@ public partial class SFXLibraryResource : Resource
 				reorderMode = (ReorderModeEnum)(int)value;
 				break;
 			case "Editing/Organization/Reorder":
-				ReorderKey();
+				if ((bool)value)
+					ReorderKey();
 				NotifyPropertyListChanged();
 				break;
 			case "Editing/Key":
@@ -105,6 +106,9 @@ public partial class SFXLibraryResource : Resource
 
 	private void ReorderKey()
 	{
+		if (!Engine.IsEditorHint())
+			return;
+
 		if (reorderIndex == keyEditingIndex)
 		{
 			GD.Print("Target key and editing key are the same. Nothing will happen.");
