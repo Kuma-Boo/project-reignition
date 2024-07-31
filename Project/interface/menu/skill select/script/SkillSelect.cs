@@ -96,7 +96,18 @@ public partial class SkillSelect : Menu
 		float targetScrollPosition = (160 * scrollRatio) - 80;
 		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, ScrollSmoothing);
 	}
+	protected override void ProcessMenu()
+	{
+		if (Input.IsActionJustPressed("button_pause"))
+		{
+			Reset();
+			Redraw();
+			animator.Play("unequip");
+		}
 
+		base.ProcessMenu();
+			
+	}
 	protected override void Cancel()
 	{
 		if (IsAlertMenuActive)
@@ -191,6 +202,14 @@ public partial class SkillSelect : Menu
 		// TODO Change sort method when speedbreak is pressed
 	}
 
+	private void Reset() //Turns off all active skills except for zero-cost skills
+	{
+		if (IsAlertMenuActive == false)
+		{
+			ActiveSkillRing.Reset();
+			ActiveSkillRing.UpdateTotalCost();
+		}
+	}
 	private void UpdateDescription()
 	{
 		if (IsEditingAugment)

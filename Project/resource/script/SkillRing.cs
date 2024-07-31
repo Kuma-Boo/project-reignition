@@ -50,6 +50,20 @@ public class SkillRing
 		}
 	}
 
+	public void Reset()//Resets the skill ring, except for zero-cost skills
+	{
+		for (int i = 0; i < EquippedSkills.Count; i++)
+		{
+			SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(EquippedSkills[i]);
+			
+			if (baseSkill.Cost == 0)
+				continue;
+			else
+				UnequipSkill(EquippedSkills[i],GetAugmentIndex(EquippedSkills[i]));
+			i -= 1;
+		}
+		
+	}
 	/// <summary> Returns the precise skill resource that is conflicting with a given skill key. </summary>
 	public SkillResource GetConflictingSkill(SkillKey key)
 	{
