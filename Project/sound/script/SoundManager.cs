@@ -71,7 +71,7 @@ public partial class SoundManager : Node
 		subtitleLabel.Text = string.Empty;
 
 		// Show background during cutscenes, disable during in-game dialog
-		subtitleLetterbox.SelfModulate = dialog.isCutscene ? Colors.White : Colors.Transparent;
+		subtitleLetterbox.SelfModulate = dialog.IsCutscene ? Colors.White : Colors.Transparent;
 
 		currentDialog = dialog;
 		currentDialogIndex = 0;
