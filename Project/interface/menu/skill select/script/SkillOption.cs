@@ -17,6 +17,7 @@ public partial class SkillOption : Control
 	private Label nameLabel;
 	[Export]
 	private Label costLabel;
+
 	[Export]
 	private AnimationPlayer animator;
 	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
@@ -31,6 +32,8 @@ public partial class SkillOption : Control
 			return;
 		}
 
+
+
 		// Update all the data that doesn't change
 		animator.Play(Skill.Element.ToString().ToLower());
 		animator.Advance(0);
@@ -39,6 +42,9 @@ public partial class SkillOption : Control
 
 		nameLabel.Text = Skill.NameKey;
 		costLabel.Text = Skill.Cost.ToString("00");
+
+		
+
 		Redraw();
 	}
 
@@ -46,6 +52,9 @@ public partial class SkillOption : Control
 	{
 		if (Skill == null)
 			return;
+
+
+		
 
 		numberLabel.Text = Number.ToString("00");
 		// Redraw equip status
@@ -67,7 +76,14 @@ public partial class SkillOption : Control
 			animator.Play("unequipped");
 		}
 
+		
+
 		animator.Advance(0);
+
+		if (Skill.HasAugments)
+		{
+			animator.Play("light_menuindicator");
+		}
 	}
 
 	private bool IsTooExpensive()
