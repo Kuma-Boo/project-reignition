@@ -788,7 +788,7 @@ namespace Project.Gameplay
 		/// <summary> How much should the steepest slope affect the player? </summary>
 		private const float SlopeInfluenceStrength = .2f;
 		/// <summary> Slopes that are shallower than Mathf.PI * threshold are ignored. </summary>
-		private const float SlopeThreshold = .2f;
+		private const float SlopeThreshold = .1f;
 		private void UpdateSlopeSpeed()
 		{
 			slopeRatio = 0;
@@ -801,7 +801,7 @@ namespace Project.Gameplay
 			slopeRatio = PathFollower.Forward().Dot(Vector3.Up);
 			if (Mathf.Abs(slopeRatio) <= SlopeThreshold) return;
 
-			slopeRatio = Mathf.Lerp(-SlopeInfluenceStrength, SlopeInfluenceStrength, slopeRatio);
+			slopeRatio = Mathf.Lerp(-SlopeInfluenceStrength, SlopeInfluenceStrength, (slopeRatio * .5f) + .5f);
 			if (slopeRatio > 0 && Skills.IsSkillEquipped(SkillKey.AllRounder)) // Cancel slope influence when moving upwards
 				slopeRatio = 0;
 
@@ -1232,6 +1232,7 @@ namespace Project.Gameplay
 					inputAmount = -(1 - InputVector.Length()) * .5f; // 0 to -0.5
 
 				inputAmount -= slopeRatio * SlopeInfluenceStrength;
+				inputAmount = Mathf.Clamp(inputAmount, 0, 1);
 				MoveSpeed = Skills.SlideSettings.UpdateSlide(MoveSpeed, inputAmount);
 			}
 			else if (ActionState == ActionStates.Crouching)
