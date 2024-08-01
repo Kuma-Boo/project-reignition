@@ -392,7 +392,7 @@ public partial class GrindRail : Area3D
 		}
 		else
 		{
-			Character.Effect.PlayActionSFX("perfect shuffle");
+			Character.Effect.PerfectGrindShuffleFX();
 		}
 
 		Character.MoveSpeed = targetSpeed;
