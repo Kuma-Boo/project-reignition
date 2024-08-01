@@ -18,6 +18,8 @@ public partial class PlanarReflectionRenderer : Node3D
 	private Camera3D reflectionCamera;
 	[Export]
 	private SubViewport reflectionViewport;
+	[Export]
+	private SubViewportContainer reflectionViewportContainer;
 	private Camera3D GameplayCamera => CharacterController.instance.Camera.Camera;
 
 	[Export]
@@ -26,6 +28,15 @@ public partial class PlanarReflectionRenderer : Node3D
 
 	private Callable UpdatePositionCallable => new(this, MethodName.UpdatePosition);
 	private Callable ApplyTextureCallable => new(this, MethodName.ApplyTexture);
+
+	public override void _Input(InputEvent e)
+	{
+		if (!OS.IsDebugBuild())
+			return;
+
+		if (Input.IsActionJustPressed("debug_reflection"))
+			reflectionViewportContainer.Visible = !reflectionViewportContainer.Visible;
+	}
 
 	public override void _EnterTree()
 	{
