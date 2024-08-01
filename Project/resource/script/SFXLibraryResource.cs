@@ -266,7 +266,7 @@ public partial class SFXLibraryResource : Resource
 			if (fallbackResource != null) // Fallback if possible
 				return fallbackResource.GetStream(key, channel, sfxIndex);
 
-			GD.PrintErr($"Couldn't find sfx '{key}'!");
+			GD.PushWarning($"Couldn't find sfx '{key}'!");
 			return null;
 		}
 
