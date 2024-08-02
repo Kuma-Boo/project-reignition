@@ -1,14 +1,9 @@
-[gd_scene load_steps=25 format=3 uid="uid://bntrixspwpi2"]
+[gd_scene load_steps=19 format=3 uid="uid://bntrixspwpi2"]
 
 [ext_resource type="Script" path="res://object/enemy/golem/data/GolemMajin.cs" id="1_qx3kf"]
 [ext_resource type="PackedScene" uid="uid://623w0nu8qp3d" path="res://object/enemy/golem/data/model/GolemMajin.gltf" id="1_x1tra"]
 [ext_resource type="Script" path="res://object/enemy/EnemyHurtbox.cs" id="3_r5w0e"]
 [ext_resource type="PackedScene" uid="uid://dvoongbmetjfh" path="res://object/stage/common/Grindrail.tscn" id="3_w2hby"]
-[ext_resource type="Animation" uid="uid://bwighvm66o7c2" path="res://object/enemy/golem/data/model/animation/defeat.res" id="4_pjs84"]
-[ext_resource type="Animation" uid="uid://dq4pmubffeqkg" path="res://object/enemy/golem/data/model/animation/RESET.res" id="5_rp51u"]
-[ext_resource type="Animation" uid="uid://bdhrpcinawpab" path="res://object/enemy/golem/data/model/animation/gear.res" id="6_1ijpp"]
-[ext_resource type="Animation" uid="uid://b7fvfmll6lgk6" path="res://object/enemy/golem/data/model/animation/idle.res" id="7_rmo1x"]
-[ext_resource type="Animation" uid="uid://beupxr24wdce7" path="res://object/enemy/golem/data/model/animation/walk.res" id="8_7b7im"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ju60i"]
 size = Vector3(2.6, 1, 6)
@@ -35,15 +30,6 @@ size = Vector3(2, 0.5, 10)
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_s76cu"]
 height = 15.0
 radius = 50.0
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_vnp0a"]
-_data = {
-"RESET": ExtResource("5_rp51u"),
-"defeat": ExtResource("4_pjs84"),
-"gear": ExtResource("6_1ijpp"),
-"idle": ExtResource("7_rmo1x"),
-"walk": ExtResource("8_7b7im")
-}
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_c1lnh"]
 animation = &"defeat"
@@ -74,7 +60,6 @@ input_2/reset = true
 animation = &"walk"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_xmh3l"]
-graph_offset = Vector2(-913.261, 204.994)
 nodes/defeat_anim/node = SubResource("AnimationNodeAnimation_c1lnh")
 nodes/defeat_anim/position = Vector2(-700, 380)
 nodes/gear_add/node = SubResource("AnimationNodeAdd2_4we8v")
@@ -89,10 +74,10 @@ nodes/walk_anim/node = SubResource("AnimationNodeAnimation_xilgg")
 nodes/walk_anim/position = Vector2(-880, 320)
 node_connections = [&"gear_add", 0, &"state_transition", &"gear_add", 1, &"gear_anim", &"output", 0, &"gear_add", &"state_transition", 0, &"idle_anim", &"state_transition", 1, &"walk_anim", &"state_transition", 2, &"defeat_anim"]
 
-[node name="GolemMajin" type="Node3D" node_paths=PackedStringArray("root", "hurtbox", "animationTree")]
+[node name="GolemMajin" type="Node3D"]
 script = ExtResource("1_qx3kf")
-root = NodePath("GolemMajin")
 hurtbox = NodePath("GolemMajin/GolemMajinRoot/Skeleton3D/Head/Hurtbox")
+rangeCollider = NodePath("RangeTrigger/CollisionShape3D")
 animationTree = NodePath("AnimationTree")
 
 [node name="GolemMajin" parent="." instance=ExtResource("1_x1tra")]
@@ -171,8 +156,6 @@ blend_times = [&"walk", &"defeat", 0.2]
 [node name="GrindrailR" parent="." node_paths=PackedStringArray("rail") instance=ExtResource("3_w2hby")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.1, -4.5)
 rail = NodePath("Path")
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="Path" type="Path3D" parent="GrindrailR"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 4.5)
@@ -185,8 +168,6 @@ disabled = true
 [node name="GrindrailL" parent="." node_paths=PackedStringArray("rail") instance=ExtResource("3_w2hby")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.1, -4.5)
 rail = NodePath("Path")
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="Path" type="Path3D" parent="GrindrailL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 4.5)
@@ -208,9 +189,6 @@ shape = SubResource("CylinderShape3D_s76cu")
 [node name="AnimationTree" type="AnimationTree" parent="."]
 active = false
 root_node = NodePath("../GolemMajin")
-libraries = {
-"": SubResource("AnimationLibrary_vnp0a")
-}
 tree_root = SubResource("AnimationNodeBlendTree_xmh3l")
 anim_player = NodePath("../GolemMajin/AnimationPlayer")
 parameters/gear_add/add_amount = 1.0

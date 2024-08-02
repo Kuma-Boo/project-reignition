@@ -57,14 +57,25 @@ public partial class LevelResult : Control
 
 			// Determine which scene to load without connecting it
 			if (Input.IsActionJustPressed("button_action")) // Retry stage
-				TransitionManager.instance.QueuedScene = string.Empty;
+			{
+				TransitionManager.QueueSceneChange(string.Empty);
+				TransitionManager.StartTransition(new()
+				{
+					inSpeed = .5f,
+					outSpeed = .5f,
+					color = Colors.Black,
+					disableAutoTransition = true
+				});
+			}
 			else// if (Level.storyEventIndex == 0) // Load main menu
+			{
 				TransitionManager.instance.QueuedScene = TransitionManager.MENU_SCENE_PATH;
+				EmitSignal(SignalName.ContinuePressed);
+			}
+
 			// TODO Load story event
 			//TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}{Level.storyEventIndex}.tscn");
-
 			// Actual scene transition is handled by the experience results screen (which is connected via this signal)
-			EmitSignal(SignalName.ContinuePressed);
 		}
 	}
 
@@ -104,11 +115,11 @@ public partial class LevelResult : Control
 				NotificationMenu.AddNotification(NotificationMenu.NotificationType.World, $"unlock_{Stage.Data.UnlockWorld.ToString().ToSnakeCase()}");
 			}
 
-			foreach (var UnlockStage in Stage.Data.UnlockStage)
+			foreach (var stage in Stage.Data.UnlockStage)
 			{
-				if (!SaveManager.ActiveGameData.IsStageUnlocked(UnlockStage.LevelID))
+				if (!SaveManager.ActiveGameData.IsStageUnlocked(stage.LevelID))
 				{
-					SaveManager.ActiveGameData.UnlockStage(UnlockStage.LevelID);
+					SaveManager.ActiveGameData.UnlockStage(stage.LevelID);
 					NotificationMenu.AddNotification(NotificationMenu.NotificationType.Mission, "unlock_mission");
 				}
 			}

@@ -44,6 +44,13 @@ public partial class HeadsUpDisplay : Control
 	private Sprite2D ringDividerSprite;
 	[Export]
 	private AnimationTree ringAnimator;
+	[Export]
+	private AnimationPlayer fireSoulAnimator;
+	public void CollectFireSoul()
+	{
+		fireSoulAnimator.Play("firesoul");
+		fireSoulAnimator.Seek(0.0, true);
+	}
 
 	private const string RingLabelFormat = "000";
 	private readonly StringName EnabledParameter = "enabled";

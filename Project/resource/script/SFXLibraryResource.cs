@@ -16,15 +16,19 @@ public partial class SFXLibraryResource : Resource
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
 	{
-		Array<Dictionary> properties = new Array<Dictionary>();
-
-		properties.Add(ExtensionMethods.CreateProperty("Settings/Channel Count", Variant.Type.Int, PropertyHint.Range, "1,9"));
-		properties.Add(ExtensionMethods.CreateProperty("Settings/Key Names", Variant.Type.Array, PropertyHint.TypeString, "21/0:StringName"));
+		Array<Dictionary> properties =
+		[
+			ExtensionMethods.CreateProperty("Settings/Channel Count", Variant.Type.Int, PropertyHint.Range, "1,9"),
+			ExtensionMethods.CreateProperty("Settings/Key Names", Variant.Type.Array, PropertyHint.TypeString, "21/0:StringName"),
+		];
 		ValidateArrays();
 
 		channelEditingIndex = Mathf.Clamp(channelEditingIndex, 1, channelCount);
 		keyEditingIndex = Mathf.Clamp(keyEditingIndex, 0, KeyCount);
 
+		properties.Add(ExtensionMethods.CreateProperty("Editing/Organization/Target", Variant.Type.Int, PropertyHint.Enum, GetKeyList(keys)));
+		properties.Add(ExtensionMethods.CreateProperty("Editing/Organization/Mode", Variant.Type.Int, PropertyHint.Enum, reorderMode.EnumToString()));
+		properties.Add(ExtensionMethods.CreateProperty("Editing/Organization/Reorder", Variant.Type.Bool));
 		properties.Add(ExtensionMethods.CreateProperty("Editing/Key", Variant.Type.Int, PropertyHint.Enum, GetKeyList(keys)));
 		properties.Add(ExtensionMethods.CreateProperty("Editing/Channel", Variant.Type.Int, PropertyHint.Range, "1, 9"));
 
@@ -42,6 +46,10 @@ public partial class SFXLibraryResource : Resource
 				return channelCount;
 			case "Settings/Key Names":
 				return keys;
+			case "Editing/Organization/Target":
+				return reorderIndex;
+			case "Editing/Organization/Mode":
+				return (int)reorderMode;
 			case "Editing/Key":
 				return keyEditingIndex;
 			case "Editing/Channel":
@@ -67,6 +75,17 @@ public partial class SFXLibraryResource : Resource
 				ValidateArrays();
 				NotifyPropertyListChanged();
 				break;
+			case "Editing/Organization/Target":
+				reorderIndex = (int)value;
+				break;
+			case "Editing/Organization/Mode":
+				reorderMode = (ReorderModeEnum)(int)value;
+				break;
+			case "Editing/Organization/Reorder":
+				if ((bool)value)
+					ReorderKey();
+				NotifyPropertyListChanged();
+				break;
 			case "Editing/Key":
 				keyEditingIndex = (int)value;
 				NotifyPropertyListChanged();
@@ -83,6 +102,64 @@ public partial class SFXLibraryResource : Resource
 		}
 
 		return true;
+	}
+
+	private void ReorderKey()
+	{
+		if (!Engine.IsEditorHint())
+			return;
+
+		if (reorderIndex == keyEditingIndex)
+		{
+			GD.Print("Target key and editing key are the same. Nothing will happen.");
+			return;
+		}
+
+		string key = keys[keyEditingIndex];
+		Array<Array<AudioStream>> stream = [];
+		for (int i = 0; i < channelCount; i++)
+			stream.Add(streams[i][keyEditingIndex]);
+
+		if (reorderMode == ReorderModeEnum.Swap)
+		{
+			keys[keyEditingIndex] = keys[reorderIndex];
+			for (int i = 0; i < channelCount; i++)
+				streams[i][keyEditingIndex] = streams[i][reorderIndex];
+
+			keys[reorderIndex] = key;
+			for (int i = 0; i < channelCount; i++)
+				streams[i][reorderIndex] = stream[i];
+
+			keyEditingIndex = reorderIndex;
+			GD.Print($"Swapped positions of {keys[reorderIndex]} and {keys[keyEditingIndex]}.");
+			return;
+		}
+
+		keys.RemoveAt(keyEditingIndex); // Remove the data at the current index
+		for (int i = 0; i < channelCount; i++)
+			streams[i].RemoveAt(keyEditingIndex);
+
+		int insertionPoint = reorderIndex;
+		if (reorderMode == ReorderModeEnum.After)
+			insertionPoint = reorderIndex + 1;
+		if (keyEditingIndex < reorderIndex) // Take deletions into account
+			insertionPoint--;
+
+		if (insertionPoint >= KeyCount)
+		{
+			keys.Add(key);
+			for (int i = 0; i < channelCount; i++)
+				streams[i].Add(stream[i]);
+		}
+		else
+		{
+			keys.Insert(insertionPoint, key);
+			for (int i = 0; i < channelCount; i++)
+				streams[i].Insert(insertionPoint, stream[i]);
+		}
+
+		keyEditingIndex = insertionPoint;
+		GD.Print($"Moved {key}.");
 	}
 
 	private string GetKeyList(Array<StringName> array)
@@ -103,11 +180,8 @@ public partial class SFXLibraryResource : Resource
 	/// </summary>
 	private void ValidateArrays()
 	{
-		if (keys == null)
-			keys = new Array<StringName>();
-
-		if (streams == null)
-			streams = new Array<Array<Array<AudioStream>>>();
+		keys ??= [];
+		streams ??= [];
 
 		if (streams.Count != channelCount)
 			streams.Resize(channelCount);
@@ -115,7 +189,7 @@ public partial class SFXLibraryResource : Resource
 		for (int i = 0; i < channelCount; i++)
 		{
 			if (streams[i] == null || streams[i].Count == 0)
-				streams[i] = new Array<Array<AudioStream>>();
+				streams[i] = [];
 
 			if (streams[i].Count != KeyCount)
 				streams[i].Resize(KeyCount);
@@ -123,7 +197,7 @@ public partial class SFXLibraryResource : Resource
 			for (int j = 0; j < KeyCount; j++)
 			{
 				if (streams[i][j] == null || streams[i][j].Count == 0)
-					streams[i][j] = new Array<AudioStream>();
+					streams[i][j] = [];
 			}
 		}
 	}
@@ -133,7 +207,7 @@ public partial class SFXLibraryResource : Resource
 	/// </summary>
 	private void CheckDuplicateKeys()
 	{
-		Array<string> duplicateKeyChecker = new Array<string>();
+		Array<string> duplicateKeyChecker = [];
 		for (int i = 0; i < KeyCount; i++)
 		{
 			if (string.IsNullOrEmpty(keys[i]))
@@ -146,11 +220,15 @@ public partial class SFXLibraryResource : Resource
 		duplicateKeyChecker.Clear();
 	}
 	#endregion
-
+	[Export]
+	private SFXLibraryResource fallbackResource;
 	[ExportGroup("DON'T EDIT THESE DIRECTLY!")]
 	[Export]
 	private Array<StringName> keys;
 	public int KeyCount => keys.Count;
+	/// <summary> Arrays are ordered in Channel -> Key -> Index. </summary>
+	[Export]
+	private Array<Array<Array<AudioStream>>> streams;
 
 	/// <summary>
 	/// How many channels does this library contain?
@@ -159,14 +237,20 @@ public partial class SFXLibraryResource : Resource
 	[Export]
 	private int channelCount = 1;
 
-	/// <summary> Arrays are ordered in Channel -> Key -> Index. </summary>
-	[Export]
-	private Array<Array<Array<AudioStream>>> streams;
-
 	/// <summary> Current channel index being edited in the inspector. </summary>
 	private int channelEditingIndex;
 	/// <summary> Current key index being edited in the inspector. </summary>
 	private int keyEditingIndex;
+
+	private int reorderIndex;
+	private ReorderModeEnum reorderMode;
+	/// <summary> Reorder swap mode. </summary>
+	private enum ReorderModeEnum
+	{
+		Before, // Moves the current key before the target key
+		After, // Moves the current key after the target key
+		Swap, // Swaps two keys with each other
+	}
 
 	/// <summary>
 	/// Returns a random sound effect from a library.
@@ -179,26 +263,32 @@ public partial class SFXLibraryResource : Resource
 
 		if (keyIndex == -1)
 		{
-			GD.PrintErr($"Couldn't find sfx '{key}'!");
+			if (fallbackResource != null) // Fallback if possible
+				return fallbackResource.GetStream(key, channel, sfxIndex);
+
+			GD.PushWarning($"Couldn't find sfx '{key}'!");
 			return null;
 		}
 
-		int maxIndex = streams[channel][keyIndex].Count; //Get max random index
+		int maxIndex = streams[channel][keyIndex].Count; // Get max random index
 
-		if (maxIndex == 0) //No sound effect found
+		if (maxIndex == 0) // No sound effect found
 		{
+			if (fallbackResource != null) // Fallback if possible
+				return fallbackResource.GetStream(key, channel, sfxIndex);
+
 			GD.PrintErr($"No sfx found for '{key}' on channel {channel}!");
 			return null;
 		}
 
-		if (maxIndex == 1) //Randomization isn't possible with only one sfx.
+		if (maxIndex == 1) // Randomization isn't possible with only one sfx.
 			sfxIndex = 0;
-		else if (sfxIndex == -1) //Randomize sfx
+		else if (sfxIndex == -1) // Randomize sfx
 			sfxIndex = Runtime.randomNumberGenerator.RandiRange(0, maxIndex - 1);
 
 		return streams[channel][keyIndex][sfxIndex];
 	}
-	public AudioStream GetStream(int index, int channel = 0, int sfxIndex = -1) => GetStream(GetKeyByIndex(index), channel, sfxIndex);
 
+	public AudioStream GetStream(int index, int channel = 0, int sfxIndex = -1) => GetStream(GetKeyByIndex(index), channel, sfxIndex);
 	public StringName GetKeyByIndex(int index) => keys[index];
 }

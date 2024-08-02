@@ -437,7 +437,7 @@ tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(640, 544)]
+"values": [Vector2(640, 488)]
 }
 tracks/11/type = "value"
 tracks/11/imported = false
@@ -1259,7 +1259,7 @@ tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(640, 544)]
+"values": [Vector2(640, 488)]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
@@ -1471,7 +1471,7 @@ tracks/12/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(2, 1),
 "update": 0,
-"values": [Vector2(640, 544), Vector2(640, 344)]
+"values": [Vector2(640, 488), Vector2(640, 344)]
 }
 tracks/13/type = "value"
 tracks/13/imported = false
@@ -1900,7 +1900,7 @@ tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(640, 544)]
+"values": [Vector2(640, 488)]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
@@ -3151,7 +3151,7 @@ tracks/12/keys = {
 "times": PackedFloat32Array(0.0666667, 0.333333),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector2(640, 744), Vector2(640, 544)]
+"values": [Vector2(640, 744), Vector2(640, 488)]
 }
 tracks/13/type = "value"
 tracks/13/imported = false
@@ -3224,6 +3224,18 @@ tracks/3/keys = {
 "args": [0.0],
 "method": &"play"
 }]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Description:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_c1m3d"]
@@ -4584,6 +4596,7 @@ input_2/auto_advance = false
 input_2/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_sm8n7"]
+graph_offset = Vector2(-684.444, 340.489)
 nodes/cancel-2/node = SubResource("AnimationNodeAnimation_2e06l")
 nodes/cancel-2/position = Vector2(-240, 1020)
 nodes/confirm/node = SubResource("AnimationNodeTransition_86qql")
@@ -4653,7 +4666,7 @@ nodes/value_selection/node = SubResource("AnimationNodeTransition_6f5vy")
 nodes/value_selection/position = Vector2(-1020, 820)
 node_connections = [&"confirm", 0, &"confirm-0", &"confirm", 1, &"confirm-1", &"confirm", 2, &"confirm-3", &"confirm_enabled", 0, &"pause_add", &"confirm_enabled", 1, &"confirm", &"output", 0, &"confirm_enabled", &"pause_add", 0, &"state", &"pause_add", 1, &"status_hide_trigger", &"selection", 0, &"select-0", &"selection", 1, &"select-1", &"selection", 2, &"select-2", &"selection", 3, &"select-3", &"show_trigger", 0, &"selection", &"show_trigger", 1, &"select_show", &"state", 0, &"hide", &"state", 1, &"hide-static", &"state", 2, &"show", &"state", 3, &"show-static", &"state", 4, &"status-hide", &"status_add", 0, &"value_selection", &"status_add", 1, &"status_selection", &"status_hide_trigger", 0, &"status_show_trigger", &"status_hide_trigger", 1, &"cancel-2", &"status_selection", 0, &"status-0", &"status_selection", 1, &"status-1", &"status_selection", 2, &"status-2", &"status_show_trigger", 0, &"submenu_transition", &"status_show_trigger", 1, &"confirm-2", &"submenu_transition", 0, &"show_trigger", &"submenu_transition", 1, &"status_add", &"value_selection", 0, &"value-0", &"value_selection", 1, &"value-1", &"value_selection", 2, &"value-2"]
 
-[node name="Pause" type="CanvasLayer" node_paths=PackedStringArray("animator", "pauseCursor", "pauseCursorAnimator", "selectSFX", "description", "statusCursor", "statusCursorAnimator", "values", "missionTypeLabel", "missionDescriptionLabel", "fireSoulParent", "fireSoulSprites", "rankSprite", "noSkillLabel", "skillContainer", "skillCursor", "skillCursorAnimator", "levelSprite")]
+[node name="Pause" type="CanvasLayer" node_paths=PackedStringArray("animator", "pauseCursor", "pauseCursorAnimator", "selectSFX", "description", "statusCursor", "statusCursorAnimator", "values", "missionTypeLabel", "missionDescriptionLabel", "fireSoulParent", "fireSoulSprites", "rankSprite", "noSkillLabel", "skillContainer", "skillCursor", "skillCursorAnimator", "levelSprite", "skillScrollbar")]
 process_mode = 3
 layer = 64
 script = ExtResource("1")
@@ -4677,6 +4690,7 @@ skillCursorAnimator = NodePath("Pause/StatusMenu/ValueMenu/Skill/CursorAnchor/An
 pauseSkillScene = ExtResource("2_pyysd")
 rectVerticalValues = PackedInt32Array(346, 8, 195, 244, 295, 98, 51, 145)
 levelSprite = NodePath("Pause/StatusMenu/ValueMenu/LevelTop")
+skillScrollbar = NodePath("Pause/StatusMenu/ValueMenu/Skill/ScrollBar/ScrollPosition")
 
 [node name="Pause" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -4708,12 +4722,12 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -320.0
-offset_top = 4.0
+offset_top = -52.0
 offset_right = 320.0
-offset_bottom = 76.0
+offset_bottom = 36.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Pause"
+text = "sys_pause"
 label_settings = ExtResource("5_j84tu")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -4827,7 +4841,7 @@ position = Vector2(280, 0)
 [node name="Header" type="Label" parent="Pause/StatusMenu"]
 offset_left = -88.0
 offset_top = 136.0
-offset_right = 74.0
+offset_right = 75.0
 offset_bottom = 171.0
 scale = Vector2(2.25, 2.25)
 text = "pause_status"
@@ -4853,7 +4867,7 @@ libraries = {
 [node name="Status" type="Label" parent="Pause/StatusMenu"]
 offset_left = -24.0
 offset_top = 280.0
-offset_right = 138.0
+offset_right = 139.0
 offset_bottom = 315.0
 scale = Vector2(2, 2)
 text = "pause_status"
@@ -4876,7 +4890,7 @@ uppercase = true
 [node name="Mission" type="Label" parent="Pause/StatusMenu"]
 self_modulate = Color(1, 1, 1, 0.588235)
 offset_top = 344.0
-offset_right = 170.0
+offset_right = 172.0
 offset_bottom = 379.0
 scale = Vector2(2, 2)
 text = "pause_mission"
@@ -4899,7 +4913,7 @@ uppercase = true
 [node name="Skills" type="Label" parent="Pause/StatusMenu"]
 self_modulate = Color(1, 1, 1, 0.588235)
 offset_top = 408.0
-offset_right = 140.0
+offset_right = 141.0
 offset_bottom = 443.0
 scale = Vector2(2, 2)
 text = "pause_skill"
@@ -4963,8 +4977,8 @@ region_rect = Rect2(0, 472, 396, 32)
 [node name="Level" type="Label" parent="Pause/StatusMenu/ValueMenu/Status"]
 offset_left = -168.0
 offset_top = -256.0
-offset_right = 24.0
-offset_bottom = -208.0
+offset_right = 26.0
+offset_bottom = -203.0
 text = "pause_lv"
 label_settings = ExtResource("12_twx0t")
 horizontal_alignment = 2
@@ -5006,8 +5020,8 @@ region_rect = Rect2(452, 72, 36, 40)
 [node name="HighScore" type="Label" parent="Pause/StatusMenu/ValueMenu/Status"]
 offset_left = -168.0
 offset_top = -196.0
-offset_right = 214.0
-offset_bottom = -148.0
+offset_right = 226.0
+offset_bottom = -143.0
 theme_override_fonts/font = ExtResource("12_tp5bp")
 theme_override_font_sizes/font_size = 64
 text = "pause_high_score"
@@ -5033,7 +5047,7 @@ metadata/_edit_use_anchors_ = true
 offset_left = -168.0
 offset_top = -140.0
 offset_right = 214.0
-offset_bottom = -92.0
+offset_bottom = -87.0
 theme_override_fonts/font = ExtResource("12_tp5bp")
 theme_override_font_sizes/font_size = 64
 text = "pause_score"
@@ -5062,7 +5076,7 @@ metadata/_edit_use_anchors_ = true
 offset_left = -168.0
 offset_top = -84.0
 offset_right = 214.0
-offset_bottom = -36.0
+offset_bottom = -31.0
 theme_override_fonts/font = ExtResource("12_tp5bp")
 theme_override_font_sizes/font_size = 64
 text = "pause_best_time"
@@ -5091,7 +5105,7 @@ metadata/_edit_use_anchors_ = true
 offset_left = -168.0
 offset_top = -28.0
 offset_right = 214.0
-offset_bottom = 20.0
+offset_bottom = 25.0
 theme_override_fonts/font = ExtResource("12_tp5bp")
 theme_override_font_sizes/font_size = 64
 text = "pause_time"
@@ -5120,7 +5134,7 @@ metadata/_edit_use_anchors_ = true
 offset_left = -168.0
 offset_top = 28.0
 offset_right = 214.0
-offset_bottom = 76.0
+offset_bottom = 81.0
 theme_override_fonts/font = ExtResource("12_tp5bp")
 theme_override_font_sizes/font_size = 64
 text = "pause_stage_exp"
@@ -5149,7 +5163,7 @@ metadata/_edit_use_anchors_ = true
 offset_left = -168.0
 offset_top = 84.0
 offset_right = 214.0
-offset_bottom = 132.0
+offset_bottom = 137.0
 theme_override_fonts/font = ExtResource("12_tp5bp")
 theme_override_font_sizes/font_size = 64
 text = "pause_total_exp"
@@ -5178,7 +5192,7 @@ metadata/_edit_use_anchors_ = true
 offset_left = -168.0
 offset_top = 140.0
 offset_right = 214.0
-offset_bottom = 188.0
+offset_bottom = 193.0
 theme_override_fonts/font = ExtResource("12_tp5bp")
 theme_override_font_sizes/font_size = 64
 text = "pause_gauge"
@@ -5299,8 +5313,8 @@ position = Vector2(-352, -200)
 metadata/_edit_lock_ = true
 
 [node name="Cursor" type="NinePatchRect" parent="Pause/StatusMenu/ValueMenu/Skill/CursorAnchor"]
-offset_right = 696.0
-offset_bottom = 50.0
+offset_right = 640.0
+offset_bottom = 54.0
 scale = Vector2(1, 1e-05)
 pivot_offset = Vector2(0, 25)
 texture = ExtResource("9_eaqga")
@@ -5358,6 +5372,21 @@ offset_bottom = 808.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 4
+
+[node name="ScrollBar" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu/Skill"]
+position = Vector2(320, 8)
+rotation = 1.57079
+scale = Vector2(2, 2)
+texture = ExtResource("9_eaqga")
+region_enabled = true
+region_rect = Rect2(32, 224, 224, 32)
+
+[node name="ScrollPosition" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu/Skill/ScrollBar"]
+position = Vector2(-80, 0)
+rotation = -1.5708
+texture = ExtResource("9_eaqga")
+region_enabled = true
+region_rect = Rect2(8, 224, 24, 24)
 
 [node name="Description" parent="Pause" instance=ExtResource("6_pouoc")]
 layout_mode = 1

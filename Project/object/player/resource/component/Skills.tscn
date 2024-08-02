@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://bemb37fo0seak"]
+[gd_scene load_steps=36 format=3 uid="uid://bemb37fo0seak"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterSkillManager.cs" id="1_rj66u"]
 [ext_resource type="AudioStream" uid="uid://dgg82ed3pd114" path="res://sound/sfx/player/speed break end.wav" id="3_di5ls"]
@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://47a1wqak6nce" path="res://object/player/resource/effect/texture/time break.png" id="7_0xj5j"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/ScreenShock.gdshader" id="9_3ptpg"]
 [ext_resource type="AudioStream" uid="uid://c0ht8bcbttefh" path="res://sound/sfx/player/speed break.wav" id="9_800f8"]
-[ext_resource type="Material" uid="uid://cckx4ey0wayq2" path="res://object/player/resource/effect/material/Speedbreak Streak.tres" id="9_isg35"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/SpeedBreak.gdshader" id="10_6bh0u"]
 [ext_resource type="AudioStream" uid="uid://byvon80bojscd" path="res://sound/sfx/player/heartbeat.wav" id="10_fl25x"]
 [ext_resource type="ArrayMesh" uid="uid://cnxw6wvbmkkar" path="res://object/player/resource/effect/model/SpeedbreakFX.res" id="10_wn37a"]
@@ -84,45 +83,6 @@ _data = {
 "start": SubResource("Animation_ljny0"),
 "stop": SubResource("Animation_hc4f1")
 }
-
-[sub_resource type="Curve" id="Curve_wskfq"]
-_data = [Vector2(0.1, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 0), -7.04173, 0.0, 0, 0]
-point_count = 4
-
-[sub_resource type="CurveTexture" id="CurveTexture_j21f5"]
-width = 64
-curve = SubResource("Curve_wskfq")
-
-[sub_resource type="Curve" id="Curve_govxd"]
-_data = [Vector2(0, 0), 0.0, 2.42837, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_v8u0k"]
-width = 64
-curve = SubResource("Curve_govxd")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_p1qjv"]
-emission_shape_offset = Vector3(0, 0, 10)
-emission_shape = 6
-emission_ring_axis = Vector3(0, 0, 1)
-emission_ring_height = 0.0
-emission_ring_radius = 2.5
-emission_ring_inner_radius = 2.0
-direction = Vector3(0, 0, -1)
-spread = 2.0
-initial_velocity_min = 1.0
-initial_velocity_max = 5.0
-gravity = Vector3(0, 0, 0)
-scale_min = 0.1
-scale_curve = SubResource("CurveTexture_v8u0k")
-color = Color(1.8, 1.2, 0, 1)
-alpha_curve = SubResource("CurveTexture_j21f5")
-hue_variation_min = -0.05
-
-[sub_resource type="QuadMesh" id="QuadMesh_tw248"]
-material = ExtResource("9_isg35")
-size = Vector2(1, 50)
-center_offset = Vector3(0, 25, 0)
 
 [sub_resource type="Curve" id="Curve_bog00"]
 _data = [Vector2(0, 0), 0.0, 7.30253, 0, 0, Vector2(0.231383, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -550,19 +510,6 @@ libraries = {
 }
 
 [node name="SpeedBreak" type="Node3D" parent="."]
-
-[node name="Streaks" type="GPUParticles3D" parent="SpeedBreak"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 4.1128e-08)
-visible = false
-layers = 32
-emitting = false
-amount = 32
-lifetime = 0.3
-fixed_fps = 60
-interpolate = false
-transform_align = 2
-process_material = SubResource("ParticleProcessMaterial_p1qjv")
-draw_pass_1 = SubResource("QuadMesh_tw248")
 
 [node name="Cluster" type="GPUParticles3D" parent="SpeedBreak" node_paths=PackedStringArray("subSystems")]
 transform = Transform3D(1.31134e-07, -4.37114e-08, 1, 4.37114e-08, 1, 4.37114e-08, -1, 4.37114e-08, 1.31134e-07, 0, 0.3, 1.4)

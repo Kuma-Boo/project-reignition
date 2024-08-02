@@ -46,7 +46,7 @@
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="59_4wx81"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mynxt"]
-size = Vector3(12, 20, 3)
+size = Vector3(15, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7xudv"]
 size = Vector3(12, 2, 1)
@@ -305,6 +305,19 @@ textKeys = ["din_flowers_so", "din_flowers_sh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
+[node name="FlowerPickingTrigger2" parent="RampageAct/DialogTriggers" instance=ExtResource("4_8l10n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -349.704, -221.019, -665.779)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/DialogTriggers/FlowerPickingTrigger2"]
+script = ExtResource("9_3ulwd")
+textKeys = ["common_enemy2_so", "common_enemy2_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/DialogTriggers/FlowerPickingTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_mynxt")
+
 [node name="Positioning" type="Node3D" parent="RampageAct/DialogTriggers"]
 transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, -373.305, -215.486, -748.775)
 
@@ -334,6 +347,35 @@ libraries = {
 "": SubResource("AnimationLibrary_l8rqa")
 }
 
+[node name="Jump" type="Node3D" parent="RampageAct/DialogTriggers"]
+transform = Transform3D(0.974913, 0, -0.222586, 0, 1, 0, 0.222586, 0, 0.974913, -440.822, -219.513, -842.445)
+
+[node name="PositioningTrigger" parent="RampageAct/DialogTriggers/Jump" instance=ExtResource("4_8l10n")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
+OneShot = true
+"Respawn Mode" = 2
+
+[node name="Dialog" type="Node3D" parent="RampageAct/DialogTriggers/Jump/PositioningTrigger"]
+script = ExtResource("9_3ulwd")
+textKeys = Array[String](["common_jump_so", "common_jump_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/DialogTriggers/Jump/PositioningTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_7xudv")
+
+[node name="DisableEvent" type="Node3D" parent="RampageAct/DialogTriggers/Jump" node_paths=PackedStringArray("animator")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("7_kv7h2")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("../../Positioning/DisableEvent/AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RampageAct/DialogTriggers/Jump/DisableEvent"]
+libraries = {
+"": SubResource("AnimationLibrary_l8rqa")
+}
+
 [node name="AttackHintTrigger" parent="RampageAct/DialogTriggers" instance=ExtResource("4_8l10n")]
 transform = Transform3D(-2.98023e-08, 0, -1, 0, 1, 0, 1, 0, -2.98023e-08, -314.674, -264.358, -950.988)
 OneShot = true
@@ -345,6 +387,33 @@ randomize = true
 textKeys = ["din_attack_hint_sh", "din_attack_hint2_sh"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/DialogTriggers/AttackHintTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_mynxt")
+
+[node name="SHDialogCaveTrigger" parent="RampageAct/DialogTriggers" instance=ExtResource("4_8l10n")]
+transform = Transform3D(0.97941, 0, -0.201881, 0, 1, 0, 0.201881, 0, 0.97941, -533.184, -274.381, -1091.95)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/DialogTriggers/SHDialogCaveTrigger"]
+script = ExtResource("9_3ulwd")
+randomize = true
+textKeys = ["common_enemy5_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/DialogTriggers/SHDialogCaveTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_mynxt")
+
+[node name="SODialogCaveTrigger" parent="RampageAct/DialogTriggers" instance=ExtResource("4_8l10n")]
+transform = Transform3D(-2.98023e-08, 0, -1, 0, 1, 0, 1, 0, -2.98023e-08, -601.66, -273.211, -1092.22)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/DialogTriggers/SODialogCaveTrigger"]
+script = ExtResource("9_3ulwd")
+textKeys = ["common_enemy7_so", "common_enemy7_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/DialogTriggers/SODialogCaveTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 shape = SubResource("BoxShape3D_mynxt")
 
@@ -779,7 +848,7 @@ transform = Transform3D(0.228878, 0, 0.973455, 0, 1, 0, -0.973455, 0, 0.228878, 
 "Spawn Settings/Amount" = 25
 
 [node name="RedMajin1" parent="RampageAct/Cave" instance=ExtResource("56_2sanu")]
-transform = Transform3D(0.00930247, 0, 0.999956, 0, 1, 0, -0.999956, 0, 0.00930247, -22.6184, 5.9733, -174.782)
+transform = Transform3D(0.00930247, 0, 0.999956, 0, 1, 0, -0.999956, 0, 0.00930247, -22.6184, 5.47331, -174.782)
 "Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
@@ -791,7 +860,7 @@ transform = Transform3D(0.00930247, 0, 0.999956, 0, 1, 0, -0.999956, 0, 0.009302
 rangeOverride = 30
 
 [node name="RedMajin2" parent="RampageAct/Cave" instance=ExtResource("56_2sanu")]
-transform = Transform3D(0.407422, 0, 0.91324, 0, 1, 0, -0.91324, 0, 0.407422, -31.3275, 4.24059, -181.115)
+transform = Transform3D(0.407422, 0, 0.91324, 0, 1, 0, -0.91324, 0, 0.407422, -29.501, 4.24059, -180.3)
 "Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
@@ -1966,6 +2035,7 @@ shape = SubResource("BoxShape3D_c4mxl")
 [connection signal="Activated" from="RampageAct/CullingMap/Cavern-U" to="RampageAct/Cavern" method="Deactivate"]
 [connection signal="Deactivated" from="RampageAct/CullingMap/Cavern-U" to="RampageAct/Cavern" method="Activate"]
 [connection signal="Activated" from="RampageAct/DialogTriggers/Positioning/PositioningTrigger" to="RampageAct/DialogTriggers/Positioning/DisableEvent" method="Activate" flags=3]
+[connection signal="Activated" from="RampageAct/DialogTriggers/Jump/PositioningTrigger" to="RampageAct/DialogTriggers/Jump/DisableEvent" method="Activate" flags=3]
 [connection signal="Activated" from="RampageAct/Cave/Switch" to="RampageAct/Cave/Switch/CullingTrigger" method="Activate"]
 [connection signal="Respawned" from="RampageAct/Cave/Switch" to="RampageAct/Cave/Switch/CullingTrigger" method="Deactivate"]
 [connection signal="Activated" from="RampageAct/Cave/Switch/CullingTrigger/Spring" to="Static/Collision/CaveRightOneWay" method="Deactivate"]

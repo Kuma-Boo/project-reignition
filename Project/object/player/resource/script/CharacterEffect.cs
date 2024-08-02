@@ -178,6 +178,8 @@ public partial class CharacterEffect : Node3D
 	[Export]
 	private GpuParticles3D grindrailBurstParticle;
 	[Export]
+	private GpuParticles3D perfectShuffleParticle;
+	[Export]
 	private AudioStreamPlayer grindrailSfx;
 	private bool isFadingRailSFX;
 	public void StartGrindFX(bool resetSFX)
@@ -198,6 +200,12 @@ public partial class CharacterEffect : Node3D
 		chargeParticle.Visible = false;
 		fullChargeParticle.Emitting = true;
 		grindrailBurstParticle.Restart();
+	}
+
+	public void PerfectGrindShuffleFX()
+	{
+		perfectShuffleParticle.Restart();
+		PlayActionSFX("perfect shuffle");
 	}
 
 	public void UpdateGrindFX(float speedRatio)
