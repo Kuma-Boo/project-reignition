@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://cu3clxd81brgn"]
+[gd_scene load_steps=70 format=3 uid="uid://cu3clxd81brgn"]
 
 [ext_resource type="Resource" uid="uid://k7nptbclbfm3" path="res://resource/level data/evil foundry/Act2Time.tres" id="2_34eee"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_6vb5h"]
@@ -33,6 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="31_42x6v"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="31_mxyuv"]
 [ext_resource type="PackedScene" uid="uid://c3b6ygc13a33j" path="res://object/enemy/majin/data/evil foundry/GreenMajin.tscn" id="32_gwlrw"]
+[ext_resource type="AudioStream" uid="uid://dfj5i62etjmlb" path="res://sound/sfx/stage/evil foundry/hanging scrap event.wav" id="33_edn44"]
 [ext_resource type="PackedScene" uid="uid://0gcen5dmjd" path="res://area/3 evil foundry/object/platform/Crusher.tscn" id="33_uego7"]
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="34_ssr7c"]
 [ext_resource type="PackedScene" uid="uid://det4s2txdn4ka" path="res://area/3 evil foundry/object/Furnace.tscn" id="35_4ax31"]
@@ -196,6 +197,20 @@ tracks/0/keys = {
 "method": &"play"
 }]
 }
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Event/SFX")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ldr67"]
 _data = {
@@ -263,6 +278,9 @@ size = Vector3(12, 10, 2)
 
 [node name="Static" parent="." instance=ExtResource("40_byhqa")]
 Data = ExtResource("2_34eee")
+
+[node name="Trigger" parent="Static" index="1"]
+visible = true
 
 [node name="TimerAct" type="Node3D" parent="."]
 
@@ -382,8 +400,6 @@ saveVisibilityOnCheckpoint = true
 
 [node name="Grindrail1" parent="TimerAct/Start" instance=ExtResource("6_plcea")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0.3, -4)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="Rings" type="Node3D" parent="TimerAct/Start/Grindrail1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -2)
@@ -483,13 +499,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
 
 [node name="Grindrail2" parent="TimerAct/Start" instance=ExtResource("6_plcea")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 23, 5.3, -23)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="Grindrail3" parent="TimerAct/Start" instance=ExtResource("10_u3mwm")]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 21, 5.3, -15)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="Rings" type="Node3D" parent="TimerAct/Start/Grindrail3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -2)
@@ -598,8 +610,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8, 10, 10.5)
 
 [node name="Grindrail4" parent="TimerAct/Start" instance=ExtResource("10_u3mwm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 10.3, 4)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="Rings" type="Node3D" parent="TimerAct/Start/Grindrail4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -7)
@@ -638,8 +648,6 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -34.2,
 
 [node name="Grindrail5" parent="TimerAct/Start" instance=ExtResource("6_plcea")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 10.3, -17)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="ScrapMachineSupport5" parent="TimerAct/Start" instance=ExtResource("11_vwf45")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -31.8, 10, -31.8)
@@ -856,8 +864,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565686, -0.565685, 0)
 
 [node name="Grindrail6" parent="TimerAct/Start" instance=ExtResource("13_o65w7")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 37, 20.3, -27)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="ScrapMachineSupport6" parent="TimerAct/Start" instance=ExtResource("11_vwf45")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 25.2, 20.2, -8.89999)
@@ -878,7 +884,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.1, 28.5, -8.89998)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 40, -194)
 visible = false
 script = ExtResource("5_gkrps")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="DashPanelL" parent="TimerAct/SidleHall" instance=ExtResource("14_v7780")]
@@ -1081,6 +1086,8 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 33.2, 
 "Rotation Settings/Rotation Time" = 2.0
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 5.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="SidleObjects" type="Node3D" parent="TimerAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 160.6, 40, -290)
@@ -1220,6 +1227,8 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6.100
 "Rotation Settings/Rotation Time" = 20.0
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="FootholdTrigger3" parent="TimerAct/SidleObjects" instance=ExtResource("20_d27qt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -4.044)
@@ -1345,7 +1354,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -4.6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -51.5)
 
 [node name="FireSoul1" parent="TimerAct/PlatformHall" instance=ExtResource("31_mxyuv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, -48.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, -53.7)
 
 [node name="ScrapFall" parent="TimerAct/PlatformHall" instance=ExtResource("4_6wf7v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17, -56)
@@ -1359,6 +1368,14 @@ script = ExtResource("15_mtoqc")
 "Trigger Settings/Is One Shot" = true
 "Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
+
+[node name="SFX" type="AudioStreamPlayer3D" parent="TimerAct/PlatformHall/ScrapFall/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.799999, 0)
+stream = ExtResource("33_edn44")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="TimerAct/PlatformHall/ScrapFall/Event"]
 root_node = NodePath("../..")
@@ -1384,8 +1401,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -85)
 
 [node name="Grindrail1" parent="TimerAct/PlatformHall" instance=ExtResource("10_u3mwm")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -11, 0.299999, -110.9)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="Pearls" type="Node3D" parent="TimerAct/PlatformHall/Grindrail1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -7)
@@ -1430,8 +1445,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
 
 [node name="Grindrail2" parent="TimerAct/PlatformHall" instance=ExtResource("10_u3mwm")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -43, 0.299999, -109.1)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="Rings" type="Node3D" parent="TimerAct/PlatformHall/Grindrail2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -4)
@@ -1480,6 +1493,8 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -82, 1
 "Rotation Settings/Rotation Time" = 8.0
 "Attack Settings/Flame Active Time" = 3.0
 "Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="FireSoul2" parent="TimerAct/PlatformHall" instance=ExtResource("31_mxyuv")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -85, 7, -110)
@@ -1493,11 +1508,8 @@ saveVisibilityOnCheckpoint = true
 
 [node name="LaunchRing1" parent="TimerAct/Lava" instance=ExtResource("31_42x6v")]
 transform = Transform3D(1, 0, 0, 0, 0.990268, 0.139173, 0, -0.139173, 0.990268, 0, 4.2, 6)
-Settings/Distance = 60.0
-"Settings/Middle Height" = 1.0
-"Settings/End Height" = -1.0
-distance = 16.0
 finalHeight = -2.0
+distance = 16.0
 
 [node name="Stopper" parent="TimerAct/Lava" instance=ExtResource("28_i0g8o")]
 transform = Transform3D(2.09, 0, 0, 0, 1, 0, 0, 0, 1, -0.440002, 0.200001, 9.5)
@@ -1508,6 +1520,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 21)
 "Rotation Settings/Rotation Time" = 5.0
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 "Defeat Settings/Enable Enemy Launching" = true
 "Defeat Settings/Launch Time" = 0.5
 "Defeat Settings/Launch Direction" = Vector3(0, 0, 0)
@@ -1562,11 +1576,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1, 49)
 
 [node name="LaunchRing2" parent="TimerAct/Lava" instance=ExtResource("31_42x6v")]
 transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871557, 0, -0.0871557, 0.996195, 0, 4.2, 106)
-Settings/Distance = 80.0
-"Settings/End Height" = -4.0
-distance = 30.0
 middleHeight = 1.0
 finalHeight = -5.0
+distance = 30.0
 
 [node name="PlatformGroup2" type="Node3D" parent="TimerAct/Lava"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 112.5)
@@ -1627,8 +1639,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.2, 0, -2, 73.5)
 
 [node name="Grindrail" parent="TimerAct/Lava" instance=ExtResource("10_u3mwm")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 5, 0.299999, 208.5)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="RedMajin2" parent="TimerAct/Lava" instance=ExtResource("19_kyk8a")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 36, 0.299999, 207.8)
@@ -1636,6 +1646,8 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 36, 0.
 "Rotation Settings/Rotation Time" = 4.0
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 6.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="PlatformGroup3" type="Node3D" parent="TimerAct/Lava"]
 transform = Transform3D(-4.37114e-08, 0, -0.8, 0, 1, 0, 1, 0, -3.49691e-08, 30.96, 0, 250)
@@ -2021,7 +2033,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 11.2, 0)
 
 [node name="Spiral" type="Node3D" parent="TimerAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, -60, -180)
-visible = false
 script = ExtResource("5_gkrps")
 saveVisibilityOnCheckpoint = true
 
@@ -2052,10 +2063,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.275, 0, -3)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -6)
 
 [node name="SpikePanel1" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
-transform = Transform3D(-0.972581, -0.21644, 0.0850897, -0.215616, 0.976296, 0.018864, -0.0871556, 1.89218e-08, -0.996195, 17.9905, 7.08657, 44.053)
+transform = Transform3D(-0.972581, -0.21644, 0.0850897, -0.215616, 0.976296, 0.018864, -0.0871556, 5.7742e-08, -0.996195, 17.9905, 7.08657, 44.053)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
 [node name="SpikePanel2" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
-transform = Transform3D(-0.972581, -0.21644, 0.0850897, -0.215616, 0.976296, 0.018864, -0.0871556, 1.89218e-08, -0.996195, 17.8629, 7.05828, 45.5473)
+transform = Transform3D(-0.972581, -0.21644, 0.0850897, -0.215616, 0.976296, 0.018864, -0.0871556, 5.7742e-08, -0.996195, 17.8629, 7.05828, 45.5473)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
 [node name="Rings2" type="Node3D" parent="TimerAct/Spiral"]
 transform = Transform3D(1.31134e-07, -0.258819, -0.965926, 0, 0.965926, -0.258819, 1, 3.394e-08, 1.26666e-07, 21.9281, 8.58692, 44.0071)
@@ -2082,9 +2101,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0, -12)
 
 [node name="SpikePanel3" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(-0.939692, -0.0740267, 0.333913, 0, 0.976296, 0.21644, -0.34202, 0.203387, -0.917418, 38.3276, 13.5984, 30.7516)
+"Current State" = 1
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
 [node name="SpikePanel4" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(-0.939692, -0.0740267, 0.333913, 0, 0.976296, 0.21644, -0.34202, 0.203387, -0.917418, 39.7371, 13.5984, 31.2648)
+"Current State" = 1
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
 [node name="Rings3" type="Node3D" parent="TimerAct/Spiral"]
 transform = Transform3D(0.766044, 0.139125, 0.627551, 0, 0.976296, -0.21644, -0.642788, 0.165802, 0.747886, 40.2308, 16.9962, 19.7517)
@@ -2111,29 +2140,53 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0, -15)
 
 [node name="SpikePanel5" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(-0.809017, 0.12722, -0.573852, 0, 0.976296, 0.21644, 0.587785, 0.175103, -0.78984, 35.5301, 18.0304, 13.6285)
+"Current State" = 2
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
 [node name="SpikePanel6" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(-0.809017, 0.12722, -0.573852, 0, 0.976296, 0.21644, 0.587785, 0.175103, -0.78984, 36.7436, 18.0304, 12.7469)
+"Current State" = 2
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
 [node name="RichRing" parent="TimerAct/Spiral" instance=ExtResource("12_6saap")]
 transform = Transform3D(0.766044, 0.139125, 0.627551, 0, 0.976296, -0.21644, -0.642788, 0.165802, 0.747886, 26.6142, 21.9108, 5.85797)
 
 [node name="SpikePanel7" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(0.573576, 0.177297, -0.799735, 0, 0.976296, 0.21644, 0.819152, -0.124145, 0.55998, 8.75923, 25.587, 9.28908)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
 [node name="SpikePanel8" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(0.570395, 0.18728, -0.799735, -0.0170387, 0.976147, 0.21644, 0.821194, -0.10983, 0.55998, 7.89886, 25.587, 8.06035)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
 [node name="SpikePanel9" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.800003, 30, 32)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
 [node name="SpikePanel10" parent="TimerAct/Spiral" instance=ExtResource("34_ssr7c")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.699997, 30, 32)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
 [node name="Grindrail" parent="TimerAct/Spiral" instance=ExtResource("6_plcea")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.5, 30.28, 33.5)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="Rings4" type="Node3D" parent="TimerAct/Spiral/Grindrail"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -5)
@@ -2199,6 +2252,8 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.5
 "Rotation Settings/Rotation Time" = 6.0
 "Attack Settings/Flame Active Time" = 2.0
 "Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
 
 [node name="Furnace1" parent="TimerAct/End" instance=ExtResource("35_4ax31")]
 transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 0, -2, 0.799999, 24.7)
@@ -2270,11 +2325,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
 
 [node name="LaunchRing" parent="TimerAct/End" instance=ExtResource("31_42x6v")]
 transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, 24, 4, 55)
-Settings/Distance = 40.0
-"Settings/Middle Height" = 4.0
-"Settings/End Height" = -3.0
 distance = 25.0
-middleHeight = 2.0
 
 [node name="FireSoul3" parent="TimerAct/End" instance=ExtResource("31_mxyuv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58, 4, 55)
@@ -2361,8 +2412,6 @@ transform = Transform3D(-1, 0, 1.50996e-07, 0, 0.999999, 0, -1.50996e-07, 0, -1,
 
 [node name="Grindrail1" parent="TimerAct/End" instance=ExtResource("38_stcxx")]
 transform = Transform3D(1, 0, -5.56361e-08, 0, 1, 0, 5.56361e-08, 0, 1, 77.5, -9.7, -8.00001)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="ScrapMachineSupport3" parent="TimerAct/End" instance=ExtResource("11_vwf45")]
 transform = Transform3D(1, 0, -1.74845e-07, 0, 1, 0, 1.74845e-07, 0, 1, 67.5, -10, -16.5)
@@ -2372,8 +2421,6 @@ transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, 74.5, -1
 
 [node name="Grindrail2" parent="TimerAct/End" instance=ExtResource("10_u3mwm")]
 transform = Transform3D(1, 0, -5.56361e-08, 0, 1, 0, 5.56361e-08, 0, 1, 73.3, -9.7, -16.5)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="ScrapMachineSupport5" parent="TimerAct/End" instance=ExtResource("11_vwf45")]
 transform = Transform3D(-1, 0, 8.74226e-08, 0, 1, 0, -8.74226e-08, 0, -1, 76, -10, -21.5)
@@ -2383,8 +2430,6 @@ transform = Transform3D(-6.11959e-08, 0, 1.4, 0, 1, 0, -1.4, 0, -6.11959e-08, 66
 
 [node name="Grindrail3" parent="TimerAct/End" instance=ExtResource("10_u3mwm")]
 transform = Transform3D(1, 0, -2.13163e-14, 0, 1, 0, 2.13163e-14, 0, 1, 62.4998, -9.7, -26.5)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="ScrapMachineSupport6" parent="TimerAct/End" instance=ExtResource("11_vwf45")]
 transform = Transform3D(-1, 0, 8.74226e-08, 0, 1, 0, -8.74226e-08, 0, -1, 72, -10, -24.5)
@@ -2394,8 +2439,6 @@ transform = Transform3D(1, 0, 1.59872e-13, 0, 1, 0, -1.59872e-13, 0, 1, 70.2, -1
 
 [node name="Grindrail4" parent="TimerAct/End" instance=ExtResource("6_plcea")]
 transform = Transform3D(1, 0, -2.13163e-14, 0, 1, 0, 2.13163e-14, 0, 1, 70, -9.7, -32.5)
-startCapPath = NodePath("")
-endCapPath = NodePath("")
 
 [node name="ScrapMachineLadder2" parent="TimerAct/End" instance=ExtResource("37_qsloy")]
 transform = Transform3D(-1.4, 0, -1.22392e-07, 0, 1, 0, 1.22392e-07, 0, -1.4, 75, -10, -34)
@@ -2460,3 +2503,5 @@ shape = SubResource("BoxShape3D_egyd0")
 [connection signal="GrindStarted" from="TimerAct/SidleHall/InvisibleGrindrails/InvisibleGrindrail3" to="TimerAct/SidleHall/InvisibleGrindrails/ExitCameraEvent" method="Activate"]
 [connection signal="Activated" from="TimerAct/SidleHall/InvisibleGrindrails/GrindPathExit" to="Static/Collision/GrindPathWall" method="Activate"]
 [connection signal="Activated" from="TimerAct/SidleHall/InvisibleGrindrails/GrindPathExit" to="TimerAct/SidleHall/InvisibleGrindrails/GrindrailCamera" method="Deactivate"]
+
+[editable path="Static"]

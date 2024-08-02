@@ -115,11 +115,11 @@ public partial class LevelResult : Control
 				NotificationMenu.AddNotification(NotificationMenu.NotificationType.World, $"unlock_{Stage.Data.UnlockWorld.ToString().ToSnakeCase()}");
 			}
 
-			foreach (var UnlockStage in Stage.Data.UnlockStage)
+			foreach (var stage in Stage.Data.UnlockStage)
 			{
-				if (!SaveManager.ActiveGameData.IsStageUnlocked(UnlockStage.LevelID))
+				if (!SaveManager.ActiveGameData.IsStageUnlocked(stage.LevelID))
 				{
-					SaveManager.ActiveGameData.UnlockStage(UnlockStage.LevelID);
+					SaveManager.ActiveGameData.UnlockStage(stage.LevelID);
 					NotificationMenu.AddNotification(NotificationMenu.NotificationType.Mission, "unlock_mission");
 				}
 			}
