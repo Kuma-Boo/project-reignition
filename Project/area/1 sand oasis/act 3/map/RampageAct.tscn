@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dib3s0hwoc66i"]
+[gd_scene load_steps=28 format=3 uid="uid://dib3s0hwoc66i"]
 
 [ext_resource type="PackedScene" uid="uid://7kcasi6v1odv" path="res://area/1 sand oasis/act 3/Static.tscn" id="1_rpqg6"]
 [ext_resource type="Resource" uid="uid://daswhq4xeo514" path="res://resource/level data/sand oasis/Act3Rampage.tres" id="2_fqwll"]
@@ -17,12 +17,13 @@
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="14_vbq4m"]
 [ext_resource type="Script" path="res://object/trigger/modules/ItemCycleTrigger.cs" id="15_0f11n"]
 [ext_resource type="PackedScene" uid="uid://d4bv4ulvmin0y" path="res://object/enemy/majin/data/sand oasis/GreenMajin.tscn" id="17_gxwn8"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="17_qbrlf"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="18_vp6fq"]
 [ext_resource type="Resource" uid="uid://cc45ga2vy7wse" path="res://area/1 sand oasis/act 3/camera/RampageEnemyCam.tres" id="19_7x56d"]
 [ext_resource type="Resource" uid="uid://dghu64iynmk7k" path="res://area/1 sand oasis/act 3/camera/LowerCam.tres" id="20_cd83g"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wbgfo"]
-size = Vector3(15, 20, 2.5)
+size = Vector3(15, 20, 5)
 
 [sub_resource type="Curve" id="Curve_boxaq"]
 min_value = -2.0
@@ -36,8 +37,11 @@ max_value = 0.0
 _data = [Vector2(0, 0), 0.0, -5.5, 0, 1, Vector2(1, -5.5), -5.5, 0.0, 1, 0]
 point_count = 2
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_60xih"]
+size = Vector3(15, 20, 5)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_xxv6r"]
-size = Vector3(15, 20, 2.5)
+size = Vector3(15, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_165ws"]
 size = Vector3(20, 15, 100)
@@ -58,7 +62,6 @@ metadata/_edit_lock_ = true
 transform = Transform3D(0.935351, 0, 0.35372, 0, 1, 0, -0.35372, 0, 0.935351, 0, 0, 0)
 
 [node name="CullingMap" type="Node3D" parent="RingChainAct"]
-visible = false
 
 [node name="DescentTopL" parent="RingChainAct/CullingMap" instance=ExtResource("4_n7xu7")]
 transform = Transform3D(0.933549, 0, 0.358449, 0, 1, 0, -0.358449, 0, 0.933549, 2.50915, 0, 6.53484)
@@ -169,6 +172,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_wbgfo")
 
 [node name="Lap01" type="Node3D" parent="RingChainAct"]
+visible = false
 script = ExtResource("5_m1wgj")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -8308,6 +8312,12 @@ transform = Transform3D(1, 0, -2.98023e-08, 6.61744e-24, 1, -1.32349e-23, 0, 0, 
 
 [node name="Child10" parent="RingChainAct/Lap03/UpperHall/Pearls2" instance=ExtResource("9_b2akn")]
 transform = Transform3D(1, 0, -2.98023e-08, 6.61744e-24, 1, -1.32349e-23, 0, 0, 1, 0.204439, 3.50376, -13.4008)
+
+[node name="Goal" parent="RingChainAct/Lap03/UpperHall" instance=ExtResource("17_qbrlf")]
+transform = Transform3D(-0.999993, 1.03509e-16, -0.0032635, 1.80718e-17, 1, -2.21987e-16, 0.00326389, 4.01484e-17, -0.999994, -0.0702344, 16.2439, 91.3743)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RingChainAct/Lap03/UpperHall/Goal"]
+shape = SubResource("BoxShape3D_60xih")
 
 [node name="StartLap1" type="Node3D" parent="RingChainAct"]
 script = ExtResource("5_m1wgj")

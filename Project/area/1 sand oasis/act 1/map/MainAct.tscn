@@ -75,10 +75,13 @@
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="71_nnqh4"]
 
 [sub_resource type="BoxShape3D" id="305"]
-size = Vector3(15, 20, 2.5)
+size = Vector3(15, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6vt8a"]
 size = Vector3(30, 20, 5)
+
+[sub_resource type="BoxShape3D" id="133"]
+size = Vector3(60, 20, 5)
 
 [sub_resource type="Curve" id="Curve_6xxi5"]
 min_value = -0.8
@@ -2834,9 +2837,6 @@ _data = {
 "RESET": SubResource("135"),
 "event": SubResource("134")
 }
-
-[sub_resource type="BoxShape3D" id="133"]
-size = Vector3(53.7814, 14, 4.2769)
 
 [sub_resource type="Animation" id="141"]
 length = 0.001
@@ -13243,7 +13243,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("305")
 
 [node name="DialogTriggers" type="Node3D" parent="MainAct"]
-visible = false
 
 [node name="KingDialogTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_v6hfg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.135, 75, -26.21)
@@ -13254,10 +13253,24 @@ OneShot = true
 
 [node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/KingDialogTrigger"]
 script = ExtResource("5_ox8ed")
-delays = [0.0, 0.1]
 textKeys = ["oas_opening_so", "oas_opening_sh"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/KingDialogTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("305")
+
+[node name="RingDialogTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_v6hfg")]
+transform = Transform3D(-4.37114e-08, -0.819152, -0.573576, 0, 0.573576, -0.819152, 1, -3.58063e-08, -2.50718e-08, -38.2402, 52.8679, -62.01)
+collision_layer = 0
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/RingDialogTrigger"]
+script = ExtResource("5_ox8ed")
+textKeys = ["common_hint_ring_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/RingDialogTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("305")
 
@@ -13278,6 +13291,38 @@ textKeys = ["oas_pillar_sh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("305")
 
+[node name="MajinDialogTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_v6hfg")]
+transform = Transform3D(0.395546, 0, 0.918447, 0, 1, 0, -0.918447, 0, 0.395546, -272.118, -43.0318, -262.729)
+collision_layer = 0
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/MajinDialogTrigger"]
+transform = Transform3D(1, 0, 0, 7.45058e-09, 1, 0, -7.45058e-09, 2.98023e-08, 1, 0, 0, 0)
+script = ExtResource("5_ox8ed")
+textKeys = ["common_enemy_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/MajinDialogTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("305")
+
+[node name="PearlsDialogTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_v6hfg")]
+transform = Transform3D(0.447853, 0, 0.894108, 0, 1, 0, -0.894108, 0, 0.447853, -219.398, -40.0247, -238.5)
+collision_layer = 0
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/PearlsDialogTrigger"]
+transform = Transform3D(1, 0, 0, 7.45058e-09, 1, 0, -7.45058e-09, 2.98023e-08, 1, 0, 0, 0)
+script = ExtResource("5_ox8ed")
+textKeys = ["common_enemy_pearl_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/PearlsDialogTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("133")
+
 [node name="UTurnDialogTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_v6hfg")]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -67.2441, -45, -343.051)
 collision_layer = 0
@@ -13294,6 +13339,21 @@ textKeys = ["oas_uturn_sh", "oas_uturn_so"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("305")
 
+[node name="RedMajinDialogTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_v6hfg")]
+transform = Transform3D(0.866026, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866026, -54.1886, -45, -395.785)
+collision_layer = 0
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/RedMajinDialogTrigger"]
+script = ExtResource("5_ox8ed")
+textKeys = ["common_red_majin_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/RedMajinDialogTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("305")
+
 [node name="InteriorDialogTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_v6hfg")]
 transform = Transform3D(0.707106, 0, 0.707106, 0, 1, 0, -0.707106, 0, 0.707106, -142.972, -65, -356.753)
 collision_layer = 0
@@ -13307,6 +13367,21 @@ delays = [0.0, 0.0]
 textKeys = ["oas_interior_sh", "oas_interior_so"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/InteriorDialogTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("305")
+
+[node name="FireSoulDialogTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("4_v6hfg")]
+transform = Transform3D(0, 0, 0.999999, 0, 1, 0, -0.999999, 0, 0, -260.523, -65, -435.049)
+collision_layer = 0
+OneShot = true
+"Respawn Mode" = 3
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/FireSoulDialogTrigger"]
+script = ExtResource("5_ox8ed")
+textKeys = ["common_hint_fire_soul_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/FireSoulDialogTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("305")
 
@@ -14109,6 +14184,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.647214, -0.470228, 0)
 
 [node name="Oasis" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -327, -44, -193)
+visible = false
 script = ExtResource("8_w6s07")
 saveVisibilityOnCheckpoint = true
 
@@ -20481,6 +20557,7 @@ Movement/Distance = 2.0
 Movement/Angle = 0.0
 "Vertical Orientation" = true
 root = NodePath("BlueMajin")
+animator = NodePath("")
 
 [node name="BlueMajin" parent="MainAct/End/MajinMovement" instance=ExtResource("25_wxgr8")]
 "Spawn Settings/Spawn Travel Time" = 0.5

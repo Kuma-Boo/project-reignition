@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://btf5dtpxc2k22"]
+[gd_scene load_steps=24 format=3 uid="uid://btf5dtpxc2k22"]
 
 [ext_resource type="PackedScene" uid="uid://7kcasi6v1odv" path="res://area/1 sand oasis/act 3/Static.tscn" id="1_7k8ba"]
 [ext_resource type="Resource" uid="uid://cmheyow2wihdv" path="res://resource/level data/sand oasis/Act3Ring.tres" id="2_lq4al"]
@@ -16,9 +16,10 @@
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="13_r4hec"]
 [ext_resource type="Script" path="res://object/trigger/modules/ItemCycleTrigger.cs" id="15_67dfm"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="16_7ll4q"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="16_fiss2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wbgfo"]
-size = Vector3(15, 20, 2.5)
+size = Vector3(15, 20, 5)
 
 [sub_resource type="Curve" id="Curve_boxaq"]
 min_value = -1.0
@@ -38,8 +39,11 @@ max_value = 2.0
 _data = [Vector2(0, 0), 0.0, 29.0667, 0, 0, Vector2(0.146479, 2), 0.0, 0.0, 0, 0, Vector2(0.4, -2), 0.0, 0.0, 0, 0, Vector2(0.6, 2), 0.0, 0.0, 0, 0, Vector2(0.850704, -2), 0.0, 0.0, 0, 0, Vector2(1, 1.19209e-07), 26.843, 0.0, 0, 0]
 point_count = 6
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_k7i0a"]
+size = Vector3(15, 20, 5)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_xxv6r"]
-size = Vector3(15, 20, 2.5)
+size = Vector3(15, 20, 5)
 
 [node name="Stage" type="Node"]
 
@@ -10881,6 +10885,12 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, -2.64698e-23, 0, 0, 1, 0.172289
 
 [node name="Child10" parent="RingChainAct/Lap03/UpperHall/Rings4" instance=ExtResource("8_dmtjc")]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 1, -2.64698e-23, 0, 0, 1, 0.193822, 0.0131198, -12.7062)
+
+[node name="Goal" parent="RingChainAct/Lap03/UpperHall" instance=ExtResource("16_fiss2")]
+transform = Transform3D(-0.999993, 1.03509e-16, -0.0032635, 1.80718e-17, 1, -2.21987e-16, 0.00326389, 4.01484e-17, -0.999994, -0.0702306, 16.2439, 91.3743)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RingChainAct/Lap03/UpperHall/Goal"]
+shape = SubResource("BoxShape3D_k7i0a")
 
 [node name="LapCycle" parent="RingChainAct" instance=ExtResource("4_ntpwb")]
 transform = Transform3D(0.93358, 0, 0.358368, 0, 1, 0, -0.358368, 0, 0.93358, 5.109, 0, 13.219)

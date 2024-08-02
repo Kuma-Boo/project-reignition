@@ -15,6 +15,10 @@ namespace Project.Gameplay.Triggers
 
 		public override void Activate()
 		{
+			// Already the current checkpoint!
+			if (Stage.CurrentCheckpoint == this)
+				return;
+
 			Stage.SetCheckpoint(this);
 
 			PlayerPath = CharacterController.instance.PathFollower.ActivePath; // Store current player path

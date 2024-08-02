@@ -380,8 +380,8 @@ namespace Project.Gameplay
 		{
 			if (IsLockoutActive && lockoutDataList.Count == 0) // Disable lockout
 				SetLockoutData(null);
-			else if (ActiveLockoutData != lockoutDataList[lockoutDataList.Count - 1]) // Change to current data (Highest priority, last on the list)
-				SetLockoutData(lockoutDataList[lockoutDataList.Count - 1]);
+			else if (ActiveLockoutData != lockoutDataList[^1]) // Change to current data (Highest priority, last on the list)
+				SetLockoutData(lockoutDataList[^1]);
 		}
 
 		private void SetLockoutData(LockoutResource resource)
@@ -440,8 +440,10 @@ namespace Project.Gameplay
 		[Signal]
 		public delegate void ExternalControlCompletedEventHandler();
 
+		/// <summary> Reference to the external object currently controlling the player. Returns null if the player isn't being externally controlled. </summary>
+		public Node ExternalController { get => MovementState == MovementStates.External ? externalController : null; }
 		/// <summary> Reference to the external object currently controlling the player </summary>
-		public Node ExternalController { get; private set; }
+		private Node externalController;
 		public Node3D ExternalParent { get; private set; }
 		private Vector3 externalOffset;
 		private float externalSmoothing;
@@ -451,7 +453,7 @@ namespace Project.Gameplay
 
 		public void StartExternal(Node controller, Node3D followObject = null, float smoothing = 0f, bool allowSpeedBreak = false)
 		{
-			ExternalController = controller;
+			externalController = controller;
 
 			ResetActionState();
 			ResetMovementState();
@@ -786,7 +788,7 @@ namespace Project.Gameplay
 		/// <summary> How much should the steepest slope affect the player? </summary>
 		private const float SlopeInfluenceStrength = .2f;
 		/// <summary> Slopes that are shallower than Mathf.PI * threshold are ignored. </summary>
-		private const float SlopeThreshold = .2f;
+		private const float SlopeThreshold = .1f;
 		private void UpdateSlopeSpeed()
 		{
 			slopeRatio = 0;
@@ -799,7 +801,7 @@ namespace Project.Gameplay
 			slopeRatio = PathFollower.Forward().Dot(Vector3.Up);
 			if (Mathf.Abs(slopeRatio) <= SlopeThreshold) return;
 
-			slopeRatio = Mathf.Lerp(-SlopeInfluenceStrength, SlopeInfluenceStrength, slopeRatio);
+			slopeRatio = Mathf.Lerp(-SlopeInfluenceStrength, SlopeInfluenceStrength, (slopeRatio * .5f) + .5f);
 			if (slopeRatio > 0 && Skills.IsSkillEquipped(SkillKey.AllRounder)) // Cancel slope influence when moving upwards
 				slopeRatio = 0;
 
@@ -1230,6 +1232,7 @@ namespace Project.Gameplay
 					inputAmount = -(1 - InputVector.Length()) * .5f; // 0 to -0.5
 
 				inputAmount -= slopeRatio * SlopeInfluenceStrength;
+				inputAmount = Mathf.Clamp(inputAmount, 0, 1);
 				MoveSpeed = Skills.SlideSettings.UpdateSlide(MoveSpeed, inputAmount);
 			}
 			else if (ActionState == ActionStates.Crouching)
@@ -1398,7 +1401,8 @@ namespace Project.Gameplay
 
 		#region Damage & Invincibility
 		public bool IsInvincible => invincibilityTimer != 0 ||
-			(Skills.IsSkillEquipped(SkillKey.SlideDefense) && ActionState == ActionStates.Sliding);
+			(Skills.IsSkillEquipped(SkillKey.SlideDefense) && ActionState == ActionStates.Sliding) ||
+			ActionState == ActionStates.Teleport;
 		private float invincibilityTimer;
 		private const float InvincibilityLength = 5f;
 
@@ -1518,6 +1522,7 @@ namespace Project.Gameplay
 		{
 			if (!Stage.IsLevelIngame) return;
 
+			allowLandingSkills = false; // Disable landing skills
 			SetActionState(ActionStates.Damaged);
 
 			// No rings; Respawn
@@ -1590,6 +1595,8 @@ namespace Project.Gameplay
 			}
 		}
 
+		[Signal]
+		public delegate void DefeatedEventHandler();
 		/// <summary> True while the player is defeated but hasn't respawned yet. </summary>
 		public bool IsDefeated { get; private set; }
 		private void DefeatPlayer()
@@ -1606,12 +1613,14 @@ namespace Project.Gameplay
 				Skills.ToggleTimeBreak();
 			if (Skills.IsSpeedBreakActive)
 				Skills.ToggleSpeedBreak();
+
+			EmitSignal(SignalName.Defeated);
 		}
 
 		/// <summary> Called when the player is returning to a checkpoint. </summary>
 		public void StartRespawn(bool debugRespawn = false)
 		{
-			if (ActionState == ActionStates.Teleport || IsDefeated || !Stage.IsLevelIngame) return;
+			if (TransitionManager.IsTransitionActive || ActionState == ActionStates.Teleport || IsDefeated || !Stage.IsLevelIngame) return;
 
 			DefeatPlayer();
 
@@ -1643,7 +1652,7 @@ namespace Project.Gameplay
 		private void ProcessRespawn()
 		{
 			ResetActionState();
-			MovementState = MovementStates.Normal;
+			ResetMovementState();
 
 			invincibilityTimer = 0;
 			Teleport(Stage.CurrentCheckpoint);
@@ -1680,6 +1689,7 @@ namespace Project.Gameplay
 			Stage.RespawnObjects();
 			Stage.IncrementRespawnCount();
 			Stage.UpdateRingCount(Skills.RespawnRingCount, StageSettings.MathModeEnum.Replace, true); // Reset ring count
+			invincibilityTimer = 0; // Reset invincibility
 
 			TransitionManager.FinishTransition();
 		}
@@ -1817,7 +1827,7 @@ namespace Project.Gameplay
 					FinishLauncher();
 					IsMovingBackward = false;
 					MoveSpeed = LaunchSettings.HorizontalVelocity * .5f; // Prevent too much movement
-					VerticalSpeed = LaunchSettings.FinalVerticalVelocity;
+					VerticalSpeed = IsOnGround ? 0 : LaunchSettings.FinalVerticalVelocity;
 				}
 
 				launcherTime += PhysicsManager.physicsDelta;
@@ -2044,7 +2054,7 @@ namespace Project.Gameplay
 			Lockon.ResetLockonTarget();
 
 			if (IsCountdownActive) return;
-			if (IsDefeated || ActionState == ActionStates.Teleport) return; // Return early when respawning
+			if (ActionState == ActionStates.Teleport) return; // Return early when respawning
 
 			if (Stage.IsLevelIngame) // Only check landing skills and play FX when ingame
 			{

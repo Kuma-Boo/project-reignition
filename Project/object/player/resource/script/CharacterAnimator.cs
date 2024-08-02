@@ -379,6 +379,7 @@ public partial class CharacterAnimator : Node3D
 		animationTree.Set(BounceTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(BackflipTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(StompTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
 	public void JumpAnimation()
@@ -716,10 +717,10 @@ public partial class CharacterAnimator : Node3D
 
 	private readonly StringName BalanceSpeed = "parameters/balance_tree/balance_speed/scale";
 	private readonly StringName BalanceWindBlend = "parameters/balance_tree/wind_blend/blend_position";
-	public void UpdateBalanceSpeed(float speedRatio)
+	public void UpdateBalanceSpeed(float speedRatio, float overrideBlend = -1)
 	{
 		animationTree.Set(BalanceSpeed, speedRatio + .8f);
-		animationTree.Set(BalanceWindBlend, speedRatio);
+		animationTree.Set(BalanceWindBlend, Mathf.IsEqualApprox(overrideBlend, -1) ? speedRatio : overrideBlend);
 	}
 	#endregion
 

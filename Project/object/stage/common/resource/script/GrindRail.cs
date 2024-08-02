@@ -390,6 +390,10 @@ public partial class GrindRail : Area3D
 			targetSpeed = Skills.GrindSettings.Speed;
 			allowBonuses = false;
 		}
+		else
+		{
+			Character.Effect.PerfectGrindShuffleFX();
+		}
 
 		Character.MoveSpeed = targetSpeed;
 		Character.Effect.StartGrindFX(false);

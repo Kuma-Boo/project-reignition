@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://cj653fqoipdkk"]
+[gd_scene load_steps=56 format=3 uid="uid://cj653fqoipdkk"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_lxhj8"]
 [ext_resource type="Resource" uid="uid://du8i3ur77gdww" path="res://resource/level data/dinosaur jungle/Act2Stealth.tres" id="2_boxoa"]
@@ -42,17 +42,20 @@
 [ext_resource type="Resource" uid="uid://d3rdm2cjtdkxv" path="res://area/2 dino jungle/act 1/camera/rampage/CavernTopCam.tres" id="40_nhuwo"]
 [ext_resource type="Resource" uid="uid://ysgb4weske7h" path="res://area/2 dino jungle/act 1/camera/rampage/FeedingLotusArenaRampageCam.tres" id="42_3t57n"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_usu3p"]
+size = Vector3(20, 20, 5)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_mynxt"]
 size = Vector3(12, 20, 3)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_bkexm"]
-size = Vector3(15, 20, 2.5)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_c4mxl"]
-size = Vector3(5, 20, 2.5)
+size = Vector3(5, 20, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bkexm"]
+size = Vector3(15, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a46qn"]
-size = Vector3(5, 20, 2.5)
+size = Vector3(5, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cbbwc"]
 size = Vector3(6, 5, 2.5)
@@ -104,7 +107,7 @@ size = Vector3(10, 20, 3)
 size = Vector3(8, 5, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qnx67"]
-size = Vector3(20, 20, 2.5)
+size = Vector3(20, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3wcby"]
 size = Vector3(27.6188, 9.5022, 5.27148)
@@ -198,6 +201,13 @@ transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 
 transform = Transform3D(0.437194, 0, 0.899367, 0, 1, 0, -0.899367, 0, 0.437194, -359, -255, -965)
 metadata/_edit_lock_ = true
 
+[node name="InvisibleWall" type="StaticBody3D" parent="StealthAct/SpawnPosition" groups=["wall"]]
+transform = Transform3D(0.84354, 0, 0.537066, 0, 1, 0, -0.537066, 0, 0.84354, -3.47418, 0, -3.49133)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/SpawnPosition/InvisibleWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_usu3p")
+
 [node name="CharacterSpawn" parent="StealthAct/SpawnPosition" instance=ExtResource("4_6i1tb")]
 
 [node name="CullingMap" type="Node3D" parent="StealthAct"]
@@ -242,13 +252,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
 script = ExtResource("7_fmk6u")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
-
-[node name="InvisibleWall" type="StaticBody3D" parent="StealthAct/Crossing"]
-transform = Transform3D(-0.728586, 0, 0.684954, 0, 1, 0, -0.684954, 0, -0.728586, 70.7415, 10.666, -41.6891)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/Crossing/InvisibleWall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_bkexm")
 
 [node name="Rings" type="Node3D" parent="StealthAct/Crossing"]
 transform = Transform3D(-0.285187, 0, -0.958472, 0, 1, 0, 0.958472, 0, -0.285187, 92.7715, 6.82593, -34.3323)
@@ -1307,6 +1310,7 @@ shape = SubResource("BoxShape3D_3wcby")
 
 [editable path="Static"]
 [editable path="Static/Collision"]
+[editable path="Static/Visuals/03CaveSky"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara1"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara2"]
 [editable path="Static/CompletionDemo"]

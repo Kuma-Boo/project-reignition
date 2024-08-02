@@ -71,7 +71,7 @@ public partial class SoundManager : Node
 		subtitleLabel.Text = string.Empty;
 
 		// Show background during cutscenes, disable during in-game dialog
-		subtitleLetterbox.SelfModulate = dialog.isCutscene ? Colors.White : Colors.Transparent;
+		subtitleLetterbox.SelfModulate = dialog.IsCutscene ? Colors.White : Colors.Transparent;
 
 		currentDialog = dialog;
 		currentDialogIndex = 0;
@@ -176,7 +176,8 @@ public partial class SoundManager : Node
 				return;
 			}
 
-			dialogChannel.Stream = null; // Disable dialog channel
+			// Experimental: Allow audio to keep playing? For long hint dialogs.
+			// dialogChannel.Stream = null; // Disable dialog channel
 
 			if (string.IsNullOrEmpty(key) || key.EndsWith("*")) // Cutscene Support - To avoid busywork in editor
 				key = currentDialog.textKeys[0].Replace("*", (currentDialogIndex + 1).ToString());
