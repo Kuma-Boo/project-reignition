@@ -205,7 +205,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	/// <summary> Optional SFX player. </summary>
 	private AudioStreamPlayer3D sfxPlayer;
 	protected bool IsSfxActive => sfxPlayer.Playing;
-	protected virtual void PlayLaunchSfx() => sfxPlayer.Play();
+	protected virtual void PlayLaunchSfx() => sfxPlayer?.Play();
 	[Export]
 	/// <summary> Option voice to play. </summary>
 	private StringName voiceKey;
