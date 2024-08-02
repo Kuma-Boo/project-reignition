@@ -21,10 +21,11 @@ namespace Project.Gameplay
 
 		protected override void SetUp()
 		{
+			base.SetUp();
+
 			if (pathFollower != null)
 				startingProgress = pathFollower.Progress;
 			AnimationTree.Active = true;
-			base.SetUp();
 		}
 
 		public override void Respawn()
