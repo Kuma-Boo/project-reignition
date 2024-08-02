@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://chn7ckbhlrr2g"]
+[gd_scene load_steps=51 format=3 uid="uid://chn7ckbhlrr2g"]
 
 [ext_resource type="Script" path="res://interface/gameplay/hud/script/HeadsUpDisplay.cs" id="1_x1dw0"]
 [ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/bitmap fonts/HUD Numbers.fnt" id="2_lj78h"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://crk7fy6bd8job" path="res://sound/sfx/objects/ring loss.wav" id="2_y70id"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/Sprite2DPlus.cs" id="3_wydbw"]
 [ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/texture/soul gauge/sprite atlas.png" id="5_phsyj"]
+[ext_resource type="LabelSettings" uid="uid://bqrydgixkulbv" path="res://interface/font/NavigationFont.tres" id="7_568eh"]
 [ext_resource type="Texture2D" uid="uid://kii0umom7seh" path="res://interface/gameplay/hud/texture/rings/ring.png" id="7_tsef6"]
 [ext_resource type="AudioStream" uid="uid://dk0nbt6u6r65r" path="res://sound/sfx/system/objective.wav" id="8_2ws5b"]
 [ext_resource type="Texture2D" uid="uid://ftko0u3nnv8" path="res://interface/gameplay/pause/texture/text/status/status common en.png" id="8_4xdo7"]
@@ -877,6 +878,67 @@ nodes/ringless_transition/node = SubResource("AnimationNodeTransition_8ld87")
 nodes/ringless_transition/position = Vector2(-160, 352)
 node_connections = [&"gain_trigger", 0, &"hold-anim", &"gain_trigger", 1, &"gain-anim", &"loss_trigger", 0, &"gain_trigger", &"loss_trigger", 1, &"loss-anim", &"output", 0, &"ringless_add", &"ringless_add", 0, &"loss_trigger", &"ringless_add", 1, &"ringless_transition", &"ringless_transition", 0, &"ringless-anim", &"ringless_transition", 1, &"ring-anim"]
 
+[sub_resource type="Animation" id="Animation_svyvt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_qx0uv"]
+resource_name = "firesoul"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(-500, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nui8w"]
+_data = {
+"RESET": SubResource("Animation_svyvt"),
+"firesoul": SubResource("Animation_qx0uv")
+}
+
 [sub_resource type="Animation" id="56"]
 length = 0.001
 tracks/0/type = "value"
@@ -1001,7 +1063,7 @@ _data = {
 "charged": SubResource("55")
 }
 
-[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "rankPreviewerRoot", "mainRank", "transitionRank", "rankUpSFX", "rankDownSFX", "time", "score", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "objectiveSfx", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator", "raceRoot", "raceUhu", "racePlayer")]
+[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "fireSoulAnimator", "rankPreviewerRoot", "mainRank", "transitionRank", "rankUpSFX", "rankDownSFX", "time", "score", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "objectiveSfx", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator", "raceRoot", "raceUhu", "racePlayer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1014,6 +1076,7 @@ maxRingLabel = NodePath("Rings/Current/RingMax")
 ringLossLabel = NodePath("Rings/Loss/LossAmount")
 ringDividerSprite = NodePath("Rings/Current/Divider")
 ringAnimator = NodePath("Rings/AnimationTree")
+fireSoulAnimator = NodePath("FireSoul/Label/AnimationPlayer")
 rankPreviewerRoot = NodePath("Values/Rank")
 mainRank = NodePath("Values/Rank/MainRank")
 transitionRank = NodePath("Values/Rank/TransitionRank")
@@ -1237,12 +1300,35 @@ parameters/ringless_transition/current_state = "disabled"
 parameters/ringless_transition/transition_request = ""
 parameters/ringless_transition/current_index = 1
 
+[node name="FireSoul" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 192.0
+offset_top = 192.0
+offset_right = 192.0
+offset_bottom = 248.0
+
+[node name="Label" type="Label" parent="FireSoul"]
+modulate = Color(1, 1, 0, 1)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 468.0
+offset_bottom = 64.0
+text = "unlock_fire_soul"
+label_settings = ExtResource("7_568eh")
+vertical_alignment = 1
+uppercase = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="FireSoul/Label"]
+libraries = {
+"": SubResource("AnimationLibrary_nui8w")
+}
+
 [node name="Objectives" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 176.0
+offset_left = 1504.0
 offset_top = 192.0
-offset_right = 592.0
+offset_right = 1792.0
 offset_bottom = 320.0
 
 [node name="ObjectiveSprite" type="TextureRect" parent="Objectives"]
