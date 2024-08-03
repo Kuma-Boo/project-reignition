@@ -1807,12 +1807,15 @@ namespace Project.Gameplay
 			if (activeLauncher?.IsCharacterCentered == false)
 			{
 				GlobalPosition = activeLauncher.RecenterCharacter();
-				VerticalSpeed = LaunchSettings.InitialVelocity.Y;
+				VerticalSpeed = 0;
 			}
 			else
 			{
+				float heightDelta = 0;
 				Vector3 targetPosition = LaunchSettings.InterpolatePositionTime(launcherTime);
-				float heightDelta = targetPosition.Y - GlobalPosition.Y;
+				if (!Mathf.IsZeroApprox(launcherTime))
+					heightDelta = targetPosition.Y - GlobalPosition.Y;
+
 				RaycastHit hit = this.CastRay(GlobalPosition, targetPosition - GlobalPosition, Runtime.Instance.environmentMask);
 				if (hit && hit.collidedObject.IsInGroup("wall"))
 				{

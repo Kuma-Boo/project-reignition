@@ -443,7 +443,7 @@ public partial class CharacterAnimator : Node3D
 		Character.Effect.IsEmittingStepDust = false;
 		animationTree.Set(GroundTransition, DisabledConstant);
 
-		if (IsFallTransitionEnabled && Character.VerticalSpeed <= 0)
+		if (IsFallTransitionEnabled && Character.VerticalSpeed < 0)
 		{
 			UpdateAirState(FallState, false);
 			animationTree.Set(FallSpeed, 1.0f);
