@@ -156,8 +156,8 @@ public partial class FlyingPot : Node3D
 		Character.VerticalSpeed = Runtime.CalculateJumpPower(Character.jumpHeight);
 
 		Character.Animator.JumpAnimation();
-		Character.Animator.Visible = true;
 		Character.Animator.SnapRotation(Character.MovementAngle - (Mathf.Pi * angleRatio));
+		Character.Animator.Visible = true;
 		Character.ResetMovementState();
 
 		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
