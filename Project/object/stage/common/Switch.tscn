@@ -374,6 +374,21 @@ timer = NodePath("Timer")
 [node name="Switch" parent="." instance=ExtResource("1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
+[node name="SwitchRay2" parent="Switch" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0)
+visible = false
+cast_shadow = 0
+
+[node name="SwitchRay1" parent="Switch" index="1"]
+visible = false
+cast_shadow = 0
+
+[node name="SwitchBase" parent="Switch" index="2"]
+cast_shadow = 0
+
+[node name="SwitchMesh" parent="Switch" index="3"]
+cast_shadow = 0
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 shape = SubResource("5")
@@ -395,3 +410,5 @@ one_shot = true
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
 [connection signal="timeout" from="Timer" to="." method="ToggleSwitch"]
+
+[editable path="Switch"]
