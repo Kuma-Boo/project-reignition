@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkimcaeupa1lw"]
+
+[ext_resource type="PackedScene" uid="uid://1etvmy7mgapq" path="res://area/3 evil foundry/object/model/platform/MetalPlatform.gltf" id="1_xd28r"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gsnlb"]
+size = Vector3(5, 4.8, 10)
+
+[node name="MetalPlatform" type="StaticBody3D" groups=["floor", "splash jump", "wall"]]
+
+[node name="MetalPlatform" parent="." instance=ExtResource("1_xd28r")]
+
+[node name="MetalPlatformMesh" parent="MetalPlatform" index="0"]
+layers = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.4, 0)
+shape = SubResource("BoxShape3D_gsnlb")
+
+[editable path="MetalPlatform"]
