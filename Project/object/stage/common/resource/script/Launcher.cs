@@ -187,7 +187,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	}
 
 	[Export]
-	private int recenterSpeed; // How fast to recenter the character
+	private int recenterSpeed = 32; // How fast to recenter the character
 
 	public virtual bool IsCharacterCentered { get; private set; }
 	protected CharacterController Character => CharacterController.instance;

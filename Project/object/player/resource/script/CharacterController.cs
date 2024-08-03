@@ -309,6 +309,7 @@ namespace Project.Gameplay
 		}
 
 		private float jumpBufferTimer;
+		public void ResetJumpBuffer() => jumpBufferTimer = 0;
 		private float actionBufferTimer;
 		private const float ACTION_BUFFER_LENGTH = .2f; // How long to allow actions to be buffered
 		private const float JUMP_BUFFER_LENGTH = .1f; // How long to allow jumps to be buffered
@@ -1795,6 +1796,8 @@ namespace Project.Gameplay
 				UpDirection = Vector3.Up;
 				Effect.PlayActionSFX(Effect.JumpSfx);
 			}
+
+			UpdateLauncher();
 		}
 
 		private void UpdateLauncher()
@@ -1804,11 +1807,15 @@ namespace Project.Gameplay
 			if (activeLauncher?.IsCharacterCentered == false)
 			{
 				GlobalPosition = activeLauncher.RecenterCharacter();
+				VerticalSpeed = 0;
 			}
 			else
 			{
+				float heightDelta = 0;
 				Vector3 targetPosition = LaunchSettings.InterpolatePositionTime(launcherTime);
-				float heightDelta = targetPosition.Y - GlobalPosition.Y;
+				if (!Mathf.IsZeroApprox(launcherTime))
+					heightDelta = targetPosition.Y - GlobalPosition.Y;
+
 				RaycastHit hit = this.CastRay(GlobalPosition, targetPosition - GlobalPosition, Runtime.Instance.environmentMask);
 				if (hit && hit.collidedObject.IsInGroup("wall"))
 				{

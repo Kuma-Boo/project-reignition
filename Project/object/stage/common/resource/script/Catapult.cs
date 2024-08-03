@@ -156,6 +156,7 @@ public partial class Catapult : Launcher
 		// Cheat launch power slightly towards extremes
 		launchRatio = Mathf.SmoothStep(0, 1, launchRatio);
 		base.Activate();
+		Character.Animator.IsFallTransitionEnabled = false;
 	}
 
 	private void CancelCatapult()
