@@ -567,6 +567,8 @@ public partial class CameraController : Node3D
 		if (motionBlurMaterial == null || !SaveManager.Config.useMotionBlur)
 			return;
 
+		GD.Print("MB: " + motionBlurRequests.ToString());
+
 		float opacity = (float)motionBlurMaterial.GetShaderParameter(OpacityParameter);
 		opacity = Mathf.MoveToward(opacity, motionBlurRequests == 0 ? 0 : 1, 5.0f * PhysicsManager.physicsDelta);
 		motionBlurMaterial.SetShaderParameter(OpacityParameter, opacity);
@@ -600,7 +602,7 @@ public partial class CameraController : Node3D
 	}
 
 	public void RequestMotionBlur() => motionBlurRequests++;
-	public void UnrequestMotionBlur() => motionBlurRequests--;
+	public void UnrequestMotionBlur() => motionBlurRequests = Mathf.Max(motionBlurRequests - 1, 0);
 
 	[Export]
 	private TextureRect crossfade;
