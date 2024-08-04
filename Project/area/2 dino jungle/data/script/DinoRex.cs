@@ -18,7 +18,7 @@ public partial class DinoRex : Node3D
 	private readonly StringName TailAttackState = "tail_attack";
 	private readonly StringName UpperBiteState = "upper_bite";
 	private readonly StringName LeftState = "left";
-	private readonly StringName RightState = "left";
+	private readonly StringName RightState = "right";
 
 	/// <summary> Is the dino currently in the middle of an attack animation? </summary>
 	private bool isAttacking;
@@ -105,7 +105,7 @@ public partial class DinoRex : Node3D
 		isStepAnimationComplete = false;
 		currentState = RexStates.Step;
 		targetRotation = playerRotation;
-		animationTree.Set(StepTransition, currentRotation > targetRotation ? RightState : LeftState);
+		animationTree.Set(StepTransition, ExtensionMethods.SignedDeltaAngleRad(currentRotation, targetRotation) > 0 ? RightState : LeftState);
 		animationTree.Set(StepTrigger, (uint)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
@@ -144,12 +144,27 @@ public partial class DinoRex : Node3D
 
 	public void OnReturnToIdle(Area3D _) => targetState = RexStates.Idle;
 
-	private void PlayScreenShake()
+	private void PlayScreenShake(float magnitude)
 	{
 		CharacterController.instance.Camera.StartCameraShake(new()
 		{
-			magnitude = Vector3.One.RemoveDepth() * 2.0f,
+			magnitude = Vector3.One.RemoveDepth() * magnitude,
 		});
+	}
+
+	private bool isRequestingMotionBlur;
+	private void StartMotionBlur()
+	{
+		isRequestingMotionBlur = true;
+		CharacterController.instance.Camera.RequestMotionBlur();
+	}
+	private void StopMotionBlur()
+	{
+		if (!isRequestingMotionBlur)
+			return;
+
+		CharacterController.instance.Camera.UnrequestMotionBlur();
+		isRequestingMotionBlur = false;
 	}
 
 	private void StartAttack()
