@@ -85,6 +85,15 @@ point_count = 4
 Data = ExtResource("2_rdr8o")
 dialogLibrary = ExtResource("3_tvr0h")
 
+[node name="Head" parent="Static/Common/Dino" index="2"]
+transform = Transform3D(0.999979, -8.9407e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -1.01328e-06, 1, 0.000292879, 1.33514e-05, 19.7418, 38.526)
+
+[node name="DemoCamera" parent="Static" index="5"]
+transform = Transform3D(-0.748955, 0, 0.662621, 0, 1, 0, -0.662621, 0, -0.748955, 119.668, 35.9585, -70.5782)
+
+[node name="Camera" parent="Static/DemoCamera" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.978148, 0.207912, 0, -0.207912, 0.978148, 0, 0, 0)
+
 [node name="PteroEggAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="PteroEggAct"]
@@ -1292,32 +1301,10 @@ transform = Transform3D(-0.422622, 0, -0.906306, 0, 1, 0, 0.906306, 0, -0.422622
 "Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 
-[connection signal="Activated" from="Static/Common/Object/Spring" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="Deactivated" from="Static/Common/Object/Spring" to="Static/Collision/IslandOneWay" method="Activate"]
 [connection signal="Staggered" from="Static/Common/Object/BoatSection1/Boat" to="PteroEggAct/EggManager" method="Frighten"]
-[connection signal="Activated" from="Static/Common/Object/DoubleBoatSection/Boat2" to="Static/Collision/BoatWallMainOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/Object/DoubleBoatSection/Boat2" to="Static/Collision/BoatWallReverseOneWay" method="Deactivate"]
 [connection signal="Staggered" from="Static/Common/Object/DoubleBoatSection/Boat2" to="PteroEggAct/EggManager" method="Frighten"]
-[connection signal="Activated" from="Static/Common/Object/DoubleBoatSection/Boat3" to="Static/Collision/BoatWallMainOneWay" method="Deactivate"]
-[connection signal="Activated" from="Static/Common/Object/DoubleBoatSection/Boat3" to="Static/Collision/BoatWallReverseOneWay" method="Activate"]
 [connection signal="Staggered" from="Static/Common/Object/DoubleBoatSection/Boat3" to="PteroEggAct/EggManager" method="Frighten"]
-[connection signal="Activated" from="Static/Common/Object/DoubleBoatSection/End2" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Common/Object/DoubleBoatSection/End2/Jump" to="Static/Collision/IslandOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/Object/DoubleBoatSection/End3" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Common/Object/DoubleBoatSection/End3/Land" to="Static/Collision/IslandOneWay" method="Deactivate"]
 [connection signal="Staggered" from="Static/Common/Object/EndingBoatSection/Boat4" to="PteroEggAct/EggManager" method="Frighten"]
-[connection signal="Activated" from="Static/Common/Object/EndingBoatSection/EndR" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Common/Object/EndingBoatSection/EndR/JumpTrigger" to="Static/Collision/IslandOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/Object/EndingBoatSection/EndL" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Common/Object/EndingBoatSection/EndL/JumpTrigger" to="Static/Collision/IslandOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/SpringPath/Spring1" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Common/SpringPath/JumpTriggers/Jump1/Jump2" to="Static/Collision/IslandOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/SpringPath/JumpPanel" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="Deactivated" from="Static/Common/SpringPath/JumpPanel/Spring" to="Static/Collision/IslandOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/Dino/DinoBridge/DinoTransitionJump" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Common/Dino/DinoBridge/DinoTransitionJump/JumpTrigger" to="Static/Collision/IslandOneWay" method="Activate"]
-[connection signal="Activated" from="Static/Common/Dino/DinoBridge/DinoTailJump" to="Static/Collision/IslandOneWay" method="Deactivate"]
-[connection signal="JumpFinished" from="Static/Common/Dino/DinoBridge/DinoTailJump/JumpTrigger" to="Static/Collision/IslandOneWay" method="Activate"]
 [connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg1" to="Static" method="IncrementObjective"]
 [connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg2" to="Static" method="IncrementObjective"]
 [connection signal="Returned" from="PteroEggAct/EggManager/PteroEgg3" to="Static" method="IncrementObjective"]

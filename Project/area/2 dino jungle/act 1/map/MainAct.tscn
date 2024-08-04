@@ -1,4 +1,4 @@
-[gd_scene load_steps=107 format=3 uid="uid://b3gupr30ahvvi"]
+[gd_scene load_steps=108 format=3 uid="uid://b3gupr30ahvvi"]
 
 [ext_resource type="Resource" uid="uid://dciso22j1cai2" path="res://resource/level data/dinosaur jungle/Act1Main.tres" id="2_p4x35"]
 [ext_resource type="Resource" uid="uid://covb6cdfu44gv" path="res://area/2 dino jungle/act 1/camera/ChaseStartCam.tres" id="3_51j1g"]
@@ -146,6 +146,10 @@ min_value = -1.0
 max_value = 1.5
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 2.5, 2.5, 0, 0, Vector2(1, 1), -1.15358, 0.0, 0, 0]
 point_count = 4
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rphlw"]
+radius = 3.0
+height = 12.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0ln2g"]
 size = Vector3(6, 15, 2)
@@ -4467,6 +4471,16 @@ enemyCount = 1
 
 [node name="GrassPillar1" parent="MainAct/Cave/LeftPath" instance=ExtResource("50_sikom")]
 transform = Transform3D(1.37749, 0, -0.316654, 0, 0.25, 0, 0.593727, 0, 0.734664, -23.0377, 0.699997, -106.939)
+
+[node name="SoftlockFix" type="StaticBody3D" parent="MainAct/Cave/LeftPath"]
+transform = Transform3D(0.918329, 0, -0.395819, 0, 1, 0, 0.395819, 0, 0.918329, -26.4403, 4.7, -112.435)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cave/LeftPath/SoftlockFix"]
+shape = SubResource("CapsuleShape3D_rphlw")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="MainAct/Cave/LeftPath/SoftlockFix"]
+transform = Transform3D(0.999999, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, 0.999999, 11.3, 0, 0.399963)
+shape = SubResource("CapsuleShape3D_rphlw")
 
 [node name="GrassPillar2" parent="MainAct/Cave/LeftPath" instance=ExtResource("50_sikom")]
 transform = Transform3D(1.63135, 0, -0.760713, 0, 1, 0, 0.760713, 0, 1.63135, -19.9575, 0.699997, -112.847)
