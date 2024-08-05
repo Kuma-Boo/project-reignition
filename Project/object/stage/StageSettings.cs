@@ -491,8 +491,13 @@ public partial class StageSettings : Node3D
 	[Export]
 	private AnimationPlayer completionAnimator;
 	private int completionAnimationIndex;
-	private void StartCompletionDemo()
+	private bool isCompletionDemoActive;
+	public void StartCompletionDemo()
 	{
+		if (isCompletionDemoActive)
+			return;
+
+		isCompletionDemoActive = true;
 		EmitSignal(SignalName.LevelDemoStarted);
 
 		if (completionAnimator == null) return;
