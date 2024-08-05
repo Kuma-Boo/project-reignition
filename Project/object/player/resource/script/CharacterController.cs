@@ -1013,8 +1013,8 @@ namespace Project.Gameplay
 			if (isAccelerationJumpQueued &&
 				currentJumpTime >= ACCELERATION_JUMP_LENGTH) // Acceleration jump?
 			{
-				if (IsHoldingDirection(PathFollower.ForwardAngle, true) &&
-				InputVector.Length() > .5f)
+				if ((IsHoldingDirection(PathFollower.ForwardAngle, true) &&
+				InputVector.Length() > .5f) || Skills.IsSkillEquipped(SkillKey.Autorun))
 				{
 					StartAccelJump();
 				}
