@@ -14,9 +14,7 @@ uniform float scroll_speed : hint_range(0.0, 0.1, 0.01);
 
 void fragment()
 {
-	float scroll = time * scroll_speed;
-	
-	vec2 main_uv = UV - vec2(scroll, 0);
+	vec2 main_uv = UV + vec2(time * scroll_speed, 0);
 	vec3 col = texture(albedo, main_uv).rgb;
 
 	vec4 detail_col = texture(detail, main_uv);
