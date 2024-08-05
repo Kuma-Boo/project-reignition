@@ -7,16 +7,11 @@ uniform sampler2D albedo : source_color, hint_default_black;
 uniform sampler2D detail : source_color, hint_default_black;
 uniform sampler2D clip_mask : source_color, hint_default_black;
 uniform sampler2D tint : source_color, hint_default_black;
-//Couldn't recreate the bloom/glow :(
-//uniform sampler2D glow_shape : source_color, hint_default_black;
-//uniform sampler2D glow_strength : source_color, hint_default_black;
-uniform float scroll_speed : hint_range(0.0, 0.1, 0.01);
+uniform float scroll_speed : hint_range(0.0, 0.1, 0.01) = .02;
 
 void fragment()
 {
-	float scroll = time * scroll_speed;
-	
-	vec2 main_uv = UV - vec2(scroll, 0);
+	vec2 main_uv = UV + vec2(time * scroll_speed, 0);
 	vec3 col = texture(albedo, main_uv).rgb;
 
 	vec4 detail_col = texture(detail, main_uv);
