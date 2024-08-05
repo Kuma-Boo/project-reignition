@@ -1,13 +1,15 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bo5dwmlju68e4"]
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://bo5dwmlju68e4"]
 
 [ext_resource type="Texture2D" uid="uid://d1xxyy80ur76a" path="res://area/2 dino jungle/data/skybox/model/texture/cloud side.png" id="1_imr48"]
+[ext_resource type="Shader" path="res://effect/shader/environment/CloudScroll.gdshader" id="1_scw5u"]
+[ext_resource type="Texture2D" uid="uid://cifuot5eo3kwg" path="res://area/2 dino jungle/data/skybox/model/texture/clouds side 2.png" id="3_l25qw"]
 
 [resource]
 resource_name = "Cloud Side"
 render_priority = -125
-transparency = 1
-shading_mode = 0
-specular_mode = 2
-disable_fog = true
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("1_imr48")
+shader = ExtResource("1_scw5u")
+shader_parameter/scroll_speed = 0.02
+shader_parameter/albedo = ExtResource("1_imr48")
+shader_parameter/detail = ExtResource("3_l25qw")
+shader_parameter/clip_mask = ExtResource("3_l25qw")
+shader_parameter/tint = ExtResource("1_imr48")
