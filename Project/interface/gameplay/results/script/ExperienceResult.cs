@@ -246,6 +246,12 @@ public partial class ExperienceResult : Control
 		}
 		missionLabel.GetParent<Control>().Visible = useMissionExp;
 
+		if (targetExp == startingExp) // No EXP was gained
+		{
+			EmitSignal(SignalName.Finished);
+			return;
+		}
+
 		RedrawData();
 
 		// Fade to black
@@ -254,8 +260,8 @@ public partial class ExperienceResult : Control
 		TransitionManager.StartTransition(new()
 		{
 			color = Colors.Black,
-			inSpeed = 0.5f,
-			outSpeed = .5f
+			inSpeed = .1f,
+			outSpeed = .1f
 		});
 	}
 
