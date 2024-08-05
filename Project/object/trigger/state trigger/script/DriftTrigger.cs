@@ -25,18 +25,18 @@ public partial class DriftTrigger : Area3D
 	private float entrySpeed; // Entry speed
 	private CharacterController Character => CharacterController.instance;
 
-	/// <summary> Is this drift trigger currently being processed? </summary>
-	private bool isProcessing;
-	private enum DriftResults
+	private enum DriftStatus
 	{
-		Waiting, // Waiting for drift input
+		Inactive, // Drift is not active
+		Waiting, // Waiting for drift validation
+		Processing, // Drift is being processed
 		TimingFail, // The player mistimed the input
 		WaitFail, // The player slid to a stop
 		JumpFail, // Player jumped out of the drift
 		Success, // Player successfully drifted
 	}
 	/// <summary> Result of the drift. </summary>
-	private DriftResults driftResult;
+	private DriftStatus driftStatus;
 
 	/// <summary> For smooth damping. </summary>
 	private Vector3 driftVelocity;
@@ -70,7 +70,7 @@ public partial class DriftTrigger : Area3D
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (!isProcessing)
+		if (driftStatus == DriftStatus.Inactive)
 		{
 			if (isFadingSFX)
 				isFadingSFX = SoundManager.FadeAudioPlayer(sfx);
@@ -83,10 +83,20 @@ public partial class DriftTrigger : Area3D
 					Character.Animator.ResetState(.4f);
 			}
 
-			return; // Inactive
+			return;
 		}
 
-		UpdateDrift();
+		if (driftStatus == DriftStatus.Waiting &&
+			Character.PathFollower.Progress < Character.PathFollower.GetProgress(GlobalPosition))
+		{
+			if (!IsDriftValid())
+				return;
+
+			StartDrift(); // Drift started successfully
+		}
+
+		if (driftStatus == DriftStatus.Processing)
+			UpdateDrift();
 	}
 
 	private bool IsDriftValid() // Checks whether the player is in a state where a drift is possible
@@ -102,8 +112,7 @@ public partial class DriftTrigger : Area3D
 
 	private void StartDrift() // Initialize drift
 	{
-		isProcessing = true;
-
+		driftStatus = DriftStatus.Processing;
 		entrySpeed = Character.MoveSpeed;
 		driftVelocity = Vector3.Zero;
 
@@ -126,8 +135,6 @@ public partial class DriftTrigger : Area3D
 
 	private void UpdateDrift()
 	{
-		if (driftResult != DriftResults.Waiting && driftResult != DriftResults.TimingFail) return; // Drift was already failed
-
 		Vector3 targetPosition = MiddlePosition + (this.Back() * InputWindowDistance);
 
 		// Process drift
@@ -143,12 +150,12 @@ public partial class DriftTrigger : Area3D
 
 		bool isManualDrift = Character.Skills.IsSkillEquipped(SkillKey.DriftExp);
 		bool isAttemptingDrift = ((Input.IsActionJustPressed("button_action") && isManualDrift) ||
-			(!isManualDrift && distance <= InputWindowDistance)) && driftResult != DriftResults.TimingFail;
+			(!isManualDrift && distance <= InputWindowDistance)) && driftStatus != DriftStatus.TimingFail;
 
 		if (Input.IsActionJustPressed("button_jump")) // Allow character to jump out of drift at any time
 		{
 			driftAnimationTimer = 0;
-			driftResult = DriftResults.JumpFail;
+			driftStatus = DriftStatus.JumpFail;
 			CompleteDrift();
 			ApplyBonus();
 
@@ -160,7 +167,7 @@ public partial class DriftTrigger : Area3D
 		{
 			if (distance <= InputWindowDistance * 2f) // Successful drift
 			{
-				driftResult = DriftResults.Success;
+				driftStatus = DriftStatus.Success;
 				driftAnimationTimer = LaunchAnimationLength;
 
 				if (isManualDrift)
@@ -172,7 +179,7 @@ public partial class DriftTrigger : Area3D
 			}
 			else // Too early! Fail drift attempt and play a special animation?
 			{
-				driftResult = DriftResults.TimingFail;
+				driftStatus = DriftStatus.TimingFail;
 				driftAnimationTimer = FailAnimationLength;
 				return;
 			}
@@ -182,10 +189,10 @@ public partial class DriftTrigger : Area3D
 			return;
 		}
 
-		if (distance >= .3f) return;
+		if (distance >= .3f || !isManualDrift) return;
 
 		// Slid to a stop
-		driftResult = DriftResults.WaitFail;
+		driftStatus = DriftStatus.WaitFail;
 		driftAnimationTimer = PhysicsManager.physicsDelta;
 		Character.MoveSpeed = 0f; // Reset Movespeed
 		CompleteDrift();
@@ -194,14 +201,13 @@ public partial class DriftTrigger : Area3D
 	private void CompleteDrift()
 	{
 		isFadingSFX = true; // Fade sound effect
-		isProcessing = false;
 
 		// Turn 90 degrees
-		if (driftResult == DriftResults.JumpFail)
+		if (driftStatus == DriftStatus.JumpFail)
 		{
 			Character.Animator.ResetState(0f);
 		}
-		else if (driftResult == DriftResults.Success)
+		else if (driftStatus == DriftStatus.Success)
 		{
 			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(ExitDirection, Character.PathFollower.Up());
 			Character.MovementAngle -= Mathf.Pi * .1f * Character.InputVector.X;
@@ -212,6 +218,7 @@ public partial class DriftTrigger : Area3D
 			Character.Animator.ExternalAngle = Character.MovementAngle;
 		}
 
+		driftStatus = DriftStatus.Inactive; // Reset to inactive state
 		Character.ResetMovementState();
 		Character.Effect.StopDust();
 
@@ -227,7 +234,7 @@ public partial class DriftTrigger : Area3D
 	{
 		if (wasBonusApplied) return; // Bonus was already applied
 
-		if (driftResult == DriftResults.Success)
+		if (driftStatus == DriftStatus.Success)
 			BonusManager.instance.QueueBonus(new(BonusType.Drift));
 
 		wasBonusApplied = true;
@@ -238,14 +245,18 @@ public partial class DriftTrigger : Area3D
 		if (!a.IsInGroup("player detection"))
 			return;
 
-		driftResult = DriftResults.Waiting;
+		driftStatus = DriftStatus.Waiting;
+	}
 
-		if (!IsDriftValid())
-		{
-			ApplyBonus(); // Invalid drift, skip bonus
+	public void OnExited(Area3D a)
+	{
+		if (!a.IsInGroup("player detection"))
 			return;
-		}
 
-		StartDrift(); // Drift started successfully
+		if (driftStatus == DriftStatus.Waiting)
+		{
+			ApplyBonus(); // Invalid drift, skip bonus (if possible)
+			driftStatus = DriftStatus.Inactive; // Reset to inactive state
+		}
 	}
 }
