@@ -1,8 +1,14 @@
-[gd_scene load_steps=23 format=3 uid="uid://dc3kqxiptkiyx"]
+[gd_scene load_steps=25 format=3 uid="uid://dc3kqxiptkiyx"]
 
+[ext_resource type="Script" path="res://object/stage/genie/Shahra.cs" id="1_yamyh"]
 [ext_resource type="Texture2D" uid="uid://ch6m32qbjicy7" path="res://object/stage/genie/texture/genie glow.png" id="5_1dvv3"]
 [ext_resource type="Material" uid="uid://dw3ix42bqk6w1" path="res://object/stage/genie/material/Shahra.tres" id="5_igf81"]
 [ext_resource type="Material" uid="uid://bm6mblpuw33xo" path="res://object/stage/genie/material/Wind.tres" id="6_xxjr7"]
+
+[sub_resource type="Curve" id="Curve_cmx77"]
+min_value = -1.0
+_data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0o2g1"]
 size = Vector2(1, 1)
@@ -79,8 +85,8 @@ spread = 0.0
 initial_velocity_min = 1.0
 initial_velocity_max = 1.5
 gravity = Vector3(0, 0, 0)
-scale_min = 0.05
-scale_max = 0.2
+scale_min = 0.01
+scale_max = 0.05
 color = Color(1, 0.627451, 1, 1)
 alpha_curve = SubResource("CurveTexture_8gyhr")
 
@@ -114,16 +120,22 @@ material = ExtResource("6_xxjr7")
 size = Vector2(1, 1)
 orientation = 2
 
-[node name="Shahra" type="Node3D"]
+[node name="Shahra" type="Node3D" node_paths=PackedStringArray("root")]
+script = ExtResource("1_yamyh")
+root = NodePath("Root")
+travelCurve = SubResource("Curve_cmx77")
+travelSpeed = Vector3(0.5, 1.2, 0.8)
+travelMagnitude = Vector3(1, 0.3, 0.5)
 
-[node name="Base" type="MeshInstance3D" parent="."]
+[node name="Root" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 material_override = ExtResource("5_igf81")
 cast_shadow = 0
 gi_mode = 0
 mesh = SubResource("PlaneMesh_0o2g1")
 skeleton = NodePath("../..")
 
-[node name="GlowParticle" type="GPUParticles3D" parent="Base"]
+[node name="GlowParticle" type="GPUParticles3D" parent="Root"]
 layers = 32
 cast_shadow = 0
 gi_mode = 0
@@ -136,7 +148,7 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_25x36")
 draw_pass_1 = SubResource("PlaneMesh_hnsb0")
 
-[node name="BaseParticle" type="GPUParticles3D" parent="Base"]
+[node name="BaseParticle" type="GPUParticles3D" parent="Root"]
 layers = 32
 cast_shadow = 0
 gi_mode = 0
@@ -149,7 +161,7 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_m217g")
 draw_pass_1 = SubResource("PlaneMesh_3meo5")
 
-[node name="DustParticle" type="GPUParticles3D" parent="Base"]
+[node name="DustParticle" type="GPUParticles3D" parent="Root"]
 layers = 32
 cast_shadow = 0
 gi_mode = 0
@@ -161,7 +173,7 @@ visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
 process_material = SubResource("ParticleProcessMaterial_rs22f")
 draw_pass_1 = SubResource("PlaneMesh_3meo5")
 
-[node name="WindParticle" type="GPUParticles3D" parent="Base"]
+[node name="WindParticle" type="GPUParticles3D" parent="Root"]
 layers = 32
 cast_shadow = 0
 gi_mode = 0
