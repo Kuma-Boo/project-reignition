@@ -95,7 +95,7 @@ public partial class DriftTrigger : Area3D
 			StartDrift(); // Drift started successfully
 		}
 
-		if (driftStatus == DriftStatus.Processing)
+		if (driftStatus == DriftStatus.Processing || driftStatus == DriftStatus.TimingFail)
 			UpdateDrift();
 	}
 

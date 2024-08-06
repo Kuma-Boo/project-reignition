@@ -67,7 +67,7 @@ public partial class Shahra : Node3D
 		);
 
 		targetPosition *= travelMagnitude;
-		root.Position = targetPosition + Vector3.Up * .5f;
+		root.Position = targetPosition + (Vector3.Up * .5f);
 	}
 
 	private void StartShahra()
