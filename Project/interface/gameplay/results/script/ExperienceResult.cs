@@ -39,6 +39,7 @@ public partial class ExperienceResult : Control
 	private BGMPlayer bgm;
 	[Export]
 	private AnimationPlayer animator;
+	private bool isSkippingResults;
 	private readonly string IncreaseAnimation = "increase";
 	private readonly string LevelUpAnimation = "level-up";
 	private readonly string ShowLevelUpAnimation = "show-level-up";
@@ -51,6 +52,7 @@ public partial class ExperienceResult : Control
 	private int startingExp;
 	private float expInterpolation;
 	private float interpolatedExp;
+	/// <summary> Lerp smoothing to use when gaining large amounts of exp. </summary>
 	private readonly float ExpSmoothing = 0.5f;
 
 	/// <summary> Number to draw on the score label. </summary>
@@ -102,9 +104,26 @@ public partial class ExperienceResult : Control
 		}
 
 		if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("button_action"))
+		{
+			isSkippingResults = true;
 			SkipResults();
+		}
 
 		UpdateExp();
+
+		if (SaveManager.ActiveGameData.exp == targetExp)
+		{
+			if (animator.CurrentAnimation == IncreaseAnimation)
+				animator.Stop();
+
+			SaveManager.SaveGameData();
+			isProcessing = false;
+
+			if (isSkippingResults)
+				FinishMenu();
+			else
+				GetTree().CreateTimer(.5).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishMenu));
+		}
 	}
 
 	private void UpdateExp()
@@ -116,26 +135,17 @@ public partial class ExperienceResult : Control
 
 		float startExp = Mathf.Max(startingExp, previousLevelupRequirement);
 		float endExp = Mathf.Min(levelupRequirement, targetExp);
-		expInterpolation = Mathf.MoveToward(expInterpolation, 1, ExpSmoothing * PhysicsManager.physicsDelta);
+		// Calculate interpolation speed to account for slight exp gains
+		float interpolationSpeed = (endExp - previousLevelupRequirement) / (levelupRequirement - previousLevelupRequirement);
+
+		// Start interpolation
+		expInterpolation = Mathf.MoveToward(expInterpolation, 1, ExpSmoothing / interpolationSpeed * PhysicsManager.physicsDelta);
 		interpolatedExp = Mathf.Lerp(startExp, endExp, expInterpolation);
 		SaveManager.ActiveGameData.exp = Mathf.CeilToInt(interpolatedExp);
 		RedrawData();
 
 		if (SaveManager.ActiveGameData.exp >= levelupRequirement && SaveManager.ActiveGameData.level < MaxLevel) // Level up
-		{
 			ProcessLevelUp();
-			return;
-		}
-
-		if (SaveManager.ActiveGameData.exp == targetExp)
-		{
-			if (animator.CurrentAnimation == IncreaseAnimation)
-				animator.Stop();
-
-			SaveManager.SaveGameData();
-			isProcessing = false;
-			GetTree().CreateTimer(.5).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishMenu));
-		}
 	}
 
 	private void RedrawData()
@@ -246,6 +256,12 @@ public partial class ExperienceResult : Control
 		}
 		missionLabel.GetParent<Control>().Visible = useMissionExp;
 
+		if (targetExp == startingExp) // No EXP was gained
+		{
+			EmitSignal(SignalName.Finished);
+			return;
+		}
+
 		RedrawData();
 
 		// Fade to black
@@ -254,8 +270,8 @@ public partial class ExperienceResult : Control
 		TransitionManager.StartTransition(new()
 		{
 			color = Colors.Black,
-			inSpeed = 0.5f,
-			outSpeed = .5f
+			inSpeed = .1f,
+			outSpeed = .1f
 		});
 	}
 
@@ -274,6 +290,9 @@ public partial class ExperienceResult : Control
 
 	private void FinishMenu()
 	{
+		if (isFadingBgm)
+			return;
+
 		// Emit a signal; Transition is handled by NotificationMenu.cs
 		isFadingBgm = true;
 		EmitSignal(SignalName.Finished);

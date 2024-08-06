@@ -1013,8 +1013,8 @@ namespace Project.Gameplay
 			if (isAccelerationJumpQueued &&
 				currentJumpTime >= ACCELERATION_JUMP_LENGTH) // Acceleration jump?
 			{
-				if (IsHoldingDirection(PathFollower.ForwardAngle, true) &&
-				InputVector.Length() > .5f)
+				if ((IsHoldingDirection(PathFollower.ForwardAngle, true) &&
+				InputVector.Length() > .5f) || Skills.IsSkillEquipped(SkillKey.Autorun))
 				{
 					StartAccelJump();
 				}
@@ -1043,9 +1043,12 @@ namespace Project.Gameplay
 		private void StartAccelJump()
 		{
 			SetActionState(ActionStates.AccelJump);
+			if (ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.ForwardAngle) > Mathf.Pi * .5f)
+				MovementAngle = PathFollower.ForwardAngle;
+
 			MoveSpeed = Skills.accelerationJumpSpeed;
-			Animator.JumpAccelAnimation();
 			VerticalSpeed = 5f; // Consistant accel jump height
+			Animator.JumpAccelAnimation();
 			isAccelerationJumpQueued = false; // Stop listening for an acceleration jump
 
 			if (Skills.IsSkillEquipped(SkillKey.AccelJumpAttack))
@@ -1328,11 +1331,15 @@ namespace Project.Gameplay
 
 		private void UpdateBackflip()
 		{
-			if (IsHoldingDirection(PathFollower.ForwardAngle))
-			{
+			bool isHoldingForward = IsHoldingDirection(PathFollower.ForwardAngle, true, false);
+			if (isHoldingForward || Input.IsActionPressed("button_brake"))
 				MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, -1);
-			}
-			else
+			else if (IsHoldingDirection(PathFollower.BackAngle))
+				MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, InputVector.Length());
+			else if (Mathf.IsZeroApprox(InputVector.Length()))
+				MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, 0);
+
+			if (!isHoldingForward)
 			{
 				float targetMovementAngle = ExtensionMethods.ClampAngleRange(GetTargetMovementAngle(), PathFollower.BackAngle, MaxBackflipAdjustment);
 				float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.BackAngle);
@@ -1349,11 +1356,6 @@ namespace Project.Gameplay
 				bool isTurningAround = !IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
 				float turnAmount = isTurningAround ? Skills.TurnTurnaround : Skills.MaxTurnAmount;
 				MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnAmount);
-
-				if (IsHoldingDirection(PathFollower.BackAngle))
-					MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, InputVector.Length());
-				else if (Mathf.IsZeroApprox(InputVector.Length()))
-					MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, 0);
 			}
 
 			if (IsOnGround)

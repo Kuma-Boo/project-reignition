@@ -258,6 +258,14 @@ public partial class EventTrigger : StageTriggerModule
 	private float characterExitMoveSpeed;
 	private float characterExitVerticalSpeed;
 
+	private void ScreenShake(float magnitude)
+	{
+		Character.Camera.StartCameraShake(new()
+		{
+			magnitude = Vector3.One.RemoveDepth() * magnitude
+		});
+	}
+
 	/// <summary> Resets the character's movement state. </summary>
 	public void FinishEvent()
 	{
