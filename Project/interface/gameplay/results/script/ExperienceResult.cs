@@ -109,8 +109,6 @@ public partial class ExperienceResult : Control
 			SkipResults();
 		}
 
-		UpdateExp();
-
 		if (SaveManager.ActiveGameData.exp == targetExp)
 		{
 			if (animator.CurrentAnimation == IncreaseAnimation)
@@ -123,7 +121,11 @@ public partial class ExperienceResult : Control
 				FinishMenu();
 			else
 				GetTree().CreateTimer(.5).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishMenu));
+
+			return;
 		}
+
+		UpdateExp();
 	}
 
 	private void UpdateExp()
@@ -177,8 +179,10 @@ public partial class ExperienceResult : Control
 
 		// Skip everything
 		SaveManager.ActiveGameData.exp = targetExp;
-		ProcessLevelUp();
+		interpolatedExp = targetExp;
 		expInterpolation = 1.0f;
+		ProcessLevelUp();
+		RedrawData();
 	}
 
 	private void ProcessLevelUp()
