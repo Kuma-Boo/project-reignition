@@ -101,6 +101,7 @@ public partial class PteroEgg : Area3D
 		if (IsHeld)
 			PteroEggManager.heldEggs.Remove(this);
 
+		IsReturnedToNest = false;
 		followVelocity = Vector3.Zero;
 		spawnData.Respawn(this);
 		Animator.Play("idle");
