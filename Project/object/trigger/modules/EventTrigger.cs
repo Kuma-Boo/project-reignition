@@ -159,12 +159,10 @@ public partial class EventTrigger : StageTriggerModule
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (Engine.IsEditorHint()) return;
-
-		if (playerStandin == null)
+		if (Engine.IsEditorHint())
 			return;
 
-		if (Character.MovementState != CharacterController.MovementStates.External || Character.ExternalController != this)
+		if (playerStandin == null || Character.ExternalController != this)
 			return;
 
 		Character.UpdateExternalControl();
@@ -259,6 +257,14 @@ public partial class EventTrigger : StageTriggerModule
 	private bool normalizeExitMoveSpeed = true;
 	private float characterExitMoveSpeed;
 	private float characterExitVerticalSpeed;
+
+	private void ScreenShake(float magnitude)
+	{
+		Character.Camera.StartCameraShake(new()
+		{
+			magnitude = Vector3.One.RemoveDepth() * magnitude
+		});
+	}
 
 	/// <summary> Resets the character's movement state. </summary>
 	public void FinishEvent()

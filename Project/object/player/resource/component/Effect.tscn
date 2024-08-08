@@ -1,4 +1,4 @@
-[gd_scene load_steps=193 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=198 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/CharacterEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -33,6 +33,7 @@
 [ext_resource type="AudioStream" uid="uid://n4glservh4l2" path="res://sound/sfx/objects/grind rail.wav" id="28_elah2"]
 [ext_resource type="Material" uid="uid://ca62uiedbfw5x" path="res://effect/particle/material/Ember Blue.tres" id="29_j5i12"]
 [ext_resource type="Material" uid="uid://bvpcekopblbht" path="res://object/player/resource/effect/material/Crest Wind Spark.tres" id="31_4gjme"]
+[ext_resource type="Material" uid="uid://bef3nf037vgw8" path="res://object/stage/common/resource/model/material/Flying Pot Shine.tres" id="33_4e01p"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
 [ext_resource type="Shader" path="res://effect/shader/particle/AnimatedNonbillboard.gdshader" id="34_fub5g"]
 [ext_resource type="Texture2D" uid="uid://cn2jkjpa6m0ut" path="res://object/stage/common/resource/model/texture/goal flame detail atlas.png" id="34_ss1rs"]
@@ -1009,6 +1010,41 @@ material = ExtResource("7_8immp")
 size = Vector2(0.1, 1)
 center_offset = Vector3(0, 0.25, 0)
 
+[sub_resource type="Curve" id="Curve_astx0"]
+_data = [Vector2(0, 0), 0.0, 9.5, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_nepbu"]
+width = 64
+curve = SubResource("Curve_astx0")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jvm8h"]
+lifetime_randomness = 0.4
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.2
+emission_ring_inner_radius = 0.2
+angle_min = -90.0
+angle_max = 90.0
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, -10, 0)
+linear_accel_min = -10.0
+linear_accel_max = -8.0
+scale_max = 2.5
+scale_curve = SubResource("CurveTexture_nepbu")
+color = Color(0.737255, 0.85098, 1, 1)
+hue_variation_min = -0.05
+hue_variation_max = 0.15
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lwk0r"]
+material = ExtResource("33_4e01p")
+size = Vector2(1, 1)
+orientation = 2
+
 [sub_resource type="Gradient" id="Gradient_fsk5e"]
 offsets = PackedFloat32Array(0.202128, 0.816489)
 colors = PackedColorArray(0.196078, 0, 0.701961, 1, 0.54902, 0, 0.701961, 1)
@@ -1196,7 +1232,7 @@ anim_speed_min = 1.0
 anim_speed_max = 2.0
 anim_offset_max = 1.0
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "dustParticle", "windParticle", "fireParticle", "stompParticle", "splashJumpParticle", "aegisSlideParticle", "volcanoSlideParticle", "soulSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "fireCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "grindrailSfx", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "dustParticle", "windParticle", "fireParticle", "stompParticle", "splashJumpParticle", "aegisSlideParticle", "volcanoSlideParticle", "soulSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "fireCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "perfectShuffleParticle", "grindrailSfx", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 trailFX = NodePath("VFX/ActionFX/TrailMesh")
@@ -1217,6 +1253,7 @@ chargeParticle = NodePath("VFX/RailFX/Charge")
 fullChargeParticle = NodePath("VFX/RailFX/FullCharge")
 grindrailSparkParticle = NodePath("VFX/RailFX/GrindrailSparks")
 grindrailBurstParticle = NodePath("VFX/RailFX/GrindrailBurst")
+perfectShuffleParticle = NodePath("VFX/RailFX/PerfectShuffle")
 grindrailSfx = NodePath("SFX/GrindrailSFX")
 materialSFXLibrary = ExtResource("5_h4i1s")
 footstepChannel = NodePath("SFX/FootstepChannel")
@@ -1726,6 +1763,20 @@ local_coords = true
 transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_d5h6o")
 draw_pass_1 = SubResource("QuadMesh_dlv4t")
+
+[node name="PerfectShuffle" type="GPUParticles3D" parent="VFX/RailFX"]
+layers = 32
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.95
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -1, -2, 4, 4, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_jvm8h")
+draw_pass_1 = SubResource("PlaneMesh_lwk0r")
 
 [node name="CrestFX" type="Node3D" parent="VFX"]
 

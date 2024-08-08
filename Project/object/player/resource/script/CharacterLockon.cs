@@ -90,7 +90,7 @@ public partial class CharacterLockon : Node3D
 		wasTargetChanged = false;
 		GlobalRotation = Vector3.Up * Character.PathFollower.ForwardAngle;
 
-		if (IsMonitoring && (!IsBounceLockoutActive || CanInterruptBounce))
+		if (IsMonitoring)
 		{
 			float closestDistance = Mathf.Inf; // Current closest target
 			Node3D currentTarget = Target;
@@ -147,6 +147,9 @@ public partial class CharacterLockon : Node3D
 				bool isTargetAttackable = IsHomingAttacking ||
 					(Target.GlobalPosition.Y <= Character.CenterPosition.Y + (Character.CollisionSize.Y * 2.0f) &&
 					Character.ActionState != CharacterController.ActionStates.JumpDash);
+				if (IsBounceLockoutActive && !CanInterruptBounce)
+					isTargetAttackable = false;
+
 				Vector2 screenPos = Character.Camera.ConvertToScreenSpace(Target.GlobalPosition);
 				UpdateLockonReticle(screenPos, isTargetAttackable);
 			}

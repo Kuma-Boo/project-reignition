@@ -15,6 +15,8 @@ public partial class FlowerMajin : Enemy
 	public delegate void StaggerEventHandler();
 	[Signal]
 	public delegate void AttackEventHandler();
+	[Signal]
+	public delegate void DeflectEventHandler();
 
 	/// <summary> Skip passive phase when activated? </summary>
 	[ExportGroup("Enemy Settings")]
@@ -141,6 +143,8 @@ public partial class FlowerMajin : Enemy
 
 				if (weakDefense)
 					StartStaggerState();
+				else
+					EmitSignal(SignalName.Deflect);
 			}
 
 			if (Character.AttackState == CharacterController.AttackStates.None ||

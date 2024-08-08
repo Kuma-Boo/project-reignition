@@ -91,7 +91,7 @@ public partial class NotificationMenu : Control
 		TransitionManager.StartTransition(new()
 		{
 			color = Colors.Black,
-			inSpeed = .5f,
+			inSpeed = .2f,
 			outSpeed = 0f,
 		});
 	}

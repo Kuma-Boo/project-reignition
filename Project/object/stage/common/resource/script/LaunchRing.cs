@@ -23,8 +23,6 @@ public partial class LaunchRing : Launcher
 	private bool isSpikeVariant;
 	[Export]
 	private AnimationPlayer animator;
-	[Export]
-	private AudioStreamPlayback sfx;
 	private bool isActive;
 
 	public override float GetLaunchRatio() => isSpikeVariant ? 1f : Mathf.SmoothStep(0, 1, launchRatio);

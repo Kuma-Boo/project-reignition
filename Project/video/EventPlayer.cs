@@ -94,7 +94,7 @@ public partial class EventPlayer : Node
 	{
 		subtitles = new Gameplay.Triggers.DialogTrigger()
 		{
-			isCutscene = true,
+			IsCutscene = true,
 			delays = new Array<float>(),
 			displayLength = new Array<float>(),
 			textKeys = new Array<string>(),

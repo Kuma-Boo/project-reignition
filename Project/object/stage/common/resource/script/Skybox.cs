@@ -3,7 +3,7 @@ using Godot;
 namespace Project.Gameplay.Objects
 {
 	/// <summary>
-	/// Moves the skybox with the player.
+	/// Moves the skybox with the current camera.
 	/// </summary>
 	public partial class Skybox : Node3D
 	{
@@ -14,7 +14,7 @@ namespace Project.Gameplay.Objects
 			if (Character.IsDefeated)
 				return;
 
-			GlobalPosition = Character.GlobalPosition;
+			GlobalPosition = GetTree().Root.GetCamera3D().GlobalPosition;
 		}
 	}
 }

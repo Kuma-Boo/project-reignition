@@ -38,6 +38,7 @@ public partial class FireSoul : Pickup
 
 		isCollected = true;
 		Animator.Play("collect");
+		HeadsUpDisplay.instance.CollectFireSoul();
 		StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint), (uint)ConnectFlags.OneShot);
 	}
 
@@ -71,7 +72,7 @@ public partial class FireSoul : Pickup
 
 	public override void Unload()
 	{
-		if (isCollected) // Write save data
+		if (isCollected && Stage.LevelState == StageSettings.LevelStateEnum.Success) // Write save data
 			SaveManager.ActiveGameData.SetFireSoulCollected(Stage.Data.LevelID, fireSoulIndex, true);
 
 		base.Unload();

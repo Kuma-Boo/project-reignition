@@ -723,6 +723,11 @@ middleHeight = 2.0
 finalHeight = -15.0
 distance = 33.0
 
+[node name="Path" type="Node3D" parent="MainAct/End/JumpPanel1" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("18_16hbr")
+path = NodePath("../../../../Static/Path/EndMiddleIslandPath")
+
 [node name="Camera" type="Node3D" parent="MainAct/End/JumpPanel1"]
 script = ExtResource("22_0v6ed")
 transitionTime = 0.5
@@ -1079,6 +1084,7 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="Activated" from="MainAct/End/JumpPanel1" to="Static/Collision/FeedingTunnelOneWay" method="Deactivate"]
 [connection signal="Activated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Activate"]
 [connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="Static/Collision/FeedingTunnelOneWay" method="Activate"]
+[connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Path" method="Activate"]
 [connection signal="Deactivated" from="MainAct/End/JumpPanel1" to="MainAct/End/JumpPanel1/Camera" method="Deactivate"]
 [connection signal="Shattered" from="MainAct/End/Cactus1" to="MainAct/End/Cactus2" method="Shatter"]
 

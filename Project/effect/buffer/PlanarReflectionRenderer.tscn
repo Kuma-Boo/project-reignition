@@ -2,15 +2,36 @@
 
 [ext_resource type="Script" path="res://effect/buffer/script/PlanarReflectionRenderer.cs" id="1_p6vq7"]
 
-[node name="PlanarReflectionRenderer" type="Node3D" node_paths=PackedStringArray("reflectionCamera", "reflectionViewport")]
+[node name="PlanarReflectionRenderer" type="Node3D" node_paths=PackedStringArray("reflectionCamera", "reflectionViewport", "reflectionViewportContainer")]
 script = ExtResource("1_p6vq7")
-reflectionCamera = NodePath("ReflectionViewport/ReflectionCamera")
-reflectionViewport = NodePath("ReflectionViewport")
+reflectionCamera = NodePath("Viewport/ReflectionPreview/ReflectionViewport/ReflectionCamera")
+reflectionViewport = NodePath("Viewport/ReflectionPreview/ReflectionViewport")
+reflectionViewportContainer = NodePath("Viewport/ReflectionPreview")
 reflectionMaterials = []
 
-[node name="ReflectionViewport" type="SubViewport" parent="."]
+[node name="Viewport" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ReflectionPreview" type="SubViewportContainer" parent="Viewport"]
+visible = false
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = 540.0
+offset_right = 960.0
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(0, 540)
+
+[node name="ReflectionViewport" type="SubViewport" parent="Viewport/ReflectionPreview"]
 transparent_bg = true
 handle_input_locally = false
+mesh_lod_threshold = 10.0
 positional_shadow_atlas_size = 0
 positional_shadow_atlas_16_bits = false
 positional_shadow_atlas_quad_0 = 0
@@ -18,7 +39,7 @@ positional_shadow_atlas_quad_1 = 0
 positional_shadow_atlas_quad_2 = 0
 positional_shadow_atlas_quad_3 = 0
 size = Vector2i(960, 540)
-render_target_update_mode = 1
+render_target_update_mode = 0
 
-[node name="ReflectionCamera" type="Camera3D" parent="ReflectionViewport"]
+[node name="ReflectionCamera" type="Camera3D" parent="Viewport/ReflectionPreview/ReflectionViewport"]
 cull_mask = 65591

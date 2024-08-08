@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://b5dibkkf5v0en"]
+[gd_scene load_steps=11 format=3 uid="uid://b5dibkkf5v0en"]
 
 [ext_resource type="PackedScene" uid="uid://b7m6ycj60sqx5" path="res://area/3 evil foundry/object/model/scrap/ScrapClaw.gltf" id="1_7go6u"]
 [ext_resource type="Script" path="res://area/3 evil foundry/data/script/HangingScrap.cs" id="1_cv8j3"]
 [ext_resource type="PackedScene" uid="uid://cptiijnhwgwjm" path="res://area/3 evil foundry/object/model/scrap/HangingScrap.gltf" id="2_rhjaa"]
+[ext_resource type="AudioStream" uid="uid://db7hww3ufbe68" path="res://sound/sfx/stage/evil foundry/hanging scrap.wav" id="4_rerat"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hhikk"]
 size = Vector3(4.5, 1.4, 4.5)
@@ -181,6 +182,20 @@ tracks/5/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SFX")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_uxish"]
 _data = {
@@ -219,6 +234,13 @@ libraries = {
 "": SubResource("AnimationLibrary_uxish")
 }
 next/delay_drop = &"drop"
+
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11, 0)
+stream = ExtResource("4_rerat")
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
 
 [connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
 [connection signal="area_exited" from="Hitbox" to="." method="OnExited"]

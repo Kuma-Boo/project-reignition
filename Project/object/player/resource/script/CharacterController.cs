@@ -309,6 +309,7 @@ namespace Project.Gameplay
 		}
 
 		private float jumpBufferTimer;
+		public void ResetJumpBuffer() => jumpBufferTimer = 0;
 		private float actionBufferTimer;
 		private const float ACTION_BUFFER_LENGTH = .2f; // How long to allow actions to be buffered
 		private const float JUMP_BUFFER_LENGTH = .1f; // How long to allow jumps to be buffered
@@ -440,8 +441,10 @@ namespace Project.Gameplay
 		[Signal]
 		public delegate void ExternalControlCompletedEventHandler();
 
+		/// <summary> Reference to the external object currently controlling the player. Returns null if the player isn't being externally controlled. </summary>
+		public Node ExternalController { get => MovementState == MovementStates.External ? externalController : null; }
 		/// <summary> Reference to the external object currently controlling the player </summary>
-		public Node ExternalController { get; private set; }
+		private Node externalController;
 		public Node3D ExternalParent { get; private set; }
 		private Vector3 externalOffset;
 		private float externalSmoothing;
@@ -451,7 +454,7 @@ namespace Project.Gameplay
 
 		public void StartExternal(Node controller, Node3D followObject = null, float smoothing = 0f, bool allowSpeedBreak = false)
 		{
-			ExternalController = controller;
+			externalController = controller;
 
 			ResetActionState();
 			ResetMovementState();
@@ -786,7 +789,7 @@ namespace Project.Gameplay
 		/// <summary> How much should the steepest slope affect the player? </summary>
 		private const float SlopeInfluenceStrength = .2f;
 		/// <summary> Slopes that are shallower than Mathf.PI * threshold are ignored. </summary>
-		private const float SlopeThreshold = .2f;
+		private const float SlopeThreshold = .1f;
 		private void UpdateSlopeSpeed()
 		{
 			slopeRatio = 0;
@@ -799,7 +802,7 @@ namespace Project.Gameplay
 			slopeRatio = PathFollower.Forward().Dot(Vector3.Up);
 			if (Mathf.Abs(slopeRatio) <= SlopeThreshold) return;
 
-			slopeRatio = Mathf.Lerp(-SlopeInfluenceStrength, SlopeInfluenceStrength, slopeRatio);
+			slopeRatio = Mathf.Lerp(-SlopeInfluenceStrength, SlopeInfluenceStrength, (slopeRatio * .5f) + .5f);
 			if (slopeRatio > 0 && Skills.IsSkillEquipped(SkillKey.AllRounder)) // Cancel slope influence when moving upwards
 				slopeRatio = 0;
 
@@ -1010,8 +1013,8 @@ namespace Project.Gameplay
 			if (isAccelerationJumpQueued &&
 				currentJumpTime >= ACCELERATION_JUMP_LENGTH) // Acceleration jump?
 			{
-				if (IsHoldingDirection(PathFollower.ForwardAngle, true) &&
-				InputVector.Length() > .5f)
+				if ((IsHoldingDirection(PathFollower.ForwardAngle, true) &&
+				InputVector.Length() > .5f) || Skills.IsSkillEquipped(SkillKey.Autorun))
 				{
 					StartAccelJump();
 				}
@@ -1040,9 +1043,12 @@ namespace Project.Gameplay
 		private void StartAccelJump()
 		{
 			SetActionState(ActionStates.AccelJump);
+			if (ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.ForwardAngle) > Mathf.Pi * .5f)
+				MovementAngle = PathFollower.ForwardAngle;
+
 			MoveSpeed = Skills.accelerationJumpSpeed;
-			Animator.JumpAccelAnimation();
 			VerticalSpeed = 5f; // Consistant accel jump height
+			Animator.JumpAccelAnimation();
 			isAccelerationJumpQueued = false; // Stop listening for an acceleration jump
 
 			if (Skills.IsSkillEquipped(SkillKey.AccelJumpAttack))
@@ -1230,6 +1236,7 @@ namespace Project.Gameplay
 					inputAmount = -(1 - InputVector.Length()) * .5f; // 0 to -0.5
 
 				inputAmount -= slopeRatio * SlopeInfluenceStrength;
+				inputAmount = Mathf.Clamp(inputAmount, 0, 1);
 				MoveSpeed = Skills.SlideSettings.UpdateSlide(MoveSpeed, inputAmount);
 			}
 			else if (ActionState == ActionStates.Crouching)
@@ -1324,11 +1331,15 @@ namespace Project.Gameplay
 
 		private void UpdateBackflip()
 		{
-			if (IsHoldingDirection(PathFollower.ForwardAngle))
-			{
+			bool isHoldingForward = IsHoldingDirection(PathFollower.ForwardAngle, true, false);
+			if (isHoldingForward || Input.IsActionPressed("button_brake"))
 				MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, -1);
-			}
-			else
+			else if (IsHoldingDirection(PathFollower.BackAngle))
+				MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, InputVector.Length());
+			else if (Mathf.IsZeroApprox(InputVector.Length()))
+				MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, 0);
+
+			if (!isHoldingForward)
 			{
 				float targetMovementAngle = ExtensionMethods.ClampAngleRange(GetTargetMovementAngle(), PathFollower.BackAngle, MaxBackflipAdjustment);
 				float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, PathFollower.BackAngle);
@@ -1345,11 +1356,6 @@ namespace Project.Gameplay
 				bool isTurningAround = !IsHoldingDirection(PathFollower.ForwardAngle) && (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
 				float turnAmount = isTurningAround ? Skills.TurnTurnaround : Skills.MaxTurnAmount;
 				MovementAngle = ExtensionMethods.SmoothDampAngle(MovementAngle, targetMovementAngle, ref turningVelocity, turnAmount);
-
-				if (IsHoldingDirection(PathFollower.BackAngle))
-					MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, InputVector.Length());
-				else if (Mathf.IsZeroApprox(InputVector.Length()))
-					MoveSpeed = Skills.BackflipSettings.UpdateInterpolate(MoveSpeed, 0);
 			}
 
 			if (IsOnGround)
@@ -1792,6 +1798,8 @@ namespace Project.Gameplay
 				UpDirection = Vector3.Up;
 				Effect.PlayActionSFX(Effect.JumpSfx);
 			}
+
+			UpdateLauncher();
 		}
 
 		private void UpdateLauncher()
@@ -1801,11 +1809,15 @@ namespace Project.Gameplay
 			if (activeLauncher?.IsCharacterCentered == false)
 			{
 				GlobalPosition = activeLauncher.RecenterCharacter();
+				VerticalSpeed = 0;
 			}
 			else
 			{
+				float heightDelta = 0;
 				Vector3 targetPosition = LaunchSettings.InterpolatePositionTime(launcherTime);
-				float heightDelta = targetPosition.Y - GlobalPosition.Y;
+				if (!Mathf.IsZeroApprox(launcherTime))
+					heightDelta = targetPosition.Y - GlobalPosition.Y;
+
 				RaycastHit hit = this.CastRay(GlobalPosition, targetPosition - GlobalPosition, Runtime.Instance.environmentMask);
 				if (hit && hit.collidedObject.IsInGroup("wall"))
 				{
@@ -2051,7 +2063,7 @@ namespace Project.Gameplay
 			Lockon.ResetLockonTarget();
 
 			if (IsCountdownActive) return;
-			if (IsDefeated || ActionState == ActionStates.Teleport) return; // Return early when respawning
+			if (ActionState == ActionStates.Teleport) return; // Return early when respawning
 
 			if (Stage.IsLevelIngame) // Only check landing skills and play FX when ingame
 			{

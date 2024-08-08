@@ -600,7 +600,7 @@ public partial class CameraController : Node3D
 	}
 
 	public void RequestMotionBlur() => motionBlurRequests++;
-	public void UnrequestMotionBlur() => motionBlurRequests--;
+	public void UnrequestMotionBlur() => motionBlurRequests = Mathf.Max(motionBlurRequests - 1, 0);
 
 	[Export]
 	private TextureRect crossfade;

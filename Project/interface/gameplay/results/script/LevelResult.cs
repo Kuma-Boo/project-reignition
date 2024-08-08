@@ -46,8 +46,19 @@ public partial class LevelResult : Control
 
 		if (animator.IsPlaying())
 		{
-			if (Input.IsActionJustPressed("button_jump")) // Skip animation
+			if (Input.IsActionJustPressed("button_jump") ||
+				Input.IsActionJustPressed("button_action")) // Skip animation
+			{
+				StringName nextAnimation = animator.AnimationGetNext(animator.CurrentAnimation);
 				animator.Advance(animator.CurrentAnimationLength);
+
+				if (!string.IsNullOrEmpty(nextAnimation))
+				{
+					animator.Play(nextAnimation);
+					animator.Advance(animator.CurrentAnimationLength);
+					Stage.StartCompletionDemo();
+				}
+			}
 		}
 		else if (Input.IsActionJustPressed("button_jump") ||
 			Input.IsActionJustPressed("button_action"))
@@ -58,14 +69,8 @@ public partial class LevelResult : Control
 			// Determine which scene to load without connecting it
 			if (Input.IsActionJustPressed("button_action")) // Retry stage
 			{
-				TransitionManager.QueueSceneChange(string.Empty);
-				TransitionManager.StartTransition(new()
-				{
-					inSpeed = .5f,
-					outSpeed = .5f,
-					color = Colors.Black,
-					disableAutoTransition = true
-				});
+				TransitionManager.instance.QueuedScene = string.Empty;
+				EmitSignal(SignalName.ContinuePressed);
 			}
 			else// if (Level.storyEventIndex == 0) // Load main menu
 			{
@@ -115,11 +120,11 @@ public partial class LevelResult : Control
 				NotificationMenu.AddNotification(NotificationMenu.NotificationType.World, $"unlock_{Stage.Data.UnlockWorld.ToString().ToSnakeCase()}");
 			}
 
-			foreach (var UnlockStage in Stage.Data.UnlockStage)
+			foreach (var stage in Stage.Data.UnlockStage)
 			{
-				if (!SaveManager.ActiveGameData.IsStageUnlocked(UnlockStage.LevelID))
+				if (!SaveManager.ActiveGameData.IsStageUnlocked(stage.LevelID))
 				{
-					SaveManager.ActiveGameData.UnlockStage(UnlockStage.LevelID);
+					SaveManager.ActiveGameData.UnlockStage(stage.LevelID);
 					NotificationMenu.AddNotification(NotificationMenu.NotificationType.Mission, "unlock_mission");
 				}
 			}

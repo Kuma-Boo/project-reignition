@@ -443,21 +443,11 @@ public partial class CharacterAnimator : Node3D
 		Character.Effect.IsEmittingStepDust = false;
 		animationTree.Set(GroundTransition, DisabledConstant);
 
-		if (IsFallTransitionEnabled)
+		if (IsFallTransitionEnabled && Character.VerticalSpeed < 0)
 		{
-			if (Character.MovementState == CharacterController.MovementStates.Launcher)
-			{
-				if (!Character.LaunchSettings.IsJump || Character.VerticalSpeed >= 0)
-					return;
-			}
-
-			if (Character.ActionState != CharacterController.ActionStates.Jumping ||
-			Character.VerticalSpeed <= 0)
-			{
-				UpdateAirState(FallState, false);
-				animationTree.Set(FallSpeed, 1.0f);
-				animationTree.Set(FallTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-			}
+			UpdateAirState(FallState, false);
+			animationTree.Set(FallSpeed, 1.0f);
+			animationTree.Set(FallTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		}
 	}
 
@@ -717,10 +707,10 @@ public partial class CharacterAnimator : Node3D
 
 	private readonly StringName BalanceSpeed = "parameters/balance_tree/balance_speed/scale";
 	private readonly StringName BalanceWindBlend = "parameters/balance_tree/wind_blend/blend_position";
-	public void UpdateBalanceSpeed(float speedRatio)
+	public void UpdateBalanceSpeed(float speedRatio, float overrideBlend = -1)
 	{
 		animationTree.Set(BalanceSpeed, speedRatio + .8f);
-		animationTree.Set(BalanceWindBlend, speedRatio);
+		animationTree.Set(BalanceWindBlend, Mathf.IsEqualApprox(overrideBlend, -1) ? speedRatio : overrideBlend);
 	}
 	#endregion
 

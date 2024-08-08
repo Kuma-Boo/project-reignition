@@ -206,7 +206,7 @@ public partial class PathTraveller : Node3D
 		if (animator != null) // Update animation speeds
 			animator.SpeedScale = 1.0f + (currentSpeed / maxSpeed * 1.5f);
 		Character.Animator.UpdateBalancing(Character.InputVector.X - (Character.PathFollower.DeltaAngle * 20.0f));
-		Character.Animator.UpdateBalanceSpeed(1.0f + Character.GroundSettings.GetSpeedRatio(currentSpeed));
+		Character.Animator.UpdateBalanceSpeed(1f + Character.GroundSettings.GetSpeedRatio(currentSpeed), 0f);
 	}
 
 	public void Respawn()
@@ -254,7 +254,7 @@ public partial class PathTraveller : Node3D
 
 		Character.StartExternal(this, playerPosition, .1f);
 		Character.Animator.StartBalancing(); // Carpet uses balancing animations
-		Character.Animator.UpdateBalanceSpeed(1.0f);
+		Character.Animator.UpdateBalanceSpeed(1f, 0f);
 		Character.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
 		EmitSignal(SignalName.Activated);
 	}
