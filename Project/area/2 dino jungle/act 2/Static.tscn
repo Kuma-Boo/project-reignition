@@ -1,4 +1,4 @@
-[gd_scene load_steps=92 format=3 uid="uid://gnw1drjjo5gi"]
+[gd_scene load_steps=93 format=3 uid="uid://gnw1drjjo5gi"]
 
 [ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="1_d384b"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_tbi4j"]
@@ -55,10 +55,11 @@
 [ext_resource type="Curve3D" uid="uid://mig8mj50lbiu" path="res://area/2 dino jungle/act 2/environment/path/RightPath.tres" id="33_quywa"]
 [ext_resource type="Curve3D" uid="uid://cruwkemxl5fc3" path="res://area/2 dino jungle/act 2/environment/path/SpringIslandPath.tres" id="34_2rl0i"]
 [ext_resource type="Resource" uid="uid://cwlm80ug7yxdp" path="res://area/2 dino jungle/act 2/camera/CavernCam.tres" id="34_m5bm2"]
-[ext_resource type="PackedScene" uid="uid://bqikfuweybrc6" path="res://area/2 dino jungle/data/BGM.tscn" id="35_dxojr"]
 [ext_resource type="Resource" uid="uid://ji20l0l30t4i" path="res://area/2 dino jungle/act 2/camera/DinoCam.tres" id="40_87ag4"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="41_4yhlb"]
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="58_hh6gi"]
+[ext_resource type="AudioStream" uid="uid://cyfvn3k7qur8h" path="res://sound/ost/bonus disc/Dinosaur Jungle Act 3.mp3" id="58_ygica"]
+[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="59_td2gy"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slcyf"]
 blend_mode = 1
@@ -1375,7 +1376,14 @@ next/demo1 = &"demo2"
 next/demo2 = &"demo3"
 next/demo3 = &"demo1"
 
-[node name="BGM" parent="." instance=ExtResource("35_dxojr")]
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("58_ygica")
+bus = &"BGM"
+script = ExtResource("59_td2gy")
+startPosition = 1.2
+loopStartPosition = 16.431
+loopEndPosition = 164.12
+isStageMusic = true
 
 [node name="DepthRenderer" parent="." instance=ExtResource("58_hh6gi")]
 
@@ -1429,8 +1437,8 @@ environment = SubResource("Environment_kepwq")
 [connection signal="Deactivated" from="Common/SpringPath/Spring3" to="Common/SpringPath/JumpTriggers/Jump1" method="Activate" flags=3]
 [connection signal="JumpFinished" from="Common/SpringPath/JumpTriggers/Jump1" to="Common/SpringPath/JumpTriggers/Jump1/Jump2" method="Activate" flags=3]
 [connection signal="JumpFinished" from="Common/SpringPath/JumpTriggers/Jump1/Jump2" to="Collision/IslandOneWay" method="Activate"]
-[connection signal="JumpFinished" from="Common/SpringPath/JumpTriggers/Jump1/Jump2" to="Common/SpringPath/JumpTriggers/Jump1/Jump2/Path" method="Activate"]
 [connection signal="JumpFinished" from="Common/SpringPath/JumpTriggers/Jump1/Jump2" to="Common/SpringPath/JumpTriggers/Jump1/Jump2/Camera" method="Activate"]
+[connection signal="JumpFinished" from="Common/SpringPath/JumpTriggers/Jump1/Jump2" to="Common/SpringPath/JumpTriggers/Jump1/Jump2/Path" method="Activate"]
 [connection signal="Activated" from="Common/SpringPath/JumpPanel" to="Collision/IslandOneWay" method="Deactivate"]
 [connection signal="Activated" from="Common/SpringPath/JumpPanel" to="Common/SpringPath/JumpPanel/Camera" method="Activate"]
 [connection signal="Activated" from="Common/SpringPath/JumpPanel/Spring" to="Common/SpringPath/JumpPanel/Camera" method="Deactivate"]
