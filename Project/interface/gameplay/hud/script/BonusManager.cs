@@ -43,7 +43,7 @@ public partial class BonusManager : VBoxContainer
 			bonus.Connect(Bonus.SignalName.BonusFinished, new(this, MethodName.BonusFinished));
 
 		MoveChild(bonus, 0); // Re-order to appear first
-		bonus.ShowBonus(bonusData); // Activate bonus
+		bonus.ShowBonus(bonusData, bonusData.CalculateBonusPoints()); // Activate bonus
 		bonusesActive++;
 
 		if (bonusData.Type == BonusType.EXP)
