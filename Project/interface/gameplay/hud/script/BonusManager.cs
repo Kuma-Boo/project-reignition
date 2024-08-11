@@ -26,6 +26,25 @@ public partial class BonusManager : VBoxContainer
 			UpdateEnemyChain();
 	}
 
+	private void UpdateQueuedScore()
+	{
+		QueuedScore = 0;
+
+		if (ringChain >= 10)
+		{
+			BonusData ringBonus = new(BonusType.Ring, ringChain);
+			QueuedScore = ringBonus.CalculateBonusPoints();
+		}
+
+		if (enemyChain >= 2)
+		{
+			BonusData enemyBonus = new(BonusType.Enemy, enemyChain);
+			QueuedScore = enemyBonus.CalculateBonusPoints();
+		}
+	}
+
+	/// <summary> Score amount of bonuses that are currently processing. </summary>
+	public int QueuedScore { get; private set; }
 	private int bonusesActive;
 	private readonly Queue<BonusData> bonusQueue = new();
 
@@ -43,7 +62,7 @@ public partial class BonusManager : VBoxContainer
 			bonus.Connect(Bonus.SignalName.BonusFinished, new(this, MethodName.BonusFinished));
 
 		MoveChild(bonus, 0); // Re-order to appear first
-		bonus.ShowBonus(bonusData); // Activate bonus
+		bonus.ShowBonus(bonusData, bonusData.CalculateBonusPoints()); // Activate bonus
 		bonusesActive++;
 
 		if (bonusData.Type == BonusType.EXP)
@@ -54,6 +73,7 @@ public partial class BonusManager : VBoxContainer
 
 		// Update score
 		StageSettings.instance.UpdateScore(bonusData.CalculateBonusPoints(), StageSettings.MathModeEnum.Add);
+		UpdateQueuedScore();
 	}
 
 	private void BonusFinished() => bonusesActive--;
@@ -69,6 +89,8 @@ public partial class BonusManager : VBoxContainer
 
 		if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Chain)
 			Stage.IncrementObjective();
+
+		UpdateQueuedScore();
 	}
 
 	/// <summary> Ends the current ring chain. </summary>
@@ -98,7 +120,11 @@ public partial class BonusManager : VBoxContainer
 	/// <summary> "Grace time" to allow player to chain attacks from a speed-break. </summary>
 	private readonly float ENEMY_CHAIN_BUFFER = .5f;
 	/// <summary> Increases the enemy chain. </summary>
-	public void AddEnemyChain() => enemyChain++;
+	public void AddEnemyChain()
+	{
+		enemyChain++;
+		UpdateQueuedScore();
+	}
 	/// <summary> Checks whether the enemy chain should end. </summary>
 	public void UpdateEnemyChain()
 	{
