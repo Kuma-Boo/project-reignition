@@ -191,12 +191,14 @@ public partial class CharacterSkillManager : Node
 	public void UpdateSlideSpeed(float slopeRatio, float slopeStrength)
 	{
 		// Calculate top speed
-		SlideSettings.Speed = GroundSettings.Speed * (1 - (slopeRatio * slideSlopeSpeedInfluence));
+		float t = Mathf.Clamp(-slopeRatio * 5.0f, 0, 1);
+		SlideSettings.Speed = GroundSettings.Speed * (1 + (t * slideSlopeSpeedInfluence));
 		float slopeInfluence = slopeRatio * slopeStrength;
 		float frictionRatio = GetSlidingFrictionRatio();
 		SlideSettings.Friction = baseSlideFriction * frictionRatio * (1 + slopeInfluence);
 		SlideSettings.Overspeed = baseSlideOverspeed * frictionRatio * (1 + slopeInfluence);
-		SlideSettings.Traction = Mathf.Lerp(0, baseSlideTraction, Mathf.Clamp(-slopeInfluence, 0, 1));
+		SlideSettings.Traction = Mathf.Lerp(0, baseSlideTraction, t);
+		GD.PrintT(Character.MoveSpeed, SlideSettings.Speed, SlideSettings.Traction);
 	}
 
 	private float soulSlideTimer;

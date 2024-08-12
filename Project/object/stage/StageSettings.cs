@@ -141,7 +141,7 @@ public partial class StageSettings : Node3D
 	/// <summary>
 	/// Calculates the rank [Fail = -1, None = 0, Bronze = 1, Silver = 2, Gold = 3]
 	/// </summary>
-	public int CalculateRank()
+	public int CalculateRank(bool preCountBonuses = false)
 	{
 		if (LevelState == LevelStateEnum.Failed)
 			return -1;
@@ -160,6 +160,9 @@ public partial class StageSettings : Node3D
 		else
 		{
 			int score = TotalScore;
+			if (preCountBonuses)
+				score += BonusManager.instance.QueuedScore;
+
 			if (CurrentTime <= Data.GoldTime && score >= Data.Score) // Perfect run
 				rank = 3;
 			else if (CurrentTime <= Data.SilverTime && score >= 3 * (Data.Score / 4)) // Silver score reqs are always 3/4 of gold
