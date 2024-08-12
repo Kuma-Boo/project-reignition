@@ -114,16 +114,16 @@ public partial class HeadsUpDisplay : Control
 		if (!rankPreviewerRoot.Visible)
 			return;
 
-		CurrentRank = Stage.CalculateRank();
+		CurrentRank = Stage.CalculateRank(true);
 		mainRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * CurrentRank * 60), mainRank.RegionRect.Size);
 	}
 
-	private void UpdateRank()
+	private void UpdateRankPreviewer()
 	{
 		if (!rankPreviewerRoot.Visible)
 			return;
 
-		int rank = Stage.CalculateRank();
+		int rank = Stage.CalculateRank(true);
 		if (CurrentRank == rank || rankTween?.IsRunning() == true)
 			return;
 
@@ -183,7 +183,7 @@ public partial class HeadsUpDisplay : Control
 		}
 
 		time.Text = Stage.DisplayTime;
-		UpdateRank(); // Update rank every frame
+		UpdateRankPreviewer(); // Update rank every frame
 	}
 
 	[Export]

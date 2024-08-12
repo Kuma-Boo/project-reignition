@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://c85xw5ix60fe8"]
+[gd_scene load_steps=11 format=3 uid="uid://c85xw5ix60fe8"]
 
 [ext_resource type="PackedScene" uid="uid://bmq81t6knj1hn" path="res://object/stage/common/resource/model/Switch.gltf" id="1"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Switch.cs" id="3"]
 [ext_resource type="AudioStream" uid="uid://cc666gvarl1yp" path="res://sound/sfx/objects/switch.wav" id="3_horin"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="4_4n1ai"]
 
 [sub_resource type="CylinderShape3D" id="5"]
 height = 0.2
@@ -401,9 +402,14 @@ libraries = {
 next/activate = &"activate-loop"
 blend_times = [&"activate", &"activate-loop", 0.01]
 
-[node name="SFX" type="AudioStreamPlayer" parent="."]
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_horin")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
 bus = &"GAME SFX"
+script = ExtResource("4_4n1ai")
+groupKey = &"switch"
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
