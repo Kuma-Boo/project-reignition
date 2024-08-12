@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://x03eut8s4p3l"]
+[gd_scene load_steps=35 format=3 uid="uid://x03eut8s4p3l"]
 
 [ext_resource type="AudioStream" uid="uid://dbv5ecruxgfsy" path="res://sound/ost/jingle/Stage Clear.mp3" id="1"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="2"]
@@ -11,13 +11,16 @@
 [ext_resource type="FontFile" uid="uid://cjn5owdvvkfrb" path="res://interface/font/bitmap fonts/Experience Results.fnt" id="6_452md"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="6_ms8ry"]
 [ext_resource type="Texture2D" uid="uid://covowu2nyy2gi" path="res://interface/gameplay/results/text/results en.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://b5si62ios4jyj" path="res://interface/gameplay/results/texture/requirements_background.png" id="7_rth11"]
+[ext_resource type="Texture2D" uid="uid://b5si62ios4jyj" path="res://interface/gameplay/results/texture/requirements background.png" id="7_rth11"]
 [ext_resource type="AudioStream" uid="uid://djog8y22u5a43" path="res://sound/sfx/system/result success.wav" id="8_5re71"]
 [ext_resource type="Texture2D" uid="uid://cbnh0am0av0ts" path="res://interface/gameplay/results/texture/silver.png" id="8_mjqbr"]
 [ext_resource type="Texture2D" uid="uid://bongvk7uwqsco" path="res://interface/gameplay/results/texture/gold.png" id="9_sn0cs"]
 [ext_resource type="AudioStream" uid="uid://biwixrje8ahed" path="res://sound/sfx/system/result fail.wav" id="9_xr8rf"]
 [ext_resource type="AudioStream" uid="uid://sm8k2fwwnwnk" path="res://sound/sfx/system/result data.wav" id="10_m50k4"]
 [ext_resource type="AudioStream" uid="uid://b4nrxor8mt3ef" path="res://sound/sfx/system/result rank.wav" id="11_w8yyn"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3cijd"]
+light_mode = 1
 
 [sub_resource type="LabelSettings" id="LabelSettings_tniw7"]
 font = ExtResource("6_452md")
@@ -524,7 +527,7 @@ tracks/39/keys = {
 tracks/40/type = "value"
 tracks/40/imported = false
 tracks/40/enabled = true
-tracks/40/path = NodePath("Data/Medal_Requirement:modulate")
+tracks/40/path = NodePath("Data/RequirementRoot/Medal:modulate")
 tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = {
@@ -536,19 +539,19 @@ tracks/40/keys = {
 tracks/41/type = "value"
 tracks/41/imported = false
 tracks/41/enabled = true
-tracks/41/path = NodePath("Data/Value_TimeRequirement:position")
+tracks/41/path = NodePath("Data/RequirementRoot/Time:modulate")
 tracks/41/interp = 1
 tracks/41/loop_wrap = true
 tracks/41/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1453, -493)]
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/42/type = "value"
 tracks/42/imported = false
 tracks/42/enabled = true
-tracks/42/path = NodePath("Data/Value_TimeRequirement:modulate")
+tracks/42/path = NodePath("Data/RequirementRoot/Score:modulate")
 tracks/42/interp = 1
 tracks/42/loop_wrap = true
 tracks/42/keys = {
@@ -560,7 +563,7 @@ tracks/42/keys = {
 tracks/43/type = "value"
 tracks/43/imported = false
 tracks/43/enabled = true
-tracks/43/path = NodePath("Data/Value_ScoreRequirement:modulate")
+tracks/43/path = NodePath("Data/RequirementRoot/Background:modulate")
 tracks/43/interp = 1
 tracks/43/loop_wrap = true
 tracks/43/keys = {
@@ -572,74 +575,14 @@ tracks/43/keys = {
 tracks/44/type = "value"
 tracks/44/imported = false
 tracks/44/enabled = true
-tracks/44/path = NodePath("Data/Value_ScoreRequirement:position")
+tracks/44/path = NodePath("Data/RequirementRoot:scale")
 tracks/44/interp = 1
 tracks/44/loop_wrap = true
 tracks/44/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1340, -430)]
-}
-tracks/45/type = "value"
-tracks/45/imported = false
-tracks/45/enabled = true
-tracks/45/path = NodePath("Data/ScoreRequirements:modulate")
-tracks/45/interp = 1
-tracks/45/loop_wrap = true
-tracks/45/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/46/type = "value"
-tracks/46/imported = false
-tracks/46/enabled = true
-tracks/46/path = NodePath("Data/ScoreRequirements:visible")
-tracks/46/interp = 1
-tracks/46/loop_wrap = true
-tracks/46/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/47/type = "value"
-tracks/47/imported = false
-tracks/47/enabled = true
-tracks/47/path = NodePath("Data/Value_TimeRequirement:visible")
-tracks/47/interp = 1
-tracks/47/loop_wrap = true
-tracks/47/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/48/type = "value"
-tracks/48/imported = false
-tracks/48/enabled = true
-tracks/48/path = NodePath("Data/Value_ScoreRequirement:visible")
-tracks/48/interp = 1
-tracks/48/loop_wrap = true
-tracks/48/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/49/type = "value"
-tracks/49/imported = false
-tracks/49/enabled = true
-tracks/49/path = NodePath("Data/Medal_Requirement:visible")
-tracks/49/interp = 1
-tracks/49/loop_wrap = true
-tracks/49/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"values": [Vector2(1, 1)]
 }
 
 [sub_resource type="Animation" id="7"]
@@ -1014,7 +957,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Data/Medal_Requirement:texture")
+tracks/3/path = NodePath("Data/RequirementRoot/Medal:texture")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -1094,7 +1037,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Data/Medal_Requirement:texture")
+tracks/2/path = NodePath("Data/RequirementRoot/Medal:texture")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -1146,7 +1089,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Data/Medal_Requirement:texture")
+tracks/3/path = NodePath("Data/RequirementRoot/Medal:texture")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -1383,8 +1326,8 @@ tracks/16/keys = {
 tracks/17/type = "value"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("Data/Value_ScoreRequirement:modulate")
-tracks/17/interp = 2
+tracks/17/path = NodePath("Data/RequirementRoot/Score:modulate")
+tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
 "times": PackedFloat32Array(0, 4.2483, 4.6648),
@@ -1395,8 +1338,8 @@ tracks/17/keys = {
 tracks/18/type = "value"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("Data/Value_TimeRequirement:modulate")
-tracks/18/interp = 2
+tracks/18/path = NodePath("Data/RequirementRoot/Time:modulate")
+tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
 "times": PackedFloat32Array(0, 4.2483, 4.6648),
@@ -1407,8 +1350,8 @@ tracks/18/keys = {
 tracks/19/type = "value"
 tracks/19/imported = false
 tracks/19/enabled = true
-tracks/19/path = NodePath("Data/Medal_Requirement:modulate")
-tracks/19/interp = 2
+tracks/19/path = NodePath("Data/RequirementRoot/Medal:modulate")
+tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
 "times": PackedFloat32Array(0, 4.2483, 4.6648),
@@ -1419,11 +1362,11 @@ tracks/19/keys = {
 tracks/20/type = "value"
 tracks/20/imported = false
 tracks/20/enabled = true
-tracks/20/path = NodePath("Data/ScoreRequirements:modulate")
-tracks/20/interp = 2
+tracks/20/path = NodePath("Data/RequirementRoot/Background:modulate")
+tracks/20/interp = 1
 tracks/20/loop_wrap = true
 tracks/20/keys = {
-"times": PackedFloat32Array(0, 3.8318, 4.0817),
+"times": PackedFloat32Array(0, 3.8318, 4.16667),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -1431,14 +1374,14 @@ tracks/20/keys = {
 tracks/21/type = "value"
 tracks/21/imported = false
 tracks/21/enabled = true
-tracks/21/path = NodePath("Data/ScoreRequirements:scale")
-tracks/21/interp = 2
+tracks/21/path = NodePath("Data/RequirementRoot:scale")
+tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
-"times": PackedFloat32Array(3.8318, 4.165),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 3.83333, 4.16667),
+"transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
-"values": [Vector2(0, 5), Vector2(4, 5)]
+"values": [Vector2(0, 1), Vector2(1e-05, 1), Vector2(1, 1)]
 }
 
 [sub_resource type="Animation" id="1"]
@@ -1775,7 +1718,7 @@ _data = {
 "success-start": SubResource("1")
 }
 
-[node name="LevelResults" type="Control" node_paths=PackedStringArray("score", "time", "ring", "technical", "total", "requirements_border", "requirements_medal", "time_requirement", "score_requirement", "bgm", "animator", "resultsVoicePlayer")]
+[node name="LevelResults" type="Control" node_paths=PackedStringArray("score", "time", "ring", "technical", "total", "requirementRoot", "requirementTime", "requirementScore", "bgm", "animator", "resultsVoicePlayer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1788,10 +1731,9 @@ time = NodePath("Data/Labels/Time/Value")
 ring = NodePath("Data/Labels/Ring/Value")
 technical = NodePath("Data/Labels/Technical/Value")
 total = NodePath("Data/Labels/Total/Value")
-requirements_border = NodePath("Data/ScoreRequirements")
-requirements_medal = NodePath("Data/Medal_Requirement")
-time_requirement = NodePath("Data/Value_TimeRequirement")
-score_requirement = NodePath("Data/Value_ScoreRequirement")
+requirementRoot = NodePath("Data/RequirementRoot")
+requirementTime = NodePath("Data/RequirementRoot/Time")
+requirementScore = NodePath("Data/RequirementRoot/Score")
 bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
 resultsVoicePlayer = NodePath("ResultsVoice")
@@ -1829,6 +1771,7 @@ region_rect = Rect2(8, 160, 1008, 320)
 
 [node name="DecalLeft" type="Sprite2D" parent="Header/Complete effects"]
 modulate = Color(1, 1, 1, 0)
+material = SubResource("CanvasItemMaterial_3cijd")
 texture = ExtResource("5")
 offset = Vector2(-252, 0)
 region_enabled = true
@@ -1842,6 +1785,7 @@ region_rect = Rect2(0, 0, 1024, 112)
 
 [node name="DecalRight" type="Sprite2D" parent="Header/Complete effects"]
 modulate = Color(1, 1, 1, 0)
+material = SubResource("CanvasItemMaterial_3cijd")
 texture = ExtResource("5")
 offset = Vector2(252, 0)
 region_enabled = true
@@ -1893,31 +1837,53 @@ position = Vector2(1456, -160)
 scale = Vector2(1.2, 1.2)
 texture = ExtResource("3")
 
-[node name="ScoreRequirements" type="Sprite2D" parent="Data"]
-visible = false
-modulate = Color(1, 1, 1, 0)
-position = Vector2(1658, 105)
-scale = Vector2(1e-05, 5)
-texture = ExtResource("7_rth11")
+[node name="RequirementRoot" type="Control" parent="Data"]
+custom_minimum_size = Vector2(128, 40)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -512.0
+offset_bottom = 192.0
+grow_horizontal = 0
+pivot_offset = Vector2(256, 96)
 
-[node name="Medal_Requirement" type="Sprite2D" parent="Data"]
-visible = false
-modulate = Color(1, 1, 1, 0)
-position = Vector2(1511, 100)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("8_mjqbr")
-
-[node name="Value_TimeRequirement" type="Label" parent="Data"]
-visible = false
+[node name="Background" type="TextureRect" parent="Data/RequirementRoot"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 1453.0
-offset_top = -493.0
-offset_right = 1837.0
-offset_bottom = -461.0
+grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("7_rth11")
+
+[node name="Medal" type="TextureRect" parent="Data/RequirementRoot"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 56.0
+offset_top = -56.0
+offset_right = 168.0
+offset_bottom = 56.0
+grow_vertical = 2
+texture = ExtResource("8_mjqbr")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Time" type="Label" parent="Data/RequirementRoot"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -392.0
+offset_top = 24.0
+offset_right = -72.0
+offset_bottom = 96.0
+grow_horizontal = 0
 pivot_offset = Vector2(0, 32)
 text = "00:00.00"
 label_settings = SubResource("LabelSettings_tniw7")
@@ -1925,17 +1891,20 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="Value_ScoreRequirement" type="Label" parent="Data"]
-visible = false
+[node name="Score" type="Label" parent="Data/RequirementRoot"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 1340.0
-offset_top = -430.0
-offset_right = 1836.0
-offset_bottom = -378.0
-grow_vertical = 2
+offset_left = -392.0
+offset_top = -96.0
+offset_right = -72.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
 pivot_offset = Vector2(0, 46)
 theme_override_fonts/font = ExtResource("5_iuphe")
 theme_override_font_sizes/font_size = 64

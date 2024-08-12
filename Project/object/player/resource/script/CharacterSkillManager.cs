@@ -198,7 +198,6 @@ public partial class CharacterSkillManager : Node
 		SlideSettings.Friction = baseSlideFriction * frictionRatio * (1 + slopeInfluence);
 		SlideSettings.Overspeed = baseSlideOverspeed * frictionRatio * (1 + slopeInfluence);
 		SlideSettings.Traction = Mathf.Lerp(0, baseSlideTraction, t);
-		GD.PrintT(Character.MoveSpeed, SlideSettings.Speed, SlideSettings.Traction);
 	}
 
 	private float soulSlideTimer;
