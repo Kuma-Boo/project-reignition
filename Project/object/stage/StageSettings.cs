@@ -175,6 +175,24 @@ public partial class StageSettings : Node3D
 	}
 	#endregion
 
+	public string GetRequiredTime(int rank)
+	{
+		switch (rank)
+		{
+			case 0:
+				return ExtensionMethods.FormatTime(Data.BronzeTime);
+			case 1:
+				return ExtensionMethods.FormatTime(Data.SilverTime);
+			case 2:
+				return ExtensionMethods.FormatTime(Data.GoldTime);
+			default:
+				return "00:00.00";
+		}
+	}
+	public int GetRequiredScore(int rank)
+	{
+		return Data.Score;
+	}
 	#region Level Data
 	public enum MathModeEnum // List of ways the score can be modified
 	{
