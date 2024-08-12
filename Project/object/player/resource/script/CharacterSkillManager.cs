@@ -386,6 +386,8 @@ public partial class CharacterSkillManager : Node
 		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
 
 		InitializeCrestSkills();
+		// Update crest of flame's trail color
+		Character.Effect.UpdateTrailHueShift(AllowCrestSkill && SkillRing.IsSkillEquipped(SkillKey.CrestFire) ? CrestOfFlameHueOffset : 0f);
 		speedbreakOverlayMaterial.SetShaderParameter(SpeedbreakOverlayOpacityKey, 0);
 	}
 
@@ -430,9 +432,6 @@ public partial class CharacterSkillManager : Node
 
 		if (!AllowCrestSkill && OS.IsDebugBuild()) // Always allow crest skills when playing the game from the editor
 			AllowCrestSkill = true;
-
-		// Update crest of flame's trail color
-		Character.Effect.UpdateTrailHueShift(AllowCrestSkill && crestType == SkillResource.SkillElement.Fire ? CrestOfFlameHueOffset : 0f);
 	}
 
 	private readonly float WindCrestSpeedMultiplier = 1.5f;
