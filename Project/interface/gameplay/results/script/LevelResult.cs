@@ -21,6 +21,12 @@ public partial class LevelResult : Control
 	[Export]
 	private Label total;
 	[Export]
+	private Control requirementRoot;
+	[Export]
+	private Label requirementTime;
+	[Export]
+	private Label requirementScore;
+	[Export]
 	private BGMPlayer bgm;
 	[Export]
 	private AnimationPlayer animator;
@@ -91,18 +97,45 @@ public partial class LevelResult : Control
 
 		ring.Text = Stage.RingBonus.ToString();
 		technical.Text = "×" + Stage.TechnicalBonus.ToString("0.0", CultureInfo.InvariantCulture);
-		total.Text = Stage.TotalScore.ToString();
+		total.Text = ExtensionMethods.FormatMenuNumber(Stage.TotalScore);
 
 		// Calculate rank AFTER tallying final score
 		int rank = Stage.CalculateRank();
+
+		// Show the Score Requirements when Rank Preview is equipped
+		if (rank >= 0 && rank < 3 && CharacterController.instance.Skills.IsSkillEquipped(SkillKey.RankPreview))
+		{
+			GD.Print("Showing rank preview");
+			requirementRoot.Visible = true;
+		}
+		else if (rank == 3)
+		{
+			GD.Print("Hiding rank preview");
+			requirementRoot.Visible = false;
+		}
+
 		if (rank <= 0) // Didn't obtain a medal
+		{
 			animator.Play("medal-none");
+			requirementTime.Text = Stage.GetRequiredTime(0);
+			requirementScore.Text = ExtensionMethods.FormatMenuNumber2(Stage.GetRequiredScore(0));
+		}
 		else if (rank == 1)
+		{
 			animator.Play("medal-bronze");
+			requirementTime.Text = Stage.GetRequiredTime(1);
+			requirementScore.Text = ExtensionMethods.FormatMenuNumber2(Stage.GetRequiredScore(1));
+		}
 		else if (rank == 2)
+		{
 			animator.Play("medal-silver");
+			requirementTime.Text = Stage.GetRequiredTime(2);
+			requirementScore.Text = ExtensionMethods.FormatMenuNumber2(Stage.GetRequiredScore(2));
+		}
 		else
+		{
 			animator.Play("medal-gold");
+		}
 
 		bool stageCleared = Stage.LevelState == StageSettings.LevelStateEnum.Success;
 		SaveManager.GameData.LevelStatus clearStatus = stageCleared ? SaveManager.GameData.LevelStatus.Cleared : SaveManager.GameData.LevelStatus.Attempted;
