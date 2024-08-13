@@ -39,6 +39,9 @@ public class SkillRing
 		for (int i = 0; i < EquippedSkills.Count; i++)
 		{
 			SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(EquippedSkills[i]);
+			if (baseSkill == null) // Skill not found?
+				continue;
+
 			int augmentIndex = GetAugmentIndex(EquippedSkills[i]);
 			if (augmentIndex == 0)
 			{
