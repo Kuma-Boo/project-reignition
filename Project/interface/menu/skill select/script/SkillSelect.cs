@@ -240,8 +240,7 @@ public partial class SkillSelect : Menu
 			skillOptionList[i].Visible = true;
 
 			// Process augments
-			if (skillOptionList[i].Skill.HasAugments)
-				UpdateAugmentHierarchy(skillOptionList[i]);
+			UpdateAugmentHierarchy(skillOptionList[i]);
 		}
 
 		Redraw();
@@ -269,6 +268,7 @@ public partial class SkillSelect : Menu
 		if (!ToggleSkill())
 			return;
 
+		UpdateAugmentHierarchy(SelectedSkill);
 		Redraw();
 	}
 
@@ -403,11 +403,14 @@ public partial class SkillSelect : Menu
 	}
 
 	/// <summary> Updates a skill option so the correct augment appears on the skill select menu. </summary>
-	private void UpdateAugmentHierarchy(SkillOption baseSkill)
+	private void UpdateAugmentHierarchy(SkillOption skillOption)
 	{
-		int augmentIndex = ActiveSkillRing.GetAugmentIndex(baseSkill.Skill.Key);
-		baseSkill.Skill = baseSkill.GetAugmentSkill(augmentIndex);
-		baseSkill.UpdateUnlockedAugments();
-		baseSkill.Redraw();
+		if (!Runtime.Instance.SkillList.GetSkill(skillOption.Skill.Key).HasAugments)
+			return;
+
+		int augmentIndex = ActiveSkillRing.GetAugmentIndex(skillOption.Skill.Key);
+		skillOption.Skill = skillOption.GetAugmentSkill(augmentIndex);
+		skillOption.UpdateUnlockedAugments();
+		skillOption.Initialize();
 	}
 }

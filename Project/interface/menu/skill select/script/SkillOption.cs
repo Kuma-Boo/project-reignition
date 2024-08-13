@@ -153,6 +153,7 @@ public partial class SkillOption : Control
 		}
 
 		animator.Advance(0);
+		EmitSignal(SignalName.OnRedraw);
 	}
 
 	private bool IsTooExpensive()
