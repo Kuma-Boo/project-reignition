@@ -216,7 +216,7 @@ public partial class SkillSelect : Menu
 				cursorPosition += inputSign;
 
 			scrollAmount = Mathf.Clamp(scrollAmount, 0, listSize - PageSize);
-			scrollRatio = (float)scrollAmount / (currentSkillOptionList.Count - PageSize);
+			scrollRatio = (float)VerticalSelection / (currentSkillOptionList.Count - 1);
 			cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
 		}
 	}
