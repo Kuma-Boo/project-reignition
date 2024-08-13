@@ -38,11 +38,14 @@ public partial class SkillSelect : Menu
 	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
 
 	private int cursorPosition;
+	private Vector2 cursorVelocity;
+	private const float CursorSmoothing = .2f;
 
 	private int scrollAmount;
 	private float scrollRatio;
 	private Vector2 scrollVelocity;
-	private const float ScrollSmoothing = .05f;
+	private Vector2 containerVelocity;
+	private const float ScrollSmoothing = .1f;
 	/// <summary> How much to scroll per skill. </summary>
 	private readonly int ScrollInterval = 63;
 	/// <summary> Number of skills on a single page. </summary>
@@ -95,6 +98,18 @@ public partial class SkillSelect : Menu
 	{
 		float targetScrollPosition = (160 * scrollRatio) - 80;
 		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, ScrollSmoothing);
+
+		// Update cursor position
+		float targetCursorPosition = cursorPosition * ScrollInterval;
+		cursor.Position = cursor.Position.SmoothDamp(Vector2.Down * targetCursorPosition, ref cursorVelocity, CursorSmoothing);
+
+		Vector2 targetContainerPosition = new(optionContainer.Position.X, -scrollAmount * ScrollInterval);
+		optionContainer.Position = optionContainer.Position.SmoothDamp(targetContainerPosition, ref containerVelocity, ScrollSmoothing);
+		/*
+		if (IsEditingAugment)
+			cursor.Position = Vector2.Up * (-cursorPosition - AugmentSelection) * ScrollInterval;
+		else
+		*/
 	}
 
 	protected override void Cancel()
@@ -145,10 +160,12 @@ public partial class SkillSelect : Menu
 		if (IsEditingAugment)
 		{
 			if (inputSign != 0)
+			{
 				AugmentSelection = WrapSelection(AugmentSelection + inputSign, SelectedSkill.AugmentMenuCount);
+				cursorPosition = VerticalSelection - scrollAmount + AugmentSelection + 1;
+			}
 
-			cursor.Position = Vector2.Up * -AugmentSelection * ScrollInterval;
-			UpdateCursor();
+			MoveCursor();
 			UpdateDescription();
 			return;
 		}
@@ -156,34 +173,8 @@ public partial class SkillSelect : Menu
 		if (inputSign != 0)
 		{
 			VerticalSelection = WrapSelection(VerticalSelection + inputSign, currentSkillOptionList.Count);
-
-			if (currentSkillOptionList.Count <= PageSize)
-			{
-				// Disable scrolling
-				scrollAmount = 0;
-				scrollRatio = 0;
-				cursorPosition = VerticalSelection;
-			}
-			else
-			{
-				// Update scroll
-				if (VerticalSelection == 0 || VerticalSelection == currentSkillOptionList.Count - 1)
-					cursorPosition = scrollAmount = VerticalSelection;
-				else if ((inputSign < 0 && cursorPosition == 1) || (inputSign > 0 && cursorPosition == 6))
-					scrollAmount += inputSign;
-				else
-					cursorPosition += inputSign;
-
-				scrollAmount = Mathf.Clamp(scrollAmount, 0, currentSkillOptionList.Count - PageSize);
-				scrollRatio = (float)scrollAmount / (currentSkillOptionList.Count - PageSize);
-				cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
-			}
-
-			cursor.Position = Vector2.Up * -cursorPosition * ScrollInterval;
-
-			UpdateCursor();
-			optionContainer.Position = new(optionContainer.Position.X, -scrollAmount * ScrollInterval);
-
+			UpdateScrollAmount(inputSign);
+			MoveCursor();
 			UpdateDescription();
 		}
 
@@ -194,27 +185,53 @@ public partial class SkillSelect : Menu
 	{
 		if (IsEditingAugment)
 		{
-			if (AugmentSelection == 0)
-				description.SetText(SelectedSkill.Skill.DescriptionKey);
-			else
-				description.SetText(SelectedSkill.GetAugmentDescription(AugmentSelection - 1));
-
+			description.SetText(SelectedSkill.GetAugmentDescription(AugmentSelection));
 			return;
 		}
 
-		int augmentIndex = ActiveSkillRing.GetAugmentIndex(SelectedSkill.Skill.Key);
-		if (SelectedSkill.Skill.HasAugments && augmentIndex != 0)
-			description.SetText(SelectedSkill.GetAugmentDescription(AugmentSelection - 1));
-		else
-			description.SetText(SelectedSkill.Skill.DescriptionKey);
+		description.SetText(SelectedSkill.Skill.DescriptionKey);
 	}
 
-	private void UpdateCursor()
+	private void UpdateScrollAmount(int inputSign)
+	{
+		int listSize = currentSkillOptionList.Count;
+		if (IsEditingAugment)
+			listSize += SelectedSkill.AugmentMenuCount;
+
+		if (listSize <= PageSize)
+		{
+			// Disable scrolling
+			scrollAmount = 0;
+			scrollRatio = 0;
+			cursorPosition = VerticalSelection;
+		}
+		else
+		{
+			// Update scroll
+			if (VerticalSelection == 0 || VerticalSelection == listSize - 1)
+				cursorPosition = scrollAmount = VerticalSelection;
+			else if ((inputSign < 0 && cursorPosition == 1) || (inputSign > 0 && cursorPosition == 6))
+				scrollAmount += inputSign;
+			else
+				cursorPosition += inputSign;
+
+			scrollAmount = Mathf.Clamp(scrollAmount, 0, listSize - PageSize);
+			scrollRatio = (float)scrollAmount / (currentSkillOptionList.Count - PageSize);
+			cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
+		}
+	}
+
+	private void SnapCursor()
+	{
+		cursorVelocity = Vector2.Zero;
+		cursor.Position = Vector2.Up * -cursorPosition * ScrollInterval;
+	}
+
+	private void MoveCursor()
 	{
 		animator.Play("select");
-		animator.Seek(0);
-		animator.Advance(0);
-		if (!isSelectionScrolling)
+		animator.Seek(0, true);
+		if (!isSelectionScrolling || IsEditingAugment)
 			StartSelectionTimer();
 	}
 
@@ -368,38 +385,33 @@ public partial class SkillSelect : Menu
 	private int AugmentSelection { get; set; }
 	private void ShowAugmentMenu()
 	{
-		DisableProcessing();
+		//DisableProcessing();
 		IsEditingAugment = true;
 		SelectedSkill.UpdateUnlockedAugments();
 		animator.Play("augment-show");
+
+		// Frame augments to stay on screen
+		if (VerticalSelection + SelectedSkill.AugmentMenuCount - scrollAmount >= PageSize - 1)
+		{
+			scrollAmount = VerticalSelection + SelectedSkill.AugmentMenuCount - (PageSize - 2);
+			UpdateScrollAmount(0);
+		}
+
+		AugmentSelection = SaveManager.ActiveSkillRing.GetAugmentIndex(SelectedSkill.Skill.Key);
+		cursorPosition = VerticalSelection - scrollAmount + AugmentSelection + 1;
+		SelectedSkill.ShowAugmentMenu();
 	}
 
 	private void HideAugmentMenu()
 	{
-		DisableProcessing();
+		//DisableProcessing();
 		IsEditingAugment = false;
 		animator.Play("augment-hide");
-	}
 
-	// TODO Replace the function in the animation with EnableProcessing()!
-	private void OnAugmentClosed() => EnableProcessing();
+		cursorPosition = VerticalSelection - scrollAmount;
+		SelectedSkill.HideAugmentMenu();
 
-	private void ToggleAugmentMenu()
-	{
-		int augmentIndex = SaveManager.ActiveSkillRing.GetAugmentIndex(SelectedSkill.Skill.Key);
-		if (IsEditingAugment)
-		{
-			cursorPosition = augmentIndex;
-			AugmentSelection = augmentIndex;
-			SelectedSkill.ShowAugmentMenu();
-		}
-		else
-		{
-			cursorPosition = VerticalSelection - scrollAmount;
-			SelectedSkill.HideAugmentMenu();
-		}
-
-		cursor.Position = Vector2.Up * -cursorPosition * ScrollInterval;
+		UpdateScrollAmount(0);
 	}
 
 	/// <summary> Updates a skill option so the correct augment appears on the skill select menu. </summary>
