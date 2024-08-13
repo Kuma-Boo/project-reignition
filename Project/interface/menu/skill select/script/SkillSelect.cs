@@ -105,11 +105,6 @@ public partial class SkillSelect : Menu
 
 		Vector2 targetContainerPosition = new(optionContainer.Position.X, -scrollAmount * ScrollInterval);
 		optionContainer.Position = optionContainer.Position.SmoothDamp(targetContainerPosition, ref containerVelocity, ScrollSmoothing);
-		/*
-		if (IsEditingAugment)
-			cursor.Position = Vector2.Up * (-cursorPosition - AugmentSelection) * ScrollInterval;
-		else
-		*/
 	}
 
 	protected override void Cancel()
@@ -407,6 +402,13 @@ public partial class SkillSelect : Menu
 		//DisableProcessing();
 		IsEditingAugment = false;
 		animator.Play("augment-hide");
+
+		// Revert to base skill if unequipped
+		if (!ActiveSkillRing.IsSkillEquipped(SelectedSkill.Skill.Key))
+		{
+			ActiveSkillRing.ResetAugmentIndex(SelectedSkill.Skill.Key);
+			UpdateAugmentHierarchy(SelectedSkill);
+		}
 
 		cursorPosition = VerticalSelection - scrollAmount;
 		SelectedSkill.HideAugmentMenu();
