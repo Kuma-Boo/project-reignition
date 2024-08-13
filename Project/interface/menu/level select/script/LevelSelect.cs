@@ -76,12 +76,12 @@ public partial class LevelSelect : Menu
 		for (int i = 0; i < levelOptions.Count; i++)
 			levelOptions[i].ShowOption();
 	}
+
 	public override void HideMenu()
 	{
 		for (int i = 0; i < levelOptions.Count; i++)
 			levelOptions[i].HideOption();
 	}
-
 
 	protected override void Confirm()
 	{
@@ -90,7 +90,6 @@ public partial class LevelSelect : Menu
 
 		base.Confirm();
 	}
-
 
 	/// <summary> Shows the "Are you ready?" screen. </summary>
 	public override void OpenSubmenu()
