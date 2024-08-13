@@ -30,8 +30,9 @@ public partial class StageSettings : Node3D
 		CalculateTechnicalBonus();
 		UpdateScore(0, MathModeEnum.Replace);
 		UpdatePostProcessingStatus();
-		// Unmute the gameplay sfx audio channel
-		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 100);
+
+		// Update gameplay sfx audio channel
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, IsControlTest ? 100 : 0);
 
 		if (IsControlTest)
 			LevelState = LevelStateEnum.Ingame;
@@ -117,6 +118,8 @@ public partial class StageSettings : Node3D
 
 			if (probeFrameCounter >= PROBE_FRAME_COUNT_LENGTH && !ShaderManager.Instance.IsCompilingShaders)
 			{
+				// Unmute gameplay sound effects
+				SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 100);
 				LevelState = LevelStateEnum.Ingame;
 				TransitionManager.FinishTransition();
 				EmitSignal(SignalName.LevelStarted);
