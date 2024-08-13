@@ -51,7 +51,7 @@ public partial class ExperienceResult : Control
 	/// <summary> Amount of experience when tallying started. </summary>
 	private int startingExp;
 	private float expInterpolation;
-	private float interpolatedExp;
+	private int interpolatedExp;
 	/// <summary> Lerp smoothing to use when gaining large amounts of exp. </summary>
 	private readonly float ExpSmoothing = 0.5f;
 
@@ -135,15 +135,18 @@ public partial class ExperienceResult : Control
 		if (!animator.IsPlaying())
 			animator.Play(IncreaseAnimation);
 
-		float startExp = Mathf.Max(startingExp, previousLevelupRequirement);
-		float endExp = Mathf.Min(levelupRequirement, targetExp);
+		int startExp = Mathf.Max(startingExp, previousLevelupRequirement);
+		int endExp = Mathf.Min(levelupRequirement, targetExp);
 		// Calculate interpolation speed to account for slight exp gains
-		float interpolationSpeed = (endExp - previousLevelupRequirement) / (levelupRequirement - previousLevelupRequirement);
+		float interpolationSpeed = (endExp - previousLevelupRequirement) / (float)(levelupRequirement - previousLevelupRequirement);
 
 		// Start interpolation
 		expInterpolation = Mathf.MoveToward(expInterpolation, 1, ExpSmoothing / interpolationSpeed * PhysicsManager.physicsDelta);
-		interpolatedExp = Mathf.Lerp(startExp, endExp, expInterpolation);
-		SaveManager.ActiveGameData.exp = Mathf.CeilToInt(interpolatedExp);
+		if (Mathf.IsEqualApprox(expInterpolation, 1.0f)) // Workaround because something is wrong with Mathf.Lerp and ints...
+			interpolatedExp = endExp;
+		else
+			interpolatedExp = Mathf.FloorToInt(Mathf.Lerp(startExp, endExp, expInterpolation));
+		SaveManager.ActiveGameData.exp = interpolatedExp;
 		RedrawData();
 
 		if (SaveManager.ActiveGameData.exp >= levelupRequirement && SaveManager.ActiveGameData.level < MaxLevel) // Level up
@@ -157,11 +160,11 @@ public partial class ExperienceResult : Control
 		expFill.Scale = new(expRatio, 1);
 		expLabel.Text = $"{ExtensionMethods.FormatMenuNumber(SaveManager.ActiveGameData.exp)}/{ExtensionMethods.FormatMenuNumber(levelupRequirement)}";
 
-		int addedExp = Mathf.CeilToInt(interpolatedExp) - startingExp;
-		scoreExp = Mathf.CeilToInt(Math.Clamp(Stage.TotalScore - addedExp, 0, Stage.TotalScore));
-		skillExp = Mathf.CeilToInt(Math.Clamp(Stage.CurrentEXP + Stage.TotalScore - addedExp, 0, Stage.CurrentEXP));
+		int addedExp = interpolatedExp - startingExp;
+		scoreExp = Math.Clamp(Stage.TotalScore - addedExp, 0, Stage.TotalScore);
+		skillExp = Math.Clamp(Stage.CurrentEXP + Stage.TotalScore - addedExp, 0, Stage.CurrentEXP);
 		if (useMissionExp)
-			missionExp = Mathf.CeilToInt(Math.Clamp(Stage.CurrentEXP + Stage.TotalScore + Stage.Data.FirstClearBonus - addedExp, 0, Stage.Data.FirstClearBonus));
+			missionExp = Math.Clamp(Stage.CurrentEXP + Stage.TotalScore + Stage.Data.FirstClearBonus - addedExp, 0, Stage.Data.FirstClearBonus);
 
 		scoreLabel.Text = ExtensionMethods.FormatMenuNumber(scoreExp);
 		skillLabel.Text = ExtensionMethods.FormatMenuNumber(skillExp);
