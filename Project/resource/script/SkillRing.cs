@@ -166,6 +166,13 @@ public class SkillRing
 		return false;
 	}
 
+	/// <summary> Resets a skill's augment index to 0. </summary>
+	public void ResetAugmentIndex(SkillKey key)
+	{
+		if (EquippedAugments.ContainsKey(key))
+			EquippedAugments[key] = 0;
+	}
+
 	/// <summary> Checks whether a skill is unlocked on the active save file. </summary>
 	public bool IsSkillUnlocked(SkillKey key) => IsSkillUnlocked(Runtime.Instance.SkillList.GetSkill(key));
 
