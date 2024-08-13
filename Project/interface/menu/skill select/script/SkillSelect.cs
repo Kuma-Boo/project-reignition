@@ -288,12 +288,15 @@ public partial class SkillSelect : Menu
 	{
 		skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
 		skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);
-		foreach (Node option in optionContainer.GetChildren())
+		foreach (SkillOption skillOption in currentSkillOptionList)
 		{
-			if (option is not SkillOption)
+			if (skillOption.HasUnlockedAugments())
+			{
+				UpdateAugmentHierarchy(skillOption);
 				continue;
+			}
 
-			((SkillOption)option).Redraw();
+			skillOption.Redraw();
 		}
 
 		UpdateDescription();
@@ -310,7 +313,11 @@ public partial class SkillSelect : Menu
 		SkillResource conflictingSkill = ActiveSkillRing.GetConflictingSkill(baseSkill.Key);
 
 		if (ActiveSkillRing.UnequipSkill(conflictingSkill.Key, ActiveSkillRing.GetAugmentIndex(conflictingSkill.Key)))
+		{
+			// Revert to base skill if unequipped
+			ActiveSkillRing.ResetAugmentIndex(conflictingSkill.Key);
 			ActiveSkillRing.EquipSkill(baseSkill.Key, IsEditingAugment ? AugmentSelection : 0);
+		}
 
 		Redraw();
 	}
@@ -380,7 +387,6 @@ public partial class SkillSelect : Menu
 	private int AugmentSelection { get; set; }
 	private void ShowAugmentMenu()
 	{
-		//DisableProcessing();
 		IsEditingAugment = true;
 		SelectedSkill.UpdateUnlockedAugments();
 		animator.Play("augment-show");
@@ -399,7 +405,6 @@ public partial class SkillSelect : Menu
 
 	private void HideAugmentMenu()
 	{
-		//DisableProcessing();
 		IsEditingAugment = false;
 		animator.Play("augment-hide");
 
