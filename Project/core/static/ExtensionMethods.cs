@@ -273,7 +273,6 @@ namespace Project
 
 		/// <summary> Formats a number to eight digits. The typical format displayed on menus. </summary>
 		public static string FormatMenuNumber(int score) => score.ToString("00000000");
-		public static string FormatMenuNumber2(int score) => score.ToString("0000000");
 		/// <summary> Formats a number of seconds into the typical format displayed on menus. Doesn't support hours. </summary>
 		public static string FormatTime(float time)
 		{
