@@ -92,6 +92,8 @@ public partial class CharacterAnimator : Node3D
 		animationTree.Set(OneshotTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		animationTree.Set(OneshotSeek, 0);
 		animationTree.Set(OneshotTransition, animation);
+
+		CancelCrouch();
 	}
 
 	/// <summary>
@@ -496,6 +498,12 @@ public partial class CharacterAnimator : Node3D
 			crouchTransition.XfadeTime = 0.0;
 
 		CrouchStatePlayback.Travel(CrouchStateStop);
+	}
+
+	private void CancelCrouch()
+	{
+		crouchTransition.XfadeTime = 0.0;
+		animationTree.Set(CrouchTransition, DisabledConstant);
 	}
 
 	public void CrouchToMoveTransition()
