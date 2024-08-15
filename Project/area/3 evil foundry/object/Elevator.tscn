@@ -1,0 +1,102 @@
+[gd_scene load_steps=12 format=3 uid="uid://bioj7igetxoe1"]
+
+[ext_resource type="PackedScene" uid="uid://wl72orcirdh4" path="res://area/3 evil foundry/object/model/Elevator.gltf" id="1_7olfm"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="2_03yvt"]
+[ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="3_edqjq"]
+[ext_resource type="AudioStream" uid="uid://e8k1tgvklbc3" path="res://sound/sfx/stage/evil foundry/elevator fall.wav" id="4_0kf3o"]
+[ext_resource type="AudioStream" uid="uid://cia283ubml2c8" path="res://sound/sfx/stage/evil foundry/elevator rise.wav" id="5_mcxgm"]
+[ext_resource type="Script" path="res://object/trigger/modules/PlatformTrigger.cs" id="6_k4s3l"]
+
+[sub_resource type="Curve" id="Curve_obwmd"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2vuck"]
+size = Vector3(4, 1, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xkf1e"]
+size = Vector3(4, 5, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v2xmr"]
+size = Vector3(4, 5, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dnt6x"]
+size = Vector3(4, 1, 6)
+
+[node name="Elevator" type="Node3D"]
+script = ExtResource("3_edqjq")
+Movement/Mode = 1
+"Movement/Cycle Length" = 4.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 30.0
+Movement/Angle = 180.0
+"Vertical Orientation" = true
+timeCurve = SubResource("Curve_obwmd")
+root = NodePath("Root")
+animator = NodePath("Root/Elevator/AnimationPlayer")
+
+[node name="Root" type="Node3D" parent="."]
+script = ExtResource("2_03yvt")
+
+[node name="Elevator" parent="Root" instance=ExtResource("1_7olfm")]
+unique_name_in_owner = true
+
+[node name="Skeleton3D" parent="Root/Elevator/ElevatorRoot" index="0"]
+bones/0/scale = Vector3(1, 1, 1)
+bones/1/rotation = Quaternion(-0.707106, 1.25607e-15, 3.94099e-08, 0.707107)
+
+[node name="AnimationPlayer" parent="Root/Elevator" index="1"]
+autoplay = "gear"
+
+[node name="Hitbox" type="Area3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.4, -2)
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Hitbox"]
+shape = SubResource("BoxShape3D_2vuck")
+
+[node name="Collision" type="StaticBody3D" parent="Root" groups=["ceiling", "floor", "wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Collision"]
+shape = SubResource("BoxShape3D_xkf1e")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Root/Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
+shape = SubResource("BoxShape3D_v2xmr")
+
+[node name="PlatformTrigger" type="Node3D" parent="Root" node_paths=PackedStringArray("floorCalculationRoot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 0)
+script = ExtResource("6_k4s3l")
+"Falling Platform Settings/Disabled" = true
+floorCalculationRoot = NodePath(".")
+
+[node name="Trigger" type="Area3D" parent="Root/PlatformTrigger"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/PlatformTrigger/Trigger"]
+shape = SubResource("BoxShape3D_dnt6x")
+
+[node name="Fall" type="AudioStreamPlayer3D" parent="Root"]
+stream = ExtResource("4_0kf3o")
+attenuation_model = 3
+max_db = 0.0
+autoplay = true
+max_distance = 150.0
+bus = &"GAME SFX"
+
+[node name="Rise" type="AudioStreamPlayer3D" parent="Root"]
+stream = ExtResource("5_mcxgm")
+attenuation_model = 3
+max_db = 0.0
+autoplay = true
+max_distance = 150.0
+bus = &"GAME SFX"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[connection signal="area_entered" from="Root/Hitbox" to="Root" method="OnEntered"]
+[connection signal="area_exited" from="Root/Hitbox" to="Root" method="OnExited"]
+
+[editable path="Root/Elevator"]
