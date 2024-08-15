@@ -10,6 +10,13 @@ namespace Project.Gameplay;
 [Tool]
 public partial class MovingObject : Node3D
 {
+	/// <summary> Emitted when the object starts to leave its initial position. </summary>
+	[Signal]
+	public delegate void OnLeaveEventHandler();
+	/// <summary> Emitted when the object starts to return to its initial position. </summary>
+	[Signal]
+	public delegate void OnReturnEventHandler();
+
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
 	{
@@ -148,6 +155,10 @@ public partial class MovingObject : Node3D
 	public float TimeScale = 1f;
 	/// <summary> Current travel time. </summary>
 	private float currentTime;
+	/// <summary> Previous sampling ratio (Linear only). </summary>
+	private float previousRatio;
+	/// <summary> Current travel direction (Linear only). </summary>
+	private int travelDirection;
 	/// <summary> Set this if you want a non-linear travel time. Only works on Linear movement modes. </summary>
 	[Export]
 	private Curve timeCurve;
@@ -223,6 +234,7 @@ public partial class MovingObject : Node3D
 		TimeScale = 1f;
 		isPaused = startPaused;
 		currentTime = StartingOffset * Mathf.Abs(cycleLength);
+		travelDirection = 0;
 
 		if (Root?.IsInsideTree() == true)
 			Root.GlobalPosition = InterpolatePosition(currentTime);
@@ -250,6 +262,23 @@ public partial class MovingObject : Node3D
 
 			targetPosition = Vector3.Forward.Rotated(Vector3.Up, Mathf.DegToRad(angle));
 			targetPosition *= distance * Mathf.Lerp(0, 1, ratio);
+
+			if (!Engine.IsEditorHint())
+			{
+				// Calculate direction changes and emit signals
+				int currentTravelDirection = Mathf.Sign(ratio - previousRatio);
+				if (travelDirection != currentTravelDirection)
+				{
+					if (currentTravelDirection == 1)
+						EmitSignal(SignalName.OnLeave);
+					else if (currentTravelDirection == -1)
+						EmitSignal(SignalName.OnReturn);
+
+					travelDirection = currentTravelDirection;
+				}
+
+				previousRatio = ratio;
+			}
 		}
 		else if (movementMode == MovementModes.Circle)
 		{
