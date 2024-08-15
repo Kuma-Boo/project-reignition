@@ -2,156 +2,146 @@ using Godot;
 using Project.Core;
 using System.Collections.Generic;
 
-namespace Project.Gameplay.Objects
+namespace Project.Gameplay.Objects;
+
+[Tool]
+public partial class GasTank : Area3D
 {
-	[Tool]
-	public partial class GasTank : Area3D
+	[Export]
+	private float height;
+	[Export]
+	private Vector3 endPosition;
+	private Vector3 startPosition;
+
+	[Export]
+	private AnimationPlayer animator;
+
+	private bool isInteractingWithPlayer;
+	private bool isPlayerInExplosion;
+	private readonly List<Enemy> enemyList = new();
+
+	private bool wasDetonated;
+	private bool isTraveling;
+	private float travelTime;
+	private const float TIME_SCALE = .8f;
+
+	private CharacterController Character => CharacterController.instance;
+	private Vector3 StartPosition => Engine.IsEditorHint() ? GlobalPosition : startPosition;
+	private Vector3 EndPosition => StartPosition + GlobalBasis * endPosition;
+	public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(StartPosition, EndPosition, height);
+
+	public override void _Ready()
 	{
+		if (Engine.IsEditorHint()) return;
 
-		[Export]
-		private float height;
-		[Export]
-		private Vector3 endPosition;
-		private Vector3 startPosition;
+		startPosition = GlobalPosition;
+		StageSettings.instance.ConnectRespawnSignal(this);
+	}
 
-		[Export]
-		private AnimationPlayer animator;
+	private void Respawn()
+	{
+		travelTime = 0;
+		isTraveling = false;
+		GlobalPosition = StartPosition;
+		wasDetonated = false;
+		animator.Play("RESET");
+	}
 
-		private bool isInteractingWithPlayer;
-		private bool isPlayerInExplosion;
-		private readonly List<Enemy> enemyList = new();
+	public override void _PhysicsProcess(double _)
+	{
+		if (Engine.IsEditorHint()) return;
 
-		private bool wasDetonated;
-		private bool isTraveling;
-		private float travelTime;
-		private const float TIME_SCALE = .8f;
+		if (wasDetonated) return;
+		if (!isTraveling && !CheckInteraction()) return;
 
-		private CharacterController Character => CharacterController.instance;
-		private Vector3 StartPosition => Engine.IsEditorHint() ? GlobalPosition : startPosition;
-		private Vector3 EndPosition => StartPosition + GlobalBasis * endPosition;
-		public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(StartPosition, EndPosition, height);
+		LaunchSettings launchSettings = GetLaunchSettings();
 
-
-		public override void _Ready()
+		if (launchSettings.IsLauncherFinished(travelTime))
 		{
-			if (Engine.IsEditorHint()) return;
-
-			startPosition = GlobalPosition;
-			StageSettings.instance.ConnectRespawnSignal(this);
+			if (!wasDetonated)
+				Detonate();
+			return;
 		}
 
+		travelTime = Mathf.MoveToward(travelTime, launchSettings.TotalTravelTime, PhysicsManager.physicsDelta * TIME_SCALE);
+		GlobalPosition = launchSettings.InterpolatePositionTime(travelTime);
+	}
 
-		private void Respawn()
+	private bool CheckInteraction()
+	{
+		if (!isInteractingWithPlayer) return false;
+
+		// TODO Check for stomp
+		if (Character.Skills.IsSpeedBreakActive)
 		{
-			travelTime = 0;
-			isTraveling = false;
-			GlobalPosition = StartPosition;
-			wasDetonated = false;
-			animator.Play("RESET");
+			Detonate(); // Detonate instantly
+			return false;
 		}
 
+		if (Character.ActionState != CharacterController.ActionStates.JumpDash) return false;
 
-		public override void _PhysicsProcess(double _)
+		Character.Lockon.StartBounce();
+		isTraveling = true;
+		animator.Play("strike");
+		animator.Advance(0);
+		animator.Play("launch");
+		return true;
+	}
+
+	private void Detonate()
+	{
+		wasDetonated = true;
+		isTraveling = false;
+		animator.Play("detonate");
+
+		for (int i = 0; i < enemyList.Count; i++)
+			enemyList[i].TakeDamage(); // Damage all enemies in range
+
+		if (isPlayerInExplosion)
+			Character.StartKnockback();
+	}
+
+	private void OnEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player")) return;
+		isInteractingWithPlayer = true;
+	}
+
+	private void OnExited(Area3D a)
+	{
+		if (!a.IsInGroup("player")) return;
+		isInteractingWithPlayer = false;
+	}
+
+	private void OnExplosionEntered(Area3D a)
+	{
+		if (a.IsInGroup("player"))
 		{
-			if (Engine.IsEditorHint()) return;
-
-			if (wasDetonated) return;
-			if (!isTraveling && !CheckInteraction()) return;
-
-			LaunchSettings launchSettings = GetLaunchSettings();
-
-			if (launchSettings.IsLauncherFinished(travelTime))
-			{
-				if (!wasDetonated)
-					Detonate();
-				return;
-			}
-
-			travelTime = Mathf.MoveToward(travelTime, launchSettings.TotalTravelTime, PhysicsManager.physicsDelta * TIME_SCALE);
-			GlobalPosition = launchSettings.InterpolatePositionTime(travelTime);
+			isPlayerInExplosion = true;
+			return;
 		}
 
-
-		private bool CheckInteraction()
+		if (a is EnemyHurtbox)
 		{
-			if (!isInteractingWithPlayer) return false;
+			Enemy targetEnemy = (a as EnemyHurtbox).enemy;
+			if (!enemyList.Contains(targetEnemy))
+				enemyList.Add(targetEnemy);
+		}
+	}
 
-			// TODO Check for stomp
-			if (Character.Skills.IsSpeedBreakActive)
-			{
-				Detonate(); // Detonate instantly
-				return false;
-			}
-
-			if (Character.ActionState != CharacterController.ActionStates.JumpDash) return false;
-
-			Character.Lockon.StartBounce();
-			isTraveling = true;
-			animator.Play("strike");
-			return true;
+	private void OnExplosionExited(Area3D a)
+	{
+		if (a.IsInGroup("player"))
+		{
+			isPlayerInExplosion = false;
+			return;
 		}
 
-
-		private void Detonate()
+		if (a is EnemyHurtbox)
 		{
-			wasDetonated = true;
-			isTraveling = false;
-			animator.Play("detonate");
-
-			for (int i = 0; i < enemyList.Count; i++)
-				enemyList[i].TakeDamage(); // Damage all enemies in range
-
-			if (isPlayerInExplosion)
-				Character.StartKnockback();
-		}
-
-
-		private void OnEntered(Area3D a)
-		{
-			if (!a.IsInGroup("player")) return;
-			isInteractingWithPlayer = true;
-		}
-
-
-		private void OnExited(Area3D a)
-		{
-			if (!a.IsInGroup("player")) return;
-			isInteractingWithPlayer = false;
-		}
-
-
-		private void OnExplosionEntered(Area3D a)
-		{
-			if (a.IsInGroup("player"))
-			{
-				isPlayerInExplosion = true;
-				return;
-			}
-
-
-			if (a is EnemyHurtbox)
-			{
-				Enemy targetEnemy = (a as EnemyHurtbox).enemy;
-				if (!enemyList.Contains(targetEnemy))
-					enemyList.Add(targetEnemy);
-			}
-		}
-
-
-		private void OnExplosionExited(Area3D a)
-		{
-			if (a.IsInGroup("player"))
-			{
-				isPlayerInExplosion = false;
-				return;
-			}
-
-			if (a is EnemyHurtbox)
-			{
-				Enemy targetEnemy = (a as EnemyHurtbox).enemy;
-				if (enemyList.Contains(targetEnemy))
-					enemyList.Remove(targetEnemy);
-			}
+			Enemy targetEnemy = (a as EnemyHurtbox).enemy;
+			if (enemyList.Contains(targetEnemy))
+				enemyList.Remove(targetEnemy);
 		}
 	}
 }
