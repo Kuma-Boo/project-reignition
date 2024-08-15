@@ -8,8 +8,8 @@
 [ext_resource type="Script" path="res://object/trigger/modules/PlatformTrigger.cs" id="6_k4s3l"]
 
 [sub_resource type="Curve" id="Curve_obwmd"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(0.99999, 0), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2vuck"]
 size = Vector3(4, 1, 2)
@@ -26,14 +26,14 @@ size = Vector3(4, 1, 6)
 [node name="Elevator" type="Node3D"]
 script = ExtResource("3_edqjq")
 Movement/Mode = 1
-"Movement/Cycle Length" = 4.0
+"Movement/Cycle Length" = 10.0
 "Movement/Starting Offset" = 0.0
 Movement/Distance = 30.0
 Movement/Angle = 180.0
 "Vertical Orientation" = true
 timeCurve = SubResource("Curve_obwmd")
 root = NodePath("Root")
-animator = NodePath("Root/Elevator/AnimationPlayer")
+animator = NodePath("")
 
 [node name="Root" type="Node3D" parent="."]
 script = ExtResource("2_03yvt")
@@ -42,7 +42,6 @@ script = ExtResource("2_03yvt")
 unique_name_in_owner = true
 
 [node name="Skeleton3D" parent="Root/Elevator/ElevatorRoot" index="0"]
-bones/0/scale = Vector3(1, 1, 1)
 bones/1/rotation = Quaternion(-0.707106, 1.25607e-15, 3.94099e-08, 0.707107)
 
 [node name="AnimationPlayer" parent="Root/Elevator" index="1"]
@@ -52,7 +51,7 @@ autoplay = "gear"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.4, -2)
 collision_layer = 0
 collision_mask = 2
-monitoring = false
+monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Hitbox"]
 shape = SubResource("BoxShape3D_2vuck")
@@ -67,13 +66,17 @@ shape = SubResource("BoxShape3D_xkf1e")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
 shape = SubResource("BoxShape3D_v2xmr")
 
-[node name="PlatformTrigger" type="Node3D" parent="Root" node_paths=PackedStringArray("floorCalculationRoot")]
+[node name="PlatformTrigger" type="Node3D" parent="Root" node_paths=PackedStringArray("floorCalculationRoot", "parentCollider")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 0)
 script = ExtResource("6_k4s3l")
 "Falling Platform Settings/Disabled" = true
 floorCalculationRoot = NodePath(".")
+parentCollider = NodePath("../Collision")
 
 [node name="Trigger" type="Area3D" parent="Root/PlatformTrigger"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Root/PlatformTrigger/Trigger"]
 shape = SubResource("BoxShape3D_dnt6x")
@@ -98,5 +101,7 @@ bus = &"GAME SFX"
 
 [connection signal="area_entered" from="Root/Hitbox" to="Root" method="OnEntered"]
 [connection signal="area_exited" from="Root/Hitbox" to="Root" method="OnExited"]
+[connection signal="area_entered" from="Root/PlatformTrigger/Trigger" to="Root/PlatformTrigger" method="OnEntered"]
+[connection signal="area_exited" from="Root/PlatformTrigger/Trigger" to="Root/PlatformTrigger" method="OnExited"]
 
 [editable path="Root/Elevator"]

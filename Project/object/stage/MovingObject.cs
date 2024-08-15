@@ -148,7 +148,7 @@ public partial class MovingObject : Node3D
 	public float TimeScale = 1f;
 	/// <summary> Current travel time. </summary>
 	private float currentTime;
-	/// <summary> Set this if you want a non-linear travel time. </summary>
+	/// <summary> Set this if you want a non-linear travel time. Only works on Linear movement modes. </summary>
 	[Export]
 	private Curve timeCurve;
 	[Export]
@@ -168,10 +168,7 @@ public partial class MovingObject : Node3D
 	/// <summary> Object to actually move. </summary>
 	private AnimationPlayer Animator;
 	[Export(PropertyHint.Range, "0,2,.1")]
-	private float animatorSpeedScale = 1.0f;
-	/// <summary> Enable this if you want an animation to change speed depending on the object's movement. </summary>
-	[Export]
-	private bool autosetAnimatorSpeed;
+	private float animatorSpeedScale = 1f;
 
 	public override void _EnterTree()
 	{
@@ -205,19 +202,8 @@ public partial class MovingObject : Node3D
 		if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) // Rollover
 			currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength) * Mathf.Sign(cycleLength);
 
-		float timeRatio = currentTime / Mathf.Abs(cycleLength);
-		if (timeCurve != null) // Sample the time curve if it exists
-		{
-			if (timeRatio < 0) // Make sure timeRatio works as expected for negative values (i.e. sample from the end of the curve)
-				timeRatio = 1 - timeRatio;
-			timeRatio = timeCurve.Sample(timeRatio);
-		}
-
 		if (Root?.IsInsideTree() == true)
-			Root.GlobalPosition = InterpolatePosition(timeRatio);
-
-		if (autosetAnimatorSpeed && Animator != null) // Update animator speed as needed
-			Animator.SpeedScale = animatorSpeedScale * ((timeRatio - .5f) / .5f);
+			Root.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
 	}
 
 	public void ApplyEditorPosition()
@@ -248,10 +234,18 @@ public partial class MovingObject : Node3D
 
 		if (movementMode == MovementModes.Linear)
 		{
-			if (timeCurve == null) // TODO Change default mode to Linear.
+			if (timeCurve == null)
 			{
+				// Default interpolation is smoothstep.
 				float linearRatio = 1f - (2 * ratio); // Convert ratio to -1 <-> 1
 				ratio = Mathf.SmoothStep(0, 1, 1f - Mathf.Abs(linearRatio));
+			}
+			else
+			{
+				// Sample the time curve
+				if (ratio < 0) // Make sure sampling works as expected for negative values (i.e. sample from the end of the curve)
+					ratio = 1 - ratio;
+				ratio = timeCurve.Sample(ratio);
 			}
 
 			targetPosition = Vector3.Forward.Rotated(Vector3.Up, Mathf.DegToRad(angle));
