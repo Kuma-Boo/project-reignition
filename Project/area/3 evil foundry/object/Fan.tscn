@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://61g1iq7igxi"]
+
+[ext_resource type="Script" path="res://area/3 evil foundry/data/script/FanHazard.cs" id="1_0gep6"]
+[ext_resource type="PackedScene" uid="uid://de6ierdk3kuqf" path="res://area/3 evil foundry/object/model/Fan.gltf" id="2_vs3rs"]
+[ext_resource type="AudioStream" uid="uid://bxtjegxkdsnmu" path="res://sound/sfx/stage/evil foundry/fan spin.wav" id="3_7fcno"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7aa55"]
+size = Vector3(1, 6, 0.5)
+
+[node name="Fan" type="Node3D"]
+script = ExtResource("1_0gep6")
+root = NodePath("Root")
+sfx = NodePath("SFX")
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="Fan" parent="Root" instance=ExtResource("2_vs3rs")]
+
+[node name="Trigger" type="Area3D" parent="Root"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Blade1" type="CollisionShape3D" parent="Root/Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+shape = SubResource("BoxShape3D_7aa55")
+
+[node name="Blade2" type="CollisionShape3D" parent="Root/Trigger"]
+transform = Transform3D(-0.5, -0.866025, 0, 0.866025, -0.5, 0, 0, 0, 1, -2.05, -1.2, 0)
+shape = SubResource("BoxShape3D_7aa55")
+
+[node name="Blade3" type="CollisionShape3D" parent="Root/Trigger"]
+transform = Transform3D(0.5, -0.866025, 0, 0.866025, 0.5, 0, 0, 0, 1, 2.05, -1.2, 0)
+shape = SubResource("BoxShape3D_7aa55")
+
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_7fcno")
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[connection signal="area_entered" from="Root/Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/Trigger" to="." method="OnExited"]
