@@ -7,43 +7,66 @@ namespace Project.Gameplay.Objects;
 [Tool]
 public partial class GasTank : Area3D
 {
+	[Signal]
+	public delegate void OnStrikeEventHandler();
+
+	/// <summary> Field is public so enemies can set this as needed. </summary>
 	[Export]
-	private float height;
+	public float height;
 	/// <summary> Field is public so enemies can set this as needed. </summary>
 	[Export]
 	public Vector3 endPosition;
+	/// <summary> Used if you want to target a particular object instead of a position (End position is recalculated on launch). </summary>
+	[Export]
+	public Node3D endTarget;
 	private Vector3 startPosition;
 
-	[Export]
-	private AnimationPlayer animator;
+	[ExportGroup("Components")]
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
+	private NodePath root;
+	private Node3D Root { get; set; }
+
+	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
+	private NodePath animator;
+	private AnimationPlayer Animator { get; set; }
 
 	private bool isInteractingWithPlayer;
 	private bool isPlayerInExplosion;
+	private SpawnData spawnData;
 	private readonly List<Enemy> enemyList = [];
 
 	public bool IsDetonated { get; private set; }
 	public bool IsTraveling { get; private set; }
 	private float travelTime;
-	private const float TimeScale = .8f;
+	private readonly float VisualRotationSpeed = 10f;
+	private readonly float TimeScale = .8f;
 
-	public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(StartPosition, EndPosition, height);
+	public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(StartPosition, EndPosition, height, true);
+	public Basis TransformBasis => endTarget == null ? GlobalBasis : Basis.Identity;
 	private CharacterController Character => CharacterController.instance;
 	private Vector3 StartPosition => Engine.IsEditorHint() ? GlobalPosition : startPosition;
-	private Vector3 EndPosition => StartPosition + (GlobalBasis * endPosition);
+	private Vector3 EndPosition => StartPosition + (TransformBasis * endPosition);
 
 	public override void _Ready()
 	{
 		if (Engine.IsEditorHint()) return;
+
+		Root = GetNodeOrNull<Node3D>(root);
+		Animator = GetNodeOrNull<AnimationPlayer>(animator);
+		InitializeSpawnData();
 		StageSettings.instance.ConnectRespawnSignal(this);
 	}
 
+	public void InitializeSpawnData() => spawnData = new SpawnData(GetParent(), Transform);
+
 	private void Respawn()
 	{
+		Root.Rotation = Vector3.Zero;
 		travelTime = 0;
 		IsTraveling = false;
-		GlobalPosition = StartPosition;
+		Position = spawnData.spawnTransform.Origin;
 		IsDetonated = false;
-		animator.Play("RESET");
+		Animator.Play("RESET");
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -51,19 +74,21 @@ public partial class GasTank : Area3D
 		if (Engine.IsEditorHint()) return;
 
 		if (IsDetonated) return;
-		if (!IsTraveling && !CheckInteraction()) return;
+		CheckInteraction();
+
+		if (!IsTraveling) return;
 
 		LaunchSettings launchSettings = GetLaunchSettings();
 
 		if (launchSettings.IsLauncherFinished(travelTime))
 		{
-			if (!IsDetonated)
-				Detonate();
+			Detonate();
 			return;
 		}
 
 		travelTime = Mathf.MoveToward(travelTime, launchSettings.TotalTravelTime, PhysicsManager.physicsDelta * TimeScale);
 		GlobalPosition = launchSettings.InterpolatePositionTime(travelTime);
+		Root.Rotation += Vector3.Forward * VisualRotationSpeed * PhysicsManager.physicsDelta * TimeScale;
 	}
 
 	private bool CheckInteraction()
@@ -79,18 +104,28 @@ public partial class GasTank : Area3D
 
 		if (Character.ActionState != CharacterController.ActionStates.JumpDash) return false;
 
-		Character.Lockon.StartBounce();
-		animator.Play("strike");
-		animator.Advance(0);
-		Launch();
-
+		StrikeTank();
 		return true;
+	}
+
+	private void StrikeTank()
+	{
+		Character.Lockon.StartBounce();
+		Animator.Play("strike");
+		Animator.Advance(0);
+		EmitSignal(SignalName.OnStrike);
+
+		Launch();
 	}
 
 	public void Launch()
 	{
+		if (endTarget != null)
+			endPosition = endTarget.GlobalPosition - GlobalPosition;
+
+		travelTime = 0;
 		IsTraveling = true;
-		animator.Play("launch");
+		Animator.Play("launch");
 		startPosition = GlobalPosition;
 	}
 
@@ -98,7 +133,7 @@ public partial class GasTank : Area3D
 	{
 		IsDetonated = true;
 		IsTraveling = false;
-		animator.Play("detonate");
+		Animator.Play("detonate");
 
 		for (int i = 0; i < enemyList.Count; i++)
 			enemyList[i].TakeDamage(); // Damage all enemies in range

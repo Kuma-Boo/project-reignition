@@ -14,6 +14,10 @@ public partial class GolemMajin : Enemy
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
 	private NodePath gasTankParent;
 	private Node3D _gasTankParent;
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
+	private NodePath gasTankLockonTarget;
+	private Node3D _gasTankLockonTarget;
+	private bool canThrowGasTank;
 
 	private float startingProgress;
 
@@ -31,10 +35,16 @@ public partial class GolemMajin : Enemy
 	{
 		if (pathFollower != null)
 			startingProgress = pathFollower.Progress;
-		_gasTankParent = GetNodeOrNull<Node3D>(gasTankParent);
-		AnimationTree.Active = true;
+
+		if (gasTank != null)
+		{
+			_gasTankParent = GetNodeOrNull<Node3D>(gasTankParent);
+			_gasTankLockonTarget = GetNodeOrNull<Node3D>(gasTankLockonTarget);
+			gasTank.Connect(GasTank.SignalName.OnStrike, new(this, MethodName.LockGasTankToGolem));
+		}
 
 		base.SetUp();
+		AnimationTree.Active = true;
 	}
 
 	public override void Respawn()
@@ -45,23 +55,27 @@ public partial class GolemMajin : Enemy
 		base.Respawn();
 
 		if (gasTank != null)
-		{
-			gasTank.GetParent().RemoveChild(gasTank);
-			_gasTankParent.AddChild(gasTank);
+			CallDeferred(MethodName.RespawnGasTank);
+	}
 
-			gasTank.SetDeferred("transform", Transform3D.Identity);
-		}
+	private void RespawnGasTank()
+	{
+		canThrowGasTank = true;
+		gasTank.GetParent().RemoveChild(gasTank);
+		_gasTankParent.AddChild(gasTank);
+		gasTank.Transform = Transform3D.Identity;
+		gasTank.CallDeferred("InitializeSpawnData");
 	}
 
 	private void CheckGasTank()
 	{
-		if (!IsActive || gasTank == null)
+		if (!canThrowGasTank || !IsActive || gasTank == null)
 			return;
 
-		GD.Print(Character.PathFollower.ForwardAxis.Dot(this.Back()));
-		if (Character.PathFollower.ForwardAxis.Dot(this.Back()) < 0.5f) // Not facing the player
+		if (Character.PathFollower.ForwardAxis.Dot(this.Forward()) < 0.5f) // Not facing the player
 			return;
 
+		canThrowGasTank = false;
 		AnimationTree.Set(ThrowTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
@@ -70,14 +84,22 @@ public partial class GolemMajin : Enemy
 		if (gasTank.IsTraveling || gasTank.IsDetonated) // Gas tank has already been launched
 			return;
 
-		gasTank.Launch();
+		Transform3D t = gasTank.GlobalTransform;
+		gasTank.endTarget = Character;
+		_gasTankParent.RemoveChild(gasTank);
+		StageSettings.instance.AddChild(gasTank);
+		gasTank.SetDeferred("global_position", t.Origin);
+		gasTank.CallDeferred(GasTank.MethodName.Launch);
 	}
+
+	/// <summary> Update the gas tank to lock onto the golem's head. </summary>
+	private void LockGasTankToGolem() => gasTank.endTarget = _gasTankLockonTarget;
 
 	protected override void EnterRange()
 	{
 		IsActive = true;
 
-		if (!IsDefeated)
+		if (!IsDefeated && pathFollower != null)
 			AnimationTree.Set(StateTransition, "walk");
 	}
 
