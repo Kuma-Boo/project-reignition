@@ -1996,7 +1996,7 @@ namespace Project.Gameplay
 				}
 				else
 				{
-					if (JustLandedOnGround)
+					if (IsGrindstepBonusActive)
 						IsGrindstepBonusActive = false;
 
 					float snapDistance = groundHit.distance - CollisionSize.Y;
