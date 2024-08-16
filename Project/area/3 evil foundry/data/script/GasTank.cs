@@ -9,8 +9,9 @@ public partial class GasTank : Area3D
 {
 	[Export]
 	private float height;
+	/// <summary> Field is public so enemies can set this as needed. </summary>
 	[Export]
-	private Vector3 endPosition;
+	public Vector3 endPosition;
 	private Vector3 startPosition;
 
 	[Export]
@@ -18,32 +19,30 @@ public partial class GasTank : Area3D
 
 	private bool isInteractingWithPlayer;
 	private bool isPlayerInExplosion;
-	private readonly List<Enemy> enemyList = new();
+	private readonly List<Enemy> enemyList = [];
 
-	private bool wasDetonated;
-	private bool isTraveling;
+	public bool IsDetonated { get; private set; }
+	public bool IsTraveling { get; private set; }
 	private float travelTime;
-	private const float TIME_SCALE = .8f;
+	private const float TimeScale = .8f;
 
+	public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(StartPosition, EndPosition, height);
 	private CharacterController Character => CharacterController.instance;
 	private Vector3 StartPosition => Engine.IsEditorHint() ? GlobalPosition : startPosition;
-	private Vector3 EndPosition => StartPosition + GlobalBasis * endPosition;
-	public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(StartPosition, EndPosition, height);
+	private Vector3 EndPosition => StartPosition + (GlobalBasis * endPosition);
 
 	public override void _Ready()
 	{
 		if (Engine.IsEditorHint()) return;
-
-		startPosition = GlobalPosition;
 		StageSettings.instance.ConnectRespawnSignal(this);
 	}
 
 	private void Respawn()
 	{
 		travelTime = 0;
-		isTraveling = false;
+		IsTraveling = false;
 		GlobalPosition = StartPosition;
-		wasDetonated = false;
+		IsDetonated = false;
 		animator.Play("RESET");
 	}
 
@@ -51,19 +50,19 @@ public partial class GasTank : Area3D
 	{
 		if (Engine.IsEditorHint()) return;
 
-		if (wasDetonated) return;
-		if (!isTraveling && !CheckInteraction()) return;
+		if (IsDetonated) return;
+		if (!IsTraveling && !CheckInteraction()) return;
 
 		LaunchSettings launchSettings = GetLaunchSettings();
 
 		if (launchSettings.IsLauncherFinished(travelTime))
 		{
-			if (!wasDetonated)
+			if (!IsDetonated)
 				Detonate();
 			return;
 		}
 
-		travelTime = Mathf.MoveToward(travelTime, launchSettings.TotalTravelTime, PhysicsManager.physicsDelta * TIME_SCALE);
+		travelTime = Mathf.MoveToward(travelTime, launchSettings.TotalTravelTime, PhysicsManager.physicsDelta * TimeScale);
 		GlobalPosition = launchSettings.InterpolatePositionTime(travelTime);
 	}
 
@@ -81,17 +80,24 @@ public partial class GasTank : Area3D
 		if (Character.ActionState != CharacterController.ActionStates.JumpDash) return false;
 
 		Character.Lockon.StartBounce();
-		isTraveling = true;
 		animator.Play("strike");
 		animator.Advance(0);
-		animator.Play("launch");
+		Launch();
+
 		return true;
+	}
+
+	public void Launch()
+	{
+		IsTraveling = true;
+		animator.Play("launch");
+		startPosition = GlobalPosition;
 	}
 
 	private void Detonate()
 	{
-		wasDetonated = true;
-		isTraveling = false;
+		IsDetonated = true;
+		IsTraveling = false;
 		animator.Play("detonate");
 
 		for (int i = 0; i < enemyList.Count; i++)
@@ -140,8 +146,7 @@ public partial class GasTank : Area3D
 		if (a is EnemyHurtbox)
 		{
 			Enemy targetEnemy = (a as EnemyHurtbox).enemy;
-			if (enemyList.Contains(targetEnemy))
-				enemyList.Remove(targetEnemy);
+			enemyList.Remove(targetEnemy);
 		}
 	}
 }
