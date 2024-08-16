@@ -69,10 +69,13 @@ public partial class GolemMajin : Enemy
 
 	private void CheckGasTank()
 	{
-		if (!canThrowGasTank || !IsActive || gasTank == null)
+		if (!canThrowGasTank || !IsActive || !IsInRange || gasTank == null)
 			return;
 
 		if (Character.PathFollower.ForwardAxis.Dot(this.Forward()) < 0.5f) // Not facing the player
+			return;
+
+		if (gasTank.CastRay(gasTank.GlobalPosition, Character.GlobalPosition - gasTank.GlobalPosition, Runtime.Instance.environmentMask)) // Obstacle
 			return;
 
 		canThrowGasTank = false;
@@ -85,7 +88,16 @@ public partial class GolemMajin : Enemy
 			return;
 
 		Transform3D t = gasTank.GlobalTransform;
-		gasTank.endTarget = Character;
+		if (IsDefeated)
+		{
+			gasTank.endTarget = null;
+			gasTank.endPosition = Vector3.Down;
+		}
+		else
+		{
+			gasTank.endTarget = Character;
+		}
+
 		_gasTankParent.RemoveChild(gasTank);
 		StageSettings.instance.AddChild(gasTank);
 		gasTank.SetDeferred("global_position", t.Origin);
@@ -107,6 +119,9 @@ public partial class GolemMajin : Enemy
 	{
 		AnimationTree.Set(StateTransition, "defeat");
 		base.Defeat();
+
+		if (gasTank != null) // Drop the gas tank
+			LaunchGasTank();
 	}
 
 	protected override void UpdateEnemy()
