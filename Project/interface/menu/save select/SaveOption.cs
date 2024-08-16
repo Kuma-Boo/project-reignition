@@ -62,8 +62,8 @@ public partial class SaveOption : Control
 
 			levelLabel.Text = saveData.level.ToString("00");
 
-			System.TimeSpan span = System.TimeSpan.FromSeconds(saveData.playTime);
-			timeLabel.Text = span.ToString("hh\\:mm\\:ss");
+			Vector3 time = ExtensionMethods.CalculateTimeVector(Mathf.FloorToInt(saveData.playTime));
+			timeLabel.Text = $"{time.X:00}:{time.Y:00}:{time.Z:00}";
 
 			for (int i = 0; i < _worldRings.Count; i++)
 			{
