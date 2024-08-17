@@ -14,9 +14,6 @@ public partial class GolemMajin : Enemy
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
 	private NodePath gasTankParent;
 	private Node3D _gasTankParent;
-	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
-	private NodePath gasTankLockonTarget;
-	private Node3D _gasTankLockonTarget;
 	private bool canThrowGasTank;
 
 	private float startingProgress;
@@ -39,7 +36,6 @@ public partial class GolemMajin : Enemy
 		if (gasTank != null)
 		{
 			_gasTankParent = GetNodeOrNull<Node3D>(gasTankParent);
-			_gasTankLockonTarget = GetNodeOrNull<Node3D>(gasTankLockonTarget);
 			gasTank.Connect(GasTank.SignalName.OnStrike, new(this, MethodName.LockGasTankToGolem));
 		}
 
@@ -105,7 +101,7 @@ public partial class GolemMajin : Enemy
 	}
 
 	/// <summary> Update the gas tank to lock onto the golem's head. </summary>
-	private void LockGasTankToGolem() => gasTank.endTarget = _gasTankLockonTarget;
+	private void LockGasTankToGolem() => gasTank.endTarget = Hurtbox;
 
 	protected override void EnterRange()
 	{
