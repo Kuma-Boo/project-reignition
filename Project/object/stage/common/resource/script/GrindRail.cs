@@ -13,8 +13,9 @@ public partial class GrindRail : Area3D
 	public delegate void GrindCompletedEventHandler();
 
 	[ExportGroup("Components")]
-	[Export]
-	private Path3D rail;
+	[Export(PropertyHint.NodeType, "Path3D")]
+	private NodePath rail;
+	private Path3D _rail;
 	/// <summary> Reference to the grindrail's pathfollower. </summary>
 	private PathFollow3D pathFollower;
 	private CharacterController Character => CharacterController.instance;
@@ -23,57 +24,62 @@ public partial class GrindRail : Area3D
 	[ExportGroup("Invisible Rail Settings")]
 	[Export]
 	private bool isInvisibleRail;
-	[Export]
-	private Node3D railModel;
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
+	private NodePath railModel;
+	private Node3D _railModel;
 	[Export]
 	private ShaderMaterial railMaterial;
-	[Export]
-	private NodePath startCapPath;
-	private Node3D startCap;
-	[Export]
-	private NodePath endCapPath;
-	private Node3D endCap;
-	[Export]
-	private CollisionShape3D collider;
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
+	private NodePath startCap;
+	private Node3D _startCap;
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
+	private NodePath endCap;
+	private Node3D _endCap;
+	[Export(PropertyHint.NodePathValidTypes, "CollisionShape3D")]
+	private NodePath collider;
+	private CollisionShape3D _collider;
 	[Export(PropertyHint.Range, "5, 120")]
 	/// <summary> Only used for invisible rails. </summary>
 	private int railLength = 5;
 	/// <summary> Updates rail's visual length. </summary>
 	private void UpdateInvisibleRailLength()
 	{
-		startCap = GetNodeOrNull<Node3D>(startCapPath);
-		endCap = GetNodeOrNull<Node3D>(endCapPath);
+		_railModel = GetNodeOrNull<Node3D>(railModel);
+		_startCap = GetNodeOrNull<Node3D>(startCap);
+		_endCap = GetNodeOrNull<Node3D>(endCap);
 
-		if (startCap != null)
-			startCap.Position = Vector3.Forward;
+		if (_startCap != null)
+			_startCap.Position = Vector3.Forward;
 
-		if (endCap != null)
-			endCap.Position = Vector3.Forward * (railLength - 1);
+		if (_endCap != null)
+			_endCap.Position = Vector3.Forward * (railLength - 1);
 	}
 
 	/// <summary> Generates rail's collision and curve. </summary>
 	private void InitializeInvisibleRail()
 	{
 		UpdateInvisibleRailLength();
-		railModel.Visible = false;
+		_railModel.Visible = false;
 
 		// Generate collision and curve
-		collider.Shape = new BoxShape3D()
+		_collider = GetNodeOrNull<CollisionShape3D>(collider);
+		_collider.Shape = new BoxShape3D()
 		{
 			Size = new Vector3(2f, .5f, railLength)
 		};
-		collider.Position = (Vector3.Forward * railLength * .5f) + (Vector3.Down * .05f);
-		rail.Curve = new();
-		rail.Curve.AddPoint(Vector3.Zero, null, Vector3.Forward);
-		rail.Curve.AddPoint(Vector3.Forward * railLength, Vector3.Back);
+		_collider.Position = (Vector3.Forward * railLength * .5f) + (Vector3.Down * .05f);
+
+		_rail.Curve = new();
+		_rail.Curve.AddPoint(Vector3.Zero, null, Vector3.Forward);
+		_rail.Curve.AddPoint(Vector3.Forward * railLength, Vector3.Back);
 	}
 
 	/// <summary> Updates invisible rails to sync with the player's position. </summary>
 	private void UpdateInvisibleRailPosition()
 	{
-		railModel.GlobalPosition = Character.GlobalPosition;
-		railModel.Position = new Vector3(0, railModel.Position.Y, railModel.Position.Z); // Ignore player's x-offset
-		railMaterial.SetShaderParameter("uv_offset", railModel.Position.Z);
+		_railModel.GlobalPosition = Character.GlobalPosition;
+		_railModel.Position = new Vector3(0, _railModel.Position.Y, _railModel.Position.Z); // Ignore player's x-offset
+		railMaterial.SetShaderParameter("uv_offset", _railModel.Position.Z);
 	}
 
 	/// <summary> Is the rail active? </summary>
@@ -97,7 +103,8 @@ public partial class GrindRail : Area3D
 			Loop = false,
 		};
 
-		rail.CallDeferred("add_child", pathFollower);
+		_rail = GetNodeOrNull<Path3D>(rail);
+		_rail.CallDeferred("add_child", pathFollower);
 
 		// For Secret Rings' hidden rails
 		if (isInvisibleRail)
@@ -137,10 +144,10 @@ public partial class GrindRail : Area3D
 			return; // Player must be falling to start grinding!
 
 		// Sync rail pathfollower
-		Vector3 delta = rail.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - rail.GlobalPosition);
-		pathFollower.Progress = rail.Curve.GetClosestOffset(delta);
-		pathFollower.Progress = Mathf.Clamp(pathFollower.Progress, 0, rail.Curve.GetBakedLength() - RailFudgeFactor);
-		if (pathFollower.Progress >= rail.Curve.GetBakedLength() - RailFudgeFactor) // Too close to the end of the rail; skip smoothing
+		Vector3 delta = _rail.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - _rail.GlobalPosition);
+		pathFollower.Progress = _rail.Curve.GetClosestOffset(delta);
+		pathFollower.Progress = Mathf.Clamp(pathFollower.Progress, 0, _rail.Curve.GetBakedLength() - RailFudgeFactor);
+		if (pathFollower.Progress >= _rail.Curve.GetBakedLength() - RailFudgeFactor) // Too close to the end of the rail; skip smoothing
 			return;
 
 		// Ignore grinds that would immediately put the player into a wall
@@ -183,15 +190,15 @@ public partial class GrindRail : Area3D
 		// Show invisible grindrail
 		if (isInvisibleRail)
 		{
-			railModel.Visible = true;
+			_railModel.Visible = true;
 			UpdateInvisibleRailPosition();
 		}
 
 		float positionSmoothing = .2f;
 		float smoothFactor = RailFudgeFactor * 5f;
-		if (pathFollower.Progress >= rail.Curve.GetBakedLength() - smoothFactor) // Calculate smoothing when activating at the end of the rail
+		if (pathFollower.Progress >= _rail.Curve.GetBakedLength() - smoothFactor) // Calculate smoothing when activating at the end of the rail
 		{
-			float progressFactor = Mathf.Abs(pathFollower.Progress - rail.Curve.GetBakedLength());
+			float progressFactor = Mathf.Abs(pathFollower.Progress - _rail.Curve.GetBakedLength());
 			positionSmoothing = Mathf.SmoothStep(0f, positionSmoothing, Mathf.Clamp(progressFactor / smoothFactor, 0f, 1f));
 		}
 		Character.ResetActionState(); // Reset grind step, cancel stomps, jumps, etc
@@ -234,7 +241,7 @@ public partial class GrindRail : Area3D
 
 		Character.Effect.StopGrindFX();
 		if (isInvisibleRail) // Hide rail model
-			railModel.Visible = false;
+			_railModel.Visible = false;
 
 		Character.IsOnGround = false; // Disconnect from the ground
 		Character.ResetMovementState();
