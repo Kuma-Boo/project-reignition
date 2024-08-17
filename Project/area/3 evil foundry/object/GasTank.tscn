@@ -1,15 +1,17 @@
-[gd_scene load_steps=44 format=3 uid="uid://bdxneanubmcid"]
+[gd_scene load_steps=47 format=3 uid="uid://bdxneanubmcid"]
 
 [ext_resource type="Script" path="res://area/3 evil foundry/data/script/GasTank.cs" id="1_35lqu"]
 [ext_resource type="PackedScene" uid="uid://ba5wjjvaj72bi" path="res://area/3 evil foundry/object/model/GasTank.gltf" id="1_ygu6i"]
 [ext_resource type="AudioStream" uid="uid://c0ydr1y6r2csf" path="res://sound/sfx/stage/evil foundry/gas tank strike.wav" id="3_pmf55"]
 [ext_resource type="Material" uid="uid://cnx2a5epxn88l" path="res://effect/particle/material/explosion/Explosion Ember.tres" id="4_5cuel"]
 [ext_resource type="AudioStream" uid="uid://cfm8o0cc0jghj" path="res://sound/sfx/stage/evil foundry/gas tank explosion.wav" id="4_jqcuq"]
+[ext_resource type="AudioStream" uid="uid://boyb482ixr7hd" path="res://sound/sfx/stage/evil foundry/gas tank launch.wav" id="4_jxiu4"]
 [ext_resource type="Material" uid="uid://7lvqh1a70ae4" path="res://effect/particle/material/explosion/Explosion Flame.tres" id="5_6nhhk"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="7_hpvuk"]
 [ext_resource type="Material" uid="uid://cctsu5ymh5eev" path="res://effect/particle/material/environment/Common Splatter.tres" id="8_nkggl"]
 [ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="9_3ev21"]
 [ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="10_e3yua"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="10_fl0uf"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_bme4n"]
 radius = 1.3
@@ -18,7 +20,7 @@ radius = 1.3
 radius = 4.0
 
 [sub_resource type="Curve" id="Curve_uucnd"]
-_data = [Vector2(0, 0), 0.0, 13.9529, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -16.4806, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 13.9529, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 4
 
 [sub_resource type="CurveTexture" id="CurveTexture_8y1co"]
@@ -88,6 +90,34 @@ alpha_curve = SubResource("CurveTexture_8y1co")
 [sub_resource type="QuadMesh" id="QuadMesh_3k587"]
 material = ExtResource("7_hpvuk")
 
+[sub_resource type="Gradient" id="Gradient_nem7w"]
+offsets = PackedFloat32Array(0, 0.598485, 1)
+colors = PackedColorArray(1, 0.764775, 0.698582, 1, 1, 0.733957, 0.659091, 1, 1, 0.219608, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ohrs2"]
+gradient = SubResource("Gradient_nem7w")
+width = 64
+
+[sub_resource type="Curve" id="Curve_ctlww"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_uebl6"]
+width = 64
+curve = SubResource("Curve_ctlww")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_upx8c"]
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 10.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_uebl6")
+color = Color(1, 1, 1, 0.392157)
+color_ramp = SubResource("GradientTexture1D_ohrs2")
+
+[sub_resource type="QuadMesh" id="QuadMesh_kvel3"]
+material = ExtResource("10_e3yua")
+
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rfnbj"]
 lifetime_randomness = 0.4
 emission_shape = 2
@@ -125,11 +155,10 @@ width = 64
 texture_mode = 1
 curve = SubResource("Curve_5q7bd")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2gkhu"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7gwap"]
 angle_max = 360.0
-direction = Vector3(0, 0, -1)
+direction = Vector3(0, 1, 0)
 spread = 90.0
-flatness = 0.7
 initial_velocity_min = 10.0
 initial_velocity_max = 20.0
 gravity = Vector3(0, 0, 0)
@@ -146,44 +175,15 @@ emission_curve = SubResource("CurveTexture_fykya")
 [sub_resource type="QuadMesh" id="QuadMesh_58uuy"]
 material = ExtResource("9_3ev21")
 
-[sub_resource type="Gradient" id="Gradient_nem7w"]
-offsets = PackedFloat32Array(0, 0.598485, 1)
-colors = PackedColorArray(1, 0.764775, 0.698582, 1, 1, 0.733957, 0.659091, 1, 1, 0.219608, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_ohrs2"]
-gradient = SubResource("Gradient_nem7w")
-width = 64
-
-[sub_resource type="Curve" id="Curve_ctlww"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_uebl6"]
-width = 64
-curve = SubResource("Curve_ctlww")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_upx8c"]
-angle_max = 360.0
-gravity = Vector3(0, 0, 0)
-scale_min = 10.0
-scale_max = 10.0
-scale_curve = SubResource("CurveTexture_uebl6")
-color = Color(1, 1, 1, 0.392157)
-color_ramp = SubResource("GradientTexture1D_ohrs2")
-
-[sub_resource type="QuadMesh" id="QuadMesh_kvel3"]
-material = ExtResource("10_e3yua")
-
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hxsmx"]
-lifetime_randomness = 0.4
+lifetime_randomness = 0.2
 emission_shape = 2
 emission_sphere_radius = 1.0
 angle_max = 360.0
-direction = Vector3(0, 0, -1)
+direction = Vector3(0, 1, -1)
 spread = 90.0
-flatness = 0.4
-initial_velocity_min = 5.0
-initial_velocity_max = 10.0
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
 gravity = Vector3(0, 0, 0)
 scale_min = 5.0
 scale_max = 10.0
@@ -196,43 +196,43 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("GasTank:rotation")
+tracks/0/path = NodePath("GasTank/GasTankCollision/StaticBody3D/CollisionShape3D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
+"update": 1,
+"values": [false]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("GasTank/GasTankCollision/StaticBody3D/CollisionShape3D:disabled")
+tracks/1/path = NodePath("GasTank:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("GasTank:visible")
+tracks/2/path = NodePath("FX/Strike/TravelEmber:emitting")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("FX/Strike/TravelEmber:emitting")
+tracks/3/path = NodePath("FX/Strike/TravelSmoke:emitting")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -244,7 +244,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("FX/Strike/TravelSmoke:emitting")
+tracks/4/path = NodePath("FX/Strike/TravelFlicker:emitting")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -256,34 +256,22 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("FX/Strike/TravelFlicker:emitting")
+tracks/5/path = NodePath(".:monitorable")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath(".:monitorable")
+tracks/6/path = NodePath(".:monitoring")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath(".:monitoring")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -334,7 +322,7 @@ tracks/2/keys = {
 tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("FX/Explosion/ExplosionSplatter")
+tracks/3/path = NodePath("FX/Explosion/ExplosionBurst")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -342,55 +330,49 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"restart"
+"method": &"RestartGroup"
 }]
 }
-tracks/4/type = "method"
+tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("FX/Explosion/ExplosionBurst")
+tracks/4/path = NodePath(".:monitoring")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"restart"
-}]
+"update": 1,
+"values": [false]
 }
-tracks/5/type = "method"
+tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("FX/Explosion/ExplosionFlame")
+tracks/5/path = NodePath(".:monitorable")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"restart"
-}]
+"update": 1,
+"values": [false]
 }
-tracks/6/type = "method"
+tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("FX/Explosion/ExplosionSmoke")
+tracks/6/path = NodePath("FX/Strike/TravelEmber:emitting")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0.1),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"restart"
-}]
+"update": 1,
+"values": [false]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath(".:monitoring")
+tracks/7/path = NodePath("FX/Strike/TravelFlicker:emitting")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -402,7 +384,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath(".:monitorable")
+tracks/8/path = NodePath("FX/Strike/TravelSmoke:emitting")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -411,46 +393,76 @@ tracks/8/keys = {
 "update": 1,
 "values": [false]
 }
-tracks/9/type = "value"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("FX/Strike/TravelEmber:emitting")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("FX/Strike/TravelFlicker:emitting")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("FX/Strike/TravelSmoke:emitting")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
 
 [sub_resource type="Animation" id="Animation_7ds0a"]
+resource_name = "launch"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FX/Strike/Launch")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GasTank/GasTankCollision/StaticBody3D/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FX/Strike/TravelEmber:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FX/Strike/TravelSmoke:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("FX/Strike/TravelFlicker:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_mdx2i"]
 resource_name = "strike"
-length = 10.0
+length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -468,82 +480,22 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("GasTank:rotation")
+tracks/1/path = NodePath(".:monitorable")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 10),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0.698132, 0, 12.5664)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("GasTank/GasTankCollision/StaticBody3D/CollisionShape3D:disabled")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("FX/Strike/TravelEmber:emitting")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("FX/Strike/TravelSmoke:emitting")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("FX/Strike/TravelFlicker:emitting")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath(".:monitorable")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
 }
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath(".:monitoring")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -554,13 +506,16 @@ tracks/7/keys = {
 _data = {
 "RESET": SubResource("Animation_5m3lv"),
 "detonate": SubResource("Animation_nslme"),
-"strike": SubResource("Animation_7ds0a")
+"launch": SubResource("Animation_7ds0a"),
+"strike": SubResource("Animation_mdx2i")
 }
 
-[node name="GasTank" type="Area3D" node_paths=PackedStringArray("animator")]
+[node name="GasTank" type="Area3D"]
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_35lqu")
+height = 5.0
+root = NodePath("GasTank")
 animator = NodePath("AnimationPlayer")
 
 [node name="GasTank" parent="." instance=ExtResource("1_ygu6i")]
@@ -589,7 +544,14 @@ shape = SubResource("SphereShape3D_p2ke1")
 stream = ExtResource("3_pmf55")
 attenuation_model = 3
 max_db = 0.0
-max_distance = 50.0
+max_distance = 150.0
+bus = &"GAME SFX"
+
+[node name="Launch" type="AudioStreamPlayer3D" parent="FX/Strike"]
+stream = ExtResource("4_jxiu4")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 150.0
 bus = &"GAME SFX"
 
 [node name="TravelEmber" type="GPUParticles3D" parent="FX/Strike"]
@@ -634,7 +596,22 @@ max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
 
-[node name="ExplosionSplatter" type="GPUParticles3D" parent="FX/Explosion"]
+[node name="ExplosionBurst" type="GPUParticles3D" parent="FX/Explosion" node_paths=PackedStringArray("subSystems")]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 2
+lifetime = 0.2
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_upx8c")
+draw_pass_1 = SubResource("QuadMesh_kvel3")
+script = ExtResource("10_fl0uf")
+subSystems = [NodePath("ExplosionSplatter"), NodePath("ExplosionFlame"), NodePath("ExplosionSmoke")]
+
+[node name="ExplosionSplatter" type="GPUParticles3D" parent="FX/Explosion/ExplosionBurst"]
 layers = 32
 cast_shadow = 0
 emitting = false
@@ -647,7 +624,7 @@ interpolate = false
 process_material = SubResource("ParticleProcessMaterial_rfnbj")
 draw_pass_1 = SubResource("QuadMesh_81224")
 
-[node name="ExplosionFlame" type="GPUParticles3D" parent="FX/Explosion"]
+[node name="ExplosionFlame" type="GPUParticles3D" parent="FX/Explosion/ExplosionBurst"]
 layers = 32
 cast_shadow = 0
 emitting = false
@@ -656,29 +633,17 @@ one_shot = true
 explosiveness = 0.8
 fixed_fps = 0
 interpolate = false
-process_material = SubResource("ParticleProcessMaterial_2gkhu")
+process_material = SubResource("ParticleProcessMaterial_7gwap")
 draw_pass_1 = SubResource("QuadMesh_58uuy")
 
-[node name="ExplosionBurst" type="GPUParticles3D" parent="FX/Explosion"]
+[node name="ExplosionSmoke" type="GPUParticles3D" parent="FX/Explosion/ExplosionBurst"]
 layers = 32
 cast_shadow = 0
 emitting = false
-amount = 2
-lifetime = 0.2
+amount = 16
+lifetime = 0.8
 one_shot = true
-explosiveness = 1.0
-fixed_fps = 0
-interpolate = false
-process_material = SubResource("ParticleProcessMaterial_upx8c")
-draw_pass_1 = SubResource("QuadMesh_kvel3")
-
-[node name="ExplosionSmoke" type="GPUParticles3D" parent="FX/Explosion"]
-layers = 32
-cast_shadow = 0
-emitting = false
-lifetime = 0.4
-one_shot = true
-explosiveness = 0.3
+explosiveness = 0.5
 fixed_fps = 0
 interpolate = false
 process_material = SubResource("ParticleProcessMaterial_hxsmx")
