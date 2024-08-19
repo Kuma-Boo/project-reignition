@@ -1,0 +1,170 @@
+[gd_scene load_steps=20 format=3 uid="uid://dt4nt7hv8bk3x"]
+
+[ext_resource type="PackedScene" uid="uid://bjhq4tu61hyom" path="res://area/3 evil foundry/object/model/Door.gltf" id="1_13c01"]
+[ext_resource type="Script" path="res://area/3 evil foundry/data/script/FoundryDoor.cs" id="1_d8fuq"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="3_cphun"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8nglt"]
+size = Vector3(3.2, 5.2, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jrdri"]
+size = Vector3(4, 6, 0.5)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3j4i5"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1buhq"]
+animation = &"door-close-left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ye6py"]
+animation = &"door-close-right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nv0kx"]
+animation = &"door-fakeout-left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_37kwc"]
+animation = &"door-fakeout-right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_23gd7"]
+animation = &"door-normal"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ftfsa"]
+animation = &"door-open-left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ra5h5"]
+animation = &"door-open-right"
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_mc3tu"]
+filters = ["DoorRoot/Skeleton3D:door_center"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uh66v"]
+animation = &"door-spike"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_6tqws"]
+allow_transition_to_self = true
+input_0/name = "enabled"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "disabled"
+input_1/auto_advance = false
+input_1/reset = true
+input_2/name = "spikeless"
+input_2/auto_advance = false
+input_2/reset = true
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_0wufq"]
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_e0hso"]
+allow_transition_to_self = true
+input_0/name = "close_left"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "close_right"
+input_1/auto_advance = false
+input_1/reset = true
+input_2/name = "open_left"
+input_2/auto_advance = false
+input_2/reset = true
+input_3/name = "open_right"
+input_3/auto_advance = false
+input_3/reset = true
+input_4/name = "fakeout_left"
+input_4/auto_advance = false
+input_4/reset = true
+input_5/name = "fakeout_right"
+input_5/auto_advance = false
+input_5/reset = true
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_gk1ho"]
+graph_offset = Vector2(-945.264, 195.07)
+nodes/RESET_anim/node = SubResource("AnimationNodeAnimation_3j4i5")
+nodes/RESET_anim/position = Vector2(-400, 0)
+nodes/close_left_anim/node = SubResource("AnimationNodeAnimation_1buhq")
+nodes/close_left_anim/position = Vector2(-500, 200)
+nodes/close_right_anim/node = SubResource("AnimationNodeAnimation_ye6py")
+nodes/close_right_anim/position = Vector2(-700, 280)
+nodes/fakeout_left_anim/node = SubResource("AnimationNodeAnimation_nv0kx")
+nodes/fakeout_left_anim/position = Vector2(-500, 520)
+nodes/fakeout_right_anim/node = SubResource("AnimationNodeAnimation_37kwc")
+nodes/fakeout_right_anim/position = Vector2(-660, 620)
+nodes/normal_anim/node = SubResource("AnimationNodeAnimation_23gd7")
+nodes/normal_anim/position = Vector2(-580, -100)
+nodes/open_left_anim/node = SubResource("AnimationNodeAnimation_ftfsa")
+nodes/open_left_anim/position = Vector2(-500, 340)
+nodes/open_right_anim/node = SubResource("AnimationNodeAnimation_ra5h5")
+nodes/open_right_anim/position = Vector2(-680, 440)
+nodes/output/position = Vector2(400, 140)
+nodes/spike_add/node = SubResource("AnimationNodeAdd2_mc3tu")
+nodes/spike_add/position = Vector2(160, 140)
+nodes/spike_anim/node = SubResource("AnimationNodeAnimation_uh66v")
+nodes/spike_anim/position = Vector2(-400, -200)
+nodes/spike_transition/node = SubResource("AnimationNodeTransition_6tqws")
+nodes/spike_transition/position = Vector2(-200, -140)
+nodes/state_speed/node = SubResource("AnimationNodeTimeScale_0wufq")
+nodes/state_speed/position = Vector2(0, 200)
+nodes/state_transition/node = SubResource("AnimationNodeTransition_e0hso")
+nodes/state_transition/position = Vector2(-200, 200)
+node_connections = [&"output", 0, &"spike_add", &"spike_add", 0, &"spike_transition", &"spike_add", 1, &"state_speed", &"spike_transition", 0, &"spike_anim", &"spike_transition", 1, &"normal_anim", &"spike_transition", 2, &"RESET_anim", &"state_speed", 0, &"state_transition", &"state_transition", 0, &"close_left_anim", &"state_transition", 1, &"close_right_anim", &"state_transition", 2, &"open_left_anim", &"state_transition", 3, &"open_right_anim", &"state_transition", 4, &"fakeout_left_anim", &"state_transition", 5, &"fakeout_right_anim"]
+
+[node name="Door" type="Node3D"]
+script = ExtResource("1_d8fuq")
+animator = NodePath("AnimationTree")
+
+[node name="Door" parent="." instance=ExtResource("1_13c01")]
+script = ExtResource("3_cphun")
+
+[node name="Skeleton3D" parent="Door/DoorRoot" index="0"]
+bones/0/rotation = Quaternion(-0.707107, 0, 0, 0.707107)
+
+[node name="DoorSpiked" parent="Door/DoorRoot/Skeleton3D" index="2"]
+visible = false
+
+[node name="DoorAttachment" type="BoneAttachment3D" parent="Door/DoorRoot/Skeleton3D/DoorSpiked" index="0"]
+transform = Transform3D(2.06632e-07, 0, -1, 0, 1, 0, 1, 0, 2.06632e-07, -2, 0, -2)
+bone_name = "door_center"
+bone_idx = 3
+use_external_skeleton = true
+external_skeleton = NodePath("../..")
+
+[node name="Hitbox" type="Area3D" parent="Door/DoorRoot/Skeleton3D/DoorSpiked/DoorAttachment"]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Door/DoorRoot/Skeleton3D/DoorSpiked/DoorAttachment/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0.5)
+shape = SubResource("BoxShape3D_8nglt")
+
+[node name="BaseAttachment" type="BoneAttachment3D" parent="Door/DoorRoot/Skeleton3D" index="3"]
+transform = Transform3D(-1.19209e-07, 0, 1, 0, 1, 0, -1, 0, -1.19209e-07, -2, 0, -4)
+bone_name = "hinge_r"
+bone_idx = 2
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Door/DoorRoot/Skeleton3D/BaseAttachment" groups=["splash jump", "wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Door/DoorRoot/Skeleton3D/BaseAttachment/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("BoxShape3D_jrdri")
+
+[node name="AnimationPlayer" parent="Door" index="1"]
+reset_on_save = false
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../Door")
+tree_root = SubResource("AnimationNodeBlendTree_gk1ho")
+anim_player = NodePath("../Door/AnimationPlayer")
+parameters/spike_add/add_amount = 1.0
+parameters/spike_transition/current_state = "enabled"
+parameters/spike_transition/transition_request = ""
+parameters/spike_transition/current_index = 0
+parameters/state_speed/scale = 0.0
+parameters/state_transition/current_state = "open_left"
+parameters/state_transition/transition_request = ""
+parameters/state_transition/current_index = 2
+
+[connection signal="area_entered" from="Door/DoorRoot/Skeleton3D/DoorSpiked/DoorAttachment/Hitbox" to="Door" method="OnEntered"]
+[connection signal="area_exited" from="Door/DoorRoot/Skeleton3D/DoorSpiked/DoorAttachment/Hitbox" to="Door" method="OnExited"]
+
+[editable path="Door"]
