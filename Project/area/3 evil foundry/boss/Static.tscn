@@ -1,16 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://554o5nn5ah4r"]
+[gd_scene load_steps=8 format=3 uid="uid://554o5nn5ah4r"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_qxxdp"]
 [ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/3 evil foundry/data/Environment.tres" id="1_vnwbt"]
 [ext_resource type="PackedScene" uid="uid://756omvmukmd8" path="res://area/3 evil foundry/boss/environment/model/EFBoss.gltf" id="2_mkb4g"]
-[ext_resource type="Material" uid="uid://cnkpwn7tehoss" path="res://area/3 evil foundry/data/material/Lava.tres" id="3_eibot"]
 [ext_resource type="PackedScene" uid="uid://dy8hsmwkctvec" path="res://area/3 evil foundry/boss/environment/collision/Collision.tscn" id="4_ptqv5"]
-[ext_resource type="Curve3D" path="res://area/3 evil foundry/boss/environment/path/MainPath.tres" id="5_b4qr8"]
+[ext_resource type="Curve3D" uid="uid://deajq7gtu72l8" path="res://area/3 evil foundry/boss/environment/path/MainPath.tres" id="5_b4qr8"]
+[ext_resource type="Curve3D" path="res://area/3 evil foundry/boss/environment/path/DamagePath.tres" id="5_hjxb7"]
 [ext_resource type="PackedScene" uid="uid://ootho4p2h2ml" path="res://area/3 evil foundry/data/BGMBoss.tscn" id="6_yibqe"]
-
-[sub_resource type="PlaneMesh" id="3"]
-material = ExtResource("3_eibot")
-size = Vector2(100, 100)
 
 [node name="Static" type="Node3D"]
 script = ExtResource("1_qxxdp")
@@ -20,10 +16,6 @@ Environment = NodePath("WorldEnvironment")
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="EFBoss" parent="Visuals" instance=ExtResource("2_mkb4g")]
-
-[node name="Lava" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
-mesh = SubResource("3")
 
 [node name="OmniLight" type="OmniLight3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -51,6 +43,10 @@ visible = false
 [node name="MainPath" type="Path3D" parent="Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 0)
 curve = ExtResource("5_b4qr8")
+
+[node name="DamagePath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.25, 5.725, -18.25)
+curve = ExtResource("5_hjxb7")
 
 [node name="BGM" parent="." instance=ExtResource("6_yibqe")]
 
