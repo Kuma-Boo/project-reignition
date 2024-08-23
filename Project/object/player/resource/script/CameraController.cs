@@ -80,6 +80,7 @@ public partial class CameraController : Node3D
 		}
 
 		UpdateGameplayCamera();
+		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Character.CenterPosition) / Runtime.ScreenSize);
 		UpdateScreenShake();
 		UpdateMotionBlur();
 	}
@@ -220,9 +221,6 @@ public partial class CameraController : Node3D
 
 	private void UpdateGameplayCamera()
 	{
-		if (isFreeCamActive && isFreeCamLocked) // Don't update gameplay camera when freecam is locked
-			return;
-
 		UpdateTransitionTimer();
 		UpdateLockonTarget();
 
@@ -268,6 +266,9 @@ public partial class CameraController : Node3D
 		// Calculate xform angle before applying pitch tracking
 		UpdateInputXForm(cameraTransform.Basis);
 
+		if (isFreeCamActive && isFreeCamLocked) // Don't update tracking when freecam is locked
+			return;
+
 		// Apply pitch tracking
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTracking);
 
@@ -282,8 +283,6 @@ public partial class CameraController : Node3D
 
 		cameraRoot.GlobalTransform = cameraTransform; // Update transform
 		Camera.Fov = fov; // Update fov
-
-		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Character.CenterPosition) / Runtime.ScreenSize);
 
 		if (SnapFlag) // Reset flag after camera was updated
 			SnapFlag = false;
