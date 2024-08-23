@@ -220,6 +220,9 @@ public partial class CameraController : Node3D
 
 	private void UpdateGameplayCamera()
 	{
+		if (isFreeCamActive && isFreeCamLocked) // Don't update gameplay camera when freecam is locked
+			return;
+
 		UpdateTransitionTimer();
 		UpdateLockonTarget();
 
