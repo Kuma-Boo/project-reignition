@@ -860,6 +860,8 @@ public partial class CameraController : Node3D
 
 		freecamMovementVector = freecamMovementVector.SmoothDamp(targetDirection * targetMoveSpeed, ref freecamVelocity, FreeCamPositionSmoothing);
 		FreeCamRoot.GlobalTranslate(freecamMovementVector * PhysicsManager.normalDelta);
+		if (isFreeCamLocked) // Update position instantly
+			freeCamPosition = FreeCamRoot.GlobalPosition;
 	}
 
 	private Vector2 currentMouseMotion;
@@ -883,6 +885,9 @@ public partial class CameraController : Node3D
 		{
 			Camera.RotateObjectLocal(Vector3.Forward, Mathf.DegToRad(currentMouseMotion.X) * FreeCamMouseSensitivity);
 		}
+
+		if (isFreeCamLocked) // Update position instantly
+			freeCamRotation = new(Camera.RotationDegrees.X, FreeCamRoot.GlobalRotationDegrees.Y, Camera.RotationDegrees.Z);
 	}
 
 	public void UpdateFreeCamData(Vector3 position, Vector3 rotation)
@@ -900,9 +905,6 @@ public partial class CameraController : Node3D
 
 		if (e is InputEventMouseMotion)
 		{
-			if (isFreeCamLocked)
-				return;
-
 			receivedMouseMotion = (e as InputEventMouseMotion).Relative;
 			return;
 		}
