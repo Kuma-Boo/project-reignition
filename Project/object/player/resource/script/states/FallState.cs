@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay;
 
@@ -9,7 +10,8 @@ public partial class FallState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		Controller.MoveAndSlide();
+		Controller.VerticalSpeed = Mathf.MoveToward(Controller.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
+		Controller.ApplyMovement();
 
 		if (Controller.CheckGround())
 			return landState;

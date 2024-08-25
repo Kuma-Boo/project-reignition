@@ -31,7 +31,9 @@ public partial class JumpState : PlayerState
 
 	public override void EnterState()
 	{
-		Runtime.CalculateJumpPower(jumpHeight);
+		Controller.VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
+		Controller.ApplyMovement();
+
 		jumpTimer = 0;
 		isShortenedJump = false;
 		isAccelerationJump = false;
@@ -62,12 +64,13 @@ public partial class JumpState : PlayerState
 		}
 
 		Controller.VerticalSpeed = Mathf.MoveToward(Controller.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
-
-		if (Controller.Velocity.Y <= 0)
-			return fallState;
+		Controller.ApplyMovement();
 
 		if (Controller.CheckGround())
 			return landState;
+
+		if (Controller.VerticalSpeed <= 0)
+			return fallState;
 
 		return null;
 	}

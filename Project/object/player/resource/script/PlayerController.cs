@@ -23,6 +23,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public override void _PhysicsProcess(double _)
 	{
+		ProcessInputs();
 		StateMachine.ProcessPhysics();
 		PathFollower.Resync();
 	}
@@ -30,6 +31,16 @@ public partial class PlayerController : CharacterBody3D
 	public bool CheckGround()
 	{
 		return IsOnFloor();
+	}
+
+	public void ApplyMovement()
+	{
+		Vector3 movementVelocity = Vector3.Zero;
+		movementVelocity += VerticalSpeed * PathFollower.GlobalBasis.Y;
+		movementVelocity += MoveSpeed * PathFollower.GlobalBasis.Z;
+		Velocity = movementVelocity;
+
+		MoveAndSlide();
 	}
 
 	#region Input Processing
@@ -47,7 +58,7 @@ public partial class PlayerController : CharacterBody3D
 	public float InputHorizontal { get; private set; }
 	public float InputVertical { get; private set; }
 
-	public void ProcessInputs()
+	private void ProcessInputs()
 	{
 		InputAxis = Input.GetVector("move_left", "move_right", "move_up", "move_down", SaveManager.Config.deadZone);
 		InputHorizontal = Input.GetAxis("move_left", "move_right");
@@ -80,9 +91,10 @@ public partial class PlayerController : CharacterBody3D
 	}
 	#endregion
 
+
+
 	[Export]
 	public CameraController Camera { get; private set; }
-
 	[Export]
 	public CharacterAnimator Animator { get; private set; }
 	[Export]
