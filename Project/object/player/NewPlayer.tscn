@@ -1,12 +1,23 @@
-[gd_scene load_steps=21 format=3 uid="uid://bbbuqgxfhuh8k"]
+[gd_scene load_steps=29 format=3 uid="uid://bbbuqgxfhuh8k"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
-[ext_resource type="PackedScene" uid="uid://qmsgr6kswk87" path="res://object/player/resource/component/PathFollower.tscn" id="2_gqu71"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/IdleState.cs" id="3_7invc"]
 [ext_resource type="PackedScene" uid="uid://wfh54hnc028k" path="res://object/player/resource/model/Sonic.tscn" id="3_rkpjr"]
 [ext_resource type="PackedScene" uid="uid://bemb37fo0seak" path="res://object/player/resource/component/Skills.tscn" id="4_cg6qu"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/JumpState.cs" id="4_ufscl"]
 [ext_resource type="PackedScene" uid="uid://dq4rt7vk6a7kv" path="res://object/player/resource/component/lockon/Lockon.tscn" id="5_2lkg7"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/FallState.cs" id="5_niuke"]
 [ext_resource type="PackedScene" uid="uid://dc3kqxiptkiyx" path="res://object/stage/genie/Shahra.tscn" id="6_3bugb"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/LandState.cs" id="6_ihvo7"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/RunState.cs" id="7_1ojgh"]
+[ext_resource type="Script" path="res://object/player/resource/script/PlayerPathController.cs" id="7_afg5r"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/BackstepState.cs" id="8_0ksv7"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_f0gyp"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_t4t3r"]
+size = Vector3(0.5, 0.1, 1)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4p752"]
 radius = 0.36
@@ -937,21 +948,64 @@ height = 0.9
 radius = 0.3
 height = 0.8
 
-[node name="Player" type="CharacterBody3D" groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "PathFollower") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
 floor_block_on_wall = false
 script = ExtResource("1_wygja")
+StateMachine = NodePath("StateMachine")
+PathFollower = NodePath("Components/PathFollower")
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("2_ehi1f")
+startingState = NodePath("Idle")
 
-[node name="Idle" type="Node" parent="StateMachine"]
+[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("jumpState", "fallState")]
+script = ExtResource("3_7invc")
+jumpState = NodePath("../Jump")
+fallState = NodePath("../Fall")
+
+[node name="Run" type="Node" parent="StateMachine" node_paths=PackedStringArray("fallState", "idleState")]
+script = ExtResource("7_1ojgh")
+fallState = NodePath("../Fall")
+idleState = NodePath("../Idle")
+
+[node name="Backstep" type="Node" parent="StateMachine" node_paths=PackedStringArray("fallState", "idleState")]
+script = ExtResource("8_0ksv7")
+fallState = NodePath("../Fall")
+idleState = NodePath("../Idle")
+
+[node name="Jump" type="Node" parent="StateMachine" node_paths=PackedStringArray("fallState", "landState")]
+script = ExtResource("4_ufscl")
+fallState = NodePath("../Fall")
+landState = NodePath("../Land")
+
+[node name="Fall" type="Node" parent="StateMachine" node_paths=PackedStringArray("landState")]
+script = ExtResource("5_niuke")
+landState = NodePath("../Land")
+
+[node name="Land" type="Node" parent="StateMachine" node_paths=PackedStringArray("runState", "idleState", "backstepState")]
+script = ExtResource("6_ihvo7")
+runState = NodePath("../Run")
+idleState = NodePath("../Idle")
+backstepState = NodePath("../Backstep")
 
 [node name="Components" type="Node3D" parent="."]
 
-[node name="PathFollower" parent="Components" instance=ExtResource("2_gqu71")]
+[node name="PathFollower" type="PathFollow3D" parent="Components"]
+visible = false
+use_model_front = true
+cubic_interp = false
+loop = false
+script = ExtResource("7_afg5r")
+
+[node name="Debug" type="MeshInstance3D" parent="Components/PathFollower"]
+mesh = SubResource("SphereMesh_f0gyp")
+
+[node name="Tilt" type="MeshInstance3D" parent="Components/PathFollower/Debug"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+mesh = SubResource("BoxMesh_t4t3r")
 
 [node name="Sonic" parent="Components" instance=ExtResource("3_rkpjr")]
 
@@ -984,9 +1038,10 @@ collision_mask = 9
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Components/StageTriggerDetector"]
 shape = SubResource("CapsuleShape3D_pgn8o")
 
-[node name="Shahra" parent="Components" instance=ExtResource("6_3bugb")]
+[node name="Shahra" parent="Components" node_paths=PackedStringArray("PathController") instance=ExtResource("6_3bugb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 visible = false
+PathController = NodePath("../PathFollower")
 travelMagnitude = Vector3(1, 0.3, 0.2)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

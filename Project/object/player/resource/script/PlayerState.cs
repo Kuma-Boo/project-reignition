@@ -5,12 +5,10 @@ namespace Project.Gameplay;
 public partial class PlayerState : Node
 {
 	protected PlayerController Controller { get; private set; }
-	protected PlayerInputController Input { get; private set; }
 
-	public void Initialize(PlayerController controller, PlayerInputController input)
+	public void Initialize(PlayerController controller)
 	{
 		Controller = controller;
-		Input = input;
 	}
 
 	/// <summary> Called when this state is entered. </summary>

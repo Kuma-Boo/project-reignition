@@ -346,8 +346,12 @@ public partial class StageSettings : Node3D
 		}
 
 		// Soul barrier
-		if (mode == MathModeEnum.Subtract && CharacterController.instance.Skills.IsSkillEquipped(SkillKey.RingLossConvert))
-			CharacterController.instance.Skills.ModifySoulGauge((previousAmount - CurrentRingCount) * 2);
+		if (CharacterController.instance == null)
+		{
+			GD.PushError("CharacterController is missing!");
+			if (mode == MathModeEnum.Subtract && CharacterController.instance.Skills.IsSkillEquipped(SkillKey.RingLossConvert))
+				CharacterController.instance.Skills.ModifySoulGauge((previousAmount - CurrentRingCount) * 2);
+		}
 
 		if (DebugManager.Instance.InfiniteRings) // Infinite ring cheat
 			CurrentRingCount = 999;
