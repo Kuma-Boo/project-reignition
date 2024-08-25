@@ -290,7 +290,7 @@ namespace Project.Gameplay
 				if (!Skills.IsSpeedBreakActive && ActiveLockoutData.allowReversing)
 				{
 					if (turnInstantly && !InputVector.IsZeroApprox())
-						IsMovingBackward = IsHoldingDirection(PathFollower.BackAngle);
+						IsMovingBackward = !Skills.IsSkillEquipped(SkillKey.Autorun) && IsHoldingDirection(PathFollower.BackAngle);
 
 					if (IsMovingBackward)
 						targetAngle += Mathf.Pi; // Flip targetAngle when moving backwards
