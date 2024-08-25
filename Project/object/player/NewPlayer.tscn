@@ -1,19 +1,12 @@
-[gd_scene load_steps=22 format=3 uid="uid://c4kdj2x0c8h4m"]
+[gd_scene load_steps=21 format=3 uid="uid://bbbuqgxfhuh8k"]
 
-[ext_resource type="PackedScene" uid="uid://qmsgr6kswk87" path="res://object/player/resource/component/PathFollower.tscn" id="2_ijgvj"]
-[ext_resource type="PackedScene" uid="uid://wfh54hnc028k" path="res://object/player/resource/model/Sonic.tscn" id="3_t0hx8"]
-[ext_resource type="PackedScene" uid="uid://dc3kqxiptkiyx" path="res://object/stage/genie/Shahra.tscn" id="6_5x5f7"]
-[ext_resource type="PackedScene" uid="uid://dq4rt7vk6a7kv" path="res://object/player/resource/component/lockon/Lockon.tscn" id="7"]
-[ext_resource type="Script" path="res://object/player/resource/script/old code/CharacterController.cs" id="10"]
-[ext_resource type="PackedScene" uid="uid://bemb37fo0seak" path="res://object/player/resource/component/Skills.tscn" id="13"]
-
-[sub_resource type="Curve" id="Curve_0y4at"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0645833, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0777784, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 4
-
-[sub_resource type="Curve" id="Curve_l0cmy"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 0), 0.0, 0.0, 0, 0, Vector2(0.4, 0.5), 4.05151, 4.05151, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0]
-point_count = 4
+[ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
+[ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
+[ext_resource type="PackedScene" uid="uid://qmsgr6kswk87" path="res://object/player/resource/component/PathFollower.tscn" id="2_gqu71"]
+[ext_resource type="PackedScene" uid="uid://wfh54hnc028k" path="res://object/player/resource/model/Sonic.tscn" id="3_rkpjr"]
+[ext_resource type="PackedScene" uid="uid://bemb37fo0seak" path="res://object/player/resource/component/Skills.tscn" id="4_cg6qu"]
+[ext_resource type="PackedScene" uid="uid://dq4rt7vk6a7kv" path="res://object/player/resource/component/lockon/Lockon.tscn" id="5_2lkg7"]
+[ext_resource type="PackedScene" uid="uid://dc3kqxiptkiyx" path="res://object/stage/genie/Shahra.tscn" id="6_3bugb"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4p752"]
 radius = 0.36
@@ -944,35 +937,23 @@ height = 0.9
 radius = 0.3
 height = 0.8
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("hitboxAnimator", "PathFollower", "Animator", "Effect", "Skills", "Lockon") groups=["player"]]
+[node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
 floor_block_on_wall = false
-script = ExtResource("10")
-turningSpeedCurve = SubResource("Curve_0y4at")
-inputCurve = SubResource("Curve_l0cmy")
-jumpHeight = 4.8
-jumpDashSpeed = 36.0
-jumpDashPower = 4.0
-jumpDashGravity = 18.0
-jumpDashMaxGravity = -24.0
-backflipHeight = 2.4
-CollisionSize = Vector2(0.3, 0.4)
-hitboxAnimator = NodePath("Components/Sonic/HitboxTrigger/AnimationPlayer")
-PathFollower = NodePath("Components/PathFollower")
-Animator = NodePath("Components/Sonic")
-Effect = NodePath("Components/Sonic/Effect")
-Skills = NodePath("Components/Sonic/Skills")
-Lockon = NodePath("Components/Lockon")
+script = ExtResource("1_wygja")
 
-[node name="StageMachine" type="Node" parent="."]
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("2_ehi1f")
+
+[node name="Idle" type="Node" parent="StateMachine"]
 
 [node name="Components" type="Node3D" parent="."]
 
-[node name="PathFollower" parent="Components" instance=ExtResource("2_ijgvj")]
+[node name="PathFollower" parent="Components" instance=ExtResource("2_gqu71")]
 
-[node name="Sonic" parent="Components" instance=ExtResource("3_t0hx8")]
+[node name="Sonic" parent="Components" instance=ExtResource("3_rkpjr")]
 
 [node name="HitboxTrigger" type="Area3D" parent="Components/Sonic" groups=["player"]]
 collision_layer = 2
@@ -990,9 +971,9 @@ libraries = {
 "": SubResource("AnimationLibrary_8j388")
 }
 
-[node name="Skills" parent="Components/Sonic" instance=ExtResource("13")]
+[node name="Skills" parent="Components/Sonic" instance=ExtResource("4_cg6qu")]
 
-[node name="Lockon" parent="Components" node_paths=PackedStringArray("areaTrigger") instance=ExtResource("7")]
+[node name="Lockon" parent="Components" node_paths=PackedStringArray("areaTrigger") instance=ExtResource("5_2lkg7")]
 areaTrigger = NodePath("../Sonic/HitboxTrigger")
 
 [node name="StageTriggerDetector" type="Area3D" parent="Components" groups=["player detection"]]
@@ -1003,7 +984,7 @@ collision_mask = 9
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Components/StageTriggerDetector"]
 shape = SubResource("CapsuleShape3D_pgn8o")
 
-[node name="Shahra" parent="Components" instance=ExtResource("6_5x5f7")]
+[node name="Shahra" parent="Components" instance=ExtResource("6_3bugb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 visible = false
 travelMagnitude = Vector3(1, 0.3, 0.2)
