@@ -43,8 +43,11 @@ public partial class BackstepState : PlayerState
 
 			float inputAngle = Player.GetTargetMovementAngle();
 			float inputStrength = Player.Controller.GetInputStrength();
-			if(Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+			if(!Mathf.IsZeroApprox(inputStrength) &&
+				Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+			{
 				return backflipState;
+			}
 
 			return jumpState;
 		}

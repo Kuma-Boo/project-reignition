@@ -44,8 +44,12 @@ public partial class RunState : PlayerState
 			Player.Controller.ResetJumpBuffer();
 			
 			float inputAngle = Player.GetTargetMovementAngle();
-			if(Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+			float inputStrength = Player.Controller.GetInputStrength();
+			if(!Mathf.IsZeroApprox(inputStrength) &&
+				Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+			{
 				return backflipState;
+			}
 
 			return jumpState;
 		}
