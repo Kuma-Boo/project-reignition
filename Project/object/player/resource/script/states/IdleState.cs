@@ -33,6 +33,7 @@ public partial class IdleState : PlayerState
 		if (inputStrength > Player.Controller.DeadZone)
 		{
 			float inputDot = ExtensionMethods.DotAngle(Player.GetTargetMovementAngle(), Player.PathFollower.ForwardAngle);
+			GD.Print(inputDot);
 			return inputDot >= -0.5f ? runState : backstepState;
 		}
 

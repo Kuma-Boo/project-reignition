@@ -10,13 +10,21 @@ public partial class RunState : PlayerState
 	[Export]
 	private PlayerState idleState;
 	[Export]
+	private PlayerState backstepState;
+	[Export]
 	private PlayerState jumpState;
+
+	[Export]
+	private Curve turningSpeedLossCurve;
+
 	/// <summary> What speed ratio should be considered as fully running? </summary>
 	private readonly float RunRatio = .9f;
 	/// <summary> Maximum amount the player can turn when running at full speed. </summary>
 	private readonly float MaxTurningAdjustment = Mathf.Pi * .25f;
 	/// <summary> Maximum amount the player can turn when running at full speed. </summary>
 	private readonly float TurningDampingRange = Mathf.Pi * .35f;
+	/// <summary> How much speed to lose when turning sharply. </summary>
+	private readonly float TurningSpeedLoss = .02f;
 
 	private float turningVelocity;
 
@@ -43,12 +51,15 @@ public partial class RunState : PlayerState
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
 
+		if (ExtensionMethods.DotAngle(Player.MovementAngle, Player.PathFollower.ForwardAngle) < 0)
+			return backstepState;
+
 		return null;
 	}
 
 	private void ProcessMoveSpeed()
 	{
-		float inputStrength = Mathf.Min(Player.Controller.CameraInputAxis.Length(), 1f);
+		float inputStrength = Player.Controller.GetInputStrength();
 		if (inputStrength < Player.Controller.DeadZone)
 		{
 			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, 0);
@@ -56,19 +67,21 @@ public partial class RunState : PlayerState
 		}
 
 		float targetMovementAngle = Player.GetTargetMovementAngle();
-		float inputDot = ExtensionMethods.DotAngle(targetMovementAngle, Player.PathFollower.ForwardAngle);
-		if (inputDot < -.5f || Input.IsActionPressed("button_brake")) // Turning around
+		float inputDot = ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle);
+		if ((inputDot < -.75f && !Mathf.IsZeroApprox(Player.MoveSpeed)) || Input.IsActionPressed("button_brake")) // Turning around
 		{
 			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, -inputStrength);
 			return;
 		}
 
 		ProcessTurning(targetMovementAngle, inputDot); // Turning only updates when accelerating
+		ApplySpeedLoss(targetMovementAngle, inputDot);
 		Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
 	}
 
 	private void ProcessTurning(float targetMovementAngle, float inputDot)
 	{
+		targetMovementAngle += Player.PathTurnInfluence;
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 		{
 			Player.MovementAngle = targetMovementAngle;
@@ -90,13 +103,26 @@ public partial class RunState : PlayerState
 		// Normal turning
 		float maxTurnAmount = Player.Stats.MaxTurnAmount;
 		float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, Player.PathFollower.ForwardAngle);
-		bool isRecentering = (Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle));
+		bool isRecentering = Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle);
 		if (isRecentering)
 			maxTurnAmount = Player.Stats.RecenterTurnAmount;
 
 		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
 		float turnSmoothing = Mathf.Lerp(Player.Stats.MinTurnAmount, maxTurnAmount, speedRatio);
 		Player.MovementAngle = ExtensionMethods.SmoothDampAngle(Player.MovementAngle + Player.PathTurnInfluence, targetMovementAngle, ref turningVelocity, turnSmoothing);
-		Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, Mathf.Pi * .5f);
+	}
+
+	private void ApplySpeedLoss(float targetMovementAngle, float inputDot)
+	{
+		float pathDot = ExtensionMethods.DotAngle(targetMovementAngle, Player.PathFollower.ForwardAngle);
+		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
+		// Don't apply turning speed loss when moving quickly and holding the direction of the pathfollower
+		if (pathDot >= .5f && speedRatio >= .5f)
+			return;
+
+		// Calculate turn delta, relative to ground speed
+		float speedLossRatio = speedRatio * ((inputDot - 1.0f) * -.5f);
+		Player.MoveSpeed -= Player.Stats.GroundSettings.Speed * turningSpeedLossCurve.Sample(speedLossRatio) * TurningSpeedLoss;
+		Player.MoveSpeed = Mathf.Max(Player.MoveSpeed, 0);
 	}
 }

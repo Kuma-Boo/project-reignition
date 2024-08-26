@@ -5,6 +5,10 @@ namespace Project.Gameplay;
 
 public partial class PlayerInputController : Node
 {
+	[Export]
+	private Curve InputCurve { get; set; }
+	public float GetInputStrength() => InputCurve.Sample(InputAxis.Length());
+
 	public float DeadZone => SaveManager.Config.deadZone;
 
 	private float jumpBuffer;

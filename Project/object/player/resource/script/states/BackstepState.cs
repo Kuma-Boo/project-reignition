@@ -8,16 +8,20 @@ public partial class BackstepState : PlayerState
 	private PlayerState fallState;
 	[Export]
 	private PlayerState idleState;
+	[Export]
+	private PlayerState runState;
+
+	private float turningVelocity;
 
 	public override void EnterState()
 	{
 		Player.IsMovingBackward = true;
+		turningVelocity = 0;
 	}
 
 	public override PlayerState ProcessPhysics()
 	{
 		ProcessMoveSpeed();
-		ProcessTurning();
 		Player.ApplyMovement();
 
 		if (!Player.CheckGround())
@@ -26,30 +30,45 @@ public partial class BackstepState : PlayerState
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
 
+		if (ExtensionMethods.DotAngle(Player.MovementAngle, Player.PathFollower.BackAngle) < 0)
+			return runState;
+
 		return null;
 	}
 
 	private void ProcessMoveSpeed()
 	{
-		float inputStrength = Mathf.Min(Player.Controller.CameraInputAxis.Length(), 1f);
+		float inputStrength = Player.Controller.GetInputStrength();
 		if (inputStrength < Player.Controller.DeadZone)
 		{
 			Player.MoveSpeed = Player.Stats.BackstepSettings.UpdateInterpolate(Player.MoveSpeed, 0);
 			return;
 		}
 
-		float inputDot = ExtensionMethods.DotAngle(Player.GetTargetMovementAngle(), Player.MovementAngle);
-		if (inputDot <= 0f || Input.IsActionPressed("button_brake")) // Turning around
+		float targetMovementAngle = Player.GetTargetMovementAngle();
+		float inputDot = ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle);
+		if ((inputDot <= 0f && !Mathf.IsZeroApprox(Player.MoveSpeed)) || Input.IsActionPressed("button_brake")) // Turning around
 		{
 			Player.MoveSpeed = Player.Stats.BackstepSettings.UpdateInterpolate(Player.MoveSpeed, -inputStrength);
 			return;
 		}
 
+		ProcessTurning(targetMovementAngle);
 		Player.MoveSpeed = Player.Stats.BackstepSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
 	}
 
-	private void ProcessTurning()
+	private void ProcessTurning(float targetMovementAngle)
 	{
-		Player.MovementAngle = Player.PathFollower.BackAngle + Player.PathTurnInfluence;
+		if (Mathf.IsZeroApprox(Player.MoveSpeed)) // Turn instantly
+		{
+			turningVelocity = 0;
+			Player.MovementAngle = targetMovementAngle;
+			return;
+		}
+
+		// Use GroundSettings so backstep turning feels consistent with the run state
+		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
+		float turnSmoothing = Mathf.Lerp(Player.Stats.MinTurnAmount, Player.Stats.MaxTurnAmount, speedRatio);
+		Player.MovementAngle = ExtensionMethods.SmoothDampAngle(Player.MovementAngle + Player.PathTurnInfluence, targetMovementAngle, ref turningVelocity, turnSmoothing);
 	}
 }
