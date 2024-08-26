@@ -4,12 +4,9 @@ namespace Project.Gameplay;
 
 public partial class PlayerState : Node
 {
-	protected PlayerController Controller { get; private set; }
+	protected PlayerController Player { get; private set; }
 
-	public void Initialize(PlayerController controller)
-	{
-		Controller = controller;
-	}
+	public void Initialize(PlayerController player) => Player = player;
 
 	/// <summary> Called when this state is entered. </summary>
 	public virtual void EnterState() { }

@@ -1,7 +1,8 @@
-[gd_scene load_steps=29 format=3 uid="uid://bbbuqgxfhuh8k"]
+[gd_scene load_steps=32 format=3 uid="uid://bbbuqgxfhuh8k"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
+[ext_resource type="Script" path="res://object/player/resource/script/PlayerInputController.cs" id="2_pk07e"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/IdleState.cs" id="3_7invc"]
 [ext_resource type="PackedScene" uid="uid://wfh54hnc028k" path="res://object/player/resource/model/Sonic.tscn" id="3_rkpjr"]
 [ext_resource type="PackedScene" uid="uid://bemb37fo0seak" path="res://object/player/resource/component/Skills.tscn" id="4_cg6qu"]
@@ -13,6 +14,11 @@
 [ext_resource type="Script" path="res://object/player/resource/script/states/RunState.cs" id="7_1ojgh"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerPathController.cs" id="7_afg5r"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/BackstepState.cs" id="8_0ksv7"]
+[ext_resource type="Script" path="res://object/player/resource/script/PlayerStatsController.cs" id="9_ewscv"]
+
+[sub_resource type="Curve" id="Curve_jakcp"]
+_data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
+point_count = 4
 
 [sub_resource type="SphereMesh" id="SphereMesh_f0gyp"]
 
@@ -948,50 +954,94 @@ height = 0.9
 radius = 0.3
 height = 0.8
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "PathFollower") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("Controller", "Stats", "StateMachine", "PathFollower") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
 floor_block_on_wall = false
 script = ExtResource("1_wygja")
-StateMachine = NodePath("StateMachine")
+Controller = NodePath("Components/Controller")
+Stats = NodePath("Components/Stats")
+StateMachine = NodePath("Components/StateMachine")
 PathFollower = NodePath("Components/PathFollower")
 
-[node name="StateMachine" type="Node" parent="."]
+[node name="Components" type="Node3D" parent="."]
+
+[node name="Stats" type="Node" parent="Components"]
+script = ExtResource("9_ewscv")
+baseGroundSpeed = 28
+baseGroundTraction = 8
+baseGroundFriction = 28
+baseGroundOverspeed = 14
+baseGroundTurnaround = 54
+baseAirSpeed = 14
+baseAirTraction = 18
+baseAirFriction = 24
+baseAirOverspeed = 54
+baseAirTurnaround = 54
+accelerationJumpSpeed = 36.0
+homingAttackSpeed = 50.0
+perfectHomingAttackSpeed = 100.0
+homingAttackAcceleration = 200.0
+InitialSlideSpeed = 12
+baseSlideTraction = 32
+baseSlideFriction = 8
+baseSlideOverspeed = 16
+baseSlideTurnaround = 32
+baseBackflipSpeed = 20
+baseBackflipTraction = 16
+baseBackflipFriction = 32
+baseBackflipOverspeed = -1
+baseBackflipTurnaround = 64
+baseBackstepSpeed = 8
+baseBackstepTraction = 12
+baseBackstepFriction = 48
+baseBackstepOverspeed = 24
+baseBackstepTurnaround = 48
+perfectShuffleSpeed = 32.0
+baseGrindSpeed = 20
+baseGrindFriction = 4
+baseGrindTurnaround = 6
+sidleMovementCurve = SubResource("Curve_jakcp")
+
+[node name="Controller" type="Node" parent="Components"]
+script = ExtResource("2_pk07e")
+
+[node name="StateMachine" type="Node" parent="Components"]
 script = ExtResource("2_ehi1f")
 startingState = NodePath("Idle")
 
-[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("jumpState", "fallState")]
+[node name="Idle" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState", "backstepState", "jumpState", "fallState")]
 script = ExtResource("3_7invc")
+runState = NodePath("../Run")
+backstepState = NodePath("../Backstep")
 jumpState = NodePath("../Jump")
 fallState = NodePath("../Fall")
 
-[node name="Run" type="Node" parent="StateMachine" node_paths=PackedStringArray("fallState", "idleState")]
+[node name="Run" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState")]
 script = ExtResource("7_1ojgh")
 fallState = NodePath("../Fall")
 idleState = NodePath("../Idle")
 
-[node name="Backstep" type="Node" parent="StateMachine" node_paths=PackedStringArray("fallState", "idleState")]
+[node name="Backstep" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState")]
 script = ExtResource("8_0ksv7")
 fallState = NodePath("../Fall")
 idleState = NodePath("../Idle")
 
-[node name="Jump" type="Node" parent="StateMachine" node_paths=PackedStringArray("fallState", "landState")]
+[node name="Jump" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "landState")]
 script = ExtResource("4_ufscl")
 fallState = NodePath("../Fall")
 landState = NodePath("../Land")
 
-[node name="Fall" type="Node" parent="StateMachine" node_paths=PackedStringArray("landState")]
+[node name="Fall" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState")]
 script = ExtResource("5_niuke")
 landState = NodePath("../Land")
 
-[node name="Land" type="Node" parent="StateMachine" node_paths=PackedStringArray("runState", "idleState", "backstepState")]
+[node name="Land" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState", "idleState", "backstepState")]
 script = ExtResource("6_ihvo7")
 runState = NodePath("../Run")
 idleState = NodePath("../Idle")
 backstepState = NodePath("../Backstep")
-
-[node name="Components" type="Node3D" parent="."]
 
 [node name="PathFollower" type="PathFollow3D" parent="Components"]
 visible = false

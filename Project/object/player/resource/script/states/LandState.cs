@@ -1,7 +1,7 @@
 using Godot;
-using System;
 
 namespace Project.Gameplay;
+
 public partial class LandState : PlayerState
 {
 	[Export]
@@ -13,10 +13,10 @@ public partial class LandState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		if (Mathf.IsZeroApprox(Controller.MoveSpeed))
+		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
 
-		if (Controller.MoveSpeed > 0)
+		if (Player.MoveSpeed > 0)
 			return runState;
 
 		return backstepState;

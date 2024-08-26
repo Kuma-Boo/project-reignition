@@ -8,14 +8,14 @@ public partial class PlayerStateMachine : Node
 	private NodePath startingState;
 	private PlayerState currentState;
 
-	public void Initialize(PlayerController controller)
+	public void Initialize(PlayerController player)
 	{
 		foreach (Node child in GetChildren())
 		{
 			if (child is not PlayerState)
 				continue;
 
-			(child as PlayerState).Initialize(controller);
+			(child as PlayerState).Initialize(player);
 		}
 
 		ChangeState(GetNode<PlayerState>(startingState));

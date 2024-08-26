@@ -10,10 +10,10 @@ public partial class FallState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		Controller.VerticalSpeed = Mathf.MoveToward(Controller.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
-		Controller.ApplyMovement();
+		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
+		Player.ApplyMovement();
 
-		if (Controller.CheckGround())
+		if (Player.CheckGround())
 			return landState;
 
 		return null;

@@ -11,10 +11,10 @@ public partial class BackstepState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		if (!Controller.CheckGround())
+		if (!Player.CheckGround())
 			return fallState;
 
-		if (Mathf.IsZeroApprox(Controller.MoveSpeed))
+		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
 
 		return null;

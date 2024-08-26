@@ -31,8 +31,8 @@ public partial class JumpState : PlayerState
 
 	public override void EnterState()
 	{
-		Controller.VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
-		Controller.ApplyMovement();
+		Player.VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
+		Player.ApplyMovement();
 
 		jumpTimer = 0;
 		isShortenedJump = false;
@@ -53,7 +53,7 @@ public partial class JumpState : PlayerState
 
 		if (isShortenedJump)
 		{
-			Controller.VerticalSpeed *= jumpCurve; // Kill jump height
+			Player.VerticalSpeed *= jumpCurve; // Kill jump height
 		}
 		else if (!isAccelerationJump)
 		{
@@ -63,13 +63,13 @@ public partial class JumpState : PlayerState
 				StartAccelerationJump();
 		}
 
-		Controller.VerticalSpeed = Mathf.MoveToward(Controller.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
-		Controller.ApplyMovement();
+		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
+		Player.ApplyMovement();
 
-		if (Controller.CheckGround())
+		if (Player.CheckGround())
 			return landState;
 
-		if (Controller.VerticalSpeed <= 0)
+		if (Player.VerticalSpeed <= 0)
 			return fallState;
 
 		return null;
@@ -78,8 +78,8 @@ public partial class JumpState : PlayerState
 	private void StartAccelerationJump()
 	{
 		// Keep acceleration jump heights consistent
-		Controller.MoveSpeed = accelerationJumpSpeed;
-		Controller.VerticalSpeed = accelerationJumpHeightVelocity;
+		Player.MoveSpeed = accelerationJumpSpeed;
+		Player.VerticalSpeed = accelerationJumpHeightVelocity;
 		isAccelerationJump = true;
 	}
 }
