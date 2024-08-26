@@ -30,7 +30,7 @@ public partial class BackstepState : PlayerState
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
 
-		if (ExtensionMethods.DotAngle(Player.MovementAngle, Player.PathFollower.BackAngle) < 0)
+		if (ExtensionMethods.DotAngle(Player.MovementAngle, Player.PathFollower.BackAngle) < 0.1f)
 			return runState;
 
 		return null;
