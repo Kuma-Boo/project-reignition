@@ -26,6 +26,9 @@ public partial class PlayerInputController : Node
 	public float InputHorizontal { get; private set; }
 	public float InputVertical { get; private set; }
 
+	/// <summary> Maximum angle that counts as holding a direction. </summary>
+	private readonly float MaximumHoldDelta = Mathf.Pi * .4f;
+
 	/// <summary> Maximum amount the player can turn when running at full speed. </summary>
 	public readonly float TurningDampingRange = Mathf.Pi * .35f;
 
@@ -63,9 +66,32 @@ public partial class PlayerInputController : Node
 		actionBuffer = Mathf.MoveToward(actionBuffer, 0, PhysicsManager.physicsDelta);
 	}
 
-	public bool IsHoldingDirection(float reference)
+	/// <summary>
+	/// Checks whether the player is holding a particular direction.
+	/// </summary>
+	public bool IsHoldingDirection(float inputAngle, float referenceAngle)
 	{
-		GD.PushError("Unimplmented.");
-		return false;
+		float deltaAngle = ExtensionMethods.DeltaAngleRad(referenceAngle, inputAngle);
+		return deltaAngle <= MaximumHoldDelta;
 	}
+
+	/// <summary>
+	/// Remaps controller inputs when holding forward to provide more analog detail.
+	/// </summary>
+	public float ImproveAnalogPrecision(float inputAngle, float referenceAngle)
+	{
+		if (!Runtime.Instance.IsUsingController || IsHoldingDirection(inputAngle, referenceAngle))
+			return inputAngle;
+		
+		float deltaAngle = ExtensionMethods.DeltaAngleRad(referenceAngle, inputAngle);
+		if(deltaAngle < TurningDampingRange) 
+			inputAngle -= deltaAngle * .5f;
+	
+		return inputAngle;
+	}
+
+	/// <summary>
+	/// Returns true if the player is trying to recenter themselves.
+	/// </summary>
+	public bool IsRecentering(float movementDeltaAngle, float inputDeltaAngle) => Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle);
 }

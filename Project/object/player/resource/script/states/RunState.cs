@@ -79,32 +79,23 @@ public partial class RunState : PlayerState
 
 	private void ProcessTurning(float targetMovementAngle, float inputDot)
 	{
-		targetMovementAngle += Player.PathTurnInfluence;
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 		{
 			Player.MovementAngle = targetMovementAngle;
 			return;
 		}
+		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
 
-		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, targetMovementAngle);
-		if (Runtime.Instance.IsUsingController &&
-			inputDot > .8f &&
-			Mathf.Abs(inputDeltaAngle) < Player.Controller.TurningDampingRange)
-		{
-			// Remap controls to provide more analog detail
-			targetMovementAngle -= inputDeltaAngle * .5f;
-		}
-
-		if (Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed) > RunRatio)
+		targetMovementAngle += Player.PathTurnInfluence;
+		targetMovementAngle = Player.Controller.ImproveAnalogPrecision(targetMovementAngle, Player.PathFollower.ForwardAngle);
+		if (speedRatio > RunRatio)
 			targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, Player.PathFollower.ForwardAngle, MaxTurningAdjustment);
 
-		float maxTurnAmount = Player.Stats.MaxTurnAmount;
+		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, targetMovementAngle);
 		float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, Player.PathFollower.ForwardAngle);
-		bool isRecentering = Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle);
-		if (isRecentering)
-			maxTurnAmount = Player.Stats.RecenterTurnAmount;
+		bool isRecentering = Player.Controller.IsRecentering(movementDeltaAngle, inputDeltaAngle);
+		float maxTurnAmount = isRecentering ? Player.Stats.RecenterTurnAmount : Player.Stats.MaxTurnAmount;
 
-		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
 		float turnSmoothing = Mathf.Lerp(Player.Stats.MinTurnAmount, maxTurnAmount, speedRatio);
 		Player.MovementAngle = ExtensionMethods.SmoothDampAngle(Player.MovementAngle + Player.PathTurnInfluence, targetMovementAngle, ref turningVelocity, turnSmoothing);
 	}
