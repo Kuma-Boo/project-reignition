@@ -26,6 +26,9 @@ public partial class PlayerInputController : Node
 	public float InputHorizontal { get; private set; }
 	public float InputVertical { get; private set; }
 
+	/// <summary> Maximum amount the player can turn when running at full speed. </summary>
+	public readonly float TurningDampingRange = Mathf.Pi * .35f;
+
 	public void ProcessInputs()
 	{
 		InputAxis = Input.GetVector("move_left", "move_right", "move_up", "move_down", DeadZone);
@@ -58,5 +61,11 @@ public partial class PlayerInputController : Node
 		}
 
 		actionBuffer = Mathf.MoveToward(actionBuffer, 0, PhysicsManager.physicsDelta);
+	}
+
+	public bool IsHoldingDirection(float reference)
+	{
+		GD.PushError("Unimplmented.");
+		return false;
 	}
 }

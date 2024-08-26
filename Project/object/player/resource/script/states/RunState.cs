@@ -21,8 +21,6 @@ public partial class RunState : PlayerState
 	private readonly float RunRatio = .9f;
 	/// <summary> Maximum amount the player can turn when running at full speed. </summary>
 	private readonly float MaxTurningAdjustment = Mathf.Pi * .25f;
-	/// <summary> Maximum amount the player can turn when running at full speed. </summary>
-	private readonly float TurningDampingRange = Mathf.Pi * .35f;
 	/// <summary> How much speed to lose when turning sharply. </summary>
 	private readonly float TurningSpeedLoss = .02f;
 
@@ -91,7 +89,7 @@ public partial class RunState : PlayerState
 		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, targetMovementAngle);
 		if (Runtime.Instance.IsUsingController &&
 			inputDot > .8f &&
-			Mathf.Abs(inputDeltaAngle) < TurningDampingRange)
+			Mathf.Abs(inputDeltaAngle) < Player.Controller.TurningDampingRange)
 		{
 			// Remap controls to provide more analog detail
 			targetMovementAngle -= inputDeltaAngle * .5f;
