@@ -29,10 +29,11 @@ public partial class IdleState : PlayerState
 		if (!Player.CheckGround())
 			return fallState;
 
-		if (!Player.Controller.CameraInputAxis.IsZeroApprox())
+		float inputStrength = Mathf.Min(Player.Controller.CameraInputAxis.Length(), 1f);
+		if (inputStrength > Player.Controller.DeadZone)
 		{
-			// Move
-			return runState;
+			float inputDot = Player.Controller.GetMovementInputDotProduct(Player.MovementAngle);
+			return inputDot >= 0 ? runState : backstepState;
 		}
 
 		return null;

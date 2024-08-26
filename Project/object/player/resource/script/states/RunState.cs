@@ -8,16 +8,19 @@ public partial class RunState : PlayerState
 	private PlayerState fallState;
 	[Export]
 	private PlayerState idleState;
-
-	public override void EnterState()
-	{
-
-	}
+	[Export]
+	private PlayerState jumpState;
 
 	public override PlayerState ProcessPhysics()
 	{
 		ProcessMoveSpeed();
 		Player.ApplyMovement();
+
+		if (Player.Controller.IsJumpBufferActive)
+		{
+			Player.Controller.ResetJumpBuffer();
+			return jumpState;
+		}
 
 		if (!Player.CheckGround())
 			return fallState;
@@ -31,16 +34,14 @@ public partial class RunState : PlayerState
 	private void ProcessMoveSpeed()
 	{
 		float inputStrength = Mathf.Min(Player.Controller.CameraInputAxis.Length(), 1f);
-		float targetMovementAngle = Player.Controller.CameraInputAxis.AngleTo(Vector2.Up);
-		float dot = ExtensionMethods.DotAngle(targetMovementAngle, Player.MovementAngle);
-
 		if (inputStrength < Player.Controller.DeadZone)
 		{
 			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, 0);
 			return;
 		}
 
-		if (dot < -.5f || Input.IsActionPressed("button_brake")) // Turning around
+		float inputDot = Player.Controller.GetMovementInputDotProduct(Player.MovementAngle);
+		if (inputDot < -.5f || Input.IsActionPressed("button_brake")) // Turning around
 		{
 			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, -inputStrength);
 			return;

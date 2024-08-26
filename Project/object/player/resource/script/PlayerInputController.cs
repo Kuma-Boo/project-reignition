@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Project.Core;
 
@@ -54,5 +55,12 @@ public partial class PlayerInputController : Node
 		}
 
 		actionBuffer = Mathf.MoveToward(actionBuffer, 0, PhysicsManager.physicsDelta);
+	}
+
+	/// <summary> Gets the dot angle between the player's input angle and movementAngle. </summary>
+	public float GetMovementInputDotProduct(float movementAngle)
+	{
+		float targetMovementAngle = CameraInputAxis.AngleTo(Vector2.Up);
+		return ExtensionMethods.DotAngle(targetMovementAngle, movementAngle);
 	}
 }
