@@ -26,6 +26,8 @@ public partial class JumpState : PlayerState
 	private bool isAccelerationJump;
 	private bool isAccelerationJumpQueued;
 
+	private float turningVelocity;
+
 	/// <summary> How fast the jump button needs to be released to count as an "acceleration jump." </summary>
 	private readonly float AccelerationJumpLength = .1f;
 
@@ -34,6 +36,7 @@ public partial class JumpState : PlayerState
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
 		Player.ApplyMovement();
 
+		turningVelocity = 0;
 		jumpTimer = 0;
 		isShortenedJump = false;
 		isAccelerationJump = false;
@@ -66,7 +69,22 @@ public partial class JumpState : PlayerState
 
 	private void UpdateMoveSpeed()
 	{
-		Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, Mathf.Pi * .1f);
+		float inputStrength = Player.Controller.GetInputStrength();
+		if (inputStrength < Player.Controller.DeadZone)
+		{
+			Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, 0);
+			return;
+		}
+
+		float targetMovementAngle = Player.GetTargetMovementAngle();
+		float inputDot = ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle);
+		if ((inputDot < -.75f && !Mathf.IsZeroApprox(Player.MoveSpeed)) || Input.IsActionPressed("button_brake")) // Turning around
+		{
+			Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, -inputStrength);
+			return;
+		}
+
+		Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
 	}
 
 	private void UpdateVerticalSpeed()
@@ -88,9 +106,20 @@ public partial class JumpState : PlayerState
 
 	private void StartAccelerationJump()
 	{
+		isAccelerationJumpQueued = false;
+
+		if (ExtensionMethods.DotAngle(Player.GetTargetMovementAngle(), Player.PathFollower.ForwardAngle) < .5f ||
+			Player.Controller.GetInputStrength() < .5f) // REFACTOR-TODO || Skills.IsSkillEquipped(SkillKey.Autorun))
+		{
+			return;
+		}
+
 		// Keep acceleration jump heights consistent
 		Player.MoveSpeed = accelerationJumpSpeed;
 		Player.VerticalSpeed = accelerationJumpHeightVelocity;
 		isAccelerationJump = true;
+
+		if (ExtensionMethods.DotAngle(Player.MovementAngle, Player.PathFollower.ForwardAngle) < .5f)
+			Player.MovementAngle = Player.PathFollower.ForwardAngle;
 	}
 }
