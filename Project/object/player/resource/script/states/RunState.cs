@@ -13,6 +13,8 @@ public partial class RunState : PlayerState
 	private PlayerState backstepState;
 	[Export]
 	private PlayerState jumpState;
+	[Export]
+	private PlayerState backflipState;
 
 	[Export]
 	private Curve turningSpeedLossCurve;
@@ -40,6 +42,11 @@ public partial class RunState : PlayerState
 		if (Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
+			
+			float inputAngle = Player.GetTargetMovementAngle();
+			if(Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+				return backflipState;
+
 			return jumpState;
 		}
 
@@ -58,7 +65,7 @@ public partial class RunState : PlayerState
 	private void ProcessMoveSpeed()
 	{
 		float inputStrength = Player.Controller.GetInputStrength();
-		if (inputStrength < Player.Controller.DeadZone)
+		if (Mathf.IsZeroApprox(inputStrength))
 		{
 			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, 0);
 			return;

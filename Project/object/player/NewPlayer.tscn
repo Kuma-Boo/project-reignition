@@ -1028,27 +1028,31 @@ backstepState = NodePath("../Backstep")
 jumpState = NodePath("../Jump")
 fallState = NodePath("../Fall")
 
-[node name="Run" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState", "backstepState", "jumpState")]
+[node name="Run" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState", "backstepState", "jumpState", "backflipState")]
 script = ExtResource("7_1ojgh")
 fallState = NodePath("../Fall")
 idleState = NodePath("../Idle")
 backstepState = NodePath("../Backstep")
 jumpState = NodePath("../Jump")
+backflipState = NodePath("../Backflip")
 turningSpeedLossCurve = SubResource("Curve_0y4at")
 
-[node name="Backstep" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState", "runState")]
+[node name="Backstep" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState", "runState", "backflipState")]
 script = ExtResource("8_0ksv7")
 fallState = NodePath("../Fall")
 idleState = NodePath("../Idle")
 runState = NodePath("../Run")
+backflipState = NodePath("../Backflip")
 
 [node name="Jump" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "landState")]
 script = ExtResource("4_ufscl")
 fallState = NodePath("../Fall")
 landState = NodePath("../Land")
 
-[node name="Backflip" type="Node" parent="Components/StateMachine"]
+[node name="Backflip" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState")]
 script = ExtResource("9_7wp0f")
+landState = NodePath("../Land")
+backflipHeight = 2.4
 
 [node name="Fall" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState")]
 script = ExtResource("5_niuke")

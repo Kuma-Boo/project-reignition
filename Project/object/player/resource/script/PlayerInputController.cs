@@ -7,7 +7,13 @@ public partial class PlayerInputController : Node
 {
 	[Export]
 	private Curve InputCurve { get; set; }
-	public float GetInputStrength() => InputCurve.Sample(InputAxis.Length());
+	public float GetInputStrength()
+	{
+		float inputLength = InputAxis.Length();
+		if(inputLength <= DeadZone)
+			inputLength = 0;
+		return InputCurve.Sample(inputLength);
+	}
 
 	public float DeadZone => SaveManager.Config.deadZone;
 

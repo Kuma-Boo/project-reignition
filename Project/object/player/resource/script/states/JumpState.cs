@@ -70,7 +70,7 @@ public partial class JumpState : PlayerState
 	private void UpdateMoveSpeed()
 	{
 		float inputStrength = Player.Controller.GetInputStrength();
-		if (inputStrength < Player.Controller.DeadZone)
+		if (Mathf.IsZeroApprox(inputStrength))
 		{
 			Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, 0);
 			return;

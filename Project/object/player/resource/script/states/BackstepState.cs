@@ -10,6 +10,10 @@ public partial class BackstepState : PlayerState
 	private PlayerState idleState;
 	[Export]
 	private PlayerState runState;
+	[Export]
+	private PlayerState jumpState;
+	[Export]
+	private PlayerState backflipState;
 
 	private float turningVelocity;
 
@@ -32,6 +36,18 @@ public partial class BackstepState : PlayerState
 
 		if (ExtensionMethods.DotAngle(Player.MovementAngle, Player.PathFollower.BackAngle) < 0.1f)
 			return runState;
+		
+		if(Player.Controller.IsJumpBufferActive)
+		{
+			Player.Controller.ResetJumpBuffer();
+
+			float inputAngle = Player.GetTargetMovementAngle();
+			float inputStrength = Player.Controller.GetInputStrength();
+			if(Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+				return backflipState;
+
+			return jumpState;
+		}
 
 		return null;
 	}
@@ -39,7 +55,7 @@ public partial class BackstepState : PlayerState
 	private void ProcessMoveSpeed()
 	{
 		float inputStrength = Player.Controller.GetInputStrength();
-		if (inputStrength < Player.Controller.DeadZone)
+		if (Mathf.IsZeroApprox(inputStrength))
 		{
 			Player.MoveSpeed = Player.Stats.BackstepSettings.UpdateInterpolate(Player.MoveSpeed, 0);
 			return;

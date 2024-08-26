@@ -58,7 +58,7 @@ public partial class BackflipState : PlayerState
 
 		if (isHoldingBackward)
 			Player.MoveSpeed = Player.Stats.BackflipSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
-		else if (inputStrength <= Player.Controller.DeadZone)
+		else 		if (Mathf.IsZeroApprox(inputStrength))
 			Player.MoveSpeed = Player.Stats.BackflipSettings.UpdateInterpolate(Player.MoveSpeed, 0);
 
 		UpdateTurning(targetMovementAngle);
