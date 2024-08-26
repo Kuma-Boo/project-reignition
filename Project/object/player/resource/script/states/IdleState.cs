@@ -32,8 +32,8 @@ public partial class IdleState : PlayerState
 		float inputStrength = Mathf.Min(Player.Controller.CameraInputAxis.Length(), 1f);
 		if (inputStrength > Player.Controller.DeadZone)
 		{
-			float inputDot = Player.Controller.GetMovementInputDotProduct(Player.MovementAngle);
-			return inputDot >= 0 ? runState : backstepState;
+			float inputDot = ExtensionMethods.DotAngle(Player.GetTargetMovementAngle(), Player.PathFollower.ForwardAngle);
+			return inputDot >= -0.5f ? runState : backstepState;
 		}
 
 		return null;

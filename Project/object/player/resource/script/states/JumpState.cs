@@ -51,6 +51,26 @@ public partial class JumpState : PlayerState
 				isShortenedJump = true;
 		}
 
+		UpdateMoveSpeed();
+		UpdateVerticalSpeed();
+		Player.ApplyMovement();
+
+		if (Player.CheckGround())
+			return landState;
+
+		if (Player.VerticalSpeed <= 0)
+			return fallState;
+
+		return null;
+	}
+
+	private void UpdateMoveSpeed()
+	{
+		Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, Mathf.Pi * .1f);
+	}
+
+	private void UpdateVerticalSpeed()
+	{
 		if (isShortenedJump)
 		{
 			Player.VerticalSpeed *= jumpCurve; // Kill jump height
@@ -64,15 +84,6 @@ public partial class JumpState : PlayerState
 		}
 
 		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
-		Player.ApplyMovement();
-
-		if (Player.CheckGround())
-			return landState;
-
-		if (Player.VerticalSpeed <= 0)
-			return fallState;
-
-		return null;
 	}
 
 	private void StartAccelerationJump()

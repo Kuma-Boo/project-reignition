@@ -119,8 +119,8 @@ public partial class PlayerStatsController : Node
 	public float MinTurnAmount { get; private set; }
 	/// <summary> How quickly to turn when moving at top speed. </summary>
 	public float MaxTurnAmount { get; private set; }
-	/// <summary> How quickly to turnaround when at top speed. </summary>
-	public float TurnTurnaround { get; private set; }
+	/// <summary> How quickly to turn when at top speed. </summary>
+	public float RecenterTurnAmount { get; private set; }
 	public float GetTurnRatio()
 	{
 		if (SkillRing.IsSkillEquipped(SkillKey.QuickTurn))
@@ -341,6 +341,6 @@ public partial class PlayerStatsController : Node
 
 		MinTurnAmount = baseMinTurn;
 		MaxTurnAmount = baseMaxTurn * GetTurnRatio();
-		TurnTurnaround = baseTurnTurnaround * Mathf.Min(GetTurnRatio(), 1f);
+		RecenterTurnAmount = baseTurnTurnaround * Mathf.Min(GetTurnRatio(), 1f);
 	}
 }

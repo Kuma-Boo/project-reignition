@@ -18,10 +18,11 @@ public partial class PlayerController : CharacterBody3D
 	public float MoveSpeed { get; set; }
 	/// <summary> Player's vertical speed -- only effective when not on the ground. </summary>
 	public float VerticalSpeed { get; set; }
+	public bool IsMovingBackward { get; set; }
 
 	/// <summary> Global movement angle, in radians. Note - VISUAL ROTATION is controlled by CharacterAnimator.cs. </summary>
 	public float MovementAngle { get; set; }
-	public bool IsMovingBackward { get; set; }
+	public float PathTurnInfluence => 0;//PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
 	public Vector3 GetMovementDirection()
 	{
 		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
@@ -42,21 +43,51 @@ public partial class PlayerController : CharacterBody3D
 		PathFollower.Resync();
 	}
 
-	public bool CheckGround()
-	{
-		return IsOnFloor();
-	}
+	public bool CheckGround() => IsOnFloor();
 
 	public void ApplyMovement()
 	{
 		Vector3 movementVelocity = Vector3.Zero;
-		movementVelocity += VerticalSpeed * PathFollower.GlobalBasis.Y;
-		movementVelocity += MoveSpeed * PathFollower.GlobalBasis.Z;
+		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
+		Vector3 movementDirection = PathFollower.GlobalBasis.Z.Rotated(UpDirection, deltaAngle);
+		movementVelocity += movementDirection * MoveSpeed;
+		movementVelocity += UpDirection * VerticalSpeed;
 		Velocity = movementVelocity;
 
-		IsMovingBackward = ExtensionMethods.DeltaAngleRad(MovementAngle, PathFollower.BackAngle) < Mathf.Pi * .4f; // Moving backwards
-
 		MoveAndSlide();
+	}
+
+	public enum InputMode
+	{
+		Auto, // Calls GetAutomaticInputMode
+		Camera, // Inputs are rotated with the camera
+		Path, // Inputs are rotated with the path (Up is always forward)
+		Global, // I think this is unused for now.
+	}
+
+	/// <summary> Gets the dot angle between the player's input angle and movementAngle. </summary>
+	public float GetTargetMovementAngle(InputMode mode = InputMode.Auto)
+	{
+		if (mode == InputMode.Auto)
+			mode = GetAutomaticInputMode();
+
+		if (mode == InputMode.Camera)
+			return Controller.CameraInputAxis.AngleTo(Vector2.Down);
+
+		if (mode == InputMode.Path)
+			return Controller.InputAxis.Rotated(PathFollower.ForwardAngle).AngleTo(Vector2.Down);
+
+		return Controller.InputAxis.AngleTo(Vector2.Down);
+	}
+
+	/// <summary> Returns the automatic input mode [based on the game's settings and] skills. </summary>
+	public InputMode GetAutomaticInputMode()
+	{
+		// TODO Add configuration option for path based inputs
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
+			return InputMode.Path;
+
+		return InputMode.Camera;
 	}
 
 	[Export]
