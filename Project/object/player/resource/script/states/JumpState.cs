@@ -84,6 +84,13 @@ public partial class JumpState : PlayerState
 			return;
 		}
 
+		if (isAccelerationJump)
+		{
+			// Prevent the player from losing speed during an acceleration jump
+			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
+			return;
+		}
+
 		Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
 	}
 
