@@ -90,6 +90,7 @@ public partial class PlayerController : CharacterBody3D
 		return InputMode.Camera;
 	}
 
+	/*
 	[Export]
 	public CameraController Camera { get; private set; }
 	[Export]
@@ -98,6 +99,7 @@ public partial class PlayerController : CharacterBody3D
 	public CharacterEffect Effect { get; private set; }
 	[Export]
 	public CharacterLockon Lockon { get; private set; }
+	*/
 }
 
 /// <summary>
