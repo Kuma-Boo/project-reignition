@@ -32,6 +32,7 @@ public partial class PlayerStateMachine : Node
 
 	public void ProcessPhysics()
 	{
+		GD.Print(currentState.Name);
 		PlayerState newState = currentState.ProcessPhysics();
 		if (newState != null)
 			ChangeState(newState);

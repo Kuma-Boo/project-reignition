@@ -7,6 +7,8 @@ public partial class FallState : PlayerState
 {
 	[Export]
 	private PlayerState landState;
+	[Export]
+	private PlayerState stompState;
 
 	public override PlayerState ProcessPhysics()
 	{
@@ -15,6 +17,12 @@ public partial class FallState : PlayerState
 
 		if (Player.CheckGround())
 			return landState;
+
+		if (Player.Controller.IsActionBufferActive)
+		{
+			Player.Controller.ResetActionBuffer();
+			return stompState;
+		}
 
 		return null;
 	}

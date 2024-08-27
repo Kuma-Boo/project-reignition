@@ -9,6 +9,8 @@ public partial class JumpState : PlayerState
 	private PlayerState fallState;
 	[Export]
 	private PlayerState landState;
+	[Export]
+	private PlayerState stompState;
 
 	[Export]
 	private float jumpHeight = 4.8f;
@@ -63,6 +65,12 @@ public partial class JumpState : PlayerState
 
 		if (Player.VerticalSpeed <= 0)
 			return fallState;
+
+		if (Player.Controller.IsActionBufferActive)
+		{
+			Player.Controller.ResetActionBuffer();
+			return stompState;
+		}
 
 		return null;
 	}

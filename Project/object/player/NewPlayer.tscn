@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bbbuqgxfhuh8k"]
+[gd_scene load_steps=36 format=3 uid="uid://bbbuqgxfhuh8k"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://object/player/resource/script/states/BackstepState.cs" id="8_0ksv7"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/BackflipState.cs" id="9_7wp0f"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStatsController.cs" id="9_ewscv"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/StompState.cs" id="10_eoh5j"]
 
 [sub_resource type="Curve" id="Curve_jakcp"]
 _data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
@@ -1045,19 +1046,25 @@ runState = NodePath("../Run")
 jumpState = NodePath("../Jump")
 backflipState = NodePath("../Backflip")
 
-[node name="Jump" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "landState")]
+[node name="Jump" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "landState", "stompState")]
 script = ExtResource("4_ufscl")
 fallState = NodePath("../Fall")
 landState = NodePath("../Land")
+stompState = NodePath("../Stomp")
 
 [node name="Backflip" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState")]
 script = ExtResource("9_7wp0f")
 landState = NodePath("../Land")
 backflipHeight = 2.4
 
-[node name="Fall" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState")]
+[node name="Stomp" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState")]
+script = ExtResource("10_eoh5j")
+landState = NodePath("../Land")
+
+[node name="Fall" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState", "stompState")]
 script = ExtResource("5_niuke")
 landState = NodePath("../Land")
+stompState = NodePath("../Stomp")
 
 [node name="Land" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState", "idleState", "backstepState")]
 script = ExtResource("6_ihvo7")
