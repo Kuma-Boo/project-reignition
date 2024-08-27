@@ -11,6 +11,10 @@ public partial class JumpState : PlayerState
 	private PlayerState landState;
 	[Export]
 	private PlayerState stompState;
+	[Export]
+	private PlayerState jumpDashState;
+	[Export]
+	private PlayerState homingAttackState;
 
 	[Export]
 	private float jumpHeight = 4.8f;
@@ -45,6 +49,8 @@ public partial class JumpState : PlayerState
 		isShortenedJump = false;
 		isAccelerationJump = false;
 		isAccelerationJumpQueued = false;
+
+		Player.Lockon.IsMonitoring = true;
 	}
 
 	public override PlayerState ProcessPhysics()
@@ -67,6 +73,15 @@ public partial class JumpState : PlayerState
 
 		if (Player.VerticalSpeed <= 0)
 			return fallState;
+
+		if (Player.Controller.IsJumpBufferActive)
+		{
+			Player.Controller.ResetJumpBuffer();
+			if (Player.Lockon.Target != null && Player.Lockon.IsTargetAttackable)
+				return homingAttackState;
+
+			return jumpDashState;
+		}
 
 		if (Player.Controller.IsActionBufferActive)
 		{

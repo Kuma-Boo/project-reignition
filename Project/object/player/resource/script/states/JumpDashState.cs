@@ -1,0 +1,95 @@
+using Godot;
+using Project.Core;
+
+namespace Project.Gameplay;
+
+public partial class JumpDashState : PlayerState
+{
+	[Export]
+	private PlayerState landState;
+	[Export]
+	private PlayerState stompState;
+	[Export]
+	private float jumpDashSpeed;
+	[Export]
+	private float jumpDashPower;
+	[Export]
+	private float jumpDashGravity;
+	[Export]
+	private float jumpDashMaxGravity;
+
+	public override void EnterState()
+	{
+		// Moving directly backwards -- jumpdash directly forward
+		if (ExtensionMethods.DeltaAngleRad(Player.MovementAngle, Player.PathFollower.BackAngle) <= Mathf.Pi * .25f)
+			Player.MovementAngle = Player.PathFollower.ForwardAngle;
+		else // Don't allow jumpdashing backwards (sideways is OK though)
+			Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, Mathf.Pi * .5f);
+
+		Player.IsMovingBackward = false; // Can't jumpdash backwards!
+		Player.MoveSpeed = jumpDashSpeed;
+		Player.VerticalSpeed = jumpDashPower;
+		Player.Lockon.IsMonitoring = false;
+
+		/* REFACTOR TODO
+		Effect.PlayActionSFX(Effect.JumpDashSfx);
+		Effect.StartTrailFX();
+		if (Skills.IsSkillEquipped(SkillKey.CrestFire))
+			Skills.ActivateFireCrest();
+
+		if (Lockon.IsBounceLockoutActive) // Interrupt lockout
+			RemoveLockoutData(Lockon.bounceLockoutSettings);
+
+		if (Lockon.Target == null || !Lockon.IsTargetAttackable) // Normal jumpdash
+		{
+			Animator.LaunchAnimation();
+		}
+		else
+		{
+			Lockon.StartHomingAttack(); // Start Homing attack
+			Animator.StartSpin(2.0f);
+			Effect.StartSpinFX();
+			ChangeHitbox("spin");
+			UpdateJumpDash();
+		}
+		*/
+	}
+
+	public override PlayerState ProcessPhysics()
+	{
+		UpdateMoveSpeed();
+		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, -jumpDashMaxGravity, jumpDashGravity * PhysicsManager.physicsDelta);
+		Player.ApplyMovement();
+
+		if (Player.CheckGround())
+			return landState;
+
+		if (Player.Controller.IsActionBufferActive)
+		{
+			Player.Controller.ResetActionBuffer();
+			return stompState;
+		}
+
+		return null;
+	}
+
+	private void UpdateMoveSpeed()
+	{
+		float inputStrength = Player.Controller.GetInputStrength();
+		if (Mathf.IsZeroApprox(inputStrength) || !Mathf.IsZeroApprox(Player.MoveSpeed))
+		{
+			Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, 0);
+			return;
+		}
+
+		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
+		float inputDot = ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle);
+		if (inputDot < -.75f || Input.IsActionPressed("button_brake")) // Turning around
+		{
+			Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, -inputStrength);
+			return;
+		}
+
+		Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, 0, Player.Stats.AirSettings.Friction * PhysicsManager.physicsDelta);
+	}
+}

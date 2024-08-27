@@ -18,6 +18,8 @@ public partial class StompState : PlayerState
 	public override void EnterState()
 	{
 		Player.MoveSpeed = 0;
+		Player.Lockon.IsMonitoring = false;
+		Player.Lockon.ResetLockonTarget();
 
 		/* REFACTOR TODO
 		if (ActionState == ActionStates.Grindstep)
@@ -25,9 +27,6 @@ public partial class StompState : PlayerState
 
 		allowLandingSkills = true;
 
-		Lockon.IsMonitoring = false;
-		if (Lockon.IsHomingAttacking)
-			Lockon.StopHomingAttack();
 		SetActionState(ActionStates.Stomping);
 
 		bool attackStomp = Skills.IsSkillEquipped(SkillKey.StompAttack);

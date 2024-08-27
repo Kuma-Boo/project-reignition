@@ -11,6 +11,11 @@ public partial class LandState : PlayerState
 	[Export]
 	private PlayerState backstepState;
 
+	public override void EnterState()
+	{
+		Player.Lockon.IsMonitoring = false;
+	}
+
 	public override PlayerState ProcessPhysics()
 	{
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))

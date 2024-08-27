@@ -6,9 +6,13 @@ namespace Project.Gameplay;
 public partial class BackflipState : PlayerState
 {
 	[Export]
-	public PlayerState landState;
+	private PlayerState landState;
 	[Export]
-	public float backflipHeight;
+	private PlayerState jumpDashState;
+	[Export]
+	private PlayerState homingAttackState;
+	[Export]
+	private float backflipHeight;
 
 	private float turningVelocity;
 	/// <summary> How much can the player adjust their angle while backflipping? </summary>
@@ -21,6 +25,8 @@ public partial class BackflipState : PlayerState
 		Player.MovementAngle = Player.PathFollower.BackAngle;
 		Player.MoveSpeed = Player.Stats.BackflipSettings.Speed;
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(backflipHeight);
+
+		Player.Lockon.IsMonitoring = true;
 
 		/* REFACTOR TODO: Add Effects
 		CanJumpDash = true;
@@ -46,6 +52,15 @@ public partial class BackflipState : PlayerState
 
 		if (Player.CheckGround())
 			return landState;
+
+		if (Player.Controller.IsJumpBufferActive)
+		{
+			Player.Controller.ResetJumpBuffer();
+			if (Player.Lockon.Target != null && Player.Lockon.IsTargetAttackable)
+				return homingAttackState;
+
+			return jumpDashState;
+		}
 
 		return null;
 	}

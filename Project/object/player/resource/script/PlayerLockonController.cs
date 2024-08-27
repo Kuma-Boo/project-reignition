@@ -12,10 +12,12 @@ public partial class PlayerLockonController : Node3D
 {
 	[Export]
 	private Area3D areaTrigger;
+	[Export]
+	private AudioStreamPlayer perfectSFX;
+
 	private PlayerController Player;
 	private void RegisterPlayer(PlayerController player) => Player = player;
 
-	#region Homing Attack Reticle
 	/// <summary> Active lockon target shown on the HUD. </summary>
 	public Node3D Target
 	{
@@ -44,14 +46,11 @@ public partial class PlayerLockonController : Node3D
 	private readonly float DistanceFudgeAmount = 1f;
 	private readonly Array<Node3D> activeTargets = []; // List of targetable objects
 
-	/// <summary> Enables detection of new lockonTargets. </summary>
+	/// <summary> Should the controller check for new lockonTargets? </summary>
 	public bool IsMonitoring { get; set; }
-
 	public bool IsHomingAttacking { get; set; }
 	public bool IsPerfectHomingAttack { get; private set; }
 	private bool monitoringPerfectHomingAttack;
-	[Export]
-	private AudioStreamPlayer perfectSFX;
 	public void EnablePerfectHomingAttack() => monitoringPerfectHomingAttack = true;
 	public void DisablePerfectHomingAttack() => monitoringPerfectHomingAttack = false;
 	public Vector3 HomingAttackDirection => Target != null ? (Target.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
@@ -277,9 +276,7 @@ public partial class PlayerLockonController : Node3D
 		else
 			lockonAnimator.Play("enable");
 	}
-	#endregion
 
-	#region Bouncing
 	/* REFACTOR TODO
 	Move to separate movement state.
 	[Export]
@@ -349,7 +346,6 @@ public partial class PlayerLockonController : Node3D
 		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 	}
 	*/
-	#endregion
 
 	// Targeting areas on the lockon layer
 	public void OnTargetTriggerEnter(Area3D area)

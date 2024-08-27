@@ -9,6 +9,10 @@ public partial class FallState : PlayerState
 	private PlayerState landState;
 	[Export]
 	private PlayerState stompState;
+	[Export]
+	private PlayerState jumpDashState;
+	[Export]
+	private PlayerState homingAttackState;
 
 	private float turningVelocity;
 
@@ -20,6 +24,15 @@ public partial class FallState : PlayerState
 
 		if (Player.CheckGround())
 			return landState;
+
+		if (Player.Controller.IsJumpBufferActive)
+		{
+			Player.Controller.ResetJumpBuffer();
+			if (Player.Lockon.Target != null && Player.Lockon.IsTargetAttackable)
+				return homingAttackState;
+
+			return jumpDashState;
+		}
 
 		if (Player.Controller.IsActionBufferActive)
 		{

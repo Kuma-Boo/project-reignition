@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=3 uid="uid://bbbuqgxfhuh8k"]
+[gd_scene load_steps=87 format=3 uid="uid://bbbuqgxfhuh8k"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -15,6 +15,8 @@
 [ext_resource type="Script" path="res://object/player/resource/script/states/BackflipState.cs" id="9_7wp0f"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStatsController.cs" id="9_ewscv"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/StompState.cs" id="10_eoh5j"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/JumpDashState.cs" id="11_80bi3"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/HomingAttackState.cs" id="12_ssfet"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateController.cs" id="13_j0n3v"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerSkillController.cs" id="14_ypfmd"]
 [ext_resource type="Material" uid="uid://bklx3tbpw7s8e" path="res://object/player/resource/model/material/SpeedbreakOverlay.tres" id="17_afci3"]
@@ -35,16 +37,20 @@
 [ext_resource type="AudioStream" uid="uid://cxgc0jnakrbdo" path="res://sound/sfx/system/lockon.wav" id="32_gqfm4"]
 [ext_resource type="AudioStream" uid="uid://d4inds2qntnj8" path="res://sound/sfx/player/perfect strike.wav" id="33_kfq5j"]
 
-[sub_resource type="Curve" id="Curve_jakcp"]
-_data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hfii6"]
+radius = 0.3
+height = 0.8
+
+[sub_resource type="Curve" id="Curve_0y4at"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0645833, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0777784, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 4
 
 [sub_resource type="Curve" id="Curve_l0cmy"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 0), 0.0, 0.0, 0, 0, Vector2(0.4, 0.5), 4.05151, 4.05151, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="Curve" id="Curve_0y4at"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0645833, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0777784, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_jakcp"]
+_data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
 point_count = 4
 
 [sub_resource type="SphereMesh" id="SphereMesh_f0gyp"]
@@ -476,7 +482,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:position")
+tracks/0/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -488,7 +494,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
+tracks/1/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -500,7 +506,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:disabled")
+tracks/2/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -560,7 +566,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:height")
+tracks/7/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:height")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -572,7 +578,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:rotation")
+tracks/8/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:rotation")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -596,7 +602,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Components/StageTriggerDetector/CollisionShape3D:shape:height")
+tracks/10/path = NodePath("StageTriggerDetector/CollisionShape3D:shape:height")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -608,7 +614,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Components/StageTriggerDetector/CollisionShape3D:shape:radius")
+tracks/11/path = NodePath("StageTriggerDetector/CollisionShape3D:shape:radius")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -620,7 +626,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Components/StageTriggerDetector/CollisionShape3D:position")
+tracks/12/path = NodePath("StageTriggerDetector/CollisionShape3D:position")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -660,7 +666,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
+tracks/2/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -696,7 +702,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:height")
+tracks/5/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:height")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -708,7 +714,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:rotation")
+tracks/6/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:rotation")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -720,7 +726,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:position")
+tracks/7/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -748,7 +754,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:disabled")
+tracks/0/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -789,7 +795,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
+tracks/2/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -825,7 +831,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:height")
+tracks/5/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:height")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -837,7 +843,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:rotation")
+tracks/6/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:rotation")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -849,7 +855,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:position")
+tracks/7/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -873,7 +879,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Components/StageTriggerDetector/CollisionShape3D:shape:height")
+tracks/9/path = NodePath("StageTriggerDetector/CollisionShape3D:shape:height")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -885,7 +891,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Components/StageTriggerDetector/CollisionShape3D:position")
+tracks/10/path = NodePath("StageTriggerDetector/CollisionShape3D:position")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -953,7 +959,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
+tracks/2/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -989,7 +995,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:height")
+tracks/5/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:height")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -1001,7 +1007,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:rotation")
+tracks/6/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:rotation")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -1013,7 +1019,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:position")
+tracks/7/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -1041,7 +1047,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
+tracks/0/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1053,7 +1059,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:height")
+tracks/1/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:height")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -1065,7 +1071,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:position")
+tracks/2/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -1077,7 +1083,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:rotation")
+tracks/3/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -1117,7 +1123,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
+tracks/2/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -1153,7 +1159,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:height")
+tracks/5/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:height")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -1165,7 +1171,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:rotation")
+tracks/6/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:rotation")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -1177,7 +1183,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:position")
+tracks/7/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -1201,7 +1207,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Components/StageTriggerDetector/CollisionShape3D:shape:height")
+tracks/9/path = NodePath("StageTriggerDetector/CollisionShape3D:shape:height")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -1213,7 +1219,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Components/StageTriggerDetector/CollisionShape3D:position")
+tracks/10/path = NodePath("StageTriggerDetector/CollisionShape3D:position")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -1229,7 +1235,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:position")
+tracks/0/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1241,7 +1247,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
+tracks/1/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -1253,7 +1259,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:height")
+tracks/2/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:height")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -1293,7 +1299,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
+tracks/2/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:radius")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -1329,7 +1335,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:shape:height")
+tracks/5/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:shape:height")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -1341,7 +1347,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:rotation")
+tracks/6/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:rotation")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -1353,7 +1359,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Components/Sonic/HitboxTrigger/CollisionShape3D:position")
+tracks/7/path = NodePath("Sonic/HitboxTrigger/CollisionShape3D:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -2376,28 +2382,104 @@ _data = {
 radius = 0.36
 height = 0.9
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hfii6"]
-radius = 0.3
-height = 0.8
-
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("Controller", "Stats", "StateMachine", "PathFollower", "State", "Skills", "Lockon") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "State", "Skills", "PathFollower", "Lockon") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
 floor_block_on_wall = false
 script = ExtResource("1_wygja")
-Controller = NodePath("Components/Controller")
-Stats = NodePath("Components/Stats")
-StateMachine = NodePath("Components/StateMachine")
-PathFollower = NodePath("Components/PathFollower")
-State = NodePath("Components/State")
-Skills = NodePath("Components/Sonic/Skills")
-Lockon = NodePath("Components/Lockon")
+StateMachine = NodePath("StateMachine")
+Controller = NodePath("Controller")
+Stats = NodePath("Stats")
+State = NodePath("State")
+Skills = NodePath("Sonic/Skills")
+PathFollower = NodePath("PathFollower")
+Lockon = NodePath("Lockon")
 CollisionSize = Vector2(0.3, 0.4)
 
-[node name="Components" type="Node3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("CapsuleShape3D_hfii6")
 
-[node name="Stats" type="Node" parent="Components"]
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("2_ehi1f")
+startingState = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("runState", "backstepState", "jumpState", "fallState")]
+script = ExtResource("3_7invc")
+runState = NodePath("../Run")
+backstepState = NodePath("../Backstep")
+jumpState = NodePath("../Jump")
+fallState = NodePath("../Fall")
+
+[node name="Run" type="Node" parent="StateMachine" node_paths=PackedStringArray("fallState", "idleState", "backstepState", "jumpState", "backflipState")]
+script = ExtResource("7_1ojgh")
+fallState = NodePath("../Fall")
+idleState = NodePath("../Idle")
+backstepState = NodePath("../Backstep")
+jumpState = NodePath("../Jump")
+backflipState = NodePath("../Backflip")
+turningSpeedLossCurve = SubResource("Curve_0y4at")
+
+[node name="Backstep" type="Node" parent="StateMachine" node_paths=PackedStringArray("fallState", "idleState", "runState", "jumpState", "backflipState")]
+script = ExtResource("8_0ksv7")
+fallState = NodePath("../Fall")
+idleState = NodePath("../Idle")
+runState = NodePath("../Run")
+jumpState = NodePath("../Jump")
+backflipState = NodePath("../Backflip")
+
+[node name="Jump" type="Node" parent="StateMachine" node_paths=PackedStringArray("fallState", "landState", "stompState", "jumpDashState", "homingAttackState")]
+script = ExtResource("4_ufscl")
+fallState = NodePath("../Fall")
+landState = NodePath("../Land")
+stompState = NodePath("../Stomp")
+jumpDashState = NodePath("../JumpDash")
+homingAttackState = NodePath("../HomingAttack")
+
+[node name="Backflip" type="Node" parent="StateMachine" node_paths=PackedStringArray("landState", "jumpDashState", "homingAttackState")]
+script = ExtResource("9_7wp0f")
+landState = NodePath("../Land")
+jumpDashState = NodePath("../JumpDash")
+homingAttackState = NodePath("../HomingAttack")
+backflipHeight = 2.4
+
+[node name="Stomp" type="Node" parent="StateMachine" node_paths=PackedStringArray("landState")]
+script = ExtResource("10_eoh5j")
+landState = NodePath("../Land")
+
+[node name="Fall" type="Node" parent="StateMachine" node_paths=PackedStringArray("landState", "stompState", "jumpDashState", "homingAttackState")]
+script = ExtResource("5_niuke")
+landState = NodePath("../Land")
+stompState = NodePath("../Stomp")
+jumpDashState = NodePath("../JumpDash")
+homingAttackState = NodePath("../HomingAttack")
+
+[node name="Land" type="Node" parent="StateMachine" node_paths=PackedStringArray("runState", "idleState", "backstepState")]
+script = ExtResource("6_ihvo7")
+runState = NodePath("../Run")
+idleState = NodePath("../Idle")
+backstepState = NodePath("../Backstep")
+
+[node name="JumpDash" type="Node" parent="StateMachine" node_paths=PackedStringArray("landState", "stompState")]
+script = ExtResource("11_80bi3")
+landState = NodePath("../Land")
+stompState = NodePath("../Stomp")
+jumpDashSpeed = 36.0
+jumpDashPower = 4.0
+jumpDashGravity = 18.0
+jumpDashMaxGravity = 24.0
+
+[node name="HomingAttack" type="Node" parent="StateMachine" node_paths=PackedStringArray("landState", "stompState")]
+script = ExtResource("12_ssfet")
+landState = NodePath("../Land")
+stompState = NodePath("../Stomp")
+
+[node name="Controller" type="Node" parent="."]
+script = ExtResource("2_pk07e")
+InputCurve = SubResource("Curve_l0cmy")
+
+[node name="Stats" type="Node" parent="."]
 script = ExtResource("9_ewscv")
 baseGroundSpeed = 28
 baseGroundTraction = 8
@@ -2434,85 +2516,27 @@ baseGrindFriction = 4
 baseGrindTurnaround = 6
 sidleMovementCurve = SubResource("Curve_jakcp")
 
-[node name="Controller" type="Node" parent="Components"]
-script = ExtResource("2_pk07e")
-InputCurve = SubResource("Curve_l0cmy")
-
-[node name="StateMachine" type="Node" parent="Components"]
-script = ExtResource("2_ehi1f")
-startingState = NodePath("Idle")
-
-[node name="Idle" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState", "backstepState", "jumpState", "fallState")]
-script = ExtResource("3_7invc")
-runState = NodePath("../Run")
-backstepState = NodePath("../Backstep")
-jumpState = NodePath("../Jump")
-fallState = NodePath("../Fall")
-
-[node name="Run" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState", "backstepState", "jumpState", "backflipState")]
-script = ExtResource("7_1ojgh")
-fallState = NodePath("../Fall")
-idleState = NodePath("../Idle")
-backstepState = NodePath("../Backstep")
-jumpState = NodePath("../Jump")
-backflipState = NodePath("../Backflip")
-turningSpeedLossCurve = SubResource("Curve_0y4at")
-
-[node name="Backstep" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState", "runState", "jumpState", "backflipState")]
-script = ExtResource("8_0ksv7")
-fallState = NodePath("../Fall")
-idleState = NodePath("../Idle")
-runState = NodePath("../Run")
-jumpState = NodePath("../Jump")
-backflipState = NodePath("../Backflip")
-
-[node name="Jump" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "landState", "stompState")]
-script = ExtResource("4_ufscl")
-fallState = NodePath("../Fall")
-landState = NodePath("../Land")
-stompState = NodePath("../Stomp")
-
-[node name="Backflip" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState")]
-script = ExtResource("9_7wp0f")
-landState = NodePath("../Land")
-backflipHeight = 2.4
-
-[node name="Stomp" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState")]
-script = ExtResource("10_eoh5j")
-landState = NodePath("../Land")
-
-[node name="Fall" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState", "stompState")]
-script = ExtResource("5_niuke")
-landState = NodePath("../Land")
-stompState = NodePath("../Stomp")
-
-[node name="Land" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState", "idleState", "backstepState")]
-script = ExtResource("6_ihvo7")
-runState = NodePath("../Run")
-idleState = NodePath("../Idle")
-backstepState = NodePath("../Backstep")
-
-[node name="State" type="Node" parent="Components" node_paths=PackedStringArray("hitboxAnimator")]
+[node name="State" type="Node" parent="." node_paths=PackedStringArray("hitboxAnimator")]
 script = ExtResource("13_j0n3v")
 hitboxAnimator = NodePath("../Sonic/HitboxTrigger/AnimationPlayer")
 
-[node name="PathFollower" type="PathFollow3D" parent="Components"]
+[node name="PathFollower" type="PathFollow3D" parent="."]
 visible = false
 use_model_front = true
 cubic_interp = false
 loop = false
 script = ExtResource("7_afg5r")
 
-[node name="Debug" type="MeshInstance3D" parent="Components/PathFollower"]
+[node name="Debug" type="MeshInstance3D" parent="PathFollower"]
 mesh = SubResource("SphereMesh_f0gyp")
 
-[node name="Tilt" type="MeshInstance3D" parent="Components/PathFollower/Debug"]
+[node name="Tilt" type="MeshInstance3D" parent="PathFollower/Debug"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
 mesh = SubResource("BoxMesh_t4t3r")
 
-[node name="Sonic" parent="Components" instance=ExtResource("3_rkpjr")]
+[node name="Sonic" parent="." instance=ExtResource("3_rkpjr")]
 
-[node name="Skills" type="Node3D" parent="Components/Sonic" node_paths=PackedStringArray("speedBreakAnimator", "speedBreakSFX", "timeBreakAnimator", "timeBreakSFX", "heartbeatSFX")]
+[node name="Skills" type="Node3D" parent="Sonic" node_paths=PackedStringArray("speedBreakAnimator", "speedBreakSFX", "timeBreakAnimator", "timeBreakSFX", "heartbeatSFX")]
 script = ExtResource("14_ypfmd")
 countdownBoostSpeed = 32.0
 landingDashSpeed = 32.0
@@ -2526,19 +2550,19 @@ heartbeatSFX = NodePath("HeartbeatSFX")
 speedbreakOverlayMaterial = ExtResource("17_afci3")
 speedBreakSpeed = 64.0
 
-[node name="SpeedBreakSFX" type="AudioStreamPlayer" parent="Components/Sonic/Skills"]
+[node name="SpeedBreakSFX" type="AudioStreamPlayer" parent="Sonic/Skills"]
 stream = ExtResource("18_7lpol")
 bus = &"GAME SFX"
 
-[node name="TimeBreakSFX" type="AudioStreamPlayer" parent="Components/Sonic/Skills"]
+[node name="TimeBreakSFX" type="AudioStreamPlayer" parent="Sonic/Skills"]
 stream = ExtResource("19_yunuo")
 bus = &"GAME SFX"
 
-[node name="HeartbeatSFX" type="AudioStreamPlayer" parent="Components/Sonic/Skills"]
+[node name="HeartbeatSFX" type="AudioStreamPlayer" parent="Sonic/Skills"]
 stream = ExtResource("20_8j2sa")
 bus = &"GAME SFX"
 
-[node name="TimeBreak" type="ColorRect" parent="Components/Sonic/Skills"]
+[node name="TimeBreak" type="ColorRect" parent="Sonic/Skills"]
 material = SubResource("ShaderMaterial_7rw8q")
 anchors_preset = 15
 anchor_right = 1.0
@@ -2549,14 +2573,14 @@ pivot_offset = Vector2(960, 540)
 mouse_filter = 2
 metadata/_edit_lock_ = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Components/Sonic/Skills/TimeBreak"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sonic/Skills/TimeBreak"]
 libraries = {
 "": SubResource("AnimationLibrary_m0ixc")
 }
 
-[node name="SpeedBreak" type="Node3D" parent="Components/Sonic/Skills"]
+[node name="SpeedBreak" type="Node3D" parent="Sonic/Skills"]
 
-[node name="Cluster" type="GPUParticles3D" parent="Components/Sonic/Skills/SpeedBreak" node_paths=PackedStringArray("subSystems")]
+[node name="Cluster" type="GPUParticles3D" parent="Sonic/Skills/SpeedBreak" node_paths=PackedStringArray("subSystems")]
 transform = Transform3D(1.31134e-07, -4.37114e-08, 1, 4.37114e-08, 1, 4.37114e-08, -1, 4.37114e-08, 1.31134e-07, 0, 0.3, 1.4)
 layers = 32
 cast_shadow = 0
@@ -2574,7 +2598,7 @@ draw_pass_1 = ExtResource("23_duu2r")
 script = ExtResource("24_n4i5r")
 subSystems = [NodePath("Streak")]
 
-[node name="Streak" type="GPUParticles3D" parent="Components/Sonic/Skills/SpeedBreak/Cluster"]
+[node name="Streak" type="GPUParticles3D" parent="Sonic/Skills/SpeedBreak/Cluster"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.37338e-15, 0, -1.37338e-15, 1, -1, 4.37114e-08, 1.31134e-07)
 layers = 32
 cast_shadow = 0
@@ -2590,15 +2614,15 @@ transform_align = 2
 process_material = SubResource("ParticleProcessMaterial_74ibn")
 draw_pass_1 = ExtResource("25_tv3ro")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="Components/Sonic/Skills/SpeedBreak"]
+[node name="CanvasLayer" type="CanvasLayer" parent="Sonic/Skills/SpeedBreak"]
 layer = -10
 
-[node name="ScreenShockBB" type="BackBufferCopy" parent="Components/Sonic/Skills/SpeedBreak/CanvasLayer"]
+[node name="ScreenShockBB" type="BackBufferCopy" parent="Sonic/Skills/SpeedBreak/CanvasLayer"]
 position = Vector2(6.10352e-05, -6.10352e-05)
 copy_mode = 2
 rect = Rect2(0, 0, 1920, 1080)
 
-[node name="ScreenShock" type="ColorRect" parent="Components/Sonic/Skills/SpeedBreak/CanvasLayer/ScreenShockBB"]
+[node name="ScreenShock" type="ColorRect" parent="Sonic/Skills/SpeedBreak/CanvasLayer/ScreenShockBB"]
 visible = false
 material = SubResource("ShaderMaterial_er50h")
 anchors_preset = 15
@@ -2612,11 +2636,11 @@ pivot_offset = Vector2(960, 540)
 mouse_filter = 2
 metadata/_edit_lock_ = true
 
-[node name="BlurBB" type="BackBufferCopy" parent="Components/Sonic/Skills/SpeedBreak/CanvasLayer"]
+[node name="BlurBB" type="BackBufferCopy" parent="Sonic/Skills/SpeedBreak/CanvasLayer"]
 copy_mode = 2
 rect = Rect2(0, 0, 1920, 1080)
 
-[node name="RadialBlur" type="ColorRect" parent="Components/Sonic/Skills/SpeedBreak/CanvasLayer/BlurBB"]
+[node name="RadialBlur" type="ColorRect" parent="Sonic/Skills/SpeedBreak/CanvasLayer/BlurBB"]
 visible = false
 material = SubResource("ShaderMaterial_fb7an")
 anchors_preset = 15
@@ -2628,29 +2652,29 @@ pivot_offset = Vector2(960, 540)
 mouse_filter = 2
 metadata/_edit_lock_ = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Components/Sonic/Skills/SpeedBreak"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sonic/Skills/SpeedBreak"]
 root_node = NodePath("../..")
 libraries = {
 "": SubResource("AnimationLibrary_5ilpv")
 }
 
-[node name="HitboxTrigger" type="Area3D" parent="Components/Sonic" groups=["player"]]
+[node name="HitboxTrigger" type="Area3D" parent="Sonic" groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Components/Sonic/HitboxTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sonic/HitboxTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("CapsuleShape3D_4p752")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Components/Sonic/HitboxTrigger"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sonic/HitboxTrigger"]
 deterministic = true
-root_node = NodePath("../../../..")
+root_node = NodePath("../../..")
 callback_mode_process = 0
 libraries = {
 "": SubResource("AnimationLibrary_8j388")
 }
 
-[node name="Lockon" type="Area3D" parent="Components" node_paths=PackedStringArray("areaTrigger", "perfectSFX", "lockonReticle", "lockonAnimator")]
+[node name="Lockon" type="Area3D" parent="." node_paths=PackedStringArray("areaTrigger", "perfectSFX", "lockonReticle", "lockonAnimator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 collision_layer = 0
 collision_mask = 4
@@ -2661,114 +2685,110 @@ perfectSFX = NodePath("PerfectStrike")
 lockonReticle = NodePath("LockonReticle")
 lockonAnimator = NodePath("LockonReticle/LockonAnimator")
 
-[node name="Collision" type="CollisionShape3D" parent="Components/Lockon"]
+[node name="Collision" type="CollisionShape3D" parent="Lockon"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.3)
 shape = SubResource("130")
 
-[node name="LockonReticle" type="Node2D" parent="Components/Lockon"]
+[node name="LockonReticle" type="Node2D" parent="Lockon"]
 visible = false
 scale = Vector2(2, 2)
 
-[node name="Main" type="Sprite2D" parent="Components/Lockon/LockonReticle"]
+[node name="Main" type="Sprite2D" parent="Lockon/LockonReticle"]
 material = SubResource("ShaderMaterial_tq0uy")
 texture = ExtResource("31_7m8b5")
 region_enabled = true
 region_rect = Rect2(280, 50, 21, 22)
 
-[node name="Surround" type="Sprite2D" parent="Components/Lockon/LockonReticle/Main"]
+[node name="Surround" type="Sprite2D" parent="Lockon/LockonReticle/Main"]
 modulate = Color(1, 1, 1, 0.588235)
 scale = Vector2(1.25, 1.25)
 texture = ExtResource("31_7m8b5")
 region_enabled = true
 region_rect = Rect2(128, 0, 128, 128)
 
-[node name="Reticle" type="Sprite2D" parent="Components/Lockon/LockonReticle/Main"]
+[node name="Reticle" type="Sprite2D" parent="Lockon/LockonReticle/Main"]
 use_parent_material = true
 scale = Vector2(1.3, 1.3)
 texture = ExtResource("31_7m8b5")
 region_enabled = true
 region_rect = Rect2(15, 15, 98, 98)
 
-[node name="Fade" type="Sprite2D" parent="Components/Lockon/LockonReticle/Main"]
+[node name="Fade" type="Sprite2D" parent="Lockon/LockonReticle/Main"]
 modulate = Color(1, 1, 1, 0.588235)
 scale = Vector2(1.25, 1.25)
 texture = ExtResource("31_7m8b5")
 region_enabled = true
 region_rect = Rect2(128, 0, 128, 128)
 
-[node name="PerfectHomingAttack" type="Node2D" parent="Components/Lockon/LockonReticle"]
+[node name="PerfectHomingAttack" type="Node2D" parent="Lockon/LockonReticle"]
 visible = false
 rotation = -3.14159
 
-[node name="1" type="Sprite2D" parent="Components/Lockon/LockonReticle/PerfectHomingAttack"]
+[node name="1" type="Sprite2D" parent="Lockon/LockonReticle/PerfectHomingAttack"]
 position = Vector2(-16, -16)
 rotation = 0.785398
 texture = ExtResource("31_7m8b5")
 region_enabled = true
 region_rect = Rect2(263, 20, 42, 14)
 
-[node name="2" type="Sprite2D" parent="Components/Lockon/LockonReticle/PerfectHomingAttack"]
+[node name="2" type="Sprite2D" parent="Lockon/LockonReticle/PerfectHomingAttack"]
 position = Vector2(-16, 16)
 rotation = 5.49779
 texture = ExtResource("31_7m8b5")
 region_enabled = true
 region_rect = Rect2(263, 20, 42, 14)
 
-[node name="3" type="Sprite2D" parent="Components/Lockon/LockonReticle/PerfectHomingAttack"]
+[node name="3" type="Sprite2D" parent="Lockon/LockonReticle/PerfectHomingAttack"]
 position = Vector2(16, -16)
 rotation = 2.35619
 texture = ExtResource("31_7m8b5")
 region_enabled = true
 region_rect = Rect2(263, 20, 42, 14)
 
-[node name="4" type="Sprite2D" parent="Components/Lockon/LockonReticle/PerfectHomingAttack"]
+[node name="4" type="Sprite2D" parent="Lockon/LockonReticle/PerfectHomingAttack"]
 position = Vector2(16, 16)
 rotation = 3.92699
 texture = ExtResource("31_7m8b5")
 region_enabled = true
 region_rect = Rect2(263, 20, 42, 14)
 
-[node name="LockonAnimator" type="AnimationPlayer" parent="Components/Lockon/LockonReticle"]
+[node name="LockonAnimator" type="AnimationPlayer" parent="Lockon/LockonReticle"]
 libraries = {
 "": SubResource("AnimationLibrary_r77q1")
 }
 next/enable = &"loop"
 blend_times = [&"perfect-enable", &"perfect-strike", 0.1]
 
-[node name="RotationAnimator" type="AnimationPlayer" parent="Components/Lockon/LockonReticle"]
+[node name="RotationAnimator" type="AnimationPlayer" parent="Lockon/LockonReticle"]
 libraries = {
 "": SubResource("AnimationLibrary_jbwmb")
 }
 autoplay = "loop"
 
-[node name="Lockon" type="AudioStreamPlayer" parent="Components/Lockon"]
+[node name="Lockon" type="AudioStreamPlayer" parent="Lockon"]
 stream = ExtResource("32_gqfm4")
 bus = &"GAME SFX"
 
-[node name="PerfectStrike" type="AudioStreamPlayer" parent="Components/Lockon"]
+[node name="PerfectStrike" type="AudioStreamPlayer" parent="Lockon"]
 stream = ExtResource("33_kfq5j")
 bus = &"GAME SFX"
 
-[node name="StageTriggerDetector" type="Area3D" parent="Components" groups=["player detection"]]
+[node name="StageTriggerDetector" type="Area3D" parent="." groups=["player detection"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 collision_layer = 2
 collision_mask = 9
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Components/StageTriggerDetector"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StageTriggerDetector"]
 shape = SubResource("CapsuleShape3D_pgn8o")
 
-[node name="Shahra" parent="Components" node_paths=PackedStringArray("PathController") instance=ExtResource("6_3bugb")]
+[node name="Shahra" parent="." node_paths=PackedStringArray("PathController") instance=ExtResource("6_3bugb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 visible = false
 PathController = NodePath("../PathFollower")
 travelMagnitude = Vector3(1, 0.3, 0.2)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
-shape = SubResource("CapsuleShape3D_hfii6")
-
-[connection signal="area_entered" from="Components/Lockon" to="Components/Lockon" method="OnTargetTriggerEnter"]
-[connection signal="area_exited" from="Components/Lockon" to="Components/Lockon" method="OnTargetTriggerExit"]
-[connection signal="body_entered" from="Components/Lockon" to="Components/Lockon" method="OnTargetBodyEnter"]
-[connection signal="body_exited" from="Components/Lockon" to="Components/Lockon" method="OnTargetBodyExit"]
-[connection signal="body_exited" from="Components/StageTriggerDetector" to="." method="OnObjectCollisionExit"]
+[connection signal="area_entered" from="Lockon" to="Lockon" method="OnTargetTriggerEnter"]
+[connection signal="area_exited" from="Lockon" to="Lockon" method="OnTargetTriggerExit"]
+[connection signal="body_entered" from="Lockon" to="Lockon" method="OnTargetBodyEnter"]
+[connection signal="body_exited" from="Lockon" to="Lockon" method="OnTargetBodyExit"]
+[connection signal="body_exited" from="StageTriggerDetector" to="." method="OnObjectCollisionExit"]
