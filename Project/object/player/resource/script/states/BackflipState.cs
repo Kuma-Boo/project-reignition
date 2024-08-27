@@ -17,26 +17,32 @@ public partial class BackflipState : PlayerState
 	public override void EnterState()
 	{
 		turningVelocity = 0;
-		Player.MoveSpeed = Player.Stats.BackflipSettings.Speed;
 		Player.IsMovingBackward = true;
+		Player.MovementAngle = Player.PathFollower.BackAngle;
+		Player.MoveSpeed = Player.Stats.BackflipSettings.Speed;
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(backflipHeight);
 
-		/*
-			REFACTOR TODO Add Effects
-			Effect.PlayActionSFX(Effect.JumpSfx);
-			Animator.BackflipAnimation();
+		/* REFACTOR TODO: Add Effects
+		CanJumpDash = true;
 
-			if (Skills.IsSkillEquipped(SkillKey.BackstepAttack))
-			{
-				Effect.PlayFireFX();
-				AttackState = AttackStates.Weak;
-			}
+		SetActionState(ActionStates.Backflip);
+
+		Effect.PlayActionSFX(Effect.JumpSfx);
+		Animator.BackflipAnimation();
+
+		if (Skills.IsSkillEquipped(SkillKey.BackstepAttack))
+		{
+			Effect.PlayFireFX();
+			AttackState = AttackStates.Weak;
+		}
 		*/
 	}
 
 	public override PlayerState ProcessPhysics()
 	{
 		UpdateMoveSpeed();
+		UpdateVerticalSpeed();
+		Player.ApplyMovement();
 
 		if (Player.CheckGround())
 			return landState;
@@ -58,7 +64,7 @@ public partial class BackflipState : PlayerState
 
 		if (isHoldingBackward)
 			Player.MoveSpeed = Player.Stats.BackflipSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
-		else 		if (Mathf.IsZeroApprox(inputStrength))
+		else if (Mathf.IsZeroApprox(inputStrength))
 			Player.MoveSpeed = Player.Stats.BackflipSettings.UpdateInterpolate(Player.MoveSpeed, 0);
 
 		UpdateTurning(targetMovementAngle);
@@ -75,5 +81,10 @@ public partial class BackflipState : PlayerState
 		bool isRecentering = Player.Controller.IsRecentering(movementDeltaAngle, inputDeltaAngle);
 		float turnAmount = isRecentering ? Player.Stats.RecenterTurnAmount : Player.Stats.MaxTurnAmount;
 		Player.MovementAngle = ExtensionMethods.SmoothDampAngle(Player.MovementAngle, targetMovementAngle, ref turningVelocity, turnAmount);
+	}
+
+	private void UpdateVerticalSpeed()
+	{
+		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
 	}
 }
