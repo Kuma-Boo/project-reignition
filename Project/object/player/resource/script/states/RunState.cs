@@ -42,10 +42,10 @@ public partial class RunState : PlayerState
 		if (Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
-			
+
 			float inputAngle = Player.GetTargetMovementAngle();
 			float inputStrength = Player.Controller.GetInputStrength();
-			if(!Mathf.IsZeroApprox(inputStrength) &&
+			if (!Mathf.IsZeroApprox(inputStrength) &&
 				Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 			{
 				return backflipState;
@@ -60,7 +60,7 @@ public partial class RunState : PlayerState
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
 
-		if (ExtensionMethods.DotAngle(Player.MovementAngle, Player.PathFollower.ForwardAngle) < 0)
+		if (ExtensionMethods.DotAngle(Player.MovementAngle, Player.PathFollower.ForwardAngle) < -.1f)
 			return backstepState;
 
 		return null;

@@ -22,7 +22,7 @@ public partial class PlayerController : CharacterBody3D
 
 	/// <summary> Global movement angle, in radians. Note - VISUAL ROTATION is controlled by CharacterAnimator.cs. </summary>
 	public float MovementAngle { get; set; }
-	public float PathTurnInfluence => 0;//PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
+	public float PathTurnInfluence => 0; // REFACTOR TODO PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
 	public Vector3 GetMovementDirection()
 	{
 		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
