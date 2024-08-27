@@ -83,12 +83,12 @@ public partial class RunState : PlayerState
 			return;
 		}
 
-		ProcessTurning(targetMovementAngle, inputDot); // Turning only updates when accelerating
+		ProcessTurning(targetMovementAngle); // Turning only updates when accelerating
 		ApplySpeedLoss(targetMovementAngle, inputDot);
 		Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
 	}
 
-	private void ProcessTurning(float targetMovementAngle, float inputDot)
+	private void ProcessTurning(float targetMovementAngle)
 	{
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 		{

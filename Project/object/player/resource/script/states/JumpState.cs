@@ -30,8 +30,10 @@ public partial class JumpState : PlayerState
 
 	private float turningVelocity;
 
-	/// <summary> How fast the jump button needs to be released to count as an "acceleration jump." </summary>
+	/// <summary> How fast the jump button needs to be released to count as an Acceleration Jump. </summary>
 	private readonly float AccelerationJumpLength = .1f;
+	/// <summary> Maximum deviation from PathFollower.ForwardAngle allowed during an Acceleration Jump. </summary>
+	private readonly float MaxAccelerationJumpTurnAmount = Mathf.Pi * .1f;
 
 	public override void EnterState()
 	{
@@ -92,6 +94,7 @@ public partial class JumpState : PlayerState
 			return;
 		}
 
+		UpdateTurning(targetMovementAngle);
 		if (isAccelerationJump)
 		{
 			// Prevent the player from losing speed during an acceleration jump
@@ -100,6 +103,29 @@ public partial class JumpState : PlayerState
 		}
 
 		Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
+	}
+
+	private void UpdateTurning(float targetMovementAngle)
+	{
+		if (Mathf.IsZeroApprox(Player.MoveSpeed))
+		{
+			Player.MovementAngle = targetMovementAngle;
+			return;
+		}
+		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
+
+		targetMovementAngle += Player.PathTurnInfluence;
+		targetMovementAngle = Player.Controller.ImproveAnalogPrecision(targetMovementAngle, Player.PathFollower.ForwardAngle);
+
+		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, targetMovementAngle);
+		float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, Player.PathFollower.ForwardAngle);
+		bool isRecentering = Player.Controller.IsRecentering(movementDeltaAngle, inputDeltaAngle);
+		float maxTurnAmount = isRecentering ? Player.Stats.RecenterTurnAmount : Player.Stats.MaxTurnAmount;
+
+		float turnSmoothing = Mathf.Lerp(Player.Stats.MinTurnAmount, maxTurnAmount, speedRatio);
+		Player.MovementAngle = ExtensionMethods.SmoothDampAngle(Player.MovementAngle + Player.PathTurnInfluence, targetMovementAngle, ref turningVelocity, turnSmoothing);
+		if (isAccelerationJump) // Clamp acceleration jumps so they don't get out of control
+			Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, MaxAccelerationJumpTurnAmount);
 	}
 
 	private void UpdateVerticalSpeed()
