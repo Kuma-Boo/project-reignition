@@ -39,7 +39,7 @@ public partial class FallState : PlayerState
 			return;
 		}
 
-		float targetMovementAngle = Player.GetTargetMovementAngle();
+		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
 		float inputDot = ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle);
 		if ((inputDot < -.75f && !Mathf.IsZeroApprox(Player.MoveSpeed)) || Input.IsActionPressed("button_brake")) // Turning around
 		{

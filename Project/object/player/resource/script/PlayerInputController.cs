@@ -5,12 +5,15 @@ namespace Project.Gameplay;
 
 public partial class PlayerInputController : Node
 {
+	private PlayerController Player { get; set; }
+	public void RegisterPlayer(PlayerController player) => Player = player;
+
 	[Export]
 	private Curve InputCurve { get; set; }
 	public float GetInputStrength()
 	{
 		float inputLength = InputAxis.Length();
-		if(inputLength <= DeadZone)
+		if (inputLength <= DeadZone)
 			inputLength = 0;
 		return InputCurve.Sample(inputLength);
 	}
@@ -72,6 +75,39 @@ public partial class PlayerInputController : Node
 		actionBuffer = Mathf.MoveToward(actionBuffer, 0, PhysicsManager.physicsDelta);
 	}
 
+	public enum InputMode
+	{
+		Auto, // Calls GetAutomaticInputMode
+		Camera, // Inputs are rotated with the camera
+		Path, // Inputs are rotated with the path (Up is always forward)
+		Global, // I think this is unused for now.
+	}
+
+	/// <summary> Gets the dot angle between the player's input angle and movementAngle. </summary>
+	public float GetTargetMovementAngle(InputMode mode = InputMode.Auto)
+	{
+		if (mode == InputMode.Auto)
+			mode = GetAutomaticInputMode();
+
+		if (mode == InputMode.Camera)
+			return CameraInputAxis.AngleTo(Vector2.Down);
+
+		if (mode == InputMode.Path)
+			return InputAxis.Rotated(Player.PathFollower.ForwardAngle).AngleTo(Vector2.Down);
+
+		return InputAxis.AngleTo(Vector2.Down);
+	}
+
+	/// <summary> Returns the automatic input mode [based on the game's settings and] skills. </summary>
+	public InputMode GetAutomaticInputMode()
+	{
+		// TODO Add configuration option for path based inputs
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
+			return InputMode.Path;
+
+		return InputMode.Camera;
+	}
+
 	/// <summary>
 	/// Checks whether the player is holding a particular direction.
 	/// </summary>
@@ -88,11 +124,11 @@ public partial class PlayerInputController : Node
 	{
 		if (!Runtime.Instance.IsUsingController || IsHoldingDirection(inputAngle, referenceAngle))
 			return inputAngle;
-		
+
 		float deltaAngle = ExtensionMethods.DeltaAngleRad(referenceAngle, inputAngle);
-		if(deltaAngle < TurningDampingRange) 
+		if (deltaAngle < TurningDampingRange)
 			inputAngle -= deltaAngle * .5f;
-	
+
 		return inputAngle;
 	}
 

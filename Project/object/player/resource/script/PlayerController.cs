@@ -6,13 +6,19 @@ namespace Project.Gameplay;
 public partial class PlayerController : CharacterBody3D
 {
 	[Export]
+	public PlayerStateMachine StateMachine { get; private set; }
+	[Export]
 	public PlayerInputController Controller { get; private set; }
 	[Export]
 	public PlayerStatsController Stats { get; private set; }
 	[Export]
-	public PlayerStateMachine StateMachine { get; private set; }
+	public PlayerStateController State { get; private set; }
+	[Export]
+	public PlayerSkillController Skills { get; private set; }
 	[Export]
 	public PlayerPathController PathFollower { get; private set; }
+	[Export]
+	public PlayerLockonController Lockon { get; private set; }
 
 	/// <summary> Player's horizontal movespeed, ignoring slopes. </summary>
 	public float MoveSpeed { get; set; }
@@ -57,38 +63,21 @@ public partial class PlayerController : CharacterBody3D
 		MoveAndSlide();
 	}
 
-	public enum InputMode
+	/// <summary> Size to use for collision checks. </summary>
+	[Export]
+	public Vector2 CollisionSize;
+	/// <summary> Center of collision calculations </summary>
+	public Vector3 CenterPosition
 	{
-		Auto, // Calls GetAutomaticInputMode
-		Camera, // Inputs are rotated with the camera
-		Path, // Inputs are rotated with the path (Up is always forward)
-		Global, // I think this is unused for now.
+		get => GlobalPosition + (UpDirection * .4f);
+		set => GlobalPosition = value - (UpDirection * .4f);
 	}
-
-	/// <summary> Gets the dot angle between the player's input angle and movementAngle. </summary>
-	public float GetTargetMovementAngle(InputMode mode = InputMode.Auto)
+	public Vector3 CollisionPosition
 	{
-		if (mode == InputMode.Auto)
-			mode = GetAutomaticInputMode();
-
-		if (mode == InputMode.Camera)
-			return Controller.CameraInputAxis.AngleTo(Vector2.Down);
-
-		if (mode == InputMode.Path)
-			return Controller.InputAxis.Rotated(PathFollower.ForwardAngle).AngleTo(Vector2.Down);
-
-		return Controller.InputAxis.AngleTo(Vector2.Down);
+		get => GlobalPosition + (UpDirection * CollisionSize.Y);
+		set => GlobalPosition = value - (UpDirection * CollisionSize.Y);
 	}
-
-	/// <summary> Returns the automatic input mode [based on the game's settings and] skills. </summary>
-	public InputMode GetAutomaticInputMode()
-	{
-		// TODO Add configuration option for path based inputs
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
-			return InputMode.Path;
-
-		return InputMode.Camera;
-	}
+	private const float CollisionPadding = .02f;
 
 	/*
 	[Export]

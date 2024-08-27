@@ -41,7 +41,7 @@ public partial class BackstepState : PlayerState
 		{
 			Player.Controller.ResetJumpBuffer();
 
-			float inputAngle = Player.GetTargetMovementAngle();
+			float inputAngle = Player.Controller.GetTargetMovementAngle();
 			float inputStrength = Player.Controller.GetInputStrength();
 			if (!Mathf.IsZeroApprox(inputStrength) &&
 				Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
@@ -64,7 +64,7 @@ public partial class BackstepState : PlayerState
 			return;
 		}
 
-		float targetMovementAngle = Player.GetTargetMovementAngle();
+		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
 		float inputDot = ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle);
 		if ((inputDot <= 0f && !Mathf.IsZeroApprox(Player.MoveSpeed)) || Input.IsActionPressed("button_brake")) // Turning around
 		{

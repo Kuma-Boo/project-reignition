@@ -22,7 +22,7 @@ public partial class PlayerStateMachine : Node
 	}
 
 	/// <summary> Exit the current state and switch to a new state. </summary>
-	private void ChangeState(PlayerState state)
+	public void ChangeState(PlayerState state)
 	{
 		currentState?.ExitState();
 

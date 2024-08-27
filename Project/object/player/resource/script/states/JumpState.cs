@@ -86,7 +86,7 @@ public partial class JumpState : PlayerState
 			return;
 		}
 
-		float targetMovementAngle = Player.GetTargetMovementAngle();
+		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
 		float inputDot = ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle);
 		if ((inputDot < -.75f && !Mathf.IsZeroApprox(Player.MoveSpeed)) || Input.IsActionPressed("button_brake")) // Turning around
 		{
@@ -149,7 +149,7 @@ public partial class JumpState : PlayerState
 	{
 		isAccelerationJumpQueued = false;
 
-		if (ExtensionMethods.DotAngle(Player.GetTargetMovementAngle(), Player.PathFollower.ForwardAngle) < .5f ||
+		if (ExtensionMethods.DotAngle(Player.Controller.GetTargetMovementAngle(), Player.PathFollower.ForwardAngle) < .5f ||
 			Player.Controller.GetInputStrength() < .5f) // REFACTOR-TODO || Skills.IsSkillEquipped(SkillKey.Autorun))
 		{
 			return;
