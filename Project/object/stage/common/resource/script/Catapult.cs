@@ -50,7 +50,7 @@ public partial class Catapult : Launcher
 			return;
 		}
 
-		if (aimSFX.Playing && Character.ExternalController != this)
+		if (aimSFX.Playing) // REFACTOR TODO && Character.ExternalController != this)
 			SoundManager.FadeAudioPlayer(aimSFX);
 
 		switch (currentState)
@@ -67,10 +67,12 @@ public partial class Catapult : Launcher
 	private void ProcessLaunch()
 	{
 		tweener.CustomStep(PhysicsManager.physicsDelta);
-		if (Character.ExternalController != this)
+		/* REFACTOR TODO
+		if (Player.ExternalController != this)
 			return;
 
-		Character.UpdateExternalControl();
+		Player.UpdateExternalControl();
+		*/
 		if (armNode.Rotation.X < Mathf.Pi * .5f)
 			return;
 
@@ -93,7 +95,7 @@ public partial class Catapult : Launcher
 		}
 
 		// Update launch power
-		targetLaunchPower += Character.InputVertical * PowerAdjustmentSpeed;
+		targetLaunchPower += Player.Controller.InputVertical * PowerAdjustmentSpeed;
 		targetLaunchPower = Mathf.Clamp(targetLaunchPower, 0, 1);
 		launchRatio = ExtensionMethods.SmoothDamp(launchRatio, targetLaunchPower, ref launchPowerVelocity, PowerAdjustmentSmoothing);
 
@@ -102,7 +104,10 @@ public partial class Catapult : Launcher
 			aimSFX.Play();
 
 		UpdateArmRotation();
-		Character.UpdateExternalControl();
+		/*
+		REFACTOR TODO
+		Player.UpdateExternalControl();
+		*/
 	}
 
 	private void UpdateArmRotation()
@@ -114,10 +119,13 @@ public partial class Catapult : Launcher
 	private void OnEnteredCatapult()
 	{
 		currentState = CatapultState.Control;
-		Character.StartExternal(this, playerPositionNode);
-		Character.Effect.StartSpinFX();
-		Character.Animator.StartSpin(3f);
-		Character.Animator.SnapRotation(0);
+
+		/* REFACTOR TODO
+		Player.StartExternal(this, playerPositionNode);
+		Player.Effect.StartSpinFX();
+		Player.Animator.StartSpin(3f);
+		Player.Animator.SnapRotation(0);
+		*/
 
 		launchRatio = 1f;
 		targetLaunchPower = 0f;
@@ -136,7 +144,8 @@ public partial class Catapult : Launcher
 
 		if (isCancel)
 		{
-			Character.Effect.StopSpinFX();
+			// REFACTOR TODO
+			// Player.Effect.StopSpinFX();
 			tweener.TweenProperty(armNode, "rotation", Vector3.Zero, .2f * (1 - launchRatio)).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
 			tweener.TweenCallback(new Callable(this, MethodName.CancelCatapult));
 		}
@@ -156,7 +165,9 @@ public partial class Catapult : Launcher
 		// Cheat launch power slightly towards extremes
 		launchRatio = Mathf.SmoothStep(0, 1, launchRatio);
 		base.Activate();
-		Character.Animator.IsFallTransitionEnabled = false;
+
+		// REFACTOR TODO
+		// Player.Animator.IsFallTransitionEnabled = false;
 	}
 
 	private void CancelCatapult()
@@ -168,13 +179,14 @@ public partial class Catapult : Launcher
 
 		// Have the player jump out backwards
 		Vector3 destination = (this.Back().RemoveVertical() * 2f) + (Vector3.Down * 2f);
-		destination += Character.GlobalPosition;
+		destination += Player.GlobalPosition;
 
-		var settings = LaunchSettings.Create(Character.GlobalPosition, destination, 1f);
+		var settings = LaunchSettings.Create(Player.GlobalPosition, destination, 1f);
 		settings.IsJump = true;
-		Character.StartLauncher(settings);
-		Character.MovementAngle = Character.PathFollower.ForwardAngle;
-		Character.Animator.SnapRotation(Character.MovementAngle); // Reset visual rotation
+		Player.StartLauncher(settings);
+		Player.MovementAngle = Player.PathFollower.ForwardAngle;
+		// REFACTOR TODO
+		// Player.Animator.SnapRotation(Player.MovementAngle); // Reset visual rotation
 		enterSFX.Play();
 		EmitSignal(SignalName.PlayerExited);
 	}
@@ -191,13 +203,13 @@ public partial class Catapult : Launcher
 		currentState = CatapultState.Enter; // Start entering
 
 		// Disable break skills
-		Character.Skills.IsSpeedBreakEnabled = Character.Skills.IsTimeBreakEnabled = false;
-		Character.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredCatapult), (uint)ConnectFlags.OneShot);
+		Player.Skills.IsSpeedBreakEnabled = Player.Skills.IsTimeBreakEnabled = false;
+		Player.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredCatapult), (uint)ConnectFlags.OneShot);
 
 		// Have the player jump into the catapult
-		var settings = LaunchSettings.Create(Character.GlobalPosition, playerPositionNode.GlobalPosition, 2f);
+		var settings = LaunchSettings.Create(Player.GlobalPosition, playerPositionNode.GlobalPosition, 2f);
 		settings.IsJump = true;
-		Character.StartLauncher(settings);
+		Player.StartLauncher(settings);
 		EmitSignal(SignalName.PlayerEntered);
 	}
 

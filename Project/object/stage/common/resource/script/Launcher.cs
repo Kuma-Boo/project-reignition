@@ -154,6 +154,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 
 		LaunchSettings settings = LaunchSettings.Create(startPosition, endPosition, blendedMiddleHeight);
 		settings.UseAutoAlign = true;
+		settings.Launcher = this;
 
 		return settings;
 	}
@@ -168,11 +169,13 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		EmitSignal(SignalName.Activated);
 		PlayLaunchSfx();
 
+		/* REFACTOR TODO
 		if (voiceKey?.IsEmpty == false)
-			Character.Effect.PlayVoice(voiceKey);
+			Player.Effect.PlayVoice(voiceKey);
+		*/
 
-		IsCharacterCentered = recenterSpeed == 0;
-		Character.StartLauncher(GetLaunchSettings(), this);
+		IsPlayerCentered = recenterSpeed == 0;
+		Player.StartLauncher(GetLaunchSettings());
 
 		LaunchAnimation();
 	}
@@ -180,22 +183,24 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	/// <summary> Sets the player's launch animation based on launchsettings. Override as needed. </summary>
 	protected virtual void LaunchAnimation()
 	{
+		/* REFACTOR TODO
 		if (GetLaunchSettings().InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
-			Character.Animator.JumpAnimation();
+			Player.Animator.JumpAnimation();
 		else
-			Character.Animator.LaunchAnimation();
+			Player.Animator.LaunchAnimation();
+		*/
 	}
 
 	[Export]
 	private int recenterSpeed = 32; // How fast to recenter the character
 
-	public virtual bool IsCharacterCentered { get; private set; }
-	protected CharacterController Character => CharacterController.instance;
+	public virtual bool IsPlayerCentered { get; private set; }
+	protected PlayerController Player => StageSettings.Player;
 
 	public Vector3 RecenterCharacter()
 	{
-		Vector3 pos = Character.GlobalPosition.MoveToward(StartingPoint, recenterSpeed * PhysicsManager.physicsDelta);
-		IsCharacterCentered = pos.IsEqualApprox(StartingPoint);
+		Vector3 pos = Player.GlobalPosition.MoveToward(StartingPoint, recenterSpeed * PhysicsManager.physicsDelta);
+		IsPlayerCentered = pos.IsEqualApprox(StartingPoint);
 		return pos;
 	}
 

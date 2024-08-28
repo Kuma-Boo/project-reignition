@@ -5,6 +5,9 @@ namespace Project.Gameplay;
 
 public partial class PlayerController : CharacterBody3D
 {
+	[Signal]
+	public delegate void LaunchFinishedEventHandler();
+
 	[Export]
 	public PlayerStateMachine StateMachine { get; private set; }
 	[Export]
@@ -19,6 +22,16 @@ public partial class PlayerController : CharacterBody3D
 	public PlayerPathController PathFollower { get; private set; }
 	[Export]
 	public PlayerLockonController Lockon { get; private set; }
+
+	[Export]
+	public LaunchState launcherState;
+	public void StartLauncher(LaunchSettings settings)
+	{
+		if (!launcherState.UpdateSettings(settings)) // Failed to start launcher state
+			return;
+
+		StateMachine.ChangeState(launcherState);
+	}
 
 	/// <summary> Player's horizontal movespeed, ignoring slopes. </summary>
 	public float MoveSpeed { get; set; }
@@ -37,19 +50,28 @@ public partial class PlayerController : CharacterBody3D
 
 	public override void _Ready()
 	{
+		StageSettings.RegisterPlayer(this); // Update global reference
+
+		Stats.Initialize();
 		StateMachine.Initialize(this);
 		PathFollower.Initialize(this);
-		Stats.Initialize();
+		Lockon.Initialize(this);
 	}
 
 	public override void _PhysicsProcess(double _)
 	{
 		Controller.ProcessInputs();
 		StateMachine.ProcessPhysics();
+		Lockon.ProcessPhysics();
 		PathFollower.Resync();
 	}
 
-	public bool CheckGround() => IsOnFloor();
+	public bool IsOnGround { get; private set; }
+	public bool CheckGround()
+	{
+		IsOnGround = IsOnFloor();
+		return IsOnGround;
+	}
 
 	public void ApplyMovement()
 	{

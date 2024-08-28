@@ -12,6 +12,8 @@ public partial class PlayerStateController : Node
 		hitboxAnimator.Play(hitboxAnimation);
 	}
 
+	public bool CanJumpDash { get; set; }
+
 	[Signal]
 	public delegate void AttackStateChangeEventHandler();
 	/// <summary> Keeps track of how much attack the player will deal. </summary>

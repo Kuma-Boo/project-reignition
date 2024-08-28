@@ -16,7 +16,7 @@ public partial class PlayerLockonController : Node3D
 	private AudioStreamPlayer perfectSFX;
 
 	private PlayerController Player;
-	private void RegisterPlayer(PlayerController player) => Player = player;
+	public void Initialize(PlayerController player) => Player = player;
 
 	/// <summary> Active lockon target shown on the HUD. </summary>
 	public Node3D Target
@@ -91,7 +91,7 @@ public partial class PlayerLockonController : Node3D
 		*/
 	}
 
-	public void UpdateLockonTargets()
+	public void ProcessPhysics()
 	{
 		wasTargetChanged = false;
 		GlobalRotation = Vector3.Up * Player.PathFollower.ForwardAngle;
@@ -149,18 +149,18 @@ public partial class PlayerLockonController : Node3D
 			}
 			else
 			{
-				/*
-				REFACTOR TODO
+				// REFACTOR TODO
 				// Check Height
 				bool isTargetAttackable = IsHomingAttacking ||
-					(Target.GlobalPosition.Y <= Player.State.CenterPosition.Y + (Player.State.CollisionSize.Y * 2.0f) &&
-					Player.State.ActionState != CharacterController.ActionStates.JumpDash);
+					(Target.GlobalPosition.Y <= Player.CenterPosition.Y + (Player.CollisionSize.Y * 2.0f));
+				// && Player.State.ActionState != CharacterController.ActionStates.JumpDash);
+				/*
 				if (IsBounceLockoutActive && !CanInterruptBounce)
 					isTargetAttackable = false;
-
-				Vector2 screenPos = Player.Camera.ConvertToScreenSpace(Target.GlobalPosition);
-				UpdateLockonReticle(screenPos, isTargetAttackable);
 				*/
+
+				Vector2 screenPos = Vector2.One * .5f; // REFACTOR TODO Player.Camera.ConvertToScreenSpace(Target.GlobalPosition);
+				UpdateLockonReticle(screenPos, isTargetAttackable);
 			}
 		}
 

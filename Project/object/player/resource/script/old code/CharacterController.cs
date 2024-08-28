@@ -1756,11 +1756,11 @@ namespace Project.Gameplay
 		private float launcherTime;
 		public LaunchSettings LaunchSettings { get; private set; }
 		private Objects.Launcher activeLauncher;
-		public void StartLauncher(LaunchSettings data, Objects.Launcher newLauncher = null)
+		public void StartLauncher(LaunchSettings data)
 		{
 			if (MovementState == MovementStates.Launcher &&
 				activeLauncher != null &&
-				activeLauncher == newLauncher)
+				activeLauncher == data.Launcher)
 			{
 				return; // Already launching that!
 			}
@@ -1769,7 +1769,7 @@ namespace Project.Gameplay
 			ResetActionState();
 			MovementState = MovementStates.Launcher;
 
-			activeLauncher = newLauncher;
+			activeLauncher = data.Launcher;
 			LaunchSettings = data;
 
 			ResetVelocity();
@@ -1806,7 +1806,7 @@ namespace Project.Gameplay
 		{
 			isCustomPhysicsEnabled = true;
 
-			if (activeLauncher?.IsCharacterCentered == false)
+			if (activeLauncher?.IsPlayerCentered == false)
 			{
 				GlobalPosition = activeLauncher.RecenterCharacter();
 				VerticalSpeed = 0;

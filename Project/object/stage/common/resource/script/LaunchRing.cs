@@ -46,14 +46,14 @@ public partial class LaunchRing : Launcher
 		if (isActive)
 		{
 			// Recenter player
-			Character.CenterPosition = RecenterCharacter();
+			Player.CenterPosition = RecenterCharacter();
 
-			if (IsCharacterCentered) // Close enough; Allow inputs
+			if (IsPlayerCentered) // Close enough; Allow inputs
 			{
 				if (Input.IsActionJustPressed("button_jump")) // Disable launcher
 				{
 					DropPlayer(false);
-					Character.CanJumpDash = true;
+					Player.Lockon.IsMonitoring = true;
 				}
 				else if (Input.IsActionJustPressed("button_action"))
 				{
@@ -61,34 +61,33 @@ public partial class LaunchRing : Launcher
 				}
 			}
 
-			Character.Animator.SetSpinSpeed(1.5f + launchRatio);
+			// REFACTOR TODO Player.Animator.SetSpinSpeed(1.5f + launchRatio);
 		}
 	}
 
 	protected override void LaunchAnimation()
 	{
 		// Keep the same animation as charging (i.e. do nothing)
-		Character.Animator.SetSpinSpeed(5); // Speed up spin animation just because
+		// REFACTOR TODO Player.Animator.SetSpinSpeed(5); // Speed up spin animation just because
 	}
 
 	private void DropPlayer(bool launched = false)
 	{
 		isActive = false;
-		Character.ResetMovementState();
 
 		if (!launched)
 		{
 			EmitSignal(SignalName.Exited);
-			Character.Animator.ResetState();
-			Character.Effect.StopSpinFX();
-			Character.CanJumpDash = false;
+			// REFACTOR TODO Player.Animator.ResetState();
+			// REFACTOR TODO Player.Effect.StopSpinFX();
+			Player.Lockon.IsMonitoring = false;
 		}
 	}
 
 	private void LaunchPlayer()
 	{
 		DropPlayer(true);
-		Character.Effect.StartTrailFX();
+		// REFACTOR TODO Player.Effect.StartTrailFX();
 		base.Activate();
 	}
 
@@ -116,18 +115,21 @@ public partial class LaunchRing : Launcher
 	{
 		if (!a.IsInGroup("player detection")) return;
 
-		animator.Play("charge");
-		Character.StartExternal(this);
-		Character.Animator.StartSpin();
-		Character.Effect.StartSpinFX();
-
 		isActive = true;
-		Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward().RemoveVertical().Normalized());
-		Character.Animator.ExternalAngle = Character.MovementAngle;
+		animator.Play("charge");
+
+		/* REFACTOR TODO
+		Player.StartExternal(this);
+		Player.Animator.StartSpin();
+		Player.Effect.StartSpinFX();
+
+		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward().RemoveVertical().Normalized());
+		Player.Animator.ExternalAngle = Player.MovementAngle;
+		*/
 
 		// Disable homing reticle
-		Character.Lockon.IsMonitoring = false;
-		Character.Lockon.StopHomingAttack();
+		Player.Lockon.IsMonitoring = false;
+		Player.Lockon.StopHomingAttack();
 		EmitSignal(SignalName.Entered);
 	}
 
@@ -140,9 +142,11 @@ public partial class LaunchRing : Launcher
 	public void DamagePlayer()
 	{
 		DropPlayer();
-		Character.StartKnockback(new CharacterController.KnockbackSettings()
+		/* REFACTOR TODO
+		Player.StartKnockback(new CharacterController.KnockbackSettings()
 		{
 			ignoreMovementState = true,
 		});
+		*/
 	}
 }

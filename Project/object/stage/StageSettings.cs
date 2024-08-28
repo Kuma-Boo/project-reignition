@@ -12,6 +12,8 @@ namespace Project.Gameplay;
 public partial class StageSettings : Node3D
 {
 	public static StageSettings instance;
+	public static PlayerController Player { get; private set; }
+	public static void RegisterPlayer(PlayerController player) => Player = player;
 
 	public bool IsControlTest => Data.LevelID == OPTIONS_LEVEL_ID;
 	private readonly StringName OPTIONS_LEVEL_ID = "options";

@@ -14,6 +14,8 @@ public struct LaunchSettings
 	/// <summary> Allow the player to jumpdash after launch is completed? </summary>
 	public bool AllowJumpDash { get; set; }
 
+	public Objects.Launcher Launcher { get; set; }
+
 	// Physics settings
 	public Vector3 launchDirection;
 	public Vector3 endPosition;

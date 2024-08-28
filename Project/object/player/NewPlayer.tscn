@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://bbbuqgxfhuh8k"]
+[gd_scene load_steps=88 format=3 uid="uid://bbbuqgxfhuh8k"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://object/player/resource/script/states/StompState.cs" id="10_eoh5j"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/JumpDashState.cs" id="11_80bi3"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/HomingAttackState.cs" id="12_ssfet"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/LaunchState.cs" id="13_d17q6"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateController.cs" id="13_j0n3v"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerSkillController.cs" id="14_ypfmd"]
 [ext_resource type="Material" uid="uid://bklx3tbpw7s8e" path="res://object/player/resource/model/material/SpeedbreakOverlay.tres" id="17_afci3"]
@@ -2382,7 +2383,7 @@ _data = {
 radius = 0.36
 height = 0.9
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "State", "Skills", "PathFollower", "Lockon") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "State", "Skills", "PathFollower", "Lockon", "launcherState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -2395,6 +2396,7 @@ State = NodePath("State")
 Skills = NodePath("Sonic/Skills")
 PathFollower = NodePath("PathFollower")
 Lockon = NodePath("Lockon")
+launcherState = NodePath("StateMachine/Launch")
 CollisionSize = Vector2(0.3, 0.4)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -2474,6 +2476,11 @@ jumpDashMaxGravity = 24.0
 script = ExtResource("12_ssfet")
 landState = NodePath("../Land")
 stompState = NodePath("../Stomp")
+
+[node name="Launch" type="Node" parent="StateMachine" node_paths=PackedStringArray("landState", "fallState")]
+script = ExtResource("13_d17q6")
+landState = NodePath("../Land")
+fallState = NodePath("../Fall")
 
 [node name="Controller" type="Node" parent="."]
 script = ExtResource("2_pk07e")

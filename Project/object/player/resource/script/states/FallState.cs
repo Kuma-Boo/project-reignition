@@ -25,7 +25,7 @@ public partial class FallState : PlayerState
 		if (Player.CheckGround())
 			return landState;
 
-		if (Player.Controller.IsJumpBufferActive)
+		if (Player.Controller.IsJumpBufferActive && Player.Lockon.IsMonitoring)
 		{
 			Player.Controller.ResetJumpBuffer();
 			if (Player.Lockon.Target != null && Player.Lockon.IsTargetAttackable)
