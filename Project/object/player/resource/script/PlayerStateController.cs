@@ -1,15 +1,29 @@
 using Godot;
 
+namespace Project.Gameplay;
+
 public partial class PlayerStateController : Node
 {
+	private PlayerController Player;
+	public void Initialize(PlayerController player) => Player = player;
+	
 	[Export]
 	private AnimationPlayer hitboxAnimator;
-
 	public void ChangeHitbox(StringName hitboxAnimation)
 	{
 		hitboxAnimator.Play(hitboxAnimation);
 		hitboxAnimator.Advance(0);
 		hitboxAnimator.Play(hitboxAnimation);
+	}
+	
+	[Export]
+	public LaunchState launcherState;
+	public void StartLauncher(LaunchSettings settings)
+	{
+		if (!launcherState.UpdateSettings(settings)) // Failed to start launcher state
+			return;
+
+		Player.StateMachine.ChangeState(launcherState);
 	}
 
 	public bool CanJumpDash { get; set; }

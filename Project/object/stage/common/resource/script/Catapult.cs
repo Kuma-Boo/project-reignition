@@ -183,7 +183,7 @@ public partial class Catapult : Launcher
 
 		var settings = LaunchSettings.Create(Player.GlobalPosition, destination, 1f);
 		settings.IsJump = true;
-		Player.StartLauncher(settings);
+		Player.State.StartLauncher(settings);
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		// REFACTOR TODO
 		// Player.Animator.SnapRotation(Player.MovementAngle); // Reset visual rotation
@@ -209,7 +209,7 @@ public partial class Catapult : Launcher
 		// Have the player jump into the catapult
 		var settings = LaunchSettings.Create(Player.GlobalPosition, playerPositionNode.GlobalPosition, 2f);
 		settings.IsJump = true;
-		Player.StartLauncher(settings);
+		Player.State.StartLauncher(settings);
 		EmitSignal(SignalName.PlayerEntered);
 	}
 

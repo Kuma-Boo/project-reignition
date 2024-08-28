@@ -59,6 +59,7 @@ public partial class HomingAttackState : PlayerState
 		*/
 
 		Player.State.AttackState = PlayerStateController.AttackStates.None;
+		Player.Effect.StopSpinFX();
 		/* REFACTOR TODO?
 			Change state Player.ResetActionState();
 			Player.StateMachine.ChangeState

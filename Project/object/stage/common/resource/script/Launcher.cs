@@ -174,7 +174,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 			Player.Effect.PlayVoice(voiceKey);
 
 		IsPlayerCentered = recenterSpeed == 0;
-		Player.StartLauncher(GetLaunchSettings());
+		Player.State.StartLauncher(GetLaunchSettings());
 
 		LaunchAnimation();
 	}
