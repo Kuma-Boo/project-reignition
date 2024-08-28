@@ -31,9 +31,7 @@ public partial class LaunchState : PlayerState
 
 		launcherTime = 0;
 
-		//Player.CanJumpDash = settings.AllowJumpDash;
 		Player.Lockon.IsMonitoring = false; // Disable lockon monitoring while launch is active
-		Player.Lockon.StopHomingAttack();
 		Player.State.AttackState = PlayerStateController.AttackStates.OneShot; // Launchers always oneshot all enemies
 
 		if (settings.UseAutoAlign)

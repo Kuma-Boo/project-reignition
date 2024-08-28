@@ -59,6 +59,7 @@ public partial class JumpDashState : PlayerState
 	{
 		UpdateMoveSpeed();
 		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, -jumpDashMaxGravity, jumpDashGravity * PhysicsManager.physicsDelta);
+		Player.UpdateUpDirection(true);
 		Player.ApplyMovement();
 
 		if (Player.CheckGround())

@@ -48,6 +48,7 @@ public partial class BackflipState : PlayerState
 	{
 		UpdateMoveSpeed();
 		UpdateVerticalSpeed();
+		Player.UpdateUpDirection(true, Player.PathFollower.HeightAxis);
 		Player.ApplyMovement();
 
 		if (Player.CheckGround())

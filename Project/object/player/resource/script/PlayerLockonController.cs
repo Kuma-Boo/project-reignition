@@ -12,8 +12,6 @@ public partial class PlayerLockonController : Node3D
 {
 	[Export]
 	private Area3D areaTrigger;
-	[Export]
-	private AudioStreamPlayer perfectSFX;
 
 	private PlayerController Player;
 	public void Initialize(PlayerController player) => Player = player;
@@ -49,47 +47,18 @@ public partial class PlayerLockonController : Node3D
 	/// <summary> Should the controller check for new lockonTargets? </summary>
 	public bool IsMonitoring { get; set; }
 	public bool IsHomingAttacking { get; set; }
-	public bool IsPerfectHomingAttack { get; private set; }
-	private bool monitoringPerfectHomingAttack;
-	public void EnablePerfectHomingAttack() => monitoringPerfectHomingAttack = true;
-	public void DisablePerfectHomingAttack() => monitoringPerfectHomingAttack = false;
+
+	[Export]
+	private AudioStreamPlayer perfectSFX;
+	public bool IsMonitoringPerfectHomingAttack { get; private set; }
+	public void EnablePerfectHomingAttack() => IsMonitoringPerfectHomingAttack = true;
+	public void DisablePerfectHomingAttack() => IsMonitoringPerfectHomingAttack = false;
+	public void PlayPerfectStrike()
+	{
+		perfectSFX.Play();
+		lockonAnimator.Play("perfect-strike");
+	}
 	public Vector3 HomingAttackDirection => Target != null ? (Target.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
-
-	public void StartHomingAttack()
-	{
-		IsHomingAttacking = true;
-		IsPerfectHomingAttack = monitoringPerfectHomingAttack;
-		Player.State.AttackState = PlayerStateController.AttackStates.Weak;
-
-		if (IsPerfectHomingAttack)
-		{
-			perfectSFX.Play();
-			lockonAnimator.Play("perfect-strike");
-			Player.State.AttackState = PlayerStateController.AttackStates.Strong;
-		}
-	}
-
-	public void StopHomingAttack()
-	{
-		IsHomingAttacking = false;
-		IsPerfectHomingAttack = false;
-		ResetLockonTarget();
-
-		/*
-		REFACTOR TODO Move to Bounce state processing
-		if (Player.Skills.IsSkillEquipped(SkillKey.CrestFire) && IsBounceLockoutActive)
-		{
-			Player.Skills.DeactivateFireCrest(true);
-			return;
-		}
-		*/
-
-		Player.State.AttackState = PlayerStateController.AttackStates.None;
-		/* REFACTOR TODO?
-			Change state Player.ResetActionState();
-			Player.StateMachine.ChangeState
-		*/
-	}
 
 	public void ProcessPhysics()
 	{

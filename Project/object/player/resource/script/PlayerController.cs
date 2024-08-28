@@ -69,6 +69,8 @@ public partial class PlayerController : CharacterBody3D
 	public bool IsOnGround { get; private set; }
 	public bool CheckGround()
 	{
+		// REFACTOR TODO Use Raycasts. There's currently a bug because CheckGround uses IsOnFloor() which only updates during MoveAndSlide().
+
 		IsOnGround = IsOnFloor();
 		return IsOnGround;
 	}
@@ -100,6 +102,26 @@ public partial class PlayerController : CharacterBody3D
 		set => GlobalPosition = value - (UpDirection * CollisionSize.Y);
 	}
 	private const float CollisionPadding = .02f;
+
+	public void UpdateUpDirection(bool quickReset = true, Vector3 upDirection = new())
+	{
+		// Calculate target up direction
+		if (upDirection.IsEqualApprox(Vector3.Zero))
+		{
+			upDirection = Vector3.Up;
+			/* REFACTOR TODO
+			if (Camera.ActiveSettings.followPathTilt) // Use PathFollower.Up when on a tilted path.
+				upDirection = PathFollower.Up();
+			*/
+		}
+
+		// Calculate reset factor
+		float resetFactor = .2f;
+		if (!quickReset)
+			resetFactor = VerticalSpeed > 0 ? .01f : VerticalSpeed * .2f / Runtime.MaxGravity;
+
+		UpDirection = UpDirection.Lerp(upDirection, Mathf.Clamp(resetFactor, 0f, 1f)).Normalized();
+	}
 
 	/*
 	[Export]

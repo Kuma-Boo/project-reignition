@@ -153,6 +153,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		Vector3 endPosition = startPosition + (GetLaunchDirection() * blendedDistance) + (Vector3.Up * blendedFinalHeight);
 
 		LaunchSettings settings = LaunchSettings.Create(startPosition, endPosition, blendedMiddleHeight);
+		settings.AllowJumpDash = allowJumpDashing;
 		settings.UseAutoAlign = true;
 		settings.Launcher = this;
 

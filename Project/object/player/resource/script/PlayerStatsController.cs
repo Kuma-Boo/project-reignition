@@ -88,12 +88,6 @@ public partial class PlayerStatsController : Node
 	private int baseAirTurnaround;
 	[Export]
 	public float accelerationJumpSpeed;
-	[Export]
-	public float homingAttackSpeed;
-	[Export]
-	public float perfectHomingAttackSpeed;
-	[Export]
-	public float homingAttackAcceleration;
 
 	[ExportSubgroup("Turn Settings")]
 	[Export]

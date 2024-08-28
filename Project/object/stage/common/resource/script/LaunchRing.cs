@@ -117,6 +117,8 @@ public partial class LaunchRing : Launcher
 
 		isActive = true;
 		animator.Play("charge");
+		// Disable homing reticle
+		Player.Lockon.IsMonitoring = false;
 
 		/* REFACTOR TODO
 		Player.StartExternal(this);
@@ -125,11 +127,9 @@ public partial class LaunchRing : Launcher
 
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward().RemoveVertical().Normalized());
 		Player.Animator.ExternalAngle = Player.MovementAngle;
+		Player.Lockon.StopHomingAttack();
 		*/
 
-		// Disable homing reticle
-		Player.Lockon.IsMonitoring = false;
-		Player.Lockon.StopHomingAttack();
 		EmitSignal(SignalName.Entered);
 	}
 
