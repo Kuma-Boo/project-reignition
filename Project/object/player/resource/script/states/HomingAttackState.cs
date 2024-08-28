@@ -33,15 +33,14 @@ public partial class HomingAttackState : PlayerState
 		IsPerfectHomingAttack = Player.Lockon.IsMonitoringPerfectHomingAttack;
 		if (IsPerfectHomingAttack)
 		{
-			// REFACTOR TODO (Perfect Strike SFX needs to be added to the resource) Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 			Player.Lockon.PlayPerfectStrike();
 			Player.State.AttackState = PlayerStateController.AttackStates.Strong;
 		}
 
+		Player.Effect.StartSpinFX();
 		/*
 		REFACTOR TODO
 		Player.Animator.StartSpin(2.0f);
-		Player.Effect.StartSpinFX();
 		*/
 	}
 

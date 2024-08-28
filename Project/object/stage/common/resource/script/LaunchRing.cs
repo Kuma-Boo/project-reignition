@@ -79,7 +79,7 @@ public partial class LaunchRing : Launcher
 		{
 			EmitSignal(SignalName.Exited);
 			// REFACTOR TODO Player.Animator.ResetState();
-			// REFACTOR TODO Player.Effect.StopSpinFX();
+			Player.Effect.StopSpinFX();
 			Player.Lockon.IsMonitoring = false;
 		}
 	}
@@ -120,12 +120,13 @@ public partial class LaunchRing : Launcher
 		// Disable homing reticle
 		Player.Lockon.IsMonitoring = false;
 
+		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward().RemoveVertical().Normalized());
+		Player.Effect.StartSpinFX();
+		
 		/* REFACTOR TODO
 		Player.StartExternal(this);
 		Player.Animator.StartSpin();
-		Player.Effect.StartSpinFX();
 
-		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward().RemoveVertical().Normalized());
 		Player.Animator.ExternalAngle = Player.MovementAngle;
 		Player.Lockon.StopHomingAttack();
 		*/

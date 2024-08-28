@@ -120,9 +120,9 @@ public partial class Catapult : Launcher
 	{
 		currentState = CatapultState.Control;
 
+		Player.Effect.StartSpinFX();
 		/* REFACTOR TODO
 		Player.StartExternal(this, playerPositionNode);
-		Player.Effect.StartSpinFX();
 		Player.Animator.StartSpin(3f);
 		Player.Animator.SnapRotation(0);
 		*/

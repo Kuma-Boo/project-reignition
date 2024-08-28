@@ -45,9 +45,8 @@ public partial class PlayerSkillController : Node3D
 		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
 
 		InitializeCrestSkills();
-		/* Update crest of flame's trail color
+		//Update crest of flame's trail color
 		Player.Effect.UpdateTrailHueShift(AllowCrestSkill && SkillRing.IsSkillEquipped(SkillKey.CrestFire) ? CrestOfFlameHueOffset : 0f);
-		*/
 		speedbreakOverlayMaterial.SetShaderParameter(SpeedbreakOverlayOpacityKey, 0);
 	}
 
@@ -124,7 +123,7 @@ public partial class PlayerSkillController : Node3D
 
 		if (UpdateCrestTimer())
 		{
-			// REFACTOR TODO Player.Effect.PlayDarkCrestFX();
+			Player.Effect.PlayDarkCrestFX();
 			ModifySoulGauge(DarkCrestSoulAmount);
 		}
 	}

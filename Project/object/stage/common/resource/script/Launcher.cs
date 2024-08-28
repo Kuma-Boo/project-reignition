@@ -170,10 +170,8 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		EmitSignal(SignalName.Activated);
 		PlayLaunchSfx();
 
-		/* REFACTOR TODO
 		if (voiceKey?.IsEmpty == false)
 			Player.Effect.PlayVoice(voiceKey);
-		*/
 
 		IsPlayerCentered = recenterSpeed == 0;
 		Player.StartLauncher(GetLaunchSettings());

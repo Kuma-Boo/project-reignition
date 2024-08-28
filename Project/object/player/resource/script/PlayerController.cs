@@ -23,7 +23,7 @@ public partial class PlayerController : CharacterBody3D
 	[Export]
 	public PlayerLockonController Lockon { get; private set; }
 	[Export]
-	public CharacterEffect Effect { get; private set; }
+	public PlayerEffect Effect { get; private set; }
 
 	[Export]
 	public LaunchState launcherState;

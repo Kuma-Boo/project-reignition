@@ -1396,7 +1396,7 @@ _data = {
 radius = 0.36
 height = 0.9
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "State", "Skills", "PathFollower", "Effect", "launcherState") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "State", "Skills", "PathFollower", "Lockon", "Effect", "launcherState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1408,6 +1408,7 @@ Stats = NodePath("Stats")
 State = NodePath("State")
 Skills = NodePath("Sonic/Skills")
 PathFollower = NodePath("PathFollower")
+Lockon = NodePath("Lockon")
 Effect = NodePath("Sonic/Effect")
 launcherState = NodePath("StateMachine/Launch")
 CollisionSize = Vector2(0.3, 0.4)
@@ -1557,7 +1558,9 @@ mesh = SubResource("BoxMesh_t4t3r")
 
 [node name="Sonic" parent="." instance=ExtResource("3_rkpjr")]
 
-[node name="Effect" parent="Sonic" instance=ExtResource("19_3dctg")]
+[node name="Effect" parent="Sonic" node_paths=PackedStringArray("landingParticles", "stepEmitters") instance=ExtResource("19_3dctg")]
+landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, null, null, NodePath("VFX/LandingFX/LandingWater")]
+stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, null, null, NodePath("VFX/StepFX/WaterStep")]
 
 [node name="Skills" type="Node3D" parent="Sonic" node_paths=PackedStringArray("speedBreakAnimator", "speedBreakSFX", "timeBreakAnimator", "timeBreakSFX", "heartbeatSFX")]
 script = ExtResource("14_ypfmd")

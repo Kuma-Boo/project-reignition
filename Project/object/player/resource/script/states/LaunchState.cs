@@ -48,7 +48,7 @@ public partial class LaunchState : PlayerState
 		{
 			// REFACTOR TODO Animator.JumpAnimation();
 			Player.UpDirection = Vector3.Up;
-			// REFACTOR TODO Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
+			Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 		}
 	}
 
@@ -62,9 +62,9 @@ public partial class LaunchState : PlayerState
 		Player.State.AttackState = PlayerStateController.AttackStates.None;
 		Player.Lockon.IsMonitoring = !Player.IsOnGround && settings.AllowJumpDash;
 
-		/* REFACTOR TODO
 		Player.Effect.StopSpinFX();
 		Player.Effect.StopTrailFX();
+		/* REFACTOR TODO
 		Player.Animator.ResetState();
 		*/
 
