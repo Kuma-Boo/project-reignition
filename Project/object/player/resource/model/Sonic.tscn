@@ -1,19 +1,13 @@
-[gd_scene load_steps=46 format=3 uid="uid://wfh54hnc028k"]
+[gd_scene load_steps=27 format=3 uid="uid://wfh54hnc028k"]
 
 [ext_resource type="PackedScene" uid="uid://b5jl3vv1j1fck" path="res://object/player/resource/model/Sonic.gltf" id="1_ea3e1"]
 [ext_resource type="Script" path="res://object/player/resource/script/old code/CharacterAnimator.cs" id="2_3qp24"]
-[ext_resource type="PackedScene" uid="uid://gp7nom61rmtj" path="res://object/player/resource/component/Effect.tscn" id="3_5mek6"]
 [ext_resource type="PackedScene" uid="uid://clet3u3mrcb8g" path="res://object/player/resource/effect/countdown/CountdownBoostParticle.tscn" id="3_hb6te"]
-[ext_resource type="Material" uid="uid://db4kropnhyudk" path="res://effect/particle/material/Ember Blue Billboard.tres" id="4_1bbht"]
 [ext_resource type="PackedScene" uid="uid://c2bl1sk5cfyq3" path="res://object/player/resource/effect/countdown/CountdownFlameParticle.tscn" id="4_js45q"]
 [ext_resource type="AnimationLibrary" uid="uid://dhcxjlduawy8d" path="res://object/player/resource/model/animation/ActionLibrary.gltf" id="5_21j6r"]
 [ext_resource type="AnimationLibrary" uid="uid://dck4cudd7a66a" path="res://object/player/resource/model/animation/BalanceLibrary.gltf" id="5_a0jad"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="6_6iwga"]
-[ext_resource type="Material" uid="uid://m0d6jfnxdrwg" path="res://effect/particle/material/Teleport Dust.tres" id="6_jr8df"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="6_kpqgu"]
 [ext_resource type="AnimationLibrary" uid="uid://ql8twqq248an" path="res://object/player/resource/model/animation/SidleLibrary.gltf" id="6_pf4ty"]
-[ext_resource type="Material" uid="uid://dsn3x4u283jxc" path="res://effect/particle/material/Teleport Spark.tres" id="7_hfxq8"]
-[ext_resource type="AudioStream" uid="uid://pbwii8b4qu3s" path="res://sound/sfx/player/teleport start.wav" id="7_wb174"]
 [ext_resource type="AnimationLibrary" uid="uid://bo26mw8v8m0eh" path="res://object/player/resource/model/animation/EventLibrary.gltf" id="8_7bg0r"]
 [ext_resource type="Material" uid="uid://bklx3tbpw7s8e" path="res://object/player/resource/model/material/SpeedbreakOverlay.tres" id="8_ds2lb"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://biwe75w273iq7" path="res://object/player/resource/model/animation/animation tree/Root.tres" id="8_sfnih"]
@@ -26,69 +20,6 @@
 max_value = 2.5
 _data = [Vector2(0, 0.4), 0.0, 3.2, 0, 1, Vector2(0.5, 2), 2.00651, 2.00651, 0, 0, Vector2(1, 2.5), 0.147263, 0.0, 0, 0]
 point_count = 3
-
-[sub_resource type="Curve" id="Curve_6pc5r"]
-_data = [Vector2(0, 0), 0.0, 5.05237, 0, 0, Vector2(0.621993, 1), 0.0, 0.0, 0, 0, Vector2(0.99999, 0), -6.37551, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_csox3"]
-width = 64
-texture_mode = 1
-curve = SubResource("Curve_6pc5r")
-
-[sub_resource type="Curve" id="Curve_aeovm"]
-_data = [Vector2(0.00343642, 0.0326843), 0.0, 2.92304, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_stfsq"]
-width = 64
-curve = SubResource("Curve_aeovm")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gjsgy"]
-gravity = Vector3(0, 0, 0)
-scale_min = 3.0
-scale_max = 3.0
-scale_curve = SubResource("CurveTexture_stfsq")
-color = Color(0, 0.686275, 1, 0.196078)
-alpha_curve = SubResource("CurveTexture_csox3")
-
-[sub_resource type="QuadMesh" id="QuadMesh_qfnk1"]
-material = ExtResource("7_hfxq8")
-
-[sub_resource type="QuadMesh" id="QuadMesh_yuhe8"]
-material = ExtResource("4_1bbht")
-
-[sub_resource type="Curve" id="Curve_oo253"]
-_data = [Vector2(0, 0), 0.0, 14.4924, 0, 0, Vector2(0.182131, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.01969, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_pxvjs"]
-width = 64
-texture_mode = 1
-curve = SubResource("Curve_oo253")
-
-[sub_resource type="Curve" id="Curve_ncsgo"]
-_data = [Vector2(0, 0.240612), 0.0, 2.37615, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_7xdvp"]
-width = 64
-curve = SubResource("Curve_ncsgo")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bddv2"]
-emission_shape = 1
-emission_sphere_radius = 1.0
-angle_min = -180.0
-angle_max = 180.0
-gravity = Vector3(0, 0, 0)
-scale_min = 3.0
-scale_max = 5.0
-scale_curve = SubResource("CurveTexture_7xdvp")
-color = Color(0.188235, 0.67451, 1, 1)
-alpha_curve = SubResource("CurveTexture_pxvjs")
-
-[sub_resource type="QuadMesh" id="QuadMesh_2872x"]
-material = ExtResource("6_jr8df")
 
 [sub_resource type="Curve" id="Curve_2rxkn"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -210,34 +141,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [false, true]
 }
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Effect/TeleportFX")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"RestartGroup"
-}]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Effect/TeleportFX/TeleportEndSFX")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
 
 [sub_resource type="Animation" id="Animation_jxy1t"]
 resource_name = "teleport-start"
@@ -252,34 +155,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Effect/TeleportFX")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"RestartGroup"
-}]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Effect/TeleportFX/TeleportStartSFX")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r0udk"]
@@ -297,65 +172,6 @@ eventAnimationPlayer = NodePath("EventAnimationPlayer")
 bodyMesh = NodePath("SonicRoot/GeneralSkeleton/BodyMesh")
 blurOverrideMaterial = ExtResource("16_icvwi")
 movementAnimationSpeedCurve = SubResource("Curve_skwgn")
-
-[node name="Effect" parent="." index="0" node_paths=PackedStringArray("rightFoot", "leftFoot", "landingParticles", "stepEmitters") instance=ExtResource("3_5mek6")]
-rightFoot = NodePath("../SonicRoot/GeneralSkeleton/RFoot/SoleOffset")
-leftFoot = NodePath("../SonicRoot/GeneralSkeleton/LFoot/SoleOffset")
-landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, null, null, NodePath("VFX/LandingFX/LandingWater")]
-stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, null, null, NodePath("VFX/StepFX/WaterStep")]
-
-[node name="TeleportFX" type="GPUParticles3D" parent="Effect" index="2" node_paths=PackedStringArray("subSystems")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-layers = 32
-cast_shadow = 0
-emitting = false
-amount = 1
-lifetime = 0.2
-one_shot = true
-explosiveness = 1.0
-fixed_fps = 0
-interpolate = false
-local_coords = true
-process_material = SubResource("ParticleProcessMaterial_gjsgy")
-draw_pass_1 = SubResource("QuadMesh_qfnk1")
-script = ExtResource("6_6iwga")
-subSystems = [NodePath("BlueEmber"), NodePath("TeleportDust")]
-
-[node name="BlueEmber" type="GPUParticles3D" parent="Effect/TeleportFX" index="0"]
-layers = 32
-cast_shadow = 0
-emitting = false
-amount = 1
-lifetime = 0.2
-one_shot = true
-fixed_fps = 0
-interpolate = false
-local_coords = true
-process_material = SubResource("ParticleProcessMaterial_gjsgy")
-draw_pass_1 = SubResource("QuadMesh_yuhe8")
-
-[node name="TeleportDust" type="GPUParticles3D" parent="Effect/TeleportFX" index="1"]
-layers = 32
-cast_shadow = 0
-emitting = false
-amount = 64
-lifetime = 0.5
-one_shot = true
-explosiveness = 0.3
-randomness = 0.2
-fixed_fps = 0
-interpolate = false
-local_coords = true
-process_material = SubResource("ParticleProcessMaterial_bddv2")
-draw_pass_1 = SubResource("QuadMesh_2872x")
-
-[node name="TeleportStartSFX" type="AudioStreamPlayer" parent="Effect/TeleportFX" index="2"]
-stream = ExtResource("7_wb174")
-bus = &"GAME SFX"
-
-[node name="TeleportEndSFX" type="AudioStreamPlayer" parent="Effect/TeleportFX" index="3"]
-stream = ExtResource("7_wb174")
-bus = &"GAME SFX"
 
 [node name="GeneralSkeleton" parent="SonicRoot" index="0"]
 bones/2/rotation = Quaternion(0.00897831, -5.98702e-12, 1.91381e-09, 0.99996)
@@ -453,7 +269,7 @@ process_material = SubResource("ParticleProcessMaterial_ny081")
 draw_pass_1 = SubResource("QuadMesh_vcbic")
 
 [node name="RFoot" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="5"]
-transform = Transform3D(1, -1.02496e-12, -6.143e-13, 6.16757e-13, 2.03494e-07, 0.999999, -9.71667e-13, -0.999998, 2.21189e-07, -0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, -6.92779e-14, -5.1853e-13, 5.12881e-13, 9.54606e-08, 0.999999, -1.77636e-14, -0.999998, 1.13156e-07, -0.0397276, 0.155469, 0.00205613)
 bone_name = "r_foot"
 bone_idx = 58
 
@@ -461,14 +277,14 @@ bone_idx = 58
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, -0.085, -0.15)
 
 [node name="LFoot" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="6"]
-transform = Transform3D(1, 1.06581e-14, 6.15422e-12, -6.2165e-12, 1.07381e-06, 1, 1.33227e-13, -1, 1.07894e-06, 0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, -3.55271e-15, 6.16018e-12, -6.22079e-12, 5.9139e-08, 1, 1.19016e-13, -1, 6.37956e-08, 0.0397276, 0.155469, 0.00205613)
 bone_name = "l_foot"
 bone_idx = 3
 
 [node name="SoleOffset" type="Node3D" parent="SonicRoot/GeneralSkeleton/LFoot" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.085, -0.15)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="2"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
 libraries = {
 "": SubResource("AnimationLibrary_6smkh"),
 "ActionLibrary": ExtResource("5_21j6r"),
@@ -477,13 +293,13 @@ libraries = {
 "SidleLibrary": ExtResource("6_pf4ty")
 }
 
-[node name="EventAnimationPlayer" type="AnimationPlayer" parent="." index="3"]
+[node name="EventAnimationPlayer" type="AnimationPlayer" parent="." index="2"]
 callback_mode_process = 0
 libraries = {
 "": SubResource("AnimationLibrary_r0udk")
 }
 
-[node name="CountdownRoot" type="Node3D" parent="." index="4"]
+[node name="CountdownRoot" type="Node3D" parent="." index="3"]
 transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
 
 [node name="FlameBurstSFX" type="AudioStreamPlayer" parent="CountdownRoot" index="0"]
@@ -496,7 +312,7 @@ script = ExtResource("10_iki8q")
 UpdateEveryFrame = true
 settings = ExtResource("11_ihqo8")
 
-[node name="AnimationTree" type="AnimationTree" parent="." index="5"]
+[node name="AnimationTree" type="AnimationTree" parent="." index="4"]
 active = false
 callback_mode_process = 0
 tree_root = ExtResource("8_sfnih")

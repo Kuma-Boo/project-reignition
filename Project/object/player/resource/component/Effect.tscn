@@ -1,4 +1,4 @@
-[gd_scene load_steps=198 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=214 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -6,21 +6,24 @@
 [ext_resource type="Resource" uid="uid://b74ouv2g73ny2" path="res://resource/preset/sfx library/MaterialSFXLibrary.tres" id="5_h4i1s"]
 [ext_resource type="Material" uid="uid://3j0tx2hxvynp" path="res://object/stage/common/resource/model/material/Grindrail Sparks Process Material.tres" id="6_v3ger"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="7_8immp"]
+[ext_resource type="Material" uid="uid://dsn3x4u283jxc" path="res://effect/particle/material/Teleport Spark.tres" id="7_txyp8"]
+[ext_resource type="Material" uid="uid://db4kropnhyudk" path="res://effect/particle/material/Ember Blue Billboard.tres" id="9_5y4pu"]
 [ext_resource type="Material" uid="uid://bduajl86aiq4o" path="res://object/player/resource/effect/material/Player Trail Material.tres" id="9_on86l"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/Trail3D.cs" id="10_1mog6"]
+[ext_resource type="Material" uid="uid://m0d6jfnxdrwg" path="res://effect/particle/material/Teleport Dust.tres" id="10_qp2jb"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="10_xhcyf"]
 [ext_resource type="Material" uid="uid://dhlpdpuxf2cwi" path="res://object/player/resource/effect/material/Spin Material.tres" id="11_lk1sb"]
 [ext_resource type="ArrayMesh" uid="uid://i2yganupvdy7" path="res://object/player/resource/effect/model/CrestDarkFX.res" id="11_p2jvq"]
 [ext_resource type="ArrayMesh" uid="uid://xjhpdbayj0gd" path="res://object/player/resource/effect/model/ExpertDriftFX.res" id="11_sq88t"]
-[ext_resource type="Texture2D" uid="uid://dpllw4lrjbvnm" path="res://object/player/resource/effect/texture/fire ember.png" id="15_8o65b"]
-[ext_resource type="Texture2D" uid="uid://r1g1i2dyjwue" path="res://object/player/resource/effect/texture/fire lingering.png" id="16_urtk5"]
-[ext_resource type="Texture2D" uid="uid://cm6hder0accd6" path="res://object/player/resource/effect/texture/aegis feather.png" id="17_qxei6"]
+[ext_resource type="Texture2D" uid="uid://bl6kudqrsdxgk" path="res://object/player/resource/effect/texture/fire ember.png" id="15_8o65b"]
+[ext_resource type="Texture2D" uid="uid://xofryeyo6xc0" path="res://object/player/resource/effect/texture/fire lingering.png" id="16_urtk5"]
+[ext_resource type="Texture2D" uid="uid://bdmv3njfoakur" path="res://object/player/resource/effect/texture/aegis feather.png" id="17_qxei6"]
 [ext_resource type="ArrayMesh" uid="uid://ce83fnfx4ei27" path="res://object/player/resource/effect/model/WindCycloneFX.res" id="18_0tfkp"]
 [ext_resource type="Material" uid="uid://cfj2lar13vb43" path="res://effect/particle/material/environment/Water Splash Ripple.tres" id="18_1h3ie"]
-[ext_resource type="Texture2D" uid="uid://dyumkeul6m5d" path="res://object/player/resource/effect/texture/aegis dust.png" id="18_yfxek"]
+[ext_resource type="Texture2D" uid="uid://criee6kko85jk" path="res://object/player/resource/effect/texture/aegis dust.png" id="18_yfxek"]
 [ext_resource type="ArrayMesh" uid="uid://bfcpv7samapqy" path="res://object/player/resource/effect/model/WindCycloneTallFX.res" id="19_3cabv"]
-[ext_resource type="Texture2D" uid="uid://dhjpuxq4ygh78" path="res://object/player/resource/effect/texture/soul slider feather.png" id="19_r8kdf"]
-[ext_resource type="Texture2D" uid="uid://426gcfdvwtcm" path="res://area/1 sand oasis/boss/effect/texture/sand scorpion hit spark.png" id="19_t7sfl"]
+[ext_resource type="Texture2D" uid="uid://ba0vd8my4rp3u" path="res://object/player/resource/effect/texture/soul slider feather.png" id="19_r8kdf"]
+[ext_resource type="Texture2D" uid="uid://cdivshqybdhqe" path="res://area/1 sand oasis/boss/effect/texture/sand scorpion hit spark.png" id="19_t7sfl"]
 [ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Dust Splatter Add.tres" id="19_twcq0"]
 [ext_resource type="Texture2D" uid="uid://dq1ukj4ghqehr" path="res://object/player/resource/effect/texture/grass step.png" id="20_ia6lg"]
 [ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="20_kjqbh"]
@@ -38,6 +41,68 @@
 [ext_resource type="Shader" path="res://effect/shader/particle/AnimatedNonbillboard.gdshader" id="34_fub5g"]
 [ext_resource type="Texture2D" uid="uid://cn2jkjpa6m0ut" path="res://object/stage/common/resource/model/texture/goal flame detail atlas.png" id="34_ss1rs"]
 
+[sub_resource type="Curve" id="Curve_4rxi1"]
+_data = [Vector2(0, 0), 0.0, 5.05237, 0, 0, Vector2(0.621993, 1), 0.0, 0.0, 0, 0, Vector2(0.99999, 0), -6.37551, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_csox3"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_4rxi1")
+
+[sub_resource type="Curve" id="Curve_ql3rq"]
+_data = [Vector2(0.00343642, 0.0326843), 0.0, 2.92304, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_stfsq"]
+width = 64
+curve = SubResource("Curve_ql3rq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_owwhh"]
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_stfsq")
+color = Color(0, 0.686275, 1, 0.196078)
+alpha_curve = SubResource("CurveTexture_csox3")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ferr0"]
+material = ExtResource("7_txyp8")
+
+[sub_resource type="QuadMesh" id="QuadMesh_rmtar"]
+material = ExtResource("9_5y4pu")
+
+[sub_resource type="Curve" id="Curve_v8p5o"]
+_data = [Vector2(0, 0), 0.0, 14.4924, 0, 0, Vector2(0.182131, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.01969, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_pxvjs"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_v8p5o")
+
+[sub_resource type="Curve" id="Curve_nksaq"]
+_data = [Vector2(0, 0.240612), 0.0, 2.37615, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_7xdvp"]
+width = 64
+curve = SubResource("Curve_nksaq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ylpcy"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+angle_min = -180.0
+angle_max = 180.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_7xdvp")
+color = Color(0.188235, 0.67451, 1, 1)
+alpha_curve = SubResource("CurveTexture_pxvjs")
+
+[sub_resource type="QuadMesh" id="QuadMesh_dp2tk"]
+material = ExtResource("10_qp2jb")
 
 [sub_resource type="Gradient" id="Gradient_bbnln"]
 offsets = PackedFloat32Array(0, 0.0739796, 1)
@@ -1286,6 +1351,51 @@ bus = &"GAME SFX"
 [node name="VFX" type="Node3D" parent="."]
 
 [node name="ActionFX" type="Node3D" parent="VFX"]
+
+[node name="TeleportFX" type="GPUParticles3D" parent="VFX/ActionFX" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 1
+lifetime = 0.2
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_owwhh")
+draw_pass_1 = SubResource("QuadMesh_ferr0")
+script = ExtResource("21_nenuf")
+subSystems = [null, null]
+
+[node name="BlueEmber" type="GPUParticles3D" parent="VFX/ActionFX/TeleportFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 1
+lifetime = 0.2
+one_shot = true
+fixed_fps = 0
+interpolate = false
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_owwhh")
+draw_pass_1 = SubResource("QuadMesh_rmtar")
+
+[node name="TeleportDust" type="GPUParticles3D" parent="VFX/ActionFX/TeleportFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 64
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.3
+randomness = 0.2
+fixed_fps = 0
+interpolate = false
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_ylpcy")
+draw_pass_1 = SubResource("QuadMesh_dp2tk")
 
 [node name="Dust" type="GPUParticles3D" parent="VFX/ActionFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)

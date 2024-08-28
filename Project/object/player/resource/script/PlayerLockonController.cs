@@ -38,16 +38,10 @@ public partial class PlayerLockonController : Node3D
 	public bool IsMonitoring { get; set; }
 	public bool IsHomingAttacking { get; set; }
 
-	[Export]
-	private AudioStreamPlayer perfectSFX;
 	public bool IsMonitoringPerfectHomingAttack { get; private set; }
 	public void EnablePerfectHomingAttack() => IsMonitoringPerfectHomingAttack = true;
 	public void DisablePerfectHomingAttack() => IsMonitoringPerfectHomingAttack = false;
-	public void PlayPerfectStrike()
-	{
-		perfectSFX.Play();
-		lockonAnimator.Play("perfect-strike");
-	}
+	public void PlayPerfectStrike() => lockonAnimator.Play("perfect-strike");
 	public Vector3 HomingAttackDirection => Target != null ? (Target.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
 
 	public void ProcessPhysics()

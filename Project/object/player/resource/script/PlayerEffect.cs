@@ -80,6 +80,20 @@ public partial class PlayerEffect : Node3D
 		(spinFX.MaterialOverride as ShaderMaterial).SetShaderParameter("hue_shift", hueShift);
 	}
 
+	[Export]
+	private GroupGpuParticles3D teleportParticle;
+	public void StartTeleport()
+	{
+		teleportParticle.RestartGroup();
+		PlayActionSFX("teleport start");
+	}
+	public void StopTeleport()
+	{
+		teleportParticle.RestartGroup();
+		PlayActionSFX("teleport end");
+	}
+
+
 	/// <summary> VFX for drifting dust. </summary>
 	[Export]
 	private GpuParticles3D dustParticle;
