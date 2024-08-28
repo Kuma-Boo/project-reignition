@@ -22,6 +22,8 @@ public partial class PlayerController : CharacterBody3D
 	public PlayerPathController PathFollower { get; private set; }
 	[Export]
 	public PlayerLockonController Lockon { get; private set; }
+	[Export]
+	public CharacterEffect Effect { get; private set; }
 
 	[Export]
 	public LaunchState launcherState;
@@ -128,10 +130,6 @@ public partial class PlayerController : CharacterBody3D
 	public CameraController Camera { get; private set; }
 	[Export]
 	public CharacterAnimator Animator { get; private set; }
-	[Export]
-	public CharacterEffect Effect { get; private set; }
-	[Export]
-	public CharacterLockon Lockon { get; private set; }
 	*/
 }
 

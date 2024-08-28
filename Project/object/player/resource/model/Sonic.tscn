@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://wfh54hnc028k"]
+[gd_scene load_steps=46 format=3 uid="uid://wfh54hnc028k"]
 
 [ext_resource type="PackedScene" uid="uid://b5jl3vv1j1fck" path="res://object/player/resource/model/Sonic.gltf" id="1_ea3e1"]
 [ext_resource type="Script" path="res://object/player/resource/script/old code/CharacterAnimator.cs" id="2_3qp24"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c2bl1sk5cfyq3" path="res://object/player/resource/effect/countdown/CountdownFlameParticle.tscn" id="4_js45q"]
 [ext_resource type="AnimationLibrary" uid="uid://dhcxjlduawy8d" path="res://object/player/resource/model/animation/ActionLibrary.gltf" id="5_21j6r"]
 [ext_resource type="AnimationLibrary" uid="uid://dck4cudd7a66a" path="res://object/player/resource/model/animation/BalanceLibrary.gltf" id="5_a0jad"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="6_6iwga"]
 [ext_resource type="Material" uid="uid://m0d6jfnxdrwg" path="res://effect/particle/material/Teleport Dust.tres" id="6_jr8df"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="6_kpqgu"]
 [ext_resource type="AnimationLibrary" uid="uid://ql8twqq248an" path="res://object/player/resource/model/animation/SidleLibrary.gltf" id="6_pf4ty"]
@@ -20,7 +21,6 @@
 [ext_resource type="Resource" uid="uid://ce3ywymj0dq0j" path="res://resource/preset/camera/common/InheritCam.tres" id="11_ihqo8"]
 [ext_resource type="AudioStream" uid="uid://c5did7u4f8gq2" path="res://sound/sfx/player/flame countdown 1.wav" id="12_3lyoq"]
 [ext_resource type="Material" uid="uid://cyphajdqgwnj8" path="res://object/player/resource/model/material/BodyTransparent.tres" id="16_icvwi"]
-
 
 [sub_resource type="Curve" id="Curve_skwgn"]
 max_value = 2.5
@@ -52,11 +52,11 @@ scale_curve = SubResource("CurveTexture_stfsq")
 color = Color(0, 0.686275, 1, 0.196078)
 alpha_curve = SubResource("CurveTexture_csox3")
 
-[sub_resource type="QuadMesh" id="QuadMesh_yuhe8"]
-material = ExtResource("4_1bbht")
-
 [sub_resource type="QuadMesh" id="QuadMesh_qfnk1"]
 material = ExtResource("7_hfxq8")
+
+[sub_resource type="QuadMesh" id="QuadMesh_yuhe8"]
+material = ExtResource("4_1bbht")
 
 [sub_resource type="Curve" id="Curve_oo253"]
 _data = [Vector2(0, 0), 0.0, 14.4924, 0, 0, Vector2(0.182131, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.01969, 0.0, 0, 0]
@@ -213,7 +213,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Effect/TeleportFX/BlueEmber")
+tracks/1/path = NodePath("Effect/TeleportFX")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -221,44 +221,16 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"restart"
+"method": &"RestartGroup"
 }]
 }
 tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Effect/TeleportFX/TeleportSpark")
+tracks/2/path = NodePath("Effect/TeleportFX/TeleportEndSFX")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"restart"
-}]
-}
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Effect/TeleportFX/TeleportDust")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0.1),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"restart"
-}]
-}
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Effect/TeleportFX/TeleportEndSFX")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -284,7 +256,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Effect/TeleportFX/BlueEmber")
+tracks/1/path = NodePath("Effect/TeleportFX")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -292,44 +264,16 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"restart"
+"method": &"RestartGroup"
 }]
 }
 tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Effect/TeleportFX/TeleportSpark")
+tracks/2/path = NodePath("Effect/TeleportFX/TeleportStartSFX")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"restart"
-}]
-}
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Effect/TeleportFX/TeleportDust")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0.1),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"restart"
-}]
-}
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Effect/TeleportFX/TeleportStartSFX")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -360,8 +304,22 @@ leftFoot = NodePath("../SonicRoot/GeneralSkeleton/LFoot/SoleOffset")
 landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, null, null, NodePath("VFX/LandingFX/LandingWater")]
 stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, null, null, NodePath("VFX/StepFX/WaterStep")]
 
-[node name="TeleportFX" type="Node3D" parent="Effect" index="2"]
+[node name="TeleportFX" type="GPUParticles3D" parent="Effect" index="2" node_paths=PackedStringArray("subSystems")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 1
+lifetime = 0.2
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_gjsgy")
+draw_pass_1 = SubResource("QuadMesh_qfnk1")
+script = ExtResource("6_6iwga")
+subSystems = [NodePath("BlueEmber"), NodePath("TeleportDust")]
 
 [node name="BlueEmber" type="GPUParticles3D" parent="Effect/TeleportFX" index="0"]
 layers = 32
@@ -376,21 +334,7 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_gjsgy")
 draw_pass_1 = SubResource("QuadMesh_yuhe8")
 
-[node name="TeleportSpark" type="GPUParticles3D" parent="Effect/TeleportFX" index="1"]
-layers = 32
-cast_shadow = 0
-emitting = false
-amount = 1
-lifetime = 0.2
-one_shot = true
-explosiveness = 1.0
-fixed_fps = 0
-interpolate = false
-local_coords = true
-process_material = SubResource("ParticleProcessMaterial_gjsgy")
-draw_pass_1 = SubResource("QuadMesh_qfnk1")
-
-[node name="TeleportDust" type="GPUParticles3D" parent="Effect/TeleportFX" index="2"]
+[node name="TeleportDust" type="GPUParticles3D" parent="Effect/TeleportFX" index="1"]
 layers = 32
 cast_shadow = 0
 emitting = false
@@ -405,11 +349,11 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_bddv2")
 draw_pass_1 = SubResource("QuadMesh_2872x")
 
-[node name="TeleportStartSFX" type="AudioStreamPlayer" parent="Effect/TeleportFX" index="3"]
+[node name="TeleportStartSFX" type="AudioStreamPlayer" parent="Effect/TeleportFX" index="2"]
 stream = ExtResource("7_wb174")
 bus = &"GAME SFX"
 
-[node name="TeleportEndSFX" type="AudioStreamPlayer" parent="Effect/TeleportFX" index="4"]
+[node name="TeleportEndSFX" type="AudioStreamPlayer" parent="Effect/TeleportFX" index="3"]
 stream = ExtResource("7_wb174")
 bus = &"GAME SFX"
 

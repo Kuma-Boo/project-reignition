@@ -8,11 +8,11 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class PlayerSkillController : Node3D
 {
-	private CharacterController Character => CharacterController.instance;
-
-	public void Initialize()
+	private PlayerController Player;
+	public void Initialize(PlayerController player)
 	{
-		normalCollisionMask = Character.CollisionMask;
+		Player = player;
+		normalCollisionMask = Player.CollisionMask;
 
 		// Determine the size of the soul gauge
 		MaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
@@ -45,8 +45,9 @@ public partial class PlayerSkillController : Node3D
 		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
 
 		InitializeCrestSkills();
-		// Update crest of flame's trail color
-		Character.Effect.UpdateTrailHueShift(AllowCrestSkill && SkillRing.IsSkillEquipped(SkillKey.CrestFire) ? CrestOfFlameHueOffset : 0f);
+		/* Update crest of flame's trail color
+		Player.Effect.UpdateTrailHueShift(AllowCrestSkill && SkillRing.IsSkillEquipped(SkillKey.CrestFire) ? CrestOfFlameHueOffset : 0f);
+		*/
 		speedbreakOverlayMaterial.SetShaderParameter(SpeedbreakOverlayOpacityKey, 0);
 	}
 
@@ -123,7 +124,7 @@ public partial class PlayerSkillController : Node3D
 
 		if (UpdateCrestTimer())
 		{
-			Character.Effect.PlayDarkCrestFX();
+			// REFACTOR TODO Player.Effect.PlayDarkCrestFX();
 			ModifySoulGauge(DarkCrestSoulAmount);
 		}
 	}
@@ -133,8 +134,8 @@ public partial class PlayerSkillController : Node3D
 		if (!AllowCrestSkill)
 			return;
 
-		Character.Effect.PlayFireFX();
-		Character.Effect.StartVolcanoFX();
+		Player.Effect.PlayFireFX();
+		Player.Effect.StartVolcanoFX();
 	}
 
 	public void DeactivateFireCrest(bool burst)
@@ -142,13 +143,12 @@ public partial class PlayerSkillController : Node3D
 		if (!AllowCrestSkill)
 			return;
 
-		Character.Effect.StopVolcanoFX();
+		Player.Effect.StopVolcanoFX();
 		if (burst)
 		{
-			Character.Effect.PlayFireCrestFX();
-			Character.AttackState = CharacterController.AttackStates.Weak;
-			Character.SetActionState(CharacterController.ActionStates.JumpDash);
-			Character.ChangeHitbox("fire-crest");
+			Player.Effect.PlayFireCrestFX();
+			Player.State.AttackState = PlayerStateController.AttackStates.Weak;
+			Player.State.ChangeHitbox("fire-crest");
 		}
 	}
 
@@ -266,15 +266,18 @@ public partial class PlayerSkillController : Node3D
 			if (breakTimer != 0) return; // Cooldown
 		}
 
+		/*
+		REFACTOR TODO Move to states.
 		if (Input.IsActionJustPressed("button_timebreak") && !IsSpeedBreakActive)
 		{
 			if (!IsTimeBreakEnabled) return;
 			if (!IsSoulGaugeCharged) return;
-			if (Character.ActionState == CharacterController.ActionStates.Teleport) return; // Can't time break during teleports
-			if (Character.IsDefeated) return;
+			if (Player.State.IsDefeated) return;
 
 			ToggleTimeBreak();
 		}
+
+		*/
 	}
 
 	private void UpdateSpeedBreak()
@@ -298,16 +301,16 @@ public partial class PlayerSkillController : Node3D
 				if (IsSoulGaugeEmpty || !Input.IsActionPressed("button_speedbreak"))// Check whether we shoudl cancel speed break
 					ToggleSpeedBreak();
 
-				if (!IsSpeedBreakOverrideActive && Character.IsOnGround) // Speed is only applied while on the ground
+				if (!IsSpeedBreakOverrideActive && Player.IsOnGround) // Speed is only applied while on the ground
 				{
 					IsSpeedBreakOverrideActive = true;
-					Character.MoveSpeed = speedBreakSpeed;
+					Player.MoveSpeed = speedBreakSpeed;
 				}
 			}
 			else
 			{
-				Character.MoveSpeed = 0;
-				Character.Camera.StartCrossfade(); // Crossfade the screen briefly
+				Player.MoveSpeed = 0;
+				// REFACTOR TODO Player.Camera.StartCrossfade(); // Crossfade the screen briefly
 			}
 
 			return;
@@ -317,17 +320,22 @@ public partial class PlayerSkillController : Node3D
 			return; // Cooldown
 		}
 
+
+		/*
+		REFACTOR TODO Move to states.
+
 		// Check whether we can start speed break
 		if (Input.IsActionJustPressed("button_speedbreak") && !IsTimeBreakActive)
 		{
 			if (!IsSoulGaugeCharged) return;
 			if (!IsSpeedBreakEnabled) return;
-			if (Character.MovementState == CharacterController.MovementStates.Launcher) return; // Can't speed break during launchers
-			if (Character.ActionState == CharacterController.ActionStates.Teleport) return; // Can't speed break during teleports
-			if (!Character.IsOnGround || Character.IsDefeated) return;
+			if (Player.MovementState == CharacterController.MovementStates.Launcher) return; // Can't speed break during launchers
+			if (Player.ActionState == CharacterController.ActionStates.Teleport) return; // Can't speed break during teleports
+			if (!Player.IsOnGround || Player.IsDefeated) return;
 
 			ToggleSpeedBreak();
 		}
+		*/
 	}
 
 	public void ToggleTimeBreak()
@@ -340,9 +348,14 @@ public partial class PlayerSkillController : Node3D
 		if (IsTimeBreakActive)
 		{
 			timeBreakAnimator.Play("start");
-			Character.Effect.PlayVoice("time break");
-			Character.Camera.RequestMotionBlur();
-			Character.Animator.StartMotionBlur();
+			Player.Effect.PlayVoice("time break");
+			
+			/*
+			REFACTOR TODO Implement Motion Blur
+			Player.Camera.RequestMotionBlur();
+			Player.Animator.StartMotionBlur();
+			*/
+
 			BGMPlayer.SetStageMusicVolume(-80f);
 
 			// Reset volume and play
@@ -353,8 +366,12 @@ public partial class PlayerSkillController : Node3D
 		else
 		{
 			timeBreakAnimator.Play("stop");
-			Character.Camera.UnrequestMotionBlur();
-			Character.Animator.StopMotionBlur();
+			/*
+			REFACTOR TODO Implement Motion Blur
+			Player.Camera.UnrequestMotionBlur();
+			Player.Animator.StopMotionBlur();
+			*/
+
 			breakTimer = BreakSkillsCooldown;
 			BGMPlayer.SetStageMusicVolume(0f);
 			HeadsUpDisplay.instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);
