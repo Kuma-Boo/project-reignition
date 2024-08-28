@@ -17,18 +17,7 @@ public partial class PlayerLockonController : Node3D
 	public void Initialize(PlayerController player) => Player = player;
 
 	/// <summary> Active lockon target shown on the HUD. </summary>
-	public Node3D Target
-	{
-		get => target;
-		private set
-		{
-			target = value;
-			wasTargetChanged = true;
-		}
-	}
-	private Node3D target;
-	/// <summary> Was lockonTarget changed this frame? </summary>
-	private bool wasTargetChanged;
+	public Node3D Target {get; private set;}
 	/// <summary> can the current target be attacked? </summary>
 	public bool IsTargetAttackable { get; set; }
 	private enum TargetState
@@ -62,79 +51,95 @@ public partial class PlayerLockonController : Node3D
 
 	public void ProcessPhysics()
 	{
-		wasTargetChanged = false;
+		bool wasTargetChanged = false;
 		GlobalRotation = Vector3.Up * Player.PathFollower.ForwardAngle;
 
 		if (IsMonitoring)
+			wasTargetChanged = ProcessMonitoring();
+
+		ValidateTarget(wasTargetChanged);
+	}
+
+	private bool ProcessMonitoring()
+	{
+		Node3D currentTarget = Target;
+		float closestDistance = Mathf.Inf;
+		if (currentTarget != null)
+			closestDistance = currentTarget.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
+
+		// Check whether to pick a new target
+		for (int i = 0; i < activeTargets.Count; i++)
 		{
-			float closestDistance = Mathf.Inf; // Current closest target
-			Node3D currentTarget = Target;
+			if (currentTarget == activeTargets[i])
+				continue;
+
+			TargetState state = IsTargetValid(activeTargets[i]);
+			if (state != TargetState.Valid)
+				continue;
+
+			float dst = activeTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
+
 			if (currentTarget != null)
-				closestDistance = currentTarget.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
-
-			// Check whether to pick a new target
-			for (int i = 0; i < activeTargets.Count; i++)
 			{
-				if (currentTarget == activeTargets[i])
+				// Ignore targets that are further from the current target
+				if (dst > closestDistance + DistanceFudgeAmount)
 					continue;
-
-				TargetState state = IsTargetValid(activeTargets[i]);
-				if (state != TargetState.Valid)
-					continue;
-
-				float dst = activeTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
-
-				if (currentTarget != null)
+				
+				// Within fudge range, decide priority based on height
+				if (dst > closestDistance - DistanceFudgeAmount &&
+					activeTargets[i].GlobalPosition.Y <= currentTarget.GlobalPosition.Y)
 				{
-					if (dst > closestDistance + DistanceFudgeAmount)
-						continue; // Check whether the object is close enough to be considered
-					else if (dst > closestDistance - DistanceFudgeAmount && activeTargets[i].GlobalPosition.Y <= currentTarget.GlobalPosition.Y)
-						continue; // Within fudge range, decide priority based on height
+					continue;
 				}
-
-				// Update data
-				currentTarget = activeTargets[i];
-				closestDistance = dst;
 			}
 
-			if (currentTarget != null && currentTarget != Target) // Target has changed
-				Target = currentTarget;
+			// Update data
+			currentTarget = activeTargets[i];
+			closestDistance = dst;
 		}
 
-		if (Target != null) // Validate current lockon target
+		if (currentTarget != null && currentTarget != Target) // Target has changed
 		{
-			TargetState targetState = IsTargetValid(Target); // Validate homing attack target
-
-			if ((IsHomingAttacking && targetState == TargetState.NotInList) ||
-				(!IsHomingAttacking && targetState != TargetState.Valid))
-			{
-				Target = null;
-			}
-			else if (!IsHomingAttacking &&
-				Target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten()) < DistanceFudgeAmount &&
-				Player.Controller.IsHoldingDirection(Player.Controller.GetTargetMovementAngle(), Player.PathFollower.ForwardAngle))
-			{
-				Target = null;
-			}
-			else
-			{
-				// REFACTOR TODO
-				// Check Height
-				bool isTargetAttackable = IsHomingAttacking ||
-					(Target.GlobalPosition.Y <= Player.CenterPosition.Y + (Player.CollisionSize.Y * 2.0f));
-				// && Player.State.ActionState != CharacterController.ActionStates.JumpDash);
-				/*
-				if (IsBounceLockoutActive && !CanInterruptBounce)
-					isTargetAttackable = false;
-				*/
-
-				Vector2 screenPos = Vector2.One * .5f; // REFACTOR TODO Player.Camera.ConvertToScreenSpace(Target.GlobalPosition);
-				UpdateLockonReticle(screenPos, isTargetAttackable);
-			}
+			Target = currentTarget;
+			return true;
 		}
 
-		if (Target == null && wasTargetChanged) // Disable UI
-			DisableLockonReticle();
+		return false;
+	}
+
+	private void ValidateTarget(bool wasTargetChanged)
+	{
+		if(Target == null)
+			return;
+
+		TargetState targetState = IsTargetValid(Target); // Validate homing attack target
+		if ((IsHomingAttacking && targetState == TargetState.NotInList) ||
+			(!IsHomingAttacking && targetState != TargetState.Valid))
+		{
+			ResetLockonTarget();
+			return;
+		}
+
+		if (!IsHomingAttacking &&
+			Target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten()) < DistanceFudgeAmount &&
+			Player.Controller.IsHoldingDirection(Player.Controller.GetTargetMovementAngle(), Player.PathFollower.ForwardAngle))
+		{
+			ResetLockonTarget();
+			return;
+		}
+
+		// REFACTOR TODO
+		// Check Height
+		bool isTargetAttackable = IsHomingAttacking ||
+			(Target.GlobalPosition.Y <= Player.CenterPosition.Y + (Player.CollisionSize.Y * 2.0f));
+		// && Player.State.ActionState != CharacterController.ActionStates.JumpDash);
+		/*
+		if (IsBounceLockoutActive && !CanInterruptBounce)
+			isTargetAttackable = false;
+		*/
+
+		Vector2 screenPos = Vector2.One * .5f; // REFACTOR TODO Player.Camera.ConvertToScreenSpace(Target.GlobalPosition);
+		UpdateLockonReticle(screenPos, isTargetAttackable, wasTargetChanged);
 	}
 
 	private TargetState IsTargetValid(Node3D t)
@@ -228,9 +233,8 @@ public partial class PlayerLockonController : Node3D
 	private Node2D lockonReticle;
 	[Export]
 	private AnimationPlayer lockonAnimator;
-
 	public void DisableLockonReticle() => lockonAnimator.Play("disable");
-	public void UpdateLockonReticle(Vector2 screenPosition, bool isTargetAttackable)
+	public void UpdateLockonReticle(Vector2 screenPosition, bool isTargetAttackable, bool wasTargetChanged)
 	{
 		lockonReticle.SetDeferred("position", screenPosition);
 		if (!wasTargetChanged && isTargetAttackable == IsTargetAttackable)
