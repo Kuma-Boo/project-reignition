@@ -31,6 +31,7 @@ public partial class PlayerLockonController : Node3D
 	}
 	/// <summary> Targets whose squared distance is within this range will prioritize height instead of distance. </summary>
 	private readonly float DistanceFudgeAmount = 1f;
+	private readonly string LevelWallGroup = "level wall";
 	private readonly Array<Node3D> activeTargets = []; // List of targetable objects
 
 	/// <summary> Should the controller check for new lockonTargets? </summary>
@@ -142,9 +143,9 @@ public partial class PlayerLockonController : Node3D
 		UpdateLockonReticle(screenPos, isTargetAttackable, wasTargetChanged);
 	}
 
-	private TargetState IsTargetValid(Node3D t)
+	private TargetState IsTargetValid(Node3D target)
 	{
-		if (!activeTargets.Contains(t)) // Not in target list anymore (target hitbox may have been disabled)
+		if (!activeTargets.Contains(target)) // Not in target list anymore (target hitbox may have been disabled)
 			return TargetState.NotInList;
 
 		/*
@@ -159,53 +160,10 @@ public partial class PlayerLockonController : Node3D
 			return TargetState.Invisible;
 		*/
 
-		// Raycast for obstacles
-		Vector3 castPosition = Player.CollisionPosition;
-		if (Player.VerticalSpeed < 0)
-			castPosition += Player.UpDirection * Player.VerticalSpeed * PhysicsManager.physicsDelta;
-		Vector3 castVector = t.GlobalPosition - castPosition;
-		RaycastHit h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
-		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
+		if(HitObstacle(target))
+			return TargetState.HitObstacle;
 
-		if (h && h.collidedObject != t)
-		{
-			if (!h.collidedObject.IsInGroup("level wall") ||
-				h.normal.AngleTo(Vector3.Up) > Mathf.Pi * .4f)
-			{
-				// Hit an obstacle
-				return TargetState.HitObstacle;
-			}
-
-			if (h.collidedObject.IsInGroup("level wall")) // Cast a new ray from the collision point
-			{
-				castPosition = h.point + (h.direction.Normalized() * .1f);
-				castVector = t.GlobalPosition - castPosition;
-				h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
-				DebugManager.DrawRay(castPosition, castVector, Colors.Red);
-
-				if (h && h.collidedObject != t)
-					return TargetState.HitObstacle;
-			}
-		}
-
-		// Check from the floor if nothing was hit
-		Vector3 castOffset = Vector3.Up * Player.CollisionSize.Y * .5f;
-		castPosition = Player.GlobalPosition + castOffset;
-		if (Player.VerticalSpeed < 0)
-			castPosition += Player.UpDirection * Player.VerticalSpeed * PhysicsManager.physicsDelta;
-		castVector = t.GlobalPosition - castOffset - castPosition;
-		h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
-		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
-		if (h && h.collidedObject != t)
-		{
-			if (!h.collidedObject.IsInGroup("level wall") &&
-				h.normal.AngleTo(Vector3.Up) > Mathf.Pi * .4f)
-			{
-				return TargetState.HitObstacle;
-			}
-		}
-
-		float distance = t.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
+		float distance = target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
 		if (distance < DistanceFudgeAmount &&
 			Player.Controller.IsHoldingDirection(Player.Controller.GetTargetMovementAngle(), Player.PathFollower.ForwardAngle))
 		{
@@ -213,6 +171,59 @@ public partial class PlayerLockonController : Node3D
 		}
 
 		return TargetState.Valid;
+	}
+
+	private bool HitObstacle(Node3D target)
+	{
+		// Raycast for obstacles
+		Vector3 castPosition = Player.CollisionPosition;
+		if (Player.VerticalSpeed < 0)
+			castPosition += Player.UpDirection * Player.VerticalSpeed * PhysicsManager.physicsDelta;
+		Vector3 castVector = target.GlobalPosition - castPosition;
+
+		RaycastHit h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
+		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
+		if (h && h.collidedObject != target)
+		{
+			if (!h.collidedObject.IsInGroup(LevelWallGroup) ||
+				h.normal.AngleTo(Vector3.Up) > Mathf.Pi * .4f)
+			{
+				// Hit an obstacle
+				return true;
+			}
+
+			if (h.collidedObject.IsInGroup(LevelWallGroup)) // Cast a new ray from the collision point
+			{
+				castPosition = h.point + (h.direction.Normalized() * .1f);
+				castVector = target.GlobalPosition - castPosition;
+				h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
+				DebugManager.DrawRay(castPosition, castVector, Colors.Red);
+
+				if (h && h.collidedObject != target)
+					return true;
+			}
+		}
+
+		/* REFACTOR TODO
+			Remove this check and have the player simply transition
+		 	bounce state when colliding with something instead.
+		*/
+		// Check from the player's feet if nothing was hit
+		Vector3 castOffset = Vector3.Up * Player.CollisionSize.Y * .5f;
+		castPosition = Player.GlobalPosition + castOffset;
+		if (Player.VerticalSpeed < 0)
+			castPosition += Player.UpDirection * Player.VerticalSpeed * PhysicsManager.physicsDelta;
+		castVector = target.GlobalPosition - castOffset - castPosition;
+		h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
+		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
+		if (h && h.collidedObject != target &&
+			!h.collidedObject.IsInGroup(LevelWallGroup) &&
+			h.normal.AngleTo(Vector3.Up) > Mathf.Pi * .4f)
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	public void ResetLockonTarget()
