@@ -13,7 +13,32 @@ public partial class LandState : PlayerState
 
 	public override void EnterState()
 	{
+		// Snap to ground
+		Vector3 originalVelocity = Player.Velocity;
+		Player.Velocity = Player.UpDirection * Player.VerticalSpeed;
+		Player.MoveAndSlide();
+		Player.Velocity = originalVelocity;
+
+		Player.VerticalSpeed = 0;
 		Player.Lockon.IsMonitoring = false;
+		Player.Lockon.ResetLockonTarget();
+
+		/*
+		REFACTOR TODO 
+		if (allowLandingSkills && MovementState == MovementStates.Normal)
+		{
+			// Apply landing skills
+			CheckLandingBoost();
+			CheckLandingSoul();
+		}
+
+		allowLandingSkills = false;
+
+		// Play FX
+		Effect.PlayLandingFX();
+
+		JustLandedOnGround = true;
+		*/
 	}
 
 	public override PlayerState ProcessPhysics()

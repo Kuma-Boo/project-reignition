@@ -216,11 +216,12 @@ public partial class PlayerLockonController : Node3D
 		Player.Camera.LockonTarget = null;
 		*/
 
-		if (Target != null) // Reset Active Target
-		{
-			Target = null;
-			DisableLockonReticle();
-		}
+		if (Target == null)
+			return;
+
+		// Reset Active Target
+		Target = null;
+		DisableLockonReticle();
 	}
 
 	[Export]
