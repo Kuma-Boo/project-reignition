@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://ciqbaxbhrxrjk"]
+[gd_scene load_steps=41 format=3 uid="uid://ciqbaxbhrxrjk"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
@@ -39,6 +39,7 @@
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="37_xvvs2"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="38_mjdev"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="39_ikhtg"]
+[ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="40_xgwfm"]
 
 [node name="Stage" type="Node"]
 
@@ -1178,6 +1179,10 @@ transform = Transform3D(1, 3.72529e-09, 0, 3.72529e-09, 1, 1.49012e-08, -2.98023
 
 [node name="Grindrail" parent="MainAct/FanHallConnection" instance=ExtResource("30_lrk71")]
 transform = Transform3D(1, -8.27181e-25, 0, 0, 1, 0, 0, 0, 1, 3.84058, 7.62939e-06, 0)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings" type="Node3D" parent="MainAct/FanHallConnection/Grindrail"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.819824, -2.17764)
@@ -1438,6 +1443,10 @@ transform = Transform3D(0.99961, 0, 0.0279043, 0, 1, 0, -0.0279043, 0, 0.99961, 
 
 [node name="Grindrail" parent="MainAct/Hall13/UpperPath" instance=ExtResource("22_ifefi")]
 transform = Transform3D(0.999998, 0, -0.0018326, 0, 1, 0, 0.0018326, 0, 0.999998, -0.795654, 0.829596, -10.2159)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Ringrail" type="Node3D" parent="MainAct/Hall13/UpperPath/Grindrail"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00866699, 0.542545, -1.17279)
@@ -1468,6 +1477,10 @@ SpikeState = 2
 
 [node name="Grindrail2" parent="MainAct/Hall13/UpperPath" instance=ExtResource("30_lrk71")]
 transform = Transform3D(0.999999, 0, -0.00108216, 0, 1, 0, 0.00108216, 0, 0.999999, 3.01956, 0.755075, -19.5829)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Ringrail2" type="Node3D" parent="MainAct/Hall13/UpperPath/Grindrail2"]
 transform = Transform3D(1, 0, -0.00075044, 0, 1, 0, 0.00075044, 0, 1, -0.0524902, 0.700665, -11.8653)
@@ -1497,6 +1510,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.2)
 
 [node name="Spring" parent="MainAct/Hall13/UpperPath" instance=ExtResource("37_xvvs2")]
 transform = Transform3D(-0.00565483, 0, 0.999984, 0, 1, 0, -0.999984, 0, -0.00565483, 3.06024, 1.24512, -49.3094)
+voiceKey = &""
 
 [node name="ScrapMachineSupport" parent="MainAct/Hall13/UpperPath" instance=ExtResource("16_lv0ng")]
 transform = Transform3D(-0.00565483, 0, 0.999984, 0, 1, 0, -0.999984, 0, -0.00565483, 2.55371, 0.5, -54.4592)
@@ -1507,6 +1521,10 @@ transform = Transform3D(-0.00565483, 0, 0.999984, 0, 1, 0, -0.999984, 0, -0.0056
 [node name="Grindrail3" parent="MainAct/Hall13/UpperPath" instance=ExtResource("25_an8dd")]
 transform = Transform3D(0.999892, 0, -0.0147126, 0, 1, 0, 0.0147126, 0, 0.999892, 2.59229, 3.10451, -65.2264)
 rail = NodePath("../Grindrail/Path3D")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Ringgrail" type="Node3D" parent="MainAct/Hall13/UpperPath/Grindrail3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0576172, 0.570358, -2.82861)
@@ -1556,11 +1574,16 @@ transform = Transform3D(-0.999772, 0, -0.0213787, 0, 1, 0, 0.0213787, 0, -0.9997
 transform = Transform3D(1, 0, -0.000924992, 0, 1, 0, 0.000924992, 0, 1, 7.29501, 0.5599, -108.236)
 SpikeState = 1
 
+[node name="JumpPanel" parent="MainAct/Hall13/UpperPath" instance=ExtResource("39_ikhtg")]
+transform = Transform3D(-0.999995, 0, -0.00324635, 0, 1, 0, 0.00324635, 0, -0.999995, 0.696625, 0.5599, -117.622)
+startingHeight = 1.325
+middleHeight = 0.485
+finalHeight = 2.97
+distance = 6.62
+
 [node name="DashPanel" parent="MainAct/Hall13/UpperPath" instance=ExtResource("38_mjdev")]
 transform = Transform3D(-0.999965, 0, 0.00846475, 0, 1, 0, -0.00846475, 0, -0.999965, 0.825928, 0.541571, -137.095)
-
-[node name="JumpPanel" parent="MainAct/Hall13/UpperPath" instance=ExtResource("39_ikhtg")]
-transform = Transform3D(-0.999995, 0, -0.00324635, 0, 1, 0, 0.00324635, 0, -0.999995, 0.696594, 0.5599, -117.622)
+speedRatio = 1.244
 
 [node name="BottomPath" type="Node3D" parent="MainAct/Hall13"]
 
@@ -1999,10 +2022,376 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.38327, -1.48384, 5.912)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.82095, -1.95168, 8.00452)
 
 [node name="Spring" parent="MainAct/Spiral2" instance=ExtResource("37_xvvs2")]
-transform = Transform3D(0.0141192, 0, -0.9999, 0, 1, 0, 0.9999, 0, 0.0141192, 1.28549, -29.1252, 24.1345)
+transform = Transform3D(0.0141192, 0, -0.9999, 0, 1, 0, 0.9999, 0, 0.0141192, 1.28555, -29.4497, 24.1345)
+startingHeight = 1.06
+middleHeight = 1.135
+finalHeight = 1.51
+distance = 1.305
+launchDirection = 1
+voiceKey = &""
 
 [node name="ScrapMachineSupport" parent="MainAct/Spiral2" instance=ExtResource("16_lv0ng")]
 transform = Transform3D(0.0141192, 0, -0.9999, 0, 1, 0, 0.9999, 0, 0.0141192, 1.25323, -29.7652, 25.6157)
+
+[node name="Box15" type="Node3D" parent="."]
+transform = Transform3D(0.00265294, 0, -0.999996, 0, 1, 0, 0.999996, 0, 0.00265294, -364.65, -56.0883, -359.999)
+
+[node name="Grindrail" parent="Box15" instance=ExtResource("22_ifefi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.94397, -0.0394173, 17.497)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="RingRail" type="Node3D" parent="Box15/Grindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0352478, 0.638519, -13.2637)
+script = ExtResource("7_v2v6a")
+Generate = false
+Source = ExtResource("8_yjt2l")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/MiddlePath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.8
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Box15/Grindrail/RingRail" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.14441e-05, -0.000518799)
+
+[node name="Child02" parent="Box15/Grindrail/RingRail" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00744629, 0.0629768, -2.80118)
+
+[node name="Child03" parent="Box15/Grindrail/RingRail" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0149536, 0.11372, -5.63925)
+
+[node name="Child04" parent="Box15/Grindrail/RingRail" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0225525, 0.135735, -8.49484)
+
+[node name="Child05" parent="Box15/Grindrail/RingRail" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0299683, 0.138023, -11.2957)
+
+[node name="SpikePanel" parent="Box15" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.00265294, 0, 0.999996, 0, 1, 0, -0.999996, 0, 0.00265294, -0.655487, -3.86605, -33.2089)
+
+[node name="SpikePanel2" parent="Box15" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.00265294, 0, 0.999996, 0, 1, 0, -0.999996, 0, 0.00265294, 0.809509, -3.87694, -33.205)
+
+[node name="ScrapMachineSupport2" parent="Box15" instance=ExtResource("16_lv0ng")]
+transform = Transform3D(0.00265305, 0, 0.999997, 0, 1, 0, -0.999997, 0, 0.00265305, -0.956604, -4.13832, -42.4156)
+
+[node name="SpikePanel3" parent="Box15" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.334749, -0.00510239, 0.942293, 0.0625756, 0.997898, -0.0168264, -0.940227, 0.0645972, 0.334365, 0.160858, -2.80609, -51.0499)
+"Current State" = 2
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.3, 0, 0.8)
+
+[node name="SpikePanel4" parent="Box15" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.334749, -0.00510239, 0.942293, 0.0625756, 0.997898, -0.0168264, -0.940227, 0.0645972, 0.334365, 1.4823, -2.83595, -50.5415)
+"Current State" = 2
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.3, 0, 0.8)
+
+[node name="SpikePanel5" parent="Box15" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.334749, -0.00510239, 0.942293, 0.0625756, 0.997898, -0.0168264, -0.940227, 0.0645972, 0.334365, 2.78394, -2.83595, -50.038)
+"Current State" = 2
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.3, 0, 0.8)
+
+[node name="SpikePanel6" parent="Box15" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.334749, -0.00510239, 0.942293, 0.0625756, 0.997898, -0.0168264, -0.940227, 0.0645972, 0.334365, 4.06668, -2.83595, -49.5595)
+"Current State" = 2
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.3, 0, 0.8)
+
+[node name="ScrapMachineSupport3" parent="Box15" instance=ExtResource("16_lv0ng")]
+transform = Transform3D(0.0238566, 0, 0.999716, 0, 1, 0, -0.999716, 0, 0.0238566, 5.84467, -1.64338, -72.0481)
+
+[node name="ScrapMachineSupport4" parent="Box15" instance=ExtResource("16_lv0ng")]
+transform = Transform3D(-0.417516, 0.0225686, 0.908389, 0.0466472, 0.998906, -0.00337743, -0.907472, 0.0409637, -0.418111, 3.34973, -0.965801, -102.978)
+
+[node name="Grindrail2" parent="Box15" instance=ExtResource("30_lrk71")]
+transform = Transform3D(0.975837, -0.000802738, -0.218498, -0.0196869, 0.995603, -0.0915818, 0.217611, 0.0936705, 0.97153, -0.726929, -0.313847, -42.6065)
+rail = NodePath("../Grindrail/Path3D")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Grindrail3" parent="Box15" instance=ExtResource("30_lrk71")]
+transform = Transform3D(0.996264, 0.0288878, 0.0813809, -0.0266403, 0.999237, -0.0285699, -0.0821442, 0.0262952, 0.996274, 5.89899, 2.32389, -72.4835)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Cave16" type="Node3D" parent="."]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, -262.091, -52.7458, -356.813)
+
+[node name="Spring" parent="Cave16" instance=ExtResource("37_xvvs2")]
+voiceKey = &""
+
+[node name="SpikePanel7" parent="Cave16" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.718576, 7.27596e-10, -0.695449, 0.0971844, 0.990188, 0.100416, 0.688625, -0.139744, 0.711525, 11.8709, -7.28415, -12.4973)
+
+[node name="SpikePanel8" parent="Cave16" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.718576, 7.27596e-10, -0.695449, 0.0971844, 0.990188, 0.100416, 0.688625, -0.139744, 0.711525, 12.8865, -7.12994, -11.5226)
+
+[node name="SpikePanel9" parent="Cave16" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.718576, -6.40285e-10, -0.695449, 0.135771, 0.980758, 0.140286, 0.682067, -0.195228, 0.704749, 13.8979, -6.94816, -10.6032)
+
+[node name="SpikePanel10" parent="Cave16" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.718576, -6.40285e-10, -0.695449, 0.135771, 0.980758, 0.140286, 0.682068, -0.195228, 0.704749, 14.8463, -6.78516, -9.7247)
+
+[node name="SpikePanel11" parent="Cave16" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.718577, 7.27596e-10, -0.695449, 0.0971844, 0.990188, 0.100416, 0.688624, -0.139744, 0.711525, 10.7935, -7.0817, -11.5182)
+
+[node name="SpikePanel12" parent="Cave16" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.718577, 7.27596e-10, -0.695449, 0.0971844, 0.990188, 0.100416, 0.688624, -0.139744, 0.711525, 11.808, -6.92749, -10.5433)
+
+[node name="SpikePanel13" parent="Cave16" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.718576, -6.40285e-10, -0.69545, 0.135771, 0.980758, 0.140286, 0.682068, -0.195228, 0.704749, 12.8195, -6.74572, -9.62396)
+
+[node name="SpikePanel14" parent="Cave16" instance=ExtResource("28_yqcmt")]
+transform = Transform3D(0.718577, -6.40285e-10, -0.69545, 0.135771, 0.980758, 0.140286, 0.682068, -0.195228, 0.704749, 13.7678, -6.58272, -8.74542)
+
+[node name="GreenMajin" parent="Cave16" instance=ExtResource("17_ff4u0")]
+transform = Transform3D(0.668963, 0, -0.743297, 0, 1, 0, 0.743297, 0, 0.668963, 14.2767, -7.73212, -14.4389)
+
+[node name="GreenMajin2" parent="Cave16" instance=ExtResource("17_ff4u0")]
+transform = Transform3D(0.668963, 0, -0.743297, 0, 1, 0, 0.743297, 0, 0.668963, 17.2976, -8.05982, -16.0049)
+
+[node name="GreenMajin3" parent="Cave16" instance=ExtResource("17_ff4u0")]
+transform = Transform3D(0.668963, 0, -0.743297, 0, 1, 0, 0.743297, 0, 0.668963, 20.2861, -8.47262, -18.068)
+
+[node name="Spring2" parent="Cave16" node_paths=PackedStringArray("sfxPlayer") instance=ExtResource("37_xvvs2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.9068, -9.4571, -23.8461)
+sfxPlayer = NodePath("../Spring/SFX")
+voiceKey = &""
+
+[node name="ScrapMachineSupport5" parent="Cave16" instance=ExtResource("16_lv0ng")]
+transform = Transform3D(0.674445, 0.136015, 0.725689, -0.0793264, 0.990545, -0.111932, -0.734051, 0.0179258, 0.678858, 22.9527, -9.67948, -25.0351)
+
+[node name="ScrapMachineSupport6" parent="Cave16" instance=ExtResource("16_lv0ng")]
+transform = Transform3D(0.916413, -0.045854, 0.3976, 0.0706408, 0.996351, -0.0479122, -0.393951, 0.0719942, 0.916308, 46.6159, -15.29, -41.2354)
+
+[node name="Grindrail4" parent="Cave16" instance=ExtResource("25_an8dd")]
+transform = Transform3D(0.547413, 0.24108, -0.801388, -0.148303, 0.970397, 0.19062, 0.823619, 0.0145001, 0.566961, 23.9212, -6.39826, -25.3643)
+rail = NodePath("../../Box15/Grindrail/Path3D")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Ringrail2" type="Node3D" parent="Cave16/Grindrail4"]
+transform = Transform3D(1, 2.07685e-07, -2.98023e-08, -2.79397e-09, 0.999999, -6.51926e-09, 0, 5.58794e-08, 1, 0.0594788, 0.591949, -1.98956)
+script = ExtResource("7_v2v6a")
+Generate = false
+Source = ExtResource("8_yjt2l")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Cave16/Grindrail4/Ringrail2" instance=ExtResource("8_yjt2l")]
+
+[node name="Child02" parent="Cave16/Grindrail4/Ringrail2" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="Cave16/Grindrail4/Ringrail2" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="Cave16/Grindrail4/Ringrail2" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="InvisibleGrindrail" parent="Cave16" instance=ExtResource("40_xgwfm")]
+transform = Transform3D(0.0109586, 0.0380803, -0.999215, 0.00234875, 0.999271, 0.038108, 0.999938, -0.00276452, 0.0108612, 46.8391, -11.4024, -41.0905)
+railLength = 19
+
+[node name="Box17" type="Node3D" parent="."]
+transform = Transform3D(0.0222162, 1.16415e-09, -0.999753, 0.889683, 0.456151, 0.0197703, 0.456038, -0.889903, 0.010134, -198.419, -65.5509, -399.485)
+
+[node name="Fan" parent="Box17" instance=ExtResource("29_wryy0")]
+transform = Transform3D(0.990622, -0.136633, -0.000208393, 0.136633, 0.990617, 0.00303622, -0.000208405, -0.00303621, 0.999995, 0.0428772, 0.192383, -6.36809)
+
+[node name="Grindrail" parent="Box17" instance=ExtResource("22_ifefi")]
+transform = Transform3D(0.455931, 0.889683, -0.0243093, -0.889893, 0.456151, 0.00408482, 0.0147229, 0.0197703, 0.999696, -4.80678, 0.454102, -0.60318)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="RingRail" type="Node3D" parent="Box17/Grindrail"]
+transform = Transform3D(0.99984, -0.00284979, 0.0177354, 0.00285637, 0.999995, -0.000346523, -0.0177343, 0.000396883, 0.999845, -0.0152588, 0.644142, -2.03014)
+script = ExtResource("7_v2v6a")
+Generate = false
+Source = ExtResource("8_yjt2l")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 3.6
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Box17/Grindrail/RingRail" instance=ExtResource("8_yjt2l")]
+
+[node name="Child02" parent="Box17/Grindrail/RingRail" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child03" parent="Box17/Grindrail/RingRail" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child04" parent="Box17/Grindrail/RingRail" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="Child05" parent="Box17/Grindrail/RingRail" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.4)
+
+[node name="Grindrail2" parent="Box17" instance=ExtResource("22_ifefi")]
+transform = Transform3D(0.456093, 0.889683, -0.021062, -0.8899, 0.456151, -0.00225211, 0.0076038, 0.0197703, 0.999776, -2.9066, -3.25385, -0.560944)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="RingRail2" type="Node3D" parent="Box17/Grindrail2"]
+transform = Transform3D(0.999939, -0.00285254, 0.0106152, 0.00285637, 0.999995, -0.000346523, -0.0106141, 0.00037658, 0.999945, 0.0989075, 0.997261, -39.1005)
+script = ExtResource("7_v2v6a")
+Generate = false
+Source = ExtResource("8_yjt2l")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 4.7
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Box17/Grindrail2/RingRail2" instance=ExtResource("8_yjt2l")]
+
+[node name="Child02" parent="Box17/Grindrail2/RingRail2" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.7)
+
+[node name="Child03" parent="Box17/Grindrail2/RingRail2" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.4)
+
+[node name="Child04" parent="Box17/Grindrail2/RingRail2" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.1)
+
+[node name="Child05" parent="Box17/Grindrail2/RingRail2" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18.8)
+
+[node name="GreenMajin" parent="Box17" instance=ExtResource("17_ff4u0")]
+transform = Transform3D(0.453726, 0.889683, -0.0509657, -0.888127, 0.456151, 0.0561875, 0.0732371, 0.0197703, 0.997119, -2.42941, -1.55652, -79.7286)
+
+[node name="GasTank" parent="Box17" instance=ExtResource("15_pjnrf")]
+transform = Transform3D(0.0222162, 0.889683, 0.456038, -3.72529e-09, 0.456151, -0.889902, -0.999753, 0.0197703, 0.010134, -1.36481, -1.32776, -82.3058)
+
+[node name="RedMajin" parent="Box17" instance=ExtResource("14_42pc4")]
+transform = Transform3D(0.456242, 0.889683, -0.017535, -0.889855, 0.456151, -0.00913252, -0.000126435, 0.0197703, 0.999805, -0.485764, -0.853546, -82.2864)
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+
+[node name="BlueMajin" parent="Box17" instance=ExtResource("34_ip7kn")]
+transform = Transform3D(0.454829, 0.889683, -0.0399364, -0.889229, 0.456151, 0.0346115, 0.0490103, 0.0197703, 0.998603, -0.723206, -2.09393, -91.7725)
+
+[node name="BlueMajin2" parent="Box17" instance=ExtResource("34_ip7kn")]
+transform = Transform3D(0.454829, 0.889683, -0.0399364, -0.889229, 0.456151, 0.0346115, 0.0490103, 0.0197703, 0.998603, -2.32016, 0.475433, -101.089)
+
+[node name="Hall18" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100.386, -67.0234, -399.991)
+
+[node name="HallRings" type="Node3D" parent="Hall18"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.5508, 4.35535, 25.1169)
+script = ExtResource("7_v2v6a")
+Generate = false
+Source = ExtResource("8_yjt2l")
+Amount = 8
+Shape = 2
+Path = NodePath("../../Static/Path/MiddlePath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 4.1
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Hall18/HallRings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.67029e-05, 3.43323e-05, 0.000183105)
+
+[node name="Child02" parent="Hall18/HallRings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.668484, 0.699284, 3.9498)
+
+[node name="Child03" parent="Hall18/HallRings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.954617, 1.36712, 7.95612)
+
+[node name="Child04" parent="Hall18/HallRings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.897732, 2.00722, 11.9739)
+
+[node name="Child05" parent="Hall18/HallRings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.438259, 2.62028, 15.9657)
+
+[node name="Child06" parent="Hall18/HallRings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.442783, 3.19804, 19.892)
+
+[node name="Child07" parent="Hall18/HallRings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7399, 3.73438, 23.7084)
+
+[node name="Child08" parent="Hall18/HallRings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.43198, 4.22506, 27.3758)
+
+[node name="Cave19" type="Node3D" parent="."]
+transform = Transform3D(-0.999979, 0, -0.0067369, 0, 1, 0, 0.0067369, 0, -0.999979, -62.523, -58.4897, -359.976)
+
+[node name="BlueMajin" parent="Cave19" instance=ExtResource("34_ip7kn")]
+transform = Transform3D(0.824649, 0, -0.565643, 0, 1, 0, 0.565643, 0, 0.824649, 4.11737, -0.110889, -16.5217)
+
+[node name="BlueMajin2" parent="Cave19" instance=ExtResource("34_ip7kn")]
+transform = Transform3D(0.849634, 0, -0.52737, 0, 1, 0, 0.52737, 0, 0.849634, 4.89437, 1.63167, -17.6663)
+
+[node name="GasTank" parent="Cave19" instance=ExtResource("15_pjnrf")]
+transform = Transform3D(0.675559, 0.0923897, 0.731492, 0.102512, 0.970712, -0.217278, -0.730143, 0.221771, 0.646302, 8.84089, 1.70226, -22.6004)
+height = 4.0
+endPosition = Vector3(11.91, 2.19, 1.32)
+
+[node name="BlueMajin3" parent="Cave19" instance=ExtResource("34_ip7kn")]
+transform = Transform3D(0.561722, 0, -0.827325, 0, 1, 0, 0.827325, 0, 0.561722, 16.8026, 2.08769, -32.157)
+
+[node name="BlueMajin4" parent="Cave19" instance=ExtResource("34_ip7kn")]
+transform = Transform3D(0.561722, 0, -0.827325, 0, 1, 0, 0.827325, 0, 0.561722, 17.6644, 4.89149, -32.1714)
+
+[node name="BlueMajin5" parent="Cave19" instance=ExtResource("34_ip7kn")]
+transform = Transform3D(0.561722, 0, -0.827325, 0, 1, 0, 0.827325, 0, 0.561722, 20.115, 4.82867, -28.5328)
+
+[node name="BlueMajin6" parent="Cave19" instance=ExtResource("34_ip7kn")]
+transform = Transform3D(0.561722, 0, -0.827325, 0, 1, 0, 0.827325, 0, 0.561722, 19.5874, 1.9211, -28.0381)
+
+[node name="Box20" type="Node3D" parent="."]
+transform = Transform3D(-0.999977, 0, -0.00673689, 0, 1, 0, 0.00673689, 0, -0.999977, -100.006, -56.2145, -289.548)
+
+[node name="Fan" parent="Box20" instance=ExtResource("25_xh5hk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Fan2" parent="Box20" instance=ExtResource("25_xh5hk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.05469, 0)
+
+[node name="Grindrail" parent="Box20" instance=ExtResource("25_an8dd")]
+transform = Transform3D(0.999737, -0.00241729, 0.0228446, -0.00130852, 0.986842, 0.161686, -0.0229348, -0.161674, 0.98658, -1.29582, -0.123207, 0.156494)
+
+[node name="Grindrail2" parent="Box20" instance=ExtResource("25_an8dd")]
+transform = Transform3D(0.999846, -0.00339279, 0.0175216, 0.00323576, 0.999955, 0.0089817, -0.0175513, -0.00892389, 0.999812, -1.74505, -3.31839, -19.5128)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Switch" parent="." instance=ExtResource("12_qvhyq")]
+transform = Transform3D(1, 0, 0, 0, 0.988647, -0.15026, 0, 0.15026, 0.988647, -98.5959, -57.1109, -286.545)
 
 [connection signal="Entered" from="MainAct/LavaHall/LaunchRing1" to="MainAct/LavaHall/LaunchRing1/Cam" method="Activate"]
 [connection signal="Exited" from="MainAct/LavaHall/LaunchRing1" to="MainAct/LavaHall/LaunchRing1/Cam" method="Deactivate"]
