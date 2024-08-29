@@ -40,13 +40,13 @@ public partial class LaunchState : PlayerState
 			if (!launchDirection.IsEqualApprox(Vector3.Zero))
 			{
 				Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(launchDirection);
-				// REFACTOR TODO Player.Animator.SnapRotation(Player.MovementAngle);
+				Player.Animator.SnapRotation(Player.MovementAngle);
 			}
 		}
 
 		if (settings.IsJump) // Play jump effects
 		{
-			// REFACTOR TODO Animator.JumpAnimation();
+			Player.Animator.JumpAnimation();
 			Player.UpDirection = Vector3.Up;
 			Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 		}
@@ -64,9 +64,7 @@ public partial class LaunchState : PlayerState
 
 		Player.Effect.StopSpinFX();
 		Player.Effect.StopTrailFX();
-		/* REFACTOR TODO
 		Player.Animator.ResetState();
-		*/
 
 		settings = new();
 		Player.EmitSignal(PlayerController.SignalName.LaunchFinished);

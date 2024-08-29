@@ -182,12 +182,10 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	/// <summary> Sets the player's launch animation based on launchsettings. Override as needed. </summary>
 	protected virtual void LaunchAnimation()
 	{
-		/* REFACTOR TODO
 		if (GetLaunchSettings().InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
 			Player.Animator.JumpAnimation();
 		else
 			Player.Animator.LaunchAnimation();
-		*/
 	}
 
 	[Export]

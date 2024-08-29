@@ -61,14 +61,14 @@ public partial class LaunchRing : Launcher
 				}
 			}
 
-			// REFACTOR TODO Player.Animator.SetSpinSpeed(1.5f + launchRatio);
+			Player.Animator.SetSpinSpeed(1.5f + launchRatio);
 		}
 	}
 
 	protected override void LaunchAnimation()
 	{
 		// Keep the same animation as charging (i.e. do nothing)
-		// REFACTOR TODO Player.Animator.SetSpinSpeed(5); // Speed up spin animation just because
+		Player.Animator.SetSpinSpeed(5); // Speed up spin animation just because
 	}
 
 	private void DropPlayer(bool launched = false)
@@ -78,7 +78,7 @@ public partial class LaunchRing : Launcher
 		if (!launched)
 		{
 			EmitSignal(SignalName.Exited);
-			// REFACTOR TODO Player.Animator.ResetState();
+			Player.Animator.ResetState();
 			Player.Effect.StopSpinFX();
 			Player.Lockon.IsMonitoring = false;
 		}
@@ -87,7 +87,7 @@ public partial class LaunchRing : Launcher
 	private void LaunchPlayer()
 	{
 		DropPlayer(true);
-		// REFACTOR TODO Player.Effect.StartTrailFX();
+		Player.Effect.StartTrailFX();
 		base.Activate();
 	}
 
@@ -122,14 +122,14 @@ public partial class LaunchRing : Launcher
 
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward().RemoveVertical().Normalized());
 		Player.Effect.StartSpinFX();
-		
+
 		/* REFACTOR TODO
 		Player.StartExternal(this);
+		*/
 		Player.Animator.StartSpin();
 
 		Player.Animator.ExternalAngle = Player.MovementAngle;
-		Player.Lockon.StopHomingAttack();
-		*/
+		Player.Lockon.ResetLockonTarget();
 
 		EmitSignal(SignalName.Entered);
 	}

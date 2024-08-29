@@ -23,17 +23,15 @@ public partial class PlayerSkillController : Node3D
 
 	#region Skills
 	private SkillRing SkillRing => SaveManager.ActiveSkillRing;
-	public bool IsSkillEquipped(SkillKey key) => SkillRing.IsSkillEquipped(key);
-	public int GetAugmentIndex(SkillKey key) => SkillRing.GetAugmentIndex(key);
 
 	[ExportGroup("Countdown Skills")]
 	[Export]
 	public float countdownBoostSpeed;
 
 	/// <summary> How many rings to start with when the level starts. </summary>
-	public int StartingRingCount => IsSkillEquipped(SkillKey.RingSpawn) ? 5 : 0;
+	public int StartingRingCount => SkillRing.IsSkillEquipped(SkillKey.RingSpawn) ? 5 : 0;
 	/// <summary> How many rings to start with when respawning. </summary>
-	public int RespawnRingCount => IsSkillEquipped(SkillKey.RingRespawn) ? 5 : 0;
+	public int RespawnRingCount => SkillRing.IsSkillEquipped(SkillKey.RingRespawn) ? 5 : 0;
 
 	/// <summary> Minimum speed when landing on the ground and holding forward. Makes Sonic feel faster. </summary>
 	[Export]
@@ -42,7 +40,7 @@ public partial class PlayerSkillController : Node3D
 	private void SetUpSkills()
 	{
 		// Expand hitbox if skills is equipped
-		Runtime.Instance.UpdatePearlCollisionShapes(IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
+		Runtime.Instance.UpdatePearlCollisionShapes(SkillRing.IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
 
 		InitializeCrestSkills();
 		//Update crest of flame's trail color
@@ -348,7 +346,7 @@ public partial class PlayerSkillController : Node3D
 		{
 			timeBreakAnimator.Play("start");
 			Player.Effect.PlayVoice("time break");
-			
+
 			/*
 			REFACTOR TODO Implement Motion Blur
 			Player.Camera.RequestMotionBlur();

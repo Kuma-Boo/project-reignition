@@ -17,7 +17,7 @@ public partial class PlayerLockonController : Node3D
 	public void Initialize(PlayerController player) => Player = player;
 
 	/// <summary> Active lockon target shown on the HUD. </summary>
-	public Node3D Target {get; private set;}
+	public Node3D Target { get; private set; }
 	/// <summary> can the current target be attacked? </summary>
 	public bool IsTargetAttackable { get; set; }
 	private enum TargetState
@@ -79,7 +79,7 @@ public partial class PlayerLockonController : Node3D
 				// Ignore targets that are further from the current target
 				if (dst > closestDistance + DistanceFudgeAmount)
 					continue;
-				
+
 				// Within fudge range, decide priority based on height
 				if (dst > closestDistance - DistanceFudgeAmount &&
 					activeTargets[i].GlobalPosition.Y <= currentTarget.GlobalPosition.Y)
@@ -104,7 +104,7 @@ public partial class PlayerLockonController : Node3D
 
 	private void ValidateTarget(bool wasTargetChanged)
 	{
-		if(Target == null)
+		if (Target == null)
 			return;
 
 		TargetState targetState = IsTargetValid(Target); // Validate homing attack target
@@ -154,7 +154,7 @@ public partial class PlayerLockonController : Node3D
 			return TargetState.Invisible;
 		*/
 
-		if(HitObstacle(target))
+		if (HitObstacle(target))
 			return TargetState.HitObstacle;
 
 		float distance = target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
@@ -250,7 +250,7 @@ public partial class PlayerLockonController : Node3D
 		lockonAnimator.Advance(0);
 		if (!IsTargetAttackable)
 			lockonAnimator.Play("preview");
-		else if (Player.Skills.IsSkillEquipped(SkillKey.PerfectHomingAttack))
+		else if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.PerfectHomingAttack))
 			lockonAnimator.Play("perfect-enable");
 		else
 			lockonAnimator.Play("enable");

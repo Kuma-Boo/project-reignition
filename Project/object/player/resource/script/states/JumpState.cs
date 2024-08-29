@@ -41,8 +41,10 @@ public partial class JumpState : PlayerState
 
 	public override void EnterState()
 	{
-		Player.VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
-		Player.ApplyMovement();
+		/* REFACTOR TODO
+		currentJumpTime = ignoreAccelerationJump ? ACCELERATION_JUMP_LENGTH + PhysicsManager.physicsDelta : 0;
+		allowLandingSkills = true;
+		*/
 
 		turningVelocity = 0;
 		jumpTimer = 0;
@@ -50,7 +52,14 @@ public partial class JumpState : PlayerState
 		isAccelerationJump = false;
 		isAccelerationJumpQueued = false;
 
+		if (Player.IsMovingBackward) // Kill speed when jumping backwards
+			Player.MoveSpeed = 0;
+		Player.VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
+		Player.ApplyMovement();
+
 		Player.Lockon.IsMonitoring = true;
+		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
+		Player.Animator.JumpAnimation();
 	}
 
 	public override PlayerState ProcessPhysics()

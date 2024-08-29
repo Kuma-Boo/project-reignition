@@ -27,21 +27,14 @@ public partial class BackflipState : PlayerState
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(backflipHeight);
 
 		Player.Lockon.IsMonitoring = true;
+		Player.Animator.BackflipAnimation();
+		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 
-		/* REFACTOR TODO: Add Effects
-		CanJumpDash = true;
-
-		SetActionState(ActionStates.Backflip);
-
-		Effect.PlayActionSFX(Effect.JumpSfx);
-		Animator.BackflipAnimation();
-
-		if (Skills.IsSkillEquipped(SkillKey.BackstepAttack))
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.BackstepAttack))
 		{
-			Effect.PlayFireFX();
-			AttackState = AttackStates.Weak;
+			Player.Effect.PlayFireFX();
+			Player.State.AttackState = PlayerStateController.AttackStates.Weak;
 		}
-		*/
 	}
 
 	public override PlayerState ProcessPhysics()

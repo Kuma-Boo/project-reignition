@@ -58,6 +58,9 @@ public partial class PlayerAnimator : Node3D
 	/// </summary>
 	public void ProcessPhysics()
 	{
+		if (!Player.IsOnGround)
+			AirAnimations();
+
 		UpdateVisualRotation();
 		UpdateShaderVariables();
 	}
