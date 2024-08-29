@@ -21,6 +21,7 @@ public partial class FallState : PlayerState
 		UpdateMoveSpeed();
 		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
 		Player.ApplyMovement();
+		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
 
 		if (Player.CheckGround())
 			return landState;

@@ -542,7 +542,7 @@ public partial class PlayerAnimator : Node3D
 	{
 		VisualAngle = angle;
 		rotationVelocity = 0;
-		ApplyVisualRotation();
+		Rotation = Vector3.Up * VisualAngle;
 	}
 
 	/// <summary>
@@ -576,13 +576,8 @@ public partial class PlayerAnimator : Node3D
 
 		VisualAngle = ExtensionMethods.ClampAngleRange(VisualAngle, Player.PathFollower.ForwardAngle, Mathf.Pi);
 		VisualAngle = ExtensionMethods.SmoothDampAngle(VisualAngle, targetRotation, ref rotationVelocity, MovementRotationSmoothing);
-		ApplyVisualRotation();
+		Rotation = Vector3.Up * VisualAngle;
 	}
-
-	/// <summary>
-	/// Apply VisualAngle onto Transform.
-	/// </summary>
-	private void ApplyVisualRotation() => Rotation = Vector3.Up * VisualAngle;
 	#endregion
 
 	#region Drift
