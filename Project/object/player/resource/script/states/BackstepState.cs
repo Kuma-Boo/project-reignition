@@ -17,6 +17,7 @@ public partial class BackstepState : PlayerState
 
 	private float turningVelocity;
 
+	public override bool ProcessOnEnter => true;
 	public override void EnterState()
 	{
 		turningVelocity = 0;

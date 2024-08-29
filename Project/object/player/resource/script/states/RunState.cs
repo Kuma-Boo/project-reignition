@@ -1,5 +1,4 @@
 using Godot;
-using Project.Core;
 
 namespace Project.Gameplay;
 
@@ -30,6 +29,7 @@ public partial class RunState : PlayerState
 
 	private float turningVelocity;
 
+	public override bool ProcessOnEnter => true;
 	public override void EnterState()
 	{
 		turningVelocity = 0;

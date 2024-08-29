@@ -165,6 +165,16 @@ public partial class PlayerAnimator : Node3D
 		ResetGroundTree();
 	}
 
+	public void LandingAnimation()
+	{
+		ResetGroundTree();
+		animationTree.Set(LandTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+		groundTransition.XfadeTime = .05f;
+		animationTree.Set(GroundTransition, EnabledConstant);
+		StopHurt();
+	}
+
 	private void ResetGroundTree()
 	{
 		DisabledSpeedSmoothing = true;
@@ -279,16 +289,6 @@ public partial class PlayerAnimator : Node3D
 
 		groundTurnRatio = Mathf.Lerp(((Vector2)animationTree.Get(TurnBlend)).X, groundTurnRatio, TurnSmoothing); // Blend from animator
 		animationTree.Set(TurnBlend, new Vector2(groundTurnRatio, Player.IsMovingBackward ? 0 : speedRatio));
-	}
-
-	public void LandingAnimation()
-	{
-		ResetGroundTree();
-		animationTree.Set(LandTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
-		groundTransition.XfadeTime = .05f;
-		animationTree.Set(GroundTransition, EnabledConstant);
-		StopHurt();
 	}
 
 	public bool IsBrakeAnimationActive { get; private set; }

@@ -28,8 +28,10 @@ public partial class PlayerStateMachine : Node
 
 		currentState = state;
 		currentState.EnterState();
-
 		GD.Print($"State changed to {currentState.Name}.");
+
+		if (currentState.ProcessOnEnter)
+			ProcessPhysics();
 	}
 
 	public void ProcessPhysics()
