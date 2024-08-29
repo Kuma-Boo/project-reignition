@@ -31,12 +31,14 @@ public partial class PlayerController : CharacterBody3D
 	{
 		StageSettings.RegisterPlayer(this); // Update global reference
 
-		StateMachine.Initialize(this);
 		Stats.Initialize();
 		State.Initialize(this);
 		Lockon.Initialize(this);
 		Animator.Initialize(this);
 		PathFollower.Initialize(this);
+
+		// Initialize state machine last to ensure components are ready		
+		StateMachine.Initialize(this);
 	}
 
 	public override void _PhysicsProcess(double _)

@@ -11,6 +11,8 @@ public partial class BackstepState : PlayerState
 	[Export]
 	private PlayerState runState;
 	[Export]
+	private PlayerState crouchState;
+	[Export]
 	private PlayerState jumpState;
 	[Export]
 	private PlayerState backflipState;
@@ -54,6 +56,12 @@ public partial class BackstepState : PlayerState
 			}
 
 			return jumpState;
+		}
+
+		if (Player.Controller.IsActionBufferActive)
+		{
+			Player.Controller.ResetActionBuffer();
+			return crouchState;
 		}
 
 		return null;

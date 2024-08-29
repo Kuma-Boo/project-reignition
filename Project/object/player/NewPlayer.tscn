@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://bbbuqgxfhuh8k"]
+[gd_scene load_steps=75 format=3 uid="uid://bbbuqgxfhuh8k"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://object/player/resource/script/states/BackstepState.cs" id="8_0ksv7"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/BackflipState.cs" id="9_7wp0f"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStatsController.cs" id="9_ewscv"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/CrouchState.cs" id="10_7aiwm"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/StompState.cs" id="10_eoh5j"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/JumpDashState.cs" id="11_80bi3"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/HomingAttackState.cs" id="12_ssfet"]
@@ -1437,10 +1438,11 @@ travelMagnitude = Vector3(1, 0.3, 0.2)
 script = ExtResource("2_ehi1f")
 startingState = NodePath("Idle")
 
-[node name="Idle" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState", "backstepState", "jumpState", "fallState")]
+[node name="Idle" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState", "backstepState", "crouchState", "jumpState", "fallState")]
 script = ExtResource("3_7invc")
 runState = NodePath("../Run")
 backstepState = NodePath("../Backstep")
+crouchState = NodePath("../Crouch")
 jumpState = NodePath("../Jump")
 fallState = NodePath("../Fall")
 
@@ -1453,11 +1455,12 @@ jumpState = NodePath("../Jump")
 backflipState = NodePath("../Backflip")
 turningSpeedLossCurve = SubResource("Curve_0y4at")
 
-[node name="Backstep" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState", "runState", "jumpState", "backflipState")]
+[node name="Backstep" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState", "runState", "crouchState", "jumpState", "backflipState")]
 script = ExtResource("8_0ksv7")
 fallState = NodePath("../Fall")
 idleState = NodePath("../Idle")
 runState = NodePath("../Run")
+crouchState = NodePath("../Crouch")
 jumpState = NodePath("../Jump")
 backflipState = NodePath("../Backflip")
 
@@ -1479,6 +1482,11 @@ backflipHeight = 2.4
 [node name="Stomp" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState")]
 script = ExtResource("10_eoh5j")
 landState = NodePath("../Land")
+
+[node name="Crouch" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("idleState", "fallState")]
+script = ExtResource("10_7aiwm")
+idleState = NodePath("../Idle")
+fallState = NodePath("../Fall")
 
 [node name="Fall" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState", "stompState", "jumpDashState", "homingAttackState")]
 script = ExtResource("5_niuke")

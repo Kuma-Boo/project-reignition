@@ -485,7 +485,6 @@ public partial class PlayerAnimator : Node3D
 		else
 		*/
 		crouchTransition.XfadeTime = 0.0;
-
 		CrouchStatePlayback.Travel(CrouchStateStop);
 	}
 

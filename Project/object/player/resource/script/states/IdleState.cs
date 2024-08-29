@@ -9,6 +9,8 @@ public partial class IdleState : PlayerState
 	[Export]
 	private PlayerState backstepState;
 	[Export]
+	private PlayerState crouchState;
+	[Export]
 	private PlayerState jumpState;
 	[Export]
 	private PlayerState fallState;
@@ -27,6 +29,12 @@ public partial class IdleState : PlayerState
 		{
 			Player.Controller.ResetJumpBuffer();
 			return jumpState;
+		}
+
+		if (Player.Controller.IsActionBufferActive)
+		{
+			Player.Controller.ResetActionBuffer();
+			return crouchState;
 		}
 
 		if (!Player.CheckGround())

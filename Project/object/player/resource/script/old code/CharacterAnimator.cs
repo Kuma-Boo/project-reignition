@@ -468,17 +468,15 @@ public partial class CharacterAnimator : Node3D
 	public bool IsSlideTransitionActive => CrouchStatePlayback.GetCurrentNode() == SlideStateStart;
 	public void StartCrouching()
 	{
-		if (Character.ActionState == CharacterController.ActionStates.Sliding)
-		{
-			crouchTransition.XfadeTime = .05;
-			CrouchStatePlayback.Travel(SlideStateStart);
-		}
-		else
-		{
-			CrouchStatePlayback.Travel(CrouchStateStart);
-			crouchTransition.XfadeTime = .1;
-		}
+		crouchTransition.XfadeTime = .1;
+		CrouchStatePlayback.Travel(CrouchStateStart);
+		animationTree.Set(CrouchTransition, EnabledConstant);
+	}
 
+	public void StartSliding()
+	{
+		crouchTransition.XfadeTime = .05;
+		CrouchStatePlayback.Travel(SlideStateStart);
 		animationTree.Set(CrouchTransition, EnabledConstant);
 	}
 
