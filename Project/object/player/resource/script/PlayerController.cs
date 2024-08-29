@@ -21,6 +21,8 @@ public partial class PlayerController : CharacterBody3D
 	[Export]
 	public PlayerLockonController Lockon { get; private set; }
 	[Export]
+	public PlayerAnimator Animator { get; private set; }
+	[Export]
 	public PlayerEffect Effect { get; private set; }
 	[Export]
 	public PlayerPathController PathFollower { get; private set; }
@@ -48,6 +50,7 @@ public partial class PlayerController : CharacterBody3D
 		Stats.Initialize();
 		State.Initialize(this);
 		Lockon.Initialize(this);
+		Animator.Initialize(this);
 		PathFollower.Initialize(this);
 	}
 
@@ -56,6 +59,7 @@ public partial class PlayerController : CharacterBody3D
 		Controller.ProcessInputs();
 		StateMachine.ProcessPhysics();
 		Lockon.ProcessPhysics();
+		Animator.ProcessPhysics();
 		PathFollower.Resync();
 	}
 
@@ -119,7 +123,5 @@ public partial class PlayerController : CharacterBody3D
 	/*
 	[Export]
 	public CameraController Camera { get; private set; }
-	[Export]
-	public CharacterAnimator Animator { get; private set; }
 	*/
 }

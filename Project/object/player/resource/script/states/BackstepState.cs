@@ -19,14 +19,17 @@ public partial class BackstepState : PlayerState
 
 	public override void EnterState()
 	{
-		Player.IsMovingBackward = true;
 		turningVelocity = 0;
+
+		Player.IsMovingBackward = true;
+		Player.Effect.IsEmittingStepDust = false;
 	}
 
 	public override PlayerState ProcessPhysics()
 	{
 		ProcessMoveSpeed();
 		Player.ApplyMovement();
+		Player.Animator.BackstepAnimation();
 
 		if (!Player.CheckGround())
 			return fallState;

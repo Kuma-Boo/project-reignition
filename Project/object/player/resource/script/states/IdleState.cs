@@ -16,10 +16,13 @@ public partial class IdleState : PlayerState
 	public override void EnterState()
 	{
 		Player.MoveSpeed = 0;
+		Player.Effect.IsEmittingStepDust = false;
 	}
 
 	public override PlayerState ProcessPhysics()
 	{
+		Player.Animator.IdleAnimation();
+
 		if (Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
@@ -29,7 +32,7 @@ public partial class IdleState : PlayerState
 		if (!Player.CheckGround())
 			return fallState;
 
-		float inputStrength = Mathf.Min(Player.Controller.CameraInputAxis.Length(), 1f);
+		float inputStrength = Player.Controller.GetInputStrength();
 		if (!Mathf.IsZeroApprox(inputStrength))
 		{
 			float inputDot = ExtensionMethods.DotAngle(Player.Controller.GetTargetMovementAngle(), Player.PathFollower.ForwardAngle);

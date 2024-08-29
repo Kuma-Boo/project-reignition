@@ -22,9 +22,11 @@ public partial class LandState : PlayerState
 		Player.VerticalSpeed = 0;
 		Player.Lockon.IsMonitoring = false;
 		Player.Lockon.ResetLockonTarget();
+		Player.Animator.LandingAnimation();
+		Player.Effect.PlayLandingFX();
 
 		/*
-		REFACTOR TODO 
+		REFACTOR TODO
 		if (allowLandingSkills && MovementState == MovementStates.Normal)
 		{
 			// Apply landing skills
@@ -33,9 +35,6 @@ public partial class LandState : PlayerState
 		}
 
 		allowLandingSkills = false;
-
-		// Play FX
-		Effect.PlayLandingFX();
 
 		JustLandedOnGround = true;
 		*/

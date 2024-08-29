@@ -25,19 +25,32 @@ public partial class RunState : PlayerState
 	private readonly float MaxTurningAdjustment = Mathf.Pi * .25f;
 	/// <summary> How much speed to lose when turning sharply. </summary>
 	private readonly float TurningSpeedLoss = .02f;
+	/// <summary> Minimum speed needed to finish the braking animation. </summary>
+	private readonly float BrakeDeadzone = 5f;
 
 	private float turningVelocity;
 
 	public override void EnterState()
 	{
-		Player.IsMovingBackward = false;
 		turningVelocity = 0;
+
+		Player.IsMovingBackward = false;
+		Player.Effect.IsEmittingStepDust = true;
+	}
+
+	public override void ExitState()
+	{
+		if (Player.Animator.IsBrakeAnimationActive)
+			Player.Animator.StopBrake();
 	}
 
 	public override PlayerState ProcessPhysics()
 	{
 		ProcessMoveSpeed();
 		Player.ApplyMovement();
+
+		Player.Animator.RunAnimation();
+		ProcessBrakeAnimation();
 
 		if (Player.Controller.IsJumpBufferActive)
 		{
@@ -80,6 +93,7 @@ public partial class RunState : PlayerState
 		if ((inputDot < -.75f && !Mathf.IsZeroApprox(Player.MoveSpeed)) || Input.IsActionPressed("button_brake")) // Turning around
 		{
 			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, -inputStrength);
+			StartBraking();
 			return;
 		}
 
@@ -123,5 +137,28 @@ public partial class RunState : PlayerState
 		float speedLossRatio = speedRatio * ((inputDot - 1.0f) * -.5f);
 		Player.MoveSpeed -= Player.Stats.GroundSettings.Speed * turningSpeedLossCurve.Sample(speedLossRatio) * TurningSpeedLoss;
 		Player.MoveSpeed = Mathf.Max(Player.MoveSpeed, 0);
+	}
+
+	private void StartBraking()
+	{
+		if (Player.Animator.IsBrakeAnimationActive) // Already active
+			return;
+
+		if (Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed) < RunRatio)
+			return;
+
+		Player.Animator.StartBrake();
+		Player.Effect.PlayActionSFX(Player.Effect.SlideSfx);
+	}
+
+	private void ProcessBrakeAnimation()
+	{
+		if (!Player.Animator.IsBrakeAnimationActive)
+			return;
+
+		if (Player.MoveSpeed > BrakeDeadzone)
+			return;
+
+		Player.Animator.StopBrake();
 	}
 }
