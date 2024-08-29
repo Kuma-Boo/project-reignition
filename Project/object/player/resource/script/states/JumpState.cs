@@ -52,6 +52,7 @@ public partial class JumpState : PlayerState
 		isAccelerationJump = false;
 		isAccelerationJumpQueued = false;
 
+		Player.IsOnGround = false;
 		if (Player.IsMovingBackward) // Kill speed when jumping backwards
 			Player.MoveSpeed = 0;
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);

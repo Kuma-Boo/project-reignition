@@ -26,6 +26,7 @@ public partial class LaunchState : PlayerState
 
 	public override void EnterState()
 	{
+		Player.IsOnGround = false;
 		Player.IsMovingBackward = false;
 		Player.MoveSpeed = Player.VerticalSpeed = 0;
 

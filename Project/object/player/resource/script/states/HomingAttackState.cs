@@ -88,11 +88,12 @@ public partial class HomingAttackState : PlayerState
 		{
 		}
 
+		Player.CheckGround();
 		Player.UpdateUpDirection(true);
 		Player.PathFollower.Resync();
 
 		// REFACTOR TODO Replace this with a wall check and switch to the bounce state instead
-		if (Player.CheckGround())
+		if (Player.IsOnGround)
 			return landState;
 
 		if (Player.Controller.IsActionBufferActive)

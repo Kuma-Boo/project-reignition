@@ -21,6 +21,7 @@ public partial class BackflipState : PlayerState
 	public override void EnterState()
 	{
 		turningVelocity = 0;
+		Player.IsOnGround = false;
 		Player.IsMovingBackward = true;
 		Player.MovementAngle = Player.PathFollower.BackAngle;
 		Player.MoveSpeed = Player.Stats.BackflipSettings.Speed;
@@ -41,10 +42,11 @@ public partial class BackflipState : PlayerState
 	{
 		UpdateMoveSpeed();
 		UpdateVerticalSpeed();
-		Player.UpdateUpDirection(true, Player.PathFollower.HeightAxis);
 		Player.ApplyMovement();
+		Player.CheckGround();
+		Player.UpdateUpDirection(true, Player.PathFollower.HeightAxis);
 
-		if (Player.CheckGround())
+		if (Player.IsOnGround)
 			return landState;
 
 		if (Player.Controller.IsJumpBufferActive)

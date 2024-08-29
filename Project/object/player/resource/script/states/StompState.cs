@@ -43,10 +43,11 @@ public partial class StompState : PlayerState
 	{
 		Player.MoveSpeed = 0; // Go STRAIGHT down
 		UpdateVerticalSpeed();
-		Player.UpdateUpDirection(true);
 		Player.ApplyMovement();
+		Player.CheckGround();
+		Player.UpdateUpDirection(true);
 
-		if (Player.CheckGround())
+		if (Player.IsOnGround)
 			return landState;
 
 		return null;

@@ -18,6 +18,8 @@ public partial class LandState : PlayerState
 		Player.Velocity = Player.UpDirection * Player.VerticalSpeed;
 		Player.MoveAndSlide();
 		Player.Velocity = originalVelocity;
+		if (Player.CheckGround())
+			Player.UpdateOrientation();
 
 		Player.VerticalSpeed = 0;
 		Player.Lockon.IsMonitoring = false;
@@ -35,8 +37,10 @@ public partial class LandState : PlayerState
 		}
 
 		allowLandingSkills = false;
-
 		JustLandedOnGround = true;
+
+		if (IsGrindstepBonusActive)
+			IsGrindstepBonusActive = false;
 		*/
 	}
 

@@ -27,21 +27,6 @@ public partial class PlayerController : CharacterBody3D
 	[Export]
 	public PlayerPathController PathFollower { get; private set; }
 
-	/// <summary> Player's horizontal movespeed, ignoring slopes. </summary>
-	public float MoveSpeed { get; set; }
-	/// <summary> Player's vertical speed -- only effective when not on the ground. </summary>
-	public float VerticalSpeed { get; set; }
-	public bool IsMovingBackward { get; set; }
-
-	/// <summary> Global movement angle, in radians. Note - VISUAL ROTATION is controlled by CharacterAnimator.cs. </summary>
-	public float MovementAngle { get; set; }
-	public float PathTurnInfluence => 0;// REFACTOR TODO PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
-	public Vector3 GetMovementDirection()
-	{
-		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
-		return PathFollower.Forward().Rotated(UpDirection, deltaAngle);
-	}
-
 	public override void _Ready()
 	{
 		StageSettings.RegisterPlayer(this); // Update global reference
@@ -63,13 +48,19 @@ public partial class PlayerController : CharacterBody3D
 		PathFollower.Resync();
 	}
 
-	public bool IsOnGround { get; private set; }
-	public bool CheckGround()
-	{
-		// REFACTOR TODO Use Raycasts. There's currently a bug because CheckGround uses IsOnFloor() which only updates during MoveAndSlide().
+	/// <summary> Player's horizontal movespeed, ignoring slopes. </summary>
+	public float MoveSpeed { get; set; }
+	/// <summary> Player's vertical speed -- only effective when not on the ground. </summary>
+	public float VerticalSpeed { get; set; }
+	public bool IsMovingBackward { get; set; }
 
-		IsOnGround = IsOnFloor();
-		return IsOnGround;
+	/// <summary> Global movement angle, in radians. Note - VISUAL ROTATION is controlled by CharacterAnimator.cs. </summary>
+	public float MovementAngle { get; set; }
+	public float PathTurnInfluence => 0;// REFACTOR TODO PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
+	public Vector3 GetMovementDirection()
+	{
+		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
+		return PathFollower.Forward().Rotated(UpDirection, deltaAngle);
 	}
 
 	public void ApplyMovement()
@@ -99,6 +90,116 @@ public partial class PlayerController : CharacterBody3D
 		set => GlobalPosition = value - (UpDirection * CollisionSize.Y);
 	}
 	private const float CollisionPadding = .02f;
+
+	public bool IsOnGround { get; set; }
+	private readonly int GroundWhiskerAmount = 8;
+	public bool CheckGround()
+	{
+		RaycastHit groundHit = CheckGroundRaycast();
+		/* REFACTOR TODO
+		if (MovementState == MovementStates.External) // Exit early when externally controlled
+			return;
+		*/
+
+		if (groundHit) // Successful ground hit
+		{
+			if (!IsOnGround && VerticalSpeed < 0) // Landing on the ground
+			{
+				UpDirection = groundHit.normal;
+				IsOnGround = true;
+				return true;
+			}
+
+			float snapDistance = groundHit.distance - CollisionSize.Y;
+			GlobalPosition -= UpDirection * snapDistance; // Remain snapped to the ground
+			UpDirection = UpDirection.Lerp(groundHit.normal, .2f + (.4f * Stats.GroundSettings.GetSpeedRatio(MoveSpeed))).Normalized(); // Update world direction
+			return IsOnGround;
+		}
+
+		if (IsOnGround) // REFACTOR TODO Move to state?
+		{
+			IsOnGround = false;
+			Animator.IsFallTransitionEnabled = true;
+		}
+
+		return false;
+	}
+
+	public RaycastHit CheckGroundRaycast()
+	{
+		bool limitAngle = true; // REFACTOR TODO Limit ground's max angle when MovementState != MovementStates.External;
+
+		Vector3 castOrigin = CollisionPosition;
+		float castLength = CollisionSize.Y + (CollisionPadding * 2.0f);
+		if (IsOnGround)
+			castLength += Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta; // Attempt to remain stuck to the ground when moving quickly
+		else if (VerticalSpeed < 0)
+			castLength += Mathf.Abs(VerticalSpeed) * PhysicsManager.physicsDelta;
+
+		Vector3 checkOffset = Vector3.Zero;
+		RaycastHit groundHit = new();
+		Vector3 castVector = this.Down() * castLength;
+		int raysHit = 0;
+
+		// Whisker casts (For smoother collision)
+		float interval = Mathf.Tau / GroundWhiskerAmount;
+		Vector3 castOffset = this.Forward() * ((CollisionSize.Y * .5f) - CollisionPadding);
+		for (int i = 0; i < GroundWhiskerAmount; i++)
+		{
+			castOffset = castOffset.Rotated(this.Down(), interval);
+			RaycastHit hit = this.CastRay(castOrigin + castOffset, castVector, CollisionMask, false, GetCollisionExceptions());
+			DebugManager.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
+			if (ValidateGroundCast(ref hit, limitAngle))
+			{
+				if (!groundHit)
+					groundHit = hit;
+				else
+					groundHit.Add(hit);
+				checkOffset += castOffset;
+				raysHit++;
+			}
+		}
+
+		if (groundHit)
+		{
+			groundHit.Divide(raysHit);
+			Effect.UpdateGroundType(groundHit.collidedObject);
+		}
+
+		return groundHit;
+	}
+
+	/// <summary> Checks whether raycast collider is tagged properly. </summary>
+	private bool ValidateGroundCast(ref RaycastHit hit, bool limitAngle)
+	{
+		if (!hit)
+			return new();
+
+		if (!hit.collidedObject.IsInGroup("floor") ||
+			(limitAngle && hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f))
+		{
+			return new();
+		}
+
+		// REFACTOR TODO Check if this is the code block that causes janky falling collisions
+		if (!IsOnGround &&
+			hit.collidedObject.IsInGroup("wall") &&
+			hit.normal.AngleTo(Vector3.Up) > Mathf.Pi * .2f) // Use Vector3.Up for objects tagged as a wall
+		{
+			return new();
+		}
+
+		return hit;
+	}
+
+	/// <summary> Orientates Root to world direction, then rotates the gimbal on the y-axis </summary>
+	public void UpdateOrientation()
+	{
+		// Untested! This may end up breaking in certain scenarios
+		GlobalRotation = Vector3.Zero;
+		Vector3 cross = Vector3.Left.Rotated(Vector3.Up, UpDirection.Flatten().AngleTo(Vector2.Down));
+		GlobalRotate(cross, -UpDirection.SignedAngleTo(Vector3.Up, cross));
+	}
 
 	public void UpdateUpDirection(bool quickReset = true, Vector3 upDirection = new())
 	{
