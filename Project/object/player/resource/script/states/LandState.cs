@@ -48,9 +48,9 @@ public partial class LandState : PlayerState
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
 
-		if (Player.MoveSpeed > 0)
-			return runState;
+		if (Player.IsMovingBackward)
+			return backstepState;
 
-		return backstepState;
+		return runState;
 	}
 }
