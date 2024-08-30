@@ -11,6 +11,8 @@ public partial class RunState : PlayerState
 	[Export]
 	private PlayerState backstepState;
 	[Export]
+	private PlayerState slideState;
+	[Export]
 	private PlayerState jumpState;
 	[Export]
 	private PlayerState backflipState;
@@ -47,6 +49,7 @@ public partial class RunState : PlayerState
 	public override PlayerState ProcessPhysics()
 	{
 		ProcessMoveSpeed();
+		Player.AddSlopeSpeed();
 		Player.ApplyMovement();
 
 		Player.Animator.RunAnimation();
@@ -65,6 +68,12 @@ public partial class RunState : PlayerState
 			}
 
 			return jumpState;
+		}
+
+		if (Player.Controller.IsActionBufferActive)
+		{
+			Player.Controller.ResetActionBuffer();
+			return slideState;
 		}
 
 		if (!Player.CheckGround())

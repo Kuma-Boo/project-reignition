@@ -33,6 +33,9 @@ public partial class PlayerStatsController : Node
 	private float tractionHighRatio = 2f;
 	[Export(PropertyHint.Range, "1,5,.1f")]
 	private float turnaroundHighRatio = 2f;
+	/// <summary> How much should the steepest slope affect the player? </summary>
+	[Export]
+	public float slopeInfluence = .2f;
 
 	public float GetBaseSpeedRatio()
 	{
@@ -165,29 +168,16 @@ public partial class PlayerStatsController : Node
 	private float slideSlopeSpeedInfluence = .5f;
 
 	/// <summary> Updates slide settings to take slope ratio into account. </summary>
-	public void UpdateSlideSpeed(float slopeRatio, float slopeStrength)
+	public void UpdateSlideSpeed(float slopeRatio)
 	{
 		// Calculate top speed
 		float t = Mathf.Clamp(-slopeRatio * 5.0f, 0, 1);
 		SlideSettings.Speed = GroundSettings.Speed * (1 + (t * slideSlopeSpeedInfluence));
-		float slopeInfluence = slopeRatio * slopeStrength;
+		float slopeInfluence = slopeRatio * this.slopeInfluence;
 		float frictionRatio = GetSlidingFrictionRatio();
 		SlideSettings.Friction = baseSlideFriction * frictionRatio * (1 + slopeInfluence);
 		SlideSettings.Overspeed = baseSlideOverspeed * frictionRatio * (1 + slopeInfluence);
 		SlideSettings.Traction = Mathf.Lerp(0, baseSlideTraction, t);
-	}
-
-	private float soulSlideTimer;
-	private readonly float SoulSlideInterval = .5f;
-	public void StartSoulSlide() => soulSlideTimer = 0;
-	public void UpdateSoulSlide()
-	{
-		soulSlideTimer += PhysicsManager.physicsDelta;
-		if (SoulSlideInterval > soulSlideTimer)
-		{
-			soulSlideTimer -= SoulSlideInterval;
-			StageSettings.instance.CurrentEXP++;
-		}
 	}
 
 	/// <summary> Calculates sliding's friction ratio based on skills. </summary>

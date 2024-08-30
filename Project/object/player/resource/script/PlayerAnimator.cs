@@ -449,42 +449,28 @@ public partial class PlayerAnimator : Node3D
 
 	public bool IsCrouchingActive => (StringName)animationTree.Get(CurrentCrouchState) == EnabledConstant;
 	public bool IsSlideTransitionActive => CrouchStatePlayback.GetCurrentNode() == SlideStateStart;
-	public void StartCrouching()
-	{
-		/* REFACTOR TODO
-		if (Player.ActionState == CharacterController.ActionStates.Sliding)
-		{
-			crouchTransition.XfadeTime = .05;
-			CrouchStatePlayback.Travel(SlideStateStart);
-		}
-		else
-		{
-		*/
-		CrouchStatePlayback.Travel(CrouchStateStart);
-		crouchTransition.XfadeTime = .1;
-		//}
 
+	public void StartSliding()
+	{
+		crouchTransition.XfadeTime = .05;
+		CrouchStatePlayback.Travel(SlideStateStart);
 		animationTree.Set(CrouchTransition, EnabledConstant);
 	}
 
-	public void ToggleSliding()
+	public void SlideToCrouch() => CrouchStatePlayback.Travel(SlideStateStop);
+	public void StartCrouching()
 	{
-		/* REFACTOR TODO
-		if (Player.ActionState == CharacterController.ActionStates.Sliding)
-			CrouchStatePlayback.Travel(SlideStateStart);
-		else
-		*/
-		CrouchStatePlayback.Travel(SlideStateStop);
+		if (IsCrouchingActive)
+			return;
+
+		CrouchStatePlayback.Travel(CrouchStateStart);
+		crouchTransition.XfadeTime = .1;
+		animationTree.Set(CrouchTransition, EnabledConstant);
 	}
 
-	public void StopCrouching()
+	public void StopCrouching(float transitionTime = 0.0f)
 	{
-		/* REFACTOR TODO
-		if (Player.ActionState == CharacterController.ActionStates.Sliding)
-			crouchTransition.XfadeTime = 0.2;
-		else
-		*/
-		crouchTransition.XfadeTime = 0.0;
+		crouchTransition.XfadeTime = transitionTime;
 		CrouchStatePlayback.Travel(CrouchStateStop);
 	}
 

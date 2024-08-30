@@ -65,6 +65,44 @@ public partial class PlayerController : CharacterBody3D
 		return PathFollower.Forward().Rotated(UpDirection, deltaAngle);
 	}
 
+	/// <summary> How much is the slope currently influencing the player? </summary>
+	public float SlopeRatio { get; private set; }
+	/// <summary> Slopes that are shallower than Mathf.PI * threshold are ignored. </summary>
+	private readonly float SlopeThreshold = .1f;
+	public void AddSlopeSpeed(bool isSliding = false)
+	{
+		SlopeRatio = 0;
+		// REFACTOR TODO if (IsLockoutActive && ActiveLockoutData.ignoreSlopes) return; // Lockout is ignoring slopes
+
+		if (Mathf.IsZeroApprox(MoveSpeed)) return; // Idle/Backstepping isn't affected by slopes
+
+		// Calculate slope influence
+		SlopeRatio = PathFollower.Forward().Dot(Vector3.Up);
+		if (Mathf.Abs(SlopeRatio) <= SlopeThreshold) return;
+
+		SlopeRatio = Mathf.Lerp(-Stats.slopeInfluence, Stats.slopeInfluence, (SlopeRatio * .5f) + .5f);
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.AllRounder) && SlopeRatio > 0) // SKILL Ignore upward slopes
+			SlopeRatio = 0;
+
+		// Slope speeds are ignored when sliding downhill and already moving faster than the max slideSpeed + slopeInfluence
+		if (isSliding && SlopeRatio < 0 && MoveSpeed >= Stats.SlideSettings.Speed)
+			return;
+
+		if (Controller.IsHoldingDirection(Controller.GetTargetMovementAngle(), PathFollower.ForwardAngle)) // Accelerating
+		{
+			if (SlopeRatio < 0f) // Downhill
+				MoveSpeed += Stats.GroundSettings.Traction * Mathf.Abs(SlopeRatio) * PhysicsManager.physicsDelta; // Uncapped
+			else if (Stats.GroundSettings.GetSpeedRatioClamped(MoveSpeed) < 1f) // Uphill; Reduce acceleration (Only when not at top speed)
+				MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, Stats.GroundSettings.Traction * SlopeRatio * PhysicsManager.physicsDelta);
+			return;
+		}
+
+		if (SlopeRatio < 0f) // Re-apply some speed when moving downhill
+			MoveSpeed = Mathf.MoveToward(MoveSpeed, Stats.GroundSettings.Speed, Stats.GroundSettings.Friction * Mathf.Abs(SlopeRatio) * PhysicsManager.physicsDelta);
+		else // Increase friction when moving uphill
+			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, Stats.GroundSettings.Friction * SlopeRatio * PhysicsManager.physicsDelta);
+	}
+
 	public void ApplyMovement()
 	{
 		Vector3 movementVelocity = Vector3.Zero;

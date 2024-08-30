@@ -164,6 +164,19 @@ public partial class PlayerSkillController : Node3D
 	}
 
 	public void ResetCrestTimer() => crestTimer = 0;
+
+	private float soulSlideTimer;
+	private readonly float SoulSlideInterval = .5f;
+	public void StartSoulSlide() => soulSlideTimer = 0;
+	public void UpdateSoulSlide()
+	{
+		soulSlideTimer += PhysicsManager.physicsDelta;
+		if (SoulSlideInterval > soulSlideTimer)
+		{
+			soulSlideTimer -= SoulSlideInterval;
+			StageSettings.instance.CurrentEXP++;
+		}
+	}
 	#endregion
 
 	#region Soul Skills

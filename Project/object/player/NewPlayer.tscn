@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=3 uid="uid://bbbuqgxfhuh8k"]
+[gd_scene load_steps=76 format=3 uid="uid://bbbuqgxfhuh8k"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStatsController.cs" id="9_ewscv"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/CrouchState.cs" id="10_7aiwm"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/StompState.cs" id="10_eoh5j"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/SlideState.cs" id="11_2eo52"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/JumpDashState.cs" id="11_80bi3"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/HomingAttackState.cs" id="12_ssfet"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/LaunchState.cs" id="13_d17q6"]
@@ -1446,11 +1447,12 @@ crouchState = NodePath("../Crouch")
 jumpState = NodePath("../Jump")
 fallState = NodePath("../Fall")
 
-[node name="Run" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState", "backstepState", "jumpState", "backflipState")]
+[node name="Run" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState", "backstepState", "slideState", "jumpState", "backflipState")]
 script = ExtResource("7_1ojgh")
 fallState = NodePath("../Fall")
 idleState = NodePath("../Idle")
 backstepState = NodePath("../Backstep")
+slideState = NodePath("../Slide")
 jumpState = NodePath("../Jump")
 backflipState = NodePath("../Backflip")
 turningSpeedLossCurve = SubResource("Curve_0y4at")
@@ -1487,6 +1489,11 @@ landState = NodePath("../Land")
 script = ExtResource("10_7aiwm")
 idleState = NodePath("../Idle")
 fallState = NodePath("../Fall")
+
+[node name="Slide" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState", "crouchState")]
+script = ExtResource("11_2eo52")
+runState = NodePath("../Run")
+crouchState = NodePath("../Crouch")
 
 [node name="Fall" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState", "stompState", "jumpDashState", "homingAttackState")]
 script = ExtResource("5_niuke")
