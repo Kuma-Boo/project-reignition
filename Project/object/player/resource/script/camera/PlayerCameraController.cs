@@ -8,7 +8,7 @@ namespace Project.Gameplay;
 /// <summary>
 /// Follows the player based on the settings provided from CameraSettingsResource.cs
 /// </summary>
-public partial class CameraController : Node3D
+public partial class PlayerCameraController : Node3D
 {
 	[Signal]
 	public delegate void StartCompletionEventHandler();
@@ -29,15 +29,17 @@ public partial class CameraController : Node3D
 	public bool IsBehindCamera(Vector3 worldSpace) => Camera.IsPositionBehind(worldSpace);
 
 	[Export]
-	/// <summary> Camera's pathfollower. Different than Character.PathFollower. </summary>
-	public CharacterPathFollower PathFollower { get; private set; }
-	private CharacterController Character => CharacterController.instance;
+	/// <summary> Camera's pathfollower. Different than Player.PathFollower. </summary>
+	public PlayerPathController PathFollower { get; private set; }
 
 	private readonly StringName ShaderPlayerScreenPosition = new("player_screen_position");
 
-	public void Initialize()
+	private PlayerController Player;
+	public void Initialize(PlayerController player)
 	{
 		if (Engine.IsEditorHint()) return;
+
+		Player = player;
 
 		// Apply default settings
 		CameraSettingsResource targetSettings = (StageSettings.instance?.InitialCameraSettings) ?? defaultSettings;
@@ -63,18 +65,17 @@ public partial class CameraController : Node3D
 		SnapFlag = true;
 	}
 
-	public override void _PhysicsProcess(double _)
+	public void ProcessPhysics()
 	{
-		if (GetTree().Paused)
-			return;
-
 		PathFollower.Resync();
 
 		// Don't update the camera when the player is defeated from a DeathTrigger
 		if (IsDefeatFreezeActive)
 		{
-			if (Character.IsDefeated)
+			/* REFACTOR TODO
+			if (Player.State.IsDefeated)
 				return;
+			*/
 
 			IsDefeatFreezeActive = false;
 		}
@@ -84,7 +85,7 @@ public partial class CameraController : Node3D
 		UpdateMotionBlur();
 	}
 
-	public override void _Process(double _)
+	public void ProcessFrame()
 	{
 		if (OS.IsDebugBuild())
 			UpdateFreeCam();
@@ -94,7 +95,7 @@ public partial class CameraController : Node3D
 	public bool IsDefeatFreezeActive { get; set; }
 	/// <summary> Used to focus onto multi-HP enemies, bosses, etc. Not to be confused with CharacterLockon.Target. </summary>
 	public Node3D LockonTarget { get; set; }
-	private bool IsLockonCameraActive => LockonTarget != null || Character.Lockon.IsHomingAttacking || Character.Lockon.IsBounceLockoutActive;
+	private bool IsLockonCameraActive => LockonTarget != null || Player.Lockon.IsHomingAttacking; // REFACTOR TODO || Player.Lockon.IsBounceLockoutActive;
 	/// <summary> [0 -> 1] ratio of how much to use the lockon camera. </summary>
 	private float lockonBlend;
 	private float lockonBlendVelocity;
@@ -257,7 +258,7 @@ public partial class CameraController : Node3D
 
 		// Recalculate non-static camera positions for better transition rotations.
 		Vector3 position = data.offsetBasis.Z.Normalized() * distance;
-		position += Character.CenterPosition;
+		position += Player.CenterPosition;
 
 		Transform3D cameraTransform = new(data.offsetBasis, position.Lerp(data.precalculatedPosition, staticBlendRatio));
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.yawTracking);
@@ -282,7 +283,7 @@ public partial class CameraController : Node3D
 
 		Camera.Fov = fov; // Update fov
 
-		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Character.CenterPosition) / Runtime.ScreenSize);
+		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Player.CenterPosition) / Runtime.ScreenSize);
 
 		if (SnapFlag) // Reset flag after camera was updated
 			SnapFlag = false;
@@ -309,10 +310,13 @@ public partial class CameraController : Node3D
 		float targetXformAngle = ExtensionMethods.CalculateForwardAngle(-cameraBasis.Z, cameraBasis.Y);
 
 		// Snap xform blend when no input is held
-		if (Character.InputVector.IsZeroApprox() ||
-			(Character.IsLockoutActive &&
-			Character.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe &&
-			Mathf.IsZeroApprox(Character.InputHorizontal)))
+		if (Mathf.IsZeroApprox(Player.Controller.GetInputStrength()))
+		/* REFACTOR TODO
+		 ||
+			(Player.State.IsLockoutActive &&
+			Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe &&
+			Mathf.IsZeroApprox(Player.Controller.InputHorizontal)))
+			*/
 		{
 			SnapXform();
 		}
@@ -359,7 +363,7 @@ public partial class CameraController : Node3D
 			}
 			else
 			{
-				Vector3 delta = Character.CenterPosition - data.precalculatedPosition;
+				Vector3 delta = Player.CenterPosition - data.precalculatedPosition;
 				data.blendData.distance = delta.Length();
 				delta = delta.Normalized();
 
@@ -379,7 +383,7 @@ public partial class CameraController : Node3D
 		{
 			// Calculate distance
 			float targetDistance = settings.distance;
-			if (Character.IsMovingBackward)
+			if (Player.IsMovingBackward)
 				targetDistance += settings.backstepDistance;
 
 			if (!settings.ignoreHomingAttack && IsLockonCameraActive)
@@ -392,7 +396,7 @@ public partial class CameraController : Node3D
 				targetDistance = PathFollower.Progress;
 			}
 
-			data.blendData.DistanceSmoothDamp(targetDistance, Character.IsMovingBackward, SnapFlag);
+			data.blendData.DistanceSmoothDamp(targetDistance, Player.IsMovingBackward, SnapFlag);
 
 			// Calculate targetAngles when DistanceMode is set to Sample.
 			float sampledTargetYawAngle = targetYawAngle;
@@ -450,7 +454,7 @@ public partial class CameraController : Node3D
 			data.CalculateBasis();
 			data.CalculatePosition(PathFollower.GlobalPosition);
 
-			Vector3 globalDelta = Character.CenterPosition - data.precalculatedPosition;
+			Vector3 globalDelta = Player.CenterPosition - data.precalculatedPosition;
 			Vector3 delta = data.offsetBasis.Inverse() * globalDelta;
 
 			if (settings.horizontalTrackingMode != CameraSettingsResource.TrackingModeEnum.Move)
@@ -493,12 +497,12 @@ public partial class CameraController : Node3D
 			data.pitchTracking = targetPitchTracking;
 
 			// Recalculate position after applying rotational tracking
-			data.CalculatePosition(Character.CenterPosition);
+			data.CalculatePosition(Player.CenterPosition);
 			data.precalculatedPosition = AddTrackingOffset(data.precalculatedPosition, data);
 
 			if (!settings.ignoreHomingAttack && IsLockonCameraActive && LockonTarget != null)
 			{
-				globalDelta = LockonTarget.GlobalPosition.Lerp(Character.CenterPosition, .5f) - data.precalculatedPosition;
+				globalDelta = LockonTarget.GlobalPosition.Lerp(Player.CenterPosition, .5f) - data.precalculatedPosition;
 				delta = data.offsetBasis.Inverse() * globalDelta;
 				delta.X = 0; // Ignore x axis for pitch tracking
 				data.blendData.lockonPitchTracking = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
@@ -586,7 +590,7 @@ public partial class CameraController : Node3D
 		if (!Mathf.IsZeroApprox(Engine.TimeScale))
 			velocity /= (float)Engine.TimeScale;
 
-		if (Character.Skills.IsTimeBreakActive)
+		if (Player.Skills.IsTimeBreakActive)
 			return velocity * TimeBreakMotionBlurStrength;
 
 		return velocity * MotionBlurStrength;
@@ -785,7 +789,7 @@ public partial class CameraController : Node3D
 		bool showCamera = isFreeCamActive && DebugManager.Instance.DrawDebugCam;
 		debugMesh.Visible = showCamera;
 		PathFollower.Visible = showCamera;
-		Character.PathFollower.Visible = showCamera;
+		Player.PathFollower.Visible = showCamera;
 
 		if (isFreeCamActive)
 		{
@@ -926,4 +930,98 @@ public partial class CameraController : Node3D
 		}
 	}
 	#endregion
+}
+
+public partial class CameraBlendData : GodotObject
+{
+	/// <summary> Use crossfading? </summary>
+	public bool IsCrossfadeEnabled { get; set; }
+
+	/// <summary> Ratio [0 <-> 1] of how much influence this blend has. </summary>
+	public float LinearInfluence { get; private set; }
+	/// <summary> Influence, smoothed with Mathf.Smoothstep. </summary>
+	public float SmoothedInfluence { get; private set; }
+	/// <summary> Actual amount to blend each frame. </summary>
+	public float BlendSpeed { get; private set; }
+
+	/// <summary> Hall tracking position. </summary>
+	public float hallPosition;
+	/// <summary> Hall tracking velocity. </summary>
+	private float hallVelocity;
+	public const float HallSmoothing = 10.0f;
+	public void HallSmoothDamp(float target, bool snap)
+	{
+		if (snap || !WasInitialized)
+		{
+			hallPosition = target;
+			hallVelocity = 0;
+			return;
+		}
+
+		hallPosition = ExtensionMethods.SmoothDamp(hallPosition, target, ref hallVelocity, HallSmoothing * PhysicsManager.physicsDelta);
+	}
+
+	/// <summary> [0 -> 1] Blend between offset and sample. </summary>
+	public float SampleBlend { get; set; }
+
+	/// <summary> How long blending takes in seconds. </summary>
+	public float BlendTime { get; set; }
+	/// <summary> Camera's static position. Only used when CameraSettingsResource.useStaticPosition is true. </summary>
+	public Vector3 StaticPosition { get; set; }
+
+	/// <summary> Camera's static rotation. Only used when CameraSettingsResource.useStaticRotation is true. </summary>
+	public Basis RotationBasis { get; set; }
+
+	/// <summary> Current fov. </summary>
+	public float Fov;
+
+	/// <summary> Current pitch angle. </summary>
+	public float pitchAngle;
+	/// <summary> Current yaw angle. </summary>
+	public float yawAngle;
+	/// <summary> Current tilt angle. </summary>
+	public float tiltAngle;
+
+	/// <summary> Last frame's lockon pitch tracking </summary>
+	public float lockonPitchTracking;
+
+	/// <summary> How far the camera should be. </summary>
+	public float distance;
+	/// <summary> Distance smoothdamp velocity. </summary>
+	private float distanceVelocity;
+	public const float DistanceSmoothing = 10.0f;
+
+	public void DistanceSmoothDamp(float target, bool movingBackwards, bool snap)
+	{
+		if (snap || !WasInitialized || (movingBackwards && target < distance))
+		{
+			distance = target;
+			distanceVelocity = 0;
+			return;
+		}
+
+		distance = ExtensionMethods.SmoothDamp(distance, target, ref distanceVelocity, DistanceSmoothing * PhysicsManager.physicsDelta);
+	}
+
+	/// <summary> Has this blend data been processed before? </summary>
+	public bool WasInitialized { get; set; }
+
+	/// <summary> CameraSettingsResource for this camera setting. </summary>
+	public CameraSettingsResource SettingsResource { get; set; }
+	/// <summary> Reference to the cameraTrigger, if it exists. </summary>
+	public CameraTrigger Trigger { get; set; }
+
+	public void SetInfluence(float rawInfluence)
+	{
+		LinearInfluence = rawInfluence;
+		SmoothedInfluence = Mathf.SmoothStep(0.0f, 1.0f, rawInfluence);
+	}
+
+	public void CalculateBlendSpeed() => BlendSpeed = 1f / BlendTime;
+
+	public CameraBlendData()
+	{
+
+	}
+	public CameraBlendData(CameraSettingsResource resource) => SettingsResource = resource;
 }

@@ -26,6 +26,8 @@ public partial class PlayerController : CharacterBody3D
 	public PlayerEffect Effect { get; private set; }
 	[Export]
 	public PlayerPathController PathFollower { get; private set; }
+	[Export]
+	public PlayerCameraController Camera { get; private set; }
 
 	public override void _Ready()
 	{
@@ -37,6 +39,7 @@ public partial class PlayerController : CharacterBody3D
 		Animator.Initialize(this);
 		Effect.Initialize(this);
 		PathFollower.Initialize(this);
+		Camera.Initialize(this);
 
 		// Initialize state machine last to ensure components are ready		
 		StateMachine.Initialize(this);
@@ -49,6 +52,15 @@ public partial class PlayerController : CharacterBody3D
 		Lockon.ProcessPhysics();
 		Animator.ProcessPhysics();
 		PathFollower.Resync();
+
+		if (GetTree().Paused)
+			return;
+		Camera.ProcessPhysics();
+	}
+
+	public override void _Process(double _)
+	{
+		Camera.ProcessFrame();
 	}
 
 	/// <summary> Player's horizontal movespeed, ignoring slopes. </summary>
@@ -261,9 +273,4 @@ public partial class PlayerController : CharacterBody3D
 
 		UpDirection = UpDirection.Lerp(upDirection, Mathf.Clamp(resetFactor, 0f, 1f)).Normalized();
 	}
-
-	/*
-	[Export]
-	public CameraController Camera { get; private set; }
-	*/
 }
