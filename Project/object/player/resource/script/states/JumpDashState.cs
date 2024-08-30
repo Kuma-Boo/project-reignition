@@ -31,28 +31,31 @@ public partial class JumpDashState : PlayerState
 		Player.VerticalSpeed = jumpDashPower;
 		Player.Lockon.IsMonitoring = false;
 
+		Player.Effect.PlayActionSFX(Player.Effect.JumpDashSfx);
+		Player.Effect.StartTrailFX();
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire))
+			Player.Skills.ActivateFireCrest();
+
+		Player.Animator.LaunchAnimation();
+
 		/* REFACTOR TODO
-		Effect.PlayActionSFX(Effect.JumpDashSfx);
-		Effect.StartTrailFX();
-		if (Skills.IsSkillEquipped(SkillKey.CrestFire))
-			Skills.ActivateFireCrest();
 
 		if (Lockon.IsBounceLockoutActive) // Interrupt lockout
 			RemoveLockoutData(Lockon.bounceLockoutSettings);
 
 		if (Lockon.Target == null || !Lockon.IsTargetAttackable) // Normal jumpdash
 		{
-			Animator.LaunchAnimation();
 		}
 		else
 		{
-			Lockon.StartHomingAttack(); // Start Homing attack
-			Animator.StartSpin(2.0f);
-			Effect.StartSpinFX();
-			ChangeHitbox("spin");
-			UpdateJumpDash();
 		}
 		*/
+	}
+
+	public override void ExitState()
+	{
+		Player.Effect.StopTrailFX();
 	}
 
 	public override PlayerState ProcessPhysics()

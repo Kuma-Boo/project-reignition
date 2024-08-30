@@ -35,6 +35,7 @@ public partial class PlayerController : CharacterBody3D
 		State.Initialize(this);
 		Lockon.Initialize(this);
 		Animator.Initialize(this);
+		Effect.Initialize(this);
 		PathFollower.Initialize(this);
 
 		// Initialize state machine last to ensure components are ready		

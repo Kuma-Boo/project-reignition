@@ -26,11 +26,11 @@ public partial class LaunchState : PlayerState
 
 	public override void EnterState()
 	{
+		launcherTime = 0;
+
 		Player.IsOnGround = false;
 		Player.IsMovingBackward = false;
 		Player.MoveSpeed = Player.VerticalSpeed = 0;
-
-		launcherTime = 0;
 
 		Player.Lockon.IsMonitoring = false; // Disable lockon monitoring while launch is active
 		Player.State.AttackState = PlayerStateController.AttackStates.OneShot; // Launchers always oneshot all enemies

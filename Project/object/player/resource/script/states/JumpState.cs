@@ -176,17 +176,23 @@ public partial class JumpState : PlayerState
 		isAccelerationJumpQueued = false;
 
 		if (ExtensionMethods.DotAngle(Player.Controller.GetTargetMovementAngle(), Player.PathFollower.ForwardAngle) < .5f ||
-			Player.Controller.GetInputStrength() < .5f) // REFACTOR-TODO || Skills.IsSkillEquipped(SkillKey.Autorun))
+			Player.Controller.GetInputStrength() < .5f || SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
 		{
 			return;
 		}
 
+		if (ExtensionMethods.DotAngle(Player.MovementAngle, Player.PathFollower.ForwardAngle) < .5f)
+			Player.MovementAngle = Player.PathFollower.ForwardAngle;
+
 		// Keep acceleration jump heights consistent
 		Player.MoveSpeed = accelerationJumpSpeed;
 		Player.VerticalSpeed = accelerationJumpHeightVelocity;
-		isAccelerationJump = true;
+		Player.Animator.JumpAccelAnimation();
 
-		if (ExtensionMethods.DotAngle(Player.MovementAngle, Player.PathFollower.ForwardAngle) < .5f)
-			Player.MovementAngle = Player.PathFollower.ForwardAngle;
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.AccelJumpAttack))
+		{
+			Player.Effect.PlayFireFX();
+			Player.State.AttackState = PlayerStateController.AttackStates.Weak;
+		}
 	}
 }

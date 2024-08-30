@@ -26,7 +26,6 @@ public partial class LandState : PlayerState
 		Player.Lockon.ResetLockonTarget();
 		Player.Animator.LandingAnimation();
 		Player.Effect.PlayLandingFX();
-
 		/*
 		REFACTOR TODO
 		if (allowLandingSkills && MovementState == MovementStates.Normal)

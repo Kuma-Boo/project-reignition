@@ -38,16 +38,22 @@ public partial class HomingAttackState : PlayerState
 		}
 
 		Player.Effect.StartSpinFX();
-		/*
-		REFACTOR TODO
+		Player.Effect.PlayActionSFX(Player.Effect.JumpDashSfx);
+		Player.Effect.StartTrailFX();
+		Player.Effect.StartSpinFX();
+
 		Player.Animator.StartSpin(2.0f);
-		*/
+		Player.State.ChangeHitbox("spin");
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire))
+			Player.Skills.ActivateFireCrest();
 	}
 
 	public override void ExitState()
 	{
 		Player.Lockon.IsHomingAttacking = false;
 		Player.Lockon.ResetLockonTarget();
+		Player.Effect.StopTrailFX();
 
 		/*
 		REFACTOR TODO Move to Bounce state processing
