@@ -37,12 +37,8 @@ public partial class LaunchState : PlayerState
 
 		if (settings.UseAutoAlign)
 		{
-			Vector3 launchDirection = settings.InitialVelocity.RemoveVertical();
-			if (!launchDirection.IsEqualApprox(Vector3.Zero))
-			{
-				Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(launchDirection);
-				Player.Animator.SnapRotation(Player.MovementAngle);
-			}
+			Player.MovementAngle = GetLaunchFacingAngle();
+			Player.Animator.SnapRotation(Player.MovementAngle);
 		}
 
 		if (settings.IsJump) // Play jump effects
@@ -94,6 +90,20 @@ public partial class LaunchState : PlayerState
 			return fallState;
 
 		return null;
+	}
+
+	private float GetLaunchFacingAngle()
+	{
+		Vector3 launchDirection;
+		if (settings.Launcher == null)
+			launchDirection = settings.InitialVelocity.RemoveVertical();
+		else
+			launchDirection = settings.Launcher.GetLaunchDirection().RemoveVertical();
+
+		if (launchDirection.IsEqualApprox(Vector3.Zero)) // Fallback to PathFollower's forward angle
+			return Player.PathFollower.ForwardAngle;
+
+		return ExtensionMethods.CalculateForwardAngle(launchDirection);
 	}
 
 	private bool IsRecenteringPlayer()
