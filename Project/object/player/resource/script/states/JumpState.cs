@@ -115,13 +115,10 @@ public partial class JumpState : PlayerState
 
 	protected override void ProcessTurning()
 	{
-		if (isAccelerationJump) // Clamp acceleration jumps so they don't get out of control
-		{
-			Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, MaxAccelerationJumpTurnAmount);
-			return;
-		}
-
 		base.ProcessTurning();
+
+		if (isAccelerationJump) // Clamp acceleration jumps so they don't get out of control
+			Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, MaxAccelerationJumpTurnAmount);
 	}
 
 	private void UpdateVerticalSpeed()
@@ -143,9 +140,7 @@ public partial class JumpState : PlayerState
 
 	private void StartAccelerationJump()
 	{
-		isAccelerationJump = true;
 		isAccelerationJumpQueued = false;
-
 		float inputAngle = Player.Controller.GetTargetMovementAngle();
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
@@ -160,6 +155,7 @@ public partial class JumpState : PlayerState
 			return;
 		}
 
+		isAccelerationJump = true;
 		if (!Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.ForwardAngle))
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;
 
