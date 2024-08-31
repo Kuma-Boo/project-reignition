@@ -128,7 +128,7 @@ public partial class PlayerInputController : Node
 	/// </summary>
 	public float ImproveAnalogPrecision(float inputAngle, float referenceAngle)
 	{
-		if (!Runtime.Instance.IsUsingController || IsHoldingDirection(inputAngle, referenceAngle))
+		if (!Runtime.Instance.IsUsingController || !IsHoldingDirection(inputAngle, referenceAngle))
 			return inputAngle;
 
 		float deltaAngle = ExtensionMethods.DeltaAngleRad(referenceAngle, inputAngle);
@@ -141,5 +141,9 @@ public partial class PlayerInputController : Node
 	/// <summary>
 	/// Returns true if the player is trying to recenter themselves.
 	/// </summary>
-	public bool IsRecentering(float movementDeltaAngle, float inputDeltaAngle) => Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) || Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle);
+	public bool IsRecentering(float movementDeltaAngle, float inputDeltaAngle)
+	{
+		return Mathf.Sign(movementDeltaAngle) != Mathf.Sign(inputDeltaAngle) ||
+			Mathf.Abs(movementDeltaAngle) > Mathf.Abs(inputDeltaAngle);
+	}
 }

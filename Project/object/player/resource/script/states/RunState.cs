@@ -107,20 +107,47 @@ public partial class RunState : PlayerState
 			return;
 		}
 
+		//if (!ProcessStrafeControls(inputStrength, targetMovementAngle))
 		ProcessTurning(targetMovementAngle); // Turning only updates when accelerating
-
 		if (IsSpeedLossActive(targetMovementAngle))
 			ApplySpeedLoss(targetMovementAngle);
 		Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
 	}
 
+	/*
+	REFACTOR TODO
+	private bool ProcessStrafeControls(float inputStrength, float targetMovementAngle)
+	{
+		bool isUsingStrafeControls = Player.Skills.IsSpeedBreakActive ||
+			SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) ||
+			Player.State.ActiveLockoutData?.movementMode == LockoutResource.MovementModes.Strafe; // Ignore path delta under certain lockout situations
+		bool isPathDeltaLockoutActive = Player.State.IsLockoutActive &&
+			Player.State.ActiveLockoutData.spaceMode != LockoutResource.SpaceModes.Camera;
+
+		if (!isUsingStrafeControls)
+			return false;
+
+		if (Mathf.IsZeroApprox(inputStrength))
+			strafeBlend = Mathf.MoveToward(strafeBlend, 1.0f, PhysicsManager.physicsDelta);
+		else
+			strafeBlend = 0;
+		if (!isPathDeltaLockoutActive)
+			Player.MovementAngle += Player.PathFollower.DeltaAngle;
+		Player.MovementAngle = Mathf.LerpAngle(Player.MovementAngle, targetMovementAngle, strafeBlend);
+		return true;
+	}
+	*/
+
 	private void ProcessTurning(float targetMovementAngle)
 	{
-		if (Mathf.IsZeroApprox(Player.MoveSpeed))
+		if (Mathf.IsZeroApprox(Player.MoveSpeed) ||
+			Player.State.ActiveLockoutData?.movementMode == LockoutResource.MovementModes.Replace)
 		{
+			turningVelocity = 0;
 			Player.MovementAngle = targetMovementAngle;
 			return;
 		}
+
 		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
 
 		targetMovementAngle += Player.PathTurnInfluence;
@@ -128,7 +155,7 @@ public partial class RunState : PlayerState
 		if (speedRatio > RunRatio)
 			targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, Player.PathFollower.ForwardAngle, MaxTurningAdjustment);
 
-		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, targetMovementAngle);
+		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, Player.PathFollower.ForwardAngle);
 		float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, Player.PathFollower.ForwardAngle);
 		bool isRecentering = Player.Controller.IsRecentering(movementDeltaAngle, inputDeltaAngle);
 		float maxTurnAmount = isRecentering ? Player.Stats.RecenterTurnAmount : Player.Stats.MaxTurnAmount;
