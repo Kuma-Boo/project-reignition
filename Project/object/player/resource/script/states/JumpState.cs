@@ -82,7 +82,7 @@ public partial class JumpState : PlayerState
 		if (Player.CheckGround())
 			return landState;
 
-		if (Player.VerticalSpeed <= 0)
+		if (Player.VerticalSpeed <= 0 && !isAccelerationJump)
 			return fallState;
 
 		if (Player.Controller.IsJumpBufferActive)
@@ -113,8 +113,9 @@ public partial class JumpState : PlayerState
 		}
 
 		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
-		float inputDot = ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle);
-		if ((inputDot < -.75f && !Mathf.IsZeroApprox(Player.MoveSpeed)) || Input.IsActionPressed("button_brake")) // Turning around
+		if ((Player.Controller.IsHoldingDirection(targetMovementAngle, Player.PathFollower.BackAngle) &&
+			!Mathf.IsZeroApprox(Player.MoveSpeed)) ||
+			Input.IsActionPressed("button_brake")) // Turning around
 		{
 			Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, -inputStrength);
 			return;
@@ -173,11 +174,12 @@ public partial class JumpState : PlayerState
 
 	private void StartAccelerationJump()
 	{
+		isAccelerationJump = true;
 		isAccelerationJumpQueued = false;
 
 		float inputAngle = Player.Controller.GetTargetMovementAngle();
 
-		if(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
 			Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 		{
 			return;
