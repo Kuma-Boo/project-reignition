@@ -6,7 +6,7 @@ namespace Project.Gameplay;
 public partial class PlayerInputController : Node
 {
 	private PlayerController Player { get; set; }
-	public void RegisterPlayer(PlayerController player) => Player = player;
+	public void Initialize(PlayerController player) => Player = player;
 
 	[Export]
 	private Curve InputCurve { get; set; }
@@ -76,37 +76,50 @@ public partial class PlayerInputController : Node
 		actionBuffer = Mathf.MoveToward(actionBuffer, 0, PhysicsManager.physicsDelta);
 	}
 
-	public enum InputMode
+	/// <summary> Returns the angle between the player's input angle and movementAngle. </summary>
+	public float GetTargetMovementAngle()
 	{
-		Auto, // Calls GetAutomaticInputMode
-		Camera, // Inputs are rotated with the camera
-		Path, // Inputs are rotated with the path (Up is always forward)
-		Global, // I think this is unused for now.
+		float inputAngle = CalculateTargetInputAngle();
+		return CalculateLockoutForwardAngle(inputAngle);
 	}
 
-	/// <summary> Gets the dot angle between the player's input angle and movementAngle. </summary>
-	public float GetTargetMovementAngle(InputMode mode = InputMode.Auto)
+	/// <summary> Returns the automaticly calculated input angle based on the game's settings and skills. </summary>
+	public float CalculateTargetInputAngle()
 	{
-		if (mode == InputMode.Auto)
-			mode = GetAutomaticInputMode();
-
-		if (mode == InputMode.Camera)
-			return InputAxis.Rotated(-XformAngle).AngleTo(Vector2.Down);
-
-		if (mode == InputMode.Path)
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
 			return InputAxis.Rotated(Player.PathFollower.ForwardAngle).AngleTo(Vector2.Down);
 
-		return InputAxis.AngleTo(Vector2.Down);
+		return InputAxis.Rotated(-XformAngle).AngleTo(Vector2.Down);
 	}
 
-	/// <summary> Returns the automatic input mode [based on the game's settings and] skills. </summary>
-	public InputMode GetAutomaticInputMode()
+	private float CalculateLockoutForwardAngle(float inputAngle)
 	{
-		// TODO Add configuration option for path based inputs
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
-			return InputMode.Path;
+		LockoutResource resource = Player.State.ActiveLockoutData;
+		if (!Player.State.IsLockoutOverridingMovementAngle) // Return early when LockoutResource doesn't override inputAngle
+			return inputAngle;
 
-		return InputMode.Camera;
+		float forwardAngle = Player.State.ActiveLockoutData.movementAngle;
+		switch (resource.spaceMode)
+		{
+			case LockoutResource.SpaceModes.Local:
+				forwardAngle += Player.MovementAngle;
+				break;
+			case LockoutResource.SpaceModes.Camera:
+				forwardAngle += XformAngle;
+				break;
+			case LockoutResource.SpaceModes.PathFollower:
+				forwardAngle += Player.PathFollower.ForwardAngle;
+				break;
+		}
+
+		if (resource.allowReversing)
+		{
+			float backwardsAngle = forwardAngle + Mathf.Pi;
+			if (Player.IsMovingBackward || (Mathf.IsZeroApprox(Player.MoveSpeed) && IsHoldingDirection(inputAngle, backwardsAngle)))
+				return backwardsAngle;
+		}
+
+		return forwardAngle;
 	}
 
 	/// <summary> Checks whether the player is holding a particular direction. </summary>

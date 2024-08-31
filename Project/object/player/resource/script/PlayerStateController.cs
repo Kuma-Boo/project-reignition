@@ -17,6 +17,7 @@ public partial class PlayerStateController : Node
 	public void ProcessPhysics()
 	{
 		UpdateLockoutTimer();
+		UpdateRecenter();
 	}
 
 	[Export]
@@ -108,6 +109,7 @@ public partial class PlayerStateController : Node
 
 	private float lockoutTimer;
 	public bool IsLockoutActive => ActiveLockoutData != null;
+	public bool IsLockoutOverridingMovementAngle => Player.State.IsLockoutActive && Player.State.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free;
 	public LockoutResource ActiveLockoutData { get; private set; }
 	private readonly List<LockoutResource> lockoutDataList = [];
 
@@ -155,8 +157,6 @@ public partial class PlayerStateController : Node
 			SetLockoutData(lockoutDataList[^1]);
 	}
 
-	// REFACTOR TODO
-	private bool isRecentered;
 	private void SetLockoutData(LockoutResource resource)
 	{
 		ActiveLockoutData = resource;
@@ -176,6 +176,34 @@ public partial class PlayerStateController : Node
 		lockoutTimer = Mathf.MoveToward(lockoutTimer, ActiveLockoutData.length, PhysicsManager.physicsDelta);
 		if (Mathf.IsEqualApprox(lockoutTimer, ActiveLockoutData.length))
 			RemoveLockoutData(ActiveLockoutData);
+	}
+
+	private bool isRecentered; // Is the recenter complete?
+	private const float MinRecenterPower = .1f;
+	private const float MaxRecenterPower = .2f;
+	/// <summary> Recenters the player. Only call this AFTER movement has occurred. </summary>
+	private void UpdateRecenter()
+	{
+		if (!IsLockoutActive || !ActiveLockoutData.recenterPlayer) return;
+
+		Vector3 recenterDirection = Player.PathFollower.Forward().Rotated(Player.UpDirection, Mathf.Pi * .5f);
+		float currentOffset = Player.PathFollower.LocalPlayerPositionDelta.X;
+		float movementOffset = currentOffset;
+		if (!isRecentered) // Smooth out recenter speed
+		{
+			float inputInfluence = ExtensionMethods.DotAngle(Player.PathFollower.ForwardAngle + (Mathf.Pi * .5f), Player.Controller.CalculateTargetInputAngle());
+			inputInfluence *= Mathf.Sign(Player.PathFollower.LocalPlayerPositionDelta.X);
+			inputInfluence = (inputInfluence + 1) * 0.5f;
+			inputInfluence = Mathf.Lerp(MinRecenterPower, MaxRecenterPower, inputInfluence);
+
+			float recenterSpeed = Player.MoveSpeed * inputInfluence;
+			movementOffset = Mathf.MoveToward(movementOffset, 0, recenterSpeed * PhysicsManager.physicsDelta);
+			if (Mathf.IsZeroApprox(movementOffset))
+				isRecentered = true;
+			movementOffset = currentOffset - movementOffset;
+		}
+
+		Player.GlobalPosition += movementOffset * recenterDirection; // Move towards the pathfollower
 	}
 }
 
