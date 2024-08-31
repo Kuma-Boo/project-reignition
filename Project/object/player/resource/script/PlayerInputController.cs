@@ -109,13 +109,18 @@ public partial class PlayerInputController : Node
 		return InputMode.Camera;
 	}
 
-	/// <summary>
-	/// Checks whether the player is holding a particular direction.
-	/// </summary>
+	/// <summary> Checks whether the player is holding a particular direction. </summary>
 	public bool IsHoldingDirection(float inputAngle, float referenceAngle)
 	{
 		float deltaAngle = ExtensionMethods.DeltaAngleRad(referenceAngle, inputAngle);
 		return deltaAngle <= MaximumHoldDelta;
+	}
+
+	/// <summary> Returns how far the player's input is from the reference angle, normalized to MaximumHoldDelta. </summary>
+	public float GetHoldingDistance(float inputAngle, float referenceAngle)
+	{
+		float deltaAngle = ExtensionMethods.DeltaAngleRad(referenceAngle, inputAngle);
+		return deltaAngle / MaximumHoldDelta;
 	}
 
 	/// <summary>

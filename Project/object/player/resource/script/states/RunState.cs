@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay;
 
@@ -107,7 +108,9 @@ public partial class RunState : PlayerState
 		}
 
 		ProcessTurning(targetMovementAngle); // Turning only updates when accelerating
-		ApplySpeedLoss(targetMovementAngle, inputDot);
+
+		if (IsSpeedLossActive(targetMovementAngle))
+			ApplySpeedLoss(targetMovementAngle);
 		Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
 	}
 
@@ -134,16 +137,39 @@ public partial class RunState : PlayerState
 		Player.MovementAngle = ExtensionMethods.SmoothDampAngle(Player.MovementAngle + Player.PathTurnInfluence, targetMovementAngle, ref turningVelocity, turnSmoothing);
 	}
 
-	private void ApplySpeedLoss(float targetMovementAngle, float inputDot)
+	private bool IsSpeedLossActive(float targetMovementAngle)
 	{
-		float pathDot = ExtensionMethods.DotAngle(targetMovementAngle, Player.PathFollower.ForwardAngle);
-		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
+		// Speedbreak is overriding speed
+		if (Player.Skills.IsSpeedBreakActive) return false;
+
+		// Autorun disables speed loss
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun)) return false;
+
 		// Don't apply turning speed loss when moving quickly and holding the direction of the pathfollower
-		if (pathDot >= .5f && speedRatio >= .5f)
-			return;
+		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.PathFollower.ForwardAngle) &&
+			Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed) > .5f)
+		{
+			return false;
+		}
+
+		// Or when overriding speed/direction
+		if (Player.State.IsLockoutActive &&
+			(Player.State.ActiveLockoutData.overrideSpeed ||
+			Player.State.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	private void ApplySpeedLoss(float targetMovementAngle)
+	{
+		float deltaAngle = Player.Controller.GetHoldingDistance(targetMovementAngle, Player.MovementAngle);
+		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
 
 		// Calculate turn delta, relative to ground speed
-		float speedLossRatio = speedRatio * ((inputDot - 1.0f) * -.5f);
+		float speedLossRatio = speedRatio * deltaAngle;
 		Player.MoveSpeed -= Player.Stats.GroundSettings.Speed * turningSpeedLossCurve.Sample(speedLossRatio) * TurningSpeedLoss;
 		Player.MoveSpeed = Mathf.Max(Player.MoveSpeed, 0);
 	}
