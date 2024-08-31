@@ -35,6 +35,7 @@ public partial class PlayerInputController : Node
 	/// <summary> Angle to use when transforming from world space to camera space. </summary>
 	public float XformAngle { get; set; }
 	public Vector2 InputAxis { get; private set; }
+	public Vector2 NonZeroInputAxis { get; private set; }
 	public float InputHorizontal { get; private set; }
 	public float InputVertical { get; private set; }
 
@@ -49,6 +50,8 @@ public partial class PlayerInputController : Node
 		InputAxis = Input.GetVector("move_left", "move_right", "move_up", "move_down", DeadZone);
 		InputHorizontal = Input.GetAxis("move_left", "move_right");
 		InputVertical = Input.GetAxis("move_up", "move_down");
+		if (!InputAxis.IsZeroApprox())
+			NonZeroInputAxis = InputAxis;
 
 		UpdateJumpBuffer();
 		UpdateActionBuffer();
@@ -87,9 +90,9 @@ public partial class PlayerInputController : Node
 	public float CalculateTargetInputAngle()
 	{
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
-			return InputAxis.Rotated(Player.PathFollower.ForwardAngle).AngleTo(Vector2.Down);
+			return NonZeroInputAxis.Rotated(Player.PathFollower.ForwardAngle).AngleTo(Vector2.Down);
 
-		return InputAxis.Rotated(-XformAngle).AngleTo(Vector2.Down);
+		return NonZeroInputAxis.Rotated(-XformAngle).AngleTo(Vector2.Down);
 	}
 
 	private float CalculateLockoutForwardAngle(float inputAngle)
