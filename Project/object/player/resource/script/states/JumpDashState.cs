@@ -97,4 +97,6 @@ public partial class JumpDashState : PlayerState
 
 		Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, 0, Player.Stats.AirSettings.Friction * PhysicsManager.physicsDelta);
 	}
+
+	protected override void Accelerate(float _) => Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, 0, ActiveMovementSettings.Friction * PhysicsManager.physicsDelta);
 }

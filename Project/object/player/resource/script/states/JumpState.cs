@@ -32,8 +32,6 @@ public partial class JumpState : PlayerState
 	private bool isAccelerationJump;
 	private bool isAccelerationJumpQueued;
 
-	private float turningVelocity;
-
 	/// <summary> How fast the jump button needs to be released to count as an Acceleration Jump. </summary>
 	private readonly float AccelerationJumpLength = .1f;
 	/// <summary> Maximum deviation from PathFollower.ForwardAngle allowed during an Acceleration Jump. </summary>
@@ -74,7 +72,8 @@ public partial class JumpState : PlayerState
 				isShortenedJump = true;
 		}
 
-		UpdateMoveSpeed();
+		ProcessMoveSpeed();
+		ProcessTurning();
 		UpdateVerticalSpeed();
 		Player.ApplyMovement();
 		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
@@ -94,7 +93,7 @@ public partial class JumpState : PlayerState
 			return jumpDashState;
 		}
 
-		if (Player.Controller.IsActionBufferActive)
+		if (Player.Controller.IsActionBufferActive && !isAccelerationJump)
 		{
 			Player.Controller.ResetActionBuffer();
 			return stompState;
@@ -103,55 +102,26 @@ public partial class JumpState : PlayerState
 		return null;
 	}
 
-	private void UpdateMoveSpeed()
+	protected override void Accelerate(float inputStrength)
 	{
-		float inputStrength = Player.Controller.GetInputStrength();
-		if (Mathf.IsZeroApprox(inputStrength))
+		if (isAccelerationJump) // Clamp acceleration jumps so they don't get out of control
 		{
-			Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, 0);
-			return;
-		}
-
-		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
-		float inputDot = ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle);
-		if ((inputDot < -.75f && !Mathf.IsZeroApprox(Player.MoveSpeed)) || Input.IsActionPressed("button_brake")) // Turning around
-		{
-			Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, -inputStrength);
-			return;
-		}
-
-		UpdateTurning(targetMovementAngle);
-		if (isAccelerationJump)
-		{
-			// Prevent the player from losing speed during an acceleration jump
 			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
 			return;
 		}
 
-		Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
+		base.Accelerate(inputStrength);
 	}
 
-	private void UpdateTurning(float targetMovementAngle)
+	protected override void ProcessTurning()
 	{
-		if (Mathf.IsZeroApprox(Player.MoveSpeed))
+		if (isAccelerationJump) // Clamp acceleration jumps so they don't get out of control
 		{
-			Player.MovementAngle = targetMovementAngle;
+			Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, MaxAccelerationJumpTurnAmount);
 			return;
 		}
-		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
 
-		targetMovementAngle += Player.PathTurnInfluence;
-		targetMovementAngle = Player.Controller.ImproveAnalogPrecision(targetMovementAngle, Player.PathFollower.ForwardAngle);
-
-		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, Player.PathFollower.ForwardAngle);
-		float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, Player.PathFollower.ForwardAngle);
-		bool isRecentering = Player.Controller.IsRecentering(movementDeltaAngle, inputDeltaAngle);
-		float maxTurnAmount = isRecentering ? Player.Stats.RecenterTurnAmount : Player.Stats.MaxTurnAmount;
-
-		float turnSmoothing = Mathf.Lerp(Player.Stats.MinTurnAmount, maxTurnAmount, speedRatio);
-		Player.MovementAngle = ExtensionMethods.SmoothDampAngle(Player.MovementAngle + Player.PathTurnInfluence, targetMovementAngle, ref turningVelocity, turnSmoothing);
-		if (isAccelerationJump) // Clamp acceleration jumps so they don't get out of control
-			Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, MaxAccelerationJumpTurnAmount);
+		base.ProcessTurning();
 	}
 
 	private void UpdateVerticalSpeed()

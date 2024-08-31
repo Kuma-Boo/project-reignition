@@ -191,7 +191,7 @@ public partial class PlayerStateController : Node
 		float movementOffset = currentOffset;
 		if (!isRecentered) // Smooth out recenter speed
 		{
-			float inputInfluence = ExtensionMethods.DotAngle(Player.PathFollower.ForwardAngle + (Mathf.Pi * .5f), Player.Controller.CalculateTargetInputAngle());
+			float inputInfluence = ExtensionMethods.DotAngle(Player.PathFollower.ForwardAngle + (Mathf.Pi * .5f), Player.Controller.GetTargetInputAngle());
 			inputInfluence *= Mathf.Sign(Player.PathFollower.LocalPlayerPositionDelta.X);
 			inputInfluence = (inputInfluence + 1) * 0.5f;
 			inputInfluence = Mathf.Lerp(MinRecenterPower, MaxRecenterPower, inputInfluence);

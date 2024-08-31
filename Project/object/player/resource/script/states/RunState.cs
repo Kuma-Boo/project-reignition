@@ -50,6 +50,7 @@ public partial class RunState : PlayerState
 	public override PlayerState ProcessPhysics()
 	{
 		ProcessMoveSpeed();
+		ProcessTurning();
 		Player.AddSlopeSpeed();
 		Player.ApplyMovement();
 
@@ -89,79 +90,12 @@ public partial class RunState : PlayerState
 		return null;
 	}
 
-	private void ProcessMoveSpeed()
+	protected override void Turn(float targetMovementAngle, float turnSmoothing)
 	{
-		float inputStrength = Player.Controller.GetInputStrength();
-		if (Mathf.IsZeroApprox(inputStrength))
-		{
-			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, 0);
-			return;
-		}
-
-		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
-		float inputDot = ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle);
-		if ((inputDot < -.75f && !Mathf.IsZeroApprox(Player.MoveSpeed)) || Input.IsActionPressed("button_brake")) // Turning around
-		{
-			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, -inputStrength);
-			StartBraking();
-			return;
-		}
-
-		//if (!ProcessStrafeControls(inputStrength, targetMovementAngle))
-		ProcessTurning(targetMovementAngle); // Turning only updates when accelerating
 		if (IsSpeedLossActive(targetMovementAngle))
 			ApplySpeedLoss(targetMovementAngle);
-		Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
-	}
 
-	/*
-	REFACTOR TODO
-	private bool ProcessStrafeControls(float inputStrength, float targetMovementAngle)
-	{
-		bool isUsingStrafeControls = Player.Skills.IsSpeedBreakActive ||
-			SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) ||
-			Player.State.ActiveLockoutData?.movementMode == LockoutResource.MovementModes.Strafe; // Ignore path delta under certain lockout situations
-		bool isPathDeltaLockoutActive = Player.State.IsLockoutActive &&
-			Player.State.ActiveLockoutData.spaceMode != LockoutResource.SpaceModes.Camera;
-
-		if (!isUsingStrafeControls)
-			return false;
-
-		if (Mathf.IsZeroApprox(inputStrength))
-			strafeBlend = Mathf.MoveToward(strafeBlend, 1.0f, PhysicsManager.physicsDelta);
-		else
-			strafeBlend = 0;
-		if (!isPathDeltaLockoutActive)
-			Player.MovementAngle += Player.PathFollower.DeltaAngle;
-		Player.MovementAngle = Mathf.LerpAngle(Player.MovementAngle, targetMovementAngle, strafeBlend);
-		return true;
-	}
-	*/
-
-	private void ProcessTurning(float targetMovementAngle)
-	{
-		if (Mathf.IsZeroApprox(Player.MoveSpeed) ||
-			Player.State.ActiveLockoutData?.movementMode == LockoutResource.MovementModes.Replace)
-		{
-			turningVelocity = 0;
-			Player.MovementAngle = targetMovementAngle;
-			return;
-		}
-
-		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
-
-		targetMovementAngle += Player.PathTurnInfluence;
-		targetMovementAngle = Player.Controller.ImproveAnalogPrecision(targetMovementAngle, Player.PathFollower.ForwardAngle);
-		if (speedRatio > RunRatio)
-			targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, Player.PathFollower.ForwardAngle, MaxTurningAdjustment);
-
-		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, Player.PathFollower.ForwardAngle);
-		float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, Player.PathFollower.ForwardAngle);
-		bool isRecentering = Player.Controller.IsRecentering(movementDeltaAngle, inputDeltaAngle);
-		float maxTurnAmount = isRecentering ? Player.Stats.RecenterTurnAmount : Player.Stats.MaxTurnAmount;
-
-		float turnSmoothing = Mathf.Lerp(Player.Stats.MinTurnAmount, maxTurnAmount, speedRatio);
-		Player.MovementAngle = ExtensionMethods.SmoothDampAngle(Player.MovementAngle + Player.PathTurnInfluence, targetMovementAngle, ref turningVelocity, turnSmoothing);
+		base.Turn(targetMovementAngle, turnSmoothing);
 	}
 
 	private bool IsSpeedLossActive(float targetMovementAngle)
@@ -201,8 +135,10 @@ public partial class RunState : PlayerState
 		Player.MoveSpeed = Mathf.Max(Player.MoveSpeed, 0);
 	}
 
-	private void StartBraking()
+	protected override void Brake()
 	{
+		base.Brake();
+
 		if (Player.Animator.IsBrakeAnimationActive) // Already active
 			return;
 
@@ -222,5 +158,16 @@ public partial class RunState : PlayerState
 			return;
 
 		Player.Animator.StopBrake();
+	}
+
+	protected override float ProcessTargetMovementAngle(float targetMovementAngle)
+	{
+		targetMovementAngle = base.ProcessTargetMovementAngle(targetMovementAngle);
+
+		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
+		if (speedRatio > RunRatio)
+			targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, Player.PathFollower.ForwardAngle, MaxTurningAdjustment);
+
+		return targetMovementAngle;
 	}
 }

@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay;
 
@@ -20,4 +21,150 @@ public partial class PlayerState : Node
 
 	/// <summary> Called on each physics update. </summary>
 	public virtual PlayerState ProcessPhysics() => null;
+
+	protected bool turnInstantly;
+	protected MovementSetting ActiveMovementSettings => Player.IsOnGround ? Player.Stats.GroundSettings : Player.Stats.AirSettings;
+	protected virtual void ProcessMoveSpeed()
+	{
+		turnInstantly = Mathf.IsZeroApprox(Player.MoveSpeed) && !Player.Skills.IsSpeedBreakActive; // Store this for turning function
+
+		if (Player.Skills.IsSpeedBreakActive)
+		{
+			// Override to speedbreak speed
+			if (Player.Skills.IsSpeedBreakOverrideActive)
+				Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.Skills.speedBreakSpeed, 1.0f);
+			return;
+		}
+
+		float inputStrength = Player.Controller.GetInputStrength();
+		if (Player.State.IsLockoutActive)
+		{
+			// Process Lockouts
+			if (Player.State.ActiveLockoutData.overrideSpeed)
+			{
+				Player.MoveSpeed = Player.State.ActiveLockoutData.ApplySpeed(Player.MoveSpeed, ActiveMovementSettings);
+				return;
+			}
+
+			if (Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
+			{
+				Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
+				return;
+			}
+		}
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun)) // Always move at full power when autorun is enabled
+			inputStrength = 1;
+
+		if (Mathf.IsZeroApprox(inputStrength)) // Basic slow down
+		{
+			Deccelerate();
+			return;
+		}
+
+		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
+		float inputAngle = Player.Controller.GetTargetInputAngle();
+		float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(inputAngle, targetMovementAngle));
+		if ((Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi) && !Mathf.IsZeroApprox(Player.MoveSpeed)) ||
+			Input.IsActionPressed("button_brake")) // Turning around
+		{
+			Brake();
+			return;
+		}
+
+		if (Player.State.IsLockoutActive && Player.State.ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.PathFollower) // Zipper exception
+			inputStrength *= Mathf.Clamp(inputDot + .5f, 0, 1f); // Arbitrary math to make it easier to maintain speed
+		else if (inputDot < .8f) // Slow down while turning
+			inputStrength *= inputDot;
+
+		Accelerate(inputStrength);
+	}
+
+	protected virtual void Deccelerate() => Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, 0);
+
+	protected virtual void Accelerate(float inputStrength)
+	{
+		if (Player.MoveSpeed < Player.Stats.BackstepSettings.Speed) // Accelerate faster when at low speeds
+			Player.MoveSpeed = Mathf.Lerp(Player.MoveSpeed, ActiveMovementSettings.Speed * ActiveMovementSettings.GetSpeedRatio(Player.Stats.BackstepSettings.Speed), .05f * inputStrength);
+
+		Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength); // Accelerate based on input strength/input direction
+	}
+
+	protected virtual void Brake() => Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, -1);
+
+	protected float turningVelocity;
+	protected virtual void ProcessTurning()
+	{
+		if (Mathf.IsZeroApprox(Player.MoveSpeed) && Input.IsActionPressed("button_brake"))
+			return;
+
+		bool isUsingStrafeControls = Player.Skills.IsSpeedBreakActive ||
+			SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) ||
+			(Player.State.IsLockoutActive &&
+			Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe); // Ignore path delta under certain lockout situations
+
+		float pathControlAmount = Player.PathTurnInfluence;
+		if (isUsingStrafeControls || Player.State.IsLockoutActive)
+			pathControlAmount = 0; // Don't use path influence during speedbreak/autorun
+
+		float targetMovementAngle = Player.Controller.GetTargetMovementAngle() + pathControlAmount;
+		if (Player.State.IsLockoutActive &&
+			Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace) // Direction is being overridden
+		{
+			Player.MovementAngle = targetMovementAngle;
+		}
+
+		if (turnInstantly) // Instantly set movement angle to target movement angle
+		{
+			SnapRotation(targetMovementAngle);
+			return;
+		}
+
+		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi))
+		{
+			// Check for turning around
+			if (!Player.State.IsLockoutActive || Player.State.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
+				return;
+		}
+
+		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
+		targetMovementAngle = ProcessTargetMovementAngle(targetMovementAngle);
+
+		// Normal turning
+
+		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, Player.PathFollower.ForwardAngle);
+		float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, Player.PathFollower.ForwardAngle);
+		bool isRecentering = Player.Controller.IsRecentering(movementDeltaAngle, inputDeltaAngle);
+		//bool isTurningAround = !IsHoldingDirection(Player.PathFollower.BackAngle) && Player.Controller.IsRecentering(movementDeltaAngle, inputDeltaAngle);
+		float maxTurnAmount = isRecentering ? Player.Stats.RecenterTurnAmount : Player.Stats.MaxTurnAmount;
+
+		float turnSmoothing = Mathf.Lerp(Player.Stats.MinTurnAmount, maxTurnAmount, speedRatio);
+		Player.MovementAngle += pathControlAmount;
+		Turn(targetMovementAngle, turnSmoothing);
+
+		/*
+		// Strafe implementation
+		if (isUsingStrafeControls)
+		{
+			if (Player.Controller.InputVector.IsZeroApprox())
+				strafeBlend = Mathf.MoveToward(strafeBlend, 1.0f, PhysicsManager.physicsDelta);
+			else
+				strafeBlend = 0;
+
+			if (!isPathDeltaLockoutActive)
+				MovementAngle += PathFollower.DeltaAngle;
+			MovementAngle = Mathf.LerpAngle(MovementAngle, targetMovementAngle, strafeBlend);
+		}
+		*/
+	}
+
+	protected virtual void Turn(float targetMovementAngle, float smoothing) => Player.MovementAngle = ExtensionMethods.SmoothDampAngle(Player.MovementAngle, targetMovementAngle, ref turningVelocity, smoothing);
+
+	protected virtual float ProcessTargetMovementAngle(float targetMovementAngle) => Player.Controller.ImproveAnalogPrecision(targetMovementAngle, Player.PathFollower.ForwardAngle);
+
+	protected virtual void SnapRotation(float targetMovementAngle)
+	{
+		turningVelocity = 0;
+		Player.MovementAngle = targetMovementAngle;
+	}
 }

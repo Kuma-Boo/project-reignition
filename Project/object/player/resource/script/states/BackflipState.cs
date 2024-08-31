@@ -14,7 +14,6 @@ public partial class BackflipState : PlayerState
 	[Export]
 	private float backflipHeight;
 
-	private float turningVelocity;
 	/// <summary> How much can the player adjust their angle while backflipping? </summary>
 	private readonly float MaxBackflipAdjustment = Mathf.Pi * .25f;
 

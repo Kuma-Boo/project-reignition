@@ -15,6 +15,13 @@ public partial class PlayerInputController : Node
 		if (Input.IsActionPressed("button_brake"))
 			return 0;
 
+		if (Player.State.IsLockoutActive && Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace)
+		{
+			float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(GetTargetInputAngle(), GetTargetMovementAngle()));
+			if (!Player.Controller.InputAxis.IsZeroApprox() && inputDot < .2f) // Fixes player holding perpendicular to target direction
+				return 0;
+		}
+
 		float inputLength = InputAxis.Length();
 		if (inputLength <= DeadZone)
 			inputLength = 0;
@@ -82,12 +89,12 @@ public partial class PlayerInputController : Node
 	/// <summary> Returns the angle between the player's input angle and movementAngle. </summary>
 	public float GetTargetMovementAngle()
 	{
-		float inputAngle = CalculateTargetInputAngle();
+		float inputAngle = GetTargetInputAngle();
 		return CalculateLockoutForwardAngle(inputAngle);
 	}
 
 	/// <summary> Returns the automaticly calculated input angle based on the game's settings and skills. </summary>
-	public float CalculateTargetInputAngle()
+	public float GetTargetInputAngle()
 	{
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
 			return NonZeroInputAxis.Rotated(Player.PathFollower.ForwardAngle).AngleTo(Vector2.Down);
@@ -118,8 +125,11 @@ public partial class PlayerInputController : Node
 		if (resource.allowReversing)
 		{
 			float backwardsAngle = forwardAngle + Mathf.Pi;
-			if (Player.IsMovingBackward || (Mathf.IsZeroApprox(Player.MoveSpeed) && IsHoldingDirection(inputAngle, backwardsAngle)))
+			if (Player.IsMovingBackward ||
+				(Mathf.IsZeroApprox(Player.MoveSpeed) && IsHoldingDirection(inputAngle, backwardsAngle)))
+			{
 				return backwardsAngle;
+			}
 		}
 
 		return forwardAngle;
