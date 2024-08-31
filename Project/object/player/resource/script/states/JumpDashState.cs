@@ -60,7 +60,8 @@ public partial class JumpDashState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		UpdateMoveSpeed();
+		ProcessMoveSpeed();
+		ProcessTurning();
 		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, -jumpDashMaxGravity, jumpDashGravity * PhysicsManager.physicsDelta);
 		Player.ApplyMovement();
 		Player.CheckGround();
@@ -78,7 +79,7 @@ public partial class JumpDashState : PlayerState
 		return null;
 	}
 
-	private void UpdateMoveSpeed()
+	protected override void ProcessMoveSpeed()
 	{
 		float inputStrength = Player.Controller.GetInputStrength();
 		if (Mathf.IsZeroApprox(inputStrength) || !Mathf.IsZeroApprox(Player.MoveSpeed))

@@ -14,8 +14,6 @@ public partial class FallState : PlayerState
 	[Export]
 	private PlayerState homingAttackState;
 
-	private float turningVelocity;
-
 	public override PlayerState ProcessPhysics()
 	{
 		UpdateMoveSpeed();

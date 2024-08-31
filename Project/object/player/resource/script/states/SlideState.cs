@@ -58,6 +58,7 @@ public partial class SlideState : PlayerState
 	public override PlayerState ProcessPhysics()
 	{
 		ProcessMoveSpeed();
+		ProcessTurning();
 		Player.AddSlopeSpeed(true);
 		Player.ApplyMovement();
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideExp))
@@ -83,7 +84,7 @@ public partial class SlideState : PlayerState
 		return null;
 	}
 
-	private void ProcessMoveSpeed()
+	protected override void ProcessMoveSpeed()
 	{
 		Player.Stats.UpdateSlideSpeed(Player.SlopeRatio);
 
