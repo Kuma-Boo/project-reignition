@@ -18,8 +18,7 @@ public partial class LandState : PlayerState
 		Player.Velocity = Player.UpDirection * Player.VerticalSpeed;
 		Player.MoveAndSlide();
 		Player.Velocity = originalVelocity;
-		if (Player.CheckGround())
-			Player.UpdateOrientation();
+		Player.UpdateOrientation();
 
 		Player.VerticalSpeed = 0;
 		Player.Lockon.IsMonitoring = false;

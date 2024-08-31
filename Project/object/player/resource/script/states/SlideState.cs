@@ -9,6 +9,8 @@ public partial class SlideState : PlayerState
 	private PlayerState runState;
 	[Export]
 	private PlayerState crouchState;
+	[Export]
+	private PlayerState fallState;
 
 	public override void EnterState()
 	{
@@ -60,6 +62,9 @@ public partial class SlideState : PlayerState
 		Player.ApplyMovement();
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideExp))
 			Player.Skills.UpdateSoulSlide();
+
+		if (!Player.CheckGround())
+			return fallState;
 
 		if (!Input.IsActionPressed("button_action") && !Player.Animator.IsSlideTransitionActive)
 		{

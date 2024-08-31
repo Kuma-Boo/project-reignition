@@ -55,6 +55,7 @@ public partial class PlayerController : CharacterBody3D
 	{
 		Controller.ProcessInputs();
 		StateMachine.ProcessPhysics();
+		UpdateOrientation();
 		State.ProcessPhysics();
 		Lockon.ProcessPhysics();
 		Animator.ProcessPhysics();
@@ -249,9 +250,11 @@ public partial class PlayerController : CharacterBody3D
 		return hit;
 	}
 
-	/// <summary> Orientates Root to world direction, then rotates the gimbal on the y-axis </summary>
-	public void UpdateOrientation()
+	/// <summary> Orientates Root to world direction, then rotates the gimbal on the y-axis. </summary>
+	public void UpdateOrientation(bool allowExternalOrientation = false)
 	{
+		if (!allowExternalOrientation && State.ExternalController != null) return;
+
 		// Untested! This may end up breaking in certain scenarios
 		GlobalRotation = Vector3.Zero;
 		Vector3 cross = Vector3.Left.Rotated(Vector3.Up, UpDirection.Flatten().AngleTo(Vector2.Down));
@@ -261,7 +264,32 @@ public partial class PlayerController : CharacterBody3D
 	public void UpdateUpDirection(bool quickReset = true, Vector3 upDirection = new())
 	{
 		// Calculate target up direction
-		if (upDirection.IsEqualApprox(Vector3.Zero))
+		/* REFACTOR TODO
+		// Calculate reset factor
+		float orientationResetFactor;
+		if (ActionState == ActionStates.Stomping ||
+			ActionState == ActionStates.JumpDash ||
+			ActionState == ActionStates.Backflip) // Quickly reset when stomping/homing attacking
+		{
+			orientationResetFactor = .2f;
+		}
+		else if (VerticalSpeed > 0)
+		{
+			orientationResetFactor = .01f;
+		}
+		else
+		{
+			orientationResetFactor = VerticalSpeed * .2f / Runtime.MaxGravity;
+		}
+		*/
+
+		// Calculate target up direction
+		if (Camera.ActiveSettings.followPathTilt)
+		{
+			// Always use PathFollower.Up when on a tilted path.
+			upDirection = PathFollower.Up();
+		}
+		else if (upDirection.IsEqualApprox(Vector3.Zero))
 		{
 			upDirection = Vector3.Up;
 			if (Camera.ActiveSettings.followPathTilt) // Use PathFollower.Up when on a tilted path.
