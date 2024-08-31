@@ -39,6 +39,7 @@ public partial class PlayerController : CharacterBody3D
 	{
 		StageSettings.RegisterPlayer(this); // Update global reference
 
+		Controller.Initialize(this);
 		Stats.Initialize();
 		State.Initialize(this);
 		Lockon.Initialize(this);
