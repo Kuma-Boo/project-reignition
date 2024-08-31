@@ -29,7 +29,7 @@ public partial class StompState : PlayerState
 
 		SetActionState(ActionStates.Stomping);
 
-		bool attackStomp = Skills.IsSkillEquipped(SkillKey.StompAttack);
+		bool attackStomp = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompAttack);
 		if (attackStomp)
 		{
 			AttackState = AttackStates.Weak;
@@ -56,7 +56,7 @@ public partial class StompState : PlayerState
 	private void UpdateVerticalSpeed()
 	{
 		/* REFACTOR TODO
-		if (Player.Skills.IsSkillEquipped(SkillKey.StompAttack))
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompAttack))
 			Player.VerticalSpeed = Mathf.MoveToward(VerticalSpeed, StompSpeed, StompGravity * PhysicsManager.physicsDelta);
 		else
 		*/

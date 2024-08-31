@@ -23,7 +23,7 @@ public partial class DriftTrigger : Area3D
 	public Vector3 ExitDirection => this.Right() * (isRightTurn ? 1 : -1);
 
 	private float entrySpeed; // Entry speed
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	private enum DriftStatus
 	{
@@ -80,14 +80,14 @@ public partial class DriftTrigger : Area3D
 				driftAnimationTimer = Mathf.MoveToward(driftAnimationTimer, 0, PhysicsManager.physicsDelta);
 
 				if (Mathf.IsZeroApprox(driftAnimationTimer))
-					Character.Animator.ResetState(.4f);
+					Player.Animator.ResetState(.4f);
 			}
 
 			return;
 		}
 
 		if (driftStatus == DriftStatus.Waiting &&
-			Character.PathFollower.Progress < Character.PathFollower.GetProgress(GlobalPosition))
+			Player.PathFollower.Progress < Player.PathFollower.GetProgress(GlobalPosition))
 		{
 			if (!IsDriftValid())
 				return;
@@ -101,34 +101,35 @@ public partial class DriftTrigger : Area3D
 
 	private bool IsDriftValid() // Checks whether the player is in a state where a drift is possible
 	{
-		if (Character.IsMovingBackward) return false; // Can't drift backwards
-		if (!Character.IsOnGround || Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < EntranceSpeedRatio) return false; // In air/too slow
-		if (Character.MovementState == CharacterController.MovementStates.External) return false; // Player is already busy
+		if (Player.IsMovingBackward) return false; // Can't drift backwards
+		if (!Player.IsOnGround || Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed) < EntranceSpeedRatio) return false; // In air/too slow
+
+		// REFACTOR TODO if (Player.MovementState == PlayerController.MovementStates.External) return false; // Player is already busy
 
 		// Check for any obstructions
-		RaycastHit hit = Character.CastRay(Character.CollisionPosition, Character.PathFollower.Forward() * slideDistance, Runtime.Instance.environmentMask);
+		RaycastHit hit = Player.CastRay(Player.CollisionPosition, Player.PathFollower.Forward() * slideDistance, Runtime.Instance.environmentMask);
 		return !hit || hit.collidedObject.IsInGroup("level wall"); // Valid drift
 	}
 
 	private void StartDrift() // Initialize drift
 	{
 		driftStatus = DriftStatus.Processing;
-		entrySpeed = Character.MoveSpeed;
+		entrySpeed = Player.MoveSpeed;
 		driftVelocity = Vector3.Zero;
 
 		// Reset sfx volume
-		float speedRatio = Character.GroundSettings.GetSpeedRatioClamped(entrySpeed) - (EntranceSpeedRatio / (1 - EntranceSpeedRatio));
+		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(entrySpeed) - (EntranceSpeedRatio / (1 - EntranceSpeedRatio));
 		startingVolume = Mathf.Lerp(MinStartingVolume, 0, speedRatio);
 		isFadingSFX = false;
 		sfx.VolumeDb = startingVolume;
 		sfx.Play();
 
 		driftAnimationTimer = DefaultAnimationLength;
-		Character.StartExternal(this); // For future reference, this is where speedbreak gets disabled
-		Character.Effect.StartDust();
-		Character.Animator.ExternalAngle = Character.MovementAngle;
-		Character.Animator.StartDrift(isRightTurn);
-		Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift));
+		Player.State.StartExternal(this); // For future reference, this is where speedbreak gets disabled
+		Player.Effect.StartDust();
+		Player.Animator.ExternalAngle = Player.MovementAngle;
+		Player.Animator.StartDrift(isRightTurn);
+		Player.Connect(PlayerController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift));
 
 		EmitSignal(SignalName.DriftStarted);
 	}
@@ -138,17 +139,17 @@ public partial class DriftTrigger : Area3D
 		Vector3 targetPosition = MiddlePosition + (this.Back() * InputWindowDistance);
 
 		// Process drift
-		float distance = Character.GlobalPosition.Flatten().DistanceTo(targetPosition.Flatten());
-		Character.GlobalPosition = Character.GlobalPosition.SmoothDamp(targetPosition, ref driftVelocity, DriftSmoothing, entrySpeed);
-		Character.UpDirection = Character.PathFollower.Up(); // Use pathfollower's up direction when drifting
-		Character.UpdateExternalControl(true);
-		Character.UpdateOrientation(true);
+		float distance = Player.GlobalPosition.Flatten().DistanceTo(targetPosition.Flatten());
+		Player.GlobalPosition = Player.GlobalPosition.SmoothDamp(targetPosition, ref driftVelocity, DriftSmoothing, entrySpeed);
+		Player.UpDirection = Player.PathFollower.Up(); // Use pathfollower's up direction when drifting
+		Player.State.UpdateExternalControl(true);
+		Player.UpdateOrientation();
 
 		// Fade out sfx based on distance
 		float volume = distance / slideDistance;
 		sfx.VolumeDb = Mathf.SmoothStep(startingVolume, -80f, volume);
 
-		bool isManualDrift = Character.Skills.IsSkillEquipped(SkillKey.DriftExp);
+		bool isManualDrift = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.DriftExp);
 		bool isAttemptingDrift = ((Input.IsActionJustPressed("button_action") && isManualDrift) ||
 			(!isManualDrift && distance <= InputWindowDistance)) && driftStatus != DriftStatus.TimingFail;
 
@@ -159,7 +160,7 @@ public partial class DriftTrigger : Area3D
 			CompleteDrift();
 			ApplyBonus();
 
-			Character.MoveSpeed = driftVelocity.Length(); // Keep speed from drift
+			Player.MoveSpeed = driftVelocity.Length(); // Keep speed from drift
 			return;
 		}
 
@@ -173,8 +174,8 @@ public partial class DriftTrigger : Area3D
 				if (isManualDrift)
 				{
 					BonusManager.instance.QueueBonus(new(BonusType.EXP, 100));
-					Character.Skills.ModifySoulGauge(10); // Not written in skill description, but that's what the original game does -_-
-					Character.Effect.PlayDarkSpiralFX();
+					Player.Skills.ModifySoulGauge(10); // Not written in skill description, but that's what the original game does -_-
+					Player.Effect.PlayDarkSpiralFX();
 				}
 			}
 			else // Too early! Fail drift attempt and play a special animation?
@@ -194,7 +195,7 @@ public partial class DriftTrigger : Area3D
 		// Slid to a stop
 		driftStatus = DriftStatus.WaitFail;
 		driftAnimationTimer = PhysicsManager.physicsDelta;
-		Character.MoveSpeed = 0f; // Reset Movespeed
+		Player.MoveSpeed = 0f; // Reset Movespeed
 		CompleteDrift();
 	}
 
@@ -205,25 +206,25 @@ public partial class DriftTrigger : Area3D
 		// Turn 90 degrees
 		if (driftStatus == DriftStatus.JumpFail)
 		{
-			Character.Animator.ResetState(0f);
+			Player.Animator.ResetState(0f);
 		}
 		else if (driftStatus == DriftStatus.Success)
 		{
-			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(ExitDirection, Character.PathFollower.Up());
-			Character.MovementAngle -= Mathf.Pi * .1f * Character.InputVector.X;
+			Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(ExitDirection, Player.PathFollower.Up());
+			Player.MovementAngle -= Mathf.Pi * .1f * Player.Controller.InputHorizontal;
 
-			Character.AddLockoutData(lockout); // Apply lockout
+			Player.State.AddLockoutData(lockout); // Apply lockout
 
-			Character.Animator.LaunchDrift();
-			Character.Animator.ExternalAngle = Character.MovementAngle;
+			Player.Animator.LaunchDrift();
+			Player.Animator.ExternalAngle = Player.MovementAngle;
 		}
 
 		driftStatus = DriftStatus.Inactive; // Reset to inactive state
-		Character.ResetMovementState();
-		Character.Effect.StopDust();
+		Player.State.StopExternal();
+		Player.Effect.StopDust();
 
-		if (Character.IsConnected(CharacterController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift)))
-			Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift));
+		if (Player.IsConnected(PlayerController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift)))
+			Player.Disconnect(PlayerController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift));
 
 		EmitSignal(SignalName.DriftCompleted);
 	}

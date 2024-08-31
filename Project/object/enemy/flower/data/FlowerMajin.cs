@@ -136,9 +136,9 @@ public partial class FlowerMajin : Enemy
 	{
 		if (!IsOpen)
 		{
-			if (Character.Lockon.IsHomingAttacking)
+			if (Player.Lockon.IsHomingAttacking)
 			{
-				Character.Lockon.StartBounce(false);
+				// REFACTOR TODO Player.Lockon.StartBounce(false);
 				UpdateLockon();
 
 				if (weakDefense)
@@ -147,17 +147,17 @@ public partial class FlowerMajin : Enemy
 					EmitSignal(SignalName.Deflect);
 			}
 
-			if (Character.AttackState == CharacterController.AttackStates.None ||
-				(Character.AttackState == CharacterController.AttackStates.Weak && !weakDefense))
+			if (Player.State.AttackState == PlayerStateController.AttackStates.None ||
+				(Player.State.AttackState == PlayerStateController.AttackStates.Weak && !weakDefense))
 			{
 				return;
 			}
 		}
 
-		if (!IsStaggered && Character.AttackState == CharacterController.AttackStates.None)
+		if (!IsStaggered && Player.State.AttackState == PlayerStateController.AttackStates.None)
 		{
 			StartStaggerState();
-			Character.Lockon.StartBounce(false);
+			// REFACTOR TODO Player.Lockon.StartBounce(false);
 			UpdateLockon();
 			return;
 		}
@@ -275,7 +275,7 @@ public partial class FlowerMajin : Enemy
 		if (!seedPool[seedIndex].IsInsideTree()) // Add seeds to the scene tree
 			GetTree().Root.AddChild(seedPool[seedIndex]);
 
-		Vector3 targetOffset = Hurtbox.GlobalPosition - Character.CenterPosition;
+		Vector3 targetOffset = Hurtbox.GlobalPosition - Player.CenterPosition;
 		targetOffset -= Vector3.Up * .4f; // Aim slightly higher so seeds avoid hitting the ground
 		seedPool[seedIndex].LookAtFromPosition(Hurtbox.GlobalPosition, Hurtbox.GlobalPosition + targetOffset, Vector3.Up);
 		seedPool[seedIndex].Spawn();
@@ -295,7 +295,7 @@ public partial class FlowerMajin : Enemy
 
 	private void StartStaggerState()
 	{
-		if (Character.AttackState == CharacterController.AttackStates.None)
+		if (Player.State.AttackState == PlayerStateController.AttackStates.None)
 			AnimationTree.Set(HitTransition, BoopState);
 		else
 			AnimationTree.Set(HitTransition, StaggerState);

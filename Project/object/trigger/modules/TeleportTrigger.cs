@@ -27,7 +27,7 @@ namespace Project.Gameplay.Triggers
 		private Node3D warpTarget;
 		public Vector3 WarpPosition => warpTarget == null ? GlobalPosition : warpTarget.GlobalPosition;
 
-		public override void Activate() => Character.Teleport(this);
+		public override void Activate() => Player.State.Teleport(this);
 
 		/// <summary> Emits signal when warp actually occours. </summary>
 		public void ApplyTeleport() => EmitSignal(SignalName.Teleport);

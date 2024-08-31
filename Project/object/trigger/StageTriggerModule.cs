@@ -8,7 +8,7 @@ namespace Project.Gameplay.Triggers
 	/// </summary>
 	public partial class StageTriggerModule : Node3D
 	{
-		protected CharacterController Character => CharacterController.instance;
+		protected PlayerController Player => StageSettings.Player;
 
 		public virtual void Activate(Area3D a)
 		{

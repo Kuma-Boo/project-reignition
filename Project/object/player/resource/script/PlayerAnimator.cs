@@ -328,14 +328,14 @@ public partial class PlayerAnimator : Node3D
 	public float CalculateTurnRatio()
 	{
 		/* REFACTOR TODO External State
-		if (Player.MovementState == CharacterController.MovementStates.External)
+		if (Player.MovementState == PlayerController.MovementStates.External)
 			return 0; // Disable turning when controlled externally
 		*/
 
 		float referenceAngle = Player.IsMovingBackward ? Player.PathFollower.ForwardAngle : Player.MovementAngle;
 		float inputAngle = Player.PathFollower.DeltaAngle * PathTurnStrength;
 		/*
-		if (Player.IsLockoutActive && Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace)
+		if (Player.IsLockoutActive && Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace)
 			inputAngle += referenceAngle;
 		else
 		*/
@@ -511,7 +511,7 @@ public partial class PlayerAnimator : Node3D
 	#endregion
 
 	#region Visual Rotation
-	/// <summary> Angle to use when character's MovementState is CharacterController.MovementStates.External. </summary>
+	/// <summary> Angle to use when character's MovementState is PlayerController.MovementStates.External. </summary>
 	public float ExternalAngle { get; set; }
 	/// <summary> Rotation (in radians) currently applied to Transform. </summary>
 	public float VisualAngle { get; private set; }
@@ -536,14 +536,14 @@ public partial class PlayerAnimator : Node3D
 	private void UpdateVisualRotation()
 	{
 		/* REFACTOR TODO
-		if (Player.ActionState == CharacterController.ActionStates.Grindstep) return; // Use the same angle as the grindrail
+		if (Player.ActionState == PlayerController.ActionStates.Grindstep) return; // Use the same angle as the grindrail
 		*/
 
 		// Don't update directions when externally controlled or on launchers
 		float targetRotation = Player.MovementAngle;
 
 		/* REFACTOR TODO
-		if (Player.MovementState == CharacterController.MovementStates.External)
+		if (Player.MovementState == PlayerController.MovementStates.External)
 			targetRotation = ExternalAngle;
 		else
 		*/
@@ -552,10 +552,10 @@ public partial class PlayerAnimator : Node3D
 		else if (Player.IsMovingBackward) // Backstepping
 			targetRotation = Player.PathFollower.ForwardAngle + (groundTurnRatio * Mathf.Pi * .15f);
 		/* REFACTOR TODO
-		else if (Player.IsLockoutActive && Player.ActiveLockoutData.recenterPlayer)
+		else if (Player.IsLockoutActive && Player.State.ActiveLockoutData.recenterPlayer)
 			targetRotation = Player.PathFollower.ForwardAngle;
 
-		if (Player.Skills.IsSpeedBreakActive && Player.MovementState != CharacterController.MovementStates.External)
+		if (Player.Skills.IsSpeedBreakActive && Player.MovementState != PlayerController.MovementStates.External)
 			VisualAngle += Player.PathFollower.DeltaAngle;
 		*/
 
@@ -722,7 +722,7 @@ public partial class PlayerAnimator : Node3D
 	public void StartSidle(bool isSidleFacingRight)
 	{
 		/*
-		if (Player.ActionState == CharacterController.ActionStates.Teleport) // Skip transition
+		if (Player.ActionState == PlayerController.ActionStates.Teleport) // Skip transition
 			SetStateXfade(0);
 		else // Quick crossfade into sidle
 		*/

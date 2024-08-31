@@ -124,7 +124,7 @@ public partial class LaunchRing : Launcher
 		Player.Effect.StartSpinFX();
 
 		/* REFACTOR TODO
-		Player.StartExternal(this);
+		Player.State.StartExternal(this);
 		*/
 		Player.Animator.StartSpin();
 
@@ -144,7 +144,7 @@ public partial class LaunchRing : Launcher
 	{
 		DropPlayer();
 		/* REFACTOR TODO
-		Player.StartKnockback(new CharacterController.KnockbackSettings()
+		Player.State.StartKnockback(new PlayerController.KnockbackSettings()
 		{
 			ignoreMovementState = true,
 		});

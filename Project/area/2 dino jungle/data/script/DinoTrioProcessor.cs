@@ -17,7 +17,7 @@ public partial class DinoTrioProcessor : Path3D
 	/// <summary> Player's offset on the curve. </summary>
 	public float PlayerProgress { get; private set; }
 	public bool IsSlowingDown => !Mathf.IsZeroApprox(hitRecoveryTimer);
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	/// <summary> Timer to keep track of how long to wait after hitting the player. </summary>
 	private float hitRecoveryTimer;
@@ -50,7 +50,7 @@ public partial class DinoTrioProcessor : Path3D
 
 	private void ProcessPositions()
 	{
-		Vector3 localPosition = GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - GlobalPosition);
+		Vector3 localPosition = GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - GlobalPosition);
 		PlayerProgress = Curve.GetClosestOffset(localPosition);
 
 		// Update reverse prevention to the position of the dino that is furthest away
@@ -67,7 +67,7 @@ public partial class DinoTrioProcessor : Path3D
 		if (!Mathf.IsZeroApprox(hitRecoveryTimer)) // Still recovering from an attack
 			return;
 
-		if (Character.Camera.IsCrossfading) // Don't process timer when crossfading
+		if (Player.Camera.IsCrossfading) // Don't process timer when crossfading
 			return;
 
 		for (int i = 0; i < dinos.Length; i++)
@@ -83,10 +83,10 @@ public partial class DinoTrioProcessor : Path3D
 		// Calculate which dino attacks
 
 		int closestDinoIndex = GetAttackingDinoIndex();
-		if (Character.Camera.IsBehindCamera(dinos[closestDinoIndex].GlobalPosition)) // Prevent unfair offscreen attacks
+		if (Player.Camera.IsBehindCamera(dinos[closestDinoIndex].GlobalPosition)) // Prevent unfair offscreen attacks
 			return;
 
-		if (Mathf.Abs(dinos[closestDinoIndex].Progress - PlayerProgress) > AttackOffset || Character.Skills.IsSpeedBreakActive) // Too far away to attack
+		if (Mathf.Abs(dinos[closestDinoIndex].Progress - PlayerProgress) > AttackOffset || Player.Skills.IsSpeedBreakActive) // Too far away to attack
 			return;
 
 		dinos[closestDinoIndex].StartAttack();
@@ -107,7 +107,7 @@ public partial class DinoTrioProcessor : Path3D
 	private int GetAttackingDinoIndex()
 	{
 		Vector3 playerPosition = GlobalPosition + Curve.SampleBaked(PlayerProgress);
-		float playerLocalPosition = (GlobalTransform.Basis.Inverse() * (playerPosition - Character.GlobalPosition)).X;
+		float playerLocalPosition = (GlobalTransform.Basis.Inverse() * (playerPosition - Player.GlobalPosition)).X;
 
 		float closestDeltaPosition = Mathf.Inf;
 		int dinoIndex = -1;

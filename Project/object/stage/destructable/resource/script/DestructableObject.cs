@@ -58,7 +58,7 @@ public partial class DestructableObject : Node3D
 	private const float ShatterStrength = 10.0f;
 
 	private ShatterFlags FlagSetting => (ShatterFlags)shatterFlags;
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	protected bool isShattered;
 	protected bool isInteractingWithPlayer;
@@ -201,7 +201,7 @@ public partial class DestructableObject : Node3D
 			animator.Play("shatter");
 
 		if (shakeScreenOnShatter)
-			Character.Camera.StartMediumCameraShake();
+			Player.Camera.StartMediumCameraShake();
 
 		pieceRoot.Visible = true; // Make sure piece root is visible
 		pieceRoot.ProcessMode = ProcessModeEnum.Inherit;
@@ -209,16 +209,19 @@ public partial class DestructableObject : Node3D
 
 		Vector3 shatterPoint = root.GlobalPosition;
 		float shatterStrength = ShatterStrength;
-		if (isInteractingWithPlayer && !Character.Skills.IsSpeedBreakActive) // Directional shatter
+		if (isInteractingWithPlayer && !Player.Skills.IsSpeedBreakActive) // Directional shatter
 		{
 			// Kill character's speed
-			if (Character.IsOnGround && stopPlayerOnShatter)
-				Character.MoveSpeed = 0f;
+			if (Player.IsOnGround && stopPlayerOnShatter)
+				Player.MoveSpeed = 0f;
 
-			shatterPoint = Character.CenterPosition; // Shatter from player
+			shatterPoint = Player.CenterPosition; // Shatter from player
 
-			if (Character.ActionState != CharacterController.ActionStates.JumpDash)
-				shatterStrength *= Mathf.Clamp(Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed), .5f, 1f);
+			/*
+			REFACTOR TODO
+			if (Player.ActionState != PlayerController.ActionStates.JumpDash)
+				shatterStrength *= Mathf.Clamp(Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed), .5f, 1f);
+			*/
 		}
 
 		tweener = CreateTween().SetParallel(true);
@@ -261,27 +264,31 @@ public partial class DestructableObject : Node3D
 	private void ProcessPlayerCollision()
 	{
 		// Prioritize Jump Dash
-		if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Character.ActionState == CharacterController.ActionStates.JumpDash)
+		/*
+		REFACTOR TODO
+		if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Player.ActionState == PlayerController.ActionStates.JumpDash)
 		{
 			Shatter();
 			if (bouncePlayerOnJumpDash)
-				Character.Lockon.StartBounce(snapPlayerOnBounce);
+				Player.Lockon.StartBounce(snapPlayerOnBounce);
 		}
-		else if (FlagSetting.HasFlag(ShatterFlags.PlayerCollision))
+		else 
+		*/
+		if (FlagSetting.HasFlag(ShatterFlags.PlayerCollision))
 		{
 			Shatter();
 		}
-		else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Character.AttackState != CharacterController.AttackStates.None)
+		else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Player.State.AttackState != PlayerStateController.AttackStates.None)
 		{
 			Shatter();
 		}
-		else if (FlagSetting.HasFlag(ShatterFlags.SpeedBreak) && Character.Skills.IsSpeedBreakActive)
+		else if (FlagSetting.HasFlag(ShatterFlags.SpeedBreak) && Player.Skills.IsSpeedBreakActive)
 		{
 			Shatter();
 		}
 		else if (damagePlayer)
 		{
-			Character.StartKnockback();
+			Player.State.StartKnockback();
 		}
 	}
 
@@ -305,13 +312,13 @@ public partial class DestructableObject : Node3D
 				{
 					// Prevent objects from getting "stuck" on the player
 					RigidBody3D rb = root as RigidBody3D;
-					float pushPower = Mathf.Clamp(Character.MoveSpeed, 10.0f, 20.0f);
-					Vector3 launchPosition = (rb.GlobalPosition + rb.CenterOfMass) - Character.GlobalPosition;
+					float pushPower = Mathf.Clamp(Player.MoveSpeed, 10.0f, 20.0f);
+					Vector3 launchPosition = (rb.GlobalPosition + rb.CenterOfMass) - Player.GlobalPosition;
 					rb.ApplyImpulse(launchPosition * pushPower);
 					animator.Play("push");
 				}
 
-				Character.MoveSpeed *= 0.4f; // Kill character's speed
+				Player.MoveSpeed *= 0.4f; // Kill character's speed
 			}
 		}
 	}

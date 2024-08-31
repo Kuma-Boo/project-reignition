@@ -57,7 +57,7 @@ public partial class HomingAttackState : PlayerState
 
 		/*
 		REFACTOR TODO Move to Bounce state processing
-		if (Player.Skills.IsSkillEquipped(SkillKey.CrestFire) && IsBounceLockoutActive)
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire) && IsBounceLockoutActive)
 		{
 			Player.Skills.DeactivateFireCrest(true);
 			return;

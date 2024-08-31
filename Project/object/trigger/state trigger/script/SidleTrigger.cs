@@ -26,7 +26,7 @@ public partial class SidleTrigger : Area3D
 
 	private bool isActive;
 	private bool isInteractingWithPlayer;
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	private float velocity;
 	private float cycleTimer;
@@ -46,12 +46,12 @@ public partial class SidleTrigger : Area3D
 		if (!isInteractingWithPlayer)
 			return;
 
-		if (Character.ActionState == CharacterController.ActionStates.Teleport)
+		if (!Player.State.AllowSidle)
 			return;
 
 		if (isActive)
 		{
-			if (Character.ExternalController != this) // Overridden
+			if (Player.State.ExternalController != this) // Overridden
 			{
 				StopSidle();
 				isInteractingWithPlayer = false;
@@ -63,13 +63,15 @@ public partial class SidleTrigger : Area3D
 			else
 				UpdateSidleDamage();
 		}
-		else if (Character.IsOnGround && Character.MovementState == CharacterController.MovementStates.Normal)
+		/* RERFACTOR TODO
+		else if (Player.IsOnGround && Player.MovementState == PlayerController.MovementStates.Normal)
 		{
-			if (Character.ActionState == CharacterController.ActionStates.Normal)
+			if (Player.ActionState == PlayerController.ActionStates.Normal)
 				StartSidle(); // Allows player to slide through sidle section if they know what they're doing
-			else if (Character.ActionState == CharacterController.ActionStates.Crouching && Mathf.IsZeroApprox(Character.MoveSpeed))
-				Character.ResetActionState();
+			else if (Player.ActionState == PlayerController.ActionStates.Crouching && Mathf.IsZeroApprox(Player.MoveSpeed))
+				Player.ResetActionState();
 		}
+		*/
 	}
 
 	private void StartSidle()
@@ -79,38 +81,38 @@ public partial class SidleTrigger : Area3D
 		cycleTimer = 0;
 		damageState = DamageStates.Disabled;
 
-		Character.IsOnGround = true;
-		Character.StartExternal(this, Character.PathFollower, .2f);
-		Character.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
-		Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
-		Character.Animator.StartSidle(isFacingRight);
-		Character.Animator.UpdateSidle(cycleTimer);
+		Player.IsOnGround = true;
+		Player.State.StartExternal(this, Player.PathFollower, .2f);
+		Player.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
+		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
+		Player.Animator.StartSidle(isFacingRight);
+		Player.Animator.UpdateSidle(cycleTimer);
 
-		if (!Character.IsConnected(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged)))
-			Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
+		if (!Player.IsConnected(PlayerController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged)))
+			Player.Connect(PlayerController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
 	}
 
 	private void UpdateSidle()
 	{
-		if (!StageSettings.instance.IsLevelIngame || Character.IsDefeated)
+		if (!StageSettings.instance.IsLevelIngame || Player.State.IsDefeated)
 			return;
 
 		// Check ground
-		Vector3 castVector = Vector3.Down * Character.CollisionSize.X * 2.0f;
-		RaycastHit hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
-		DebugManager.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
+		Vector3 castVector = Vector3.Down * Player.CollisionSize.X * 2.0f;
+		RaycastHit hit = this.CastRay(Player.CenterPosition, castVector, Runtime.Instance.environmentMask);
+		DebugManager.DrawRay(Player.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
 		if (!hit) // No ground - Fall and respawn
 		{
 			GD.Print("Ground not found!!!");
 			StartRespawn();
-			Character.Animator.SidleFall();
+			Player.Animator.SidleFall();
 			return;
 		}
 
 		// Update velocity
 		float targetVelocity = Input.GetAxis("move_left", "move_right") * (isFacingRight ? 1 : -1) * CYCLE_FREQUENCY;
 		if (Mathf.IsZeroApprox(velocity) && !Mathf.IsZeroApprox(targetVelocity)) // Ensure sfx plays when starting to move
-			Character.Effect.PlayActionSFX(Character.Effect.SidleSfx);
+			Player.Effect.PlayActionSFX(Player.Effect.SidleSfx);
 
 		if (Mathf.IsZeroApprox(velocity) || Mathf.Sign(targetVelocity) == Mathf.Sign(velocity))
 			velocity = Mathf.Lerp(velocity, targetVelocity, TRACTION_SMOOTHING);
@@ -118,11 +120,11 @@ public partial class SidleTrigger : Area3D
 			velocity = Mathf.Lerp(velocity, targetVelocity, FRICTION_SMOOTHING);
 
 		// Check walls
-		castVector = Character.PathFollower.Forward() * Mathf.Sign(velocity) * (Character.CollisionSize.X + Mathf.Abs(velocity * PhysicsManager.physicsDelta));
-		hit = this.CastRay(Character.CenterPosition, castVector, Runtime.Instance.environmentMask);
-		DebugManager.DrawRay(Character.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
+		castVector = Player.PathFollower.Forward() * Mathf.Sign(velocity) * (Player.CollisionSize.X + Mathf.Abs(velocity * PhysicsManager.physicsDelta));
+		hit = this.CastRay(Player.CenterPosition, castVector, Runtime.Instance.environmentMask);
+		DebugManager.DrawRay(Player.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
 		if (hit && hit.collidedObject.IsInGroup("sidle wall")) // Kill speed
-			velocity = (hit.distance - Character.CollisionSize.X) * Mathf.Sign(velocity);
+			velocity = (hit.distance - Player.CollisionSize.X) * Mathf.Sign(velocity);
 
 		if (!Mathf.IsZeroApprox(velocity))
 		{
@@ -130,19 +132,19 @@ public partial class SidleTrigger : Area3D
 			if (Mathf.Abs(cycleTimer - .5f) >= .5f) // Starting a new cycle
 			{
 				cycleTimer -= Mathf.Sign(cycleTimer);
-				Character.Effect.PlayActionSFX(Character.Effect.SidleSfx);
+				Player.Effect.PlayActionSFX(Player.Effect.SidleSfx);
 			}
 
-			Character.Animator.UpdateSidle(cycleTimer);
-			Character.MoveSpeed = Character.Skills.sidleMovementCurve.Sample(cycleTimer) * velocity * CYCLE_DISTANCE;
-			Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
+			Player.Animator.UpdateSidle(cycleTimer);
+			Player.MoveSpeed = Player.Stats.sidleMovementCurve.Sample(cycleTimer) * velocity * CYCLE_DISTANCE;
+			Player.PathFollower.Progress += Player.MoveSpeed * PhysicsManager.physicsDelta;
 		}
 		else
 		{
-			Character.MoveSpeed = 0;
+			Player.MoveSpeed = 0;
 		}
 
-		Character.UpdateExternalControl();
+		Player.State.UpdateExternalControl();
 	}
 
 	private void StopSidle()
@@ -152,24 +154,25 @@ public partial class SidleTrigger : Area3D
 
 		isActive = false;
 
-		if (Character.IsDefeated)
+		if (Player.State.IsDefeated)
 			return; // Don't reset animations when respawning
 
 		damageState = DamageStates.Disabled;
 
-		if (Character.ExternalController == this)
+		if (Player.State.ExternalController == this)
 		{
-			Character.ResetMovementState();
-			Character.Animator.SnapRotation(Character.PathFollower.ForwardAngle);
+			Player.State.StopExternal();
+			Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
 		}
 
-		// TODO Clean up this workaround when refactoring CharacterController.cs
-		// TEMP WORKAROUND: Use the "wrong" angle so CharacterController will flip it when correcting the "negative speed"
-		// Use negative speed to force CharacterController to snap direction
-		Character.MovementAngle = Character.MoveSpeed < 0 ? Character.PathFollower.ForwardAngle : Character.PathFollower.BackAngle;
-		Character.MoveSpeed = -Mathf.Abs(Character.MoveSpeed);
-		Character.Animator.ResetState(Character.ActionState == CharacterController.ActionStates.Teleport ? 0f : .1f);
-		Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
+		// TODO Clean up this workaround when refactoring PlayerController.cs
+		// TEMP WORKAROUND: Use the "wrong" angle so PlayerController will flip it when correcting the "negative speed"
+		// Use negative speed to force PlayerController to snap direction
+		Player.MovementAngle = Player.MoveSpeed < 0 ? Player.PathFollower.ForwardAngle : Player.PathFollower.BackAngle;
+		Player.MoveSpeed = -Mathf.Abs(Player.MoveSpeed);
+
+		// REFACTOR TODO Player.Animator.ResetState(Player.ActionState == PlayerController.ActionStates.Teleport ? 0f : .1f);
+		Player.Disconnect(PlayerController.SignalName.Knockback, new Callable(this, MethodName.OnPlayerDamaged));
 	}
 
 	#region Damage
@@ -194,24 +197,24 @@ public partial class SidleTrigger : Area3D
 	private void OnPlayerDamaged()
 	{
 		// Invincible/Damage routine has already started
-		if (Character.IsInvincible || damageState != DamageStates.Disabled) return;
+		if (Player.State.IsInvincible || damageState != DamageStates.Disabled) return;
 
 		if (StageSettings.instance.CurrentRingCount == 0)
 		{
 			StopSidle();
-			Character.StartKnockback();
+			Player.State.StartKnockback();
 			return;
 		}
 
-		Character.TakeDamage();
-		Character.StartInvincibility();
-		Character.Effect.PlayVoice("sidle hurt");
+		Player.State.TakeDamage();
+		Player.State.StartInvincibility();
+		Player.Effect.PlayVoice("sidle hurt");
 
 		damageState = DamageStates.Stagger;
 		velocity = 0;
 		cycleTimer = 0;
 
-		Character.Animator.SidleDamage();
+		Player.Animator.SidleDamage();
 	}
 
 	/// <summary> Processes player when being damaged. </summary>
@@ -224,16 +227,16 @@ public partial class SidleTrigger : Area3D
 				if (cycleTimer >= DAMAGE_HANG_LENGTH) // Fall
 				{
 					StartRespawn();
-					Character.Animator.SidleHangFall();
+					Player.Animator.SidleHangFall();
 				}
 				else if (Input.IsActionJustPressed("button_jump")) // Process inputs
 				{
 					// Jump back to the ledge
 					cycleTimer = 0;
 					damageState = DamageStates.Recovery;
-					Character.Effect.PlayActionSFX(Character.Effect.JumpSfx);
-					Character.Effect.PlayVoice("grunt");
-					Character.Animator.SidleRecovery();
+					Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
+					Player.Effect.PlayVoice("grunt");
+					Player.Animator.SidleRecovery();
 				}
 				break;
 
@@ -244,13 +247,13 @@ public partial class SidleTrigger : Area3D
 					if (IsOverFoothold)
 					{
 						damageState = DamageStates.Falling;
-						Character.IsOnGround = false;
-						Character.Animator.SidleHang();
+						Player.IsOnGround = false;
+						Player.Animator.SidleHang();
 					}
 					else
 					{
 						StartRespawn();
-						Character.Animator.SidleFall();
+						Player.Animator.SidleFall();
 					}
 				}
 				break;
@@ -264,25 +267,25 @@ public partial class SidleTrigger : Area3D
 				break;
 
 			case DamageStates.Recovery:
-				if (!Character.IsOnGround)
+				if (!Player.IsOnGround)
 				{
 					if (cycleTimer < RECOVERY_LENGTH)
 						return;
 
-					Character.LandOnGround();
+					Player.Effect.PlayLandingFX();
 				}
 
 				cycleTimer = 0;
-				if (Character.Animator.IsSidleMoving) // Finished
+				if (Player.Animator.IsSidleMoving) // Finished
 				{
 					damageState = DamageStates.Disabled;
-					Character.Animator.UpdateSidle(cycleTimer);
+					Player.Animator.UpdateSidle(cycleTimer);
 				}
 				break;
 
 			case DamageStates.Respawning:
 				if (cycleTimer > .5f)
-					Character.StartRespawn();
+					Player.State.StartRespawn();
 				break;
 		}
 	}
@@ -299,7 +302,7 @@ public partial class SidleTrigger : Area3D
 		if (!isActive) return;
 
 		StartSidle();
-		Character.Animator.UpdateSidle(cycleTimer);
+		Player.Animator.UpdateSidle(cycleTimer);
 	}
 	#endregion
 
@@ -309,8 +312,8 @@ public partial class SidleTrigger : Area3D
 
 		isInteractingWithPlayer = true;
 
-		Character.Skills.IsSpeedBreakEnabled = false; // Disable speed break
-		Character.AddLockoutData(lockout); // Apply lockout
+		Player.Skills.IsSpeedBreakEnabled = false; // Disable speed break
+		Player.State.AddLockoutData(lockout); // Apply lockout
 		EmitSignal(SignalName.Activated); // Immediately emit signals to allow path changes, etc.
 	}
 
@@ -319,10 +322,13 @@ public partial class SidleTrigger : Area3D
 		if (!a.IsInGroup("player detection")) return;
 
 		isInteractingWithPlayer = false;
-		Character.RemoveLockoutData(lockout);
+		Player.State.RemoveLockoutData(lockout);
 
-		if (Character.MovementState == CharacterController.MovementStates.Normal)
-			Character.Skills.IsSpeedBreakEnabled = true; // Re-enable speed break
+		/*
+		REFACTOR TODO
+		if (Player.MovementState == PlayerController.MovementStates.Normal)
+			Player.Skills.IsSpeedBreakEnabled = true; // Re-enable speed break
+		*/
 
 		StopSidle();
 		EmitSignal(SignalName.Deactivated); // Deactivate signals

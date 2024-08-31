@@ -9,7 +9,7 @@ public partial class PteroNest : Node3D
 	private NodePath animator;
 	private AnimationPlayer Animator { get; set; }
 	public PteroEgg AssignedEgg { get; set; }
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 	private bool isInteractingWithPlayer;
 
 	public override void _Ready()
@@ -31,8 +31,11 @@ public partial class PteroNest : Node3D
 		if (!isInteractingWithPlayer)
 			return;
 
-		if (Character.Lockon.IsHomingAttacking) // Bounce the player
-			Character.Lockon.StartBounce();
+		/*
+		REFACTOR TODO
+		if (Player.Lockon.IsHomingAttacking) // Bounce the player
+			Player.Lockon.StartBounce();
+		*/
 
 		if (AssignedEgg.IsReturningToNest || AssignedEgg.IsReturnedToNest)
 			return;

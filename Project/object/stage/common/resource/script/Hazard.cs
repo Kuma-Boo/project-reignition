@@ -9,7 +9,7 @@ public partial class Hazard : Node3D
 
 	private bool isInteractingWithPlayer;
 
-	protected CharacterController Character => CharacterController.instance;
+	protected PlayerController Player => StageSettings.Player;
 
 	[Signal]
 	public delegate void DamagedPlayerEventHandler();
@@ -20,7 +20,7 @@ public partial class Hazard : Node3D
 	{
 		if (!isDisabled && isInteractingWithPlayer)
 		{
-			Character.StartKnockback();
+			Player.State.StartKnockback();
 			EmitSignal(SignalName.DamagedPlayer);
 		}
 	}

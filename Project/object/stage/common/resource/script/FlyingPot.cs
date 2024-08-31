@@ -58,7 +58,7 @@ public partial class FlyingPot : Node3D
 	private const float FlapInterval = .5f; // How long is a single flap?
 	private const float FlapAccelerationLength = .4f; // How long does a flap accelerate?
 
-	public CharacterController Character => CharacterController.instance;
+	public PlayerController Player => StageSettings.Player;
 
 	public override void _Ready()
 	{
@@ -96,12 +96,12 @@ public partial class FlyingPot : Node3D
 		{
 			if (isControllingPlayer)
 				ProcessMovement();
-			else if (!isEnteringPot && !Character.IsOnGround)
+			else if (!isEnteringPot && !Player.IsOnGround)
 				StartJump();
 		}
 		else if (!lockonArea.Monitorable) // Re-enable lockon
 		{
-			lockonArea.SetDeferred("monitorable", Character.VerticalSpeed < 0f);
+			lockonArea.SetDeferred("monitorable", Player.VerticalSpeed < 0f);
 		}
 
 		ApplyMovement();
@@ -112,19 +112,19 @@ public partial class FlyingPot : Node3D
 		isEnteringPot = true;
 		environmentCollider.Disabled = true;
 
-		float jumpHeight = GlobalPosition.Y + 1 - Character.GlobalPosition.Y;
+		float jumpHeight = GlobalPosition.Y + 1 - Player.GlobalPosition.Y;
 		jumpHeight = Mathf.Clamp(jumpHeight * 2, 0, 2);
-		LaunchSettings settings = LaunchSettings.Create(Character.GlobalPosition, root.GlobalPosition, jumpHeight, false);
+		LaunchSettings settings = LaunchSettings.Create(Player.GlobalPosition, root.GlobalPosition, jumpHeight, false);
 		settings.IsJump = true;
-		Character.StartLauncher(settings);
+		settings.AllowJumpDash = false;
+		Player.State.StartLauncher(settings);
 
 		lockonArea.SetDeferred("monitorable", false);
 
-		Character.CanJumpDash = false;
-		Character.Skills.IsSpeedBreakEnabled = false; // Disable speed break
+		Player.Skills.IsSpeedBreakEnabled = false; // Disable speed break
 
-		Character.Lockon.StopHomingAttack();
-		Character.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredPot), (uint)ConnectFlags.OneShot);
+		// REFACTOR TODO Player.Lockon.StopHomingAttack();
+		Player.Connect(PlayerController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredPot), (uint)ConnectFlags.OneShot);
 
 		// Update camera
 		if (cameraTrigger != null)
@@ -138,8 +138,8 @@ public partial class FlyingPot : Node3D
 	{
 		flapTimer = 0;
 		isControllingPlayer = true;
-		Character.StartExternal(this, root);
-		Character.Animator.Visible = false;
+		Player.State.StartExternal(this, root);
+		Player.Animator.Visible = false;
 		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		enterSFX.Play();
 	}
@@ -152,13 +152,13 @@ public partial class FlyingPot : Node3D
 		velocity = 0f; // Kill all velocity
 
 		float angleRatio = angle / MaxAngle;
-		Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Back());
-		Character.VerticalSpeed = Runtime.CalculateJumpPower(Character.jumpHeight);
+		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Back());
+		// REFACTOR TODO Player.VerticalSpeed = Runtime.CalculateJumpPower(Player.State.jumpHeight);
 
-		Character.Animator.JumpAnimation();
-		Character.Animator.SnapRotation(Character.MovementAngle - (Mathf.Pi * angleRatio));
-		Character.Animator.Visible = true;
-		Character.ResetMovementState();
+		Player.Animator.JumpAnimation();
+		Player.Animator.SnapRotation(Player.MovementAngle - (Mathf.Pi * angleRatio));
+		Player.Animator.Visible = true;
+		Player.State.StopExternal();
 
 		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		exitSFX.Play();
@@ -168,7 +168,7 @@ public partial class FlyingPot : Node3D
 
 	private void ProcessMovement()
 	{
-		float targetRotation = Character.InputHorizontal * MaxAngle;
+		float targetRotation = Player.Controller.InputHorizontal * MaxAngle;
 		angle = Mathf.Lerp(angle, targetRotation, RotationSpeed);
 
 		if (Input.IsActionJustPressed("button_jump"))
@@ -234,7 +234,7 @@ public partial class FlyingPot : Node3D
 		root.Rotation = Vector3.Forward * angle;
 
 		if (isControllingPlayer)
-			Character.UpdateExternalControl(); // Sync player object
+			Player.State.UpdateExternalControl(); // Sync player object
 
 		if (lockonArea.Monitorable && !interactingWithPlayer)
 			isProcessing = !Mathf.IsZeroApprox(localPosition.Y) || !Mathf.IsZeroApprox(angle); // Update sleeping status
@@ -251,7 +251,7 @@ public partial class FlyingPot : Node3D
 	{
 		if (isLeavingPot)
 		{
-			Character.CanJumpDash = true; // So the player isn't completely helpless
+			Player.State.CanJumpDash = true; // So the player isn't completely helpless
 			isEnteringPot = false;
 		}
 

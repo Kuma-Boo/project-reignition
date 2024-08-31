@@ -7,15 +7,15 @@ public partial class DashPanel : Area3D
 	[Export(PropertyHint.Range, "0, 2")]
 	private float speedRatio;
 	[Export]
-	private float length; //How long for the boost pad to last
-	private bool isQueued; //For when the player collides with the dash panel from the air
+	private float length; // How long for the boost pad to last
+	private bool isQueued; // For when the player collides with the dash panel from the air
 	[Export]
-	private bool alignToPath; //Forces the player to stay aligned to the path. Useful when a dash panel is right before a corner.
+	private bool alignToPath; // Forces the player to stay aligned to the path. Useful when a dash panel is right before a corner.
 
 	[Export(PropertyHint.NodePathValidTypes, "AudioStreamPlayer3D")]
 	private NodePath sfxPlayer;
 	private AudioStreamPlayer3D SfxPlayer { get; set; }
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	public override void _Ready() => SfxPlayer = GetNodeOrNull<AudioStreamPlayer3D>(sfxPlayer);
 
@@ -30,17 +30,17 @@ public partial class DashPanel : Area3D
 
 	private void Activate()
 	{
-		if (!Character.IsOnGround) return; //Can't activate when player is in the air
+		if (!Player.IsOnGround) return; // Can't activate when player is in the air
 
 		SfxPlayer.Play();
 		isQueued = false;
-		Character.ResetActionState();
+		// REFACTOR TODO Player.ResetActionState();
 
-		//Only apply speed boost when player is moving slow. Don't slow them down!
-		if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < speedRatio)
+		// Only apply speed boost when player is moving slow. Don't slow them down!
+		if (Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed) < speedRatio)
 		{
-			Character.MoveSpeed = Character.GroundSettings.Speed * speedRatio;
-			Character.Effect.PlayVoice("dash panel");
+			Player.MoveSpeed = Player.Stats.GroundSettings.Speed * speedRatio;
+			Player.Effect.PlayVoice("dash panel");
 		}
 
 		LockoutResource lockout = new()
@@ -54,22 +54,22 @@ public partial class DashPanel : Area3D
 			tractionMultiplier = -1,
 			frictionMultiplier = 0,
 			length = length,
-			priority = -1, //Not using priority
+			priority = -1, // Not using priority
 		};
 
 		if (alignToPath)
 		{
 			lockout.movementAngle = 0f;
 			lockout.spaceMode = LockoutResource.SpaceModes.PathFollower;
-			Character.MovementAngle = Character.PathFollower.ForwardAngle;
-			lockout.recenterPlayer = Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer;
+			Player.MovementAngle = Player.PathFollower.ForwardAngle;
+			lockout.recenterPlayer = Player.State.IsLockoutActive && Player.State.ActiveLockoutData.recenterPlayer;
 		}
 		else
 		{
-			Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward(), Character.PathFollower.Up());
+			Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward(), Player.PathFollower.Up());
 		}
 
-		Character.Animator.StopBrake();
-		Character.AddLockoutData(lockout);
+		Player.Animator.StopBrake();
+		Player.State.AddLockoutData(lockout);
 	}
 }

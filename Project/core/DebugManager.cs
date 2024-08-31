@@ -91,9 +91,9 @@ public partial class DebugManager : Node2D
 
 		if (Input.IsActionJustPressed("debug_restart"))
 		{
-			if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(CharacterController.instance))
+			if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(StageSettings.Player))
 			{
-				CharacterController.instance.StartRespawn(true);
+				StageSettings.Player.State.StartRespawn(true);
 			}
 			else
 			{
@@ -300,7 +300,7 @@ public partial class DebugManager : Node2D
 
 	private void SaveCustomCheckpoint()
 	{
-		if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(CharacterController.instance)) return;
+		if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(StageSettings.Player)) return;
 
 		if (customCheckpoint == null)
 		{
@@ -308,14 +308,14 @@ public partial class DebugManager : Node2D
 			AddChild(customCheckpoint);
 		}
 
-		customCheckpoint.GlobalPosition = CharacterController.instance.GlobalPosition;
+		customCheckpoint.GlobalPosition = StageSettings.Player.GlobalPosition;
 		StageSettings.instance.SetCheckpoint(customCheckpoint);
 		GD.Print("Checkpoint created.");
 	}
 
 	private void LoadCustomCheckpoint()
 	{
-		if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(CharacterController.instance)) return;
+		if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(StageSettings.Player)) return;
 		if (customCheckpoint == null)
 		{
 			GD.PushWarning("No custom checkpoint.");
@@ -323,7 +323,7 @@ public partial class DebugManager : Node2D
 		}
 
 		StageSettings.instance.SetCheckpoint(customCheckpoint);
-		CharacterController.instance.StartRespawn(true);
+		StageSettings.Player.State.StartRespawn(true);
 	}
 	#endregion
 
@@ -366,8 +366,8 @@ public partial class DebugManager : Node2D
 	private void UpdateCamData(string newData)
 	{
 		if (!newData.IsValidFloat()) return;
-		if (!IsInstanceValid(CharacterController.instance)) return;
-		CameraController cam = CharacterController.instance.Camera;
+		if (!IsInstanceValid(StageSettings.Player)) return;
+		PlayerCameraController cam = StageSettings.Player.Camera;
 
 		Vector3 pos = new(freeCamData[0].Text.ToFloat(), freeCamData[1].Text.ToFloat(), freeCamData[2].Text.ToFloat());
 		Vector3 rot = new(freeCamData[3].Text.ToFloat(), freeCamData[4].Text.ToFloat(), freeCamData[5].Text.ToFloat());

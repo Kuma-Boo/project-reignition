@@ -1,6 +1,5 @@
 using Godot;
 using Project.Core;
-using Project.Gameplay.Objects;
 
 namespace Project.Gameplay.Bosses
 {
@@ -49,7 +48,7 @@ namespace Project.Gameplay.Bosses
 		public void OnAreaEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
-			CharacterController.instance.StartKnockback();
+			StageSettings.Player.State.StartKnockback();
 		}
 	}
 }

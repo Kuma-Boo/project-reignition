@@ -1445,29 +1445,6 @@ namespace Project.Gameplay
 
 		[Signal]
 		public delegate void KnockbackEventHandler(); // This signal is called anytime a hitbox collides with the player, regardless of invincibilty.
-		public struct KnockbackSettings
-		{
-			/// <summary> Should the player be knocked forward? Default is false. </summary>
-			public bool knockForward;
-			/// <summary> Knock the player around without bouncing them into the air. </summary>
-			public bool stayOnGround;
-			/// <summary> Apply knockback even when invincible? </summary>
-			public bool ignoreInvincibility;
-			/// <summary> Don't damage the player? </summary>
-			public bool disableDamage;
-			/// <summary> Always apply knockback, regardless of state. </summary>
-			public bool ignoreMovementState;
-
-			/// <summary> Override default knockback amount? </summary>
-			public bool overrideKnockbackSpeed;
-			/// <summary> Speed to assign to player. </summary>
-			public float knockbackSpeed;
-
-			/// <summary> Override default knockback height? </summary>
-			public bool overrideKnockbackHeight;
-			/// <summary> Height to move player by. </summary>
-			public float knockbackHeight;
-		}
 		private KnockbackSettings previousKnockbackSettings;
 
 		/// <summary>

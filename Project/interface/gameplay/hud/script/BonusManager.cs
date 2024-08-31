@@ -8,7 +8,7 @@ public partial class BonusManager : VBoxContainer
 {
 	public static BonusManager instance;
 	private StageSettings Stage => StageSettings.instance;
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -128,9 +128,12 @@ public partial class BonusManager : VBoxContainer
 	/// <summary> Checks whether the enemy chain should end. </summary>
 	public void UpdateEnemyChain()
 	{
-		if (Character.JustLandedOnGround || !Character.IsOnGround) return; // Chain is never counted when the player is in the air
-		if (Character.MovementState != CharacterController.MovementStates.Normal) return; // Chains only end during normal movement
-		if (Character.Skills.IsSpeedBreakActive)
+		/*
+		REFACTOR TODO
+		if (Player.JustLandedOnGround || !Player.IsOnGround) return; // Chain is never counted when the player is in the air
+		if (Player.MovementState != PlayerController.MovementStates.Normal) return; // Chains only end during normal movement
+		*/
+		if (Player.Skills.IsSpeedBreakActive)
 		{
 			enemyChainTimer = ENEMY_CHAIN_BUFFER;
 			return; // Chain continues during speedbreak

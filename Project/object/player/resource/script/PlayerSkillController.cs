@@ -98,7 +98,7 @@ public partial class PlayerSkillController : Node3D
 		REFACTOR TODO
 		if (!AllowCrestSkill ||
 			IsUsingBreakSkills ||
-			Character.ActionState != CharacterController.ActionStates.Normal ||
+			Player.ActionState != PlayerController.ActionStates.Normal ||
 			StageSettings.instance.CurrentRingCount == 0)
 		{
 			return;
@@ -106,9 +106,9 @@ public partial class PlayerSkillController : Node3D
 
 		if (UpdateCrestTimer())
 		{
-			Character.MoveSpeed = Mathf.Max(Character.MoveSpeed, GroundSettings.Speed * WindCrestSpeedMultiplier);
+			Player.MoveSpeed = Mathf.Max(Player.MoveSpeed, GroundSettings.Speed * WindCrestSpeedMultiplier);
 			StageSettings.instance.UpdateRingCount(1, StageSettings.MathModeEnum.Subtract, true);
-			Character.Effect.PlayWindCrestFX();
+			Player.Effect.PlayWindCrestFX();
 		}
 		*/
 	}
@@ -339,9 +339,9 @@ public partial class PlayerSkillController : Node3D
 		{
 			if (!IsSoulGaugeCharged) return;
 			if (!IsSpeedBreakEnabled) return;
-			if (Player.MovementState == CharacterController.MovementStates.Launcher) return; // Can't speed break during launchers
-			if (Player.ActionState == CharacterController.ActionStates.Teleport) return; // Can't speed break during teleports
-			if (!Player.IsOnGround || Player.IsDefeated) return;
+			if (Player.MovementState == PlayerController.MovementStates.Launcher) return; // Can't speed break during launchers
+			if (Player.ActionState == PlayerController.ActionStates.Teleport) return; // Can't speed break during teleports
+			if (!Player.IsOnGround || Player.State.IsDefeated) return;
 
 			ToggleSpeedBreak();
 		}
@@ -392,7 +392,7 @@ public partial class PlayerSkillController : Node3D
 	{
 		/*
 		REFACTOR TODO
-		Character.ResetActionState();
+		Player.ResetActionState();
 
 		IsSpeedBreakActive = !IsSpeedBreakActive;
 		SoundManager.IsBreakChannelMuted = IsSpeedBreakActive;
@@ -405,14 +405,14 @@ public partial class PlayerSkillController : Node3D
 			speedBreakAnimator.Advance(0.0);
 
 			speedBreakAnimator.Play("start");
-			Character.Effect.PlayVoice("speed break");
-			Character.MovementAngle = Character.PathFollower.ForwardAngle;
-			Character.CollisionMask = Runtime.Instance.environmentMask; // Don't collide with any objects
-			Character.Animator.SpeedBreak();
-			Character.ChangeHitbox("speed break");
-			Character.AttackState = CharacterController.AttackStates.OneShot;
-			Character.Camera.RequestMotionBlur();
-			Character.Animator.StartMotionBlur();
+			Player.Effect.PlayVoice("speed break");
+			Player.MovementAngle = Player.PathFollower.ForwardAngle;
+			Player.CollisionMask = Runtime.Instance.environmentMask; // Don't collide with any objects
+			Player.Animator.SpeedBreak();
+			Player.ChangeHitbox("speed break");
+			Player.State.AttackState = PlayerStateController.AttackStates.OneShot;
+			Player.Camera.RequestMotionBlur();
+			Player.Animator.StartMotionBlur();
 		}
 		else
 		{
@@ -420,12 +420,12 @@ public partial class PlayerSkillController : Node3D
 			speedBreakSFX.Stream = speedBreakDeactivate;
 			speedBreakSFX.Play();
 
-			Character.MoveSpeed = GroundSettings.Speed; // Override speed
-			Character.CollisionMask = normalCollisionMask; // Reset collision layer
-			Character.AttackState = CharacterController.AttackStates.None;
-			Character.ChangeHitbox("RESET");
-			Character.Camera.UnrequestMotionBlur();
-			Character.Animator.StopMotionBlur();
+			Player.MoveSpeed = GroundSettings.Speed; // Override speed
+			Player.CollisionMask = normalCollisionMask; // Reset collision layer
+			Player.State.AttackState = PlayerStateController.AttackStates.None;
+			Player.ChangeHitbox("RESET");
+			Player.Camera.UnrequestMotionBlur();
+			Player.Animator.StopMotionBlur();
 		}
 
 		HeadsUpDisplay.instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);

@@ -7,6 +7,12 @@ public partial class PlayerController : CharacterBody3D
 {
 	[Signal]
 	public delegate void LaunchFinishedEventHandler();
+	[Signal]
+	public delegate void KnockbackEventHandler();
+	[Signal]
+	public delegate void DefeatedEventHandler();
+	[Signal]
+	public delegate void ExternalControlCompletedEventHandler();
 
 	[Export]
 	public PlayerStateMachine StateMachine { get; private set; }
@@ -49,6 +55,7 @@ public partial class PlayerController : CharacterBody3D
 	{
 		Controller.ProcessInputs();
 		StateMachine.ProcessPhysics();
+		State.ProcessPhysics();
 		Lockon.ProcessPhysics();
 		Animator.ProcessPhysics();
 		PathFollower.Resync();

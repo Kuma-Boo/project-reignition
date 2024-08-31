@@ -57,7 +57,7 @@ public partial class Enemy : Node3D
 	protected CollisionShape3D RangeCollider { get; private set; }
 	[Export(PropertyHint.NodePathValidTypes, "AnimationTree")]
 	private NodePath animationTree;
-	/// <summary> Animation tree for enemy character. </summary>
+	/// <summary> Animation tree for enemy Player. </summary>
 	protected AnimationTree AnimationTree { get; private set; }
 	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
 	private NodePath animationPlayer;
@@ -65,7 +65,7 @@ public partial class Enemy : Node3D
 	protected AnimationPlayer AnimationPlayer { get; private set; }
 
 	protected SpawnData SpawnData { get; private set; }
-	protected CharacterController Character => CharacterController.instance;
+	protected PlayerController Player => StageSettings.Player;
 
 	protected bool IsDefeated => currentHealth <= 0;
 	protected bool IsSpeedbreakDefeat { get; private set; }
@@ -128,7 +128,7 @@ public partial class Enemy : Node3D
 
 		if (IsInteracting)
 			UpdateInteraction();
-		else if (IsInteractionProcessed && Character.AttackState == CharacterController.AttackStates.None)
+		else if (IsInteractionProcessed && Player.State.AttackState == PlayerStateController.AttackStates.None)
 			ResetInteractionProcessed();
 	}
 
@@ -170,11 +170,11 @@ public partial class Enemy : Node3D
 
 	public virtual void UpdateLockon()
 	{
-		if (Character.Lockon.IsHomingAttacking)
-			Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
+		if (Player.Lockon.IsHomingAttacking)
+			Player.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
 
 		if (!IsDefeated)
-			Character.Camera.SetDeferred("LockonTarget", Hurtbox);
+			Player.Camera.SetDeferred("LockonTarget", Hurtbox);
 	}
 
 	public virtual void TakeDamage(int amount = -1)
@@ -194,8 +194,8 @@ public partial class Enemy : Node3D
 	protected virtual void Defeat()
 	{
 		currentHealth = 0;
-		Character.Camera.LockonTarget = null;
-		Character.Lockon.CallDeferred(CharacterLockon.MethodName.ResetLockonTarget);
+		Player.Camera.LockonTarget = null;
+		Player.Lockon.CallDeferred(CharacterLockon.MethodName.ResetLockonTarget);
 		BonusManager.instance.AddEnemyChain();
 		StageSettings.instance.UpdateScore(50 * maxHealth, StageSettings.MathModeEnum.Add); // Add points based on max health
 
@@ -245,38 +245,45 @@ public partial class Enemy : Node3D
 		if (IsInteractionProcessed)
 			return;
 
-		if ((Character.Lockon.IsBounceLockoutActive &&
-			Character.ActionState == CharacterController.ActionStates.Normal) ||
+		/*
+		REFACTOR TODO
+		if ((Player.Lockon.IsBounceLockoutActive &&
+			Player.ActionState == PlayerController.ActionStates.Normal) ||
 			!IsHitboxEnabled)
 		{
 			return;
 		}
+		*/
 
-		switch (Character.AttackState)
+		switch (Player.State.AttackState)
 		{
-			case CharacterController.AttackStates.OneShot:
-				IsSpeedbreakDefeat = Character.Skills.IsSpeedBreakActive;
+			case PlayerStateController.AttackStates.OneShot:
+				IsSpeedbreakDefeat = Player.Skills.IsSpeedBreakActive;
 				if (IsSpeedbreakDefeat) // Shake the camera
-					Character.Camera.StartMediumCameraShake();
+					Player.Camera.StartMediumCameraShake();
 
 				Defeat();
 				break;
-			case CharacterController.AttackStates.Weak:
+			case PlayerStateController.AttackStates.Weak:
 				TakeDamage(1);
 				break;
-			case CharacterController.AttackStates.Strong:
+			case PlayerStateController.AttackStates.Strong:
 				TakeDamage(2);
 				break;
 		}
 
-		if (Character.ActionState == CharacterController.ActionStates.JumpDash)
+		/*
+		REFACTOR TODO
+		if (Player.ActionState == PlayerController.ActionStates.JumpDash)
 		{
 			UpdateLockon();
-			Character.Lockon.StartBounce(IsDefeated);
+			Player.Lockon.StartBounce(IsDefeated);
 		}
-		else if (damagePlayer && Character.AttackState == CharacterController.AttackStates.None)
+		else
+		*/
+		if (damagePlayer && Player.State.AttackState == PlayerStateController.AttackStates.None)
 		{
-			Character.StartKnockback();
+			Player.State.StartKnockback();
 		}
 
 		SetInteractionProcessed();
@@ -286,15 +293,15 @@ public partial class Enemy : Node3D
 	{
 		IsInteractionProcessed = true;
 		// Connect a signal
-		if (!Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-			Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
+		if (!Player.State.IsConnected(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+			Player.State.Connect(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
 	}
 	protected void ResetInteractionProcessed()
 	{
 		IsInteractionProcessed = false;
 
-		if (Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-			Character.Disconnect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
+		if (Player.State.IsConnected(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+			Player.State.Disconnect(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
 	}
 
 	/// <summary> Current local rotation of the enemy. </summary>
@@ -306,7 +313,7 @@ public partial class Enemy : Node3D
 	/// </summary>
 	protected void TrackPlayer()
 	{
-		float targetRotation = ExtensionMethods.Flatten(GlobalPosition - Character.GlobalPosition).AngleTo(Vector2.Up);
+		float targetRotation = ExtensionMethods.Flatten(GlobalPosition - Player.GlobalPosition).AngleTo(Vector2.Up);
 		targetRotation -= GlobalRotation.Y; // Rotation is in local space
 		currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, TrackingSmoothing);
 	}

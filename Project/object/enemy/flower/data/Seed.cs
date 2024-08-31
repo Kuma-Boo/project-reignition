@@ -12,7 +12,7 @@ public partial class Seed : Area3D
 	private AnimationPlayer animator;
 
 	private bool isMoving;
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	public override void _PhysicsProcess(double _)
 	{
@@ -42,15 +42,17 @@ public partial class Seed : Area3D
 
 		Explode();
 
-		if (Character.ActionState == CharacterController.ActionStates.JumpDash ||
-			Character.Lockon.IsHomingAttacking ||
-			Character.Lockon.IsBounceLockoutActive)
+		/* REFACTOR TODO 
+		if (Player.ActionState == PlayerController.ActionStates.JumpDash ||
+			Player.Lockon.IsHomingAttacking ||
+			Player.Lockon.IsBounceLockoutActive)
 		{
-			Character.Lockon.StartBounce();
+			Player.Lockon.StartBounce();
 			return;
 		}
+		*/
 
-		Character.StartKnockback();
+		Player.State.StartKnockback();
 	}
 
 	public void OnBodyEntered(PhysicsBody3D _) => Explode();

@@ -26,7 +26,7 @@ namespace Project.Gameplay.Objects
 		private float travelTime;
 		private const float TIME_SCALE = .8f;
 
-		private CharacterController Character => CharacterController.instance;
+		private PlayerController Player => StageSettings.Player;
 		private Vector3 StartPosition => Engine.IsEditorHint() ? GlobalPosition : startPosition;
 		private Vector3 EndPosition => StartPosition + GlobalBasis * endPosition;
 		public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(StartPosition, EndPosition, height);
@@ -77,15 +77,18 @@ namespace Project.Gameplay.Objects
 			if (!isInteractingWithPlayer) return false;
 
 			// TODO Check for stomp
-			if (Character.Skills.IsSpeedBreakActive)
+			if (Player.Skills.IsSpeedBreakActive)
 			{
 				Detonate(); // Detonate instantly
 				return false;
 			}
 
-			if (Character.ActionState != CharacterController.ActionStates.JumpDash) return false;
+			/*
+			REFACTOR TODO
+			if (Player.ActionState != PlayerController.ActionStates.JumpDash) return false;
 
-			Character.Lockon.StartBounce();
+			Player.Lockon.StartBounce();
+			*/
 			isTraveling = true;
 			animator.Play("strike");
 			return true;
@@ -102,7 +105,7 @@ namespace Project.Gameplay.Objects
 				enemyList[i].TakeDamage(); // Damage all enemies in range
 
 			if (isPlayerInExplosion)
-				Character.StartKnockback();
+				Player.State.StartKnockback();
 		}
 
 

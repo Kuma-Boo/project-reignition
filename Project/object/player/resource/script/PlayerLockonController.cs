@@ -127,7 +127,7 @@ public partial class PlayerLockonController : Node3D
 		// Check Height
 		bool isTargetAttackable = IsHomingAttacking ||
 			(Target.GlobalPosition.Y <= Player.CenterPosition.Y + (Player.CollisionSize.Y * 2.0f));
-		// && Player.State.ActionState != CharacterController.ActionStates.JumpDash);
+		// && Player.State.ActionState != PlayerController.ActionStates.JumpDash);
 		/*
 		if (IsBounceLockoutActive && !CanInterruptBounce)
 			isTargetAttackable = false;
@@ -144,7 +144,7 @@ public partial class PlayerLockonController : Node3D
 
 		/*
 		REFACTOR TODO
-		if (Player.ActionState == CharacterController.ActionStates.Damaged ||
+		if (Player.ActionState == PlayerController.ActionStates.Damaged ||
 			!StageSettings.instance.IsLevelIngame) // Character is busy
 		{
 			return TargetState.PlayerBusy;
@@ -268,7 +268,7 @@ public partial class PlayerLockonController : Node3D
 	/// <summary> Used to determine whether targeting is enabled or not. </summary>
 	private float bounceInterruptTimer;
 	/// <summary> Used to determine whether character's lockout is active. </summary>
-	public bool IsBounceLockoutActive => Player.ActiveLockoutData == bounceLockoutSettings;
+	public bool IsBounceLockoutActive => Player.State.ActiveLockoutData == bounceLockoutSettings;
 	public bool CanInterruptBounce { get; private set; }
 
 	public void UpdateBounce()
@@ -280,7 +280,7 @@ public partial class PlayerLockonController : Node3D
 			UpdateLockonTargets();
 		}
 
-		Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, 0f, Player.GroundSettings.Friction * PhysicsManager.physicsDelta);
+		Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, 0f, Player.Stats.GroundSettings.Friction * PhysicsManager.physicsDelta);
 		Player.VerticalSpeed -= Runtime.Gravity * PhysicsManager.physicsDelta;
 	}
 

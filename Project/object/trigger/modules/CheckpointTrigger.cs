@@ -21,9 +21,9 @@ namespace Project.Gameplay.Triggers
 
 			Stage.SetCheckpoint(this);
 
-			PlayerPath = CharacterController.instance.PathFollower.ActivePath; // Store current player path
-			CameraPath = CharacterController.instance.Camera.PathFollower.ActivePath; // Store current camera path
-			CameraSettings = CharacterController.instance.Camera.ActiveSettings;
+			PlayerPath = StageSettings.Player.PathFollower.ActivePath; // Store current player path
+			CameraPath = StageSettings.Player.Camera.PathFollower.ActivePath; // Store current camera path
+			CameraSettings = StageSettings.Player.Camera.ActiveSettings;
 		}
 	}
 }

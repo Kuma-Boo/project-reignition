@@ -7,11 +7,11 @@ namespace Project.Gameplay.Objects
 	/// </summary>
 	public partial class Skybox : Node3D
 	{
-		private CharacterController Character => CharacterController.instance;
+		private PlayerController Player => StageSettings.Player;
 
 		public override void _Process(double _)
 		{
-			if (Character.IsDefeated)
+			if (Player.State.IsDefeated)
 				return;
 
 			GlobalPosition = GetTree().Root.GetCamera3D().GlobalPosition;

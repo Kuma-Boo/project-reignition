@@ -42,13 +42,12 @@ namespace Project.Gameplay.Objects
 			AnimationTree.Active = true;
 		}
 
-
 		protected override void UpdateInteraction()
 		{
-			if (Character.Lockon.IsBounceLockoutActive || !IsHitboxEnabled) return;
+			// REFACTOR TODO if (Player.Lockon.IsBounceLockoutActive || !IsHitboxEnabled) return;
 
-			if (isAttacking && !isHurtboxInteraction && !Character.Skills.IsSpeedBreakActive)
-				Character.StartKnockback();
+			if (isAttacking && !isHurtboxInteraction && !Player.Skills.IsSpeedBreakActive)
+				Player.State.StartKnockback();
 			else
 				base.UpdateInteraction();
 		}
@@ -126,7 +125,7 @@ namespace Project.Gameplay.Objects
 			AnimationState.Travel(isImmortal ? DamageAnimation : DefeatAnimation);
 			AnimationPlayer.Play(isImmortal ? DamageAnimation : DefeatAnimation);
 
-			Character.MovementAngle = Character.PathFollower.ForwardAngle; //More consistent direction
+			Player.MovementAngle = Player.PathFollower.ForwardAngle; //More consistent direction
 
 			if (isImmortal)
 				stateTimer = ImmortalRespawnTime;

@@ -18,8 +18,7 @@ public partial class GrindRail : Area3D
 	private Path3D _rail;
 	/// <summary> Reference to the grindrail's pathfollower. </summary>
 	private PathFollow3D pathFollower;
-	private CharacterController Character => CharacterController.instance;
-	private CharacterSkillManager Skills => Character.Skills;
+	private PlayerController Player => StageSettings.Player;
 
 	[ExportGroup("Invisible Rail Settings")]
 	[Export]
@@ -77,7 +76,7 @@ public partial class GrindRail : Area3D
 	/// <summary> Updates invisible rails to sync with the player's position. </summary>
 	private void UpdateInvisibleRailPosition()
 	{
-		_railModel.GlobalPosition = Character.GlobalPosition;
+		_railModel.GlobalPosition = Player.GlobalPosition;
 		_railModel.Position = new Vector3(0, _railModel.Position.Y, _railModel.Position.Z); // Ignore player's x-offset
 		railMaterial.SetShaderParameter("uv_offset", _railModel.Position.Z);
 	}
@@ -127,7 +126,7 @@ public partial class GrindRail : Area3D
 	/// <summary> Is a jump currently being buffered? </summary>
 	private float jumpBufferTimer;
 	/// <summary> Basic measure for attaching at the end of the rail. </summary>
-	private float RailFudgeFactor => Skills.GrindSettings.Speed * PhysicsManager.physicsDelta;
+	private float RailFudgeFactor => Player.Stats.GrindSettings.Speed * PhysicsManager.physicsDelta;
 	private const float JumpbufferLength = .2f;
 	/// <summary> How "magnetic" the rail is. Early 3D Sonic games had a habit of putting this too low. </summary>
 	private const float GrindrailSnapping = 1.0f;
@@ -136,38 +135,44 @@ public partial class GrindRail : Area3D
 	private Vector3 closestPoint;
 	private void CheckRailActivation()
 	{
-		if (Character.IsOnGround && !Character.JustLandedOnGround)
+		/*
+		REFACTOR TODO
+		if (Player.IsOnGround && !Player.JustLandedOnGround)
 			return; // Can't start grinding from the ground
-		if (Character.MovementState != CharacterController.MovementStates.Normal)
+		if (Player.MovementState != PlayerController.MovementStates.Normal)
 			return; // Character is busy
-		if (Character.VerticalSpeed > 0f)
+		*/
+		if (Player.VerticalSpeed > 0f)
 			return; // Player must be falling to start grinding!
 
 		// Sync rail pathfollower
-		Vector3 delta = _rail.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - _rail.GlobalPosition);
+		Vector3 delta = _rail.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - _rail.GlobalPosition);
 		pathFollower.Progress = _rail.Curve.GetClosestOffset(delta);
 		pathFollower.Progress = Mathf.Clamp(pathFollower.Progress, 0, _rail.Curve.GetBakedLength() - RailFudgeFactor);
 		if (pathFollower.Progress >= _rail.Curve.GetBakedLength() - RailFudgeFactor) // Too close to the end of the rail; skip smoothing
 			return;
 
 		// Ignore grinds that would immediately put the player into a wall
-		if (CheckWall(Skills.GrindSettings.Speed * PhysicsManager.physicsDelta)) return;
+		if (CheckWall(Player.Stats.GrindSettings.Speed * PhysicsManager.physicsDelta)) return;
 
-		delta = pathFollower.GlobalTransform.Basis.Inverse() * (Character.GlobalPosition - pathFollower.GlobalPosition);
-		delta.Y -= Character.VerticalSpeed * PhysicsManager.physicsDelta;
-		if (!Character.JustLandedOnGround && delta.Y < -0.01f)
+		delta = pathFollower.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - pathFollower.GlobalPosition);
+		delta.Y -= Player.VerticalSpeed * PhysicsManager.physicsDelta;
+		/*
+		REFACTOR TODO
+		if (!Player.JustLandedOnGround && delta.Y < -0.01f)
 			return;
 
 		// Horizontal validation
 		if (Mathf.Abs(delta.X) > GrindrailSnapping &&
-			!(Character.ActionState == CharacterController.ActionStates.Grindstep &&
+			!(Player.ActionState == PlayerController.ActionStates.Grindstep &&
 			Mathf.Abs(delta.X) > GrindstepRailSnapping))
 		{
 			return;
 		}
 
-		if (Character.Lockon.IsHomingAttacking) // Cancel any active homing attack
-			Character.Lockon.StopHomingAttack();
+		if (Player.Lockon.IsHomingAttacking) // Cancel any active homing attack
+			Player.Lockon.StopHomingAttack();
+		*/
 
 		Activate(); // Start grinding
 	}
@@ -176,11 +181,14 @@ public partial class GrindRail : Area3D
 	{
 		isActive = true;
 
-		if (allowBonuses && Character.IsGrindstepBonusActive)
+		/*
+		REFACTOR TODO
+		if (allowBonuses && Player.IsGrindstepBonusActive)
 			BonusManager.instance.QueueBonus(new(BonusType.Grindstep));
 
 		isGrindstepping = false;
-		Character.IsGrindstepBonusActive = false;
+		Player.IsGrindstepBonusActive = false;
+		*/
 
 		// Reset buffer timers
 		jumpBufferTimer = 0;
@@ -201,25 +209,29 @@ public partial class GrindRail : Area3D
 			float progressFactor = Mathf.Abs(pathFollower.Progress - _rail.Curve.GetBakedLength());
 			positionSmoothing = Mathf.SmoothStep(0f, positionSmoothing, Mathf.Clamp(progressFactor / smoothFactor, 0f, 1f));
 		}
-		Character.ResetActionState(); // Reset grind step, cancel stomps, jumps, etc
-		Character.StartExternal(this, pathFollower, positionSmoothing);
+		// REFACTOR TODO Player.ResetActionState(); // Reset grind step, cancel stomps, jumps, etc
+		Player.State.StartExternal(this, pathFollower, positionSmoothing);
 
-		Character.IsMovingBackward = false;
-		Character.LandOnGround(); // Rail counts as being on the ground
-		Character.VerticalSpeed = 0f;
-		Character.MoveSpeed = Skills.GrindSettings.Speed * Skills.CalculateGrindSpeedRatio(); // Start at the correct speed
-		if (Skills.IsSkillEquipped(SkillKey.GrindUp) && Skills.GetAugmentIndex(SkillKey.GrindUp) == 3)
+		Player.IsMovingBackward = false;
+		// REFACTOR TODO Player.LandOnGround(); // Rail counts as being on the ground
+		Player.IsOnGround = true;
+		Player.VerticalSpeed = 0f;
+		Player.MoveSpeed = Player.Stats.GrindSettings.Speed * Player.Stats.CalculateGrindSpeedRatio(); // Start at the correct speed
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.GrindUp) &&
+			SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.GrindUp) == 3)
+		{
 			StageSettings.instance.UpdateRingCount(5, StageSettings.MathModeEnum.Subtract, true);
+		}
 
-		Character.Animator.ExternalAngle = 0; // Reset rotation
-		Character.Animator.StartBalancing();
-		Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
+		Player.Animator.ExternalAngle = 0; // Reset rotation
+		Player.Animator.StartBalancing();
+		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
 
 		// Reset FX
-		Character.Effect.StartGrindFX(true);
+		Player.Effect.StartGrindFX(true);
 
-		Character.Connect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.Deactivate));
-		Character.Connect(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.Deactivate));
+		Player.Connect(PlayerController.SignalName.Knockback, new Callable(this, MethodName.Deactivate));
+		Player.Connect(PlayerController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.Deactivate));
 
 		UpdateRail();
 		EmitSignal(SignalName.GrindStarted);
@@ -239,41 +251,44 @@ public partial class GrindRail : Area3D
 		isInteractingWithPlayer = false;
 		allowBonuses = false;
 
-		Character.Effect.StopGrindFX();
+		Player.Effect.StopGrindFX();
 		if (isInvisibleRail) // Hide rail model
 			_railModel.Visible = false;
 
-		Character.IsOnGround = false; // Disconnect from the ground
-		Character.ResetMovementState();
+		Player.IsOnGround = false; // Disconnect from the ground
+		Player.State.StopExternal();
 
 		// Preserve speed
 		float launchAngle = pathFollower.Up().AngleTo(Vector3.Up) * Mathf.Sign(pathFollower.Up().Y);
-		Character.VerticalSpeed = Mathf.Sin(launchAngle) * -Character.MoveSpeed;
-		Character.MoveSpeed = Mathf.Cos(launchAngle) * Character.MoveSpeed;
+		Player.VerticalSpeed = Mathf.Sin(launchAngle) * -Player.MoveSpeed;
+		Player.MoveSpeed = Mathf.Cos(launchAngle) * Player.MoveSpeed;
 
 		if (!isGrindstepping)
-			Character.Animator.ResetState(.2f);
-		Character.Animator.SnapRotation(Character.MovementAngle);
-		Character.Animator.IsFallTransitionEnabled = true;
+			Player.Animator.ResetState(.2f);
+		Player.Animator.SnapRotation(Player.MovementAngle);
+		Player.Animator.IsFallTransitionEnabled = true;
 
 		// Disconnect signals
-		Character.Disconnect(CharacterController.SignalName.Knockback, new Callable(this, MethodName.Deactivate));
-		Character.Disconnect(CharacterController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.Deactivate));
+		Player.Disconnect(PlayerController.SignalName.Knockback, new Callable(this, MethodName.Deactivate));
+		Player.Disconnect(PlayerController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.Deactivate));
 
 		EmitSignal(SignalName.GrindCompleted);
 	}
 
 	private void UpdateRail()
 	{
-		if (Character.MovementState != CharacterController.MovementStates.External ||
-			Character.ExternalController != this) // Player disconnected from the rail already
+		/*
+		REFACTOR TODO
+		if (Player.MovementState != PlayerController.MovementStates.External ||
+			Player.State.ExternalController != this) // Player disconnected from the rail already
 		{
 			Deactivate();
 			return;
 		}
+		*/
 
-		Character.UpDirection = pathFollower.Up();
-		Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(pathFollower.Forward(), Character.PathFollower.Up());
+		Player.UpDirection = pathFollower.Up();
+		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(pathFollower.Forward(), Player.PathFollower.Up());
 
 		UpdateCharge();
 
@@ -282,7 +297,7 @@ public partial class GrindRail : Area3D
 
 		jumpBufferTimer = Mathf.MoveToward(jumpBufferTimer, 0, PhysicsManager.physicsDelta);
 
-		if (!Character.Animator.IsBalanceShuffleActive && jumpBufferTimer > 0) //Jumping off rail can only happen when not shuffling
+		if (!Player.Animator.IsBalanceShuffleActive && jumpBufferTimer > 0) //Jumping off rail can only happen when not shuffling
 		{
 			ProcessJump();
 			return;
@@ -292,23 +307,23 @@ public partial class GrindRail : Area3D
 			UpdateInvisibleRailPosition();
 
 		// Check wall
-		float movementDelta = Character.MoveSpeed * PhysicsManager.physicsDelta;
+		float movementDelta = Player.MoveSpeed * PhysicsManager.physicsDelta;
 		RaycastHit hit = CheckWall(movementDelta);
 		if (hit && hit.collidedObject is StaticBody3D) // Stop player when colliding with a static body
 		{
 			movementDelta = 0; // Limit movement distance
-			Character.MoveSpeed = 0f;
+			Player.MoveSpeed = 0f;
 		}
 		else // No walls, Check for crushers
 		{
-			Character.CheckCeiling();
+			// REFACTOR TODO Player.CheckCeiling();
 		}
 
 		pathFollower.Progress += movementDelta;
 		pathFollower.ProgressRatio = Mathf.Clamp(pathFollower.ProgressRatio, 0.0f, 1.0f);
-		Character.UpdateExternalControl(true);
-		Character.Animator.UpdateBalanceSpeed(Character.Skills.GrindSettings.GetSpeedRatioClamped(Character.MoveSpeed));
-		if (Mathf.IsEqualApprox(pathFollower.ProgressRatio, 1) || Mathf.IsZeroApprox(Character.MoveSpeed)) // Disconnect from the rail
+		Player.State.UpdateExternalControl(true);
+		Player.Animator.UpdateBalanceSpeed(Player.Stats.GrindSettings.GetSpeedRatioClamped(Player.MoveSpeed));
+		if (Mathf.IsEqualApprox(pathFollower.ProgressRatio, 1) || Mathf.IsZeroApprox(Player.MoveSpeed)) // Disconnect from the rail
 			Deactivate();
 	}
 
@@ -316,15 +331,18 @@ public partial class GrindRail : Area3D
 	{
 		jumpBufferTimer = 0;
 
+		/*
 		// Check if the player is holding a direction parallel to rail and start a grindstep
-		isGrindstepping = Character.IsHoldingDirection(Character.MovementAngle + (Mathf.Pi * .5f), true, false) ||
-			Character.IsHoldingDirection(Character.MovementAngle - (Mathf.Pi * .5f), true, false);
+		isGrindstepping = Player.Controller.IsHoldingDirection(Player.MovementAngle + (Mathf.Pi * .5f), true, false) ||
+			Player.Controller.IsHoldingDirection(Player.MovementAngle - (Mathf.Pi * .5f), true, false);
 
 		Deactivate();
+		REFACTOR TODO
 		if (isGrindstepping) // Grindstepping
-			Character.StartGrindstep();
+			Player.StartGrindstep();
 		else // Jump normally
-			Character.Jump(true);
+			Player.Jump(true);
+		*/
 	}
 
 	private float currentCharge;
@@ -343,7 +361,7 @@ public partial class GrindRail : Area3D
 			currentCharge = Mathf.MoveToward(currentCharge, 1.0f, ChargeSpeed * PhysicsManager.physicsDelta);
 			if (Mathf.IsEqualApprox(currentCharge, 1.0f))
 			{
-				if (Character.Animator.IsBalanceShuffleActive)
+				if (Player.Animator.IsBalanceShuffleActive)
 				{
 					// Prevent fully charging during a grind shuffle
 					currentCharge -= 0.0001f;
@@ -351,18 +369,18 @@ public partial class GrindRail : Area3D
 				else if (!isCharged) // Fully charged
 				{
 					perfectChargeTimer = PerfectChargeInputWindow;
-					Character.Effect.FullGrindChargeFX();
+					Player.Effect.FullGrindChargeFX();
 				}
 			}
 			else
 			{
-				Character.Effect.StartChargeFX();
+				Player.Effect.StartChargeFX();
 			}
 		}
 		else if (!Mathf.IsZeroApprox(currentCharge))
 		{
 			// Update shuffling
-			if (!Character.Animator.IsBalanceShuffleActive && isCharged)
+			if (!Player.Animator.IsBalanceShuffleActive && isCharged)
 			{
 				StartShuffle();
 				currentCharge = 0;
@@ -373,38 +391,38 @@ public partial class GrindRail : Area3D
 			}
 
 			currentCharge = Mathf.MoveToward(currentCharge, 0f, ChargeSpeed * PhysicsManager.physicsDelta);
-			Character.Effect.StopChargeFX();
+			Player.Effect.StopChargeFX();
 		}
 
-		Character.Animator.UpdateBalanceCrouch(isCharging && !Character.Animator.IsBalanceShuffleActive);
-		if (!Character.Animator.IsBalanceShuffleActive) // Only slow down when not shuffling
+		Player.Animator.UpdateBalanceCrouch(isCharging && !Player.Animator.IsBalanceShuffleActive);
+		if (!Player.Animator.IsBalanceShuffleActive) // Only slow down when not shuffling
 		{
-			float speedRatio = Character.Skills.GrindSettings.GetSpeedRatioClamped(Character.MoveSpeed);
-			Character.Effect.UpdateGrindFX(speedRatio);
+			float speedRatio = Player.Stats.GrindSettings.GetSpeedRatioClamped(Player.MoveSpeed);
+			Player.Effect.UpdateGrindFX(speedRatio);
 
 			if (Mathf.IsZeroApprox(perfectChargeTimer))
-				Character.MoveSpeed = Skills.GrindSettings.UpdateInterpolate(Character.MoveSpeed, isCharging ? 0f : -1f);
+				Player.MoveSpeed = Player.Stats.GrindSettings.UpdateInterpolate(Player.MoveSpeed, isCharging ? 0f : -1f);
 		}
 
-		Character.Animator.UpdateBalancing(isCharging ? 0.0f : Character.Animator.CalculateTurnRatio());
+		Player.Animator.UpdateBalancing(isCharging ? 0.0f : Player.Animator.CalculateTurnRatio());
 	}
 
 	private void StartShuffle()
 	{
-		float targetSpeed = Skills.perfectShuffleSpeed;
+		float targetSpeed = Player.Stats.perfectShuffleSpeed;
 		if (Mathf.IsZeroApprox(perfectChargeTimer))
 		{
-			targetSpeed = Skills.GrindSettings.Speed;
+			targetSpeed = Player.Stats.GrindSettings.Speed;
 			allowBonuses = false;
 		}
 		else
 		{
-			Character.Effect.PerfectGrindShuffleFX();
+			Player.Effect.PerfectGrindShuffleFX();
 		}
 
-		Character.MoveSpeed = targetSpeed;
-		Character.Effect.StartGrindFX(false);
-		Character.Animator.StartGrindShuffle();
+		Player.MoveSpeed = targetSpeed;
+		Player.Effect.StartGrindFX(false);
+		Player.Animator.StartGrindShuffle();
 
 		if (allowBonuses)
 			BonusManager.instance.QueueBonus(new(BonusType.GrindShuffle));
@@ -412,8 +430,8 @@ public partial class GrindRail : Area3D
 
 	private RaycastHit CheckWall(float movementDelta)
 	{
-		float castLength = movementDelta + Character.CollisionSize.X;
-		RaycastHit hit = this.CastRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, Character.CollisionMask);
+		float castLength = movementDelta + Player.CollisionSize.X;
+		RaycastHit hit = this.CastRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, Player.CollisionMask);
 		DebugManager.DrawRay(pathFollower.GlobalPosition, pathFollower.Forward() * castLength, hit ? Colors.Red : Colors.White);
 
 		// Block grinding through objects in the given group

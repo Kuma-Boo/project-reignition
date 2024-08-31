@@ -15,7 +15,7 @@ namespace Project.Gameplay.Objects
 		private bool permanentlyDestroyed;
 		private float currentHealth;
 		private readonly int MaxHealth = 3;
-		private CharacterController Character => CharacterController.instance;
+		private PlayerController Player => StageSettings.Player;
 		/// <summary> True when colliding with the player. </summary>
 		private bool IsInteracting { get; set; }
 		/// <summary> True when a particular interaction has already been processed. </summary>
@@ -33,7 +33,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (IsInteracting)
 				UpdateInteraction();
-			else if (IsInteractionProcessed && Character.AttackState == CharacterController.AttackStates.None)
+			else if (IsInteractionProcessed && Player.State.AttackState == PlayerStateController.AttackStates.None)
 				ResetInteractionProcessed();
 		}
 
@@ -45,21 +45,23 @@ namespace Project.Gameplay.Objects
 			if (IsInteractionProcessed)
 				return;
 
-			if (Character.Lockon.IsBounceLockoutActive &&
-				Character.ActionState == CharacterController.ActionStates.Normal)
+			/*
+			if (Player.Lockon.IsBounceLockoutActive &&
+				Player.ActionState == PlayerController.ActionStates.Normal)
 			{
 				return;
 			}
+			*/
 
-			switch (Character.AttackState)
+			switch (Player.State.AttackState)
 			{
-				case CharacterController.AttackStates.OneShot:
+				case PlayerStateController.AttackStates.OneShot:
 					Shatter();
 					break;
-				case CharacterController.AttackStates.Weak:
+				case PlayerStateController.AttackStates.Weak:
 					currentHealth--;
 					break;
-				case CharacterController.AttackStates.Strong:
+				case PlayerStateController.AttackStates.Strong:
 					currentHealth -= 2;
 					break;
 			}
@@ -71,17 +73,20 @@ namespace Project.Gameplay.Objects
 			else if (currentHealth == 2)
 				animator.Play("crack-01");
 
-			if (Character.ActionState == CharacterController.ActionStates.JumpDash)
+			/*
+			REFACTOR TODO
+			if (Player.ActionState == PlayerController.ActionStates.JumpDash)
 			{
 				// Copied from Enemy.cs UpdateLockon method
-				if (Character.Lockon.IsHomingAttacking)
-					Character.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
+				if (Player.Lockon.IsHomingAttacking)
+					Player.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
 
 				if (!isShattered)
-					Character.Camera.SetDeferred("LockonTarget", this);
+					Player.Camera.SetDeferred("LockonTarget", this);
 
-				Character.Lockon.StartBounce(isShattered);
+				Player.Lockon.StartBounce(isShattered);
 			}
+			*/
 
 			SetInteractionProcessed();
 		}
@@ -90,16 +95,16 @@ namespace Project.Gameplay.Objects
 		{
 			IsInteractionProcessed = true;
 			// Connect a signal
-			if (!Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-				Character.Connect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
+			if (!Player.State.IsConnected(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+				Player.State.Connect(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
 		}
 
 		private void ResetInteractionProcessed()
 		{
 			IsInteractionProcessed = false;
 
-			if (Character.IsConnected(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-				Character.Disconnect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
+			if (Player.State.IsConnected(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+				Player.State.Disconnect(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
 		}
 
 		private void SaveDestructionStatus() => permanentlyDestroyed = isShattered;

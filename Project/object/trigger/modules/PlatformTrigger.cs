@@ -89,7 +89,7 @@ namespace Project.Gameplay.Triggers
 		[Export]
 		/// <summary> Animator to handle falling platform behaviour. </summary>
 		private AnimationPlayer fallingPlatformAnimator;
-		private CharacterController Character => CharacterController.instance;
+		private PlayerController Player => StageSettings.Player;
 
 		private bool isActive;
 		private bool isInteractingWithPlayer;
@@ -116,7 +116,7 @@ namespace Project.Gameplay.Triggers
 
 			if (!isInteractingWithPlayer) return;
 
-			if (!isActive && Character.IsOnGround)
+			if (!isActive && Player.IsOnGround)
 			{
 				isActive = true;
 				EmitSignal(SignalName.PlatformInteracted);
@@ -168,14 +168,14 @@ namespace Project.Gameplay.Triggers
 		/// <summary> Moves the player with the platform. </summary>
 		private void SyncPlayerMovement()
 		{
-			if (!Character.IsOnGround) return; // Player isn't on the ground
+			if (!Player.IsOnGround) return; // Player isn't on the ground
 
-			float checkLength = Mathf.Abs(Character.GlobalPosition.Y - floorCalculationRoot.GlobalPosition.Y) + (Character.CollisionSize.Y * 2.0f);
-			KinematicCollision3D collision = Character.MoveAndCollide(Vector3.Down * checkLength, true);
+			float checkLength = Mathf.Abs(Player.GlobalPosition.Y - floorCalculationRoot.GlobalPosition.Y) + (Player.CollisionSize.Y * 2.0f);
+			KinematicCollision3D collision = Player.MoveAndCollide(Vector3.Down * checkLength, true);
 			if (collision == null || (Node3D)collision.GetCollider() != parentCollider) // Player is not on the platform
 				return;
 
-			Character.GlobalTranslate(Vector3.Up * (floorCalculationRoot.GlobalPosition.Y - Character.GlobalPosition.Y));
+			Player.GlobalTranslate(Vector3.Up * (floorCalculationRoot.GlobalPosition.Y - Player.GlobalPosition.Y));
 		}
 
 		public void OnEntered(Area3D a)

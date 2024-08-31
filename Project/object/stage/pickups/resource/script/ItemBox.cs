@@ -254,8 +254,11 @@ namespace Project.Gameplay.Objects
 		{
 			base.Collect();
 
-			if (Character.ActionState == CharacterController.ActionStates.JumpDash)
-				Character.Lockon.StartBounce();
+			/*
+			REFACTOR TODO
+			if (Player.ActionState == PlayerController.ActionStates.JumpDash)
+				Player.Lockon.StartBounce();
+			*/
 
 			animator.Play("open");
 			isOpened = true;

@@ -50,7 +50,7 @@ public partial class Catapult : Launcher
 			return;
 		}
 
-		if (aimSFX.Playing) // REFACTOR TODO && Character.ExternalController != this)
+		if (aimSFX.Playing) // REFACTOR TODO && Player.State.ExternalController != this)
 			SoundManager.FadeAudioPlayer(aimSFX);
 
 		switch (currentState)
@@ -68,10 +68,10 @@ public partial class Catapult : Launcher
 	{
 		tweener.CustomStep(PhysicsManager.physicsDelta);
 		/* REFACTOR TODO
-		if (Player.ExternalController != this)
+		if (Player.State.ExternalController != this)
 			return;
 
-		Player.UpdateExternalControl();
+		Player.State.UpdateExternalControl();
 		*/
 		if (armNode.Rotation.X < Mathf.Pi * .5f)
 			return;
@@ -106,7 +106,7 @@ public partial class Catapult : Launcher
 		UpdateArmRotation();
 		/*
 		REFACTOR TODO
-		Player.UpdateExternalControl();
+		Player.State.UpdateExternalControl();
 		*/
 	}
 
@@ -122,7 +122,7 @@ public partial class Catapult : Launcher
 
 		Player.Effect.StartSpinFX();
 		/* REFACTOR TODO
-		Player.StartExternal(this, playerPositionNode);
+		Player.State.StartExternal(this, playerPositionNode);
 		Player.Animator.StartSpin(3f);
 		Player.Animator.SnapRotation(0);
 		*/
@@ -204,7 +204,7 @@ public partial class Catapult : Launcher
 
 		// Disable break skills
 		Player.Skills.IsSpeedBreakEnabled = Player.Skills.IsTimeBreakEnabled = false;
-		Player.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredCatapult), (uint)ConnectFlags.OneShot);
+		Player.Connect(PlayerController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredCatapult), (uint)ConnectFlags.OneShot);
 
 		// Have the player jump into the catapult
 		var settings = LaunchSettings.Create(Player.GlobalPosition, playerPositionNode.GlobalPosition, 2f);

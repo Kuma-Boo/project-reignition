@@ -348,11 +348,11 @@ public partial class StageSettings : Node3D
 		}
 
 		// Soul barrier
-		if (CharacterController.instance == null)
+		if (Player == null)
 		{
-			GD.PushError("CharacterController is missing!");
-			if (mode == MathModeEnum.Subtract && CharacterController.instance.Skills.IsSkillEquipped(SkillKey.RingLossConvert))
-				CharacterController.instance.Skills.ModifySoulGauge((previousAmount - CurrentRingCount) * 2);
+			GD.PushError("PlayerController is missing!");
+			if (mode == MathModeEnum.Subtract && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RingLossConvert))
+				Player.Skills.ModifySoulGauge((previousAmount - CurrentRingCount) * 2);
 		}
 
 		if (DebugManager.Instance.InfiniteRings) // Infinite ring cheat
@@ -541,7 +541,7 @@ public partial class StageSettings : Node3D
 		if (completionAnimationIndex > 3)
 			completionAnimationIndex = 1;
 		completionAnimator.Play($"demo{completionAnimationIndex}");
-		CharacterController.instance.Camera.StartCrossfade();
+		Player.Camera.StartCrossfade();
 	}
 
 	#endregion

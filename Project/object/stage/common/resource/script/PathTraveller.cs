@@ -84,7 +84,7 @@ public partial class PathTraveller : Node3D
 	private Vector3 startingOffset;
 	private SpawnData spawnData;
 
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	public override void _Ready()
 	{
@@ -129,7 +129,7 @@ public partial class PathTraveller : Node3D
 	/// <summary> Handles player input. </summary>
 	private void CalculateMovement()
 	{
-		Vector2 inputVector = Character.InputVector * turnSpeed;
+		Vector2 inputVector = Player.Controller.InputAxis * turnSpeed;
 		if (isVerticalMovementDisabled) // Ignore vertical input
 			inputVector.Y = 0;
 
@@ -155,7 +155,7 @@ public partial class PathTraveller : Node3D
 		if (!autosetBounds)
 			return;
 
-		float pathTravellerCollisionSize = Character.CollisionSize.X;
+		float pathTravellerCollisionSize = Player.CollisionSize.X;
 		float castDistance = pathTravellerCollisionSize + CollisionSmoothingDistance;
 		if (Mathf.Sign(currentTurnAmount.X) == direction)
 			castDistance += Mathf.Abs(currentTurnAmount.X * PhysicsManager.physicsDelta);
@@ -183,7 +183,7 @@ public partial class PathTraveller : Node3D
 
 		// Sync transforms
 		GlobalTransform = pathFollower.GlobalTransform;
-		Character.UpdateExternalControl(true);
+		Player.State.UpdateExternalControl(true);
 	}
 
 	private void UpdateAnimation()
@@ -191,7 +191,7 @@ public partial class PathTraveller : Node3D
 		// Update animations
 		if (root != null) // Update visual rotations
 		{
-			float turnAmount = (currentTurnAmount.X / turnSpeed) - (Character.PathFollower.DeltaAngle * 5.0f);
+			float turnAmount = (currentTurnAmount.X / turnSpeed) - (Player.PathFollower.DeltaAngle * 5.0f);
 			float tiltAmount = Mathf.DegToRad(rotationAmount) * tiltRatio * turnAmount;
 			root.Rotation = Vector3.Zero;
 
@@ -205,8 +205,8 @@ public partial class PathTraveller : Node3D
 
 		if (animator != null) // Update animation speeds
 			animator.SpeedScale = 1.0f + (currentSpeed / maxSpeed * 1.5f);
-		Character.Animator.UpdateBalancing(Character.InputVector.X - (Character.PathFollower.DeltaAngle * 20.0f));
-		Character.Animator.UpdateBalanceSpeed(1f + Character.GroundSettings.GetSpeedRatio(currentSpeed), 0f);
+		Player.Animator.UpdateBalancing(Player.Controller.InputAxis.X - (Player.PathFollower.DeltaAngle * 20.0f));
+		Player.Animator.UpdateBalanceSpeed(1f + Player.Stats.GroundSettings.GetSpeedRatio(currentSpeed), 0f);
 	}
 
 	public void Respawn()
@@ -252,10 +252,10 @@ public partial class PathTraveller : Node3D
 			animator.Advance(0.0);
 		}
 
-		Character.StartExternal(this, playerPosition, .1f);
-		Character.Animator.StartBalancing(); // Carpet uses balancing animations
-		Character.Animator.UpdateBalanceSpeed(1f, 0f);
-		Character.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
+		Player.State.StartExternal(this, playerPosition, .1f);
+		Player.Animator.StartBalancing(); // Carpet uses balancing animations
+		Player.Animator.UpdateBalanceSpeed(1f, 0f);
+		Player.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
 		EmitSignal(SignalName.Activated);
 	}
 
@@ -274,10 +274,10 @@ public partial class PathTraveller : Node3D
 		currentSpeed = speedVelocity = 0;
 		currentTurnAmount = turnVelocity = Vector2.Zero;
 
-		if (Character.ExternalParent == this)
+		if (Player.State.ExternalParent == this)
 		{
-			Character.StopExternal();
-			Character.Animator.ResetState();
+			Player.State.StopExternal();
+			Player.Animator.ResetState();
 		}
 	}
 
@@ -289,19 +289,19 @@ public partial class PathTraveller : Node3D
 		Despawn();
 
 		// Bump the player off
-		LaunchSettings launchSettings = LaunchSettings.Create(Character.GlobalPosition, Character.GlobalPosition, 2);
-		Character.StartLauncher(launchSettings);
-		Character.Animator.ResetState(0.1f);
-		Character.Animator.StartSpin(3.0f);
-		Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
+		LaunchSettings launchSettings = LaunchSettings.Create(Player.GlobalPosition, Player.GlobalPosition, 2);
+		Player.State.StartLauncher(launchSettings);
+		Player.Animator.ResetState(0.1f);
+		Player.Animator.StartSpin(3.0f);
+		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
 	}
 
 	private void Stagger()
 	{
 		EmitSignal(SignalName.Staggered);
 
-		Character.StartInvincibility(5f);
-		Character.Animator.StartBalanceStagger();
+		Player.State.StartInvincibility();
+		Player.Animator.StartBalanceStagger();
 		currentSpeed = speedVelocity = 0;
 		currentTurnAmount = turnVelocity = Vector2.Zero;
 	}

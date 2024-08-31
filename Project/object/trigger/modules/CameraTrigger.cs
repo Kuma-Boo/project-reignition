@@ -39,7 +39,7 @@ public partial class CameraTrigger : StageTriggerModule
 
 	private Vector3 previousStaticPosition;
 	private Basis previousStaticRotation;
-	private CameraController Camera => Character.Camera;
+	private PlayerCameraController Camera => Player.Camera;
 
 	public void UpdateStaticData(CameraBlendData data)
 	{
@@ -96,7 +96,8 @@ public partial class CameraTrigger : StageTriggerModule
 	{
 		if (previousSettings == null || settings == null) return;
 		if (Camera.ActiveSettings != settings) return; // Already overridden by a different trigger
-		if (Character.ActionState == CharacterController.ActionStates.Teleport) return;
+
+		// REFACTOR TODO if (Player.ActionState == PlayerController.ActionStates.Teleport) return;
 
 		Camera.UpdateCameraSettings(new()
 		{

@@ -33,7 +33,7 @@ public partial class PteroEgg : Area3D
 	private float returnTravelRatio;
 	private SpawnData spawnData;
 	private LaunchSettings returnArc; // The path to follow when returning to the nest
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	public override void _Ready()
 	{
@@ -56,11 +56,11 @@ public partial class PteroEgg : Area3D
 	private void UpdateHeldPosition()
 	{
 		int eggIndex = PteroEggManager.heldEggs.IndexOf(this);
-		Vector3 referencePosition = eggIndex == 0 ? Character.GlobalPosition : PteroEggManager.heldEggs[eggIndex - 1].GlobalPosition;
+		Vector3 referencePosition = eggIndex == 0 ? Player.GlobalPosition : PteroEggManager.heldEggs[eggIndex - 1].GlobalPosition;
 		float distanceSquared = GlobalPosition.DistanceSquaredTo(referencePosition);
 
 		float smoothing = FollowSmoothing;
-		Vector3 targetPosition = referencePosition + (Character.PathFollower.Back() * FollowDistanceIncrement);
+		Vector3 targetPosition = referencePosition + (Player.PathFollower.Back() * FollowDistanceIncrement);
 
 		if (distanceSquared < Mathf.Pow(MinDistance, 2.0f)) // Extra snappy when things are too close
 		{

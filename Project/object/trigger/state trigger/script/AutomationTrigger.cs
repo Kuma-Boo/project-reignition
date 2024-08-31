@@ -25,8 +25,8 @@ public partial class AutomationTrigger : Area3D
 	/// <summary> Reference to the automation path. </summary>
 	private Path3D automationPath;
 
-	private bool IsFinished => Character.PathFollower.ActivePath != automationPath || Character.PathFollower.Progress >= endPoint;
-	private CharacterController Character => CharacterController.instance;
+	private bool IsFinished => Player.PathFollower.ActivePath != automationPath || Player.PathFollower.Progress >= endPoint;
+	private PlayerController Player => StageSettings.Player;
 
 	/// <summary> Extra acceleration applied when the player is moving too slow. </summary>
 	private const float LOW_SPEED_ACCELERATION = 80.0f;
@@ -54,33 +54,33 @@ public partial class AutomationTrigger : Area3D
 
 	private void UpdateAutomation()
 	{
-		if (!Character.Skills.IsSpeedBreakActive)
+		if (!Player.Skills.IsSpeedBreakActive)
 		{
-			if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < .8f) // Accelerate quicker to reduce low-speed jank
-				Character.MoveSpeed += LOW_SPEED_ACCELERATION * PhysicsManager.physicsDelta;
+			if (Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed) < .8f) // Accelerate quicker to reduce low-speed jank
+				Player.MoveSpeed += LOW_SPEED_ACCELERATION * PhysicsManager.physicsDelta;
 
-			if (Character.IsLockoutActive && Character.ActiveLockoutData.overrideSpeed)
-				Character.MoveSpeed = Character.ActiveLockoutData.ApplySpeed(Character.MoveSpeed, Character.GroundSettings);
+			if (Player.State.IsLockoutActive && Player.State.ActiveLockoutData.overrideSpeed)
+				Player.MoveSpeed = Player.State.ActiveLockoutData.ApplySpeed(Player.MoveSpeed, Player.Stats.GroundSettings);
 			else
-				Character.MoveSpeed = Character.GroundSettings.UpdateInterpolate(Character.MoveSpeed, 1); // Move to max speed
+				Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, 1); // Move to max speed
 		}
 
-		Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
-		Character.MovementAngle = Character.PathFollower.ForwardAngle;
+		Player.PathFollower.Progress += Player.MoveSpeed * PhysicsManager.physicsDelta;
+		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 
-		Character.UpdateExternalControl(false);
-		Character.Animator.ExternalAngle = 0;
+		Player.State.UpdateExternalControl(false);
+		Player.Animator.ExternalAngle = 0;
 	}
 
 	private bool IsActivationValid()
 	{
-		if (!Character.IsOnGround) return false;
+		if (!Player.IsOnGround) return false;
 
 		if (!ignoreDirection)
 		{
 			// Ensure character is facing/moving the correct direction
-			float dot = ExtensionMethods.DotAngle(Character.MovementAngle, ExtensionMethods.CalculateForwardAngle(this.Forward()));
-			if (dot < 0f || Character.IsMovingBackward) return false;
+			float dot = ExtensionMethods.DotAngle(Player.MovementAngle, ExtensionMethods.CalculateForwardAngle(this.Forward()));
+			if (dot < 0f || Player.IsMovingBackward) return false;
 		}
 
 		return true;
@@ -91,18 +91,18 @@ public partial class AutomationTrigger : Area3D
 		EmitSignal(SignalName.Activated);
 		isActive = true;
 
-		automationPath = Character.PathFollower.ActivePath;
-		Character.PathFollower.Resync();
+		automationPath = Player.PathFollower.ActivePath;
+		Player.PathFollower.Resync();
 
-		float initialVelocity = Character.MoveSpeed;
-		Character.StartExternal(this, Character.PathFollower, .05f, true);
-		Character.MoveSpeed = initialVelocity;
-		Character.Animator.ExternalAngle = 0;
-		Character.Animator.SnapRotation(Character.Animator.ExternalAngle); // Rotate to follow pathfollower
-		Character.IsMovingBackward = false; // Prevent getting stuck in backstep animation
+		float initialVelocity = Player.MoveSpeed;
+		Player.State.StartExternal(this, Player.PathFollower, .05f, true);
+		Player.MoveSpeed = initialVelocity;
+		Player.Animator.ExternalAngle = 0;
+		Player.Animator.SnapRotation(Player.Animator.ExternalAngle); // Rotate to follow pathfollower
+		Player.IsMovingBackward = false; // Prevent getting stuck in backstep animation
 
-		if (Character.Animator.IsBrakeAnimationActive)
-			Character.Animator.StopBrake();
+		if (Player.Animator.IsBrakeAnimationActive)
+			Player.Animator.StopBrake();
 	}
 
 	private void Deactivate()
@@ -110,10 +110,10 @@ public partial class AutomationTrigger : Area3D
 		EmitSignal(SignalName.Deactivated);
 		isActive = false;
 
-		Character.PathFollower.Resync();
-		Character.ResetMovementState();
-		Character.UpDirection = Character.PathFollower.Up();
-		Character.Animator.SnapRotation(Character.MovementAngle);
+		Player.PathFollower.Resync();
+		Player.State.StopExternal();
+		Player.UpDirection = Player.PathFollower.Up();
+		Player.Animator.SnapRotation(Player.MovementAngle);
 	}
 
 	public void OnEntered(Area3D _) => isEntered = true;

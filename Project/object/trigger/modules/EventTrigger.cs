@@ -162,10 +162,10 @@ public partial class EventTrigger : StageTriggerModule
 		if (Engine.IsEditorHint())
 			return;
 
-		if (playerStandin == null || Character.ExternalController != this)
+		if (playerStandin == null || Player.State.ExternalController != this)
 			return;
 
-		Character.UpdateExternalControl();
+		Player.State.UpdateExternalControl();
 	}
 
 	public override void Respawn()
@@ -234,12 +234,12 @@ public partial class EventTrigger : StageTriggerModule
 
 		BGMPlayer.SetStageMusicVolume(-80f); // Mute BGM
 
-		Character.StartExternal(this, GetNode<Node3D>(playerStandin), characterPositionSmoothing);
-		Character.Animator.ExternalAngle = 0; // Reset external angle
-		Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
-		Character.Skills.DisableBreakSkills();
+		Player.State.StartExternal(this, GetNode<Node3D>(playerStandin), characterPositionSmoothing);
+		Player.Animator.ExternalAngle = 0; // Reset external angle
+		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
+		Player.Skills.DisableBreakSkills();
 		if (!characterAnimation.IsEmpty)
-			Character.Animator.PlayOneshotAnimation(characterAnimation);
+			Player.Animator.PlayOneshotAnimation(characterAnimation);
 	}
 
 	#region Event Animation
@@ -250,7 +250,7 @@ public partial class EventTrigger : StageTriggerModule
 
 	/// <summary> How much to fadeout character's animation by. </summary>
 	private float characterFadeoutTime;
-	/// <summary> Which event animation to play on the character. </summary>
+	/// <summary> Which event animation to play on the Player. </summary>
 	private StringName characterAnimation;
 
 	/// <summary> Evaluate exit move speed as a ratio instead of a default value. </summary>
@@ -260,7 +260,7 @@ public partial class EventTrigger : StageTriggerModule
 
 	private void ScreenShake(float magnitude)
 	{
-		Character.Camera.StartCameraShake(new()
+		Player.Camera.StartCameraShake(new()
 		{
 			magnitude = Vector3.One.RemoveDepth() * magnitude
 		});
@@ -271,21 +271,21 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		BGMPlayer.SetStageMusicVolume(0f); // Unmute BGM
 
-		Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(Character.ExternalParent.Forward());
-		Character.Animator.SnapRotation(Character.MovementAngle);
-		Character.Animator.CancelOneshot(characterFadeoutTime);
-		Character.Animator.DisabledSpeedSmoothing = true;
-		Character.Animator.ResetState(0);
-		Character.ResetMovementState();
+		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Player.State.ExternalParent.Forward());
+		Player.Animator.SnapRotation(Player.MovementAngle);
+		Player.Animator.CancelOneshot(characterFadeoutTime);
+		Player.Animator.DisabledSpeedSmoothing = true;
+		Player.Animator.ResetState(0);
+		Player.State.StopExternal();
 
 		if (characterExitLockout != null)
-			Character.AddLockoutData(characterExitLockout);
+			Player.State.AddLockoutData(characterExitLockout);
 
-		Character.MoveSpeed = normalizeExitMoveSpeed ? Character.GroundSettings.Speed * characterExitMoveSpeed : characterExitMoveSpeed;
-		Character.VerticalSpeed = characterExitVerticalSpeed;
+		Player.MoveSpeed = normalizeExitMoveSpeed ? Player.Stats.GroundSettings.Speed * characterExitMoveSpeed : characterExitMoveSpeed;
+		Player.VerticalSpeed = characterExitVerticalSpeed;
 
 		// Re-enable break skills
-		Character.Skills.IsSpeedBreakEnabled = Character.Skills.IsTimeBreakEnabled = true;
+		Player.Skills.IsSpeedBreakEnabled = Player.Skills.IsTimeBreakEnabled = true;
 		EmitSignal(SignalName.EventFinished);
 	}
 	#endregion

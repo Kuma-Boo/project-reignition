@@ -61,7 +61,7 @@ public partial class FireSoul : Pickup
 
 	private void UpdateLockon()
 	{
-		if (Character.Skills.IsSkillEquipped(SkillKey.FireSoulLockon))
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.FireSoulLockon))
 		{
 			Animator.Play("enable-lockon");
 			Animator.Advance(0);
