@@ -113,9 +113,8 @@ public partial class JumpState : PlayerState
 		}
 
 		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
-		if ((Player.Controller.IsHoldingDirection(targetMovementAngle, Player.PathFollower.BackAngle) &&
-			!Mathf.IsZeroApprox(Player.MoveSpeed)) ||
-			Input.IsActionPressed("button_brake")) // Turning around
+		float inputDot = ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle);
+		if ((inputDot < -.75f && !Mathf.IsZeroApprox(Player.MoveSpeed)) || Input.IsActionPressed("button_brake")) // Turning around
 		{
 			Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, -inputStrength);
 			return;
