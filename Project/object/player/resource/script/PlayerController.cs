@@ -78,7 +78,7 @@ public partial class PlayerController : CharacterBody3D
 
 	/// <summary> Global movement angle, in radians. Note - VISUAL ROTATION is controlled by CharacterAnimator.cs. </summary>
 	public float MovementAngle { get; set; }
-	public float PathTurnInfluence => 0;// REFACTOR TODO PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
+	public float PathTurnInfluence => PathFollower.DeltaAngle * Camera.ActiveSettings.pathControlInfluence;
 	public Vector3 GetMovementDirection()
 	{
 		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
@@ -92,8 +92,7 @@ public partial class PlayerController : CharacterBody3D
 	public void AddSlopeSpeed(bool isSliding = false)
 	{
 		SlopeRatio = 0;
-		// REFACTOR TODO if (IsLockoutActive && ActiveLockoutData.ignoreSlopes) return; // Lockout is ignoring slopes
-
+		if (State.ActiveLockoutData?.ignoreSlopes == true) return; // Lockout is ignoring slopes
 		if (Mathf.IsZeroApprox(MoveSpeed)) return; // Idle/Backstepping isn't affected by slopes
 
 		// Calculate slope influence
@@ -156,10 +155,8 @@ public partial class PlayerController : CharacterBody3D
 	public bool CheckGround()
 	{
 		RaycastHit groundHit = CheckGroundRaycast();
-		/* REFACTOR TODO
-		if (MovementState == MovementStates.External) // Exit early when externally controlled
-			return;
-		*/
+		if (State.ExternalController != null) // Exit early when externally controlled
+			return groundHit;
 
 		if (groundHit) // Successful ground hit
 		{
@@ -187,7 +184,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public RaycastHit CheckGroundRaycast()
 	{
-		bool limitAngle = true; // REFACTOR TODO Limit ground's max angle when MovementState != MovementStates.External;
+		bool limitAngle = State.ExternalController != null;
 
 		Vector3 castOrigin = CollisionPosition;
 		float castLength = CollisionSize.Y + (CollisionPadding * 2.0f);
@@ -267,10 +264,8 @@ public partial class PlayerController : CharacterBody3D
 		if (upDirection.IsEqualApprox(Vector3.Zero))
 		{
 			upDirection = Vector3.Up;
-			/* REFACTOR TODO
 			if (Camera.ActiveSettings.followPathTilt) // Use PathFollower.Up when on a tilted path.
 				upDirection = PathFollower.Up();
-			*/
 		}
 
 		// Calculate reset factor

@@ -320,7 +320,7 @@ public partial class PlayerSkillController : Node3D
 			else
 			{
 				Player.MoveSpeed = 0;
-				// REFACTOR TODO Player.Camera.StartCrossfade(); // Crossfade the screen briefly
+				Player.Camera.StartCrossfade(); // Crossfade the screen briefly
 			}
 
 			return;
@@ -329,7 +329,6 @@ public partial class PlayerSkillController : Node3D
 		{
 			return; // Cooldown
 		}
-
 
 		/*
 		REFACTOR TODO Move to states.
@@ -360,11 +359,8 @@ public partial class PlayerSkillController : Node3D
 			timeBreakAnimator.Play("start");
 			Player.Effect.PlayVoice("time break");
 
-			/*
-			REFACTOR TODO Implement Motion Blur
 			Player.Camera.RequestMotionBlur();
 			Player.Animator.StartMotionBlur();
-			*/
 
 			BGMPlayer.SetStageMusicVolume(-80f);
 
@@ -376,11 +372,8 @@ public partial class PlayerSkillController : Node3D
 		else
 		{
 			timeBreakAnimator.Play("stop");
-			/*
-			REFACTOR TODO Implement Motion Blur
 			Player.Camera.UnrequestMotionBlur();
 			Player.Animator.StopMotionBlur();
-			*/
 
 			breakTimer = BreakSkillsCooldown;
 			BGMPlayer.SetStageMusicVolume(0f);
