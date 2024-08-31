@@ -40,6 +40,7 @@ public partial class PlayerCameraController : Node3D
 		if (Engine.IsEditorHint()) return;
 
 		Player = player;
+		PathFollower.Initialize(player);
 
 		// Apply default settings
 		CameraSettingsResource targetSettings = (StageSettings.instance?.InitialCameraSettings) ?? defaultSettings;
@@ -289,40 +290,34 @@ public partial class PlayerCameraController : Node3D
 			SnapFlag = false;
 	}
 
-	/// <summary> Angle to use when transforming from world space to camera space. </summary>
-	public float XformAngle { get; private set; }
 	/// <summary> Previous xform angle used right before the last camera change. </summary>
-	private float previousXformAngle;
+	private float cachedXFormAngle;
 	private float xformBlend = 1;
 	private readonly float XformSmoothing = 1.5f;
-	public float TransformAngle(float angle) => XformAngle + angle;
 
 	/// <summary> Starts blending the xform angle. </summary>
 	private void StartXformBlend()
 	{
 		xformBlend = 0;
-		previousXformAngle = XformAngle;
+		cachedXFormAngle = Player.Controller.XformAngle;
 	}
 
 	/// <summary> Blends xform angles for smoother inputs between camera cuts. </summary>
 	private void UpdateInputXForm(Basis cameraBasis)
 	{
-		float targetXformAngle = ExtensionMethods.CalculateForwardAngle(-cameraBasis.Z, cameraBasis.Y);
+		float targetXformAngle = ExtensionMethods.CalculateForwardAngle(cameraBasis.Z, cameraBasis.Y);
 
 		// Snap xform blend when no input is held
-		if (Mathf.IsZeroApprox(Player.Controller.GetInputStrength()))
-		/* REFACTOR TODO
-		 ||
+		if (Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) ||
 			(Player.State.IsLockoutActive &&
 			Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe &&
 			Mathf.IsZeroApprox(Player.Controller.InputHorizontal)))
-			*/
 		{
 			SnapXform();
 		}
 
 		xformBlend = Mathf.MoveToward(xformBlend, 1, XformSmoothing * PhysicsManager.physicsDelta);
-		XformAngle = Mathf.LerpAngle(previousXformAngle, targetXformAngle, xformBlend);
+		Player.Controller.XformAngle = Mathf.LerpAngle(cachedXFormAngle, targetXformAngle, xformBlend);
 	}
 
 	public void SnapXform() => xformBlend = 1;

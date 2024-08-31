@@ -25,15 +25,15 @@ public partial class PlayerInputController : Node
 
 	private float jumpBuffer;
 	public bool IsJumpBufferActive => !Mathf.IsZeroApprox(jumpBuffer);
+	private readonly float InputBufferLength = .2f;
 	public void ResetJumpBuffer() => jumpBuffer = 0;
 
 	private float actionBuffer;
 	public bool IsActionBufferActive => !Mathf.IsZeroApprox(actionBuffer);
 	public void ResetActionBuffer() => actionBuffer = 0;
 
-	private readonly float InputBufferLength = .2f;
-
-	public Vector2 CameraInputAxis { get; private set; }
+	/// <summary> Angle to use when transforming from world space to camera space. </summary>
+	public float XformAngle { get; set; }
 	public Vector2 InputAxis { get; private set; }
 	public float InputHorizontal { get; private set; }
 	public float InputVertical { get; private set; }
@@ -49,8 +49,6 @@ public partial class PlayerInputController : Node
 		InputAxis = Input.GetVector("move_left", "move_right", "move_up", "move_down", DeadZone);
 		InputHorizontal = Input.GetAxis("move_left", "move_right");
 		InputVertical = Input.GetAxis("move_up", "move_down");
-
-		CameraInputAxis = InputAxis; // TODO Update based on camera yaw rotation.
 
 		UpdateJumpBuffer();
 		UpdateActionBuffer();
@@ -93,7 +91,7 @@ public partial class PlayerInputController : Node
 			mode = GetAutomaticInputMode();
 
 		if (mode == InputMode.Camera)
-			return CameraInputAxis.AngleTo(Vector2.Down);
+			return InputAxis.Rotated(-XformAngle).AngleTo(Vector2.Down);
 
 		if (mode == InputMode.Path)
 			return InputAxis.Rotated(Player.PathFollower.ForwardAngle).AngleTo(Vector2.Down);
