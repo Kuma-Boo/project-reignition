@@ -30,8 +30,6 @@ public partial class RunState : PlayerState
 	/// <summary> Minimum speed needed to finish the braking animation. </summary>
 	private readonly float BrakeDeadzone = 5f;
 
-	private float turningVelocity;
-
 	public override bool ProcessOnEnter => true;
 	public override void EnterState()
 	{
@@ -88,6 +86,16 @@ public partial class RunState : PlayerState
 			return backstepState;
 
 		return null;
+	}
+
+	protected override void Accelerate(float targetMovementAngle)
+	{
+		base.Accelerate(targetMovementAngle);
+
+		if (!Player.Animator.IsBrakeAnimationActive)
+			return;
+
+		Player.Animator.StopBrake();
 	}
 
 	protected override void Turn(float targetMovementAngle, float turnSmoothing)

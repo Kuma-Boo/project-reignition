@@ -62,10 +62,10 @@ public partial class PlayerState : Node
 			return;
 		}
 
-		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
 		float inputAngle = Player.Controller.GetTargetInputAngle();
-		float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(inputAngle, targetMovementAngle));
-		if ((Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi) && !Mathf.IsZeroApprox(Player.MoveSpeed)) ||
+		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
+		float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle));
+		if ((Player.Controller.IsHoldingDirection(inputAngle, Player.MovementAngle + Mathf.Pi) && !Mathf.IsZeroApprox(Player.MoveSpeed)) ||
 			Input.IsActionPressed("button_brake")) // Turning around
 		{
 			Brake();
