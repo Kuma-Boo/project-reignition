@@ -39,7 +39,7 @@ public partial class BackstepState : PlayerState
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
 
-		if (ExtensionMethods.DotAngle(Player.MovementAngle, Player.PathFollower.ForwardAngle) > -.1f)
+		if (Player.Controller.GetHoldingDistance(Player.MovementAngle, Player.PathFollower.ForwardAngle) < 1.0f)
 			return runState;
 
 		if (Player.Controller.IsJumpBufferActive)
@@ -82,9 +82,6 @@ public partial class BackstepState : PlayerState
 			Player.MovementAngle = targetMovementAngle;
 			return;
 		}
-
-		if (!Player.Controller.IsHoldingDirection(targetMovementAngle, Player.PathFollower.BackAngle))
-			return;
 
 		// Use GroundSettings so backstep turning feels consistent with the run state
 		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);

@@ -48,6 +48,8 @@ public partial class PlayerInputController : Node
 
 	/// <summary> Maximum angle that counts as holding a direction. </summary>
 	private readonly float MaximumHoldDelta = Mathf.Pi * .4f;
+	/// <summary> Minimum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
+	private readonly float MinBackStepAngle = Mathf.Pi * .75f;
 
 	/// <summary> Maximum amount the player can turn when running at full speed. </summary>
 	public readonly float TurningDampingRange = Mathf.Pi * .35f;
@@ -147,11 +149,11 @@ public partial class PlayerInputController : Node
 		return deltaAngle <= MaximumHoldDelta;
 	}
 
-	/// <summary> Returns how far the player's input is from the reference angle, normalized to MaximumHoldDelta. </summary>
+	/// <summary> Returns how far the player's input is from the reference angle, normalized to MinBackStepAngle. </summary>
 	public float GetHoldingDistance(float inputAngle, float referenceAngle)
 	{
 		float deltaAngle = ExtensionMethods.DeltaAngleRad(referenceAngle, inputAngle);
-		return deltaAngle / MaximumHoldDelta;
+		return deltaAngle / MinBackStepAngle;
 	}
 
 	/// <summary>

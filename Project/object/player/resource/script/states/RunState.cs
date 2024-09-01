@@ -82,7 +82,7 @@ public partial class RunState : PlayerState
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
 
-		if (ExtensionMethods.DotAngle(Player.MovementAngle, Player.PathFollower.ForwardAngle) < -.1f)
+		if (Player.Controller.GetHoldingDistance(Player.MovementAngle, Player.PathFollower.ForwardAngle) >= 1.0f)
 			return backstepState;
 
 		return null;
@@ -134,8 +134,8 @@ public partial class RunState : PlayerState
 
 	private void ApplySpeedLoss(float targetMovementAngle)
 	{
-		float deltaAngle = Player.Controller.GetHoldingDistance(targetMovementAngle, Player.MovementAngle);
 		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
+		float deltaAngle = Player.Controller.GetHoldingDistance(targetMovementAngle, Player.MovementAngle);
 
 		// Calculate turn delta, relative to ground speed
 		float speedLossRatio = speedRatio * deltaAngle;
