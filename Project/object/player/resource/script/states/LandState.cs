@@ -22,10 +22,11 @@ public partial class LandState : PlayerState
 
 		Player.VerticalSpeed = 0;
 		Player.Lockon.IsMonitoring = false;
-		Player.Lockon.ResetLockonTarget();
+		Player.State.DisableAccelerationJump = false;
+
 		Player.Animator.LandingAnimation();
 		Player.Effect.PlayLandingFX();
-		Player.State.DisableAccelerationJump = false;
+
 		/*
 		REFACTOR TODO
 		if (allowLandingSkills && MovementState == MovementStates.Normal)
