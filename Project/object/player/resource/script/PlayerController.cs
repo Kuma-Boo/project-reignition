@@ -469,6 +469,10 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(automationState);
 	}
 
+	[Export]
+	private CountdownState countdownState;
+	public void OnCountdownStarted() => StateMachine.ChangeState(countdownState);
+
 	// REFACTOR TODO
 	[Signal]
 	public delegate void KnockbackEventHandler();

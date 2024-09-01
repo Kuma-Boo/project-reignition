@@ -14,6 +14,7 @@ public partial class CountdownState : PlayerState
 
 	public override void EnterState()
 	{
+		Player.Transform = Transform3D.Identity;
 		Player.PathFollower.Resync();
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 
