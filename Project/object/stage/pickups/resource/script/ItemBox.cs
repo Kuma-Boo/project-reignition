@@ -256,8 +256,8 @@ namespace Project.Gameplay.Objects
 
 			/*
 			REFACTOR TODO
-			if (Player.ActionState == PlayerController.ActionStates.JumpDash)
-				Player.Lockon.StartBounce();
+			if (Player.IsJumpDashOrHomingAttack)
+				Player.StartBounce();
 			*/
 
 			animator.Play("open");

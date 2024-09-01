@@ -86,9 +86,10 @@ namespace Project.Gameplay.Objects
 			/*
 			REFACTOR TODO
 			if (Player.ActionState != PlayerController.ActionStates.JumpDash) return false;
-
-			Player.Lockon.StartBounce();
 			*/
+
+			Player.StartBounce();
+
 			isTraveling = true;
 			animator.Play("strike");
 			return true;

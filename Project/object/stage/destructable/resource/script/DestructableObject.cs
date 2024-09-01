@@ -266,11 +266,11 @@ public partial class DestructableObject : Node3D
 		// Prioritize Jump Dash
 		/*
 		REFACTOR TODO
-		if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Player.ActionState == PlayerController.ActionStates.JumpDash)
+		if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Player.IsJumpDashOrHomingAttack)
 		{
 			Shatter();
 			if (bouncePlayerOnJumpDash)
-				Player.Lockon.StartBounce(snapPlayerOnBounce);
+				Player.StartBounce(snapPlayerOnBounce);
 		}
 		else 
 		*/

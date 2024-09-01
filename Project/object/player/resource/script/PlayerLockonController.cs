@@ -10,11 +10,13 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class PlayerLockonController : Node3D
 {
-	[Export]
-	private Area3D areaTrigger;
-
 	private PlayerController Player;
 	public void Initialize(PlayerController player) => Player = player;
+
+	[Export]
+	private Area3D areaTrigger;
+	public Array<Area3D> GetOverlappingAreas() => areaTrigger.GetOverlappingAreas();
+	public Array<Node3D> GetOverlappingBodies() => areaTrigger.GetOverlappingBodies();
 
 	/// <summary> Active lockon target shown on the HUD. </summary>
 	public Node3D Target { get; private set; }
@@ -74,19 +76,21 @@ public partial class PlayerLockonController : Node3D
 
 			float dst = activeTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
 
+			/* REFACTOR TODO Does this need to be here?
 			if (currentTarget != null)
 			{
-				// Ignore targets that are further from the current target
-				if (dst > closestDistance + DistanceFudgeAmount)
-					continue;
+			*/
+			// Ignore targets that are further from the current target
+			if (dst > closestDistance + DistanceFudgeAmount)
+				continue;
 
-				// Within fudge range, decide priority based on height
-				if (dst > closestDistance - DistanceFudgeAmount &&
-					activeTargets[i].GlobalPosition.Y <= currentTarget.GlobalPosition.Y)
-				{
-					continue;
-				}
+			// Within fudge range, decide priority based on height
+			if (dst > closestDistance - DistanceFudgeAmount &&
+				activeTargets[i].GlobalPosition.Y <= currentTarget.GlobalPosition.Y)
+			{
+				continue;
 			}
+			//}
 
 			// Update data
 			currentTarget = activeTargets[i];
@@ -149,10 +153,10 @@ public partial class PlayerLockonController : Node3D
 		{
 			return TargetState.PlayerBusy;
 		}
-
-		if (!t.IsVisibleInTree() || !Player.Camera.IsOnScreen(t.GlobalPosition)) // Not visible
-			return TargetState.Invisible;
 		*/
+
+		if (!target.IsVisibleInTree() || !Player.Camera.IsOnScreen(target.GlobalPosition)) // Not visible
+			return TargetState.Invisible;
 
 		if (HitObstacle(target))
 			return TargetState.HitObstacle;
@@ -222,9 +226,7 @@ public partial class PlayerLockonController : Node3D
 
 	public void ResetLockonTarget()
 	{
-		/* REFACTOR TODO
 		Player.Camera.LockonTarget = null;
-		*/
 
 		if (Target == null)
 			return;
@@ -255,76 +257,6 @@ public partial class PlayerLockonController : Node3D
 		else
 			lockonAnimator.Play("enable");
 	}
-
-	/* REFACTOR TODO
-	Move to separate movement state.
-	[Export]
-	public LockoutResource bounceLockoutSettings;
-	[Export]
-	public float bounceSpeed;
-	[Export]
-	public float bounceHeight;
-
-	/// <summary> Used to determine whether targeting is enabled or not. </summary>
-	private float bounceInterruptTimer;
-	/// <summary> Used to determine whether character's lockout is active. </summary>
-	public bool IsBounceLockoutActive => Player.ActiveLockoutData == bounceLockoutSettings;
-	public bool CanInterruptBounce { get; private set; }
-
-	public void UpdateBounce()
-	{
-		bounceInterruptTimer = Mathf.MoveToward(bounceInterruptTimer, 0, PhysicsManager.physicsDelta);
-		if (Mathf.IsZeroApprox(bounceInterruptTimer))
-		{
-			CanInterruptBounce = true;
-			UpdateLockonTargets();
-		}
-
-		Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, 0f, Player.Stats.GroundSettings.Friction * PhysicsManager.physicsDelta);
-		Player.VerticalSpeed -= Runtime.Gravity * PhysicsManager.physicsDelta;
-	}
-
-	public void StartBounce(bool bounceUpward = true) // Bounce the player
-	{
-		IsHomingAttacking = false;
-		CanInterruptBounce = false;
-		bounceInterruptTimer = bounceLockoutSettings.length - .5f;
-
-		if (bounceUpward && Target != null) // Snap the player to the target
-		{
-			Player.MoveSpeed = 0; // Reset speed
-
-			bool applySnapping = false;
-			if (!IsBounceLockoutActive)
-			{
-				if (Target is Area3D)
-					applySnapping = areaTrigger.GetOverlappingAreas().Contains(Target as Area3D);
-				else if (Target is PhysicsBody3D)
-					applySnapping = areaTrigger.GetOverlappingBodies().Contains(Target as PhysicsBody3D);
-			}
-
-			// Only snap when target being hit is correct
-			if (applySnapping)
-				Player.GlobalPosition = Target.GlobalPosition;
-		}
-		else // Only bounce the player backwards if bounceUpward is false
-		{
-			Player.MoveSpeed = -bounceSpeed;
-		}
-
-		if (IsBounceLockoutActive) return;
-
-		Player.CanJumpDash = true;
-		Player.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
-		Player.MovementAngle = Player.PathFollower.ForwardAngle;
-		Player.AddLockoutData(bounceLockoutSettings);
-		Player.ResetActionState();
-
-		Player.Animator.ResetState(0.1f);
-		Player.Animator.BounceTrick();
-		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
-	}
-	*/
 
 	// Targeting areas on the lockon layer
 	public void OnTargetTriggerEnter(Area3D area)

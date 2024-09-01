@@ -75,7 +75,7 @@ namespace Project.Gameplay.Objects
 
 			/*
 			REFACTOR TODO
-			if (Player.ActionState == PlayerController.ActionStates.JumpDash)
+			if (Player.IsJumpDashOrHomingAttack)
 			{
 				// Copied from Enemy.cs UpdateLockon method
 				if (Player.Lockon.IsHomingAttacking)

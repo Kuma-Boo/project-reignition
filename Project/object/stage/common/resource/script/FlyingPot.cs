@@ -123,7 +123,6 @@ public partial class FlyingPot : Node3D
 
 		Player.Skills.IsSpeedBreakEnabled = false; // Disable speed break
 
-		// REFACTOR TODO Player.Lockon.StopHomingAttack();
 		Player.Connect(PlayerController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredPot), (uint)ConnectFlags.OneShot);
 
 		// Update camera

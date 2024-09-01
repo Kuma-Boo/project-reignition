@@ -28,11 +28,8 @@ namespace Project.Gameplay
 
 			animator.Play("drop");
 
-			/*
-			REFACTOR TODO
-			if (Player.ActionState == PlayerController.ActionStates.JumpDash)
-				Player.Lockon.StartBounce(false);
-			*/
+			if (Player.IsJumpDashOrHomingAttack)
+				Player.StartBounce(false);
 		}
 
 		public void OnEntered(Area3D a)

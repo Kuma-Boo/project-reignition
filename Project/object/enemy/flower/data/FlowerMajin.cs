@@ -138,7 +138,7 @@ public partial class FlowerMajin : Enemy
 		{
 			if (Player.Lockon.IsHomingAttacking)
 			{
-				// REFACTOR TODO Player.Lockon.StartBounce(false);
+				// REFACTOR TODO Player.StartBounce(false);
 				UpdateLockon();
 
 				if (weakDefense)
@@ -157,7 +157,7 @@ public partial class FlowerMajin : Enemy
 		if (!IsStaggered && Player.AttackState == PlayerController.AttackStates.None)
 		{
 			StartStaggerState();
-			// REFACTOR TODO Player.Lockon.StartBounce(false);
+			// REFACTOR TODO Player.StartBounce(false);
 			UpdateLockon();
 			return;
 		}

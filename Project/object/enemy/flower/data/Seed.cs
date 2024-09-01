@@ -43,11 +43,11 @@ public partial class Seed : Area3D
 		Explode();
 
 		/* REFACTOR TODO 
-		if (Player.ActionState == PlayerController.ActionStates.JumpDash ||
+		if (Player.IsJumpDashOrHomingAttack ||
 			Player.Lockon.IsHomingAttacking ||
 			Player.Lockon.IsBounceLockoutActive)
 		{
-			Player.Lockon.StartBounce();
+			Player.StartBounce();
 			return;
 		}
 		*/

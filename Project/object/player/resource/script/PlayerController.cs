@@ -430,14 +430,20 @@ public partial class PlayerController : CharacterBody3D
 
 	#region State
 	public bool CanJumpDash { get; set; }
+	public bool IsJumpDashing { get; set; }
+	public bool IsJumpDashOrHomingAttack => IsJumpDashing || Lockon.IsHomingAttacking;
 	public bool DisableAccelerationJump { get; set; }
 	public bool AllowSidle { get; set; }
 	public bool IsInvincible { get; set; }
 	public bool IsDefeated { get; set; }
 
+	[ExportGroup("States")]
+	[Export]
+	private CountdownState countdownState;
+	public void StartCountdown() => StateMachine.ChangeState(countdownState);
+
 	[Signal]
 	public delegate void LaunchFinishedEventHandler();
-	[ExportGroup("States")]
 	[Export]
 	public LaunchState launchState;
 	public void StartLauncher(LaunchSettings settings)
@@ -470,8 +476,13 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	[Export]
-	private CountdownState countdownState;
-	public void OnCountdownStarted() => StateMachine.ChangeState(countdownState);
+	private BounceState bounceState;
+	public bool IsBouncing => IsLockoutActive && ActiveLockoutData == bounceState.LockoutSettings;
+	public void StartBounce(bool isUpwardBounce = true)
+	{
+		bounceState.IsUpwardBounce = isUpwardBounce;
+		StateMachine.ChangeState(bounceState);
+	}
 
 	// REFACTOR TODO
 	[Signal]
@@ -531,7 +542,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public void UpdateExternalControl(bool autoResync = false)
 	{
-		GD.PushWarning("External Controllers used to check the ground. Be sure this functionality is recreated when needed.");
+		CheckGround();
 
 		if (ExternalParent != null)
 		{

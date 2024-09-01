@@ -21,8 +21,8 @@ namespace Project.Gameplay.Objects
 			REFACTOR TODO
 			if (!Player.Skills.IsSpeedBreakActive && Player.ActionState != PlayerController.ActionStates.JumpDash) return;
 
-			if (Player.ActionState == PlayerController.ActionStates.JumpDash) // Bounce the player if necessary
-				Player.Lockon.StartBounce();
+			if (Player.IsJumpDashOrHomingAttack) // Bounce the player if necessary
+				Player.StartBounce();
 			*/
 			eventHandler.Activate();
 		}

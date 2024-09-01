@@ -170,9 +170,6 @@ public partial class Enemy : Node3D
 
 	public virtual void UpdateLockon()
 	{
-		if (Player.Lockon.IsHomingAttacking)
-			Player.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
-
 		if (!IsDefeated)
 			Player.Camera.SetDeferred("LockonTarget", Hurtbox);
 	}
@@ -272,16 +269,12 @@ public partial class Enemy : Node3D
 				break;
 		}
 
-		/*
-		REFACTOR TODO
-		if (Player.ActionState == PlayerController.ActionStates.JumpDash)
+		if (Player.IsJumpDashOrHomingAttack)
 		{
 			UpdateLockon();
-			Player.Lockon.StartBounce(IsDefeated);
+			Player.StartBounce(IsDefeated);
 		}
-		else
-		*/
-		if (damagePlayer && Player.AttackState == PlayerController.AttackStates.None)
+		else if (damagePlayer && Player.AttackState == PlayerController.AttackStates.None)
 		{
 			Player.StartKnockback();
 		}

@@ -26,6 +26,7 @@ public partial class JumpDashState : PlayerState
 		else // Don't allow jumpdashing backwards (sideways is OK though)
 			Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, Mathf.Pi * .5f);
 
+		Player.IsJumpDashing = true;
 		Player.IsMovingBackward = false; // Can't jumpdash backwards!
 		Player.MoveSpeed = jumpDashSpeed;
 		Player.VerticalSpeed = jumpDashPower;
@@ -55,6 +56,7 @@ public partial class JumpDashState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.IsJumpDashing = false;
 		Player.Effect.StopTrailFX();
 	}
 
