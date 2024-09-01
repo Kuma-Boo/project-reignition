@@ -10,9 +10,9 @@ public partial class PlayerInputController : Node
 
 	[Export]
 	private Curve InputCurve { get; set; }
-	public float GetInputStrength()
+	public float GetInputStrength(bool axisOnly = false)
 	{
-		if (Input.IsActionPressed("button_brake"))
+		if (!axisOnly && Input.IsActionPressed("button_brake"))
 			return 0;
 
 		float inputLength = InputAxis.Length();

@@ -184,20 +184,16 @@ public partial class GrindState : PlayerState
 
 		// Check if the player is holding a direction parallel to rail and start a grindstep
 		float targetInputAngle = Player.Controller.GetTargetInputAngle();
-		bool isGrindstepping = !Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) &&
+		Player.State.IsGrindstepping = !Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) &&
 			(Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle + (Mathf.Pi * .5f)) ||
 			Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle - (Mathf.Pi * .5f)));
 
-		if (isGrindstepping) // Grindstepping
-		{
-			// Player.StartGrindstep();
+		if (Player.State.IsGrindstepping)
 			return grindstepState;
-		}
-		else // Jump normally
-		{
-			Player.State.DisableAccelerationJump = true;
-			return jumpState;
-		}
+
+		// Jump normally
+		Player.State.DisableAccelerationJump = true;
+		return jumpState;
 	}
 
 	private float currentCharge;

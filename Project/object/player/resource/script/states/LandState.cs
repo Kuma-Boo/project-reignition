@@ -27,6 +27,7 @@ public partial class LandState : PlayerState
 		if (Player.State.IsGrinding)
 			return;
 
+		Player.State.IsGrindstepping = false;
 		Player.State.AllowLandingGrind = false;
 		Player.Animator.LandingAnimation();
 		Player.Effect.PlayLandingFX();

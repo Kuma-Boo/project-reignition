@@ -533,9 +533,7 @@ public partial class PlayerAnimator : Node3D
 	/// </summary>
 	private void UpdateVisualRotation()
 	{
-		/* REFACTOR TODO
-		if (Player.ActionState == PlayerController.ActionStates.Grindstep) return; // Use the same angle as the grindrail
-		*/
+		if (Player.State.IsGrindstepping) return; // Use the same angle as the grindrail
 
 		// Don't update directions when externally controlled or on launchers
 		float targetRotation = Player.MovementAngle;
