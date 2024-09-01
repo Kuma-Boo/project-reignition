@@ -100,13 +100,13 @@ public partial class RunState : PlayerState
 
 	protected override void Turn(float targetMovementAngle, float turnSmoothing)
 	{
-		if (IsSpeedLossActive(targetMovementAngle))
+		if (IsSpeedLossActive())
 			ApplySpeedLoss(targetMovementAngle);
 
 		base.Turn(targetMovementAngle, turnSmoothing);
 	}
 
-	private bool IsSpeedLossActive(float targetMovementAngle)
+	private bool IsSpeedLossActive()
 	{
 		// Speedbreak is overriding speed
 		if (Player.Skills.IsSpeedBreakActive) return false;
@@ -115,7 +115,7 @@ public partial class RunState : PlayerState
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun)) return false;
 
 		// Don't apply turning speed loss when moving quickly and holding the direction of the pathfollower
-		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.PathFollower.ForwardAngle) &&
+		if (Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle) &&
 			Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed) > .5f)
 		{
 			return false;

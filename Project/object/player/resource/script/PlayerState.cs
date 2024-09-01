@@ -64,7 +64,6 @@ public partial class PlayerState : Node
 
 		float inputAngle = Player.Controller.GetTargetInputAngle();
 		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
-		float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle));
 		if ((Player.Controller.IsHoldingDirection(inputAngle, Player.MovementAngle + Mathf.Pi) && !Mathf.IsZeroApprox(Player.MoveSpeed)) ||
 			Input.IsActionPressed("button_brake")) // Turning around
 		{
@@ -73,9 +72,11 @@ public partial class PlayerState : Node
 		}
 
 		if (Player.State.IsLockoutActive && Player.State.ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.PathFollower) // Zipper exception
-			inputStrength *= Mathf.Clamp(inputDot + .5f, 0, 1f); // Arbitrary math to make it easier to maintain speed
-		else if (inputDot < .8f) // Slow down while turning
-			inputStrength *= inputDot;
+		{
+			// Arbitrary math to make it easier to maintain speed
+			float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle));
+			inputStrength *= Mathf.Clamp(inputDot + .5f, 0, 1f);
+		}
 
 		Accelerate(inputStrength);
 	}
@@ -84,6 +85,7 @@ public partial class PlayerState : Node
 
 	protected virtual void Accelerate(float inputStrength)
 	{
+		GD.Print(inputStrength);
 		if (Player.MoveSpeed < Player.Stats.BackstepSettings.Speed) // Accelerate faster when at low speeds
 			Player.MoveSpeed = Mathf.Lerp(Player.MoveSpeed, ActiveMovementSettings.Speed * ActiveMovementSettings.GetSpeedRatio(Player.Stats.BackstepSettings.Speed), .05f * inputStrength);
 
@@ -131,11 +133,9 @@ public partial class PlayerState : Node
 		targetMovementAngle = ProcessTargetMovementAngle(targetMovementAngle);
 
 		// Normal turning
-
 		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, Player.PathFollower.ForwardAngle);
 		float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, Player.PathFollower.ForwardAngle);
 		bool isRecentering = Player.Controller.IsRecentering(movementDeltaAngle, inputDeltaAngle);
-		//bool isTurningAround = !IsHoldingDirection(Player.PathFollower.BackAngle) && Player.Controller.IsRecentering(movementDeltaAngle, inputDeltaAngle);
 		float maxTurnAmount = isRecentering ? Player.Stats.RecenterTurnAmount : Player.Stats.MaxTurnAmount;
 
 		float turnSmoothing = Mathf.Lerp(Player.Stats.MinTurnAmount, maxTurnAmount, speedRatio);

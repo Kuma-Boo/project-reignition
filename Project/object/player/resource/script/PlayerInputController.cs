@@ -48,7 +48,7 @@ public partial class PlayerInputController : Node
 	public float InputVertical { get; private set; }
 
 	/// <summary> Maximum angle that counts as holding a direction. </summary>
-	private readonly float MaximumHoldDelta = Mathf.Pi * .4f;
+	private readonly float MaximumHoldDelta = Mathf.Pi * .45f;
 	/// <summary> Minimum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 	private readonly float MinBackStepAngle = Mathf.Pi * .6f;
 
@@ -147,7 +147,7 @@ public partial class PlayerInputController : Node
 	/// <summary> Checks whether the player is holding a particular direction. </summary>
 	public bool IsHoldingDirection(float inputAngle, float referenceAngle)
 	{
-		float deltaAngle = ExtensionMethods.DeltaAngleRad(referenceAngle, inputAngle);
+		float deltaAngle = ExtensionMethods.DeltaAngleRad(inputAngle, referenceAngle);
 		return deltaAngle <= MaximumHoldDelta;
 	}
 
@@ -166,8 +166,8 @@ public partial class PlayerInputController : Node
 		if (!Runtime.Instance.IsUsingController || !IsHoldingDirection(inputAngle, referenceAngle))
 			return inputAngle;
 
-		float deltaAngle = ExtensionMethods.DeltaAngleRad(referenceAngle, inputAngle);
-		if (deltaAngle < TurningDampingRange)
+		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(inputAngle, referenceAngle);
+		if (Mathf.Abs(deltaAngle) < TurningDampingRange)
 			inputAngle -= deltaAngle * .5f;
 
 		return inputAngle;
