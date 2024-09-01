@@ -138,7 +138,7 @@ public partial class FlowerMajin : Enemy
 		{
 			if (Player.Lockon.IsHomingAttacking)
 			{
-				// REFACTOR TODO Player.StartBounce(false);
+				Player.StartBounce(false);
 				UpdateLockon();
 
 				if (weakDefense)

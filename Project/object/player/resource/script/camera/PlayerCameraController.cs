@@ -73,10 +73,8 @@ public partial class PlayerCameraController : Node3D
 		// Don't update the camera when the player is defeated from a DeathTrigger
 		if (IsDefeatFreezeActive)
 		{
-			/* REFACTOR TODO
 			if (Player.IsDefeated)
 				return;
-			*/
 
 			IsDefeatFreezeActive = false;
 		}
@@ -96,7 +94,7 @@ public partial class PlayerCameraController : Node3D
 	public bool IsDefeatFreezeActive { get; set; }
 	/// <summary> Used to focus onto multi-HP enemies, bosses, etc. Not to be confused with CharacterLockon.Target. </summary>
 	public Node3D LockonTarget { get; set; }
-	private bool IsLockonCameraActive => LockonTarget != null || Player.Lockon.IsHomingAttacking; // REFACTOR TODO || Player.Lockon.IsBounceLockoutActive;
+	private bool IsLockonCameraActive => LockonTarget != null || Player.Lockon.IsHomingAttacking || Player.IsBouncing;
 	/// <summary> [0 -> 1] ratio of how much to use the lockon camera. </summary>
 	private float lockonBlend;
 	private float lockonBlendVelocity;

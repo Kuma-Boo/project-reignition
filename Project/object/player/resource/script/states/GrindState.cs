@@ -62,12 +62,6 @@ public partial class GrindState : PlayerState
 		// Reset FX
 		Player.Effect.StartGrindFX(true);
 		Player.Lockon.IsMonitoring = false;
-
-		/*
-		REFACTOR TODO
-		ActiveGrindRail.Connect(PlayerController.SignalName.Knockback, new Callable(this, GrindRail.MethodName.Deactivate));
-		ActiveGrindRail.Connect(PlayerController.SignalName.ExternalControlCompleted, new Callable(this, GrindRail.MethodName.Deactivate));
-		*/
 	}
 
 	public override void ExitState()
@@ -89,13 +83,6 @@ public partial class GrindState : PlayerState
 
 		ActiveGrindRail.Deactivate();
 		ActiveGrindRail = null;
-
-		// Disconnect signals
-		/*
-		REFACTOR TODO
-		Player.Disconnect(PlayerController.SignalName.Knockback, new Callable(this, MethodName.Deactivate));
-		Player.Disconnect(PlayerController.SignalName.ExternalControlCompleted, new Callable(this, MethodName.Deactivate));
-		*/
 	}
 
 	public override PlayerState ProcessPhysics()

@@ -68,6 +68,7 @@ public partial class KnockbackState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.Animator.ResetState();
 	}
 
 	public override PlayerState ProcessPhysics()

@@ -93,6 +93,7 @@ public partial class PlayerState : Node
 
 	protected virtual void Brake() => Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, -1);
 
+	protected float strafeBlend;
 	protected float turningVelocity;
 	protected virtual void ProcessTurning()
 	{
@@ -141,20 +142,21 @@ public partial class PlayerState : Node
 		Player.MovementAngle += pathControlAmount;
 		Turn(targetMovementAngle, turnSmoothing);
 
-		/*
 		// Strafe implementation
 		if (isUsingStrafeControls)
-		{
-			if (Player.Controller.InputVector.IsZeroApprox())
-				strafeBlend = Mathf.MoveToward(strafeBlend, 1.0f, PhysicsManager.physicsDelta);
-			else
-				strafeBlend = 0;
+			ProcessStrafe(targetMovementAngle);
+	}
 
-			if (!isPathDeltaLockoutActive)
-				MovementAngle += PathFollower.DeltaAngle;
-			MovementAngle = Mathf.LerpAngle(MovementAngle, targetMovementAngle, strafeBlend);
-		}
-		*/
+	protected virtual void ProcessStrafe(float targetMovementAngle)
+	{
+		if (Mathf.IsZeroApprox(Player.Controller.GetInputStrength()))
+			strafeBlend = Mathf.MoveToward(strafeBlend, 1.0f, PhysicsManager.physicsDelta);
+		else
+			strafeBlend = 0;
+
+		if (!Player.IsLockoutActive)
+			Player.MovementAngle += Player.PathFollower.DeltaAngle;
+		Player.MovementAngle = Mathf.LerpAngle(Player.MovementAngle, targetMovementAngle, strafeBlend);
 	}
 
 	protected virtual void Turn(float targetMovementAngle, float smoothing) => Player.MovementAngle = ExtensionMethods.SmoothDampAngle(Player.MovementAngle, targetMovementAngle, ref turningVelocity, smoothing);

@@ -242,15 +242,8 @@ public partial class Enemy : Node3D
 		if (IsInteractionProcessed)
 			return;
 
-		/*
-		REFACTOR TODO
-		if ((Player.Lockon.IsBounceLockoutActive &&
-			Player.ActionState == PlayerController.ActionStates.Normal) ||
-			!IsHitboxEnabled)
-		{
+		if (Player.IsBouncing || !IsHitboxEnabled)
 			return;
-		}
-		*/
 
 		switch (Player.AttackState)
 		{

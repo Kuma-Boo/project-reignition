@@ -16,7 +16,7 @@ public partial class PlayerSkillController : Node3D
 
 		// Determine the size of the soul gauge
 		MaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
-		timeBreakAnimator.Play("RESET");
+		GD.Print(MaxSoulPower);
 
 		SetUpSkills();
 	}
@@ -43,7 +43,7 @@ public partial class PlayerSkillController : Node3D
 		Runtime.Instance.UpdatePearlCollisionShapes(SkillRing.IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
 
 		InitializeCrestSkills();
-		//Update crest of flame's trail color
+		// Update crest of flame's trail color
 		Player.Effect.UpdateTrailHueShift(AllowCrestSkill && SkillRing.IsSkillEquipped(SkillKey.CrestFire) ? CrestOfFlameHueOffset : 0f);
 		speedbreakOverlayMaterial.SetShaderParameter(SpeedbreakOverlayOpacityKey, 0);
 	}
@@ -240,7 +240,7 @@ public partial class PlayerSkillController : Node3D
 	private const float BreakSkillsCooldown = 1f; // Prevent skill spam
 	private readonly string SpeedbreakOverlayOpacityKey = "opacity";
 
-	public void UpdateSoulSkills()
+	public void ProcessPhysics()
 	{
 		if (DebugManager.Instance.InfiniteSoulGauge) // Max out the soul gauge
 			ModifySoulGauge(MaxSoulPower);
@@ -276,8 +276,6 @@ public partial class PlayerSkillController : Node3D
 			if (breakTimer != 0) return; // Cooldown
 		}
 
-		/*
-		REFACTOR TODO Move to states.
 		if (Input.IsActionJustPressed("button_timebreak") && !IsSpeedBreakActive)
 		{
 			if (!IsTimeBreakEnabled) return;
@@ -286,7 +284,6 @@ public partial class PlayerSkillController : Node3D
 
 			ToggleTimeBreak();
 		}
-		*/
 	}
 
 	private void UpdateSpeedBreak()
@@ -329,21 +326,20 @@ public partial class PlayerSkillController : Node3D
 			return; // Cooldown
 		}
 
-		/*
-		REFACTOR TODO Move to states.
-
 		// Check whether we can start speed break
 		if (Input.IsActionJustPressed("button_speedbreak") && !IsTimeBreakActive)
 		{
 			if (!IsSoulGaugeCharged) return;
 			if (!IsSpeedBreakEnabled) return;
+			/*
+			REFACTOR TODO
 			if (Player.MovementState == PlayerController.MovementStates.Launcher) return; // Can't speed break during launchers
 			if (Player.ActionState == PlayerController.ActionStates.Teleport) return; // Can't speed break during teleports
+			*/
 			if (!Player.IsOnGround || Player.IsDefeated) return;
 
 			ToggleSpeedBreak();
 		}
-		*/
 	}
 
 	public void ToggleTimeBreak()
@@ -382,9 +378,7 @@ public partial class PlayerSkillController : Node3D
 
 	public void ToggleSpeedBreak()
 	{
-		/*
-		REFACTOR TODO
-		Player.ResetActionState();
+		//Player.ResetActionState();
 
 		IsSpeedBreakActive = !IsSpeedBreakActive;
 		SoundManager.IsBreakChannelMuted = IsSpeedBreakActive;
@@ -412,7 +406,7 @@ public partial class PlayerSkillController : Node3D
 			speedBreakSFX.Stream = speedBreakDeactivate;
 			speedBreakSFX.Play();
 
-			Player.MoveSpeed = GroundSettings.Speed; // Override speed
+			Player.MoveSpeed = Player.Stats.GroundSettings.Speed; // Override speed
 			Player.CollisionMask = normalCollisionMask; // Reset collision layer
 			Player.AttackState = PlayerController.AttackStates.None;
 			Player.ChangeHitbox("RESET");
@@ -421,8 +415,6 @@ public partial class PlayerSkillController : Node3D
 		}
 
 		HeadsUpDisplay.instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);
-
-		*/
 	}
 
 	public void DisableBreakSkills() => IsTimeBreakEnabled = IsSpeedBreakEnabled = false;

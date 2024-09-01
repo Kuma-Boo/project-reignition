@@ -107,41 +107,78 @@ public partial class PlayerInputController : Node
 
 	private float CalculateLockoutForwardAngle(float inputAngle)
 	{
+		if (Player.Skills.IsSpeedBreakCharging)
+			return Player.PathFollower.ForwardAngle;
+
 		LockoutResource resource = Player.ActiveLockoutData;
-		if (!Player.IsLockoutOverridingMovementAngle) // Return early when LockoutResource doesn't override inputAngle
+		if (Player.IsLockoutOverridingMovementAngle) // Return early when LockoutResource doesn't override inputAngle
 		{
-			if (Mathf.IsZeroApprox(GetInputStrength()))
-				return Player.MovementAngle;
-
-			return inputAngle;
-		}
-
-		float forwardAngle = Player.ActiveLockoutData.movementAngle;
-		switch (resource.spaceMode)
-		{
-			case LockoutResource.SpaceModes.Local:
-				forwardAngle += Player.MovementAngle;
-				break;
-			case LockoutResource.SpaceModes.Camera:
-				forwardAngle += XformAngle;
-				break;
-			case LockoutResource.SpaceModes.PathFollower:
-				forwardAngle += Player.PathFollower.ForwardAngle;
-				break;
-		}
-
-		if (resource.allowReversing)
-		{
-			float backwardsAngle = forwardAngle + Mathf.Pi;
-			if (Player.IsMovingBackward ||
-				(Mathf.IsZeroApprox(Player.MoveSpeed) &&
-				IsHoldingDirection(inputAngle, backwardsAngle)))
+			float forwardAngle = Player.ActiveLockoutData.movementAngle;
+			switch (resource.spaceMode)
 			{
-				return backwardsAngle;
+				case LockoutResource.SpaceModes.Local:
+					forwardAngle += Player.MovementAngle;
+					break;
+				case LockoutResource.SpaceModes.Camera:
+					forwardAngle += XformAngle;
+					break;
+				case LockoutResource.SpaceModes.PathFollower:
+					forwardAngle += Player.PathFollower.ForwardAngle;
+					break;
 			}
+
+			if (resource.allowReversing)
+			{
+				float backwardsAngle = forwardAngle + Mathf.Pi;
+				if (Player.IsMovingBackward ||
+					(Mathf.IsZeroApprox(Player.MoveSpeed) &&
+					IsHoldingDirection(inputAngle, backwardsAngle)))
+				{
+					return backwardsAngle;
+				}
+			}
+
+			return forwardAngle;
 		}
 
-		return forwardAngle;
+		if (Player.Skills.IsSpeedBreakActive)
+			return GetStrafeAngle();
+
+		if (Mathf.IsZeroApprox(GetInputStrength()))
+			return Player.MovementAngle;
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
+			return GetStrafeAngle(true);
+
+		return inputAngle;
+	}
+
+	private float GetStrafeAngle(bool allowBackstep = false)
+	{
+		CameraSettingsResource.ControlModeEnum controlMode = Player.Camera.ActiveSettings.controlMode;
+		Vector2 inputs = InputAxis;
+
+		if (controlMode == CameraSettingsResource.ControlModeEnum.Sidescrolling)
+			GD.PushWarning("Sidescrolling Control Mode Hasn't Been Implemented!");
+
+		if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
+			inputs.X *= -1;
+
+		float baseAngle = Player.PathFollower.ForwardAngle;
+		if (allowBackstep && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun)) // Check for backstep
+		{
+			if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
+				inputs.Y *= -1;
+
+			if (inputs.Y > SaveManager.Config.deadZone)
+				baseAngle = Player.PathFollower.BackAngle;
+		}
+
+		float strafeAngle = inputs.X * TurningDampingRange;
+		if (Player.IsMovingBackward)
+			strafeAngle *= -1;
+
+		return baseAngle - strafeAngle;
 	}
 
 	/// <summary> Checks whether the player is holding a particular direction. </summary>

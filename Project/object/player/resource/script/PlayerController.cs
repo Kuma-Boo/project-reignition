@@ -34,6 +34,7 @@ public partial class PlayerController : CharacterBody3D
 
 		Controller.Initialize(this);
 		Stats.Initialize();
+		Skills.Initialize(this);
 		Lockon.Initialize(this);
 		Animator.Initialize(this);
 		Effect.Initialize(this);
@@ -54,6 +55,7 @@ public partial class PlayerController : CharacterBody3D
 		UpdateInvincibility();
 		UpdateRecenter();
 
+		Skills.ProcessPhysics();
 		Lockon.ProcessPhysics();
 		Animator.ProcessPhysics();
 		PathFollower.Resync();
