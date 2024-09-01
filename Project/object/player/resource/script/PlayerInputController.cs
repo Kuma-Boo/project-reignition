@@ -15,16 +15,17 @@ public partial class PlayerInputController : Node
 		if (Input.IsActionPressed("button_brake"))
 			return 0;
 
-		if (Player.State.IsLockoutActive && Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace)
-		{
-			float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(GetTargetInputAngle(), GetTargetMovementAngle()));
-			if (!Player.Controller.InputAxis.IsZeroApprox() && inputDot < .2f) // Fixes player holding perpendicular to target direction
-				return 0;
-		}
-
 		float inputLength = InputAxis.Length();
 		if (inputLength <= DeadZone)
 			inputLength = 0;
+
+		if (Player.State.IsLockoutActive && Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace)
+		{
+			float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(GetTargetInputAngle(), GetTargetMovementAngle()));
+			if (!Mathf.IsZeroApprox(inputLength) && inputDot < .2f) // Fixes player holding perpendicular to target direction
+				return 0;
+		}
+
 		return InputCurve.Sample(inputLength);
 	}
 
@@ -49,7 +50,7 @@ public partial class PlayerInputController : Node
 	/// <summary> Maximum angle that counts as holding a direction. </summary>
 	private readonly float MaximumHoldDelta = Mathf.Pi * .4f;
 	/// <summary> Minimum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
-	private readonly float MinBackStepAngle = Mathf.Pi * .75f;
+	private readonly float MinBackStepAngle = Mathf.Pi * .6f;
 
 	/// <summary> Maximum amount the player can turn when running at full speed. </summary>
 	public readonly float TurningDampingRange = Mathf.Pi * .35f;
@@ -133,7 +134,8 @@ public partial class PlayerInputController : Node
 		{
 			float backwardsAngle = forwardAngle + Mathf.Pi;
 			if (Player.IsMovingBackward ||
-				(Mathf.IsZeroApprox(Player.MoveSpeed) && IsHoldingDirection(inputAngle, backwardsAngle)))
+				(Mathf.IsZeroApprox(Player.MoveSpeed) &&
+				IsHoldingDirection(inputAngle, backwardsAngle)))
 			{
 				return backwardsAngle;
 			}

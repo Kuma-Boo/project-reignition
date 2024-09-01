@@ -43,8 +43,10 @@ public partial class IdleState : PlayerState
 		float inputStrength = Player.Controller.GetInputStrength();
 		if (!Mathf.IsZeroApprox(inputStrength))
 		{
-			float inputDot = ExtensionMethods.DotAngle(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle);
-			return inputDot >= -0.5f ? runState : backstepState;
+			if (Player.Controller.GetHoldingDistance(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle) >= 1.0f)
+				return backstepState;
+
+			return runState;
 		}
 
 		return null;
