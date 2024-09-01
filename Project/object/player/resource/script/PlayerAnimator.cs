@@ -334,13 +334,10 @@ public partial class PlayerAnimator : Node3D
 
 		float referenceAngle = Player.IsMovingBackward ? Player.PathFollower.ForwardAngle : Player.MovementAngle;
 		float inputAngle = Player.PathFollower.DeltaAngle * PathTurnStrength;
-		/*
-		if (Player.IsLockoutActive && Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace)
+		if (Player.State.IsLockoutOverridingMovementAngle)
 			inputAngle += referenceAngle;
 		else
-		*/
-		if (!Mathf.IsZeroApprox(Player.Controller.GetInputStrength()))
-			inputAngle += Player.Controller.GetTargetMovementAngle();
+			inputAngle = Player.Controller.GetTargetMovementAngle();
 
 		float delta = ExtensionMethods.SignedDeltaAngleRad(referenceAngle, inputAngle);
 		if (ExtensionMethods.DotAngle(referenceAngle, inputAngle) < 0) // Input is backwards

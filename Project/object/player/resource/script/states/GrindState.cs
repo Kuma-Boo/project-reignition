@@ -60,6 +60,7 @@ public partial class GrindState : PlayerState
 
 		// Reset FX
 		Player.Effect.StartGrindFX(true);
+		Player.Lockon.IsMonitoring = false;
 
 		/*
 		REFACTOR TODO
@@ -171,12 +172,6 @@ public partial class GrindState : PlayerState
 		{
 			return false;
 		}
-
-		/*
-		REFACTOR TODO?
-		if (Player.Lockon.IsHomingAttacking) // Cancel any active homing attack
-			Player.Lockon.StopHomingAttack();
-		*/
 
 		return true;
 	}
