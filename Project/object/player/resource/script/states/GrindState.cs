@@ -103,11 +103,8 @@ public partial class GrindState : PlayerState
 		UpdateCharge();
 
 		// Jumping off rail can only happen when not shuffling
-		GD.PrintT(!Player.Animator.IsBalanceShuffleActive, Player.Controller.IsJumpBufferActive);
 		if (!Player.Animator.IsBalanceShuffleActive && Player.Controller.IsJumpBufferActive)
-		{
 			return ProcessJump();
-		}
 
 		if (Mathf.IsEqualApprox(ActiveGrindRail.PathFollower.ProgressRatio, 1) || Mathf.IsZeroApprox(Player.MoveSpeed)) // Disconnect from the rail
 			return fallState;
