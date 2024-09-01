@@ -85,7 +85,6 @@ public partial class PlayerState : Node
 
 	protected virtual void Accelerate(float inputStrength)
 	{
-		GD.Print(inputStrength);
 		if (Player.MoveSpeed < Player.Stats.BackstepSettings.Speed) // Accelerate faster when at low speeds
 			Player.MoveSpeed = Mathf.Lerp(Player.MoveSpeed, ActiveMovementSettings.Speed * ActiveMovementSettings.GetSpeedRatio(Player.Stats.BackstepSettings.Speed), .05f * inputStrength);
 
