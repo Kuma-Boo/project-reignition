@@ -401,7 +401,7 @@ public partial class Majin : Enemy
 		staggerTimer = StaggerLength;
 		DisableFlameAttack();
 
-		if (Player.State.AttackState == PlayerStateController.AttackStates.None)
+		if (Player.AttackState == PlayerController.AttackStates.None)
 		{
 			AnimationTree.Set(HitTransition, BoopState);
 		}

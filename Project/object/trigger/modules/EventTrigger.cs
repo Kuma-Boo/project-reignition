@@ -162,10 +162,10 @@ public partial class EventTrigger : StageTriggerModule
 		if (Engine.IsEditorHint())
 			return;
 
-		if (playerStandin == null || Player.State.ExternalController != this)
+		if (playerStandin == null || Player.ExternalController != this)
 			return;
 
-		Player.State.UpdateExternalControl();
+		Player.UpdateExternalControl();
 	}
 
 	public override void Respawn()
@@ -234,7 +234,7 @@ public partial class EventTrigger : StageTriggerModule
 
 		BGMPlayer.SetStageMusicVolume(-80f); // Mute BGM
 
-		Player.State.StartExternal(this, GetNode<Node3D>(playerStandin), characterPositionSmoothing);
+		Player.StartExternal(this, GetNode<Node3D>(playerStandin), characterPositionSmoothing);
 		Player.Animator.ExternalAngle = 0; // Reset external angle
 		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
 		Player.Skills.DisableBreakSkills();
@@ -271,15 +271,15 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		BGMPlayer.SetStageMusicVolume(0f); // Unmute BGM
 
-		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Player.State.ExternalParent.Forward());
+		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Player.ExternalParent.Forward());
 		Player.Animator.SnapRotation(Player.MovementAngle);
 		Player.Animator.CancelOneshot(characterFadeoutTime);
 		Player.Animator.DisabledSpeedSmoothing = true;
 		Player.Animator.ResetState(0);
-		Player.State.StopExternal();
+		Player.StopExternal();
 
 		if (characterExitLockout != null)
-			Player.State.AddLockoutData(characterExitLockout);
+			Player.AddLockoutData(characterExitLockout);
 
 		Player.MoveSpeed = normalizeExitMoveSpeed ? Player.Stats.GroundSettings.Speed * characterExitMoveSpeed : characterExitMoveSpeed;
 		Player.VerticalSpeed = characterExitVerticalSpeed;

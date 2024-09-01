@@ -93,7 +93,7 @@ public partial class DebugManager : Node2D
 		{
 			if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(StageSettings.Player))
 			{
-				StageSettings.Player.State.StartRespawn(true);
+				StageSettings.Player.StartRespawn(true);
 			}
 			else
 			{
@@ -323,7 +323,7 @@ public partial class DebugManager : Node2D
 		}
 
 		StageSettings.instance.SetCheckpoint(customCheckpoint);
-		StageSettings.Player.State.StartRespawn(true);
+		StageSettings.Player.StartRespawn(true);
 	}
 	#endregion
 

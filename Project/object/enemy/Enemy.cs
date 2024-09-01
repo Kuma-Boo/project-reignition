@@ -128,7 +128,7 @@ public partial class Enemy : Node3D
 
 		if (IsInteracting)
 			UpdateInteraction();
-		else if (IsInteractionProcessed && Player.State.AttackState == PlayerStateController.AttackStates.None)
+		else if (IsInteractionProcessed && Player.AttackState == PlayerController.AttackStates.None)
 			ResetInteractionProcessed();
 	}
 
@@ -255,19 +255,19 @@ public partial class Enemy : Node3D
 		}
 		*/
 
-		switch (Player.State.AttackState)
+		switch (Player.AttackState)
 		{
-			case PlayerStateController.AttackStates.OneShot:
+			case PlayerController.AttackStates.OneShot:
 				IsSpeedbreakDefeat = Player.Skills.IsSpeedBreakActive;
 				if (IsSpeedbreakDefeat) // Shake the camera
 					Player.Camera.StartMediumCameraShake();
 
 				Defeat();
 				break;
-			case PlayerStateController.AttackStates.Weak:
+			case PlayerController.AttackStates.Weak:
 				TakeDamage(1);
 				break;
-			case PlayerStateController.AttackStates.Strong:
+			case PlayerController.AttackStates.Strong:
 				TakeDamage(2);
 				break;
 		}
@@ -281,9 +281,9 @@ public partial class Enemy : Node3D
 		}
 		else
 		*/
-		if (damagePlayer && Player.State.AttackState == PlayerStateController.AttackStates.None)
+		if (damagePlayer && Player.AttackState == PlayerController.AttackStates.None)
 		{
-			Player.State.StartKnockback();
+			Player.StartKnockback();
 		}
 
 		SetInteractionProcessed();
@@ -293,15 +293,15 @@ public partial class Enemy : Node3D
 	{
 		IsInteractionProcessed = true;
 		// Connect a signal
-		if (!Player.State.IsConnected(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-			Player.State.Connect(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
+		if (!Player.IsConnected(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+			Player.Connect(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
 	}
 	protected void ResetInteractionProcessed()
 	{
 		IsInteractionProcessed = false;
 
-		if (Player.State.IsConnected(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-			Player.State.Disconnect(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
+		if (Player.IsConnected(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+			Player.Disconnect(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
 	}
 
 	/// <summary> Current local rotation of the enemy. </summary>

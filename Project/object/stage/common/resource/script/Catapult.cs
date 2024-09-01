@@ -50,7 +50,7 @@ public partial class Catapult : Launcher
 			return;
 		}
 
-		if (aimSFX.Playing) // REFACTOR TODO && Player.State.ExternalController != this)
+		if (aimSFX.Playing) // REFACTOR TODO && Player.ExternalController != this)
 			SoundManager.FadeAudioPlayer(aimSFX);
 
 		switch (currentState)
@@ -68,10 +68,10 @@ public partial class Catapult : Launcher
 	{
 		tweener.CustomStep(PhysicsManager.physicsDelta);
 		/* REFACTOR TODO
-		if (Player.State.ExternalController != this)
+		if (Player.ExternalController != this)
 			return;
 
-		Player.State.UpdateExternalControl();
+		Player.UpdateExternalControl();
 		*/
 		if (armNode.Rotation.X < Mathf.Pi * .5f)
 			return;
@@ -106,7 +106,7 @@ public partial class Catapult : Launcher
 		UpdateArmRotation();
 		/*
 		REFACTOR TODO
-		Player.State.UpdateExternalControl();
+		Player.UpdateExternalControl();
 		*/
 	}
 
@@ -122,7 +122,7 @@ public partial class Catapult : Launcher
 
 		Player.Effect.StartSpinFX();
 		/* REFACTOR TODO
-		Player.State.StartExternal(this, playerPositionNode);
+		Player.StartExternal(this, playerPositionNode);
 		Player.Animator.StartSpin(3f);
 		Player.Animator.SnapRotation(0);
 		*/
@@ -183,7 +183,7 @@ public partial class Catapult : Launcher
 
 		var settings = LaunchSettings.Create(Player.GlobalPosition, destination, 1f);
 		settings.IsJump = true;
-		Player.State.StartLauncher(settings);
+		Player.StartLauncher(settings);
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		// REFACTOR TODO
 		// Player.Animator.SnapRotation(Player.MovementAngle); // Reset visual rotation
@@ -209,7 +209,7 @@ public partial class Catapult : Launcher
 		// Have the player jump into the catapult
 		var settings = LaunchSettings.Create(Player.GlobalPosition, playerPositionNode.GlobalPosition, 2f);
 		settings.IsJump = true;
-		Player.State.StartLauncher(settings);
+		Player.StartLauncher(settings);
 		EmitSignal(SignalName.PlayerEntered);
 	}
 

@@ -11,7 +11,7 @@ namespace Project.Gameplay.Objects
 
 		public override void _Process(double _)
 		{
-			if (Player.State.IsDefeated)
+			if (Player.IsDefeated)
 				return;
 
 			GlobalPosition = GetTree().Root.GetCamera3D().GlobalPosition;

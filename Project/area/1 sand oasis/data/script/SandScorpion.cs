@@ -224,7 +224,7 @@ namespace Project.Gameplay.Bosses
 			eventAnimator.Advance(0.0);
 
 			Player.Visible = false;
-			Player.State.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
+			Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 			Interface.PauseMenu.AllowPausing = false;
 
 			// Award 1000 points for defeating the boss
@@ -962,13 +962,13 @@ namespace Project.Gameplay.Bosses
 			if (Player.Skills.IsSpeedBreakActive)
 			{
 				Player.Skills.ToggleSpeedBreak();
-				Player.State.StartKnockback(new()
+				Player.StartKnockback(new()
 				{
 					disableDamage = true
 				});
 			}
 			else
-				Player.State.StartKnockback();
+				Player.StartKnockback();
 		}
 
 		/// <summary> Is the player currently colliding with the flying eye? </summary>
@@ -1009,7 +1009,7 @@ namespace Project.Gameplay.Bosses
 
 			if (!Player.Lockon.IsHomingAttacking) // Player isn't attacking
 			{
-				Player.State.StartKnockback();
+				Player.StartKnockback();
 				return;
 			}
 

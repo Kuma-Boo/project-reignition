@@ -334,7 +334,7 @@ public partial class PlayerAnimator : Node3D
 
 		float referenceAngle = Player.IsMovingBackward ? Player.PathFollower.ForwardAngle : Player.MovementAngle;
 		float inputAngle = Player.PathFollower.DeltaAngle * PathTurnStrength;
-		if (Player.State.IsLockoutOverridingMovementAngle)
+		if (Player.IsLockoutOverridingMovementAngle)
 			inputAngle += referenceAngle;
 		else
 			inputAngle = Player.Controller.GetTargetMovementAngle();
@@ -533,19 +533,19 @@ public partial class PlayerAnimator : Node3D
 	/// </summary>
 	private void UpdateVisualRotation()
 	{
-		if (Player.State.IsGrindstepping) return; // Use the same angle as the grindrail
+		if (Player.IsGrindstepping) return; // Use the same angle as the grindrail
 
 		// Don't update directions when externally controlled or on launchers
 		float targetRotation = Player.MovementAngle;
 
-		if (Player.State.ExternalController != null)
+		if (Player.ExternalController != null)
 			targetRotation = ExternalAngle;
 		else if (Player.Lockon.IsHomingAttacking) // Face target
 			targetRotation = ExtensionMethods.CalculateForwardAngle(Player.Lockon.HomingAttackDirection);
 		else if (Player.IsMovingBackward) // Backstepping
 			targetRotation = Player.PathFollower.ForwardAngle + (groundTurnRatio * Mathf.Pi * .15f);
 		/* REFACTOR TODO
-		else if (Player.IsLockoutActive && Player.State.ActiveLockoutData.recenterPlayer)
+		else if (Player.IsLockoutActive && Player.ActiveLockoutData.recenterPlayer)
 			targetRotation = Player.PathFollower.ForwardAngle;
 
 		if (Player.Skills.IsSpeedBreakActive && Player.MovementState != PlayerController.MovementStates.External)

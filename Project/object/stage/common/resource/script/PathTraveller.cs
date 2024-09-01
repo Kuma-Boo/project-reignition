@@ -183,7 +183,7 @@ public partial class PathTraveller : Node3D
 
 		// Sync transforms
 		GlobalTransform = pathFollower.GlobalTransform;
-		Player.State.UpdateExternalControl(true);
+		Player.UpdateExternalControl(true);
 	}
 
 	private void UpdateAnimation()
@@ -252,7 +252,7 @@ public partial class PathTraveller : Node3D
 			animator.Advance(0.0);
 		}
 
-		Player.State.StartExternal(this, playerPosition, .1f);
+		Player.StartExternal(this, playerPosition, .1f);
 		Player.Animator.StartBalancing(); // Carpet uses balancing animations
 		Player.Animator.UpdateBalanceSpeed(1f, 0f);
 		Player.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
@@ -274,9 +274,9 @@ public partial class PathTraveller : Node3D
 		currentSpeed = speedVelocity = 0;
 		currentTurnAmount = turnVelocity = Vector2.Zero;
 
-		if (Player.State.ExternalParent == this)
+		if (Player.ExternalParent == this)
 		{
-			Player.State.StopExternal();
+			Player.StopExternal();
 			Player.Animator.ResetState();
 		}
 	}
@@ -290,7 +290,7 @@ public partial class PathTraveller : Node3D
 
 		// Bump the player off
 		LaunchSettings launchSettings = LaunchSettings.Create(Player.GlobalPosition, Player.GlobalPosition, 2);
-		Player.State.StartLauncher(launchSettings);
+		Player.StartLauncher(launchSettings);
 		Player.Animator.ResetState(0.1f);
 		Player.Animator.StartSpin(3.0f);
 		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
@@ -300,7 +300,7 @@ public partial class PathTraveller : Node3D
 	{
 		EmitSignal(SignalName.Staggered);
 
-		Player.State.StartInvincibility();
+		Player.StartInvincibility();
 		Player.Animator.StartBalanceStagger();
 		currentSpeed = speedVelocity = 0;
 		currentTurnAmount = turnVelocity = Vector2.Zero;

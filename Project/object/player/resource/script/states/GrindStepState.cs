@@ -32,7 +32,7 @@ public partial class GrindStepState : PlayerState
 		Player.MoveSpeed = new Vector2(horizontalTarget, Player.MoveSpeed).Length();
 		turnInstantly = true;
 
-		Player.State.CanJumpDash = false; // Disable jumpdashing
+		Player.CanJumpDash = false; // Disable jumpdashing
 		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 		Player.Animator.StartGrindStep();
 	}

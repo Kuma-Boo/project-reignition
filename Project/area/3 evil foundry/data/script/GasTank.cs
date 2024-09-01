@@ -105,7 +105,7 @@ namespace Project.Gameplay.Objects
 				enemyList[i].TakeDamage(); // Damage all enemies in range
 
 			if (isPlayerInExplosion)
-				Player.State.StartKnockback();
+				Player.StartKnockback();
 		}
 
 

@@ -36,7 +36,7 @@ public partial class JumpTrigger : StageTriggerModule
 
 	public override void Activate()
 	{
-		Player.State.StartLauncher(GetLaunchSettings());
+		Player.StartLauncher(GetLaunchSettings());
 
 		if (!Player.IsConnected(PlayerController.SignalName.LaunchFinished, new Callable(this, MethodName.FinishJump)))
 			Player.Connect(PlayerController.SignalName.LaunchFinished, new Callable(this, MethodName.FinishJump), (uint)ConnectFlags.OneShot);

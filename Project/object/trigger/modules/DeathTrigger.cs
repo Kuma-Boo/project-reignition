@@ -18,7 +18,7 @@ namespace Project.Gameplay.Triggers
 		public override void Activate()
 		{
 			Player.Camera.IsDefeatFreezeActive = true;
-			Player.State.StartRespawn();
+			Player.StartRespawn();
 			Player.Effect.PlayVoice("fall");
 
 			if (triggerType == TriggerType.Water)

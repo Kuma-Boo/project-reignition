@@ -74,7 +74,7 @@ public partial class PlayerCameraController : Node3D
 		if (IsDefeatFreezeActive)
 		{
 			/* REFACTOR TODO
-			if (Player.State.IsDefeated)
+			if (Player.IsDefeated)
 				return;
 			*/
 
@@ -309,8 +309,8 @@ public partial class PlayerCameraController : Node3D
 
 		// Snap xform blend when no input is held
 		if (Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) ||
-			(Player.State.IsLockoutActive &&
-			Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe &&
+			(Player.IsLockoutActive &&
+			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe &&
 			Mathf.IsZeroApprox(Player.Controller.InputHorizontal)))
 		{
 			SnapXform();

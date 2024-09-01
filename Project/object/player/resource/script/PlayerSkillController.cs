@@ -144,8 +144,8 @@ public partial class PlayerSkillController : Node3D
 		if (burst)
 		{
 			Player.Effect.PlayFireCrestFX();
-			Player.State.AttackState = PlayerStateController.AttackStates.Weak;
-			Player.State.ChangeHitbox("fire-crest");
+			Player.AttackState = PlayerController.AttackStates.Weak;
+			Player.ChangeHitbox("fire-crest");
 		}
 	}
 
@@ -282,7 +282,7 @@ public partial class PlayerSkillController : Node3D
 		{
 			if (!IsTimeBreakEnabled) return;
 			if (!IsSoulGaugeCharged) return;
-			if (Player.State.IsDefeated) return;
+			if (Player.IsDefeated) return;
 
 			ToggleTimeBreak();
 		}
@@ -340,7 +340,7 @@ public partial class PlayerSkillController : Node3D
 			if (!IsSpeedBreakEnabled) return;
 			if (Player.MovementState == PlayerController.MovementStates.Launcher) return; // Can't speed break during launchers
 			if (Player.ActionState == PlayerController.ActionStates.Teleport) return; // Can't speed break during teleports
-			if (!Player.IsOnGround || Player.State.IsDefeated) return;
+			if (!Player.IsOnGround || Player.IsDefeated) return;
 
 			ToggleSpeedBreak();
 		}
@@ -403,7 +403,7 @@ public partial class PlayerSkillController : Node3D
 			Player.CollisionMask = Runtime.Instance.environmentMask; // Don't collide with any objects
 			Player.Animator.SpeedBreak();
 			Player.ChangeHitbox("speed break");
-			Player.State.AttackState = PlayerStateController.AttackStates.OneShot;
+			Player.AttackState = PlayerController.AttackStates.OneShot;
 			Player.Camera.RequestMotionBlur();
 			Player.Animator.StartMotionBlur();
 		}
@@ -415,7 +415,7 @@ public partial class PlayerSkillController : Node3D
 
 			Player.MoveSpeed = GroundSettings.Speed; // Override speed
 			Player.CollisionMask = normalCollisionMask; // Reset collision layer
-			Player.State.AttackState = PlayerStateController.AttackStates.None;
+			Player.AttackState = PlayerController.AttackStates.None;
 			Player.ChangeHitbox("RESET");
 			Player.Camera.UnrequestMotionBlur();
 			Player.Animator.StopMotionBlur();

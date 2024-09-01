@@ -27,14 +27,14 @@ public partial class HomingAttackState : PlayerState
 	{
 		Player.VerticalSpeed = 0;
 		Player.Lockon.IsHomingAttacking = true;
-		Player.State.ChangeHitbox("spin");
-		Player.State.AttackState = PlayerStateController.AttackStates.Weak;
+		Player.ChangeHitbox("spin");
+		Player.AttackState = PlayerController.AttackStates.Weak;
 
 		IsPerfectHomingAttack = Player.Lockon.IsMonitoringPerfectHomingAttack;
 		if (IsPerfectHomingAttack)
 		{
 			Player.Lockon.PlayPerfectStrike();
-			Player.State.AttackState = PlayerStateController.AttackStates.Strong;
+			Player.AttackState = PlayerController.AttackStates.Strong;
 		}
 
 		Player.Effect.StartSpinFX();
@@ -43,7 +43,7 @@ public partial class HomingAttackState : PlayerState
 		Player.Effect.StartSpinFX();
 
 		Player.Animator.StartSpin(2.0f);
-		Player.State.ChangeHitbox("spin");
+		Player.ChangeHitbox("spin");
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire))
 			Player.Skills.ActivateFireCrest();
@@ -64,11 +64,11 @@ public partial class HomingAttackState : PlayerState
 		}
 		*/
 
-		Player.State.AttackState = PlayerStateController.AttackStates.None;
+		Player.AttackState = PlayerController.AttackStates.None;
 		Player.Effect.StopSpinFX();
 		/* REFACTOR TODO?
 			Change state Player.ResetActionState();
-			Player.StateMachine.ChangeState
+			PlayerMachine.ChangeState
 		*/
 	}
 
@@ -77,7 +77,7 @@ public partial class HomingAttackState : PlayerState
 		if (Player.Lockon.Target == null) // Target disappeared. Transition to jumpdash
 		{
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;
-			Player.State.ChangeHitbox("RESET");
+			Player.ChangeHitbox("RESET");
 			return jumpDashState;
 		}
 

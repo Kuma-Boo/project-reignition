@@ -21,8 +21,8 @@ public partial class StompState : PlayerState
 		Player.Lockon.IsMonitoring = false;
 		Player.Lockon.ResetLockonTarget();
 
-		Player.State.AllowLandingGrind = true;
-		if (Player.State.IsGrindstepping)
+		Player.AllowLandingGrind = true;
+		if (Player.IsGrindstepping)
 			Player.Animator.ResetState(.1f);
 
 		/* REFACTOR TODO
@@ -32,8 +32,8 @@ public partial class StompState : PlayerState
 		bool attackStomp = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompAttack);
 		if (attackStomp)
 		{
-			Player.State.AttackState = PlayerStateController.AttackStates.Weak;
-			Player.State.ChangeHitbox("stomp");
+			Player.AttackState = PlayerController.AttackStates.Weak;
+			Player.ChangeHitbox("stomp");
 		}
 		Player.Animator.StompAnimation(attackStomp);
 	}

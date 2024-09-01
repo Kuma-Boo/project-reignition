@@ -47,7 +47,7 @@ namespace Project.Gameplay.Objects
 			// REFACTOR TODO if (Player.Lockon.IsBounceLockoutActive || !IsHitboxEnabled) return;
 
 			if (isAttacking && !isHurtboxInteraction && !Player.Skills.IsSpeedBreakActive)
-				Player.State.StartKnockback();
+				Player.StartKnockback();
 			else
 				base.UpdateInteraction();
 		}

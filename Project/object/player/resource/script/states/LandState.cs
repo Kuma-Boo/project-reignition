@@ -22,13 +22,13 @@ public partial class LandState : PlayerState
 
 		Player.VerticalSpeed = 0;
 		Player.Lockon.IsMonitoring = false;
-		Player.State.DisableAccelerationJump = false;
+		Player.DisableAccelerationJump = false;
 
-		if (Player.State.IsGrinding)
+		if (Player.IsGrinding)
 			return;
 
-		Player.State.IsGrindstepping = false;
-		Player.State.AllowLandingGrind = false;
+		Player.IsGrindstepping = false;
+		Player.AllowLandingGrind = false;
 		Player.Animator.LandingAnimation();
 		Player.Effect.PlayLandingFX();
 

@@ -33,7 +33,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (IsInteracting)
 				UpdateInteraction();
-			else if (IsInteractionProcessed && Player.State.AttackState == PlayerStateController.AttackStates.None)
+			else if (IsInteractionProcessed && Player.AttackState == PlayerController.AttackStates.None)
 				ResetInteractionProcessed();
 		}
 
@@ -53,15 +53,15 @@ namespace Project.Gameplay.Objects
 			}
 			*/
 
-			switch (Player.State.AttackState)
+			switch (Player.AttackState)
 			{
-				case PlayerStateController.AttackStates.OneShot:
+				case PlayerController.AttackStates.OneShot:
 					Shatter();
 					break;
-				case PlayerStateController.AttackStates.Weak:
+				case PlayerController.AttackStates.Weak:
 					currentHealth--;
 					break;
-				case PlayerStateController.AttackStates.Strong:
+				case PlayerController.AttackStates.Strong:
 					currentHealth -= 2;
 					break;
 			}
@@ -95,16 +95,16 @@ namespace Project.Gameplay.Objects
 		{
 			IsInteractionProcessed = true;
 			// Connect a signal
-			if (!Player.State.IsConnected(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-				Player.State.Connect(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
+			if (!Player.IsConnected(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+				Player.Connect(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
 		}
 
 		private void ResetInteractionProcessed()
 		{
 			IsInteractionProcessed = false;
 
-			if (Player.State.IsConnected(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-				Player.State.Disconnect(PlayerStateController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
+			if (Player.IsConnected(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
+				Player.Disconnect(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
 		}
 
 		private void SaveDestructionStatus() => permanentlyDestroyed = isShattered;

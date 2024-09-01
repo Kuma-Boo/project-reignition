@@ -62,7 +62,7 @@ public partial class DashPanel : Area3D
 			lockout.movementAngle = 0f;
 			lockout.spaceMode = LockoutResource.SpaceModes.PathFollower;
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;
-			lockout.recenterPlayer = Player.State.IsLockoutActive && Player.State.ActiveLockoutData.recenterPlayer;
+			lockout.recenterPlayer = Player.IsLockoutActive && Player.ActiveLockoutData.recenterPlayer;
 		}
 		else
 		{
@@ -70,6 +70,6 @@ public partial class DashPanel : Area3D
 		}
 
 		Player.Animator.StopBrake();
-		Player.State.AddLockoutData(lockout);
+		Player.AddLockoutData(lockout);
 	}
 }

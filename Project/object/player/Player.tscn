@@ -19,7 +19,6 @@
 [ext_resource type="Script" path="res://object/player/resource/script/states/JumpDashState.cs" id="11_80bi3"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/HomingAttackState.cs" id="12_ssfet"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/LaunchState.cs" id="13_d17q6"]
-[ext_resource type="Script" path="res://object/player/resource/script/PlayerStateController.cs" id="13_j0n3v"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerSkillController.cs" id="14_ypfmd"]
 [ext_resource type="Material" uid="uid://bklx3tbpw7s8e" path="res://object/player/resource/model/material/SpeedbreakOverlay.tres" id="17_afci3"]
 [ext_resource type="AudioStream" uid="uid://c0ht8bcbttefh" path="res://sound/sfx/player/speed break.wav" id="17_mkqg3"]
@@ -29,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://gp7nom61rmtj" path="res://object/player/resource/component/Effect.tscn" id="19_3dctg"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/AutomationState.cs" id="19_3qddi"]
 [ext_resource type="AudioStream" uid="uid://ci25ma2gyy8iq" path="res://sound/sfx/player/time break pad.ogg" id="19_yunuo"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/CountdownState.cs" id="20_0gpee"]
 [ext_resource type="AudioStream" uid="uid://byvon80bojscd" path="res://sound/sfx/player/heartbeat.wav" id="20_8j2sa"]
 [ext_resource type="PackedScene" uid="uid://qmsgr6kswk87" path="res://object/player/resource/component/PathFollower.tscn" id="20_b54bv"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/TimeBreak.gdshader" id="21_uhk4r"]
@@ -1396,7 +1396,7 @@ _data = {
 "volcano-slide": SubResource("Animation_flrr5")
 }
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "State", "Skills", "Lockon", "Animator", "Effect", "PathFollower") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "launchState", "grindState", "automationState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1405,13 +1405,16 @@ script = ExtResource("1_wygja")
 StateMachine = NodePath("Components/StateMachine")
 Controller = NodePath("Components/Controller")
 Stats = NodePath("Components/Stats")
-State = NodePath("Components/State")
 Skills = NodePath("Components/Sonic/Skills")
 Lockon = NodePath("Components/Lockon")
 Animator = NodePath("Components/Sonic")
 Effect = NodePath("Components/Sonic/Effect")
 PathFollower = NodePath("Components/PathFollower")
 CollisionSize = Vector2(0.3, 0.4)
+hitboxAnimator = NodePath("Components/Sonic/HitboxTrigger/AnimationPlayer")
+launchState = NodePath("Components/StateMachine/Launch")
+grindState = NodePath("Components/StateMachine/Grind")
+automationState = NodePath("Components/StateMachine/Automation")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
@@ -1545,6 +1548,11 @@ stompState = NodePath("../Stomp")
 script = ExtResource("19_3qddi")
 runState = NodePath("../Run")
 
+[node name="Countdown" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("idleState", "runState")]
+script = ExtResource("20_0gpee")
+idleState = NodePath("../Idle")
+runState = NodePath("../Run")
+
 [node name="Controller" type="Node" parent="Components"]
 script = ExtResource("2_pk07e")
 InputCurve = SubResource("Curve_l0cmy")
@@ -1582,13 +1590,6 @@ baseGrindSpeed = 20
 baseGrindFriction = 4
 baseGrindTurnaround = 6
 sidleMovementCurve = SubResource("Curve_jakcp")
-
-[node name="State" type="Node" parent="Components" node_paths=PackedStringArray("launcherState", "grindState", "automationState", "hitboxAnimator")]
-script = ExtResource("13_j0n3v")
-launcherState = NodePath("../StateMachine/Launch")
-grindState = NodePath("../StateMachine/Grind")
-automationState = NodePath("../StateMachine/Automation")
-hitboxAnimator = NodePath("../Sonic/HitboxTrigger/AnimationPlayer")
 
 [node name="PathFollower" parent="Components" instance=ExtResource("20_b54bv")]
 

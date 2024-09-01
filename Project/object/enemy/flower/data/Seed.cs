@@ -52,7 +52,7 @@ public partial class Seed : Area3D
 		}
 		*/
 
-		Player.State.StartKnockback();
+		Player.StartKnockback();
 	}
 
 	public void OnBodyEntered(PhysicsBody3D _) => Explode();

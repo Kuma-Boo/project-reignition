@@ -22,7 +22,7 @@ public partial class AutomationState : PlayerState
 		initialPath = Player.PathFollower.ActivePath;
 		Player.PathFollower.Resync();
 
-		Player.State.StartExternal(Automation, Player.PathFollower, .05f, true);
+		Player.StartExternal(Automation, Player.PathFollower, .05f, true);
 		Player.Animator.ExternalAngle = 0;
 		Player.Animator.SnapRotation(Player.Animator.ExternalAngle); // Rotate to follow pathfollower
 		Player.IsMovingBackward = false; // Prevent getting stuck in backstep animation
@@ -36,7 +36,7 @@ public partial class AutomationState : PlayerState
 		Automation.Deactivate();
 
 		Player.PathFollower.Resync();
-		Player.State.StopExternal();
+		Player.StopExternal();
 		Player.UpDirection = Player.PathFollower.Up();
 		Player.Animator.SnapRotation(Player.MovementAngle);
 	}
@@ -48,8 +48,8 @@ public partial class AutomationState : PlayerState
 			if (Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed) < .8f) // Accelerate quicker to reduce low-speed jank
 				Player.MoveSpeed += CatchupAccelerationAmount * PhysicsManager.physicsDelta;
 
-			if (Player.State.IsLockoutActive && Player.State.ActiveLockoutData.overrideSpeed)
-				Player.MoveSpeed = Player.State.ActiveLockoutData.ApplySpeed(Player.MoveSpeed, Player.Stats.GroundSettings);
+			if (Player.IsLockoutActive && Player.ActiveLockoutData.overrideSpeed)
+				Player.MoveSpeed = Player.ActiveLockoutData.ApplySpeed(Player.MoveSpeed, Player.Stats.GroundSettings);
 			else
 				Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, 1); // Move to max speed
 		}
@@ -57,7 +57,7 @@ public partial class AutomationState : PlayerState
 		Player.PathFollower.Progress += Player.MoveSpeed * PhysicsManager.physicsDelta;
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 
-		Player.State.UpdateExternalControl();
+		Player.UpdateExternalControl();
 		Player.Animator.ExternalAngle = 0;
 
 		if (Player.PathFollower.ActivePath != initialPath || Automation.IsFinished)

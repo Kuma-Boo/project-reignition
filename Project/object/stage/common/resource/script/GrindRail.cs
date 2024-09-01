@@ -125,8 +125,8 @@ public partial class GrindRail : Area3D
 
 	private void CheckRailActivation()
 	{
-		if (Player.State.IsRailActivationValid(this))
-			Player.State.StartGrinding(this);
+		if (Player.IsRailActivationValid(this))
+			Player.StartGrinding(this);
 	}
 
 	public void Activate()

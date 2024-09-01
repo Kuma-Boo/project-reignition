@@ -103,7 +103,7 @@ public partial class DinoTrio : PathFollow3D
 
 		if (Processor.IsSlowingDown ||
 			(CurrentAttackState != AttackStates.Charge && CurrentAttackState != AttackStates.Inactive) ||
-			(Player.State.IsLockoutActive && Player.State.ActiveLockoutData.recenterPlayer) ||
+			(Player.IsLockoutActive && Player.ActiveLockoutData.recenterPlayer) ||
 			Player.Skills.IsSpeedBreakActive)
 		{
 			// Dino is slowing down
@@ -196,7 +196,7 @@ public partial class DinoTrio : PathFollow3D
 			case AttackStates.Toss: // Powerful launch
 				if (tossedPlayer) return; // Already tossed the player
 
-				Player.State.StartKnockback(new()
+				Player.StartKnockback(new()
 				{
 					knockForward = true, // Always knock forward
 					ignoreInvincibility = true, // Always knockback the player
@@ -208,7 +208,7 @@ public partial class DinoTrio : PathFollow3D
 
 				break;
 			default: // Normal knockback
-				Player.State.StartKnockback(new()
+				Player.StartKnockback(new()
 				{
 					knockForward = true,
 					ignoreInvincibility = true,

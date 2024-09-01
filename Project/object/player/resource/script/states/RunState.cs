@@ -122,9 +122,9 @@ public partial class RunState : PlayerState
 		}
 
 		// Or when overriding speed/direction
-		if (Player.State.IsLockoutActive &&
-			(Player.State.ActiveLockoutData.overrideSpeed ||
-			Player.State.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free))
+		if (Player.IsLockoutActive &&
+			(Player.ActiveLockoutData.overrideSpeed ||
+			Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free))
 		{
 			return false;
 		}

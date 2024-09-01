@@ -27,11 +27,11 @@ public partial class GrindState : PlayerState
 		perfectChargeTimer = 0;
 
 		ActiveGrindRail.Activate();
-		if (!ActiveGrindRail.IsBonusDisabled && Player.State.IsGrindstepping)
+		if (!ActiveGrindRail.IsBonusDisabled && Player.IsGrindstepping)
 			BonusManager.instance.QueueBonus(new(BonusType.Grindstep));
 
-		Player.State.AllowLandingGrind = false;
-		Player.State.IsGrindstepping = false;
+		Player.AllowLandingGrind = false;
+		Player.IsGrindstepping = false;
 
 		float positionSmoothing = .2f;
 		float smoothFactor = RailFudgeFactor * 5f;
@@ -42,7 +42,7 @@ public partial class GrindState : PlayerState
 		}
 
 		// REFACTOR TODO Player.ResetActionState(); // Reset grind step, cancel stomps, jumps, etc
-		Player.State.StartExternal(this, ActiveGrindRail.PathFollower, positionSmoothing);
+		Player.StartExternal(this, ActiveGrindRail.PathFollower, positionSmoothing);
 
 		Player.IsMovingBackward = false;
 		// REFACTOR TODO Player.LandOnGround(); // Rail counts as being on the ground
@@ -73,7 +73,7 @@ public partial class GrindState : PlayerState
 	public override void ExitState()
 	{
 		Player.IsOnGround = false; // Disconnect from the ground
-		Player.State.StopExternal();
+		Player.StopExternal();
 
 		// Preserve speed
 		float launchSpeed = Player.MoveSpeed;
@@ -81,7 +81,7 @@ public partial class GrindState : PlayerState
 		Player.MoveSpeed = Mathf.Cos(launchAngle) * launchSpeed;
 		Player.VerticalSpeed = Mathf.Sin(launchAngle) * -launchSpeed;
 
-		if (!Player.State.IsGrindstepping) // Smoother transition to falling animation
+		if (!Player.IsGrindstepping) // Smoother transition to falling animation
 			Player.Animator.ResetState(.2f);
 		Player.Animator.SnapRotation(Player.MovementAngle);
 		Player.Animator.IsFallTransitionEnabled = true;
@@ -133,7 +133,7 @@ public partial class GrindState : PlayerState
 
 		ActiveGrindRail.PathFollower.Progress += movementDelta;
 		ActiveGrindRail.PathFollower.ProgressRatio = Mathf.Clamp(ActiveGrindRail.PathFollower.ProgressRatio, 0.0f, 1.0f);
-		Player.State.UpdateExternalControl(true);
+		Player.UpdateExternalControl(true);
 		Player.Animator.UpdateBalanceSpeed(Player.Stats.GrindSettings.GetSpeedRatioClamped(Player.MoveSpeed));
 
 		ActiveGrindRail.UpdateInvisibleRailPosition();
@@ -164,12 +164,12 @@ public partial class GrindState : PlayerState
 
 		delta = grindrail.PathFollower.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindrail.PathFollower.GlobalPosition);
 		delta.Y -= Player.VerticalSpeed * PhysicsManager.physicsDelta;
-		if (delta.Y < 0.01f && !(Player.IsOnGround && Player.State.AllowLandingGrind))
+		if (delta.Y < 0.01f && !(Player.IsOnGround && Player.AllowLandingGrind))
 			return false;
 
 		// Horizontal validation
 		if (Mathf.Abs(delta.X) > GrindrailSnapping &&
-			!(Player.State.IsGrindstepping && Mathf.Abs(delta.X) > GrindstepRailSnapping))
+			!(Player.IsGrindstepping && Mathf.Abs(delta.X) > GrindstepRailSnapping))
 		{
 			return false;
 		}
@@ -183,15 +183,15 @@ public partial class GrindState : PlayerState
 
 		// Check if the player is holding a direction parallel to rail and start a grindstep
 		float targetInputAngle = Player.Controller.GetTargetInputAngle();
-		Player.State.IsGrindstepping = !Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) &&
+		Player.IsGrindstepping = !Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) &&
 			(Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle + (Mathf.Pi * .5f)) ||
 			Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle - (Mathf.Pi * .5f)));
 
-		if (Player.State.IsGrindstepping)
+		if (Player.IsGrindstepping)
 			return grindstepState;
 
 		// Jump normally
-		Player.State.DisableAccelerationJump = true;
+		Player.DisableAccelerationJump = true;
 		return jumpState;
 	}
 

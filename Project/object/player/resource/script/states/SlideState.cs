@@ -19,7 +19,7 @@ public partial class SlideState : PlayerState
 
 		Player.Animator.StartSliding();
 		Player.Effect.PlayActionSFX(Player.Effect.SlideSfx);
-		Player.State.ChangeHitbox("slide");
+		Player.ChangeHitbox("slide");
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideDefense))
 			Player.Effect.StartAegisFX();
@@ -28,8 +28,8 @@ public partial class SlideState : PlayerState
 		{
 			Player.Effect.PlayFireFX();
 			Player.Effect.StartVolcanoFX();
-			Player.State.AttackState = PlayerStateController.AttackStates.Weak;
-			Player.State.ChangeHitbox("volcano-slide");
+			Player.AttackState = PlayerController.AttackStates.Weak;
+			Player.ChangeHitbox("volcano-slide");
 		}
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideExp))
@@ -48,7 +48,7 @@ public partial class SlideState : PlayerState
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideAttack))
 		{
 			Player.Effect.StopVolcanoFX();
-			Player.State.AttackState = PlayerStateController.AttackStates.None;
+			Player.AttackState = PlayerController.AttackStates.None;
 		}
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideExp))
@@ -77,7 +77,7 @@ public partial class SlideState : PlayerState
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 		{
 			Player.Animator.SlideToCrouch();
-			Player.State.ChangeHitbox("crouch");
+			Player.ChangeHitbox("crouch");
 			return crouchState;
 		}
 

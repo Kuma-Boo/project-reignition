@@ -278,7 +278,7 @@ public partial class DestructableObject : Node3D
 		{
 			Shatter();
 		}
-		else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Player.State.AttackState != PlayerStateController.AttackStates.None)
+		else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Player.AttackState != PlayerController.AttackStates.None)
 		{
 			Shatter();
 		}
@@ -288,7 +288,7 @@ public partial class DestructableObject : Node3D
 		}
 		else if (damagePlayer)
 		{
-			Player.State.StartKnockback();
+			Player.StartKnockback();
 		}
 	}
 

@@ -19,7 +19,7 @@ public partial class PlayerInputController : Node
 		if (inputLength <= DeadZone)
 			inputLength = 0;
 
-		if (Player.State.IsLockoutActive && Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace)
+		if (Player.IsLockoutActive && Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace)
 		{
 			float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(GetTargetInputAngle(), GetTargetMovementAngle()));
 			if (!Mathf.IsZeroApprox(inputLength) && inputDot < .2f) // Fixes player holding perpendicular to target direction
@@ -107,8 +107,8 @@ public partial class PlayerInputController : Node
 
 	private float CalculateLockoutForwardAngle(float inputAngle)
 	{
-		LockoutResource resource = Player.State.ActiveLockoutData;
-		if (!Player.State.IsLockoutOverridingMovementAngle) // Return early when LockoutResource doesn't override inputAngle
+		LockoutResource resource = Player.ActiveLockoutData;
+		if (!Player.IsLockoutOverridingMovementAngle) // Return early when LockoutResource doesn't override inputAngle
 		{
 			if (Mathf.IsZeroApprox(GetInputStrength()))
 				return Player.MovementAngle;
@@ -116,7 +116,7 @@ public partial class PlayerInputController : Node
 			return inputAngle;
 		}
 
-		float forwardAngle = Player.State.ActiveLockoutData.movementAngle;
+		float forwardAngle = Player.ActiveLockoutData.movementAngle;
 		switch (resource.spaceMode)
 		{
 			case LockoutResource.SpaceModes.Local:

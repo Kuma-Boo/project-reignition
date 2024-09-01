@@ -37,16 +37,16 @@ public partial class PlayerState : Node
 		}
 
 		float inputStrength = Player.Controller.GetInputStrength();
-		if (Player.State.IsLockoutActive)
+		if (Player.IsLockoutActive)
 		{
 			// Process Lockouts
-			if (Player.State.ActiveLockoutData.overrideSpeed)
+			if (Player.ActiveLockoutData.overrideSpeed)
 			{
-				Player.MoveSpeed = Player.State.ActiveLockoutData.ApplySpeed(Player.MoveSpeed, ActiveMovementSettings);
+				Player.MoveSpeed = Player.ActiveLockoutData.ApplySpeed(Player.MoveSpeed, ActiveMovementSettings);
 				return;
 			}
 
-			if (Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
+			if (Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
 			{
 				Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
 				return;
@@ -71,7 +71,7 @@ public partial class PlayerState : Node
 			return;
 		}
 
-		if (Player.State.IsLockoutActive && Player.State.ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.PathFollower) // Zipper exception
+		if (Player.IsLockoutActive && Player.ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.PathFollower) // Zipper exception
 		{
 			// Arbitrary math to make it easier to maintain speed
 			float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle));
@@ -101,16 +101,16 @@ public partial class PlayerState : Node
 
 		bool isUsingStrafeControls = Player.Skills.IsSpeedBreakActive ||
 			SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) ||
-			(Player.State.IsLockoutActive &&
-			Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe); // Ignore path delta under certain lockout situations
+			(Player.IsLockoutActive &&
+			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe); // Ignore path delta under certain lockout situations
 
 		float pathControlAmount = Player.PathTurnInfluence;
-		if (isUsingStrafeControls || Player.State.IsLockoutActive)
+		if (isUsingStrafeControls || Player.IsLockoutActive)
 			pathControlAmount = 0; // Don't use path influence during speedbreak/autorun
 
 		float targetMovementAngle = Player.Controller.GetTargetMovementAngle() + pathControlAmount;
-		if (Player.State.IsLockoutActive &&
-			Player.State.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace) // Direction is being overridden
+		if (Player.IsLockoutActive &&
+			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace) // Direction is being overridden
 		{
 			Player.MovementAngle = targetMovementAngle;
 		}
@@ -124,7 +124,7 @@ public partial class PlayerState : Node
 		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi))
 		{
 			// Check for turning around
-			if (!Player.State.IsLockoutActive || Player.State.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
+			if (!Player.IsLockoutActive || Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
 				return;
 		}
 

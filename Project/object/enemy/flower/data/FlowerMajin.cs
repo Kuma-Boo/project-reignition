@@ -147,14 +147,14 @@ public partial class FlowerMajin : Enemy
 					EmitSignal(SignalName.Deflect);
 			}
 
-			if (Player.State.AttackState == PlayerStateController.AttackStates.None ||
-				(Player.State.AttackState == PlayerStateController.AttackStates.Weak && !weakDefense))
+			if (Player.AttackState == PlayerController.AttackStates.None ||
+				(Player.AttackState == PlayerController.AttackStates.Weak && !weakDefense))
 			{
 				return;
 			}
 		}
 
-		if (!IsStaggered && Player.State.AttackState == PlayerStateController.AttackStates.None)
+		if (!IsStaggered && Player.AttackState == PlayerController.AttackStates.None)
 		{
 			StartStaggerState();
 			// REFACTOR TODO Player.Lockon.StartBounce(false);
@@ -295,7 +295,7 @@ public partial class FlowerMajin : Enemy
 
 	private void StartStaggerState()
 	{
-		if (Player.State.AttackState == PlayerStateController.AttackStates.None)
+		if (Player.AttackState == PlayerController.AttackStates.None)
 			AnimationTree.Set(HitTransition, BoopState);
 		else
 			AnimationTree.Set(HitTransition, StaggerState);

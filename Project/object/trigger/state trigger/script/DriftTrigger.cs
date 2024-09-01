@@ -125,7 +125,7 @@ public partial class DriftTrigger : Area3D
 		sfx.Play();
 
 		driftAnimationTimer = DefaultAnimationLength;
-		Player.State.StartExternal(this); // For future reference, this is where speedbreak gets disabled
+		Player.StartExternal(this); // For future reference, this is where speedbreak gets disabled
 		Player.Effect.StartDust();
 		Player.Animator.ExternalAngle = Player.MovementAngle;
 		Player.Animator.StartDrift(isRightTurn);
@@ -142,7 +142,7 @@ public partial class DriftTrigger : Area3D
 		float distance = Player.GlobalPosition.Flatten().DistanceTo(targetPosition.Flatten());
 		Player.GlobalPosition = Player.GlobalPosition.SmoothDamp(targetPosition, ref driftVelocity, DriftSmoothing, entrySpeed);
 		Player.UpDirection = Player.PathFollower.Up(); // Use pathfollower's up direction when drifting
-		Player.State.UpdateExternalControl(true);
+		Player.UpdateExternalControl(true);
 		Player.UpdateOrientation();
 
 		// Fade out sfx based on distance
@@ -213,14 +213,14 @@ public partial class DriftTrigger : Area3D
 			Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(ExitDirection, Player.PathFollower.Up());
 			Player.MovementAngle -= Mathf.Pi * .1f * Player.Controller.InputHorizontal;
 
-			Player.State.AddLockoutData(lockout); // Apply lockout
+			Player.AddLockoutData(lockout); // Apply lockout
 
 			Player.Animator.LaunchDrift();
 			Player.Animator.ExternalAngle = Player.MovementAngle;
 		}
 
 		driftStatus = DriftStatus.Inactive; // Reset to inactive state
-		Player.State.StopExternal();
+		Player.StopExternal();
 		Player.Effect.StopDust();
 
 		if (Player.IsConnected(PlayerController.SignalName.Knockback, new Callable(this, MethodName.CompleteDrift)))

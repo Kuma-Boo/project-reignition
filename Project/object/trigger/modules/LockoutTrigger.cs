@@ -12,7 +12,7 @@ namespace Project.Gameplay.Triggers
 
 		public override void Activate()
 		{
-			Player.State.AddLockoutData(lockoutData);
+			Player.AddLockoutData(lockoutData);
 
 			if (!Player.IsConnected(PlayerController.SignalName.Defeated, new(this, MethodName.Deactivate)))
 				Player.Connect(PlayerController.SignalName.Defeated, new(this, MethodName.Deactivate), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
@@ -20,7 +20,7 @@ namespace Project.Gameplay.Triggers
 
 		public override void Deactivate()
 		{
-			Player.State.RemoveLockoutData(lockoutData);
+			Player.RemoveLockoutData(lockoutData);
 
 			if (Player.IsConnected(PlayerController.SignalName.Defeated, new(this, MethodName.Deactivate)))
 				Player.Disconnect(PlayerController.SignalName.Defeated, new(this, MethodName.Deactivate));

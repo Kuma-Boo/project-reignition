@@ -141,7 +141,7 @@ public partial class JumpState : PlayerState
 	private void StartAccelerationJump()
 	{
 		isAccelerationJumpQueued = false;
-		if (Player.State.DisableAccelerationJump)
+		if (Player.DisableAccelerationJump)
 			return;
 
 		float inputAngle = Player.Controller.GetTargetMovementAngle();
@@ -169,7 +169,7 @@ public partial class JumpState : PlayerState
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.AccelJumpAttack))
 		{
 			Player.Effect.PlayFireFX();
-			Player.State.AttackState = PlayerStateController.AttackStates.Weak;
+			Player.AttackState = PlayerController.AttackStates.Weak;
 		}
 	}
 }

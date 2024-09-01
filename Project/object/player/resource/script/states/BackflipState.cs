@@ -33,7 +33,7 @@ public partial class BackflipState : PlayerState
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.BackstepAttack))
 		{
 			Player.Effect.PlayFireFX();
-			Player.State.AttackState = PlayerStateController.AttackStates.Weak;
+			Player.AttackState = PlayerController.AttackStates.Weak;
 		}
 	}
 

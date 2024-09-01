@@ -117,7 +117,7 @@ public partial class FlyingPot : Node3D
 		LaunchSettings settings = LaunchSettings.Create(Player.GlobalPosition, root.GlobalPosition, jumpHeight, false);
 		settings.IsJump = true;
 		settings.AllowJumpDash = false;
-		Player.State.StartLauncher(settings);
+		Player.StartLauncher(settings);
 
 		lockonArea.SetDeferred("monitorable", false);
 
@@ -138,7 +138,7 @@ public partial class FlyingPot : Node3D
 	{
 		flapTimer = 0;
 		isControllingPlayer = true;
-		Player.State.StartExternal(this, root);
+		Player.StartExternal(this, root);
 		Player.Animator.Visible = false;
 		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		enterSFX.Play();
@@ -153,12 +153,12 @@ public partial class FlyingPot : Node3D
 
 		float angleRatio = angle / MaxAngle;
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Back());
-		// REFACTOR TODO Player.VerticalSpeed = Runtime.CalculateJumpPower(Player.State.jumpHeight);
+		// REFACTOR TODO Player.VerticalSpeed = Runtime.CalculateJumpPower(Player.jumpHeight);
 
 		Player.Animator.JumpAnimation();
 		Player.Animator.SnapRotation(Player.MovementAngle - (Mathf.Pi * angleRatio));
 		Player.Animator.Visible = true;
-		Player.State.StopExternal();
+		Player.StopExternal();
 
 		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		exitSFX.Play();
@@ -234,7 +234,7 @@ public partial class FlyingPot : Node3D
 		root.Rotation = Vector3.Forward * angle;
 
 		if (isControllingPlayer)
-			Player.State.UpdateExternalControl(); // Sync player object
+			Player.UpdateExternalControl(); // Sync player object
 
 		if (lockonArea.Monitorable && !interactingWithPlayer)
 			isProcessing = !Mathf.IsZeroApprox(localPosition.Y) || !Mathf.IsZeroApprox(angle); // Update sleeping status
@@ -251,7 +251,7 @@ public partial class FlyingPot : Node3D
 	{
 		if (isLeavingPot)
 		{
-			Player.State.CanJumpDash = true; // So the player isn't completely helpless
+			Player.CanJumpDash = true; // So the player isn't completely helpless
 			isEnteringPot = false;
 		}
 

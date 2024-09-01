@@ -46,12 +46,12 @@ public partial class SidleTrigger : Area3D
 		if (!isInteractingWithPlayer)
 			return;
 
-		if (!Player.State.AllowSidle)
+		if (!Player.AllowSidle)
 			return;
 
 		if (isActive)
 		{
-			if (Player.State.ExternalController != this) // Overridden
+			if (Player.ExternalController != this) // Overridden
 			{
 				StopSidle();
 				isInteractingWithPlayer = false;
@@ -82,7 +82,7 @@ public partial class SidleTrigger : Area3D
 		damageState = DamageStates.Disabled;
 
 		Player.IsOnGround = true;
-		Player.State.StartExternal(this, Player.PathFollower, .2f);
+		Player.StartExternal(this, Player.PathFollower, .2f);
 		Player.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
 		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
 		Player.Animator.StartSidle(isFacingRight);
@@ -94,7 +94,7 @@ public partial class SidleTrigger : Area3D
 
 	private void UpdateSidle()
 	{
-		if (!StageSettings.instance.IsLevelIngame || Player.State.IsDefeated)
+		if (!StageSettings.instance.IsLevelIngame || Player.IsDefeated)
 			return;
 
 		// Check ground
@@ -144,7 +144,7 @@ public partial class SidleTrigger : Area3D
 			Player.MoveSpeed = 0;
 		}
 
-		Player.State.UpdateExternalControl();
+		Player.UpdateExternalControl();
 	}
 
 	private void StopSidle()
@@ -154,14 +154,14 @@ public partial class SidleTrigger : Area3D
 
 		isActive = false;
 
-		if (Player.State.IsDefeated)
+		if (Player.IsDefeated)
 			return; // Don't reset animations when respawning
 
 		damageState = DamageStates.Disabled;
 
-		if (Player.State.ExternalController == this)
+		if (Player.ExternalController == this)
 		{
-			Player.State.StopExternal();
+			Player.StopExternal();
 			Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
 		}
 
@@ -197,17 +197,17 @@ public partial class SidleTrigger : Area3D
 	private void OnPlayerDamaged()
 	{
 		// Invincible/Damage routine has already started
-		if (Player.State.IsInvincible || damageState != DamageStates.Disabled) return;
+		if (Player.IsInvincible || damageState != DamageStates.Disabled) return;
 
 		if (StageSettings.instance.CurrentRingCount == 0)
 		{
 			StopSidle();
-			Player.State.StartKnockback();
+			Player.StartKnockback();
 			return;
 		}
 
-		Player.State.TakeDamage();
-		Player.State.StartInvincibility();
+		Player.TakeDamage();
+		Player.StartInvincibility();
 		Player.Effect.PlayVoice("sidle hurt");
 
 		damageState = DamageStates.Stagger;
@@ -285,7 +285,7 @@ public partial class SidleTrigger : Area3D
 
 			case DamageStates.Respawning:
 				if (cycleTimer > .5f)
-					Player.State.StartRespawn();
+					Player.StartRespawn();
 				break;
 		}
 	}
@@ -313,7 +313,7 @@ public partial class SidleTrigger : Area3D
 		isInteractingWithPlayer = true;
 
 		Player.Skills.IsSpeedBreakEnabled = false; // Disable speed break
-		Player.State.AddLockoutData(lockout); // Apply lockout
+		Player.AddLockoutData(lockout); // Apply lockout
 		EmitSignal(SignalName.Activated); // Immediately emit signals to allow path changes, etc.
 	}
 
@@ -322,7 +322,7 @@ public partial class SidleTrigger : Area3D
 		if (!a.IsInGroup("player detection")) return;
 
 		isInteractingWithPlayer = false;
-		Player.State.RemoveLockoutData(lockout);
+		Player.RemoveLockoutData(lockout);
 
 		/*
 		REFACTOR TODO

@@ -33,7 +33,7 @@ public partial class LaunchState : PlayerState
 		Player.MoveSpeed = Player.VerticalSpeed = 0;
 
 		Player.Lockon.IsMonitoring = false; // Disable lockon monitoring while launch is active
-		Player.State.AttackState = PlayerStateController.AttackStates.OneShot; // Launchers always oneshot all enemies
+		Player.AttackState = PlayerController.AttackStates.OneShot; // Launchers always oneshot all enemies
 
 		if (settings.UseAutoAlign)
 		{
@@ -56,7 +56,7 @@ public partial class LaunchState : PlayerState
 		Player.MoveSpeed = settings.HorizontalVelocity * .5f; // Prevent too much movement
 		Player.VerticalSpeed = Player.IsOnGround ? 0 : settings.FinalVerticalVelocity;
 
-		Player.State.AttackState = PlayerStateController.AttackStates.None;
+		Player.AttackState = PlayerController.AttackStates.None;
 		Player.Lockon.IsMonitoring = !Player.IsOnGround && settings.AllowJumpDash;
 
 		Player.Effect.StopSpinFX();

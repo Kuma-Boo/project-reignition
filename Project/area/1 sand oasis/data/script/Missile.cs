@@ -48,7 +48,7 @@ namespace Project.Gameplay.Bosses
 		public void OnAreaEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player")) return;
-			StageSettings.Player.State.StartKnockback();
+			StageSettings.Player.StartKnockback();
 		}
 	}
 }

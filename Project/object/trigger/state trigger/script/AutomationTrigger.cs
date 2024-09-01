@@ -32,7 +32,7 @@ public partial class AutomationTrigger : Area3D
 
 	private void AttemptAutomation()
 	{
-		if (Player.State.IsAutomationActive || !Player.IsOnGround)
+		if (Player.IsAutomationActive || !Player.IsOnGround)
 			return;
 
 		if (!ignoreDirection)
@@ -43,7 +43,7 @@ public partial class AutomationTrigger : Area3D
 				return;
 		}
 
-		Player.State.StartAutomation(this);
+		Player.StartAutomation(this);
 	}
 
 	public void Activate() => EmitSignal(SignalName.Activated);
