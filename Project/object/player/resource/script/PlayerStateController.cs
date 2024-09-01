@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay.Triggers;
 using System.Collections.Generic;
 
 namespace Project.Gameplay;
@@ -12,11 +13,39 @@ public partial class PlayerStateController : Node
 	public bool CanJumpDash { get; set; }
 	public bool DisableAccelerationJump { get; set; }
 	public bool AllowSidle { get; set; }
-	public bool AllowLandingGrind { get; set; }
-	public bool IsGrinding { get; set; }
-	public bool IsGrindstepping { get; set; }
 	public bool IsInvincible { get; set; }
 	public bool IsDefeated { get; set; }
+
+	[Export]
+	public LaunchState launcherState;
+	public void StartLauncher(LaunchSettings settings)
+	{
+		if (!launcherState.UpdateSettings(settings)) // Failed to start launcher state
+			return;
+
+		Player.StateMachine.ChangeState(launcherState);
+	}
+
+	[Export]
+	private GrindState grindState;
+	public bool AllowLandingGrind { get; set; }
+	public bool IsGrindstepping { get; set; }
+	public bool IsGrinding => grindState.ActiveGrindRail != null;
+	public bool IsRailActivationValid(GrindRail rail) => grindState.IsRailActivationValid(rail);
+	public void StartGrinding(GrindRail rail)
+	{
+		grindState.ActiveGrindRail = rail;
+		Player.StateMachine.ChangeState(grindState);
+	}
+
+	[Export]
+	private AutomationState automationState;
+	public bool IsAutomationActive => automationState.Automation != null;
+	public void StartAutomation(AutomationTrigger automation)
+	{
+		automationState.Automation = automation;
+		Player.StateMachine.ChangeState(automationState);
+	}
 
 	public void ProcessPhysics()
 	{
@@ -60,16 +89,6 @@ public partial class PlayerStateController : Node
 	public void Teleport(Triggers.TeleportTrigger tr)
 	{
 		GD.PrintErr("Teleport hasn't been implemented yet.");
-	}
-
-	[Export]
-	public LaunchState launcherState;
-	public void StartLauncher(LaunchSettings settings)
-	{
-		if (!launcherState.UpdateSettings(settings)) // Failed to start launcher state
-			return;
-
-		Player.StateMachine.ChangeState(launcherState);
 	}
 
 	[Signal]
@@ -247,17 +266,6 @@ public partial class PlayerStateController : Node
 		}
 
 		Player.GlobalPosition += movementOffset * recenterDirection; // Move towards the pathfollower
-	}
-
-	[Export]
-	private GrindState grindState;
-
-	public bool IsRailActivationValid(GrindRail rail) => grindState.IsRailActivationValid(rail);
-	public void StartGrinding(GrindRail rail)
-	{
-		IsGrinding = true;
-		grindState.ActiveGrindRail = rail;
-		Player.StateMachine.ChangeState(grindState);
 	}
 }
 

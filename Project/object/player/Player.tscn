@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://bbbuqgxfhuh8k"]
+[gd_scene load_steps=77 format=3 uid="uid://bbbuqgxfhuh8k"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -27,6 +27,7 @@
 [ext_resource type="AudioStream" uid="uid://dgg82ed3pd114" path="res://sound/sfx/player/speed break end.wav" id="18_7lpol"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/GrindStepState.cs" id="18_kmt0n"]
 [ext_resource type="PackedScene" uid="uid://gp7nom61rmtj" path="res://object/player/resource/component/Effect.tscn" id="19_3dctg"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/AutomationState.cs" id="19_3qddi"]
 [ext_resource type="AudioStream" uid="uid://ci25ma2gyy8iq" path="res://sound/sfx/player/time break pad.ogg" id="19_yunuo"]
 [ext_resource type="AudioStream" uid="uid://byvon80bojscd" path="res://sound/sfx/player/heartbeat.wav" id="20_8j2sa"]
 [ext_resource type="PackedScene" uid="uid://qmsgr6kswk87" path="res://object/player/resource/component/PathFollower.tscn" id="20_b54bv"]
@@ -1540,6 +1541,10 @@ script = ExtResource("18_kmt0n")
 landState = NodePath("../Land")
 stompState = NodePath("../Stomp")
 
+[node name="Automation" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState")]
+script = ExtResource("19_3qddi")
+runState = NodePath("../Run")
+
 [node name="Controller" type="Node" parent="Components"]
 script = ExtResource("2_pk07e")
 InputCurve = SubResource("Curve_l0cmy")
@@ -1578,11 +1583,12 @@ baseGrindFriction = 4
 baseGrindTurnaround = 6
 sidleMovementCurve = SubResource("Curve_jakcp")
 
-[node name="State" type="Node" parent="Components" node_paths=PackedStringArray("hitboxAnimator", "launcherState", "grindState")]
+[node name="State" type="Node" parent="Components" node_paths=PackedStringArray("launcherState", "grindState", "automationState", "hitboxAnimator")]
 script = ExtResource("13_j0n3v")
-hitboxAnimator = NodePath("../Sonic/HitboxTrigger/AnimationPlayer")
 launcherState = NodePath("../StateMachine/Launch")
 grindState = NodePath("../StateMachine/Grind")
+automationState = NodePath("../StateMachine/Automation")
+hitboxAnimator = NodePath("../Sonic/HitboxTrigger/AnimationPlayer")
 
 [node name="PathFollower" parent="Components" instance=ExtResource("20_b54bv")]
 

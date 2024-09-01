@@ -81,7 +81,6 @@ public partial class GrindState : PlayerState
 		Player.MoveSpeed = Mathf.Cos(launchAngle) * launchSpeed;
 		Player.VerticalSpeed = Mathf.Sin(launchAngle) * -launchSpeed;
 
-		Player.State.IsGrinding = false;
 		if (!Player.State.IsGrindstepping) // Smoother transition to falling animation
 			Player.Animator.ResetState(.2f);
 		Player.Animator.SnapRotation(Player.MovementAngle);
