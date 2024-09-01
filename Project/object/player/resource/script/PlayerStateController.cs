@@ -10,7 +10,9 @@ public partial class PlayerStateController : Node
 	public void Initialize(PlayerController player) => Player = player;
 
 	public bool CanJumpDash { get; set; }
+	public bool DisableAccelerationJump { get; set; }
 	public bool AllowSidle { get; set; }
+	public bool IsGrindstepping { get; set; }
 	public bool IsInvincible { get; set; }
 	public bool IsDefeated { get; set; }
 
@@ -68,21 +70,59 @@ public partial class PlayerStateController : Node
 		Player.StateMachine.ChangeState(launcherState);
 	}
 
-	public Node ExternalController { get; set; }
-	public Node3D ExternalParent { get; set; }
+	[Signal]
+	public delegate void ExternalControlStartedEventHandler();
+	[Signal]
+	public delegate void ExternalControlCompletedEventHandler();
+
+	public Node ExternalController { get; private set; }
+	public Node3D ExternalParent { get; private set; }
+	public Vector3 ExternalOffset { get; private set; }
+	private float externalSmoothing;
 	public void StartExternal(Node controller, Node3D followObject = null, float smoothing = 0f, bool allowSpeedBreak = false)
 	{
-		GD.PrintErr("Start External controllers is not inimplemented!");
+		ExternalController = controller;
+
+		// REFACTOR TODO Move to states?
+		Player.Skills.IsSpeedBreakEnabled = allowSpeedBreak;
+
+		ExternalParent = followObject;
+		ExternalOffset = Vector3.Zero; // Reset offset
+		externalSmoothing = smoothing;
+		if (ExternalParent != null && !Mathf.IsZeroApprox(smoothing)) // Smooth out transition
+			ExternalOffset = Player.GlobalPosition - ExternalParent.GlobalPosition;
+
+		UpdateExternalControl();
+		EmitSignal(SignalName.ExternalControlStarted);
 	}
 
-	public void UpdateExternalControl(bool autoResynce = false)
+	public void UpdateExternalControl(bool autoResync = false)
 	{
-		GD.PrintErr("Process External controllers is not inimplemented!");
+		GD.PushWarning("External Controllers used to check the ground. Be sure this functionality is recreated when needed.");
+
+		if (ExternalParent != null)
+		{
+			if (ExternalParent is BoneAttachment3D) // Ensure BoneAttachments are updated
+				(ExternalParent as BoneAttachment3D).OnBonePoseUpdate((ExternalParent as BoneAttachment3D).BoneIdx);
+
+			Player.GlobalTransform = ExternalParent.GlobalTransform;
+		}
+
+		ExternalOffset = ExternalOffset.Lerp(Vector3.Zero, externalSmoothing); // Smooth out entry
+		Player.GlobalPosition += ExternalOffset;
+
+		if (autoResync)
+			Player.PathFollower.Resync();
+		else
+			Player.PathFollower.RecalculateData();
 	}
 
 	public void StopExternal()
 	{
-		GD.PrintErr("Stop External controllers is not inimplemented!");
+		ExternalController = null;
+		ExternalParent = null;
+		Player.UpdateOrientation();
+		EmitSignal(SignalName.ExternalControlCompleted);
 	}
 
 	[Signal]
@@ -111,6 +151,7 @@ public partial class PlayerStateController : Node
 	public bool IsLockoutActive => ActiveLockoutData != null;
 	public bool IsLockoutOverridingMovementAngle => Player.State.IsLockoutActive && Player.State.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free;
 	public LockoutResource ActiveLockoutData { get; private set; }
+
 	private readonly List<LockoutResource> lockoutDataList = [];
 
 	/// <summary> Adds a ControlLockoutResource to the list, and switches to it depending on it's priority
@@ -204,6 +245,16 @@ public partial class PlayerStateController : Node
 		}
 
 		Player.GlobalPosition += movementOffset * recenterDirection; // Move towards the pathfollower
+	}
+
+	[Export]
+	private GrindState grindState;
+
+	public bool IsRailActivationValid(GrindRail rail) => grindState.IsRailActivationValid(rail);
+	public void StartGrinding(GrindRail rail)
+	{
+		grindState.ActiveGrindRail = rail;
+		Player.StateMachine.ChangeState(grindState);
 	}
 }
 

@@ -25,6 +25,7 @@ public partial class LandState : PlayerState
 		Player.Lockon.ResetLockonTarget();
 		Player.Animator.LandingAnimation();
 		Player.Effect.PlayLandingFX();
+		Player.State.DisableAccelerationJump = false;
 		/*
 		REFACTOR TODO
 		if (allowLandingSkills && MovementState == MovementStates.Normal)

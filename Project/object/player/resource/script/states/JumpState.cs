@@ -141,8 +141,10 @@ public partial class JumpState : PlayerState
 	private void StartAccelerationJump()
 	{
 		isAccelerationJumpQueued = false;
-		float inputAngle = Player.Controller.GetTargetMovementAngle();
+		if (Player.State.DisableAccelerationJump)
+			return;
 
+		float inputAngle = Player.Controller.GetTargetMovementAngle();
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
 			Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 		{

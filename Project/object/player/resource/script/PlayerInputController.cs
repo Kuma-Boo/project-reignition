@@ -106,7 +106,12 @@ public partial class PlayerInputController : Node
 	{
 		LockoutResource resource = Player.State.ActiveLockoutData;
 		if (!Player.State.IsLockoutOverridingMovementAngle) // Return early when LockoutResource doesn't override inputAngle
+		{
+			if (Mathf.IsZeroApprox(GetInputStrength()))
+				return Player.MovementAngle;
+
 			return inputAngle;
+		}
 
 		float forwardAngle = Player.State.ActiveLockoutData.movementAngle;
 		switch (resource.spaceMode)

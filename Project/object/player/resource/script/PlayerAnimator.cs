@@ -339,7 +339,8 @@ public partial class PlayerAnimator : Node3D
 			inputAngle += referenceAngle;
 		else
 		*/
-		inputAngle += Player.Controller.GetTargetMovementAngle();
+		if (!Mathf.IsZeroApprox(Player.Controller.GetInputStrength()))
+			inputAngle += Player.Controller.GetTargetMovementAngle();
 
 		float delta = ExtensionMethods.SignedDeltaAngleRad(referenceAngle, inputAngle);
 		if (ExtensionMethods.DotAngle(referenceAngle, inputAngle) < 0) // Input is backwards
@@ -542,12 +543,9 @@ public partial class PlayerAnimator : Node3D
 		// Don't update directions when externally controlled or on launchers
 		float targetRotation = Player.MovementAngle;
 
-		/* REFACTOR TODO
-		if (Player.MovementState == PlayerController.MovementStates.External)
+		if (Player.State.ExternalController != null)
 			targetRotation = ExternalAngle;
-		else
-		*/
-		if (Player.Lockon.IsHomingAttacking) // Face target
+		else if (Player.Lockon.IsHomingAttacking) // Face target
 			targetRotation = ExtensionMethods.CalculateForwardAngle(Player.Lockon.HomingAttackDirection);
 		else if (Player.IsMovingBackward) // Backstepping
 			targetRotation = Player.PathFollower.ForwardAngle + (groundTurnRatio * Mathf.Pi * .15f);
