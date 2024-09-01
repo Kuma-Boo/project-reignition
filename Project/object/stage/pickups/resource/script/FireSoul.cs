@@ -39,7 +39,7 @@ public partial class FireSoul : Pickup
 		isCollected = true;
 		Animator.Play("collect");
 		HeadsUpDisplay.instance.CollectFireSoul();
-		StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint), (uint)ConnectFlags.OneShot);
+		StageSettings.Instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint), (uint)ConnectFlags.OneShot);
 	}
 
 	public override void Respawn()
@@ -53,8 +53,8 @@ public partial class FireSoul : Pickup
 		UpdateLockon();
 		Animator.Play("loop");
 
-		if (StageSettings.instance.IsConnected(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint)))
-			StageSettings.instance.Disconnect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint));
+		if (StageSettings.Instance.IsConnected(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint)))
+			StageSettings.Instance.Disconnect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint));
 
 		base.Respawn();
 	}

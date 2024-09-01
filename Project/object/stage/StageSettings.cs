@@ -11,7 +11,7 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class StageSettings : Node3D
 {
-	public static StageSettings instance;
+	public static StageSettings Instance;
 	public static PlayerController Player { get; private set; }
 	public static void RegisterPlayer(PlayerController player) => Player = player;
 
@@ -20,7 +20,7 @@ public partial class StageSettings : Node3D
 
 	public override void _EnterTree()
 	{
-		instance = this; // Always override previous instance
+		Instance = this; // Always override previous instance
 
 		for (int i = 0; i < pathParent.GetChildCount(); i++)
 		{

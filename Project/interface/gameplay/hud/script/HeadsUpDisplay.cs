@@ -9,7 +9,7 @@ namespace Project.Gameplay;
 public partial class HeadsUpDisplay : Control
 {
 	public static HeadsUpDisplay instance;
-	private StageSettings Stage => StageSettings.instance;
+	private StageSettings Stage => StageSettings.Instance;
 
 	public override void _EnterTree() => instance = this;
 

@@ -22,7 +22,10 @@ public partial class SlideState : PlayerState
 		Player.ChangeHitbox("slide");
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideDefense))
+		{
+			Player.DisableDamage = true;
 			Player.Effect.StartAegisFX();
+		}
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideAttack))
 		{
@@ -43,7 +46,10 @@ public partial class SlideState : PlayerState
 	public override void ExitState()
 	{
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideDefense))
+		{
+			Player.DisableDamage = false;
 			Player.Effect.StopAegisFX();
+		}
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideAttack))
 		{

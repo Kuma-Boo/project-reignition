@@ -96,10 +96,10 @@ namespace Project.Gameplay.Bosses
 
 			SetUpMissiles();
 
-			StageSettings.instance.ConnectUnloadSignal(this);
-			StageSettings.instance.ConnectRespawnSignal(this);
+			StageSettings.Instance.ConnectUnloadSignal(this);
+			StageSettings.Instance.ConnectRespawnSignal(this);
 
-			StageSettings.instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.StartIntroduction));
+			StageSettings.Instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.StartIntroduction));
 		}
 
 
@@ -254,7 +254,7 @@ namespace Project.Gameplay.Bosses
 			Player.Visible = true;
 			Player.ProcessMode = ProcessModeEnum.Inherit;
 			Player.Camera.Camera.Current = true;
-			StageSettings.instance.FinishLevel(true);
+			StageSettings.Instance.FinishLevel(true);
 		}
 
 

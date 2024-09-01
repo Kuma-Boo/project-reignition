@@ -15,7 +15,7 @@ namespace Project.Gameplay.Objects
 		public bool DisableAutoRespawning { get; set; }
 		public SpawnData SpawnData { get; set; }
 
-		protected StageSettings Stage => StageSettings.instance;
+		protected StageSettings Stage => StageSettings.Instance;
 		protected PlayerController Player => StageSettings.Player;
 
 		public override void _Ready() => SetUp();

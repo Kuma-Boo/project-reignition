@@ -10,7 +10,7 @@ namespace Project.Gameplay
 	public partial class CharacterController : CharacterBody3D
 	{
 		public static CharacterController instance;
-		public StageSettings Stage => StageSettings.instance;
+		public StageSettings Stage => StageSettings.Instance;
 
 		public override void _EnterTree() => instance = this; // Always Override Singleton
 

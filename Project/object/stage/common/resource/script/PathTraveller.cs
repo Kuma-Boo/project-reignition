@@ -105,7 +105,7 @@ public partial class PathTraveller : Node3D
 		startingOffset = pathFollower.GlobalBasis.Inverse() * (GlobalPosition - pathFollower.GlobalPosition);
 		spawnData = new SpawnData(GetParent(), Transform); // Create spawn data
 
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.ConnectRespawnSignal(this);
 		Respawn();
 	}
 

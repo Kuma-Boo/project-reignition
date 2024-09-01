@@ -237,7 +237,7 @@ public partial class PauseMenu : Node
 		animator.Set(SUBMENU_PARAMETER, "pause");
 	}
 
-	private StageSettings Stage => StageSettings.instance;
+	private StageSettings Stage => StageSettings.Instance;
 	private void UpdateStatusMenuData()
 	{
 		// Status menu

@@ -1,0 +1,119 @@
+using Godot;
+using Project.Core;
+
+namespace Project.Gameplay;
+
+public partial class KnockbackState : PlayerState
+{
+	[Export]
+	private PlayerState landState;
+	public KnockbackSettings Settings { get; set; }
+	public KnockbackSettings PreviousSettings { get; set; }
+	private readonly float DamageFriction = 20f;
+
+	public override void EnterState()
+	{
+		if (Player.IsInvincible && !Settings.ignoreInvincibility) return;
+
+		/*
+		REFACTOR TODO
+		if (Lockon.IsHomingAttacking)
+			Lockon.StopHomingAttack();
+		*/
+
+		if (Player.Skills.IsSpeedBreakActive) // Disable speedbreak
+			Player.Skills.ToggleSpeedBreak();
+
+		Player.MovementAngle = Player.PathFollower.ForwardAngle; // Prevent being knocked sideways
+
+		/* REFACTOR TODO 
+		if (Settings.ignoreMovementState || MovementState == MovementStates.Normal)
+		{
+		*/
+		Player.Animator.StartHurt();
+		Player.Animator.ResetState();
+		PreviousSettings = Settings;
+
+		Player.MoveSpeed = Settings.overrideKnockbackSpeed ? Settings.knockbackSpeed : 8f;
+		if (!Settings.knockForward)
+			Player.MoveSpeed *= -1;
+
+		if (!Settings.stayOnGround)
+		{
+			Player.IsOnGround = false;
+			Player.VerticalSpeed = Runtime.CalculateJumpPower(Settings.overrideKnockbackHeight ? Settings.knockbackHeight : 1);
+		}
+		//}
+
+		if (Player.ExternalController != null)
+			return; // Only allow autorespawning when not using external controller
+
+		if (Settings.disableDamage)
+			return;
+
+		/*
+		REFACTOR TODO
+		SetActionState(ActionStates.Damaged);
+		*/
+
+		// Apply invincibility and drop rings
+		if (!Player.IsInvincible)
+		{
+			Player.StartInvincibility();
+
+			if (!Settings.disableDamage)
+				Player.TakeDamage();
+		}
+	}
+
+	public override void ExitState()
+	{
+	}
+
+	public override PlayerState ProcessPhysics()
+	{
+		Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, 0, DamageFriction * PhysicsManager.physicsDelta);
+		Player.VerticalSpeed -= Runtime.Gravity * PhysicsManager.physicsDelta;
+		Player.ApplyMovement();
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.DownCancel) &&
+			Player.Controller.IsJumpBufferActive)
+		{
+			Player.Controller.ResetJumpBuffer();
+			/*
+			REFACTOR TODO
+			Player.ForceAccelerationJump = false;
+			return jumpState;
+			*/
+		}
+
+		if (!Settings.stayOnGround && Player.CheckGround())
+			return landState;
+
+		return null;
+	}
+}
+
+public struct KnockbackSettings
+{
+	/// <summary> Should the player be knocked forward? Default is false. </summary>
+	public bool knockForward;
+	/// <summary> Knock the player around without bouncing them into the air. </summary>
+	public bool stayOnGround;
+	/// <summary> Apply knockback even when invincible? </summary>
+	public bool ignoreInvincibility;
+	/// <summary> Don't damage the player? </summary>
+	public bool disableDamage;
+	/// <summary> Always apply knockback, regardless of state. </summary>
+	public bool ignoreMovementState;
+
+	/// <summary> Override default knockback amount? </summary>
+	public bool overrideKnockbackSpeed;
+	/// <summary> Speed to assign to player. </summary>
+	public float knockbackSpeed;
+
+	/// <summary> Override default knockback height? </summary>
+	public bool overrideKnockbackHeight;
+	/// <summary> Height to move player by. </summary>
+	public float knockbackHeight;
+}

@@ -20,13 +20,13 @@ public partial class Countdown : Control
 	private AnimationPlayer animator;
 
 	public override void _EnterTree() => Instance = this;
-	public override void _Ready() => StageSettings.instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.StartCountdown));
+	public override void _Ready() => StageSettings.Instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.StartCountdown));
 
 	public void StartCountdown()
 	{
 		BGMPlayer.StartStageMusic(); // Start BGM
 
-		if (DebugManager.Instance.SkipCountdown || StageSettings.instance.Data.DisableCountdown)
+		if (DebugManager.Instance.SkipCountdown || StageSettings.Instance.Data.DisableCountdown)
 		{
 			FinishCountdown();
 			return;

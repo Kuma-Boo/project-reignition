@@ -209,7 +209,7 @@ public partial class CharacterSkillManager : Node
 		if (SoulSlideInterval > soulSlideTimer)
 		{
 			soulSlideTimer -= SoulSlideInterval;
-			StageSettings.instance.CurrentEXP++;
+			StageSettings.Instance.CurrentEXP++;
 		}
 	}
 
@@ -440,7 +440,7 @@ public partial class CharacterSkillManager : Node
 		if (!AllowCrestSkill ||
 			IsUsingBreakSkills ||
 			Character.ActionState != CharacterController.ActionStates.Normal ||
-			StageSettings.instance.CurrentRingCount == 0)
+			StageSettings.Instance.CurrentRingCount == 0)
 		{
 			return;
 		}
@@ -448,7 +448,7 @@ public partial class CharacterSkillManager : Node
 		if (UpdateCrestTimer())
 		{
 			Character.MoveSpeed = Mathf.Max(Character.MoveSpeed, GroundSettings.Speed * WindCrestSpeedMultiplier);
-			StageSettings.instance.UpdateRingCount(1, StageSettings.MathModeEnum.Subtract, true);
+			StageSettings.Instance.UpdateRingCount(1, StageSettings.MathModeEnum.Subtract, true);
 			Character.Effect.PlayWindCrestFX();
 		}
 	}
@@ -745,8 +745,8 @@ public partial class CharacterSkillManager : Node
 	public int SoulPower { get; private set; } // Current soul power
 	public int MaxSoulPower { get; private set; } // Calculated on start
 
-	public bool IsSoulGaugeEmpty => !StageSettings.instance.IsControlTest && SoulPower == 0;
-	public bool IsSoulGaugeCharged => StageSettings.instance.IsControlTest || SoulPower >= MinimumSoulPower;
+	public bool IsSoulGaugeEmpty => !StageSettings.Instance.IsControlTest && SoulPower == 0;
+	public bool IsSoulGaugeCharged => StageSettings.Instance.IsControlTest || SoulPower >= MinimumSoulPower;
 	public const int MinimumSoulPower = 50; // Minimum amount of soul power needed to use soul skills.
 	public void ModifySoulGauge(int amount)
 	{

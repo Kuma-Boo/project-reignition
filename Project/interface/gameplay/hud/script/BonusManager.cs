@@ -7,7 +7,7 @@ namespace Project.Gameplay;
 public partial class BonusManager : VBoxContainer
 {
 	public static BonusManager instance;
-	private StageSettings Stage => StageSettings.instance;
+	private StageSettings Stage => StageSettings.Instance;
 	private PlayerController Player => StageSettings.Player;
 
 	// Called when the node enters the scene tree for the first time.
@@ -67,12 +67,12 @@ public partial class BonusManager : VBoxContainer
 
 		if (bonusData.Type == BonusType.EXP)
 		{
-			StageSettings.instance.CurrentEXP += bonusData.Amount;
+			StageSettings.Instance.CurrentEXP += bonusData.Amount;
 			return;
 		}
 
 		// Update score
-		StageSettings.instance.UpdateScore(bonusData.CalculateBonusPoints(), StageSettings.MathModeEnum.Add);
+		StageSettings.Instance.UpdateScore(bonusData.CalculateBonusPoints(), StageSettings.MathModeEnum.Add);
 		UpdateQueuedScore();
 	}
 

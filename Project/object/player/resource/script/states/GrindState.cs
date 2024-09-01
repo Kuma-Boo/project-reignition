@@ -52,7 +52,7 @@ public partial class GrindState : PlayerState
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.GrindUp) &&
 			SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.GrindUp) == 3)
 		{
-			StageSettings.instance.UpdateRingCount(5, StageSettings.MathModeEnum.Subtract, true);
+			StageSettings.Instance.UpdateRingCount(5, StageSettings.MathModeEnum.Subtract, true);
 		}
 
 		Player.Animator.ExternalAngle = 0; // Reset rotation

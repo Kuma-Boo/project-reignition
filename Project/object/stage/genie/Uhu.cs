@@ -18,7 +18,7 @@ public partial class Uhu : PathFollow3D
 	private Path3D path;
 	[Export]
 	private Trail3D trail;
-	private StageSettings Stage => StageSettings.instance;
+	private StageSettings Stage => StageSettings.Instance;
 
 	private Vector2 targetPosition;
 	private Vector2 currentPosition;

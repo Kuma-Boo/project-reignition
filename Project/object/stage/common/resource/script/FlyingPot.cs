@@ -65,7 +65,7 @@ public partial class FlyingPot : Node3D
 		if (Engine.IsEditorHint()) return;
 
 		animationTree.Active = true;
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.ConnectRespawnSignal(this);
 
 		if (customCameraSettings != null) // Create the camera trigger
 		{

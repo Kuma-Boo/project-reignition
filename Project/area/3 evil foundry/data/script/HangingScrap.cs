@@ -12,7 +12,7 @@ namespace Project.Gameplay
 		private PlayerController Player => StageSettings.Player;
 		private bool isInteractingWithPlayer;
 
-		public override void _Ready() => StageSettings.instance.ConnectRespawnSignal(this);
+		public override void _Ready() => StageSettings.Instance.ConnectRespawnSignal(this);
 		public void Respawn() => animator.Play("RESET");
 
 		public override void _PhysicsProcess(double _)

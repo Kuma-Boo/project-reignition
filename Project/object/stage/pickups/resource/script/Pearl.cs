@@ -76,11 +76,11 @@ public partial class Pearl : Pickup
 
 		isCollected = true;
 
-		StageSettings.instance.UpdateScore(isRichPearl ? 5 : 1, StageSettings.MathModeEnum.Add);
-		if (StageSettings.instance.Data.MissionType == LevelDataResource.MissionTypes.Pearl &&
-			StageSettings.instance.Data.MissionObjectiveCount == 0)
+		StageSettings.Instance.UpdateScore(isRichPearl ? 5 : 1, StageSettings.MathModeEnum.Add);
+		if (StageSettings.Instance.Data.MissionType == LevelDataResource.MissionTypes.Pearl &&
+			StageSettings.Instance.Data.MissionObjectiveCount == 0)
 		{
-			StageSettings.instance.FinishLevel(false);
+			StageSettings.Instance.FinishLevel(false);
 		}
 		base.Collect();
 	}

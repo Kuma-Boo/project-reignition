@@ -105,9 +105,9 @@ public partial class DestructableObject : Node3D
 		Respawn();
 
 		if (!disableRespawn)
-			StageSettings.instance.ConnectRespawnSignal(this);
+			StageSettings.Instance.ConnectRespawnSignal(this);
 
-		StageSettings.instance.ConnectUnloadSignal(this);
+		StageSettings.Instance.ConnectUnloadSignal(this);
 	}
 
 

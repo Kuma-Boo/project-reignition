@@ -26,6 +26,7 @@ public partial class PlayerController : CharacterBody3D
 	public PlayerPathController PathFollower { get; private set; }
 	[Export]
 	public PlayerCameraController Camera { get; private set; }
+	private StageSettings Stage => StageSettings.Instance;
 
 	public override void _Ready()
 	{
@@ -50,6 +51,7 @@ public partial class PlayerController : CharacterBody3D
 
 		UpdateOrientation();
 		UpdateLockoutTimer();
+		UpdateInvincibility();
 		UpdateRecenter();
 
 		Lockon.ProcessPhysics();
@@ -433,9 +435,11 @@ public partial class PlayerController : CharacterBody3D
 	public bool IsJumpDashing { get; set; }
 	public bool IsJumpDashOrHomingAttack => IsJumpDashing || Lockon.IsHomingAttacking;
 	public bool DisableAccelerationJump { get; set; }
+	public bool DisableDamage { get; set; }
 	public bool AllowSidle { get; set; }
-	public bool IsInvincible { get; set; }
+	/// <summary> True while the player is defeated but hasn't respawned yet. </summary>
 	public bool IsDefeated { get; set; }
+	public bool AllowLandingSkills { get; set; }
 
 	[ExportGroup("States")]
 	[Export]
@@ -487,24 +491,140 @@ public partial class PlayerController : CharacterBody3D
 	// REFACTOR TODO
 	[Signal]
 	public delegate void KnockbackEventHandler();
-	private KnockbackSettings previousKnockbackSettings;
-	public void StartKnockback(KnockbackSettings knockbackSettings = new())
+	[Export]
+	private KnockbackState knockbackState;
+	public void StartKnockback(KnockbackSettings settings = new())
 	{
-		GD.PrintErr("Knockback hasn't been implemented yet.");
+		EmitSignal(SignalName.Knockback); // Emit signal FIRST so external controllers can be alerted
+		knockbackState.Settings = settings;
+		StateMachine.ChangeState(knockbackState);
 	}
 
 	public void TakeDamage()
 	{
-		GD.PrintErr("Damage hasn't been implemented yet.");
+		if (!Stage.IsLevelIngame) return;
+
+		AllowLandingSkills = false; // Disable landing skills
+									// REFACTOR TODO SetActionState(ActionStates.Damaged);
+
+		// No rings; Respawn
+		if (Stage.CurrentRingCount == 0)
+		{
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.PearlRespawn) && Skills.IsSoulGaugeCharged)
+			{
+				// Lose soul power and continue
+				Skills.ModifySoulGauge(-CharacterSkillManager.MinimumSoulPower);
+			}
+			else
+			{
+				Effect.PlayVoice("defeat");
+				StartRespawn();
+				return;
+			}
+		}
+
+		Effect.PlayVoice("hurt");
+
+		int ringLoss = 20;
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RingLossConvert)) // Don't lose ANY soul power when ring -> soul conversion skill is active
+		{
+			Effect.PlayDarkSpiralFX(); // Play a VFX instead
+		}
+		else if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.PearlDamage)) // Lose soul power
+		{
+			if (SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.PearlDamage) == 1) // Damage augment
+			{
+				ringLoss += 20;
+				Skills.ModifySoulGauge(-Mathf.FloorToInt(Skills.SoulPower * .1f));
+			}
+			else
+			{
+				Skills.ModifySoulGauge(-Mathf.FloorToInt(Skills.SoulPower * .2f));
+			}
+		}
+		else
+		{
+			Skills.ModifySoulGauge(-Mathf.FloorToInt(Skills.SoulPower * .5f));
+		}
+
+		// Add in defense lowering augments
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RingLossConvert) &&
+			SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.RingLossConvert) == 1)
+		{
+			ringLoss += 20;
+		}
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SpeedUp) &&
+			SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.SpeedUp) == 3)
+		{
+			ringLoss += 20;
+		}
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.TractionUp) &&
+			SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.TractionUp) == 3)
+		{
+			ringLoss += 20;
+		}
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.AccelJumpAttack) &&
+			SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.AccelJumpAttack) == 1)
+		{
+			ringLoss += 20;
+		}
+
+		// Defense up
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RingDamage))
+			ringLoss -= 10;
+
+		// Lose rings
+		ringLoss = Mathf.Max(ringLoss, 0);
+		Stage.UpdateRingCount(ringLoss, StageSettings.MathModeEnum.Subtract);
+		Stage.IncrementDamageCount();
+
+		// Level failed
+		if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect)
+		{
+			DefeatPlayer();
+			Stage.FinishLevel(false);
+		}
 	}
 
-	public void StartInvincibility(float length = 3f)
+	public bool IsInvincible => invincibilityTimer != 0 || DisableDamage; // REFACTOR TODO ActionState == ActionStates.Teleport;
+	private float invincibilityTimer;
+	private const float InvincibilityLength = 3f;
+	public void StartInvincibility(float timeScale = 1f)
 	{
-		GD.PrintErr("Invincibility hasn't been implemented yet.");
+		invincibilityTimer = InvincibilityLength / timeScale;
+		Animator.StartInvincibility(timeScale);
+	}
+
+	private void UpdateInvincibility()
+	{
+		if (Mathf.IsZeroApprox(invincibilityTimer))
+			return;
+
+		invincibilityTimer = Mathf.MoveToward(invincibilityTimer, 0, PhysicsManager.physicsDelta);
 	}
 
 	[Signal]
 	public delegate void DefeatedEventHandler();
+	private void DefeatPlayer()
+	{
+		if (IsDefeated) return;
+
+		IsDefeated = true;
+		Lockon.IsMonitoring = false;
+		ChangeHitbox("disable");
+
+		// Disable break skills
+		if (Skills.IsTimeBreakActive)
+			Skills.ToggleTimeBreak();
+		if (Skills.IsSpeedBreakActive)
+			Skills.ToggleSpeedBreak();
+
+		EmitSignal(SignalName.Defeated);
+	}
+
 	public void StartRespawn(bool useDebugCheckpoint = false)
 	{
 		GD.PrintErr("Respawn hasn't been implemented yet.");
@@ -569,28 +689,4 @@ public partial class PlayerController : CharacterBody3D
 		EmitSignal(SignalName.ExternalControlCompleted);
 	}
 	#endregion
-}
-
-public struct KnockbackSettings
-{
-	/// <summary> Should the player be knocked forward? Default is false. </summary>
-	public bool knockForward;
-	/// <summary> Knock the player around without bouncing them into the air. </summary>
-	public bool stayOnGround;
-	/// <summary> Apply knockback even when invincible? </summary>
-	public bool ignoreInvincibility;
-	/// <summary> Don't damage the player? </summary>
-	public bool disableDamage;
-	/// <summary> Always apply knockback, regardless of state. </summary>
-	public bool ignoreMovementState;
-
-	/// <summary> Override default knockback amount? </summary>
-	public bool overrideKnockbackSpeed;
-	/// <summary> Speed to assign to player. </summary>
-	public float knockbackSpeed;
-
-	/// <summary> Override default knockback height? </summary>
-	public bool overrideKnockbackHeight;
-	/// <summary> Height to move player by. </summary>
-	public float knockbackHeight;
 }

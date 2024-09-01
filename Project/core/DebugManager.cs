@@ -226,7 +226,7 @@ public partial class DebugManager : Node2D
 	private void ToggleInfiniteRings(bool enabled)
 	{
 		InfiniteRings = enabled;
-		StageSettings.instance?.UpdateRingCount(0, StageSettings.MathModeEnum.Replace, true);
+		StageSettings.Instance?.UpdateRingCount(0, StageSettings.MathModeEnum.Replace, true);
 	}
 	/// <summary> Skip countdowns for faster debugging. </summary>
 	public bool SkipCountdown { get; private set; }
@@ -300,7 +300,7 @@ public partial class DebugManager : Node2D
 
 	private void SaveCustomCheckpoint()
 	{
-		if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(StageSettings.Player)) return;
+		if (!IsInstanceValid(StageSettings.Instance) || !IsInstanceValid(StageSettings.Player)) return;
 
 		if (customCheckpoint == null)
 		{
@@ -309,20 +309,20 @@ public partial class DebugManager : Node2D
 		}
 
 		customCheckpoint.GlobalPosition = StageSettings.Player.GlobalPosition;
-		StageSettings.instance.SetCheckpoint(customCheckpoint);
+		StageSettings.Instance.SetCheckpoint(customCheckpoint);
 		GD.Print("Checkpoint created.");
 	}
 
 	private void LoadCustomCheckpoint()
 	{
-		if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(StageSettings.Player)) return;
+		if (!IsInstanceValid(StageSettings.Instance) || !IsInstanceValid(StageSettings.Player)) return;
 		if (customCheckpoint == null)
 		{
 			GD.PushWarning("No custom checkpoint.");
 			return;
 		}
 
-		StageSettings.instance.SetCheckpoint(customCheckpoint);
+		StageSettings.Instance.SetCheckpoint(customCheckpoint);
 		StageSettings.Player.StartRespawn(true);
 	}
 	#endregion

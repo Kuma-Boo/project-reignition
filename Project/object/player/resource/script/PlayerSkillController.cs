@@ -174,7 +174,7 @@ public partial class PlayerSkillController : Node3D
 		if (SoulSlideInterval > soulSlideTimer)
 		{
 			soulSlideTimer -= SoulSlideInterval;
-			StageSettings.instance.CurrentEXP++;
+			StageSettings.Instance.CurrentEXP++;
 		}
 	}
 	#endregion
@@ -286,7 +286,6 @@ public partial class PlayerSkillController : Node3D
 
 			ToggleTimeBreak();
 		}
-
 		*/
 	}
 
@@ -431,8 +430,8 @@ public partial class PlayerSkillController : Node3D
 	public int SoulPower { get; private set; } // Current soul power
 	public int MaxSoulPower { get; private set; } // Calculated on start
 
-	public bool IsSoulGaugeEmpty => !StageSettings.instance.IsControlTest && SoulPower == 0;
-	public bool IsSoulGaugeCharged => StageSettings.instance.IsControlTest || SoulPower >= MinimumSoulPower;
+	public bool IsSoulGaugeEmpty => !StageSettings.Instance.IsControlTest && SoulPower == 0;
+	public bool IsSoulGaugeCharged => StageSettings.Instance.IsControlTest || SoulPower >= MinimumSoulPower;
 	public const int MinimumSoulPower = 50; // Minimum amount of soul power needed to use soul skills.
 	public void ModifySoulGauge(int amount)
 	{

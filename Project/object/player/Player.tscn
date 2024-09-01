@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=3 uid="uid://bbbuqgxfhuh8k"]
+[gd_scene load_steps=80 format=3 uid="uid://bbbuqgxfhuh8k"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -36,6 +36,7 @@
 [ext_resource type="Texture2D" uid="uid://47a1wqak6nce" path="res://object/player/resource/effect/texture/time break.png" id="22_d122m"]
 [ext_resource type="Resource" uid="uid://dsp0ckshdhlnr" path="res://resource/preset/lockout/action/BounceLockout.tres" id="22_nv64p"]
 [ext_resource type="ArrayMesh" uid="uid://cnxw6wvbmkkar" path="res://object/player/resource/effect/model/SpeedbreakFX.res" id="23_duu2r"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/KnockbackState.cs" id="23_gpnrh"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="24_n4i5r"]
 [ext_resource type="ArrayMesh" uid="uid://cljse54cbo2oh" path="res://object/player/resource/effect/model/SpeedbreakTallFX.res" id="25_tv3ro"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/ScreenShock.gdshader" id="26_bjr1n"]
@@ -1398,7 +1399,7 @@ _data = {
 "volcano-slide": SubResource("Animation_flrr5")
 }
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "grindState", "automationState", "bounceState") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "grindState", "automationState", "bounceState", "knockbackState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1419,6 +1420,7 @@ launchState = NodePath("Components/StateMachine/Launch")
 grindState = NodePath("Components/StateMachine/Grind")
 automationState = NodePath("Components/StateMachine/Automation")
 bounceState = NodePath("Components/StateMachine/Bounce")
+knockbackState = NodePath("Components/StateMachine/Knockback")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
@@ -1566,6 +1568,10 @@ homingAttackState = NodePath("../HomingAttack")
 LockoutSettings = ExtResource("22_nv64p")
 bounceSpeed = 5.0
 bounceHeight = 4.0
+
+[node name="Knockback" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState")]
+script = ExtResource("23_gpnrh")
+landState = NodePath("../Land")
 
 [node name="Controller" type="Node" parent="Components"]
 script = ExtResource("2_pk07e")

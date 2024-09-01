@@ -40,7 +40,7 @@ public partial class CameraController : Node3D
 		if (Engine.IsEditorHint()) return;
 
 		// Apply default settings
-		CameraSettingsResource targetSettings = (StageSettings.instance?.InitialCameraSettings) ?? defaultSettings;
+		CameraSettingsResource targetSettings = (StageSettings.Instance?.InitialCameraSettings) ?? defaultSettings;
 
 		SnapXform();
 		UpdateCameraSettings(new CameraBlendData()
@@ -58,7 +58,7 @@ public partial class CameraController : Node3D
 		// Revert camera settings
 		UpdateCameraSettings(new CameraBlendData()
 		{
-			SettingsResource = StageSettings.instance.CurrentCheckpoint.CameraSettings,
+			SettingsResource = StageSettings.Instance.CurrentCheckpoint.CameraSettings,
 		});
 		SnapFlag = true;
 	}
@@ -622,7 +622,7 @@ public partial class CameraController : Node3D
 		crossfadeAnimator.Play("activate");// Start crossfade animation
 		crossfadeAnimator.SpeedScale = speed;
 
-		if (!StageSettings.instance.IsLevelIngame)
+		if (!StageSettings.Instance.IsLevelIngame)
 			return;
 
 		// Warp the camera

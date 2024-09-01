@@ -40,7 +40,7 @@ namespace Project.Gameplay
 		public void Initialize(PlayerController controller)
 		{
 			Controller = controller;
-			SetActivePath(StageSettings.instance.CalculateStartingPath(GlobalPosition));
+			SetActivePath(StageSettings.Instance.CalculateStartingPath(GlobalPosition));
 		}
 
 		public void SetActivePath(Path3D newPath)

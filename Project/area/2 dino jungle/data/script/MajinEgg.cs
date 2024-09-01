@@ -23,8 +23,8 @@ namespace Project.Gameplay.Objects
 
 		public override void _Ready()
 		{
-			StageSettings.instance.ConnectRespawnSignal(this);
-			StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveDestructionStatus));
+			StageSettings.Instance.ConnectRespawnSignal(this);
+			StageSettings.Instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveDestructionStatus));
 
 			Respawn();
 		}

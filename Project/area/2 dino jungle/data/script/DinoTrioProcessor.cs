@@ -32,7 +32,7 @@ public partial class DinoTrioProcessor : Path3D
 	public override void _EnterTree() => Instance = this;
 	public override void _Ready()
 	{
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.ConnectRespawnSignal(this);
 
 		for (int i = 0; i < dinos.Length; i++)
 			dinos[i].Connect(DinoTrio.SignalName.DamagedPlayer, new(this, MethodName.DamagedPlayer));

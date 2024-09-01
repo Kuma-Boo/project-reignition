@@ -188,8 +188,8 @@ public partial class CharacterAnimator : Node3D
 	{
 		Character.Effect.IsEmittingStepDust = !Mathf.IsZeroApprox(Character.MoveSpeed); // Emit step dust based on speed
 
-		if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Success &&
-			StageSettings.instance.Data.CompletionAnimation == LevelDataResource.CompletionAnimationType.ThumbsUp)
+		if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Success &&
+			StageSettings.Instance.Data.CompletionAnimation == LevelDataResource.CompletionAnimationType.ThumbsUp)
 		{
 			if (!(bool)animationTree.Get(OneshotActive))
 			{

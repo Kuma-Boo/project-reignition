@@ -11,7 +11,7 @@ namespace Project.Gameplay.Triggers
 		public Path3D CameraPath { get; private set; }
 		public CameraSettingsResource CameraSettings;
 
-		private StageSettings Stage => StageSettings.instance;
+		private StageSettings Stage => StageSettings.Instance;
 
 		public override void Activate()
 		{

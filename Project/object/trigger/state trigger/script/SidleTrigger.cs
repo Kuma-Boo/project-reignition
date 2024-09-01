@@ -39,7 +39,7 @@ public partial class SidleTrigger : Area3D
 	/// <summary> Smoothing to apply when slowing down.  </summary>
 	private const float FRICTION_SMOOTHING = .4f;
 
-	public override void _Ready() => StageSettings.instance.ConnectRespawnSignal(this);
+	public override void _Ready() => StageSettings.Instance.ConnectRespawnSignal(this);
 
 	public override void _PhysicsProcess(double _)
 	{
@@ -94,7 +94,7 @@ public partial class SidleTrigger : Area3D
 
 	private void UpdateSidle()
 	{
-		if (!StageSettings.instance.IsLevelIngame || Player.IsDefeated)
+		if (!StageSettings.Instance.IsLevelIngame || Player.IsDefeated)
 			return;
 
 		// Check ground
@@ -199,7 +199,7 @@ public partial class SidleTrigger : Area3D
 		// Invincible/Damage routine has already started
 		if (Player.IsInvincible || damageState != DamageStates.Disabled) return;
 
-		if (StageSettings.instance.CurrentRingCount == 0)
+		if (StageSettings.Instance.CurrentRingCount == 0)
 		{
 			StopSidle();
 			Player.StartKnockback();

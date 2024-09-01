@@ -82,8 +82,8 @@ public partial class Enemy : Node3D
 		AnimationPlayer = GetNodeOrNull<AnimationPlayer>(animationPlayer);
 
 		SpawnData = new(GetParent(), Transform);
-		StageSettings.instance.ConnectRespawnSignal(this);
-		StageSettings.instance.ConnectUnloadSignal(this);
+		StageSettings.Instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.ConnectUnloadSignal(this);
 		Respawn();
 
 		InitializeRangeCollider();
@@ -194,11 +194,11 @@ public partial class Enemy : Node3D
 		Player.Camera.LockonTarget = null;
 		Player.Lockon.CallDeferred(CharacterLockon.MethodName.ResetLockonTarget);
 		BonusManager.instance.AddEnemyChain();
-		StageSettings.instance.UpdateScore(50 * maxHealth, StageSettings.MathModeEnum.Add); // Add points based on max health
+		StageSettings.Instance.UpdateScore(50 * maxHealth, StageSettings.MathModeEnum.Add); // Add points based on max health
 
 		// Automatically increment objective count
-		if (StageSettings.instance.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
-			StageSettings.instance.CallDeferred(StageSettings.MethodName.IncrementObjective);
+		if (StageSettings.Instance.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
+			StageSettings.Instance.CallDeferred(StageSettings.MethodName.IncrementObjective);
 
 		EmitSignal(SignalName.Defeated);
 	}

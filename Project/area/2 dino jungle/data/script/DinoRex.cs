@@ -46,7 +46,7 @@ public partial class DinoRex : Node3D
 	public override void _Ready()
 	{
 		animationTree.Active = true;
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.ConnectRespawnSignal(this);
 		Respawn();
 	}
 

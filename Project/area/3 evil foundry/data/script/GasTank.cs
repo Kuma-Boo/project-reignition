@@ -37,7 +37,7 @@ namespace Project.Gameplay.Objects
 			if (Engine.IsEditorHint()) return;
 
 			startPosition = GlobalPosition;
-			StageSettings.instance.ConnectRespawnSignal(this);
+			StageSettings.Instance.ConnectRespawnSignal(this);
 		}
 
 
