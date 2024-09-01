@@ -23,7 +23,7 @@ public partial class GrindStepState : PlayerState
 		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.Controller.GetTargetInputAngle(), Player.MovementAngle);
 		// Calculate how far player is trying to go
 		float horizontalTarget = GrindStepSpeed * Mathf.Sign(inputDeltaAngle);
-		horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Player.Controller.GetInputStrength(true)); // Give some smoothing based on controller strength
+		horizontalTarget *= Mathf.SmoothStep(0.5f, 1f, Player.Controller.GetInputStrength()); // Give some smoothing based on controller strength
 
 		// Keep some speed forward
 		turningVelocity = 0;

@@ -10,10 +10,13 @@ public partial class PlayerInputController : Node
 
 	[Export]
 	private Curve InputCurve { get; set; }
-	public float GetInputStrength(bool axisOnly = false)
+	public float GetInputStrength()
 	{
-		if (!axisOnly && Input.IsActionPressed("button_brake"))
+		/*
+		REFACTOR TODO
+		if (Input.IsActionPressed("button_brake"))
 			return 0;
+		*/
 
 		float inputLength = InputAxis.Length();
 		if (inputLength <= DeadZone)
@@ -111,8 +114,11 @@ public partial class PlayerInputController : Node
 			return Player.PathFollower.ForwardAngle;
 
 		LockoutResource resource = Player.ActiveLockoutData;
-		if (Player.IsLockoutOverridingMovementAngle) // Return early when LockoutResource doesn't override inputAngle
+		if (Player.IsLockoutOverridingMovementAngle)
 		{
+			if (Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe)
+				return GetStrafeAngle();
+
 			float forwardAngle = Player.ActiveLockoutData.movementAngle;
 			switch (resource.spaceMode)
 			{

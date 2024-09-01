@@ -210,7 +210,6 @@ public partial class PlayerAnimator : Node3D
 
 	public void RunAnimation()
 	{
-		groundTurnRatio = CalculateTurnRatio();
 		float idleBlend = (float)animationTree.Get(IdleBlend);
 		if (DisabledSpeedSmoothing)
 			idleBlend = 1;
@@ -242,12 +241,12 @@ public partial class PlayerAnimator : Node3D
 			}
 		}
 
+		groundTurnRatio = CalculateTurnRatio();
 		UpdateGroundAnimation(idleBlend, speedRatio, animationSpeed);
 	}
 
 	public void BackstepAnimation()
 	{
-		groundTurnRatio = CalculateTurnRatio();
 		float idleBlend = (float)animationTree.Get(IdleBlend);
 		if (DisabledSpeedSmoothing)
 			idleBlend = -1;
@@ -256,6 +255,8 @@ public partial class PlayerAnimator : Node3D
 
 		float speedRatio = Mathf.Abs(Player.Stats.BackstepSettings.GetSpeedRatio(Player.MoveSpeed));
 		float animationSpeed = 0.5f + (speedRatio * 2f);
+
+		groundTurnRatio = CalculateTurnRatio();
 		UpdateGroundAnimation(idleBlend, speedRatio, animationSpeed);
 	}
 
@@ -327,23 +328,24 @@ public partial class PlayerAnimator : Node3D
 	/// <summary> Calculates turn ratio based on current input with -1 being left and 1 being right. </summary>
 	public float CalculateTurnRatio()
 	{
-		/* REFACTOR TODO External State
-		if (Player.MovementState == PlayerController.MovementStates.External)
+		if (Player.ExternalController != null)
 			return 0; // Disable turning when controlled externally
-		*/
 
 		float referenceAngle = Player.IsMovingBackward ? Player.PathFollower.ForwardAngle : Player.MovementAngle;
 		float inputAngle = Player.PathFollower.DeltaAngle * PathTurnStrength;
-		if (Player.IsLockoutOverridingMovementAngle)
+		if (Player.IsLockoutActive && Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace)
 			inputAngle += referenceAngle;
+		else if (!Mathf.IsZeroApprox(Player.Controller.GetInputStrength()))
+			inputAngle = Player.Controller.GetTargetInputAngle();
 		else
-			inputAngle = Player.Controller.GetTargetMovementAngle();
+			inputAngle = referenceAngle;
 
 		float delta = ExtensionMethods.SignedDeltaAngleRad(referenceAngle, inputAngle);
 		if (ExtensionMethods.DotAngle(referenceAngle, inputAngle) < 0) // Input is backwards
 			delta = -ExtensionMethods.SignedDeltaAngleRad(referenceAngle + Mathf.Pi, inputAngle);
 
 		delta = Mathf.Clamp(delta, -MaxTurnAngle, MaxTurnAngle);
+		GD.Print(delta / MaxTurnAngle);
 		return delta / MaxTurnAngle;
 	}
 
@@ -509,7 +511,7 @@ public partial class PlayerAnimator : Node3D
 	#endregion
 
 	#region Visual Rotation
-	/// <summary> Angle to use when character's MovementState is PlayerController.MovementStates.External. </summary>
+	/// <summary> Angle to use when Player's MovementState is PlayerController.MovementStates.External. </summary>
 	public float ExternalAngle { get; set; }
 	/// <summary> Rotation (in radians) currently applied to Transform. </summary>
 	public float VisualAngle { get; private set; }
@@ -544,13 +546,11 @@ public partial class PlayerAnimator : Node3D
 			targetRotation = ExtensionMethods.CalculateForwardAngle(Player.Lockon.HomingAttackDirection);
 		else if (Player.IsMovingBackward) // Backstepping
 			targetRotation = Player.PathFollower.ForwardAngle + (groundTurnRatio * Mathf.Pi * .15f);
-		/* REFACTOR TODO
 		else if (Player.IsLockoutActive && Player.ActiveLockoutData.recenterPlayer)
 			targetRotation = Player.PathFollower.ForwardAngle;
 
-		if (Player.Skills.IsSpeedBreakActive && Player.MovementState != PlayerController.MovementStates.External)
+		if (Player.Skills.IsSpeedBreakActive && Player.ExternalController == null)
 			VisualAngle += Player.PathFollower.DeltaAngle;
-		*/
 
 		VisualAngle = ExtensionMethods.ClampAngleRange(VisualAngle, Player.PathFollower.ForwardAngle, Mathf.Pi);
 		VisualAngle = ExtensionMethods.SmoothDampAngle(VisualAngle, targetRotation, ref rotationVelocity, MovementRotationSmoothing);
