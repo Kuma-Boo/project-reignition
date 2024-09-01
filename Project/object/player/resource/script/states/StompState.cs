@@ -21,22 +21,21 @@ public partial class StompState : PlayerState
 		Player.Lockon.IsMonitoring = false;
 		Player.Lockon.ResetLockonTarget();
 
+		if (Player.State.IsGrindstepping)
+			Player.Animator.ResetState(.1f);
+
 		/* REFACTOR TODO
-		if (ActionState == ActionStates.Grindstep)
-			Animator.ResetState(.1f);
-
 		allowLandingSkills = true;
-
 		SetActionState(ActionStates.Stomping);
+		*/
 
 		bool attackStomp = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompAttack);
 		if (attackStomp)
 		{
-			AttackState = AttackStates.Weak;
-			ChangeHitbox("stomp");
+			Player.State.AttackState = PlayerStateController.AttackStates.Weak;
+			Player.State.ChangeHitbox("stomp");
 		}
-		Animator.StompAnimation(attackStomp);
-		*/
+		Player.Animator.StompAnimation(attackStomp);
 	}
 
 	public override PlayerState ProcessPhysics()

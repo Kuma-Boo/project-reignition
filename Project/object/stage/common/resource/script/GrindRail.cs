@@ -156,6 +156,7 @@ public partial class GrindRail : Area3D
 		if (!a.IsInGroup("player detection")) return;
 
 		IsInteractingWithPlayer = true;
+		CheckRailActivation();
 	}
 
 	public void OnExited(Area3D a)

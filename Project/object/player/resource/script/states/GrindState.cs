@@ -163,7 +163,7 @@ public partial class GrindState : PlayerState
 
 		delta = grindrail.PathFollower.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindrail.PathFollower.GlobalPosition);
 		delta.Y -= Player.VerticalSpeed * PhysicsManager.physicsDelta;
-		if (delta.Y < -0.01f || Player.IsOnGround)
+		if (delta.Y < -0.01f && !Player.IsOnGround)
 			return false;
 
 		// Horizontal validation

@@ -93,7 +93,7 @@ public partial class JumpState : PlayerState
 			return jumpDashState;
 		}
 
-		if (Player.Controller.IsActionBufferActive && !isAccelerationJump)
+		if (Player.Controller.IsActionBufferActive)
 		{
 			Player.Controller.ResetActionBuffer();
 			return stompState;
