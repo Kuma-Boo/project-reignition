@@ -12,6 +12,8 @@ public partial class PlayerStateController : Node
 	public bool CanJumpDash { get; set; }
 	public bool DisableAccelerationJump { get; set; }
 	public bool AllowSidle { get; set; }
+	public bool AllowLandingGrind { get; set; }
+	public bool IsGrinding { get; set; }
 	public bool IsGrindstepping { get; set; }
 	public bool IsInvincible { get; set; }
 	public bool IsDefeated { get; set; }
@@ -253,6 +255,7 @@ public partial class PlayerStateController : Node
 	public bool IsRailActivationValid(GrindRail rail) => grindState.IsRailActivationValid(rail);
 	public void StartGrinding(GrindRail rail)
 	{
+		IsGrinding = true;
 		grindState.ActiveGrindRail = rail;
 		Player.StateMachine.ChangeState(grindState);
 	}

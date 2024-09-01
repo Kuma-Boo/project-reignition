@@ -21,12 +21,12 @@ public partial class StompState : PlayerState
 		Player.Lockon.IsMonitoring = false;
 		Player.Lockon.ResetLockonTarget();
 
+		Player.State.AllowLandingGrind = true;
 		if (Player.State.IsGrindstepping)
 			Player.Animator.ResetState(.1f);
 
 		/* REFACTOR TODO
 		allowLandingSkills = true;
-		SetActionState(ActionStates.Stomping);
 		*/
 
 		bool attackStomp = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompAttack);

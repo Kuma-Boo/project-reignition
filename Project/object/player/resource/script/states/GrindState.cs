@@ -30,6 +30,7 @@ public partial class GrindState : PlayerState
 		if (!ActiveGrindRail.IsBonusDisabled && Player.State.IsGrindstepping)
 			BonusManager.instance.QueueBonus(new(BonusType.Grindstep));
 
+		Player.State.AllowLandingGrind = false;
 		Player.State.IsGrindstepping = false;
 
 		float positionSmoothing = .2f;
@@ -80,6 +81,7 @@ public partial class GrindState : PlayerState
 		Player.MoveSpeed = Mathf.Cos(launchAngle) * launchSpeed;
 		Player.VerticalSpeed = Mathf.Sin(launchAngle) * -launchSpeed;
 
+		Player.State.IsGrinding = false;
 		if (!Player.State.IsGrindstepping) // Smoother transition to falling animation
 			Player.Animator.ResetState(.2f);
 		Player.Animator.SnapRotation(Player.MovementAngle);
@@ -102,11 +104,14 @@ public partial class GrindState : PlayerState
 		ProcessMovement();
 		UpdateCharge();
 
-		// Jumping off rail can only happen when not shuffling
-		if (!Player.Animator.IsBalanceShuffleActive && Player.Controller.IsJumpBufferActive)
+		bool isGrindCompleted = Mathf.IsEqualApprox(ActiveGrindRail.PathFollower.ProgressRatio, 1);
+		if (Player.Controller.IsJumpBufferActive &&
+			(!Player.Animator.IsBalanceShuffleActive || isGrindCompleted))
+		{
 			return ProcessJump();
+		}
 
-		if (Mathf.IsEqualApprox(ActiveGrindRail.PathFollower.ProgressRatio, 1) || Mathf.IsZeroApprox(Player.MoveSpeed)) // Disconnect from the rail
+		if (isGrindCompleted || Mathf.IsZeroApprox(Player.MoveSpeed)) // Disconnect from the rail
 			return fallState;
 
 		return null;
@@ -143,7 +148,7 @@ public partial class GrindState : PlayerState
 		if (ActiveGrindRail != null) // Already grinding
 			return false;
 
-		if (Player.VerticalSpeed > 0f) // Player must be falling to start grinding!
+		if (Player.VerticalSpeed >= 0f) // Player must be falling to start grinding!
 			return false;
 
 		// Resync Grindrail's PathFollower
@@ -160,7 +165,7 @@ public partial class GrindState : PlayerState
 
 		delta = grindrail.PathFollower.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindrail.PathFollower.GlobalPosition);
 		delta.Y -= Player.VerticalSpeed * PhysicsManager.physicsDelta;
-		if (delta.Y < -0.01f && !Player.IsOnGround)
+		if (delta.Y < 0.01f && !(Player.IsOnGround && Player.State.AllowLandingGrind))
 			return false;
 
 		// Horizontal validation

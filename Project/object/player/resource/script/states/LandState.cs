@@ -11,7 +11,7 @@ public partial class LandState : PlayerState
 	[Export]
 	private PlayerState backstepState;
 
-	public override void EnterState()
+	public override void ExitState()
 	{
 		// Snap to ground
 		Vector3 originalVelocity = Player.Velocity;
@@ -24,6 +24,10 @@ public partial class LandState : PlayerState
 		Player.Lockon.IsMonitoring = false;
 		Player.State.DisableAccelerationJump = false;
 
+		if (Player.State.IsGrinding)
+			return;
+
+		Player.State.AllowLandingGrind = false;
 		Player.Animator.LandingAnimation();
 		Player.Effect.PlayLandingFX();
 
