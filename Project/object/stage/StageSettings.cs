@@ -15,8 +15,8 @@ public partial class StageSettings : Node3D
 	public static PlayerController Player { get; private set; }
 	public static void RegisterPlayer(PlayerController player) => Player = player;
 
-	public bool IsControlTest => Data.LevelID == OPTIONS_LEVEL_ID;
-	private readonly StringName OPTIONS_LEVEL_ID = "options";
+	public bool IsControlTest => Data.LevelID == OptionsLevelId;
+	private readonly StringName OptionsLevelId = "options";
 
 	public override void _EnterTree()
 	{

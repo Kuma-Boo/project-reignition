@@ -67,8 +67,11 @@ public partial class PlayerCameraController : Node3D
 		SnapFlag = true;
 	}
 
-	public void ProcessPhysics()
+	public override void _PhysicsProcess(double _)
 	{
+		if (GetTree().Paused)
+			return;
+
 		PathFollower.Resync();
 
 		// Don't update the camera when the player is defeated from a DeathTrigger
@@ -85,7 +88,7 @@ public partial class PlayerCameraController : Node3D
 		UpdateMotionBlur();
 	}
 
-	public void ProcessFrame()
+	public override void _Process(double _)
 	{
 		if (OS.IsDebugBuild())
 			UpdateFreeCam();
@@ -835,6 +838,9 @@ public partial class PlayerCameraController : Node3D
 	private const float FreeCamPositionSmoothing = .3f;
 	private void UpdateFreeCamMovement()
 	{
+		if (!isFreeCamActive)
+			return;
+
 		float targetMoveSpeed = freecamMovespeed;
 		if (Input.IsKeyPressed(Key.Shift))
 			targetMoveSpeed *= 2;
@@ -842,7 +848,6 @@ public partial class PlayerCameraController : Node3D
 			targetMoveSpeed *= .5f;
 
 		Vector3 targetDirection = new();
-
 		if (Input.IsKeyPressed(Key.E))
 			targetDirection += Camera.Up();
 		if (Input.IsKeyPressed(Key.Q))

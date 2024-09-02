@@ -52,6 +52,7 @@ public partial class LaunchState : PlayerState
 	public override void ExitState()
 	{
 		settings.Launcher?.Deactivate();
+		settings = new();
 
 		Player.MoveSpeed = settings.HorizontalVelocity * .5f; // Prevent too much movement
 		Player.VerticalSpeed = Player.IsOnGround ? 0 : settings.FinalVerticalVelocity;
@@ -63,7 +64,6 @@ public partial class LaunchState : PlayerState
 		Player.Effect.StopTrailFX();
 		Player.Animator.ResetState();
 
-		settings = new();
 		Player.EmitSignal(PlayerController.SignalName.LaunchFinished);
 	}
 
@@ -72,6 +72,7 @@ public partial class LaunchState : PlayerState
 		if (IsRecenteringPlayer())
 			return null;
 
+		launcherTime = Mathf.Min(launcherTime + PhysicsManager.physicsDelta, settings.TotalTravelTime);
 		Vector3 targetPosition = settings.InterpolatePositionTime(launcherTime);
 		float heightDelta = Mathf.IsZeroApprox(launcherTime) ? 0 : targetPosition.Y - Player.GlobalPosition.Y;
 
@@ -85,7 +86,6 @@ public partial class LaunchState : PlayerState
 		if (heightDelta < 0 && Player.CheckGround()) // Only check ground when falling
 			return landState;
 
-		launcherTime += PhysicsManager.physicsDelta;
 		if (settings.IsLauncherFinished(launcherTime)) // Revert to normal state
 			return fallState;
 

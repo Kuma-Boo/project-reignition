@@ -64,15 +64,6 @@ public partial class PlayerController : CharacterBody3D
 		Lockon.ProcessPhysics();
 		Animator.ProcessPhysics();
 		PathFollower.Resync();
-
-		if (GetTree().Paused)
-			return;
-		Camera.ProcessPhysics();
-	}
-
-	public override void _Process(double _)
-	{
-		Camera.ProcessFrame();
 	}
 
 	/// <summary> Player's horizontal movespeed, ignoring slopes. </summary>
@@ -171,7 +162,6 @@ public partial class PlayerController : CharacterBody3D
 			{
 				UpDirection = groundHit.normal;
 				IsOnGround = true;
-				return true;
 			}
 
 			float snapDistance = groundHit.distance - CollisionSize.Y;
@@ -487,6 +477,7 @@ public partial class PlayerController : CharacterBody3D
 			return;
 
 		StateMachine.ChangeState(launchState);
+		launchState.UpdateSettings(settings); // Failed to start launcher state
 	}
 
 	[Export]

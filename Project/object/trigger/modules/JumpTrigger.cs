@@ -25,6 +25,7 @@ public partial class JumpTrigger : StageTriggerModule
 	public LaunchSettings GetLaunchSettings()
 	{
 		Vector3 startPosition = Player != null ? Player.GlobalPosition : GetParent<Node3D>().GlobalPosition;
+		GD.Print(GlobalPosition);
 		LaunchSettings settings = LaunchSettings.Create(startPosition, GlobalPosition, jumpHeight, forceConsistentHeight);
 		settings.IsJump = true;
 		settings.UseAutoAlign = autoAlign;
