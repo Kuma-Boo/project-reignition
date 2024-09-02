@@ -249,16 +249,12 @@ namespace Project.Gameplay.Objects
 			isMovingObjects = !isMovementComplete;
 		}
 
-
 		protected override void Collect()
 		{
 			base.Collect();
 
-			/*
-			REFACTOR TODO
 			if (Player.IsJumpDashOrHomingAttack)
 				Player.StartBounce();
-			*/
 
 			animator.Play("open");
 			isOpened = true;
