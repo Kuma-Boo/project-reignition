@@ -41,6 +41,7 @@ public partial class PlayerCameraController : Node3D
 
 		Player = player;
 		PathFollower.Initialize(player);
+		LimitToPathDistance = !PathFollower.Loop;
 
 		// Apply default settings
 		CameraSettingsResource targetSettings = (StageSettings.Instance?.InitialCameraSettings) ?? defaultSettings;

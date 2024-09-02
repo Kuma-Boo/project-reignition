@@ -31,6 +31,9 @@ public partial class PlayerController : CharacterBody3D
 	public override void _Ready()
 	{
 		StageSettings.RegisterPlayer(this); // Update global reference
+		Stage.UpdateRingCount(Skills.StartingRingCount, StageSettings.MathModeEnum.Replace); // Start with the proper ring count
+		Stage.Connect(StageSettings.SignalName.LevelCompleted, new Callable(this, MethodName.OnLevelCompleted));
+		Stage.Connect(StageSettings.SignalName.LevelDemoStarted, new Callable(this, MethodName.OnLevelDemoStarted));
 
 		Controller.Initialize(this);
 		Stats.Initialize();
@@ -43,6 +46,8 @@ public partial class PlayerController : CharacterBody3D
 
 		// Initialize state machine last to ensure components are ready		
 		StateMachine.Initialize(this);
+
+		GetParent<CheckpointTrigger>().Activate(); // Save initial checkpoint
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -404,6 +409,29 @@ public partial class PlayerController : CharacterBody3D
 			RemoveLockoutData(ActiveLockoutData);
 	}
 
+	private void OnLevelCompleted()
+	{
+		/* REFACTOR TODO?
+		if (ActionState != ActionStates.Damaged)
+			ResetActionState();
+		*/
+
+		// Disable everything
+		Lockon.IsMonitoring = false;
+		Skills.DisableBreakSkills();
+
+		if (Stage.LevelState == StageSettings.LevelStateEnum.Failed || Stage.Data.CompletionLockout == null)
+			AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
+		else
+			AddLockoutData(Stage.Data.CompletionLockout);
+	}
+
+	private void OnLevelDemoStarted()
+	{
+		MoveSpeed = 0;
+		AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
+	}
+
 	private bool isRecentered; // Is the recenter complete?
 	private const float MinRecenterPower = .1f;
 	private const float MaxRecenterPower = .2f;
@@ -500,7 +528,6 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(driftState);
 	}
 
-	// REFACTOR TODO
 	[Signal]
 	public delegate void KnockbackEventHandler();
 	[Export]
