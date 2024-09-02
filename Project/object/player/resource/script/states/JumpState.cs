@@ -77,8 +77,10 @@ public partial class JumpState : PlayerState
 		UpdateVerticalSpeed();
 		Player.ApplyMovement();
 		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
+		Player.CheckGround();
+		Player.UpdateUpDirection();
 
-		if (Player.CheckGround())
+		if (Player.IsOnGround)
 			return landState;
 
 		if (Player.VerticalSpeed <= 0 && !isAccelerationJump)

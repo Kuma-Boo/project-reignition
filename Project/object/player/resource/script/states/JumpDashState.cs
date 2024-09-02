@@ -39,19 +39,6 @@ public partial class JumpDashState : PlayerState
 			Player.Skills.ActivateFireCrest();
 
 		Player.Animator.LaunchAnimation();
-
-		/* REFACTOR TODO
-
-		if (Lockon.IsBounceLockoutActive) // Interrupt lockout
-			RemoveLockoutData(Lockon.bounceLockoutSettings);
-
-		if (Lockon.Target == null || !Lockon.IsTargetAttackable) // Normal jumpdash
-		{
-		}
-		else
-		{
-		}
-		*/
 	}
 
 	public override void ExitState()
