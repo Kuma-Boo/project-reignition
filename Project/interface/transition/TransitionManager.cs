@@ -34,7 +34,7 @@ public partial class TransitionManager : Node
 	{
 		if (IsTransitionActive)
 		{
-			GD.Print("Transition is already active!");
+			GD.PushWarning("Transition is already active!");
 			return;
 		}
 

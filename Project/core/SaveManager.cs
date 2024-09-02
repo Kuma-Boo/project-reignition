@@ -563,8 +563,8 @@ public partial class SaveManager : Node
 
 		if (!FileAccess.FileExists(savePath))
 			return;
+
 		OS.MoveToTrash(ProjectSettings.GlobalizePath(savePath));
-		GD.Print("Deleting save");
 	}
 
 	public class GameData

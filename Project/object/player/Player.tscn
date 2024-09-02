@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=3 uid="uid://bbbuqgxfhuh8k"]
+[gd_scene load_steps=82 format=3 uid="uid://bbbuqgxfhuh8k"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -32,7 +32,9 @@
 [ext_resource type="AudioStream" uid="uid://byvon80bojscd" path="res://sound/sfx/player/heartbeat.wav" id="20_8j2sa"]
 [ext_resource type="PackedScene" uid="uid://qmsgr6kswk87" path="res://object/player/resource/component/PathFollower.tscn" id="20_b54bv"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/BounceState.cs" id="21_jghe7"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/DriftState.cs" id="21_jno2g"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/TimeBreak.gdshader" id="21_uhk4r"]
+[ext_resource type="Resource" uid="uid://crljqsuclbtda" path="res://resource/preset/lockout/action/DriftLockout.tres" id="22_d2npt"]
 [ext_resource type="Texture2D" uid="uid://47a1wqak6nce" path="res://object/player/resource/effect/texture/time break.png" id="22_d122m"]
 [ext_resource type="Resource" uid="uid://dsp0ckshdhlnr" path="res://resource/preset/lockout/action/BounceLockout.tres" id="22_nv64p"]
 [ext_resource type="ArrayMesh" uid="uid://cnxw6wvbmkkar" path="res://object/player/resource/effect/model/SpeedbreakFX.res" id="23_duu2r"]
@@ -1399,7 +1401,7 @@ _data = {
 "volcano-slide": SubResource("Animation_flrr5")
 }
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "grindState", "automationState", "bounceState", "knockbackState") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "grindState", "automationState", "bounceState", "driftState", "knockbackState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1420,6 +1422,7 @@ launchState = NodePath("Components/StateMachine/Launch")
 grindState = NodePath("Components/StateMachine/Grind")
 automationState = NodePath("Components/StateMachine/Automation")
 bounceState = NodePath("Components/StateMachine/Bounce")
+driftState = NodePath("Components/StateMachine/Drift")
 knockbackState = NodePath("Components/StateMachine/Knockback")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -1558,6 +1561,13 @@ stompState = NodePath("../Stomp")
 [node name="Automation" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState")]
 script = ExtResource("19_3qddi")
 runState = NodePath("../Run")
+
+[node name="Drift" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("idleState", "runState", "jumpState")]
+script = ExtResource("21_jno2g")
+idleState = NodePath("../Idle")
+runState = NodePath("../Run")
+jumpState = NodePath("../Jump")
+LockoutSettings = ExtResource("22_d2npt")
 
 [node name="Bounce" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "stompState", "jumpDashState", "homingAttackState")]
 script = ExtResource("21_jghe7")

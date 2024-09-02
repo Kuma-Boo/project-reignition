@@ -16,7 +16,6 @@ public partial class PlayerSkillController : Node3D
 
 		// Determine the size of the soul gauge
 		MaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
-		GD.Print(MaxSoulPower);
 
 		SetUpSkills();
 	}

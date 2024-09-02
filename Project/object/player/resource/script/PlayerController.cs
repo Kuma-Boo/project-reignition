@@ -490,6 +490,15 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(bounceState);
 	}
 
+	[Export]
+	private DriftState driftState;
+	public bool IsDrifting => driftState.Trigger != null;
+	public void StartDrift(DriftTrigger trigger)
+	{
+		driftState.Trigger = trigger;
+		StateMachine.ChangeState(driftState);
+	}
+
 	// REFACTOR TODO
 	[Signal]
 	public delegate void KnockbackEventHandler();

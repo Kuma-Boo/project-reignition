@@ -345,7 +345,6 @@ public partial class PlayerAnimator : Node3D
 			delta = -ExtensionMethods.SignedDeltaAngleRad(referenceAngle + Mathf.Pi, inputAngle);
 
 		delta = Mathf.Clamp(delta, -MaxTurnAngle, MaxTurnAngle);
-		GD.Print(delta / MaxTurnAngle);
 		return delta / MaxTurnAngle;
 	}
 
