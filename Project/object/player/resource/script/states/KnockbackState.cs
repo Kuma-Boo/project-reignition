@@ -13,8 +13,6 @@ public partial class KnockbackState : PlayerState
 
 	public override void EnterState()
 	{
-		if (Player.IsInvincible && !Settings.ignoreInvincibility) return;
-
 		/*
 		REFACTOR TODO
 		if (Lockon.IsHomingAttacking)

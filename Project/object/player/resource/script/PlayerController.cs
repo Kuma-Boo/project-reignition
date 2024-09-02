@@ -535,6 +535,8 @@ public partial class PlayerController : CharacterBody3D
 	public void StartKnockback(KnockbackSettings settings = new())
 	{
 		EmitSignal(SignalName.Knockback); // Emit signal FIRST so external controllers can be alerted
+
+		if (IsInvincible && !settings.ignoreInvincibility) return;
 		knockbackState.Settings = settings;
 		StateMachine.ChangeState(knockbackState);
 	}
