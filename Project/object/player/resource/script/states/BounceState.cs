@@ -24,7 +24,6 @@ public partial class BounceState : PlayerState
 	public bool IsUpwardBounce { get; set; }
 	/// <summary> Used to determine whether targeting is enabled or not. </summary>
 	private float bounceInterruptTimer;
-	private bool CanInterruptBounce => Mathf.IsZeroApprox(bounceInterruptTimer);
 
 	public override void EnterState()
 	{
@@ -81,9 +80,11 @@ public partial class BounceState : PlayerState
 		if (!Player.IsBouncing) // Lockout has ended
 			return fallState;
 
-		UpdateBounceTimer();
-		if (!CanInterruptBounce)
+		if (!Player.Lockon.IsMonitoring)
+		{
+			UpdateBounceTimer();
 			return null;
+		}
 
 		if (Player.Controller.IsJumpBufferActive)
 		{
@@ -106,6 +107,6 @@ public partial class BounceState : PlayerState
 	private void UpdateBounceTimer()
 	{
 		bounceInterruptTimer = Mathf.MoveToward(bounceInterruptTimer, 0, PhysicsManager.physicsDelta);
-		Player.Lockon.IsMonitoring = CanInterruptBounce;
+		Player.Lockon.IsMonitoring = Mathf.IsZeroApprox(bounceInterruptTimer);
 	}
 }
