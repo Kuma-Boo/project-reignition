@@ -52,6 +52,8 @@ public partial class DriftState : PlayerState
 		driftStatus = DriftStatus.Processing;
 
 		Player.StartExternal(this); // For future reference, this is where speedbreak gets disabled
+
+		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.Effect.StartDust();
 		Player.Animator.ExternalAngle = Player.MovementAngle;
 		Player.Animator.StartDrift(Trigger.IsRightTurn);
@@ -61,6 +63,7 @@ public partial class DriftState : PlayerState
 	{
 		Player.StopExternal();
 		Player.Effect.StopDust();
+		Player.Skills.IsSpeedBreakEnabled = true;
 
 		if (driftStatus != DriftStatus.JumpFail)
 			Player.Animator.ResetState(.4f);

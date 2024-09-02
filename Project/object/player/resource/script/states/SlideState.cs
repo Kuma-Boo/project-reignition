@@ -82,7 +82,7 @@ public partial class SlideState : PlayerState
 		if (!Input.IsActionPressed("button_action") && !Player.Animator.IsSlideTransitionActive)
 			return runState;
 
-		if (Player.IsLockoutActive)
+		if (Player.IsLockoutDisablingActions)
 			return runState;
 
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))

@@ -253,6 +253,7 @@ public partial class PathTraveller : Node3D
 		}
 
 		Player.StartExternal(this, playerPosition, .1f);
+		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.Animator.StartBalancing(); // Carpet uses balancing animations
 		Player.Animator.UpdateBalanceSpeed(1f, 0f);
 		Player.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
@@ -277,6 +278,7 @@ public partial class PathTraveller : Node3D
 		if (Player.ExternalParent == this)
 		{
 			Player.StopExternal();
+			Player.Skills.IsSpeedBreakEnabled = true;
 			Player.Animator.ResetState();
 		}
 	}

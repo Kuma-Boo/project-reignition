@@ -338,6 +338,7 @@ public partial class PlayerController : CharacterBody3D
 	private float lockoutTimer;
 	public bool IsLockoutActive => ActiveLockoutData != null;
 	public bool IsLockoutOverridingMovementAngle => IsLockoutActive && ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free;
+	public bool IsLockoutDisablingActions => IsLockoutActive && ActiveLockoutData.disableActions;
 	public LockoutResource ActiveLockoutData { get; private set; }
 
 	private readonly List<LockoutResource> lockoutDataList = [];
@@ -654,12 +655,9 @@ public partial class PlayerController : CharacterBody3D
 	public Node3D ExternalParent { get; private set; }
 	public Vector3 ExternalOffset { get; private set; }
 	private float externalSmoothing;
-	public void StartExternal(Node controller, Node3D followObject = null, float smoothing = 0f, bool allowSpeedBreak = false)
+	public void StartExternal(Node controller, Node3D followObject = null, float smoothing = 0f)
 	{
 		ExternalController = controller;
-
-		// REFACTOR TODO Move to states?
-		Skills.IsSpeedBreakEnabled = allowSpeedBreak;
 
 		ExternalParent = followObject;
 		ExternalOffset = Vector3.Zero; // Reset offset

@@ -22,7 +22,7 @@ public partial class AutomationState : PlayerState
 		initialPath = Player.PathFollower.ActivePath;
 		Player.PathFollower.Resync();
 
-		Player.StartExternal(Automation, Player.PathFollower, .05f, true);
+		Player.StartExternal(Automation, Player.PathFollower, .05f);
 		Player.Animator.ExternalAngle = 0;
 		Player.Animator.SnapRotation(Player.Animator.ExternalAngle); // Rotate to follow pathfollower
 		Player.IsMovingBackward = false; // Prevent getting stuck in backstep animation

@@ -55,7 +55,7 @@ public partial class RunState : PlayerState
 		Player.Animator.RunAnimation();
 		ProcessBrakeAnimation();
 
-		if (!Player.IsLockoutActive || !Player.ActiveLockoutData.disableActions)
+		if (!Player.IsLockoutDisablingActions)
 		{
 			if (Player.Controller.IsJumpBufferActive)
 			{

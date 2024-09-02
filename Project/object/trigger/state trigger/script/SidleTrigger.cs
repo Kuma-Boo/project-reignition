@@ -83,6 +83,7 @@ public partial class SidleTrigger : Area3D
 
 		Player.IsOnGround = true;
 		Player.StartExternal(this, Player.PathFollower, .2f);
+		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
 		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
 		Player.Animator.StartSidle(isFacingRight);
@@ -162,6 +163,7 @@ public partial class SidleTrigger : Area3D
 		if (Player.ExternalController == this)
 		{
 			Player.StopExternal();
+			Player.Skills.IsSpeedBreakEnabled = true;
 			Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
 		}
 

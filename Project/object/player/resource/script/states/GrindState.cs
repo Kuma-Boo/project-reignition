@@ -42,7 +42,6 @@ public partial class GrindState : PlayerState
 		}
 
 		// REFACTOR TODO Player.ResetActionState(); // Reset grind step, cancel stomps, jumps, etc
-		Player.StartExternal(this, ActiveGrindRail.PathFollower, positionSmoothing);
 
 		Player.IsMovingBackward = false;
 		// REFACTOR TODO Player.LandOnGround(); // Rail counts as being on the ground
@@ -55,6 +54,8 @@ public partial class GrindState : PlayerState
 			StageSettings.Instance.UpdateRingCount(5, StageSettings.MathModeEnum.Subtract, true);
 		}
 
+		Player.StartExternal(this, ActiveGrindRail.PathFollower, positionSmoothing);
+		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.Animator.ExternalAngle = 0; // Reset rotation
 		Player.Animator.StartBalancing();
 		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
@@ -74,6 +75,7 @@ public partial class GrindState : PlayerState
 		float launchAngle = ActiveGrindRail.PathFollower.Up().AngleTo(Vector3.Up) * Mathf.Sign(ActiveGrindRail.PathFollower.Up().Y);
 		Player.MoveSpeed = Mathf.Cos(launchAngle) * launchSpeed;
 		Player.VerticalSpeed = Mathf.Sin(launchAngle) * -launchSpeed;
+		Player.Skills.IsSpeedBreakEnabled = true;
 
 		if (!Player.IsGrindstepping) // Smoother transition to falling animation
 			Player.Animator.ResetState(.2f);
