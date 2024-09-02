@@ -45,6 +45,12 @@ public partial class SlideState : PlayerState
 
 	public override void ExitState()
 	{
+		if (!Mathf.IsZeroApprox(Player.MoveSpeed))
+		{
+			Player.Animator.StopCrouching(0.2f);
+			Player.Animator.CrouchToMoveTransition();
+		}
+
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideDefense))
 		{
 			Player.DisableDamage = false;
@@ -74,11 +80,10 @@ public partial class SlideState : PlayerState
 			return fallState;
 
 		if (!Input.IsActionPressed("button_action") && !Player.Animator.IsSlideTransitionActive)
-		{
-			Player.Animator.StopCrouching(0.2f);
-			Player.Animator.CrouchToMoveTransition();
 			return runState;
-		}
+
+		if (Player.IsLockoutActive)
+			return runState;
 
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 		{

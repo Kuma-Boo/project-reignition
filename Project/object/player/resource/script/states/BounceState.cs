@@ -61,7 +61,6 @@ public partial class BounceState : PlayerState
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		Player.AddLockoutData(LockoutSettings);
-		//		Player.ResetActionState();
 
 		Player.Animator.ResetState(0.1f);
 		Player.Animator.BounceTrick();

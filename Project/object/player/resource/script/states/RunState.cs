@@ -55,25 +55,28 @@ public partial class RunState : PlayerState
 		Player.Animator.RunAnimation();
 		ProcessBrakeAnimation();
 
-		if (Player.Controller.IsJumpBufferActive)
+		if (!Player.IsLockoutActive || !Player.ActiveLockoutData.disableActions)
 		{
-			Player.Controller.ResetJumpBuffer();
-
-			float inputAngle = Player.Controller.GetTargetMovementAngle();
-			float inputStrength = Player.Controller.GetInputStrength();
-			if (!Mathf.IsZeroApprox(inputStrength) &&
-				Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+			if (Player.Controller.IsJumpBufferActive)
 			{
-				return backflipState;
+				Player.Controller.ResetJumpBuffer();
+
+				float inputAngle = Player.Controller.GetTargetMovementAngle();
+				float inputStrength = Player.Controller.GetInputStrength();
+				if (!Mathf.IsZeroApprox(inputStrength) &&
+					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+				{
+					return backflipState;
+				}
+
+				return jumpState;
 			}
 
-			return jumpState;
-		}
-
-		if (Player.Controller.IsActionBufferActive)
-		{
-			Player.Controller.ResetActionBuffer();
-			return slideState;
+			if (Player.Controller.IsActionBufferActive)
+			{
+				Player.Controller.ResetActionBuffer();
+				return slideState;
+			}
 		}
 
 		if (!Player.CheckGround())
