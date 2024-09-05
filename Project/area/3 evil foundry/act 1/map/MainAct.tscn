@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://ciqbaxbhrxrjk"]
+[gd_scene load_steps=46 format=3 uid="uid://ciqbaxbhrxrjk"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
@@ -40,6 +40,11 @@
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="38_mjdev"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="39_ikhtg"]
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="40_xgwfm"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="41_gc12q"]
+[ext_resource type="PackedScene" uid="uid://cxb1fxhrsja13" path="res://object/stage/common/SpikeBallStatic.tscn" id="42_mh06d"]
+[ext_resource type="PackedScene" uid="uid://bioj7igetxoe1" path="res://area/3 evil foundry/object/Elevator.tscn" id="43_hxgcc"]
+[ext_resource type="PackedScene" uid="uid://bkimcaeupa1lw" path="res://area/3 evil foundry/object/platform/MetalPlatform.tscn" id="44_kj7yh"]
+[ext_resource type="PackedScene" uid="uid://0gcen5dmjd" path="res://area/3 evil foundry/object/platform/Crusher.tscn" id="45_ko5px"]
 
 [node name="Stage" type="Node"]
 
@@ -2375,23 +2380,375 @@ transform = Transform3D(0.561722, 0, -0.827325, 0, 1, 0, 0.827325, 0, 0.561722, 
 transform = Transform3D(-0.999977, 0, -0.00673689, 0, 1, 0, 0.00673689, 0, -0.999977, -100.006, -56.2145, -289.548)
 
 [node name="Fan" parent="Box20" instance=ExtResource("25_xh5hk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.450397, 0)
 
 [node name="Fan2" parent="Box20" instance=ExtResource("25_xh5hk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.05469, 0)
 
 [node name="Grindrail" parent="Box20" instance=ExtResource("25_an8dd")]
-transform = Transform3D(0.999737, -0.00241729, 0.0228446, -0.00130852, 0.986842, 0.161686, -0.0229348, -0.161674, 0.98658, -1.29582, -0.123207, 0.156494)
+transform = Transform3D(0.999738, -0.00241729, 0.0228446, -0.00130852, 0.986842, 0.161686, -0.0229349, -0.161674, 0.986581, -0.420158, -0.123207, 0.556854)
 
 [node name="Grindrail2" parent="Box20" instance=ExtResource("25_an8dd")]
-transform = Transform3D(0.999846, -0.00339279, 0.0175216, 0.00323576, 0.999955, 0.0089817, -0.0175513, -0.00892389, 0.999812, -1.74505, -3.31839, -19.5128)
+transform = Transform3D(0.999997, -0.00326239, 0.0029495, 0.00323576, 0.999955, 0.0089817, -0.00297869, -0.00897241, 0.999964, -0.869987, -3.31839, -19.0234)
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
 collider = NodePath("")
 
-[node name="Switch" parent="." instance=ExtResource("12_qvhyq")]
-transform = Transform3D(1, 0, 0, 0, 0.988647, -0.15026, 0, 0.15026, 0.988647, -98.5959, -57.1109, -286.545)
+[node name="Switch" parent="Box20" instance=ExtResource("12_qvhyq")]
+transform = Transform3D(-0.999978, 0.00101229, 0.00666041, 0, 0.988647, -0.15026, -0.00673689, -0.150257, -0.988625, -0.514114, -0.8964, -2.61255)
+
+[node name="CullingTrigger" type="Node3D" parent="Box20/Switch"]
+script = ExtResource("41_gc12q")
+
+[node name="SwitchRings" type="Node3D" parent="Box20/Switch/CullingTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.162689, 0.704651, 7.50168)
+script = ExtResource("7_v2v6a")
+Generate = false
+Source = ExtResource("8_yjt2l")
+Amount = 3
+Shape = 2
+Path = NodePath("../../../../Static/Path/MiddlePath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.9
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Box20/Switch/CullingTrigger/SwitchRings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.52588e-05, 7.62939e-06, 0)
+
+[node name="Child02" parent="Box20/Switch/CullingTrigger/SwitchRings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.52588e-05, -0.0492096, 1.89337)
+
+[node name="Child03" parent="Box20/Switch/CullingTrigger/SwitchRings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.52588e-05, -0.0826187, 3.78476)
+
+[node name="SwitchRings2" type="Node3D" parent="Box20/Switch/CullingTrigger"]
+transform = Transform3D(1, 0, 0, 0, 0.987294, 0.158899, 0, -0.158899, 0.987294, 0.472183, 1.51906, 22.4769)
+script = ExtResource("7_v2v6a")
+Generate = false
+Source = ExtResource("8_yjt2l")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Path/MiddlePath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.7
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Box20/Switch/CullingTrigger/SwitchRings2" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52588e-05, 0, -3.05176e-05)
+
+[node name="Child02" parent="Box20/Switch/CullingTrigger/SwitchRings2" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52588e-05, -0.0482445, 2.69922)
+
+[node name="Child03" parent="Box20/Switch/CullingTrigger/SwitchRings2" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52588e-05, -0.0964966, 5.39877)
+
+[node name="Child04" parent="Box20/Switch/CullingTrigger/SwitchRings2" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.57764e-05, -0.144753, 8.0983)
+
+[node name="Child05" parent="Box20/Switch/CullingTrigger/SwitchRings2" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52588e-05, -0.193001, 10.7978)
+
+[node name="SwitchRings3" type="Node3D" parent="Box20/Switch/CullingTrigger"]
+transform = Transform3D(-0.982545, -0.00162666, 0.186019, -0.0279524, 0.989898, -0.138986, -0.183915, -0.14176, -0.972664, 0.625328, 3.45719, 35.3133)
+script = ExtResource("7_v2v6a")
+Generate = false
+Source = ExtResource("8_yjt2l")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 3.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Box20/Switch/CullingTrigger/SwitchRings3" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(0.994093, 0.000949055, -0.108533, -0.000949058, 1, 5.16288e-05, 0.108533, 5.1667e-05, 0.994094, 0.0087738, 0.10696, -1.81335)
+
+[node name="Child02" parent="Box20/Switch/CullingTrigger/SwitchRings3" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(0.995405, 0.000837322, -0.0957552, -0.000837323, 1, 4.01726e-05, 0.0957552, 4.01884e-05, 0.995405, 0.121902, 0.0075531, -4.26079)
+
+[node name="Child03" parent="Box20/Switch/CullingTrigger/SwitchRings3" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 1.49012e-08, -2.32831e-10, 1, -9.31323e-10, 0, 1.86265e-09, 1, 0.328384, 0.000545502, -6.86218)
+
+[node name="Child04" parent="Box20/Switch/CullingTrigger/SwitchRings3" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, -2.32831e-10, 1.49012e-08, -9.31323e-10, 1, -9.31323e-10, 0, 5.58794e-09, 1, 0.510483, 0.0215797, -9.26682)
+
+[node name="SwitchRings4" type="Node3D" parent="Box20/Switch/CullingTrigger"]
+transform = Transform3D(-0.99826, 0.000515539, -0.0589555, 0.00885902, 0.989918, -0.141348, 0.0582886, -0.141624, -0.988201, -2.14998, 5.5517, 49.0939)
+script = ExtResource("7_v2v6a")
+Generate = false
+Source = ExtResource("8_yjt2l")
+Amount = 3
+Shape = 2
+Path = NodePath("../../../../Static/Path/MiddlePath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.6
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Box20/Switch/CullingTrigger/SwitchRings4" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 5.82077e-11, 0, -5.82077e-11, 1, 9.31323e-10, 3.72529e-09, 9.31323e-10, 1, -1.52588e-05, 0, 1.52588e-05)
+
+[node name="Child02" parent="Box20/Switch/CullingTrigger/SwitchRings4" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 5.82077e-11, 0, -5.82077e-11, 1, 9.31323e-10, 3.72529e-09, 9.31323e-10, 1, 0.153336, 0.0226822, -2.59525)
+
+[node name="Child03" parent="Box20/Switch/CullingTrigger/SwitchRings4" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 5.82077e-11, 0, -5.82077e-11, 1, 9.31323e-10, 3.72529e-09, 9.31323e-10, 1, 0.306557, 0.0453835, -5.19055)
+
+[node name="SwitchRings5" type="Node3D" parent="Box20/Switch/CullingTrigger"]
+transform = Transform3D(-0.99826, 0.000515539, -0.0589555, 0.00885903, 0.989918, -0.141348, 0.0582886, -0.141624, -0.9882, 1.6266, 8.35693, 67.5508)
+script = ExtResource("7_v2v6a")
+Generate = false
+Source = ExtResource("8_yjt2l")
+Amount = 8
+Shape = 2
+Path = NodePath("../../../../Static/Path/MiddlePath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 3.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Box20/Switch/CullingTrigger/SwitchRings5" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 3.72529e-09, -5.82077e-11, 1, 0, 0, 9.31323e-10, 1, 7.62939e-05, 7.62939e-06, -0.000900269)
+
+[node name="Child02" parent="Box20/Switch/CullingTrigger/SwitchRings5" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 3.72529e-09, -5.82077e-11, 1, 0, 0, 9.31323e-10, 1, 0.206429, 0.0305672, -3.49467)
+
+[node name="Child03" parent="Box20/Switch/CullingTrigger/SwitchRings5" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 3.72529e-09, -5.82077e-11, 1, 0, 0, 9.31323e-10, 1, 0.412788, 0.0611153, -6.98853)
+
+[node name="Child04" parent="Box20/Switch/CullingTrigger/SwitchRings5" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 3.72529e-09, -5.82077e-11, 1, 0, 0, 9.31323e-10, 1, 0.619141, 0.091671, -10.4823)
+
+[node name="Child05" parent="Box20/Switch/CullingTrigger/SwitchRings5" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 3.72529e-09, -5.82077e-11, 1, 0, 0, 9.31323e-10, 1, 0.825554, 0.122215, -13.9762)
+
+[node name="Child06" parent="Box20/Switch/CullingTrigger/SwitchRings5" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 3.72529e-09, -5.82077e-11, 1, 0, 0, 9.31323e-10, 1, 1.03185, 0.152771, -17.47)
+
+[node name="Child07" parent="Box20/Switch/CullingTrigger/SwitchRings5" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 3.72529e-09, -5.82077e-11, 1, 0, 0, 9.31323e-10, 1, 1.2382, 0.183319, -20.9637)
+
+[node name="Child08" parent="Box20/Switch/CullingTrigger/SwitchRings5" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 3.72529e-09, -5.82077e-11, 1, 0, 0, 9.31323e-10, 1, 1.44456, 0.213867, -24.4577)
+
+[node name="SwitchRings6" type="Node3D" parent="Box20/Switch/CullingTrigger"]
+transform = Transform3D(-0.565053, 0.0072147, -0.825021, 0.123973, 0.989348, -0.0762567, 0.815687, -0.145369, -0.559929, 3.94875, 12.3923, 94.1013)
+script = ExtResource("7_v2v6a")
+Generate = false
+Source = ExtResource("8_yjt2l")
+Amount = 2
+Shape = 0
+Orientation = 0
+Spacing = 5.8
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Box20/Switch/CullingTrigger/SwitchRings6" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 4.65661e-10, 0, -2.32831e-10, 1, -0.144424, 0.000205994, -0.0240631)
+
+[node name="Child02" parent="Box20/Switch/CullingTrigger/SwitchRings6" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 4.65661e-10, 0, -2.32831e-10, 1, -0.289742, 2.28882e-05, -5.80257)
+
+[node name="Child03" parent="Box20/Switch/CullingTrigger/SwitchRings6" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(0.820451, -0.0049991, 0.571695, 0.00499909, 0.999987, 0.00156993, -0.571695, 0.0015699, 0.820465, -1.28094, 0.0219269, -8.30748)
+
+[node name="Child04" parent="Box20/Switch/CullingTrigger/SwitchRings6" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(0.873543, -0.00425612, 0.486728, 0.00425612, 0.999991, 0.00110571, -0.486728, 0.00110569, 0.873553, -2.98929, 0.0437355, -10.8018)
+
+[node name="Child05" parent="Box20/Switch/CullingTrigger/SwitchRings6" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(0.807043, -0.00516328, 0.59047, 0.00516328, 0.999986, 0.00168717, -0.59047, 0.00168714, 0.807058, -4.37656, 0.0814095, -12.8977)
+
+[node name="Grindrail3" parent="Box20" instance=ExtResource("20_8t73i")]
+transform = Transform3D(0.962261, 0, -0.272129, 0, 1, 0, 0.272129, 0, 0.962261, -0.90522, -3.4585, -38.965)
+rail = NodePath("../Grindrail/Path3D")
+
+[node name="Grindrail4" parent="Box20" instance=ExtResource("22_ifefi")]
+transform = Transform3D(0.999732, 0, -0.0231411, 0, 1, 0, 0.0231411, 0, 0.999732, -2.51853, -3.4535, -35.5538)
+rail = NodePath("../Grindrail2/Path3D")
+
+[node name="Grindrail5" parent="Box20" instance=ExtResource("22_ifefi")]
+transform = Transform3D(0.999732, 0, -0.0231411, 0, 1, 0, 0.0231411, 0, 0.999732, 1.42489, -3.4535, -31.0021)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="SpikeBallStatic" parent="Box20" instance=ExtResource("42_mh06d")]
+transform = Transform3D(-1.46903, -0.619081, -0.84166, -0.504704, 1.71193, -0.345883, 0.949695, -0.0478369, -1.48573, 2.82034, -3.5535, -89.6961)
+
+[node name="Shaft21" type="Node3D" parent="."]
+transform = Transform3D(-0.546453, 0, -0.83749, 0, 1, 0, 0.83749, 0, -0.546453, -98.2726, -59.6637, -194.063)
+
+[node name="Grindrail4" parent="Shaft21" instance=ExtResource("20_8t73i")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+
+[node name="Grindrail5" parent="Shaft21" instance=ExtResource("20_8t73i")]
+transform = Transform3D(0.85396, 0, 0.520339, 0, 1, 0, -0.520339, 0, 0.85396, 0.0411224, 0, -9.97534)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="DashPanel" parent="Shaft21" instance=ExtResource("38_mjdev")]
+transform = Transform3D(-0.836889, 0, -0.547373, 0, 1, 0, 0.547373, 0, -0.836889, -19.6462, -0.335754, -32.5276)
+
+[node name="DashPanel2" parent="Shaft21" instance=ExtResource("38_mjdev")]
+transform = Transform3D(-0.836889, 0, -0.547373, 0, 1, 0, 0.547373, 0, -0.836889, -18.0762, -0.335754, -33.552)
+
+[node name="DashPanel3" parent="Shaft21" instance=ExtResource("38_mjdev")]
+transform = Transform3D(-0.836889, 0, -0.547373, 0, 1, 0, 0.547373, 0, -0.836889, -16.5054, -0.335754, -34.577)
+
+[node name="DashPanel4" parent="Shaft21" instance=ExtResource("38_mjdev")]
+transform = Transform3D(-0.836889, 0, -0.547373, 0, 1, 0, 0.547373, 0, -0.836889, -14.8304, -0.335754, -35.6699)
+
+[node name="Elevator" parent="Shaft21" instance=ExtResource("43_hxgcc")]
+transform = Transform3D(0.865086, -0.00143011, 0.501622, 0.00280938, 0.999994, -0.00199409, -0.501616, 0.00313426, 0.865085, -21.4946, 33.6562, -40.65)
+
+[node name="Elevator2" parent="Shaft21" instance=ExtResource("43_hxgcc")]
+transform = Transform3D(0.849161, -0.00133251, 0.528132, 0.00280938, 0.999994, -0.00199409, -0.528127, 0.00317699, 0.84916, -18.1284, 66.7597, -42.8463)
+
+[node name="Elevator3" parent="Shaft21" instance=ExtResource("43_hxgcc")]
+transform = Transform3D(0.824043, -0.00118539, 0.566527, 0.00280938, 0.999994, -0.00199409, -0.566521, 0.00323476, 0.824041, -24.9119, 70.1634, -38.4202)
+
+[node name="Elevator4" parent="Shaft21" instance=ExtResource("43_hxgcc")]
+transform = Transform3D(0.835305, -0.0012504, 0.549787, 0.00280938, 0.999994, -0.00199409, -0.549781, 0.00321019, 0.835303, -21.5785, 101.127, -40.5952)
+
+[node name="Lava22" type="Node3D" parent="."]
+transform = Transform3D(0.00398123, -0.00200521, -0.99999, 0.00280938, 0.999994, -0.00199409, 0.999988, -0.00280142, 0.00398678, -45.5409, 41.463, -189.951)
+
+[node name="Rings" type="Node3D" parent="Lava22"]
+transform = Transform3D(1, 6.98492e-10, 0, -2.32831e-10, 1, -1.82263e-09, 2.32831e-09, -8.43102e-10, 1, 0.0554199, -0.821712, -14.4765)
+script = ExtResource("7_v2v6a")
+Generate = false
+Source = ExtResource("8_yjt2l")
+Amount = 6
+Shape = 2
+Path = NodePath("../../Static/Path/EndingPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Lava22/Rings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 2.32831e-10, 0, -2.32831e-10, 1, -1.9827e-10, 0, 9.3678e-11, 1, 0, 0, 1.52588e-05)
+
+[node name="Child02" parent="Lava22/Rings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 2.32831e-10, 0, -2.32831e-10, 1, -1.9827e-10, 0, 9.3678e-11, 1, 0.00596619, -0.0030098, -1.49997)
+
+[node name="Child03" parent="Lava22/Rings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 2.32831e-10, 0, -2.32831e-10, 1, -1.9827e-10, 0, 9.3678e-11, 1, 0.0119324, -0.00601578, -2.99995)
+
+[node name="Child04" parent="Lava22/Rings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 2.32831e-10, 0, -2.32831e-10, 1, -1.9827e-10, 0, 9.3678e-11, 1, 0.0179138, -0.00902557, -4.49995)
+
+[node name="Child05" parent="Lava22/Rings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 2.32831e-10, 0, -2.32831e-10, 1, -1.9827e-10, 0, 9.3678e-11, 1, 0.02388, -0.0120316, -5.99992)
+
+[node name="Child06" parent="Lava22/Rings" instance=ExtResource("8_yjt2l")]
+transform = Transform3D(1, 2.32831e-10, 0, -2.32831e-10, 1, -1.9827e-10, 0, 9.3678e-11, 1, 0.0298462, -0.0150414, -7.49991)
+
+[node name="MetalPlatform" parent="Lava22" instance=ExtResource("44_kj7yh")]
+transform = Transform3D(0.999969, 0.00280938, 0.0072586, -0.00282378, 0.999994, 0.00197365, -0.00725295, -0.00199404, 0.999971, -0.113708, -1.66325, -30.5575)
+
+[node name="Crusher" parent="Lava22" instance=ExtResource("45_ko5px")]
+transform = Transform3D(0.00398116, 0.00280938, 0.999988, -0.00200526, 0.999994, -0.00280141, -0.999989, -0.00199403, 0.00398684, -0.0478668, -0.926441, -38.0958)
+
+[node name="MetalPlatform2" parent="Lava22" instance=ExtResource("44_kj7yh")]
+transform = Transform3D(0.999969, 0.00280938, 0.0072586, -0.00282378, 0.999994, 0.00197365, -0.00725295, -0.00199404, 0.999971, -0.054245, -1.69319, -45.5006)
+
+[node name="MetalPlatform3" parent="Lava22" instance=ExtResource("44_kj7yh")]
+transform = Transform3D(0.999969, 0.00280938, 0.0072586, -0.00282378, 0.999994, 0.00197365, -0.00725295, -0.00199404, 0.999971, -0.015213, -1.71284, -55.3037)
+
+[node name="Crusher2" parent="Lava22" node_paths=PackedStringArray("light") instance=ExtResource("45_ko5px")]
+transform = Transform3D(0.00398116, 0.00280938, 0.999988, -0.00200526, 0.999994, -0.00280141, -0.999989, -0.00199403, 0.00398684, 0.0492554, -0.975342, -62.4901)
+light = NodePath("../Crusher/CrusherBloomMesh")
+
+[node name="MetalPlatform4" parent="Lava22" instance=ExtResource("44_kj7yh")]
+transform = Transform3D(0.999969, 0.00280938, 0.0072586, -0.00282378, 0.999994, 0.00197365, -0.00725295, -0.00199404, 0.999971, 0.0430603, -1.74218, -69.9402)
+
+[node name="MetalPlatform5" parent="Lava22" instance=ExtResource("44_kj7yh")]
+transform = Transform3D(0.999969, 0.00280938, 0.0072586, -0.00282378, 0.999994, 0.00197365, -0.00725295, -0.00199403, 0.999971, 0.0829315, -1.76225, -79.9556)
+
+[node name="MetalPlatform6" parent="Lava22" instance=ExtResource("44_kj7yh")]
+transform = Transform3D(0.999969, 0.00280938, 0.0072586, -0.00282378, 0.999994, 0.00197365, -0.00725295, -0.00199403, 0.999971, 0.162827, -1.80247, -100.025)
+
+[node name="Crusher3" parent="Lava22" node_paths=PackedStringArray("light") instance=ExtResource("45_ko5px")]
+transform = Transform3D(0.00398116, 0.00280938, 0.999988, -0.00200526, 0.999993, -0.00280141, -0.999989, -0.00199403, 0.00398684, 0.148987, -1.02558, -87.5496)
+light = NodePath("../Crusher/CrusherBloomMesh")
+
+[node name="Crusher4" parent="Lava22" node_paths=PackedStringArray("light") instance=ExtResource("45_ko5px")]
+transform = Transform3D(0.00398116, 0.00280938, 0.999988, -0.00200525, 0.999993, -0.00280141, -0.999989, -0.00199403, 0.00398684, 0.169571, -1.03594, -92.7234)
+light = NodePath("../Crusher/CrusherBloomMesh")
+
+[node name="GasTank" parent="Lava22" instance=ExtResource("15_pjnrf")]
+transform = Transform3D(-0.999986, 0.00163816, 0.00492138, 0.00492156, 8.51723e-05, 0.999988, 0.00163765, 0.999998, -9.31697e-05, -14.3368, -1.04075, -107.829)
+
+[node name="GasTank2" parent="Lava22" instance=ExtResource("15_pjnrf")]
+transform = Transform3D(-0.999945, 0.00841876, 0.00611133, 0.00842973, 0.999962, 0.00178355, -0.00609612, 0.00183493, -0.999979, -34.6289, -0.861118, -108.592)
+
+[node name="RedMajin" parent="Lava22" instance=ExtResource("14_42pc4")]
+transform = Transform3D(0.00398116, 0.00280938, 0.999988, -0.00200526, 0.999994, -0.00280141, -0.99999, -0.00199404, 0.00398684, -29.8047, -1.11185, -106.88)
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+
+[node name="RedMajin2" parent="Lava22" instance=ExtResource("14_42pc4")]
+transform = Transform3D(0.00398116, 0.00280938, 0.999988, -0.00200526, 0.999994, -0.00280141, -0.99999, -0.00199404, 0.00398684, -29.7962, -1.11615, -109.019)
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+
+[node name="BlueMajin" parent="Lava22" instance=ExtResource("34_ip7kn")]
+transform = Transform3D(-0.999826, 0.00280938, -0.0183928, 0.00284558, 0.999994, -0.00194208, 0.0183872, -0.00199404, -0.999829, -41.7301, -0.972565, -99.5675)
+
+[node name="BlueMajin2" parent="Lava22" instance=ExtResource("34_ip7kn")]
+transform = Transform3D(-0.999826, 0.00280938, -0.0183928, 0.00284558, 0.999994, -0.00194208, 0.0183872, -0.00199404, -0.999829, -41.7372, -0.474232, -97.4196)
+
+[node name="BlueMajin3" parent="Lava22" instance=ExtResource("34_ip7kn")]
+transform = Transform3D(-0.999826, 0.00280938, -0.0183928, 0.00284558, 0.999994, -0.00194208, 0.0183872, -0.00199404, -0.999829, -41.7543, 0.326355, -92.5801)
+
+[node name="Lava23" type="Node3D" parent="."]
+transform = Transform3D(-0.0223733, -2.32831e-10, 0.99975, 4.72937e-10, 1, 0, -0.99975, -9.09495e-12, -0.0223733, 20.0736, 41.8567, -234.234)
+
+[node name="MetalPlatform" parent="Lava23" instance=ExtResource("44_kj7yh")]
+transform = Transform3D(-0.0223733, -1.43019e-11, -0.99975, 1.05812e-11, 1, 4.72819e-10, 0.99975, 2.32569e-10, -0.0223733, 20.7329, -1.92801, 0.487518)
+
+[node name="Crusher" parent="Lava23" instance=ExtResource("45_ko5px")]
+transform = Transform3D(-0.0223733, -1.43019e-11, -0.999752, 1.05812e-11, 1, 4.7282e-10, 0.999752, 2.32569e-10, -0.0223733, 28.3932, -1.2924, 0.417185)
+
+[node name="MetalPlatform2" parent="Lava23" instance=ExtResource("44_kj7yh")]
+transform = Transform3D(-0.0223734, -1.43019e-11, -0.999752, 1.05812e-11, 1, 4.7282e-10, 0.999752, 2.32569e-10, -0.0223733, 35.291, -6.20206, 0.574072)
+
+[node name="MetalPlatform3" parent="Lava23" instance=ExtResource("44_kj7yh")]
+transform = Transform3D(-0.0223734, -1.43019e-11, -0.999752, 1.05812e-11, 1, 4.7282e-10, 0.999752, 2.32569e-10, -0.0223733, 45.1687, -6.20206, 0.795126)
+
+[node name="MetalPlatform4" parent="Lava23" instance=ExtResource("44_kj7yh")]
+transform = Transform3D(-0.0223734, -1.43019e-11, -0.999754, 1.05812e-11, 1, 4.7282e-10, 0.999753, 2.32569e-10, -0.0223734, 59.952, -10.0187, 1.12596)
+
+[node name="Crusher2" parent="Lava23" node_paths=PackedStringArray("light") instance=ExtResource("45_ko5px")]
+transform = Transform3D(-0.0223734, -1.43019e-11, -0.999754, 1.05812e-11, 1, 4.7282e-10, 0.999754, 2.32569e-10, -0.0223734, 52.6753, -11.26, 0.960594)
+light = NodePath("../Crusher/CrusherBloomMesh")
+
+[node name="Crusher3" parent="Lava23" node_paths=PackedStringArray("light") instance=ExtResource("45_ko5px")]
+transform = Transform3D(-0.0223734, -1.43019e-11, -0.999755, 1.05812e-11, 1, 4.72821e-10, 0.999755, 2.3257e-10, -0.0223734, 67.6641, -6.37027, 1.29603)
+light = NodePath("../Crusher/CrusherBloomMesh")
+
+[node name="MetalPlatform5" parent="Lava23" instance=ExtResource("44_kj7yh")]
+transform = Transform3D(-0.0223734, -1.43019e-11, -0.999754, 1.05812e-11, 1, 4.7282e-10, 0.999754, 2.32569e-10, -0.0223734, 75.4025, -10.0187, 1.47172)
+
+[node name="Crusher4" parent="Lava23" node_paths=PackedStringArray("light") instance=ExtResource("45_ko5px")]
+transform = Transform3D(-0.0223735, -1.43019e-11, -0.999757, 1.05813e-11, 1, 4.72822e-10, 0.999757, 2.3257e-10, -0.0223735, 86.5846, -13.072, 1.69029)
+light = NodePath("../Crusher/CrusherBloomMesh")
+
+[node name="Crusher5" parent="Lava23" node_paths=PackedStringArray("light") instance=ExtResource("45_ko5px")]
+transform = Transform3D(-0.0223735, -1.43019e-11, -0.999758, 1.05813e-11, 1, 4.72822e-10, 0.999758, 2.3257e-10, -0.0223735, 91.9434, -10.675, 1.97815)
+light = NodePath("../Crusher/CrusherBloomMesh")
 
 [connection signal="Entered" from="MainAct/LavaHall/LaunchRing1" to="MainAct/LavaHall/LaunchRing1/Cam" method="Activate"]
 [connection signal="Exited" from="MainAct/LavaHall/LaunchRing1" to="MainAct/LavaHall/LaunchRing1/Cam" method="Deactivate"]
