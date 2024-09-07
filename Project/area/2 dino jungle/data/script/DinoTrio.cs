@@ -113,16 +113,17 @@ public partial class DinoTrio : PathFollow3D
 			return;
 		}
 
+		float playerSpeed = Mathf.Min(Character.MoveSpeed, Character.Skills.GroundSettings.Speed);
 		// Accelerate
 		if (CurrentAttackState == AttackStates.Charge)
 		{
-			moveSpeed = Mathf.Lerp(moveSpeed, Character.MoveSpeed + Mathf.Abs(DeltaProgress * 1.5f), .5f);
+			moveSpeed = Mathf.Lerp(moveSpeed, playerSpeed + Mathf.Abs(DeltaProgress * 1.5f), .5f);
 			rubberbandingSpeed = 0;
 			return;
 		}
 
 		// Normal chasing
-		float targetSpeed = Mathf.Clamp(Character.MoveSpeed - Processor.SpeedDifference, 0, Character.Skills.GroundSettings.Speed);
+		float targetSpeed = Mathf.Clamp(playerSpeed - Processor.SpeedDifference, 0, Character.Skills.GroundSettings.Speed);
 		if (Mathf.Abs(DeltaProgress) > DinoTrioProcessor.AttackOffset)
 			targetSpeed = Character.Skills.GroundSettings.Speed - Processor.SpeedDifference;
 
