@@ -39,6 +39,7 @@ public partial class ExperienceResult : Control
 	private BGMPlayer bgm;
 	[Export]
 	private AnimationPlayer animator;
+	private bool isSkippingLevel;
 	private bool isSkippingResults;
 	private readonly string IncreaseAnimation = "increase";
 	private readonly string LevelUpAnimation = "level-up";
@@ -105,8 +106,16 @@ public partial class ExperienceResult : Control
 
 		if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("button_action"))
 		{
-			isSkippingResults = true;
-			SkipResults();
+			if (isSkippingLevel)
+			{
+				isSkippingResults = true;
+				SkipResults();
+			}
+			else
+			{
+				isSkippingLevel = true;
+				SkipAnimations();
+			}
 		}
 
 		if (SaveManager.ActiveGameData.exp == targetExp)
@@ -142,10 +151,15 @@ public partial class ExperienceResult : Control
 
 		// Start interpolation
 		expInterpolation = Mathf.MoveToward(expInterpolation, 1, ExpSmoothing / interpolationSpeed * PhysicsManager.physicsDelta);
-		if (Mathf.IsEqualApprox(expInterpolation, 1.0f)) // Workaround because something is wrong with Mathf.Lerp and ints...
+		if (isSkippingLevel || Mathf.IsEqualApprox(expInterpolation, 1.0f)) // Workaround because something is wrong with Mathf.Lerp and ints...
+		{
+			isSkippingLevel = false;
 			interpolatedExp = endExp;
+		}
 		else
+		{
 			interpolatedExp = Mathf.FloorToInt(Mathf.Lerp(startExp, endExp, expInterpolation));
+		}
 		SaveManager.ActiveGameData.exp = interpolatedExp;
 		RedrawData();
 
@@ -171,16 +185,19 @@ public partial class ExperienceResult : Control
 		missionLabel.Text = ExtensionMethods.FormatMenuNumber(missionExp);
 	}
 
-	private void SkipResults()
+	private void SkipAnimations()
 	{
 		// Skip any active animation
-		if (animator.IsPlaying() && animator.CurrentAnimation != IncreaseAnimation)
-		{
-			animator.Seek(animator.CurrentAnimationLength, true, true);
+		if (!animator.IsPlaying() || animator.CurrentAnimation == IncreaseAnimation)
 			return;
-		}
 
+		animator.Seek(animator.CurrentAnimationLength, true, true);
+	}
+
+	private void SkipResults()
+	{
 		// Skip everything
+		SkipAnimations();
 		SaveManager.ActiveGameData.exp = targetExp;
 		interpolatedExp = targetExp;
 		expInterpolation = 1.0f;
