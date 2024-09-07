@@ -75,6 +75,7 @@ public partial class SaveManager : Node
 		Spanish,
 		BrazilianPortuguese,
 		Polish,
+		Chinese,
 		Count
 	}
 
@@ -479,10 +480,15 @@ public partial class SaveManager : Node
 			case TextLanguage.Polish:
 				TranslationServer.SetLocale("pl");
 				break;
+			case TextLanguage.Chinese:
+				TranslationServer.SetLocale("zh");
+				break;
 			default:
 				TranslationServer.SetLocale(UseEnglishVoices ? "en" : "en_US");
 				break;
 		}
+
+		GD.Print(TranslationServer.GetLocale());
 	}
 
 	#endregion
