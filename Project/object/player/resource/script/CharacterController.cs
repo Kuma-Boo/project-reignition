@@ -709,7 +709,7 @@ namespace Project.Gameplay
 				IsHoldingDirection(PathFollower.ForwardAngle) &&
 				Mathf.Abs(inputDeltaAngle) < TurningDampingRange) // Remap controls to provide more analog detail
 			{
-				targetMovementAngle -= inputDeltaAngle * .9f * (1.0f - (Mathf.Abs(inputDeltaAngle) / TurningDampingRange));
+				targetMovementAngle -= inputDeltaAngle * (1.0f - (Mathf.Abs(inputDeltaAngle) / TurningDampingRange));
 			}
 
 			// Reduce sensitivity when player is running
