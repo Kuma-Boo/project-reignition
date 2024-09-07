@@ -47,6 +47,7 @@ namespace Project.Gameplay.Bosses
 		/// <summary> Is the boss being processed? </summary>
 		private FightState fightState;
 		private readonly float STARTING_POSITION = 60;
+		private readonly int TraversalEyePearlAmount = 10;
 
 		private CharacterController Character => CharacterController.instance;
 		private CharacterPathFollower PathFollower => Character.PathFollower;
@@ -566,7 +567,7 @@ namespace Project.Gameplay.Bosses
 		/// <summary> 0 - 1 value blend value. </summary>
 		private float flyingEyeBlend;
 		private readonly float FLYING_EYE_NORMAL_SPEED = 0.6f; // How fast does the eye typically move?
-		private readonly float FLYING_EYE_LOCKON_SPEED = 0.3f; // How fast does the eye move when targeted?
+		private readonly float FLYING_EYE_LOCKON_SPEED = 0.2f; // How fast does the eye move when targeted?
 		private readonly float FLYING_EYE_KNOCKBACK = 1.2f; // How quickly to knock the eye back on the final hit
 
 		private void UpdateAttacks()
@@ -838,7 +839,7 @@ namespace Project.Gameplay.Bosses
 			{
 				if (currentHealth == 0)
 					flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_KNOCKBACK * PhysicsManager.physicsDelta);
-				else if (Character.Lockon.IsHomingAttacking)
+				else if (Character.Lockon.IsHomingAttacking || Character.Skills.IsSpeedBreakActive)
 					flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_LOCKON_SPEED * PhysicsManager.physicsDelta);
 				else
 					flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_NORMAL_SPEED * PhysicsManager.physicsDelta);
@@ -901,9 +902,9 @@ namespace Project.Gameplay.Bosses
 		/// <summary>
 		/// Deals damage to the boss. Returns True if the boss is defeated.
 		/// </summary>
-		private void TakeDamage()
+		private void TakeDamage(int amount = 1)
 		{
-			currentHealth = (int)Mathf.MoveToward(currentHealth, 0, 1);
+			currentHealth = (int)Mathf.MoveToward(currentHealth, 0, amount);
 			eventAnimator.Play("damage");
 			eventAnimator.Advance(0.0);
 
@@ -993,27 +994,37 @@ namespace Project.Gameplay.Bosses
 			if (Character.Lockon.IsBounceLockoutActive) return; // Player just finished a homing attack
 
 			if (Character.Skills.IsSpeedBreakActive) // Special attack
-				return;
+			{
+				if (attackState != AttackState.RECOVERY)
+				{
+					flyingEyeAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+					StartHitFX();
+					RetreatEyeAttack();
+					TakeDamage(2);
+				}
 
-			// Player countered the attack
-			if (attackState == AttackState.STRIKE && Character.ActionState == CharacterController.ActionStates.JumpDash)
+				return;
+			}
+
+			if (Character.Lockon.IsHomingAttacking) // Player isn't attacking
 			{
 				flyingEyeAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+				StartHitFX();
+				TakeDamage();
+				Character.Lockon.StartBounce(false);
+				return;
+			}
+
+			if (Character.ActionState == CharacterController.ActionStates.JumpDash ||
+				Character.ActionState == CharacterController.ActionStates.AccelJump)
+			{
+				// Player countered the attack
 				RetreatEyeAttack();
 				Character.Lockon.StartBounce(false);
 				return;
 			}
 
-			if (!Character.Lockon.IsHomingAttacking) // Player isn't attacking
-			{
-				Character.StartKnockback();
-				return;
-			}
-
-			flyingEyeAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-			StartHitFX();
-			TakeDamage();
-			Character.Lockon.StartBounce(false);
+			Character.StartKnockback();
 		}
 
 		/// <summary> Is the player currently colliding with the eye on the boss's back? </summary>
@@ -1069,6 +1080,7 @@ namespace Project.Gameplay.Bosses
 			rootAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			Character.Lockon.StartBounce();
 			damageState = DamageState.Hitstun;
+			Runtime.Instance.SpawnPearls(TraversalEyePearlAmount, Character.GlobalPosition, new Vector2(2, 1.5f));
 
 			// Disable hurtboxes so the player can't just bounce on the same eye infinitely
 			eventAnimator.Play(hitFarEye ? "disable-hurtbox-01" : "disable-hurtbox-02");
