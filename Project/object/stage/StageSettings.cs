@@ -497,9 +497,6 @@ public partial class StageSettings : Node3D
 		if (!IsLevelIngame)
 			return;
 
-		// Recalculate technical bonus
-		CalculateTechnicalBonus();
-
 		// Attempt to start the completion demo
 		GetTree().CreateTimer(wasSuccessful ? Data.CompletionDelay : FAIL_COMPLETION_DELAY).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.StartCompletionDemo));
 
@@ -507,6 +504,9 @@ public partial class StageSettings : Node3D
 		SoundManager.instance.CancelDialog();
 		Interface.PauseMenu.AllowPausing = false;
 		LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
+
+		// Recalculate technical bonus
+		CalculateTechnicalBonus();
 
 		EmitSignal(SignalName.LevelCompleted);
 	}
