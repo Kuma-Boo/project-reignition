@@ -707,6 +707,7 @@ namespace Project.Gameplay.Bosses
 		private GroupGpuParticles3D impactEffect;
 		private void StartImpactFX(NodePath n)
 		{
+			Character.Camera.StartMediumCameraShake();
 			impactEffect.Visible = true;
 			Vector3 p = GetNode<Node3D>(n).GlobalPosition;
 			p.Y = 0; // Snap to the floor
