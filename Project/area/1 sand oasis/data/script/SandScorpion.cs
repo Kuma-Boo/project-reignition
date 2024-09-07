@@ -1011,7 +1011,10 @@ namespace Project.Gameplay.Bosses
 			{
 				flyingEyeAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				StartHitFX();
-				TakeDamage();
+				if (Character.AttackState == CharacterController.AttackStates.Weak)
+					TakeDamage(1);
+				else
+					TakeDamage(2);
 				Character.Lockon.StartBounce(false);
 				return;
 			}
