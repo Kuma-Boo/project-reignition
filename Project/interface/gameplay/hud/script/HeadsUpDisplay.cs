@@ -76,9 +76,9 @@ public partial class HeadsUpDisplay : Control
 
 	private void UpdateRingCount(int amount, bool disableAnimations)
 	{
-		if (!disableAnimations && amount != 0) // Play animation
+		if (!disableAnimations) // Play animation
 		{
-			if (amount > 0)
+			if (amount >= 0)
 			{
 				ringAnimator.Set(RingGainParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			}
