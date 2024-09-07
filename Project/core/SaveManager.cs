@@ -487,8 +487,6 @@ public partial class SaveManager : Node
 				TranslationServer.SetLocale(UseEnglishVoices ? "en" : "en_US");
 				break;
 		}
-
-		GD.Print(TranslationServer.GetLocale());
 	}
 
 	#endregion
