@@ -102,6 +102,7 @@ public partial class SaveManager : Node
 	[
 		0,
 		30,
+		45,
 		60,
 		120,
 	];
@@ -115,7 +116,7 @@ public partial class SaveManager : Node
 		public int windowSize = 3; // Defaults to one lower than 1080p
 		public bool useFullscreen = true;
 		public bool useExclusiveFullscreen;
-		public int framerate = 2;
+		public int framerate = 3;
 		public bool useVsync;
 		public int renderScale = 100;
 		public RenderingServer.ViewportScaling3DMode resizeMode = RenderingServer.ViewportScaling3DMode.Bilinear;
