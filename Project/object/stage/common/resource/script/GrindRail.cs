@@ -386,7 +386,7 @@ public partial class GrindRail : Area3D
 				Character.MoveSpeed = Skills.GrindSettings.UpdateInterpolate(Character.MoveSpeed, isCharging ? 0f : -1f);
 		}
 
-		Character.Animator.UpdateBalancing(isCharging ? 0.0f : Character.Animator.CalculateTurnRatio());
+		Character.Animator.CallDeferred(CharacterAnimator.MethodName.UpdateBalancing, isCharging ? 0.0f : Character.Animator.CalculateTurnRatio());
 	}
 
 	private void StartShuffle()
