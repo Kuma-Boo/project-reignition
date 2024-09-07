@@ -132,11 +132,11 @@ public partial class SaveManager : Node
 		public bool isMasterMuted;
 		public int masterVolume = 50;
 		public bool isBgmMuted;
-		public int bgmVolume = 100;
+		public int bgmVolume = 50;
 		public bool isSfxMuted;
-		public int sfxVolume = 100;
+		public int sfxVolume = 50;
 		public bool isVoiceMuted;
-		public int voiceVolume = 100;
+		public int voiceVolume = 50;
 
 		// Controls
 		public float deadZone = .5f;
