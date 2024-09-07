@@ -136,6 +136,7 @@ public partial class Enemy : Node3D
 	public virtual void Respawn()
 	{
 		IsActive = false; // Start disabled
+		IsInteracting = false; // Disable interactions
 
 		SpawnData.Respawn(this);
 		currentHealth = maxHealth;

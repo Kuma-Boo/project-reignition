@@ -70,6 +70,8 @@ public partial class DinoTrio : PathFollow3D
 
 	private void Respawn()
 	{
+		isInteractingWithPlayer = false;
+
 		Progress = 0;
 		moveSpeed = rubberbandingSpeed = 0;
 
