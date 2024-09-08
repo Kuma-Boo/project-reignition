@@ -154,7 +154,13 @@ public partial class EventTrigger : StageTriggerModule
 		if (autoRespawn)
 			StageSettings.instance.ConnectRespawnSignal(this);
 
-		Respawn();
+		StageSettings.instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.Respawn));
+
+		if (playerStandin == null)
+		{
+			animator.Play(EventAnimation);
+			animator.Seek(animator.CurrentAnimationLength, true, true);
+		}
 	}
 
 	public override void _PhysicsProcess(double _)
