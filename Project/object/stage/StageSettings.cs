@@ -57,7 +57,6 @@ public partial class StageSettings : Node3D
 		}
 
 		InitializeShaders();
-		TransitionManager.FinishTransition();
 	}
 
 	public void UpdatePostProcessingStatus()
@@ -127,7 +126,7 @@ public partial class StageSettings : Node3D
 			{
 				LevelState = LevelStateEnum.Ingame;
 				SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 100); // Unmute gameplay sound effects
-																					  //TransitionManager.FinishTransition();
+				TransitionManager.FinishTransition();
 				EmitSignal(SignalName.LevelStarted);
 			}
 
