@@ -106,7 +106,8 @@ public partial class DinoTrio : PathFollow3D
 		if (Processor.IsSlowingDown ||
 			(CurrentAttackState != AttackStates.Charge && CurrentAttackState != AttackStates.Inactive) ||
 			(Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer) ||
-			Character.Skills.IsSpeedBreakActive)
+			Character.Skills.IsSpeedBreakActive ||
+			(Character.Camera.IsCrossfading && CurrentAttackState == AttackStates.Charge))
 		{
 			// Dino is slowing down
 			moveSpeed = Mathf.MoveToward(moveSpeed, 0, friction * PhysicsManager.physicsDelta);
