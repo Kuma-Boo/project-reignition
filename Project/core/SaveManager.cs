@@ -10,14 +10,32 @@ public partial class SaveManager : Node
 {
 	public static SaveManager Instance;
 
-	private const string SaveDirectory = "user://";
-
 	[Signal]
 	public delegate void ConfigAppliedEventHandler();
+
+	private static bool IsPortableMode { get; set; }
+	private static string SaveDirectory
+	{
+		get
+		{
+			if (OS.IsDebugBuild() || !IsPortableMode)
+				return "user://";
+
+			return OS.GetExecutablePath().GetBaseDir() + "/save/";
+		}
+	}
+	private string PortableFile => OS.GetExecutablePath().GetBaseDir() + "/portable.txt";
 
 	public override void _EnterTree()
 	{
 		Instance = this;
+		FileAccess f = FileAccess.Open(PortableFile, FileAccess.ModeFlags.Read);
+		if (f != null && f.GetError() == Error.Ok)
+		{
+			IsPortableMode = true;
+			f.Close();
+		}
+
 		MenuData = GameData.CreateDefaultData(); // Create a default game data object for the menu
 
 		LoadConfig();
