@@ -61,7 +61,10 @@ public partial class CullingTrigger : StageTriggerModule
 			Level.ConnectRespawnSignal(this);
 		}
 
-		Level.Connect(StageSettings.SignalName.LevelStarted, new Callable(this, MethodName.Respawn), (uint)ConnectFlags.Deferred);
+		if (isStageVisuals)
+			Level.Connect(StageSettings.SignalName.LevelStarted, new Callable(this, MethodName.Respawn), (uint)ConnectFlags.Deferred);
+		else
+			CallDeferred(MethodName.Respawn);
 	}
 
 	private bool visibleOnCheckpoint;
