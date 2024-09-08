@@ -967,7 +967,9 @@ namespace Project.Gameplay.Bosses
 				});
 			}
 			else
+			{
 				Character.StartKnockback();
+			}
 		}
 
 		/// <summary> Is the player currently colliding with the flying eye? </summary>
@@ -1007,7 +1009,7 @@ namespace Project.Gameplay.Bosses
 				return;
 			}
 
-			if (Character.Lockon.IsHomingAttacking) // Player isn't attacking
+			if (Character.Lockon.IsHomingAttacking)
 			{
 				flyingEyeAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				StartHitFX();
@@ -1053,7 +1055,7 @@ namespace Project.Gameplay.Bosses
 
 		public void ProcessBackEyeCollision()
 		{
-			if (!Character.Lockon.IsHomingAttacking) return; // Player isn't attacking
+			if (Character.AttackState == CharacterController.AttackStates.None) return; // Player isn't attacking
 
 			if (IsHeavyAttackActive) // End active heavy attack
 			{
@@ -1066,7 +1068,9 @@ namespace Project.Gameplay.Bosses
 
 			StartHitFX();
 			TakeDamage();
-			Character.Lockon.StartBounce(); // Bounce the player
+
+			if (Character.Lockon.IsHomingAttacking)
+				Character.Lockon.StartBounce(); // Bounce the player
 
 			MoveSpeed = KNOCKBACK; // Start knockback
 			damageState = DamageState.Knockback;
