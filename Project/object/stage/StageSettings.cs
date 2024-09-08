@@ -57,6 +57,7 @@ public partial class StageSettings : Node3D
 		}
 
 		InitializeShaders();
+		TransitionManager.FinishTransition();
 	}
 
 	public void UpdatePostProcessingStatus()
@@ -75,18 +76,15 @@ public partial class StageSettings : Node3D
 
 		foreach (Node node in GetChildren(GetTree().Root, []))
 		{
-			if (node is MeshInstance3D)
-			{
-				ShaderManager.Instance.QueueMesh((node as MeshInstance3D).Mesh);
-				continue;
-			}
-
 			if (node is GpuParticles3D)
 			{
 				GpuParticles3D particles = node as GpuParticles3D;
-				ShaderManager.Instance.QueueMaterial(particles.ProcessMaterial);
-				ShaderManager.Instance.QueueMesh(particles.DrawPass1);
+				ShaderManager.Instance.QueueParticle(particles.ProcessMaterial, particles.DrawPass1);
+				continue;
 			}
+
+			if (node is MeshInstance3D)
+				ShaderManager.Instance.QueueMesh((node as MeshInstance3D).Mesh);
 		}
 	}
 
@@ -118,7 +116,6 @@ public partial class StageSettings : Node3D
 				// Start Shader Caching
 				LevelState = LevelStateEnum.Shaders;
 				ShaderManager.Instance.StartCompilation();
-				Engine.MaxFps = 0; // Uncap framerate for faster shader caching
 			}
 
 			return;
@@ -130,8 +127,7 @@ public partial class StageSettings : Node3D
 			{
 				LevelState = LevelStateEnum.Ingame;
 				SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 100); // Unmute gameplay sound effects
-				Engine.MaxFps = SaveManager.FrameRates[SaveManager.Config.framerate]; // Recap framerate
-				TransitionManager.FinishTransition();
+																					  //TransitionManager.FinishTransition();
 				EmitSignal(SignalName.LevelStarted);
 			}
 
