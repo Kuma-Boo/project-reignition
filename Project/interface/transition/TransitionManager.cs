@@ -156,7 +156,7 @@ public partial class TransitionManager : Node
 			FinishFade();
 	}
 
-	public void UpdateLoadingText(StringName localizationKey, int shader = 0, int maxShader = 0)
+	public void UpdateLoadingText(StringName localizationKey, int currentProgress = 0, int maxProgress = 0)
 	{
 		if (localizationKey == null)
 		{
@@ -165,8 +165,8 @@ public partial class TransitionManager : Node
 		}
 
 		loadLabel.Text = Tr(localizationKey);
-		if (maxShader != 0)
-			loadLabel.Text += $" {shader}/{maxShader}";
+		if (maxProgress != 0)
+			loadLabel.Text += $" {currentProgress}/{maxProgress}";
 	}
 }
 

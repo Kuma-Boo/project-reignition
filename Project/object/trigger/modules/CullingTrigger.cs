@@ -23,11 +23,18 @@ public partial class CullingTrigger : StageTriggerModule
 	private bool respawnOnActivation;
 	private Array<Node> respawnableNodes = [];
 
+	/// <summary> The amount of surrounding chunks to calculate when compiling shaders. </summary>
+	[Export]
+	public int ShaderCompilationLoadRange { get; private set; }
+
 	public override void _EnterTree()
 	{
 		Visible = true;
 		if (isStageVisuals)
 			DebugManager.Instance.Connect(DebugManager.SignalName.StageCullingToggled, new Callable(this, MethodName.UpdateCullingState));
+
+		if (isStageVisuals)
+			ShaderManager.Instance.RegisterCullingTrigger(this);
 	}
 
 	public override void _ExitTree()

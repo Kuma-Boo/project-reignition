@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using Project.Gameplay.Triggers;
 
 namespace Project.Core
 {
@@ -20,6 +21,10 @@ namespace Project.Core
 
 		private int TotalShaderCount { get; set; }
 
+		private int cullingTriggerIndex;
+		private bool isSecondaryCullingCompilation;
+		private readonly Array<CullingTrigger> cullingTriggers = [];
+
 		private int meshCompilationIndex;
 		private int materialCompilationIndex;
 		private int particleCompilationIndex;
@@ -28,12 +33,27 @@ namespace Project.Core
 		private readonly Array<Mesh> particleMeshes = [];
 		private readonly Array<Material> particleMaterials = [];
 
+		public void RegisterCullingTrigger(CullingTrigger trigger) => cullingTriggers.Add(trigger);
+
 		public override void _EnterTree() => Instance = this;
 
 		public override void _Process(double _)
 		{
 			if (!IsCompilingShaders) return;
 
+			if (materialCompilationIndex < materials.Count ||
+				meshCompilationIndex < meshes.Count ||
+				particleCompilationIndex < particleMaterials.Count)
+			{
+				ProcessMaterials();
+				return;
+			}
+
+			ProcessTriggers();
+		}
+
+		private void ProcessMaterials()
+		{
 			if (materialCompilationIndex < materials.Count)
 			{
 				// Compile normal materials 
@@ -64,15 +84,28 @@ namespace Project.Core
 				particleCompilationIndex++;
 			}
 
-			if (materialCompilationIndex >= materials.Count &&
-				meshCompilationIndex >= meshes.Count &&
-				particleCompilationIndex >= particleMaterials.Count)
+			TransitionManager.instance.UpdateLoadingText("load_cache", materialCompilationIndex + particleCompilationIndex + meshCompilationIndex, TotalShaderCount);
+		}
+
+		private void ProcessTriggers()
+		{
+			if (cullingTriggerIndex < cullingTriggers.Count)
 			{
-				FinishCompilation();
+				// Move to next level chunk
+				cullingTriggers[cullingTriggerIndex].Visible = isSecondaryCullingCompilation;
+				cullingTriggerIndex++;
+				TransitionManager.instance.UpdateLoadingText("load_lighting", cullingTriggerIndex, cullingTriggers.Count);
 				return;
 			}
 
-			TransitionManager.instance.UpdateLoadingText("load_cache", materialCompilationIndex + particleCompilationIndex, TotalShaderCount);
+			if (!isSecondaryCullingCompilation)
+			{
+				cullingTriggerIndex = 0;
+				isSecondaryCullingCompilation = true;
+				return;
+			}
+
+			FinishCompilation();
 		}
 
 		public void StartCompilation()
@@ -92,9 +125,11 @@ namespace Project.Core
 				DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled); // Disable vsync
 
 			Visible = shaderParent.Visible = true;
-			TotalShaderCount = materials.Count + particleMaterials.Count;
+			isSecondaryCullingCompilation = false;
+			TotalShaderCount = materials.Count + meshes.Count + particleMaterials.Count;
 			meshCompilationIndex = materialCompilationIndex = particleCompilationIndex = 0;
 			TransitionManager.instance.UpdateLoadingText("load_cache", 0, TotalShaderCount);
+
 			IsCompilingShaders = true;
 		}
 
@@ -115,6 +150,7 @@ namespace Project.Core
 
 			materials.Clear();
 			meshes.Clear();
+			cullingTriggers.Clear();
 			IsCompilingShaders = false;
 			Visible = shaderParent.Visible = false;
 

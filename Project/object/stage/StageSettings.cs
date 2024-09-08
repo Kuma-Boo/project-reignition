@@ -42,7 +42,7 @@ public partial class StageSettings : Node3D
 		{
 			LevelState = LevelStateEnum.Probes;
 			if (!TransitionManager.instance.IsReloadingScene)
-				TransitionManager.instance.UpdateLoadingText("load_lighting");
+				TransitionManager.instance.UpdateLoadingText("load_probes");
 		}
 	}
 
