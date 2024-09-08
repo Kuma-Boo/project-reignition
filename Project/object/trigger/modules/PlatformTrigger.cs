@@ -122,8 +122,6 @@ namespace Project.Gameplay.Triggers
 				EmitSignal(SignalName.PlatformInteracted);
 			}
 
-			if (!isActive) return;
-
 			if (floorCalculationRoot != null)
 				CallDeferred(MethodName.SyncPlayerMovement);
 		}

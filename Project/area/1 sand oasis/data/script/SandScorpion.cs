@@ -47,6 +47,7 @@ namespace Project.Gameplay.Bosses
 		/// <summary> Is the boss being processed? </summary>
 		private FightState fightState;
 		private readonly float STARTING_POSITION = 60;
+		private readonly int TraversalEyePearlAmount = 10;
 
 		private CharacterController Character => CharacterController.instance;
 		private CharacterPathFollower PathFollower => Character.PathFollower;
@@ -566,7 +567,7 @@ namespace Project.Gameplay.Bosses
 		/// <summary> 0 - 1 value blend value. </summary>
 		private float flyingEyeBlend;
 		private readonly float FLYING_EYE_NORMAL_SPEED = 0.6f; // How fast does the eye typically move?
-		private readonly float FLYING_EYE_LOCKON_SPEED = 0.3f; // How fast does the eye move when targeted?
+		private readonly float FLYING_EYE_LOCKON_SPEED = 0.2f; // How fast does the eye move when targeted?
 		private readonly float FLYING_EYE_KNOCKBACK = 1.2f; // How quickly to knock the eye back on the final hit
 
 		private void UpdateAttacks()
@@ -706,6 +707,7 @@ namespace Project.Gameplay.Bosses
 		private GroupGpuParticles3D impactEffect;
 		private void StartImpactFX(NodePath n)
 		{
+			Character.Camera.StartMediumCameraShake();
 			impactEffect.Visible = true;
 			Vector3 p = GetNode<Node3D>(n).GlobalPosition;
 			p.Y = 0; // Snap to the floor
@@ -797,12 +799,14 @@ namespace Project.Gameplay.Bosses
 		private const float FLYING_EYE_MAX_TRACKING = 2.5f;
 		/// <summary> Used to prevent the flying eye clipping into the ground. </summary>
 		private const float FLYING_EYE_RADIUS = 2f;
+		/// <summary> The eye will start retreating if when the player is moving backwards. </summary>
+		private const float FLYING_EYE_RETREAT_DISTANCE_SQUARED = 12f;
 		private void UpdateFlyingEyeTarget()
 		{
 			// Calculate
 			float horizontalTracking = flyingEyeAttackPosition.X - PathFollower.LocalPlayerPositionDelta.X;
 			horizontalTracking = Mathf.Clamp(horizontalTracking, -FLYING_EYE_MAX_TRACKING, FLYING_EYE_MAX_TRACKING);
-			flyingEyeTarget = Character.PathFollower.GlobalPosition + Vector3.Up * flyingEyeAttackPosition.Y;
+			flyingEyeTarget = Character.PathFollower.GlobalPosition + (Vector3.Up * flyingEyeAttackPosition.Y);
 			flyingEyeTarget += Character.PathFollower.Right() * horizontalTracking;
 			flyingEyeTarget += Character.PathFollower.Forward() * FLYING_EYE_RADIUS;
 		}
@@ -833,12 +837,18 @@ namespace Project.Gameplay.Bosses
 				flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 1f, FLYING_EYE_NORMAL_SPEED * PhysicsManager.physicsDelta);
 				if (Mathf.IsEqualApprox(flyingEyeBlend, 1f))
 					RetreatEyeAttack();
+
+				if (Character.ActionState == CharacterController.ActionStates.Backflip &&
+					flyingEyeRoot.GlobalPosition.DistanceSquaredTo(Character.CenterPosition) < FLYING_EYE_RETREAT_DISTANCE_SQUARED)
+				{
+					RetreatEyeAttack();
+				}
 			}
 			else
 			{
 				if (currentHealth == 0)
 					flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_KNOCKBACK * PhysicsManager.physicsDelta);
-				else if (Character.Lockon.IsHomingAttacking)
+				else if (Character.Lockon.IsHomingAttacking || Character.Skills.IsSpeedBreakActive)
 					flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_LOCKON_SPEED * PhysicsManager.physicsDelta);
 				else
 					flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_NORMAL_SPEED * PhysicsManager.physicsDelta);
@@ -901,9 +911,9 @@ namespace Project.Gameplay.Bosses
 		/// <summary>
 		/// Deals damage to the boss. Returns True if the boss is defeated.
 		/// </summary>
-		private void TakeDamage()
+		private void TakeDamage(int amount = 1)
 		{
-			currentHealth = (int)Mathf.MoveToward(currentHealth, 0, 1);
+			currentHealth = (int)Mathf.MoveToward(currentHealth, 0, amount);
 			eventAnimator.Play("damage");
 			eventAnimator.Advance(0.0);
 
@@ -965,7 +975,9 @@ namespace Project.Gameplay.Bosses
 				});
 			}
 			else
+			{
 				Character.StartKnockback();
+			}
 		}
 
 		/// <summary> Is the player currently colliding with the flying eye? </summary>
@@ -993,27 +1005,41 @@ namespace Project.Gameplay.Bosses
 			if (Character.Lockon.IsBounceLockoutActive) return; // Player just finished a homing attack
 
 			if (Character.Skills.IsSpeedBreakActive) // Special attack
-				return;
+			{
+				if (attackState != AttackState.RECOVERY)
+				{
+					flyingEyeAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+					StartHitFX();
+					RetreatEyeAttack();
+					TakeDamage(2);
+				}
 
-			// Player countered the attack
-			if (attackState == AttackState.STRIKE && Character.ActionState == CharacterController.ActionStates.JumpDash)
+				return;
+			}
+
+			if (Character.AttackState != CharacterController.AttackStates.None)
 			{
 				flyingEyeAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+				StartHitFX();
+				if (Character.AttackState == CharacterController.AttackStates.Weak)
+					TakeDamage(1);
+				else
+					TakeDamage(2);
+
+				Character.Lockon.StartBounce(false);
+				return;
+			}
+
+			if (Character.ActionState == CharacterController.ActionStates.JumpDash ||
+				Character.ActionState == CharacterController.ActionStates.AccelJump)
+			{
+				// Player countered the attack
 				RetreatEyeAttack();
 				Character.Lockon.StartBounce(false);
 				return;
 			}
 
-			if (!Character.Lockon.IsHomingAttacking) // Player isn't attacking
-			{
-				Character.StartKnockback();
-				return;
-			}
-
-			flyingEyeAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-			StartHitFX();
-			TakeDamage();
-			Character.Lockon.StartBounce(false);
+			Character.StartKnockback();
 		}
 
 		/// <summary> Is the player currently colliding with the eye on the boss's back? </summary>
@@ -1038,7 +1064,7 @@ namespace Project.Gameplay.Bosses
 
 		public void ProcessBackEyeCollision()
 		{
-			if (!Character.Lockon.IsHomingAttacking) return; // Player isn't attacking
+			if (Character.AttackState == CharacterController.AttackStates.None) return; // Player isn't attacking
 
 			if (IsHeavyAttackActive) // End active heavy attack
 			{
@@ -1051,7 +1077,9 @@ namespace Project.Gameplay.Bosses
 
 			StartHitFX();
 			TakeDamage();
-			Character.Lockon.StartBounce(); // Bounce the player
+
+			if (Character.Lockon.IsHomingAttacking)
+				Character.Lockon.StartBounce(); // Bounce the player
 
 			MoveSpeed = KNOCKBACK; // Start knockback
 			damageState = DamageState.Knockback;
@@ -1069,6 +1097,7 @@ namespace Project.Gameplay.Bosses
 			rootAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			Character.Lockon.StartBounce();
 			damageState = DamageState.Hitstun;
+			Runtime.Instance.SpawnPearls(TraversalEyePearlAmount, Character.GlobalPosition, new Vector2(2, 1.5f));
 
 			// Disable hurtboxes so the player can't just bounce on the same eye infinitely
 			eventAnimator.Play(hitFarEye ? "disable-hurtbox-01" : "disable-hurtbox-02");

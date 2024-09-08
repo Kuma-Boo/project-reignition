@@ -1215,7 +1215,6 @@ shape = SubResource("BoxShape3D_84q52")
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
-visible = false
 
 [node name="02Load" parent="Visuals/CullingMap" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.2, 75, -48)
@@ -1262,12 +1261,21 @@ transform = Transform3D(-0.464069, 0, -0.885799, 0, 1, 0, 0.885799, 0, -0.464069
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_84q52")
 
-[node name="03Unload-06Load" parent="Visuals/CullingMap" instance=ExtResource("5_4sfp2")]
+[node name="03Unload" parent="Visuals/CullingMap" instance=ExtResource("5_4sfp2")]
+transform = Transform3D(-0.791757, 0, 0.610836, 0, 1, 0, -0.610836, 0, -0.791757, 68.4831, -46.6, -369.654)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/03Unload"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_84q52")
+
+[node name="06Load" parent="Visuals/CullingMap" instance=ExtResource("5_4sfp2")]
 transform = Transform3D(-0.9911, 0, 0.133121, 0, 1, 0, -0.133121, 0, -0.9911, -72.5918, -45, -307.856)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/03Unload-06Load"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/06Load"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_84q52")
 
@@ -1548,10 +1556,10 @@ reflectionMaterials = [ExtResource("29_lfji7")]
 [connection signal="Activated" from="Visuals/CullingMap/05Load-02Unload" to="Visuals/05Islands" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/05Load-02Unload" to="Visuals/02Slope" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/05Load-02Unload" to="Visuals/05Islands" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/03Unload-06Load" to="Visuals/03Oasis" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/03Unload-06Load" to="Visuals/06Interior" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/03Unload-06Load" to="Visuals/03Oasis" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/03Unload-06Load" to="Visuals/06Interior" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/03Unload" to="Visuals/03Oasis" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/03Unload" to="Visuals/03Oasis" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/06Load" to="Visuals/06Interior" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/06Load" to="Visuals/06Interior" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/04Unload-05Unload" to="Visuals/04Forest" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/04Unload-05Unload" to="Visuals/05Islands" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/04Unload-05Unload" to="Visuals/04Forest" method="Activate"]

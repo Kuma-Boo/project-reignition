@@ -154,7 +154,13 @@ public partial class EventTrigger : StageTriggerModule
 		if (autoRespawn)
 			StageSettings.instance.ConnectRespawnSignal(this);
 
-		Respawn();
+		StageSettings.instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.Respawn));
+
+		if (playerStandin == null)
+		{
+			animator.Play(EventAnimation);
+			animator.Seek(animator.CurrentAnimationLength, true, true);
+		}
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -271,11 +277,15 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		BGMPlayer.SetStageMusicVolume(0f); // Unmute BGM
 
+		Character.ApplyExternalTransform(true);
 		Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(Character.ExternalParent.Forward());
 		Character.Animator.SnapRotation(Character.MovementAngle);
 		Character.Animator.CancelOneshot(characterFadeoutTime);
 		Character.Animator.DisabledSpeedSmoothing = true;
 		Character.Animator.ResetState(0);
+		Character.UpDirection = Vector3.Up;
+		Character.UpdateOrientation(true);
+		Character.ResetActionState();
 		Character.ResetMovementState();
 
 		if (characterExitLockout != null)

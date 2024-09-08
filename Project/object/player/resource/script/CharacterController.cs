@@ -38,7 +38,11 @@ namespace Project.Gameplay
 		public override void _PhysicsProcess(double _)
 		{
 			// Still loading
-			if (Stage.LevelState == StageSettings.LevelStateEnum.Loading) return;
+			if (Stage.LevelState == StageSettings.LevelStateEnum.Probes ||
+				Stage.LevelState == StageSettings.LevelStateEnum.Shaders)
+			{
+				return;
+			}
 
 			UpdateStateMachine();
 			UpdateOrientation();
@@ -709,7 +713,7 @@ namespace Project.Gameplay
 				IsHoldingDirection(PathFollower.ForwardAngle) &&
 				Mathf.Abs(inputDeltaAngle) < TurningDampingRange) // Remap controls to provide more analog detail
 			{
-				targetMovementAngle -= inputDeltaAngle * .5f;
+				targetMovementAngle -= inputDeltaAngle * (1.0f - (Mathf.Abs(inputDeltaAngle) / TurningDampingRange));
 			}
 
 			// Reduce sensitivity when player is running
@@ -2283,7 +2287,7 @@ namespace Project.Gameplay
 		private bool IsCountdownActive => Interface.Countdown.IsCountdownActive;
 
 		private float countdownBoostTimer;
-		private readonly float COUNTDOWN_BOOST_WINDOW = .4f;
+		private readonly float COUNTDOWN_BOOST_WINDOW = .8f;
 
 		public void OnCountdownStarted()
 		{
@@ -2296,14 +2300,14 @@ namespace Project.Gameplay
 
 		private void UpdateCountdown()
 		{
+			actionBufferTimer -= PhysicsManager.physicsDelta;
 			if (Input.IsActionJustPressed("button_action"))
 				actionBufferTimer = 1f;
-			actionBufferTimer -= PhysicsManager.physicsDelta;
 		}
 
 		public void OnCountdownFinished()
 		{
-			if (Skills.IsSkillEquipped(SkillKey.RocketStart) && actionBufferTimer > 0 && actionBufferTimer < COUNTDOWN_BOOST_WINDOW) // Successful starting boost
+			if (Skills.IsSkillEquipped(SkillKey.RocketStart) && Mathf.Abs(actionBufferTimer) < COUNTDOWN_BOOST_WINDOW * .5f) // Successful starting boost
 			{
 				Effect.PlayWindFX();
 				MoveSpeed = Skills.countdownBoostSpeed;

@@ -105,5 +105,6 @@ public partial class ReadyMenu : Menu
 			loadAsynchronously = true,
 			disableAutoTransition = true
 		});
+		TransitionManager.instance.UpdateLoadingText("load_level");
 	}
 }

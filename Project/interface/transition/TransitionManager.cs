@@ -15,6 +15,10 @@ public partial class TransitionManager : Node
 	/// <summary> Path to story events. </summary>
 	public const string EVENT_SCENE_PATH = "res://video/event/scene/Event";
 
+	public bool IsReloadingScene { get; private set; }
+
+	[Export]
+	private Label loadLabel;
 	[Export]
 	private ColorRect fade;
 	[Export]
@@ -91,6 +95,7 @@ public partial class TransitionManager : Node
 	{
 		instance.animator.Play("RESET"); //Reset animator, just in case
 		instance.animator.Advance(0);
+		instance.UpdateLoadingText(null);
 
 		instance.CurrentTransitionData = data;
 
@@ -103,7 +108,11 @@ public partial class TransitionManager : Node
 		instance.StartFade();
 	}
 
-	public static void FinishTransition() => instance.FinishFade();
+	public static void FinishTransition()
+	{
+		instance.UpdateLoadingText(null);
+		instance.FinishFade();
+	}
 
 	/// <summary> The scene to load. Note that the scene only gets applied if queued using QueueSceneChange(). </summary>
 	public string QueuedScene { get; set; }
@@ -120,7 +129,8 @@ public partial class TransitionManager : Node
 	private async void ApplySceneChange()
 	{
 		SoundManager.instance.CancelDialog(); //Cancel any active dialog
-		if (string.IsNullOrEmpty(QueuedScene)) //Reload the current scene
+		IsReloadingScene = string.IsNullOrEmpty(QueuedScene);
+		if (IsReloadingScene) //Reload the current scene
 			GetTree().ReloadCurrentScene();
 		else
 		{
@@ -144,6 +154,19 @@ public partial class TransitionManager : Node
 
 		if (!CurrentTransitionData.disableAutoTransition)
 			FinishFade();
+	}
+
+	public void UpdateLoadingText(StringName localizationKey, int currentProgress = 0, int maxProgress = 0)
+	{
+		if (localizationKey == null)
+		{
+			loadLabel.Text = string.Empty;
+			return;
+		}
+
+		loadLabel.Text = Tr(localizationKey);
+		if (maxProgress != 0)
+			loadLabel.Text += $" {currentProgress}/{maxProgress}";
 	}
 }
 

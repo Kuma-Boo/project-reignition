@@ -10,14 +10,32 @@ public partial class SaveManager : Node
 {
 	public static SaveManager Instance;
 
-	private const string SaveDirectory = "user://";
-
 	[Signal]
 	public delegate void ConfigAppliedEventHandler();
+
+	private static bool IsPortableMode { get; set; }
+	private static string SaveDirectory
+	{
+		get
+		{
+			if (OS.IsDebugBuild() || !IsPortableMode)
+				return "user://";
+
+			return OS.GetExecutablePath().GetBaseDir() + "/save/";
+		}
+	}
+	private string PortableFile => OS.GetExecutablePath().GetBaseDir() + "/portable.txt";
 
 	public override void _EnterTree()
 	{
 		Instance = this;
+		FileAccess f = FileAccess.Open(PortableFile, FileAccess.ModeFlags.Read);
+		if (f != null && f.GetError() == Error.Ok)
+		{
+			IsPortableMode = true;
+			f.Close();
+		}
+
 		MenuData = GameData.CreateDefaultData(); // Create a default game data object for the menu
 
 		LoadConfig();
@@ -75,6 +93,7 @@ public partial class SaveManager : Node
 		Spanish,
 		BrazilianPortuguese,
 		Polish,
+		Chinese,
 		Count
 	}
 
@@ -98,6 +117,15 @@ public partial class SaveManager : Node
 		new(3840, 2160), // 4K
 	];
 
+	public static readonly int[] FrameRates =
+	[
+		0,
+		30,
+		45,
+		60,
+		120,
+	];
+
 	#endregion
 
 	public partial class ConfigData : GodotObject
@@ -107,6 +135,7 @@ public partial class SaveManager : Node
 		public int windowSize = 3; // Defaults to one lower than 1080p
 		public bool useFullscreen = true;
 		public bool useExclusiveFullscreen;
+		public int framerate = 3;
 		public bool useVsync;
 		public int renderScale = 100;
 		public RenderingServer.ViewportScaling3DMode resizeMode = RenderingServer.ViewportScaling3DMode.Bilinear;
@@ -123,11 +152,11 @@ public partial class SaveManager : Node
 		public bool isMasterMuted;
 		public int masterVolume = 50;
 		public bool isBgmMuted;
-		public int bgmVolume = 100;
+		public int bgmVolume = 50;
 		public bool isSfxMuted;
-		public int sfxVolume = 100;
+		public int sfxVolume = 50;
 		public bool isVoiceMuted;
-		public int voiceVolume = 100;
+		public int voiceVolume = 50;
 
 		// Controls
 		public float deadZone = .5f;
@@ -149,6 +178,7 @@ public partial class SaveManager : Node
 				{ nameof(windowSize), windowSize },
 				{ nameof(useFullscreen), useFullscreen },
 				{ nameof(useExclusiveFullscreen), useExclusiveFullscreen },
+				{ nameof(framerate), framerate },
 				{ nameof(useVsync), useVsync },
 
 				{ nameof(renderScale), renderScale },
@@ -195,6 +225,8 @@ public partial class SaveManager : Node
 				useExclusiveFullscreen = (bool)var;
 			if (dictionary.TryGetValue(nameof(windowSize), out var))
 				windowSize = (int)var;
+			if (dictionary.TryGetValue(nameof(framerate), out var))
+				framerate = (int)var;
 			if (dictionary.TryGetValue(nameof(useVsync), out var))
 				useVsync = (bool)var;
 
@@ -303,6 +335,7 @@ public partial class SaveManager : Node
 		if (!Config.useFullscreen)
 			DisplayServer.WindowSetSize(WindowSizes[Config.windowSize]);
 
+		Engine.MaxFps = FrameRates[Config.framerate];
 		DisplayServer.VSyncMode targetVSyncMode =
 			Config.useVsync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
 		if (DisplayServer.WindowGetVsyncMode() != targetVSyncMode)
@@ -464,6 +497,9 @@ public partial class SaveManager : Node
 				break;
 			case TextLanguage.Polish:
 				TranslationServer.SetLocale("pl");
+				break;
+			case TextLanguage.Chinese:
+				TranslationServer.SetLocale("zh");
 				break;
 			default:
 				TranslationServer.SetLocale(UseEnglishVoices ? "en" : "en_US");
