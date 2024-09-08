@@ -31,19 +31,29 @@ namespace Project.Gameplay.Objects
 			{
 				SoundManager.instance.PlayRichRingSFX();
 				Stage.UpdateScore(100, StageSettings.MathModeEnum.Add);
-				if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RingPearlConvert))
-					Player.Skills.ModifySoulGauge(40);
+				if (Character.Skills.IsSkillEquipped(SkillKey.RingPearlConvert))
+				{
+					Stage.UpdateRingCount(0, StageSettings.MathModeEnum.Add);
+					Character.Skills.ModifySoulGauge(40);
+				}
 				else
+				{
 					Stage.UpdateRingCount(20, StageSettings.MathModeEnum.Add);
+				}
 			}
 			else
 			{
 				SoundManager.instance.PlayRingSFX();
 				Stage.UpdateScore(10, StageSettings.MathModeEnum.Add);
-				if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RingPearlConvert))
-					Player.Skills.ModifySoulGauge(2);
+				if (Character.Skills.IsSkillEquipped(SkillKey.RingPearlConvert))
+				{
+					Stage.UpdateRingCount(0, StageSettings.MathModeEnum.Add);
+					Character.Skills.ModifySoulGauge(2);
+				}
 				else
+				{
 					Stage.UpdateRingCount(1, StageSettings.MathModeEnum.Add);
+				}
 			}
 
 			BonusManager.instance.AddRingChain();

@@ -39,7 +39,11 @@ public partial class FireSoul : Pickup
 		isCollected = true;
 		Animator.Play("collect");
 		HeadsUpDisplay.instance.CollectFireSoul();
-		StageSettings.Instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint), (uint)ConnectFlags.OneShot);
+		StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint), (uint)ConnectFlags.OneShot);
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.FireSoulLockon) &&
+			Character.Lockon.IsHomingAttacking)
+			Character.Lockon.StartBounce(true);
 	}
 
 	public override void Respawn()

@@ -15,12 +15,26 @@ namespace Project.Gameplay.Triggers
 			if (!a.IsInGroup("player detection"))
 				return;
 
+			// Culling states shouldn't be changed when level is completed
+			if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Failed ||
+				StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Success)
+			{
+				return;
+			}
+
 			Activate();
 		}
 		public virtual void Deactivate(Area3D a)
 		{
 			if (!a.IsInGroup("player detection"))
 				return;
+
+			// Culling states shouldn't be changed when level is completed
+			if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Failed ||
+				StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Success)
+			{
+				return;
+			}
 
 			Deactivate();
 		}

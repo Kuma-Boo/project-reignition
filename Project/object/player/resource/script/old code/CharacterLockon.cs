@@ -184,7 +184,7 @@ public partial class CharacterLockon : Node3D
 		if (h && h.collidedObject != t)
 		{
 			if (!h.collidedObject.IsInGroup("level wall") ||
-				h.normal.AngleTo(Vector3.Up) > Mathf.Pi * .4f)
+				(h.normal.AngleTo(Vector3.Up) > Mathf.Pi * .4f && h.normal.AngleTo(castVector.Normalized()) > Mathf.Pi * .5f))
 			{
 				// Hit an obstacle
 				return TargetState.HitObstacle;

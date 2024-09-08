@@ -111,7 +111,8 @@ namespace Project.Gameplay.Triggers
 		public delegate void DeactivatedEventHandler();
 		[Signal]
 		public delegate void RespawnedEventHandler();
-		private PlayerPathController PathFollower => StageSettings.Player.PathFollower;
+		private CharacterPathFollower PathFollower => CharacterController.instance.PathFollower;
+		private bool isInteractingWithPlayer;
 
 		public override void _Ready()
 		{
@@ -144,8 +145,13 @@ namespace Project.Gameplay.Triggers
 
 				if ((respawnMode == RespawnModes.CheckpointBefore && isRespawningAhead) ||
 				(respawnMode == RespawnModes.CheckpointAfter && !isRespawningAhead)) //Invalid Respawn
+				{
 					return;
+				}
 			}
+
+			if (isInteractingWithPlayer)
+				OnEntered();
 
 			wasTriggered = false;
 			EmitSignal(SignalName.Respawned);
@@ -154,6 +160,18 @@ namespace Project.Gameplay.Triggers
 		public void OnEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player detection")) return;
+			OnEntered();
+		}
+
+		public void OnExited(Area3D a)
+		{
+			if (!a.IsInGroup("player detection")) return;
+			OnExited();
+		}
+
+		private void OnEntered()
+		{
+			isInteractingWithPlayer = true;
 
 			//Determine whether activation is successful
 			if (triggerMode == TriggerModes.OnExit)
@@ -169,9 +187,9 @@ namespace Project.Gameplay.Triggers
 			Activate();
 		}
 
-		public void OnExited(Area3D a)
+		private void OnExited()
 		{
-			if (!a.IsInGroup("player detection")) return;
+			isInteractingWithPlayer = false;
 
 			//Determine whether deactivation is successful
 			if (triggerMode == TriggerModes.OnEnter)

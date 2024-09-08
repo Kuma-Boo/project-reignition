@@ -28,6 +28,9 @@ public partial class CullingTrigger : StageTriggerModule
 		Visible = true;
 		if (isStageVisuals)
 			DebugManager.Instance.Connect(DebugManager.SignalName.StageCullingToggled, new Callable(this, MethodName.UpdateCullingState));
+
+		if (isStageVisuals)
+			ShaderManager.Instance.RegisterCullingTrigger(this);
 	}
 
 	public override void _ExitTree()
@@ -38,11 +41,13 @@ public partial class CullingTrigger : StageTriggerModule
 
 	public override void _Ready()
 	{
+		// Show everything for shader compilation
+		Visible = true;
+
 		// Cache all children with a respawn method
 		if (respawnOnActivation)
 		{
-			Array<Node> children = GetChildren(true);
-			foreach (Node child in children)
+			foreach (Node child in GetChildren(true))
 			{
 				if (child.HasMethod(StageSettings.RESPAWN_FUNCTION))
 					respawnableNodes.Add(child);
@@ -59,17 +64,25 @@ public partial class CullingTrigger : StageTriggerModule
 			Level.ConnectRespawnSignal(this);
 		}
 
-		CallDeferred(MethodName.Respawn);
+		if (isStageVisuals)
+			Level.Connect(StageSettings.SignalName.LevelStarted, new Callable(this, MethodName.Respawn), (uint)ConnectFlags.Deferred);
+		else
+			CallDeferred(MethodName.Respawn);
 	}
 
 	private bool visibleOnCheckpoint;
 	/// <summary> Saves the current visiblity. Called when the player passes a checkpoint. </summary>
 	private void ProcessCheckpoint()
 	{
-		if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Loading)
+		if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Probes ||
+			StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Shaders)
+		{
 			visibleOnCheckpoint = startEnabled;
+		}
 		else
+		{
 			visibleOnCheckpoint = Visible;
+		}
 	}
 
 	public override void Respawn()

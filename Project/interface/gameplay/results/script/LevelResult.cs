@@ -39,7 +39,11 @@ public partial class LevelResult : Control
 	private bool isFadingBgm;
 	private StageSettings Stage => StageSettings.Instance;
 
-	public override void _Ready() => Stage?.Connect(nameof(StageSettings.LevelCompleted), new Callable(this, nameof(StartResults)), (uint)ConnectFlags.Deferred);
+	public override void _Ready()
+	{
+		Stage?.Connect(StageSettings.SignalName.LevelCompleted, new Callable(this, MethodName.StartResults), (uint)ConnectFlags.Deferred);
+		Stage?.Connect(StageSettings.SignalName.LevelDemoStarted, new Callable(this, MethodName.MuteGameplaySoundEffects));
+	}
 
 	public override void _PhysicsProcess(double _)
 	{
@@ -162,7 +166,7 @@ public partial class LevelResult : Control
 
 	public void SetInputProcessing(bool value) => isProcessing = value;
 	/// <summary> Mutes the gameplay sfx audio channel. </summary>
-	public void MuteGameplaySoundEffects() => SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 0);
+	private void MuteGameplaySoundEffects() => SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 0);
 
 	public void PlayRankQuote()
 	{

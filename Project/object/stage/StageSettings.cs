@@ -37,9 +37,15 @@ public partial class StageSettings : Node3D
 		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, IsControlTest ? 100 : 0);
 
 		if (IsControlTest)
+		{
 			LevelState = LevelStateEnum.Ingame;
+		}
 		else
-			LevelState = LevelStateEnum.Loading;
+		{
+			LevelState = LevelStateEnum.Probes;
+			if (!TransitionManager.instance.IsReloadingScene)
+				TransitionManager.instance.UpdateLoadingText("load_probes");
+		}
 	}
 
 	public override void _Ready()
@@ -77,21 +83,16 @@ public partial class StageSettings : Node3D
 
 		foreach (Node node in GetChildren(GetTree().Root, []))
 		{
-			if (node is MeshInstance3D)
-			{
-				ShaderManager.Instance.QueueMesh((node as MeshInstance3D).Mesh);
-				continue;
-			}
-
 			if (node is GpuParticles3D)
 			{
 				GpuParticles3D particles = node as GpuParticles3D;
-				ShaderManager.Instance.QueueMaterial(particles.ProcessMaterial);
-				ShaderManager.Instance.QueueMesh(particles.DrawPass1);
+				ShaderManager.Instance.QueueParticle(particles.ProcessMaterial, particles.DrawPass1);
+				continue;
 			}
-		}
 
-		ShaderManager.Instance.StartCompilation();
+			if (node is MeshInstance3D)
+				ShaderManager.Instance.QueueMesh((node as MeshInstance3D).Mesh);
+		}
 	}
 
 	private List<Node> GetChildren(Node parent, List<Node> nodes)
@@ -104,33 +105,53 @@ public partial class StageSettings : Node3D
 
 	[Signal]
 	public delegate void LevelStartedEventHandler();
-	private int probeFrameCounter;
-	private const int PROBE_FRAME_COUNT_LENGTH = 90;
+	private float probeTimer;
+	private const float ProbeWaitLength = 2f;
 	public override void _Process(double _)
 	{
 		/*
 		TODO 
 		Temporary workaround because reflection probes are slow.
-		Remove this when Godot adds a way to do quick "UPDATE_ONCE" reflection probes
+		Reduce frame count when Godot adds a way to do quick "UPDATE_ONCE" reflection probes
 		*/
 
-		if (LevelState == LevelStateEnum.Loading)
+		if (LevelState == LevelStateEnum.Probes)
 		{
-			probeFrameCounter++;
-
-			if (probeFrameCounter >= PROBE_FRAME_COUNT_LENGTH && !ShaderManager.Instance.IsCompilingShaders)
+			probeTimer += PhysicsManager.normalDelta;
+			if (probeTimer >= ProbeWaitLength)
 			{
-				// Unmute gameplay sound effects
-				SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 100);
-				LevelState = LevelStateEnum.Ingame;
-				TransitionManager.FinishTransition();
-				EmitSignal(SignalName.LevelStarted);
+				if (TransitionManager.instance.IsReloadingScene)
+				{
+					// Skip level setup when reloading a level
+					StartLevel();
+					return;
+				}
+
+				// Start Shader Caching
+				LevelState = LevelStateEnum.Shaders;
+				ShaderManager.Instance.StartCompilation();
 			}
 
 			return;
 		}
 
+		if (LevelState == LevelStateEnum.Shaders)
+		{
+			if (!ShaderManager.Instance.IsCompilingShaders)
+				StartLevel();
+
+			return;
+		}
+
 		UpdateTime();
+	}
+
+	private void StartLevel()
+	{
+		LevelState = LevelStateEnum.Ingame;
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 100); // Unmute gameplay sound effects
+		TransitionManager.FinishTransition();
+		EmitSignal(SignalName.LevelStarted);
 	}
 	#endregion
 
@@ -488,7 +509,8 @@ public partial class StageSettings : Node3D
 
 	public enum LevelStateEnum
 	{
-		Loading, // TODO Delete this when Godot fixes reflection probes
+		Probes,
+		Shaders,
 		Ingame,
 		Failed,
 		Success,
@@ -503,9 +525,6 @@ public partial class StageSettings : Node3D
 		if (!IsLevelIngame)
 			return;
 
-		// Recalculate technical bonus
-		CalculateTechnicalBonus();
-
 		// Attempt to start the completion demo
 		GetTree().CreateTimer(wasSuccessful ? Data.CompletionDelay : FAIL_COMPLETION_DELAY).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.StartCompletionDemo));
 
@@ -513,6 +532,9 @@ public partial class StageSettings : Node3D
 		SoundManager.instance.CancelDialog();
 		Interface.PauseMenu.AllowPausing = false;
 		LevelState = wasSuccessful ? LevelStateEnum.Success : LevelStateEnum.Failed;
+
+		// Recalculate technical bonus
+		CalculateTechnicalBonus();
 
 		EmitSignal(SignalName.LevelCompleted);
 	}
