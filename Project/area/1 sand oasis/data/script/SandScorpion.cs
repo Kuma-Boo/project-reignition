@@ -799,12 +799,14 @@ namespace Project.Gameplay.Bosses
 		private const float FLYING_EYE_MAX_TRACKING = 2.5f;
 		/// <summary> Used to prevent the flying eye clipping into the ground. </summary>
 		private const float FLYING_EYE_RADIUS = 2f;
+		/// <summary> The eye will start retreating if when the player is moving backwards. </summary>
+		private const float FLYING_EYE_RETREAT_DISTANCE_SQUARED = 12f;
 		private void UpdateFlyingEyeTarget()
 		{
 			// Calculate
 			float horizontalTracking = flyingEyeAttackPosition.X - PathFollower.LocalPlayerPositionDelta.X;
 			horizontalTracking = Mathf.Clamp(horizontalTracking, -FLYING_EYE_MAX_TRACKING, FLYING_EYE_MAX_TRACKING);
-			flyingEyeTarget = Character.PathFollower.GlobalPosition + Vector3.Up * flyingEyeAttackPosition.Y;
+			flyingEyeTarget = Character.PathFollower.GlobalPosition + (Vector3.Up * flyingEyeAttackPosition.Y);
 			flyingEyeTarget += Character.PathFollower.Right() * horizontalTracking;
 			flyingEyeTarget += Character.PathFollower.Forward() * FLYING_EYE_RADIUS;
 		}
@@ -835,6 +837,12 @@ namespace Project.Gameplay.Bosses
 				flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 1f, FLYING_EYE_NORMAL_SPEED * PhysicsManager.physicsDelta);
 				if (Mathf.IsEqualApprox(flyingEyeBlend, 1f))
 					RetreatEyeAttack();
+
+				if (Character.ActionState == CharacterController.ActionStates.Backflip &&
+					flyingEyeRoot.GlobalPosition.DistanceSquaredTo(Character.CenterPosition) < FLYING_EYE_RETREAT_DISTANCE_SQUARED)
+				{
+					RetreatEyeAttack();
+				}
 			}
 			else
 			{
@@ -1009,7 +1017,7 @@ namespace Project.Gameplay.Bosses
 				return;
 			}
 
-			if (Character.Lockon.IsHomingAttacking)
+			if (Character.AttackState != CharacterController.AttackStates.None)
 			{
 				flyingEyeAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				StartHitFX();
@@ -1017,6 +1025,7 @@ namespace Project.Gameplay.Bosses
 					TakeDamage(1);
 				else
 					TakeDamage(2);
+
 				Character.Lockon.StartBounce(false);
 				return;
 			}
