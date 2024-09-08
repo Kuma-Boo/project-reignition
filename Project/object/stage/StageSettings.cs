@@ -35,9 +35,15 @@ public partial class StageSettings : Node3D
 		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, IsControlTest ? 100 : 0);
 
 		if (IsControlTest)
+		{
 			LevelState = LevelStateEnum.Ingame;
+		}
 		else
+		{
 			LevelState = LevelStateEnum.Probes;
+			if (!TransitionManager.instance.IsReloadingScene)
+				TransitionManager.instance.UpdateLoadingText("load_lighting");
+		}
 	}
 
 	public override void _Ready()
@@ -97,8 +103,8 @@ public partial class StageSettings : Node3D
 
 	[Signal]
 	public delegate void LevelStartedEventHandler();
-	private int probeFrameCounter;
-	private const int PROBE_FRAME_COUNT_LENGTH = 20;
+	private float probeTimer;
+	private const float ProbeWaitLength = 2f;
 	public override void _Process(double _)
 	{
 		/*
@@ -109,9 +115,16 @@ public partial class StageSettings : Node3D
 
 		if (LevelState == LevelStateEnum.Probes)
 		{
-			probeFrameCounter++;
-			if (probeFrameCounter >= PROBE_FRAME_COUNT_LENGTH)
+			probeTimer += PhysicsManager.normalDelta;
+			if (probeTimer >= ProbeWaitLength)
 			{
+				if (TransitionManager.instance.IsReloadingScene)
+				{
+					// Skip level setup when reloading a level
+					StartLevel();
+					return;
+				}
+
 				// Start Shader Caching
 				LevelState = LevelStateEnum.Shaders;
 				ShaderManager.Instance.StartCompilation();
@@ -123,17 +136,20 @@ public partial class StageSettings : Node3D
 		if (LevelState == LevelStateEnum.Shaders)
 		{
 			if (!ShaderManager.Instance.IsCompilingShaders)
-			{
-				LevelState = LevelStateEnum.Ingame;
-				SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 100); // Unmute gameplay sound effects
-				TransitionManager.FinishTransition();
-				EmitSignal(SignalName.LevelStarted);
-			}
+				StartLevel();
 
 			return;
 		}
 
 		UpdateTime();
+	}
+
+	private void StartLevel()
+	{
+		LevelState = LevelStateEnum.Ingame;
+		SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 100); // Unmute gameplay sound effects
+		TransitionManager.FinishTransition();
+		EmitSignal(SignalName.LevelStarted);
 	}
 	#endregion
 

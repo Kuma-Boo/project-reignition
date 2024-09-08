@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://bbkkpqrn4few"]
+[gd_scene load_steps=12 format=3 uid="uid://bbkkpqrn4few"]
 
 [ext_resource type="Script" path="res://interface/transition/TransitionManager.cs" id="1"]
 [ext_resource type="PackedScene" uid="uid://rdmkjkkugnvf" path="res://interface/transition/loading/Loading.tscn" id="2_4rxrd"]
+[ext_resource type="LabelSettings" uid="uid://dki35mj1oux2s" path="res://interface/font/DescriptionText.tres" id="2_h67nm"]
 
 [sub_resource type="Animation" id="Animation_k4ji2"]
 length = 0.001
@@ -157,10 +158,11 @@ _data = {
 "fade": SubResource("2")
 }
 
-[node name="TransitionManager" type="CanvasLayer" node_paths=PackedStringArray("fade", "animator", "loadingAnimator")]
+[node name="TransitionManager" type="CanvasLayer" node_paths=PackedStringArray("loadLabel", "fade", "animator", "loadingAnimator")]
 process_mode = 3
 layer = 100
 script = ExtResource("1")
+loadLabel = NodePath("Fade/LoadingText")
 fade = NodePath("Fade")
 animator = NodePath("AnimationPlayer")
 loadingAnimator = NodePath("Loading/LoadingAnimator")
@@ -171,6 +173,19 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
 metadata/_edit_lock_ = true
+
+[node name="LoadingText" type="Label" parent="Fade"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 128.0
+offset_top = -184.0
+offset_right = 960.0
+offset_bottom = -122.0
+grow_vertical = 0
+label_settings = ExtResource("2_h67nm")
+vertical_alignment = 1
 
 [node name="Crossfade" type="TextureRect" parent="."]
 self_modulate = Color(1, 1, 1, 0)

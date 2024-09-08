@@ -18,6 +18,8 @@ namespace Project.Core
 		[Export]
 		private GpuParticles3D[] particles;
 
+		private int TotalShaderCount { get; set; }
+
 		private int meshCompilationIndex;
 		private int materialCompilationIndex;
 		private int particleCompilationIndex;
@@ -67,15 +69,16 @@ namespace Project.Core
 				particleCompilationIndex >= particleMaterials.Count)
 			{
 				FinishCompilation();
+				return;
 			}
+
+			TransitionManager.instance.UpdateLoadingText("load_cache", materialCompilationIndex + particleCompilationIndex, TotalShaderCount);
 		}
 
 		public void StartCompilation()
 		{
 			// No shaders to compile!
-			if (materials.Count == 0) return;
-
-			GD.Print("Starting shader compilation.");
+			if (materials.Count == 0 && particleMaterials.Count == 0) return;
 
 			Viewport mainViewport = GetViewport();
 			shaderCompilationViewport.ScreenSpaceAA = mainViewport.ScreenSpaceAA;
@@ -89,7 +92,9 @@ namespace Project.Core
 				DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled); // Disable vsync
 
 			Visible = shaderParent.Visible = true;
+			TotalShaderCount = materials.Count + particleMaterials.Count;
 			meshCompilationIndex = materialCompilationIndex = particleCompilationIndex = 0;
+			TransitionManager.instance.UpdateLoadingText("load_cache", 0, TotalShaderCount);
 			IsCompilingShaders = true;
 		}
 
@@ -116,8 +121,6 @@ namespace Project.Core
 			Engine.MaxFps = SaveManager.FrameRates[SaveManager.Config.framerate]; // Recap framerate
 			if (SaveManager.Config.useVsync) // Reapply v-sync
 				DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Enabled);
-
-			GD.Print($"Shader compilation finished. {materialCompilationIndex + particleCompilationIndex} materials compiled.");
 		}
 
 		public void QueueMaterial(Material material)
