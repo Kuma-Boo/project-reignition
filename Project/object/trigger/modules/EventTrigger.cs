@@ -277,11 +277,15 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		BGMPlayer.SetStageMusicVolume(0f); // Unmute BGM
 
+		Character.ApplyExternalTransform(true);
 		Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(Character.ExternalParent.Forward());
 		Character.Animator.SnapRotation(Character.MovementAngle);
 		Character.Animator.CancelOneshot(characterFadeoutTime);
 		Character.Animator.DisabledSpeedSmoothing = true;
 		Character.Animator.ResetState(0);
+		Character.UpDirection = Vector3.Up;
+		Character.UpdateOrientation(true);
+		Character.ResetActionState();
 		Character.ResetMovementState();
 
 		if (characterExitLockout != null)
