@@ -38,7 +38,11 @@ namespace Project.Gameplay
 		public override void _PhysicsProcess(double _)
 		{
 			// Still loading
-			if (Stage.LevelState == StageSettings.LevelStateEnum.Loading) return;
+			if (Stage.LevelState == StageSettings.LevelStateEnum.Probes ||
+				Stage.LevelState == StageSettings.LevelStateEnum.Shaders)
+			{
+				return;
+			}
 
 			UpdateStateMachine();
 			UpdateOrientation();

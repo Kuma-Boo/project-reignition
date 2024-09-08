@@ -37,7 +37,7 @@ public partial class StageSettings : Node3D
 		if (IsControlTest)
 			LevelState = LevelStateEnum.Ingame;
 		else
-			LevelState = LevelStateEnum.Loading;
+			LevelState = LevelStateEnum.Probes;
 	}
 
 	public override void _Ready()
@@ -88,8 +88,6 @@ public partial class StageSettings : Node3D
 				ShaderManager.Instance.QueueMesh(particles.DrawPass1);
 			}
 		}
-
-		ShaderManager.Instance.StartCompilation();
 	}
 
 	private List<Node> GetChildren(Node parent, List<Node> nodes)
@@ -103,24 +101,36 @@ public partial class StageSettings : Node3D
 	[Signal]
 	public delegate void LevelStartedEventHandler();
 	private int probeFrameCounter;
-	private const int PROBE_FRAME_COUNT_LENGTH = 90;
+	private const int PROBE_FRAME_COUNT_LENGTH = 20;
 	public override void _Process(double _)
 	{
 		/*
 		TODO 
 		Temporary workaround because reflection probes are slow.
-		Remove this when Godot adds a way to do quick "UPDATE_ONCE" reflection probes
+		Reduce frame count when Godot adds a way to do quick "UPDATE_ONCE" reflection probes
 		*/
 
-		if (LevelState == LevelStateEnum.Loading)
+		if (LevelState == LevelStateEnum.Probes)
 		{
 			probeFrameCounter++;
-
-			if (probeFrameCounter >= PROBE_FRAME_COUNT_LENGTH && !ShaderManager.Instance.IsCompilingShaders)
+			if (probeFrameCounter >= PROBE_FRAME_COUNT_LENGTH)
 			{
-				// Unmute gameplay sound effects
-				SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 100);
+				// Start Shader Caching
+				LevelState = LevelStateEnum.Shaders;
+				ShaderManager.Instance.StartCompilation();
+				Engine.MaxFps = 0; // Uncap framerate for faster shader caching
+			}
+
+			return;
+		}
+
+		if (LevelState == LevelStateEnum.Shaders)
+		{
+			if (!ShaderManager.Instance.IsCompilingShaders)
+			{
 				LevelState = LevelStateEnum.Ingame;
+				SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 100); // Unmute gameplay sound effects
+				Engine.MaxFps = SaveManager.FrameRates[SaveManager.Config.framerate]; // Recap framerate
 				TransitionManager.FinishTransition();
 				EmitSignal(SignalName.LevelStarted);
 			}
@@ -482,7 +492,8 @@ public partial class StageSettings : Node3D
 
 	public enum LevelStateEnum
 	{
-		Loading, // TODO Delete this when Godot fixes reflection probes
+		Probes,
+		Shaders,
 		Ingame,
 		Failed,
 		Success,
