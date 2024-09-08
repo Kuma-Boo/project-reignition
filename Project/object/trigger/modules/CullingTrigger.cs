@@ -23,10 +23,6 @@ public partial class CullingTrigger : StageTriggerModule
 	private bool respawnOnActivation;
 	private Array<Node> respawnableNodes = [];
 
-	/// <summary> The amount of surrounding chunks to calculate when compiling shaders. </summary>
-	[Export]
-	public int ShaderCompilationLoadRange { get; private set; }
-
 	public override void _EnterTree()
 	{
 		Visible = true;
