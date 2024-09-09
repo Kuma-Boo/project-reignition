@@ -455,6 +455,7 @@ public partial class PlayerController : CharacterBody3D
 	public bool CanJumpDash { get; set; }
 	public bool IsJumpDashing { get; set; }
 	public bool IsJumpDashOrHomingAttack => IsJumpDashing || Lockon.IsHomingAttacking;
+	public bool IsAccelerationJumping { get; set; }
 	public bool DisableAccelerationJump { get; set; }
 	public bool DisableDamage { get; set; }
 	public bool AllowSidle { get; set; }
@@ -466,6 +467,9 @@ public partial class PlayerController : CharacterBody3D
 	[Export]
 	private CountdownState countdownState;
 	public void StartCountdown() => StateMachine.ChangeState(countdownState);
+
+
+	public bool IsBackflipping { get; set; }
 
 	[Signal]
 	public delegate void LaunchFinishedEventHandler();

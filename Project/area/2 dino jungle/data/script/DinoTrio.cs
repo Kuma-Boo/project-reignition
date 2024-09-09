@@ -105,9 +105,9 @@ public partial class DinoTrio : PathFollow3D
 
 		if (Processor.IsSlowingDown ||
 			(CurrentAttackState != AttackStates.Charge && CurrentAttackState != AttackStates.Inactive) ||
-			(Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer) ||
-			Character.Skills.IsSpeedBreakActive ||
-			(Character.Camera.IsCrossfading && CurrentAttackState == AttackStates.Charge))
+			(Player.IsLockoutActive && Player.ActiveLockoutData.recenterPlayer) ||
+			Player.Skills.IsSpeedBreakActive ||
+			(Player.Camera.IsCrossfading && CurrentAttackState == AttackStates.Charge))
 		{
 			// Dino is slowing down
 			moveSpeed = Mathf.MoveToward(moveSpeed, 0, friction * PhysicsManager.physicsDelta);
@@ -116,7 +116,7 @@ public partial class DinoTrio : PathFollow3D
 			return;
 		}
 
-		float playerSpeed = Mathf.Min(Character.MoveSpeed, Character.Skills.GroundSettings.Speed);
+		float playerSpeed = Mathf.Min(Player.MoveSpeed, Player.Stats.GroundSettings.Speed);
 		// Accelerate
 		if (CurrentAttackState == AttackStates.Charge)
 		{
@@ -126,7 +126,7 @@ public partial class DinoTrio : PathFollow3D
 		}
 
 		// Normal chasing
-		float targetSpeed = Mathf.Clamp(playerSpeed - Processor.SpeedDifference, 0, Character.Skills.GroundSettings.Speed);
+		float targetSpeed = Mathf.Clamp(playerSpeed - Processor.SpeedDifference, 0, Player.Stats.GroundSettings.Speed);
 		if (Mathf.Abs(DeltaProgress) > DinoTrioProcessor.AttackOffset)
 			targetSpeed = Player.Stats.GroundSettings.Speed - Processor.SpeedDifference;
 

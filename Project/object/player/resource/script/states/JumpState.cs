@@ -61,6 +61,11 @@ public partial class JumpState : PlayerState
 		Player.Animator.JumpAnimation();
 	}
 
+	public override void ExitState()
+	{
+		Player.IsAccelerationJumping = false;
+	}
+
 	public override PlayerState ProcessPhysics()
 	{
 		if (!Input.IsActionPressed("button_jump"))
@@ -160,6 +165,7 @@ public partial class JumpState : PlayerState
 		}
 
 		isAccelerationJump = true;
+		Player.IsAccelerationJumping = true;
 		if (!Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.ForwardAngle))
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;
 

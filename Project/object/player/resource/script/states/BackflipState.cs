@@ -22,6 +22,7 @@ public partial class BackflipState : PlayerState
 		turningVelocity = 0;
 		Player.IsOnGround = false;
 		Player.IsMovingBackward = true;
+		Player.IsBackflipping = true;
 		Player.MovementAngle = Player.PathFollower.BackAngle;
 		Player.MoveSpeed = Player.Stats.BackflipSettings.Speed;
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(backflipHeight);
@@ -35,6 +36,11 @@ public partial class BackflipState : PlayerState
 			Player.Effect.PlayFireFX();
 			Player.AttackState = PlayerController.AttackStates.Weak;
 		}
+	}
+
+	public override void ExitState()
+	{
+		Player.IsBackflipping = false;
 	}
 
 	public override PlayerState ProcessPhysics()
