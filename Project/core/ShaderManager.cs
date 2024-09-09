@@ -1,5 +1,5 @@
 using Godot;
-using Godot.Collections;
+using System.Collections.Generic;
 using Project.Gameplay.Triggers;
 
 namespace Project.Core
@@ -23,15 +23,15 @@ namespace Project.Core
 
 		private int cullingTriggerIndex;
 		private bool isSecondaryCullingCompilation;
-		private readonly Array<CullingTrigger> cullingTriggers = [];
+		private readonly List<CullingTrigger> cullingTriggers = [];
 
 		private int meshCompilationIndex;
 		private int materialCompilationIndex;
 		private int particleCompilationIndex;
-		private readonly Array<Mesh> meshes = [];
-		private readonly Array<Material> materials = [];
-		private readonly Array<Mesh> particleMeshes = [];
-		private readonly Array<Material> particleMaterials = [];
+		private readonly List<Mesh> meshes = [];
+		private readonly List<Material> materials = [];
+		private readonly List<Mesh> particleMeshes = [];
+		private readonly List<Material> particleMaterials = [];
 
 		public void RegisterCullingTrigger(CullingTrigger trigger) => cullingTriggers.Add(trigger);
 
@@ -105,7 +105,7 @@ namespace Project.Core
 				return;
 			}
 
-			FinishCompilation();
+			CallDeferred(MethodName.FinishCompilation);
 		}
 
 		public void StartCompilation()
@@ -145,12 +145,14 @@ namespace Project.Core
 			for (int i = 0; i < meshInstances.Length; i++)
 			{
 				meshInstances[i].MaterialOverride = null;
-				meshInstances[i].Mesh = new QuadMesh();
 			}
 
-			materials.Clear();
 			meshes.Clear();
+			materials.Clear();
+			particleMeshes.Clear();
+			particleMaterials.Clear();
 			cullingTriggers.Clear();
+
 			IsCompilingShaders = false;
 			Visible = shaderParent.Visible = false;
 
