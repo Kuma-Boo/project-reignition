@@ -127,7 +127,7 @@ namespace Project.Core
 			Visible = shaderParent.Visible = true;
 			isSecondaryCullingCompilation = false;
 			TotalShaderCount = materials.Count + meshes.Count + particleMaterials.Count;
-			meshCompilationIndex = materialCompilationIndex = particleCompilationIndex = 0;
+			meshCompilationIndex = materialCompilationIndex = particleCompilationIndex = cullingTriggerIndex = 0;
 			TransitionManager.instance.UpdateLoadingText("load_cache", 0, TotalShaderCount);
 
 			IsCompilingShaders = true;
