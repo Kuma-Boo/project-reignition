@@ -92,7 +92,9 @@ namespace Project.Core
 			if (cullingTriggerIndex < cullingTriggers.Count)
 			{
 				// Move to next level chunk
-				cullingTriggers[cullingTriggerIndex].Visible = isSecondaryCullingCompilation;
+				if (IsInstanceValid(cullingTriggers[cullingTriggerIndex]))
+					cullingTriggers[cullingTriggerIndex].Visible = isSecondaryCullingCompilation;
+
 				cullingTriggerIndex++;
 				TransitionManager.instance.UpdateLoadingText("load_lighting", cullingTriggerIndex, cullingTriggers.Count);
 				return;
