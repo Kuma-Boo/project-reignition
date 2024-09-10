@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Godot.Collections;
 using Project.Gameplay;
@@ -13,7 +14,8 @@ public partial class ObjectGenerator : Node3D
 {
 	private PackedScene source;
 	private int currentChildCount;
-	private int amount;
+	[Export(PropertyHint.Range, "0,100,1,or_greater")]
+	public int amount = 0;
 	private float IntervalDivider => amount - 1;
 
 	public SpawnShape shape;
@@ -24,7 +26,7 @@ public partial class ObjectGenerator : Node3D
 		Path, // Spawn linearly along a path
 		Launcher // Spawn along a launcher path
 	}
-
+	[Export]
 	public SpawnOrientation orientation;
 	public enum SpawnOrientation
 	{
@@ -32,7 +34,8 @@ public partial class ObjectGenerator : Node3D
 		Vertical,
 	}
 
-	public float spacing;
+	[Export(PropertyHint.Range, "0,20,0.1")]
+	public float spacing = 1f;
 	public float ringRatio = 1f;
 
 	public NodePath _path;
@@ -42,235 +45,243 @@ public partial class ObjectGenerator : Node3D
 	public float launchEndHeight;
 	public float launchMiddleHeight;
 	/// <summary> Use this if the default sampling is inaccurate. </summary>
+	[Export(PropertyHint.Range, "-64,64,0.1")]
 	public float progressOffset;
 	/// <summary> Disable following the path's Y position? </summary>
+	[Export]
 	public bool disablePathY;
+	[Export]
 	public Curve hOffsetCurve;
+	[Export]
 	public Curve vOffsetCurve;
 
-	public override Array<Dictionary> _GetPropertyList()
+	// public override Array<Dictionary> _GetPropertyList()
+	// {
+	// 	Array<Dictionary> properties =
+	// 	[
+	// 		// ExtensionMethods.CreateProperty("Generate", Variant.Type.Bool),
+	// 			ExtensionMethods.CreateProperty("Source", Variant.Type.Object, PropertyHint.ResourceType, "PackedScene"),
+	// 			// ExtensionMethods.CreateProperty("Amount", Variant.Type.Int, PropertyHint.Range, "0,64"),
+	// 			ExtensionMethods.CreateProperty("Shape", Variant.Type.Int, PropertyHint.Enum, shape.EnumToString()),
+	// 		];
+
+	// 	if (shape == SpawnShape.Path)
+	// 	{
+	// 		properties.Add(ExtensionMethods.CreateProperty("Path", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Path3D"));
+	// 		// properties.Add(ExtensionMethods.CreateProperty("Path Progress Offset", Variant.Type.Float, PropertyHint.Range, "-64,64,.1"));
+	// 		// properties.Add(ExtensionMethods.CreateProperty("Disable Path Y", Variant.Type.Bool));
+	// 	}
+	// 	else if (shape == SpawnShape.Launcher)
+	// 	{
+	// 		properties.Add(ExtensionMethods.CreateProperty("Launcher Type", Variant.Type.Int, PropertyHint.Enum, launchDirection.EnumToString()));
+	// 		properties.Add(ExtensionMethods.CreateProperty("Launch Distance", Variant.Type.Float));
+	// 		properties.Add(ExtensionMethods.CreateProperty("Launch Middle Height", Variant.Type.Float));
+	// 		properties.Add(ExtensionMethods.CreateProperty("Launch End Height", Variant.Type.Float));
+	// 		properties.Add(ExtensionMethods.CreateProperty("Launch Offset", Variant.Type.Float, PropertyHint.Range, "0,1"));
+	// 		properties.Add(ExtensionMethods.CreateProperty("Launch Ratio", Variant.Type.Float, PropertyHint.Range, "0,1"));
+	// 	}
+	// 	else
+	// 	{
+	// 		// properties.Add(ExtensionMethods.CreateProperty("Orientation", Variant.Type.Int, PropertyHint.Enum, orientation.EnumToString()));
+	// 	}
+
+	// 	if (shape == SpawnShape.Ring)
+	// 	{
+	// 		properties.Add(ExtensionMethods.CreateProperty("Ring Size", Variant.Type.Float, PropertyHint.Range, "0,12,.1"));
+	// 		properties.Add(ExtensionMethods.CreateProperty("Ring Ratio", Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
+	// 	}
+	// 	else if (shape != SpawnShape.Launcher)
+	// 	{
+	// 		// properties.Add(ExtensionMethods.CreateProperty("Spacing", Variant.Type.Float, PropertyHint.Range, "0,12,.1"));
+	// 		properties.Add(ExtensionMethods.CreateProperty("Horizontal Offset", Variant.Type.Object, PropertyHint.ResourceType, "Curve"));
+	// 		properties.Add(ExtensionMethods.CreateProperty("Vertical Offset", Variant.Type.Object, PropertyHint.ResourceType, "Curve"));
+	// 	}
+
+	// 	return properties;
+	// }
+	public override void _ValidateProperty(Dictionary property)
 	{
-		Array<Dictionary> properties =
-		[
-			ExtensionMethods.CreateProperty("Generate", Variant.Type.Bool),
-				ExtensionMethods.CreateProperty("Source", Variant.Type.Object, PropertyHint.ResourceType, "PackedScene"),
-				ExtensionMethods.CreateProperty("Amount", Variant.Type.Int, PropertyHint.Range, "0,64"),
-				ExtensionMethods.CreateProperty("Shape", Variant.Type.Int, PropertyHint.Enum, shape.EnumToString()),
-			];
-
-		if (shape == SpawnShape.Path)
+		var propName = property["name"].AsString();
+		// hide spacing if type is launcher
+		var _hide = false;
+		GD.Print(propName, shape);
+		if ((propName == "spacing" && shape == SpawnShape.Launcher) || (propName == "orientation" && shape <= SpawnShape.Ring))
 		{
-			properties.Add(ExtensionMethods.CreateProperty("Path", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Path3D"));
-			properties.Add(ExtensionMethods.CreateProperty("Path Progress Offset", Variant.Type.Float, PropertyHint.Range, "-64,64,.1"));
-			properties.Add(ExtensionMethods.CreateProperty("Disable Path Y", Variant.Type.Bool));
+			_hide = true;
 		}
-		else if (shape == SpawnShape.Launcher)
+		if (_hide)
 		{
-			properties.Add(ExtensionMethods.CreateProperty("Launcher Type", Variant.Type.Int, PropertyHint.Enum, launchDirection.EnumToString()));
-			properties.Add(ExtensionMethods.CreateProperty("Launch Distance", Variant.Type.Float));
-			properties.Add(ExtensionMethods.CreateProperty("Launch Middle Height", Variant.Type.Float));
-			properties.Add(ExtensionMethods.CreateProperty("Launch End Height", Variant.Type.Float));
-			properties.Add(ExtensionMethods.CreateProperty("Launch Offset", Variant.Type.Float, PropertyHint.Range, "0,1"));
-			properties.Add(ExtensionMethods.CreateProperty("Launch Ratio", Variant.Type.Float, PropertyHint.Range, "0,1"));
+			GD.Print("hide ", propName);
+			property["usage"] = Variant.From((int)PropertyUsageFlags.NoEditor);
 		}
-		else
-		{
-			properties.Add(ExtensionMethods.CreateProperty("Orientation", Variant.Type.Int, PropertyHint.Enum, orientation.EnumToString()));
-		}
-
-		if (shape == SpawnShape.Ring)
-		{
-			properties.Add(ExtensionMethods.CreateProperty("Ring Size", Variant.Type.Float, PropertyHint.Range, "0,12,.1"));
-			properties.Add(ExtensionMethods.CreateProperty("Ring Ratio", Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
-		}
-		else if (shape != SpawnShape.Launcher)
-		{
-			properties.Add(ExtensionMethods.CreateProperty("Spacing", Variant.Type.Float, PropertyHint.Range, "0,12,.1"));
-			properties.Add(ExtensionMethods.CreateProperty("Horizontal Offset", Variant.Type.Object, PropertyHint.ResourceType, "Curve"));
-			properties.Add(ExtensionMethods.CreateProperty("Vertical Offset", Variant.Type.Object, PropertyHint.ResourceType, "Curve"));
-		}
-
-		return properties;
 	}
+	// public override bool _Set(StringName property, Variant value)
+	// {
+	// 	switch ((string)property)
+	// 	{
+	// 		case "Source":
+	// 			source = (PackedScene)value;
+	// 			break;
+	// 		case "Amount":
+	// 			amount = (int)value;
+	// 			break;
+	// 		case "Shape":
+	// 			shape = (SpawnShape)(int)value;
+	// 			NotifyPropertyListChanged();
+	// 			break;
+	// 		case "Launcher Type":
+	// 			launchDirection = (Launcher.LaunchDirection)(int)value;
+	// 			break;
+	// 		case "Launch Distance":
+	// 			launchDistance = (float)value;
+	// 			break;
+	// 		case "Launch Middle Height":
+	// 			launchMiddleHeight = (float)value;
+	// 			break;
+	// 		case "Launch End Height":
+	// 			launchEndHeight = (float)value;
+	// 			break;
+	// 		case "Launch Ratio":
+	// 		case "Ring Ratio":
+	// 			ringRatio = (float)value;
+	// 			break;
+	// 		case "Launch Offset":
+	// 		case "Ring Size":
+	// 		case "Spacing":
+	// 			spacing = (float)value;
+	// 			break;
+	// 		case "Path":
+	// 			_path = (NodePath)value;
+	// 			path = GetNodeOrNull<Path3D>(_path);
+	// 			break;
+	// 		default:
+	// 			return false;
+	// 	}
 
-	public override bool _Set(StringName property, Variant value)
-	{
-		switch ((string)property)
-		{
-			case "Generate":
-				GenerateChildren();
-				break;
-			case "Source":
-				source = (PackedScene)value;
-				break;
-			case "Amount":
-				amount = (int)value;
-				break;
-			case "Shape":
-				shape = (SpawnShape)(int)value;
-				NotifyPropertyListChanged();
-				break;
-			case "Launcher Type":
-				launchDirection = (Launcher.LaunchDirection)(int)value;
-				break;
-			case "Launch Distance":
-				launchDistance = (float)value;
-				break;
-			case "Launch Middle Height":
-				launchMiddleHeight = (float)value;
-				break;
-			case "Launch End Height":
-				launchEndHeight = (float)value;
-				break;
-			case "Orientation":
-				orientation = (SpawnOrientation)(int)value;
-				break;
-			case "Launch Ratio":
-			case "Ring Ratio":
-				ringRatio = (float)value;
-				break;
-			case "Launch Offset":
-			case "Ring Size":
-			case "Spacing":
-				spacing = (float)value;
-				break;
-			case "Path":
-				_path = (NodePath)value;
-				break;
-			case "Path Progress Offset":
-				progressOffset = (float)value;
-				break;
-			case "Disable Path Y":
-				disablePathY = (bool)value;
-				break;
+	// 	return true;
+	// }
 
-			case "Horizontal Offset":
-				hOffsetCurve = (Curve)value;
-				break;
-			case "Vertical Offset":
-				vOffsetCurve = (Curve)value;
-				break;
+	// public override Variant _Get(StringName property)
+	// {
+	// 	switch ((string)property)
+	// 	{
+	// 		case "Source":
+	// 			return source;
+	// 		case "Amount":
+	// 			return amount;
+	// 		case "Shape":
+	// 			return (int)shape;
+	// 		case "Launcher Type":
+	// 			return (int)launchDirection;
+	// 		case "Launch Distance":
+	// 			return launchDistance;
+	// 		case "Launch Middle Height":
+	// 			return launchMiddleHeight;
+	// 		case "Launch End Height":
+	// 			return launchEndHeight;
+	// 		case "Launch Ratio":
+	// 		case "Ring Ratio":
+	// 			return ringRatio;
+	// 		case "Launch Offset":
+	// 		case "Ring Size":
+	// 		case "Spacing":
+	// 			return spacing;
+	// 		case "Path":
+	// 			return _path;
+	// 		default:
+	// 			break;
+	// 	}
 
-			default:
-				return false;
-		}
+	// 	return base._Get(property);
+	// }
 
-		return true;
-	}
-
-	public override Variant _Get(StringName property)
-	{
-		switch ((string)property)
-		{
-			case "Generate":
-				return false;
-			case "Source":
-				return source;
-			case "Amount":
-				return amount;
-			case "Shape":
-				return (int)shape;
-			case "Orientation":
-				return (int)orientation;
-			case "Launcher Type":
-				return (int)launchDirection;
-			case "Launch Distance":
-				return launchDistance;
-			case "Launch Middle Height":
-				return launchMiddleHeight;
-			case "Launch End Height":
-				return launchEndHeight;
-			case "Launch Ratio":
-			case "Ring Ratio":
-				return ringRatio;
-			case "Launch Offset":
-			case "Ring Size":
-			case "Spacing":
-				return spacing;
-			case "Path":
-				return _path;
-			case "Path Progress Offset":
-				return progressOffset;
-			case "Disable Path Y":
-				return disablePathY;
-
-			case "Horizontal Offset":
-				return hOffsetCurve;
-			case "Vertical Offset":
-				return vOffsetCurve;
-		}
-
-		return base._Get(property);
-	}
-
-	private void GenerateChildren()
+	private void DeleteChildren()
 	{
 		// Delete old children
 		for (int i = 0; i < GetChildCount(); i++)
 		{
-			GetChild(i).Name = "Deletion" + i;
-			GetChild(i).QueueFree();
+			var child = GetChild(i);
+			child.Name = "Deletion" + i;
+			child.QueueFree();
 		}
-		currentChildCount = 1; // Reset child counter
+	}
+	private void CreateChildren()
+	{
+		var root = GetTree().EditedSceneRoot;
+		for (var i = 0; i < amount; i++)
+		{
+			Node3D obj = source.Instantiate<Node3D>(PackedScene.GenEditState.Instance);
+			obj.Name = "Child" + i.ToString("00"); //Set name
+			currentChildCount++;
+			AddChild(obj);
+			obj.Owner = root;
+			obj.SetMeta("_edit_lock_", true);
+		}
+	}
 
+	public void GenerateChildren()
+	{
+		if (amount != GetChildCount())
+		{
+			DeleteChildren();
+			CreateChildren();
+		}
+		AlignChildren();
+	}
+
+	public void AlignChildren()
+	{
 		switch (shape)
 		{
 			case SpawnShape.Line:
-				SpawnLinearly();
+				AlignLine();
 				break;
 			case SpawnShape.Ring:
-				SpawnRing();
+				AlignRing();
 				break;
 			case SpawnShape.Path:
-				SpawnAlongPath(GetNodeOrNull<Path3D>(_path));
+				AlignPath();
 				break;
 			case SpawnShape.Launcher:
-				SpawnAlongLauncher();
+				AlignLauncher();
 				break;
 		}
 	}
 
-	private void SpawnRing()
+	private void AlignRing()
 	{
-		if (amount == 1)
-		{
-			SpawnNode(Vector3.Zero);
-			return;
-		}
-
 		float interval = Mathf.Tau * ringRatio / (ringRatio == 1 ? amount : amount - 1);
-		Vector3 rotationBase = orientation == SpawnOrientation.Horizontal ? Vector3.Forward : Vector3.Left;
 		Vector3 rotationAxis = orientation == SpawnOrientation.Horizontal ? Vector3.Up : Vector3.Forward;
 		for (int i = 0; i < amount; i++)
-			SpawnNode(Vector3.Left.Rotated(rotationAxis, (interval * i)).Normalized() * spacing);
+			GetChild<Node3D>(i).Position = Vector3.Left.Rotated(rotationAxis, interval * i).Normalized() * spacing;
 	}
 
-	private void SpawnLinearly()
+	private void AlignLine()
 	{
 		Vector3 forwardDirection = orientation == SpawnOrientation.Horizontal ? Vector3.Forward : Vector3.Up;
 		Vector3 upDirection = orientation == SpawnOrientation.Horizontal ? Vector3.Up : Vector3.Back;
 		float hOffset = 0;
 		float vOffset = 0;
 
-		for (int i = 0; i < amount; i++)
+		for (int i = 0; i < GetChildCount(); i++)
 		{
 			if (hOffsetCurve != null)
 				hOffset = hOffsetCurve.Sample(i / IntervalDivider);
 
 			if (vOffsetCurve != null)
 				vOffset = vOffsetCurve.Sample(i / IntervalDivider);
-
-			SpawnNode(forwardDirection * i * spacing + Vector3.Right * hOffset + upDirection * vOffset);
+			GetChild<Node3D>(i).Position = forwardDirection * i * spacing + Vector3.Right * hOffset + upDirection * vOffset;
 		}
 	}
 
-	private void SpawnAlongPath(Path3D path)
+	private void AlignPath()
 	{
-		if (path == null)
+		if (_path == null)
 		{
 			GD.PrintErr("No Path Provided.");
 			return;
 		}
+		path = GetNodeOrNull<Path3D>(_path);
 
 		PathFollow3D follow = new()
 		{
@@ -297,7 +308,7 @@ public partial class ObjectGenerator : Node3D
 			if (disablePathY)
 				spawnPosition.Y = GlobalPosition.Y;
 
-			SpawnNode(spawnPosition, true);
+			GetChild<Node3D>(i).GlobalPosition = spawnPosition;
 			follow.Progress += spacing;
 		}
 
@@ -314,7 +325,7 @@ public partial class ObjectGenerator : Node3D
 		return this.Up();
 	}
 
-	private void SpawnAlongLauncher()
+	private void AlignLauncher()
 	{
 		Vector3 startPosition = GlobalPosition;
 		Vector3 endPosition = startPosition + (GetLaunchDirection() * launchDistance) + (Vector3.Up * launchEndHeight);
@@ -326,21 +337,7 @@ public partial class ObjectGenerator : Node3D
 			float t = i / (float)amount;
 			t *= ringRatio;
 			t += spacing;
-			SpawnNode(settings.InterpolatePositionRatio(t), true);
+			GetChild<Node3D>(i).Position = settings.InterpolatePositionRatio(t);
 		}
-	}
-
-	private void SpawnNode(Vector3 pos, bool globalPosition = default)
-	{
-		Node3D obj = source.Instantiate<Node3D>(PackedScene.GenEditState.Instance);
-		obj.Name = "Child" + currentChildCount.ToString("00"); //Set name
-		currentChildCount++;
-		AddChild(obj);
-		obj.Owner = GetTree().EditedSceneRoot;
-
-		if (globalPosition)
-			obj.GlobalPosition = pos;
-		else
-			obj.Position = pos;
 	}
 }
