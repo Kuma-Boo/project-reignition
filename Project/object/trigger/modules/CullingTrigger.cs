@@ -29,7 +29,7 @@ public partial class CullingTrigger : StageTriggerModule
 		if (isStageVisuals)
 			DebugManager.Instance.Connect(DebugManager.SignalName.StageCullingToggled, new Callable(this, MethodName.UpdateCullingState));
 
-		if (isStageVisuals)
+		if (isStageVisuals && !TransitionManager.instance.IsReloadingScene)
 			ShaderManager.Instance.RegisterCullingTrigger(this);
 	}
 

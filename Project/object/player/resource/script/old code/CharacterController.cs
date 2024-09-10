@@ -2263,6 +2263,7 @@ namespace Project.Gameplay
 		#region Signals
 		private bool IsCountdownActive => Interface.Countdown.IsCountdownActive;
 
+		private bool allowCountdownBoost;
 		private float countdownBoostTimer;
 		private readonly float COUNTDOWN_BOOST_WINDOW = .8f;
 
@@ -2279,12 +2280,15 @@ namespace Project.Gameplay
 		{
 			actionBufferTimer -= PhysicsManager.physicsDelta;
 			if (Input.IsActionJustPressed("button_action"))
+			{
+				allowCountdownBoost = true;
 				actionBufferTimer = 1f;
+			}
 		}
 
 		public void OnCountdownFinished()
 		{
-			if (Skills.IsSkillEquipped(SkillKey.RocketStart) && Mathf.Abs(actionBufferTimer) < COUNTDOWN_BOOST_WINDOW * .5f) // Successful starting boost
+			if (Skills.IsSkillEquipped(SkillKey.RocketStart) && allowCountdownBoost && Mathf.Abs(actionBufferTimer) < COUNTDOWN_BOOST_WINDOW * .5f) // Successful starting boost
 			{
 				Effect.PlayWindFX();
 				MoveSpeed = Skills.countdownBoostSpeed;
