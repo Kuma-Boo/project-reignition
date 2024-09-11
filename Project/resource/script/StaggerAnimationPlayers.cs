@@ -1,4 +1,5 @@
 using Godot;
+using Project.Gameplay;
 
 public partial class StaggerAnimationPlayers : Node
 {
@@ -9,6 +10,10 @@ public partial class StaggerAnimationPlayers : Node
   [Export]
   public string AnimationName = "";
   private Tween _timeline;
+  public override void _EnterTree()
+  {
+    StageSettings.instance.ConnectRespawnSignal(this);
+  }
   public override void _Ready()
   {
     _timeline = GetTree().CreateTween();
@@ -42,11 +47,7 @@ public partial class StaggerAnimationPlayers : Node
     Reset();
     Run();
   }
-  public void Run(Area3D area)
-  {
-    Run();
-  }
-  public void Reset(Area3D area)
+  public void Respawn()
   {
     Reset();
   }
