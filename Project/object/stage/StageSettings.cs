@@ -440,16 +440,11 @@ public partial class StageSettings : Node3D
 	public delegate void UnloadedEventHandler();
 	private const string UNLOAD_FUNCTION = "Unload"; // Clean up any memory leaks in this function
 	public override void _ExitTree() => EmitSignal(SignalName.Unloaded);
-	public void ConnectUnloadSignal(Node node)
+	public void ConnectUnloadSignal(IUnloadListener listener)
 	{
-		if (!node.HasMethod(UNLOAD_FUNCTION))
-		{
-			GD.PrintErr($"Node {node.Name} doesn't have a function '{UNLOAD_FUNCTION}!'");
-			return;
-		}
-
-		if (!IsConnected(SignalName.Unloaded, new Callable(node, UNLOAD_FUNCTION)))
-			Connect(SignalName.Unloaded, new Callable(node, UNLOAD_FUNCTION));
+		var callable = Callable.From(listener.Unload);
+		if (!IsConnected(SignalName.Unloaded, callable))
+			Connect(SignalName.Unloaded, callable);
 	}
 
 	[Signal]
