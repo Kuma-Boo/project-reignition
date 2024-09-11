@@ -31,7 +31,7 @@ public partial class CameraController : Node3D
 	[Export]
 	/// <summary> Camera's pathfollower. Different than Character.PathFollower. </summary>
 	public CharacterPathFollower PathFollower { get; private set; }
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	private readonly StringName ShaderPlayerScreenPosition = new("player_screen_position");
 
@@ -73,7 +73,7 @@ public partial class CameraController : Node3D
 		// Don't update the camera when the player is defeated from a DeathTrigger
 		if (IsDefeatFreezeActive)
 		{
-			if (Character.IsDefeated)
+			if (Player.IsDefeated)
 				return;
 
 			IsDefeatFreezeActive = false;
@@ -94,7 +94,7 @@ public partial class CameraController : Node3D
 	public bool IsDefeatFreezeActive { get; set; }
 	/// <summary> Used to focus onto multi-HP enemies, bosses, etc. Not to be confused with CharacterLockon.Target. </summary>
 	public Node3D LockonTarget { get; set; }
-	private bool IsLockonCameraActive => LockonTarget != null || Character.Lockon.IsHomingAttacking || Character.Lockon.IsBounceLockoutActive;
+	private bool IsLockonCameraActive => LockonTarget != null || Player.Lockon.IsHomingAttacking || Player.IsBouncing;
 	/// <summary> [0 -> 1] ratio of how much to use the lockon camera. </summary>
 	private float lockonBlend;
 	private float lockonBlendVelocity;
@@ -257,7 +257,7 @@ public partial class CameraController : Node3D
 
 		// Recalculate non-static camera positions for better transition rotations.
 		Vector3 position = data.offsetBasis.Z.Normalized() * distance;
-		position += Character.CenterPosition;
+		position += Player.CenterPosition;
 
 		Transform3D cameraTransform = new(data.offsetBasis, position.Lerp(data.precalculatedPosition, staticBlendRatio));
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.yawTracking);
@@ -282,7 +282,7 @@ public partial class CameraController : Node3D
 
 		Camera.Fov = fov; // Update fov
 
-		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Character.CenterPosition) / Runtime.ScreenSize);
+		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Player.CenterPosition) / Runtime.ScreenSize);
 
 		if (SnapFlag) // Reset flag after camera was updated
 			SnapFlag = false;
@@ -309,10 +309,10 @@ public partial class CameraController : Node3D
 		float targetXformAngle = ExtensionMethods.CalculateForwardAngle(-cameraBasis.Z, cameraBasis.Y);
 
 		// Snap xform blend when no input is held
-		if (Character.InputVector.IsZeroApprox() ||
-			(Character.IsLockoutActive &&
-			Character.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe &&
-			Mathf.IsZeroApprox(Character.InputHorizontal)))
+		if (Player.Controller.InputAxis.IsZeroApprox() ||
+			(Player.IsLockoutActive &&
+			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe &&
+			Mathf.IsZeroApprox(Player.Controller.InputHorizontal)))
 		{
 			SnapXform();
 		}
@@ -359,7 +359,7 @@ public partial class CameraController : Node3D
 			}
 			else
 			{
-				Vector3 delta = Character.CenterPosition - data.precalculatedPosition;
+				Vector3 delta = Player.CenterPosition - data.precalculatedPosition;
 				data.blendData.distance = delta.Length();
 				delta = delta.Normalized();
 
@@ -379,7 +379,7 @@ public partial class CameraController : Node3D
 		{
 			// Calculate distance
 			float targetDistance = settings.distance;
-			if (Character.IsMovingBackward)
+			if (Player.IsMovingBackward)
 				targetDistance += settings.backstepDistance;
 
 			if (!settings.ignoreHomingAttack && IsLockonCameraActive)
@@ -392,7 +392,7 @@ public partial class CameraController : Node3D
 				targetDistance = PathFollower.Progress;
 			}
 
-			data.blendData.DistanceSmoothDamp(targetDistance, Character.IsMovingBackward, SnapFlag);
+			data.blendData.DistanceSmoothDamp(targetDistance, Player.IsMovingBackward, SnapFlag);
 
 			// Calculate targetAngles when DistanceMode is set to Sample.
 			float sampledTargetYawAngle = targetYawAngle;
@@ -450,7 +450,7 @@ public partial class CameraController : Node3D
 			data.CalculateBasis();
 			data.CalculatePosition(PathFollower.GlobalPosition);
 
-			Vector3 globalDelta = Character.CenterPosition - data.precalculatedPosition;
+			Vector3 globalDelta = Player.CenterPosition - data.precalculatedPosition;
 			Vector3 delta = data.offsetBasis.Inverse() * globalDelta;
 
 			if (settings.horizontalTrackingMode != CameraSettingsResource.TrackingModeEnum.Move)
@@ -493,12 +493,12 @@ public partial class CameraController : Node3D
 			data.pitchTracking = targetPitchTracking;
 
 			// Recalculate position after applying rotational tracking
-			data.CalculatePosition(Character.CenterPosition);
+			data.CalculatePosition(Player.CenterPosition);
 			data.precalculatedPosition = AddTrackingOffset(data.precalculatedPosition, data);
 
 			if (!settings.ignoreHomingAttack && IsLockonCameraActive && LockonTarget != null)
 			{
-				globalDelta = LockonTarget.GlobalPosition.Lerp(Character.CenterPosition, .5f) - data.precalculatedPosition;
+				globalDelta = LockonTarget.GlobalPosition.Lerp(Player.CenterPosition, .5f) - data.precalculatedPosition;
 				delta = data.offsetBasis.Inverse() * globalDelta;
 				delta.X = 0; // Ignore x axis for pitch tracking
 				data.blendData.lockonPitchTracking = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
@@ -586,7 +586,7 @@ public partial class CameraController : Node3D
 		if (!Mathf.IsZeroApprox(Engine.TimeScale))
 			velocity /= (float)Engine.TimeScale;
 
-		if (Character.Skills.IsTimeBreakActive)
+		if (Player.Skills.IsTimeBreakActive)
 			return velocity * TimeBreakMotionBlurStrength;
 
 		return velocity * MotionBlurStrength;
@@ -785,7 +785,7 @@ public partial class CameraController : Node3D
 		bool showCamera = isFreeCamActive && DebugManager.Instance.DrawDebugCam;
 		debugMesh.Visible = showCamera;
 		PathFollower.Visible = showCamera;
-		Character.PathFollower.Visible = showCamera;
+		Player.PathFollower.Visible = showCamera;
 
 		if (isFreeCamActive)
 		{

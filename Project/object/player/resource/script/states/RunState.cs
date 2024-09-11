@@ -61,7 +61,7 @@ public partial class RunState : PlayerState
 			{
 				Player.Controller.ResetJumpBuffer();
 
-				float inputAngle = Player.Controller.GetTargetMovementAngle();
+				float inputAngle = Player.Controller.GetTargetMovementAngle(true);
 				float inputStrength = Player.Controller.GetInputStrength();
 				if (!Mathf.IsZeroApprox(inputStrength) &&
 					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))

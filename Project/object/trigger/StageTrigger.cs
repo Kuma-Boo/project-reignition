@@ -111,7 +111,7 @@ namespace Project.Gameplay.Triggers
 		public delegate void DeactivatedEventHandler();
 		[Signal]
 		public delegate void RespawnedEventHandler();
-		private CharacterPathFollower PathFollower => CharacterController.instance.PathFollower;
+		private PlayerPathController PathFollower => StageSettings.Player.PathFollower;
 		private bool isInteractingWithPlayer;
 
 		public override void _Ready()

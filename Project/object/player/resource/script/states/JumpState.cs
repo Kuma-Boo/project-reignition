@@ -152,21 +152,21 @@ public partial class JumpState : PlayerState
 			return;
 
 		float inputAngle = Player.Controller.GetTargetMovementAngle();
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
-			Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+		if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 		{
 			return;
 		}
 
-		if (!Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle) ||
-			Player.Controller.GetInputStrength() < .5f)
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
+			(!Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle) ||
+			Player.Controller.GetInputStrength() < .5f))
 		{
 			return;
 		}
 
 		isAccelerationJump = true;
 		Player.IsAccelerationJumping = true;
-		if (!Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.ForwardAngle))
+		if (ExtensionMethods.DeltaAngleRad(Player.MovementAngle, Player.PathFollower.ForwardAngle) > Mathf.Pi * .5f)
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;
 
 		// Keep acceleration jump heights consistent

@@ -93,9 +93,12 @@ public partial class PlayerInputController : Node
 	}
 
 	/// <summary> Returns the angle between the player's input angle and movementAngle. </summary>
-	public float GetTargetMovementAngle()
+	public float GetTargetMovementAngle(bool rawInput = false)
 	{
 		float inputAngle = GetTargetInputAngle();
+		if(rawInput)
+			return inputAngle;
+
 		return CalculateLockoutForwardAngle(inputAngle);
 	}
 

@@ -121,7 +121,7 @@ public partial class PlayerLockonController : Node3D
 
 		if (!IsHomingAttacking &&
 			Target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten()) < DistanceFudgeAmount &&
-			Player.Controller.IsHoldingDirection(Player.Controller.GetTargetMovementAngle(), Player.PathFollower.ForwardAngle))
+			Player.Controller.IsHoldingDirection(Player.Controller.GetTargetMovementAngle(true), Player.PathFollower.ForwardAngle))
 		{
 			ResetLockonTarget();
 			return;
@@ -163,7 +163,7 @@ public partial class PlayerLockonController : Node3D
 
 		float distance = target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
 		if (distance < DistanceFudgeAmount &&
-			Player.Controller.IsHoldingDirection(Player.Controller.GetTargetMovementAngle(), Player.PathFollower.ForwardAngle))
+			Player.Controller.IsHoldingDirection(Player.Controller.GetTargetMovementAngle(true), Player.PathFollower.ForwardAngle))
 		{
 			return TargetState.PlayerIgnored;
 		}

@@ -13,6 +13,8 @@ public partial class IdleState : PlayerState
 	[Export]
 	private PlayerState jumpState;
 	[Export]
+	private PlayerState backflipState;
+	[Export]
 	private PlayerState fallState;
 
 	public override void EnterState()
@@ -28,6 +30,15 @@ public partial class IdleState : PlayerState
 		if (Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
+
+			float inputAngle = Player.Controller.GetTargetMovementAngle(true);
+			float inputStrength = Player.Controller.GetInputStrength();
+			if (!Mathf.IsZeroApprox(inputStrength) &&
+				Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+			{
+				return backflipState;
+			}
+
 			return jumpState;
 		}
 
