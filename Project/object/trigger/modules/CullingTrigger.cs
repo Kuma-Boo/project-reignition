@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 using Project.Core;
@@ -21,7 +22,7 @@ public partial class CullingTrigger : StageTriggerModule
 	private StageSettings Level => StageSettings.instance;
 	[Export]
 	private bool respawnOnActivation;
-	private Array<Node> respawnableNodes = [];
+	private List<IPlayerRespawnedListener> respawnableNodes = [];
 
 	public override void _EnterTree()
 	{
@@ -44,8 +45,8 @@ public partial class CullingTrigger : StageTriggerModule
 			Array<Node> children = GetChildren(true);
 			foreach (Node child in children)
 			{
-				if (child.HasMethod(StageSettings.RESPAWN_FUNCTION))
-					respawnableNodes.Add(child);
+				if (child is IPlayerRespawnedListener listener)
+					respawnableNodes.Add(listener);
 			}
 		}
 
@@ -99,8 +100,8 @@ public partial class CullingTrigger : StageTriggerModule
 		// Respawn everything
 		if (respawnOnActivation)
 		{
-			foreach (Node node in respawnableNodes)
-				node.Call(StageSettings.RESPAWN_FUNCTION);
+			foreach (IPlayerRespawnedListener node in respawnableNodes)
+				node.Respawn();
 		}
 
 		EmitSignal(SignalName.Activated);

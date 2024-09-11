@@ -438,7 +438,6 @@ public partial class StageSettings : Node3D
 
 	[Signal]
 	public delegate void UnloadedEventHandler();
-	private const string UNLOAD_FUNCTION = "Unload"; // Clean up any memory leaks in this function
 	public override void _ExitTree() => EmitSignal(SignalName.Unloaded);
 	public void ConnectUnloadSignal(IUnloadListener listener)
 	{
@@ -449,7 +448,6 @@ public partial class StageSettings : Node3D
 
 	[Signal]
 	public delegate void RespawnedEventHandler();
-	public readonly static StringName RESPAWN_FUNCTION = "Respawn"; // Default name of respawn functions
 	public void ConnectRespawnSignal(IPlayerRespawnedListener listener)
 	{
 		var callable = Callable.From(listener.Respawn);
