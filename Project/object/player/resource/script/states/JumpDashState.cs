@@ -45,6 +45,9 @@ public partial class JumpDashState : PlayerState
 	{
 		Player.IsJumpDashing = false;
 		Player.Effect.StopTrailFX();
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire))
+			Player.Skills.DeactivateFireCrest();
 	}
 
 	public override PlayerState ProcessPhysics()

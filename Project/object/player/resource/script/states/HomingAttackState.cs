@@ -55,14 +55,11 @@ public partial class HomingAttackState : PlayerState
 		Player.Lockon.ResetLockonTarget();
 		Player.Effect.StopTrailFX();
 
-		/*
-		REFACTOR TODO Move to Bounce state processing
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire) && IsBounceLockoutActive)
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire) && Player.IsBouncing)
 		{
-			Player.Skills.DeactivateFireCrest(true);
+			Player.Skills.ActivateFireCrestBurst();
 			return;
 		}
-		*/
 
 		Player.AttackState = PlayerController.AttackStates.None;
 		Player.Effect.StopSpinFX();
@@ -116,7 +113,7 @@ public partial class HomingAttackState : PlayerState
 		Vector3 castDirection = castPosition - Player.GetLastSlideCollision().GetPosition();
 
 		RaycastHit hit = Player.CastRay(castPosition, castDirection, Runtime.Instance.environmentMask);
-		if(hit && hit.collidedObject.IsInGroup("ground"))
+		if (hit && hit.collidedObject.IsInGroup("ground"))
 			return true;
 
 		return false;

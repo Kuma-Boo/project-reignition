@@ -134,18 +134,23 @@ public partial class PlayerSkillController : Node3D
 		Player.Effect.StartVolcanoFX();
 	}
 
-	public void DeactivateFireCrest(bool burst)
+	public void DeactivateFireCrest()
 	{
 		if (!AllowCrestSkill)
 			return;
 
 		Player.Effect.StopVolcanoFX();
-		if (burst)
-		{
-			Player.Effect.PlayFireCrestFX();
-			Player.AttackState = PlayerController.AttackStates.Weak;
-			Player.ChangeHitbox("fire-crest");
-		}
+	}
+
+	public void ActivateFireCrestBurst()
+	{
+		if (!AllowCrestSkill)
+			return;
+
+		Player.Effect.StopVolcanoFX();
+		Player.Effect.PlayFireCrestFX();
+		Player.AttackState = PlayerController.AttackStates.Weak;
+		Player.ChangeHitbox("fire-crest");
 	}
 
 	private float crestTimer;
