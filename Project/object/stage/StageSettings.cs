@@ -455,16 +455,12 @@ public partial class StageSettings : Node3D
 	[Signal]
 	public delegate void RespawnedEventHandler();
 	public readonly static StringName RESPAWN_FUNCTION = "Respawn"; // Default name of respawn functions
-	public void ConnectRespawnSignal(Node node)
+	public void ConnectRespawnSignal(IPlayerRespawnedListener listener)
 	{
-		if (!node.HasMethod(RESPAWN_FUNCTION))
-		{
-			GD.PrintErr($"Node {node.Name} doesn't have a function '{RESPAWN_FUNCTION}!'");
-			return;
-		}
+		var callable = Callable.From(listener.Respawn);
 
-		if (!IsConnected(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION)))
-			Connect(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION), (uint)ConnectFlags.Deferred);
+		if (!IsConnected(SignalName.Respawned, callable))
+			Connect(SignalName.Respawned, callable, (uint)ConnectFlags.Deferred);
 	}
 
 	public void RespawnObjects()
