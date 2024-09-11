@@ -39,6 +39,8 @@ public partial class AutomationState : PlayerState
 		Player.StopExternal();
 		Player.UpDirection = Player.PathFollower.Up();
 		Player.Animator.SnapRotation(Player.MovementAngle);
+
+		Automation = null;
 	}
 
 	public override PlayerState ProcessPhysics()
@@ -58,7 +60,10 @@ public partial class AutomationState : PlayerState
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 
 		Player.UpdateExternalControl();
+		Player.CheckGround();
+
 		Player.Animator.ExternalAngle = 0;
+		Player.Animator.RunAnimation();
 
 		if (Player.PathFollower.ActivePath != initialPath || Automation.IsFinished)
 			return runState;

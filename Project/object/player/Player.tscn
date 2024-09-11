@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=3 uid="uid://bbbuqgxfhuh8k"]
+[gd_scene load_steps=84 format=3 uid="uid://bbbuqgxfhuh8k"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -44,6 +44,7 @@
 [ext_resource type="ArrayMesh" uid="uid://cljse54cbo2oh" path="res://object/player/resource/effect/model/SpeedbreakTallFX.res" id="25_tv3ro"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/ScreenShock.gdshader" id="26_bjr1n"]
 [ext_resource type="Shader" path="res://effect/shader/object/player/SpeedBreak.gdshader" id="27_ompnm"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/SidleState.cs" id="27_t835u"]
 [ext_resource type="PackedScene" uid="uid://dq4rt7vk6a7kv" path="res://object/player/resource/component/Lockon.tscn" id="33_q1dko"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hfii6"]
@@ -1402,7 +1403,7 @@ _data = {
 "volcano-slide": SubResource("Animation_flrr5")
 }
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "grindState", "automationState", "bounceState", "driftState", "knockbackState", "teleportState") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "grindState", "sidleState", "automationState", "bounceState", "driftState", "knockbackState", "teleportState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1421,6 +1422,7 @@ hitboxAnimator = NodePath("Components/Sonic/HitboxTrigger/AnimationPlayer")
 countdownState = NodePath("Components/StateMachine/Countdown")
 launchState = NodePath("Components/StateMachine/Launch")
 grindState = NodePath("Components/StateMachine/Grind")
+sidleState = NodePath("Components/StateMachine/Sidle")
 automationState = NodePath("Components/StateMachine/Automation")
 bounceState = NodePath("Components/StateMachine/Bounce")
 driftState = NodePath("Components/StateMachine/Drift")
@@ -1590,6 +1592,11 @@ bounceHeight = 4.0
 [node name="Knockback" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState")]
 script = ExtResource("23_gpnrh")
 landState = NodePath("../Land")
+
+[node name="Sidle" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState", "backstepState")]
+script = ExtResource("27_t835u")
+runState = NodePath("../Run")
+backstepState = NodePath("../Backstep")
 
 [node name="Controller" type="Node" parent="Components"]
 script = ExtResource("2_pk07e")

@@ -10,9 +10,7 @@ public partial class SidleState : PlayerState
 	private PlayerState runState;
 	[Export]
 	private PlayerState backstepState;
-	[Export]
-	private PlayerState knockbackState;
-	
+
 	public SidleTrigger Trigger { get; set; }
 	/// <summary> Should the player grab a foot hold when taking damage? </summary>
 	public Node ActiveFoothold { get; set; }
@@ -66,14 +64,14 @@ public partial class SidleState : PlayerState
 	}
 	*/
 
-    public override void EnterState()
-    {
+	public override void EnterState()
+	{
 		velocity = 0;
 		cycleTimer = 0;
 		damageState = DamageStates.Disabled;
 
 		Player.Skills.IsSpeedBreakEnabled = false; // Disable speed break
-		
+
 		Player.IsSidling = true;
 		Player.IsOnGround = true;
 		Player.StartExternal(this, Player.PathFollower, .2f);
@@ -84,7 +82,7 @@ public partial class SidleState : PlayerState
 		Player.Animator.UpdateSidle(cycleTimer);
 
 		Player.Knockback += OnPlayerDamaged;
-    }
+	}
 
 	public override void ExitState()
 	{
@@ -113,7 +111,7 @@ public partial class SidleState : PlayerState
 		Trigger = null;
 	}
 
-    public override PlayerState ProcessPhysics()
+	public override PlayerState ProcessPhysics()
 	{
 		if (!StageSettings.Instance.IsLevelIngame || Player.IsDefeated)
 			return null;

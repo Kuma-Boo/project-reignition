@@ -176,8 +176,6 @@ public partial class PlayerController : CharacterBody3D
 
 	public RaycastHit CheckGroundRaycast()
 	{
-		bool limitAngle = ExternalController != null;
-
 		Vector3 castOrigin = CollisionPosition;
 		float castLength = CollisionSize.Y + (CollisionPadding * 2.0f);
 		if (IsOnGround)
@@ -198,7 +196,7 @@ public partial class PlayerController : CharacterBody3D
 			castOffset = castOffset.Rotated(this.Down(), interval);
 			RaycastHit hit = this.CastRay(castOrigin + castOffset, castVector, CollisionMask, false, GetCollisionExceptions());
 			DebugManager.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
-			if (ValidateGroundCast(ref hit, limitAngle))
+			if (ValidateGroundCast(ref hit))
 			{
 				if (!groundHit)
 					groundHit = hit;
@@ -219,13 +217,13 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	/// <summary> Checks whether raycast collider is tagged properly. </summary>
-	private bool ValidateGroundCast(ref RaycastHit hit, bool limitAngle)
+	private bool ValidateGroundCast(ref RaycastHit hit)
 	{
 		if (!hit)
 			return new();
 
 		if (!hit.collidedObject.IsInGroup("floor") ||
-			(limitAngle && hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f))
+			(ExternalController == null && hit.normal.AngleTo(UpDirection) > Mathf.Pi * .4f))
 		{
 			return new();
 		}
@@ -560,7 +558,7 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	public bool DisableSidle { get; set; }
-	public bool IsSidling {get; set; }
+	public bool IsSidling { get; set; }
 	[Export]
 	private SidleState sidleState;
 	public void StartSidle(SidleTrigger trigger)
@@ -572,7 +570,7 @@ public partial class PlayerController : CharacterBody3D
 	public void SetFoothold(Node foothold) => sidleState.ActiveFoothold = foothold;
 	public void UnsetFoothold(Node foothold)
 	{
-		if(sidleState.ActiveFoothold == foothold)
+		if (sidleState.ActiveFoothold == foothold)
 			sidleState.ActiveFoothold = null;
 	}
 

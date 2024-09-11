@@ -171,7 +171,7 @@ public partial class EventTrigger : StageTriggerModule
 		if (playerStandin == null || Player.ExternalController != this)
 			return;
 
-		Player.UpdateExternalControl();
+		Player.CallDeferred(PlayerController.MethodName.UpdateExternalControl, true);
 	}
 
 	public override void Respawn()
