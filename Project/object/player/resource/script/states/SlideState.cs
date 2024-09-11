@@ -17,6 +17,7 @@ public partial class SlideState : PlayerState
 		if (Player.MoveSpeed <= Player.Stats.InitialSlideSpeed)
 			Player.MoveSpeed = Player.Stats.InitialSlideSpeed;
 
+		Player.DisableSidle = true;
 		Player.Animator.StartSliding();
 		Player.Effect.PlayActionSFX(Player.Effect.SlideSfx);
 		Player.ChangeHitbox("slide");
@@ -45,6 +46,8 @@ public partial class SlideState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.DisableSidle = false;
+
 		if (!Mathf.IsZeroApprox(Player.MoveSpeed))
 		{
 			Player.Animator.StopCrouching(0.2f);

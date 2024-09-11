@@ -522,8 +522,8 @@ public partial class PlayerController : CharacterBody3D
 	public bool IsJumpDashOrHomingAttack => IsJumpDashing || Lockon.IsHomingAttacking;
 	public bool IsAccelerationJumping { get; set; }
 	public bool DisableAccelerationJump { get; set; }
+	public bool IsBackflipping { get; set; }
 	public bool DisableDamage { get; set; }
-	public bool AllowSidle { get; set; }
 	/// <summary> True while the player is defeated but hasn't respawned yet. </summary>
 	public bool IsDefeated { get; set; }
 	public bool AllowLandingSkills { get; set; }
@@ -533,8 +533,6 @@ public partial class PlayerController : CharacterBody3D
 	private CountdownState countdownState;
 	public void StartCountdown() => StateMachine.ChangeState(countdownState);
 
-
-	public bool IsBackflipping { get; set; }
 
 	[Signal]
 	public delegate void LaunchFinishedEventHandler();
@@ -559,6 +557,23 @@ public partial class PlayerController : CharacterBody3D
 	{
 		grindState.ActiveGrindRail = rail;
 		StateMachine.ChangeState(grindState);
+	}
+
+	public bool DisableSidle { get; set; }
+	public bool IsSidling {get; set; }
+	[Export]
+	private SidleState sidleState;
+	public void StartSidle(SidleTrigger trigger)
+	{
+		sidleState.Trigger = trigger;
+		StateMachine.ChangeState(sidleState);
+	}
+
+	public void SetFoothold(Node foothold) => sidleState.ActiveFoothold = foothold;
+	public void UnsetFoothold(Node foothold)
+	{
+		if(sidleState.ActiveFoothold == foothold)
+			sidleState.ActiveFoothold = null;
 	}
 
 	[Export]

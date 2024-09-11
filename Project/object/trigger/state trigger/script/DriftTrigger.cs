@@ -51,7 +51,8 @@ public partial class DriftTrigger : Area3D
 		isFadingSFX = SoundManager.FadeAudioPlayer(sfx);
 	}
 
-	private void AttemptDrift() // Checks whether the player is in a state where a drift is possible
+	/// <summary> Checks whether the player is in a state where a drift is possible. </summary>
+	private void AttemptDrift()
 	{
 		if (Player.IsDrifting)
 			return;
@@ -77,7 +78,6 @@ public partial class DriftTrigger : Area3D
 			return;
 
 		Player.StartDrift(this);
-		//StartDrift(); // Drift started successfully
 	}
 
 	public void UpdateSfxVolume(float distance)
