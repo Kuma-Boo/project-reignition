@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://uffeqt2qhbs2"]
+[gd_scene load_steps=16 format=3 uid="uid://uffeqt2qhbs2"]
 
 [ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="1_gipeb"]
 [ext_resource type="Resource" uid="uid://du0m4oxktmurb" path="res://resource/level data/evil foundry/Act1Ringless.tres" id="2_ovj8b"]
@@ -6,8 +6,15 @@
 [ext_resource type="PackedScene" uid="uid://caxr4l7dgmca" path="res://area/3 evil foundry/object/scrap/ScrapMachineSupport.tscn" id="4_dsqse"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_413l6"]
 [ext_resource type="PackedScene" uid="uid://cswcb8bgweh5m" path="res://area/3 evil foundry/object/scrap/ScrapMachineShort.tscn" id="5_qmd4g"]
+[ext_resource type="PackedScene" uid="uid://b7ku38xcd8buw" path="res://object/enemy/majin/data/evil foundry/BlueMajin.tscn" id="6_bjnf6"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_h1fdq"]
+[ext_resource type="PackedScene" uid="uid://c3b6ygc13a33j" path="res://object/enemy/majin/data/evil foundry/GreenMajin.tscn" id="7_x8tqf"]
 [ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="8_5jrmk"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="9_twagj"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="10_4c02x"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="11_ptg20"]
+[ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="12_cx2mb"]
+[ext_resource type="PackedScene" uid="uid://dhwwi7i5b0v65" path="res://area/3 evil foundry/object/grindrail/Grindrail02.tscn" id="14_bwl18"]
 
 [node name="RinglessAct" type="Node"]
 
@@ -25,23 +32,75 @@ transform = Transform3D(0.0108906, 0, 0.999941, 0, 1, 0, -0.999941, 0, 0.0108906
 [node name="END" type="Node3D" parent="RinglessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 179.717, 40.2822, -194.038)
 
-[node name="ScrapMachineSupport" parent="RinglessAct/END" instance=ExtResource("4_dsqse")]
+[node name="DECORATION" type="Node3D" parent="RinglessAct/END"]
+
+[node name="ScrapMachineSupport" parent="RinglessAct/END/DECORATION" instance=ExtResource("4_dsqse")]
 transform = Transform3D(0.98762, 0.156865, 0, -0.156865, 0.98762, 0, 0, 0, 1, -32.275, -1.43289, 0.809814)
 
-[node name="ScrapMachineSupport2" parent="RinglessAct/END" instance=ExtResource("4_dsqse")]
+[node name="ScrapMachineSupport2" parent="RinglessAct/END/DECORATION" instance=ExtResource("4_dsqse")]
 transform = Transform3D(0.98762, 0.156865, 0, -0.156865, 0.98762, 0, 0, 0, 1, -25.2343, -2.55118, -0.965332)
 
-[node name="ScrapMachineSupport3" parent="RinglessAct/END" instance=ExtResource("4_dsqse")]
+[node name="ScrapMachineSupport3" parent="RinglessAct/END/DECORATION" instance=ExtResource("4_dsqse")]
 transform = Transform3D(0.98762, 0.156865, 0, -0.156865, 0.98762, 0, 0, 0, 1, -18.347, -3.6451, 0.809814)
 
-[node name="ScrapMachineSupport4" parent="RinglessAct/END" instance=ExtResource("4_dsqse")]
+[node name="ScrapMachineSupport4" parent="RinglessAct/END/DECORATION" instance=ExtResource("4_dsqse")]
 transform = Transform3D(0.98762, 0.156865, 0, -0.156865, 0.98762, 0, 0, 0, 1, -12.6102, -4.5563, -0.965332)
 
-[node name="ScrapMachineShort" parent="RinglessAct/END" instance=ExtResource("5_qmd4g")]
+[node name="ScrapMachineShort" parent="RinglessAct/END/DECORATION" instance=ExtResource("5_qmd4g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.744, -20.2819, -17.1115)
 
-[node name="ScrapMachineShort2" parent="RinglessAct/END" instance=ExtResource("5_qmd4g")]
+[node name="ScrapMachineShort2" parent="RinglessAct/END/DECORATION" instance=ExtResource("5_qmd4g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.8096, -20.2819, -6.70091)
+
+[node name="ScrapMachineShort3" parent="RinglessAct/END/DECORATION" instance=ExtResource("5_qmd4g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.9932, -20.2819, 20.8331)
+
+[node name="ScrapMachineShort4" parent="RinglessAct/END/DECORATION" instance=ExtResource("5_qmd4g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.4819, -20.2819, 20.8331)
+
+[node name="ScrapMachineShort5" parent="RinglessAct/END/DECORATION" instance=ExtResource("5_qmd4g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.9932, -18.2926, 20.8331)
+
+[node name="ScrapMachineShort6" parent="RinglessAct/END/DECORATION" instance=ExtResource("5_qmd4g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.4819, -18.2926, 20.8331)
+
+[node name="ScrapMachineShort7" parent="RinglessAct/END/DECORATION" instance=ExtResource("5_qmd4g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.9932, -16.3474, 20.8331)
+
+[node name="ScrapMachineShort8" parent="RinglessAct/END/DECORATION" instance=ExtResource("5_qmd4g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.4819, -16.3474, 20.8331)
+
+[node name="ENEMIES" type="Node3D" parent="RinglessAct/END"]
+
+[node name="BlueMajin" parent="RinglessAct/END/ENEMIES" instance=ExtResource("6_bjnf6")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -28.9562, -20.296, 35.0259)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(-6, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 10
+
+[node name="BlueMajin2" parent="RinglessAct/END/ENEMIES" instance=ExtResource("6_bjnf6")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.8327, -18.8555, 35.0259)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(-6, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 11
+
+[node name="GreenMajin" parent="RinglessAct/END/ENEMIES" instance=ExtResource("7_x8tqf")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -19.8683, -20.0459, 34.9261)
+rangeOverride = 10
+
+[node name="GreenMajin2" parent="RinglessAct/END/ENEMIES" instance=ExtResource("7_x8tqf")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.630554, -18.9432, 34.9261)
+rangeOverride = 10
+
+[node name="GreenMajin3" parent="RinglessAct/END/ENEMIES" instance=ExtResource("7_x8tqf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.3402, -24.927, -9.23788)
+rangeOverride = 10
 
 [node name="RINGS" type="Node3D" parent="RinglessAct/END"]
 
@@ -417,6 +476,58 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.49691e-07, 0, -2)
 [node name="Child08" parent="RinglessAct/END/RINGS/Rings15" instance=ExtResource("6_h1fdq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.41421, 0, -1.41421)
 
+[node name="Rings16" type="Node3D" parent="RinglessAct/END/RINGS"]
+transform = Transform3D(-4.37114e-08, 0.156434, -0.987688, 0, 0.987688, 0.156434, 1, 6.83797e-09, -4.31732e-08, -18.9842, -20.4038, 33.727)
+script = ExtResource("5_413l6")
+Generate = false
+Source = ExtResource("6_h1fdq")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RinglessAct/END/RINGS/Rings16" instance=ExtResource("6_h1fdq")]
+
+[node name="Child02" parent="RinglessAct/END/RINGS/Rings16" instance=ExtResource("6_h1fdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="RinglessAct/END/RINGS/Rings16" instance=ExtResource("6_h1fdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="RinglessAct/END/RINGS/Rings16" instance=ExtResource("6_h1fdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="RinglessAct/END/RINGS/Rings16" instance=ExtResource("6_h1fdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Rings17" type="Node3D" parent="RinglessAct/END/RINGS"]
+transform = Transform3D(-4.37114e-08, 0.156434, -0.987688, 0, 0.987688, 0.156434, 1, 6.83797e-09, -4.31732e-08, -18.9842, -20.4038, 36.048)
+script = ExtResource("5_413l6")
+Generate = false
+Source = ExtResource("6_h1fdq")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="RinglessAct/END/RINGS/Rings17" instance=ExtResource("6_h1fdq")]
+
+[node name="Child02" parent="RinglessAct/END/RINGS/Rings17" instance=ExtResource("6_h1fdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="RinglessAct/END/RINGS/Rings17" instance=ExtResource("6_h1fdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="RinglessAct/END/RINGS/Rings17" instance=ExtResource("6_h1fdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="RinglessAct/END/RINGS/Rings17" instance=ExtResource("6_h1fdq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
 [node name="PEARLS" type="Node3D" parent="RinglessAct/END"]
 
 [node name="RichPearl" parent="RinglessAct/END/PEARLS" instance=ExtResource("8_5jrmk")]
@@ -424,3 +535,71 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.7719, -17.8622, -17.0537)
 
 [node name="RichPearl2" parent="RinglessAct/END/PEARLS" instance=ExtResource("8_5jrmk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.7719, -17.8622, -6.68875)
+
+[node name="RichPearl3" parent="RinglessAct/END/PEARLS" instance=ExtResource("8_5jrmk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.7719, -17.8622, 6.9314)
+
+[node name="Pearls" type="Node3D" parent="RinglessAct/END/PEARLS"]
+transform = Transform3D(1, 0, 0, 0, 1.19249e-08, 1, 0, -1, 1.19249e-08, -34.7719, -17.8622, 6.9314)
+script = ExtResource("5_413l6")
+Generate = false
+Source = ExtResource("9_twagj")
+Amount = 8
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.5
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="RinglessAct/END/PEARLS/Pearls" instance=ExtResource("9_twagj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
+
+[node name="Child02" parent="RinglessAct/END/PEARLS/Pearls" instance=ExtResource("9_twagj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.353553, 0, 0.353553)
+
+[node name="Child03" parent="RinglessAct/END/PEARLS/Pearls" instance=ExtResource("9_twagj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.37114e-08, 0, 0.5)
+
+[node name="Child04" parent="RinglessAct/END/PEARLS/Pearls" instance=ExtResource("9_twagj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.353553, 0, 0.353553)
+
+[node name="Child05" parent="RinglessAct/END/PEARLS/Pearls" instance=ExtResource("9_twagj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, -4.37114e-08)
+
+[node name="Child06" parent="RinglessAct/END/PEARLS/Pearls" instance=ExtResource("9_twagj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.353553, 0, -0.353553)
+
+[node name="Child07" parent="RinglessAct/END/PEARLS/Pearls" instance=ExtResource("9_twagj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.74228e-08, 0, -0.5)
+
+[node name="Child08" parent="RinglessAct/END/PEARLS/Pearls" instance=ExtResource("9_twagj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.353554, 0, -0.353553)
+
+[node name="GIMMICKS" type="Node3D" parent="RinglessAct/END"]
+
+[node name="Switch" parent="RinglessAct/END/GIMMICKS" instance=ExtResource("10_4c02x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.7184, -20.1679, 14.6326)
+activationLength = 4.0
+
+[node name="Spring" parent="RinglessAct/END/GIMMICKS/Switch" instance=ExtResource("11_ptg20")]
+transform = Transform3D(1, 0, 0, 0, 0.926935, -0.375221, 0, 0.375221, 0.926935, -0.764725, 0, 3.20923)
+distance = 8.0
+launchDirection = 1
+voiceKey = &""
+
+[node name="Spring2" parent="RinglessAct/END/GIMMICKS/Switch" node_paths=PackedStringArray("sfxPlayer") instance=ExtResource("11_ptg20")]
+transform = Transform3D(1, 0, 0, 0, 0.926935, -0.375221, 0, 0.375221, 0.926935, 0.766571, 0, 3.20923)
+distance = 8.0
+launchDirection = 1
+sfxPlayer = NodePath("../Spring/SFX")
+voiceKey = &""
+
+[node name="ItemBoxFlying" parent="RinglessAct/END/GIMMICKS" instance=ExtResource("12_cx2mb")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -35.1328, -16.5848, 32.0265)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 50
+
+[node name="Grindrail" parent="RinglessAct/END/GIMMICKS" instance=ExtResource("14_bwl18")]
+transform = Transform3D(-4.37114e-08, 0.142404, -0.989809, 0, 0.989809, 0.142404, 1, 6.22469e-09, -4.32659e-08, -20.9609, -20.6867, 34.9193)
+
+[connection signal="Activated" from="RinglessAct/END/GIMMICKS/Switch" to="RinglessAct/END/GIMMICKS/Switch/Spring" method="Activate"]
+[connection signal="Activated" from="RinglessAct/END/GIMMICKS/Switch" to="RinglessAct/END/GIMMICKS/Switch/Spring2" method="Activate"]
