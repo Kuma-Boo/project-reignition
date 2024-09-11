@@ -419,6 +419,14 @@ public partial class StageSettings : Node3D
 	// Checkpoint data
 	[Signal]
 	public delegate void TriggeredCheckpointEventHandler();
+	public void ConnectTriggeredCheckpointSignal(ITriggeredCheckpointListener listener, uint flags = 0)
+	{
+		ConnectSignalHelper(typeof(ITriggeredCheckpointListener), listener, SignalName.TriggeredCheckpoint, listener.TriggeredCheckpoint);
+	}
+	public void DisconnectTriggeredCheckpointSignal(ITriggeredCheckpointListener listener)
+	{
+		DisconnectSignalHelper(SignalName.TriggeredCheckpoint, listener.TriggeredCheckpoint);
+	}
 	public Triggers.CheckpointTrigger CurrentCheckpoint { get; private set; }
 	private int CheckpointScore { get; set; }
 	private int CheckpointObjectiveCount { get; set; }
@@ -540,17 +548,22 @@ public partial class StageSettings : Node3D
 	/// <summary>
 	/// This needs to be an extension method but I could not get it to work -- Chris
 	/// </summary>
-	private Error ConnectSignalHelper(Type Interface, object node, StringName signalName, Action method)
+	private Error ConnectSignalHelper(Type Interface, object node, StringName signalName, Action method, uint flags = 0)
 	{
 		if (node.GetType().IsAssignableFrom(Interface))
 		{
 			var callable = Callable.From(method);
 			if (!IsConnected(signalName, callable))
 			{
-				return Connect(signalName, callable);
+				return Connect(signalName, callable, flags);
 			}
 		}
 		return Error.ConnectionError;
+	}
+	private void DisconnectSignalHelper(StringName signalName, Action method)
+	{
+		var callable = Callable.From(method);
+		Disconnect(signalName, callable);
 	}
 }
 

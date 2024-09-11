@@ -5,7 +5,7 @@ using Project.Core;
 namespace Project.Gameplay.Objects;
 
 /// <summary> Responsible for handling the types of eggs that spawn. </summary>
-public partial class PteroEggManager : Node3D
+public partial class PteroEggManager : Node3D, ITriggeredCheckpointListener
 {
 	// In the original game, you could only hold one egg at a time; You can now hold as many as you run across
 	public static readonly Array<PteroEgg> heldEggs = []; // Contains all the eggs the player is currently holding
@@ -22,7 +22,7 @@ public partial class PteroEggManager : Node3D
 	public override void _Ready()
 	{
 		heldEggs.Clear();
-		StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveNestStatus));
+		StageSettings.instance.ConnectTriggeredCheckpointSignal(this);
 		CharacterController.instance.Connect(CharacterController.SignalName.Knockback, new(this, MethodName.Frighten));
 
 		for (int i = 0; i < GetChildCount(); i++)
@@ -42,7 +42,10 @@ public partial class PteroEggManager : Node3D
 			nests[GenerateEggPair(i)].SetType(signModels[type].Instantiate<Node3D>());
 		}
 	}
-
+	public void TriggeredCheckpoint()
+	{
+		SaveNestStatus();
+	}
 	private void SaveNestStatus()
 	{
 		for (int i = 0; i < eggs.Count; i++)

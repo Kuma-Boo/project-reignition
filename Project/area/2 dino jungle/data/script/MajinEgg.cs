@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay.Objects
 {
-	public partial class MajinEgg : Node3D, IPlayerRespawnedListener
+	public partial class MajinEgg : Node3D, IPlayerRespawnedListener, ITriggeredCheckpointListener
 	{
 		[Signal]
 		public delegate void ShatteredEventHandler();
@@ -24,7 +24,7 @@ namespace Project.Gameplay.Objects
 		public override void _Ready()
 		{
 			StageSettings.instance.ConnectRespawnSignal(this);
-			StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveDestructionStatus));
+			StageSettings.instance.ConnectTriggeredCheckpointSignal(this);
 
 			Respawn();
 		}
@@ -102,6 +102,10 @@ namespace Project.Gameplay.Objects
 				Character.Disconnect(CharacterController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
 		}
 
+		public void TriggeredCheckpoint()
+		{
+			SaveDestructionStatus();
+		}
 		private void SaveDestructionStatus() => permanentlyDestroyed = isShattered;
 
 		public void Respawn()

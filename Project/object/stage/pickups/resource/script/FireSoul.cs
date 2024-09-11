@@ -3,7 +3,7 @@ using Project.Core;
 
 namespace Project.Gameplay.Objects;
 
-public partial class FireSoul : Pickup
+public partial class FireSoul : Pickup, ITriggeredCheckpointListener
 {
 	[Export(PropertyHint.Range, "1, 3")]
 	public int fireSoulIndex = 1; // Which fire soul is this?
@@ -39,7 +39,7 @@ public partial class FireSoul : Pickup
 		isCollected = true;
 		Animator.Play("collect");
 		HeadsUpDisplay.instance.CollectFireSoul();
-		StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint), (uint)ConnectFlags.OneShot);
+		StageSettings.instance.ConnectTriggeredCheckpointSignal(this, (uint)ConnectFlags.OneShot);
 	}
 
 	public override void Respawn()
@@ -54,7 +54,7 @@ public partial class FireSoul : Pickup
 		Animator.Play("loop");
 
 		if (StageSettings.instance.IsConnected(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint)))
-			StageSettings.instance.Disconnect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint));
+			StageSettings.instance.DisconnectTriggeredCheckpointSignal(this);
 
 		base.Respawn();
 	}
@@ -67,7 +67,10 @@ public partial class FireSoul : Pickup
 			Animator.Advance(0);
 		}
 	}
-
+	public void TriggeredCheckpoint()
+	{
+		SaveCheckpoint();
+	}
 	private void SaveCheckpoint() => isCollectedInCheckpoint = true;
 
 	public override void Unload()

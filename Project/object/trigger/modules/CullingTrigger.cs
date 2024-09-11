@@ -5,7 +5,7 @@ using Project.Core;
 
 namespace Project.Gameplay.Triggers;
 
-public partial class CullingTrigger : StageTriggerModule
+public partial class CullingTrigger : StageTriggerModule, ITriggeredCheckpointListener
 {
 	[Signal]
 	public delegate void ActivatedEventHandler();
@@ -56,7 +56,7 @@ public partial class CullingTrigger : StageTriggerModule
 			visibleOnCheckpoint = startEnabled;
 
 			//Listen for checkpoint signals
-			Level.Connect(StageSettings.SignalName.TriggeredCheckpoint, new Callable(this, MethodName.ProcessCheckpoint));
+			Level.ConnectTriggeredCheckpointSignal(this);
 			Level.ConnectRespawnSignal(this);
 		}
 
@@ -64,6 +64,10 @@ public partial class CullingTrigger : StageTriggerModule
 	}
 
 	private bool visibleOnCheckpoint;
+	public void TriggeredCheckpoint()
+	{
+		ProcessCheckpoint();
+	}
 	/// <summary> Saves the current visiblity. Called when the player passes a checkpoint. </summary>
 	private void ProcessCheckpoint()
 	{
