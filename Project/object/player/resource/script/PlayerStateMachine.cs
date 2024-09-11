@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 
 namespace Project.Gameplay;
 
@@ -7,15 +8,20 @@ public partial class PlayerStateMachine : Node
 	[Export]
 	private NodePath startingState;
 	private PlayerState currentState;
+	[Export]
+	private Array<NodePath> stateParents;
 
 	public void Initialize(PlayerController player)
 	{
-		foreach (Node child in GetChildren())
+		for (int i = 0; i < stateParents.Count; i++)
 		{
-			if (child is not PlayerState)
-				continue;
+			foreach (Node child in GetNode(stateParents[i]).GetChildren(true))
+			{
+				if (child is not PlayerState)
+					continue;
 
-			(child as PlayerState).Initialize(player);
+				(child as PlayerState).Initialize(player);
+			}
 		}
 
 		ChangeState(GetNode<PlayerState>(startingState));

@@ -1419,15 +1419,15 @@ Effect = NodePath("Components/Sonic/Effect")
 PathFollower = NodePath("Components/PathFollower")
 CollisionSize = Vector2(0.3, 0.4)
 hitboxAnimator = NodePath("Components/Sonic/HitboxTrigger/AnimationPlayer")
-countdownState = NodePath("Components/StateMachine/Countdown")
-launchState = NodePath("Components/StateMachine/Launch")
-grindState = NodePath("Components/StateMachine/Grind")
-sidleState = NodePath("Components/StateMachine/Sidle")
-automationState = NodePath("Components/StateMachine/Automation")
-bounceState = NodePath("Components/StateMachine/Bounce")
-driftState = NodePath("Components/StateMachine/Drift")
-knockbackState = NodePath("Components/StateMachine/Knockback")
-teleportState = NodePath("Components/StateMachine/Teleport")
+countdownState = NodePath("Components/StateMachine/Special/Countdown")
+launchState = NodePath("Components/StateMachine/Special/Launch")
+grindState = NodePath("Components/StateMachine/Special/Grind")
+sidleState = NodePath("Components/StateMachine/Special/Sidle")
+automationState = NodePath("Components/StateMachine/Special/Automation")
+bounceState = NodePath("Components/StateMachine/Special/Bounce")
+driftState = NodePath("Components/StateMachine/Special/Drift")
+knockbackState = NodePath("Components/StateMachine/Special/Knockback")
+teleportState = NodePath("Components/StateMachine/Special/Teleport")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
@@ -1451,9 +1451,12 @@ travelMagnitude = Vector3(1, 0.3, 0.2)
 
 [node name="StateMachine" type="Node" parent="Components"]
 script = ExtResource("2_ehi1f")
-startingState = NodePath("Idle")
+startingState = NodePath("Basic/Idle")
+stateParents = Array[NodePath]([NodePath("Basic"), NodePath("Special")])
 
-[node name="Idle" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState", "backstepState", "crouchState", "jumpState", "backflipState", "fallState")]
+[node name="Basic" type="Node" parent="Components/StateMachine"]
+
+[node name="Idle" type="Node" parent="Components/StateMachine/Basic" node_paths=PackedStringArray("runState", "backstepState", "crouchState", "jumpState", "backflipState", "fallState")]
 script = ExtResource("3_7invc")
 runState = NodePath("../Run")
 backstepState = NodePath("../Backstep")
@@ -1462,7 +1465,7 @@ jumpState = NodePath("../Jump")
 backflipState = NodePath("../Backflip")
 fallState = NodePath("../Fall")
 
-[node name="Run" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState", "backstepState", "slideState", "jumpState", "backflipState")]
+[node name="Run" type="Node" parent="Components/StateMachine/Basic" node_paths=PackedStringArray("fallState", "idleState", "backstepState", "slideState", "jumpState", "backflipState")]
 script = ExtResource("7_1ojgh")
 fallState = NodePath("../Fall")
 idleState = NodePath("../Idle")
@@ -1472,7 +1475,7 @@ jumpState = NodePath("../Jump")
 backflipState = NodePath("../Backflip")
 turningSpeedLossCurve = SubResource("Curve_0y4at")
 
-[node name="Backstep" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "idleState", "runState", "crouchState", "jumpState", "backflipState")]
+[node name="Backstep" type="Node" parent="Components/StateMachine/Basic" node_paths=PackedStringArray("fallState", "idleState", "runState", "crouchState", "jumpState", "backflipState")]
 script = ExtResource("8_0ksv7")
 fallState = NodePath("../Fall")
 idleState = NodePath("../Idle")
@@ -1481,7 +1484,7 @@ crouchState = NodePath("../Crouch")
 jumpState = NodePath("../Jump")
 backflipState = NodePath("../Backflip")
 
-[node name="Jump" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "landState", "stompState", "jumpDashState", "homingAttackState")]
+[node name="Jump" type="Node" parent="Components/StateMachine/Basic" node_paths=PackedStringArray("fallState", "landState", "stompState", "jumpDashState", "homingAttackState")]
 script = ExtResource("4_ufscl")
 fallState = NodePath("../Fall")
 landState = NodePath("../Land")
@@ -1489,42 +1492,44 @@ stompState = NodePath("../Stomp")
 jumpDashState = NodePath("../JumpDash")
 homingAttackState = NodePath("../HomingAttack")
 
-[node name="Backflip" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState", "jumpDashState", "homingAttackState")]
+[node name="Backflip" type="Node" parent="Components/StateMachine/Basic" node_paths=PackedStringArray("landState", "jumpDashState", "homingAttackState")]
 script = ExtResource("9_7wp0f")
 landState = NodePath("../Land")
 jumpDashState = NodePath("../JumpDash")
 homingAttackState = NodePath("../HomingAttack")
 backflipHeight = 2.4
 
-[node name="Stomp" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState")]
+[node name="Stomp" type="Node" parent="Components/StateMachine/Basic" node_paths=PackedStringArray("landState")]
 script = ExtResource("10_eoh5j")
 landState = NodePath("../Land")
 
-[node name="Crouch" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("idleState", "fallState")]
+[node name="Crouch" type="Node" parent="Components/StateMachine/Basic" node_paths=PackedStringArray("idleState", "fallState")]
 script = ExtResource("10_7aiwm")
 idleState = NodePath("../Idle")
 fallState = NodePath("../Fall")
 
-[node name="Slide" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState", "crouchState", "fallState")]
+[node name="Slide" type="Node" parent="Components/StateMachine/Basic" node_paths=PackedStringArray("runState", "crouchState", "jumpState", "backflipState", "fallState")]
 script = ExtResource("11_2eo52")
 runState = NodePath("../Run")
 crouchState = NodePath("../Crouch")
+jumpState = NodePath("../Jump")
+backflipState = NodePath("../Backflip")
 fallState = NodePath("../Fall")
 
-[node name="Fall" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState", "stompState", "jumpDashState", "homingAttackState")]
+[node name="Fall" type="Node" parent="Components/StateMachine/Basic" node_paths=PackedStringArray("landState", "stompState", "jumpDashState", "homingAttackState")]
 script = ExtResource("5_niuke")
 landState = NodePath("../Land")
 stompState = NodePath("../Stomp")
 jumpDashState = NodePath("../JumpDash")
 homingAttackState = NodePath("../HomingAttack")
 
-[node name="Land" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState", "idleState", "backstepState")]
+[node name="Land" type="Node" parent="Components/StateMachine/Basic" node_paths=PackedStringArray("runState", "idleState", "backstepState")]
 script = ExtResource("6_ihvo7")
 runState = NodePath("../Run")
 idleState = NodePath("../Idle")
 backstepState = NodePath("../Backstep")
 
-[node name="JumpDash" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState", "fallState", "stompState")]
+[node name="JumpDash" type="Node" parent="Components/StateMachine/Basic" node_paths=PackedStringArray("landState", "fallState", "stompState")]
 script = ExtResource("11_80bi3")
 landState = NodePath("../Land")
 fallState = NodePath("../Fall")
@@ -1534,7 +1539,7 @@ jumpDashPower = 4.0
 jumpDashGravity = 18.0
 jumpDashMaxGravity = 24.0
 
-[node name="HomingAttack" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState", "stompState", "jumpDashState")]
+[node name="HomingAttack" type="Node" parent="Components/StateMachine/Basic" node_paths=PackedStringArray("landState", "stompState", "jumpDashState")]
 script = ExtResource("12_ssfet")
 landState = NodePath("../Land")
 stompState = NodePath("../Stomp")
@@ -1543,60 +1548,62 @@ normalStrikeSpeed = 50.0
 perfectStrikeSpeed = 100.0
 homingAttackAcceleration = 200.0
 
-[node name="Countdown" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("idleState", "runState")]
+[node name="Special" type="Node" parent="Components/StateMachine"]
+
+[node name="Countdown" type="Node" parent="Components/StateMachine/Special" node_paths=PackedStringArray("idleState", "runState")]
 script = ExtResource("20_0gpee")
-idleState = NodePath("../Idle")
-runState = NodePath("../Run")
+idleState = NodePath("../../Basic/Idle")
+runState = NodePath("../../Basic/Run")
 
-[node name="Teleport" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("idleState")]
+[node name="Teleport" type="Node" parent="Components/StateMachine/Special" node_paths=PackedStringArray("idleState")]
 script = ExtResource("17_h1v2w")
-idleState = NodePath("../Idle")
+idleState = NodePath("../../Basic/Idle")
 
-[node name="Launch" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState", "fallState")]
+[node name="Launch" type="Node" parent="Components/StateMachine/Special" node_paths=PackedStringArray("landState", "fallState")]
 script = ExtResource("13_d17q6")
-landState = NodePath("../Land")
-fallState = NodePath("../Fall")
+landState = NodePath("../../Basic/Land")
+fallState = NodePath("../../Basic/Fall")
 
-[node name="Grind" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("jumpState", "grindstepState", "fallState")]
+[node name="Grind" type="Node" parent="Components/StateMachine/Special" node_paths=PackedStringArray("jumpState", "grindstepState", "fallState")]
 script = ExtResource("17_pl6a2")
-jumpState = NodePath("../Jump")
+jumpState = NodePath("../../Basic/Jump")
 grindstepState = NodePath("../Grindstep")
-fallState = NodePath("../Fall")
+fallState = NodePath("../../Basic/Fall")
 
-[node name="Grindstep" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState", "stompState")]
+[node name="Grindstep" type="Node" parent="Components/StateMachine/Special" node_paths=PackedStringArray("landState", "stompState")]
 script = ExtResource("18_kmt0n")
-landState = NodePath("../Land")
-stompState = NodePath("../Stomp")
+landState = NodePath("../../Basic/Land")
+stompState = NodePath("../../Basic/Stomp")
 
-[node name="Automation" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState")]
+[node name="Automation" type="Node" parent="Components/StateMachine/Special" node_paths=PackedStringArray("runState")]
 script = ExtResource("19_3qddi")
-runState = NodePath("../Run")
+runState = NodePath("../../Basic/Run")
 
-[node name="Drift" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("idleState", "runState", "jumpState")]
+[node name="Drift" type="Node" parent="Components/StateMachine/Special" node_paths=PackedStringArray("idleState", "runState", "jumpState")]
 script = ExtResource("21_jno2g")
-idleState = NodePath("../Idle")
-runState = NodePath("../Run")
-jumpState = NodePath("../Jump")
+idleState = NodePath("../../Basic/Idle")
+runState = NodePath("../../Basic/Run")
+jumpState = NodePath("../../Basic/Jump")
 LockoutSettings = ExtResource("22_d2npt")
 
-[node name="Bounce" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("fallState", "stompState", "jumpDashState", "homingAttackState")]
+[node name="Bounce" type="Node" parent="Components/StateMachine/Special" node_paths=PackedStringArray("fallState", "stompState", "jumpDashState", "homingAttackState")]
 script = ExtResource("21_jghe7")
-fallState = NodePath("../Fall")
-stompState = NodePath("../Stomp")
-jumpDashState = NodePath("../JumpDash")
-homingAttackState = NodePath("../HomingAttack")
+fallState = NodePath("../../Basic/Fall")
+stompState = NodePath("../../Basic/Stomp")
+jumpDashState = NodePath("../../Basic/JumpDash")
+homingAttackState = NodePath("../../Basic/HomingAttack")
 LockoutSettings = ExtResource("22_nv64p")
 bounceSpeed = 5.0
 bounceHeight = 4.0
 
-[node name="Knockback" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("landState")]
+[node name="Knockback" type="Node" parent="Components/StateMachine/Special" node_paths=PackedStringArray("landState")]
 script = ExtResource("23_gpnrh")
-landState = NodePath("../Land")
+landState = NodePath("../../Basic/Land")
 
-[node name="Sidle" type="Node" parent="Components/StateMachine" node_paths=PackedStringArray("runState", "backstepState")]
+[node name="Sidle" type="Node" parent="Components/StateMachine/Special" node_paths=PackedStringArray("runState", "backstepState")]
 script = ExtResource("27_t835u")
-runState = NodePath("../Run")
-backstepState = NodePath("../Backstep")
+runState = NodePath("../../Basic/Run")
+backstepState = NodePath("../../Basic/Backstep")
 
 [node name="Controller" type="Node" parent="Components"]
 script = ExtResource("2_pk07e")
