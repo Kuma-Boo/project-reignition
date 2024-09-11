@@ -68,17 +68,18 @@ public partial class BackflipState : PlayerState
 
 	private void UpdateMoveSpeed()
 	{
+		float inputAngle = Player.Controller.GetTargetMovementAngle(true);
 		float inputStrength = Player.Controller.GetInputStrength();
-		float targetMovementAngle = ExtensionMethods.ClampAngleRange(Player.Controller.GetTargetMovementAngle(), Player.PathFollower.BackAngle, MaxBackflipAdjustment);
-		bool isHoldingForward = Player.Controller.IsHoldingDirection(targetMovementAngle, Player.PathFollower.ForwardAngle);// REFACTOR TODO: Extra arguments? , true, false);
-		bool isHoldingBackward = Player.Controller.IsHoldingDirection(targetMovementAngle, Player.PathFollower.BackAngle);
-		if (isHoldingForward || Input.IsActionPressed("button_brake"))
+
+		if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle) || // REFACTOR TODO: Extra arguments? , true, false);
+			Input.IsActionPressed("button_brake"))
 		{
 			Player.MoveSpeed = Player.Stats.BackflipSettings.UpdateInterpolate(Player.MoveSpeed, -1);
 			return;
 		}
 
-		if (isHoldingBackward)
+		float targetMovementAngle = ExtensionMethods.ClampAngleRange(inputAngle, Player.PathFollower.BackAngle, MaxBackflipAdjustment);
+		if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 			Player.MoveSpeed = Player.Stats.BackflipSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
 		else if (Mathf.IsZeroApprox(inputStrength))
 			Player.MoveSpeed = Player.Stats.BackflipSettings.UpdateInterpolate(Player.MoveSpeed, 0);
