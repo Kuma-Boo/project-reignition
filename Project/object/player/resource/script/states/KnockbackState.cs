@@ -66,6 +66,7 @@ public partial class KnockbackState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.Animator.StopHurt();
 		Player.Animator.ResetState();
 	}
 

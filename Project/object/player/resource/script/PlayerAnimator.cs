@@ -175,7 +175,6 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 		groundTransition.XfadeTime = .05f;
 		animationTree.Set(GroundTransition, EnabledConstant);
-		StopHurt();
 	}
 
 	private void ResetGroundTree()
@@ -759,7 +758,6 @@ public partial class PlayerAnimator : Node3D
 	#region Hurt
 	private readonly StringName HurtTrigger = "parameters/hurt_trigger/request";
 	public void StartHurt() => animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-
 	public void StopHurt() => animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 	#endregion
 
