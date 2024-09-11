@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Godot.Collections;
 using Project.Core;
@@ -552,7 +553,7 @@ public partial class StageSettings : Node3D
 	/// </summary>
 	private Error ConnectSignalHelper(Type Interface, object node, StringName signalName, Action method, uint flags = 0)
 	{
-		if (node.GetType().IsAssignableFrom(Interface))
+		if (node.GetType().GetInterfaces().Contains(Interface))
 		{
 			var callable = Callable.From(method);
 			if (!IsConnected(signalName, callable))
