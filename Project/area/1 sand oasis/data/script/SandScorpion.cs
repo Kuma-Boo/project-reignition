@@ -18,7 +18,7 @@ namespace Project.Gameplay.Bosses
 	ITEMS:
 	After hitting the trigger point (Excluding the first time), change the active itemset to the next lap. Lap 4 doesn't have any items.
 	*/
-	public partial class SandScorpion : Node3D, IPlayerRespawnedListener, IUnloadListener
+	public partial class SandScorpion : Node3D, IPlayerRespawnedListener, IUnloadListener, ILevelStartedListener
 	{
 		[Export]
 		/// <summary> Boss's path follower. </summary>
@@ -98,8 +98,7 @@ namespace Project.Gameplay.Bosses
 
 			StageSettings.instance.ConnectUnloadSignal(this);
 			StageSettings.instance.ConnectRespawnSignal(this);
-
-			StageSettings.instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.StartIntroduction));
+			StageSettings.instance.ConnectLevelStartedSignal(this);
 		}
 
 
@@ -163,6 +162,10 @@ namespace Project.Gameplay.Bosses
 				missilePool[i].QueueFree();
 		}
 
+		public void LevelStarted()
+		{
+			StartIntroduction();
+		}
 
 		private void StartIntroduction()
 		{

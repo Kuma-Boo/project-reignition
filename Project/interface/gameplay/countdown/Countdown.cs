@@ -4,7 +4,7 @@ using Project.Gameplay;
 
 namespace Project.Interface;
 
-public partial class Countdown : Control
+public partial class Countdown : Control, ILevelStartedListener
 {
 	public static bool IsCountdownActive { get; private set; }
 	public static Countdown Instance { get; private set; }
@@ -20,8 +20,12 @@ public partial class Countdown : Control
 	private AnimationPlayer animator;
 
 	public override void _EnterTree() => Instance = this;
-	public override void _Ready() => StageSettings.instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.StartCountdown));
+	public override void _Ready() => StageSettings.instance.ConnectLevelStartedSignal(this);
 
+	public void LevelStarted()
+	{
+		StartCountdown();
+	}
 	public void StartCountdown()
 	{
 		BGMPlayer.StartStageMusic(); // Start BGM
