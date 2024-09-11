@@ -31,9 +31,12 @@ public partial class BackstepState : PlayerState
 		ProcessMoveSpeed();
 		ProcessTurning();
 		Player.ApplyMovement();
-		Player.Animator.BackstepAnimation();
+		Player.CheckGround();
+		Player.CheckWall();
 
-		if (!Player.CheckGround())
+		GD.Print(Player.IsOnWall,Player.MoveSpeed);
+		
+		if (!Player.IsOnGround)
 			return fallState;
 
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
@@ -63,6 +66,7 @@ public partial class BackstepState : PlayerState
 			return crouchState;
 		}
 
+		Player.Animator.BackstepAnimation();
 		return null;
 	}
 

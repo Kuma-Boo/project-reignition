@@ -221,6 +221,8 @@ public partial class PlayerStatsController : Node
 	private int baseBackstepOverspeed;
 	[Export]
 	private int baseBackstepTurnaround;
+	[Export]
+	public float JumpHeight { get; private set; }
 
 	[ExportGroup("Grind Settings")]
 	[Export]

@@ -49,8 +49,10 @@ public partial class GrindStepState : PlayerState
 		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
 		ProcessTurning();
 		Player.ApplyMovement();
+		Player.CheckGround();
+		Player.CheckWall();
 
-		if (Player.CheckGround())
+		if (Player.IsOnGround)
 			return landState;
 
 		if (Player.Controller.IsActionBufferActive)

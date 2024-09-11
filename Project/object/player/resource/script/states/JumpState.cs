@@ -17,8 +17,6 @@ public partial class JumpState : PlayerState
 	private PlayerState homingAttackState;
 
 	[Export]
-	private float jumpHeight = 4.8f;
-	[Export]
 	private float jumpCurve = .95f;
 
 	[Export]
@@ -53,7 +51,7 @@ public partial class JumpState : PlayerState
 		Player.IsOnGround = false;
 		if (Player.IsMovingBackward) // Kill speed when jumping backwards
 			Player.MoveSpeed = 0;
-		Player.VerticalSpeed = Runtime.CalculateJumpPower(jumpHeight);
+		Player.VerticalSpeed = Runtime.CalculateJumpPower(Player.Stats.JumpHeight);
 		Player.ApplyMovement();
 
 		Player.Lockon.IsMonitoring = true;
@@ -83,6 +81,7 @@ public partial class JumpState : PlayerState
 		Player.ApplyMovement();
 		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
 		Player.CheckGround();
+		Player.CheckWall();
 		Player.UpdateUpDirection();
 
 		if (Player.IsOnGround)

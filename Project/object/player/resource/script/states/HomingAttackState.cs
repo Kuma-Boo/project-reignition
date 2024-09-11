@@ -88,19 +88,17 @@ public partial class HomingAttackState : PlayerState
 		Player.Velocity = Player.Lockon.HomingAttackDirection.Normalized() * Player.MoveSpeed;
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Player.Lockon.HomingAttackDirection);
 		Player.MoveAndSlide();
-
-		// REFACTOR TODO switch to bounce state
-		if (Player.GetSlideCollisionCount() != 0)
-		{
-		}
-
 		Player.CheckGround();
+		Player.CheckWall();
 		Player.UpdateUpDirection(true);
 		Player.PathFollower.Resync();
 
 		// REFACTOR TODO Replace this with a wall check and switch to the bounce state instead
-		if (Player.IsOnGround)
-			return landState;
+		if (Player.IsOnGround || Player.GetSlideCollisionCount() != 0)
+		{
+			Player.CallDeferred(PlayerController.MethodName.StartBounce);
+			return null;
+		}
 
 		if (Player.Controller.IsActionBufferActive)
 		{

@@ -120,13 +120,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public void ApplyMovement()
 	{
-		Vector3 movementVelocity = Vector3.Zero;
-		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
-		Vector3 movementDirection = PathFollower.GlobalBasis.Z.Rotated(UpDirection, deltaAngle);
-		movementVelocity += movementDirection * MoveSpeed;
-		movementVelocity += UpDirection * VerticalSpeed;
-		Velocity = movementVelocity;
-
+		Velocity = GetMovementDirection() * MoveSpeed + UpDirection * VerticalSpeed;
 		MoveAndSlide();
 	}
 
@@ -246,6 +240,85 @@ public partial class PlayerController : CharacterBody3D
 		return hit;
 	}
 
+	public new bool IsOnWall { get; set; }
+	// Checks for walls forward and backwards (only in the direction the player is moving).
+	public void CheckWall()
+	{
+		IsOnWall = false;
+		Vector3 velocity = GetMovementDirection();
+		if (Mathf.IsZeroApprox(MoveSpeed)) // No movement
+		{
+			DebugManager.DrawRay(CollisionPosition, velocity * CollisionSize.X, Colors.White);
+			return;
+		}
+
+		// REFACTOR TODO? velocity *= Mathf.Sign(MoveSpeed);
+		float castLength = CollisionSize.X + CollisionPadding + (Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta);
+
+		RaycastHit wallHit = this.CastRay(CollisionPosition, velocity * castLength, CollisionMask, false, GetCollisionExceptions());
+		DebugManager.DrawRay(CollisionPosition, velocity * castLength, wallHit ? Colors.Red : Colors.White);
+
+		if (!ValidateWallCast(wallHit))
+			return;
+
+		float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(wallHit.normal.RemoveVertical(), IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
+		if (wallDelta >= Mathf.Pi * .75f) // Process wall collision 
+		{
+			if (IsJumpDashing &&
+				wallHit.collidedObject.IsInGroup("splash jump") &&
+				SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SplashJump))
+			{
+				// Perform a splash jump
+				// REFACTOR TODO Lockon.StopHomingAttack();
+				Effect.PlaySplashJumpFX();
+				Animator.SplashJumpAnimation();
+				VerticalSpeed = Runtime.CalculateJumpPower(Stats.JumpHeight * .5f);
+				return;
+			}
+
+			// Cancel speed break
+			if (Skills.IsSpeedBreakActive)
+			{
+				float pathDelta = ExtensionMethods.DeltaAngleRad(PathFollower.BackAngle, ExtensionMethods.CalculateForwardAngle(wallHit.normal));
+				if (pathDelta >= Mathf.Pi * .25f) // Snap to path direction
+				{
+					MovementAngle = PathFollower.ForwardAngle;
+					return;
+				}
+
+				Skills.CallDeferred(CharacterSkillManager.MethodName.ToggleSpeedBreak);
+			}
+
+			// Kill speed when jump dashing into a wall to prevent splash jump from becoming obsolete
+			if (IsJumpDashing && wallHit.collidedObject.IsInGroup("splash jump"))
+			{
+				MoveSpeed = 0;
+				VerticalSpeed = Mathf.Clamp(VerticalSpeed, -Mathf.Inf, 0);
+			}
+
+			// Running into wall head-on
+			if (wallDelta >= Mathf.Pi * .8f)
+			{
+				if (wallHit.distance <= CollisionSize.X + CollisionPadding)
+					MoveSpeed = 0; // Kill speed
+				else if (wallHit.distance <= CollisionSize.X + CollisionPadding + (MoveSpeed * PhysicsManager.physicsDelta))
+					MoveSpeed *= .9f; // Slow down drastically
+
+				IsOnWall = true;
+				return;
+			}
+		}
+
+		if (!IsMovingBackward && IsOnGround) // Reduce MoveSpeed when running against walls
+		{
+			float speedClamp = Mathf.Clamp(1.0f - (wallDelta / Mathf.Pi * .4f), 0f, 1f); // Arbitrary formula that works well
+			if (Stats.GroundSettings.GetSpeedRatio(MoveSpeed) > speedClamp)
+				MoveSpeed *= speedClamp;
+		}
+	}
+
+	private bool ValidateWallCast(RaycastHit hit) => hit && hit.collidedObject.IsInGroup("wall");
+	
 	/// <summary> Orientates Root to world direction, then rotates the gimbal on the y-axis. </summary>
 	public void UpdateOrientation(bool allowExternalOrientation = false)
 	{

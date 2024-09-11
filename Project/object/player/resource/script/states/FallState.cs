@@ -21,6 +21,7 @@ public partial class FallState : PlayerState
 		Player.ApplyMovement();
 		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
 		Player.CheckGround();
+		Player.CheckWall();
 		Player.UpdateUpDirection();
 
 		if (Player.IsOnGround)

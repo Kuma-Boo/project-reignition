@@ -51,9 +51,7 @@ public partial class RunState : PlayerState
 		ProcessTurning();
 		Player.AddSlopeSpeed();
 		Player.ApplyMovement();
-
-		Player.Animator.RunAnimation();
-		ProcessBrakeAnimation();
+		Player.CheckWall();
 
 		if (!Player.IsLockoutDisablingActions)
 		{
@@ -88,6 +86,8 @@ public partial class RunState : PlayerState
 		if (Player.Controller.GetHoldingDistance(Player.MovementAngle, Player.PathFollower.ForwardAngle) >= 1.0f)
 			return backstepState;
 
+		Player.Animator.RunAnimation();
+		ProcessBrakeAnimation();
 		return null;
 	}
 
