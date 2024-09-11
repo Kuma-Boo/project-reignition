@@ -18,7 +18,7 @@ namespace Project.Gameplay.Bosses
 	ITEMS:
 	After hitting the trigger point (Excluding the first time), change the active itemset to the next lap. Lap 4 doesn't have any items.
 	*/
-	public partial class SandScorpion : Node3D
+	public partial class SandScorpion : Node3D, IPlayerRespawnedListener
 	{
 		[Export]
 		/// <summary> Boss's path follower. </summary>

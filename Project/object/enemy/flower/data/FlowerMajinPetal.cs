@@ -3,7 +3,7 @@ using Project.Core;
 
 namespace Project.Gameplay;
 
-public partial class FlowerMajinPetal : Node3D
+public partial class FlowerMajinPetal : Node3D, IPlayerRespawnedListener
 {
 	[Export]
 	private BoneAttachment3D attachment;

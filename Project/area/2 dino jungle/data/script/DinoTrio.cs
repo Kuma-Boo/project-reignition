@@ -3,7 +3,7 @@ using Project.Core;
 
 namespace Project.Gameplay;
 
-public partial class DinoTrio : PathFollow3D
+public partial class DinoTrio : PathFollow3D, IPlayerRespawnedListener
 {
 	[Signal]
 	public delegate void DamagedPlayerEventHandler();
@@ -68,7 +68,7 @@ public partial class DinoTrio : PathFollow3D
 		Respawn();
 	}
 
-	private void Respawn()
+	public void Respawn()
 	{
 		Progress = 0;
 		moveSpeed = rubberbandingSpeed = 0;

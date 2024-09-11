@@ -8,7 +8,7 @@ namespace Project.Gameplay;
 /// Generic moving object. Doesn't affect rotations.
 /// </summary>
 [Tool]
-public partial class MovingObject : Node3D
+public partial class MovingObject : Node3D, IPlayerRespawnedListener
 {
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()

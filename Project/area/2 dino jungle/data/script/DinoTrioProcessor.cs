@@ -3,7 +3,7 @@ using Project.Core;
 
 namespace Project.Gameplay;
 
-public partial class DinoTrioProcessor : Path3D
+public partial class DinoTrioProcessor : Path3D, IPlayerRespawnedListener
 {
 	public static DinoTrioProcessor Instance;
 
@@ -146,7 +146,7 @@ public partial class DinoTrioProcessor : Path3D
 		attackTimer = AttackInterval;
 	}
 
-	private void Respawn()
+	public void Respawn()
 	{
 		hitRecoveryTimer = 0;
 		attackTimer = AttackInterval;

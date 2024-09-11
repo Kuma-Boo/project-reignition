@@ -5,7 +5,7 @@ namespace Project.Gameplay
 	/// <summary>
 	/// Hanging scrap found in Evil Foundry.
 	/// </summary>
-	public partial class HangingScrap : Node3D
+	public partial class HangingScrap : Node3D, IPlayerRespawnedListener
 	{
 		[Export]
 		private AnimationPlayer animator;

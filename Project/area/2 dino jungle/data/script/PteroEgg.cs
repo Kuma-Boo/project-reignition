@@ -4,7 +4,7 @@ using Project.Core;
 namespace Project.Gameplay.Objects;
 
 /// <summary> For that one act in Dinosaur Jungle. Follows the player until damage is taken. </summary>
-public partial class PteroEgg : Area3D
+public partial class PteroEgg : Area3D, IPlayerRespawnedListener
 {
 	/// <summary> Emitted when the egg is back in the nest. </summary>
 	[Signal]
@@ -94,7 +94,7 @@ public partial class PteroEgg : Area3D
 	// Called when the player takes damage or respawns
 	public void Frighten() => Animator.Play("frighten");
 
-	private void Respawn()
+	public void Respawn()
 	{
 		if (IgnoreRespawn) return; // Don't respawn if we're already at the nest. Don't force the player to redo stuff they already did.
 

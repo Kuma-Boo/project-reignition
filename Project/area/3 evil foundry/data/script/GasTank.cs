@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Project.Gameplay.Objects
 {
 	[Tool]
-	public partial class GasTank : Area3D
+	public partial class GasTank : Area3D, IPlayerRespawnedListener
 	{
 
 		[Export]
@@ -41,7 +41,7 @@ namespace Project.Gameplay.Objects
 		}
 
 
-		private void Respawn()
+		public void Respawn()
 		{
 			travelTime = 0;
 			isTraveling = false;

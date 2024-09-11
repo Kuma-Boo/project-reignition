@@ -6,7 +6,7 @@ namespace Project.Gameplay.Objects;
 
 /// <summary> Mash the action button for maximum speed. </summary>
 [Tool]
-public partial class FlyingPot : Node3D
+public partial class FlyingPot : Node3D, IPlayerRespawnedListener
 {
 	[Export]
 	public Vector2 travelBounds;
@@ -78,7 +78,7 @@ public partial class FlyingPot : Node3D
 		}
 	}
 
-	private void Respawn()
+	public void Respawn()
 	{
 		angle = 0f;
 		velocity = 0f;

@@ -6,7 +6,7 @@ namespace Project.Gameplay.Triggers;
 /// <summary>
 /// Handles sidle behaviour.
 /// </summary>
-public partial class SidleTrigger : Area3D
+public partial class SidleTrigger : Area3D, IPlayerRespawnedListener
 {
 	[Signal]
 	public delegate void ActivatedEventHandler();

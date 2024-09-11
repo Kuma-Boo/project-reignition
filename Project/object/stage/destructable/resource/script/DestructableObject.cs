@@ -6,7 +6,7 @@ namespace Project.Gameplay.Objects;
 /// <summary>
 /// Object that shatters when destroyed. All pieces must be a child of pieceRoot.
 /// </summary>
-public partial class DestructableObject : Node3D
+public partial class DestructableObject : Node3D, IPlayerRespawnedListener
 {
 	[Signal]
 	public delegate void ShatteredEventHandler();

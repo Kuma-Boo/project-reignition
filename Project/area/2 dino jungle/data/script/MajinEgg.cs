@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay.Objects
 {
-	public partial class MajinEgg : Node3D
+	public partial class MajinEgg : Node3D, IPlayerRespawnedListener
 	{
 		[Signal]
 		public delegate void ShatteredEventHandler();
@@ -104,7 +104,7 @@ namespace Project.Gameplay.Objects
 
 		private void SaveDestructionStatus() => permanentlyDestroyed = isShattered;
 
-		private void Respawn()
+		public void Respawn()
 		{
 			if (permanentlyDestroyed)
 				return;

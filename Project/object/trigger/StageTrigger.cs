@@ -8,7 +8,7 @@ namespace Project.Gameplay.Triggers
 	/// Automatically sets up signals for children that inherit from StageTriggerModule.
 	/// </summary>
 	[Tool]
-	public partial class StageTrigger : Area3D
+	public partial class StageTrigger : Area3D, IPlayerRespawnedListener
 	{
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()

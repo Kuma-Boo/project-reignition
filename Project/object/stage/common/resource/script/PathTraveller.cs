@@ -9,7 +9,7 @@ namespace Project.Gameplay.Objects;
 /// the cannon in Pirate Storm,
 /// and the carpet in Night Palace.
 /// </summary>
-public partial class PathTraveller : Node3D
+public partial class PathTraveller : Node3D, IPlayerRespawnedListener
 {
 	[Signal]
 	public delegate void ActivatedEventHandler();

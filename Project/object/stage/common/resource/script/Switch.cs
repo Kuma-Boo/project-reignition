@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay.Objects;
 
-public partial class Switch : Area3D
+public partial class Switch : Area3D, IPlayerRespawnedListener
 {
 	[Signal]
 	public delegate void ActivatedEventHandler();

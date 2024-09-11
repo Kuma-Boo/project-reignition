@@ -4,7 +4,7 @@ using Project.Core;
 namespace Project.Gameplay;
 
 /// <summary> Handles the logic of the T-Rex found in Dinosaur Jungle Act 1. </summary>
-public partial class DinoRex : Node3D
+public partial class DinoRex : Node3D, IPlayerRespawnedListener
 {
 	[Export]
 	private Node3D root;
@@ -50,7 +50,7 @@ public partial class DinoRex : Node3D
 		Respawn();
 	}
 
-	private void Respawn()
+	public void Respawn()
 	{
 		isAttacking = false;
 		currentState = targetState = RexStates.Idle;
