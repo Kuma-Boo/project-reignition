@@ -78,7 +78,7 @@ public partial class BounceState : PlayerState
 		Player.VerticalSpeed -= Runtime.Gravity * PhysicsManager.physicsDelta;
 		Player.ApplyMovement();
 
-		if (!Player.IsBouncing) // Lockout has ended
+		if (!Player.IsLockoutActive || Player.ActiveLockoutData != LockoutSettings) // Lockout has ended
 			return fallState;
 
 		if (!Player.Lockon.IsMonitoring)
