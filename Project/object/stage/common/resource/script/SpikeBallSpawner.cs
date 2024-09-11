@@ -7,7 +7,7 @@ namespace Project.Gameplay.Hazards
 	/// <summary>
 	/// Continuously spawns spike balls at a given rate.
 	/// </summary>
-	public partial class SpikeBallSpawner : Node3D
+	public partial class SpikeBallSpawner : Node3D, IUnloadListener
 	{
 		/// <summary> Timer to keep track of spawn interval. </summary>
 		private float timer;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Project.Gameplay;
 
-public partial class Enemy : Node3D, IPlayerRespawnedListener
+public partial class Enemy : Node3D, IPlayerRespawnedListener, IUnloadListener
 {
 	private static readonly Dictionary<int, CylinderShape3D> CollisionShapeList = [];
 

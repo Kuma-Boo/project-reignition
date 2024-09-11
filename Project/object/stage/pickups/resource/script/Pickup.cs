@@ -2,7 +2,7 @@ using Godot;
 
 namespace Project.Gameplay.Objects
 {
-	public partial class Pickup : Area3D, IPlayerRespawnedListener
+	public partial class Pickup : Area3D, IPlayerRespawnedListener, IUnloadListener
 	{
 		[Signal]
 		public delegate void CollectedEventHandler();

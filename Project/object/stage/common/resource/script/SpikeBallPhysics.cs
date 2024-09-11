@@ -3,7 +3,7 @@ using Project.Core;
 
 namespace Project.Gameplay.Hazards
 {
-	public partial class SpikeBallPhysics : RigidBody3D
+	public partial class SpikeBallPhysics : RigidBody3D, IUnloadListener
 	{
 		/// <summary> Spikeball's current lifetime. </summary>
 		private float Lifetime { get; set; }
@@ -56,6 +56,6 @@ namespace Project.Gameplay.Hazards
 			ProcessMode = ProcessModeEnum.Disabled;
 		}
 
-		private void Unload() => QueueFree();
+		public void Unload() => QueueFree();
 	}
 }
