@@ -384,8 +384,6 @@ public partial class PlayerAnimator : Node3D
 	{
 		if (offensive)
 		{
-			// Offensive stomp animation
-			Player.Effect.StartStompFX();
 			UpdateAirState(StompState, false);
 			animationTree.Set(StompTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		}

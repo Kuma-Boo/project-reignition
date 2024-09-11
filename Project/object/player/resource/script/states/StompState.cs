@@ -29,13 +29,21 @@ public partial class StompState : PlayerState
 		allowLandingSkills = true;
 		*/
 
-		bool attackStomp = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompAttack);
-		if (attackStomp)
+		bool isAttackStomp = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompAttack);
+		Player.Animator.StompAnimation(isAttackStomp);
+		if (isAttackStomp)
 		{
 			Player.AttackState = PlayerController.AttackStates.Weak;
 			Player.ChangeHitbox("stomp");
+			Player.Effect.StartStompFX();
 		}
-		Player.Animator.StompAnimation(attackStomp);
+	}
+
+	public override void ExitState()
+	{
+		Player.Effect.StopStompFX();
+		Player.ChangeHitbox("RESET");
+		Player.AttackState = PlayerController.AttackStates.None;
 	}
 
 	public override PlayerState ProcessPhysics()
