@@ -136,7 +136,7 @@ public partial class GrindState : PlayerState
 		if (ActiveGrindRail != null) // Already grinding
 			return false;
 
-		if (Player.VerticalSpeed >= 0f) // Player must be falling to start grinding!
+		if (Player.VerticalSpeed > 0f) // Player can't snap to grind rails when moving upwards
 			return false;
 
 		// Resync Grindrail's PathFollower
