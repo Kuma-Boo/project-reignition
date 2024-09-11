@@ -19,6 +19,9 @@ public partial class BackflipState : PlayerState
 
 	public override void EnterState()
 	{
+		if (Player.Skills.IsSpeedBreakActive)
+			Player.Skills.ToggleSpeedBreak();
+
 		turningVelocity = 0;
 		Player.IsOnGround = false;
 		Player.IsMovingBackward = true;

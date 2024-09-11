@@ -37,6 +37,9 @@ public partial class JumpState : PlayerState
 
 	public override void EnterState()
 	{
+		if (Player.Skills.IsSpeedBreakActive)
+			Player.Skills.ToggleSpeedBreak();
+
 		/* REFACTOR TODO
 		currentJumpTime = ignoreAccelerationJump ? ACCELERATION_JUMP_LENGTH + PhysicsManager.physicsDelta : 0;
 		allowLandingSkills = true;
