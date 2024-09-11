@@ -6,7 +6,7 @@ namespace Project.Gameplay;
 /// <summary>
 /// Displays game data to the player. Only handles the graphics.
 /// </summary>
-public partial class HeadsUpDisplay : Control
+public partial class HeadsUpDisplay : Control, IObjectiveChangedListener
 {
 	public static HeadsUpDisplay instance;
 	private StageSettings Stage => StageSettings.instance;
@@ -217,10 +217,13 @@ public partial class HeadsUpDisplay : Control
 		objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
 		objectiveMaxValue.Text = Stage.Data.MissionObjectiveCount.ToString("00");
 
-		Stage.Connect(nameof(StageSettings.SignalName.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
+		Stage.ConnectObjectiveChangedSignal(this);
 		Stage.Connect(nameof(StageSettings.SignalName.ObjectiveReset), new Callable(this, nameof(ResetObjective)));
 	}
-
+	public void ObjectiveChanged()
+	{
+		UpdateObjective();
+	}
 	private void UpdateObjective()
 	{
 		if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Objective ||

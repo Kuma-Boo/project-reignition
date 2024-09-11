@@ -308,6 +308,10 @@ public partial class StageSettings : Node3D
 	public int CurrentObjectiveCount { get; private set; } // How much has the player currently completed?
 	[Signal]
 	public delegate void ObjectiveChangedEventHandler(); // Progress towards the objective has changed
+	public void ConnectObjectiveChangedSignal(IObjectiveChangedListener listener)
+	{
+		ConnectSignalHelper(typeof(IObjectiveChangedListener), listener, SignalName.ObjectiveChanged, listener.ObjectiveChanged);
+	}
 	[Signal]
 	public delegate void ObjectiveResetEventHandler(); // Progress towards the objective has changed
 	public void IncrementObjective()
