@@ -51,9 +51,6 @@ public partial class LaunchState : PlayerState
 
 	public override void ExitState()
 	{
-		settings.Launcher?.Deactivate();
-		settings = new();
-
 		Player.MoveSpeed = settings.HorizontalVelocity * .5f; // Prevent too much movement
 		Player.VerticalSpeed = Player.IsOnGround ? 0 : settings.FinalVerticalVelocity;
 
@@ -65,6 +62,9 @@ public partial class LaunchState : PlayerState
 		Player.Animator.ResetState();
 
 		Player.EmitSignal(PlayerController.SignalName.LaunchFinished);
+
+		settings.Launcher?.Deactivate();
+		settings = new();
 	}
 
 	public override PlayerState ProcessPhysics()
