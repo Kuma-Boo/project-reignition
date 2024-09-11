@@ -34,8 +34,6 @@ public partial class BackstepState : PlayerState
 		Player.CheckGround();
 		Player.CheckWall();
 
-		GD.Print(Player.IsOnWall,Player.MoveSpeed);
-		
 		if (!Player.IsOnGround)
 			return fallState;
 

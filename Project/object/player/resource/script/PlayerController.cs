@@ -318,7 +318,7 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	private bool ValidateWallCast(RaycastHit hit) => hit && hit.collidedObject.IsInGroup("wall");
-	
+
 	/// <summary> Orientates Root to world direction, then rotates the gimbal on the y-axis. </summary>
 	public void UpdateOrientation(bool allowExternalOrientation = false)
 	{
@@ -580,9 +580,10 @@ public partial class PlayerController : CharacterBody3D
 
 	[Export]
 	private BounceState bounceState;
-	public bool IsBouncing => IsLockoutActive && ActiveLockoutData == bounceState.LockoutSettings;
+	public bool IsBouncing { get; set; }
 	public void StartBounce(bool isUpwardBounce = true)
 	{
+		IsBouncing = true;
 		bounceState.IsUpwardBounce = isUpwardBounce;
 		StateMachine.ChangeState(bounceState);
 	}

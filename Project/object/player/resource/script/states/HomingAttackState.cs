@@ -51,22 +51,21 @@ public partial class HomingAttackState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.AttackState = PlayerController.AttackStates.None;
 		Player.Lockon.IsHomingAttacking = false;
 		Player.Lockon.ResetLockonTarget();
-		Player.Effect.StopTrailFX();
-
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire) && Player.IsBouncing)
-		{
-			Player.Skills.ActivateFireCrestBurst();
-			return;
-		}
-
-		Player.AttackState = PlayerController.AttackStates.None;
+		Player.ChangeHitbox("RESET");
 		Player.Effect.StopSpinFX();
-		/* REFACTOR TODO?
-			Change state Player.ResetActionState();
-			PlayerMachine.ChangeState
-		*/
+		Player.Effect.StopTrailFX();
+		Player.Animator.ResetState();
+
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire))
+			return;
+
+		if (Player.IsBouncing)
+			Player.Skills.ActivateFireCrestBurst();
+		else
+			Player.Skills.DeactivateFireCrest();
 	}
 
 	public override PlayerState ProcessPhysics()
@@ -94,7 +93,7 @@ public partial class HomingAttackState : PlayerState
 		bool isColliding = Player.GetSlideCollisionCount() != 0;
 		if (Player.IsOnGround || (isColliding && ProcessEnvironmentCollision()))
 		{
-			Player.CallDeferred(PlayerController.MethodName.StartBounce, false);
+			Player.StartBounce();
 			return null;
 		}
 

@@ -54,7 +54,7 @@ public partial class BounceState : PlayerState
 			Player.MoveSpeed = -bounceSpeed;
 		}
 
-		if (Player.IsBouncing) return;
+		if (Player.IsLockoutActive && Player.ActiveLockoutData == LockoutSettings) return;
 
 		Player.CanJumpDash = true;
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
@@ -68,6 +68,7 @@ public partial class BounceState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.IsBouncing = false;
 		Player.RemoveLockoutData(LockoutSettings);
 	}
 
