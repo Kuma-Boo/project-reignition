@@ -461,21 +461,15 @@ public partial class StageSettings : Node3D
 	public override void _ExitTree() => EmitSignal(SignalName.Unloaded);
 	public void ConnectUnloadSignal(IUnloadListener listener)
 	{
-		var callable = Callable.From(listener.Unload);
-		if (!IsConnected(SignalName.Unloaded, callable))
-			Connect(SignalName.Unloaded, callable);
+		ConnectSignalHelper(typeof(IUnloadListener), listener, SignalName.Unloaded, listener.Unload);
 	}
 
 	[Signal]
 	public delegate void RespawnedEventHandler();
 	public void ConnectRespawnSignal(IPlayerRespawnedListener listener)
 	{
-		var callable = Callable.From(listener.Respawn);
-
-		if (!IsConnected(SignalName.Respawned, callable))
-			Connect(SignalName.Respawned, callable, (uint)ConnectFlags.Deferred);
+		ConnectSignalHelper(typeof(IPlayerRespawnedListener), listener, SignalName.Respawned, listener.Respawn);
 	}
-
 	public void RespawnObjects()
 	{
 		SoundManager.instance.CancelDialog(); // Cancel any active dialog
