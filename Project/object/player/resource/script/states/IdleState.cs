@@ -25,7 +25,8 @@ public partial class IdleState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		Player.Animator.IdleAnimation();
+		if(Player.Skills.IsSpeedBreakActive)
+			return runState;
 
 		if (Player.Controller.IsJumpBufferActive)
 		{
@@ -52,20 +53,21 @@ public partial class IdleState : PlayerState
 			return fallState;
 
 		Player.CheckWall();
-		if(Player.IsOnWall)
-			return null;
-
-		if (Player.IsLockoutActive && Player.ActiveLockoutData.overrideSpeed && !Mathf.IsZeroApprox(Player.ActiveLockoutData.speedRatio))
-			return runState;
-
-		if (!Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) && !Input.IsActionPressed("button_brake"))
+		if(!Player.IsOnWall)
 		{
-			if (Player.Controller.GetHoldingDistance(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle) >= 1.0f)
-				return backstepState;
+			if (Player.IsLockoutActive && Player.ActiveLockoutData.overrideSpeed && !Mathf.IsZeroApprox(Player.ActiveLockoutData.speedRatio))
+				return runState;
 
-			return runState;
+			if (!Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) && !Input.IsActionPressed("button_brake"))
+			{
+				if (Player.Controller.GetHoldingDistance(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle) >= 1.0f)
+					return backstepState;
+
+				return runState;
+			}
 		}
 
+		Player.Animator.IdleAnimation();
 		return null;
 	}
 }
