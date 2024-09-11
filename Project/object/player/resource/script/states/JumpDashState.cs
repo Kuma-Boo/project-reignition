@@ -8,6 +8,8 @@ public partial class JumpDashState : PlayerState
 	[Export]
 	private PlayerState landState;
 	[Export]
+	private PlayerState fallState;
+	[Export]
 	private PlayerState stompState;
 	[Export]
 	private float jumpDashSpeed;
@@ -62,6 +64,24 @@ public partial class JumpDashState : PlayerState
 
 		if (Player.IsOnGround)
 			return landState;
+
+		if (Player.IsOnWall && Player.WallRaycastHit.collidedObject.IsInGroup("splash jump"))
+		{
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SplashJump))
+			{
+				// Perform a splash jump
+				Player.Lockon.IsHomingAttacking = false;
+				Player.Lockon.ResetLockonTarget();
+				Player.Effect.PlaySplashJumpFX();
+				Player.Animator.SplashJumpAnimation();
+				Player.VerticalSpeed = Runtime.CalculateJumpPower(Player.Stats.JumpHeight * .5f);
+				return fallState;
+			}
+
+			// Kill speed when jump dashing into a wall to prevent splash jump from becoming obsolete
+			Player.MoveSpeed = 0;
+			Player.VerticalSpeed = Mathf.Clamp(Player.VerticalSpeed, -Mathf.Inf, 0);
+		}
 
 		if (Player.Controller.IsActionBufferActive)
 		{

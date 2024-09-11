@@ -241,6 +241,7 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	public new bool IsOnWall { get; set; }
+	public RaycastHit WallRaycastHit { get; set; }
 	// Checks for walls forward and backwards (only in the direction the player is moving).
 	public void CheckWall()
 	{
@@ -252,34 +253,25 @@ public partial class PlayerController : CharacterBody3D
 			return;
 		}
 
-		// REFACTOR TODO? velocity *= Mathf.Sign(MoveSpeed);
 		float castLength = CollisionSize.X + CollisionPadding + (Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta);
 
-		RaycastHit wallHit = this.CastRay(CollisionPosition, velocity * castLength, CollisionMask, false, GetCollisionExceptions());
-		DebugManager.DrawRay(CollisionPosition, velocity * castLength, wallHit ? Colors.Red : Colors.White);
+		WallRaycastHit = this.CastRay(CollisionPosition, velocity * castLength, CollisionMask, false, GetCollisionExceptions());
+		DebugManager.DrawRay(CollisionPosition, velocity * castLength, WallRaycastHit ? Colors.Red : Colors.White);
 
-		if (!ValidateWallCast(wallHit))
-			return;
-
-		float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(wallHit.normal.RemoveVertical(), IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
-		if (wallDelta >= Mathf.Pi * .75f) // Process wall collision 
+		if (!ValidateWallCast())
 		{
-			if (IsJumpDashing &&
-				wallHit.collidedObject.IsInGroup("splash jump") &&
-				SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SplashJump))
-			{
-				// Perform a splash jump
-				// REFACTOR TODO Lockon.StopHomingAttack();
-				Effect.PlaySplashJumpFX();
-				Animator.SplashJumpAnimation();
-				VerticalSpeed = Runtime.CalculateJumpPower(Stats.JumpHeight * .5f);
-				return;
-			}
+			WallRaycastHit = new();
+			return;
+		}
 
+		float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(WallRaycastHit.normal.RemoveVertical(), IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
+		GD.Print(wallDelta);
+		if (wallDelta >= Mathf.Pi * .75f) // Process head-on collision
+		{
 			// Cancel speed break
 			if (Skills.IsSpeedBreakActive)
 			{
-				float pathDelta = ExtensionMethods.DeltaAngleRad(PathFollower.BackAngle, ExtensionMethods.CalculateForwardAngle(wallHit.normal));
+				float pathDelta = ExtensionMethods.DeltaAngleRad(PathFollower.BackAngle, ExtensionMethods.CalculateForwardAngle(WallRaycastHit.normal));
 				if (pathDelta >= Mathf.Pi * .25f) // Snap to path direction
 				{
 					MovementAngle = PathFollower.ForwardAngle;
@@ -289,24 +281,13 @@ public partial class PlayerController : CharacterBody3D
 				Skills.CallDeferred(CharacterSkillManager.MethodName.ToggleSpeedBreak);
 			}
 
-			// Kill speed when jump dashing into a wall to prevent splash jump from becoming obsolete
-			if (IsJumpDashing && wallHit.collidedObject.IsInGroup("splash jump"))
-			{
-				MoveSpeed = 0;
-				VerticalSpeed = Mathf.Clamp(VerticalSpeed, -Mathf.Inf, 0);
-			}
+			if (WallRaycastHit.distance <= CollisionSize.X + CollisionPadding)
+				MoveSpeed = 0; // Kill speed
+			else if (WallRaycastHit.distance <= CollisionSize.X + CollisionPadding + (MoveSpeed * PhysicsManager.physicsDelta))
+				MoveSpeed *= .9f; // Slow down drastically
 
-			// Running into wall head-on
-			if (wallDelta >= Mathf.Pi * .8f)
-			{
-				if (wallHit.distance <= CollisionSize.X + CollisionPadding)
-					MoveSpeed = 0; // Kill speed
-				else if (wallHit.distance <= CollisionSize.X + CollisionPadding + (MoveSpeed * PhysicsManager.physicsDelta))
-					MoveSpeed *= .9f; // Slow down drastically
-
-				IsOnWall = true;
-				return;
-			}
+			IsOnWall = true;
+			return;
 		}
 
 		if (!IsMovingBackward && IsOnGround) // Reduce MoveSpeed when running against walls
@@ -317,7 +298,7 @@ public partial class PlayerController : CharacterBody3D
 		}
 	}
 
-	private bool ValidateWallCast(RaycastHit hit) => hit && hit.collidedObject.IsInGroup("wall");
+	private bool ValidateWallCast() => WallRaycastHit && WallRaycastHit.collidedObject.IsInGroup("wall");
 
 	/// <summary> Orientates Root to world direction, then rotates the gimbal on the y-axis. </summary>
 	public void UpdateOrientation(bool allowExternalOrientation = false)
