@@ -47,6 +47,7 @@ public partial class PlayerController : CharacterBody3D
 		// Initialize state machine last to ensure components are ready		
 		StateMachine.Initialize(this);
 
+		SnapToGround();
 		GetParent<CheckpointTrigger>().Activate(); // Save initial checkpoint
 	}
 
@@ -238,6 +239,16 @@ public partial class PlayerController : CharacterBody3D
 		}
 
 		return hit;
+	}
+
+	/// <summary> Attempts to snap the player to the ground. </summary>
+	public void SnapToGround()
+	{
+		KinematicCollision3D collision = MoveAndCollide(-UpDirection * 100.0f, true);
+		if (collision == null) return;
+
+		GlobalPosition = collision.GetPosition();
+		Animator.SnapToGround();
 	}
 
 	public new bool IsOnWall { get; set; }
@@ -716,14 +727,93 @@ public partial class PlayerController : CharacterBody3D
 		EmitSignal(SignalName.Defeated);
 	}
 
-	public void StartRespawn(bool useDebugCheckpoint = false)
+	public void StartRespawn(bool debugRespawn = false)
 	{
-		GD.PrintErr("Respawn hasn't been implemented yet.");
+		if (TransitionManager.IsTransitionActive || IsTeleporting || IsDefeated || !Stage.IsLevelIngame) return;
+
+		DefeatPlayer();
+
+		if (!debugRespawn)
+		{
+			// Level failed
+			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Deathless
+				|| Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect)
+			{
+				Stage.FinishLevel(false);
+				return;
+			}
+		}
+
+		// Fade screen out and connect signals
+		TransitionManager.StartTransition(new()
+		{
+			inSpeed = .5f,
+			outSpeed = .5f,
+			color = Colors.Black // Use Colors.Transparent for debugging
+		});
+
+		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.ProcessRespawn), (uint)ConnectFlags.OneShot);
 	}
 
-	public void Teleport(TeleportTrigger tr)
+	private void ProcessRespawn()
 	{
-		GD.PrintErr("Teleport hasn't been implemented yet.");
+		// TODO Revert to idle state?
+		AllowLandingSkills = false; // Disable landing skills temporarily
+		Skills.IsSpeedBreakEnabled = Skills.IsTimeBreakEnabled = true; // Reenable soul skills
+
+		invincibilityTimer = 0;
+		Teleport(Stage.CurrentCheckpoint);
+		BonusManager.instance.CancelBonuses();
+		Stage.RevertToCheckpointData();
+		PathFollower.SetActivePath(Stage.CurrentCheckpoint.PlayerPath); // Revert path
+		Camera.PathFollower.SetActivePath(Stage.CurrentCheckpoint.CameraPath);
+
+		IsDefeated = false;
+		IsMovingBackward = false;
+		MoveSpeed = VerticalSpeed = 0;
+
+		// Clear any collision exceptions
+		foreach (Node exception in GetCollisionExceptions())
+			RemoveCollisionExceptionWith(exception);
+
+		// Wait a single physics frame to ensure objects update properly
+		GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishRespawn));
+	}
+
+	/// <summary> Final step of the respawn process. Re-enable area collider and finish transition. </summary>
+	private void FinishRespawn()
+	{
+		PathFollower.Resync();
+		Camera.Respawn();
+		MovementAngle = PathFollower.ForwardAngle; // Reset movement angle
+
+		UpDirection = Vector3.Up;
+
+		if (Stage.CurrentCheckpoint == null) // Default to parent node's position
+			Transform = Transform3D.Identity;
+		else
+			GlobalTransform = Stage.CurrentCheckpoint.GlobalTransform;
+
+		Animator.SnapRotation(MovementAngle);
+
+		SnapToGround();
+		ChangeHitbox("RESET");
+
+		Stage.RespawnObjects();
+		Stage.IncrementRespawnCount();
+		Stage.UpdateRingCount(Skills.RespawnRingCount, StageSettings.MathModeEnum.Replace, true); // Reset ring count
+		invincibilityTimer = 0; // Reset invincibility
+
+		TransitionManager.FinishTransition();
+	}
+
+	[Export]
+	private TeleportState teleportState;
+	public bool IsTeleporting { get; set; }
+	public void Teleport(TeleportTrigger trigger)
+	{
+		teleportState.UpdateTrigger(trigger);
+		StateMachine.ChangeState(teleportState);
 	}
 
 	[Signal]
