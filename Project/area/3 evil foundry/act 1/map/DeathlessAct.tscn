@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bddurtsrkx5gf"]
+[gd_scene load_steps=33 format=3 uid="uid://bddurtsrkx5gf"]
 
 [ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="1_8qxdg"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_qk3u2"]
@@ -19,7 +19,9 @@
 [ext_resource type="PackedScene" uid="uid://dogm6wyurmt4" path="res://area/3 evil foundry/object/grindrail/Grindrail03.tscn" id="17_mr6ev"]
 [ext_resource type="PackedScene" path="res://area/3 evil foundry/object/Elevator.tscn" id="18_834aa"]
 [ext_resource type="PackedScene" path="res://area/3 evil foundry/object/Fan.tscn" id="18_ddkmk"]
+[ext_resource type="Script" path="res://resource/script/StaggerAnimationPlayers.cs" id="18_i7kb8"]
 [ext_resource type="PackedScene" uid="uid://lqag3j32861" path="res://area/3 evil foundry/object/grindrail/Grindrail04.tscn" id="19_q274s"]
+[ext_resource type="PackedScene" uid="uid://sylhinlbnh0v" path="res://area/3 evil foundry/object/TippingFurnace.tscn" id="19_r1r1j"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="19_xdhlr"]
 [ext_resource type="PackedScene" uid="uid://b7ku38xcd8buw" path="res://object/enemy/majin/data/evil foundry/BlueMajin.tscn" id="20_kkn76"]
 [ext_resource type="PackedScene" uid="uid://bdxneanubmcid" path="res://area/3 evil foundry/object/GasTank.tscn" id="21_kry2n"]
@@ -40,6 +42,9 @@ max_value = 10.0
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 0.75), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_cvoto"]
+size = Vector3(5, 20, 20)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_t3h8b"]
 size = Vector3(15, 13, 12.9072)
 
@@ -58,6 +63,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -532, -45, -360)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="DeathlessAct/SpawnPosition" instance=ExtResource("2_qk3u2")]
+enableStartFX = true
 
 [node name="LoadZoneTriggers" type="Node3D" parent="DeathlessAct"]
 
@@ -457,6 +463,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.23)
 
 [node name="Furnace" parent="DeathlessAct/SpikeHallway" instance=ExtResource("7_uib7b")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 64.1842, 3.16241, 2.93552)
+visible = false
+
+[node name="Furnace2" parent="DeathlessAct/SpikeHallway" instance=ExtResource("7_uib7b")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 71.6726, 4.0723, 2.93552)
+visible = false
+
+[node name="Furnace3" parent="DeathlessAct/SpikeHallway" instance=ExtResource("7_uib7b")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 80.757, 4.96471, 2.93552)
+visible = false
 
 [node name="Grindrail" parent="DeathlessAct/SpikeHallway" instance=ExtResource("17_mr6ev")]
 transform = Transform3D(-4.37114e-08, -0.112041, -0.993704, 0, 0.993704, -0.112041, 1, -4.89748e-09, -4.34362e-08, 51.4996, 1.97189, 6.24069)
@@ -482,11 +497,29 @@ Spacing = 0.0
 [node name="Child01" parent="DeathlessAct/SpikeHallway/Grindrail/Rail RichRing" instance=ExtResource("6_upu1a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.1283, 3.05874, 0)
 
-[node name="Furnace2" parent="DeathlessAct/SpikeHallway" instance=ExtResource("7_uib7b")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 71.6726, 4.0723, 2.93552)
+[node name="FurnaceTraps" type="Node3D" parent="DeathlessAct/SpikeHallway"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1842, 3.16241, 3.7355)
 
-[node name="Furnace3" parent="DeathlessAct/SpikeHallway" instance=ExtResource("7_uib7b")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 80.757, 4.96471, 2.93552)
+[node name="Trigger" parent="DeathlessAct/SpikeHallway/FurnaceTraps" instance=ExtResource("4_vuoeu")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/SpikeHallway/FurnaceTraps/Trigger"]
+transform = Transform3D(0.967828, 0, -0.251613, 0, 1, 0, 0.251613, 0, 0.967828, -10.5785, 6.7704, 0.890259)
+shape = SubResource("BoxShape3D_cvoto")
+
+[node name="StaggerAnimations" type="Node" parent="DeathlessAct/SpikeHallway/FurnaceTraps" node_paths=PackedStringArray("AnimationPlayers")]
+script = ExtResource("18_i7kb8")
+AnimationPlayers = [NodePath("../TippingFurnace/AnimationPlayer"), NodePath("../TippingFurnace2/AnimationPlayer"), NodePath("../TippingFurnace3/AnimationPlayer")]
+StaggerTime = 0.3
+AnimationName = "event"
+
+[node name="TippingFurnace" parent="DeathlessAct/SpikeHallway/FurnaceTraps" instance=ExtResource("19_r1r1j")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="TippingFurnace2" parent="DeathlessAct/SpikeHallway/FurnaceTraps" instance=ExtResource("19_r1r1j")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 7.4884, 0.909889, 3.05176e-05)
+
+[node name="TippingFurnace3" parent="DeathlessAct/SpikeHallway/FurnaceTraps" instance=ExtResource("19_r1r1j")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 16.5728, 1.8023, 3.05176e-05)
 
 [node name="LavaHallway" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -275, -55, -355)
@@ -699,7 +732,11 @@ shape = SubResource("BoxShape3D_t3h8b")
 [connection signal="Activated" from="DeathlessAct/LoadZoneTriggers/Elevators-Load" to="DeathlessAct/Elevators" method="Activate"]
 [connection signal="Activated" from="DeathlessAct/LoadZoneTriggers/LavaHallway2-Unload" to="DeathlessAct/LavaHallway2" method="Deactivate"]
 [connection signal="Activated" from="DeathlessAct/LoadZoneTriggers/End-Load" to="DeathlessAct/End" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/SpikeHallway/FurnaceTraps/Trigger" to="DeathlessAct/SpikeHallway/FurnaceTraps/StaggerAnimations" method="Run"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]
 [editable path="DeathlessAct/SpikeHallway/Grindrail"]
+[editable path="DeathlessAct/SpikeHallway/FurnaceTraps/TippingFurnace"]
+[editable path="DeathlessAct/SpikeHallway/FurnaceTraps/TippingFurnace2"]
+[editable path="DeathlessAct/SpikeHallway/FurnaceTraps/TippingFurnace3"]
