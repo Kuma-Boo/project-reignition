@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
@@ -532,6 +533,22 @@ public partial class StageSettings : Node3D
 	/// <summary> Reference to active area's WorldEnvironment node. </summary>
 	[Export]
 	public WorldEnvironment Environment { get; private set; }
+
+	/// <summary>
+	/// This needs to be an extension method but I could not get it to work -- Chris
+	/// </summary>
+	private Error ConnectSignalHelper(Type Interface, object node, StringName signalName, Action method)
+	{
+		if (node.GetType().IsAssignableFrom(Interface))
+		{
+			var callable = Callable.From(method);
+			if (!IsConnected(signalName, callable))
+			{
+				return Connect(signalName, callable);
+			}
+		}
+		return Error.ConnectionError;
+	}
 }
 
 public struct SpawnData(Node parent, Transform3D transform)
