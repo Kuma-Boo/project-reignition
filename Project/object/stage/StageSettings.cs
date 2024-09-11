@@ -100,9 +100,12 @@ public partial class StageSettings : Node3D
 			nodes = GetChildren(child, nodes);
 		return nodes;
 	}
-
 	[Signal]
 	public delegate void LevelStartedEventHandler();
+	public void ConnectLevelStartedSignal(ILevelStartedListener listener)
+	{
+		ConnectSignalHelper(typeof(ILevelStartedListener), listener, SignalName.LevelStarted, listener.LevelStarted);
+	}
 	private int probeFrameCounter;
 	private const int PROBE_FRAME_COUNT_LENGTH = 90;
 	public override void _Process(double _)
