@@ -314,6 +314,10 @@ public partial class StageSettings : Node3D
 	}
 	[Signal]
 	public delegate void ObjectiveResetEventHandler(); // Progress towards the objective has changed
+	public void ConnectObjectiveResetSignal(IObjectiveResetListener listener)
+	{
+		ConnectSignalHelper(typeof(IObjectiveResetListener), listener, SignalName.ObjectiveReset, listener.ObjectiveReset);
+	}
 	public void IncrementObjective()
 	{
 		CurrentObjectiveCount++;
