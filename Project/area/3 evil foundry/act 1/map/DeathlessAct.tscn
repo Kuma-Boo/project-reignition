@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bddurtsrkx5gf"]
+[gd_scene load_steps=34 format=3 uid="uid://bddurtsrkx5gf"]
 
 [ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="1_8qxdg"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_qk3u2"]
@@ -35,6 +35,13 @@ size = Vector3(5, 20, 20)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_csbec"]
 size = Vector3(20, 5, 20)
+
+[sub_resource type="Curve3D" id="Curve3D_wv2bb"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 1, 0, 0, -1, 0, 0, -2, 0, 7, 0, 0, 1, 0, 0, 0, -4, 0, 5, 0, 0, 0, 0, 0, -1, -4, 0, 0, -1, 0, 0, 1, 0, 0, -2, 0, -2, 0, 0, -1, 0, 0, 0, 0, 0, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 7
 
 [sub_resource type="Curve" id="Curve_30x12"]
 min_value = -10.0
@@ -245,8 +252,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
 [node name="RichRing" parent="DeathlessAct/StartingHallway" instance=ExtResource("6_upu1a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.9064, 0.24963, -0.905304)
 
-[node name="GolemMajin" parent="DeathlessAct/StartingHallway" instance=ExtResource("7_nfp1y")]
+[node name="GolemPath" type="Path3D" parent="DeathlessAct/StartingHallway"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 35.7907, -0.5, 1.03372)
+curve = SubResource("Curve3D_wv2bb")
+
+[node name="PathFollower" type="PathFollow3D" parent="DeathlessAct/StartingHallway/GolemPath"]
+transform = Transform3D(0.999997, 0, 0, 0, 1, 0, 0, 0, 0.999997, 0, 0, 0)
+use_model_front = true
+cubic_interp = false
+tilt_enabled = false
+
+[node name="GolemMajin" parent="DeathlessAct/StartingHallway/GolemPath/PathFollower" node_paths=PackedStringArray("pathFollower", "gasTank") instance=ExtResource("7_nfp1y")]
+transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0, -7.62939e-06)
+pathFollower = NodePath("..")
+gasTank = NodePath("../../../GasTank")
 
 [node name="Traps" type="Node3D" parent="DeathlessAct/StartingHallway"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.5978, 0, 0)
@@ -279,6 +298,8 @@ transform = Transform3D(0.984808, 0, 0.173648, -0.173648, -4.37114e-08, 0.984808
 
 [node name="GreenMajin" parent="DeathlessAct/StartingHallway" instance=ExtResource("10_ac17n")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 92.5941, 3.08256, 0)
+
+[node name="GasTank" parent="DeathlessAct/StartingHallway" instance=ExtResource("21_kry2n")]
 
 [node name="Spiral" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -417.03, -30, -360)
