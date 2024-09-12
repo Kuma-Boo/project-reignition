@@ -75,6 +75,7 @@ public partial class GrindState : PlayerState
 		float launchAngle = ActiveGrindRail.PathFollower.Up().AngleTo(Vector3.Up) * Mathf.Sign(ActiveGrindRail.PathFollower.Up().Y);
 		Player.MoveSpeed = Mathf.Cos(launchAngle) * launchSpeed;
 		Player.VerticalSpeed = Mathf.Sin(launchAngle) * -launchSpeed;
+
 		Player.Skills.IsSpeedBreakEnabled = true;
 
 		if (!Player.IsGrindstepping) // Smoother transition to falling animation
@@ -286,7 +287,6 @@ public partial class GrindState : PlayerState
 		DebugManager.DrawRay(Player.CenterPosition, Player.PathFollower.Forward() * length, hit ? Colors.Red : Colors.White);
 
 		// Block grinding through objects in the given group
-		GD.PrintT(hit, hit.collidedObject?.IsInGroup("grind wall"));
 		if (hit && hit.collidedObject.IsInGroup("grind wall"))
 			return hit;
 

@@ -17,20 +17,24 @@ public partial class LaunchState : PlayerState
 		if (settings.startPosition.IsEqualApprox(settings.endPosition)) // Launcher initialization error
 			return false;
 
-		if (this.settings.Launcher != null && this.settings.Launcher == settings.Launcher) // Already launching
+		if (this.settings.Launcher != null &&
+			this.settings.Launcher == settings.Launcher) // Already launching
+		{
 			return false;
+		}
 
 		this.settings = settings;
 		return true;
 	}
 
-	public override void EnterState()
+    public override void EnterState()
 	{
 		launcherTime = 0;
 
 		Player.IsOnGround = false;
 		Player.IsMovingBackward = false;
-		Player.MoveSpeed = Player.VerticalSpeed = 0;
+		Player.MoveSpeed = settings.HorizontalVelocity;
+		Player.VerticalSpeed = settings.InitialVerticalVelocity;
 
 		Player.Lockon.IsMonitoring = false; // Disable lockon monitoring while launch is active
 		Player.AttackState = PlayerController.AttackStates.OneShot; // Launchers always oneshot all enemies
@@ -64,6 +68,7 @@ public partial class LaunchState : PlayerState
 		Player.EmitSignal(PlayerController.SignalName.LaunchFinished);
 
 		settings.Launcher?.Deactivate();
+		settings = new();
 	}
 
 	public override PlayerState ProcessPhysics()
