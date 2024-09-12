@@ -109,7 +109,7 @@ public partial class GrindState : PlayerState
 	{
 		// Check wall
 		float movementDelta = Player.MoveSpeed * PhysicsManager.physicsDelta;
-		RaycastHit hit = CheckWall(ActiveGrindRail, movementDelta);
+		RaycastHit hit = CheckWall(movementDelta);
 		if (hit && hit.collidedObject is StaticBody3D) // Stop player when colliding with a static body
 		{
 			movementDelta = 0; // Limit movement distance
@@ -148,7 +148,7 @@ public partial class GrindState : PlayerState
 			return false;
 
 		// Ignore grinds that would immediately put the player into a wall
-		if (CheckWall(grindrail, Player.Stats.GrindSettings.Speed * PhysicsManager.physicsDelta))
+		if (CheckWall(Player.Stats.GrindSettings.Speed * PhysicsManager.physicsDelta))
 			return false;
 
 		delta = grindrail.PathFollower.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindrail.PathFollower.GlobalPosition);
@@ -272,13 +272,14 @@ public partial class GrindState : PlayerState
 			BonusManager.instance.QueueBonus(new(BonusType.GrindShuffle));
 	}
 
-	private RaycastHit CheckWall(Node3D castNode, float length)
+	private RaycastHit CheckWall(float length)
 	{
 		length += Player.CollisionSize.X;
-		RaycastHit hit = castNode.CastRay(castNode.GlobalPosition, castNode.Forward() * length, Player.CollisionMask);
-		DebugManager.DrawRay(castNode.GlobalPosition, castNode.Forward() * length, hit ? Colors.Red : Colors.White);
+		RaycastHit hit = Player.CastRay(Player.CenterPosition, Player.PathFollower.Forward() * length, Player.CollisionMask);
+		DebugManager.DrawRay(Player.CenterPosition, Player.PathFollower.Forward() * length, hit ? Colors.Red : Colors.White);
 
 		// Block grinding through objects in the given group
+		GD.PrintT(hit, hit.collidedObject?.IsInGroup("grind wall"));
 		if (hit && hit.collidedObject.IsInGroup("grind wall"))
 			return hit;
 
