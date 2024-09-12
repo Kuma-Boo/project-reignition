@@ -51,6 +51,7 @@ public partial class SlideState : PlayerState
 	public override void ExitState()
 	{
 		Player.DisableSidle = false;
+		Player.ChangeHitbox("RESET");
 
 		if (!Mathf.IsZeroApprox(Player.MoveSpeed))
 		{

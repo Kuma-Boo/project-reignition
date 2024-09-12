@@ -12,10 +12,12 @@ public partial class CrouchState : PlayerState
 	public override void EnterState()
 	{
 		Player.Animator.StartCrouching();
+		Player.ChangeHitbox("crouch");
 	}
 
 	public override void ExitState()
 	{
+		Player.ChangeHitbox("RESET");
 		float inputStrength = Player.Controller.GetInputStrength();
 		if (!Mathf.IsZeroApprox(inputStrength)) // Transition into moving state
 		{
