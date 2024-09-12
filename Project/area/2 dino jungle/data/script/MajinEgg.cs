@@ -73,8 +73,6 @@ namespace Project.Gameplay.Objects
 			else if (currentHealth == 2)
 				animator.Play("crack-01");
 
-			/*
-			REFACTOR TODO
 			if (Player.IsJumpDashOrHomingAttack)
 			{
 				// Copied from Enemy.cs UpdateLockon method
@@ -84,9 +82,8 @@ namespace Project.Gameplay.Objects
 				if (!isShattered)
 					Player.Camera.SetDeferred("LockonTarget", this);
 
-				Player.Lockon.StartBounce(isShattered);
+				Player.StartBounce(isShattered);
 			}
-			*/
 
 			SetInteractionProcessed();
 		}

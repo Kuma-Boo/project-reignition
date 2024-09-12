@@ -50,7 +50,7 @@ public partial class Catapult : Launcher
 			return;
 		}
 
-		if (aimSFX.Playing) // REFACTOR TODO && Player.ExternalController != this)
+		if (aimSFX.Playing && Player.ExternalController != this)
 			SoundManager.FadeAudioPlayer(aimSFX);
 
 		switch (currentState)
@@ -67,12 +67,10 @@ public partial class Catapult : Launcher
 	private void ProcessLaunch()
 	{
 		tweener.CustomStep(PhysicsManager.physicsDelta);
-		/* REFACTOR TODO
 		if (Player.ExternalController != this)
 			return;
 
 		Player.UpdateExternalControl();
-		*/
 		if (armNode.Rotation.X < Mathf.Pi * .5f)
 			return;
 
@@ -104,10 +102,7 @@ public partial class Catapult : Launcher
 			aimSFX.Play();
 
 		UpdateArmRotation();
-		/*
-		REFACTOR TODO
 		Player.UpdateExternalControl();
-		*/
 	}
 
 	private void UpdateArmRotation()
@@ -121,11 +116,9 @@ public partial class Catapult : Launcher
 		currentState = CatapultState.Control;
 
 		Player.Effect.StartSpinFX();
-		/* REFACTOR TODO
 		Player.StartExternal(this, playerPositionNode);
 		Player.Animator.StartSpin(3f);
 		Player.Animator.SnapRotation(0);
-		*/
 
 		launchRatio = 1f;
 		targetLaunchPower = 0f;
@@ -144,8 +137,7 @@ public partial class Catapult : Launcher
 
 		if (isCancel)
 		{
-			// REFACTOR TODO
-			// Player.Effect.StopSpinFX();
+			Player.Effect.StopSpinFX();
 			tweener.TweenProperty(armNode, "rotation", Vector3.Zero, .2f * (1 - launchRatio)).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
 			tweener.TweenCallback(new Callable(this, MethodName.CancelCatapult));
 		}
@@ -166,8 +158,7 @@ public partial class Catapult : Launcher
 		launchRatio = Mathf.SmoothStep(0, 1, launchRatio);
 		base.Activate();
 
-		// REFACTOR TODO
-		// Player.Animator.IsFallTransitionEnabled = false;
+		Player.Animator.IsFallTransitionEnabled = false;
 	}
 
 	private void CancelCatapult()
@@ -185,8 +176,7 @@ public partial class Catapult : Launcher
 		settings.IsJump = true;
 		Player.StartLauncher(settings);
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
-		// REFACTOR TODO
-		// Player.Animator.SnapRotation(Player.MovementAngle); // Reset visual rotation
+		Player.Animator.SnapRotation(Player.MovementAngle); // Reset visual rotation
 		enterSFX.Play();
 		EmitSignal(SignalName.PlayerExited);
 	}

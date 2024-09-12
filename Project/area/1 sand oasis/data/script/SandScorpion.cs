@@ -963,11 +963,8 @@ namespace Project.Gameplay.Bosses
 
 		public void ProcessHitboxCollision()
 		{
-			/*
-			REFACTOR TODO
-			if (Player.Lockon.IsHomingAttacking || Player.Lockon.IsBounceLockoutActive) return; // Player's homing attack always takes priority.
-			*/
-			if (damageState == DamageState.Knockback) return; // Boss is in knockback and can't damage the player.
+			if (Player.Lockon.IsHomingAttacking || Player.IsBouncing) return; // Player's homing attack always takes priority
+			if (damageState == DamageState.Knockback) return; // Boss is in knockback and can't damage the player
 
 			if (Player.Skills.IsSpeedBreakActive)
 			{
@@ -1005,7 +1002,7 @@ namespace Project.Gameplay.Bosses
 
 		private void ProcessFlyingEyeCollision()
 		{
-			// REFACTOR TODO if (Player.Lockon.IsBounceLockoutActive) return; // Player just finished a homing attack
+			if (Player.IsBouncing) return; // Player just finished a homing attack
 
 			if (Player.Skills.IsSpeedBreakActive) // Special attack
 			{
@@ -1098,7 +1095,7 @@ namespace Project.Gameplay.Bosses
 
 			StartHitFX();
 			rootAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-			// REFACTOR TODO Player.Lockon.StartBounce();
+			Player.StartBounce();
 			damageState = DamageState.Hitstun;
 			Runtime.Instance.SpawnPearls(TraversalEyePearlAmount, Player.GlobalPosition, new Vector2(2, 1.5f));
 

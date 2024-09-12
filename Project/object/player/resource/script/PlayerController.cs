@@ -165,7 +165,7 @@ public partial class PlayerController : CharacterBody3D
 			return IsOnGround;
 		}
 
-		if (IsOnGround) // REFACTOR TODO Move to state?
+		if (IsOnGround)
 		{
 			IsOnGround = false;
 			Animator.IsFallTransitionEnabled = true;
@@ -274,6 +274,7 @@ public partial class PlayerController : CharacterBody3D
 		}
 
 		float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(WallRaycastHit.normal.RemoveVertical(), IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
+		// REFACTOR TODO Fix this
 		GD.Print(wallDelta);
 		if (wallDelta >= Mathf.Pi * .75f) // Process head-on collision
 		{
@@ -323,37 +324,10 @@ public partial class PlayerController : CharacterBody3D
 	public void UpdateUpDirection(bool quickReset = true, Vector3 upDirection = new())
 	{
 		// Calculate target up direction
-		/* REFACTOR TODO
-		// Calculate reset factor
-		float orientationResetFactor;
-		if (ActionState == ActionStates.Stomping ||
-			ActionState == ActionStates.JumpDash ||
-			ActionState == ActionStates.Backflip) // Quickly reset when stomping/homing attacking
-		{
-			orientationResetFactor = .2f;
-		}
-		else if (VerticalSpeed > 0)
-		{
-			orientationResetFactor = .01f;
-		}
-		else
-		{
-			orientationResetFactor = VerticalSpeed * .2f / Runtime.MaxGravity;
-		}
-		*/
-
-		// Calculate target up direction
-		if (Camera.ActiveSettings.followPathTilt)
-		{
-			// Always use PathFollower.Up when on a tilted path.
+		if (Camera.ActiveSettings.followPathTilt) // Always use PathFollower.Up when on a tilted path
 			upDirection = PathFollower.Up();
-		}
 		else if (upDirection.IsEqualApprox(Vector3.Zero))
-		{
 			upDirection = Vector3.Up;
-			if (Camera.ActiveSettings.followPathTilt) // Use PathFollower.Up when on a tilted path.
-				upDirection = PathFollower.Up();
-		}
 
 		// Calculate reset factor
 		float resetFactor = .2f;
@@ -519,8 +493,10 @@ public partial class PlayerController : CharacterBody3D
 	public bool IsJumpDashing { get; set; }
 	public bool IsJumpDashOrHomingAttack => IsJumpDashing || Lockon.IsHomingAttacking;
 	public bool IsAccelerationJumping { get; set; }
-	public bool DisableAccelerationJump { get; set; }
 	public bool IsBackflipping { get; set; }
+	public bool IsStomping { get; set; }
+	public bool ForceAccelerationJump { get; set; }
+	public bool DisableAccelerationJump { get; set; }
 	public bool DisableDamage { get; set; }
 	/// <summary> True while the player is defeated but hasn't respawned yet. </summary>
 	public bool IsDefeated { get; set; }
@@ -530,7 +506,6 @@ public partial class PlayerController : CharacterBody3D
 	[Export]
 	private CountdownState countdownState;
 	public void StartCountdown() => StateMachine.ChangeState(countdownState);
-
 
 	[Signal]
 	public delegate void LaunchFinishedEventHandler();
@@ -708,7 +683,7 @@ public partial class PlayerController : CharacterBody3D
 		}
 	}
 
-	public bool IsInvincible => invincibilityTimer != 0 || DisableDamage; // REFACTOR TODO ActionState == ActionStates.Teleport;
+	public bool IsInvincible => invincibilityTimer != 0 || DisableDamage || IsTeleporting;
 	private float invincibilityTimer;
 	private const float InvincibilityLength = 3f;
 	public void StartInvincibility(float timeScale = 1f)

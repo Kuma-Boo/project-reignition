@@ -17,13 +17,11 @@ namespace Project.Gameplay.Objects
 		{
 			if (!isInteractingWithPlayer) return;
 
-			/*
-			REFACTOR TODO
-			if (!Player.Skills.IsSpeedBreakActive && Player.ActionState != PlayerController.ActionStates.JumpDash) return;
+			if (!Player.Skills.IsSpeedBreakActive && !Player.IsJumpDashOrHomingAttack) return;
 
 			if (Player.IsJumpDashOrHomingAttack) // Bounce the player if necessary
 				Player.StartBounce();
-			*/
+
 			eventHandler.Activate();
 		}
 

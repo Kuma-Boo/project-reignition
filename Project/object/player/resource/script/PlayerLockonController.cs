@@ -130,14 +130,14 @@ public partial class PlayerLockonController : Node3D
 		// REFACTOR TODO
 		// Check Height
 		bool isTargetAttackable = IsHomingAttacking ||
-			(Target.GlobalPosition.Y <= Player.CenterPosition.Y + (Player.CollisionSize.Y * 2.0f));
-		// && Player.ActionState != PlayerController.ActionStates.JumpDash);
+			(Target.GlobalPosition.Y <= Player.CenterPosition.Y + (Player.CollisionSize.Y * 2.0f) &&
+			Player.IsJumpDashOrHomingAttack);
 		/*
 		if (IsBounceLockoutActive && !CanInterruptBounce)
 			isTargetAttackable = false;
 		*/
 
-		Vector2 screenPos = Vector2.One * .5f; // REFACTOR TODO Player.Camera.ConvertToScreenSpace(Target.GlobalPosition);
+		Vector2 screenPos = Player.Camera.ConvertToScreenSpace(Target.GlobalPosition);
 		UpdateLockonReticle(screenPos, isTargetAttackable, wasTargetChanged);
 	}
 
@@ -205,7 +205,6 @@ public partial class PlayerLockonController : Node3D
 		/* REFACTOR TODO
 			Remove this check and have the player simply transition
 		 	bounce state when colliding with something instead.
-		*/
 		// Check from the player's feet if nothing was hit
 		Vector3 castOffset = Vector3.Up * Player.CollisionSize.Y * .5f;
 		castPosition = Player.GlobalPosition + castOffset;
@@ -220,6 +219,7 @@ public partial class PlayerLockonController : Node3D
 		{
 			return true;
 		}
+		*/
 
 		return false;
 	}

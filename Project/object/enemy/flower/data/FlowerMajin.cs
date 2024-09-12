@@ -157,7 +157,7 @@ public partial class FlowerMajin : Enemy
 		if (!IsStaggered && Player.AttackState == PlayerController.AttackStates.None)
 		{
 			StartStaggerState();
-			// REFACTOR TODO Player.StartBounce(false);
+			Player.StartBounce(false);
 			UpdateLockon();
 			return;
 		}

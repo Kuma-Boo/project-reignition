@@ -7,6 +7,8 @@ public partial class KnockbackState : PlayerState
 {
 	[Export]
 	private PlayerState landState;
+	[Export]
+	private PlayerState jumpState;
 	public KnockbackSettings Settings { get; set; }
 	public KnockbackSettings PreviousSettings { get; set; }
 	private readonly float DamageFriction = 20f;
@@ -80,11 +82,8 @@ public partial class KnockbackState : PlayerState
 			Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
-			/*
-			REFACTOR TODO
-			Player.ForceAccelerationJump = false;
+			Player.ForceAccelerationJump = true;
 			return jumpState;
-			*/
 		}
 
 		if (!Settings.stayOnGround && Player.CheckGround())

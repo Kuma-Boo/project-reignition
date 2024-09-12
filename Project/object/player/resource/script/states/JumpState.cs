@@ -40,17 +40,15 @@ public partial class JumpState : PlayerState
 		if (Player.Skills.IsSpeedBreakActive)
 			Player.Skills.ToggleSpeedBreak();
 
-		/* REFACTOR TODO
-		currentJumpTime = ignoreAccelerationJump ? ACCELERATION_JUMP_LENGTH + PhysicsManager.physicsDelta : 0;
-		allowLandingSkills = true;
-		*/
+		Player.AllowLandingSkills = true;
 
 		turningVelocity = 0;
 		jumpTimer = 0;
 		isShortenedJump = false;
 		isAccelerationJump = false;
-		isAccelerationJumpQueued = false;
+		isAccelerationJumpQueued = Player.ForceAccelerationJump;
 
+		Player.ForceAccelerationJump = false;
 		Player.IsOnGround = false;
 		if (Player.IsMovingBackward) // Kill speed when jumping backwards
 			Player.MoveSpeed = 0;

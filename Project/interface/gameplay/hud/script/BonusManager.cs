@@ -128,11 +128,9 @@ public partial class BonusManager : VBoxContainer
 	/// <summary> Checks whether the enemy chain should end. </summary>
 	public void UpdateEnemyChain()
 	{
-		/*
-		REFACTOR TODO
-		if (Player.JustLandedOnGround || !Player.IsOnGround) return; // Chain is never counted when the player is in the air
-		if (Player.MovementState != PlayerController.MovementStates.Normal) return; // Chains only end during normal movement
-		*/
+		if (!Player.IsOnGround) return; // Chain is never counted when the player is in the air
+		if (Player.ExternalController != null) return; // Chains only end during normal movement
+
 		if (Player.Skills.IsSpeedBreakActive)
 		{
 			enemyChainTimer = ENEMY_CHAIN_BUFFER;

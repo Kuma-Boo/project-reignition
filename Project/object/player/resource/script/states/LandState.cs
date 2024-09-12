@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay;
 
@@ -35,21 +36,15 @@ public partial class LandState : PlayerState
 		Player.Animator.LandingAnimation();
 		Player.Effect.PlayLandingFX();
 
-		/*
-		REFACTOR TODO
-		if (allowLandingSkills && MovementState == MovementStates.Normal)
+		if (Player.AllowLandingSkills)
 		{
 			// Apply landing skills
 			CheckLandingBoost();
 			CheckLandingSoul();
 		}
 
-		allowLandingSkills = false;
-		JustLandedOnGround = true;
-
-		if (IsGrindstepBonusActive)
-			IsGrindstepBonusActive = false;
-		*/
+		Player.IsStomping = false;
+		Player.AllowLandingSkills = false;
 	}
 
 	public override PlayerState ProcessPhysics()
@@ -61,5 +56,55 @@ public partial class LandState : PlayerState
 			return backstepState;
 
 		return runState;
+	}
+
+	private void CheckLandingBoost()
+	{
+		bool applyLandingBoost = (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompDash) && Player.IsStomping) ||
+			(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LandDash) && !Player.IsStomping);
+
+		if (!applyLandingBoost)
+			return;
+
+		// Only apply landing boost when holding forward to avoid accidents (See Sonic and the Black Knight)
+		if (Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle))
+		{
+			Player.Effect.PlayWindFX();
+			Player.MovementAngle = Player.PathFollower.ForwardAngle;
+			Player.MoveSpeed = Mathf.Max(Player.MoveSpeed, Player.Skills.landingDashSpeed);
+		}
+	}
+
+	private void CheckLandingSoul()
+	{
+		// Bonus EXP
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompExp) && Player.IsStomping)
+		{
+			Player.Effect.PlayDarkSpiralFX();
+			StageSettings.Instance.CurrentEXP += 2;
+		}
+
+		// Increase soul gauge
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LandSoul) && !Player.IsStomping)
+		{
+			Player.Effect.PlayDarkSpiralFX();
+
+			switch (SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.LandSoul))
+			{
+				case 0:
+					Player.Skills.ModifySoulGauge(1);
+					break;
+				case 1:
+					Player.Skills.ModifySoulGauge(2);
+					break;
+				case 2:
+					Player.Skills.ModifySoulGauge(4);
+					break;
+				case 3:
+					Player.Skills.ModifySoulGauge(4 + (Mathf.Min(StageSettings.Instance.CurrentRingCount, 5) * 2));
+					StageSettings.Instance.UpdateRingCount(5, StageSettings.MathModeEnum.Subtract, true);
+					break;
+			}
+		}
 	}
 }

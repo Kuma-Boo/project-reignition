@@ -152,7 +152,7 @@ public partial class FlyingPot : Node3D
 
 		float angleRatio = angle / MaxAngle;
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Back());
-		// REFACTOR TODO Player.VerticalSpeed = Runtime.CalculateJumpPower(Player.jumpHeight);
+		Player.VerticalSpeed = Runtime.CalculateJumpPower(Player.Stats.JumpHeight);
 
 		Player.Animator.JumpAnimation();
 		Player.Animator.SnapRotation(Player.MovementAngle - (Mathf.Pi * angleRatio));

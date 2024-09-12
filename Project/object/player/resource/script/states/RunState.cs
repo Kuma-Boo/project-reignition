@@ -86,6 +86,20 @@ public partial class RunState : PlayerState
 		if (Player.Controller.GetHoldingDistance(Player.MovementAngle, Player.PathFollower.ForwardAngle) >= 1.0f)
 			return backstepState;
 
+		if (Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed) > RunRatio &&
+			StageSettings.Instance.IsLevelIngame)
+		{
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestWind))
+				Player.Skills.ActivateWindCrest();
+
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestDark))
+				Player.Skills.ActivateDarkCrest();
+		}
+		else
+		{
+			Player.Skills.ResetCrestTimer();
+		}
+
 		Player.Animator.RunAnimation();
 		ProcessBrakeAnimation();
 		return null;

@@ -217,11 +217,8 @@ public partial class DestructableObject : Node3D
 
 			shatterPoint = Player.CenterPosition; // Shatter from player
 
-			/*
-			REFACTOR TODO
-			if (Player.ActionState != PlayerController.ActionStates.JumpDash)
+			if (!Player.IsJumpDashOrHomingAttack)
 				shatterStrength *= Mathf.Clamp(Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed), .5f, 1f);
-			*/
 		}
 
 		tweener = CreateTween().SetParallel(true);
@@ -264,32 +261,37 @@ public partial class DestructableObject : Node3D
 	private void ProcessPlayerCollision()
 	{
 		// Prioritize Jump Dash
-		/*
-		REFACTOR TODO
 		if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Player.IsJumpDashOrHomingAttack)
 		{
 			Shatter();
 			if (bouncePlayerOnJumpDash)
 				Player.StartBounce(snapPlayerOnBounce);
+
+			return;
 		}
-		else 
-		*/
+
 		if (FlagSetting.HasFlag(ShatterFlags.PlayerCollision))
 		{
 			Shatter();
+			return;
 		}
-		else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Player.AttackState != PlayerController.AttackStates.None)
+
+		if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Player.AttackState != PlayerController.AttackStates.None)
 		{
 			Shatter();
+			return;
 		}
-		else if (FlagSetting.HasFlag(ShatterFlags.SpeedBreak) && Player.Skills.IsSpeedBreakActive)
+
+		if (FlagSetting.HasFlag(ShatterFlags.SpeedBreak) && Player.Skills.IsSpeedBreakActive)
 		{
 			Shatter();
+			return;
 		}
-		else if (damagePlayer)
-		{
-			Player.StartKnockback();
-		}
+
+		if (!damagePlayer)
+			return;
+
+		Player.StartKnockback();
 	}
 
 	public void OnBodyEntered(Node3D b)

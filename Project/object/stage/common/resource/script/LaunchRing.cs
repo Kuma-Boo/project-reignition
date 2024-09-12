@@ -123,9 +123,7 @@ public partial class LaunchRing : Launcher
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward().RemoveVertical().Normalized());
 		Player.Effect.StartSpinFX();
 
-		/* REFACTOR TODO
 		Player.StartExternal(this);
-		*/
 		Player.Animator.StartSpin();
 
 		Player.Animator.ExternalAngle = Player.MovementAngle;
@@ -143,11 +141,9 @@ public partial class LaunchRing : Launcher
 	public void DamagePlayer()
 	{
 		DropPlayer();
-		/* REFACTOR TODO
-		Player.StartKnockback(new PlayerController.KnockbackSettings()
+		Player.StartKnockback(new()
 		{
 			ignoreMovementState = true,
 		});
-		*/
 	}
 }

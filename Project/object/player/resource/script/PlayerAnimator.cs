@@ -261,20 +261,17 @@ public partial class PlayerAnimator : Node3D
 
 	private void UpdateGroundAnimation(float idleBlend, float speedRatio, float animationSpeed = 1)
 	{
-		/*
-		REFACTOR TODO Move to Completion State.
-		if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Success &&
-			StageSettings.instance.Data.CompletionAnimation == LevelDataResource.CompletionAnimationType.ThumbsUp)
+		if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Success &&
+			StageSettings.Instance.Data.CompletionAnimation == LevelDataResource.CompletionAnimationType.ThumbsUp)
 		{
 			if (!(bool)animationTree.Get(OneshotActive))
 			{
 				PlayOneshotAnimation((Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed) > .5f) ? "completion_standing" : "completion_crouching", .2f);
-				// REFACTOR TODO Player.Camera.StartCompletionCamera();
+				Player.Camera.StartCompletionCamera();
 			}
 
 			return;
 		}
-		*/
 
 		if (Player.Skills.IsSpeedBreakCharging) return;
 

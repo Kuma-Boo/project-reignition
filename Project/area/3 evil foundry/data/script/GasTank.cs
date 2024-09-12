@@ -83,10 +83,7 @@ namespace Project.Gameplay.Objects
 				return false;
 			}
 
-			/*
-			REFACTOR TODO
-			if (Player.ActionState != PlayerController.ActionStates.JumpDash) return false;
-			*/
+			if (!Player.IsJumpDashOrHomingAttack) return false;
 
 			Player.StartBounce();
 

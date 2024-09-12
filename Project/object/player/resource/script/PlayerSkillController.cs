@@ -93,23 +93,19 @@ public partial class PlayerSkillController : Node3D
 	private readonly float WindCrestSpeedMultiplier = 1.5f;
 	public void ActivateWindCrest()
 	{
-		/*
-		REFACTOR TODO
 		if (!AllowCrestSkill ||
 			IsUsingBreakSkills ||
-			Player.ActionState != PlayerController.ActionStates.Normal ||
-			StageSettings.instance.CurrentRingCount == 0)
+			StageSettings.Instance.CurrentRingCount == 0)
 		{
 			return;
 		}
 
 		if (UpdateCrestTimer())
 		{
-			Player.MoveSpeed = Mathf.Max(Player.MoveSpeed, GroundSettings.Speed * WindCrestSpeedMultiplier);
-			StageSettings.instance.UpdateRingCount(1, StageSettings.MathModeEnum.Subtract, true);
+			Player.MoveSpeed = Mathf.Max(Player.MoveSpeed, Player.Stats.GroundSettings.Speed * WindCrestSpeedMultiplier);
+			StageSettings.Instance.UpdateRingCount(1, StageSettings.MathModeEnum.Subtract, true);
 			Player.Effect.PlayWindCrestFX();
 		}
-		*/
 	}
 
 	private readonly int DarkCrestSoulAmount = 3;

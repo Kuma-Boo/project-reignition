@@ -18,6 +18,7 @@ public partial class StompState : PlayerState
 	public override void EnterState()
 	{
 		Player.MoveSpeed = 0;
+		Player.IsStomping = true;
 		Player.Lockon.IsMonitoring = false;
 		Player.Lockon.ResetLockonTarget();
 
@@ -25,9 +26,7 @@ public partial class StompState : PlayerState
 		if (Player.IsGrindstepping)
 			Player.Animator.ResetState(.1f);
 
-		/* REFACTOR TODO
-		allowLandingSkills = true;
-		*/
+		Player.AllowLandingSkills = true;
 
 		bool isAttackStomp = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompAttack);
 		Player.Animator.StompAnimation(isAttackStomp);
@@ -62,11 +61,9 @@ public partial class StompState : PlayerState
 
 	private void UpdateVerticalSpeed()
 	{
-		/* REFACTOR TODO
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompAttack))
-			Player.VerticalSpeed = Mathf.MoveToward(VerticalSpeed, StompSpeed, StompGravity * PhysicsManager.physicsDelta);
+			Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, StompSpeed, StompGravity * PhysicsManager.physicsDelta);
 		else
-		*/
-		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, StompSpeed, JumpCancelGravity * PhysicsManager.physicsDelta);
+			Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, StompSpeed, JumpCancelGravity * PhysicsManager.physicsDelta);
 	}
 }

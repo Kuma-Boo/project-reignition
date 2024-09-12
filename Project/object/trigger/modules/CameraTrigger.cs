@@ -94,10 +94,14 @@ public partial class CameraTrigger : StageTriggerModule
 
 	public override void Deactivate()
 	{
-		if (previousSettings == null || settings == null) return;
-		if (Camera.ActiveSettings != settings) return; // Already overridden by a different trigger
+		if (previousSettings == null || settings == null)
+			return;
 
-		// REFACTOR TODO if (Player.ActionState == PlayerController.ActionStates.Teleport) return;
+		if (Camera.ActiveSettings != settings)
+			return; // Already overridden by a different trigger
+
+		if (Player.IsTeleporting)
+			return;
 
 		Camera.UpdateCameraSettings(new()
 		{
