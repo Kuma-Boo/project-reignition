@@ -71,7 +71,7 @@ public partial class BackflipState : PlayerState
 
 	private void UpdateMoveSpeed()
 	{
-		float inputAngle = Player.Controller.GetTargetMovementAngle(true);
+		float inputAngle = Player.Controller.GetTargetInputAngle();
 		float inputStrength = Player.Controller.GetInputStrength();
 
 		if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle) || // REFACTOR TODO: Extra arguments? , true, false);

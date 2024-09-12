@@ -113,4 +113,56 @@ public partial class JumpDashState : PlayerState
 	}
 
 	protected override void Accelerate(float _) => Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, 0, ActiveMovementSettings.Friction * PhysicsManager.physicsDelta);
+
+	protected override void ProcessTurning()
+	{
+		if (Mathf.IsZeroApprox(Player.MoveSpeed) && Input.IsActionPressed("button_brake"))
+			return;
+
+		bool isUsingStrafeControls = Player.Skills.IsSpeedBreakActive ||
+			SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) ||
+			(Player.IsLockoutActive &&
+			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe); // Ignore path delta under certain lockout situations
+
+		float pathControlAmount = Player.PathTurnInfluence;
+		if (isUsingStrafeControls || Player.IsLockoutActive)
+			pathControlAmount = 0; // Don't use path influence during speedbreak/autorun
+
+		float targetMovementAngle = Player.Controller.GetTargetMovementAngle() + pathControlAmount;
+		if (Player.IsLockoutActive &&
+			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace) // Direction is being overridden
+		{
+			Player.MovementAngle = targetMovementAngle;
+		}
+
+		if (turnInstantly) // Instantly set movement angle to target movement angle
+		{
+			SnapRotation(targetMovementAngle);
+			return;
+		}
+
+		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi))
+		{
+			// Check for turning around
+			if (!Player.IsLockoutActive || Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
+				return;
+		}
+
+		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
+		targetMovementAngle = ProcessTargetMovementAngle(targetMovementAngle);
+
+		// Normal turning
+		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, Player.PathFollower.ForwardAngle);
+		float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, Player.PathFollower.ForwardAngle);
+		bool isRecentering = Player.Controller.IsRecentering(movementDeltaAngle, inputDeltaAngle);
+		float maxTurnAmount = isRecentering ? Player.Stats.RecenterTurnAmount : Player.Stats.MaxTurnAmount;
+
+		float turnSmoothing = Mathf.Lerp(Player.Stats.MinTurnAmount, maxTurnAmount, speedRatio);
+		Player.MovementAngle += pathControlAmount;
+		Turn(targetMovementAngle, turnSmoothing);
+
+		// Strafe implementation
+		if (isUsingStrafeControls)
+			ProcessStrafe(targetMovementAngle);
+	}
 }

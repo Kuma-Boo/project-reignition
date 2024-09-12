@@ -96,7 +96,7 @@ public partial class SlideState : PlayerState
 		{
 			Player.Controller.ResetJumpBuffer();
 
-			float inputAngle = Player.Controller.GetTargetMovementAngle(true);
+			float inputAngle = Player.Controller.GetTargetInputAngle();
 			float inputStrength = Player.Controller.GetInputStrength();
 			if (!Mathf.IsZeroApprox(inputStrength) &&
 				Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))

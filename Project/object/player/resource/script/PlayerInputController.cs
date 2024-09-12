@@ -51,7 +51,7 @@ public partial class PlayerInputController : Node
 	public float InputVertical { get; private set; }
 
 	/// <summary> Maximum angle that counts as holding a direction. </summary>
-	private readonly float MaximumHoldDelta = Mathf.Pi * .45f;
+	private readonly float MaximumHoldDelta = Mathf.Pi * .4f;
 	/// <summary> Minimum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 	private readonly float MinBackStepAngle = Mathf.Pi * .6f;
 
@@ -93,14 +93,7 @@ public partial class PlayerInputController : Node
 	}
 
 	/// <summary> Returns the angle between the player's input angle and movementAngle. </summary>
-	public float GetTargetMovementAngle(bool rawInput = false)
-	{
-		float inputAngle = GetTargetInputAngle();
-		if(rawInput)
-			return inputAngle;
-
-		return CalculateLockoutForwardAngle(inputAngle);
-	}
+	public float GetTargetMovementAngle() => CalculateLockoutForwardAngle(GetTargetInputAngle());
 
 	/// <summary> Returns the automaticly calculated input angle based on the game's settings and skills. </summary>
 	public float GetTargetInputAngle()
@@ -139,9 +132,8 @@ public partial class PlayerInputController : Node
 			if (resource.allowReversing)
 			{
 				float backwardsAngle = forwardAngle + Mathf.Pi;
-				if (Player.IsMovingBackward ||
-					(Mathf.IsZeroApprox(Player.MoveSpeed) &&
-					IsHoldingDirection(inputAngle, backwardsAngle)))
+				if ((!Mathf.IsZeroApprox(Player.MoveSpeed) && Player.IsMovingBackward) ||
+					(Mathf.IsZeroApprox(Player.MoveSpeed) && IsHoldingDirection(inputAngle, backwardsAngle)))
 				{
 					return backwardsAngle;
 				}
