@@ -25,7 +25,7 @@ public partial class IdleState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		if(Player.Skills.IsSpeedBreakActive)
+		if (Player.Skills.IsSpeedBreakActive)
 			return runState;
 
 		if (Player.Controller.IsJumpBufferActive)
@@ -52,8 +52,8 @@ public partial class IdleState : PlayerState
 		if (!Player.CheckGround())
 			return fallState;
 
-		Player.CheckWall();
-		if(!Player.IsOnWall)
+		Player.CheckWall(CalculateWallCastDirection());
+		if (!Player.IsOnWall)
 		{
 			if (Player.IsLockoutActive && Player.ActiveLockoutData.overrideSpeed && !Mathf.IsZeroApprox(Player.ActiveLockoutData.speedRatio))
 				return runState;
@@ -69,5 +69,15 @@ public partial class IdleState : PlayerState
 
 		Player.Animator.IdleAnimation();
 		return null;
+	}
+
+	private Vector3 CalculateWallCastDirection()
+	{
+		if (Mathf.IsZeroApprox(Player.Controller.GetInputStrength()))
+			return Player.GetMovementDirection();
+
+		float targetAngle = Player.Controller.GetTargetMovementAngle();
+		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetAngle, Player.PathFollower.ForwardAngle);
+		return Player.PathFollower.Forward().Rotated(Player.UpDirection, deltaAngle);
 	}
 }

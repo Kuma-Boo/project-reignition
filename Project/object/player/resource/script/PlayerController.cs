@@ -252,20 +252,16 @@ public partial class PlayerController : CharacterBody3D
 	public new bool IsOnWall { get; set; }
 	public RaycastHit WallRaycastHit { get; set; }
 	// Checks for walls forward and backwards (only in the direction the player is moving).
-	public void CheckWall()
+	public void CheckWall(Vector3 castDirection = new())
 	{
 		IsOnWall = false;
-		Vector3 velocity = GetMovementDirection();
-		if (Mathf.IsZeroApprox(MoveSpeed)) // No movement
-		{
-			DebugManager.DrawRay(CollisionPosition, velocity * CollisionSize.X, Colors.White);
-			return;
-		}
 
+		if (castDirection.IsZeroApprox())
+			castDirection = GetMovementDirection();
 		float castLength = CollisionSize.X + CollisionPadding + (Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta);
 
-		WallRaycastHit = this.CastRay(CollisionPosition, velocity * castLength, CollisionMask, false, GetCollisionExceptions());
-		DebugManager.DrawRay(CollisionPosition, velocity * castLength, WallRaycastHit ? Colors.Red : Colors.White);
+		WallRaycastHit = this.CastRay(CollisionPosition, castDirection * castLength, CollisionMask, false, GetCollisionExceptions());
+		DebugManager.DrawRay(CollisionPosition, castDirection * castLength, WallRaycastHit ? Colors.Red : Colors.White);
 
 		if (!ValidateWallCast())
 		{
@@ -274,8 +270,6 @@ public partial class PlayerController : CharacterBody3D
 		}
 
 		float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(WallRaycastHit.normal.RemoveVertical(), IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
-		// REFACTOR TODO Fix this
-		GD.Print(wallDelta);
 		if (wallDelta >= Mathf.Pi * .75f) // Process head-on collision
 		{
 			// Cancel speed break
