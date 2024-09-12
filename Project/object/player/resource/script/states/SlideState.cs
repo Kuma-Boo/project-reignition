@@ -10,6 +10,10 @@ public partial class SlideState : PlayerState
 	[Export]
 	private PlayerState crouchState;
 	[Export]
+	private PlayerState jumpState;
+	[Export]
+	private PlayerState backflipState;
+	[Export]
 	private PlayerState fallState;
 
 	public override void EnterState()
@@ -77,7 +81,7 @@ public partial class SlideState : PlayerState
 		Player.AddSlopeSpeed(true);
 		Player.ApplyMovement();
 		Player.CheckWall();
-		
+
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideExp))
 			Player.Skills.UpdateSoulSlide();
 
@@ -86,6 +90,21 @@ public partial class SlideState : PlayerState
 
 		if (!Input.IsActionPressed("button_action") && !Player.Animator.IsSlideTransitionActive)
 			return runState;
+
+		if (Player.Controller.IsJumpBufferActive)
+		{
+			Player.Controller.ResetJumpBuffer();
+
+			float inputAngle = Player.Controller.GetTargetMovementAngle(true);
+			float inputStrength = Player.Controller.GetInputStrength();
+			if (!Mathf.IsZeroApprox(inputStrength) &&
+				Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+			{
+				return backflipState;
+			}
+
+			return jumpState;
+		}
 
 		if (Player.IsLockoutDisablingActions)
 			return runState;

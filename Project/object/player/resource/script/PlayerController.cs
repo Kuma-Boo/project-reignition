@@ -558,7 +558,7 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	public bool DisableSidle { get; set; }
-	public bool IsSidling { get; set; }
+	public bool IsSidling => sidleState.Trigger != null;
 	[Export]
 	private SidleState sidleState;
 	public void StartSidle(SidleTrigger trigger)
@@ -566,6 +566,8 @@ public partial class PlayerController : CharacterBody3D
 		sidleState.Trigger = trigger;
 		StateMachine.ChangeState(sidleState);
 	}
+
+	public void StopSidle() => sidleState.Trigger = null;
 
 	public void SetFoothold(Node foothold) => sidleState.ActiveFoothold = foothold;
 	public void UnsetFoothold(Node foothold)
@@ -611,6 +613,8 @@ public partial class PlayerController : CharacterBody3D
 		EmitSignal(SignalName.Knockback); // Emit signal FIRST so external controllers can be alerted
 
 		if (IsInvincible && !settings.ignoreInvincibility) return;
+		if (ExternalController != null && !settings.ignoreMovementState) return;
+
 		knockbackState.Settings = settings;
 		StateMachine.ChangeState(knockbackState);
 	}

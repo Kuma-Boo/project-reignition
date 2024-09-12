@@ -65,7 +65,7 @@ public partial class SidleTrigger : Area3D
 
 		isInteractingWithPlayer = false;
 		Player.RemoveLockoutData(lockout);
-		// REFACTOR TODO Player.StopSidle();
+		Player.StopSidle();
 
 		if (Player.ExternalController == null)
 			Player.Skills.IsSpeedBreakEnabled = true; // Re-enable speed break

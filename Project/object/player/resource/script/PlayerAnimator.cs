@@ -710,13 +710,7 @@ public partial class PlayerAnimator : Node3D
 
 	public void StartSidle(bool isSidleFacingRight)
 	{
-		/*
-		if (Player.ActionState == PlayerController.ActionStates.Teleport) // Skip transition
-			SetStateXfade(0);
-		else // Quick crossfade into sidle
-		*/
-		SetStateXfade(0.1f);
-
+		SetStateXfade(Player.IsTeleporting ? 0 : .1f);
 		isFacingRight = isSidleFacingRight;
 		ActiveSidleStatePlayback.Start(SidleLoopState);
 		animationTree.Set(StateTransition, SidleState);
