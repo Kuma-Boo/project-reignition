@@ -324,7 +324,7 @@ public partial class PlayerAnimator : Node3D
 	/// <summary> Calculates turn ratio based on current input with -1 being left and 1 being right. </summary>
 	public float CalculateTurnRatio()
 	{
-		if (Player.ExternalController != null)
+		if (Player.ExternalController != null && !Player.IsGrinding)
 			return 0; // Disable turning when controlled externally
 
 		float referenceAngle = Player.IsMovingBackward ? Player.PathFollower.ForwardAngle : Player.MovementAngle;

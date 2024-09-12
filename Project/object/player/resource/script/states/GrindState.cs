@@ -214,14 +214,21 @@ public partial class GrindState : PlayerState
 		}
 
 		if (!Mathf.IsEqualApprox(currentCharge, 1.0f))
+		{
 			Player.Effect.StartChargeFX();
+			return;
+		}
 
 		if (!isCharged)
+		{
+			// Play fully charged VFX
+			perfectChargeTimer = PerfectChargeInputWindow;
+			Player.Effect.FullGrindChargeFX();
 			return;
+		}
 
-		// Play fully charged VFX
-		perfectChargeTimer = PerfectChargeInputWindow;
-		Player.Effect.FullGrindChargeFX();
+		perfectChargeTimer = Mathf.MoveToward(perfectChargeTimer, 0f, PhysicsManager.physicsDelta);
+
 	}
 
 	private void Uncharge(bool isCharged)
