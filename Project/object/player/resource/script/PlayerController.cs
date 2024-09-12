@@ -504,7 +504,7 @@ public partial class PlayerController : CharacterBody3D
 	[Signal]
 	public delegate void LaunchFinishedEventHandler();
 	[Export]
-	public LaunchState launchState;
+	private LaunchState launchState;
 	public void StartLauncher(LaunchSettings settings)
 	{
 		if (!launchState.UpdateSettings(settings)) // Failed to start launcher state

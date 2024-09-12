@@ -115,6 +115,7 @@ public partial class Catapult : Launcher
 	{
 		currentState = CatapultState.Control;
 
+		Player.LaunchFinished -= OnEnteredCatapult;
 		Player.Effect.StartSpinFX();
 		Player.StartExternal(this, playerPositionNode);
 		Player.Animator.StartSpin(3f);
@@ -194,7 +195,7 @@ public partial class Catapult : Launcher
 
 		// Disable break skills
 		Player.Skills.IsSpeedBreakEnabled = Player.Skills.IsTimeBreakEnabled = false;
-		Player.Connect(PlayerController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredCatapult), (uint)ConnectFlags.OneShot);
+		Player.LaunchFinished += OnEnteredCatapult;
 
 		// Have the player jump into the catapult
 		var settings = LaunchSettings.Create(Player.GlobalPosition, playerPositionNode.GlobalPosition, 2f);

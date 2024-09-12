@@ -122,9 +122,8 @@ public partial class FlyingPot : Node3D
 		lockonArea.SetDeferred("monitorable", false);
 
 		Player.Skills.IsSpeedBreakEnabled = false; // Disable speed break
-
-		Player.Connect(PlayerController.SignalName.LaunchFinished, new Callable(this, MethodName.OnEnteredPot), (uint)ConnectFlags.OneShot);
-
+		Player.LaunchFinished += OnEnteredPot;
+		
 		// Update camera
 		if (cameraTrigger != null)
 		{
@@ -137,6 +136,7 @@ public partial class FlyingPot : Node3D
 	{
 		flapTimer = 0;
 		isControllingPlayer = true;
+		Player.LaunchFinished -= OnEnteredPot;
 		Player.StartExternal(this, root);
 		Player.Animator.Visible = false;
 		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);

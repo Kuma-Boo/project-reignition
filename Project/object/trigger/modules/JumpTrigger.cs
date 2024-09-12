@@ -32,13 +32,15 @@ public partial class JumpTrigger : StageTriggerModule
 		return settings;
 	}
 
-	private void FinishJump() => EmitSignal(SignalName.JumpFinished);
+	private void FinishJump()
+	{
+		Player.LaunchFinished -= FinishJump;
+		EmitSignal(SignalName.JumpFinished);
+	}
 
 	public override void Activate()
 	{
 		Player.StartLauncher(GetLaunchSettings());
-
-		if (!Player.IsConnected(PlayerController.SignalName.LaunchFinished, new Callable(this, MethodName.FinishJump)))
-			Player.Connect(PlayerController.SignalName.LaunchFinished, new Callable(this, MethodName.FinishJump), (uint)ConnectFlags.OneShot);
+		Player.LaunchFinished += FinishJump;
 	}
 }
