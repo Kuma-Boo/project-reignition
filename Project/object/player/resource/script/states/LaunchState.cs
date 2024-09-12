@@ -64,7 +64,6 @@ public partial class LaunchState : PlayerState
 		Player.EmitSignal(PlayerController.SignalName.LaunchFinished);
 
 		settings.Launcher?.Deactivate();
-		settings = new();
 	}
 
 	public override PlayerState ProcessPhysics()

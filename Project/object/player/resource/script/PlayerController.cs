@@ -517,7 +517,6 @@ public partial class PlayerController : CharacterBody3D
 			return;
 
 		StateMachine.ChangeState(launchState);
-		launchState.UpdateSettings(settings); // Failed to start launcher state
 	}
 
 	[Export]
