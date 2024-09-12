@@ -159,6 +159,7 @@ public partial class Catapult : Launcher
 		launchRatio = Mathf.SmoothStep(0, 1, launchRatio);
 		base.Activate();
 
+		Player.StopExternal();
 		Player.Animator.IsFallTransitionEnabled = false;
 	}
 
@@ -175,6 +176,7 @@ public partial class Catapult : Launcher
 
 		var settings = LaunchSettings.Create(Player.GlobalPosition, destination, 1f);
 		settings.IsJump = true;
+		Player.StopExternal();
 		Player.StartLauncher(settings);
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		Player.Animator.SnapRotation(Player.MovementAngle); // Reset visual rotation
