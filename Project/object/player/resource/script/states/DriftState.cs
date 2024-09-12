@@ -51,8 +51,6 @@ public partial class DriftState : PlayerState
 		driftVelocity = Vector3.Zero;
 		driftStatus = DriftStatus.Processing;
 
-		Player.StartExternal(this); // For future reference, this is where speedbreak gets disabled
-
 		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.Effect.StartDust();
 		Player.Animator.ExternalAngle = Player.MovementAngle;
@@ -61,7 +59,6 @@ public partial class DriftState : PlayerState
 
 	public override void ExitState()
 	{
-		Player.StopExternal();
 		Player.Effect.StopDust();
 		Player.Skills.IsSpeedBreakEnabled = true;
 
