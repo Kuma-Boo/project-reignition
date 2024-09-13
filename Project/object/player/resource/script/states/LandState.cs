@@ -31,24 +31,25 @@ public partial class LandState : PlayerState
 		if (Player.IsGrinding)
 			return;
 
+		// IsStomping is set false here so LandingSkills can check against it
+		Player.IsStomping = false;
 		Player.IsGrindstepping = false;
 		Player.AllowLandingGrind = false;
 		Player.Animator.LandingAnimation();
 		Player.Effect.PlayLandingFX();
+	}
 
+	public override PlayerState ProcessPhysics()
+	{
 		if (Player.AllowLandingSkills)
 		{
 			// Apply landing skills
 			CheckLandingBoost();
 			CheckLandingSoul();
+
+			Player.AllowLandingSkills = false;
 		}
 
-		Player.IsStomping = false;
-		Player.AllowLandingSkills = false;
-	}
-
-	public override PlayerState ProcessPhysics()
-	{
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
 
