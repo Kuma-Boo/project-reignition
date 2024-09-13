@@ -144,6 +144,7 @@ public partial class PlayerController : CharacterBody3D
 	private const float CollisionPadding = .02f;
 
 	public bool IsOnGround { get; set; }
+	private RaycastHit GroundHit { get; set; }
 	private readonly int GroundWhiskerAmount = 8;
 	public bool CheckGround()
 	{
@@ -184,7 +185,7 @@ public partial class PlayerController : CharacterBody3D
 			castLength += Mathf.Abs(VerticalSpeed) * PhysicsManager.physicsDelta;
 
 		Vector3 checkOffset = Vector3.Zero;
-		RaycastHit groundHit = new();
+		GroundHit = new();
 		Vector3 castVector = this.Down() * castLength;
 		int raysHit = 0;
 
@@ -198,22 +199,22 @@ public partial class PlayerController : CharacterBody3D
 			DebugManager.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
 			if (ValidateGroundCast(ref hit))
 			{
-				if (!groundHit)
-					groundHit = hit;
+				if (!GroundHit)
+					GroundHit = hit;
 				else
-					groundHit.Add(hit);
+					GroundHit.Add(hit);
 				checkOffset += castOffset;
 				raysHit++;
 			}
 		}
 
-		if (groundHit)
+		if (GroundHit)
 		{
-			groundHit.Divide(raysHit);
-			Effect.UpdateGroundType(groundHit.collidedObject);
+			GroundHit.Divide(raysHit);
+			Effect.UpdateGroundType(GroundHit.collidedObject);
 		}
 
-		return groundHit;
+		return GroundHit;
 	}
 
 	/// <summary> Checks whether raycast collider is tagged properly. </summary>
@@ -251,7 +252,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public new bool IsOnWall { get; set; }
 	public RaycastHit WallRaycastHit { get; set; }
-	// Checks for walls forward and backwards (only in the direction the player is moving).
+	/// <summary> Checks for walls forward and backwards (only in the direction the player is moving). </summary>
 	public void CheckWall(Vector3 castDirection = new())
 	{
 		IsOnWall = false;
@@ -294,15 +295,74 @@ public partial class PlayerController : CharacterBody3D
 			return;
 		}
 
-		if (!IsMovingBackward && IsOnGround) // Reduce MoveSpeed when running against walls
-		{
-			float speedClamp = Mathf.Clamp(1.0f - (wallDelta / Mathf.Pi * .4f), 0f, 1f); // Arbitrary formula that works well
-			if (Stats.GroundSettings.GetSpeedRatio(MoveSpeed) > speedClamp)
-				MoveSpeed *= speedClamp;
-		}
+		if (IsMovingBackward || !IsOnGround)
+			return;
+
+		// Reduce MoveSpeed when running against walls
+		float speedClamp = Mathf.Clamp(1.0f - (wallDelta / Mathf.Pi * .4f), 0f, 1f); // Arbitrary formula that works well
+		if (Stats.GroundSettings.GetSpeedRatio(MoveSpeed) > speedClamp)
+			MoveSpeed *= speedClamp;
 	}
 
 	private bool ValidateWallCast() => WallRaycastHit && WallRaycastHit.collidedObject.IsInGroup("wall");
+
+	/// <summary> Checks for ceilings and crushers. </summary>
+	public void CheckCeiling()
+	{
+		// Start from below the floor and cast through the player to ensure object detection
+		Vector3 castOrigin = GlobalPosition - (UpDirection * CollisionPadding);
+		float castLength = (CollisionSize.Y + CollisionPadding) * 2.0f;
+		if (VerticalSpeed > 0)
+			castLength += VerticalSpeed * PhysicsManager.physicsDelta;
+
+		Vector3 castVector = UpDirection * castLength;
+		if (IsBackflipping) // Improve collision detection when backflipping
+			castVector += GetMovementDirection() * MoveSpeed * PhysicsManager.physicsDelta;
+
+		RaycastHit ceilingHit = this.CastRay(castOrigin, castVector, CollisionMask, false, GetCollisionExceptions());
+		DebugManager.DrawRay(castOrigin, castVector, ceilingHit ? Colors.Red : Colors.White);
+
+		if (!ceilingHit)
+			return;
+
+		// Check if the player is being crushed
+		if (ceilingHit.collidedObject.IsInGroup("crusher") && GroundHit)
+		{
+			// Prevent clipping through the ground
+			AddCollisionExceptionWith(ceilingHit.collidedObject);
+			StartKnockback(new()
+			{
+				ignoreInvincibility = true,
+			});
+
+			return;
+		}
+
+		if (!ceilingHit.collidedObject.IsInGroup("ceiling"))
+			return;
+
+		GlobalTranslate(ceilingHit.point - (CollisionPosition + (UpDirection * CollisionSize.Y)));
+
+		float maxVerticalSpeed = 0;
+		// Workaround for backflipping into slanted ceilings
+		if (IsBackflipping)
+		{
+			float ceilingAngle = ceilingHit.normal.AngleTo(Vector3.Down);
+
+			if (ceilingAngle > Mathf.Pi * .1f) // Only slanted ceilings need this workaround
+			{
+				float deltaAngle = ExtensionMethods.DeltaAngleRad(PathFollower.ForwardAngle, ExtensionMethods.CalculateForwardAngle(ceilingHit.normal, IsOnGround ? PathFollower.Up() : Vector3.Up));
+				if (deltaAngle > Mathf.Pi * .1f) // Wall isn't aligned to the path
+					return;
+
+				// Slide down the wall if it's aligned with the path direction
+				maxVerticalSpeed = -Mathf.Sin(ceilingAngle) * MoveSpeed;
+			}
+		}
+
+		if (VerticalSpeed > maxVerticalSpeed)
+			VerticalSpeed = maxVerticalSpeed;
+	}
 
 	/// <summary> Orientates Root to world direction, then rotates the gimbal on the y-axis. </summary>
 	public void UpdateOrientation(bool allowExternalOrientation = false)
@@ -479,6 +539,17 @@ public partial class PlayerController : CharacterBody3D
 		}
 
 		GlobalPosition += movementOffset * recenterDirection; // Move towards the pathfollower
+	}
+
+	private void OnBodyExited(Node3D body)
+	{
+		if (body is not PhysicsBody3D) return;
+
+		if (GetCollisionExceptions().Contains(body as PhysicsBody3D))
+		{
+			GD.Print($"Stopped ignoring {body.Name}");
+			RemoveCollisionExceptionWith(body);
+		}
 	}
 	#endregion
 

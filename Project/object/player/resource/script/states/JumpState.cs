@@ -83,6 +83,7 @@ public partial class JumpState : PlayerState
 		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
 		Player.CheckGround();
 		Player.CheckWall();
+		Player.CheckCeiling();
 		Player.UpdateUpDirection();
 
 		if (Player.IsOnGround)

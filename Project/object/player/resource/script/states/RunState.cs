@@ -52,6 +52,7 @@ public partial class RunState : PlayerState
 		Player.AddSlopeSpeed();
 		Player.ApplyMovement();
 		Player.CheckWall();
+		Player.CheckCeiling();
 
 		if (!Player.IsLockoutDisablingActions)
 		{

@@ -118,7 +118,7 @@ public partial class GrindState : PlayerState
 		}
 		else // No walls, Check for crushers
 		{
-			// REFACTOR TODO Player.CheckCeiling();
+			Player.CheckCeiling();
 		}
 
 		ActiveGrindRail.PathFollower.Progress += movementDelta;

@@ -33,6 +33,7 @@ public partial class BackstepState : PlayerState
 		Player.ApplyMovement();
 		Player.CheckGround();
 		Player.CheckWall();
+		Player.CheckCeiling();
 
 		if (!Player.IsOnGround)
 			return fallState;
