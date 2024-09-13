@@ -28,25 +28,28 @@ public partial class IdleState : PlayerState
 		if (Player.Skills.IsSpeedBreakActive)
 			return runState;
 
-		if (Player.Controller.IsJumpBufferActive)
+		if (!Player.Skills.IsSpeedBreakActive)
 		{
-			Player.Controller.ResetJumpBuffer();
-
-			float inputAngle = Player.Controller.GetTargetInputAngle();
-			float inputStrength = Player.Controller.GetInputStrength();
-			if (!Mathf.IsZeroApprox(inputStrength) &&
-				Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+			if (Player.Controller.IsJumpBufferActive)
 			{
-				return backflipState;
+				Player.Controller.ResetJumpBuffer();
+
+				float inputAngle = Player.Controller.GetTargetInputAngle();
+				float inputStrength = Player.Controller.GetInputStrength();
+				if (!Mathf.IsZeroApprox(inputStrength) &&
+					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+				{
+					return backflipState;
+				}
+
+				return jumpState;
 			}
 
-			return jumpState;
-		}
-
-		if (Player.Controller.IsActionBufferActive)
-		{
-			Player.Controller.ResetActionBuffer();
-			return crouchState;
+			if (Player.Controller.IsActionBufferActive)
+			{
+				Player.Controller.ResetActionBuffer();
+				return crouchState;
+			}
 		}
 
 		if (!Player.CheckGround())
