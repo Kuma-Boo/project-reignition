@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://bddurtsrkx5gf"]
+[gd_scene load_steps=35 format=3 uid="uid://bddurtsrkx5gf"]
 
 [ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="1_8qxdg"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_qk3u2"]
@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://b7ku38xcd8buw" path="res://object/enemy/majin/data/evil foundry/BlueMajin.tscn" id="20_kkn76"]
 [ext_resource type="PackedScene" uid="uid://bdxneanubmcid" path="res://area/3 evil foundry/object/GasTank.tscn" id="21_kry2n"]
 [ext_resource type="PackedScene" uid="uid://c10y5dhqmy3gk" path="res://area/3 evil foundry/object/FanBroken.tscn" id="22_cges7"]
+[ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="24_lhmrn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s1mwa"]
 size = Vector3(5, 32, 12)
@@ -646,18 +647,55 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 29.046
 [node name="BlueMajin2" parent="DeathlessAct/LavaHallway2" instance=ExtResource("20_kkn76")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 29.0462, 14.5974, 110.842)
 
-[node name="GasTank" parent="DeathlessAct/LavaHallway2" instance=ExtResource("21_kry2n")]
+[node name="GasTank" parent="DeathlessAct/LavaHallway2" node_paths=PackedStringArray("endTarget") instance=ExtResource("21_kry2n")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 29.1162, 11.6275, 126.366)
+endTarget = NodePath("")
 
-[node name="BlueMajin3" parent="DeathlessAct/LavaHallway2" instance=ExtResource("20_kkn76")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 28.98, 10.5, 146.732)
+[node name="MajinMover" type="Node3D" parent="DeathlessAct/LavaHallway2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.48, 10.5, 146.732)
+script = ExtResource("24_lhmrn")
+Movement/Mode = 1
+"Movement/Cycle Length" = 3.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 5.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+startPaused = true
+root = NodePath("BlueMajin")
+animator = NodePath("")
+
+[node name="BlueMajin" parent="DeathlessAct/LavaHallway2/MajinMover" instance=ExtResource("20_kkn76")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 "Attack Settings/Attack Type" = 1
 
-[node name="GasTank2" parent="DeathlessAct/LavaHallway2" instance=ExtResource("21_kry2n")]
+[node name="GasTank2" parent="DeathlessAct/LavaHallway2" node_paths=PackedStringArray("endTarget") instance=ExtResource("21_kry2n")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 28.981, 11.0115, 148.727)
+endTarget = NodePath("")
 
-[node name="BlueMajin4" parent="DeathlessAct/LavaHallway2" instance=ExtResource("20_kkn76")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 28.98, 10.5, 156.836)
+[node name="MajinMover2" type="Node3D" parent="DeathlessAct/LavaHallway2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.48, 10.5, 156.836)
+script = ExtResource("24_lhmrn")
+Movement/Mode = 1
+"Movement/Cycle Length" = 3.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 5.0
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+startPaused = true
+root = NodePath("BlueMajin")
+
+[node name="BlueMajin" parent="DeathlessAct/LavaHallway2/MajinMover2" instance=ExtResource("20_kkn76")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 "Attack Settings/Attack Type" = 1
 
 [node name="Fan" parent="DeathlessAct/LavaHallway2" instance=ExtResource("18_ddkmk")]
@@ -718,6 +756,8 @@ shape = SubResource("BoxShape3D_t3h8b")
 [connection signal="Activated" from="DeathlessAct/LoadZoneTriggers/LavaHallway2-Unload" to="DeathlessAct/LavaHallway2" method="Deactivate"]
 [connection signal="Activated" from="DeathlessAct/LoadZoneTriggers/End-Load" to="DeathlessAct/End" method="Activate"]
 [connection signal="Activated" from="DeathlessAct/SpikeHallway/FurnaceTraps/Trigger" to="DeathlessAct/SpikeHallway/FurnaceTraps/StaggerAnimations" method="Run"]
+[connection signal="SpinStarted" from="DeathlessAct/LavaHallway2/MajinMover/BlueMajin" to="DeathlessAct/LavaHallway2/MajinMover" method="Unpause"]
+[connection signal="SpinStarted" from="DeathlessAct/LavaHallway2/MajinMover2/BlueMajin" to="DeathlessAct/LavaHallway2/MajinMover2" method="Unpause"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]
