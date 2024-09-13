@@ -156,11 +156,12 @@ public partial class EventTrigger : StageTriggerModule
 
 		StageSettings.Instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.Respawn));
 
-		if (playerStandin == null)
-		{
-			animator.Play(EventAnimation);
-			animator.Seek(animator.CurrentAnimationLength, true, true);
-		}
+		PlayerStandin = GetNodeOrNull<Node3D>(playerStandin);
+		if (PlayerStandin == null)
+			return;
+
+		animator.Play(EventAnimation);
+		animator.Seek(animator.CurrentAnimationLength, true, true);
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -250,19 +251,27 @@ public partial class EventTrigger : StageTriggerModule
 
 	#region Event Animation
 	private NodePath playerStandin;
+	public Node3D PlayerStandin { get; private set; }
 	/// <summary> Lockout to apply when character finishes event. </summary>
 	private LockoutResource characterExitLockout;
+	public LockoutResource CharacterExitLockout => characterExitLockout;
 	private float characterPositionSmoothing = .2f;
+	public float CharacterPositionSmoothing => characterPositionSmoothing;
 
 	/// <summary> How much to fadeout character's animation by. </summary>
 	private float characterFadeoutTime;
+	public float CharacterFadeoutTime => characterFadeoutTime;
 	/// <summary> Which event animation to play on the Player. </summary>
 	private StringName characterAnimation;
+	public StringName CharacterAnimation => characterAnimation;
 
 	/// <summary> Evaluate exit move speed as a ratio instead of a default value. </summary>
 	private bool normalizeExitMoveSpeed = true;
+	public bool NormalizeExitMoveSpeed => normalizeExitMoveSpeed;
 	private float characterExitMoveSpeed;
+	public float CharacterExitMoveSpeed => characterExitMoveSpeed;
 	private float characterExitVerticalSpeed;
+	public float CharacterExitVerticalSpeed => characterExitVerticalSpeed;
 
 	private void ScreenShake(float magnitude)
 	{
@@ -272,31 +281,6 @@ public partial class EventTrigger : StageTriggerModule
 		});
 	}
 
-	/// <summary> Resets the character's movement state. </summary>
-	public void FinishEvent()
-	{
-		BGMPlayer.SetStageMusicVolume(0f); // Unmute BGM
-
-		//Player.ApplyExternalTransform(true);
-		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Player.ExternalParent.Forward());
-		Player.Animator.SnapRotation(Player.MovementAngle);
-		Player.Animator.CancelOneshot(characterFadeoutTime);
-		Player.Animator.DisabledSpeedSmoothing = true;
-		Player.Animator.ResetState(0);
-		Player.UpDirection = Vector3.Up;
-		Player.UpdateOrientation(true);
-		// TODO REFACTOR Player.ResetActionState();
-		Player.StopExternal();
-
-		if (characterExitLockout != null)
-			Player.AddLockoutData(characterExitLockout);
-
-		Player.MoveSpeed = normalizeExitMoveSpeed ? Player.Stats.GroundSettings.Speed * characterExitMoveSpeed : characterExitMoveSpeed;
-		Player.VerticalSpeed = characterExitVerticalSpeed;
-
-		// Re-enable break skills
-		Player.Skills.IsSpeedBreakEnabled = Player.Skills.IsTimeBreakEnabled = true;
-		EmitSignal(SignalName.EventFinished);
-	}
+	public void FinishEvent() => EmitSignal(SignalName.EventFinished);
 	#endregion
 }
