@@ -121,7 +121,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public void ApplyMovement()
 	{
-		Velocity = GetMovementDirection() * MoveSpeed + UpDirection * VerticalSpeed;
+		Velocity = (GetMovementDirection() * MoveSpeed) + (UpDirection * VerticalSpeed);
 		MoveAndSlide();
 	}
 
@@ -574,6 +574,7 @@ public partial class PlayerController : CharacterBody3D
 
 	[Signal]
 	public delegate void LaunchFinishedEventHandler();
+	public bool IsLaunching { get; set; }
 	[Export]
 	private LaunchState launchState;
 	public void StartLauncher(LaunchSettings settings)
@@ -622,6 +623,14 @@ public partial class PlayerController : CharacterBody3D
 	{
 		automationState.Automation = automation;
 		StateMachine.ChangeState(automationState);
+	}
+
+	[Export]
+	private EventState eventState;
+	public void StartEvent(EventTrigger trigger)
+	{
+		eventState.Trigger = trigger;
+		StateMachine.ChangeState(eventState);
 	}
 
 	[Export]

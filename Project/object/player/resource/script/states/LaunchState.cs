@@ -17,9 +17,11 @@ public partial class LaunchState : PlayerState
 		if (settings.startPosition.IsEqualApprox(settings.endPosition)) // Launcher initialization error
 			return false;
 
-		if (this.settings.Launcher != null &&
+		if (Player.IsLaunching &&
+			this.settings.Launcher != null &&
 			this.settings.Launcher == settings.Launcher) // Already launching
 		{
+			GD.Print("Launch Failed");
 			return false;
 		}
 
@@ -27,11 +29,12 @@ public partial class LaunchState : PlayerState
 		return true;
 	}
 
-    public override void EnterState()
+	public override void EnterState()
 	{
 		launcherTime = 0;
 
 		Player.IsOnGround = false;
+		Player.IsLaunching = true;
 		Player.IsMovingBackward = false;
 		Player.MoveSpeed = settings.HorizontalVelocity;
 		Player.VerticalSpeed = settings.InitialVerticalVelocity;
@@ -55,6 +58,7 @@ public partial class LaunchState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.IsLaunching = false;
 		Player.MoveSpeed = settings.HorizontalVelocity * .5f; // Prevent too much movement
 		Player.VerticalSpeed = Player.IsOnGround ? 0 : settings.FinalVerticalVelocity;
 
@@ -68,7 +72,6 @@ public partial class LaunchState : PlayerState
 		Player.EmitSignal(PlayerController.SignalName.LaunchFinished);
 
 		settings.Launcher?.Deactivate();
-		settings = new();
 	}
 
 	public override PlayerState ProcessPhysics()
