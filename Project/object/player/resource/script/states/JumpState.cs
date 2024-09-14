@@ -131,7 +131,7 @@ public partial class JumpState : PlayerState
 
 	private void UpdateVerticalSpeed()
 	{
-		if (isShortenedJump)
+		if (isShortenedJump && Player.VerticalSpeed > 0)
 		{
 			Player.VerticalSpeed *= jumpCurve; // Kill jump height
 		}
