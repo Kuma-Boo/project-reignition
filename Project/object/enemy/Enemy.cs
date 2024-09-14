@@ -243,7 +243,7 @@ public partial class Enemy : Node3D
 		if (IsInteractionProcessed)
 			return;
 
-		if (Player.IsBouncing || !IsHitboxEnabled)
+		if (!IsHitboxEnabled)
 			return;
 
 		switch (Player.AttackState)
@@ -279,16 +279,12 @@ public partial class Enemy : Node3D
 	protected void SetInteractionProcessed()
 	{
 		IsInteractionProcessed = true;
-		// Connect a signal
-		if (!Player.IsConnected(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-			Player.Connect(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
+		Player.AttackStateChange += ResetInteractionProcessed;
 	}
 	protected void ResetInteractionProcessed()
 	{
 		IsInteractionProcessed = false;
-
-		if (Player.IsConnected(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-			Player.Disconnect(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
+		Player.AttackStateChange -= ResetInteractionProcessed;
 	}
 
 	/// <summary> Current local rotation of the enemy. </summary>

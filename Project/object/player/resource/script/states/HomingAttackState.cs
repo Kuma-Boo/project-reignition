@@ -63,7 +63,7 @@ public partial class HomingAttackState : PlayerState
 			return;
 
 		if (Player.IsBouncing)
-			Player.Skills.ActivateFireCrestBurst();
+			Player.Skills.CallDeferred(PlayerSkillController.MethodName.ActivateFireCrestBurst);
 		else
 			Player.Skills.DeactivateFireCrest();
 	}
