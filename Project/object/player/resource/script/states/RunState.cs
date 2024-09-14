@@ -51,6 +51,7 @@ public partial class RunState : PlayerState
 		ProcessTurning();
 		Player.AddSlopeSpeed();
 		Player.ApplyMovement();
+		Player.CheckGround();
 		Player.CheckWall();
 		Player.CheckCeiling();
 
@@ -78,7 +79,7 @@ public partial class RunState : PlayerState
 			}
 		}
 
-		if (!Player.CheckGround())
+		if (!Player.IsOnGround)
 			return fallState;
 
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
