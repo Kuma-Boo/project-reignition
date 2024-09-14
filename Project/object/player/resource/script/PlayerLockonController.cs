@@ -37,8 +37,18 @@ public partial class PlayerLockonController : Node3D
 	private readonly string LevelWallGroup = "level wall";
 	private readonly Array<Node3D> activeTargets = []; // List of targetable objects
 
+	private bool isMonitoring;
 	/// <summary> Should the controller check for new lockonTargets? </summary>
-	public bool IsMonitoring { get; set; }
+	public bool IsMonitoring
+	{
+		get => isMonitoring;
+		set
+		{
+			isMonitoring = value;
+			if (!isMonitoring)
+				Player.Lockon.ResetLockonTarget();
+		}
+	}
 
 	public bool IsMonitoringPerfectHomingAttack { get; private set; }
 	public void EnablePerfectHomingAttack() => IsMonitoringPerfectHomingAttack = true;

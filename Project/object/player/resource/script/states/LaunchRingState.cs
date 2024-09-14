@@ -16,7 +16,6 @@ public partial class LaunchRingState : PlayerState
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Launcher.Forward().RemoveVertical().Normalized());
 
 		Player.Lockon.IsMonitoring = false; // Disable homing reticle
-		Player.Lockon.ResetLockonTarget();
 
 		Player.Animator.ExternalAngle = Player.MovementAngle;
 		Player.Animator.StartSpin();

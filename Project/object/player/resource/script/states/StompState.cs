@@ -20,7 +20,6 @@ public partial class StompState : PlayerState
 		Player.MoveSpeed = 0;
 		Player.IsStomping = true;
 		Player.Lockon.IsMonitoring = false;
-		Player.Lockon.ResetLockonTarget();
 
 		Player.AllowLandingGrind = true;
 		if (Player.IsGrindstepping)
