@@ -596,6 +596,15 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	[Export]
+	private CatapultState catapultState;
+	public bool IsCatapultActive => catapultState.Catapult != null;
+	public void StartCatapult(Catapult catapult)
+	{
+		catapultState.Catapult = catapult;
+		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, catapultState);
+	}
+
+	[Export]
 	private PathTravellerState pathTravellerState;
 	public void StartPathTraveller(PathTraveller traveller)
 	{

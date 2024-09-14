@@ -76,8 +76,11 @@ namespace Project.Gameplay.Objects
 			if (Player.IsJumpDashOrHomingAttack)
 			{
 				// Copied from Enemy.cs UpdateLockon method
+				/*
+				REFACTOR TODO
 				if (Player.Lockon.IsHomingAttacking)
 					Player.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
+				*/
 
 				if (!isShattered)
 					Player.Camera.SetDeferred("LockonTarget", this);

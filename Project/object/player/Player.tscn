@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://bqck0hqdn3o8r"]
+[gd_scene load_steps=88 format=3 uid="uid://bqck0hqdn3o8r"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -48,6 +48,7 @@
 [ext_resource type="PackedScene" uid="uid://dq4rt7vk6a7kv" path="res://object/player/resource/component/Lockon.tscn" id="33_q1dko"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/LaunchRingState.cs" id="36_00l6c"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/PathTravellerState.cs" id="37_rlyto"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/CatapultState.cs" id="38_xdgt8"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/EventState.cs" id="39_4sg6h"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hfii6"]
@@ -1406,7 +1407,7 @@ point_count = 4
 _data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "pathTravellerState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "knockbackState", "teleportState") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "catapultState", "pathTravellerState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "knockbackState", "teleportState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1425,6 +1426,7 @@ hitboxAnimator = NodePath("Sonic/HitboxTrigger/AnimationPlayer")
 countdownState = NodePath("StateMachine/Special/Countdown")
 launchState = NodePath("StateMachine/Special/Launch")
 launchRingState = NodePath("StateMachine/Special/LaunchRing")
+catapultState = NodePath("StateMachine/Special/Catapult")
 pathTravellerState = NodePath("StateMachine/Special/PathTraveller")
 grindState = NodePath("StateMachine/Special/Grind")
 sidleState = NodePath("StateMachine/Special/Sidle")
@@ -1731,6 +1733,9 @@ fallState = NodePath("../../Basic/Fall")
 [node name="LaunchRing" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("fallState")]
 script = ExtResource("36_00l6c")
 fallState = NodePath("../../Basic/Fall")
+
+[node name="Catapult" type="Node" parent="StateMachine/Special"]
+script = ExtResource("38_xdgt8")
 
 [node name="PathTraveller" type="Node" parent="StateMachine/Special"]
 script = ExtResource("37_rlyto")
