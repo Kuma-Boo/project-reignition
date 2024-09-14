@@ -667,7 +667,7 @@ public partial class PlayerController : CharacterBody3D
 	public void StartEvent(EventTrigger trigger)
 	{
 		eventState.Trigger = trigger;
-		StateMachine.ChangeState(eventState);
+		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, eventState);
 	}
 
 	[Export]

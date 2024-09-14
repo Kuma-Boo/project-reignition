@@ -55,7 +55,7 @@ public partial class RunState : PlayerState
 		Player.CheckWall();
 		Player.CheckCeiling();
 
-		if (!Player.IsLockoutDisablingActions && !Player.Skills.IsSpeedBreakActive)
+		if (!Player.Skills.IsSpeedBreakActive)
 		{
 			if (Player.Controller.IsJumpBufferActive)
 			{
