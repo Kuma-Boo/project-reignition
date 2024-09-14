@@ -165,6 +165,7 @@ public partial class PlayerController : CharacterBody3D
 			float snapDistance = groundHit.distance - CollisionSize.Y;
 			GlobalPosition -= UpDirection * snapDistance; // Remain snapped to the ground
 			UpDirection = UpDirection.Lerp(groundHit.normal, .2f + (.4f * Stats.GroundSettings.GetSpeedRatio(MoveSpeed))).Normalized(); // Update world direction
+
 			return IsOnGround;
 		}
 
@@ -243,9 +244,9 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	/// <summary> Attempts to snap the player to the ground. </summary>
-	public void SnapToGround()
+	public void SnapToGround(float distance = 100.0f)
 	{
-		KinematicCollision3D collision = MoveAndCollide(-UpDirection * 100.0f, true);
+		KinematicCollision3D collision = MoveAndCollide(-UpDirection * distance, true);
 		if (collision == null) return;
 
 		GlobalPosition = collision.GetPosition();

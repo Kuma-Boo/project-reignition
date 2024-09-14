@@ -14,15 +14,12 @@ public partial class LandState : PlayerState
 
 	public override void EnterState()
 	{
-		Vector3 originalVelocity = Player.Velocity;
-		Player.Velocity = Player.UpDirection * Player.VerticalSpeed;
-		Player.MoveAndSlide();
-		Player.Velocity = originalVelocity;
-		Player.UpdateOrientation();
-
 		Player.VerticalSpeed = 0;
-		Player.Lockon.IsMonitoring = false;
+		Player.UpdateOrientation();
+		Player.SnapToGround();
 		Player.DisableAccelerationJump = false;
+		Player.Lockon.IsMonitoring = false;
+		Player.Animator.LandingAnimation();
 	}
 
 	public override void ExitState()
@@ -35,12 +32,12 @@ public partial class LandState : PlayerState
 		Player.IsStomping = false;
 		Player.IsGrindstepping = false;
 		Player.AllowLandingGrind = false;
-		Player.Animator.LandingAnimation();
 		Player.Effect.PlayLandingFX();
 	}
 
 	public override PlayerState ProcessPhysics()
 	{
+		Player.CheckGround();
 		if (Player.AllowLandingSkills)
 		{
 			// Apply landing skills
