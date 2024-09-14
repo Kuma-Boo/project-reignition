@@ -1789,7 +1789,7 @@ namespace Project.Gameplay
 
 			if (activeLauncher?.IsPlayerCentered == false)
 			{
-				GlobalPosition = activeLauncher.RecenterCharacter();
+				GlobalPosition = activeLauncher.RecenterPlayer();
 				VerticalSpeed = 0;
 			}
 			else

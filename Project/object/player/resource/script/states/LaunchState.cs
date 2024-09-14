@@ -118,7 +118,7 @@ public partial class LaunchState : PlayerState
 		if (settings.Launcher?.IsPlayerCentered != false)
 			return false;
 
-		Player.GlobalPosition = settings.Launcher.RecenterCharacter();
+		Player.GlobalPosition = settings.Launcher.RecenterPlayer();
 		return true;
 	}
 

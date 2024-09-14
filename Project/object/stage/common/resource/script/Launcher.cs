@@ -162,7 +162,10 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 
 	public virtual void Activate(Area3D a)
 	{
-		if (!a.IsInGroup("player detection")) return;
+		if (!a.IsInGroup("player detection"))
+			return;
+
+		IsPlayerCentered = false;
 		Activate();
 	}
 	public virtual void Activate()
@@ -191,10 +194,10 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	[Export]
 	private int recenterSpeed = 32; // How fast to recenter the character
 
-	public virtual bool IsPlayerCentered { get; private set; }
+	public virtual bool IsPlayerCentered { get; protected set; }
 	protected PlayerController Player => StageSettings.Player;
 
-	public Vector3 RecenterCharacter()
+	public Vector3 RecenterPlayer()
 	{
 		Vector3 pos = Player.GlobalPosition.MoveToward(StartingPoint, recenterSpeed * PhysicsManager.physicsDelta);
 		IsPlayerCentered = pos.IsEqualApprox(StartingPoint);

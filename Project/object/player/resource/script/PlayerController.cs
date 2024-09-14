@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay.Objects;
 using Project.Gameplay.Triggers;
 using System.Collections.Generic;
 
@@ -583,6 +584,14 @@ public partial class PlayerController : CharacterBody3D
 			return;
 
 		StateMachine.ChangeState(launchState);
+	}
+
+	[Export]
+	private LaunchRingState launchRingState;
+	public void StartLaunchRing(LaunchRing launcher)
+	{
+		launchRingState.Launcher = launcher;
+		StateMachine.ChangeState(launchRingState);
 	}
 
 	[Export]

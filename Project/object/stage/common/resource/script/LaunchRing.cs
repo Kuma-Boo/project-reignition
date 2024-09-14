@@ -10,6 +10,8 @@ public partial class LaunchRing : Launcher
 	public delegate void EnteredEventHandler();
 	[Signal]
 	public delegate void ExitedEventHandler();
+	[Signal]
+	public delegate void DamageEventHandler();
 
 	[ExportGroup("Editor")]
 	[Export]
@@ -23,13 +25,14 @@ public partial class LaunchRing : Launcher
 	private bool isSpikeVariant;
 	[Export]
 	private AnimationPlayer animator;
-	private bool isActive;
 
+	public float LaunchRatio => launchRatio;
 	public override float GetLaunchRatio() => isSpikeVariant ? 1f : Mathf.SmoothStep(0, 1, launchRatio);
 
 	public override void _Ready()
 	{
-		if (Engine.IsEditorHint()) return;
+		if (Engine.IsEditorHint())
+			return;
 
 		InitializePieces();
 	}
@@ -40,56 +43,9 @@ public partial class LaunchRing : Launcher
 			InitializePieces();
 
 		UpdatePieces();
-
-		if (Engine.IsEditorHint()) return;
-
-		if (isActive)
-		{
-			// Recenter player
-			Player.CenterPosition = RecenterCharacter();
-
-			if (IsPlayerCentered) // Close enough; Allow inputs
-			{
-				if (Input.IsActionJustPressed("button_jump")) // Disable launcher
-				{
-					DropPlayer(false);
-					Player.Lockon.IsMonitoring = true;
-				}
-				else if (Input.IsActionJustPressed("button_action"))
-				{
-					LaunchPlayer();
-				}
-			}
-
-			Player.Animator.SetSpinSpeed(1.5f + launchRatio);
-		}
 	}
 
-	protected override void LaunchAnimation()
-	{
-		// Keep the same animation as charging (i.e. do nothing)
-		Player.Animator.SetSpinSpeed(5); // Speed up spin animation just because
-	}
-
-	private void DropPlayer(bool launched = false)
-	{
-		isActive = false;
-
-		if (!launched)
-		{
-			EmitSignal(SignalName.Exited);
-			Player.Animator.ResetState();
-			Player.Effect.StopSpinFX();
-			Player.Lockon.IsMonitoring = false;
-		}
-	}
-
-	private void LaunchPlayer()
-	{
-		DropPlayer(true);
-		Player.Effect.StartTrailFX();
-		base.Activate();
-	}
+	protected override void LaunchAnimation() => Player.Animator.SetSpinSpeed(5); // Keep spinning, but do it faster
 
 	private void InitializePieces()
 	{
@@ -113,37 +69,23 @@ public partial class LaunchRing : Launcher
 
 	private void OnEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player detection")) return;
+		if (!a.IsInGroup("player detection"))
+			return;
 
-		isActive = true;
 		animator.Play("charge");
-		// Disable homing reticle
-		Player.Lockon.IsMonitoring = false;
-
-		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(this.Forward().RemoveVertical().Normalized());
-		Player.Effect.StartSpinFX();
-
-		Player.StartExternal(this);
-		Player.Animator.StartSpin();
-
-		Player.Animator.ExternalAngle = Player.MovementAngle;
-		Player.Lockon.ResetLockonTarget();
-
+		IsPlayerCentered = false;
+		Player.StartLaunchRing(this);
 		EmitSignal(SignalName.Entered);
 	}
 
 	private void OnExited(Area3D a)
 	{
-		if (!a.IsInGroup("player detection")) return;
+		if (!a.IsInGroup("player detection"))
+			return;
+
 		animator.Play("RESET", .2 * (1 + launchRatio));
 	}
 
-	public void DamagePlayer()
-	{
-		DropPlayer();
-		Player.StartKnockback(new()
-		{
-			ignoreMovementState = true,
-		});
-	}
+	/// <summary> Called from an AnimationPlayer. </summary>
+	private void DamagePlayer() => EmitSignal(SignalName.Damage);
 }
