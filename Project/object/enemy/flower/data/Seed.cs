@@ -42,15 +42,12 @@ public partial class Seed : Area3D
 
 		Explode();
 
-		/* REFACTOR TODO 
 		if (Player.IsJumpDashOrHomingAttack ||
-			Player.IsHomingAttacking ||
-			Player.Lockon.IsBounceLockoutActive)
+			Player.IsBouncing)
 		{
 			Player.StartBounce();
 			return;
 		}
-		*/
 
 		Player.StartKnockback();
 	}
