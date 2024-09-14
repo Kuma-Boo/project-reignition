@@ -249,7 +249,7 @@ public partial class PlayerController : CharacterBody3D
 		KinematicCollision3D collision = MoveAndCollide(-UpDirection * distance, true);
 		if (collision == null) return;
 
-		GlobalPosition = collision.GetPosition();
+		MoveAndCollide(-UpDirection * distance);
 		Animator.SnapToGround();
 	}
 
