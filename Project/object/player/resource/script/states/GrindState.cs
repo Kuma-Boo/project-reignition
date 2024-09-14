@@ -223,11 +223,7 @@ public partial class GrindState : PlayerState
 			// Play fully charged VFX
 			perfectChargeTimer = PerfectChargeInputWindow;
 			Player.Effect.FullGrindChargeFX();
-			return;
 		}
-
-		perfectChargeTimer = Mathf.MoveToward(perfectChargeTimer, 0f, PhysicsManager.physicsDelta);
-
 	}
 
 	private void Uncharge(bool isCharged)
