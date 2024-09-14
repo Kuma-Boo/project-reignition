@@ -153,8 +153,7 @@ public partial class PlayerState : Node
 		else
 			strafeBlend = 0;
 
-		if (!Player.IsLockoutActive)
-			Player.MovementAngle += Player.PathFollower.DeltaAngle;
+		Player.MovementAngle += Player.PathTurnInfluence;
 		Player.MovementAngle = Mathf.LerpAngle(Player.MovementAngle, targetMovementAngle, strafeBlend);
 	}
 
