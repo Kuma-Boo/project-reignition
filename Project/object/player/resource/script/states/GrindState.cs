@@ -41,10 +41,8 @@ public partial class GrindState : PlayerState
 			positionSmoothing = Mathf.SmoothStep(0f, positionSmoothing, Mathf.Clamp(progressFactor / smoothFactor, 0f, 1f));
 		}
 
-		// REFACTOR TODO Player.ResetActionState(); // Reset grind step, cancel stomps, jumps, etc
-
 		Player.IsMovingBackward = false;
-		// REFACTOR TODO Player.LandOnGround(); // Rail counts as being on the ground
+		Player.AllowLandingSkills = false;
 		Player.IsOnGround = true;
 		Player.VerticalSpeed = 0f;
 		Player.MoveSpeed = Player.Stats.GrindSettings.Speed * Player.Stats.CalculateGrindSpeedRatio(); // Start at the correct speed
