@@ -156,7 +156,7 @@ public partial class PlayerController : CharacterBody3D
 
 		if (groundHit) // Successful ground hit
 		{
-			if (!IsOnGround && VerticalSpeed < 0) // Landing on the ground
+			if (!IsOnGround && VerticalSpeed <= 0) // Landing on the ground
 			{
 				UpDirection = groundHit.normal;
 				IsOnGround = true;
@@ -853,12 +853,11 @@ public partial class PlayerController : CharacterBody3D
 			color = Colors.Black // Use Colors.Transparent for debugging
 		});
 
-		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.ProcessRespawn), (uint)ConnectFlags.OneShot);
+		TransitionManager.instance.TransitionProcess += ProcessRespawn;
 	}
 
 	private void ProcessRespawn()
 	{
-		// TODO Revert to idle state?
 		AllowLandingSkills = false; // Disable landing skills temporarily
 		Skills.IsSpeedBreakEnabled = Skills.IsTimeBreakEnabled = true; // Reenable soul skills
 
@@ -877,8 +876,9 @@ public partial class PlayerController : CharacterBody3D
 		foreach (Node exception in GetCollisionExceptions())
 			RemoveCollisionExceptionWith(exception);
 
+		TransitionManager.instance.TransitionProcess -= ProcessRespawn;
 		// Wait a single physics frame to ensure objects update properly
-		GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Connect(SceneTreeTimer.SignalName.Timeout, new Callable(this, MethodName.FinishRespawn));
+		GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Timeout += FinishRespawn;
 	}
 
 	/// <summary> Final step of the respawn process. Re-enable area collider and finish transition. </summary>

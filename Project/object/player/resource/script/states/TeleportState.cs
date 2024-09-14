@@ -29,26 +29,29 @@ public partial class TeleportState : PlayerState
 	{
 		Player.IsTeleporting = true;
 		if (Trigger.resetMovespeed)
+		{
 			Player.MoveSpeed = Player.VerticalSpeed = 0;
+			Player.Animator.DisabledSpeedSmoothing = true;
+		}
 
-		if(StartTeleportFX())
+		if (StartTeleportFX())
 			return;
 
-		if(StartCrossfade())
+		if (StartCrossfade())
 			return;
-		
+
 		ApplyTeleport();
 
-		if(StopTeleportFX())
+		if (StopTeleportFX())
 			return;
-		
+
 		currentState = States.Completed;
 	}
 
-    public override void ExitState() => Player.IsTeleporting = false;
+	public override void ExitState() => Player.IsTeleporting = false;
 
-    public override PlayerState ProcessPhysics()
-    {
+	public override PlayerState ProcessPhysics()
+	{
 		switch (currentState)
 		{
 			case States.Start:
@@ -63,7 +66,7 @@ public partial class TeleportState : PlayerState
 			default:
 				return idleState;
 		}
-    }
+	}
 
 	private bool StartTeleportFX()
 	{
@@ -82,10 +85,10 @@ public partial class TeleportState : PlayerState
 	{
 		teleportTimer = Mathf.MoveToward(teleportTimer, TeleportStartFXLength, PhysicsManager.physicsDelta);
 
-		if(!Mathf.IsEqualApprox(teleportTimer, TeleportStartFXLength))
+		if (!Mathf.IsEqualApprox(teleportTimer, TeleportStartFXLength))
 			return;
-		
-		if(StartCrossfade())
+
+		if (StartCrossfade())
 			return;
 	}
 
@@ -98,13 +101,16 @@ public partial class TeleportState : PlayerState
 		currentState = States.Crossfade;
 		return true;
 	}
-	
+
 	private void ApplyTeleport()
 	{
 		Player.GlobalPosition = Trigger.WarpPosition;
-		Player.SnapToGround();
-		Player.PathFollower.Resync();
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
+		Player.SnapToGround();
+		Player.CheckGround();
+		Player.PathFollower.Resync();
+		Player.Animator.ResetState(0);
+		Player.Animator.IdleAnimation();
 		Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
 
 		Trigger.ApplyTeleport(); // Apply any signals/path changes
@@ -126,9 +132,9 @@ public partial class TeleportState : PlayerState
 	{
 		teleportTimer = Mathf.MoveToward(teleportTimer, TeleportEndFXLength, PhysicsManager.physicsDelta);
 
-		if(!Mathf.IsEqualApprox(teleportTimer, TeleportEndFXLength))
+		if (!Mathf.IsEqualApprox(teleportTimer, TeleportEndFXLength))
 			return;
-		
+
 		currentState = States.Completed;
 	}
 }

@@ -196,7 +196,10 @@ public partial class PlayerAnimator : Node3D
 	{
 		groundTurnRatio = 0;
 		float idleBlend = (float)animationTree.Get(IdleBlend);
-		idleBlend = ExtensionMethods.SmoothDamp(idleBlend, 0, ref idleBlendVelocity, IdleSmoothing);
+		if (DisabledSpeedSmoothing)
+			idleBlend = 0;
+		else
+			idleBlend = ExtensionMethods.SmoothDamp(idleBlend, 0, ref idleBlendVelocity, IdleSmoothing);
 
 		if (Mathf.IsZeroApprox(idleBlend))
 		{
