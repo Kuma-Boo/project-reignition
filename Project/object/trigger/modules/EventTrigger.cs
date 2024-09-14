@@ -239,14 +239,7 @@ public partial class EventTrigger : StageTriggerModule
 		if (playerStandin?.IsEmpty != false) // Not a player event -- return early
 			return;
 
-		BGMPlayer.SetStageMusicVolume(-80f); // Mute BGM
-
-		Player.StartExternal(this, GetNode<Node3D>(playerStandin), characterPositionSmoothing);
-		Player.Animator.ExternalAngle = 0; // Reset external angle
-		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
-		Player.Skills.DisableBreakSkills();
-		if (!characterAnimation.IsEmpty)
-			Player.Animator.PlayOneshotAnimation(characterAnimation);
+		Player.StartEvent(this);
 	}
 
 	#region Event Animation
