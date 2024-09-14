@@ -133,16 +133,10 @@ public partial class GrindState : PlayerState
 	public bool IsRailActivationValid(GrindRail grindRail)
 	{
 		if (ActiveGrindRail == grindRail) // Already grinding
-		{
-			GD.Print("Already Grinding");
 			return false;
-		}
 
 		if (Player.VerticalSpeed > 0f) // Player can't snap to grind rails when moving upwards
-		{
-			GD.Print("Falling");
 			return false;
-		}
 
 		// Resync Grindrail's PathFollower
 		Vector3 delta = grindRail.Rail.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindRail.Rail.GlobalPosition);
@@ -150,31 +144,21 @@ public partial class GrindState : PlayerState
 
 		// Ignore rails when the player is too close to the end
 		if (grindRail.PathFollower.Progress >= grindRail.Rail.Curve.GetBakedLength() - RailFudgeFactor)
-		{
-			GD.Print("FudgeFactor");
 			return false;
-		}
 
 		// Ignore grinds that would immediately put the player into a wall
 		if (CheckWall(Player.Stats.GrindSettings.Speed * PhysicsManager.physicsDelta, grindRail))
-		{
-			GD.Print("Wall");
 			return false;
-		}
 
 		delta = grindRail.PathFollower.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindRail.PathFollower.GlobalPosition);
 		delta.Y -= Player.VerticalSpeed * PhysicsManager.physicsDelta;
 		if (delta.Y < 0.01f && (!Player.IsOnGround || !Player.AllowLandingGrind) && ActiveGrindRail == null)
-		{
-			GD.Print("Delta Y");
 			return false;
-		}
 
 		// Horizontal validation
 		if (Mathf.Abs(delta.X) > GrindrailSnapping &&
 			!(Player.IsGrindstepping && Mathf.Abs(delta.X) > GrindstepRailSnapping))
 		{
-			GD.Print("Horizontal Delta");
 			return false;
 		}
 
