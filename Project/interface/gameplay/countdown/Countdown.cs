@@ -20,7 +20,7 @@ public partial class Countdown : Control
 	private AnimationPlayer animator;
 
 	public override void _EnterTree() => Instance = this;
-	public override void _Ready() => StageSettings.Instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.StartCountdown));
+	public override void _Ready() => StageSettings.Instance.LevelStarted += StartCountdown;
 
 	public void StartCountdown()
 	{
@@ -44,6 +44,8 @@ public partial class Countdown : Control
 
 		IsCountdownActive = true;
 		PauseMenu.AllowPausing = false;
+		StageSettings.Player.StartCountdown();
+		StageSettings.Instance.LevelStarted -= StartCountdown;
 		EmitSignal(SignalName.CountdownStarted);
 	}
 

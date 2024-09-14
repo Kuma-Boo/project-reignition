@@ -33,8 +33,8 @@ public partial class PlayerController : CharacterBody3D
 	{
 		StageSettings.RegisterPlayer(this); // Update global reference
 		Stage.UpdateRingCount(Skills.StartingRingCount, StageSettings.MathModeEnum.Replace); // Start with the proper ring count
-		Stage.Connect(StageSettings.SignalName.LevelCompleted, new Callable(this, MethodName.OnLevelCompleted));
-		Stage.Connect(StageSettings.SignalName.LevelDemoStarted, new Callable(this, MethodName.OnLevelDemoStarted));
+		Stage.LevelCompleted += OnLevelCompleted;
+		Stage.LevelDemoStarted += OnLevelDemoStarted;
 
 		Controller.Initialize(this);
 		Stats.Initialize();
@@ -48,6 +48,7 @@ public partial class PlayerController : CharacterBody3D
 		// Initialize state machine last to ensure components are ready		
 		StateMachine.Initialize(this);
 
+		ResetOrientation();
 		SnapToGround();
 		GetParent<CheckpointTrigger>().Activate(); // Save initial checkpoint
 	}
@@ -859,17 +860,7 @@ public partial class PlayerController : CharacterBody3D
 	{
 		PathFollower.Resync();
 		Camera.Respawn();
-		MovementAngle = PathFollower.ForwardAngle; // Reset movement angle
-
-		UpDirection = Vector3.Up;
-
-		if (Stage.CurrentCheckpoint == null) // Default to parent node's position
-			Transform = Transform3D.Identity;
-		else
-			GlobalTransform = Stage.CurrentCheckpoint.GlobalTransform;
-
-		Animator.SnapRotation(MovementAngle);
-
+		ResetOrientation();
 		SnapToGround();
 		ChangeHitbox("RESET");
 
@@ -879,6 +870,19 @@ public partial class PlayerController : CharacterBody3D
 		invincibilityTimer = 0; // Reset invincibility
 
 		TransitionManager.FinishTransition();
+	}
+
+	private void ResetOrientation()
+	{
+		UpDirection = Vector3.Up;
+
+		if (Stage.CurrentCheckpoint == null) // Default to parent node's position
+			Transform = Transform3D.Identity;
+		else
+			GlobalTransform = Stage.CurrentCheckpoint.GlobalTransform;
+
+		MovementAngle = PathFollower.ForwardAngle; // Reset movement angle
+		Animator.SnapRotation(MovementAngle);
 	}
 
 	[Export]
