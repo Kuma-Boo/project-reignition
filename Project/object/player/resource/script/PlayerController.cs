@@ -495,11 +495,6 @@ public partial class PlayerController : CharacterBody3D
 
 	private void OnLevelCompleted()
 	{
-		/* REFACTOR TODO?
-		if (ActionState != ActionStates.Damaged)
-			ResetActionState();
-		*/
-
 		// Disable everything
 		Lockon.IsMonitoring = false;
 		Skills.DisableBreakSkills();
@@ -711,7 +706,6 @@ public partial class PlayerController : CharacterBody3D
 		if (!Stage.IsLevelIngame) return;
 
 		AllowLandingSkills = false; // Disable landing skills
-									// REFACTOR TODO SetActionState(ActionStates.Damaged);
 
 		// No rings; Respawn
 		if (Stage.CurrentRingCount == 0)

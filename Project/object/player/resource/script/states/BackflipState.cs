@@ -75,7 +75,7 @@ public partial class BackflipState : PlayerState
 		float inputAngle = Player.Controller.GetTargetInputAngle();
 		float inputStrength = Player.Controller.GetInputStrength();
 
-		if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle) || // REFACTOR TODO: Extra arguments? , true, false);
+		if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle) ||
 			Input.IsActionPressed("button_brake"))
 		{
 			Player.MoveSpeed = Player.Stats.BackflipSettings.UpdateInterpolate(Player.MoveSpeed, -1);

@@ -89,7 +89,6 @@ public partial class HomingAttackState : PlayerState
 		Player.UpdateUpDirection(true);
 		Player.PathFollower.Resync();
 
-		// REFACTOR TODO Replace this with a wall check and switch to the bounce state instead
 		bool isColliding = Player.GetSlideCollisionCount() != 0;
 		if (isColliding && ProcessEnvironmentCollision())
 		{

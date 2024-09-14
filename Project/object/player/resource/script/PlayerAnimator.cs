@@ -102,7 +102,6 @@ public partial class PlayerAnimator : Node3D
 		oneShotTransition.FadeOutTime = fadeout;
 
 		// Abort accidental landing animations
-		// REFACTOR TODO if (!Player.JustLandedOnGround || Mathf.IsZeroApprox(fadeout))
 		if (Mathf.IsZeroApprox(fadeout))
 			animationTree.Set(LandTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		else

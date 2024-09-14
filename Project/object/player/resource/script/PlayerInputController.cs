@@ -12,12 +12,6 @@ public partial class PlayerInputController : Node
 	private Curve InputCurve { get; set; }
 	public float GetInputStrength()
 	{
-		/*
-		REFACTOR TODO
-		if (Input.IsActionPressed("button_brake"))
-			return 0;
-		*/
-
 		float inputLength = InputAxis.Length();
 		if (inputLength <= DeadZone)
 			inputLength = 0;

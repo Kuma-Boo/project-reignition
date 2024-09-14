@@ -15,12 +15,6 @@ public partial class KnockbackState : PlayerState
 
 	public override void EnterState()
 	{
-		/*
-		REFACTOR TODO
-		if (Lockon.IsHomingAttacking)
-			Lockon.StopHomingAttack();
-		*/
-
 		if (Player.Skills.IsSpeedBreakActive) // Disable speedbreak
 			Player.Skills.ToggleSpeedBreak();
 

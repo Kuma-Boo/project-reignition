@@ -331,11 +331,6 @@ public partial class PlayerSkillController : Node3D
 		{
 			if (!IsSoulGaugeCharged) return;
 			if (!IsSpeedBreakEnabled) return;
-			/*
-			REFACTOR TODO
-			if (Player.MovementState == PlayerController.MovementStates.Launcher) return; // Can't speed break during launchers
-			if (Player.ActionState == PlayerController.ActionStates.Teleport) return; // Can't speed break during teleports
-			*/
 			if (!Player.IsOnGround || Player.IsDefeated) return;
 
 			ToggleSpeedBreak();

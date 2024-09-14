@@ -42,12 +42,9 @@ public partial class PathTravellerState : PlayerState
 		currentSpeed = speedVelocity = 0;
 		currentTurnAmount = turnVelocity = Vector2.Zero;
 
-		if (Player.ExternalParent == Traveller.PlayerStandin)
-		{
-			Player.StopExternal();
-			Player.Skills.IsSpeedBreakEnabled = true;
-			Player.Animator.ResetState();
-		}
+		Player.StopExternal();
+		Player.Animator.ResetState();
+		Player.Skills.IsSpeedBreakEnabled = true;
 
 		Traveller.Staggered -= OnStagger;
 		Traveller.Damaged -= OnDamage;

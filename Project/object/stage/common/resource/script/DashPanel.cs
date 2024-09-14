@@ -34,7 +34,6 @@ public partial class DashPanel : Area3D
 
 		SfxPlayer.Play();
 		isQueued = false;
-		// REFACTOR TODO Player.ResetActionState();
 
 		// Only apply speed boost when player is moving slow. Don't slow them down!
 		if (Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed) < speedRatio)

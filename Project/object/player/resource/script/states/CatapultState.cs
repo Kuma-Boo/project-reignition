@@ -25,8 +25,8 @@ public partial class CatapultState : PlayerState
 		launchPowerVelocity = 0f;
 		currentState = State.Control;
 
-		// Disable break skills
-		Player.Skills.IsSpeedBreakEnabled = Player.Skills.IsTimeBreakEnabled = false;
+		// Disable speedbreak skills
+		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.Effect.StartSpinFX();
 		Player.StartExternal(this, Catapult.PlayerPositionNode);
 		Player.Animator.StartSpin(3f);
@@ -39,6 +39,7 @@ public partial class CatapultState : PlayerState
 	public override void ExitState()
 	{
 		Player.StopExternal();
+		Player.Skills.IsSpeedBreakEnabled = true;
 		Player.Animator.IsFallTransitionEnabled = false;
 		Catapult = null;
 	}

@@ -111,7 +111,7 @@ public partial class FlyingPot : Node3D
 
 		lockonArea.SetDeferred("monitorable", false);
 
-		Player.Skills.IsSpeedBreakEnabled = false; // Disable speed break
+		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.LaunchFinished += OnEnteredPot;
 
 		if (cameraTrigger == null)

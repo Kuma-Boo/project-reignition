@@ -29,8 +29,9 @@ public partial class FlyingPotState : PlayerState
 
 	public override void ExitState()
 	{
-		Player.Animator.Visible = true;
 		Player.CanJumpDash = true; // So the player isn't completely helpless
+		Player.Skills.IsSpeedBreakEnabled = true;
+		Player.Animator.Visible = true;
 		Player.StopExternal();
 
 		Pot = null;
