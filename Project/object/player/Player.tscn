@@ -1453,7 +1453,18 @@ travelMagnitude = Vector3(1, 0.3, 0.2)
 
 [node name="Sonic" parent="." instance=ExtResource("3_rkpjr")]
 
-[node name="Effect" parent="Sonic" node_paths=PackedStringArray("landingParticles", "stepEmitters") instance=ExtResource("19_3dctg")]
+[node name="ChestAttachment" parent="Sonic/SonicRoot/GeneralSkeleton" index="4"]
+transform = Transform3D(1, 7.92686e-07, -7.92686e-07, -7.92686e-07, 1, 1.59254e-08, 7.92686e-07, -1.59248e-08, 1, 5.80681e-08, 0.554189, -2.23517e-08)
+
+[node name="RFoot" parent="Sonic/SonicRoot/GeneralSkeleton" index="5"]
+transform = Transform3D(1, -1.02496e-12, -6.143e-13, 6.16757e-13, 2.03494e-07, 0.999999, -9.71667e-13, -0.999998, 2.21189e-07, -0.0397276, 0.155469, 0.00205613)
+
+[node name="LFoot" parent="Sonic/SonicRoot/GeneralSkeleton" index="6"]
+transform = Transform3D(1, 1.06581e-14, 6.15422e-12, -6.2165e-12, 1.07381e-06, 1, 1.33227e-13, -1, 1.07894e-06, 0.0397276, 0.155469, 0.00205613)
+
+[node name="Effect" parent="Sonic" node_paths=PackedStringArray("rightFoot", "leftFoot", "landingParticles", "stepEmitters") instance=ExtResource("19_3dctg")]
+rightFoot = NodePath("../SonicRoot/GeneralSkeleton/RFoot")
+leftFoot = NodePath("../SonicRoot/GeneralSkeleton/LFoot")
 landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, null, null, NodePath("VFX/LandingFX/LandingWater")]
 stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, null, null, NodePath("VFX/StepFX/WaterStep")]
 
@@ -1800,3 +1811,5 @@ baseGrindTurnaround = 6
 sidleMovementCurve = SubResource("Curve_jakcp")
 
 [connection signal="body_exited" from="StageTriggerDetector" to="." method="OnBodyExited"]
+
+[editable path="Sonic"]
