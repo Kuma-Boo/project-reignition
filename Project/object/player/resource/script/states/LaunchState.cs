@@ -14,8 +14,11 @@ public partial class LaunchState : PlayerState
 	private LaunchSettings settings;
 	public bool UpdateSettings(LaunchSettings settings)
 	{
-		if (settings.startPosition.IsEqualApprox(settings.endPosition)) // Launcher initialization error
+		if (settings.startPosition.IsEqualApprox(settings.endPosition) &&
+			Mathf.IsZeroApprox(settings.middleHeight)) // Launcher initialization error
+		{
 			return false;
+		}
 
 		if (Player.IsLaunching &&
 			this.settings.Launcher != null &&

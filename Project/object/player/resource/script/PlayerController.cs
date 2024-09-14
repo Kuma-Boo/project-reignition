@@ -596,6 +596,14 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	[Export]
+	private PathTravellerState pathTravellerState;
+	public void StartPathTraveller(PathTraveller traveller)
+	{
+		pathTravellerState.Traveller = traveller;
+		StateMachine.ChangeState(pathTravellerState);
+	}
+
+	[Export]
 	private GrindState grindState;
 	public bool AllowLandingGrind { get; set; }
 	public bool IsGrindstepping { get; set; }
