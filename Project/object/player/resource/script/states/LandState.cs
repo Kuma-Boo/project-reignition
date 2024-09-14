@@ -68,12 +68,17 @@ public partial class LandState : PlayerState
 			return;
 
 		// Only apply landing boost when holding forward to avoid accidents (See Sonic and the Black Knight)
-		if (Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle))
-		{
-			Player.Effect.PlayWindFX();
-			Player.MovementAngle = Player.PathFollower.ForwardAngle;
-			Player.MoveSpeed = Mathf.Max(Player.MoveSpeed, Player.Skills.landingDashSpeed);
-		}
+		float inputStrength = Player.Controller.GetInputStrength();
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) && Mathf.IsZeroApprox(inputStrength))
+			return;
+
+		float inputAngle = Player.Controller.GetTargetInputAngle();
+		if (!Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle))
+			return;
+
+		Player.Effect.PlayWindFX();
+		Player.MovementAngle = Player.PathFollower.ForwardAngle;
+		Player.MoveSpeed = Mathf.Max(Player.MoveSpeed, Player.Skills.landingDashSpeed);
 	}
 
 	private void CheckLandingSoul()
