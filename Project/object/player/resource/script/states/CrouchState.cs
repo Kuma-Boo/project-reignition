@@ -7,6 +7,8 @@ public partial class CrouchState : PlayerState
 	[Export]
 	private PlayerState idleState;
 	[Export]
+	private PlayerState runState;
+	[Export]
 	private PlayerState fallState;
 
 	public override void EnterState()
@@ -34,11 +36,14 @@ public partial class CrouchState : PlayerState
 		Player.ApplyMovement();
 		Player.CheckGround();
 
+		if (!Player.IsOnGround)
+			return fallState;
+
 		if (!Input.IsActionPressed("button_action"))
 			return idleState;
 
-		if (!Player.IsOnGround)
-			return fallState;
+		if (Player.Skills.IsSpeedBreakActive)
+			return runState;
 
 		return null;
 	}

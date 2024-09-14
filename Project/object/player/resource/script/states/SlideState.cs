@@ -89,8 +89,11 @@ public partial class SlideState : PlayerState
 		if (!Player.CheckGround())
 			return fallState;
 
-		if (!Input.IsActionPressed("button_action") && !Player.Animator.IsSlideTransitionActive)
+		if (Player.Skills.IsSpeedBreakActive ||
+			(!Input.IsActionPressed("button_action") && !Player.Animator.IsSlideTransitionActive))
+		{
 			return runState;
+		}
 
 		if (Player.Controller.IsJumpBufferActive)
 		{
