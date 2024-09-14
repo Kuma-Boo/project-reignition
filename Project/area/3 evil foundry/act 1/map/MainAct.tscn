@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://ciqbaxbhrxrjk"]
+[gd_scene load_steps=70 format=3 uid="uid://ciqbaxbhrxrjk"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="6_8b1i8"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="7_4vimk"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="7_d57bs"]
+[ext_resource type="PackedScene" uid="uid://bgp5prexgdala" path="res://area/3 evil foundry/object/scrap/FallingScrap.tscn" id="7_os07l"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="7_pb234"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="7_v2v6a"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="8_yjt2l"]
@@ -60,80 +61,213 @@
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="54_5u8fr"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="55_0ks8t"]
 
-[sub_resource type="Animation" id="Animation_5ugqj"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_vkmlm"]
+size = Vector3(20, 20, 5)
+
+[sub_resource type="Animation" id="Animation_33q1c"]
 resource_name = "event"
 length = 2.0
+step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Scrap2:rotation")
+tracks/0/path = NodePath("FallingScrap1:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.8),
-"transitions": PackedFloat32Array(2, 1),
+"times": PackedFloat32Array(0, 0.933333, 1.26667),
+"transitions": PackedFloat32Array(1, 3, 1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(1.5708, 0, 0)]
+"values": [Vector3(2.5, 10, -2.5), Vector3(2.5, 10, -2.5), Vector3(2.5, 0, -2.5)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Scrap2/ScrapMachineLadder:position")
+tracks/1/path = NodePath("FallingScrap1:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.8),
-"transitions": PackedFloat32Array(1, 2.58816, 1),
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2, 0.266667, 0.333333, 0.4, 0.466667, 0.533333, 0.6, 0.666667, 0.733333, 0.8, 0.866667, 0.933333, 1, 1.26667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(0, 3.2, 0), Vector3(0, 3.4, 0), Vector3(0, 8, 0)]
+"values": [Vector3(0, -3.14159, 0), Vector3(0.0593412, -3.14159, -0.0890118), Vector3(0, -3.14159, 0), Vector3(0.0680678, -3.14159, -0.0680678), Vector3(0, -3.14159, 0), Vector3(0.0593412, -3.14159, -0.0890118), Vector3(0, -3.14159, 0), Vector3(0.0680678, -3.14159, -0.0680678), Vector3(0, -3.14159, 0), Vector3(0.0593412, -3.14159, -0.0890118), Vector3(0, -3.14159, 0), Vector3(0.0680678, -3.14159, -0.0680678), Vector3(0, -3.14159, 0), Vector3(0.0593412, -3.14159, -0.0890118), Vector3(0, -3.14159, 0), Vector3(0.0680678, -3.14159, -0.0680678), Vector3(0, -3.14159, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Scrap1:rotation")
+tracks/2/path = NodePath("FallingScrap2:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.9),
-"transitions": PackedFloat32Array(1, 2, 1),
+"times": PackedFloat32Array(0, 1.13333, 1.46667),
+"transitions": PackedFloat32Array(1, 3, 1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(1.5708, 0, 0)]
+"values": [Vector3(-2.5, 10, -2.5), Vector3(-2.5, 10, -2.5), Vector3(-2.5, 0, -2.5)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Scrap3:rotation")
+tracks/3/path = NodePath("FallingScrap2:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(5, 1),
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2, 0.266667, 0.333333, 0.4, 0.466667, 0.533333, 0.6, 0.666667, 0.733333, 0.8, 0.866667, 0.933333, 1, 1.06667, 1.13333, 1.2, 1.26667, 1.46667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(-1.5708, 0, 0)]
+"values": [Vector3(0, 0, 0), Vector3(0.0436332, 0, 0.0314159), Vector3(-0.0802851, 0, 0.139626), Vector3(0.0785398, 0, -0.0523599), Vector3(0, 0, 0), Vector3(0.0436332, 0, 0.0314159), Vector3(-0.0802851, 0, 0.139626), Vector3(0.0785398, 0, -0.0523599), Vector3(0, 0, 0), Vector3(0.0436332, 0, 0.0314159), Vector3(-0.0802851, 0, 0.139626), Vector3(0.0785398, 0, -0.0523599), Vector3(0, 0, 0), Vector3(0.0436332, 0, 0.0314159), Vector3(-0.0802851, 0, 0.139626), Vector3(0.0785398, 0, -0.0523599), Vector3(0, 0, 0), Vector3(0.0436332, 0, 0.0314159), Vector3(-0.0802851, 0, 0.139626), Vector3(0.0785398, 0, -0.0523599), Vector3(0, 0, 0)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Scrap4:rotation")
+tracks/4/path = NodePath("FallingScrap3:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.9),
-"transitions": PackedFloat32Array(2, 1),
+"times": PackedFloat32Array(0, 1.26667, 1.6),
+"transitions": PackedFloat32Array(1, 3, 1),
 "update": 0,
-"values": [Vector3(0, -3.14159, 0), Vector3(1.5708, -3.14159, 0)]
+"values": [Vector3(2.5, 13, -2.5), Vector3(2.5, 13, -2.5), Vector3(2.5, 3, -2.5)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Scrap4/ScrapMachineLadder:position")
+tracks/5/path = NodePath("FallingScrap3:rotation")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.9),
-"transitions": PackedFloat32Array(3, 1),
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2, 0.266667, 0.333333, 0.4, 0.466667, 0.533333, 0.6, 0.666667, 0.733333, 0.8, 0.866667, 0.933333, 1, 1.06667, 1.13333, 1.2, 1.26667, 1.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(0, 3.2, 0), Vector3(0, 6.8, -3.8147e-06)]
+"values": [Vector3(0, 1.5708, 0), Vector3(-0.0506145, 1.5708, 0.0523599), Vector3(-0.0279253, 1.5708, -0.0366519), Vector3(0.0767945, 1.5708, -0.0628319), Vector3(0, 1.5708, 0), Vector3(-0.0506145, 1.5708, 0.0523599), Vector3(-0.0279253, 1.5708, -0.0366519), Vector3(0.0767945, 1.5708, -0.0628319), Vector3(0, 1.5708, 0), Vector3(-0.0506145, 1.5708, 0.0523599), Vector3(-0.0279253, 1.5708, -0.0366519), Vector3(0.0767945, 1.5708, -0.0628319), Vector3(0, 1.5708, 0), Vector3(-0.0506145, 1.5708, 0.0523599), Vector3(-0.0279253, 1.5708, -0.0366519), Vector3(0.0767945, 1.5708, -0.0628319), Vector3(0, 1.5708, 0), Vector3(-0.0506145, 1.5708, 0.0523599), Vector3(-0.0279253, 1.5708, -0.0366519), Vector3(0.0767945, 1.5708, -0.0628319), Vector3(0, 1.5708, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("FallingScrap4:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 1.53333, 1.86667),
+"transitions": PackedFloat32Array(1, 3, 1),
+"update": 0,
+"values": [Vector3(-2.5, 13, -2.5), Vector3(-2.5, 13, -2.5), Vector3(-2.5, 3, -2.5)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("FallingScrap4:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2, 0.266667, 0.333333, 0.4, 0.466667, 0.533333, 0.6, 0.666667, 0.733333, 0.8, 0.866667, 0.933333, 1, 1.06667, 1.13333, 1.2, 1.26667, 1.33333, 1.4, 1.46667, 1.53333, 1.6, 1.66667, 1.86667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, -1.5708, 0), Vector3(-0.0698132, -1.5708, 0.0750492), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0, -1.5708, 0), Vector3(-0.0698132, -1.5708, 0.0750492), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0, -1.5708, 0), Vector3(-0.0698132, -1.5708, 0.0750492), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0, -1.5708, 0), Vector3(-0.0698132, -1.5708, 0.0750492), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0, -1.5708, 0), Vector3(-0.0698132, -1.5708, 0.0750492), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0, -1.5708, 0), Vector3(-0.0698132, -1.5708, 0.0750492), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0, -1.5708, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_av7d8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FallingScrap1:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(2.5, 10, -2.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FallingScrap1:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FallingScrap2:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-2.5, 10, -2.5)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FallingScrap2:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("FallingScrap3:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(2.5, 13, -2.5)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FallingScrap3:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("FallingScrap4:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-2.5, 13, -2.5)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("FallingScrap4:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -1.5708, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rbcmy"]
+_data = {
+"RESET": SubResource("Animation_av7d8"),
+"event": SubResource("Animation_33q1c")
 }
 
 [sub_resource type="Animation" id="Animation_rxccf"]
@@ -211,14 +345,87 @@ tracks/5/keys = {
 "values": [Vector3(0, 3.2, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_5ugqj"]
+resource_name = "event"
+length = 1.50001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Scrap2:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(1.5708, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Scrap2/ScrapMachineLadder:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.8),
+"transitions": PackedFloat32Array(1, 2.58816, 1),
+"update": 0,
+"values": [Vector3(0, 3.2, 0), Vector3(0, 3.4, 0), Vector3(0, 8, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Scrap1:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.9),
+"transitions": PackedFloat32Array(1, 2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(1.5708, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Scrap3:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(5, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-1.5708, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Scrap4:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.9),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0), Vector3(1.5708, -3.14159, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Scrap4/ScrapMachineLadder:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.9),
+"transitions": PackedFloat32Array(3, 1),
+"update": 0,
+"values": [Vector3(0, 3.2, 0), Vector3(0, 6.8, -3.8147e-06)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_o7qlw"]
 _data = {
 "RESET": SubResource("Animation_rxccf"),
 "event": SubResource("Animation_5ugqj")
 }
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_vkmlm"]
-size = Vector3(20, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ew8xo"]
 size = Vector3(4, 5, 5)
@@ -241,10 +448,94 @@ metadata/_edit_lock_ = true
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 
+[node name="2-L" parent="MainAct/CullingMap" instance=ExtResource("7_d57bs")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/2-L"]
+shape = SubResource("BoxShape3D_vkmlm")
+
 [node name="Opening" type="Node3D" parent="MainAct"]
 script = ExtResource("41_gc12q")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
+
+[node name="FallingScrapEvent" parent="MainAct/Opening" instance=ExtResource("7_d57bs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -40, -19)
+
+[node name="Event" type="Node3D" parent="MainAct/Opening/FallingScrapEvent" node_paths=PackedStringArray("animator")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -36)
+script = ExtResource("7_pb234")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
+
+[node name="FallingScrap1" parent="MainAct/Opening/FallingScrapEvent/Event" instance=ExtResource("7_os07l")]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 2.5, 10, -2.5)
+
+[node name="FallingScrap2" parent="MainAct/Opening/FallingScrapEvent/Event" instance=ExtResource("7_os07l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 10, -2.5)
+
+[node name="FallingScrap3" parent="MainAct/Opening/FallingScrapEvent/Event" instance=ExtResource("7_os07l")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.5, 13, -2.5)
+
+[node name="FallingScrap4" parent="MainAct/Opening/FallingScrapEvent/Event" instance=ExtResource("7_os07l")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.5, 13, -2.5)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Opening/FallingScrapEvent/Event"]
+libraries = {
+"": SubResource("AnimationLibrary_rbcmy")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Opening/FallingScrapEvent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_vkmlm")
+
+[node name="ScrapGroup1" parent="MainAct/Opening" instance=ExtResource("7_d57bs")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -12, -40, -50.1)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Event" type="Node3D" parent="MainAct/Opening/ScrapGroup1" node_paths=PackedStringArray("animator")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 8.6, 0, -28)
+script = ExtResource("7_pb234")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
+
+[node name="Scrap1" type="Node3D" parent="MainAct/Opening/ScrapGroup1/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.700001)
+
+[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup1/Event/Scrap1" groups=["crusher"] instance=ExtResource("9_7x2f4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.799999)
+
+[node name="Scrap2" type="Node3D" parent="MainAct/Opening/ScrapGroup1/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.799999, 0)
+
+[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup1/Event/Scrap2" groups=["crusher"] instance=ExtResource("9_7x2f4")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 3.2, 0)
+
+[node name="Scrap3" type="Node3D" parent="MainAct/Opening/ScrapGroup1/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, 14.5)
+
+[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup1/Event/Scrap3" instance=ExtResource("9_7x2f4")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0.799999)
+
+[node name="Scrap4" type="Node3D" parent="MainAct/Opening/ScrapGroup1/Event"]
+transform = Transform3D(-1, 0, -2.53518e-06, 0, 1, 0, 2.53518e-06, 0, -1, -5.5, 0.799999, 15.1)
+
+[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup1/Event/Scrap4" instance=ExtResource("9_7x2f4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Opening/ScrapGroup1/Event"]
+callback_mode_process = 0
+libraries = {
+"": SubResource("AnimationLibrary_o7qlw")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Opening/ScrapGroup1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_vkmlm")
 
 [node name="Rings1" type="Node3D" parent="MainAct/Opening"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4, -39.326, -50.1)
@@ -271,53 +562,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 
 [node name="Child05" parent="MainAct/Opening/Rings1" instance=ExtResource("8_yjt2l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-
-[node name="ScrapGroup1" parent="MainAct/Opening" instance=ExtResource("7_d57bs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -40, -35.7)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Event" type="Node3D" parent="MainAct/Opening/ScrapGroup1" node_paths=PackedStringArray("animator")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, -23)
-script = ExtResource("7_pb234")
-"Trigger Settings/Automatically Respawn" = false
-"Trigger Settings/Is One Shot" = true
-"Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
-
-[node name="Scrap1" type="Node3D" parent="MainAct/Opening/ScrapGroup1/Event"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.700001)
-
-[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup1/Event/Scrap1" groups=["crusher"] instance=ExtResource("9_7x2f4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.799999)
-
-[node name="Scrap2" type="Node3D" parent="MainAct/Opening/ScrapGroup1/Event"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.799999, 0)
-
-[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup1/Event/Scrap2" groups=["crusher"] instance=ExtResource("9_7x2f4")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 3.2, 0)
-
-[node name="Scrap3" type="Node3D" parent="MainAct/Opening/ScrapGroup1/Event"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, 14.5)
-
-[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup1/Event/Scrap3" instance=ExtResource("9_7x2f4")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0.799999)
-
-[node name="Scrap4" type="Node3D" parent="MainAct/Opening/ScrapGroup1/Event"]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -5.5, 0.799999, 15.1)
-
-[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup1/Event/Scrap4" instance=ExtResource("9_7x2f4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 0)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Opening/ScrapGroup1/Event"]
-callback_mode_process = 0
-libraries = {
-"": SubResource("AnimationLibrary_o7qlw")
-}
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Opening/ScrapGroup1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_vkmlm")
 
 [node name="ScrapMachineLadder" parent="MainAct/Opening" instance=ExtResource("9_7x2f4")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 0.999999, -4.37114e-08, -52, -39.2, -52)
