@@ -30,14 +30,12 @@ public partial class PlayerStateMachine : Node
 	/// <summary> Exit the current state and switch to a new state. </summary>
 	public void ChangeState(PlayerState state)
 	{
-		currentState?.ExitState();
+		if (currentState != state)
+			currentState?.ExitState();
 
 		currentState = state;
 		currentState.EnterState();
 		GD.Print($"State changed to {currentState.Name}.");
-
-		if (currentState.ProcessOnEnter)
-			ProcessPhysics();
 	}
 
 	public void ProcessPhysics()

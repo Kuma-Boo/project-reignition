@@ -600,7 +600,7 @@ public partial class PlayerController : CharacterBody3D
 	public void StartPathTraveller(PathTraveller traveller)
 	{
 		pathTravellerState.Traveller = traveller;
-		StateMachine.ChangeState(pathTravellerState);
+		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, pathTravellerState);
 	}
 
 	[Export]

@@ -20,7 +20,6 @@ public partial class GrindState : PlayerState
 	private readonly float GrindstepRailSnapping = 1.4f;
 	/// <summary> Basic measure for attaching at the end of the rail. </summary>
 	private float RailFudgeFactor => Player.Stats.GrindSettings.Speed * PhysicsManager.physicsDelta;
-	public override bool ProcessOnEnter => true;
 	public override void EnterState()
 	{
 		currentCharge = 0;
@@ -61,6 +60,7 @@ public partial class GrindState : PlayerState
 		// Reset FX
 		Player.Effect.StartGrindFX(true);
 		Player.Lockon.IsMonitoring = false;
+		ProcessPhysics();
 	}
 
 	public override void ExitState()

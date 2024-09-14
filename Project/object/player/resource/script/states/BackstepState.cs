@@ -17,12 +17,11 @@ public partial class BackstepState : PlayerState
 	[Export]
 	private PlayerState backflipState;
 
-	public override bool ProcessOnEnter => true;
 	public override void EnterState()
 	{
 		turningVelocity = 0;
-
 		Player.IsMovingBackward = true;
+		ProcessPhysics();
 	}
 
 	public override void ExitState()

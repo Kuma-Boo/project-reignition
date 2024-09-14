@@ -7,7 +7,6 @@ public partial class PlayerState : Node
 {
 	protected PlayerController Player { get; private set; }
 
-	public virtual bool ProcessOnEnter => false;
 	public void Initialize(PlayerController player) => Player = player;
 
 	/// <summary> Called when this state is entered. </summary>
