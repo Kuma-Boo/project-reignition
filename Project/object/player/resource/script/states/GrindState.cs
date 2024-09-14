@@ -130,35 +130,51 @@ public partial class GrindState : PlayerState
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(ActiveGrindRail.PathFollower.Forward(), ActiveGrindRail.PathFollower.Up());
 	}
 
-	public bool IsRailActivationValid(GrindRail grindrail)
+	public bool IsRailActivationValid(GrindRail grindRail)
 	{
-		if (ActiveGrindRail != null) // Already grinding
+		if (ActiveGrindRail == grindRail) // Already grinding
+		{
+			GD.Print("Already Grinding");
 			return false;
+		}
 
 		if (Player.VerticalSpeed > 0f) // Player can't snap to grind rails when moving upwards
+		{
+			GD.Print("Falling");
 			return false;
+		}
 
 		// Resync Grindrail's PathFollower
-		Vector3 delta = grindrail.Rail.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindrail.Rail.GlobalPosition);
-		grindrail.PathFollower.Progress = grindrail.Rail.Curve.GetClosestOffset(delta);
+		Vector3 delta = grindRail.Rail.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindRail.Rail.GlobalPosition);
+		grindRail.PathFollower.Progress = grindRail.Rail.Curve.GetClosestOffset(delta);
 
 		// Ignore rails when the player is too close to the end
-		if (grindrail.PathFollower.Progress >= grindrail.Rail.Curve.GetBakedLength() - RailFudgeFactor)
+		if (grindRail.PathFollower.Progress >= grindRail.Rail.Curve.GetBakedLength() - RailFudgeFactor)
+		{
+			GD.Print("FudgeFactor");
 			return false;
+		}
 
 		// Ignore grinds that would immediately put the player into a wall
-		if (CheckWall(Player.Stats.GrindSettings.Speed * PhysicsManager.physicsDelta))
+		if (CheckWall(Player.Stats.GrindSettings.Speed * PhysicsManager.physicsDelta, grindRail))
+		{
+			GD.Print("Wall");
 			return false;
+		}
 
-		delta = grindrail.PathFollower.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindrail.PathFollower.GlobalPosition);
+		delta = grindRail.PathFollower.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindRail.PathFollower.GlobalPosition);
 		delta.Y -= Player.VerticalSpeed * PhysicsManager.physicsDelta;
-		if (delta.Y < 0.01f && !(Player.IsOnGround && Player.AllowLandingGrind))
+		if (delta.Y < 0.01f && (!Player.IsOnGround || !Player.AllowLandingGrind) && ActiveGrindRail == null)
+		{
+			GD.Print("Delta Y");
 			return false;
+		}
 
 		// Horizontal validation
 		if (Mathf.Abs(delta.X) > GrindrailSnapping &&
 			!(Player.IsGrindstepping && Mathf.Abs(delta.X) > GrindstepRailSnapping))
 		{
+			GD.Print("Horizontal Delta");
 			return false;
 		}
 
@@ -278,11 +294,12 @@ public partial class GrindState : PlayerState
 			BonusManager.instance.QueueBonus(new(BonusType.GrindShuffle));
 	}
 
-	private RaycastHit CheckWall(float length)
+	private RaycastHit CheckWall(float length, GrindRail rail = null)
 	{
+		rail ??= ActiveGrindRail;
 		length += Player.CollisionSize.X;
-		RaycastHit hit = Player.CastRay(Player.CenterPosition, Player.PathFollower.Forward() * length, Player.CollisionMask);
-		DebugManager.DrawRay(Player.CenterPosition, Player.PathFollower.Forward() * length, hit ? Colors.Red : Colors.White);
+		RaycastHit hit = rail.CastRay(rail.GlobalPosition, rail.PathFollower.Forward() * length, Player.CollisionMask);
+		DebugManager.DrawRay(rail.GlobalPosition, rail.PathFollower.Forward() * length, hit ? Colors.Red : Colors.White);
 
 		// Block grinding through objects in the given group
 		if (hit && hit.collidedObject.IsInGroup("grind wall"))
