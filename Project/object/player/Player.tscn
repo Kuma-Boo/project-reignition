@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=3 uid="uid://bqck0hqdn3o8r"]
+[gd_scene load_steps=89 format=3 uid="uid://bqck0hqdn3o8r"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -48,6 +48,7 @@
 [ext_resource type="PackedScene" uid="uid://dq4rt7vk6a7kv" path="res://object/player/resource/component/Lockon.tscn" id="33_q1dko"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/LaunchRingState.cs" id="36_00l6c"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/PathTravellerState.cs" id="37_rlyto"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/FlyingPotState.cs" id="38_jno1x"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/CatapultState.cs" id="38_xdgt8"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/EventState.cs" id="39_4sg6h"]
 
@@ -1407,7 +1408,7 @@ point_count = 4
 _data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "catapultState", "pathTravellerState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "knockbackState", "teleportState") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "knockbackState", "teleportState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1425,10 +1426,11 @@ CollisionSize = Vector2(0.3, 0.4)
 hitboxAnimator = NodePath("Sonic/HitboxTrigger/AnimationPlayer")
 countdownState = NodePath("StateMachine/Special/Countdown")
 launchState = NodePath("StateMachine/Special/Launch")
-launchRingState = NodePath("StateMachine/Special/LaunchRing")
-catapultState = NodePath("StateMachine/Special/Catapult")
-pathTravellerState = NodePath("StateMachine/Special/PathTraveller")
-grindState = NodePath("StateMachine/Special/Grind")
+launchRingState = NodePath("StateMachine/Object/LaunchRing")
+catapultState = NodePath("StateMachine/Object/Catapult")
+flyingPotState = NodePath("StateMachine/Object/FlyingPot")
+pathTravellerState = NodePath("StateMachine/Object/PathTraveller")
+grindState = NodePath("StateMachine/Object/Grind")
 sidleState = NodePath("StateMachine/Special/Sidle")
 automationState = NodePath("StateMachine/Special/Automation")
 eventState = NodePath("StateMachine/Special/Event")
@@ -1618,7 +1620,7 @@ areaTrigger = NodePath("../Sonic/HitboxTrigger")
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("2_ehi1f")
 startingState = NodePath("Basic/Idle")
-stateParents = Array[NodePath]([NodePath("Basic"), NodePath("Special")])
+stateParents = Array[NodePath]([NodePath("Basic"), NodePath("Object"), NodePath("Special")])
 
 [node name="Basic" type="Node" parent="StateMachine"]
 
@@ -1714,6 +1716,33 @@ normalStrikeSpeed = 50.0
 perfectStrikeSpeed = 100.0
 homingAttackAcceleration = 200.0
 
+[node name="Object" type="Node" parent="StateMachine"]
+
+[node name="LaunchRing" type="Node" parent="StateMachine/Object" node_paths=PackedStringArray("fallState")]
+script = ExtResource("36_00l6c")
+fallState = NodePath("../../Basic/Fall")
+
+[node name="Catapult" type="Node" parent="StateMachine/Object"]
+script = ExtResource("38_xdgt8")
+
+[node name="FlyingPot" type="Node" parent="StateMachine/Object" node_paths=PackedStringArray("jumpState")]
+script = ExtResource("38_jno1x")
+jumpState = NodePath("../../Basic/Jump")
+
+[node name="PathTraveller" type="Node" parent="StateMachine/Object"]
+script = ExtResource("37_rlyto")
+
+[node name="Grind" type="Node" parent="StateMachine/Object" node_paths=PackedStringArray("jumpState", "grindstepState", "fallState")]
+script = ExtResource("17_pl6a2")
+jumpState = NodePath("../../Basic/Jump")
+grindstepState = NodePath("../Grindstep")
+fallState = NodePath("../../Basic/Fall")
+
+[node name="Grindstep" type="Node" parent="StateMachine/Object" node_paths=PackedStringArray("landState", "stompState")]
+script = ExtResource("18_kmt0n")
+landState = NodePath("../../Basic/Land")
+stompState = NodePath("../../Basic/Stomp")
+
 [node name="Special" type="Node" parent="StateMachine"]
 
 [node name="Countdown" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("idleState", "runState")]
@@ -1729,27 +1758,6 @@ idleState = NodePath("../../Basic/Idle")
 script = ExtResource("13_d17q6")
 landState = NodePath("../../Basic/Land")
 fallState = NodePath("../../Basic/Fall")
-
-[node name="LaunchRing" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("fallState")]
-script = ExtResource("36_00l6c")
-fallState = NodePath("../../Basic/Fall")
-
-[node name="Catapult" type="Node" parent="StateMachine/Special"]
-script = ExtResource("38_xdgt8")
-
-[node name="PathTraveller" type="Node" parent="StateMachine/Special"]
-script = ExtResource("37_rlyto")
-
-[node name="Grind" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("jumpState", "grindstepState", "fallState")]
-script = ExtResource("17_pl6a2")
-jumpState = NodePath("../../Basic/Jump")
-grindstepState = NodePath("../Grindstep")
-fallState = NodePath("../../Basic/Fall")
-
-[node name="Grindstep" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("landState", "stompState")]
-script = ExtResource("18_kmt0n")
-landState = NodePath("../../Basic/Land")
-stompState = NodePath("../../Basic/Stomp")
 
 [node name="Automation" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("runState")]
 script = ExtResource("19_3qddi")

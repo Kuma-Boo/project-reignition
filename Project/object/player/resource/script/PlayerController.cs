@@ -605,6 +605,15 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	[Export]
+	private FlyingPotState flyingPotState;
+	public bool IsFlyingPotActive => flyingPotState.Pot != null;
+	public void StartFlyingPot(FlyingPot pot)
+	{
+		flyingPotState.Pot = pot;
+		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, flyingPotState);
+	}
+
+	[Export]
 	private PathTravellerState pathTravellerState;
 	public void StartPathTraveller(PathTraveller traveller)
 	{
