@@ -39,6 +39,7 @@ public partial class AutomationState : PlayerState
 		Player.StopExternal();
 		Player.UpDirection = Player.PathFollower.Up();
 		Player.Animator.SnapRotation(Player.MovementAngle);
+		Player.Effect.IsEmittingStepDust = false;
 
 		Automation = null;
 	}
@@ -64,6 +65,7 @@ public partial class AutomationState : PlayerState
 
 		Player.Animator.ExternalAngle = 0;
 		Player.Animator.RunAnimation();
+		Player.Effect.IsEmittingStepDust = true;
 
 		if (Player.PathFollower.ActivePath != initialPath || Automation.IsFinished)
 			return runState;

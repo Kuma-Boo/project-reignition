@@ -36,13 +36,14 @@ public partial class RunState : PlayerState
 		turningVelocity = 0;
 
 		Player.IsMovingBackward = false;
-		Player.Effect.IsEmittingStepDust = true;
 	}
 
 	public override void ExitState()
 	{
 		if (Player.Animator.IsBrakeAnimationActive)
 			Player.Animator.StopBrake();
+
+		Player.Effect.IsEmittingStepDust = false;
 	}
 
 	public override PlayerState ProcessPhysics()
@@ -103,6 +104,7 @@ public partial class RunState : PlayerState
 		}
 
 		Player.Animator.RunAnimation();
+		Player.Effect.IsEmittingStepDust = true;
 		ProcessBrakeAnimation();
 		return null;
 	}

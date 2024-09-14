@@ -20,7 +20,6 @@ public partial class IdleState : PlayerState
 	public override void EnterState()
 	{
 		Player.MoveSpeed = 0;
-		Player.Effect.IsEmittingStepDust = false;
 	}
 
 	public override PlayerState ProcessPhysics()

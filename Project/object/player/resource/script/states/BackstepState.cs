@@ -23,6 +23,10 @@ public partial class BackstepState : PlayerState
 		turningVelocity = 0;
 
 		Player.IsMovingBackward = true;
+	}
+
+	public override void ExitState()
+	{
 		Player.Effect.IsEmittingStepDust = false;
 	}
 
@@ -66,6 +70,7 @@ public partial class BackstepState : PlayerState
 		}
 
 		Player.Animator.BackstepAnimation();
+		Player.Effect.IsEmittingStepDust = true;
 		return null;
 	}
 
