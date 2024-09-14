@@ -29,6 +29,7 @@ public partial class FireSoul : Pickup
 		}
 
 		UpdateLockon();
+		Respawn();
 	}
 
 	protected override void Collect()
