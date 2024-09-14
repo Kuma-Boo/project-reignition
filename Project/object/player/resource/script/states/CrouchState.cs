@@ -21,7 +21,7 @@ public partial class CrouchState : PlayerState
 	{
 		Player.ChangeHitbox("RESET");
 		float inputStrength = Player.Controller.GetInputStrength();
-		if (!Mathf.IsZeroApprox(inputStrength)) // Transition into moving state
+		if (!Mathf.IsZeroApprox(inputStrength) || Player.Skills.IsSpeedBreakActive) // Transition into moving state
 		{
 			Player.Animator.CrouchToMoveTransition();
 			return;
