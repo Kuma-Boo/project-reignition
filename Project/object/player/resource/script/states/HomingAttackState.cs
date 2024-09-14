@@ -91,7 +91,7 @@ public partial class HomingAttackState : PlayerState
 
 		// REFACTOR TODO Replace this with a wall check and switch to the bounce state instead
 		bool isColliding = Player.GetSlideCollisionCount() != 0;
-		if (Player.IsOnGround || (isColliding && ProcessEnvironmentCollision()))
+		if (isColliding && ProcessEnvironmentCollision())
 		{
 			Player.StartBounce();
 			return null;
@@ -108,13 +108,14 @@ public partial class HomingAttackState : PlayerState
 
 	private bool ProcessEnvironmentCollision()
 	{
-		Vector3 castPosition = Player.CenterPosition;
-		Vector3 castDirection = castPosition - Player.GetLastSlideCollision().GetPosition();
-
-		RaycastHit hit = Player.CastRay(castPosition, castDirection, Runtime.Instance.environmentMask);
-		if (hit && hit.collidedObject.IsInGroup("ground"))
-			return true;
-
-		return false;
+		// Check from the floor
+		Vector3 castOffset = Vector3.Up * Player.CollisionSize.Y * .5f;
+		Vector3 castPosition = Player.GlobalPosition + castOffset;
+		if (Player.VerticalSpeed < 0)
+			castPosition += Player.UpDirection * Player.VerticalSpeed * PhysicsManager.physicsDelta;
+		Vector3 castVector = Player.Lockon.Target.GlobalPosition - castPosition;
+		RaycastHit hit = Player.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
+		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
+		return hit && hit.collidedObject.IsInGroup("wall");
 	}
 }
