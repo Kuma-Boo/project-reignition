@@ -24,6 +24,7 @@ public partial class KnockbackState : PlayerState
 		if (Player.Skills.IsSpeedBreakActive) // Disable speedbreak
 			Player.Skills.ToggleSpeedBreak();
 
+		Player.IsKnockback = true;
 		Player.MovementAngle = Player.PathFollower.ForwardAngle; // Prevent being knocked sideways
 
 		/* REFACTOR TODO 
@@ -51,11 +52,6 @@ public partial class KnockbackState : PlayerState
 		if (Settings.disableDamage)
 			return;
 
-		/*
-		REFACTOR TODO
-		SetActionState(ActionStates.Damaged);
-		*/
-
 		// Apply invincibility and drop rings
 		if (!Player.IsInvincible)
 		{
@@ -68,6 +64,7 @@ public partial class KnockbackState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.IsKnockback = false;
 		Player.Animator.StopHurt();
 		Player.Animator.ResetState();
 	}

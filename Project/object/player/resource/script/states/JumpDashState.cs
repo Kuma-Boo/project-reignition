@@ -70,7 +70,6 @@ public partial class JumpDashState : PlayerState
 			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SplashJump))
 			{
 				// Perform a splash jump
-				Player.Lockon.IsHomingAttacking = false;
 				Player.Lockon.ResetLockonTarget();
 				Player.Effect.PlaySplashJumpFX();
 				Player.Animator.SplashJumpAnimation();

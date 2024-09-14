@@ -44,7 +44,7 @@ public partial class Seed : Area3D
 
 		/* REFACTOR TODO 
 		if (Player.IsJumpDashOrHomingAttack ||
-			Player.Lockon.IsHomingAttacking ||
+			Player.IsHomingAttacking ||
 			Player.Lockon.IsBounceLockoutActive)
 		{
 			Player.StartBounce();

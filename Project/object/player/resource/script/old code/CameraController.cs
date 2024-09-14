@@ -94,7 +94,7 @@ public partial class CameraController : Node3D
 	public bool IsDefeatFreezeActive { get; set; }
 	/// <summary> Used to focus onto multi-HP enemies, bosses, etc. Not to be confused with CharacterLockon.Target. </summary>
 	public Node3D LockonTarget { get; set; }
-	private bool IsLockonCameraActive => LockonTarget != null || Player.Lockon.IsHomingAttacking || Player.IsBouncing;
+	private bool IsLockonCameraActive => LockonTarget != null || Player.IsHomingAttacking || Player.IsBouncing;
 	/// <summary> [0 -> 1] ratio of how much to use the lockon camera. </summary>
 	private float lockonBlend;
 	private float lockonBlendVelocity;

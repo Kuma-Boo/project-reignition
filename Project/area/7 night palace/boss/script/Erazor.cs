@@ -153,7 +153,7 @@ namespace Project.Gameplay.Bosses
 									currentDistance = ExtensionMethods.SmoothDamp(currentDistance, -20f, ref distanceVelocity, DUEL_SMOOTHING, MAX_DUEL_SPEED);
 									/*
 									REFACTOR TODO
-									if (Player.Lockon.IsHomingAttacking)
+									if (Player.IsHomingAttacking)
 										currentDistance -= Player.Stats.homingAttackSpeed * PhysicsManager.physicsDelta;
 									*/
 
@@ -162,7 +162,7 @@ namespace Project.Gameplay.Bosses
 										duelAnimator.Seek(0, true);
 										duelAnimator.Play("activate");
 
-										if (Player.Lockon.IsHomingAttacking)
+										if (Player.IsHomingAttacking)
 										{
 											//Take Damage
 										}

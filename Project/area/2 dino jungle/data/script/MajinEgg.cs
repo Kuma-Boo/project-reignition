@@ -78,7 +78,7 @@ namespace Project.Gameplay.Objects
 				// Copied from Enemy.cs UpdateLockon method
 				/*
 				REFACTOR TODO
-				if (Player.Lockon.IsHomingAttacking)
+				if (Player.IsHomingAttacking)
 					Player.Lockon.CallDeferred(CharacterLockon.MethodName.StopHomingAttack);
 				*/
 

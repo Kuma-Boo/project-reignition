@@ -678,7 +678,7 @@ namespace Project.Gameplay.Bosses
 
 		public void FinishHeavyAttack(bool forced = default)
 		{
-			if (!forced && (damageState == DamageState.Hitstun || Player.Lockon.IsHomingAttacking)) return;
+			if (!forced && (damageState == DamageState.Hitstun || Player.IsHomingAttacking)) return;
 
 			// Player missed their chance, update hints.
 			if (dialogFlags[1] < 2)
@@ -848,7 +848,7 @@ namespace Project.Gameplay.Bosses
 			{
 				if (currentHealth == 0)
 					flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_KNOCKBACK * PhysicsManager.physicsDelta);
-				else if (Player.Lockon.IsHomingAttacking || Player.Skills.IsSpeedBreakActive)
+				else if (Player.IsHomingAttacking || Player.Skills.IsSpeedBreakActive)
 					flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_LOCKON_SPEED * PhysicsManager.physicsDelta);
 				else
 					flyingEyeBlend = Mathf.MoveToward(flyingEyeBlend, 0f, FLYING_EYE_NORMAL_SPEED * PhysicsManager.physicsDelta);
@@ -963,7 +963,7 @@ namespace Project.Gameplay.Bosses
 
 		public void ProcessHitboxCollision()
 		{
-			if (Player.Lockon.IsHomingAttacking || Player.IsBouncing) return; // Player's homing attack always takes priority
+			if (Player.IsHomingAttacking || Player.IsBouncing) return; // Player's homing attack always takes priority
 			if (damageState == DamageState.Knockback) return; // Boss is in knockback and can't damage the player
 
 			if (Player.Skills.IsSpeedBreakActive)
@@ -1078,7 +1078,7 @@ namespace Project.Gameplay.Bosses
 			StartHitFX();
 			TakeDamage();
 
-			if (Player.Lockon.IsHomingAttacking)
+			if (Player.IsHomingAttacking)
 				Player.StartBounce(); // Bounce the player
 
 			MoveSpeed = KNOCKBACK; // Start knockback
@@ -1091,7 +1091,7 @@ namespace Project.Gameplay.Bosses
 		public void OnTraversalHurtboxCollision(Area3D a, bool hitFarEye)
 		{
 			if (!a.IsInGroup("player")) return;
-			if (!Player.Lockon.IsHomingAttacking) return; // Player isn't attacking
+			if (!Player.IsHomingAttacking) return; // Player isn't attacking
 
 			StartHitFX();
 			rootAnimationTree.Set(DAMAGE_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);

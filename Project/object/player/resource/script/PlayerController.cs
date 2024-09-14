@@ -558,7 +558,8 @@ public partial class PlayerController : CharacterBody3D
 	#region State
 	public bool CanJumpDash { get; set; }
 	public bool IsJumpDashing { get; set; }
-	public bool IsJumpDashOrHomingAttack => IsJumpDashing || Lockon.IsHomingAttacking;
+	public bool IsHomingAttacking { get; set; }
+	public bool IsJumpDashOrHomingAttack => IsJumpDashing || IsHomingAttacking;
 	public bool IsAccelerationJumping { get; set; }
 	public bool IsBackflipping { get; set; }
 	public bool IsStomping { get; set; }
@@ -692,6 +693,7 @@ public partial class PlayerController : CharacterBody3D
 	public delegate void KnockbackEventHandler();
 	[Export]
 	private KnockbackState knockbackState;
+	public bool IsKnockback { get; set; }
 	public void StartKnockback(KnockbackSettings settings = new())
 	{
 		EmitSignal(SignalName.Knockback); // Emit signal FIRST so external controllers can be alerted

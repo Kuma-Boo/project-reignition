@@ -31,7 +31,7 @@ public partial class PteroNest : Node3D
 		if (!isInteractingWithPlayer)
 			return;
 
-		if (Player.Lockon.IsHomingAttacking) // Bounce the player
+		if (Player.IsHomingAttacking) // Bounce the player
 			Player.StartBounce();
 
 		if (AssignedEgg.IsReturningToNest || AssignedEgg.IsReturnedToNest)

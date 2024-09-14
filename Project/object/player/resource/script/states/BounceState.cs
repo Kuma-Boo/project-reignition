@@ -28,8 +28,6 @@ public partial class BounceState : PlayerState
 	public override void EnterState()
 	{
 		Player.Lockon.IsMonitoring = false;
-		Player.Lockon.IsHomingAttacking = false;
-
 		bounceInterruptTimer = LockoutSettings.length - .5f;
 
 		if (IsUpwardBounce && Player.Lockon.Target != null) // Snap the player to the target

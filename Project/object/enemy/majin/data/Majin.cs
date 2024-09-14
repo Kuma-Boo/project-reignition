@@ -526,7 +526,7 @@ public partial class Majin : Enemy
 		if (!Mathf.IsZeroApprox(timer))
 			return;
 
-		if (Player.Lockon.IsHomingAttacking)
+		if (Player.IsHomingAttacking)
 			return;
 
 		timer = -1;

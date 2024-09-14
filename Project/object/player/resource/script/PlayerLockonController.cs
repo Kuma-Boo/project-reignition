@@ -25,6 +25,7 @@ public partial class PlayerLockonController : Node3D
 	private enum TargetState
 	{
 		Valid,
+		LowPriority,
 		NotInList,
 		PlayerBusy,
 		PlayerIgnored,
@@ -38,7 +39,6 @@ public partial class PlayerLockonController : Node3D
 
 	/// <summary> Should the controller check for new lockonTargets? </summary>
 	public bool IsMonitoring { get; set; }
-	public bool IsHomingAttacking { get; set; }
 
 	public bool IsMonitoringPerfectHomingAttack { get; private set; }
 	public void EnablePerfectHomingAttack() => IsMonitoringPerfectHomingAttack = true;
@@ -59,47 +59,47 @@ public partial class PlayerLockonController : Node3D
 
 	private bool ProcessMonitoring()
 	{
-		Node3D currentTarget = Target;
+		Node3D activeTarget = Target;
+		TargetState activeState = IsTargetValid(Target);
 		float closestDistance = Mathf.Inf;
-		if (currentTarget != null)
-			closestDistance = currentTarget.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
+		if (activeTarget != null)
+			closestDistance = activeTarget.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
 
 		// Check whether to pick a new target
 		for (int i = 0; i < activeTargets.Count; i++)
 		{
-			if (currentTarget == activeTargets[i])
+			if (activeTarget == activeTargets[i])
 				continue;
 
 			TargetState state = IsTargetValid(activeTargets[i]);
-			if (state != TargetState.Valid)
+			if (state != TargetState.Valid && state != TargetState.LowPriority)
 				continue;
 
 			float dst = activeTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
-
-			/* REFACTOR TODO Does this need to be here?
-			if (currentTarget != null)
+			if (activeTarget != null)
 			{
-			*/
-			// Ignore targets that are further from the current target
-			if (dst > closestDistance + DistanceFudgeAmount)
-				continue;
+				// Ignore low-priority targets that are further from the current target
+				if (dst > closestDistance + DistanceFudgeAmount && (activeState == TargetState.Valid || state == TargetState.LowPriority))
+					continue;
 
-			// Within fudge range, decide priority based on height
-			if (dst > closestDistance - DistanceFudgeAmount &&
-				activeTargets[i].GlobalPosition.Y <= currentTarget.GlobalPosition.Y)
-			{
-				continue;
+				// Ignore lower targets when within fudge range
+				if (dst < closestDistance + DistanceFudgeAmount &&
+					dst > closestDistance - DistanceFudgeAmount &&
+					activeTargets[i].GlobalPosition.Y <= activeTarget.GlobalPosition.Y)
+				{
+					continue;
+				}
 			}
-			//}
 
 			// Update data
-			currentTarget = activeTargets[i];
+			activeTarget = activeTargets[i];
+			activeState = state;
 			closestDistance = dst;
 		}
 
-		if (currentTarget != null && currentTarget != Target) // Target has changed
+		if (activeTarget != null && activeTarget != Target) // Target has changed
 		{
-			Target = currentTarget;
+			Target = activeTarget;
 			return true;
 		}
 
@@ -112,14 +112,14 @@ public partial class PlayerLockonController : Node3D
 			return;
 
 		TargetState targetState = IsTargetValid(Target); // Validate homing attack target
-		if ((IsHomingAttacking && targetState == TargetState.NotInList) ||
-			(!IsHomingAttacking && targetState != TargetState.Valid))
+		if ((Player.IsHomingAttacking && targetState == TargetState.NotInList) ||
+			(!Player.IsHomingAttacking && targetState != TargetState.Valid && targetState != TargetState.LowPriority))
 		{
 			ResetLockonTarget();
 			return;
 		}
 
-		if (!IsHomingAttacking &&
+		if (!Player.IsHomingAttacking &&
 			Target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten()) < DistanceFudgeAmount &&
 			Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle))
 		{
@@ -127,33 +127,17 @@ public partial class PlayerLockonController : Node3D
 			return;
 		}
 
-		// REFACTOR TODO
-		// Check Height
-		bool isTargetAttackable = IsHomingAttacking ||
-			(Target.GlobalPosition.Y <= Player.CenterPosition.Y + (Player.CollisionSize.Y * 2.0f) &&
-			!Player.IsJumpDashOrHomingAttack);
-		/*
-		if (IsBounceLockoutActive && !CanInterruptBounce)
-			isTargetAttackable = false;
-		*/
-
 		Vector2 screenPos = Player.Camera.ConvertToScreenSpace(Target.GlobalPosition);
-		UpdateLockonReticle(screenPos, isTargetAttackable, wasTargetChanged);
+		UpdateLockonReticle(screenPos, Player.IsHomingAttacking || targetState == TargetState.Valid, wasTargetChanged);
 	}
 
 	private TargetState IsTargetValid(Node3D target)
 	{
-		if (!activeTargets.Contains(target)) // Not in target list anymore (target hitbox may have been disabled)
+		if (target == null || !activeTargets.Contains(target)) // Not in target list anymore (target hitbox may have been disabled)
 			return TargetState.NotInList;
 
-		/*
-		REFACTOR TODO
-		if (Player.ActionState == PlayerController.ActionStates.Damaged ||
-			!StageSettings.instance.IsLevelIngame) // Character is busy
-		{
+		if (Player.IsKnockback || !StageSettings.Instance.IsLevelIngame) // Character is busy
 			return TargetState.PlayerBusy;
-		}
-		*/
 
 		if (!target.IsVisibleInTree() || !Player.Camera.IsOnScreen(target.GlobalPosition)) // Not visible
 			return TargetState.Invisible;
@@ -168,7 +152,12 @@ public partial class PlayerLockonController : Node3D
 			return TargetState.PlayerIgnored;
 		}
 
-		return TargetState.Valid;
+		// Check Height
+		bool isTargetAttackable = target.GlobalPosition.Y <= Player.CenterPosition.Y + (Player.CollisionSize.Y * 2.0f);
+		if (Player.IsBouncing && !IsMonitoring)
+			isTargetAttackable = false;
+
+		return isTargetAttackable ? TargetState.Valid : TargetState.LowPriority;
 	}
 
 	private bool HitObstacle(Node3D target)
@@ -200,25 +189,6 @@ public partial class PlayerLockonController : Node3D
 				if (h && h.collidedObject != target)
 					return true;
 			}
-		}
-
-		/* REFACTOR TODO
-			Remove this check and have the player simply transition
-		 	bounce state when colliding with something instead.
-		*/
-		// Check from the player's feet if nothing was hit
-		Vector3 castOffset = Vector3.Up * Player.CollisionSize.Y * .5f;
-		castPosition = Player.GlobalPosition + castOffset;
-		if (Player.VerticalSpeed < 0)
-			castPosition += Player.UpDirection * Player.VerticalSpeed * PhysicsManager.physicsDelta;
-		castVector = target.GlobalPosition - castOffset - castPosition;
-		h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
-		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
-		if (h && h.collidedObject != target &&
-			!h.collidedObject.IsInGroup(LevelWallGroup) &&
-			h.normal.AngleTo(Vector3.Up) > Mathf.Pi * .4f)
-		{
-			return true;
 		}
 
 		return false;

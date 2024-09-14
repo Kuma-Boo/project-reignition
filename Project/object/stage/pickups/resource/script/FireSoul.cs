@@ -42,7 +42,7 @@ public partial class FireSoul : Pickup
 		StageSettings.Instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint), (uint)ConnectFlags.OneShot);
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.FireSoulLockon) &&
-			Player.Lockon.IsHomingAttacking)
+			Player.IsHomingAttacking)
 			Player.StartBounce(true);
 	}
 

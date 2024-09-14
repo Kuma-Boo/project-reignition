@@ -538,7 +538,7 @@ public partial class PlayerAnimator : Node3D
 
 		if (Player.ExternalController != null)
 			targetRotation = ExternalAngle;
-		else if (Player.Lockon.IsHomingAttacking) // Face target
+		else if (Player.IsHomingAttacking) // Face target
 			targetRotation = ExtensionMethods.CalculateForwardAngle(Player.Lockon.HomingAttackDirection);
 		else if (Player.IsMovingBackward) // Backstepping
 			targetRotation = Player.PathFollower.ForwardAngle + (groundTurnRatio * Mathf.Pi * .15f);

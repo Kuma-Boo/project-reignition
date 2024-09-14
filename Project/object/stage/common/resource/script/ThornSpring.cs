@@ -71,7 +71,7 @@ public partial class ThornSpring : Launcher
 
 	public override void Activate(Area3D a)
 	{
-		if (Player.Lockon.IsHomingAttacking && Player.Lockon.Target == this) // Pause time break rotation temporarily
+		if (Player.IsHomingAttacking && Player.Lockon.Target == this) // Pause time break rotation temporarily
 			pauseTimebreakRotation = true;
 
 		base.Activate(a);
@@ -97,7 +97,7 @@ public partial class ThornSpring : Launcher
 	private void UpdateTimeBreakSpring()
 	{
 		if (!Player.Skills.IsTimeBreakActive &&
-			(!Player.Lockon.IsHomingAttacking || Player.Lockon.Target != this))
+			(!Player.IsHomingAttacking || Player.Lockon.Target != this))
 		{
 			if (rotationState != RotationStates.Looping && !pauseTimebreakRotation) // Return to spinning quickly
 				StartTimeBreakRotation();
@@ -139,7 +139,7 @@ public partial class ThornSpring : Launcher
 			return;
 		}
 
-		if (Player.Lockon.IsHomingAttacking && Player.Lockon.Target == this)
+		if (Player.IsHomingAttacking && Player.Lockon.Target == this)
 			return; // Don't start rotating if the player is attacking this spring
 
 		// Start a new rotation

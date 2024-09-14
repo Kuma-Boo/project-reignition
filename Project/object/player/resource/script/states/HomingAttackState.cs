@@ -26,7 +26,7 @@ public partial class HomingAttackState : PlayerState
 	public override void EnterState()
 	{
 		Player.VerticalSpeed = 0;
-		Player.Lockon.IsHomingAttacking = true;
+		Player.IsHomingAttacking = true;
 		Player.ChangeHitbox("spin");
 		Player.AttackState = PlayerController.AttackStates.Weak;
 
@@ -51,8 +51,8 @@ public partial class HomingAttackState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.IsHomingAttacking = false;
 		Player.AttackState = PlayerController.AttackStates.None;
-		Player.Lockon.IsHomingAttacking = false;
 		Player.Lockon.ResetLockonTarget();
 		Player.ChangeHitbox("RESET");
 		Player.Effect.StopSpinFX();

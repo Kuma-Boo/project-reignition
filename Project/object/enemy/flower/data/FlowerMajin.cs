@@ -136,7 +136,7 @@ public partial class FlowerMajin : Enemy
 	{
 		if (!IsOpen)
 		{
-			if (Player.Lockon.IsHomingAttacking)
+			if (Player.IsHomingAttacking)
 			{
 				Player.StartBounce(false);
 				UpdateLockon();
