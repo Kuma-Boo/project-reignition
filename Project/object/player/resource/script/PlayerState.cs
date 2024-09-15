@@ -63,8 +63,7 @@ public partial class PlayerState : Node
 
 		float inputAngle = Player.Controller.GetTargetInputAngle();
 		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
-		if ((Player.Controller.IsHoldingDirection(inputAngle, Player.MovementAngle + Mathf.Pi) && !Mathf.IsZeroApprox(Player.MoveSpeed)) ||
-			Input.IsActionPressed("button_brake")) // Turning around
+		if (IsBraking(inputAngle)) // Turning around
 		{
 			Brake();
 			return;
@@ -78,6 +77,20 @@ public partial class PlayerState : Node
 		}
 
 		Accelerate(inputStrength);
+	}
+
+	private bool IsBraking(float inputAngle)
+	{
+		if (Input.IsActionPressed("button_brake"))
+			return true;
+
+		if (Mathf.IsZeroApprox(Player.MoveSpeed))
+			return false;
+
+		if (Player.Camera.IsCrossfading)
+			return false;
+
+		return Player.Controller.IsHoldingDirection(inputAngle, Player.MovementAngle + Mathf.Pi);
 	}
 
 	protected virtual void Deccelerate() => Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, 0);
