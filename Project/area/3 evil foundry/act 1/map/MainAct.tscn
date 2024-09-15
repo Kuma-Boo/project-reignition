@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=3 uid="uid://ciqbaxbhrxrjk"]
+[gd_scene load_steps=74 format=3 uid="uid://ciqbaxbhrxrjk"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
@@ -52,9 +52,6 @@
 [ext_resource type="PackedScene" uid="uid://0gcen5dmjd" path="res://area/3 evil foundry/object/platform/Crusher.tscn" id="45_ko5px"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="46_urgd3"]
 [ext_resource type="PackedScene" uid="uid://chy7mei3ri2oc" path="res://area/3 evil foundry/object/platform/Stopper.tscn" id="47_8ckq7"]
-[ext_resource type="PackedScene" uid="uid://cw0i551l21x8l" path="res://object/enemy/majin/data/evil foundry/model/BlueMajin.gltf" id="48_0tdpe"]
-[ext_resource type="PackedScene" uid="uid://dqsppr7qcsl1j" path="res://object/enemy/majin/data/evil foundry/model/RedMajin.gltf" id="49_wxauh"]
-[ext_resource type="PackedScene" uid="uid://b0a2846kxe6fo" path="res://object/enemy/majin/data/evil foundry/model/GreenMajin.gltf" id="50_wqvpr"]
 [ext_resource type="PackedScene" uid="uid://b5dibkkf5v0en" path="res://area/3 evil foundry/object/scrap/HangingScrap.tscn" id="51_wa5gi"]
 [ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="52_y2u4x"]
 [ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="53_ssbfn"]
@@ -704,7 +701,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_vkmlm")
 
 [node name="Opening" type="Node3D" parent="MainAct"]
-visible = false
 script = ExtResource("41_gc12q")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -955,7 +951,6 @@ transform = Transform3D(0.047734, 0, -0.99886, 0, 1, 0, 0.99886, 0, 0.047734, -6
 
 [node name="GolemMajin" parent="MainAct/Opening" instance=ExtResource("11_6jexk")]
 transform = Transform3D(0.0154106, 0, 0.999881, 0, 1, 0, -0.999881, 0, 0.0154106, -65.2369, -40, -49.965)
-gasTankParent = null
 
 [node name="ScrapMachineLadder6" parent="MainAct/Opening" instance=ExtResource("9_7x2f4")]
 transform = Transform3D(-0.000420112, 0.00786134, -0.999968, 0.00161161, 0.999968, 0.00786066, 0.999999, -0.00160827, -0.000432776, -73.529, -39.9919, -55.7397)
@@ -1851,7 +1846,6 @@ endPosition = Vector3(-1, 6, -12)
 
 [node name="GolemMajin" parent="MainAct/Spiral1" instance=ExtResource("11_6jexk")]
 transform = Transform3D(-0.0278344, 0, 0.999613, 0, 1, 0, -0.999613, 0, -0.0278344, -35.48, -29.8606, -0.561363)
-gasTankParent = null
 
 [node name="FanHall" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -484, -59.9998, -60)
@@ -2184,11 +2178,12 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.171
 [node name="ScrapMachineLadder4" parent="MainAct/LavaCrossway" instance=ExtResource("9_7x2f4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.636, 0, -50.638)
 
-[node name="GolemMajin" parent="MainAct/LavaCrossway" instance=ExtResource("11_6jexk")]
-transform = Transform3D(1, -3.72529e-09, 5.55113e-17, -3.72529e-09, 1, -1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.731, 0, -61.656)
-
 [node name="GasTank" parent="MainAct/LavaCrossway" instance=ExtResource("15_pjnrf")]
 transform = Transform3D(1, -3.72529e-09, 5.55113e-17, -3.72529e-09, 1, -1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 1.59991, 9.74957, -61.6375)
+
+[node name="GolemMajin" parent="MainAct/LavaCrossway" node_paths=PackedStringArray("gasTank") instance=ExtResource("11_6jexk")]
+transform = Transform3D(1, -3.72529e-09, 5.55113e-17, -3.72529e-09, 1, -1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.731, 0, -61.656)
+gasTank = NodePath("../GasTank")
 
 [node name="FireSoulEvent" type="Node3D" parent="MainAct/LavaCrossway" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.13, 0, -78.564)
@@ -3725,32 +3720,71 @@ transform = Transform3D(-0.546452, -2.67035e-09, 0.837489, 1.46683e-08, 0.999999
 light = NodePath("../Crusher/CrusherBloomMesh")
 
 [node name="GasTank" parent="MainAct/Elevator" instance=ExtResource("15_pjnrf")]
-transform = Transform3D(-0.834398, 0.551153, 0.00280923, 0.00210892, -0.00190431, 0.999996, 0.551156, 0.834401, 0.000426644, -96.6288, 100.261, -128.6)
+transform = Transform3D(-0.834401, 0.551155, 2.40918e-08, 0, -4.37113e-08, 1, 0.551155, 0.834401, 3.64729e-08, -96.6288, 100.261, -128.6)
+height = 3.0
+endPosition = Vector3(18, 0, 1)
 
 [node name="GasTank2" parent="MainAct/Elevator" instance=ExtResource("15_pjnrf")]
-transform = Transform3D(-0.83862, 0.00679068, -0.544672, 0.00563261, 0.999976, 0.00379476, 0.544685, 0.000114316, -0.838639, -113.999, 100.385, -118.081)
+transform = Transform3D(0.544638, 0, -0.83867, 0, 0.999999, 0, 0.838669, 0, 0.544638, -113.997, 100.68, -118.081)
+height = 3.0
+endPosition = Vector3(13, 2, 7)
 
-[node name="RedMajin" parent="MainAct/Elevator" instance=ExtResource("14_42pc4")]
+[node name="RedMajin1" parent="MainAct/Elevator" instance=ExtResource("14_42pc4")]
 transform = Transform3D(-0.546453, -9.49687e-09, 0.837489, 6.51926e-09, 1, 2.91129e-09, -0.837489, -2.1437e-09, -0.546453, -109.027, 100.144, -119.304)
+"Spawn Settings/Spawn Travel Time" = 1.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 5, 40)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, -20)
+"Spawn Settings/Spawn Out Offset" = Vector3(-4, 0, -4)
+"Attack Settings/Flame Active Time" = 5.0
+"Attack Settings/Flame Inactive Time" = 0.5
 "Attack Settings/Flame Aggression Radius" = 0
-"Attack Settings/Attack Instantly" = false
+"Attack Settings/Attack Instantly" = true
+rangeOverride = 30
 
 [node name="RedMajin2" parent="MainAct/Elevator" instance=ExtResource("14_42pc4")]
 transform = Transform3D(-0.546453, -9.49687e-09, 0.837489, 6.51926e-09, 1, 2.91129e-09, -0.837489, -2.1437e-09, -0.546453, -110.196, 100.144, -121.095)
+"Spawn Settings/Spawn Travel Time" = 1.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 50)
+"Spawn Settings/Spawn In Offset" = Vector3(-5, 0, -25)
+"Spawn Settings/Spawn Out Offset" = Vector3(-5, 0, -5)
+"Attack Settings/Flame Active Time" = 5.0
+"Attack Settings/Flame Inactive Time" = 0.5
 "Attack Settings/Flame Aggression Radius" = 0
-"Attack Settings/Attack Instantly" = false
+"Attack Settings/Attack Instantly" = true
+rangeOverride = 30
 
 [node name="BlueMajin" parent="MainAct/Elevator" instance=ExtResource("34_ip7kn")]
-transform = Transform3D(-0.825053, -9.49687e-09, -0.565053, 5.7953e-09, 1, 8.14907e-09, 0.565053, -2.1437e-09, -0.825054, -114.969, 100.235, -106.639)
+transform = Transform3D(-0.825053, -9.49687e-09, -0.565053, 5.7953e-09, 1, 8.14907e-09, 0.565053, -2.1437e-09, -0.825054, -114.29, 100.235, -105.649)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 0, 20)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(-5, 0, -5)
+rangeOverride = 35
 
 [node name="BlueMajin2" parent="MainAct/Elevator" instance=ExtResource("34_ip7kn")]
-transform = Transform3D(-0.825053, -9.49687e-09, -0.565053, 5.7953e-09, 1, 8.14907e-09, 0.565053, -2.1437e-09, -0.825054, -113.794, 100.729, -104.839)
+transform = Transform3D(-0.825053, -9.49687e-09, -0.565053, 5.7953e-09, 1, 8.14907e-09, 0.565053, -2.1437e-09, -0.825054, -112.608, 100.729, -103.107)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 0, 20)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(-5, 0, -5)
+rangeOverride = 35
 
 [node name="BlueMajin3" parent="MainAct/Elevator" instance=ExtResource("34_ip7kn")]
 transform = Transform3D(-0.825053, -9.49687e-09, -0.565053, 5.7953e-09, 1, 8.14907e-09, 0.565053, -2.1437e-09, -0.825054, -111.149, 101.52, -100.785)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 0, 20)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(-5, 0, -5)
+rangeOverride = 35
 
 [node name="LavaFlowHall" type="Node3D" parent="MainAct"]
 transform = Transform3D(-0.0223733, -2.32831e-10, 0.99975, 4.72937e-10, 1, 0, -0.99975, -9.09495e-12, -0.0223733, 20, 40, -235)
+visible = false
 script = ExtResource("41_gc12q")
 saveVisibilityOnCheckpoint = true
 
@@ -3817,12 +3851,8 @@ transform = Transform3D(-0.0223733, -1.43019e-11, -0.99975, 1.05812e-11, 1, 4.72
 [node name="MetalPlatform5" parent="MainAct/LavaFlowHall" instance=ExtResource("44_kj7yh")]
 transform = Transform3D(-0.0223733, -1.43019e-11, -0.99975, 1.05812e-11, 1, 4.72819e-10, 0.99975, 2.32569e-10, -0.0223733, 169.725, -0.130955, 4.84224)
 
-[node name="LaunchRing" parent="MainAct/LavaFlowHall" instance=ExtResource("4_8g5mc")]
-transform = Transform3D(-0.0223732, 0.985339, 0.169134, -1.47899e-08, -0.169176, 0.985586, 0.99975, 0.0220507, 0.00378503, 148.201, -4.13126, 4.72368)
-"Secondary Settings/Distance" = 22.135
-
-[node name="Rings" type="Node3D" parent="MainAct/LavaFlowHall/LaunchRing"]
-transform = Transform3D(1, 1.11029e-14, 8.60176e-15, 4.23722e-14, -0.0254607, -0.999666, 7.31151e-15, 0.999683, -0.025463, -0.328075, -0.209778, 0.977081)
+[node name="Rings" type="Node3D" parent="MainAct/LavaFlowHall"]
+transform = Transform3D(-0.0223732, 0.143993, -0.989317, -1.47899e-08, 0.989581, 0.144024, 0.99975, 0.00322241, -0.0221397, 148.167, -3.13277, 4.39476)
 script = ExtResource("7_v2v6a")
 Generate = false
 Source = ExtResource("8_yjt2l")
@@ -3833,35 +3863,60 @@ Spacing = 2.7
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="MainAct/LavaFlowHall/LaunchRing/Rings" instance=ExtResource("8_yjt2l")]
+[node name="Child01" parent="MainAct/LavaFlowHall/Rings" instance=ExtResource("8_yjt2l")]
 
-[node name="Child02" parent="MainAct/LavaFlowHall/LaunchRing/Rings" instance=ExtResource("8_yjt2l")]
+[node name="Child02" parent="MainAct/LavaFlowHall/Rings" instance=ExtResource("8_yjt2l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0)
 
-[node name="Child03" parent="MainAct/LavaFlowHall/LaunchRing/Rings" instance=ExtResource("8_yjt2l")]
+[node name="Child03" parent="MainAct/LavaFlowHall/Rings" instance=ExtResource("8_yjt2l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4, 0)
 
-[node name="Child04" parent="MainAct/LavaFlowHall/LaunchRing/Rings" instance=ExtResource("8_yjt2l")]
+[node name="Child04" parent="MainAct/LavaFlowHall/Rings" instance=ExtResource("8_yjt2l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, 0)
 
-[node name="BlueMajin" parent="MainAct/LavaFlowHall" instance=ExtResource("48_0tdpe")]
+[node name="LaunchRing" parent="MainAct/LavaFlowHall" instance=ExtResource("4_8g5mc")]
+transform = Transform3D(-3.72529e-08, 0.984807, 0.173648, 8.67362e-19, -0.173648, 0.984807, 0.999999, 4.28408e-08, 6.75209e-09, 148.004, -4.09653, 4.72368)
+"Secondary Settings/Middle Height" = 16.0
+"Secondary Settings/Distance" = 10.0
+finalHeight = 10.0
+distance = 2.0
+launchDirection = 2
+
+[node name="BlueMajin" parent="MainAct/LavaFlowHall" instance=ExtResource("34_ip7kn")]
 transform = Transform3D(-0.0223733, -1.43019e-11, -0.99975, 1.05812e-11, 1, 4.72819e-10, 0.99975, 2.32569e-10, -0.0223733, 156.63, 1.34244, 4.47241)
+rangeOverride = 100
 
 [node name="LaunchRing2" parent="MainAct/LavaFlowHall" node_paths=PackedStringArray("animator", "sfxPlayer") instance=ExtResource("4_8g5mc")]
 transform = Transform3D(-0.0223733, 0.952228, 0.304571, 1.44813e-08, -0.304647, 0.952465, 0.99975, 0.0213098, 0.00681594, 181.159, -1.38873, 5.46124)
-"Secondary Settings/Middle Height" = 3.0
-"Secondary Settings/Distance" = 22.135
+"Secondary Settings/Middle Height" = 10.0
+"Secondary Settings/Final Height" = 5.0
+"Secondary Settings/Distance" = 10.0
 animator = NodePath("../LaunchRing/AnimationPlayer")
+middleHeight = 4.0
+distance = 7.0
+launchDirection = 2
 sfxPlayer = NodePath("../LaunchRing/Launch")
 
 [node name="LaunchRing3" parent="MainAct/LavaFlowHall" node_paths=PackedStringArray("animator", "sfxPlayer") instance=ExtResource("4_8g5mc")]
-transform = Transform3D(-0.0223733, 0.28249, 0.95901, 5.39837e-09, -0.959249, 0.282561, 0.99975, 0.00632181, 0.0214616, 190.442, 3.8358, 4.50231)
-"Secondary Settings/Distance" = 22.135
+transform = Transform3D(-0.0223733, 0.971771, 0.234861, 1.86265e-09, -0.23492, 0.972016, 0.99975, 0.0217471, 0.00525593, 190.442, 3.8358, 4.50231)
+"Secondary Settings/Middle Height" = 4.0
+"Secondary Settings/Final Height" = -4.0
+"Secondary Settings/Distance" = 12.0
 animator = NodePath("../LaunchRing/AnimationPlayer")
+finalHeight = -2.0
+distance = 7.0
+launchDirection = 2
 sfxPlayer = NodePath("../LaunchRing/Launch")
 
-[node name="RedMajin" parent="MainAct/LavaFlowHall" instance=ExtResource("49_wxauh")]
-transform = Transform3D(-0.0223733, -1.43019e-11, -0.99975, 1.05812e-11, 1, 4.72819e-10, 0.99975, 2.32569e-10, -0.0223733, 200.359, 3.23035, 5.32876)
+[node name="RedMajin2" parent="MainAct/LavaFlowHall" instance=ExtResource("14_42pc4")]
+transform = Transform3D(-0.0223733, -1.43019e-11, -0.99975, 1.05812e-11, 1, 4.72819e-10, 0.99975, 2.32569e-10, -0.0223733, 200.374, 3.23035, 4.62893)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 5.0
+"Attack Settings/Flame Active Time" = 1.4
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 15
+"Attack Settings/Attack Instantly" = true
+rangeOverride = 100
 
 [node name="TransitionHall" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.8447, 43.2303, -435.428)
@@ -3901,39 +3956,45 @@ transform = Transform3D(1, 0, 0, -1.45519e-11, 1, 8.4583e-11, -4.65661e-10, -3.7
 [node name="Child05" parent="MainAct/TransitionHall/BottomPath/HallRings" instance=ExtResource("8_yjt2l")]
 transform = Transform3D(1, 0, 0, -1.45519e-11, 1, 8.4583e-11, -4.65661e-10, -3.79828e-10, 1, 0.186493, -0.119312, 26.3994)
 
-[node name="LaunchRing4" parent="MainAct/TransitionHall" node_paths=PackedStringArray("animator", "sfxPlayer") instance=ExtResource("4_8g5mc")]
+[node name="LaunchRing" parent="MainAct/TransitionHall" node_paths=PackedStringArray("animator", "sfxPlayer") instance=ExtResource("4_8g5mc")]
 transform = Transform3D(0.00706518, -0.00451945, 0.999965, -0.000220549, -0.99999, -0.00451801, 0.999975, -0.00018862, -0.00706607, 5.01923, 1.83332, -14.1919)
-"Secondary Settings/Distance" = 22.135
+"Secondary Settings/Middle Height" = 2.0
+"Secondary Settings/Distance" = 60.0
 animator = NodePath("../../LavaFlowHall/LaunchRing/AnimationPlayer")
+middleHeight = 1.0
+distance = 30.0
 sfxPlayer = NodePath("../../LavaFlowHall/LaunchRing/Launch")
 
-[node name="GreenMajin" parent="MainAct/TransitionHall" instance=ExtResource("50_wqvpr")]
-transform = Transform3D(-0.0082204, 0, -0.999966, 0, 1, 0, 0.999966, 0, -0.0082204, 39.6611, 2.94642, -14.526)
+[node name="GreenMajin1" parent="MainAct/TransitionHall" instance=ExtResource("17_ff4u0")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 40, 3, -14.5)
 
-[node name="GreenMajin2" parent="MainAct/TransitionHall" instance=ExtResource("50_wqvpr")]
-transform = Transform3D(-0.0082204, 0, -0.999966, 0, 1, 0, 0.999966, 0, -0.0082204, 48.8881, 2.94642, -14.526)
+[node name="GreenMajin2" parent="MainAct/TransitionHall" instance=ExtResource("17_ff4u0")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 49, 3, -14.5)
 
-[node name="GreenMajin3" parent="MainAct/TransitionHall" instance=ExtResource("50_wqvpr")]
-transform = Transform3D(-0.0082204, 0, -0.999966, 0, 1, 0, 0.999966, 0, -0.0082204, 60.8353, 2.94642, -14.526)
+[node name="GreenMajin3" parent="MainAct/TransitionHall" instance=ExtResource("17_ff4u0")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 62, 3, -14.5)
 
-[node name="EnemyStone" parent="MainAct/TransitionHall" instance=ExtResource("31_m0om1")]
+[node name="EnemyStone1" parent="MainAct/TransitionHall" instance=ExtResource("31_m0om1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.4971, -2.16109, -13.7576)
+enemyCount = 1
 
-[node name="RichRing" parent="MainAct/TransitionHall/EnemyStone" instance=ExtResource("32_7ocqg")]
+[node name="RichRing" parent="MainAct/TransitionHall/EnemyStone1" instance=ExtResource("32_7ocqg")]
 
 [node name="EnemyStone2" parent="MainAct/TransitionHall" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("31_m0om1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 78.6879, -2.16109, -13.7576)
-root = NodePath("../EnemyStone/Root")
-pieceRoot = NodePath("../EnemyStone/EnemyStonePieces")
-animator = NodePath("../EnemyStone/AnimationPlayer")
+enemyCount = 1
+root = NodePath("../EnemyStone1/Root")
+pieceRoot = NodePath("../EnemyStone1/EnemyStonePieces")
+animator = NodePath("../EnemyStone1/AnimationPlayer")
 
 [node name="RichRing" parent="MainAct/TransitionHall/EnemyStone2" instance=ExtResource("32_7ocqg")]
 
 [node name="EnemyStone3" parent="MainAct/TransitionHall" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("31_m0om1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81.9955, -2.16109, -13.7576)
-root = NodePath("../EnemyStone/Root")
-pieceRoot = NodePath("../EnemyStone/EnemyStonePieces")
-animator = NodePath("../EnemyStone/AnimationPlayer")
+enemyCount = 1
+root = NodePath("../EnemyStone1/Root")
+pieceRoot = NodePath("../EnemyStone1/EnemyStonePieces")
+animator = NodePath("../EnemyStone1/AnimationPlayer")
 
 [node name="RichRing" parent="MainAct/TransitionHall/EnemyStone3" instance=ExtResource("32_7ocqg")]
 
@@ -3955,8 +4016,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0305786, -0.63755, 25.4931)
 [node name="HangingScrap" parent="MainAct/LavaPoolHall" instance=ExtResource("51_wa5gi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0359192, 17.055, 34.5553)
 
-[node name="BlueMajin" parent="MainAct/LavaPoolHall" instance=ExtResource("48_0tdpe")]
-transform = Transform3D(-0.99799, 0, -0.0633653, 0, 1, 0, 0.0633653, 0, -0.99799, 0.163635, 3.60229, 39.2824)
+[node name="BlueMajin2" parent="MainAct/LavaPoolHall" instance=ExtResource("34_ip7kn")]
+transform = Transform3D(-0.99799, 0, -0.0633653, 0, 1, 0, 0.0633653, 0, -0.99799, 0.353729, 3.60229, 42.2764)
+rangeOverride = 75
+
+[node name="RedMajin" parent="MainAct/LavaPoolHall" instance=ExtResource("14_42pc4")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.000610352, 0.0709114, 52.9264)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 5.0
+"Attack Settings/Flame Active Time" = 1.5
+"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 20
+"Attack Settings/Attack Instantly" = true
 
 [node name="MetalPlatform8" parent="MainAct/LavaPoolHall" instance=ExtResource("44_kj7yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000610352, -0.929089, 52.9264)
@@ -3996,11 +4067,25 @@ animator = NodePath("../HangingScrap/AnimationPlayer")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0359192, 11.956, 80.463)
 animator = NodePath("../HangingScrap/AnimationPlayer")
 
-[node name="GreenMajin" parent="MainAct/LavaPoolHall" instance=ExtResource("50_wqvpr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0234528, -3.34858, 73.7216)
+[node name="GreenMajin1" parent="MainAct/LavaPoolHall" instance=ExtResource("17_ff4u0")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0234528, -3.34858, 73.7216)
+"Spawn Settings/Spawn Travel Time" = 2.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-3, 0, 20)
+"Spawn Settings/Spawn In Offset" = Vector3(-4, 0, -6)
+"Spawn Settings/Spawn Out Offset" = Vector3(-5, 0, -5)
+rangeOverride = 15
 
-[node name="GreenMajin2" parent="MainAct/LavaPoolHall" instance=ExtResource("50_wqvpr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0234528, -3.92407, 80.0748)
+[node name="GreenMajin2" parent="MainAct/LavaPoolHall" instance=ExtResource("17_ff4u0")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0234528, -3.92407, 80.0748)
+"Spawn Settings/Spawn Travel Time" = 2.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-5, 0, 25)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, -12)
+"Spawn Settings/Spawn Out Offset" = Vector3(-5, 0, -5)
+
+[node name="BlueMajin" parent="MainAct/LavaPoolHall" instance=ExtResource("34_ip7kn")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.261452, 1.00054, 89.7785)
 
 [node name="JumpPanel" parent="MainAct/LavaPoolHall" instance=ExtResource("39_ikhtg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.261452, 0.000541687, 102.779)
@@ -4010,43 +4095,47 @@ finalHeight = 4.59
 distance = 12.97
 
 [node name="MetalPlatform" parent="MainAct/LavaPoolHall" instance=ExtResource("44_kj7yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.786537, -1.78024, 124.313)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.060379, -1.78024, 124.313)
 
 [node name="MetalPlatform2" parent="MainAct/LavaPoolHall" instance=ExtResource("44_kj7yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.786537, -1.78024, 134.318)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.060379, -1.78024, 134.318)
 
 [node name="MetalPlatform3" parent="MainAct/LavaPoolHall" instance=ExtResource("44_kj7yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.786537, -1.78024, 144.339)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.060379, -1.78024, 144.339)
 
 [node name="MetalPlatform4" parent="MainAct/LavaPoolHall" instance=ExtResource("44_kj7yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.786537, -8.8435, 160.795)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.060379, -8.8435, 160.795)
 
 [node name="MetalPlatform5" parent="MainAct/LavaPoolHall" instance=ExtResource("44_kj7yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.786537, -4.01182, 170.891)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.060379, -4.01182, 170.891)
 
 [node name="Stopper" parent="MainAct/LavaPoolHall" instance=ExtResource("47_8ckq7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.692802, -1.49951, 148.918)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0333557, -1.49951, 148.918)
 
 [node name="LaunchRing" parent="MainAct/LavaPoolHall" instance=ExtResource("4_8g5mc")]
-transform = Transform3D(1, 0, 0, 0, 0.987494, 0.157658, 0, -0.157658, 0.987494, 0.266754, 1.27806, 150.391)
+transform = Transform3D(1, 0, 0, 0, 0.987494, 0.157658, 0, -0.157658, 0.987494, -0.459404, 1.27806, 150.391)
+"Secondary Settings/Middle Height" = 1.0
+"Secondary Settings/Final Height" = -8.0
+"Secondary Settings/Distance" = 18.0
+middleHeight = 1.0
+finalHeight = -5.0
+distance = 6.0
 
 [node name="FlyingPot" parent="MainAct/LavaPoolHall" instance=ExtResource("52_y2u4x")]
-transform = Transform3D(0.999936, 0.0113444, 0, -0.0113444, 0.999936, 0, 0, 0, 1, 0.721443, -7.74586, 164.916)
+transform = Transform3D(0.999936, 0.0113444, 0, -0.0113444, 0.999936, 0, 0, 0, 1, -0.00471497, -7.74586, 164.916)
 travelBounds = Vector2(2.67, 7.07)
 
 [node name="SpikeBall" parent="MainAct/LavaPoolHall" instance=ExtResource("13_flmq3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.757004, -3.92003, 165.336)
-"Movement/Cycle Length" = 1.9
-"Movement/Starting Offset" = 0.06
-Movement/Distance = 5.9
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0308456, -3.92003, 165.336)
+"Movement/Cycle Length" = 2.0
+Movement/Distance = 6.0
 "Vertical Orientation" = true
 
 [node name="Spring" parent="MainAct/LavaPoolHall" instance=ExtResource("37_xvvs2")]
-transform = Transform3D(1, 0, 0, 0, 0.811003, -0.585043, 0, 0.585043, 0.811003, 0.745255, -3.54047, 174.601)
-startingHeight = 0.395
-middleHeight = 0.145
-finalHeight = 5.21
-distance = 10.405
+transform = Transform3D(1, 0, 0, 0, 0.811003, -0.585043, 0, 0.585043, 0.811003, 0.0190964, -3.54047, 174.601)
+middleHeight = 8.0
+finalHeight = 4.0
+distance = 50.0
 voiceKey = &""
 
 [node name="DashPanel" parent="MainAct/LavaPoolHall" instance=ExtResource("38_mjdev")]
@@ -4054,6 +4143,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 226)
 
 [node name="Ending" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 138, 40, -194.2)
+visible = false
 script = ExtResource("41_gc12q")
 saveVisibilityOnCheckpoint = true
 
@@ -4084,10 +4174,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.18729, 0, 0.00149536)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.78729, 0, 0.00149536)
 
 [node name="SpikeBallSpawner1" parent="MainAct/Ending" instance=ExtResource("53_ssbfn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.485, 4.1995, 0.121994)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 18.485, 4.1995, -0.878006)
+maxSpawnAmount = 10
+lifetime = 5.0
 
 [node name="SpikeBallSpawner2" parent="MainAct/Ending" instance=ExtResource("53_ssbfn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.292, 4.0127, 0.121994)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.292, 4.0127, -0.478012)
+maxSpawnAmount = 10
+lifetime = 5.0
 
 [node name="RichRing" parent="MainAct/Ending" instance=ExtResource("32_7ocqg")]
 transform = Transform3D(-0.00535812, 0, 0.999986, 0, 1, 0, -0.999986, 0, -0.00535812, 48.907, -6.2722, 1.092)
@@ -4660,3 +4754,6 @@ shape = SubResource("BoxShape3D_tr11d")
 [connection signal="Exited" from="MainAct/LavaCrossway/LaunchRing1" to="MainAct/LavaCrossway/LaunchRing1/Cam" method="Deactivate"]
 [connection signal="Spawned" from="MainAct/MineEntrance/GreenMajin1" to="MainAct/MineEntrance/GreenMajin2" method="Spawn"]
 [connection signal="Spawned" from="MainAct/MineEntrance/GreenMajin1" to="MainAct/MineEntrance/GreenMajin3" method="Spawn"]
+[connection signal="Defeated" from="MainAct/TransitionHall/GreenMajin1" to="MainAct/TransitionHall/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/TransitionHall/GreenMajin2" to="MainAct/TransitionHall/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/TransitionHall/GreenMajin3" to="MainAct/TransitionHall/EnemyStone3" method="IncrementCounter"]
