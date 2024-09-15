@@ -13,9 +13,8 @@ namespace Project.Gameplay.Triggers
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new Array<Dictionary>();
+			Array<Dictionary> properties = [ExtensionMethods.CreateProperty("OneShot", Variant.Type.Bool)];
 
-			properties.Add(ExtensionMethods.CreateProperty("OneShot", Variant.Type.Bool));
 			if (isOneShot)
 				properties.Add(ExtensionMethods.CreateProperty("Respawn Mode", Variant.Type.Int, PropertyHint.Enum, respawnMode.EnumToString()));
 
@@ -112,7 +111,7 @@ namespace Project.Gameplay.Triggers
 		public delegate void DeactivatedEventHandler();
 		[Signal]
 		public delegate void RespawnedEventHandler();
-		private CharacterPathFollower PathFollower => CharacterController.instance.PathFollower;
+		private PlayerPathController PathFollower => StageSettings.Player.PathFollower;
 		private bool isInteractingWithPlayer;
 
 		public override void _Ready()
@@ -132,7 +131,7 @@ namespace Project.Gameplay.Triggers
 			}
 
 			if (respawnMode != RespawnModes.Disabled) //Connect respawn signal
-				StageSettings.instance.ConnectRespawnSignal(this);
+				StageSettings.Instance.ConnectRespawnSignal(this);
 		}
 
 		public void Respawn()
@@ -141,7 +140,7 @@ namespace Project.Gameplay.Triggers
 			{
 				//Compare the currentCheckpoint progress compared to this StageTrigger
 				float eventPosition = PathFollower.GetProgress(GlobalPosition);
-				float checkpointPosition = PathFollower.GetProgress(StageSettings.instance.CurrentCheckpoint.GlobalPosition);
+				float checkpointPosition = PathFollower.GetProgress(StageSettings.Instance.CurrentCheckpoint.GlobalPosition);
 				bool isRespawningAhead = checkpointPosition > eventPosition;
 
 				if ((respawnMode == RespawnModes.CheckpointBefore && isRespawningAhead) ||

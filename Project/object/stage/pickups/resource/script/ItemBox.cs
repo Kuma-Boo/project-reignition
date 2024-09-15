@@ -249,13 +249,12 @@ namespace Project.Gameplay.Objects
 			isMovingObjects = !isMovementComplete;
 		}
 
-
 		protected override void Collect()
 		{
 			base.Collect();
 
-			if (Character.ActionState == CharacterController.ActionStates.JumpDash)
-				Character.Lockon.StartBounce();
+			if (Player.IsJumpDashOrHomingAttack)
+				Player.StartBounce();
 
 			animator.Play("open");
 			isOpened = true;

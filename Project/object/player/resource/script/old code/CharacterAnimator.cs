@@ -188,8 +188,8 @@ public partial class CharacterAnimator : Node3D
 	{
 		Character.Effect.IsEmittingStepDust = !Mathf.IsZeroApprox(Character.MoveSpeed); // Emit step dust based on speed
 
-		if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Success &&
-			StageSettings.instance.Data.CompletionAnimation == LevelDataResource.CompletionAnimationType.ThumbsUp)
+		if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Success &&
+			StageSettings.Instance.Data.CompletionAnimation == LevelDataResource.CompletionAnimationType.ThumbsUp)
 		{
 			if (!(bool)animationTree.Get(OneshotActive))
 			{
@@ -468,17 +468,15 @@ public partial class CharacterAnimator : Node3D
 	public bool IsSlideTransitionActive => CrouchStatePlayback.GetCurrentNode() == SlideStateStart;
 	public void StartCrouching()
 	{
-		if (Character.ActionState == CharacterController.ActionStates.Sliding)
-		{
-			crouchTransition.XfadeTime = .05;
-			CrouchStatePlayback.Travel(SlideStateStart);
-		}
-		else
-		{
-			CrouchStatePlayback.Travel(CrouchStateStart);
-			crouchTransition.XfadeTime = .1;
-		}
+		crouchTransition.XfadeTime = .1;
+		CrouchStatePlayback.Travel(CrouchStateStart);
+		animationTree.Set(CrouchTransition, EnabledConstant);
+	}
 
+	public void StartSliding()
+	{
+		crouchTransition.XfadeTime = .05;
+		CrouchStatePlayback.Travel(SlideStateStart);
 		animationTree.Set(CrouchTransition, EnabledConstant);
 	}
 

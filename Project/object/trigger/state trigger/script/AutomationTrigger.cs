@@ -1,5 +1,4 @@
 using Godot;
-using Project.Core;
 
 namespace Project.Gameplay.Triggers;
 
@@ -19,103 +18,37 @@ public partial class AutomationTrigger : Area3D
 	/// <summary> Always activate regardless of which way the player entered/moves. </summary>
 	[Export]
 	private bool ignoreDirection;
-
-	private bool isEntered;
-	private bool isActive;
-	/// <summary> Reference to the automation path. </summary>
-	private Path3D automationPath;
-
-	private bool IsFinished => Character.PathFollower.ActivePath != automationPath || Character.PathFollower.Progress >= endPoint;
-	private CharacterController Character => CharacterController.instance;
-
-	/// <summary> Extra acceleration applied when the player is moving too slow. </summary>
-	private const float LOW_SPEED_ACCELERATION = 80.0f;
+	private bool isInteractingWithPlayer;
+	private PlayerController Player => StageSettings.Player;
+	public bool IsFinished => Player.PathFollower.Progress >= endPoint;
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (isActive)
-		{
-			UpdateAutomation();
-
-			if (IsFinished)
-			{
-				Deactivate();
-				return;
-			}
-
+		if (!isInteractingWithPlayer)
 			return;
-		}
 
-		if (!isEntered) return;
-
-		if (IsActivationValid())
-			Activate();
+		AttemptAutomation();
 	}
 
-	private void UpdateAutomation()
+	private void AttemptAutomation()
 	{
-		if (!Character.Skills.IsSpeedBreakActive)
-		{
-			if (Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed) < .8f) // Accelerate quicker to reduce low-speed jank
-				Character.MoveSpeed += LOW_SPEED_ACCELERATION * PhysicsManager.physicsDelta;
-
-			if (Character.IsLockoutActive && Character.ActiveLockoutData.overrideSpeed)
-				Character.MoveSpeed = Character.ActiveLockoutData.ApplySpeed(Character.MoveSpeed, Character.GroundSettings);
-			else
-				Character.MoveSpeed = Character.GroundSettings.UpdateInterpolate(Character.MoveSpeed, 1); // Move to max speed
-		}
-
-		Character.PathFollower.Progress += Character.MoveSpeed * PhysicsManager.physicsDelta;
-		Character.MovementAngle = Character.PathFollower.ForwardAngle;
-
-		Character.UpdateExternalControl(false);
-		Character.Animator.ExternalAngle = 0;
-	}
-
-	private bool IsActivationValid()
-	{
-		if (!Character.IsOnGround) return false;
+		if (Player.IsAutomationActive || !Player.IsOnGround)
+			return;
 
 		if (!ignoreDirection)
 		{
 			// Ensure character is facing/moving the correct direction
-			float dot = ExtensionMethods.DotAngle(Character.MovementAngle, ExtensionMethods.CalculateForwardAngle(this.Forward()));
-			if (dot < 0f || Character.IsMovingBackward) return false;
+			float dot = ExtensionMethods.DotAngle(Player.MovementAngle, ExtensionMethods.CalculateForwardAngle(this.Forward()));
+			if (dot < 0f || Player.IsMovingBackward)
+				return;
 		}
 
-		return true;
+		Player.StartAutomation(this);
 	}
 
-	private void Activate()
-	{
-		EmitSignal(SignalName.Activated);
-		isActive = true;
+	public void Activate() => EmitSignal(SignalName.Activated);
+	public void Deactivate() => EmitSignal(SignalName.Deactivated);
 
-		automationPath = Character.PathFollower.ActivePath;
-		Character.PathFollower.Resync();
-
-		float initialVelocity = Character.MoveSpeed;
-		Character.StartExternal(this, Character.PathFollower, .05f, true);
-		Character.MoveSpeed = initialVelocity;
-		Character.Animator.ExternalAngle = 0;
-		Character.Animator.SnapRotation(Character.Animator.ExternalAngle); // Rotate to follow pathfollower
-		Character.IsMovingBackward = false; // Prevent getting stuck in backstep animation
-
-		if (Character.Animator.IsBrakeAnimationActive)
-			Character.Animator.StopBrake();
-	}
-
-	private void Deactivate()
-	{
-		EmitSignal(SignalName.Deactivated);
-		isActive = false;
-
-		Character.PathFollower.Resync();
-		Character.ResetMovementState();
-		Character.UpDirection = Character.PathFollower.Up();
-		Character.Animator.SnapRotation(Character.MovementAngle);
-	}
-
-	public void OnEntered(Area3D _) => isEntered = true;
-	public void OnExited(Area3D _) => isEntered = false;
+	public void OnEntered(Area3D _) => isInteractingWithPlayer = true;
+	public void OnExited(Area3D _) => isInteractingWithPlayer = false;
 }

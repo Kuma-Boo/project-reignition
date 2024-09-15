@@ -153,8 +153,8 @@ public partial class SoundManager : Node
 
 		string key = currentDialog.textKeys[currentDialogIndex];
 		AudioStream targetStream = null;
-		if (IsInstanceValid(Gameplay.StageSettings.instance))
-			targetStream = Gameplay.StageSettings.instance.dialogLibrary.GetStream(key, LanguageIndex);
+		if (IsInstanceValid(Gameplay.StageSettings.Instance))
+			targetStream = Gameplay.StageSettings.Instance.dialogLibrary.GetStream(key, LanguageIndex);
 
 		if (targetStream != null) // Using audio
 		{

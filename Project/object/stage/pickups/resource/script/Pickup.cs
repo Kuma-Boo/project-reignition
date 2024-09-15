@@ -15,8 +15,8 @@ namespace Project.Gameplay.Objects
 		public bool DisableAutoRespawning { get; set; }
 		public SpawnData SpawnData { get; set; }
 
-		protected StageSettings Stage => StageSettings.instance;
-		protected CharacterController Character => CharacterController.instance;
+		protected StageSettings Stage => StageSettings.Instance;
+		protected PlayerController Player => StageSettings.Player;
 
 		public override void _Ready() => SetUp();
 
@@ -34,7 +34,7 @@ namespace Project.Gameplay.Objects
 		public void OnEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player detection")) return;
-			if (Character.ActionState == CharacterController.ActionStates.Teleport) return; // Don't allow collections during teleport/respawn
+			if (Player.IsTeleporting) return; // Don't allow collections during teleport/respawn
 
 			CallDeferred(MethodName.Collect);
 		}

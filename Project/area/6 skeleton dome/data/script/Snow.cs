@@ -9,7 +9,7 @@ namespace Project.Gameplay.Objects
 		{
 			// Reparent to camera
 			GetParent().RemoveChild(this);
-			CharacterController.instance.Camera.AddChild(this);
+			StageSettings.Player.Camera.AddChild(this);
 			Restart();
 			Preprocess = 0.0f;
 		}

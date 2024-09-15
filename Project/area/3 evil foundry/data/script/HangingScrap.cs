@@ -9,17 +9,17 @@ namespace Project.Gameplay
 	{
 		[Export]
 		private AnimationPlayer animator;
-		private CharacterController Character => CharacterController.instance;
+		private PlayerController Player => StageSettings.Player;
 		private bool isInteractingWithPlayer;
 
-		public override void _Ready() => StageSettings.instance.ConnectRespawnSignal(this);
+		public override void _Ready() => StageSettings.Instance.ConnectRespawnSignal(this);
 		public void Respawn() => animator.Play("RESET");
 
 		public override void _PhysicsProcess(double _)
 		{
 			if (!isInteractingWithPlayer) return;
 
-			if (Character.IsOnGround)
+			if (Player.IsOnGround)
 			{
 				if (animator.CurrentAnimation != "delay_drop")
 					animator.Play("delay_drop");
@@ -28,8 +28,8 @@ namespace Project.Gameplay
 
 			animator.Play("drop");
 
-			if (Character.ActionState == CharacterController.ActionStates.JumpDash)
-				Character.Lockon.StartBounce(false);
+			if (Player.IsJumpDashOrHomingAttack)
+				Player.StartBounce(false);
 		}
 
 		public void OnEntered(Area3D a)
