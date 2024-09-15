@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://d4va62rgfqin"]
+[gd_scene load_steps=43 format=3 uid="uid://d4va62rgfqin"]
 
 [ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="1_8qxdg"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_qk3u2"]
@@ -16,17 +16,22 @@
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="9_tksp5"]
 [ext_resource type="PackedScene" uid="uid://c3b6ygc13a33j" path="res://object/enemy/majin/data/evil foundry/GreenMajin.tscn" id="10_ac17n"]
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="15_x6g2j"]
+[ext_resource type="PackedScene" path="res://area/3 evil foundry/object/platform/HallPlatformLong.tscn" id="16_xbsy4"]
+[ext_resource type="PackedScene" uid="uid://c1o8jxmiiryrj" path="res://object/stage/common/JumpCarpet.tscn" id="17_6twug"]
 [ext_resource type="PackedScene" uid="uid://dogm6wyurmt4" path="res://area/3 evil foundry/object/grindrail/Grindrail03.tscn" id="17_mr6ev"]
+[ext_resource type="PackedScene" uid="uid://2h6xrqn3jp6l" path="res://object/stage/destructable/Cage.tscn" id="17_welrc"]
 [ext_resource type="PackedScene" path="res://area/3 evil foundry/object/Elevator.tscn" id="18_834aa"]
 [ext_resource type="PackedScene" path="res://area/3 evil foundry/object/Fan.tscn" id="18_ddkmk"]
-[ext_resource type="Script" path="res://resource/script/StaggerAnimationPlayers.cs" id="18_i7kb8"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="18_mjad6"]
+[ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="19_8jijq"]
 [ext_resource type="PackedScene" uid="uid://lqag3j32861" path="res://area/3 evil foundry/object/grindrail/Grindrail04.tscn" id="19_q274s"]
-[ext_resource type="PackedScene" uid="uid://cdeed7pfy1q13" path="res://area/3 evil foundry/object/TippingFurnace.tscn" id="19_r1r1j"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="19_xdhlr"]
+[ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="20_4u3p0"]
 [ext_resource type="PackedScene" uid="uid://b7ku38xcd8buw" path="res://object/enemy/majin/data/evil foundry/BlueMajin.tscn" id="20_kkn76"]
 [ext_resource type="PackedScene" uid="uid://bdxneanubmcid" path="res://area/3 evil foundry/object/GasTank.tscn" id="21_kry2n"]
 [ext_resource type="PackedScene" path="res://area/3 evil foundry/object/FanBroken.tscn" id="22_cges7"]
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="24_lhmrn"]
+[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="25_l0jjy"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s1mwa"]
 size = Vector3(20, 20, 5)
@@ -38,11 +43,177 @@ _data = {
 }
 point_count = 7
 
-[sub_resource type="Curve" id="Curve_30x12"]
-min_value = -10.0
-max_value = 10.0
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 0.75), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_luj3r"]
+min_value = -2.0
+max_value = 0.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, -1), 0.0, 0.0, 0, 0, Vector2(1, -0.6), 0.0, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="Curve" id="Curve_gc1gy"]
+min_value = -1.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -0.6), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_30x12"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.7), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Animation" id="Animation_s406k"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FurnacePivot1:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.0872665, -1.5708, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FurnacePivot1/Furnace1:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FurnacePivot2:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.0872665, -1.5708, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FurnacePivot2/Furnace2:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("FurnacePivot3:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.0872665, -1.5708, -6.36724e-10)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FurnacePivot3/Furnace3:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_m0l34"]
+resource_name = "event"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FurnacePivot1:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0.0872665, -1.5708, 0), Vector3(0.0872665, -1.5708, -1.5708)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FurnacePivot1/Furnace1:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(-0.8, 0, 0), Vector3(-0.8, -1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FurnacePivot2:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3, 1.1),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0.0872665, -1.5708, 0), Vector3(0.0872665, -1.5708, -1.5708)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FurnacePivot2/Furnace2:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.3, 1.1),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(-0.8, 0, 0), Vector3(-0.8, -1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("FurnacePivot3:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.6, 1.4),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0.0872665, -1.5708, -6.36724e-10), Vector3(0.0872665, -1.5708, -1.5708)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FurnacePivot3/Furnace3:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.6, 1.4),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(-0.8, 0, 0), Vector3(-0.8, -1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2sowh"]
+_data = {
+"RESET": SubResource("Animation_s406k"),
+"event": SubResource("Animation_m0l34")
+}
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cvoto"]
 size = Vector3(5, 20, 20)
@@ -61,13 +232,14 @@ metadata/_edit_lock_ = true
 metadata/_edit_lock_ = true
 
 [node name="SpawnPosition" type="Node3D" parent="DeathlessAct"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -532, -45, -360)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -532, -45, -360)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="DeathlessAct/SpawnPosition" instance=ExtResource("2_qk3u2")]
 enableStartFX = true
 
 [node name="CullingMap" type="Node3D" parent="DeathlessAct"]
+visible = false
 
 [node name="MineEntrance-L" parent="DeathlessAct/CullingMap" instance=ExtResource("4_vuoeu")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -405.071, -52.4939, -340.001)
@@ -107,6 +279,7 @@ shape = SubResource("BoxShape3D_s1mwa")
 
 [node name="Opening" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -521.264, -44.4904, -360.012)
+visible = false
 script = ExtResource("4_khgg8")
 startEnabled = true
 isStageVisuals = true
@@ -185,6 +358,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
 [node name="RichRing" parent="DeathlessAct/Opening" instance=ExtResource("6_upu1a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.9064, 0.24963, -0.905304)
 
+[node name="GasTank" parent="DeathlessAct/Opening" instance=ExtResource("21_kry2n")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.5, 0)
+
 [node name="GolemPath" type="Path3D" parent="DeathlessAct/Opening"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 35.7907, -0.5, 1.03372)
 curve = SubResource("Curve3D_wv2bb")
@@ -232,7 +408,50 @@ transform = Transform3D(0.984808, 0, 0.173648, -0.173648, -4.37114e-08, 0.984808
 [node name="GreenMajin" parent="DeathlessAct/Opening" instance=ExtResource("10_ac17n")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 92.5941, 3.08256, 0)
 
-[node name="GasTank" parent="DeathlessAct/Opening" instance=ExtResource("21_kry2n")]
+[node name="DashPanel2" parent="DeathlessAct/Opening" instance=ExtResource("4_sj5iv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 154.403, -15.5096, 0.0119934)
+
+[node name="HallPlatformLong1" parent="DeathlessAct/Opening" instance=ExtResource("16_xbsy4")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 55.5, 14, 0)
+
+[node name="Cage" parent="DeathlessAct/Opening/HallPlatformLong1" instance=ExtResource("17_welrc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.501, 5.5)
+
+[node name="FireSoul" parent="DeathlessAct/Opening/HallPlatformLong1/Cage" instance=ExtResource("18_mjad6")]
+
+[node name="DashPanel" parent="DeathlessAct/Opening/HallPlatformLong1" instance=ExtResource("4_sj5iv")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.5, 3)
+
+[node name="RichPearls" type="Node3D" parent="DeathlessAct/Opening/HallPlatformLong1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -4.5)
+script = ExtResource("3_g5v4g")
+Generate = false
+Source = ExtResource("19_8jijq")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 6.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Opening/HallPlatformLong1/RichPearls" instance=ExtResource("19_8jijq")]
+
+[node name="Child02" parent="DeathlessAct/Opening/HallPlatformLong1/RichPearls" instance=ExtResource("19_8jijq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child03" parent="DeathlessAct/Opening/HallPlatformLong1/RichPearls" instance=ExtResource("19_8jijq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child04" parent="DeathlessAct/Opening/HallPlatformLong1/RichPearls" instance=ExtResource("19_8jijq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="HallPlatformLong2" parent="DeathlessAct/Opening" instance=ExtResource("16_xbsy4")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 75.5, 14, 0)
+
+[node name="JumpPanel" parent="DeathlessAct/Opening/HallPlatformLong2" instance=ExtResource("20_4u3p0")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.5, -12)
+middleHeight = 2.0
+distance = 20.0
 
 [node name="DashPanel" parent="DeathlessAct/Opening" instance=ExtResource("4_sj5iv")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 109.037, 14.4904, 0.0119934)
@@ -247,27 +466,27 @@ Shape = 2
 Path = NodePath("../../../Static/Path/MiddlePath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
-Spacing = 7.7
-"Horizontal Offset" = SubResource("Curve_30x12")
+Spacing = 8.0
+"Horizontal Offset" = SubResource("Curve_luj3r")
 "Vertical Offset" = null
 
 [node name="Child01" parent="DeathlessAct/Opening/Rings1" instance=ExtResource("4_pwmd8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 1.90735e-06, 0)
 
 [node name="Child02" parent="DeathlessAct/Opening/Rings1" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.67798, -0.736462, 0.248779)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.92548, -0.776918, 0.664246)
 
 [node name="Child03" parent="DeathlessAct/Opening/Rings1" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.7307, -2.06878, 2.74112)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.9172, -2.19504, 3.56693)
 
 [node name="Child04" parent="DeathlessAct/Opening/Rings1" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.153, -3.84717, 7.59943)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.5406, -4.07051, 8.36639)
 
 [node name="Child05" parent="DeathlessAct/Opening/Rings1" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.5011, -5.77758, 13.9336)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.9673, -6.07376, 14.9648)
 
 [node name="Rings2" type="Node3D" parent="DeathlessAct/Opening"]
-transform = Transform3D(-0.696001, 0, -0.718041, 0, 1, 0, 0.718041, 0, -0.696001, 151.009, 4.2931, 32.3172)
+transform = Transform3D(-0.696001, 0, -0.718041, 0, 1, 0, 0.718041, 0, -0.696001, 149.937, 3.9931, 33.2476)
 script = ExtResource("3_g5v4g")
 Generate = false
 Source = ExtResource("4_pwmd8")
@@ -276,27 +495,27 @@ Shape = 2
 Path = NodePath("../../../Static/Path/MiddlePath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
-Spacing = 4.8
-"Horizontal Offset" = SubResource("Curve_30x12")
+Spacing = 5.0
+"Horizontal Offset" = SubResource("Curve_gc1gy")
 "Vertical Offset" = null
 
 [node name="Child01" parent="DeathlessAct/Opening/Rings2" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000442505, 0.000106812, 6.10352e-05)
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.000717163, -0.00018692, 0)
 
 [node name="Child02" parent="DeathlessAct/Opening/Rings2" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.58224, -1.15623, 0.300598)
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 4.71494, -1.20291, 0.589142)
 
 [node name="Child03" parent="DeathlessAct/Opening/Rings2" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.93672, -2.30382, 1.63651)
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 9.11395, -2.39115, 2.26855)
 
 [node name="Child04" parent="DeathlessAct/Opening/Rings2" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.8049, -3.42503, 3.88147)
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 12.8767, -3.537, 4.9505)
 
 [node name="Child05" parent="DeathlessAct/Opening/Rings2" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.9584, -4.48833, 6.9306)
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 15.7402, -4.6467, 8.51935)
 
 [node name="Rings3" type="Node3D" parent="DeathlessAct/Opening"]
-transform = Transform3D(-0.847826, 0, 0.530274, 0, 1, 0, -0.530274, 0, -0.847826, 127.103, -2.1801, 37.5399)
+transform = Transform3D(-0.847826, 0, 0.530274, 0, 1, 0, -0.530274, 0, -0.847826, 127.703, -2.1801, 37.7399)
 script = ExtResource("3_g5v4g")
 Generate = false
 Source = ExtResource("4_pwmd8")
@@ -310,19 +529,19 @@ Spacing = 6.5
 "Vertical Offset" = null
 
 [node name="Child01" parent="DeathlessAct/Opening/Rings3" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -0.000244141, 5.34058e-05, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 1.14441e-05, 1.52588e-05)
 
 [node name="Child02" parent="DeathlessAct/Opening/Rings3" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 6.37473, -1.56145, 0.298721)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.37512, -1.55991, -0.00146484)
 
 [node name="Child03" parent="DeathlessAct/Opening/Rings3" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 12.5238, -3.12357, 2.35918)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.6387, -3.12317, 1.77975)
 
 [node name="Child04" parent="DeathlessAct/Opening/Rings3" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 17.3362, -4.64937, 6.75229)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.7852, -4.65535, 5.88525)
 
 [node name="Child05" parent="DeathlessAct/Opening/Rings3" instance=ExtResource("4_pwmd8")]
-transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 20.2095, -6.12393, 12.4977)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.1542, -6.12558, 11.5494)
 
 [node name="Furnace1" parent="DeathlessAct/Opening" instance=ExtResource("7_uib7b")]
 transform = Transform3D(-0.747856, 0, -0.663861, 0, 1, 0, 0.663861, 0, -0.747856, 153.269, 10.0823, 7.96463)
@@ -336,8 +555,8 @@ transform = Transform3D(0.945251, 0, 0.326344, 0, 1, 0, -0.326344, 0, 0.945251, 
 [node name="Furnace4" parent="DeathlessAct/Opening" instance=ExtResource("7_uib7b")]
 transform = Transform3D(0.349259, 0, -0.937026, 0, 1, 0, 0.937026, 0, 0.349259, 130.888, -14.0253, -0.0552673)
 
-[node name="DashPanel2" parent="DeathlessAct/Opening" instance=ExtResource("4_sj5iv")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 154.403, -15.5096, 0.0119934)
+[node name="JumpCarpet" parent="DeathlessAct/Opening" instance=ExtResource("17_6twug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42, 10, 0)
 
 [node name="MineEntrance" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -360.023, -60, -360)
@@ -349,30 +568,58 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 0)
 
 [node name="SpikePanel" parent="DeathlessAct/MineEntrance/SpikeStrip" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.27)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
 
 [node name="SpikePanel2" parent="DeathlessAct/MineEntrance/SpikeStrip" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.77)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
 
 [node name="SpikePanel3" parent="DeathlessAct/MineEntrance/SpikeStrip" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.73)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
 
 [node name="SpikePanel4" parent="DeathlessAct/MineEntrance/SpikeStrip" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.23)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
 
 [node name="SpikeStrip2" type="Node3D" parent="DeathlessAct/MineEntrance"]
 transform = Transform3D(0.936017, -0.0795424, -0.34285, 0.0766146, 0.996816, -0.0220987, 0.343516, -0.0055825, 0.93913, 42.8639, 0.864731, 0.801666)
 
 [node name="SpikePanel" parent="DeathlessAct/MineEntrance/SpikeStrip2" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.27)
+"State Lengths/inactive" = 0.5
+"State Lengths/warning" = 0.3
+"State Lengths/active" = 1.0
+stateLengths = PackedFloat32Array(0.5, 0.3, 1)
 
 [node name="SpikePanel2" parent="DeathlessAct/MineEntrance/SpikeStrip2" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.77)
+"State Lengths/inactive" = 0.5
+"State Lengths/warning" = 0.3
+"State Lengths/active" = 1.0
+stateLengths = PackedFloat32Array(0.5, 0.3, 1)
 
 [node name="SpikePanel3" parent="DeathlessAct/MineEntrance/SpikeStrip2" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.73)
+"State Lengths/inactive" = 0.5
+"State Lengths/warning" = 0.3
+"State Lengths/active" = 1.0
+stateLengths = PackedFloat32Array(0.5, 0.3, 1)
 
 [node name="SpikePanel4" parent="DeathlessAct/MineEntrance/SpikeStrip2" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.23)
+"State Lengths/inactive" = 0.5
+"State Lengths/warning" = 0.3
+"State Lengths/active" = 1.0
+stateLengths = PackedFloat32Array(0.5, 0.3, 1)
 
 [node name="Furnace" parent="DeathlessAct/MineEntrance" instance=ExtResource("7_uib7b")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 64.1842, 3.16241, 2.93552)
@@ -386,6 +633,44 @@ visible = false
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 80.757, 4.96471, 2.93552)
 visible = false
 
+[node name="FurnaceEvent" parent="DeathlessAct/MineEntrance" instance=ExtResource("4_vuoeu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1842, 3.16241, 3.7355)
+"Enter Mode" = 0
+
+[node name="Event" type="Node3D" parent="DeathlessAct/MineEntrance/FurnaceEvent" node_paths=PackedStringArray("animator")]
+script = ExtResource("25_l0jjy")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
+
+[node name="FurnacePivot1" type="Node3D" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event"]
+transform = Transform3D(-3.61999e-06, -0.0871558, -0.996195, 0, 0.996195, -0.0871558, 1, -3.15503e-07, -3.60622e-06, 0, 0, 0)
+
+[node name="Furnace1" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event/FurnacePivot1" instance=ExtResource("7_uib7b")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, -0.8, 0, 0)
+
+[node name="FurnacePivot2" type="Node3D" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event"]
+transform = Transform3D(-3.61999e-06, -0.0871558, -0.996195, 0, 0.996195, -0.0871558, 1, -3.15503e-07, -3.60622e-06, 7.5, 0.900002, 0)
+
+[node name="Furnace2" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event/FurnacePivot2" instance=ExtResource("7_uib7b")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, -0.8, 0, 0)
+
+[node name="FurnacePivot3" type="Node3D" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event"]
+transform = Transform3D(-3.61993e-06, -0.0871558, -0.996195, -6.34301e-10, 0.996195, -0.0871558, 1, -3.14866e-07, -3.60622e-06, 16.1271, 1.82777, 0)
+
+[node name="Furnace3" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event/FurnacePivot3" instance=ExtResource("7_uib7b")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, -0.8, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event"]
+libraries = {
+"": SubResource("AnimationLibrary_2sowh")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/MineEntrance/FurnaceEvent"]
+transform = Transform3D(0.967828, 0, -0.251613, 0, 1, 0, 0.251613, 0, 0.967828, -10.5785, 6.7704, 0.890259)
+shape = SubResource("BoxShape3D_cvoto")
+
 [node name="Grindrail" parent="DeathlessAct/MineEntrance" instance=ExtResource("17_mr6ev")]
 transform = Transform3D(-4.37114e-08, -0.112041, -0.993704, 0, 0.993704, -0.112041, 1, -4.89748e-09, -4.34362e-08, 51.4996, 1.97189, 6.24069)
 railModel = NodePath("")
@@ -396,32 +681,12 @@ collider = NodePath("")
 [node name="RichRing" parent="DeathlessAct/MineEntrance/Grindrail" instance=ExtResource("6_upu1a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -27)
 
-[node name="FurnaceTraps" type="Node3D" parent="DeathlessAct/MineEntrance"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1842, 3.16241, 3.7355)
-
-[node name="Trigger" parent="DeathlessAct/MineEntrance/FurnaceTraps" instance=ExtResource("4_vuoeu")]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/MineEntrance/FurnaceTraps/Trigger"]
-transform = Transform3D(0.967828, 0, -0.251613, 0, 1, 0, 0.251613, 0, 0.967828, -10.5785, 6.7704, 0.890259)
-shape = SubResource("BoxShape3D_cvoto")
-
-[node name="StaggerAnimations" type="Node" parent="DeathlessAct/MineEntrance/FurnaceTraps" node_paths=PackedStringArray("AnimationPlayers")]
-script = ExtResource("18_i7kb8")
-AnimationPlayers = [NodePath("../TippingFurnace/AnimationPlayer"), NodePath("../TippingFurnace2/AnimationPlayer"), NodePath("../TippingFurnace3/AnimationPlayer")]
-StaggerTime = 0.3
-AnimationName = "event"
-
-[node name="TippingFurnace" parent="DeathlessAct/MineEntrance/FurnaceTraps" instance=ExtResource("19_r1r1j")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
-
-[node name="TippingFurnace2" parent="DeathlessAct/MineEntrance/FurnaceTraps" instance=ExtResource("19_r1r1j")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 7.4884, 0.909889, 3.05176e-05)
-
-[node name="TippingFurnace3" parent="DeathlessAct/MineEntrance/FurnaceTraps" instance=ExtResource("19_r1r1j")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 16.5728, 1.8023, 3.05176e-05)
+[node name="FireSoul" parent="DeathlessAct/MineEntrance/Grindrail" instance=ExtResource("18_mjad6")]
+transform = Transform3D(1, 4.44089e-16, 3.55271e-15, 0, 1, 2.12727e-16, 0, 2.12728e-16, 1, 0, 0.5, -29)
+fireSoulIndex = 2
 
 [node name="SpikeBall1" parent="DeathlessAct/MineEntrance" instance=ExtResource("8_e6mti")]
-transform = Transform3D(0.755087, 0.109992, -0.646332, 0, 0.985827, 0.167767, 0.655624, -0.126679, 0.744385, 111.383, 1.31038, -8.71161)
+transform = Transform3D(0.7618, 0.0437632, -0.646332, 0.0859204, 0.982076, 0.167767, 0.642088, -0.183338, 0.744385, 111.383, 1.31038, -8.71161)
 "Movement/Cycle Length" = 3.0
 Movement/Distance = 22.0
 
@@ -436,18 +701,30 @@ metadata/_edit_group_ = true
 
 [node name="SpikePanel" parent="DeathlessAct/MineEntrance/SpikeStrip3" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.27)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
 metadata/_edit_lock_ = true
 
 [node name="SpikePanel2" parent="DeathlessAct/MineEntrance/SpikeStrip3" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.77)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
 metadata/_edit_lock_ = true
 
 [node name="SpikePanel3" parent="DeathlessAct/MineEntrance/SpikeStrip3" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.73)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
 metadata/_edit_lock_ = true
 
 [node name="SpikePanel4" parent="DeathlessAct/MineEntrance/SpikeStrip3" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.23)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
 metadata/_edit_lock_ = true
 
 [node name="Fan" parent="DeathlessAct/MineEntrance" instance=ExtResource("18_ddkmk")]
@@ -504,26 +781,36 @@ metadata/_edit_group_ = true
 
 [node name="SpikePanel" parent="DeathlessAct/MineEntrance/SpikeStrip4" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.27)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
 metadata/_edit_lock_ = true
 
 [node name="SpikePanel2" parent="DeathlessAct/MineEntrance/SpikeStrip4" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.77)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
 metadata/_edit_lock_ = true
 
 [node name="SpikePanel3" parent="DeathlessAct/MineEntrance/SpikeStrip4" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.73)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
 metadata/_edit_lock_ = true
 
 [node name="SpikePanel4" parent="DeathlessAct/MineEntrance/SpikeStrip4" instance=ExtResource("15_x6g2j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.23)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
 metadata/_edit_lock_ = true
 
 [node name="SpikeBall3" parent="DeathlessAct/MineEntrance" instance=ExtResource("8_e6mti")]
-transform = Transform3D(-0.994425, 0.0114277, 0.104829, -0.00734143, 0.984196, -0.176932, -0.105194, -0.176716, -0.978624, 298.708, -1.27248, -6.673)
+transform = Transform3D(-0.963498, -0.246338, 0.104829, -0.26182, 0.94876, -0.176932, -0.0558723, -0.197921, -0.978624, 298.708, -1.27248, -6.673)
 "Movement/Cycle Length" = 2.0
 Movement/Distance = 22.0
-root = NodePath("../SpikeBall2/Root")
-animator = NodePath("../SpikeBall2/Root/AnimationPlayer")
 
 [node name="Rings2" type="Node3D" parent="DeathlessAct/MineEntrance"]
 transform = Transform3D(-0.997916, 0.0114277, 0.0635125, 0, 0.984196, -0.177085, -0.0645324, -0.176716, -0.982144, 300.509, -1.13985, -5.14301)
@@ -560,6 +847,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.0462
 
 [node name="GasTank" parent="DeathlessAct/Ending" instance=ExtResource("21_kry2n")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.116196, -3.3725, 26.366)
+endPosition = Vector3(0, 0, -25)
 
 [node name="MajinMover" type="Node3D" parent="DeathlessAct/Ending"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.52, -4.5, 46.732)
@@ -632,11 +920,16 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 
 [node name="DashPanel4" parent="DeathlessAct/Ending/DashStrip" instance=ExtResource("4_sj5iv")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 3)
 
-[node name="Elevator" parent="DeathlessAct/Ending" instance=ExtResource("18_834aa")]
+[node name="Elevator1" parent="DeathlessAct/Ending" instance=ExtResource("18_834aa")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 47, 47.8411, 110)
+
+[node name="FireSoul" parent="DeathlessAct/Ending" instance=ExtResource("18_mjad6")]
+transform = Transform3D(-4.37114e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, -4.37114e-08, 0, 49, 78.5471, 110)
+fireSoulIndex = 3
 
 [node name="Elevator2" parent="DeathlessAct/Ending" instance=ExtResource("18_834aa")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 47, 88.5471, 110)
+"Movement/Starting Offset" = 0.5
 
 [node name="Goal" parent="DeathlessAct/Ending" instance=ExtResource("19_xdhlr")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 70.638, 100.75, 110)
@@ -652,10 +945,5 @@ shape = SubResource("BoxShape3D_t3h8b")
 [connection signal="Deactivated" from="DeathlessAct/CullingMap/Ending-L" to="DeathlessAct/Ending" method="Deactivate"]
 [connection signal="Activated" from="DeathlessAct/CullingMap/MineEntrance-U" to="DeathlessAct/MineEntrance" method="Deactivate"]
 [connection signal="Deactivated" from="DeathlessAct/CullingMap/MineEntrance-U" to="DeathlessAct/MineEntrance" method="Activate"]
-[connection signal="Activated" from="DeathlessAct/MineEntrance/FurnaceTraps/Trigger" to="DeathlessAct/MineEntrance/FurnaceTraps/StaggerAnimations" method="Run"]
 [connection signal="SpinStarted" from="DeathlessAct/Ending/MajinMover/BlueMajin" to="DeathlessAct/Ending/MajinMover" method="Unpause"]
 [connection signal="SpinStarted" from="DeathlessAct/Ending/MajinMover2/BlueMajin" to="DeathlessAct/Ending/MajinMover2" method="Unpause"]
-
-[editable path="DeathlessAct/MineEntrance/FurnaceTraps/TippingFurnace"]
-[editable path="DeathlessAct/MineEntrance/FurnaceTraps/TippingFurnace2"]
-[editable path="DeathlessAct/MineEntrance/FurnaceTraps/TippingFurnace3"]
