@@ -237,7 +237,7 @@ public partial class PauseMenu : Node
 		animator.Set(SUBMENU_PARAMETER, "pause");
 	}
 
-	private StageSettings Stage => StageSettings.instance;
+	private StageSettings Stage => StageSettings.Instance;
 	private void UpdateStatusMenuData()
 	{
 		// Status menu
@@ -249,7 +249,7 @@ public partial class PauseMenu : Node
 		values[5].Text = Stage.DisplayTime;
 		values[6].Text = ExtensionMethods.FormatMenuNumber(Stage.CurrentEXP);
 		values[7].Text = ExtensionMethods.FormatMenuNumber(SaveManager.ActiveGameData.exp);
-		values[8].Text = CharacterController.instance.Skills.TextDisplay;
+		values[8].Text = StageSettings.Player.Skills.TextDisplay;
 
 		// Mission menu
 		missionTypeLabel.Text = Stage.Data.MissionTypeKey;

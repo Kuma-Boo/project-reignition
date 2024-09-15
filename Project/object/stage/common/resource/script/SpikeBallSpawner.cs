@@ -48,7 +48,7 @@ namespace Project.Gameplay.Hazards
 				AddChild(spikeBall);
 			}
 
-			StageSettings.instance.ConnectUnloadSignal(this);
+			StageSettings.Instance.ConnectUnloadSignal(this);
 		}
 
 		public override void _PhysicsProcess(double _)

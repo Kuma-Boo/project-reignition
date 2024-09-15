@@ -18,7 +18,7 @@ namespace Project.Gameplay.Hazards
 		[Export]
 		private AnimationPlayer animator;
 
-		public override void _Ready() => StageSettings.instance.ConnectUnloadSignal(this);
+		public override void _Ready() => StageSettings.Instance.ConnectUnloadSignal(this);
 
 		public override void _PhysicsProcess(double _)
 		{

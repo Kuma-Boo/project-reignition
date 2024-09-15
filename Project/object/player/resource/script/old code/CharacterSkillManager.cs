@@ -209,7 +209,7 @@ public partial class CharacterSkillManager : Node
 		if (SoulSlideInterval > soulSlideTimer)
 		{
 			soulSlideTimer -= SoulSlideInterval;
-			StageSettings.instance.CurrentEXP++;
+			StageSettings.Instance.CurrentEXP++;
 		}
 	}
 
@@ -403,12 +403,12 @@ public partial class CharacterSkillManager : Node
 		}
 		else if (SkillRing.IsSkillEquipped(SkillKey.CrestFire))
 		{
-			crestRequirement = 8;
+			crestRequirement = 6;
 			crestType = SkillResource.SkillElement.Fire;
 		}
 		else if (SkillRing.IsSkillEquipped(SkillKey.CrestDark))
 		{
-			crestRequirement = 6;
+			crestRequirement = 8;
 			crestType = SkillResource.SkillElement.Dark;
 		}
 		else
@@ -440,7 +440,7 @@ public partial class CharacterSkillManager : Node
 		if (!AllowCrestSkill ||
 			IsUsingBreakSkills ||
 			Character.ActionState != CharacterController.ActionStates.Normal ||
-			StageSettings.instance.CurrentRingCount == 0)
+			StageSettings.Instance.CurrentRingCount == 0)
 		{
 			return;
 		}
@@ -448,7 +448,7 @@ public partial class CharacterSkillManager : Node
 		if (UpdateCrestTimer())
 		{
 			Character.MoveSpeed = Mathf.Max(Character.MoveSpeed, GroundSettings.Speed * WindCrestSpeedMultiplier);
-			StageSettings.instance.UpdateRingCount(1, StageSettings.MathModeEnum.Subtract, true);
+			StageSettings.Instance.UpdateRingCount(1, StageSettings.MathModeEnum.Subtract, true);
 			Character.Effect.PlayWindCrestFX();
 		}
 	}
@@ -745,8 +745,8 @@ public partial class CharacterSkillManager : Node
 	public int SoulPower { get; private set; } // Current soul power
 	public int MaxSoulPower { get; private set; } // Calculated on start
 
-	public bool IsSoulGaugeEmpty => !StageSettings.instance.IsControlTest && SoulPower == 0;
-	public bool IsSoulGaugeCharged => StageSettings.instance.IsControlTest || SoulPower >= MinimumSoulPower;
+	public bool IsSoulGaugeEmpty => !StageSettings.Instance.IsControlTest && SoulPower == 0;
+	public bool IsSoulGaugeCharged => StageSettings.Instance.IsControlTest || SoulPower >= MinimumSoulPower;
 	public const int MinimumSoulPower = 50; // Minimum amount of soul power needed to use soul skills.
 	public void ModifySoulGauge(int amount)
 	{
@@ -763,75 +763,4 @@ public partial class CharacterSkillManager : Node
 	/// <summary> Returns a string representing the soul gauge for menus to display. </summary>
 	public string TextDisplay => $"{SoulPower}/{MaxSoulPower}";
 	#endregion
-}
-
-/// <summary>
-/// Contains data of movement settings. Leave values at -1 to ignore (primarily for skill overrides)
-/// </summary>
-public class MovementSetting
-{
-	public float Speed { get; set; }
-	public float Traction { get; set; } // Speed up rate
-	public float Friction { get; set; } // Slow down rate
-	public float Overspeed { get; set; } // Slow down rate when going faster than speed
-	public float Turnaround { get; set; } // Skidding
-
-	public MovementSetting()
-	{
-		Speed = 0;
-		Traction = 0;
-		Friction = 0;
-	}
-
-	/// <summary> Interpolates between speeds based on input. </summary>
-	public float UpdateInterpolate(float currentSpeed, float input)
-	{
-		float delta = Traction;
-		float targetSpeed = Speed * input;
-		targetSpeed = Mathf.Max(targetSpeed, 0);
-
-		if (Mathf.Abs(currentSpeed) > Speed)
-			delta = Overspeed;
-
-		if (input == 0) // Deccelerate
-			delta = Friction;
-		else if (!Mathf.IsZeroApprox(currentSpeed) && Mathf.Sign(targetSpeed) != Mathf.Sign(Speed)) // Turnaround
-			delta = Turnaround;
-
-		return Mathf.MoveToward(currentSpeed, targetSpeed, delta * PhysicsManager.physicsDelta);
-	}
-
-	/// <summary> Special addition mode for Sliding. Does NOT support negative speeds. </summary>
-	public float UpdateSlide(float currentSpeed, float input)
-	{
-		bool clampFinalSpeed = Mathf.Abs(currentSpeed) <= Speed;
-		if (Mathf.Abs(currentSpeed) > Speed) // Reduce by overspeed
-		{
-			currentSpeed -= Overspeed * PhysicsManager.physicsDelta;
-			if (Mathf.Abs(currentSpeed) > Speed && (Mathf.IsZeroApprox(input) || input > 0)) // Allow overspeed sliding
-				return currentSpeed;
-		}
-
-		if (input > 0) // Accelerate
-		{
-			if (!clampFinalSpeed)
-				currentSpeed = Speed;
-			else
-				currentSpeed += Traction * input * PhysicsManager.physicsDelta;
-		}
-		else
-		{
-			// Deccelerate and Turnaround
-			currentSpeed -= Mathf.Lerp(Friction, Turnaround, Mathf.Abs(input)) * PhysicsManager.physicsDelta;
-			clampFinalSpeed = Mathf.Abs(currentSpeed) <= Speed;
-		}
-
-		if (clampFinalSpeed)
-			currentSpeed = Mathf.Clamp(currentSpeed, 0, Speed);
-
-		return currentSpeed;
-	}
-
-	public float GetSpeedRatio(float spd) => spd / Speed;
-	public float GetSpeedRatioClamped(float spd) => Mathf.Clamp(GetSpeedRatio(spd), -1f, 1f);
 }

@@ -11,7 +11,7 @@ public partial class DinoTrio : PathFollow3D
 	public delegate void WindupEventHandler();
 
 	private DinoTrioProcessor Processor => DinoTrioProcessor.Instance;
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	[ExportGroup("Movement")]
 	[Export]
@@ -64,12 +64,14 @@ public partial class DinoTrio : PathFollow3D
 	public override void _Ready()
 	{
 		animationTree.Active = true;
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.ConnectRespawnSignal(this);
 		Respawn();
 	}
 
 	private void Respawn()
 	{
+		isInteractingWithPlayer = false;
+
 		Progress = 0;
 		moveSpeed = rubberbandingSpeed = 0;
 
@@ -94,7 +96,7 @@ public partial class DinoTrio : PathFollow3D
 
 	private void CalculateMovespeed()
 	{
-		if (Character.Skills.IsSpeedBreakCharging) // Kill speed quickly when starting a speed break
+		if (Player.Skills.IsSpeedBreakCharging) // Kill speed quickly when starting a speed break
 		{
 			moveSpeed *= .8f;
 			rubberbandingSpeed = 0;
@@ -103,8 +105,9 @@ public partial class DinoTrio : PathFollow3D
 
 		if (Processor.IsSlowingDown ||
 			(CurrentAttackState != AttackStates.Charge && CurrentAttackState != AttackStates.Inactive) ||
-			(Character.IsLockoutActive && Character.ActiveLockoutData.recenterPlayer) ||
-			Character.Skills.IsSpeedBreakActive)
+			(Player.IsLockoutActive && Player.ActiveLockoutData.recenterPlayer) ||
+			Player.Skills.IsSpeedBreakActive ||
+			(Player.Camera.IsCrossfading && CurrentAttackState == AttackStates.Charge))
 		{
 			// Dino is slowing down
 			moveSpeed = Mathf.MoveToward(moveSpeed, 0, friction * PhysicsManager.physicsDelta);
@@ -113,18 +116,19 @@ public partial class DinoTrio : PathFollow3D
 			return;
 		}
 
+		float playerSpeed = Mathf.Min(Player.MoveSpeed, Player.Stats.GroundSettings.Speed);
 		// Accelerate
 		if (CurrentAttackState == AttackStates.Charge)
 		{
-			moveSpeed = Mathf.Lerp(moveSpeed, Character.MoveSpeed + Mathf.Abs(DeltaProgress * 1.5f), .5f);
+			moveSpeed = Mathf.Lerp(moveSpeed, playerSpeed + Mathf.Abs(DeltaProgress * 1.5f), .5f);
 			rubberbandingSpeed = 0;
 			return;
 		}
 
 		// Normal chasing
-		float targetSpeed = Mathf.Clamp(Character.MoveSpeed - Processor.SpeedDifference, 0, Character.Skills.GroundSettings.Speed);
+		float targetSpeed = Mathf.Clamp(playerSpeed - Processor.SpeedDifference, 0, Player.Stats.GroundSettings.Speed);
 		if (Mathf.Abs(DeltaProgress) > DinoTrioProcessor.AttackOffset)
-			targetSpeed = Character.Skills.GroundSettings.Speed - Processor.SpeedDifference;
+			targetSpeed = Player.Stats.GroundSettings.Speed - Processor.SpeedDifference;
 
 		moveSpeed = Mathf.MoveToward(moveSpeed, targetSpeed, traction * PhysicsManager.physicsDelta);
 
@@ -169,8 +173,8 @@ public partial class DinoTrio : PathFollow3D
 			animationTree.Set(MovementSeekParameter, Runtime.randomNumberGenerator.RandfRange(0, 5));
 		}
 
-		animationTree.Set(MovementSpeedParameter, 1.5f + (Character.Skills.GroundSettings.GetSpeedRatio(TotalMoveSpeed) * .8f));
-		animationTree.Set(MovementBlendParameter, Character.Skills.GroundSettings.GetSpeedRatioClamped(TotalMoveSpeed * 1.5f));
+		animationTree.Set(MovementSpeedParameter, 1.5f + (Player.Stats.GroundSettings.GetSpeedRatio(TotalMoveSpeed) * .8f));
+		animationTree.Set(MovementBlendParameter, Player.Stats.GroundSettings.GetSpeedRatioClamped(TotalMoveSpeed * 1.5f));
 	}
 
 	public void StartIdleFidget()
@@ -196,7 +200,7 @@ public partial class DinoTrio : PathFollow3D
 			case AttackStates.Toss: // Powerful launch
 				if (tossedPlayer) return; // Already tossed the player
 
-				Character.StartKnockback(new()
+				Player.StartKnockback(new()
 				{
 					knockForward = true, // Always knock forward
 					ignoreInvincibility = true, // Always knockback the player
@@ -208,7 +212,7 @@ public partial class DinoTrio : PathFollow3D
 
 				break;
 			default: // Normal knockback
-				Character.StartKnockback(new()
+				Player.StartKnockback(new()
 				{
 					knockForward = true,
 					ignoreInvincibility = true,

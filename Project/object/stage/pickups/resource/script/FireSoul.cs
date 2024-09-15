@@ -29,6 +29,7 @@ public partial class FireSoul : Pickup
 		}
 
 		UpdateLockon();
+		Respawn();
 	}
 
 	protected override void Collect()
@@ -39,7 +40,13 @@ public partial class FireSoul : Pickup
 		isCollected = true;
 		Animator.Play("collect");
 		HeadsUpDisplay.instance.CollectFireSoul();
-		StageSettings.instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint), (uint)ConnectFlags.OneShot);
+		StageSettings.Instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint), (uint)ConnectFlags.OneShot);
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.FireSoulLockon) &&
+			Player.IsHomingAttacking)
+		{
+			Player.StartBounce();
+		}
 	}
 
 	public override void Respawn()
@@ -53,15 +60,15 @@ public partial class FireSoul : Pickup
 		UpdateLockon();
 		Animator.Play("loop");
 
-		if (StageSettings.instance.IsConnected(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint)))
-			StageSettings.instance.Disconnect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint));
+		if (StageSettings.Instance.IsConnected(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint)))
+			StageSettings.Instance.Disconnect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint));
 
 		base.Respawn();
 	}
 
 	private void UpdateLockon()
 	{
-		if (Character.Skills.IsSkillEquipped(SkillKey.FireSoulLockon))
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.FireSoulLockon))
 		{
 			Animator.Play("enable-lockon");
 			Animator.Advance(0);

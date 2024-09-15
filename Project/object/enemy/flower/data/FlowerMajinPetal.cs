@@ -27,7 +27,7 @@ public partial class FlowerMajinPetal : Node3D
 	private float currentLifetime;
 	private readonly float Lifetime = 10f;
 
-	public override void _Ready() => StageSettings.instance.ConnectRespawnSignal(this);
+	public override void _Ready() => StageSettings.Instance.ConnectRespawnSignal(this);
 
 	public void Respawn() => Visible = false;
 

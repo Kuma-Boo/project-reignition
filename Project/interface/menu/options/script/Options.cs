@@ -104,16 +104,15 @@ public partial class Options : Menu
 	[Export]
 	private Node3D lockNode;
 	private bool isPlayerLocked;
+	private PlayerController Player => StageSettings.Player;
 	private void LockPlayer() => isPlayerLocked = true;
 	private void UnlockPlayer() => isPlayerLocked = false;
 	private void UpdatePlayerPosition()
 	{
-		CharacterController character = CharacterController.instance;
-
-		Vector3 lockPosition = character.GlobalPosition;
+		Vector3 lockPosition = Player.GlobalPosition;
 		lockPosition.X = Mathf.Clamp(lockPosition.X, lockNode.GlobalPosition.X - 1.2f, lockNode.GlobalPosition.X + 1.2f);
 		lockPosition.Z = lockNode.GlobalPosition.Z;
-		character.GlobalPosition = lockPosition;
+		Player.GlobalPosition = lockPosition;
 	}
 
 	protected override void Confirm()
@@ -191,7 +190,7 @@ public partial class Options : Menu
 			UnlockPlayer();
 			animator.Play("test_end");
 			currentSubmenu = Submenus.Control;
-			CharacterController.instance.Skills.DisableBreakSkills();
+			StageSettings.Player.Skills.DisableBreakSkills();
 		}
 		else
 			Confirm();
@@ -295,37 +294,41 @@ public partial class Options : Menu
 		videoLabels[0].Text = Tr("option_display").Replace("0", (SaveManager.Config.targetDisplay + 1).ToString());
 		videoLabels[1].Text = SaveManager.Config.useFullscreen ? FULLSCREEN_STRING : $"{resolution.X}:{resolution.Y}";
 		videoLabels[2].Text = SaveManager.Config.useExclusiveFullscreen ? FULLSCREEN_EXCLUSIVE_STRING : FULLSCREEN_NORMAL_STRING;
-		videoLabels[3].Text = SaveManager.Config.useVsync ? ENABLED_STRING : DISABLED_STRING;
-		videoLabels[4].Text = $"{SaveManager.Config.renderScale}%";
-		videoLabels[5].Text = SaveManager.Config.resizeMode.ToString();
+		if (SaveManager.Config.framerate == 0)
+			videoLabels[3].Text = Tr("option_unlimited_fps");
+		else
+			videoLabels[3].Text = Tr("option_fps").Replace("0", SaveManager.FrameRates[SaveManager.Config.framerate].ToString());
+		videoLabels[4].Text = SaveManager.Config.useVsync ? ENABLED_STRING : DISABLED_STRING;
+		videoLabels[5].Text = $"{SaveManager.Config.renderScale}%";
+		videoLabels[6].Text = SaveManager.Config.resizeMode.ToString();
 		switch (SaveManager.Config.antiAliasing)
 		{
 			case 0:
-				videoLabels[6].Text = DISABLED_STRING;
+				videoLabels[7].Text = DISABLED_STRING;
 				break;
 			case 1:
-				videoLabels[6].Text = "FXAA";
+				videoLabels[7].Text = "FXAA";
 				break;
 			case 2:
-				videoLabels[6].Text = "2x MSAA";
+				videoLabels[7].Text = "2x MSAA";
 				break;
 			case 3:
-				videoLabels[6].Text = "4x MSAA";
+				videoLabels[7].Text = "4x MSAA";
 				break;
 			case 4:
-				videoLabels[6].Text = "8x MSAA";
+				videoLabels[7].Text = "8x MSAA";
 				break;
 		}
-		videoLabels[7].Text = SaveManager.Config.useHDBloom ? HIGH_STRING : LOW_STRING;
+		videoLabels[8].Text = SaveManager.Config.useHDBloom ? HIGH_STRING : LOW_STRING;
 
 		if (SaveManager.Config.softShadowQuality == SaveManager.QualitySetting.Disabled)
-			videoLabels[8].Text = "option_hard_shadows";
+			videoLabels[9].Text = "option_hard_shadows";
 		else
-			videoLabels[8].Text = CalculateQualityString(SaveManager.Config.softShadowQuality);
-		videoLabels[9].Text = CalculateQualityString(SaveManager.Config.postProcessingQuality);
-		videoLabels[10].Text = CalculateQualityString(SaveManager.Config.reflectionQuality);
-		videoLabels[11].Text = SaveManager.Config.useMotionBlur ? ENABLED_STRING : DISABLED_STRING;
-		videoLabels[12].Text = SaveManager.Config.useScreenShake ? $"{SaveManager.Config.screenShake}%" : DISABLED_STRING;
+			videoLabels[9].Text = CalculateQualityString(SaveManager.Config.softShadowQuality);
+		videoLabels[10].Text = CalculateQualityString(SaveManager.Config.postProcessingQuality);
+		videoLabels[11].Text = CalculateQualityString(SaveManager.Config.reflectionQuality);
+		videoLabels[12].Text = SaveManager.Config.useMotionBlur ? ENABLED_STRING : DISABLED_STRING;
+		videoLabels[13].Text = SaveManager.Config.useScreenShake ? $"{SaveManager.Config.screenShake}%" : DISABLED_STRING;
 
 		audioLabels[0].Text = SaveManager.Config.isMasterMuted ? MUTE_STRING : $"{SaveManager.Config.masterVolume}%";
 		audioLabels[1].Text = SaveManager.Config.isBgmMuted ? MUTE_STRING : $"{SaveManager.Config.bgmVolume}%";
@@ -469,51 +472,55 @@ public partial class Options : Menu
 		}
 		else if (VerticalSelection == 3)
 		{
-			SaveManager.Config.useVsync = !SaveManager.Config.useVsync;
+			SaveManager.Config.framerate = WrapSelection(SaveManager.Config.framerate + direction, SaveManager.FrameRates.Length);
 		}
 		else if (VerticalSelection == 4)
+		{
+			SaveManager.Config.useVsync = !SaveManager.Config.useVsync;
+		}
+		else if (VerticalSelection == 5)
 		{
 			SaveManager.Config.renderScale += direction * 10;
 			SaveManager.Config.renderScale = Mathf.Clamp(SaveManager.Config.renderScale, 50, 150);
 		}
-		else if (VerticalSelection == 5)
+		else if (VerticalSelection == 6)
 		{
 			int resizeMode = (int)SaveManager.Config.resizeMode;
 			resizeMode = WrapSelection(resizeMode + direction, (int)RenderingServer.ViewportScaling3DMode.Max);
 			SaveManager.Config.resizeMode = (RenderingServer.ViewportScaling3DMode)resizeMode;
 		}
-		else if (VerticalSelection == 6) // TODO Change this to 5 when upgrading to godot v4.3
+		else if (VerticalSelection == 7) // TODO Change this to 6 when upgrading to godot v4.3
 		{
 			SaveManager.Config.antiAliasing = WrapSelection(SaveManager.Config.antiAliasing + direction, 3);
 		}
-		else if (VerticalSelection == 7)
+		else if (VerticalSelection == 8)
 		{
 			SaveManager.Config.useHDBloom = !SaveManager.Config.useHDBloom;
 		}
-		else if (VerticalSelection == 8)
+		else if (VerticalSelection == 9)
 		{
 			int softShadowQuality = (int)SaveManager.Config.softShadowQuality;
 			softShadowQuality = WrapSelection(softShadowQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.softShadowQuality = (SaveManager.QualitySetting)softShadowQuality;
 		}
-		else if (VerticalSelection == 9)
+		else if (VerticalSelection == 10)
 		{
 			int postProcessingQuality = (int)SaveManager.Config.postProcessingQuality;
 			postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.postProcessingQuality = (SaveManager.QualitySetting)postProcessingQuality;
-			StageSettings.instance.UpdatePostProcessingStatus();
+			StageSettings.Instance.UpdatePostProcessingStatus();
 		}
-		else if (VerticalSelection == 10)
+		else if (VerticalSelection == 11)
 		{
 			int reflectionQuality = (int)SaveManager.Config.reflectionQuality;
 			reflectionQuality = WrapSelection(reflectionQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.reflectionQuality = (SaveManager.QualitySetting)reflectionQuality;
 		}
-		else if (VerticalSelection == 11)
+		else if (VerticalSelection == 12)
 		{
 			SaveManager.Config.useMotionBlur = !SaveManager.Config.useMotionBlur;
 		}
-		else if (VerticalSelection == 12)
+		else if (VerticalSelection == 13)
 		{
 			if (!IsSlideVolumeValid(SaveManager.Config.screenShake, direction))
 				return false;

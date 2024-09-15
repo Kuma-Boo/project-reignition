@@ -43,7 +43,7 @@ public partial class GasTank : Area3D
 
 	public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(StartPosition, EndPosition, height, true);
 	public Basis TransformBasis => endTarget == null ? GlobalBasis : Basis.Identity;
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 	private Vector3 StartPosition => Engine.IsEditorHint() ? GlobalPosition : startPosition;
 	private Vector3 EndPosition => StartPosition + (TransformBasis * endPosition);
 
@@ -54,7 +54,7 @@ public partial class GasTank : Area3D
 		Root = GetNodeOrNull<Node3D>(root);
 		Animator = GetNodeOrNull<AnimationPlayer>(animator);
 		InitializeSpawnData();
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.ConnectRespawnSignal(this);
 	}
 
 	public void InitializeSpawnData() => spawnData = new SpawnData(GetParent(), Transform);
@@ -95,14 +95,16 @@ public partial class GasTank : Area3D
 	{
 		if (!isInteractingWithPlayer) return false;
 
-		// TODO Check for stomp
-		if (Character.Skills.IsSpeedBreakActive)
-		{
-			Detonate(); // Detonate instantly
-			return false;
-		}
+			// TODO Check for stomp
+			if (Player.Skills.IsSpeedBreakActive)
+			{
+				Detonate(); // Detonate instantly
+				return false;
+			}
 
-		if (Character.ActionState != CharacterController.ActionStates.JumpDash) return false;
+			if (!Player.IsJumpDashOrHomingAttack) return false;
+
+			Player.StartBounce();
 
 		StrikeTank();
 		return true;
@@ -138,9 +140,10 @@ public partial class GasTank : Area3D
 		for (int i = 0; i < enemyList.Count; i++)
 			enemyList[i].TakeDamage(); // Damage all enemies in range
 
-		if (isPlayerInExplosion)
-			Character.StartKnockback();
-	}
+			if (isPlayerInExplosion)
+				Player.StartKnockback();
+		}
+
 
 	private void OnEntered(Area3D a)
 	{

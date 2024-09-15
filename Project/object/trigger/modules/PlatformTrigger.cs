@@ -90,7 +90,7 @@ public partial class PlatformTrigger : Node3D
 	[Export]
 	/// <summary> Animator to handle falling platform behaviour. </summary>
 	private AnimationPlayer fallingPlatformAnimator;
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	private bool isActive;
 	private bool isInteractingWithPlayer;
@@ -115,9 +115,9 @@ public partial class PlatformTrigger : Node3D
 		if (isPlatformShaking)
 			UpdateFallingPlatformBehaviour();
 
-		if (!isActive)
-		{
-			if (isInteractingWithPlayer)
+			if (!isInteractingWithPlayer) return;
+
+			if (!isActive && Player.IsOnGround)
 			{
 				isActive = true;
 				EmitSignal(SignalName.PlatformInteracted);
@@ -168,7 +168,7 @@ public partial class PlatformTrigger : Node3D
 	/// <summary> Moves the player with the platform. </summary>
 	private void SyncPlayerMovement()
 	{
-		if (!Character.IsOnGround || !isInteractingWithPlayer)
+		if (!Player.IsOnGround || !isInteractingWithPlayer)
 		{
 			Vector3 delta = floorCalculationRoot.GlobalPosition - previousPosition;
 			if (delta.Y <= 0) // Not moving upwards -- reset influence instantly
@@ -188,15 +188,15 @@ public partial class PlatformTrigger : Node3D
 			return;
 		}
 
-		float checkLength = Mathf.Abs(Character.CenterPosition.Y - floorCalculationRoot.GlobalPosition.Y) + (Character.CollisionSize.Y * 2.0f);
-		KinematicCollision3D collision = Character.MoveAndCollide(Vector3.Down * checkLength, true);
+		float checkLength = Mathf.Abs(Player.CenterPosition.Y - floorCalculationRoot.GlobalPosition.Y) + (Player.CollisionSize.Y * 2.0f);
+		KinematicCollision3D collision = Player.MoveAndCollide(Vector3.Down * checkLength, true);
 
 		if (collision == null || (Node3D)collision.GetCollider() != parentCollider) // Player is not on the platform
 			return;
 
 		playerInfluence = 1f; // Set player influence to 1 for when we leave
 		previousPosition = floorCalculationRoot.GlobalPosition;
-		Character.GlobalTranslate(Vector3.Up * (floorCalculationRoot.GlobalPosition.Y - Character.GlobalPosition.Y));
+		Player.GlobalTranslate(Vector3.Up * (floorCalculationRoot.GlobalPosition.Y - Player.GlobalPosition.Y));
 	}
 
 	public void OnEntered(Area3D a)

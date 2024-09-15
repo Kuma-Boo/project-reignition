@@ -33,7 +33,7 @@ public partial class Switch : Area3D
 
 	public override void _Ready()
 	{
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.ConnectRespawnSignal(this);
 		Respawn();
 	}
 

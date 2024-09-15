@@ -9,7 +9,7 @@ namespace Project.Gameplay;
 public partial class HeadsUpDisplay : Control
 {
 	public static HeadsUpDisplay instance;
-	private StageSettings Stage => StageSettings.instance;
+	private StageSettings Stage => StageSettings.Instance;
 
 	public override void _EnterTree() => instance = this;
 
@@ -76,9 +76,9 @@ public partial class HeadsUpDisplay : Control
 
 	private void UpdateRingCount(int amount, bool disableAnimations)
 	{
-		if (!disableAnimations && amount != 0) // Play animation
+		if (!disableAnimations) // Play animation
 		{
-			if (amount > 0)
+			if (amount >= 0)
 			{
 				ringAnimator.Set(RingGainParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			}

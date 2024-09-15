@@ -25,9 +25,9 @@ public partial class JumpCarpet : Launcher
 		if (currentBounceCount == 0)
 			return;
 
-		// TODO Refactor CharacterController to have a LandedOnGround signal and use that instead?
+		// TODO Refactor PlayerController to have a LandedOnGround signal and use that instead?
 		// Reset Jump Carpet when the player lands on ground
-		if (Character.IsOnGround)
+		if (Player.IsOnGround)
 			Reset();
 	}
 
