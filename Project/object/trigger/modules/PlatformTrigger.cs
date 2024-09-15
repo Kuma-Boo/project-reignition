@@ -181,7 +181,7 @@ public partial class PlatformTrigger : Node3D
 			}
 			else
 			{
-				Character.GlobalTranslate(Vector3.Up * delta.Y * playerInfluence);
+				Player.GlobalTranslate(Vector3.Up * delta.Y * playerInfluence);
 				playerInfluence = Mathf.MoveToward(playerInfluence, 0, PlayerInfluenceReset * PhysicsManager.physicsDelta);
 			}
 

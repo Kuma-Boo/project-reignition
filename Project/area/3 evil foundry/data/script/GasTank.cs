@@ -95,16 +95,16 @@ public partial class GasTank : Area3D
 	{
 		if (!isInteractingWithPlayer) return false;
 
-			// TODO Check for stomp
-			if (Player.Skills.IsSpeedBreakActive)
-			{
-				Detonate(); // Detonate instantly
-				return false;
-			}
+		// TODO Check for stomp
+		if (Player.Skills.IsSpeedBreakActive)
+		{
+			Detonate(); // Detonate instantly
+			return false;
+		}
 
-			if (!Player.IsJumpDashOrHomingAttack) return false;
+		if (!Player.IsJumpDashOrHomingAttack) return false;
 
-			Player.StartBounce();
+		Player.StartBounce();
 
 		StrikeTank();
 		return true;
@@ -112,7 +112,7 @@ public partial class GasTank : Area3D
 
 	private void StrikeTank()
 	{
-		Character.Lockon.StartBounce();
+		Player.StartBounce();
 		Animator.Play("strike");
 		Animator.Advance(0);
 		EmitSignal(SignalName.OnStrike);
@@ -140,9 +140,9 @@ public partial class GasTank : Area3D
 		for (int i = 0; i < enemyList.Count; i++)
 			enemyList[i].TakeDamage(); // Damage all enemies in range
 
-			if (isPlayerInExplosion)
-				Player.StartKnockback();
-		}
+		if (isPlayerInExplosion)
+			Player.StartKnockback();
+	}
 
 
 	private void OnEntered(Area3D a)

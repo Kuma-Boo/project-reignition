@@ -68,10 +68,10 @@ public partial class GolemMajin : Enemy
 		if (!canThrowGasTank || !IsActive || !IsInRange || gasTank == null)
 			return;
 
-		if (Character.PathFollower.ForwardAxis.Dot(this.Forward()) < 0.5f) // Not facing the player
+		if (Player.PathFollower.ForwardAxis.Dot(this.Forward()) < 0.5f) // Not facing the player
 			return;
 
-		if (gasTank.CastRay(gasTank.GlobalPosition, Character.GlobalPosition - gasTank.GlobalPosition, Runtime.Instance.environmentMask)) // Obstacle
+		if (gasTank.CastRay(gasTank.GlobalPosition, Player.GlobalPosition - gasTank.GlobalPosition, Runtime.Instance.environmentMask)) // Obstacle
 			return;
 
 		canThrowGasTank = false;
@@ -91,11 +91,11 @@ public partial class GolemMajin : Enemy
 		}
 		else
 		{
-			gasTank.endTarget = Character;
+			gasTank.endTarget = Player;
 		}
 
 		_gasTankParent.RemoveChild(gasTank);
-		StageSettings.instance.AddChild(gasTank);
+		StageSettings.Instance.AddChild(gasTank);
 		gasTank.SetDeferred("global_position", t.Origin);
 		gasTank.CallDeferred(GasTank.MethodName.Launch);
 	}

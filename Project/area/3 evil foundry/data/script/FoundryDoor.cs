@@ -77,7 +77,7 @@ public partial class FoundryDoor : Node3D
 			return;
 		}
 
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.ConnectRespawnSignal(this);
 		Respawn();
 	}
 
