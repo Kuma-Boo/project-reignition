@@ -113,6 +113,7 @@ public partial class PlatformTrigger : Node3D
 		if (Engine.IsEditorHint()) return;
 
 		if (isPlatformShaking)
+		{
 			UpdateFallingPlatformBehaviour();
 
 			if (!isInteractingWithPlayer) return;
