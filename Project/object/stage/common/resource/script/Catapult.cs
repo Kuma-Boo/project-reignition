@@ -52,6 +52,12 @@ public partial class Catapult : Launcher
 		base.Activate();
 	}
 
+	protected override void LaunchAnimation()
+	{
+		Player.Animator.StartSpin(5f);
+		Player.Effect.StartSpinFX();
+	}
+
 	public void PlayEnterSfx() => enterSFX.Play();
 	protected override void PlayLaunchSfx()
 	{

@@ -185,6 +185,8 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	/// <summary> Sets the player's launch animation based on launchsettings. Override as needed. </summary>
 	protected virtual void LaunchAnimation()
 	{
+		Player.Effect.StopSpinFX();
+		Player.Animator.ResetState(.1f);
 		if (GetLaunchSettings().InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
 			Player.Animator.JumpAnimation();
 		else
