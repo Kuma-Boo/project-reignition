@@ -44,7 +44,9 @@ public partial class FireSoul : Pickup
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.FireSoulLockon) &&
 			Player.IsHomingAttacking)
-			Player.StartBounce(true);
+		{
+			Player.StartBounce();
+		}
 	}
 
 	public override void Respawn()

@@ -73,7 +73,12 @@ public partial class PlayerLockonController : Node3D
 		TargetState activeState = IsTargetValid(Target);
 		float closestDistance = Mathf.Inf;
 		if (activeTarget != null)
+		{
 			closestDistance = activeTarget.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
+
+			if (Player.IsHomingAttacking) // Don't allow lockons to switch during a homing attack
+				return false;
+		}
 
 		// Check whether to pick a new target
 		for (int i = 0; i < activeTargets.Count; i++)
@@ -83,19 +88,24 @@ public partial class PlayerLockonController : Node3D
 
 			TargetState state = IsTargetValid(activeTargets[i]);
 			if (state != TargetState.Valid && state != TargetState.LowPriority)
+			{
+				GD.Print(state);
 				continue;
+			}
 
 			float dst = activeTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
 			if (activeTarget != null)
 			{
+				bool prioritizeActiveTarget = activeState == TargetState.Valid || state == TargetState.LowPriority;
 				// Ignore low-priority targets that are further from the current target
-				if (dst > closestDistance + DistanceFudgeAmount && (activeState == TargetState.Valid || state == TargetState.LowPriority))
+				if (dst > closestDistance + DistanceFudgeAmount && prioritizeActiveTarget)
 					continue;
 
 				// Ignore lower targets when within fudge range
 				if (dst < closestDistance + DistanceFudgeAmount &&
 					dst > closestDistance - DistanceFudgeAmount &&
-					activeTargets[i].GlobalPosition.Y <= activeTarget.GlobalPosition.Y)
+					activeTargets[i].GlobalPosition.Y <= activeTarget.GlobalPosition.Y &&
+					prioritizeActiveTarget)
 				{
 					continue;
 				}
@@ -129,9 +139,7 @@ public partial class PlayerLockonController : Node3D
 			return;
 		}
 
-		if (!Player.IsHomingAttacking &&
-			Target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten()) < DistanceFudgeAmount &&
-			Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle))
+		if (IsIgnoringTarget(Target))
 		{
 			ResetLockonTarget();
 			return;
@@ -155,12 +163,12 @@ public partial class PlayerLockonController : Node3D
 		if (HitObstacle(target))
 			return TargetState.HitObstacle;
 
-		float distance = target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
-		if (distance < DistanceFudgeAmount &&
-			Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle))
-		{
+		if (IsIgnoringTarget(target))
 			return TargetState.PlayerIgnored;
-		}
+
+		// Ignore height check if player is already homing attacking the target
+		if (IsTargetAttackable && target == Target && Player.IsHomingAttacking)
+			return TargetState.Valid;
 
 		// Check Height
 		bool isTargetAttackable = target.GlobalPosition.Y <= Player.CenterPosition.Y + (Player.CollisionSize.Y * 2.0f);
@@ -168,6 +176,20 @@ public partial class PlayerLockonController : Node3D
 			isTargetAttackable = false;
 
 		return isTargetAttackable ? TargetState.Valid : TargetState.LowPriority;
+	}
+
+	private bool IsIgnoringTarget(Node3D target)
+	{
+		if (Target == target && Player.IsHomingAttacking)
+			return false;
+
+		float inputStrength = Player.Controller.GetInputStrength();
+		if (Mathf.IsZeroApprox(inputStrength))
+			return false;
+
+		float distance = target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
+		bool holdingForward = Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle);
+		return distance < DistanceFudgeAmount && holdingForward;
 	}
 
 	private bool HitObstacle(Node3D target)
@@ -186,6 +208,7 @@ public partial class PlayerLockonController : Node3D
 				h.normal.AngleTo(Vector3.Up) > Mathf.Pi * .4f)
 			{
 				// Hit an obstacle
+				GD.Print(h.collidedObject.Name);
 				return true;
 			}
 

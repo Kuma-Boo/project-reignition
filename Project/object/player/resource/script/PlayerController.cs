@@ -672,6 +672,7 @@ public partial class PlayerController : CharacterBody3D
 	public void StartBounce(bool isUpwardBounce = true)
 	{
 		IsBouncing = true;
+		GD.PrintT("Bouncing", isUpwardBounce);
 		bounceState.IsUpwardBounce = isUpwardBounce;
 		StateMachine.ChangeState(bounceState);
 	}
