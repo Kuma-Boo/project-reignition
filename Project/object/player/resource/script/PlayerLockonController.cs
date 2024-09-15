@@ -88,10 +88,7 @@ public partial class PlayerLockonController : Node3D
 
 			TargetState state = IsTargetValid(activeTargets[i]);
 			if (state != TargetState.Valid && state != TargetState.LowPriority)
-			{
-				GD.Print(state);
 				continue;
-			}
 
 			float dst = activeTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
 			if (activeTarget != null)
@@ -202,15 +199,11 @@ public partial class PlayerLockonController : Node3D
 
 		RaycastHit h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
 		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
+
 		if (h && h.collidedObject != target)
 		{
-			if (!h.collidedObject.IsInGroup(LevelWallGroup) ||
-				h.normal.AngleTo(Vector3.Up) > Mathf.Pi * .4f)
-			{
-				// Hit an obstacle
-				GD.Print(h.collidedObject.Name);
+			if (!h.collidedObject.IsInGroup(LevelWallGroup)) // Hit an obstacle
 				return true;
-			}
 
 			if (h.collidedObject.IsInGroup(LevelWallGroup)) // Cast a new ray from the collision point
 			{
