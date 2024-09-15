@@ -519,6 +519,12 @@ public partial class PlayerController : CharacterBody3D
 	{
 		if (!IsLockoutActive || !ActiveLockoutData.recenterPlayer) return;
 
+		if (ExternalParent != null || IsLaunching) // Player's position is being overridden
+		{
+			isRecentered = false;
+			return;
+		}
+
 		Vector3 recenterDirection = PathFollower.Forward().Rotated(UpDirection, Mathf.Pi * .5f);
 		float currentOffset = PathFollower.LocalPlayerPositionDelta.X;
 		float movementOffset = currentOffset;
