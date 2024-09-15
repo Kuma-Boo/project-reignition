@@ -182,7 +182,7 @@ public partial class MovingObject : Node3D
 		if (Animator != null)
 			Animator.SpeedScale = animatorSpeedScale;
 
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.ConnectRespawnSignal(this);
 		Respawn();
 	}
 

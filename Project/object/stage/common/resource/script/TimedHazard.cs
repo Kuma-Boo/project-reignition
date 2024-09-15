@@ -136,11 +136,12 @@ public partial class TimedHazard : Hazard
 		Timer = GetNodeOrNull<Timer>(timer);
 
 		currentStateIndex = Mathf.Clamp(currentStateIndex, 0, stateNames.Count);
-		Interface.Countdown.Instance.Connect(Interface.Countdown.SignalName.CountdownFinished, new(this, MethodName.StartHazard), (uint)ConnectFlags.OneShot);
+		Interface.Countdown.Instance.CountdownFinished += StartHazard;
 	}
 
 	private void StartHazard()
 	{
+		Interface.Countdown.Instance.CountdownFinished -= StartHazard;
 		if (currentStateIndex < stateLengths.Length)
 			StartTimer(stateLengths[currentStateIndex] - startingTime);
 		else

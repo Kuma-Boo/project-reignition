@@ -25,7 +25,7 @@ namespace Project.Gameplay.Bosses
 		[Export]
 		private Node3D secondaryCollision;
 
-		private CharacterController Character => CharacterController.instance;
+		private PlayerController Player => StageSettings.Player;
 		private const float COLLISION_PIECE_SPACING = -87f;
 		private const float COLLISION_PIECE_ROTATION = 1;
 
@@ -36,7 +36,7 @@ namespace Project.Gameplay.Bosses
 
 		public override void _PhysicsProcess(double _)
 		{
-			float extraRotation = Character.PathFollower.ProgressRatio * Mathf.Pi;
+			float extraRotation = Player.PathFollower.ProgressRatio * Mathf.Pi;
 			sky.Rotation = Vector3.Up * (Mathf.DegToRad(-65) + extraRotation);
 		}
 

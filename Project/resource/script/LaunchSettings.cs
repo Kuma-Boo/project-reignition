@@ -14,6 +14,8 @@ public struct LaunchSettings
 	/// <summary> Allow the player to jumpdash after launch is completed? </summary>
 	public bool AllowJumpDash { get; set; }
 
+	public Objects.Launcher Launcher { get; set; }
+
 	// Physics settings
 	public Vector3 launchDirection;
 	public Vector3 endPosition;
@@ -34,7 +36,7 @@ public struct LaunchSettings
 
 	/// <summary> Was this launch settings initialized? </summary>
 	public bool IsInitialized { get; private set; }
-	public bool IsLauncherFinished(float t) => t + PhysicsManager.physicsDelta >= TotalTravelTime;
+	public bool IsLauncherFinished(float t) => t >= TotalTravelTime;
 	private static float Gravity => -Runtime.Gravity; // Use the same gravity as the character controller
 
 	/// <summary>

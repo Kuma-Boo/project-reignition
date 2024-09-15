@@ -18,7 +18,7 @@ public partial class CullingTrigger : StageTriggerModule
 	[Export]
 	private bool isStageVisuals;
 	private bool isActive;
-	private StageSettings Level => StageSettings.instance;
+	private StageSettings Level => StageSettings.Instance;
 	[Export]
 	private bool respawnOnActivation;
 	private Array<Node> respawnableNodes = [];
@@ -74,8 +74,8 @@ public partial class CullingTrigger : StageTriggerModule
 	/// <summary> Saves the current visiblity. Called when the player passes a checkpoint. </summary>
 	private void ProcessCheckpoint()
 	{
-		if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Probes ||
-			StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Shaders)
+		if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Probes ||
+			StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Shaders)
 		{
 			visibleOnCheckpoint = startEnabled;
 		}

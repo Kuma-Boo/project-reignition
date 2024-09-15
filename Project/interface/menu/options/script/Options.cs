@@ -104,16 +104,15 @@ public partial class Options : Menu
 	[Export]
 	private Node3D lockNode;
 	private bool isPlayerLocked;
+	private PlayerController Player => StageSettings.Player;
 	private void LockPlayer() => isPlayerLocked = true;
 	private void UnlockPlayer() => isPlayerLocked = false;
 	private void UpdatePlayerPosition()
 	{
-		CharacterController character = CharacterController.instance;
-
-		Vector3 lockPosition = character.GlobalPosition;
+		Vector3 lockPosition = Player.GlobalPosition;
 		lockPosition.X = Mathf.Clamp(lockPosition.X, lockNode.GlobalPosition.X - 1.2f, lockNode.GlobalPosition.X + 1.2f);
 		lockPosition.Z = lockNode.GlobalPosition.Z;
-		character.GlobalPosition = lockPosition;
+		Player.GlobalPosition = lockPosition;
 	}
 
 	protected override void Confirm()
@@ -191,7 +190,7 @@ public partial class Options : Menu
 			UnlockPlayer();
 			animator.Play("test_end");
 			currentSubmenu = Submenus.Control;
-			CharacterController.instance.Skills.DisableBreakSkills();
+			StageSettings.Player.Skills.DisableBreakSkills();
 		}
 		else
 			Confirm();
@@ -509,7 +508,7 @@ public partial class Options : Menu
 			int postProcessingQuality = (int)SaveManager.Config.postProcessingQuality;
 			postProcessingQuality = WrapSelection(postProcessingQuality + direction, (int)SaveManager.QualitySetting.Count);
 			SaveManager.Config.postProcessingQuality = (SaveManager.QualitySetting)postProcessingQuality;
-			StageSettings.instance.UpdatePostProcessingStatus();
+			StageSettings.Instance.UpdatePostProcessingStatus();
 		}
 		else if (VerticalSelection == 11)
 		{

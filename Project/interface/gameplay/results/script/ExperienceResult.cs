@@ -86,7 +86,7 @@ public partial class ExperienceResult : Control
 	private const int MaxLevel = 99;
 	private const int LevelInterval = 10000;
 
-	private StageSettings Stage => StageSettings.instance;
+	private StageSettings Stage => StageSettings.Instance;
 
 	public override void _Ready()
 	{
@@ -240,7 +240,7 @@ public partial class ExperienceResult : Control
 		int maxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
 		int maxSkillPoints = SkillRing.CalculateSkillPointsByLevel(SaveManager.ActiveGameData.level);
 
-		int soulGaugeGain = maxSoulPower - CharacterController.instance.Skills.MaxSoulPower;
+		int soulGaugeGain = maxSoulPower - StageSettings.Player.Skills.MaxSoulPower;
 		int skillPointGain = maxSkillPoints - SaveManager.ActiveSkillRing.MaxSkillPoints;
 
 		levelGainLabel.Text = $"+{levelsGained.ToString("00")}";

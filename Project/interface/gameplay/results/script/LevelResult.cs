@@ -37,7 +37,7 @@ public partial class LevelResult : Control
 
 	private bool isProcessing;
 	private bool isFadingBgm;
-	private StageSettings Stage => StageSettings.instance;
+	private StageSettings Stage => StageSettings.Instance;
 
 	public override void _Ready()
 	{
@@ -107,7 +107,7 @@ public partial class LevelResult : Control
 		int rank = Stage.CalculateRank();
 
 		// Show the Score Requirements when Rank Preview is equipped
-		if (CharacterController.instance.Skills.IsSkillEquipped(SkillKey.RankPreview) && rank >= 0 && rank < 3)
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RankPreview) && rank >= 0 && rank < 3)
 		{
 			// Show rank requirements
 			requirementRoot.Visible = true;

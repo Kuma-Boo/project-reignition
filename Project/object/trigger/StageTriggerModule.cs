@@ -8,7 +8,7 @@ namespace Project.Gameplay.Triggers
 	/// </summary>
 	public partial class StageTriggerModule : Node3D
 	{
-		protected CharacterController Character => CharacterController.instance;
+		protected PlayerController Player => StageSettings.Player;
 
 		public virtual void Activate(Area3D a)
 		{
@@ -16,8 +16,8 @@ namespace Project.Gameplay.Triggers
 				return;
 
 			// Culling states shouldn't be changed when level is completed
-			if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Failed ||
-				StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Success)
+			if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Failed ||
+				StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Success)
 			{
 				return;
 			}
@@ -30,8 +30,8 @@ namespace Project.Gameplay.Triggers
 				return;
 
 			// Culling states shouldn't be changed when level is completed
-			if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Failed ||
-				StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Success)
+			if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Failed ||
+				StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Success)
 			{
 				return;
 			}

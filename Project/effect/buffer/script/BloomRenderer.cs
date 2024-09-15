@@ -35,7 +35,7 @@ namespace Project.Gameplay
 		[Export]
 		private ShaderMaterial compositeMaterial; //Material that overlays the final bloom image to the screen
 
-		private Camera3D Camera => CharacterController.instance.Camera.Camera;
+		private Camera3D Camera => StageSettings.Player.Camera.Camera;
 		private Callable ApplyTextureCallable => new Callable(this, MethodName.ApplyTexture);
 
 		public override void _Ready()

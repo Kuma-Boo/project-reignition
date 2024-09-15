@@ -366,7 +366,7 @@ public partial class CharacterEffect : Node3D
 		{
 			activeFootprintDecal = footprintDecal.Instantiate<Node3D>();
 			footprintDecalList.Add(activeFootprintDecal);
-			StageSettings.instance.AddChild(activeFootprintDecal);
+			StageSettings.Instance.AddChild(activeFootprintDecal);
 		}
 
 		// Reset fading animation

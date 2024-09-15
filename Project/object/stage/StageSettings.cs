@@ -11,14 +11,16 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class StageSettings : Node3D
 {
-	public static StageSettings instance;
+	public static StageSettings Instance;
+	public static PlayerController Player { get; private set; }
+	public static void RegisterPlayer(PlayerController player) => Player = player;
 
-	public bool IsControlTest => Data.LevelID == OPTIONS_LEVEL_ID;
-	private readonly StringName OPTIONS_LEVEL_ID = "options";
+	public bool IsControlTest => Data.LevelID == OptionsLevelId;
+	private readonly StringName OptionsLevelId = "options";
 
 	public override void _EnterTree()
 	{
-		instance = this; // Always override previous instance
+		Instance = this; // Always override previous instance
 
 		for (int i = 0; i < pathParent.GetChildCount(); i++)
 		{
@@ -367,8 +369,12 @@ public partial class StageSettings : Node3D
 		}
 
 		// Soul barrier
-		if (mode == MathModeEnum.Subtract && CharacterController.instance.Skills.IsSkillEquipped(SkillKey.RingLossConvert))
-			CharacterController.instance.Skills.ModifySoulGauge((previousAmount - CurrentRingCount) * 2);
+		if (Player == null)
+		{
+			GD.PushError("PlayerController is missing!");
+			if (mode == MathModeEnum.Subtract && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RingLossConvert))
+				Player.Skills.ModifySoulGauge((previousAmount - CurrentRingCount) * 2);
+		}
 
 		if (DebugManager.Instance.InfiniteRings) // Infinite ring cheat
 			CurrentRingCount = 999;
@@ -557,7 +563,7 @@ public partial class StageSettings : Node3D
 		if (completionAnimationIndex > 3)
 			completionAnimationIndex = 1;
 		completionAnimator.Play($"demo{completionAnimationIndex}");
-		CharacterController.instance.Camera.StartCrossfade();
+		Player.Camera.StartCrossfade();
 	}
 
 	#endregion
