@@ -19,10 +19,11 @@
 [ext_resource type="PackedScene" uid="uid://dhwwi7i5b0v65" path="res://area/3 evil foundry/object/grindrail/Grindrail02.tscn" id="14_bwl18"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="16_c4g30"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_piryv"]
+size = Vector3(20, 20, 5)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_obefh"]
 size = Vector3(13.515, 8.885, 1.44)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_piryv"]
 
 [node name="RinglessAct" type="Node"]
 
@@ -31,11 +32,10 @@ Data = ExtResource("2_ovj8b")
 
 [node name="RinglessAct" type="Node3D" parent="."]
 
-[node name="Spawnposition" type="Node3D" parent="RinglessAct"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 126.591, 40.4096, -193.946)
+[node name="SpawnPosition" type="Node3D" parent="RinglessAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125, 40, -194.2)
 
-[node name="CharacterSpawn" parent="RinglessAct/Spawnposition" instance=ExtResource("3_jx3jb")]
-transform = Transform3D(0.0108906, 0, 0.999941, 0, 1, 0, -0.999941, 0, 0.0108906, -2.55489, 0, -0.294189)
+[node name="CharacterSpawn" parent="RinglessAct/SpawnPosition" instance=ExtResource("3_jx3jb")]
 
 [node name="Ending" type="Node3D" parent="RinglessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 179.717, 40.2822, -194.038)
@@ -106,10 +106,10 @@ rangeOverride = 10
 
 [node name="BlueMajin2" parent="RinglessAct/Ending/ENEMIES" instance=ExtResource("6_bjnf6")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.865, -18.8555, 35.0343)
-"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.3
-"Spawn Settings/Spawn Offset" = Vector3(0, 0, 0)
-"Spawn Settings/Spawn In Offset" = Vector3(-10, 0, 0)
+"Spawn Settings/Spawn Offset" = Vector3(-10, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 rangeOverride = 11
 
@@ -843,7 +843,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.27279, -1.27279, 0)
 
 [node name="InvisibleGrindrail1" parent="RinglessAct/Ending/GIMMICKS" instance=ExtResource("8_4d187")]
 transform = Transform3D(0.00674591, 0.112787, -0.993596, -0.000765743, 0.993619, 0.112784, 0.999977, 4.92996e-09, 0.00678924, -1.57513, -19.7179, 35.0979)
-rail = NodePath("")
 railLength = 23
 
 [node name="InvisibleGrindrail2" parent="RinglessAct/Ending/GIMMICKS" instance=ExtResource("8_4d187")]
@@ -952,21 +951,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
 [node name="Child12" parent="RinglessAct/Ending/GIMMICKS/InvisibleGrindrail4/Pearls5" instance=ExtResource("9_twagj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.8)
 
+[node name="EXTRA" type="Node3D" parent="RinglessAct/Ending"]
+
+[node name="InvisibleWall" type="StaticBody3D" parent="RinglessAct/Ending/EXTRA"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -59.4653, 0, -0.160416)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RinglessAct/Ending/EXTRA/InvisibleWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_piryv")
+
 [node name="Goal" parent="RinglessAct/Ending" instance=ExtResource("16_c4g30")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.570206, -25.5517, 9.60463)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RinglessAct/Ending/Goal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.14846, 4.80933)
 shape = SubResource("BoxShape3D_obefh")
-
-[node name="EXTRA" type="Node3D" parent="RinglessAct/Ending"]
-
-[node name="InvisibleWall" type="StaticBody3D" parent="RinglessAct/Ending/EXTRA"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.8653, 0, -0.160416)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RinglessAct/Ending/EXTRA/InvisibleWall"]
-transform = Transform3D(1, 0, 0, 0, 13.2714, 0, 0, 0, 10.7752, 0, 0, 0)
-shape = SubResource("BoxShape3D_piryv")
 
 [connection signal="Activated" from="RinglessAct/Ending/GIMMICKS/Switch" to="RinglessAct/Ending/GIMMICKS/Switch/CullingTrigger" method="Activate"]
 [connection signal="Activated" from="RinglessAct/Ending/GIMMICKS/Switch2" to="RinglessAct/Ending/GIMMICKS/Switch2/CullingTrigger" method="Activate"]
