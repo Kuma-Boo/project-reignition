@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://wufpyrm8jour"]
+[gd_scene load_steps=51 format=3 uid="uid://wufpyrm8jour"]
 
 [ext_resource type="PackedScene" uid="uid://o4l6oimlm4qq" path="res://area/3 evil foundry/act 1/environment/collision/Collision.tscn" id="1_liyuu"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_q5jqm"]
@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://wh1mwp5hhdqh" path="res://area/3 evil foundry/act 1/environment/23Lava.tscn" id="25_txtep"]
 [ext_resource type="PackedScene" uid="uid://dqkj7brporikx" path="res://area/3 evil foundry/act 1/environment/25Hall.tscn" id="27_exol8"]
 [ext_resource type="PackedScene" uid="uid://be5hf56680hi3" path="res://area/3 evil foundry/act 1/environment/26Lava.tscn" id="28_6kce0"]
+[ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="30_ujjb5"]
 [ext_resource type="PackedScene" uid="uid://bw5ehfdmtkisl" path="res://area/3 evil foundry/act 1/environment/28Hall.tscn" id="30_yrtbv"]
 [ext_resource type="PackedScene" uid="uid://3qifnsx8udf7" path="res://area/3 evil foundry/act 1/environment/29End.tscn" id="31_wglcq"]
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="32_fcup5"]
@@ -57,6 +58,12 @@ radius = 2.0
 [sub_resource type="BoxShape3D" id="BoxShape3D_wtwnk"]
 size = Vector3(20, 120, 10)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_vrh7o"]
+size = Vector3(100, 5, 300)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uffs8"]
+size = Vector3(100, 5, 200)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_seqin"]
 size = Vector3(20, 20, 8)
 
@@ -72,6 +79,7 @@ visible = false
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="CullingMap" type="Node3D" parent="Visuals"]
+visible = false
 
 [node name="L-02" parent="Visuals/CullingMap" instance=ExtResource("33_1wgtf")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -69.8, -40, -50.1)
@@ -500,13 +508,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -155, -30, -110)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_h6yh5")
 
-[node name="DriftTrigger3" parent="Triggers/Object/DriftTrigger" instance=ExtResource("32_fcup5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -155, -30, -110)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/DriftTrigger/DriftTrigger3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_h6yh5")
-
 [node name="DriftTrigger4" parent="Triggers/Object/DriftTrigger" instance=ExtResource("32_fcup5")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -350, -30, -120)
 
@@ -683,6 +684,20 @@ lockoutData = ExtResource("38_vwkfl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/ElevatorLockout"]
 shape = SubResource("BoxShape3D_wtwnk")
+
+[node name="FallTrigger" parent="Triggers/Object" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 30, -290)
+"Enter Mode" = 0
+
+[node name="Fall" type="Node3D" parent="Triggers/Object/FallTrigger"]
+script = ExtResource("30_ujjb5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/FallTrigger"]
+shape = SubResource("BoxShape3D_vrh7o")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Triggers/Object/FallTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 99, 0, -50)
+shape = SubResource("BoxShape3D_uffs8")
 
 [node name="Camera" type="Node3D" parent="Triggers"]
 
