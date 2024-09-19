@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://wufpyrm8jour"]
+[gd_scene load_steps=57 format=3 uid="uid://wufpyrm8jour"]
 
 [ext_resource type="PackedScene" uid="uid://o4l6oimlm4qq" path="res://area/3 evil foundry/act 1/environment/collision/Collision.tscn" id="1_liyuu"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_q5jqm"]
@@ -47,6 +47,7 @@
 [ext_resource type="Resource" uid="uid://bst174qxx0cr6" path="res://area/3 evil foundry/act 1/camera/StaticCam.tres" id="38_3gwpp"]
 [ext_resource type="Resource" uid="uid://drgabk5njs1qx" path="res://area/3 evil foundry/act 1/camera/SpiralCam.tres" id="38_uh4ey"]
 [ext_resource type="Resource" uid="uid://ccjhqcuypdtc0" path="res://area/3 evil foundry/data/ElevatorLockout.tres" id="38_vwkfl"]
+[ext_resource type="Resource" uid="uid://dnk158xtx3lvc" path="res://area/3 evil foundry/act 1/camera/ElevatorCam.tres" id="39_tu57i"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h6yh5"]
 size = Vector3(20, 20, 5)
@@ -710,6 +711,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 99, 0, -50)
 shape = SubResource("BoxShape3D_uffs8")
 
 [node name="Checkpoint" type="Node3D" parent="Triggers"]
+visible = false
 
 [node name="Checkpoint1" parent="Triggers/Checkpoint" instance=ExtResource("33_1wgtf")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -17.1, -40, -50.1)
@@ -930,7 +932,36 @@ settings = ExtResource("37_fhjrg")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_seqin")
 
+[node name="SpiralCam2" parent="Triggers/Camera" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-5.96046e-08, -1.13133e-08, 1, -1.48943e-09, 1, 1.13133e-08, -1, -1.48943e-09, -5.96046e-08, -393, -30, -360)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/SpiralCam2"]
+script = ExtResource("35_va14j")
+transitionTime = 0.5
+settings = ExtResource("38_uh4ey")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/SpiralCam2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_seqin")
+
+[node name="ElevatorCam" parent="Triggers/Camera" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-5.96046e-08, -1.13133e-08, 1, -1.48943e-09, 1, 1.13133e-08, -1, -1.48943e-09, -5.96046e-08, -77, -60, -190)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/ElevatorCam"]
+script = ExtResource("35_va14j")
+transitionTime = 0.5
+settings = ExtResource("39_tu57i")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/ElevatorCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_seqin")
+
 [node name="Path" type="Node3D" parent="Triggers"]
+visible = false
 
 [node name="StartingPath" parent="Triggers/Path" instance=ExtResource("33_1wgtf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -40, -35)
