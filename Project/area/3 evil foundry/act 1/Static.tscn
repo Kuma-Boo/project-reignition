@@ -1,9 +1,9 @@
-[gd_scene load_steps=52 format=3 uid="uid://wufpyrm8jour"]
+[gd_scene load_steps=56 format=3 uid="uid://wufpyrm8jour"]
 
 [ext_resource type="PackedScene" uid="uid://o4l6oimlm4qq" path="res://area/3 evil foundry/act 1/environment/collision/Collision.tscn" id="1_liyuu"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_q5jqm"]
-[ext_resource type="Resource" uid="uid://b017wlhsy06jg" path="res://area/3 evil foundry/act 1/camera/HallCam.tres" id="2_cdw4d"]
 [ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/3 evil foundry/data/Environment.tres" id="2_imo2i"]
+[ext_resource type="Resource" uid="uid://b017wlhsy06jg" path="res://area/3 evil foundry/act 1/camera/FarHallCam.tres" id="2_oi8d4"]
 [ext_resource type="PackedScene" uid="uid://bo4ijrtd2ee3j" path="res://area/3 evil foundry/act 1/environment/01Opening.tscn" id="3_bb6ii"]
 [ext_resource type="PackedScene" uid="uid://b8raat7vo2t82" path="res://area/3 evil foundry/act 1/environment/02Hall.tscn" id="4_kqfa2"]
 [ext_resource type="PackedScene" uid="uid://bhpbwwtmjtg2t" path="res://area/3 evil foundry/act 1/environment/03Connection.tscn" id="5_wfrm4"]
@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://wh1mwp5hhdqh" path="res://area/3 evil foundry/act 1/environment/23Lava.tscn" id="25_txtep"]
 [ext_resource type="PackedScene" uid="uid://dqkj7brporikx" path="res://area/3 evil foundry/act 1/environment/25Hall.tscn" id="27_exol8"]
 [ext_resource type="PackedScene" uid="uid://be5hf56680hi3" path="res://area/3 evil foundry/act 1/environment/26Lava.tscn" id="28_6kce0"]
+[ext_resource type="Resource" uid="uid://btesvp21a581s" path="res://area/3 evil foundry/act 1/camera/SidleCam.tres" id="28_ug1pn"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="30_ujjb5"]
 [ext_resource type="PackedScene" uid="uid://bw5ehfdmtkisl" path="res://area/3 evil foundry/act 1/environment/28Hall.tscn" id="30_yrtbv"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="31_8wctb"]
@@ -38,10 +39,13 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="35_va14j"]
 [ext_resource type="Curve3D" uid="uid://dhy43m5kqt3mx" path="res://area/3 evil foundry/act 1/environment/path/MiddlePath.tres" id="35_xnhgv"]
 [ext_resource type="Curve3D" uid="uid://tjilx005moco" path="res://area/3 evil foundry/act 1/environment/path/ElevatorAutomationPath.tres" id="36_cuwfc"]
+[ext_resource type="Resource" uid="uid://dtmbywgmb8yc7" path="res://area/3 evil foundry/act 1/camera/CloseHallCam.tres" id="36_g2b6g"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="37_47qmh"]
 [ext_resource type="Curve3D" uid="uid://bv0t8i8sfcb7q" path="res://area/3 evil foundry/act 1/environment/path/EndingPath.tres" id="37_dpldg"]
+[ext_resource type="Resource" uid="uid://deb2j8xspvlfq" path="res://area/3 evil foundry/act 1/camera/NarrowHallCam.tres" id="37_fhjrg"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="37_nle4i"]
 [ext_resource type="Resource" uid="uid://bst174qxx0cr6" path="res://area/3 evil foundry/act 1/camera/StaticCam.tres" id="38_3gwpp"]
+[ext_resource type="Resource" uid="uid://drgabk5njs1qx" path="res://area/3 evil foundry/act 1/camera/SpiralCam.tres" id="38_uh4ey"]
 [ext_resource type="Resource" uid="uid://ccjhqcuypdtc0" path="res://area/3 evil foundry/data/ElevatorLockout.tres" id="38_vwkfl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h6yh5"]
@@ -66,11 +70,11 @@ size = Vector3(100, 5, 300)
 size = Vector3(100, 5, 200)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_seqin"]
-size = Vector3(20, 20, 8)
+size = Vector3(20, 20, 5)
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_q5jqm")
-InitialCameraSettings = ExtResource("2_cdw4d")
+InitialCameraSettings = ExtResource("2_oi8d4")
 pathParent = NodePath("Path")
 Environment = NodePath("WorldEnvironment")
 
@@ -662,6 +666,11 @@ shape = SubResource("BoxShape3D_h6yh5")
 [node name="SidleTrigger" parent="Triggers/Object" instance=ExtResource("33_w7jv7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -159.5, -30, -77)
 
+[node name="Camera" type="Node3D" parent="Triggers/Object/SidleTrigger"]
+script = ExtResource("35_va14j")
+transitionTime = 0.5
+settings = ExtResource("28_ug1pn")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/SidleTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 shape = SubResource("BoxShape3D_513tn")
@@ -859,10 +868,66 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1, -2)
 script = ExtResource("35_va14j")
 deactivationTransitionTime = 0.5
 settings = ExtResource("38_3gwpp")
-previousSettings = ExtResource("2_cdw4d")
+previousSettings = ExtResource("36_g2b6g")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/OpeningStatic2Cam"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_seqin")
+
+[node name="StaircaseCam" parent="Triggers/Camera" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -110, -40, -50.1)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/StaircaseCam"]
+script = ExtResource("35_va14j")
+transitionTime = 0.5
+settings = ExtResource("2_oi8d4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/StaircaseCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_seqin")
+
+[node name="HallCam" parent="Triggers/Camera" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -157.6, -30, -101)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/HallCam"]
+script = ExtResource("35_va14j")
+transitionTime = 0.5
+settings = ExtResource("37_fhjrg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/HallCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_seqin")
+
+[node name="SpiralCam" parent="Triggers/Camera" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -447, -30, -60)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/SpiralCam"]
+script = ExtResource("35_va14j")
+transitionTime = 0.5
+settings = ExtResource("38_uh4ey")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/SpiralCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_seqin")
+
+[node name="NarrowCam" parent="Triggers/Camera" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -619, -30, -420)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/NarrowCam"]
+script = ExtResource("35_va14j")
+transitionTime = 0.5
+settings = ExtResource("37_fhjrg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/NarrowCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_seqin")
 
 [node name="Path" type="Node3D" parent="Triggers"]
@@ -891,7 +956,7 @@ path = NodePath("../../../../Path/MiddlePath")
 transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, 0, -0.200001, -0.699951)
 script = ExtResource("35_va14j")
 transitionTime = 0.5
-settings = ExtResource("2_cdw4d")
+settings = ExtResource("2_oi8d4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Path/MiddlePath"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1027,6 +1092,8 @@ environment = ExtResource("2_imo2i")
 [connection signal="Deactivated" from="Visuals/CullingMap/L-29" to="Visuals/29End" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/U-28" to="Visuals/28Hall" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/U-28" to="Visuals/28Hall" method="Activate"]
+[connection signal="Activated" from="Triggers/Object/SidleTrigger" to="Triggers/Object/SidleTrigger/Camera" method="Activate"]
+[connection signal="Deactivated" from="Triggers/Object/SidleTrigger" to="Triggers/Object/SidleTrigger/Camera" method="Deactivate"]
 [connection signal="Activated" from="Triggers/Object/AutomationTrigger" to="Collision/WallOneWay" method="Deactivate"]
 [connection signal="Deactivated" from="Triggers/Object/AutomationTrigger" to="Collision/WallOneWay" method="Activate"]
 
