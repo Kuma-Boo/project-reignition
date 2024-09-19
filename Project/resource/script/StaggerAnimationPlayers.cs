@@ -12,7 +12,7 @@ public partial class StaggerAnimationPlayers : Node
   private Tween _timeline;
   public override void _EnterTree()
   {
-    StageSettings.instance.ConnectRespawnSignal(this);
+    StageSettings.Instance.ConnectRespawnSignal(this);
   }
   public override void _Ready()
   {
