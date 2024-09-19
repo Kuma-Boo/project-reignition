@@ -1,0 +1,937 @@
+[gd_scene load_steps=43 format=3 uid="uid://d4va62rgfqin"]
+
+[ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="1_8qxdg"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_qk3u2"]
+[ext_resource type="Resource" uid="uid://bsu0pkrs1lgiq" path="res://resource/level data/evil foundry/Act1Deathless.tres" id="2_ropkd"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="3_g5v4g"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_khgg8"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="4_pwmd8"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="4_sj5iv"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_vuoeu"]
+[ext_resource type="PackedScene" uid="uid://cbpudluma1oux" path="res://object/stage/destructable/Crate.tscn" id="5_3e03o"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="6_upu1a"]
+[ext_resource type="PackedScene" uid="uid://bntrixspwpi2" path="res://object/enemy/golem/GolemMajin.tscn" id="7_nfp1y"]
+[ext_resource type="PackedScene" uid="uid://det4s2txdn4ka" path="res://area/3 evil foundry/object/Furnace.tscn" id="7_uib7b"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="8_e6mti"]
+[ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="9_tksp5"]
+[ext_resource type="PackedScene" uid="uid://c3b6ygc13a33j" path="res://object/enemy/majin/data/evil foundry/GreenMajin.tscn" id="10_ac17n"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="15_x6g2j"]
+[ext_resource type="PackedScene" path="res://area/3 evil foundry/object/platform/HallPlatformLong.tscn" id="16_xbsy4"]
+[ext_resource type="PackedScene" uid="uid://c1o8jxmiiryrj" path="res://object/stage/common/JumpCarpet.tscn" id="17_6twug"]
+[ext_resource type="PackedScene" uid="uid://dogm6wyurmt4" path="res://area/3 evil foundry/object/grindrail/Grindrail03.tscn" id="17_mr6ev"]
+[ext_resource type="PackedScene" uid="uid://2h6xrqn3jp6l" path="res://object/stage/destructable/Cage.tscn" id="17_welrc"]
+[ext_resource type="PackedScene" path="res://area/3 evil foundry/object/Elevator.tscn" id="18_834aa"]
+[ext_resource type="PackedScene" path="res://area/3 evil foundry/object/Fan.tscn" id="18_ddkmk"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="18_mjad6"]
+[ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="19_8jijq"]
+[ext_resource type="PackedScene" uid="uid://lqag3j32861" path="res://area/3 evil foundry/object/grindrail/Grindrail04.tscn" id="19_q274s"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="19_xdhlr"]
+[ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="20_4u3p0"]
+[ext_resource type="PackedScene" uid="uid://b7ku38xcd8buw" path="res://object/enemy/majin/data/evil foundry/BlueMajin.tscn" id="20_kkn76"]
+[ext_resource type="PackedScene" uid="uid://bdxneanubmcid" path="res://area/3 evil foundry/object/GasTank.tscn" id="21_kry2n"]
+[ext_resource type="PackedScene" path="res://area/3 evil foundry/object/FanBroken.tscn" id="22_cges7"]
+[ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="24_lhmrn"]
+[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="25_l0jjy"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s1mwa"]
+size = Vector3(20, 20, 5)
+
+[sub_resource type="Curve3D" id="Curve3D_wv2bb"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 1, 0, 0, -1, 0, 0, -2, 0, 7, 0, 0, 1, 0, 0, 0, -4, 0, 5, 0, 0, 0, 0, 0, -1, -4, 0, 0, -1, 0, 0, 1, 0, 0, -2, 0, -2, 0, 0, -1, 0, 0, 0, 0, 0, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 7
+
+[sub_resource type="Curve" id="Curve_luj3r"]
+min_value = -2.0
+max_value = 0.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, -1), 0.0, 0.0, 0, 0, Vector2(1, -0.6), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_gc1gy"]
+min_value = -1.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -0.6), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_30x12"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.7), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Animation" id="Animation_s406k"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FurnacePivot1:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.0872665, -1.5708, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FurnacePivot1/Furnace1:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FurnacePivot2:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.0872665, -1.5708, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FurnacePivot2/Furnace2:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("FurnacePivot3:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.0872665, -1.5708, -6.36724e-10)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FurnacePivot3/Furnace3:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_m0l34"]
+resource_name = "event"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FurnacePivot1:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0.0872665, -1.5708, 0), Vector3(0.0872665, -1.5708, -1.5708)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FurnacePivot1/Furnace1:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(-0.8, 0, 0), Vector3(-0.8, -1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FurnacePivot2:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3, 1.1),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0.0872665, -1.5708, 0), Vector3(0.0872665, -1.5708, -1.5708)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FurnacePivot2/Furnace2:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.3, 1.1),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(-0.8, 0, 0), Vector3(-0.8, -1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("FurnacePivot3:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.6, 1.4),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0.0872665, -1.5708, -6.36724e-10), Vector3(0.0872665, -1.5708, -1.5708)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FurnacePivot3/Furnace3:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.6, 1.4),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(-0.8, 0, 0), Vector3(-0.8, -1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2sowh"]
+_data = {
+"RESET": SubResource("Animation_s406k"),
+"event": SubResource("Animation_m0l34")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cvoto"]
+size = Vector3(5, 20, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t3h8b"]
+size = Vector3(15, 13, 12.9072)
+
+[node name="Stage" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_8qxdg")]
+Data = ExtResource("2_ropkd")
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="DeathlessAct" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="SpawnPosition" type="Node3D" parent="DeathlessAct"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -532, -45, -360)
+metadata/_edit_lock_ = true
+
+[node name="CharacterSpawn" parent="DeathlessAct/SpawnPosition" instance=ExtResource("2_qk3u2")]
+enableStartFX = true
+
+[node name="CullingMap" type="Node3D" parent="DeathlessAct"]
+visible = false
+
+[node name="MineEntrance-L" parent="DeathlessAct/CullingMap" instance=ExtResource("4_vuoeu")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -405.071, -52.4939, -340.001)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/MineEntrance-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_s1mwa")
+
+[node name="Opening-U" parent="DeathlessAct/CullingMap" instance=ExtResource("4_vuoeu")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -330, -60, -360)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/Opening-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_s1mwa")
+
+[node name="Ending-L" parent="DeathlessAct/CullingMap" instance=ExtResource("4_vuoeu")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -104.071, -69.9939, -400.001)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/Ending-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_s1mwa")
+
+[node name="MineEntrance-U" parent="DeathlessAct/CullingMap" instance=ExtResource("4_vuoeu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, -55, -300)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/MineEntrance-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_s1mwa")
+
+[node name="Opening" type="Node3D" parent="DeathlessAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -521.264, -44.4904, -360.012)
+visible = false
+script = ExtResource("4_khgg8")
+startEnabled = true
+isStageVisuals = true
+
+[node name="Rings" type="Node3D" parent="DeathlessAct/Opening"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+script = ExtResource("3_g5v4g")
+Generate = false
+Source = ExtResource("4_pwmd8")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 1.8
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Opening/Rings" instance=ExtResource("4_pwmd8")]
+
+[node name="Child02" parent="DeathlessAct/Opening/Rings" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
+
+[node name="Child03" parent="DeathlessAct/Opening/Rings" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child04" parent="DeathlessAct/Opening/Rings" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.4)
+
+[node name="Child05" parent="DeathlessAct/Opening/Rings" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child06" parent="DeathlessAct/Opening/Rings" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="CrateTower" type="Node3D" parent="DeathlessAct/Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.6549, 0, 0)
+
+[node name="Crate" parent="DeathlessAct/Opening/CrateTower" instance=ExtResource("5_3e03o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Crate2" parent="DeathlessAct/Opening/CrateTower" instance=ExtResource("5_3e03o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1)
+
+[node name="Crate3" parent="DeathlessAct/Opening/CrateTower" instance=ExtResource("5_3e03o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -1)
+
+[node name="Crate4" parent="DeathlessAct/Opening/CrateTower" instance=ExtResource("5_3e03o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="Crate5" parent="DeathlessAct/Opening/CrateTower" instance=ExtResource("5_3e03o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1)
+
+[node name="Crate6" parent="DeathlessAct/Opening/CrateTower" instance=ExtResource("5_3e03o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 1)
+
+[node name="Crate7" parent="DeathlessAct/Opening/CrateTower" instance=ExtResource("5_3e03o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -0.5)
+
+[node name="Crate8" parent="DeathlessAct/Opening/CrateTower" instance=ExtResource("5_3e03o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -0.5)
+
+[node name="Crate9" parent="DeathlessAct/Opening/CrateTower" instance=ExtResource("5_3e03o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -0.5)
+
+[node name="Crate10" parent="DeathlessAct/Opening/CrateTower" instance=ExtResource("5_3e03o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0.5)
+
+[node name="Crate11" parent="DeathlessAct/Opening/CrateTower" instance=ExtResource("5_3e03o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0.5)
+
+[node name="Crate12" parent="DeathlessAct/Opening/CrateTower" instance=ExtResource("5_3e03o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0.5)
+
+[node name="Crate13" parent="DeathlessAct/Opening/CrateTower" instance=ExtResource("5_3e03o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+
+[node name="RichRing" parent="DeathlessAct/Opening" instance=ExtResource("6_upu1a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.9064, 0.24963, -0.905304)
+
+[node name="GasTank" parent="DeathlessAct/Opening" instance=ExtResource("21_kry2n")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.5, 0)
+
+[node name="GolemPath" type="Path3D" parent="DeathlessAct/Opening"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 35.7907, -0.5, 1.03372)
+curve = SubResource("Curve3D_wv2bb")
+
+[node name="PathFollower" type="PathFollow3D" parent="DeathlessAct/Opening/GolemPath"]
+transform = Transform3D(0.999997, 0, 0, 0, 1, 0, 0, 0, 0.999997, 0, 0, 0)
+use_model_front = true
+cubic_interp = false
+tilt_enabled = false
+
+[node name="GolemMajin" parent="DeathlessAct/Opening/GolemPath/PathFollower" node_paths=PackedStringArray("pathFollower", "gasTank") instance=ExtResource("7_nfp1y")]
+transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0, -7.62939e-06)
+pathFollower = NodePath("..")
+gasTank = NodePath("../../../GasTank")
+
+[node name="Traps" type="Node3D" parent="DeathlessAct/Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.5978, 0, 0)
+
+[node name="SpikeBall" parent="DeathlessAct/Opening/Traps" instance=ExtResource("8_e6mti")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.799999, -2.58752)
+Movement/Mode = 0
+
+[node name="SpikeBall2" parent="DeathlessAct/Opening/Traps" instance=ExtResource("8_e6mti")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.799999, 2.60278)
+Movement/Mode = 0
+
+[node name="SpikeBall3" parent="DeathlessAct/Opening/Traps" instance=ExtResource("8_e6mti")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3602, 2.5, 0)
+Movement/Mode = 0
+
+[node name="SpikeBall4" parent="DeathlessAct/Opening/Traps" instance=ExtResource("8_e6mti")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.816, 0.8, 3.25)
+"Movement/Cycle Length" = 3.0
+Movement/Distance = 6.0
+
+[node name="SpikeBall5" parent="DeathlessAct/Opening/Traps" instance=ExtResource("8_e6mti")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 16.708, 0.8, -2.75)
+"Movement/Cycle Length" = 3.0
+Movement/Distance = 6.0
+
+[node name="LaunchRing" parent="DeathlessAct/Opening" instance=ExtResource("9_tksp5")]
+transform = Transform3D(0.984808, 0, 0.173648, -0.173648, -4.37114e-08, 0.984808, 7.5904e-09, -1, -4.30473e-08, 92.5636, 1.22758, 0)
+"Secondary Settings/Distance" = 15.0
+
+[node name="GreenMajin" parent="DeathlessAct/Opening" instance=ExtResource("10_ac17n")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 92.5941, 3.08256, 0)
+
+[node name="DashPanel2" parent="DeathlessAct/Opening" instance=ExtResource("4_sj5iv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 154.403, -15.5096, 0.0119934)
+
+[node name="HallPlatformLong1" parent="DeathlessAct/Opening" instance=ExtResource("16_xbsy4")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 55.5, 14, 0)
+
+[node name="Cage" parent="DeathlessAct/Opening/HallPlatformLong1" instance=ExtResource("17_welrc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.501, 5.5)
+
+[node name="FireSoul" parent="DeathlessAct/Opening/HallPlatformLong1/Cage" instance=ExtResource("18_mjad6")]
+
+[node name="DashPanel" parent="DeathlessAct/Opening/HallPlatformLong1" instance=ExtResource("4_sj5iv")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.5, 3)
+
+[node name="RichPearls" type="Node3D" parent="DeathlessAct/Opening/HallPlatformLong1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -4.5)
+script = ExtResource("3_g5v4g")
+Generate = false
+Source = ExtResource("19_8jijq")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 6.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Opening/HallPlatformLong1/RichPearls" instance=ExtResource("19_8jijq")]
+
+[node name="Child02" parent="DeathlessAct/Opening/HallPlatformLong1/RichPearls" instance=ExtResource("19_8jijq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child03" parent="DeathlessAct/Opening/HallPlatformLong1/RichPearls" instance=ExtResource("19_8jijq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child04" parent="DeathlessAct/Opening/HallPlatformLong1/RichPearls" instance=ExtResource("19_8jijq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="HallPlatformLong2" parent="DeathlessAct/Opening" instance=ExtResource("16_xbsy4")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 75.5, 14, 0)
+
+[node name="JumpPanel" parent="DeathlessAct/Opening/HallPlatformLong2" instance=ExtResource("20_4u3p0")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.5, -12)
+middleHeight = 2.0
+distance = 20.0
+
+[node name="DashPanel" parent="DeathlessAct/Opening" instance=ExtResource("4_sj5iv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 109.037, 14.4904, 0.0119934)
+
+[node name="Rings1" type="Node3D" parent="DeathlessAct/Opening"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 131.026, 14.8204, 0.0119934)
+script = ExtResource("3_g5v4g")
+Generate = false
+Source = ExtResource("4_pwmd8")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/MiddlePath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 8.0
+"Horizontal Offset" = SubResource("Curve_luj3r")
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Opening/Rings1" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 1.90735e-06, 0)
+
+[node name="Child02" parent="DeathlessAct/Opening/Rings1" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.92548, -0.776918, 0.664246)
+
+[node name="Child03" parent="DeathlessAct/Opening/Rings1" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.9172, -2.19504, 3.56693)
+
+[node name="Child04" parent="DeathlessAct/Opening/Rings1" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.5406, -4.07051, 8.36639)
+
+[node name="Child05" parent="DeathlessAct/Opening/Rings1" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.9673, -6.07376, 14.9648)
+
+[node name="Rings2" type="Node3D" parent="DeathlessAct/Opening"]
+transform = Transform3D(-0.696001, 0, -0.718041, 0, 1, 0, 0.718041, 0, -0.696001, 149.937, 3.9931, 33.2476)
+script = ExtResource("3_g5v4g")
+Generate = false
+Source = ExtResource("4_pwmd8")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/MiddlePath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 5.0
+"Horizontal Offset" = SubResource("Curve_gc1gy")
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Opening/Rings2" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.000717163, -0.00018692, 0)
+
+[node name="Child02" parent="DeathlessAct/Opening/Rings2" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 4.71494, -1.20291, 0.589142)
+
+[node name="Child03" parent="DeathlessAct/Opening/Rings2" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 9.11395, -2.39115, 2.26855)
+
+[node name="Child04" parent="DeathlessAct/Opening/Rings2" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 12.8767, -3.537, 4.9505)
+
+[node name="Child05" parent="DeathlessAct/Opening/Rings2" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 15.7402, -4.6467, 8.51935)
+
+[node name="Rings3" type="Node3D" parent="DeathlessAct/Opening"]
+transform = Transform3D(-0.847826, 0, 0.530274, 0, 1, 0, -0.530274, 0, -0.847826, 127.703, -2.1801, 37.7399)
+script = ExtResource("3_g5v4g")
+Generate = false
+Source = ExtResource("4_pwmd8")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/MiddlePath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 6.5
+"Horizontal Offset" = SubResource("Curve_30x12")
+"Vertical Offset" = null
+
+[node name="Child01" parent="DeathlessAct/Opening/Rings3" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 1.14441e-05, 1.52588e-05)
+
+[node name="Child02" parent="DeathlessAct/Opening/Rings3" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.37512, -1.55991, -0.00146484)
+
+[node name="Child03" parent="DeathlessAct/Opening/Rings3" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.6387, -3.12317, 1.77975)
+
+[node name="Child04" parent="DeathlessAct/Opening/Rings3" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.7852, -4.65535, 5.88525)
+
+[node name="Child05" parent="DeathlessAct/Opening/Rings3" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.1542, -6.12558, 11.5494)
+
+[node name="Furnace1" parent="DeathlessAct/Opening" instance=ExtResource("7_uib7b")]
+transform = Transform3D(-0.747856, 0, -0.663861, 0, 1, 0, 0.663861, 0, -0.747856, 153.269, 10.0823, 7.96463)
+
+[node name="Furnace2" parent="DeathlessAct/Opening" instance=ExtResource("7_uib7b")]
+transform = Transform3D(-0.349259, 0, 0.937026, 0, 1, 0, -0.937026, 0, -0.349259, 141.59, 0.871597, 40.1176)
+
+[node name="Furnace3" parent="DeathlessAct/Opening" instance=ExtResource("7_uib7b")]
+transform = Transform3D(0.945251, 0, 0.326344, 0, 1, 0, -0.326344, 0, 0.945251, 118, -6.3349, 25.4974)
+
+[node name="Furnace4" parent="DeathlessAct/Opening" instance=ExtResource("7_uib7b")]
+transform = Transform3D(0.349259, 0, -0.937026, 0, 1, 0, 0.937026, 0, 0.349259, 130.888, -14.0253, -0.0552673)
+
+[node name="JumpCarpet" parent="DeathlessAct/Opening" instance=ExtResource("17_6twug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42, 10, 0)
+
+[node name="MineEntrance" type="Node3D" parent="DeathlessAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -360.023, -60, -360)
+script = ExtResource("4_khgg8")
+saveVisibilityOnCheckpoint = true
+
+[node name="SpikeStrip" type="Node3D" parent="DeathlessAct/MineEntrance"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 0)
+
+[node name="SpikePanel" parent="DeathlessAct/MineEntrance/SpikeStrip" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.27)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+
+[node name="SpikePanel2" parent="DeathlessAct/MineEntrance/SpikeStrip" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.77)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+
+[node name="SpikePanel3" parent="DeathlessAct/MineEntrance/SpikeStrip" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.73)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+
+[node name="SpikePanel4" parent="DeathlessAct/MineEntrance/SpikeStrip" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.23)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+
+[node name="SpikeStrip2" type="Node3D" parent="DeathlessAct/MineEntrance"]
+transform = Transform3D(0.936017, -0.0795424, -0.34285, 0.0766146, 0.996816, -0.0220987, 0.343516, -0.0055825, 0.93913, 42.8639, 0.864731, 0.801666)
+
+[node name="SpikePanel" parent="DeathlessAct/MineEntrance/SpikeStrip2" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.27)
+"State Lengths/inactive" = 0.5
+"State Lengths/warning" = 0.3
+"State Lengths/active" = 1.0
+stateLengths = PackedFloat32Array(0.5, 0.3, 1)
+
+[node name="SpikePanel2" parent="DeathlessAct/MineEntrance/SpikeStrip2" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.77)
+"State Lengths/inactive" = 0.5
+"State Lengths/warning" = 0.3
+"State Lengths/active" = 1.0
+stateLengths = PackedFloat32Array(0.5, 0.3, 1)
+
+[node name="SpikePanel3" parent="DeathlessAct/MineEntrance/SpikeStrip2" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.73)
+"State Lengths/inactive" = 0.5
+"State Lengths/warning" = 0.3
+"State Lengths/active" = 1.0
+stateLengths = PackedFloat32Array(0.5, 0.3, 1)
+
+[node name="SpikePanel4" parent="DeathlessAct/MineEntrance/SpikeStrip2" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.23)
+"State Lengths/inactive" = 0.5
+"State Lengths/warning" = 0.3
+"State Lengths/active" = 1.0
+stateLengths = PackedFloat32Array(0.5, 0.3, 1)
+
+[node name="FurnaceEvent" parent="DeathlessAct/MineEntrance" instance=ExtResource("4_vuoeu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1842, 3.16241, 3.7355)
+"Enter Mode" = 0
+
+[node name="Event" type="Node3D" parent="DeathlessAct/MineEntrance/FurnaceEvent" node_paths=PackedStringArray("animator")]
+script = ExtResource("25_l0jjy")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
+
+[node name="FurnacePivot1" type="Node3D" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event"]
+transform = Transform3D(-3.61999e-06, -0.0871558, -0.996195, 0, 0.996195, -0.0871558, 1, -3.15503e-07, -3.60622e-06, 0, 0, 0)
+
+[node name="Furnace1" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event/FurnacePivot1" instance=ExtResource("7_uib7b")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, -0.8, 0, 0)
+
+[node name="FurnacePivot2" type="Node3D" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event"]
+transform = Transform3D(-3.61999e-06, -0.0871558, -0.996195, 0, 0.996195, -0.0871558, 1, -3.15503e-07, -3.60622e-06, 7.5, 0.900002, 0)
+
+[node name="Furnace2" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event/FurnacePivot2" instance=ExtResource("7_uib7b")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, -0.8, 0, 0)
+
+[node name="FurnacePivot3" type="Node3D" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event"]
+transform = Transform3D(-3.61993e-06, -0.0871558, -0.996195, -6.34301e-10, 0.996195, -0.0871558, 1, -3.14866e-07, -3.60622e-06, 16.1271, 1.82777, 0)
+
+[node name="Furnace3" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event/FurnacePivot3" instance=ExtResource("7_uib7b")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, -0.8, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/MineEntrance/FurnaceEvent/Event"]
+libraries = {
+"": SubResource("AnimationLibrary_2sowh")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/MineEntrance/FurnaceEvent"]
+transform = Transform3D(0.967828, 0, -0.251613, 0, 1, 0, 0.251613, 0, 0.967828, -10.5785, 6.7704, 0.890259)
+shape = SubResource("BoxShape3D_cvoto")
+
+[node name="Grindrail" parent="DeathlessAct/MineEntrance" instance=ExtResource("17_mr6ev")]
+transform = Transform3D(-4.37114e-08, -0.112041, -0.993704, 0, 0.993704, -0.112041, 1, -4.89748e-09, -4.34362e-08, 51.4996, 1.97189, 6.24069)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="RichRing" parent="DeathlessAct/MineEntrance/Grindrail" instance=ExtResource("6_upu1a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -27)
+
+[node name="FireSoul" parent="DeathlessAct/MineEntrance/Grindrail" instance=ExtResource("18_mjad6")]
+transform = Transform3D(1, 4.44089e-16, 3.55271e-15, 0, 1, 2.12727e-16, 0, 2.12728e-16, 1, 0, 0.5, -29)
+fireSoulIndex = 2
+
+[node name="SpikeBall1" parent="DeathlessAct/MineEntrance" instance=ExtResource("8_e6mti")]
+transform = Transform3D(0.7618, 0.0437632, -0.646332, 0.0859204, 0.982076, 0.167767, 0.642088, -0.183338, 0.744385, 111.383, 1.31038, -8.71161)
+"Movement/Cycle Length" = 3.0
+Movement/Distance = 22.0
+
+[node name="SpikeBall2" parent="DeathlessAct/MineEntrance" instance=ExtResource("8_e6mti")]
+transform = Transform3D(0.458696, 0.228661, -0.858669, -0.18673, 0.969551, 0.158439, 0.868752, 0.0876639, 0.487427, 128.946, -2.81951, -29.0077)
+"Movement/Cycle Length" = 3.0
+Movement/Distance = 20.0
+
+[node name="SpikeStrip3" type="Node3D" parent="DeathlessAct/MineEntrance"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 178.6, -9.9365, -39.9753)
+metadata/_edit_group_ = true
+
+[node name="SpikePanel" parent="DeathlessAct/MineEntrance/SpikeStrip3" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.27)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="SpikePanel2" parent="DeathlessAct/MineEntrance/SpikeStrip3" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.77)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="SpikePanel3" parent="DeathlessAct/MineEntrance/SpikeStrip3" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.73)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="SpikePanel4" parent="DeathlessAct/MineEntrance/SpikeStrip3" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.23)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="Fan" parent="DeathlessAct/MineEntrance" instance=ExtResource("18_ddkmk")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 182.223, -5.0864, -40.079)
+spinSpeed = 1.0
+playSFX = true
+
+[node name="Grindrail2" parent="DeathlessAct/MineEntrance" instance=ExtResource("19_q274s")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 185, -9.7, -42)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Grindrail3" parent="DeathlessAct/MineEntrance" instance=ExtResource("19_q274s")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 185, -9.7, -38)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="SpikeBall" parent="DeathlessAct/MineEntrance" instance=ExtResource("8_e6mti")]
+transform = Transform3D(-0.345023, -0.142606, -0.927697, -0.00511254, 0.988661, -0.150076, 0.93858, -0.047037, -0.34184, 270.362, -8.34367, -38.4582)
+"Movement/Cycle Length" = 6.0
+Movement/Distance = 22.0
+
+[node name="Rings" type="Node3D" parent="DeathlessAct/MineEntrance"]
+transform = Transform3D(-0.3975, -0.126833, -0.908794, 5.4697e-09, 0.990401, -0.138222, 0.917602, -0.0549435, -0.393685, 279.389, -8.02747, -39.4022)
+script = ExtResource("3_g5v4g")
+Generate = false
+Source = ExtResource("4_pwmd8")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 2.1
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_edit_group_ = true
+
+[node name="Child01" parent="DeathlessAct/MineEntrance/Rings" instance=ExtResource("4_pwmd8")]
+metadata/_edit_lock_ = true
+
+[node name="Child02" parent="DeathlessAct/MineEntrance/Rings" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.1)
+metadata/_edit_lock_ = true
+
+[node name="Child03" parent="DeathlessAct/MineEntrance/Rings" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
+metadata/_edit_lock_ = true
+
+[node name="SpikeStrip4" type="Node3D" parent="DeathlessAct/MineEntrance"]
+transform = Transform3D(0.470138, -0.286861, -0.834674, 0.20225, 0.955558, -0.214487, 0.859107, -0.0679742, 0.507261, 295.916, -5.03308, -22.9674)
+metadata/_edit_group_ = true
+
+[node name="SpikePanel" parent="DeathlessAct/MineEntrance/SpikeStrip4" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.27)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="SpikePanel2" parent="DeathlessAct/MineEntrance/SpikeStrip4" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.77)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="SpikePanel3" parent="DeathlessAct/MineEntrance/SpikeStrip4" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.73)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="SpikePanel4" parent="DeathlessAct/MineEntrance/SpikeStrip4" instance=ExtResource("15_x6g2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.23)
+"State Lengths/inactive" = 0.3
+"State Lengths/active" = 0.5
+stateLengths = PackedFloat32Array(0.3, 0, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="SpikeBall3" parent="DeathlessAct/MineEntrance" instance=ExtResource("8_e6mti")]
+transform = Transform3D(-0.963498, -0.246338, 0.104829, -0.26182, 0.94876, -0.176932, -0.0558723, -0.197921, -0.978624, 298.708, -1.27248, -6.673)
+"Movement/Cycle Length" = 2.0
+Movement/Distance = 22.0
+
+[node name="Rings2" type="Node3D" parent="DeathlessAct/MineEntrance"]
+transform = Transform3D(-0.997916, 0.0114277, 0.0635125, 0, 0.984196, -0.177085, -0.0645324, -0.176716, -0.982144, 300.509, -1.13985, -5.14301)
+script = ExtResource("3_g5v4g")
+Generate = false
+Source = ExtResource("4_pwmd8")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 2.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_edit_group_ = true
+
+[node name="Child01" parent="DeathlessAct/MineEntrance/Rings2" instance=ExtResource("4_pwmd8")]
+
+[node name="Child02" parent="DeathlessAct/MineEntrance/Rings2" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child03" parent="DeathlessAct/MineEntrance/Rings2" instance=ExtResource("4_pwmd8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Ending" type="Node3D" parent="DeathlessAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, -55, -300)
+visible = false
+script = ExtResource("4_khgg8")
+saveVisibilityOnCheckpoint = true
+
+[node name="BlueMajin" parent="DeathlessAct/Ending" instance=ExtResource("20_kkn76")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.0462036, 0.531898, 1.27499)
+
+[node name="BlueMajin2" parent="DeathlessAct/Ending" instance=ExtResource("20_kkn76")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.0462036, -0.402599, 10.842)
+
+[node name="GasTank" parent="DeathlessAct/Ending" instance=ExtResource("21_kry2n")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.116196, -3.3725, 26.366)
+endPosition = Vector3(0, 0, -25)
+
+[node name="MajinMover" type="Node3D" parent="DeathlessAct/Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.52, -4.5, 46.732)
+script = ExtResource("24_lhmrn")
+Movement/Mode = 1
+"Movement/Cycle Length" = 3.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 5.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+startPaused = true
+root = NodePath("BlueMajin")
+animator = NodePath("")
+
+[node name="BlueMajin" parent="DeathlessAct/Ending/MajinMover" instance=ExtResource("20_kkn76")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Attack Settings/Attack Type" = 1
+
+[node name="GasTank2" parent="DeathlessAct/Ending" instance=ExtResource("21_kry2n")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.0189972, -3.9885, 48.727)
+
+[node name="MajinMover2" type="Node3D" parent="DeathlessAct/Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.48, -4.5, 56.836)
+script = ExtResource("24_lhmrn")
+Movement/Mode = 1
+"Movement/Cycle Length" = 3.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 5.0
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+startPaused = true
+root = NodePath("BlueMajin")
+animator = NodePath("")
+
+[node name="BlueMajin" parent="DeathlessAct/Ending/MajinMover2" instance=ExtResource("20_kkn76")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Attack Settings/Attack Type" = 1
+
+[node name="Fan" parent="DeathlessAct/Ending" instance=ExtResource("18_ddkmk")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0200043, 0.538498, 77.717)
+spinSpeed = 1.0
+playSFX = true
+
+[node name="Fan2" parent="DeathlessAct/Ending" instance=ExtResource("22_cges7")]
+transform = Transform3D(-0.5, -0.866025, -8.74228e-08, -0.866025, 0.5, 0, 4.37114e-08, 7.57103e-08, -1, -0.0200043, 0.538498, 77.717)
+spinSpeed = 1.0
+
+[node name="DashStrip" type="Node3D" parent="DeathlessAct/Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.9608, -5, 110)
+
+[node name="DashPanel1" parent="DeathlessAct/Ending/DashStrip" instance=ExtResource("4_sj5iv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -3)
+
+[node name="DashPanel2" parent="DeathlessAct/Ending/DashStrip" instance=ExtResource("4_sj5iv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -1)
+
+[node name="DashPanel3" parent="DeathlessAct/Ending/DashStrip" instance=ExtResource("4_sj5iv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 1)
+
+[node name="DashPanel4" parent="DeathlessAct/Ending/DashStrip" instance=ExtResource("4_sj5iv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 3)
+
+[node name="Elevator1" parent="DeathlessAct/Ending" instance=ExtResource("18_834aa")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 47, 47.8411, 110)
+
+[node name="FireSoul" parent="DeathlessAct/Ending" instance=ExtResource("18_mjad6")]
+transform = Transform3D(-4.37114e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, -4.37114e-08, 0, 49, 78.5471, 110)
+fireSoulIndex = 3
+
+[node name="Elevator2" parent="DeathlessAct/Ending" instance=ExtResource("18_834aa")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 47, 88.5471, 110)
+"Movement/Starting Offset" = 0.5
+
+[node name="Goal" parent="DeathlessAct/Ending" instance=ExtResource("19_xdhlr")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 70.638, 100.75, 110)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Ending/Goal"]
+shape = SubResource("BoxShape3D_t3h8b")
+
+[connection signal="Activated" from="DeathlessAct/CullingMap/MineEntrance-L" to="DeathlessAct/MineEntrance" method="Activate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/MineEntrance-L" to="DeathlessAct/MineEntrance" method="Deactivate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/Opening-U" to="DeathlessAct/Opening" method="Deactivate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/Opening-U" to="DeathlessAct/Opening" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/Ending-L" to="DeathlessAct/Ending" method="Activate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/Ending-L" to="DeathlessAct/Ending" method="Deactivate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/MineEntrance-U" to="DeathlessAct/MineEntrance" method="Deactivate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/MineEntrance-U" to="DeathlessAct/MineEntrance" method="Activate"]
+[connection signal="SpinStarted" from="DeathlessAct/Ending/MajinMover/BlueMajin" to="DeathlessAct/Ending/MajinMover" method="Unpause"]
+[connection signal="SpinStarted" from="DeathlessAct/Ending/MajinMover2/BlueMajin" to="DeathlessAct/Ending/MajinMover2" method="Unpause"]
