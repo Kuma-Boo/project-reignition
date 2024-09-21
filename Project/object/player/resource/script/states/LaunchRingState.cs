@@ -10,6 +10,9 @@ public partial class LaunchRingState : PlayerState
 	[Export]
 	private PlayerState fallState;
 
+	private readonly StringName LaunchAction = "action_launch";
+	private readonly StringName ExitAction = "action_exit";
+
 	public override void EnterState()
 	{
 		Player.MoveSpeed = Player.VerticalSpeed = 0;
@@ -21,11 +24,18 @@ public partial class LaunchRingState : PlayerState
 		Player.Animator.StartSpin();
 
 		Player.Effect.StartSpinFX();
+
+		HeadsUpDisplay.Instance.SetPrompt(LaunchAction, 0);
+		HeadsUpDisplay.Instance.SetPrompt(ExitAction, 1);
+		HeadsUpDisplay.Instance.ShowPrompts();
+
 		Launcher.Damage += OnDamaged;
 	}
 
 	public override void ExitState()
 	{
+		HeadsUpDisplay.Instance.HidePrompts();
+
 		Launcher.Damage -= OnDamaged;
 		Launcher = null;
 	}

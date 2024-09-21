@@ -17,6 +17,10 @@ public partial class GrindStepState : PlayerState
 	[Export]
 	private float GrindStepSpeed = 28.0f;
 
+	private readonly StringName JumpAction = "action_jump";
+	private readonly StringName ShuffleAction = "action_shuffle";
+	private readonly StringName GrindStepAction = "action_grindstep";
+
 	public override void EnterState()
 	{
 		// Delta angle to rail's movement direction (NOTE - Due to Godot conventions, negative is right, positive is left)
@@ -35,12 +39,18 @@ public partial class GrindStepState : PlayerState
 		Player.CanJumpDash = false; // Disable jumpdashing
 		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 		Player.Animator.StartGrindStep();
+
+		HeadsUpDisplay.Instance.SetPrompt(ShuffleAction, 0);
+		HeadsUpDisplay.Instance.SetPrompt(JumpAction, 1);
+		HeadsUpDisplay.Instance.ShowPrompts();
 	}
 
 	public override void ExitState()
 	{
 		Player.MovementAngle = Player.Animator.VisualAngle;
 		Player.Animator.ResetState(.1f);
+
+		HeadsUpDisplay.Instance.HidePrompts();
 	}
 
 	public override PlayerState ProcessPhysics()
