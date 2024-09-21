@@ -69,11 +69,15 @@ public partial class Catapult : Launcher
 
 	public void UpdateArmRotation(float targetLaunchPower = 0)
 	{
+		float targetRotation = Mathf.Lerp(Mathf.Pi * .25f, 0, launchRatio);
+		armNode.Rotation = Vector3.Right * targetRotation;
+
+		if (Engine.IsEditorHint())
+			return;
+
 		aimSFX.VolumeDb = Mathf.LinearToDb(Mathf.Abs(LaunchRatio - targetLaunchPower) / .1f);
 		if (!aimSFX.Playing)
 			aimSFX.Play();
-		float targetRotation = Mathf.Lerp(Mathf.Pi * .25f, 0, launchRatio);
-		armNode.Rotation = Vector3.Right * targetRotation;
 	}
 
 	public void OnEntered(Area3D a)
