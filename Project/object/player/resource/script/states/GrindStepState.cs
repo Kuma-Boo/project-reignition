@@ -71,4 +71,10 @@ public partial class GrindStepState : PlayerState
 
 		return null;
 	}
+
+	protected override void Brake()
+	{
+		Player.MoveSpeed *= .9f;
+		base.Brake();
+	}
 }
