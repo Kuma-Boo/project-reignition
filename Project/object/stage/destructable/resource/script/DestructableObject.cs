@@ -110,7 +110,6 @@ public partial class DestructableObject : Node3D
 		StageSettings.Instance.ConnectUnloadSignal(this);
 	}
 
-
 	public override void _PhysicsProcess(double _)
 	{
 		if (isShattered || !isInteractingWithPlayer) return;
@@ -118,10 +117,10 @@ public partial class DestructableObject : Node3D
 		ProcessPlayerCollision();
 	}
 
-
 	public virtual void Respawn()
 	{
 		isShattered = false;
+		isInteractingWithPlayer = false;
 
 		tweener?.Kill();
 
@@ -147,7 +146,6 @@ public partial class DestructableObject : Node3D
 		GetTree().CreateTimer(Core.PhysicsManager.physicsDelta, true, true).Connect(SceneTreeTimer.SignalName.Timeout,
 		new Callable(this, MethodName.ResetNodeTransforms));
 	}
-
 
 	private void ResetNodeTransforms()
 	{
@@ -181,7 +179,6 @@ public partial class DestructableObject : Node3D
 
 		root.Transform = Transform3D.Identity;
 	}
-
 
 	public virtual void Despawn()
 	{

@@ -61,6 +61,9 @@ public partial class CatapultState : PlayerState
 
 	private void ProcessLaunch()
 	{
+		if (Catapult == null) // State must have been exited early
+			return;
+
 		Catapult.TweenStep();
 		Player.UpdateExternalControl();
 		if (Catapult.IsAtLaunchPoint)

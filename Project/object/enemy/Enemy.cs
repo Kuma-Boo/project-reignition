@@ -172,7 +172,7 @@ public partial class Enemy : Node3D
 	public virtual void UpdateLockon()
 	{
 		if (!IsDefeated)
-			Player.Camera.SetDeferred("LockonTarget", Hurtbox);
+			Player.Camera.LockonTarget = Hurtbox;
 	}
 
 	public virtual void TakeDamage(int amount = -1)
