@@ -20,6 +20,11 @@ public partial class GrindState : PlayerState
 	private readonly float GrindstepRailSnapping = 1.4f;
 	/// <summary> Basic measure for attaching at the end of the rail. </summary>
 	private float RailFudgeFactor => Player.Stats.GrindSettings.Speed * PhysicsManager.physicsDelta;
+
+	private readonly StringName JumpAction = "action_jump";
+	private readonly StringName ShuffleAction = "action_shuffle";
+	private readonly StringName GrindStepAction = "action_grindstep";
+
 	public override void EnterState()
 	{
 		currentCharge = 0;
@@ -60,6 +65,11 @@ public partial class GrindState : PlayerState
 		// Reset FX
 		Player.Effect.StartGrindFX(true);
 		Player.Lockon.IsMonitoring = false;
+
+		HeadsUpDisplay.Instance.SetPrompt(ShuffleAction, 0);
+		HeadsUpDisplay.Instance.SetPrompt(JumpAction, 1);
+		HeadsUpDisplay.Instance.ShowPrompts();
+
 		ProcessPhysics();
 	}
 
@@ -81,6 +91,9 @@ public partial class GrindState : PlayerState
 		Player.Animator.SnapRotation(Player.MovementAngle);
 		Player.Animator.IsFallTransitionEnabled = true;
 		Player.Effect.StopGrindFX();
+
+		if (!Player.IsGrindstepping)
+			HeadsUpDisplay.Instance.HidePrompts();
 
 		ActiveGrindRail.Deactivate();
 		ActiveGrindRail = null;

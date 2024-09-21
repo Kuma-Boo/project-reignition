@@ -358,7 +358,7 @@ public partial class HeadsUpDisplay : Control
 	private void RedrawPrompts()
 	{
 		for (int i = 0; i < buttons.Length; i++)
-			buttons[i].Visible = !buttons[i].ActionKey.IsEmpty;
+			buttons[i].Visible = buttons[i].ActionKey?.IsEmpty == false;
 
 		EmitSignal(SignalName.InputPromptsChanged);
 	}

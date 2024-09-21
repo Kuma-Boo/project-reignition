@@ -17,9 +17,7 @@ public partial class GrindStepState : PlayerState
 	[Export]
 	private float GrindStepSpeed = 28.0f;
 
-	private readonly StringName JumpAction = "action_jump";
-	private readonly StringName ShuffleAction = "action_shuffle";
-	private readonly StringName GrindStepAction = "action_grindstep";
+	private readonly StringName StompAction = "action_stomp";
 
 	public override void EnterState()
 	{
@@ -40,8 +38,8 @@ public partial class GrindStepState : PlayerState
 		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 		Player.Animator.StartGrindStep();
 
-		HeadsUpDisplay.Instance.SetPrompt(ShuffleAction, 0);
-		HeadsUpDisplay.Instance.SetPrompt(JumpAction, 1);
+		HeadsUpDisplay.Instance.SetPrompt(StompAction, 0);
+		HeadsUpDisplay.Instance.SetPrompt(null, 1);
 		HeadsUpDisplay.Instance.ShowPrompts();
 	}
 
