@@ -19,6 +19,9 @@ public partial class CatapultState : PlayerState
 	/// <summary> How much to smooth launchPower changes. </summary>
 	private readonly float PowerAdjustmentSmoothing = .15f;
 
+	private readonly StringName LaunchAction = "action_launch";
+	private readonly StringName ExitAction = "action_exit";
+
 	public override void EnterState()
 	{
 		launchPower = 1f;
@@ -34,6 +37,10 @@ public partial class CatapultState : PlayerState
 
 		Catapult.LaunchRatio = 1f;
 		Catapult.PlayEnterSfx();
+
+		HeadsUpDisplay.Instance.SetPrompt(LaunchAction, 0);
+		HeadsUpDisplay.Instance.SetPrompt(ExitAction, 1);
+		HeadsUpDisplay.Instance.ShowPrompts();
 	}
 
 	public override void ExitState()
@@ -41,6 +48,9 @@ public partial class CatapultState : PlayerState
 		Player.StopExternal();
 		Player.Skills.IsSpeedBreakEnabled = true;
 		Player.Animator.IsFallTransitionEnabled = false;
+
+		HeadsUpDisplay.Instance.HidePrompts();
+
 		Catapult = null;
 	}
 

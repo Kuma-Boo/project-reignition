@@ -177,7 +177,7 @@ namespace Project.Gameplay.Bosses
 			// Disable the player for the intro animation
 			Player.ProcessMode = ProcessModeEnum.Disabled;
 			Interface.PauseMenu.AllowPausing = false;
-			HeadsUpDisplay.instance.Visible = false;
+			HeadsUpDisplay.Instance.Visible = false;
 		}
 
 
@@ -206,7 +206,7 @@ namespace Project.Gameplay.Bosses
 			TransitionManager.FinishTransition();
 			Player.ProcessMode = ProcessModeEnum.Inherit;
 			Interface.PauseMenu.AllowPausing = true;
-			HeadsUpDisplay.instance.Visible = true;
+			HeadsUpDisplay.Instance.Visible = true;
 			Player.Camera.Camera.Current = true;
 		}
 
@@ -240,7 +240,7 @@ namespace Project.Gameplay.Bosses
 			rTailAnimationTree.Set(DEFEAT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			flyingEyeAnimationTree.Set(DEFEAT_PARAMETER, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
-			HeadsUpDisplay.instance.Visible = false;
+			HeadsUpDisplay.Instance.Visible = false;
 
 			fightState = FightState.Defeated;
 			Player.ProcessMode = ProcessModeEnum.Disabled;
