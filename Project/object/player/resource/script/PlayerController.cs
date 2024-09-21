@@ -517,6 +517,9 @@ public partial class PlayerController : CharacterBody3D
 	/// <summary> Recenters the  Only call this AFTER movement has occurred. </summary>
 	private void UpdateRecenter()
 	{
+		if (IsHomingAttacking)
+			return;
+
 		if (!IsLockoutActive || !ActiveLockoutData.recenterPlayer) return;
 
 		if (ExternalParent != null || IsLaunching) // Player's position is being overridden
