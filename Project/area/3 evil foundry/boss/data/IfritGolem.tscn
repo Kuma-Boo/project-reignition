@@ -1,11 +1,16 @@
-[gd_scene load_steps=48 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=51 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
+[ext_resource type="PackedScene" uid="uid://v8h6abta165i" path="res://area/3 evil foundry/boss/environment/EFBoss.tscn" id="2_6ncrv"]
 [ext_resource type="PackedScene" uid="uid://b26mkp3yjneyj" path="res://area/3 evil foundry/boss/data/ArenaPlatform.tscn" id="2_nsyah"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_v71j8"]
 [ext_resource type="PackedScene" uid="uid://b7g26173gty07" path="res://area/3 evil foundry/boss/data/model/Lava.gltf" id="2_wope5"]
 [ext_resource type="PackedScene" uid="uid://cayo6pq1qpjyf" path="res://area/3 evil foundry/boss/data/Core.tscn" id="4_0luyt"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="5_rxyxv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_utngs"]
+size = Vector3(100, 5, 100)
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_g8eyb"]
 filter_enabled = true
@@ -207,11 +212,30 @@ node_connections = [&"gear_add", 0, &"hitstun_trigger", &"gear_add", 1, &"gear_a
 
 [node name="IfritGolem" instance=ExtResource("1_37vkv")]
 
-[node name="ArenaPlatform" parent="." index="0" instance=ExtResource("2_nsyah")]
+[node name="EFBoss" parent="." index="0" instance=ExtResource("2_6ncrv")]
 
-[node name="Lava" parent="." index="1" instance=ExtResource("2_wope5")]
+[node name="ArenaPlatform" parent="." index="1" instance=ExtResource("2_nsyah")]
 
-[node name="IfritGolemCollision" parent="." index="2" instance=ExtResource("2_4kp3h")]
+[node name="Lava" parent="." index="2" instance=ExtResource("2_wope5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -15, 0)
+
+[node name="LavaRipple1Mesh" parent="Lava" index="0"]
+visible = false
+
+[node name="LavaRipple2Mesh" parent="Lava" index="2"]
+visible = false
+
+[node name="LavaRipple3Mesh" parent="Lava" index="3"]
+visible = false
+
+[node name="LavaHazard" type="Area3D" parent="Lava" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
+script = ExtResource("5_rxyxv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lava/LavaHazard" index="0"]
+shape = SubResource("BoxShape3D_utngs")
+
+[node name="IfritGolemCollision" parent="." index="3" instance=ExtResource("2_4kp3h")]
 visible = false
 script = ExtResource("2_v71j8")
 
@@ -303,7 +327,7 @@ transform = Transform3D(-0.208058, -0.987688, 1.18525e-07, 1.31363, -0.156434, -
 
 [node name="GolemCore" parent="IfritRoot/Skeleton3D/LCore3/Core" index="0" instance=ExtResource("4_0luyt")]
 
-[node name="AnimationTree" type="AnimationTree" parent="." index="5"]
+[node name="AnimationTree" type="AnimationTree" parent="." index="6"]
 active = false
 tree_root = SubResource("AnimationNodeBlendTree_bb4ub")
 anim_player = NodePath("../AnimationPlayer")
@@ -316,5 +340,8 @@ parameters/hitstun_trigger/request = 0
 parameters/special_trigger/active = false
 parameters/special_trigger/internal_active = false
 parameters/special_trigger/request = 0
+
+[connection signal="area_entered" from="Lava/LavaHazard" to="Lava/LavaHazard" method="OnEntered"]
+[connection signal="area_exited" from="Lava/LavaHazard" to="Lava/LavaHazard" method="OnExited"]
 
 [editable path="Lava"]
