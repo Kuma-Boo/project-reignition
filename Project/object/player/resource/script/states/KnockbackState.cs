@@ -15,6 +15,8 @@ public partial class KnockbackState : PlayerState
 
 	public override void EnterState()
 	{
+		Player.Camera.LockonTarget = null;
+
 		if (Player.Skills.IsSpeedBreakActive) // Disable speedbreak
 			Player.Skills.ToggleSpeedBreak();
 

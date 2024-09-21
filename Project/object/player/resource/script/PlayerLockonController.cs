@@ -139,6 +139,7 @@ public partial class PlayerLockonController : Node3D
 		if (IsIgnoringTarget(Target))
 		{
 			ResetLockonTarget();
+			Player.Camera.LockonTarget = null;
 			return;
 		}
 
@@ -222,8 +223,6 @@ public partial class PlayerLockonController : Node3D
 
 	public void ResetLockonTarget()
 	{
-		Player.Camera.LockonTarget = null;
-
 		if (Target == null)
 			return;
 
