@@ -13,6 +13,7 @@ public partial class GrindState : PlayerState
 	private PlayerState fallState;
 
 	public GrindRail ActiveGrindRail { get; set; }
+	private bool isAttemptingGrindStep;
 
 	/// <summary> How "magnetic" the rail is. Early 3D Sonic games had a habit of putting this too low. </summary>
 	private readonly float GrindrailSnapping = 1.0f;
@@ -29,6 +30,7 @@ public partial class GrindState : PlayerState
 	{
 		currentCharge = 0;
 		perfectChargeTimer = 0;
+		CheckGrindStep();
 
 		ActiveGrindRail.Activate();
 		if (!ActiveGrindRail.IsBonusDisabled && Player.IsGrindstepping)
@@ -67,10 +69,26 @@ public partial class GrindState : PlayerState
 		Player.Lockon.IsMonitoring = false;
 
 		HeadsUpDisplay.Instance.SetPrompt(ShuffleAction, 0);
-		HeadsUpDisplay.Instance.SetPrompt(JumpAction, 1);
+		HeadsUpDisplay.Instance.SetPrompt(isAttemptingGrindStep ? GrindStepAction : JumpAction, 1);
 		HeadsUpDisplay.Instance.ShowPrompts();
 
 		ProcessPhysics();
+	}
+
+	private void CheckGrindStep(bool allowRedrawing = false)
+	{
+		bool wasAttemptingGrindStep = isAttemptingGrindStep;
+		// Check if the player is holding a direction parallel to rail and start a grindstep
+		float targetInputAngle = Player.Controller.GetTargetInputAngle();
+		isAttemptingGrindStep = !Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) &&
+				(Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle + (Mathf.Pi * .5f)) ||
+				Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle - (Mathf.Pi * .5f)));
+
+		if (allowRedrawing && wasAttemptingGrindStep != isAttemptingGrindStep)
+		{
+			HeadsUpDisplay.Instance.SetPrompt(isAttemptingGrindStep ? GrindStepAction : ShuffleAction, 1);
+			HeadsUpDisplay.Instance.ShowPrompts();
+		}
 	}
 
 	public override void ExitState()
@@ -102,6 +120,7 @@ public partial class GrindState : PlayerState
 	public override PlayerState ProcessPhysics()
 	{
 		ProcessMovement();
+		CheckGrindStep(true);
 		UpdateCharge();
 
 		bool isGrindCompleted = Mathf.IsEqualApprox(ActiveGrindRail.PathFollower.ProgressRatio, 1);
@@ -181,12 +200,7 @@ public partial class GrindState : PlayerState
 	private PlayerState ProcessJump()
 	{
 		Player.Controller.ResetJumpBuffer();
-
-		// Check if the player is holding a direction parallel to rail and start a grindstep
-		float targetInputAngle = Player.Controller.GetTargetInputAngle();
-		Player.IsGrindstepping = !Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) &&
-			(Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle + (Mathf.Pi * .5f)) ||
-			Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle - (Mathf.Pi * .5f)));
+		Player.IsGrindstepping = isAttemptingGrindStep;
 
 		if (Player.IsGrindstepping)
 			return grindstepState;
