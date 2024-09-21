@@ -1,18 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://bgprgy7jv3pxr"]
+[gd_scene load_steps=6 format=3 uid="uid://bgprgy7jv3pxr"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_iilpd"]
 [ext_resource type="PackedScene" uid="uid://554o5nn5ah4r" path="res://area/3 evil foundry/boss/Static.tscn" id="1_vi4ig"]
 [ext_resource type="Resource" uid="uid://41ygpdjlcr8a" path="res://resource/level data/evil foundry/Boss.tres" id="2_ybwun"]
+[ext_resource type="Resource" uid="uid://uf7lyw3gw1fc" path="res://area/3 evil foundry/boss/camera/BossCam.tres" id="3_yn75d"]
+[ext_resource type="PackedScene" uid="uid://dakk7vvkh050f" path="res://area/3 evil foundry/boss/data/IfritGolem.tscn" id="4_28qle"]
 
 [node name="World" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_vi4ig")]
 Data = ExtResource("2_ybwun")
+InitialCameraSettings = ExtResource("3_yn75d")
 
 [node name="BossAct" type="Node3D" parent="."]
 
+[node name="IfritGolem" parent="BossAct" instance=ExtResource("4_28qle")]
+
 [node name="SpawnPosition" type="Node3D" parent="BossAct"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.5, 0, -2)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="BossAct/SpawnPosition" instance=ExtResource("1_iilpd")]

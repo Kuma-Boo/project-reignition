@@ -1,8 +1,7 @@
-[gd_scene load_steps=51 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=50 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
-[ext_resource type="PackedScene" uid="uid://v8h6abta165i" path="res://area/3 evil foundry/boss/environment/EFBoss.tscn" id="2_6ncrv"]
 [ext_resource type="PackedScene" uid="uid://b26mkp3yjneyj" path="res://area/3 evil foundry/boss/data/ArenaPlatform.tscn" id="2_nsyah"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_v71j8"]
 [ext_resource type="PackedScene" uid="uid://b7g26173gty07" path="res://area/3 evil foundry/boss/data/model/Lava.gltf" id="2_wope5"]
@@ -212,11 +211,9 @@ node_connections = [&"gear_add", 0, &"hitstun_trigger", &"gear_add", 1, &"gear_a
 
 [node name="IfritGolem" instance=ExtResource("1_37vkv")]
 
-[node name="EFBoss" parent="." index="0" instance=ExtResource("2_6ncrv")]
+[node name="ArenaPlatform" parent="." index="0" instance=ExtResource("2_nsyah")]
 
-[node name="ArenaPlatform" parent="." index="1" instance=ExtResource("2_nsyah")]
-
-[node name="Lava" parent="." index="2" instance=ExtResource("2_wope5")]
+[node name="Lava" parent="." index="1" instance=ExtResource("2_wope5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -15, 0)
 
 [node name="LavaRipple1Mesh" parent="Lava" index="0"]
@@ -235,7 +232,7 @@ script = ExtResource("5_rxyxv")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Lava/LavaHazard" index="0"]
 shape = SubResource("BoxShape3D_utngs")
 
-[node name="IfritGolemCollision" parent="." index="3" instance=ExtResource("2_4kp3h")]
+[node name="IfritGolemCollision" parent="." index="2" instance=ExtResource("2_4kp3h")]
 visible = false
 script = ExtResource("2_v71j8")
 
@@ -267,7 +264,19 @@ bones/54/scale = Vector3(1, 1, 1)
 bones/56/scale = Vector3(1, 1, 1)
 bones/58/scale = Vector3(1, 1, 1)
 
-[node name="RCore1" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="3"]
+[node name="BaseMesh" parent="IfritRoot/Skeleton3D" index="0"]
+cast_shadow = 0
+
+[node name="CoreMesh" parent="IfritRoot/Skeleton3D" index="1"]
+cast_shadow = 0
+
+[node name="GearMesh" parent="IfritRoot/Skeleton3D" index="2"]
+cast_shadow = 0
+
+[node name="PlateMesh" parent="IfritRoot/Skeleton3D" index="3"]
+cast_shadow = 0
+
+[node name="RCore1" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="4"]
 transform = Transform3D(-0.155963, -0.987763, 6.46429e-09, 0.987763, -0.155963, -3.61722e-06, 3.57396e-06, -5.57765e-07, 1, -35.9999, 9.1, 0.300031)
 bone_name = "r_core1"
 bone_idx = 34
@@ -277,7 +286,7 @@ transform = Transform3D(0.156434, -0.987688, 0, 0.987688, 0.156434, 0, 0, 0, 1, 
 
 [node name="GolemCore" parent="IfritRoot/Skeleton3D/RCore1/Core" index="0" instance=ExtResource("4_0luyt")]
 
-[node name="RCore2" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="4"]
+[node name="RCore2" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="5"]
 transform = Transform3D(-0.155963, -0.987763, -5.54151e-08, 0.987763, -0.155963, -3.62267e-06, 3.5697e-06, -6.19739e-07, 1, -35.9999, 9.10001, -0.999962)
 bone_name = "r_core2"
 bone_idx = 38
@@ -287,7 +296,7 @@ transform = Transform3D(0.156434, -0.987688, -4.25959e-09, 0.987688, 0.156434, -
 
 [node name="GolemCore" parent="IfritRoot/Skeleton3D/RCore2/Core" index="0" instance=ExtResource("4_0luyt")]
 
-[node name="RCore3" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="5"]
+[node name="RCore3" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="6"]
 transform = Transform3D(-0.155963, -0.987763, 2.08597e-07, 0.987763, -0.155963, -3.7053e-06, 3.69249e-06, -3.71843e-07, 1, -35.9999, 9.10001, -2.29996)
 bone_name = "r_core3"
 bone_idx = 42
@@ -297,7 +306,7 @@ transform = Transform3D(0.156434, -0.987688, 1.18526e-07, 0.987688, 0.156434, 1.
 
 [node name="GolemCore" parent="IfritRoot/Skeleton3D/RCore3/Core" index="0" instance=ExtResource("4_0luyt")]
 
-[node name="LCore1" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="6"]
+[node name="LCore1" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="7"]
 transform = Transform3D(-0.155962, 0.987763, -2.08597e-07, -0.987763, -0.155962, -3.70529e-06, -3.69249e-06, -3.71843e-07, 1, 36, 9.10001, -2.29996)
 bone_name = "l_core1"
 bone_idx = 58
@@ -307,7 +316,7 @@ transform = Transform3D(-0.156434, -0.987688, 0, 0.987688, -0.156434, 2.84217e-1
 
 [node name="GolemCore" parent="IfritRoot/Skeleton3D/LCore1/Core" index="0" instance=ExtResource("4_0luyt")]
 
-[node name="LCore2" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="7"]
+[node name="LCore2" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="8"]
 transform = Transform3D(-0.155962, 0.987763, 5.54152e-08, -0.987763, -0.155962, -3.62267e-06, -3.5697e-06, -6.19738e-07, 1, 36, 9.10001, -0.999962)
 bone_name = "l_core2"
 bone_idx = 54
@@ -317,7 +326,7 @@ transform = Transform3D(-0.156434, -0.987688, 1.22785e-07, 0.987688, -0.156434, 
 
 [node name="GolemCore" parent="IfritRoot/Skeleton3D/LCore2/Core" index="0" instance=ExtResource("4_0luyt")]
 
-[node name="LCore3" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="8"]
+[node name="LCore3" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="9"]
 transform = Transform3D(-0.155962, 0.987763, -6.46475e-09, -0.987763, -0.155962, -3.61722e-06, -3.57396e-06, -5.57765e-07, 1, 36, 9.1, 0.300031)
 bone_name = "l_core3"
 bone_idx = 50
@@ -327,7 +336,7 @@ transform = Transform3D(-0.208058, -0.987688, 1.18525e-07, 1.31363, -0.156434, -
 
 [node name="GolemCore" parent="IfritRoot/Skeleton3D/LCore3/Core" index="0" instance=ExtResource("4_0luyt")]
 
-[node name="AnimationTree" type="AnimationTree" parent="." index="6"]
+[node name="AnimationTree" type="AnimationTree" parent="." index="5"]
 active = false
 tree_root = SubResource("AnimationNodeBlendTree_bb4ub")
 anim_player = NodePath("../AnimationPlayer")
