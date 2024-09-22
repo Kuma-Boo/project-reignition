@@ -221,6 +221,7 @@ public partial class IfritGolem : Node3D
 	{
 		// Update sectors
 		UpdatePreviousSector();
+		HideCores();
 		currentSector += currentSector % 2 == 0 ? 0 : 1;
 		if (!isRightHand)
 			currentSector += 2;
@@ -244,11 +245,13 @@ public partial class IfritGolem : Node3D
 
 	private void ProcessStun()
 	{
+		/*
 		if (Player.IsOnGround && headHealth != MaxHeadHealth)
 		{
 			EnterRecovery();
 			return;
 		}
+		*/
 
 		if (isInteractingWithPlayer)
 			UpdateInteraction();
@@ -383,9 +386,24 @@ public partial class IfritGolem : Node3D
 	{
 		currentHealth--;
 
-		if (currentHealth > 0)
-			EnterDamage();
+		if (currentHealth <= 0)
+			CallDeferred(MethodName.DefeatBoss);
+		else
+			CallDeferred(MethodName.EnterDamage);
 	}
+
+	private void DefeatBoss()
+	{
+		GD.Print("Boss Defeated");
+		ExitHitstun();
+
+		// TODO Play defeat cutscene
+		Player.LaunchFinished += FinishLevel;
+		BonusManager.instance.QueueBonus(new(BonusType.Boss, 8000));
+		currentState = GolemState.Defeated;
+	}
+
+	private void FinishLevel() => StageSettings.Instance.FinishLevel(true);
 	#endregion
 
 	#region Signals
