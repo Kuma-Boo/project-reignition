@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=56 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
@@ -8,9 +8,12 @@
 [ext_resource type="PackedScene" uid="uid://b7g26173gty07" path="res://area/3 evil foundry/boss/data/model/Lava.gltf" id="2_wope5"]
 [ext_resource type="PackedScene" uid="uid://cayo6pq1qpjyf" path="res://area/3 evil foundry/boss/data/Core.tscn" id="4_0luyt"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="5_rxyxv"]
-[ext_resource type="PackedScene" uid="uid://v8h6abta165i" path="res://area/3 evil foundry/boss/environment/EFBoss.tscn" id="9_miuir"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="9_xqc7y"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="11_iscui"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="12_cgkgo"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n2677"]
+size = Vector3(20, 20, 5)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_c2y7b"]
 radius = 1.75
@@ -219,6 +222,7 @@ script = ExtResource("2_jm400")
 root = NodePath("IfritRoot")
 animationTree = NodePath("AnimationTree")
 headHurtbox = NodePath("IfritRoot/Skeleton3D/Head/HeadHurtbox")
+playerLaunchTarget = NodePath("IfritRoot/Skeleton3D/Root/LaunchTarget")
 cores = [NodePath("IfritRoot/Skeleton3D/RCore1/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/RCore2/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/RCore3/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore1/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore2/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore3/Core/GolemCore")]
 
 [node name="Skeleton3D" parent="IfritRoot" index="0"]
@@ -349,8 +353,16 @@ script = ExtResource("2_v71j8")
 
 [node name="StaticBody3D" parent="IfritRoot/Skeleton3D/Root/IfritGolemCollision/Wall" index="0" groups=["wall"]]
 
-[node name="JumpTarget" type="Node3D" parent="IfritRoot/Skeleton3D/Root" index="1"]
+[node name="LaunchTarget" type="Node3D" parent="IfritRoot/Skeleton3D/Root" index="1"]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -26, 0)
+
+[node name="StageTrigger" parent="IfritRoot/Skeleton3D/Root" index="2" instance=ExtResource("9_xqc7y")]
+transform = Transform3D(0.707107, 0, 0.707107, 0.707107, 0, -0.707107, 0, 1, 0, 10.4343, -8.56569, 17)
+monitoring = false
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="IfritRoot/Skeleton3D/Root/StageTrigger" index="0"]
+shape = SubResource("BoxShape3D_n2677")
 
 [node name="Head" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="11"]
 transform = Transform3D(1, 1.50996e-07, -4.48798e-14, -1.50996e-07, 1, -4.20213e-06, -5.90409e-13, 4.20213e-06, 1, 3.01992e-07, 15.6, 0.700059)
@@ -413,12 +425,11 @@ shape = SubResource("BoxShape3D_utngs")
 script = ExtResource("11_iscui")
 lockoutData = ExtResource("12_cgkgo")
 
-[node name="EFBoss" parent="." index="6" instance=ExtResource("9_miuir")]
-
 [connection signal="StunEnded" from="." to="IfritRoot/Skeleton3D/Root/IfritGolemCollision" method="Deactivate"]
 [connection signal="StunEnded" from="." to="Triggers/Lockout" method="Deactivate"]
 [connection signal="Stunned" from="." to="IfritRoot/Skeleton3D/Root/IfritGolemCollision" method="Activate"]
 [connection signal="Stunned" from="." to="Triggers/Lockout" method="Activate"]
+[connection signal="Activated" from="IfritRoot/Skeleton3D/Root/StageTrigger" to="." method="EnterRecovery"]
 [connection signal="area_entered" from="IfritRoot/Skeleton3D/Head/HeadHurtbox" to="." method="OnHeadEntered"]
 [connection signal="area_exited" from="IfritRoot/Skeleton3D/Head/HeadHurtbox" to="." method="OnHeadExited"]
 [connection signal="area_entered" from="Lava/LavaHazard" to="Lava/LavaHazard" method="OnEntered"]

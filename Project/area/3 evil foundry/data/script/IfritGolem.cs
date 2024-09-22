@@ -14,6 +14,8 @@ public partial class IfritGolem : Node3D
 	private Area3D HeadHurtbox { get; set; }
 	[Export(PropertyHint.NodeType, "Node3D")] private NodePath damagePath;
 	private Node3D DamagePath { get; set; }
+	[Export(PropertyHint.NodeType, "Node3D")] private NodePath playerLaunchTarget;
+	private Node3D PlayerLaunchTarget { get; set; }
 
 	[Export] private Core[] cores;
 	[ExportGroup("Animated Properties")]
@@ -79,6 +81,7 @@ public partial class IfritGolem : Node3D
 		AnimationTree.Active = true;
 		HeadHurtbox = GetNode<Area3D>(headHurtbox);
 		DamagePath = GetNode<Node3D>(damagePath);
+		PlayerLaunchTarget = GetNode<Node3D>(playerLaunchTarget);
 
 		foreach (Core core in cores)
 		{
@@ -217,9 +220,14 @@ public partial class IfritGolem : Node3D
 
 	private void ExitHitstun()
 	{
+		if (currentState != GolemState.Stunned) // Already left hitstun
+			return;
+
 		isInteractingWithPlayer = false;
 
-		// TODO Make the player jump
+		// Launch the player back to solid ground
+		Player.StartLauncher(LaunchSettings.Create(Player.GlobalPosition, PlayerLaunchTarget.GlobalPosition, 10f));
+		Player.Animator.StartSpin(3f);
 		EmitSignal(SignalName.StunEnded);
 	}
 
