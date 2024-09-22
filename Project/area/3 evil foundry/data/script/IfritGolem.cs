@@ -95,6 +95,7 @@ public partial class IfritGolem : Node3D
 		currentSector = previousSector = 0;
 		currentState = GolemState.Idle;
 
+		currentHealth = MaxHealth;
 		RespawnCores();
 
 		// Reset Animations
@@ -324,7 +325,7 @@ public partial class IfritGolem : Node3D
 
 	private void UpdateInteraction()
 	{
-		if (isInteractingWithPlayer)
+		if (isInteractionProcessed)
 			return;
 
 		switch (Player.AttackState)
