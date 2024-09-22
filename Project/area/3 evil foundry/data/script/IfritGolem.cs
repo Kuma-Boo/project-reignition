@@ -238,7 +238,7 @@ public partial class IfritGolem : Node3D
 		Player.Camera.LockonTarget = null;
 
 		// Launch the player back to solid ground
-		Player.StartLauncher(LaunchSettings.Create(Player.GlobalPosition, PlayerLaunchTarget.GlobalPosition, 10f));
+		Player.StartLauncher(LaunchSettings.Create(Player.GlobalPosition, PlayerLaunchTarget.GlobalPosition, 5f));
 		Player.Animator.StartSpin(3f);
 		EmitSignal(SignalName.StunEnded);
 	}
