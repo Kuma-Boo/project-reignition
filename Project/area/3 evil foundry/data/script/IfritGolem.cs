@@ -12,6 +12,8 @@ public partial class IfritGolem : Node3D
 	private AnimationTree AnimationTree { get; set; }
 	[Export(PropertyHint.NodeType, "Area3D")] private NodePath headHurtbox;
 	private Area3D HeadHurtbox { get; set; }
+	[Export(PropertyHint.NodeType, "Node3D")] private NodePath damagePath;
+	private Node3D DamagePath { get; set; }
 
 	[Export] private Core[] cores;
 	[ExportGroup("Animated Properties")]
@@ -76,6 +78,7 @@ public partial class IfritGolem : Node3D
 		AnimationTree = GetNode<AnimationTree>(animationTree);
 		AnimationTree.Active = true;
 		HeadHurtbox = GetNode<Area3D>(headHurtbox);
+		DamagePath = GetNode<Node3D>(damagePath);
 
 		foreach (Core core in cores)
 		{
@@ -125,6 +128,7 @@ public partial class IfritGolem : Node3D
 			currentRotation = Mathf.LerpAngle(previousRotation, currentRotation, rotationBlend);
 
 		Root.Rotation = Vector3.Up * (currentRotation % Mathf.Tau);
+		DamagePath.Rotation = Root.Rotation;
 	}
 
 	private void EnterIdle()

@@ -19,11 +19,16 @@ InitialCameraSettings = ExtResource("3_yn75d")
 
 [node name="BossAct" type="Node3D" parent="."]
 
-[node name="MainPath" type="Node3D" parent="BossAct" node_paths=PackedStringArray("path")]
+[node name="DamagePath" type="Node3D" parent="BossAct" node_paths=PackedStringArray("path")]
 script = ExtResource("5_s4uog")
-path = NodePath("../../Static/Path/MainPath")
+path = NodePath("../../Static/Path/DamagePath/DamagePath")
+affectCamera = false
+
+[node name="MainPath" type="Node3D" parent="BossAct"]
+script = ExtResource("5_s4uog")
 
 [node name="IfritGolem" parent="BossAct" instance=ExtResource("4_28qle")]
+damagePath = NodePath("../../Static/Path/DamagePath")
 
 [node name="SectorSignals" type="Node3D" parent="BossAct"]
 
@@ -84,9 +89,12 @@ metadata/_edit_lock_ = true
 [connection signal="StunEnded" from="BossAct/IfritGolem" to="Static/Collision/Wall" method="Activate"]
 [connection signal="StunEnded" from="BossAct/IfritGolem" to="BossAct/MainPath" method="Activate"]
 [connection signal="Stunned" from="BossAct/IfritGolem" to="Static/Collision/Wall" method="Deactivate"]
+[connection signal="Stunned" from="BossAct/IfritGolem" to="BossAct/DamagePath" method="Activate"]
 [connection signal="Activated" from="BossAct/SectorSignals/0" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [0]]
 [connection signal="Activated" from="BossAct/SectorSignals/1" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [1]]
 [connection signal="Activated" from="BossAct/SectorSignals/2" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [2]]
 [connection signal="Activated" from="BossAct/SectorSignals/3" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [3]]
 [connection signal="Activated" from="BossAct/SectorSignals/4" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [4]]
 [connection signal="Activated" from="BossAct/SectorSignals/5" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [5]]
+
+[editable path="Static"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=55 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
@@ -8,9 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://b7g26173gty07" path="res://area/3 evil foundry/boss/data/model/Lava.gltf" id="2_wope5"]
 [ext_resource type="PackedScene" uid="uid://cayo6pq1qpjyf" path="res://area/3 evil foundry/boss/data/Core.tscn" id="4_0luyt"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="5_rxyxv"]
-[ext_resource type="Curve3D" path="res://area/3 evil foundry/boss/environment/path/DamagePath.tres" id="9_7nvwp"]
 [ext_resource type="PackedScene" uid="uid://v8h6abta165i" path="res://area/3 evil foundry/boss/environment/EFBoss.tscn" id="9_miuir"]
-[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="10_prfje"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="11_iscui"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="12_cgkgo"]
 
@@ -360,10 +358,6 @@ monitorable = false
 transform = Transform3D(1, -2.47767e-18, 0, -2.48097e-18, 1, 0, 0, 0, 1, 0, -0.9, 5.96046e-08)
 shape = SubResource("SphereShape3D_c2y7b")
 
-[node name="DamagePath" type="Path3D" parent="IfritRoot/Skeleton3D" index="12"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.25, 5.725, -18.25)
-curve = ExtResource("9_7nvwp")
-
 [node name="AnimationPlayer" parent="." index="1"]
 callback_mode_process = 0
 
@@ -405,12 +399,7 @@ shape = SubResource("BoxShape3D_utngs")
 
 [node name="Triggers" type="Node3D" parent="." index="5"]
 
-[node name="DamagePath" type="Node3D" parent="Triggers" index="0" node_paths=PackedStringArray("path")]
-script = ExtResource("10_prfje")
-path = NodePath("../../IfritRoot/Skeleton3D/DamagePath")
-affectCamera = false
-
-[node name="Lockout" type="Node3D" parent="Triggers" index="1"]
+[node name="Lockout" type="Node3D" parent="Triggers" index="0"]
 script = ExtResource("11_iscui")
 lockoutData = ExtResource("12_cgkgo")
 
@@ -419,7 +408,6 @@ lockoutData = ExtResource("12_cgkgo")
 [connection signal="StunEnded" from="." to="IfritRoot/Skeleton3D/Root/IfritGolemCollision" method="Deactivate"]
 [connection signal="StunEnded" from="." to="Triggers/Lockout" method="Deactivate"]
 [connection signal="Stunned" from="." to="IfritRoot/Skeleton3D/Root/IfritGolemCollision" method="Activate"]
-[connection signal="Stunned" from="." to="Triggers/DamagePath" method="Activate"]
 [connection signal="Stunned" from="." to="Triggers/Lockout" method="Activate"]
 [connection signal="area_entered" from="IfritRoot/Skeleton3D/Head/HeadHurtbox" to="." method="OnHeadEntered"]
 [connection signal="area_exited" from="IfritRoot/Skeleton3D/Head/HeadHurtbox" to="." method="OnHeadExited"]
