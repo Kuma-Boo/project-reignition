@@ -191,7 +191,13 @@ public partial class IfritGolem : Node3D
 		currentState = GolemState.Step;
 		currentSector = WrapClampSector(currentSector);
 	}
-	private void ExitStep() => EnterIdle();
+	private void ExitStep()
+	{
+		if (leftHandCores == 0 && rightHandCores == 0)
+			RespawnCores();
+
+		EnterIdle();
+	}
 
 	[Signal] public delegate void StunnedEventHandler();
 	[Signal] public delegate void StunEndedEventHandler();

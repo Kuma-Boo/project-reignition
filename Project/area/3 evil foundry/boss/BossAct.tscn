@@ -19,6 +19,12 @@ InitialCameraSettings = ExtResource("3_yn75d")
 
 [node name="BossAct" type="Node3D" parent="."]
 
+[node name="SpawnPosition" type="Node3D" parent="BossAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.5, 0, -2)
+metadata/_edit_lock_ = true
+
+[node name="CharacterSpawn" parent="BossAct/SpawnPosition" instance=ExtResource("1_iilpd")]
+
 [node name="DamagePath" type="Node3D" parent="BossAct" node_paths=PackedStringArray("path")]
 script = ExtResource("5_s4uog")
 path = NodePath("../../Static/Path/DamagePath/DamagePath")
@@ -79,12 +85,6 @@ transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -22.5167, 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SectorSignals/5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_rxc87")
-
-[node name="SpawnPosition" type="Node3D" parent="BossAct"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.5, 0, -2)
-metadata/_edit_lock_ = true
-
-[node name="CharacterSpawn" parent="BossAct/SpawnPosition" instance=ExtResource("1_iilpd")]
 
 [connection signal="StunEnded" from="BossAct/IfritGolem" to="Static/Collision/Wall" method="Activate"]
 [connection signal="StunEnded" from="BossAct/IfritGolem" to="BossAct/MainPath" method="Activate"]
