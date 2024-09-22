@@ -27,21 +27,11 @@ public partial class BounceState : PlayerState
 
 	public override void EnterState()
 	{
-		Player.Lockon.IsMonitoring = false;
-		bounceInterruptTimer = LockoutSettings.length - .5f;
-
 		if (IsUpwardBounce && Player.Lockon.Target != null) // Snap the player to the target
 		{
 			Player.MoveSpeed = 0; // Reset speed
-
-			bool applySnapping = false;
-			if (!Player.IsBouncing)
-			{
-				if (Player.Lockon.Target is Area3D)
-					applySnapping = Player.Lockon.GetOverlappingAreas().Contains(Player.Lockon.Target as Area3D);
-				else if (Player.Lockon.Target is PhysicsBody3D)
-					applySnapping = Player.Lockon.GetOverlappingBodies().Contains(Player.Lockon.Target as PhysicsBody3D);
-			}
+			bool applySnapping = Mathf.IsZeroApprox(bounceInterruptTimer) &&
+				(Player.Lockon.Target is Area3D || Player.Lockon.Target is PhysicsBody3D);
 
 			// Only snap when target being hit is correct
 			if (applySnapping)
@@ -51,6 +41,9 @@ public partial class BounceState : PlayerState
 		{
 			Player.MoveSpeed = -bounceSpeed;
 		}
+
+		Player.Lockon.IsMonitoring = false;
+		bounceInterruptTimer = LockoutSettings.length - .5f;
 
 		if (Player.IsLockoutActive && Player.ActiveLockoutData == LockoutSettings) return;
 

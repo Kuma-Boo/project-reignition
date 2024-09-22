@@ -208,10 +208,11 @@ nodes/special_trigger/node = SubResource("AnimationNodeOneShot_wjwst")
 nodes/special_trigger/position = Vector2(-800, 0)
 node_connections = [&"gear_add", 0, &"hitstun_trigger", &"gear_add", 1, &"gear_anim", &"head_add", 0, &"gear_add", &"head_add", 1, &"head_blend", &"head_blend", 0, &"head_right_anim", &"head_blend", 1, &"head_center_anim", &"head_blend", 2, &"head_left_anim", &"hitstun_trigger", 0, &"special_trigger", &"hitstun_trigger", 1, &"hitstun_state", &"output", 0, &"head_add", &"special_trigger", 0, &"normal_state", &"special_trigger", 1, &"special_state"]
 
-[node name="IfritGolem" instance=ExtResource("1_37vkv")]
+[node name="IfritGolem" node_paths=PackedStringArray("cores") instance=ExtResource("1_37vkv")]
 script = ExtResource("2_jm400")
 root = NodePath("IfritRoot")
 animationTree = NodePath("AnimationTree")
+cores = [NodePath("IfritRoot/Skeleton3D/RCore1/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/RCore2/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/RCore3/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore1/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore2/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore3/Core/GolemCore")]
 
 [node name="ArenaPlatform" parent="." index="0" instance=ExtResource("2_nsyah")]
 
@@ -295,6 +296,7 @@ bone_idx = 35
 transform = Transform3D(0.156434, -0.987688, 0, 0.987688, 0.156434, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="GolemCore" parent="IfritRoot/Skeleton3D/RCore1/Core" index="0" instance=ExtResource("4_0luyt")]
+isRightHand = true
 
 [node name="RCore2" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="5"]
 transform = Transform3D(-0.155962, -0.987763, -3.65969e-08, 0.987763, -0.155962, -3.62915e-06, 3.57904e-06, -6.02158e-07, 1, -35.9999, 9.10001, -0.999962)

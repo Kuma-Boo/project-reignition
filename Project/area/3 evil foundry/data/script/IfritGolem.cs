@@ -6,10 +6,11 @@ namespace Project.Gameplay.Bosses;
 public partial class IfritGolem : Node3D
 {
 	[ExportGroup("Components")]
-	[Export] private NodePath root;
+	[Export(PropertyHint.NodeType, "Node3D")] private NodePath root;
 	private Node3D Root { get; set; }
-	[Export] private NodePath animationTree;
+	[Export(PropertyHint.NodeType, "AnimationTree")] private NodePath animationTree;
 	private AnimationTree AnimationTree;
+	[Export] private Core[] cores;
 	[ExportGroup("Animated Properties")]
 	/// <summary> Used in animations to blend rotations (because exporting stepped keyframes doesn't work...) </summary>
 	[Export(PropertyHint.Range, "0,1")] private float rotationBlend;
@@ -70,6 +71,11 @@ public partial class IfritGolem : Node3D
 		AnimationTree = GetNode<AnimationTree>(animationTree);
 		AnimationTree.Active = true;
 
+		foreach (Core core in cores)
+		{
+			core.CoreDestroyed += OnCoreDestroyed;
+		}
+
 		StageSettings.Instance.Respawned += Respawn;
 		// TODO Play introduction cutscene
 		Respawn();
@@ -94,7 +100,22 @@ public partial class IfritGolem : Node3D
 		}
 	}
 
-	public override void _Process(double _) => UpdateRotation();
+	public override void _Process(double _)
+	{
+		if (!updateRotations)
+			return;
+
+		// Update visual rotations
+		float currentRotation = currentSector * SectorRotationIncrementRad;
+		float previousRotation = previousSector * SectorRotationIncrementRad;
+		Root.Rotation = Vector3.Up * Mathf.LerpAngle(previousRotation, currentRotation, rotationBlend);
+	}
+
+	private void EnterIdle()
+	{
+		ShowCores();
+		currentState = GolemState.Idle;
+	}
 
 	private void ProcessIdle()
 	{
@@ -102,6 +123,11 @@ public partial class IfritGolem : Node3D
 			return;
 
 		AttemptStep();
+	}
+
+	private void ExitIdle()
+	{
+		HideCores();
 	}
 
 	private float stepTimer;
@@ -120,8 +146,9 @@ public partial class IfritGolem : Node3D
 	private readonly StringName IdleAnimation = "idle";
 	private void EnterStep()
 	{
-		stepTimer = 0f;
+		ExitIdle();
 		UpdatePreviousSector();
+
 		int targetSector = CalculateTargetSector();
 		if (targetSector > currentSector)
 		{
@@ -136,20 +163,62 @@ public partial class IfritGolem : Node3D
 			NormalStatePlayback.Travel(StepRightAnimation);
 		}
 
+		stepTimer = 0f;
 		currentState = GolemState.Step;
 		currentSector = WrapClampSector(currentSector);
 	}
-	private void ExitStep() => currentState = GolemState.Idle;
+	private void ExitStep() => EnterIdle();
 
-	/// <summary> Updates the rotation of the golem's visual model. </summary>
-	private void UpdateRotation()
+	private int rightHandCores = 3;
+	private int leftHandCores = 3;
+	private void ShowCores()
 	{
-		if (!updateRotations)
-			return;
+		foreach (Core core in cores)
+		{
+			if (core.IsDamaged)
+				continue;
 
-		float currentRotation = currentSector * SectorRotationIncrementRad;
-		float previousRotation = previousSector * SectorRotationIncrementRad;
-		Root.Rotation = Vector3.Up * Mathf.LerpAngle(previousRotation, currentRotation, rotationBlend);
+			core.ShowCore();
+		}
+	}
+
+	private void HideCores()
+	{
+		foreach (Core core in cores)
+		{
+			if (core.IsDamaged)
+				continue;
+
+			core.HideCore();
+		}
+	}
+
+	private void RespawnCores()
+	{
+		foreach (Core core in cores)
+		{
+			core.Respawn();
+		}
+	}
+
+	private void OnCoreDestroyed(bool isRightHand)
+	{
+		if (isRightHand)
+		{
+			// Process right hand
+			rightHandCores--;
+			if (rightHandCores != 0)
+				return;
+
+
+
+			return;
+		}
+
+		// Process left hand
+		leftHandCores--;
+		if (leftHandCores != 0)
+			return;
 	}
 
 	private void UpdatePreviousSector() => previousSector = currentSector;
