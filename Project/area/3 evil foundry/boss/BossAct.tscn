@@ -1,10 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://bgprgy7jv3pxr"]
+[gd_scene load_steps=8 format=3 uid="uid://bgprgy7jv3pxr"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_iilpd"]
 [ext_resource type="PackedScene" uid="uid://554o5nn5ah4r" path="res://area/3 evil foundry/boss/Static.tscn" id="1_vi4ig"]
 [ext_resource type="Resource" uid="uid://41ygpdjlcr8a" path="res://resource/level data/evil foundry/Boss.tres" id="2_ybwun"]
 [ext_resource type="Resource" uid="uid://uf7lyw3gw1fc" path="res://area/3 evil foundry/boss/camera/BossCam.tres" id="3_yn75d"]
 [ext_resource type="PackedScene" uid="uid://dakk7vvkh050f" path="res://area/3 evil foundry/boss/data/IfritGolem.tscn" id="4_28qle"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_evmsn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rxc87"]
+size = Vector3(20, 20, 5)
 
 [node name="World" type="Node"]
 
@@ -16,8 +20,65 @@ InitialCameraSettings = ExtResource("3_yn75d")
 
 [node name="IfritGolem" parent="BossAct" instance=ExtResource("4_28qle")]
 
+[node name="SectorSignals" type="Node3D" parent="BossAct"]
+
+[node name="0" parent="BossAct/SectorSignals" instance=ExtResource("5_evmsn")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 26)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SectorSignals/0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_rxc87")
+
+[node name="1" parent="BossAct/SectorSignals" instance=ExtResource("5_evmsn")]
+transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 22.5167, 0, 13)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SectorSignals/1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_rxc87")
+
+[node name="2" parent="BossAct/SectorSignals" instance=ExtResource("5_evmsn")]
+transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 22.5167, 0, -13)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SectorSignals/2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_rxc87")
+
+[node name="3" parent="BossAct/SectorSignals" instance=ExtResource("5_evmsn")]
+transform = Transform3D(7.35137e-08, 0, -1, 0, 1, 0, 1, 0, 7.35137e-08, -7.7486e-07, 0, -26)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SectorSignals/3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_rxc87")
+
+[node name="4" parent="BossAct/SectorSignals" instance=ExtResource("5_evmsn")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -22.5167, 0, -13)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SectorSignals/4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_rxc87")
+
+[node name="5" parent="BossAct/SectorSignals" instance=ExtResource("5_evmsn")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -22.5167, 0, 13)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SectorSignals/5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_rxc87")
+
 [node name="SpawnPosition" type="Node3D" parent="BossAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.5, 0, -2)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="BossAct/SpawnPosition" instance=ExtResource("1_iilpd")]
+
+[connection signal="Activated" from="BossAct/SectorSignals/0" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [0]]
+[connection signal="Activated" from="BossAct/SectorSignals/1" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [1]]
+[connection signal="Activated" from="BossAct/SectorSignals/2" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [2]]
+[connection signal="Activated" from="BossAct/SectorSignals/3" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [3]]
+[connection signal="Activated" from="BossAct/SectorSignals/4" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [4]]
+[connection signal="Activated" from="BossAct/SectorSignals/5" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [5]]

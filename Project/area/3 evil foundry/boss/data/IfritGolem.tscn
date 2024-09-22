@@ -1,7 +1,8 @@
-[gd_scene load_steps=50 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=51 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
+[ext_resource type="Script" path="res://area/3 evil foundry/data/script/IfritGolem.cs" id="2_jm400"]
 [ext_resource type="PackedScene" uid="uid://b26mkp3yjneyj" path="res://area/3 evil foundry/boss/data/ArenaPlatform.tscn" id="2_nsyah"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_v71j8"]
 [ext_resource type="PackedScene" uid="uid://b7g26173gty07" path="res://area/3 evil foundry/boss/data/model/Lava.gltf" id="2_wope5"]
@@ -138,7 +139,7 @@ states/step-l/position = Vector2(330, 28)
 states/step-r/node = SubResource("AnimationNodeAnimation_4k0jr")
 states/step-r/position = Vector2(330, 178)
 transitions = ["idle", "step-l", SubResource("AnimationNodeStateMachineTransition_clanm"), "step-l", "idle", SubResource("AnimationNodeStateMachineTransition_3eosp"), "step-r", "idle", SubResource("AnimationNodeStateMachineTransition_pl1k4"), "idle", "step-r", SubResource("AnimationNodeStateMachineTransition_6nwgh"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_mruqk")]
-graph_offset = Vector2(-344, -17)
+graph_offset = Vector2(-377, -48)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_021lr"]
 animation = &"special-attack-start"
@@ -181,7 +182,7 @@ fadeout_time = 0.5
 fadeout_curve = SubResource("Curve_upeqj")
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_bb4ub"]
-graph_offset = Vector2(-1051.07, -20.3404)
+graph_offset = Vector2(-1331.24, -61.2463)
 nodes/gear_add/node = SubResource("AnimationNodeAdd2_g8eyb")
 nodes/gear_add/position = Vector2(-400, 0)
 nodes/gear_anim/node = SubResource("AnimationNodeAnimation_blrrc")
@@ -209,7 +210,10 @@ nodes/special_trigger/node = SubResource("AnimationNodeOneShot_wjwst")
 nodes/special_trigger/position = Vector2(-800, 0)
 node_connections = [&"gear_add", 0, &"hitstun_trigger", &"gear_add", 1, &"gear_anim", &"head_add", 0, &"gear_add", &"head_add", 1, &"head_blend", &"head_blend", 0, &"head_right_anim", &"head_blend", 1, &"head_center_anim", &"head_blend", 2, &"head_left_anim", &"hitstun_trigger", 0, &"special_trigger", &"hitstun_trigger", 1, &"hitstun_state", &"output", 0, &"head_add", &"special_trigger", 0, &"normal_state", &"special_trigger", 1, &"special_state"]
 
-[node name="IfritGolem" instance=ExtResource("1_37vkv")]
+[node name="IfritGolem" node_paths=PackedStringArray("root", "animationTree") instance=ExtResource("1_37vkv")]
+script = ExtResource("2_jm400")
+root = NodePath("IfritRoot")
+animationTree = NodePath("AnimationTree")
 
 [node name="ArenaPlatform" parent="." index="0" instance=ExtResource("2_nsyah")]
 
@@ -231,10 +235,6 @@ script = ExtResource("5_rxyxv")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Lava/LavaHazard" index="0"]
 shape = SubResource("BoxShape3D_utngs")
-
-[node name="IfritGolemCollision" parent="." index="2" instance=ExtResource("2_4kp3h")]
-visible = false
-script = ExtResource("2_v71j8")
 
 [node name="Skeleton3D" parent="IfritRoot" index="0"]
 bones/1/rotation = Quaternion(0.0865145, -5.01917e-21, -2.9041e-14, 0.996251)
@@ -336,7 +336,10 @@ transform = Transform3D(-0.208058, -0.987688, 1.18525e-07, 1.31363, -0.156434, -
 
 [node name="GolemCore" parent="IfritRoot/Skeleton3D/LCore3/Core" index="0" instance=ExtResource("4_0luyt")]
 
-[node name="AnimationTree" type="AnimationTree" parent="." index="5"]
+[node name="IfritGolemCollision" parent="IfritRoot" index="1" instance=ExtResource("2_4kp3h")]
+script = ExtResource("2_v71j8")
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="4"]
 active = false
 tree_root = SubResource("AnimationNodeBlendTree_bb4ub")
 anim_player = NodePath("../AnimationPlayer")
