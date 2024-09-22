@@ -18,6 +18,7 @@ public partial class IfritGolem : Node3D
 	private Node3D PlayerLaunchTarget { get; set; }
 
 	[Export] private Core[] cores;
+	[Export] private Node3D[] burnPositions;
 	[ExportGroup("Animated Properties")]
 	/// <summary> Used in animations to blend rotations (because exporting stepped keyframes doesn't work...) </summary>
 	[Export(PropertyHint.Range, "0,1")] private float rotationBlend;
@@ -97,12 +98,19 @@ public partial class IfritGolem : Node3D
 	{
 		currentSector = previousSector = 0;
 		currentState = GolemState.Idle;
+		Root.Rotation = Vector3.Zero;
 
 		currentHealth = MaxHealth;
 		RespawnCores();
 
 		// Reset Animations
 		NormalStatePlayback.Start(IdleAnimation);
+		AnimationTree.Set(HitstunTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+
+		if (currentState == GolemState.Stunned)
+			EmitSignal(SignalName.StunEnded);
+
+		EnterIdle();
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -213,7 +221,6 @@ public partial class IfritGolem : Node3D
 	{
 		// Update sectors
 		UpdatePreviousSector();
-		GD.PrintT(currentSector % 2 == 0, isRightHand);
 		currentSector += currentSector % 2 == 0 ? 0 : 1;
 		if (!isRightHand)
 			currentSector += 2;
@@ -226,10 +233,8 @@ public partial class IfritGolem : Node3D
 
 	private void ExitHitstun()
 	{
-		if (currentState != GolemState.Stunned) // Already left hitstun
-			return;
-
 		isInteractingWithPlayer = false;
+		Player.Camera.LockonTarget = null;
 
 		// Launch the player back to solid ground
 		Player.StartLauncher(LaunchSettings.Create(Player.GlobalPosition, PlayerLaunchTarget.GlobalPosition, 10f));
@@ -355,6 +360,8 @@ public partial class IfritGolem : Node3D
 				break;
 		}
 
+		Player.Camera.LockonTarget = HeadHurtbox;
+		Player.StartBounce(false);
 		SetInteractionProcessed();
 	}
 
@@ -365,13 +372,8 @@ public partial class IfritGolem : Node3D
 		headHealth -= amount;
 
 		if (headHealth > 0)
-		{
-			Player.Camera.LockonTarget = HeadHurtbox;
-			Player.StartBounce(false);
 			return;
-		}
 
-		Player.Camera.LockonTarget = null;
 		Damage();
 	}
 

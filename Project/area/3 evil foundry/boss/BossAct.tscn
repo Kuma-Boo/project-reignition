@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_iilpd"]
 [ext_resource type="PackedScene" uid="uid://554o5nn5ah4r" path="res://area/3 evil foundry/boss/Static.tscn" id="1_vi4ig"]
 [ext_resource type="Resource" uid="uid://41ygpdjlcr8a" path="res://resource/level data/evil foundry/Boss.tres" id="2_ybwun"]
-[ext_resource type="Resource" uid="uid://uf7lyw3gw1fc" path="res://area/3 evil foundry/boss/camera/BossCam.tres" id="3_yn75d"]
+[ext_resource type="Resource" uid="uid://uf7lyw3gw1fc" path="res://area/3 evil foundry/boss/camera/LowCam.tres" id="3_yn75d"]
 [ext_resource type="PackedScene" uid="uid://dakk7vvkh050f" path="res://area/3 evil foundry/boss/data/IfritGolem.tscn" id="4_28qle"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_evmsn"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="5_s4uog"]
@@ -28,10 +28,10 @@ metadata/_edit_lock_ = true
 [node name="DamagePath" type="Node3D" parent="BossAct" node_paths=PackedStringArray("path")]
 script = ExtResource("5_s4uog")
 path = NodePath("../../Static/Path/DamagePath/DamagePath")
-affectCamera = false
 
-[node name="MainPath" type="Node3D" parent="BossAct"]
+[node name="MainPath" type="Node3D" parent="BossAct" node_paths=PackedStringArray("path")]
 script = ExtResource("5_s4uog")
+path = NodePath("../../Static/Path/MainPath")
 
 [node name="IfritGolem" parent="BossAct" instance=ExtResource("4_28qle")]
 damagePath = NodePath("../../Static/Path/DamagePath")
