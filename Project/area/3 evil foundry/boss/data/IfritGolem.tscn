@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=57 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
@@ -8,9 +8,14 @@
 [ext_resource type="PackedScene" uid="uid://b7g26173gty07" path="res://area/3 evil foundry/boss/data/model/Lava.gltf" id="2_wope5"]
 [ext_resource type="PackedScene" uid="uid://cayo6pq1qpjyf" path="res://area/3 evil foundry/boss/data/Core.tscn" id="4_0luyt"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="5_rxyxv"]
+[ext_resource type="Curve3D" path="res://area/3 evil foundry/boss/environment/path/DamagePath.tres" id="9_7nvwp"]
+[ext_resource type="PackedScene" uid="uid://v8h6abta165i" path="res://area/3 evil foundry/boss/environment/EFBoss.tscn" id="9_miuir"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="10_prfje"]
+[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="11_iscui"]
+[ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="12_cgkgo"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_utngs"]
-size = Vector3(100, 5, 100)
+[sub_resource type="SphereShape3D" id="SphereShape3D_c2y7b"]
+radius = 1.75
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_g8eyb"]
 filter_enabled = true
@@ -90,7 +95,7 @@ states/hitstun-r/position = Vector2(344, 33)
 states/recovery/node = SubResource("AnimationNodeAnimation_udlwa")
 states/recovery/position = Vector2(658, 33)
 transitions = ["hitstun-r", "hitstun", SubResource("AnimationNodeStateMachineTransition_p6nqp"), "hitstun-l", "hitstun", SubResource("AnimationNodeStateMachineTransition_200v4"), "hitstun", "damage", SubResource("AnimationNodeStateMachineTransition_nqpft"), "hitstun", "recovery", SubResource("AnimationNodeStateMachineTransition_s4sr7"), "recovery", "End", SubResource("AnimationNodeStateMachineTransition_jl7vf"), "damage", "End", SubResource("AnimationNodeStateMachineTransition_gxqnd"), "Start", "hitstun-r", SubResource("AnimationNodeStateMachineTransition_o4lpp")]
-graph_offset = Vector2(-129, -38)
+graph_offset = Vector2(-165, 8)
 
 [sub_resource type="Curve" id="Curve_upeqj"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -180,7 +185,7 @@ fadeout_time = 0.5
 fadeout_curve = SubResource("Curve_upeqj")
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_bb4ub"]
-graph_offset = Vector2(-1671, -58)
+graph_offset = Vector2(-130.905, -57.9475)
 nodes/gear_add/node = SubResource("AnimationNodeAdd2_g8eyb")
 nodes/gear_add/position = Vector2(-400, 0)
 nodes/gear_anim/node = SubResource("AnimationNodeAnimation_blrrc")
@@ -208,66 +213,39 @@ nodes/special_trigger/node = SubResource("AnimationNodeOneShot_wjwst")
 nodes/special_trigger/position = Vector2(-800, 0)
 node_connections = [&"gear_add", 0, &"hitstun_trigger", &"gear_add", 1, &"gear_anim", &"head_add", 0, &"gear_add", &"head_add", 1, &"head_blend", &"head_blend", 0, &"head_right_anim", &"head_blend", 1, &"head_center_anim", &"head_blend", 2, &"head_left_anim", &"hitstun_trigger", 0, &"special_trigger", &"hitstun_trigger", 1, &"hitstun_state", &"output", 0, &"head_add", &"special_trigger", 0, &"normal_state", &"special_trigger", 1, &"special_state"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_utngs"]
+size = Vector3(100, 5, 100)
+
 [node name="IfritGolem" node_paths=PackedStringArray("cores") instance=ExtResource("1_37vkv")]
 script = ExtResource("2_jm400")
 root = NodePath("IfritRoot")
 animationTree = NodePath("AnimationTree")
+headHurtbox = NodePath("IfritRoot/Skeleton3D/Head/HeadHurtbox")
 cores = [NodePath("IfritRoot/Skeleton3D/RCore1/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/RCore2/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/RCore3/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore1/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore2/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore3/Core/GolemCore")]
 
-[node name="ArenaPlatform" parent="." index="0" instance=ExtResource("2_nsyah")]
-
-[node name="Lava" parent="." index="1" instance=ExtResource("2_wope5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -15, 0)
-
-[node name="LavaRipple1Mesh" parent="Lava" index="0"]
-visible = false
-
-[node name="LavaRipple2Mesh" parent="Lava" index="2"]
-visible = false
-
-[node name="LavaRipple3Mesh" parent="Lava" index="3"]
-visible = false
-
-[node name="LavaHazard" type="Area3D" parent="Lava" index="4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
-script = ExtResource("5_rxyxv")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Lava/LavaHazard" index="0"]
-shape = SubResource("BoxShape3D_utngs")
-
 [node name="Skeleton3D" parent="IfritRoot" index="0"]
-bones/1/scale = Vector3(1, 1, 1)
 bones/2/rotation = Quaternion(0.0865145, -5.01917e-21, -2.9041e-14, 0.996251)
 bones/3/rotation = Quaternion(-0.0865154, -4.214e-09, -4.85256e-08, 0.996251)
 bones/5/rotation = Quaternion(-3.63867e-07, 3.63867e-07, 0.707107, 0.707107)
 bones/6/rotation = Quaternion(-3.63867e-07, 3.63867e-07, 0.707107, 0.707107)
 bones/7/rotation = Quaternion(-4.87189e-07, 3.18355e-07, 0.707107, 0.707107)
-bones/7/scale = Vector3(1, 1, 1)
 bones/10/rotation = Quaternion(-7.82284e-07, 3.39026e-06, -0.707107, 0.707107)
-bones/10/scale = Vector3(1, 1, 1)
 bones/12/rotation = Quaternion(0.689228, -5.47678e-09, -5.20983e-09, 0.724545)
-bones/12/scale = Vector3(1, 1, 1)
 bones/13/rotation = Quaternion(0.689228, -5.47678e-09, -5.20984e-09, 0.724545)
 bones/14/rotation = Quaternion(-0.689223, -1.09311e-08, 1.03981e-08, 0.72455)
 bones/15/rotation = Quaternion(-0.689222, -1.09311e-08, 1.03981e-08, 0.72455)
-bones/15/scale = Vector3(1, 1, 1)
 bones/16/rotation = Quaternion(-0.689222, -1.09311e-08, 1.0398e-08, 0.724551)
 bones/17/rotation = Quaternion(-3.69582e-07, -3.58153e-07, -0.707107, 0.707107)
 bones/18/rotation = Quaternion(-5.63487e-07, -3.32835e-07, -0.707107, 0.707107)
 bones/21/rotation = Quaternion(2.53355e-08, 1.43252e-07, 0.707107, 0.707107)
 bones/23/rotation = Quaternion(0.689225, -5.54409e-12, -5.27092e-12, 0.724548)
-bones/23/scale = Vector3(1, 1, 1)
 bones/24/rotation = Quaternion(0.689225, -5.54409e-12, -5.27138e-12, 0.724548)
-bones/24/scale = Vector3(1, 1, 1)
-bones/25/scale = Vector3(1, 1, 1)
 bones/27/rotation = Quaternion(-0.689225, 4.87039e-13, -4.63953e-13, 0.724547)
 bones/28/rotation = Quaternion(-0.5, 0.500001, -0.499999, -0.499999)
 bones/30/rotation = Quaternion(2.4407e-06, 2.91194e-06, 0.707108, 0.707106)
-bones/30/scale = Vector3(1, 1, 1)
 bones/36/rotation = Quaternion(-5.81513e-07, 4.33873e-07, 0.0824808, 0.996593)
 bones/44/rotation = Quaternion(0.500001, 0.500001, -0.499999, 0.499999)
 bones/46/rotation = Quaternion(2.54306e-06, -3.06247e-06, -0.707107, 0.707107)
-bones/46/scale = Vector3(1, 1, 1)
 bones/49/scale = Vector3(1, 1, 1)
 bones/51/scale = Vector3(1, 1, 1)
 bones/53/scale = Vector3(1, 1, 1)
@@ -307,6 +285,7 @@ bone_idx = 39
 transform = Transform3D(0.156434, -0.987688, -4.25959e-09, 0.987688, 0.156434, -6.19722e-08, 6.18756e-08, 5.48744e-09, 1, 0, 0, 0)
 
 [node name="GolemCore" parent="IfritRoot/Skeleton3D/RCore2/Core" index="0" instance=ExtResource("4_0luyt")]
+isRightHand = true
 
 [node name="RCore3" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="6"]
 transform = Transform3D(-0.155962, -0.987763, 2.27415e-07, 0.987763, -0.155962, -3.71178e-06, 3.70182e-06, -3.54262e-07, 1, -35.9999, 9.10001, -2.29996)
@@ -317,6 +296,7 @@ bone_idx = 43
 transform = Transform3D(0.156434, -0.987688, 1.18526e-07, 0.987688, 0.156434, 1.85922e-07, -2.02175e-07, 8.79818e-08, 1, 0, 0, 0)
 
 [node name="GolemCore" parent="IfritRoot/Skeleton3D/RCore3/Core" index="0" instance=ExtResource("4_0luyt")]
+isRightHand = true
 
 [node name="LCore1" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="7"]
 transform = Transform3D(-0.155962, 0.987763, -3.70155e-07, -0.987763, -0.155962, -3.56747e-06, -3.62648e-06, -2.88374e-07, 1, 36, 9.10001, -2.29996)
@@ -329,7 +309,7 @@ transform = Transform3D(-0.156434, -0.987688, 0, 0.987688, -0.156434, 2.84217e-1
 [node name="GolemCore" parent="IfritRoot/Skeleton3D/LCore1/Core" index="0" instance=ExtResource("4_0luyt")]
 
 [node name="LCore2" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="8"]
-transform = Transform3D(-0.155962, 0.987763, -1.06142e-07, -0.987763, -0.155962, -3.48485e-06, -3.50369e-06, -5.36269e-07, 1, 36, 9.10001, -0.999961)
+transform = Transform3D(-0.155962, 0.987763, -1.06142e-07, -0.987763, -0.155962, -3.48485e-06, -3.50369e-06, -5.3627e-07, 1, 36, 9.10001, -0.999961)
 bone_name = "l_core2"
 bone_idx = 55
 
@@ -348,13 +328,46 @@ transform = Transform3D(-0.156434, -0.987688, 1.18525e-07, 0.987688, -0.156434, 
 
 [node name="GolemCore" parent="IfritRoot/Skeleton3D/LCore3/Core" index="0" instance=ExtResource("4_0luyt")]
 
-[node name="IfritGolemCollision" parent="IfritRoot" index="1" instance=ExtResource("2_4kp3h")]
+[node name="Root" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="10"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
+bone_name = "root"
+bone_idx = 0
+
+[node name="IfritGolemCollision" parent="IfritRoot/Skeleton3D/Root" index="0" instance=ExtResource("2_4kp3h")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 script = ExtResource("2_v71j8")
 
-[node name="AnimationPlayer" parent="." index="3"]
+[node name="StaticBody3D" parent="IfritRoot/Skeleton3D/Root/IfritGolemCollision/Floor" index="0" groups=["floor"]]
+
+[node name="StaticBody3D" parent="IfritRoot/Skeleton3D/Root/IfritGolemCollision/Wall" index="0" groups=["wall"]]
+
+[node name="JumpTarget" type="Node3D" parent="IfritRoot/Skeleton3D/Root" index="1"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -26, 0)
+
+[node name="Head" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="11"]
+transform = Transform3D(1, 1.50996e-07, -4.48798e-14, -1.50996e-07, 1, -4.20213e-06, -5.90409e-13, 4.20213e-06, 1, 3.01992e-07, 15.6, 0.700059)
+bone_name = "head"
+bone_idx = 4
+
+[node name="HeadHurtbox" type="Area3D" parent="IfritRoot/Skeleton3D/Head" index="0"]
+transform = Transform3D(1, -2.47767e-18, 0, -2.48097e-18, 1, 0, 0, 0, 1, 0, 4, 0)
+collision_layer = 4
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="IfritRoot/Skeleton3D/Head/HeadHurtbox" index="0"]
+transform = Transform3D(1, -2.47767e-18, 0, -2.48097e-18, 1, 0, 0, 0, 1, 0, -0.9, 5.96046e-08)
+shape = SubResource("SphereShape3D_c2y7b")
+
+[node name="DamagePath" type="Path3D" parent="IfritRoot/Skeleton3D" index="12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.25, 5.725, -18.25)
+curve = ExtResource("9_7nvwp")
+
+[node name="AnimationPlayer" parent="." index="1"]
 callback_mode_process = 0
 
-[node name="AnimationTree" type="AnimationTree" parent="." index="4"]
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
 active = false
 callback_mode_process = 0
 tree_root = SubResource("AnimationNodeBlendTree_bb4ub")
@@ -369,7 +382,49 @@ parameters/special_trigger/active = false
 parameters/special_trigger/internal_active = false
 parameters/special_trigger/request = 0
 
+[node name="Lava" parent="." index="3" instance=ExtResource("2_wope5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -15, 0)
+
+[node name="LavaRipple1Mesh" parent="Lava" index="0"]
+visible = false
+
+[node name="LavaRipple2Mesh" parent="Lava" index="2"]
+visible = false
+
+[node name="LavaRipple3Mesh" parent="Lava" index="3"]
+visible = false
+
+[node name="LavaHazard" type="Area3D" parent="Lava" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
+script = ExtResource("5_rxyxv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lava/LavaHazard" index="0"]
+shape = SubResource("BoxShape3D_utngs")
+
+[node name="ArenaPlatform" parent="." index="4" instance=ExtResource("2_nsyah")]
+
+[node name="Triggers" type="Node3D" parent="." index="5"]
+
+[node name="DamagePath" type="Node3D" parent="Triggers" index="0" node_paths=PackedStringArray("path")]
+script = ExtResource("10_prfje")
+path = NodePath("../../IfritRoot/Skeleton3D/DamagePath")
+affectCamera = false
+
+[node name="Lockout" type="Node3D" parent="Triggers" index="1"]
+script = ExtResource("11_iscui")
+lockoutData = ExtResource("12_cgkgo")
+
+[node name="EFBoss" parent="." index="6" instance=ExtResource("9_miuir")]
+
+[connection signal="StunEnded" from="." to="IfritRoot/Skeleton3D/Root/IfritGolemCollision" method="Deactivate"]
+[connection signal="StunEnded" from="." to="Triggers/Lockout" method="Deactivate"]
+[connection signal="Stunned" from="." to="IfritRoot/Skeleton3D/Root/IfritGolemCollision" method="Activate"]
+[connection signal="Stunned" from="." to="Triggers/DamagePath" method="Activate"]
+[connection signal="Stunned" from="." to="Triggers/Lockout" method="Activate"]
+[connection signal="area_entered" from="IfritRoot/Skeleton3D/Head/HeadHurtbox" to="." method="OnHeadEntered"]
+[connection signal="area_exited" from="IfritRoot/Skeleton3D/Head/HeadHurtbox" to="." method="OnHeadExited"]
 [connection signal="area_entered" from="Lava/LavaHazard" to="Lava/LavaHazard" method="OnEntered"]
 [connection signal="area_exited" from="Lava/LavaHazard" to="Lava/LavaHazard" method="OnExited"]
 
+[editable path="IfritRoot/Skeleton3D/Root/IfritGolemCollision"]
 [editable path="Lava"]

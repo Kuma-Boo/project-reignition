@@ -9,13 +9,14 @@ public partial class IfritGolem : Node3D
 	[Export(PropertyHint.NodeType, "Node3D")] private NodePath root;
 	private Node3D Root { get; set; }
 	[Export(PropertyHint.NodeType, "AnimationTree")] private NodePath animationTree;
-	private AnimationTree AnimationTree;
+	private AnimationTree AnimationTree { get; set; }
+	[Export(PropertyHint.NodeType, "Area3D")] private NodePath headHurtbox;
+	private Area3D HeadHurtbox { get; set; }
+
 	[Export] private Core[] cores;
 	[ExportGroup("Animated Properties")]
 	/// <summary> Used in animations to blend rotations (because exporting stepped keyframes doesn't work...) </summary>
 	[Export(PropertyHint.Range, "0,1")] private float rotationBlend;
-	/// <summary> Used in animations to blend rotations (because exporting stepped keyframes doesn't work...) </summary>
-	[Export(PropertyHint.Range, "0,1")] private float rotationInfluence;
 	[Export] private bool updateRotations;
 
 	private GolemState currentState;
@@ -26,14 +27,18 @@ public partial class IfritGolem : Node3D
 		Step,
 		Stunned,
 		Damaged,
+		Recovery,
 		SpecialAttack,
 		Defeated
 	}
+
+	private PlayerController Player => StageSettings.Player;
 
 	/// <summary> Sector that the golem is currently facing. </summary>
 	private int currentSector;
 	/// <summary> Sector that the golem was previously facing (Used for blending rotation angles). </summary>
 	private int previousSector;
+	private void UpdatePreviousSector() => previousSector = currentSector;
 	/// <summary> Sector that the player is currently standing in. </summary>
 	private int playerSector = 4;
 	/// <summary> Called from stage signals. </summary>
@@ -70,6 +75,7 @@ public partial class IfritGolem : Node3D
 		Root = GetNode<Node3D>(root);
 		AnimationTree = GetNode<AnimationTree>(animationTree);
 		AnimationTree.Active = true;
+		HeadHurtbox = GetNode<Area3D>(headHurtbox);
 
 		foreach (Core core in cores)
 		{
@@ -86,6 +92,8 @@ public partial class IfritGolem : Node3D
 		currentSector = previousSector = 0;
 		currentState = GolemState.Idle;
 
+		RespawnCores();
+
 		// Reset Animations
 		NormalStatePlayback.Start(IdleAnimation);
 	}
@@ -96,6 +104,9 @@ public partial class IfritGolem : Node3D
 		{
 			case GolemState.Idle:
 				ProcessIdle();
+				break;
+			case GolemState.Stunned:
+				ProcessStun();
 				break;
 		}
 	}
@@ -108,7 +119,12 @@ public partial class IfritGolem : Node3D
 		// Update visual rotations
 		float currentRotation = currentSector * SectorRotationIncrementRad;
 		float previousRotation = previousSector * SectorRotationIncrementRad;
-		Root.Rotation = Vector3.Up * Mathf.LerpAngle(previousRotation, currentRotation, rotationBlend);
+		if (currentState == GolemState.Stunned)
+			currentRotation = Mathf.Lerp(previousRotation, currentRotation, rotationBlend);
+		else
+			currentRotation = Mathf.LerpAngle(previousRotation, currentRotation, rotationBlend);
+
+		Root.Rotation = Vector3.Up * (currentRotation % Mathf.Tau);
 	}
 
 	private void EnterIdle()
@@ -169,8 +185,73 @@ public partial class IfritGolem : Node3D
 	}
 	private void ExitStep() => EnterIdle();
 
-	private int rightHandCores = 3;
-	private int leftHandCores = 3;
+	[Signal] public delegate void StunnedEventHandler();
+	[Signal] public delegate void StunEndedEventHandler();
+
+	private AnimationNodeStateMachinePlayback HitstunStatePlayback => AnimationTree.Get(HitstunPlayback).Obj as AnimationNodeStateMachinePlayback;
+	private readonly StringName HitstunPlayback = "parameters/hitstun_state/playback";
+	private readonly StringName HitstunTrigger = "parameters/hitstun_trigger/request";
+	private readonly StringName HitstunLeftAnimation = "hitstun-l";
+	private readonly StringName HitstunRightAnimation = "hitstun-r";
+	private readonly StringName DamageAnimation = "damage";
+	private readonly StringName RecoveryAnimation = "recovery";
+	private void EnterHitstun(bool isRightHand)
+	{
+		// Update sectors
+		UpdatePreviousSector();
+		GD.PrintT(currentSector % 2 == 0, isRightHand);
+		currentSector += currentSector % 2 == 0 ? 0 : 1;
+		if (!isRightHand)
+			currentSector += 2;
+
+		headHealth = MaxHeadHealth;
+		currentState = GolemState.Stunned;
+		HitstunStatePlayback.Start(isRightHand ? HitstunRightAnimation : HitstunLeftAnimation);
+		AnimationTree.Set(HitstunTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	private void ExitHitstun()
+	{
+		isInteractingWithPlayer = false;
+
+		// TODO Make the player jump
+		EmitSignal(SignalName.StunEnded);
+	}
+
+	private void ProcessStun()
+	{
+		if (Player.IsOnGround && headHealth != MaxHeadHealth)
+		{
+			EnterRecovery();
+			return;
+		}
+
+		if (isInteractingWithPlayer)
+			UpdateInteraction();
+		else if (isInteractionProcessed && Player.AttackState == PlayerController.AttackStates.None)
+			ResetInteractionProcessed();
+	}
+
+	private void EnterDamage()
+	{
+		ExitHitstun();
+
+		HitstunStatePlayback.Start(DamageAnimation);
+		currentState = GolemState.Damaged;
+	}
+
+	private void EnterRecovery()
+	{
+		ExitHitstun();
+
+		HitstunStatePlayback.Start(RecoveryAnimation);
+		currentState = GolemState.Recovery;
+	}
+
+	#region Damageable Objects
+	private int rightHandCores;
+	private int leftHandCores;
+	private readonly int CoresPerHand = 3;
 	private void ShowCores()
 	{
 		foreach (Core core in cores)
@@ -195,6 +276,7 @@ public partial class IfritGolem : Node3D
 
 	private void RespawnCores()
 	{
+		rightHandCores = leftHandCores = CoresPerHand;
 		foreach (Core core in cores)
 		{
 			core.Respawn();
@@ -210,8 +292,7 @@ public partial class IfritGolem : Node3D
 			if (rightHandCores != 0)
 				return;
 
-
-
+			EnterHitstun(true);
 			return;
 		}
 
@@ -219,7 +300,88 @@ public partial class IfritGolem : Node3D
 		leftHandCores--;
 		if (leftHandCores != 0)
 			return;
+
+		EnterHitstun(false);
 	}
 
-	private void UpdatePreviousSector() => previousSector = currentSector;
+	private bool isInteractingWithPlayer;
+	private bool isInteractionProcessed;
+	private void SetInteractionProcessed()
+	{
+		isInteractionProcessed = true;
+		Player.AttackStateChange += ResetInteractionProcessed;
+	}
+
+	private void ResetInteractionProcessed()
+	{
+		isInteractionProcessed = false;
+		Player.AttackStateChange -= ResetInteractionProcessed;
+	}
+
+	private void UpdateInteraction()
+	{
+		if (isInteractingWithPlayer)
+			return;
+
+		switch (Player.AttackState)
+		{
+			case PlayerController.AttackStates.OneShot:
+				UpdateHeadDamage(3);
+				break;
+			case PlayerController.AttackStates.Weak:
+				UpdateHeadDamage(1);
+				break;
+			case PlayerController.AttackStates.Strong:
+				UpdateHeadDamage(2);
+				break;
+		}
+
+		SetInteractionProcessed();
+	}
+
+	private int headHealth;
+	private readonly int MaxHeadHealth = 3;
+	private void UpdateHeadDamage(int amount)
+	{
+		headHealth -= amount;
+
+		if (headHealth > 0)
+		{
+			Player.Camera.LockonTarget = HeadHurtbox;
+			Player.StartBounce(false);
+			return;
+		}
+
+		Player.Camera.LockonTarget = null;
+		Damage();
+	}
+
+	private int currentHealth;
+	private readonly int MaxHealth = 3;
+	private void Damage()
+	{
+		currentHealth--;
+
+		if (currentHealth > 0)
+			EnterDamage();
+	}
+	#endregion
+
+	#region Signals
+	private void OnHeadEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player"))
+			return;
+
+		isInteractingWithPlayer = true;
+	}
+
+	private void OnHeadExited(Area3D a)
+	{
+		if (!a.IsInGroup("player"))
+			return;
+
+		isInteractingWithPlayer = false;
+	}
+	#endregion
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bgprgy7jv3pxr"]
+[gd_scene load_steps=9 format=3 uid="uid://bgprgy7jv3pxr"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_iilpd"]
 [ext_resource type="PackedScene" uid="uid://554o5nn5ah4r" path="res://area/3 evil foundry/boss/Static.tscn" id="1_vi4ig"]
@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://uf7lyw3gw1fc" path="res://area/3 evil foundry/boss/camera/BossCam.tres" id="3_yn75d"]
 [ext_resource type="PackedScene" uid="uid://dakk7vvkh050f" path="res://area/3 evil foundry/boss/data/IfritGolem.tscn" id="4_28qle"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_evmsn"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="5_s4uog"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rxc87"]
 size = Vector3(20, 20, 15)
@@ -17,6 +18,10 @@ Data = ExtResource("2_ybwun")
 InitialCameraSettings = ExtResource("3_yn75d")
 
 [node name="BossAct" type="Node3D" parent="."]
+
+[node name="MainPath" type="Node3D" parent="BossAct" node_paths=PackedStringArray("path")]
+script = ExtResource("5_s4uog")
+path = NodePath("../../Static/Path/MainPath")
 
 [node name="IfritGolem" parent="BossAct" instance=ExtResource("4_28qle")]
 
@@ -76,6 +81,9 @@ metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="BossAct/SpawnPosition" instance=ExtResource("1_iilpd")]
 
+[connection signal="StunEnded" from="BossAct/IfritGolem" to="Static/Collision/Wall" method="Activate"]
+[connection signal="StunEnded" from="BossAct/IfritGolem" to="BossAct/MainPath" method="Activate"]
+[connection signal="Stunned" from="BossAct/IfritGolem" to="Static/Collision/Wall" method="Deactivate"]
 [connection signal="Activated" from="BossAct/SectorSignals/0" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [0]]
 [connection signal="Activated" from="BossAct/SectorSignals/1" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [1]]
 [connection signal="Activated" from="BossAct/SectorSignals/2" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [2]]

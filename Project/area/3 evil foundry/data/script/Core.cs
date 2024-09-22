@@ -38,7 +38,7 @@ public partial class Core : Area3D
 			return;
 
 		if (Player.IsHomingAttacking)
-			Player.StartBounce(true);
+			Player.StartBounce();
 
 		IsDamaged = true;
 		Animator.Play("damage");
