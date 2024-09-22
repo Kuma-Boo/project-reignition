@@ -5,10 +5,17 @@ namespace Project.Gameplay.Bosses;
 
 public partial class IfritGolem : Node3D
 {
-	[Export]
-	private Node3D root;
-	[Export]
-	private AnimationTree animationTree;
+	[ExportGroup("Components")]
+	[Export] private NodePath root;
+	private Node3D Root { get; set; }
+	[Export] private NodePath animationTree;
+	private AnimationTree AnimationTree;
+	[ExportGroup("Animated Properties")]
+	/// <summary> Used in animations to blend rotations (because exporting stepped keyframes doesn't work...) </summary>
+	[Export(PropertyHint.Range, "0,1")] private float rotationBlend;
+	/// <summary> Used in animations to blend rotations (because exporting stepped keyframes doesn't work...) </summary>
+	[Export(PropertyHint.Range, "0,1")] private float rotationInfluence;
+	[Export] private bool updateRotations;
 
 	private GolemState currentState;
 	private enum GolemState
@@ -24,6 +31,8 @@ public partial class IfritGolem : Node3D
 
 	/// <summary> Sector that the golem is currently facing. </summary>
 	private int currentSector;
+	/// <summary> Sector that the golem was previously facing (Used for blending rotation angles). </summary>
+	private int previousSector;
 	/// <summary> Sector that the player is currently standing in. </summary>
 	private int playerSector = 4;
 	/// <summary> Called from stage signals. </summary>
@@ -57,23 +66,22 @@ public partial class IfritGolem : Node3D
 
 	public override void _Ready()
 	{
-		StageSettings.Instance.Respawned += Respawn;
-		animationTree.Active = true;
+		Root = GetNode<Node3D>(root);
+		AnimationTree = GetNode<AnimationTree>(animationTree);
+		AnimationTree.Active = true;
 
+		StageSettings.Instance.Respawned += Respawn;
 		// TODO Play introduction cutscene
 		Respawn();
 	}
 
 	private void Respawn()
 	{
-		currentSector = 0;
+		currentSector = previousSector = 0;
 		currentState = GolemState.Idle;
 
 		// Reset Animations
 		NormalStatePlayback.Start(IdleAnimation);
-
-		// Update rotation
-		UpdateRotation();
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -85,6 +93,8 @@ public partial class IfritGolem : Node3D
 				break;
 		}
 	}
+
+	public override void _Process(double _) => UpdateRotation();
 
 	private void ProcessIdle()
 	{
@@ -103,7 +113,7 @@ public partial class IfritGolem : Node3D
 			EnterStep();
 	}
 
-	private AnimationNodeStateMachinePlayback NormalStatePlayback => animationTree.Get(NormalPlayback).Obj as AnimationNodeStateMachinePlayback;
+	private AnimationNodeStateMachinePlayback NormalStatePlayback => AnimationTree.Get(NormalPlayback).Obj as AnimationNodeStateMachinePlayback;
 	private readonly StringName NormalPlayback = "parameters/normal_state/playback";
 	private readonly StringName StepLeftAnimation = "step-l";
 	private readonly StringName StepRightAnimation = "step-r";
@@ -111,6 +121,7 @@ public partial class IfritGolem : Node3D
 	private void EnterStep()
 	{
 		stepTimer = 0f;
+		UpdatePreviousSector();
 		int targetSector = CalculateTargetSector();
 		if (targetSector > currentSector)
 		{
@@ -131,5 +142,15 @@ public partial class IfritGolem : Node3D
 	private void ExitStep() => currentState = GolemState.Idle;
 
 	/// <summary> Updates the rotation of the golem's visual model. </summary>
-	private void UpdateRotation() => root.Rotation = Vector3.Up * currentSector * SectorRotationIncrementRad;
+	private void UpdateRotation()
+	{
+		if (!updateRotations)
+			return;
+
+		float currentRotation = currentSector * SectorRotationIncrementRad;
+		float previousRotation = previousSector * SectorRotationIncrementRad;
+		Root.Rotation = Vector3.Up * Mathf.LerpAngle(previousRotation, currentRotation, rotationBlend);
+	}
+
+	private void UpdatePreviousSector() => previousSector = currentSector;
 }
