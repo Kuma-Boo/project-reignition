@@ -100,6 +100,8 @@ public partial class IfritGolem : Node3D
 		currentState = GolemState.Idle;
 		Root.Rotation = Vector3.Zero;
 
+		headRotationRatio = targetHeadRotationRatio = 0;
+
 		currentHealth = MaxHealth;
 		RespawnCores();
 
@@ -124,6 +126,8 @@ public partial class IfritGolem : Node3D
 				ProcessStun();
 				break;
 		}
+
+		UpdateHeadRotation();
 	}
 
 	public override void _Process(double _)
@@ -404,6 +408,58 @@ public partial class IfritGolem : Node3D
 	}
 
 	private void FinishLevel() => StageSettings.Instance.FinishLevel(true);
+	#endregion
+
+	#region Attacks
+	private bool isHeadAttackActive;
+	private float headRotationRatio;
+	private float targetHeadRotationRatio;
+	private float headRotationVelocity;
+	private readonly StringName HeadBlend = "parameters/head_blend/blend_amount";
+	private readonly float MaxHeadRotation = Mathf.Pi / 4f;
+	private readonly float HeadSmoothing = 0.1f;
+	private readonly float LaserLeadMultiplier = 10.0f;
+	private void UpdateHeadRotation()
+	{
+		UpdateHeadTargetRotation();
+
+		headRotationRatio = ExtensionMethods.SmoothDamp(headRotationRatio, targetHeadRotationRatio, ref headRotationVelocity, HeadSmoothing);
+		AnimationTree.Set(HeadBlend, headRotationRatio);
+	}
+
+	private void UpdateHeadTargetRotation()
+	{
+		if (isHeadAttackActive) // Mid-attack; Don't rotate
+			return;
+
+		if (currentState != GolemState.Idle && currentState != GolemState.Step)
+		{
+			targetHeadRotationRatio = 0;
+			return;
+		}
+
+		float delta = ExtensionMethods.SignedDeltaAngleRad(Player.GlobalPosition.Flatten().AngleTo(Vector2.Down), Root.Rotation.Y);
+		GD.Print(Mathf.RadToDeg(delta));
+		if (Mathf.Abs(delta) > MaxHeadRotation * 2f)
+		{
+			targetHeadRotationRatio = 0;
+			return;
+		}
+
+		delta = Mathf.Clamp(delta / MaxHeadRotation, -1f, 1f);
+		targetHeadRotationRatio = delta;
+	}
+
+	private void StartLaserAttack()
+	{
+		float progress = Player.PathFollower.Progress;
+		if (Player.IsMovingBackward)
+			Player.PathFollower.Progress -= Player.MoveSpeed * LaserLeadMultiplier;
+		else
+			Player.PathFollower.Progress += Player.MoveSpeed * LaserLeadMultiplier;
+		Vector3 samplePosition = Player.PathFollower.GlobalPosition;
+		Player.PathFollower.Progress = progress;
+	}
 	#endregion
 
 	#region Signals
