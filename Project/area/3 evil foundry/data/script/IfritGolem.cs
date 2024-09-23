@@ -413,6 +413,9 @@ public partial class IfritGolem : Node3D
 			return;
 
 		isInteractingWithPlayer = true;
+
+		if (currentState == GolemState.Stunned)
+			ProcessStun();
 	}
 
 	private void OnHeadExited(Area3D a)
