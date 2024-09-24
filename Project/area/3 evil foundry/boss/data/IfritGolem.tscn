@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=85 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
@@ -328,7 +328,17 @@ shader_parameter/texture_albedo = ExtResource("19_4xrqc")
 [sub_resource type="QuadMesh" id="QuadMesh_106a2"]
 material = SubResource("ShaderMaterial_jnd80")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qipee"]
+specular_mode = 2
+albedo_color = Color(0.976471, 0.278431, 0, 1)
+metallic_specular = 0.0
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+emission_energy_multiplier = 5.0
+
 [sub_resource type="BoxMesh" id="BoxMesh_2o48d"]
+material = SubResource("StandardMaterial3D_qipee")
+size = Vector3(0.1, 0.1, 1)
 
 [node name="IfritGolem" node_paths=PackedStringArray("cores", "burnPositions") instance=ExtResource("1_37vkv")]
 script = ExtResource("2_jm400")
@@ -626,10 +636,12 @@ process_material = SubResource("ParticleProcessMaterial_bo57r")
 draw_pass_1 = SubResource("QuadMesh_106a2")
 
 [node name="Laser" type="Node3D" parent="." index="10"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17, 11)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 20, -1.9, 13.7, 4.41351)
 
 [node name="LaserMesh" type="MeshInstance3D" parent="Laser" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+layers = 32
+cast_shadow = 0
 mesh = SubResource("BoxMesh_2o48d")
 skeleton = NodePath("../..")
 
