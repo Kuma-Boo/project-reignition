@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=84 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
@@ -15,6 +15,12 @@
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="11_iscui"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="12_cgkgo"]
 [ext_resource type="Resource" uid="uid://uf7lyw3gw1fc" path="res://area/3 evil foundry/boss/camera/LowCam.tres" id="15_3iytr"]
+[ext_resource type="Shader" path="res://effect/shader/particle/ParticleLocalBillboard.gdshader" id="16_vd0ip"]
+[ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="17_n2j05"]
+[ext_resource type="Material" uid="uid://c6fc13de00bdn" path="res://object/stage/common/resource/model/material/Goal Flame Base.tres" id="18_a4xxb"]
+[ext_resource type="Texture2D" uid="uid://b6mr44o0sk3wj" path="res://area/1 sand oasis/boss/effect/texture/flying eye.png" id="19_4xrqc"]
+[ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffsetFade.gdshader" id="19_khjmj"]
+[ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffset.gdshader" id="19_sr8ns"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n2677"]
 size = Vector3(20, 20, 5)
@@ -220,6 +226,109 @@ node_connections = [&"gear_add", 0, &"hitstun_trigger", &"gear_add", 1, &"gear_a
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_utngs"]
 size = Vector3(100, 5, 100)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_r8hfe"]
+lifetime_randomness = 0.4
+gravity = Vector3(0, 0, 0)
+attractor_interaction_enabled = false
+scale_max = 1.2
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qdfrg"]
+render_priority = 0
+shader = ExtResource("16_vd0ip")
+shader_parameter/particles_anim_loop = false
+shader_parameter/particles_anim_h_frames = 4
+shader_parameter/particles_anim_v_frames = 4
+shader_parameter/albedo = ExtResource("17_n2j05")
+
+[sub_resource type="QuadMesh" id="QuadMesh_w6uoc"]
+material = SubResource("ShaderMaterial_qdfrg")
+size = Vector2(2, 5)
+center_offset = Vector3(0, 2.5, 0)
+
+[sub_resource type="Curve" id="Curve_qkoqb"]
+_data = [Vector2(0, 0), 0.0, 26.6316, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_ma5a7"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_qkoqb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iyovd"]
+particle_flag_align_y = true
+particle_flag_rotate_y = true
+emission_shape_offset = Vector3(0, -0.25, 0)
+emission_shape = 3
+emission_box_extents = Vector3(2.5, 0.5, 0)
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 3.0
+alpha_curve = SubResource("CurveTexture_ma5a7")
+anim_speed_min = 0.5
+anim_speed_max = 1.0
+anim_offset_max = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_flg4p"]
+material = ExtResource("18_a4xxb")
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="Curve" id="Curve_kbw7r"]
+_data = [Vector2(0, 0.5), 0.0, 0.962539, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_mvd5r"]
+width = 64
+curve = SubResource("Curve_kbw7r")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cpgow"]
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_mvd5r")
+color = Color(1, 1, 0.470588, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_viv8e"]
+render_priority = 0
+shader = ExtResource("19_khjmj")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/distance_fade_min = -20.0
+shader_parameter/distance_fade_max = 30.0
+shader_parameter/clipping_offset = 1.0
+shader_parameter/texture_albedo = ExtResource("19_4xrqc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_aphx1"]
+material = SubResource("ShaderMaterial_viv8e")
+
+[sub_resource type="Curve" id="Curve_pmgtg"]
+_data = [Vector2(0, 0), 0.0, 6.60032, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -0.272006, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_wwglt"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_pmgtg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bo57r"]
+gravity = Vector3(0, 0, 0)
+scale_min = 10.0
+scale_max = 10.0
+alpha_curve = SubResource("CurveTexture_wwglt")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jnd80"]
+render_priority = 0
+shader = ExtResource("19_sr8ns")
+shader_parameter/albedo = Color(1, 0.700804, 0.662181, 1)
+shader_parameter/clipping_offset = 3.0
+shader_parameter/texture_albedo = ExtResource("19_4xrqc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_106a2"]
+material = SubResource("ShaderMaterial_jnd80")
+
+[sub_resource type="BoxMesh" id="BoxMesh_2o48d"]
 
 [node name="IfritGolem" node_paths=PackedStringArray("cores", "burnPositions") instance=ExtResource("1_37vkv")]
 script = ExtResource("2_jm400")
@@ -455,6 +564,74 @@ settings = ExtResource("9_6fxph")
 script = ExtResource("7_7kxhk")
 transitionTime = 0.5
 settings = ExtResource("15_3iytr")
+
+[node name="FlameExplosion" type="GPUParticles3D" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26.75, 0)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="LaserFlame" type="GPUParticles3D" parent="." index="7"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4.37114e-08, 0.974998, -26)
+layers = 32
+emitting = false
+amount = 64
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -1, -2, 8, 4, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_iyovd")
+draw_pass_1 = SubResource("QuadMesh_flg4p")
+
+[node name="EyeR" type="GPUParticles3D" parent="." index="8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 13.6, 4.4)
+layers = 32
+amount = 16
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
+draw_order = 3
+transform_align = 1
+process_material = SubResource("ParticleProcessMaterial_cpgow")
+draw_pass_1 = SubResource("QuadMesh_aphx1")
+
+[node name="EyeFlash" type="GPUParticles3D" parent="." index="9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 13.6, 4.4)
+layers = 32
+emitting = false
+amount = 12
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
+draw_order = 3
+transform_align = 1
+process_material = SubResource("ParticleProcessMaterial_bo57r")
+draw_pass_1 = SubResource("QuadMesh_106a2")
+
+[node name="Laser" type="Node3D" parent="." index="10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17, 11)
+
+[node name="LaserMesh" type="MeshInstance3D" parent="Laser" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+mesh = SubResource("BoxMesh_2o48d")
+skeleton = NodePath("../..")
 
 [connection signal="StunEnded" from="." to="IfritRoot/Skeleton3D/Root/IfritGolemCollision" method="Deactivate"]
 [connection signal="StunEnded" from="." to="Triggers/Lockout" method="Deactivate"]
