@@ -167,7 +167,7 @@ public partial class IfritGolem : Node3D
 	}
 
 	private float stepTimer;
-	private readonly float StepInterval = 0.5f;
+	private readonly float StepInterval = 1f;
 	private void AttemptStep()
 	{
 		stepTimer = Mathf.MoveToward(stepTimer, StepInterval, PhysicsManager.physicsDelta);

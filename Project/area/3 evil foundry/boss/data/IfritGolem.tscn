@@ -25,8 +25,56 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_n2677"]
 size = Vector3(20, 20, 5)
 
+[sub_resource type="Curve" id="Curve_kbw7r"]
+_data = [Vector2(0, 0.5), 0.0, 0.962539, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_mvd5r"]
+width = 64
+curve = SubResource("Curve_kbw7r")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cpgow"]
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_mvd5r")
+color = Color(1, 1, 0.470588, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_viv8e"]
+render_priority = 0
+shader = ExtResource("19_khjmj")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/distance_fade_min = -20.0
+shader_parameter/distance_fade_max = 30.0
+shader_parameter/clipping_offset = 1.0
+shader_parameter/texture_albedo = ExtResource("19_4xrqc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_aphx1"]
+material = SubResource("ShaderMaterial_viv8e")
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_c2y7b"]
 radius = 1.75
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_r8hfe"]
+lifetime_randomness = 0.4
+gravity = Vector3(0, 0, 0)
+attractor_interaction_enabled = false
+scale_max = 1.2
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qdfrg"]
+render_priority = 0
+shader = ExtResource("16_vd0ip")
+shader_parameter/particles_anim_loop = false
+shader_parameter/particles_anim_h_frames = 4
+shader_parameter/particles_anim_v_frames = 4
+shader_parameter/albedo = ExtResource("17_n2j05")
+
+[sub_resource type="QuadMesh" id="QuadMesh_w6uoc"]
+material = SubResource("ShaderMaterial_qdfrg")
+size = Vector2(2, 5)
+center_offset = Vector3(0, 2.5, 0)
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_g8eyb"]
 filter_enabled = true
@@ -227,27 +275,6 @@ node_connections = [&"gear_add", 0, &"hitstun_trigger", &"gear_add", 1, &"gear_a
 [sub_resource type="BoxShape3D" id="BoxShape3D_utngs"]
 size = Vector3(100, 5, 100)
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_r8hfe"]
-lifetime_randomness = 0.4
-gravity = Vector3(0, 0, 0)
-attractor_interaction_enabled = false
-scale_max = 1.2
-anim_speed_min = 1.0
-anim_speed_max = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qdfrg"]
-render_priority = 0
-shader = ExtResource("16_vd0ip")
-shader_parameter/particles_anim_loop = false
-shader_parameter/particles_anim_h_frames = 4
-shader_parameter/particles_anim_v_frames = 4
-shader_parameter/albedo = ExtResource("17_n2j05")
-
-[sub_resource type="QuadMesh" id="QuadMesh_w6uoc"]
-material = SubResource("ShaderMaterial_qdfrg")
-size = Vector2(2, 5)
-center_offset = Vector3(0, 2.5, 0)
-
 [sub_resource type="Curve" id="Curve_qkoqb"]
 _data = [Vector2(0, 0), 0.0, 26.6316, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 4
@@ -275,33 +302,6 @@ anim_offset_max = 1.0
 [sub_resource type="QuadMesh" id="QuadMesh_flg4p"]
 material = ExtResource("18_a4xxb")
 center_offset = Vector3(0, 0.5, 0)
-
-[sub_resource type="Curve" id="Curve_kbw7r"]
-_data = [Vector2(0, 0.5), 0.0, 0.962539, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_mvd5r"]
-width = 64
-curve = SubResource("Curve_kbw7r")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cpgow"]
-gravity = Vector3(0, 0, 0)
-scale_min = 2.0
-scale_max = 2.0
-scale_curve = SubResource("CurveTexture_mvd5r")
-color = Color(1, 1, 0.470588, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_viv8e"]
-render_priority = 0
-shader = ExtResource("19_khjmj")
-shader_parameter/albedo = Color(1, 1, 1, 1)
-shader_parameter/distance_fade_min = -20.0
-shader_parameter/distance_fade_max = 30.0
-shader_parameter/clipping_offset = 1.0
-shader_parameter/texture_albedo = ExtResource("19_4xrqc")
-
-[sub_resource type="QuadMesh" id="QuadMesh_aphx1"]
-material = SubResource("ShaderMaterial_viv8e")
 
 [sub_resource type="Curve" id="Curve_pmgtg"]
 _data = [Vector2(0, 0), 0.0, 6.60032, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -0.272006, 0.0, 0, 0]
@@ -497,7 +497,33 @@ transform = Transform3D(1, 1.50996e-07, -4.48798e-14, -1.50996e-07, 1, -4.20213e
 bone_name = "head"
 bone_idx = 4
 
-[node name="HeadHurtbox" type="Area3D" parent="IfritRoot/Skeleton3D/Head" index="0"]
+[node name="EyeR" type="GPUParticles3D" parent="IfritRoot/Skeleton3D/Head" index="0"]
+transform = Transform3D(1, -1.50996e-07, -5.65642e-13, 1.50996e-07, 1, 4.20213e-06, -7.07383e-14, -4.20213e-06, 1, -1.8, -1.99998, 3.69995)
+layers = 32
+amount = 16
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
+draw_order = 3
+transform_align = 1
+process_material = SubResource("ParticleProcessMaterial_cpgow")
+draw_pass_1 = SubResource("QuadMesh_aphx1")
+
+[node name="EyeL" type="GPUParticles3D" parent="IfritRoot/Skeleton3D/Head" index="1"]
+transform = Transform3D(1, -1.50996e-07, -5.65642e-13, 1.50996e-07, 1, 4.20213e-06, -7.07383e-14, -4.20213e-06, 1, 1.8, -2, 3.7)
+layers = 32
+amount = 16
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
+draw_order = 3
+transform_align = 1
+process_material = SubResource("ParticleProcessMaterial_cpgow")
+draw_pass_1 = SubResource("QuadMesh_aphx1")
+
+[node name="HeadHurtbox" type="Area3D" parent="IfritRoot/Skeleton3D/Head" index="2"]
 transform = Transform3D(1, 1.42084e-14, 0, -2.48097e-18, 1, 0, 0, 0, 1, 2.27374e-13, 4.4, 0)
 collision_layer = 4
 collision_mask = 2
@@ -507,6 +533,159 @@ monitorable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="IfritRoot/Skeleton3D/Head/HeadHurtbox" index="0"]
 transform = Transform3D(1, -1.42133e-14, 0, 1.42084e-14, 1, 0, 0, 0, 1, 2.27374e-13, -1.5, 5.96046e-08)
 shape = SubResource("SphereShape3D_c2y7b")
+
+[node name="RShoulder" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="12"]
+transform = Transform3D(3.57628e-07, -1, -2.38767e-07, 1, 3.57629e-07, -3.39074e-06, 3.39074e-06, -2.38766e-07, 1, -9, 8.5, 3.20673e-05)
+bone_name = "r_shoulder"
+bone_idx = 7
+
+[node name="FlameExplosion1" type="GPUParticles3D" parent="IfritRoot/Skeleton3D/RShoulder" index="0"]
+transform = Transform3D(-4.37114e-08, 1, 2.27374e-13, -1, -4.37112e-08, -1.13687e-13, -5.68434e-13, -1.59162e-12, 0.999999, 6, -3.45, 0.8)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="FlameExplosion2" type="GPUParticles3D" parent="IfritRoot/Skeleton3D/RShoulder" index="1"]
+transform = Transform3D(-4.37114e-08, 1, 2.27374e-13, -1, -4.37112e-08, -1.42109e-13, -5.96856e-13, -1.81899e-12, 0.999999, 6, -3.45, -1.4)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="LShoulder" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="13"]
+transform = Transform3D(0, 1, 3.26191e-07, -1, 1.47763e-12, -3.26236e-06, -3.26236e-06, -3.26191e-07, 1, 9, 8.5, 3.20673e-05)
+bone_name = "l_shoulder"
+bone_idx = 18
+
+[node name="FlameExplosion1" type="GPUParticles3D" parent="IfritRoot/Skeleton3D/LShoulder" index="0"]
+transform = Transform3D(-4.37114e-08, -1, 1.36424e-12, 1, -4.37114e-08, -5.40012e-13, 5.68434e-13, 1.36424e-12, 0.999999, -6, -3.45, 0.8)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="FlameExplosion2" type="GPUParticles3D" parent="IfritRoot/Skeleton3D/LShoulder" index="1"]
+transform = Transform3D(-4.37114e-08, -1, 1.36424e-12, 1, -4.37114e-08, -5.68434e-13, 5.96856e-13, 1.59162e-12, 0.999999, -6, -3.45, -1.4)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="LShoulder2" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="14"]
+transform = Transform3D(1, 0, 0, 0, 1, -4.52995e-06, 0, 4.52995e-06, 1, 0, 7, 2.52724e-05)
+bone_name = "body"
+bone_idx = 1
+
+[node name="FlameExplosion1" type="GPUParticles3D" parent="IfritRoot/Skeleton3D/LShoulder2" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 1.8, 5.5, -5)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="FlameExplosion2" type="GPUParticles3D" parent="IfritRoot/Skeleton3D/LShoulder2" index="1"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, -1.8, 5.5, -5)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="RElbow" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="15"]
+transform = Transform3D(1, 1.86932e-07, 2.71921e-07, -1.86913e-07, 1, 8.21355e-06, -2.7192e-07, -8.21355e-06, 1, -20.2, 8.5, 1.40003)
+bone_name = "r_elbow"
+bone_idx = 10
+
+[node name="FlameExplosion" type="GPUParticles3D" parent="IfritRoot/Skeleton3D/RElbow" index="0"]
+transform = Transform3D(1, 0, 1.51788e-18, 2.32626e-15, -4.37158e-08, 1, 0, -1, -4.37158e-08, 1.6, -1.2, -5.3)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="LElbow" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="16"]
+transform = Transform3D(1, -1.42997e-07, 9.27298e-08, 1.42998e-07, 1, -1.17727e-06, -9.27296e-08, 1.17727e-06, 1, 20.2, 8.5, 1.40003)
+bone_name = "l_elbow"
+bone_idx = 21
+
+[node name="FlameExplosion" type="GPUParticles3D" parent="IfritRoot/Skeleton3D/LElbow" index="0"]
+transform = Transform3D(1, 0, 1.51788e-18, 2.32626e-15, -4.37158e-08, 1, 0, -1, -4.37158e-08, -1.6, -1.2, -5.3)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
 
 [node name="AnimationPlayer" parent="." index="1"]
 callback_mode_process = 0
@@ -575,24 +754,8 @@ script = ExtResource("7_7kxhk")
 transitionTime = 0.5
 settings = ExtResource("15_3iytr")
 
-[node name="FlameExplosion" type="GPUParticles3D" parent="." index="6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26.75, 0)
-layers = 32
-cast_shadow = 0
-gi_mode = 0
-emitting = false
-lifetime = 0.5
-one_shot = true
-explosiveness = 0.8
-fixed_fps = 0
-interpolate = false
-visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
-local_coords = true
-process_material = SubResource("ParticleProcessMaterial_r8hfe")
-draw_pass_1 = SubResource("QuadMesh_w6uoc")
-
-[node name="LaserFlame" type="GPUParticles3D" parent="." index="7"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4.37114e-08, 0.974998, -26)
+[node name="LaserFlame" type="GPUParticles3D" parent="." index="6"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.975, 26)
 layers = 32
 emitting = false
 amount = 64
@@ -606,21 +769,10 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_iyovd")
 draw_pass_1 = SubResource("QuadMesh_flg4p")
 
-[node name="EyeR" type="GPUParticles3D" parent="." index="8"]
+[node name="EyeLaser" type="Node3D" parent="." index="7"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 13.6, 4.4)
-layers = 32
-amount = 16
-lifetime = 0.5
-fixed_fps = 0
-interpolate = false
-visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
-draw_order = 3
-transform_align = 1
-process_material = SubResource("ParticleProcessMaterial_cpgow")
-draw_pass_1 = SubResource("QuadMesh_aphx1")
 
-[node name="EyeFlash" type="GPUParticles3D" parent="." index="9"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 13.6, 4.4)
+[node name="EyeFlash" type="GPUParticles3D" parent="EyeLaser" index="0"]
 layers = 32
 emitting = false
 amount = 12
@@ -629,21 +781,22 @@ one_shot = true
 explosiveness = 1.0
 fixed_fps = 0
 interpolate = false
-visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
+visibility_aabb = AABB(-3, -3, -3, 6, 6, 6)
+local_coords = true
 draw_order = 3
 transform_align = 1
 process_material = SubResource("ParticleProcessMaterial_bo57r")
 draw_pass_1 = SubResource("QuadMesh_106a2")
 
-[node name="Laser" type="Node3D" parent="." index="10"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 20, -1.9, 13.7, 4.41351)
+[node name="Laser" type="Node3D" parent="EyeLaser" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0)
 
-[node name="LaserMesh" type="MeshInstance3D" parent="Laser" index="0"]
+[node name="LaserMesh" type="MeshInstance3D" parent="EyeLaser/Laser" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 layers = 32
 cast_shadow = 0
 mesh = SubResource("BoxMesh_2o48d")
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 
 [connection signal="StunEnded" from="." to="IfritRoot/Skeleton3D/Root/IfritGolemCollision" method="Deactivate"]
 [connection signal="StunEnded" from="." to="Triggers/Lockout" method="Deactivate"]
