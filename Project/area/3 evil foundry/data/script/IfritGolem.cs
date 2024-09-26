@@ -16,6 +16,12 @@ public partial class IfritGolem : Node3D
 	private Node3D DamagePath { get; set; }
 	[Export(PropertyHint.NodeType, "Node3D")] private NodePath playerLaunchTarget;
 	private Node3D PlayerLaunchTarget { get; set; }
+	[Export(PropertyHint.NodeType, "Node3D")] private NodePath rightEye;
+	[Export(PropertyHint.NodeType, "Node3D")] private NodePath leftEye;
+	private Node3D RightEye { get; set; }
+	private Node3D LeftEye { get; set; }
+	[Export(PropertyHint.NodeType, "Node3D")] private NodePath laserRoot;
+	private Node3D LaserRoot { get; set; }
 
 	[Export] private Core[] cores;
 	[Export] private Node3D[] burnPositions;
@@ -84,6 +90,9 @@ public partial class IfritGolem : Node3D
 		DamagePath = GetNode<Node3D>(damagePath);
 		PlayerLaunchTarget = GetNode<Node3D>(playerLaunchTarget);
 
+		LeftEye = GetNode<Node3D>(leftEye);
+		RightEye = GetNode<Node3D>(rightEye);
+
 		foreach (Core core in cores)
 		{
 			core.CoreDestroyed += OnCoreDestroyed;
@@ -104,6 +113,8 @@ public partial class IfritGolem : Node3D
 
 		currentHealth = MaxHealth;
 		RespawnCores();
+
+		StopLaserAttack();
 
 		// Reset Animations
 		NormalStatePlayback.Start(IdleAnimation);
@@ -128,6 +139,8 @@ public partial class IfritGolem : Node3D
 		}
 
 		UpdateHeadRotation();
+		if (isLaserAttackActive)
+			ProcessLaserAttack();
 	}
 
 	public override void _Process(double _)
@@ -155,8 +168,14 @@ public partial class IfritGolem : Node3D
 
 	private void ProcessIdle()
 	{
-		if (IsFocusingOnPlayer)
+		if (isLaserAttackActive) // Wait for laser attack to finish
 			return;
+
+		if (IsFocusingOnPlayer)
+		{
+			AttemptLaserAttack();
+			return;
+		}
 
 		AttemptStep();
 	}
@@ -411,7 +430,9 @@ public partial class IfritGolem : Node3D
 	#endregion
 
 	#region Attacks
-	private bool isHeadAttackActive;
+	private bool isLaserAttackActive;
+	private bool isLaserFromRightEye;
+	private float laserAttackTimer;
 	private float headRotationRatio;
 	private float targetHeadRotationRatio;
 	private float headRotationVelocity;
@@ -419,6 +440,7 @@ public partial class IfritGolem : Node3D
 	private readonly float MaxHeadRotation = Mathf.Pi / 4f;
 	private readonly float HeadSmoothing = 0.1f;
 	private readonly float LaserLeadMultiplier = 10.0f;
+	private readonly float LaserAttackInterval = 1f;
 	private void UpdateHeadRotation()
 	{
 		UpdateHeadTargetRotation();
@@ -429,7 +451,7 @@ public partial class IfritGolem : Node3D
 
 	private void UpdateHeadTargetRotation()
 	{
-		if (isHeadAttackActive) // Mid-attack; Don't rotate
+		if (isLaserAttackActive) // Mid-attack; Don't rotate
 			return;
 
 		if (currentState != GolemState.Idle && currentState != GolemState.Step)
@@ -439,7 +461,6 @@ public partial class IfritGolem : Node3D
 		}
 
 		float delta = ExtensionMethods.SignedDeltaAngleRad(Player.GlobalPosition.Flatten().AngleTo(Vector2.Down), Root.Rotation.Y);
-		GD.Print(Mathf.RadToDeg(delta));
 		if (Mathf.Abs(delta) > MaxHeadRotation * 2f)
 		{
 			targetHeadRotationRatio = 0;
@@ -450,8 +471,19 @@ public partial class IfritGolem : Node3D
 		targetHeadRotationRatio = delta;
 	}
 
+	private void AttemptLaserAttack()
+	{
+		laserAttackTimer -= PhysicsManager.physicsDelta;
+		if (laserAttackTimer > 0)
+			return;
+
+		StartLaserAttack();
+	}
+
 	private void StartLaserAttack()
 	{
+		isLaserAttackActive = true;
+
 		float progress = Player.PathFollower.Progress;
 		if (Player.IsMovingBackward)
 			Player.PathFollower.Progress -= Player.MoveSpeed * LaserLeadMultiplier;
@@ -459,6 +491,22 @@ public partial class IfritGolem : Node3D
 			Player.PathFollower.Progress += Player.MoveSpeed * LaserLeadMultiplier;
 		Vector3 samplePosition = Player.PathFollower.GlobalPosition;
 		Player.PathFollower.Progress = progress;
+
+		// TODO Decide which eye the laser spawns from based on player's position (or alternating eye attack)
+	}
+
+	private void ProcessLaserAttack()
+	{
+		if (isLaserFromRightEye)
+		{
+
+		}
+	}
+
+	private void StopLaserAttack()
+	{
+		isLaserAttackActive = false;
+		laserAttackTimer = LaserAttackInterval;
 	}
 	#endregion
 
