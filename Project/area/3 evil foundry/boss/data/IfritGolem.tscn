@@ -357,7 +357,7 @@ animationTree = NodePath("AnimationTree")
 headHurtbox = NodePath("IfritRoot/Skeleton3D/Head/HeadHurtbox")
 playerLaunchTarget = NodePath("IfritRoot/Skeleton3D/Root/LaunchTarget")
 cores = [NodePath("IfritRoot/Skeleton3D/RCore1/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/RCore2/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/RCore3/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore1/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore2/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore3/Core/GolemCore")]
-burnPositions = []
+burnPositions = [NodePath("ArenaPlatform/BurnPosition1"), NodePath("ArenaPlatform/BurnPosition2"), NodePath("ArenaPlatform/BurnPosition3")]
 
 [node name="Skeleton3D" parent="IfritRoot" index="0"]
 bones/2/rotation = Quaternion(0.0865145, -5.01917e-21, -2.9041e-14, 0.996251)
@@ -823,6 +823,7 @@ skeleton = NodePath("../../..")
 [connection signal="Activated" from="IfritRoot/Skeleton3D/Root/OvershootTrigger" to="." method="EnterRecovery"]
 [connection signal="area_entered" from="IfritRoot/Skeleton3D/Head/HeadHurtbox" to="." method="OnHeadEntered"]
 [connection signal="area_exited" from="IfritRoot/Skeleton3D/Head/HeadHurtbox" to="." method="OnHeadExited"]
+[connection signal="DamagedPlayer" from="Lava/LavaHazard" to="." method="OnLavaDamagedPlayer"]
 [connection signal="area_entered" from="Lava/LavaHazard" to="Lava/LavaHazard" method="OnEntered"]
 [connection signal="area_exited" from="Lava/LavaHazard" to="Lava/LavaHazard" method="OnExited"]
 

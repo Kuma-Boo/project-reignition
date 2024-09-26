@@ -25,76 +25,78 @@ metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="BossAct/SpawnPosition" instance=ExtResource("1_iilpd")]
 
-[node name="DamagePath" type="Node3D" parent="BossAct" node_paths=PackedStringArray("path")]
-script = ExtResource("5_s4uog")
-path = NodePath("../../Static/Path/DamagePath/DamagePath")
+[node name="Boss" type="Node3D" parent="BossAct"]
 
-[node name="MainPath" type="Node3D" parent="BossAct" node_paths=PackedStringArray("path")]
-script = ExtResource("5_s4uog")
-path = NodePath("../../Static/Path/MainPath")
+[node name="IfritGolem" parent="BossAct/Boss" instance=ExtResource("4_28qle")]
+damagePath = NodePath("../../../Static/Path/DamagePath")
 
-[node name="IfritGolem" parent="BossAct" instance=ExtResource("4_28qle")]
-damagePath = NodePath("../../Static/Path/DamagePath")
+[node name="SectorTriggers" type="Node3D" parent="BossAct/Boss"]
 
-[node name="SectorSignals" type="Node3D" parent="BossAct"]
-
-[node name="0" parent="BossAct/SectorSignals" instance=ExtResource("5_evmsn")]
+[node name="0" parent="BossAct/Boss/SectorTriggers" instance=ExtResource("5_evmsn")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 26)
 "Enter Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SectorSignals/0"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/Boss/SectorTriggers/0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_rxc87")
 
-[node name="1" parent="BossAct/SectorSignals" instance=ExtResource("5_evmsn")]
+[node name="1" parent="BossAct/Boss/SectorTriggers" instance=ExtResource("5_evmsn")]
 transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 22.5167, 0, 13)
 "Enter Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SectorSignals/1"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/Boss/SectorTriggers/1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_rxc87")
 
-[node name="2" parent="BossAct/SectorSignals" instance=ExtResource("5_evmsn")]
+[node name="2" parent="BossAct/Boss/SectorTriggers" instance=ExtResource("5_evmsn")]
 transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 22.5167, 0, -13)
 "Enter Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SectorSignals/2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/Boss/SectorTriggers/2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_rxc87")
 
-[node name="3" parent="BossAct/SectorSignals" instance=ExtResource("5_evmsn")]
+[node name="3" parent="BossAct/Boss/SectorTriggers" instance=ExtResource("5_evmsn")]
 transform = Transform3D(7.35137e-08, 0, -1, 0, 1, 0, 1, 0, 7.35137e-08, -7.7486e-07, 0, -26)
 "Enter Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SectorSignals/3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/Boss/SectorTriggers/3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_rxc87")
 
-[node name="4" parent="BossAct/SectorSignals" instance=ExtResource("5_evmsn")]
+[node name="4" parent="BossAct/Boss/SectorTriggers" instance=ExtResource("5_evmsn")]
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -22.5167, 0, -13)
 "Enter Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SectorSignals/4"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/Boss/SectorTriggers/4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_rxc87")
 
-[node name="5" parent="BossAct/SectorSignals" instance=ExtResource("5_evmsn")]
+[node name="5" parent="BossAct/Boss/SectorTriggers" instance=ExtResource("5_evmsn")]
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -22.5167, 0, 13)
 "Enter Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/SectorSignals/5"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/Boss/SectorTriggers/5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_rxc87")
 
-[connection signal="StunEnded" from="BossAct/IfritGolem" to="Static/Collision/Wall" method="Activate"]
-[connection signal="StunEnded" from="BossAct/IfritGolem" to="BossAct/MainPath" method="Activate"]
-[connection signal="Stunned" from="BossAct/IfritGolem" to="Static/Collision/Wall" method="Deactivate"]
-[connection signal="Stunned" from="BossAct/IfritGolem" to="BossAct/DamagePath" method="Activate"]
-[connection signal="Activated" from="BossAct/SectorSignals/0" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [0]]
-[connection signal="Activated" from="BossAct/SectorSignals/1" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [1]]
-[connection signal="Activated" from="BossAct/SectorSignals/2" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [2]]
-[connection signal="Activated" from="BossAct/SectorSignals/3" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [3]]
-[connection signal="Activated" from="BossAct/SectorSignals/4" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [4]]
-[connection signal="Activated" from="BossAct/SectorSignals/5" to="BossAct/IfritGolem" method="SetPlayerSector" binds= [5]]
+[node name="DamagePath" type="Node3D" parent="BossAct/Boss" node_paths=PackedStringArray("path")]
+script = ExtResource("5_s4uog")
+path = NodePath("../../../Static/Path/DamagePath/DamagePath")
+
+[node name="MainPath" type="Node3D" parent="BossAct/Boss" node_paths=PackedStringArray("path")]
+script = ExtResource("5_s4uog")
+path = NodePath("../../../Static/Path/MainPath")
+
+[connection signal="StunEnded" from="BossAct/Boss/IfritGolem" to="Static/Collision/Wall" method="Activate"]
+[connection signal="StunEnded" from="BossAct/Boss/IfritGolem" to="BossAct/Boss/MainPath" method="Activate"]
+[connection signal="Stunned" from="BossAct/Boss/IfritGolem" to="Static/Collision/Wall" method="Deactivate"]
+[connection signal="Stunned" from="BossAct/Boss/IfritGolem" to="BossAct/Boss/DamagePath" method="Activate"]
+[connection signal="Activated" from="BossAct/Boss/SectorTriggers/0" to="BossAct/Boss/IfritGolem" method="SetPlayerSector" binds= [0]]
+[connection signal="Activated" from="BossAct/Boss/SectorTriggers/1" to="BossAct/Boss/IfritGolem" method="SetPlayerSector" binds= [1]]
+[connection signal="Activated" from="BossAct/Boss/SectorTriggers/2" to="BossAct/Boss/IfritGolem" method="SetPlayerSector" binds= [2]]
+[connection signal="Activated" from="BossAct/Boss/SectorTriggers/3" to="BossAct/Boss/IfritGolem" method="SetPlayerSector" binds= [3]]
+[connection signal="Activated" from="BossAct/Boss/SectorTriggers/4" to="BossAct/Boss/IfritGolem" method="SetPlayerSector" binds= [4]]
+[connection signal="Activated" from="BossAct/Boss/SectorTriggers/5" to="BossAct/Boss/IfritGolem" method="SetPlayerSector" binds= [5]]
 
 [editable path="Static"]

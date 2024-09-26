@@ -481,5 +481,19 @@ public partial class IfritGolem : Node3D
 
 		isInteractingWithPlayer = false;
 	}
+
+	private void OnLavaDamagedPlayer()
+	{
+		// Launch the player to the correct burn position
+		int burnPositionIndex = 0;
+		if (playerSector == 0 || playerSector == 5)
+			burnPositionIndex = 0;
+		else if (playerSector == 1 || playerSector == 2)
+			burnPositionIndex = 1;
+		else if (playerSector == 3 || playerSector == 4)
+			burnPositionIndex = 2;
+
+		Player.StartLauncher(LaunchSettings.Create(Player.GlobalPosition, burnPositions[burnPositionIndex].GlobalPosition, 5f, true));
+	}
 	#endregion
 }
