@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=105 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="9_xqc7y"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="11_iscui"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="12_cgkgo"]
+[ext_resource type="Material" uid="uid://cx8t0sy6gaqpm" path="res://area/3 evil foundry/boss/effect/material/Glow.tres" id="12_ltvht"]
 [ext_resource type="Resource" uid="uid://uf7lyw3gw1fc" path="res://area/3 evil foundry/boss/camera/LowCam.tres" id="15_3iytr"]
 [ext_resource type="Shader" path="res://effect/shader/particle/ParticleLocalBillboard.gdshader" id="16_vd0ip"]
 [ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="17_n2j05"]
@@ -21,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://b6mr44o0sk3wj" path="res://area/1 sand oasis/boss/effect/texture/flying eye.png" id="19_4xrqc"]
 [ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffsetFade.gdshader" id="19_khjmj"]
 [ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffset.gdshader" id="19_sr8ns"]
+[ext_resource type="Material" uid="uid://dv8e2vx0q5qy6" path="res://area/3 evil foundry/boss/effect/material/Laser Contact.tres" id="21_fakwu"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n2677"]
 size = Vector3(20, 20, 5)
@@ -54,6 +56,31 @@ material = SubResource("ShaderMaterial_viv8e")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_c2y7b"]
 radius = 1.75
+
+[sub_resource type="Curve" id="Curve_3mmys"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_en0dt"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_3mmys")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_n42eo"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 0, 1)
+spread = 180.0
+initial_velocity_min = 0.1
+initial_velocity_max = 0.1
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 10.0
+color = Color(1, 0.674989, 0.566275, 1)
+alpha_curve = SubResource("CurveTexture_en0dt")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ojqyr"]
+material = ExtResource("12_ltvht")
 
 [sub_resource type="Curve" id="Curve_hbebs"]
 _data = [Vector2(0.00260417, 0), 0.0, 30.4609, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -298,7 +325,7 @@ particle_flag_align_y = true
 particle_flag_rotate_y = true
 emission_shape_offset = Vector3(0, -0.25, 0)
 emission_shape = 3
-emission_box_extents = Vector3(2.5, 0.5, 0)
+emission_box_extents = Vector3(0, 0.5, 2.5)
 angle_max = 360.0
 gravity = Vector3(0, 0, 0)
 scale_min = 2.0
@@ -310,6 +337,53 @@ anim_offset_max = 1.0
 
 [sub_resource type="QuadMesh" id="QuadMesh_flg4p"]
 material = ExtResource("18_a4xxb")
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ln5ki"]
+size = Vector3(1, 2, 6)
+
+[sub_resource type="Curve" id="Curve_v4vtg"]
+_data = [Vector2(0, 0), 0.0, 2.98443, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_qjuh1"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_v4vtg")
+
+[sub_resource type="Curve" id="Curve_cd053"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_681f3"]
+_data = [Vector2(0, 0), 0.0, 8.82012, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.2263, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_0oh55"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_sqvs6"]
+width = 64
+curve_x = SubResource("Curve_cd053")
+curve_y = SubResource("Curve_681f3")
+curve_z = SubResource("Curve_0oh55")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_evm4e"]
+lifetime_randomness = 0.5
+particle_flag_align_y = true
+particle_flag_rotate_y = true
+angle_min = -90.0
+angle_max = 90.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 5.0
+scale_curve = SubResource("CurveXYZTexture_sqvs6")
+alpha_curve = SubResource("CurveTexture_qjuh1")
+
+[sub_resource type="QuadMesh" id="QuadMesh_amtrv"]
+material = ExtResource("21_fakwu")
+size = Vector2(0.5, 1)
 center_offset = Vector3(0, 0.5, 0)
 
 [sub_resource type="Curve" id="Curve_pmgtg"]
@@ -349,16 +423,218 @@ emission_energy_multiplier = 5.0
 material = SubResource("StandardMaterial3D_qipee")
 size = Vector3(0.1, 0.1, 1)
 
+[sub_resource type="Animation" id="Animation_3bxoj"]
+resource_name = "laser-close"
+length = 1.5
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Laser/Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Laser/Root/Beam:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.233333, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1.0472, 0, 0), Vector3(1.0472, 0, 0), Vector3(0.349066, 0, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Laser/Root/EyeFlash")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Laser/Root/Beam:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.233333, 0.3, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 2, 0.5, 1, 0.5, 1),
+"update": 0,
+"values": [Vector3(1, 1, 0), Vector3(1, 1, 0), Vector3(1, 1, 20), Vector3(1, 1, 40), Vector3(1, 1, 40), Vector3(0, 0, 40)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.966667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"StopLaserAttack"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Laser/VFXRoot/Flame/LaserFlame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Laser/VFXRoot/Flame:isDisabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.666667, 1.03333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Laser/VFXRoot/ContactLine:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.3, 0.433333),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, -2), Vector3(0, 0, 2)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Laser/VFXRoot/ContactLine:emitting")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+
+[sub_resource type="Animation" id="Animation_n5e8u"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Laser/Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Laser/Root/Beam:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.523599, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Laser/Root/Beam:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Laser/VFXRoot/Flame:isDisabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Laser/VFXRoot/ContactLine:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-1.31134e-07, 0, -3)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Laser/VFXRoot/ContactLine:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_k4tih"]
+_data = {
+"RESET": SubResource("Animation_n5e8u"),
+"laser-close": SubResource("Animation_3bxoj")
+}
+
 [node name="IfritGolem" node_paths=PackedStringArray("cores", "burnPositions") instance=ExtResource("1_37vkv")]
 script = ExtResource("2_jm400")
 root = NodePath("IfritRoot")
 animationTree = NodePath("AnimationTree")
+eventAnimator = NodePath("EventAnimator")
 headHurtbox = NodePath("IfritRoot/Skeleton3D/Head/HeadHurtbox")
 playerLaunchTarget = NodePath("IfritRoot/Skeleton3D/Root/LaunchTarget")
 rightEye = NodePath("IfritRoot/Skeleton3D/Head/EyeR")
 leftEye = NodePath("IfritRoot/Skeleton3D/Head/EyeL")
-laserRoot = NodePath("EyeLaser")
-laserBeam = NodePath("EyeLaser/Laser")
+laserRoot = NodePath("Laser/Root")
+laserBeam = NodePath("Laser/Root/Beam")
+laserVFXRoot = NodePath("Laser/VFXRoot")
 cores = [NodePath("IfritRoot/Skeleton3D/RCore1/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/RCore2/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/RCore3/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore1/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore2/Core/GolemCore"), NodePath("IfritRoot/Skeleton3D/LCore3/Core/GolemCore")]
 burnPositions = [NodePath("ArenaPlatform/BurnPosition1"), NodePath("ArenaPlatform/BurnPosition2"), NodePath("ArenaPlatform/BurnPosition3")]
 
@@ -548,6 +824,19 @@ monitorable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="IfritRoot/Skeleton3D/Head/HeadHurtbox" index="0"]
 transform = Transform3D(1, -1.42133e-14, 0, 1.42084e-14, 1, 0, 0, 0, 1, 2.27374e-13, -1.5, 5.96046e-08)
 shape = SubResource("SphereShape3D_c2y7b")
+
+[node name="Glow" type="GPUParticles3D" parent="IfritRoot/Skeleton3D/Head" index="3"]
+transform = Transform3D(1, -2.47767e-18, 0, -2.48097e-18, 1, 0, 0, 0, 1, 6.82121e-13, 4, 0)
+layers = 32
+amount = 32
+lifetime = 0.5
+fixed_fps = 0
+fract_delta = false
+visibility_aabb = AABB(-2, -1, -2, 4, 2, 4)
+draw_order = 1
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_n42eo")
+draw_pass_1 = SubResource("QuadMesh_ojqyr")
 
 [node name="RShoulder" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="12"]
 transform = Transform3D(3.57628e-07, -1, -2.38767e-07, 1, 3.57629e-07, -3.39074e-06, 3.39074e-06, -2.38766e-07, 1, -9, 8.5, 3.20673e-05)
@@ -777,8 +1066,19 @@ script = ExtResource("7_7kxhk")
 transitionTime = 0.5
 settings = ExtResource("15_3iytr")
 
-[node name="LaserFlame" type="GPUParticles3D" parent="." index="6"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.975, 26)
+[node name="Laser" type="Node3D" parent="." index="6"]
+
+[node name="VFXRoot" type="Node3D" parent="Laser" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 26)
+
+[node name="Flame" type="Area3D" parent="Laser/VFXRoot" index="0"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+script = ExtResource("5_rxyxv")
+isDisabled = true
+
+[node name="LaserFlame" type="GPUParticles3D" parent="Laser/VFXRoot/Flame" index="0"]
 layers = 32
 emitting = false
 amount = 64
@@ -787,15 +1087,35 @@ one_shot = true
 explosiveness = 0.8
 fixed_fps = 0
 interpolate = false
-visibility_aabb = AABB(-4, -1, -2, 8, 4, 4)
+visibility_aabb = AABB(-2, -1, -4, 4, 4, 8)
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_iyovd")
 draw_pass_1 = SubResource("QuadMesh_flg4p")
 
-[node name="EyeLaser" type="Node3D" parent="." index="7"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 13.6, 4.4)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Laser/VFXRoot/Flame" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_ln5ki")
 
-[node name="EyeFlash" type="GPUParticles3D" parent="EyeLaser" index="0"]
+[node name="ContactLine" type="GPUParticles3D" parent="Laser/VFXRoot" index="1"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.31134e-07, 0, -3)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.3
+explosiveness = 0.3
+randomness = 0.7
+fixed_fps = 0
+fract_delta = false
+visibility_aabb = AABB(-4, -1, -1, 8, 4, 2)
+process_material = SubResource("ParticleProcessMaterial_evm4e")
+draw_pass_1 = SubResource("QuadMesh_amtrv")
+
+[node name="Root" type="Node3D" parent="Laser" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 13.6, 4.4)
+visible = false
+
+[node name="EyeFlash" type="GPUParticles3D" parent="Laser/Root" index="0"]
 layers = 32
 emitting = false
 amount = 12
@@ -811,15 +1131,20 @@ transform_align = 1
 process_material = SubResource("ParticleProcessMaterial_bo57r")
 draw_pass_1 = SubResource("QuadMesh_106a2")
 
-[node name="Laser" type="Node3D" parent="EyeLaser" index="1"]
-transform = Transform3D(1, 0, 0, 0, 0.866025, -20, 0, 0.5, 34.641, 0, 0, 0)
+[node name="Beam" type="Node3D" parent="Laser/Root" index="1"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0, 0, 0.5, 0, 0, 0, 0)
 
-[node name="LaserMesh" type="MeshInstance3D" parent="EyeLaser/Laser" index="0"]
+[node name="LaserMesh" type="MeshInstance3D" parent="Laser/Root/Beam" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 layers = 32
 cast_shadow = 0
 mesh = SubResource("BoxMesh_2o48d")
-skeleton = NodePath("../../..")
+skeleton = NodePath("../../../..")
+
+[node name="EventAnimator" type="AnimationPlayer" parent="." index="7"]
+libraries = {
+"": SubResource("AnimationLibrary_k4tih")
+}
 
 [connection signal="StunEnded" from="." to="IfritRoot/Skeleton3D/Root/IfritGolemCollision" method="Deactivate"]
 [connection signal="StunEnded" from="." to="Triggers/Lockout" method="Deactivate"]
@@ -831,6 +1156,8 @@ skeleton = NodePath("../../..")
 [connection signal="DamagedPlayer" from="Lava/LavaHazard" to="." method="OnLavaDamagedPlayer"]
 [connection signal="area_entered" from="Lava/LavaHazard" to="Lava/LavaHazard" method="OnEntered"]
 [connection signal="area_exited" from="Lava/LavaHazard" to="Lava/LavaHazard" method="OnExited"]
+[connection signal="area_entered" from="Laser/VFXRoot/Flame" to="Laser/VFXRoot/Flame" method="OnEntered"]
+[connection signal="area_exited" from="Laser/VFXRoot/Flame" to="Laser/VFXRoot/Flame" method="OnExited"]
 
 [editable path="IfritRoot/Skeleton3D/Root/IfritGolemCollision"]
 [editable path="Lava"]

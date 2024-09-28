@@ -10,6 +10,8 @@ public partial class IfritGolem : Node3D
 	private Node3D Root { get; set; }
 	[Export(PropertyHint.NodeType, "AnimationTree")] private NodePath animationTree;
 	private AnimationTree AnimationTree { get; set; }
+	[Export(PropertyHint.NodeType, "AnimationPlayer")] private NodePath eventAnimator;
+	private AnimationPlayer EventAnimator { get; set; }
 	[Export(PropertyHint.NodeType, "Area3D")] private NodePath headHurtbox;
 	private Area3D HeadHurtbox { get; set; }
 	[Export(PropertyHint.NodeType, "Node3D")] private NodePath damagePath;
@@ -24,6 +26,8 @@ public partial class IfritGolem : Node3D
 	[Export(PropertyHint.NodeType, "Node3D")] private NodePath laserBeam;
 	private Node3D LaserRoot { get; set; }
 	private Node3D LaserBeam { get; set; }
+	[Export(PropertyHint.NodeType, "Node3D")] private NodePath laserVFXRoot;
+	private Node3D LaserVFXRoot { get; set; }
 
 	[Export] private Core[] cores;
 	[Export] private Node3D[] burnPositions;
@@ -88,6 +92,7 @@ public partial class IfritGolem : Node3D
 		Root = GetNode<Node3D>(root);
 		AnimationTree = GetNode<AnimationTree>(animationTree);
 		AnimationTree.Active = true;
+		EventAnimator = GetNode<AnimationPlayer>(eventAnimator);
 		HeadHurtbox = GetNode<Area3D>(headHurtbox);
 		DamagePath = GetNode<Node3D>(damagePath);
 		PlayerLaunchTarget = GetNode<Node3D>(playerLaunchTarget);
@@ -96,6 +101,7 @@ public partial class IfritGolem : Node3D
 		RightEye = GetNode<Node3D>(rightEye);
 		LaserRoot = GetNode<Node3D>(laserRoot);
 		LaserBeam = GetNode<Node3D>(laserBeam);
+		LaserVFXRoot = GetNode<Node3D>(laserVFXRoot);
 
 		foreach (Core core in cores)
 		{
@@ -456,9 +462,6 @@ public partial class IfritGolem : Node3D
 
 	private void UpdateHeadTargetRotation()
 	{
-		if (isLaserAttackActive) // Mid-attack; Don't rotate
-			return;
-
 		if (currentState != GolemState.Idle && currentState != GolemState.Step)
 		{
 			targetHeadRotationRatio = 0;
@@ -490,10 +493,10 @@ public partial class IfritGolem : Node3D
 
 	private void StartLaserAttack()
 	{
-		isLaserAttackActive = true;
+		laserAttackTimer = 0;
+
 		// TODO Decide which eye the laser spawns from based on player's position (or alternating eye attack)
 		isLaserFromRightEye = Player.GlobalPosition.Rotated(Vector3.Up, -Root.Rotation.Y).X < 0;
-		laserAttackTimer = 0;
 
 		float progress = Player.PathFollower.Progress;
 		if (Player.IsMovingBackward)
@@ -503,28 +506,35 @@ public partial class IfritGolem : Node3D
 		Vector3 samplePosition = Player.PathFollower.GlobalPosition;
 		Player.PathFollower.Progress = progress;
 
-		LaserRoot.Visible = true;
-		LaserRoot.GlobalPosition = isLaserFromRightEye ? RightEye.GlobalPosition : LeftEye.GlobalPosition;
-		LaserRoot.Rotation = Vector3.Up * (samplePosition - LaserRoot.GlobalPosition).Flatten().AngleTo(Vector2.Down);
-		LaserBeam.Rotation = Vector3.Right * Mathf.Pi * .5f;
+		Vector3 targetPosition = isLaserFromRightEye ? RightEye.GlobalPosition : LeftEye.GlobalPosition;
+		float targetRotation = (samplePosition - targetPosition).Flatten().AngleTo(Vector2.Down);
+
+		// Player is out of range
+		GD.Print(ExtensionMethods.DeltaAngleRad(targetRotation, Root.Rotation.Y));
+		if (ExtensionMethods.DeltaAngleRad(targetRotation, Root.Rotation.Y) > Mathf.Pi * .3f)
+			return;
+
+		LaserRoot.Rotation = Vector3.Up * targetRotation;
+		LaserRoot.GlobalPosition = targetPosition;
+
+		// Update VFX positions
+		LaserVFXRoot.GlobalPosition = samplePosition + (Vector3.Up * 10.0f);
+		LaserVFXRoot.Rotation = Vector3.Up * LaserVFXRoot.GlobalPosition.Flatten().AngleTo(Vector2.Down);
+		RaycastHit hit = LaserVFXRoot.CastRay(LaserVFXRoot.GlobalPosition, Vector3.Down * 50.0f, Runtime.Instance.environmentMask);
+		if (hit)
+			LaserVFXRoot.GlobalPosition = new(LaserVFXRoot.GlobalPosition.X, hit.point.Y, LaserVFXRoot.GlobalPosition.Z);
+
+		EventAnimator.Play("laser-close");
+		isLaserAttackActive = true;
 	}
 
 	private void ProcessLaserAttack()
 	{
-		laserAttackTimer = Mathf.MoveToward(laserAttackTimer, LaserAttackLength, PhysicsManager.physicsDelta);
-		float laserScale = Mathf.Clamp(laserAttackTimer * 3.0f / LaserAttackLength, 0f, 1f);
-		float laserRatio = laserAttackTimer / LaserAttackLength;
 		LaserRoot.GlobalPosition = isLaserFromRightEye ? RightEye.GlobalPosition : LeftEye.GlobalPosition;
-		LaserRoot.Scale = new(1, 1, laserScale);
-		LaserBeam.Rotation = Vector3.Right * Mathf.Lerp(Mathf.Pi * .5f, Mathf.Pi * .1f, laserRatio);
-
-		if (Mathf.IsEqualApprox(laserRatio, 1f))
-			StopLaserAttack();
 	}
 
 	private void StopLaserAttack()
 	{
-		LaserRoot.Visible = false;
 		isLaserAttackActive = false;
 		laserAttackTimer = LaserAttackInterval;
 	}
