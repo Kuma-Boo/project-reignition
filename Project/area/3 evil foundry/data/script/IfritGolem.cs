@@ -21,7 +21,9 @@ public partial class IfritGolem : Node3D
 	private Node3D RightEye { get; set; }
 	private Node3D LeftEye { get; set; }
 	[Export(PropertyHint.NodeType, "Node3D")] private NodePath laserRoot;
+	[Export(PropertyHint.NodeType, "Node3D")] private NodePath laserBeam;
 	private Node3D LaserRoot { get; set; }
+	private Node3D LaserBeam { get; set; }
 
 	[Export] private Core[] cores;
 	[Export] private Node3D[] burnPositions;
@@ -92,6 +94,8 @@ public partial class IfritGolem : Node3D
 
 		LeftEye = GetNode<Node3D>(leftEye);
 		RightEye = GetNode<Node3D>(rightEye);
+		LaserRoot = GetNode<Node3D>(laserRoot);
+		LaserBeam = GetNode<Node3D>(laserBeam);
 
 		foreach (Core core in cores)
 		{
@@ -439,8 +443,9 @@ public partial class IfritGolem : Node3D
 	private readonly StringName HeadBlend = "parameters/head_blend/blend_amount";
 	private readonly float MaxHeadRotation = Mathf.Pi / 4f;
 	private readonly float HeadSmoothing = 0.1f;
-	private readonly float LaserLeadMultiplier = 10.0f;
+	private readonly float LaserLeadMultiplier = 40.0f;
 	private readonly float LaserAttackInterval = 1f;
+	private readonly float LaserAttackLength = .5f;
 	private void UpdateHeadRotation()
 	{
 		UpdateHeadTargetRotation();
@@ -473,6 +478,9 @@ public partial class IfritGolem : Node3D
 
 	private void AttemptLaserAttack()
 	{
+		if (isLaserAttackActive)
+			return;
+
 		laserAttackTimer -= PhysicsManager.physicsDelta;
 		if (laserAttackTimer > 0)
 			return;
@@ -483,28 +491,40 @@ public partial class IfritGolem : Node3D
 	private void StartLaserAttack()
 	{
 		isLaserAttackActive = true;
+		// TODO Decide which eye the laser spawns from based on player's position (or alternating eye attack)
+		isLaserFromRightEye = Player.GlobalPosition.Rotated(Vector3.Up, -Root.Rotation.Y).X < 0;
+		laserAttackTimer = 0;
 
 		float progress = Player.PathFollower.Progress;
 		if (Player.IsMovingBackward)
-			Player.PathFollower.Progress -= Player.MoveSpeed * LaserLeadMultiplier;
+			Player.PathFollower.Progress -= Player.MoveSpeed * LaserLeadMultiplier * PhysicsManager.physicsDelta;
 		else
-			Player.PathFollower.Progress += Player.MoveSpeed * LaserLeadMultiplier;
+			Player.PathFollower.Progress += Player.MoveSpeed * LaserLeadMultiplier * PhysicsManager.physicsDelta;
 		Vector3 samplePosition = Player.PathFollower.GlobalPosition;
 		Player.PathFollower.Progress = progress;
 
-		// TODO Decide which eye the laser spawns from based on player's position (or alternating eye attack)
+		LaserRoot.Visible = true;
+		LaserRoot.GlobalPosition = isLaserFromRightEye ? RightEye.GlobalPosition : LeftEye.GlobalPosition;
+		LaserRoot.Rotation = Vector3.Up * (samplePosition - LaserRoot.GlobalPosition).Flatten().AngleTo(Vector2.Down);
+		LaserBeam.Rotation = Vector3.Right * Mathf.Pi * .5f;
 	}
 
 	private void ProcessLaserAttack()
 	{
-		if (isLaserFromRightEye)
-		{
+		laserAttackTimer = Mathf.MoveToward(laserAttackTimer, LaserAttackLength, PhysicsManager.physicsDelta);
+		float laserScale = Mathf.Clamp(laserAttackTimer * 3.0f / LaserAttackLength, 0f, 1f);
+		float laserRatio = laserAttackTimer / LaserAttackLength;
+		LaserRoot.GlobalPosition = isLaserFromRightEye ? RightEye.GlobalPosition : LeftEye.GlobalPosition;
+		LaserRoot.Scale = new(1, 1, laserScale);
+		LaserBeam.Rotation = Vector3.Right * Mathf.Lerp(Mathf.Pi * .5f, Mathf.Pi * .1f, laserRatio);
 
-		}
+		if (Mathf.IsEqualApprox(laserRatio, 1f))
+			StopLaserAttack();
 	}
 
 	private void StopLaserAttack()
 	{
+		LaserRoot.Visible = false;
 		isLaserAttackActive = false;
 		laserAttackTimer = LaserAttackInterval;
 	}
