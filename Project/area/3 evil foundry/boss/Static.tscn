@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_qxxdp"]
 [ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/3 evil foundry/data/Environment.tres" id="1_vnwbt"]
-[ext_resource type="PackedScene" uid="uid://756omvmukmd8" path="res://area/3 evil foundry/boss/environment/model/EFBoss.gltf" id="2_mkb4g"]
+[ext_resource type="PackedScene" uid="uid://v8h6abta165i" path="res://area/3 evil foundry/boss/environment/EFBoss.tscn" id="2_r5wbo"]
 [ext_resource type="PackedScene" uid="uid://dy8hsmwkctvec" path="res://area/3 evil foundry/boss/environment/collision/Collision.tscn" id="4_ptqv5"]
 [ext_resource type="Curve3D" uid="uid://deajq7gtu72l8" path="res://area/3 evil foundry/boss/environment/path/MainPath.tres" id="5_b4qr8"]
 [ext_resource type="Curve3D" uid="uid://cecyd5htsj1lu" path="res://area/3 evil foundry/boss/environment/path/DamagePath.tres" id="5_hjxb7"]
@@ -14,8 +14,6 @@ pathParent = NodePath("Path")
 Environment = NodePath("WorldEnvironment")
 
 [node name="Visuals" type="Node3D" parent="."]
-
-[node name="EFBoss" parent="Visuals" instance=ExtResource("2_mkb4g")]
 
 [node name="OmniLight" type="OmniLight3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -34,6 +32,8 @@ light_energy = 2.4
 transform = Transform3D(1, 0, 0, 0, 1.31134e-07, 1, 0, -1, 1.31134e-07, 0, -5, 0)
 light_color = Color(1, 0.623529, 0.14902, 1)
 light_energy = 0.4
+
+[node name="EFBoss" parent="Visuals" instance=ExtResource("2_r5wbo")]
 
 [node name="Collision" parent="." instance=ExtResource("4_ptqv5")]
 visible = false
