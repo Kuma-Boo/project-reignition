@@ -149,6 +149,7 @@ public partial class IfritGolem : Node3D
 		}
 
 		UpdateHeadRotation();
+		ProcessShutters();
 		if (isLaserAttackActive)
 			ProcessLaserAttack();
 	}
@@ -510,7 +511,6 @@ public partial class IfritGolem : Node3D
 		float targetRotation = (samplePosition - targetPosition).Flatten().AngleTo(Vector2.Down);
 
 		// Player is out of range
-		GD.Print(ExtensionMethods.DeltaAngleRad(targetRotation, Root.Rotation.Y));
 		if (ExtensionMethods.DeltaAngleRad(targetRotation, Root.Rotation.Y) > Mathf.Pi * .3f)
 			return;
 
@@ -537,6 +537,54 @@ public partial class IfritGolem : Node3D
 	{
 		isLaserAttackActive = false;
 		laserAttackTimer = LaserAttackInterval;
+	}
+
+	private float rightShutterTimer;
+	private float leftShutterTimer;
+	private readonly float LeftShutterInterval = 1.5f;
+	private readonly float RightShutterInterval = 0.5f;
+	private readonly int MaxShutterIndex = 6;
+	private void ProcessShutters()
+	{
+		if (currentState != GolemState.Idle && currentState != GolemState.Step)
+			return;
+
+		rightShutterTimer = Mathf.MoveToward(rightShutterTimer, LeftShutterInterval, PhysicsManager.physicsDelta);
+		if (Mathf.IsEqualApprox(rightShutterTimer, RightShutterInterval))
+		{
+			rightShutterTimer = 0;
+			for (int i = 0; i < 2; i++)
+				StartGasTankAttack(true, Runtime.randomNumberGenerator.RandiRange(1, MaxShutterIndex));
+		}
+
+		leftShutterTimer = Mathf.MoveToward(leftShutterTimer, LeftShutterInterval, PhysicsManager.physicsDelta);
+		if (Mathf.IsEqualApprox(leftShutterTimer, LeftShutterInterval))
+		{
+			leftShutterTimer = 0;
+			// Left shutter releases 2 gas tanks at a time so it's easier for the player to hit the cores
+			for (int i = 0; i < 2; i++)
+				StartGasTankAttack(false, Runtime.randomNumberGenerator.RandiRange(1, MaxShutterIndex));
+		}
+	}
+
+	private void StartGasTankAttack(bool isRightHand, int tankIndex)
+	{
+		StringName trigger = GetShutterTrigger(isRightHand, tankIndex);
+		if ((bool)AnimationTree.Get(trigger + "/active")) // Shutter is already busy
+			return;
+
+		AnimationTree.Set(trigger + "/request", (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	private readonly StringName ShutterTreeParameter = "parameters/shutter_tree/";
+	private StringName GetShutterTrigger(bool isRightHand, int tankIndex)
+	{
+		int initialDigit = tankIndex;
+		if (tankIndex > 3)
+			initialDigit = 11 + (tankIndex % 3);
+		string triggerName = initialDigit.ToString("00");
+		triggerName += isRightHand ? "_r_trigger" : "_l_trigger";
+		return ShutterTreeParameter + triggerName;
 	}
 	#endregion
 
