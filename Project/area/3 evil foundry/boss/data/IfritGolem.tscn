@@ -1,4 +1,4 @@
-[gd_scene load_steps=135 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=136 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
@@ -16,6 +16,7 @@
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="12_cgkgo"]
 [ext_resource type="Material" uid="uid://cx8t0sy6gaqpm" path="res://area/3 evil foundry/boss/effect/material/Glow.tres" id="12_ltvht"]
 [ext_resource type="Resource" uid="uid://uf7lyw3gw1fc" path="res://area/3 evil foundry/boss/camera/LowCam.tres" id="15_3iytr"]
+[ext_resource type="PackedScene" uid="uid://bdxneanubmcid" path="res://area/3 evil foundry/object/GasTank.tscn" id="15_m7vtc"]
 [ext_resource type="Shader" path="res://effect/shader/particle/ParticleLocalBillboard.gdshader" id="16_vd0ip"]
 [ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="17_n2j05"]
 [ext_resource type="Material" uid="uid://c6fc13de00bdn" path="res://object/stage/common/resource/model/material/Goal Flame Base.tres" id="18_a4xxb"]
@@ -339,6 +340,7 @@ fadeout_time = 0.5
 fadeout_curve = SubResource("Curve_upeqj")
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_bb4ub"]
+graph_offset = Vector2(-202.868, -20.5703)
 nodes/gear_add/node = SubResource("AnimationNodeAdd2_g8eyb")
 nodes/gear_add/position = Vector2(-400, 0)
 nodes/gear_anim/node = SubResource("AnimationNodeAnimation_blrrc")
@@ -774,7 +776,7 @@ _data = {
 "laser-close": SubResource("Animation_3bxoj")
 }
 
-[node name="IfritGolem" node_paths=PackedStringArray("cores", "burnPositions") instance=ExtResource("1_37vkv")]
+[node name="IfritGolem" node_paths=PackedStringArray("boneAttachments", "cores", "burnPositions", "gasTankSpawnPositions") instance=ExtResource("1_37vkv")]
 script = ExtResource("2_jm400")
 root = NodePath("IfritRoot")
 animationTree = NodePath("AnimationTree")
@@ -786,8 +788,11 @@ leftEye = NodePath("BoneAttachments/BodyParts/Head/EyeL")
 laserRoot = NodePath("Laser/Root")
 laserBeam = NodePath("Laser/Root/Beam")
 laserVFXRoot = NodePath("Laser/VFXRoot")
+boneAttachments = [NodePath("BoneAttachments/Cores/RCore1"), NodePath("BoneAttachments/Cores/RCore2"), NodePath("BoneAttachments/Cores/RCore3"), NodePath("BoneAttachments/Cores/LCore1"), NodePath("BoneAttachments/Cores/LCore2"), NodePath("BoneAttachments/Cores/LCore3"), NodePath("BoneAttachments/BodyParts/Root"), NodePath("BoneAttachments/BodyParts/Head"), NodePath("BoneAttachments/BodyParts/RShoulder"), NodePath("BoneAttachments/BodyParts/LShoulder"), NodePath("BoneAttachments/BodyParts/Body"), NodePath("BoneAttachments/BodyParts/RElbow"), NodePath("BoneAttachments/BodyParts/LElbow"), NodePath("BoneAttachments/TankSpawn/01L"), NodePath("BoneAttachments/TankSpawn/02L"), NodePath("BoneAttachments/TankSpawn/03L"), NodePath("BoneAttachments/TankSpawn/11L"), NodePath("BoneAttachments/TankSpawn/12L"), NodePath("BoneAttachments/TankSpawn/13L"), NodePath("BoneAttachments/TankSpawn/01R"), NodePath("BoneAttachments/TankSpawn/02R"), NodePath("BoneAttachments/TankSpawn/03R"), NodePath("BoneAttachments/TankSpawn/11R"), NodePath("BoneAttachments/TankSpawn/12R"), NodePath("BoneAttachments/TankSpawn/13R")]
 cores = [NodePath("BoneAttachments/Cores/RCore1/Core/GolemCore"), NodePath("BoneAttachments/Cores/RCore2/Core/GolemCore"), NodePath("BoneAttachments/Cores/RCore3/Core/GolemCore"), NodePath("BoneAttachments/Cores/LCore1/Core/GolemCore"), NodePath("BoneAttachments/Cores/LCore2/Core/GolemCore"), NodePath("BoneAttachments/Cores/LCore3/Core/GolemCore")]
 burnPositions = [NodePath("Environment/ArenaPlatform/BurnPosition1"), NodePath("Environment/ArenaPlatform/BurnPosition2"), NodePath("Environment/ArenaPlatform/BurnPosition3")]
+gasTankScene = ExtResource("15_m7vtc")
+gasTankSpawnPositions = [NodePath("BoneAttachments/TankSpawn/01L/Tank0"), NodePath("BoneAttachments/TankSpawn/02L/Tank1"), NodePath("BoneAttachments/TankSpawn/03L/Tank2"), NodePath("BoneAttachments/TankSpawn/11L/Tank3"), NodePath("BoneAttachments/TankSpawn/12L/Tank4"), NodePath("BoneAttachments/TankSpawn/13L/Tank5"), NodePath("BoneAttachments/TankSpawn/01R/Tank6"), NodePath("BoneAttachments/TankSpawn/02R/Tank7"), NodePath("BoneAttachments/TankSpawn/03R/Tank8"), NodePath("BoneAttachments/TankSpawn/11R/Tank9"), NodePath("BoneAttachments/TankSpawn/12R/Tank10"), NodePath("BoneAttachments/TankSpawn/13R/Tank11")]
 
 [node name="Skeleton3D" parent="IfritRoot" index="0"]
 bones/2/rotation = Quaternion(0.0865145, -5.01917e-21, -2.9041e-14, 0.996251)
@@ -1246,88 +1251,148 @@ draw_pass_1 = SubResource("QuadMesh_w6uoc")
 [node name="TankSpawn" type="Node3D" parent="BoneAttachments" index="2"]
 
 [node name="01L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="0"]
+process_priority = 1
+process_physics_priority = 1
 transform = Transform3D(1, -1.42997e-07, 9.27297e-08, 1.42998e-07, 1, 2.39901e-06, -9.273e-08, -2.39901e-06, 1, 23, 9.94994, -2.00121)
 bone_name = "l_spawn01"
 bone_idx = 34
 use_external_skeleton = true
 external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
 
+[node name="Tank0" type="Node3D" parent="BoneAttachments/TankSpawn/01L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
 [node name="02L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="1"]
+process_priority = 1
+process_physics_priority = 1
 transform = Transform3D(1, -1.42997e-07, 9.27297e-08, 1.42998e-07, 1, 2.39901e-06, -9.273e-08, -2.39901e-06, 1, 25, 9.94994, -2.00121)
 bone_name = "l_spawn02"
 bone_idx = 39
 use_external_skeleton = true
 external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
 
+[node name="Tank1" type="Node3D" parent="BoneAttachments/TankSpawn/02L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
 [node name="03L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="2"]
+process_priority = 1
+process_physics_priority = 1
 transform = Transform3D(1, -1.42997e-07, 9.27296e-08, 1.42998e-07, 1, 2.63742e-06, -9.273e-08, -2.63742e-06, 1, 27, 9.99951, -2.00493)
 bone_name = "l_spawn03"
 bone_idx = 38
 use_external_skeleton = true
 external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
 
+[node name="Tank2" type="Node3D" parent="BoneAttachments/TankSpawn/03L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
 [node name="11L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="3"]
+process_priority = 1
+process_physics_priority = 1
 transform = Transform3D(1, -1.42997e-07, 9.27296e-08, 1.42998e-07, 1, 2.51822e-06, -9.273e-08, -2.51822e-06, 1, 23, 9.94994, 0.00128245)
 bone_name = "l_spawn11"
 bone_idx = 35
 use_external_skeleton = true
 external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
 
+[node name="Tank3" type="Node3D" parent="BoneAttachments/TankSpawn/11L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
 [node name="12L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="4"]
+process_priority = 1
+process_physics_priority = 1
 transform = Transform3D(1, -1.42997e-07, 9.27296e-08, 1.42998e-07, 1, 2.51822e-06, -9.273e-08, -2.51822e-06, 1, 25, 9.94994, 0.00128222)
 bone_name = "l_spawn12"
 bone_idx = 36
 use_external_skeleton = true
 external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
 
+[node name="Tank4" type="Node3D" parent="BoneAttachments/TankSpawn/12L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
 [node name="13L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="5"]
+process_priority = 1
+process_physics_priority = 1
 transform = Transform3D(1, -1.42997e-07, 9.27296e-08, 1.42998e-07, 1, 2.51822e-06, -9.273e-08, -2.51822e-06, 1, 27, 9.94994, 0.00128055)
 bone_name = "l_spawn13"
 bone_idx = 37
 use_external_skeleton = true
 external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
 
+[node name="Tank5" type="Node3D" parent="BoneAttachments/TankSpawn/13L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
 [node name="01R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="6"]
+process_priority = 1
+process_physics_priority = 1
 transform = Transform3D(1, 1.86933e-07, 2.95746e-07, -1.86913e-07, 1, 2.72993e-06, -2.95746e-07, -2.72994e-06, 1, -23, 9.94994, -2.00122)
 bone_name = "r_spawn01"
 bone_idx = 17
 use_external_skeleton = true
 external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
 
+[node name="Tank6" type="Node3D" parent="BoneAttachments/TankSpawn/01R" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
 [node name="02R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="7"]
+process_priority = 1
+process_physics_priority = 1
 transform = Transform3D(1, 1.86933e-07, 2.95746e-07, -1.86913e-07, 1, 2.72993e-06, -2.95746e-07, -2.72994e-06, 1, -25, 9.94994, -2.00122)
 bone_name = "r_spawn02"
 bone_idx = 22
 use_external_skeleton = true
 external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
 
+[node name="Tank7" type="Node3D" parent="BoneAttachments/TankSpawn/02R" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
 [node name="03R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="8"]
+process_priority = 1
+process_physics_priority = 1
 transform = Transform3D(1, 1.86933e-07, 2.95746e-07, -1.86913e-07, 1, 2.72993e-06, -2.95746e-07, -2.72994e-06, 1, -27, 9.99951, -2.00493)
 bone_name = "r_spawn03"
 bone_idx = 21
 use_external_skeleton = true
 external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
 
+[node name="Tank8" type="Node3D" parent="BoneAttachments/TankSpawn/03R" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
 [node name="11R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="9"]
+process_priority = 1
+process_physics_priority = 1
 transform = Transform3D(1, 1.86933e-07, 2.95746e-07, -1.86913e-07, 1, 2.72993e-06, -2.95746e-07, -2.72994e-06, 1, -23, 9.94994, 0.00128019)
 bone_name = "r_spawn11"
 bone_idx = 18
 use_external_skeleton = true
 external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
 
+[node name="Tank9" type="Node3D" parent="BoneAttachments/TankSpawn/11R" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
 [node name="12R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="10"]
+process_priority = 1
+process_physics_priority = 1
 transform = Transform3D(1, 1.86933e-07, 2.95746e-07, -1.86913e-07, 1, 2.72993e-06, -2.95746e-07, -2.72994e-06, 1, -25, 9.94994, 0.00128067)
 bone_name = "r_spawn12"
 bone_idx = 19
 use_external_skeleton = true
 external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
 
+[node name="Tank10" type="Node3D" parent="BoneAttachments/TankSpawn/12R" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
 [node name="13R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="11"]
+process_priority = 1
+process_physics_priority = 1
 transform = Transform3D(1, 1.86933e-07, 2.95746e-07, -1.86913e-07, 1, 2.72993e-06, -2.95746e-07, -2.72994e-06, 1, -27, 9.94994, 0.00127983)
 bone_name = "r_spawn13"
 bone_idx = 20
 use_external_skeleton = true
 external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Tank11" type="Node3D" parent="BoneAttachments/TankSpawn/13R" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="Environment" type="Node3D" parent="." index="4"]
 

@@ -1,5 +1,7 @@
 using Godot;
+using System.Collections.Generic;
 using Project.Core;
+using Project.Gameplay.Objects;
 
 namespace Project.Gameplay.Bosses;
 
@@ -29,6 +31,7 @@ public partial class IfritGolem : Node3D
 	[Export(PropertyHint.NodeType, "Node3D")] private NodePath laserVFXRoot;
 	private Node3D LaserVFXRoot { get; set; }
 
+	[Export] private BoneAttachment3D[] boneAttachments;
 	[Export] private Core[] cores;
 	[Export] private Node3D[] burnPositions;
 	[ExportGroup("Animated Properties")]
@@ -103,6 +106,7 @@ public partial class IfritGolem : Node3D
 		LaserBeam = GetNode<Node3D>(laserBeam);
 		LaserVFXRoot = GetNode<Node3D>(laserVFXRoot);
 
+		PoolGasTanks();
 		foreach (Core core in cores)
 		{
 			core.CoreDestroyed += OnCoreDestroyed;
@@ -111,6 +115,13 @@ public partial class IfritGolem : Node3D
 		StageSettings.Instance.Respawned += Respawn;
 		// TODO Play introduction cutscene
 		Respawn();
+	}
+
+	public override void _ExitTree()
+	{
+		// Free everything in the pool (The dictionary and list don't need to be freed because all the nodes exist in the scene tree)
+		while (gasTankPool.Count != 0)
+			gasTankPool.Dequeue().QueueFree();
 	}
 
 	private void Respawn()
@@ -169,6 +180,14 @@ public partial class IfritGolem : Node3D
 
 		Root.Rotation = Vector3.Up * (currentRotation % Mathf.Tau);
 		DamagePath.Rotation = Root.Rotation;
+
+		UpdateBoneAttachments();
+	}
+
+	private void UpdateBoneAttachments()
+	{
+		foreach (BoneAttachment3D bone in boneAttachments)
+			bone.OnBonePoseUpdate(bone.BoneIdx);
 	}
 
 	private void EnterIdle()
@@ -549,7 +568,7 @@ public partial class IfritGolem : Node3D
 		if (currentState != GolemState.Idle && currentState != GolemState.Step)
 			return;
 
-		rightShutterTimer = Mathf.MoveToward(rightShutterTimer, LeftShutterInterval, PhysicsManager.physicsDelta);
+		rightShutterTimer = Mathf.MoveToward(rightShutterTimer, RightShutterInterval, PhysicsManager.physicsDelta);
 		if (Mathf.IsEqualApprox(rightShutterTimer, RightShutterInterval))
 		{
 			rightShutterTimer = 0;
@@ -574,6 +593,73 @@ public partial class IfritGolem : Node3D
 			return;
 
 		AnimationTree.Set(trigger + "/request", (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	[ExportGroup("Attacks")]
+	[Export] private PackedScene gasTankScene;
+	[Export] private Node3D[] gasTankSpawnPositions;
+	private readonly Queue<GasTank> gasTankPool = [];
+	private readonly List<GasTank> activeGasTanks = [];
+	private readonly Dictionary<int, GasTank> queuedGasTanks = [];
+	private void PoolGasTanks()
+	{
+		for (int i = 0; i < 2; i++)
+			gasTankPool.Enqueue(GenerateGasTank());
+	}
+
+	private GasTank GenerateGasTank()
+	{
+		GasTank tank = gasTankScene.Instantiate<GasTank>();
+		tank.disableRespawning = true;
+		tank.Detonated += () => PoolTank(tank);
+		return tank;
+	}
+
+	private void SpawnGasTank(int index)
+	{
+		if (!gasTankPool.TryDequeue(out GasTank tank))
+			tank = GenerateGasTank();
+
+		if (tank.IsInsideTree())
+			tank.GetParent().RemoveChild(tank);
+
+		gasTankSpawnPositions[index].AddChild(tank);
+		tank.Call(GasTank.MethodName.Respawn);
+		tank.Transform = Transform3D.Identity;
+
+		queuedGasTanks.Add(index, tank);
+	}
+
+	private void LaunchGasTank(int index)
+	{
+		// There isn't any gas tank queued at the given shutter!
+		if (!queuedGasTanks.TryGetValue(index, out GasTank tank))
+			return;
+
+		Transform3D t = tank.GlobalTransform;
+		tank.GetParent().RemoveChild(tank);
+		AddChild(tank);
+		tank.GlobalTransform = t;
+
+		// TODO Set target to a radius around the player during the secondary attack
+		float distance = Mathf.Lerp(5f, 10f, Runtime.randomNumberGenerator.Randf());
+		tank.height = 1f;
+		tank.globalEndPosition = true;
+		tank.endPosition = tank.GlobalPosition + (tank.Up() * distance) + (Vector3.Down * tank.GlobalPosition.Y);
+		tank.CallDeferred(GasTank.MethodName.Launch);
+
+		queuedGasTanks.Remove(index);
+		activeGasTanks.Add(tank);
+	}
+
+	private void PoolTank(GasTank tank)
+	{
+		if (tank.GetParent() == null) // Already dequeued
+			return;
+
+		gasTankPool.Enqueue(tank);
+		activeGasTanks.Remove(tank);
+		tank.GetParent().RemoveChild(tank);
 	}
 
 	private readonly StringName ShutterTreeParameter = "parameters/shutter_tree/";
