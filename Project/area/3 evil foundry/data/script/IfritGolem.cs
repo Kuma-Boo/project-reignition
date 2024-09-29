@@ -645,11 +645,24 @@ public partial class IfritGolem : Node3D
 		AddChild(tank);
 		tank.GlobalTransform = t;
 
-		// TODO Set target to a radius around the player during the secondary attack
-		float distance = Mathf.Lerp(5f, 10f, Runtime.randomNumberGenerator.Randf());
-		tank.height = 1f;
+		if (currentState == GolemState.SpecialAttack)
+		{
+			// Alternative targeting during special attack
+			float rotation = Mathf.Pi * .15f * Mathf.Lerp(-1f, 1f, Runtime.randomNumberGenerator.Randf());
+			float distance = Mathf.Lerp(-5f, 5f, Runtime.randomNumberGenerator.Randf());
+			tank.height = Mathf.Lerp(5f, 10f, Runtime.randomNumberGenerator.Randf());
+			tank.endPosition = Player.PathFollower.GlobalPosition.Rotated(Vector3.Up, rotation);
+			tank.endPosition += tank.endPosition.Normalized() * distance;
+		}
+		else
+		{
+			// Drop nearby
+			float distance = Mathf.Lerp(5f, 10f, Runtime.randomNumberGenerator.Randf());
+			float offset = Mathf.Lerp(-3f, 3f, Runtime.randomNumberGenerator.Randf());
+			tank.height = 1f;
+			tank.endPosition = tank.GlobalPosition + (tank.Up() * distance) + (tank.Right() * offset) + (Vector3.Down * tank.GlobalPosition.Y);
+		}
 		tank.globalEndPosition = true;
-		tank.endPosition = tank.GlobalPosition + (tank.Up() * distance) + (Vector3.Down * tank.GlobalPosition.Y);
 		tank.CallDeferred(GasTank.MethodName.Launch);
 
 		queuedGasTanks.Remove(index);

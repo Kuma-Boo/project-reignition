@@ -15,6 +15,7 @@ public partial class GasTank : Area3D
 	/// <summary> Field is public so enemies can set this as needed. </summary>
 	[Export] public float height;
 	[Export] public bool globalEndPosition;
+	[Export] public bool explodeOnGroundCollision;
 	/// <summary> Field is public so enemies can set this as needed. </summary>
 	[Export] public Vector3 endPosition;
 	/// <summary> Used if you want to target a particular object instead of a position (End position is recalculated on launch). </summary>
@@ -149,8 +150,11 @@ public partial class GasTank : Area3D
 
 	private void OnEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
-		isInteractingWithPlayer = true;
+		if (a.IsInGroup("player"))
+			isInteractingWithPlayer = true;
+
+		if (a.IsInGroup("floor") && explodeOnGroundCollision)
+			Detonate();
 	}
 
 	private void OnExited(Area3D a)
