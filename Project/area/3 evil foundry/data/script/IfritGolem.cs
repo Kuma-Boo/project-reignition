@@ -181,11 +181,7 @@ public partial class IfritGolem : Node3D
 		Root.Rotation = Vector3.Up * (currentRotation % Mathf.Tau);
 		DamagePath.Rotation = Root.Rotation;
 
-		UpdateBoneAttachments();
-	}
-
-	private void UpdateBoneAttachments()
-	{
+		// Force-update bone attachments so objects don't go out of sync
 		foreach (BoneAttachment3D bone in boneAttachments)
 			bone.OnBonePoseUpdate(bone.BoneIdx);
 	}
