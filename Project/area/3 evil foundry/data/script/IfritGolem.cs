@@ -197,6 +197,7 @@ public partial class IfritGolem : Node3D
 			return;
 
 		ShowCores();
+		laserAttackTimer = 0; // Laser attack is queued instantly when transitioning to idle
 		currentState = GolemState.Idle;
 	}
 
@@ -470,8 +471,9 @@ public partial class IfritGolem : Node3D
 	private readonly StringName HeadBlend = "parameters/head_blend/blend_amount";
 	private readonly float MaxHeadRotation = Mathf.Pi / 4f;
 	private readonly float HeadSmoothing = 0.1f;
-	private readonly float LaserLeadMultiplier = 40.0f;
-	private readonly float LaserAttackInterval = 1f;
+	private readonly float LaserForwardLeadMultiplier = 60.0f;
+	private readonly float LaserBackwardLeadMultiplier = 40.0f;
+	private readonly float LaserAttackInterval = 0.5f;
 	private void UpdateHeadRotation()
 	{
 		UpdateHeadTargetRotation();
@@ -482,7 +484,7 @@ public partial class IfritGolem : Node3D
 
 	private void UpdateHeadTargetRotation()
 	{
-		if (currentState != GolemState.Idle && currentState != GolemState.Step)
+		if (currentState != GolemState.Idle && currentState != GolemState.Step && currentState != GolemState.SpecialAttack)
 		{
 			targetHeadRotationRatio = 0;
 			return;
@@ -491,7 +493,9 @@ public partial class IfritGolem : Node3D
 		float delta = ExtensionMethods.SignedDeltaAngleRad(Player.GlobalPosition.Flatten().AngleTo(Vector2.Down), Root.Rotation.Y);
 		if (Mathf.Abs(delta) > MaxHeadRotation * 2f)
 		{
-			targetHeadRotationRatio = 0;
+			if (currentState != GolemState.SpecialAttack)
+				targetHeadRotationRatio = 0;
+
 			return;
 		}
 
@@ -508,13 +512,12 @@ public partial class IfritGolem : Node3D
 		if (laserAttackTimer > 0)
 			return;
 
+		laserAttackTimer = 0;
 		StartLaserAttack();
 	}
 
 	private void StartLaserAttack(int eyeIndex = 0)
 	{
-		laserAttackTimer = 0;
-
 		// Decide which eye the laser spawns from based on player's position (or alternating eye attack)
 		if (eyeIndex == 0)
 			isLaserFromRightEye = Player.GlobalPosition.Rotated(Vector3.Up, -Root.Rotation.Y).X < 0;
@@ -523,18 +526,25 @@ public partial class IfritGolem : Node3D
 
 		float progress = Player.PathFollower.Progress;
 		if (Player.IsMovingBackward)
-			Player.PathFollower.Progress -= Player.MoveSpeed * LaserLeadMultiplier * PhysicsManager.physicsDelta;
+			Player.PathFollower.Progress -= Player.MoveSpeed * LaserBackwardLeadMultiplier * PhysicsManager.physicsDelta;
 		else
-			Player.PathFollower.Progress += Player.MoveSpeed * LaserLeadMultiplier * PhysicsManager.physicsDelta;
+			Player.PathFollower.Progress += Player.MoveSpeed * LaserForwardLeadMultiplier * PhysicsManager.physicsDelta;
 		Vector3 samplePosition = Player.PathFollower.GlobalPosition;
 		Player.PathFollower.Progress = progress;
 
 		Vector3 targetPosition = isLaserFromRightEye ? RightEye.GlobalPosition : LeftEye.GlobalPosition;
 		float targetRotation = (samplePosition - targetPosition).Flatten().AngleTo(Vector2.Down);
+		float activeRotation = (Player.PathFollower.GlobalPosition - targetPosition).Flatten().AngleTo(Vector2.Down);
 
 		// Player is out of range
-		if (ExtensionMethods.DeltaAngleRad(targetRotation, Root.Rotation.Y) > Mathf.Pi * .3f)
+		if (ExtensionMethods.DeltaAngleRad(activeRotation, Root.Rotation.Y) > Mathf.Pi * .4f ||
+			ExtensionMethods.DeltaAngleRad(targetRotation, Root.Rotation.Y) > Mathf.Pi * .4f)
+		{
+			if (currentState == GolemState.SpecialAttack) // Cancel special attack early
+				FinishSpecialAttack();
+
 			return;
+		}
 
 		LaserRoot.Rotation = Vector3.Up * targetRotation;
 		LaserRoot.GlobalPosition = targetPosition;
@@ -559,6 +569,8 @@ public partial class IfritGolem : Node3D
 	{
 		isLaserAttackActive = false;
 		laserAttackTimer = LaserAttackInterval;
+		if (IsSecondPhaseActive)
+			laserAttackTimer *= .5f;
 		LaserAnimator.Play("RESET");
 	}
 
@@ -660,7 +672,7 @@ public partial class IfritGolem : Node3D
 			float distance = Mathf.Lerp(5f, 10f, Runtime.randomNumberGenerator.Randf());
 			float offset = Mathf.Lerp(-3f, 3f, Runtime.randomNumberGenerator.Randf());
 			tank.height = 1f;
-			tank.endPosition = tank.GlobalPosition + (tank.Up() * distance) + (tank.Right() * offset) + (Vector3.Down * tank.GlobalPosition.Y);
+			tank.endPosition = tank.GlobalPosition + (tank.Up() * distance) + (tank.Forward() * offset) + (Vector3.Down * tank.GlobalPosition.Y);
 		}
 		tank.globalEndPosition = true;
 		tank.CallDeferred(GasTank.MethodName.Launch);
@@ -714,7 +726,6 @@ public partial class IfritGolem : Node3D
 
 		specialAttackRightShutterOrder = RandomizeArray(specialAttackLeftShutterOrder);
 		specialAttackRightShutterOrder = RandomizeArray(specialAttackRightShutterOrder);
-		GD.Print(specialAttackLeftShutterOrder, specialAttackRightShutterOrder);
 
 		StartSpecialAttack();
 		return true;
@@ -750,8 +761,13 @@ public partial class IfritGolem : Node3D
 		else
 			targetSpecialAttackCount = 10 + (SecondPhaseRequirement - currentHealth);
 
-		specialAttackTimer = 0;
-		specialAttackCount = 0;
+		UpdatePreviousSector();
+		currentSector = playerSector;
+		if (currentSector % 2 == 0)
+			currentSector++;
+		currentSector = WrapClampSector(currentSector);
+
+		specialAttackTimer = specialAttackCount = 0;
 		specialAttackIntervalCounter = SpecialAttackInterval;
 		currentState = GolemState.SpecialAttack;
 	}
