@@ -12,8 +12,8 @@ public partial class IfritGolem : Node3D
 	private Node3D Root { get; set; }
 	[Export(PropertyHint.NodeType, "AnimationTree")] private NodePath animationTree;
 	private AnimationTree AnimationTree { get; set; }
-	[Export(PropertyHint.NodeType, "AnimationPlayer")] private NodePath eventAnimator;
-	private AnimationPlayer EventAnimator { get; set; }
+	[Export(PropertyHint.NodeType, "AnimationPlayer")] private NodePath laserAnimator;
+	private AnimationPlayer LaserAnimator { get; set; }
 	[Export(PropertyHint.NodeType, "Area3D")] private NodePath headHurtbox;
 	private Area3D HeadHurtbox { get; set; }
 	[Export(PropertyHint.NodeType, "Node3D")] private NodePath damagePath;
@@ -95,7 +95,7 @@ public partial class IfritGolem : Node3D
 		Root = GetNode<Node3D>(root);
 		AnimationTree = GetNode<AnimationTree>(animationTree);
 		AnimationTree.Active = true;
-		EventAnimator = GetNode<AnimationPlayer>(eventAnimator);
+		LaserAnimator = GetNode<AnimationPlayer>(laserAnimator);
 		HeadHurtbox = GetNode<Area3D>(headHurtbox);
 		DamagePath = GetNode<Node3D>(damagePath);
 		PlayerLaunchTarget = GetNode<Node3D>(playerLaunchTarget);
@@ -107,6 +107,7 @@ public partial class IfritGolem : Node3D
 		LaserVFXRoot = GetNode<Node3D>(laserVFXRoot);
 
 		PoolGasTanks();
+		InitializeSpecialAttack();
 		foreach (Core core in cores)
 		{
 			core.CoreDestroyed += OnCoreDestroyed;
@@ -139,10 +140,12 @@ public partial class IfritGolem : Node3D
 		// Reset Animations
 		NormalStatePlayback.Start(IdleAnimation);
 		AnimationTree.Set(HitstunTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		AnimationTree.Set(SpecialAttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 		if (currentState == GolemState.Stunned)
 			EmitSignal(SignalName.StunEnded);
 
+		specialAttackIntervalCounter = 0;
 		EnterIdle();
 	}
 
@@ -155,6 +158,9 @@ public partial class IfritGolem : Node3D
 				break;
 			case GolemState.Stunned:
 				ProcessStun();
+				break;
+			case GolemState.SpecialAttack:
+				ProcessSpecialAttack();
 				break;
 		}
 
@@ -187,6 +193,9 @@ public partial class IfritGolem : Node3D
 
 	private void EnterIdle()
 	{
+		if (AttemptSpecialAttack())
+			return;
+
 		ShowCores();
 		currentState = GolemState.Idle;
 	}
@@ -416,23 +425,20 @@ public partial class IfritGolem : Node3D
 		SetInteractionProcessed();
 	}
 
+	private bool IsSecondPhaseActive => currentHealth <= SecondPhaseRequirement;
+	private int currentHealth;
 	private int headHealth;
+	private readonly int MaxHealth = 9;
+	/// <summary> Maximum number of times the player hurt the golem in one cycle (excluding a powerful final hit). </summary>
 	private readonly int MaxHeadHealth = 3;
+	private readonly int SecondPhaseRequirement = 3;
 	private void UpdateHeadDamage(int amount)
 	{
 		headHealth -= amount;
+		currentHealth -= amount;
 
-		if (headHealth > 0)
+		if (headHealth > 0 && currentHealth > 0)
 			return;
-
-		Damage();
-	}
-
-	private int currentHealth;
-	private readonly int MaxHealth = 3;
-	private void Damage()
-	{
-		currentHealth--;
 
 		if (currentHealth <= 0)
 			CallDeferred(MethodName.DefeatBoss);
@@ -466,7 +472,6 @@ public partial class IfritGolem : Node3D
 	private readonly float HeadSmoothing = 0.1f;
 	private readonly float LaserLeadMultiplier = 40.0f;
 	private readonly float LaserAttackInterval = 1f;
-	private readonly float LaserAttackLength = .5f;
 	private void UpdateHeadRotation()
 	{
 		UpdateHeadTargetRotation();
@@ -506,12 +511,15 @@ public partial class IfritGolem : Node3D
 		StartLaserAttack();
 	}
 
-	private void StartLaserAttack()
+	private void StartLaserAttack(int eyeIndex = 0)
 	{
 		laserAttackTimer = 0;
 
-		// TODO Decide which eye the laser spawns from based on player's position (or alternating eye attack)
-		isLaserFromRightEye = Player.GlobalPosition.Rotated(Vector3.Up, -Root.Rotation.Y).X < 0;
+		// Decide which eye the laser spawns from based on player's position (or alternating eye attack)
+		if (eyeIndex == 0)
+			isLaserFromRightEye = Player.GlobalPosition.Rotated(Vector3.Up, -Root.Rotation.Y).X < 0;
+		else
+			isLaserFromRightEye = eyeIndex > 0;
 
 		float progress = Player.PathFollower.Progress;
 		if (Player.IsMovingBackward)
@@ -538,7 +546,7 @@ public partial class IfritGolem : Node3D
 		if (hit)
 			LaserVFXRoot.GlobalPosition = new(LaserVFXRoot.GlobalPosition.X, hit.point.Y, LaserVFXRoot.GlobalPosition.Z);
 
-		EventAnimator.Play("laser-close");
+		LaserAnimator.Play(currentState == GolemState.SpecialAttack ? "laser-far" : "laser-close");
 		isLaserAttackActive = true;
 	}
 
@@ -551,6 +559,7 @@ public partial class IfritGolem : Node3D
 	{
 		isLaserAttackActive = false;
 		laserAttackTimer = LaserAttackInterval;
+		LaserAnimator.Play("RESET");
 	}
 
 	private float rightShutterTimer;
@@ -666,6 +675,113 @@ public partial class IfritGolem : Node3D
 		string triggerName = initialDigit.ToString("00");
 		triggerName += isRightHand ? "_r_trigger" : "_l_trigger";
 		return ShutterTreeParameter + triggerName;
+	}
+
+	private bool isLaserSpecialAttack;
+	private float specialAttackTimer;
+	private int specialAttackCount;
+	private int targetSpecialAttackCount;
+	private int specialAttackIntervalCounter;
+	private int[] specialAttackLeftShutterOrder;
+	private int[] specialAttackRightShutterOrder;
+	private readonly int SpecialAttackInterval = 2;
+	private void InitializeSpecialAttack()
+	{
+		specialAttackLeftShutterOrder = specialAttackRightShutterOrder = [1, 2, 3, 4, 5, 6];
+	}
+
+	private bool AttemptSpecialAttack()
+	{
+		if (!IsSecondPhaseActive)
+			return false;
+
+		specialAttackIntervalCounter--;
+		if (specialAttackIntervalCounter > 0)
+			return false;
+
+		specialAttackRightShutterOrder = RandomizeArray(specialAttackLeftShutterOrder);
+		specialAttackRightShutterOrder = RandomizeArray(specialAttackRightShutterOrder);
+		GD.Print(specialAttackLeftShutterOrder, specialAttackRightShutterOrder);
+
+		StartSpecialAttack();
+		return true;
+	}
+
+	private int[] RandomizeArray(int[] array)
+	{
+		System.Random rng = new();
+		int n = array.Length;
+		while (n > 1)
+		{
+			int k = rng.Next(n--);
+			(array[k], array[n]) = (array[n], array[k]);
+		}
+		return array;
+	}
+
+	private AnimationNodeStateMachinePlayback SpecialStatePlayback => AnimationTree.Get(SpecialPlayback).Obj as AnimationNodeStateMachinePlayback;
+	private readonly StringName SpecialPlayback = "parameters/special_state/playback";
+	private readonly StringName SpecialAttackTrigger = "parameters/special_trigger/request";
+	private readonly StringName SpecialAttackStartAnimation = "special-attack-start";
+	private readonly StringName SpecialAttackStopAnimation = "special-attack-stop";
+	private void StartSpecialAttack()
+	{
+		SpecialStatePlayback.Start(SpecialAttackStartAnimation);
+		AnimationTree.Set(SpecialAttackTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+
+		// Randomly choose between gas tanks and lasers
+		isLaserSpecialAttack = Runtime.randomNumberGenerator.Randf() > .5f;
+
+		if (isLaserSpecialAttack)
+			targetSpecialAttackCount = 3 + (SecondPhaseRequirement - currentHealth);
+		else
+			targetSpecialAttackCount = 10 + (SecondPhaseRequirement - currentHealth);
+
+		specialAttackTimer = 0;
+		specialAttackCount = 0;
+		specialAttackIntervalCounter = SpecialAttackInterval;
+		currentState = GolemState.SpecialAttack;
+	}
+
+	private readonly float LaserSpecialAttackInterval = 1.5f;
+	private readonly float TankSpecialAttackInterval = .5f;
+	private void ProcessSpecialAttack()
+	{
+		if (specialAttackCount > targetSpecialAttackCount)
+			return;
+
+		float targetTime = isLaserSpecialAttack ? LaserSpecialAttackInterval : TankSpecialAttackInterval;
+		specialAttackTimer = Mathf.MoveToward(specialAttackTimer, targetTime, PhysicsManager.physicsDelta);
+
+		if (!Mathf.IsEqualApprox(specialAttackTimer, targetTime))
+			return;
+
+		specialAttackCount++;
+		specialAttackTimer = 0;
+		if (specialAttackCount > targetSpecialAttackCount)
+		{
+			// Finished special attacks
+			specialAttackIntervalCounter = SpecialAttackInterval;
+			SpecialStatePlayback.Travel(SpecialAttackStopAnimation);
+			return;
+		}
+
+		if (isLaserSpecialAttack)
+		{
+			// Fire laser attacks, alternating between left and right
+			StartLaserAttack(specialAttackCount % 2 == 0 ? -1 : 1);
+			return;
+		}
+
+		// Gas tanks
+		bool isRightHand = specialAttackCount < targetSpecialAttackCount / 2;
+		int targetShutterIndex = specialAttackCount % (targetSpecialAttackCount / 2);
+		targetShutterIndex = isRightHand ? specialAttackRightShutterOrder[targetShutterIndex] : specialAttackLeftShutterOrder[targetShutterIndex];
+		StartGasTankAttack(isRightHand, targetShutterIndex);
+	}
+
+	private void StopSpecialAttack()
+	{
 	}
 	#endregion
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=136 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=137 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
@@ -770,17 +770,137 @@ tracks/8/keys = {
 "values": [false, true, false]
 }
 
+[sub_resource type="Animation" id="Animation_vks4w"]
+resource_name = "laser-far"
+length = 1.5
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Laser/Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Laser/Root/Beam:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.233333, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.349066, 0, 0), Vector3(0.349066, 0, 0), Vector3(0.0349066, 0, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Laser/Root/EyeFlash")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Laser/Root/Beam:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.233333, 0.3, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 2, 0.5, 1, 0.5, 1),
+"update": 0,
+"values": [Vector3(1, 1, 0), Vector3(1, 1, 0), Vector3(1, 1, 20), Vector3(1, 1, 40), Vector3(1, 1, 40), Vector3(0, 0, 40)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.966667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"StopLaserAttack"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Laser/VFXRoot/Flame/LaserFlame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Laser/VFXRoot/Flame:isDisabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.666667, 1.03333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Laser/VFXRoot/ContactLine:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.3, 0.433333),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, -2), Vector3(0, 0, 2)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Laser/VFXRoot/ContactLine:emitting")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k4tih"]
 _data = {
 "RESET": SubResource("Animation_n5e8u"),
-"laser-close": SubResource("Animation_3bxoj")
+"laser-close": SubResource("Animation_3bxoj"),
+"laser-far": SubResource("Animation_vks4w")
 }
 
 [node name="IfritGolem" node_paths=PackedStringArray("boneAttachments", "cores", "burnPositions", "gasTankSpawnPositions") instance=ExtResource("1_37vkv")]
 script = ExtResource("2_jm400")
 root = NodePath("IfritRoot")
 animationTree = NodePath("AnimationTree")
-eventAnimator = NodePath("EventAnimator")
+laserAnimator = NodePath("LaserAnimator")
 headHurtbox = NodePath("BoneAttachments/BodyParts/Head/HeadHurtbox")
 playerLaunchTarget = NodePath("BoneAttachments/BodyParts/Root/LaunchTarget")
 rightEye = NodePath("BoneAttachments/BodyParts/Head/EyeR")
@@ -1489,7 +1609,7 @@ process_material = SubResource("ParticleProcessMaterial_evm4e")
 draw_pass_1 = SubResource("QuadMesh_amtrv")
 
 [node name="Root" type="Node3D" parent="Laser" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 13.6, 4.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 13.6, 4.5)
 visible = false
 
 [node name="EyeFlash" type="GPUParticles3D" parent="Laser/Root" index="0"]
@@ -1518,7 +1638,7 @@ cast_shadow = 0
 mesh = SubResource("BoxMesh_2o48d")
 skeleton = NodePath("../../../..")
 
-[node name="EventAnimator" type="AnimationPlayer" parent="." index="6"]
+[node name="LaserAnimator" type="AnimationPlayer" parent="." index="6"]
 libraries = {
 "": SubResource("AnimationLibrary_k4tih")
 }
