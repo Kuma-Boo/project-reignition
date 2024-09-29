@@ -127,7 +127,6 @@ public partial class IfritGolem : Node3D
 	private void Respawn()
 	{
 		currentSector = previousSector = 0;
-		currentState = GolemState.Idle;
 		Root.Rotation = Vector3.Zero;
 
 		headRotationRatio = targetHeadRotationRatio = 0;
@@ -692,6 +691,9 @@ public partial class IfritGolem : Node3D
 
 	private void OnLavaDamagedPlayer()
 	{
+		if (Player.IsDefeated || Player.IsTeleporting) // Don't bother launching the player when respawning
+			return;
+
 		// Launch the player to the correct burn position
 		int burnPositionIndex = 0;
 		if (playerSector == 0 || playerSector == 5)
