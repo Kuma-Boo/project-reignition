@@ -761,8 +761,7 @@ public partial class IfritGolem : Node3D
 		if (specialAttackCount > targetSpecialAttackCount)
 		{
 			// Finished special attacks
-			specialAttackIntervalCounter = SpecialAttackInterval;
-			SpecialStatePlayback.Travel(SpecialAttackStopAnimation);
+			FinishSpecialAttack();
 			return;
 		}
 
@@ -780,8 +779,10 @@ public partial class IfritGolem : Node3D
 		StartGasTankAttack(isRightHand, targetShutterIndex);
 	}
 
-	private void StopSpecialAttack()
+	private void FinishSpecialAttack()
 	{
+		specialAttackIntervalCounter = SpecialAttackInterval;
+		SpecialStatePlayback.Travel(SpecialAttackStopAnimation);
 	}
 	#endregion
 
