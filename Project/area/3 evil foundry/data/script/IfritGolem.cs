@@ -2,6 +2,7 @@ using Godot;
 using System.Collections.Generic;
 using Project.Core;
 using Project.Gameplay.Objects;
+using System.Linq;
 
 namespace Project.Gameplay.Bosses;
 
@@ -134,7 +135,7 @@ public partial class IfritGolem : Node3D
 
 		currentHealth = MaxHealth;
 		RespawnCores();
-
+		RespawnGasTanks();
 		StopLaserAttack();
 
 		// Reset Animations
@@ -294,6 +295,7 @@ public partial class IfritGolem : Node3D
 	{
 		isInteractingWithPlayer = false;
 		Player.Camera.LockonTarget = null;
+		RespawnCores();
 
 		// Launch the player back to solid ground
 		Player.StartLauncher(LaunchSettings.Create(Player.GlobalPosition, PlayerLaunchTarget.GlobalPosition, 5f));
@@ -599,6 +601,27 @@ public partial class IfritGolem : Node3D
 			// Left shutter releases 2 gas tanks at a time so it's easier for the player to hit the cores
 			for (int i = 0; i < 2; i++)
 				StartGasTankAttack(false, Runtime.randomNumberGenerator.RandiRange(1, MaxShutterIndex));
+		}
+	}
+
+	private void RespawnGasTanks()
+	{
+		// Abort shutter animations
+		for (int i = 1; i <= MaxShutterIndex; i++)
+		{
+			AnimationTree.Set(GetShutterTrigger(true, i) + "/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+			AnimationTree.Set(GetShutterTrigger(false, i) + "/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		}
+
+		// Repool active gas tanks
+		for (int i = activeGasTanks.Count - 1; i >= 0; i--)
+			PoolTank(activeGasTanks[i]);
+
+		int[] keys = [.. queuedGasTanks.Keys];
+		for (int i = keys.Length - 1; i >= 0; i--)
+		{
+			PoolTank(queuedGasTanks[keys[i]]);
+			queuedGasTanks.Remove(keys[i]);
 		}
 	}
 
