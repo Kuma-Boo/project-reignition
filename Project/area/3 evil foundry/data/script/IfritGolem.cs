@@ -424,7 +424,7 @@ public partial class IfritGolem : Node3D
 		}
 
 		Player.Camera.LockonTarget = HeadHurtbox;
-		Player.StartBounce(false);
+		Player.StartBounce(true);
 		SetInteractionProcessed();
 	}
 
@@ -833,6 +833,7 @@ public partial class IfritGolem : Node3D
 
 	private void FinishSpecialAttack()
 	{
+		specialAttackCount = targetSpecialAttackCount + 1;
 		specialAttackIntervalCounter = SpecialAttackInterval;
 		SpecialStatePlayback.Travel(SpecialAttackStopAnimation);
 	}
