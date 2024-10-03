@@ -1,4 +1,4 @@
-[gd_scene load_steps=137 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=138 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
@@ -371,6 +371,10 @@ nodes/special_state/position = Vector2(-1000, 200)
 nodes/special_trigger/node = SubResource("AnimationNodeOneShot_wjwst")
 nodes/special_trigger/position = Vector2(-800, 0)
 node_connections = [&"gear_add", 0, &"hitstun_trigger", &"gear_add", 1, &"gear_anim", &"head_add", 0, &"gear_add", &"head_add", 1, &"head_blend", &"head_blend", 0, &"head_right_anim", &"head_blend", 1, &"head_center_anim", &"head_blend", 2, &"head_left_anim", &"hitstun_trigger", 0, &"special_trigger", &"hitstun_trigger", 1, &"hitstun_state", &"output", 0, &"shutter_add", &"shutter_add", 0, &"head_add", &"shutter_add", 1, &"shutter_tree", &"special_trigger", 0, &"normal_state", &"special_trigger", 1, &"special_state"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_8xrv2"]
+height = 50.0
+radius = 22.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n2677"]
 size = Vector3(20, 20, 5)
@@ -910,7 +914,7 @@ laserBeam = NodePath("Laser/Root/Beam")
 laserVFXRoot = NodePath("Laser/VFXRoot")
 boneAttachments = [NodePath("BoneAttachments/Cores/RCore1"), NodePath("BoneAttachments/Cores/RCore2"), NodePath("BoneAttachments/Cores/RCore3"), NodePath("BoneAttachments/Cores/LCore1"), NodePath("BoneAttachments/Cores/LCore2"), NodePath("BoneAttachments/Cores/LCore3"), NodePath("BoneAttachments/BodyParts/Root"), NodePath("BoneAttachments/BodyParts/Head"), NodePath("BoneAttachments/BodyParts/RShoulder"), NodePath("BoneAttachments/BodyParts/LShoulder"), NodePath("BoneAttachments/BodyParts/Body"), NodePath("BoneAttachments/BodyParts/RElbow"), NodePath("BoneAttachments/BodyParts/LElbow"), NodePath("BoneAttachments/TankSpawn/01L"), NodePath("BoneAttachments/TankSpawn/02L"), NodePath("BoneAttachments/TankSpawn/03L"), NodePath("BoneAttachments/TankSpawn/11L"), NodePath("BoneAttachments/TankSpawn/12L"), NodePath("BoneAttachments/TankSpawn/13L"), NodePath("BoneAttachments/TankSpawn/01R"), NodePath("BoneAttachments/TankSpawn/02R"), NodePath("BoneAttachments/TankSpawn/03R"), NodePath("BoneAttachments/TankSpawn/11R"), NodePath("BoneAttachments/TankSpawn/12R"), NodePath("BoneAttachments/TankSpawn/13R")]
 cores = [NodePath("BoneAttachments/Cores/RCore1/Core/GolemCore"), NodePath("BoneAttachments/Cores/RCore2/Core/GolemCore"), NodePath("BoneAttachments/Cores/RCore3/Core/GolemCore"), NodePath("BoneAttachments/Cores/LCore1/Core/GolemCore"), NodePath("BoneAttachments/Cores/LCore2/Core/GolemCore"), NodePath("BoneAttachments/Cores/LCore3/Core/GolemCore")]
-burnPositions = [NodePath("Environment/ArenaPlatform/BurnPosition1"), NodePath("Environment/ArenaPlatform/BurnPosition2"), NodePath("Environment/ArenaPlatform/BurnPosition3")]
+burnPositions = [NodePath("Environment/BurnPosition1"), NodePath("Environment/BurnPosition2"), NodePath("Environment/BurnPosition3")]
 gasTankScene = ExtResource("3_7wg3m")
 gasTankSpawnPositions = [NodePath("BoneAttachments/TankSpawn/01L/Tank0"), NodePath("BoneAttachments/TankSpawn/02L/Tank1"), NodePath("BoneAttachments/TankSpawn/03L/Tank2"), NodePath("BoneAttachments/TankSpawn/11L/Tank3"), NodePath("BoneAttachments/TankSpawn/12L/Tank4"), NodePath("BoneAttachments/TankSpawn/13L/Tank5"), NodePath("BoneAttachments/TankSpawn/01R/Tank6"), NodePath("BoneAttachments/TankSpawn/02R/Tank7"), NodePath("BoneAttachments/TankSpawn/03R/Tank8"), NodePath("BoneAttachments/TankSpawn/11R/Tank9"), NodePath("BoneAttachments/TankSpawn/12R/Tank10"), NodePath("BoneAttachments/TankSpawn/13R/Tank11")]
 
@@ -1022,7 +1026,7 @@ parameters/special_trigger/request = 0
 [node name="Cores" type="Node3D" parent="BoneAttachments" index="0"]
 
 [node name="RCore1" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="0"]
-transform = Transform3D(-0.155963, -0.987763, -6.30368e-07, 0.987763, -0.155963, -3.50449e-06, 3.31371e-06, -1.10105e-06, 1, -35.9999, 9.1, 0.300027)
+transform = Transform3D(-0.155962, -0.987763, 2.52825e-08, 0.987763, -0.155962, -3.6237e-06, 3.5833e-06, -5.40185e-07, 1, -35.9999, 9.1, 0.300031)
 bone_name = "r_core1"
 bone_idx = 47
 use_external_skeleton = true
@@ -1035,7 +1039,7 @@ transform = Transform3D(0.156434, -0.987688, 0, 0.987688, 0.156434, 0, 0, 0, 1, 
 isRightHand = true
 
 [node name="RCore2" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="1"]
-transform = Transform3D(-0.155962, -0.987763, -6.92247e-07, 0.987763, -0.155962, -3.50995e-06, 3.30945e-06, -1.16302e-06, 1, -35.9999, 9.10001, -0.999966)
+transform = Transform3D(-0.155962, -0.987763, -3.65969e-08, 0.987763, -0.155962, -3.62915e-06, 3.57904e-06, -6.02158e-07, 1, -35.9999, 9.10001, -0.999962)
 bone_name = "r_core2"
 bone_idx = 51
 use_external_skeleton = true
@@ -1048,7 +1052,7 @@ transform = Transform3D(0.156434, -0.987688, -4.25959e-09, 0.987688, 0.156434, -
 isRightHand = true
 
 [node name="RCore3" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="2"]
-transform = Transform3D(-0.155963, -0.987763, -4.28236e-07, 0.987763, -0.155963, -3.59257e-06, 3.43224e-06, -9.15127e-07, 1, -35.9999, 9.10001, -2.29997)
+transform = Transform3D(-0.155962, -0.987763, 2.27415e-07, 0.987763, -0.155962, -3.71178e-06, 3.70182e-06, -3.54262e-07, 1, -35.9999, 9.10001, -2.29996)
 bone_name = "r_core3"
 bone_idx = 55
 use_external_skeleton = true
@@ -1061,7 +1065,7 @@ transform = Transform3D(0.156434, -0.987688, 1.18526e-07, 0.987688, 0.156434, 1.
 isRightHand = true
 
 [node name="LCore1" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="3"]
-transform = Transform3D(-0.155962, 0.987763, -4.59562e-07, -0.987763, -0.155962, -4.52114e-06, -4.53749e-06, -2.51189e-07, 1, 36, 9.10002, -2.29996)
+transform = Transform3D(-0.155962, 0.987763, -3.70155e-07, -0.987763, -0.155962, -3.56747e-06, -3.62648e-06, -2.88374e-07, 1, 36, 9.10001, -2.29996)
 bone_name = "l_core1"
 bone_idx = 71
 use_external_skeleton = true
@@ -1073,7 +1077,7 @@ transform = Transform3D(-0.156434, -0.987688, 0, 0.987688, -0.156434, 2.84217e-1
 [node name="GolemCore" parent="BoneAttachments/Cores/LCore1/Core" index="0" instance=ExtResource("4_0luyt")]
 
 [node name="LCore2" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="4"]
-transform = Transform3D(-0.155962, 0.987763, -1.95549e-07, -0.987763, -0.155962, -4.43852e-06, -4.41471e-06, -4.99085e-07, 1, 36, 9.10001, -0.99996)
+transform = Transform3D(-0.155962, 0.987763, -1.06142e-07, -0.987763, -0.155962, -3.48485e-06, -3.50369e-06, -5.3627e-07, 1, 36, 9.10001, -0.999961)
 bone_name = "l_core2"
 bone_idx = 67
 use_external_skeleton = true
@@ -1085,7 +1089,7 @@ transform = Transform3D(-0.156434, -0.987688, 1.22785e-07, 0.987688, -0.156434, 
 [node name="GolemCore" parent="BoneAttachments/Cores/LCore2/Core" index="0" instance=ExtResource("4_0luyt")]
 
 [node name="LCore3" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="5"]
-transform = Transform3D(-0.155962, 0.987763, -2.57429e-07, -0.987763, -0.155962, -4.43307e-06, -4.41897e-06, -4.37111e-07, 1, 36, 9.1, 0.300034)
+transform = Transform3D(-0.155962, 0.987763, -1.68022e-07, -0.987763, -0.155962, -3.47939e-06, -3.50795e-06, -4.74296e-07, 1, 36, 9.1, 0.300032)
 bone_name = "l_core3"
 bone_idx = 63
 use_external_skeleton = true
@@ -1114,8 +1118,9 @@ script = ExtResource("2_v71j8")
 [node name="StaticBody3D" parent="BoneAttachments/BodyParts/Root/IfritGolemCollision/Wall" index="0" groups=["wall"]]
 
 [node name="ClimbCamera" parent="BoneAttachments/BodyParts/Root/IfritGolemCollision" index="2" instance=ExtResource("9_xqc7y")]
-transform = Transform3D(-0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, -0.766044, 21.9442, 6.4, -8.72493)
+"Trigger Mode" = 2
 "Enter Mode" = 0
+"Exit Mode" = 0
 
 [node name="Camera" type="Node3D" parent="BoneAttachments/BodyParts/Root/IfritGolemCollision/ClimbCamera" index="0"]
 script = ExtResource("7_7kxhk")
@@ -1124,8 +1129,8 @@ settings = ExtResource("8_m8xnx")
 previousSettings = ExtResource("9_6fxph")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAttachments/BodyParts/Root/IfritGolemCollision/ClimbCamera" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_n2677")
+transform = Transform3D(1, 0, 2.98023e-08, -3.0731e-13, 1, 3.09086e-13, -2.98023e-08, 0, 1, 0, 8, 9.53674e-07)
+shape = SubResource("CylinderShape3D_8xrv2")
 
 [node name="OvershootTrigger" parent="BoneAttachments/BodyParts/Root" index="1" instance=ExtResource("9_xqc7y")]
 transform = Transform3D(0.707107, 0.241845, 0.664463, 0.707107, -0.241845, -0.664463, 0, 0.939693, -0.34202, 10.4343, -8.56569, 17)
@@ -1139,7 +1144,7 @@ shape = SubResource("BoxShape3D_n2677")
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -26, 0)
 
 [node name="Head" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="1"]
-transform = Transform3D(1, 1.50996e-07, -6.88604e-14, -1.50996e-07, 1, -4.20213e-06, -5.63764e-13, 4.20213e-06, 1, 3.01991e-07, 15.6, 0.700058)
+transform = Transform3D(1, 1.50996e-07, -4.48798e-14, -1.50996e-07, 1, -4.20213e-06, -5.90409e-13, 4.20213e-06, 1, 3.01992e-07, 15.6, 0.700059)
 bone_name = "head"
 bone_idx = 4
 use_external_skeleton = true
@@ -1198,7 +1203,7 @@ process_material = SubResource("ParticleProcessMaterial_n42eo")
 draw_pass_1 = SubResource("QuadMesh_ojqyr")
 
 [node name="RShoulder" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="2"]
-transform = Transform3D(0, -1, -2.38767e-07, 1, 1.0816e-12, -3.39074e-06, 3.39074e-06, -2.38767e-07, 1, -9, 8.5, 3.20673e-05)
+transform = Transform3D(3.57628e-07, -1, -2.38767e-07, 1, 3.57629e-07, -3.39074e-06, 3.39074e-06, -2.38766e-07, 1, -9, 8.5, 3.20673e-05)
 bone_name = "r_shoulder"
 bone_idx = 7
 use_external_skeleton = true
@@ -1321,7 +1326,7 @@ process_material = SubResource("ParticleProcessMaterial_r8hfe")
 draw_pass_1 = SubResource("QuadMesh_w6uoc")
 
 [node name="RElbow" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="5"]
-transform = Transform3D(1, -6.47533e-07, 2.71917e-07, 6.47552e-07, 1, 8.21356e-06, -2.71922e-07, -8.21356e-06, 1, -20.2, 8.5, 1.40003)
+transform = Transform3D(1, 1.86932e-07, 2.71921e-07, -1.86913e-07, 1, 8.21355e-06, -2.7192e-07, -8.21355e-06, 1, -20.2, 8.5, 1.40003)
 bone_name = "r_elbow"
 bone_idx = 10
 use_external_skeleton = true
@@ -1345,7 +1350,7 @@ process_material = SubResource("ParticleProcessMaterial_r8hfe")
 draw_pass_1 = SubResource("QuadMesh_w6uoc")
 
 [node name="LElbow" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="6"]
-transform = Transform3D(1, -1.42997e-07, 9.27299e-08, 1.42998e-07, 1, -1.17727e-06, -9.27297e-08, 1.17727e-06, 1, 20.2, 8.5, 1.40003)
+transform = Transform3D(1, -1.42997e-07, 9.27298e-08, 1.42998e-07, 1, -1.17727e-06, -9.27296e-08, 1.17727e-06, 1, 20.2, 8.5, 1.40003)
 bone_name = "l_elbow"
 bone_idx = 27
 use_external_skeleton = true
@@ -1373,7 +1378,7 @@ draw_pass_1 = SubResource("QuadMesh_w6uoc")
 [node name="01L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="0"]
 process_priority = 1
 process_physics_priority = 1
-transform = Transform3D(1, -1.42997e-07, 9.27298e-08, 1.42998e-07, 1, 2.39901e-06, -9.27301e-08, -2.39901e-06, 1, 23, 9.94994, -2.00121)
+transform = Transform3D(1, -1.42997e-07, 9.27297e-08, 1.42998e-07, 1, 2.39901e-06, -9.273e-08, -2.39901e-06, 1, 23, 9.94994, -2.00121)
 bone_name = "l_spawn01"
 bone_idx = 34
 use_external_skeleton = true
@@ -1385,7 +1390,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 [node name="02L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="1"]
 process_priority = 1
 process_physics_priority = 1
-transform = Transform3D(1, -1.42997e-07, 9.27298e-08, 1.42998e-07, 1, 2.39901e-06, -9.27301e-08, -2.39901e-06, 1, 25, 9.94994, -2.00121)
+transform = Transform3D(1, -1.42997e-07, 9.27297e-08, 1.42998e-07, 1, 2.39901e-06, -9.273e-08, -2.39901e-06, 1, 25, 9.94994, -2.00121)
 bone_name = "l_spawn02"
 bone_idx = 39
 use_external_skeleton = true
@@ -1397,7 +1402,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 [node name="03L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="2"]
 process_priority = 1
 process_physics_priority = 1
-transform = Transform3D(1, -1.42997e-07, 9.27297e-08, 1.42998e-07, 1, 2.63742e-06, -9.27301e-08, -2.63742e-06, 1, 27, 9.99951, -2.00493)
+transform = Transform3D(1, -1.42997e-07, 9.27296e-08, 1.42998e-07, 1, 2.63742e-06, -9.273e-08, -2.63742e-06, 1, 27, 9.99951, -2.00493)
 bone_name = "l_spawn03"
 bone_idx = 38
 use_external_skeleton = true
@@ -1409,7 +1414,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 [node name="11L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="3"]
 process_priority = 1
 process_physics_priority = 1
-transform = Transform3D(1, -1.42997e-07, 9.27297e-08, 1.42998e-07, 1, 2.51821e-06, -9.27301e-08, -2.51821e-06, 1, 23, 9.94994, 0.00128245)
+transform = Transform3D(1, -1.42997e-07, 9.27296e-08, 1.42998e-07, 1, 2.51822e-06, -9.273e-08, -2.51822e-06, 1, 23, 9.94994, 0.00128245)
 bone_name = "l_spawn11"
 bone_idx = 35
 use_external_skeleton = true
@@ -1421,7 +1426,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 [node name="12L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="4"]
 process_priority = 1
 process_physics_priority = 1
-transform = Transform3D(1, -1.42997e-07, 9.27297e-08, 1.42998e-07, 1, 2.51821e-06, -9.27301e-08, -2.51821e-06, 1, 25, 9.94994, 0.00128222)
+transform = Transform3D(1, -1.42997e-07, 9.27296e-08, 1.42998e-07, 1, 2.51822e-06, -9.273e-08, -2.51822e-06, 1, 25, 9.94994, 0.00128222)
 bone_name = "l_spawn12"
 bone_idx = 36
 use_external_skeleton = true
@@ -1433,7 +1438,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 [node name="13L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="5"]
 process_priority = 1
 process_physics_priority = 1
-transform = Transform3D(1, -1.42997e-07, 9.27297e-08, 1.42998e-07, 1, 2.51821e-06, -9.27301e-08, -2.51821e-06, 1, 27, 9.94994, 0.00128055)
+transform = Transform3D(1, -1.42997e-07, 9.27296e-08, 1.42998e-07, 1, 2.51822e-06, -9.273e-08, -2.51822e-06, 1, 27, 9.94994, 0.00128055)
 bone_name = "l_spawn13"
 bone_idx = 37
 use_external_skeleton = true
@@ -1445,7 +1450,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 [node name="01R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="6"]
 process_priority = 1
 process_physics_priority = 1
-transform = Transform3D(1, -6.47532e-07, 2.95746e-07, 6.47552e-07, 1, 2.72994e-06, -2.95748e-07, -2.72994e-06, 1, -23, 9.94994, -2.00122)
+transform = Transform3D(1, 1.86933e-07, 2.95746e-07, -1.86913e-07, 1, 2.72993e-06, -2.95746e-07, -2.72994e-06, 1, -23, 9.94994, -2.00122)
 bone_name = "r_spawn01"
 bone_idx = 17
 use_external_skeleton = true
@@ -1457,7 +1462,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 [node name="02R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="7"]
 process_priority = 1
 process_physics_priority = 1
-transform = Transform3D(1, -6.47532e-07, 2.95746e-07, 6.47552e-07, 1, 2.72994e-06, -2.95748e-07, -2.72994e-06, 1, -25, 9.94993, -2.00122)
+transform = Transform3D(1, 1.86933e-07, 2.95746e-07, -1.86913e-07, 1, 2.72993e-06, -2.95746e-07, -2.72994e-06, 1, -25, 9.94994, -2.00122)
 bone_name = "r_spawn02"
 bone_idx = 22
 use_external_skeleton = true
@@ -1469,7 +1474,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 [node name="03R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="8"]
 process_priority = 1
 process_physics_priority = 1
-transform = Transform3D(1, -6.47532e-07, 2.95746e-07, 6.47552e-07, 1, 2.72994e-06, -2.95748e-07, -2.72994e-06, 1, -27, 9.9995, -2.00493)
+transform = Transform3D(1, 1.86933e-07, 2.95746e-07, -1.86913e-07, 1, 2.72993e-06, -2.95746e-07, -2.72994e-06, 1, -27, 9.99951, -2.00493)
 bone_name = "r_spawn03"
 bone_idx = 21
 use_external_skeleton = true
@@ -1481,7 +1486,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 [node name="11R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="9"]
 process_priority = 1
 process_physics_priority = 1
-transform = Transform3D(1, -6.47532e-07, 2.95746e-07, 6.47552e-07, 1, 2.72994e-06, -2.95748e-07, -2.72994e-06, 1, -23, 9.94993, 0.00128019)
+transform = Transform3D(1, 1.86933e-07, 2.95746e-07, -1.86913e-07, 1, 2.72993e-06, -2.95746e-07, -2.72994e-06, 1, -23, 9.94994, 0.00128019)
 bone_name = "r_spawn11"
 bone_idx = 18
 use_external_skeleton = true
@@ -1493,7 +1498,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 [node name="12R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="10"]
 process_priority = 1
 process_physics_priority = 1
-transform = Transform3D(1, -6.47532e-07, 2.95746e-07, 6.47552e-07, 1, 2.72994e-06, -2.95748e-07, -2.72994e-06, 1, -25, 9.94993, 0.00128067)
+transform = Transform3D(1, 1.86933e-07, 2.95746e-07, -1.86913e-07, 1, 2.72993e-06, -2.95746e-07, -2.72994e-06, 1, -25, 9.94994, 0.00128067)
 bone_name = "r_spawn12"
 bone_idx = 19
 use_external_skeleton = true
@@ -1505,7 +1510,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 [node name="13R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="11"]
 process_priority = 1
 process_physics_priority = 1
-transform = Transform3D(1, -6.47532e-07, 2.95746e-07, 6.47552e-07, 1, 2.72994e-06, -2.95748e-07, -2.72994e-06, 1, -27, 9.94993, 0.00127983)
+transform = Transform3D(1, 1.86933e-07, 2.95746e-07, -1.86913e-07, 1, 2.72993e-06, -2.95746e-07, -2.72994e-06, 1, -27, 9.94994, 0.00127983)
 bone_name = "r_spawn13"
 bone_idx = 20
 use_external_skeleton = true
@@ -1516,7 +1521,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="Environment" type="Node3D" parent="." index="4"]
 
-[node name="Lava" parent="Environment" index="0" instance=ExtResource("2_wope5")]
+[node name="BurnPosition1" type="Node3D" parent="Environment" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 6, 21.3)
+
+[node name="BurnPosition2" type="Node3D" parent="Environment" index="1"]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 10.9463, 6, -23.6404)
+
+[node name="BurnPosition3" type="Node3D" parent="Environment" index="2"]
+transform = Transform3D(-0.5, 0, -0.866026, 0, 1, 0, 0.866026, 0, -0.5, -25.9463, 6, 2.34038)
+
+[node name="Lava" parent="Environment" index="3" instance=ExtResource("2_wope5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -15, 0)
 
 [node name="LavaRipple1Mesh" parent="Environment/Lava" index="0"]
@@ -1538,27 +1552,18 @@ script = ExtResource("5_rxyxv")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Lava/LavaHazard" index="0"]
 shape = SubResource("BoxShape3D_utngs")
 
-[node name="ArenaPlatform" parent="Environment" index="1" instance=ExtResource("2_nsyah")]
+[node name="ArenaPlatform" parent="Environment" index="4" instance=ExtResource("2_nsyah")]
 
-[node name="BurnPosition1" type="Node3D" parent="Environment/ArenaPlatform" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 21.3)
-
-[node name="BurnPosition2" type="Node3D" parent="Environment/ArenaPlatform" index="4"]
-transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 10.9463, 1, -23.6404)
-
-[node name="BurnPosition3" type="Node3D" parent="Environment/ArenaPlatform" index="5"]
-transform = Transform3D(-0.5, 0, -0.866026, 0, 1, 0, 0.866026, 0, -0.5, -25.9463, 1, 2.34038)
-
-[node name="Lockout" type="Node3D" parent="Environment" index="2"]
+[node name="Lockout" type="Node3D" parent="Environment" index="5"]
 script = ExtResource("11_iscui")
 lockoutData = ExtResource("12_cgkgo")
 
-[node name="HighCamera" type="Node3D" parent="Environment" index="3"]
+[node name="HighCamera" type="Node3D" parent="Environment" index="6"]
 script = ExtResource("7_7kxhk")
 transitionTime = 0.5
 settings = ExtResource("9_6fxph")
 
-[node name="LowCamera" type="Node3D" parent="Environment" index="4"]
+[node name="LowCamera" type="Node3D" parent="Environment" index="7"]
 script = ExtResource("7_7kxhk")
 transitionTime = 0.5
 settings = ExtResource("15_3iytr")

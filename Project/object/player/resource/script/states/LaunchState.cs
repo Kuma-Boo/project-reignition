@@ -128,7 +128,14 @@ public partial class LaunchState : PlayerState
 
 	private bool CheckWall(Vector3 targetPosition)
 	{
-		RaycastHit hit = Player.CastRay(Player.GlobalPosition, targetPosition - Player.GlobalPosition, Runtime.Instance.environmentMask);
-		return hit && hit.collidedObject.IsInGroup("wall");
+		Vector3 direction = targetPosition - Player.GlobalPosition;
+		RaycastHit hit = Player.CastRay(Player.GlobalPosition, direction, Runtime.Instance.environmentMask);
+		if (!hit || !hit.collidedObject.IsInGroup("wall"))
+			return false;
+
+		if (hit.normal.Dot(direction.Normalized()) < .5f)
+			return false;
+
+		return true;
 	}
 }

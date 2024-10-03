@@ -861,6 +861,9 @@ public partial class IfritGolem : Node3D
 
 	private void OnLavaDamagedPlayer()
 	{
+		if (Player.IsLaunching)
+			return;
+
 		if (Player.IsDefeated || Player.IsTeleporting) // Don't bother launching the player when respawning
 			return;
 
