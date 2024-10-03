@@ -91,7 +91,7 @@ public partial class LaunchState : PlayerState
 			return fallState;
 
 		Player.GlobalPosition = targetPosition;
-		Player.VerticalSpeed = heightDelta;
+		Player.VerticalSpeed = heightDelta / PhysicsManager.physicsDelta;
 		Player.PathFollower.Resync();
 
 		if (heightDelta < 0 && Player.CheckGround()) // Only check ground when falling
