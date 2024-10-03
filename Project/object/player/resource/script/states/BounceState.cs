@@ -30,8 +30,10 @@ public partial class BounceState : PlayerState
 		if (IsUpwardBounce && Player.Lockon.Target != null) // Snap the player to the target
 		{
 			Player.MoveSpeed = 0; // Reset speed
+
 			bool applySnapping = Mathf.IsZeroApprox(bounceInterruptTimer) &&
-				(Player.Lockon.Target is Area3D || Player.Lockon.Target is PhysicsBody3D);
+				((Player.Lockon.Target is Area3D area && Player.Lockon.GetOverlappingAreas().Contains(area)) ||
+				(Player.Lockon.Target is PhysicsBody3D body && Player.Lockon.GetOverlappingBodies().Contains(body)));
 
 			// Only snap when target being hit is correct
 			if (applySnapping)
