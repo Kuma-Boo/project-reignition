@@ -2,7 +2,6 @@ using Godot;
 using System.Collections.Generic;
 using Project.Core;
 using Project.Gameplay.Objects;
-using System.Linq;
 
 namespace Project.Gameplay.Bosses;
 
@@ -115,8 +114,7 @@ public partial class IfritGolem : Node3D
 		}
 
 		StageSettings.Instance.Respawned += Respawn;
-		// TODO Play introduction cutscene
-		Respawn();
+		StageSettings.Instance.LevelStarted += StartIntroduction;
 	}
 
 	public override void _ExitTree()
@@ -154,6 +152,10 @@ public partial class IfritGolem : Node3D
 	{
 		switch (currentState)
 		{
+			case GolemState.Introduction:
+				if (Input.IsActionJustPressed("button_pause"))
+					FinishIntroduction();
+				break;
 			case GolemState.Idle:
 				ProcessIdle();
 				break;
@@ -190,6 +192,43 @@ public partial class IfritGolem : Node3D
 		// Force-update bone attachments so objects don't go out of sync
 		foreach (BoneAttachment3D bone in boneAttachments)
 			bone.OnBonePoseUpdate(bone.BoneIdx);
+	}
+
+	private readonly StringName IntroTrigger = "parameters/intro_trigger/request";
+	private void StartIntroduction()
+	{
+		// Disable the player for the intro animation
+		Player.ProcessMode = ProcessModeEnum.Disabled;
+		Interface.PauseMenu.AllowPausing = false;
+		HeadsUpDisplay.instance.Visible = false;
+		AnimationTree.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	private void FinishIntroduction()
+	{
+		if (TransitionManager.IsTransitionActive) return; // Player must have skipped the introduction animation
+
+		TransitionManager.StartTransition(new()
+		{
+			inSpeed = 0f,
+			outSpeed = .5f,
+			color = Colors.Black
+		});
+
+		TransitionManager.instance.TransitionProcess += StartBattle;
+	}
+
+	private void StartBattle()
+	{
+		TransitionManager.instance.TransitionProcess -= StartBattle;
+		AnimationTree.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+
+		Respawn();
+		TransitionManager.FinishTransition();
+		Player.ProcessMode = ProcessModeEnum.Inherit;
+		Interface.PauseMenu.AllowPausing = true;
+		HeadsUpDisplay.instance.Visible = true;
+		Player.Camera.Camera.Current = true;
 	}
 
 	private void EnterIdle()
@@ -449,15 +488,35 @@ public partial class IfritGolem : Node3D
 			CallDeferred(MethodName.EnterDamage);
 	}
 
+	private readonly StringName DefeatTrigger = "parameters/defeat_trigger/request";
 	private void DefeatBoss()
 	{
-		GD.Print("Boss Defeated");
-		ExitHitstun();
+		TransitionManager.StartTransition(new()
+		{
+			inSpeed = 0f,
+			outSpeed = .5f,
+			color = Colors.Black
+		});
+		TransitionManager.FinishTransition();
 
-		// TODO Play defeat cutscene
-		Player.LaunchFinished += FinishLevel;
+		ExitHitstun();
+		Player.Visible = false;
+		Player.ProcessMode = ProcessModeEnum.Disabled;
+		Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
+
+		AnimationTree.Set(DefeatTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		// Award 8000 points for defeating the boss
 		BonusManager.instance.QueueBonus(new(BonusType.Boss, 8000));
+		Interface.PauseMenu.AllowPausing = false;
 		currentState = GolemState.Defeated;
+	}
+
+	private void StartResults()
+	{
+		AnimationTree.Active = false;
+		Player.Visible = true;
+		Player.ProcessMode = ProcessModeEnum.Inherit;
+		StageSettings.Instance.FinishLevel(true);
 	}
 
 	private void FinishLevel() => StageSettings.Instance.FinishLevel(true);

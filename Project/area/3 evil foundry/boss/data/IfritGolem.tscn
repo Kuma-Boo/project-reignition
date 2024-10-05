@@ -1,4 +1,4 @@
-[gd_scene load_steps=138 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=142 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
@@ -24,6 +24,11 @@
 [ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffsetFade.gdshader" id="19_khjmj"]
 [ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffset.gdshader" id="19_sr8ns"]
 [ext_resource type="Material" uid="uid://dv8e2vx0q5qy6" path="res://area/3 evil foundry/boss/effect/material/Laser Contact.tres" id="21_fakwu"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xc84b"]
+animation = &"defeat"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ocice"]
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_g8eyb"]
 filter_enabled = true
@@ -113,6 +118,11 @@ point_count = 2
 fadein_time = 0.1
 fadeout_time = 1.0
 fadeout_curve = SubResource("Curve_upeqj")
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5m2c7"]
+animation = &"intro"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_k4wi6"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2c2kh"]
 animation = &"idle"
@@ -340,7 +350,11 @@ fadeout_time = 0.5
 fadeout_curve = SubResource("Curve_upeqj")
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_bb4ub"]
-graph_offset = Vector2(-202.868, -20.5703)
+graph_offset = Vector2(-484.999, 200.886)
+nodes/defeat_anim/node = SubResource("AnimationNodeAnimation_xc84b")
+nodes/defeat_anim/position = Vector2(180, 360)
+nodes/defeat_trigger/node = SubResource("AnimationNodeOneShot_ocice")
+nodes/defeat_trigger/position = Vector2(340, 160)
 nodes/gear_add/node = SubResource("AnimationNodeAdd2_g8eyb")
 nodes/gear_add/position = Vector2(-400, 0)
 nodes/gear_anim/node = SubResource("AnimationNodeAnimation_blrrc")
@@ -359,9 +373,13 @@ nodes/hitstun_state/node = SubResource("AnimationNodeStateMachine_erj6u")
 nodes/hitstun_state/position = Vector2(-800, 200)
 nodes/hitstun_trigger/node = SubResource("AnimationNodeOneShot_7saw6")
 nodes/hitstun_trigger/position = Vector2(-600, 0)
+nodes/intro_anim/node = SubResource("AnimationNodeAnimation_5m2c7")
+nodes/intro_anim/position = Vector2(0, 340)
+nodes/intro_trigger/node = SubResource("AnimationNodeOneShot_k4wi6")
+nodes/intro_trigger/position = Vector2(180, 160)
 nodes/normal_state/node = SubResource("AnimationNodeStateMachine_21w4q")
 nodes/normal_state/position = Vector2(-1000, 0)
-nodes/output/position = Vector2(200, 160)
+nodes/output/position = Vector2(520, 160)
 nodes/shutter_add/node = SubResource("AnimationNodeAdd2_velll")
 nodes/shutter_add/position = Vector2(0, 160)
 nodes/shutter_tree/node = SubResource("AnimationNodeBlendTree_ao2hh")
@@ -370,7 +388,7 @@ nodes/special_state/node = SubResource("AnimationNodeStateMachine_x47fr")
 nodes/special_state/position = Vector2(-1000, 200)
 nodes/special_trigger/node = SubResource("AnimationNodeOneShot_wjwst")
 nodes/special_trigger/position = Vector2(-800, 0)
-node_connections = [&"gear_add", 0, &"hitstun_trigger", &"gear_add", 1, &"gear_anim", &"head_add", 0, &"gear_add", &"head_add", 1, &"head_blend", &"head_blend", 0, &"head_right_anim", &"head_blend", 1, &"head_center_anim", &"head_blend", 2, &"head_left_anim", &"hitstun_trigger", 0, &"special_trigger", &"hitstun_trigger", 1, &"hitstun_state", &"output", 0, &"shutter_add", &"shutter_add", 0, &"head_add", &"shutter_add", 1, &"shutter_tree", &"special_trigger", 0, &"normal_state", &"special_trigger", 1, &"special_state"]
+node_connections = [&"defeat_trigger", 0, &"intro_trigger", &"defeat_trigger", 1, &"defeat_anim", &"gear_add", 0, &"hitstun_trigger", &"gear_add", 1, &"gear_anim", &"head_add", 0, &"gear_add", &"head_add", 1, &"head_blend", &"head_blend", 0, &"head_right_anim", &"head_blend", 1, &"head_center_anim", &"head_blend", 2, &"head_left_anim", &"hitstun_trigger", 0, &"special_trigger", &"hitstun_trigger", 1, &"hitstun_state", &"intro_trigger", 0, &"shutter_add", &"intro_trigger", 1, &"intro_anim", &"output", 0, &"defeat_trigger", &"shutter_add", 0, &"head_add", &"shutter_add", 1, &"shutter_tree", &"special_trigger", 0, &"normal_state", &"special_trigger", 1, &"special_state"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_8xrv2"]
 height = 50.0
@@ -972,12 +990,18 @@ active = false
 callback_mode_process = 0
 tree_root = SubResource("AnimationNodeBlendTree_bb4ub")
 anim_player = NodePath("../AnimationPlayer")
+parameters/defeat_trigger/active = false
+parameters/defeat_trigger/internal_active = false
+parameters/defeat_trigger/request = 0
 parameters/gear_add/add_amount = 1.0
 parameters/head_add/add_amount = 1.0
 parameters/head_blend/blend_amount = 0
 parameters/hitstun_trigger/active = false
 parameters/hitstun_trigger/internal_active = false
 parameters/hitstun_trigger/request = 0
+parameters/intro_trigger/active = false
+parameters/intro_trigger/internal_active = false
+parameters/intro_trigger/request = 0
 parameters/shutter_add/add_amount = 1.0
 parameters/shutter_tree/01_l_trigger/active = false
 parameters/shutter_tree/01_l_trigger/internal_active = false
@@ -1026,7 +1050,7 @@ parameters/special_trigger/request = 0
 [node name="Cores" type="Node3D" parent="BoneAttachments" index="0"]
 
 [node name="RCore1" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="0"]
-transform = Transform3D(-0.155962, -0.987763, 2.52825e-08, 0.987763, -0.155962, -3.6237e-06, 3.5833e-06, -5.40185e-07, 1, -35.9999, 9.1, 0.300031)
+transform = Transform3D(-0.155962, -0.987763, 2.52826e-08, 0.987763, -0.155962, -3.6237e-06, 3.5833e-06, -5.40185e-07, 1, -35.9999, 9.1, 0.300032)
 bone_name = "r_core1"
 bone_idx = 47
 use_external_skeleton = true
@@ -1039,7 +1063,7 @@ transform = Transform3D(0.156434, -0.987688, 0, 0.987688, 0.156434, 0, 0, 0, 1, 
 isRightHand = true
 
 [node name="RCore2" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="1"]
-transform = Transform3D(-0.155962, -0.987763, -3.65969e-08, 0.987763, -0.155962, -3.62915e-06, 3.57904e-06, -6.02158e-07, 1, -35.9999, 9.10001, -0.999962)
+transform = Transform3D(-0.155962, -0.987763, -3.65965e-08, 0.987763, -0.155962, -3.62915e-06, 3.57904e-06, -6.02158e-07, 1, -35.9999, 9.10001, -0.999961)
 bone_name = "r_core2"
 bone_idx = 51
 use_external_skeleton = true
@@ -1052,7 +1076,7 @@ transform = Transform3D(0.156434, -0.987688, -4.25959e-09, 0.987688, 0.156434, -
 isRightHand = true
 
 [node name="RCore3" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="2"]
-transform = Transform3D(-0.155962, -0.987763, 2.27415e-07, 0.987763, -0.155962, -3.71178e-06, 3.70182e-06, -3.54262e-07, 1, -35.9999, 9.10001, -2.29996)
+transform = Transform3D(-0.155962, -0.987763, 2.27415e-07, 0.987763, -0.155962, -3.71177e-06, 3.70182e-06, -3.54262e-07, 1, -35.9999, 9.10001, -2.29996)
 bone_name = "r_core3"
 bone_idx = 55
 use_external_skeleton = true
@@ -1535,12 +1559,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -15, 0)
 
 [node name="LavaRipple1Mesh" parent="Environment/Lava" index="0"]
 visible = false
+cast_shadow = 0
 
 [node name="LavaRipple2Mesh" parent="Environment/Lava" index="2"]
 visible = false
+cast_shadow = 0
 
 [node name="LavaRipple3Mesh" parent="Environment/Lava" index="3"]
 visible = false
+cast_shadow = 0
 
 [node name="LavaHazard" type="Area3D" parent="Environment/Lava" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
