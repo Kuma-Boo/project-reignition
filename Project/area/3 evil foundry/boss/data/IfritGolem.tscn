@@ -1,4 +1,4 @@
-[gd_scene load_steps=145 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=143 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://b7g26173gty07" path="res://area/3 evil foundry/boss/data/model/Lava.gltf" id="2_wope5"]
 [ext_resource type="PackedScene" uid="uid://b1vvf7gw3t311" path="res://area/3 evil foundry/boss/data/BossGasTank.tscn" id="3_7wg3m"]
 [ext_resource type="PackedScene" uid="uid://cayo6pq1qpjyf" path="res://area/3 evil foundry/boss/data/Core.tscn" id="4_0luyt"]
-[ext_resource type="Texture2D" uid="uid://b4a3q5q2cmgu0" path="res://area/3 evil foundry/boss/data/model/texture/lava glow.png" id="4_26qjk"]
+[ext_resource type="Material" uid="uid://brh3j4dti4ne4" path="res://area/3 evil foundry/boss/data/model/material/Glow Overlay.tres" id="4_1wjmy"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="5_rxyxv"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="7_7kxhk"]
 [ext_resource type="Resource" uid="uid://dfav6cfqlgdfx" path="res://area/3 evil foundry/boss/camera/ClimbCam.tres" id="8_m8xnx"]
@@ -25,37 +25,6 @@
 [ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffsetFade.gdshader" id="19_khjmj"]
 [ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffset.gdshader" id="19_sr8ns"]
 [ext_resource type="Material" uid="uid://dv8e2vx0q5qy6" path="res://area/3 evil foundry/boss/effect/material/Laser Contact.tres" id="21_fakwu"]
-
-[sub_resource type="Shader" id="Shader_boulh"]
-code = "shader_type spatial;
-render_mode blend_add, unshaded;
-
-uniform sampler2D texture_albedo : source_color, repeat_disable;
-uniform float glow_scale = 1.0;
-uniform float glow_offset;
-uniform float opacity = 1.0;
-varying float position;
-
-void vertex()
-{
-	position = (VERTEX.y * glow_scale) + glow_offset;
-}
-
-void fragment()
-{
-	vec4 albedo_tex = texture(texture_albedo, vec2(0, position));
-	ALBEDO = albedo_tex.rgb;
-	ALPHA = opacity;
-}
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6jits"]
-render_priority = 0
-shader = SubResource("Shader_boulh")
-shader_parameter/glow_scale = 0.05
-shader_parameter/glow_offset = null
-shader_parameter/opacity = 0.1
-shader_parameter/texture_albedo = ExtResource("4_26qjk")
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xc84b"]
 animation = &"defeat"
@@ -1003,18 +972,18 @@ bones/69/scale = Vector3(1, 1, 1)
 bones/71/scale = Vector3(1, 1, 1)
 
 [node name="BaseMesh" parent="IfritRoot/Skeleton3D" index="0"]
-material_overlay = SubResource("ShaderMaterial_6jits")
+material_overlay = ExtResource("4_1wjmy")
 cast_shadow = 0
 
 [node name="CoreMesh" parent="IfritRoot/Skeleton3D" index="1"]
 cast_shadow = 0
 
 [node name="GearMesh" parent="IfritRoot/Skeleton3D" index="2"]
-material_overlay = SubResource("ShaderMaterial_6jits")
+material_overlay = ExtResource("4_1wjmy")
 cast_shadow = 0
 
 [node name="PlateMesh" parent="IfritRoot/Skeleton3D" index="3"]
-material_overlay = SubResource("ShaderMaterial_6jits")
+material_overlay = ExtResource("4_1wjmy")
 cast_shadow = 0
 
 [node name="AnimationPlayer" parent="." index="1"]
