@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://cayo6pq1qpjyf"]
+[gd_scene load_steps=21 format=3 uid="uid://cayo6pq1qpjyf"]
 
 [ext_resource type="Script" path="res://area/3 evil foundry/data/script/Core.cs" id="1_b5skn"]
 [ext_resource type="PackedScene" uid="uid://db40cw21e0jlv" path="res://area/3 evil foundry/boss/data/model/GolemCore.gltf" id="1_ex3l5"]
 [ext_resource type="Material" uid="uid://cx8t0sy6gaqpm" path="res://area/3 evil foundry/boss/effect/material/Glow.tres" id="3_vh8wr"]
+[ext_resource type="Material" uid="uid://drgtm3le1tx81" path="res://object/stage/common/resource/model/material/Flying Pot Feather.tres" id="4_iisby"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pvw8k"]
 radius = 0.4
@@ -132,6 +133,20 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Damage")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_17ywy"]
@@ -293,6 +308,41 @@ alpha_curve = SubResource("CurveTexture_3w63w")
 [sub_resource type="QuadMesh" id="QuadMesh_h1pam"]
 material = ExtResource("3_vh8wr")
 
+[sub_resource type="Curve" id="Curve_emdib"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_xkcpy"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_emdib")
+
+[sub_resource type="Curve" id="Curve_thwtu"]
+_data = [Vector2(1e-05, 0), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.842843), -1.56905, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_sfgp3"]
+width = 64
+curve = SubResource("Curve_thwtu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_a0hi5"]
+lifetime_randomness = 0.5
+spread = 180.0
+flatness = 0.8
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+damping_min = 2.0
+damping_max = 2.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_sfgp3")
+alpha_curve = SubResource("CurveTexture_xkcpy")
+
+[sub_resource type="QuadMesh" id="QuadMesh_7e25t"]
+material = ExtResource("4_iisby")
+size = Vector2(0.1, 1)
+center_offset = Vector3(0, 0.3, 0)
+
 [node name="GolemCore" type="Area3D"]
 collision_layer = 4
 collision_mask = 2
@@ -341,6 +391,22 @@ draw_order = 1
 transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_uw28x")
 draw_pass_1 = SubResource("QuadMesh_h1pam")
+
+[node name="Damage" type="GPUParticles3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+layers = 32
+emitting = false
+amount = 32
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 0
+fract_delta = false
+visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
+draw_order = 1
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_a0hi5")
+draw_pass_1 = SubResource("QuadMesh_7e25t")
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
 [connection signal="area_exited" from="." to="." method="OnExited"]

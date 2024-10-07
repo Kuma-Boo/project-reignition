@@ -1,4 +1,4 @@
-[gd_scene load_steps=143 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=157 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
@@ -18,6 +18,8 @@
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="12_cgkgo"]
 [ext_resource type="Material" uid="uid://cx8t0sy6gaqpm" path="res://area/3 evil foundry/boss/effect/material/Glow.tres" id="12_ltvht"]
 [ext_resource type="Resource" uid="uid://uf7lyw3gw1fc" path="res://area/3 evil foundry/boss/camera/LowCam.tres" id="15_3iytr"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="15_5j6sd"]
+[ext_resource type="Texture2D" uid="uid://cpkbc7p47d2bg" path="res://effect/particle/texture/environment/common dust.png" id="15_feday"]
 [ext_resource type="Shader" path="res://effect/shader/particle/ParticleLocalBillboard.gdshader" id="16_vd0ip"]
 [ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="17_n2j05"]
 [ext_resource type="Material" uid="uid://c6fc13de00bdn" path="res://object/stage/common/resource/model/material/Goal Flame Base.tres" id="18_a4xxb"]
@@ -453,6 +455,73 @@ alpha_curve = SubResource("CurveTexture_en0dt")
 [sub_resource type="QuadMesh" id="QuadMesh_ojqyr"]
 material = ExtResource("12_ltvht")
 
+[sub_resource type="Curve" id="Curve_ve6kf"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0416667, 0.0751504), 4.21221, 4.21221, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_7101h"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_ve6kf")
+
+[sub_resource type="Gradient" id="Gradient_geumx"]
+offsets = PackedFloat32Array(0, 0.440217, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.972014, 0.318714, 3.63868e-05, 1, 1, 0.116667, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nc2dj"]
+gradient = SubResource("Gradient_geumx")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ykglb"]
+lifetime_randomness = 0.5
+emission_shape_offset = Vector3(0, 0.5, 0)
+direction = Vector3(0, 1, 0)
+spread = 60.0
+initial_velocity_min = 1.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, 0, 0)
+damping_min = 20.0
+damping_max = 20.0
+scale_min = 2.0
+scale_max = 8.0
+color_ramp = SubResource("GradientTexture1D_nc2dj")
+alpha_curve = SubResource("CurveTexture_7101h")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nyob0"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("15_feday")
+
+[sub_resource type="QuadMesh" id="QuadMesh_c0w2a"]
+material = SubResource("StandardMaterial3D_nyob0")
+size = Vector2(0.4, 1)
+center_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="Curve" id="Curve_qpuec"]
+_data = [Vector2(0, 0.339942), 0.0, 1.43327, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jn53k"]
+width = 64
+curve = SubResource("Curve_qpuec")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_y018f"]
+lifetime_randomness = 0.4
+angle_max = 360.0
+direction = Vector3(0, -1, 0.5)
+spread = 20.0
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_jn53k")
+alpha_curve = SubResource("CurveTexture_7101h")
+
+[sub_resource type="QuadMesh" id="QuadMesh_bu6vk"]
+material = ExtResource("15_5j6sd")
+
 [sub_resource type="Curve" id="Curve_hbebs"]
 _data = [Vector2(0.00260417, 0), 0.0, 30.4609, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
@@ -483,6 +552,20 @@ shader_parameter/albedo = ExtResource("17_n2j05")
 material = SubResource("ShaderMaterial_qdfrg")
 size = Vector2(2, 5)
 center_offset = Vector3(0, 2.5, 0)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7yc5q"]
+lifetime_randomness = 0.4
+emission_shape_offset = Vector3(0, 2, -2)
+angle_max = 360.0
+direction = Vector3(0, 1, -1)
+spread = 20.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_jn53k")
+alpha_curve = SubResource("CurveTexture_7101h")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_utngs"]
 size = Vector3(100, 5, 100)
@@ -1231,6 +1314,33 @@ transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_n42eo")
 draw_pass_1 = SubResource("QuadMesh_ojqyr")
 
+[node name="Damage" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Head" index="4"]
+transform = Transform3D(1, -2.47767e-18, 0, -2.48097e-18, 1, 0, 0, 0, 1, 9.09495e-13, 4, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 128
+lifetime = 0.5
+fixed_fps = 0
+fract_delta = false
+visibility_aabb = AABB(-2, -1, -2, 4, 2, 4)
+draw_order = 1
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_ykglb")
+draw_pass_1 = SubResource("QuadMesh_c0w2a")
+
+[node name="ChinSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Head" index="5"]
+transform = Transform3D(1, -2.47767e-18, 0, -2.48097e-18, 1, 0, 0, 0, 1, 2.27374e-13, -6, 3.8)
+layers = 32
+cast_shadow = 0
+amount = 16
+lifetime = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -6, -2, 6, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_y018f")
+draw_pass_1 = SubResource("QuadMesh_bu6vk")
+
 [node name="RShoulder" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="2"]
 transform = Transform3D(3.57628e-07, -1, -2.38767e-07, 1, 3.57629e-07, -3.39074e-06, 3.39074e-06, -2.38766e-07, 1, -9, 8.5, 3.20673e-05)
 bone_name = "r_shoulder"
@@ -1401,6 +1511,48 @@ visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_r8hfe")
 draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="LWrist" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="7"]
+transform = Transform3D(-2.38419e-07, 1, 8.9407e-08, -1, -3.27826e-07, -3.09944e-06, -3.15905e-06, -1.78814e-07, 1, 29.2, 8.50001, -0.999973)
+bone_name = "l_wrist"
+bone_idx = 56
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="MoveSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/LWrist" index="0"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -2, -5, 6, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_7yc5q")
+draw_pass_1 = SubResource("QuadMesh_bu6vk")
+
+[node name="RWrist" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="8"]
+transform = Transform3D(-9.53674e-07, -1, -3.57628e-07, 1, -9.53674e-07, -3.21865e-06, 3.21865e-06, -3.57628e-07, 1, -29.1999, 8.50001, -0.999973)
+bone_name = "r_wrist"
+bone_idx = 40
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="MoveSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/RWrist" index="0"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -2, -5, 6, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_7yc5q")
+draw_pass_1 = SubResource("QuadMesh_bu6vk")
 
 [node name="TankSpawn" type="Node3D" parent="BoneAttachments" index="2"]
 
