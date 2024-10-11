@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bgprgy7jv3pxr"]
+[gd_scene load_steps=17 format=3 uid="uid://bgprgy7jv3pxr"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_iilpd"]
 [ext_resource type="PackedScene" uid="uid://554o5nn5ah4r" path="res://area/3 evil foundry/boss/Static.tscn" id="1_vi4ig"]
@@ -7,9 +7,25 @@
 [ext_resource type="PackedScene" uid="uid://dakk7vvkh050f" path="res://area/3 evil foundry/boss/data/IfritGolem.tscn" id="4_28qle"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_evmsn"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="5_s4uog"]
+[ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="8_8mqqf"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="9_uja2t"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="10_p5v2h"]
+[ext_resource type="Resource" uid="uid://dfav6cfqlgdfx" path="res://area/3 evil foundry/boss/camera/ClimbCam.tres" id="11_0lae4"]
+[ext_resource type="Resource" uid="uid://df4ctc3ix5agq" path="res://area/3 evil foundry/boss/camera/HighCam.tres" id="12_sv6ma"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rxc87"]
 size = Vector3(20, 20, 15)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vhel6"]
+height = 50.0
+radius = 22.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hatdu"]
+size = Vector3(17, 20, 20)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1u7ey"]
+height = 32.0
+radius = 21.0
 
 [node name="World" type="Node"]
 
@@ -80,18 +96,61 @@ transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -22.5167, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_rxc87")
 
-[node name="DamagePath" type="Node3D" parent="BossAct/Boss" node_paths=PackedStringArray("path")]
+[node name="RootBone" type="BoneAttachment3D" parent="BossAct/Boss"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
+bone_name = "root"
+bone_idx = 0
+use_external_skeleton = true
+external_skeleton = NodePath("../IfritGolem/IfritRoot/Skeleton3D")
+
+[node name="IfritGolemCollision" parent="BossAct/Boss/RootBone" instance=ExtResource("8_8mqqf")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+script = ExtResource("9_uja2t")
+
+[node name="StaticBody3D" parent="BossAct/Boss/RootBone/IfritGolemCollision/Floor" index="0" groups=["floor"]]
+
+[node name="StaticBody3D" parent="BossAct/Boss/RootBone/IfritGolemCollision/Wall" index="0" groups=["wall"]]
+
+[node name="ClimbCamera" parent="BossAct/Boss/RootBone/IfritGolemCollision" instance=ExtResource("5_evmsn")]
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="BossAct/Boss/RootBone/IfritGolemCollision/ClimbCamera"]
+script = ExtResource("10_p5v2h")
+transitionTime = 0.5
+settings = ExtResource("11_0lae4")
+previousSettings = ExtResource("12_sv6ma")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/Boss/RootBone/IfritGolemCollision/ClimbCamera"]
+transform = Transform3D(1, 0, 2.98023e-08, -3.0731e-13, 1, 3.09086e-13, -2.98023e-08, 0, 1, 0, 8, 9.53674e-07)
+shape = SubResource("CylinderShape3D_vhel6")
+
+[node name="DamagePath" parent="BossAct/Boss/RootBone/IfritGolemCollision" instance=ExtResource("5_evmsn")]
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="DamagePath" type="Node3D" parent="BossAct/Boss/RootBone/IfritGolemCollision/DamagePath" node_paths=PackedStringArray("path")]
 script = ExtResource("5_s4uog")
-path = NodePath("../../../Static/Path/DamagePath/DamagePath")
+path = NodePath("../../../../../../Static/Path/DamagePath/DamagePath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/Boss/RootBone/IfritGolemCollision/DamagePath"]
+transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, 19.3188, 8, -7.75024)
+shape = SubResource("BoxShape3D_hatdu")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="BossAct/Boss/RootBone/IfritGolemCollision/DamagePath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13, 0)
+shape = SubResource("CylinderShape3D_1u7ey")
 
 [node name="MainPath" type="Node3D" parent="BossAct/Boss" node_paths=PackedStringArray("path")]
 script = ExtResource("5_s4uog")
 path = NodePath("../../../Static/Path/MainPath")
 
 [connection signal="StunEnded" from="BossAct/Boss/IfritGolem" to="Static/Collision/Wall" method="Activate"]
-[connection signal="StunEnded" from="BossAct/Boss/IfritGolem" to="BossAct/Boss/MainPath" method="Activate"]
+[connection signal="StunEnded" from="BossAct/Boss/IfritGolem" to="BossAct/Boss/RootBone/IfritGolemCollision" method="Deactivate"]
 [connection signal="Stunned" from="BossAct/Boss/IfritGolem" to="Static/Collision/Wall" method="Deactivate"]
-[connection signal="Stunned" from="BossAct/Boss/IfritGolem" to="BossAct/Boss/DamagePath" method="Activate"]
+[connection signal="Stunned" from="BossAct/Boss/IfritGolem" to="BossAct/Boss/RootBone/IfritGolemCollision" method="Activate"]
 [connection signal="Activated" from="BossAct/Boss/SectorTriggers/0" to="BossAct/Boss/IfritGolem" method="SetPlayerSector" binds= [0]]
 [connection signal="Activated" from="BossAct/Boss/SectorTriggers/1" to="BossAct/Boss/IfritGolem" method="SetPlayerSector" binds= [1]]
 [connection signal="Activated" from="BossAct/Boss/SectorTriggers/2" to="BossAct/Boss/IfritGolem" method="SetPlayerSector" binds= [2]]
@@ -100,3 +159,6 @@ path = NodePath("../../../Static/Path/MainPath")
 [connection signal="Activated" from="BossAct/Boss/SectorTriggers/5" to="BossAct/Boss/IfritGolem" method="SetPlayerSector" binds= [5]]
 
 [editable path="Static"]
+[editable path="BossAct/Boss/IfritGolem"]
+[editable path="BossAct/Boss/IfritGolem/Environment/Lava"]
+[editable path="BossAct/Boss/RootBone/IfritGolemCollision"]
