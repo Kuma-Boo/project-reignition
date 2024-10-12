@@ -13,10 +13,8 @@ public partial class IfritGolem : Node3D
 	private Node3D Root { get; set; }
 	[Export(PropertyHint.NodeType, "AnimationTree")] private NodePath animationTree;
 	private AnimationTree AnimationTree { get; set; }
-	[Export(PropertyHint.NodeType, "AnimationPlayer")] private NodePath laserAnimator;
-	private AnimationPlayer LaserAnimator { get; set; }
-	[Export(PropertyHint.NodeType, "AnimationPlayer")] private NodePath damageAnimator;
-	private AnimationPlayer DamageAnimator { get; set; }
+	[Export(PropertyHint.NodeType, "AnimationPlayer")] private NodePath eventAnimator;
+	private AnimationPlayer EventAnimator { get; set; }
 	[Export(PropertyHint.NodeType, "Area3D")] private NodePath headHurtbox;
 	private Area3D HeadHurtbox { get; set; }
 	[Export(PropertyHint.NodeType, "Node3D")] private NodePath damagePath;
@@ -108,8 +106,8 @@ public partial class IfritGolem : Node3D
 		Root = GetNode<Node3D>(root);
 		AnimationTree = GetNode<AnimationTree>(animationTree);
 		AnimationTree.Active = true;
-		LaserAnimator = GetNode<AnimationPlayer>(laserAnimator);
-		DamageAnimator = GetNode<AnimationPlayer>(damageAnimator);
+		EventAnimator = GetNode<AnimationPlayer>(eventAnimator);
+		EventAnimator = GetNode<AnimationPlayer>(eventAnimator);
 
 		HeadHurtbox = GetNode<Area3D>(headHurtbox);
 		DamagePath = GetNode<Node3D>(damagePath);
@@ -171,6 +169,10 @@ public partial class IfritGolem : Node3D
 			case GolemState.Introduction:
 				if (Input.IsActionJustPressed("button_pause"))
 					FinishIntroduction();
+				break;
+			case GolemState.Defeated:
+				if (Input.IsActionJustPressed("button_pause"))
+					FinishDefeat();
 				break;
 			case GolemState.Idle:
 				ProcessIdle();
@@ -234,9 +236,19 @@ public partial class IfritGolem : Node3D
 		TransitionManager.instance.TransitionProcess += StartBattle;
 	}
 
+	private readonly StringName DefeatSeek = "parameters/defeat_seek/seek_request";
+	private void FinishDefeat()
+	{
+		EventAnimator.Play("finish-defeat");
+		EventAnimator.Advance(0.0);
+		AnimationTree.Set(DefeatSeek, 20);
+	}
+
 	private void StartBattle()
 	{
 		TransitionManager.instance.TransitionProcess -= StartBattle;
+		EventAnimator.Play("finish-intro");
+		EventAnimator.Advance(0.0);
 		AnimationTree.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 		Respawn();
@@ -550,8 +562,8 @@ public partial class IfritGolem : Node3D
 	{
 		headHealth -= amount;
 		currentHealth -= amount;
-		DamageAnimator.Seek(0.0, true);
-		DamageAnimator.Play("damage");
+		EventAnimator.Seek(0.0, true);
+		EventAnimator.Play("damage");
 
 		if (dialogFlags[0] == 0)
 		{
@@ -697,7 +709,7 @@ public partial class IfritGolem : Node3D
 		if (hit)
 			LaserVFXRoot.GlobalPosition = new(LaserVFXRoot.GlobalPosition.X, hit.point.Y, LaserVFXRoot.GlobalPosition.Z);
 
-		LaserAnimator.Play(currentState == GolemState.SpecialAttack ? "laser-far" : "laser-close");
+		EventAnimator.Play(currentState == GolemState.SpecialAttack ? "laser-far" : "laser-close");
 		isLaserAttackActive = true;
 
 		// Play laser hint dialog
@@ -719,7 +731,7 @@ public partial class IfritGolem : Node3D
 		laserAttackTimer = LaserAttackInterval;
 		if (IsSecondPhaseActive)
 			laserAttackTimer *= .5f;
-		LaserAnimator.Play("RESET");
+		EventAnimator.Play("RESET");
 	}
 
 	private float rightShutterTimer;
