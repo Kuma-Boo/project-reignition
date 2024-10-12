@@ -590,6 +590,9 @@ public partial class IfritGolem : Node3D
 
 		Root.Rotation = Vector3.Zero;
 		ExitHitstun();
+
+		if (Player.Skills.IsUsingBreakSkills)
+			Player.Skills.CancelBreakSkills();
 		Player.Visible = false;
 		Player.ProcessMode = ProcessModeEnum.Disabled;
 		Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);

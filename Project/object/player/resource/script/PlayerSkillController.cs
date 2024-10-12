@@ -251,6 +251,15 @@ public partial class PlayerSkillController : Node3D
 		breakTimer = Mathf.MoveToward(breakTimer, 0, PhysicsManager.physicsDelta);
 	}
 
+	public void CancelBreakSkills()
+	{
+		IsTimeBreakActive = IsSpeedBreakActive = false;
+		timeBreakAnimator.Play("RESET");
+		timeBreakAnimator.Advance(0);
+		speedBreakAnimator.Play("RESET");
+		speedBreakAnimator.Advance(0);
+	}
+
 	private int timeBreakDrainTimer;
 	private const int TimeBreakSoulDrainInterval = 3; // Drain 1 point every x frames
 	private void UpdateTimeBreak()
