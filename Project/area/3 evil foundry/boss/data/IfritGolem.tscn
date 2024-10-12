@@ -1,4 +1,4 @@
-[gd_scene load_steps=156 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=171 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="Script" path="res://area/3 evil foundry/data/script/IfritGolem.cs" id="2_jm400"]
@@ -26,7 +26,19 @@
 [ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffset.gdshader" id="19_sr8ns"]
 [ext_resource type="Material" uid="uid://dv8e2vx0q5qy6" path="res://area/3 evil foundry/boss/effect/material/Laser Contact.tres" id="21_fakwu"]
 [ext_resource type="PackedScene" uid="uid://75f72xq1jhqo" path="res://area/3 evil foundry/boss/data/TraversalScrap.tscn" id="22_y8yfc"]
+[ext_resource type="AudioStream" uid="uid://dnhop4yryvtbo" path="res://sound/boss/ifrit golem/laser charge.wav" id="26_k5i8e"]
+[ext_resource type="AudioStream" uid="uid://dmeygedcok7pc" path="res://sound/boss/ifrit golem/laser impact.wav" id="26_lfg5l"]
+[ext_resource type="AudioStream" uid="uid://y3jnvdmc4s02" path="res://sound/boss/ifrit golem/laser beam.wav" id="27_ema0p"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="27_v73pf"]
+[ext_resource type="AudioStream" uid="uid://cj7rknesqy2uh" path="res://sound/boss/ifrit golem/step roar.wav" id="28_6fg5l"]
+[ext_resource type="AudioStream" uid="uid://b6o0ox1crtx6n" path="res://sound/boss/ifrit golem/step grab.wav" id="29_dwhy7"]
+[ext_resource type="AudioStream" uid="uid://bji72bj18vdw6" path="res://sound/boss/ifrit golem/step gears.wav" id="30_py1nf"]
+[ext_resource type="AudioStream" uid="uid://btqg4yl25pntq" path="res://sound/boss/ifrit golem/lava warn.wav" id="34_0g7x3"]
+[ext_resource type="AudioStream" uid="uid://roe8af52cjsj" path="res://sound/boss/ifrit golem/lava rise.wav" id="35_0xwj3"]
+[ext_resource type="AudioStream" uid="uid://cp2jr41tuvhhm" path="res://sound/boss/ifrit golem/recovery.wav" id="35_va4id"]
+[ext_resource type="AudioStream" uid="uid://4drt0am6f0p0" path="res://sound/boss/ifrit golem/damage.wav" id="36_45ekf"]
+[ext_resource type="AudioStream" uid="uid://djf45xc1rtbrx" path="res://sound/boss/ifrit golem/ev_01_stg032.ogg" id="37_f4i4x"]
+[ext_resource type="AudioStream" uid="uid://byl8jlykjil50" path="res://sound/boss/ifrit golem/ev_02_stg032.ogg" id="38_8geod"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xc84b"]
 animation = &"defeat"
@@ -871,6 +883,48 @@ tracks/8/keys = {
 "update": 1,
 "values": [false, true, false]
 }
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Laser/Root/LaserCharge")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Laser/Root/LaserBeam")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0.1665),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Laser/VFXRoot/LaserImpact")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.2997),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_vks4w"]
 resource_name = "laser-far"
@@ -990,6 +1044,48 @@ tracks/8/keys = {
 "update": 1,
 "values": [false, true, false]
 }
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Laser/Root/LaserCharge")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Laser/Root/LaserBeam")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0.1665),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Laser/VFXRoot/LaserImpact")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.2997),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k4tih"]
 _data = {
@@ -998,11 +1094,63 @@ _data = {
 "laser-far": SubResource("Animation_vks4w")
 }
 
+[sub_resource type="Animation" id="Animation_gxdyr"]
+resource_name = "damage"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Damage:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../../Sound/Damage")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_y1815"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Damage:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_c7572"]
+_data = {
+"RESET": SubResource("Animation_y1815"),
+"damage": SubResource("Animation_gxdyr")
+}
+
 [node name="IfritGolem" node_paths=PackedStringArray("boneAttachments", "cores", "burnPositions", "hitDialogs", "hintDialogs", "gasTankSpawnPositions") instance=ExtResource("1_37vkv")]
 script = ExtResource("2_jm400")
 root = NodePath("IfritRoot")
 animationTree = NodePath("AnimationTree")
 laserAnimator = NodePath("LaserAnimator")
+damageAnimator = NodePath("DamageAnimator")
 headHurtbox = NodePath("BoneAttachments/BodyParts/Head/HeadHurtbox")
 playerLaunchTarget = NodePath("BoneAttachments/BodyParts/Root/LaunchTarget")
 rightEye = NodePath("BoneAttachments/BodyParts/Head/EyeR")
@@ -1796,11 +1944,34 @@ visibility_aabb = AABB(-4, -1, -1, 8, 4, 2)
 process_material = SubResource("ParticleProcessMaterial_evm4e")
 draw_pass_1 = SubResource("QuadMesh_amtrv")
 
+[node name="LaserImpact" type="AudioStreamPlayer3D" parent="Laser/VFXRoot" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 13.6, -21.5)
+stream = ExtResource("26_lfg5l")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 4
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
 [node name="Root" type="Node3D" parent="Laser" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 13.6, 4.5)
 visible = false
 
-[node name="EyeFlash" type="GPUParticles3D" parent="Laser/Root" index="0"]
+[node name="LaserCharge" type="AudioStreamPlayer" parent="Laser/Root" index="0"]
+stream = ExtResource("26_k5i8e")
+bus = &"GAME SFX"
+
+[node name="LaserBeam" type="AudioStreamPlayer3D" parent="Laser/Root" index="1"]
+stream = ExtResource("27_ema0p")
+attenuation_model = 3
+volume_db = -6.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="EyeFlash" type="GPUParticles3D" parent="Laser/Root" index="2"]
 layers = 32
 emitting = false
 amount = 12
@@ -1816,7 +1987,7 @@ transform_align = 1
 process_material = SubResource("ParticleProcessMaterial_bo57r")
 draw_pass_1 = SubResource("QuadMesh_106a2")
 
-[node name="Beam" type="Node3D" parent="Laser/Root" index="1"]
+[node name="Beam" type="Node3D" parent="Laser/Root" index="3"]
 transform = Transform3D(1, 0, 0, 0, 0.866025, 0, 0, 0.5, 0, 0, 0, 0)
 
 [node name="LaserMesh" type="MeshInstance3D" parent="Laser/Root/Beam" index="0"]
@@ -1831,7 +2002,13 @@ libraries = {
 "": SubResource("AnimationLibrary_k4tih")
 }
 
-[node name="Sound" type="Node3D" parent="." index="7"]
+[node name="DamageAnimator" type="AnimationPlayer" parent="." index="7"]
+root_node = NodePath("../BoneAttachments/BodyParts/Head")
+libraries = {
+"": SubResource("AnimationLibrary_c7572")
+}
+
+[node name="Sound" type="Node3D" parent="." index="8"]
 
 [node name="Dialog" type="Node3D" parent="Sound" index="0"]
 
@@ -1882,6 +2059,71 @@ textKeys = Array[String](["evi_hint_water_sh"])
 [node name="Defeat" type="Node3D" parent="Sound/Dialog" index="11"]
 script = ExtResource("27_v73pf")
 textKeys = Array[String](["evi_boss_defeat_so"])
+
+[node name="StepRoar" type="AudioStreamPlayer3D" parent="Sound" index="1"]
+stream = ExtResource("28_6fg5l")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="StepGrab" type="AudioStreamPlayer3D" parent="Sound" index="2"]
+stream = ExtResource("29_dwhy7")
+attenuation_model = 3
+volume_db = -6.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="StepGears" type="AudioStreamPlayer3D" parent="Sound" index="3"]
+stream = ExtResource("30_py1nf")
+attenuation_model = 3
+volume_db = -3.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="LavaWarn" type="AudioStreamPlayer" parent="Sound" index="4"]
+stream = ExtResource("34_0g7x3")
+bus = &"GAME SFX"
+
+[node name="LavaRise" type="AudioStreamPlayer3D" parent="Sound" index="5"]
+stream = ExtResource("35_0xwj3")
+attenuation_model = 3
+volume_db = -6.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Recovery" type="AudioStreamPlayer3D" parent="Sound" index="6"]
+stream = ExtResource("35_va4id")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Damage" type="AudioStreamPlayer3D" parent="Sound" index="7"]
+stream = ExtResource("36_45ekf")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Intro" type="AudioStreamPlayer" parent="Sound" index="8"]
+stream = ExtResource("37_f4i4x")
+bus = &"GAME SFX"
+
+[node name="Defeat" type="AudioStreamPlayer" parent="Sound" index="9"]
+stream = ExtResource("38_8geod")
+bus = &"GAME SFX"
 
 [connection signal="StunEnded" from="." to="BoneAttachments/BodyParts/Root/TraversalScrap" method="Deactivate"]
 [connection signal="StunEnded" from="." to="Environment/Lockout" method="Deactivate"]

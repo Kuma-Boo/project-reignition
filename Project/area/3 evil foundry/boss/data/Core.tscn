@@ -1,9 +1,12 @@
-[gd_scene load_steps=21 format=3 uid="uid://cayo6pq1qpjyf"]
+[gd_scene load_steps=24 format=3 uid="uid://cayo6pq1qpjyf"]
 
 [ext_resource type="Script" path="res://area/3 evil foundry/data/script/Core.cs" id="1_b5skn"]
 [ext_resource type="PackedScene" uid="uid://db40cw21e0jlv" path="res://area/3 evil foundry/boss/data/model/GolemCore.gltf" id="1_ex3l5"]
 [ext_resource type="Material" uid="uid://cx8t0sy6gaqpm" path="res://area/3 evil foundry/boss/effect/material/Glow.tres" id="3_vh8wr"]
 [ext_resource type="Material" uid="uid://drgtm3le1tx81" path="res://object/stage/common/resource/model/material/Flying Pot Feather.tres" id="4_iisby"]
+[ext_resource type="AudioStream" uid="uid://2xm2qs657b3u" path="res://sound/boss/ifrit golem/core destroyed.wav" id="5_gnejk"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="6_rtt7c"]
+[ext_resource type="AudioStream" uid="uid://cfteos8s62o2" path="res://sound/boss/ifrit golem/core base.wav" id="7_iq5t3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pvw8k"]
 radius = 0.4
@@ -146,6 +149,34 @@ tracks/5/keys = {
 "values": [{
 "args": [],
 "method": &"restart"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("CoreDestroyed")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayInGroup"
+}]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("CoreBase")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayInGroup"
 }]
 }
 
@@ -336,6 +367,7 @@ damping_min = 2.0
 damping_max = 2.0
 scale_max = 2.0
 scale_curve = SubResource("CurveTexture_sfgp3")
+color = Color(1, 0.501961, 0, 1)
 alpha_curve = SubResource("CurveTexture_xkcpy")
 
 [sub_resource type="QuadMesh" id="QuadMesh_7e25t"]
@@ -407,6 +439,28 @@ draw_order = 1
 transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_a0hi5")
 draw_pass_1 = SubResource("QuadMesh_7e25t")
+
+[node name="CoreDestroyed" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_gnejk")
+attenuation_model = 3
+volume_db = -12.0
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("6_rtt7c")
+groupKey = &"core_destroyed"
+
+[node name="CoreBase" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("7_iq5t3")
+attenuation_model = 3
+volume_db = -12.0
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("6_rtt7c")
+groupKey = &"core_base"
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
 [connection signal="area_exited" from="." to="." method="OnExited"]

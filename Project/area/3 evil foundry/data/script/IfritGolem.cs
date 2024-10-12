@@ -15,6 +15,8 @@ public partial class IfritGolem : Node3D
 	private AnimationTree AnimationTree { get; set; }
 	[Export(PropertyHint.NodeType, "AnimationPlayer")] private NodePath laserAnimator;
 	private AnimationPlayer LaserAnimator { get; set; }
+	[Export(PropertyHint.NodeType, "AnimationPlayer")] private NodePath damageAnimator;
+	private AnimationPlayer DamageAnimator { get; set; }
 	[Export(PropertyHint.NodeType, "Area3D")] private NodePath headHurtbox;
 	private Area3D HeadHurtbox { get; set; }
 	[Export(PropertyHint.NodeType, "Node3D")] private NodePath damagePath;
@@ -107,6 +109,8 @@ public partial class IfritGolem : Node3D
 		AnimationTree = GetNode<AnimationTree>(animationTree);
 		AnimationTree.Active = true;
 		LaserAnimator = GetNode<AnimationPlayer>(laserAnimator);
+		DamageAnimator = GetNode<AnimationPlayer>(damageAnimator);
+
 		HeadHurtbox = GetNode<Area3D>(headHurtbox);
 		DamagePath = GetNode<Node3D>(damagePath);
 		PlayerLaunchTarget = GetNode<Node3D>(playerLaunchTarget);
@@ -546,6 +550,8 @@ public partial class IfritGolem : Node3D
 	{
 		headHealth -= amount;
 		currentHealth -= amount;
+		DamageAnimator.Seek(0.0, true);
+		DamageAnimator.Play("damage");
 
 		if (dialogFlags[0] == 0)
 		{
