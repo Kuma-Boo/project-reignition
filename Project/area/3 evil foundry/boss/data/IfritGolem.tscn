@@ -1,4 +1,4 @@
-[gd_scene load_steps=171 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=172 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="Script" path="res://area/3 evil foundry/data/script/IfritGolem.cs" id="2_jm400"]
@@ -21,6 +21,7 @@
 [ext_resource type="Shader" path="res://effect/shader/particle/ParticleLocalBillboard.gdshader" id="16_vd0ip"]
 [ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="17_n2j05"]
 [ext_resource type="Material" uid="uid://c6fc13de00bdn" path="res://object/stage/common/resource/model/material/Goal Flame Base.tres" id="18_a4xxb"]
+[ext_resource type="AudioStream" uid="uid://c8sn2q8nwutep" path="res://sound/boss/ifrit golem/lava.wav" id="18_trxln"]
 [ext_resource type="Texture2D" uid="uid://b6mr44o0sk3wj" path="res://area/1 sand oasis/boss/effect/texture/flying eye.png" id="19_4xrqc"]
 [ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffsetFade.gdshader" id="19_khjmj"]
 [ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffset.gdshader" id="19_sr8ns"]
@@ -1882,6 +1883,12 @@ script = ExtResource("5_rxyxv")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Lava/LavaHazard" index="0"]
 shape = SubResource("BoxShape3D_utngs")
+
+[node name="Lava" type="AudioStreamPlayer" parent="Environment/Lava" index="5"]
+stream = ExtResource("18_trxln")
+volume_db = -3.0
+autoplay = true
+bus = &"GAME SFX"
 
 [node name="ArenaPlatform" parent="Environment" index="4" instance=ExtResource("2_nsyah")]
 
