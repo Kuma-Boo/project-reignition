@@ -2,6 +2,7 @@ using Godot;
 using System.Collections.Generic;
 using Project.Core;
 using Project.Gameplay.Objects;
+using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay.Bosses;
 
@@ -34,6 +35,16 @@ public partial class IfritGolem : Node3D
 	[Export] private BoneAttachment3D[] boneAttachments;
 	[Export] private Core[] cores;
 	[Export] private Node3D[] burnPositions;
+
+	[Export] private DialogTrigger[] hitDialogs = [];
+	[Export] private DialogTrigger[] hintDialogs = [];
+	private int[] dialogFlags = [
+		0, // Health flag
+		0, // Head flag
+		0, // Laser flag
+		0 // Water flag
+	];
+
 	[ExportGroup("Animated Properties")]
 	/// <summary> Used in animations to blend rotations (because exporting stepped keyframes doesn't work...) </summary>
 	[Export(PropertyHint.Range, "0,1")] private float rotationBlend;
@@ -113,6 +124,7 @@ public partial class IfritGolem : Node3D
 			core.CoreDestroyed += OnCoreDestroyed;
 		}
 
+		Player.LaunchFinished += FinishLaunch;
 		StageSettings.Instance.Respawned += Respawn;
 		StageSettings.Instance.LevelStarted += StartIntroduction;
 	}
@@ -297,16 +309,28 @@ public partial class IfritGolem : Node3D
 		currentState = GolemState.Step;
 		currentSector = WrapClampSector(currentSector);
 	}
+
 	private void ExitStep()
 	{
 		if (leftHandCores == 0 && rightHandCores == 0)
 			RespawnCores();
 
 		EnterIdle();
+
+		if (SoundManager.instance.IsDialogActive)
+			return;
+
+		if (dialogFlags[1] < 3 && dialogFlags[3] != 1)
+		{
+			hintDialogs[dialogFlags[1]].Activate();
+			dialogFlags[1]++;
+		}
 	}
 
 	[Signal] public delegate void StunnedEventHandler();
 	[Signal] public delegate void StunEndedEventHandler();
+	[Signal] public delegate void LaunchedEventHandler();
+	[Signal] public delegate void LaunchEndedEventHandler();
 
 	private AnimationNodeStateMachinePlayback HitstunStatePlayback => AnimationTree.Get(HitstunPlayback).Obj as AnimationNodeStateMachinePlayback;
 	private readonly StringName HitstunPlayback = "parameters/hitstun_state/playback";
@@ -328,6 +352,21 @@ public partial class IfritGolem : Node3D
 		currentState = GolemState.Stunned;
 		HitstunStatePlayback.Start(isRightHand ? HitstunRightAnimation : HitstunLeftAnimation);
 		AnimationTree.Set(HitstunTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+
+		// Play water hint dialog
+		if (dialogFlags[3] == 0)
+		{
+			dialogFlags[3] = 1;
+			hintDialogs[4].Activate();
+			return;
+		}
+
+		// Play Shahra's voice clip
+		if (dialogFlags[0] == 4)
+		{
+			dialogFlags[0] = 5;
+			hitDialogs[4].Activate();
+		}
 	}
 
 	private void ExitHitstun()
@@ -339,18 +378,42 @@ public partial class IfritGolem : Node3D
 		// Launch the player back to solid ground
 		Player.StartLauncher(LaunchSettings.Create(Player.GlobalPosition, PlayerLaunchTarget.GlobalPosition, 5f));
 		Player.Animator.StartSpin(3f);
+		EmitSignal(SignalName.Launched);
 		EmitSignal(SignalName.StunEnded);
+	}
+
+	private void FinishLaunch()
+	{
+		if (currentState != GolemState.Damaged && currentState != GolemState.Recovery)
+			return;
+
+		// TODO Play hit dialog
+		if (currentHealth < MaxHealth && dialogFlags[0] == 1)
+		{
+			hitDialogs[1].Activate();
+			dialogFlags[0]++;
+		}
+		else if (currentHealth <= MaxHealth - 3 && dialogFlags[0] == 2)
+		{
+			hitDialogs[2].Activate();
+			dialogFlags[0]++;
+		}
+		else if (IsSecondPhaseActive && dialogFlags[0] < 4)
+		{
+			hitDialogs[3].Activate();
+			dialogFlags[0] = 4;
+		}
+
+		EmitSignal(SignalName.LaunchEnded);
 	}
 
 	private void ProcessStun()
 	{
-		/*
 		if (Player.IsOnGround && headHealth != MaxHeadHealth)
 		{
 			EnterRecovery();
 			return;
 		}
-		*/
 
 		if (isInteractingWithPlayer)
 			UpdateInteraction();
@@ -370,6 +433,7 @@ public partial class IfritGolem : Node3D
 	{
 		ExitHitstun();
 
+		Player.Camera.LockonTarget = null;
 		HitstunStatePlayback.Start(RecoveryAnimation);
 		currentState = GolemState.Recovery;
 	}
@@ -449,6 +513,8 @@ public partial class IfritGolem : Node3D
 		if (isInteractionProcessed)
 			return;
 
+		Player.Camera.LockonTarget = HeadHurtbox;
+
 		switch (Player.AttackState)
 		{
 			case PlayerController.AttackStates.OneShot:
@@ -460,9 +526,11 @@ public partial class IfritGolem : Node3D
 			case PlayerController.AttackStates.Strong:
 				UpdateHeadDamage(2);
 				break;
+			case PlayerController.AttackStates.None:
+				EnterRecovery();
+				return;
 		}
 
-		Player.Camera.LockonTarget = HeadHurtbox;
 		Player.StartBounce(true);
 		SetInteractionProcessed();
 	}
@@ -478,6 +546,12 @@ public partial class IfritGolem : Node3D
 	{
 		headHealth -= amount;
 		currentHealth -= amount;
+
+		if (dialogFlags[0] == 0)
+		{
+			dialogFlags[0]++;
+			hitDialogs[0].Activate();
+		}
 
 		if (headHealth > 0 && currentHealth > 0)
 			return;
@@ -619,6 +693,13 @@ public partial class IfritGolem : Node3D
 
 		LaserAnimator.Play(currentState == GolemState.SpecialAttack ? "laser-far" : "laser-close");
 		isLaserAttackActive = true;
+
+		// Play laser hint dialog
+		if (dialogFlags[2] != 0)
+			return;
+
+		dialogFlags[2] = 1;
+		hintDialogs[3].Activate();
 	}
 
 	private void ProcessLaserAttack()
