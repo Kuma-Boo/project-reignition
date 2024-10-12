@@ -74,7 +74,7 @@ public partial class IfritGolem : Node3D
 	private int playerSector = 4;
 	/// <summary> Called from stage signals. </summary>
 	private void SetPlayerSector(int sector) => playerSector = sector;
-	private bool IsFocusingOnPlayer => Mathf.Abs(currentSector - playerSector) <= 1;
+	private bool IsFocusingOnPlayer => Mathf.Abs(currentSector - playerSector) <= 1 || Mathf.Abs(currentSector - playerSector) >= MaxSectorCount - 1;
 	/// <summary> Calculates the target sector for the Golem to move towards. </summary>
 	private int CalculateTargetSector()
 	{
