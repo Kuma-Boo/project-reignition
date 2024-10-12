@@ -85,6 +85,11 @@ public partial class IfritGolem : Node3D
 		// Get the sector opposite to the player
 		int targetSector = WrapClampSector(playerSector + 3);
 
+		if (targetSector == 0 && playerSector < currentSector)
+			targetSector += MaxSectorCount;
+		if (targetSector > playerSector && playerSector > currentSector)
+			targetSector -= MaxSectorCount;
+
 		// Prevent the golem from getting stuck at a single position
 		if (targetSector == currentSector)
 			targetSector++;
