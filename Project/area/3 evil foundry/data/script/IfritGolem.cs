@@ -177,7 +177,7 @@ public partial class IfritGolem : Node3D
 				break;
 			case GolemState.Defeated:
 				if (Input.IsActionJustPressed("button_pause"))
-					FinishDefeat();
+					AnimationTree.Set(DefeatSeek, 20);
 				break;
 			case GolemState.Idle:
 				ProcessIdle();
@@ -239,14 +239,6 @@ public partial class IfritGolem : Node3D
 		});
 
 		TransitionManager.instance.TransitionProcess += StartBattle;
-	}
-
-	private readonly StringName DefeatSeek = "parameters/defeat_seek/seek_request";
-	private void FinishDefeat()
-	{
-		EventAnimator.Play("finish-defeat");
-		EventAnimator.Advance(0.0);
-		AnimationTree.Set(DefeatSeek, 20);
 	}
 
 	private void StartBattle()
@@ -383,7 +375,7 @@ public partial class IfritGolem : Node3D
 		}
 
 		// Play Shahra's voice clip
-		if (dialogFlags[0] == 4)
+		if (dialogFlags[0] != 5 && IsSecondPhaseActive)
 		{
 			dialogFlags[0] = 5;
 			hitDialogs[4].Activate();
@@ -596,6 +588,7 @@ public partial class IfritGolem : Node3D
 		});
 		TransitionManager.FinishTransition();
 
+		Root.Rotation = Vector3.Zero;
 		ExitHitstun();
 		Player.Visible = false;
 		Player.ProcessMode = ProcessModeEnum.Disabled;
@@ -608,15 +601,17 @@ public partial class IfritGolem : Node3D
 		currentState = GolemState.Defeated;
 	}
 
-	private void StartResults()
+	private readonly StringName DefeatSeek = "parameters/defeat_seek/seek_request";
+	private void FinishDefeat()
 	{
+		EventAnimator.Play("finish-defeat");
+		EventAnimator.Advance(0.0);
 		AnimationTree.Active = false;
 		Player.Visible = true;
 		Player.ProcessMode = ProcessModeEnum.Inherit;
+		Player.Camera.Camera.Current = true;
 		StageSettings.Instance.FinishLevel(true);
 	}
-
-	private void FinishLevel() => StageSettings.Instance.FinishLevel(true);
 	#endregion
 
 	#region Attacks
