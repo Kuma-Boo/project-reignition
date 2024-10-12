@@ -1,4 +1,4 @@
-[gd_scene load_steps=186 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=212 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="Script" path="res://area/3 evil foundry/data/script/IfritGolem.cs" id="2_jm400"]
@@ -24,11 +24,16 @@
 [ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="17_n2j05"]
 [ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Dust Splatter Add.tres" id="17_sx46h"]
 [ext_resource type="Material" uid="uid://c6fc13de00bdn" path="res://object/stage/common/resource/model/material/Goal Flame Base.tres" id="18_a4xxb"]
+[ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="18_d56ac"]
+[ext_resource type="Material" uid="uid://7lvqh1a70ae4" path="res://effect/particle/material/explosion/Explosion Flame.tres" id="18_eb5p4"]
 [ext_resource type="AudioStream" uid="uid://c8sn2q8nwutep" path="res://sound/boss/ifrit golem/lava.wav" id="18_trxln"]
 [ext_resource type="Texture2D" uid="uid://b6mr44o0sk3wj" path="res://area/1 sand oasis/boss/effect/texture/flying eye.png" id="19_4xrqc"]
 [ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffsetFade.gdshader" id="19_khjmj"]
 [ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffset.gdshader" id="19_sr8ns"]
+[ext_resource type="Material" uid="uid://cctsu5ymh5eev" path="res://effect/particle/material/environment/Common Splatter.tres" id="20_3483e"]
+[ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="21_bt4ca"]
 [ext_resource type="Material" uid="uid://dv8e2vx0q5qy6" path="res://area/3 evil foundry/boss/effect/material/Laser Contact.tres" id="21_fakwu"]
+[ext_resource type="Material" uid="uid://wdp8vltltolc" path="res://area/1 sand oasis/boss/effect/material/Light Ray.tres" id="22_h4kgd"]
 [ext_resource type="PackedScene" uid="uid://75f72xq1jhqo" path="res://area/3 evil foundry/boss/data/TraversalScrap.tscn" id="22_y8yfc"]
 [ext_resource type="AudioStream" uid="uid://dnhop4yryvtbo" path="res://sound/boss/ifrit golem/laser charge.wav" id="26_k5i8e"]
 [ext_resource type="AudioStream" uid="uid://dmeygedcok7pc" path="res://sound/boss/ifrit golem/laser impact.wav" id="26_lfg5l"]
@@ -415,6 +420,51 @@ node_connections = [&"defeat_seek", 0, &"defeat_anim", &"defeat_trigger", 0, &"i
 [sub_resource type="BoxShape3D" id="BoxShape3D_n2677"]
 size = Vector3(20, 20, 5)
 
+[sub_resource type="Curve" id="Curve_kvh06"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.35666, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_qp47u"]
+width = 64
+curve = SubResource("Curve_kvh06")
+
+[sub_resource type="Curve" id="Curve_3y4l3"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.98093, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_hguad"]
+_data = [Vector2(0, 0), 0.0, 10.628, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_t5m1l"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_8kafd"]
+width = 64
+curve_x = SubResource("Curve_3y4l3")
+curve_y = SubResource("Curve_hguad")
+curve_z = SubResource("Curve_t5m1l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vj76e"]
+lifetime_randomness = 0.5
+direction = Vector3(0, 0, -1)
+spread = 3.0
+initial_velocity_min = 15.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, 0, 0)
+scale_min = 10.0
+scale_max = 20.0
+scale_curve = SubResource("CurveXYZTexture_8kafd")
+color = Color(1, 0.741176, 0.611765, 1)
+alpha_curve = SubResource("CurveTexture_qp47u")
+hue_variation_max = 0.1
+
+[sub_resource type="QuadMesh" id="QuadMesh_otkjn"]
+material = ExtResource("22_h4kgd")
+size = Vector2(2, 4)
+center_offset = Vector3(0, 1.5, 0)
+
 [sub_resource type="Curve" id="Curve_kbw7r"]
 _data = [Vector2(0, 0.5), 0.0, 0.962539, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -611,6 +661,76 @@ alpha_curve = SubResource("CurveTexture_uajy8")
 
 [sub_resource type="QuadMesh" id="QuadMesh_gau51"]
 material = ExtResource("17_sx46h")
+
+[sub_resource type="Curve" id="Curve_tkfti"]
+_data = [Vector2(0, 0), 0.0, 4.72635, 0, 0, Vector2(0.511327, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.44712, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_nkivc"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_tkfti")
+
+[sub_resource type="Curve" id="Curve_mq415"]
+_data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_lhgoj"]
+width = 64
+curve = SubResource("Curve_mq415")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0wxl4"]
+emission_shape = 1
+emission_sphere_radius = 10.0
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_lhgoj")
+alpha_curve = SubResource("CurveTexture_nkivc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_n122x"]
+material = ExtResource("18_eb5p4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_m30gq"]
+emission_shape = 1
+emission_sphere_radius = 10.0
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_lhgoj")
+color = Color(1, 0.745098, 0, 1)
+alpha_curve = SubResource("CurveTexture_nkivc")
+hue_variation_max = 0.1
+
+[sub_resource type="QuadMesh" id="QuadMesh_ac88v"]
+material = ExtResource("18_d56ac")
+
+[sub_resource type="QuadMesh" id="QuadMesh_g1f50"]
+material = ExtResource("20_3483e")
+
+[sub_resource type="Gradient" id="Gradient_jj3af"]
+offsets = PackedFloat32Array(0.331058, 0.83959)
+colors = PackedColorArray(1, 0.709804, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_caheu"]
+gradient = SubResource("Gradient_jj3af")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dsg2p"]
+emission_shape = 1
+emission_sphere_radius = 10.0
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 8.0
+scale_curve = SubResource("CurveTexture_lhgoj")
+color_initial_ramp = SubResource("GradientTexture1D_caheu")
+alpha_curve = SubResource("CurveTexture_nkivc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_58uuy"]
+material = ExtResource("21_bt4ca")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7yc5q"]
 lifetime_randomness = 0.4
@@ -1536,6 +1656,22 @@ shape = SubResource("BoxShape3D_n2677")
 [node name="LaunchTarget" type="Node3D" parent="BoneAttachments/BodyParts/Root" index="2"]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -26, 0)
 
+[node name="Ray1" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Root" index="3"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 12.7208, 6.65792)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_vj76e")
+draw_pass_1 = SubResource("QuadMesh_otkjn")
+
 [node name="Head" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="1"]
 transform = Transform3D(1, 1.50996e-07, -4.48798e-14, -1.50996e-07, 1, -4.20213e-06, -5.90409e-13, 4.20213e-06, 1, 3.01992e-07, 15.6, 0.700059)
 bone_name = "head"
@@ -1765,6 +1901,49 @@ fixed_fps = 0
 interpolate = false
 process_material = SubResource("ParticleProcessMaterial_eq4fa")
 draw_pass_1 = SubResource("QuadMesh_gau51")
+
+[node name="ExplosionFlame" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3.63798e-12)
+layers = 32
+emitting = false
+amount = 64
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_0wxl4")
+draw_pass_1 = SubResource("QuadMesh_n122x")
+
+[node name="ExplosionDust" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3.63798e-12)
+layers = 32
+emitting = false
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_m30gq")
+draw_pass_1 = SubResource("QuadMesh_ac88v")
+
+[node name="ExplosionSplatter" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3.63798e-12)
+layers = 32
+emitting = false
+amount = 64
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_m30gq")
+draw_pass_1 = SubResource("QuadMesh_g1f50")
+
+[node name="ExplosionSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3.63798e-12)
+layers = 32
+emitting = false
+amount = 32
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_dsg2p")
+draw_pass_1 = SubResource("QuadMesh_58uuy")
 
 [node name="RElbow" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="5"]
 transform = Transform3D(1, 1.86932e-07, 2.71921e-07, -1.86913e-07, 1, 8.21355e-06, -2.7192e-07, -8.21355e-06, 1, -20.2, 8.5, 1.40003)
@@ -2045,14 +2224,17 @@ transform = Transform3D(-0.5, 0, -0.866026, 0, 1, 0, 0.866026, 0, -0.5, -25.9463
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -15, 0)
 
 [node name="LavaRipple1Mesh" parent="Environment/Lava" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
 visible = false
 cast_shadow = 0
 
 [node name="LavaRipple2Mesh" parent="Environment/Lava" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
 visible = false
 cast_shadow = 0
 
 [node name="LavaRipple3Mesh" parent="Environment/Lava" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
 visible = false
 cast_shadow = 0
 
