@@ -1,4 +1,4 @@
-[gd_scene load_steps=173 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=186 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="Script" path="res://area/3 evil foundry/data/script/IfritGolem.cs" id="2_jm400"]
@@ -18,8 +18,11 @@
 [ext_resource type="Resource" uid="uid://uf7lyw3gw1fc" path="res://area/3 evil foundry/boss/camera/LowCam.tres" id="15_3iytr"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="15_5j6sd"]
 [ext_resource type="Texture2D" uid="uid://cpkbc7p47d2bg" path="res://effect/particle/texture/environment/common dust.png" id="15_feday"]
+[ext_resource type="Material" uid="uid://cqly2cta75k4b" path="res://effect/particle/material/object/Dino Rex Splatter.tres" id="16_gbq6m"]
 [ext_resource type="Shader" path="res://effect/shader/particle/ParticleLocalBillboard.gdshader" id="16_vd0ip"]
+[ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="17_jwqya"]
 [ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="17_n2j05"]
+[ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Dust Splatter Add.tres" id="17_sx46h"]
 [ext_resource type="Material" uid="uid://c6fc13de00bdn" path="res://object/stage/common/resource/model/material/Goal Flame Base.tres" id="18_a4xxb"]
 [ext_resource type="AudioStream" uid="uid://c8sn2q8nwutep" path="res://sound/boss/ifrit golem/lava.wav" id="18_trxln"]
 [ext_resource type="Texture2D" uid="uid://b6mr44o0sk3wj" path="res://area/1 sand oasis/boss/effect/texture/flying eye.png" id="19_4xrqc"]
@@ -368,7 +371,6 @@ fadeout_time = 0.5
 fadeout_curve = SubResource("Curve_upeqj")
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_bb4ub"]
-graph_offset = Vector2(-502.124, 248.463)
 nodes/defeat_anim/node = SubResource("AnimationNodeAnimation_xc84b")
 nodes/defeat_anim/position = Vector2(180, 360)
 nodes/defeat_seek/node = SubResource("AnimationNodeTimeSeek_nycbl")
@@ -566,6 +568,50 @@ material = SubResource("ShaderMaterial_qdfrg")
 size = Vector2(2, 5)
 center_offset = Vector3(0, 2.5, 0)
 
+[sub_resource type="Curve" id="Curve_lkkle"]
+_data = [Vector2(0, 0.1), 0.0, 4.75248, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_wxwxp"]
+width = 64
+curve = SubResource("Curve_lkkle")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yyx3u"]
+lifetime_randomness = 0.2
+emission_shape = 3
+emission_box_extents = Vector3(15, 5, 10)
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, -20, 0)
+scale_min = 2.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_wxwxp")
+color = Color(1, 0.74902, 0, 1)
+alpha_curve = SubResource("CurveTexture_uajy8")
+
+[sub_resource type="QuadMesh" id="QuadMesh_m75ip"]
+material = ExtResource("16_gbq6m")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_eq4fa"]
+lifetime_randomness = 0.2
+emission_shape = 3
+emission_box_extents = Vector3(15, 3, 10)
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, -20, 0)
+scale_min = 5.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_wxwxp")
+color = Color(1, 0.74902, 0, 1)
+alpha_curve = SubResource("CurveTexture_uajy8")
+
+[sub_resource type="QuadMesh" id="QuadMesh_gau51"]
+material = ExtResource("17_sx46h")
+
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7yc5q"]
 lifetime_randomness = 0.4
 emission_shape_offset = Vector3(0, 2, -2)
@@ -579,6 +625,31 @@ scale_min = 5.0
 scale_max = 10.0
 scale_curve = SubResource("CurveTexture_jn53k")
 alpha_curve = SubResource("CurveTexture_7101h")
+
+[sub_resource type="Gradient" id="Gradient_1r7d6"]
+colors = PackedColorArray(0, 0, 0, 1, 0.18359, 0.18359, 0.18359, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1ihyf"]
+gradient = SubResource("Gradient_1r7d6")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rsb3h"]
+emission_shape = 3
+emission_box_extents = Vector3(1, 5, 3)
+angle_max = 360.0
+direction = Vector3(-1, 0, 1)
+spread = 30.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 20.0
+scale_curve = SubResource("CurveTexture_wxwxp")
+color_initial_ramp = SubResource("GradientTexture1D_1ihyf")
+alpha_curve = SubResource("CurveTexture_uajy8")
+
+[sub_resource type="QuadMesh" id="QuadMesh_unetw"]
+material = ExtResource("17_jwqya")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_utngs"]
 size = Vector3(100, 5, 100)
@@ -780,6 +851,100 @@ tracks/6/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_wadlw"]
+resource_name = "damage"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BoneAttachments/BodyParts/Head/Damage:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sound/Damage")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_h3ici"]
+resource_name = "finish-defeat"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sound/Defeat")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"stop"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sound/Dialog/Defeat")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Deactivate"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_0ei26"]
+resource_name = "finish-intro"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sound/Intro")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"stop"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sound/Dialog/Intro")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Deactivate"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_3bxoj"]
@@ -1101,100 +1266,6 @@ tracks/11/keys = {
 "values": [{
 "args": [0.0],
 "method": &"play"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_wadlw"]
-resource_name = "damage"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("BoneAttachments/BodyParts/Head/Damage:emitting")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sound/Damage")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_0ei26"]
-resource_name = "finish-intro"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sound/Intro")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"stop"
-}]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sound/Dialog/Intro")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"Deactivate"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_h3ici"]
-resource_name = "finish-defeat"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sound/Defeat")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"stop"
-}]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sound/Dialog/Defeat")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"Deactivate"
 }]
 }
 
@@ -1674,6 +1745,27 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_r8hfe")
 draw_pass_1 = SubResource("QuadMesh_w6uoc")
 
+[node name="WaterSplatter" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="2"]
+layers = 32
+emitting = false
+amount = 128
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_yyx3u")
+draw_pass_1 = SubResource("QuadMesh_m75ip")
+
+[node name="WaterSplatterBurst" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
+layers = 32
+emitting = false
+amount = 128
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_eq4fa")
+draw_pass_1 = SubResource("QuadMesh_gau51")
+
 [node name="RElbow" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="5"]
 transform = Transform3D(1, 1.86932e-07, 2.71921e-07, -1.86913e-07, 1, 8.21355e-06, -2.7192e-07, -8.21355e-06, 1, -20.2, 8.5, 1.40003)
 bone_name = "r_elbow"
@@ -1743,6 +1835,20 @@ visibility_aabb = AABB(-3, -2, -5, 6, 8, 8)
 process_material = SubResource("ParticleProcessMaterial_7yc5q")
 draw_pass_1 = SubResource("QuadMesh_bu6vk")
 
+[node name="ImpactSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/LWrist" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 4, -9.53674e-07)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -2, -5, 6, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_rsb3h")
+draw_pass_1 = SubResource("QuadMesh_unetw")
+
 [node name="RWrist" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="8"]
 transform = Transform3D(-9.53674e-07, -1, -3.57628e-07, 1, -9.53674e-07, -3.21865e-06, 3.21865e-06, -3.57628e-07, 1, -29.1999, 8.50001, -0.999973)
 bone_name = "r_wrist"
@@ -1763,6 +1869,20 @@ interpolate = false
 visibility_aabb = AABB(-3, -2, -5, 6, 8, 8)
 process_material = SubResource("ParticleProcessMaterial_7yc5q")
 draw_pass_1 = SubResource("QuadMesh_bu6vk")
+
+[node name="ImpactSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/RWrist" index="1"]
+transform = Transform3D(1, 3.72529e-08, 0, -4.47035e-08, 1, -2.98023e-08, 2.98023e-08, 0, 1, 1, 4, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -2, -5, 6, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_rsb3h")
+draw_pass_1 = SubResource("QuadMesh_unetw")
 
 [node name="TankSpawn" type="Node3D" parent="BoneAttachments" index="2"]
 
@@ -2189,7 +2309,7 @@ stream = ExtResource("38_8geod")
 bus = &"GAME SFX"
 
 [node name="Camera" type="Node3D" parent="." index="8"]
-transform = Transform3D(-0.173648, -0.0858316, 0.98106, 0, 0.996195, 0.0871557, -0.984808, 0.0151344, -0.172987, 0, 3, 0)
+transform = Transform3D(-0.173648, -0.0858317, 0.98106, 0, 0.996195, 0.0871557, -0.984808, 0.0151344, -0.172987, 0, 3, 0)
 
 [node name="CutsceneCamera" type="Camera3D" parent="Camera" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 30)
