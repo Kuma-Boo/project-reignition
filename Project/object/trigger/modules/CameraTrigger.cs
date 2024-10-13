@@ -21,43 +21,48 @@ public partial class CameraTrigger : StageTriggerModule
 		Crossfade, // Crossfade states
 	}
 
-	/// <summary> Update static position/rotations every frame? </summary>
-	[Export]
-	public bool UpdateEveryFrame { get; private set; }
-
-	[Export]
-	public bool enableInputBlending;
+	[Export] public bool enableInputBlending;
 
 	/// <summary> Must be assigned to something. </summary>
-	[Export]
-	public CameraSettingsResource settings;
+	[Export] public CameraSettingsResource settings;
 	/// <summary> Reference to the camera data that was being used when this trigger was entered. </summary>
-	[Export]
-	private CameraSettingsResource previousSettings;
-	[Export]
-	private Camera3D referenceCamera;
+	[Export] private CameraSettingsResource previousSettings;
+
+	[ExportGroup("Transform Overrides")]
+	/// <summary> Update positions and rotations every frame? </summary>
+	[Export] public bool UpdateEveryFrame { get; private set; }
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")] private NodePath followObject;
+	private Node3D _followObject;
+	private Camera3D _referenceCamera;
+	private bool IsOverridingCameraTransform => settings.copyPosition || settings.copyRotation || settings.copyRotation;
 
 	private Vector3 previousStaticPosition;
 	private Basis previousStaticRotation;
 	private PlayerCameraController Camera => Player.Camera;
 
+	public override void _Ready()
+	{
+		if (!IsOverridingCameraTransform)
+			return;
+
+		_followObject = followObject?.IsEmpty == false ? GetNode<Node3D>(followObject) : this;
+
+		if (_followObject is Camera3D)
+			_referenceCamera = _followObject as Camera3D;
+	}
+
 	public void UpdateStaticData(CameraBlendData data)
 	{
 		if (data.SettingsResource != settings) return;
 
-		if (data.SettingsResource.useStaticPosition)
-		{
-			if (data.SettingsResource.copyPosition)
-				data.StaticPosition = GlobalPosition;
-			else
-				data.StaticPosition = data.SettingsResource.staticPosition;
-		}
+		if (data.SettingsResource.copyPosition)
+			data.Position = GlobalPosition;
 
 		if (data.SettingsResource.copyRotation)
 			data.RotationBasis = GlobalBasis;
 
-		if (data.SettingsResource.copyFov && referenceCamera != null)
-			data.Fov = referenceCamera.Fov;
+		if (data.SettingsResource.copyFov && _referenceCamera != null)
+			data.Fov = _referenceCamera.Fov;
 	}
 
 	public override void Activate()
@@ -71,7 +76,7 @@ public partial class CameraTrigger : StageTriggerModule
 		if (previousSettings == null)
 		{
 			previousSettings = Camera.ActiveSettings;
-			previousStaticPosition = Camera.ActiveBlendData.StaticPosition; // Cache static position
+			previousStaticPosition = Camera.ActiveBlendData.Position; // Cache static position
 			previousStaticRotation = Camera.ActiveBlendData.RotationBasis; // Cache static rotation
 		}
 
@@ -107,7 +112,7 @@ public partial class CameraTrigger : StageTriggerModule
 		{
 			BlendTime = Mathf.IsEqualApprox(deactivationTransitionTime, -1) ? transitionTime : deactivationTransitionTime,
 			SettingsResource = previousSettings,
-			StaticPosition = previousStaticPosition, // Restore cached static position
+			Position = previousStaticPosition, // Restore cached static position
 			RotationBasis = previousStaticRotation // Restore cached static rotation
 		}, enableInputBlending);
 	}

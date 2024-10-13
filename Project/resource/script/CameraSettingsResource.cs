@@ -8,10 +8,8 @@ namespace Project.Gameplay;
 public partial class CameraSettingsResource : Resource
 {
 	#region Editor
-	private const string STATIC_CAMERA_KEY = "Static Camera Enabled";
 	private const string COPY_POSITION_KEY = "Copy Position";
 	private const string COPY_ROTATION_KEY = "Copy Rotation";
-	private const string POSITION_KEY = "Static Position";
 
 	private const string DISTANCE_KEY = "Distance/Distance";
 	private const string BACKSTEP_DISTANCE_KEY = "Distance/Backstep Distance";
@@ -38,10 +36,12 @@ public partial class CameraSettingsResource : Resource
 
 	public override Array<Dictionary> _GetPropertyList()
 	{
-		Array<Dictionary> properties = new();
+		Array<Dictionary> properties = [];
 
-		properties.Add(ExtensionMethods.CreateProperty(STATIC_CAMERA_KEY, Variant.Type.Bool));
-		if (!useStaticPosition)
+		properties.Add(ExtensionMethods.CreateProperty(COPY_POSITION_KEY, Variant.Type.Bool));
+		properties.Add(ExtensionMethods.CreateProperty(COPY_ROTATION_KEY, Variant.Type.Bool));
+
+		if (!copyPosition)
 		{
 			properties.Add(ExtensionMethods.CreateProperty(DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,30,.1"));
 			properties.Add(ExtensionMethods.CreateProperty(BACKSTEP_DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
@@ -60,17 +60,8 @@ public partial class CameraSettingsResource : Resource
 				properties.Add(ExtensionMethods.CreateProperty(HALL_ROTATION_KEY, Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
 			}
 		}
-		else
-		{
-			properties.Add(ExtensionMethods.CreateProperty(COPY_POSITION_KEY, Variant.Type.Bool));
-			if (!copyPosition)
-				properties.Add(ExtensionMethods.CreateProperty(POSITION_KEY, Variant.Type.Vector3));
 
-			properties.Add(ExtensionMethods.CreateProperty(COPY_ROTATION_KEY, Variant.Type.Bool));
-		}
-
-
-		if (!useStaticPosition || !copyRotation)
+		if (!copyRotation)
 		{
 			properties.Add(ExtensionMethods.CreateProperty(PITCH_ANGLE_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,1"));
 			properties.Add(ExtensionMethods.CreateProperty(YAW_ANGLE_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,1"));
@@ -94,16 +85,12 @@ public partial class CameraSettingsResource : Resource
 	{
 		switch ((string)property)
 		{
-			case STATIC_CAMERA_KEY:
-				return useStaticPosition;
 			case COPY_POSITION_KEY:
 				return copyPosition;
 			case COPY_ROTATION_KEY:
 				return copyRotation;
 			case COPY_FOV_KEY:
 				return copyFov;
-			case POSITION_KEY:
-				return staticPosition;
 
 			case DISTANCE_KEY:
 				return distance;
@@ -155,10 +142,6 @@ public partial class CameraSettingsResource : Resource
 	{
 		switch ((string)property)
 		{
-			case STATIC_CAMERA_KEY:
-				useStaticPosition = (bool)value;
-				NotifyPropertyListChanged();
-				break;
 			case COPY_POSITION_KEY:
 				copyPosition = (bool)value;
 				NotifyPropertyListChanged();
@@ -170,9 +153,6 @@ public partial class CameraSettingsResource : Resource
 			case COPY_FOV_KEY:
 				copyFov = (bool)value;
 				NotifyPropertyListChanged();
-				break;
-			case POSITION_KEY:
-				staticPosition = (Vector3)value;
 				break;
 
 			case DISTANCE_KEY:
@@ -246,16 +226,12 @@ public partial class CameraSettingsResource : Resource
 	}
 	#endregion
 
-	/// <summary> Keep the camera's position at a specific point? </summary>
-	public bool useStaticPosition;
 	/// <summary> Copy camera's position from the cameraTrigger node? </summary>
-	public bool copyPosition = true;
+	public bool copyPosition;
 	/// <summary> Copy camera's rotation from the cameraTrigger node? </summary>
 	public bool copyRotation;
 	/// <summary> Copy camera's rotation from the cameraTrigger node (requires a reference camera)? </summary>
 	public bool copyFov;
-	/// <summary> Static position to use when copyPosition is false. </summary>
-	public Vector3 staticPosition;
 
 	/// <summary> Angle (in radians) of pitch (X rotation). </summary>
 	public float pitchAngle;
