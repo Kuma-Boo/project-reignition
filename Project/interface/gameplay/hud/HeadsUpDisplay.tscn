@@ -27,7 +27,7 @@
 [ext_resource type="Texture2D" uid="uid://wehmqy1nfvqd" path="res://interface/gameplay/hud/texture/soul gauge/surface orange.png" id="21_xt5s7"]
 [ext_resource type="Texture2D" uid="uid://dxukrbt64dvpn" path="res://interface/gameplay/hud/texture/race/sonic.png" id="25_tnp30"]
 [ext_resource type="Texture2D" uid="uid://bfshr1ptvr744" path="res://interface/gameplay/hud/texture/race/uhu.png" id="26_8fdkc"]
-[ext_resource type="Texture2D" uid="uid://ba64jopturjnu" path="res://interface/gameplay/hud/texture/race/bar.png" id="26_rlyqq"]
+[ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="27_vkylp"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="29_dr2xu"]
 
 [sub_resource type="Animation" id="2"]
@@ -1240,7 +1240,7 @@ _data = {
 "show": SubResource("Animation_rfoup")
 }
 
-[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "fireSoulAnimator", "rankPreviewerRoot", "mainRank", "transitionRank", "rankUpSFX", "rankDownSFX", "time", "score", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "objectiveSfx", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator", "raceRoot", "raceUhu", "racePlayer", "buttons", "promptAnimator")]
+[node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "fireSoulAnimator", "rankPreviewerRoot", "mainRank", "transitionRank", "rankUpSFX", "rankDownSFX", "time", "score", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "objectiveSfx", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator", "raceRoot", "raceUhu", "racePlayer", "buttons")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1274,8 +1274,7 @@ soulGaugeAnimator = NodePath("SoulGauge/AnimationPlayer")
 raceRoot = NodePath("Race")
 raceUhu = NodePath("Race/Uhu")
 racePlayer = NodePath("Race/Sonic")
-buttons = [NodePath("ButtonPrompts/Action"), NodePath("ButtonPrompts/Jump")]
-promptAnimator = NodePath("ButtonPrompts/AnimationPlayer")
+buttons = []
 
 [node name="Rings" type="Control" parent="."]
 layout_mode = 1
@@ -1823,16 +1822,12 @@ offset_right = 320.0
 offset_bottom = 160.0
 grow_horizontal = 2
 
-[node name="Bar" type="TextureRect" parent="Race"]
-clip_children = 2
-layout_mode = 1
-anchors_preset = -1
-offset_left = 48.0
-offset_right = 592.0
-offset_bottom = 64.0
-grow_vertical = 2
-pivot_offset = Vector2(0, 32)
-texture = ExtResource("26_rlyqq")
+[node name="ScrollBar" type="Sprite2D" parent="Race"]
+position = Vector2(328, 32)
+scale = Vector2(2.64286, 2.5)
+texture = ExtResource("27_vkylp")
+region_enabled = true
+region_rect = Rect2(32, 224, 224, 32)
 
 [node name="Uhu" type="TextureRect" parent="Race"]
 layout_mode = 1
@@ -1846,8 +1841,9 @@ stretch_mode = 4
 
 [node name="Sonic" type="TextureRect" parent="Race"]
 layout_mode = 1
+offset_left = 512.0
 offset_top = -32.0
-offset_right = 128.0
+offset_right = 640.0
 offset_bottom = 96.0
 pivot_offset = Vector2(64, 64)
 texture = ExtResource("25_tnp30")
