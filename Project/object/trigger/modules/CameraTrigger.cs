@@ -53,7 +53,7 @@ public partial class CameraTrigger : StageTriggerModule
 
 	public void UpdateStaticData(CameraBlendData data)
 	{
-		if (data.SettingsResource != settings) return;
+		if (data.SettingsResource != settings || !IsOverridingCameraTransform) return;
 
 		if (data.SettingsResource.copyPosition)
 			data.Position = GlobalPosition;

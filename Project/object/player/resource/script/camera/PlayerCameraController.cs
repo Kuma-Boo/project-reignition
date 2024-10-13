@@ -342,7 +342,6 @@ public partial class PlayerCameraController : Node3D
 	/// <summary> Simulates a camera setting and returns the Transform of where it would end up. </summary>
 	private CameraPositionData SimulateCamera(int index)
 	{
-		// CAM TODO Clean up this function
 		CameraSettingsResource settings = CameraBlendList[index].SettingsResource;
 		CameraPositionData data = new()
 		{
@@ -350,50 +349,127 @@ public partial class PlayerCameraController : Node3D
 		};
 
 		// Update static data before simulating camera
-		if (CameraBlendList[index].Trigger != null)
-		{
-			if (CameraBlendList[index].Trigger.UpdateEveryFrame)
-				CameraBlendList[index].Trigger.UpdateStaticData(CameraBlendList[index]);
+		if (CameraBlendList[index].Trigger?.UpdateEveryFrame == true)
+			CameraBlendList[index].Trigger.UpdateStaticData(CameraBlendList[index]);
 
-		}
+		if (settings.copyPosition)
+			data = SimulateStaticCamera(settings, ref data);
+		else
+			data = SimulateDynamicCamera(settings, ref data);
 
 		if (!settings.copyFov)
 			data.blendData.Fov = Mathf.IsZeroApprox(settings.targetFOV) ? DefaultFov : settings.targetFOV;
 
-		float targetYawAngle = settings.yawAngle;
+		if (!data.blendData.WasInitialized)
+			data.blendData.WasInitialized = true;
+
+		return data;
+	}
+
+	private CameraPositionData SimulateStaticCamera(CameraSettingsResource settings, ref CameraPositionData data)
+	{
 		float targetPitchAngle = settings.pitchAngle;
+		float targetYawAngle = settings.yawAngle;
 
-		/*
-		CAM TODO Reimplement static camera tracking
-		if (settings.useStaticPosition)
+		data.precalculatedPosition = data.blendData.Position;
+
+		if (settings.copyRotation)
 		{
-			data.precalculatedPosition = data.blendData.StaticPosition;
+			data.precalculatedPosition = data.blendData.Position;
+			return data;
+		}
 
-			if (settings.copyRotation) // Override rotation w/ inherited basis
+		Vector3 delta = Player.CenterPosition - data.precalculatedPosition;
+		data.blendData.distance = delta.Length();
+		delta = delta.Normalized();
+
+		if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+			targetYawAngle += delta.Flatten().AngleTo(Vector2.Up);
+		targetYawAngle += Mathf.Pi;
+
+		if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+			targetPitchAngle += delta.AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
+
+		data.blendData.yawAngle = targetYawAngle;
+		data.blendData.pitchAngle = targetPitchAngle;
+		data.CalculateBasis();
+
+		return data;
+	}
+
+	private CameraPositionData SimulateDynamicCamera(CameraSettingsResource settings, ref CameraPositionData data)
+	{
+		// Calculate distance
+		float targetDistance = CalculateDistance(settings);
+		data.blendData.DistanceSmoothDamp(targetDistance, Player.IsMovingBackward, SnapFlag);
+
+		CalculateRotation(settings, ref data);
+
+		// Update Tracking
+		// Calculate position for tracking calculations
+		data.CalculateBasis();
+		data.CalculatePosition(PathFollower.GlobalPosition);
+
+		Vector3 globalDelta = Player.CenterPosition - data.precalculatedPosition;
+		Vector3 localDelta = data.offsetBasis.Inverse() * globalDelta;
+
+		if (settings.horizontalTrackingMode != CameraSettingsResource.TrackingModeEnum.Move)
+		{
+			data.horizontalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.X;
+
+			if (settings.horizontalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate)
+				data.secondaryYawTracking = -localDelta.Normalized().Flatten().AngleTo(Vector2.Down);
+		}
+		else if (!Mathf.IsZeroApprox(settings.hallWidth) || !Mathf.IsZeroApprox(settings.hallRotationStrength)) // Process hall width
+		{
+			float positionTracking = Mathf.Clamp(PathFollower.GlobalPlayerPositionDelta.X, -settings.hallWidth, settings.hallWidth);
+			data.blendData.HallSmoothDamp(positionTracking, SnapFlag);
+
+			data.horizontalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.X; // Recenter
+			data.horizontalTrackingOffset += data.blendData.hallPosition; // Add clamped position tracking
+
+			if (!Mathf.IsZeroApprox(settings.hallRotationStrength) && Mathf.Abs(localDelta.X) > settings.hallWidth)
 			{
-				data.offsetBasis = data.blendData.RotationBasis.Orthonormalized();
-			}
-			else
-			{
-				Vector3 delta = Player.CenterPosition - data.precalculatedPosition;
-				data.blendData.distance = delta.Length();
-				delta = delta.Normalized();
-
-				if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-					targetYawAngle += delta.Flatten().AngleTo(Vector2.Up);
-				targetYawAngle += Mathf.Pi;
-
-				if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-					targetPitchAngle += delta.AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
-
-				data.blendData.yawAngle = targetYawAngle;
-				data.blendData.pitchAngle = targetPitchAngle;
-				data.CalculateBasis();
+				localDelta.X -= Mathf.Sign(localDelta.X) * settings.hallWidth;
+				data.secondaryYawTracking = -localDelta.Flatten().AngleTo(Vector2.Down) * settings.hallRotationStrength;
 			}
 		}
-		*/
 
-		// Calculate distance
+		float targetPitchTracking = 0.0f;
+		if (settings.verticalTrackingMode != CameraSettingsResource.TrackingModeEnum.Move)
+		{
+			// Stay on the floor
+			data.verticalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.Y;
+
+			if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate) // Rotational tracking
+			{
+				localDelta.X = 0; // Ignore x axis for pitch tracking
+				localDelta.Y -= settings.viewportOffset.Y;
+				data.pitchTracking = localDelta.Normalized().AngleTo(localDelta.RemoveVertical().Normalized()) * Mathf.Sign(localDelta.Y);
+				targetPitchTracking = data.pitchTracking;
+			}
+		}
+
+		data.pitchTracking = targetPitchTracking;
+
+		// Recalculate position after applying rotational tracking
+		data.CalculatePosition(Player.CenterPosition);
+		data.precalculatedPosition = AddTrackingOffset(data.precalculatedPosition, data);
+
+		if (!settings.ignoreHomingAttack && IsLockonCameraActive && LockonTarget != null)
+		{
+			globalDelta = LockonTarget.GlobalPosition.Lerp(Player.CenterPosition, .5f) - data.precalculatedPosition;
+			localDelta = data.offsetBasis.Inverse() * globalDelta;
+			localDelta.X = 0; // Ignore x axis for pitch tracking
+			data.blendData.lockonPitchTracking = localDelta.Normalized().AngleTo(localDelta.RemoveVertical().Normalized()) * Mathf.Sign(localDelta.Y);
+		}
+		data.pitchTracking += data.blendData.lockonPitchTracking * lockonTargetBlend;
+
+		return data;
+	}
+
+	private float CalculateDistance(CameraSettingsResource settings)
+	{
 		float targetDistance = settings.distance;
 		if (Player.IsMovingBackward)
 			targetDistance += settings.backstepDistance;
@@ -408,8 +484,13 @@ public partial class PlayerCameraController : Node3D
 			targetDistance = PathFollower.Progress;
 		}
 
-		data.blendData.DistanceSmoothDamp(targetDistance, Player.IsMovingBackward, SnapFlag);
+		return targetDistance;
+	}
 
+	private void CalculateRotation(CameraSettingsResource settings, ref CameraPositionData data)
+	{
+		float targetYawAngle = settings.yawAngle;
+		float targetPitchAngle = settings.pitchAngle;
 		// Calculate targetAngles when DistanceMode is set to Sample.
 		float sampledTargetYawAngle = targetYawAngle;
 		float sampledTargetPitchAngle = targetPitchAngle;
@@ -433,19 +514,18 @@ public partial class PlayerCameraController : Node3D
 		if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 			targetPitchAngle += PathFollower.Forward().AngleTo(PathFollower.Forward().RemoveVertical().Normalized()) * Mathf.Sign(PathFollower.Forward().Y);
 
-		if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Auto) // Fixes slope changes
+		// Calculate slope rotation blending
+		switch (settings.distanceCalculationMode)
 		{
-			// Negative number -> Concave, Positive number -> Convex.
-			float slopeDifference = sampledForward.Y - PathFollower.Forward().Y;
-			data.blendData.SampleBlend = Mathf.Lerp(data.blendData.SampleBlend, slopeDifference < 0 ? 1.0f : 0.0f, .1f);
-		}
-		else if (settings.distanceCalculationMode == CameraSettingsResource.DistanceModeEnum.Sample)
-		{
-			data.blendData.SampleBlend = 1.0f;
-		}
-		else
-		{
-			data.blendData.SampleBlend = 0.0f;
+			case CameraSettingsResource.DistanceModeEnum.Auto: // Fixes slope changes
+				data.blendData.SampleBlend = Mathf.Lerp(data.blendData.SampleBlend, sampledForward.Y < PathFollower.Forward().Y ? 1.0f : 0.0f, .1f);
+				break;
+			case CameraSettingsResource.DistanceModeEnum.Sample:
+				data.blendData.SampleBlend = 1.0f;
+				break;
+			case CameraSettingsResource.DistanceModeEnum.Offset:
+				data.blendData.SampleBlend = 0.0f;
+				break;
 		}
 
 		// Fix rotated sampling cameras
@@ -460,71 +540,6 @@ public partial class PlayerCameraController : Node3D
 		data.blendData.pitchAngle = Mathf.Lerp(targetPitchAngle, sampledTargetPitchAngle, data.blendData.SampleBlend);
 		if (settings.followPathTilt) // Calculate tilt
 			data.blendData.tiltAngle = PathFollower.Right().SignedAngleTo(-PathFollower.SideAxis, PathFollower.Forward()) * yawSamplingFix;
-
-		// Update Tracking
-		// Calculate position for tracking calculations
-		data.CalculateBasis();
-		data.CalculatePosition(PathFollower.GlobalPosition);
-
-		Vector3 globalDelta = Player.CenterPosition - data.precalculatedPosition;
-		Vector3 delta = data.offsetBasis.Inverse() * globalDelta;
-
-		if (settings.horizontalTrackingMode != CameraSettingsResource.TrackingModeEnum.Move)
-		{
-			data.horizontalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.X;
-
-			if (settings.horizontalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate)
-				data.secondaryYawTracking = -delta.Normalized().Flatten().AngleTo(Vector2.Down);
-		}
-		else if (!Mathf.IsZeroApprox(settings.hallWidth) || !Mathf.IsZeroApprox(settings.hallRotationStrength)) // Process hall width
-		{
-			float positionTracking = Mathf.Clamp(PathFollower.GlobalPlayerPositionDelta.X, -settings.hallWidth, settings.hallWidth);
-			data.blendData.HallSmoothDamp(positionTracking, SnapFlag);
-
-			data.horizontalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.X; // Recenter
-			data.horizontalTrackingOffset += data.blendData.hallPosition; // Add clamped position tracking
-
-			if (!Mathf.IsZeroApprox(settings.hallRotationStrength) && Mathf.Abs(delta.X) > settings.hallWidth)
-			{
-				delta.X -= Mathf.Sign(delta.X) * settings.hallWidth;
-				data.secondaryYawTracking = -delta.Flatten().AngleTo(Vector2.Down) * settings.hallRotationStrength;
-			}
-		}
-
-		float targetPitchTracking = 0.0f;
-		if (settings.verticalTrackingMode != CameraSettingsResource.TrackingModeEnum.Move)
-		{
-			// Stay on the floor
-			data.verticalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.Y;
-
-			if (settings.verticalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate) // Rotational tracking
-			{
-				delta.X = 0; // Ignore x axis for pitch tracking
-				delta.Y -= settings.viewportOffset.Y;
-				data.pitchTracking = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
-				targetPitchTracking = data.pitchTracking;
-			}
-		}
-
-		data.pitchTracking = targetPitchTracking;
-
-		// Recalculate position after applying rotational tracking
-		data.CalculatePosition(Player.CenterPosition);
-		data.precalculatedPosition = AddTrackingOffset(data.precalculatedPosition, data);
-
-		if (!settings.ignoreHomingAttack && IsLockonCameraActive && LockonTarget != null)
-		{
-			globalDelta = LockonTarget.GlobalPosition.Lerp(Player.CenterPosition, .5f) - data.precalculatedPosition;
-			delta = data.offsetBasis.Inverse() * globalDelta;
-			delta.X = 0; // Ignore x axis for pitch tracking
-			data.blendData.lockonPitchTracking = delta.Normalized().AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
-		}
-		data.pitchTracking += data.blendData.lockonPitchTracking * lockonTargetBlend;
-
-		if (!data.blendData.WasInitialized)
-			data.blendData.WasInitialized = true;
-
-		return data;
 	}
 
 	private struct CameraPositionData
