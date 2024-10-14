@@ -246,6 +246,7 @@ public partial class SidleState : PlayerState
 					if (cycleTimer < RecoveryLength)
 						return;
 
+					Player.IsOnGround = true;
 					Player.Effect.PlayLandingFX();
 				}
 
