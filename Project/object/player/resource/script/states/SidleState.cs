@@ -163,22 +163,27 @@ public partial class SidleState : PlayerState
 	private void OnPlayerDamaged()
 	{
 		// Invincible/Damage routine has already started
-		if (Player.IsInvincible || damageState != DamageStates.Disabled) return;
+		if (Player.IsDefeated || Player.IsInvincible || damageState != DamageStates.Disabled) return;
 
-		if (StageSettings.Instance.CurrentRingCount == 0)
-		{
-			Player.StartKnockback();
-			return;
-		}
-
-		Player.TakeDamage();
-		Player.StartInvincibility();
-		Player.Effect.PlayVoice("sidle hurt");
-
-		damageState = DamageStates.Stagger;
 		velocity = 0;
 		cycleTimer = 0;
 
+		if (StageSettings.Instance.CurrentRingCount == 0)
+		{
+			Player.Knockback -= OnPlayerDamaged;
+			Player.StartKnockback(new()
+			{
+				ignoreMovementState = true
+			});
+			return;
+		}
+
+		damageState = DamageStates.Stagger;
+
+		Player.TakeDamage();
+		Player.StartInvincibility();
+
+		Player.Effect.PlayVoice("sidle hurt");
 		Player.Animator.SidleDamage();
 	}
 
