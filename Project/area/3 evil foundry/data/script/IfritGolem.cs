@@ -223,7 +223,7 @@ public partial class IfritGolem : Node3D
 		// Disable the player for the intro animation
 		Player.ProcessMode = ProcessModeEnum.Disabled;
 		Interface.PauseMenu.AllowPausing = false;
-		HeadsUpDisplay.instance.Visible = false;
+		HeadsUpDisplay.Instance.Visible = false;
 		AnimationTree.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
@@ -252,7 +252,7 @@ public partial class IfritGolem : Node3D
 		TransitionManager.FinishTransition();
 		Player.ProcessMode = ProcessModeEnum.Inherit;
 		Interface.PauseMenu.AllowPausing = true;
-		HeadsUpDisplay.instance.Visible = true;
+		HeadsUpDisplay.Instance.Visible = true;
 		Player.Camera.Camera.Current = true;
 	}
 
@@ -601,7 +601,7 @@ public partial class IfritGolem : Node3D
 		// Award 8000 points for defeating the boss
 		BonusManager.instance.QueueBonus(new(BonusType.Boss, 8000));
 		Interface.PauseMenu.AllowPausing = false;
-		HeadsUpDisplay.instance.Visible = false;
+		HeadsUpDisplay.Instance.Visible = false;
 		currentState = GolemState.Defeated;
 	}
 
