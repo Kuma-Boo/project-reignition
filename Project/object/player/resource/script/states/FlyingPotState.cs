@@ -19,12 +19,19 @@ public partial class FlyingPotState : PlayerState
 	private const float FlapInterval = .5f; // How long is a single flap?
 	private const float FlapAccelerationLength = .4f; // How long does a flap accelerate?
 
+	private readonly StringName AscendAction = "action_ascend";
+	private readonly StringName ExitAction = "action_exit";
+
 	public override void EnterState()
 	{
 		flapTimer = 0;
 		Player.StartExternal(Pot, Pot.Root);
 		Player.Animator.Visible = false;
 		Player.MoveSpeed = Player.VerticalSpeed = 0;
+
+		HeadsUpDisplay.Instance.SetPrompt(AscendAction, 0);
+		HeadsUpDisplay.Instance.SetPrompt(ExitAction, 1);
+		HeadsUpDisplay.Instance.ShowPrompts();
 	}
 
 	public override void ExitState()
@@ -33,6 +40,8 @@ public partial class FlyingPotState : PlayerState
 		Player.Skills.IsSpeedBreakEnabled = true;
 		Player.Animator.Visible = true;
 		Player.StopExternal();
+
+		HeadsUpDisplay.Instance.HidePrompts();
 
 		Pot = null;
 	}

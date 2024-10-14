@@ -333,8 +333,8 @@ public partial class DebugManager : Node2D
 	{
 		DisableHUD = enabled;
 
-		if (!IsInstanceValid(HeadsUpDisplay.instance)) return;
-		HeadsUpDisplay.instance.Visible = !enabled;
+		if (!IsInstanceValid(HeadsUpDisplay.Instance)) return;
+		HeadsUpDisplay.Instance.Visible = !enabled;
 	}
 
 	/// <summary> Hide countdown for recording. </summary>

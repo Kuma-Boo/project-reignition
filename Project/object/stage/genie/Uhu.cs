@@ -62,7 +62,7 @@ public partial class Uhu : PathFollow3D
 		float uhuRatio = (Progress - startingProgress) / (maxProgress - startingProgress);
 		float playerRatio = path.Curve.GetClosestOffset(path.ToLocal(StageSettings.Player.GlobalPosition));
 		playerRatio = (playerRatio - startingProgress) / (maxProgress - startingProgress);
-		HeadsUpDisplay.instance.UpdateRace(playerRatio, uhuRatio);
+		HeadsUpDisplay.Instance.UpdateRace(playerRatio, uhuRatio);
 	}
 
 	private void StartRace()

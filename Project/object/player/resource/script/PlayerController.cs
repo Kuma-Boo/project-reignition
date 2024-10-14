@@ -286,7 +286,7 @@ public partial class PlayerController : CharacterBody3D
 					return;
 				}
 
-				Skills.CallDeferred(CharacterSkillManager.MethodName.ToggleSpeedBreak);
+				Skills.CallDeferred(PlayerSkillController.MethodName.ToggleSpeedBreak);
 			}
 
 			if (WallRaycastHit.distance <= CollisionSize.X + CollisionPadding)
@@ -704,6 +704,7 @@ public partial class PlayerController : CharacterBody3D
 	{
 		EmitSignal(SignalName.Knockback); // Emit signal FIRST so external controllers can be alerted
 
+		if (IsTeleporting || IsDefeated) return;
 		if (IsInvincible && !settings.ignoreInvincibility) return;
 		if (ExternalController != null && !settings.ignoreMovementState) return;
 
@@ -723,7 +724,7 @@ public partial class PlayerController : CharacterBody3D
 			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.PearlRespawn) && Skills.IsSoulGaugeCharged)
 			{
 				// Lose soul power and continue
-				Skills.ModifySoulGauge(-CharacterSkillManager.MinimumSoulPower);
+				Skills.ModifySoulGauge(-PlayerSkillController.MinimumSoulPower);
 			}
 			else
 			{
