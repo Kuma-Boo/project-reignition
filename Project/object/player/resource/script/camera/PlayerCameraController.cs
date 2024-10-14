@@ -16,21 +16,17 @@ public partial class PlayerCameraController : Node3D
 	public const float DefaultFov = 70;
 
 	[ExportGroup("Components")]
-	[Export]
-	public Camera3D Camera { get; private set; }
-	[Export]
-	public Node3D FreeCamRoot { get; private set; }
-	[Export]
-	private Node3D cameraRoot;
-	[Export]
-	private Node3D debugMesh;
+	[Export] public Camera3D Camera { get; private set; }
+	[Export] public Node3D FreeCamRoot { get; private set; }
+	[Export] private Node3D cameraRoot;
+	[Export] private Node3D debugMesh;
 	public Vector2 ConvertToScreenSpace(Vector3 worldSpace) => Camera.UnprojectPosition(worldSpace);
 	public bool IsOnScreen(Vector3 worldSpace) => Camera.IsPositionInFrustum(worldSpace);
 	public bool IsBehindCamera(Vector3 worldSpace) => Camera.IsPositionBehind(worldSpace);
 
-	[Export]
 	/// <summary> Camera's pathfollower. Different than Player.PathFollower. </summary>
-	public PlayerPathController PathFollower { get; private set; }
+	[Export] public PlayerPathController PathFollower { get; private set; }
+	[Export] private Node3D sampler;
 
 	private readonly StringName ShaderPlayerScreenPosition = new("player_screen_position");
 
@@ -53,7 +49,10 @@ public partial class PlayerCameraController : Node3D
 		});
 
 		motionBlurMaterial.SetShaderParameter(OpacityParameter, 0);
-		Runtime.Instance.Connect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
+
+		sampler.GetParent().RemoveChild(sampler);
+		StageSettings.Instance.AddChild(sampler);
+		Runtime.Instance.EventInputed += ReceiveInput;
 	}
 
 	public void Respawn()
@@ -72,7 +71,7 @@ public partial class PlayerCameraController : Node3D
 		if (GetTree().Paused)
 			return;
 
-		PathFollower.Resync();
+		UpdatePathFollower();
 
 		// Don't update the camera when the player is defeated from a DeathTrigger
 		if (IsDefeatFreezeActive)
@@ -92,6 +91,38 @@ public partial class PlayerCameraController : Node3D
 	{
 		if (OS.IsDebugBuild())
 			UpdateFreeCam();
+	}
+
+	private float pathBlend = 1.0f;
+	private float pathBlendSmoothed = 1.0f;
+	private float pathBlendSpeed;
+	public void UpdatePathBlendSpeed(float speed)
+	{
+		if (Mathf.IsZeroApprox(speed))
+		{
+			pathBlend = pathBlendSmoothed = 1.0f;
+			return;
+		}
+
+		pathBlend = pathBlendSmoothed = 0.0f;
+		pathBlendSpeed = speed;
+	}
+
+	private void UpdatePathFollower()
+	{
+		if (SnapFlag)
+			pathBlend = pathBlendSmoothed = 1.0f;
+
+		PathFollower.Resync();
+		sampler.GlobalPosition = sampler.GlobalPosition.Lerp(PathFollower.GlobalPosition, pathBlendSmoothed);
+		sampler.GlobalBasis = sampler.GlobalBasis.Orthonormalized().Slerp(PathFollower.GlobalBasis.Orthonormalized(), pathBlendSmoothed);
+
+		GD.Print(pathBlend);
+		if (Mathf.IsEqualApprox(pathBlend, 1.0f))
+			return;
+
+		pathBlend = Mathf.MoveToward(pathBlend, 1.0f, pathBlendSpeed * PhysicsManager.physicsDelta);
+		pathBlendSmoothed = Mathf.SmoothStep(0.0f, 1.0f, pathBlend);
 	}
 
 	/// <summary> Enabled when the camera should freeze due to a DeathTrigger. </summary>
@@ -234,7 +265,15 @@ public partial class PlayerCameraController : Node3D
 	{
 		UpdateTransitionTimer();
 		UpdateLockonTarget();
+		UpdateCameraBlends();
+		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Player.CenterPosition) / Runtime.ScreenSize);
 
+		if (SnapFlag) // Reset flag after camera was updated
+			SnapFlag = false;
+	}
+
+	private void UpdateCameraBlends()
+	{
 		CameraPositionData data = new()
 		{
 			offsetBasis = Basis.Identity,
@@ -293,11 +332,6 @@ public partial class PlayerCameraController : Node3D
 			cameraRoot.GlobalTransform = cameraTransform; // Update transform
 
 		Camera.Fov = fov; // Update fov
-
-		RenderingServer.GlobalShaderParameterSet(ShaderPlayerScreenPosition, ConvertToScreenSpace(Player.CenterPosition) / Runtime.ScreenSize);
-
-		if (SnapFlag) // Reset flag after camera was updated
-			SnapFlag = false;
 	}
 
 	/// <summary> Previous xform angle used right before the last camera change. </summary>
@@ -334,8 +368,8 @@ public partial class PlayerCameraController : Node3D
 
 	private Vector3 AddTrackingOffset(Vector3 position, CameraPositionData data)
 	{
-		position += PathFollower.Right() * data.horizontalTrackingOffset;
-		position += PathFollower.Up() * data.verticalTrackingOffset; // Use Pathfollower's up axis for vertical offset
+		position += sampler.Right() * data.horizontalTrackingOffset;
+		position += sampler.Up() * data.verticalTrackingOffset;
 		return position;
 	}
 
@@ -408,7 +442,7 @@ public partial class PlayerCameraController : Node3D
 		// Update Tracking
 		// Calculate position for tracking calculations
 		data.CalculateBasis();
-		data.CalculatePosition(PathFollower.GlobalPosition);
+		data.CalculatePosition(sampler.GlobalPosition);
 
 		Vector3 globalDelta = Player.CenterPosition - data.precalculatedPosition;
 		Vector3 localDelta = data.offsetBasis.Inverse() * globalDelta;
@@ -510,15 +544,15 @@ public partial class PlayerCameraController : Node3D
 
 		// Calculate target angles when DistanceMode is set to Offset
 		if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-			targetYawAngle += PathFollower.ForwardAngle;
+			targetYawAngle += ExtensionMethods.CalculateForwardAngle(sampler.Forward(), sampler.Up());
 		if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-			targetPitchAngle += PathFollower.Forward().AngleTo(PathFollower.Forward().RemoveVertical().Normalized()) * Mathf.Sign(PathFollower.Forward().Y);
+			targetPitchAngle += sampler.Forward().AngleTo(sampler.Forward().RemoveVertical().Normalized()) * Mathf.Sign(sampler.Forward().Y);
 
 		// Calculate slope rotation blending
 		switch (settings.distanceCalculationMode)
 		{
 			case CameraSettingsResource.DistanceModeEnum.Auto: // Fixes slope changes
-				data.blendData.SampleBlend = Mathf.Lerp(data.blendData.SampleBlend, sampledForward.Y < PathFollower.Forward().Y ? 1.0f : 0.0f, .1f);
+				data.blendData.SampleBlend = Mathf.Lerp(data.blendData.SampleBlend, sampledForward.Y < sampler.Forward().Y ? 1.0f : 0.0f, .1f);
 				break;
 			case CameraSettingsResource.DistanceModeEnum.Sample:
 				data.blendData.SampleBlend = 1.0f;
@@ -539,7 +573,7 @@ public partial class PlayerCameraController : Node3D
 		data.blendData.yawAngle = Mathf.LerpAngle(targetYawAngle, sampledTargetYawAngle, data.blendData.SampleBlend);
 		data.blendData.pitchAngle = Mathf.Lerp(targetPitchAngle, sampledTargetPitchAngle, data.blendData.SampleBlend);
 		if (settings.followPathTilt) // Calculate tilt
-			data.blendData.tiltAngle = PathFollower.Right().SignedAngleTo(-PathFollower.SideAxis, PathFollower.Forward()) * yawSamplingFix;
+			data.blendData.tiltAngle = sampler.Right().SignedAngleTo(-PathFollower.SideAxis, sampler.Forward()) * yawSamplingFix;
 	}
 
 	private struct CameraPositionData

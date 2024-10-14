@@ -12,17 +12,17 @@ public partial class PathTrigger : StageTriggerModule
 
 	private Path3D playerDeactivatePath;
 	private Path3D cameraDeactivatePath;
+	/// <summary> Did the previous path limit the camera's distance? </summary>
 	private bool deactivateLimitCameraDistance;
 
 	/// <summary> Should the path be assigned to the player? </summary>
-	[Export]
-	public bool affectPlayer = true;
+	[Export] public bool affectPlayer = true;
 	/// <summary> Should the path be assigned to the camera? </summary>
-	[Export]
-	public bool affectCamera = true;
+	[Export] public bool affectCamera = true;
+	/// <summary> How much should the camera's path transition be smoothed? </summary>
+	[Export] private float cameraPathBlendTime = .5f;
 	/// <summary> Should this path limit the camera's maximum distance? </summary>
-	[Export]
-	public bool limitCameraDistanceToPath;
+	[Export] public bool limitCameraDistanceToPath;
 
 	public override void Activate()
 	{
@@ -32,14 +32,15 @@ public partial class PathTrigger : StageTriggerModule
 			Player.PathFollower.SetActivePath(path);
 		}
 
-		if (affectCamera)
-		{
-			cameraDeactivatePath ??= Player.Camera.PathFollower.ActivePath;
-			deactivateLimitCameraDistance = Player.Camera.LimitToPathDistance;
+		if (!affectCamera)
+			return;
 
-			Player.Camera.PathFollower.SetActivePath(path);
-			Player.Camera.LimitToPathDistance = limitCameraDistanceToPath;
-		}
+		cameraDeactivatePath ??= Player.Camera.PathFollower.ActivePath;
+		Player.Camera.PathFollower.SetActivePath(path);
+
+		deactivateLimitCameraDistance = Player.Camera.LimitToPathDistance;
+		Player.Camera.LimitToPathDistance = limitCameraDistanceToPath;
+		Player.Camera.UpdatePathBlendSpeed(Mathf.IsZeroApprox(cameraPathBlendTime) ? 0.0f : 1.0f / cameraPathBlendTime);
 	}
 
 	public override void Deactivate()
