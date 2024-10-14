@@ -180,10 +180,6 @@ public partial class SidleState : PlayerState
 		cycleTimer = 0;
 
 		Player.Animator.SidleDamage();
-
-		HeadsUpDisplay.Instance.SetPrompt(null, 0);
-		HeadsUpDisplay.Instance.SetPrompt(JumpAction, 1);
-		HeadsUpDisplay.Instance.ShowPrompts();
 	}
 
 	/// <summary> Processes player when being damaged. </summary>
@@ -233,6 +229,9 @@ public partial class SidleState : PlayerState
 				{
 					cycleTimer = 0;
 					damageState = DamageStates.Hanging;
+					HeadsUpDisplay.Instance.SetPrompt(null, 0);
+					HeadsUpDisplay.Instance.SetPrompt(JumpAction, 1);
+					HeadsUpDisplay.Instance.ShowPrompts();
 				}
 				break;
 
