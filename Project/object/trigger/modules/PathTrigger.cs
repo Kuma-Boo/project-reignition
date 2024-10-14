@@ -20,7 +20,7 @@ public partial class PathTrigger : StageTriggerModule
 	/// <summary> Should the path be assigned to the camera? </summary>
 	[Export] public bool affectCamera = true;
 	/// <summary> How much should the camera's path transition be smoothed? </summary>
-	[Export] private float cameraPathBlendTime = .5f;
+	[Export(PropertyHint.Range, "0, 2, 0.1")] private float cameraPathBlendTime;
 	/// <summary> Should this path limit the camera's maximum distance? </summary>
 	[Export] public bool limitCameraDistanceToPath;
 
