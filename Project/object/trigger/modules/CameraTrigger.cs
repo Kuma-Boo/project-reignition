@@ -77,8 +77,6 @@ public partial class CameraTrigger : StageTriggerModule
 		if (!cachedPreviousSettings)
 		{
 			previousSettings ??= Camera.ActiveSettings;
-
-			GD.Print(Camera.ActiveBlendData.Position);
 			previousStaticPosition = Camera.ActiveBlendData.Position; // Cache static position
 			previousStaticRotation = Camera.ActiveBlendData.RotationBasis; // Cache static rotation
 			cachedPreviousSettings = true;
