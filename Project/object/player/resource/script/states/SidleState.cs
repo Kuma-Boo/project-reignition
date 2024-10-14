@@ -289,6 +289,7 @@ public partial class SidleState : PlayerState
 		if (cycleTimer <= .5f)
 			return;
 
+		damageState = DamageStates.Disabled;
 		Player.StartRespawn();
 	}
 

@@ -704,6 +704,7 @@ public partial class PlayerController : CharacterBody3D
 	{
 		EmitSignal(SignalName.Knockback); // Emit signal FIRST so external controllers can be alerted
 
+		if (IsTeleporting || IsDefeated) return;
 		if (IsInvincible && !settings.ignoreInvincibility) return;
 		if (ExternalController != null && !settings.ignoreMovementState) return;
 
