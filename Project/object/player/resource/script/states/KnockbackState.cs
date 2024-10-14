@@ -23,10 +23,6 @@ public partial class KnockbackState : PlayerState
 		Player.IsKnockback = true;
 		Player.MovementAngle = Player.PathFollower.ForwardAngle; // Prevent being knocked sideways
 
-		/* REFACTOR TODO 
-		if (Settings.ignoreMovementState || MovementState == MovementStates.Normal)
-		{
-		*/
 		Player.Animator.StartHurt();
 		Player.Animator.ResetState();
 		PreviousSettings = Settings;
@@ -40,7 +36,6 @@ public partial class KnockbackState : PlayerState
 			Player.IsOnGround = false;
 			Player.VerticalSpeed = Runtime.CalculateJumpPower(Settings.overrideKnockbackHeight ? Settings.knockbackHeight : 1);
 		}
-		//}
 
 		if (Player.ExternalController != null)
 			return; // Only allow autorespawning when not using external controller
