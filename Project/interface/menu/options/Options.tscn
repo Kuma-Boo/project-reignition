@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://bwehljjnagemy"]
+[gd_scene load_steps=57 format=3 uid="uid://bwehljjnagemy"]
 
 [ext_resource type="Script" path="res://interface/menu/options/script/Options.cs" id="1_yejdm"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="2_x1aix"]
@@ -20,8 +20,9 @@
 [ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="8_wksl8"]
 [ext_resource type="AudioStream" uid="uid://l2e1do1wwkg" path="res://sound/sfx/system/menu confirm.wav" id="8_xb0ie"]
 [ext_resource type="PackedScene" uid="uid://c1806dq45a0kr" path="res://interface/menu/options/ControlOption.tscn" id="14_itn8j"]
-[ext_resource type="PackedScene" uid="uid://bbbuqgxfhuh8k" path="res://object/player/Player.tscn" id="16_f4s6v"]
+[ext_resource type="PackedScene" uid="uid://bqck0hqdn3o8r" path="res://object/player/Player.tscn" id="16_f4s6v"]
 [ext_resource type="AudioStream" uid="uid://b5d5wemyoi5ap" path="res://sound/ost/treasure disc/4 MISGIVING.mp3" id="18_fr2tm"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="18_wt5wy"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="19_agawd"]
 [ext_resource type="LabelSettings" uid="uid://dnmqaq1ahkjk3" path="res://interface/font/HeaderLabelSettings.tres" id="21_egfsq"]
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="22_cq4kf"]
@@ -1371,7 +1372,6 @@ metadata/_edit_lock_ = true
 [node name="ControlBook" type="Node3D" parent="." node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("2_x1aix")
 Data = ExtResource("4_3wn11")
-InitialCameraSettings = ExtResource("3_jnp5r")
 pathParent = NodePath("Path")
 Environment = NodePath("Visuals/WorldEnvironment")
 
@@ -1554,6 +1554,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.54972e-06, 2, 18)
 script = ExtResource("8_7asuc")
 jumpHeight = 15.0
 autoAlign = true
+
+[node name="Camera" type="Node3D" parent="ControlBook"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 3)
+script = ExtResource("18_wt5wy")
+settings = ExtResource("3_jnp5r")
+UpdateEveryFrame = true
 
 [node name="MenuBase" type="Control" parent="."]
 layout_mode = 1
@@ -2363,19 +2369,13 @@ alignment = 2
 
 [node name="Select" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
 layout_mode = 2
-ActionKey = "sys_select"
-inputKey = "button_jump"
 
 [node name="Cancel" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
 layout_mode = 2
-ActionKey = "sys_cancel"
-inputKey = "button_action"
 
 [node name="Return" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
 visible = false
 layout_mode = 2
-ActionKey = "sys_return"
-inputKey = "button_pause"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 callback_mode_process = 0
