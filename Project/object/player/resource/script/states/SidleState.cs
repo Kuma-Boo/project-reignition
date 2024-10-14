@@ -193,76 +193,103 @@ public partial class SidleState : PlayerState
 		cycleTimer += PhysicsManager.physicsDelta;
 		switch (damageState)
 		{
-			case DamageStates.Hanging:
-				if (cycleTimer >= DamageHangLength) // Fall
-				{
-					StartRespawn();
-					Player.Animator.SidleHangFall();
-				}
-				else if (Input.IsActionJustPressed("button_jump")) // Process inputs
-				{
-					// Jump back to the ledge
-					cycleTimer = 0;
-					damageState = DamageStates.Recovery;
-					Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
-					Player.Effect.PlayVoice("grunt");
-					Player.Animator.SidleRecovery();
-					HeadsUpDisplay.Instance.HidePrompts();
-				}
-				break;
-
 			case DamageStates.Stagger:
-				if (cycleTimer >= DamageStaggerLength) // Fall
-				{
-					cycleTimer = 0;
-					if (IsOverFoothold)
-					{
-						damageState = DamageStates.Falling;
-						Player.IsOnGround = false;
-						Player.Animator.SidleHang();
-					}
-					else
-					{
-						StartRespawn();
-						Player.Animator.SidleFall();
-					}
-				}
+				ProcessDamageStagger();
 				break;
-
 			case DamageStates.Falling:
-				if (cycleTimer >= DamageTransitionLength)
-				{
-					cycleTimer = 0;
-					damageState = DamageStates.Hanging;
-					HeadsUpDisplay.Instance.SetPrompt(null, 0);
-					HeadsUpDisplay.Instance.SetPrompt(JumpAction, 1);
-					HeadsUpDisplay.Instance.ShowPrompts();
-				}
+				ProcessDamageFalling();
 				break;
-
+			case DamageStates.Hanging:
+				ProcessDamageHanging();
+				break;
 			case DamageStates.Recovery:
-				if (!Player.IsOnGround)
-				{
-					if (cycleTimer < RecoveryLength)
-						return;
-
-					Player.IsOnGround = true;
-					Player.Effect.PlayLandingFX();
-				}
-
-				if (Player.Animator.IsSidleMoving) // Finished
-				{
-					cycleTimer = 0;
-					damageState = DamageStates.Disabled;
-					Player.Animator.UpdateSidle(cycleTimer);
-				}
+				ProcessDamageRecovery();
 				break;
-
 			case DamageStates.Respawning:
-				if (cycleTimer > .5f)
-					Player.StartRespawn();
+				ProcessDamageRespawn();
 				break;
 		}
+	}
+
+	private void ProcessDamageStagger()
+	{
+		if (cycleTimer >= DamageStaggerLength)
+			return;
+
+		cycleTimer = 0;
+		if (IsOverFoothold)
+		{
+			damageState = DamageStates.Falling;
+			Player.IsOnGround = false;
+			Player.Animator.SidleHang();
+		}
+		else
+		{
+			StartRespawn();
+			Player.Animator.SidleFall();
+		}
+	}
+
+	private void ProcessDamageFalling()
+	{
+		if (cycleTimer < DamageTransitionLength)
+			return;
+
+		cycleTimer = 0;
+		damageState = DamageStates.Hanging;
+		HeadsUpDisplay.Instance.SetPrompt(null, 0);
+		HeadsUpDisplay.Instance.SetPrompt(JumpAction, 1);
+		HeadsUpDisplay.Instance.ShowPrompts();
+	}
+
+	private void ProcessDamageHanging()
+	{
+		if (Input.IsActionJustPressed("button_jump")) // Process inputs
+		{
+			// Jump back to the ledge
+			cycleTimer = 0;
+			damageState = DamageStates.Recovery;
+			Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
+			Player.Effect.PlayVoice("grunt");
+			Player.Animator.SidleRecovery();
+			HeadsUpDisplay.Instance.HidePrompts();
+			return;
+		}
+
+		if (cycleTimer < DamageHangLength) // Fall
+			return;
+
+		StartRespawn();
+		Player.Animator.SidleHangFall();
+		HeadsUpDisplay.Instance.HidePrompts();
+	}
+
+	private void ProcessDamageRecovery()
+	{
+		if (!Player.IsOnGround)
+		{
+			if (cycleTimer < RecoveryLength)
+				return;
+
+			Player.IsOnGround = true;
+			Player.Effect.PlayLandingFX();
+		}
+
+		if (!Player.Animator.IsSidleMoving)
+			return;
+
+		// Finished
+		cycleTimer = 0;
+		damageState = DamageStates.Disabled;
+		Player.Animator.UpdateSidle(cycleTimer);
+	}
+
+	private void ProcessDamageRespawn()
+	{
+		if (cycleTimer <= .5f)
+			return;
+
+		Player.StartRespawn();
 	}
 
 	/// <summary> Tells the player to start respawning. </summary>
