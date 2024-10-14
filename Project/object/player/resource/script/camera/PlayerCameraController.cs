@@ -117,7 +117,6 @@ public partial class PlayerCameraController : Node3D
 		sampler.GlobalPosition = sampler.GlobalPosition.Lerp(PathFollower.GlobalPosition, pathBlendSmoothed);
 		sampler.GlobalBasis = sampler.GlobalBasis.Orthonormalized().Slerp(PathFollower.GlobalBasis.Orthonormalized(), pathBlendSmoothed);
 
-		GD.Print(pathBlend);
 		if (Mathf.IsEqualApprox(pathBlend, 1.0f))
 			return;
 
@@ -206,17 +205,6 @@ public partial class PlayerCameraController : Node3D
 		else
 		{
 			data.CalculateBlendSpeed(); // Cache blend speed so we don't have to do it every frame
-		}
-
-		if (data.Trigger == null && data.SettingsResource.copyPosition)
-		{
-			GD.PushWarning("Data Trigger was not provided!");
-			data.Position = Vector3.Zero;
-			/*
-			CAM TODO Remove?
-			if (data.Trigger == null && data.SettingsResource.useStaticPosition) // Fallback to static position value
-				data.StaticPosition = data.SettingsResource.staticPosition;
-			*/
 		}
 
 		// Add current data to blend list

@@ -230,7 +230,7 @@ public partial class CameraSettingsResource : Resource
 	public bool copyPosition;
 	/// <summary> Copy camera's rotation from the cameraTrigger node? </summary>
 	public bool copyRotation;
-	/// <summary> Copy camera's rotation from the cameraTrigger node (requires a reference camera)? </summary>
+	/// <summary> Copy camera's FOV from the cameraTrigger node? Requires a reference camera. </summary>
 	public bool copyFov;
 
 	/// <summary> Angle (in radians) of pitch (X rotation). </summary>

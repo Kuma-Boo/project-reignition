@@ -36,6 +36,7 @@ public partial class CameraTrigger : StageTriggerModule
 	private Camera3D _referenceCamera;
 	private bool IsOverridingCameraTransform => settings.copyPosition || settings.copyRotation || settings.copyRotation;
 
+	private bool cachedPreviousSettings;
 	private Vector3 previousStaticPosition;
 	private Basis previousStaticRotation;
 	private PlayerCameraController Camera => Player.Camera;
@@ -73,11 +74,14 @@ public partial class CameraTrigger : StageTriggerModule
 			return;
 		}
 
-		if (previousSettings == null)
+		if (!cachedPreviousSettings)
 		{
-			previousSettings = Camera.ActiveSettings;
+			previousSettings ??= Camera.ActiveSettings;
+
+			GD.Print(Camera.ActiveBlendData.Position);
 			previousStaticPosition = Camera.ActiveBlendData.Position; // Cache static position
 			previousStaticRotation = Camera.ActiveBlendData.RotationBasis; // Cache static rotation
+			cachedPreviousSettings = true;
 		}
 
 		if (Camera.ActiveSettings == settings &&
