@@ -379,8 +379,9 @@ public partial class PlayerCameraController : Node3D
 		else
 			data = SimulateDynamicCamera(settings, ref data);
 
-		if (!settings.copyFov)
-			data.blendData.Fov = Mathf.IsZeroApprox(settings.targetFOV) ? DefaultFov : settings.targetFOV;
+		data.blendData.Fov = DefaultFov;
+		if (settings.copyFov && !Mathf.IsZeroApprox(settings.targetFOV))
+			data.blendData.Fov = settings.targetFOV;
 
 		if (!data.blendData.WasInitialized)
 			data.blendData.WasInitialized = true;
@@ -397,7 +398,7 @@ public partial class PlayerCameraController : Node3D
 
 		if (settings.copyRotation)
 		{
-			data.precalculatedPosition = data.blendData.Position;
+			data.offsetBasis = data.blendData.RotationBasis.Orthonormalized();
 			return data;
 		}
 
