@@ -8,10 +8,10 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class HeadsUpDisplay : Control
 {
-	public static HeadsUpDisplay instance;
+	public static HeadsUpDisplay Instance;
 	private StageSettings Stage => StageSettings.Instance;
 
-	public override void _EnterTree() => instance = this;
+	public override void _EnterTree() => Instance = this;
 
 	public override void _Ready()
 	{
@@ -20,6 +20,7 @@ public partial class HeadsUpDisplay : Control
 		InitializeObjectives();
 		InitializeSoulGauge();
 		InitializeRace();
+		InitializePrompts();
 
 		if (Stage != null) // Decouple from level settings
 		{
@@ -333,6 +334,34 @@ public partial class HeadsUpDisplay : Control
 		racePlayer.ZIndex = playerRatio >= uhuRatio ? 1 : 0;
 	}
 
+	#endregion
+
+	#region Prompts
+	[Signal]
+	public delegate void InputPromptsChangedEventHandler();
+
+	[ExportGroup("Prompts")]
+	[Export]
+	private Interface.NavigationButton[] buttons;
+	[Export]
+	private AnimationPlayer promptAnimator;
+	private void InitializePrompts()
+	{
+		for (int i = 0; i < buttons.Length; i++)
+			Connect(SignalName.InputPromptsChanged, new(buttons[i], Interface.NavigationButton.MethodName.Redraw));
+	}
+
+	public void SetPrompt(StringName label, int index) => buttons[index].ActionKey = label;
+	public void ShowPrompts() => promptAnimator.Play(promptAnimator.CurrentAnimation == "show" ? "change" : "show");
+	public void HidePrompts() => promptAnimator.Play("hide");
+
+	private void RedrawPrompts()
+	{
+		for (int i = 0; i < buttons.Length; i++)
+			buttons[i].Visible = buttons[i].ActionKey?.IsEmpty == false;
+
+		EmitSignal(SignalName.InputPromptsChanged);
+	}
 	#endregion
 
 	public void OnLevelCompleted() => SetVisibility(false); // Ignore parameter
