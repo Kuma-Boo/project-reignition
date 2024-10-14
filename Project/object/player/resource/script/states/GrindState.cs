@@ -305,8 +305,8 @@ public partial class GrindState : PlayerState
 	{
 		rail ??= ActiveGrindRail;
 		length += Player.CollisionSize.X;
-		RaycastHit hit = rail.CastRay(rail.GlobalPosition, rail.PathFollower.Forward() * length, Player.CollisionMask);
-		DebugManager.DrawRay(rail.GlobalPosition, rail.PathFollower.Forward() * length, hit ? Colors.Red : Colors.White);
+		RaycastHit hit = rail.CastRay(rail.PathFollower.GlobalPosition, rail.PathFollower.Forward() * length, Player.CollisionMask);
+		DebugManager.DrawRay(rail.PathFollower.GlobalPosition, rail.PathFollower.Forward() * length, hit ? Colors.Red : Colors.White);
 
 		// Block grinding through objects in the given group
 		if (hit && hit.collidedObject.IsInGroup("grind wall"))
