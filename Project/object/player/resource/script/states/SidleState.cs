@@ -244,9 +244,9 @@ public partial class SidleState : PlayerState
 					Player.Effect.PlayLandingFX();
 				}
 
-				cycleTimer = 0;
 				if (Player.Animator.IsSidleMoving) // Finished
 				{
+					cycleTimer = 0;
 					damageState = DamageStates.Disabled;
 					Player.Animator.UpdateSidle(cycleTimer);
 				}
