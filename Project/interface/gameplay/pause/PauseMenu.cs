@@ -347,18 +347,18 @@ public partial class PauseMenu : Node
 	private void UpdateStatusDescription()
 	{
 		if (currentSelection == 0)
-			description.SetText("pause_status_description");
+			description.Text = "pause_status_description";
 		else if (currentSelection == 1)
-			description.SetText("pause_mission_description");
+			description.Text = "pause_mission_description";
 		else
-			description.SetText("pause_skill_description");
+			description.Text = "pause_skill_description";
 		description.ShowDescription();
 	}
 
 	private void UpdateSkillDescription()
 	{
 		PauseSkill pauseSkill = skillContainer.GetChild<PauseSkill>(currentSelection);
-		description.SetText(pauseSkill.Skill.DescriptionKey);
+		description.Text = pauseSkill.Skill.DescriptionKey;
 		description.ShowDescription();
 	}
 
