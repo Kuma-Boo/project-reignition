@@ -117,7 +117,7 @@ public partial class LevelSelect : Menu
 	private void UpdateDescription()
 	{
 		description.ShowDescription();
-		description.SetText(levelOptions[VerticalSelection].GetDescription());
+		description.Text = levelOptions[VerticalSelection].GetDescription();
 	}
 
 	private void RecalculateListPosition()

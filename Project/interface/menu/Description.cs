@@ -6,7 +6,11 @@ namespace Project.Interface.Menus
 	{
 		[Export]
 		private Label descriptionLabel;
-		public void SetText(string descriptionText) => descriptionLabel.Text = descriptionText;
+		public string Text
+		{
+			get => descriptionLabel.Text;
+			set => descriptionLabel.Text = value;
+		}
 
 		[Export]
 		private AnimationPlayer animator;

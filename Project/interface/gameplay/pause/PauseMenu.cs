@@ -81,6 +81,9 @@ public partial class PauseMenu : Node
 	private readonly StringName ValueSelectionTransition = "parameters/value_selection/transition_request";
 	private const float ScrollSmoothing = .05f;
 
+	private bool isConfirmButtonBuffered;
+	private bool isCancelButtonBuffered;
+
 	public override void _Ready()
 	{
 		animator.Active = true;
@@ -122,6 +125,21 @@ public partial class PauseMenu : Node
 			}
 		}
 
+		if (GetTree().Paused)
+		{
+			if (Input.IsActionJustPressed("button_jump"))
+			{
+				isConfirmButtonBuffered = true;
+				isCancelButtonBuffered = false;
+			}
+
+			if (Input.IsActionJustPressed("button_action"))
+			{
+				isConfirmButtonBuffered = false;
+				isCancelButtonBuffered = true;
+			}
+		}
+
 		if (Input.IsActionJustPressed("button_pause"))
 		{
 			TogglePause();
@@ -129,8 +147,9 @@ public partial class PauseMenu : Node
 		else if (GetTree().Paused && canMoveCursor)
 		{
 			int sign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
-			if (Input.IsActionJustPressed("button_jump"))
+			if (isConfirmButtonBuffered)
 			{
+				isConfirmButtonBuffered = false;
 				if (submenu == Submenu.PAUSE)
 				{
 					AllowPausing = false;
@@ -149,8 +168,9 @@ public partial class PauseMenu : Node
 					ApplySelection();
 				}
 			}
-			else if (Input.IsActionJustPressed("button_action"))
+			else if (isCancelButtonBuffered)
 			{
+				isCancelButtonBuffered = false;
 				if (submenu == Submenu.PAUSE)
 				{
 					TogglePause();
@@ -347,18 +367,18 @@ public partial class PauseMenu : Node
 	private void UpdateStatusDescription()
 	{
 		if (currentSelection == 0)
-			description.SetText("pause_status_description");
+			description.Text = "pause_status_description";
 		else if (currentSelection == 1)
-			description.SetText("pause_mission_description");
+			description.Text = "pause_mission_description";
 		else
-			description.SetText("pause_skill_description");
+			description.Text = "pause_skill_description";
 		description.ShowDescription();
 	}
 
 	private void UpdateSkillDescription()
 	{
 		PauseSkill pauseSkill = skillContainer.GetChild<PauseSkill>(currentSelection);
-		description.SetText(pauseSkill.Skill.DescriptionKey);
+		description.Text = pauseSkill.Skill.DescriptionKey;
 		description.ShowDescription();
 	}
 
@@ -407,15 +427,23 @@ public partial class PauseMenu : Node
 
 	private void StartSceneTransition(string targetScene)
 	{
-		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
-		TransitionManager.QueueSceneChange(targetScene);
-		TransitionManager.StartTransition(new()
+		TransitionData data = new()
 		{
-			inSpeed = .5f,
-			outSpeed = .5f,
+			inSpeed = 0.5f,
+			outSpeed = 0.5f,
 			color = Colors.Black,
 			disableAutoTransition = string.IsNullOrEmpty(targetScene)
-		});
+		};
+
+		if (currentSelection == 1) // Restarting -- speed up transition
+		{
+			data.inSpeed = .2f;
+			data.outSpeed = .5f;
+		}
+
+		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
+		TransitionManager.QueueSceneChange(targetScene);
+		TransitionManager.StartTransition(data);
 	}
 
 	/// <summary>
