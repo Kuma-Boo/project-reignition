@@ -193,7 +193,6 @@ public partial class Enemy : Node3D
 	{
 		currentHealth = 0;
 		Player.Camera.LockonTarget = null;
-		Player.Lockon.CallDeferred(PlayerLockonController.MethodName.ResetLockonTarget);
 		BonusManager.instance.AddEnemyChain();
 		StageSettings.Instance.UpdateScore(50 * maxHealth, StageSettings.MathModeEnum.Add); // Add points based on max health
 
