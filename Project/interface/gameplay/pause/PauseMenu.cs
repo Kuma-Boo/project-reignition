@@ -436,10 +436,7 @@ public partial class PauseMenu : Node
 		};
 
 		if (currentSelection == 1) // Restarting -- speed up transition
-		{
-			data.inSpeed = .2f;
-			data.outSpeed = .5f;
-		}
+			data.inSpeed = 0.2f;
 
 		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
 		TransitionManager.QueueSceneChange(targetScene);
