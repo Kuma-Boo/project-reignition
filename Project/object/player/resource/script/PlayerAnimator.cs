@@ -530,11 +530,13 @@ public partial class PlayerAnimator : Node3D
 	/// </summary>
 	private void UpdateVisualRotation()
 	{
-		if (Player.IsGrindstepping) return; // Use the same angle as the grindrail
+		if (Player.IsGrindstepping)
+			return;
 
-		// Don't update directions when externally controlled or on launchers
+		if (Player.IsLaunching)
+			return;
+
 		float targetRotation = Player.MovementAngle;
-
 		if (Player.ExternalController != null)
 			targetRotation = ExternalAngle;
 		else if (Player.IsHomingAttacking) // Face target

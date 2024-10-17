@@ -1,4 +1,4 @@
-[gd_scene load_steps=212 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=213 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="Script" path="res://area/3 evil foundry/data/script/IfritGolem.cs" id="2_jm400"]
@@ -42,6 +42,7 @@
 [ext_resource type="AudioStream" uid="uid://cj7rknesqy2uh" path="res://sound/boss/ifrit golem/step roar.wav" id="28_6fg5l"]
 [ext_resource type="AudioStream" uid="uid://b6o0ox1crtx6n" path="res://sound/boss/ifrit golem/step grab.wav" id="29_dwhy7"]
 [ext_resource type="AudioStream" uid="uid://bji72bj18vdw6" path="res://sound/boss/ifrit golem/step gears.wav" id="30_py1nf"]
+[ext_resource type="Resource" uid="uid://bs4u01rf82btx" path="res://area/3 evil foundry/boss/camera/BounceCam.tres" id="33_6cwa2"]
 [ext_resource type="AudioStream" uid="uid://btqg4yl25pntq" path="res://sound/boss/ifrit golem/lava warn.wav" id="34_0g7x3"]
 [ext_resource type="AudioStream" uid="uid://roe8af52cjsj" path="res://sound/boss/ifrit golem/lava rise.wav" id="35_0xwj3"]
 [ext_resource type="AudioStream" uid="uid://cp2jr41tuvhhm" path="res://sound/boss/ifrit golem/recovery.wav" id="35_va4id"]
@@ -1411,6 +1412,7 @@ leftEye = NodePath("BoneAttachments/BodyParts/Head/EyeL")
 laserRoot = NodePath("Laser/Root")
 laserBeam = NodePath("Laser/Root/Beam")
 laserVFXRoot = NodePath("Laser/VFXRoot")
+bounceCameraSettings = ExtResource("33_6cwa2")
 boneAttachments = [NodePath("BoneAttachments/Cores/RCore1"), NodePath("BoneAttachments/Cores/RCore2"), NodePath("BoneAttachments/Cores/RCore3"), NodePath("BoneAttachments/Cores/LCore1"), NodePath("BoneAttachments/Cores/LCore2"), NodePath("BoneAttachments/Cores/LCore3"), NodePath("BoneAttachments/BodyParts/Root"), NodePath("BoneAttachments/BodyParts/Head"), NodePath("BoneAttachments/BodyParts/RShoulder"), NodePath("BoneAttachments/BodyParts/LShoulder"), NodePath("BoneAttachments/BodyParts/Body"), NodePath("BoneAttachments/BodyParts/RElbow"), NodePath("BoneAttachments/BodyParts/LElbow"), NodePath("BoneAttachments/TankSpawn/01L"), NodePath("BoneAttachments/TankSpawn/02L"), NodePath("BoneAttachments/TankSpawn/03L"), NodePath("BoneAttachments/TankSpawn/11L"), NodePath("BoneAttachments/TankSpawn/12L"), NodePath("BoneAttachments/TankSpawn/13L"), NodePath("BoneAttachments/TankSpawn/01R"), NodePath("BoneAttachments/TankSpawn/02R"), NodePath("BoneAttachments/TankSpawn/03R"), NodePath("BoneAttachments/TankSpawn/11R"), NodePath("BoneAttachments/TankSpawn/12R"), NodePath("BoneAttachments/TankSpawn/13R")]
 cores = [NodePath("BoneAttachments/Cores/RCore1/Core/GolemCore"), NodePath("BoneAttachments/Cores/RCore2/Core/GolemCore"), NodePath("BoneAttachments/Cores/RCore3/Core/GolemCore"), NodePath("BoneAttachments/Cores/LCore1/Core/GolemCore"), NodePath("BoneAttachments/Cores/LCore2/Core/GolemCore"), NodePath("BoneAttachments/Cores/LCore3/Core/GolemCore")]
 burnPositions = [NodePath("Environment/BurnPosition1"), NodePath("Environment/BurnPosition2"), NodePath("Environment/BurnPosition3")]
@@ -2270,6 +2272,13 @@ script = ExtResource("7_7kxhk")
 transitionTime = 0.5
 settings = ExtResource("15_3iytr")
 
+[node name="BounceCamera" type="Node3D" parent="Environment" index="8"]
+script = ExtResource("7_7kxhk")
+transitionTime = 0.2
+deactivationTransitionTime = 0.5
+settings = ExtResource("33_6cwa2")
+previousSettings = ExtResource("15_3iytr")
+
 [node name="Laser" type="Node3D" parent="." index="5"]
 
 [node name="VFXRoot" type="Node3D" parent="Laser" index="0"]
@@ -2497,6 +2506,8 @@ transform = Transform3D(-0.173648, -0.0858317, 0.98106, 0, 0.996195, 0.0871557, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 30)
 cull_mask = 37
 
+[connection signal="LaunchEnded" from="." to="Environment/BounceCamera" method="Deactivate"]
+[connection signal="Launched" from="." to="Environment/BounceCamera" method="Activate"]
 [connection signal="StunEnded" from="." to="BoneAttachments/BodyParts/Root/TraversalScrap" method="Deactivate"]
 [connection signal="StunEnded" from="." to="Environment/Lockout" method="Deactivate"]
 [connection signal="Stunned" from="." to="Environment/Lockout" method="Activate"]
