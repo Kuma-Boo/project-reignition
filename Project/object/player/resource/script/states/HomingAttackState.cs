@@ -54,6 +54,7 @@ public partial class HomingAttackState : PlayerState
 		Player.IsHomingAttacking = false;
 		Player.AttackState = PlayerController.AttackStates.None;
 		Player.ChangeHitbox("RESET");
+		Player.Lockon.CallDeferred(PlayerLockonController.MethodName.ResetLockonTarget);
 		Player.Effect.StopSpinFX();
 		Player.Effect.StopTrailFX();
 		Player.Animator.ResetState();

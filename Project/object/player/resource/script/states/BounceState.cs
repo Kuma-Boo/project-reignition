@@ -27,24 +27,7 @@ public partial class BounceState : PlayerState
 
 	public override void EnterState()
 	{
-		if (IsUpwardBounce && Player.Lockon.Target != null) // Snap the player to the target
-		{
-			Player.MoveSpeed = 0; // Reset speed
-
-			bool applySnapping = Mathf.IsZeroApprox(bounceInterruptTimer) &&
-				((Player.Lockon.Target is Area3D area && Player.Lockon.GetOverlappingAreas().Contains(area)) ||
-				(Player.Lockon.Target is PhysicsBody3D body && Player.Lockon.GetOverlappingBodies().Contains(body)));
-
-			// Only snap when target being hit is correct
-			if (applySnapping)
-				Player.GlobalPosition = Player.Lockon.Target.GlobalPosition;
-		}
-		else // Only bounce the player backwards if bounceUpward is false
-		{
-			Player.MoveSpeed = -bounceSpeed;
-		}
-
-		Player.Lockon.IsMonitoring = false;
+		AttemptBounceSnapping();
 		bounceInterruptTimer = LockoutSettings.length - .5f;
 
 		if (Player.IsLockoutActive && Player.ActiveLockoutData == LockoutSettings) return;
@@ -55,6 +38,7 @@ public partial class BounceState : PlayerState
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		Player.AddLockoutData(LockoutSettings);
 
+		Player.Lockon.IsMonitoring = false;
 		Player.Animator.ResetState(0.1f);
 		Player.Animator.BounceTrick();
 		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
@@ -97,6 +81,32 @@ public partial class BounceState : PlayerState
 		}
 
 		return null;
+	}
+
+	private void AttemptBounceSnapping()
+	{
+		if (!IsUpwardBounce) // Not a snap bounce -- bounce the player backwards
+		{
+			Player.MoveSpeed = -bounceSpeed;
+			return;
+		}
+
+		if (Player.Lockon.Target == null) // Nothign to snap to
+			return;
+
+		if (!Mathf.IsZeroApprox(bounceInterruptTimer)) // Player is already bouncing -- don't snap
+			return;
+
+		if ((Player.Lockon.Target is Area3D && !Player.Lockon.GetOverlappingAreas().Contains(Player.Lockon.Target as Area3D)) ||
+			(Player.Lockon.Target is PhysicsBody3D && !Player.Lockon.GetOverlappingBodies().Contains(Player.Lockon.Target as PhysicsBody3D)))
+		{
+			// Failed to find a target to snap to
+			return;
+		}
+
+		// Only snap when target being hit is correct
+		Player.MoveSpeed = 0; // Reset speed
+		Player.GlobalPosition = Player.Lockon.Target.GlobalPosition;
 	}
 
 	private void UpdateBounceTimer()
