@@ -32,6 +32,8 @@ public partial class IfritGolem : Node3D
 	[Export(PropertyHint.NodeType, "Node3D")] private NodePath laserVFXRoot;
 	private Node3D LaserVFXRoot { get; set; }
 
+	[Export] private CameraSettingsResource bounceCameraSettings;
+
 	[Export] private BoneAttachment3D[] boneAttachments;
 	[Export] private Core[] cores;
 	[Export] private Node3D[] burnPositions;
@@ -385,11 +387,13 @@ public partial class IfritGolem : Node3D
 	private void ExitHitstun()
 	{
 		isInteractingWithPlayer = false;
-		Player.Camera.LockonTarget = null;
+		bounceCameraSettings.yawAngle = (currentSector * SectorRotationIncrementRad) + Mathf.Pi;
 		RespawnCores();
 
 		// Launch the player back to solid ground
+		Player.Animator.SnapRotation(bounceCameraSettings.yawAngle - (Mathf.Pi * 0.5f));
 		Player.StartLauncher(LaunchSettings.Create(Player.GlobalPosition, PlayerLaunchTarget.GlobalPosition, 5f));
+		Player.Camera.LockonTarget = null;
 		Player.Animator.StartSpin(3f);
 		EmitSignal(SignalName.Launched);
 		EmitSignal(SignalName.StunEnded);
@@ -399,6 +403,10 @@ public partial class IfritGolem : Node3D
 	{
 		if (currentState != GolemState.Damaged && currentState != GolemState.Recovery)
 			return;
+
+		// Kill residue player speed
+		Player.MoveSpeed = 0.0f;
+		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 
 		// TODO Play hit dialog
 		if (currentHealth < MaxHealth && dialogFlags[0] == 1)
