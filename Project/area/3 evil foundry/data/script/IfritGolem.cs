@@ -344,8 +344,10 @@ public partial class IfritGolem : Node3D
 
 	[Signal] public delegate void StunnedEventHandler();
 	[Signal] public delegate void StunEndedEventHandler();
-	[Signal] public delegate void LaunchedEventHandler();
-	[Signal] public delegate void LaunchEndedEventHandler();
+	[Signal] public delegate void HitstunLaunchedEventHandler();
+	[Signal] public delegate void HitstunLaunchEndedEventHandler();
+	[Signal] public delegate void LavaLaunchedEventHandler();
+	[Signal] public delegate void LavaLaunchEndedEventHandler();
 
 	private AnimationNodeStateMachinePlayback HitstunStatePlayback => AnimationTree.Get(HitstunPlayback).Obj as AnimationNodeStateMachinePlayback;
 	private readonly StringName HitstunPlayback = "parameters/hitstun_state/playback";
@@ -395,14 +397,17 @@ public partial class IfritGolem : Node3D
 		Player.StartLauncher(LaunchSettings.Create(Player.GlobalPosition, PlayerLaunchTarget.GlobalPosition, 5f));
 		Player.Camera.LockonTarget = null;
 		Player.Animator.StartSpin(3f);
-		EmitSignal(SignalName.Launched);
+		EmitSignal(SignalName.HitstunLaunched);
 		EmitSignal(SignalName.StunEnded);
 	}
 
 	private void FinishLaunch()
 	{
 		if (currentState != GolemState.Damaged && currentState != GolemState.Recovery)
+		{
+			EmitSignal(SignalName.LavaLaunchEnded);
 			return;
+		}
 
 		// Kill residue player speed
 		Player.MoveSpeed = 0.0f;
@@ -425,7 +430,7 @@ public partial class IfritGolem : Node3D
 			dialogFlags[0] = 4;
 		}
 
-		EmitSignal(SignalName.LaunchEnded);
+		EmitSignal(SignalName.HitstunLaunchEnded);
 	}
 
 	private void ProcessStun()
@@ -1047,6 +1052,7 @@ public partial class IfritGolem : Node3D
 			burnPositionIndex = 2;
 
 		Player.StartLauncher(LaunchSettings.Create(Player.GlobalPosition, burnPositions[burnPositionIndex].GlobalPosition, 5f, true));
+		EmitSignal(SignalName.LavaLaunched);
 	}
 	#endregion
 }
