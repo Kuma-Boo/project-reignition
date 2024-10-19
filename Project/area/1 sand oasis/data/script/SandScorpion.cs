@@ -246,7 +246,6 @@ namespace Project.Gameplay.Bosses
 			eventAnimator.Play("finish-defeat");
 
 			Player.EnablePlayer();
-			Player.Camera.Camera.Current = true;
 			StageSettings.Instance.FinishLevel(true);
 		}
 

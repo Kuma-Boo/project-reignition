@@ -251,7 +251,6 @@ public partial class IfritGolem : Node3D
 		Respawn();
 		TransitionManager.FinishTransition();
 		Player.EnablePlayer();
-		Player.Camera.Camera.Current = true;
 	}
 
 	private void EnterIdle()

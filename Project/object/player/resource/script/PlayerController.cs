@@ -998,6 +998,7 @@ public partial class PlayerController : CharacterBody3D
 		Visible = true;
 		ProcessMode = ProcessModeEnum.Inherit;
 
+		Camera.Camera.Current = true; // Reactivate camera (for cutscenes)
 		Lockon.IsReticleVisible = true;
 
 		HeadsUpDisplay.Instance.Visible = true;
