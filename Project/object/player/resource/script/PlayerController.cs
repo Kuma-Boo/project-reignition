@@ -988,7 +988,6 @@ public partial class PlayerController : CharacterBody3D
 		ProcessMode = ProcessModeEnum.Disabled;
 
 		Lockon.IsReticleVisible = false;
-		GD.Print("Hid lockon");
 
 		HeadsUpDisplay.Instance.Visible = false;
 		Interface.PauseMenu.AllowPausing = false;
