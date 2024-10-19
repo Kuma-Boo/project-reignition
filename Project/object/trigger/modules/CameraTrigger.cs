@@ -1,12 +1,63 @@
 using Godot;
+using Godot.Collections;
 
 namespace Project.Gameplay.Triggers;
 
 /// <summary>
 /// Activates a <see cref="CameraSettingsResource"/>.
 /// </summary>
+[Tool] //Needed to draw distance blend endpoint, like drift triggers
 public partial class CameraTrigger : StageTriggerModule
 {
+	#region Editor
+	public override Array<Dictionary> _GetPropertyList()
+	{
+		Array<Dictionary> properties = new()
+		{
+		ExtensionMethods.CreateProperty("Additional Blend Settings/Blend By Distance", Variant.Type.Bool)
+		};
+
+		if (BlendByDistance)
+		{
+			properties.Add(ExtensionMethods.CreateProperty("Additional Blend Settings/Blend Distance", Variant.Type.Int, PropertyHint.Range, "1, 300"));
+			properties.Add(ExtensionMethods.CreateProperty("Additional Blend Settings/Distance Blend Setting", Variant.Type.Object));
+		}
+		return properties;
+	}
+	public override Variant _Get(StringName property)
+	{
+		switch ((string)property)
+		{
+			case "Additional Blend Settings/Blend By Distance":
+				return BlendByDistance;
+			case "Additional Blend Settings/Blend Distance":
+				return (int)blendDistance;
+			case "Additional Blend Settings/Distance Blend Setting":
+				return (CameraSettingsResource)DistanceBlendSetting;
+		}
+		return base._Get(property);
+	}
+	public override bool _Set(StringName property, Variant value)
+	{
+		switch ((string)property)
+		{
+			case "Additional Blend Settings/Blend By Distance":
+				BlendByDistance = (bool)value;
+				NotifyPropertyListChanged();
+				break;
+			case "Additional Blend Settings/Blend Distance":
+				blendDistance = (int)value;
+				break;
+			case "Additional Blend Settings/Distance Blend Setting":
+				DistanceBlendSetting = (CameraSettingsResource)value;
+				break;
+			default:
+				return false;
+		}
+		return true;
+	}
+	#endregion
+
 	/// <summary> How long the transition is (in seconds). Use a transition time of 0 to perform an instant cut. </summary>
 	[Export(PropertyHint.Range, "0,2,0.1")]
 	public float transitionTime;
@@ -20,6 +71,12 @@ public partial class CameraTrigger : StageTriggerModule
 		Blend, // Interpolate between states
 		Crossfade, // Crossfade states
 	}
+	/// <summary>Does this trigger blend between two camera settings based off distance?</summary>
+	private bool BlendByDistance = false;
+	/// <summary>How far away would the blend/tranisition complete?</summary>
+	private int blendDistance = 100;
+	/// <summary>The point where the camera would fully tranisition to setting 2 when blending by distance</summary>
+	public Vector3 BlendFinishPoint => GlobalPosition + (this.Back() * blendDistance);
 
 	/// <summary> Update static position/rotations every frame? </summary>
 	[Export]
@@ -34,6 +91,9 @@ public partial class CameraTrigger : StageTriggerModule
 	/// <summary> Reference to the camera data that was being used when this trigger was entered. </summary>
 	[Export]
 	private CameraSettingsResource previousSettings;
+	/// <summary> If blending two settings by distance, the second camera setting data that is used for the blend </summary>
+	
+	private CameraSettingsResource DistanceBlendSetting;
 	[Export]
 	private Camera3D referenceCamera;
 
@@ -83,11 +143,25 @@ public partial class CameraTrigger : StageTriggerModule
 
 		Camera.UpdateCameraSettings(new()
 		{
+			BlendsOverDistance = false,
 			BlendTime = transitionTime,
 			SettingsResource = settings,
 			IsCrossfadeEnabled = transitionType == TransitionType.Crossfade,
 			Trigger = this
 		}, enableInputBlending);
+   
+		if (BlendByDistance) //If this a distance blend Trigger, add the second setting/camera for the first to blend with as well
+		{
+			Camera.UpdateCameraSettings(new()
+			{
+				DistanceBlendEndPoint = BlendFinishPoint,
+				blendLength = blendDistance,
+				BlendsOverDistance = BlendByDistance,
+				SettingsResource = DistanceBlendSetting,
+				IsCrossfadeEnabled = transitionType == TransitionType.Crossfade,
+				Trigger = this
+			}, enableInputBlending);
+		}
 
 		UpdateStaticData(Camera.ActiveBlendData);
 	}
@@ -97,7 +171,7 @@ public partial class CameraTrigger : StageTriggerModule
 		if (previousSettings == null || settings == null)
 			return;
 
-		if (Camera.ActiveSettings != settings)
+		if (Camera.ActiveSettings != settings && Camera.ActiveSettings != DistanceBlendSetting)
 			return; // Already overridden by a different trigger
 
 		if (Player.IsTeleporting)

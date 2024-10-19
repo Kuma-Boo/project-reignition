@@ -56,6 +56,8 @@ namespace Project.Editor.StageObjectPreviewer
 				UpdatePot();
 			else if (target is DriftTrigger)
 				UpdateDriftCorner();
+			else if (target is CameraTrigger)
+				DrawCameraBlend();
 			else if (target is MovingObject)
 				UpdateMovingObject();
 			else if (target is Majin)
@@ -92,6 +94,12 @@ namespace Project.Editor.StageObjectPreviewer
 			DriftTrigger trigger = target as DriftTrigger;
 			DrawLine(trigger.GlobalPosition, trigger.MiddlePosition, DefaultDrawColor);
 			DrawLine(trigger.MiddlePosition, trigger.EndPosition, SpecialDrawColor);
+		}
+
+		private void DrawCameraBlend()
+		{
+			CameraTrigger trigger = target as CameraTrigger;
+			DrawLine(trigger.GlobalPosition, trigger.BlendFinishPoint, DefaultDrawColor);
 		}
 
 		private void UpdateItemBox()
