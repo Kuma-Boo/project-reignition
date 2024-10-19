@@ -172,7 +172,7 @@ public partial class PlayerCameraController : Node3D
 			if (enableXformBlend)
 				StartXformBlend();
 		}
-		else
+		else if (!data.BlendsOverDistance) //If blending over distance, speed isn't used
 		{
 			data.CalculateBlendSpeed(); // Cache blend speed so we don't have to do it every frame
 		}
@@ -190,8 +190,10 @@ public partial class PlayerCameraController : Node3D
 		// Clear all lists (except active blend) when snapping
 		if (SnapFlag)
 		{
+			//If the latest blend data is blended by distance, we also need to keep the previous data
+			int BlendListOffset = (CameraBlendList[CameraBlendList.Count - 1].BlendsOverDistance) ? 3 : 2;
 			// Remove all blend data except the latest (active)
-			for (int i = CameraBlendList.Count - 2; i >= 0; i--)
+			for (int i = CameraBlendList.Count - BlendListOffset; i >= 0; i--)
 			{
 				CameraBlendList[i].Free(); // Prevent memory leak
 				CameraBlendList.RemoveAt(i);
@@ -217,9 +219,20 @@ public partial class PlayerCameraController : Node3D
 			return;
 		}
 
-		float influence = Mathf.MoveToward(CameraBlendList[blendIndex].LinearInfluence, 1f,
+	 //If the blend data is marked as blend by distance, blend it with the previous data by distance between player and endpoint. Otherwise blend by time as normal
+		if (CameraBlendList[blendIndex].BlendsOverDistance) 
+		{
+			float PlayerEndPointDistance = (Player.GlobalPosition - CameraBlendList[blendIndex].DistanceBlendEndPoint).Length();
+			float influence = 1f - (PlayerEndPointDistance / CameraBlendList[blendIndex].blendLength);
+			CameraBlendList[blendIndex].SetInfluence(influence);
+		}
+		else 
+		{
+			float influence = Mathf.MoveToward(CameraBlendList[blendIndex].LinearInfluence, 1f,
 			CameraBlendList[blendIndex].BlendSpeed * PhysicsManager.physicsDelta);
-		CameraBlendList[blendIndex].SetInfluence(influence);
+			CameraBlendList[blendIndex].SetInfluence(influence);
+			
+		}
 	}
 
 	private void UpdateGameplayCamera()
@@ -935,7 +948,13 @@ public partial class CameraBlendData : GodotObject
 {
 	/// <summary> Use crossfading? </summary>
 	public bool IsCrossfadeEnabled { get; set; }
-
+	
+	/// <summary>Does the current blend data blend between two settings based off distance?</summary>
+	public bool BlendsOverDistance {get; set;}
+	/// <summary>How long is the distance between trigger back and endpoint? </summary>
+	public int blendLength {get; set;}
+	/// <summary>The point where the distance blending should end </summary>
+	public Vector3 DistanceBlendEndPoint {get; set;}
 	/// <summary> Ratio [0 <-> 1] of how much influence this blend has. </summary>
 	public float LinearInfluence { get; private set; }
 	/// <summary> Influence, smoothed with Mathf.Smoothstep. </summary>
