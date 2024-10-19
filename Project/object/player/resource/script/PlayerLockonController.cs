@@ -50,6 +50,12 @@ public partial class PlayerLockonController : Node3D
 		}
 	}
 
+	public bool IsReticleVisible
+	{
+		get => lockonReticle.Visible;
+		set => lockonReticle.Visible = value;
+	}
+
 	public bool IsMonitoringPerfectHomingAttack { get; private set; }
 	public void EnablePerfectHomingAttack() => IsMonitoringPerfectHomingAttack = true;
 	public void DisablePerfectHomingAttack() => IsMonitoringPerfectHomingAttack = false;

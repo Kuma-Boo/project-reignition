@@ -223,10 +223,7 @@ public partial class IfritGolem : Node3D
 	private readonly StringName IntroTrigger = "parameters/intro_trigger/request";
 	private void StartIntroduction()
 	{
-		// Disable the player for the intro animation
-		Player.ProcessMode = ProcessModeEnum.Disabled;
-		Interface.PauseMenu.AllowPausing = false;
-		HeadsUpDisplay.Instance.Visible = false;
+		Player.Deactivate();
 		AnimationTree.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
@@ -253,10 +250,7 @@ public partial class IfritGolem : Node3D
 
 		Respawn();
 		TransitionManager.FinishTransition();
-		Player.ProcessMode = ProcessModeEnum.Inherit;
-		Interface.PauseMenu.AllowPausing = true;
-		HeadsUpDisplay.Instance.Visible = true;
-		Player.Camera.Camera.Current = true;
+		Player.Activate();
 	}
 
 	private void EnterIdle()
@@ -606,10 +600,7 @@ public partial class IfritGolem : Node3D
 		Root.Rotation = Vector3.Zero;
 		ExitHitstun();
 
-		if (Player.Skills.IsUsingBreakSkills)
-			Player.Skills.CancelBreakSkills();
-		Player.Visible = false;
-		Player.ProcessMode = ProcessModeEnum.Disabled;
+		Player.Deactivate();
 		Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 
 		AnimationTree.Set(DefeatTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
@@ -628,9 +619,7 @@ public partial class IfritGolem : Node3D
 		EventAnimator.Play("finish-defeat");
 		EventAnimator.Advance(0.0);
 		AnimationTree.Active = false;
-		Player.Visible = true;
-		Player.ProcessMode = ProcessModeEnum.Inherit;
-		Player.Camera.Camera.Current = true;
+		Player.Activate();
 		StageSettings.Instance.FinishLevel(true);
 	}
 	#endregion
