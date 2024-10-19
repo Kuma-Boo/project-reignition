@@ -516,6 +516,7 @@ public partial class StageSettings : Node3D
 		Success,
 	}
 	public LevelStateEnum LevelState { get; private set; }
+	public bool IsLevelLoading => LevelState == LevelStateEnum.Probes || LevelState == LevelStateEnum.Shaders;
 	public bool IsLevelIngame => LevelState == LevelStateEnum.Ingame;
 	/// <summary> Flag for keeping track of Uhu's race status. </summary>
 	public bool IsRaceActive { get; set; }

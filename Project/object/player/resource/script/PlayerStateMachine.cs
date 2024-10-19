@@ -40,7 +40,7 @@ public partial class PlayerStateMachine : Node
 
 	public void ProcessPhysics()
 	{
-		if (!StageSettings.Instance.IsLevelIngame)
+		if (StageSettings.Instance.IsLevelLoading)
 			return;
 
 		PlayerState newState = currentState.ProcessPhysics();
