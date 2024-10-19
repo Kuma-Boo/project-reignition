@@ -217,15 +217,23 @@ public partial class PlayerCameraController : Node3D
 		// Clear all lists (except active blend) when snapping
 		if (SnapFlag)
 		{
-			// Remove all blend data except the latest (active)
-			for (int i = CameraBlendList.Count - 2; i >= 0; i--)
+			// Remove all blend data except the last 2 active ones (for blending purposes)
+			int startingIndex = CameraBlendList.Count - 2;
+			if (CameraBlendList[^1].Trigger?.blendOverDistance == true)
+			{
+
+			}
+
+			for (int i = startingIndex; i >= 0; i--)
 			{
 				CameraBlendList[i].Free(); // Prevent memory leak
 				CameraBlendList.RemoveAt(i);
 			}
 
-			// The remaining blend data is active, and its influence is set to 1
 			CameraBlendList[0].SetInfluence(1);
+			// Attempt to snap the active blend settings' influence
+			if (CameraBlendList[^1].Trigger?.blendOverDistance == false)
+				CameraBlendList[^1].CalculateInfluence(Player.PathFollower);
 			return;
 		}
 
@@ -241,6 +249,14 @@ public partial class PlayerCameraController : Node3D
 		{
 			CameraBlendList[blendIndex].Free();
 			CameraBlendList.RemoveAt(blendIndex);
+			return;
+		}
+
+		// Don't automatically update influence when using distance blending
+		if (CameraBlendList[blendIndex].Trigger?.blendOverDistance == true)
+		{
+			CameraTrigger trigger = CameraBlendList[blendIndex].Trigger;
+			CameraBlendList[blendIndex].CalculateInfluence(Player.PathFollower);
 			return;
 		}
 
@@ -1062,10 +1078,18 @@ public partial class CameraBlendData : GodotObject
 	/// <summary> Reference to the cameraTrigger, if it exists. </summary>
 	public CameraTrigger Trigger { get; set; }
 
+	public void CalculateInfluence(PlayerPathController pathController)
+	{
+		float playerProgress = pathController.Progress;
+		float triggerProgress = pathController.GetProgress(Trigger.GlobalPosition);
+		float influence = Mathf.Clamp((playerProgress - triggerProgress) / Trigger.blendDistance, 0f, 1f);
+		SetInfluence(influence);
+	}
+
 	public void SetInfluence(float rawInfluence)
 	{
 		LinearInfluence = rawInfluence;
-		SmoothedInfluence = Mathf.SmoothStep(0.0f, 1.0f, rawInfluence);
+		SmoothedInfluence = Mathf.SmoothStep(0f, 1f, rawInfluence);
 	}
 
 	public void CalculateBlendSpeed() => BlendSpeed = 1f / BlendTime;

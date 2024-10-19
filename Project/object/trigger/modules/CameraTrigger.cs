@@ -7,6 +7,11 @@ namespace Project.Gameplay.Triggers;
 /// </summary>
 public partial class CameraTrigger : StageTriggerModule
 {
+	/// <summary> Should this camera blend over distance instead of time? </summary>
+	[Export] public bool blendOverDistance;
+	/// <summary> At what progress value should this camera have full influence? </summary>
+	[Export] public float blendDistance;
+
 	/// <summary> How long the transition is (in seconds). Use a transition time of 0 to perform an instant cut. </summary>
 	[Export(PropertyHint.Range, "0,2,0.1")]
 	public float transitionTime;
