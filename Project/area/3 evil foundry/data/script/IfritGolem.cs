@@ -223,7 +223,7 @@ public partial class IfritGolem : Node3D
 	private readonly StringName IntroTrigger = "parameters/intro_trigger/request";
 	private void StartIntroduction()
 	{
-		Player.DisablePlayer();
+		Player.Deactivate();
 		AnimationTree.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
@@ -250,7 +250,7 @@ public partial class IfritGolem : Node3D
 
 		Respawn();
 		TransitionManager.FinishTransition();
-		Player.EnablePlayer();
+		Player.Activate();
 	}
 
 	private void EnterIdle()
@@ -600,7 +600,7 @@ public partial class IfritGolem : Node3D
 		Root.Rotation = Vector3.Zero;
 		ExitHitstun();
 
-		Player.DisablePlayer();
+		Player.Deactivate();
 		Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 
 		AnimationTree.Set(DefeatTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
@@ -619,7 +619,7 @@ public partial class IfritGolem : Node3D
 		EventAnimator.Play("finish-defeat");
 		EventAnimator.Advance(0.0);
 		AnimationTree.Active = false;
-		Player.EnablePlayer();
+		Player.Activate();
 		StageSettings.Instance.FinishLevel(true);
 	}
 	#endregion

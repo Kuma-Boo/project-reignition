@@ -173,7 +173,7 @@ namespace Project.Gameplay.Bosses
 			GlobalTransform = Transform3D.Identity;
 
 			cutsceneCamera.Current = true;
-			Player.DisablePlayer();
+			Player.Deactivate();
 		}
 
 
@@ -200,7 +200,7 @@ namespace Project.Gameplay.Bosses
 			Respawn();
 			eventAnimator.Play("finish-intro");
 			TransitionManager.FinishTransition();
-			Player.EnablePlayer();
+			Player.Activate();
 		}
 
 
@@ -236,7 +236,7 @@ namespace Project.Gameplay.Bosses
 			HeadsUpDisplay.Instance.Visible = false;
 
 			fightState = FightState.Defeated;
-			Player.DisablePlayer();
+			Player.Deactivate();
 		}
 
 
@@ -245,7 +245,7 @@ namespace Project.Gameplay.Bosses
 			rootAnimationTree.Active = rTailAnimationTree.Active = lTailAnimationTree.Active = flyingEyeAnimationTree.Active = false;
 			eventAnimator.Play("finish-defeat");
 
-			Player.EnablePlayer();
+			Player.Activate();
 			StageSettings.Instance.FinishLevel(true);
 		}
 

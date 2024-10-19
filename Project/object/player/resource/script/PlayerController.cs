@@ -979,7 +979,19 @@ public partial class PlayerController : CharacterBody3D
 		EmitSignal(SignalName.ExternalControlCompleted);
 	}
 
-	public void DisablePlayer()
+	public void Activate()
+	{
+		Visible = true;
+		ProcessMode = ProcessModeEnum.Inherit;
+
+		Camera.Camera.Current = true; // Reactivate camera (for cutscenes)
+		Lockon.IsReticleVisible = true;
+
+		HeadsUpDisplay.Instance.Visible = true;
+		Interface.PauseMenu.AllowPausing = true;
+	}
+
+	public void Deactivate()
 	{
 		if (Skills.IsUsingBreakSkills)
 			Skills.CancelBreakSkills();
@@ -991,18 +1003,6 @@ public partial class PlayerController : CharacterBody3D
 
 		HeadsUpDisplay.Instance.Visible = false;
 		Interface.PauseMenu.AllowPausing = false;
-	}
-
-	public void EnablePlayer()
-	{
-		Visible = true;
-		ProcessMode = ProcessModeEnum.Inherit;
-
-		Camera.Camera.Current = true; // Reactivate camera (for cutscenes)
-		Lockon.IsReticleVisible = true;
-
-		HeadsUpDisplay.Instance.Visible = true;
-		Interface.PauseMenu.AllowPausing = true;
 	}
 	#endregion
 }
