@@ -1,13 +1,14 @@
-[gd_scene load_steps=74 format=3 uid="uid://ciqbaxbhrxrjk"]
+[gd_scene load_steps=77 format=3 uid="uid://ciqbaxbhrxrjk"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
+[ext_resource type="Resource" uid="uid://dtmbywgmb8yc7" path="res://area/3 evil foundry/act 1/camera/CloseHallCam.tres" id="3_xb6na"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="4_8g5mc"]
 [ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="5_fqsot"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="6_8b1i8"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="7_4vimk"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="7_d57bs"]
-[ext_resource type="PackedScene" uid="uid://bgp5prexgdala" path="res://area/3 evil foundry/object/scrap/FallingScrap.tscn" id="7_os07l"]
+[ext_resource type="PackedScene" path="res://area/3 evil foundry/object/scrap/FallingScrap.tscn" id="7_os07l"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="7_pb234"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="7_v2v6a"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="8_yjt2l"]
@@ -432,6 +433,14 @@ max_value = 2.0
 _data = [Vector2(0, 0), 0.0, 2.74304, 0, 0, Vector2(0.541667, 1.72645), 1.22, 1.22, 0, 0, Vector2(1, 1.47896), -1.45219, 0.0, 0, 0]
 point_count = 3
 
+[sub_resource type="Animation" id="Animation_khcjl"]
+resource_name = "RESET"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qu6nc"]
+_data = {
+"RESET": SubResource("Animation_khcjl")
+}
+
 [sub_resource type="Curve" id="Curve_yo7fn"]
 max_value = 4.0
 _data = [Vector2(0, 0), 0.0, 2.0251, 0, 0, Vector2(1, 4), 7.503, 0.0, 0, 0]
@@ -473,6 +482,7 @@ size = Vector3(15, 20, 5)
 
 [node name="Static" parent="." instance=ExtResource("5_fqsot")]
 Data = ExtResource("2_qt87d")
+InitialCameraSettings = ExtResource("3_xb6na")
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -483,6 +493,7 @@ metadata/_edit_lock_ = true
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("1_1wjgq")]
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
+visible = false
 
 [node name="DoorHall-L" parent="MainAct/CullingMap" instance=ExtResource("7_d57bs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -159.785, -30, -87.202)
@@ -1855,11 +1866,9 @@ saveVisibilityOnCheckpoint = true
 
 [node name="Fan1" parent="MainAct/FanHall" instance=ExtResource("25_xh5hk")]
 transform = Transform3D(-0.93358, 0, -0.358368, 0, 1, 0, 0.358368, 0, -0.93358, 1.803, 4.5, 40.257)
-spinSpeed = 0.5
 
 [node name="Fan2" parent="MainAct/FanHall" instance=ExtResource("25_xh5hk")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 5.1182, 6.54131, 83.7869)
-spinSpeed = 0.5
 
 [node name="Rings1" type="Node3D" parent="MainAct/FanHall"]
 transform = Transform3D(-0.9998, 0, 0.02, 0, 1, 0, -0.02, 0, -0.9998, 5.03912, 3.13803, 80.5948)
@@ -1986,7 +1995,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, -0.646563, 0)
 
 [node name="Fan3" parent="MainAct/FanHall" instance=ExtResource("25_xh5hk")]
 transform = Transform3D(7.54979e-08, -6.55651e-07, 1, -3.57628e-07, 1, -6.55651e-07, -1, 2.08616e-07, -3.41735e-07, -43.7678, 1.945, 146.045)
-spinSpeed = 7.0
 playSFX = true
 
 [node name="HallPearlRings2" type="Node3D" parent="MainAct/FanHall"]
@@ -2032,7 +2040,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, -0.646563, 0)
 
 [node name="Fan4" parent="MainAct/FanHall" instance=ExtResource("29_wryy0")]
 transform = Transform3D(7.54979e-08, -6.55651e-07, 1, -3.57628e-07, 1, -6.55651e-07, -1, 2.08616e-07, -3.41735e-07, -61.006, -0.0430756, 145.947)
-spinSpeed = 0.8
 root = NodePath("../Fan2/Root")
 sfx = NodePath("../Fan2/SFX")
 
@@ -2150,13 +2157,11 @@ transform = Transform3D(-0.463296, 0.0772377, 0.882831, 0, 0.996195, -0.0871557,
 
 [node name="Fan5" parent="MainAct/FanHall" instance=ExtResource("29_wryy0")]
 transform = Transform3D(-4.37114e-08, 0, 1, 4.4409e-16, 1, 0, -1, 0, -4.37114e-08, -222.308, 4.10896, 186.123)
-spinSpeed = 1.0
 root = NodePath("../Fan1/Root")
 sfx = NodePath("../Fan1/SFX")
 
 [node name="Fan6" parent="MainAct/FanHall" instance=ExtResource("29_wryy0")]
 transform = Transform3D(2.61175e-08, 3.50509e-08, 1, 0.80187, -0.597499, 0, 0.597499, 0.80187, -4.37114e-08, -222.308, 10.326, 186.217)
-spinSpeed = 1.0
 root = NodePath("../Fan2/Root")
 sfx = NodePath("../Fan2/SFX")
 
@@ -2211,6 +2216,9 @@ transform = Transform3D(1, -3.72529e-09, 5.55113e-17, -3.72529e-09, 1, -1.49012e
 fireSoulIndex = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/LavaCrossway/FireSoulEvent"]
+libraries = {
+"": SubResource("AnimationLibrary_qu6nc")
+}
 
 [node name="BlueMajin" parent="MainAct/LavaCrossway" instance=ExtResource("34_ip7kn")]
 transform = Transform3D(0.0236819, -3.72529e-09, -0.99972, -1.49852e-08, 1, 3.37136e-09, 0.99972, 1.49012e-08, 0.0236819, 36.6428, 0.510021, -119.936)
