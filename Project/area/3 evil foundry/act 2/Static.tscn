@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://2npi4fgvupgn"]
+[gd_scene load_steps=51 format=3 uid="uid://2npi4fgvupgn"]
 
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="1_6j3jw"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_ur5y1"]
@@ -30,14 +30,15 @@
 [ext_resource type="PackedScene" uid="uid://cbrcws5d38ioo" path="res://area/3 evil foundry/act 2/environment/collision/Collision.tscn" id="18_vaeni"]
 [ext_resource type="Curve3D" uid="uid://dkpjo3bu2nmpy" path="res://area/3 evil foundry/act 2/environment/path/GrindPath.tres" id="20_4coev"]
 [ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/3 evil foundry/data/Environment.tres" id="21_u5nl1"]
-[ext_resource type="PackedScene" uid="uid://cl0tw3ce066ap" path="res://area/3 evil foundry/data/BGM.tscn" id="22_jn25t"]
 [ext_resource type="Curve3D" uid="uid://l3sk8oxxtsvf" path="res://area/3 evil foundry/act 2/environment/path/StartPath.tres" id="27_p6tbj"]
 [ext_resource type="Curve3D" uid="uid://2r81kn85banm" path="res://area/3 evil foundry/act 2/environment/path/EndingPath.tres" id="28_dca3m"]
 [ext_resource type="Curve3D" uid="uid://dg2yphtncc2gj" path="res://area/3 evil foundry/act 2/environment/path/ElevatorPath.tres" id="28_mg2bk"]
 [ext_resource type="PackedScene" uid="uid://cs7ogaqrx3sn5" path="res://area/3 evil foundry/data/shader/ScreenWarp.tscn" id="29_vht2p"]
+[ext_resource type="AudioStream" uid="uid://bei02eq2na4cp" path="res://sound/ost/bonus disc/Evil Foundry Act 2.mp3" id="33_yqqdf"]
+[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="34_0pw5r"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c5gu7"]
-size = Vector3(10, 10, 1)
+size = Vector3(10, 10, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fqa3g"]
 size = Vector3(90, 10, 92)
@@ -55,7 +56,7 @@ size = Vector3(10, 20, 5)
 size = Vector3(10, 20, 15)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0yj8a"]
-size = Vector3(8, 15, 1)
+size = Vector3(8, 15, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_erq44"]
 size = Vector3(20, 20, 5)
@@ -600,7 +601,6 @@ Environment = NodePath("WorldEnvironment")
 visible = false
 
 [node name="Trigger" type="Node3D" parent="."]
-visible = false
 
 [node name="Object" type="Node3D" parent="Trigger"]
 
@@ -754,8 +754,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_c5gu7")
 
 [node name="DriftTrigger18" parent="Trigger/Object" instance=ExtResource("1_6j3jw")]
-transform = Transform3D(-1, 0, 8.74232e-08, 0, 1, 0, -8.74232e-08, 0, -1, -100, -29.999, -130.025)
+transform = Transform3D(-1, 0, 8.74232e-08, 0, 1, 0, -8.74232e-08, 0, -1, -100, -29.999, -125.025)
 isRightTurn = true
+slideDistance = 5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/DriftTrigger18"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -902,7 +903,10 @@ path = NodePath("../../../../Path/ElevatorPath")
 shape = SubResource("BoxShape3D_0j1ln")
 
 [node name="EndingPath" parent="Trigger/Path" instance=ExtResource("2_tyjcn")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -56, -60, -190)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -58, -60, -190)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
 
 [node name="Path" type="Node3D" parent="Trigger/Path/EndingPath" node_paths=PackedStringArray("path")]
 script = ExtResource("4_dvx8k")
@@ -1223,7 +1227,13 @@ next/demo1 = &"demo2"
 next/demo2 = &"demo3"
 next/demo3 = &"demo1"
 
-[node name="BGM" parent="." instance=ExtResource("22_jn25t")]
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("33_yqqdf")
+bus = &"BGM"
+script = ExtResource("34_0pw5r")
+loopStartPosition = 11.794
+loopEndPosition = 158.99
+isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("21_u5nl1")

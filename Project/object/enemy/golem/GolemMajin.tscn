@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bntrixspwpi2"]
+[gd_scene load_steps=23 format=3 uid="uid://bntrixspwpi2"]
 
 [ext_resource type="Script" path="res://object/enemy/golem/data/GolemMajin.cs" id="1_qx3kf"]
 [ext_resource type="PackedScene" uid="uid://623w0nu8qp3d" path="res://object/enemy/golem/data/model/GolemMajin.gltf" id="1_x1tra"]
@@ -19,7 +19,7 @@ radius = 0.7
 
 [sub_resource type="Curve3D" id="Curve3D_eumw5"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -9),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10),
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
@@ -41,6 +41,12 @@ filters = ["GolemMajinRoot/Skeleton3D:gear"]
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x3hss"]
 animation = &"gear"
 
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_mjkmo"]
+filters = ["GolemMajinRoot/Skeleton3D:l_finger01", "GolemMajinRoot/Skeleton3D:l_finger02"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ipsfj"]
+animation = &"tank-hold"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_82vc1"]
 animation = &"idle"
 
@@ -56,26 +62,45 @@ input_2/name = "defeat"
 input_2/auto_advance = false
 input_2/reset = true
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2q6u5"]
+animation = &"throw"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_r8itt"]
+fadein_time = 0.5
+fadeout_time = 0.5
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xilgg"]
 animation = &"walk"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_xmh3l"]
+graph_offset = Vector2(-827.018, 113.75)
 nodes/defeat_anim/node = SubResource("AnimationNodeAnimation_c1lnh")
 nodes/defeat_anim/position = Vector2(-700, 380)
 nodes/gear_add/node = SubResource("AnimationNodeAdd2_4we8v")
 nodes/gear_add/position = Vector2(100, 160)
 nodes/gear_anim/node = SubResource("AnimationNodeAnimation_x3hss")
 nodes/gear_anim/position = Vector2(-60, 400)
+nodes/hand_add/node = SubResource("AnimationNodeAdd2_mjkmo")
+nodes/hand_add/position = Vector2(340, 160)
+nodes/hold_anim/node = SubResource("AnimationNodeAnimation_ipsfj")
+nodes/hold_anim/position = Vector2(140, 360)
 nodes/idle_anim/node = SubResource("AnimationNodeAnimation_82vc1")
 nodes/idle_anim/position = Vector2(-880, 200)
+nodes/output/position = Vector2(500, 160)
 nodes/state_transition/node = SubResource("AnimationNodeTransition_gxn1a")
-nodes/state_transition/position = Vector2(-377.958, 260.481)
+nodes/state_transition/position = Vector2(-400, 200)
+nodes/throw_anim/node = SubResource("AnimationNodeAnimation_2q6u5")
+nodes/throw_anim/position = Vector2(-400, 420)
+nodes/throw_trigger/node = SubResource("AnimationNodeOneShot_r8itt")
+nodes/throw_trigger/position = Vector2(-140, 200)
 nodes/walk_anim/node = SubResource("AnimationNodeAnimation_xilgg")
 nodes/walk_anim/position = Vector2(-880, 320)
-node_connections = [&"gear_add", 0, &"state_transition", &"gear_add", 1, &"gear_anim", &"output", 0, &"gear_add", &"state_transition", 0, &"idle_anim", &"state_transition", 1, &"walk_anim", &"state_transition", 2, &"defeat_anim"]
+node_connections = [&"gear_add", 0, &"throw_trigger", &"gear_add", 1, &"gear_anim", &"hand_add", 0, &"gear_add", &"hand_add", 1, &"hold_anim", &"output", 0, &"hand_add", &"state_transition", 0, &"idle_anim", &"state_transition", 1, &"walk_anim", &"state_transition", 2, &"defeat_anim", &"throw_trigger", 0, &"state_transition", &"throw_trigger", 1, &"throw_anim"]
 
 [node name="GolemMajin" type="Node3D"]
 script = ExtResource("1_qx3kf")
+gasTankParent = NodePath("GolemMajin/GolemMajinRoot/Skeleton3D/Hand/GasTankParent")
+gasTankLockonTarget = NodePath("GolemMajin/GolemMajinRoot/Skeleton3D/Head/Hurtbox")
 hurtbox = NodePath("GolemMajin/GolemMajinRoot/Skeleton3D/Head/Hurtbox")
 rangeCollider = NodePath("RangeTrigger/CollisionShape3D")
 animationTree = NodePath("AnimationTree")
@@ -136,7 +161,7 @@ shape = SubResource("BoxShape3D_dls5v")
 disabled = true
 
 [node name="Head" type="BoneAttachment3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D" index="2"]
-transform = Transform3D(1, -4.37114e-08, 4.37115e-08, 4.37115e-08, 1, -3.35255e-06, -4.37114e-08, 3.35255e-06, 1, -8.73969e-08, 5.675, 1.68844e-05)
+transform = Transform3D(1, -4.37114e-08, 4.37115e-08, 4.37115e-08, 1, -3.23334e-06, -4.37114e-08, 3.23334e-06, 1, -8.73971e-08, 5.675, 1.65596e-05)
 bone_name = "head"
 bone_idx = 8
 
@@ -150,27 +175,35 @@ enemy = NodePath("../../../../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Head/Hurtbox"]
 shape = SubResource("SphereShape3D_u3rel")
 
+[node name="Hand" type="BoneAttachment3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D" index="3"]
+transform = Transform3D(1, 4.43451e-07, 1.97779e-07, -4.67098e-07, 1, -4.70118e-06, -1.95916e-07, 4.70025e-06, 1, 0.875001, 8.7, 2.65458e-05)
+bone_name = "l_hand"
+bone_idx = 16
+
+[node name="GasTankParent" type="Node3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Hand"]
+transform = Transform3D(1, 1.86317e-09, 8.14418e-17, 0, -4.37114e-08, 1, 1.86317e-09, -1, -4.37114e-08, 2.38419e-07, 1.10001, -5.48363e-06)
+
 [node name="AnimationPlayer" parent="GolemMajin" index="1"]
 blend_times = [&"walk", &"defeat", 0.2]
 
-[node name="GrindrailR" parent="." node_paths=PackedStringArray("rail") instance=ExtResource("3_w2hby")]
+[node name="GrindrailR" parent="." instance=ExtResource("3_w2hby")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.1, -4.5)
 rail = NodePath("Path")
 
 [node name="Path" type="Path3D" parent="GrindrailR"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 5)
 curve = SubResource("Curve3D_eumw5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GrindrailR"]
 shape = SubResource("BoxShape3D_h6tkg")
 disabled = true
 
-[node name="GrindrailL" parent="." node_paths=PackedStringArray("rail") instance=ExtResource("3_w2hby")]
+[node name="GrindrailL" parent="." instance=ExtResource("3_w2hby")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.1, -4.5)
 rail = NodePath("Path")
 
 [node name="Path" type="Path3D" parent="GrindrailL"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 5)
 curve = SubResource("Curve3D_eumw5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GrindrailL"]
@@ -192,9 +225,13 @@ root_node = NodePath("../GolemMajin")
 tree_root = SubResource("AnimationNodeBlendTree_xmh3l")
 anim_player = NodePath("../GolemMajin/AnimationPlayer")
 parameters/gear_add/add_amount = 1.0
+parameters/hand_add/add_amount = 1.0
 parameters/state_transition/current_state = "idle"
 parameters/state_transition/transition_request = ""
 parameters/state_transition/current_index = 0
+parameters/throw_trigger/active = false
+parameters/throw_trigger/internal_active = false
+parameters/throw_trigger/request = 0
 
 [connection signal="area_entered" from="GolemMajin/GolemMajinRoot/Skeleton3D/Head/Hurtbox" to="." method="OnEntered"]
 [connection signal="area_exited" from="GolemMajin/GolemMajinRoot/Skeleton3D/Head/Hurtbox" to="." method="OnExited"]

@@ -32,6 +32,7 @@ public partial class BounceState : PlayerState
 
 		if (Player.IsLockoutActive && Player.ActiveLockoutData == LockoutSettings) return;
 
+		Player.IsOnGround = false;
 		Player.CanJumpDash = true;
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
@@ -90,7 +91,9 @@ public partial class BounceState : PlayerState
 			return;
 		}
 
-		if (Player.Lockon.Target == null) // Nothign to snap to
+		Player.MoveSpeed = 0; // Reset speed
+
+		if (Player.Lockon.Target == null) // Nothing to snap to
 			return;
 
 		if (!Mathf.IsZeroApprox(bounceInterruptTimer)) // Player is already bouncing -- don't snap
@@ -104,7 +107,6 @@ public partial class BounceState : PlayerState
 		}
 
 		// Only snap when target being hit is correct
-		Player.MoveSpeed = 0; // Reset speed
 		Player.GlobalPosition = Player.Lockon.Target.GlobalPosition;
 	}
 

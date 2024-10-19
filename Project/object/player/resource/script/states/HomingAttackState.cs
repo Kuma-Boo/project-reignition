@@ -63,9 +63,14 @@ public partial class HomingAttackState : PlayerState
 			return;
 
 		if (Player.IsBouncing)
+		{
 			Player.Skills.CallDeferred(PlayerSkillController.MethodName.ActivateFireCrestBurst);
+		}
 		else
+		{
+			Player.Lockon.ResetLockonTarget();
 			Player.Skills.DeactivateFireCrest();
+		}
 	}
 
 	public override PlayerState ProcessPhysics()
