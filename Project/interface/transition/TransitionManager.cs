@@ -54,6 +54,8 @@ public partial class TransitionManager : Node
 			animator.SpeedScale = 1.0f / CurrentTransitionData.inSpeed;
 			animator.Connect(AnimationPlayer.SignalName.AnimationFinished, new(instance, MethodName.TransitionLoading), (uint)ConnectFlags.OneShot);
 		}
+
+		EmitSignal(SignalName.TransitionStarted);
 	}
 
 	private void FinishFade()
@@ -73,12 +75,14 @@ public partial class TransitionManager : Node
 
 	private TransitionData CurrentTransitionData { get; set; }
 	public static bool IsTransitionActive { get; set; }
-	[Signal]
-	public delegate void SceneChangedEventHandler(); // Called when the scene changes
-	[Signal]
-	public delegate void TransitionProcessEventHandler(); // Called in the middle of the transition (i.e. when the screen is completely black)
-	[Signal]
-	public delegate void TransitionFinishEventHandler(); // Called when the transition is finished
+	/// <summary> Called when the scene changes. </summary>
+	[Signal] public delegate void SceneChangedEventHandler();
+	/// <summary> Called whenever a transition is started. </summary>
+	[Signal] public delegate void TransitionStartedEventHandler();
+	/// <summary> Called in the middle of the transition (when the screen is completely black). </summary>
+	[Signal] public delegate void TransitionProcessEventHandler();
+	/// <summary> Called when the transition is finished. </summary>
+	[Signal] public delegate void TransitionFinishEventHandler();
 	private void TransitionLoading(string _) => EmitSignal(SignalName.TransitionProcess);
 	private void TransitionFinished(string _)
 	{
