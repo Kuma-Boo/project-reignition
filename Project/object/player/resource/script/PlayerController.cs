@@ -978,5 +978,37 @@ public partial class PlayerController : CharacterBody3D
 		UpdateOrientation();
 		EmitSignal(SignalName.ExternalControlCompleted);
 	}
+
+	public void Activate()
+	{
+		Visible = true;
+		ProcessMode = ProcessModeEnum.Inherit;
+
+		Camera.Camera.Current = true; // Reactivate camera (for cutscenes)
+		Lockon.IsReticleVisible = true;
+
+		if (Stage.IsControlTest)
+			return;
+
+		HeadsUpDisplay.Instance.Visible = true;
+		Interface.PauseMenu.AllowPausing = true;
+	}
+
+	public void Deactivate()
+	{
+		if (Skills.IsUsingBreakSkills)
+			Skills.CancelBreakSkills();
+
+		Visible = false;
+		ProcessMode = ProcessModeEnum.Disabled;
+
+		Lockon.IsReticleVisible = false;
+
+		if (Stage.IsControlTest)
+			return;
+
+		HeadsUpDisplay.Instance.Visible = false;
+		Interface.PauseMenu.AllowPausing = false;
+	}
 	#endregion
 }
