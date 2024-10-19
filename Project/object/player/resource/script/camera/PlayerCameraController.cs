@@ -5,6 +5,13 @@ using System.Collections.Generic;
 
 namespace Project.Gameplay;
 
+public enum CameraTransitionType
+{
+	Time,
+	Distance,
+	Crossfade,
+}
+
 /// <summary>
 /// Follows the player based on the settings provided from CameraSettingsResource.cs
 /// </summary>
@@ -195,14 +202,14 @@ public partial class PlayerCameraController : Node3D
 			if (enableXformBlend)
 				StartXformBlend();
 		}
-		else if (data.IsCrossfadeEnabled) // Crossfade transition
+		else if (data.TransitionType == CameraTransitionType.Crossfade) // Crossfade transition
 		{
 			StartCrossfade(1.0f / data.BlendTime);
 			SnapFlag = true;
 			if (enableXformBlend)
 				StartXformBlend();
 		}
-		else
+		else if (data.TransitionType == CameraTransitionType.Time)
 		{
 			data.CalculateBlendSpeed(); // Cache blend speed so we don't have to do it every frame
 		}
@@ -219,7 +226,7 @@ public partial class PlayerCameraController : Node3D
 		{
 			// Remove all blend data except the last 2 active ones (for blending purposes)
 			int startingIndex = CameraBlendList.Count - 2;
-			if (CameraBlendList[^1].Trigger?.blendOverDistance == true)
+			if (CameraBlendList[^1].UseDistanceBlending)
 				startingIndex--;
 
 			for (int i = startingIndex; i >= 0; i--)
@@ -230,7 +237,7 @@ public partial class PlayerCameraController : Node3D
 
 			CameraBlendList[0].SetInfluence(1);
 			// Attempt to snap the active blend settings' influence
-			if (CameraBlendList[^1].Trigger?.blendOverDistance == false)
+			if (CameraBlendList[^1].UseDistanceBlending)
 				CameraBlendList[^1].CalculateInfluence(Player.PathFollower);
 			return;
 		}
@@ -244,7 +251,7 @@ public partial class PlayerCameraController : Node3D
 	{
 		// Removes completed blends (Excluding active/distance blend data)
 		if (blendIndex < CameraBlendList.Count - 1 && Mathf.IsEqualApprox(CameraBlendList[blendIndex + 1].LinearInfluence, 1.0f) &&
-			CameraBlendList[^1].Trigger?.blendOverDistance == false)
+			!CameraBlendList[^1].UseDistanceBlending)
 		{
 			CameraBlendList[blendIndex].Free();
 			CameraBlendList.RemoveAt(blendIndex);
@@ -252,7 +259,7 @@ public partial class PlayerCameraController : Node3D
 		}
 
 		// Don't automatically update influence when using distance blending
-		if (CameraBlendList[blendIndex].Trigger?.blendOverDistance == true)
+		if (CameraBlendList[blendIndex].UseDistanceBlending)
 		{
 			CameraTrigger trigger = CameraBlendList[blendIndex].Trigger;
 			CameraBlendList[blendIndex].CalculateInfluence(Player.PathFollower);
@@ -1001,7 +1008,7 @@ public partial class PlayerCameraController : Node3D
 public partial class CameraBlendData : GodotObject
 {
 	/// <summary> Use crossfading? </summary>
-	public bool IsCrossfadeEnabled { get; set; }
+	public CameraTransitionType TransitionType { get; set; }
 
 	/// <summary> Ratio [0 <-> 1] of how much influence this blend has. </summary>
 	public float LinearInfluence { get; private set; }
@@ -1009,6 +1016,7 @@ public partial class CameraBlendData : GodotObject
 	public float SmoothedInfluence { get; private set; }
 	/// <summary> Actual amount to blend each frame. </summary>
 	public float BlendSpeed { get; private set; }
+	public bool UseDistanceBlending => Trigger?.transitionType == CameraTransitionType.Distance;
 
 	/// <summary> Hall tracking position. </summary>
 	public float hallPosition;
@@ -1079,9 +1087,16 @@ public partial class CameraBlendData : GodotObject
 
 	public void CalculateInfluence(PlayerPathController pathController)
 	{
+		if (Mathf.IsZeroApprox(Trigger.transitionTime))
+		{
+			GD.PushWarning("Warning: ActiveCameraSettings distance amount is 0.");
+			SetInfluence(1f);
+			return;
+		}
+
 		float playerProgress = pathController.Progress;
 		float triggerProgress = pathController.GetProgress(Trigger.GlobalPosition);
-		float influence = Mathf.Clamp((playerProgress - triggerProgress) / Trigger.blendDistance, 0f, 1f);
+		float influence = Mathf.Clamp((playerProgress - triggerProgress) / Trigger.transitionTime, 0f, 1f);
 		SetInfluence(influence);
 	}
 

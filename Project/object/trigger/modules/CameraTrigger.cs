@@ -7,25 +7,13 @@ namespace Project.Gameplay.Triggers;
 /// </summary>
 public partial class CameraTrigger : StageTriggerModule
 {
-	/// <summary> Should this camera blend over distance instead of time? </summary>
-	[Export] public bool blendOverDistance;
-	/// <summary> At what progress value should this camera have full influence? </summary>
-	[Export] public float blendDistance;
-
 	/// <summary> How long the transition is (in seconds). Use a transition time of 0 to perform an instant cut. </summary>
-	[Export(PropertyHint.Range, "0,2,0.1")]
-	public float transitionTime;
+	[Export(PropertyHint.Range, "0,5,0.1,or_greater")]
+	public float transitionTime = 0.5f;
 	/// <summary> Override to have a different blend time during deactivation. </summary>
 	[Export(PropertyHint.Range, "-1,2,0.1")]
-	public float deactivationTransitionTime = -1;
-	[Export]
-	public TransitionType transitionType;
-	public enum TransitionType
-	{
-		Blend, // Interpolate between states
-		Crossfade, // Crossfade states
-	}
-
+	public float deactivationTransitionTime = -1f;
+	[Export] public CameraTransitionType transitionType;
 	[Export] public bool enableInputBlending;
 
 	/// <summary> Must be assigned to something. </summary>
@@ -97,7 +85,7 @@ public partial class CameraTrigger : StageTriggerModule
 		{
 			BlendTime = transitionTime,
 			SettingsResource = settings,
-			IsCrossfadeEnabled = transitionType == TransitionType.Crossfade,
+			TransitionType = transitionType,
 			Trigger = this
 		}, enableInputBlending);
 
