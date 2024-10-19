@@ -180,11 +180,11 @@ public partial class SkillSelect : Menu
 	{
 		if (IsEditingAugment)
 		{
-			description.SetText(SelectedSkill.GetAugmentDescription(AugmentSelection));
+			description.Text = SelectedSkill.GetAugmentDescription(AugmentSelection);
 			return;
 		}
 
-		description.SetText(SelectedSkill.Skill.DescriptionKey);
+		description.Text = SelectedSkill.Skill.DescriptionKey;
 	}
 
 	private void UpdateScrollAmount(int inputSign)

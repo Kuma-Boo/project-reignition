@@ -1,11 +1,62 @@
-[gd_scene load_steps=48 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=214 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
-[ext_resource type="PackedScene" uid="uid://bmgaktb3i28mo" path="res://area/3 evil foundry/boss/data/model/IfritGolemCollision.gltf" id="2_4kp3h"]
+[ext_resource type="Script" path="res://area/3 evil foundry/data/script/IfritGolem.cs" id="2_jm400"]
 [ext_resource type="PackedScene" uid="uid://b26mkp3yjneyj" path="res://area/3 evil foundry/boss/data/ArenaPlatform.tscn" id="2_nsyah"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_v71j8"]
 [ext_resource type="PackedScene" uid="uid://b7g26173gty07" path="res://area/3 evil foundry/boss/data/model/Lava.gltf" id="2_wope5"]
+[ext_resource type="PackedScene" uid="uid://b1vvf7gw3t311" path="res://area/3 evil foundry/boss/data/BossGasTank.tscn" id="3_7wg3m"]
 [ext_resource type="PackedScene" uid="uid://cayo6pq1qpjyf" path="res://area/3 evil foundry/boss/data/Core.tscn" id="4_0luyt"]
+[ext_resource type="Material" uid="uid://brh3j4dti4ne4" path="res://area/3 evil foundry/boss/data/model/material/Glow Overlay.tres" id="4_1wjmy"]
+[ext_resource type="Resource" uid="uid://svpypw63us2l" path="res://area/3 evil foundry/boss/camera/ClimbDistantCam.tres" id="4_2n4ox"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="5_rxyxv"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="7_7kxhk"]
+[ext_resource type="Resource" uid="uid://df4ctc3ix5agq" path="res://area/3 evil foundry/boss/camera/HighCam.tres" id="9_6fxph"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="9_xqc7y"]
+[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="11_iscui"]
+[ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="12_cgkgo"]
+[ext_resource type="Material" uid="uid://cx8t0sy6gaqpm" path="res://area/3 evil foundry/boss/effect/material/Glow.tres" id="12_ltvht"]
+[ext_resource type="Resource" uid="uid://uf7lyw3gw1fc" path="res://area/3 evil foundry/boss/camera/LowCam.tres" id="15_3iytr"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="15_5j6sd"]
+[ext_resource type="Texture2D" uid="uid://cpkbc7p47d2bg" path="res://effect/particle/texture/environment/common dust.png" id="15_feday"]
+[ext_resource type="Material" uid="uid://cqly2cta75k4b" path="res://effect/particle/material/object/Dino Rex Splatter.tres" id="16_gbq6m"]
+[ext_resource type="Shader" path="res://effect/shader/particle/ParticleLocalBillboard.gdshader" id="16_vd0ip"]
+[ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="17_jwqya"]
+[ext_resource type="Texture2D" uid="uid://dvioww06e1hj3" path="res://effect/particle/texture/flame/flame explosion.png" id="17_n2j05"]
+[ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Dust Splatter Add.tres" id="17_sx46h"]
+[ext_resource type="Material" uid="uid://c6fc13de00bdn" path="res://object/stage/common/resource/model/material/Goal Flame Base.tres" id="18_a4xxb"]
+[ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="18_d56ac"]
+[ext_resource type="Material" uid="uid://7lvqh1a70ae4" path="res://effect/particle/material/explosion/Explosion Flame.tres" id="18_eb5p4"]
+[ext_resource type="AudioStream" uid="uid://c8sn2q8nwutep" path="res://sound/boss/ifrit golem/lava.wav" id="18_trxln"]
+[ext_resource type="Texture2D" uid="uid://b6mr44o0sk3wj" path="res://area/1 sand oasis/boss/effect/texture/flying eye.png" id="19_4xrqc"]
+[ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffsetFade.gdshader" id="19_khjmj"]
+[ext_resource type="Shader" path="res://effect/shader/particle/BillboardCameraOffset.gdshader" id="19_sr8ns"]
+[ext_resource type="Material" uid="uid://cctsu5ymh5eev" path="res://effect/particle/material/environment/Common Splatter.tres" id="20_3483e"]
+[ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="21_bt4ca"]
+[ext_resource type="Material" uid="uid://dv8e2vx0q5qy6" path="res://area/3 evil foundry/boss/effect/material/Laser Contact.tres" id="21_fakwu"]
+[ext_resource type="Material" uid="uid://wdp8vltltolc" path="res://area/1 sand oasis/boss/effect/material/Light Ray.tres" id="22_h4kgd"]
+[ext_resource type="PackedScene" uid="uid://75f72xq1jhqo" path="res://area/3 evil foundry/boss/data/TraversalScrap.tscn" id="22_y8yfc"]
+[ext_resource type="AudioStream" uid="uid://dnhop4yryvtbo" path="res://sound/boss/ifrit golem/laser charge.wav" id="26_k5i8e"]
+[ext_resource type="AudioStream" uid="uid://dmeygedcok7pc" path="res://sound/boss/ifrit golem/laser impact.wav" id="26_lfg5l"]
+[ext_resource type="AudioStream" uid="uid://y3jnvdmc4s02" path="res://sound/boss/ifrit golem/laser beam.wav" id="27_ema0p"]
+[ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="27_v73pf"]
+[ext_resource type="AudioStream" uid="uid://cj7rknesqy2uh" path="res://sound/boss/ifrit golem/step roar.wav" id="28_6fg5l"]
+[ext_resource type="AudioStream" uid="uid://b6o0ox1crtx6n" path="res://sound/boss/ifrit golem/step grab.wav" id="29_dwhy7"]
+[ext_resource type="AudioStream" uid="uid://bji72bj18vdw6" path="res://sound/boss/ifrit golem/step gears.wav" id="30_py1nf"]
+[ext_resource type="Resource" uid="uid://bs4u01rf82btx" path="res://area/3 evil foundry/boss/camera/BounceCam.tres" id="33_6cwa2"]
+[ext_resource type="AudioStream" uid="uid://btqg4yl25pntq" path="res://sound/boss/ifrit golem/lava warn.wav" id="34_0g7x3"]
+[ext_resource type="AudioStream" uid="uid://roe8af52cjsj" path="res://sound/boss/ifrit golem/lava rise.wav" id="35_0xwj3"]
+[ext_resource type="AudioStream" uid="uid://cp2jr41tuvhhm" path="res://sound/boss/ifrit golem/recovery.wav" id="35_va4id"]
+[ext_resource type="AudioStream" uid="uid://4drt0am6f0p0" path="res://sound/boss/ifrit golem/damage.wav" id="36_45ekf"]
+[ext_resource type="AudioStream" uid="uid://djf45xc1rtbrx" path="res://sound/boss/ifrit golem/ev_01_stg032.ogg" id="37_f4i4x"]
+[ext_resource type="AudioStream" uid="uid://byl8jlykjil50" path="res://sound/boss/ifrit golem/ev_02_stg032.ogg" id="38_8geod"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xc84b"]
+animation = &"defeat"
+
+[sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_nycbl"]
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ocice"]
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_g8eyb"]
 filter_enabled = true
@@ -85,7 +136,7 @@ states/hitstun-r/position = Vector2(344, 33)
 states/recovery/node = SubResource("AnimationNodeAnimation_udlwa")
 states/recovery/position = Vector2(658, 33)
 transitions = ["hitstun-r", "hitstun", SubResource("AnimationNodeStateMachineTransition_p6nqp"), "hitstun-l", "hitstun", SubResource("AnimationNodeStateMachineTransition_200v4"), "hitstun", "damage", SubResource("AnimationNodeStateMachineTransition_nqpft"), "hitstun", "recovery", SubResource("AnimationNodeStateMachineTransition_s4sr7"), "recovery", "End", SubResource("AnimationNodeStateMachineTransition_jl7vf"), "damage", "End", SubResource("AnimationNodeStateMachineTransition_gxqnd"), "Start", "hitstun-r", SubResource("AnimationNodeStateMachineTransition_o4lpp")]
-graph_offset = Vector2(-129, -38)
+graph_offset = Vector2(-165, 8)
 
 [sub_resource type="Curve" id="Curve_upeqj"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -95,6 +146,11 @@ point_count = 2
 fadein_time = 0.1
 fadeout_time = 1.0
 fadeout_curve = SubResource("Curve_upeqj")
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5m2c7"]
+animation = &"intro"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_k4wi6"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2c2kh"]
 animation = &"idle"
@@ -106,20 +162,18 @@ animation = &"step-l"
 animation = &"step-r"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_clanm"]
-xfade_time = 0.1
+xfade_time = 0.5
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3eosp"]
-xfade_time = 0.1
 switch_mode = 2
 advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_pl1k4"]
-xfade_time = 0.1
 switch_mode = 2
 advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6nwgh"]
-xfade_time = 0.1
+xfade_time = 0.5
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_mruqk"]
 advance_mode = 2
@@ -134,7 +188,154 @@ states/step-l/position = Vector2(330, 28)
 states/step-r/node = SubResource("AnimationNodeAnimation_4k0jr")
 states/step-r/position = Vector2(330, 178)
 transitions = ["idle", "step-l", SubResource("AnimationNodeStateMachineTransition_clanm"), "step-l", "idle", SubResource("AnimationNodeStateMachineTransition_3eosp"), "step-r", "idle", SubResource("AnimationNodeStateMachineTransition_pl1k4"), "idle", "step-r", SubResource("AnimationNodeStateMachineTransition_6nwgh"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_mruqk")]
-graph_offset = Vector2(-344, -17)
+graph_offset = Vector2(-392, -20)
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_velll"]
+filters = ["IfritRoot/Skeleton3D:l_shutter01", "IfritRoot/Skeleton3D:l_shutter02", "IfritRoot/Skeleton3D:l_shutter03", "IfritRoot/Skeleton3D:l_shutter11", "IfritRoot/Skeleton3D:l_shutter12", "IfritRoot/Skeleton3D:l_shutter13", "IfritRoot/Skeleton3D:r_shutter01", "IfritRoot/Skeleton3D:r_shutter02", "IfritRoot/Skeleton3D:r_shutter03", "IfritRoot/Skeleton3D:r_shutter11", "IfritRoot/Skeleton3D:r_shutter12", "IfritRoot/Skeleton3D:r_shutter13"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8ffs1"]
+animation = &"shutter01-l"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_se7mr"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_u88mq"]
+animation = &"shutter01-r"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_hg84d"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_00xr3"]
+animation = &"shutter02-l"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_4j2hu"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bfiyu"]
+animation = &"shutter02-r"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_jq1ot"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2krsp"]
+animation = &"shutter03-l"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ssk2f"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gbgc1"]
+animation = &"shutter03-r"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_n3inn"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dsenj"]
+animation = &"shutter11-l"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_cxwqb"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_r3hq1"]
+animation = &"shutter11-r"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ssqj3"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_oggdg"]
+animation = &"shutter12-l"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_b6nb6"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3s75g"]
+animation = &"shutter12-r"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_r3usj"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_p5smb"]
+animation = &"shutter13-l"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_883mi"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_o1u7g"]
+animation = &"shutter13-r"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_c2538"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n74cm"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3gifs"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_eni7c"]
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_mmoe4"]
+sync = true
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ao2hh"]
+graph_offset = Vector2(-1089.68, 47.0896)
+nodes/01_l_anim/node = SubResource("AnimationNodeAnimation_8ffs1")
+nodes/01_l_anim/position = Vector2(-1300, 240)
+nodes/01_l_trigger/node = SubResource("AnimationNodeOneShot_se7mr")
+nodes/01_l_trigger/position = Vector2(-1120, 0)
+nodes/01_r_anim/node = SubResource("AnimationNodeAnimation_u88mq")
+nodes/01_r_anim/position = Vector2(-1300, 640)
+nodes/01_r_trigger/node = SubResource("AnimationNodeOneShot_hg84d")
+nodes/01_r_trigger/position = Vector2(-1120, 400)
+nodes/02_l_anim/node = SubResource("AnimationNodeAnimation_00xr3")
+nodes/02_l_anim/position = Vector2(-1120, 240)
+nodes/02_l_trigger/node = SubResource("AnimationNodeOneShot_4j2hu")
+nodes/02_l_trigger/position = Vector2(-960, 0)
+nodes/02_r_anim/node = SubResource("AnimationNodeAnimation_bfiyu")
+nodes/02_r_anim/position = Vector2(-1120, 640)
+nodes/02_r_trigger/node = SubResource("AnimationNodeOneShot_jq1ot")
+nodes/02_r_trigger/position = Vector2(-960, 400)
+nodes/03_l_anim/node = SubResource("AnimationNodeAnimation_2krsp")
+nodes/03_l_anim/position = Vector2(-960, 240)
+nodes/03_l_trigger/node = SubResource("AnimationNodeOneShot_ssk2f")
+nodes/03_l_trigger/position = Vector2(-800, 0)
+nodes/03_r_anim/node = SubResource("AnimationNodeAnimation_gbgc1")
+nodes/03_r_anim/position = Vector2(-960, 640)
+nodes/03_r_trigger/node = SubResource("AnimationNodeOneShot_n3inn")
+nodes/03_r_trigger/position = Vector2(-800, 400)
+nodes/11_l_anim/node = SubResource("AnimationNodeAnimation_dsenj")
+nodes/11_l_anim/position = Vector2(-800, 240)
+nodes/11_l_trigger/node = SubResource("AnimationNodeOneShot_cxwqb")
+nodes/11_l_trigger/position = Vector2(-640, 0)
+nodes/11_r_anim/node = SubResource("AnimationNodeAnimation_r3hq1")
+nodes/11_r_anim/position = Vector2(-800, 640)
+nodes/11_r_trigger/node = SubResource("AnimationNodeOneShot_ssqj3")
+nodes/11_r_trigger/position = Vector2(-640, 400)
+nodes/12_l_anim/node = SubResource("AnimationNodeAnimation_oggdg")
+nodes/12_l_anim/position = Vector2(-640, 240)
+nodes/12_l_trigger/node = SubResource("AnimationNodeOneShot_b6nb6")
+nodes/12_l_trigger/position = Vector2(-480, 0)
+nodes/12_r_anim/node = SubResource("AnimationNodeAnimation_3s75g")
+nodes/12_r_anim/position = Vector2(-640, 640)
+nodes/12_r_trigger/node = SubResource("AnimationNodeOneShot_r3usj")
+nodes/12_r_trigger/position = Vector2(-480, 400)
+nodes/13_l_anim/node = SubResource("AnimationNodeAnimation_p5smb")
+nodes/13_l_anim/position = Vector2(-480, 240)
+nodes/13_l_trigger/node = SubResource("AnimationNodeOneShot_883mi")
+nodes/13_l_trigger/position = Vector2(-320, 0)
+nodes/13_r_anim/node = SubResource("AnimationNodeAnimation_o1u7g")
+nodes/13_r_anim/position = Vector2(-480, 640)
+nodes/13_r_trigger/node = SubResource("AnimationNodeOneShot_c2538")
+nodes/13_r_trigger/position = Vector2(-320, 400)
+nodes/RESET_anim/node = SubResource("AnimationNodeAnimation_3gifs")
+nodes/RESET_anim/position = Vector2(-1300, 0)
+"nodes/RESET_anim 2/node" = SubResource("AnimationNodeAnimation_n74cm")
+"nodes/RESET_anim 2/position" = Vector2(-1300, 400)
+nodes/output/position = Vector2(300, 160)
+nodes/shutter_speed/node = SubResource("AnimationNodeTimeScale_eni7c")
+nodes/shutter_speed/position = Vector2(148.839, 117.122)
+nodes/side_add/node = SubResource("AnimationNodeAdd2_mmoe4")
+nodes/side_add/position = Vector2(-106.26, 57.0959)
+node_connections = [&"01_l_trigger", 0, &"RESET_anim", &"01_l_trigger", 1, &"01_l_anim", &"01_r_trigger", 0, &"RESET_anim 2", &"01_r_trigger", 1, &"01_r_anim", &"02_l_trigger", 0, &"01_l_trigger", &"02_l_trigger", 1, &"02_l_anim", &"02_r_trigger", 0, &"01_r_trigger", &"02_r_trigger", 1, &"02_r_anim", &"03_l_trigger", 0, &"02_l_trigger", &"03_l_trigger", 1, &"03_l_anim", &"03_r_trigger", 0, &"02_r_trigger", &"03_r_trigger", 1, &"03_r_anim", &"11_l_trigger", 0, &"03_l_trigger", &"11_l_trigger", 1, &"11_l_anim", &"11_r_trigger", 0, &"03_r_trigger", &"11_r_trigger", 1, &"11_r_anim", &"12_l_trigger", 0, &"11_l_trigger", &"12_l_trigger", 1, &"12_l_anim", &"12_r_trigger", 0, &"11_r_trigger", &"12_r_trigger", 1, &"12_r_anim", &"13_l_trigger", 0, &"12_l_trigger", &"13_l_trigger", 1, &"13_l_anim", &"13_r_trigger", 0, &"12_r_trigger", &"13_r_trigger", 1, &"13_r_anim", &"output", 0, &"shutter_speed", &"shutter_speed", 0, &"side_add", &"side_add", 0, &"13_l_trigger", &"side_add", 1, &"13_r_trigger"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_021lr"]
 animation = &"special-attack-start"
@@ -177,7 +378,12 @@ fadeout_time = 0.5
 fadeout_curve = SubResource("Curve_upeqj")
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_bb4ub"]
-graph_offset = Vector2(-1051.07, -20.3404)
+nodes/defeat_anim/node = SubResource("AnimationNodeAnimation_xc84b")
+nodes/defeat_anim/position = Vector2(180, 360)
+nodes/defeat_seek/node = SubResource("AnimationNodeTimeSeek_nycbl")
+nodes/defeat_seek/position = Vector2(340, 280)
+nodes/defeat_trigger/node = SubResource("AnimationNodeOneShot_ocice")
+nodes/defeat_trigger/position = Vector2(500, 160)
 nodes/gear_add/node = SubResource("AnimationNodeAdd2_g8eyb")
 nodes/gear_add/position = Vector2(-400, 0)
 nodes/gear_anim/node = SubResource("AnimationNodeAnimation_blrrc")
@@ -196,125 +402,2154 @@ nodes/hitstun_state/node = SubResource("AnimationNodeStateMachine_erj6u")
 nodes/hitstun_state/position = Vector2(-800, 200)
 nodes/hitstun_trigger/node = SubResource("AnimationNodeOneShot_7saw6")
 nodes/hitstun_trigger/position = Vector2(-600, 0)
+nodes/intro_anim/node = SubResource("AnimationNodeAnimation_5m2c7")
+nodes/intro_anim/position = Vector2(0, 340)
+nodes/intro_trigger/node = SubResource("AnimationNodeOneShot_k4wi6")
+nodes/intro_trigger/position = Vector2(180, 160)
 nodes/normal_state/node = SubResource("AnimationNodeStateMachine_21w4q")
 nodes/normal_state/position = Vector2(-1000, 0)
-nodes/output/position = Vector2(0, 180)
+nodes/output/position = Vector2(680, 160)
+nodes/shutter_add/node = SubResource("AnimationNodeAdd2_velll")
+nodes/shutter_add/position = Vector2(0, 160)
+nodes/shutter_tree/node = SubResource("AnimationNodeBlendTree_ao2hh")
+nodes/shutter_tree/position = Vector2(-200, 340)
 nodes/special_state/node = SubResource("AnimationNodeStateMachine_x47fr")
 nodes/special_state/position = Vector2(-1000, 200)
 nodes/special_trigger/node = SubResource("AnimationNodeOneShot_wjwst")
 nodes/special_trigger/position = Vector2(-800, 0)
-node_connections = [&"gear_add", 0, &"hitstun_trigger", &"gear_add", 1, &"gear_anim", &"head_add", 0, &"gear_add", &"head_add", 1, &"head_blend", &"head_blend", 0, &"head_right_anim", &"head_blend", 1, &"head_center_anim", &"head_blend", 2, &"head_left_anim", &"hitstun_trigger", 0, &"special_trigger", &"hitstun_trigger", 1, &"hitstun_state", &"output", 0, &"head_add", &"special_trigger", 0, &"normal_state", &"special_trigger", 1, &"special_state"]
+node_connections = [&"defeat_seek", 0, &"defeat_anim", &"defeat_trigger", 0, &"intro_trigger", &"defeat_trigger", 1, &"defeat_seek", &"gear_add", 0, &"hitstun_trigger", &"gear_add", 1, &"gear_anim", &"head_add", 0, &"gear_add", &"head_add", 1, &"head_blend", &"head_blend", 0, &"head_right_anim", &"head_blend", 1, &"head_center_anim", &"head_blend", 2, &"head_left_anim", &"hitstun_trigger", 0, &"special_trigger", &"hitstun_trigger", 1, &"hitstun_state", &"intro_trigger", 0, &"shutter_add", &"intro_trigger", 1, &"intro_anim", &"output", 0, &"defeat_trigger", &"shutter_add", 0, &"head_add", &"shutter_add", 1, &"shutter_tree", &"special_trigger", 0, &"normal_state", &"special_trigger", 1, &"special_state"]
 
-[node name="IfritGolem" instance=ExtResource("1_37vkv")]
+[sub_resource type="BoxShape3D" id="BoxShape3D_n2677"]
+size = Vector3(20, 20, 5)
 
-[node name="ArenaPlatform" parent="." index="0" instance=ExtResource("2_nsyah")]
+[sub_resource type="Curve" id="Curve_kvh06"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.35666, 0.0, 0, 0]
+point_count = 2
 
-[node name="Lava" parent="." index="1" instance=ExtResource("2_wope5")]
+[sub_resource type="CurveTexture" id="CurveTexture_qp47u"]
+width = 64
+curve = SubResource("Curve_kvh06")
 
-[node name="IfritGolemCollision" parent="." index="2" instance=ExtResource("2_4kp3h")]
-visible = false
-script = ExtResource("2_v71j8")
+[sub_resource type="Curve" id="Curve_3y4l3"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.98093, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_hguad"]
+_data = [Vector2(0, 0), 0.0, 10.628, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_t5m1l"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_8kafd"]
+width = 64
+curve_x = SubResource("Curve_3y4l3")
+curve_y = SubResource("Curve_hguad")
+curve_z = SubResource("Curve_t5m1l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vj76e"]
+lifetime_randomness = 0.5
+direction = Vector3(0, 0, -1)
+spread = 3.0
+initial_velocity_min = 15.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, 0, 0)
+scale_min = 10.0
+scale_max = 20.0
+scale_curve = SubResource("CurveXYZTexture_8kafd")
+color = Color(1, 0.741176, 0.611765, 1)
+alpha_curve = SubResource("CurveTexture_qp47u")
+hue_variation_max = 0.1
+
+[sub_resource type="QuadMesh" id="QuadMesh_otkjn"]
+material = ExtResource("22_h4kgd")
+size = Vector2(2, 4)
+center_offset = Vector3(0, 1.5, 0)
+
+[sub_resource type="Curve" id="Curve_kbw7r"]
+_data = [Vector2(0, 0.5), 0.0, 0.962539, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_mvd5r"]
+width = 64
+curve = SubResource("Curve_kbw7r")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cpgow"]
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_mvd5r")
+color = Color(1, 1, 0.470588, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_viv8e"]
+render_priority = 0
+shader = ExtResource("19_khjmj")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/distance_fade_min = -20.0
+shader_parameter/distance_fade_max = 30.0
+shader_parameter/clipping_offset = 1.0
+shader_parameter/texture_albedo = ExtResource("19_4xrqc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_aphx1"]
+material = SubResource("ShaderMaterial_viv8e")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_c2y7b"]
+radius = 2.0
+
+[sub_resource type="Curve" id="Curve_3mmys"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_en0dt"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_3mmys")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_n42eo"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 0, 1)
+spread = 180.0
+initial_velocity_min = 0.1
+initial_velocity_max = 0.1
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 10.0
+color = Color(1, 0.674989, 0.566275, 1)
+alpha_curve = SubResource("CurveTexture_en0dt")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ojqyr"]
+material = ExtResource("12_ltvht")
+
+[sub_resource type="Curve" id="Curve_ve6kf"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0416667, 0.0751504), 4.21221, 4.21221, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_7101h"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_ve6kf")
+
+[sub_resource type="Gradient" id="Gradient_geumx"]
+offsets = PackedFloat32Array(0, 0.440217, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.972014, 0.318714, 3.63868e-05, 1, 1, 0.116667, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nc2dj"]
+gradient = SubResource("Gradient_geumx")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ykglb"]
+lifetime_randomness = 0.5
+emission_shape_offset = Vector3(0, 0.5, 0)
+direction = Vector3(0, 1, 0)
+spread = 60.0
+initial_velocity_min = 1.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, 0, 0)
+damping_min = 20.0
+damping_max = 20.0
+scale_min = 2.0
+scale_max = 8.0
+color_ramp = SubResource("GradientTexture1D_nc2dj")
+alpha_curve = SubResource("CurveTexture_7101h")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nyob0"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("15_feday")
+
+[sub_resource type="QuadMesh" id="QuadMesh_c0w2a"]
+material = SubResource("StandardMaterial3D_nyob0")
+size = Vector2(0.4, 1)
+center_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="Curve" id="Curve_qpuec"]
+_data = [Vector2(0, 0.339942), 0.0, 1.43327, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jn53k"]
+width = 64
+curve = SubResource("Curve_qpuec")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_y018f"]
+lifetime_randomness = 0.4
+angle_max = 360.0
+direction = Vector3(0, -1, 0.5)
+spread = 20.0
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_jn53k")
+alpha_curve = SubResource("CurveTexture_7101h")
+
+[sub_resource type="QuadMesh" id="QuadMesh_bu6vk"]
+material = ExtResource("15_5j6sd")
+
+[sub_resource type="Curve" id="Curve_hbebs"]
+_data = [Vector2(0.00260417, 0), 0.0, 30.4609, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_uajy8"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_hbebs")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_r8hfe"]
+lifetime_randomness = 0.4
+gravity = Vector3(0, 0, 0)
+attractor_interaction_enabled = false
+scale_max = 1.2
+alpha_curve = SubResource("CurveTexture_uajy8")
+anim_speed_min = 1.0
+anim_speed_max = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qdfrg"]
+render_priority = 0
+shader = ExtResource("16_vd0ip")
+shader_parameter/particles_anim_loop = false
+shader_parameter/particles_anim_h_frames = 4
+shader_parameter/particles_anim_v_frames = 4
+shader_parameter/albedo = ExtResource("17_n2j05")
+
+[sub_resource type="QuadMesh" id="QuadMesh_w6uoc"]
+material = SubResource("ShaderMaterial_qdfrg")
+size = Vector2(2, 5)
+center_offset = Vector3(0, 2.5, 0)
+
+[sub_resource type="Curve" id="Curve_lkkle"]
+_data = [Vector2(0, 0.1), 0.0, 4.75248, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_wxwxp"]
+width = 64
+curve = SubResource("Curve_lkkle")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yyx3u"]
+lifetime_randomness = 0.2
+emission_shape = 3
+emission_box_extents = Vector3(15, 5, 10)
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, -20, 0)
+scale_min = 2.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_wxwxp")
+color = Color(1, 0.74902, 0, 1)
+alpha_curve = SubResource("CurveTexture_uajy8")
+
+[sub_resource type="QuadMesh" id="QuadMesh_m75ip"]
+material = ExtResource("16_gbq6m")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_eq4fa"]
+lifetime_randomness = 0.2
+emission_shape = 3
+emission_box_extents = Vector3(15, 3, 10)
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, -20, 0)
+scale_min = 5.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_wxwxp")
+color = Color(1, 0.74902, 0, 1)
+alpha_curve = SubResource("CurveTexture_uajy8")
+
+[sub_resource type="QuadMesh" id="QuadMesh_gau51"]
+material = ExtResource("17_sx46h")
+
+[sub_resource type="Curve" id="Curve_tkfti"]
+_data = [Vector2(0, 0), 0.0, 4.72635, 0, 0, Vector2(0.511327, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.44712, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_nkivc"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_tkfti")
+
+[sub_resource type="Curve" id="Curve_mq415"]
+_data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_lhgoj"]
+width = 64
+curve = SubResource("Curve_mq415")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0wxl4"]
+emission_shape = 1
+emission_sphere_radius = 10.0
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_lhgoj")
+alpha_curve = SubResource("CurveTexture_nkivc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_n122x"]
+material = ExtResource("18_eb5p4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_m30gq"]
+emission_shape = 1
+emission_sphere_radius = 10.0
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_lhgoj")
+color = Color(1, 0.745098, 0, 1)
+alpha_curve = SubResource("CurveTexture_nkivc")
+hue_variation_max = 0.1
+
+[sub_resource type="QuadMesh" id="QuadMesh_ac88v"]
+material = ExtResource("18_d56ac")
+
+[sub_resource type="QuadMesh" id="QuadMesh_g1f50"]
+material = ExtResource("20_3483e")
+
+[sub_resource type="Gradient" id="Gradient_jj3af"]
+offsets = PackedFloat32Array(0.331058, 0.83959)
+colors = PackedColorArray(1, 0.709804, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_caheu"]
+gradient = SubResource("Gradient_jj3af")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dsg2p"]
+emission_shape = 1
+emission_sphere_radius = 10.0
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 8.0
+scale_curve = SubResource("CurveTexture_lhgoj")
+color_initial_ramp = SubResource("GradientTexture1D_caheu")
+alpha_curve = SubResource("CurveTexture_nkivc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_58uuy"]
+material = ExtResource("21_bt4ca")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7yc5q"]
+lifetime_randomness = 0.4
+emission_shape_offset = Vector3(0, 2, -2)
+angle_max = 360.0
+direction = Vector3(0, 1, -1)
+spread = 20.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_jn53k")
+alpha_curve = SubResource("CurveTexture_7101h")
+
+[sub_resource type="Gradient" id="Gradient_1r7d6"]
+colors = PackedColorArray(0, 0, 0, 1, 0.18359, 0.18359, 0.18359, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1ihyf"]
+gradient = SubResource("Gradient_1r7d6")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rsb3h"]
+emission_shape = 3
+emission_box_extents = Vector3(1, 5, 3)
+angle_max = 360.0
+direction = Vector3(-1, 0, 1)
+spread = 30.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 20.0
+scale_curve = SubResource("CurveTexture_wxwxp")
+color_initial_ramp = SubResource("GradientTexture1D_1ihyf")
+alpha_curve = SubResource("CurveTexture_uajy8")
+
+[sub_resource type="QuadMesh" id="QuadMesh_unetw"]
+material = ExtResource("17_jwqya")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_utngs"]
+size = Vector3(100, 5, 100)
+
+[sub_resource type="Curve" id="Curve_qkoqb"]
+_data = [Vector2(0, 0), 0.0, 26.6316, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_ma5a7"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_qkoqb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iyovd"]
+particle_flag_align_y = true
+particle_flag_rotate_y = true
+emission_shape_offset = Vector3(0, -0.25, 0)
+emission_shape = 3
+emission_box_extents = Vector3(0, 0.5, 2.5)
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 3.0
+alpha_curve = SubResource("CurveTexture_ma5a7")
+anim_speed_min = 0.5
+anim_speed_max = 1.0
+anim_offset_max = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_flg4p"]
+material = ExtResource("18_a4xxb")
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ln5ki"]
+size = Vector3(1, 2, 6)
+
+[sub_resource type="Curve" id="Curve_v4vtg"]
+_data = [Vector2(0, 0), 0.0, 2.98443, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_qjuh1"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_v4vtg")
+
+[sub_resource type="Curve" id="Curve_cd053"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_681f3"]
+_data = [Vector2(0, 0), 0.0, 8.82012, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.2263, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_0oh55"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_sqvs6"]
+width = 64
+curve_x = SubResource("Curve_cd053")
+curve_y = SubResource("Curve_681f3")
+curve_z = SubResource("Curve_0oh55")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_evm4e"]
+lifetime_randomness = 0.5
+particle_flag_align_y = true
+particle_flag_rotate_y = true
+angle_min = -90.0
+angle_max = 90.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 5.0
+scale_curve = SubResource("CurveXYZTexture_sqvs6")
+alpha_curve = SubResource("CurveTexture_qjuh1")
+
+[sub_resource type="QuadMesh" id="QuadMesh_amtrv"]
+material = ExtResource("21_fakwu")
+size = Vector2(0.5, 1)
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="Curve" id="Curve_pmgtg"]
+_data = [Vector2(0, 0), 0.0, 6.60032, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -0.272006, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_wwglt"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_pmgtg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bo57r"]
+gravity = Vector3(0, 0, 0)
+scale_min = 10.0
+scale_max = 10.0
+alpha_curve = SubResource("CurveTexture_wwglt")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jnd80"]
+render_priority = 0
+shader = ExtResource("19_sr8ns")
+shader_parameter/albedo = Color(1, 0.700804, 0.662181, 1)
+shader_parameter/clipping_offset = 3.0
+shader_parameter/texture_albedo = ExtResource("19_4xrqc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_106a2"]
+material = SubResource("ShaderMaterial_jnd80")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qipee"]
+specular_mode = 2
+albedo_color = Color(0.976471, 0.278431, 0, 1)
+metallic_specular = 0.0
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_2o48d"]
+material = SubResource("StandardMaterial3D_qipee")
+size = Vector3(0.1, 0.1, 1)
+
+[sub_resource type="Animation" id="Animation_n5e8u"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Laser/Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Laser/Root/Beam:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.523599, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Laser/Root/Beam:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Laser/VFXRoot/Flame:isDisabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Laser/VFXRoot/ContactLine:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-1.31134e-07, 0, -3)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Laser/VFXRoot/ContactLine:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("BoneAttachments/BodyParts/Head/Damage:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("BoneAttachments/BodyParts/Body/WaterSplatter:emitting")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_wadlw"]
+resource_name = "damage"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BoneAttachments/BodyParts/Head/Damage:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sound/Damage")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_h3ici"]
+resource_name = "finish-defeat"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sound/Defeat")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"stop"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sound/Dialog/Defeat")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Deactivate"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_0ei26"]
+resource_name = "finish-intro"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sound/Intro")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"stop"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sound/Dialog/Intro")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Deactivate"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BoneAttachments/BodyParts/Body/WaterSplatter:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_3bxoj"]
+resource_name = "laser-close"
+length = 1.5
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Laser/Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Laser/Root/Beam:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.233333, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1.0472, 0, 0), Vector3(1.0472, 0, 0), Vector3(0.349066, 0, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Laser/Root/EyeFlash")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Laser/Root/Beam:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.233333, 0.3, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 2, 0.5, 1, 0.5, 1),
+"update": 0,
+"values": [Vector3(1, 1, 0), Vector3(1, 1, 0), Vector3(1, 1, 20), Vector3(1, 1, 40), Vector3(1, 1, 40), Vector3(0, 0, 40)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.966667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"StopLaserAttack"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Laser/VFXRoot/Flame/LaserFlame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Laser/VFXRoot/Flame:isDisabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.666667, 1.03333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Laser/VFXRoot/ContactLine:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.3, 0.433333),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, -2), Vector3(0, 0, 2)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Laser/VFXRoot/ContactLine:emitting")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Laser/Root/LaserCharge")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Laser/Root/LaserBeam")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0.1665),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Laser/VFXRoot/LaserImpact")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.2997),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_vks4w"]
+resource_name = "laser-far"
+length = 1.5
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Laser/Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Laser/Root/Beam:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.233333, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.349066, 0, 0), Vector3(0.349066, 0, 0), Vector3(0.0349066, 0, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Laser/Root/EyeFlash")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Laser/Root/Beam:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.233333, 0.3, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 2, 0.5, 1, 0.5, 1),
+"update": 0,
+"values": [Vector3(1, 1, 0), Vector3(1, 1, 0), Vector3(1, 1, 20), Vector3(1, 1, 40), Vector3(1, 1, 40), Vector3(0, 0, 40)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.966667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"StopLaserAttack"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Laser/VFXRoot/Flame/LaserFlame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Laser/VFXRoot/Flame:isDisabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.666667, 1.03333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Laser/VFXRoot/ContactLine:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.3, 0.433333),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, -2), Vector3(0, 0, 2)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Laser/VFXRoot/ContactLine:emitting")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Laser/Root/LaserCharge")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Laser/Root/LaserBeam")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0.1665),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Laser/VFXRoot/LaserImpact")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.2997),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_k4tih"]
+_data = {
+"RESET": SubResource("Animation_n5e8u"),
+"damage": SubResource("Animation_wadlw"),
+"finish-defeat": SubResource("Animation_h3ici"),
+"finish-intro": SubResource("Animation_0ei26"),
+"laser-close": SubResource("Animation_3bxoj"),
+"laser-far": SubResource("Animation_vks4w")
+}
+
+[node name="IfritGolem" node_paths=PackedStringArray("boneAttachments", "cores", "burnPositions", "hitDialogs", "hintDialogs", "gasTankSpawnPositions") instance=ExtResource("1_37vkv")]
+script = ExtResource("2_jm400")
+root = NodePath("IfritRoot")
+animationTree = NodePath("AnimationTree")
+eventAnimator = NodePath("EventAnimator")
+headHurtbox = NodePath("BoneAttachments/BodyParts/Head/HeadHurtbox")
+playerLaunchTarget = NodePath("BoneAttachments/BodyParts/Root/LaunchTarget")
+rightEye = NodePath("BoneAttachments/BodyParts/Head/EyeR")
+leftEye = NodePath("BoneAttachments/BodyParts/Head/EyeL")
+laserRoot = NodePath("Laser/Root")
+laserBeam = NodePath("Laser/Root/Beam")
+laserVFXRoot = NodePath("Laser/VFXRoot")
+bounceCameraSettings = ExtResource("33_6cwa2")
+transitionCameraSettings = ExtResource("4_2n4ox")
+boneAttachments = [NodePath("BoneAttachments/Cores/RCore1"), NodePath("BoneAttachments/Cores/RCore2"), NodePath("BoneAttachments/Cores/RCore3"), NodePath("BoneAttachments/Cores/LCore1"), NodePath("BoneAttachments/Cores/LCore2"), NodePath("BoneAttachments/Cores/LCore3"), NodePath("BoneAttachments/BodyParts/Root"), NodePath("BoneAttachments/BodyParts/Head"), NodePath("BoneAttachments/BodyParts/RShoulder"), NodePath("BoneAttachments/BodyParts/LShoulder"), NodePath("BoneAttachments/BodyParts/Body"), NodePath("BoneAttachments/BodyParts/RElbow"), NodePath("BoneAttachments/BodyParts/LElbow"), NodePath("BoneAttachments/TankSpawn/01L"), NodePath("BoneAttachments/TankSpawn/02L"), NodePath("BoneAttachments/TankSpawn/03L"), NodePath("BoneAttachments/TankSpawn/11L"), NodePath("BoneAttachments/TankSpawn/12L"), NodePath("BoneAttachments/TankSpawn/13L"), NodePath("BoneAttachments/TankSpawn/01R"), NodePath("BoneAttachments/TankSpawn/02R"), NodePath("BoneAttachments/TankSpawn/03R"), NodePath("BoneAttachments/TankSpawn/11R"), NodePath("BoneAttachments/TankSpawn/12R"), NodePath("BoneAttachments/TankSpawn/13R")]
+cores = [NodePath("BoneAttachments/Cores/RCore1/Core/GolemCore"), NodePath("BoneAttachments/Cores/RCore2/Core/GolemCore"), NodePath("BoneAttachments/Cores/RCore3/Core/GolemCore"), NodePath("BoneAttachments/Cores/LCore1/Core/GolemCore"), NodePath("BoneAttachments/Cores/LCore2/Core/GolemCore"), NodePath("BoneAttachments/Cores/LCore3/Core/GolemCore")]
+burnPositions = [NodePath("Environment/BurnPosition1"), NodePath("Environment/BurnPosition2"), NodePath("Environment/BurnPosition3")]
+hitDialogs = [NodePath("Sound/Dialog/HitShahra"), NodePath("Sound/Dialog/Hit1"), NodePath("Sound/Dialog/Hit2"), NodePath("Sound/Dialog/Hit3"), NodePath("Sound/Dialog/Prepare")]
+hintDialogs = [NodePath("Sound/Dialog/Head1"), NodePath("Sound/Dialog/Head2"), NodePath("Sound/Dialog/Head3"), NodePath("Sound/Dialog/Laser"), NodePath("Sound/Dialog/Water")]
+gasTankScene = ExtResource("3_7wg3m")
+gasTankSpawnPositions = [NodePath("BoneAttachments/TankSpawn/01L/Tank0"), NodePath("BoneAttachments/TankSpawn/02L/Tank1"), NodePath("BoneAttachments/TankSpawn/03L/Tank2"), NodePath("BoneAttachments/TankSpawn/11L/Tank3"), NodePath("BoneAttachments/TankSpawn/12L/Tank4"), NodePath("BoneAttachments/TankSpawn/13L/Tank5"), NodePath("BoneAttachments/TankSpawn/01R/Tank6"), NodePath("BoneAttachments/TankSpawn/02R/Tank7"), NodePath("BoneAttachments/TankSpawn/03R/Tank8"), NodePath("BoneAttachments/TankSpawn/11R/Tank9"), NodePath("BoneAttachments/TankSpawn/12R/Tank10"), NodePath("BoneAttachments/TankSpawn/13R/Tank11")]
 
 [node name="Skeleton3D" parent="IfritRoot" index="0"]
-bones/1/rotation = Quaternion(0.0865145, -5.01917e-21, -2.9041e-14, 0.996251)
-bones/2/rotation = Quaternion(-0.0865154, -4.214e-09, -4.85256e-08, 0.996251)
-bones/4/rotation = Quaternion(-3.63867e-07, 3.63867e-07, 0.707107, 0.707107)
+bones/2/rotation = Quaternion(0.0865145, -5.01917e-21, -2.9041e-14, 0.996251)
+bones/3/rotation = Quaternion(-0.0865154, -4.214e-09, -4.85256e-08, 0.996251)
 bones/5/rotation = Quaternion(-3.63867e-07, 3.63867e-07, 0.707107, 0.707107)
-bones/6/rotation = Quaternion(-4.87189e-07, 3.18355e-07, 0.707107, 0.707107)
-bones/9/rotation = Quaternion(-7.82284e-07, 3.39026e-06, -0.707107, 0.707107)
-bones/11/rotation = Quaternion(0.689228, -5.47678e-09, -5.20983e-09, 0.724545)
-bones/12/rotation = Quaternion(0.689228, -5.47678e-09, -5.20984e-09, 0.724545)
-bones/13/rotation = Quaternion(-0.689223, -1.09311e-08, 1.03981e-08, 0.72455)
-bones/14/rotation = Quaternion(-0.689222, -1.09311e-08, 1.03981e-08, 0.72455)
-bones/15/rotation = Quaternion(-0.689222, -1.09311e-08, 1.0398e-08, 0.724551)
-bones/16/rotation = Quaternion(-3.69582e-07, -3.58153e-07, -0.707107, 0.707107)
-bones/17/rotation = Quaternion(-5.63487e-07, -3.32835e-07, -0.707107, 0.707107)
-bones/20/rotation = Quaternion(2.53355e-08, 1.43252e-07, 0.707107, 0.707107)
-bones/22/rotation = Quaternion(0.689225, -5.54409e-12, -5.27092e-12, 0.724548)
-bones/23/rotation = Quaternion(0.689225, -5.54409e-12, -5.27138e-12, 0.724548)
-bones/26/rotation = Quaternion(-0.689225, 4.87039e-13, -4.63953e-13, 0.724547)
-bones/29/rotation = Quaternion(2.4407e-06, 2.91194e-06, 0.707108, 0.707106)
-bones/35/rotation = Quaternion(-5.81513e-07, 4.33873e-07, 0.0824808, 0.996593)
-bones/45/rotation = Quaternion(2.54306e-06, -3.06247e-06, -0.707107, 0.707107)
-bones/48/scale = Vector3(1, 1, 1)
-bones/50/scale = Vector3(1, 1, 1)
-bones/52/scale = Vector3(1, 1, 1)
-bones/54/scale = Vector3(1, 1, 1)
-bones/56/scale = Vector3(1, 1, 1)
-bones/58/scale = Vector3(1, 1, 1)
+bones/6/rotation = Quaternion(-3.63867e-07, 3.63867e-07, 0.707107, 0.707107)
+bones/7/rotation = Quaternion(-4.87189e-07, 3.18355e-07, 0.707107, 0.707107)
+bones/10/rotation = Quaternion(-7.82284e-07, 3.39026e-06, -0.707107, 0.707107)
+bones/12/rotation = Quaternion(0.689228, -5.47678e-09, -5.20983e-09, 0.724545)
+bones/13/rotation = Quaternion(0.689228, -5.47678e-09, -5.20984e-09, 0.724545)
+bones/14/rotation = Quaternion(-0.689223, -1.09311e-08, 1.03981e-08, 0.72455)
+bones/16/rotation = Quaternion(-0.689222, -1.09311e-08, 1.0398e-08, 0.724551)
+bones/17/rotation = Quaternion(2.74181e-06, 1.19129e-08, 3.17165e-14, 1)
+bones/18/rotation = Quaternion(2.74181e-06, 1.19129e-08, 3.17165e-14, 1)
+bones/19/rotation = Quaternion(2.74181e-06, 1.19129e-08, 3.17165e-14, 1)
+bones/20/rotation = Quaternion(2.74181e-06, 1.19129e-08, 3.17165e-14, 1)
+bones/21/rotation = Quaternion(2.74181e-06, 1.19129e-08, 3.17165e-14, 1)
+bones/22/rotation = Quaternion(2.74181e-06, 1.19129e-08, 3.17165e-14, 1)
+bones/23/rotation = Quaternion(-3.69582e-07, -3.58153e-07, -0.707107, 0.707107)
+bones/24/rotation = Quaternion(-5.63487e-07, -3.32835e-07, -0.707107, 0.707107)
+bones/27/rotation = Quaternion(2.53355e-08, 1.43252e-07, 0.707107, 0.707107)
+bones/29/rotation = Quaternion(0.689225, -5.54409e-12, -5.27092e-12, 0.724548)
+bones/30/rotation = Quaternion(0.689225, -5.54409e-12, -5.27138e-12, 0.724548)
+bones/40/rotation = Quaternion(-0.5, 0.500001, -0.499999, -0.499999)
+bones/42/rotation = Quaternion(2.4407e-06, 2.91194e-06, 0.707108, 0.707106)
+bones/48/rotation = Quaternion(-5.81513e-07, 4.33873e-07, 0.0824808, 0.996593)
+bones/56/rotation = Quaternion(0.500001, 0.500001, -0.499999, 0.499999)
+bones/58/rotation = Quaternion(2.54306e-06, -3.06247e-06, -0.707107, 0.707107)
+bones/61/scale = Vector3(1, 1, 1)
+bones/63/scale = Vector3(1, 1, 1)
+bones/65/scale = Vector3(1, 1, 1)
+bones/67/scale = Vector3(1, 1, 1)
+bones/69/scale = Vector3(1, 1, 1)
+bones/71/scale = Vector3(1, 1, 1)
 
-[node name="RCore1" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="3"]
-transform = Transform3D(-0.155963, -0.987763, 6.46429e-09, 0.987763, -0.155963, -3.61722e-06, 3.57396e-06, -5.57765e-07, 1, -35.9999, 9.1, 0.300031)
-bone_name = "r_core1"
-bone_idx = 34
+[node name="BaseMesh" parent="IfritRoot/Skeleton3D" index="0"]
+material_overlay = ExtResource("4_1wjmy")
+cast_shadow = 0
 
-[node name="Core" type="Node3D" parent="IfritRoot/Skeleton3D/RCore1" index="0"]
-transform = Transform3D(0.156434, -0.987688, 0, 0.987688, 0.156434, 0, 0, 0, 1, 0, 0, 0)
+[node name="CoreMesh" parent="IfritRoot/Skeleton3D" index="1"]
+cast_shadow = 0
 
-[node name="GolemCore" parent="IfritRoot/Skeleton3D/RCore1/Core" index="0" instance=ExtResource("4_0luyt")]
+[node name="GearMesh" parent="IfritRoot/Skeleton3D" index="2"]
+material_overlay = ExtResource("4_1wjmy")
+cast_shadow = 0
 
-[node name="RCore2" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="4"]
-transform = Transform3D(-0.155963, -0.987763, -5.54151e-08, 0.987763, -0.155963, -3.62267e-06, 3.5697e-06, -6.19739e-07, 1, -35.9999, 9.10001, -0.999962)
-bone_name = "r_core2"
-bone_idx = 38
+[node name="PlateMesh" parent="IfritRoot/Skeleton3D" index="3"]
+material_overlay = ExtResource("4_1wjmy")
+cast_shadow = 0
 
-[node name="Core" type="Node3D" parent="IfritRoot/Skeleton3D/RCore2" index="0"]
-transform = Transform3D(0.156434, -0.987688, -4.25959e-09, 0.987688, 0.156434, -6.19722e-08, 6.18756e-08, 5.48744e-09, 1, 0, 0, 0)
+[node name="AnimationPlayer" parent="." index="1"]
+callback_mode_process = 0
 
-[node name="GolemCore" parent="IfritRoot/Skeleton3D/RCore2/Core" index="0" instance=ExtResource("4_0luyt")]
-
-[node name="RCore3" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="5"]
-transform = Transform3D(-0.155963, -0.987763, 2.08597e-07, 0.987763, -0.155963, -3.7053e-06, 3.69249e-06, -3.71843e-07, 1, -35.9999, 9.10001, -2.29996)
-bone_name = "r_core3"
-bone_idx = 42
-
-[node name="Core" type="Node3D" parent="IfritRoot/Skeleton3D/RCore3" index="0"]
-transform = Transform3D(0.156434, -0.987688, 1.18526e-07, 0.987688, 0.156434, 1.85922e-07, -2.02175e-07, 8.79818e-08, 1, 0, 0, 0)
-
-[node name="GolemCore" parent="IfritRoot/Skeleton3D/RCore3/Core" index="0" instance=ExtResource("4_0luyt")]
-
-[node name="LCore1" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="6"]
-transform = Transform3D(-0.155962, 0.987763, -2.08597e-07, -0.987763, -0.155962, -3.70529e-06, -3.69249e-06, -3.71843e-07, 1, 36, 9.10001, -2.29996)
-bone_name = "l_core1"
-bone_idx = 58
-
-[node name="Core" type="Node3D" parent="IfritRoot/Skeleton3D/LCore1" index="0"]
-transform = Transform3D(-0.156434, -0.987688, 0, 0.987688, -0.156434, 2.84217e-14, -1.42109e-14, -4.54747e-13, 1, 0, 0, 0)
-
-[node name="GolemCore" parent="IfritRoot/Skeleton3D/LCore1/Core" index="0" instance=ExtResource("4_0luyt")]
-
-[node name="LCore2" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="7"]
-transform = Transform3D(-0.155962, 0.987763, 5.54152e-08, -0.987763, -0.155962, -3.62267e-06, -3.5697e-06, -6.19738e-07, 1, 36, 9.10001, -0.999962)
-bone_name = "l_core2"
-bone_idx = 54
-
-[node name="Core" type="Node3D" parent="IfritRoot/Skeleton3D/LCore2" index="0"]
-transform = Transform3D(-0.156434, -0.987688, 1.22785e-07, 0.987688, -0.156434, -2.47896e-07, 2.64052e-07, 8.24943e-08, 1, 0, 0, 0)
-
-[node name="GolemCore" parent="IfritRoot/Skeleton3D/LCore2/Core" index="0" instance=ExtResource("4_0luyt")]
-
-[node name="LCore3" type="BoneAttachment3D" parent="IfritRoot/Skeleton3D" index="8"]
-transform = Transform3D(-0.155962, 0.987763, -6.46475e-09, -0.987763, -0.155962, -3.61722e-06, -3.57396e-06, -5.57765e-07, 1, 36, 9.1, 0.300031)
-bone_name = "l_core3"
-bone_idx = 50
-
-[node name="Core" type="Node3D" parent="IfritRoot/Skeleton3D/LCore3" index="0"]
-transform = Transform3D(-0.208058, -0.987688, 1.18525e-07, 1.31363, -0.156434, -1.85922e-07, 2.68892e-07, 8.79809e-08, 1, 0, 0, 0)
-
-[node name="GolemCore" parent="IfritRoot/Skeleton3D/LCore3/Core" index="0" instance=ExtResource("4_0luyt")]
-
-[node name="AnimationTree" type="AnimationTree" parent="." index="5"]
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
 active = false
+callback_mode_process = 0
 tree_root = SubResource("AnimationNodeBlendTree_bb4ub")
 anim_player = NodePath("../AnimationPlayer")
+parameters/defeat_seek/seek_request = -1.0
+parameters/defeat_trigger/active = false
+parameters/defeat_trigger/internal_active = false
+parameters/defeat_trigger/request = 0
 parameters/gear_add/add_amount = 1.0
 parameters/head_add/add_amount = 1.0
 parameters/head_blend/blend_amount = 0
 parameters/hitstun_trigger/active = false
 parameters/hitstun_trigger/internal_active = false
 parameters/hitstun_trigger/request = 0
+parameters/intro_trigger/active = false
+parameters/intro_trigger/internal_active = false
+parameters/intro_trigger/request = 0
+parameters/shutter_add/add_amount = 1.0
+parameters/shutter_tree/01_l_trigger/active = false
+parameters/shutter_tree/01_l_trigger/internal_active = false
+parameters/shutter_tree/01_l_trigger/request = 0
+parameters/shutter_tree/01_r_trigger/active = false
+parameters/shutter_tree/01_r_trigger/internal_active = false
+parameters/shutter_tree/01_r_trigger/request = 0
+parameters/shutter_tree/02_l_trigger/active = false
+parameters/shutter_tree/02_l_trigger/internal_active = false
+parameters/shutter_tree/02_l_trigger/request = 0
+parameters/shutter_tree/02_r_trigger/active = false
+parameters/shutter_tree/02_r_trigger/internal_active = false
+parameters/shutter_tree/02_r_trigger/request = 0
+parameters/shutter_tree/03_l_trigger/active = false
+parameters/shutter_tree/03_l_trigger/internal_active = false
+parameters/shutter_tree/03_l_trigger/request = 0
+parameters/shutter_tree/03_r_trigger/active = false
+parameters/shutter_tree/03_r_trigger/internal_active = false
+parameters/shutter_tree/03_r_trigger/request = 0
+parameters/shutter_tree/11_l_trigger/active = false
+parameters/shutter_tree/11_l_trigger/internal_active = false
+parameters/shutter_tree/11_l_trigger/request = 0
+parameters/shutter_tree/11_r_trigger/active = false
+parameters/shutter_tree/11_r_trigger/internal_active = false
+parameters/shutter_tree/11_r_trigger/request = 0
+parameters/shutter_tree/12_l_trigger/active = false
+parameters/shutter_tree/12_l_trigger/internal_active = false
+parameters/shutter_tree/12_l_trigger/request = 0
+parameters/shutter_tree/12_r_trigger/active = false
+parameters/shutter_tree/12_r_trigger/internal_active = false
+parameters/shutter_tree/12_r_trigger/request = 0
+parameters/shutter_tree/13_l_trigger/active = false
+parameters/shutter_tree/13_l_trigger/internal_active = false
+parameters/shutter_tree/13_l_trigger/request = 0
+parameters/shutter_tree/13_r_trigger/active = false
+parameters/shutter_tree/13_r_trigger/internal_active = false
+parameters/shutter_tree/13_r_trigger/request = 0
+parameters/shutter_tree/shutter_speed/scale = 1.0
+parameters/shutter_tree/side_add/add_amount = 1.0
 parameters/special_trigger/active = false
 parameters/special_trigger/internal_active = false
 parameters/special_trigger/request = 0
 
-[editable path="Lava"]
+[node name="BoneAttachments" type="Node3D" parent="." index="3"]
+
+[node name="Cores" type="Node3D" parent="BoneAttachments" index="0"]
+
+[node name="RCore1" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="0"]
+transform = Transform3D(-0.155963, -0.987763, -6.30368e-07, 0.987763, -0.155963, -3.50449e-06, 3.31371e-06, -1.10105e-06, 1, -35.9999, 9.1, 0.300028)
+bone_name = "r_core1"
+bone_idx = 47
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Core" type="Node3D" parent="BoneAttachments/Cores/RCore1" index="0"]
+transform = Transform3D(0.156434, -0.987688, 0, 0.987688, 0.156434, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="GolemCore" parent="BoneAttachments/Cores/RCore1/Core" index="0" instance=ExtResource("4_0luyt")]
+isRightHand = true
+
+[node name="RCore2" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="1"]
+transform = Transform3D(-0.155962, -0.987763, -6.92246e-07, 0.987763, -0.155962, -3.50995e-06, 3.30945e-06, -1.16302e-06, 1, -35.9999, 9.10001, -0.999966)
+bone_name = "r_core2"
+bone_idx = 51
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Core" type="Node3D" parent="BoneAttachments/Cores/RCore2" index="0"]
+transform = Transform3D(0.156434, -0.987688, -4.25959e-09, 0.987688, 0.156434, -6.19722e-08, 6.18756e-08, 5.48744e-09, 1, 0, 0, 0)
+
+[node name="GolemCore" parent="BoneAttachments/Cores/RCore2/Core" index="0" instance=ExtResource("4_0luyt")]
+isRightHand = true
+
+[node name="RCore3" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="2"]
+transform = Transform3D(-0.155963, -0.987763, -4.28236e-07, 0.987763, -0.155963, -3.59257e-06, 3.43224e-06, -9.15127e-07, 1, -35.9999, 9.10001, -2.29997)
+bone_name = "r_core3"
+bone_idx = 55
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Core" type="Node3D" parent="BoneAttachments/Cores/RCore3" index="0"]
+transform = Transform3D(0.156434, -0.987688, 1.18526e-07, 0.987688, 0.156434, 1.85922e-07, -2.02175e-07, 8.79818e-08, 1, 0, 0, 0)
+
+[node name="GolemCore" parent="BoneAttachments/Cores/RCore3/Core" index="0" instance=ExtResource("4_0luyt")]
+isRightHand = true
+
+[node name="LCore1" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="3"]
+transform = Transform3D(-0.155962, 0.987763, -4.59562e-07, -0.987763, -0.155962, -4.52114e-06, -4.53749e-06, -2.51189e-07, 1, 36, 9.10001, -2.29996)
+bone_name = "l_core1"
+bone_idx = 71
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Core" type="Node3D" parent="BoneAttachments/Cores/LCore1" index="0"]
+transform = Transform3D(-0.156434, -0.987688, 0, 0.987688, -0.156434, 2.84217e-14, -1.42109e-14, -4.54747e-13, 1, 0, 0, 0)
+
+[node name="GolemCore" parent="BoneAttachments/Cores/LCore1/Core" index="0" instance=ExtResource("4_0luyt")]
+
+[node name="LCore2" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="4"]
+transform = Transform3D(-0.155962, 0.987763, -1.95549e-07, -0.987763, -0.155962, -4.43852e-06, -4.41471e-06, -4.99085e-07, 1, 36, 9.10001, -0.99996)
+bone_name = "l_core2"
+bone_idx = 67
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Core" type="Node3D" parent="BoneAttachments/Cores/LCore2" index="0"]
+transform = Transform3D(-0.156434, -0.987688, 1.22785e-07, 0.987688, -0.156434, -2.47896e-07, 2.64052e-07, 8.24943e-08, 1, 0, 0, 0)
+
+[node name="GolemCore" parent="BoneAttachments/Cores/LCore2/Core" index="0" instance=ExtResource("4_0luyt")]
+
+[node name="LCore3" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="5"]
+transform = Transform3D(-0.155962, 0.987763, -2.57429e-07, -0.987763, -0.155962, -4.43307e-06, -4.41897e-06, -4.37111e-07, 1, 36, 9.10001, 0.300034)
+bone_name = "l_core3"
+bone_idx = 63
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Core" type="Node3D" parent="BoneAttachments/Cores/LCore3" index="0"]
+transform = Transform3D(-0.156434, -0.987688, 1.18525e-07, 0.987688, -0.156434, -1.85921e-07, 2.02174e-07, 8.79809e-08, 1, 0, 0, 0)
+
+[node name="GolemCore" parent="BoneAttachments/Cores/LCore3/Core" index="0" instance=ExtResource("4_0luyt")]
+
+[node name="BodyParts" type="Node3D" parent="BoneAttachments" index="1"]
+
+[node name="Root" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
+bone_name = "root"
+bone_idx = 0
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="TraversalScrap" type="Node3D" parent="BoneAttachments/BodyParts/Root" index="0"]
+process_mode = 4
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 3)
+visible = false
+script = ExtResource("2_v71j8")
+respawnOnActivation = true
+
+[node name="TraversalScrap1" parent="BoneAttachments/BodyParts/Root/TraversalScrap" index="0" instance=ExtResource("22_y8yfc")]
+transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -18.6506, 0, -17.6962)
+
+[node name="TraversalScrap2" parent="BoneAttachments/BodyParts/Root/TraversalScrap" index="1" instance=ExtResource("22_y8yfc")]
+transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -24.6506, 0, -7.30385)
+
+[node name="TraversalScrap3" parent="BoneAttachments/BodyParts/Root/TraversalScrap" index="2" instance=ExtResource("22_y8yfc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 25)
+
+[node name="TraversalScrap4" parent="BoneAttachments/BodyParts/Root/TraversalScrap" index="3" instance=ExtResource("22_y8yfc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 25)
+
+[node name="TraversalScrap5" parent="BoneAttachments/BodyParts/Root/TraversalScrap" index="4" instance=ExtResource("22_y8yfc")]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 22.7846, 0, -8.53589)
+
+[node name="TraversalScrap6" parent="BoneAttachments/BodyParts/Root/TraversalScrap" index="5" instance=ExtResource("22_y8yfc")]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 18.9186, 0, -13.232)
+
+[node name="OvershootTrigger" parent="BoneAttachments/BodyParts/Root" index="1" instance=ExtResource("9_xqc7y")]
+transform = Transform3D(0.707107, 0.241845, 0.664463, 0.707107, -0.241845, -0.664463, 0, 0.939693, -0.34202, 10.4343, -8.56569, 17)
+monitoring = false
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAttachments/BodyParts/Root/OvershootTrigger" index="0"]
+shape = SubResource("BoxShape3D_n2677")
+
+[node name="LaunchTarget" type="Node3D" parent="BoneAttachments/BodyParts/Root" index="2"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -26, 0)
+
+[node name="Ray1" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Root" index="3"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 12.7208, 6.65792)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_vj76e")
+draw_pass_1 = SubResource("QuadMesh_otkjn")
+
+[node name="Head" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="1"]
+transform = Transform3D(1, 1.50996e-07, -6.88604e-14, -1.50996e-07, 1, -4.20213e-06, -5.63764e-13, 4.20213e-06, 1, 3.01991e-07, 15.6, 0.700058)
+bone_name = "head"
+bone_idx = 4
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="EyeR" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Head" index="0"]
+transform = Transform3D(1, -1.50996e-07, -5.65642e-13, 1.50996e-07, 1, 4.20213e-06, -7.07383e-14, -4.20213e-06, 1, -1.8, -1.99998, 3.69995)
+layers = 32
+amount = 16
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
+local_coords = true
+draw_order = 3
+transform_align = 1
+process_material = SubResource("ParticleProcessMaterial_cpgow")
+draw_pass_1 = SubResource("QuadMesh_aphx1")
+
+[node name="EyeL" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Head" index="1"]
+transform = Transform3D(1, -1.50996e-07, -5.65642e-13, 1.50996e-07, 1, 4.20213e-06, -7.07383e-14, -4.20213e-06, 1, 1.8, -2, 3.7)
+layers = 32
+amount = 16
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-1, -1, -1, 2, 2, 2)
+local_coords = true
+draw_order = 3
+transform_align = 1
+process_material = SubResource("ParticleProcessMaterial_cpgow")
+draw_pass_1 = SubResource("QuadMesh_aphx1")
+
+[node name="HeadHurtbox" type="Area3D" parent="BoneAttachments/BodyParts/Head" index="2"]
+transform = Transform3D(1, 1.42084e-14, 0, -2.48097e-18, 1, 0, 0, 0, 1, 2.27374e-13, 4.4, 0)
+collision_layer = 4
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAttachments/BodyParts/Head/HeadHurtbox" index="0"]
+transform = Transform3D(1, -1.42133e-14, 0, 1.42084e-14, 1, 0, 0, 0, 1, 2.27374e-13, -1.5, 5.96046e-08)
+shape = SubResource("SphereShape3D_c2y7b")
+
+[node name="Glow" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Head" index="3"]
+transform = Transform3D(1, -2.47767e-18, 0, -2.48097e-18, 1, 0, 0, 0, 1, 6.82121e-13, 4, 0)
+layers = 32
+amount = 32
+lifetime = 0.5
+fixed_fps = 0
+fract_delta = false
+visibility_aabb = AABB(-2, -1, -2, 4, 2, 4)
+draw_order = 1
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_n42eo")
+draw_pass_1 = SubResource("QuadMesh_ojqyr")
+
+[node name="Damage" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Head" index="4"]
+transform = Transform3D(1, -2.47767e-18, 0, -2.48097e-18, 1, 0, 0, 0, 1, 9.09495e-13, 4, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 128
+lifetime = 0.5
+fixed_fps = 0
+fract_delta = false
+visibility_aabb = AABB(-2, -1, -2, 4, 2, 4)
+draw_order = 1
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_ykglb")
+draw_pass_1 = SubResource("QuadMesh_c0w2a")
+
+[node name="ChinSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Head" index="5"]
+transform = Transform3D(1, -2.47767e-18, 0, -2.48097e-18, 1, 0, 0, 0, 1, 2.27374e-13, -6, 3.8)
+layers = 32
+cast_shadow = 0
+amount = 16
+lifetime = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -6, -2, 6, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_y018f")
+draw_pass_1 = SubResource("QuadMesh_bu6vk")
+
+[node name="RShoulder" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="2"]
+transform = Transform3D(0, -1, -2.38767e-07, 1, 1.0816e-12, -3.39074e-06, 3.39074e-06, -2.38767e-07, 1, -9, 8.5, 3.20673e-05)
+bone_name = "r_shoulder"
+bone_idx = 7
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="FlameExplosion1" type="GPUParticles3D" parent="BoneAttachments/BodyParts/RShoulder" index="0"]
+transform = Transform3D(-4.37114e-08, 1, 2.27374e-13, -1, -4.37112e-08, -1.13687e-13, -5.68434e-13, -1.59162e-12, 0.999999, 6, -3.45, 0.8)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="FlameExplosion2" type="GPUParticles3D" parent="BoneAttachments/BodyParts/RShoulder" index="1"]
+transform = Transform3D(-4.37114e-08, 1, 2.27374e-13, -1, -4.37112e-08, -1.42109e-13, -5.96856e-13, -1.81899e-12, 0.999999, 6, -3.45, -1.4)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="LShoulder" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="3"]
+transform = Transform3D(0, 1, 3.26191e-07, -1, 1.47763e-12, -3.26236e-06, -3.26236e-06, -3.26191e-07, 1, 9, 8.5, 3.20673e-05)
+bone_name = "l_shoulder"
+bone_idx = 24
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="FlameExplosion1" type="GPUParticles3D" parent="BoneAttachments/BodyParts/LShoulder" index="0"]
+transform = Transform3D(-4.37114e-08, -1, 1.36424e-12, 1, -4.37114e-08, -5.40012e-13, 5.68434e-13, 1.36424e-12, 0.999999, -6, -3.45, 0.8)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="FlameExplosion2" type="GPUParticles3D" parent="BoneAttachments/BodyParts/LShoulder" index="1"]
+transform = Transform3D(-4.37114e-08, -1, 1.36424e-12, 1, -4.37114e-08, -5.68434e-13, 5.96856e-13, 1.59162e-12, 0.999999, -6, -3.45, -1.4)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="Body" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, -4.52995e-06, 0, 4.52995e-06, 1, 0, 7, 2.52724e-05)
+bone_name = "body"
+bone_idx = 1
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="FlameExplosion1" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 1.8, 5.5, -5)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="FlameExplosion2" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="1"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, -1.8, 5.5, -5)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="WaterSplatter" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="2"]
+layers = 32
+emitting = false
+amount = 128
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_yyx3u")
+draw_pass_1 = SubResource("QuadMesh_m75ip")
+
+[node name="WaterSplatterBurst" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
+layers = 32
+emitting = false
+amount = 128
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_eq4fa")
+draw_pass_1 = SubResource("QuadMesh_gau51")
+
+[node name="ExplosionFlame" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3.63798e-12)
+layers = 32
+emitting = false
+amount = 64
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_0wxl4")
+draw_pass_1 = SubResource("QuadMesh_n122x")
+
+[node name="ExplosionDust" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3.63798e-12)
+layers = 32
+emitting = false
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_m30gq")
+draw_pass_1 = SubResource("QuadMesh_ac88v")
+
+[node name="ExplosionSplatter" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3.63798e-12)
+layers = 32
+emitting = false
+amount = 64
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_m30gq")
+draw_pass_1 = SubResource("QuadMesh_g1f50")
+
+[node name="ExplosionSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Body" index="7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3.63798e-12)
+layers = 32
+emitting = false
+amount = 32
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_dsg2p")
+draw_pass_1 = SubResource("QuadMesh_58uuy")
+
+[node name="RElbow" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="5"]
+transform = Transform3D(1, -6.47533e-07, 2.71917e-07, 6.47552e-07, 1, 8.21356e-06, -2.71922e-07, -8.21356e-06, 1, -20.2, 8.5, 1.40003)
+bone_name = "r_elbow"
+bone_idx = 10
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="FlameExplosion" type="GPUParticles3D" parent="BoneAttachments/BodyParts/RElbow" index="0"]
+transform = Transform3D(1, 0, 1.51788e-18, 2.32626e-15, -4.37158e-08, 1, 0, -1, -4.37158e-08, 1.6, -1.2, -5.3)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="LElbow" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="6"]
+transform = Transform3D(1, -1.42997e-07, 9.27299e-08, 1.42998e-07, 1, -1.17727e-06, -9.27297e-08, 1.17727e-06, 1, 20.2, 8.5, 1.40003)
+bone_name = "l_elbow"
+bone_idx = 27
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="FlameExplosion" type="GPUParticles3D" parent="BoneAttachments/BodyParts/LElbow" index="0"]
+transform = Transform3D(1, 0, 1.51788e-18, 2.32626e-15, -4.37158e-08, 1, 0, -1, -4.37158e-08, -1.6, -1.2, -5.3)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 16
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-0.75, -0.5, -0.75, 1.5, 6, 1.5)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_r8hfe")
+draw_pass_1 = SubResource("QuadMesh_w6uoc")
+
+[node name="LWrist" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="7"]
+transform = Transform3D(0, 1, 0, -1, 0, -4.05312e-06, -4.05312e-06, 0, 1, 29.2, 8.50001, -0.999973)
+bone_name = "l_wrist"
+bone_idx = 56
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="MoveSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/LWrist" index="0"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -2, -5, 6, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_7yc5q")
+draw_pass_1 = SubResource("QuadMesh_bu6vk")
+
+[node name="ImpactSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/LWrist" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 4, -9.53674e-07)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -2, -5, 6, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_rsb3h")
+draw_pass_1 = SubResource("QuadMesh_unetw")
+
+[node name="RWrist" type="BoneAttachment3D" parent="BoneAttachments/BodyParts" index="8"]
+transform = Transform3D(-1.07288e-06, -1, -1.01328e-06, 1, -1.01328e-06, -3.09944e-06, 3.03984e-06, -9.53674e-07, 1, -29.1999, 8.50001, -0.999973)
+bone_name = "r_wrist"
+bone_idx = 40
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="MoveSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/RWrist" index="0"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -2, -5, 6, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_7yc5q")
+draw_pass_1 = SubResource("QuadMesh_bu6vk")
+
+[node name="ImpactSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/RWrist" index="1"]
+transform = Transform3D(1, 3.72529e-08, 0, -4.47035e-08, 1, -2.98023e-08, 2.98023e-08, 0, 1, 1, 4, 0)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -2, -5, 6, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_rsb3h")
+draw_pass_1 = SubResource("QuadMesh_unetw")
+
+[node name="TankSpawn" type="Node3D" parent="BoneAttachments" index="2"]
+
+[node name="01L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="0"]
+process_priority = 1
+process_physics_priority = 1
+transform = Transform3D(1, -1.42997e-07, 9.27298e-08, 1.42998e-07, 1, 2.39901e-06, -9.27301e-08, -2.39901e-06, 1, 23, 9.94994, -2.00121)
+bone_name = "l_spawn01"
+bone_idx = 34
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Tank0" type="Node3D" parent="BoneAttachments/TankSpawn/01L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="02L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="1"]
+process_priority = 1
+process_physics_priority = 1
+transform = Transform3D(1, -1.42997e-07, 9.27298e-08, 1.42998e-07, 1, 2.39901e-06, -9.27301e-08, -2.39901e-06, 1, 25, 9.94994, -2.00121)
+bone_name = "l_spawn02"
+bone_idx = 39
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Tank1" type="Node3D" parent="BoneAttachments/TankSpawn/02L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="03L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="2"]
+process_priority = 1
+process_physics_priority = 1
+transform = Transform3D(1, -1.42997e-07, 9.27297e-08, 1.42998e-07, 1, 2.63742e-06, -9.27301e-08, -2.63742e-06, 1, 27, 9.99951, -2.00493)
+bone_name = "l_spawn03"
+bone_idx = 38
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Tank2" type="Node3D" parent="BoneAttachments/TankSpawn/03L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="11L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="3"]
+process_priority = 1
+process_physics_priority = 1
+transform = Transform3D(1, -1.42997e-07, 9.27297e-08, 1.42998e-07, 1, 2.51821e-06, -9.27301e-08, -2.51821e-06, 1, 23, 9.94994, 0.00128245)
+bone_name = "l_spawn11"
+bone_idx = 35
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Tank3" type="Node3D" parent="BoneAttachments/TankSpawn/11L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="12L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="4"]
+process_priority = 1
+process_physics_priority = 1
+transform = Transform3D(1, -1.42997e-07, 9.27297e-08, 1.42998e-07, 1, 2.51821e-06, -9.27301e-08, -2.51821e-06, 1, 25, 9.94994, 0.00128222)
+bone_name = "l_spawn12"
+bone_idx = 36
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Tank4" type="Node3D" parent="BoneAttachments/TankSpawn/12L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="13L" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="5"]
+process_priority = 1
+process_physics_priority = 1
+transform = Transform3D(1, -1.42997e-07, 9.27297e-08, 1.42998e-07, 1, 2.51821e-06, -9.27301e-08, -2.51821e-06, 1, 27, 9.94994, 0.00128055)
+bone_name = "l_spawn13"
+bone_idx = 37
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Tank5" type="Node3D" parent="BoneAttachments/TankSpawn/13L" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="01R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="6"]
+process_priority = 1
+process_physics_priority = 1
+transform = Transform3D(1, -6.47532e-07, 2.95746e-07, 6.47552e-07, 1, 2.72994e-06, -2.95748e-07, -2.72994e-06, 1, -23, 9.94994, -2.00122)
+bone_name = "r_spawn01"
+bone_idx = 17
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Tank6" type="Node3D" parent="BoneAttachments/TankSpawn/01R" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="02R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="7"]
+process_priority = 1
+process_physics_priority = 1
+transform = Transform3D(1, -6.47532e-07, 2.95746e-07, 6.47552e-07, 1, 2.72994e-06, -2.95748e-07, -2.72994e-06, 1, -25, 9.94993, -2.00122)
+bone_name = "r_spawn02"
+bone_idx = 22
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Tank7" type="Node3D" parent="BoneAttachments/TankSpawn/02R" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="03R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="8"]
+process_priority = 1
+process_physics_priority = 1
+transform = Transform3D(1, -6.47532e-07, 2.95746e-07, 6.47552e-07, 1, 2.72994e-06, -2.95748e-07, -2.72994e-06, 1, -27, 9.9995, -2.00493)
+bone_name = "r_spawn03"
+bone_idx = 21
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Tank8" type="Node3D" parent="BoneAttachments/TankSpawn/03R" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="11R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="9"]
+process_priority = 1
+process_physics_priority = 1
+transform = Transform3D(1, -6.47532e-07, 2.95746e-07, 6.47552e-07, 1, 2.72994e-06, -2.95748e-07, -2.72994e-06, 1, -23, 9.94993, 0.00128019)
+bone_name = "r_spawn11"
+bone_idx = 18
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Tank9" type="Node3D" parent="BoneAttachments/TankSpawn/11R" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="12R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="10"]
+process_priority = 1
+process_physics_priority = 1
+transform = Transform3D(1, -6.47532e-07, 2.95746e-07, 6.47552e-07, 1, 2.72994e-06, -2.95748e-07, -2.72994e-06, 1, -25, 9.94993, 0.00128067)
+bone_name = "r_spawn12"
+bone_idx = 19
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Tank10" type="Node3D" parent="BoneAttachments/TankSpawn/12R" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="13R" type="BoneAttachment3D" parent="BoneAttachments/TankSpawn" index="11"]
+process_priority = 1
+process_physics_priority = 1
+transform = Transform3D(1, -6.47532e-07, 2.95746e-07, 6.47552e-07, 1, 2.72994e-06, -2.95748e-07, -2.72994e-06, 1, -27, 9.94993, 0.00127983)
+bone_name = "r_spawn13"
+bone_idx = 20
+use_external_skeleton = true
+external_skeleton = NodePath("../../../IfritRoot/Skeleton3D")
+
+[node name="Tank11" type="Node3D" parent="BoneAttachments/TankSpawn/13R" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Environment" type="Node3D" parent="." index="4"]
+
+[node name="BurnPosition1" type="Node3D" parent="Environment" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 6, 21.3)
+
+[node name="BurnPosition2" type="Node3D" parent="Environment" index="1"]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 10.9463, 6, -23.6404)
+
+[node name="BurnPosition3" type="Node3D" parent="Environment" index="2"]
+transform = Transform3D(-0.5, 0, -0.866026, 0, 1, 0, 0.866026, 0, -0.5, -25.9463, 6, 2.34038)
+
+[node name="Lava" parent="Environment" index="3" instance=ExtResource("2_wope5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -15, 0)
+
+[node name="LavaRipple1Mesh" parent="Environment/Lava" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+visible = false
+layers = 4
+cast_shadow = 0
+
+[node name="LavaMesh" parent="Environment/Lava" index="1"]
+layers = 4
+
+[node name="LavaRipple2Mesh" parent="Environment/Lava" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+visible = false
+layers = 4
+cast_shadow = 0
+
+[node name="LavaRipple3Mesh" parent="Environment/Lava" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+visible = false
+layers = 4
+cast_shadow = 0
+
+[node name="LavaHazard" type="Area3D" parent="Environment/Lava" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("5_rxyxv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Lava/LavaHazard" index="0"]
+shape = SubResource("BoxShape3D_utngs")
+
+[node name="Lava" type="AudioStreamPlayer" parent="Environment/Lava" index="5"]
+stream = ExtResource("18_trxln")
+volume_db = -3.0
+autoplay = true
+bus = &"GAME SFX"
+
+[node name="ArenaPlatform" parent="Environment" index="4" instance=ExtResource("2_nsyah")]
+
+[node name="Lockout" type="Node3D" parent="Environment" index="5"]
+script = ExtResource("11_iscui")
+lockoutData = ExtResource("12_cgkgo")
+
+[node name="HighCamera" type="Node3D" parent="Environment" index="6"]
+script = ExtResource("7_7kxhk")
+transitionTime = 0.5
+settings = ExtResource("9_6fxph")
+
+[node name="LowCamera" type="Node3D" parent="Environment" index="7"]
+script = ExtResource("7_7kxhk")
+transitionTime = 0.5
+settings = ExtResource("15_3iytr")
+
+[node name="BounceCamera" type="Node3D" parent="Environment" index="8"]
+script = ExtResource("7_7kxhk")
+transitionTime = 0.2
+deactivationTransitionTime = 0.5
+settings = ExtResource("33_6cwa2")
+previousSettings = ExtResource("15_3iytr")
+
+[node name="Laser" type="Node3D" parent="." index="5"]
+
+[node name="VFXRoot" type="Node3D" parent="Laser" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 26)
+
+[node name="Flame" type="Area3D" parent="Laser/VFXRoot" index="0"]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+script = ExtResource("5_rxyxv")
+isDisabled = true
+
+[node name="LaserFlame" type="GPUParticles3D" parent="Laser/VFXRoot/Flame" index="0"]
+layers = 32
+emitting = false
+amount = 64
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -1, -4, 4, 4, 8)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_iyovd")
+draw_pass_1 = SubResource("QuadMesh_flg4p")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Laser/VFXRoot/Flame" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_ln5ki")
+
+[node name="ContactLine" type="GPUParticles3D" parent="Laser/VFXRoot" index="1"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.31134e-07, 0, -3)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.3
+explosiveness = 0.3
+randomness = 0.7
+fixed_fps = 0
+fract_delta = false
+visibility_aabb = AABB(-4, -1, -1, 8, 4, 2)
+process_material = SubResource("ParticleProcessMaterial_evm4e")
+draw_pass_1 = SubResource("QuadMesh_amtrv")
+
+[node name="LaserImpact" type="AudioStreamPlayer3D" parent="Laser/VFXRoot" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 13.6, -21.5)
+stream = ExtResource("26_lfg5l")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 4
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Root" type="Node3D" parent="Laser" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 13.6, 4.5)
+visible = false
+
+[node name="LaserCharge" type="AudioStreamPlayer" parent="Laser/Root" index="0"]
+stream = ExtResource("26_k5i8e")
+bus = &"GAME SFX"
+
+[node name="LaserBeam" type="AudioStreamPlayer3D" parent="Laser/Root" index="1"]
+stream = ExtResource("27_ema0p")
+attenuation_model = 3
+volume_db = -6.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="EyeFlash" type="GPUParticles3D" parent="Laser/Root" index="2"]
+layers = 32
+emitting = false
+amount = 12
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -3, -3, 6, 6, 6)
+local_coords = true
+draw_order = 3
+transform_align = 1
+process_material = SubResource("ParticleProcessMaterial_bo57r")
+draw_pass_1 = SubResource("QuadMesh_106a2")
+
+[node name="Beam" type="Node3D" parent="Laser/Root" index="3"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0, 0, 0.5, 0, 0, 0, 0)
+
+[node name="LaserMesh" type="MeshInstance3D" parent="Laser/Root/Beam" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+layers = 32
+cast_shadow = 0
+mesh = SubResource("BoxMesh_2o48d")
+skeleton = NodePath("../../../..")
+
+[node name="EventAnimator" type="AnimationPlayer" parent="." index="6"]
+libraries = {
+"": SubResource("AnimationLibrary_k4tih")
+}
+
+[node name="Sound" type="Node3D" parent="." index="7"]
+
+[node name="Dialog" type="Node3D" parent="Sound" index="0"]
+
+[node name="Intro" type="Node3D" parent="Sound/Dialog" index="0"]
+script = ExtResource("27_v73pf")
+textKeys = Array[String](["evi_boss_intro_so", "evi_boss_intro_sh"])
+
+[node name="HitShahra" type="Node3D" parent="Sound/Dialog" index="1"]
+script = ExtResource("27_v73pf")
+textKeys = Array[String](["evi_boss_hit_sh"])
+
+[node name="Hit1" type="Node3D" parent="Sound/Dialog" index="2"]
+script = ExtResource("27_v73pf")
+textKeys = Array[String](["evi_boss_hit_so"])
+
+[node name="Hit2" type="Node3D" parent="Sound/Dialog" index="3"]
+script = ExtResource("27_v73pf")
+textKeys = Array[String](["evi_boss_hit2_so"])
+
+[node name="Hit3" type="Node3D" parent="Sound/Dialog" index="4"]
+script = ExtResource("27_v73pf")
+textKeys = Array[String](["evi_boss_hit3_so"])
+
+[node name="Prepare" type="Node3D" parent="Sound/Dialog" index="5"]
+script = ExtResource("27_v73pf")
+textKeys = Array[String](["evi_boss_prepare_sh"])
+
+[node name="Head1" type="Node3D" parent="Sound/Dialog" index="6"]
+script = ExtResource("27_v73pf")
+textKeys = Array[String](["evi_hint_head_sh"])
+
+[node name="Head2" type="Node3D" parent="Sound/Dialog" index="7"]
+script = ExtResource("27_v73pf")
+textKeys = Array[String](["evi_hint_head2_sh"])
+
+[node name="Head3" type="Node3D" parent="Sound/Dialog" index="8"]
+script = ExtResource("27_v73pf")
+textKeys = Array[String](["evi_hint_hand_sh"])
+
+[node name="Laser" type="Node3D" parent="Sound/Dialog" index="9"]
+script = ExtResource("27_v73pf")
+textKeys = Array[String](["evi_hint_laser_sh"])
+
+[node name="Water" type="Node3D" parent="Sound/Dialog" index="10"]
+script = ExtResource("27_v73pf")
+textKeys = Array[String](["evi_hint_water_sh"])
+
+[node name="Defeat" type="Node3D" parent="Sound/Dialog" index="11"]
+script = ExtResource("27_v73pf")
+textKeys = Array[String](["evi_boss_defeat_so"])
+
+[node name="StepRoar" type="AudioStreamPlayer3D" parent="Sound" index="1"]
+stream = ExtResource("28_6fg5l")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="StepGrab" type="AudioStreamPlayer3D" parent="Sound" index="2"]
+stream = ExtResource("29_dwhy7")
+attenuation_model = 3
+volume_db = -6.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="StepGears" type="AudioStreamPlayer3D" parent="Sound" index="3"]
+stream = ExtResource("30_py1nf")
+attenuation_model = 3
+volume_db = -3.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="LavaWarn" type="AudioStreamPlayer" parent="Sound" index="4"]
+stream = ExtResource("34_0g7x3")
+bus = &"GAME SFX"
+
+[node name="LavaRise" type="AudioStreamPlayer3D" parent="Sound" index="5"]
+stream = ExtResource("35_0xwj3")
+attenuation_model = 3
+volume_db = -6.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Recovery" type="AudioStreamPlayer3D" parent="Sound" index="6"]
+stream = ExtResource("35_va4id")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Damage" type="AudioStreamPlayer3D" parent="Sound" index="7"]
+stream = ExtResource("36_45ekf")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Intro" type="AudioStreamPlayer" parent="Sound" index="8"]
+stream = ExtResource("37_f4i4x")
+bus = &"GAME SFX"
+
+[node name="Defeat" type="AudioStreamPlayer" parent="Sound" index="9"]
+stream = ExtResource("38_8geod")
+bus = &"GAME SFX"
+
+[node name="Camera" type="Node3D" parent="." index="8"]
+transform = Transform3D(-0.173648, -0.0858317, 0.98106, 0, 0.996195, 0.0871557, -0.984808, 0.0151344, -0.172987, 0, 3, 0)
+
+[node name="CutsceneCamera" type="Camera3D" parent="Camera" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 30)
+cull_mask = 37
+
+[connection signal="HitstunLaunchEnded" from="." to="Environment/BounceCamera" method="Deactivate"]
+[connection signal="HitstunLaunched" from="." to="Environment/BounceCamera" method="Activate"]
+[connection signal="StunEnded" from="." to="BoneAttachments/BodyParts/Root/TraversalScrap" method="Deactivate"]
+[connection signal="StunEnded" from="." to="Environment/Lockout" method="Deactivate"]
+[connection signal="Stunned" from="." to="Environment/Lockout" method="Activate"]
+[connection signal="Activated" from="BoneAttachments/BodyParts/Root/OvershootTrigger" to="." method="EnterRecovery"]
+[connection signal="area_entered" from="BoneAttachments/BodyParts/Head/HeadHurtbox" to="." method="OnHeadEntered"]
+[connection signal="area_exited" from="BoneAttachments/BodyParts/Head/HeadHurtbox" to="." method="OnHeadExited"]
+[connection signal="DamagedPlayer" from="Environment/Lava/LavaHazard" to="." method="OnLavaDamagedPlayer"]
+[connection signal="area_entered" from="Environment/Lava/LavaHazard" to="Environment/Lava/LavaHazard" method="OnEntered"]
+[connection signal="area_exited" from="Environment/Lava/LavaHazard" to="Environment/Lava/LavaHazard" method="OnExited"]
+[connection signal="area_entered" from="Laser/VFXRoot/Flame" to="Laser/VFXRoot/Flame" method="OnEntered"]
+[connection signal="area_exited" from="Laser/VFXRoot/Flame" to="Laser/VFXRoot/Flame" method="OnExited"]
+
+[editable path="Environment/Lava"]

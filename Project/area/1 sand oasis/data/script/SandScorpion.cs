@@ -243,6 +243,8 @@ namespace Project.Gameplay.Bosses
 			HeadsUpDisplay.Instance.Visible = false;
 
 			fightState = FightState.Defeated;
+			if (Player.Skills.IsUsingBreakSkills)
+				Player.Skills.CancelBreakSkills();
 			Player.ProcessMode = ProcessModeEnum.Disabled;
 		}
 

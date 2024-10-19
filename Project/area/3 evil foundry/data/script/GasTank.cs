@@ -9,17 +9,19 @@ public partial class GasTank : Area3D
 {
 	[Signal]
 	public delegate void OnStrikeEventHandler();
+	[Signal]
+	public delegate void DetonatedEventHandler();
 
 	/// <summary> Field is public so enemies can set this as needed. </summary>
-	[Export]
-	public float height;
+	[Export] public float height;
+	[Export] public bool globalEndPosition;
+	[Export] public bool explodeOnGroundCollision;
 	/// <summary> Field is public so enemies can set this as needed. </summary>
-	[Export]
-	public Vector3 endPosition;
+	[Export] public Vector3 endPosition;
 	/// <summary> Used if you want to target a particular object instead of a position (End position is recalculated on launch). </summary>
-	[Export]
-	public Node3D endTarget;
+	[Export] public Node3D endTarget;
 	private Vector3 startPosition;
+	[Export] public bool disableRespawning;
 
 	[ExportGroup("Components")]
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
@@ -45,7 +47,7 @@ public partial class GasTank : Area3D
 	public Basis TransformBasis => endTarget == null ? GlobalBasis : Basis.Identity;
 	private PlayerController Player => StageSettings.Player;
 	private Vector3 StartPosition => Engine.IsEditorHint() ? GlobalPosition : startPosition;
-	private Vector3 EndPosition => StartPosition + (TransformBasis * endPosition);
+	private Vector3 EndPosition => globalEndPosition ? endPosition : StartPosition + (TransformBasis * endPosition);
 
 	public override void _Ready()
 	{
@@ -54,7 +56,9 @@ public partial class GasTank : Area3D
 		Root = GetNodeOrNull<Node3D>(root);
 		Animator = GetNodeOrNull<AnimationPlayer>(animator);
 		InitializeSpawnData();
-		StageSettings.Instance.ConnectRespawnSignal(this);
+
+		if (!disableRespawning)
+			StageSettings.Instance.ConnectRespawnSignal(this);
 	}
 
 	public void InitializeSpawnData() => spawnData = new SpawnData(GetParent(), Transform);
@@ -144,11 +148,13 @@ public partial class GasTank : Area3D
 			Player.StartKnockback();
 	}
 
-
 	private void OnEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
-		isInteractingWithPlayer = true;
+		if (a.IsInGroup("player"))
+			isInteractingWithPlayer = true;
+
+		if (a.IsInGroup("floor") && explodeOnGroundCollision)
+			Detonate();
 	}
 
 	private void OnExited(Area3D a)

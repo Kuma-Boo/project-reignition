@@ -53,8 +53,8 @@ public partial class HomingAttackState : PlayerState
 	{
 		Player.IsHomingAttacking = false;
 		Player.AttackState = PlayerController.AttackStates.None;
-		Player.Lockon.ResetLockonTarget();
 		Player.ChangeHitbox("RESET");
+		Player.Lockon.CallDeferred(PlayerLockonController.MethodName.ResetLockonTarget);
 		Player.Effect.StopSpinFX();
 		Player.Effect.StopTrailFX();
 		Player.Animator.ResetState();
@@ -63,9 +63,14 @@ public partial class HomingAttackState : PlayerState
 			return;
 
 		if (Player.IsBouncing)
+		{
 			Player.Skills.CallDeferred(PlayerSkillController.MethodName.ActivateFireCrestBurst);
+		}
 		else
+		{
+			Player.Lockon.ResetLockonTarget();
 			Player.Skills.DeactivateFireCrest();
+		}
 	}
 
 	public override PlayerState ProcessPhysics()

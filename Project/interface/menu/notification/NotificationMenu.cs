@@ -115,7 +115,7 @@ public partial class NotificationMenu : Control
 			return;
 		}
 
-		description.SetText(CurrentNotification.description);
+		description.Text = CurrentNotification.description;
 		switch (CurrentNotification.type)
 		{
 			case NotificationType.WorldRing:

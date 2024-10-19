@@ -30,6 +30,7 @@ public partial class Hazard : Node3D
 		if (!a.IsInGroup("player detection")) return;
 		isInteractingWithPlayer = true;
 	}
+
 	public void OnExited(Area3D a)
 	{
 		if (!a.IsInGroup("player detection")) return;
