@@ -92,7 +92,6 @@ public partial class CameraTrigger : StageTriggerModule
 	[Export]
 	private CameraSettingsResource previousSettings;
 	/// <summary> If blending two settings by distance, the second camera setting data that is used for the blend </summary>
-	
 	private CameraSettingsResource DistanceBlendSetting;
 	[Export]
 	private Camera3D referenceCamera;
