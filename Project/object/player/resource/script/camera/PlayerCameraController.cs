@@ -220,9 +220,7 @@ public partial class PlayerCameraController : Node3D
 			// Remove all blend data except the last 2 active ones (for blending purposes)
 			int startingIndex = CameraBlendList.Count - 2;
 			if (CameraBlendList[^1].Trigger?.blendOverDistance == true)
-			{
-
-			}
+				startingIndex--;
 
 			for (int i = startingIndex; i >= 0; i--)
 			{
@@ -244,8 +242,9 @@ public partial class PlayerCameraController : Node3D
 	/// <summary> Update the influence of a particular blend. </summary>
 	private void UpdateCameraBlendInfluence(int blendIndex)
 	{
-		// Removes completed blends (Excluding active blend data)
-		if (blendIndex < CameraBlendList.Count - 1 && Mathf.IsEqualApprox(CameraBlendList[blendIndex + 1].LinearInfluence, 1.0f))
+		// Removes completed blends (Excluding active/distance blend data)
+		if (blendIndex < CameraBlendList.Count - 1 && Mathf.IsEqualApprox(CameraBlendList[blendIndex + 1].LinearInfluence, 1.0f) &&
+			CameraBlendList[^1].Trigger?.blendOverDistance == false)
 		{
 			CameraBlendList[blendIndex].Free();
 			CameraBlendList.RemoveAt(blendIndex);
