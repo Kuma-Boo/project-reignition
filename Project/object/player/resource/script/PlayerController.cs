@@ -978,5 +978,31 @@ public partial class PlayerController : CharacterBody3D
 		UpdateOrientation();
 		EmitSignal(SignalName.ExternalControlCompleted);
 	}
+
+	public void DisablePlayer()
+	{
+		if (Skills.IsUsingBreakSkills)
+			Skills.CancelBreakSkills();
+
+		Visible = false;
+		ProcessMode = ProcessModeEnum.Disabled;
+
+		Lockon.IsReticleVisible = false;
+		GD.Print("Hid lockon");
+
+		HeadsUpDisplay.Instance.Visible = false;
+		Interface.PauseMenu.AllowPausing = false;
+	}
+
+	public void EnablePlayer()
+	{
+		Visible = true;
+		ProcessMode = ProcessModeEnum.Inherit;
+
+		Lockon.IsReticleVisible = true;
+
+		HeadsUpDisplay.Instance.Visible = true;
+		Interface.PauseMenu.AllowPausing = true;
+	}
 	#endregion
 }

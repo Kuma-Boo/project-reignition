@@ -173,11 +173,7 @@ namespace Project.Gameplay.Bosses
 			GlobalTransform = Transform3D.Identity;
 
 			cutsceneCamera.Current = true;
-
-			// Disable the player for the intro animation
-			Player.ProcessMode = ProcessModeEnum.Disabled;
-			Interface.PauseMenu.AllowPausing = false;
-			HeadsUpDisplay.Instance.Visible = false;
+			Player.DisablePlayer();
 		}
 
 
@@ -204,10 +200,7 @@ namespace Project.Gameplay.Bosses
 			Respawn();
 			eventAnimator.Play("finish-intro");
 			TransitionManager.FinishTransition();
-			Player.ProcessMode = ProcessModeEnum.Inherit;
-			Interface.PauseMenu.AllowPausing = true;
-			HeadsUpDisplay.Instance.Visible = true;
-			Player.Camera.Camera.Current = true;
+			Player.EnablePlayer();
 		}
 
 
@@ -243,9 +236,7 @@ namespace Project.Gameplay.Bosses
 			HeadsUpDisplay.Instance.Visible = false;
 
 			fightState = FightState.Defeated;
-			if (Player.Skills.IsUsingBreakSkills)
-				Player.Skills.CancelBreakSkills();
-			Player.ProcessMode = ProcessModeEnum.Disabled;
+			Player.DisablePlayer();
 		}
 
 
@@ -254,8 +245,7 @@ namespace Project.Gameplay.Bosses
 			rootAnimationTree.Active = rTailAnimationTree.Active = lTailAnimationTree.Active = flyingEyeAnimationTree.Active = false;
 			eventAnimator.Play("finish-defeat");
 
-			Player.Visible = true;
-			Player.ProcessMode = ProcessModeEnum.Inherit;
+			Player.EnablePlayer();
 			Player.Camera.Camera.Current = true;
 			StageSettings.Instance.FinishLevel(true);
 		}
