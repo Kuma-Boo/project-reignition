@@ -33,6 +33,7 @@ public partial class IfritGolem : Node3D
 	private Node3D LaserVFXRoot { get; set; }
 
 	[Export] private CameraSettingsResource bounceCameraSettings;
+	[Export] private CameraSettingsResource transitionCameraSettings;
 
 	[Export] private BoneAttachment3D[] boneAttachments;
 	[Export] private Core[] cores;
@@ -435,6 +436,8 @@ public partial class IfritGolem : Node3D
 
 	private void ProcessStun()
 	{
+		transitionCameraSettings.yawAngle = Player.GlobalPosition.Flatten().AngleTo(Vector2.Up);
+
 		if (Player.IsOnGround && headHealth != MaxHeadHealth)
 		{
 			EnterRecovery();
@@ -599,7 +602,6 @@ public partial class IfritGolem : Node3D
 			outSpeed = .5f,
 			color = Colors.Black
 		});
-		TransitionManager.FinishTransition();
 
 		Root.Rotation = Vector3.Zero;
 		ExitHitstun();
@@ -616,6 +618,8 @@ public partial class IfritGolem : Node3D
 		Interface.PauseMenu.AllowPausing = false;
 		HeadsUpDisplay.Instance.Visible = false;
 		currentState = GolemState.Defeated;
+
+		TransitionManager.FinishTransition();
 	}
 
 	private readonly StringName DefeatSeek = "parameters/defeat_seek/seek_request";
