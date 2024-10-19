@@ -6,7 +6,7 @@ namespace Project.Gameplay.Hazards;
 public partial class FanHazard : Hazard
 {
 	[Export]
-	private float spinSpeed;
+	private float rotationsPerSecond;
 	[Export]
 	private bool playSFX;
 
@@ -29,7 +29,7 @@ public partial class FanHazard : Hazard
 
 	public override void _PhysicsProcess(double _)
 	{
-		_root.Rotation += Vector3.Forward * spinSpeed * PhysicsManager.physicsDelta;
+		_root.Rotation += Vector3.Forward * rotationsPerSecond * Mathf.Tau * PhysicsManager.physicsDelta;
 		ProcessCollision();
 	}
 }
