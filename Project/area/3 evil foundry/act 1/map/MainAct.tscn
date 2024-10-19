@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=3 uid="uid://ciqbaxbhrxrjk"]
+[gd_scene load_steps=84 format=3 uid="uid://ciqbaxbhrxrjk"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
@@ -13,9 +13,12 @@
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="7_v2v6a"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="8_yjt2l"]
 [ext_resource type="PackedScene" uid="uid://cxgu3ob2u708b" path="res://area/3 evil foundry/object/scrap/ScrapMachineLadder.tscn" id="9_7x2f4"]
+[ext_resource type="AudioStream" uid="uid://d3aimfj774oti" path="res://sound/sfx/stage/evil foundry/falling scrap rumble.wav" id="9_jucbu"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="10_5tdln"]
+[ext_resource type="AudioStream" uid="uid://baqqu7nb5rd7i" path="res://sound/sfx/stage/evil foundry/falling scrap impact.wav" id="10_7ulb6"]
 [ext_resource type="PackedScene" uid="uid://cswcb8bgweh5m" path="res://area/3 evil foundry/object/scrap/ScrapMachineShort.tscn" id="10_afld8"]
 [ext_resource type="PackedScene" uid="uid://bntrixspwpi2" path="res://object/enemy/golem/GolemMajin.tscn" id="11_6jexk"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="11_mjgn6"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="11_x5tgj"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="12_qvhyq"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="13_flmq3"]
@@ -48,8 +51,8 @@
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="40_xgwfm"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="41_gc12q"]
 [ext_resource type="PackedScene" uid="uid://cxb1fxhrsja13" path="res://object/stage/common/SpikeBallStatic.tscn" id="42_mh06d"]
-[ext_resource type="PackedScene" path="res://area/3 evil foundry/object/Elevator.tscn" id="43_hxgcc"]
-[ext_resource type="PackedScene" path="res://area/3 evil foundry/object/platform/MetalPlatform.tscn" id="44_kj7yh"]
+[ext_resource type="PackedScene" uid="uid://bioj7igetxoe1" path="res://area/3 evil foundry/object/Elevator.tscn" id="43_hxgcc"]
+[ext_resource type="PackedScene" uid="uid://bkimcaeupa1lw" path="res://area/3 evil foundry/object/platform/MetalPlatform.tscn" id="44_kj7yh"]
 [ext_resource type="PackedScene" uid="uid://0gcen5dmjd" path="res://area/3 evil foundry/object/platform/Crusher.tscn" id="45_ko5px"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="46_urgd3"]
 [ext_resource type="PackedScene" uid="uid://chy7mei3ri2oc" path="res://area/3 evil foundry/object/platform/Stopper.tscn" id="47_8ckq7"]
@@ -61,6 +64,32 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vkmlm"]
 size = Vector3(20, 20, 5)
+
+[sub_resource type="Curve" id="Curve_iw12v"]
+_data = [Vector2(0, 0.1), 0.0, 8.09784, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.35203, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_s14ln"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_iw12v")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6t2cr"]
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_box_extents = Vector3(3, 0, 5)
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 10.0
+color = Color(1, 0.639216, 0.180392, 0.313726)
+alpha_curve = SubResource("CurveTexture_s14ln")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ge576"]
+material = ExtResource("11_mjgn6")
 
 [sub_resource type="Animation" id="Animation_av7d8"]
 length = 0.001
@@ -159,6 +188,54 @@ tracks/7/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, -1.5708, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Rumble:playing")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Rumble:volume_db")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Dust:emitting")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Dust:position")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, -4)]
 }
 
 [sub_resource type="Animation" id="Animation_33q1c"]
@@ -260,6 +337,100 @@ tracks/7/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector3(0, -1.5708, 0), Vector3(-0.0698132, -1.5708, 0.0750492), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0, -1.5708, 0), Vector3(-0.0698132, -1.5708, 0.0750492), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0, -1.5708, 0), Vector3(-0.0698132, -1.5708, 0.0750492), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0, -1.5708, 0), Vector3(-0.0698132, -1.5708, 0.0750492), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0, -1.5708, 0), Vector3(-0.0698132, -1.5708, 0.0750492), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0, -1.5708, 0), Vector3(-0.0698132, -1.5708, 0.0750492), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0.10472, -1.5708, -0.0837758), Vector3(-0.0925025, -1.5708, -0.0802851), Vector3(0, -1.5708, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Rumble:playing")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 1.86666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Rumble:volume_db")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.9324, 0.9657, 1.1322, 1.16667, 1.2654, 1.3, 1.53333, 1.5651),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, -3.0, -3.0, -6.0, -6.0, -12.0, -12.0, -80.0]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Impact")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(1.2654, 1.46667, 1.6, 1.86666),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}, {
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Dust:emitting")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 1.26667, 1.86666),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Dust:position")
+tracks/12/interp = 0
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 1.26667, 1.46667, 1.6, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1, -4), Vector3(2, 1, -4), Vector3(-3, 1, -4), Vector3(2, 2, -4), Vector3(-3, 2, -4)]
+}
+tracks/13/type = "method"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath(".")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(1.2654, 1.46667, 1.6, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": [0.5],
+"method": &"ScreenShake"
+}, {
+"args": [0.5],
+"method": &"ScreenShake"
+}, {
+"args": [0.5],
+"method": &"ScreenShake"
+}, {
+"args": [0.5],
+"method": &"ScreenShake"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rbcmy"]
@@ -738,6 +909,34 @@ transform = Transform3D(-3.61999e-06, 0, 1, 0, 1, 0, -1, 0, -3.61999e-06, 2.5, 1
 
 [node name="FallingScrap4" parent="MainAct/Opening/FallingScrapEvent/Event" instance=ExtResource("7_os07l")]
 transform = Transform3D(-3.61999e-06, 0, -1, 0, 1, 0, 1, 0, -3.61999e-06, -2.5, 13, -2.5)
+
+[node name="Rumble" type="AudioStreamPlayer3D" parent="MainAct/Opening/FallingScrapEvent/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13, 0)
+stream = ExtResource("9_jucbu")
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="Impact" type="AudioStreamPlayer3D" parent="MainAct/Opening/FallingScrapEvent/Event"]
+stream = ExtResource("10_7ulb6")
+volume_db = -6.0
+max_db = -6.0
+max_polyphony = 4
+bus = &"GAME SFX"
+
+[node name="Dust" type="GPUParticles3D" parent="MainAct/Opening/FallingScrapEvent/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -4)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 32
+lifetime = 0.6
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-7, -2, -7, 14, 8, 14)
+process_material = SubResource("ParticleProcessMaterial_6t2cr")
+draw_pass_1 = SubResource("QuadMesh_ge576")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Opening/FallingScrapEvent/Event"]
 libraries = {
