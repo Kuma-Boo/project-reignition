@@ -535,7 +535,13 @@ public partial class PlayerCameraController : Node3D
 		if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 			targetYawAngle += ExtensionMethods.CalculateForwardAngle(sampler.Forward(), sampler.Up());
 		if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-			targetPitchAngle += sampler.Forward().AngleTo(sampler.Forward().RemoveVertical().Normalized()) * Mathf.Sign(sampler.Forward().Y);
+		{
+			Vector3 forwardDirection = sampler.Forward();
+			if (forwardDirection.Dot(Vector3.Up) > 0.9f)
+				forwardDirection = sampler.Up() * Mathf.Sign(-forwardDirection.Y);
+
+			targetPitchAngle += sampler.Forward().AngleTo(forwardDirection.RemoveVertical().Normalized()) * Mathf.Sign(sampler.Forward().Y);
+		}
 
 		// Calculate slope rotation blending
 		switch (settings.distanceCalculationMode)
