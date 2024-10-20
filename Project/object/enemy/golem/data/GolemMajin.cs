@@ -6,13 +6,12 @@ namespace Project.Gameplay;
 
 public partial class GolemMajin : Enemy
 {
-	[Export]
-	private PathFollow3D pathFollower;
+	[Signal]
+	public delegate void FallenEventHandler();
+	[Export] private PathFollow3D pathFollower;
 	/// <summary> Optional reference to a gas tank that can be thrown at the player. </summary>
-	[Export]
-	private GasTank gasTank;
-	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
-	private NodePath gasTankParent;
+	[Export] private GasTank gasTank;
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")] private NodePath gasTankParent;
 	private Node3D _gasTankParent;
 	private bool canThrowGasTank;
 
