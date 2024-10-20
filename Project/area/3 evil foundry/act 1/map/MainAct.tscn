@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=3 uid="uid://ciqbaxbhrxrjk"]
+[gd_scene load_steps=93 format=3 uid="uid://ciqbaxbhrxrjk"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://bntrixspwpi2" path="res://object/enemy/golem/GolemMajin.tscn" id="11_6jexk"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="11_mjgn6"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="11_x5tgj"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="12_okk5r"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="12_qvhyq"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="13_flmq3"]
 [ext_resource type="PackedScene" uid="uid://em6o4lfsiiqw" path="res://object/enemy/majin/data/evil foundry/RedMajin.tscn" id="14_42pc4"]
@@ -439,6 +440,21 @@ _data = {
 "event": SubResource("Animation_33q1c")
 }
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nuyc3"]
+lifetime_randomness = 0.5
+emission_shape_scale = Vector3(2, 0, 3)
+emission_shape = 3
+emission_box_extents = Vector3(1, 0, 1)
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 5.0
+color = Color(1, 0.639216, 0.180392, 0.313726)
+alpha_curve = SubResource("CurveTexture_s14ln")
+
 [sub_resource type="Animation" id="Animation_rxccf"]
 length = 0.001
 tracks/0/type = "value"
@@ -517,6 +533,7 @@ tracks/5/keys = {
 [sub_resource type="Animation" id="Animation_5ugqj"]
 resource_name = "event"
 length = 1.50001
+step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -588,6 +605,118 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(3, 1),
 "update": 0,
 "values": [Vector3(0, 3.2, 0), Vector3(0, 6.8, -3.8147e-06)]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Dust2")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Impact2")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Dust1")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Impact1")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Dust3")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Impact3")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/12/type = "method"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Dust4")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/13/type = "method"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Impact4")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_o7qlw"]
@@ -900,10 +1029,93 @@ point_count = 3
 
 [sub_resource type="Animation" id="Animation_khcjl"]
 resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScrapMachine/ScrapMachineSupport2:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.00012207, 3.68469, -0.000396729)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ScrapMachine:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_isshl"]
+resource_name = "event"
+length = 0.500003
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScrapMachine/ScrapMachineSupport2:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.00012207, 3.68469, -0.000396729), Vector3(0, 3.8, 0), Vector3(0, 2.79999, -0.800003)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ScrapMachine:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(1.5708, 0, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Dust")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Impact")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qu6nc"]
 _data = {
-"RESET": SubResource("Animation_khcjl")
+"RESET": SubResource("Animation_khcjl"),
+"event": SubResource("Animation_isshl")
 }
 
 [sub_resource type="Curve" id="Curve_yo7fn"]
@@ -1376,7 +1588,7 @@ bus = &"GAME SFX"
 [node name="Impact" type="AudioStreamPlayer3D" parent="MainAct/Opening/FallingScrapEvent/Event"]
 stream = ExtResource("10_7ulb6")
 volume_db = -6.0
-max_db = -6.0
+max_db = 0.0
 max_polyphony = 4
 bus = &"GAME SFX"
 
@@ -1416,6 +1628,102 @@ script = ExtResource("7_pb234")
 "Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
+[node name="Impact1" type="AudioStreamPlayer3D" parent="MainAct/Opening/ScrapGroup1/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299999, 2.7)
+stream = ExtResource("10_7ulb6")
+volume_db = -6.0
+max_db = 0.0
+bus = &"GAME SFX"
+script = ExtResource("12_okk5r")
+groupKey = &"scrap_impact"
+
+[node name="Impact2" type="AudioStreamPlayer3D" parent="MainAct/Opening/ScrapGroup1/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299999, 9.7)
+stream = ExtResource("10_7ulb6")
+volume_db = -6.0
+max_db = 0.0
+bus = &"GAME SFX"
+script = ExtResource("12_okk5r")
+groupKey = &"scrap_impact"
+
+[node name="Impact3" type="AudioStreamPlayer3D" parent="MainAct/Opening/ScrapGroup1/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0.299999, 6.2)
+stream = ExtResource("10_7ulb6")
+volume_db = -6.0
+max_db = 0.0
+bus = &"GAME SFX"
+script = ExtResource("12_okk5r")
+groupKey = &"scrap_impact"
+
+[node name="Impact4" type="AudioStreamPlayer3D" parent="MainAct/Opening/ScrapGroup1/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0.299999, 12.7)
+stream = ExtResource("10_7ulb6")
+volume_db = -6.0
+max_db = 0.0
+bus = &"GAME SFX"
+script = ExtResource("12_okk5r")
+groupKey = &"scrap_impact"
+
+[node name="Dust1" type="GPUParticles3D" parent="MainAct/Opening/ScrapGroup1/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299999, 2.7)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_nuyc3")
+draw_pass_1 = SubResource("QuadMesh_ge576")
+
+[node name="Dust2" type="GPUParticles3D" parent="MainAct/Opening/ScrapGroup1/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299999, 9.7)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_nuyc3")
+draw_pass_1 = SubResource("QuadMesh_ge576")
+
+[node name="Dust3" type="GPUParticles3D" parent="MainAct/Opening/ScrapGroup1/Event"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -5.5, 0.299999, 6.2)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_nuyc3")
+draw_pass_1 = SubResource("QuadMesh_ge576")
+
+[node name="Dust4" type="GPUParticles3D" parent="MainAct/Opening/ScrapGroup1/Event"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -5.5, 0.299999, 12.7)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_nuyc3")
+draw_pass_1 = SubResource("QuadMesh_ge576")
+
 [node name="Scrap1" type="Node3D" parent="MainAct/Opening/ScrapGroup1/Event"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.700001)
 
@@ -1431,13 +1739,13 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 3.2
 [node name="Scrap3" type="Node3D" parent="MainAct/Opening/ScrapGroup1/Event"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, 14.5)
 
-[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup1/Event/Scrap3" instance=ExtResource("9_7x2f4")]
+[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup1/Event/Scrap3" groups=["crusher"] instance=ExtResource("9_7x2f4")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0.799999)
 
 [node name="Scrap4" type="Node3D" parent="MainAct/Opening/ScrapGroup1/Event"]
 transform = Transform3D(-1, 0, -2.53518e-06, 0, 1, 0, 2.53518e-06, 0, -1, -5.5, 0.799999, 15.1)
 
-[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup1/Event/Scrap4" instance=ExtResource("9_7x2f4")]
+[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup1/Event/Scrap4" groups=["crusher"] instance=ExtResource("9_7x2f4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Opening/ScrapGroup1/Event"]
@@ -1624,17 +1932,148 @@ transform = Transform3D(-0.000420112, 0.00786134, -0.999968, 0.00161161, 0.99996
 [node name="ScrapMachineLadder7" parent="MainAct/Opening" instance=ExtResource("9_7x2f4")]
 transform = Transform3D(0.999969, 0.00786134, -0.000420251, -0.00786066, 0.999968, 0.00161163, 0.000432899, -0.00160827, 0.999998, -78.5333, -39.9924, -46.3923)
 
-[node name="ScrapMachineLadder8" parent="MainAct/Opening" instance=ExtResource("9_7x2f4")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -89, -39.2, -56.5)
+[node name="ScrapGroup2" parent="MainAct/Opening" instance=ExtResource("7_d57bs")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -30, -40, -50.1)
+OneShot = true
+"Respawn Mode" = 0
 
-[node name="ScrapMachineLadder9" parent="MainAct/Opening" instance=ExtResource("9_7x2f4")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -89, -39.2, -48)
+[node name="Event" type="Node3D" parent="MainAct/Opening/ScrapGroup2" node_paths=PackedStringArray("animator")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 7.8, 0, -60)
+script = ExtResource("7_pb234")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
 
-[node name="ScrapMachineLadder10" parent="MainAct/Opening" instance=ExtResource("9_7x2f4")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -98.05, -39.2, -43.5)
+[node name="Impact1" type="AudioStreamPlayer3D" parent="MainAct/Opening/ScrapGroup2/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299999, 2.7)
+stream = ExtResource("10_7ulb6")
+volume_db = -6.0
+max_db = 0.0
+bus = &"GAME SFX"
+script = ExtResource("12_okk5r")
+groupKey = &"scrap_impact"
 
-[node name="ScrapMachineLadder11" parent="MainAct/Opening" instance=ExtResource("9_7x2f4")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -98.05, -39.2, -52)
+[node name="Impact2" type="AudioStreamPlayer3D" parent="MainAct/Opening/ScrapGroup2/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299999, 9.7)
+stream = ExtResource("10_7ulb6")
+volume_db = -6.0
+max_db = 0.0
+bus = &"GAME SFX"
+script = ExtResource("12_okk5r")
+groupKey = &"scrap_impact"
+
+[node name="Impact3" type="AudioStreamPlayer3D" parent="MainAct/Opening/ScrapGroup2/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0.299999, 6.2)
+stream = ExtResource("10_7ulb6")
+volume_db = -6.0
+max_db = 0.0
+bus = &"GAME SFX"
+script = ExtResource("12_okk5r")
+groupKey = &"scrap_impact"
+
+[node name="Impact4" type="AudioStreamPlayer3D" parent="MainAct/Opening/ScrapGroup2/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0.299999, 12.7)
+stream = ExtResource("10_7ulb6")
+volume_db = -6.0
+max_db = 0.0
+bus = &"GAME SFX"
+script = ExtResource("12_okk5r")
+groupKey = &"scrap_impact"
+
+[node name="Dust1" type="GPUParticles3D" parent="MainAct/Opening/ScrapGroup2/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299999, 2.7)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_nuyc3")
+draw_pass_1 = SubResource("QuadMesh_ge576")
+
+[node name="Dust2" type="GPUParticles3D" parent="MainAct/Opening/ScrapGroup2/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299999, 9.7)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_nuyc3")
+draw_pass_1 = SubResource("QuadMesh_ge576")
+
+[node name="Dust3" type="GPUParticles3D" parent="MainAct/Opening/ScrapGroup2/Event"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -5.5, 0.299999, 6.2)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_nuyc3")
+draw_pass_1 = SubResource("QuadMesh_ge576")
+
+[node name="Dust4" type="GPUParticles3D" parent="MainAct/Opening/ScrapGroup2/Event"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -5.5, 0.299999, 12.7)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_nuyc3")
+draw_pass_1 = SubResource("QuadMesh_ge576")
+
+[node name="Scrap1" type="Node3D" parent="MainAct/Opening/ScrapGroup2/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.700001)
+
+[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup2/Event/Scrap1" groups=["crusher"] instance=ExtResource("9_7x2f4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.799999)
+
+[node name="Scrap2" type="Node3D" parent="MainAct/Opening/ScrapGroup2/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.799999, 0)
+
+[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup2/Event/Scrap2" groups=["crusher"] instance=ExtResource("9_7x2f4")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 3.2, 0)
+
+[node name="Scrap3" type="Node3D" parent="MainAct/Opening/ScrapGroup2/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, 14.5)
+
+[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup2/Event/Scrap3" groups=["crusher"] instance=ExtResource("9_7x2f4")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0.799999)
+
+[node name="Scrap4" type="Node3D" parent="MainAct/Opening/ScrapGroup2/Event"]
+transform = Transform3D(-1, 0, -2.53518e-06, 0, 1, 0, 2.53518e-06, 0, -1, -5.5, 0.799999, 15.1)
+
+[node name="ScrapMachineLadder" parent="MainAct/Opening/ScrapGroup2/Event/Scrap4" groups=["crusher"] instance=ExtResource("9_7x2f4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Opening/ScrapGroup2/Event"]
+callback_mode_process = 0
+libraries = {
+"": SubResource("AnimationLibrary_o7qlw")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Opening/ScrapGroup2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_vkmlm")
 
 [node name="Switch1" parent="MainAct/Opening" instance=ExtResource("12_qvhyq")]
 transform = Transform3D(0.0215008, 0.999769, -4.79344e-06, -0.999768, 0.0215008, 0.000977372, 0.00097725, -1.6222e-05, 1, -159.924, -28.0552, -64.2647)
@@ -2578,11 +3017,9 @@ saveVisibilityOnCheckpoint = true
 
 [node name="Fan1" parent="MainAct/FanHall" instance=ExtResource("25_xh5hk")]
 transform = Transform3D(-0.93358, 0, -0.358368, 0, 1, 0, 0.358368, 0, -0.93358, 1.803, 4.5, 40.257)
-rotationTime = 15.0
 
 [node name="Fan2" parent="MainAct/FanHall" instance=ExtResource("25_xh5hk")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 5.1182, 6.54131, 83.7869)
-rotationTime = 20.0
 
 [node name="Rings1" type="Node3D" parent="MainAct/FanHall"]
 transform = Transform3D(-0.9998, 0, 0.02, 0, 1, 0, -0.02, 0, -0.9998, 5.03912, 3.13803, 80.5948)
@@ -2709,7 +3146,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, -0.646563, 0)
 
 [node name="Fan3" parent="MainAct/FanHall" instance=ExtResource("25_xh5hk")]
 transform = Transform3D(7.54979e-08, -6.55651e-07, 1, -3.57628e-07, 1, -6.55651e-07, -1, 2.08616e-07, -3.41735e-07, -43.7678, 1.945, 146.045)
-rotationTime = 0.5
 playSFX = true
 
 [node name="HallPearlRings2" type="Node3D" parent="MainAct/FanHall"]
@@ -2755,7 +3191,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, -0.646563, 0)
 
 [node name="Fan4" parent="MainAct/FanHall" instance=ExtResource("29_wryy0")]
 transform = Transform3D(7.54979e-08, -6.55651e-07, 1, -3.57628e-07, 1, -6.55651e-07, -1, 2.08616e-07, -3.41735e-07, -61.006, -0.0430756, 145.947)
-rotationTime = 30.0
 
 [node name="Grindrail1" parent="MainAct/FanHall" instance=ExtResource("30_lrk71")]
 transform = Transform3D(-7.35137e-08, -1.49012e-08, 1, 3.72529e-09, 1, 1.49012e-08, -1, -3.72529e-09, -4.37114e-08, -73.945, -2.776, 144.2)
@@ -2871,11 +3306,9 @@ transform = Transform3D(-0.463296, 0.0772377, 0.882831, 0, 0.996195, -0.0871557,
 
 [node name="Fan5" parent="MainAct/FanHall" instance=ExtResource("29_wryy0")]
 transform = Transform3D(-4.37114e-08, 0, 1, 4.4409e-16, 1, 0, -1, 0, -4.37114e-08, -222.308, 4.10896, 186.123)
-rotationTime = 60.0
 
 [node name="Fan6" parent="MainAct/FanHall" instance=ExtResource("29_wryy0")]
 transform = Transform3D(2.61175e-08, 3.50509e-08, 1, 0.80187, -0.597499, 0, 0.597499, 0.80187, -4.37114e-08, -222.308, 10.326, 186.217)
-rotationTime = 60.0
 
 [node name="LavaCrossway" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 3.72529e-09, 0, 3.72529e-09, 1, 1.49012e-08, -2.98023e-08, -1.49012e-08, 1, -670, -60, -300)
@@ -2913,15 +3346,45 @@ animator = NodePath("AnimationPlayer")
 [node name="ScrapMachineSupport" parent="MainAct/LavaCrossway/FireSoulEvent" instance=ExtResource("16_lv0ng")]
 transform = Transform3D(1, -3.72529e-09, 5.55113e-17, -3.72529e-09, 1, -1.49012e-08, 2.98023e-08, 1.49012e-08, 1, -0.00012207, 0.00941849, -0.000396729)
 
-[node name="Spring" parent="MainAct/LavaCrossway/FireSoulEvent" instance=ExtResource("37_xvvs2")]
+[node name="CullingTrigger" type="Node3D" parent="MainAct/LavaCrossway/FireSoulEvent"]
 transform = Transform3D(1, 3.86118e-09, 1.97967e-09, -3.72529e-09, 0.965926, 0.258819, 2.98023e-08, -0.258819, 0.965926, -0.00012207, 3.98469, 0.299591)
+script = ExtResource("41_gc12q")
+
+[node name="Spring" parent="MainAct/LavaCrossway/FireSoulEvent/CullingTrigger" instance=ExtResource("37_xvvs2")]
+transform = Transform3D(1, 4.44089e-16, 2.77556e-16, 2.14479e-16, 1, 0, 5.74694e-17, 0, 1, 0, 0, 0)
 middleHeight = 5.0
 finalHeight = 4.0
 distance = 2.0
 voiceKey = &""
 
-[node name="ScrapMachineSupport2" parent="MainAct/LavaCrossway/FireSoulEvent" instance=ExtResource("16_lv0ng")]
-transform = Transform3D(1, -3.72529e-09, 5.55113e-17, -3.72529e-09, 1, -1.49012e-08, 2.98023e-08, 1.49012e-08, 1, -0.00012207, 3.68469, -0.000396729)
+[node name="ScrapMachine" type="Node3D" parent="MainAct/LavaCrossway/FireSoulEvent"]
+
+[node name="ScrapMachineSupport2" parent="MainAct/LavaCrossway/FireSoulEvent/ScrapMachine" groups=["crusher"] instance=ExtResource("16_lv0ng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00012207, 3.68469, -0.000396729)
+
+[node name="Impact" type="AudioStreamPlayer3D" parent="MainAct/LavaCrossway/FireSoulEvent"]
+transform = Transform3D(-1, -3.72529e-09, 8.74228e-08, 3.72529e-09, 1, 1.49012e-08, -1.17225e-07, 1.49012e-08, -1, 5.49988, 0.284695, -8.0004)
+stream = ExtResource("10_7ulb6")
+volume_db = -6.0
+max_db = 0.0
+bus = &"GAME SFX"
+script = ExtResource("12_okk5r")
+groupKey = &"scrap_impact"
+
+[node name="Dust" type="GPUParticles3D" parent="MainAct/LavaCrossway/FireSoulEvent"]
+transform = Transform3D(-1, -3.72529e-09, 8.74228e-08, 3.72529e-09, 1, 1.49012e-08, -1.17225e-07, 1.49012e-08, -1, -0.00012207, -0.0153122, 4.69962)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_nuyc3")
+draw_pass_1 = SubResource("QuadMesh_ge576")
 
 [node name="FireSoul" parent="MainAct/LavaCrossway/FireSoulEvent" instance=ExtResource("11_x5tgj")]
 transform = Transform3D(1, -3.72529e-09, 5.55113e-17, -3.72529e-09, 1, -1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.00256348, 8.59707, -0.396179)
@@ -2971,7 +3434,6 @@ launchDirection = 2
 [node name="Cam" type="Node3D" parent="MainAct/LavaCrossway/LaunchRing1"]
 transform = Transform3D(1, -2.84217e-14, 7.10543e-15, 0, 1, -5.53967e-15, 0, -2.10602e-16, 1, 0, -7, 2)
 script = ExtResource("6_8b1i8")
-transitionTime = 0.5
 settings = ExtResource("7_4vimk")
 
 [node name="PitHall" type="Node3D" parent="MainAct"]
@@ -4173,12 +4635,10 @@ transform = Transform3D(-0.567284, 0, 0.823523, 0, 1, 0, -0.823523, 0, -0.567284
 
 [node name="Fan1" parent="MainAct/MineExit" instance=ExtResource("25_xh5hk")]
 transform = Transform3D(-1, 0, -8.74227e-08, 0, 1, 0, 8.74227e-08, 0, -1, 99.994, 14.2359, 110.452)
-rotationTime = 3.0
 playSFX = true
 
 [node name="Fan2" parent="MainAct/MineExit" instance=ExtResource("25_xh5hk")]
 transform = Transform3D(-1, 0, -8.74227e-08, 0, 1, 0, 8.74227e-08, 0, -1, 99.994, 20.8402, 110.452)
-rotationTime = 3.0
 playSFX = true
 
 [node name="Grindrail" parent="MainAct/MineExit" instance=ExtResource("25_an8dd")]
@@ -5514,6 +5974,8 @@ shape = SubResource("BoxShape3D_tr11d")
 [connection signal="Defeated" from="MainAct/FanHall/MajinGroup/GreenMajin4" to="MainAct/FanHall/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/FanHall/MajinGroup/GreenMajin5" to="MainAct/FanHall/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/FanHall/MajinGroup/GreenMajin6" to="MainAct/FanHall/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/LavaCrossway/GolemMajin" to="MainAct/LavaCrossway/FireSoulEvent" method="Activate"]
+[connection signal="Activated" from="MainAct/LavaCrossway/FireSoulEvent" to="MainAct/LavaCrossway/FireSoulEvent/CullingTrigger" method="Activate"]
 [connection signal="Entered" from="MainAct/LavaCrossway/LaunchRing1" to="MainAct/LavaCrossway/LaunchRing1/Cam" method="Activate"]
 [connection signal="Exited" from="MainAct/LavaCrossway/LaunchRing1" to="MainAct/LavaCrossway/LaunchRing1/Cam" method="Deactivate"]
 [connection signal="Spawned" from="MainAct/MineEntrance/GreenMajin1" to="MainAct/MineEntrance/GreenMajin2" method="Spawn"]
