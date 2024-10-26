@@ -8,13 +8,10 @@ namespace Project.Gameplay.Objects;
 [Tool]
 public partial class FlyingPot : Node3D
 {
-	[Export]
-	public Vector2 travelBounds;
-	[Export]
-	public float boundOffset;
+	[Export] public Vector2 travelBounds;
+	[Export] public float boundOffset;
 
-	[Export]
-	private CameraSettingsResource customCameraSettings;
+	[Export] private CameraSettingsResource customCameraSettings;
 
 	[ExportGroup("Components")]
 	[Export] private Node3D root;
@@ -135,6 +132,12 @@ public partial class FlyingPot : Node3D
 	{
 		exitSFX.Play();
 		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		cameraTrigger?.Deactivate();
+	}
+
+	public void Shatter()
+	{
+		interactionAnimator.Play("shatter");
 		cameraTrigger?.Deactivate();
 	}
 

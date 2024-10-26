@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://153wwjnd7nv6"]
+[gd_scene load_steps=49 format=3 uid="uid://153wwjnd7nv6"]
 
 [ext_resource type="PackedScene" uid="uid://dbyn2iyw87kug" path="res://object/stage/common/resource/model/FlyingPot.gltf" id="1"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/FlyingPot.cs" id="2"]
@@ -10,6 +10,7 @@
 [ext_resource type="Material" uid="uid://6n0fwrc1jr14" path="res://object/stage/common/resource/model/material/Flying Pot Spark.tres" id="8_wn8by"]
 [ext_resource type="Material" uid="uid://bef3nf037vgw8" path="res://object/stage/common/resource/model/material/Flying Pot Shine.tres" id="9_ctkoe"]
 [ext_resource type="AudioStream" uid="uid://b75ytouytm73f" path="res://sound/sfx/objects/flying pot enter.wav" id="12_0cgd7"]
+[ext_resource type="AudioStream" uid="uid://1rnhdwqarpwj" path="res://sound/sfx/stage/sand oasis/jar.wav" id="12_jyaqs"]
 [ext_resource type="AudioStream" uid="uid://cjnqa17j2mmww" path="res://sound/sfx/objects/flying pot exit.wav" id="13_43524"]
 [ext_resource type="AudioStream" uid="uid://c0f0a8fdabdrf" path="res://sound/sfx/objects/wing.wav" id="14_uh57a"]
 
@@ -257,7 +258,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_gp4pg"]
 resource_name = "shatter"
-length = 3.00001
+length = 2.00001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -265,7 +266,7 @@ tracks/0/path = NodePath("Root/FlyingPot:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 2.9),
+"times": PackedFloat32Array(0, 0.2, 1.9),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [true, false, true]
@@ -277,7 +278,7 @@ tracks/1/path = NodePath("Root/VFX/SpawnParticles")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 2.6),
+"times": PackedFloat32Array(0, 1.6),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -294,7 +295,7 @@ tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(1.5),
+"times": PackedFloat32Array(0.8),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -308,10 +309,10 @@ tracks/3/path = NodePath("Root/LockonTarget/CollisionShape3D:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 2.9),
+"times": PackedFloat32Array(0, 1.9),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true, true]
+"values": [true, false]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -320,10 +321,24 @@ tracks/4/path = NodePath("Root/Collision/CollisionShape3D:disabled")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 2.9),
+"times": PackedFloat32Array(0, 1.9),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Root/SFX/ShatterSFX")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hb8l8"]
@@ -332,13 +347,14 @@ _data = {
 "shatter": SubResource("Animation_gp4pg")
 }
 
-[node name="FlyingPot" type="Node3D" node_paths=PackedStringArray("root", "lockonArea", "environmentCollider", "animationTree", "enterSFX", "exitSFX")]
+[node name="FlyingPot" type="Node3D" node_paths=PackedStringArray("root", "lockonArea", "environmentCollider", "animationTree", "interactionAnimator", "enterSFX", "exitSFX")]
 script = ExtResource("2")
 customCameraSettings = ExtResource("2_gdkjt")
 root = NodePath("Root")
 lockonArea = NodePath("Root/LockonTarget")
 environmentCollider = NodePath("Root/Collision/CollisionShape3D")
 animationTree = NodePath("Root/AnimationTree")
+interactionAnimator = NodePath("AnimationPlayer")
 enterSFX = NodePath("Root/SFX/EnterSFX")
 exitSFX = NodePath("Root/SFX/ExitSFX")
 
@@ -441,6 +457,11 @@ bus = &"GAME SFX"
 
 [node name="ExitSFX" type="AudioStreamPlayer" parent="Root/SFX"]
 stream = ExtResource("13_43524")
+volume_db = -6.0
+bus = &"GAME SFX"
+
+[node name="ShatterSFX" type="AudioStreamPlayer" parent="Root/SFX"]
+stream = ExtResource("12_jyaqs")
 volume_db = -6.0
 bus = &"GAME SFX"
 

@@ -32,6 +32,7 @@ public partial class FlyingPotState : PlayerState
 		HeadsUpDisplay.Instance.SetPrompt(AscendAction, 0);
 		HeadsUpDisplay.Instance.SetPrompt(ExitAction, 1);
 		HeadsUpDisplay.Instance.ShowPrompts();
+		Player.Knockback += OnPlayerDamaged;
 	}
 
 	public override void ExitState()
@@ -44,6 +45,7 @@ public partial class FlyingPotState : PlayerState
 		HeadsUpDisplay.Instance.HidePrompts();
 
 		Pot = null;
+		Player.Knockback -= OnPlayerDamaged;
 	}
 
 	public override PlayerState ProcessPhysics()
@@ -92,6 +94,14 @@ public partial class FlyingPotState : PlayerState
 		Pot.Velocity = Mathf.Min(Pot.Velocity, MaxSpeed);
 	}
 
+	private void OnPlayerDamaged()
+	{
+		Pot.Velocity = 0f;
+		Pot.Shatter();
+
+		ShowPlayer();
+	}
+
 	private void UpdateAnimation()
 	{
 		flapSpeed = Mathf.Lerp(flapSpeed, 1, .1f);
@@ -103,11 +113,16 @@ public partial class FlyingPotState : PlayerState
 		Pot.Velocity = 0f; // Kill all velocity
 		Pot.PlayExitFX();
 
-		float angleRatio = Pot.Angle / MaxAngle;
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Pot.Back());
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(Player.Stats.JumpHeight);
 
 		Player.Animator.JumpAnimation();
+		ShowPlayer();
+	}
+
+	private void ShowPlayer()
+	{
+		float angleRatio = Pot.Angle / MaxAngle;
 		Player.Animator.SnapRotation(Player.MovementAngle - (Mathf.Pi * angleRatio));
 		Player.Animator.Visible = true;
 		Player.StopExternal();
