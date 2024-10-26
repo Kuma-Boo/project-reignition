@@ -15,7 +15,6 @@ public partial class GasTank : Area3D
 	/// <summary> Field is public so enemies can set this as needed. </summary>
 	[Export] public float height;
 	[Export] public bool globalEndPosition;
-	[Export] public bool explodeOnGroundCollision;
 	/// <summary> Field is public so enemies can set this as needed. </summary>
 	[Export] public Vector3 endPosition;
 	/// <summary> Used if you want to target a particular object instead of a position (End position is recalculated on launch). </summary>
@@ -37,6 +36,7 @@ public partial class GasTank : Area3D
 	private SpawnData spawnData;
 	private readonly List<Enemy> enemyList = [];
 
+	public bool IsFalling { get; private set; }
 	public bool IsDetonated { get; private set; }
 	public bool IsTravelling { get; private set; }
 	private float travelTime;
@@ -67,6 +67,7 @@ public partial class GasTank : Area3D
 	{
 		Root.Rotation = Vector3.Zero;
 		travelTime = 0;
+		IsFalling = false;
 		IsTravelling = false;
 		Position = spawnData.spawnTransform.Origin;
 		IsDetonated = false;
@@ -79,6 +80,12 @@ public partial class GasTank : Area3D
 
 		if (IsDetonated) return;
 		CheckInteraction();
+
+		if (IsFalling)
+		{
+			ProcessFalling();
+			return;
+		}
 
 		if (!IsTravelling) return;
 
@@ -130,18 +137,28 @@ public partial class GasTank : Area3D
 			endPosition = endTarget.GlobalPosition - GlobalPosition;
 
 		travelTime = 0;
+		IsFalling = false;
 		IsTravelling = true;
 		Animator.Play("launch");
 		startPosition = GlobalPosition;
 	}
 
-	/// <summary> Detonate, but only if the GasTank is not travelling (used in EFAct1's main mission). </summary>
-	private void StationaryDetonate()
+	/// <summary> Causes a gas tank to fall straight down if it is inactive. </summary>
+	private void Fall()
 	{
 		if (IsTravelling)
 			return;
 
-		Detonate();
+		IsFalling = true;
+		fallingVelocity = 0;
+		Animator.Play("launch");
+	}
+
+	private float fallingVelocity;
+	private void ProcessFalling()
+	{
+		fallingVelocity = Mathf.MoveToward(fallingVelocity, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
+		GlobalPosition += Vector3.Up * fallingVelocity * PhysicsManager.physicsDelta;
 	}
 
 	private void Detonate()
@@ -161,15 +178,18 @@ public partial class GasTank : Area3D
 	{
 		if (a.IsInGroup("player"))
 			isInteractingWithPlayer = true;
-
-		if (a.IsInGroup("floor") && explodeOnGroundCollision)
-			Detonate();
 	}
 
 	private void OnExited(Area3D a)
 	{
 		if (!a.IsInGroup("player")) return;
 		isInteractingWithPlayer = false;
+	}
+
+	private void OnBodyEntered(Node3D b)
+	{
+		if (b.IsInGroup("floor") && (IsTravelling || IsFalling))
+			Detonate();
 	}
 
 	private void OnExplosionEntered(Area3D a)
