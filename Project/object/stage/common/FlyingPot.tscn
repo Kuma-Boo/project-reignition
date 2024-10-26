@@ -1,14 +1,12 @@
-[gd_scene load_steps=30 format=3 uid="uid://153wwjnd7nv6"]
+[gd_scene load_steps=48 format=3 uid="uid://153wwjnd7nv6"]
 
 [ext_resource type="PackedScene" uid="uid://dbyn2iyw87kug" path="res://object/stage/common/resource/model/FlyingPot.gltf" id="1"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/FlyingPot.cs" id="2"]
 [ext_resource type="Resource" uid="uid://mdlg0ek0ee5v" path="res://resource/preset/camera/object/FlyingPotCam.tres" id="2_gdkjt"]
-[ext_resource type="Material" uid="uid://ioj32pptmmjl" path="res://object/stage/common/resource/model/material/Flying Pot Feather Process Material.tres" id="4_8d8qk"]
 [ext_resource type="Material" uid="uid://drgtm3le1tx81" path="res://object/stage/common/resource/model/material/Flying Pot Feather.tres" id="4_dhjjw"]
 [ext_resource type="Material" uid="uid://hpb2xgpvq2l4" path="res://object/stage/common/resource/model/material/Flying Pot Dust.tres" id="6_e2e4l"]
-[ext_resource type="Material" uid="uid://c8a7jlwdfu0k6" path="res://object/stage/common/resource/model/material/Flying Pot Dust Process Material.tres" id="6_s7d7r"]
+[ext_resource type="Material" uid="uid://ddkmfoh57qrxu" path="res://object/stage/common/resource/model/material/Flying Pot Spawn.tres" id="6_wk3qp"]
 [ext_resource type="Material" uid="uid://dtyv06bt3q7mw" path="res://object/stage/common/resource/model/material/Flying Pot Shine Process Material.tres" id="8_5bysa"]
-[ext_resource type="Material" uid="uid://b1b035gwom0w5" path="res://object/stage/common/resource/model/material/Flying Pot Spark Process Material.tres" id="8_m5xym"]
 [ext_resource type="Material" uid="uid://6n0fwrc1jr14" path="res://object/stage/common/resource/model/material/Flying Pot Spark.tres" id="8_wn8by"]
 [ext_resource type="Material" uid="uid://bef3nf037vgw8" path="res://object/stage/common/resource/model/material/Flying Pot Shine.tres" id="9_ctkoe"]
 [ext_resource type="AudioStream" uid="uid://b75ytouytm73f" path="res://sound/sfx/objects/flying pot enter.wav" id="12_0cgd7"]
@@ -21,13 +19,98 @@ radius = 0.8
 [sub_resource type="SphereShape3D" id="1"]
 radius = 1.5
 
+[sub_resource type="Gradient" id="Gradient_1wma4"]
+offsets = PackedFloat32Array(0, 0.172535, 0.580986, 0.911972)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_hn1s3"]
+gradient = SubResource("Gradient_1wma4")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qqgtp"]
+lifetime_randomness = 0.4
+particle_flag_rotate_y = true
+emission_shape = 3
+emission_box_extents = Vector3(2.5, 1, 0.5)
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, -1, 0)
+spread = 0.0
+initial_velocity_max = 4.0
+angular_velocity_max = 360.0
+gravity = Vector3(0, -2, 0)
+linear_accel_min = 2.0
+linear_accel_max = 10.0
+radial_accel_min = -5.0
+radial_accel_max = 5.0
+tangential_accel_min = -5.0
+tangential_accel_max = 5.0
+damping_min = 5.0
+damping_max = 10.0
+scale_min = 0.2
+scale_max = 0.5
+color = Color(1, 1, 0.756863, 0.603922)
+color_ramp = SubResource("GradientTexture1D_hn1s3")
+turbulence_noise_scale = 1.03
+turbulence_influence_max = 0.2
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_18vhs"]
 material = ExtResource("4_dhjjw")
 size = Vector2(1, 1)
 orientation = 2
 
+[sub_resource type="Gradient" id="Gradient_dua2s"]
+offsets = PackedFloat32Array(0, 0.0544218, 0.731293, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mfwhv"]
+gradient = SubResource("Gradient_dua2s")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qs2s3"]
+lifetime_randomness = 0.4
+particle_flag_rotate_y = true
+emission_shape = 3
+emission_box_extents = Vector3(1.5, 1, 0.8)
+direction = Vector3(0, -1, 0)
+spread = 0.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.1
+scale_max = 0.2
+color = Color(1, 0.901961, 0.768627, 1)
+color_ramp = SubResource("GradientTexture1D_mfwhv")
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_x18td"]
 material = ExtResource("6_e2e4l")
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="Curve" id="Curve_jq1lm"]
+_data = [Vector2(0, 0.5), 0.0, 1.54739, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3pyvn"]
+width = 64
+curve = SubResource("Curve_jq1lm")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vv0c0"]
+lifetime_randomness = 0.4
+particle_flag_rotate_y = true
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_3pyvn")
+color = Color(1, 0.901961, 0.768627, 0.588235)
+color_ramp = SubResource("GradientTexture1D_mfwhv")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_k3kup"]
+material = ExtResource("6_wk3qp")
 size = Vector2(1, 1)
 orientation = 2
 
@@ -35,6 +118,47 @@ orientation = 2
 material = ExtResource("9_ctkoe")
 size = Vector2(1, 1)
 orientation = 2
+
+[sub_resource type="Gradient" id="Gradient_w2nti"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.00704225, 0.461268, 0.827465)
+colors = PackedColorArray(0.2304, 0.72896, 0.96, 1, 0.770802, 0.289234, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mnp3m"]
+gradient = SubResource("Gradient_w2nti")
+width = 64
+
+[sub_resource type="Gradient" id="Gradient_spk85"]
+offsets = PackedFloat32Array(0, 0.0140845, 0.753521)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_hugif"]
+gradient = SubResource("Gradient_spk85")
+width = 64
+
+[sub_resource type="Curve" id="Curve_3mcfs"]
+max_value = 2.0
+_data = [Vector2(0, 1), 0.0, 2.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_rfpdd"]
+width = 64
+curve = SubResource("Curve_3mcfs")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yk21u"]
+particle_flag_rotate_y = true
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 15.0
+initial_velocity_min = 5.0
+initial_velocity_max = 8.0
+gravity = Vector3(0, -5, 0)
+damping_min = 5.0
+damping_max = 5.0
+scale_curve = SubResource("CurveTexture_rfpdd")
+color_ramp = SubResource("GradientTexture1D_hugif")
+color_initial_ramp = SubResource("GradientTexture1D_mnp3m")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_x428s"]
 material = ExtResource("8_wn8by")
@@ -73,7 +197,6 @@ fadeout_time = 0.2
 animation = &"pot-idle"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_v4aem"]
-graph_offset = Vector2(-866.627, -4.56219)
 nodes/action_anim/node = SubResource("AnimationNodeAnimation_wgyli")
 nodes/action_anim/position = Vector2(0, 240)
 nodes/enter_trigger/node = SubResource("AnimationNodeOneShot_hr07p")
@@ -92,6 +215,122 @@ nodes/idle_anim/node = SubResource("AnimationNodeAnimation_5rf63")
 nodes/idle_anim/position = Vector2(-660, 20)
 nodes/output/position = Vector2(320, 48)
 node_connections = [&"enter_trigger", 0, &"flap_trigger", &"enter_trigger", 1, &"action_anim", &"fall_transition", 0, &"idle_anim", &"fall_transition", 1, &"fall_anim", &"flap_speed", 0, &"flap_anim", &"flap_trigger", 0, &"fall_transition", &"flap_trigger", 1, &"flap_speed", &"output", 0, &"enter_trigger"]
+
+[sub_resource type="Animation" id="Animation_f1hvo"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/FlyingPot:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/LockonTarget/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root/Collision/CollisionShape3D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_gp4pg"]
+resource_name = "shatter"
+length = 3.00001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/FlyingPot:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 2.9),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/VFX/SpawnParticles")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2.6),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"restart"
+}, {
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"ResetPosition"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Root/LockonTarget/CollisionShape3D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 2.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Root/Collision/CollisionShape3D:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 2.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hb8l8"]
+_data = {
+"RESET": SubResource("Animation_f1hvo"),
+"shatter": SubResource("Animation_gp4pg")
+}
 
 [node name="FlyingPot" type="Node3D" node_paths=PackedStringArray("root", "lockonArea", "environmentCollider", "animationTree", "enterSFX", "exitSFX")]
 script = ExtResource("2")
@@ -142,7 +381,7 @@ lifetime = 0.8
 fixed_fps = 0
 interpolate = false
 transform_align = 3
-process_material = ExtResource("4_8d8qk")
+process_material = SubResource("ParticleProcessMaterial_qqgtp")
 draw_pass_1 = SubResource("PlaneMesh_18vhs")
 
 [node name="DustParticles" type="GPUParticles3D" parent="Root/VFX"]
@@ -151,8 +390,21 @@ emitting = false
 lifetime = 1.5
 fixed_fps = 0
 interpolate = false
-process_material = ExtResource("6_s7d7r")
+visibility_aabb = AABB(-2, -3, -2, 4, 4, 4)
+process_material = SubResource("ParticleProcessMaterial_qs2s3")
 draw_pass_1 = SubResource("PlaneMesh_x18td")
+
+[node name="SpawnParticles" type="GPUParticles3D" parent="Root/VFX"]
+layers = 32
+emitting = false
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -1, -4, 8, 8, 8)
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_vv0c0")
+draw_pass_1 = SubResource("PlaneMesh_k3kup")
 
 [node name="ShineParticles" type="GPUParticles3D" parent="Root/VFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
@@ -177,7 +429,7 @@ one_shot = true
 explosiveness = 0.4
 fixed_fps = 0
 interpolate = false
-process_material = ExtResource("8_m5xym")
+process_material = SubResource("ParticleProcessMaterial_yk21u")
 draw_pass_1 = SubResource("PlaneMesh_x428s")
 
 [node name="SFX" type="Node3D" parent="Root"]
@@ -216,6 +468,11 @@ parameters/flap_speed/scale = 1.0
 parameters/flap_trigger/active = false
 parameters/flap_trigger/internal_active = false
 parameters/flap_trigger/request = 0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_hb8l8")
+}
 
 [connection signal="area_entered" from="Root/LockonTarget" to="." method="OnEntered"]
 [connection signal="area_exited" from="Root/LockonTarget" to="." method="OnExited"]
