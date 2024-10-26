@@ -79,7 +79,7 @@ public partial class GolemMajin : Enemy
 
 	private void LaunchGasTank()
 	{
-		if (gasTank.IsTraveling || gasTank.IsDetonated) // Gas tank has already been launched
+		if (gasTank.IsTravelling || gasTank.IsDetonated) // Gas tank has already been launched
 			return;
 
 		Transform3D t = gasTank.GlobalTransform;

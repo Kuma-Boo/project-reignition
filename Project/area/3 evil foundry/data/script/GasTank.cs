@@ -38,7 +38,7 @@ public partial class GasTank : Area3D
 	private readonly List<Enemy> enemyList = [];
 
 	public bool IsDetonated { get; private set; }
-	public bool IsTraveling { get; private set; }
+	public bool IsTravelling { get; private set; }
 	private float travelTime;
 	private readonly float VisualRotationSpeed = 10f;
 	private readonly float TimeScale = .8f;
@@ -67,7 +67,7 @@ public partial class GasTank : Area3D
 	{
 		Root.Rotation = Vector3.Zero;
 		travelTime = 0;
-		IsTraveling = false;
+		IsTravelling = false;
 		Position = spawnData.spawnTransform.Origin;
 		IsDetonated = false;
 		Animator.Play("RESET");
@@ -80,7 +80,7 @@ public partial class GasTank : Area3D
 		if (IsDetonated) return;
 		CheckInteraction();
 
-		if (!IsTraveling) return;
+		if (!IsTravelling) return;
 
 		LaunchSettings launchSettings = GetLaunchSettings();
 
@@ -130,15 +130,24 @@ public partial class GasTank : Area3D
 			endPosition = endTarget.GlobalPosition - GlobalPosition;
 
 		travelTime = 0;
-		IsTraveling = true;
+		IsTravelling = true;
 		Animator.Play("launch");
 		startPosition = GlobalPosition;
+	}
+
+	/// <summary> Detonate, but only if the GasTank is not travelling (used in EFAct1's main mission). </summary>
+	private void StationaryDetonate()
+	{
+		if (IsTravelling)
+			return;
+
+		Detonate();
 	}
 
 	private void Detonate()
 	{
 		IsDetonated = true;
-		IsTraveling = false;
+		IsTravelling = false;
 		Animator.Play("detonate");
 
 		for (int i = 0; i < enemyList.Count; i++)
