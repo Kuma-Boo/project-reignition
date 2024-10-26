@@ -1,4 +1,4 @@
-[gd_scene load_steps=93 format=3 uid="uid://ciqbaxbhrxrjk"]
+[gd_scene load_steps=94 format=3 uid="uid://ciqbaxbhrxrjk"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
@@ -33,6 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://c3b6ygc13a33j" path="res://object/enemy/majin/data/evil foundry/GreenMajin.tscn" id="17_ff4u0"]
 [ext_resource type="PackedScene" uid="uid://det4s2txdn4ka" path="res://area/3 evil foundry/object/Furnace.tscn" id="19_aihy4"]
 [ext_resource type="PackedScene" uid="uid://cjmdbpjhq73j8" path="res://area/3 evil foundry/object/grindrail/Grindrail01.tscn" id="20_8t73i"]
+[ext_resource type="Script" path="res://object/trigger/StageTrigger.cs" id="22_6qr5a"]
 [ext_resource type="PackedScene" uid="uid://lqag3j32861" path="res://area/3 evil foundry/object/grindrail/Grindrail04.tscn" id="22_ifefi"]
 [ext_resource type="PackedScene" uid="uid://dhwwi7i5b0v65" path="res://area/3 evil foundry/object/grindrail/Grindrail02.tscn" id="25_an8dd"]
 [ext_resource type="PackedScene" path="res://area/3 evil foundry/object/Fan.tscn" id="25_xh5hk"]
@@ -2075,26 +2076,49 @@ libraries = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_vkmlm")
 
-[node name="Switch1" parent="MainAct/Opening" instance=ExtResource("12_qvhyq")]
+[node name="SwitchGroup" type="Node3D" parent="MainAct/Opening"]
 transform = Transform3D(0.0215008, 0.999769, -4.79344e-06, -0.999768, 0.0215008, 0.000977372, 0.00097725, -1.6222e-05, 1, -159.924, -28.0552, -64.2647)
+
+[node name="Switch1" parent="MainAct/Opening/SwitchGroup" instance=ExtResource("12_qvhyq")]
+transform = Transform3D(1, 9.10873e-10, 0, -9.5174e-10, 1, 0, 0, 1.81899e-12, 1, 0, 0, 0)
 activationLength = 2.5
 startActive = true
 
-[node name="Switch2" parent="MainAct/Opening" instance=ExtResource("12_qvhyq")]
-transform = Transform3D(0.00541052, 0.999985, 0, -0.999985, 0.00541052, 0, 0, 0, 1, -159.886, -28.0552, -76.0652)
+[node name="Switch2" parent="MainAct/Opening/SwitchGroup" instance=ExtResource("12_qvhyq")]
+transform = Transform3D(0.99987, 0.0160912, 0.000977249, -0.0160912, 0.99987, -1.62219e-05, -0.000977384, 4.94748e-07, 0.999999, -0.0107155, 0.0381775, -11.8005)
 activationLength = 2.5
 startActive = true
 
-[node name="Switch3" parent="MainAct/Opening" instance=ExtResource("12_qvhyq")]
-transform = Transform3D(0.00541052, 0.999985, 0, -0.999985, 0.00541052, 0, 0, 0, 1, -159.886, -28.0552, -88.0855)
+[node name="Switch3" parent="MainAct/Opening/SwitchGroup" instance=ExtResource("12_qvhyq")]
+transform = Transform3D(0.99987, 0.0160912, 0.000977249, -0.0160912, 0.99987, -1.62219e-05, -0.000977384, 4.94748e-07, 0.999999, -0.0224609, 0.0383759, -23.8208)
 activationLength = 2.5
 startActive = true
 
-[node name="SpikeBall" parent="MainAct/Opening" instance=ExtResource("13_flmq3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -158.999, -29.1543, -68.5731)
+[node name="SpikeBall" parent="MainAct/Opening/SwitchGroup" instance=ExtResource("13_flmq3")]
+transform = Transform3D(0.0215008, -0.999769, 0.000977249, 0.999769, 0.0215008, -1.62219e-05, -4.79342e-06, 0.000977373, 0.999999, 1.11452, 0.90123, -4.30947)
 "Movement/Cycle Length" = 2.0
 Movement/Distance = 4.0
 "Vertical Orientation" = true
+
+[node name="SpikeBall2" parent="MainAct/Opening/SwitchGroup" instance=ExtResource("13_flmq3")]
+transform = Transform3D(0.0215008, -0.999769, 0.000977249, 0.999769, 0.0215008, -1.62219e-05, -4.79342e-06, 0.000977373, 0.999999, 1.1011, 0.901459, -17.7364)
+"Movement/Cycle Length" = 2.0
+Movement/Distance = 4.0
+"Vertical Orientation" = true
+
+[node name="SpikeBall3" parent="MainAct/Opening/SwitchGroup" instance=ExtResource("13_flmq3")]
+transform = Transform3D(0.0215008, -0.999769, 0.000977249, 0.999769, 0.0215008, -1.62219e-05, -4.79342e-06, 0.000977373, 0.999999, 1.09096, 0.901627, -28.419)
+"Movement/Cycle Length" = 2.0
+Movement/Distance = 4.0
+"Vertical Orientation" = true
+
+[node name="Trigger" type="Area3D" parent="MainAct/Opening/SwitchGroup"]
+monitoring = false
+monitorable = false
+script = ExtResource("22_6qr5a")
+OneShot = false
+"Trigger Mode" = 0
+"Enter Mode" = 1
 
 [node name="Foothold1" parent="MainAct/Opening" instance=ExtResource("16_p4lxv")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -159.165, -30.5, -68.6)
@@ -2159,12 +2183,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.60001, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_ew8xo")
 
-[node name="SpikeBall2" parent="MainAct/Opening" instance=ExtResource("13_flmq3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -158.999, -29.154, -82)
-"Movement/Cycle Length" = 2.0
-Movement/Distance = 4.0
-"Vertical Orientation" = true
-
 [node name="RedMajin" parent="MainAct/Opening" instance=ExtResource("14_42pc4")]
 transform = Transform3D(-0.999723, 0, 0.0235423, 0, 1, 0, -0.0235423, 0, -0.999723, -156.877, -30.9073, -77.9805)
 "Rotation Settings/Track Player" = false
@@ -2199,12 +2217,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.9)
 
 [node name="Child05" parent="MainAct/Opening/Rings2" instance=ExtResource("8_yjt2l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.2)
-
-[node name="SpikeBall3" parent="MainAct/Opening" instance=ExtResource("13_flmq3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -158.999, -29.1543, -92.6826)
-"Movement/Cycle Length" = 2.0
-Movement/Distance = 4.0
-"Vertical Orientation" = true
 
 [node name="DoorHall" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -171.921, -29.2551, -119.921)
@@ -5966,16 +5978,24 @@ shape = SubResource("BoxShape3D_tr11d")
 [connection signal="Deactivated" from="MainAct/CullingMap/Ending-L" to="MainAct/Ending" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/LavaPool-U" to="MainAct/LavaPoolHall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/LavaPool-U" to="MainAct/LavaPoolHall" method="Activate"]
-[connection signal="Activated" from="MainAct/Opening/Switch1" to="MainAct/Opening/SpikeBall" method="Unpause"]
-[connection signal="Activated" from="MainAct/Opening/Switch1" to="MainAct/Opening/SpikeBall2" method="Unpause"]
-[connection signal="Activated" from="MainAct/Opening/Switch1" to="MainAct/Opening/SpikeBall3" method="Unpause"]
-[connection signal="Deactivated" from="MainAct/Opening/Switch1" to="MainAct/Opening/Switch2" method="Activate"]
-[connection signal="Deactivated" from="MainAct/Opening/Switch1" to="MainAct/Opening/Switch3" method="Activate"]
-[connection signal="Deactivated" from="MainAct/Opening/Switch1" to="MainAct/Opening/SpikeBall" method="Pause"]
-[connection signal="Deactivated" from="MainAct/Opening/Switch1" to="MainAct/Opening/SpikeBall2" method="Pause"]
-[connection signal="Deactivated" from="MainAct/Opening/Switch1" to="MainAct/Opening/SpikeBall3" method="Pause"]
-[connection signal="Deactivated" from="MainAct/Opening/Switch2" to="MainAct/Opening/Switch1" method="Activate"]
-[connection signal="Deactivated" from="MainAct/Opening/Switch3" to="MainAct/Opening/Switch1" method="Activate"]
+[connection signal="Activated" from="MainAct/Opening/SwitchGroup/Switch1" to="MainAct/Opening/SwitchGroup/Trigger" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Opening/SwitchGroup/Switch1" to="MainAct/Opening/SwitchGroup/Trigger" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Opening/SwitchGroup/Switch2" to="MainAct/Opening/SwitchGroup/Trigger" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Opening/SwitchGroup/Switch2" to="MainAct/Opening/SwitchGroup/Trigger" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Opening/SwitchGroup/Switch3" to="MainAct/Opening/SwitchGroup/Trigger" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Opening/SwitchGroup/Switch3" to="MainAct/Opening/SwitchGroup/Trigger" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Opening/SwitchGroup/Trigger" to="MainAct/Opening/SwitchGroup/SpikeBall" method="Unpause"]
+[connection signal="Activated" from="MainAct/Opening/SwitchGroup/Trigger" to="MainAct/Opening/SwitchGroup/SpikeBall2" method="Unpause"]
+[connection signal="Activated" from="MainAct/Opening/SwitchGroup/Trigger" to="MainAct/Opening/SwitchGroup/SpikeBall3" method="Unpause"]
+[connection signal="Deactivated" from="MainAct/Opening/SwitchGroup/Trigger" to="MainAct/Opening/SwitchGroup/Switch1" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Opening/SwitchGroup/Trigger" to="MainAct/Opening/SwitchGroup/Switch2" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Opening/SwitchGroup/Trigger" to="MainAct/Opening/SwitchGroup/Switch3" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Opening/SwitchGroup/Trigger" to="MainAct/Opening/SwitchGroup/SpikeBall" method="Pause"]
+[connection signal="Deactivated" from="MainAct/Opening/SwitchGroup/Trigger" to="MainAct/Opening/SwitchGroup/SpikeBall2" method="Pause"]
+[connection signal="Deactivated" from="MainAct/Opening/SwitchGroup/Trigger" to="MainAct/Opening/SwitchGroup/SpikeBall3" method="Pause"]
+[connection signal="Respawned" from="MainAct/Opening/SwitchGroup/Trigger" to="MainAct/Opening/SwitchGroup/SpikeBall" method="Unpause"]
+[connection signal="Respawned" from="MainAct/Opening/SwitchGroup/Trigger" to="MainAct/Opening/SwitchGroup/SpikeBall2" method="Unpause"]
+[connection signal="Respawned" from="MainAct/Opening/SwitchGroup/Trigger" to="MainAct/Opening/SwitchGroup/SpikeBall3" method="Unpause"]
 [connection signal="Defeated" from="MainAct/FanHall/MajinGroup/GreenMajin1" to="MainAct/FanHall/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/FanHall/MajinGroup/GreenMajin2" to="MainAct/FanHall/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/FanHall/MajinGroup/GreenMajin3" to="MainAct/FanHall/EnemyStone" method="IncrementCounter"]
