@@ -35,6 +35,7 @@ public partial class GasTank : Area3D
 	private bool isPlayerInExplosion;
 	private SpawnData spawnData;
 	private readonly List<Enemy> enemyList = [];
+	private readonly List<GasTank> tankList = [];
 
 	public bool IsFalling { get; private set; }
 	public bool IsDetonated { get; private set; }
@@ -170,6 +171,9 @@ public partial class GasTank : Area3D
 		for (int i = 0; i < enemyList.Count; i++)
 			enemyList[i].TakeDamage(); // Damage all enemies in range
 
+		for (int i = 0; i < tankList.Count; i++)
+			tankList[i].Launch(); // Launch all gas tanks in range
+
 		if (isPlayerInExplosion)
 			Player.StartKnockback();
 	}
@@ -206,6 +210,13 @@ public partial class GasTank : Area3D
 			if (!enemyList.Contains(targetEnemy))
 				enemyList.Add(targetEnemy);
 		}
+
+		if (a is GasTank)
+		{
+			GasTank tank = a as GasTank;
+			if (a != this && !tankList.Contains(tank))
+				tankList.Add(tank);
+		}
 	}
 
 	private void OnExplosionExited(Area3D a)
@@ -220,6 +231,13 @@ public partial class GasTank : Area3D
 		{
 			Enemy targetEnemy = (a as EnemyHurtbox).enemy;
 			enemyList.Remove(targetEnemy);
+		}
+
+		if (a is GasTank)
+		{
+			GasTank tank = a as GasTank;
+			if (a != this)
+				tankList.Remove(tank);
 		}
 	}
 }
