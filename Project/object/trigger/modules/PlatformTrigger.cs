@@ -190,7 +190,7 @@ public partial class PlatformTrigger : Node3D
 		}
 
 		float checkLength = Mathf.Abs(Player.CenterPosition.Y - floorCalculationRoot.GlobalPosition.Y) + (Player.CollisionSize.Y * 2.0f);
-		KinematicCollision3D collision = Player.MoveAndCollide(Vector3.Down * checkLength, true);
+		KinematicCollision3D collision = Player.MoveAndCollide(-Player.PathFollower.HeightAxis * checkLength, true);
 
 		if (collision == null || (Node3D)collision.GetCollider() != parentCollider) // Player is not on the platform
 			return;
