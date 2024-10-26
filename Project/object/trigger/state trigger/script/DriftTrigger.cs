@@ -74,7 +74,7 @@ public partial class DriftTrigger : Area3D
 
 		// Check for any obstructions
 		RaycastHit hit = Player.CastRay(Player.CollisionPosition, Player.PathFollower.Forward() * slideDistance, Runtime.Instance.environmentMask);
-		if (hit && !hit.collidedObject.IsInGroup("level wall"))
+		if (hit && !hit.collidedObject.IsInGroup("level wall") && hit.collidedObject.IsInGroup("wall"))
 			return;
 
 		Player.StartDrift(this);
