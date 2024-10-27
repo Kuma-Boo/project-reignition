@@ -55,12 +55,10 @@ public partial class FoundryDoor : Node3D
 		Close,
 		Fakeout
 	}
-	[Export(PropertyHint.Range, ".01f, 2f")]
-	private float swingLength = .2f;
+	[Export(PropertyHint.Range, ".01f, 2f")] private float swingLength = .2f;
 
 	[ExportGroup("Components")]
-	[Export(PropertyHint.NodePathValidTypes, "AnimationTree")]
-	private NodePath animator;
+	[Export(PropertyHint.NodePathValidTypes, "AnimationTree")] private NodePath animator;
 	private AnimationTree Animator { get; set; }
 
 	private bool IsActivated;
@@ -77,7 +75,7 @@ public partial class FoundryDoor : Node3D
 			return;
 		}
 
-		StageSettings.Instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.Respawned += Respawn;
 		Respawn();
 	}
 
@@ -102,12 +100,12 @@ public partial class FoundryDoor : Node3D
 
 	public void Activate(Area3D a)
 	{
-		GD.Print(a);
 		if (!a.IsInGroup("player detection"))
 			return;
 
 		Activate();
 	}
+
 	public void Activate()
 	{
 		if (IsActivated) // Already activated

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dt4nt7hv8bk3x"]
+[gd_scene load_steps=20 format=3 uid="uid://bn8lomrei46ap"]
 
 [ext_resource type="PackedScene" uid="uid://bjhq4tu61hyom" path="res://area/3 evil foundry/object/model/Door.gltf" id="1_13c01"]
 [ext_resource type="Script" path="res://area/3 evil foundry/data/script/FoundryDoor.cs" id="1_d8fuq"]
@@ -76,7 +76,7 @@ input_5/auto_advance = false
 input_5/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_gk1ho"]
-graph_offset = Vector2(-945.264, 195.07)
+graph_offset = Vector2(-892.38, -42.6496)
 nodes/RESET_anim/node = SubResource("AnimationNodeAnimation_3j4i5")
 nodes/RESET_anim/position = Vector2(-400, 0)
 nodes/close_left_anim/node = SubResource("AnimationNodeAnimation_1buhq")
@@ -120,7 +120,6 @@ bones/0/rotation = Quaternion(-0.707107, 0, 0, 0.707107)
 visible = false
 
 [node name="DoorAttachment" type="BoneAttachment3D" parent="Door/DoorRoot/Skeleton3D/DoorSpiked" index="0"]
-transform = Transform3D(2.06632e-07, 0, -1, 0, 1, 0, 1, 0, 2.06632e-07, -2, 0, -2)
 bone_name = "door_center"
 bone_idx = 3
 use_external_skeleton = true
@@ -137,12 +136,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0.5)
 shape = SubResource("BoxShape3D_8nglt")
 
 [node name="BaseAttachment" type="BoneAttachment3D" parent="Door/DoorRoot/Skeleton3D" index="3"]
-transform = Transform3D(-1.19209e-07, 0, 1, 0, 1, 0, -1, 0, -1.19209e-07, -2, 0, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 bone_name = "hinge_r"
 bone_idx = 2
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Door/DoorRoot/Skeleton3D/BaseAttachment" groups=["splash jump", "wall"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+collision_layer = 8
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Door/DoorRoot/Skeleton3D/BaseAttachment/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
@@ -156,13 +157,13 @@ root_node = NodePath("../Door")
 tree_root = SubResource("AnimationNodeBlendTree_gk1ho")
 anim_player = NodePath("../Door/AnimationPlayer")
 parameters/spike_add/add_amount = 1.0
-parameters/spike_transition/current_state = "enabled"
+parameters/spike_transition/current_state = "spikeless"
 parameters/spike_transition/transition_request = ""
-parameters/spike_transition/current_index = 0
+parameters/spike_transition/current_index = 2
 parameters/state_speed/scale = 0.0
-parameters/state_transition/current_state = "open_left"
+parameters/state_transition/current_state = "close_left"
 parameters/state_transition/transition_request = ""
-parameters/state_transition/current_index = 2
+parameters/state_transition/current_index = 0
 
 [connection signal="area_entered" from="Door/DoorRoot/Skeleton3D/DoorSpiked/DoorAttachment/Hitbox" to="Door" method="OnEntered"]
 [connection signal="area_exited" from="Door/DoorRoot/Skeleton3D/DoorSpiked/DoorAttachment/Hitbox" to="Door" method="OnExited"]
