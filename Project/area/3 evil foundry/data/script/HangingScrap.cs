@@ -7,13 +7,16 @@ namespace Project.Gameplay
 	/// </summary>
 	public partial class HangingScrap : Node3D
 	{
-		[Export]
-		private AnimationPlayer animator;
+		[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")] private NodePath animator;
+		private AnimationPlayer Animator { get; set; }
 		private PlayerController Player => StageSettings.Player;
 		private bool isInteractingWithPlayer;
 
-		public override void _Ready() => StageSettings.Instance.ConnectRespawnSignal(this);
-		public void Respawn() => animator.Play("RESET");
+		public override void _Ready()
+		{
+			Animator = GetNode<AnimationPlayer>(animator);
+			StageSettings.Instance.Respawned += Respawn;
+		}
 
 		public override void _PhysicsProcess(double _)
 		{
@@ -21,16 +24,18 @@ namespace Project.Gameplay
 
 			if (Player.IsOnGround)
 			{
-				if (animator.CurrentAnimation != "delay_drop")
-					animator.Play("delay_drop");
+				if (Animator.CurrentAnimation != "delay_drop")
+					Animator.Play("delay_drop");
 				return;
 			}
 
-			animator.Play("drop");
+			Animator.Play("drop");
 
 			if (Player.IsJumpDashOrHomingAttack)
 				Player.StartBounce(false);
 		}
+
+		public void Respawn() => Animator.Play("RESET");
 
 		public void OnEntered(Area3D a)
 		{
