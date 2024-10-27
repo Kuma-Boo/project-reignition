@@ -147,7 +147,7 @@ public partial class GasTank : Area3D
 	/// <summary> Causes a gas tank to fall straight down if it is inactive. </summary>
 	private void Fall()
 	{
-		if (IsTravelling)
+		if (IsTravelling || IsDetonated)
 			return;
 
 		IsFalling = true;
