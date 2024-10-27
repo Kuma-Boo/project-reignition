@@ -164,7 +164,7 @@ public partial class GrindState : PlayerState
 
 	public bool IsRailActivationValid(GrindRail grindRail)
 	{
-		if (ActiveGrindRail == grindRail) // Already grinding
+		if (ActiveGrindRail == grindRail) // Already grinding on that rail
 			return false;
 
 		if (Player.VerticalSpeed > 0f) // Player can't snap to grind rails when moving upwards
@@ -184,7 +184,7 @@ public partial class GrindState : PlayerState
 
 		delta = grindRail.PathFollower.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindRail.PathFollower.GlobalPosition);
 		delta.Y -= Player.VerticalSpeed * PhysicsManager.physicsDelta;
-		if (delta.Y < 0.01f && (!Player.IsOnGround || !Player.AllowLandingGrind) && ActiveGrindRail == null)
+		if (delta.Y < 0.01f && Player.IsOnGround && !Player.AllowLandingGrind && ActiveGrindRail == null)
 			return false;
 
 		// Horizontal validation
