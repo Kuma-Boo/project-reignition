@@ -16,8 +16,8 @@ public partial class LaunchRingState : PlayerState
 	public override void EnterState()
 	{
 		Player.MoveSpeed = Player.VerticalSpeed = 0;
-		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Launcher.Forward().RemoveVertical().Normalized());
 
+		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Launcher.GetLaunchDirection());
 		Player.Lockon.IsMonitoring = false; // Disable homing reticle
 
 		Player.Animator.ExternalAngle = Player.MovementAngle;
