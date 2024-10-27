@@ -4,6 +4,7 @@ using Project.Gameplay.Objects;
 
 namespace Project.Gameplay;
 
+[Tool]
 public partial class GolemMajin : Enemy
 {
 	[Signal]
