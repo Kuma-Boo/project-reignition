@@ -1,4 +1,4 @@
-[gd_scene load_steps=100 format=3 uid="uid://ciqbaxbhrxrjk"]
+[gd_scene load_steps=103 format=3 uid="uid://ciqbaxbhrxrjk"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
@@ -726,6 +726,13 @@ _data = {
 "event": SubResource("Animation_5ugqj")
 }
 
+[sub_resource type="Curve3D" id="Curve3D_y76xj"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 2, 1.5, 0, 0, 0, 0, 2, 0, 0, -2, -1.5, 0, 0, 0, 0, 2, 0, 0, -2, -1.5, 0, -5, 0, 0, -2, 0, 0, 2, 1.5, 0, -5, 0, 0, -2, 0, 0, 0, 1.5, 0, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_ew8xo"]
 size = Vector3(4, 5, 5)
 
@@ -1212,6 +1219,20 @@ _data = {
 max_value = 2.0
 _data = [Vector2(0, 0), 0.0, 2.74304, 0, 0, Vector2(0.541667, 1.72645), 1.22, 1.22, 0, 0, Vector2(1, 1.47896), -1.45219, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="Curve3D" id="Curve3D_wm1fi"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 1, 0.5, 0, 0, 0, 0, 1, 0, 0, -1, -0.5, 0, 0, 0, 0, 1, 0, 0, -1, -0.5, 0, -10, 0, 0, -1, 0, 0, 1, 0.5, 0, -10, 0, 0, -1, 0, 0, 0, 0.5, 0, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[sub_resource type="Curve3D" id="Curve3D_87hid"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 2, 0, 0, -2, -1, 0, 0, 0, 0, 2, 0, 0, -2, -1, 0, -5, 0, 0, -2, 0, 0, 2, 1, 0, -5, 0, 0, -2, 0, 0, 0, 1, 0, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
 
 [sub_resource type="Animation" id="Animation_khcjl"]
 resource_name = "RESET"
@@ -2146,8 +2167,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45623, -1.05801, 0)
 [node name="FireSoul1" parent="MainAct/Opening" instance=ExtResource("11_x5tgj")]
 transform = Transform3D(0.047734, 0, -0.99886, 0, 1, 0, 0.99886, 0, 0.047734, -65.3957, -30.0168, -50.0109)
 
-[node name="GolemMajin" parent="MainAct/Opening" instance=ExtResource("11_6jexk")]
-transform = Transform3D(0.0154106, 0, 0.999881, 0, 1, 0, -0.999881, 0, 0.0154106, -65.2369, -40, -49.965)
+[node name="GolemPath" type="Path3D" parent="MainAct/Opening"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -66.2369, -40, -49.965)
+curve = SubResource("Curve3D_y76xj")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="MainAct/Opening/GolemPath"]
+transform = Transform3D(-0.999995, 0, -8.74224e-08, 0, 1, 0, 8.74224e-08, 0, -0.999995, 2, 0, 0)
+use_model_front = true
+
+[node name="GolemMajin" parent="MainAct/Opening/GolemPath/PathFollow3D" instance=ExtResource("11_6jexk")]
 
 [node name="ScrapMachineLadder6" parent="MainAct/Opening" instance=ExtResource("9_7x2f4")]
 transform = Transform3D(-0.000420112, 0.00786134, -0.999968, 0.00161161, 0.999968, 0.00786066, 0.999999, -0.00160827, -0.000432776, -73.529, -39.9919, -55.7397)
@@ -3283,8 +3311,15 @@ transform = Transform3D(-1.62374e-08, 0, 1, 0, 1, 0, -1, 0, -1.62374e-08, -23.90
 height = 1.0
 endPosition = Vector3(-1, 6, -12)
 
-[node name="GolemMajin" parent="MainAct/Spiral1" instance=ExtResource("11_6jexk")]
-transform = Transform3D(-0.0278344, 0, 0.999613, 0, 1, 0, -0.999613, 0, -0.0278344, -35.48, -29.8606, -0.561363)
+[node name="GolemPath" type="Path3D" parent="MainAct/Spiral1"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -34, -30, 0)
+curve = SubResource("Curve3D_wm1fi")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="MainAct/Spiral1/GolemPath"]
+transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0.5, 0, 0)
+use_model_front = true
+
+[node name="GolemMajin" parent="MainAct/Spiral1/GolemPath/PathFollow3D" instance=ExtResource("11_6jexk")]
 
 [node name="FanHall" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -484, -59.9998, -60)
@@ -3611,15 +3646,22 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.171
 [node name="ScrapMachineLadder4" parent="MainAct/LavaCrossway" instance=ExtResource("9_7x2f4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.636, 0, -50.638)
 
-[node name="GasTank" parent="MainAct/LavaCrossway" instance=ExtResource("15_pjnrf")]
-transform = Transform3D(1, -3.72529e-09, 5.55113e-17, -3.72529e-09, 1, -1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 1.59991, 9.74957, -61.6375)
+[node name="GolemPath" type="Path3D" parent="MainAct/LavaCrossway"]
+transform = Transform3D(1, -3.72529e-09, 5.55113e-17, -3.72529e-09, 1, -1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.0310059, 0, -62.656)
+curve = SubResource("Curve3D_87hid")
 
-[node name="GolemMajin" parent="MainAct/LavaCrossway" node_paths=PackedStringArray("gasTank") instance=ExtResource("11_6jexk")]
-transform = Transform3D(1, -3.72529e-09, 5.55113e-17, -3.72529e-09, 1, -1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.731, 0, -61.656)
-gasTank = NodePath("../GasTank")
+[node name="GasTank" parent="MainAct/LavaCrossway/GolemPath" instance=ExtResource("15_pjnrf")]
+
+[node name="PathFollow3D" type="PathFollow3D" parent="MainAct/LavaCrossway/GolemPath"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 1.00009, 0, -4.9941)
+progress = 13.0
+use_model_front = true
+
+[node name="GolemMajin" parent="MainAct/LavaCrossway/GolemPath/PathFollow3D" node_paths=PackedStringArray("gasTank") instance=ExtResource("11_6jexk")]
+gasTank = NodePath("../../GasTank")
 
 [node name="FireSoulEvent" type="Node3D" parent="MainAct/LavaCrossway" node_paths=PackedStringArray("animator")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.13, 0, -78.564)
+transform = Transform3D(1, -8.27185e-25, 0, -2.22044e-16, 1, 0, 0, 0, 1, 2.13, 3.8147e-06, -88.564)
 script = ExtResource("7_pb234")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
@@ -3680,7 +3722,7 @@ libraries = {
 
 [node name="BlueMajin" parent="MainAct/LavaCrossway" instance=ExtResource("34_ip7kn")]
 transform = Transform3D(0.0236819, -3.72529e-09, -0.99972, -1.49852e-08, 1, 3.37136e-09, 0.99972, 1.49012e-08, 0.0236819, 36.6428, 0.510021, -119.936)
-"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 30, 0)
 "Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
@@ -3689,7 +3731,7 @@ rangeOverride = 35
 
 [node name="GreenMajin" parent="MainAct/LavaCrossway" instance=ExtResource("17_ff4u0")]
 transform = Transform3D(0.0346378, -3.72529e-09, -0.9994, -1.50213e-08, 1, 3.20691e-09, 0.9994, 1.49012e-08, 0.0346378, 40.0427, 2.01936, -120.001)
-"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 30, 0)
 "Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
@@ -6289,7 +6331,7 @@ shape = SubResource("BoxShape3D_tr11d")
 [connection signal="Shattered" from="MainAct/FanHall/EnemyStone" to="MainAct/FanHall/GasTank1" method="Fall"]
 [connection signal="Shattered" from="MainAct/FanHall/EnemyStone" to="MainAct/FanHall/GasTank2" method="Fall"]
 [connection signal="OnStrike" from="MainAct/FanHall/GasTank1" to="MainAct/FanHall/GasTank2" method="Fall"]
-[connection signal="Fallen" from="MainAct/LavaCrossway/GolemMajin" to="MainAct/LavaCrossway/FireSoulEvent" method="Activate"]
+[connection signal="Fallen" from="MainAct/LavaCrossway/GolemPath/PathFollow3D/GolemMajin" to="MainAct/LavaCrossway/FireSoulEvent" method="Activate"]
 [connection signal="Activated" from="MainAct/LavaCrossway/FireSoulEvent" to="MainAct/LavaCrossway/FireSoulEvent/CullingTrigger" method="Activate"]
 [connection signal="Entered" from="MainAct/LavaCrossway/LaunchRing1" to="MainAct/LavaCrossway/Cam" method="Activate"]
 [connection signal="Exited" from="MainAct/LavaCrossway/LaunchRing1" to="MainAct/LavaCrossway/Cam" method="Deactivate"]
