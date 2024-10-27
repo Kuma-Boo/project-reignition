@@ -58,9 +58,7 @@ public partial class PlayerAnimator : Node3D
 	/// </summary>
 	public void ProcessPhysics()
 	{
-		if (!Player.IsOnGround)
-			AirAnimations();
-
+		AirAnimations();
 		UpdateVisualRotation();
 		UpdateShaderVariables();
 	}
@@ -420,6 +418,12 @@ public partial class PlayerAnimator : Node3D
 
 	private void AirAnimations()
 	{
+		if (Player.IsOnGround)
+			return;
+
+		if (Player.ExternalController != null)
+			return;
+
 		Player.Effect.IsEmittingStepDust = false;
 		animationTree.Set(GroundTransition, DisabledConstant);
 
