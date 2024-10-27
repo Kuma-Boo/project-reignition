@@ -53,9 +53,10 @@ public partial class FoundryDoor : Node3D
 	{
 		Open,
 		Close,
-		Fakeout
+		Fakeout,
+		Flip,
 	}
-	[Export(PropertyHint.Range, ".01f, 2f")] private float swingLength = .2f;
+	[Export(PropertyHint.Range, ".1,2,.1")] private float swingLength;
 
 	[ExportGroup("Components")]
 	[Export(PropertyHint.NodePathValidTypes, "AnimationTree")] private NodePath animator;
