@@ -8,8 +8,8 @@ public partial class FlyingPotState : PlayerState
 {
 	public FlyingPot Pot { get; set; }
 
-	[Export]
-	private PlayerState jumpState;
+	[Export] private PlayerState jumpState;
+	[Export] private PlayerState fallState;
 
 	private float flapSpeed = 1;
 	private float flapTimer;
@@ -50,6 +50,9 @@ public partial class FlyingPotState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
+		if (Player.ExternalController != Pot) // Pot must have been shattered
+			return fallState;
+
 		Pot.UpdateAngle(Player.Controller.InputHorizontal * MaxAngle);
 
 		if (Player.Controller.IsJumpBufferActive)
@@ -96,10 +99,19 @@ public partial class FlyingPotState : PlayerState
 
 	private void OnPlayerDamaged()
 	{
+		if (Pot == null)
+			return;
+
 		Pot.Velocity = 0f;
 		Pot.Shatter();
 
 		ShowPlayer();
+		Player.Knockback -= OnPlayerDamaged;
+		Player.StartKnockback(new()
+		{
+			ignoreMovementState = true,
+			disableDamage = true,
+		});
 	}
 
 	private void UpdateAnimation()

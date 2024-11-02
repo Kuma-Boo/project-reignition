@@ -80,6 +80,9 @@ public partial class FlyingPot : Node3D
 		if (Player.IsFlyingPotActive)
 			return;
 
+		if (interactingWithPlayer && !Player.IsOnGround && !environmentCollider.Disabled)
+			StartJump();
+
 		UpdateAngle(0);
 		ApplyMovement();
 	}

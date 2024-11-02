@@ -708,6 +708,8 @@ public partial class PlayerController : CharacterBody3D
 		if (IsInvincible && !settings.ignoreInvincibility) return;
 		if (ExternalController != null && !settings.ignoreMovementState) return;
 
+		GD.Print("Knockback Started");
+
 		knockbackState.Settings = settings;
 		StateMachine.ChangeState(knockbackState);
 	}
