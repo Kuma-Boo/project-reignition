@@ -51,7 +51,9 @@ public partial class GrindState : PlayerState
 		Player.AllowLandingSkills = false;
 		Player.IsOnGround = true;
 		Player.VerticalSpeed = 0f;
-		Player.MoveSpeed = Player.Stats.GrindSettings.Speed * Player.Stats.CalculateGrindSpeedRatio(); // Start at the correct speed
+
+		float targetMoveSpeed = Player.Stats.GrindSettings.Speed * Player.Stats.CalculateGrindSpeedRatio();
+		Player.MoveSpeed = Mathf.Max(targetMoveSpeed, Player.MoveSpeed);
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.GrindUp) &&
 			SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.GrindUp) == 3)
 		{
