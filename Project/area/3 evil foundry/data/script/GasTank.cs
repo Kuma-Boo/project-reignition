@@ -73,6 +73,8 @@ public partial class GasTank : Area3D
 		Position = spawnData.spawnTransform.Origin;
 		IsDetonated = false;
 		Animator.Play("RESET");
+
+		BonusManager.instance.UnregisterEnemyComboExtender(this);
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -128,6 +130,7 @@ public partial class GasTank : Area3D
 		Animator.Play("strike");
 		Animator.Advance(0);
 		EmitSignal(SignalName.OnStrike);
+		BonusManager.instance.RegisterEnemyComboExtender(this);
 
 		Launch();
 	}
@@ -167,6 +170,7 @@ public partial class GasTank : Area3D
 		IsDetonated = true;
 		IsTravelling = false;
 		Animator.Play("detonate");
+		BonusManager.instance.UnregisterEnemyComboExtender(this);
 
 		for (int i = 0; i < enemyList.Count; i++)
 			enemyList[i].TakeDamage(); // Damage all enemies in range
