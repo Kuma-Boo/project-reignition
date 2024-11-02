@@ -6,14 +6,14 @@
 [ext_resource type="PackedScene" uid="uid://cgjdnwcl27ndq" path="res://area/3 evil foundry/object/model/scrap/HangingScrapPieces.gltf" id="4_mqh2e"]
 [ext_resource type="AudioStream" uid="uid://db7hww3ufbe68" path="res://sound/sfx/stage/evil foundry/hanging scrap attacked.wav" id="4_rerat"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_hhikk"]
-size = Vector3(4.5, 2, 4.5)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_yocea"]
 size = Vector3(1.5, 1.6, 4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_48nus"]
 size = Vector3(4, 0.8, 1.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hhikk"]
+size = Vector3(4.5, 2, 4.5)
 
 [sub_resource type="Animation" id="Animation_tapwj"]
 resource_name = "RESET"
@@ -83,26 +83,38 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Hitbox/CollisionShape3D:disabled")
+tracks/5/path = NodePath("Collision/HangingScrap:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Vector3(0, 0, 0)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Collision/HangingScrap:position")
+tracks/6/path = NodePath("Collision/Hitbox:monitorable")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Collision/Hitbox/CollisionShape3D:disabled")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_3hncg"]
@@ -126,13 +138,13 @@ tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/path = NodePath("Collision:position")
-tracks/1/interp = 1
+tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(2, 1),
+"times": PackedFloat32Array(0, 0.5, 1.2, 1.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(0, -10.9, 0), Vector3(0, -40, 0)]
+"values": [Vector3(0, -10.9, 0), Vector3(0, -15, 0), Vector3(0, -40, 0), Vector3(0, -80, 0)]
 }
 tracks/2/type = "method"
 tracks/2/imported = false
@@ -148,31 +160,31 @@ tracks/2/keys = {
 "method": &"play"
 }]
 }
-tracks/3/type = "value"
+tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Hitbox/CollisionShape3D:disabled")
+tracks/3/path = NodePath(".")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath(".")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(1.9),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
 "method": &"Despawn"
 }]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Collision/Hitbox:monitorable")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_kcbku"]
@@ -197,7 +209,7 @@ tracks/1/path = NodePath("Collision/CollisionShape3D:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.001),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
@@ -209,7 +221,19 @@ tracks/2/path = NodePath("Collision/CollisionShape3D2:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.001),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Collision/Hitbox/CollisionShape3D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
@@ -234,14 +258,6 @@ bouncePlayerOnJumpDash = true
 
 [node name="ScrapClaw" parent="." instance=ExtResource("1_7go6u")]
 
-[node name="Hitbox" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.8, 0)
-collision_layer = 4
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
-shape = SubResource("BoxShape3D_hhikk")
-
 [node name="Collision" type="StaticBody3D" parent="." groups=["floor", "wall"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10.9, 0)
 collision_layer = 8
@@ -256,6 +272,14 @@ shape = SubResource("BoxShape3D_yocea")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Collision"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.9, 0)
 shape = SubResource("BoxShape3D_48nus")
+
+[node name="Hitbox" type="Area3D" parent="Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.9, 0)
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collision/Hitbox"]
+shape = SubResource("BoxShape3D_hhikk")
 
 [node name="HangingScrapPieces" parent="." instance=ExtResource("4_mqh2e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10.9, 0)
@@ -273,5 +297,5 @@ max_db = 0.0
 max_distance = 50.0
 bus = &"GAME SFX"
 
-[connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
-[connection signal="area_exited" from="Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="Collision/Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="Collision/Hitbox" to="." method="OnExited"]
