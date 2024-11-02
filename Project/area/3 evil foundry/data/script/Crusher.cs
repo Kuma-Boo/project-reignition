@@ -83,6 +83,9 @@ public partial class Crusher : Node3D
 	/// </summary>
 	private bool IsStateCompleted(float t)
 	{
+		if (Mathf.IsZeroApprox(t)) // Having a denominator of 0 means disable crusher 
+			return false;
+
 		currentRatio += 1f / t * PhysicsManager.physicsDelta;
 		if (currentRatio >= 1f) // Start falling
 		{
