@@ -421,7 +421,7 @@ public partial class PauseMenu : Node
 
 	private void DisablePause()
 	{
-		if (GetTree().Paused)
+		if (isActive)
 			TogglePause();
 	}
 
