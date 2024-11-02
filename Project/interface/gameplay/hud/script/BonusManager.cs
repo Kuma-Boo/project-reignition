@@ -154,6 +154,7 @@ public partial class BonusManager : VBoxContainer
 		enemyChain = 0; // Reset enemy chain
 	}
 
+	public bool IsEnemyComboExtenderRegistered(Node n) => activeEnemyComboExtenders.Contains(n);
 	public void RegisterEnemyComboExtender(Node n)
 	{
 		if (activeEnemyComboExtenders.Contains(n))
@@ -161,7 +162,6 @@ public partial class BonusManager : VBoxContainer
 
 		activeEnemyComboExtenders.Add(n);
 	}
-
 	public void UnregisterEnemyComboExtender(Node n) => activeEnemyComboExtenders.Remove(n);
 
 	/// <summary> Called when the level is completed. Forces all bonuses to be counted. </summary>
