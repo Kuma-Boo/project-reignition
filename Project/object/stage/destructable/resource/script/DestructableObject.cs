@@ -180,7 +180,11 @@ public partial class DestructableObject : Node3D
 		root.Transform = Transform3D.Identity;
 	}
 
-	public virtual void Despawn() => root.ProcessMode = pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
+	public virtual void Despawn()
+	{
+		root.Visible = pieceRoot.Visible = false;
+		root.ProcessMode = pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
+	}
 
 	public virtual void Shatter() // Call this from a signal
 	{
