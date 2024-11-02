@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_add, unshaded, world_vertex_coords;
+render_mode unshaded, world_vertex_coords;
 
 uniform vec4 albedo : source_color;
 uniform sampler2D texture_albedo : source_color;

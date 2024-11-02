@@ -84,6 +84,9 @@ public partial class LaunchRing : Launcher
 			return;
 
 		animator.Play("RESET", .2 * (1 + launchRatio));
+
+		if (!Player.IsLaunching)
+			EmitSignal(SignalName.Exited);
 	}
 
 	/// <summary> Called from an AnimationPlayer. </summary>

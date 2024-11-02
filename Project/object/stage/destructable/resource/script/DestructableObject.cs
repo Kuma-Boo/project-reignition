@@ -182,11 +182,8 @@ public partial class DestructableObject : Node3D
 
 	public virtual void Despawn()
 	{
-		pieceRoot.Visible = true;
-		root.ProcessMode = ProcessModeEnum.Disabled;
-
-		pieceRoot.Visible = true;
-		pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
+		root.Visible = pieceRoot.Visible = false;
+		root.ProcessMode = pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
 	}
 
 	public virtual void Shatter() // Call this from a signal
@@ -255,7 +252,7 @@ public partial class DestructableObject : Node3D
 			isInteractingWithPlayer = false;
 	}
 
-	private void ProcessPlayerCollision()
+	protected virtual void ProcessPlayerCollision()
 	{
 		// Prioritize Jump Dash
 		if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Player.IsJumpDashOrHomingAttack)

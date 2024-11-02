@@ -4,18 +4,18 @@ using Project.Gameplay.Objects;
 
 namespace Project.Gameplay;
 
+[Tool]
 public partial class GolemMajin : Enemy
 {
-	[Export]
-	private PathFollow3D pathFollower;
+	[Signal]
+	public delegate void FallenEventHandler();
 	/// <summary> Optional reference to a gas tank that can be thrown at the player. </summary>
-	[Export]
-	private GasTank gasTank;
-	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
-	private NodePath gasTankParent;
+	[Export] private GasTank gasTank;
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")] private NodePath gasTankParent;
 	private Node3D _gasTankParent;
 	private bool canThrowGasTank;
 
+	private PathFollow3D pathFollower;
 	private float startingProgress;
 
 	private Vector3 velocity;
@@ -30,13 +30,18 @@ public partial class GolemMajin : Enemy
 
 	protected override void SetUp()
 	{
-		if (pathFollower != null)
+		if (GetParent() is PathFollow3D)
+		{
+			pathFollower = GetParent<PathFollow3D>();
+			pathFollower.UseModelFront = true;
+			pathFollower.CubicInterp = false;
 			startingProgress = pathFollower.Progress;
+		}
 
 		if (gasTank != null)
 		{
 			_gasTankParent = GetNodeOrNull<Node3D>(gasTankParent);
-			gasTank.Connect(GasTank.SignalName.OnStrike, new(this, MethodName.LockGasTankToGolem));
+			gasTank.OnStrike += LockGasTankToGolem;
 		}
 
 		base.SetUp();
@@ -80,7 +85,7 @@ public partial class GolemMajin : Enemy
 
 	private void LaunchGasTank()
 	{
-		if (gasTank.IsTraveling || gasTank.IsDetonated) // Gas tank has already been launched
+		if (gasTank.IsTravelling || gasTank.IsDetonated) // Gas tank has already been launched
 			return;
 
 		Transform3D t = gasTank.GlobalTransform;

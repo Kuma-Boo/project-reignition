@@ -8,28 +8,20 @@ namespace Project.Gameplay.Objects;
 [Tool]
 public partial class FlyingPot : Node3D
 {
-	[Export]
-	public Vector2 travelBounds;
-	[Export]
-	public float boundOffset;
+	[Export] public Vector2 travelBounds;
+	[Export] public float boundOffset;
 
-	[Export]
-	private CameraSettingsResource customCameraSettings;
+	[Export] private CameraSettingsResource customCameraSettings;
 
 	[ExportGroup("Components")]
-	[Export]
-	private Node3D root;
+	[Export] private Node3D root;
 	public Node3D Root => root;
-	[Export]
-	private Area3D lockonArea;
-	[Export]
-	private CollisionShape3D environmentCollider;
-	[Export]
-	private AnimationTree animationTree;
-	[Export]
-	private AudioStreamPlayer enterSFX;
-	[Export]
-	private AudioStreamPlayer exitSFX;
+	[Export] private Area3D lockonArea;
+	[Export] private CollisionShape3D environmentCollider;
+	[Export] private AnimationTree animationTree;
+	[Export] private AnimationPlayer interactionAnimator;
+	[Export] private AudioStreamPlayer enterSFX;
+	[Export] private AudioStreamPlayer exitSFX;
 	private CameraTrigger cameraTrigger;
 
 	private readonly StringName EnterTrigger = "parameters/enter_trigger/request";
@@ -72,11 +64,9 @@ public partial class FlyingPot : Node3D
 
 	private void Respawn()
 	{
-		angle = 0f;
-		Velocity = 0f;
-		localPosition = Vector2.Zero;
-		ApplyMovement();
+		ResetPosition();
 
+		interactionAnimator.Play("RESET");
 		lockonArea.SetDeferred("monitorable", true);
 	}
 
@@ -90,7 +80,18 @@ public partial class FlyingPot : Node3D
 		if (Player.IsFlyingPotActive)
 			return;
 
+		if (interactingWithPlayer && !Player.IsOnGround && !environmentCollider.Disabled)
+			StartJump();
+
 		UpdateAngle(0);
+		ApplyMovement();
+	}
+
+	private void ResetPosition()
+	{
+		angle = 0f;
+		Velocity = 0f;
+		localPosition = Vector2.Zero;
 		ApplyMovement();
 	}
 
@@ -134,6 +135,12 @@ public partial class FlyingPot : Node3D
 	{
 		exitSFX.Play();
 		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		cameraTrigger?.Deactivate();
+	}
+
+	public void Shatter()
+	{
+		interactionAnimator.Play("shatter");
 		cameraTrigger?.Deactivate();
 	}
 

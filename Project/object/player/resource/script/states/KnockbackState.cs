@@ -40,17 +40,13 @@ public partial class KnockbackState : PlayerState
 		if (Player.ExternalController != null)
 			return; // Only allow autorespawning when not using external controller
 
+		if (Player.IsInvincible)
+			return;
+		Player.StartInvincibility();
+
 		if (Settings.disableDamage)
 			return;
-
-		// Apply invincibility and drop rings
-		if (!Player.IsInvincible)
-		{
-			Player.StartInvincibility();
-
-			if (!Settings.disableDamage)
-				Player.TakeDamage();
-		}
+		Player.TakeDamage();
 	}
 
 	public override void ExitState()

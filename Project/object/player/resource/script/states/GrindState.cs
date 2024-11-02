@@ -51,7 +51,9 @@ public partial class GrindState : PlayerState
 		Player.AllowLandingSkills = false;
 		Player.IsOnGround = true;
 		Player.VerticalSpeed = 0f;
-		Player.MoveSpeed = Player.Stats.GrindSettings.Speed * Player.Stats.CalculateGrindSpeedRatio(); // Start at the correct speed
+
+		float targetMoveSpeed = Player.Stats.GrindSettings.Speed * Player.Stats.CalculateGrindSpeedRatio();
+		Player.MoveSpeed = Mathf.Max(targetMoveSpeed, Player.MoveSpeed);
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.GrindUp) &&
 			SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.GrindUp) == 3)
 		{
@@ -164,7 +166,7 @@ public partial class GrindState : PlayerState
 
 	public bool IsRailActivationValid(GrindRail grindRail)
 	{
-		if (ActiveGrindRail == grindRail) // Already grinding
+		if (ActiveGrindRail == grindRail) // Already grinding on that rail
 			return false;
 
 		if (Player.VerticalSpeed > 0f) // Player can't snap to grind rails when moving upwards
@@ -184,7 +186,7 @@ public partial class GrindState : PlayerState
 
 		delta = grindRail.PathFollower.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindRail.PathFollower.GlobalPosition);
 		delta.Y -= Player.VerticalSpeed * PhysicsManager.physicsDelta;
-		if (delta.Y < 0.01f && (!Player.IsOnGround || !Player.AllowLandingGrind) && ActiveGrindRail == null)
+		if (delta.Y < 0.01f && Player.IsOnGround && !Player.AllowLandingGrind && ActiveGrindRail == null)
 			return false;
 
 		// Horizontal validation
