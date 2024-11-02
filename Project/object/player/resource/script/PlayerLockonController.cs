@@ -105,7 +105,8 @@ public partial class PlayerLockonController : Node3D
 
 				// Ignore lower targets when within fudge range
 				if (Mathf.Abs(closestDistance - potentialDistance) < DistanceFudgeAmount &&
-					potentialState == TargetState.LowPriority &&
+					(potentialTargets[i].GlobalPosition.Y <= activeTarget.GlobalPosition.Y ||
+					potentialState == TargetState.LowPriority) &&
 					activeState == TargetState.Valid)
 				{
 					continue;
