@@ -180,14 +180,7 @@ public partial class DestructableObject : Node3D
 		root.Transform = Transform3D.Identity;
 	}
 
-	public virtual void Despawn()
-	{
-		pieceRoot.Visible = true;
-		root.ProcessMode = ProcessModeEnum.Disabled;
-
-		pieceRoot.Visible = true;
-		pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
-	}
+	public virtual void Despawn() => root.ProcessMode = pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
 
 	public virtual void Shatter() // Call this from a signal
 	{
@@ -255,7 +248,7 @@ public partial class DestructableObject : Node3D
 			isInteractingWithPlayer = false;
 	}
 
-	private void ProcessPlayerCollision()
+	protected virtual void ProcessPlayerCollision()
 	{
 		// Prioritize Jump Dash
 		if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Player.IsJumpDashOrHomingAttack)

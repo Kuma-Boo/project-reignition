@@ -1,52 +1,82 @@
 using Godot;
+using Project.Core;
 
-namespace Project.Gameplay
+namespace Project.Gameplay.Objects;
+
+/// <summary> Hanging scrap found in Evil Foundry. </summary>
+public partial class HangingScrap : DestructableObject
 {
-	/// <summary>
-	/// Hanging scrap found in Evil Foundry.
-	/// </summary>
-	public partial class HangingScrap : Node3D
+	[Export(PropertyHint.Range, "0,5,.1")] private float dropDelaySeconds = 1.0f;
+	private bool isDropping;
+	private float dropTimer;
+	private PlayerController Player => StageSettings.Player;
+
+	/// <summary> The number of seconds to delay dropping when the player stands on the platform. </summary>
+	private readonly float StandingDelaySeconds = 0.5f;
+
+	public override void _PhysicsProcess(double delta)
 	{
-		[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")] private NodePath animator;
-		private AnimationPlayer Animator { get; set; }
-		private PlayerController Player => StageSettings.Player;
-		private bool isInteractingWithPlayer;
+		ProcessDrop();
+		base._PhysicsProcess(delta);
+	}
 
-		public override void _Ready()
+	protected override void ProcessPlayerCollision()
+	{
+		if (Player.IsOnGround && animator.CurrentAnimation != "start-drop")
 		{
-			Animator = GetNode<AnimationPlayer>(animator);
-			StageSettings.Instance.Respawned += Respawn;
+			QueueDrop(StandingDelaySeconds);
+			return;
 		}
 
-		public override void _PhysicsProcess(double _)
-		{
-			if (!isInteractingWithPlayer) return;
+		base.ProcessPlayerCollision();
+	}
 
-			if (Player.IsOnGround)
-			{
-				if (Animator.CurrentAnimation != "delay_drop")
-					Animator.Play("delay_drop");
-				return;
-			}
+	public override void Respawn()
+	{
+		base.Respawn();
+		dropTimer = 0.0f;
+		isDropping = false;
+	}
 
-			Animator.Play("drop");
+	public override void Shatter()
+	{
+		animator.Play("hide-base-mesh");
+		animator.Advance(0.0);
+		base.Shatter();
+	}
 
-			if (Player.IsJumpDashOrHomingAttack)
-				Player.StartBounce(false);
-		}
+	/// <summary> Call this from a signal. </summary>
+	private void QueueDrop() => QueueDrop(dropDelaySeconds);
+	private void QueueDrop(float time)
+	{
+		if (isDropping && time > dropTimer)
+			return;
 
-		public void Respawn() => Animator.Play("RESET");
+		isDropping = true;
+		dropTimer = time;
 
-		public void OnEntered(Area3D a)
-		{
-			if (!a.IsInGroup("player detection")) return;
-			isInteractingWithPlayer = true;
-		}
+		if (Mathf.IsZeroApprox(time))
+			ProcessDrop();
+	}
 
-		public void OnExited(Area3D a)
-		{
-			if (!a.IsInGroup("player detection")) return;
-			isInteractingWithPlayer = false;
-		}
+	private void ProcessDrop()
+	{
+		if (!isDropping)
+			return;
+
+		dropTimer = Mathf.MoveToward(dropTimer, 0, PhysicsManager.physicsDelta);
+		if (!Mathf.IsZeroApprox(dropTimer))
+			return;
+
+		Drop();
+	}
+
+	private void Drop()
+	{
+		if (isShattered)
+			return;
+
+		isShattered = true;
+		animator.Play("shatter");
 	}
 }
