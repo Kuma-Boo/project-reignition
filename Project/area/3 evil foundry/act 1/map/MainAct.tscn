@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=3 uid="uid://ciqbaxbhrxrjk"]
+[gd_scene load_steps=105 format=3 uid="uid://ciqbaxbhrxrjk"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
@@ -63,6 +63,7 @@
 [ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="53_ssbfn"]
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="54_5u8fr"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="55_0ks8t"]
+[ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="63_ix8fy"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vkmlm"]
 size = Vector3(20, 20, 5)
@@ -1558,6 +1559,9 @@ max_value = 0.0
 _data = [Vector2(0, 0), 0.0, 1.3033, 0, 0, Vector2(1, -1.8), -6.92583, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_neu5c"]
+size = Vector3(10, 1, 3)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_tr11d"]
 size = Vector3(15, 20, 5)
 
@@ -2643,6 +2647,7 @@ shape = SubResource("BoxShape3D_vkmlm")
 libraries = {
 "": SubResource("AnimationLibrary_i8wfd")
 }
+speed_scale = 1.2
 
 [node name="PearlRing2" type="Node3D" parent="MainAct/DoorHall"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -81.921, 2.2449, 2.079)
@@ -5408,7 +5413,6 @@ rangeOverride = 35
 
 [node name="LavaFlowHall" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20, 40, -235)
-visible = false
 script = ExtResource("41_gc12q")
 saveVisibilityOnCheckpoint = true
 
@@ -5449,12 +5453,12 @@ risingTime = 0.5
 closedTime = 1.2
 
 [node name="ItemBoxFlying" parent="MainAct/LavaFlowHall" instance=ExtResource("46_urgd3")]
-transform = Transform3D(-4.37118e-08, -9.09497e-12, -1.00001, 1.05812e-11, 1, -9.09506e-12, 1.00001, -1.05811e-11, -4.37118e-08, 72.4749, 11.419, 1.34201)
+transform = Transform3D(-4.37118e-08, -9.09497e-12, -1.00001, 1.05812e-11, 1, -9.09506e-12, 1.00001, -1.05811e-11, -4.37118e-08, 72.4749, 10.419, 1.34201)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 20
 
 [node name="ItemBoxFlying2" parent="MainAct/LavaFlowHall" instance=ExtResource("46_urgd3")]
-transform = Transform3D(-4.37118e-08, -9.09497e-12, -1.00001, 1.05813e-11, 1, -9.09506e-12, 1.00001, -1.05812e-11, -4.37118e-08, 72.507, 7.67146, 1.34272)
+transform = Transform3D(-4.37118e-08, -9.09497e-12, -1.00001, 1.05813e-11, 1, -9.09506e-12, 1.00001, -1.05812e-11, -4.37118e-08, 74.507, 6.67146, 1.34273)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 20
 
@@ -5840,6 +5844,20 @@ transform = Transform3D(-0.0127755, 0, 0.999918, 0, 1, 0, -0.999918, 0, -0.01277
 [node name="RichRing" parent="MainAct/Ending/ItemBox" instance=ExtResource("32_7ocqg")]
 transform = Transform3D(-0.998585, 0, 0.0531725, 0, 1, 0, -0.0531725, 0, -0.998585, -0.0237885, -17.0237, -29.2095)
 
+[node name="JumpTrigger1" parent="MainAct/Ending" instance=ExtResource("7_d57bs")]
+transform = Transform3D(0.0127754, 0, -0.999918, 0, 1, 0, 0.999918, 0, 0.0127754, 36.7244, -2.1184, -35.6871)
+"Enter Mode" = 0
+
+[node name="Jump" type="Node3D" parent="MainAct/Ending/JumpTrigger1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -18, 21)
+script = ExtResource("63_ix8fy")
+jumpHeight = 5.0
+autoAlign = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Ending/JumpTrigger1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_vkmlm")
+
 [node name="PearlRings" type="Node3D" parent="MainAct/Ending"]
 transform = Transform3D(0.0681024, 0, -0.997678, 0, 1, 0, 0.997678, 0, 0.0681024, 60.163, -10.2596, -33.999)
 script = ExtResource("7_v2v6a")
@@ -6187,6 +6205,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.963, -5.2239, 34.583)
 
 [node name="HangingScrap4" parent="MainAct/Ending" instance=ExtResource("51_wa5gi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.321, -3.7583, 34.583)
+
+[node name="JumpTrigger2" parent="MainAct/Ending" instance=ExtResource("7_d57bs")]
+transform = Transform3D(-0.00931987, 0, 0.999957, 0, 1, 0, -0.999957, 0, -0.00931987, 57.3523, -16.6238, 34.515)
+"Enter Mode" = 0
+
+[node name="Jump" type="Node3D" parent="MainAct/Ending/JumpTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.05176e-05, -8.4, 4.7)
+script = ExtResource("63_ix8fy")
+jumpHeight = 5.0
+autoAlign = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Ending/JumpTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_neu5c")
 
 [node name="ItemBoxFlying" parent="MainAct/Ending" instance=ExtResource("46_urgd3")]
 transform = Transform3D(0.00931996, 0, -0.999957, 0, 1, 0, 0.999957, 0, 0.00931996, 57.3523, -14.6238, 34.515)
