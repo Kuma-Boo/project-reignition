@@ -176,7 +176,10 @@ public partial class GasTank : Area3D
 			enemyList[i].TakeDamage(); // Damage all enemies in range
 
 		for (int i = 0; i < tankList.Count; i++)
+		{
 			tankList[i].Launch(); // Launch all gas tanks in range
+			BonusManager.instance.RegisterEnemyComboExtender(tankList[i]);
+		}
 
 		if (isPlayerInExplosion)
 			Player.StartKnockback();
