@@ -48,6 +48,7 @@ public partial class PlayerController : CharacterBody3D
 		// Initialize state machine last to ensure components are ready		
 		StateMachine.Initialize(this);
 
+		ChangeHitbox("RESET");
 		ResetOrientation();
 		SnapToGround();
 		GetParent<CheckpointTrigger>().Activate(); // Save initial checkpoint
