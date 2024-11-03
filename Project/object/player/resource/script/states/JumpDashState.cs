@@ -115,40 +115,13 @@ public partial class JumpDashState : PlayerState
 
 	protected override void ProcessTurning()
 	{
-		if (Mathf.IsZeroApprox(Player.MoveSpeed) && Input.IsActionPressed("button_brake"))
-			return;
-
-		bool isUsingStrafeControls = Player.Skills.IsSpeedBreakActive ||
-			SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) ||
-			(Player.IsLockoutActive &&
-			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe); // Ignore path delta under certain lockout situations
-
-		float pathControlAmount = Player.PathTurnInfluence;
-		if (isUsingStrafeControls || Player.IsLockoutActive)
-			pathControlAmount = 0; // Don't use path influence during speedbreak/autorun
-
+		float pathControlAmount = Player.Controller.CalculatePathControlAmount();
 		float targetMovementAngle = Player.Controller.GetTargetMovementAngle() + pathControlAmount;
-		if (Player.IsLockoutActive &&
-			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace) // Direction is being overridden
-		{
-			Player.MovementAngle = targetMovementAngle;
-		}
-
-		if (turnInstantly) // Instantly set movement angle to target movement angle
-		{
-			SnapRotation(targetMovementAngle);
+		if (DisableTurning(targetMovementAngle))
 			return;
-		}
-
-		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi))
-		{
-			// Check for turning around
-			if (!Player.IsLockoutActive || Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
-				return;
-		}
 
 		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
-		targetMovementAngle = ProcessTargetMovementAngle(targetMovementAngle);
+		targetMovementAngle = ProcessTargetMovementAngle(targetMovementAngle) + pathControlAmount;
 
 		// Normal turning
 		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, Player.PathFollower.ForwardAngle);
@@ -159,9 +132,29 @@ public partial class JumpDashState : PlayerState
 		float turnSmoothing = Mathf.Lerp(Player.Stats.MinTurnAmount, maxTurnAmount, speedRatio);
 		Player.MovementAngle += pathControlAmount;
 		Turn(targetMovementAngle, turnSmoothing);
+		Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, Mathf.Pi * .5f);
 
 		// Strafe implementation
-		if (isUsingStrafeControls)
+		if (Player.Controller.IsStrafeModeActive)
 			ProcessStrafe(targetMovementAngle);
+	}
+
+	protected override bool DisableTurning(float targetMovementAngle)
+	{
+		if (Player.IsLockoutActive &&
+			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace) // Direction is being overridden
+		{
+			Player.MovementAngle = targetMovementAngle;
+			return true;
+		}
+
+		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi, Mathf.Pi * .2f))
+		{
+			// Check for turning around
+			if (!Player.IsLockoutActive || Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
+				return true;
+		}
+
+		return false;
 	}
 }

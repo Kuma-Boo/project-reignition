@@ -109,37 +109,10 @@ public partial class PlayerState : Node
 	protected float turningVelocity;
 	protected virtual void ProcessTurning()
 	{
-		if (Mathf.IsZeroApprox(Player.MoveSpeed) && Input.IsActionPressed("button_brake"))
-			return;
-
-		bool isUsingStrafeControls = Player.Skills.IsSpeedBreakActive ||
-			SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) ||
-			(Player.IsLockoutActive &&
-			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe); // Ignore path delta under certain lockout situations
-
-		float pathControlAmount = Player.PathTurnInfluence;
-		if (isUsingStrafeControls || Player.IsLockoutActive)
-			pathControlAmount = 0; // Don't use path influence during speedbreak/autorun
-
+		float pathControlAmount = Player.Controller.CalculatePathControlAmount();
 		float targetMovementAngle = Player.Controller.GetTargetMovementAngle() + pathControlAmount;
-		if (Player.IsLockoutActive &&
-			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace) // Direction is being overridden
-		{
-			Player.MovementAngle = targetMovementAngle;
-		}
-
-		if (turnInstantly) // Instantly set movement angle to target movement angle
-		{
-			SnapRotation(targetMovementAngle);
+		if (DisableTurning(targetMovementAngle))
 			return;
-		}
-
-		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi))
-		{
-			// Check for turning around
-			if (!Player.IsLockoutActive || Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
-				return;
-		}
 
 		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
 		targetMovementAngle = ProcessTargetMovementAngle(targetMovementAngle);
@@ -155,8 +128,36 @@ public partial class PlayerState : Node
 		Turn(targetMovementAngle, turnSmoothing);
 
 		// Strafe implementation
-		if (isUsingStrafeControls)
+		if (Player.Controller.IsStrafeModeActive)
 			ProcessStrafe(targetMovementAngle);
+	}
+
+	protected virtual bool DisableTurning(float targetMovementAngle)
+	{
+		if (Mathf.IsZeroApprox(Player.MoveSpeed) && Input.IsActionPressed("button_brake"))
+			return true;
+
+		if (Player.IsLockoutActive &&
+			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace) // Direction is being overridden
+		{
+			Player.MovementAngle = targetMovementAngle;
+			return true;
+		}
+
+		if (turnInstantly) // Instantly set movement angle to target movement angle
+		{
+			SnapRotation(targetMovementAngle);
+			return true;
+		}
+
+		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi))
+		{
+			// Check for turning around
+			if (!Player.IsLockoutActive || Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
+				return true;
+		}
+
+		return false;
 	}
 
 	protected virtual void ProcessStrafe(float targetMovementAngle)

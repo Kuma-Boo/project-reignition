@@ -44,10 +44,10 @@ public partial class PlayerInputController : Node
 	public float InputHorizontal { get; private set; }
 	public float InputVertical { get; private set; }
 
-	/// <summary> Maximum angle that counts as holding a direction. </summary>
-	private readonly float MaximumHoldDelta = Mathf.Pi * .4f;
 	/// <summary> Minimum angle from PathFollower.ForwardAngle that counts as backstepping/moving backwards. </summary>
 	private readonly float MinBackStepAngle = Mathf.Pi * .6f;
+	/// <summary> Maximum angle that counts as holding a direction. </summary>
+	private const float MaximumHoldDelta = Mathf.Pi * .4f;
 
 	/// <summary> Maximum amount the player can turn when running at full speed. </summary>
 	public readonly float TurningDampingRange = Mathf.Pi * .35f;
@@ -96,6 +96,20 @@ public partial class PlayerInputController : Node
 
 	/// <summary> Returns the angle between the player's input angle and movementAngle. </summary>
 	public float GetTargetMovementAngle() => CalculateLockoutForwardAngle(GetTargetInputAngle());
+
+	public float CalculatePathControlAmount()
+	{
+		if (IsStrafeModeActive || Player.IsLockoutActive)
+			return 0; // Don't use path influence during speedbreak/autorun
+
+		return Player.PathTurnInfluence;
+	}
+
+	/// <summary> Returns whether the player is currently in strafing mode. </summary>
+	public bool IsStrafeModeActive => Player.Skills.IsSpeedBreakActive ||
+			SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) ||
+			(Player.IsLockoutActive &&
+			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe);
 
 	/// <summary> Returns the automaticly calculated input angle based on the game's settings and skills. </summary>
 	public float GetTargetInputAngle()
@@ -185,10 +199,10 @@ public partial class PlayerInputController : Node
 	}
 
 	/// <summary> Checks whether the player is holding a particular direction. </summary>
-	public bool IsHoldingDirection(float inputAngle, float referenceAngle)
+	public bool IsHoldingDirection(float inputAngle, float referenceAngle, float maximumDelta = MaximumHoldDelta)
 	{
 		float deltaAngle = ExtensionMethods.DeltaAngleRad(inputAngle, referenceAngle);
-		return deltaAngle <= MaximumHoldDelta;
+		return deltaAngle <= maximumDelta;
 	}
 
 	/// <summary> Returns how far the player's input is from the reference angle, normalized to MinBackStepAngle. </summary>
