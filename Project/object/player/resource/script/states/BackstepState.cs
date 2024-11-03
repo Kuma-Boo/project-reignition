@@ -85,9 +85,15 @@ public partial class BackstepState : PlayerState
 		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
 		if (turnInstantly) // Turn instantly
 		{
-			turningVelocity = 0;
-			Player.MovementAngle = targetMovementAngle;
+			SnapRotation(targetMovementAngle);
 			return;
+		}
+
+		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi))
+		{
+			// Check for turning around
+			if (!Player.IsLockoutActive || Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
+				return;
 		}
 
 		// Use GroundSettings so backstep turning feels consistent with the run state
