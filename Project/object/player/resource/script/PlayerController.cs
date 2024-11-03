@@ -299,7 +299,7 @@ public partial class PlayerController : CharacterBody3D
 			return;
 		}
 
-		if (IsMovingBackward || !IsOnGround)
+		if (Controller.IsStrafeModeActive || IsMovingBackward || !IsOnGround)
 			return;
 
 		// Reduce MoveSpeed when running against walls
