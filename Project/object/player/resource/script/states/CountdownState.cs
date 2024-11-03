@@ -14,6 +14,8 @@ public partial class CountdownState : PlayerState
 
 	public override void EnterState()
 	{
+		Player.IsCountdown = true;
+
 		Player.Transform = Transform3D.Identity;
 		Player.PathFollower.Resync();
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
@@ -24,6 +26,7 @@ public partial class CountdownState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.IsCountdown = false;
 		Player.Animator.CancelOneshot();
 
 		// Snap camera to gameplay

@@ -579,6 +579,7 @@ public partial class PlayerController : CharacterBody3D
 	[ExportGroup("States")]
 	[Export]
 	private CountdownState countdownState;
+	public bool IsCountdown { get; set; }
 	public void StartCountdown() => StateMachine.ChangeState(countdownState);
 
 	[Signal]
