@@ -44,6 +44,7 @@ public partial class BackflipState : PlayerState
 	public override void ExitState()
 	{
 		Player.IsBackflipping = false;
+		Player.AttackState = PlayerController.AttackStates.None;
 	}
 
 	public override PlayerState ProcessPhysics()
