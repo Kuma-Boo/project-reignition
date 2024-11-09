@@ -35,6 +35,9 @@ public partial class AutomationTrigger : Area3D
 		if (Player.IsAutomationActive || !Player.IsOnGround)
 			return;
 
+		if (Player.IsCountdown)
+			return;
+
 		if (Player.IsTeleporting)
 			return;
 

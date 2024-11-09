@@ -18,6 +18,8 @@ public partial class PlayerSkillController : Node3D
 		MaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
 
 		SetUpSkills();
+		timeBreakAnimator.Play("RESET");
+		speedBreakAnimator.Play("RESET");
 	}
 
 	#region Skills
@@ -382,8 +384,6 @@ public partial class PlayerSkillController : Node3D
 
 	public void ToggleSpeedBreak()
 	{
-		//Player.ResetActionState();
-
 		IsSpeedBreakActive = !IsSpeedBreakActive;
 		SoundManager.IsBreakChannelMuted = IsSpeedBreakActive;
 		breakTimer = IsSpeedBreakActive ? SpeedBreakDelay : BreakSkillsCooldown;

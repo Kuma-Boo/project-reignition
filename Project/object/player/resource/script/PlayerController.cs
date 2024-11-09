@@ -48,6 +48,7 @@ public partial class PlayerController : CharacterBody3D
 		// Initialize state machine last to ensure components are ready		
 		StateMachine.Initialize(this);
 
+		ChangeHitbox("RESET");
 		ResetOrientation();
 		SnapToGround();
 		GetParent<CheckpointTrigger>().Activate(); // Save initial checkpoint
@@ -257,7 +258,7 @@ public partial class PlayerController : CharacterBody3D
 	public new bool IsOnWall { get; set; }
 	public RaycastHit WallRaycastHit { get; set; }
 	/// <summary> Checks for walls forward and backwards (only in the direction the player is moving). </summary>
-	public void CheckWall(Vector3 castDirection = new())
+	public void CheckWall(Vector3 castDirection = new(), bool reduceSpeedDuringHeadonCollision = true)
 	{
 		IsOnWall = false;
 
@@ -275,7 +276,7 @@ public partial class PlayerController : CharacterBody3D
 		}
 
 		float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(WallRaycastHit.normal.RemoveVertical(), IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
-		if (wallDelta >= Mathf.Pi * .75f) // Process head-on collision
+		if (wallDelta >= Mathf.Pi * .8f) // Process head-on collision
 		{
 			// Cancel speed break
 			if (Skills.IsSpeedBreakActive)
@@ -290,16 +291,19 @@ public partial class PlayerController : CharacterBody3D
 				Skills.CallDeferred(PlayerSkillController.MethodName.ToggleSpeedBreak);
 			}
 
-			if (WallRaycastHit.distance <= CollisionSize.X + CollisionPadding)
-				MoveSpeed = 0; // Kill speed
-			else if (WallRaycastHit.distance <= CollisionSize.X + CollisionPadding + (MoveSpeed * PhysicsManager.physicsDelta))
-				MoveSpeed *= .9f; // Slow down drastically
+			if (reduceSpeedDuringHeadonCollision)
+			{
+				if (WallRaycastHit.distance <= CollisionSize.X + CollisionPadding)
+					MoveSpeed = 0; // Kill speed
+				else if (WallRaycastHit.distance <= CollisionSize.X + CollisionPadding + (MoveSpeed * PhysicsManager.physicsDelta))
+					MoveSpeed *= .9f; // Slow down drastically
+			}
 
 			IsOnWall = true;
 			return;
 		}
 
-		if (IsMovingBackward || !IsOnGround)
+		if (Controller.IsStrafeModeActive || IsMovingBackward || !IsOnGround)
 			return;
 
 		// Reduce MoveSpeed when running against walls
@@ -579,6 +583,7 @@ public partial class PlayerController : CharacterBody3D
 	[ExportGroup("States")]
 	[Export]
 	private CountdownState countdownState;
+	public bool IsCountdown { get; set; }
 	public void StartCountdown() => StateMachine.ChangeState(countdownState);
 
 	[Signal]

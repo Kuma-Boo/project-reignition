@@ -78,11 +78,11 @@ public partial class JumpState : PlayerState
 
 		ProcessMoveSpeed();
 		ProcessTurning();
-		UpdateVerticalSpeed();
+		ProcessGravity();
 		Player.ApplyMovement();
 		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
 		Player.CheckGround();
-		Player.CheckWall();
+		Player.CheckWall(Vector3.Zero, !isAccelerationJump);
 		Player.CheckCeiling();
 		Player.UpdateUpDirection();
 
@@ -129,7 +129,7 @@ public partial class JumpState : PlayerState
 			Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, MaxAccelerationJumpTurnAmount);
 	}
 
-	private void UpdateVerticalSpeed()
+	protected override void ProcessGravity()
 	{
 		if (isShortenedJump && Player.VerticalSpeed > 0)
 		{
@@ -143,7 +143,7 @@ public partial class JumpState : PlayerState
 				StartAccelerationJump();
 		}
 
-		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
+		base.ProcessGravity();
 	}
 
 	private void StartAccelerationJump()

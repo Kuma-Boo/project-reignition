@@ -79,16 +79,10 @@ public partial class BackstepState : PlayerState
 
 	protected override void ProcessTurning()
 	{
-		if (Mathf.IsZeroApprox(Player.MoveSpeed) && !Input.IsActionPressed("button_brake"))
+		float pathControlAmount = Player.Controller.CalculatePathControlAmount();
+		float targetMovementAngle = Player.Controller.GetTargetMovementAngle() + pathControlAmount;
+		if (DisableTurning(targetMovementAngle))
 			return;
-
-		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
-		if (turnInstantly) // Turn instantly
-		{
-			turningVelocity = 0;
-			Player.MovementAngle = targetMovementAngle;
-			return;
-		}
 
 		// Use GroundSettings so backstep turning feels consistent with the run state
 		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
