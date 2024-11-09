@@ -180,4 +180,6 @@ public partial class PlayerState : Node
 		turningVelocity = 0;
 		Player.MovementAngle = targetMovementAngle;
 	}
+
+	protected virtual void ProcessGravity() => Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
 }

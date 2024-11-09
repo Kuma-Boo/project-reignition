@@ -49,8 +49,9 @@ public partial class BackflipState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		UpdateMoveSpeed();
-		UpdateVerticalSpeed();
+		ProcessMoveSpeed();
+		ProcessTurning();
+		ProcessGravity();
 		Player.ApplyMovement();
 		Player.CheckGround();
 		Player.CheckCeiling();
@@ -71,7 +72,7 @@ public partial class BackflipState : PlayerState
 		return null;
 	}
 
-	private void UpdateMoveSpeed()
+	protected override void ProcessMoveSpeed()
 	{
 		float inputAngle = Player.Controller.GetTargetInputAngle();
 		float inputStrength = Player.Controller.GetInputStrength();
@@ -83,30 +84,41 @@ public partial class BackflipState : PlayerState
 			return;
 		}
 
-		float targetMovementAngle = ExtensionMethods.ClampAngleRange(inputAngle, Player.PathFollower.BackAngle, MaxBackflipAdjustment);
 		if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 			Player.MoveSpeed = Player.Stats.BackflipSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
 		else if (Mathf.IsZeroApprox(inputStrength))
 			Player.MoveSpeed = Player.Stats.BackflipSettings.UpdateInterpolate(Player.MoveSpeed, 0);
-
-		UpdateTurning(targetMovementAngle);
 	}
 
-	private void UpdateTurning(float targetMovementAngle)
+	protected override void ProcessTurning()
 	{
-		targetMovementAngle += Player.PathTurnInfluence;
-		targetMovementAngle = Player.Controller.ImproveAnalogPrecision(targetMovementAngle, Player.PathFollower.BackAngle);
+		float pathControlAmount = Player.Controller.CalculatePathControlAmount();
+		float targetMovementAngle = Player.Controller.GetTargetMovementAngle() + pathControlAmount;
+		if (DisableTurning(targetMovementAngle))
+			return;
 
-		float inputDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetMovementAngle, Player.PathFollower.BackAngle);
-		float movementDeltaAngle = ExtensionMethods.SignedDeltaAngleRad(Player.MovementAngle, Player.PathFollower.BackAngle);
-		// Is the player trying to recenter themselves?
-		bool isRecentering = Player.Controller.IsRecentering(movementDeltaAngle, inputDeltaAngle);
-		float turnAmount = isRecentering ? Player.Stats.RecenterTurnAmount : Player.Stats.MaxTurnAmount;
-		Player.MovementAngle = ExtensionMethods.SmoothDampAngle(Player.MovementAngle, targetMovementAngle, ref turningVelocity, turnAmount);
+		// Use GroundSettings so backstep turning feels consistent with the run state
+		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);
+		float turnSmoothing = Mathf.Lerp(Player.Stats.MinTurnAmount, Player.Stats.MaxTurnAmount, speedRatio);
+		Player.MovementAngle = ExtensionMethods.SmoothDampAngle(Player.MovementAngle + Player.PathTurnInfluence, targetMovementAngle, ref turningVelocity, turnSmoothing);
 	}
 
-	private void UpdateVerticalSpeed()
+	protected override bool DisableTurning(float targetMovementAngle)
 	{
-		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
+		if (Player.IsLockoutActive &&
+			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Replace) // Direction is being overridden
+		{
+			Player.MovementAngle = targetMovementAngle;
+			return true;
+		}
+
+		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi, Mathf.Pi * .2f))
+		{
+			// Check for turning around
+			if (!Player.IsLockoutActive || Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
+				return true;
+		}
+
+		return false;
 	}
 }
