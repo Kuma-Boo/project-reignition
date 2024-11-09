@@ -54,6 +54,7 @@ public partial class BackflipState : PlayerState
 		ProcessGravity();
 		Player.ApplyMovement();
 		Player.CheckGround();
+		Player.CheckWall(Vector3.Zero, false);
 		Player.CheckCeiling();
 		Player.UpdateUpDirection(true, Player.PathFollower.HeightAxis);
 

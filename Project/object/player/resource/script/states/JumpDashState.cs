@@ -59,7 +59,7 @@ public partial class JumpDashState : PlayerState
 		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, -jumpDashMaxGravity, jumpDashGravity * PhysicsManager.physicsDelta);
 		Player.ApplyMovement();
 		Player.CheckGround();
-		Player.CheckWall();
+		Player.CheckWall(Vector3.Zero, false);
 		Player.UpdateUpDirection(true);
 
 		if (Player.IsOnGround)
@@ -78,7 +78,6 @@ public partial class JumpDashState : PlayerState
 			}
 
 			// Kill speed when jump dashing into a wall to prevent splash jump from becoming obsolete
-			Player.MoveSpeed = 0;
 			Player.VerticalSpeed = Mathf.Clamp(Player.VerticalSpeed, -Mathf.Inf, 0);
 		}
 
