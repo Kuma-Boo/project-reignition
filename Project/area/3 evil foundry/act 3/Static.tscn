@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://sap50uvjitma"]
+[gd_scene load_steps=18 format=3 uid="uid://sap50uvjitma"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_y3xwh"]
 [ext_resource type="Resource" uid="uid://dmv3a7tioyyl6" path="res://area/3 evil foundry/data/DialogLibrary.tres" id="2_s1lnd"]
@@ -14,6 +14,8 @@
 [ext_resource type="PackedScene" uid="uid://bxktruswicj2v" path="res://area/3 evil foundry/act 3/environment/09Mine.tscn" id="12_s5wbo"]
 [ext_resource type="PackedScene" uid="uid://wv3blyqy54yi" path="res://area/3 evil foundry/act 3/environment/10Hall.tscn" id="13_d35ao"]
 [ext_resource type="PackedScene" uid="uid://colwov4oavxp" path="res://area/3 evil foundry/act 3/environment/11Spiral.tscn" id="14_oxee6"]
+[ext_resource type="Curve3D" path="res://area/3 evil foundry/act 3/environment/path/StartingPath.tres" id="15_s46kt"]
+[ext_resource type="Curve3D" path="res://area/3 evil foundry/act 3/environment/path/EndingPath.tres" id="16_qmjwd"]
 
 [sub_resource type="Environment" id="Environment_vst5d"]
 background_mode = 1
@@ -33,9 +35,10 @@ glow_hdr_scale = 2.5
 volumetric_fog_density = 0.0
 adjustment_enabled = true
 
-[node name="Static" type="Node3D" node_paths=PackedStringArray("Environment")]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_y3xwh")
 dialogLibrary = ExtResource("2_s1lnd")
+pathParent = NodePath("Path")
 Environment = NodePath("WorldEnvironment")
 
 [node name="Collision" parent="." instance=ExtResource("3_vpehf")]
@@ -95,6 +98,16 @@ directional_shadow_max_distance = 10.0
 [node name="10Hall" parent="Visuals" instance=ExtResource("13_d35ao")]
 
 [node name="11Spiral" parent="Visuals" instance=ExtResource("14_oxee6")]
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="StartingPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, -30, -120)
+curve = ExtResource("15_s46kt")
+
+[node name="EndingPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -660, -30, -420)
+curve = ExtResource("16_qmjwd")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_vst5d")
