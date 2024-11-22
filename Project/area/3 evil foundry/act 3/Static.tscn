@@ -1,0 +1,100 @@
+[gd_scene load_steps=16 format=3 uid="uid://sap50uvjitma"]
+
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_y3xwh"]
+[ext_resource type="Resource" uid="uid://dmv3a7tioyyl6" path="res://area/3 evil foundry/data/DialogLibrary.tres" id="2_s1lnd"]
+[ext_resource type="PackedScene" uid="uid://b3rghxm2g3tjo" path="res://area/3 evil foundry/act 3/environment/collision/Collision.tscn" id="3_vpehf"]
+[ext_resource type="PackedScene" uid="uid://bolh38bdssjtb" path="res://area/3 evil foundry/act 3/environment/01Opening.tscn" id="4_aq7cx"]
+[ext_resource type="PackedScene" uid="uid://cqilvs0p5ayr0" path="res://area/3 evil foundry/act 3/environment/02Elbow.tscn" id="5_1v5ok"]
+[ext_resource type="PackedScene" uid="uid://bamlrdh04dqov" path="res://area/3 evil foundry/act 3/environment/03Spiral.tscn" id="6_r5rce"]
+[ext_resource type="PackedScene" uid="uid://cya1hyb6dp4jc" path="res://area/3 evil foundry/act 3/environment/04Mine.tscn" id="7_rpa0v"]
+[ext_resource type="PackedScene" uid="uid://dojgigqipikg7" path="res://area/3 evil foundry/act 3/environment/05Hall.tscn" id="8_o3bwv"]
+[ext_resource type="PackedScene" uid="uid://g0flyjbdj8qr" path="res://area/3 evil foundry/act 3/environment/06LavaRoom.tscn" id="9_pb8gl"]
+[ext_resource type="PackedScene" uid="uid://bwca7fi6p0nwr" path="res://area/3 evil foundry/act 3/environment/07Hall.tscn" id="10_mcyuw"]
+[ext_resource type="PackedScene" uid="uid://klgrk8u0u053" path="res://area/3 evil foundry/act 3/environment/08Spiral.tscn" id="11_mb1lp"]
+[ext_resource type="PackedScene" uid="uid://bxktruswicj2v" path="res://area/3 evil foundry/act 3/environment/09Mine.tscn" id="12_s5wbo"]
+[ext_resource type="PackedScene" uid="uid://wv3blyqy54yi" path="res://area/3 evil foundry/act 3/environment/10Hall.tscn" id="13_d35ao"]
+[ext_resource type="PackedScene" uid="uid://colwov4oavxp" path="res://area/3 evil foundry/act 3/environment/11Spiral.tscn" id="14_oxee6"]
+
+[sub_resource type="Environment" id="Environment_vst5d"]
+background_mode = 1
+ambient_light_source = 2
+ambient_light_color = Color(0.54902, 0.372549, 0.329412, 1)
+tonemap_mode = 2
+tonemap_white = 1.2
+ssil_enabled = true
+ssil_radius = 10.0
+ssil_intensity = 1.5
+glow_enabled = true
+glow_intensity = 0.2
+glow_strength = 0.95
+glow_blend_mode = 0
+glow_hdr_threshold = 1.5
+glow_hdr_scale = 2.5
+volumetric_fog_density = 0.0
+adjustment_enabled = true
+
+[node name="Static" type="Node3D" node_paths=PackedStringArray("Environment")]
+script = ExtResource("1_y3xwh")
+dialogLibrary = ExtResource("2_s1lnd")
+Environment = NodePath("WorldEnvironment")
+
+[node name="Collision" parent="." instance=ExtResource("3_vpehf")]
+visible = false
+
+[node name="Trigger" type="Node3D" parent="."]
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="ObjectLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(0.92549, 0.8, 0.466667, 1)
+light_cull_mask = 4293918785
+directional_shadow_max_distance = 10.0
+
+[node name="DropShadows" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_cull_mask = 4293918726
+shadow_enabled = true
+
+[node name="LavaLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1.31134e-07, -1, 0, 1, 1.31134e-07, 0, 0, 0)
+layers = 1024
+light_color = Color(0.819608, 0.584314, 0, 1)
+light_cull_mask = 4293918722
+directional_shadow_max_distance = 10.0
+
+[node name="LavaGlowLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(0.6, 0.42, 0, 1)
+light_cull_mask = 4293918728
+directional_shadow_max_distance = 10.0
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="01Opening" parent="Visuals" instance=ExtResource("4_aq7cx")]
+
+[node name="02Elbow" parent="Visuals" instance=ExtResource("5_1v5ok")]
+
+[node name="03Spiral" parent="Visuals" instance=ExtResource("6_r5rce")]
+
+[node name="04Mine" parent="Visuals" instance=ExtResource("7_rpa0v")]
+
+[node name="05Hall" parent="Visuals" instance=ExtResource("8_o3bwv")]
+
+[node name="06LavaRoom" parent="Visuals" instance=ExtResource("9_pb8gl")]
+
+[node name="07Hall" parent="Visuals" instance=ExtResource("10_mcyuw")]
+
+[node name="08Spiral" parent="Visuals" instance=ExtResource("11_mb1lp")]
+
+[node name="09Mine" parent="Visuals" instance=ExtResource("12_s5wbo")]
+
+[node name="10Hall" parent="Visuals" instance=ExtResource("13_d35ao")]
+
+[node name="11Spiral" parent="Visuals" instance=ExtResource("14_oxee6")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_vst5d")
