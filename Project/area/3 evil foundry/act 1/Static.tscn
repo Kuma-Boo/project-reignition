@@ -1,8 +1,7 @@
-[gd_scene load_steps=58 format=3 uid="uid://wufpyrm8jour"]
+[gd_scene load_steps=62 format=3 uid="uid://wufpyrm8jour"]
 
 [ext_resource type="PackedScene" uid="uid://o4l6oimlm4qq" path="res://area/3 evil foundry/act 1/environment/collision/Collision.tscn" id="1_liyuu"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_q5jqm"]
-[ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/3 evil foundry/data/Environment.tres" id="2_imo2i"]
 [ext_resource type="Resource" uid="uid://b017wlhsy06jg" path="res://area/3 evil foundry/act 1/camera/FarHallCam.tres" id="2_oi8d4"]
 [ext_resource type="PackedScene" uid="uid://bo4ijrtd2ee3j" path="res://area/3 evil foundry/act 1/environment/01Opening.tscn" id="3_bb6ii"]
 [ext_resource type="PackedScene" uid="uid://b8raat7vo2t82" path="res://area/3 evil foundry/act 1/environment/02Hall.tscn" id="4_kqfa2"]
@@ -74,11 +73,57 @@ size = Vector3(100, 5, 200)
 [sub_resource type="BoxShape3D" id="BoxShape3D_seqin"]
 size = Vector3(20, 20, 5)
 
-[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
+[sub_resource type="Gradient" id="Gradient_b08sy"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.0340909, 0.503788, 0.897727, 1)
+colors = PackedColorArray(0, 0.00392157, 0, 1, 0.00884778, 0.0219422, 0.0080423, 1, 0.41, 0.41, 0.41, 1, 0.904192, 0.855356, 0.812669, 1, 1, 0.941333, 0.89, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_et1ty"]
+gradient = SubResource("Gradient_b08sy")
+
+[sub_resource type="Gradient" id="Gradient_663e5"]
+offsets = PackedFloat32Array(0.484848)
+colors = PackedColorArray(1, 0.583333, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_n41td"]
+gradient = SubResource("Gradient_663e5")
+
+[sub_resource type="Environment" id="Environment_8qchy"]
+ambient_light_source = 2
+ambient_light_color = Color(0.54902, 0.372549, 0.329412, 1)
+tonemap_exposure = 1.2
+tonemap_white = 1.2
+ssil_enabled = true
+ssil_radius = 10.0
+ssil_intensity = 1.5
+glow_enabled = true
+glow_levels/2 = 2.0
+glow_levels/3 = 0.3
+glow_levels/5 = 0.0
+glow_intensity = 0.2
+glow_strength = 2.0
+glow_bloom = 0.1
+glow_blend_mode = 4
+glow_hdr_threshold = 1.5
+glow_hdr_scale = 2.5
+glow_map = SubResource("GradientTexture1D_n41td")
+fog_enabled = true
+fog_light_color = Color(1, 0.55, 0, 1)
+fog_density = 0.0004
+fog_sky_affect = 0.0
+volumetric_fog_density = 0.1008
+volumetric_fog_albedo = Color(0, 0, 0, 1)
+volumetric_fog_emission = Color(0.466667, 0, 0, 1)
+volumetric_fog_anisotropy = 0.11
+volumetric_fog_length = 100.0
+volumetric_fog_temporal_reprojection_enabled = false
+adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture1D_et1ty")
+
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent")]
 script = ExtResource("1_q5jqm")
 InitialCameraSettings = ExtResource("2_oi8d4")
 pathParent = NodePath("Path")
-Environment = NodePath("WorldEnvironment")
 
 [node name="Collision" parent="." instance=ExtResource("1_liyuu")]
 visible = false
@@ -1100,7 +1145,7 @@ curve = ExtResource("37_dpldg")
 [node name="BGM" parent="." instance=ExtResource("9_qe1e0")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("2_imo2i")
+environment = SubResource("Environment_8qchy")
 
 [node name="ScreenWarp" parent="." instance=ExtResource("10_t3vg2")]
 

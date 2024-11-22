@@ -1,0 +1,26 @@
+[gd_resource type="Shader" format=3 uid="uid://dt8heyml4biim"]
+
+[resource]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.2.2.stable.mono's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_add,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx,unshaded;
+uniform vec4 albedo : source_color;
+
+uniform float rim_bias : hint_range(0, 1) = .5;
+uniform float vert_col_influence: hint_range(0.0, 1.0) = 0.5;
+
+uniform float distance_fade_min;
+uniform float distance_fade_max;
+
+
+void fragment() {
+	float view = dot(NORMAL, VIEW);
+	float rim = (view - rim_bias);
+	
+	float distance_fade = clamp(smoothstep(distance_fade_min, distance_fade_max, length(VERTEX)), 0.0, 1.0);
+	
+	ALBEDO = albedo.rgb * COLOR.rgb * rim * distance_fade;
+	ALBEDO = vec3(clamp(ALBEDO.r, 0, 1), clamp(ALBEDO.g, 0, 1), clamp(ALBEDO.b, 0, 1));
+}
+"
