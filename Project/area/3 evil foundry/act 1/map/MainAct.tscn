@@ -76,6 +76,9 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_vkmlm"]
 size = Vector3(20, 20, 5)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_jbfdv"]
+size = Vector3(15, 20, 5)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_x0emq"]
 size = Vector3(15, 20, 20)
 
@@ -1598,9 +1601,6 @@ size = Vector3(10, 1, 3)
 [sub_resource type="BoxShape3D" id="BoxShape3D_tr11d"]
 size = Vector3(15, 20, 5)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_jbfdv"]
-size = Vector3(15, 20, 5)
-
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("5_fqsot")]
@@ -1831,6 +1831,134 @@ transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, 140, 40,
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/LavaPool-U"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_vkmlm")
+
+[node name="DialogTriggers" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.485, 0, -5.78446)
+
+[node name="CastleTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("7_d57bs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.6133, -2.40597, -3.96583)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/CastleTrigger"]
+script = ExtResource("72_5nukf")
+delays = Array[float]([])
+textKeys = ["evi_castle_sh", "evi_castle_so"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/CastleTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_jbfdv")
+
+[node name="GolemTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("7_d57bs")]
+transform = Transform3D(0.0100529, 0, 0.999949, 0, 1, 0, -0.999949, 0, 0.0100529, -50.0611, -40.8999, -44.2322)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/GolemTrigger"]
+script = ExtResource("72_5nukf")
+delays = Array[float]([])
+textKeys = ["evi_golem_so", "evi_golem_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/GolemTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_jbfdv")
+
+[node name="TankTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("7_d57bs")]
+transform = Transform3D(0.0100529, 0, 0.999949, 0, 1, 0, -0.999949, 0, 0.0100529, -172.274, -33.8773, -113.3)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/TankTrigger"]
+script = ExtResource("72_5nukf")
+delays = Array[float]([])
+textKeys = ["evi_hint_tank_sh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/TankTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_jbfdv")
+
+[node name="VaporizeTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("7_d57bs")]
+transform = Transform3D(0.0100529, 0, 0.999949, 0, 1, 0, -0.999949, 0, 0.0100529, -575.564, -58.6324, -49.4703)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/VaporizeTrigger"]
+script = ExtResource("72_5nukf")
+delays = Array[float]([])
+textKeys = ["evi_vape_sh", "evi_vape_so"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/VaporizeTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
+shape = SubResource("BoxShape3D_jbfdv")
+
+[node name="GolemHeightTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("7_d57bs")]
+transform = Transform3D(0.999838, 0, 0.0179759, 0, 1, 0, -0.0179759, 0, 0.999838, -662.464, -60.1442, -338.306)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/GolemHeightTrigger"]
+script = ExtResource("72_5nukf")
+delays = Array[float]([])
+textKeys = Array[String](["evi_hint_golem_height_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/GolemHeightTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
+shape = SubResource("BoxShape3D_jbfdv")
+
+[node name="LaunchringTrigger (missing dialog)" parent="MainAct/DialogTriggers" instance=ExtResource("7_d57bs")]
+transform = Transform3D(0.016894, 0, -0.999857, 0, 1, 0, 0.999857, 0, 0.016894, -614.002, -60.1442, -413.673)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/LaunchringTrigger (missing dialog)"]
+script = ExtResource("72_5nukf")
+textKeys = Array[String](["evi_hint_golem_height_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/LaunchringTrigger (missing dialog)"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
+shape = SubResource("BoxShape3D_jbfdv")
+disabled = true
+
+[node name="ElevatorTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("7_d57bs")]
+transform = Transform3D(0.016894, 0, -0.999857, 0, 1, 0, 0.999857, 0, 0.016894, -50.2714, -60.7889, -184.278)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/ElevatorTrigger"]
+script = ExtResource("72_5nukf")
+delays = Array[float]([])
+textKeys = Array[String](["evi_elevator_sh", "evi_elevator_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/ElevatorTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
+shape = SubResource("BoxShape3D_jbfdv")
+
+[node name="MechineTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("7_d57bs")]
+transform = Transform3D(-0.999652, 0, 0.0263863, 0, 1, 0, -0.0263863, 0, -0.999652, 126.591, 37.5076, -405.094)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/MechineTrigger"]
+script = ExtResource("72_5nukf")
+delays = Array[float]([])
+textKeys = Array[String](["evi_hint_homing_attack_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/MechineTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
+shape = SubResource("BoxShape3D_jbfdv")
+
+[node name="CenterTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("7_d57bs")]
+transform = Transform3D(0.101803, 0, -0.994804, 0, 1, 0, 0.994804, 0, 0.101803, 163.748, 37.5076, -188.53)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/CenterTrigger"]
+script = ExtResource("72_5nukf")
+textKeys = Array[String](["evi_factory_sh", "evi_factory_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/CenterTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
+shape = SubResource("BoxShape3D_jbfdv")
 
 [node name="CameraMap" type="Node3D" parent="MainAct"]
 
@@ -6580,135 +6708,6 @@ transform = Transform3D(0.0467926, 3.56043e-17, -0.998905, 1.80718e-17, 1, -2.21
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Ending/Goal"]
 shape = SubResource("BoxShape3D_tr11d")
-
-[node name="DialogTriggers" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.485, 0, -5.78446)
-
-[node name="CastleTrigger" parent="DialogTriggers" instance=ExtResource("7_d57bs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.6133, -2.40597, -3.96583)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="DialogTriggers/CastleTrigger"]
-script = ExtResource("72_5nukf")
-delays = Array[float]([])
-textKeys = ["evi_castle_sh", "evi_castle_so"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/CastleTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-shape = SubResource("BoxShape3D_jbfdv")
-
-[node name="GolemTrigger" parent="DialogTriggers" instance=ExtResource("7_d57bs")]
-transform = Transform3D(0.0100529, 0, 0.999949, 0, 1, 0, -0.999949, 0, 0.0100529, -50.0611, -40.8999, -44.2322)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="DialogTriggers/GolemTrigger"]
-script = ExtResource("72_5nukf")
-delays = Array[float]([])
-textKeys = ["evi_golem_so", "evi_golem_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/GolemTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-shape = SubResource("BoxShape3D_jbfdv")
-
-[node name="TankTrigger" parent="DialogTriggers" instance=ExtResource("7_d57bs")]
-transform = Transform3D(0.0100529, 0, 0.999949, 0, 1, 0, -0.999949, 0, 0.0100529, -172.274, -33.8773, -113.3)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="DialogTriggers/TankTrigger"]
-script = ExtResource("72_5nukf")
-delays = Array[float]([])
-textKeys = ["evi_hint_tank_sh"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/TankTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-shape = SubResource("BoxShape3D_jbfdv")
-
-[node name="TankTrigger2" parent="DialogTriggers" instance=ExtResource("7_d57bs")]
-transform = Transform3D(0.0100529, 0, 0.999949, 0, 1, 0, -0.999949, 0, 0.0100529, -575.564, -58.6324, -49.4703)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="DialogTriggers/TankTrigger2"]
-script = ExtResource("72_5nukf")
-delays = Array[float]([])
-textKeys = ["evi_vape_sh", "evi_vape_so"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/TankTrigger2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
-shape = SubResource("BoxShape3D_jbfdv")
-
-[node name="GolemTrigger2" parent="DialogTriggers" instance=ExtResource("7_d57bs")]
-transform = Transform3D(0.999838, 0, 0.0179759, 0, 1, 0, -0.0179759, 0, 0.999838, -661.864, -60.1442, -338.317)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="DialogTriggers/GolemTrigger2"]
-script = ExtResource("72_5nukf")
-delays = Array[float]([])
-textKeys = Array[String](["evi_hint_golem_height_sh"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/GolemTrigger2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
-shape = SubResource("BoxShape3D_jbfdv")
-
-[node name="LaunchringTrigger (missing dialog)" parent="DialogTriggers" instance=ExtResource("7_d57bs")]
-transform = Transform3D(0.016894, 0, -0.999857, 0, 1, 0, 0.999857, 0, 0.016894, -614.002, -60.1442, -413.673)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="DialogTriggers/LaunchringTrigger (missing dialog)"]
-script = ExtResource("72_5nukf")
-delays = Array[float]([])
-textKeys = Array[String](["evi_hint_golem_height_sh"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/LaunchringTrigger (missing dialog)"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
-shape = SubResource("BoxShape3D_jbfdv")
-
-[node name="ElevatorTrigger" parent="DialogTriggers" instance=ExtResource("7_d57bs")]
-transform = Transform3D(0.016894, 0, -0.999857, 0, 1, 0, 0.999857, 0, 0.016894, -44.2723, -60.7889, -184.379)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="DialogTriggers/ElevatorTrigger"]
-script = ExtResource("72_5nukf")
-delays = Array[float]([])
-textKeys = Array[String](["evi_elevator_sh", "evi_elevator_so"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/ElevatorTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
-shape = SubResource("BoxShape3D_jbfdv")
-
-[node name="MechineTrigger" parent="DialogTriggers" instance=ExtResource("7_d57bs")]
-transform = Transform3D(-0.999652, 0, 0.0263863, 0, 1, 0, -0.0263863, 0, -0.999652, 126.591, 37.5076, -405.094)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="DialogTriggers/MechineTrigger"]
-script = ExtResource("72_5nukf")
-delays = Array[float]([])
-textKeys = Array[String](["evi_hint_homing_attack_sh"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/MechineTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
-shape = SubResource("BoxShape3D_jbfdv")
-
-[node name="MurmurTrigger (Missing dialogs)" parent="DialogTriggers" instance=ExtResource("7_d57bs")]
-transform = Transform3D(0.101803, 0, -0.994804, 0, 1, 0, 0.994804, 0, 0.101803, 163.748, 37.5076, -188.53)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="DialogTriggers/MurmurTrigger (Missing dialogs)"]
-script = ExtResource("72_5nukf")
-delays = Array[float]([])
-textKeys = Array[String](["", ""])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/MurmurTrigger (Missing dialogs)"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
-shape = SubResource("BoxShape3D_jbfdv")
 
 [connection signal="Activated" from="MainAct/CullingMap/DoorHall-L" to="MainAct/DoorHall" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/DoorHall-L" to="MainAct/DoorHall" method="Deactivate"]
