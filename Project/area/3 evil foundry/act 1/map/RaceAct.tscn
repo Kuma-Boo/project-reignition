@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://b4080aabmoxvg"]
+
+[ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="1_cmr73"]
+[ext_resource type="Resource" uid="uid://m5ueqam8sc0c" path="res://resource/level data/evil foundry/Act1Race.tres" id="2_e5v2s"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_j1enb"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tlhgp"]
+size = Vector3(4.19458, 20, 11.3859)
+
+[node name="RaceAct" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_cmr73")]
+Data = ExtResource("2_e5v2s")
+
+[node name="RaceAct" type="Node3D" parent="."]
+
+[node name="Spawnposition" type="Node3D" parent="RaceAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9305, 40.0026, -234.535)
+
+[node name="CharacterSpawn" parent="RaceAct/Spawnposition" instance=ExtResource("3_j1enb")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="1Segment" type="Node3D" parent="RaceAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.8635, 43.3879, -281.106)
+
+[node name="InvisibleWall" type="StaticBody3D" parent="RaceAct/1Segment"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 21.0653, 40.0087, -232.707)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RaceAct/1Segment/InvisibleWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.813354, 8, -1.2641)
+shape = SubResource("BoxShape3D_tlhgp")
