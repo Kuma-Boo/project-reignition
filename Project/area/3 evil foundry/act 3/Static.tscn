@@ -1,8 +1,8 @@
-[gd_scene load_steps=28 format=3 uid="uid://sap50uvjitma"]
+[gd_scene load_steps=31 format=3 uid="uid://sap50uvjitma"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_y3xwh"]
-[ext_resource type="Resource" uid="uid://csn55r0wewnr4" path="res://area/3 evil foundry/act 3/camera/CloseHallCam.tres" id="2_no7pr"]
 [ext_resource type="Resource" uid="uid://dmv3a7tioyyl6" path="res://area/3 evil foundry/data/DialogLibrary.tres" id="2_s1lnd"]
+[ext_resource type="Resource" uid="uid://deb2j8xspvlfq" path="res://area/3 evil foundry/act 1/camera/NarrowHallCam.tres" id="2_tbo3m"]
 [ext_resource type="PackedScene" uid="uid://b3rghxm2g3tjo" path="res://area/3 evil foundry/act 3/environment/collision/Collision.tscn" id="3_vpehf"]
 [ext_resource type="PackedScene" uid="uid://bolh38bdssjtb" path="res://area/3 evil foundry/act 3/environment/01Opening.tscn" id="4_aq7cx"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_ighux"]
@@ -12,7 +12,10 @@
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="7_08a1o"]
 [ext_resource type="PackedScene" uid="uid://cya1hyb6dp4jc" path="res://area/3 evil foundry/act 3/environment/04Mine.tscn" id="7_rpa0v"]
 [ext_resource type="PackedScene" uid="uid://dojgigqipikg7" path="res://area/3 evil foundry/act 3/environment/05Hall.tscn" id="8_o3bwv"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="8_qip82"]
+[ext_resource type="Resource" uid="uid://drgabk5njs1qx" path="res://area/3 evil foundry/act 1/camera/SpiralCam.tres" id="9_cx45o"]
 [ext_resource type="PackedScene" uid="uid://g0flyjbdj8qr" path="res://area/3 evil foundry/act 3/environment/06LavaRoom.tscn" id="9_pb8gl"]
+[ext_resource type="Resource" uid="uid://nfpvaaas4rfq" path="res://area/3 evil foundry/act 1/camera/PitHallConnectionCam.tres" id="10_aib2q"]
 [ext_resource type="PackedScene" uid="uid://bwca7fi6p0nwr" path="res://area/3 evil foundry/act 3/environment/07Hall.tscn" id="10_mcyuw"]
 [ext_resource type="PackedScene" uid="uid://klgrk8u0u053" path="res://area/3 evil foundry/act 3/environment/08Spiral.tscn" id="11_mb1lp"]
 [ext_resource type="PackedScene" uid="uid://bxktruswicj2v" path="res://area/3 evil foundry/act 3/environment/09Mine.tscn" id="12_s5wbo"]
@@ -23,6 +26,69 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_y4n3u"]
 size = Vector3(20, 20, 5)
+
+[sub_resource type="Animation" id="Animation_cwd0w"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera:current")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-100, -24, -120)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Camera:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Camera:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_50a5f"]
 resource_name = "demo1"
@@ -142,69 +208,6 @@ tracks/8/keys = {
 "args": [],
 "method": &"Deactivate"
 }]
-}
-
-[sub_resource type="Animation" id="Animation_cwd0w"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Camera:current")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(-100, -24, -120)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1.5708, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Camera:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Camera:rotation")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_vxla3"]
@@ -469,7 +472,7 @@ adjustment_enabled = true
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_y3xwh")
-InitialCameraSettings = ExtResource("2_no7pr")
+InitialCameraSettings = ExtResource("2_tbo3m")
 dialogLibrary = ExtResource("2_s1lnd")
 pathParent = NodePath("Path")
 completionAnimator = NodePath("DemoCamera/AnimationPlayer")
@@ -510,6 +513,7 @@ directional_shadow_max_distance = 10.0
 [node name="Trigger" type="Node3D" parent="."]
 
 [node name="Checkpoint" type="Node3D" parent="Trigger"]
+visible = false
 
 [node name="Checkpoint1" parent="Trigger/Checkpoint" instance=ExtResource("4_ighux")]
 transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -360.1, -30, -108.1)
@@ -600,6 +604,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_y4n3u")
 
 [node name="DriftTrigger" type="Node3D" parent="Trigger"]
+visible = false
 
 [node name="DriftTrigger4" parent="Trigger/DriftTrigger" instance=ExtResource("7_08a1o")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -350, -30, -120)
@@ -651,6 +656,155 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -100, 
 isRightTurn = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/DriftTrigger/DriftTrigger10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_y4n3u")
+
+[node name="Camera" type="Node3D" parent="Trigger"]
+
+[node name="SpiralCam" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -447, -30, -60)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/SpiralCam"]
+script = ExtResource("8_qip82")
+settings = ExtResource("9_cx45o")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SpiralCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_y4n3u")
+
+[node name="NarrowCam" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -476, -60, -60)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/NarrowCam"]
+script = ExtResource("8_qip82")
+transitionTime = 20.0
+transitionType = 1
+settings = ExtResource("2_tbo3m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/NarrowCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_y4n3u")
+
+[node name="PitHallCam1" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -617.1, -30, -420)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/PitHallCam1"]
+transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, 0, -0.200001, -0.699951)
+script = ExtResource("8_qip82")
+settings = ExtResource("2_tbo3m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/PitHallCam1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_y4n3u")
+
+[node name="PitHallCam2" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -562.5, -30, -420)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/PitHallCam2"]
+transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, 0, -0.200001, -0.699951)
+script = ExtResource("8_qip82")
+settings = ExtResource("2_tbo3m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/PitHallCam2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_y4n3u")
+
+[node name="PitHallConnectionCam" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -550, -30, -410)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/PitHallConnectionCam"]
+transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, 0, -0.200001, -0.699951)
+script = ExtResource("8_qip82")
+settings = ExtResource("10_aib2q")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/PitHallConnectionCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_y4n3u")
+
+[node name="PitHallCam3" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -550, -30, -371.8)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/PitHallCam3"]
+transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, 0, -0.200001, -0.699951)
+script = ExtResource("8_qip82")
+settings = ExtResource("2_tbo3m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/PitHallCam3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_y4n3u")
+
+[node name="PitHallCam4" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -422.5, -30, -360)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/PitHallCam4"]
+transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, 0, -0.200001, -0.699951)
+script = ExtResource("8_qip82")
+settings = ExtResource("2_tbo3m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/PitHallCam4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_y4n3u")
+
+[node name="SpiralCam2" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
+transform = Transform3D(-5.96046e-08, -1.13133e-08, 1, -1.48943e-09, 1, 1.13133e-08, -1, -1.48943e-09, -5.96046e-08, -393, -30, -360)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/SpiralCam2"]
+script = ExtResource("8_qip82")
+settings = ExtResource("9_cx45o")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SpiralCam2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_y4n3u")
+
+[node name="NarrowCam2" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
+transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, -364, -60, -360)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/NarrowCam2"]
+script = ExtResource("8_qip82")
+transitionTime = 20.0
+transitionType = 1
+settings = ExtResource("2_tbo3m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/NarrowCam2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_y4n3u")
+
+[node name="SpiralCam3" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
+transform = Transform3D(1, 1.48943e-09, 1.58932e-08, -1.48943e-09, 1, 1.13133e-08, -1.58932e-08, -1.13133e-08, 1, -100, -60, -174)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/SpiralCam3"]
+script = ExtResource("8_qip82")
+settings = ExtResource("9_cx45o")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SpiralCam3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_y4n3u")
+
+[node name="NarrowCam3" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
+transform = Transform3D(1, 0, -1.74845e-07, 0, 1, 0, 1.74845e-07, 0, 1, -100, -30, -137)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Trigger/Camera/NarrowCam3"]
+script = ExtResource("8_qip82")
+settings = ExtResource("2_tbo3m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/NarrowCam3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_y4n3u")
 
@@ -890,7 +1044,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -660, -29.666, -420)
 curve = ExtResource("16_qmjwd")
 
 [node name="DemoCamera" type="Node3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -100, -24, -120)
+transform = Transform3D(-3.61999e-06, 0, 1, 0, 1, 0, -1, 0, -3.61999e-06, -100, -24, -120)
 
 [node name="Camera" type="Camera3D" parent="DemoCamera"]
 cull_mask = 30
