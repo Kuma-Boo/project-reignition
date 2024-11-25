@@ -340,7 +340,7 @@ public partial class StageSettings : Node3D
 			FinishLevel(false);
 		}
 		else if (CurrentObjectiveCount >= Data.MissionObjectiveCount &&
-						Data.MissionType != LevelDataResource.MissionTypes.Chain)
+				Data.MissionType != LevelDataResource.MissionTypes.Chain)
 		{
 			FinishLevel(true);
 		}
@@ -362,7 +362,9 @@ public partial class StageSettings : Node3D
 		int previousAmount = CurrentRingCount;
 		CurrentRingCount = CalculateMath(CurrentRingCount, amount, mode);
 		RingBonus = CurrentRingCount * 10;
-		if (Data.MissionType == LevelDataResource.MissionTypes.Ring && CurrentRingCount >= Data.MissionObjectiveCount) // For ring based missions
+		if (Data.MissionType == LevelDataResource.MissionTypes.Ring &&
+			CurrentRingCount >= Data.MissionObjectiveCount &&
+			Data.MissionObjectiveCount != 0) // For ring based missions
 		{
 			CurrentRingCount = Data.MissionObjectiveCount; // Clamp
 			FinishLevel(true);
