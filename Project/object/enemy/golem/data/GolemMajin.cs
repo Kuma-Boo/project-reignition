@@ -42,6 +42,7 @@ public partial class GolemMajin : Enemy
 		{
 			_gasTankParent = GetNodeOrNull<Node3D>(gasTankParent);
 			gasTank.OnStrike += LockGasTankToGolem;
+			gasTank.Monitorable = false;
 		}
 
 		base.SetUp();
@@ -97,6 +98,7 @@ public partial class GolemMajin : Enemy
 		else
 		{
 			gasTank.endTarget = Player;
+			gasTank.Monitorable = true;
 		}
 
 		_gasTankParent.RemoveChild(gasTank);
@@ -136,6 +138,7 @@ public partial class GolemMajin : Enemy
 			return;
 		}
 
+		CheckGasTank();
 		pathFollower.Progress += WalkSpeed * PhysicsManager.physicsDelta;
 	}
 }
