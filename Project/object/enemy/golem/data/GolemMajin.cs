@@ -130,6 +130,7 @@ public partial class GolemMajin : Enemy
 
 	protected override void UpdateEnemy()
 	{
+		if (!StageSettings.Instance.IsLevelIngame) return;
 		if (!IsActive) return;
 		if (pathFollower == null) return;
 
