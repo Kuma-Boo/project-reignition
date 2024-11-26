@@ -148,7 +148,7 @@ public partial class GolemMajin : Enemy
 		StageSettings.Player.Camera.StartCameraShake(new()
 		{
 			origin = GlobalPosition,
-			maximumDistanceSquared = DefaultCameraShakeDistance * magnitude,
+			maximumDistance = DefaultCameraShakeDistance * magnitude,
 			magnitude = Vector3.One.RemoveDepth() * magnitude,
 		});
 	}
