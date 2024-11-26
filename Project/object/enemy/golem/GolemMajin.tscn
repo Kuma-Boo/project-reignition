@@ -1,10 +1,17 @@
-[gd_scene load_steps=26 format=3 uid="uid://bntrixspwpi2"]
+[gd_scene load_steps=33 format=3 uid="uid://bntrixspwpi2"]
 
 [ext_resource type="Script" path="res://object/enemy/golem/data/GolemMajin.cs" id="1_qx3kf"]
 [ext_resource type="PackedScene" uid="uid://623w0nu8qp3d" path="res://object/enemy/golem/data/model/GolemMajin.gltf" id="1_x1tra"]
 [ext_resource type="Script" path="res://object/enemy/EnemyHurtbox.cs" id="3_r5w0e"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="3_u2idn"]
 [ext_resource type="PackedScene" uid="uid://dvoongbmetjfh" path="res://object/stage/common/Grindrail.tscn" id="3_w2hby"]
+[ext_resource type="AudioStream" uid="uid://cqk2gptelm4q1" path="res://sound/sfx/enemy/golem/golem step.wav" id="6_7jh6v"]
+[ext_resource type="AudioStream" uid="uid://ddsrwgbnsrdnq" path="res://sound/sfx/enemy/golem/golem throw.wav" id="7_fpp2j"]
+[ext_resource type="AudioStream" uid="uid://dpolp6ta5ir14" path="res://sound/sfx/enemy/golem/golem windup.wav" id="8_ie4eq"]
+[ext_resource type="AudioStream" uid="uid://cuasdjcwd6s0y" path="res://sound/sfx/enemy/golem/golem attacked.wav" id="9_g82kv"]
+[ext_resource type="AudioStream" uid="uid://c8083isqbhdd6" path="res://sound/sfx/enemy/golem/golem grunt.wav" id="10_4lar6"]
+[ext_resource type="AudioStream" uid="uid://k6ads38wj0yd" path="res://sound/sfx/enemy/golem/golem impact.wav" id="11_p5sbo"]
+[ext_resource type="AudioStream" uid="uid://u6ukurl7m57e" path="res://sound/sfx/enemy/golem/golem turn.wav" id="12_m4pf6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g3a1g"]
 size = Vector3(2.6, 1, 0.4)
@@ -245,7 +252,6 @@ transform = Transform3D(1, -3.90088e-11, -5.68434e-14, 7.99716e-12, 1, 0, 5.4001
 shape = SubResource("BoxShape3D_m1p6f")
 
 [node name="FootHitbox" type="Area3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D" index="8"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
@@ -300,6 +306,57 @@ monitorable = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("CylinderShape3D_s76cu")
 
+[node name="SFX" type="Node3D" parent="."]
+
+[node name="StepSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("6_7jh6v")
+max_db = 0.0
+max_distance = 50.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="ThrowSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("7_fpp2j")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="WindupSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("8_ie4eq")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="AttackedSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("9_g82kv")
+max_db = 0.0
+max_distance = 50.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="GruntSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("10_4lar6")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="ImpactSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("11_p5sbo")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="TurnSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("12_m4pf6")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
 [node name="AnimationTree" type="AnimationTree" parent="."]
 active = false
 root_node = NodePath("../GolemMajin")
@@ -314,6 +371,7 @@ parameters/throw_trigger/active = false
 parameters/throw_trigger/internal_active = false
 parameters/throw_trigger/request = 0
 
+[connection signal="TurnStarted" from="." to="SFX/TurnSFX" method="play"]
 [connection signal="area_entered" from="GolemMajin/GolemMajinRoot/Skeleton3D/Head/Hurtbox" to="." method="OnEntered"]
 [connection signal="area_exited" from="GolemMajin/GolemMajinRoot/Skeleton3D/Head/Hurtbox" to="." method="OnExited"]
 [connection signal="area_entered" from="GolemMajin/GolemMajinRoot/Skeleton3D/FootHitbox" to="GolemMajin/GolemMajinRoot/Skeleton3D/FootHitbox" method="OnEntered"]

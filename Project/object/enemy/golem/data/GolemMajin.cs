@@ -7,13 +7,16 @@ namespace Project.Gameplay;
 [Tool]
 public partial class GolemMajin : Enemy
 {
-	[Signal]
-	public delegate void FallenEventHandler();
+	[Signal] public delegate void TurnStartedEventHandler();
+	[Signal] public delegate void FallenEventHandler();
+
 	/// <summary> Optional reference to a gas tank that can be thrown at the player. </summary>
 	[Export] private GasTank gasTank;
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")] private NodePath gasTankParent;
 	private Node3D _gasTankParent;
 	private bool canThrowGasTank;
+
+	private bool isTurning;
 
 	private PathFollow3D pathFollower;
 	private float startingProgress;
@@ -130,7 +133,7 @@ public partial class GolemMajin : Enemy
 
 	protected override void UpdateEnemy()
 	{
-		if (!StageSettings.Instance.IsLevelIngame) return;
+		if (StageSettings.Instance?.IsLevelIngame == false) return;
 		if (!IsActive) return;
 		if (pathFollower == null) return;
 
@@ -141,7 +144,27 @@ public partial class GolemMajin : Enemy
 		}
 
 		CheckGasTank();
+		MoveGolem();
+	}
+
+	private void MoveGolem()
+	{
+		Vector3 forwardDirection = pathFollower.Forward();
 		pathFollower.Progress += WalkSpeed * PhysicsManager.physicsDelta;
+
+		// Check for turning to play a sound effect
+		if (forwardDirection.IsEqualApprox(pathFollower.Forward()))
+		{
+			if (isTurning)
+				isTurning = false;
+
+			return;
+		}
+
+		if (isTurning) return;
+
+		EmitSignal(SignalName.TurnStarted);
+		isTurning = true;
 	}
 
 	public void PlayScreenShake(float magnitude)
