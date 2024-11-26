@@ -757,7 +757,7 @@ public partial class PlayerCameraController : Node3D
 				continue;
 			}
 
-			Vector3 rotationAmount = shakeSettings[i].SimulateShake(PhysicsManager.physicsDelta);
+			Vector3 rotationAmount = shakeSettings[i].SimulateShake(PhysicsManager.physicsDelta, cameraRoot.GlobalPosition);
 			cameraRoot.Rotation += rotationAmount * screenShakeRatio;
 		}
 	}
@@ -778,7 +778,7 @@ public partial class PlayerCameraController : Node3D
 		public float maximumDistance;
 
 		/// <summary> Should this camera shake continue even after being respawned? </summary>
-		public bool persistBetweenRespawns = false;
+		public bool persistBetweenRespawns;
 
 		/// <summary> Camera's current time. </summary>
 		public float currentTime;
@@ -803,7 +803,7 @@ public partial class PlayerCameraController : Node3D
 				Runtime.randomNumberGenerator.Randf() * Mathf.Tau);
 		}
 
-		public Vector3 SimulateShake(float deltaTime)
+		public Vector3 SimulateShake(float deltaTime, Vector3 cameraPosition)
 		{
 			// Update times and phase offsets
 			currentTime += deltaTime;
@@ -814,7 +814,7 @@ public partial class PlayerCameraController : Node3D
 			// Sample sin wave
 			Vector3 shake = new(Mathf.Sin(phaseOffset.X), Mathf.Sin(phaseOffset.Y), Mathf.Sin(phaseOffset.Z));
 			shake *= magnitude;
-			return shake * CalculateRatio();
+			return shake * CalculateRatio() * CalculateDistanceRatio(cameraPosition);
 		}
 
 		private float CalculateRatio()
@@ -827,6 +827,15 @@ public partial class PlayerCameraController : Node3D
 			ratio = Mathf.Clamp(ratio, 0f, 1f);
 			ratio = Mathf.Pow(ratio, 2.0f);
 			return ratio;
+		}
+
+		private float CalculateDistanceRatio(Vector3 cameraPosition)
+		{
+			if (Mathf.IsZeroApprox(maximumDistance))
+				return 1f;
+
+			float distance = cameraPosition.DistanceTo(origin);
+			return 1f - Mathf.Clamp(distance / maximumDistance, 0f, 1f);
 		}
 	}
 	#endregion
