@@ -21,6 +21,7 @@ public partial class GolemMajin : Enemy
 	private Vector3 velocity;
 	private const float RotationResetSpeed = 5f;
 	private const float WalkSpeed = 2f;
+	private const float DefaultCameraShakeDistance = 20;
 
 	private readonly StringName ThrowTrigger = "parameters/throw_trigger/request";
 	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
@@ -140,5 +141,15 @@ public partial class GolemMajin : Enemy
 
 		CheckGasTank();
 		pathFollower.Progress += WalkSpeed * PhysicsManager.physicsDelta;
+	}
+
+	public void PlayScreenShake(float magnitude)
+	{
+		StageSettings.Player.Camera.StartCameraShake(new()
+		{
+			origin = GlobalPosition,
+			maximumDistanceSquared = DefaultCameraShakeDistance * magnitude,
+			magnitude = Vector3.One.RemoveDepth() * magnitude,
+		});
 	}
 }
