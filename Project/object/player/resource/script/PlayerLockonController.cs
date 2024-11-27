@@ -144,7 +144,7 @@ public partial class PlayerLockonController : Node3D
 		if (IsIgnoringTarget(Target))
 		{
 			ResetLockonTarget();
-			Player.Camera.LockonTarget = null;
+			Player.Camera.SetLockonTarget(null);
 			return;
 		}
 
@@ -175,8 +175,19 @@ public partial class PlayerLockonController : Node3D
 
 		// Check Height
 		bool isTargetAttackable = target.GlobalPosition.Y <= Player.CenterPosition.Y + (Player.CollisionSize.Y * 2.0f);
-		if (Player.IsBouncing && !IsMonitoring)
+		if (Player.IsBouncing && !Player.IsBounceInteruptable)
+		{
 			isTargetAttackable = false;
+
+			if (Target == null)
+			{
+				// Only allow camera to lockon to extremely close objects
+				float targetDistance = target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
+				if (targetDistance <= DistanceFudgeAmount)
+					Player.Camera.SetLockonTarget(target);
+			}
+		}
+
 		return isTargetAttackable ? TargetState.Valid : TargetState.LowPriority;
 	}
 
@@ -192,7 +203,7 @@ public partial class PlayerLockonController : Node3D
 		if (Player.Camera.IsBehindCamera(target.GlobalPosition)) // Don't allow targeting behind the camera
 			return false;
 
-		if (!Player.IsBouncing && Target != target)
+		if (!Player.IsBouncing || (Target != null && Target != target))
 			return false;
 
 		Vector2 screenPosition = Player.Camera.ConvertToScreenSpace(target.GlobalPosition) / Runtime.ScreenSize;
@@ -200,7 +211,6 @@ public partial class PlayerLockonController : Node3D
 		if (Mathf.Abs(screenPosition.X) >= 1f) // Offscreen from the sides
 			return false;
 
-		Player.Camera.LockonTarget = target;
 		return true;
 	}
 

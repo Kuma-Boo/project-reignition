@@ -172,7 +172,7 @@ public partial class Enemy : Node3D
 	public virtual void UpdateLockon()
 	{
 		if (!IsDefeated)
-			Player.Camera.LockonTarget = Hurtbox;
+			Player.Camera.SetLockonTarget(Hurtbox);
 	}
 
 	public virtual void TakeDamage(int amount = -1)
@@ -192,7 +192,7 @@ public partial class Enemy : Node3D
 	protected virtual void Defeat()
 	{
 		currentHealth = 0;
-		Player.Camera.LockonTarget = null;
+		Player.Camera.SetLockonTarget(null);
 		BonusManager.instance.AddEnemyChain();
 		StageSettings.Instance.UpdateScore(50 * maxHealth, StageSettings.MathModeEnum.Add); // Add points based on max health
 

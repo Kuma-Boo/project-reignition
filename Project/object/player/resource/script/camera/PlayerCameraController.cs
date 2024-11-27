@@ -135,7 +135,7 @@ public partial class PlayerCameraController : Node3D
 	/// <summary> Enabled when the camera should freeze due to a DeathTrigger. </summary>
 	public bool IsDefeatFreezeActive { get; set; }
 	/// <summary> Used to focus onto multi-HP enemies, bosses, etc. Not to be confused with CharacterLockon.Target. </summary>
-	public Node3D LockonTarget { get; set; }
+	public Node3D LockonTarget { get; private set; }
 	private bool IsLockonCameraActive => LockonTarget != null || Player.IsHomingAttacking || Player.IsBouncing;
 	/// <summary> [0 -> 1] ratio of how much to use the lockon camera. </summary>
 	private float lockonBlend;
@@ -143,16 +143,31 @@ public partial class PlayerCameraController : Node3D
 	/// <summary> [0 -> 1] ratio of how much to focus onto LockonTarget. </summary>
 	private float lockonTargetBlend;
 	private float lockonTargetBlendVelocity;
+	/// <summary> Amount when blending between different lockon targets. Reset whenever the lockon target changes. </summary>
+	private float lockonTargetTransitionBlend;
+	private float lockonTargetTransitionBlendVelocity;
 	/// <summary> Snappier blend when lockon is active to keep things in frame. </summary>
 	private const float LockonBlendInSmoothing = 5.0f;
 	/// <summary> More smoothing/slower blend when resetting lockonBlend. </summary>
 	private const float LockonBlendOutSmoothing = 20.0f;
 	/// <summary> How much extra distance to add when performing a homing attack. </summary>
 	private const float LockonDistance = 3f;
+	public void SetLockonTarget(Node3D lockonTarget)
+	{
+		if (LockonTarget == lockonTarget) return;
+
+		LockonTarget = lockonTarget;
+		lockonTargetTransitionBlend = 0;
+	}
+
 	private void UpdateLockonTarget()
 	{
-		if (LockonTarget?.IsInsideTree() == false || Player.IsOnGround) // Invalid LockonTarget
-			LockonTarget = null;
+		if (LockonTarget != null)
+		{
+			// Validate LockonTarget
+			if (Player.IsOnGround || !LockonTarget.IsInsideTree() || IsBehindCamera(LockonTarget.GlobalPosition))
+				SetLockonTarget(null);
+		}
 
 		float targetBlend = 0;
 		float smoothing = LockonBlendOutSmoothing;
@@ -165,7 +180,10 @@ public partial class PlayerCameraController : Node3D
 		}
 
 		lockonBlend = ExtensionMethods.SmoothDamp(lockonBlend, targetBlend, ref lockonBlendVelocity, smoothing * PhysicsManager.physicsDelta);
-		lockonTargetBlend = ExtensionMethods.SmoothDamp(lockonTargetBlend, LockonTarget == null ? 0 : 1, ref lockonTargetBlendVelocity, LockonBlendOutSmoothing * PhysicsManager.physicsDelta);
+		lockonTargetBlend = ExtensionMethods.SmoothDamp(lockonTargetBlend, LockonTarget == null ? 0f : 1f, ref lockonTargetBlendVelocity, LockonBlendOutSmoothing * PhysicsManager.physicsDelta);
+
+		if (LockonTarget != null)
+			lockonTargetTransitionBlend = ExtensionMethods.SmoothDamp(lockonTargetTransitionBlend, 1f, ref lockonTargetTransitionBlendVelocity, LockonBlendInSmoothing * PhysicsManager.physicsDelta);
 	}
 
 	#region Gameplay Camera
@@ -507,8 +525,8 @@ public partial class PlayerCameraController : Node3D
 			globalDelta = LockonTarget.GlobalPosition.Lerp(Player.CenterPosition, .5f) - data.precalculatedPosition;
 			localDelta = data.offsetBasis.Inverse() * globalDelta;
 			localDelta.X = 0; // Ignore x axis for pitch tracking
-			localDelta.Y = Math.Min(localDelta.Y, 0); // Don't allow tilting upwards
-			data.blendData.lockonPitchTracking = localDelta.Normalized().AngleTo(localDelta.RemoveVertical().Normalized()) * Mathf.Sign(localDelta.Y);
+			float targetLockonPitchTracking = localDelta.Normalized().AngleTo(localDelta.RemoveVertical().Normalized()) * Mathf.Sign(localDelta.Y);
+			data.blendData.lockonPitchTracking = Mathf.Lerp(data.blendData.lockonPitchTracking, targetLockonPitchTracking, lockonTargetTransitionBlend);
 		}
 		data.pitchTracking += data.blendData.lockonPitchTracking * lockonTargetBlend;
 
@@ -1073,7 +1091,7 @@ public partial class CameraBlendData : GodotObject
 	/// <summary> Current tilt angle. </summary>
 	public float tiltAngle;
 
-	/// <summary> Last frame's lockon pitch tracking </summary>
+	/// <summary> Last frame's lockon pitch tracking. </summary>
 	public float lockonPitchTracking;
 
 	/// <summary> How far the camera should be. </summary>
