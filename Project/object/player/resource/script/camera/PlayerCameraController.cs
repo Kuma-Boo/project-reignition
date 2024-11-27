@@ -1,6 +1,7 @@
 using Godot;
 using Project.Core;
 using Project.Gameplay.Triggers;
+using System;
 using System.Collections.Generic;
 
 namespace Project.Gameplay;
@@ -150,7 +151,7 @@ public partial class PlayerCameraController : Node3D
 	private const float LockonDistance = 3f;
 	private void UpdateLockonTarget()
 	{
-		if (LockonTarget?.IsInsideTree() == false) // Invalid LockonTarget
+		if (LockonTarget?.IsInsideTree() == false || Player.IsOnGround) // Invalid LockonTarget
 			LockonTarget = null;
 
 		float targetBlend = 0;
@@ -506,6 +507,7 @@ public partial class PlayerCameraController : Node3D
 			globalDelta = LockonTarget.GlobalPosition.Lerp(Player.CenterPosition, .5f) - data.precalculatedPosition;
 			localDelta = data.offsetBasis.Inverse() * globalDelta;
 			localDelta.X = 0; // Ignore x axis for pitch tracking
+			localDelta.Y = Math.Min(localDelta.Y, 0); // Don't allow tilting upwards
 			data.blendData.lockonPitchTracking = localDelta.Normalized().AngleTo(localDelta.RemoveVertical().Normalized()) * Mathf.Sign(localDelta.Y);
 		}
 		data.pitchTracking += data.blendData.lockonPitchTracking * lockonTargetBlend;

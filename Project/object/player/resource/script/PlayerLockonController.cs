@@ -160,9 +160,6 @@ public partial class PlayerLockonController : Node3D
 		if (Player.IsKnockback || !StageSettings.Instance.IsLevelIngame) // Character is busy
 			return TargetState.PlayerBusy;
 
-		if (!target.IsVisibleInTree() || !Player.Camera.IsOnScreen(target.GlobalPosition)) // Not visible
-			return TargetState.Invisible;
-
 		if (HitObstacle(target))
 			return TargetState.HitObstacle;
 
@@ -173,11 +170,38 @@ public partial class PlayerLockonController : Node3D
 		if (IsTargetAttackable && target == Target && Player.IsHomingAttacking)
 			return TargetState.Valid;
 
+		if (!IsTargetVisible(target))
+			return TargetState.Invisible;
+
 		// Check Height
 		bool isTargetAttackable = target.GlobalPosition.Y <= Player.CenterPosition.Y + (Player.CollisionSize.Y * 2.0f);
 		if (Player.IsBouncing && !IsMonitoring)
 			isTargetAttackable = false;
 		return isTargetAttackable ? TargetState.Valid : TargetState.LowPriority;
+	}
+
+	/// <summary> Determines whether an object should be prematurely locked onto (e.g. stacked gas tanks in EF). </summary>
+	private bool IsTargetVisible(Node3D target)
+	{
+		if (!target.IsVisibleInTree()) // Not visible
+			return false;
+
+		if (Player.Camera.IsOnScreen(target.GlobalPosition)) // Always allow targeting on-screen objects
+			return true;
+
+		if (Player.Camera.IsBehindCamera(target.GlobalPosition)) // Don't allow targeting behind the camera
+			return false;
+
+		if (!Player.IsBouncing && Target != target)
+			return false;
+
+		Vector2 screenPosition = Player.Camera.ConvertToScreenSpace(target.GlobalPosition) / Runtime.ScreenSize;
+		screenPosition = (screenPosition - (Vector2.One * .5f)) * 2f; // Remap values between -1 and 1.
+		if (Mathf.Abs(screenPosition.X) >= 1f) // Offscreen from the sides
+			return false;
+
+		Player.Camera.LockonTarget = target;
+		return true;
 	}
 
 	private bool IsIgnoringTarget(Node3D target)
