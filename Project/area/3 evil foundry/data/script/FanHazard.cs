@@ -1,7 +1,7 @@
 using Godot;
 using Project.Core;
 
-namespace Project.Gameplay.Hazards;
+namespace Project.Gameplay.Objects;
 
 public partial class FanHazard : Hazard
 {

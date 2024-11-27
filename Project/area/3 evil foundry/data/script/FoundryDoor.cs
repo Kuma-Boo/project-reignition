@@ -61,8 +61,12 @@ public partial class FoundryDoor : Node3D
 	[ExportGroup("Components")]
 	[Export(PropertyHint.NodePathValidTypes, "AnimationTree")] private NodePath animator;
 	private AnimationTree Animator { get; set; }
+	[Export] private NodePath hazard;
+	private Hazard Hazard { get; set; }
 
-	private bool IsActivated;
+	private bool isActivated;
+	private bool isForceClosedActivated;
+	private bool isInteractingWithPlayer;
 
 	private readonly StringName SpikeTransition = "parameters/spike_transition/transition_request";
 	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
@@ -80,9 +84,33 @@ public partial class FoundryDoor : Node3D
 		Respawn();
 	}
 
+	public override void _PhysicsProcess(double _)
+	{
+		if (isForceClosedActivated || !isInteractingWithPlayer || !StageSettings.Player.Skills.IsSpeedBreakActive) return;
+
+		ForceClose();
+	}
+
+	private void ForceClose()
+	{
+		isForceClosedActivated = true;
+		StageSettings.Player.Camera.StartCameraShake(new()
+		{
+			origin = GlobalPosition,
+			magnitude = Vector3.One.RemoveDepth(),
+		});
+
+		if (swingMode == SwingModeEnum.Fakeout) // Flip fakeout doors when closing
+			Animator.Set(SpikeTransition, spikeState == SpikeEnum.Enabled ? "disabled" : "enabled");
+
+		Animator.Set(StateTransition, $"close_{pivotPoint.ToString().ToLower()}");
+		Animator.Set(DoorSpeed, 10f);
+	}
+
 	private void Respawn()
 	{
-		IsActivated = false;
+		isActivated = false;
+		isForceClosedActivated = false;
 		UpdateState();
 	}
 
@@ -90,6 +118,7 @@ public partial class FoundryDoor : Node3D
 	private void UpdateState()
 	{
 		Animator = GetNodeOrNull<AnimationTree>(animator);
+		Hazard = GetNodeOrNull<Hazard>(hazard);
 		if (Animator == null) // No animator!
 			return;
 
@@ -109,10 +138,22 @@ public partial class FoundryDoor : Node3D
 
 	public void Activate()
 	{
-		if (IsActivated) // Already activated
+		if (isActivated) // Already activated
 			return;
 
-		IsActivated = true;
+		isActivated = true;
 		Animator.Set(DoorSpeed, 1f / swingLength);
+	}
+
+	private void OnEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player")) return;
+		isInteractingWithPlayer = true;
+	}
+
+	private void OnExited(Area3D a)
+	{
+		if (!a.IsInGroup("player")) return;
+		isInteractingWithPlayer = false;
 	}
 }
