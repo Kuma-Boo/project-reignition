@@ -124,9 +124,9 @@ public partial class GolemMajin : Enemy
 
 	protected override void Defeat()
 	{
-		SetHitboxStatus(false);
 		AnimationTree.Set(StateTransition, "defeat");
 		base.Defeat();
+		CallDeferred(MethodName.SetHitboxStatus, false, false);
 
 		if (gasTank != null) // Drop the gas tank
 			LaunchGasTank();
