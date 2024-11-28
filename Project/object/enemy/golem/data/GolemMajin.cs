@@ -124,6 +124,7 @@ public partial class GolemMajin : Enemy
 
 	protected override void Defeat()
 	{
+		SetHitboxStatus(false);
 		AnimationTree.Set(StateTransition, "defeat");
 		base.Defeat();
 
