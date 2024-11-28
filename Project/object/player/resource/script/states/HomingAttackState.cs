@@ -26,6 +26,7 @@ public partial class HomingAttackState : PlayerState
 	public override void EnterState()
 	{
 		Player.VerticalSpeed = 0;
+		Player.IsMovingBackward = false;
 		Player.IsHomingAttacking = true;
 		Player.ChangeHitbox("spin");
 		Player.AttackState = PlayerController.AttackStates.Weak;
