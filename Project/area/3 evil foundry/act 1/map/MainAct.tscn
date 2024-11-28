@@ -1,4 +1,4 @@
-[gd_scene load_steps=122 format=3 uid="uid://ciqbaxbhrxrjk"]
+[gd_scene load_steps=128 format=3 uid="uid://ciqbaxbhrxrjk"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
@@ -69,8 +69,14 @@
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="55_0ks8t"]
 [ext_resource type="Resource" uid="uid://xydjkax35ng3" path="res://area/3 evil foundry/act 1/camera/main/OverheadLaunchRingCam.tres" id="60_abfqp"]
 [ext_resource type="Resource" uid="uid://b017wlhsy06jg" path="res://area/3 evil foundry/act 1/camera/main/FallingScrapCam.tres" id="61_4hcoc"]
+[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="62_3jf77"]
 [ext_resource type="Resource" uid="uid://ue3podnaoetf" path="res://area/3 evil foundry/act 1/camera/PlatformingCam.tres" id="63_00tg6"]
+[ext_resource type="Resource" uid="uid://ccjhqcuypdtc0" path="res://area/3 evil foundry/data/ElevatorLockout.tres" id="63_1mmvt"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="63_ix8fy"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="64_5smqs"]
+[ext_resource type="Resource" uid="uid://dnk158xtx3lvc" path="res://area/3 evil foundry/act 1/camera/ElevatorCam.tres" id="65_y86dj"]
+[ext_resource type="Resource" uid="uid://x2wnppe3iny1" path="res://area/3 evil foundry/act 1/camera/ElevatorBaseCam.tres" id="66_6m3ut"]
+[ext_resource type="Resource" uid="uid://dy7imtvsy4rtp" path="res://area/3 evil foundry/act 1/camera/ElevatorPlatformingCam.tres" id="67_lx1wo"]
 [ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="72_5nukf"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vkmlm"]
@@ -1585,7 +1591,7 @@ point_count = 3
 [sub_resource type="Curve" id="Curve_11o6m"]
 min_value = -1.8
 max_value = 0.0
-_data = [Vector2(0, 0), 0.0, 1.3033, 0, 0, Vector2(1, -1.8), -6.92583, 0.0, 0, 0]
+_data = [Vector2(0.00970874, 0), 0.0, 0.479689, 0, 0, Vector2(1, -0.36), -1.53316, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_ueekg"]
@@ -1918,20 +1924,6 @@ textKeys = Array[String](["evi_hint_golem_height_sh"])
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
 shape = SubResource("BoxShape3D_jbfdv")
 disabled = true
-
-[node name="ElevatorTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("7_d57bs")]
-transform = Transform3D(0.016894, 0, -0.999857, 0, 1, 0, 0.999857, 0, 0.016894, -50.2714, -60.7889, -184.278)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="MainAct/DialogTriggers/ElevatorTrigger"]
-script = ExtResource("72_5nukf")
-delays = Array[float]([])
-textKeys = Array[String](["evi_elevator_sh", "evi_elevator_so"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/DialogTriggers/ElevatorTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0337181, 10, 3.3537)
-shape = SubResource("BoxShape3D_jbfdv")
 
 [node name="MechineTrigger" parent="MainAct/DialogTriggers" instance=ExtResource("7_d57bs")]
 transform = Transform3D(-0.999652, 0, 0.0263863, 0, 1, 0, -0.0263863, 0, -0.999652, 126.591, 37.5076, -405.094)
@@ -2495,9 +2487,6 @@ use_model_front = true
 cubic_interp = false
 
 [node name="GolemMajin" parent="MainAct/Opening/GolemPath/PathFollow3D" instance=ExtResource("11_6jexk")]
-root = NodePath("")
-collider = NodePath("")
-animationPlayer = NodePath("")
 
 [node name="ScrapMachineLadder6" parent="MainAct/Opening" instance=ExtResource("9_7x2f4")]
 transform = Transform3D(-0.000420112, 0.00786134, -0.999968, 0.00161161, 0.999968, 0.00786066, 0.999999, -0.00160827, -0.000432776, -73.529, -39.9919, -55.7397)
@@ -3646,9 +3635,6 @@ cubic_interp = false
 
 [node name="GolemMajin" parent="MainAct/Spiral1/GolemPath/PathFollow3D" instance=ExtResource("11_6jexk")]
 rangeOverride = 20
-root = NodePath("")
-collider = NodePath("")
-animationPlayer = NodePath("")
 
 [node name="FanHall" type="Node3D" parent="MainAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -484, -59.9998, -60)
@@ -3989,9 +3975,6 @@ cubic_interp = false
 
 [node name="GolemMajin" parent="MainAct/LavaCrossway/GolemPath/PathFollow3D" node_paths=PackedStringArray("gasTank") instance=ExtResource("11_6jexk")]
 gasTank = NodePath("../../GasTank")
-root = NodePath("")
-collider = NodePath("")
-animationPlayer = NodePath("")
 
 [node name="FireSoulEvent" type="Node3D" parent="MainAct/LavaCrossway" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, -8.27185e-25, 0, -2.22044e-16, 1, 0, 0, 0, 1, 2.13, 3.8147e-06, -88.564)
@@ -4383,9 +4366,6 @@ transform = Transform3D(-4.37114e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, -
 
 [node name="GolemMajin" parent="MainAct/PitHall" instance=ExtResource("11_6jexk")]
 transform = Transform3D(-0.999984, 0, 0.00565493, 0, 1, 0, -0.00565493, 0, -0.999984, -60.2216, -0.0268002, 161.217)
-root = NodePath("")
-collider = NodePath("")
-animationPlayer = NodePath("")
 
 [node name="FireSoul" parent="MainAct/PitHall" instance=ExtResource("11_x5tgj")]
 transform = Transform3D(-0.999984, 0, 0.00565493, 0, 1, 0, -0.00565493, 0, -0.999984, -59.2172, 1.9732, 167.765)
@@ -4898,16 +4878,16 @@ Spacing = 4.0
 "Vertical Offset" = null
 
 [node name="Child01" parent="MainAct/MineEntrance/Rings3" instance=ExtResource("8_yjt2l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000671387, 0.000236511, -0.000732422)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000762939, 0.000270844, -0.000854492)
 
 [node name="Child02" parent="MainAct/MineEntrance/Rings3" instance=ExtResource("8_yjt2l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.63705, -0.890648, 3.1062)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.51025, -0.890629, 3.18652)
 
 [node name="Child03" parent="MainAct/MineEntrance/Rings3" instance=ExtResource("8_yjt2l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.06985, -1.70191, 6.95303)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.26154, -1.7019, 6.87686)
 
 [node name="Child04" parent="MainAct/MineEntrance/Rings3" instance=ExtResource("8_yjt2l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5665, -2.39518, 11.1356)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.98746, -2.39518, 10.9028)
 
 [node name="Spring" parent="MainAct/MineEntrance" instance=ExtResource("37_xvvs2")]
 transform = Transform3D(0.999901, -0.00123058, -0.0140656, 0, 0.996195, -0.0871557, 0.0141193, 0.0871472, 0.996096, 0.932129, 0.573814, -24.3994)
@@ -5578,29 +5558,101 @@ visible = false
 script = ExtResource("41_gc12q")
 saveVisibilityOnCheckpoint = true
 
-[node name="DashPanel1" parent="MainAct/Elevator" instance=ExtResource("38_mjdev")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 30, 0, -3)
+[node name="ElevatorStuff" type="Node3D" parent="MainAct/Elevator"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 30, 0, 0)
 
-[node name="DashPanel2" parent="MainAct/Elevator" instance=ExtResource("38_mjdev")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 30, 0, -1)
+[node name="LockoutDeactivate" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("7_d57bs")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 100, 12)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
 
-[node name="DashPanel3" parent="MainAct/Elevator" instance=ExtResource("38_mjdev")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 30, 0, 1)
+[node name="Lockout" type="Node3D" parent="MainAct/Elevator/ElevatorStuff/LockoutDeactivate"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -100, 17)
+script = ExtResource("62_3jf77")
+lockoutData = ExtResource("63_1mmvt")
 
-[node name="DashPanel4" parent="MainAct/Elevator" instance=ExtResource("38_mjdev")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 30, 0, 3)
+[node name="Camera" type="Node3D" parent="MainAct/Elevator/ElevatorStuff/LockoutDeactivate"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -100, 17)
+script = ExtResource("6_8b1i8")
+settings = ExtResource("65_y86dj")
+previousSettings = ExtResource("65_y86dj")
 
-[node name="Elevator1" parent="MainAct/Elevator" instance=ExtResource("43_hxgcc")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 37.5, 35, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Elevator/ElevatorStuff/LockoutDeactivate"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jbfdv")
 
-[node name="Elevator2" parent="MainAct/Elevator" instance=ExtResource("43_hxgcc")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 37.5, 67.096, 4)
+[node name="DashPanel1" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("38_mjdev")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
 
-[node name="Elevator3" parent="MainAct/Elevator" instance=ExtResource("43_hxgcc")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 37.5, 70.5, -4)
+[node name="DashPanel2" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("38_mjdev")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
 
-[node name="Elevator4" parent="MainAct/Elevator" instance=ExtResource("43_hxgcc")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 37.5, 101, 0)
+[node name="DashPanel3" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("38_mjdev")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="DashPanel4" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("38_mjdev")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+
+[node name="Elevator1" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("43_hxgcc")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 40, 7.5)
+
+[node name="Elevator2" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("43_hxgcc")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -4, 70.096, 7.5)
+
+[node name="Elevator3" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("43_hxgcc")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 4, 57.5, 7.5)
+"Movement/Starting Offset" = 0.6
+
+[node name="Elevator4" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("43_hxgcc")]
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0, 97, 7.5)
+"Movement/Starting Offset" = 0.7
+
+[node name="CullingTrigger" type="Node3D" parent="MainAct/Elevator/ElevatorStuff"]
+script = ExtResource("41_gc12q")
+startEnabled = true
+
+[node name="Camera" parent="MainAct/Elevator/ElevatorStuff/CullingTrigger" instance=ExtResource("7_d57bs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="MainAct/Elevator/ElevatorStuff/CullingTrigger/Camera"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -100, 17)
+script = ExtResource("6_8b1i8")
+settings = ExtResource("66_6m3ut")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Elevator/ElevatorStuff/CullingTrigger/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jbfdv")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MainAct/Elevator/ElevatorStuff/CullingTrigger" groups=["wall"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Elevator/ElevatorStuff/CullingTrigger/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 0.984808, -0.173648, 0, 0.173648, 0.984808, 0.5, 6.32635, 10.9848)
+shape = SubResource("BoxShape3D_jbfdv")
+
+[node name="AutorunLockout" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("7_d57bs")]
+
+[node name="Dialog" type="Node3D" parent="MainAct/Elevator/ElevatorStuff/AutorunLockout"]
+transform = Transform3D(-0.999857, 0, -0.016894, 0, 1, 0, 0.016894, 0, -0.999857, 0.0624542, -0.788898, 2.2436)
+script = ExtResource("72_5nukf")
+delays = Array[float]([])
+textKeys = Array[String](["evi_elevator_sh", "evi_elevator_so"])
+
+[node name="Lockout" type="Node3D" parent="MainAct/Elevator/ElevatorStuff/AutorunLockout"]
+script = ExtResource("62_3jf77")
+lockoutData = ExtResource("63_1mmvt")
+
+[node name="Path" type="Node3D" parent="MainAct/Elevator/ElevatorStuff/AutorunLockout" node_paths=PackedStringArray("path")]
+script = ExtResource("64_5smqs")
+path = NodePath("../../../../../Static/Path/ElevatorAutomationPath")
+
+[node name="Camera" type="Node3D" parent="MainAct/Elevator/ElevatorStuff/AutorunLockout"]
+script = ExtResource("6_8b1i8")
+settings = ExtResource("65_y86dj")
+previousSettings = ExtResource("67_lx1wo")
 
 [node name="Rings" type="Node3D" parent="MainAct/Elevator"]
 transform = Transform3D(0.00398087, -0.00200521, -0.99999, 0.00280938, 0.999994, -0.00199409, 0.999987, -0.00280142, 0.00398645, 60, 100.67, 0)
@@ -6797,6 +6849,16 @@ shape = SubResource("BoxShape3D_tr11d")
 [connection signal="Spawned" from="MainAct/MineEntrance/GreenMajin1" to="MainAct/MineEntrance/GreenMajin3" method="Spawn"]
 [connection signal="Activated" from="MainAct/MineExit/Switch" to="MainAct/MineExit/SwitchRings" method="Activate"]
 [connection signal="Respawned" from="MainAct/MineExit/Switch" to="MainAct/MineExit/SwitchRings" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Elevator/ElevatorStuff/DashPanel1" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Activate"]
+[connection signal="Activated" from="MainAct/Elevator/ElevatorStuff/DashPanel2" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Activate"]
+[connection signal="Activated" from="MainAct/Elevator/ElevatorStuff/DashPanel3" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Activate"]
+[connection signal="Activated" from="MainAct/Elevator/ElevatorStuff/DashPanel4" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Activate"]
+[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/Elevator1" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/Elevator2" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/Elevator3" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/Elevator4" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Elevator/ElevatorStuff/AutorunLockout" to="MainAct/Elevator/ElevatorStuff/CullingTrigger" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/Elevator/ElevatorStuff/AutorunLockout" to="MainAct/Elevator/ElevatorStuff/CullingTrigger" method="Activate"]
 [connection signal="Defeated" from="MainAct/TransitionHall/GreenMajin1" to="MainAct/TransitionHall/EnemyStone1" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/TransitionHall/GreenMajin2" to="MainAct/TransitionHall/EnemyStone2" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/TransitionHall/GreenMajin3" to="MainAct/TransitionHall/EnemyStone3" method="IncrementCounter"]

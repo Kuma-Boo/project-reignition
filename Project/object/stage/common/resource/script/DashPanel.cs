@@ -4,6 +4,9 @@ namespace Project.Gameplay.Objects;
 
 public partial class DashPanel : Area3D
 {
+	[Signal]
+	public delegate void ActivatedEventHandler();
+
 	[Export(PropertyHint.Range, "0, 2")]
 	private float speedRatio;
 	[Export]
@@ -70,5 +73,6 @@ public partial class DashPanel : Area3D
 
 		Player.Animator.StopBrake();
 		Player.AddLockoutData(lockout);
+		EmitSignal(SignalName.Activated);
 	}
 }

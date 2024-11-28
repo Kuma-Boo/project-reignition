@@ -61,6 +61,7 @@ public partial class KnockbackState : PlayerState
 		Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, 0, DamageFriction * PhysicsManager.physicsDelta);
 		Player.VerticalSpeed -= Runtime.Gravity * PhysicsManager.physicsDelta;
 		Player.ApplyMovement();
+		Player.UpdateUpDirection();
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.DownCancel) &&
 			Player.Controller.IsJumpBufferActive)

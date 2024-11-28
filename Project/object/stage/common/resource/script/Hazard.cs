@@ -20,7 +20,8 @@ public partial class Hazard : Node3D
 		if (isDisabled || !isInteractingWithPlayer)
 			return;
 
-		Player.StartKnockback();
+		if (!Player.StartKnockback())
+			return;
 		EmitSignal(SignalName.DamagedPlayer);
 	}
 

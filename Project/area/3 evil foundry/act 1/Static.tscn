@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://wufpyrm8jour"]
+[gd_scene load_steps=62 format=3 uid="uid://wufpyrm8jour"]
 
 [ext_resource type="PackedScene" uid="uid://o4l6oimlm4qq" path="res://area/3 evil foundry/act 1/environment/collision/Collision.tscn" id="1_liyuu"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_q5jqm"]
@@ -42,14 +42,11 @@
 [ext_resource type="Curve3D" uid="uid://tjilx005moco" path="res://area/3 evil foundry/act 1/environment/path/ElevatorAutomationPath.tres" id="36_cuwfc"]
 [ext_resource type="Resource" uid="uid://dtmbywgmb8yc7" path="res://area/3 evil foundry/act 1/camera/CloseHallCam.tres" id="36_g2b6g"]
 [ext_resource type="Resource" uid="uid://dlfc7qmh2pubk" path="res://area/3 evil foundry/act 1/camera/StaircaseCam.tres" id="36_gjknb"]
-[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="37_47qmh"]
 [ext_resource type="Curve3D" uid="uid://bv0t8i8sfcb7q" path="res://area/3 evil foundry/act 1/environment/path/EndingPath.tres" id="37_dpldg"]
 [ext_resource type="Resource" uid="uid://deb2j8xspvlfq" path="res://area/3 evil foundry/act 1/camera/NarrowHallCam.tres" id="37_fhjrg"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="37_nle4i"]
 [ext_resource type="Resource" uid="uid://bst174qxx0cr6" path="res://area/3 evil foundry/act 1/camera/StaticCam.tres" id="38_3gwpp"]
 [ext_resource type="Resource" uid="uid://drgabk5njs1qx" path="res://area/3 evil foundry/act 1/camera/SpiralCam.tres" id="38_uh4ey"]
-[ext_resource type="Resource" uid="uid://ccjhqcuypdtc0" path="res://area/3 evil foundry/data/ElevatorLockout.tres" id="38_vwkfl"]
-[ext_resource type="Resource" uid="uid://dnk158xtx3lvc" path="res://area/3 evil foundry/act 1/camera/ElevatorCam.tres" id="39_tu57i"]
 [ext_resource type="Resource" uid="uid://nfpvaaas4rfq" path="res://area/3 evil foundry/act 1/camera/PitHallConnectionCam.tres" id="40_pn0hm"]
 [ext_resource type="Resource" uid="uid://baxr5jqxfm1du" path="res://area/3 evil foundry/act 1/camera/CrusherCam.tres" id="40_xc2mh"]
 
@@ -64,9 +61,6 @@ size = Vector3(10, 10, 36)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_mtlbe"]
 radius = 2.0
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_wtwnk"]
-size = Vector3(20, 120, 10)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vrh7o"]
 size = Vector3(100, 5, 300)
@@ -775,7 +769,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_h6yh5")
 
 [node name="L-22" parent="Visuals/CullingMap" instance=ExtResource("33_1wgtf")]
-transform = Transform3D(4.37114e-08, -1, -4.37114e-08, -8.74228e-08, -4.37114e-08, 1, -1, -4.37114e-08, -8.74228e-08, -50, -20, -190)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -58, -60, -190)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
@@ -1132,19 +1126,6 @@ ignoreDirection = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/AutomationTrigger"]
 shape = SubResource("SphereShape3D_mtlbe")
-
-[node name="ElevatorLockout" parent="Triggers/Object" instance=ExtResource("33_1wgtf")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -54.7513, -7, -190.002)
-"Trigger Mode" = 2
-"Enter Mode" = 0
-"Exit Mode" = 0
-
-[node name="Lockout" type="Node3D" parent="Triggers/Object/ElevatorLockout"]
-script = ExtResource("37_47qmh")
-lockoutData = ExtResource("38_vwkfl")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/ElevatorLockout"]
-shape = SubResource("BoxShape3D_wtwnk")
 
 [node name="FallTrigger" parent="Triggers/Object" instance=ExtResource("33_1wgtf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 26, -290)
@@ -1607,19 +1588,6 @@ settings = ExtResource("37_fhjrg")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_seqin")
 
-[node name="ElevatorCam" parent="Triggers/Camera" instance=ExtResource("33_1wgtf")]
-transform = Transform3D(-5.96046e-08, -1.13133e-08, 1, -1.48943e-09, 1, 1.13133e-08, -1, -1.48943e-09, -5.96046e-08, -77, -60, -190)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="Camera" type="Node3D" parent="Triggers/Camera/ElevatorCam"]
-script = ExtResource("35_va14j")
-settings = ExtResource("39_tu57i")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/ElevatorCam"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_seqin")
-
 [node name="CrusherCam" parent="Triggers/Camera" instance=ExtResource("33_1wgtf")]
 transform = Transform3D(-5.96046e-08, -1.13133e-08, 1, -1.48943e-09, 1, 1.13133e-08, -1, -1.48943e-09, -5.96046e-08, -25, 40, -190)
 "Trigger Mode" = 2
@@ -1681,19 +1649,6 @@ script = ExtResource("34_ugtny")
 path = NodePath("../../../../Path/EndingPath")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Path/EndingPath"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_h6yh5")
-
-[node name="EndingPath2" parent="Triggers/Path" instance=ExtResource("33_1wgtf")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -77, -60, -190)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="Path" type="Node3D" parent="Triggers/Path/EndingPath2" node_paths=PackedStringArray("path")]
-script = ExtResource("34_ugtny")
-path = NodePath("../../../../Path/ElevatorAutomationPath")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Path/EndingPath2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_h6yh5")
 
