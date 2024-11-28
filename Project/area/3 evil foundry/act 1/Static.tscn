@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://wufpyrm8jour"]
+[gd_scene load_steps=66 format=3 uid="uid://wufpyrm8jour"]
 
 [ext_resource type="PackedScene" uid="uid://o4l6oimlm4qq" path="res://area/3 evil foundry/act 1/environment/collision/Collision.tscn" id="1_liyuu"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_q5jqm"]
@@ -29,6 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://bw5ehfdmtkisl" path="res://area/3 evil foundry/act 1/environment/28Hall.tscn" id="30_yrtbv"]
 [ext_resource type="Script" path="res://object/trigger/modules/CheckpointTrigger.cs" id="31_8wctb"]
 [ext_resource type="PackedScene" uid="uid://3qifnsx8udf7" path="res://area/3 evil foundry/act 1/environment/29End.tscn" id="31_wglcq"]
+[ext_resource type="Script" path="res://object/trigger/modules/EnvironmentFxTrigger.cs" id="32_5580a"]
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="32_fcup5"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="33_1wgtf"]
 [ext_resource type="Curve3D" uid="uid://c60tx6v8ofiep" path="res://area/3 evil foundry/act 1/environment/path/StartingPath.tres" id="33_16aw5"]
@@ -1158,6 +1159,120 @@ shape = SubResource("BoxShape3D_vrh7o")
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Triggers/Object/FallTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 99, 0, -50)
 shape = SubResource("BoxShape3D_uffs8")
+
+[node name="Environment" type="Node3D" parent="Triggers"]
+
+[node name="WarpEnable" parent="Triggers/Environment" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -574, -57.2, -55)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Warp" type="Node3D" parent="Triggers/Environment/WarpEnable"]
+script = ExtResource("32_5580a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Environment/WarpEnable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_h6yh5")
+
+[node name="WarpDisable" parent="Triggers/Environment" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, -630, -60.4, -96)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Warp" type="Node3D" parent="Triggers/Environment/WarpDisable"]
+script = ExtResource("32_5580a")
+environmentFxFactor = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Environment/WarpDisable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_h6yh5")
+
+[node name="WarpEnable2" parent="Triggers/Environment" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, -670, -60, -300)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Warp" type="Node3D" parent="Triggers/Environment/WarpEnable2"]
+script = ExtResource("32_5580a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Environment/WarpEnable2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_h6yh5")
+
+[node name="WarpDisable2" parent="Triggers/Environment" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -617.1, -29.8, -420)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Warp" type="Node3D" parent="Triggers/Environment/WarpDisable2"]
+script = ExtResource("32_5580a")
+environmentFxFactor = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Environment/WarpDisable2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_h6yh5")
+
+[node name="WarpEnable3" parent="Triggers/Environment" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -275.339, -55, -355.191)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Warp" type="Node3D" parent="Triggers/Environment/WarpEnable3"]
+script = ExtResource("32_5580a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Environment/WarpEnable3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_h6yh5")
+
+[node name="WarpDisable3" parent="Triggers/Environment" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -198.439, -69.8, -400.091)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Warp" type="Node3D" parent="Triggers/Environment/WarpDisable3"]
+script = ExtResource("32_5580a")
+environmentFxFactor = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Environment/WarpDisable3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_h6yh5")
+
+[node name="WarpEnable4" parent="Triggers/Environment" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -101.339, -70, -400.091)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Warp" type="Node3D" parent="Triggers/Environment/WarpEnable4"]
+script = ExtResource("32_5580a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Environment/WarpEnable4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_h6yh5")
+
+[node name="WarpDisable4" parent="Triggers/Environment" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -99.9393, -55, -299.091)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Warp" type="Node3D" parent="Triggers/Environment/WarpDisable4"]
+script = ExtResource("32_5580a")
+environmentFxFactor = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Environment/WarpDisable4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_h6yh5")
+
+[node name="WarpEnable5" parent="Triggers/Environment" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -28.3394, 40, -189.991)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Warp" type="Node3D" parent="Triggers/Environment/WarpEnable5"]
+script = ExtResource("32_5580a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Environment/WarpEnable5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_h6yh5")
 
 [node name="Checkpoint" type="Node3D" parent="Triggers"]
 visible = false
