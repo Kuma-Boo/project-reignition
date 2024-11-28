@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://o84mynnonie0"]
+[gd_scene load_steps=35 format=3 uid="uid://o84mynnonie0"]
 
 [ext_resource type="PackedScene" uid="uid://2npi4fgvupgn" path="res://area/3 evil foundry/act 2/Static.tscn" id="1_xqp6r"]
 [ext_resource type="Resource" uid="uid://dn6cs0ku5r8i5" path="res://resource/level data/evil foundry/Act2Stealth.tres" id="2_lgr0y"]
@@ -11,9 +11,11 @@
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="9_oplmn"]
 [ext_resource type="PackedScene" uid="uid://dogm6wyurmt4" path="res://area/3 evil foundry/object/grindrail/Grindrail03.tscn" id="10_ogblh"]
 [ext_resource type="PackedScene" uid="uid://caxr4l7dgmca" path="res://area/3 evil foundry/object/scrap/ScrapMachineSupport.tscn" id="11_iirvw"]
-[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="12_ohpbk"]
+[ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="18_jlgkf"]
 [ext_resource type="PackedScene" uid="uid://em6o4lfsiiqw" path="res://object/enemy/majin/data/evil foundry/RedMajin.tscn" id="20_6bk5j"]
 [ext_resource type="PackedScene" uid="uid://cswcb8bgweh5m" path="res://area/3 evil foundry/object/scrap/ScrapMachineShort.tscn" id="26_p186v"]
+[ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="30_1gckd"]
+[ext_resource type="PackedScene" uid="uid://b7ku38xcd8buw" path="res://object/enemy/majin/data/evil foundry/BlueMajin.tscn" id="31_2loxc"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="32_w0her"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="34_apsfa"]
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="37_a7syv"]
@@ -34,20 +36,14 @@ size = Vector3(13.8862, 7.96594, 0.521423)
 [sub_resource type="Curve" id="Curve_sgdex"]
 min_value = -3.0
 max_value = 0.0
-_data = [Vector2(0, 0), 0.0, -7.2, 0, 0, Vector2(1, -3), -9.0, 0.0, 0, 0]
-point_count = 2
+_data = [Vector2(0, 0), 0.0, -6.04029, 0, 0, Vector2(1e-05, 0), 0.0, 0.0, 0, 0, Vector2(1, -3), -9.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Curve" id="Curve_xakx1"]
 min_value = -4.0
 max_value = 0.0
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -3.6), -10.8435, 0.0, 0, 0]
 point_count = 2
-
-[sub_resource type="Curve" id="Curve_8dgu3"]
-min_value = -4.0
-max_value = 2.0
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 0), 0.0, 0.0, 0, 0, Vector2(0.6, 1.2), 0.0, 0.0, 0, 0, Vector2(1, 0.3), 0.0, 0.0, 0, 0]
-point_count = 4
 
 [sub_resource type="Curve" id="Curve_0pxlj"]
 min_value = -1.5
@@ -194,12 +190,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.99988)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0178223, 3.48297, 0.38446)
 shape = SubResource("BoxShape3D_rtrti")
 
+[node name="Grindrail2" parent="StealthAct/Spiral" instance=ExtResource("6_o5acm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.187378, 18.7291)
+
 [node name="Rings1" type="Node3D" parent="StealthAct/Spiral"]
-transform = Transform3D(-0.984808, -0.0378802, -0.169466, 0, 0.975917, -0.218143, 0.173648, -0.214829, -0.96109, -0.503036, 1.8, 29.3653)
+transform = Transform3D(-0.965314, -0.0569559, -0.254806, -5.72459e-09, 0.975917, -0.218143, 0.261094, -0.210576, -0.942065, -0.593193, 1.84013, 29.3653)
 script = ExtResource("7_65sb5")
 Generate = false
 Source = ExtResource("8_12ovq")
-Amount = 3
+Amount = 4
 Shape = 0
 Orientation = 0
 Spacing = 3.0
@@ -209,24 +208,16 @@ Spacing = 3.0
 [node name="Child01" parent="StealthAct/Spiral/Rings1" instance=ExtResource("8_12ovq")]
 
 [node name="Child02" parent="StealthAct/Spiral/Rings1" instance=ExtResource("8_12ovq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.275, 0, -3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.111111, 0, -3)
 
 [node name="Child03" parent="StealthAct/Spiral/Rings1" instance=ExtResource("8_12ovq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.888889, 0, -6)
 
-[node name="SpikePanel1" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
-transform = Transform3D(-0.972581, -0.21644, 0.0850897, -0.215616, 0.976296, 0.018864, -0.0871556, 5.7742e-08, -0.996195, 17.9905, 7.08657, 44.053)
-"State Lengths/inactive" = 0.3
-"State Lengths/warning" = 0.2
-"State Lengths/active" = 0.5
-stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
+[node name="Child04" parent="StealthAct/Spiral/Rings1" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -9)
 
-[node name="SpikePanel2" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
-transform = Transform3D(-0.972581, -0.21644, 0.0850897, -0.215616, 0.976296, 0.018864, -0.0871556, 5.7742e-08, -0.996195, 17.8629, 7.05828, 45.5473)
-"State Lengths/inactive" = 0.3
-"State Lengths/warning" = 0.2
-"State Lengths/active" = 0.5
-stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
+[node name="BlueMajin" parent="StealthAct/Spiral" instance=ExtResource("31_2loxc")]
+transform = Transform3D(-0.552141, 0, -0.833751, 0, 1, 0, 0.833751, 0, -0.552141, 11.8072, 5.97712, 44.0814)
 
 [node name="SpikePanel11" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
 transform = Transform3D(-0.0368534, -0.00661416, 0.999299, -0.144947, 0.989438, 0.00120334, -0.988753, -0.144801, -0.0374229, 0.814384, 0.767849, 25.9435)
@@ -243,7 +234,7 @@ transform = Transform3D(-0.0368534, -0.00661416, 0.999299, -0.144947, 0.989438, 
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
 [node name="Rings2" type="Node3D" parent="StealthAct/Spiral"]
-transform = Transform3D(1.31134e-07, -0.258819, -0.965926, 0, 0.965926, -0.258819, 1, 3.394e-08, 1.26666e-07, 21.9281, 8.58692, 44.0071)
+transform = Transform3D(-0.159723, -0.258819, -0.952629, -0.0427977, 0.965926, -0.255256, 0.986234, 3.29791e-08, -0.165357, 16.2425, 7.10598, 44.0745)
 script = ExtResource("7_65sb5")
 Generate = false
 Source = ExtResource("8_12ovq")
@@ -255,6 +246,7 @@ Spacing = 4.0
 "Vertical Offset" = null
 
 [node name="Child01" parent="StealthAct/Spiral/Rings2" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, -1.00253e-09, -1.49012e-08, 3.31501e-09, 1, 9.97313e-09, 0, 9.44783e-09, 1, 0, 0, 0)
 
 [node name="Child02" parent="StealthAct/Spiral/Rings2" instance=ExtResource("8_12ovq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.130109, 0, -4)
@@ -265,8 +257,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.06022, 0, -8)
 [node name="Child04" parent="StealthAct/Spiral/Rings2" instance=ExtResource("8_12ovq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0, -12)
 
+[node name="RedMajin" parent="StealthAct/Spiral" instance=ExtResource("20_6bk5j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3145, 14.9732, 26.7565)
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+
 [node name="SpikePanel3" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
-transform = Transform3D(-0.939692, -0.0740267, 0.333913, 0, 0.976296, 0.21644, -0.34202, 0.203387, -0.917418, 38.3276, 13.5984, 30.7516)
+transform = Transform3D(-0.677466, -0.159203, 0.718118, 1.20977e-08, 0.976296, 0.21644, -0.735553, 0.146631, -0.661408, 33.0836, 11.0797, 39.093)
 "Current State" = 1
 "State Lengths/inactive" = 0.3
 "State Lengths/warning" = 0.2
@@ -274,35 +271,26 @@ transform = Transform3D(-0.939692, -0.0740267, 0.333913, 0, 0.976296, 0.21644, -
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
 [node name="SpikePanel4" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
-transform = Transform3D(-0.939692, -0.0740267, 0.333913, 0, 0.976296, 0.21644, -0.34202, 0.203387, -0.917418, 39.7371, 13.5984, 31.2648)
+transform = Transform3D(-0.677466, -0.159203, 0.718118, 1.20977e-08, 0.976296, 0.21644, -0.735553, 0.146631, -0.661408, 34.0997, 11.0797, 40.1965)
 "Current State" = 1
 "State Lengths/inactive" = 0.3
 "State Lengths/warning" = 0.2
 "State Lengths/active" = 0.5
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
-[node name="Rings3" type="Node3D" parent="StealthAct/Spiral"]
-transform = Transform3D(0.766044, 0.139125, 0.627551, 0, 0.976296, -0.21644, -0.642788, 0.165802, 0.747886, 40.2308, 16.9962, 19.7517)
+[node name="RichPearl" type="Node3D" parent="StealthAct/Spiral"]
+transform = Transform3D(0.807633, 0.126399, 0.575978, 0.000444564, 0.976626, -0.214945, -0.589685, 0.173852, 0.7887, 36.2922, 19.1771, 13.3721)
 script = ExtResource("7_65sb5")
 Generate = false
-Source = ExtResource("8_12ovq")
-Amount = 4
+Source = ExtResource("30_1gckd")
+Amount = 1
 Shape = 0
 Orientation = 0
-Spacing = 5.0
-"Horizontal Offset" = SubResource("Curve_8dgu3")
+Spacing = 0.0
+"Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="StealthAct/Spiral/Rings3" instance=ExtResource("8_12ovq")]
-
-[node name="Child02" parent="StealthAct/Spiral/Rings3" instance=ExtResource("8_12ovq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.171688, 0, -5)
-
-[node name="Child03" parent="StealthAct/Spiral/Rings3" instance=ExtResource("8_12ovq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.13333, 0, -10)
-
-[node name="Child04" parent="StealthAct/Spiral/Rings3" instance=ExtResource("8_12ovq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0, -15)
+[node name="Child01" parent="StealthAct/Spiral/RichPearl" instance=ExtResource("30_1gckd")]
 
 [node name="SpikePanel5" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
 transform = Transform3D(-0.809017, 0.12722, -0.573852, 0, 0.976296, 0.21644, 0.587785, 0.175103, -0.78984, 35.5301, 18.0304, 13.6285)
@@ -320,22 +308,33 @@ transform = Transform3D(-0.809017, 0.12722, -0.573852, 0, 0.976296, 0.21644, 0.5
 "State Lengths/active" = 0.5
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
-[node name="RichRing" parent="StealthAct/Spiral" instance=ExtResource("12_ohpbk")]
-transform = Transform3D(0.766044, 0.139125, 0.627551, 0, 0.976296, -0.21644, -0.642788, 0.165802, 0.747886, 26.6142, 21.9108, 5.85797)
+[node name="RedMajin2" parent="StealthAct/Spiral" instance=ExtResource("20_6bk5j")]
+transform = Transform3D(0.471524, 0.190437, 0.861045, -0.0266092, 0.979032, -0.201961, -0.881451, 0.0723174, 0.466705, 27.5804, 21.1147, 5.44826)
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+flameRoot = NodePath("../RedMajin/FX/FireFX")
+hitboxAttachment = NodePath("../RedMajin/ChestAttachment")
+root = NodePath("../RedMajin/Root")
+hurtbox = NodePath("../RedMajin/ChestAttachment/Hitbox")
+collider = NodePath("../RedMajin/ChestAttachment/EnvironmentCollider/CollisionShape3D")
+rangeCollider = NodePath("../RedMajin/Range/CollisionShape3D")
+animationTree = NodePath("../RedMajin/AnimationTree")
+animationPlayer = NodePath("../RedMajin/AnimationPlayer")
 
-[node name="SpikePanel7" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
-transform = Transform3D(0.573576, 0.177297, -0.799735, 0, 0.976296, 0.21644, 0.819152, -0.124145, 0.55998, 8.75923, 25.587, 9.28908)
-"State Lengths/inactive" = 0.3
-"State Lengths/warning" = 0.2
-"State Lengths/active" = 0.5
-stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
+[node name="RichPearl2" parent="StealthAct/Spiral" instance=ExtResource("30_1gckd")]
+transform = Transform3D(-0.152308, 0.0420517, 0.987438, 0.0559756, 0.997858, -0.033862, -0.986747, 0.0501147, -0.154335, 15.6981, 24.3498, 5.35365)
+collider = NodePath("../RichPearl/CollisionShape3D")
 
-[node name="SpikePanel8" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
+[node name="BlueMajin2" parent="StealthAct/Spiral" instance=ExtResource("31_2loxc")]
 transform = Transform3D(0.570395, 0.18728, -0.799735, -0.0170387, 0.976147, 0.21644, 0.821194, -0.10983, 0.55998, 7.89886, 25.587, 8.06035)
-"State Lengths/inactive" = 0.3
-"State Lengths/warning" = 0.2
-"State Lengths/active" = 0.5
-stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
+flameRoot = NodePath("../BlueMajin/FX/FireFX")
+hitboxAttachment = NodePath("../BlueMajin/ChestAttachment")
+root = NodePath("../BlueMajin/Root")
+hurtbox = NodePath("../BlueMajin/ChestAttachment/Hitbox")
+collider = NodePath("../BlueMajin/ChestAttachment/EnvironmentCollider/CollisionShape3D")
+rangeCollider = NodePath("../BlueMajin/Range/CollisionShape3D")
+animationTree = NodePath("../BlueMajin/AnimationTree")
+animationPlayer = NodePath("../BlueMajin/AnimationPlayer")
 
 [node name="SpikePanel9" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
 transform = Transform3D(-1, -7.6194e-09, -8.70901e-08, 0, 0.996195, -0.0871557, 8.74228e-08, -0.0871557, -0.996195, 0.800003, 29.9004, 29.0087)
@@ -409,6 +408,39 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
 [node name="Child05" parent="StealthAct/Spiral/Grindrail/Pearls" instance=ExtResource("9_oplmn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="InvisibleGrindrail" parent="StealthAct/Spiral" instance=ExtResource("18_jlgkf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 24.1858)
+railLength = 32
+
+[node name="ObjectGenerator" type="Node3D" parent="StealthAct/Spiral/InvisibleGrindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.563736, -17.9174)
+script = ExtResource("7_65sb5")
+Generate = false
+Source = ExtResource("8_12ovq")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="StealthAct/Spiral/InvisibleGrindrail/ObjectGenerator" instance=ExtResource("8_12ovq")]
+
+[node name="Child02" parent="StealthAct/Spiral/InvisibleGrindrail/ObjectGenerator" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="StealthAct/Spiral/InvisibleGrindrail/ObjectGenerator" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="StealthAct/Spiral/InvisibleGrindrail/ObjectGenerator" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="StealthAct/Spiral/InvisibleGrindrail/ObjectGenerator" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="StealthAct/Spiral/InvisibleGrindrail/ObjectGenerator" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
 
 [node name="End" type="Node3D" parent="StealthAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -100, -30, -120)
