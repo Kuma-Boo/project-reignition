@@ -100,6 +100,9 @@ public partial class FoundryDoor : Node3D
 			magnitude = Vector3.One.RemoveDepth(),
 		});
 
+		Hazard.isDisabled = true;
+		StageSettings.Player.MoveSpeed = 0;
+
 		if (swingMode == SwingModeEnum.Fakeout) // Flip fakeout doors when closing
 			Animator.Set(SpikeTransition, spikeState == SpikeEnum.Enabled ? "disabled" : "enabled");
 
