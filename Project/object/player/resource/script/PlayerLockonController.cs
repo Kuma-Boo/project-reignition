@@ -70,6 +70,25 @@ public partial class PlayerLockonController : Node3D
 			wasTargetChanged = ProcessMonitoring();
 
 		ValidateTarget(wasTargetChanged);
+		ValidateCameraLockonTarget();
+	}
+
+	private void ValidateCameraLockonTarget()
+	{
+		if (Player.Camera.LockonTarget == null)
+			return;
+
+		if (Player.IsOnGround)
+		{
+			Player.Camera.SetLockonTarget(null);
+			return;
+		}
+
+		TargetState targetState = IsTargetValid(Player.Camera.LockonTarget);
+		if (targetState != TargetState.NotInList && targetState != TargetState.Invisible)
+			return;
+
+		Player.Camera.SetLockonTarget(null);
 	}
 
 	private bool ProcessMonitoring()

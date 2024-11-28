@@ -162,13 +162,6 @@ public partial class PlayerCameraController : Node3D
 
 	private void UpdateLockonTarget()
 	{
-		if (LockonTarget != null)
-		{
-			// Validate LockonTarget
-			if (Player.IsOnGround || !LockonTarget.IsInsideTree() || IsBehindCamera(LockonTarget.GlobalPosition))
-				SetLockonTarget(null);
-		}
-
 		float targetBlend = 0;
 		float smoothing = LockonBlendOutSmoothing;
 
