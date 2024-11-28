@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://o84mynnonie0"]
+[gd_scene load_steps=36 format=3 uid="uid://o84mynnonie0"]
 
 [ext_resource type="PackedScene" uid="uid://2npi4fgvupgn" path="res://area/3 evil foundry/act 2/Static.tscn" id="1_xqp6r"]
 [ext_resource type="Resource" uid="uid://dn6cs0ku5r8i5" path="res://resource/level data/evil foundry/Act2Stealth.tres" id="2_lgr0y"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="9_oplmn"]
 [ext_resource type="PackedScene" uid="uid://dogm6wyurmt4" path="res://area/3 evil foundry/object/grindrail/Grindrail03.tscn" id="10_ogblh"]
 [ext_resource type="PackedScene" uid="uid://caxr4l7dgmca" path="res://area/3 evil foundry/object/scrap/ScrapMachineSupport.tscn" id="11_iirvw"]
+[ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="14_an0s0"]
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="18_jlgkf"]
 [ext_resource type="PackedScene" uid="uid://em6o4lfsiiqw" path="res://object/enemy/majin/data/evil foundry/RedMajin.tscn" id="20_6bk5j"]
 [ext_resource type="PackedScene" uid="uid://cswcb8bgweh5m" path="res://area/3 evil foundry/object/scrap/ScrapMachineShort.tscn" id="26_p186v"]
@@ -233,6 +234,9 @@ transform = Transform3D(-0.0368534, -0.00661416, 0.999299, -0.144947, 0.989438, 
 "State Lengths/active" = 0.5
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
+[node name="ScrapMachineShort" parent="StealthAct/Spiral" instance=ExtResource("26_p186v")]
+transform = Transform3D(-0.99704, 0.026808, 0.0720677, 0.0140262, 0.984939, -0.172333, -0.075602, -0.170812, -0.982399, 0.754417, 29.2837, 24.0843)
+
 [node name="Rings2" type="Node3D" parent="StealthAct/Spiral"]
 transform = Transform3D(-0.159723, -0.258819, -0.952629, -0.0427977, 0.965926, -0.255256, 0.986234, 3.29791e-08, -0.165357, 16.2425, 7.10598, 44.0745)
 script = ExtResource("7_65sb5")
@@ -257,9 +261,36 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.06022, 0, -8)
 [node name="Child04" parent="StealthAct/Spiral/Rings2" instance=ExtResource("8_12ovq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0, -12)
 
+[node name="Rings3" type="Node3D" parent="StealthAct/Spiral"]
+transform = Transform3D(-0.672886, 0.124441, 0.729204, -0.0371659, 0.978818, -0.201333, -0.738812, -0.162576, -0.654008, 4.4995, 27.4281, 12.2447)
+script = ExtResource("7_65sb5")
+Generate = false
+Source = ExtResource("8_12ovq")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = SubResource("Curve_xakx1")
+"Vertical Offset" = null
+
+[node name="Child01" parent="StealthAct/Spiral/Rings3" instance=ExtResource("8_12ovq")]
+
+[node name="Child02" parent="StealthAct/Spiral/Rings3" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.130111, 0, -3)
+
+[node name="Child03" parent="StealthAct/Spiral/Rings3" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.06022, 0, -6)
+
+[node name="Child04" parent="StealthAct/Spiral/Rings3" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0, -9)
+
 [node name="RedMajin" parent="StealthAct/Spiral" instance=ExtResource("20_6bk5j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3145, 14.9732, 26.7565)
-"Attack Settings/Flame Aggression Radius" = 0
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 3.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 6
 "Attack Settings/Attack Instantly" = false
 
 [node name="SpikePanel3" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
@@ -310,7 +341,11 @@ stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 
 [node name="RedMajin2" parent="StealthAct/Spiral" instance=ExtResource("20_6bk5j")]
 transform = Transform3D(0.471524, 0.190437, 0.861045, -0.0266092, 0.979032, -0.201961, -0.881451, 0.0723174, 0.466705, 27.5804, 21.1147, 5.44826)
-"Attack Settings/Flame Aggression Radius" = 0
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 3.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 2.0
+"Attack Settings/Flame Aggression Radius" = 6
 "Attack Settings/Attack Instantly" = false
 flameRoot = NodePath("../RedMajin/FX/FireFX")
 hitboxAttachment = NodePath("../RedMajin/ChestAttachment")
@@ -325,8 +360,30 @@ animationPlayer = NodePath("../RedMajin/AnimationPlayer")
 transform = Transform3D(-0.152308, 0.0420517, 0.987438, 0.0559756, 0.997858, -0.033862, -0.986747, 0.0501147, -0.154335, 15.6981, 24.3498, 5.35365)
 collider = NodePath("../RichPearl/CollisionShape3D")
 
-[node name="BlueMajin2" parent="StealthAct/Spiral" instance=ExtResource("31_2loxc")]
-transform = Transform3D(0.570395, 0.18728, -0.799735, -0.0170387, 0.976147, 0.21644, 0.821194, -0.10983, 0.55998, 7.89886, 25.587, 8.06035)
+[node name="MovingObject" type="Node3D" parent="StealthAct/Spiral"]
+transform = Transform3D(0.570395, 0.18728, -0.799735, -0.0170387, 0.976147, 0.21644, 0.821194, -0.10983, 0.55998, 7.46687, 25.5999, 7.4384)
+script = ExtResource("14_an0s0")
+Movement/Mode = 1
+"Movement/Cycle Length" = 1.0
+"Movement/Starting Offset" = 0.23
+Movement/Distance = 3.5
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+
+[node name="BlueMajin2" parent="StealthAct/Spiral/MovingObject" instance=ExtResource("31_2loxc")]
+transform = Transform3D(1, -7.45058e-09, 2.98023e-08, -1.49012e-08, 1, -7.45058e-09, -5.96046e-08, 1.11759e-08, 1, 0, 0, 0)
+"Attack Settings/Attack Type" = 1
+flameRoot = NodePath("../../BlueMajin/FX/FireFX")
+hitboxAttachment = NodePath("../../BlueMajin/ChestAttachment")
+root = NodePath("../../BlueMajin/Root")
+hurtbox = NodePath("../../BlueMajin/ChestAttachment/Hitbox")
+collider = NodePath("../../BlueMajin/ChestAttachment/EnvironmentCollider/CollisionShape3D")
+rangeCollider = NodePath("../../BlueMajin/Range/CollisionShape3D")
+animationTree = NodePath("../../BlueMajin/AnimationTree")
+animationPlayer = NodePath("../../BlueMajin/AnimationPlayer")
+
+[node name="BlueMajin3" parent="StealthAct/Spiral" instance=ExtResource("31_2loxc")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.539658, 32.2424, 34.9737)
 flameRoot = NodePath("../BlueMajin/FX/FireFX")
 hitboxAttachment = NodePath("../BlueMajin/ChestAttachment")
 root = NodePath("../BlueMajin/Root")
@@ -336,33 +393,19 @@ rangeCollider = NodePath("../BlueMajin/Range/CollisionShape3D")
 animationTree = NodePath("../BlueMajin/AnimationTree")
 animationPlayer = NodePath("../BlueMajin/AnimationPlayer")
 
-[node name="SpikePanel9" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
-transform = Transform3D(-1, -7.6194e-09, -8.70901e-08, 0, 0.996195, -0.0871557, 8.74228e-08, -0.0871557, -0.996195, 0.800003, 29.9004, 29.0087)
-"State Lengths/inactive" = 0.3
-"State Lengths/warning" = 0.2
-"State Lengths/active" = 0.5
-stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
-
-[node name="SpikePanel10" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
-transform = Transform3D(-1, -7.6194e-09, -8.70901e-08, 0, 0.996195, -0.0871557, 8.74228e-08, -0.0871557, -0.996195, -0.699997, 29.9004, 29.0087)
-"State Lengths/inactive" = 0.3
-"State Lengths/warning" = 0.2
-"State Lengths/active" = 0.5
-stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
-
 [node name="Grindrail" parent="StealthAct/Spiral" instance=ExtResource("6_o5acm")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.5, 30.28, 31.5)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.00679016, 30.28, 34.7517)
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
 collider = NodePath("")
 
 [node name="Rings4" type="Node3D" parent="StealthAct/Spiral/Grindrail"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -8.00443)
 script = ExtResource("7_65sb5")
 Generate = false
 Source = ExtResource("8_12ovq")
-Amount = 5
+Amount = 6
 Shape = 0
 Orientation = 0
 Spacing = 2.0
@@ -383,31 +426,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 [node name="Child05" parent="StealthAct/Spiral/Grindrail/Rings4" instance=ExtResource("8_12ovq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
-[node name="Pearls" type="Node3D" parent="StealthAct/Spiral/Grindrail"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -5)
-script = ExtResource("7_65sb5")
-Generate = false
-Source = ExtResource("9_oplmn")
-Amount = 5
-Shape = 0
-Orientation = 0
-Spacing = 2.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="StealthAct/Spiral/Grindrail/Pearls" instance=ExtResource("9_oplmn")]
-
-[node name="Child02" parent="StealthAct/Spiral/Grindrail/Pearls" instance=ExtResource("9_oplmn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="Child03" parent="StealthAct/Spiral/Grindrail/Pearls" instance=ExtResource("9_oplmn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="Child04" parent="StealthAct/Spiral/Grindrail/Pearls" instance=ExtResource("9_oplmn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="Child05" parent="StealthAct/Spiral/Grindrail/Pearls" instance=ExtResource("9_oplmn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+[node name="Child06" parent="StealthAct/Spiral/Grindrail/Rings4" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="InvisibleGrindrail" parent="StealthAct/Spiral" instance=ExtResource("18_jlgkf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 24.1858)
@@ -529,6 +549,7 @@ transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.08715
 "Secondary Settings/Middle Height" = 2.0
 "Secondary Settings/Final Height" = -5.0
 "Secondary Settings/Distance" = 40.0
+isSpikeVariant = true
 distance = 25.0
 
 [node name="FireSoul3" parent="StealthAct/End" instance=ExtResource("32_w0her")]
