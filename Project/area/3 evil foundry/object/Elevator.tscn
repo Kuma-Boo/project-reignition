@@ -21,7 +21,7 @@ size = Vector3(4, 5, 6)
 size = Vector3(4, 6, 4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dnt6x"]
-size = Vector3(4, 1, 6)
+size = Vector3(4, 2, 6)
 
 [sub_resource type="Animation" id="Animation_jtpo6"]
 length = 0.001
@@ -60,6 +60,26 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_gksj0"]
+resource_name = "damage"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.1, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"Pause"
+}, {
+"args": [],
+"method": &"Unpause"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_11rjf"]
@@ -140,26 +160,6 @@ tracks/2/keys = {
 "values": [1.0, -2.0]
 }
 
-[sub_resource type="Animation" id="Animation_gksj0"]
-resource_name = "damage"
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"Pause"
-}, {
-"args": [],
-"method": &"Unpause"
-}]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_h1tvi"]
 _data = {
 "RESET": SubResource("Animation_jtpo6"),
@@ -226,6 +226,7 @@ collision_mask = 2
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Root/PlatformTrigger/Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_dnt6x")
 
 [node name="Fall" type="AudioStreamPlayer3D" parent="Root"]

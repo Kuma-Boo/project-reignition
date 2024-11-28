@@ -58,6 +58,7 @@ public partial class PlayerAnimator : Node3D
 	/// </summary>
 	public void ProcessPhysics()
 	{
+		GD.PrintT("AnimationState:", animationTree.Get("parameters/ground_transition/current_state"));
 		AirAnimations();
 		UpdateVisualRotation();
 		UpdateShaderVariables();

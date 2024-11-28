@@ -147,7 +147,7 @@ public partial class PlayerController : CharacterBody3D
 	private const float CollisionPadding = .02f;
 
 	public bool IsOnGround { get; set; }
-	private RaycastHit GroundHit { get; set; }
+	public RaycastHit GroundHit { get; private set; }
 	private readonly int GroundWhiskerAmount = 8;
 	public bool CheckGround()
 	{
