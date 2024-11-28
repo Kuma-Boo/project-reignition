@@ -206,7 +206,7 @@ public partial class Enemy : Node3D
 	/// <summary>
 	/// Spawns pearls. Call this somewhere in Defeat(), or from an AnimationPlayer.
 	/// </summary>
-	protected virtual void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, GlobalPosition, new Vector2(2, 1.5f), 1.5f);
+	protected virtual void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, Hurtbox != null ? Hurtbox.GlobalPosition : GlobalPosition, new Vector2(2, 1.5f), 1.5f);
 
 	protected bool IsHitboxEnabled { get; private set; }
 	protected void SetHitboxStatus(bool isEnabled, bool hurtboxOnly = false)
