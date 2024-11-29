@@ -74,6 +74,10 @@ public partial class PlatformTrigger : Node3D
 	/// <summary> Keeps track of the platform's position from the previous frame. </summary>
 	private Vector3 previousPosition;
 
+	/// <summary> Bump this up to allow the player to go flying when jumping off. </summary>
+	[Export] private float playerJumpInfluenceMultiplier = 1f;
+	[Export(PropertyHint.Range, "0,1,.1,or_greater")] private float maxJumpMovementAmount;
+
 	// Runtime data
 	/// <summary> Timer to keep track of shaking status. </summary>
 	private float shakeTimer;
@@ -112,6 +116,11 @@ public partial class PlatformTrigger : Node3D
 	{
 		if (Engine.IsEditorHint()) return;
 
+		UpdatePlatform();
+	}
+
+	private void UpdatePlatform()
+	{
 		if (isPlatformShaking)
 		{
 			UpdateFallingPlatformBehaviour();
@@ -169,7 +178,10 @@ public partial class PlatformTrigger : Node3D
 	/// <summary> Moves the player with the platform. </summary>
 	private void SyncPlayerMovement()
 	{
-		if (!Player.IsOnGround || !isInteractingWithPlayer)
+		if (isInteractingWithPlayer)
+			GD.PrintT("GroundState:", Player.IsOnGround);
+
+		if ((!Player.IsOnGround && Player.Velocity.Y >= 0) || !isInteractingWithPlayer)
 		{
 			Vector3 delta = floorCalculationRoot.GlobalPosition - previousPosition;
 			if (delta.Y <= 0) // Not moving upwards -- reset influence instantly
@@ -181,7 +193,10 @@ public partial class PlatformTrigger : Node3D
 			}
 			else
 			{
-				Player.GlobalTranslate(Vector3.Up * delta.Y * playerInfluence);
+				float amount = delta.Y * playerInfluence * playerJumpInfluenceMultiplier;
+				if (!Mathf.IsZeroApprox(maxJumpMovementAmount))
+					amount = Mathf.Min(amount, maxJumpMovementAmount * PhysicsManager.physicsDelta);
+				Player.GlobalTranslate(Vector3.Up * amount);
 				playerInfluence = Mathf.MoveToward(playerInfluence, 0, PlayerInfluenceReset * PhysicsManager.physicsDelta);
 			}
 
@@ -190,7 +205,8 @@ public partial class PlatformTrigger : Node3D
 		}
 
 		float checkLength = Mathf.Abs(Player.CenterPosition.Y - floorCalculationRoot.GlobalPosition.Y) + (Player.CollisionSize.Y * 2.0f);
-		KinematicCollision3D collision = Player.MoveAndCollide(-Player.PathFollower.HeightAxis * checkLength, true);
+		KinematicCollision3D collision = Player.MoveAndCollide(-Player.UpDirection * checkLength, true);
+		GD.PrintT("CollisionCheck:", collision?.GetCollider());
 
 		if (collision == null || (Node3D)collision.GetCollider() != parentCollider) // Player is not on the platform
 			return;
@@ -204,12 +220,12 @@ public partial class PlatformTrigger : Node3D
 	{
 		if (!a.IsInGroup("player detection")) return;
 		isInteractingWithPlayer = true;
+		UpdatePlatform();
 	}
 
 	public void OnExited(Area3D a)
 	{
 		if (!a.IsInGroup("player detection")) return;
-
 		isInteractingWithPlayer = false;
 	}
 }

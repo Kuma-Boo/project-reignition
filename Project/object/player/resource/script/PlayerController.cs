@@ -147,7 +147,7 @@ public partial class PlayerController : CharacterBody3D
 	private const float CollisionPadding = .02f;
 
 	public bool IsOnGround { get; set; }
-	private RaycastHit GroundHit { get; set; }
+	public RaycastHit GroundHit { get; private set; }
 	private readonly int GroundWhiskerAmount = 8;
 	public bool CheckGround()
 	{
@@ -684,9 +684,11 @@ public partial class PlayerController : CharacterBody3D
 	[Export]
 	private BounceState bounceState;
 	public bool IsBouncing { get; set; }
+	public bool IsBounceInteruptable { get; set; }
 	public void StartBounce(bool isUpwardBounce = true)
 	{
 		IsBouncing = true;
+		IsBounceInteruptable = false;
 		bounceState.IsUpwardBounce = isUpwardBounce;
 		StateMachine.ChangeState(bounceState);
 	}
@@ -705,18 +707,19 @@ public partial class PlayerController : CharacterBody3D
 	[Export]
 	private KnockbackState knockbackState;
 	public bool IsKnockback { get; set; }
-	public void StartKnockback(KnockbackSettings settings = new())
+	public bool StartKnockback(KnockbackSettings settings = new())
 	{
 		EmitSignal(SignalName.Knockback); // Emit signal FIRST so external controllers can be alerted
 
-		if (IsTeleporting || IsDefeated) return;
-		if (IsInvincible && !settings.ignoreInvincibility) return;
-		if (ExternalController != null && !settings.ignoreMovementState) return;
+		if (IsTeleporting || IsDefeated) return false;
+		if (IsInvincible && !settings.ignoreInvincibility) return false;
+		if (ExternalController != null && !settings.ignoreMovementState) return false;
 
 		GD.Print("Knockback Started");
 
 		knockbackState.Settings = settings;
 		StateMachine.ChangeState(knockbackState);
+		return true;
 	}
 
 	public void TakeDamage()

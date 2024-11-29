@@ -11,11 +11,10 @@ namespace Project.Gameplay;
 public partial class MovingObject : Node3D
 {
 	/// <summary> Emitted when the object starts to leave its initial position. </summary>
-	[Signal]
-	public delegate void OnLeaveEventHandler();
+	[Signal] public delegate void OnLeaveEventHandler();
 	/// <summary> Emitted when the object starts to return to its initial position. </summary>
-	[Signal]
-	public delegate void OnReturnEventHandler();
+	[Signal] public delegate void OnReturnEventHandler();
+	[Signal] public delegate void DamagedPlayerEventHandler();
 
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
@@ -238,6 +237,12 @@ public partial class MovingObject : Node3D
 
 		if (Root?.IsInsideTree() == true)
 			Root.GlobalPosition = InterpolatePosition(currentTime);
+	}
+
+	public void DamagePlayer()
+	{
+		GD.Print("Damaging Player");
+		EmitSignal(SignalName.DamagedPlayer);
 	}
 
 	public Vector3 InterpolatePosition(float ratio)

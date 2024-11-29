@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://wm6qp8wc4aik"]
+[gd_scene load_steps=52 format=3 uid="uid://wm6qp8wc4aik"]
 
 [ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="1_8qxdg"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_qk3u2"]
@@ -32,6 +32,14 @@
 [ext_resource type="PackedScene" uid="uid://c10y5dhqmy3gk" path="res://area/3 evil foundry/object/FanBroken.tscn" id="22_cges7"]
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="24_lhmrn"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="25_l0jjy"]
+[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="31_o07cn"]
+[ext_resource type="Resource" uid="uid://ccjhqcuypdtc0" path="res://area/3 evil foundry/data/ElevatorLockout.tres" id="32_qsn7x"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="33_paq22"]
+[ext_resource type="Resource" uid="uid://dnk158xtx3lvc" path="res://area/3 evil foundry/act 1/camera/ElevatorCam.tres" id="34_iwx46"]
+[ext_resource type="Resource" uid="uid://x2wnppe3iny1" path="res://area/3 evil foundry/act 1/camera/ElevatorBaseCam.tres" id="36_wwwlt"]
+[ext_resource type="Resource" uid="uid://deb2j8xspvlfq" path="res://area/3 evil foundry/act 1/camera/NarrowHallCam.tres" id="37_5m7l6"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="38_fwdur"]
+[ext_resource type="Resource" uid="uid://dy7imtvsy4rtp" path="res://area/3 evil foundry/act 1/camera/ElevatorPlatformingCam.tres" id="39_et0ch"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s1mwa"]
 size = Vector3(20, 20, 5)
@@ -217,6 +225,9 @@ _data = {
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cvoto"]
 size = Vector3(5, 20, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vcj4s"]
+size = Vector3(20, 10, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_t3h8b"]
 size = Vector3(15, 13, 12.9072)
@@ -567,7 +578,7 @@ transform = Transform3D(0.945251, 0, 0.326344, 0, 1, 0, -0.326344, 0, 0.945251, 
 transform = Transform3D(0.349259, 0, -0.937026, 0, 1, 0, 0.937026, 0, 0.349259, 130.888, -14.0253, -0.0552673)
 
 [node name="JumpCarpet" parent="DeathlessAct/Opening" instance=ExtResource("17_6twug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42, 10, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 42, 10, 0)
 
 [node name="MineEntrance" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -360.023, -60, -360)
@@ -833,7 +844,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
 
 [node name="Ending" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, -55, -300)
-visible = false
 script = ExtResource("4_khgg8")
 saveVisibilityOnCheckpoint = true
 
@@ -901,31 +911,93 @@ playSFX = true
 [node name="Fan2" parent="DeathlessAct/Ending" instance=ExtResource("22_cges7")]
 transform = Transform3D(-0.5, -0.866025, -8.74228e-08, -0.866025, 0.5, 0, 4.37114e-08, 7.57103e-08, -1, -0.0200043, 0.538498, 77.717)
 
-[node name="DashStrip" type="Node3D" parent="DeathlessAct/Ending"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.9608, -5, 110)
+[node name="ElevatorStuff" type="Node3D" parent="DeathlessAct/Ending"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 40, -5, 110)
 
-[node name="DashPanel1" parent="DeathlessAct/Ending/DashStrip" instance=ExtResource("4_sj5iv")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -3)
+[node name="LockoutDeactivate" parent="DeathlessAct/Ending/ElevatorStuff" instance=ExtResource("4_vuoeu")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 100, 12)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
 
-[node name="DashPanel2" parent="DeathlessAct/Ending/DashStrip" instance=ExtResource("4_sj5iv")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -1)
+[node name="Lockout" type="Node3D" parent="DeathlessAct/Ending/ElevatorStuff/LockoutDeactivate"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -100, 17)
+script = ExtResource("31_o07cn")
+lockoutData = ExtResource("32_qsn7x")
 
-[node name="DashPanel3" parent="DeathlessAct/Ending/DashStrip" instance=ExtResource("4_sj5iv")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 1)
+[node name="Camera" type="Node3D" parent="DeathlessAct/Ending/ElevatorStuff/LockoutDeactivate"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -100, 17)
+script = ExtResource("33_paq22")
+settings = ExtResource("34_iwx46")
+previousSettings = ExtResource("34_iwx46")
 
-[node name="DashPanel4" parent="DeathlessAct/Ending/DashStrip" instance=ExtResource("4_sj5iv")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 3)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Ending/ElevatorStuff/LockoutDeactivate"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_s1mwa")
 
-[node name="Elevator1" parent="DeathlessAct/Ending" instance=ExtResource("18_834aa")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 47, 47.8411, 110)
+[node name="DashPanel1" parent="DeathlessAct/Ending/ElevatorStuff" instance=ExtResource("4_sj5iv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+
+[node name="DashPanel2" parent="DeathlessAct/Ending/ElevatorStuff" instance=ExtResource("4_sj5iv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="DashPanel3" parent="DeathlessAct/Ending/ElevatorStuff" instance=ExtResource("4_sj5iv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="DashPanel4" parent="DeathlessAct/Ending/ElevatorStuff" instance=ExtResource("4_sj5iv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+
+[node name="Elevator1" parent="DeathlessAct/Ending/ElevatorStuff" instance=ExtResource("18_834aa")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 40, 7.5)
+
+[node name="Elevator2" parent="DeathlessAct/Ending/ElevatorStuff" instance=ExtResource("18_834aa")]
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0, 97, 7.5)
+"Movement/Starting Offset" = 0.7
+
+[node name="CullingTrigger" type="Node3D" parent="DeathlessAct/Ending/ElevatorStuff"]
+script = ExtResource("4_khgg8")
+startEnabled = true
+
+[node name="Camera" parent="DeathlessAct/Ending/ElevatorStuff/CullingTrigger" instance=ExtResource("4_vuoeu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="DeathlessAct/Ending/ElevatorStuff/CullingTrigger/Camera"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -100, 17)
+script = ExtResource("33_paq22")
+settings = ExtResource("36_wwwlt")
+previousSettings = ExtResource("37_5m7l6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Ending/ElevatorStuff/CullingTrigger/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("BoxShape3D_vcj4s")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="DeathlessAct/Ending/ElevatorStuff/CullingTrigger" groups=["wall"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Ending/ElevatorStuff/CullingTrigger/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 0.984808, -0.173648, 0, 0.173648, 0.984808, 0.5, 6.32635, 10.9848)
+shape = SubResource("BoxShape3D_s1mwa")
+
+[node name="AutorunLockout" parent="DeathlessAct/Ending/ElevatorStuff" instance=ExtResource("4_vuoeu")]
+
+[node name="Lockout" type="Node3D" parent="DeathlessAct/Ending/ElevatorStuff/AutorunLockout"]
+script = ExtResource("31_o07cn")
+lockoutData = ExtResource("32_qsn7x")
+
+[node name="Path" type="Node3D" parent="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" node_paths=PackedStringArray("path")]
+script = ExtResource("38_fwdur")
+path = NodePath("../../../../../Static/Path/ElevatorAutomationPath")
+
+[node name="Camera" type="Node3D" parent="DeathlessAct/Ending/ElevatorStuff/AutorunLockout"]
+script = ExtResource("33_paq22")
+settings = ExtResource("34_iwx46")
+previousSettings = ExtResource("39_et0ch")
 
 [node name="FireSoul" parent="DeathlessAct/Ending" instance=ExtResource("18_mjad6")]
 transform = Transform3D(-4.37114e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, -4.37114e-08, 0, 49, 78.5471, 110)
 fireSoulIndex = 3
-
-[node name="Elevator2" parent="DeathlessAct/Ending" instance=ExtResource("18_834aa")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 47, 88.5471, 110)
-"Movement/Starting Offset" = 0.5
 
 [node name="Goal" parent="DeathlessAct/Ending" instance=ExtResource("19_xdhlr")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 70.638, 100.75, 110)
@@ -943,6 +1015,14 @@ shape = SubResource("BoxShape3D_t3h8b")
 [connection signal="Deactivated" from="DeathlessAct/CullingMap/MineEntrance-U" to="DeathlessAct/MineEntrance" method="Activate"]
 [connection signal="SpinStarted" from="DeathlessAct/Ending/MajinMover/BlueMajin" to="DeathlessAct/Ending/MajinMover" method="Unpause"]
 [connection signal="SpinStarted" from="DeathlessAct/Ending/MajinMover2/BlueMajin" to="DeathlessAct/Ending/MajinMover2" method="Unpause"]
+[connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/DashPanel1" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/DashPanel2" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/DashPanel3" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/DashPanel4" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Activate"]
+[connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/Elevator1" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/Elevator2" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" to="DeathlessAct/Ending/ElevatorStuff/CullingTrigger" method="Deactivate"]
+[connection signal="Deactivated" from="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" to="DeathlessAct/Ending/ElevatorStuff/CullingTrigger" method="Activate"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]

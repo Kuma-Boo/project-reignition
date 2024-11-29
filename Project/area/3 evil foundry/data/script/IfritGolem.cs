@@ -390,7 +390,7 @@ public partial class IfritGolem : Node3D
 		// Launch the player back to solid ground
 		Player.Animator.SnapRotation(bounceCameraSettings.yawAngle - (Mathf.Pi * 0.5f));
 		Player.StartLauncher(LaunchSettings.Create(Player.GlobalPosition, PlayerLaunchTarget.GlobalPosition, 5f));
-		Player.Camera.LockonTarget = null;
+		Player.Camera.SetLockonTarget(null);
 		Player.Animator.StartSpin(3f);
 		EmitSignal(SignalName.HitstunLaunched);
 		EmitSignal(SignalName.StunEnded);
@@ -456,7 +456,7 @@ public partial class IfritGolem : Node3D
 	{
 		ExitHitstun();
 
-		Player.Camera.LockonTarget = null;
+		Player.Camera.SetLockonTarget(null);
 		HitstunStatePlayback.Start(RecoveryAnimation);
 		currentState = GolemState.Recovery;
 	}
@@ -536,7 +536,7 @@ public partial class IfritGolem : Node3D
 		if (isInteractionProcessed)
 			return;
 
-		Player.Camera.LockonTarget = HeadHurtbox;
+		Player.Camera.SetLockonTarget(HeadHurtbox);
 
 		switch (Player.AttackState)
 		{
