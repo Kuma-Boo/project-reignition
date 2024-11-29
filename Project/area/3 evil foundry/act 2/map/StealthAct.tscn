@@ -1,10 +1,12 @@
-[gd_scene load_steps=33 format=3 uid="uid://dqvmvjsdwynll"]
+[gd_scene load_steps=36 format=3 uid="uid://dqvmvjsdwynll"]
 
 [ext_resource type="PackedScene" uid="uid://2npi4fgvupgn" path="res://area/3 evil foundry/act 2/Static.tscn" id="1_xqp6r"]
 [ext_resource type="Resource" uid="uid://dn6cs0ku5r8i5" path="res://resource/level data/evil foundry/Act2Stealth.tres" id="2_lgr0y"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_jdsbk"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="4_fy42y"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_wp22j"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="5_dymgr"]
+[ext_resource type="Resource" uid="uid://dk5vslixkehvw" path="res://area/3 evil foundry/act 2/trigger/camera/StealthStartCam.tres" id="6_dsglk"]
 [ext_resource type="PackedScene" uid="uid://dhwwi7i5b0v65" path="res://area/3 evil foundry/object/grindrail/Grindrail02.tscn" id="6_o5acm"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="7_65sb5"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="8_12ovq"]
@@ -28,6 +30,9 @@
 [ext_resource type="PackedScene" uid="uid://det4s2txdn4ka" path="res://area/3 evil foundry/object/Furnace.tscn" id="38_a4p2t"]
 [ext_resource type="PackedScene" uid="uid://cxgu3ob2u708b" path="res://area/3 evil foundry/object/scrap/ScrapMachineLadder.tscn" id="41_6gbv4"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="43_wm0ue"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h41i1"]
+size = Vector3(12, 10, 10)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_egyd0"]
 size = Vector3(12, 10, 2)
@@ -68,9 +73,24 @@ startEnabled = true
 [node name="SpawnPosition" type="Node3D" parent="StealthAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100.001, -59.9991, -185.727)
 
+[node name="StartingCamera" parent="StealthAct/SpawnPosition" instance=ExtResource("4_wp22j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="StealthAct/SpawnPosition/StartingCamera"]
+script = ExtResource("4_fy42y")
+transitionTime = 0.1
+settings = ExtResource("6_dsglk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/SpawnPosition/StartingCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+shape = SubResource("BoxShape3D_h41i1")
+
 [node name="CharacterSpawn" parent="StealthAct/SpawnPosition" instance=ExtResource("3_jdsbk")]
 
-[node name="InvisibleWall" type="StaticBody3D" parent="StealthAct/SpawnPosition"]
+[node name="InvisibleWall" type="StaticBody3D" parent="StealthAct/SpawnPosition" groups=["wall"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/SpawnPosition/InvisibleWall"]
@@ -397,7 +417,7 @@ root = NodePath("BlueMajin2")
 animator = NodePath("")
 
 [node name="BlueMajin2" parent="StealthAct/Spiral/MovingMajin" instance=ExtResource("31_2loxc")]
-transform = Transform3D(1, -3.72529e-08, 2.98023e-08, -4.47035e-08, 1, -2.23517e-08, -2.08616e-07, 1.86265e-08, 1, 1.54044, -3.8147e-06, 0)
+transform = Transform3D(1, -3.72529e-08, 2.98023e-08, -4.47035e-08, 1, -2.23517e-08, -2.68221e-07, 1.49012e-08, 1, 1.54044, -3.8147e-06, 0)
 "Attack Settings/Attack Type" = 1
 
 [node name="BlueMajin3" parent="StealthAct/Spiral" instance=ExtResource("31_2loxc")]
