@@ -100,11 +100,11 @@ public partial class ItemBox : Pickup
 	private Node3D pickupParent;
 	private void DisablePickupParent()
 	{
-		if (pickupParent != null) // Disable node parent
-		{
-			pickupParent.Visible = false;
-			pickupParent.ProcessMode = ProcessModeEnum.Disabled;
-		}
+		if (pickupParent == null) return;
+
+		// Disable node parent
+		pickupParent.Visible = false;
+		pickupParent.ProcessMode = ProcessModeEnum.Disabled;
 	}
 
 	/// <summary> How many objects to spawn. </summary>
@@ -143,11 +143,8 @@ public partial class ItemBox : Pickup
 
 		if (Engine.IsEditorHint()) return;
 
-		if (!spawnPearls)
+		if (!spawnPearls && pickupParent != null)
 		{
-			if (pickupParent == null)
-				GD.PrintErr($"Pickup parent is null on {Name}! Did you mean to turn spawnPearls on?");
-
 			// Pool objects
 			if (pickupParent is Pickup)
 			{
@@ -161,7 +158,7 @@ public partial class ItemBox : Pickup
 		}
 
 		base.SetUp();
-		DisablePickupParent(); // Attempt to disable the pickup parent
+		DisablePickupParent();
 	}
 
 	public override void Unload() // Prevent memory leak
@@ -269,8 +266,11 @@ public partial class ItemBox : Pickup
 
 		isMovingObjects = true;
 
-		pickupParent.Visible = true;
-		pickupParent.ProcessMode = ProcessModeEnum.Inherit;
+		if (pickupParent != null)
+		{
+			pickupParent.Visible = true;
+			pickupParent.ProcessMode = ProcessModeEnum.Inherit;
+		}
 
 		// Spawn objects
 		for (int i = 0; i < objectPool.Count; i++)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://o84mynnonie0"]
+[gd_scene load_steps=33 format=3 uid="uid://dqvmvjsdwynll"]
 
 [ext_resource type="PackedScene" uid="uid://2npi4fgvupgn" path="res://area/3 evil foundry/act 2/Static.tscn" id="1_xqp6r"]
 [ext_resource type="Resource" uid="uid://dn6cs0ku5r8i5" path="res://resource/level data/evil foundry/Act2Stealth.tres" id="2_lgr0y"]
@@ -28,13 +28,12 @@
 [ext_resource type="PackedScene" uid="uid://det4s2txdn4ka" path="res://area/3 evil foundry/object/Furnace.tscn" id="38_a4p2t"]
 [ext_resource type="PackedScene" uid="uid://cxgu3ob2u708b" path="res://area/3 evil foundry/object/scrap/ScrapMachineLadder.tscn" id="41_6gbv4"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="43_wm0ue"]
-[ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="44_h6tea"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_egyd0"]
+size = Vector3(12, 10, 2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cnx8w"]
 size = Vector3(5, 20, 15)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_rtrti"]
-size = Vector3(13.8862, 7.96594, 0.521423)
 
 [sub_resource type="Curve" id="Curve_sgdex"]
 min_value = -3.0
@@ -48,23 +47,35 @@ max_value = 0.0
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -3.6), -10.8435, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_egyd0"]
-size = Vector3(12, 10, 2)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ghie0"]
-size = Vector3(15, 20, 5)
-
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_xqp6r")]
 Data = ExtResource("2_lgr0y")
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="01Opening" parent="Static/Visuals" index="1"]
+startEnabled = false
+
+[node name="09Elevator" parent="Static/Visuals" index="9"]
+startEnabled = true
+
+[node name="10Spiral" parent="Static/Visuals" index="10"]
+startEnabled = true
 
 [node name="StealthAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="StealthAct"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100.001, -59.9991, -186.727)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100.001, -59.9991, -185.727)
 
 [node name="CharacterSpawn" parent="StealthAct/SpawnPosition" instance=ExtResource("3_jdsbk")]
+
+[node name="InvisibleWall" type="StaticBody3D" parent="StealthAct/SpawnPosition"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/SpawnPosition/InvisibleWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+shape = SubResource("BoxShape3D_egyd0")
 
 [node name="CullingMap" type="Node3D" parent="StealthAct"]
 visible = false
@@ -171,17 +182,48 @@ shape = SubResource("BoxShape3D_cnx8w")
 [node name="Spiral" type="Node3D" parent="StealthAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, -60, -180)
 script = ExtResource("5_dymgr")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
-[node name="InvisibleWall" type="StaticBody3D" parent="StealthAct/Spiral"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.99988)
+[node name="InvisibleGrindrail" parent="StealthAct/Spiral" instance=ExtResource("18_jlgkf")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 3.5, -7.81419)
+railLength = 32
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/Spiral/InvisibleWall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0178223, 3.48297, 0.38446)
-shape = SubResource("BoxShape3D_rtrti")
+[node name="Rings" type="Node3D" parent="StealthAct/Spiral/InvisibleGrindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -9)
+script = ExtResource("7_65sb5")
+Generate = false
+Source = ExtResource("8_12ovq")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="StealthAct/Spiral/InvisibleGrindrail/Rings" instance=ExtResource("8_12ovq")]
+
+[node name="Child02" parent="StealthAct/Spiral/InvisibleGrindrail/Rings" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child03" parent="StealthAct/Spiral/InvisibleGrindrail/Rings" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child04" parent="StealthAct/Spiral/InvisibleGrindrail/Rings" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="StealthAct/Spiral/InvisibleGrindrail/Rings" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child06" parent="StealthAct/Spiral/InvisibleGrindrail/Rings" instance=ExtResource("8_12ovq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
 
 [node name="Grindrail2" parent="StealthAct/Spiral" instance=ExtResource("6_o5acm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.187378, 18.7291)
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0.3, -1)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Rings1" type="Node3D" parent="StealthAct/Spiral"]
 transform = Transform3D(-0.965314, -0.0569559, -0.254806, -5.72459e-09, 0.975917, -0.218143, 0.261094, -0.210576, -0.942065, -0.593193, 1.84013, 29.3653)
@@ -206,9 +248,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.888889, 0, -6)
 [node name="Child04" parent="StealthAct/Spiral/Rings1" instance=ExtResource("8_12ovq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -9)
 
-[node name="BlueMajin" parent="StealthAct/Spiral" instance=ExtResource("31_2loxc")]
-transform = Transform3D(-0.552141, 0, -0.833751, 0, 1, 0, 0.833751, 0, -0.552141, 11.8072, 5.97712, 44.0814)
-
 [node name="SpikePanel11" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
 transform = Transform3D(-0.0368534, -0.00661416, 0.999299, -0.144947, 0.989438, 0.00120334, -0.988753, -0.144801, -0.0374229, 0.814384, 0.767849, 25.9435)
 "State Lengths/inactive" = 0.3
@@ -222,6 +261,9 @@ transform = Transform3D(-0.0368534, -0.00661416, 0.999299, -0.144947, 0.989438, 
 "State Lengths/warning" = 0.2
 "State Lengths/active" = 0.5
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
+
+[node name="BlueMajin" parent="StealthAct/Spiral" instance=ExtResource("31_2loxc")]
+transform = Transform3D(-0.552141, 0, -0.833751, 0, 1, 0, 0.833751, 0, -0.552141, 11.8072, 5.97712, 44.0814)
 
 [node name="ScrapMachineShort" parent="StealthAct/Spiral" instance=ExtResource("26_p186v")]
 transform = Transform3D(-0.99704, 0.026808, 0.0720677, 0.0140262, 0.984939, -0.172333, -0.075602, -0.170812, -0.982399, 0.754417, 29.2837, 24.0843)
@@ -276,10 +318,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0, -9)
 [node name="RedMajin" parent="StealthAct/Spiral" instance=ExtResource("20_6bk5j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3145, 14.9732, 26.7565)
 "Rotation Settings/Track Player" = false
-"Rotation Settings/Rotation Time" = 3.0
-"Attack Settings/Flame Active Time" = 2.0
-"Attack Settings/Flame Inactive Time" = 2.0
-"Attack Settings/Flame Aggression Radius" = 6
+"Rotation Settings/Rotation Time" = 2.0
+"Attack Settings/Flame Active Time" = 1.2
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 10
 "Attack Settings/Attack Instantly" = false
 
 [node name="SpikePanel3" parent="StealthAct/Spiral" instance=ExtResource("37_a7syv")]
@@ -331,25 +373,16 @@ stateLengths = PackedFloat32Array(0.3, 0.2, 0.5)
 [node name="RedMajin2" parent="StealthAct/Spiral" instance=ExtResource("20_6bk5j")]
 transform = Transform3D(0.471524, 0.190437, 0.861045, -0.0266092, 0.979032, -0.201961, -0.881451, 0.0723174, 0.466705, 27.5804, 21.1147, 5.44826)
 "Rotation Settings/Track Player" = false
-"Rotation Settings/Rotation Time" = 3.0
-"Attack Settings/Flame Active Time" = 2.0
-"Attack Settings/Flame Inactive Time" = 2.0
-"Attack Settings/Flame Aggression Radius" = 6
+"Rotation Settings/Rotation Time" = 2.0
+"Attack Settings/Flame Active Time" = 1.2
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 10
 "Attack Settings/Attack Instantly" = false
-flameRoot = NodePath("../RedMajin/FX/FireFX")
-hitboxAttachment = NodePath("../RedMajin/ChestAttachment")
-root = NodePath("../RedMajin/Root")
-hurtbox = NodePath("../RedMajin/ChestAttachment/Hitbox")
-collider = NodePath("../RedMajin/ChestAttachment/EnvironmentCollider/CollisionShape3D")
-rangeCollider = NodePath("../RedMajin/Range/CollisionShape3D")
-animationTree = NodePath("../RedMajin/AnimationTree")
-animationPlayer = NodePath("../RedMajin/AnimationPlayer")
 
 [node name="RichPearl2" parent="StealthAct/Spiral" instance=ExtResource("30_1gckd")]
 transform = Transform3D(-0.152308, 0.0420517, 0.987438, 0.0559756, 0.997858, -0.033862, -0.986747, 0.0501147, -0.154335, 15.6981, 24.3498, 5.35365)
-collider = NodePath("../RichPearl/CollisionShape3D")
 
-[node name="MovingObject" type="Node3D" parent="StealthAct/Spiral"]
+[node name="MovingMajin" type="Node3D" parent="StealthAct/Spiral"]
 transform = Transform3D(0.570395, 0.18728, -0.799735, -0.0170387, 0.976147, 0.21644, 0.821194, -0.10983, 0.55998, 7.46687, 25.5999, 7.4384)
 script = ExtResource("14_an0s0")
 Movement/Mode = 1
@@ -358,39 +391,27 @@ Movement/Mode = 1
 Movement/Distance = 3.5
 Movement/Angle = -90.0
 "Vertical Orientation" = false
+startPaused = true
+smoothPausing = true
+root = NodePath("BlueMajin2")
+animator = NodePath("")
 
-[node name="BlueMajin2" parent="StealthAct/Spiral/MovingObject" instance=ExtResource("31_2loxc")]
-transform = Transform3D(1, -7.45058e-09, 2.98023e-08, -1.49012e-08, 1, -7.45058e-09, -5.96046e-08, 1.11759e-08, 1, 0, 0, 0)
+[node name="BlueMajin2" parent="StealthAct/Spiral/MovingMajin" instance=ExtResource("31_2loxc")]
+transform = Transform3D(1, -1.49012e-08, 2.98023e-08, -1.49012e-08, 1, -2.23517e-08, -1.49012e-07, 1.11759e-08, 1, 1.54044, -3.8147e-06, 0)
 "Attack Settings/Attack Type" = 1
-flameRoot = NodePath("../../BlueMajin/FX/FireFX")
-hitboxAttachment = NodePath("../../BlueMajin/ChestAttachment")
-root = NodePath("../../BlueMajin/Root")
-hurtbox = NodePath("../../BlueMajin/ChestAttachment/Hitbox")
-collider = NodePath("../../BlueMajin/ChestAttachment/EnvironmentCollider/CollisionShape3D")
-rangeCollider = NodePath("../../BlueMajin/Range/CollisionShape3D")
-animationTree = NodePath("../../BlueMajin/AnimationTree")
-animationPlayer = NodePath("../../BlueMajin/AnimationPlayer")
 
 [node name="BlueMajin3" parent="StealthAct/Spiral" instance=ExtResource("31_2loxc")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0103455, 32.2424, 36.8756)
-flameRoot = NodePath("../BlueMajin/FX/FireFX")
-hitboxAttachment = NodePath("../BlueMajin/ChestAttachment")
-root = NodePath("../BlueMajin/Root")
-hurtbox = NodePath("../BlueMajin/ChestAttachment/Hitbox")
-collider = NodePath("../BlueMajin/ChestAttachment/EnvironmentCollider/CollisionShape3D")
-rangeCollider = NodePath("../BlueMajin/Range/CollisionShape3D")
-animationTree = NodePath("../BlueMajin/AnimationTree")
-animationPlayer = NodePath("../BlueMajin/AnimationPlayer")
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0103455, 33.2424, 36.8756)
 
 [node name="Grindrail" parent="StealthAct/Spiral" instance=ExtResource("6_o5acm")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.00679016, 30.28, 34.7517)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.00679016, 30.28, 32.7517)
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
 collider = NodePath("")
 
 [node name="Rings4" type="Node3D" parent="StealthAct/Spiral/Grindrail"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -8.00443)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -8)
 script = ExtResource("7_65sb5")
 Generate = false
 Source = ExtResource("8_12ovq")
@@ -418,41 +439,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 [node name="Child06" parent="StealthAct/Spiral/Grindrail/Rings4" instance=ExtResource("8_12ovq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
-[node name="InvisibleGrindrail" parent="StealthAct/Spiral" instance=ExtResource("18_jlgkf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 24.1858)
-railLength = 32
-
-[node name="ObjectGenerator" type="Node3D" parent="StealthAct/Spiral/InvisibleGrindrail"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.563736, -17.9174)
-script = ExtResource("7_65sb5")
-Generate = false
-Source = ExtResource("8_12ovq")
-Amount = 6
-Shape = 0
-Orientation = 0
-Spacing = 1.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="StealthAct/Spiral/InvisibleGrindrail/ObjectGenerator" instance=ExtResource("8_12ovq")]
-
-[node name="Child02" parent="StealthAct/Spiral/InvisibleGrindrail/ObjectGenerator" instance=ExtResource("8_12ovq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-
-[node name="Child03" parent="StealthAct/Spiral/InvisibleGrindrail/ObjectGenerator" instance=ExtResource("8_12ovq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="Child04" parent="StealthAct/Spiral/InvisibleGrindrail/ObjectGenerator" instance=ExtResource("8_12ovq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
-
-[node name="Child05" parent="StealthAct/Spiral/InvisibleGrindrail/ObjectGenerator" instance=ExtResource("8_12ovq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="Child06" parent="StealthAct/Spiral/InvisibleGrindrail/ObjectGenerator" instance=ExtResource("8_12ovq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-
 [node name="FireSoul1" parent="StealthAct/Spiral" instance=ExtResource("32_w0her")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0737534, 33.5724, 35.0537)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0737534, 34.4724, 35.0537)
 
 [node name="End" type="Node3D" parent="StealthAct"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -100, -30, -120)
@@ -496,139 +484,68 @@ Spacing = 2.0
 [node name="Child02" parent="StealthAct/End/RichPearls" instance=ExtResource("30_1gckd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
-[node name="DashPanel" parent="StealthAct/End" instance=ExtResource("16_wif5v")]
+[node name="DashPanelGroup" type="Node3D" parent="StealthAct/End"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000413895, 21.0495)
 
-[node name="DashPanel2" parent="StealthAct/End" instance=ExtResource("16_wif5v")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.97967, 0.000413895, 21.0495)
+[node name="Stone1" parent="StealthAct/End/DashPanelGroup" instance=ExtResource("27_laehy")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.999445, -0.579498)
 
-[node name="DashPanel3" parent="StealthAct/End" instance=ExtResource("16_wif5v")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0211, 0.000413895, 21.0495)
+[node name="Stone2" parent="StealthAct/End/DashPanelGroup" instance=ExtResource("27_laehy")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.01698, 0.999445, -0.579498)
+
+[node name="Stone3" parent="StealthAct/End/DashPanelGroup" instance=ExtResource("27_laehy")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.00929, 0.999445, -0.579498)
+
+[node name="DashPanel" parent="StealthAct/End/DashPanelGroup" instance=ExtResource("16_wif5v")]
+
+[node name="DashPanel2" parent="StealthAct/End/DashPanelGroup" instance=ExtResource("16_wif5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.97967, 0, 0)
+
+[node name="DashPanel3" parent="StealthAct/End/DashPanelGroup" instance=ExtResource("16_wif5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0211, 0, 0)
+
+[node name="RichRing" parent="StealthAct/End/DashPanelGroup" instance=ExtResource("25_43q2f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -0.600006)
 
 [node name="BlueMajin" parent="StealthAct/End" instance=ExtResource("31_2loxc")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.5, 27.1613)
-
-[node name="MovingMajin" type="Node3D" parent="StealthAct/End"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 15.6073, 0.262026, 54.7546)
-script = ExtResource("14_an0s0")
-Movement/Mode = 1
-"Movement/Cycle Length" = 1.5
-"Movement/Starting Offset" = 0.0
-Movement/Distance = 4.2
-Movement/Angle = 180.0
-"Vertical Orientation" = false
-root = NodePath("BlueMajin2")
-
-[node name="BlueMajin2" parent="StealthAct/End/MovingMajin" instance=ExtResource("31_2loxc")]
-"Attack Settings/Attack Type" = 1
-
-[node name="MovingMajin2" type="Node3D" parent="StealthAct/End"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 15.6073, 0.262026, 58.8231)
-script = ExtResource("14_an0s0")
-Movement/Mode = 1
-"Movement/Cycle Length" = 1.5
-"Movement/Starting Offset" = 0.0
-Movement/Distance = 3.8
-Movement/Angle = 180.0
-"Vertical Orientation" = false
-root = NodePath("BlueMajin2")
-animator = NodePath("")
-
-[node name="BlueMajin2" parent="StealthAct/End/MovingMajin2" instance=ExtResource("31_2loxc")]
-"Attack Settings/Attack Type" = 1
-
-[node name="MovingMajin3" type="Node3D" parent="StealthAct/End"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 38.3087, 5.14683, 58.0363)
-script = ExtResource("14_an0s0")
-Movement/Mode = 1
-"Movement/Cycle Length" = 2.0
-"Movement/Starting Offset" = 0.0
-Movement/Distance = 7.0
-Movement/Angle = 180.0
-"Vertical Orientation" = false
-root = NodePath("BlueMajin2")
-animator = NodePath("")
-
-[node name="BlueMajin2" parent="StealthAct/End/MovingMajin3" instance=ExtResource("31_2loxc")]
-"Attack Settings/Attack Type" = 1
-
-[node name="MovingMajin4" type="Node3D" parent="StealthAct/End"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 46.8528, 5.14683, 51.6766)
-script = ExtResource("14_an0s0")
-Movement/Mode = 1
-"Movement/Cycle Length" = 2.0
-"Movement/Starting Offset" = 0.0
-Movement/Distance = 7.0
-Movement/Angle = 0.0
-"Vertical Orientation" = false
-root = NodePath("BlueMajin2")
-animator = NodePath("")
-
-[node name="BlueMajin2" parent="StealthAct/End/MovingMajin4" instance=ExtResource("31_2loxc")]
-"Attack Settings/Attack Type" = 1
-
-[node name="MovingMajin5" type="Node3D" parent="StealthAct/End"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 69.9846, -3.15058, 37.1291)
-script = ExtResource("14_an0s0")
-Movement/Mode = 0
-"Vertical Orientation" = false
-root = NodePath("BlueMajin2")
-animator = NodePath("")
-
-[node name="BlueMajin2" parent="StealthAct/End/MovingMajin5" instance=ExtResource("31_2loxc")]
-"Attack Settings/Attack Type" = 1
-
-[node name="MovingMajin6" type="Node3D" parent="StealthAct/End"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 66.4409, -4.48011, 29.8135)
-script = ExtResource("14_an0s0")
-Movement/Mode = 1
-"Movement/Cycle Length" = 1.4
-"Movement/Starting Offset" = 0.0
-Movement/Distance = 8.0
-Movement/Angle = 90.0
-"Vertical Orientation" = false
-root = NodePath("BlueMajin2")
-animator = NodePath("")
-animatorSpeedScale = 1.8
-
-[node name="BlueMajin2" parent="StealthAct/End/MovingMajin6" instance=ExtResource("31_2loxc")]
-"Attack Settings/Attack Type" = 1
-
-[node name="MovingMajin7" type="Node3D" parent="StealthAct/End"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 65.5543, -9.71847, -6.58601)
-script = ExtResource("14_an0s0")
-Movement/Mode = 1
-"Movement/Cycle Length" = 1.2
-"Movement/Starting Offset" = 0.0
-Movement/Distance = 9.0
-Movement/Angle = 90.0
-"Vertical Orientation" = false
-root = NodePath("BlueMajin2")
-animator = NodePath("")
-
-[node name="BlueMajin2" parent="StealthAct/End/MovingMajin7" instance=ExtResource("31_2loxc")]
-"Attack Settings/Attack Type" = 1
-
-[node name="RedMajin" parent="StealthAct/End" instance=ExtResource("20_6bk5j")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 70.0005, -5.48409, -9.3258)
-"Rotation Settings/Track Player" = false
-"Rotation Settings/Rotation Time" = 3.0
-"Attack Settings/Flame Active Time" = 2.0
-"Attack Settings/Flame Inactive Time" = 2.0
-"Attack Settings/Flame Aggression Radius" = 0
-"Attack Settings/Attack Instantly" = false
-
-[node name="FireSoul2" parent="StealthAct/End" instance=ExtResource("32_w0her")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 70.0005, -6.79105, -9.3258)
-
-[node name="Cage" parent="StealthAct/End" instance=ExtResource("18_13git")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 70.0005, -6.79105, -9.32579)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.5, 27)
 
 [node name="Furnace1" parent="StealthAct/End" instance=ExtResource("38_a4p2t")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.89746, 0.00894547, 46.0837)
 
 [node name="Furnace2" parent="StealthAct/End" instance=ExtResource("38_a4p2t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55929, 0.0269318, 39.5613)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.5593, 0.0269318, 39.5613)
+
+[node name="MovingMajin" type="Node3D" parent="StealthAct/End"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 15.6073, 0.262026, 54.7546)
+script = ExtResource("14_an0s0")
+Movement/Mode = 1
+"Movement/Cycle Length" = 0.8
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 4.2
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+root = NodePath("BlueMajin")
+animator = NodePath("")
+
+[node name="BlueMajin" parent="StealthAct/End/MovingMajin" instance=ExtResource("31_2loxc")]
+"Attack Settings/Attack Type" = 1
+
+[node name="MovingMajin2" type="Node3D" parent="StealthAct/End"]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 15.6073, 0.262026, 58.8231)
+script = ExtResource("14_an0s0")
+Movement/Mode = 1
+"Movement/Cycle Length" = 0.8
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 3.8
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+root = NodePath("BlueMajin")
+animator = NodePath("")
+
+[node name="BlueMajin" parent="StealthAct/End/MovingMajin2" instance=ExtResource("31_2loxc")]
+transform = Transform3D(1, 0, 3.27826e-07, 0, 1, 0, -3.27826e-07, 0, 1, 0, 0, 0)
+"Attack Settings/Attack Type" = 1
 
 [node name="LaunchRingSpike" parent="StealthAct/End" instance=ExtResource("19_4nrpv")]
 transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.0871557, -1, 3.8097e-09, -4.35451e-08, 24, 4, 55)
@@ -638,10 +555,113 @@ transform = Transform3D(-4.37114e-08, -0.0871557, 0.996195, 0, 0.996195, 0.08715
 middleHeight = 2.0
 finalHeight = 0.0
 distance = 25.0
-recenterSpeed = 10000
+voiceKey = &""
+
+[node name="MovingMajin3" type="Node3D" parent="StealthAct/End"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 38, 5.147, 58)
+script = ExtResource("14_an0s0")
+Movement/Mode = 1
+"Movement/Cycle Length" = 1.2
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 7.0
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+root = NodePath("BlueMajin")
+animator = NodePath("")
+
+[node name="BlueMajin" parent="StealthAct/End/MovingMajin3" instance=ExtResource("31_2loxc")]
+transform = Transform3D(0.999978, 0, 1.46027e-06, 0, 1, 0, -1.46027e-06, 0, 0.999978, 0, 0, 0)
+"Attack Settings/Attack Type" = 1
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(0, 0, 1)
+"Defeat Settings/Local Transform" = true
+
+[node name="MovingMajin4" type="Node3D" parent="StealthAct/End"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 47, 5, 52)
+script = ExtResource("14_an0s0")
+Movement/Mode = 1
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 7.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+root = NodePath("BlueMajin")
+animator = NodePath("")
+
+[node name="BlueMajin" parent="StealthAct/End/MovingMajin4" instance=ExtResource("31_2loxc")]
+transform = Transform3D(1, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, 0, 0, 0)
+"Attack Settings/Attack Type" = 1
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(0, 0, 1)
+"Defeat Settings/Local Transform" = true
 
 [node name="RichPearl" parent="StealthAct/End" instance=ExtResource("30_1gckd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58, 4, 55)
+
+[node name="MovingMajin5" type="Node3D" parent="StealthAct/End"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.404, -3.15058, 37.1291)
+script = ExtResource("14_an0s0")
+Movement/Mode = 1
+"Movement/Cycle Length" = 1.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 1.0
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+root = NodePath("BlueMajin")
+animator = NodePath("")
+
+[node name="BlueMajin" parent="StealthAct/End/MovingMajin5" instance=ExtResource("31_2loxc")]
+"Attack Settings/Attack Type" = 1
+
+[node name="MovingMajin6" type="Node3D" parent="StealthAct/End"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 66.4409, -4.48011, 29.8135)
+script = ExtResource("14_an0s0")
+Movement/Mode = 1
+"Movement/Cycle Length" = 1.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 8.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+root = NodePath("BlueMajin")
+animator = NodePath("")
+animatorSpeedScale = 1.8
+
+[node name="BlueMajin" parent="StealthAct/End/MovingMajin6" instance=ExtResource("31_2loxc")]
+"Attack Settings/Attack Type" = 1
+
+[node name="MovingMajin7" type="Node3D" parent="StealthAct/End"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.5543, -9.71847, -6.58601)
+script = ExtResource("14_an0s0")
+Movement/Mode = 1
+"Movement/Cycle Length" = 1.5
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 9.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+root = NodePath("BlueMajin")
+animator = NodePath("")
+
+[node name="BlueMajin" parent="StealthAct/End/MovingMajin7" instance=ExtResource("31_2loxc")]
+"Attack Settings/Attack Type" = 1
+
+[node name="RedMajin" parent="StealthAct/End" instance=ExtResource("20_6bk5j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, -5.484, -9)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 2.0
+"Attack Settings/Flame Active Time" = 1.2
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = true
+rangeOverride = 35
+
+[node name="FireSoul2" parent="StealthAct/End" instance=ExtResource("32_w0her")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, -6.791, -9)
+fireSoulIndex = 2
+
+[node name="Cage" parent="StealthAct/End" instance=ExtResource("18_13git")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, -6.791, -9)
 
 [node name="ScrapMachinesL" type="Node3D" parent="StealthAct/End"]
 transform = Transform3D(1.3, 0, 0, 0, 1, 0, 0, 0, 1.3, 64.5, -10, -9.00005)
@@ -744,10 +764,10 @@ transform = Transform3D(-1, 0, -8.74229e-08, 0, 1, 0, 8.74229e-08, 0, -1, 72, -1
 
 [node name="InvisibleGrindrail" parent="StealthAct/End" instance=ExtResource("18_jlgkf")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 67.502, -5.91714, -60.8056)
-railLength = 25
+railLength = 20
 
 [node name="RichRings" type="Node3D" parent="StealthAct/End/InvisibleGrindrail"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8147e-06, 1.23275, -10.9514)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -10)
 script = ExtResource("7_65sb5")
 Generate = false
 Source = ExtResource("25_43q2f")
@@ -766,95 +786,52 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 [node name="Child03" parent="StealthAct/End/InvisibleGrindrail/RichRings" instance=ExtResource("25_43q2f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
-[node name="Switch" parent="StealthAct/End" instance=ExtResource("24_csiag")]
+[node name="SwitchGroup" type="Node3D" parent="StealthAct/End"]
 transform = Transform3D(1, 0, 1.59872e-13, 0, 1, 0, -1.59872e-13, 0, 1, 76.7675, -9.8992, -28.0383)
 
-[node name="Cullingtrigger" type="Node3D" parent="StealthAct/End/Switch"]
+[node name="Switch" parent="StealthAct/End/SwitchGroup" instance=ExtResource("24_csiag")]
+
+[node name="Cullingtrigger" type="Node3D" parent="StealthAct/End/SwitchGroup/Switch"]
 script = ExtResource("5_dymgr")
 
-[node name="ItemBoxFlying3" parent="StealthAct/End/Switch/Cullingtrigger" instance=ExtResource("26_vf3py")]
+[node name="ItemBoxFlying3" parent="StealthAct/End/SwitchGroup/Switch/Cullingtrigger" instance=ExtResource("26_vf3py")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -11.5862, 8.82786, -35.2492)
 
-[node name="Switch2" parent="StealthAct/End" instance=ExtResource("24_csiag")]
-transform = Transform3D(1, 0, 1.59872e-13, 0, 1, 0, -1.59872e-13, 0, 1, 62.564, -9.8992, -29.775)
+[node name="Switch2" parent="StealthAct/End/SwitchGroup" instance=ExtResource("24_csiag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.2035, 0, -1.73669)
 
-[node name="Cullingtrigger2" type="Node3D" parent="StealthAct/End/Switch2"]
+[node name="Cullingtrigger2" type="Node3D" parent="StealthAct/End/SwitchGroup/Switch2"]
 script = ExtResource("5_dymgr")
 
-[node name="ItemBoxFlying2" parent="StealthAct/End/Switch2/Cullingtrigger2" instance=ExtResource("26_vf3py")]
-transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 1.99973, 5.53745, -31.0305)
+[node name="ItemBoxFlying2" parent="StealthAct/End/SwitchGroup/Switch2/Cullingtrigger2" instance=ExtResource("26_vf3py")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 2.99973, 5.53745, -31.0305)
 
-[node name="Switch3" parent="StealthAct/End" instance=ExtResource("24_csiag")]
-transform = Transform3D(1, 0, 1.59872e-13, 0, 1, 0, -1.59872e-13, 0, 1, 69.1632, -9.8992, -46.5461)
+[node name="Switch3" parent="StealthAct/End/SwitchGroup" instance=ExtResource("24_csiag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.6043, 0, -18.5078)
 
-[node name="Cullingtrigger3" type="Node3D" parent="StealthAct/End/Switch3"]
+[node name="Cullingtrigger3" type="Node3D" parent="StealthAct/End/SwitchGroup/Switch3"]
 script = ExtResource("5_dymgr")
 
-[node name="ItemBoxFlying" parent="StealthAct/End/Switch3/Cullingtrigger3" instance=ExtResource("26_vf3py")]
+[node name="ItemBoxFlying" parent="StealthAct/End/SwitchGroup/Switch3/Cullingtrigger3" instance=ExtResource("26_vf3py")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -1.66127, 2.51912, -11.8463)
 
-[node name="FlyingPot" parent="StealthAct/End" instance=ExtResource("27_dgrv2")]
-transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 65.1814, 1.41749, -65.1099)
+[node name="RichRing" parent="StealthAct/End/SwitchGroup" instance=ExtResource("25_43q2f")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -11.5861, 12.8216, -37.0716)
+
+[node name="FireSoul3" parent="StealthAct/End/SwitchGroup" instance=ExtResource("32_w0her")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -11.5861, 11.3167, -37.0716)
+fireSoulIndex = 3
+
+[node name="FlyingPot" parent="StealthAct/End/SwitchGroup" instance=ExtResource("27_dgrv2")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -11.5861, 11.3167, -37.0716)
 travelBounds = Vector2(1, 1)
-
-[node name="RichRing" parent="StealthAct/End/FlyingPot" instance=ExtResource("25_43q2f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.50496, 0)
-
-[node name="FireSoul3" parent="StealthAct/End/FlyingPot" instance=ExtResource("32_w0her")]
 
 [node name="Goal" parent="StealthAct/End" instance=ExtResource("43_wm0ue")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.9999, 0, -85)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/End/Goal"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -2)
 shape = SubResource("BoxShape3D_egyd0")
-
-[node name="Stone" parent="StealthAct/End" instance=ExtResource("27_laehy")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.999859, 20.47)
-
-[node name="Stone2" parent="StealthAct/End" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("27_laehy")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.01698, 0.999859, 20.47)
-root = NodePath("../Stone/Root")
-pieceRoot = NodePath("../Stone/StonePieces")
-animator = NodePath("../Stone/AnimationPlayer")
-
-[node name="Stone3" parent="StealthAct/End" node_paths=PackedStringArray("root", "pieceRoot", "animator") instance=ExtResource("27_laehy")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.00929, 0.999859, 20.47)
-root = NodePath("../Stone/Root")
-pieceRoot = NodePath("../Stone/StonePieces")
-animator = NodePath("../Stone/AnimationPlayer")
-
-[node name="DialogTriggers" type="Node3D" parent="."]
-transform = Transform3D(0.253505, 0, 0.967334, 0, 1, 0, -0.967334, 0, 0.253505, 175.919, 8.87144, -174.343)
-visible = false
-
-[node name="TimerTrigger" parent="DialogTriggers" instance=ExtResource("4_wp22j")]
-transform = Transform3D(0.30242, 0, -0.953175, 0, 1, 0, 0.953175, 0, 0.30242, 16.0092, -2.40597, -20.5064)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="DialogTriggers/TimerTrigger"]
-script = ExtResource("44_h6tea")
-delays = Array[float]([])
-textKeys = ["evi_timer_sh", "evi_timer_so"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/TimerTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-shape = SubResource("BoxShape3D_ghie0")
-
-[node name="ExitTrigger" parent="DialogTriggers" instance=ExtResource("4_wp22j")]
-transform = Transform3D(-0.972917, 0, -0.231154, 0, 1, 0, 0.231154, 0, -0.972917, -198.441, -49.3833, -266.978)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="DialogTriggers/ExitTrigger"]
-script = ExtResource("44_h6tea")
-delays = Array[float]([])
-textKeys = ["evi_exit_sh", "evi_exit_so"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/ExitTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-shape = SubResource("BoxShape3D_ghie0")
 
 [connection signal="Activated" from="StealthAct/CullingMap/ElevatorUnload - SpiralLoad" to="StealthAct/Spiral" method="Activate"]
 [connection signal="Deactivated" from="StealthAct/CullingMap/ElevatorUnload - SpiralLoad" to="StealthAct/Spiral" method="Deactivate"]
@@ -862,11 +839,12 @@ shape = SubResource("BoxShape3D_ghie0")
 [connection signal="Deactivated" from="StealthAct/CullingMap/SpiralUnload" to="StealthAct/Spiral" method="Activate"]
 [connection signal="Activated" from="StealthAct/CullingMap/EndLoad" to="StealthAct/End" method="Activate"]
 [connection signal="Deactivated" from="StealthAct/CullingMap/EndLoad" to="StealthAct/End" method="Deactivate"]
-[connection signal="Activated" from="StealthAct/End/Switch" to="StealthAct/End/Switch/Cullingtrigger" method="Activate"]
-[connection signal="Respawned" from="StealthAct/End/Switch" to="StealthAct/End/Switch/Cullingtrigger" method="Deactivate"]
-[connection signal="Activated" from="StealthAct/End/Switch2" to="StealthAct/End/Switch2/Cullingtrigger2" method="Activate"]
-[connection signal="Respawned" from="StealthAct/End/Switch2" to="StealthAct/End/Switch2/Cullingtrigger2" method="Deactivate"]
-[connection signal="Activated" from="StealthAct/End/Switch3" to="StealthAct/End/Switch3/Cullingtrigger3" method="Activate"]
-[connection signal="Respawned" from="StealthAct/End/Switch3" to="StealthAct/End/Switch3/Cullingtrigger3" method="Deactivate"]
+[connection signal="SpinStarted" from="StealthAct/Spiral/MovingMajin/BlueMajin2" to="StealthAct/Spiral/MovingMajin" method="Unpause"]
+[connection signal="Activated" from="StealthAct/End/SwitchGroup/Switch" to="StealthAct/End/SwitchGroup/Switch/Cullingtrigger" method="Activate"]
+[connection signal="Respawned" from="StealthAct/End/SwitchGroup/Switch" to="StealthAct/End/SwitchGroup/Switch/Cullingtrigger" method="Deactivate"]
+[connection signal="Activated" from="StealthAct/End/SwitchGroup/Switch2" to="StealthAct/End/SwitchGroup/Switch2/Cullingtrigger2" method="Activate"]
+[connection signal="Respawned" from="StealthAct/End/SwitchGroup/Switch2" to="StealthAct/End/SwitchGroup/Switch2/Cullingtrigger2" method="Deactivate"]
+[connection signal="Activated" from="StealthAct/End/SwitchGroup/Switch3" to="StealthAct/End/SwitchGroup/Switch3/Cullingtrigger3" method="Activate"]
+[connection signal="Respawned" from="StealthAct/End/SwitchGroup/Switch3" to="StealthAct/End/SwitchGroup/Switch3/Cullingtrigger3" method="Deactivate"]
 
 [editable path="Static"]
