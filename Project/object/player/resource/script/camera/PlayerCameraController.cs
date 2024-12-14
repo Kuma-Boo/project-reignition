@@ -602,6 +602,7 @@ public partial class PlayerCameraController : Node3D
 		// Interpolate angles
 		data.blendData.yawAngle = Mathf.LerpAngle(targetYawAngle, sampledTargetYawAngle, data.blendData.SampleBlend);
 		data.blendData.pitchAngle = Mathf.Lerp(targetPitchAngle, sampledTargetPitchAngle, data.blendData.SampleBlend);
+		PathFollower.TiltEnabled = settings.followPathTilt;
 		if (settings.followPathTilt) // Calculate tilt
 			data.blendData.tiltAngle = sampler.Right().SignedAngleTo(-PathFollower.SideAxis, sampler.Forward()) * yawSamplingFix;
 	}
