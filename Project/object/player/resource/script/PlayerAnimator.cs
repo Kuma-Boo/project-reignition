@@ -438,6 +438,8 @@ public partial class PlayerAnimator : Node3D
 	private AnimationNodeStateMachinePlayback CrouchStatePlayback => animationTree.Get(CrouchPlayback).Obj as AnimationNodeStateMachinePlayback;
 	private readonly StringName CrouchPlayback = "parameters/ground_tree/crouch_state/playback";
 
+	private readonly StringName ChargeState = "charge-loop";
+
 	private readonly StringName CrouchStateStart = "crouch-start";
 	private readonly StringName CrouchStateStop = "crouch-stop";
 
@@ -448,6 +450,13 @@ public partial class PlayerAnimator : Node3D
 
 	public bool IsCrouchingActive => (StringName)animationTree.Get(CurrentCrouchState) == EnabledConstant;
 	public bool IsSlideTransitionActive => CrouchStatePlayback.GetCurrentNode() == SlideStateStart;
+
+	public void StartCharge()
+	{
+		crouchTransition.XfadeTime = .05;
+		CrouchStatePlayback.Travel(ChargeState);
+		animationTree.Set(CrouchTransition, EnabledConstant);
+	}
 
 	public void StartSliding()
 	{

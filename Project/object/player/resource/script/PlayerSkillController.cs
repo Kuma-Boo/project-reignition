@@ -25,6 +25,26 @@ public partial class PlayerSkillController : Node3D
 	#region Skills
 	private SkillRing SkillRing => SaveManager.ActiveSkillRing;
 
+	public bool IsJumpCharged => JumpCharge >= 1f;
+	public float JumpCharge { get; private set; }
+	public void ChargeJump()
+	{
+		bool isFullyCharged = IsJumpCharged;
+		if (Mathf.IsZeroApprox(JumpCharge))
+			Player.Effect.StartChargeFX();
+
+		JumpCharge = Mathf.MoveToward(JumpCharge, 1f, PhysicsManager.physicsDelta);
+		if (JumpCharge >= 1f && isFullyCharged)
+			Player.Effect.StartFullChargeFX();
+	}
+	public bool ConsumeJumpCharge()
+	{
+		bool isJumpCharged = IsJumpCharged;
+		JumpCharge = 0;
+		Player.Effect.StopChargeFX();
+		return isJumpCharged;
+	}
+
 	[ExportGroup("Countdown Skills")]
 	[Export]
 	public float countdownBoostSpeed;

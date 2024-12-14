@@ -48,6 +48,10 @@ public partial class JumpState : PlayerState
 		isAccelerationJump = false;
 		isAccelerationJumpQueued = Player.ForceAccelerationJump;
 
+		// Decide accleration jump based on jump charge
+		if (!Player.ForceAccelerationJump && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+			isAccelerationJump = !Player.Skills.ConsumeJumpCharge();
+
 		Player.ForceAccelerationJump = false;
 		Player.IsOnGround = false;
 		if (Player.IsMovingBackward) // Kill speed when jumping backwards
@@ -67,7 +71,7 @@ public partial class JumpState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		if (!Input.IsActionPressed("button_jump"))
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && !Input.IsActionPressed("button_jump"))
 		{
 			// Check for acceleration jump
 			if (jumpTimer <= AccelerationJumpLength)
