@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=245 format=3 uid="uid://biwe75w273iq7"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=255 format=3 uid="uid://biwe75w273iq7"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_hf2vv"]
 
@@ -628,7 +628,22 @@ fadein_time = 0.1
 fadeout_time = 0.2
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_aenqr"]
-animation = &"ActionLibrary/charge"
+animation = &"ActionLibrary/charge-slide"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fqyxq"]
+animation = &"ActionLibrary/charge-slide-start"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8qtij"]
+animation = &"ActionLibrary/charge-slide-stop"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_n6gw2"]
+animation = &"ActionLibrary/charge-stationary-start"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i7g5e"]
+animation = &"ActionLibrary/charge-stationary-stop"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2msxa"]
+animation = &"ActionLibrary/charge-stationary"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_shcil"]
 animation = &"ActionLibrary/crouch"
@@ -696,19 +711,53 @@ xfade_time = 0.1
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sfcte"]
 xfade_time = 0.1
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_acks2"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_r0cw2"]
 advance_mode = 2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_s6xx7"]
-xfade_time = 0.2
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_v8b3y"]
+xfade_time = 0.1
+switch_mode = 2
+advance_mode = 2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_oq821"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_labyb"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rm18l"]
+xfade_time = 0.1
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8iu13"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kb038"]
+xfade_time = 0.1
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jvxtf"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ogkm2"]
 xfade_time = 0.2
+switch_mode = 2
+advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_l2wf8"]
-states/End/position = Vector2(716.598, 100.102)
-states/charge-loop/node = SubResource("AnimationNodeAnimation_aenqr")
-states/charge-loop/position = Vector2(348.062, 189)
+states/End/position = Vector2(772.598, 100.102)
+states/Start/position = Vector2(96, 100.102)
+states/charge-slide-loop/node = SubResource("AnimationNodeAnimation_aenqr")
+states/charge-slide-loop/position = Vector2(557.3, 168)
+states/charge-slide-start/node = SubResource("AnimationNodeAnimation_fqyxq")
+states/charge-slide-start/position = Vector2(363, 168)
+states/charge-slide-stop/node = SubResource("AnimationNodeAnimation_8qtij")
+states/charge-slide-stop/position = Vector2(363, 254)
+states/charge-stationary/node = SubResource("AnimationNodeAnimation_2msxa")
+states/charge-stationary/position = Vector2(363, 345)
+states/charge-stationary-start/node = SubResource("AnimationNodeAnimation_n6gw2")
+states/charge-stationary-start/position = Vector2(96, 345)
+states/charge-stationary-stop/node = SubResource("AnimationNodeAnimation_i7g5e")
+states/charge-stationary-stop/position = Vector2(776.099, 345)
 states/crouch-loop/node = SubResource("AnimationNodeAnimation_shcil")
 states/crouch-loop/position = Vector2(556.859, 25.136)
 states/crouch-start/node = SubResource("AnimationNodeAnimation_iom7q")
@@ -720,9 +769,9 @@ states/slide/position = Vector2(349.289, -52.0685)
 states/slide-start/node = SubResource("AnimationNodeAnimation_62hyn")
 states/slide-start/position = Vector2(350.761, 24.9568)
 states/slide-stop/node = SubResource("AnimationNodeAnimation_gu50u")
-states/slide-stop/position = Vector2(716.099, -51.971)
-transitions = ["crouch-start", "crouch-loop", SubResource("AnimationNodeStateMachineTransition_u5cr1"), "Start", "crouch-start", SubResource("AnimationNodeStateMachineTransition_mudoi"), "crouch-loop", "crouch-stop", SubResource("AnimationNodeStateMachineTransition_lmat6"), "crouch-stop", "End", SubResource("AnimationNodeStateMachineTransition_l7gk7"), "crouch-stop", "crouch-start", SubResource("AnimationNodeStateMachineTransition_65xii"), "crouch-start", "crouch-stop", SubResource("AnimationNodeStateMachineTransition_fwi2w"), "crouch-start", "slide-start", SubResource("AnimationNodeStateMachineTransition_ent60"), "slide-stop", "crouch-loop", SubResource("AnimationNodeStateMachineTransition_jy1x2"), "slide-start", "slide", SubResource("AnimationNodeStateMachineTransition_y86rw"), "slide", "slide-stop", SubResource("AnimationNodeStateMachineTransition_83cy5"), "Start", "slide-start", SubResource("AnimationNodeStateMachineTransition_2y7nm"), "crouch-loop", "slide-start", SubResource("AnimationNodeStateMachineTransition_v2sp5"), "slide-stop", "crouch-stop", SubResource("AnimationNodeStateMachineTransition_sfcte"), "Start", "charge-loop", SubResource("AnimationNodeStateMachineTransition_acks2"), "charge-loop", "crouch-stop", SubResource("AnimationNodeStateMachineTransition_s6xx7"), "crouch-start", "charge-loop", SubResource("AnimationNodeStateMachineTransition_oq821")]
-graph_offset = Vector2(-417, 28)
+states/slide-stop/position = Vector2(772.099, -51.971)
+transitions = ["crouch-start", "crouch-loop", SubResource("AnimationNodeStateMachineTransition_u5cr1"), "Start", "crouch-start", SubResource("AnimationNodeStateMachineTransition_mudoi"), "crouch-loop", "crouch-stop", SubResource("AnimationNodeStateMachineTransition_lmat6"), "crouch-stop", "End", SubResource("AnimationNodeStateMachineTransition_l7gk7"), "crouch-stop", "crouch-start", SubResource("AnimationNodeStateMachineTransition_65xii"), "crouch-start", "crouch-stop", SubResource("AnimationNodeStateMachineTransition_fwi2w"), "crouch-start", "slide-start", SubResource("AnimationNodeStateMachineTransition_ent60"), "slide-stop", "crouch-loop", SubResource("AnimationNodeStateMachineTransition_jy1x2"), "slide-start", "slide", SubResource("AnimationNodeStateMachineTransition_y86rw"), "slide", "slide-stop", SubResource("AnimationNodeStateMachineTransition_83cy5"), "Start", "slide-start", SubResource("AnimationNodeStateMachineTransition_2y7nm"), "crouch-loop", "slide-start", SubResource("AnimationNodeStateMachineTransition_v2sp5"), "slide-stop", "crouch-stop", SubResource("AnimationNodeStateMachineTransition_sfcte"), "Start", "charge-slide-start", SubResource("AnimationNodeStateMachineTransition_r0cw2"), "charge-slide-start", "charge-slide-loop", SubResource("AnimationNodeStateMachineTransition_v8b3y"), "charge-slide-loop", "charge-slide-stop", SubResource("AnimationNodeStateMachineTransition_labyb"), "charge-slide-stop", "charge-stationary", SubResource("AnimationNodeStateMachineTransition_rm18l"), "charge-stationary", "charge-stationary-stop", SubResource("AnimationNodeStateMachineTransition_8iu13"), "charge-stationary-start", "charge-stationary", SubResource("AnimationNodeStateMachineTransition_kb038"), "Start", "charge-stationary-start", SubResource("AnimationNodeStateMachineTransition_jvxtf"), "charge-stationary-stop", "End", SubResource("AnimationNodeStateMachineTransition_ogkm2")]
+graph_offset = Vector2(-295, -7)
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_oo2i4"]
 sync = true

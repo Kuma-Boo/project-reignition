@@ -22,10 +22,7 @@ public partial class SlideState : PlayerState
 			Player.MoveSpeed = Player.Stats.InitialSlideSpeed;
 
 		Player.DisableSidle = true;
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
-			Player.Animator.StartCharging();
-		else
-			Player.Animator.StartSliding();
+		Player.Animator.StartSliding();
 		Player.Effect.PlayActionSFX(Player.Effect.SlideSfx);
 		Player.ChangeHitbox("slide");
 
