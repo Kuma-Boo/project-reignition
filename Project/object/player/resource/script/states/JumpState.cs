@@ -50,7 +50,7 @@ public partial class JumpState : PlayerState
 
 		// Decide accleration jump based on jump charge
 		if (!Player.ForceAccelerationJump && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
-			isAccelerationJump = !Player.Skills.ConsumeJumpCharge();
+			isAccelerationJumpQueued = !Player.Skills.ConsumeJumpCharge();
 
 		Player.ForceAccelerationJump = false;
 		Player.IsOnGround = false;

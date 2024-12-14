@@ -22,7 +22,10 @@ public partial class SlideState : PlayerState
 			Player.MoveSpeed = Player.Stats.InitialSlideSpeed;
 
 		Player.DisableSidle = true;
-		Player.Animator.StartSliding();
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+			Player.Animator.StartCharging();
+		else
+			Player.Animator.StartSliding();
 		Player.Effect.PlayActionSFX(Player.Effect.SlideSfx);
 		Player.ChangeHitbox("slide");
 
@@ -52,6 +55,9 @@ public partial class SlideState : PlayerState
 	{
 		Player.DisableSidle = false;
 		Player.ChangeHitbox("RESET");
+
+		if (Player.StateMachine.QueuedState != jumpState && Player.StateMachine.QueuedState != crouchState)
+			Player.Skills.ConsumeJumpCharge();
 
 		if (!Mathf.IsZeroApprox(Player.MoveSpeed))
 		{

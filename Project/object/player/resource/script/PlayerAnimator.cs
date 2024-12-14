@@ -451,7 +451,7 @@ public partial class PlayerAnimator : Node3D
 	public bool IsCrouchingActive => (StringName)animationTree.Get(CurrentCrouchState) == EnabledConstant;
 	public bool IsSlideTransitionActive => CrouchStatePlayback.GetCurrentNode() == SlideStateStart;
 
-	public void StartCharge()
+	public void StartCharging()
 	{
 		crouchTransition.XfadeTime = .05;
 		CrouchStatePlayback.Travel(ChargeState);

@@ -54,9 +54,10 @@ public partial class CrouchState : PlayerState
 				return idleState;
 			}
 		}
-
-		if (!Input.IsActionPressed("button_action"))
+		else if (!Input.IsActionPressed("button_action"))
+		{
 			return idleState;
+		}
 
 		if (Player.Skills.IsSpeedBreakActive)
 			return runState;

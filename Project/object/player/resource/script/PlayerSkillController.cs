@@ -25,7 +25,7 @@ public partial class PlayerSkillController : Node3D
 	#region Skills
 	private SkillRing SkillRing => SaveManager.ActiveSkillRing;
 
-	public bool IsJumpCharged => JumpCharge >= 1f;
+	public bool IsJumpCharged => JumpCharge >= 0.5f;
 	public float JumpCharge { get; private set; }
 	public void ChargeJump()
 	{
@@ -34,7 +34,7 @@ public partial class PlayerSkillController : Node3D
 			Player.Effect.StartChargeFX();
 
 		JumpCharge = Mathf.MoveToward(JumpCharge, 1f, PhysicsManager.physicsDelta);
-		if (JumpCharge >= 1f && isFullyCharged)
+		if (IsJumpCharged && isFullyCharged)
 			Player.Effect.StartFullChargeFX();
 	}
 	public bool ConsumeJumpCharge()
