@@ -178,9 +178,6 @@ public partial class PlatformTrigger : Node3D
 	/// <summary> Moves the player with the platform. </summary>
 	private void SyncPlayerMovement()
 	{
-		if (isInteractingWithPlayer)
-			GD.PrintT("GroundState:", Player.IsOnGround);
-
 		if ((!Player.IsOnGround && Player.Velocity.Y >= 0) || !isInteractingWithPlayer)
 		{
 			Vector3 delta = floorCalculationRoot.GlobalPosition - previousPosition;
@@ -206,7 +203,6 @@ public partial class PlatformTrigger : Node3D
 
 		float checkLength = Mathf.Abs(Player.CenterPosition.Y - floorCalculationRoot.GlobalPosition.Y) + (Player.CollisionSize.Y * 2.0f);
 		KinematicCollision3D collision = Player.MoveAndCollide(-Player.UpDirection * checkLength, true);
-		GD.PrintT("CollisionCheck:", collision?.GetCollider());
 
 		if (collision == null || (Node3D)collision.GetCollider() != parentCollider) // Player is not on the platform
 			return;
