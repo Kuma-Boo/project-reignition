@@ -34,7 +34,7 @@ public partial class PlayerSkillController : Node3D
 			Player.Effect.StartChargeFX();
 
 		JumpCharge = Mathf.MoveToward(JumpCharge, 1f, PhysicsManager.physicsDelta);
-		if (IsJumpCharged && isFullyCharged)
+		if (IsJumpCharged && !isFullyCharged)
 			Player.Effect.StartFullChargeFX();
 	}
 	public bool ConsumeJumpCharge()
