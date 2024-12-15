@@ -52,10 +52,8 @@ public partial class PlayerState : Node
 			}
 		}
 
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun)) // Always move at full power when autorun is enabled
-			inputStrength = 1;
-
-		if (Mathf.IsZeroApprox(inputStrength)) // Basic slow down
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
+			Mathf.IsZeroApprox(inputStrength)) // Basic slow down
 		{
 			Deccelerate();
 			return;
@@ -65,7 +63,15 @@ public partial class PlayerState : Node
 		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
 		if (IsBraking(inputAngle)) // Turning around
 		{
+			GD.Print("Braking");
 			Brake();
+			return;
+		}
+
+		// Always move at full power when autorun is enabled
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
+		{
+			Accelerate(1f);
 			return;
 		}
 

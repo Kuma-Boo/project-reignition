@@ -81,7 +81,8 @@ public partial class IdleState : PlayerState
 			if (Player.IsLockoutActive && Player.ActiveLockoutData.overrideSpeed && !Mathf.IsZeroApprox(Player.ActiveLockoutData.speedRatio))
 				return runState;
 
-			if (!Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) && !Input.IsActionPressed("button_brake"))
+			if (!Input.IsActionPressed("button_brake") &&
+				(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) || !Mathf.IsZeroApprox(Player.Controller.GetInputStrength())))
 			{
 				if (Player.Controller.GetHoldingDistance(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle) >= 1.0f)
 					return backstepState;
