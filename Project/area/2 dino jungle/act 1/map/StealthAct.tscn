@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://cj653fqoipdkk"]
+[gd_scene load_steps=57 format=3 uid="uid://cj653fqoipdkk"]
 
 [ext_resource type="PackedScene" uid="uid://cby2m0q2072c2" path="res://area/2 dino jungle/act 1/Static.tscn" id="1_lxhj8"]
 [ext_resource type="Resource" uid="uid://du8i3ur77gdww" path="res://resource/level data/dinosaur jungle/Act2Stealth.tres" id="2_boxoa"]
@@ -41,6 +41,7 @@
 [ext_resource type="Resource" uid="uid://cdqwwejmitt41" path="res://area/2 dino jungle/act 1/camera/stealth/LotusCam.tres" id="39_tttbn"]
 [ext_resource type="Resource" uid="uid://d3rdm2cjtdkxv" path="res://area/2 dino jungle/act 1/camera/rampage/CavernTopCam.tres" id="40_nhuwo"]
 [ext_resource type="Resource" uid="uid://ysgb4weske7h" path="res://area/2 dino jungle/act 1/camera/rampage/FeedingLotusArenaRampageCam.tres" id="42_3t57n"]
+[ext_resource type="Resource" uid="uid://wwmq3p5yd4x4" path="res://area/2 dino jungle/act 1/camera/stealth/CompletionCam.tres" id="42_cqup3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_usu3p"]
 size = Vector3(20, 20, 5)
@@ -609,12 +610,24 @@ saveVisibilityOnCheckpoint = true
 transform = Transform3D(0.118958, 0, 0.992899, 0, 1, 0, -0.992899, 0, 0.118958, 1.16251, 5.55444, 4.89014)
 
 [node name="Grindrail1" parent="StealthAct/Cavern/GrindRailGroup" instance=ExtResource("34_w8uhn")]
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Grindrail2" parent="StealthAct/Cavern/GrindRailGroup" instance=ExtResource("35_8yp8r")]
 transform = Transform3D(0.79181, 0, -0.610767, 0, 1, 0, 0.610767, 0, 0.79181, -5.47632, 0, -13.0527)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Grindrail3" parent="StealthAct/Cavern/GrindRailGroup" instance=ExtResource("35_8yp8r")]
 transform = Transform3D(0.823751, 0, 0.566953, 0, 1, 0, -0.566953, 0, 0.823751, 20.1301, 0, -26.2556)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="ItemBoxFlying" parent="StealthAct/Cavern" instance=ExtResource("32_f3enx")]
 transform = Transform3D(0.086808, 0, 0.996225, 0, 1, 0, -0.996225, 0, 0.086808, -5.6568, 9.92999, 4.13782)
@@ -1247,6 +1260,18 @@ shape = SubResource("BoxShape3D_c4mxl")
 
 [node name="LotusPlatform" parent="StealthAct/FeedingTunnel" instance=ExtResource("24_inqs1")]
 transform = Transform3D(4, 0, 0, 0, 1.5, 0, 0, 0, 4, 0.39447, -19.5, -0.355347)
+
+[node name="EndingCamera" parent="StealthAct/FeedingTunnel" instance=ExtResource("5_f3cg5")]
+transform = Transform3D(-0.884703, 0, -0.466156, 0, 1, 0, 0.466156, 0, -0.884703, 2.11749, 0.306854, 2.8783)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="StealthAct/FeedingTunnel/EndingCamera"]
+script = ExtResource("15_n8lxi")
+settings = ExtResource("42_cqup3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StealthAct/FeedingTunnel/EndingCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_qnx67")
 
 [node name="Goal" parent="StealthAct/FeedingTunnel" instance=ExtResource("36_ub7ac")]
 transform = Transform3D(0.871325, 0, 0.490706, 0, 1, 0, -0.490706, 0, 0.871325, -1.47845, 7.80374, -4.66064)
