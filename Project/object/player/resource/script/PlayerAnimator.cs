@@ -89,7 +89,7 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(OneshotSeek, 0);
 		animationTree.Set(OneshotTransition, animation);
 
-		CancelCrouch();
+		StopCrouching(0f);
 	}
 
 	/// <summary>
@@ -450,7 +450,6 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName CrouchTransition = "parameters/ground_tree/crouch_transition/transition_request";
 	private readonly StringName CurrentCrouchState = "parameters/ground_tree/crouch_transition/current_state";
 
-	public bool IsCrouchingActive => (StringName)animationTree.Get(CurrentCrouchState) == EnabledConstant;
 	public bool IsSlideTransitionActive => CrouchStatePlayback.GetCurrentNode() == SlideStateStart || CrouchStatePlayback.GetCurrentNode() == ChargeSlideStateStart;
 
 	public void StartSliding()
@@ -465,25 +464,22 @@ public partial class PlayerAnimator : Node3D
 		ChargeSlideStateStop : SlideStateStop);
 	public void StartCrouching()
 	{
-		if (IsCrouchingActive)
-			return;
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ||
+			!CrouchStatePlayback.GetCurrentNode().ToString().Contains("charge-slide"))
+		{
+			CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+				ChargeStationaryStateStart : CrouchStateStart);
+		}
 
-		CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
-			ChargeStationaryStateStart : CrouchStateStart);
 		crouchTransition.XfadeTime = .1;
 		animationTree.Set(CrouchTransition, EnabledConstant);
 	}
 
-	public void StopCrouching(float transitionTime = 0.0f)
+	public void StopCrouching(float transitionTime = 0.2f)
 	{
 		crouchTransition.XfadeTime = transitionTime;
 		CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
 			ChargeStationaryStateStop : CrouchStateStop);
-	}
-
-	private void CancelCrouch()
-	{
-		crouchTransition.XfadeTime = 0.0;
 		animationTree.Set(CrouchTransition, DisabledConstant);
 	}
 
@@ -491,8 +487,7 @@ public partial class PlayerAnimator : Node3D
 	{
 		// Limit blending to the time remaining in current animation
 		float max = CrouchStatePlayback.GetCurrentLength() - CrouchStatePlayback.GetCurrentPlayPosition();
-		crouchTransition.XfadeTime = Mathf.Clamp(0.2, 0, max);
-		animationTree.Set(CrouchTransition, DisabledConstant);
+		StopCrouching(Mathf.Clamp(0.2f, 0f, max));
 	}
 
 	public void StartMotionBlur() => bodyMesh.MaterialOverride = blurOverrideMaterial;
