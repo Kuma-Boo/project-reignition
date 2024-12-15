@@ -57,25 +57,36 @@ public partial class RunState : PlayerState
 
 		if (!Player.Skills.IsSpeedBreakActive)
 		{
-			if (Player.Controller.IsJumpBufferActive)
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
 			{
-				Player.Controller.ResetJumpBuffer();
-
-				float inputAngle = Player.Controller.GetTargetInputAngle();
-				float inputStrength = Player.Controller.GetInputStrength();
-				if (!Mathf.IsZeroApprox(inputStrength) &&
-					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+				if (Player.Controller.IsJumpBufferActive)
 				{
-					return backflipState;
+					Player.Controller.ResetJumpBuffer();
+					return slideState;
+				}
+			}
+			else
+			{
+				if (Player.Controller.IsJumpBufferActive)
+				{
+					Player.Controller.ResetJumpBuffer();
+
+					float inputAngle = Player.Controller.GetTargetInputAngle();
+					float inputStrength = Player.Controller.GetInputStrength();
+					if (!Mathf.IsZeroApprox(inputStrength) &&
+						Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+					{
+						return backflipState;
+					}
+
+					return jumpState;
 				}
 
-				return jumpState;
-			}
-
-			if (Player.Controller.IsActionBufferActive)
-			{
-				Player.Controller.ResetActionBuffer();
-				return slideState;
+				if (Player.Controller.IsActionBufferActive)
+				{
+					Player.Controller.ResetActionBuffer();
+					return slideState;
+				}
 			}
 		}
 

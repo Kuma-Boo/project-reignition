@@ -12,6 +12,11 @@ public partial class PlayerInputController : Node
 	private Curve InputCurve { get; set; }
 	public float GetInputStrength()
 	{
+		/*
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
+			return 1f;
+		*/
+
 		float inputLength = InputAxis.Length();
 		if (inputLength <= DeadZone)
 			inputLength = 0;
@@ -115,7 +120,10 @@ public partial class PlayerInputController : Node
 	public float GetTargetInputAngle()
 	{
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
-			return NonZeroInputAxis.Rotated(Player.PathFollower.ForwardAngle).AngleTo(Vector2.Down);
+		{
+			if (InputAxis.IsZeroApprox())
+				return Player.PathFollower.ForwardAngle;
+		}
 
 		return NonZeroInputAxis.Rotated(-XformAngle).AngleTo(Vector2.Down);
 	}
@@ -161,11 +169,11 @@ public partial class PlayerInputController : Node
 		if (Player.Skills.IsSpeedBreakActive)
 			return GetStrafeAngle();
 
-		if (Mathf.IsZeroApprox(GetInputStrength()))
-			return Player.MovementAngle;
-
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
 			return GetStrafeAngle(true);
+
+		if (Mathf.IsZeroApprox(GetInputStrength()))
+			return Player.MovementAngle;
 
 		return inputAngle;
 	}

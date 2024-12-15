@@ -251,7 +251,7 @@ public partial class GrindState : PlayerState
 		{
 			// Play fully charged VFX
 			perfectChargeTimer = PerfectChargeInputWindow;
-			Player.Effect.FullGrindChargeFX();
+			Player.Effect.StartFullChargeFX();
 		}
 	}
 

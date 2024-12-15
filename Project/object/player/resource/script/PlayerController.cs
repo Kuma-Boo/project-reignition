@@ -383,7 +383,7 @@ public partial class PlayerController : CharacterBody3D
 		GlobalRotate(cross, -UpDirection.SignedAngleTo(Vector3.Up, cross));
 	}
 
-	public void UpdateUpDirection(bool quickReset = true, Vector3 upDirection = new())
+	public void UpdateUpDirection(bool quickReset = false, Vector3 upDirection = new())
 	{
 		// Calculate target up direction
 		if (Camera.ActiveSettings.followPathTilt) // Always use PathFollower.Up when on a tilted path

@@ -89,7 +89,7 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(OneshotSeek, 0);
 		animationTree.Set(OneshotTransition, animation);
 
-		CancelCrouch();
+		StopCrouching(0f);
 	}
 
 	/// <summary>
@@ -440,42 +440,46 @@ public partial class PlayerAnimator : Node3D
 
 	private readonly StringName CrouchStateStart = "crouch-start";
 	private readonly StringName CrouchStateStop = "crouch-stop";
+	private readonly StringName ChargeStationaryStateStart = "charge-stationary-start";
+	private readonly StringName ChargeStationaryStateStop = "charge-stationary-stop";
 
 	private readonly StringName SlideStateStart = "slide-start";
 	private readonly StringName SlideStateStop = "slide-stop";
+	private readonly StringName ChargeSlideStateStart = "charge-slide-start";
+	private readonly StringName ChargeSlideStateStop = "charge-slide-stop";
 	private readonly StringName CrouchTransition = "parameters/ground_tree/crouch_transition/transition_request";
 	private readonly StringName CurrentCrouchState = "parameters/ground_tree/crouch_transition/current_state";
 
-	public bool IsCrouchingActive => (StringName)animationTree.Get(CurrentCrouchState) == EnabledConstant;
-	public bool IsSlideTransitionActive => CrouchStatePlayback.GetCurrentNode() == SlideStateStart;
+	public bool IsSlideTransitionActive => CrouchStatePlayback.GetCurrentNode() == SlideStateStart || CrouchStatePlayback.GetCurrentNode() == ChargeSlideStateStart;
 
 	public void StartSliding()
 	{
 		crouchTransition.XfadeTime = .05;
-		CrouchStatePlayback.Travel(SlideStateStart);
+		CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+			ChargeSlideStateStart : SlideStateStart);
 		animationTree.Set(CrouchTransition, EnabledConstant);
 	}
 
-	public void SlideToCrouch() => CrouchStatePlayback.Travel(SlideStateStop);
+	public void SlideToCrouch() => CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+		ChargeSlideStateStop : SlideStateStop);
 	public void StartCrouching()
 	{
-		if (IsCrouchingActive)
-			return;
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ||
+			!CrouchStatePlayback.GetCurrentNode().ToString().Contains("charge-slide"))
+		{
+			CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+				ChargeStationaryStateStart : CrouchStateStart);
+		}
 
-		CrouchStatePlayback.Travel(CrouchStateStart);
 		crouchTransition.XfadeTime = .1;
 		animationTree.Set(CrouchTransition, EnabledConstant);
 	}
 
-	public void StopCrouching(float transitionTime = 0.0f)
+	public void StopCrouching(float transitionTime = 0.2f)
 	{
 		crouchTransition.XfadeTime = transitionTime;
-		CrouchStatePlayback.Travel(CrouchStateStop);
-	}
-
-	private void CancelCrouch()
-	{
-		crouchTransition.XfadeTime = 0.0;
+		CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+			ChargeStationaryStateStop : CrouchStateStop);
 		animationTree.Set(CrouchTransition, DisabledConstant);
 	}
 
@@ -483,8 +487,7 @@ public partial class PlayerAnimator : Node3D
 	{
 		// Limit blending to the time remaining in current animation
 		float max = CrouchStatePlayback.GetCurrentLength() - CrouchStatePlayback.GetCurrentPlayPosition();
-		crouchTransition.XfadeTime = Mathf.Clamp(0.2, 0, max);
-		animationTree.Set(CrouchTransition, DisabledConstant);
+		StopCrouching(Mathf.Clamp(0.2f, 0f, max));
 	}
 
 	public void StartMotionBlur() => bodyMesh.MaterialOverride = blurOverrideMaterial;

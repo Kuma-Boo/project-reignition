@@ -1035,13 +1035,13 @@ travelMagnitude = Vector3(1, 0.3, 0.2)
 [node name="Sonic" parent="." instance=ExtResource("3_rkpjr")]
 
 [node name="ChestAttachment" parent="Sonic/SonicRoot/GeneralSkeleton" index="4"]
-transform = Transform3D(1, 7.92686e-07, -7.92686e-07, -7.92686e-07, 1, 1.59254e-08, 7.92686e-07, -1.59248e-08, 1, 5.80681e-08, 0.554189, -2.23517e-08)
+transform = Transform3D(0.734397, 6.6811e-07, -0.67872, -8.54107e-07, 1, 6.01969e-08, 0.67872, 5.35491e-07, 0.734397, -0.0185633, 0.495343, -0.00217962)
 
 [node name="RFoot" parent="Sonic/SonicRoot/GeneralSkeleton" index="5"]
-transform = Transform3D(1, -1.02496e-12, -6.143e-13, 6.16757e-13, 2.03494e-07, 0.999999, -9.71667e-13, -0.999998, 2.21189e-07, -0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(0.676313, 0.732948, 0.0733858, -0.165117, 0.0537552, 0.984807, 0.717869, -0.678155, 0.157379, -0.111945, 0.169137, -0.157993)
 
 [node name="LFoot" parent="Sonic/SonicRoot/GeneralSkeleton" index="6"]
-transform = Transform3D(1, 1.06581e-14, 6.15422e-12, -6.2165e-12, 1.07381e-06, 1, 1.33227e-13, -1, 1.07894e-06, 0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(0.992546, -0.121869, 1.11386e-06, -2.12155e-06, 3.8743e-07, 1, -0.121868, -0.992546, 9.83477e-07, 0.133628, 0.155466, 0.123642)
 
 [node name="Effect" parent="Sonic" node_paths=PackedStringArray("rightFoot", "leftFoot", "landingParticles", "stepEmitters") instance=ExtResource("19_3dctg")]
 rightFoot = NodePath("../SonicRoot/GeneralSkeleton/RFoot")
@@ -1124,10 +1124,11 @@ backflipHeight = 2.4
 script = ExtResource("10_eoh5j")
 landState = NodePath("../Land")
 
-[node name="Crouch" type="Node" parent="StateMachine/Basic" node_paths=PackedStringArray("idleState", "runState", "fallState")]
+[node name="Crouch" type="Node" parent="StateMachine/Basic" node_paths=PackedStringArray("idleState", "runState", "jumpState", "fallState")]
 script = ExtResource("10_7aiwm")
 idleState = NodePath("../Idle")
 runState = NodePath("../Run")
+jumpState = NodePath("../Jump")
 fallState = NodePath("../Fall")
 
 [node name="Slide" type="Node" parent="StateMachine/Basic" node_paths=PackedStringArray("runState", "crouchState", "jumpState", "backflipState", "fallState")]

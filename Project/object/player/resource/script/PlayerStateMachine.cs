@@ -8,6 +8,7 @@ public partial class PlayerStateMachine : Node
 	[Export]
 	private NodePath startingState;
 	private PlayerState currentState;
+	public PlayerState QueuedState { get; private set; }
 	[Export]
 	private Array<NodePath> stateParents;
 
@@ -30,9 +31,11 @@ public partial class PlayerStateMachine : Node
 	/// <summary> Exit the current state and switch to a new state. </summary>
 	public void ChangeState(PlayerState state)
 	{
+		QueuedState = state;
 		if (currentState != state)
 			currentState?.ExitState();
 
+		QueuedState = null;
 		currentState = state;
 		currentState.EnterState();
 		GD.Print($"State changed to {currentState.Name}.");
