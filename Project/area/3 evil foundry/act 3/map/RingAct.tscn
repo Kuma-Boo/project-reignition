@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bb6wcbrkyex8p"]
+[gd_scene load_steps=25 format=3 uid="uid://bb6wcbrkyex8p"]
 
 [ext_resource type="PackedScene" uid="uid://sap50uvjitma" path="res://area/3 evil foundry/act 3/Static.tscn" id="1_gtt8y"]
 [ext_resource type="Resource" uid="uid://b0gigm6bbv35g" path="res://resource/level data/evil foundry/Act3Ring.tres" id="2_plufy"]
@@ -12,7 +12,9 @@
 [ext_resource type="PackedScene" uid="uid://dhwwi7i5b0v65" path="res://area/3 evil foundry/object/grindrail/Grindrail02.tscn" id="10_nq6tn"]
 [ext_resource type="PackedScene" uid="uid://dogm6wyurmt4" path="res://area/3 evil foundry/object/grindrail/Grindrail03.tscn" id="11_owl4c"]
 [ext_resource type="PackedScene" uid="uid://bn8lomrei46ap" path="res://area/3 evil foundry/object/Door.tscn" id="11_pmbvs"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="12_f76lo"]
 [ext_resource type="PackedScene" uid="uid://det4s2txdn4ka" path="res://area/3 evil foundry/object/Furnace.tscn" id="13_prhfc"]
+[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="13_vcthb"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="14_hklds"]
 [ext_resource type="PackedScene" uid="uid://b7ku38xcd8buw" path="res://object/enemy/majin/data/evil foundry/BlueMajin.tscn" id="15_ywtx0"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="16_qvx17"]
@@ -20,15 +22,136 @@
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="18_nu02a"]
 [ext_resource type="PackedScene" uid="uid://61g1iq7igxi" path="res://area/3 evil foundry/object/Fan.tscn" id="19_0tehk"]
 
+[sub_resource type="Animation" id="Animation_gcx7a"]
+resource_name = "event"
+length = 4.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Door1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Door2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Door3")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Door4")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Door5")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Door6")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(2.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Door7")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(3.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Door8")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(3.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kdbck"]
+_data = {
+"event": SubResource("Animation_gcx7a")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fie53"]
+size = Vector3(20, 20, 2.5)
+
 [node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_gtt8y")]
 Data = ExtResource("2_plufy")
 metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
-
-[node name="Collision" parent="Static" index="0"]
-visible = true
 
 [node name="DemoCamera" parent="Static" index="5"]
 transform = Transform3D(-3.61999e-06, 0, 1, 0, 1, 0, -1, 0, -3.61999e-06, -100, -24, -120)
@@ -116,7 +239,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
 
 [node name="GasTank2" parent="MainHallway" instance=ExtResource("7_to0nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, 40)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 1, 40)
 height = 3.0
 endPosition = Vector3(0, 3, 12)
 
@@ -125,15 +248,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 40)
 height = 8.0
 
 [node name="GasTank4" parent="MainHallway" instance=ExtResource("7_to0nv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, 40)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 1, 40)
 height = 1.0
 endPosition = Vector3(1, 4, 12)
 
 [node name="ScrapMachineShort3" parent="MainHallway" instance=ExtResource("6_2thv2")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4, 0, 40)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -3.5, 0, 40)
 
 [node name="ScrapMachineShort4" parent="MainHallway" instance=ExtResource("6_2thv2")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4, 0, 40)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.5, 0, 40)
 
 [node name="GreenMajin2" parent="MainHallway" instance=ExtResource("8_ujsjf")]
 transform = Transform3D(-0.999904, 0, 0.0138924, 0, 1, 0, -0.0138924, 0, -0.999904, 1.955, 2.6666, 51.456)
@@ -145,7 +268,7 @@ transform = Transform3D(-0.999904, 0, 0.0138924, 0, 1, 0, -0.0138924, 0, -0.9999
 transform = Transform3D(-0.999904, 0, 0.0138924, 0, 1, 0, -0.0138924, 0, -0.999904, -2.532, 2.5548, 51.456)
 
 [node name="Grindrail" parent="MainHallway" instance=ExtResource("9_fmilg")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.8, 0.3, 45)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0.3, 45)
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
@@ -244,7 +367,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.6)
 
 [node name="Grindrail4" parent="MainHallway" instance=ExtResource("10_nq6tn")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.8, 0.3, 118)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0.3, 118)
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
@@ -312,93 +435,113 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.137352, 0, -5.49829)
 [node name="Child05" parent="MainHallway/Grindrail5/Rings" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17231, 0, -6.89784)
 
-[node name="hallwaydoors" type="Node3D" parent="MainHallway"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.522003, 0.000400543, 87.8)
-
-[node name="Door" parent="MainHallway/hallwaydoors" instance=ExtResource("11_pmbvs")]
-PivotPoint = 1
-
-[node name="Door2" parent="MainHallway/hallwaydoors" instance=ExtResource("11_pmbvs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.754, 0, 5.222)
-PivotPoint = 1
-
-[node name="Door3" parent="MainHallway/hallwaydoors" instance=ExtResource("11_pmbvs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.736, 0, -0.170998)
-PivotPoint = 1
-
-[node name="Door4" parent="MainHallway/hallwaydoors" instance=ExtResource("11_pmbvs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.991, 0, 4.57101)
-PivotPoint = 1
-SwingMode = 1
-
-[node name="Door5" parent="MainHallway/hallwaydoors" instance=ExtResource("11_pmbvs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.0778, 0, 4.50204)
-
-[node name="Door6" parent="MainHallway/hallwaydoors" instance=ExtResource("11_pmbvs")]
-transform = Transform3D(-0.999931, 0, -0.0117284, 0, 1, 0, 0.0117284, 0, -0.999931, -60.1745, 0, -3.4378)
-PivotPoint = 1
-SwingMode = 1
-
-[node name="Door7" parent="MainHallway/hallwaydoors" instance=ExtResource("11_pmbvs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.4773, 0, 0.369011)
-
-[node name="Door8" parent="MainHallway/hallwaydoors" instance=ExtResource("11_pmbvs")]
-transform = Transform3D(-0.999712, 0, 0.0240134, 0, 1, 0, -0.0240134, 0, -0.999712, -79.873, 0, 4.70566)
-SwingMode = 1
-
 [node name="Grindrail6" parent="MainHallway" instance=ExtResource("10_nq6tn")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.445, 0.3, 165.184)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0.3, 165)
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
 collider = NodePath("")
 
-[node name="Second Hallway" type="Node3D" parent="."]
+[node name="DoorEvent" parent="MainHallway" instance=ExtResource("12_f76lo")]
+transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, 0, 0, 50)
 
-[node name="Furnace" parent="Second Hallway" instance=ExtResource("13_prhfc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -356.086, -29.9998, -89.9176)
+[node name="Door1" parent="MainHallway/DoorEvent" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, 36)
+SpikeState = 1
+PivotPoint = 1
 
-[node name="Furnace2" parent="Second Hallway" instance=ExtResource("13_prhfc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -363.143, -29.9998, -89.6622)
+[node name="Door2" parent="MainHallway/DoorEvent" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.00002, 0, 56)
+SpikeState = 1
 
-[node name="Grindrail7" parent="Second Hallway" instance=ExtResource("10_nq6tn")]
-transform = Transform3D(-0.999862, 0, 0.0166321, 0, 1, 0, -0.0166321, 0, -0.999862, -359.868, -29.6662, -95.4215)
+[node name="Door3" parent="MainHallway/DoorEvent" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.99998, 0, 76)
+SpikeState = 1
+PivotPoint = 1
+
+[node name="Door4" parent="MainHallway/DoorEvent" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.00003, 0, 76)
+SpikeState = 1
+SwingMode = 1
+
+[node name="Door5" parent="MainHallway/DoorEvent" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0, 96)
+
+[node name="Door6" parent="MainHallway/DoorEvent" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(-1, 0, 8.74227e-08, 0, 1, 0, -8.74227e-08, 0, -1, -2, 0, 96)
+SpikeState = 1
+PivotPoint = 1
+SwingMode = 1
+
+[node name="Door7" parent="MainHallway/DoorEvent" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, 116)
+PivotPoint = 1
+SwingMode = 2
+
+[node name="Door8" parent="MainHallway/DoorEvent" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0, 116)
+SwingMode = 1
+
+[node name="Event" type="Node3D" parent="MainHallway/DoorEvent" node_paths=PackedStringArray("animator")]
+script = ExtResource("13_vcthb")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("../AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainHallway/DoorEvent"]
+libraries = {
+"": SubResource("AnimationLibrary_kdbck")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainHallway/DoorEvent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_fie53")
+
+[node name="FurnaceHallway" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -360, -30, -120)
+
+[node name="Furnace" parent="FurnaceHallway" instance=ExtResource("13_prhfc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 30)
+
+[node name="Furnace2" parent="FurnaceHallway" instance=ExtResource("13_prhfc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, 30)
+
+[node name="Grindrail7" parent="FurnaceHallway" instance=ExtResource("10_nq6tn")]
+transform = Transform3D(-0.999862, 0, 0.0166321, 0, 1, 0, -0.0166321, 0, -0.999862, 0.131989, 0.333799, 24.5785)
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
 collider = NodePath("")
 
-[node name="Ringsline5" type="Node3D" parent="Second Hallway/Grindrail7"]
-transform = Transform3D(0.999998, 0, 0.00151838, 0, 1, 0, -0.00151838, 0, 0.999998, 0.00479126, 0.457834, -6.20072)
+[node name="Rings" type="Node3D" parent="FurnaceHallway/Grindrail7"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 1.1, -7)
 script = ExtResource("4_h3103")
 Generate = false
 Source = ExtResource("5_s3r1f")
 Amount = 5
-Shape = 2
-Path = NodePath("../../../Static/Path/StartingPath")
-"Path Progress Offset" = 1.3
-"Disable Path Y" = false
+Shape = 0
+Orientation = 0
 Spacing = 1.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="Second Hallway/Grindrail7/Ringsline5" instance=ExtResource("5_s3r1f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0196228, 0, -1.2998)
+[node name="Child01" parent="FurnaceHallway/Grindrail7/Rings" instance=ExtResource("5_s3r1f")]
 
-[node name="Child02" parent="Second Hallway/Grindrail7/Ringsline5" instance=ExtResource("5_s3r1f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0422974, 0, -2.79961)
+[node name="Child02" parent="FurnaceHallway/Grindrail7/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
 
-[node name="Child03" parent="Second Hallway/Grindrail7/Ringsline5" instance=ExtResource("5_s3r1f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0649719, 0, -4.29948)
+[node name="Child03" parent="FurnaceHallway/Grindrail7/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 
-[node name="Child04" parent="Second Hallway/Grindrail7/Ringsline5" instance=ExtResource("5_s3r1f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0876465, 0, -5.79934)
+[node name="Child04" parent="FurnaceHallway/Grindrail7/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
 
-[node name="Child05" parent="Second Hallway/Grindrail7/Ringsline5" instance=ExtResource("5_s3r1f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.110321, 0, -7.29916)
+[node name="Child05" parent="FurnaceHallway/Grindrail7/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
-[node name="Ringsline6" type="Node3D" parent="Second Hallway"]
-transform = Transform3D(-0.008936, 0, 0.999959, 0, 1, 0, -0.999959, 0, -0.008936, -368.836, -29.2084, -59.1719)
+[node name="Ringsline6" type="Node3D" parent="FurnaceHallway"]
+transform = Transform3D(-0.008936, 0, 0.999959, 0, 1, 0, -0.999959, 0, -0.008936, -8.836, 0.791599, 60.8281)
 script = ExtResource("4_h3103")
 Generate = false
 Source = ExtResource("5_s3r1f")
@@ -411,56 +554,56 @@ Spacing = 1.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="Second Hallway/Ringsline6" instance=ExtResource("5_s3r1f")]
+[node name="Child01" parent="FurnaceHallway/Ringsline6" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 9.31323e-10, 0, 1, 0, -9.31323e-10, 0, 1, 0.0116119, 0.00151634, -1.29941)
 
-[node name="Child02" parent="Second Hallway/Ringsline6" instance=ExtResource("5_s3r1f")]
+[node name="Child02" parent="FurnaceHallway/Ringsline6" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 9.31323e-10, 0, 1, 0, -9.31323e-10, 0, 1, 0.0250206, 0.00372887, -2.79889)
 
-[node name="Child03" parent="Second Hallway/Ringsline6" instance=ExtResource("5_s3r1f")]
+[node name="Child03" parent="FurnaceHallway/Ringsline6" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 9.31323e-10, 0, 1, 0, -9.31323e-10, 0, 1, 0.0384178, 0.0067997, -4.29837)
 
-[node name="Child04" parent="Second Hallway/Ringsline6" instance=ExtResource("5_s3r1f")]
+[node name="Child04" parent="FurnaceHallway/Ringsline6" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 9.31323e-10, 0, 1, 0, -9.31323e-10, 0, 1, 0.051815, 0.0106258, -5.79794)
 
-[node name="Child05" parent="Second Hallway/Ringsline6" instance=ExtResource("5_s3r1f")]
+[node name="Child05" parent="FurnaceHallway/Ringsline6" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 9.31323e-10, 0, 1, 0, -9.31323e-10, 0, 1, 0.0652161, 0.0151196, -7.29755)
 
-[node name="RichRing" parent="Second Hallway" instance=ExtResource("14_hklds")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -411.591, -23.3762, -57.9988)
+[node name="RichRing" parent="FurnaceHallway" instance=ExtResource("14_hklds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.591, 6.6238, 62.0012)
 
-[node name="Door" parent="Second Hallway" instance=ExtResource("11_pmbvs")]
-transform = Transform3D(0.999972, 0, 0.00753974, 0, 1, 0, -0.00753974, 0, 0.999972, -389.992, -29.997, -55.9348)
+[node name="Door" parent="FurnaceHallway" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(0.999972, 0, 0.00753974, 0, 1, 0, -0.00753974, 0, 0.999972, -29.992, 0.00300026, 64.0652)
 PivotPoint = 1
 SwingMode = 1
 
-[node name="Door2" parent="Second Hallway" instance=ExtResource("11_pmbvs")]
-transform = Transform3D(0.999968, 0, 0.00804587, 0, 1, 0, -0.00804587, 0, 0.999968, -390.006, -29.9418, -64.363)
+[node name="Door2" parent="FurnaceHallway" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(0.999968, 0, 0.00804587, 0, 1, 0, -0.00804587, 0, 0.999968, -30.006, 0.0582008, 55.637)
 SwingMode = 1
 
-[node name="Door3" parent="Second Hallway" instance=ExtResource("11_pmbvs")]
-transform = Transform3D(-0.999969, 0, -0.00781893, 0, 1, 0, 0.00781893, 0, -0.999969, -406.392, -29.9418, -64.1014)
+[node name="Door3" parent="FurnaceHallway" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(-0.999969, 0, -0.00781893, 0, 1, 0, 0.00781893, 0, -0.999969, -46.392, 0.0582008, 55.8986)
 PivotPoint = 1
 
-[node name="Door4" parent="Second Hallway" instance=ExtResource("11_pmbvs")]
-transform = Transform3D(-0.999981, 0, -0.00621327, 0, 1, 0, 0.00621327, 0, -0.999981, -409.688, -29.9418, -55.8848)
+[node name="Door4" parent="FurnaceHallway" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(-0.999981, 0, -0.00621327, 0, 1, 0, 0.00621327, 0, -0.999981, -49.688, 0.0582008, 64.1152)
 PivotPoint = 1
 SwingMode = 1
 
-[node name="GreenMajin5" parent="Second Hallway" instance=ExtResource("8_ujsjf")]
-transform = Transform3D(0.0138924, 0, 0.999904, 0, 1, 0, -0.999904, 0, 0.0138924, -397.982, -27.4452, -60.2249)
+[node name="GreenMajin5" parent="FurnaceHallway" instance=ExtResource("8_ujsjf")]
+transform = Transform3D(0.0138924, 0, 0.999904, 0, 1, 0, -0.999904, 0, 0.0138924, -37.982, 2.5548, 59.7751)
 
-[node name="BlueMajin" parent="Second Hallway" instance=ExtResource("15_ywtx0")]
-transform = Transform3D(0.00214679, 0, 0.999998, 0, 1, 0, -0.999998, 0, 0.00214679, -411.597, -26.7741, -60.5051)
+[node name="BlueMajin" parent="FurnaceHallway" instance=ExtResource("15_ywtx0")]
+transform = Transform3D(0.00214679, 0, 0.999998, 0, 1, 0, -0.999998, 0, 0.00214679, -51.597, 3.2259, 59.4949)
 
-[node name="Grindrail" parent="Second Hallway" instance=ExtResource("10_nq6tn")]
-transform = Transform3D(0.0146777, 0, 0.999892, 0, 1, 0, -0.999892, 0, 0.0146777, -414.81, -29.6482, -60.4454)
+[node name="Grindrail" parent="FurnaceHallway" instance=ExtResource("10_nq6tn")]
+transform = Transform3D(0.0146777, 0, 0.999892, 0, 1, 0, -0.999892, 0, 0.0146777, -54.81, 0.351801, 59.5546)
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
 collider = NodePath("")
 
-[node name="Ringsline7" type="Node3D" parent="Second Hallway/Grindrail"]
+[node name="Ringsline7" type="Node3D" parent="FurnaceHallway/Grindrail"]
 transform = Transform3D(0.999721, 0, 0.0236121, 0, 1, 0, -0.0236121, 0, 0.999721, 0.0496559, 0.636185, -9.25708)
 script = ExtResource("4_h3103")
 Generate = false
@@ -474,23 +617,23 @@ Spacing = 1.7
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="Second Hallway/Grindrail/Ringsline7" instance=ExtResource("5_s3r1f")]
+[node name="Child01" parent="FurnaceHallway/Grindrail/Ringsline7" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0116196, -0.00341606, -1.30051)
 
-[node name="Child02" parent="Second Hallway/Grindrail/Ringsline7" instance=ExtResource("5_s3r1f")]
+[node name="Child02" parent="FurnaceHallway/Grindrail/Ringsline7" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.026825, -0.0087471, -3.00131)
 
-[node name="Child03" parent="Second Hallway/Grindrail/Ringsline7" instance=ExtResource("5_s3r1f")]
+[node name="Child03" parent="FurnaceHallway/Grindrail/Ringsline7" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0420151, -0.0159378, -4.70221)
 
-[node name="Child04" parent="Second Hallway/Grindrail/Ringsline7" instance=ExtResource("5_s3r1f")]
+[node name="Child04" parent="FurnaceHallway/Grindrail/Ringsline7" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0572205, -0.0251884, -6.40317)
 
-[node name="Child05" parent="Second Hallway/Grindrail/Ringsline7" instance=ExtResource("5_s3r1f")]
+[node name="Child05" parent="FurnaceHallway/Grindrail/Ringsline7" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0724182, -0.0367374, -8.10428)
 
-[node name="Ringsline8" type="Node3D" parent="Second Hallway"]
-transform = Transform3D(-0.00893601, 0, 0.99996, 0, 1, 0, -0.99996, 0, -0.00893601, -424.065, -29.0121, -60.6309)
+[node name="Ringsline8" type="Node3D" parent="FurnaceHallway"]
+transform = Transform3D(-0.00893601, 0, 0.99996, 0, 1, 0, -0.99996, 0, -0.00893601, -64.065, 0.9879, 59.3691)
 script = ExtResource("4_h3103")
 Generate = false
 Source = ExtResource("5_s3r1f")
@@ -503,19 +646,19 @@ Spacing = 1.7
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="Second Hallway/Ringsline8" instance=ExtResource("5_s3r1f")]
+[node name="Child01" parent="FurnaceHallway/Ringsline8" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0116196, -0.00341606, -1.30051)
 
-[node name="Child02" parent="Second Hallway/Ringsline8" instance=ExtResource("5_s3r1f")]
+[node name="Child02" parent="FurnaceHallway/Ringsline8" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.026825, -0.0087471, -3.00131)
 
-[node name="Child03" parent="Second Hallway/Ringsline8" instance=ExtResource("5_s3r1f")]
+[node name="Child03" parent="FurnaceHallway/Ringsline8" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0420151, -0.0159378, -4.70221)
 
-[node name="Child04" parent="Second Hallway/Ringsline8" instance=ExtResource("5_s3r1f")]
+[node name="Child04" parent="FurnaceHallway/Ringsline8" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0572205, -0.0251884, -6.40317)
 
-[node name="Child05" parent="Second Hallway/Ringsline8" instance=ExtResource("5_s3r1f")]
+[node name="Child05" parent="FurnaceHallway/Ringsline8" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0724182, -0.0367374, -8.10428)
 
 [node name="Sprial" type="Node3D" parent="."]
