@@ -59,7 +59,7 @@ public partial class LevelDataResource : Resource
 		properties.Add(ExtensionMethods.CreateProperty("Ranking/Bronze Time", Variant.Type.Int));
 
 		if (!SkipScore)
-			properties.Add(ExtensionMethods.CreateProperty("Ranking/Score Requirement", Variant.Type.Int, PropertyHint.Range, "0,999999,100"));
+			properties.Add(ExtensionMethods.CreateProperty("Ranking/Score Requirement", Variant.Type.Int, PropertyHint.Range, "0,999999,50"));
 
 		properties.Add(ExtensionMethods.CreateProperty("Completion/Delay", Variant.Type.Float, PropertyHint.Range, "0,5,.1"));
 		properties.Add(ExtensionMethods.CreateProperty("Completion/Lockout", Variant.Type.Object)); //, PropertyHint.ResourceType, "LockoutResource"));
