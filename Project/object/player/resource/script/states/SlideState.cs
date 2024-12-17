@@ -53,8 +53,12 @@ public partial class SlideState : PlayerState
 		Player.DisableSidle = false;
 		Player.ChangeHitbox("RESET");
 
-		if (Player.StateMachine.QueuedState != jumpState && Player.StateMachine.QueuedState != crouchState)
+		if (!Player.IsDrifting &&
+			Player.StateMachine.QueuedState != jumpState &&
+			Player.StateMachine.QueuedState != crouchState)
+		{
 			Player.Skills.ConsumeJumpCharge();
+		}
 
 		if (!Mathf.IsZeroApprox(Player.MoveSpeed))
 		{

@@ -69,12 +69,16 @@ public partial class PlayerInputController : Node
 		{
 			UpdateJumpBuffer();
 			UpdateActionBuffer();
+			return;
 		}
+
+		// Allow player to jump out of certain lockouts (i.e. DriftLockout)
+		if (Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump))
+			UpdateJumpBuffer();
 		else
-		{
 			ResetJumpBuffer();
-			ResetActionBuffer();
-		}
+
+		ResetActionBuffer();
 	}
 
 	private void UpdateJumpBuffer()
