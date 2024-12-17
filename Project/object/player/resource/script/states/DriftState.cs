@@ -134,7 +134,8 @@ public partial class DriftState : PlayerState
 	/// <summary> Returns true if the player releases a charge jump. </summary>
 	private bool UpdateChargeJump()
 	{
-		if (Input.IsActionPressed("button_jump"))
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+			Input.IsActionPressed("button_jump"))
 		{
 			isChargingJump = true;
 			Player.Skills.ChargeJump();
