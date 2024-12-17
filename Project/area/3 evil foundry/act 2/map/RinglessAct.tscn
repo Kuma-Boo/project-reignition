@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://cauh14efrxggl"]
+[gd_scene load_steps=23 format=3 uid="uid://cauh14efrxggl"]
 
 [ext_resource type="PackedScene" uid="uid://2npi4fgvupgn" path="res://area/3 evil foundry/act 2/Static.tscn" id="1_snlpk"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_6t3ar"]
 [ext_resource type="Resource" uid="uid://bxvflomap0uv3" path="res://resource/level data/evil foundry/Act2Ringless.tres" id="2_ttljy"]
 [ext_resource type="PackedScene" uid="uid://bntrixspwpi2" path="res://object/enemy/golem/GolemMajin.tscn" id="3_b1mfa"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="4_ejj34"]
 [ext_resource type="PackedScene" uid="uid://cswcb8bgweh5m" path="res://area/3 evil foundry/object/scrap/ScrapMachineShort.tscn" id="4_rrgqw"]
 [ext_resource type="PackedScene" uid="uid://cxgu3ob2u708b" path="res://area/3 evil foundry/object/scrap/ScrapMachineLadder.tscn" id="5_hbojg"]
 [ext_resource type="PackedScene" uid="uid://caxr4l7dgmca" path="res://area/3 evil foundry/object/scrap/ScrapMachineSupport.tscn" id="6_g2ajm"]
@@ -12,10 +13,20 @@
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="8_u5p1u"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="9_km1ug"]
 [ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="9_o0awe"]
-[ext_resource type="Resource" uid="uid://bxmoitmc4gf64" path="res://area/3 evil foundry/act 2/trigger/camera/RinglessOverheadCam.tres" id="9_rrb6i"]
+[ext_resource type="Resource" uid="uid://bxmoitmc4gf64" path="res://area/3 evil foundry/act 2/trigger/camera/ringless/RinglessOverheadCam.tres" id="9_rrb6i"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="10_lxxvc"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="11_cq0k7"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="11_ib8qk"]
+
+[sub_resource type="Curve3D" id="Curve3D_15rvx"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 12, 0, 0, -10, 0, 0, 0, 0, -10, 55, 0, 0, 0, 0, 0, 0, 0, 0, 240),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+up_vector_enabled = false
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_g8cll"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a3ouc"]
 size = Vector3(20, 20, 2.5)
@@ -47,6 +58,19 @@ startEnabled = true
 [node name="SpawnPosition" type="Node3D" parent="RinglessAct"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -150.5, -30, -50)
 metadata/_edit_lock_ = true
+
+[node name="LevelPath" type="Path3D" parent="RinglessAct/SpawnPosition"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+curve = SubResource("Curve3D_15rvx")
+
+[node name="PathTrigger" parent="RinglessAct/SpawnPosition" instance=ExtResource("6_th2w2")]
+
+[node name="Path" type="Node3D" parent="RinglessAct/SpawnPosition/PathTrigger" node_paths=PackedStringArray("path")]
+script = ExtResource("4_ejj34")
+path = NodePath("../../LevelPath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RinglessAct/SpawnPosition/PathTrigger"]
+shape = SubResource("SphereShape3D_g8cll")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="RinglessAct/SpawnPosition" groups=["wall"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
@@ -149,6 +173,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62939e-06, 0, -44)
 [node name="Camera" type="Node3D" parent="RinglessAct/ObjectMap/CameraTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 17)
 script = ExtResource("8_u5p1u")
+transitionTime = 1.0
 settings = ExtResource("9_rrb6i")
 UpdateEveryFrame = true
 
