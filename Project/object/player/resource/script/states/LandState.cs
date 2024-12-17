@@ -14,6 +14,12 @@ public partial class LandState : PlayerState
 
 	public override void EnterState()
 	{
+		if (Player.IsLockoutActive &&
+			Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnLand))
+		{
+			Player.RemoveLockoutData(Player.ActiveLockoutData);
+		}
+
 		Player.VerticalSpeed = 0;
 		Player.UpdateOrientation();
 		Player.SnapToGround();

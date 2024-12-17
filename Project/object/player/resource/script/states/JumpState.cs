@@ -37,6 +37,12 @@ public partial class JumpState : PlayerState
 
 	public override void EnterState()
 	{
+		if (Player.IsLockoutActive &&
+			Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump))
+		{
+			Player.RemoveLockoutData(Player.ActiveLockoutData);
+		}
+
 		if (Player.Skills.IsSpeedBreakActive)
 			Player.Skills.ToggleSpeedBreak();
 

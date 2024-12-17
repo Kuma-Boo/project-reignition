@@ -1,0 +1,388 @@
+[gd_scene load_steps=13 format=3 uid="uid://nge373il67yx"]
+
+[ext_resource type="PackedScene" uid="uid://2npi4fgvupgn" path="res://area/3 evil foundry/act 2/Static.tscn" id="1_ph722"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_748mw"]
+[ext_resource type="Resource" uid="uid://ci4xf3f880aa2" path="res://resource/level data/evil foundry/Act2Perfect.tres" id="2_p66tv"]
+[ext_resource type="PackedScene" uid="uid://cswcb8bgweh5m" path="res://area/3 evil foundry/object/scrap/ScrapMachineShort.tscn" id="3_tpuck"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="4_c5p5v"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="5_mt2eo"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="6_lyjik"]
+[ext_resource type="PackedScene" uid="uid://caxr4l7dgmca" path="res://area/3 evil foundry/object/scrap/ScrapMachineSupport.tscn" id="7_hm5kq"]
+[ext_resource type="PackedScene" uid="uid://bntrixspwpi2" path="res://object/enemy/golem/GolemMajin.tscn" id="8_rw3mt"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="9_n50kv"]
+
+[sub_resource type="Curve3D" id="Curve3D_iit05"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 1, 0, 0, -1, 0, 0, -1, 0, 7, 0, 0, 1, 0, 0, 0, -2, 0, 5, 0, 0, 0, 0, 0, -1, -2, 0, 0, -1, 0, 0, 1, 0, 0, -1, 0, -2, 0, 0, -1, 0, 0, 0, 0, 0, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 7
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jbpsv"]
+size = Vector3(20, 20, 2.5)
+
+[node name="Stage" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_ph722")]
+Data = ExtResource("2_p66tv")
+
+[node name="PerfectAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="PerfectAct"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 176, 10, -184)
+
+[node name="CharacterSpawn" parent="PerfectAct/SpawnPosition" instance=ExtResource("2_748mw")]
+
+[node name="ObjectMap" type="Node3D" parent="PerfectAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 180, 10, -185)
+
+[node name="ScrapMachineGroup1" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.5, 0, -6)
+
+[node name="ScrapMachineShort1" parent="PerfectAct/ObjectMap/ScrapMachineGroup1" instance=ExtResource("3_tpuck")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.60001, 0, 0)
+
+[node name="ScrapMachineShort2" parent="PerfectAct/ObjectMap/ScrapMachineGroup1" instance=ExtResource("3_tpuck")]
+
+[node name="ScrapMachineShort3" parent="PerfectAct/ObjectMap/ScrapMachineGroup1" instance=ExtResource("3_tpuck")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.60001, 0, 0)
+
+[node name="SpikeBallGroup1" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1, -10)
+
+[node name="SpikeBall1" parent="PerfectAct/ObjectMap/SpikeBallGroup1" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
+Movement/Mode = 0
+
+[node name="SpikeBall2" parent="PerfectAct/ObjectMap/SpikeBallGroup1" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -5)
+Movement/Mode = 0
+
+[node name="SpikeBall3" parent="PerfectAct/ObjectMap/SpikeBallGroup1" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.5)
+"Movement/Cycle Length" = 1.5
+Movement/Distance = 3.0
+"Vertical Orientation" = true
+
+[node name="ScrapMachineGroup2" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -11, 0, -29.6)
+
+[node name="ScrapMachineShort1" parent="PerfectAct/ObjectMap/ScrapMachineGroup2" instance=ExtResource("3_tpuck")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.60001, 0, 0)
+
+[node name="ScrapMachineShort2" parent="PerfectAct/ObjectMap/ScrapMachineGroup2" instance=ExtResource("3_tpuck")]
+
+[node name="ScrapMachineShort3" parent="PerfectAct/ObjectMap/ScrapMachineGroup2" instance=ExtResource("3_tpuck")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.60001, 0, 0)
+
+[node name="RichRing" parent="PerfectAct/ObjectMap/ScrapMachineGroup2" instance=ExtResource("5_mt2eo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+
+[node name="SpikeBallGroup2" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(-4.37114e-08, -0.258819, 0.965926, 0, 0.965926, 0.258819, -1, 1.13133e-08, -4.2222e-08, -5.5, 0.1, -29.1)
+
+[node name="SpikeBall1" parent="PerfectAct/ObjectMap/SpikeBallGroup2" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 7.10543e-15, 1.77636e-15, -1.77636e-15, -4.47035e-08, 1, 7.10543e-15, -1, -4.47035e-08, 0, 0, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 3.0
+"Movement/Starting Offset" = 0.25
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall2" parent="PerfectAct/ObjectMap/SpikeBallGroup2" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 3.55271e-15, 1.77636e-15, 8.88178e-16, -1.49012e-08, 1, 1.06581e-14, -1, -1.49012e-08, -4.57764e-05, -1.90735e-06, 3.39998)
+Movement/Mode = 2
+"Movement/Cycle Length" = -3.0
+"Movement/Starting Offset" = 0.75
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall3" parent="PerfectAct/ObjectMap/SpikeBallGroup2" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 7.10543e-15, 2.66454e-15, 0, -1.49012e-08, 1, 1.42109e-14, -1, -1.49012e-08, -6.10352e-05, -1.90735e-06, 10.5)
+Movement/Mode = 2
+"Movement/Cycle Length" = 3.0
+"Movement/Starting Offset" = 0.25
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall4" parent="PerfectAct/ObjectMap/SpikeBallGroup2" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 1.42109e-14, 3.55271e-15, -1.77636e-15, -2.98023e-08, 1, 1.77636e-14, -1, -2.98023e-08, -6.10352e-05, -1.90735e-06, 15)
+Movement/Mode = 2
+"Movement/Cycle Length" = -3.0
+"Movement/Starting Offset" = 0.75
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="ScrapMachineGroup3" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 20.5, 5, -24.6)
+
+[node name="ScrapMachineShort1" parent="PerfectAct/ObjectMap/ScrapMachineGroup3" instance=ExtResource("3_tpuck")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.60001, 0, 0)
+
+[node name="ScrapMachineShort2" parent="PerfectAct/ObjectMap/ScrapMachineGroup3" instance=ExtResource("3_tpuck")]
+
+[node name="ScrapMachineShort3" parent="PerfectAct/ObjectMap/ScrapMachineGroup3" instance=ExtResource("3_tpuck")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.60001, 0, 0)
+
+[node name="RichRing" parent="PerfectAct/ObjectMap/ScrapMachineGroup3" instance=ExtResource("5_mt2eo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+
+[node name="SpikeBallGroup3" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 6, -15.5)
+
+[node name="SpikeBall1" parent="PerfectAct/ObjectMap/SpikeBallGroup3" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+"Movement/Cycle Length" = 1.5
+Movement/Distance = 5.0
+"Vertical Orientation" = true
+
+[node name="SpikeBall2" parent="PerfectAct/ObjectMap/SpikeBallGroup3" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 10)
+"Movement/Cycle Length" = 1.5
+"Movement/Starting Offset" = 0.5
+Movement/Distance = 5.0
+"Vertical Orientation" = true
+
+[node name="SpikeBall3" parent="PerfectAct/ObjectMap/SpikeBallGroup3" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 20)
+"Movement/Cycle Length" = 1.5
+Movement/Distance = 5.0
+"Vertical Orientation" = true
+
+[node name="SpikeBall4" parent="PerfectAct/ObjectMap/SpikeBallGroup3" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.999939, -1.90735e-06, 30)
+"Movement/Cycle Length" = 1.5
+"Movement/Starting Offset" = 0.5
+Movement/Distance = 5.0
+"Vertical Orientation" = true
+
+[node name="ScrapMachineGroup4" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, 13.5, 5, 26.4)
+
+[node name="ScrapMachineShort1" parent="PerfectAct/ObjectMap/ScrapMachineGroup4" instance=ExtResource("3_tpuck")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.60001, 0, 0)
+
+[node name="ScrapMachineShort2" parent="PerfectAct/ObjectMap/ScrapMachineGroup4" instance=ExtResource("3_tpuck")]
+
+[node name="ScrapMachineShort3" parent="PerfectAct/ObjectMap/ScrapMachineGroup4" instance=ExtResource("3_tpuck")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.60001, 0, 0)
+
+[node name="RichRing" parent="PerfectAct/ObjectMap/ScrapMachineGroup4" instance=ExtResource("5_mt2eo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+
+[node name="SpikeBallGroup4" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(-4.37114e-08, 0.130526, -0.991445, 0, 0.991445, 0.130526, 1, 5.70548e-09, -4.33374e-08, 11.5, 6, 25.9)
+
+[node name="SpikeBall1" parent="PerfectAct/ObjectMap/SpikeBallGroup4" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+"Movement/Cycle Length" = 5.0
+Movement/Distance = 40.0
+Movement/Angle = 180.0
+
+[node name="SpikeBall2" parent="PerfectAct/ObjectMap/SpikeBallGroup4" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+"Movement/Cycle Length" = 5.0
+"Movement/Starting Offset" = 0.5
+Movement/Distance = 40.0
+Movement/Angle = 180.0
+
+[node name="ScrapMachineGroup5" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(1, 0, -1.74846e-07, 0, 1, 0, 1.74846e-07, 0, 1, -35.5, 10, 19.4)
+
+[node name="ScrapMachineShort1" parent="PerfectAct/ObjectMap/ScrapMachineGroup5" instance=ExtResource("3_tpuck")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.60001, 0, 0)
+
+[node name="ScrapMachineShort2" parent="PerfectAct/ObjectMap/ScrapMachineGroup5" instance=ExtResource("3_tpuck")]
+
+[node name="ScrapMachineShort3" parent="PerfectAct/ObjectMap/ScrapMachineGroup5" instance=ExtResource("3_tpuck")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.60001, 0, 0)
+
+[node name="RichRing" parent="PerfectAct/ObjectMap/ScrapMachineGroup5" instance=ExtResource("5_mt2eo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+
+[node name="SpikeBallGroup5" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -35, 11, 15)
+
+[node name="SpikeBall1" parent="PerfectAct/ObjectMap/SpikeBallGroup5" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+Movement/Mode = 0
+
+[node name="SpikeBall2" parent="PerfectAct/ObjectMap/SpikeBallGroup5" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+Movement/Mode = 0
+
+[node name="SpikeBall3" parent="PerfectAct/ObjectMap/SpikeBallGroup5" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 10)
+Movement/Mode = 2
+"Movement/Cycle Length" = 1.8
+"Movement/Starting Offset" = 0.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 3.0
+"Vertical Orientation" = true
+
+[node name="SpikeBall4" parent="PerfectAct/ObjectMap/SpikeBallGroup5" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 15)
+Movement/Mode = 2
+"Movement/Cycle Length" = -1.8
+"Movement/Starting Offset" = 0.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 3.0
+"Vertical Orientation" = true
+
+[node name="SpikeBall5" parent="PerfectAct/ObjectMap/SpikeBallGroup5" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 21)
+Movement/Mode = 0
+
+[node name="SpikeBall6" parent="PerfectAct/ObjectMap/SpikeBallGroup5" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 21)
+Movement/Mode = 0
+
+[node name="SpikeBall7" parent="PerfectAct/ObjectMap/SpikeBallGroup5" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 29)
+Movement/Mode = 0
+
+[node name="SpikeBall8" parent="PerfectAct/ObjectMap/SpikeBallGroup5" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 29)
+Movement/Mode = 0
+
+[node name="DashPanelGroup1" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -35, 10, -22)
+
+[node name="DashPanel1" parent="PerfectAct/ObjectMap/DashPanelGroup1" instance=ExtResource("6_lyjik")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="DashPanel2" parent="PerfectAct/ObjectMap/DashPanelGroup1" instance=ExtResource("6_lyjik")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="SpikeBallGroup6" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(-4.37114e-08, -0.190809, 0.981627, 0, 0.981627, 0.190809, -1, 8.34053e-09, -4.29083e-08, -22.5, 9.5, -44.1)
+
+[node name="SpikeBall1" parent="PerfectAct/ObjectMap/SpikeBallGroup6" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 7.10543e-15, 1.77636e-15, -1.77636e-15, -4.47035e-08, 1, 7.10543e-15, -1, -4.47035e-08, 0, 0, 2)
+Movement/Mode = 2
+"Movement/Cycle Length" = 3.0
+"Movement/Starting Offset" = 0.25
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall2" parent="PerfectAct/ObjectMap/SpikeBallGroup6" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 3.55271e-15, 8.88178e-16, 8.88178e-16, -1.49012e-08, 1, 1.06581e-14, -1, -1.49012e-08, -4.57764e-05, -3.8147e-06, 10.4)
+Movement/Mode = 2
+"Movement/Cycle Length" = -2.5
+"Movement/Starting Offset" = 0.75
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 2.0
+Movement/Radius = 4.0
+
+[node name="SpikeBall3" parent="PerfectAct/ObjectMap/SpikeBallGroup6" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 7.10543e-15, 1.77636e-15, 0, -1.49012e-08, 1, 1.42109e-14, -1, -1.49012e-08, -7.62939e-05, 0, 20.5)
+Movement/Mode = 2
+"Movement/Cycle Length" = 3.0
+"Movement/Starting Offset" = 0.25
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall4" parent="PerfectAct/ObjectMap/SpikeBallGroup6" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 1.77636e-14, 4.44089e-15, -1.77636e-15, -2.98023e-08, 1, 1.77636e-14, -1, -2.98023e-08, -9.15527e-05, -3.8147e-06, 30)
+Movement/Mode = 2
+"Movement/Cycle Length" = -2.5
+"Movement/Starting Offset" = 0.75
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 2.0
+Movement/Radius = 4.0
+
+[node name="SpikeBall5" parent="PerfectAct/ObjectMap/SpikeBallGroup6" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 7.10543e-15, 1.77636e-15, 0, -1.49012e-08, 1, 1.42109e-14, -1, -1.49012e-08, -7.62939e-05, -5.72205e-06, 41.5)
+Movement/Mode = 2
+"Movement/Cycle Length" = 3.0
+"Movement/Starting Offset" = 0.25
+"Movement/Horizontal Size" = 2.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="ScrapMachineGroup6" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(1, 0, -1.74846e-07, 0, 1, 0, 1.74846e-07, 0, 1, 35.5, 20, -38.6)
+
+[node name="RichRing" parent="PerfectAct/ObjectMap/ScrapMachineGroup6" instance=ExtResource("5_mt2eo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+
+[node name="ScrapMachineSupport" parent="PerfectAct/ObjectMap/ScrapMachineGroup6" instance=ExtResource("7_hm5kq")]
+
+[node name="GolemPath" type="Path3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 34, 20, -23.6)
+curve = SubResource("Curve3D_iit05")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="PerfectAct/ObjectMap/GolemPath"]
+transform = Transform3D(0.999983, 0, -0.00103283, 0, 1, 0, 0.00103283, 0, 0.999983, -6.43009e-05, 0, 5.04932)
+progress = 5.04932
+use_model_front = true
+cubic_interp = false
+tilt_enabled = false
+
+[node name="GolemMajin" parent="PerfectAct/ObjectMap/GolemPath/PathFollow3D" instance=ExtResource("8_rw3mt")]
+rangeOverride = 30
+
+[node name="RichRing" parent="PerfectAct/ObjectMap" instance=ExtResource("5_mt2eo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 22.5, -9)
+
+[node name="DashPanelGroup2" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(-4.37114e-08, 0.156434, -0.987688, 0, 0.987688, 0.156434, 1, 6.83797e-09, -4.31732e-08, -9, 25.25, -9)
+
+[node name="DashPanel1" parent="PerfectAct/ObjectMap/DashPanelGroup2" instance=ExtResource("6_lyjik")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="DashPanel2" parent="PerfectAct/ObjectMap/DashPanelGroup2" instance=ExtResource("6_lyjik")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="SpikeBallGroup7" type="Node3D" parent="PerfectAct/ObjectMap"]
+transform = Transform3D(-4.37114e-08, 0.156434, -0.987688, 0, 0.987688, 0.156434, 1, 6.83797e-09, -4.31732e-08, 11.0123, 22.1564, -9.10001)
+
+[node name="SpikeBall1" parent="PerfectAct/ObjectMap/SpikeBallGroup7" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 1, 0)
+"Movement/Cycle Length" = 5.2
+Movement/Distance = 50.0
+Movement/Angle = 180.0
+
+[node name="SpikeBall2" parent="PerfectAct/ObjectMap/SpikeBallGroup7" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.00001, 1.52588e-05)
+"Movement/Cycle Length" = 5.2
+Movement/Distance = 50.0
+Movement/Angle = 180.0
+
+[node name="SpikeBall3" parent="PerfectAct/ObjectMap/SpikeBallGroup7" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 1, 0)
+"Movement/Cycle Length" = 5.2
+Movement/Distance = 50.0
+Movement/Angle = 180.0
+
+[node name="SpikeBall4" parent="PerfectAct/ObjectMap/SpikeBallGroup7" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 3.55271e-15, 0, 1, -3.57878e-16, 0, -3.57878e-16, 1, 2.2, 5, 3.05176e-05)
+"Movement/Cycle Length" = 5.2
+Movement/Distance = 50.0
+Movement/Angle = 180.0
+
+[node name="SpikeBall5" parent="PerfectAct/ObjectMap/SpikeBallGroup7" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 3.55271e-15, 0, 1, -3.57878e-16, 0, -3.57878e-16, 1, 0, 5.00002, 3.05176e-05)
+"Movement/Cycle Length" = 5.2
+Movement/Distance = 50.0
+Movement/Angle = 180.0
+
+[node name="SpikeBall6" parent="PerfectAct/ObjectMap/SpikeBallGroup7" instance=ExtResource("4_c5p5v")]
+transform = Transform3D(1, 0, 3.55271e-15, 0, 1, -3.57878e-16, 0, -3.57878e-16, 1, -2.2, 5, 3.05176e-05)
+"Movement/Cycle Length" = 5.2
+Movement/Distance = 50.0
+Movement/Angle = 180.0
+
+[node name="Goal" parent="PerfectAct/ObjectMap" instance=ExtResource("9_n50kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -43, 39, -9)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/ObjectMap/Goal"]
+shape = SubResource("BoxShape3D_jbpsv")
