@@ -38,36 +38,28 @@ public partial class IdleState : PlayerState
 
 		if (!Player.Skills.IsSpeedBreakActive)
 		{
-			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+			if (Player.Controller.IsJumpBufferActive)
 			{
-				if (Player.Controller.IsJumpBufferActive)
+				Player.Controller.ResetJumpBuffer();
+
+				float inputAngle = Player.Controller.GetTargetInputAngle();
+				float inputStrength = Player.Controller.GetInputStrength();
+				if (!Mathf.IsZeroApprox(inputStrength) &&
+					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 				{
-					Player.Controller.ResetJumpBuffer();
-					return crouchState;
+					return backflipState;
 				}
+
+				if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+					return crouchState;
+
+				return jumpState;
 			}
-			else
+
+			if (Player.Controller.IsActionBufferActive)
 			{
-				if (Player.Controller.IsJumpBufferActive)
-				{
-					Player.Controller.ResetJumpBuffer();
-
-					float inputAngle = Player.Controller.GetTargetInputAngle();
-					float inputStrength = Player.Controller.GetInputStrength();
-					if (!Mathf.IsZeroApprox(inputStrength) &&
-						Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
-					{
-						return backflipState;
-					}
-
-					return jumpState;
-				}
-
-				if (Player.Controller.IsActionBufferActive)
-				{
-					Player.Controller.ResetActionBuffer();
-					return crouchState;
-				}
+				Player.Controller.ResetActionBuffer();
+				return crouchState;
 			}
 		}
 
