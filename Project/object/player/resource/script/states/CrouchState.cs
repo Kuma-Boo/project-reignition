@@ -47,7 +47,7 @@ public partial class CrouchState : PlayerState
 			Player.Skills.ChargeJump();
 			if (!Input.IsActionPressed("button_jump"))
 			{
-				if (!Player.Controller.IsBrakeHeld() || Player.Skills.IsJumpCharged)
+				if (!Player.Controller.IsBrakeHeld())
 					return jumpState;
 
 				Player.Skills.ConsumeJumpCharge();

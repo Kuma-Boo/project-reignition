@@ -103,7 +103,13 @@ public partial class SlideState : PlayerState
 		{
 			Player.Skills.ChargeJump();
 			if (!Input.IsActionPressed("button_jump"))
-				return jumpState;
+			{
+				if (!Player.Controller.IsBrakeHeld())
+					return jumpState;
+
+				Player.Skills.ConsumeJumpCharge();
+				return runState;
+			}
 		}
 		else
 		{
