@@ -42,12 +42,12 @@ public partial class CrouchState : PlayerState
 		if (!Player.IsOnGround)
 			return fallState;
 
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl))
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
 		{
 			Player.Skills.ChargeJump();
 			if (!Input.IsActionPressed("button_jump"))
 			{
-				if (!Player.Controller.IsBrakePressed() || Player.Skills.IsJumpCharged)
+				if (!Input.IsActionPressed("button_brake") || Player.Skills.IsJumpCharged)
 					return jumpState;
 
 				Player.Skills.ConsumeJumpCharge();

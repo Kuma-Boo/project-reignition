@@ -261,7 +261,8 @@ public enum SkillEquipStatusEnum
 public enum SkillKey
 {
 	// Control skills
-	LegacyControl,
+	Autorun,
+	ChargeJump,
 	SpeedUp, // Increases Sonic's top speed
 	TractionUp, // Increases Sonic's traction
 	TurnaroundUp, // Increases Sonic's friction

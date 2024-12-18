@@ -38,7 +38,7 @@ public partial class IdleState : PlayerState
 
 		if (!Player.Skills.IsSpeedBreakActive)
 		{
-			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl))
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
 			{
 				if (Player.Controller.IsJumpBufferActive)
 				{
@@ -81,8 +81,8 @@ public partial class IdleState : PlayerState
 			if (Player.IsLockoutActive && Player.ActiveLockoutData.overrideSpeed && !Mathf.IsZeroApprox(Player.ActiveLockoutData.speedRatio))
 				return runState;
 
-			if (!Player.Controller.IsBrakePressed() &&
-				(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) || !Mathf.IsZeroApprox(Player.Controller.GetInputStrength())))
+			if (!Input.IsActionPressed("button_brake") &&
+				(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) || !Mathf.IsZeroApprox(Player.Controller.GetInputStrength())))
 			{
 				if (Player.Controller.GetHoldingDistance(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle) >= 1.0f)
 					return backstepState;

@@ -52,7 +52,7 @@ public partial class PlayerState : Node
 			}
 		}
 
-		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) &&
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
 			Mathf.IsZeroApprox(inputStrength)) // Basic slow down
 		{
 			Deccelerate();
@@ -69,7 +69,7 @@ public partial class PlayerState : Node
 		}
 
 		// Always move at full power when autorun is enabled
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl))
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
 		{
 			Accelerate(1f);
 			return;
@@ -87,7 +87,7 @@ public partial class PlayerState : Node
 
 	private bool IsBraking(float inputAngle)
 	{
-		if (Player.Controller.IsBrakePressed())
+		if (Input.IsActionPressed("button_brake"))
 			return true;
 
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
@@ -146,7 +146,7 @@ public partial class PlayerState : Node
 
 	protected virtual bool DisableTurning(float targetMovementAngle)
 	{
-		if (Mathf.IsZeroApprox(Player.MoveSpeed) && Player.Controller.IsBrakePressed())
+		if (Mathf.IsZeroApprox(Player.MoveSpeed) && Input.IsActionPressed("button_brake"))
 			return true;
 
 		if (Player.IsLockoutActive &&

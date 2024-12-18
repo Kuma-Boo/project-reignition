@@ -55,7 +55,7 @@ public partial class JumpState : PlayerState
 		isAccelerationJumpQueued = Player.ForceAccelerationJump;
 
 		// Decide accleration jump based on jump charge
-		if (!Player.ForceAccelerationJump && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl))
+		if (!Player.ForceAccelerationJump && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
 			isAccelerationJumpQueued = !Player.Skills.ConsumeJumpCharge();
 
 		Player.ForceAccelerationJump = false;
@@ -77,7 +77,7 @@ public partial class JumpState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) && !Input.IsActionPressed("button_jump"))
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && !Input.IsActionPressed("button_jump"))
 		{
 			// Check for acceleration jump
 			if (jumpTimer <= AccelerationJumpLength)
@@ -168,7 +168,7 @@ public partial class JumpState : PlayerState
 			return;
 		}
 
-		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) &&
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
 			(!Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle) ||
 			Player.Controller.GetInputStrength() < .5f))
 		{
