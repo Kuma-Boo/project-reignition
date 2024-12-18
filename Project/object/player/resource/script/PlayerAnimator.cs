@@ -394,6 +394,7 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName BackflipTrigger = "parameters/air_tree/backflip_trigger/request";
 	public void BackflipAnimation()
 	{
+		IsFallTransitionEnabled = false;
 		animationTree.Set(AirStateTransition, FallState);
 		animationTree.Set(BackflipTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		animationTree.Set(BrakeTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);

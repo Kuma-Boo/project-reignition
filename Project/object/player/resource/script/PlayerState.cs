@@ -87,7 +87,7 @@ public partial class PlayerState : Node
 
 	private bool IsBraking(float inputAngle)
 	{
-		if (Input.IsActionPressed("button_brake"))
+		if (Player.Controller.IsBrakeHeld())
 			return true;
 
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
@@ -96,7 +96,7 @@ public partial class PlayerState : Node
 		if (Player.Camera.IsCrossfading)
 			return false;
 
-		return Player.Controller.IsHoldingDirection(inputAngle, Player.MovementAngle + Mathf.Pi);
+		return Player.Controller.IsHoldingDirection(inputAngle, Player.MovementAngle + Mathf.Pi, Mathf.Pi * .3f);
 	}
 
 	protected virtual void Deccelerate() => Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, 0);
@@ -130,6 +130,12 @@ public partial class PlayerState : Node
 		float maxTurnAmount = isRecentering ? Player.Stats.RecenterTurnAmount : Player.Stats.MaxTurnAmount;
 
 		float turnSmoothing = Mathf.Lerp(Player.Stats.MinTurnAmount, maxTurnAmount, speedRatio);
+		if (Player.Skills.IsTimeBreakActive)
+		{
+			// Increase turning responsiveness when time break is active
+			turnSmoothing *= 0.2f;
+		}
+
 		Player.MovementAngle += pathControlAmount;
 		Turn(targetMovementAngle, turnSmoothing);
 
@@ -140,7 +146,7 @@ public partial class PlayerState : Node
 
 	protected virtual bool DisableTurning(float targetMovementAngle)
 	{
-		if (Mathf.IsZeroApprox(Player.MoveSpeed) && Input.IsActionPressed("button_brake"))
+		if (Mathf.IsZeroApprox(Player.MoveSpeed) && Player.Controller.IsBrakeHeld())
 			return true;
 
 		if (Player.IsLockoutActive &&

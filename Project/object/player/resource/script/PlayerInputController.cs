@@ -12,11 +12,6 @@ public partial class PlayerInputController : Node
 	private Curve InputCurve { get; set; }
 	public float GetInputStrength()
 	{
-		/*
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
-			return 1f;
-		*/
-
 		float inputLength = InputAxis.Length();
 		if (inputLength <= DeadZone)
 			inputLength = 0;
@@ -101,6 +96,15 @@ public partial class PlayerInputController : Node
 		}
 
 		actionBuffer = Mathf.MoveToward(actionBuffer, 0, PhysicsManager.physicsDelta);
+	}
+
+	public bool IsBrakeHeld()
+	{
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+			return Input.IsActionPressed("button_action");
+
+		return SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
+			Input.IsActionPressed("button_brake");
 	}
 
 	/// <summary> Returns the angle between the player's input angle and movementAngle. </summary>
