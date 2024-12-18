@@ -455,19 +455,19 @@ public partial class PlayerAnimator : Node3D
 	public void StartSliding()
 	{
 		crouchTransition.XfadeTime = .05;
-		CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+		CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) ?
 			ChargeSlideStateStart : SlideStateStart);
 		animationTree.Set(CrouchTransition, EnabledConstant);
 	}
 
-	public void SlideToCrouch() => CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+	public void SlideToCrouch() => CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) ?
 		ChargeSlideStateStop : SlideStateStop);
 	public void StartCrouching()
 	{
-		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ||
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) ||
 			!CrouchStatePlayback.GetCurrentNode().ToString().Contains("charge-slide"))
 		{
-			CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+			CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) ?
 				ChargeStationaryStateStart : CrouchStateStart);
 		}
 
@@ -478,7 +478,7 @@ public partial class PlayerAnimator : Node3D
 	public void StopCrouching(float transitionTime = 0.2f)
 	{
 		crouchTransition.XfadeTime = transitionTime;
-		CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+		CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) ?
 			ChargeStationaryStateStop : CrouchStateStop);
 		animationTree.Set(CrouchTransition, DisabledConstant);
 	}

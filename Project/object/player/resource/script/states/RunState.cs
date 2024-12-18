@@ -57,7 +57,7 @@ public partial class RunState : PlayerState
 
 		if (!Player.Skills.IsSpeedBreakActive)
 		{
-			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl))
 			{
 				if (Player.Controller.IsJumpBufferActive)
 				{
@@ -143,7 +143,7 @@ public partial class RunState : PlayerState
 		if (Player.Skills.IsSpeedBreakActive) return false;
 
 		// Autorun disables speed loss
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun)) return false;
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl)) return false;
 
 		// Don't apply turning speed loss when moving quickly and holding the direction of the pathfollower
 		if (Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle) &&

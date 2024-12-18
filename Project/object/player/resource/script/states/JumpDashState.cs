@@ -101,7 +101,7 @@ public partial class JumpDashState : PlayerState
 
 		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
 		float inputDot = ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle);
-		if (inputDot < -.75f || Input.IsActionPressed("button_brake")) // Turning around
+		if (inputDot < -.75f || Player.Controller.IsBrakePressed()) // Turning around
 		{
 			Player.MoveSpeed = Player.Stats.AirSettings.UpdateInterpolate(Player.MoveSpeed, -inputStrength);
 			return;

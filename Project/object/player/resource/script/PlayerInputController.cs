@@ -116,14 +116,14 @@ public partial class PlayerInputController : Node
 
 	/// <summary> Returns whether the player is currently in strafing mode. </summary>
 	public bool IsStrafeModeActive => Player.Skills.IsSpeedBreakActive ||
-			SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) ||
+			SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) ||
 			(Player.IsLockoutActive &&
 			Player.ActiveLockoutData.movementMode == LockoutResource.MovementModes.Strafe);
 
 	/// <summary> Returns the automaticly calculated input angle based on the game's settings and skills. </summary>
 	public float GetTargetInputAngle()
 	{
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl))
 		{
 			if (InputAxis.IsZeroApprox())
 				return Player.PathFollower.ForwardAngle;
@@ -173,7 +173,7 @@ public partial class PlayerInputController : Node
 		if (Player.Skills.IsSpeedBreakActive)
 			return GetStrafeAngle();
 
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl))
 			return GetStrafeAngle(true);
 
 		if (Mathf.IsZeroApprox(GetInputStrength()))
@@ -194,7 +194,7 @@ public partial class PlayerInputController : Node
 			inputs.X *= -1;
 
 		float baseAngle = Player.PathFollower.ForwardAngle;
-		if (allowBackstep && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun)) // Check for backstep
+		if (allowBackstep && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl)) // Check for backstep
 		{
 			if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
 				inputs.Y *= -1;
@@ -215,6 +215,13 @@ public partial class PlayerInputController : Node
 	{
 		float deltaAngle = ExtensionMethods.DeltaAngleRad(inputAngle, referenceAngle);
 		return deltaAngle <= maximumDelta;
+	}
+
+	/// <summary> Checks whether the player is holding the "brake" button (Legacy Controls only). </summary>
+	public bool IsBrakePressed()
+	{
+		return SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) &&
+		Input.IsActionPressed("button_action");
 	}
 
 	/// <summary> Returns how far the player's input is from the reference angle, normalized to MinBackStepAngle. </summary>

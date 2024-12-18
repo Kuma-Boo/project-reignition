@@ -67,7 +67,7 @@ public partial class LandState : PlayerState
 		bool applyLandingBoost = (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompDash) && Player.IsStomping) ||
 			(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LandDash) && !Player.IsStomping);
 
-		if (Input.IsActionPressed("button_brake"))
+		if (Player.Controller.IsBrakePressed())
 			applyLandingBoost = false;
 
 		if (!applyLandingBoost)
@@ -75,7 +75,7 @@ public partial class LandState : PlayerState
 
 		// Only apply landing boost when holding forward to avoid accidents (See Sonic and the Black Knight)
 		float inputStrength = Player.Controller.GetInputStrength();
-		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) && Mathf.IsZeroApprox(inputStrength))
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) && Mathf.IsZeroApprox(inputStrength))
 			return;
 
 		float inputAngle = Player.Controller.GetTargetInputAngle();

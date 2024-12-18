@@ -62,7 +62,7 @@ public partial class DriftState : PlayerState
 		Player.Animator.ExternalAngle = Player.MovementAngle;
 		Player.Animator.StartDrift(Trigger.IsRightTurn);
 
-		isChargingJump = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && Input.IsActionPressed("button_jump");
+		isChargingJump = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) && Input.IsActionPressed("button_jump");
 	}
 
 	public override void ExitState()
@@ -84,7 +84,7 @@ public partial class DriftState : PlayerState
 
 		if (driftAnimationTimer > 0)
 		{
-			if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+			if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) &&
 				Player.Controller.IsJumpBufferActive)
 			{
 				Player.Controller.ResetJumpBuffer();
@@ -108,7 +108,7 @@ public partial class DriftState : PlayerState
 		if (driftStatus == DriftStatus.Success)
 			SuccessfulDrift();
 
-		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) &&
 			Player.Controller.IsJumpBufferActive) // Allow character to jump out of drift at any time
 		{
 			Player.Controller.ResetJumpBuffer();
@@ -134,7 +134,7 @@ public partial class DriftState : PlayerState
 	/// <summary> Returns true if the player releases a charge jump. </summary>
 	private bool UpdateChargeJump()
 	{
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl) &&
 			Input.IsActionPressed("button_jump"))
 		{
 			isChargingJump = true;

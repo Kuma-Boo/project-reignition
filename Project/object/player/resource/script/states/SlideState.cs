@@ -99,7 +99,7 @@ public partial class SlideState : PlayerState
 		if (Player.Skills.IsSpeedBreakActive)
 			return runState;
 
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl))
 		{
 			Player.Skills.ChargeJump();
 			if (!Input.IsActionPressed("button_jump"))
@@ -149,7 +149,7 @@ public partial class SlideState : PlayerState
 		float inputAngle = Player.Controller.GetTargetMovementAngle();
 		if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 			inputAmount = -(1 + inputStrength) * .5f; // -0.5 to -1
-		else if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
+		else if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LegacyControl))
 			inputAmount = 0;
 		else if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle))
 			inputAmount = -(1 - inputStrength) * .5f; // 0 to -0.5
