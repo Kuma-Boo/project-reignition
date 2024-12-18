@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay;
 
@@ -58,6 +59,9 @@ public partial class BackstepState : PlayerState
 			{
 				return backflipState;
 			}
+
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+				return crouchState;
 
 			return jumpState;
 		}
