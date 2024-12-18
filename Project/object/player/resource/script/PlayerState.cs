@@ -130,6 +130,12 @@ public partial class PlayerState : Node
 		float maxTurnAmount = isRecentering ? Player.Stats.RecenterTurnAmount : Player.Stats.MaxTurnAmount;
 
 		float turnSmoothing = Mathf.Lerp(Player.Stats.MinTurnAmount, maxTurnAmount, speedRatio);
+		if (Player.Skills.IsTimeBreakActive)
+		{
+			// Increase turning responsiveness when time break is active
+			turnSmoothing *= 0.2f;
+		}
+
 		Player.MovementAngle += pathControlAmount;
 		Turn(targetMovementAngle, turnSmoothing);
 
