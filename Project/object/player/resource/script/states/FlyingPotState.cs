@@ -8,8 +8,8 @@ public partial class FlyingPotState : PlayerState
 {
 	public FlyingPot Pot { get; set; }
 
-	[Export]
-	private PlayerState jumpState;
+	[Export] private PlayerState jumpState;
+	[Export] private PlayerState fallState;
 
 	private float flapSpeed = 1;
 	private float flapTimer;
@@ -19,12 +19,20 @@ public partial class FlyingPotState : PlayerState
 	private const float FlapInterval = .5f; // How long is a single flap?
 	private const float FlapAccelerationLength = .4f; // How long does a flap accelerate?
 
+	private readonly StringName AscendAction = "action_ascend";
+	private readonly StringName ExitAction = "action_exit";
+
 	public override void EnterState()
 	{
 		flapTimer = 0;
 		Player.StartExternal(Pot, Pot.Root);
 		Player.Animator.Visible = false;
 		Player.MoveSpeed = Player.VerticalSpeed = 0;
+
+		HeadsUpDisplay.Instance.SetPrompt(AscendAction, 0);
+		HeadsUpDisplay.Instance.SetPrompt(ExitAction, 1);
+		HeadsUpDisplay.Instance.ShowPrompts();
+		Player.Knockback += OnPlayerDamaged;
 	}
 
 	public override void ExitState()
@@ -34,11 +42,17 @@ public partial class FlyingPotState : PlayerState
 		Player.Animator.Visible = true;
 		Player.StopExternal();
 
+		HeadsUpDisplay.Instance.HidePrompts();
+
 		Pot = null;
+		Player.Knockback -= OnPlayerDamaged;
 	}
 
 	public override PlayerState ProcessPhysics()
 	{
+		if (Player.ExternalController != Pot) // Pot must have been shattered
+			return fallState;
+
 		Pot.UpdateAngle(Player.Controller.InputHorizontal * MaxAngle);
 
 		if (Player.Controller.IsJumpBufferActive)
@@ -83,6 +97,23 @@ public partial class FlyingPotState : PlayerState
 		Pot.Velocity = Mathf.Min(Pot.Velocity, MaxSpeed);
 	}
 
+	private void OnPlayerDamaged()
+	{
+		if (Pot == null)
+			return;
+
+		Pot.Velocity = 0f;
+		Pot.Shatter();
+
+		ShowPlayer();
+		Player.Knockback -= OnPlayerDamaged;
+		Player.StartKnockback(new()
+		{
+			ignoreMovementState = true,
+			disableDamage = true,
+		});
+	}
+
 	private void UpdateAnimation()
 	{
 		flapSpeed = Mathf.Lerp(flapSpeed, 1, .1f);
@@ -94,11 +125,16 @@ public partial class FlyingPotState : PlayerState
 		Pot.Velocity = 0f; // Kill all velocity
 		Pot.PlayExitFX();
 
-		float angleRatio = Pot.Angle / MaxAngle;
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Pot.Back());
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(Player.Stats.JumpHeight);
 
 		Player.Animator.JumpAnimation();
+		ShowPlayer();
+	}
+
+	private void ShowPlayer()
+	{
+		float angleRatio = Pot.Angle / MaxAngle;
 		Player.Animator.SnapRotation(Player.MovementAngle - (Mathf.Pi * angleRatio));
 		Player.Animator.Visible = true;
 		Player.StopExternal();

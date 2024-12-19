@@ -8,66 +8,47 @@ public partial class PauseMenu : Node
 {
 	public static bool AllowPausing = true;
 
-	[Export]
-	private AnimationTree animator;
-	[Export]
-	private Node2D pauseCursor;
-	[Export]
-	private AnimationPlayer pauseCursorAnimator;
-	[Export]
-	private AudioStreamPlayer selectSFX;
-	[Export]
-	private Menus.Description description;
+	[Export] AnimationTree animator;
+	[Export] private Node2D pauseCursor;
+	[Export] private AnimationPlayer pauseCursorAnimator;
+	[Export] private AudioStreamPlayer selectSFX;
+	[Export] private Menus.Description description;
 
 	[ExportGroup("Status Menu")]
-	[Export]
-	private Node2D statusCursor;
-	[Export]
-	private AnimationPlayer statusCursorAnimator;
-	[Export]
-	private Label[] values;
+	[Export] private Node2D statusCursor;
+	[Export] private AnimationPlayer statusCursorAnimator;
+	[Export] private Label[] values;
 
 	[ExportSubgroup("Mission Menu")]
-	[Export]
-	private Label missionTypeLabel;
-	[Export]
-	private Label missionDescriptionLabel;
-	[Export]
-	private Control fireSoulParent;
-	[Export]
-	private Sprite2D[] fireSoulSprites;
-	[Export]
-	private Sprite2D rankSprite;
+	[Export] private Label missionTypeLabel;
+	[Export] private Label missionDescriptionLabel;
+	[Export] private Control fireSoulParent;
+	[Export] private Sprite2D[] fireSoulSprites;
+	[Export] private Sprite2D rankSprite;
 
 	[ExportSubgroup("Skill Menu")]
-	[Export]
-	private Label noSkillLabel;
-	[Export]
-	private VBoxContainer skillContainer;
-	[Export]
-	private Control skillCursor;
-	[Export]
-	private AnimationPlayer skillCursorAnimator;
-	[Export]
-	private PackedScene pauseSkillScene;
-	[Export]
-	private int[] rectVerticalValues;
-	[Export]
-	private Sprite2D levelSprite;
+	[Export] private Label noSkillLabel;
+	[Export] private VBoxContainer skillContainer;
+	[Export] private Control skillCursor;
+	[Export] private AnimationPlayer skillCursorAnimator;
+	[Export] private PackedScene pauseSkillScene;
+	[Export] private int[] rectVerticalValues;
+	[Export] private Sprite2D levelSprite;
 	private PauseSkill[] skills;
 	private int skillScrollOffset;
-	[Export]
-	private Sprite2D skillScrollbar;
+	[Export] private Sprite2D skillScrollbar;
 	private Vector2 scrollVelocity;
+	private readonly float ScrollSmoothing = .05f;
 
 	private bool isActive;
 	private enum Submenu
 	{
-		PAUSE,
-		STATUS,
-		SKILL
+		Pause,
+		Status,
+		Skill
 	}
 	private Submenu submenu;
+	private StageSettings Stage => StageSettings.Instance;
 
 	private readonly StringName SelectionTransition = "parameters/selection/transition_request";
 	private readonly StringName ConfirmTransition = "parameters/confirm/transition_request";
@@ -79,7 +60,10 @@ public partial class PauseMenu : Node
 	private readonly StringName StatusHideTrigger = "parameters/status_hide_trigger/request";
 	private readonly StringName StatusSelectionTransition = "parameters/status_selection/transition_request";
 	private readonly StringName ValueSelectionTransition = "parameters/value_selection/transition_request";
-	private const float ScrollSmoothing = .05f;
+	private readonly StringName SubmenuParameter = "parameters/submenu_transition/transition_request";
+
+	private bool isConfirmButtonBuffered;
+	private bool isCancelButtonBuffered;
 
 	public override void _Ready()
 	{
@@ -106,9 +90,11 @@ public partial class PauseMenu : Node
 			pauseSkill.Initialize();
 			skillContainer.AddChild(pauseSkill);
 		}
+
+		TransitionManager.instance.TransitionStarted += DisablePause;
 	}
 
-	public override void _PhysicsProcess(double delta)
+	public override void _PhysicsProcess(double _)
 	{
 		if (!AllowPausing || !Stage.IsLevelIngame || TransitionManager.IsTransitionActive) return;
 
@@ -122,79 +108,120 @@ public partial class PauseMenu : Node
 			}
 		}
 
-		if (Input.IsActionJustPressed("button_pause"))
+		if (Input.IsActionJustPressed("button_pause") && !Input.IsActionJustPressed("toggle_fullscreen"))
 		{
 			TogglePause();
+			return;
 		}
-		else if (GetTree().Paused && canMoveCursor)
-		{
-			int sign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
-			if (Input.IsActionJustPressed("button_jump"))
-			{
-				if (submenu == Submenu.PAUSE)
-				{
-					AllowPausing = false;
-					if (currentSelection == 2)
-					{
-						ApplySelection();
-					}
-					else
-					{
-						animator.Set(ConfirmTransition, currentSelection.ToString());
-						animator.Set(ConfirmEnabledTransition, "true");
-					}
-				}
-				else if (submenu == Submenu.STATUS && currentSelection == 2 && skills.Length != 0) // Enter skill menu
-				{
-					ApplySelection();
-				}
-			}
-			else if (Input.IsActionJustPressed("button_action"))
-			{
-				if (submenu == Submenu.PAUSE)
-				{
-					TogglePause();
-				}
-				else if (submenu == Submenu.STATUS)
-				{
-					AllowPausing = false;
-					statusCursorAnimator.Play("hide");
-					description.HideDescription();
-					animator.Set(StatusHideTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-				}
-				else
-				{
-					skillCursorAnimator.Play("hide");
-					submenu = Submenu.STATUS;
-					currentSelection = 2;
-				}
-			}
-			else if (sign != 0)
-			{
-				int targetSelection = currentSelection + sign;
-				if (submenu == Submenu.SKILL) // Allow wrapping when viewing skills
-				{
-					if (targetSelection < 0)
-						targetSelection = skills.Length - 1;
-					else if (targetSelection == skills.Length)
-						targetSelection = 0;
-				}
-				else
-				{
-					targetSelection = Mathf.Clamp(targetSelection, 0, submenu == Submenu.PAUSE ? 3 : 2);
-				}
 
-				if (targetSelection != currentSelection)
-					UpdateSelection(targetSelection, true);
-			}
+		if (!GetTree().Paused)
+			return;
+
+		UpdateBuffers();
+
+		if (!canMoveCursor)
+			return;
+
+		if (isConfirmButtonBuffered)
+		{
+			Confirm();
+			return;
+		}
+
+		if (isCancelButtonBuffered)
+		{
+			Cancel();
+			return;
+		}
+
+		int sign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		if (sign != 0)
+			ChangeSelection(sign);
+	}
+
+	private void UpdateBuffers()
+	{
+		if (Input.IsActionJustPressed("button_jump"))
+		{
+			isConfirmButtonBuffered = true;
+			isCancelButtonBuffered = false;
+		}
+
+		if (Input.IsActionJustPressed("button_action"))
+		{
+			isConfirmButtonBuffered = false;
+			isCancelButtonBuffered = true;
 		}
 	}
 
-	private readonly StringName SUBMENU_PARAMETER = "parameters/submenu_transition/transition_request";
+	private void Confirm()
+	{
+		isConfirmButtonBuffered = false;
+		if (submenu == Submenu.Status && currentSelection == 2 && skills.Length != 0) // Enter skill menu
+		{
+			ApplySelection();
+			return;
+		}
+
+		if (submenu != Submenu.Pause)
+			return;
+
+		AllowPausing = false;
+		if (currentSelection != 2)
+		{
+			animator.Set(ConfirmTransition, currentSelection.ToString());
+			animator.Set(ConfirmEnabledTransition, "true");
+			return;
+		}
+
+		ApplySelection();
+	}
+
+	private void Cancel()
+	{
+		isCancelButtonBuffered = false;
+		switch (submenu)
+		{
+			case Submenu.Pause:
+				TogglePause();
+				break;
+			case Submenu.Status:
+				AllowPausing = false;
+				statusCursorAnimator.Play("hide");
+				description.HideDescription();
+				animator.Set(StatusHideTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+				break;
+			case Submenu.Skill:
+				skillCursorAnimator.Play("hide");
+				submenu = Submenu.Status;
+				currentSelection = 2;
+				break;
+		}
+	}
+
+	private void ChangeSelection(int direction)
+	{
+		int targetSelection = currentSelection + direction;
+		if (submenu == Submenu.Skill) // Allow wrapping when viewing skills
+		{
+			if (targetSelection < 0)
+				targetSelection = skills.Length - 1;
+			else if (targetSelection == skills.Length)
+				targetSelection = 0;
+		}
+		else
+		{
+			targetSelection = Mathf.Clamp(targetSelection, 0, submenu == Submenu.Pause ? 3 : 2);
+		}
+
+		if (targetSelection != currentSelection)
+			UpdateSelection(targetSelection, true);
+	}
+
 	/// <summary> Actually applies the current selection (called from the animator). </summary>
 	private void ApplySelection()
 	{
-		if (submenu == Submenu.PAUSE)
+		if (submenu == Submenu.Pause)
 		{
 			switch (currentSelection)
 			{
@@ -206,9 +233,9 @@ public partial class PauseMenu : Node
 					StartSceneTransition(string.Empty);
 					break;
 				case 2: // Status menu
-					submenu = Submenu.STATUS;
+					submenu = Submenu.Status;
 					pauseCursorAnimator.Play("hide");
-					animator.Set(SUBMENU_PARAMETER, "status");
+					animator.Set(SubmenuParameter, "status");
 					animator.Set(StatusShowTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 					UpdateSelection(0);
 					UpdateCursorPosition();
@@ -220,9 +247,9 @@ public partial class PauseMenu : Node
 					break;
 			}
 		}
-		else if (submenu == Submenu.STATUS && currentSelection == 2) // Enter skill menu
+		else if (submenu == Submenu.Status && currentSelection == 2) // Enter skill menu
 		{
-			submenu = Submenu.SKILL;
+			submenu = Submenu.Skill;
 			skillCursorAnimator.Play("select");
 			skillCursorAnimator.Advance(0.0);
 			UpdateSelection(skillSelection); // Remember previously selected skill
@@ -232,12 +259,11 @@ public partial class PauseMenu : Node
 
 	private void CancelSelection()
 	{
-		submenu = Submenu.PAUSE;
+		submenu = Submenu.Pause;
 		UpdateSelection(2);
-		animator.Set(SUBMENU_PARAMETER, "pause");
+		animator.Set(SubmenuParameter, "pause");
 	}
 
-	private StageSettings Stage => StageSettings.Instance;
 	private void UpdateStatusMenuData()
 	{
 		// Status menu
@@ -278,24 +304,24 @@ public partial class PauseMenu : Node
 	private void EnableCursorMovement()
 	{
 		canMoveCursor = true;
-		if (submenu == Submenu.SKILL)
+		if (submenu == Submenu.Skill)
 			skillCursorAnimator.Play("loop");
 	}
 	private void UpdateCursorPosition()
 	{
 		switch (submenu)
 		{
-			case Submenu.PAUSE:
+			case Submenu.Pause:
 				pauseCursor.Position = Vector2.Down * currentSelection * 32;
 				pauseCursorAnimator.Play("show");
 				pauseCursorAnimator.Seek(0.0, true);
 				break;
-			case Submenu.STATUS:
+			case Submenu.Status:
 				statusCursor.Position = Vector2.Down * currentSelection * 32;
 				statusCursorAnimator.Play("show");
 				statusCursorAnimator.Seek(0.0, true);
 				break;
-			case Submenu.SKILL:
+			case Submenu.Skill:
 				int visualSelection = skillSelection - skillScrollOffset;
 				if (skillSelection > skillScrollOffset + 6)
 				{
@@ -326,17 +352,17 @@ public partial class PauseMenu : Node
 
 		switch (submenu)
 		{
-			case Submenu.PAUSE:
+			case Submenu.Pause:
 				pauseCursorAnimator.Play("move");
 				animator.Set(SelectionTransition, selection.ToString());
 				break;
-			case Submenu.STATUS:
+			case Submenu.Status:
 				statusCursorAnimator.Play("move");
 				animator.Set(ValueSelectionTransition, selection.ToString());
 				animator.Set(StatusSelectionTransition, selection.ToString());
 				UpdateStatusDescription();
 				break;
-			case Submenu.SKILL:
+			case Submenu.Skill:
 				skillSelection = selection;
 				UpdateCursorPosition();
 				UpdateSkillDescription();
@@ -347,18 +373,18 @@ public partial class PauseMenu : Node
 	private void UpdateStatusDescription()
 	{
 		if (currentSelection == 0)
-			description.SetText("pause_status_description");
+			description.Text = "pause_status_description";
 		else if (currentSelection == 1)
-			description.SetText("pause_mission_description");
+			description.Text = "pause_mission_description";
 		else
-			description.SetText("pause_skill_description");
+			description.Text = "pause_skill_description";
 		description.ShowDescription();
 	}
 
 	private void UpdateSkillDescription()
 	{
 		PauseSkill pauseSkill = skillContainer.GetChild<PauseSkill>(currentSelection);
-		description.SetText(pauseSkill.Skill.DescriptionKey);
+		description.Text = pauseSkill.Skill.DescriptionKey;
 		description.ShowDescription();
 	}
 
@@ -371,7 +397,7 @@ public partial class PauseMenu : Node
 
 		isActive = !isActive;
 		animator.Set(ConfirmEnabledTransition, "false");
-		if (submenu == Submenu.PAUSE)
+		if (submenu == Submenu.Pause)
 			animator.Set(StateRequest, isActive ? "show" : "hide");
 		else
 			animator.Set(StateRequest, "status-hide");
@@ -393,9 +419,15 @@ public partial class PauseMenu : Node
 		}
 	}
 
+	private void DisablePause()
+	{
+		if (isActive)
+			TogglePause();
+	}
+
 	private void ApplyPause()
 	{
-		if (submenu != Submenu.PAUSE)
+		if (submenu != Submenu.Pause)
 		{
 			UpdateSelection(0); // Select Continue
 			CancelSelection();
@@ -407,15 +439,20 @@ public partial class PauseMenu : Node
 
 	private void StartSceneTransition(string targetScene)
 	{
-		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
-		TransitionManager.QueueSceneChange(targetScene);
-		TransitionManager.StartTransition(new()
+		TransitionData data = new()
 		{
-			inSpeed = .5f,
-			outSpeed = .5f,
+			inSpeed = 0.5f,
+			outSpeed = 0.5f,
 			color = Colors.Black,
 			disableAutoTransition = string.IsNullOrEmpty(targetScene)
-		});
+		};
+
+		if (currentSelection == 1) // Restarting -- speed up transition
+			data.inSpeed = 0.2f;
+
+		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
+		TransitionManager.QueueSceneChange(targetScene);
+		TransitionManager.StartTransition(data);
 	}
 
 	/// <summary>

@@ -53,6 +53,7 @@ namespace Project.Gameplay
 
 			PreviousPath = ActivePath;
 			ActivePath = newPath;
+			Loop = ActivePath.Curve.GetPointPosition(0).IsEqualApprox(ActivePath.Curve.GetPointPosition(ActivePath.Curve.PointCount - 1));
 			Resync();
 		}
 
@@ -62,9 +63,8 @@ namespace Project.Gameplay
 			if (ActivePath == null) return;
 
 			Vector3 syncPoint = Controller.GlobalPosition;
-			Progress = ActivePath.Curve.GetClosestOffset(syncPoint - ActivePath.GlobalPosition);
+			Progress = ActivePath.Curve.GetClosestOffset(ActivePath.GlobalBasis.Inverse() * (syncPoint - ActivePath.GlobalPosition));
 
-			Loop = ActivePath.Curve.GetPointPosition(0).IsEqualApprox(ActivePath.Curve.GetPointPosition(ActivePath.Curve.PointCount - 1));
 			RecalculateData();
 		}
 

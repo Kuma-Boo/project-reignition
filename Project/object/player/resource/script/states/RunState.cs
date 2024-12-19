@@ -53,7 +53,8 @@ public partial class RunState : PlayerState
 		Player.ApplyMovement();
 		Player.CheckGround();
 		Player.CheckWall();
-		Player.CheckCeiling();
+		if (Player.CheckCeiling())
+			return null;
 
 		if (!Player.Skills.IsSpeedBreakActive)
 		{
@@ -69,10 +70,14 @@ public partial class RunState : PlayerState
 					return backflipState;
 				}
 
+				if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+					return slideState;
+
 				return jumpState;
 			}
 
-			if (Player.Controller.IsActionBufferActive)
+			if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+				Player.Controller.IsActionBufferActive)
 			{
 				Player.Controller.ResetActionBuffer();
 				return slideState;

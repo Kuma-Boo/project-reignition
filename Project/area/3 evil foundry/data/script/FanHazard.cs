@@ -1,21 +1,18 @@
 using Godot;
 using Project.Core;
 
-namespace Project.Gameplay.Hazards;
+namespace Project.Gameplay.Objects;
 
 public partial class FanHazard : Hazard
 {
-	[Export]
-	private float spinSpeed;
-	[Export]
-	private bool playSFX;
+	/// <summary> How long it takes to make a single rotation, in seconds. </summary>
+	[Export] private float rotationTime;
+	[Export] private bool playSFX;
 
 	[ExportGroup("Components")]
-	[Export]
-	private NodePath root;
+	[Export] private NodePath root;
 	private Node3D _root;
-	[Export]
-	private NodePath sfx;
+	[Export] private NodePath sfx;
 	private AudioStreamPlayer3D _sfx;
 
 	public override void _Ready()
@@ -29,7 +26,9 @@ public partial class FanHazard : Hazard
 
 	public override void _PhysicsProcess(double _)
 	{
-		_root.Rotation += Vector3.Forward * spinSpeed * PhysicsManager.physicsDelta;
+		if (!Mathf.IsZeroApprox(rotationTime))
+			_root.Rotation += Vector3.Back * Mathf.Tau * (1f / rotationTime) * PhysicsManager.physicsDelta;
+
 		ProcessCollision();
 	}
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://bwehljjnagemy"]
+[gd_scene load_steps=57 format=3 uid="uid://bwehljjnagemy"]
 
 [ext_resource type="Script" path="res://interface/menu/options/script/Options.cs" id="1_yejdm"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="2_x1aix"]
@@ -20,8 +20,9 @@
 [ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="8_wksl8"]
 [ext_resource type="AudioStream" uid="uid://l2e1do1wwkg" path="res://sound/sfx/system/menu confirm.wav" id="8_xb0ie"]
 [ext_resource type="PackedScene" uid="uid://c1806dq45a0kr" path="res://interface/menu/options/ControlOption.tscn" id="14_itn8j"]
-[ext_resource type="PackedScene" uid="uid://bbbuqgxfhuh8k" path="res://object/player/Player.tscn" id="16_f4s6v"]
+[ext_resource type="PackedScene" uid="uid://bqck0hqdn3o8r" path="res://object/player/Player.tscn" id="16_f4s6v"]
 [ext_resource type="AudioStream" uid="uid://b5d5wemyoi5ap" path="res://sound/ost/treasure disc/4 MISGIVING.mp3" id="18_fr2tm"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="18_wt5wy"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="19_agawd"]
 [ext_resource type="LabelSettings" uid="uid://dnmqaq1ahkjk3" path="res://interface/font/HeaderLabelSettings.tres" id="21_egfsq"]
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="22_cq4kf"]
@@ -270,31 +271,31 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("ControlBook/PlayerSpawn/Player:process_mode")
+tracks/8/path = NodePath("MenuBase/Header:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [4]
+"values": [true]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("ControlBook/PlayerSpawn/Player:visible")
+tracks/9/path = NodePath("MenuBase/Header:text")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": ["sys_options"]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("MenuBase/Header:visible")
+tracks/10/path = NodePath("MenuBase/HorizontalLine:visible")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -306,19 +307,19 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("MenuBase/Header:text")
+tracks/11/path = NodePath("MenuBase/Cursor:visible")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": ["sys_options"]
+"values": [true]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("MenuBase/HorizontalLine:visible")
+tracks/12/path = NodePath("MenuBase/ScrollBar:visible")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -330,19 +331,19 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("MenuBase/Cursor:visible")
+tracks/13/path = NodePath("MenuBase/NavigationButtons/Return:visible")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("MenuBase/ScrollBar:visible")
+tracks/14/path = NodePath("MenuBase/NavigationButtons/Cancel:visible")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
@@ -354,46 +355,22 @@ tracks/14/keys = {
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("MenuBase/NavigationButtons/Return:visible")
+tracks/15/path = NodePath("MenuBase/NavigationButtons/Select:visible")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("MenuBase/NavigationButtons/Cancel:visible")
+tracks/16/path = NodePath("World/PlayerSpawn/Player:position")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/17/type = "value"
-tracks/17/imported = false
-tracks/17/enabled = true
-tracks/17/path = NodePath("MenuBase/NavigationButtons/Select:visible")
-tracks/17/interp = 1
-tracks/17/loop_wrap = true
-tracks/17/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/18/type = "value"
-tracks/18/imported = false
-tracks/18/enabled = true
-tracks/18/path = NodePath("ControlBook/PlayerSpawn/Player:position")
-tracks/18/interp = 1
-tracks/18/loop_wrap = true
-tracks/18/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -494,7 +471,7 @@ length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/SFX/Cancel")
+tracks/0/path = NodePath("SFX/Cancel")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -512,7 +489,7 @@ length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/SFX/Confirm")
+tracks/0/path = NodePath("SFX/Confirm")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -714,7 +691,7 @@ length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/ControlBook/AnimationPlayer")
+tracks/0/path = NodePath("World/ControlBook/ControlBook/AnimationPlayer")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -728,7 +705,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ControlBook/SFX/Flip")
+tracks/1/path = NodePath("SFX/Flip")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -746,7 +723,7 @@ length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/ControlBook/AnimationPlayer")
+tracks/0/path = NodePath("World/ControlBook/ControlBook/AnimationPlayer")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -760,7 +737,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ControlBook/SFX/Flip")
+tracks/1/path = NodePath("SFX/Flip")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -999,6 +976,20 @@ tracks/7/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("World/PlayerSpawn/Player")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Deactivate"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_k2y4w"]
 resource_name = "select"
@@ -1006,7 +997,7 @@ length = 0.001
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/SFX/Select")
+tracks/0/path = NodePath("SFX/Select")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1025,34 +1016,22 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/PlayerSpawn/Player:process_mode")
+tracks/0/path = NodePath("World/PlayerSpawn/Player:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0333333),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [4, 0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("ControlBook/PlayerSpawn/Player:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 0, -6)]
 }
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("ControlBook/JumpStart/JumpStart")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("World/JumpStart/JumpStart")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0.0333333),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -1060,13 +1039,13 @@ tracks/2/keys = {
 "method": &"Activate"
 }]
 }
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath(".")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -1074,10 +1053,22 @@ tracks/3/keys = {
 "method": &"DisableProcessing"
 }]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MenuBase/ContentClip/Content/Control:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("MenuBase/ContentClip/Content/Control:visible")
+tracks/4/path = NodePath("MenuBase/Header:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -1089,19 +1080,19 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("ControlBook/PlayerSpawn/Player:visible")
+tracks/5/path = NodePath("MenuBase/HorizontalLine:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0.0333333),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("MenuBase/Header:visible")
+tracks/6/path = NodePath("MenuBase/Cursor:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -1113,7 +1104,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("MenuBase/HorizontalLine:visible")
+tracks/7/path = NodePath("MenuBase/NavigationButtons/Select:visible")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -1125,19 +1116,19 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("MenuBase/Cursor:visible")
+tracks/8/path = NodePath("MenuBase/NavigationButtons/Return:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("MenuBase/NavigationButtons/Select:visible")
+tracks/9/path = NodePath("MenuBase/NavigationButtons/Cancel:visible")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -1146,50 +1137,42 @@ tracks/9/keys = {
 "update": 1,
 "values": [false]
 }
-tracks/10/type = "value"
+tracks/10/type = "method"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("MenuBase/NavigationButtons/Return:visible")
+tracks/10/path = NodePath("World/PlayerSpawn/Player")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.0333333),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("MenuBase/NavigationButtons/Cancel:visible")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_pjjbd"]
 resource_name = "test_end"
 length = 0.8
-tracks/0/type = "value"
+tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ControlBook/PlayerSpawn/Player:process_mode")
+tracks/0/path = NodePath("World/PlayerSpawn/Player")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [0, 4]
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Deactivate"
+}]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".")
+tracks/1/path = NodePath("World/JumpEnd/JumpEnd")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -1197,13 +1180,13 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"DisableProcessing"
+"method": &"Activate"
 }]
 }
 tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("ControlBook/JumpEnd/JumpEnd")
+tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -1211,20 +1194,8 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"Activate"
+"method": &"DisableProcessing"
 }]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("ControlBook/PlayerSpawn/Player:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
 }
 
 [sub_resource type="Animation" id="Animation_q1gli"]
@@ -1356,7 +1327,7 @@ script = ExtResource("1_yejdm")
 cursor = NodePath("MenuBase/Cursor")
 cursorAnimator = NodePath("MenuBase/Cursor/AnimationPlayer")
 contentContainer = NodePath("MenuBase/ContentClip/Content")
-lockNode = NodePath("ControlBook/JumpStart/JumpStart")
+lockNode = NodePath("World/JumpStart/JumpStart")
 scrollBar = NodePath("MenuBase/ScrollBar/ScrollPosition")
 videoLabels = [NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/DisplayLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/WindowSizeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/FullscreenLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/FPSLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/VsyncLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/RenderScaleLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ResizeModeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/AntiAliasingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/BloomLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ShadowLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/PostProcessingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ReflectionLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/MotionBlurLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ScreenShakeLabel")]
 audioLabels = [NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MainLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MusicLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/SFXLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/VoiceLabel")]
@@ -1368,47 +1339,48 @@ animator = NodePath("AnimationPlayer")
 isProcessing = true
 metadata/_edit_lock_ = true
 
-[node name="ControlBook" type="Node3D" parent="." node_paths=PackedStringArray("pathParent", "Environment")]
-script = ExtResource("2_x1aix")
-Data = ExtResource("4_3wn11")
-InitialCameraSettings = ExtResource("3_jnp5r")
-pathParent = NodePath("Path")
-Environment = NodePath("Visuals/WorldEnvironment")
+[node name="SFX" type="Node" parent="."]
 
-[node name="SFX" type="Node" parent="ControlBook"]
-
-[node name="Open" type="AudioStreamPlayer" parent="ControlBook/SFX"]
+[node name="Open" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("5_boind")
 bus = &"SFX"
 
-[node name="Flipping" type="AudioStreamPlayer" parent="ControlBook/SFX"]
+[node name="Flipping" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("5_f4e4n")
 bus = &"SFX"
 
-[node name="Select" type="AudioStreamPlayer" parent="ControlBook/SFX"]
+[node name="Select" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("6_j7003")
 bus = &"SFX"
 
-[node name="Cancel" type="AudioStreamPlayer" parent="ControlBook/SFX"]
+[node name="Cancel" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("7_f15lq")
 bus = &"SFX"
 
-[node name="Confirm" type="AudioStreamPlayer" parent="ControlBook/SFX"]
+[node name="Confirm" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("8_xb0ie")
 bus = &"SFX"
 
-[node name="Flip" type="AudioStreamPlayer" parent="ControlBook/SFX"]
+[node name="Flip" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("7_0sy78")
 bus = &"SFX"
 
-[node name="Collision" parent="ControlBook" instance=ExtResource("5_w565g")]
+[node name="World" type="Node3D" parent="."]
+
+[node name="ControlBook" type="Node3D" parent="World" node_paths=PackedStringArray("pathParent", "Environment")]
+script = ExtResource("2_x1aix")
+Data = ExtResource("4_3wn11")
+pathParent = NodePath("Path")
+Environment = NodePath("Visuals/WorldEnvironment")
+
+[node name="Collision" parent="World/ControlBook" instance=ExtResource("5_w565g")]
 visible = false
 
-[node name="StaticBody3D" parent="ControlBook/Collision/Floor" index="0" groups=["floor"]]
+[node name="StaticBody3D" parent="World/ControlBook/Collision/Floor" index="0" groups=["floor"]]
 
-[node name="ControlBook" parent="ControlBook" instance=ExtResource("6_jppea")]
+[node name="ControlBook" parent="World/ControlBook" instance=ExtResource("6_jppea")]
 
-[node name="Skeleton3D" parent="ControlBook/ControlBook/BookRoot" index="0"]
+[node name="Skeleton3D" parent="World/ControlBook/ControlBook/BookRoot" index="0"]
 bones/0/rotation = Quaternion(-0.5, -0.5, -0.5, 0.5)
 bones/2/rotation = Quaternion(-0.707107, -1.48754e-08, -1.48754e-08, 0.707107)
 bones/3/rotation = Quaternion(0.707106, 1.72081e-08, 1.72081e-08, 0.707107)
@@ -1416,86 +1388,86 @@ bones/4/rotation = Quaternion(3.23117e-08, 0.707106, 0.707107, 5.3385e-08)
 bones/5/rotation = Quaternion(-0.707107, -1.48754e-08, -1.48754e-08, 0.707107)
 bones/6/rotation = Quaternion(-0.707107, 1.45739e-08, -1.45739e-08, 0.707107)
 
-[node name="obj_book01_Mesh_0001" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="0"]
+[node name="obj_book01_Mesh_0001" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="0"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0003" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="1"]
+[node name="obj_book01_Mesh_0003" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="1"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0006" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="2"]
+[node name="obj_book01_Mesh_0006" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="2"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0008" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="3"]
+[node name="obj_book01_Mesh_0008" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="3"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0009" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="4"]
+[node name="obj_book01_Mesh_0009" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="4"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0010" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="5"]
+[node name="obj_book01_Mesh_0010" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="5"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0011" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="6"]
+[node name="obj_book01_Mesh_0011" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="6"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0012" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="7"]
+[node name="obj_book01_Mesh_0012" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="7"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0013" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="8"]
+[node name="obj_book01_Mesh_0013" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="8"]
 layers = 2
 cast_shadow = 0
 
-[node name="obj_book01_Mesh_0014" parent="ControlBook/ControlBook/BookRoot/Skeleton3D" index="9"]
+[node name="obj_book01_Mesh_0014" parent="World/ControlBook/ControlBook/BookRoot/Skeleton3D" index="9"]
 layers = 2
 cast_shadow = 0
 
-[node name="Page1" parent="ControlBook/ControlBook/BookRoot" index="1" instance=ExtResource("7_37jow")]
+[node name="Page1" parent="World/ControlBook/ControlBook/BookRoot" index="1" instance=ExtResource("7_37jow")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.175, 0)
 
-[node name="PageMesh" parent="ControlBook/ControlBook/BookRoot/Page1" index="0"]
+[node name="PageMesh" parent="World/ControlBook/ControlBook/BookRoot/Page1" index="0"]
 layers = 2
 cast_shadow = 0
 blend_shapes/Flip = 0.5
 blend_shapes/Stretch = 1.0
 
-[node name="Page2" parent="ControlBook/ControlBook/BookRoot" index="2" instance=ExtResource("7_37jow")]
+[node name="Page2" parent="World/ControlBook/ControlBook/BookRoot" index="2" instance=ExtResource("7_37jow")]
 transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.575, 0)
 
-[node name="PageMesh" parent="ControlBook/ControlBook/BookRoot/Page2" index="0"]
+[node name="PageMesh" parent="World/ControlBook/ControlBook/BookRoot/Page2" index="0"]
 layers = 2
 cast_shadow = 0
 blend_shapes/Flip = 0.5
 blend_shapes/Stretch = 1.0
 
-[node name="Page3" parent="ControlBook/ControlBook/BookRoot" index="3" instance=ExtResource("7_37jow")]
+[node name="Page3" parent="World/ControlBook/ControlBook/BookRoot" index="3" instance=ExtResource("7_37jow")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.298, 0)
 visible = false
 
-[node name="PageMesh" parent="ControlBook/ControlBook/BookRoot/Page3" index="0"]
+[node name="PageMesh" parent="World/ControlBook/ControlBook/BookRoot/Page3" index="0"]
 layers = 2
 cast_shadow = 0
 blend_shapes/Flip = 0.5
 blend_shapes/Stretch = 1.0
 
-[node name="AnimationPlayer" parent="ControlBook/ControlBook" index="1"]
+[node name="AnimationPlayer" parent="World/ControlBook/ControlBook" index="1"]
 autoplay = "open"
 
-[node name="Path" type="Node3D" parent="ControlBook"]
+[node name="Path" type="Node3D" parent="World/ControlBook"]
 
-[node name="MainPath" type="Path3D" parent="ControlBook/Path"]
+[node name="MainPath" type="Path3D" parent="World/ControlBook/Path"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.2, 2)
 curve = SubResource("Curve3D_eqptd")
 
-[node name="Visuals" type="Node3D" parent="ControlBook"]
+[node name="Visuals" type="Node3D" parent="World/ControlBook"]
 
-[node name="EnvironmentLight" type="DirectionalLight3D" parent="ControlBook/Visuals"]
+[node name="EnvironmentLight" type="DirectionalLight3D" parent="World/ControlBook/Visuals"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
 light_color = Color(0.6, 0.6, 1, 1)
@@ -1504,12 +1476,12 @@ light_cull_mask = 2
 shadow_enabled = true
 directional_shadow_max_distance = 50.0
 
-[node name="CharacterLight" type="DirectionalLight3D" parent="ControlBook/Visuals"]
+[node name="CharacterLight" type="DirectionalLight3D" parent="World/ControlBook/Visuals"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
 light_cull_mask = 64
 
-[node name="Fog" type="GPUParticles3D" parent="ControlBook/Visuals"]
+[node name="Fog" type="GPUParticles3D" parent="World/ControlBook/Visuals"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -4, 4)
 layers = 32
 emitting = false
@@ -1522,38 +1494,42 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_xe8d5")
 draw_pass_1 = SubResource("QuadMesh_md2q0")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="ControlBook/Visuals"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World/ControlBook/Visuals"]
 environment = SubResource("Environment_xk4ou")
 
-[node name="PlayerSpawn" type="Node3D" parent="ControlBook"]
+[node name="PlayerSpawn" type="Node3D" parent="World"]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.9, 5, 0)
 script = ExtResource("4_g52h3")
 
-[node name="Player" parent="ControlBook/PlayerSpawn" node_paths=PackedStringArray("Camera") instance=ExtResource("16_f4s6v")]
-process_mode = 4
+[node name="Player" parent="World/PlayerSpawn" node_paths=PackedStringArray("Camera") instance=ExtResource("16_f4s6v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-visible = false
 Camera = NodePath("../Camera")
 
-[node name="Camera" parent="ControlBook/PlayerSpawn" instance=ExtResource("5_1klrf")]
+[node name="Camera" parent="World/PlayerSpawn" instance=ExtResource("5_1klrf")]
 
-[node name="JumpStart" type="Node3D" parent="ControlBook"]
+[node name="JumpStart" type="Node3D" parent="World"]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.9, 5, 6)
 
-[node name="JumpStart" type="Node3D" parent="ControlBook/JumpStart"]
+[node name="JumpStart" type="Node3D" parent="World/JumpStart"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.30645, 6)
 script = ExtResource("8_7asuc")
 jumpHeight = 2.0
 autoAlign = true
 
-[node name="JumpEnd" type="Node3D" parent="ControlBook"]
+[node name="JumpEnd" type="Node3D" parent="World"]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.9, 0.2, 0)
 
-[node name="JumpEnd" type="Node3D" parent="ControlBook/JumpEnd"]
+[node name="JumpEnd" type="Node3D" parent="World/JumpEnd"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.54972e-06, 2, 18)
 script = ExtResource("8_7asuc")
 jumpHeight = 15.0
 autoAlign = true
+
+[node name="Camera" type="Node3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 3)
+script = ExtResource("18_wt5wy")
+settings = ExtResource("3_jnp5r")
+UpdateEveryFrame = true
 
 [node name="MenuBase" type="Control" parent="."]
 layout_mode = 1
@@ -2363,19 +2339,19 @@ alignment = 2
 
 [node name="Select" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
 layout_mode = 2
-actionKey = "sys_select"
-inputKey = "button_jump"
+ActionKey = &"sys_select"
+inputKey = &"button_jump"
 
 [node name="Cancel" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
 layout_mode = 2
-actionKey = "sys_cancel"
-inputKey = "button_action"
+ActionKey = &"sys_cancel"
+inputKey = &"button_action"
 
 [node name="Return" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
 visible = false
 layout_mode = 2
-actionKey = "sys_return"
-inputKey = "button_pause"
+ActionKey = &"sys_return"
+inputKey = &"button_pause"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 callback_mode_process = 0
@@ -2392,11 +2368,11 @@ script = ExtResource("19_agawd")
 loopStartPosition = 30.264
 loopEndPosition = 95.0
 
-[connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="." method="EnableProcessing"]
-[connection signal="JumpFinished" from="ControlBook/JumpStart/JumpStart" to="." method="LockPlayer"]
+[connection signal="JumpFinished" from="World/JumpStart/JumpStart" to="." method="EnableProcessing"]
+[connection signal="JumpFinished" from="World/JumpStart/JumpStart" to="." method="LockPlayer"]
 
-[editable path="ControlBook/Collision"]
-[editable path="ControlBook/ControlBook"]
-[editable path="ControlBook/ControlBook/BookRoot/Page1"]
-[editable path="ControlBook/ControlBook/BookRoot/Page2"]
-[editable path="ControlBook/ControlBook/BookRoot/Page3"]
+[editable path="World/ControlBook/Collision"]
+[editable path="World/ControlBook/ControlBook"]
+[editable path="World/ControlBook/ControlBook/BookRoot/Page1"]
+[editable path="World/ControlBook/ControlBook/BookRoot/Page2"]
+[editable path="World/ControlBook/ControlBook/BookRoot/Page3"]

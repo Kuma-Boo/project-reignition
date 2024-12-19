@@ -37,6 +37,12 @@ public partial class JumpState : PlayerState
 
 	public override void EnterState()
 	{
+		if (Player.IsLockoutActive &&
+			Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump))
+		{
+			Player.RemoveLockoutData(Player.ActiveLockoutData);
+		}
+
 		if (Player.Skills.IsSpeedBreakActive)
 			Player.Skills.ToggleSpeedBreak();
 
@@ -47,6 +53,10 @@ public partial class JumpState : PlayerState
 		isShortenedJump = false;
 		isAccelerationJump = false;
 		isAccelerationJumpQueued = Player.ForceAccelerationJump;
+
+		// Decide accleration jump based on jump charge
+		if (!Player.ForceAccelerationJump && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+			isAccelerationJumpQueued = !Player.Skills.ConsumeJumpCharge();
 
 		Player.ForceAccelerationJump = false;
 		Player.IsOnGround = false;
@@ -67,7 +77,7 @@ public partial class JumpState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		if (!Input.IsActionPressed("button_jump"))
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && !Input.IsActionPressed("button_jump"))
 		{
 			// Check for acceleration jump
 			if (jumpTimer <= AccelerationJumpLength)
@@ -78,12 +88,13 @@ public partial class JumpState : PlayerState
 
 		ProcessMoveSpeed();
 		ProcessTurning();
-		UpdateVerticalSpeed();
+		ProcessGravity();
 		Player.ApplyMovement();
 		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
 		Player.CheckGround();
-		Player.CheckWall();
-		Player.CheckCeiling();
+		Player.CheckWall(Vector3.Zero, !isAccelerationJump);
+		if (Player.CheckCeiling())
+			return null;
 		Player.UpdateUpDirection();
 
 		if (Player.IsOnGround)
@@ -129,7 +140,7 @@ public partial class JumpState : PlayerState
 			Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, MaxAccelerationJumpTurnAmount);
 	}
 
-	private void UpdateVerticalSpeed()
+	protected override void ProcessGravity()
 	{
 		if (isShortenedJump && Player.VerticalSpeed > 0)
 		{
@@ -143,7 +154,7 @@ public partial class JumpState : PlayerState
 				StartAccelerationJump();
 		}
 
-		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
+		base.ProcessGravity();
 	}
 
 	private void StartAccelerationJump()

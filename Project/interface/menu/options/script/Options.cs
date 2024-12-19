@@ -185,15 +185,20 @@ public partial class Options : Menu
 
 	private void Select()
 	{
-		if (currentSubmenu == Submenus.Test) // Cancel test
+		if (currentSubmenu != Submenus.Test)
 		{
-			UnlockPlayer();
-			animator.Play("test_end");
-			currentSubmenu = Submenus.Control;
-			StageSettings.Player.Skills.DisableBreakSkills();
-		}
-		else
 			Confirm();
+			return;
+		}
+
+		if (Player.IsLaunching)
+			return;
+
+		// Cancel test
+		UnlockPlayer();
+		animator.Play("test_end");
+		currentSubmenu = Submenus.Control;
+		StageSettings.Player.Skills.DisableBreakSkills();
 	}
 
 	protected override void UpdateSelection()
