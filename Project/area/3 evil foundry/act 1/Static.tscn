@@ -1,9 +1,8 @@
-[gd_scene load_steps=63 format=3 uid="uid://wufpyrm8jour"]
+[gd_scene load_steps=67 format=3 uid="uid://wufpyrm8jour"]
 
 [ext_resource type="PackedScene" uid="uid://o4l6oimlm4qq" path="res://area/3 evil foundry/act 1/environment/collision/Collision.tscn" id="1_liyuu"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_q5jqm"]
-[ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/3 evil foundry/data/Environment.tres" id="2_imo2i"]
-[ext_resource type="Resource" uid="uid://dmv3a7tioyyl6" path="res://area/3 evil foundry/data/DialogLibrary.tres" id="3_6udtg"]
+[ext_resource type="Resource" path="res://area/3 evil foundry/data/DialogLibrary.tres" id="3_6udtg"]
 [ext_resource type="PackedScene" uid="uid://bo4ijrtd2ee3j" path="res://area/3 evil foundry/act 1/environment/01Opening.tscn" id="3_bb6ii"]
 [ext_resource type="PackedScene" uid="uid://b8raat7vo2t82" path="res://area/3 evil foundry/act 1/environment/02Hall.tscn" id="4_kqfa2"]
 [ext_resource type="PackedScene" uid="uid://bhpbwwtmjtg2t" path="res://area/3 evil foundry/act 1/environment/03Connection.tscn" id="5_wfrm4"]
@@ -41,15 +40,15 @@
 [ext_resource type="Curve3D" uid="uid://dhy43m5kqt3mx" path="res://area/3 evil foundry/act 1/environment/path/MiddlePath.tres" id="35_xnhgv"]
 [ext_resource type="Curve3D" uid="uid://tjilx005moco" path="res://area/3 evil foundry/act 1/environment/path/ElevatorAutomationPath.tres" id="36_cuwfc"]
 [ext_resource type="Resource" uid="uid://dtmbywgmb8yc7" path="res://area/3 evil foundry/act 1/camera/CloseHallCam.tres" id="36_g2b6g"]
-[ext_resource type="Resource" uid="uid://dlfc7qmh2pubk" path="res://area/3 evil foundry/act 1/camera/StaircaseCam.tres" id="36_gjknb"]
+[ext_resource type="Resource" path="res://area/3 evil foundry/act 1/camera/StaircaseCam.tres" id="36_gjknb"]
 [ext_resource type="Curve3D" uid="uid://bv0t8i8sfcb7q" path="res://area/3 evil foundry/act 1/environment/path/EndingPath.tres" id="37_dpldg"]
 [ext_resource type="Resource" uid="uid://deb2j8xspvlfq" path="res://area/3 evil foundry/act 1/camera/NarrowHallCam.tres" id="37_fhjrg"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="37_nle4i"]
 [ext_resource type="Resource" uid="uid://bst174qxx0cr6" path="res://area/3 evil foundry/act 1/camera/StaticCam.tres" id="38_3gwpp"]
 [ext_resource type="Resource" uid="uid://drgabk5njs1qx" path="res://area/3 evil foundry/act 1/camera/SpiralCam.tres" id="38_uh4ey"]
-[ext_resource type="Resource" uid="uid://nfpvaaas4rfq" path="res://area/3 evil foundry/act 1/camera/PitHallConnectionCam.tres" id="40_pn0hm"]
+[ext_resource type="Resource" path="res://area/3 evil foundry/act 1/camera/PitHallConnectionCam.tres" id="40_pn0hm"]
 [ext_resource type="Resource" uid="uid://baxr5jqxfm1du" path="res://area/3 evil foundry/act 1/camera/CrusherCam.tres" id="40_xc2mh"]
-[ext_resource type="Resource" uid="uid://e6q36ss8c12c" path="res://resource/preset/camera/common/CompletionThumbsUpCam.tres" id="41_14tqr"]
+[ext_resource type="Resource" path="res://resource/preset/camera/common/CompletionThumbsUpCam.tres" id="41_14tqr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h6yh5"]
 size = Vector3(20, 20, 5)
@@ -521,6 +520,54 @@ _data = {
 "demo3": SubResource("Animation_6r6ej")
 }
 
+[sub_resource type="Gradient" id="Gradient_b08sy"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.0340909, 0.503788, 0.897727, 1)
+colors = PackedColorArray(0, 0.00392157, 0, 1, 0.00884778, 0.0219422, 0.0080423, 1, 0.41, 0.41, 0.41, 1, 0.904192, 0.855356, 0.812669, 1, 1, 0.941333, 0.89, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_et1ty"]
+gradient = SubResource("Gradient_b08sy")
+
+[sub_resource type="Gradient" id="Gradient_663e5"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0.484848)
+colors = PackedColorArray(1, 0.583333, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_n41td"]
+gradient = SubResource("Gradient_663e5")
+
+[sub_resource type="Environment" id="Environment_8qchy"]
+ambient_light_source = 2
+ambient_light_color = Color(0.619608, 0.466667, 0.258824, 1)
+tonemap_exposure = 1.2
+tonemap_white = 1.2
+ssil_enabled = true
+ssil_radius = 10.0
+ssil_intensity = 1.5
+glow_enabled = true
+glow_levels/2 = 2.0
+glow_levels/3 = 0.3
+glow_levels/5 = 0.0
+glow_intensity = 0.2
+glow_strength = 2.0
+glow_bloom = 0.1
+glow_blend_mode = 4
+glow_hdr_threshold = 1.5
+glow_hdr_scale = 2.5
+glow_map = SubResource("GradientTexture1D_n41td")
+fog_enabled = true
+fog_light_color = Color(1, 0.55, 0, 1)
+fog_density = 0.0004
+fog_sky_affect = 0.0
+volumetric_fog_density = 0.1008
+volumetric_fog_albedo = Color(0, 0, 0, 1)
+volumetric_fog_emission = Color(0.466667, 0, 0, 1)
+volumetric_fog_anisotropy = 0.11
+volumetric_fog_length = 100.0
+volumetric_fog_temporal_reprojection_enabled = false
+adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture1D_et1ty")
+
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_q5jqm")
 InitialCameraSettings = ExtResource("36_g2b6g")
@@ -921,25 +968,29 @@ startEnabled = true
 [node name="Environment" type="Node3D" parent="Visuals"]
 
 [node name="Light" type="DirectionalLight3D" parent="Visuals/Environment"]
-transform = Transform3D(0.997296, -0.0722649, -0.0133753, 0.0560711, 0.63053, 0.774137, -0.0475094, -0.772793, 0.632877, 0, 6.68, -3.52118)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 6.68, -3.52118)
 light_energy = 1.4
-light_cull_mask = 4294967263
+light_cull_mask = 4294967199
 shadow_enabled = true
-shadow_opacity = 0.5
+shadow_opacity = 0.8
+directional_shadow_mode = 1
+directional_shadow_split_1 = 0.225
 directional_shadow_blend_splits = true
-directional_shadow_max_distance = 200.0
+directional_shadow_fade_start = 0.418
+directional_shadow_max_distance = 20.0
 
 [node name="BounceLight" type="DirectionalLight3D" parent="Visuals/Environment"]
 transform = Transform3D(0.92456, 0.252439, 0.285419, -0.0395726, -0.681394, 0.730847, 0.378977, -0.687006, -0.62, 0, 6.68, -3.52118)
-light_cull_mask = 4294967263
+light_color = Color(0.85098, 1, 0.839216, 1)
+light_cull_mask = 4294967199
 shadow_opacity = 0.5
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 200.0
 
 [node name="CharacterLighting" type="DirectionalLight3D" parent="Visuals/Environment"]
-transform = Transform3D(0.997296, -0.0722649, -0.0133753, 0.0560711, 0.63053, 0.774137, -0.0475094, -0.772793, 0.632877, 0, 6.68, -3.52118)
+transform = Transform3D(0.997296, -0.0722649, -0.013375, 0.0544675, 0.604603, 0.794663, -0.0493396, -0.793242, 0.606904, 0, 6.68, -3.52118)
 light_color = Color(0.733333, 0.572549, 0.454902, 1)
-light_cull_mask = 4293918752
+light_cull_mask = 4293918816
 shadow_opacity = 0.5
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 200.0
@@ -1695,7 +1746,7 @@ libraries = {
 [node name="BGM" parent="." instance=ExtResource("9_qe1e0")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("2_imo2i")
+environment = SubResource("Environment_8qchy")
 
 [node name="ScreenWarp" parent="." instance=ExtResource("10_t3vg2")]
 
