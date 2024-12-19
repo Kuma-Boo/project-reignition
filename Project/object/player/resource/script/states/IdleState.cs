@@ -56,7 +56,8 @@ public partial class IdleState : PlayerState
 				return jumpState;
 			}
 
-			if (Player.Controller.IsActionBufferActive)
+			if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+				Player.Controller.IsActionBufferActive)
 			{
 				Player.Controller.ResetActionBuffer();
 				return crouchState;
@@ -65,9 +66,10 @@ public partial class IdleState : PlayerState
 
 		if (!Player.CheckGround())
 			return fallState;
-
 		Player.CheckWall(CalculateWallCastDirection());
-		Player.CheckCeiling();
+		if (Player.CheckCeiling())
+			return null;
+
 		if (!Player.IsOnWall)
 		{
 			if (Player.IsLockoutActive && Player.ActiveLockoutData.overrideSpeed && !Mathf.IsZeroApprox(Player.ActiveLockoutData.speedRatio))

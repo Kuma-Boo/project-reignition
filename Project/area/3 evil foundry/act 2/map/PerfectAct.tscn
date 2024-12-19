@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://nge373il67yx"]
+[gd_scene load_steps=15 format=3 uid="uid://nge373il67yx"]
 
 [ext_resource type="PackedScene" uid="uid://2npi4fgvupgn" path="res://area/3 evil foundry/act 2/Static.tscn" id="1_ph722"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_748mw"]
@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://caxr4l7dgmca" path="res://area/3 evil foundry/object/scrap/ScrapMachineSupport.tscn" id="7_hm5kq"]
 [ext_resource type="PackedScene" uid="uid://bntrixspwpi2" path="res://object/enemy/golem/GolemMajin.tscn" id="8_rw3mt"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="9_n50kv"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="11_1nlvv"]
+[ext_resource type="Resource" uid="uid://e6q36ss8c12c" path="res://resource/preset/camera/common/CompletionThumbsUpCam.tres" id="12_kinet"]
 
 [sub_resource type="Curve3D" id="Curve3D_iit05"]
 _data = {
@@ -321,7 +323,7 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 34, 20
 curve = SubResource("Curve3D_iit05")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="PerfectAct/ObjectMap/GolemPath"]
-transform = Transform3D(0.999983, 0, -0.00103283, 0, 1, 0, 0.00103283, 0, 0.999983, -6.43009e-05, 0, 5.04932)
+transform = Transform3D(0.999983, 0, -0.00103286, 0, 1, 0, 0.00103286, 0, 0.999983, -6.43028e-05, 0, 5.04932)
 progress = 5.04932
 use_model_front = true
 cubic_interp = false
@@ -386,3 +388,10 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -43, 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/ObjectMap/Goal"]
 shape = SubResource("BoxShape3D_jbpsv")
+
+[node name="CompletionCamera" type="Node3D" parent="PerfectAct"]
+script = ExtResource("11_1nlvv")
+transitionTime = 1.0
+settings = ExtResource("12_kinet")
+
+[connection signal="LevelCompleted" from="Static" to="PerfectAct/CompletionCamera" method="Activate"]

@@ -16,8 +16,8 @@ public partial class HangingScrap : DestructableObject
 
 	public override void _PhysicsProcess(double delta)
 	{
-		ProcessDrop();
 		base._PhysicsProcess(delta);
+		ProcessDrop();
 	}
 
 	protected override void ProcessPlayerCollision()
@@ -61,7 +61,7 @@ public partial class HangingScrap : DestructableObject
 
 	private void ProcessDrop()
 	{
-		if (!isDropping)
+		if (isShattered || !isDropping)
 			return;
 
 		dropTimer = Mathf.MoveToward(dropTimer, 0, PhysicsManager.physicsDelta);

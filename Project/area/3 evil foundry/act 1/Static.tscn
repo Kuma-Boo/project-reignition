@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://wufpyrm8jour"]
+[gd_scene load_steps=63 format=3 uid="uid://wufpyrm8jour"]
 
 [ext_resource type="PackedScene" uid="uid://o4l6oimlm4qq" path="res://area/3 evil foundry/act 1/environment/collision/Collision.tscn" id="1_liyuu"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_q5jqm"]
@@ -49,6 +49,7 @@
 [ext_resource type="Resource" uid="uid://drgabk5njs1qx" path="res://area/3 evil foundry/act 1/camera/SpiralCam.tres" id="38_uh4ey"]
 [ext_resource type="Resource" uid="uid://nfpvaaas4rfq" path="res://area/3 evil foundry/act 1/camera/PitHallConnectionCam.tres" id="40_pn0hm"]
 [ext_resource type="Resource" uid="uid://baxr5jqxfm1du" path="res://area/3 evil foundry/act 1/camera/CrusherCam.tres" id="40_xc2mh"]
+[ext_resource type="Resource" uid="uid://e6q36ss8c12c" path="res://resource/preset/camera/common/CompletionThumbsUpCam.tres" id="41_14tqr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h6yh5"]
 size = Vector3(20, 20, 5)
@@ -1614,6 +1615,11 @@ settings = ExtResource("37_fhjrg")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_seqin")
 
+[node name="CompletionCamera" type="Node3D" parent="Triggers/Camera"]
+script = ExtResource("35_va14j")
+transitionTime = 1.0
+settings = ExtResource("41_14tqr")
+
 [node name="Path" type="Node3D" parent="Triggers"]
 
 [node name="StartingPath" parent="Triggers/Path" instance=ExtResource("33_1wgtf")]
@@ -1693,6 +1699,7 @@ environment = ExtResource("2_imo2i")
 
 [node name="ScreenWarp" parent="." instance=ExtResource("10_t3vg2")]
 
+[connection signal="LevelCompleted" from="." to="Triggers/Camera/CompletionCamera" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingMap/L-02" to="Visuals/02Hall" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/L-02" to="Visuals/02Hall" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/U-01" to="Visuals/01Opening" method="Deactivate"]
