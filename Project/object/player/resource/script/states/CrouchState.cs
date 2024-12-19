@@ -45,7 +45,8 @@ public partial class CrouchState : PlayerState
 		Player.MoveSpeed *= .5f;
 		Player.ApplyMovement();
 		Player.CheckGround();
-		Player.CheckCeiling();
+		if (Player.CheckCeiling())
+			return null;
 
 		if (!Player.IsOnGround)
 			return fallState;

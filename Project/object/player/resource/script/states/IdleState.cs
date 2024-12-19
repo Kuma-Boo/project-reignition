@@ -66,9 +66,10 @@ public partial class IdleState : PlayerState
 
 		if (!Player.CheckGround())
 			return fallState;
-
 		Player.CheckWall(CalculateWallCastDirection());
-		Player.CheckCeiling();
+		if (Player.CheckCeiling())
+			return null;
+
 		if (!Player.IsOnWall)
 		{
 			if (Player.IsLockoutActive && Player.ActiveLockoutData.overrideSpeed && !Mathf.IsZeroApprox(Player.ActiveLockoutData.speedRatio))

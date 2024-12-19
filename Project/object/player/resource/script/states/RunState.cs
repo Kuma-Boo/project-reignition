@@ -53,7 +53,8 @@ public partial class RunState : PlayerState
 		Player.ApplyMovement();
 		Player.CheckGround();
 		Player.CheckWall();
-		Player.CheckCeiling();
+		if (Player.CheckCeiling())
+			return null;
 
 		if (!Player.Skills.IsSpeedBreakActive)
 		{

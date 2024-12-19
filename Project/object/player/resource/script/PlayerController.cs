@@ -315,7 +315,7 @@ public partial class PlayerController : CharacterBody3D
 	private bool ValidateWallCast() => WallRaycastHit && WallRaycastHit.collidedObject.IsInGroup("wall");
 
 	/// <summary> Checks for ceilings and crushers. </summary>
-	public void CheckCeiling()
+	public bool CheckCeiling()
 	{
 		// Start from below the floor and cast through the player to ensure object detection
 		Vector3 castOrigin = GlobalPosition - (UpDirection * CollisionPadding);
@@ -331,7 +331,7 @@ public partial class PlayerController : CharacterBody3D
 		DebugManager.DrawRay(castOrigin, castVector, ceilingHit ? Colors.Red : Colors.White);
 
 		if (!ceilingHit)
-			return;
+			return false;
 
 		// Check if the player is being crushed
 		if (ceilingHit.collidedObject.IsInGroup("crusher") && GroundHit)
@@ -343,11 +343,11 @@ public partial class PlayerController : CharacterBody3D
 				ignoreInvincibility = true,
 			});
 
-			return;
+			return true;
 		}
 
 		if (!ceilingHit.collidedObject.IsInGroup("ceiling"))
-			return;
+			return false;
 
 		GlobalTranslate(ceilingHit.point - (CollisionPosition + (UpDirection * CollisionSize.Y)));
 
@@ -361,7 +361,7 @@ public partial class PlayerController : CharacterBody3D
 			{
 				float deltaAngle = ExtensionMethods.DeltaAngleRad(PathFollower.ForwardAngle, ExtensionMethods.CalculateForwardAngle(ceilingHit.normal, IsOnGround ? PathFollower.Up() : Vector3.Up));
 				if (deltaAngle > Mathf.Pi * .1f) // Wall isn't aligned to the path
-					return;
+					return false;
 
 				// Slide down the wall if it's aligned with the path direction
 				maxVerticalSpeed = -Mathf.Sin(ceilingAngle) * MoveSpeed;
@@ -370,6 +370,8 @@ public partial class PlayerController : CharacterBody3D
 
 		if (VerticalSpeed > maxVerticalSpeed)
 			VerticalSpeed = maxVerticalSpeed;
+
+		return false;
 	}
 
 	/// <summary> Orientates Root to world direction, then rotates the gimbal on the y-axis. </summary>
@@ -720,8 +722,6 @@ public partial class PlayerController : CharacterBody3D
 		if (IsTeleporting || IsDefeated) return false;
 		if (IsInvincible && !settings.ignoreInvincibility) return false;
 		if (ExternalController != null && !settings.ignoreMovementState) return false;
-
-		GD.Print("Knockback Started");
 
 		UpDirection = Vector3.Up;
 		knockbackState.Settings = settings;
