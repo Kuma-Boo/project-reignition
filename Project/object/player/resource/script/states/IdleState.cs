@@ -56,7 +56,8 @@ public partial class IdleState : PlayerState
 				return jumpState;
 			}
 
-			if (Player.Controller.IsActionBufferActive)
+			if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+				Player.Controller.IsActionBufferActive)
 			{
 				Player.Controller.ResetActionBuffer();
 				return crouchState;

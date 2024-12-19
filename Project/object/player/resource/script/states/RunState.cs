@@ -75,7 +75,8 @@ public partial class RunState : PlayerState
 				return jumpState;
 			}
 
-			if (Player.Controller.IsActionBufferActive)
+			if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+				Player.Controller.IsActionBufferActive)
 			{
 				Player.Controller.ResetActionBuffer();
 				return slideState;
