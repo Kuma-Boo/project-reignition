@@ -25,7 +25,7 @@ public partial class PlayerSkillController : Node3D
 	#region Skills
 	private SkillRing SkillRing => SaveManager.ActiveSkillRing;
 
-	public bool IsJumpCharged => JumpCharge >= 0.5f;
+	public bool IsJumpCharged => JumpCharge >= 0.25f;
 	public float JumpCharge { get; private set; }
 	public void ChargeJump()
 	{
