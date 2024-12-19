@@ -112,7 +112,7 @@ public partial class DestructableObject : Node3D
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (isShattered || !isInteractingWithPlayer) return;
+		if (!isInteractingWithPlayer) return;
 
 		ProcessPlayerCollision();
 	}
@@ -244,6 +244,7 @@ public partial class DestructableObject : Node3D
 		}
 
 		isInteractingWithPlayer = true;
+		ProcessPlayerCollision();
 	}
 
 	public void OnExited(Area3D a)
@@ -254,6 +255,9 @@ public partial class DestructableObject : Node3D
 
 	protected virtual void ProcessPlayerCollision()
 	{
+		if (isShattered)
+			return;
+
 		// Prioritize Jump Dash
 		if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Player.IsJumpDashOrHomingAttack)
 		{
