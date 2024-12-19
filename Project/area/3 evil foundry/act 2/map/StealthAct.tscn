@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://dqvmvjsdwynll"]
+[gd_scene load_steps=37 format=3 uid="uid://dqvmvjsdwynll"]
 
 [ext_resource type="PackedScene" uid="uid://2npi4fgvupgn" path="res://area/3 evil foundry/act 2/Static.tscn" id="1_xqp6r"]
 [ext_resource type="Resource" uid="uid://dn6cs0ku5r8i5" path="res://resource/level data/evil foundry/Act2Stealth.tres" id="2_lgr0y"]
@@ -25,6 +25,7 @@
 [ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="27_laehy"]
 [ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="30_1gckd"]
 [ext_resource type="PackedScene" uid="uid://b7ku38xcd8buw" path="res://object/enemy/majin/data/evil foundry/BlueMajin.tscn" id="31_2loxc"]
+[ext_resource type="Resource" uid="uid://e6q36ss8c12c" path="res://resource/preset/camera/common/CompletionThumbsUpCam.tres" id="31_kaspj"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="32_w0her"]
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="37_a7syv"]
 [ext_resource type="PackedScene" uid="uid://det4s2txdn4ka" path="res://area/3 evil foundry/object/Furnace.tscn" id="38_a4p2t"]
@@ -417,7 +418,7 @@ root = NodePath("BlueMajin2")
 animator = NodePath("")
 
 [node name="BlueMajin2" parent="StealthAct/Spiral/MovingMajin" instance=ExtResource("31_2loxc")]
-transform = Transform3D(1, -4.47035e-08, 2.98023e-08, -5.21541e-08, 1, -2.23517e-08, -4.17233e-07, 1.11759e-08, 1, 1.54044, -3.8147e-06, 0)
+transform = Transform3D(1, -5.96046e-08, 2.98023e-08, -5.21541e-08, 1, -2.23517e-08, -5.06639e-07, 2.6077e-08, 1, 1.54044, -3.8147e-06, 0)
 "Attack Settings/Attack Type" = 1
 
 [node name="BlueMajin3" parent="StealthAct/Spiral" instance=ExtResource("31_2loxc")]
@@ -867,6 +868,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.9999, 0, -85)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -2)
 shape = SubResource("BoxShape3D_egyd0")
 
+[node name="CompletionCamera" type="Node3D" parent="StealthAct"]
+script = ExtResource("4_fy42y")
+settings = ExtResource("31_kaspj")
+
+[connection signal="LevelCompleted" from="Static" to="StealthAct/CompletionCamera" method="Activate"]
 [connection signal="Activated" from="StealthAct/CullingMap/ElevatorUnload - SpiralLoad" to="StealthAct/Spiral" method="Activate"]
 [connection signal="Deactivated" from="StealthAct/CullingMap/ElevatorUnload - SpiralLoad" to="StealthAct/Spiral" method="Deactivate"]
 [connection signal="Activated" from="StealthAct/CullingMap/SpiralUnload" to="StealthAct/Spiral" method="Deactivate"]
