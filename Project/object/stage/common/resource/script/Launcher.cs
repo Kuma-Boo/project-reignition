@@ -135,8 +135,18 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	{
 		if (launchDirection == LaunchDirection.Forward)
 			return LaunchPoint.Forward();
-		else if (launchDirection == LaunchDirection.Flatten)
-			return LaunchPoint.Up().RemoveVertical().Normalized();
+
+		if (launchDirection == LaunchDirection.Flatten)
+		{
+			if (Mathf.Abs(LaunchPoint.Forward().Dot(Vector3.Up)) > .9f)
+			{
+				int sign = LaunchPoint.Forward().Y > -0.01f ? 1 : -1;
+				sign *= LaunchPoint.Up().Y > -0.01f ? 1 : -1;
+				return -(LaunchPoint.Up() * sign).RemoveVertical().Normalized();
+			}
+
+			return LaunchPoint.Forward().RemoveVertical().Normalized();
+		}
 
 		return LaunchPoint.Up();
 	}

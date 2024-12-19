@@ -14,6 +14,12 @@ public partial class LandState : PlayerState
 
 	public override void EnterState()
 	{
+		if (Player.IsLockoutActive &&
+			Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnLand))
+		{
+			Player.RemoveLockoutData(Player.ActiveLockoutData);
+		}
+
 		Player.VerticalSpeed = 0;
 		Player.UpdateOrientation();
 		Player.SnapToGround();
@@ -60,6 +66,9 @@ public partial class LandState : PlayerState
 	{
 		bool applyLandingBoost = (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompDash) && Player.IsStomping) ||
 			(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LandDash) && !Player.IsStomping);
+
+		if (Player.Controller.IsBrakeHeld())
+			applyLandingBoost = false;
 
 		if (!applyLandingBoost)
 			return;

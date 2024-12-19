@@ -9,17 +9,18 @@ public partial class GasTank : Area3D
 {
 	[Signal]
 	public delegate void OnStrikeEventHandler();
+	[Signal]
+	public delegate void DetonatedEventHandler();
 
 	/// <summary> Field is public so enemies can set this as needed. </summary>
-	[Export]
-	public float height;
+	[Export] public float height;
+	[Export] public bool globalEndPosition;
 	/// <summary> Field is public so enemies can set this as needed. </summary>
-	[Export]
-	public Vector3 endPosition;
+	[Export] public Vector3 endPosition;
 	/// <summary> Used if you want to target a particular object instead of a position (End position is recalculated on launch). </summary>
-	[Export]
-	public Node3D endTarget;
+	[Export] public Node3D endTarget;
 	private Vector3 startPosition;
+	[Export] public bool disableRespawning;
 
 	[ExportGroup("Components")]
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
@@ -34,9 +35,11 @@ public partial class GasTank : Area3D
 	private bool isPlayerInExplosion;
 	private SpawnData spawnData;
 	private readonly List<Enemy> enemyList = [];
+	private readonly List<GasTank> tankList = [];
 
+	public bool IsFalling { get; private set; }
 	public bool IsDetonated { get; private set; }
-	public bool IsTraveling { get; private set; }
+	public bool IsTravelling { get; private set; }
 	private float travelTime;
 	private readonly float VisualRotationSpeed = 10f;
 	private readonly float TimeScale = .8f;
@@ -45,7 +48,7 @@ public partial class GasTank : Area3D
 	public Basis TransformBasis => endTarget == null ? GlobalBasis : Basis.Identity;
 	private PlayerController Player => StageSettings.Player;
 	private Vector3 StartPosition => Engine.IsEditorHint() ? GlobalPosition : startPosition;
-	private Vector3 EndPosition => StartPosition + (TransformBasis * endPosition);
+	private Vector3 EndPosition => globalEndPosition ? endPosition : StartPosition + (TransformBasis * endPosition);
 
 	public override void _Ready()
 	{
@@ -54,7 +57,9 @@ public partial class GasTank : Area3D
 		Root = GetNodeOrNull<Node3D>(root);
 		Animator = GetNodeOrNull<AnimationPlayer>(animator);
 		InitializeSpawnData();
-		StageSettings.Instance.ConnectRespawnSignal(this);
+
+		if (!disableRespawning)
+			StageSettings.Instance.ConnectRespawnSignal(this);
 	}
 
 	public void InitializeSpawnData() => spawnData = new SpawnData(GetParent(), Transform);
@@ -63,10 +68,13 @@ public partial class GasTank : Area3D
 	{
 		Root.Rotation = Vector3.Zero;
 		travelTime = 0;
-		IsTraveling = false;
+		IsFalling = false;
+		IsTravelling = false;
 		Position = spawnData.spawnTransform.Origin;
 		IsDetonated = false;
 		Animator.Play("RESET");
+
+		BonusManager.instance.UnregisterEnemyComboExtender(this);
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -76,7 +84,13 @@ public partial class GasTank : Area3D
 		if (IsDetonated) return;
 		CheckInteraction();
 
-		if (!IsTraveling) return;
+		if (IsFalling)
+		{
+			ProcessFalling();
+			return;
+		}
+
+		if (!IsTravelling) return;
 
 		LaunchSettings launchSettings = GetLaunchSettings();
 
@@ -116,6 +130,7 @@ public partial class GasTank : Area3D
 		Animator.Play("strike");
 		Animator.Advance(0);
 		EmitSignal(SignalName.OnStrike);
+		BonusManager.instance.RegisterEnemyComboExtender(this);
 
 		Launch();
 	}
@@ -126,35 +141,67 @@ public partial class GasTank : Area3D
 			endPosition = endTarget.GlobalPosition - GlobalPosition;
 
 		travelTime = 0;
-		IsTraveling = true;
+		IsFalling = false;
+		IsTravelling = true;
 		Animator.Play("launch");
 		startPosition = GlobalPosition;
+	}
+
+	/// <summary> Causes a gas tank to fall straight down if it is inactive. </summary>
+	private void Fall()
+	{
+		if (IsTravelling || IsDetonated)
+			return;
+
+		IsFalling = true;
+		fallingVelocity = 0;
+		Animator.Play("launch");
+	}
+
+	private float fallingVelocity;
+	private void ProcessFalling()
+	{
+		fallingVelocity = Mathf.MoveToward(fallingVelocity, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
+		GlobalPosition += Vector3.Up * fallingVelocity * PhysicsManager.physicsDelta;
 	}
 
 	private void Detonate()
 	{
 		IsDetonated = true;
-		IsTraveling = false;
+		IsTravelling = false;
 		Animator.Play("detonate");
 
 		for (int i = 0; i < enemyList.Count; i++)
 			enemyList[i].TakeDamage(); // Damage all enemies in range
 
+		for (int i = 0; i < tankList.Count; i++)
+		{
+			tankList[i].Launch(); // Launch all gas tanks in range
+			if (BonusManager.instance.IsEnemyComboExtenderRegistered(this))
+				BonusManager.instance.RegisterEnemyComboExtender(tankList[i]);
+		}
+		BonusManager.instance.UnregisterEnemyComboExtender(this);
+
 		if (isPlayerInExplosion)
 			Player.StartKnockback();
 	}
 
-
 	private void OnEntered(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
-		isInteractingWithPlayer = true;
+		if (a.IsInGroup("player"))
+			isInteractingWithPlayer = true;
 	}
 
 	private void OnExited(Area3D a)
 	{
 		if (!a.IsInGroup("player")) return;
 		isInteractingWithPlayer = false;
+	}
+
+	private void OnBodyEntered(Node3D b)
+	{
+		if (b.IsInGroup("floor") && (IsTravelling || IsFalling))
+			Detonate();
 	}
 
 	private void OnExplosionEntered(Area3D a)
@@ -171,6 +218,13 @@ public partial class GasTank : Area3D
 			if (!enemyList.Contains(targetEnemy))
 				enemyList.Add(targetEnemy);
 		}
+
+		if (a is GasTank)
+		{
+			GasTank tank = a as GasTank;
+			if (a != this && !tankList.Contains(tank))
+				tankList.Add(tank);
+		}
 	}
 
 	private void OnExplosionExited(Area3D a)
@@ -185,6 +239,13 @@ public partial class GasTank : Area3D
 		{
 			Enemy targetEnemy = (a as EnemyHurtbox).enemy;
 			enemyList.Remove(targetEnemy);
+		}
+
+		if (a is GasTank)
+		{
+			GasTank tank = a as GasTank;
+			if (a != this)
+				tankList.Remove(tank);
 		}
 	}
 }

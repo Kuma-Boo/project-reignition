@@ -15,7 +15,7 @@ public partial class KnockbackState : PlayerState
 
 	public override void EnterState()
 	{
-		Player.Camera.LockonTarget = null;
+		Player.Camera.SetLockonTarget(null);
 
 		if (Player.Skills.IsSpeedBreakActive) // Disable speedbreak
 			Player.Skills.ToggleSpeedBreak();
@@ -23,10 +23,7 @@ public partial class KnockbackState : PlayerState
 		Player.IsKnockback = true;
 		Player.MovementAngle = Player.PathFollower.ForwardAngle; // Prevent being knocked sideways
 
-		/* REFACTOR TODO 
-		if (Settings.ignoreMovementState || MovementState == MovementStates.Normal)
-		{
-		*/
+		GD.Print("Started Knockback");
 		Player.Animator.StartHurt();
 		Player.Animator.ResetState();
 		PreviousSettings = Settings;
@@ -40,26 +37,22 @@ public partial class KnockbackState : PlayerState
 			Player.IsOnGround = false;
 			Player.VerticalSpeed = Runtime.CalculateJumpPower(Settings.overrideKnockbackHeight ? Settings.knockbackHeight : 1);
 		}
-		//}
 
 		if (Player.ExternalController != null)
 			return; // Only allow autorespawning when not using external controller
 
+		if (Player.IsInvincible)
+			return;
+		Player.StartInvincibility();
+
 		if (Settings.disableDamage)
 			return;
-
-		// Apply invincibility and drop rings
-		if (!Player.IsInvincible)
-		{
-			Player.StartInvincibility();
-
-			if (!Settings.disableDamage)
-				Player.TakeDamage();
-		}
+		Player.TakeDamage();
 	}
 
 	public override void ExitState()
 	{
+		GD.Print("Exited Knockback");
 		Player.IsKnockback = false;
 		Player.Animator.StopHurt();
 		Player.Animator.ResetState();
@@ -70,6 +63,7 @@ public partial class KnockbackState : PlayerState
 		Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, 0, DamageFriction * PhysicsManager.physicsDelta);
 		Player.VerticalSpeed -= Runtime.Gravity * PhysicsManager.physicsDelta;
 		Player.ApplyMovement();
+		Player.UpdateUpDirection();
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.DownCancel) &&
 			Player.Controller.IsJumpBufferActive)

@@ -1,7 +1,7 @@
 using Godot;
 using Godot.Collections;
 
-namespace Project.Gameplay.Hazards;
+namespace Project.Gameplay.Objects;
 
 /// <summary>
 /// Statemachine that progress through states based on a timer.

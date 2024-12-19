@@ -172,7 +172,7 @@ public partial class Enemy : Node3D
 	public virtual void UpdateLockon()
 	{
 		if (!IsDefeated)
-			Player.Camera.LockonTarget = Hurtbox;
+			Player.Camera.SetLockonTarget(Hurtbox);
 	}
 
 	public virtual void TakeDamage(int amount = -1)
@@ -192,8 +192,7 @@ public partial class Enemy : Node3D
 	protected virtual void Defeat()
 	{
 		currentHealth = 0;
-		Player.Camera.LockonTarget = null;
-		Player.Lockon.CallDeferred(CharacterLockon.MethodName.ResetLockonTarget);
+		Player.Camera.SetLockonTarget(null);
 		BonusManager.instance.AddEnemyChain();
 		StageSettings.Instance.UpdateScore(50 * maxHealth, StageSettings.MathModeEnum.Add); // Add points based on max health
 
@@ -207,7 +206,7 @@ public partial class Enemy : Node3D
 	/// <summary>
 	/// Spawns pearls. Call this somewhere in Defeat(), or from an AnimationPlayer.
 	/// </summary>
-	protected virtual void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, GlobalPosition, new Vector2(2, 1.5f), 1.5f);
+	protected virtual void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, Hurtbox != null ? Hurtbox.GlobalPosition : GlobalPosition, new Vector2(2, 1.5f), 1.5f);
 
 	protected bool IsHitboxEnabled { get; private set; }
 	protected void SetHitboxStatus(bool isEnabled, bool hurtboxOnly = false)

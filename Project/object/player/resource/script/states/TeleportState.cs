@@ -114,6 +114,11 @@ public partial class TeleportState : PlayerState
 		Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
 
 		Trigger.ApplyTeleport(); // Apply any signals/path changes
+
+		if (StopTeleportFX())
+			return;
+
+		currentState = States.Completed;
 	}
 
 	private bool StopTeleportFX()

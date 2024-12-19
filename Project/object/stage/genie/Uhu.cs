@@ -42,6 +42,7 @@ public partial class Uhu : PathFollow3D
 		currentPosition = currentPosition.SmoothDamp(targetPosition, ref positionVelocity, PositionSmoothing * PhysicsManager.physicsDelta);
 		root.Position = new(currentPosition.X, currentPosition.Y, 0);
 
+		UpdateRubberBanding();
 		UpdateRacePositions();
 	}
 
@@ -55,6 +56,40 @@ public partial class Uhu : PathFollow3D
 
 		targetPosition = Vector2.Up.Rotated(Mathf.Tau * Runtime.randomNumberGenerator.Randf());
 		targetPosition *= Runtime.randomNumberGenerator.RandfRange(0, IdlePositionRadius);
+	}
+
+	private float currentRubberBandRatio;
+	private float rubberBandVelocity;
+	private readonly float MaxRubberBandDistance = 30.0f;
+	private readonly float RubberBandFactor = 1f;
+	private readonly float RubberBandDeadZone = 10.0f;
+	private readonly float RubberBandEndDeadZone = 20.0f;
+	private readonly float RubberBandSmoothAmount = 0.4f;
+	private void UpdateRubberBanding()
+	{
+		float targetRubberBandingRatio = CalculateRubberBandingRatio();
+		currentRubberBandRatio = ExtensionMethods.SmoothDamp(currentRubberBandRatio, targetRubberBandingRatio, ref rubberBandVelocity, RubberBandSmoothAmount);
+		animator.SpeedScale = currentRubberBandRatio;
+	}
+
+	private float CalculateRubberBandingRatio()
+	{
+		if (!Stage.IsRaceActive)
+			return 1f;
+
+		if ((maxProgress - Progress) < RubberBandEndDeadZone) // Too close to the end; allow the player to catch up
+			return 1f;
+
+		float playerProgress = path.Curve.GetClosestOffset(path.ToLocal(StageSettings.Player.GlobalPosition));
+		float deltaProgress = Progress - playerProgress;
+		if (Mathf.Abs(deltaProgress) <= RubberBandDeadZone) // Too close to the player; disable rubber banding
+			return 1f;
+
+		if (playerProgress < Progress) // Uhu is ahead; don't slow down
+			return 1f;
+
+		// Uhu is playing catchup
+		return 1f - (RubberBandFactor * Mathf.Clamp(deltaProgress / MaxRubberBandDistance, -1f, 1f));
 	}
 
 	private void UpdateRacePositions()

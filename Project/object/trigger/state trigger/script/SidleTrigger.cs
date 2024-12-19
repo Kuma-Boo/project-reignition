@@ -39,6 +39,9 @@ public partial class SidleTrigger : Area3D
 		if (Player.DisableSidle)
 			return;
 
+		if (Player.IsTeleporting)
+			return;
+
 		if (!Player.IsOnGround)
 			return;
 
