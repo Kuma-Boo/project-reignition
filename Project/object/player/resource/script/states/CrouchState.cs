@@ -23,6 +23,13 @@ public partial class CrouchState : PlayerState
 	public override void ExitState()
 	{
 		Player.ChangeHitbox("RESET");
+
+		if (!Player.IsDrifting &&
+			Player.StateMachine.QueuedState != jumpState)
+		{
+			Player.Skills.ConsumeJumpCharge();
+		}
+
 		float inputStrength = Player.Controller.GetInputStrength();
 		if (!Mathf.IsZeroApprox(inputStrength) || Player.Skills.IsSpeedBreakActive) // Transition into moving state
 		{
@@ -38,6 +45,7 @@ public partial class CrouchState : PlayerState
 		Player.MoveSpeed *= .5f;
 		Player.ApplyMovement();
 		Player.CheckGround();
+		Player.CheckCeiling();
 
 		if (!Player.IsOnGround)
 			return fallState;

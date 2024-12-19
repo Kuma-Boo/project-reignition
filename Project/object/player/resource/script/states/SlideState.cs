@@ -89,6 +89,7 @@ public partial class SlideState : PlayerState
 		Player.AddSlopeSpeed(true);
 		Player.ApplyMovement();
 		Player.CheckWall();
+		Player.CheckCeiling();
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideExp))
 			Player.Skills.UpdateSoulSlide();
