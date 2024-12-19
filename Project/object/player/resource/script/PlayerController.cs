@@ -723,6 +723,7 @@ public partial class PlayerController : CharacterBody3D
 
 		GD.Print("Knockback Started");
 
+		UpDirection = Vector3.Up;
 		knockbackState.Settings = settings;
 		StateMachine.ChangeState(knockbackState);
 		return true;

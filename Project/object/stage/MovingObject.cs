@@ -205,7 +205,7 @@ public partial class MovingObject : Node3D
 		if (IsMovementInvalid()) return; // No movement
 		if (isPaused && !smoothPausing) return;
 
-		if (smoothPausing)
+		if (smoothPausing || StageSettings.Player.IsInvincible)
 			TimeScale = Mathf.Lerp(TimeScale, isPaused ? 0 : 1, PauseSmoothing);
 
 		currentTime += PhysicsManager.physicsDelta * Mathf.Sign(cycleLength) * TimeScale;
