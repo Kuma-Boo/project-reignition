@@ -48,6 +48,8 @@ public partial class SidleState : PlayerState
 	/// <summary> How long does the recovery take? </summary>
 	private const float RecoveryLength = .84f;
 
+	private readonly StringName JumpAction = "action_jump";
+
 	public override void EnterState()
 	{
 		velocity = 0;
@@ -178,6 +180,10 @@ public partial class SidleState : PlayerState
 		cycleTimer = 0;
 
 		Player.Animator.SidleDamage();
+
+		HeadsUpDisplay.Instance.SetPrompt(null, 0);
+		HeadsUpDisplay.Instance.SetPrompt(JumpAction, 1);
+		HeadsUpDisplay.Instance.ShowPrompts();
 	}
 
 	/// <summary> Processes player when being damaged. </summary>
@@ -200,6 +206,7 @@ public partial class SidleState : PlayerState
 					Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 					Player.Effect.PlayVoice("grunt");
 					Player.Animator.SidleRecovery();
+					HeadsUpDisplay.Instance.HidePrompts();
 				}
 				break;
 
