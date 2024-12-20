@@ -6,7 +6,7 @@ uniform sampler2D albedo : source_color;
 
 const float GLOW_SPEED = 5.0;
 const float GLOW_STRENGTH = 4.0;
-const float GLOW_BIAS = 3.0;
+const float GLOW_BIAS = 20.0;
 
 void fragment()
 {

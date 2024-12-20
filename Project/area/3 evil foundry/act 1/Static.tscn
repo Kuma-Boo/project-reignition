@@ -92,7 +92,7 @@ gradient = SubResource("Gradient_663e5")
 [sub_resource type="Environment" id="Environment_8qchy"]
 ambient_light_source = 2
 ambient_light_color = Color(0.619608, 0.466667, 0.258824, 1)
-tonemap_exposure = 1.2
+tonemap_exposure = 1.4
 tonemap_white = 1.2
 ssil_enabled = true
 ssil_radius = 10.0
@@ -101,6 +101,7 @@ glow_enabled = true
 glow_levels/2 = 2.0
 glow_levels/3 = 0.3
 glow_levels/5 = 0.0
+glow_levels/7 = 0.01
 glow_intensity = 0.2
 glow_strength = 2.0
 glow_bloom = 0.1
@@ -110,15 +111,20 @@ glow_hdr_scale = 2.5
 glow_map = SubResource("GradientTexture1D_n41td")
 fog_enabled = true
 fog_light_color = Color(1, 0.55, 0, 1)
-fog_density = 0.0004
+fog_density = 0.0005
 fog_sky_affect = 0.0
+fog_height = -59.54
+fog_height_density = 0.003
 volumetric_fog_density = 0.1008
 volumetric_fog_albedo = Color(0, 0, 0, 1)
 volumetric_fog_emission = Color(0.466667, 0, 0, 1)
 volumetric_fog_anisotropy = 0.11
 volumetric_fog_length = 100.0
+volumetric_fog_sky_affect = 0.0
 volumetric_fog_temporal_reprojection_enabled = false
 adjustment_enabled = true
+adjustment_brightness = 1.1
+adjustment_saturation = 0.9
 adjustment_color_correction = SubResource("GradientTexture1D_et1ty")
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent")]
@@ -519,7 +525,6 @@ startEnabled = true
 
 [node name="Light" type="DirectionalLight3D" parent="Visuals/Environment"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 6.68, -3.52118)
-light_energy = 1.4
 light_cull_mask = 4294967199
 shadow_enabled = true
 shadow_opacity = 0.8
@@ -532,6 +537,7 @@ directional_shadow_max_distance = 20.0
 [node name="BounceLight" type="DirectionalLight3D" parent="Visuals/Environment"]
 transform = Transform3D(0.92456, 0.252439, 0.285419, -0.0395726, -0.681394, 0.730847, 0.378977, -0.687006, -0.62, 0, 6.68, -3.52118)
 light_color = Color(0.85098, 1, 0.839216, 1)
+light_energy = 0.5
 light_cull_mask = 4294967199
 shadow_opacity = 0.5
 directional_shadow_blend_splits = true
