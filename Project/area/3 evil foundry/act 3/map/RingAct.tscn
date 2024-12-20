@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bb6wcbrkyex8p"]
+[gd_scene load_steps=33 format=3 uid="uid://bb6wcbrkyex8p"]
 
 [ext_resource type="PackedScene" uid="uid://sap50uvjitma" path="res://area/3 evil foundry/act 3/Static.tscn" id="1_gtt8y"]
 [ext_resource type="Resource" uid="uid://b0gigm6bbv35g" path="res://resource/level data/evil foundry/Act3Ring.tres" id="2_plufy"]
@@ -22,10 +22,125 @@
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="17_wv4oa"]
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="18_nu02a"]
 [ext_resource type="PackedScene" uid="uid://61g1iq7igxi" path="res://area/3 evil foundry/object/Fan.tscn" id="19_0tehk"]
+[ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="23_mp3n2"]
+[ext_resource type="PackedScene" uid="uid://bntrixspwpi2" path="res://object/enemy/golem/GolemMajin.tscn" id="24_qx33a"]
+[ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="25_h0vns"]
 
 [sub_resource type="Animation" id="Animation_gcx7a"]
 resource_name = "event"
 length = 4.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Door1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Door2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Door3")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Door4")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Door5")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Door6")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(2.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Door7")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(3.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Door8")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(3.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_kdbck"]
 _data = {
@@ -84,6 +199,19 @@ tracks/2/keys = {
 _data = {
 "event": SubResource("Animation_6u27i")
 }
+
+[sub_resource type="Curve" id="Curve_2nsi1"]
+min_value = -2.0
+max_value = 0.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.4, 0), 0.0, -2.33333, 0, 1, Vector2(1, -1.4), -2.33333, 0.0, 1, 0]
+point_count = 3
+
+[sub_resource type="Curve3D" id="Curve3D_dwyrv"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 2, 0, 0, -2, -1, 0, 0, 0, 0, 2, 0, 0, -2, -1, 0, -5, 0, 0, -2, 0, 0, 2, 1, 0, -5, 0, 0, -2, 0, 0, 0, 1, 0, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
 
 [node name="Stage" type="Node"]
 
@@ -560,6 +688,7 @@ Movement/Angle = 90.0
 startPaused = true
 smoothPausing = true
 root = NodePath("BlueMajin")
+animator = NodePath("")
 
 [node name="BlueMajin" parent="FurnaceHallway/SpinningMajin" instance=ExtResource("15_ywtx0")]
 
@@ -596,10 +725,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 [node name="Child05" parent="FurnaceHallway/Grindrail/Rings7" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
-[node name="Spiral" type="Node3D" parent="."]
-
-[node name="Ringsline9" type="Node3D" parent="Spiral"]
-transform = Transform3D(-0.325766, 0, 0.94545, 0, 1, 0, -0.94545, 0, -0.325766, -455.385, -29.978, -60.8047)
+[node name="Ringsline9" type="Node3D" parent="FurnaceHallway"]
+transform = Transform3D(-0.325766, 0, 0.94545, 0, 1, 0, -0.94545, 0, -0.325766, -95.385, 0.0219994, 59.1953)
 script = ExtResource("4_h3103")
 Generate = false
 Source = ExtResource("5_s3r1f")
@@ -612,32 +739,32 @@ Spacing = 2.1
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="Spiral/Ringsline9" instance=ExtResource("5_s3r1f")]
+[node name="Child01" parent="FurnaceHallway/Ringsline9" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25589, -0.168909, -1.32367)
 
-[node name="Child02" parent="Spiral/Ringsline9" instance=ExtResource("5_s3r1f")]
+[node name="Child02" parent="FurnaceHallway/Ringsline9" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.551025, -0.458015, -3.47702)
 
-[node name="Child03" parent="Spiral/Ringsline9" instance=ExtResource("5_s3r1f")]
+[node name="Child03" parent="FurnaceHallway/Ringsline9" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.619629, -0.797314, -5.64307)
 
-[node name="Child04" parent="Spiral/Ringsline9" instance=ExtResource("5_s3r1f")]
+[node name="Child04" parent="FurnaceHallway/Ringsline9" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.457443, -1.18273, -7.79611)
 
-[node name="Child05" parent="Spiral/Ringsline9" instance=ExtResource("5_s3r1f")]
+[node name="Child05" parent="FurnaceHallway/Ringsline9" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0665741, -1.60877, -9.90985)
 
-[node name="Child06" parent="Spiral/Ringsline9" instance=ExtResource("5_s3r1f")]
+[node name="Child06" parent="FurnaceHallway/Ringsline9" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.545471, -2.06905, -11.9601)
 
-[node name="Child07" parent="Spiral/Ringsline9" instance=ExtResource("5_s3r1f")]
+[node name="Child07" parent="FurnaceHallway/Ringsline9" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.36719, -2.55672, -13.9253)
 
-[node name="Child08" parent="Spiral/Ringsline9" instance=ExtResource("5_s3r1f")]
+[node name="Child08" parent="FurnaceHallway/Ringsline9" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.38469, -3.06485, -15.787)
 
-[node name="Pearlsline" type="Node3D" parent="Spiral"]
-transform = Transform3D(-0.999329, 0, -0.0366262, 0, 1, 0, 0.0366262, 0, -0.999329, -474.11, -36.7918, -40.2347)
+[node name="Pearlsline" type="Node3D" parent="FurnaceHallway"]
+transform = Transform3D(-0.999329, 0, -0.0366262, 0, 1, 0, 0.0366262, 0, -0.999329, -114.11, -6.7918, 79.7653)
 script = ExtResource("4_h3103")
 Generate = false
 Source = ExtResource("16_qvx17")
@@ -650,71 +777,71 @@ Spacing = 1.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child01" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0254822, -0.262512, -1.20278)
 
-[node name="Child02" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child02" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.131805, -0.589268, -2.58231)
 
-[node name="Child03" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child03" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36026, -0.925919, -3.94877)
 
-[node name="Child04" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child04" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.702057, -1.27036, -5.29384)
 
-[node name="Child05" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child05" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.14847, -1.6208, -6.6104)
 
-[node name="Child06" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child06" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6911, -1.97588, -7.89278)
 
-[node name="Child07" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child07" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.32257, -2.33448, -9.13611)
 
-[node name="Child08" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child08" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.03598, -2.69574, -10.3362)
 
-[node name="Child09" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child09" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.82547, -3.05895, -11.4891)
 
-[node name="Child10" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child10" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.68564, -3.42356, -12.5912)
 
-[node name="Child11" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child11" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.61194, -3.78907, -13.6386)
 
-[node name="Child12" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child12" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.60022, -4.15502, -14.6274)
 
-[node name="Child13" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child13" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.64673, -4.52096, -15.553)
 
-[node name="Child14" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child14" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.74792, -4.8864, -16.4106)
 
-[node name="Child15" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child15" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.90039, -5.25081, -17.1946)
 
-[node name="Child16" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child16" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.1003, -5.61348, -17.8986)
 
-[node name="Child17" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child17" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.344, -5.97355, -18.5156)
 
-[node name="Child18" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child18" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.6265, -6.32994, -19.0377)
 
-[node name="Child19" parent="Spiral/Pearlsline" instance=ExtResource("16_qvx17")]
+[node name="Child19" parent="FurnaceHallway/Pearlsline" instance=ExtResource("16_qvx17")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.9421, -6.68122, -19.4564)
 
-[node name="Grindrail" parent="Spiral" instance=ExtResource("9_fmilg")]
-transform = Transform3D(-0.00312413, 0, 0.999995, 0, 1, 0, -0.999995, 0, -0.00312413, -462.202, -59.7063, -59.6767)
+[node name="Grindrail2" parent="FurnaceHallway" instance=ExtResource("9_fmilg")]
+transform = Transform3D(-0.00312413, 0, 0.999995, 0, 1, 0, -0.999995, 0, -0.00312413, -102.202, -29.7063, 60.3233)
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
 collider = NodePath("")
 
-[node name="Rings" type="Node3D" parent="Spiral/Grindrail"]
+[node name="Rings" type="Node3D" parent="FurnaceHallway/Grindrail2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -10)
 script = ExtResource("4_h3103")
 Generate = false
@@ -726,33 +853,32 @@ Spacing = 2.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="Spiral/Grindrail/Rings" instance=ExtResource("5_s3r1f")]
+[node name="Child01" parent="FurnaceHallway/Grindrail2/Rings" instance=ExtResource("5_s3r1f")]
 
-[node name="Child02" parent="Spiral/Grindrail/Rings" instance=ExtResource("5_s3r1f")]
+[node name="Child02" parent="FurnaceHallway/Grindrail2/Rings" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
-[node name="Child03" parent="Spiral/Grindrail/Rings" instance=ExtResource("5_s3r1f")]
+[node name="Child03" parent="FurnaceHallway/Grindrail2/Rings" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 
-[node name="Child04" parent="Spiral/Grindrail/Rings" instance=ExtResource("5_s3r1f")]
+[node name="Child04" parent="FurnaceHallway/Grindrail2/Rings" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
-[node name="Child05" parent="Spiral/Grindrail/Rings" instance=ExtResource("5_s3r1f")]
+[node name="Child05" parent="FurnaceHallway/Grindrail2/Rings" instance=ExtResource("5_s3r1f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
-[node name="GreenMajin5" parent="Spiral" instance=ExtResource("8_ujsjf")]
-transform = Transform3D(0.0138924, 0, 0.999904, 0, 1, 0, -0.999904, 0, 0.0138924, -510.519, -59.3801, -59.5837)
+[node name="GreenMajin6" parent="FurnaceHallway" instance=ExtResource("8_ujsjf")]
+transform = Transform3D(0.0138924, 0, 0.999904, 0, 1, 0, -0.999904, 0, 0.0138924, -150.519, -29.3801, 60.4163)
 
 [node name="FanHall" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -475, -60, -60)
 
-[node name="Fan3" parent="FanHall" instance=ExtResource("17_w10kd")]
+[node name="Fan1" parent="FanHall" instance=ExtResource("17_w10kd")]
 transform = Transform3D(0.99863, 0, 0.052336, 0, 1, 0, -0.052336, 0, 0.99863, -5, 4, -63.5)
 rotationTime = 24.0
 
 [node name="Grindrail3" parent="FanHall" instance=ExtResource("10_nq6tn")]
 transform = Transform3D(0.999796, -1.88457e-05, -0.0201916, -0.00101928, 0.998677, -0.0514021, 0.0201659, 0.0514122, 0.998474, -6.071, 1.64848, -72.6021)
-rail = NodePath("../Grindrail/Path3D")
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
@@ -785,80 +911,82 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
 [node name="SpikeGroup1" type="Node3D" parent="FanHall"]
-transform = Transform3D(-0.0490736, 0.0636204, -0.996767, 0.0522383, 0.996767, 0.0610485, 0.997428, -0.0490736, -0.0522383, -7, 3, -116)
+transform = Transform3D(-0.996599, 0.0636988, 0.0522643, 0.0609649, 0.996767, -0.052336, -0.0554291, -0.0489717, -0.997261, -4.70743, 2.85959, -115.88)
 
 [node name="SpikePanel" parent="FanHall/SpikeGroup1" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel2" parent="FanHall/SpikeGroup1" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel3" parent="FanHall/SpikeGroup1" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel4" parent="FanHall/SpikeGroup1" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikeGroup2" type="Node3D" parent="FanHall"]
-transform = Transform3D(-0.819155, 0.138761, -0.55654, 0, 0.970296, 0.241922, 0.573579, 0.198171, -0.794821, 6.94435, -1.47581, -151.079)
+transform = Transform3D(-0.556541, 0.138761, 0.819153, 0.241923, 0.970296, 0, -0.794823, 0.198171, -0.573577, 8.22441, -2.03223, -149.251)
 
 [node name="SpikePanel" parent="FanHall/SpikeGroup2" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, -3.72529e-09, 1.86265e-09, 1.49836e-10, 1, 0, -1.85661e-09, 0, 1, 0, 3.8147e-06, -3.8147e-06)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel2" parent="FanHall/SpikeGroup2" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel3" parent="FanHall/SpikeGroup2" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel4" parent="FanHall/SpikeGroup2" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikeGroup3" type="Node3D" parent="FanHall"]
-transform = Transform3D(-0.999397, 0.00121797, -0.0348784, 0, 0.999392, 0.0348997, 0.0348997, 0.0348783, -0.998789, 25, 0.09, -157.166)
+transform = Transform3D(-0.0348784, 0.00121797, 0.999398, 0.0348997, 0.999392, 0, -0.998788, 0.0348783, -0.0348997, 25, 0, -155)
 
 [node name="SpikePanel" parent="FanHall/SpikeGroup3" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.5
 stateLengths = PackedFloat32Array(0.2, 0, 0.5)
 
 [node name="SpikePanel2" parent="FanHall/SpikeGroup3" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.5
 stateLengths = PackedFloat32Array(0.2, 0, 0.5)
 
 [node name="SpikePanel3" parent="FanHall/SpikeGroup3" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 5.96046e-08, -2.68221e-07, 6.70552e-08, 0.999999, -8.85339e-08, 2.79397e-08, 4.62751e-08, 0.999999, 0, 0, -3)
+transform = Transform3D(1, 5.96046e-08, -2.68221e-07, 6.70552e-08, 0.999999, -8.85339e-08, 2.79397e-08, 4.62751e-08, 0.999999, -0.75, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.5
 stateLengths = PackedFloat32Array(0.2, 0, 0.5)
 
 [node name="SpikePanel4" parent="FanHall/SpikeGroup3" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 1.86265e-08, -6.33299e-08, 4.09782e-08, 1, -4.40632e-08, 1.86265e-09, 4.47035e-08, 1, 0, 0, -4.5)
+transform = Transform3D(1, 1.86265e-08, -6.33299e-08, 4.09782e-08, 1, -4.40632e-08, 1.86265e-09, 4.47035e-08, 1, -2.25, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.5
 stateLengths = PackedFloat32Array(0.2, 0, 0.5)
@@ -868,7 +996,7 @@ transform = Transform3D(0.0132466, 0, -0.999912, 0, 1, 0, 0.999912, 0, 0.0132466
 height = 4.0
 endPosition = Vector3(0, 1, -21)
 
-[node name="Fan" parent="FanHall" instance=ExtResource("19_0tehk")]
+[node name="Fan2" parent="FanHall" instance=ExtResource("19_0tehk")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 44, 2, -155)
 rotationTime = 10.0
 
@@ -882,6 +1010,7 @@ Movement/Distance = 3.0
 Movement/Angle = 90.0
 "Vertical Orientation" = false
 root = NodePath("BlueMajin")
+animator = NodePath("")
 
 [node name="BlueMajin" parent="FanHall/MovingMajin" instance=ExtResource("15_ywtx0")]
 
@@ -901,63 +1030,55 @@ animator = NodePath("")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05597, 0, 0)
 
 [node name="SpikeGroup4" type="Node3D" parent="FanHall"]
-transform = Transform3D(-1.00001, 0, -8.74234e-08, 0, 1, 0, 8.74233e-08, 0, -1.00001, 70.5767, -2.96683, -157.283)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 70.5767, -2.96683, -154.983)
 
 [node name="SpikePanel" parent="FanHall/SpikeGroup4" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 1.86265e-09, -1.86265e-09, 1, -1.22236e-09, 0, 5.23869e-10, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 1.86265e-09, -1.86265e-09, 1, -1.22236e-09, 0, 5.23869e-10, 1, 2.25, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel2" parent="FanHall/SpikeGroup4" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 1.86265e-09, -1.86265e-09, 1, -1.22236e-09, 0, 5.23869e-10, 1, 0, 7.62939e-06, -1.5)
+transform = Transform3D(1, 0, 1.86265e-09, -1.86265e-09, 1, -1.22236e-09, 0, 5.23869e-10, 1, 0.75, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel3" parent="FanHall/SpikeGroup4" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 1.86265e-09, -1.86265e-09, 1, -1.22236e-09, 0, 5.23869e-10, 1, 0, 7.62939e-06, -3)
+transform = Transform3D(1, 0, 1.86265e-09, -1.86265e-09, 1, -1.22236e-09, 0, 5.23869e-10, 1, -0.75, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel4" parent="FanHall/SpikeGroup4" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 1.86265e-09, -1.86265e-09, 1, -1.22236e-09, 0, 5.23869e-10, 1, 0, 7.62939e-06, -4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel5" parent="FanHall/SpikeGroup4" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 1.86265e-09, -1.86265e-09, 1, -1.22236e-09, 0, 5.23869e-10, 1, -1.5, 7.62939e-06, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 1.5)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
-animator = NodePath("../SpikePanel/SpikePanel/AnimationPlayer")
-timer = NodePath("../SpikePanel/Timer")
 
 [node name="SpikePanel6" parent="FanHall/SpikeGroup4" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 1.86265e-09, -1.86265e-09, 1, -1.22236e-09, 0, 5.23869e-10, 1, -1.5, 7.62939e-06, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 1.5)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
-animator = NodePath("../SpikePanel2/SpikePanel/AnimationPlayer")
-timer = NodePath("../SpikePanel2/Timer")
 
 [node name="SpikePanel7" parent="FanHall/SpikeGroup4" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 1.86265e-09, -1.86265e-09, 1, -1.22236e-09, 0, 5.23869e-10, 1, -1.5, 0, -2.99994)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 1.5)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
-animator = NodePath("../SpikePanel3/SpikePanel/AnimationPlayer")
-timer = NodePath("../SpikePanel3/Timer")
 
 [node name="SpikePanel8" parent="FanHall/SpikeGroup4" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 1.86265e-08, -5.96046e-08, 3.72529e-08, 1, -4.66825e-08, 0, 4.49363e-08, 1, -1.5, 7.62939e-06, -4.49994)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, 1.5)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
-animator = NodePath("../SpikePanel4/SpikePanel/AnimationPlayer")
-timer = NodePath("../SpikePanel4/Timer")
 
 [node name="Grindrail" parent="FanHall" instance=ExtResource("11_owl4c")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 75.098, -2.6743, -156.898)
@@ -1037,35 +1158,327 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 93, -2
 [node name="GreenMajin3" parent="FanHall" instance=ExtResource("8_ujsjf")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 106, -2, -155)
 
-[node name="Fan2" parent="FanHall" instance=ExtResource("17_w10kd")]
+[node name="Fan3" parent="FanHall" instance=ExtResource("17_w10kd")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 119.189, 0, -155)
 rotationTime = 2.0
 
 [node name="SpikeGroup5" type="Node3D" parent="FanHall"]
-transform = Transform3D(-0.861286, -0.0905244, -0.500004, -0.104529, 0.994523, 0, 0.497264, 0.0522643, -0.866031, 157.883, 1.735, -194.041)
+transform = Transform3D(-0.500003, -0.0905244, 0.861287, 0, 0.994523, 0.104529, -0.86603, 0.0522643, -0.497264, 158.983, 1.735, -192.136)
 
 [node name="SpikePanel" parent="FanHall/SpikeGroup5" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, -3.72529e-09, 1.86265e-09, -3.72529e-09, 1, -8.03266e-09, 0, -8.73115e-10, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel2" parent="FanHall/SpikeGroup5" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel3" parent="FanHall/SpikeGroup5" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel4" parent="FanHall/SpikeGroup5" instance=ExtResource("18_nu02a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikeGroup6" type="Node3D" parent="FanHall"]
+transform = Transform3D(1.30673e-07, 0.0575641, 0.998349, -1.2988e-09, 0.998343, -0.0575644, -1.00001, 3.72529e-09, 1.3099e-07, 186, 2.735, -195)
+
+[node name="SpikePanel" parent="FanHall/SpikeGroup6" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="FanHall/SpikeGroup6" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="FanHall/SpikeGroup6" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="FanHall/SpikeGroup6" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24994, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="Fan4" parent="FanHall" instance=ExtResource("19_0tehk")]
+transform = Transform3D(4.37114e-08, -1.65809e-15, -1, -1.19209e-07, -1, 3.55271e-15, -1, 1.19209e-07, -4.37114e-08, 222.289, 3, -195)
+
+[node name="FanBroken" parent="FanHall/Fan4" instance=ExtResource("17_w10kd")]
+transform = Transform3D(0.5, 0.866025, 4.23516e-22, -0.866025, 0.5, 3.55271e-15, -1.30038e-15, -1.30038e-15, 1, 0, 0, 0)
+
+[node name="SpikeGroup7" type="Node3D" parent="FanHall"]
+transform = Transform3D(1.30673e-07, 0.0575641, 0.998349, -1.2988e-09, 0.998343, -0.0575644, -1.00001, 3.72529e-09, 1.3099e-07, 212, 1.5, -195)
+
+[node name="SpikePanel" parent="FanHall/SpikeGroup7" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="FanHall/SpikeGroup7" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="FanHall/SpikeGroup7" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="FanHall/SpikeGroup7" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24994, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="LavaCrossway" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670, -60, -300)
+
+[node name="InvisibleGrindrail" parent="LavaCrossway" instance=ExtResource("23_mp3n2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 49)
+railLength = 60
+
+[node name="RichRing" parent="LavaCrossway/InvisibleGrindrail" instance=ExtResource("14_hklds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -5)
+
+[node name="InvisibleGrindrail2" parent="LavaCrossway" instance=ExtResource("23_mp3n2")]
+transform = Transform3D(0.976296, 0, -0.21644, 0, 1, 0, 0.21644, 0, 0.976296, 0, 5, -11)
+railLength = 10
+
+[node name="InvisibleGrindrailL" parent="LavaCrossway" instance=ExtResource("23_mp3n2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 5, -21)
+railLength = 60
+
+[node name="Rings" type="Node3D" parent="LavaCrossway/InvisibleGrindrailL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -5)
+script = ExtResource("4_h3103")
+Generate = false
+Source = ExtResource("5_s3r1f")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="LavaCrossway/InvisibleGrindrailL/Rings" instance=ExtResource("5_s3r1f")]
+
+[node name="Child02" parent="LavaCrossway/InvisibleGrindrailL/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="LavaCrossway/InvisibleGrindrailL/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="LavaCrossway/InvisibleGrindrailL/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="LavaCrossway/InvisibleGrindrailL/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Rings2" type="Node3D" parent="LavaCrossway/InvisibleGrindrailL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -20)
+script = ExtResource("4_h3103")
+Generate = false
+Source = ExtResource("5_s3r1f")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="LavaCrossway/InvisibleGrindrailL/Rings2" instance=ExtResource("5_s3r1f")]
+
+[node name="Child02" parent="LavaCrossway/InvisibleGrindrailL/Rings2" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="LavaCrossway/InvisibleGrindrailL/Rings2" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="LavaCrossway/InvisibleGrindrailL/Rings2" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="LavaCrossway/InvisibleGrindrailL/Rings2" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Rings3" type="Node3D" parent="LavaCrossway/InvisibleGrindrailL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -35)
+script = ExtResource("4_h3103")
+Generate = false
+Source = ExtResource("5_s3r1f")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="LavaCrossway/InvisibleGrindrailL/Rings3" instance=ExtResource("5_s3r1f")]
+
+[node name="Child02" parent="LavaCrossway/InvisibleGrindrailL/Rings3" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="LavaCrossway/InvisibleGrindrailL/Rings3" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="LavaCrossway/InvisibleGrindrailL/Rings3" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="LavaCrossway/InvisibleGrindrailL/Rings3" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="InvisibleGrindrailR" parent="LavaCrossway" instance=ExtResource("23_mp3n2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 5, -20)
+railLength = 60
+
+[node name="Rings" type="Node3D" parent="LavaCrossway/InvisibleGrindrailR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -55)
+script = ExtResource("4_h3103")
+Generate = false
+Source = ExtResource("5_s3r1f")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = SubResource("Curve_2nsi1")
+"Vertical Offset" = null
+
+[node name="Child01" parent="LavaCrossway/InvisibleGrindrailR/Rings" instance=ExtResource("5_s3r1f")]
+
+[node name="Child02" parent="LavaCrossway/InvisibleGrindrailR/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="LavaCrossway/InvisibleGrindrailR/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.233333, 0, -5)
+
+[node name="Child04" parent="LavaCrossway/InvisibleGrindrailR/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.816667, 0, -7.5)
+
+[node name="Child05" parent="LavaCrossway/InvisibleGrindrailR/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 0, -10)
+
+[node name="SpikeGroup" type="Node3D" parent="LavaCrossway"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0999985, -41)
+
+[node name="SpikePanel" parent="LavaCrossway/SpikeGroup" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="LavaCrossway/SpikeGroup" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="LavaCrossway/SpikeGroup" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="LavaCrossway/SpikeGroup" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24994, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="GolemPath" type="Path3D" parent="LavaCrossway"]
+transform = Transform3D(1, -3.72529e-09, 5.55113e-17, -3.72529e-09, 1, -1.49012e-08, 2.98023e-08, 1.49012e-08, 1, 0.0310059, 0, -62.656)
+curve = SubResource("Curve3D_dwyrv")
+
+[node name="GasTank" parent="LavaCrossway/GolemPath" instance=ExtResource("7_to0nv")]
+
+[node name="PathFollow3D" type="PathFollow3D" parent="LavaCrossway/GolemPath"]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 1, 0, -4.99406)
+progress = 13.0
+use_model_front = true
+cubic_interp = false
+
+[node name="GolemMajin" parent="LavaCrossway/GolemPath/PathFollow3D" node_paths=PackedStringArray("gasTank") instance=ExtResource("24_qx33a")]
+gasTank = NodePath("../../GasTank")
+
+[node name="InvisibleGrindrail3" parent="LavaCrossway" instance=ExtResource("23_mp3n2")]
+transform = Transform3D(0.976296, 0, 0.21644, 0, 1, 0, -0.21644, 0, 0.976296, 2, 5, -79)
+railLength = 10
+
+[node name="InvisibleGrindrail4" parent="LavaCrossway" instance=ExtResource("23_mp3n2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -88)
+railLength = 15
+
+[node name="Rings" type="Node3D" parent="LavaCrossway/InvisibleGrindrail4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -2)
+script = ExtResource("4_h3103")
+Generate = false
+Source = ExtResource("5_s3r1f")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="LavaCrossway/InvisibleGrindrail4/Rings" instance=ExtResource("5_s3r1f")]
+
+[node name="Child02" parent="LavaCrossway/InvisibleGrindrail4/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="LavaCrossway/InvisibleGrindrail4/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="LavaCrossway/InvisibleGrindrail4/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="LavaCrossway/InvisibleGrindrail4/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="GasTank" parent="LavaCrossway" instance=ExtResource("7_to0nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, -21)
+endPosition = Vector3(5, 0, 0)
+
+[node name="GasTank2" parent="LavaCrossway" instance=ExtResource("7_to0nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 1, -21)
+endPosition = Vector3(-2, 0, -10)
+
+[node name="GasTank3" parent="LavaCrossway" instance=ExtResource("7_to0nv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -32)
+endPosition = Vector3(0, 0, -20)
+root = NodePath("../GasTank2/GasTank")
+animator = NodePath("../GasTank2/AnimationPlayer")
+
+[node name="FlyingPot1" parent="LavaCrossway" instance=ExtResource("25_h0vns")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 31, 1, -120)
+travelBounds = Vector2(2, 10)
+
+[node name="FlyingPot2" parent="LavaCrossway" instance=ExtResource("25_h0vns")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 35, 8, -120)
+travelBounds = Vector2(2, 10)
+
+[node name="FlyingPot3" parent="LavaCrossway" instance=ExtResource("25_h0vns")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 40, 16, -120)
+travelBounds = Vector2(2, 10)
+
+[node name="FlyingPot4" parent="LavaCrossway" instance=ExtResource("25_h0vns")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 46, 24, -120)
+travelBounds = Vector2(2, 10)
 
 [editable path="Static"]
