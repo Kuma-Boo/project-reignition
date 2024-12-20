@@ -123,22 +123,23 @@ public partial class ItemBox : Pickup
 
 	public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(SpawnPosition, EndPosition, travelHeight);
 
-
-	[Export] private AnimationPlayer animator;
+	[Export] private NodePath animator;
+	private AnimationPlayer _animator;
 
 	private bool isOpened;
 	private bool isMovingObjects;
 
 	// Godot doesn't support listing custom structs, so System.Collections.Generic.List is used instead.
-	private readonly List<float> travelTimes = new();
-	private readonly List<Pickup> objectPool = new();
-	private readonly List<LaunchSettings> objectLaunchSettings = new();
+	private readonly List<float> travelTimes = [];
+	private readonly List<Pickup> objectPool = [];
+	private readonly List<LaunchSettings> objectLaunchSettings = [];
 
 	private readonly Vector3 SPAWN_OFFSET = Vector3.Up * .5f;
 	private readonly Vector2 PEARL_SPAWN_RADIUS = new(2.0f, 1.0f);
 
 	protected override void SetUp()
 	{
+		_animator = GetNodeOrNull<AnimationPlayer>(animator);
 		pickupParent = GetNodeOrNull<Node3D>(pickupParentPath);
 
 		if (Engine.IsEditorHint()) return;
@@ -179,8 +180,8 @@ public partial class ItemBox : Pickup
 		isOpened = false;
 		isMovingObjects = false;
 
-		animator.Play("RESET");
-		animator.Seek(0, true);
+		_animator.Play("RESET");
+		_animator.Seek(0, true);
 
 		DisablePickupParent();
 
@@ -250,12 +251,12 @@ public partial class ItemBox : Pickup
 
 		if (Player.IsJumpDashOrHomingAttack)
 		{
-			animator.Play("disable-collision");
-			animator.Advance(0.0);
+			_animator.Play("disable-collision");
+			_animator.Advance(0.0);
 			Player.StartBounce();
 		}
 
-		animator.Play("open");
+		_animator.Play("open");
 		isOpened = true;
 
 		if (spawnPearls)

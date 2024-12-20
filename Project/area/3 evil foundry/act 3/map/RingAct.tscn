@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bb6wcbrkyex8p"]
+[gd_scene load_steps=44 format=3 uid="uid://bb6wcbrkyex8p"]
 
 [ext_resource type="PackedScene" uid="uid://sap50uvjitma" path="res://area/3 evil foundry/act 3/Static.tscn" id="1_gtt8y"]
 [ext_resource type="Resource" uid="uid://b0gigm6bbv35g" path="res://resource/level data/evil foundry/Act3Ring.tres" id="2_plufy"]
@@ -25,6 +25,14 @@
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="23_mp3n2"]
 [ext_resource type="PackedScene" uid="uid://bntrixspwpi2" path="res://object/enemy/golem/GolemMajin.tscn" id="24_qx33a"]
 [ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="25_h0vns"]
+[ext_resource type="PackedScene" uid="uid://dkve4vw60ngu3" path="res://area/3 evil foundry/object/platform/HallPlatformShort.tscn" id="26_wlk10"]
+[ext_resource type="PackedScene" uid="uid://2fyo48r8yibn" path="res://area/3 evil foundry/object/platform/HallPlatformLong.tscn" id="27_85y6o"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="28_w8jfy"]
+[ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="29_vxp3i"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="30_lu8h1"]
+[ext_resource type="PackedScene" uid="uid://cjuvjyn7a7uqa" path="res://area/3 evil foundry/object/platform/HallPlatformRight.tscn" id="31_n2l3h"]
+[ext_resource type="PackedScene" uid="uid://di218qnf7t4ra" path="res://area/3 evil foundry/object/platform/HallPlatformLeft.tscn" id="31_yvbfo"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="33_r62ly"]
 
 [sub_resource type="Animation" id="Animation_gcx7a"]
 resource_name = "event"
@@ -212,6 +220,46 @@ _data = {
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0)
 }
 point_count = 5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o7cc1"]
+size = Vector3(20, 20, 5)
+
+[sub_resource type="Animation" id="Animation_mwc11"]
+resource_name = "event"
+length = 0.2
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Door1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Door2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cl5vi"]
+_data = {
+"event": SubResource("Animation_mwc11")
+}
 
 [node name="Stage" type="Node"]
 
@@ -1470,15 +1518,311 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 31, 1,
 travelBounds = Vector2(2, 10)
 
 [node name="FlyingPot2" parent="LavaCrossway" instance=ExtResource("25_h0vns")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 35, 8, -120)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 36, 8, -120)
 travelBounds = Vector2(2, 10)
 
 [node name="FlyingPot3" parent="LavaCrossway" instance=ExtResource("25_h0vns")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 40, 16, -120)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 41, 16, -120)
 travelBounds = Vector2(2, 10)
 
 [node name="FlyingPot4" parent="LavaCrossway" instance=ExtResource("25_h0vns")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 46, 24, -120)
 travelBounds = Vector2(2, 10)
+
+[node name="PitHall" type="Node3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -620, -30, -420)
+
+[node name="HallPlatformShort" parent="PitHall" instance=ExtResource("26_wlk10")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.5, 41.75)
+
+[node name="DoorEvent" parent="PitHall" instance=ExtResource("12_f76lo")]
+transform = Transform3D(-1, 0, -8.74227e-08, 0, 1, 0, 8.74227e-08, 0, -1, 0, 0, 23)
+"Enter Mode" = 0
+
+[node name="Door1" parent="PitHall/DoorEvent" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -15)
+SpikeState = 1
+PivotPoint = 1
+SwingMode = 2
+
+[node name="Door2" parent="PitHall/DoorEvent" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -15)
+SpikeState = 2
+SwingMode = 1
+
+[node name="Event" type="Node3D" parent="PitHall/DoorEvent"]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 1.42109e-14, 0, 1, 0, 0, 0)
+script = ExtResource("13_vcthb")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PitHall/DoorEvent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_o7cc1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PitHall/DoorEvent"]
+root_node = NodePath("../Event")
+libraries = {
+"": SubResource("AnimationLibrary_cl5vi")
+}
+
+[node name="HallPlatformLong" parent="PitHall" instance=ExtResource("27_85y6o")]
+transform = Transform3D(-1, 0, -8.74227e-08, 0, 1, 0, 8.74227e-08, 0, -1, 0, -0.5, 20)
+
+[node name="SpikeGroup" type="Node3D" parent="PitHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14.9, 12)
+
+[node name="SpikePanel" parent="PitHall/SpikeGroup" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="PitHall/SpikeGroup" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="PitHall/SpikeGroup" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="PitHall/SpikeGroup" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.749939, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel5" parent="PitHall/SpikeGroup" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel6" parent="PitHall/SpikeGroup" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.74994, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikeGroup2" type="Node3D" parent="PitHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14.9, 45)
+
+[node name="SpikePanel" parent="PitHall/SpikeGroup2" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="PitHall/SpikeGroup2" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="PitHall/SpikeGroup2" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"Current State" = 2
+"Start Time" = 0.2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="PitHall/SpikeGroup2" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.749939, 0, 0)
+"Current State" = 2
+"Start Time" = 0.2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel5" parent="PitHall/SpikeGroup2" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75, 0, 0)
+"Current State" = 2
+"Start Time" = 0.6
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel6" parent="PitHall/SpikeGroup2" instance=ExtResource("18_nu02a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.24994, 0, 0)
+"Current State" = 2
+"Start Time" = 0.6
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="FlyingPot" parent="PitHall" instance=ExtResource("25_h0vns")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -14, 54)
+travelBounds = Vector2(2, 10)
+
+[node name="CullingTrigger" type="Node3D" parent="PitHall"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -14, 54)
+script = ExtResource("28_w8jfy")
+respawnOnActivation = true
+
+[node name="Rings" type="Node3D" parent="PitHall/CullingTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+script = ExtResource("4_h3103")
+Generate = false
+Source = ExtResource("5_s3r1f")
+Amount = 6
+Shape = 0
+Orientation = 1
+Spacing = 1.6
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PitHall/CullingTrigger/Rings" instance=ExtResource("5_s3r1f")]
+
+[node name="Child02" parent="PitHall/CullingTrigger/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="Child03" parent="PitHall/CullingTrigger/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 0)
+
+[node name="Child04" parent="PitHall/CullingTrigger/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, 0)
+
+[node name="Child05" parent="PitHall/CullingTrigger/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, 0)
+
+[node name="Child06" parent="PitHall/CullingTrigger/Rings" instance=ExtResource("5_s3r1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+
+[node name="ItemBoxes" type="Node3D" parent="PitHall"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -16, 0.5, 70)
+
+[node name="ItemBox1" parent="PitHall/ItemBoxes" instance=ExtResource("29_vxp3i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
+"Spawn Settings/Pickup Parent" = NodePath("RichRing")
+"Spawn Settings/Travel Height" = 1.0
+
+[node name="RichRing" parent="PitHall/ItemBoxes/ItemBox1" instance=ExtResource("14_hklds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -3)
+
+[node name="ItemBox2" parent="PitHall/ItemBoxes" instance=ExtResource("29_vxp3i")]
+
+[node name="ItemBox3" parent="PitHall/ItemBoxes" instance=ExtResource("29_vxp3i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 0)
+
+[node name="ItemBox4" parent="PitHall/ItemBoxes" instance=ExtResource("29_vxp3i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -6)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 50
+
+[node name="ItemBox5" parent="PitHall/ItemBoxes" instance=ExtResource("29_vxp3i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="ItemBox6" parent="PitHall/ItemBoxes" instance=ExtResource("29_vxp3i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -6)
+
+[node name="Grindrail" parent="PitHall/ItemBoxes" instance=ExtResource("11_owl4c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, -9)
+
+[node name="SpringGroup" type="Node3D" parent="PitHall"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, -60, 0, 85)
+
+[node name="Spring1" parent="PitHall/SpringGroup" instance=ExtResource("30_lu8h1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+finalHeight = 5.0
+distance = 15.0
+
+[node name="Spring2" parent="PitHall/SpringGroup" instance=ExtResource("30_lu8h1")]
+finalHeight = 5.0
+distance = 15.0
+
+[node name="Spring3" parent="PitHall/SpringGroup" instance=ExtResource("30_lu8h1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+finalHeight = 5.0
+distance = 15.0
+
+[node name="Door" parent="PitHall" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -62, 0, 98.0001)
+SpikeState = 1
+PivotPoint = 1
+
+[node name="HallPlatformRight" parent="PitHall" instance=ExtResource("31_n2l3h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.9, -61.8, -0.5, 110)
+
+[node name="GreenMajin1" parent="PitHall" instance=ExtResource("8_ujsjf")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -61.8, 0, 116)
+rangeOverride = 30
+
+[node name="HallPlatformLeft" parent="PitHall" instance=ExtResource("31_yvbfo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.9, -58.2, -0.5, 130)
+
+[node name="GreenMajin2" parent="PitHall" instance=ExtResource("8_ujsjf")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -58.1, 0, 135)
+rangeOverride = 30
+
+[node name="HallPlatformRight2" parent="PitHall" instance=ExtResource("31_n2l3h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.9, -61.8, -0.5, 150.5)
+
+[node name="GreenMajin3" parent="PitHall" instance=ExtResource("8_ujsjf")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -61.8, 0, 156)
+rangeOverride = 30
+
+[node name="HallPlatformLeft2" parent="PitHall" instance=ExtResource("31_yvbfo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.75, -60.2, -0.5, 169.5)
+
+[node name="HallPlatformShort2" parent="PitHall" instance=ExtResource("26_wlk10")]
+transform = Transform3D(-0.999999, 0, -8.74227e-08, 0, 1, 0, 8.74227e-08, 0, -0.999999, -60, -0.5, 182)
+
+[node name="Door1" parent="PitHall/HallPlatformShort2" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(-4.37115e-08, 0, 1, 0, 1, 0, -1, 0, -4.37115e-08, -4, 0.5, 2)
+SwingMode = 1
+
+[node name="Door2" parent="PitHall/HallPlatformShort2" instance=ExtResource("11_pmbvs")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 4, 0.5, 2)
+SpikeState = 2
+SwingMode = 1
+
+[node name="SpikeBall1" parent="PitHall" instance=ExtResource("33_r62ly")]
+transform = Transform3D(-1.5, 0, -2.26494e-07, 0, 1.5, 0, 2.26494e-07, 0, -1.5, -58.4, -13, 129)
+"Movement/Cycle Length" = 2.0
+Movement/Distance = 16.0
+
+[node name="SpikeBall2" parent="PitHall" instance=ExtResource("33_r62ly")]
+transform = Transform3D(1.5, 0, 2.62268e-07, 0, 1.5, 0, -2.62268e-07, 0, 1.5, -61.6, -13, 155)
+"Movement/Cycle Length" = 2.0
+Movement/Distance = 16.0
+
+[node name="SpikeBall3" parent="PitHall" instance=ExtResource("33_r62ly")]
+transform = Transform3D(1.5, 0, 2.62268e-07, 0, 1.5, 0, -2.62268e-07, 0, 1.5, -60.85, -13, 168.5)
+Movement/Mode = 2
+"Movement/Cycle Length" = 3.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="SpikeBall4" parent="PitHall" instance=ExtResource("33_r62ly")]
+transform = Transform3D(1.5, 0, 2.62268e-07, 0, 1.5, 0, -2.62268e-07, 0, 1.5, -60.85, -13, 174.5)
+Movement/Mode = 2
+"Movement/Cycle Length" = 3.0
+"Movement/Starting Offset" = 0.4
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="FlyingPot2" parent="PitHall" instance=ExtResource("25_h0vns")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -60, -14, 189)
+travelBounds = Vector2(2, 5)
+
+[node name="SpikeBall5" parent="PitHall" instance=ExtResource("33_r62ly")]
+transform = Transform3D(-1.5, 0, 1.31134e-07, 0, 1.5, 0, -1.31134e-07, 0, -1.5, -57, -9, 192)
+"Movement/Cycle Length" = 3.0
+Movement/Distance = 4.0
+Movement/Angle = -90.0
+
+[node name="FlyingPot3" parent="PitHall" instance=ExtResource("25_h0vns")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -60, -8, 194)
+travelBounds = Vector2(2, 8)
+
+[connection signal="PotEntered" from="PitHall/FlyingPot" to="PitHall/CullingTrigger" method="Activate"]
 
 [editable path="Static"]
