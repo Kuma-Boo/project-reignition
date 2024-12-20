@@ -18,7 +18,7 @@ public partial class FallState : PlayerState
 	{
 		ProcessMoveSpeed();
 		ProcessTurning();
-		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
+		ProcessGravity();
 		Player.ApplyMovement();
 		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
 		Player.CheckGround();

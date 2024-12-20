@@ -5,13 +5,12 @@ namespace Project.Gameplay;
 
 public partial class LaunchState : PlayerState
 {
-	[Export]
-	private PlayerState landState;
-	[Export]
-	private PlayerState fallState;
+	[Export] private PlayerState landState;
+	[Export] private PlayerState fallState;
 
 	private float launcherTime;
 	private LaunchSettings settings;
+	private RaycastHit wallHit;
 	public bool UpdateSettings(LaunchSettings settings)
 	{
 		if (settings.startPosition.IsEqualApprox(settings.endPosition) &&
@@ -35,6 +34,7 @@ public partial class LaunchState : PlayerState
 	public override void EnterState()
 	{
 		launcherTime = 0;
+		wallHit = new();
 
 		Player.IsOnGround = false;
 		Player.IsLaunching = true;
@@ -63,8 +63,11 @@ public partial class LaunchState : PlayerState
 	public override void ExitState()
 	{
 		Player.IsLaunching = false;
-		Player.MoveSpeed = settings.HorizontalVelocity * .5f; // Prevent too much movement
-		Player.VerticalSpeed = Player.IsOnGround ? 0 : settings.FinalVerticalVelocity;
+		if (!wallHit)
+		{
+			Player.MoveSpeed = settings.HorizontalVelocity * .5f; // Prevent too much movement
+			Player.VerticalSpeed = Player.IsOnGround ? 0 : settings.FinalVerticalVelocity;
+		}
 
 		Player.AttackState = PlayerController.AttackStates.None;
 		Player.Lockon.IsMonitoring = !Player.IsOnGround && settings.AllowJumpDash;
@@ -87,11 +90,12 @@ public partial class LaunchState : PlayerState
 		Vector3 targetPosition = settings.InterpolatePositionTime(launcherTime);
 		float heightDelta = Mathf.IsZeroApprox(launcherTime) ? 0 : targetPosition.Y - Player.GlobalPosition.Y;
 
-		if (CheckWall(targetPosition))
+		UpdateWallHit(targetPosition);
+		if (wallHit)
 			return fallState;
 
 		Player.GlobalPosition = targetPosition;
-		Player.VerticalSpeed = heightDelta;
+		Player.VerticalSpeed = heightDelta / PhysicsManager.physicsDelta;
 		Player.PathFollower.Resync();
 
 		if (heightDelta < 0 && Player.CheckGround()) // Only check ground when falling
@@ -126,9 +130,18 @@ public partial class LaunchState : PlayerState
 		return true;
 	}
 
-	private bool CheckWall(Vector3 targetPosition)
+	private void UpdateWallHit(Vector3 targetPosition)
 	{
-		RaycastHit hit = Player.CastRay(Player.GlobalPosition, targetPosition - Player.GlobalPosition, Runtime.Instance.environmentMask);
-		return hit && hit.collidedObject.IsInGroup("wall");
+		wallHit = new();
+		Vector3 direction = targetPosition - Player.GlobalPosition;
+		RaycastHit hit = Player.CastRay(Player.GlobalPosition, direction, Runtime.Instance.environmentMask);
+		DebugManager.DrawRay(Player.GlobalPosition, direction, hit ? Colors.Red : Colors.White);
+
+		if (!hit || !hit.collidedObject.IsInGroup("wall"))
+			return;
+
+		wallHit = hit;
+		Player.MoveSpeed = 0;
+		Player.GlobalPosition = wallHit.point - (wallHit.direction * Player.CollisionSize.X);
 	}
 }

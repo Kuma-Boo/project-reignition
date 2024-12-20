@@ -54,7 +54,7 @@ public partial class GrindStepState : PlayerState
 	public override PlayerState ProcessPhysics()
 	{
 		ProcessMoveSpeed();
-		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
+		ProcessGravity();
 		ProcessTurning();
 		Player.ApplyMovement();
 		Player.CheckGround();

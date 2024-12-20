@@ -27,7 +27,7 @@
 [ext_resource type="Texture2D" uid="uid://wehmqy1nfvqd" path="res://interface/gameplay/hud/texture/soul gauge/surface orange.png" id="21_xt5s7"]
 [ext_resource type="Texture2D" uid="uid://dxukrbt64dvpn" path="res://interface/gameplay/hud/texture/race/sonic.png" id="25_tnp30"]
 [ext_resource type="Texture2D" uid="uid://bfshr1ptvr744" path="res://interface/gameplay/hud/texture/race/uhu.png" id="26_8fdkc"]
-[ext_resource type="Texture2D" uid="uid://ba64jopturjnu" path="res://interface/gameplay/hud/texture/race/bar.png" id="26_rlyqq"]
+[ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="27_vkylp"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="29_dr2xu"]
 
 [sub_resource type="Animation" id="2"]
@@ -372,10 +372,46 @@ tracks/29/keys = {
 "update": 1,
 "values": [4]
 }
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("Current/Chain/Fill:scale")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("Current/Chain/Fill:color")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 1, 0, 1)]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("Current/Chain:modulate")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="1"]
 resource_name = "collect"
-length = 2.0
+length = 2.33333
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -450,6 +486,42 @@ tracks/5/keys = {
 "args": [],
 "method": &"FinishRingChain"
 }]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Current/Chain/Fill:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Current/Chain/Fill:color")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0, 1, 0, 1), Color(1, 1, 1, 1), Color(0, 1, 0, 1)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Current/Chain:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 2, 2.33333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="46"]
@@ -858,7 +930,7 @@ input_1/auto_advance = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_06lyc"]
-graph_offset = Vector2(-553.648, 31.4597)
+graph_offset = Vector2(-879.16, 45.582)
 nodes/gain-anim/node = SubResource("AnimationNodeAnimation_rarei")
 nodes/gain-anim/position = Vector2(-480, 96)
 nodes/gain_trigger/node = SubResource("AnimationNodeOneShot_jee8d")
@@ -1327,10 +1399,48 @@ clip_text = true
 
 [node name="Divider" type="Sprite2D" parent="Rings/Current"]
 position = Vector2(110.4, -1.6)
-scale = Vector2(1.2, 1.2)
 texture = ExtResource("5_phsyj")
 region_enabled = true
 region_rect = Rect2(120, 168, 64, 104)
+
+[node name="Chain" type="CanvasGroup" parent="Rings/Current"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(-211.428, 0)
+scale = Vector2(2, 2)
+
+[node name="Background" type="ColorRect" parent="Rings/Current/Chain"]
+show_behind_parent = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 24.0
+offset_right = 15.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 3.14159
+color = Color(1, 0, 0, 1)
+
+[node name="Fill" type="ColorRect" parent="Rings/Current/Chain"]
+show_behind_parent = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 24.0
+offset_right = 15.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 3.14159
+color = Color(0, 1, 0, 1)
+
+[node name="Chain" type="Sprite2D" parent="Rings/Current/Chain"]
+use_parent_material = true
+texture = ExtResource("5_phsyj")
+region_enabled = true
+region_rect = Rect2(172, 276, 28, 60)
 
 [node name="Loss" type="Control" parent="Rings"]
 anchors_preset = 0
@@ -1366,7 +1476,6 @@ rotation = 0.460767
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_vvimn")
 hframes = 8
-frame = 1
 script = ExtResource("3_wydbw")
 playing = true
 loopMode = 1
@@ -1377,7 +1486,7 @@ rotation = 0.523598
 scale = Vector2(1.375, 1.5)
 texture = ExtResource("2_vvimn")
 hframes = 8
-frame = 1
+frame = 4
 script = ExtResource("3_wydbw")
 playing = true
 loopMode = 1
@@ -1387,7 +1496,7 @@ rotation = 0.236989
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_vvimn")
 hframes = 8
-frame = 1
+frame = 4
 script = ExtResource("3_wydbw")
 playing = true
 loopMode = 1
@@ -1397,7 +1506,7 @@ rotation = -0.953518
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_vvimn")
 hframes = 8
-frame = 1
+frame = 4
 script = ExtResource("3_wydbw")
 playing = true
 loopMode = 1
@@ -1406,7 +1515,7 @@ loopMode = 1
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_vvimn")
 hframes = 8
-frame = 1
+frame = 4
 script = ExtResource("3_wydbw")
 playing = true
 loopMode = 1
@@ -1416,7 +1525,7 @@ rotation = -0.332001
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_vvimn")
 hframes = 8
-frame = 1
+frame = 4
 script = ExtResource("3_wydbw")
 playing = true
 loopMode = 1
@@ -1426,7 +1535,7 @@ rotation = -0.388323
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_vvimn")
 hframes = 8
-frame = 1
+frame = 4
 script = ExtResource("3_wydbw")
 playing = true
 loopMode = 1
@@ -1436,7 +1545,7 @@ rotation = -0.457046
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_vvimn")
 hframes = 8
-frame = 1
+frame = 4
 script = ExtResource("3_wydbw")
 playing = true
 loopMode = 1
@@ -1446,7 +1555,7 @@ rotation = -0.533923
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_vvimn")
 hframes = 8
-frame = 1
+frame = 4
 script = ExtResource("3_wydbw")
 playing = true
 loopMode = 1
@@ -1455,7 +1564,7 @@ loopMode = 1
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_vvimn")
 hframes = 8
-frame = 1
+frame = 4
 script = ExtResource("3_wydbw")
 playing = true
 loopMode = 1
@@ -1466,6 +1575,7 @@ libraries = {
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="Rings"]
+active = false
 tree_root = SubResource("AnimationNodeBlendTree_06lyc")
 anim_player = NodePath("../AnimationPlayer")
 parameters/gain_trigger/active = false
@@ -1823,16 +1933,12 @@ offset_right = 320.0
 offset_bottom = 160.0
 grow_horizontal = 2
 
-[node name="Bar" type="TextureRect" parent="Race"]
-clip_children = 2
-layout_mode = 1
-anchors_preset = -1
-offset_left = 48.0
-offset_right = 592.0
-offset_bottom = 64.0
-grow_vertical = 2
-pivot_offset = Vector2(0, 32)
-texture = ExtResource("26_rlyqq")
+[node name="ScrollBar" type="Sprite2D" parent="Race"]
+position = Vector2(328, 32)
+scale = Vector2(2.64286, 2.5)
+texture = ExtResource("27_vkylp")
+region_enabled = true
+region_rect = Rect2(32, 224, 224, 32)
 
 [node name="Uhu" type="TextureRect" parent="Race"]
 layout_mode = 1
@@ -1846,8 +1952,9 @@ stretch_mode = 4
 
 [node name="Sonic" type="TextureRect" parent="Race"]
 layout_mode = 1
+offset_left = 512.0
 offset_top = -32.0
-offset_right = 128.0
+offset_right = 640.0
 offset_bottom = 96.0
 pivot_offset = Vector2(64, 64)
 texture = ExtResource("25_tnp30")

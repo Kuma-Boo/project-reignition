@@ -66,7 +66,8 @@ public partial class HeadsUpDisplay : Control
 		// Initialize ring counter
 		if (Stage != null)
 		{
-			maxRingLabel.Visible = ringDividerSprite.Visible = Stage.Data.MissionType == LevelDataResource.MissionTypes.Ring; // Show/Hide max ring count
+			maxRingLabel.Visible = ringDividerSprite.Visible = Stage.Data.MissionType == LevelDataResource.MissionTypes.Ring &&
+				Stage.Data.MissionObjectiveCount != 0; // Show/Hide max ring count
 			if (maxRingLabel.Visible)
 				maxRingLabel.Text = Stage.Data.MissionObjectiveCount.ToString(RingLabelFormat);
 

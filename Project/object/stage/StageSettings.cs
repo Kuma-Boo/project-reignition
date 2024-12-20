@@ -65,6 +65,7 @@ public partial class StageSettings : Node3D
 		}
 
 		InitializeShaders();
+		SetEnvironmentFxFactor(environmentFxFactor, 0);
 	}
 
 	public void UpdatePostProcessingStatus()
@@ -144,6 +145,7 @@ public partial class StageSettings : Node3D
 		}
 
 		UpdateTime();
+		UpdateEnvironmentFXFactor();
 	}
 
 	private void StartLevel()
@@ -340,7 +342,7 @@ public partial class StageSettings : Node3D
 			FinishLevel(false);
 		}
 		else if (CurrentObjectiveCount >= Data.MissionObjectiveCount &&
-						Data.MissionType != LevelDataResource.MissionTypes.Chain)
+				Data.MissionType != LevelDataResource.MissionTypes.Chain)
 		{
 			FinishLevel(true);
 		}
@@ -362,7 +364,9 @@ public partial class StageSettings : Node3D
 		int previousAmount = CurrentRingCount;
 		CurrentRingCount = CalculateMath(CurrentRingCount, amount, mode);
 		RingBonus = CurrentRingCount * 10;
-		if (Data.MissionType == LevelDataResource.MissionTypes.Ring && CurrentRingCount >= Data.MissionObjectiveCount) // For ring based missions
+		if (Data.MissionType == LevelDataResource.MissionTypes.Ring &&
+			CurrentRingCount >= Data.MissionObjectiveCount &&
+			Data.MissionObjectiveCount != 0) // For ring based missions
 		{
 			CurrentRingCount = Data.MissionObjectiveCount; // Clamp
 			FinishLevel(true);
@@ -447,6 +451,7 @@ public partial class StageSettings : Node3D
 	private int CheckpointObjectiveCount { get; set; }
 	private int SavedScore { get; set; }
 	private int SavedObjectiveCount { get; set; }
+	private float SavedEnvironmentFxFactor { get; set; }
 	public void SetCheckpoint(Triggers.CheckpointTrigger checkpoint)
 	{
 		if (checkpoint == CurrentCheckpoint) return; // Already at this checkpoint
@@ -454,6 +459,7 @@ public partial class StageSettings : Node3D
 		CurrentCheckpoint = checkpoint;
 		SavedScore = CurrentScore;
 		SavedObjectiveCount = CurrentObjectiveCount;
+		SavedEnvironmentFxFactor = targetEnvironmentFxFactor;
 		EmitSignal(SignalName.TriggeredCheckpoint);
 	}
 
@@ -461,6 +467,7 @@ public partial class StageSettings : Node3D
 	{
 		ResetObjective(SavedObjectiveCount);
 		UpdateScore(SavedScore, MathModeEnum.Replace);
+		SetEnvironmentFxFactor(SavedEnvironmentFxFactor, 0);
 	}
 
 	[Signal]
@@ -516,6 +523,7 @@ public partial class StageSettings : Node3D
 		Success,
 	}
 	public LevelStateEnum LevelState { get; private set; }
+	public bool IsLevelLoading => LevelState == LevelStateEnum.Probes || LevelState == LevelStateEnum.Shaders;
 	public bool IsLevelIngame => LevelState == LevelStateEnum.Ingame;
 	/// <summary> Flag for keeping track of Uhu's race status. </summary>
 	public bool IsRaceActive { get; set; }
@@ -569,8 +577,32 @@ public partial class StageSettings : Node3D
 	#endregion
 
 	/// <summary> Reference to active area's WorldEnvironment node. </summary>
-	[Export]
-	public WorldEnvironment Environment { get; private set; }
+	[Export] public WorldEnvironment Environment { get; private set; }
+	[Export(PropertyHint.Range, "0,1,.1")] private float environmentFxFactor;
+	private float targetEnvironmentFxFactor;
+	private float environmentFxVelocity;
+	private float environmentFxSmoothing;
+	private readonly StringName ShaderEnvironmentFXParameter = "environment_fx_intensity";
+	public void SetEnvironmentFxFactor(float value, float smoothing)
+	{
+		targetEnvironmentFxFactor = Mathf.Clamp(value, 0f, 1f);
+		environmentFxSmoothing = smoothing;
+	}
+
+	private void UpdateEnvironmentFXFactor()
+	{
+		if (Mathf.IsZeroApprox(environmentFxSmoothing))
+		{
+			environmentFxFactor = targetEnvironmentFxFactor;
+			environmentFxVelocity = 0;
+		}
+		else
+		{
+			environmentFxFactor = ExtensionMethods.SmoothDamp(environmentFxFactor, targetEnvironmentFxFactor, ref environmentFxVelocity, environmentFxSmoothing);
+		}
+
+		RenderingServer.GlobalShaderParameterSet(ShaderEnvironmentFXParameter, environmentFxFactor);
+	}
 }
 
 public struct SpawnData(Node parent, Transform3D transform)

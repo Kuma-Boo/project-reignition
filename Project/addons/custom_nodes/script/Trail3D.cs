@@ -51,9 +51,12 @@ namespace Project.CustomNodes
 
 			GetTree().CurrentScene.CallDeferred(MethodName.AddChild, trailMeshInstance);
 			previousPosition = GlobalPosition;
+			VisibilityChanged += UpdateVisibility;
 		}
 
 		public override void _PhysicsProcess(double delta) => CallDeferred(MethodName.UpdateTrail, delta);
+
+		private void UpdateVisibility() => trailMeshInstance.Visible = IsVisibleInTree();
 
 		private void UpdateTrail(double delta)
 		{

@@ -13,8 +13,7 @@ public partial class PlayerLockonController : Node3D
 	private PlayerController Player;
 	public void Initialize(PlayerController player) => Player = player;
 
-	[Export]
-	private Area3D areaTrigger;
+	[Export] private Area3D areaTrigger;
 	public Array<Area3D> GetOverlappingAreas() => areaTrigger.GetOverlappingAreas();
 	public Array<Node3D> GetOverlappingBodies() => areaTrigger.GetOverlappingBodies();
 
@@ -35,7 +34,7 @@ public partial class PlayerLockonController : Node3D
 	/// <summary> Targets whose squared distance is within this range will prioritize height instead of distance. </summary>
 	private readonly float DistanceFudgeAmount = 1f;
 	private readonly string LevelWallGroup = "level wall";
-	private readonly Array<Node3D> activeTargets = []; // List of targetable objects
+	private readonly Array<Node3D> potentialTargets = []; // List of targetable objects
 
 	private bool isMonitoring;
 	/// <summary> Should the controller check for new lockonTargets? </summary>
@@ -48,6 +47,12 @@ public partial class PlayerLockonController : Node3D
 			if (!isMonitoring)
 				Player.Lockon.ResetLockonTarget();
 		}
+	}
+
+	public bool IsReticleVisible
+	{
+		get => lockonReticle.Visible;
+		set => lockonReticle.Visible = value;
 	}
 
 	public bool IsMonitoringPerfectHomingAttack { get; private set; }
@@ -65,6 +70,25 @@ public partial class PlayerLockonController : Node3D
 			wasTargetChanged = ProcessMonitoring();
 
 		ValidateTarget(wasTargetChanged);
+		ValidateCameraLockonTarget();
+	}
+
+	private void ValidateCameraLockonTarget()
+	{
+		if (Player.Camera.LockonTarget == null)
+			return;
+
+		if (Player.IsOnGround)
+		{
+			Player.Camera.SetLockonTarget(null);
+			return;
+		}
+
+		TargetState targetState = IsTargetValid(Player.Camera.LockonTarget);
+		if (targetState != TargetState.NotInList && targetState != TargetState.Invisible)
+			return;
+
+		Player.Camera.SetLockonTarget(null);
 	}
 
 	private bool ProcessMonitoring()
@@ -81,37 +105,37 @@ public partial class PlayerLockonController : Node3D
 		}
 
 		// Check whether to pick a new target
-		for (int i = 0; i < activeTargets.Count; i++)
+		for (int i = 0; i < potentialTargets.Count; i++)
 		{
-			if (activeTarget == activeTargets[i])
+			if (activeTarget == potentialTargets[i])
 				continue;
 
-			TargetState state = IsTargetValid(activeTargets[i]);
-			if (state != TargetState.Valid && state != TargetState.LowPriority)
+			TargetState potentialState = IsTargetValid(potentialTargets[i]);
+			if (potentialState != TargetState.Valid && potentialState != TargetState.LowPriority)
 				continue;
 
-			float dst = activeTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
+			float potentialDistance = potentialTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
 			if (activeTarget != null)
 			{
-				bool prioritizeActiveTarget = activeState == TargetState.Valid || state == TargetState.LowPriority;
+				bool prioritizeActiveTarget = activeState == TargetState.Valid || potentialState == TargetState.LowPriority;
 				// Ignore low-priority targets that are further from the current target
-				if (dst > closestDistance + DistanceFudgeAmount && prioritizeActiveTarget)
+				if (potentialDistance > closestDistance + DistanceFudgeAmount && prioritizeActiveTarget)
 					continue;
 
 				// Ignore lower targets when within fudge range
-				if (dst < closestDistance + DistanceFudgeAmount &&
-					dst > closestDistance - DistanceFudgeAmount &&
-					activeTargets[i].GlobalPosition.Y <= activeTarget.GlobalPosition.Y &&
-					prioritizeActiveTarget)
+				if (Mathf.Abs(closestDistance - potentialDistance) < DistanceFudgeAmount &&
+					(potentialTargets[i].GlobalPosition.Y <= activeTarget.GlobalPosition.Y ||
+					potentialState == TargetState.LowPriority) &&
+					activeState == TargetState.Valid)
 				{
 					continue;
 				}
 			}
 
 			// Update data
-			activeTarget = activeTargets[i];
-			activeState = state;
-			closestDistance = dst;
+			activeTarget = potentialTargets[i];
+			activeState = potentialState;
+			closestDistance = potentialDistance;
 		}
 
 		if (activeTarget != null && activeTarget != Target) // Target has changed
@@ -139,7 +163,7 @@ public partial class PlayerLockonController : Node3D
 		if (IsIgnoringTarget(Target))
 		{
 			ResetLockonTarget();
-			Player.Camera.LockonTarget = null;
+			Player.Camera.SetLockonTarget(null);
 			return;
 		}
 
@@ -149,14 +173,11 @@ public partial class PlayerLockonController : Node3D
 
 	private TargetState IsTargetValid(Node3D target)
 	{
-		if (target == null || !activeTargets.Contains(target)) // Not in target list anymore (target hitbox may have been disabled)
+		if (target == null || !potentialTargets.Contains(target)) // Not in target list anymore (target hitbox may have been disabled)
 			return TargetState.NotInList;
 
 		if (Player.IsKnockback || !StageSettings.Instance.IsLevelIngame) // Character is busy
 			return TargetState.PlayerBusy;
-
-		if (!target.IsVisibleInTree() || !Player.Camera.IsOnScreen(target.GlobalPosition)) // Not visible
-			return TargetState.Invisible;
 
 		if (HitObstacle(target))
 			return TargetState.HitObstacle;
@@ -168,12 +189,48 @@ public partial class PlayerLockonController : Node3D
 		if (IsTargetAttackable && target == Target && Player.IsHomingAttacking)
 			return TargetState.Valid;
 
+		if (!IsTargetVisible(target))
+			return TargetState.Invisible;
+
 		// Check Height
 		bool isTargetAttackable = target.GlobalPosition.Y <= Player.CenterPosition.Y + (Player.CollisionSize.Y * 2.0f);
-		if (Player.IsBouncing && !IsMonitoring)
+		if (Player.IsBouncing && !Player.IsBounceInteruptable)
+		{
 			isTargetAttackable = false;
 
+			if (Target == null)
+			{
+				// Only allow camera to lockon to extremely close objects
+				float targetDistance = target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
+				if (targetDistance <= DistanceFudgeAmount)
+					Player.Camera.SetLockonTarget(target);
+			}
+		}
+
 		return isTargetAttackable ? TargetState.Valid : TargetState.LowPriority;
+	}
+
+	/// <summary> Determines whether an object should be prematurely locked onto (e.g. stacked gas tanks in EF). </summary>
+	private bool IsTargetVisible(Node3D target)
+	{
+		if (!target.IsVisibleInTree()) // Not visible
+			return false;
+
+		if (Player.Camera.IsOnScreen(target.GlobalPosition)) // Always allow targeting on-screen objects
+			return true;
+
+		if (Player.Camera.IsBehindCamera(target.GlobalPosition)) // Don't allow targeting behind the camera
+			return false;
+
+		if (!Player.IsBouncing || (Target != null && Target != target))
+			return false;
+
+		Vector2 screenPosition = Player.Camera.ConvertToScreenSpace(target.GlobalPosition) / Runtime.ScreenSize;
+		screenPosition = (screenPosition - (Vector2.One * .5f)) * 2f; // Remap values between -1 and 1.
+		if (Mathf.Abs(screenPosition.X) >= 1f) // Offscreen from the sides
+			return false;
+
+		return true;
 	}
 
 	private bool IsIgnoringTarget(Node3D target)
@@ -256,26 +313,26 @@ public partial class PlayerLockonController : Node3D
 	// Targeting areas on the lockon layer
 	public void OnTargetTriggerEnter(Area3D area)
 	{
-		if (!activeTargets.Contains(area))
-			activeTargets.Add(area);
+		if (!potentialTargets.Contains(area))
+			potentialTargets.Add(area);
 	}
 
 	public void OnTargetTriggerExit(Area3D area)
 	{
-		if (activeTargets.Contains(area))
-			activeTargets.Remove(area);
+		if (potentialTargets.Contains(area))
+			potentialTargets.Remove(area);
 	}
 
 	// Allow targeting physics bodies as well...
 	public void OnTargetBodyEnter(PhysicsBody3D body)
 	{
-		if (!activeTargets.Contains(body))
-			activeTargets.Add(body);
+		if (!potentialTargets.Contains(body))
+			potentialTargets.Add(body);
 	}
 
 	public void OnTargetBodyExit(PhysicsBody3D body)
 	{
-		if (activeTargets.Contains(body))
-			activeTargets.Remove(body);
+		if (potentialTargets.Contains(body))
+			potentialTargets.Remove(body);
 	}
 }

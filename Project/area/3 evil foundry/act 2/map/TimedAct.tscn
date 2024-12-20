@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://cu3clxd81brgn"]
+[gd_scene load_steps=72 format=3 uid="uid://cu3clxd81brgn"]
 
 [ext_resource type="Resource" uid="uid://k7nptbclbfm3" path="res://resource/level data/evil foundry/Act2Time.tres" id="2_34eee"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_6vb5h"]
@@ -33,7 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="31_42x6v"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="31_mxyuv"]
 [ext_resource type="PackedScene" uid="uid://c3b6ygc13a33j" path="res://object/enemy/majin/data/evil foundry/GreenMajin.tscn" id="32_gwlrw"]
-[ext_resource type="AudioStream" uid="uid://dfj5i62etjmlb" path="res://sound/sfx/stage/evil foundry/hanging scrap event.wav" id="33_edn44"]
+[ext_resource type="AudioStream" uid="uid://dfj5i62etjmlb" path="res://sound/sfx/stage/evil foundry/hanging scrap fall.wav" id="33_edn44"]
 [ext_resource type="PackedScene" uid="uid://0gcen5dmjd" path="res://area/3 evil foundry/object/platform/Crusher.tscn" id="33_uego7"]
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="34_ssr7c"]
 [ext_resource type="PackedScene" uid="uid://det4s2txdn4ka" path="res://area/3 evil foundry/object/Furnace.tscn" id="35_4ax31"]
@@ -43,6 +43,7 @@
 [ext_resource type="PackedScene" uid="uid://lqag3j32861" path="res://area/3 evil foundry/object/grindrail/Grindrail04.tscn" id="38_stcxx"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="39_su2xy"]
 [ext_resource type="PackedScene" uid="uid://2npi4fgvupgn" path="res://area/3 evil foundry/act 2/Static.tscn" id="40_byhqa"]
+[ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="44_1sjmd"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cnx8w"]
 size = Vector3(5, 20, 15)
@@ -193,7 +194,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0.8),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": ["drop", -1, 1.0, false],
+"args": ["shatter", -1, 1.0, false],
 "method": &"play"
 }]
 }
@@ -273,6 +274,9 @@ point_count = 7
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_egyd0"]
 size = Vector3(12, 10, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ghie0"]
+size = Vector3(15, 20, 5)
 
 [node name="Stage" type="Node"]
 
@@ -2354,9 +2358,8 @@ use_model_front = true
 cubic_interp = false
 tilt_enabled = false
 
-[node name="GolemMajin" parent="TimerAct/End/GolemPath/PathFollower" node_paths=PackedStringArray("pathFollower") instance=ExtResource("36_vf80d")]
+[node name="GolemMajin" parent="TimerAct/End/GolemPath/PathFollower" instance=ExtResource("36_vf80d")]
 transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0, -7.62939e-06)
-pathFollower = NodePath("..")
 
 [node name="ScrapMachinesL" type="Node3D" parent="TimerAct/End"]
 transform = Transform3D(1.3, 0, 0, 0, 1, 0, 0, 0, 1.3, 64.5, -10, -9.00005)
@@ -2476,7 +2479,37 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.9999, 0, -85)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
 shape = SubResource("BoxShape3D_egyd0")
 
-[connection signal="Activated" from="Static/Trigger/Path/EndingPath" to="Static/Collision/ElevatorOneWayWall" method="Activate"]
+[node name="DialogTriggers" type="Node3D" parent="."]
+transform = Transform3D(0.253505, 0, 0.967334, 0, 1, 0, -0.967334, 0, 0.253505, 175.919, 8.87144, -174.343)
+
+[node name="TimerTrigger" parent="DialogTriggers" instance=ExtResource("4_6wf7v")]
+transform = Transform3D(0.30242, 0, -0.953175, 0, 1, 0, 0.953175, 0, 0.30242, 16.0092, -2.40597, -20.5064)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="DialogTriggers/TimerTrigger"]
+script = ExtResource("44_1sjmd")
+delays = Array[float]([])
+textKeys = ["evi_timer_sh", "evi_timer_so"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/TimerTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_ghie0")
+
+[node name="ExitTrigger" parent="DialogTriggers" instance=ExtResource("4_6wf7v")]
+transform = Transform3D(-0.972917, 0, -0.231154, 0, 1, 0, 0.231154, 0, -0.972917, -198.441, -49.3833, -266.978)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="DialogTriggers/ExitTrigger"]
+script = ExtResource("44_1sjmd")
+delays = Array[float]([])
+textKeys = ["evi_exit_sh", "evi_exit_so"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DialogTriggers/ExitTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_ghie0")
+
 [connection signal="Activated" from="TimerAct/CullingMap/StartUnload - PlatformHallLoad" to="TimerAct/Start" method="Deactivate"]
 [connection signal="Activated" from="TimerAct/CullingMap/StartUnload - PlatformHallLoad" to="TimerAct/PlatformHall" method="Activate"]
 [connection signal="Deactivated" from="TimerAct/CullingMap/StartUnload - PlatformHallLoad" to="TimerAct/Start" method="Activate"]

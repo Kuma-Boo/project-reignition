@@ -136,7 +136,7 @@ namespace Project.Gameplay.Triggers
 
 		public void Respawn()
 		{
-			if (respawnMode != RespawnModes.Always) //Validate respawn
+			if (isOneShot && respawnMode != RespawnModes.Always) //Validate respawn
 			{
 				//Compare the currentCheckpoint progress compared to this StageTrigger
 				float eventPosition = PathFollower.GetProgress(GlobalPosition);

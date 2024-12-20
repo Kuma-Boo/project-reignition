@@ -53,9 +53,16 @@ public partial class SlideState : PlayerState
 		Player.DisableSidle = false;
 		Player.ChangeHitbox("RESET");
 
+		if (!Player.IsDrifting &&
+			Player.StateMachine.QueuedState != jumpState &&
+			Player.StateMachine.QueuedState != crouchState)
+		{
+			Player.Skills.ConsumeJumpCharge();
+		}
+
 		if (!Mathf.IsZeroApprox(Player.MoveSpeed))
 		{
-			Player.Animator.StopCrouching(0.2f);
+			Player.Animator.StopCrouching();
 			Player.Animator.CrouchToMoveTransition();
 		}
 
@@ -82,6 +89,8 @@ public partial class SlideState : PlayerState
 		Player.AddSlopeSpeed(true);
 		Player.ApplyMovement();
 		Player.CheckWall();
+		if (Player.CheckCeiling())
+			return null;
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideExp))
 			Player.Skills.UpdateSoulSlide();
@@ -89,25 +98,40 @@ public partial class SlideState : PlayerState
 		if (!Player.CheckGround())
 			return fallState;
 
-		if (Player.Skills.IsSpeedBreakActive ||
-			(!Input.IsActionPressed("button_action") && !Player.Animator.IsSlideTransitionActive))
-		{
+		if (Player.Skills.IsSpeedBreakActive)
 			return runState;
-		}
 
-		if (Player.Controller.IsJumpBufferActive)
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
 		{
-			Player.Controller.ResetJumpBuffer();
-
-			float inputAngle = Player.Controller.GetTargetInputAngle();
-			float inputStrength = Player.Controller.GetInputStrength();
-			if (!Mathf.IsZeroApprox(inputStrength) &&
-				Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+			Player.Skills.ChargeJump();
+			if (!Input.IsActionPressed("button_jump"))
 			{
-				return backflipState;
-			}
+				if (!Player.Controller.IsBrakeHeld())
+					return jumpState;
 
-			return jumpState;
+				Player.Skills.ConsumeJumpCharge();
+				return runState;
+			}
+		}
+		else
+		{
+			if (!Input.IsActionPressed("button_action") && !Player.Animator.IsSlideTransitionActive)
+				return runState;
+
+			if (Player.Controller.IsJumpBufferActive)
+			{
+				Player.Controller.ResetJumpBuffer();
+
+				float inputAngle = Player.Controller.GetTargetInputAngle();
+				float inputStrength = Player.Controller.GetInputStrength();
+				if (!Mathf.IsZeroApprox(inputStrength) &&
+					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+				{
+					return backflipState;
+				}
+
+				return jumpState;
+			}
 		}
 
 		if (Player.IsLockoutDisablingActions)
