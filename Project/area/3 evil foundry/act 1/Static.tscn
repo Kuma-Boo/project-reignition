@@ -1,8 +1,8 @@
-[gd_scene load_steps=67 format=3 uid="uid://wufpyrm8jour"]
+[gd_scene load_steps=76 format=3 uid="uid://wufpyrm8jour"]
 
 [ext_resource type="PackedScene" uid="uid://o4l6oimlm4qq" path="res://area/3 evil foundry/act 1/environment/collision/Collision.tscn" id="1_liyuu"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_q5jqm"]
-[ext_resource type="Resource" path="res://area/3 evil foundry/data/DialogLibrary.tres" id="3_6udtg"]
+[ext_resource type="Resource" uid="uid://dmv3a7tioyyl6" path="res://area/3 evil foundry/data/DialogLibrary.tres" id="3_6udtg"]
 [ext_resource type="PackedScene" uid="uid://bo4ijrtd2ee3j" path="res://area/3 evil foundry/act 1/environment/01Opening.tscn" id="3_bb6ii"]
 [ext_resource type="PackedScene" uid="uid://b8raat7vo2t82" path="res://area/3 evil foundry/act 1/environment/02Hall.tscn" id="4_kqfa2"]
 [ext_resource type="PackedScene" uid="uid://bhpbwwtmjtg2t" path="res://area/3 evil foundry/act 1/environment/03Connection.tscn" id="5_wfrm4"]
@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://cnq6o51txoeni" path="res://area/3 evil foundry/act 1/environment/21Shaft.tscn" id="23_p11fh"]
 [ext_resource type="PackedScene" uid="uid://d3ayi7umclll1" path="res://area/3 evil foundry/act 1/environment/22Lava.tscn" id="24_ltj8x"]
 [ext_resource type="PackedScene" uid="uid://wh1mwp5hhdqh" path="res://area/3 evil foundry/act 1/environment/23Lava.tscn" id="25_txtep"]
+[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="26_rgyb4"]
 [ext_resource type="PackedScene" uid="uid://dqkj7brporikx" path="res://area/3 evil foundry/act 1/environment/25Hall.tscn" id="27_exol8"]
 [ext_resource type="PackedScene" uid="uid://be5hf56680hi3" path="res://area/3 evil foundry/act 1/environment/26Lava.tscn" id="28_6kce0"]
 [ext_resource type="Resource" uid="uid://btesvp21a581s" path="res://area/3 evil foundry/act 1/camera/SidleCam.tres" id="28_ug1pn"]
@@ -40,21 +41,121 @@
 [ext_resource type="Curve3D" uid="uid://dhy43m5kqt3mx" path="res://area/3 evil foundry/act 1/environment/path/MiddlePath.tres" id="35_xnhgv"]
 [ext_resource type="Curve3D" uid="uid://tjilx005moco" path="res://area/3 evil foundry/act 1/environment/path/ElevatorAutomationPath.tres" id="36_cuwfc"]
 [ext_resource type="Resource" uid="uid://dtmbywgmb8yc7" path="res://area/3 evil foundry/act 1/camera/CloseHallCam.tres" id="36_g2b6g"]
-[ext_resource type="Resource" path="res://area/3 evil foundry/act 1/camera/StaircaseCam.tres" id="36_gjknb"]
+[ext_resource type="Resource" uid="uid://dlfc7qmh2pubk" path="res://area/3 evil foundry/act 1/camera/StaircaseCam.tres" id="36_gjknb"]
 [ext_resource type="Curve3D" uid="uid://bv0t8i8sfcb7q" path="res://area/3 evil foundry/act 1/environment/path/EndingPath.tres" id="37_dpldg"]
 [ext_resource type="Resource" uid="uid://deb2j8xspvlfq" path="res://area/3 evil foundry/act 1/camera/NarrowHallCam.tres" id="37_fhjrg"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="37_nle4i"]
 [ext_resource type="Resource" uid="uid://bst174qxx0cr6" path="res://area/3 evil foundry/act 1/camera/StaticCam.tres" id="38_3gwpp"]
 [ext_resource type="Resource" uid="uid://drgabk5njs1qx" path="res://area/3 evil foundry/act 1/camera/SpiralCam.tres" id="38_uh4ey"]
-[ext_resource type="Resource" path="res://area/3 evil foundry/act 1/camera/PitHallConnectionCam.tres" id="40_pn0hm"]
+[ext_resource type="Resource" uid="uid://nfpvaaas4rfq" path="res://area/3 evil foundry/act 1/camera/PitHallConnectionCam.tres" id="40_pn0hm"]
 [ext_resource type="Resource" uid="uid://baxr5jqxfm1du" path="res://area/3 evil foundry/act 1/camera/CrusherCam.tres" id="40_xc2mh"]
-[ext_resource type="Resource" uid="uid://dijn07gknj6xs" path="res://resource/preset/camera/common/CompletionThumbsUpCam.tres" id="41_14tqr"]
+[ext_resource type="Resource" uid="uid://e6q36ss8c12c" path="res://resource/preset/camera/common/CompletionThumbsUpCam.tres" id="41_14tqr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h6yh5"]
 size = Vector3(20, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ff177"]
 size = Vector3(20, 50, 5)
+
+[sub_resource type="Animation" id="Animation_fgslk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DownLight:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("UpLight:light_energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_m17ve"]
+resource_name = "event"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DownLight:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("UpLight:light_energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_avq68"]
+resource_name = "event-deactivate"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DownLight:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("UpLight:light_energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_c8ckv"]
+_data = {
+"RESET": SubResource("Animation_fgslk"),
+"event": SubResource("Animation_m17ve"),
+"event-deactivate": SubResource("Animation_avq68")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8f5p5"]
+size = Vector3(66, 30, 65)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bia3m"]
+size = Vector3(71, 30, 75)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wftqj"]
+size = Vector3(71, 30, 61)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8m6ew"]
+size = Vector3(90, 80, 95)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_513tn"]
 size = Vector3(10, 10, 36)
@@ -539,7 +640,7 @@ gradient = SubResource("Gradient_663e5")
 [sub_resource type="Environment" id="Environment_8qchy"]
 ambient_light_source = 2
 ambient_light_color = Color(0.619608, 0.466667, 0.258824, 1)
-tonemap_exposure = 1.2
+tonemap_exposure = 1.4
 tonemap_white = 1.2
 ssil_enabled = true
 ssil_radius = 10.0
@@ -548,6 +649,7 @@ glow_enabled = true
 glow_levels/2 = 2.0
 glow_levels/3 = 0.3
 glow_levels/5 = 0.0
+glow_levels/7 = 0.01
 glow_intensity = 0.2
 glow_strength = 2.0
 glow_bloom = 0.1
@@ -557,15 +659,21 @@ glow_hdr_scale = 2.5
 glow_map = SubResource("GradientTexture1D_n41td")
 fog_enabled = true
 fog_light_color = Color(1, 0.55, 0, 1)
-fog_density = 0.0004
+fog_light_energy = 0.9
+fog_density = 0.0005
 fog_sky_affect = 0.0
+fog_height = -59.54
+fog_height_density = 0.003
 volumetric_fog_density = 0.1008
 volumetric_fog_albedo = Color(0, 0, 0, 1)
 volumetric_fog_emission = Color(0.466667, 0, 0, 1)
 volumetric_fog_anisotropy = 0.11
 volumetric_fog_length = 100.0
+volumetric_fog_sky_affect = 0.0
 volumetric_fog_temporal_reprojection_enabled = false
 adjustment_enabled = true
+adjustment_brightness = 1.15
+adjustment_saturation = 0.9
 adjustment_color_correction = SubResource("GradientTexture1D_et1ty")
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
@@ -965,11 +1073,10 @@ startEnabled = true
 
 [node name="29End" parent="Visuals" instance=ExtResource("31_wglcq")]
 
-[node name="Environment" type="Node3D" parent="Visuals"]
+[node name="Lighting" type="Node3D" parent="."]
 
-[node name="Light" type="DirectionalLight3D" parent="Visuals/Environment"]
+[node name="Light" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 6.68, -3.52118)
-light_energy = 1.4
 light_cull_mask = 4294967199
 shadow_enabled = true
 shadow_opacity = 0.8
@@ -979,21 +1086,127 @@ directional_shadow_blend_splits = true
 directional_shadow_fade_start = 0.418
 directional_shadow_max_distance = 20.0
 
-[node name="BounceLight" type="DirectionalLight3D" parent="Visuals/Environment"]
+[node name="BounceLight" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(0.92456, 0.252439, 0.285419, -0.0395726, -0.681394, 0.730847, 0.378977, -0.687006, -0.62, 0, 6.68, -3.52118)
 light_color = Color(0.85098, 1, 0.839216, 1)
+light_energy = 0.5
 light_cull_mask = 4294967199
 shadow_opacity = 0.5
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 200.0
 
-[node name="CharacterLighting" type="DirectionalLight3D" parent="Visuals/Environment"]
-transform = Transform3D(0.997296, -0.0722649, -0.013375, 0.0544675, 0.604603, 0.794663, -0.0493396, -0.793242, 0.606904, 0, 6.68, -3.52118)
+[node name="LavaLightEvent" type="Node3D" parent="Lighting" node_paths=PackedStringArray("animator")]
+script = ExtResource("26_rgyb4")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
+
+[node name="DownLight" type="DirectionalLight3D" parent="Lighting/LavaLightEvent"]
+transform = Transform3D(1, 0, 0, 0, -0.20658, 0.97843, 0, -0.97843, -0.20658, 0, 0, 0)
+layers = 1024
 light_color = Color(0.733333, 0.572549, 0.454902, 1)
-light_cull_mask = 4293918816
-shadow_opacity = 0.5
-directional_shadow_blend_splits = true
-directional_shadow_max_distance = 200.0
+light_cull_mask = 4293918784
+shadow_blur = 10.0
+directional_shadow_mode = 0
+
+[node name="UpLight" type="DirectionalLight3D" parent="Lighting/LavaLightEvent"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(1, 0.968627, 0.533333, 1)
+light_energy = 0.0
+light_cull_mask = 4293918784
+shadow_blur = 10.0
+directional_shadow_mode = 0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Lighting/LavaLightEvent"]
+libraries = {
+"": SubResource("AnimationLibrary_c8ckv")
+}
+
+[node name="MineATrigger" parent="Lighting" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -618.475, -61.5, -62.629)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/MineATrigger"]
+transform = Transform3D(0.99999, 0, 5.96044e-08, 0, 1, 0, -5.96044e-08, 0, 0.99999, -2, 10, 10)
+shape = SubResource("BoxShape3D_8f5p5")
+
+[node name="MineBTrigger" parent="Lighting" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -237.476, -62.5, -381.629)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/MineBTrigger"]
+transform = Transform3D(0.999994, 0, -2.84217e-13, 0, 1, 0, 2.84217e-13, 0, 0.999994, -2.5, 5, 0)
+shape = SubResource("BoxShape3D_bia3m")
+
+[node name="MineCTrigger" parent="Lighting" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.741, -61, -330)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/MineCTrigger"]
+transform = Transform3D(0.999994, 0, -2.84217e-13, 0, 1, 0, 2.84217e-13, 0, 0.999994, 0, 10, 0)
+shape = SubResource("BoxShape3D_wftqj")
+
+[node name="LavaHallTrigger" parent="Lighting" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 21, 40, -190.372)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/LavaHallTrigger"]
+shape = SubResource("BoxShape3D_8m6ew")
+
+[node name="LavaHallTrigger2" parent="Lighting" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 21, 40, -290)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/LavaHallTrigger2"]
+shape = SubResource("BoxShape3D_8m6ew")
+
+[node name="LavaHallTrigger3" parent="Lighting" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 21, 40, -389)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/LavaHallTrigger3"]
+shape = SubResource("BoxShape3D_8m6ew")
+
+[node name="LavaHallTrigger4" parent="Lighting" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 120, 40, -290)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/LavaHallTrigger4"]
+shape = SubResource("BoxShape3D_8m6ew")
+
+[node name="LavaHallTrigger5" parent="Lighting" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 120, 40, -389)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/LavaHallTrigger5"]
+shape = SubResource("BoxShape3D_8m6ew")
+
+[node name="LavaHallTrigger6" parent="Lighting" instance=ExtResource("33_1wgtf")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 180, 40, -190.372)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/LavaHallTrigger6"]
+shape = SubResource("BoxShape3D_8m6ew")
 
 [node name="Triggers" type="Node3D" parent="."]
 
@@ -1827,6 +2040,24 @@ environment = SubResource("Environment_8qchy")
 [connection signal="Deactivated" from="Visuals/CullingMap/L-29" to="Visuals/29End" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingMap/U-28" to="Visuals/28Hall" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/U-28" to="Visuals/28Hall" method="Activate"]
+[connection signal="Activated" from="Lighting/MineATrigger" to="Lighting/LavaLightEvent" method="Activate"]
+[connection signal="Deactivated" from="Lighting/MineATrigger" to="Lighting/LavaLightEvent" method="Deactivate"]
+[connection signal="Activated" from="Lighting/MineBTrigger" to="Lighting/LavaLightEvent" method="Activate"]
+[connection signal="Deactivated" from="Lighting/MineBTrigger" to="Lighting/LavaLightEvent" method="Deactivate"]
+[connection signal="Activated" from="Lighting/MineCTrigger" to="Lighting/LavaLightEvent" method="Activate"]
+[connection signal="Deactivated" from="Lighting/MineCTrigger" to="Lighting/LavaLightEvent" method="Deactivate"]
+[connection signal="Activated" from="Lighting/LavaHallTrigger" to="Lighting/LavaLightEvent" method="Activate"]
+[connection signal="Deactivated" from="Lighting/LavaHallTrigger" to="Lighting/LavaLightEvent" method="Deactivate"]
+[connection signal="Activated" from="Lighting/LavaHallTrigger2" to="Lighting/LavaLightEvent" method="Activate"]
+[connection signal="Deactivated" from="Lighting/LavaHallTrigger2" to="Lighting/LavaLightEvent" method="Deactivate"]
+[connection signal="Activated" from="Lighting/LavaHallTrigger3" to="Lighting/LavaLightEvent" method="Activate"]
+[connection signal="Deactivated" from="Lighting/LavaHallTrigger3" to="Lighting/LavaLightEvent" method="Deactivate"]
+[connection signal="Activated" from="Lighting/LavaHallTrigger4" to="Lighting/LavaLightEvent" method="Activate"]
+[connection signal="Deactivated" from="Lighting/LavaHallTrigger4" to="Lighting/LavaLightEvent" method="Deactivate"]
+[connection signal="Activated" from="Lighting/LavaHallTrigger5" to="Lighting/LavaLightEvent" method="Activate"]
+[connection signal="Deactivated" from="Lighting/LavaHallTrigger5" to="Lighting/LavaLightEvent" method="Deactivate"]
+[connection signal="Activated" from="Lighting/LavaHallTrigger6" to="Lighting/LavaLightEvent" method="Activate"]
+[connection signal="Deactivated" from="Lighting/LavaHallTrigger6" to="Lighting/LavaLightEvent" method="Deactivate"]
 [connection signal="Activated" from="Triggers/Object/AutomationTrigger" to="Collision/WallOneWay" method="Deactivate"]
 [connection signal="Deactivated" from="Triggers/Object/AutomationTrigger" to="Collision/WallOneWay" method="Activate"]
 

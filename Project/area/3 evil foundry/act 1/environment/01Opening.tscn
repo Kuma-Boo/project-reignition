@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bo4ijrtd2ee3j"]
+[gd_scene load_steps=6 format=3 uid="uid://bo4ijrtd2ee3j"]
 
 [ext_resource type="PackedScene" uid="uid://dgn3kog8hro3h" path="res://area/3 evil foundry/act 1/environment/model/01Opening.gltf" id="1_b0a0l"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_d1hnd"]
@@ -36,71 +36,6 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_dmlgd")
 
-[sub_resource type="Shader" id="Shader_b7d1e"]
-code = "// NOTE: Shader automatically converted from Godot Engine 4.2.2.stable.mono's StandardMaterial3D.
-
-shader_type spatial;
-render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_lambert,specular_disabled,unshaded;
-uniform vec4 albedo : source_color;
-uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_enable;
-uniform float distance_fade_min;
-uniform float distance_fade_max;
-uniform float point_size : hint_range(0,128);
-uniform float roughness : hint_range(0,1);
-uniform sampler2D texture_metallic : hint_default_white,filter_linear_mipmap,repeat_enable;
-uniform vec4 metallic_texture_channel;
-uniform sampler2D texture_roughness : hint_roughness_r,filter_linear_mipmap,repeat_enable;
-uniform float specular;
-uniform float metallic;
-uniform vec3 uv1_scale;
-uniform vec3 uv1_offset;
-uniform vec3 uv2_scale;
-uniform vec3 uv2_offset;
-
-
-void vertex() {
-	UV=UV*uv1_scale.xy+uv1_offset.xy;
-}
-
-
-
-
-
-
-void fragment() {
-	vec2 base_uv = UV;
-	vec4 albedo_tex = texture(texture_albedo,base_uv);
-	ALBEDO = albedo.rgb * albedo_tex.rgb;
-	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);
-	METALLIC = metallic_tex * metallic;
-	vec4 roughness_texture_channel = vec4(1.0,0.0,0.0,0.0);
-	float roughness_tex = dot(texture(texture_roughness,base_uv),roughness_texture_channel);
-	ROUGHNESS = roughness_tex * roughness;
-	SPECULAR = specular;
-	ALPHA *= albedo.a * albedo_tex.a;
-	ALPHA *= clamp(smoothstep(distance_fade_min, distance_fade_max, length(VERTEX)), 0.0, 1.0);
-}
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_d48l6"]
-render_priority = 0
-shader = SubResource("Shader_b7d1e")
-shader_parameter/albedo = Color(1, 1, 1, 1)
-shader_parameter/distance_fade_min = 5.0
-shader_parameter/distance_fade_max = 15.0
-shader_parameter/point_size = 1.0
-shader_parameter/roughness = 1.0
-shader_parameter/metallic_texture_channel = null
-shader_parameter/specular = 0.5
-shader_parameter/metallic = 0.0
-shader_parameter/uv1_scale = Vector3(1, 1, 1)
-shader_parameter/uv1_offset = Vector3(0, 0, 0)
-shader_parameter/uv2_scale = Vector3(1, 1, 1)
-shader_parameter/uv2_offset = Vector3(0, 0, 0)
-
-[sub_resource type="BoxMesh" id="BoxMesh_3ieov"]
-material = SubResource("ShaderMaterial_d48l6")
-
 [node name="01Opening" instance=ExtResource("1_b0a0l")]
 script = ExtResource("2_d1hnd")
 saveVisibilityOnCheckpoint = true
@@ -108,103 +43,136 @@ isStageVisuals = true
 
 [node name="stg030_g02_Mesh_1" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.05002, 0, 0, 0)
+layers = 4
 cast_shadow = 0
 mesh = SubResource("ArrayMesh_kelhp")
 
 [node name="stg030_k02_Mesh_1" parent="." index="1"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_lighting_01_Mesh_0" parent="." index="2"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_2" parent="." index="3"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_3" parent="." index="4"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_7" parent="." index="5"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_9" parent="." index="6"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_17" parent="." index="7"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_20" parent="." index="8"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_24" parent="." index="9"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_26" parent="." index="10"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_28" parent="." index="11"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_31" parent="." index="12"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_36" parent="." index="13"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_37" parent="." index="14"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_40" parent="." index="15"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_43" parent="." index="16"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_46" parent="." index="17"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_50" parent="." index="18"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_52" parent="." index="19"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o01_Mesh_53" parent="." index="20"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o02_Mesh_5" parent="." index="21"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o02_Mesh_11" parent="." index="22"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o02_Mesh_20" parent="." index="23"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o02_Mesh_30" parent="." index="24"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o02_Mesh_40" parent="." index="25"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o02_Mesh_52" parent="." index="26"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o02_Mesh_53" parent="." index="27"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o02_Mesh_54" parent="." index="28"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o02_Mesh_55" parent="." index="29"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_o02_Mesh_65" parent="." index="30"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_p02_Mesh_0" parent="." index="31"]
+layers = 4
 cast_shadow = 0
 
 [node name="stg030_p02_Mesh_1" parent="." index="32"]
+layers = 4
 cast_shadow = 0
 
 [node name="Skeleton3D" parent="OpeningMachinery" index="0"]
@@ -223,11 +191,7 @@ bones/8/rotation = Quaternion(0.408768, 0.576951, 0.576951, -0.408857)
 [node name="AnimationPlayer" parent="." index="34"]
 autoplay = "opening"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="35"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.6348, -36.0372, -59.766)
-mesh = SubResource("BoxMesh_3ieov")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="." index="36"]
+[node name="OmniLight3D" type="OmniLight3D" parent="." index="35"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.93078, -38.6726, -31.1648)
 light_color = Color(1, 0.815686, 0.470588, 1)
 light_energy = 4.0
@@ -235,7 +199,7 @@ light_cull_mask = 4294147009
 omni_range = 50.0
 omni_attenuation = 0.5
 
-[node name="OmniLight3D2" type="OmniLight3D" parent="." index="37"]
+[node name="OmniLight3D2" type="OmniLight3D" parent="." index="36"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -104.91, -38.6726, -31.1648)
 light_color = Color(1, 0.815686, 0.470588, 1)
 light_energy = 4.0
@@ -243,7 +207,7 @@ light_cull_mask = 4294147009
 omni_range = 50.0
 omni_attenuation = 0.5
 
-[node name="OmniLight3D3" type="OmniLight3D" parent="." index="38"]
+[node name="OmniLight3D3" type="OmniLight3D" parent="." index="37"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.60327, 0.84992)
 light_color = Color(1, 0.894118, 0.54902, 1)
 light_energy = 2.0
