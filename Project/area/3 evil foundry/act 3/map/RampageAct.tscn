@@ -172,8 +172,9 @@ _data = {
 [sub_resource type="BoxShape3D" id="BoxShape3D_vrdcu"]
 size = Vector3(20, 20, 2.5)
 
-[sub_resource type="Animation" id="Animation_6u27i"]
+[sub_resource type="Animation" id="Animation_u66v4"]
 resource_name = "event"
+length = 1.2
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -205,10 +206,24 @@ tracks/1/keys = {
 tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Door4")
+tracks/2/path = NodePath("Door3")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
+"times": PackedFloat32Array(1.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Door4")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0.8),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -217,9 +232,9 @@ tracks/2/keys = {
 }]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_f4d8d"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kkr2s"]
 _data = {
-"event": SubResource("Animation_6u27i")
+"event": SubResource("Animation_u66v4")
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fie53"]
@@ -445,6 +460,7 @@ shape = SubResource("BoxShape3D_jgghs")
 
 [node name="MainHall" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -162, -30, -120)
+visible = false
 script = ExtResource("5_uyv21")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -796,91 +812,91 @@ shape = SubResource("BoxShape3D_vrdcu")
 
 [node name="FurnaceHall" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -360, -30, -120)
-visible = false
 script = ExtResource("5_uyv21")
 saveVisibilityOnCheckpoint = true
 
 [node name="Furnace" parent="FurnaceHall" instance=ExtResource("16_uuqbq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 30)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 32)
 
 [node name="Furnace2" parent="FurnaceHall" instance=ExtResource("16_uuqbq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, 30)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, 41)
+
+[node name="Furnace3" parent="FurnaceHall" instance=ExtResource("16_uuqbq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 48)
 
 [node name="Grindrail7" parent="FurnaceHall" instance=ExtResource("12_3kv5t")]
-transform = Transform3D(-0.999862, 0, 0.0166321, 0, 1, 0, -0.0166321, 0, -0.999862, 0, 0.3, 25)
+transform = Transform3D(-0.999862, 0, 0.0166321, 0, 1, 0, -0.0166321, 0, -0.999862, -0.116425, 0.299999, 31.999)
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
 collider = NodePath("")
 
-[node name="Rings" type="Node3D" parent="FurnaceHall/Grindrail7"]
-transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 1.1, -7)
+[node name="GreenMajin" parent="FurnaceHall/Grindrail7" instance=ExtResource("10_eupsa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.00002)
+
+[node name="GreenMajin2" parent="FurnaceHall/Grindrail7" instance=ExtResource("10_eupsa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Pearls" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-4.37113e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37113e-08, -14, 0.6, 62)
 script = ExtResource("6_uk2l3")
 Generate = false
-Source = ExtResource("7_4roe7")
-Amount = 5
+Source = ExtResource("20_64oqy")
+Amount = 10
 Shape = 0
 Orientation = 0
-Spacing = 1.5
-"Horizontal Offset" = null
+Spacing = 1.0
+"Horizontal Offset" = SubResource("Curve_5lk7t")
 "Vertical Offset" = null
 
-[node name="Child01" parent="FurnaceHall/Grindrail7/Rings" instance=ExtResource("7_4roe7")]
+[node name="Child01" parent="FurnaceHall/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, 0)
 
-[node name="Child02" parent="FurnaceHall/Grindrail7/Rings" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+[node name="Child02" parent="FurnaceHall/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.277708, 0, -1)
 
-[node name="Child03" parent="FurnaceHall/Grindrail7/Rings" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+[node name="Child03" parent="FurnaceHall/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.458228, 0, -2)
 
-[node name="Child04" parent="FurnaceHall/Grindrail7/Rings" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+[node name="Child04" parent="FurnaceHall/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.480324, 0, -3)
 
-[node name="Child05" parent="FurnaceHall/Grindrail7/Rings" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+[node name="Child05" parent="FurnaceHall/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.202975, 0, -4)
 
-[node name="Rings6" type="Node3D" parent="FurnaceHall"]
-transform = Transform3D(-4.37113e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37113e-08, -10, 1, 60)
-script = ExtResource("6_uk2l3")
-Generate = false
-Source = ExtResource("7_4roe7")
-Amount = 5
-Shape = 0
-Orientation = 0
-Spacing = 1.5
-"Horizontal Offset" = null
-"Vertical Offset" = null
+[node name="Child06" parent="FurnaceHall/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.202975, 0, -5)
 
-[node name="Child01" parent="FurnaceHall/Rings6" instance=ExtResource("7_4roe7")]
+[node name="Child07" parent="FurnaceHall/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.480324, 0, -6)
 
-[node name="Child02" parent="FurnaceHall/Rings6" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+[node name="Child08" parent="FurnaceHall/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.459394, 0, -7)
 
-[node name="Child03" parent="FurnaceHall/Rings6" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+[node name="Child09" parent="FurnaceHall/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.281146, 0, -8)
 
-[node name="Child04" parent="FurnaceHall/Rings6" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
-
-[node name="Child05" parent="FurnaceHall/Rings6" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+[node name="Child10" parent="FurnaceHall/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, -9)
 
 [node name="DoorEvent" parent="FurnaceHall" instance=ExtResource("4_4bbn8")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6.2, 0, 60)
 
 [node name="Door1" parent="FurnaceHall/DoorEvent" instance=ExtResource("14_aq75i")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0, 22)
+SpikeState = 1
 SwingMode = 2
 
 [node name="Door2" parent="FurnaceHall/DoorEvent" instance=ExtResource("14_aq75i")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, 22)
 PivotPoint = 1
-SwingMode = 1
+SwingMode = 3
 
 [node name="Door3" parent="FurnaceHall/DoorEvent" instance=ExtResource("14_aq75i")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, 42)
+SpikeState = 1
 PivotPoint = 1
-SwingMode = 1
+SwingMode = 2
 
 [node name="Door4" parent="FurnaceHall/DoorEvent" instance=ExtResource("14_aq75i")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0, 42)
@@ -895,213 +911,261 @@ animator = NodePath("../AnimationPlayer")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="FurnaceHall/DoorEvent"]
 libraries = {
-"": SubResource("AnimationLibrary_f4d8d")
+"": SubResource("AnimationLibrary_kkr2s")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="FurnaceHall/DoorEvent"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_fie53")
 
-[node name="RichRing" parent="FurnaceHall" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 8, 62)
-
-[node name="GreenMajin5" parent="FurnaceHall" instance=ExtResource("10_eupsa")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -38, 3, 60)
-
-[node name="MovingMajin" type="Node3D" parent="FurnaceHall"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -50, 4.826, 58)
-script = ExtResource("18_5lbv6")
-Movement/Mode = 1
-"Movement/Cycle Length" = 4.0
-"Movement/Starting Offset" = 0.0
-Movement/Distance = 5.0
-Movement/Angle = 90.0
-"Vertical Orientation" = false
-startPaused = true
-smoothPausing = true
-root = NodePath("BlueMajin")
-animator = NodePath("")
-
-[node name="BlueMajin" parent="FurnaceHall/MovingMajin" instance=ExtResource("19_ssxri")]
-"Attack Settings/Attack Type" = 1
-
-[node name="Grindrail" parent="FurnaceHall" instance=ExtResource("12_3kv5t")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -55, 0.3, 59.5)
-railModel = NodePath("")
-startCap = NodePath("")
-endCap = NodePath("")
-collider = NodePath("")
-
-[node name="Rings7" type="Node3D" parent="FurnaceHall/Grindrail"]
-transform = Transform3D(0.999721, 0, 0.0236121, 0, 1, 0, -0.0236121, 0, 0.999721, 0, 1.1, -8)
-script = ExtResource("6_uk2l3")
-Generate = false
-Source = ExtResource("7_4roe7")
-Amount = 5
-Shape = 0
-Orientation = 0
-Spacing = 2.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="FurnaceHall/Grindrail/Rings7" instance=ExtResource("7_4roe7")]
-
-[node name="Child02" parent="FurnaceHall/Grindrail/Rings7" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="Child03" parent="FurnaceHall/Grindrail/Rings7" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="Child04" parent="FurnaceHall/Grindrail/Rings7" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="Child05" parent="FurnaceHall/Grindrail/Rings7" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="Ringsline9" type="Node3D" parent="FurnaceHall"]
-transform = Transform3D(-0.325766, 0, 0.94545, 0, 1, 0, -0.94545, 0, -0.325766, -100.65, -0.799999, 60.7978)
-script = ExtResource("6_uk2l3")
-Generate = false
-Source = ExtResource("7_4roe7")
-Amount = 8
-Shape = 2
-Path = NodePath("../../Static/Path/StartingPath")
-"Path Progress Offset" = 0.0
-"Disable Path Y" = false
-Spacing = 3.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="FurnaceHall/Ringsline9" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52588e-05, -2.67029e-05, -0.00012207)
-
-[node name="Child02" parent="FurnaceHall/Ringsline9" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0651093, -0.559622, -2.95602)
-
-[node name="Child03" parent="FurnaceHall/Ringsline9" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.578369, -1.19736, -5.84818)
-
-[node name="Child04" parent="FurnaceHall/Ringsline9" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.51727, -1.89386, -8.61322)
-
-[node name="Child05" parent="FurnaceHall/Ringsline9" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.84799, -2.62899, -11.1978)
-
-[node name="Child06" parent="FurnaceHall/Ringsline9" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.53223, -3.38318, -13.5565)
-
-[node name="Child07" parent="FurnaceHall/Ringsline9" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.53107, -4.13769, -15.65)
-
-[node name="Child08" parent="FurnaceHall/Ringsline9" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.80602, -4.8742, -17.4407)
-
-[node name="Pearlsline" type="Node3D" parent="FurnaceHall"]
-transform = Transform3D(-0.999329, 0, -0.0366262, 0, 1, 0, 0.0366262, 0, -0.999329, -113.564, -7.9918, 83.748)
+[node name="Pearls2" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-4.37113e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37113e-08, -34, 0.6, 58)
 script = ExtResource("6_uk2l3")
 Generate = false
 Source = ExtResource("20_64oqy")
-Amount = 19
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = SubResource("Curve_5lk7t")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, 0)
+
+[node name="Child02" parent="FurnaceHall/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.277708, 0, -1)
+
+[node name="Child03" parent="FurnaceHall/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.458228, 0, -2)
+
+[node name="Child04" parent="FurnaceHall/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.480324, 0, -3)
+
+[node name="Child05" parent="FurnaceHall/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.202975, 0, -4)
+
+[node name="Child06" parent="FurnaceHall/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.202975, 0, -5)
+
+[node name="Child07" parent="FurnaceHall/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.480324, 0, -6)
+
+[node name="Child08" parent="FurnaceHall/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.459394, 0, -7)
+
+[node name="Child09" parent="FurnaceHall/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.281146, 0, -8)
+
+[node name="Child10" parent="FurnaceHall/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, -9)
+
+[node name="GreenMajin" parent="FurnaceHall" instance=ExtResource("10_eupsa")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -38, 3, 60)
+
+[node name="GreenMajin2" parent="FurnaceHall" instance=ExtResource("10_eupsa")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -53, 3, 62)
+
+[node name="Rings" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-4.37114e-08, -0.0204538, 0.999791, 0, 0.999791, 0.0204538, -1, 8.94065e-10, -4.37022e-08, -78, 1, 60)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("7_4roe7")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = SubResource("Curve_5lk7t")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, 0)
+
+[node name="Child02" parent="FurnaceHall/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.432299, 0, -3)
+
+[node name="Child03" parent="FurnaceHall/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34375, 0, -6)
+
+[node name="Child04" parent="FurnaceHall/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34375, 0, -9)
+
+[node name="Child05" parent="FurnaceHall/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.434033, 0, -12)
+
+[node name="Child06" parent="FurnaceHall/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, -15)
+
+[node name="GreenMajin3" parent="FurnaceHall" instance=ExtResource("10_eupsa")]
+transform = Transform3D(-0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, -0.422618, -103.873, -2, 63.2719)
+rangeOverride = 30
+
+[node name="Pearls3" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -115.819, -6.2918, 76.8186)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("20_64oqy")
+Amount = 20
 Shape = 2
 Path = NodePath("../../Static/Path/StartingPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
-Spacing = 1.5
+Spacing = 1.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000152588, -0.000167847, -0.000709534)
+[node name="Child01" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000183105, -0.000278473, 0.00117493)
 
-[node name="Child02" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.345642, -0.344902, -1.34146)
+[node name="Child02" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13147, -0.226467, 1.01535)
 
-[node name="Child03" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.795288, -0.695572, -2.65393)
+[node name="Child03" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.213287, -0.446201, 2.03629)
 
-[node name="Child04" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.34067, -1.05082, -3.9324)
+[node name="Child04" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24469, -0.658737, 3.06168)
 
-[node name="Child05" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.97455, -1.40954, -5.17194)
+[node name="Child05" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.218781, -0.868912, 4.1054)
 
-[node name="Child06" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.69006, -1.77089, -6.3683)
+[node name="Child06" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.127075, -1.08473, 5.1466)
 
-[node name="Child07" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.48129, -2.13417, -7.51759)
+[node name="Child07" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0271912, -1.30542, 6.17629)
 
-[node name="Child08" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.34311, -2.49883, -8.61607)
+[node name="Child08" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.240326, -1.53025, 7.19138)
 
-[node name="Child09" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.27072, -2.86437, -9.65987)
+[node name="Child09" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.508881, -1.75863, 8.18948)
 
-[node name="Child10" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.26007, -3.23032, -10.6449)
+[node name="Child10" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.829346, -1.98999, 9.16853)
 
-[node name="Child11" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3075, -3.59625, -11.5667)
+[node name="Child11" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19846, -2.22387, 10.127)
 
-[node name="Child12" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.40948, -3.96167, -12.4204)
+[node name="Child12" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.61331, -2.45984, 11.0636)
 
-[node name="Child13" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.56241, -4.32601, -13.2003)
+[node name="Child13" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.07095, -2.69758, 11.9773)
 
-[node name="Child14" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.7628, -4.68858, -13.9001)
+[node name="Child14" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.56903, -2.93679, 12.8671)
 
-[node name="Child15" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.0067, -5.04852, -14.5127)
+[node name="Child15" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.10526, -3.17721, 13.7325)
 
-[node name="Child16" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.289, -5.40471, -15.0302)
+[node name="Child16" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.67755, -3.41862, 14.5726)
 
-[node name="Child17" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.6045, -5.75573, -15.4439)
+[node name="Child17" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2843, -3.66084, 15.3867)
 
-[node name="Child18" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.9459, -6.09984, -15.7451)
+[node name="Child18" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.92374, -3.9037, 16.1741)
 
-[node name="Child19" parent="FurnaceHall/Pearlsline" instance=ExtResource("20_64oqy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.305, -6.43487, -15.9248)
+[node name="Child19" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.59464, -4.14706, 16.934)
 
-[node name="Grindrail2" parent="FurnaceHall" instance=ExtResource("11_ysag6")]
-transform = Transform3D(-0.00312413, 0, 0.999995, 0, 1, 0, -0.999995, 0, -0.00312413, -102.202, -29.7063, 60.3233)
-railModel = NodePath("")
-startCap = NodePath("")
-endCap = NodePath("")
-collider = NodePath("")
+[node name="Child20" parent="FurnaceHall/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.29565, -4.39077, 17.6657)
 
-[node name="Rings" type="Node3D" parent="FurnaceHall/Grindrail2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8147e-06, 1.1, -8)
+[node name="GreenMajin4" parent="FurnaceHall" instance=ExtResource("10_eupsa")]
+transform = Transform3D(-0.573576, 0, -0.819152, 0, 1, 0, 0.819152, 0, -0.573576, -105.434, -12, 96.9344)
+
+[node name="Pearls4" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -97, -14, 99)
 script = ExtResource("6_uk2l3")
 Generate = false
-Source = ExtResource("7_4roe7")
-Amount = 5
-Shape = 0
-Orientation = 0
-Spacing = 2.0
+Source = ExtResource("20_64oqy")
+Amount = 20
+Shape = 2
+Path = NodePath("../../Static/Path/StartingPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="FurnaceHall/Grindrail2/Rings" instance=ExtResource("7_4roe7")]
+[node name="Child01" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00213623, 0.00050354, -0.000312805)
 
-[node name="Child02" parent="FurnaceHall/Grindrail2/Rings" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+[node name="Child02" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.912415, -0.223705, 0.0970001)
 
-[node name="Child03" parent="FurnaceHall/Grindrail2/Rings" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+[node name="Child03" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.82983, -0.443108, 0.137268)
 
-[node name="Child04" parent="FurnaceHall/Grindrail2/Rings" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+[node name="Child04" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75311, -0.660461, 0.119522)
 
-[node name="Child05" parent="FurnaceHall/Grindrail2/Rings" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+[node name="Child05" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.67615, -0.882496, 0.0460052)
+
+[node name="Child06" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.59357, -1.10869, -0.0814667)
+
+[node name="Child07" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.50281, -1.33843, -0.260895)
+
+[node name="Child08" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.40134, -1.57115, -0.490044)
+
+[node name="Child09" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.28714, -1.80637, -0.766685)
+
+[node name="Child10" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.15836, -2.04367, -1.08864)
+
+[node name="Child11" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.01331, -2.28263, -1.45366)
+
+[node name="Child12" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.85043, -2.52296, -1.85966)
+
+[node name="Child13" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6683, -2.76435, -2.30462)
+
+[node name="Child14" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.4658, -3.00655, -2.78658)
+
+[node name="Child15" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.2415, -3.24934, -3.30376)
+
+[node name="Child16" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.9944, -3.49254, -3.8545)
+
+[node name="Child17" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.7233, -3.73597, -4.43724)
+
+[node name="Child18" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4271, -3.9795, -5.05051)
+
+[node name="Child19" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.1048, -4.22295, -5.69289)
+
+[node name="Child20" parent="FurnaceHall/Pearls4" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.7549, -4.46619, -6.36307)
+
+[node name="DashGroup" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -104, -30, 60)
+
+[node name="DashPanel1" parent="FurnaceHall/DashGroup" instance=ExtResource("34_28sk7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="DashPanel2" parent="FurnaceHall/DashGroup" instance=ExtResource("34_28sk7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Grindrail" parent="FurnaceHall" instance=ExtResource("13_coq33")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -114, -29.7, 59)
 
 [node name="GreenMajin6" parent="FurnaceHall" instance=ExtResource("10_eupsa")]
 transform = Transform3D(0.0138924, 0, 0.999904, 0, 1, 0, -0.999904, 0, 0.0138924, -150.519, -29.3801, 60.4163)
+rangeOverride = 35
 
 [node name="FanHall" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -475, -60, -60)
@@ -2563,7 +2627,6 @@ shape = SubResource("BoxShape3D_jgghs")
 [connection signal="Deactivated" from="CullingMap/Ending-L" to="Ending" method="Deactivate"]
 [connection signal="Activated" from="CullingMap/Mine-U" to="Mine" method="Deactivate"]
 [connection signal="Deactivated" from="CullingMap/Mine-U" to="Mine" method="Activate"]
-[connection signal="SpinStarted" from="FurnaceHall/MovingMajin/BlueMajin" to="FurnaceHall/MovingMajin" method="Unpause"]
 [connection signal="SpinStarted" from="FanHall/MovingMajin/BlueMajin" to="FanHall/MovingMajin" method="Unpause"]
 [connection signal="SpinStarted" from="FanHall/MovingMajin2/BlueMajin2" to="FanHall/MovingMajin2" method="Unpause"]
 [connection signal="PotEntered" from="PitHall/FlyingPot" to="PitHall/CullingTrigger" method="Activate"]
