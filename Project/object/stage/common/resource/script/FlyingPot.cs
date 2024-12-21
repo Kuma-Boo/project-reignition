@@ -8,9 +8,10 @@ namespace Project.Gameplay.Objects;
 [Tool]
 public partial class FlyingPot : Node3D
 {
+	[Signal] public delegate void PotEnteredEventHandler();
+
 	[Export] public Vector2 travelBounds;
 	[Export] public float boundOffset;
-
 	[Export] private CameraSettingsResource customCameraSettings;
 
 	[ExportGroup("Components")]
@@ -129,6 +130,7 @@ public partial class FlyingPot : Node3D
 		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		Player.StartFlyingPot(this);
 		Player.LaunchFinished -= OnEnteredPot;
+		EmitSignal(SignalName.PotEntered);
 	}
 
 	public void PlayExitFX()
