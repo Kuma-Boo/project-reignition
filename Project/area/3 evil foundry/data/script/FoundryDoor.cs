@@ -57,6 +57,17 @@ public partial class FoundryDoor : Node3D
 		Flip,
 	}
 	[Export(PropertyHint.Range, ".1,2,.1")] private float swingLength;
+	[Export]
+	private bool SwingInReverse
+	{
+		get => swingInReverse;
+		set
+		{
+			swingInReverse = value;
+			UpdateState();
+		}
+	}
+	private bool swingInReverse;
 
 	[ExportGroup("Components")]
 	[Export(PropertyHint.NodePathValidTypes, "AnimationTree")] private NodePath animator;
@@ -70,6 +81,7 @@ public partial class FoundryDoor : Node3D
 
 	private readonly StringName SpikeTransition = "parameters/spike_transition/transition_request";
 	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
+	private readonly StringName StateSeek = "parameters/state_seek/seek_request";
 	private readonly StringName DoorSpeed = "parameters/state_speed/scale";
 
 	public override void _Ready()
@@ -125,10 +137,11 @@ public partial class FoundryDoor : Node3D
 		if (Animator == null) // No animator!
 			return;
 
-		Animator.Set(DoorSpeed, 0f); // Prevent door from swinging immediately
-
 		Animator.Set(SpikeTransition, spikeState.ToString().ToLower());
 		Animator.Set(StateTransition, $"{swingMode.ToString().ToLower()}_{pivotPoint.ToString().ToLower()}");
+
+		Animator.Set(StateSeek, swingInReverse ? 1f : 0f);
+		Animator.Set(DoorSpeed, 0f); // Prevent door from swinging immediately
 	}
 
 	public void Activate(Area3D a)
@@ -145,7 +158,10 @@ public partial class FoundryDoor : Node3D
 			return;
 
 		isActivated = true;
-		Animator.Set(DoorSpeed, 1f / swingLength);
+		float animationSpeed = 1f / swingLength;
+		if (swingInReverse)
+			animationSpeed *= -1;
+		Animator.Set(DoorSpeed, animationSpeed);
 	}
 
 	private void OnEntered(Area3D a)
