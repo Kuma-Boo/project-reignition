@@ -53,8 +53,12 @@ public partial class SlideState : PlayerState
 		Player.DisableSidle = false;
 		Player.ChangeHitbox("RESET");
 
-		if (Player.StateMachine.QueuedState != jumpState && Player.StateMachine.QueuedState != crouchState)
+		if (!Player.IsDrifting &&
+			Player.StateMachine.QueuedState != jumpState &&
+			Player.StateMachine.QueuedState != crouchState)
+		{
 			Player.Skills.ConsumeJumpCharge();
+		}
 
 		if (!Mathf.IsZeroApprox(Player.MoveSpeed))
 		{
@@ -85,6 +89,8 @@ public partial class SlideState : PlayerState
 		Player.AddSlopeSpeed(true);
 		Player.ApplyMovement();
 		Player.CheckWall();
+		if (Player.CheckCeiling())
+			return null;
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideExp))
 			Player.Skills.UpdateSoulSlide();
@@ -99,7 +105,13 @@ public partial class SlideState : PlayerState
 		{
 			Player.Skills.ChargeJump();
 			if (!Input.IsActionPressed("button_jump"))
-				return jumpState;
+			{
+				if (!Player.Controller.IsBrakeHeld())
+					return jumpState;
+
+				Player.Skills.ConsumeJumpCharge();
+				return runState;
+			}
 		}
 		else
 		{

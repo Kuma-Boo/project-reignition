@@ -1,4 +1,4 @@
-[gd_scene load_steps=145 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=144 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -338,9 +338,6 @@ size = Vector3(8, 10, 15)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hyom4"]
 size = Vector3(5.72754, 10.5288, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_xaffb"]
-size = Vector3(15.1752, 29.3977, 18.1023)
 
 [sub_resource type="Gradient" id="Gradient_4ngna"]
 offsets = PackedFloat32Array(0, 0.0465116, 0.914634, 1)
@@ -2156,28 +2153,6 @@ reflectionRenderer = NodePath("../../../../PlanarReflectionRenderer")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
-[node name="Lighting" type="Node3D" parent="Trigger"]
-
-[node name="CavernEnter" type="Area3D" parent="Trigger/Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -570.943, -244.376, -1096.23)
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Lighting/CavernEnter"]
-transform = Transform3D(0.996154, 0, 0.0876252, 0, 1, 0, -0.0876252, 0, 0.996154, 67.4445, -35.9698, -11.246)
-shape = SubResource("BoxShape3D_xaffb")
-
-[node name="CavernExit" type="Area3D" parent="Trigger/Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -570.943, -244.376, -1096.23)
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Lighting/CavernExit"]
-transform = Transform3D(0.711989, 0, 0.70219, 0, 1, 0, -0.70219, 0, 0.711989, -60.9026, -27.0661, 37.8761)
-shape = SubResource("BoxShape3D_xaffb")
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Lighting/CavernExit"]
-transform = Transform3D(0.711989, 0, 0.70219, 0, 1, 0, -0.70219, 0, 0.711989, 106.569, -27.0661, -31.0936)
-shape = SubResource("BoxShape3D_xaffb")
-
 [node name="Path" type="Node3D" parent="."]
 
 [node name="ChasePath" type="Path3D" parent="Path"]
@@ -2392,8 +2367,6 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Deactivated" from="Trigger/Object/IslandRecenterTrigger/StartTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/IslandRecenterTrigger/StopTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/IslandRecenterTrigger/StopTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Deactivate"]
-[connection signal="area_entered" from="Trigger/Lighting/CavernEnter" to="Lighting/CaveLightEvent/PlayerLight" method="_on_cavern_enter_area_entered"]
-[connection signal="area_entered" from="Trigger/Lighting/CavernExit" to="Lighting/CaveLightEvent/PlayerLight" method="_on_cavern_exit_area_entered"]
 
 [editable path="Trigger/Object/DinoParaGroup/DinoPara1"]
 [editable path="Trigger/Object/DinoParaGroup/DinoPara2"]

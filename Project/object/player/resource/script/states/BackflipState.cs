@@ -55,7 +55,8 @@ public partial class BackflipState : PlayerState
 		Player.ApplyMovement();
 		Player.CheckGround();
 		Player.CheckWall(Vector3.Zero, false);
-		Player.CheckCeiling();
+		if (Player.CheckCeiling())
+			return null;
 		Player.UpdateUpDirection(true, Player.PathFollower.HeightAxis);
 
 		if (Player.IsOnGround)
@@ -79,7 +80,7 @@ public partial class BackflipState : PlayerState
 		float inputStrength = Player.Controller.GetInputStrength();
 
 		if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle) ||
-			Input.IsActionPressed("button_brake"))
+			Player.Controller.IsBrakeHeld())
 		{
 			Player.MoveSpeed = Player.Stats.BackflipSettings.UpdateInterpolate(Player.MoveSpeed, -1);
 			return;

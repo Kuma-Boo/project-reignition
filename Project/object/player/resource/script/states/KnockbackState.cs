@@ -23,6 +23,7 @@ public partial class KnockbackState : PlayerState
 		Player.IsKnockback = true;
 		Player.MovementAngle = Player.PathFollower.ForwardAngle; // Prevent being knocked sideways
 
+		GD.Print("Started Knockback");
 		Player.Animator.StartHurt();
 		Player.Animator.ResetState();
 		PreviousSettings = Settings;
@@ -51,6 +52,7 @@ public partial class KnockbackState : PlayerState
 
 	public override void ExitState()
 	{
+		GD.Print("Exited Knockback");
 		Player.IsKnockback = false;
 		Player.Animator.StopHurt();
 		Player.Animator.ResetState();

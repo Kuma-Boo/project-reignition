@@ -116,7 +116,6 @@ public partial class GrindState : PlayerState
 			HeadsUpDisplay.Instance.HidePrompts();
 
 		ActiveGrindRail.Deactivate();
-		ActiveGrindRail = null;
 	}
 
 	public override PlayerState ProcessPhysics()

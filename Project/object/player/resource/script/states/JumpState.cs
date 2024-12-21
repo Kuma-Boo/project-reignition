@@ -37,6 +37,12 @@ public partial class JumpState : PlayerState
 
 	public override void EnterState()
 	{
+		if (Player.IsLockoutActive &&
+			Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump))
+		{
+			Player.RemoveLockoutData(Player.ActiveLockoutData);
+		}
+
 		if (Player.Skills.IsSpeedBreakActive)
 			Player.Skills.ToggleSpeedBreak();
 
@@ -87,7 +93,8 @@ public partial class JumpState : PlayerState
 		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
 		Player.CheckGround();
 		Player.CheckWall(Vector3.Zero, !isAccelerationJump);
-		Player.CheckCeiling();
+		if (Player.CheckCeiling())
+			return null;
 		Player.UpdateUpDirection();
 
 		if (Player.IsOnGround)

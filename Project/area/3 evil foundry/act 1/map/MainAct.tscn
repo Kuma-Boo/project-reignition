@@ -1,4 +1,4 @@
-[gd_scene load_steps=129 format=3 uid="uid://ciqbaxbhrxrjk"]
+[gd_scene load_steps=130 format=3 uid="uid://ciqbaxbhrxrjk"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
@@ -68,7 +68,7 @@
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="54_5u8fr"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="55_0ks8t"]
 [ext_resource type="Resource" uid="uid://xydjkax35ng3" path="res://area/3 evil foundry/act 1/camera/main/OverheadLaunchRingCam.tres" id="60_abfqp"]
-[ext_resource type="Resource" uid="uid://b017wlhsy06jg" path="res://area/3 evil foundry/act 1/camera/main/FallingScrapCam.tres" id="61_4hcoc"]
+[ext_resource type="Resource" uid="uid://b017wlhsy06jg" path="res://area/3 evil foundry/act 1/camera/FarHallCam.tres" id="61_4hcoc"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="62_3jf77"]
 [ext_resource type="Resource" uid="uid://ue3podnaoetf" path="res://area/3 evil foundry/act 1/camera/PlatformingCam.tres" id="63_00tg6"]
 [ext_resource type="Resource" uid="uid://ccjhqcuypdtc0" path="res://area/3 evil foundry/data/ElevatorLockout.tres" id="63_1mmvt"]
@@ -1596,6 +1596,9 @@ point_count = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_181sa"]
 size = Vector3(15, 10, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1ntpd"]
+size = Vector3(5, 10, 10)
 
 [sub_resource type="Curve" id="Curve_ueekg"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.82426, 0.0, 0, 0]
@@ -4326,7 +4329,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -60, -
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -61.221, 0, 124)
 
 [node name="Grindrail3" parent="MainAct/PitHall" instance=ExtResource("30_lrk71")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -61.225, 2.5, 125)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -61.225, 3, 125)
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
@@ -5858,6 +5861,12 @@ transform = Transform3D(-4.37118e-08, -9.09497e-12, -1.00001, 1.05813e-11, 1, -9
 
 [node name="MetalPlatform9" parent="MainAct/LavaFlowHall" instance=ExtResource("44_kj7yh")]
 transform = Transform3D(-4.37116e-08, 9.09502e-12, 1, 1.05812e-11, 1, -9.09506e-12, -1, 1.05812e-11, -4.37116e-08, 74.5, -6, 0)
+
+[node name="SoftlockPrevention" type="StaticBody3D" parent="MainAct/LavaFlowHall"]
+transform = Transform3D(-4.37114e-08, 9.09499e-12, 1, 1.05812e-11, 1, -9.09499e-12, -1, 1.05812e-11, -4.37114e-08, 89.817, -9.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/LavaFlowHall/SoftlockPrevention"]
+shape = SubResource("BoxShape3D_1ntpd")
 
 [node name="Crusher4" parent="MainAct/LavaFlowHall" instance=ExtResource("45_ko5px")]
 transform = Transform3D(-4.37117e-08, 9.09499e-12, 1.00001, 1.05813e-11, 1, -9.09506e-12, -1.00001, 1.05812e-11, -4.37117e-08, 87.217, -11.5, 0)

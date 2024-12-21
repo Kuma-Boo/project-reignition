@@ -31,7 +31,7 @@ public partial class MovingObject : Node3D
 
 			if (movementMode == MovementModes.Linear)
 			{
-				properties.Add(ExtensionMethods.CreateProperty("Movement/Distance", Variant.Type.Float, PropertyHint.Range, "0,32,.1"));
+				properties.Add(ExtensionMethods.CreateProperty("Movement/Distance", Variant.Type.Float, PropertyHint.Range, "0,100,.1"));
 				properties.Add(ExtensionMethods.CreateProperty("Movement/Angle", Variant.Type.Float, PropertyHint.Range, "-180,180,5"));
 			}
 			else
@@ -205,7 +205,7 @@ public partial class MovingObject : Node3D
 		if (IsMovementInvalid()) return; // No movement
 		if (isPaused && !smoothPausing) return;
 
-		if (smoothPausing)
+		if (smoothPausing || StageSettings.Player.IsInvincible)
 			TimeScale = Mathf.Lerp(TimeScale, isPaused ? 0 : 1, PauseSmoothing);
 
 		currentTime += PhysicsManager.physicsDelta * Mathf.Sign(cycleLength) * TimeScale;
