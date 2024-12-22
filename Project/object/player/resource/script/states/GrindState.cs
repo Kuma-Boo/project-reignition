@@ -60,7 +60,7 @@ public partial class GrindState : PlayerState
 			StageSettings.Instance.UpdateRingCount(5, StageSettings.MathModeEnum.Subtract, true);
 		}
 
-		Player.StartExternal(this, ActiveGrindRail.PathFollower, positionSmoothing);
+		Player.StartExternal(null, ActiveGrindRail.PathFollower, positionSmoothing);
 		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.Animator.ExternalAngle = 0; // Reset rotation
 		Player.Animator.StartBalancing();
@@ -75,22 +75,6 @@ public partial class GrindState : PlayerState
 		HeadsUpDisplay.Instance.ShowPrompts();
 
 		ProcessPhysics();
-	}
-
-	private void CheckGrindStep(bool allowRedrawing = false)
-	{
-		bool wasAttemptingGrindStep = isAttemptingGrindStep;
-		// Check if the player is holding a direction parallel to rail and start a grindstep
-		float targetInputAngle = Player.Controller.GetTargetInputAngle();
-		isAttemptingGrindStep = !Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) &&
-				(Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle + (Mathf.Pi * .5f)) ||
-				Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle - (Mathf.Pi * .5f)));
-
-		if (allowRedrawing && wasAttemptingGrindStep != isAttemptingGrindStep)
-		{
-			HeadsUpDisplay.Instance.SetPrompt(isAttemptingGrindStep ? GrindStepAction : ShuffleAction, 1);
-			HeadsUpDisplay.Instance.ShowPrompts();
-		}
 	}
 
 	public override void ExitState()
@@ -135,6 +119,22 @@ public partial class GrindState : PlayerState
 			return fallState;
 
 		return null;
+	}
+
+	private void CheckGrindStep(bool allowRedrawing = false)
+	{
+		bool wasAttemptingGrindStep = isAttemptingGrindStep;
+		// Check if the player is holding a direction parallel to rail and start a grindstep
+		float targetInputAngle = Player.Controller.GetTargetInputAngle();
+		isAttemptingGrindStep = !Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) &&
+				(Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle + (Mathf.Pi * .5f)) ||
+				Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle - (Mathf.Pi * .5f)));
+
+		if (allowRedrawing && wasAttemptingGrindStep != isAttemptingGrindStep)
+		{
+			HeadsUpDisplay.Instance.SetPrompt(isAttemptingGrindStep ? GrindStepAction : ShuffleAction, 1);
+			HeadsUpDisplay.Instance.ShowPrompts();
+		}
 	}
 
 	private void ProcessMovement()
