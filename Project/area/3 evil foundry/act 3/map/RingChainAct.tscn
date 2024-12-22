@@ -276,6 +276,33 @@ alpha_curve = SubResource("CurveTexture_s14ln")
 [sub_resource type="QuadMesh" id="QuadMesh_2xv43"]
 material = ExtResource("20_mvqlt")
 
+[sub_resource type="Animation" id="Animation_kf55r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Furnace/Furnace:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Furnace:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_hygex"]
 resource_name = "event"
 tracks/0/type = "value"
@@ -315,33 +342,6 @@ tracks/2/keys = {
 "args": [],
 "method": &"restart"
 }]
-}
-
-[sub_resource type="Animation" id="Animation_kf55r"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Furnace/Furnace:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Furnace:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ik3yp"]
@@ -1085,7 +1085,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.97687, -4.14698, -17.1255)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.65085, -4.39069, -17.8821)
 
 [node name="RichRing" parent="FurnaceHall" instance=ExtResource("17_x8d6c")]
-transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, -100.966, -10.5, 98.2412)
+transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, -100, -10, 98.5)
 
 [node name="GreenMajin3" parent="FurnaceHall" instance=ExtResource("10_4deqf")]
 transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, -100, -13.5, 98.5)
@@ -1324,8 +1324,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, -12.5)
 [node name="Fan2" parent="FanHall" instance=ExtResource("21_5eri8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 5.5, -71)
 rotationTime = 20.0
-root = NodePath("../Fan/Root")
-sfx = NodePath("../Fan/SFX")
 
 [node name="GreenMajin2" parent="FanHall" instance=ExtResource("10_4deqf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.99997, 2, -85)
@@ -1521,8 +1519,6 @@ stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 [node name="Fan3" parent="FanHall" instance=ExtResource("23_dvean")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 35, 4, -155)
 rotationTime = 3.0
-root = NodePath("../Fan/Root")
-sfx = NodePath("../Fan/SFX")
 
 [node name="Rings8" type="Node3D" parent="FanHall"]
 transform = Transform3D(-4.37114e-08, 0.0784591, -0.996917, 0, 0.996917, 0.0784591, 1, 3.42956e-09, -4.35766e-08, 35, 0.5, -156)
@@ -1625,8 +1621,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.45058e-09, 0, -17)
 [node name="Fan4" parent="FanHall" instance=ExtResource("21_5eri8")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 61, 2, -155)
 rotationTime = 30.0
-root = NodePath("../Fan/Root")
-sfx = NodePath("../Fan/SFX")
 
 [node name="Rings9" type="Node3D" parent="FanHall"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 68, -2, -155)
@@ -1720,7 +1714,7 @@ draw_pass_1 = SubResource("QuadMesh_2xv43")
 script = ExtResource("15_lahxt")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
-"Trigger Settings/Player Stand-in" = null
+"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("../AnimationPlayer")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="FanHall/FurnaceEvent"]
@@ -1770,7 +1764,7 @@ transform = Transform3D(0.40688, 0, -0.913481, 0, 1, 0, 0.913481, 0, 0.40688, 12
 rotationTime = 2.0
 
 [node name="GreenMajin7" parent="FanHall" instance=ExtResource("10_4deqf")]
-transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 146, 0, -181)
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 146, 0.299999, -181)
 
 [node name="Rings12" type="Node3D" parent="FanHall"]
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 146, 3, -181)
@@ -1780,46 +1774,46 @@ Source = ExtResource("7_qo73h")
 Amount = 4
 Shape = 0
 Orientation = 1
-Spacing = 1.2
+Spacing = 1.1
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
 [node name="Child01" parent="FanHall/Rings12" instance=ExtResource("7_qo73h")]
 
 [node name="Child02" parent="FanHall/Rings12" instance=ExtResource("7_qo73h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 
 [node name="Child03" parent="FanHall/Rings12" instance=ExtResource("7_qo73h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
 
 [node name="Child04" parent="FanHall/Rings12" instance=ExtResource("7_qo73h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
 
 [node name="GreenMajin8" parent="FanHall" instance=ExtResource("10_4deqf")]
 transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 157, 1.5, -189)
 
 [node name="Rings13" type="Node3D" parent="FanHall"]
-transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 157, 4.5, -189)
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 157, 4.3, -189)
 script = ExtResource("6_m0t1x")
 Generate = false
 Source = ExtResource("7_qo73h")
 Amount = 4
 Shape = 0
 Orientation = 1
-Spacing = 1.2
+Spacing = 1.1
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
 [node name="Child01" parent="FanHall/Rings13" instance=ExtResource("7_qo73h")]
 
 [node name="Child02" parent="FanHall/Rings13" instance=ExtResource("7_qo73h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 
 [node name="Child03" parent="FanHall/Rings13" instance=ExtResource("7_qo73h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
 
 [node name="Child04" parent="FanHall/Rings13" instance=ExtResource("7_qo73h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
 
 [node name="SpikeGroup3" type="Node3D" parent="FanHall"]
 transform = Transform3D(0.422618, -0.0789899, -0.902859, 0, 0.996195, -0.0871557, 0.906308, 0.0368336, 0.42101, 160.187, 1.9, -192.655)
