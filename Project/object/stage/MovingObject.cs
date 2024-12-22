@@ -296,6 +296,6 @@ public partial class MovingObject : Node3D
 		if (verticalOrientation)
 			targetPosition = targetPosition.Rotated(Vector3.Right, Mathf.Pi * .5f);
 
-		return GlobalPosition + (GlobalTransform.Basis * targetPosition);
+		return GlobalPosition + (GlobalTransform.Basis.Orthonormalized() * targetPosition);
 	}
 }
