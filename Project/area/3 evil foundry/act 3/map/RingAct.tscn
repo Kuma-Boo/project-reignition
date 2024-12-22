@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://bb6wcbrkyex8p"]
+[gd_scene load_steps=53 format=3 uid="uid://bb6wcbrkyex8p"]
 
 [ext_resource type="PackedScene" uid="uid://sap50uvjitma" path="res://area/3 evil foundry/act 3/Static.tscn" id="1_gtt8y"]
 [ext_resource type="Resource" uid="uid://b0gigm6bbv35g" path="res://resource/level data/evil foundry/Act3Ring.tres" id="2_plufy"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="13_vcthb"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="14_hklds"]
 [ext_resource type="PackedScene" uid="uid://b7ku38xcd8buw" path="res://object/enemy/majin/data/evil foundry/BlueMajin.tscn" id="15_ywtx0"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="16_5sd3t"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="16_qvx17"]
 [ext_resource type="PackedScene" uid="uid://c10y5dhqmy3gk" path="res://area/3 evil foundry/object/FanBroken.tscn" id="17_w10kd"]
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="17_wv4oa"]
@@ -436,6 +437,7 @@ shape = SubResource("BoxShape3D_jgghs")
 
 [node name="MainHall" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -162, -30, -120)
+visible = false
 script = ExtResource("28_w8jfy")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -715,6 +717,9 @@ railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
 collider = NodePath("")
+
+[node name="FireSoul1" parent="MainHall" instance=ExtResource("16_5sd3t")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 1, 148)
 
 [node name="DoorEvent" parent="MainHall" instance=ExtResource("12_f76lo")]
 transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, 0, 0, 50)
@@ -1954,6 +1959,10 @@ rangeOverride = 30
 [node name="HallPlatformLeft2" parent="PitHall" instance=ExtResource("31_yvbfo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.75, -60.2, -0.5, 169.5)
 
+[node name="FireSoul2" parent="PitHall" instance=ExtResource("16_5sd3t")]
+transform = Transform3D(1, 0, -3.55271e-15, 0, 1, 0, 0, 0, 0.75, -60.2, 1.5, 172.5)
+fireSoulIndex = 2
+
 [node name="HallPlatformShort2" parent="PitHall" instance=ExtResource("26_wlk10")]
 transform = Transform3D(-0.999999, 0, -8.74227e-08, 0, 1, 0, 8.74227e-08, 0, -0.999999, -60, -0.5, 182)
 
@@ -2501,12 +2510,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
 [node name="Child05" parent="Ending/Grindrail/RichRings3" instance=ExtResource("14_hklds")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
+[node name="FireSoul3" parent="Ending/Grindrail" instance=ExtResource("16_5sd3t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -29)
+fireSoulIndex = 3
+
 [node name="InvisibleGrindrail" parent="Ending" instance=ExtResource("23_mp3n2")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -46, 35, 150)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -45, 35, 150)
 railLength = 10
 
 [node name="Goal" parent="Ending" instance=ExtResource("38_ge0ru")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -55, 39, 150)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -57, 39, 150)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ending/Goal"]
 shape = SubResource("BoxShape3D_jgghs")
