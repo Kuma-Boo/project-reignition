@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://c0g787cfiycyb"]
+[gd_scene load_steps=69 format=3 uid="uid://c0g787cfiycyb"]
 
 [ext_resource type="PackedScene" uid="uid://sap50uvjitma" path="res://area/3 evil foundry/act 3/Static.tscn" id="1_vxbwk"]
 [ext_resource type="Resource" uid="uid://dms84hjj5asyn" path="res://resource/level data/evil foundry/Act3Rampage.tres" id="2_ai54x"]
@@ -31,16 +31,14 @@
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="27_csl17"]
 [ext_resource type="PackedScene" uid="uid://2fyo48r8yibn" path="res://area/3 evil foundry/object/platform/HallPlatformLong.tscn" id="28_lecrf"]
 [ext_resource type="PackedScene" uid="uid://mhhtlvsxmugl" path="res://object/stage/common/Catapult.tscn" id="28_u3nvm"]
-[ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="29_j1ann"]
 [ext_resource type="PackedScene" uid="uid://c1o8jxmiiryrj" path="res://object/stage/common/JumpCarpet.tscn" id="29_soiy7"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="30_jve7i"]
-[ext_resource type="PackedScene" uid="uid://cjuvjyn7a7uqa" path="res://area/3 evil foundry/object/platform/HallPlatformRight.tscn" id="31_v4dno"]
-[ext_resource type="PackedScene" uid="uid://di218qnf7t4ra" path="res://area/3 evil foundry/object/platform/HallPlatformLeft.tscn" id="32_pid4k"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="33_llghu"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="34_28sk7"]
+[ext_resource type="PackedScene" uid="uid://cjmdbpjhq73j8" path="res://area/3 evil foundry/object/grindrail/Grindrail01.tscn" id="34_afs7x"]
 [ext_resource type="PackedScene" uid="uid://caxr4l7dgmca" path="res://area/3 evil foundry/object/scrap/ScrapMachineSupport.tscn" id="35_0l3kf"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="36_7mm5i"]
-[ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="37_bcpg7"]
+[ext_resource type="PackedScene" uid="uid://bgp5prexgdala" path="res://area/3 evil foundry/object/scrap/FallingScrap.tscn" id="38_61d2o"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="38_dh8tc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jgghs"]
@@ -415,11 +413,27 @@ _data = {
 "event": SubResource("Animation_mwc11")
 }
 
-[sub_resource type="Curve" id="Curve_5i57i"]
+[sub_resource type="Curve" id="Curve_0aomd"]
+min_value = -0.5
+max_value = 0.5
+_data = [Vector2(0, 7.45058e-09), 0.0, -5.13352, 0, 0, Vector2(0.2, -0.5), 0.0, 0.0, 0, 0, Vector2(0.4, 0.5), 0.0, 0.0, 0, 0, Vector2(0.6, -0.5), 0.0, 0.0, 0, 0, Vector2(0.84466, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), -6.88787, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="Curve" id="Curve_odtwg"]
 min_value = -1.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, -1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_7mtoy"]
+min_value = -2.0
 max_value = 0.0
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -0.5), 0.0, 0.0, 0, 0]
-point_count = 2
+_data = [Vector2(0, 0), 0.0, -8.90852, 0, 0, Vector2(0.5, -2), 0.0, 0.0, 0, 0, Vector2(1, 0), 10.3933, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_ckjbf"]
+max_value = 2.0
+_data = [Vector2(0, 0), 0.0, 9.21852, 0, 0, Vector2(0.5, 2), 0.0, 0.0, 0, 0, Vector2(1, 0), -10.9775, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Curve" id="Curve_3f5nl"]
 min_value = -1.0
@@ -432,6 +446,16 @@ _data = {
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0)
 }
 point_count = 5
+
+[sub_resource type="Curve" id="Curve_64u7j"]
+min_value = -1.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.7, -1), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_dxlux"]
+max_value = 2.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 2), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [node name="Stage" type="Node"]
 
@@ -589,7 +613,6 @@ shape = SubResource("BoxShape3D_jgghs")
 
 [node name="MainHall" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -162, -30, -120)
-visible = false
 script = ExtResource("5_uyv21")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
@@ -1611,6 +1634,7 @@ stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="LavaCrossway" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670, -60, -300)
+visible = false
 script = ExtResource("5_uyv21")
 saveVisibilityOnCheckpoint = true
 
@@ -1778,46 +1802,38 @@ libraries = {
 transform = Transform3D(-1, 0, -8.74227e-08, 0, 1, 0, 8.74227e-08, 0, -1, 0, -0.5, 20)
 
 [node name="SpikeGroup" type="Node3D" parent="PitHall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14.9, 12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14.9, 38.5)
 
 [node name="SpikePanel" parent="PitHall/SpikeGroup" instance=ExtResource("22_tmi33")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.75, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.25, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel2" parent="PitHall/SpikeGroup" instance=ExtResource("22_tmi33")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0, 0)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel3" parent="PitHall/SpikeGroup" instance=ExtResource("22_tmi33")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75, 0, 0)
+"Current State" = 2
+"Start Time" = 0.6
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel4" parent="PitHall/SpikeGroup" instance=ExtResource("22_tmi33")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.749939, 0, 0)
-"State Lengths/inactive" = 0.2
-"State Lengths/active" = 0.8
-stateLengths = PackedFloat32Array(0.2, 0, 0.8)
-
-[node name="SpikePanel5" parent="PitHall/SpikeGroup" instance=ExtResource("22_tmi33")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, 0)
-"State Lengths/inactive" = 0.2
-"State Lengths/active" = 0.8
-stateLengths = PackedFloat32Array(0.2, 0, 0.8)
-
-[node name="SpikePanel6" parent="PitHall/SpikeGroup" instance=ExtResource("22_tmi33")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.74994, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.24994, 0, 0)
+"Current State" = 2
+"Start Time" = 0.6
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikeGroup2" type="Node3D" parent="PitHall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14.9, 45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14.9, 50)
 
 [node name="SpikePanel" parent="PitHall/SpikeGroup2" instance=ExtResource("22_tmi33")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.25, 0, 0)
@@ -1832,22 +1848,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0, 0)
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="SpikePanel3" parent="PitHall/SpikeGroup2" instance=ExtResource("22_tmi33")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
-"Current State" = 2
-"Start Time" = 0.2
-"State Lengths/inactive" = 0.2
-"State Lengths/active" = 0.8
-stateLengths = PackedFloat32Array(0.2, 0, 0.8)
-
-[node name="SpikePanel4" parent="PitHall/SpikeGroup2" instance=ExtResource("22_tmi33")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.749939, 0, 0)
-"Current State" = 2
-"Start Time" = 0.2
-"State Lengths/inactive" = 0.2
-"State Lengths/active" = 0.8
-stateLengths = PackedFloat32Array(0.2, 0, 0.8)
-
-[node name="SpikePanel5" parent="PitHall/SpikeGroup2" instance=ExtResource("22_tmi33")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75, 0, 0)
 "Current State" = 2
 "Start Time" = 0.6
@@ -1855,7 +1855,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75, 0, 0)
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
-[node name="SpikePanel6" parent="PitHall/SpikeGroup2" instance=ExtResource("22_tmi33")]
+[node name="SpikePanel4" parent="PitHall/SpikeGroup2" instance=ExtResource("22_tmi33")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.24994, 0, 0)
 "Current State" = 2
 "Start Time" = 0.6
@@ -1863,77 +1863,88 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.24994, 0, 0)
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
-[node name="FlyingPot" parent="PitHall" instance=ExtResource("26_ydg4s")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -14, 54)
-travelBounds = Vector2(2, 14)
+[node name="LaunchRing" parent="PitHall" instance=ExtResource("22_gm263")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -13, 51)
+"Secondary Settings/Middle Height" = 15.0
+"Secondary Settings/Final Height" = 13.0
+"Secondary Settings/Distance" = 6.0
+middleHeight = 0.0
+finalHeight = 5.0
+distance = 0.0
+launchDirection = 2
 
-[node name="CullingTrigger" type="Node3D" parent="PitHall"]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -14, 54)
-script = ExtResource("5_uyv21")
-respawnOnActivation = true
+[node name="GreenMajin" parent="PitHall" instance=ExtResource("10_eupsa")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -14, 45)
 
-[node name="Rings" type="Node3D" parent="PitHall/CullingTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+[node name="GreenMajin2" parent="PitHall" instance=ExtResource("10_eupsa")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -12, 51)
+
+[node name="Grindrail" parent="PitHall" instance=ExtResource("13_coq33")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -5, 0.5, 72)
+
+[node name="Rings" type="Node3D" parent="PitHall/Grindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -9)
 script = ExtResource("6_uk2l3")
 Generate = false
 Source = ExtResource("7_4roe7")
-Amount = 6
+Amount = 5
 Shape = 0
-Orientation = 1
-Spacing = 1.6
+Orientation = 0
+Spacing = 3.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="PitHall/CullingTrigger/Rings" instance=ExtResource("7_4roe7")]
+[node name="Child01" parent="PitHall/Grindrail/Rings" instance=ExtResource("7_4roe7")]
 
-[node name="Child02" parent="PitHall/CullingTrigger/Rings" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+[node name="Child02" parent="PitHall/Grindrail/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 
-[node name="Child03" parent="PitHall/CullingTrigger/Rings" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 0)
-
-[node name="Child04" parent="PitHall/CullingTrigger/Rings" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, 0)
-
-[node name="Child05" parent="PitHall/CullingTrigger/Rings" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, 0)
-
-[node name="Child06" parent="PitHall/CullingTrigger/Rings" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-
-[node name="ItemBoxes" type="Node3D" parent="PitHall"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -16, 0.5, 70)
-
-[node name="ItemBox1" parent="PitHall/ItemBoxes" instance=ExtResource("29_j1ann")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
-"Spawn Settings/Pickup Parent" = NodePath("RichRing")
-"Spawn Settings/Travel Height" = 1.0
-
-[node name="RichRing" parent="PitHall/ItemBoxes/ItemBox1" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -3)
-
-[node name="ItemBox2" parent="PitHall/ItemBoxes" instance=ExtResource("29_j1ann")]
-
-[node name="ItemBox3" parent="PitHall/ItemBoxes" instance=ExtResource("29_j1ann")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 0)
-
-[node name="ItemBox4" parent="PitHall/ItemBoxes" instance=ExtResource("29_j1ann")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -6)
-"Spawn Settings/Spawn Pearls" = true
-"Spawn Settings/Amount" = 50
-
-[node name="ItemBox5" parent="PitHall/ItemBoxes" instance=ExtResource("29_j1ann")]
+[node name="Child03" parent="PitHall/Grindrail/Rings" instance=ExtResource("7_4roe7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
-[node name="ItemBox6" parent="PitHall/ItemBoxes" instance=ExtResource("29_j1ann")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -6)
+[node name="Child04" parent="PitHall/Grindrail/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 
-[node name="Grindrail" parent="PitHall/ItemBoxes" instance=ExtResource("13_coq33")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, -9)
+[node name="Child05" parent="PitHall/Grindrail/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Grindrail2" parent="PitHall" instance=ExtResource("13_coq33")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -25, 0.299999, 68)
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
 collider = NodePath("")
+
+[node name="Rings" type="Node3D" parent="PitHall/Grindrail2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -12)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("7_4roe7")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PitHall/Grindrail2/Rings" instance=ExtResource("7_4roe7")]
+
+[node name="Child02" parent="PitHall/Grindrail2/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="PitHall/Grindrail2/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="PitHall/Grindrail2/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child05" parent="PitHall/Grindrail2/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Door" parent="PitHall" instance=ExtResource("14_aq75i")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -62, 0, 98.0001)
+SpikeState = 1
+PivotPoint = 1
 
 [node name="SpringGroup" type="Node3D" parent="PitHall"]
 transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, -60, 0.200001, 85)
@@ -1955,34 +1966,211 @@ finalHeight = 5.0
 distance = 15.0
 voiceKey = &""
 
-[node name="Door" parent="PitHall" instance=ExtResource("14_aq75i")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -62, 0, 98.0001)
-SpikeState = 1
-PivotPoint = 1
+[node name="HallPlatformShort3" parent="PitHall" instance=ExtResource("27_chjey")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -60, -0.5, 95)
 
-[node name="HallPlatformRight" parent="PitHall" instance=ExtResource("31_v4dno")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.9, -61.8, -0.5, 110)
+[node name="Grindrail3" parent="PitHall" instance=ExtResource("12_3kv5t")]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -58.5, 0.299999, 99)
 
-[node name="GreenMajin1" parent="PitHall" instance=ExtResource("10_eupsa")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -61.8, 0, 116)
+[node name="GreenMajin3" parent="PitHall/Grindrail3" instance=ExtResource("10_eupsa")]
+transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -2.84217e-14, 0, 1, 0, -0.299999, -1)
 rangeOverride = 30
 
-[node name="HallPlatformLeft" parent="PitHall" instance=ExtResource("32_pid4k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.9, -58.2, -0.5, 130)
+[node name="Rings" type="Node3D" parent="PitHall/Grindrail3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -3.60834)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("7_4roe7")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
 
-[node name="GreenMajin2" parent="PitHall" instance=ExtResource("10_eupsa")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -58.1, 0, 135)
+[node name="Child01" parent="PitHall/Grindrail3/Rings" instance=ExtResource("7_4roe7")]
+
+[node name="Child02" parent="PitHall/Grindrail3/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="PitHall/Grindrail3/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="PitHall/Grindrail3/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="PitHall/Grindrail3/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="PitHall/Grindrail3/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="PitHall/Grindrail3/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="PitHall/Grindrail3/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Grindrail4" parent="PitHall" instance=ExtResource("34_afs7x")]
+transform = Transform3D(-0.953717, 0, 0.300706, 0, 1, 0, -0.300706, 0, -0.953717, -58.5, 0.299999, 119)
+
+[node name="Grindrail5" parent="PitHall" instance=ExtResource("12_3kv5t")]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -61.5, 0.299999, 128.5)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Pearls" type="Node3D" parent="PitHall/Grindrail5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.4, -1)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("20_64oqy")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PitHall/Grindrail5/Pearls" instance=ExtResource("20_64oqy")]
+
+[node name="Child02" parent="PitHall/Grindrail5/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="PitHall/Grindrail5/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="PitHall/Grindrail5/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="PitHall/Grindrail5/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child06" parent="PitHall/Grindrail5/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="PitHall/Grindrail5/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child08" parent="PitHall/Grindrail5/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+
+[node name="Pearls2" type="Node3D" parent="PitHall/Grindrail5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.4, -1)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("20_64oqy")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PitHall/Grindrail5/Pearls2" instance=ExtResource("20_64oqy")]
+
+[node name="Child02" parent="PitHall/Grindrail5/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="PitHall/Grindrail5/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="PitHall/Grindrail5/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="PitHall/Grindrail5/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child06" parent="PitHall/Grindrail5/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="PitHall/Grindrail5/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child08" parent="PitHall/Grindrail5/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+
+[node name="InvisibleGrindrail" parent="PitHall" instance=ExtResource("24_0xmdl")]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -58.5, 0.299999, 128.5)
+railLength = 21
+
+[node name="GreenMajin4" parent="PitHall/InvisibleGrindrail" instance=ExtResource("10_eupsa")]
+transform = Transform3D(1, 0, -6.3573e-08, 0, 1, 0, 6.3573e-08, 0, 1, 0, -0.299999, -6.49979)
 rangeOverride = 30
 
-[node name="HallPlatformRight2" parent="PitHall" instance=ExtResource("31_v4dno")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.9, -61.8, -0.5, 150.5)
+[node name="RichRing" parent="PitHall/InvisibleGrindrail" instance=ExtResource("17_fpk27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -13)
+
+[node name="Grindrail6" parent="PitHall" instance=ExtResource("34_afs7x")]
+transform = Transform3D(-0.953717, 0, -0.300706, 0, 1, 0, 0.300706, 0, -0.953717, -61.5, 0.299999, 148.5)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="InvisibleGrindrail2" parent="PitHall" instance=ExtResource("24_0xmdl")]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -61.5, 0.299999, 158.001)
+railLength = 21
+
+[node name="GreenMajin34" parent="PitHall/InvisibleGrindrail2" instance=ExtResource("10_eupsa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, -2)
+rangeOverride = 30
+
+[node name="RichRing" parent="PitHall/InvisibleGrindrail2" instance=ExtResource("17_fpk27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -10)
+
+[node name="Grindrail7" parent="PitHall" instance=ExtResource("12_3kv5t")]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -58.5, 0.299999, 158)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Rings" type="Node3D" parent="PitHall/Grindrail7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -1)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("7_4roe7")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="PitHall/Grindrail7/Rings" instance=ExtResource("7_4roe7")]
+
+[node name="Child02" parent="PitHall/Grindrail7/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="PitHall/Grindrail7/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="PitHall/Grindrail7/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="PitHall/Grindrail7/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child06" parent="PitHall/Grindrail7/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="PitHall/Grindrail7/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child08" parent="PitHall/Grindrail7/Rings" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+
+[node name="Spring" parent="PitHall" instance=ExtResource("30_jve7i")]
+transform = Transform3D(1, 0, 0, 0, 0.906308, -0.422618, 0, 0.422618, 0.906308, -58.5, 0.299999, 178.001)
+middleHeight = 5.0
+finalHeight = 4.0
+distance = 5.0
 
 [node name="GreenMajin3" parent="PitHall" instance=ExtResource("10_eupsa")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -61.8, 0, 156)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -60, 0, 185)
 rangeOverride = 30
-
-[node name="HallPlatformLeft2" parent="PitHall" instance=ExtResource("32_pid4k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.75, -60.2, -0.5, 169.5)
 
 [node name="HallPlatformShort2" parent="PitHall" instance=ExtResource("27_chjey")]
 transform = Transform3D(-0.999999, 0, -8.74227e-08, 0, 1, 0, 8.74227e-08, 0, -0.999999, -60, -0.5, 182)
@@ -1996,26 +2184,433 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 4, 0.5
 SpikeState = 2
 SwingMode = 1
 
-[node name="SpikeBall1" parent="PitHall" instance=ExtResource("33_llghu")]
-transform = Transform3D(-1.5, 0, -2.26494e-07, 0, 1.5, 0, 2.26494e-07, 0, -1.5, -58.4, -13, 129)
-"Movement/Cycle Length" = 2.0
-Movement/Distance = 16.0
+[node name="LowerPit" type="Node3D" parent="PitHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, -15, 85)
 
-[node name="SpikeBall2" parent="PitHall" instance=ExtResource("33_llghu")]
-transform = Transform3D(1.5, 0, 2.62268e-07, 0, 1.5, 0, -2.62268e-07, 0, 1.5, -61.6, -13, 155)
-"Movement/Cycle Length" = 2.0
-Movement/Distance = 16.0
+[node name="SpikeBall1" parent="PitHall/LowerPit" instance=ExtResource("33_llghu")]
+transform = Transform3D(-1.5, 0, -2.26494e-07, 0, 1.5, 0, 2.26494e-07, 0, -1.5, 1.60001, 2, 38.0001)
+"Movement/Cycle Length" = 8.0
+Movement/Distance = 10.0
 
-[node name="SpikeBall3" parent="PitHall" instance=ExtResource("33_llghu")]
-transform = Transform3D(1.5, 0, 2.62268e-07, 0, 1.5, 0, -2.62268e-07, 0, 1.5, -60.85, -13, 168.5)
+[node name="SpikeGroup" type="Node3D" parent="PitHall/LowerPit"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2, 0, 46)
+
+[node name="SpikePanel" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel2" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel3" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel4" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel5" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel6" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel7" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel8" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel9" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel10" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel11" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel12" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel13" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel14" parent="PitHall/LowerPit/SpikeGroup" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.8
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikeGroup2" type="Node3D" parent="PitHall/LowerPit"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2, 0, 69.0363)
+
+[node name="SpikePanel" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel2" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel3" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel4" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel5" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel6" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel7" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel8" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel9" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel10" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel11" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel12" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel13" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, 0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel14" parent="PitHall/LowerPit/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -0.75)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikeGroup3" type="Node3D" parent="PitHall/LowerPit"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2, 0, 94.0364)
+
+[node name="SpikePanel" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel2" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel3" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel4" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel5" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel6" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel7" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel8" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel9" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel10" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel11" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel12" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel13" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel14" parent="PitHall/LowerPit/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikeGroup4" type="Node3D" parent="PitHall/LowerPit"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -3, 0, 94.0365)
+
+[node name="SpikePanel" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel2" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel3" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel4" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel5" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel6" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel7" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel8" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel9" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel10" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel11" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel12" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel13" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, 0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikePanel14" parent="PitHall/LowerPit/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -0.75)
+"State Lengths/inactive" = 0.4
+"State Lengths/active" = 1.2
+stateLengths = PackedFloat32Array(0.4, 0, 1.2)
+
+[node name="SpikeBall2" parent="PitHall/LowerPit" instance=ExtResource("33_llghu")]
+transform = Transform3D(1.5, 0, 2.62268e-07, 0, 1.5, 0, -2.62268e-07, 0, 1.5, -1.6, 2, 77)
+"Movement/Cycle Length" = 9.0
+Movement/Distance = 10.0
+
+[node name="SpikeBall3" parent="PitHall/LowerPit" instance=ExtResource("33_llghu")]
+transform = Transform3D(1.5, 0, 2.62268e-07, 0, 1.5, 0, -2.62268e-07, 0, 1.5, 0, 2, 85)
 Movement/Mode = 2
-"Movement/Cycle Length" = 3.0
+"Movement/Cycle Length" = 5.0
 "Movement/Horizontal Size" = 0.0
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
 
-[node name="SpikeBall4" parent="PitHall" instance=ExtResource("33_llghu")]
-transform = Transform3D(1.5, 0, 2.62268e-07, 0, 1.5, 0, -2.62268e-07, 0, 1.5, -60.85, -13, 174.5)
+[node name="SpikeBall4" parent="PitHall/LowerPit" instance=ExtResource("33_llghu")]
+transform = Transform3D(1.5, 0, 2.62268e-07, 0, 1.5, 0, -2.62268e-07, 0, 1.5, -0.849976, 2, 89.5)
 Movement/Mode = 2
 "Movement/Cycle Length" = 3.0
 "Movement/Starting Offset" = 0.4
@@ -2023,19 +2618,87 @@ Movement/Mode = 2
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 2.0
 
-[node name="FlyingPot2" parent="PitHall" instance=ExtResource("26_ydg4s")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -60, -14, 189)
-travelBounds = Vector2(2, 5)
-
-[node name="SpikeBall5" parent="PitHall" instance=ExtResource("33_llghu")]
-transform = Transform3D(-1.5, 0, 1.31134e-07, 0, 1.5, 0, -1.31134e-07, 0, -1.5, -57, -9, 192)
+[node name="SpikeBall5" parent="PitHall/LowerPit" instance=ExtResource("33_llghu")]
+transform = Transform3D(-1.5, 0, 1.31134e-07, 0, 1.5, 0, -1.31134e-07, 0, -1.5, 3, 6, 107)
 "Movement/Cycle Length" = 3.0
 Movement/Distance = 4.0
 Movement/Angle = -90.0
 
-[node name="FlyingPot3" parent="PitHall" instance=ExtResource("26_ydg4s")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -60, -8, 194)
-travelBounds = Vector2(2, 8)
+[node name="FlyingPot" parent="PitHall/LowerPit" instance=ExtResource("26_ydg4s")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1, 109)
+travelBounds = Vector2(2, 14)
+
+[node name="Pearls" type="Node3D" parent="PitHall/LowerPit"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 3, 109)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("20_64oqy")
+Amount = 20
+Shape = 0
+Orientation = 1
+Spacing = 0.6
+"Horizontal Offset" = SubResource("Curve_0aomd")
+"Vertical Offset" = null
+
+[node name="Child01" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.45058e-09, 0, 0)
+
+[node name="Child02" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.232347, 0.6, 0)
+
+[node name="Child03" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.390965, 1.2, 0)
+
+[node name="Child04" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.478774, 1.8, 0)
+
+[node name="Child05" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.491981, 2.4, 0)
+
+[node name="Child06" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.263814, 3, 0)
+
+[node name="Child07" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.117437, 3.6, 0)
+
+[node name="Child08" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.433081, 4.2, 0)
+
+[node name="Child09" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.469092, 4.8, 0)
+
+[node name="Child10" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.192812, 5.4, 0)
+
+[node name="Child11" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.192812, 6, 0)
+
+[node name="Child12" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.469092, 6.6, 0)
+
+[node name="Child13" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.454322, 7.2, 0)
+
+[node name="Child14" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.226145, 7.8, 0)
+
+[node name="Child15" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0885548, 8.4, 0)
+
+[node name="Child16" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.370316, 9, 0)
+
+[node name="Child17" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.499675, 9.6, 0)
+
+[node name="Child18" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.452966, 10.2, 0)
+
+[node name="Child19" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29178, 10.8, 0)
+
+[node name="Child20" parent="PitHall/LowerPit/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 11.4, 0)
 
 [node name="Spiral" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 4.37114e-08, 1, -4.37114e-08, 1, -4.37114e-08, -1, -4.37114e-08, -4.37114e-08, -410, -30, -360)
@@ -2051,26 +2714,38 @@ transform = Transform3D(0.999901, -4.37114e-08, -0.0141193, 4.43242e-08, 1, 4.30
 script = ExtResource("6_uk2l3")
 Generate = false
 Source = ExtResource("7_4roe7")
-Amount = 4
+Amount = 8
 Shape = 2
 Path = NodePath("../../Static/Path/EndingPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 4.0
-"Horizontal Offset" = SubResource("Curve_5i57i")
+"Horizontal Offset" = SubResource("Curve_odtwg")
 "Vertical Offset" = null
 
 [node name="Child01" parent="Spiral/Rings1" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.33514e-05, -0.000183105)
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, -1.05879e-22, 0, 6.94832e-23, 1, 0, 1.33514e-05, -0.000183105)
 
 [node name="Child02" parent="Spiral/Rings1" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0731201, -0.342464, 4.00333)
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, -1.05879e-22, 0, 6.94832e-23, 1, -0.407776, -0.342464, 4.00806)
 
 [node name="Child03" parent="Spiral/Rings1" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.533539, -0.833174, 7.92633)
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, -1.05879e-22, 0, 6.94832e-23, 1, -1.14981, -0.833174, 7.83478)
 
 [node name="Child04" parent="Spiral/Rings1" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.62402, -1.49757, 11.6422)
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, -1.05879e-22, 0, 6.94832e-23, 1, -1.92697, -1.49757, 11.532)
+
+[node name="Child05" parent="Spiral/Rings1" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, -1.05879e-22, 0, 6.94832e-23, 1, -3.16595, -2.30894, 15.1627)
+
+[node name="Child06" parent="Spiral/Rings1" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, -1.05879e-22, 0, 6.94832e-23, 1, -5.07077, -3.22776, 18.603)
+
+[node name="Child07" parent="Spiral/Rings1" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, -1.05879e-22, 0, 6.94832e-23, 1, -7.7352, -4.21116, 21.5943)
+
+[node name="Child08" parent="Spiral/Rings1" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, -1.05879e-22, 0, 6.94832e-23, 1, -11.1157, -5.21822, 23.8)
 
 [node name="ScrapMachineSupport1" parent="Spiral" instance=ExtResource("35_0l3kf")]
 transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, 0.00448608, -1.3985, 30.9832)
@@ -2081,8 +2756,126 @@ transform = Transform3D(0.573576, 0, -0.819152, 1.59872e-14, 1, -2.13163e-14, 0.
 [node name="ScrapMachineSupport3" parent="Spiral" instance=ExtResource("35_0l3kf")]
 transform = Transform3D(0.906308, 0, -0.422618, 2.13163e-14, 1, -7.28306e-14, 0.422618, -1.64203e-15, 0.906308, -27.4235, -9.25292, 42.655)
 
+[node name="Pearls" type="Node3D" parent="Spiral"]
+transform = Transform3D(0.999901, -4.37114e-08, -0.0141193, 4.43242e-08, 1, 4.30899e-08, 0.0141193, -4.37114e-08, 0.999901, -37.5211, -11.6523, 36.0348)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("20_64oqy")
+Amount = 15
+Shape = 2
+Path = NodePath("../../Static/Path/EndingPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = SubResource("Curve_7mtoy")
+"Vertical Offset" = null
+
+[node name="Child01" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, 0.000976563, 0.000427246, 0.00143433)
+
+[node name="Child02" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -0.083313, -0.239006, -1.16162)
+
+[node name="Child03" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -0.199219, -0.477791, -2.25024)
+
+[node name="Child04" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -0.346832, -0.715778, -3.27689)
+
+[node name="Child05" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -0.52478, -0.952759, -4.2536)
+
+[node name="Child06" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -0.730286, -1.1885, -5.1922)
+
+[node name="Child07" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -0.959381, -1.42271, -6.104)
+
+[node name="Child08" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -1.20648, -1.65504, -6.99976)
+
+[node name="Child09" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -1.45499, -1.88507, -7.89218)
+
+[node name="Child10" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -1.70511, -2.11232, -8.78745)
+
+[node name="Child11" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -1.97632, -2.3362, -9.69028)
+
+[node name="Child12" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -2.28741, -2.5561, -10.6114)
+
+[node name="Child13" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -2.65628, -2.77282, -11.5701)
+
+[node name="Child14" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -3.10196, -2.99324, -12.5845)
+
+[node name="Child15" parent="Spiral/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 1.37643e-21, 0, 6.94832e-23, 1, -3.6412, -3.21745, -13.6716)
+
 [node name="ScrapMachineSupport4" parent="Spiral" instance=ExtResource("35_0l3kf")]
 transform = Transform3D(0.965926, 0, 0.258819, 3.55271e-14, 1, -1.05693e-13, -0.258819, -1.64203e-15, 0.965926, -40.197, -13.6529, 30.4033)
+
+[node name="Pearls2" type="Node3D" parent="Spiral"]
+transform = Transform3D(0.999901, -4.37114e-08, -0.0141193, 4.43242e-08, 1, 4.30898e-08, 0.0141193, -4.37114e-08, 0.999901, -38.7493, -15.4478, 21.0313)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("20_64oqy")
+Amount = 15
+Shape = 2
+Path = NodePath("../../Static/Path/EndingPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = SubResource("Curve_ckjbf")
+"Vertical Offset" = null
+
+[node name="Child01" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, 0.000457764, -0.000480652, -0.00195313)
+
+[node name="Child02" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, -0.328217, -0.232281, -1.06995)
+
+[node name="Child03" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, -0.477295, -0.466072, -2.14343)
+
+[node name="Child04" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, -0.461914, -0.701488, -3.20343)
+
+[node name="Child05" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, -0.297974, -0.938251, -4.23483)
+
+[node name="Child06" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, -0.00183105, -1.17609, -5.22623)
+
+[node name="Child07" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, 0.410309, -1.4148, -6.16943)
+
+[node name="Child08" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, 0.922638, -1.65418, -7.05927)
+
+[node name="Child09" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, 1.51028, -1.8941, -7.89996)
+
+[node name="Child10" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, 2.1698, -2.13442, -8.68451)
+
+[node name="Child11" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, 2.91586, -2.37504, -9.39084)
+
+[node name="Child12" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, 3.76007, -2.61584, -9.99384)
+
+[node name="Child13" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, 4.71069, -2.85675, -10.4657)
+
+[node name="Child14" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, 5.77209, -3.09767, -10.7762)
+
+[node name="Child15" parent="Spiral/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 3.38813e-21, 1, 6.35275e-21, 0, 6.94832e-23, 1, 6.94443, -3.33853, -10.893)
 
 [node name="ScrapMachineSupport5" parent="Spiral" instance=ExtResource("35_0l3kf")]
 transform = Transform3D(-0.5, 0, -0.866025, 4.61853e-14, 1, -1.77636e-13, 0.866025, -1.64203e-15, -0.5, -36.972, -17.1529, 16.1152)
@@ -2090,30 +2883,14 @@ transform = Transform3D(-0.5, 0, -0.866025, 4.61853e-14, 1, -1.77636e-13, 0.8660
 [node name="ScrapMachineSupport6" parent="Spiral" instance=ExtResource("35_0l3kf")]
 transform = Transform3D(-0.965926, 0, -0.258819, 4.26326e-14, 1, -2.13163e-13, 0.258819, -1.64203e-15, -0.965926, -26.0421, -20.9529, 5.03058)
 
-[node name="RichRing" parent="Spiral" instance=ExtResource("17_fpk27")]
-transform = Transform3D(0.866025, 0, 0.5, 8.88178e-14, 1, -2.0961e-13, -0.5, -1.64203e-15, 0.866025, -2.07922, -26.4529, 14.2961)
-
-[node name="ScrapMachineSupport7" parent="Spiral" instance=ExtResource("35_0l3kf")]
-transform = Transform3D(0.866025, 0, 0.5, 7.10543e-14, 1, -2.0961e-13, -0.5, -1.64203e-15, 0.866025, -3.63806, -27.4529, 15.1962)
-
-[node name="ScrapMachineSupport8" parent="Spiral" instance=ExtResource("35_0l3kf")]
-transform = Transform3D(-1, 0, 3.17865e-08, 7.81597e-14, 1, -2.10131e-13, -3.17865e-08, -1.64203e-15, -1, 0.861938, -29.6529, 27.3923)
-
 [node name="Mine" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -360, -60, -360)
 visible = false
 script = ExtResource("5_uyv21")
 saveVisibilityOnCheckpoint = true
 
-[node name="Grindrail" parent="Mine" instance=ExtResource("12_3kv5t")]
-transform = Transform3D(-1, 4.37114e-08, -8.74228e-08, 4.37114e-08, 1, 4.37114e-08, 8.74228e-08, 4.37114e-08, -1, 0, 0.299995, 2)
-railModel = NodePath("")
-startCap = NodePath("")
-endCap = NodePath("")
-collider = NodePath("")
-
-[node name="Rings" type="Node3D" parent="Mine/Grindrail"]
-transform = Transform3D(1, 0, 0, 0, 1, 1.37337e-15, 0, 1.37337e-15, 1, 0, 1.1, -4)
+[node name="Rings" type="Node3D" parent="Mine"]
+transform = Transform3D(-1, 4.37114e-08, -8.74228e-08, 4.37114e-08, 1, 4.37114e-08, 8.74228e-08, 4.37114e-08, -1, 0.600006, 0.699993, -10)
 script = ExtResource("6_uk2l3")
 Generate = false
 Source = ExtResource("7_4roe7")
@@ -2124,21 +2901,134 @@ Spacing = 3.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="Mine/Grindrail/Rings" instance=ExtResource("7_4roe7")]
+[node name="Child01" parent="Mine/Rings" instance=ExtResource("7_4roe7")]
 
-[node name="Child02" parent="Mine/Grindrail/Rings" instance=ExtResource("7_4roe7")]
+[node name="Child02" parent="Mine/Rings" instance=ExtResource("7_4roe7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 
-[node name="Child03" parent="Mine/Grindrail/Rings" instance=ExtResource("7_4roe7")]
+[node name="Child03" parent="Mine/Rings" instance=ExtResource("7_4roe7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
-[node name="Child04" parent="Mine/Grindrail/Rings" instance=ExtResource("7_4roe7")]
+[node name="Child04" parent="Mine/Rings" instance=ExtResource("7_4roe7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 
-[node name="Child05" parent="Mine/Grindrail/Rings" instance=ExtResource("7_4roe7")]
+[node name="Child05" parent="Mine/Rings" instance=ExtResource("7_4roe7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 
 [node name="Rings2" type="Node3D" parent="Mine"]
+transform = Transform3D(-1, 4.37114e-08, -8.74228e-08, 4.37114e-08, 1, 4.37114e-08, 8.74228e-08, 4.37114e-08, -1, -0.599976, 0.699993, -10)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("7_4roe7")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Mine/Rings2" instance=ExtResource("7_4roe7")]
+
+[node name="Child02" parent="Mine/Rings2" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="Mine/Rings2" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="Mine/Rings2" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child05" parent="Mine/Rings2" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="SpikeGroup1" type="Node3D" parent="Mine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00012207, 0, 28)
+
+[node name="SpikePanel" parent="Mine/SpikeGroup1" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="Mine/SpikeGroup1" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="GreenMajin" parent="Mine" instance=ExtResource("10_eupsa")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.000213623, 1, 37)
+rangeOverride = 30
+
+[node name="GreenMajin2" parent="Mine" instance=ExtResource("10_eupsa")]
+transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, -3.5004, 2, 54)
+rangeOverride = 30
+
+[node name="ScrapMachineSupport" parent="Mine" instance=ExtResource("35_0l3kf")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.00027, 2.9, 63)
+
+[node name="GreenMajin3" parent="Mine" instance=ExtResource("10_eupsa")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, -4, 4, 69)
+rangeOverride = 30
+
+[node name="SpikeGroup2" type="Node3D" parent="Mine"]
+transform = Transform3D(0.696364, 0.24371, 0.675042, -0.173648, 0.969846, -0.17101, -0.696364, 0.00186542, 0.717686, 6.13437, 0.652092, 108.845)
+
+[node name="SpikePanel" parent="Mine/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="Mine/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="Mine/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="Mine/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel5" parent="Mine/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 1.49012e-08, 2.98023e-08, 0, 1, 1.49012e-08, 0, -1.49012e-08, 1, 2.25, -7.62939e-06, 1.50002)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel6" parent="Mine/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 1.49012e-08, 2.98023e-08, 0, 1, 1.49012e-08, 0, -1.49012e-08, 1, 0.750061, -3.8147e-06, 1.5)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel7" parent="Mine/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 1.49012e-08, 2.98023e-08, 0, 1, 1.49012e-08, 0, -1.49012e-08, 1, -0.749969, -3.8147e-06, 1.50002)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel8" parent="Mine/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 1.49012e-08, 2.98023e-08, 0, 1, 1.49012e-08, 0, -1.49012e-08, 1, -2.25, -3.8147e-06, 1.5)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="ScrapMachineSupport2" parent="Mine" instance=ExtResource("35_0l3kf")]
+transform = Transform3D(0.64469, 0.021745, 0.764135, 0.172329, 0.969731, -0.172987, -0.744767, 0.243206, 0.621428, 23.1844, -2.63531, 121.762)
+
+[node name="ScrapMachineSupport3" parent="Mine" instance=ExtResource("35_0l3kf")]
+transform = Transform3D(-0.86405, -0.0765299, -0.497555, -0.211854, 0.951871, 0.221495, 0.456657, 0.296792, -0.838677, 30.3575, -5.4377, 133.525)
+
+[node name="Rings3" type="Node3D" parent="Mine"]
 transform = Transform3D(-1, 4.37114e-08, -8.74228e-08, 4.37114e-08, 1, 4.37114e-08, 8.74228e-08, 4.37114e-08, -1, 40.0996, -9.3, 164)
 script = ExtResource("6_uk2l3")
 Generate = false
@@ -2150,29 +3040,190 @@ Spacing = 3.0
 "Horizontal Offset" = SubResource("Curve_3f5nl")
 "Vertical Offset" = null
 
-[node name="Child01" parent="Mine/Rings2" instance=ExtResource("7_4roe7")]
+[node name="Child01" parent="Mine/Rings3" instance=ExtResource("7_4roe7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, 0)
 
-[node name="Child02" parent="Mine/Rings2" instance=ExtResource("7_4roe7")]
+[node name="Child02" parent="Mine/Rings3" instance=ExtResource("7_4roe7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.731524, 0, -3)
 
-[node name="Child03" parent="Mine/Rings2" instance=ExtResource("7_4roe7")]
+[node name="Child03" parent="Mine/Rings3" instance=ExtResource("7_4roe7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.99783, 0, -6)
 
-[node name="Child04" parent="Mine/Rings2" instance=ExtResource("7_4roe7")]
+[node name="Child04" parent="Mine/Rings3" instance=ExtResource("7_4roe7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.512937, 0, -9)
 
-[node name="Child05" parent="Mine/Rings2" instance=ExtResource("7_4roe7")]
+[node name="Child05" parent="Mine/Rings3" instance=ExtResource("7_4roe7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.512938, 0, -12)
 
-[node name="Child06" parent="Mine/Rings2" instance=ExtResource("7_4roe7")]
+[node name="Child06" parent="Mine/Rings3" instance=ExtResource("7_4roe7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.996723, 0, -15)
 
-[node name="Child07" parent="Mine/Rings2" instance=ExtResource("7_4roe7")]
+[node name="Child07" parent="Mine/Rings3" instance=ExtResource("7_4roe7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.664576, 0, -18)
 
-[node name="Child08" parent="Mine/Rings2" instance=ExtResource("7_4roe7")]
+[node name="Child08" parent="Mine/Rings3" instance=ExtResource("7_4roe7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, -21)
+
+[node name="GreenMajin4" parent="Mine" instance=ExtResource("10_eupsa")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 37.9999, -9, 213)
+
+[node name="GreenMajin5" parent="Mine" instance=ExtResource("10_eupsa")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 40.9997, -4.4, 220)
+rangeOverride = 40
+
+[node name="Rings4" type="Node3D" parent="Mine"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 43.2999, -7.5, 200.8)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("7_4roe7")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Mine/Rings4" instance=ExtResource("7_4roe7")]
+
+[node name="Child02" parent="Mine/Rings4" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="Mine/Rings4" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Rings5" type="Node3D" parent="Mine"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 41.7999, -7.5, 200.8)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("7_4roe7")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Mine/Rings5" instance=ExtResource("7_4roe7")]
+
+[node name="Child02" parent="Mine/Rings5" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="Mine/Rings5" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Pearls" type="Node3D" parent="Mine"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 42.2997, -4.9, 206.8)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("20_64oqy")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Mine/Pearls" instance=ExtResource("20_64oqy")]
+
+[node name="Child02" parent="Mine/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="Mine/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="Mine/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="Mine/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child06" parent="Mine/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child07" parent="Mine/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child08" parent="Mine/Pearls" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+
+[node name="Pearls2" type="Node3D" parent="Mine"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 42.8996, -4.9, 206.8)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("20_64oqy")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Mine/Pearls2" instance=ExtResource("20_64oqy")]
+
+[node name="Child02" parent="Mine/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="Mine/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="Mine/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="Mine/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child06" parent="Mine/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child07" parent="Mine/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child08" parent="Mine/Pearls2" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+
+[node name="Pearls3" type="Node3D" parent="Mine"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 43.4996, -4.9, 206.8)
+script = ExtResource("6_uk2l3")
+Generate = false
+Source = ExtResource("20_64oqy")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Mine/Pearls3" instance=ExtResource("20_64oqy")]
+
+[node name="Child02" parent="Mine/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="Mine/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="Mine/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="Mine/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child06" parent="Mine/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child07" parent="Mine/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child08" parent="Mine/Pearls3" instance=ExtResource("20_64oqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+
+[node name="FallingScrap" parent="Mine" instance=ExtResource("38_61d2o")]
+transform = Transform3D(-1.25, 0, -1.88745e-07, 0, 1, 0, 1.88745e-07, 0, -1.25, 41.9999, -10.5, 202.8)
+
+[node name="FallingScrap2" parent="Mine" instance=ExtResource("38_61d2o")]
+transform = Transform3D(1, 0, 1.27146e-07, 0, 2, 0, -6.3573e-08, 0, 2, 42.9995, -10.4, 208.5)
+
+[node name="FallingScrap3" parent="Mine" instance=ExtResource("38_61d2o")]
+transform = Transform3D(1, 0, 1.27146e-07, 0, 2, 0, -6.3573e-08, 0, 2, 42.9995, -10.4, 216.9)
 
 [node name="GolemPath" type="Path3D" parent="Mine"]
 transform = Transform3D(-1, 3.99861e-08, 8.74228e-08, 3.25355e-08, 1, 5.86126e-08, -1.17225e-07, 5.86126e-08, -1, 40.0307, -10, 224.344)
@@ -2189,11 +3240,89 @@ cubic_interp = false
 [node name="GolemMajin" parent="Mine/GolemPath/PathFollow3D" node_paths=PackedStringArray("gasTank") instance=ExtResource("25_lmvo0")]
 gasTank = NodePath("../../GasTank")
 
-[node name="RichRings" type="Node3D" parent="Mine"]
-transform = Transform3D(-0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, -0.258819, 14.9821, -2.5, 299.066)
+[node name="SpikeGroup3" type="Node3D" parent="Mine"]
+transform = Transform3D(0.996195, 0.00380168, -0.0870728, 0, 0.999048, 0.0436194, 0.0871557, -0.0434534, 0.995247, 40, -9.6, 268)
+
+[node name="SpikePanel" parent="Mine/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="Mine/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="Mine/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel5" parent="Mine/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 1.49012e-08, 2.98023e-08, 0, 1, 1.49012e-08, 0, -1.49012e-08, 1, 2.25, -7.62939e-06, 1.50002)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel6" parent="Mine/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 1.49012e-08, 2.98023e-08, 0, 1, 1.49012e-08, 0, -1.49012e-08, 1, 0.750061, -3.8147e-06, 1.5)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel7" parent="Mine/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 1.49012e-08, 2.98023e-08, 0, 1, 1.49012e-08, 0, -1.49012e-08, 1, -0.749969, -3.8147e-06, 1.50002)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikeGroup4" type="Node3D" parent="Mine"]
+transform = Transform3D(0.52651, 0.0721663, -0.847101, 0.203368, 0.956773, 0.207912, 0.825487, -0.281741, 0.489074, 23.5, -5.7, 293.7)
+
+[node name="SpikePanel" parent="Mine/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="Mine/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="Mine/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel5" parent="Mine/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 1.49012e-08, 2.98023e-08, 0, 1, 1.49012e-08, 0, -1.49012e-08, 1, 2.25, -7.62939e-06, 1.50002)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel6" parent="Mine/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 1.49012e-08, 2.98023e-08, 0, 1, 1.49012e-08, 0, -1.49012e-08, 1, 0.750061, -3.8147e-06, 1.5)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel7" parent="Mine/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 1.49012e-08, 2.98023e-08, 0, 1, 1.49012e-08, 0, -1.49012e-08, 1, -0.749969, -3.8147e-06, 1.50002)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="Rings6" type="Node3D" parent="Mine"]
+transform = Transform3D(-0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, -0.258819, 15.0597, -2.5, 299.356)
 script = ExtResource("6_uk2l3")
 Generate = false
-Source = ExtResource("17_fpk27")
+Source = ExtResource("7_4roe7")
 Amount = 8
 Shape = 2
 Path = NodePath("../../Static/Path/EndingPath")
@@ -2203,29 +3332,29 @@ Spacing = 4.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="Mine/RichRings" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.67029e-05, -0.000102997, 0.000579834)
+[node name="Child01" parent="Mine/Rings6" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.14441e-05, -3.43323e-05, 0.000152588)
 
-[node name="Child02" parent="Mine/RichRings" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.351685, 0.682396, -3.88535)
+[node name="Child02" parent="Mine/Rings6" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.353195, 0.68652, -3.9155)
 
-[node name="Child03" parent="Mine/RichRings" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.07167, 1.33518, -7.73166)
+[node name="Child03" parent="Mine/Rings6" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.07694, 1.34309, -7.78717)
 
-[node name="Child04" parent="Mine/RichRings" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.10783, 1.96148, -11.5069)
+[node name="Child04" parent="Mine/Rings6" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.11919, 1.97055, -11.5885)
 
-[node name="Child05" parent="Mine/RichRings" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.50125, 2.56337, -15.1635)
+[node name="Child05" parent="Mine/Rings6" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.52256, 2.57171, -15.2742)
 
-[node name="Child06" parent="Mine/RichRings" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.26695, 3.13245, -18.6616)
+[node name="Child06" parent="Mine/Rings6" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.30135, 3.14006, -18.8009)
 
-[node name="Child07" parent="Mine/RichRings" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.39141, 3.6629, -21.9624)
+[node name="Child07" parent="Mine/Rings6" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.44175, 3.66976, -22.1286)
 
-[node name="Child08" parent="Mine/RichRings" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.84818, 4.15041, -25.034)
+[node name="Child08" parent="Mine/Rings6" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.91658, 4.1565, -25.2247)
 
 [node name="SpikeGroupL" type="Node3D" parent="Mine"]
 transform = Transform3D(0.482963, 0.204396, 0.851451, -0.258819, 0.96225, -0.084186, -0.836516, -0.179713, 0.517633, -14.1978, 1.59623, 297.448)
@@ -2252,6 +3381,78 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
 "Current State" = 2
 "State Lengths/active" = 0.8
 stateLengths = PackedFloat32Array(0, 0, 0.8)
+
+[node name="SpikeGroup5" type="Node3D" parent="Mine"]
+transform = Transform3D(0.540016, 0.0766262, 0.83816, -0.0871026, 0.995588, -0.0348995, -0.837136, -0.0541597, 0.544307, -43.7021, 4, 265.769)
+
+[node name="SpikePanel" parent="Mine/SpikeGroup5" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, -0.75)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="Mine/SpikeGroup5" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 4.09782e-08, 2.08167e-16, -4.09782e-08, 1, 3.72529e-09, -5.55116e-17, -3.72529e-09, 1, -0.75, 7.62939e-06, -0.750061)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel5" parent="Mine/SpikeGroup5" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 7.45058e-08, -5.96047e-08, -7.45058e-08, 1, 7.10543e-15, 5.96047e-08, -2.66453e-15, 1, 0.75, -1.52588e-05, 0.750031)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel6" parent="Mine/SpikeGroup5" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 7.45058e-08, -5.96047e-08, -7.45058e-08, 1, 7.10543e-15, 5.96047e-08, -2.66453e-15, 1, -0.749939, -7.62939e-06, 0.75)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="GasTank" parent="Mine" instance=ExtResource("9_f7iy1")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -64.0001, 5.4, 260)
+height = 3.0
+endPosition = Vector3(0, 2, 12)
+
+[node name="GreenMajin6" parent="Mine" instance=ExtResource("10_eupsa")]
+transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, -76.0002, 3.4, 260)
+flameRoot = NodePath("../GreenMajin/FX/FireFX")
+hitboxAttachment = NodePath("../GreenMajin/ChestAttachment")
+rangeOverride = 30
+root = NodePath("../GreenMajin/Root")
+hurtbox = NodePath("../GreenMajin/ChestAttachment/Hitbox")
+collider = NodePath("../GreenMajin/ChestAttachment/EnvironmentCollider/CollisionShape3D")
+rangeCollider = NodePath("../GreenMajin/Range/CollisionShape3D")
+animationTree = NodePath("../GreenMajin/AnimationTree")
+animationPlayer = NodePath("../GreenMajin/AnimationPlayer")
+
+[node name="GreenMajin7" parent="Mine" instance=ExtResource("10_eupsa")]
+transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, -76.5003, 5.4, 259)
+flameRoot = NodePath("../GreenMajin/FX/FireFX")
+hitboxAttachment = NodePath("../GreenMajin/ChestAttachment")
+rangeOverride = 30
+root = NodePath("../GreenMajin/Root")
+hurtbox = NodePath("../GreenMajin/ChestAttachment/Hitbox")
+collider = NodePath("../GreenMajin/ChestAttachment/EnvironmentCollider/CollisionShape3D")
+rangeCollider = NodePath("../GreenMajin/Range/CollisionShape3D")
+animationTree = NodePath("../GreenMajin/AnimationTree")
+animationPlayer = NodePath("../GreenMajin/AnimationPlayer")
+
+[node name="GreenMajin8" parent="Mine" instance=ExtResource("10_eupsa")]
+transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, -77.0004, 6.4, 261)
+flameRoot = NodePath("../GreenMajin/FX/FireFX")
+hitboxAttachment = NodePath("../GreenMajin/ChestAttachment")
+rangeOverride = 30
+root = NodePath("../GreenMajin/Root")
+hurtbox = NodePath("../GreenMajin/ChestAttachment/Hitbox")
+collider = NodePath("../GreenMajin/ChestAttachment/EnvironmentCollider/CollisionShape3D")
+rangeCollider = NodePath("../GreenMajin/Range/CollisionShape3D")
+animationTree = NodePath("../GreenMajin/AnimationTree")
+animationPlayer = NodePath("../GreenMajin/AnimationPlayer")
+
+[node name="Fan" parent="Mine" instance=ExtResource("23_hckoj")]
+transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, -82.0005, 6.4, 260)
+rotationTime = 3.0
 
 [node name="Ending" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, -60, -270)
@@ -2344,60 +3545,106 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00024, 0, 87.0001)
 [node name="DashPanelR" parent="Ending" instance=ExtResource("34_28sk7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.999786, 0, 87.0001)
 
-[node name="RichRings" type="Node3D" parent="Ending"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.999786, 1, 95.0001)
-script = ExtResource("6_uk2l3")
-Generate = false
-Source = ExtResource("17_fpk27")
-Amount = 5
-Shape = 0
-Orientation = 0
-Spacing = 1.5
-"Horizontal Offset" = null
-"Vertical Offset" = null
+[node name="SpikeGroup1" type="Node3D" parent="Ending"]
+transform = Transform3D(1, 0, 0, 0, 0.990268, 0.139173, 0, -0.139173, 0.990268, 0, 0.536633, 114.241)
 
-[node name="Child01" parent="Ending/RichRings" instance=ExtResource("17_fpk27")]
+[node name="SpikePanel" parent="Ending/SpikeGroup1" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
-[node name="Child02" parent="Ending/RichRings" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+[node name="SpikePanel2" parent="Ending/SpikeGroup1" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
-[node name="Child03" parent="Ending/RichRings" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+[node name="SpikePanel3" parent="Ending/SpikeGroup1" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 1.5)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
-[node name="Child04" parent="Ending/RichRings" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+[node name="SpikePanel4" parent="Ending/SpikeGroup1" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 1.5)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
-[node name="Child05" parent="Ending/RichRings" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+[node name="GreenMajin" parent="Ending" instance=ExtResource("10_eupsa")]
+transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 4.1732, 2.99352, 125.724)
+
+[node name="GreenMajin2" parent="Ending" instance=ExtResource("10_eupsa")]
+transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, 11, 5, 133)
+
+[node name="SpikeGroup2" type="Node3D" parent="Ending"]
+transform = Transform3D(-0.0871558, -0.215616, -0.972581, 0, 0.976296, -0.21644, 0.996195, -0.018864, -0.0850898, 17.93, 7.1, 134.797)
+
+[node name="SpikePanel" parent="Ending/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="Ending/SpikeGroup2" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="Rings1" type="Node3D" parent="Ending"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 21.1395, 8.6, 134.975)
 script = ExtResource("6_uk2l3")
 Generate = false
 Source = ExtResource("7_4roe7")
-Amount = 4
+Amount = 6
 Shape = 2
 Path = NodePath("../../Static/Path/EndingPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
-Spacing = 3.0
-"Horizontal Offset" = null
+Spacing = 4.0
+"Horizontal Offset" = SubResource("Curve_64u7j")
 "Vertical Offset" = null
 
 [node name="Child01" parent="Ending/Rings1" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.52588e-05, 2.67029e-05, -9.15527e-05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.43323e-05, -0.000152588)
 
 [node name="Child02" parent="Ending/Rings1" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.461716, 0.684628, -2.88461)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.532257, 0.917885, -3.88358)
 
 [node name="Child03" parent="Ending/Rings1" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.38316, 1.3893, -5.65469)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.68768, 1.86549, -7.70316)
 
 [node name="Child04" parent="Ending/Rings1" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.69801, 2.10475, -8.25967)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.61246, 2.82546, -11.255)
+
+[node name="Child05" parent="Ending/Rings1" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.50827, 3.78891, -14.0621)
+
+[node name="Child06" parent="Ending/Rings1" instance=ExtResource("7_4roe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0944, 4.74989, -15.8695)
+
+[node name="GreenMajin3" parent="Ending" instance=ExtResource("10_eupsa")]
+transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, 24.5, 10, 133.3)
+
+[node name="SpikeGroup3" type="Node3D" parent="Ending"]
+transform = Transform3D(0.906308, -0.105815, -0.409157, 0, 0.968148, -0.25038, 0.422618, 0.226921, 0.87744, 38.5, 13.225, 122.5)
+
+[node name="SpikePanel" parent="Ending/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="Ending/SpikeGroup3" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="Rings2" type="Node3D" parent="Ending"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 34.1395, 11.9, 128.975)
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 40.1395, 17.1, 109.975)
 script = ExtResource("6_uk2l3")
 Generate = false
 Source = ExtResource("7_4roe7")
@@ -2407,133 +3654,100 @@ Path = NodePath("../../Static/Path/EndingPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 5.0
-"Horizontal Offset" = null
+"Horizontal Offset" = SubResource("Curve_dxlux")
 "Vertical Offset" = null
 
 [node name="Child01" parent="Ending/Rings2" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000534058, -0.00018692, 0.000518799)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000144958, -0.00019455, 0.000778198)
 
 [node name="Child02" parent="Ending/Rings2" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8394, 1.20177, -3.08725)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9617, 1.18056, -4.13084)
 
 [node name="Child03" parent="Ending/Rings2" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.28029, 2.38759, -5.25333)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.43751, 2.38087, -8.14902)
 
 [node name="Child04" parent="Ending/Rings2" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.1549, 3.52652, -6.22354)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.73075, 3.58637, -12.7138)
+
+[node name="SpikeGroup4" type="Node3D" parent="Ending"]
+transform = Transform3D(0.939693, 0.085635, 0.331126, 6.75252e-09, 0.968148, -0.25038, -0.34202, 0.23528, 0.909761, 38.5, 16.825, 107.5)
+
+[node name="SpikePanel" parent="Ending/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="Ending/SpikeGroup4" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikeGroup5" type="Node3D" parent="Ending"]
+transform = Transform3D(-0.573576, 0.170311, 0.801252, 0, 0.978148, -0.207912, -0.819152, -0.119253, -0.561042, 8.3, 25.525, 98.7)
+
+[node name="SpikePanel" parent="Ending/SpikeGroup5" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="Ending/SpikeGroup5" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="Rings3" type="Node3D" parent="Ending"]
 transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 4.68725, 27.6, 102.029)
 script = ExtResource("6_uk2l3")
 Generate = false
 Source = ExtResource("7_4roe7")
-Amount = 8
+Amount = 3
 Shape = 2
 Path = NodePath("../../Static/Path/EndingPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
-Spacing = 2.0
+Spacing = 2.5
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
 [node name="Child01" parent="Ending/Rings3" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52588e-05, -3.8147e-06, 1.52588e-05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52588e-05, -2.67029e-05, 0.000114441)
 
 [node name="Child02" parent="Ending/Rings3" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.248734, 0.456657, -1.93674)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34137, 0.567078, -2.41727)
 
 [node name="Child03" parent="Ending/Rings3" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.693161, 0.88821, -3.84579)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.988754, 1.09291, -4.78384)
 
-[node name="Child04" parent="Ending/Rings3" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.33301, 1.28938, -5.70753)
+[node name="SpikeGroup6" type="Node3D" parent="Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30, 122)
 
-[node name="Child05" parent="Ending/Rings3" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.16388, 1.6551, -7.50163)
+[node name="SpikePanel" parent="Ending/SpikeGroup6" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
-[node name="Child06" parent="Ending/Rings3" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.17764, 1.98102, -9.20859)
+[node name="SpikePanel2" parent="Ending/SpikeGroup6" instance=ExtResource("22_tmi33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
-[node name="Child07" parent="Ending/Rings3" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3616, 2.26385, -10.8119)
+[node name="GasTank" parent="Ending" instance=ExtResource("9_f7iy1")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -9, 31.0003, 150)
+endPosition = Vector3(0, 0, -11)
 
-[node name="Child08" parent="Ending/Rings3" instance=ExtResource("7_4roe7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.70107, 2.50168, -12.2986)
+[node name="GasTank2" parent="Ending" instance=ExtResource("9_f7iy1")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, 31, 150.5)
+height = 1.0
+endPosition = Vector3(0, 4, -8)
 
-[node name="RichRings2" type="Node3D" parent="Ending"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.00021, 31, 139)
-script = ExtResource("6_uk2l3")
-Generate = false
-Source = ExtResource("17_fpk27")
-Amount = 5
-Shape = 0
-Orientation = 0
-Spacing = 1.5
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="Ending/RichRings2" instance=ExtResource("17_fpk27")]
-
-[node name="Child02" parent="Ending/RichRings2" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
-
-[node name="Child03" parent="Ending/RichRings2" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
-
-[node name="Child04" parent="Ending/RichRings2" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
-
-[node name="Child05" parent="Ending/RichRings2" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="JumpPanel" parent="Ending" instance=ExtResource("37_bcpg7")]
-transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -5.90604, 30.1865, 149.833)
-middleHeight = 6.0
-finalHeight = 5.0
-distance = 50.0
-
-[node name="JumpPanel2" parent="Ending" instance=ExtResource("37_bcpg7")]
-transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -16.906, 30.1865, 149.833)
-middleHeight = 4.0
-finalHeight = 4.0
-distance = 30.0
-
-[node name="Grindrail" parent="Ending" instance=ExtResource("13_coq33")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -23.906, 30.1865, 149.833)
-railModel = NodePath("")
-startCap = NodePath("")
-endCap = NodePath("")
-collider = NodePath("")
-
-[node name="RichRings3" type="Node3D" parent="Ending/Grindrail"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -22)
-script = ExtResource("6_uk2l3")
-Generate = false
-Source = ExtResource("17_fpk27")
-Amount = 5
-Shape = 0
-Orientation = 0
-Spacing = 1.5
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="Ending/Grindrail/RichRings3" instance=ExtResource("17_fpk27")]
-
-[node name="Child02" parent="Ending/Grindrail/RichRings3" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
-
-[node name="Child03" parent="Ending/Grindrail/RichRings3" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
-
-[node name="Child04" parent="Ending/Grindrail/RichRings3" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
-
-[node name="Child05" parent="Ending/Grindrail/RichRings3" instance=ExtResource("17_fpk27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="InvisibleGrindrail" parent="Ending" instance=ExtResource("24_0xmdl")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -46, 35, 150)
-railLength = 10
+[node name="GreenMajin4" parent="Ending" instance=ExtResource("10_eupsa")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -28, 34, 150.5)
 
 [node name="Goal" parent="Ending" instance=ExtResource("38_dh8tc")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -55, 39, 150)
@@ -2572,7 +3786,6 @@ shape = SubResource("BoxShape3D_jgghs")
 [connection signal="Activated" from="CullingMap/Mine-U" to="Mine" method="Deactivate"]
 [connection signal="Deactivated" from="CullingMap/Mine-U" to="Mine" method="Activate"]
 [connection signal="Fallen" from="LavaCrossway/GolemPath/PathFollow3D/GolemMajin" to="LavaCrossway/ScrapEvent" method="Activate"]
-[connection signal="PotEntered" from="PitHall/FlyingPot" to="PitHall/CullingTrigger" method="Activate"]
 [connection signal="Activated" from="Ending/Switch" to="Ending/Switch/CullingTrigger" method="Activate"]
 [connection signal="Deactivated" from="Ending/Switch" to="Ending/Switch/CullingTrigger" method="Deactivate"]
 [connection signal="Respawned" from="Ending/Switch" to="Ending/Switch/CullingTrigger" method="Respawn"]
