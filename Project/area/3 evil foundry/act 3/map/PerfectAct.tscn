@@ -52,6 +52,57 @@ alpha_curve = SubResource("CurveTexture_s14ln")
 [sub_resource type="QuadMesh" id="QuadMesh_e2usn"]
 material = ExtResource("28_e6oyh")
 
+[sub_resource type="Animation" id="Animation_cqst8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Event/Furnace1:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Event/Furnace1/Furnace:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Event/Furnace2:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Event/Furnace2/Furnace:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_hes8e"]
 resource_name = "event"
 tracks/0/type = "value"
@@ -129,57 +180,6 @@ tracks/5/keys = {
 "args": [],
 "method": &"restart"
 }]
-}
-
-[sub_resource type="Animation" id="Animation_cqst8"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Event/Furnace1:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Event/Furnace1/Furnace:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Event/Furnace2:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Event/Furnace2/Furnace:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jeu7o"]
@@ -593,7 +593,7 @@ collider = NodePath("")
 transform = Transform3D(1, -5.29396e-23, 1.69407e-21, 5.29396e-23, 1, 0, 0, 0, 1, 0, 1.1, -0.999985)
 
 [node name="Grindrail5" parent="FanHall" instance=ExtResource("14_5xfbl")]
-transform = Transform3D(-4.37114e-08, 0.0418757, -0.999123, 0, 0.999123, 0.0418757, 1, 1.83044e-09, -4.3673e-08, 196.029, 2.47495, -194.039)
+transform = Transform3D(-4.37114e-08, 0.0488498, -0.998806, 0, 0.998806, 0.0488498, 1, 2.13529e-09, -4.36592e-08, 196.029, 2.47495, -194.039)
 railModel = NodePath("")
 startCap = NodePath("")
 endCap = NodePath("")
@@ -633,9 +633,9 @@ stateLengths = PackedFloat32Array(0.2, 0, 0.8)
 
 [node name="LaunchRing" parent="LavaCrossway" instance=ExtResource("23_ytp4u")]
 transform = Transform3D(-1, -7.62898e-10, 8.74194e-08, 0, 0.999962, 0.00872654, -8.74228e-08, 0.00872654, -0.999962, 0, 6.99996, -0.991272)
-"Secondary Settings/Middle Height" = 0.0
+"Secondary Settings/Middle Height" = 1.0
 "Secondary Settings/Final Height" = 0.0
-"Secondary Settings/Distance" = 43.0
+"Secondary Settings/Distance" = 40.0
 middleHeight = 0.0
 finalHeight = -5.0
 distance = 40.0
@@ -692,6 +692,16 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 7, 
 "Secondary Settings/Final Height" = -5.0
 "Secondary Settings/Distance" = 60.0
 
+[node name="LaunchRingStopper" type="Node3D" parent="LavaCrossway"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 7, -45)
+script = ExtResource("5_asta0")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="LavaCrossway/LaunchRingStopper"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LavaCrossway/LaunchRingStopper/StaticBody3D"]
+shape = SubResource("BoxShape3D_jgghs")
+
 [node name="SpikeBall8" parent="LavaCrossway" instance=ExtResource("38_bcvhw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 1.2, -68)
 "Movement/Cycle Length" = 1.0
@@ -708,5 +718,8 @@ shape = SubResource("BoxShape3D_jgghs")
 [connection signal="Deactivated" from="CullingMap/LavaCrossway-L" to="LavaCrossway" method="Deactivate"]
 [connection signal="Activated" from="CullingMap/FanHall-U" to="FanHall" method="Deactivate"]
 [connection signal="Deactivated" from="CullingMap/FanHall-U" to="FanHall" method="Activate"]
+[connection signal="Activated" from="LavaCrossway/LaunchRing" to="LavaCrossway/LaunchRingStopper" method="Activate"]
+[connection signal="Deactivated" from="LavaCrossway/LaunchRing" to="LavaCrossway/LaunchRingStopper" method="Deactivate"]
+[connection signal="Entered" from="LavaCrossway/LaunchRingSpike" to="LavaCrossway/LaunchRingStopper" method="Deactivate"]
 
 [editable path="Static"]
