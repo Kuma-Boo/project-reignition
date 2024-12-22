@@ -1,0 +1,701 @@
+[gd_scene load_steps=30 format=3 uid="uid://bg0j8p7wpxkp"]
+
+[ext_resource type="PackedScene" uid="uid://sap50uvjitma" path="res://area/3 evil foundry/act 3/Static.tscn" id="1_v8djy"]
+[ext_resource type="Resource" uid="uid://bbrvxn0meppdk" path="res://resource/level data/evil foundry/Act3Perfect.tres" id="2_lufho"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_isnnh"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_3ilj8"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="5_asta0"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="9_gpgq5"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="12_nqdc1"]
+[ext_resource type="PackedScene" uid="uid://dhwwi7i5b0v65" path="res://area/3 evil foundry/object/grindrail/Grindrail02.tscn" id="13_vuf67"]
+[ext_resource type="PackedScene" uid="uid://dogm6wyurmt4" path="res://area/3 evil foundry/object/grindrail/Grindrail03.tscn" id="14_5xfbl"]
+[ext_resource type="PackedScene" uid="uid://em6o4lfsiiqw" path="res://object/enemy/majin/data/evil foundry/RedMajin.tscn" id="14_uxtpo"]
+[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="16_faho4"]
+[ext_resource type="PackedScene" uid="uid://det4s2txdn4ka" path="res://area/3 evil foundry/object/Furnace.tscn" id="17_uuo7f"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="18_62fye"]
+[ext_resource type="PackedScene" uid="uid://c10y5dhqmy3gk" path="res://area/3 evil foundry/object/FanBroken.tscn" id="19_8wygi"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="20_6rj26"]
+[ext_resource type="PackedScene" uid="uid://db770ujvjdio4" path="res://object/stage/common/LaunchRingSpike.tscn" id="20_18a74"]
+[ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="23_ytp4u"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="28_e6oyh"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="37_3bvxt"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="38_bcvhw"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="41_yqlpn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jgghs"]
+size = Vector3(20, 20, 2.5)
+
+[sub_resource type="Curve" id="Curve_lkjbb"]
+_data = [Vector2(0, 0.1), 0.0, 8.09784, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.35203, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_s14ln"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_lkjbb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1m5k1"]
+lifetime_randomness = 0.5
+emission_shape_scale = Vector3(2, 0, 3)
+emission_shape = 3
+emission_box_extents = Vector3(1, 0, 1)
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 5.0
+color = Color(1, 0.639216, 0.180392, 0.313726)
+alpha_curve = SubResource("CurveTexture_s14ln")
+
+[sub_resource type="QuadMesh" id="QuadMesh_e2usn"]
+material = ExtResource("28_e6oyh")
+
+[sub_resource type="Animation" id="Animation_hes8e"]
+resource_name = "event"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Event/Furnace1:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, -1.5708)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Event/Furnace1/Furnace:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.5, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Event/Furnace2:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 1.5708)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Event/Furnace2/Furnace:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.5, 0, 0)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Event/Dust1")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Event/Dust2")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_cqst8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Event/Furnace1:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Event/Furnace1/Furnace:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Event/Furnace2:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Event/Furnace2/Furnace:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jeu7o"]
+_data = {
+"RESET": SubResource("Animation_cqst8"),
+"event": SubResource("Animation_hes8e")
+}
+
+[node name="Stage" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_v8djy")]
+Data = ExtResource("2_lufho")
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="PerfectAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="PerfectAct"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -468, -60, -60)
+
+[node name="CharacterSpawn" parent="PerfectAct/SpawnPosition" instance=ExtResource("3_isnnh")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="PerfectAct" groups=["wall"]]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -462, -60, -60)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jgghs")
+
+[node name="CullingMap" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -162, -30, -120)
+visible = false
+
+[node name="LavaCrossway-L" parent="CullingMap" instance=ExtResource("4_3ilj8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -468, -33, -30)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CullingMap/LavaCrossway-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jgghs")
+
+[node name="FanHall-U" parent="CullingMap" instance=ExtResource("4_3ilj8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -508, -30, -220)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CullingMap/FanHall-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jgghs")
+
+[node name="FanHall" type="Node3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -475, -60, -60)
+script = ExtResource("5_asta0")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Grindrail" parent="FanHall" instance=ExtResource("13_vuf67")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62939e-06, 0.299999, -9)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Pearls" type="Node3D" parent="FanHall/Grindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -2.5)
+script = ExtResource("9_gpgq5")
+Generate = false
+Source = ExtResource("12_nqdc1")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Grindrail/Pearls" instance=ExtResource("12_nqdc1")]
+
+[node name="Child02" parent="FanHall/Grindrail/Pearls" instance=ExtResource("12_nqdc1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="FanHall/Grindrail/Pearls" instance=ExtResource("12_nqdc1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="FanHall/Grindrail/Pearls" instance=ExtResource("12_nqdc1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="FanHall/Grindrail/Pearls" instance=ExtResource("12_nqdc1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Furnace" parent="FanHall" instance=ExtResource("17_uuo7f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.99999, 0, -35)
+
+[node name="Furnace2" parent="FanHall" instance=ExtResource("17_uuo7f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.00001, 0, -42)
+
+[node name="Furnace3" parent="FanHall" instance=ExtResource("17_uuo7f")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -3.59999, 0.0999985, -48)
+
+[node name="Furnace4" parent="FanHall" instance=ExtResource("17_uuo7f")]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -1.90532, 0.399998, -56.7454)
+
+[node name="Grindrail2" parent="FanHall" instance=ExtResource("14_5xfbl")]
+transform = Transform3D(1, 0, 0, 0, 0.99863, -0.052336, 0, 0.052336, 0.99863, -5, 0.7, -55)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="FurnaceEvent" parent="FanHall" instance=ExtResource("4_3ilj8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, -71)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="Event" type="Node3D" parent="FanHall/FurnaceEvent"]
+script = ExtResource("16_faho4")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="Furnace1" type="Node3D" parent="FanHall/FurnaceEvent/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.6, -27)
+
+[node name="Furnace" parent="FanHall/FurnaceEvent/Event/Furnace1" instance=ExtResource("17_uuo7f")]
+
+[node name="Furnace2" type="Node3D" parent="FanHall/FurnaceEvent/Event"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, -33)
+
+[node name="Furnace" parent="FanHall/FurnaceEvent/Event/Furnace2" instance=ExtResource("17_uuo7f")]
+
+[node name="Dust1" type="GPUParticles3D" parent="FanHall/FurnaceEvent/Event"]
+transform = Transform3D(-4.37114e-08, 0, 1, 2.11758e-22, 1, 0, -1, 0, -4.37114e-08, 3.05176e-05, 2, -27)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_1m5k1")
+draw_pass_1 = SubResource("QuadMesh_e2usn")
+
+[node name="Dust2" type="GPUParticles3D" parent="FanHall/FurnaceEvent/Event"]
+transform = Transform3D(-4.37114e-08, -8.74228e-08, -1, -8.74228e-08, 1, -8.74228e-08, 1, 8.74228e-08, -4.37114e-08, 0.999992, 1.6, -33)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_1m5k1")
+draw_pass_1 = SubResource("QuadMesh_e2usn")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="FanHall/FurnaceEvent"]
+callback_mode_process = 0
+libraries = {
+"": SubResource("AnimationLibrary_jeu7o")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FanHall/FurnaceEvent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jgghs")
+
+[node name="RichRing" parent="FanHall" instance=ExtResource("37_3bvxt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.99998, 3.5, -96)
+
+[node name="RedMajin" parent="FanHall" instance=ExtResource("14_uxtpo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.79998, 2.2, -125)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 15, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 9.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = true
+rangeOverride = 20
+
+[node name="SpikeGroup" type="Node3D" parent="FanHall"]
+transform = Transform3D(-0.944608, 0.279679, 0.171741, 0.255976, 0.955316, -0.147809, -0.205406, -0.0956604, -0.97399, -3.25, 1.87, -128.164)
+
+[node name="SpikePanel" parent="FanHall/SpikeGroup" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"Current State" = 2
+"Start Time" = 0.2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="FanHall/SpikeGroup" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"Current State" = 2
+"Start Time" = 0.2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="FanHall/SpikeGroup" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"Current State" = 2
+"Start Time" = 0.2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="FanHall/SpikeGroup" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24994, 0, 0)
+"Current State" = 2
+"Start Time" = 0.2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="RedMajin2" parent="FanHall" instance=ExtResource("14_uxtpo")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -2.91952, 1.7, -131.213)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 15, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 2.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = true
+rangeOverride = 20
+
+[node name="SpikeGroup2" type="Node3D" parent="FanHall"]
+transform = Transform3D(-0.890651, 0.332622, 0.310006, 0.258019, 0.931121, -0.257759, -0.374389, -0.149585, -0.915127, -1.73369, 0.550812, -133.86)
+
+[node name="SpikePanel" parent="FanHall/SpikeGroup2" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="FanHall/SpikeGroup2" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="FanHall/SpikeGroup2" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"Current State" = 2
+"Start Time" = 0.6
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="FanHall/SpikeGroup2" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24994, 0, 0)
+"Current State" = 2
+"Start Time" = 0.6
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="RedMajin3" parent="FanHall" instance=ExtResource("14_uxtpo")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -0.890568, 0.700001, -136.467)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 15, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = true
+rangeOverride = 20
+
+[node name="Furnace5" parent="FanHall" instance=ExtResource("17_uuo7f")]
+transform = Transform3D(2.98023e-08, 0, -1, 0, 1, 0, 1, 0, 2.98023e-08, 37, -0.5, -153)
+
+[node name="Furnace6" parent="FanHall" instance=ExtResource("17_uuo7f")]
+transform = Transform3D(2.98023e-08, 0, -1, 0, 1, 0, 1, 0, 2.98023e-08, 51, -1.5, -157)
+
+[node name="SpikeBallGroup" type="Node3D" parent="FanHall"]
+transform = Transform3D(2.98023e-08, 0, -1, 0, 1, 0, 1, 0, 2.98023e-08, 71, -3, -155)
+
+[node name="SpikeBall" parent="FanHall/SpikeBallGroup" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -2.5, 4, -9)
+Movement/Mode = 0
+
+[node name="SpikeBall2" parent="FanHall/SpikeBallGroup" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 2.5, 4, -9)
+Movement/Mode = 0
+
+[node name="SpikeBall3" parent="FanHall/SpikeBallGroup" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.5, -20)
+Movement/Mode = 0
+
+[node name="SpikeBall4" parent="FanHall/SpikeBallGroup" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -20)
+"Movement/Cycle Length" = 2.0
+Movement/Distance = 3.0
+"Vertical Orientation" = true
+
+[node name="SpikeBall5" parent="FanHall/SpikeBallGroup" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.5, -30)
+"Movement/Cycle Length" = 4.0
+Movement/Distance = 6.0
+Movement/Angle = 90.0
+
+[node name="SpikeBall6" parent="FanHall/SpikeBallGroup" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.5, -38)
+"Movement/Cycle Length" = 4.0
+"Movement/Starting Offset" = 0.5
+Movement/Distance = 6.0
+Movement/Angle = 90.0
+
+[node name="Grindrail" parent="FanHall/SpikeBallGroup" instance=ExtResource("14_5xfbl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.299999, 1)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Grindrail2" parent="FanHall/SpikeBallGroup" instance=ExtResource("14_5xfbl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.299999, -12)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="RichRing" parent="FanHall/SpikeBallGroup" instance=ExtResource("37_3bvxt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -26)
+
+[node name="DashPanelGroup" type="Node3D" parent="FanHall"]
+transform = Transform3D(5.76205e-08, 0, 1, 0, 1, 0, -1, 0, 5.76205e-08, 116, -3, -155)
+
+[node name="DashPanelL" parent="FanHall/DashPanelGroup" instance=ExtResource("18_62fye")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="DashPanelR" parent="FanHall/DashPanelGroup" instance=ExtResource("18_62fye")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="Fan" parent="FanHall" instance=ExtResource("19_8wygi")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866026, 145, 5, -175)
+rotationTime = 5.0
+
+[node name="Fan2" parent="FanHall/Fan" instance=ExtResource("19_8wygi")]
+transform = Transform3D(0.5, 0.866025, 0, -0.866025, 0.5, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="SpikeGroup3" type="Node3D" parent="FanHall"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 174, 3, -195)
+
+[node name="SpikePanel" parent="FanHall/SpikeGroup3" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="FanHall/SpikeGroup3" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="FanHall/SpikeGroup3" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"Current State" = 2
+"Start Time" = 0.6
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="FanHall/SpikeGroup3" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24994, 0, 0)
+"Current State" = 2
+"Start Time" = 0.6
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="Grindrail3" parent="FanHall" instance=ExtResource("13_vuf67")]
+transform = Transform3D(-4.37114e-08, 0.0418757, -0.999123, 0, 0.999123, 0.0418757, 1, 1.83044e-09, -4.3673e-08, 178, 3.235, -196)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="RichRing" parent="FanHall/Grindrail3" instance=ExtResource("37_3bvxt")]
+transform = Transform3D(1, -5.29396e-23, 1.69407e-21, 5.29396e-23, 1, 0, 0, 0, 1, 0, 1.1, -0.999985)
+
+[node name="Grindrail5" parent="FanHall" instance=ExtResource("14_5xfbl")]
+transform = Transform3D(-4.37114e-08, 0.0418757, -0.999123, 0, 0.999123, 0.0418757, 1, 1.83044e-09, -4.3673e-08, 196.029, 2.47495, -194.039)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="LavaCrossway" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670, -60, -300)
+script = ExtResource("5_asta0")
+saveVisibilityOnCheckpoint = true
+
+[node name="SpikeGroup" type="Node3D" parent="LavaCrossway"]
+transform = Transform3D(-1, -3.81333e-09, -8.73396e-08, 0, 0.999048, -0.0436194, 8.74228e-08, -0.0436194, -0.999048, 0, 0.200001, 2.5)
+
+[node name="SpikePanel" parent="LavaCrossway/SpikeGroup" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="LavaCrossway/SpikeGroup" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="LavaCrossway/SpikeGroup" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"Current State" = 2
+"Start Time" = 0.6
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="LavaCrossway/SpikeGroup" instance=ExtResource("20_6rj26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24994, 0, 0)
+"Current State" = 2
+"Start Time" = 0.6
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="LaunchRing" parent="LavaCrossway" instance=ExtResource("23_ytp4u")]
+transform = Transform3D(-1, -7.62898e-10, 8.74194e-08, 0, 0.999962, 0.00872654, -8.74228e-08, 0.00872654, -0.999962, 0, 6.99996, -0.991272)
+"Secondary Settings/Middle Height" = 0.0
+"Secondary Settings/Final Height" = -1.0
+"Secondary Settings/Distance" = 50.0
+middleHeight = 0.0
+finalHeight = -5.0
+distance = 31.0
+
+[node name="RichRing" parent="LavaCrossway/LaunchRing" instance=ExtResource("37_3bvxt")]
+
+[node name="SpikeBall" parent="LavaCrossway" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.2, -12)
+"Movement/Cycle Length" = 1.5
+Movement/Distance = 8.0
+Movement/Angle = 90.0
+
+[node name="SpikeBall2" parent="LavaCrossway" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.2, -20)
+"Movement/Cycle Length" = 1.5
+Movement/Distance = 3.0
+Movement/Angle = 90.0
+
+[node name="SpikeBall3" parent="LavaCrossway" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.2, -20)
+"Movement/Cycle Length" = 1.5
+Movement/Distance = 3.0
+Movement/Angle = 90.0
+
+[node name="SpikeBall4" parent="LavaCrossway" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.2, -22)
+"Movement/Cycle Length" = 2.0
+Movement/Distance = 5.0
+"Vertical Orientation" = true
+
+[node name="SpikeBall5" parent="LavaCrossway" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.2, -27)
+"Movement/Cycle Length" = 1.5
+"Movement/Starting Offset" = 0.5
+Movement/Distance = 3.0
+Movement/Angle = 90.0
+
+[node name="SpikeBall6" parent="LavaCrossway" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.2, -27)
+"Movement/Cycle Length" = 1.5
+"Movement/Starting Offset" = 0.5
+Movement/Distance = 3.0
+Movement/Angle = 90.0
+
+[node name="SpikeBall7" parent="LavaCrossway" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.2, -37)
+"Movement/Cycle Length" = 1.2
+Movement/Distance = 6.0
+Movement/Angle = 90.0
+
+[node name="LaunchRingSpike" parent="LavaCrossway" instance=ExtResource("20_18a74")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 7, -45)
+"Secondary Settings/Middle Height" = 2.0
+"Secondary Settings/Final Height" = -5.0
+"Secondary Settings/Distance" = 60.0
+
+[node name="SpikeBall8" parent="LavaCrossway" instance=ExtResource("38_bcvhw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 1.2, -68)
+"Movement/Cycle Length" = 1.0
+Movement/Distance = 5.0
+Movement/Angle = 90.0
+
+[node name="Goal" parent="LavaCrossway" instance=ExtResource("41_yqlpn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -99)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LavaCrossway/Goal"]
+shape = SubResource("BoxShape3D_jgghs")
+
+[connection signal="Activated" from="CullingMap/LavaCrossway-L" to="LavaCrossway" method="Activate"]
+[connection signal="Deactivated" from="CullingMap/LavaCrossway-L" to="LavaCrossway" method="Deactivate"]
+[connection signal="Activated" from="CullingMap/FanHall-U" to="FanHall" method="Deactivate"]
+[connection signal="Deactivated" from="CullingMap/FanHall-U" to="FanHall" method="Activate"]
