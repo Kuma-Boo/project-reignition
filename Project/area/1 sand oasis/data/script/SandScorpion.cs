@@ -246,6 +246,7 @@ namespace Project.Gameplay.Bosses
 			eventAnimator.Play("finish-defeat");
 
 			Player.Activate();
+			Player.Skills.CancelBreakSkills();
 			StageSettings.Instance.FinishLevel(true);
 		}
 
