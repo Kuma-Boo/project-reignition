@@ -10,8 +10,8 @@ public partial class Hazard : Node3D
 	private bool isInteractingWithPlayer;
 	protected PlayerController Player => StageSettings.Player;
 
-	[Signal]
-	public delegate void DamagedPlayerEventHandler();
+	[Signal] public delegate void DamagedPlayerEventHandler();
+	[Signal] public delegate void KnockbackFailedEventHandler();
 
 	public override void _PhysicsProcess(double _) => ProcessCollision();
 
@@ -21,7 +21,11 @@ public partial class Hazard : Node3D
 			return;
 
 		if (!Player.StartKnockback())
+		{
+			EmitSignal(SignalName.KnockbackFailed);
 			return;
+		}
+
 		EmitSignal(SignalName.DamagedPlayer);
 	}
 

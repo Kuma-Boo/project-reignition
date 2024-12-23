@@ -13,6 +13,10 @@ public struct LaunchSettings
 	public bool UseAutoAlign { get; set; }
 	/// <summary> Allow the player to jumpdash after launch is completed? </summary>
 	public bool AllowJumpDash { get; set; }
+	/// <summary> Allow the player to launch through solid objects? </summary>
+	public bool IgnoreCollisions { get; set; }
+	/// <summary> Play Hurt animations based on launch state? </summary>
+	public bool AsDamage { get; set; }
 
 	public Objects.Launcher Launcher { get; set; }
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://bqck0hqdn3o8r"]
+[gd_scene load_steps=57 format=3 uid="uid://bqck0hqdn3o8r"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -209,6 +209,18 @@ tracks/12/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 0, 0)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("CollisionShape3D:disabled")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_bcu8q"]
@@ -956,11 +968,28 @@ tracks/8/keys = {
 "values": [Vector2(0.4, 0.3)]
 }
 
+[sub_resource type="Animation" id="Animation_2s3ot"]
+resource_name = "disable-environment"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8j388"]
 _data = {
 "RESET": SubResource("Animation_5tko6"),
 "crouch": SubResource("Animation_bcu8q"),
 "disable": SubResource("Animation_bhgay"),
+"disable-environment": SubResource("Animation_2s3ot"),
 "fire-crest": SubResource("Animation_dp7pp"),
 "slide": SubResource("Animation_cxie3"),
 "speed break": SubResource("Animation_hgkeo"),

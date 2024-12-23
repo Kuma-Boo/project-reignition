@@ -1045,7 +1045,10 @@ public partial class IfritGolem : Node3D
 		else if (playerSector == 3 || playerSector == 4)
 			burnPositionIndex = 2;
 
-		Player.StartLauncher(LaunchSettings.Create(Player.GlobalPosition, burnPositions[burnPositionIndex].GlobalPosition, 5f, true));
+		LaunchSettings settings = LaunchSettings.Create(Player.GlobalPosition, burnPositions[burnPositionIndex].GlobalPosition, 5f, true);
+		settings.IgnoreCollisions = true;
+		settings.AsDamage = true;
+		Player.StartLauncher(settings);
 		EmitSignal(SignalName.LavaLaunched);
 	}
 	#endregion

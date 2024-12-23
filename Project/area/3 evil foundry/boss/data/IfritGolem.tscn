@@ -51,7 +51,6 @@
 [ext_resource type="AudioStream" uid="uid://djf45xc1rtbrx" path="res://sound/boss/ifrit golem/ev_01_stg032.ogg" id="37_f4i4x"]
 [ext_resource type="AudioStream" uid="uid://byl8jlykjil50" path="res://sound/boss/ifrit golem/ev_02_stg032.ogg" id="38_8geod"]
 
-
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xc84b"]
 animation = &"defeat"
 
@@ -2297,12 +2296,10 @@ lockoutData = ExtResource("12_cgkgo")
 
 [node name="HighCamera" type="Node3D" parent="Environment" index="6"]
 script = ExtResource("7_7kxhk")
-transitionTime = 0.5
 settings = ExtResource("9_6fxph")
 
 [node name="LowCamera" type="Node3D" parent="Environment" index="7"]
 script = ExtResource("7_7kxhk")
-transitionTime = 0.5
 settings = ExtResource("15_3iytr")
 
 [node name="BounceCamera" type="Node3D" parent="Environment" index="8"]
@@ -2548,6 +2545,7 @@ cull_mask = 37
 [connection signal="area_entered" from="BoneAttachments/BodyParts/Head/HeadHurtbox" to="." method="OnHeadEntered"]
 [connection signal="area_exited" from="BoneAttachments/BodyParts/Head/HeadHurtbox" to="." method="OnHeadExited"]
 [connection signal="DamagedPlayer" from="Environment/Lava/LavaHazard" to="." method="OnLavaDamagedPlayer"]
+[connection signal="KnockbackFailed" from="Environment/Lava/LavaHazard" to="." method="OnLavaDamagedPlayer"]
 [connection signal="area_entered" from="Environment/Lava/LavaHazard" to="Environment/Lava/LavaHazard" method="OnEntered"]
 [connection signal="area_exited" from="Environment/Lava/LavaHazard" to="Environment/Lava/LavaHazard" method="OnExited"]
 [connection signal="area_entered" from="Laser/VFXRoot/Flame" to="Laser/VFXRoot/Flame" method="OnEntered"]
