@@ -69,7 +69,7 @@ public partial class DriftTrigger : Area3D
 		if (Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed) < EntranceSpeedRatio)
 			return;
 
-		if (Player.ExternalController != null)
+		if (Player.ExternalController != null || Player.ExternalParent != null)
 			return; // Player is already busy
 
 		// Check for any obstructions
