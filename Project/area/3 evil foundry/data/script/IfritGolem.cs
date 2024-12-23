@@ -620,6 +620,7 @@ public partial class IfritGolem : Node3D
 		EventAnimator.Advance(0.0);
 		AnimationTree.Active = false;
 		Player.Activate();
+		Player.Skills.CancelBreakSkills();
 		StageSettings.Instance.FinishLevel(true);
 	}
 	#endregion
