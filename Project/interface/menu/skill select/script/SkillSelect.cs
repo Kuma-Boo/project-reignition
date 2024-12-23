@@ -39,7 +39,7 @@ public partial class SkillSelect : Menu
 
 	private int cursorPosition;
 	private Vector2 cursorVelocity;
-	private const float CursorSmoothing = .2f;
+	private const float CursorSmoothing = .1f;
 
 	private int scrollAmount;
 	private float scrollRatio;
