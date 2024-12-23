@@ -5,12 +5,11 @@ namespace Project.Gameplay;
 
 public partial class LandState : PlayerState
 {
-	[Export]
-	private PlayerState runState;
-	[Export]
-	private PlayerState idleState;
-	[Export]
-	private PlayerState backstepState;
+	[Export] private PlayerState runState;
+	[Export] private PlayerState idleState;
+	[Export] private PlayerState crouchState;
+	[Export] private PlayerState slideState;
+	[Export] private PlayerState backstepState;
 
 	public override void EnterState()
 	{
@@ -52,6 +51,10 @@ public partial class LandState : PlayerState
 
 			Player.AllowLandingSkills = false;
 		}
+
+		// Allow buffering jump charge transition for responsiveness
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && Input.IsActionPressed("button_jump"))
+			return Mathf.IsZeroApprox(Player.MoveSpeed) ? crouchState : slideState;
 
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;

@@ -351,6 +351,22 @@ tracks/0/keys = {
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_2s3ot"]
+resource_name = "disable-environment"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="Animation" id="Animation_dp7pp"]
 resource_name = "fire-crest"
 length = 0.0666699
@@ -968,22 +984,6 @@ tracks/8/keys = {
 "values": [Vector2(0.4, 0.3)]
 }
 
-[sub_resource type="Animation" id="Animation_2s3ot"]
-resource_name = "disable-environment"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CollisionShape3D:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8j388"]
 _data = {
 "RESET": SubResource("Animation_5tko6"),
@@ -1175,10 +1175,12 @@ stompState = NodePath("../Stomp")
 jumpDashState = NodePath("../JumpDash")
 homingAttackState = NodePath("../HomingAttack")
 
-[node name="Land" type="Node" parent="StateMachine/Basic" node_paths=PackedStringArray("runState", "idleState", "backstepState")]
+[node name="Land" type="Node" parent="StateMachine/Basic" node_paths=PackedStringArray("runState", "idleState", "crouchState", "slideState", "backstepState")]
 script = ExtResource("6_ihvo7")
 runState = NodePath("../Run")
 idleState = NodePath("../Idle")
+crouchState = NodePath("../Crouch")
+slideState = NodePath("../Slide")
 backstepState = NodePath("../Backstep")
 
 [node name="JumpDash" type="Node" parent="StateMachine/Basic" node_paths=PackedStringArray("landState", "fallState", "stompState")]
