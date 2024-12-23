@@ -98,7 +98,11 @@ public partial class DriftTrigger : Area3D
 		sfx.Play();
 	}
 
-	public void Deactivate() => EmitSignal(SignalName.DriftCompleted);
+	public void Deactivate()
+	{
+		sfx.Stop();
+		EmitSignal(SignalName.DriftCompleted);
+	}
 
 	/// <summary> Tracks whether drift bonus was already applied. </summary>
 	private bool wasBonusApplied;
