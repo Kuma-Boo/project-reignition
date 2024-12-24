@@ -38,6 +38,7 @@ public partial class GrindState : PlayerState
 
 		Player.AllowLandingGrind = false;
 		Player.IsGrindstepping = false;
+		Player.IsGrinding = true;
 
 		float positionSmoothing = .2f;
 		float smoothFactor = RailFudgeFactor * 5f;
@@ -80,6 +81,7 @@ public partial class GrindState : PlayerState
 	public override void ExitState()
 	{
 		Player.IsOnGround = false; // Disconnect from the ground
+		Player.IsGrinding = false;
 		Player.StopExternal();
 
 		// Preserve speed
@@ -189,7 +191,7 @@ public partial class GrindState : PlayerState
 			return false;
 
 		// Prevent absurd jumps in height when already on a grind rail
-		if (Mathf.Abs(delta.Y) > .2f && ActiveGrindRail != null)
+		if (Mathf.Abs(delta.Y) > .2f && Player.IsGrinding)
 			return false;
 
 		// Horizontal validation

@@ -30,7 +30,7 @@ public partial class LandState : PlayerState
 	public override void ExitState()
 	{
 		// Snap to ground
-		if (Player.IsGrinding)
+		if (Player.IsGrindRailActive)
 			return;
 
 		// IsStomping is set false here so LandingSkills can check against it

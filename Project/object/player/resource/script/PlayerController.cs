@@ -639,7 +639,8 @@ public partial class PlayerController : CharacterBody3D
 	private GrindState grindState;
 	public bool AllowLandingGrind { get; set; }
 	public bool IsGrindstepping { get; set; }
-	public bool IsGrinding => grindState.ActiveGrindRail != null;
+	public bool IsGrinding { get; set; }
+	public bool IsGrindRailActive => grindState.ActiveGrindRail != null;
 	public bool IsRailActivationValid(GrindRail rail) => grindState.IsRailActivationValid(rail);
 	public void StartGrinding(GrindRail rail)
 	{
