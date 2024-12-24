@@ -398,6 +398,7 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(AirStateTransition, FallState);
 		animationTree.Set(BackflipTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		animationTree.Set(BrakeTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(FallTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
 	private readonly StringName SplashJumpTrigger = "parameters/air_tree/splash_jump_trigger/request";
