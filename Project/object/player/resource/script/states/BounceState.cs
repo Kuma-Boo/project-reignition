@@ -34,6 +34,7 @@ public partial class BounceState : PlayerState
 
 		Player.IsOnGround = false;
 		Player.CanJumpDash = true;
+		Player.Lockon.IsMonitoring = true;
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		Player.AddLockoutData(LockoutSettings);
