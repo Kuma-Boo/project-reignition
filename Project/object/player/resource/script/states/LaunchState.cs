@@ -61,9 +61,6 @@ public partial class LaunchState : PlayerState
 
 		if (settings.IgnoreCollisions)
 			Player.ChangeHitbox("disable-environment");
-
-		if (settings.AsDamage)
-			Player.Animator.StartHurt();
 	}
 
 	public override void ExitState()
@@ -85,9 +82,6 @@ public partial class LaunchState : PlayerState
 		Player.ChangeHitbox("RESET");
 		Player.EmitSignal(PlayerController.SignalName.LaunchFinished);
 		settings.Launcher?.Deactivate();
-
-		if (settings.AsDamage)
-			Player.Animator.StopHurt();
 	}
 
 	public override PlayerState ProcessPhysics()

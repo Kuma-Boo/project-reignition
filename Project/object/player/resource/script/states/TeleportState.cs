@@ -28,6 +28,12 @@ public partial class TeleportState : PlayerState
 	public override void EnterState()
 	{
 		Player.IsTeleporting = true;
+		if (Player.IsKnockback)
+		{
+			Player.IsKnockback = false;
+			Player.Animator.StopHurt(false);
+		}
+
 		if (Trigger.resetMovespeed)
 		{
 			Player.MoveSpeed = Player.VerticalSpeed = 0;
