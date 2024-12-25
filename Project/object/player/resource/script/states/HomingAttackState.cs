@@ -11,8 +11,6 @@ public partial class HomingAttackState : PlayerState
 	private PlayerState stompState;
 	[Export]
 	private PlayerState jumpDashState;
-	[Export]
-	private PlayerState bounceState;
 
 	[Export]
 	private float normalStrikeSpeed;

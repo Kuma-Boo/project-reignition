@@ -63,7 +63,10 @@ public partial class LaunchState : PlayerState
 			Player.ChangeHitbox("disable-environment");
 
 		if (settings.AsDamage)
-			Player.Animator.StartHurt();
+		{
+			GD.PushWarning("This needs to be reworked!");
+			Player.Animator.StartHurt(true);
+		}
 	}
 
 	public override void ExitState()
@@ -87,7 +90,10 @@ public partial class LaunchState : PlayerState
 		settings.Launcher?.Deactivate();
 
 		if (settings.AsDamage)
-			Player.Animator.StopHurt();
+		{
+			GD.PushWarning("This needs to be reworked!");
+			Player.Animator.StopHurt(true);
+		}
 	}
 
 	public override PlayerState ProcessPhysics()

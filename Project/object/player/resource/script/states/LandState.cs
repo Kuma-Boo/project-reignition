@@ -11,6 +11,9 @@ public partial class LandState : PlayerState
 	[Export] private PlayerState slideState;
 	[Export] private PlayerState backstepState;
 
+	private float knockbackTimer;
+	private readonly float KnockbackLandingLength = .5f;
+
 	public override void EnterState()
 	{
 		if (Player.IsLockoutActive &&
@@ -24,7 +27,10 @@ public partial class LandState : PlayerState
 		Player.SnapToGround();
 		Player.DisableAccelerationJump = false;
 		Player.Lockon.IsMonitoring = false;
-		Player.Animator.LandingAnimation();
+
+		knockbackTimer = Player.IsKnockback ? KnockbackLandingLength : 0;
+		if (!Player.IsKnockback)
+			Player.Animator.LandingAnimation();
 	}
 
 	public override void ExitState()
@@ -42,6 +48,12 @@ public partial class LandState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
+		if (!Mathf.IsZeroApprox(knockbackTimer))
+		{
+			knockbackTimer = Mathf.MoveToward(knockbackTimer, 0, PhysicsManager.physicsDelta);
+			return null;
+		}
+
 		Player.CheckGround();
 		if (Player.AllowLandingSkills)
 		{

@@ -5,10 +5,8 @@ namespace Project.Gameplay;
 
 public partial class KnockbackState : PlayerState
 {
-	[Export]
-	private PlayerState landState;
-	[Export]
-	private PlayerState jumpState;
+	[Export] private PlayerState landState;
+	[Export] private PlayerState jumpState;
 	public KnockbackSettings Settings { get; set; }
 	public KnockbackSettings PreviousSettings { get; set; }
 	private readonly float DamageFriction = 20f;
@@ -23,8 +21,7 @@ public partial class KnockbackState : PlayerState
 		Player.IsKnockback = true;
 		Player.MovementAngle = Player.PathFollower.ForwardAngle; // Prevent being knocked sideways
 
-		GD.Print("Started Knockback");
-		Player.Animator.StartHurt();
+		Player.Animator.StartHurt(Settings.knockForward);
 		Player.Animator.ResetState();
 		PreviousSettings = Settings;
 
@@ -52,9 +49,10 @@ public partial class KnockbackState : PlayerState
 
 	public override void ExitState()
 	{
-		GD.Print("Exited Knockback");
-		Player.IsKnockback = false;
-		Player.Animator.StopHurt();
+		if (!Settings.knockForward)
+			Player.IsKnockback = false;
+
+		Player.Animator.StopHurt(Settings.knockForward);
 		Player.Animator.ResetState();
 	}
 
