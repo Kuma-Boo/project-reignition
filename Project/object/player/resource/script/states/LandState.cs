@@ -28,6 +28,7 @@ public partial class LandState : PlayerState
 		Player.DisableAccelerationJump = false;
 		Player.Lockon.IsMonitoring = false;
 
+		Player.IsKnockback = false;
 		knockbackTimer = Player.IsKnockback ? KnockbackLandingLength : 0;
 		if (!Player.IsKnockback)
 			Player.Animator.LandingAnimation();
@@ -51,6 +52,12 @@ public partial class LandState : PlayerState
 		if (!Mathf.IsZeroApprox(knockbackTimer))
 		{
 			knockbackTimer = Mathf.MoveToward(knockbackTimer, 0, PhysicsManager.physicsDelta);
+
+			if (Mathf.IsZeroApprox(knockbackTimer))
+			{
+				Player.Animator.StopHurt(true);
+				Player.Animator.ResetState();
+			}
 			return null;
 		}
 
