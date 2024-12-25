@@ -44,14 +44,16 @@ public partial class KnockbackState : PlayerState
 
 		if (Settings.disableDamage)
 			return;
+
 		Player.TakeDamage();
 	}
 
 	public override void ExitState()
 	{
-		if (!Settings.knockForward)
-			Player.IsKnockback = false;
+		if (Settings.knockForward) // NOTE: This is handled in LandState if we're being knocked forward
+			return;
 
+		Player.IsKnockback = false;
 		Player.Animator.StopHurt(Settings.knockForward);
 		Player.Animator.ResetState();
 	}

@@ -7,12 +7,13 @@ public partial class LandState : PlayerState
 {
 	[Export] private PlayerState runState;
 	[Export] private PlayerState idleState;
+	[Export] private PlayerState fallState;
 	[Export] private PlayerState crouchState;
 	[Export] private PlayerState slideState;
 	[Export] private PlayerState backstepState;
 
 	private float knockbackTimer;
-	private readonly float KnockbackLandingLength = .5f;
+	private readonly float KnockbackLandingLength = .3f;
 
 	public override void EnterState()
 	{
@@ -28,10 +29,20 @@ public partial class LandState : PlayerState
 		Player.DisableAccelerationJump = false;
 		Player.Lockon.IsMonitoring = false;
 
-		Player.IsKnockback = false;
-		knockbackTimer = Player.IsKnockback ? KnockbackLandingLength : 0;
-		if (!Player.IsKnockback)
+		if (Player.IsKnockback)
+		{
+			knockbackTimer = KnockbackLandingLength;
+			Player.MoveSpeed = 0;
+			Player.IsKnockback = false;
+			Player.AllowLandingSkills = false;
+			Player.Animator.StopHurt(true);
+			Player.Animator.ResetState();
+		}
+		else
+		{
+			knockbackTimer = 0;
 			Player.Animator.LandingAnimation();
+		}
 	}
 
 	public override void ExitState()
@@ -49,19 +60,17 @@ public partial class LandState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
+		Player.CheckGround();
+
 		if (!Mathf.IsZeroApprox(knockbackTimer))
 		{
 			knockbackTimer = Mathf.MoveToward(knockbackTimer, 0, PhysicsManager.physicsDelta);
-
-			if (Mathf.IsZeroApprox(knockbackTimer))
-			{
-				Player.Animator.StopHurt(true);
-				Player.Animator.ResetState();
-			}
 			return null;
 		}
 
-		Player.CheckGround();
+		if (!Player.IsOnGround)
+			return fallState;
+
 		if (Player.AllowLandingSkills)
 		{
 			// Apply landing skills

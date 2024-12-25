@@ -1070,7 +1070,6 @@ bones/1/rotation = Quaternion(0.999986, 2.99907e-07, -1.92129e-07, 0.00531361)
 bones/2/rotation = Quaternion(0.00897831, -5.98702e-12, 1.91381e-09, 0.99996)
 bones/3/rotation = Quaternion(0.704511, 6.86235e-09, -1.13115e-08, 0.709693)
 bones/4/rotation = Quaternion(0.996924, 1.07903e-15, 1.37244e-14, -0.0783794)
-bones/5/rotation = Quaternion(-7.96255e-09, -2.15482e-07, -9.62729e-08, 1)
 bones/6/rotation = Quaternion(0.923503, 0.0930435, 0.0930429, -0.360317)
 bones/7/rotation = Quaternion(0.923503, -0.0930431, -0.0930439, -0.360317)
 bones/8/rotation = Quaternion(-0.507972, -0.493846, -0.492108, 0.505876)
@@ -1136,13 +1135,13 @@ bones/58/rotation = Quaternion(0.704506, 8.15635e-09, -9.99258e-09, 0.709699)
 bones/59/rotation = Quaternion(0.996924, -1.09643e-15, -1.39458e-14, -0.0783794)
 
 [node name="ChestAttachment" parent="Sonic/SonicRoot/GeneralSkeleton" index="4"]
-transform = Transform3D(1, 7.92686e-07, -7.92686e-07, -7.92686e-07, 1, 1.59254e-08, 7.92686e-07, -1.59248e-08, 1, 5.80681e-08, 0.554189, -2.23517e-08)
+transform = Transform3D(1, 7.92686e-07, -7.92686e-07, -7.92686e-07, 1, 1.59254e-08, 7.92686e-07, -1.59248e-08, 1, 5.80681e-08, 0.55419, -2.23517e-08)
 
 [node name="RFoot" parent="Sonic/SonicRoot/GeneralSkeleton" index="5"]
-transform = Transform3D(1, -6.92779e-14, -5.1853e-13, 5.12881e-13, 9.54606e-08, 0.999999, -1.77636e-14, -0.999998, 1.13156e-07, -0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, -2.54019e-13, -3.87024e-13, 3.89383e-13, 2.03494e-07, 0.999999, -2.04281e-13, -0.999998, 2.21189e-07, -0.0397276, 0.155469, 0.00205613)
 
 [node name="LFoot" parent="Sonic/SonicRoot/GeneralSkeleton" index="6"]
-transform = Transform3D(1, -3.55271e-15, 6.16018e-12, -6.22079e-12, 5.9139e-08, 1, 1.19016e-13, -1, 6.37956e-08, 0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, 1.1493e-12, 6.20876e-12, -6.27318e-12, 1.0673e-06, 1, 1.2701e-12, -1, 1.07242e-06, 0.0397276, 0.155469, 0.00205613)
 
 [node name="Effect" parent="Sonic" node_paths=PackedStringArray("rightFoot", "leftFoot", "landingParticles", "stepEmitters") instance=ExtResource("19_3dctg")]
 rightFoot = NodePath("../SonicRoot/GeneralSkeleton/RFoot")
@@ -1247,10 +1246,11 @@ stompState = NodePath("../Stomp")
 jumpDashState = NodePath("../JumpDash")
 homingAttackState = NodePath("../HomingAttack")
 
-[node name="Land" type="Node" parent="StateMachine/Basic" node_paths=PackedStringArray("runState", "idleState", "crouchState", "slideState", "backstepState")]
+[node name="Land" type="Node" parent="StateMachine/Basic" node_paths=PackedStringArray("runState", "idleState", "fallState", "crouchState", "slideState", "backstepState")]
 script = ExtResource("6_ihvo7")
 runState = NodePath("../Run")
 idleState = NodePath("../Idle")
+fallState = NodePath("../Fall")
 crouchState = NodePath("../Crouch")
 slideState = NodePath("../Slide")
 backstepState = NodePath("../Backstep")
@@ -1347,10 +1347,9 @@ LockoutSettings = ExtResource("22_nv64p")
 bounceSpeed = 5.0
 bounceHeight = 4.0
 
-[node name="Knockback" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("landState", "idleState", "jumpState")]
+[node name="Knockback" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("landState", "jumpState")]
 script = ExtResource("23_gpnrh")
 landState = NodePath("../../Basic/Land")
-idleState = NodePath("../../Basic/Idle")
 jumpState = NodePath("../../Basic/Jump")
 
 [node name="Sidle" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("runState", "backstepState")]

@@ -61,12 +61,6 @@ public partial class LaunchState : PlayerState
 
 		if (settings.IgnoreCollisions)
 			Player.ChangeHitbox("disable-environment");
-
-		if (settings.AsDamage)
-		{
-			GD.PushWarning("This needs to be reworked!");
-			Player.Animator.StartHurt(true);
-		}
 	}
 
 	public override void ExitState()
@@ -88,12 +82,6 @@ public partial class LaunchState : PlayerState
 		Player.ChangeHitbox("RESET");
 		Player.EmitSignal(PlayerController.SignalName.LaunchFinished);
 		settings.Launcher?.Deactivate();
-
-		if (settings.AsDamage)
-		{
-			GD.PushWarning("This needs to be reworked!");
-			Player.Animator.StopHurt(true);
-		}
 	}
 
 	public override PlayerState ProcessPhysics()

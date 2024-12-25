@@ -197,6 +197,9 @@ public partial class IfritGolem : Node3D
 		ProcessShutters();
 		if (isLaserAttackActive)
 			ProcessLaserAttack();
+
+		if (isLavaInteractingWithPlayer)
+			ProcessLavaCollision();
 	}
 
 	public override void _Process(double _)
@@ -517,6 +520,7 @@ public partial class IfritGolem : Node3D
 		EnterHitstun(false);
 	}
 
+	private bool isLavaInteractingWithPlayer;
 	private bool isInteractingWithPlayer;
 	private bool isInteractionProcessed;
 	private void SetInteractionProcessed()
@@ -556,6 +560,36 @@ public partial class IfritGolem : Node3D
 
 		Player.StartBounce(true);
 		SetInteractionProcessed();
+	}
+
+	private void ProcessLavaCollision()
+	{
+		if (Player.IsLaunching)
+			return;
+
+		if (Player.IsDefeated || Player.IsTeleporting) // Don't bother launching the player when respawning
+			return;
+
+		// Launch the player to the correct burn position
+		int burnPositionIndex = 0;
+		if (playerSector == 0 || playerSector == 5)
+			burnPositionIndex = 0;
+		else if (playerSector == 1 || playerSector == 2)
+			burnPositionIndex = 1;
+		else if (playerSector == 3 || playerSector == 4)
+			burnPositionIndex = 2;
+
+		Player.StartKnockback(new()
+		{
+			knockForward = true,
+			ignoreInvincibility = true,
+			disableDamage = Player.IsInvincible
+		});
+
+		LaunchSettings settings = LaunchSettings.Create(Player.GlobalPosition, burnPositions[burnPositionIndex].GlobalPosition, 5f, true);
+		settings.IgnoreCollisions = true;
+		Player.StartLauncher(settings);
+		EmitSignal(SignalName.LavaLaunched);
 	}
 
 	private bool IsSecondPhaseActive => currentHealth <= SecondPhaseRequirement;
@@ -1028,28 +1062,20 @@ public partial class IfritGolem : Node3D
 		isInteractingWithPlayer = false;
 	}
 
-	private void OnLavaDamagedPlayer()
+	private void OnLavaEntered(Area3D a)
 	{
-		if (Player.IsLaunching)
+		if (!a.IsInGroup("player"))
 			return;
 
-		if (Player.IsDefeated || Player.IsTeleporting) // Don't bother launching the player when respawning
+		isLavaInteractingWithPlayer = true;
+	}
+
+	private void OnLavaExited(Area3D a)
+	{
+		if (!a.IsInGroup("player"))
 			return;
 
-		// Launch the player to the correct burn position
-		int burnPositionIndex = 0;
-		if (playerSector == 0 || playerSector == 5)
-			burnPositionIndex = 0;
-		else if (playerSector == 1 || playerSector == 2)
-			burnPositionIndex = 1;
-		else if (playerSector == 3 || playerSector == 4)
-			burnPositionIndex = 2;
-
-		LaunchSettings settings = LaunchSettings.Create(Player.GlobalPosition, burnPositions[burnPositionIndex].GlobalPosition, 5f, true);
-		settings.IgnoreCollisions = true;
-		settings.AsDamage = true;
-		Player.StartLauncher(settings);
-		EmitSignal(SignalName.LavaLaunched);
+		isLavaInteractingWithPlayer = false;
 	}
 	#endregion
 }
