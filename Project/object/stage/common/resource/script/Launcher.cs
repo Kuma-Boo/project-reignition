@@ -170,6 +170,11 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		return settings;
 	}
 
+	public override void _Ready()
+	{
+		_sfxPlayer = GetNodeOrNull<AudioStreamPlayer3D>(sfxPlayer);
+	}
+
 	public virtual void Activate(Area3D a)
 	{
 		if (!a.IsInGroup("player detection"))
@@ -220,9 +225,10 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 
 	[Export]
 	/// <summary> Optional SFX player. </summary>
-	private AudioStreamPlayer3D sfxPlayer;
-	protected bool IsSfxActive => sfxPlayer.Playing;
-	protected virtual void PlayLaunchSfx() => sfxPlayer?.Play();
+	private NodePath sfxPlayer;
+	private AudioStreamPlayer3D _sfxPlayer;
+	protected bool IsSfxActive => _sfxPlayer.Playing;
+	protected virtual void PlayLaunchSfx() => _sfxPlayer?.Play();
 	[Export]
 	/// <summary> Option voice to play. </summary>
 	private StringName voiceKey;
