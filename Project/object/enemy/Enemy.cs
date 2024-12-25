@@ -262,7 +262,7 @@ public partial class Enemy : Node3D
 				break;
 		}
 
-		if (Player.IsJumpDashOrHomingAttack)
+		if (Player.IsJumpDashOrHomingAttack || (Player.IsBouncing && !Player.IsBounceInteruptable))
 		{
 			UpdateLockon();
 			Player.StartBounce(IsDefeated);

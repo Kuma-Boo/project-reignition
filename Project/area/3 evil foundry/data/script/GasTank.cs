@@ -118,8 +118,6 @@ public partial class GasTank : Area3D
 
 		if (!Player.IsJumpDashOrHomingAttack) return false;
 
-		Player.StartBounce();
-
 		StrikeTank();
 		return true;
 	}
