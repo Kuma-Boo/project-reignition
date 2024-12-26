@@ -12,6 +12,8 @@ public partial class SkillSelect : Menu
 	[Export]
 	private VBoxContainer optionContainer;
 	[Export]
+	private VBoxContainer presetContainer;
+	[Export]
 	private Node2D cursor;
 	[Export]
 	private Description description;
@@ -54,8 +56,26 @@ public partial class SkillSelect : Menu
 	private Array<SkillOption> skillOptionList = [];
 	private Array<SkillOption> currentSkillOptionList = [];
 
+
+	//---Skill Preset Variables---//
+	private bool presetMode; //set to true if we are looking at presets
+	private bool firstLoad; //This is used so we only create the presets once per load
+	private Array<SkillOption> presetOptionList = [];
+	private Array<SkillOption> currentPresetOptionList = [];
+	private int selectedID;
+
 	protected override void SetUp()
 	{
+		
+
+		//Creates a button for making new presets
+		SkillOption createPresetButton = skillOption.Instantiate<SkillOption>();
+		createPresetButton.SetAsCreateButton();
+			
+		createPresetButton.Initialize(true);
+		presetOptionList.Add(createPresetButton);
+		optionContainer.AddChild(createPresetButton);
+		firstLoad = false;
 		for (int i = 0; i < (int)SkillKey.Max; i++)
 		{
 			SkillKey key = (SkillKey)i;
@@ -70,7 +90,7 @@ public partial class SkillSelect : Menu
 			SkillOption newSkill = skillOption.Instantiate<SkillOption>();
 			newSkill.Skill = skill;
 			newSkill.Number = i + 1;
-			newSkill.Initialize();
+			newSkill.Initialize(false);
 
 			skillOptionList.Add(newSkill);
 			optionContainer.AddChild(newSkill);
@@ -92,6 +112,33 @@ public partial class SkillSelect : Menu
 		}
 
 		base.SetUp();
+	}
+
+	void CreateNewPreset()
+	{
+		Array<SkillKey> newRing = new Array<SkillKey>();
+		SaveManager.ActiveGameData.skillPresets.Add(newRing);
+		SaveManager.ActiveGameData.skillPresetNames.Add("newSkillRing");
+
+		GD.Print("adding preset");
+		SaveManager.SaveGameData();
+		GD.Print("saving preset data: " + SaveManager.ActiveGameData.skillPresetNames.Count);
+
+		SkillOption newPreset = skillOption.Instantiate<SkillOption>();
+		newPreset.isPreset = true;
+		newPreset.ChangeName("newSkillRing");
+
+		newPreset.Initialize(true);
+		
+		
+		presetOptionList.Add(newPreset);
+		optionContainer.AddChild(newPreset);
+	}
+
+	void LoadPresets(SkillRing ring)
+	{
+		ShowSkills();
+
 	}
 
 	public override void _Process(double _)
@@ -234,6 +281,7 @@ public partial class SkillSelect : Menu
 	{
 		// Update visible skill list to account for multiple save files
 		currentSkillOptionList.Clear();
+		currentPresetOptionList.Clear();
 		for (int i = 0; i < skillOptionList.Count; i++)
 		{
 			if (skillOptionList[i] == null)
@@ -255,8 +303,67 @@ public partial class SkillSelect : Menu
 			UpdateAugmentHierarchy(skillOptionList[i]);
 		}
 
+		for (int i = 0; i < presetOptionList.Count; i++)
+		{
+			currentPresetOptionList.Add(presetOptionList[i]);
+			presetOptionList[i].Visible = true;
+		}
+		
+		ShowPresets();
+
+
 		Redraw();
 		base.ShowMenu();
+	}
+
+	public void ShowPresets()
+	{
+
+		for (int i = 0; i < skillOptionList.Count; i++)
+		{
+			skillOptionList[i].Visible = false;
+		}
+		for (int i = 0; i < presetOptionList.Count; i++)
+		{
+			presetOptionList[i].Visible = true;
+		}
+		presetMode = true;
+		description.Visible = false;
+		skillPointFill.Visible = false;
+		levelLabel.Visible = false;
+		
+		
+		if (firstLoad == false)
+		{
+			GD.Print("Loading presets: " + SaveManager.ActiveGameData.skillPresetNames.Count);
+			for (int i = 0; i < SaveManager.ActiveGameData.skillPresetNames.Count; i++)
+			{
+				
+				SkillOption newPreset = skillOption.Instantiate<SkillOption>();
+
+				newPreset.ChangeName(SaveManager.ActiveGameData.skillPresetNames[i]);
+				newPreset.Initialize(true);
+				presetOptionList.Add(newPreset);
+				optionContainer.AddChild(newPreset);
+			
+			}
+			firstLoad = true;
+		}
+		
+	}
+
+	public void ShowSkills()
+	{
+		for (int i = 0; i < skillOptionList.Count; i++)
+		{
+			skillOptionList[i].Visible = true;
+		}
+		for (int i = 0; i < presetOptionList.Count; i++)
+		{
+			presetOptionList[i].Visible = false;
+		}
+		presetMode = false;
+		description.Visible = true;
 	}
 
 	protected override void Confirm()
@@ -277,10 +384,28 @@ public partial class SkillSelect : Menu
 			return;
 		}
 
-		if (!ToggleSkill())
+		if (presetMode == false)
+		{
+			if (!ToggleSkill())
 			return;
 
-		UpdateAugmentHierarchy(SelectedSkill);
+			UpdateAugmentHierarchy(SelectedSkill);
+		}
+		else
+		{
+			if (cursorPosition == 0) //If we're highlighting the "create preset" button
+			{
+				CreateNewPreset();
+				SaveManager.SaveGameData();
+			}
+			else if (cursorPosition >= 0)
+			{
+
+			}
+		}
+		
+
+		
 		Redraw();
 	}
 
@@ -430,6 +555,6 @@ public partial class SkillSelect : Menu
 		int augmentIndex = ActiveSkillRing.GetAugmentIndex(skillOption.Skill.Key);
 		skillOption.Skill = skillOption.GetAugmentSkill(augmentIndex);
 		skillOption.UpdateUnlockedAugments();
-		skillOption.Initialize();
+		skillOption.Initialize(false);
 	}
 }

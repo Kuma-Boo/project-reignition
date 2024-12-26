@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections;
 using Godot;
 using Godot.Collections;
 using Project.Gameplay;
@@ -92,6 +93,7 @@ public partial class SaveManager : Node
 		new(640, 360), // 360p
 		new(854, 480), // 480p
 		new(1280, 720), // 720p
+		new(1280, 800), // 800p (Steam Deck resolution)
 		new(1600, 900), // 900p
 		new(1920, 1080), // 1080p
 		new(2560, 1440), // 1440p
@@ -508,6 +510,8 @@ public partial class SaveManager : Node
 	public static GameData MenuData { get; set; }
 	/// <summary> Current skill ring. </summary>
 	public readonly static SkillRing ActiveSkillRing = new();
+	/// <summary> List of all saved skill presets
+	public readonly static System.Collections.Generic.List<SkillRing> SkillPresets = new();
 	/// <summary> List of all saves created. </summary>
 	public readonly static GameData[] GameSaveSlots = new GameData[SaveSlotCount];
 	/// <summary> Maximum number of save slots that can be created. </summary>
@@ -527,6 +531,7 @@ public partial class SaveManager : Node
 			file.StoreString(Json.Stringify(ActiveGameData.ToDictionary(), "\t"));
 			file.Close();
 		}
+		GD.Print("Saving.......");
 	}
 
 	/// <summary> Preloads game data so it can be displayed on menus. </summary>
@@ -569,6 +574,7 @@ public partial class SaveManager : Node
 
 	public class GameData
 	{
+
 		/// <summary> Which area was the player in last? (Used for save select) </summary>
 		public WorldEnum lastPlayedWorld;
 
@@ -588,7 +594,11 @@ public partial class SaveManager : Node
 		public int exp;
 		/// <summary> Total playtime, in seconds. </summary>
 		public float playTime;
-
+		
+		//public System.Collections.Generic.List<SkillRing> skillPresets;
+		public System.Collections.Generic.List<Array<SkillKey>> skillPresets;
+		public System.Collections.Generic.List<Array<SkillKey, int>> skillPresetAugments;
+		public System.Collections.Generic.List<string> skillPresetNames;
 		public Array<SkillKey> equippedSkills;
 		public Dictionary<SkillKey, int> equippedAugments;
 		/// <summary> Total number of fire souls the player collected. </summary>
@@ -932,6 +942,8 @@ public partial class SaveManager : Node
 				worldRingsCollected = [],
 				worldsUnlocked = [],
 				stagesUnlocked = [],
+				skillPresets = [],
+				skillPresetNames = [],
 				equippedSkills = [],
 				equippedAugments = [],
 				level = 0,
