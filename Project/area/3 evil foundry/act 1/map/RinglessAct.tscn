@@ -29,6 +29,7 @@ size = Vector3(15, 20, 2.5)
 
 [node name="Static" parent="." instance=ExtResource("1_gipeb")]
 Data = ExtResource("2_ovj8b")
+environmentFxFactor = 1.0
 
 [node name="01Opening" parent="Static/Visuals" index="1"]
 startEnabled = false
@@ -48,6 +49,13 @@ transform = Transform3D(-3.61999e-06, 0, -1, 0, 1, 0, 1, 0, -3.61999e-06, -491, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125, 40, -194.2)
 
 [node name="CharacterSpawn" parent="RinglessAct/SpawnPosition" instance=ExtResource("3_jx3jb")]
+
+[node name="InvisibleWall" type="StaticBody3D" parent="RinglessAct/SpawnPosition" groups=["wall"]]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4.74831, 0.2822, 0.00158691)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RinglessAct/SpawnPosition/InvisibleWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_piryv")
 
 [node name="Ending" type="Node3D" parent="RinglessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 179.717, 40.2822, -194.038)
@@ -139,7 +147,7 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.630
 rangeOverride = 10
 
 [node name="GreenMajin3" parent="RinglessAct/Ending/ENEMIES" instance=ExtResource("7_x8tqf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.3402, -25.227, -9.23788)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.3, -25.3, -8.89999)
 rangeOverride = 10
 
 [node name="RINGS" type="Node3D" parent="RinglessAct/Ending"]
@@ -967,15 +975,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
 
 [node name="Child12" parent="RinglessAct/Ending/GIMMICKS/InvisibleGrindrail4/Pearls5" instance=ExtResource("9_twagj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.8)
-
-[node name="EXTRA" type="Node3D" parent="RinglessAct/Ending"]
-
-[node name="InvisibleWall" type="StaticBody3D" parent="RinglessAct/Ending/EXTRA"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -59.4653, 0, -0.160416)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RinglessAct/Ending/EXTRA/InvisibleWall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_piryv")
 
 [node name="Goal" parent="RinglessAct/Ending" instance=ExtResource("16_c4g30")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.570206, -25.5517, 9.60463)
