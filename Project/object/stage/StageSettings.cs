@@ -175,14 +175,15 @@ public partial class StageSettings : Node3D
 			return -1;
 
 		int rank = 0; // DEFAULT - No rank
+		float completionTime = Mathf.RoundToInt(CurrentTime * 100f) * 0.01f; // Round to nearest millisecond
 
 		if (Data.SkipScore)
 		{
-			if (CurrentTime <= Data.GoldTime)
+			if (completionTime <= Data.GoldTime)
 				rank = 3;
-			else if (CurrentTime <= Data.SilverTime)
+			else if (completionTime <= Data.SilverTime)
 				rank = 2;
-			else if (CurrentTime <= Data.BronzeTime)
+			else if (completionTime <= Data.BronzeTime)
 				rank = 1;
 		}
 		else
@@ -191,11 +192,11 @@ public partial class StageSettings : Node3D
 			if (preCountBonuses)
 				score += BonusManager.instance.QueuedScore;
 
-			if (CurrentTime <= Data.GoldTime && score >= Data.Score) // Perfect run
+			if (completionTime <= Data.GoldTime && score >= Data.Score) // Perfect run
 				rank = 3;
-			else if (CurrentTime <= Data.SilverTime && score >= 3 * (Data.Score / 4)) // Silver score reqs are always 3/4 of gold
+			else if (completionTime <= Data.SilverTime && score >= 3 * (Data.Score / 4)) // Silver score reqs are always 3/4 of gold
 				rank = 2;
-			else if (CurrentTime <= Data.BronzeTime) // Bronze is easy to get
+			else if (completionTime <= Data.BronzeTime) // Bronze is easy to get
 				rank = 1;
 		}
 
