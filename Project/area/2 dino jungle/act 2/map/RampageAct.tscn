@@ -194,6 +194,9 @@ transform = Transform3D(1, 2.98023e-08, -4.24683e-07, -4.16082e-07, -0.185597, -
 [node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
 transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
 
+[node name="DemoCamera" parent="Static" index="7"]
+transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, -362, -209, -624)
+
 [node name="RampageAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="RampageAct"]
@@ -1986,6 +1989,7 @@ warpTarget = NodePath("../../../SpawnPosition")
 [node name="Camera" type="Node3D" parent="RampageAct/FeedingTunnel/Spring/Teleport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00311279, 0.78244, 0.337524)
 script = ExtResource("16_l2204")
+transitionTime = 0.0
 settings = ExtResource("3_uvabf")
 
 [node name="Path" type="Node3D" parent="RampageAct/FeedingTunnel/Spring" node_paths=PackedStringArray("path")]
@@ -2056,6 +2060,8 @@ shape = SubResource("BoxShape3D_c4mxl")
 [connection signal="Activated" from="RampageAct/FeedingTunnel/Spring" to="RampageAct/Cave/Switch" method="Respawn"]
 [connection signal="Activated" from="RampageAct/FeedingTunnel/Spring" to="RampageAct/FeedingTunnel/Spring/Path" method="Activate"]
 [connection signal="Deactivated" from="RampageAct/FeedingTunnel/Spring" to="RampageAct/FeedingTunnel/Spring/Teleport" method="Activate" flags=3]
+[connection signal="Teleport" from="RampageAct/FeedingTunnel/Spring/Teleport" to="Static/Visuals/03CaveSky" method="Activate"]
+[connection signal="Teleport" from="RampageAct/FeedingTunnel/Spring/Teleport" to="Static/Visuals/08FeedingTunnel" method="Deactivate"]
 [connection signal="Teleport" from="RampageAct/FeedingTunnel/Spring/Teleport" to="RampageAct/Crossing/SafetySpring" method="Activate"]
 [connection signal="Teleport" from="RampageAct/FeedingTunnel/Spring/Teleport" to="RampageAct/FeedingTunnel/Spring/Teleport/Camera" method="Activate"]
 
@@ -2063,4 +2069,3 @@ shape = SubResource("BoxShape3D_c4mxl")
 [editable path="Static/Visuals/03CaveSky"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara1"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara2"]
-[editable path="Static/CompletionDemo"]
