@@ -167,6 +167,9 @@ public partial class GrindState : PlayerState
 
 	public bool IsRailActivationValid(GrindRail grindRail)
 	{
+		if (!StageSettings.Instance.IsLevelIngame) // Not in-game
+			return false;
+
 		if (ActiveGrindRail == grindRail) // Already grinding on the target rail
 			return false;
 
