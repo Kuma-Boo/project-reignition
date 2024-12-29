@@ -398,6 +398,7 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(AirStateTransition, FallState);
 		animationTree.Set(BackflipTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		animationTree.Set(BrakeTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(FallTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
 	private readonly StringName SplashJumpTrigger = "parameters/air_tree/splash_jump_trigger/request";
@@ -760,8 +761,25 @@ public partial class PlayerAnimator : Node3D
 
 	#region Hurt
 	private readonly StringName HurtTrigger = "parameters/hurt_trigger/request";
-	public void StartHurt() => animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-	public void StopHurt() => animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+	private readonly StringName HurtBackwardState = "hurt-backward-start";
+	private readonly StringName HurtForwardStartState = "hurt-forward-start";
+	private readonly StringName HurtForwardStopState = "hurt-forward-stop";
+	private readonly StringName HurtPlayback = "parameters/hurt_state/playback";
+	private AnimationNodeStateMachinePlayback HurtStatePlayback => animationTree.Get(HurtPlayback).Obj as AnimationNodeStateMachinePlayback;
+
+	public void StartHurt(bool forwardLaunch)
+	{
+		HurtStatePlayback.Start(forwardLaunch ? HurtForwardStartState : HurtBackwardState);
+		animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	public void StopHurt(bool forwardLaunch)
+	{
+		if (forwardLaunch)
+			HurtStatePlayback.Travel(HurtForwardStopState);
+		else
+			animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+	}
 	#endregion
 
 	#region Spin

@@ -23,12 +23,13 @@
 size = Vector3(20, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_obefh"]
-size = Vector3(13.515, 8.885, 1.44)
+size = Vector3(15, 20, 2.5)
 
 [node name="RinglessAct" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_gipeb")]
 Data = ExtResource("2_ovj8b")
+environmentFxFactor = 1.0
 
 [node name="01Opening" parent="Static/Visuals" index="1"]
 startEnabled = false
@@ -39,7 +40,7 @@ startEnabled = true
 [node name="29End" parent="Static/Visuals" index="20"]
 startEnabled = true
 
-[node name="DemoCamera" parent="Static" index="4"]
+[node name="DemoCamera" parent="Static" index="5"]
 transform = Transform3D(-3.61999e-06, 0, -1, 0, 1, 0, 1, 0, -3.61999e-06, -491, -30, -360)
 
 [node name="RinglessAct" type="Node3D" parent="."]
@@ -48,6 +49,13 @@ transform = Transform3D(-3.61999e-06, 0, -1, 0, 1, 0, 1, 0, -3.61999e-06, -491, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125, 40, -194.2)
 
 [node name="CharacterSpawn" parent="RinglessAct/SpawnPosition" instance=ExtResource("3_jx3jb")]
+
+[node name="InvisibleWall" type="StaticBody3D" parent="RinglessAct/SpawnPosition" groups=["wall"]]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4.74831, 0.2822, 0.00158691)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RinglessAct/SpawnPosition/InvisibleWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_piryv")
 
 [node name="Ending" type="Node3D" parent="RinglessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 179.717, 40.2822, -194.038)
@@ -127,6 +135,11 @@ rangeOverride = 11
 
 [node name="GreenMajin" parent="RinglessAct/Ending/ENEMIES" instance=ExtResource("7_x8tqf")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -19.8683, -20.0459, 34.9261)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 rangeOverride = 10
 
 [node name="GreenMajin2" parent="RinglessAct/Ending/ENEMIES" instance=ExtResource("7_x8tqf")]
@@ -134,7 +147,7 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.630
 rangeOverride = 10
 
 [node name="GreenMajin3" parent="RinglessAct/Ending/ENEMIES" instance=ExtResource("7_x8tqf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.3402, -24.927, -9.23788)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.3, -25.3, -8.89999)
 rangeOverride = 10
 
 [node name="RINGS" type="Node3D" parent="RinglessAct/Ending"]
@@ -301,7 +314,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.4)
 
 [node name="Rings18" type="Node3D" parent="RinglessAct/Ending/RINGS"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.3234, -24.8864, 18.0254)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.3234, -24.5864, 18.0254)
 script = ExtResource("5_413l6")
 Generate = false
 Source = ExtResource("6_h1fdq")
@@ -783,11 +796,11 @@ distance = 8.0
 launchDirection = 1
 voiceKey = &""
 
-[node name="Spring2" parent="RinglessAct/Ending/GIMMICKS/Switch/CullingTrigger" node_paths=PackedStringArray("sfxPlayer") instance=ExtResource("11_ptg20")]
+[node name="Spring2" parent="RinglessAct/Ending/GIMMICKS/Switch/CullingTrigger" instance=ExtResource("11_ptg20")]
 transform = Transform3D(1, 0, 0, 0, 0.926935, -0.375221, 0, 0.375221, 0.926935, 0.766571, 0, 3.20923)
 distance = 8.0
 launchDirection = 1
-sfxPlayer = NodePath("../Spring/SFX")
+sfxPlayer = NodePath("")
 voiceKey = &""
 
 [node name="ItemBoxFlying" parent="RinglessAct/Ending/GIMMICKS" instance=ExtResource("12_cx2mb")]
@@ -854,7 +867,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.14722e-07, -1.8, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.27279, -1.27279, 0)
 
 [node name="InvisibleGrindrail1" parent="RinglessAct/Ending/GIMMICKS" instance=ExtResource("8_4d187")]
-transform = Transform3D(0.00674591, 0.112787, -0.993596, -0.000765743, 0.993619, 0.112784, 0.999977, 4.92996e-09, 0.00678924, -1.57513, -19.7179, 35.0979)
+transform = Transform3D(0.00674591, 0.112787, -0.993596, -0.000765743, 0.993619, 0.112784, 0.999977, 4.92996e-09, 0.00678924, -2.17128, -19.6502, 35.102)
 railLength = 23
 
 [node name="InvisibleGrindrail2" parent="RinglessAct/Ending/GIMMICKS" instance=ExtResource("8_4d187")]
@@ -963,20 +976,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
 [node name="Child12" parent="RinglessAct/Ending/GIMMICKS/InvisibleGrindrail4/Pearls5" instance=ExtResource("9_twagj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.8)
 
-[node name="EXTRA" type="Node3D" parent="RinglessAct/Ending"]
-
-[node name="InvisibleWall" type="StaticBody3D" parent="RinglessAct/Ending/EXTRA"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -59.4653, 0, -0.160416)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RinglessAct/Ending/EXTRA/InvisibleWall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_piryv")
-
 [node name="Goal" parent="RinglessAct/Ending" instance=ExtResource("16_c4g30")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.570206, -25.5517, 9.60463)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RinglessAct/Ending/Goal"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.14846, 4.80933)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 shape = SubResource("BoxShape3D_obefh")
 
 [connection signal="Activated" from="RinglessAct/Ending/GIMMICKS/Switch" to="RinglessAct/Ending/GIMMICKS/Switch/CullingTrigger" method="Activate"]

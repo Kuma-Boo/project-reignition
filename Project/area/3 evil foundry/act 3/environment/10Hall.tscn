@@ -1,13 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://wv3blyqy54yi"]
+[gd_scene load_steps=4 format=3 uid="uid://wv3blyqy54yi"]
 
 [ext_resource type="PackedScene" uid="uid://boxedm72fs45t" path="res://area/3 evil foundry/act 3/environment/model/10Hall.gltf" id="1_0l033"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_bicvo"]
+[ext_resource type="PackedScene" uid="uid://wnnthoykndrj" path="res://effect/particle/Lantern.tscn" id="3_xmt0s"]
 
 [node name="10Hall" instance=ExtResource("1_0l033")]
 script = ExtResource("2_bicvo")
+saveVisibilityOnCheckpoint = true
 isStageVisuals = true
 
 [node name="stg033_g25_Mesh_0000" parent="." index="0"]
+visible = false
 layers = 4
 cast_shadow = 0
 
@@ -220,3 +223,15 @@ cast_shadow = 0
 
 [node name="AnimationPlayer" parent="." index="50"]
 autoplay = "10"
+
+[node name="Lanterns" type="Node3D" parent="." index="51"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -99.9947, -54.3, -204.318)
+
+[node name="Lantern" parent="Lanterns" index="0" instance=ExtResource("3_xmt0s")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="Lantern2" parent="Lanterns" index="1" instance=ExtResource("3_xmt0s")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, -14.4545)
+
+[node name="Lantern3" parent="Lanterns" index="2" instance=ExtResource("3_xmt0s")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.0178223, 2.48956, -80.401)

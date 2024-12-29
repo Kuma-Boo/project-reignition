@@ -69,7 +69,7 @@ public partial class DriftTrigger : Area3D
 		if (Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed) < EntranceSpeedRatio)
 			return;
 
-		if (Player.ExternalController != null)
+		if (Player.ExternalController != null || Player.ExternalParent != null)
 			return; // Player is already busy
 
 		// Check for any obstructions
@@ -98,7 +98,11 @@ public partial class DriftTrigger : Area3D
 		sfx.Play();
 	}
 
-	public void Deactivate() => EmitSignal(SignalName.DriftCompleted);
+	public void Deactivate()
+	{
+		sfx.Stop();
+		EmitSignal(SignalName.DriftCompleted);
+	}
 
 	/// <summary> Tracks whether drift bonus was already applied. </summary>
 	private bool wasBonusApplied;

@@ -91,7 +91,7 @@ public partial class PauseMenu : Node
 			skillContainer.AddChild(pauseSkill);
 		}
 
-		TransitionManager.instance.TransitionStarted += DisablePause;
+		TransitionManager.instance.TransitionProcess += DisablePause;
 	}
 
 	public override void _PhysicsProcess(double _)

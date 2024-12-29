@@ -36,6 +36,7 @@ public partial class GrindStepState : PlayerState
 
 		Player.CanJumpDash = false; // Disable jumpdashing
 		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
+		Player.Effect.PlayVoice("grunt");
 		Player.Animator.StartGrindStep();
 
 		HeadsUpDisplay.Instance.SetPrompt(StompAction, 0);

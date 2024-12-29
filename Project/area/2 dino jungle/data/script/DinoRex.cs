@@ -142,7 +142,13 @@ public partial class DinoRex : Node3D
 			targetRotation = playerRotation;
 	}
 
-	public void OnReturnToIdle(Area3D _) => targetState = RexStates.Idle;
+	public void OnReturnToIdle(Area3D a)
+	{
+		if (!a.IsInGroup("player detection"))
+			return;
+
+		targetState = RexStates.Idle;
+	}
 
 	private void PlayScreenShake(float magnitude)
 	{

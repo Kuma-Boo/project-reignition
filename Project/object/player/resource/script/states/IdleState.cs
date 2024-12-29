@@ -83,6 +83,9 @@ public partial class IdleState : PlayerState
 
 				return runState;
 			}
+
+			if (!Mathf.IsZeroApprox(Player.MoveSpeed))
+				return runState;
 		}
 
 		Player.Animator.IdleAnimation();

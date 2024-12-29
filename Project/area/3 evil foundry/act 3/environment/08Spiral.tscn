@@ -1,14 +1,26 @@
-[gd_scene load_steps=3 format=3 uid="uid://klgrk8u0u053"]
+[gd_scene load_steps=5 format=3 uid="uid://klgrk8u0u053"]
 
 [ext_resource type="PackedScene" uid="uid://c0wrlpmi2su41" path="res://area/3 evil foundry/act 3/environment/model/08Spiral.gltf" id="1_hs8i4"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_6t6by"]
+[ext_resource type="Shader" uid="uid://dt8heyml4biim" path="res://effect/shader/bloom/material/customfade/CentralFadeBloom.tres" id="3_avt0r"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_em8hx"]
+render_priority = 0
+shader = ExtResource("3_avt0r")
+shader_parameter/albedo = Color(4.20784, 3.60392, 0, 1)
+shader_parameter/rim_bias = 0.453
+shader_parameter/vert_col_influence = 0.0
+shader_parameter/distance_fade_min = 10.0
+shader_parameter/distance_fade_max = 20.0
 
 [node name="08Spiral" instance=ExtResource("1_hs8i4")]
 script = ExtResource("2_6t6by")
+saveVisibilityOnCheckpoint = true
 isStageVisuals = true
 
 [node name="stg033_g18_Mesh_0001" parent="." index="0"]
 layers = 4
+surface_material_override/0 = SubResource("ShaderMaterial_em8hx")
 
 [node name="stg033_k18_Mesh_0000" parent="." index="1"]
 layers = 4

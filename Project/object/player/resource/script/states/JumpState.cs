@@ -165,11 +165,10 @@ public partial class JumpState : PlayerState
 
 		float inputAngle = Player.Controller.GetTargetMovementAngle();
 		if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
-		{
 			return;
-		}
 
-		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+			!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
 			(!Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle) ||
 			Player.Controller.GetInputStrength() < .5f))
 		{

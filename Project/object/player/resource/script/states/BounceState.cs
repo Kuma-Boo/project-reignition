@@ -30,13 +30,14 @@ public partial class BounceState : PlayerState
 		AttemptBounceSnapping();
 		bounceInterruptTimer = LockoutSettings.length - .5f;
 
-		if (Player.IsLockoutActive && Player.ActiveLockoutData == LockoutSettings) return;
-
 		Player.IsOnGround = false;
 		Player.CanJumpDash = true;
+		Player.Lockon.IsMonitoring = true;
 		Player.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
-		Player.AddLockoutData(LockoutSettings);
+
+		if (!Player.IsLockoutActive || Player.ActiveLockoutData != LockoutSettings)
+			Player.AddLockoutData(LockoutSettings);
 
 		Player.Animator.ResetState(0.1f);
 		Player.Animator.BounceTrick();

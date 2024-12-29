@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=257 format=3 uid="uid://biwe75w273iq7"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=264 format=3 uid="uid://biwe75w273iq7"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_hf2vv"]
 
@@ -964,6 +964,15 @@ animation = &"ActionLibrary/hurt"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pv3ab"]
 animation = &"ActionLibrary/hurt-start"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_a7hr1"]
+animation = &"ActionLibrary/hurt-forward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xmxy0"]
+animation = &"ActionLibrary/hurt-forward-start"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_talfe"]
+animation = &"ActionLibrary/hurt-forward-stop"
+
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_b442m"]
 xfade_time = 0.05
 switch_mode = 2
@@ -972,12 +981,34 @@ advance_mode = 2
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cmj73"]
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_e5yi2"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_mlipo"]
+xfade_time = 0.05
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cxmnf"]
+xfade_time = 0.05
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ikb2c"]
+switch_mode = 2
+advance_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_kdifa"]
-states/hurt/node = SubResource("AnimationNodeAnimation_pv3ab")
-states/hurt/position = Vector2(380.8, 100.4)
-states/hurt-loop/node = SubResource("AnimationNodeAnimation_yavkw")
-states/hurt-loop/position = Vector2(576, 101.392)
-transitions = ["hurt", "hurt-loop", SubResource("AnimationNodeStateMachineTransition_b442m"), "Start", "hurt", SubResource("AnimationNodeStateMachineTransition_cmj73")]
+states/hurt-backward-loop/node = SubResource("AnimationNodeAnimation_yavkw")
+states/hurt-backward-loop/position = Vector2(576, 101.392)
+states/hurt-backward-start/node = SubResource("AnimationNodeAnimation_pv3ab")
+states/hurt-backward-start/position = Vector2(380.8, 100.4)
+states/hurt-forward-loop/node = SubResource("AnimationNodeAnimation_a7hr1")
+states/hurt-forward-loop/position = Vector2(576, 158)
+states/hurt-forward-start/node = SubResource("AnimationNodeAnimation_xmxy0")
+states/hurt-forward-start/position = Vector2(380.8, 158)
+states/hurt-forward-stop/node = SubResource("AnimationNodeAnimation_talfe")
+states/hurt-forward-stop/position = Vector2(758, 158)
+transitions = ["hurt-backward-start", "hurt-backward-loop", SubResource("AnimationNodeStateMachineTransition_b442m"), "Start", "hurt-backward-start", SubResource("AnimationNodeStateMachineTransition_cmj73"), "Start", "hurt-forward-start", SubResource("AnimationNodeStateMachineTransition_e5yi2"), "hurt-forward-start", "hurt-forward-loop", SubResource("AnimationNodeStateMachineTransition_mlipo"), "hurt-forward-loop", "hurt-forward-stop", SubResource("AnimationNodeStateMachineTransition_cxmnf"), "hurt-forward-stop", "End", SubResource("AnimationNodeStateMachineTransition_ikb2c")]
+graph_offset = Vector2(-96, 28)
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ep02e"]
 fadeout_time = 0.1
@@ -1254,7 +1285,7 @@ states/loop/position = Vector2(200, 227)
 states/start/node = SubResource("AnimationNodeAnimation_c0u2g")
 states/start/position = Vector2(200, 160)
 transitions = ["start", "loop", SubResource("AnimationNodeStateMachineTransition_3simu"), "Start", "start", SubResource("AnimationNodeStateMachineTransition_q3xr0")]
-graph_offset = Vector2(-153, 57)
+graph_offset = Vector2(-339, 148)
 
 [sub_resource type="AnimationNodeTransition" id="70"]
 input_0/name = "normal"
@@ -1274,7 +1305,7 @@ input_4/auto_advance = false
 input_4/reset = true
 
 [resource]
-graph_offset = Vector2(-1571.73, 13.6364)
+graph_offset = Vector2(-954.787, 157.66)
 nodes/air_tree/node = SubResource("AnimationNodeBlendTree_2rvqt")
 nodes/air_tree/position = Vector2(-1120, 112)
 nodes/balance_tree/node = SubResource("AnimationNodeBlendTree_gi378")

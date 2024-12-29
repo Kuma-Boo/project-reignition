@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://sap50uvjitma"]
+[gd_scene load_steps=40 format=3 uid="uid://sap50uvjitma"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_y3xwh"]
 [ext_resource type="Resource" uid="uid://dmv3a7tioyyl6" path="res://area/3 evil foundry/data/DialogLibrary.tres" id="2_s1lnd"]
@@ -25,6 +25,9 @@
 [ext_resource type="PackedScene" uid="uid://colwov4oavxp" path="res://area/3 evil foundry/act 3/environment/11Spiral.tscn" id="14_oxee6"]
 [ext_resource type="Curve3D" uid="uid://bw5j3w382q34e" path="res://area/3 evil foundry/act 3/environment/path/StartingPath.tres" id="15_s46kt"]
 [ext_resource type="Curve3D" uid="uid://45wud7t2ygbd" path="res://area/3 evil foundry/act 3/environment/path/EndingPath.tres" id="16_qmjwd"]
+[ext_resource type="PackedScene" uid="uid://cl0tw3ce066ap" path="res://area/3 evil foundry/data/BGM.tscn" id="26_qgsqb"]
+[ext_resource type="AudioStream" uid="uid://h7j3n4lf452s" path="res://sound/ost/bonus disc/Evil Foundry Act 3.mp3" id="27_g5tpq"]
+[ext_resource type="PackedScene" uid="uid://cs7ogaqrx3sn5" path="res://area/3 evil foundry/data/shader/ScreenWarp.tscn" id="28_c7cby"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_y4n3u"]
 size = Vector3(20, 20, 5)
@@ -454,23 +457,59 @@ _data = {
 "demo3": SubResource("Animation_yw6bd")
 }
 
-[sub_resource type="Environment" id="Environment_vst5d"]
-background_mode = 1
+[sub_resource type="Gradient" id="Gradient_qub4s"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0.0307167, 0.0580205, 0.389078, 0.897727, 1)
+colors = PackedColorArray(0, 0.00392157, 0, 1, 0.00884778, 0.0219422, 0.0080423, 1, 0.41, 0.41, 0.41, 1, 0.904192, 0.855356, 0.812669, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_twncg"]
+gradient = SubResource("Gradient_qub4s")
+
+[sub_resource type="Gradient" id="Gradient_jl0ac"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0.484848)
+colors = PackedColorArray(1, 0.583333, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_03vla"]
+gradient = SubResource("Gradient_jl0ac")
+
+[sub_resource type="Environment" id="Environment_2rm3p"]
 ambient_light_source = 2
-ambient_light_color = Color(0.54902, 0.372549, 0.329412, 1)
-tonemap_mode = 2
+ambient_light_color = Color(0.62, 0.56606, 0.2604, 1)
+tonemap_exposure = 1.4
 tonemap_white = 1.2
-ssil_enabled = true
 ssil_radius = 10.0
 ssil_intensity = 1.5
 glow_enabled = true
+glow_levels/2 = 2.0
+glow_levels/3 = 0.3
+glow_levels/5 = 0.0
+glow_levels/7 = 0.01
 glow_intensity = 0.2
-glow_strength = 0.95
-glow_blend_mode = 0
+glow_strength = 1.2
+glow_bloom = 0.1
+glow_blend_mode = 4
 glow_hdr_threshold = 1.5
 glow_hdr_scale = 2.5
-volumetric_fog_density = 0.0
+glow_map = SubResource("GradientTexture1D_03vla")
+fog_enabled = true
+fog_light_color = Color(1, 0.733333, 0, 1)
+fog_light_energy = 0.9
+fog_density = 0.0003
+fog_sky_affect = 0.0
+fog_height = -59.54
+fog_height_density = 0.003
+volumetric_fog_density = 0.1008
+volumetric_fog_albedo = Color(0, 0, 0, 1)
+volumetric_fog_emission = Color(0.466667, 0, 0, 1)
+volumetric_fog_anisotropy = 0.11
+volumetric_fog_length = 100.0
+volumetric_fog_sky_affect = 0.0
+volumetric_fog_temporal_reprojection_enabled = false
 adjustment_enabled = true
+adjustment_brightness = 1.2
+adjustment_saturation = 0.9
+adjustment_color_correction = SubResource("GradientTexture1D_twncg")
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_y3xwh")
@@ -1164,8 +1203,16 @@ libraries = {
 "": SubResource("AnimationLibrary_5vskf")
 }
 
+[node name="BGM" parent="." instance=ExtResource("26_qgsqb")]
+stream = ExtResource("27_g5tpq")
+startPosition = 1.0
+loopStartPosition = 9.2
+loopEndPosition = 121.2
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_vst5d")
+environment = SubResource("Environment_2rm3p")
+
+[node name="ScreenWarp" parent="." instance=ExtResource("28_c7cby")]
 
 [connection signal="Activated" from="Visuals/CullingMap/02Load" to="Visuals/02Elbow" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/02Load" to="Visuals/02Elbow" method="Deactivate"]

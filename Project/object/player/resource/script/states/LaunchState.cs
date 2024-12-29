@@ -39,6 +39,7 @@ public partial class LaunchState : PlayerState
 		Player.IsOnGround = false;
 		Player.IsLaunching = true;
 		Player.IsMovingBackward = false;
+		Player.AllowLandingGrind = true;
 		Player.AllowLandingSkills = false;
 		Player.MoveSpeed = settings.HorizontalVelocity;
 		Player.VerticalSpeed = settings.InitialVerticalVelocity;
@@ -58,6 +59,9 @@ public partial class LaunchState : PlayerState
 			Player.UpDirection = Vector3.Up;
 			Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 		}
+
+		if (settings.IgnoreCollisions)
+			Player.ChangeHitbox("disable-environment");
 	}
 
 	public override void ExitState()
@@ -76,8 +80,8 @@ public partial class LaunchState : PlayerState
 		Player.Effect.StopTrailFX();
 		Player.Animator.ResetState();
 
+		Player.ChangeHitbox("RESET");
 		Player.EmitSignal(PlayerController.SignalName.LaunchFinished);
-
 		settings.Launcher?.Deactivate();
 	}
 
@@ -90,9 +94,12 @@ public partial class LaunchState : PlayerState
 		Vector3 targetPosition = settings.InterpolatePositionTime(launcherTime);
 		float heightDelta = Mathf.IsZeroApprox(launcherTime) ? 0 : targetPosition.Y - Player.GlobalPosition.Y;
 
-		UpdateWallHit(targetPosition);
-		if (wallHit)
-			return fallState;
+		if (!settings.IgnoreCollisions)
+		{
+			UpdateWallHit(targetPosition);
+			if (wallHit)
+				return fallState;
+		}
 
 		Player.GlobalPosition = targetPosition;
 		Player.VerticalSpeed = heightDelta / PhysicsManager.physicsDelta;
