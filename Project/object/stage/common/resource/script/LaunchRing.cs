@@ -29,11 +29,12 @@ public partial class LaunchRing : Launcher
 	public float LaunchRatio => launchRatio;
 	public override float GetLaunchRatio() => isSpikeVariant ? 1f : Mathf.SmoothStep(0, 1, launchRatio);
 
-	public override void _Ready()
+	protected override void SetUp()
 	{
 		if (Engine.IsEditorHint())
 			return;
 
+		base.SetUp();
 		InitializePieces();
 	}
 
