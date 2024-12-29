@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://cumqwrsj6eqpd"]
+[gd_scene load_steps=48 format=3 uid="uid://cumqwrsj6eqpd"]
 
 [ext_resource type="Script" path="res://interface/menu/level select/script/WorldSelect.cs" id="1_7vrge"]
 [ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="7_6bdak"]
@@ -28,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://ckdga1wgdrja8" path="res://interface/menu/level select/level lists/SkeletonDome.tscn" id="19_3xa6d"]
 [ext_resource type="PackedScene" uid="uid://bft64s1qkqatm" path="res://interface/menu/level select/level lists/NightPalace.tscn" id="20_y3iyc"]
 [ext_resource type="AudioStream" uid="uid://cl54rftw5aiyf" path="res://sound/sfx/system/menu cancel.wav" id="21_fw6ew"]
+[ext_resource type="PackedScene" uid="uid://bgsvifk5vld4y" path="res://interface/menu/skill select/SkillPresetSelect.tscn" id="22_go238"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2vkkl"]
 shader = ExtResource("17_uyu6q")
@@ -2386,6 +2387,12 @@ z_index = 15
 z_as_relative = false
 layout_mode = 1
 parentMenu = NodePath("../ReadyMenu")
+submenus = Array[NodePath]([NodePath("../SkillPresetSelect")])
+
+[node name="SkillPresetSelect" parent="Submenus" node_paths=PackedStringArray("parentMenu") instance=ExtResource("22_go238")]
+layout_mode = 1
+parentMenu = NodePath("../SkillSelect")
+submenus = Array[NodePath]([])
 
 [node name="NavigationButtons" type="HBoxContainer" parent="."]
 layout_mode = 0
@@ -2445,4 +2452,4 @@ next/scroll-down = &"reset-scroll"
 next/scroll-up = &"reset-scroll"
 next/show = &"loop"
 next/show-fade-video = &"loop"
-blend_times = [&"show", &"loop", 0.1, &"loop", &"scroll-up", 0.05, &"loop", &"scroll-down", 0.05, &"show-fade-video", &"loop", 0.1]
+blend_times = [&"loop", &"scroll-up", 0.05, &"loop", &"scroll-down", 0.05, &"show", &"loop", 0.1, &"show-fade-video", &"loop", 0.1]

@@ -38,9 +38,6 @@ public partial class SkillOption : Control
 	private Label createPresetLabel;
 
 	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
-	public int skillRingID;
-	public bool isCreateButton;
-	public bool isPreset;
 
 	private readonly float MinimumSize = 64;
 	private readonly float MinimumSizeIncrement = 63;
@@ -92,7 +89,7 @@ public partial class SkillOption : Control
 			augmentMenuMinimumSize += MinimumSizeIncrement; // Update submenu size
 
 			augment.Number = AugmentMenuCount; // Update augment number
-			augment.Initialize(false); // Redraw
+			augment.Initialize(); // Redraw
 		}
 
 		animator.Play(AugmentMenuCount == 0 ? "disable-augment" : "enable-augment");
@@ -102,7 +99,7 @@ public partial class SkillOption : Control
 	public void ShowAugmentMenu() => animator.Play("show-augment-menu");
 	public void HideAugmentMenu() => animator.Play("hide-augment-menu");
 
-	public void Initialize(bool preset)
+	public void Initialize()
 	{
 		if (Skill == null)
 		{
@@ -110,34 +107,9 @@ public partial class SkillOption : Control
 			return;
 		}
 
-		if (preset)
-		{
-			elementLabel.Visible = false;
-			numberLabel.Visible = false;
-			costLabel.Visible = false;
-			light.Visible = false;
-			createPresetLabel.Visible = false;
-		}
-
-		if (isCreateButton)
-		{
-			createPresetLabel.Visible = true;
-		}
 		RedrawStaticData();
 
-		if (preset == false)
 		Redraw();
-	}
-
-	public void SetAsCreateButton()
-	{
-		nameLabel.Visible = false;
-		light.Visible = false;
-		costLabel.Visible = false;
-		elementLabel.Visible = false;
-		numberLabel.Visible = false;
-		createPresetLabel.Visible = true;
-		isCreateButton = true;
 	}
 
 	public override void _Process(double _)

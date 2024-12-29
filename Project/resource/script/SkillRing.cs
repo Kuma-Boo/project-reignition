@@ -7,10 +7,6 @@ namespace Project.Gameplay;
 
 public class SkillRing
 {
-	/// <summary> Preset name
-	public string SkillRingName = "";
-	/// <summary> ID used to identify which skill ring is equipped
-	public int SkillRingID = 0;
 	/// <summary> List of equipped skills. </summary>
 	public Array<SkillKey> EquippedSkills => SaveManager.ActiveGameData.equippedSkills;
 	/// <summary> List of equipped Augments. </summary>

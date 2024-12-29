@@ -182,6 +182,7 @@ public partial class SaveManager : Node
 				{ nameof(subtitlesEnabled), subtitlesEnabled },
 				{ nameof(voiceLanguage), (int)voiceLanguage },
 				{ nameof(textLanguage), (int)textLanguage },
+				
 			};
 		}
 
@@ -510,8 +511,6 @@ public partial class SaveManager : Node
 	public static GameData MenuData { get; set; }
 	/// <summary> Current skill ring. </summary>
 	public readonly static SkillRing ActiveSkillRing = new();
-	/// <summary> List of all saved skill presets
-	public readonly static System.Collections.Generic.List<SkillRing> SkillPresets = new();
 	/// <summary> List of all saves created. </summary>
 	public readonly static GameData[] GameSaveSlots = new GameData[SaveSlotCount];
 	/// <summary> Maximum number of save slots that can be created. </summary>
@@ -595,10 +594,8 @@ public partial class SaveManager : Node
 		/// <summary> Total playtime, in seconds. </summary>
 		public float playTime;
 		
-		//public System.Collections.Generic.List<SkillRing> skillPresets;
-		public System.Collections.Generic.List<Array<SkillKey>> skillPresets;
-		public System.Collections.Generic.List<Array<SkillKey, int>> skillPresetAugments;
-		public System.Collections.Generic.List<string> skillPresetNames;
+
+		public Array<SkillPreset> presetList;
 		public Array<SkillKey> equippedSkills;
 		public Dictionary<SkillKey, int> equippedAugments;
 		/// <summary> Total number of fire souls the player collected. </summary>
@@ -840,6 +837,7 @@ public partial class SaveManager : Node
 				{ nameof(playTime), Mathf.RoundToInt(playTime) },
 				{ nameof(equippedSkills), skillDictionary },
 				{ nameof(equippedAugments), augmentDictionary },
+				{ nameof(presetList), presetList},
 			};
 		}
 
@@ -942,8 +940,7 @@ public partial class SaveManager : Node
 				worldRingsCollected = [],
 				worldsUnlocked = [],
 				stagesUnlocked = [],
-				skillPresets = [],
-				skillPresetNames = [],
+				presetList = [],
 				equippedSkills = [],
 				equippedAugments = [],
 				level = 0,

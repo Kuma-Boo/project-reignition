@@ -1,0 +1,196 @@
+[gd_scene load_steps=8 format=3 uid="uid://bgsvifk5vld4y"]
+
+[ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="1_g5uw6"]
+[ext_resource type="Script" path="res://interface/menu/skill select/script/SkillPresetSelect.cs" id="1_o0ujo"]
+[ext_resource type="PackedScene" uid="uid://c3qhbk31d0gc4" path="res://interface/menu/skill select/SkillPresetOption.tscn" id="2_aav6m"]
+[ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="2_w3g84"]
+
+[sub_resource type="Animation" id="Animation_nfhql"]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Content:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("NavigationButtons:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_2eqc8"]
+resource_name = "show"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Content:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("NavigationButtons:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_b2l6e"]
+_data = {
+"RESET": SubResource("Animation_nfhql"),
+"show": SubResource("Animation_2eqc8")
+}
+
+[node name="SkillPresetSelect" type="Control" node_paths=PackedStringArray("presetContainer", "scrollbar", "animator", "animator")]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o0ujo")
+numPresets = 20
+presetOption = ExtResource("2_aav6m")
+presetContainer = NodePath("Content/Clip/Options")
+scrollbar = NodePath("Content/Window/ScrollBar/ScrollPosition")
+animator = NodePath("AnimationPlayer")
+animator = NodePath("AnimationPlayer")
+
+[node name="Content" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 320.0
+offset_right = -320.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Window" type="Node2D" parent="Content"]
+position = Vector2(640, 480)
+
+[node name="ScrollBar" type="Sprite2D" parent="Content/Window"]
+position = Vector2(552, -24)
+rotation = 1.57079
+scale = Vector2(2.25002, 2.25002)
+texture = ExtResource("1_g5uw6")
+region_enabled = true
+region_rect = Rect2(32, 224, 224, 32)
+metadata/_edit_lock_ = true
+
+[node name="ScrollPosition" type="Sprite2D" parent="Content/Window/ScrollBar"]
+position = Vector2(-80, 0)
+rotation = -1.5708
+texture = ExtResource("1_g5uw6")
+region_enabled = true
+region_rect = Rect2(8, 224, 24, 24)
+
+[node name="Header" type="Control" parent="Content"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 64.0
+offset_bottom = 144.0
+grow_horizontal = 2
+
+[node name="Clip" type="Control" parent="Content"]
+clip_contents = true
+custom_minimum_size = Vector2(1072, 504)
+layout_mode = 1
+anchor_left = 0.102
+anchor_top = 0.178
+anchor_right = 0.894
+anchor_bottom = 0.652
+offset_left = -42.56
+offset_top = -188.24
+offset_right = 15.6801
+offset_bottom = 51.84
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+metadata/_edit_group_ = true
+
+[node name="Options" type="VBoxContainer" parent="Content/Clip"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 1073.0
+grow_horizontal = 2
+theme_override_constants/separation = -1
+
+[node name="NavigationButtons" type="HBoxContainer" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 448.0
+offset_top = 760.0
+offset_right = -380.0
+offset_bottom = -256.0
+theme_override_constants/separation = 64
+alignment = 2
+
+[node name="Select" parent="NavigationButtons" instance=ExtResource("2_w3g84")]
+layout_mode = 2
+actionKey = "sys_select"
+inputKey = "button_jump"
+
+[node name="Cancel" parent="NavigationButtons" instance=ExtResource("2_w3g84")]
+layout_mode = 2
+actionKey = "sys_cancel"
+inputKey = "button_action"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_b2l6e")
+}
