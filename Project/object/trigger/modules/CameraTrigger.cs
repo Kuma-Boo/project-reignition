@@ -75,12 +75,6 @@ public partial class CameraTrigger : StageTriggerModule
 			cachedPreviousSettings = true;
 		}
 
-		if (Camera.ActiveSettings == settings &&
-			!(settings.copyPosition || settings.copyRotation))
-		{
-			return;
-		}
-
 		Camera.UpdateCameraSettings(new()
 		{
 			BlendTime = transitionTime,
