@@ -7,8 +7,6 @@ namespace Project.Interface.Menus;
 
 public partial class SkillSelect : Menu
 {
-
-
 	[Export]
 	private PackedScene skillOption;
 	[Export]
@@ -56,13 +54,8 @@ public partial class SkillSelect : Menu
 	private Array<SkillOption> skillOptionList = [];
 	private Array<SkillOption> currentSkillOptionList = [];
 
-
-
-
 	protected override void SetUp()
 	{
-		
-
 		for (int i = 0; i < (int)SkillKey.Max; i++)
 		{
 			SkillKey key = (SkillKey)i;
@@ -101,7 +94,6 @@ public partial class SkillSelect : Menu
 		base.SetUp();
 	}
 
-
 	public override void _Process(double _)
 	{
 		float targetScrollPosition = (160 * scrollRatio) - 80;
@@ -113,7 +105,6 @@ public partial class SkillSelect : Menu
 
 		Vector2 targetContainerPosition = new(optionContainer.Position.X, -scrollAmount * ScrollInterval);
 		optionContainer.Position = optionContainer.Position.SmoothDamp(targetContainerPosition, ref containerVelocity, ScrollSmoothing);
-
 	}
 
 	protected override void Cancel()
@@ -143,11 +134,12 @@ public partial class SkillSelect : Menu
 
 	protected override void Enter()
 	{
-		if (IsAlertMenuActive == false)
+		GD.Print("Entered");
+		if (!IsAlertMenuActive)
 		{
 			SaveManager.SaveGameData();
-			animator.Play("hide_2");
-		}	
+			animator.Play("enter-skill-preset");
+		}
 	}
 
 	protected override void UpdateSelection()
@@ -191,7 +183,7 @@ public partial class SkillSelect : Menu
 			UpdateDescription();
 		}
 
-		
+
 
 		// TODO Change sort method when speedbreak is pressed
 	}
@@ -288,7 +280,7 @@ public partial class SkillSelect : Menu
 			skillOptionList[i].Visible = true;
 		}
 		description.Visible = true;
-		
+
 	}
 
 	protected override void Confirm()
@@ -314,7 +306,7 @@ public partial class SkillSelect : Menu
 			return;
 
 		UpdateAugmentHierarchy(SelectedSkill);
-		
+
 		Redraw();
 	}
 
