@@ -718,6 +718,9 @@ public partial class PlayerController : CharacterBody3D
 	public bool IsKnockback { get; set; }
 	public bool StartKnockback(KnockbackSettings settings = new())
 	{
+		// Disable damage when not in-game
+		if (!Stage.IsLevelIngame) return false;
+
 		EmitSignal(SignalName.Knockback); // Emit signal FIRST so external controllers can be alerted
 
 		if (IsTeleporting || IsDefeated) return false;

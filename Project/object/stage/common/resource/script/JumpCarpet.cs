@@ -13,8 +13,9 @@ public partial class JumpCarpet : Launcher
 	[Export]
 	private AnimationPlayer animator;
 
-	public override void _Ready()
+	protected override void SetUp()
 	{
+		base.SetUp();
 		// Pre-calculate ratio increment
 		if (maxBounceCount != 0)
 			ratioIncrement = 1.0f / maxBounceCount;

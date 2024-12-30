@@ -57,8 +57,10 @@ public partial class ThornSpring : Launcher
 	/// <summary> Flag to pause timebreak rotation so the player doesn't get hurt. </summary>
 	private bool pauseTimebreakRotation;
 
-	public override void _Ready()
+	protected override void SetUp()
 	{
+		base.SetUp();
+
 		currentTime = startingTimeOffset;
 		if (pauseHalfway && startRotated)
 		{

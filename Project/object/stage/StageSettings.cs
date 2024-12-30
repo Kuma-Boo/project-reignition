@@ -221,10 +221,8 @@ public partial class StageSettings : Node3D
 				return "00:00.00";
 		}
 	}
-	public int GetRequiredScore(int rank)
-	{
-		return Data.Score;
-	}
+	public int GetRequiredScore() => Data.Score;
+
 	#region Level Data
 	public enum MathModeEnum // List of ways the score can be modified
 	{
@@ -513,6 +511,10 @@ public partial class StageSettings : Node3D
 	[Signal]
 	public delegate void LevelCompletedEventHandler(); // Called when the level is completed
 	[Signal]
+	public delegate void LevelFailedEventHandler(); // Called when the level is failed
+	[Signal]
+	public delegate void LevelSuccessEventHandler(); // Called when the level is successfully finished
+	[Signal]
 	public delegate void LevelDemoStartedEventHandler(); // Called when the level demo starts
 
 	public enum LevelStateEnum
@@ -546,6 +548,7 @@ public partial class StageSettings : Node3D
 		CalculateTechnicalBonus();
 
 		EmitSignal(SignalName.LevelCompleted);
+		EmitSignal(wasSuccessful ? SignalName.LevelSuccess : SignalName.LevelFailed);
 	}
 
 	/// <summary> Camera demo that gets enabled after the level is cleared. </summary>

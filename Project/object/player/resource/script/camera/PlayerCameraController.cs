@@ -60,6 +60,9 @@ public partial class PlayerCameraController : Node3D
 
 		sampler.GetParent().RemoveChild(sampler);
 		StageSettings.Instance.AddChild(sampler);
+		if (StageSettings.Instance.Data.CompletionAnimation == LevelDataResource.CompletionAnimationType.ThumbsUp)
+			StageSettings.Instance.LevelSuccess += StartThumbsUpCamera;
+
 		Runtime.Instance.EventInputed += ReceiveInput;
 	}
 
@@ -185,9 +188,8 @@ public partial class PlayerCameraController : Node3D
 	/// <summary> Determines whether the camera's distance will be limited by its path. </summary>
 	public bool LimitToPathDistance { get; set; }
 
-	[Export]
 	/// <summary> Default camera settings to use when nothing is set. </summary>
-	public CameraSettingsResource defaultSettings;
+	[Export] public CameraSettingsResource defaultSettings;
 	/// <summary> Reference to active CameraBlendData. </summary>
 	public CameraBlendData ActiveBlendData => CameraBlendList[^1];
 	/// <summary> Reference to active CameraSettingsResource. </summary>
@@ -195,11 +197,25 @@ public partial class PlayerCameraController : Node3D
 	/// <summary> A list of all camera settings that are influencing camera. </summary>
 	private readonly List<CameraBlendData> CameraBlendList = [];
 
+	/// <summary> Camera setting to use when performing the thumbs-up animation. </summary>
+	[Export] public CameraSettingsResource thumbsUpSettings;
+
 	public bool UsingCompletionCamera { get; private set; }
 	public void StartCompletionCamera()
 	{
 		EmitSignal(SignalName.StartCompletion);
 		UsingCompletionCamera = true;
+	}
+
+	public void StartThumbsUpCamera()
+	{
+		UpdateCameraSettings(new()
+		{
+			BlendTime = 1f,
+			SettingsResource = thumbsUpSettings,
+			TransitionType = CameraTransitionType.Time,
+			Trigger = null
+		});
 	}
 
 	/// <summary> Changes the current camera settings. </summary>

@@ -112,7 +112,7 @@ public partial class LevelResult : Control
 			// Show rank requirements
 			requirementRoot.Visible = true;
 			requirementTime.Text = Stage.GetRequiredTime(rank);
-			requirementScore.Text = ExtensionMethods.FormatMenuNumber(Stage.GetRequiredScore(rank));
+			requirementScore.Text = ExtensionMethods.FormatMenuNumber(Stage.GetRequiredScore());
 		}
 		else
 		{

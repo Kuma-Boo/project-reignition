@@ -81,6 +81,7 @@ public partial class SandScorpion : Node3D
 	private readonly StringName DamageParameter = "parameters/damage_trigger/request";
 	private readonly StringName DefeatParameter = "parameters/defeat_trigger/request";
 	private readonly StringName DefeatSeekParameter = "parameters/defeat_seek/seek_request";
+	private readonly StringName PhaseTwoDamageParameter = "parameters/phase_two_damage_trigger/request";
 
 	public override void _Ready()
 	{
@@ -110,6 +111,7 @@ public partial class SandScorpion : Node3D
 		rootAnimationTree.Set(EyeParameter, DisabledState);
 
 		rootAnimationTree.Set(DamageParameter, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		rootAnimationTree.Set(PhaseTwoDamageParameter, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		lTailAnimationTree.Set(LightAttackParameter, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		rTailAnimationTree.Set(LightAttackParameter, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
@@ -995,6 +997,7 @@ public partial class SandScorpion : Node3D
 			if (attackState != AttackState.Recovery)
 			{
 				flyingEyeAnimationTree.Set(DamageParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+				rootAnimationTree.Set(PhaseTwoDamageParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 				StartHitFX();
 				RetreatEyeAttack();
 				TakeDamage(2);
@@ -1006,6 +1009,7 @@ public partial class SandScorpion : Node3D
 		if (Player.AttackState != PlayerController.AttackStates.None)
 		{
 			flyingEyeAnimationTree.Set(DamageParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			rootAnimationTree.Set(PhaseTwoDamageParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			StartHitFX();
 			if (Player.AttackState == PlayerController.AttackStates.Weak)
 				TakeDamage(1);
