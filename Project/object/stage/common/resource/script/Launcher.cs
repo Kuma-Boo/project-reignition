@@ -170,10 +170,8 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		return settings;
 	}
 
-	public override void _Ready()
-	{
-		_sfxPlayer = GetNodeOrNull<AudioStreamPlayer3D>(sfxPlayer);
-	}
+	public override void _Ready() => SetUp();
+	protected virtual void SetUp() => _sfxPlayer = GetNodeOrNull<AudioStreamPlayer3D>(sfxPlayer);
 
 	public virtual void Activate(Area3D a)
 	{

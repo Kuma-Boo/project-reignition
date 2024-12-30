@@ -40,6 +40,7 @@ public partial class HomingAttackState : PlayerState
 		Player.Effect.PlayActionSFX(Player.Effect.JumpDashSfx);
 		Player.Effect.StartTrailFX();
 		Player.Effect.StartSpinFX();
+		Player.Effect.PlayVoice("grunt");
 
 		Player.Animator.StartSpin(2.0f);
 		Player.ChangeHitbox("spin");

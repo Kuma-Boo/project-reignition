@@ -87,7 +87,7 @@ public partial class RunState : PlayerState
 		if (!Player.IsOnGround)
 			return fallState;
 
-		if (Mathf.IsZeroApprox(Player.MoveSpeed))
+		if (!Player.Skills.IsSpeedBreakActive && Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
 
 		if (Player.Controller.GetHoldingDistance(Player.MovementAngle, Player.PathFollower.ForwardAngle) >= 1.0f)

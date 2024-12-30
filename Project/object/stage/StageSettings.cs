@@ -175,14 +175,15 @@ public partial class StageSettings : Node3D
 			return -1;
 
 		int rank = 0; // DEFAULT - No rank
+		float completionTime = Mathf.RoundToInt(CurrentTime * 100f) * 0.01f; // Round to nearest millisecond
 
 		if (Data.SkipScore)
 		{
-			if (CurrentTime <= Data.GoldTime)
+			if (completionTime <= Data.GoldTime)
 				rank = 3;
-			else if (CurrentTime <= Data.SilverTime)
+			else if (completionTime <= Data.SilverTime)
 				rank = 2;
-			else if (CurrentTime <= Data.BronzeTime)
+			else if (completionTime <= Data.BronzeTime)
 				rank = 1;
 		}
 		else
@@ -191,11 +192,11 @@ public partial class StageSettings : Node3D
 			if (preCountBonuses)
 				score += BonusManager.instance.QueuedScore;
 
-			if (CurrentTime <= Data.GoldTime && score >= Data.Score) // Perfect run
+			if (completionTime <= Data.GoldTime && score >= Data.Score) // Perfect run
 				rank = 3;
-			else if (CurrentTime <= Data.SilverTime && score >= 3 * (Data.Score / 4)) // Silver score reqs are always 3/4 of gold
+			else if (completionTime <= Data.SilverTime && score >= 3 * (Data.Score / 4)) // Silver score reqs are always 3/4 of gold
 				rank = 2;
-			else if (CurrentTime <= Data.BronzeTime) // Bronze is easy to get
+			else if (completionTime <= Data.BronzeTime) // Bronze is easy to get
 				rank = 1;
 		}
 
@@ -220,10 +221,8 @@ public partial class StageSettings : Node3D
 				return "00:00.00";
 		}
 	}
-	public int GetRequiredScore(int rank)
-	{
-		return Data.Score;
-	}
+	public int GetRequiredScore() => Data.Score;
+
 	#region Level Data
 	public enum MathModeEnum // List of ways the score can be modified
 	{
@@ -512,6 +511,10 @@ public partial class StageSettings : Node3D
 	[Signal]
 	public delegate void LevelCompletedEventHandler(); // Called when the level is completed
 	[Signal]
+	public delegate void LevelFailedEventHandler(); // Called when the level is failed
+	[Signal]
+	public delegate void LevelSuccessEventHandler(); // Called when the level is successfully finished
+	[Signal]
 	public delegate void LevelDemoStartedEventHandler(); // Called when the level demo starts
 
 	public enum LevelStateEnum
@@ -545,6 +548,7 @@ public partial class StageSettings : Node3D
 		CalculateTechnicalBonus();
 
 		EmitSignal(SignalName.LevelCompleted);
+		EmitSignal(wasSuccessful ? SignalName.LevelSuccess : SignalName.LevelFailed);
 	}
 
 	/// <summary> Camera demo that gets enabled after the level is cleared. </summary>
