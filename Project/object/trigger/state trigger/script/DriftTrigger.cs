@@ -63,9 +63,6 @@ public partial class DriftTrigger : Area3D
 		if (Player.IsMovingBackward)
 			return;
 
-		if (Player.PathFollower.Progress > Player.PathFollower.GetProgress(GlobalPosition))
-			return;
-
 		if (Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed) < EntranceSpeedRatio)
 			return;
 
@@ -73,7 +70,10 @@ public partial class DriftTrigger : Area3D
 			return; // Player is already busy
 
 		// Check for any obstructions
-		RaycastHit hit = Player.CastRay(Player.CollisionPosition, Player.PathFollower.Forward() * slideDistance, Runtime.Instance.environmentMask);
+		Vector3 targetCastPosition = Player.CollisionPosition + Player.PathFollower.GlobalPlayerPositionDelta.RemoveVertical();
+		targetCastPosition += Player.PathFollower.Forward() * slideDistance;
+		Vector3 castVector = targetCastPosition - Player.CollisionPosition;
+		RaycastHit hit = Player.CastRay(Player.CollisionPosition, castVector, Runtime.Instance.environmentMask);
 		if (hit && !hit.collidedObject.IsInGroup("level wall") && hit.collidedObject.IsInGroup("wall"))
 			return;
 
