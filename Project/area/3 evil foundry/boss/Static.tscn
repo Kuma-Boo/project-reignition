@@ -1,7 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://554o5nn5ah4r"]
+[gd_scene load_steps=18 format=3 uid="uid://554o5nn5ah4r"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_qxxdp"]
-[ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/3 evil foundry/data/Environment.tres" id="1_vnwbt"]
 [ext_resource type="PackedScene" uid="uid://v8h6abta165i" path="res://area/3 evil foundry/boss/environment/EFBoss.tscn" id="2_r5wbo"]
 [ext_resource type="PackedScene" uid="uid://dy8hsmwkctvec" path="res://area/3 evil foundry/boss/environment/collision/Collision.tscn" id="4_ptqv5"]
 [ext_resource type="Curve3D" uid="uid://deajq7gtu72l8" path="res://area/3 evil foundry/boss/environment/path/MainPath.tres" id="5_b4qr8"]
@@ -278,6 +277,61 @@ _data = {
 "demo3": SubResource("Animation_k2qjs")
 }
 
+[sub_resource type="Gradient" id="Gradient_eh2vr"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.0340909, 0.503788, 0.897727, 1)
+colors = PackedColorArray(0, 0.00392157, 0, 1, 0.0074, 0.02, 0.00824, 1, 0.41, 0.41, 0.41, 1, 0.894, 0.9, 0.81, 1, 0.992667, 1, 0.89, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ppx68"]
+gradient = SubResource("Gradient_eh2vr")
+
+[sub_resource type="Gradient" id="Gradient_mapkp"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0.484848)
+colors = PackedColorArray(1, 0.583333, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_n41td"]
+gradient = SubResource("Gradient_mapkp")
+
+[sub_resource type="Environment" id="Environment_m5ojg"]
+ambient_light_source = 2
+ambient_light_color = Color(1, 0.788235, 0.788235, 1)
+tonemap_exposure = 1.4
+tonemap_white = 1.2
+ssil_enabled = true
+ssil_radius = 10.0
+ssil_intensity = 1.5
+glow_enabled = true
+glow_levels/2 = 2.0
+glow_levels/3 = 0.3
+glow_levels/5 = 0.0
+glow_levels/7 = 0.01
+glow_intensity = 0.2
+glow_strength = 2.0
+glow_bloom = 0.1
+glow_blend_mode = 4
+glow_hdr_threshold = 1.5
+glow_hdr_scale = 2.5
+glow_map = SubResource("GradientTexture1D_n41td")
+fog_enabled = true
+fog_light_color = Color(1, 0.662745, 0.529412, 1)
+fog_light_energy = 0.07
+fog_density = 0.0265
+fog_height = 57.45
+fog_height_density = -0.1256
+volumetric_fog_density = 0.1008
+volumetric_fog_albedo = Color(0, 0, 0, 1)
+volumetric_fog_emission = Color(0.466667, 0, 0, 1)
+volumetric_fog_anisotropy = 0.11
+volumetric_fog_length = 100.0
+volumetric_fog_sky_affect = 0.0
+volumetric_fog_temporal_reprojection_enabled = false
+adjustment_enabled = true
+adjustment_brightness = 1.15
+adjustment_contrast = 1.2
+adjustment_saturation = 0.9
+adjustment_color_correction = SubResource("GradientTexture1D_ppx68")
+
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_qxxdp")
 pathParent = NodePath("Path")
@@ -297,12 +351,11 @@ omni_attenuation = 0.15529
 
 [node name="DirectionalLight" type="DirectionalLight3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -5, 0)
-light_color = Color(0.976471, 0.443137, 0, 1)
-light_energy = 2.4
+light_color = Color(0.980392, 0.439216, 0, 1)
 
 [node name="DirectionalLight2" type="DirectionalLight3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1.31134e-07, 1, 0, -1, 1.31134e-07, 0, -5, 0)
-light_color = Color(1, 0.623529, 0.14902, 1)
+light_color = Color(1, 0.14902, 0.14902, 1)
 light_energy = 0.4
 
 [node name="EFBoss" parent="Visuals" instance=ExtResource("2_r5wbo")]
@@ -324,9 +377,6 @@ curve = ExtResource("5_hjxb7")
 
 [node name="BGM" parent="." instance=ExtResource("6_yibqe")]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("1_vnwbt")
-
 [node name="ScreenWarp" parent="." instance=ExtResource("8_d6cfb")]
 
 [node name="DemoCamera" type="Node3D" parent="."]
@@ -342,3 +392,6 @@ libraries = {
 "": SubResource("AnimationLibrary_en8nf")
 }
 next/demo1 = &"demo2"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_m5ojg")
