@@ -171,6 +171,7 @@ size = Vector3(20, 20, 5)
 Data = ExtResource("2_ybwun")
 InitialCameraSettings = ExtResource("3_yn75d")
 dialogLibrary = ExtResource("4_0imnq")
+environmentFxFactor = 1.0
 
 [node name="DemoCamera" parent="Static" index="5"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0)
@@ -188,9 +189,13 @@ metadata/_edit_lock_ = true
 
 [node name="Boss" type="Node3D" parent="BossAct"]
 
-[node name="IfritGolem" parent="BossAct/Boss" instance=ExtResource("4_28qle")]
+[node name="IfritGolem" parent="BossAct/Boss" node_paths=PackedStringArray("boneAttachments", "cores", "burnPositions", "gasTankSpawnPositions") instance=ExtResource("4_28qle")]
 damagePath = NodePath("../../../Static/Path/DamagePath")
+boneAttachments = []
+cores = []
+burnPositions = []
 gasTankScene = ExtResource("7_o6ojp")
+gasTankSpawnPositions = []
 
 [node name="Skeleton3D" parent="BossAct/Boss/IfritGolem/IfritRoot" index="0"]
 bones/2/rotation = Quaternion(0.0865145, -5.01917e-21, -2.9041e-14, 0.996251)
