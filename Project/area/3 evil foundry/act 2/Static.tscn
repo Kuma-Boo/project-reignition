@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://2npi4fgvupgn"]
+[gd_scene load_steps=54 format=3 uid="uid://2npi4fgvupgn"]
 
 [ext_resource type="PackedScene" uid="uid://etu2s6i547gb" path="res://object/trigger/state trigger/DriftTrigger.tscn" id="1_6j3jw"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_ur5y1"]
@@ -31,7 +31,6 @@
 [ext_resource type="PackedScene" uid="uid://cbrcws5d38ioo" path="res://area/3 evil foundry/act 2/environment/collision/Collision.tscn" id="18_vaeni"]
 [ext_resource type="Script" path="res://object/trigger/modules/EnvironmentFxTrigger.cs" id="18_y2l4i"]
 [ext_resource type="Curve3D" uid="uid://dkpjo3bu2nmpy" path="res://area/3 evil foundry/act 2/environment/path/GrindPath.tres" id="20_4coev"]
-[ext_resource type="Environment" uid="uid://dycp0oc1o5eig" path="res://area/3 evil foundry/data/Environment.tres" id="21_u5nl1"]
 [ext_resource type="Curve3D" uid="uid://l3sk8oxxtsvf" path="res://area/3 evil foundry/act 2/environment/path/StartPath.tres" id="27_p6tbj"]
 [ext_resource type="Curve3D" uid="uid://2r81kn85banm" path="res://area/3 evil foundry/act 2/environment/path/EndingPath.tres" id="28_dca3m"]
 [ext_resource type="Curve3D" uid="uid://dg2yphtncc2gj" path="res://area/3 evil foundry/act 2/environment/path/ElevatorPath.tres" id="28_mg2bk"]
@@ -297,6 +296,20 @@ tracks/11/keys = {
 "method": &"Deactivate"
 }]
 }
+tracks/12/type = "method"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("../Visuals/05Hall")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_kr4ey"]
 resource_name = "demo2"
@@ -445,6 +458,20 @@ tracks/10/keys = {
 "method": &"Activate"
 }]
 }
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("../Visuals/05Hall")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Deactivate"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_820jq"]
 resource_name = "demo3"
@@ -589,6 +616,40 @@ _data = {
 "demo3": SubResource("Animation_820jq")
 }
 
+[sub_resource type="Gradient" id="Gradient_4ej6d"]
+offsets = PackedFloat32Array(0, 0.0955631, 0.505119, 1)
+colors = PackedColorArray(0.0784314, 0, 0, 1, 0.188235, 0.0784314, 0.0941176, 1, 0.74, 0.484947, 0.4144, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_isgk5"]
+gradient = SubResource("Gradient_4ej6d")
+
+[sub_resource type="Environment" id="Environment_qpgxq"]
+background_mode = 1
+ambient_light_source = 2
+ambient_light_color = Color(0.504134, 0.33814, 0.297606, 1)
+ambient_light_energy = 1.2
+tonemap_mode = 2
+tonemap_exposure = 1.3
+tonemap_white = 1.2
+ssil_enabled = true
+ssil_radius = 10.0
+ssil_intensity = 1.5
+glow_enabled = true
+glow_intensity = 0.2
+glow_strength = 0.95
+glow_blend_mode = 0
+glow_hdr_threshold = 1.5
+glow_hdr_scale = 2.5
+fog_enabled = true
+fog_light_color = Color(0.544, 0.795733, 0.8, 1)
+fog_light_energy = 0.1
+fog_density = 0.005
+fog_sky_affect = 0.0
+volumetric_fog_density = 0.0
+adjustment_enabled = true
+adjustment_saturation = 1.2
+adjustment_color_correction = SubResource("GradientTexture1D_isgk5")
+
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_ur5y1")
 InitialCameraSettings = ExtResource("11_b7tyc")
@@ -596,7 +657,6 @@ dialogLibrary = ExtResource("3_fks0k")
 pathParent = NodePath("Path")
 completionAnimator = NodePath("DemoCamera/AnimationPlayer")
 Environment = NodePath("WorldEnvironment")
-environmentFxFactor = 1.0
 
 [node name="Collision" parent="." instance=ExtResource("18_vaeni")]
 visible = false
@@ -1246,7 +1306,7 @@ loopEndPosition = 158.99
 isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("21_u5nl1")
+environment = SubResource("Environment_qpgxq")
 
 [node name="ScreenWarp" parent="." instance=ExtResource("29_vht2p")]
 
