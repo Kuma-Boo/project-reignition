@@ -1,7 +1,6 @@
 using Godot;
 using Project.Core;
 using Project.Gameplay.Triggers;
-using System;
 using System.Collections.Generic;
 
 namespace Project.Gameplay;
@@ -224,6 +223,14 @@ public partial class PlayerCameraController : Node3D
 		if (UsingCompletionCamera) return;
 		if (data.SettingsResource == null) return; // Invalid data
 
+		if (CameraBlendList.Count != 0 && ActiveSettings == data.SettingsResource &&
+			!(data.SettingsResource.copyPosition || data.SettingsResource.copyRotation))
+		{
+			// When the same data is used for multiple different triggers
+			ActiveBlendData.Trigger = data.Trigger; // Simply update the current trigger
+			return;
+		}
+
 		if (Mathf.IsZeroApprox(data.BlendTime)) // Cut transition
 		{
 			SnapFlag = true;
@@ -289,7 +296,6 @@ public partial class PlayerCameraController : Node3D
 		// Don't automatically update influence when using distance blending
 		if (CameraBlendList[blendIndex].UseDistanceBlending)
 		{
-			CameraTrigger trigger = CameraBlendList[blendIndex].Trigger;
 			CameraBlendList[blendIndex].CalculateInfluence(Player.PathFollower);
 			return;
 		}
