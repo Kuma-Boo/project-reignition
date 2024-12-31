@@ -75,6 +75,10 @@ public partial class FoundryDoor : Node3D
 	[Export] private NodePath hazard;
 	private Hazard Hazard { get; set; }
 
+	[ExportGroup("Animation Properties")]
+	/// <summary> Animated via the AnimationPlayer. </summary>
+	[Export] private SpikeEnum SpeedBreakDamageMode { get; set; }
+
 	private bool isActivated;
 	private bool isForceClosedActivated;
 	private bool isInteractingWithPlayer;
@@ -105,6 +109,16 @@ public partial class FoundryDoor : Node3D
 
 	private void ForceClose()
 	{
+		if (SpeedBreakDamageMode != SpikeEnum.Spikeless && SpeedBreakDamageMode == SpikeState)
+		{
+			StageSettings.Player.Skills.ToggleSpeedBreak();
+			StageSettings.Player.StartKnockback(new()
+			{
+				ignoreInvincibility = true,
+				disableDamage = true
+			});
+		}
+
 		isForceClosedActivated = true;
 		StageSettings.Player.Camera.StartCameraShake(new()
 		{
