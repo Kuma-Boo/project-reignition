@@ -1,4 +1,4 @@
-[gd_scene load_steps=143 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=144 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -60,7 +60,6 @@
 [ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="35_oqyu5"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="35_vf0rg"]
 [ext_resource type="Material" uid="uid://d0klutkn8da67" path="res://area/2 dino jungle/data/material/Water.tres" id="36_7bv1x"]
-[ext_resource type="PackedScene" uid="uid://bqikfuweybrc6" path="res://area/2 dino jungle/data/BGM.tscn" id="36_8otvo"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="36_8t574"]
 [ext_resource type="Resource" uid="uid://77eiif6gvg8g" path="res://area/2 dino jungle/act 1/camera/DinoCrossingCam.tres" id="36_hewn5"]
 [ext_resource type="Resource" uid="uid://cnhb6111uxifw" path="res://area/2 dino jungle/act 1/camera/ChaseReverseCam.tres" id="36_mti58"]
@@ -99,6 +98,8 @@
 [ext_resource type="Curve3D" uid="uid://dkof5hnvrvbuu" path="res://area/2 dino jungle/act 1/environment/path/EndTopPath.tres" id="81_vy7ml"]
 [ext_resource type="PackedScene" uid="uid://6cdlojevxvu7" path="res://area/2 dino jungle/act 1/completion/CompletionDemo.gltf" id="89_i1ci7"]
 [ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelIslandJumpPath.tres" id="91_mavbd"]
+[ext_resource type="AudioStream" uid="uid://tjq8v1nvh7i7" path="res://sound/ost/adventure disc/5 The Wicked Wild.mp3" id="95_tbflj"]
+[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="96_ubg5c"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ibe76"]
 size = Vector3(20, 20, 5)
@@ -2251,7 +2252,14 @@ curve = ExtResource("81_vy7ml")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_f4b5x")
 
-[node name="BGM" parent="." instance=ExtResource("36_8otvo")]
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("95_tbflj")
+bus = &"BGM"
+script = ExtResource("96_ubg5c")
+startPosition = 0.5
+loopStartPosition = 24.213
+loopEndPosition = 164.51
+isStageMusic = true
 
 [node name="CompletionDemo" parent="." instance=ExtResource("89_i1ci7")]
 
