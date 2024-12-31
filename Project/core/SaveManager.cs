@@ -521,6 +521,8 @@ public partial class SaveManager : Node
 	{
 		if (ActiveSaveSlotIndex == -1) return; // Invalid save slot
 
+		
+
 		// Write save data to a file.
 		string saveNumber = ActiveSaveSlotIndex.ToString("00");
 		FileAccess file = FileAccess.Open(SaveDirectory + $"save{saveNumber}.dat", FileAccess.ModeFlags.Write);
@@ -547,6 +549,18 @@ public partial class SaveManager : Node
 				GameSaveSlots[i].FromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
 				file.Close();
 			}
+
+			if (GameSaveSlots[i].presetNames == null &&
+				GameSaveSlots[i].presetSkills == null &&
+				GameSaveSlots[i].presetSkillAugments == null)
+			{
+				for (int j = 0; j < 20; j++)
+				{
+					GameSaveSlots[i].presetNames.Add(null);
+					GameSaveSlots[i].presetSkills.Add(null);
+					GameSaveSlots[i].presetSkillAugments.Add(null);
+				}
+			}
 		}
 	}
 
@@ -570,6 +584,7 @@ public partial class SaveManager : Node
 		OS.MoveToTrash(ProjectSettings.GlobalizePath(savePath));
 		GD.Print("Deleting save");
 	}
+
 
 	public class GameData
 	{
@@ -595,7 +610,10 @@ public partial class SaveManager : Node
 		public float playTime;
 		
 
-		public Array<SkillPreset> presetList;
+		public Array<string> presetNames;
+		public Array<Array<SkillKey>> presetSkills;
+		public Array<Dictionary<SkillKey, int>> presetSkillAugments;
+
 		public Array<SkillKey> equippedSkills;
 		public Dictionary<SkillKey, int> equippedAugments;
 		/// <summary> Total number of fire souls the player collected. </summary>
@@ -803,6 +821,35 @@ public partial class SaveManager : Node
 		}
 		#endregion
 
+		
+		public SkillPreset ToSkillPreset(int index)
+		{
+			SkillPreset preset = new SkillPreset();
+			preset.presetName = ActiveGameData.presetNames[index];
+			preset.skills = ActiveGameData.presetSkills[index];
+			preset.skillAugments = ActiveGameData.presetSkillAugments[index];
+			return preset;
+		}
+
+		public void FromSkillPreset(SkillPreset preset, int index)
+		{
+			ActiveGameData.presetNames[index] = preset.presetName;
+			ActiveGameData.presetSkills[index] = preset.skills;
+			ActiveGameData.presetSkillAugments[index] = preset.skillAugments;
+
+		}
+
+		public bool IsSkillPresetNull(int index)
+		{	
+			if (presetNames[index] == null &&
+				presetSkills[index] == null &&
+				presetSkillAugments[index] == null)
+				return true;
+			else
+				return false;
+		}
+	
+
 		/// <summary> Creates a dictionary based on GameData. </summary>
 		public Dictionary ToDictionary()
 		{
@@ -837,7 +884,9 @@ public partial class SaveManager : Node
 				{ nameof(playTime), Mathf.RoundToInt(playTime) },
 				{ nameof(equippedSkills), skillDictionary },
 				{ nameof(equippedAugments), augmentDictionary },
-				{ nameof(presetList), presetList},
+				{ nameof(presetNames), presetNames},
+				{ nameof(presetSkills), presetSkills},
+				{ nameof(presetSkillAugments), presetSkillAugments},
 			};
 		}
 
@@ -881,6 +930,12 @@ public partial class SaveManager : Node
 				exp = (int)var;
 			if (dictionary.TryGetValue(nameof(playTime), out var))
 				playTime = (float)var;
+			if (dictionary.TryGetValue(nameof(presetNames), out var))
+				presetNames = (Array<string>)var;
+			if (dictionary.TryGetValue(nameof(presetSkills), out var))
+				presetSkills = (Array<Array<SkillKey>>)var;
+			if (dictionary.TryGetValue(nameof(presetSkillAugments), out var))
+				presetSkillAugments = (Array<Dictionary<SkillKey, int>>)var;
 
 			if (dictionary.TryGetValue(nameof(equippedSkills), out var))
 			{
@@ -940,7 +995,9 @@ public partial class SaveManager : Node
 				worldRingsCollected = [],
 				worldsUnlocked = [],
 				stagesUnlocked = [],
-				presetList = [],
+				presetNames = [],
+				presetSkills = [],
+				presetSkillAugments = [],
 				equippedSkills = [],
 				equippedAugments = [],
 				level = 0,
@@ -951,6 +1008,13 @@ public partial class SaveManager : Node
 			data.UnlockStage("so_a1_main");
 			data.UnlockWorld(WorldEnum.LostPrologue);
 			data.UnlockWorld(WorldEnum.SandOasis); // Lock this in the final build
+
+			for (int i = 0; i < 20; i++)
+			{
+				data.presetNames.Add(null);
+				data.presetSkills.Add(null);
+				data.presetSkillAugments.Add(null);
+			}
 
 			return data;
 		}

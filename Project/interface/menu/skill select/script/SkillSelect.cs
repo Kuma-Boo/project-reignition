@@ -135,7 +135,7 @@ public partial class SkillSelect : Menu
 	protected override void Enter()
 	{
 		GD.Print("Entered");
-		if (!IsAlertMenuActive)
+		if (IsAlertMenuActive == false)
 		{
 			SaveManager.SaveGameData();
 			animator.Play("enter-skill-preset");

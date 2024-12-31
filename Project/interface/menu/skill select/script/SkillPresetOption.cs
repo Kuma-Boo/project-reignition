@@ -13,15 +13,15 @@ public partial class SkillPresetOption : Menu
     private SkillRing activeSkillRing => SaveManager.ActiveSkillRing;
 
     public int index {get; set;}// The preset option's menu number
-    public bool isSubMenuActive;
-    public bool enableControls;
 
     private bool isInvalid;
-    private int subIndex; 
     
 
     [Export]
     private Label presetLabel;
+
+    [Export]
+    private Label numLabel;
 
     [Export]
     private Label numSkillsLabel;
@@ -39,30 +39,33 @@ public partial class SkillPresetOption : Menu
     private Label darkAmtLabel;
 
     [Export]
-    private Label saveLabel; //We're changing this to "overwrite" if a save already exists
-
-    [Export]
     private AnimationPlayer animator;
 
     [Export]
-    private AnimationPlayer animatorOptions;
+    private AnimationPlayer animatorData;
+
+    
 
 
 
     public void Initialize()
     {
-        isSubMenuActive = false;
-        subIndex = 0;
+
+        
+        numLabel.Text = index.ToString();
         if (thisPreset == null)
         {
             animator.Play("no-preset");
-            saveLabel.Text = "sys_savep";
+            //saveLabel.Text = "sys_savep";
             isInvalid = true;
             return;
         }
         else
         {
-            saveLabel.Text = "sys_overwrite";
+            //saveLabel.Text = "sys_overwrite";
+            
+            if (thisPreset.presetName == "");
+                thisPreset.presetName = "New Preset";
             presetLabel.Text = thisPreset.presetName;
 
             int numSkills = 0;
@@ -119,168 +122,17 @@ public partial class SkillPresetOption : Menu
                 numSkills += 1;
             }
             
-
+            windAmtLabel.Text = windAmt.ToString();
+            fireAmtLabel.Text = fireAmt.ToString();
+            darkAmtLabel.Text = darkAmt.ToString();
             numSkillsLabel.Text = numSkills.ToString();
             skillCostLabel.Text = skillCost.ToString();
-
+            //animator.Play("new-preset");
+            animatorData.Play("show");
         }
     }
 
-    protected override void UpdateSelection()
-    {
-        if (isSubMenuActive && enableControls)
-        {
-            if (Input.IsActionPressed("move_up"))
-            {
-                subIndex -= 1;
-                if (subIndex < 0)
-                    subIndex = 4;
-                MoveCursor();
-            }
-
-            if (Input.IsActionPressed("move_down"))
-            {
-                subIndex += 1;
-                if (subIndex > 4)
-                    subIndex = 0;
-                MoveCursor();
-            }
-        }
-    }
-
-    protected override void Confirm()
-    {
-        if (enableControls)
-        {
-            if (isSubMenuActive)
-            {
-
-                switch (subIndex)
-                {
-                    case 0:
-                    SavePreset();
-                    break;
-                    case 1:
-                    LoadPreset();
-                    break;
-                    case 2:
-                    //RenamePreset();
-                    break;
-                    case 3:
-                    DeletePreset();
-                    break;
-                    case 4:
-                    animatorOptions.Play("hide");
-                    isSubMenuActive = false;
-                    break;
-                }
-
-            }
-            else
-            {
-                animatorOptions.Play("show");
-                isSubMenuActive = true;
-            }
-        }
-        
-
-    }
-
-    protected override void Cancel()
-    {
-        if (enableControls)
-        {
-            if (isSubMenuActive)
-            {
-                animatorOptions.Play("hide");
-                isSubMenuActive = false;
-            }
-            else
-            {
-                //Return to skill editing
-            }
-        }
-    }
-
-    private void MoveCursor()
-    {
-        switch (subIndex)
-        {
-            case 0:
-            if (isInvalid)
-                animatorOptions.Play("select_save");
-            else
-                animatorOptions.Play("select_save_invalid");
-            break;
-            case 1:
-            if (isInvalid)
-                animatorOptions.Play("select_load");
-            else
-                animatorOptions.Play("select_load_invalid");
-            break;
-            case 2:
-            if (isInvalid)
-                animatorOptions.Play("select_rename");
-            else
-                animatorOptions.Play("select_rename_invalid");
-            break;
-            case 3:
-            if (isInvalid)
-                animatorOptions.Play("select_delete");
-            else
-                animatorOptions.Play("select_delete_invalid");
-            break;
-            case 4:
-            if (isInvalid)
-                animatorOptions.Play("select_cancel");
-            else
-                animatorOptions.Play("select_cancel_invalid");
-            break;
-        }
-    }
-
-    private void SavePreset()
-    {
-        thisPreset = SaveManager.ActiveGameData.presetList[index];
-        SaveManager.SaveGameData();
-        Initialize();
-
-    }
-
-    private void LoadPreset()
-    {
-        SaveManager.ActiveGameData.equippedSkills = thisPreset.skills;
-        SaveManager.ActiveGameData.equippedAugments = thisPreset.skillAugments;
-
-    }
-
-    private void RenamePreset()
-    {
-
-    }
-
-    private void DeletePreset()
-    {
-        if (SaveManager.ActiveGameData.presetList[index] != null)
-        {
-            SaveManager.ActiveGameData.presetList[index] = null;
-            SaveManager.SaveGameData();
-            Initialize();
-        }
-        
-    }
-
-    public void EnableControls()
-    {
-        enableControls = true;
-    }
-
-    public void DisableControls()
-    {
-        enableControls = false;
-    }
-
-    public void SelectUp() //used in the parent menu
+    public void SelectUp()
     {
         animator.Play("select-up");
     }
@@ -300,9 +152,24 @@ public partial class SkillPresetOption : Menu
         animator.Play("select-right");
     }
 
+    public void SavePreset()
+    {
+        animator.Play("save-preset");
+    }
+
+    public void SelectPreset()
+    {
+        animator.Play("load-preset");
+    }
+
     public void Deselect()
     {
         animator.Play("deselect");
+    }
+
+    public void DeselectInstant()
+    {
+        animator.Play("deselect_instant");
     }
 
     private void _on_text_edit_focus_exited()

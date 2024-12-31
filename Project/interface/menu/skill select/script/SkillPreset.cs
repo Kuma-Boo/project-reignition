@@ -7,7 +7,6 @@ using Project.Gameplay;
 public partial class SkillPreset : Resource
 {
     public string presetName {get; set;}
-    public int presetID {get; set;}
     public Array<SkillKey> skills {get; set;}
     public Dictionary<SkillKey, int> skillAugments {get; set;}
 
