@@ -124,10 +124,10 @@ namespace Project.Gameplay.Triggers
 				StageTriggerModule module = GetChildOrNull<StageTriggerModule>(i);
 				if (module == null) continue;
 
-				//Connect signals
-				Connect(SignalName.Activated, new Callable(module, StageTriggerModule.MethodName.Activate));
-				Connect(SignalName.Deactivated, new Callable(module, StageTriggerModule.MethodName.Deactivate));
-				Connect(SignalName.Respawned, new Callable(module, StageTriggerModule.MethodName.Respawn));
+				// Connect signals
+				Activated += module.Activate;
+				Deactivated += module.Deactivate;
+				Respawned += module.Respawn;
 			}
 
 			if (respawnMode != RespawnModes.Disabled) //Connect respawn signal
