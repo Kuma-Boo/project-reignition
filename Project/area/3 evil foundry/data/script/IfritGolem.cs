@@ -567,6 +567,9 @@ public partial class IfritGolem : Node3D
 		if (Player.IsLaunching)
 			return;
 
+		if (Player.IsOnGround || Player.VerticalSpeed > 0) // Erroneously colliding through a platform
+			return;
+
 		if (Player.IsDefeated || Player.IsTeleporting) // Don't bother launching the player when respawning
 			return;
 
