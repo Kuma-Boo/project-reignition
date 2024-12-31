@@ -206,6 +206,9 @@ public partial class SandScorpion : Node3D
 		eventAnimator.Play("defeat");
 		eventAnimator.Advance(0.0);
 
+		Player.Skills.DisableBreakSkills();
+		Player.MoveSpeed = 0;
+
 		Player.Visible = false;
 		Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 		Interface.PauseMenu.AllowPausing = false;
