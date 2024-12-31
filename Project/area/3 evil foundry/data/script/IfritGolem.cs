@@ -567,7 +567,7 @@ public partial class IfritGolem : Node3D
 		if (Player.IsLaunching)
 			return;
 
-		if (Player.IsOnGround || Player.VerticalSpeed > 0) // Erroneously colliding through a platform
+		if (Player.VerticalSpeed > 0)
 			return;
 
 		if (Player.IsDefeated || Player.IsTeleporting) // Don't bother launching the player when respawning
@@ -883,7 +883,7 @@ public partial class IfritGolem : Node3D
 
 		Transform3D t = tank.GlobalTransform;
 		tank.GetParent().RemoveChild(tank);
-		AddChild(tank);
+		StageSettings.Instance.AddChild(tank);
 		tank.GlobalTransform = t;
 
 		if (currentState == GolemState.SpecialAttack)
