@@ -168,6 +168,7 @@ public partial class GasTank : Area3D
 		IsDetonated = true;
 		IsTravelling = false;
 		Animator.Play("detonate");
+		Animator.CallDeferred("advance", 0.0);
 
 		for (int i = 0; i < enemyList.Count; i++)
 			enemyList[i].TakeDamage(); // Damage all enemies in range
