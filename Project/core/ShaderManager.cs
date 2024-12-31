@@ -33,6 +33,10 @@ namespace Project.Core
 		private readonly List<Mesh> particleMeshes = [];
 		private readonly List<Material> particleMaterials = [];
 
+		/// <summary> Dev flag for toggling individual meshes. </summary>
+		private bool IsMeshCompilationEnabled => false;
+		private bool IsCompilingMeshes => IsMeshCompilationEnabled && meshCompilationIndex < meshes.Count;
+
 		public void RegisterCullingTrigger(CullingTrigger trigger) => cullingTriggers.Add(trigger);
 
 		public override void _EnterTree() => Instance = this;
@@ -42,7 +46,7 @@ namespace Project.Core
 			if (!IsCompilingShaders) return;
 
 			if (materialCompilationIndex < materials.Count ||
-				meshCompilationIndex < meshes.Count ||
+				IsCompilingMeshes ||
 				particleCompilationIndex < particleMaterials.Count)
 			{
 				ProcessMaterials();
@@ -64,7 +68,7 @@ namespace Project.Core
 				materialCompilationIndex++;
 			}
 
-			if (meshCompilationIndex < meshes.Count)
+			if (IsCompilingMeshes)
 			{
 				for (int i = 0; i < meshInstances.Length; i++)
 					meshInstances[i].Mesh = meshes[meshCompilationIndex];
@@ -128,7 +132,11 @@ namespace Project.Core
 
 			Visible = shaderParent.Visible = true;
 			isSecondaryCullingCompilation = false;
-			TotalShaderCount = materials.Count + meshes.Count + particleMaterials.Count;
+			TotalShaderCount = materials.Count + particleMaterials.Count;
+
+			if (IsMeshCompilationEnabled)
+				TotalShaderCount += meshes.Count;
+
 			meshCompilationIndex = materialCompilationIndex = particleCompilationIndex = cullingTriggerIndex = 0;
 			TransitionManager.instance.UpdateLoadingText("load_cache", 0, TotalShaderCount);
 
