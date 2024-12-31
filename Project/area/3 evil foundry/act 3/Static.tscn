@@ -25,7 +25,7 @@
 [ext_resource type="PackedScene" uid="uid://colwov4oavxp" path="res://area/3 evil foundry/act 3/environment/11Spiral.tscn" id="14_oxee6"]
 [ext_resource type="Curve3D" uid="uid://bw5j3w382q34e" path="res://area/3 evil foundry/act 3/environment/path/StartingPath.tres" id="15_s46kt"]
 [ext_resource type="Curve3D" uid="uid://45wud7t2ygbd" path="res://area/3 evil foundry/act 3/environment/path/EndingPath.tres" id="16_qmjwd"]
-[ext_resource type="PackedScene" uid="uid://cl0tw3ce066ap" path="res://area/3 evil foundry/data/BGM.tscn" id="26_qgsqb"]
+[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="27_35wwr"]
 [ext_resource type="AudioStream" uid="uid://h7j3n4lf452s" path="res://sound/ost/bonus disc/Evil Foundry Act 3.mp3" id="27_g5tpq"]
 [ext_resource type="PackedScene" uid="uid://cs7ogaqrx3sn5" path="res://area/3 evil foundry/data/shader/ScreenWarp.tscn" id="28_c7cby"]
 
@@ -1207,10 +1207,13 @@ libraries = {
 "": SubResource("AnimationLibrary_5vskf")
 }
 
-[node name="BGM" parent="." instance=ExtResource("26_qgsqb")]
+[node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("27_g5tpq")
+bus = &"BGM"
+script = ExtResource("27_35wwr")
 loopStartPosition = 16.2
 loopEndPosition = 129.3
+isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_hnlum")

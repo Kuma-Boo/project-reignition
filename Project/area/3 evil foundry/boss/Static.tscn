@@ -1,11 +1,12 @@
-[gd_scene load_steps=18 format=3 uid="uid://554o5nn5ah4r"]
+[gd_scene load_steps=19 format=3 uid="uid://554o5nn5ah4r"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_qxxdp"]
 [ext_resource type="PackedScene" uid="uid://v8h6abta165i" path="res://area/3 evil foundry/boss/environment/EFBoss.tscn" id="2_r5wbo"]
 [ext_resource type="PackedScene" uid="uid://dy8hsmwkctvec" path="res://area/3 evil foundry/boss/environment/collision/Collision.tscn" id="4_ptqv5"]
 [ext_resource type="Curve3D" uid="uid://deajq7gtu72l8" path="res://area/3 evil foundry/boss/environment/path/MainPath.tres" id="5_b4qr8"]
 [ext_resource type="Curve3D" uid="uid://cecyd5htsj1lu" path="res://area/3 evil foundry/boss/environment/path/DamagePath.tres" id="5_hjxb7"]
-[ext_resource type="PackedScene" uid="uid://ootho4p2h2ml" path="res://area/3 evil foundry/data/BGMBoss.tscn" id="6_yibqe"]
+[ext_resource type="AudioStream" uid="uid://dhj35573hjgrm" path="res://sound/ost/adventure disc/7 How it Started.mp3" id="6_x3u6b"]
+[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="7_rw13t"]
 [ext_resource type="PackedScene" uid="uid://cs7ogaqrx3sn5" path="res://area/3 evil foundry/data/shader/ScreenWarp.tscn" id="8_d6cfb"]
 
 [sub_resource type="Animation" id="Animation_13n20"]
@@ -375,7 +376,13 @@ curve = ExtResource("5_b4qr8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.725, 26)
 curve = ExtResource("5_hjxb7")
 
-[node name="BGM" parent="." instance=ExtResource("6_yibqe")]
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_x3u6b")
+bus = &"BGM"
+script = ExtResource("7_rw13t")
+loopStartPosition = 0.355
+loopEndPosition = 259.62
+isStageMusic = true
 
 [node name="ScreenWarp" parent="." instance=ExtResource("8_d6cfb")]
 
