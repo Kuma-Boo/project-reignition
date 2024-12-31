@@ -360,6 +360,7 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(BackflipTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(StompTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
 	public void JumpAnimation()
@@ -773,9 +774,9 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
-	public void StopHurt(bool forwardLaunch)
+	public void StopHurt(bool useTransition)
 	{
-		if (forwardLaunch)
+		if (useTransition)
 			HurtStatePlayback.Travel(HurtForwardStopState);
 		else
 			animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);

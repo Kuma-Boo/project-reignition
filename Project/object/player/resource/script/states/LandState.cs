@@ -36,7 +36,7 @@ public partial class LandState : PlayerState
 			Player.IsKnockback = false;
 			Player.AllowLandingSkills = false;
 			Player.Animator.StopHurt(true);
-			Player.Animator.ResetState();
+			Player.Animator.ResetState(0);
 		}
 		else
 		{
