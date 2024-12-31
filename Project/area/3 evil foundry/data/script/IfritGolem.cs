@@ -883,7 +883,7 @@ public partial class IfritGolem : Node3D
 
 		Transform3D t = tank.GlobalTransform;
 		tank.GetParent().RemoveChild(tank);
-		StageSettings.Instance.AddChild(tank);
+		AddChild(tank);
 		tank.GlobalTransform = t;
 
 		if (currentState == GolemState.SpecialAttack)
