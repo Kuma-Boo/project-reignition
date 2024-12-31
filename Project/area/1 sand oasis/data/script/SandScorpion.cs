@@ -712,9 +712,7 @@ public partial class SandScorpion : Node3D
 	private GroupGpuParticles3D impactEffect;
 	private void StartImpactFX(NodePath n)
 	{
-		//Player.Camera.StartMediumCameraShake();
-		PlayScreenShake(1);
-		GD.Print("Screen Shake!");
+		PlayScreenShake(1f);
 		impactEffect.Visible = true;
 		Vector3 p = GetNode<Node3D>(n).GlobalPosition;
 		p.Y = 0; // Snap to the floor

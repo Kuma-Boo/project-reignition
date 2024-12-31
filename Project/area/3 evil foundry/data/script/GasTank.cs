@@ -169,6 +169,11 @@ public partial class GasTank : Area3D
 		IsTravelling = false;
 		Animator.Play("detonate");
 		Animator.CallDeferred("advance", 0.0);
+		Player.Camera.StartCameraShake(new()
+		{
+			origin = GlobalPosition,
+			maximumDistance = 20f,
+		});
 
 		for (int i = 0; i < enemyList.Count; i++)
 			enemyList[i].TakeDamage(); // Damage all enemies in range
