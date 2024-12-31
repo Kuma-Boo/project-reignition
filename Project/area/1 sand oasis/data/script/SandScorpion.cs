@@ -22,7 +22,7 @@ public partial class SandScorpion : Node3D
 {
 	/// <summary> Boss's path follower. </summary>
 	[Export] private PathFollow3D bossPathFollower;
-	[Export] private Camera3D cutsceneCamera;
+	[Export] private CameraTrigger cutsceneCamera;
 
 	private enum AttackState
 	{
@@ -164,7 +164,7 @@ public partial class SandScorpion : Node3D
 		rTailAnimationTree.Set(IntroParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		GlobalTransform = Transform3D.Identity;
 
-		cutsceneCamera.Current = true;
+		cutsceneCamera.Activate();
 		Player.Deactivate();
 	}
 
@@ -183,6 +183,7 @@ public partial class SandScorpion : Node3D
 
 	private void StartBattle()
 	{
+		cutsceneCamera.Deactivate();
 		rootAnimationTree.Set(IntroParameter, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		lTailAnimationTree.Set(IntroParameter, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		rTailAnimationTree.Set(IntroParameter, (int)AnimationNodeOneShot.OneShotRequest.Abort);
@@ -219,6 +220,7 @@ public partial class SandScorpion : Node3D
 
 	private void StartDefeat()
 	{
+		cutsceneCamera.Activate();
 		rootAnimationTree.Set(DefeatParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		lTailAnimationTree.Set(DefeatParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		rTailAnimationTree.Set(DefeatParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
@@ -232,6 +234,7 @@ public partial class SandScorpion : Node3D
 
 	private void StartResults()
 	{
+		cutsceneCamera.Deactivate();
 		rootAnimationTree.Active = rTailAnimationTree.Active = lTailAnimationTree.Active = flyingEyeAnimationTree.Active = false;
 		eventAnimator.Play("finish-defeat");
 
@@ -696,12 +699,22 @@ public partial class SandScorpion : Node3D
 			lTailAnimationTree.Set(HeavyAttackParameter, HeavyRecoveryState);
 	}
 
+	private void PlayScreenShake(float magnitude)
+	{
+		StageSettings.Player.Camera.StartCameraShake(new()
+		{
+			magnitude = Vector3.One.RemoveDepth() * magnitude,
+		});
+	}
+
 	[ExportGroup("Effects")]
 	[Export]
 	private GroupGpuParticles3D impactEffect;
 	private void StartImpactFX(NodePath n)
 	{
-		Player.Camera.StartMediumCameraShake();
+		//Player.Camera.StartMediumCameraShake();
+		PlayScreenShake(1);
+		GD.Print("Screen Shake!");
 		impactEffect.Visible = true;
 		Vector3 p = GetNode<Node3D>(n).GlobalPosition;
 		p.Y = 0; // Snap to the floor
