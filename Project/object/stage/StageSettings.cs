@@ -404,6 +404,10 @@ public partial class StageSettings : Node3D
 
 		EmitSignal(SignalName.TimeChanged);
 	}
+
+	public bool[] fireSoulCheckpoints = new bool[3];
+	public bool IsFireSoulCheckpointFlagSet(int index) => fireSoulCheckpoints[index];
+	public bool SetFireSoulCheckpointFlag(int index, bool value) => fireSoulCheckpoints[index] = value;
 	#endregion
 
 	#region Path Settings
