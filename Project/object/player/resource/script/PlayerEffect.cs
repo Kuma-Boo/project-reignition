@@ -433,6 +433,9 @@ public partial class PlayerEffect : Node3D
 	private AudioStreamPlayer voiceChannel;
 	public void PlayVoice(StringName key)
 	{
+		if (SoundManager.instance.IsDialogActive)
+			return;
+
 		voiceChannel.Stream = voiceLibrary.GetStream(key, SoundManager.LanguageIndex);
 		voiceChannel.Play();
 	}

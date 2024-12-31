@@ -330,7 +330,7 @@ public partial class IfritGolem : Node3D
 
 		EnterIdle();
 
-		if (SoundManager.instance.IsDialogActive)
+		if (SoundManager.instance.IsSubtitlesActive)
 			return;
 
 		if (dialogFlags[1] < 3 && dialogFlags[3] != 1)

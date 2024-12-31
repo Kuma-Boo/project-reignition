@@ -50,7 +50,8 @@ public partial class SoundManager : Node
 	#endregion
 
 	#region Dialog
-	public bool IsDialogActive { get; private set; }
+	public bool IsSubtitlesActive { get; private set; }
+	public bool IsDialogActive => IsSubtitlesActive && (isSonicSpeaking || isShahraSpeaking);
 	[Export]
 	private Label subtitleLabel;
 	[Export]
@@ -67,7 +68,7 @@ public partial class SoundManager : Node
 	{
 		if (dialog.DialogCount == 0 || DebugManager.Instance.DisableDialog) return; // No dialog
 
-		IsDialogActive = true;
+		IsSubtitlesActive = true;
 		subtitleLabel.Text = string.Empty;
 
 		// Show background during cutscenes, disable during in-game dialog
@@ -82,7 +83,7 @@ public partial class SoundManager : Node
 
 	public void CancelDialog()
 	{
-		if (!IsDialogActive) return;
+		if (!IsSubtitlesActive) return;
 
 		delayTimer.Stop();
 		dialogChannel.Stop();
@@ -113,7 +114,7 @@ public partial class SoundManager : Node
 
 	private void DisableDialog()
 	{
-		IsDialogActive = false;
+		IsSubtitlesActive = false;
 		subtitleAnimator.Play("deactivate");
 
 		UpdateSonicDialog();
@@ -199,7 +200,7 @@ public partial class SoundManager : Node
 	private void UpdateSonicDialog() // Checks whether Sonic is the one speaking, and mutes his gameplay audio.
 	{
 		bool wasSonicSpeaking = isSonicSpeaking;
-		isSonicSpeaking = IsDialogActive && currentDialog.textKeys[currentDialogIndex].EndsWith(SONIC_VOICE_SUFFIX);
+		isSonicSpeaking = IsSubtitlesActive && currentDialog.textKeys[currentDialogIndex].EndsWith(SONIC_VOICE_SUFFIX);
 		if (isSonicSpeaking && !wasSonicSpeaking)
 			EmitSignal(SignalName.SonicSpeechStart);
 		else if (!isSonicSpeaking && wasSonicSpeaking)
@@ -215,7 +216,7 @@ public partial class SoundManager : Node
 	private void UpdateShahraDialog() // Checks whether Shahra is the one speaking, and mutes his gameplay audio.
 	{
 		bool wasShahraSpeaking = isShahraSpeaking;
-		isShahraSpeaking = IsDialogActive && currentDialog.textKeys[currentDialogIndex].EndsWith(SHAHRA_VOICE_SUFFIX);
+		isShahraSpeaking = IsSubtitlesActive && currentDialog.textKeys[currentDialogIndex].EndsWith(SHAHRA_VOICE_SUFFIX);
 		if (isShahraSpeaking && !wasShahraSpeaking)
 			EmitSignal(SignalName.ShahraSpeechStart);
 		else if (!isShahraSpeaking && wasShahraSpeaking)
