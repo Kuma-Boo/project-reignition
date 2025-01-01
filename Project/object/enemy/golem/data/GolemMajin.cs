@@ -22,7 +22,7 @@ public partial class GolemMajin : Enemy
 	private float startingProgress;
 
 	private Vector3 velocity;
-	private const float RotationResetSpeed = 5f;
+	private const float RotationResetRatio = .5f;
 	private const float WalkSpeed = 2f;
 	private const float DefaultCameraShakeDistance = 20;
 
@@ -140,7 +140,7 @@ public partial class GolemMajin : Enemy
 
 		if (IsDefeated)
 		{
-			pathFollower.Rotation = pathFollower.Rotation.Lerp(Vector3.Zero, RotationResetSpeed * PhysicsManager.physicsDelta);
+			pathFollower.Rotation = pathFollower.Rotation.Lerp(Vector3.Zero, RotationResetRatio);
 			return;
 		}
 
