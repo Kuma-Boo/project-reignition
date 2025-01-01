@@ -334,7 +334,7 @@ public partial class PlayerController : CharacterBody3D
 			return false;
 
 		// Check if the player is being crushed
-		if (ceilingHit.collidedObject.IsInGroup("crusher") && GroundHit)
+		if (!IsBackflipping && ceilingHit.collidedObject.IsInGroup("crusher") && GroundHit)
 		{
 			// Prevent clipping through the ground
 			AddCollisionExceptionWith(ceilingHit.collidedObject);
