@@ -337,6 +337,15 @@ public partial class DebugManager : Node2D
 		HeadsUpDisplay.Instance.Visible = !enabled;
 	}
 
+	public bool DisableReticle { get; private set; }
+	public void ToggleReticle(bool enabled)
+	{
+		DisableReticle = enabled;
+
+		if (!IsInstanceValid(StageSettings.Player)) return;
+		StageSettings.Player.Lockon.IsReticleVisible = !enabled;
+	}
+
 	/// <summary> Hide countdown for recording. </summary>
 	public bool HideCountdown { get; private set; }
 	private void ToggleCountdownVisibility(bool enabled) => HideCountdown = enabled;

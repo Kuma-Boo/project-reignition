@@ -1006,7 +1006,7 @@ public partial class PlayerController : CharacterBody3D
 		ProcessMode = ProcessModeEnum.Inherit;
 
 		Camera.Camera.Current = true; // Reactivate camera (for cutscenes)
-		Lockon.IsReticleVisible = true;
+		Lockon.IsReticleVisible = !DebugManager.Instance.DisableReticle;
 
 		if (Stage.IsControlTest)
 			return;
