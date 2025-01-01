@@ -239,7 +239,6 @@ public partial class SandScorpion : Node3D
 		eventAnimator.Play("finish-defeat");
 
 		Player.Activate();
-		Player.Skills.CancelBreakSkills();
 		StageSettings.Instance.FinishLevel(true);
 	}
 

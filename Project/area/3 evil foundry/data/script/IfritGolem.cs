@@ -637,6 +637,7 @@ public partial class IfritGolem : Node3D
 		Root.Rotation = Vector3.Zero;
 		ExitHitstun();
 
+		Player.Skills.DisableBreakSkills();
 		Player.Deactivate();
 		Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 
@@ -657,7 +658,6 @@ public partial class IfritGolem : Node3D
 		EventAnimator.Advance(0.0);
 		AnimationTree.Active = false;
 		Player.Activate();
-		Player.Skills.CancelBreakSkills();
 		StageSettings.Instance.FinishLevel(true);
 	}
 	#endregion
