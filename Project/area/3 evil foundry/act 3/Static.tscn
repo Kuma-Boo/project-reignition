@@ -94,6 +94,18 @@ tracks/4/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("EnableEnvironmentFX:blendTime")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_50a5f"]
 resource_name = "demo1"
@@ -207,6 +219,20 @@ tracks/8/path = NodePath("../Visuals/11Spiral")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Deactivate"
+}]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("DisableEnvironmentFX")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -336,6 +362,46 @@ tracks/8/keys = {
 "method": &"Activate"
 }]
 }
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("DisableEnvironmentFX")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("EnableEnvironmentFX")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("EnableEnvironmentFX:blendTime")
+tracks/11/interp = 0
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(1.9, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.2, 0.0]
+}
 
 [sub_resource type="Animation" id="Animation_yw6bd"]
 resource_name = "demo3"
@@ -441,6 +507,20 @@ tracks/7/path = NodePath("../Visuals/11Spiral")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("DisableEnvironmentFX")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -1206,6 +1286,17 @@ fov = 60.0
 libraries = {
 "": SubResource("AnimationLibrary_5vskf")
 }
+
+[node name="DisableEnvironmentFX" type="Node3D" parent="DemoCamera"]
+transform = Transform3D(-1, 0, -3.6637e-06, 0, 1, 0, 3.6637e-06, 0, -1, 305, -27.2, 82.9989)
+script = ExtResource("8_bxeue")
+environmentFxFactor = 0.0
+blendTime = 0.0
+
+[node name="EnableEnvironmentFX" type="Node3D" parent="DemoCamera"]
+transform = Transform3D(-1, 0, -3.6637e-06, 0, 1, 0, 3.6637e-06, 0, -1, 305, -27.2, 82.9989)
+script = ExtResource("8_bxeue")
+blendTime = 0.0
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("27_g5tpq")
