@@ -134,7 +134,7 @@ public partial class GrindState : PlayerState
 
 		if (allowRedrawing && wasAttemptingGrindStep != isAttemptingGrindStep)
 		{
-			HeadsUpDisplay.Instance.SetPrompt(isAttemptingGrindStep ? GrindStepAction : ShuffleAction, 1);
+			HeadsUpDisplay.Instance.SetPrompt(isAttemptingGrindStep ? GrindStepAction : JumpAction, 1);
 			HeadsUpDisplay.Instance.ShowPrompts();
 		}
 	}
