@@ -68,11 +68,19 @@ public partial class PlayerCameraController : Node3D
 	public void Respawn()
 	{
 		SnapXform();
+
 		// Revert camera settings
+		CameraSettingsResource resource;
+		if (Player.IsDebugRespawn)
+			resource = DebugManager.Instance.DebugCheckpoint.CameraSettings;
+		else
+			resource = StageSettings.Instance.CurrentCheckpoint.CameraSettings;
+
 		UpdateCameraSettings(new()
 		{
-			SettingsResource = StageSettings.Instance.CurrentCheckpoint.CameraSettings,
+			SettingsResource = resource,
 		});
+
 		SnapFlag = true;
 	}
 

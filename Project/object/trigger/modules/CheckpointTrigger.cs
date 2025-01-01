@@ -20,7 +20,11 @@ namespace Project.Gameplay.Triggers
 				return;
 
 			Stage.SetCheckpoint(this);
+			SaveCheckpointData();
+		}
 
+		public void SaveCheckpointData()
+		{
 			PlayerPath = StageSettings.Player.PathFollower.ActivePath; // Store current player path
 			CameraPath = StageSettings.Player.Camera.PathFollower.ActivePath; // Store current camera path
 			CameraSettings = StageSettings.Player.Camera.ActiveSettings;
