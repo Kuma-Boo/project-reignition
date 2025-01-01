@@ -27,13 +27,17 @@ public partial class PlayerSkillController : Node3D
 
 	public bool IsJumpCharged => JumpCharge >= 0.25f;
 	public float JumpCharge { get; private set; }
+	private readonly float ChargeFXDelay = 0.1f;
 	public void ChargeJump()
 	{
 		bool isFullyCharged = IsJumpCharged;
-		if (Mathf.IsZeroApprox(JumpCharge))
-			Player.Effect.StartChargeFX();
+		bool canStartFX = JumpCharge < ChargeFXDelay;
 
 		JumpCharge = Mathf.MoveToward(JumpCharge, 1f, PhysicsManager.physicsDelta);
+
+		if (canStartFX && JumpCharge >= ChargeFXDelay)
+			Player.Effect.StartChargeFX();
+
 		if (IsJumpCharged && !isFullyCharged)
 			Player.Effect.StartFullChargeFX();
 	}
