@@ -7,179 +7,137 @@ using Project.Gameplay;
 namespace Project.Interface.Menus;
 
 
-public partial class SkillPresetOption : Menu
+public partial class SkillPresetOption : Control
 {
+	//public SkillPreset thisPreset;
+
+	public string presetName;
+	public Array<SkillKey> skills;
+	public Dictionary<SkillKey, int> skillAugments;
+
+	private SkillRing activeSkillRing => SaveManager.ActiveSkillRing;
+
+	/// <summary> The preset option's menu number. </summary>
+	public int Index { get; set; }
+
+	private bool isInvalid;
+
+	[Export] private Label presetLabel;
+
+	[Export] private Label numLabel;
+	[Export] private Label numSkillsLabel;
+
+	[Export] private Label skillCostLabel;
+	[Export] private Label windAmtLabel;
+	[Export] private Label fireAmtLabel;
+	[Export] private Label darkAmtLabel;
+
+	[Export] private AnimationPlayer animator;
+	[Export] private AnimationPlayer animatorData;
+
+	public void Initialize()
+	{
+		numLabel.Text = Index.ToString();
+		if (presetName == null && skills == null && skillAugments == null)
+		{
+			animator.Play("no-preset");
+			isInvalid = true;
+			return;
+		}
+		else
+		{
+			if (string.IsNullOrEmpty(presetName))
+				presetName = "New Preset";
+
+			Redraw();
+			//animator.Play("new-preset");
+			animatorData.Play("show");
+		}
+	}
+
+	private void Redraw()
+	{
+		presetLabel.Text = presetName;
+
+		int numSkills = 0;
+		int skillCost = 0;
+		int windAmt = 0;
+		int fireAmt = 0;
+		int darkAmt = 0;
+
+		// Update all the above totals
+		for (int i = 0; i < skills.Count; i++)
+		{
+			SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(skills[i]);
+			if (baseSkill == null)
+				continue;
+			int augmentIndex = activeSkillRing.GetAugmentIndex(skills[i]);
+			if (augmentIndex == 0)
+			{
+				switch (baseSkill.Element)
+				{
+					case SkillResource.SkillElement.Wind:
+						windAmt += 1;
+						break;
+
+					case SkillResource.SkillElement.Fire:
+						fireAmt += 1;
+						break;
+
+					case SkillResource.SkillElement.Dark:
+						fireAmt += 1;
+						break;
+				}
 
 
-    //public SkillPreset thisPreset;
+				skillCost += baseSkill.Cost;
+				numSkills += 1;
+				continue;
+			}
 
-    public string presetName;
-    public Array<SkillKey> skills;
-    public Dictionary<SkillKey, int> skillAugments;
+			switch (baseSkill.Augments[augmentIndex - 1].Element)
+			{
+				case SkillResource.SkillElement.Wind:
+					windAmt += 1;
+					break;
 
-    private SkillRing activeSkillRing => SaveManager.ActiveSkillRing;
+				case SkillResource.SkillElement.Fire:
+					fireAmt += 1;
+					break;
 
-    public int index {get; set;}// The preset option's menu number
+				case SkillResource.SkillElement.Dark:
+					darkAmt += 1;
+					break;
+			}
+			skillCost += baseSkill.Augments[augmentIndex - 1].Cost;
+			numSkills += 1;
+		}
 
-    private bool isInvalid;
-    
+		windAmtLabel.Text = windAmt.ToString();
+		fireAmtLabel.Text = fireAmt.ToString();
+		darkAmtLabel.Text = darkAmt.ToString();
+		numSkillsLabel.Text = numSkills.ToString();
+		skillCostLabel.Text = skillCost.ToString();
+	}
 
-    [Export]
-    private Label presetLabel;
+	public void SelectUp() => animator.Play("select-up");
 
-    [Export]
-    private Label numLabel;
+	public void SelectDown() => animator.Play("select-down");
 
-    [Export]
-    private Label numSkillsLabel;
+	public void SelectLeft() => animator.Play("select-left");
 
-    [Export]
-    private Label skillCostLabel;
+	public void SelectRight() => animator.Play("select-right");
 
-    [Export]
-    private Label windAmtLabel;
+	public void SavePreset() => animator.Play("save-preset");
 
-    [Export]
-    private Label fireAmtLabel;
+	public void SelectPreset() => animator.Play("load-preset");
 
-    [Export]
-    private Label darkAmtLabel;
+	public void Deselect() => animator.Play("deselect");
 
-    [Export]
-    private AnimationPlayer animator;
+	public void DeselectInstant() => animator.Play("deselect_instant");
 
-    [Export]
-    private AnimationPlayer animatorData;
+	private void _on_text_edit_focus_exited()
+	{
 
-    
-
-
-
-    public void Initialize()
-    {
-
-
-        numLabel.Text = index.ToString();
-        if (presetName == null && skills == null && skillAugments == null)
-        {
-            
-            animator.Play("no-preset");
-            isInvalid = true;
-            return;
-        }
-        else
-        {
-            
-            if (presetName == "");
-                presetName = "New Preset";
-            presetLabel.Text = presetName;
-
-            int numSkills = 0;
-            int skillCost = 0;  
-            int windAmt = 0;
-            int fireAmt = 0;
-            int darkAmt = 0;
-
-            //update all the above totals
-            for (int i = 0; i < skills.Count; i++)
-            {
-                SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(skills[i]);
-                if (baseSkill == null)
-                    continue;
-                int augmentIndex = activeSkillRing.GetAugmentIndex(skills[i]);
-                if (augmentIndex == 0)
-                {
-                    switch (baseSkill.Element)
-                    {
-                        case SkillResource.SkillElement.Wind:
-                            windAmt += 1;
-                        break;
-
-                        case SkillResource.SkillElement.Fire:
-                            fireAmt += 1;
-                        break;
-
-                        case SkillResource.SkillElement.Dark:
-                            fireAmt += 1;
-                        break;
-                    }
-
-
-                    skillCost += baseSkill.Cost;
-                    numSkills += 1;
-                    continue;
-                }
-
-                switch (baseSkill.Augments[augmentIndex - 1].Element)
-                {
-                    case SkillResource.SkillElement.Wind:
-                        windAmt += 1;
-                    break;
-
-                    case SkillResource.SkillElement.Fire:
-                        fireAmt += 1;
-                    break;
-
-                    case SkillResource.SkillElement.Dark:
-                        darkAmt += 1;
-                    break;
-                }
-                skillCost += baseSkill.Augments[augmentIndex - 1].Cost;
-                numSkills += 1;
-            }
-            
-            windAmtLabel.Text = windAmt.ToString();
-            fireAmtLabel.Text = fireAmt.ToString();
-            darkAmtLabel.Text = darkAmt.ToString();
-            numSkillsLabel.Text = numSkills.ToString();
-            skillCostLabel.Text = skillCost.ToString();
-            //animator.Play("new-preset");
-            animatorData.Play("show");
-        }
-    }
-
-    public void SelectUp()
-    {
-        animator.Play("select-up");
-    }
-
-    public void SelectDown()
-    {
-        animator.Play("select-down");
-    }
-
-    public void SelectLeft()
-    {
-        animator.Play("select-left");
-    }
-
-    public void SelectRight()
-    {
-        animator.Play("select-right");
-    }
-
-    public void SavePreset()
-    {
-        animator.Play("save-preset");
-    }
-
-    public void SelectPreset()
-    {
-        animator.Play("load-preset");
-    }
-
-    public void Deselect()
-    {
-        animator.Play("deselect");
-    }
-
-    public void DeselectInstant()
-    {
-        animator.Play("deselect_instant");
-    }
-
-    private void _on_text_edit_focus_exited()
-    {
-
-    }
+	}
 }
