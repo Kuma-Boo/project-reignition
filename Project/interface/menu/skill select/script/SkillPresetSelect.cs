@@ -169,6 +169,7 @@ public partial class SkillPresetSelect : Menu
 			case 1:
 				if (!IsInvalid(VerticalSelection))
 					animatorOptions.Play("select-load");
+
 				else
 					animatorOptions.Play("select-load-invalid");
 				break;
@@ -219,8 +220,8 @@ public partial class SkillPresetSelect : Menu
 		presetList[preset].skillAugments = SaveManager.ActiveGameData.equippedAugments.Duplicate();
 
 		SaveManager.ActiveGameData.presetNames[preset] = presetList[preset].presetName;
-		SaveManager.ActiveGameData.presetSkills[preset] = presetList[preset].skills;
-		SaveManager.ActiveGameData.presetSkillAugments[preset] = presetList[preset].skillAugments;
+		SaveManager.ActiveGameData.presetSkills[preset] = presetList[preset].skills.Duplicate();
+		SaveManager.ActiveGameData.presetSkillAugments[preset] = presetList[preset].skillAugments.Duplicate();
 
 		// Save our new data to the file and play the animation to initialize the on-screen data
 		presetList[preset].SavePreset();
@@ -234,10 +235,10 @@ public partial class SkillPresetSelect : Menu
 
 	private void LoadSkills(int preset)
 	{
-		SaveManager.ActiveGameData.equippedSkills = presetList[preset].skills;
-		SaveManager.ActiveGameData.equippedAugments = presetList[preset].skillAugments;
+		SaveManager.ActiveGameData.equippedSkills = presetList[preset].skills.Duplicate();
+		SaveManager.ActiveGameData.equippedAugments = presetList[preset].skillAugments.Duplicate();
 
-		skillSelectMenu.Redraw();
+		//skillSelectMenu.Redraw();
 		presetList[preset].SelectPreset();
 	}
 
