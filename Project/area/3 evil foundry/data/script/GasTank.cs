@@ -30,6 +30,8 @@ public partial class GasTank : Area3D
 	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
 	private NodePath animator;
 	private AnimationPlayer Animator { get; set; }
+	[Export] private float timeScale = 0.8f;
+	private float currentTimeScale;
 
 	private bool isInteractingWithPlayer;
 	private bool isPlayerInExplosion;
@@ -42,7 +44,7 @@ public partial class GasTank : Area3D
 	public bool IsTravelling { get; private set; }
 	private float travelTime;
 	private readonly float VisualRotationSpeed = 10f;
-	private readonly float TimeScale = .8f;
+	private readonly float StrikeTimeScale = 1.5f;
 
 	public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(StartPosition, EndPosition, height, true);
 	public Basis TransformBasis => endTarget == null ? GlobalBasis : Basis.Identity;
@@ -57,6 +59,8 @@ public partial class GasTank : Area3D
 		Root = GetNodeOrNull<Node3D>(root);
 		Animator = GetNodeOrNull<AnimationPlayer>(animator);
 		InitializeSpawnData();
+
+		currentTimeScale = timeScale;
 
 		if (!disableRespawning)
 			StageSettings.Instance.ConnectRespawnSignal(this);
@@ -100,9 +104,9 @@ public partial class GasTank : Area3D
 			return;
 		}
 
-		travelTime = Mathf.MoveToward(travelTime, launchSettings.TotalTravelTime, PhysicsManager.physicsDelta * TimeScale);
+		travelTime = Mathf.MoveToward(travelTime, launchSettings.TotalTravelTime, PhysicsManager.physicsDelta * currentTimeScale);
 		GlobalPosition = launchSettings.InterpolatePositionTime(travelTime);
-		Root.Rotation += Vector3.Forward * VisualRotationSpeed * PhysicsManager.physicsDelta * TimeScale;
+		Root.Rotation += Vector3.Forward * VisualRotationSpeed * PhysicsManager.physicsDelta * currentTimeScale;
 	}
 
 	private bool CheckInteraction()
@@ -124,12 +128,14 @@ public partial class GasTank : Area3D
 
 	private void StrikeTank()
 	{
+		currentTimeScale = StrikeTimeScale;
+
 		Player.StartBounce();
 		Animator.Play("strike");
 		Animator.Advance(0);
 		EmitSignal(SignalName.OnStrike);
-		BonusManager.instance.RegisterEnemyComboExtender(this);
 
+		BonusManager.instance.RegisterEnemyComboExtender(this);
 		Launch();
 	}
 
