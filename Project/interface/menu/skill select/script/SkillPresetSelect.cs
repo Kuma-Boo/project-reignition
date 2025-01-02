@@ -8,11 +8,11 @@ namespace Project.Interface.Menus;
 
 public partial class SkillPresetSelect : Menu
 {
-	enum direction { UP, DOWN }
-
-
-	private int numPresets;
-
+	private enum Direction
+	{
+		Up,
+		Down
+	}
 
 	[Export]
 	private SkillSelect skillSelectMenu;
@@ -27,8 +27,6 @@ public partial class SkillPresetSelect : Menu
 	private Label saveLabel; //We're changing this to "overwrite" if a save already exists
 
 	[Export]
-	private AnimationPlayer animator;
-	[Export]
 	private AnimationPlayer animatorOptions;
 
 	private int scrollAmount;
@@ -39,6 +37,9 @@ public partial class SkillPresetSelect : Menu
 
 	private readonly int scrollInterval = 63;
 	private readonly int pageSize = 5;
+
+	/// <summary> Number of available save slots for presets. </summary>
+	private readonly int PresetsSlots = 20;
 
 	private Array<SkillPresetOption> presetList = [];
 
@@ -62,8 +63,6 @@ public partial class SkillPresetSelect : Menu
 		firstLoad = true;
 		selectedIndex = 0;
 		subIndex = 0;
-		numPresets = 20;
-
 	}
 
 	public override void ShowMenu()
@@ -74,19 +73,19 @@ public partial class SkillPresetSelect : Menu
 
 		base.ShowMenu();
 	}
+
 	public void LoadPresets()
 	{
 		GD.Print("Loading Presets");
 
-
-		if (firstLoad == true)
+		if (firstLoad)
 		{
 			presetList = new Array<SkillPresetOption>();
 			//currentPresets = new Array<SkillPreset>();
 			currentPresetNames = new Array<string>();
 			currentPresetSkills = new Array<Array<SkillKey>>();
 			currentPresetAugments = new Array<Dictionary<SkillKey, int>>();
-			for (int i = 0; i < 20; i++)
+			for (int i = 0; i < PresetsSlots; i++)
 			{
 				//presetList.Add(null);
 				currentPresetNames.Add("");
@@ -143,49 +142,24 @@ public partial class SkillPresetSelect : Menu
 
 	protected override void UpdateSelection()
 	{
-		if (isSubMenuActive && enableControls)
+		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+
+		if (isSubMenuActive)
 		{
-			if (Input.IsActionJustPressed("move_up"))
-			{
-				subIndex -= 1;
-				if (subIndex < 0)
-					subIndex = 4;
-				MoveSubCursor();
-			}
-
-			if (Input.IsActionJustPressed("move_down"))
-			{
-				subIndex += 1;
-				if (subIndex > 4)
-					subIndex = 0;
-				MoveSubCursor();
-			}
+			subIndex = WrapSelection(subIndex + inputSign, 5);
+			MoveSubCursor();
+			return;
 		}
-		if (isSubMenuActive == false && enableControls)
+
+		for (int i = 0; i < PresetsSlots; i++)
 		{
-			for (int i = 0; i < 20; i++)
-			{
-				if (i != selectedIndex)
-					presetList[i].DeselectInstant();
-			}
-
-			if (Input.IsActionJustPressed("move_up"))
-			{
-				selectedIndex -= 1;
-				if (selectedIndex < 0)
-					selectedIndex = presetList.Count - 1;
-				MoveCursor(direction.UP, selectedIndex);
-			}
-
-			if (Input.IsActionJustPressed("move_down"))
-			{
-				selectedIndex += 1;
-				if (selectedIndex > presetList.Count - 1)
-					selectedIndex = 0;
-				MoveCursor(direction.DOWN, selectedIndex);
-			}
-
+			if (i != selectedIndex)
+				presetList[i].DeselectInstant();
 		}
+
+		selectedIndex = WrapSelection(selectedIndex + inputSign, presetList.Count);
+		MoveCursor(inputSign < 0 ? Direction.Up : Direction.Down, selectedIndex);
+		GD.Print("Selected index ", selectedIndex);
 	}
 
 	protected override void Confirm()
@@ -258,48 +232,52 @@ public partial class SkillPresetSelect : Menu
 		switch (subIndex)
 		{
 			case 0:
-				if (IsInvalid(selectedIndex) == false)
+				if (!IsInvalid(selectedIndex))
 					animatorOptions.Play("select-save");
 				else
 					animatorOptions.Play("select-save-invalid");
 				break;
 			case 1:
-				if (IsInvalid(selectedIndex) == false)
+				if (!IsInvalid(selectedIndex))
 					animatorOptions.Play("select-load");
 				else
 					animatorOptions.Play("select-load-invalid");
 				break;
 			case 2:
-				if (IsInvalid(selectedIndex) == false)
+				if (!IsInvalid(selectedIndex))
 					animatorOptions.Play("select-rename");
 				else
 					animatorOptions.Play("select-rename-invalid");
 				break;
 			case 3:
-				if (IsInvalid(selectedIndex) == false)
+				if (!IsInvalid(selectedIndex))
 					animatorOptions.Play("select-delete");
 				else
 					animatorOptions.Play("select-delete-invalid");
 				break;
 			case 4:
-				if (IsInvalid(selectedIndex) == false)
+				if (!IsInvalid(selectedIndex))
 					animatorOptions.Play("select-cancel");
 				else
 					animatorOptions.Play("select-cancel-invalid");
 				break;
 		}
+
+		if (!isSelectionScrolling)
+			StartSelectionTimer();
 	}
 
-	private void MoveCursor(direction dir, int index)
+	private void MoveCursor(Direction dir, int index)
 	{
 		GD.Print("Index: " + index);
 
-		if (dir == direction.UP)
+		if (dir == Direction.Up)
 			presetList[index].SelectUp();
-		else if (dir == direction.DOWN)
+		else if (dir == Direction.Down)
 			presetList[index].SelectDown();
 
-
+		if (!isSelectionScrolling)
+			StartSelectionTimer();
 	}
 
 	private void SaveSkills(int preset)
