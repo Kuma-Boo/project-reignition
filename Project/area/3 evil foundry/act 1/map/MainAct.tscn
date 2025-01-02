@@ -1,4 +1,4 @@
-[gd_scene load_steps=130 format=3 uid="uid://ciqbaxbhrxrjk"]
+[gd_scene load_steps=133 format=3 uid="uid://ciqbaxbhrxrjk"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
@@ -1593,6 +1593,143 @@ min_value = -1.8
 max_value = 0.0
 _data = [Vector2(0.00970874, 0), 0.0, 0.479689, 0, 0, Vector2(1, -0.36), -1.53316, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="Animation" id="Animation_j84ge"]
+resource_name = "event"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Elevator1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.1, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"Pause"
+}, {
+"args": [],
+"method": &"Unpause"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Elevator2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"Pause"
+}, {
+"args": [],
+"method": &"Unpause"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Elevator3")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"Pause"
+}, {
+"args": [],
+"method": &"Unpause"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Elevator4")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.1, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"Pause"
+}, {
+"args": [],
+"method": &"Unpause"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_5txsn"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Elevator1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Unpause"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Elevator2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Unpause"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Elevator3")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Unpause"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Elevator4")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Unpause"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_elqbj"]
+_data = {
+"RESET": SubResource("Animation_5txsn"),
+"event": SubResource("Animation_j84ge")
+}
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_181sa"]
 size = Vector3(15, 10, 5)
@@ -5599,19 +5736,32 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 [node name="DashPanel4" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("38_mjdev")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
 
-[node name="Elevator1" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("43_hxgcc")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 40, 7.5)
+[node name="ElevatorGroup" type="Node3D" parent="MainAct/Elevator/ElevatorStuff" node_paths=PackedStringArray("animator")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+script = ExtResource("7_pb234")
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
 
-[node name="Elevator2" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("43_hxgcc")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -4, 70.096, 7.5)
+[node name="Elevator1" parent="MainAct/Elevator/ElevatorStuff/ElevatorGroup" instance=ExtResource("43_hxgcc")]
+transform = Transform3D(1, 0, -1.74846e-07, 0, 1, 0, 1.74846e-07, 0, 1, 1.52588e-05, 40, -7.5)
 
-[node name="Elevator3" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("43_hxgcc")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 4, 57.5, 7.5)
+[node name="Elevator2" parent="MainAct/Elevator/ElevatorStuff/ElevatorGroup" instance=ExtResource("43_hxgcc")]
+transform = Transform3D(1, 0, -1.74846e-07, 0, 1, 0, 1.74846e-07, 0, 1, 4.00002, 70.096, -7.5)
+
+[node name="Elevator3" parent="MainAct/Elevator/ElevatorStuff/ElevatorGroup" instance=ExtResource("43_hxgcc")]
+transform = Transform3D(1, 0, -1.74846e-07, 0, 1, 0, 1.74846e-07, 0, 1, -3.99998, 57.5, -7.5)
 "Movement/Starting Offset" = 0.6
 
-[node name="Elevator4" parent="MainAct/Elevator/ElevatorStuff" instance=ExtResource("43_hxgcc")]
-transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0, 97, 7.5)
+[node name="Elevator4" parent="MainAct/Elevator/ElevatorStuff/ElevatorGroup" instance=ExtResource("43_hxgcc")]
+transform = Transform3D(1, 0, -2.38419e-07, 0, 1, 0, 2.38419e-07, 0, 1, 1.52588e-05, 97, -7.5)
 "Movement/Starting Offset" = 0.7
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainAct/Elevator/ElevatorStuff/ElevatorGroup"]
+libraries = {
+"": SubResource("AnimationLibrary_elqbj")
+}
 
 [node name="CullingTrigger" type="Node3D" parent="MainAct/Elevator/ElevatorStuff"]
 script = ExtResource("41_gc12q")
@@ -6864,10 +7014,14 @@ shape = SubResource("BoxShape3D_tr11d")
 [connection signal="Activated" from="MainAct/Elevator/ElevatorStuff/DashPanel2" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Activate"]
 [connection signal="Activated" from="MainAct/Elevator/ElevatorStuff/DashPanel3" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Activate"]
 [connection signal="Activated" from="MainAct/Elevator/ElevatorStuff/DashPanel4" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Activate"]
-[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/Elevator1" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Deactivate"]
-[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/Elevator2" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Deactivate"]
-[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/Elevator3" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Deactivate"]
-[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/Elevator4" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/ElevatorGroup/Elevator1" to="MainAct/Elevator/ElevatorStuff/ElevatorGroup" method="Activate"]
+[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/ElevatorGroup/Elevator1" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/ElevatorGroup/Elevator2" to="MainAct/Elevator/ElevatorStuff/ElevatorGroup" method="Activate"]
+[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/ElevatorGroup/Elevator2" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/ElevatorGroup/Elevator3" to="MainAct/Elevator/ElevatorStuff/ElevatorGroup" method="Activate"]
+[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/ElevatorGroup/Elevator3" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/ElevatorGroup/Elevator4" to="MainAct/Elevator/ElevatorStuff/ElevatorGroup" method="Activate"]
+[connection signal="DamagedPlayer" from="MainAct/Elevator/ElevatorStuff/ElevatorGroup/Elevator4" to="MainAct/Elevator/ElevatorStuff/AutorunLockout" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Elevator/ElevatorStuff/AutorunLockout" to="MainAct/Elevator/ElevatorStuff/CullingTrigger" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Elevator/ElevatorStuff/AutorunLockout" to="MainAct/Elevator/ElevatorStuff/CullingTrigger" method="Activate"]
 [connection signal="Defeated" from="MainAct/TransitionHall/GreenMajin1" to="MainAct/TransitionHall/EnemyStone1" method="IncrementCounter"]

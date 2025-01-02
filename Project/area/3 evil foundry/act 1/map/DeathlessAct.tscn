@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://wm6qp8wc4aik"]
+[gd_scene load_steps=55 format=3 uid="uid://wm6qp8wc4aik"]
 
 [ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="1_8qxdg"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_qk3u2"]
@@ -225,6 +225,81 @@ _data = {
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cvoto"]
 size = Vector3(5, 20, 20)
+
+[sub_resource type="Animation" id="Animation_187ur"]
+resource_name = "event"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Elevator1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.1, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"Pause"
+}, {
+"args": [],
+"method": &"Unpause"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Elevator2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"Pause"
+}, {
+"args": [],
+"method": &"Unpause"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_yedi7"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Elevator1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Unpause"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Elevator2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Unpause"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jn613"]
+_data = {
+"RESET": SubResource("Animation_yedi7"),
+"event": SubResource("Animation_187ur")
+}
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vcj4s"]
 size = Vector3(20, 10, 5)
@@ -952,12 +1027,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 [node name="DashPanel4" parent="DeathlessAct/Ending/ElevatorStuff" instance=ExtResource("4_sj5iv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
 
-[node name="Elevator1" parent="DeathlessAct/Ending/ElevatorStuff" instance=ExtResource("18_834aa")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 40, 7.5)
+[node name="ElevatorGroup" type="Node3D" parent="DeathlessAct/Ending/ElevatorStuff" node_paths=PackedStringArray("animator")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+script = ExtResource("25_l0jjy")
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
 
-[node name="Elevator2" parent="DeathlessAct/Ending/ElevatorStuff" instance=ExtResource("18_834aa")]
-transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0, 97, 7.5)
+[node name="Elevator1" parent="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup" instance=ExtResource("18_834aa")]
+transform = Transform3D(1, 0, -1.74846e-07, 0, 1, 0, 1.74846e-07, 0, 1, 1.52588e-05, 40, -7.5)
+
+[node name="Elevator2" parent="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup" instance=ExtResource("18_834aa")]
+transform = Transform3D(1, 0, -2.38419e-07, 0, 1, 0, 2.38419e-07, 0, 1, 1.52588e-05, 97, -7.5)
 "Movement/Starting Offset" = 0.7
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup"]
+libraries = {
+"": SubResource("AnimationLibrary_jn613")
+}
 
 [node name="CullingTrigger" type="Node3D" parent="DeathlessAct/Ending/ElevatorStuff"]
 script = ExtResource("4_khgg8")
@@ -1024,8 +1112,10 @@ shape = SubResource("BoxShape3D_t3h8b")
 [connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/DashPanel2" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Activate"]
 [connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/DashPanel3" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Activate"]
 [connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/DashPanel4" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Activate"]
-[connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/Elevator1" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Deactivate"]
-[connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/Elevator2" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup/Elevator1" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup/Elevator1" to="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup" method="Activate"]
+[connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup/Elevator2" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup/Elevator2" to="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup" method="Activate"]
 [connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" to="DeathlessAct/Ending/ElevatorStuff/CullingTrigger" method="Deactivate"]
 [connection signal="Deactivated" from="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" to="DeathlessAct/Ending/ElevatorStuff/CullingTrigger" method="Activate"]
 

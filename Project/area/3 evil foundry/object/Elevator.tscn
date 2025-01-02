@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bioj7igetxoe1"]
+[gd_scene load_steps=16 format=3 uid="uid://bioj7igetxoe1"]
 
 [ext_resource type="PackedScene" uid="uid://wl72orcirdh4" path="res://area/3 evil foundry/object/model/Elevator.gltf" id="1_7olfm"]
 [ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="2_03yvt"]
@@ -60,26 +60,6 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [1.0]
-}
-
-[sub_resource type="Animation" id="Animation_gksj0"]
-resource_name = "damage"
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.1, 0.8),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"Pause"
-}, {
-"args": [],
-"method": &"Unpause"
-}]
 }
 
 [sub_resource type="Animation" id="Animation_11rjf"]
@@ -163,7 +143,6 @@ tracks/2/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_h1tvi"]
 _data = {
 "RESET": SubResource("Animation_jtpo6"),
-"damage": SubResource("Animation_gksj0"),
 "fall": SubResource("Animation_11rjf"),
 "rise": SubResource("Animation_j23ue")
 }
@@ -250,7 +229,6 @@ libraries = {
 "": SubResource("AnimationLibrary_h1tvi")
 }
 
-[connection signal="DamagedPlayer" from="." to="AnimationPlayer" method="play" binds= [&"damage", -1.0, 1.0, false]]
 [connection signal="OnLeave" from="." to="AnimationPlayer" method="play" binds= [&"fall", -1.0, 1.0, false]]
 [connection signal="OnReturn" from="." to="AnimationPlayer" method="play" binds= [&"rise", -1.0, 1.0, false]]
 [connection signal="DamagedPlayer" from="Root" to="." method="DamagePlayer"]
