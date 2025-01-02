@@ -143,6 +143,8 @@ public partial class GolemMajin : Enemy
 			LaunchGasTank();
 	}
 
+	protected override void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, GlobalPosition + (this.Back() * 5f), new Vector2(2, 1.5f), 1.5f);
+
 	protected override void UpdateEnemy()
 	{
 		if (StageSettings.Instance?.IsLevelIngame == false) return;
