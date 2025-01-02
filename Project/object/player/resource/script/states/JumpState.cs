@@ -68,6 +68,7 @@ public partial class JumpState : PlayerState
 		Player.Lockon.IsMonitoring = true;
 		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 		Player.Animator.JumpAnimation();
+		Player.Controller.ResetJumpBuffer();
 	}
 
 	public override void ExitState()
