@@ -226,6 +226,38 @@ _data = {
 [sub_resource type="BoxShape3D" id="BoxShape3D_cvoto"]
 size = Vector3(5, 20, 20)
 
+[sub_resource type="Animation" id="Animation_yedi7"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Elevator1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Unpause"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Elevator2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Unpause"
+}]
+}
+
 [sub_resource type="Animation" id="Animation_187ur"]
 resource_name = "event"
 tracks/0/type = "method"
@@ -258,38 +290,6 @@ tracks/1/keys = {
 "args": [],
 "method": &"Pause"
 }, {
-"args": [],
-"method": &"Unpause"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_yedi7"]
-resource_name = "RESET"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Elevator1")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"Unpause"
-}]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Elevator2")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
 "args": [],
 "method": &"Unpause"
 }]
@@ -500,8 +500,13 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 16.708
 Movement/Distance = 6.0
 
 [node name="LaunchRing" parent="DeathlessAct/Opening" instance=ExtResource("9_tksp5")]
-transform = Transform3D(0.984808, 0, 0.173648, -0.173648, -4.37114e-08, 0.984808, 7.5904e-09, -1, -4.30473e-08, 92.5636, 1.22758, 0)
-"Secondary Settings/Distance" = 15.0
+transform = Transform3D(-4.37114e-08, -1, 0, -4.37114e-08, 0, 1, -1, 4.37114e-08, -4.37114e-08, 92.5636, 1.22758, 0)
+"Secondary Settings/Middle Height" = 15.0
+"Secondary Settings/Final Height" = 14.0
+"Secondary Settings/Distance" = 5.0
+finalHeight = 5.0
+distance = 0.0
+launchDirection = 2
 
 [node name="GreenMajin" parent="DeathlessAct/Opening" instance=ExtResource("10_ac17n")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 92.5941, 3.08256, 0)
@@ -1112,10 +1117,10 @@ shape = SubResource("BoxShape3D_t3h8b")
 [connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/DashPanel2" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Activate"]
 [connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/DashPanel3" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Activate"]
 [connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/DashPanel4" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Activate"]
-[connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup/Elevator1" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Deactivate"]
 [connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup/Elevator1" to="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup" method="Activate"]
-[connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup/Elevator2" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Deactivate"]
+[connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup/Elevator1" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Deactivate"]
 [connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup/Elevator2" to="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup" method="Activate"]
+[connection signal="DamagedPlayer" from="DeathlessAct/Ending/ElevatorStuff/ElevatorGroup/Elevator2" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Deactivate"]
 [connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" to="DeathlessAct/Ending/ElevatorStuff/CullingTrigger" method="Deactivate"]
 [connection signal="Deactivated" from="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" to="DeathlessAct/Ending/ElevatorStuff/CullingTrigger" method="Activate"]
 
