@@ -44,7 +44,7 @@ public partial class GasTank : Area3D
 	public bool IsTravelling { get; private set; }
 	private float travelTime;
 	private readonly float VisualRotationSpeed = 10f;
-	private readonly float StrikeTimeScale = 1.5f;
+	private readonly float StrikeTimeScale = 1.2f;
 
 	public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(StartPosition, EndPosition, height, true);
 	public Basis TransformBasis => endTarget == null ? GlobalBasis : Basis.Identity;
