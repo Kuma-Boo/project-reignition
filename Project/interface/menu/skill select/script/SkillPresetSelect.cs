@@ -151,12 +151,7 @@ public partial class SkillPresetSelect : Menu
 			return;
 		}
 
-		for (int i = 0; i < PresetsSlots; i++)
-		{
-			if (i != selectedIndex)
-				presetList[i].DeselectInstant();
-		}
-
+		presetList[selectedIndex].DeselectInstant();
 		selectedIndex = WrapSelection(selectedIndex + inputSign, presetList.Count);
 		MoveCursor(inputSign < 0 ? Direction.Up : Direction.Down, selectedIndex);
 		GD.Print("Selected index ", selectedIndex);
