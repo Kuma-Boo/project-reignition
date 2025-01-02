@@ -48,22 +48,10 @@ public partial class SkillPresetSelect : Menu
 	private Array<Array<SkillKey>> currentPresetSkills = [];
 	private Array<Dictionary<SkillKey, int>> currentPresetAugments = [];
 
-
-	private bool firstLoad;
-
-	private int selectedIndex;
+	private bool isInitialized;
 
 	public bool isSubMenuActive;
-	public bool enableControls;
 	private int subIndex;
-
-
-	protected override void SetUp()
-	{
-		firstLoad = true;
-		selectedIndex = 0;
-		subIndex = 0;
-	}
 
 	public override void ShowMenu()
 	{
@@ -78,7 +66,7 @@ public partial class SkillPresetSelect : Menu
 	{
 		GD.Print("Loading Presets");
 
-		if (firstLoad)
+		if (!isInitialized)
 		{
 			presetList = new Array<SkillPresetOption>();
 			//currentPresets = new Array<SkillPreset>();
@@ -134,15 +122,16 @@ public partial class SkillPresetSelect : Menu
 				presetList[i].Initialize();
 			}
 		}
-		firstLoad = false;
-		presetList[0].SelectRight();
-		enableControls = true;
 
+		isInitialized = true;
+		presetList[0].SelectRight();
 	}
 
 	protected override void UpdateSelection()
 	{
 		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		if (inputSign == 0)
+			return;
 
 		if (isSubMenuActive)
 		{
@@ -151,70 +140,61 @@ public partial class SkillPresetSelect : Menu
 			return;
 		}
 
-		presetList[selectedIndex].DeselectInstant();
-		selectedIndex = WrapSelection(selectedIndex + inputSign, presetList.Count);
-		MoveCursor(inputSign < 0 ? Direction.Up : Direction.Down, selectedIndex);
-		GD.Print("Selected index ", selectedIndex);
+		presetList[VerticalSelection].DeselectInstant();
+		VerticalSelection = WrapSelection(VerticalSelection + inputSign, presetList.Count);
+		MoveCursor(inputSign < 0 ? Direction.Up : Direction.Down, VerticalSelection);
+		GD.Print("Selected index ", VerticalSelection);
 	}
 
 	protected override void Confirm()
 	{
-		if (enableControls)
+		if (isSubMenuActive)
 		{
-			if (isSubMenuActive)
+			switch (subIndex)
 			{
-
-				switch (subIndex)
-				{
-					case 0:
-						SaveSkills(selectedIndex);
-						break;
-					case 1:
-						if (IsInvalid(selectedIndex) == false)
-							LoadSkills(selectedIndex);
-						break;
-					case 2:
-						//RenamePreset();
-						break;
-					case 3:
-						if (IsInvalid(selectedIndex) == false)
-							DeletePreset(selectedIndex);
-						break;
-					case 4:
-						animatorOptions.Play("hide");
-						isSubMenuActive = false;
-						break;
-				}
-
+				case 0:
+					SaveSkills(VerticalSelection);
+					break;
+				case 1:
+					if (!IsInvalid(VerticalSelection))
+						LoadSkills(VerticalSelection);
+					break;
+				case 2:
+					//RenamePreset();
+					break;
+				case 3:
+					if (!IsInvalid(VerticalSelection))
+						DeletePreset(VerticalSelection);
+					break;
+				case 4:
+					animatorOptions.Play("hide");
+					isSubMenuActive = false;
+					break;
 			}
-			else
-			{
-				subIndex = 0;
-				MoveSubCursor();
-				animatorOptions.Play("show");
-				isSubMenuActive = true;
-			}
+			return;
 		}
 
 
+		// Show the submenu
+		subIndex = 0;
+		MoveSubCursor();
+		animatorOptions.Play("show");
+		isSubMenuActive = true;
 	}
 
 	protected override void Cancel()
 	{
-		if (enableControls)
+		if (isSubMenuActive)
 		{
-			if (isSubMenuActive)
-			{
-				animatorOptions.Play("hide");
-				isSubMenuActive = false;
-			}
-			else
-			{
-				animator.Play("hide");
-				SaveManager.SaveGameData();
-				OpenParentMenu();
-				//Return to skill editing
-			}
+			animatorOptions.Play("hide");
+			isSubMenuActive = false;
+		}
+		else
+		{
+			animator.Play("hide");
+			SaveManager.SaveGameData();
+			OpenParentMenu();
+			//Return to skill editing
 		}
 	}
 
@@ -227,31 +207,31 @@ public partial class SkillPresetSelect : Menu
 		switch (subIndex)
 		{
 			case 0:
-				if (!IsInvalid(selectedIndex))
+				if (!IsInvalid(VerticalSelection))
 					animatorOptions.Play("select-save");
 				else
 					animatorOptions.Play("select-save-invalid");
 				break;
 			case 1:
-				if (!IsInvalid(selectedIndex))
+				if (!IsInvalid(VerticalSelection))
 					animatorOptions.Play("select-load");
 				else
 					animatorOptions.Play("select-load-invalid");
 				break;
 			case 2:
-				if (!IsInvalid(selectedIndex))
+				if (!IsInvalid(VerticalSelection))
 					animatorOptions.Play("select-rename");
 				else
 					animatorOptions.Play("select-rename-invalid");
 				break;
 			case 3:
-				if (!IsInvalid(selectedIndex))
+				if (!IsInvalid(VerticalSelection))
 					animatorOptions.Play("select-delete");
 				else
 					animatorOptions.Play("select-delete-invalid");
 				break;
 			case 4:
-				if (!IsInvalid(selectedIndex))
+				if (!IsInvalid(VerticalSelection))
 					animatorOptions.Play("select-cancel");
 				else
 					animatorOptions.Play("select-cancel-invalid");
@@ -277,13 +257,13 @@ public partial class SkillPresetSelect : Menu
 
 	private void SaveSkills(int preset)
 	{
-		if (currentPresetNames[preset] == "" &&
+		if (string.IsNullOrEmpty(currentPresetNames[preset]) &&
 			currentPresetSkills[preset] == null &&
 			currentPresetAugments[preset] == null)
 		{
 			currentPresetNames[preset] = "New Preset";
-			currentPresetSkills[preset] = new Array<SkillKey>();
-			currentPresetAugments[preset] = new Dictionary<SkillKey, int>();
+			currentPresetSkills[preset] = [];
+			currentPresetAugments[preset] = [];
 		}
 
 
