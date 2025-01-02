@@ -820,34 +820,6 @@ public partial class SaveManager : Node
 			return levelData[levelID];
 		}
 		#endregion
-
-		
-		public SkillPreset ToSkillPreset(int index)
-		{
-			SkillPreset preset = new SkillPreset();
-			preset.presetName = ActiveGameData.presetNames[index];
-			preset.skills = ActiveGameData.presetSkills[index];
-			preset.skillAugments = ActiveGameData.presetSkillAugments[index];
-			return preset;
-		}
-
-		public void FromSkillPreset(SkillPreset preset, int index)
-		{
-			ActiveGameData.presetNames[index] = preset.presetName;
-			ActiveGameData.presetSkills[index] = preset.skills;
-			ActiveGameData.presetSkillAugments[index] = preset.skillAugments;
-
-		}
-
-		public bool IsSkillPresetNull(int index)
-		{	
-			if (presetNames[index] == null &&
-				presetSkills[index] == null &&
-				presetSkillAugments[index] == null)
-				return true;
-			else
-				return false;
-		}
 	
 
 		/// <summary> Creates a dictionary based on GameData. </summary>

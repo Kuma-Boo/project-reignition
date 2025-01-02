@@ -134,7 +134,6 @@ public partial class SkillSelect : Menu
 
 	protected override void Enter()
 	{
-		GD.Print("Entered");
 		if (IsAlertMenuActive == false)
 		{
 			SaveManager.SaveGameData();
@@ -315,7 +314,7 @@ public partial class SkillSelect : Menu
 		_submenus[0].ShowMenu();
 	}
 
-	private void Redraw()
+	public void Redraw()
 	{
 		skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
 		skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);

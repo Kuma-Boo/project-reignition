@@ -13,6 +13,9 @@ public partial class SkillPresetSelect : Menu
     
     private int numPresets;
 
+
+    [Export]
+    private SkillSelect skillSelectMenu;
     [Export]
     private PackedScene presetOption;
     [Export]
@@ -38,7 +41,12 @@ public partial class SkillPresetSelect : Menu
     private readonly int pageSize = 5;
 
     private Array<SkillPresetOption> presetList = [];
-    private Array<SkillPreset> currentPresets = [];
+    
+    //private Array<SkillPreset> currentPresets = [];
+    private Array<string> currentPresetNames = [];
+    private Array<Array<SkillKey>> currentPresetSkills = [];
+    private Array<Dictionary<SkillKey, int>> currentPresetAugments = [];
+
 
     private bool firstLoad;
 
@@ -55,8 +63,7 @@ public partial class SkillPresetSelect : Menu
         selectedIndex = 0;
         subIndex = 0;
         numPresets = 20;
-        MoveSubCursor();
-        MoveCursor(direction.UP, 0);
+
     }
 
     public override void ShowMenu()
@@ -75,12 +82,17 @@ public partial class SkillPresetSelect : Menu
         if (firstLoad == true)
         {
             presetList = new Array<SkillPresetOption>();
-            currentPresets = new Array<SkillPreset>();
-
+            //currentPresets = new Array<SkillPreset>();
+            currentPresetNames = new Array<string>();
+            currentPresetSkills = new Array<Array<SkillKey>>();
+            currentPresetAugments = new Array<Dictionary<SkillKey, int>>();
             for (int i = 0; i < 20; i++)
             {
-                presetList.Add(null);
-                currentPresets.Add(null);
+                //presetList.Add(null);
+                currentPresetNames.Add("");
+                currentPresetSkills.Add(null);
+                currentPresetAugments.Add(null);
+                //currentPresets.Add(new SkillPreset("", null, null));
                 SkillPresetOption newPreset = presetOption.Instantiate<SkillPresetOption>();
                 
             
@@ -90,29 +102,35 @@ public partial class SkillPresetSelect : Menu
                 {
                     GD.Print("LOADING PRESET " + i);
                     
-                    currentPresets[i] = SaveManager.ActiveGameData.ToSkillPreset(i);
-                    newPreset.thisPreset = currentPresets[i];
-                    GD.Print("PRESET " + i + ":");
-                    GD.Print(newPreset.thisPreset.presetName.ToString());
-                    GD.Print(newPreset.thisPreset.skills.ToString());
-                    GD.Print(newPreset.thisPreset.skillAugments.ToString());
+                    currentPresetNames[i] = SaveManager.ActiveGameData.presetNames[i];
+                    currentPresetSkills[i] = SaveManager.ActiveGameData.presetSkills[i];
+                    currentPresetAugments[i] = SaveManager.ActiveGameData.presetSkillAugments[i];
+                    
+                    newPreset.presetName = currentPresetNames[i];
+                    newPreset.skills = currentPresetSkills[i];
+                    newPreset.skillAugments = currentPresetAugments[i];
+
+                    //newPreset.thisPreset = currentPresets[i];
+                    //GD.Print("PRESET " + i + ":");
+                    //GD.Print(newPreset.thisPreset.presetName.ToString());
+                    //GD.Print(newPreset.thisPreset.skills.ToString());
+                    //GD.Print(newPreset.thisPreset.skillAugments.ToString());
                     
                 }
                 else
                 {   
-                    currentPresets[i] = null;
+                    currentPresetNames[i] = "";
+                    currentPresetSkills[i] = null;
+                    currentPresetAugments[i] = null;
                     
                 }
                     
                     
                     
-                   
-                
-                
-                presetList[i] = newPreset;
+                presetList.Add(newPreset);
                 
                 presetContainer.AddChild(newPreset);
-                presetList[i].index = i + 1;
+                presetList[i].index = i + 1;//for displaying the number
                 
                 presetList[i].Initialize();
             }
@@ -183,14 +201,14 @@ public partial class SkillPresetSelect : Menu
                     SaveSkills(selectedIndex);
                     break;
                     case 1:
-                    if (IsInvalid(currentPresets[selectedIndex]) == false)
+                    if (IsInvalid(selectedIndex) == false)
                     LoadSkills(selectedIndex);
                     break;
                     case 2:
                     //RenamePreset();
                     break;
                     case 3:
-                    if (IsInvalid(currentPresets[selectedIndex]) == false)
+                    if (IsInvalid(selectedIndex) == false)
                     DeletePreset(selectedIndex);
                     break;
                     case 4:
@@ -224,6 +242,7 @@ public partial class SkillPresetSelect : Menu
             else
             {
                 animator.Play("hide");
+                SaveManager.SaveGameData();
                 OpenParentMenu();
                 //Return to skill editing
             }
@@ -239,31 +258,31 @@ public partial class SkillPresetSelect : Menu
         switch (subIndex)
         {
             case 0:
-            if (IsInvalid(currentPresets[selectedIndex]) == false)
+            if (IsInvalid(selectedIndex) == false)
                 animatorOptions.Play("select-save");
             else
                 animatorOptions.Play("select-save-invalid");
             break;
             case 1:
-            if (IsInvalid(currentPresets[selectedIndex]) == false)
+            if (IsInvalid(selectedIndex) == false)
                 animatorOptions.Play("select-load");
             else
                 animatorOptions.Play("select-load-invalid");
             break;
             case 2:
-            if (IsInvalid(currentPresets[selectedIndex]) == false)
+            if (IsInvalid(selectedIndex) == false)
                 animatorOptions.Play("select-rename");
             else
                 animatorOptions.Play("select-rename-invalid");
             break;
             case 3:
-            if (IsInvalid(currentPresets[selectedIndex]) == false)
+            if (IsInvalid(selectedIndex) == false)
                 animatorOptions.Play("select-delete");
             else
                 animatorOptions.Play("select-delete-invalid");
             break;
             case 4:
-            if (IsInvalid(currentPresets[selectedIndex]) == false)
+            if (IsInvalid(selectedIndex) == false)
                 animatorOptions.Play("select-cancel");
             else
                 animatorOptions.Play("select-cancel-invalid");
@@ -285,34 +304,53 @@ public partial class SkillPresetSelect : Menu
 
     private void SaveSkills(int preset)
     {
-        if (currentPresets[preset] == null)
-            currentPresets[preset] = new SkillPreset();
+        if (currentPresetNames[preset] == "" &&
+            currentPresetSkills[preset] == null &&
+            currentPresetAugments[preset] == null)
+            {
+                currentPresetNames[preset] = "New Preset";
+                currentPresetSkills[preset] = new Array<SkillKey>();
+                currentPresetAugments[preset] = new Dictionary<SkillKey, int>();
+            }
+        
         
         //Storing our equipped skills into the temporary preset
-        currentPresets[preset].skills = SaveManager.ActiveGameData.equippedSkills;
-        currentPresets[preset].skillAugments = SaveManager.ActiveGameData.equippedAugments;
+        currentPresetSkills[preset] = SaveManager.ActiveGameData.equippedSkills;
+        currentPresetAugments[preset] = SaveManager.ActiveGameData.equippedAugments;
+
         
         //Set a new name if our current one is empty
-        if (currentPresets[preset].presetName == null || currentPresets[preset].presetName == "")
-            currentPresets[preset].presetName = "New Preset";
+        if (currentPresetNames[preset] == null || currentPresetNames[preset] == "")
+            currentPresetNames[preset] = "New Preset";
 
         //Sets the preset selection object to the saved temporary preset
-        presetList[preset].thisPreset = currentPresets[preset];
+        presetList[preset].presetName = currentPresetNames[preset];
+        presetList[preset].skills = currentPresetSkills[preset];
+        presetList[preset].skillAugments = currentPresetAugments[preset];
 
         //Turns the class back into separate data
-        SaveManager.ActiveGameData.FromSkillPreset(currentPresets[preset], preset); 
-        
+        //SaveManager.ActiveGameData.FromSkillPreset(currentPresets[preset], preset); 
+        SaveManager.ActiveGameData.presetNames[preset] = currentPresetNames[preset];
+        SaveManager.ActiveGameData.presetSkills[preset] = currentPresetSkills[preset];
+        SaveManager.ActiveGameData.presetSkillAugments[preset] = currentPresetAugments[preset];
+
         //Save our new data to the file and play the animation to initialize the on-screen data
-        SaveManager.SaveGameData();
         presetList[preset].SavePreset();
+        SaveManager.SaveGameData();
+        
 
     }
 
     private void LoadSkills(int preset)
     {
-        SaveManager.ActiveGameData.equippedSkills = currentPresets[preset].skills;
-        SaveManager.ActiveGameData.equippedAugments = currentPresets[preset].skillAugments;
+        
+
+        SaveManager.ActiveGameData.equippedSkills = currentPresetSkills[preset];
+        SaveManager.ActiveGameData.equippedAugments = currentPresetAugments[preset];
+
+        skillSelectMenu.Redraw();
         presetList[preset].SelectPreset();
+
 
     }
 
@@ -323,14 +361,23 @@ public partial class SkillPresetSelect : Menu
 
     private void DeletePreset(int preset)
     {
-        if (SaveManager.ActiveGameData.IsSkillPresetNull(preset) == false)
+        if (SaveManager.ActiveGameData.presetNames[preset] != "" &&
+            SaveManager.ActiveGameData.presetSkills[preset] != null &&
+            SaveManager.ActiveGameData.presetSkillAugments[preset] != null)
         {
-            currentPresets[preset].presetName = "";
-            currentPresets[preset].skills = null;
-            currentPresets[preset].skillAugments = null;
-            presetList[preset].thisPreset = currentPresets[preset];
+            currentPresetNames[preset] = "";
+            currentPresetSkills[preset] = null;
+            currentPresetAugments[preset] = null;
 
-            SaveManager.ActiveGameData.FromSkillPreset(currentPresets[preset],preset);
+            presetList[preset].presetName = currentPresetNames[preset];
+            presetList[preset].skills = currentPresetSkills[preset];
+            presetList[preset].skillAugments = currentPresetAugments[preset];
+            //currentPresets[preset].SetName("");
+            //currentPresets[preset].SetSkills(null);
+            //currentPresets[preset].SetSkills(null);
+            //presetList[preset].thisPreset.SetPreset(currentPresets[preset]);
+
+            //SaveManager.ActiveGameData.FromSkillPreset(currentPresets[preset],preset);
 
 
             SaveManager.SaveGameData();
@@ -339,32 +386,15 @@ public partial class SkillPresetSelect : Menu
         
     }
 
-    private bool IsInvalid(SkillPreset preset)
+    private bool IsInvalid(int index)
     {
-        if (preset != null)
-        {
-            if (preset.presetName == "" &&
-                preset.skills == null &&
-                preset.skillAugments == null)
-                {
-                    GD.Print(preset.presetName + " is invalid");
-                    return true;
-                }
-                
-            else
-            {
-                GD.Print(preset.presetName + " is valid");
-                return false;
-            }
-                
-        }
-        else
-        {
-            GD.Print("invalid");
+        if (currentPresetNames[index] == "" &&
+            currentPresetSkills[index] == null &&
+            currentPresetAugments[index] == null)
             return true;
-        }
-            
-        
+        else
+            return false;
+             
     }
     
 

@@ -1,15 +1,22 @@
 using Godot;
+using Godot.Collections;
 using System;
 using Project.Core;
 using Project.Gameplay;
 
 namespace Project.Interface.Menus;
 
+
 public partial class SkillPresetOption : Menu
 {
 
 
-    public SkillPreset thisPreset;
+    //public SkillPreset thisPreset;
+
+    public string presetName;
+    public Array<SkillKey> skills;
+    public Dictionary<SkillKey, int> skillAugments;
+
     private SkillRing activeSkillRing => SaveManager.ActiveSkillRing;
 
     public int index {get; set;}// The preset option's menu number
@@ -51,36 +58,35 @@ public partial class SkillPresetOption : Menu
     public void Initialize()
     {
 
-        
+
         numLabel.Text = index.ToString();
-        if (thisPreset == null)
+        if (presetName == null && skills == null && skillAugments == null)
         {
+            
             animator.Play("no-preset");
-            //saveLabel.Text = "sys_savep";
             isInvalid = true;
             return;
         }
         else
         {
-            //saveLabel.Text = "sys_overwrite";
             
-            if (thisPreset.presetName == "");
-                thisPreset.presetName = "New Preset";
-            presetLabel.Text = thisPreset.presetName;
+            if (presetName == "");
+                presetName = "New Preset";
+            presetLabel.Text = presetName;
 
             int numSkills = 0;
-            int skillCost = 0;
+            int skillCost = 0;  
             int windAmt = 0;
             int fireAmt = 0;
             int darkAmt = 0;
 
             //update all the above totals
-            for (int i = 0; i < thisPreset.skills.Count; i++)
+            for (int i = 0; i < skills.Count; i++)
             {
-                SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(thisPreset.skills[i]);
+                SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(skills[i]);
                 if (baseSkill == null)
                     continue;
-                int augmentIndex = activeSkillRing.GetAugmentIndex(thisPreset.skills[i]);
+                int augmentIndex = activeSkillRing.GetAugmentIndex(skills[i]);
                 if (augmentIndex == 0)
                 {
                     switch (baseSkill.Element)
