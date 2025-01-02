@@ -6,6 +6,9 @@ namespace Project.Gameplay.Objects;
 public partial class Shahra : Node3D
 {
 	[Export]
+	private PlayerPathController PathController { get; set; }
+
+	[Export]
 	private Node3D root;
 	[Export]
 	private Curve travelCurve;
@@ -22,7 +25,6 @@ public partial class Shahra : Node3D
 		Inactive,
 	}
 	private float scaleAmount;
-	private CharacterController Character => CharacterController.instance;
 	private readonly float ScaleSpeed = 1.0f;
 
 	public override void _Ready()
@@ -41,7 +43,7 @@ public partial class Shahra : Node3D
 
 	private void UpdateState()
 	{
-		Rotation = Vector3.Up * Character.PathFollower.ForwardAngle;
+		Rotation = Vector3.Up * PathController.ForwardAngle;
 
 		scaleAmount = Mathf.MoveToward(scaleAmount, currentState == ShahraState.Inactive ? 0 : 1, ScaleSpeed * PhysicsManager.physicsDelta);
 		float interpolationAmount = Mathf.SmoothStep(0, 1, scaleAmount);

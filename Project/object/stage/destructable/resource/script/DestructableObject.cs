@@ -58,7 +58,7 @@ public partial class DestructableObject : Node3D
 	private const float ShatterStrength = 10.0f;
 
 	private ShatterFlags FlagSetting => (ShatterFlags)shatterFlags;
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	protected bool isShattered;
 	protected bool isInteractingWithPlayer;
@@ -105,23 +105,22 @@ public partial class DestructableObject : Node3D
 		Respawn();
 
 		if (!disableRespawn)
-			StageSettings.instance.ConnectRespawnSignal(this);
+			StageSettings.Instance.ConnectRespawnSignal(this);
 
-		StageSettings.instance.ConnectUnloadSignal(this);
+		StageSettings.Instance.ConnectUnloadSignal(this);
 	}
-
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (isShattered || !isInteractingWithPlayer) return;
+		if (!isInteractingWithPlayer) return;
 
 		ProcessPlayerCollision();
 	}
 
-
 	public virtual void Respawn()
 	{
 		isShattered = false;
+		isInteractingWithPlayer = false;
 
 		tweener?.Kill();
 
@@ -147,7 +146,6 @@ public partial class DestructableObject : Node3D
 		GetTree().CreateTimer(Core.PhysicsManager.physicsDelta, true, true).Connect(SceneTreeTimer.SignalName.Timeout,
 		new Callable(this, MethodName.ResetNodeTransforms));
 	}
-
 
 	private void ResetNodeTransforms()
 	{
@@ -182,14 +180,10 @@ public partial class DestructableObject : Node3D
 		root.Transform = Transform3D.Identity;
 	}
 
-
 	public virtual void Despawn()
 	{
-		pieceRoot.Visible = true;
-		root.ProcessMode = ProcessModeEnum.Disabled;
-
-		pieceRoot.Visible = true;
-		pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
+		root.Visible = pieceRoot.Visible = false;
+		root.ProcessMode = pieceRoot.ProcessMode = ProcessModeEnum.Disabled;
 	}
 
 	public virtual void Shatter() // Call this from a signal
@@ -201,7 +195,7 @@ public partial class DestructableObject : Node3D
 			animator.Play("shatter");
 
 		if (shakeScreenOnShatter)
-			Character.Camera.StartMediumCameraShake();
+			Player.Camera.StartMediumCameraShake();
 
 		pieceRoot.Visible = true; // Make sure piece root is visible
 		pieceRoot.ProcessMode = ProcessModeEnum.Inherit;
@@ -209,16 +203,16 @@ public partial class DestructableObject : Node3D
 
 		Vector3 shatterPoint = root.GlobalPosition;
 		float shatterStrength = ShatterStrength;
-		if (isInteractingWithPlayer && !Character.Skills.IsSpeedBreakActive) // Directional shatter
+		if (isInteractingWithPlayer && !Player.Skills.IsSpeedBreakActive) // Directional shatter
 		{
 			// Kill character's speed
-			if (Character.IsOnGround && stopPlayerOnShatter)
-				Character.MoveSpeed = 0f;
+			if (Player.IsOnGround && stopPlayerOnShatter)
+				Player.MoveSpeed = 0f;
 
-			shatterPoint = Character.CenterPosition; // Shatter from player
+			shatterPoint = Player.CenterPosition; // Shatter from player
 
-			if (Character.ActionState != CharacterController.ActionStates.JumpDash)
-				shatterStrength *= Mathf.Clamp(Character.GroundSettings.GetSpeedRatio(Character.MoveSpeed), .5f, 1f);
+			if (!Player.IsJumpDashOrHomingAttack)
+				shatterStrength *= Mathf.Clamp(Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed), .5f, 1f);
 		}
 
 		tweener = CreateTween().SetParallel(true);
@@ -250,6 +244,7 @@ public partial class DestructableObject : Node3D
 		}
 
 		isInteractingWithPlayer = true;
+		ProcessPlayerCollision();
 	}
 
 	public void OnExited(Area3D a)
@@ -258,31 +253,43 @@ public partial class DestructableObject : Node3D
 			isInteractingWithPlayer = false;
 	}
 
-	private void ProcessPlayerCollision()
+	protected virtual void ProcessPlayerCollision()
 	{
+		if (isShattered)
+			return;
+
 		// Prioritize Jump Dash
-		if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Character.ActionState == CharacterController.ActionStates.JumpDash)
+		if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Player.IsJumpDashOrHomingAttack)
 		{
 			Shatter();
 			if (bouncePlayerOnJumpDash)
-				Character.Lockon.StartBounce(snapPlayerOnBounce);
+				Player.StartBounce(snapPlayerOnBounce);
+
+			return;
 		}
-		else if (FlagSetting.HasFlag(ShatterFlags.PlayerCollision))
+
+		if (FlagSetting.HasFlag(ShatterFlags.PlayerCollision))
 		{
 			Shatter();
+			return;
 		}
-		else if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Character.AttackState != CharacterController.AttackStates.None)
+
+		if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Player.AttackState != PlayerController.AttackStates.None)
 		{
 			Shatter();
+			return;
 		}
-		else if (FlagSetting.HasFlag(ShatterFlags.SpeedBreak) && Character.Skills.IsSpeedBreakActive)
+
+		if (FlagSetting.HasFlag(ShatterFlags.SpeedBreak) && Player.Skills.IsSpeedBreakActive)
 		{
 			Shatter();
+			return;
 		}
-		else if (damagePlayer)
-		{
-			Character.StartKnockback();
-		}
+
+		if (!damagePlayer)
+			return;
+
+		Player.StartKnockback();
 	}
 
 	public void OnBodyEntered(Node3D b)
@@ -305,13 +312,13 @@ public partial class DestructableObject : Node3D
 				{
 					// Prevent objects from getting "stuck" on the player
 					RigidBody3D rb = root as RigidBody3D;
-					float pushPower = Mathf.Clamp(Character.MoveSpeed, 10.0f, 20.0f);
-					Vector3 launchPosition = (rb.GlobalPosition + rb.CenterOfMass) - Character.GlobalPosition;
+					float pushPower = Mathf.Clamp(Player.MoveSpeed, 10.0f, 20.0f);
+					Vector3 launchPosition = (rb.GlobalPosition + rb.CenterOfMass) - Player.GlobalPosition;
 					rb.ApplyImpulse(launchPosition * pushPower);
 					animator.Play("push");
 				}
 
-				Character.MoveSpeed *= 0.4f; // Kill character's speed
+				Player.MoveSpeed *= 0.4f; // Kill character's speed
 			}
 		}
 	}

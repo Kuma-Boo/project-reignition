@@ -27,7 +27,7 @@ namespace Project
 		private readonly float OCCLUSION_SMOOTHING = .5f;
 		private readonly float MOVEMENT_SMOOTHING = 4.0f;
 
-		private CameraController Camera => CharacterController.instance.Camera;
+		private PlayerCameraController Camera => StageSettings.Player.Camera;
 		private Callable UpdateSunCallable => new(this, MethodName.UpdateSun);
 
 		private readonly StringName SHADER_GLOBAL_SUN_OCCLUSION = "sun_occlusion";

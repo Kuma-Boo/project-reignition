@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cc64d8h51jyx2"]
+[gd_scene load_steps=10 format=3 uid="uid://cc64d8h51jyx2"]
 
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/ItemBox.cs" id="1_oatmb"]
 [ext_resource type="PackedScene" uid="uid://dpqfrq4sc5frh" path="res://object/stage/common/resource/model/ItemBoxWings.gltf" id="2_dsovg"]
@@ -96,6 +96,34 @@ tracks/6/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [0.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Collision/CollisionShape3D:disabled")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_46tu3"]
+resource_name = "disable-collision"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Collision/CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_hxe17"]
@@ -201,14 +229,27 @@ tracks/7/keys = {
 "update": 0,
 "values": [0.0, 0.0, 1.0]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Collision/CollisionShape3D:disabled")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_c756k"]
 _data = {
 "RESET": SubResource("Animation_bg4xx"),
+"disable-collision": SubResource("Animation_46tu3"),
 "open": SubResource("Animation_hxe17")
 }
 
-[node name="ItemBoxFlying" type="Area3D" node_paths=PackedStringArray("animator")]
+[node name="ItemBoxFlying" type="Area3D"]
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_oatmb")
@@ -224,14 +265,14 @@ animator = NodePath("AnimationPlayer")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
 [node name="Skeleton3D" parent="ItemBoxWings/ItemBoxWingsRoot" index="0"]
-bones/0/position = Vector3(0, -0.080211, 0)
-bones/1/rotation = Quaternion(0.561105, -0.430304, 0.430303, 0.561105)
-bones/2/rotation = Quaternion(-6.46777e-07, 1.7519e-06, 0.0902083, 0.995923)
-bones/3/rotation = Quaternion(0.561105, 0.430304, -0.430303, 0.561105)
-bones/4/rotation = Quaternion(-6.46777e-07, -1.7519e-06, -0.0902083, 0.995923)
+bones/0/position = Vector3(0, -0.0056, 0)
+bones/1/rotation = Quaternion(0.616938, -0.345525, 0.345524, 0.616938)
+bones/2/rotation = Quaternion(-6.73486e-07, 1.69663e-06, 0.446424, 0.894821)
+bones/3/rotation = Quaternion(0.616938, 0.345525, -0.345524, 0.616938)
+bones/4/rotation = Quaternion(-6.73486e-07, -1.69663e-06, -0.446424, 0.894821)
 
 [node name="RootPosition" type="BoneAttachment3D" parent="ItemBoxWings/ItemBoxWingsRoot/Skeleton3D" index="1"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, -0.080211, 0)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, -0.0056, 0)
 bone_name = "root"
 bone_idx = 0
 
@@ -264,7 +305,6 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
 shape = SubResource("6")
-disabled = true
 
 [node name="SFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_qfd32")

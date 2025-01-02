@@ -18,7 +18,7 @@ public partial class CullingTrigger : StageTriggerModule
 	[Export]
 	private bool isStageVisuals;
 	private bool isActive;
-	private StageSettings Level => StageSettings.instance;
+	private StageSettings Stage => StageSettings.Instance;
 	[Export]
 	private bool respawnOnActivation;
 	private Array<Node> respawnableNodes = [];
@@ -27,22 +27,27 @@ public partial class CullingTrigger : StageTriggerModule
 	{
 		Visible = true;
 		if (isStageVisuals)
-			DebugManager.Instance.Connect(DebugManager.SignalName.StageCullingToggled, new Callable(this, MethodName.UpdateCullingState));
+			DebugManager.Instance.StageCullingToggled += UpdateCullingState;
+
+		if (isStageVisuals && !TransitionManager.instance.IsReloadingScene)
+			ShaderManager.Instance.RegisterCullingTrigger(this);
 	}
 
 	public override void _ExitTree()
 	{
 		if (isStageVisuals)
-			DebugManager.Instance.Disconnect(DebugManager.SignalName.StageCullingToggled, new Callable(this, MethodName.UpdateCullingState));
+			DebugManager.Instance.StageCullingToggled -= UpdateCullingState;
 	}
 
 	public override void _Ready()
 	{
+		// Show everything for shader compilation
+		Visible = true;
+
 		// Cache all children with a respawn method
 		if (respawnOnActivation)
 		{
-			Array<Node> children = GetChildren(true);
-			foreach (Node child in children)
+			foreach (Node child in GetChildren(true))
 			{
 				if (child.HasMethod(StageSettings.RESPAWN_FUNCTION))
 					respawnableNodes.Add(child);
@@ -51,32 +56,46 @@ public partial class CullingTrigger : StageTriggerModule
 
 		if (saveVisibilityOnCheckpoint)
 		{
-			//Cache starting checkpoint state
-			visibleOnCheckpoint = startEnabled;
+			// Cache starting checkpoint state
+			visibleOnCheckpoint = visibleOnDebugCheckpoint = startEnabled;
 
-			//Listen for checkpoint signals
-			Level.Connect(StageSettings.SignalName.TriggeredCheckpoint, new Callable(this, MethodName.ProcessCheckpoint));
-			Level.ConnectRespawnSignal(this);
+			// Listen for checkpoint signals
+			DebugManager.Instance.TriggeredDebugCheckpoint += ProcessDebugCheckpoint;
+			Stage.TriggeredCheckpoint += ProcessCheckpoint;
+			Stage.ConnectRespawnSignal(this);
 		}
 
-		CallDeferred(MethodName.Respawn);
+		if (isStageVisuals)
+			Stage.Connect(StageSettings.SignalName.LevelStarted, new Callable(this, MethodName.Respawn), (uint)ConnectFlags.Deferred);
+		else
+			CallDeferred(MethodName.Respawn);
 	}
 
 	private bool visibleOnCheckpoint;
+	private bool visibleOnDebugCheckpoint;
 	/// <summary> Saves the current visiblity. Called when the player passes a checkpoint. </summary>
 	private void ProcessCheckpoint()
 	{
-		if (StageSettings.instance.LevelState == StageSettings.LevelStateEnum.Loading)
+		if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Probes ||
+			StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Shaders)
+		{
 			visibleOnCheckpoint = startEnabled;
+		}
 		else
+		{
 			visibleOnCheckpoint = Visible;
+		}
 	}
+
+	private void ProcessDebugCheckpoint() => visibleOnDebugCheckpoint = Visible;
 
 	public override void Respawn()
 	{
 		if (saveVisibilityOnCheckpoint)
 		{
-			if (visibleOnCheckpoint)
+			if (Player.IsDebugRespawn && visibleOnDebugCheckpoint)
+				Activate();
+			else if (!Player.IsDebugRespawn && visibleOnCheckpoint)
 				Activate();
 			else
 				Deactivate();

@@ -30,6 +30,8 @@ public partial class DialogTrigger : StageTriggerModule
 		SoundManager.instance.PlayDialog(this);
 	}
 
+	public override void Deactivate() => SoundManager.instance.CancelDialog();
+
 	public bool IsCutscene { get; set; }
 	public int DialogCount => textKeys.Count;
 	public bool HasDelay(int index) => delays != null && delays.Count > index && !Mathf.IsZeroApprox(delays[index]);

@@ -12,46 +12,47 @@ public partial class PathTrigger : StageTriggerModule
 
 	private Path3D playerDeactivatePath;
 	private Path3D cameraDeactivatePath;
+	/// <summary> Did the previous path limit the camera's distance? </summary>
 	private bool deactivateLimitCameraDistance;
 
 	/// <summary> Should the path be assigned to the player? </summary>
-	[Export]
-	public bool affectPlayer = true;
+	[Export] public bool affectPlayer = true;
 	/// <summary> Should the path be assigned to the camera? </summary>
-	[Export]
-	public bool affectCamera = true;
+	[Export] public bool affectCamera = true;
+	/// <summary> How much should the camera's path transition be smoothed? </summary>
+	[Export(PropertyHint.Range, "0, 2, 0.1")] private float cameraPathBlendTime;
 	/// <summary> Should this path limit the camera's maximum distance? </summary>
-	[Export]
-	public bool limitCameraDistanceToPath;
+	[Export] public bool limitCameraDistanceToPath;
 
 	public override void Activate()
 	{
 		if (affectPlayer)
 		{
-			playerDeactivatePath ??= Character.PathFollower.ActivePath;
-			Character.PathFollower.SetActivePath(path);
+			playerDeactivatePath ??= Player.PathFollower.ActivePath;
+			Player.PathFollower.SetActivePath(path);
 		}
 
-		if (affectCamera)
-		{
-			cameraDeactivatePath ??= Character.Camera.PathFollower.ActivePath;
-			deactivateLimitCameraDistance = Character.Camera.LimitToPathDistance;
+		if (!affectCamera)
+			return;
 
-			Character.Camera.PathFollower.SetActivePath(path);
-			Character.Camera.LimitToPathDistance = limitCameraDistanceToPath;
-		}
+		cameraDeactivatePath ??= Player.Camera.PathFollower.ActivePath;
+		Player.Camera.PathFollower.SetActivePath(path);
+
+		deactivateLimitCameraDistance = Player.Camera.LimitToPathDistance;
+		Player.Camera.LimitToPathDistance = limitCameraDistanceToPath;
+		Player.Camera.UpdatePathBlendSpeed(Mathf.IsZeroApprox(cameraPathBlendTime) ? 0.0f : 1.0f / cameraPathBlendTime);
 	}
 
 	public override void Deactivate()
 	{
 		//Ensure player's path hasn't already been changed
-		if (affectPlayer && Character.PathFollower.ActivePath == path)
-			Character.PathFollower.SetActivePath(playerDeactivatePath);
+		if (affectPlayer && Player.PathFollower.ActivePath == path)
+			Player.PathFollower.SetActivePath(playerDeactivatePath);
 
-		if (affectCamera && Character.Camera.PathFollower.ActivePath == path)
+		if (affectCamera && Player.Camera.PathFollower.ActivePath == path)
 		{
-			Character.Camera.PathFollower.SetActivePath(cameraDeactivatePath);
-			Character.Camera.LimitToPathDistance = limitCameraDistanceToPath;
+			Player.Camera.PathFollower.SetActivePath(cameraDeactivatePath);
+			Player.Camera.LimitToPathDistance = limitCameraDistanceToPath;
 		}
 	}
 }

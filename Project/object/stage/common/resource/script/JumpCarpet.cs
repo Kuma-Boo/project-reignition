@@ -13,8 +13,9 @@ public partial class JumpCarpet : Launcher
 	[Export]
 	private AnimationPlayer animator;
 
-	public override void _Ready()
+	protected override void SetUp()
 	{
+		base.SetUp();
 		// Pre-calculate ratio increment
 		if (maxBounceCount != 0)
 			ratioIncrement = 1.0f / maxBounceCount;
@@ -25,9 +26,9 @@ public partial class JumpCarpet : Launcher
 		if (currentBounceCount == 0)
 			return;
 
-		// TODO Refactor CharacterController to have a LandedOnGround signal and use that instead?
+		// TODO Refactor PlayerController to have a LandedOnGround signal and use that instead?
 		// Reset Jump Carpet when the player lands on ground
-		if (Character.IsOnGround)
+		if (Player.IsOnGround)
 			Reset();
 	}
 

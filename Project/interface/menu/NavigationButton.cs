@@ -4,12 +4,12 @@ using Project.Core;
 
 namespace Project.Interface;
 
-public partial class NavigationButton : Node
+public partial class NavigationButton : Control
 {
 	[Export]
-	private string actionKey;
+	public StringName ActionKey { get; set; }
 	[Export]
-	private string inputKey;
+	private StringName inputKey;
 	[Export(PropertyHint.ArrayType, "ControllerSpriteResource")]
 	private ControllerSpriteResource[] controllerResources;
 
@@ -30,21 +30,21 @@ public partial class NavigationButton : Node
 		ButtonTextureRect = GetNodeOrNull<TextureRect>(buttonTextureRect);
 		ActionLabel = GetNodeOrNull<Label>(actionLabel);
 
-		Runtime.Instance.Connect(Runtime.SignalName.ControllerChanged, new(this, MethodName.Redraw));
-		SaveManager.Instance.Connect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.Redraw));
+		Runtime.Instance.ControllerChanged += Redraw;
+		SaveManager.Instance.ConfigApplied += Redraw;
 		Redraw();
 	}
 
 	public override void _ExitTree()
 	{
-		Runtime.Instance.Disconnect(Runtime.SignalName.ControllerChanged, new(this, MethodName.Redraw));
-		SaveManager.Instance.Disconnect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.Redraw));
+		Runtime.Instance.ControllerChanged -= Redraw;
+		SaveManager.Instance.ConfigApplied -= Redraw;
 	}
 
 	private void Redraw(int _) => Redraw();
 	private void Redraw()
 	{
-		ActionLabel.Text = Tr(actionKey);
+		ActionLabel.Text = Tr(ActionKey);
 
 		Array<InputEvent> eventList = InputMap.ActionGetEvents(inputKey);
 

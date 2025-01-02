@@ -57,8 +57,10 @@ public partial class ThornSpring : Launcher
 	/// <summary> Flag to pause timebreak rotation so the player doesn't get hurt. </summary>
 	private bool pauseTimebreakRotation;
 
-	public override void _Ready()
+	protected override void SetUp()
 	{
+		base.SetUp();
+
 		currentTime = startingTimeOffset;
 		if (pauseHalfway && startRotated)
 		{
@@ -71,7 +73,7 @@ public partial class ThornSpring : Launcher
 
 	public override void Activate(Area3D a)
 	{
-		if (Character.Lockon.IsHomingAttacking && Character.Lockon.Target == this) // Pause time break rotation temporarily
+		if (Player.IsHomingAttacking && Player.Lockon.Target == this) // Pause time break rotation temporarily
 			pauseTimebreakRotation = true;
 
 		base.Activate(a);
@@ -96,8 +98,8 @@ public partial class ThornSpring : Launcher
 	/// <summary> Updates a time break spring based on the player's break skills. </summary>
 	private void UpdateTimeBreakSpring()
 	{
-		if (!Character.Skills.IsTimeBreakActive &&
-			(!Character.Lockon.IsHomingAttacking || Character.Lockon.Target != this))
+		if (!Player.Skills.IsTimeBreakActive &&
+			(!Player.IsHomingAttacking || Player.Lockon.Target != this))
 		{
 			if (rotationState != RotationStates.Looping && !pauseTimebreakRotation) // Return to spinning quickly
 				StartTimeBreakRotation();
@@ -139,7 +141,7 @@ public partial class ThornSpring : Launcher
 			return;
 		}
 
-		if (Character.Lockon.IsHomingAttacking && Character.Lockon.Target == this)
+		if (Player.IsHomingAttacking && Player.Lockon.Target == this)
 			return; // Don't start rotating if the player is attacking this spring
 
 		// Start a new rotation

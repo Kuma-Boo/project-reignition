@@ -152,9 +152,16 @@ public partial class EventTrigger : StageTriggerModule
 		if (Engine.IsEditorHint()) return;
 
 		if (autoRespawn)
-			StageSettings.instance.ConnectRespawnSignal(this);
+			StageSettings.Instance.ConnectRespawnSignal(this);
 
-		Respawn();
+		StageSettings.Instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.Respawn));
+
+		PlayerStandin = GetNodeOrNull<Node3D>(playerStandin);
+		if (PlayerStandin == null)
+			return;
+
+		animator.Play(EventAnimation);
+		animator.Seek(animator.CurrentAnimationLength, true, true);
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -162,10 +169,10 @@ public partial class EventTrigger : StageTriggerModule
 		if (Engine.IsEditorHint())
 			return;
 
-		if (playerStandin == null || Character.ExternalController != this)
+		if (playerStandin == null || Player.ExternalController != this)
 			return;
 
-		Character.UpdateExternalControl();
+		Player.CallDeferred(PlayerController.MethodName.UpdateExternalControl, true);
 	}
 
 	public override void Respawn()
@@ -190,6 +197,9 @@ public partial class EventTrigger : StageTriggerModule
 					animator.Play(DeactivateEventAnimation);
 				break;
 		}
+
+		if (string.IsNullOrEmpty(animator.CurrentAnimation))
+			return;
 
 		animator.Seek(respawnToEnd ? animator.CurrentAnimationLength : 0, true, true);
 		if (!respawnToEnd)
@@ -232,61 +242,41 @@ public partial class EventTrigger : StageTriggerModule
 		if (playerStandin?.IsEmpty != false) // Not a player event -- return early
 			return;
 
-		BGMPlayer.SetStageMusicVolume(-80f); // Mute BGM
-
-		Character.StartExternal(this, GetNode<Node3D>(playerStandin), characterPositionSmoothing);
-		Character.Animator.ExternalAngle = 0; // Reset external angle
-		Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
-		Character.Skills.DisableBreakSkills();
-		if (!characterAnimation.IsEmpty)
-			Character.Animator.PlayOneshotAnimation(characterAnimation);
+		Player.StartEvent(this);
 	}
 
 	#region Event Animation
 	private NodePath playerStandin;
+	public Node3D PlayerStandin { get; private set; }
 	/// <summary> Lockout to apply when character finishes event. </summary>
 	private LockoutResource characterExitLockout;
+	public LockoutResource CharacterExitLockout => characterExitLockout;
 	private float characterPositionSmoothing = .2f;
+	public float CharacterPositionSmoothing => characterPositionSmoothing;
 
 	/// <summary> How much to fadeout character's animation by. </summary>
 	private float characterFadeoutTime;
-	/// <summary> Which event animation to play on the character. </summary>
+	public float CharacterFadeoutTime => characterFadeoutTime;
+	/// <summary> Which event animation to play on the Player. </summary>
 	private StringName characterAnimation;
+	public StringName CharacterAnimation => characterAnimation;
 
 	/// <summary> Evaluate exit move speed as a ratio instead of a default value. </summary>
 	private bool normalizeExitMoveSpeed = true;
+	public bool NormalizeExitMoveSpeed => normalizeExitMoveSpeed;
 	private float characterExitMoveSpeed;
+	public float CharacterExitMoveSpeed => characterExitMoveSpeed;
 	private float characterExitVerticalSpeed;
+	public float CharacterExitVerticalSpeed => characterExitVerticalSpeed;
 
 	private void ScreenShake(float magnitude)
 	{
-		Character.Camera.StartCameraShake(new()
+		Player.Camera.StartCameraShake(new()
 		{
 			magnitude = Vector3.One.RemoveDepth() * magnitude
 		});
 	}
 
-	/// <summary> Resets the character's movement state. </summary>
-	public void FinishEvent()
-	{
-		BGMPlayer.SetStageMusicVolume(0f); // Unmute BGM
-
-		Character.MovementAngle = ExtensionMethods.CalculateForwardAngle(Character.ExternalParent.Forward());
-		Character.Animator.SnapRotation(Character.MovementAngle);
-		Character.Animator.CancelOneshot(characterFadeoutTime);
-		Character.Animator.DisabledSpeedSmoothing = true;
-		Character.Animator.ResetState(0);
-		Character.ResetMovementState();
-
-		if (characterExitLockout != null)
-			Character.AddLockoutData(characterExitLockout);
-
-		Character.MoveSpeed = normalizeExitMoveSpeed ? Character.GroundSettings.Speed * characterExitMoveSpeed : characterExitMoveSpeed;
-		Character.VerticalSpeed = characterExitVerticalSpeed;
-
-		// Re-enable break skills
-		Character.Skills.IsSpeedBreakEnabled = Character.Skills.IsTimeBreakEnabled = true;
-		EmitSignal(SignalName.EventFinished);
-	}
+	public void FinishEvent() => EmitSignal(SignalName.EventFinished);
 	#endregion
 }

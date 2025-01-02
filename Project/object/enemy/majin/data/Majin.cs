@@ -253,8 +253,8 @@ public partial class Majin : Enemy
 		Vector3 launchVector = defeatLaunchDirection;
 		if (launchVector.IsEqualApprox(Vector3.Zero) && !Engine.IsEditorHint()) // Calculate launch direction
 		{
-			launchVector = (Character.Animator.Back() + (Character.Animator.Up() * .2f)).Normalized();
-			launchVector = launchVector.Normalized() * Mathf.Clamp(Character.MoveSpeed, 5, 20);
+			launchVector = (Player.Animator.Back() + (Player.Animator.Up() * .2f)).Normalized();
+			launchVector = launchVector.Normalized() * Mathf.Clamp(Player.MoveSpeed, 5, 20);
 		}
 		else if (isDefeatLocalTransform)
 		{
@@ -401,7 +401,7 @@ public partial class Majin : Enemy
 		staggerTimer = StaggerLength;
 		DisableFlameAttack();
 
-		if (Character.AttackState == CharacterController.AttackStates.None)
+		if (Player.AttackState == PlayerController.AttackStates.None)
 		{
 			AnimationTree.Set(HitTransition, BoopState);
 		}
@@ -468,7 +468,7 @@ public partial class Majin : Enemy
 		if (IsDefeated)
 		{
 			if (IsSpeedbreakDefeat) // Cheat particle effects to stay onscreen
-				GlobalPosition += Character.GetPositionDelta();
+				GlobalPosition += Player.GetPositionDelta();
 
 			return; // Already defeated
 		}
@@ -526,7 +526,7 @@ public partial class Majin : Enemy
 		if (!Mathf.IsZeroApprox(timer))
 			return;
 
-		if (Character.Lockon.IsHomingAttacking)
+		if (Player.IsHomingAttacking)
 			return;
 
 		timer = -1;
@@ -621,7 +621,7 @@ public partial class Majin : Enemy
 		if (FlameAggressionRadius == 0)
 			return true;
 
-		float distance = (GlobalPosition - Character.GlobalPosition).Flatten().LengthSquared();
+		float distance = (GlobalPosition - Player.GlobalPosition).Flatten().LengthSquared();
 		// Because raising to the 2nd power is better than taking a square root...
 		return distance < Mathf.Pow(FlameAggressionRadius, 2);
 	}

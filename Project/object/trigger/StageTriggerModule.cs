@@ -8,12 +8,19 @@ namespace Project.Gameplay.Triggers
 	/// </summary>
 	public partial class StageTriggerModule : Node3D
 	{
-		protected CharacterController Character => CharacterController.instance;
+		protected PlayerController Player => StageSettings.Player;
 
 		public virtual void Activate(Area3D a)
 		{
 			if (!a.IsInGroup("player detection"))
 				return;
+
+			// Culling states shouldn't be changed when level is completed
+			if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Failed ||
+				StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Success)
+			{
+				return;
+			}
 
 			Activate();
 		}
@@ -21,6 +28,13 @@ namespace Project.Gameplay.Triggers
 		{
 			if (!a.IsInGroup("player detection"))
 				return;
+
+			// Culling states shouldn't be changed when level is completed
+			if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Failed ||
+				StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Success)
+			{
+				return;
+			}
 
 			Deactivate();
 		}

@@ -1,0 +1,95 @@
+[gd_scene load_steps=12 format=3 uid="uid://c10y5dhqmy3gk"]
+
+[ext_resource type="Script" path="res://area/3 evil foundry/data/script/FanHazard.cs" id="1_saxnw"]
+[ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="2_0cupn"]
+[ext_resource type="PackedScene" uid="uid://btmcw6p35yjgy" path="res://area/3 evil foundry/object/model/FanBroken.gltf" id="2_sil8t"]
+[ext_resource type="AudioStream" uid="uid://bxtjegxkdsnmu" path="res://sound/sfx/stage/evil foundry/fan spin.wav" id="3_18uvj"]
+
+[sub_resource type="Curve" id="Curve_6okwa"]
+_data = [Vector2(0, 0), 0.0, 32.8787, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_b2pda"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_6okwa")
+
+[sub_resource type="Curve" id="Curve_avox7"]
+_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_2e8q7"]
+width = 64
+curve = SubResource("Curve_avox7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_oyi0o"]
+angle_max = 360.0
+spread = 0.0
+initial_velocity_min = 3.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, 0, 0)
+scale_min = 4.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_2e8q7")
+color = Color(1, 0.54902, 0, 0.392157)
+alpha_curve = SubResource("CurveTexture_b2pda")
+
+[sub_resource type="QuadMesh" id="QuadMesh_um6se"]
+material = ExtResource("2_0cupn")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7aa55"]
+size = Vector3(1, 6, 0.5)
+
+[node name="Fan" type="Node3D"]
+script = ExtResource("1_saxnw")
+root = NodePath("Root")
+sfx = NodePath("SFX")
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="VFX" type="Node3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4)
+
+[node name="Smoke1" type="GPUParticles3D" parent="Root/VFX"]
+transform = Transform3D(-5.96046e-08, -1, 0, 1, -5.96046e-08, 0, 0, 0, 1, 0, 1.5, 0)
+layers = 32
+cast_shadow = 0
+amount = 16
+fixed_fps = 0
+fract_delta = false
+process_material = SubResource("ParticleProcessMaterial_oyi0o")
+draw_pass_1 = SubResource("QuadMesh_um6se")
+
+[node name="Smoke2" type="GPUParticles3D" parent="Root/VFX"]
+transform = Transform3D(-0.866025, 0.5, 0, -0.5, -0.866025, 0, 0, 0, 1, -1.29904, -0.75, 0)
+layers = 32
+cast_shadow = 0
+amount = 16
+fixed_fps = 0
+fract_delta = false
+process_material = SubResource("ParticleProcessMaterial_oyi0o")
+draw_pass_1 = SubResource("QuadMesh_um6se")
+
+[node name="Trigger" type="Area3D" parent="Root"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Blade1" type="CollisionShape3D" parent="Root/Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+shape = SubResource("BoxShape3D_7aa55")
+
+[node name="Blade2" type="CollisionShape3D" parent="Root/Trigger"]
+transform = Transform3D(-0.5, -0.866025, 0, 0.866025, -0.5, 0, 0, 0, 1, -2.05, -1.2, 0)
+shape = SubResource("BoxShape3D_7aa55")
+
+[node name="FanBroken" parent="Root" instance=ExtResource("2_sil8t")]
+
+[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_18uvj")
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[connection signal="area_entered" from="Root/Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/Trigger" to="." method="OnExited"]

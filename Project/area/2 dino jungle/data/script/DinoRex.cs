@@ -46,7 +46,7 @@ public partial class DinoRex : Node3D
 	public override void _Ready()
 	{
 		animationTree.Active = true;
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.ConnectRespawnSignal(this);
 		Respawn();
 	}
 
@@ -142,11 +142,17 @@ public partial class DinoRex : Node3D
 			targetRotation = playerRotation;
 	}
 
-	public void OnReturnToIdle(Area3D _) => targetState = RexStates.Idle;
+	public void OnReturnToIdle(Area3D a)
+	{
+		if (!a.IsInGroup("player detection"))
+			return;
+
+		targetState = RexStates.Idle;
+	}
 
 	private void PlayScreenShake(float magnitude)
 	{
-		CharacterController.instance.Camera.StartCameraShake(new()
+		StageSettings.Player.Camera.StartCameraShake(new()
 		{
 			magnitude = Vector3.One.RemoveDepth() * magnitude,
 		});
@@ -156,14 +162,14 @@ public partial class DinoRex : Node3D
 	private void StartMotionBlur()
 	{
 		isRequestingMotionBlur = true;
-		CharacterController.instance.Camera.RequestMotionBlur();
+		StageSettings.Player.Camera.RequestMotionBlur();
 	}
 	private void StopMotionBlur()
 	{
 		if (!isRequestingMotionBlur)
 			return;
 
-		CharacterController.instance.Camera.UnrequestMotionBlur();
+		StageSettings.Player.Camera.UnrequestMotionBlur();
 		isRequestingMotionBlur = false;
 	}
 
@@ -203,7 +209,7 @@ public partial class DinoRex : Node3D
 
 	private void CalculateUpperTargetRotation()
 	{
-		Vector3 targetPosition = CharacterController.instance.GlobalPosition + (CharacterController.instance.Forward() * 2f);
+		Vector3 targetPosition = StageSettings.Player.GlobalPosition + (StageSettings.Player.Forward() * 2f);
 		playerRotation = (targetPosition - GlobalPosition).Flatten().AngleTo(Vector2.Down);
 	}
 }
