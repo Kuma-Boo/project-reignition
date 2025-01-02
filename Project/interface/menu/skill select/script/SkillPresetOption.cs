@@ -77,7 +77,7 @@ public partial class SkillPresetOption : Control
                         break;
 
                     case SkillResource.SkillElement.Dark:
-                        fireAmt += 1;
+                        darkAmt += 1;
                         break;
                 }
 
@@ -127,9 +127,4 @@ public partial class SkillPresetOption : Control
     public void Deselect() => animator.Play("deselect");
 
     public void DeselectInstant() => animator.Play("deselect_instant");
-
-    private void _on_text_edit_focus_exited()
-    {
-
-    }
 }

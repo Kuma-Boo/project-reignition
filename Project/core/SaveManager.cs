@@ -507,6 +507,8 @@ public partial class SaveManager : Node
 		}
 	}
 
+
+
 	/// <summary> Game Data to use during the menu so things don't break. </summary>
 	public static GameData MenuData { get; set; }
 	/// <summary> Current skill ring. </summary>
@@ -516,6 +518,8 @@ public partial class SaveManager : Node
 	/// <summary> Maximum number of save slots that can be created. </summary>
 	public const int SaveSlotCount = 9;
 
+	/// <summary> Maximum number of preset slots
+	public const int PresetCount = 20;
 	/// <summary> Saves active game data to a file. </summary>
 	public static void SaveGameData()
 	{
@@ -975,7 +979,7 @@ public partial class SaveManager : Node
 			data.UnlockWorld(WorldEnum.LostPrologue);
 			data.UnlockWorld(WorldEnum.SandOasis); // Lock this in the final build
 
-			for (int i = 0; i < 20; i++)
+			for (int i = 0; i < PresetCount; i++)
 			{
 				data.presetNames.Add(null);
 				data.presetSkills.Add(null);

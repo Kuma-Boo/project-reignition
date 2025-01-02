@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://c3qhbk31d0gc4"]
+[gd_scene load_steps=32 format=3 uid="uid://c3qhbk31d0gc4"]
 
 [ext_resource type="Script" path="res://interface/menu/skill select/script/SkillPresetOption.cs" id="1_adrm6"]
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="1_pce6s"]
@@ -17,8 +17,11 @@
 [ext_resource type="AudioStream" uid="uid://dmf8plsfsakc6" path="res://sound/sfx/system/skill unequip.wav" id="14_fe7yt"]
 [ext_resource type="AudioStream" uid="uid://huxte6rhwx58" path="res://sound/sfx/system/menu selection.wav" id="15_00xro"]
 
+[sub_resource type="CanvasTexture" id="CanvasTexture_grg0i"]
+
 [sub_resource type="Animation" id="Animation_4os1y"]
 resource_name = "RESET"
+length = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -42,6 +45,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BackgroundWhite:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_4s1bd"]
@@ -369,27 +384,41 @@ tracks/3/keys = {
 "method": &"play"
 }]
 }
-tracks/4/type = "value"
+tracks/4/type = "animation"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Background:modulate")
-tracks/4/interp = 2
+tracks/4/path = NodePath("AnimationPlayer_Data")
+tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.6, 0.9),
-"transitions": PackedFloat32Array(1, 0.517632, 0.5, 2),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0.0980392), Color(1, 1, 1, 1)]
+"clips": PackedStringArray("show"),
+"times": PackedFloat32Array(0.6)
 }
-tracks/5/type = "animation"
+tracks/5/type = "method"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("AnimationPlayer_Data")
+tracks/5/path = NodePath(".")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"clips": PackedStringArray("show"),
-"times": PackedFloat32Array(0.6)
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Redraw"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("BackgroundWhite:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 0.313726), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_ls1cp"]
@@ -707,6 +736,26 @@ patch_margin_top = 32
 patch_margin_right = 32
 patch_margin_bottom = 32
 
+[node name="BackgroundWhite" type="NinePatchRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_right = -3.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(567.5, 130.5)
+texture = SubResource("CanvasTexture_grg0i")
+region_rect = Rect2(64, 176, 48, 48)
+patch_margin_left = 32
+patch_margin_top = 32
+patch_margin_right = 32
+patch_margin_bottom = 32
+
 [node name="Bottom" type="NinePatchRect" parent="."]
 visible = false
 custom_minimum_size = Vector2(432, 33)
@@ -756,6 +805,7 @@ label_settings = ExtResource("1_rp60a")
 vertical_alignment = 1
 
 [node name="NameLabel" type="Label" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = -1
@@ -789,6 +839,7 @@ drag_and_drop_selection_enabled = false
 middle_mouse_paste_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = 680.0
@@ -825,6 +876,7 @@ label_settings = ExtResource("1_rp60a")
 vertical_alignment = 1
 
 [node name="Element1" type="TextureRect" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 1
@@ -864,6 +916,7 @@ label_settings = ExtResource("1_rp60a")
 vertical_alignment = 1
 
 [node name="Element2" type="TextureRect" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 1
@@ -905,6 +958,7 @@ label_settings = ExtResource("1_rp60a")
 vertical_alignment = 1
 
 [node name="Element3" type="TextureRect" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 1
@@ -947,7 +1001,6 @@ vertical_alignment = 1
 
 [node name="SkillRing" type="TextureRect" parent="."]
 visible = false
-modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_top = 40.0
 offset_right = 65.0

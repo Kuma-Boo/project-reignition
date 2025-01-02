@@ -12,20 +12,19 @@ public partial class SkillPresetSelect : Menu
 		Down
 	}
 
-	[Export]
-	private SkillSelect skillSelectMenu;
-	[Export]
-	private PackedScene presetOption;
-	[Export]
-	private VBoxContainer presetContainer;
-	[Export]
-	private Sprite2D scrollbar;
+	[Export] private SkillSelect skillSelectMenu;
+	[Export] private PackedScene presetOption;
+	[Export] private VBoxContainer presetContainer;
+	[Export] private Sprite2D scrollbar;
 
-	[Export]
-	private Label saveLabel; //We're changing this to "overwrite" if a save already exists
+	[Export] private Label saveLabel; //We're changing this to "overwrite" if a save already exists
 
-	[Export]
-	private AnimationPlayer animatorOptions;
+	[Export] private TextEdit nameEditor;
+
+	[Export] private AnimationPlayer animatorOptions;
+	[Export] private AnimationPlayer animatorOptionsSelector;
+
+	[Export] private AnimationPlayer animatorNameEditor;
 
 	private int scrollAmount;
 	private float scrollRatio;
@@ -44,6 +43,8 @@ public partial class SkillPresetSelect : Menu
 	private bool isInitialized;
 
 	public bool isSubMenuActive;
+
+	public bool isEditingName;
 	private int subIndex;
 
 	protected override void SetUp()
@@ -119,7 +120,8 @@ public partial class SkillPresetSelect : Menu
 						LoadSkills(VerticalSelection);
 					break;
 				case 2:
-					//RenamePreset();
+					if (!IsInvalid(VerticalSelection))
+						RenamePreset();
 					break;
 				case 3:
 					if (!IsInvalid(VerticalSelection))
@@ -140,12 +142,27 @@ public partial class SkillPresetSelect : Menu
 		isSubMenuActive = true;
 	}
 
+	protected override void Enter()
+	{
+		if (isEditingName)
+		{
+			presetList[VerticalSelection].presetName = nameEditor.Text;
+			isEditingName = false;
+			animatorNameEditor.Play("hide");
+		}
+	}
+
 	protected override void Cancel()
 	{
 		if (isSubMenuActive)
 		{
 			animatorOptions.Play("hide");
 			isSubMenuActive = false;
+		}
+		else if (isEditingName)
+		{
+			animatorNameEditor.Play("hide");
+			isEditingName = false;
 		}
 		else
 		{
@@ -162,34 +179,34 @@ public partial class SkillPresetSelect : Menu
 		{
 			case 0:
 				if (!IsInvalid(VerticalSelection))
-					animatorOptions.Play("select-save");
+					animatorOptionsSelector.Play("select-save");
 				else
-					animatorOptions.Play("select-save-invalid");
+					animatorOptionsSelector.Play("select-save-invalid");
 				break;
 			case 1:
 				if (!IsInvalid(VerticalSelection))
-					animatorOptions.Play("select-load");
+					animatorOptionsSelector.Play("select-load");
 
 				else
-					animatorOptions.Play("select-load-invalid");
+					animatorOptionsSelector.Play("select-load-invalid");
 				break;
 			case 2:
 				if (!IsInvalid(VerticalSelection))
-					animatorOptions.Play("select-rename");
+					animatorOptionsSelector.Play("select-rename");
 				else
-					animatorOptions.Play("select-rename-invalid");
+					animatorOptionsSelector.Play("select-rename-invalid");
 				break;
 			case 3:
 				if (!IsInvalid(VerticalSelection))
-					animatorOptions.Play("select-delete");
+					animatorOptionsSelector.Play("select-delete");
 				else
-					animatorOptions.Play("select-delete-invalid");
+					animatorOptionsSelector.Play("select-delete-invalid");
 				break;
 			case 4:
 				if (!IsInvalid(VerticalSelection))
-					animatorOptions.Play("select-cancel");
+					animatorOptionsSelector.Play("select-cancel");
 				else
-					animatorOptions.Play("select-cancel-invalid");
+					animatorOptionsSelector.Play("select-cancel-invalid");
 				break;
 		}
 
@@ -213,7 +230,7 @@ public partial class SkillPresetSelect : Menu
 	private void SaveSkills(int preset)
 	{
 		// Storing our equipped skills into our current preset
-		if (string.IsNullOrEmpty(presetList[preset].presetName))
+		if (string.IsNullOrEmpty(presetList[preset].presetName) && subIndex == 0)
 			presetList[preset].presetName = "New Preset";
 
 		presetList[preset].skills = SaveManager.ActiveGameData.equippedSkills.Duplicate();
@@ -224,7 +241,11 @@ public partial class SkillPresetSelect : Menu
 		SaveManager.ActiveGameData.presetSkillAugments[preset] = presetList[preset].skillAugments.Duplicate();
 
 		// Save our new data to the file and play the animation to initialize the on-screen data
-		presetList[preset].SavePreset();
+		if (subIndex == 0 || subIndex == 1) //Only play the save animation if we are selecting save or load, otherewise just display the data
+			presetList[preset].SavePreset();
+		else
+			presetList[preset].Initialize();
+
 		SaveManager.SaveGameData();
 
 		foreach (SkillPresetOption option in presetList)
@@ -238,13 +259,13 @@ public partial class SkillPresetSelect : Menu
 		SaveManager.ActiveGameData.equippedSkills = presetList[preset].skills.Duplicate();
 		SaveManager.ActiveGameData.equippedAugments = presetList[preset].skillAugments.Duplicate();
 
-		//skillSelectMenu.Redraw();
 		presetList[preset].SelectPreset();
 	}
 
 	private void RenamePreset()
 	{
-
+		isEditingName = true;
+		animatorNameEditor.Play("show");
 	}
 
 	private void DeletePreset(int preset)
@@ -253,12 +274,19 @@ public partial class SkillPresetSelect : Menu
 		if (string.IsNullOrEmpty(SaveManager.ActiveGameData.presetNames[preset]))
 			return;
 
-		presetList[preset].presetName = null;
-		presetList[preset].skills = null;
-		presetList[preset].skillAugments = null;
+		presetList[preset].presetName = "";
+		presetList[preset].skills.Clear();
+		presetList[preset].skillAugments.Clear();
+
+		GD.Print(presetList[preset].presetName.ToString());
+		GD.Print(presetList[preset].skills.ToString());
+		GD.Print(presetList[preset].skillAugments.ToString());
+
+		SaveSkills(preset);
 
 		SaveManager.SaveGameData();
-		presetList[preset].Redraw();
+		presetList[preset].Initialize();
+		MoveSubCursor();//Grays out the options menu 
 	}
 
 	private bool IsInvalid(int index) => presetList[index].IsInvalid;
