@@ -18,10 +18,36 @@ public partial class PlayerSkillController : Node3D
 		MaxSoulPower = SaveManager.ActiveGameData.CalculateMaxSoulPower();
 
 		SetUpSkills();
+		timeBreakAnimator.Play("RESET");
+		speedBreakAnimator.Play("RESET");
 	}
 
 	#region Skills
 	private SkillRing SkillRing => SaveManager.ActiveSkillRing;
+
+	public bool IsJumpCharged => JumpCharge >= 0.25f;
+	public float JumpCharge { get; private set; }
+	private readonly float ChargeFXDelay = 0.1f;
+	public void ChargeJump()
+	{
+		bool isFullyCharged = IsJumpCharged;
+		bool canStartFX = JumpCharge < ChargeFXDelay;
+
+		JumpCharge = Mathf.MoveToward(JumpCharge, 1f, PhysicsManager.physicsDelta);
+
+		if (canStartFX && JumpCharge >= ChargeFXDelay)
+			Player.Effect.StartChargeFX();
+
+		if (IsJumpCharged && !isFullyCharged)
+			Player.Effect.StartFullChargeFX();
+	}
+	public bool ConsumeJumpCharge()
+	{
+		bool isJumpCharged = IsJumpCharged;
+		JumpCharge = 0;
+		Player.Effect.StopChargeFX();
+		return isJumpCharged;
+	}
 
 	[ExportGroup("Countdown Skills")]
 	[Export]
@@ -251,6 +277,15 @@ public partial class PlayerSkillController : Node3D
 		breakTimer = Mathf.MoveToward(breakTimer, 0, PhysicsManager.physicsDelta);
 	}
 
+	public void CancelBreakSkills()
+	{
+		IsTimeBreakActive = IsSpeedBreakActive = false;
+		timeBreakAnimator.Play("RESET");
+		timeBreakAnimator.Advance(0);
+		speedBreakAnimator.Play("RESET");
+		speedBreakAnimator.Advance(0);
+	}
+
 	private int timeBreakDrainTimer;
 	private const int TimeBreakSoulDrainInterval = 3; // Drain 1 point every x frames
 	private void UpdateTimeBreak()
@@ -373,8 +408,6 @@ public partial class PlayerSkillController : Node3D
 
 	public void ToggleSpeedBreak()
 	{
-		//Player.ResetActionState();
-
 		IsSpeedBreakActive = !IsSpeedBreakActive;
 		SoundManager.IsBreakChannelMuted = IsSpeedBreakActive;
 		breakTimer = IsSpeedBreakActive ? SpeedBreakDelay : BreakSkillsCooldown;

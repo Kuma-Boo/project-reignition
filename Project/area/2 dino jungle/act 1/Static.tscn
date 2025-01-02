@@ -1,4 +1,4 @@
-[gd_scene load_steps=146 format=3 uid="uid://cby2m0q2072c2"]
+[gd_scene load_steps=144 format=3 uid="uid://cby2m0q2072c2"]
 
 [ext_resource type="PackedScene" uid="uid://d3ppk3bftcyht" path="res://area/2 dino jungle/act 1/environment/collision/Collision.tscn" id="1_0crfa"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_hpjme"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://c5dih136fv3wc" path="res://area/2 dino jungle/act 1/environment/01Chase.tscn" id="5_8hbmi"]
 [ext_resource type="PackedScene" uid="uid://iij01cwh2ttg" path="res://area/2 dino jungle/act 1/environment/02River.tscn" id="6_51sf7"]
 [ext_resource type="PackedScene" uid="uid://8hi2u5lp8ujo" path="res://area/2 dino jungle/act 1/environment/03Cave.tscn" id="7_fyuv1"]
-[ext_resource type="PackedScene" uid="uid://7hwurdywrfq7" path="res://area/2 dino jungle/act 1/environment/02RiverReverse.tscn" id="7_h6ywe"]
 [ext_resource type="PackedScene" uid="uid://ban3idx4lt045" path="res://area/2 dino jungle/act 1/environment/06CavernEntrance.tscn" id="8_6iish"]
 [ext_resource type="PackedScene" uid="uid://bbqpbxdsvgh1r" path="res://area/2 dino jungle/act 1/environment/03CaveSky.tscn" id="8_17ely"]
 [ext_resource type="PackedScene" uid="uid://xtvjxondy70e" path="res://area/2 dino jungle/act 1/environment/04Spiral.tscn" id="8_y6qf8"]
@@ -45,7 +44,6 @@
 [ext_resource type="Curve3D" uid="uid://dp3fwc4r17a3a" path="res://area/2 dino jungle/act 1/environment/path/CavePath.tres" id="28_t1ofp"]
 [ext_resource type="Resource" uid="uid://dj5jss65sqknh" path="res://area/2 dino jungle/act 1/camera/DinoApatos1Cam.tres" id="29_eqruc"]
 [ext_resource type="Resource" uid="uid://b5xjurtovabtm" path="res://area/2 dino jungle/act 1/camera/LogCam.tres" id="29_jpgcf"]
-[ext_resource type="Resource" uid="uid://cqri86jjwylkn" path="res://area/2 dino jungle/act 1/camera/SpiralCam1.tres" id="29_omkni"]
 [ext_resource type="Curve3D" uid="uid://2b3j33hmgtp5" path="res://area/2 dino jungle/act 1/environment/path/CaveRightPath.tres" id="29_uuyxq"]
 [ext_resource type="Resource" uid="uid://bda1eev4fi2xe" path="res://area/2 dino jungle/act 1/camera/DinoApatos2Cam.tres" id="30_gtpto"]
 [ext_resource type="Resource" uid="uid://bdivp7ogd7b3y" path="res://area/2 dino jungle/act 1/camera/SpiralCamEnd.tres" id="30_ju7m7"]
@@ -62,7 +60,6 @@
 [ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="35_oqyu5"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="35_vf0rg"]
 [ext_resource type="Material" uid="uid://d0klutkn8da67" path="res://area/2 dino jungle/data/material/Water.tres" id="36_7bv1x"]
-[ext_resource type="PackedScene" uid="uid://bqikfuweybrc6" path="res://area/2 dino jungle/data/BGM.tscn" id="36_8otvo"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="36_8t574"]
 [ext_resource type="Resource" uid="uid://77eiif6gvg8g" path="res://area/2 dino jungle/act 1/camera/DinoCrossingCam.tres" id="36_hewn5"]
 [ext_resource type="Resource" uid="uid://cnhb6111uxifw" path="res://area/2 dino jungle/act 1/camera/ChaseReverseCam.tres" id="36_mti58"]
@@ -101,6 +98,8 @@
 [ext_resource type="Curve3D" uid="uid://dkof5hnvrvbuu" path="res://area/2 dino jungle/act 1/environment/path/EndTopPath.tres" id="81_vy7ml"]
 [ext_resource type="PackedScene" uid="uid://6cdlojevxvu7" path="res://area/2 dino jungle/act 1/completion/CompletionDemo.gltf" id="89_i1ci7"]
 [ext_resource type="Curve3D" path="res://area/2 dino jungle/act 1/environment/path/FeedingTunnelIslandJumpPath.tres" id="91_mavbd"]
+[ext_resource type="AudioStream" uid="uid://tjq8v1nvh7i7" path="res://sound/ost/adventure disc/5 The Wicked Wild.mp3" id="95_tbflj"]
+[ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="96_ubg5c"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ibe76"]
 size = Vector3(20, 20, 5)
@@ -340,9 +339,6 @@ size = Vector3(8, 10, 15)
 [sub_resource type="BoxShape3D" id="BoxShape3D_hyom4"]
 size = Vector3(5.72754, 10.5288, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_xaffb"]
-size = Vector3(15.1752, 29.3977, 18.1023)
-
 [sub_resource type="Gradient" id="Gradient_4ngna"]
 offsets = PackedFloat32Array(0, 0.0465116, 0.914634, 1)
 colors = PackedColorArray(0, 0, 0, 1, 0.028, 0, 0.06, 1, 0.95, 0.94525, 0.9025, 1, 1, 1, 1, 1)
@@ -551,8 +547,6 @@ shape = SubResource("BoxShape3D_ibe76")
 startEnabled = true
 
 [node name="02River" parent="Visuals" instance=ExtResource("6_51sf7")]
-
-[node name="02RiverReverse" parent="Visuals" instance=ExtResource("7_h6ywe")]
 
 [node name="03Cave" parent="Visuals" instance=ExtResource("7_fyuv1")]
 
@@ -1032,7 +1026,6 @@ path = NodePath("../../../../Path/CavePath")
 [node name="Camera" type="Node3D" parent="Trigger/Object/CaveRejoinTrigger"]
 transform = Transform3D(0.999884, 0, 0.0152704, 0, 1, 0, -0.0152704, 0, 0.999884, -0.112183, 0.0325928, 0.0930786)
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("37_lloeo")
 previousSettings = ExtResource("37_lloeo")
 
@@ -1113,7 +1106,6 @@ affectCamera = false
 
 [node name="Camera" type="Node3D" parent="Trigger/Object/LogAutomationTrigger"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("23_pnpt3")
 previousSettings = ExtResource("34_qb2qj")
 
@@ -1200,10 +1192,11 @@ forceConsistentHeight = true
 [node name="Camera" type="Node3D" parent="Trigger/Object/Apatos1/ActivateTrigger"]
 transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 29.1186, -20.5381, 11.5186)
 script = ExtResource("36_8t574")
+transitionTime = 0.0
 deactivationTransitionTime = 0.5
-UpdateEveryFrame = true
 settings = ExtResource("28_7w0ww")
 previousSettings = ExtResource("29_eqruc")
+UpdateEveryFrame = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Apatos1/ActivateTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1253,7 +1246,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10352e-05, 30, -6)
 [node name="Camera" type="Node3D" parent="Trigger/Object/Apatos2/RecenterTrigger"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("30_gtpto")
 previousSettings = ExtResource("37_lloeo")
 
@@ -1698,7 +1690,6 @@ transform = Transform3D(0.752691, 0, -0.658374, 0, 1, 0, 0.658374, 0, 0.752691, 
 [node name="Cam" type="Node3D" parent="Trigger/Object/IslandRecenterTrigger/StartTrigger"]
 transform = Transform3D(0.990212, 0, 0.13957, 0, 1, 0, -0.13957, 0, 0.990212, 0.234131, 0.16922, 5.67874)
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("47_q66r8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/IslandRecenterTrigger/StartTrigger"]
@@ -1769,8 +1760,7 @@ OneShot = true
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/ChaseCam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
-transitionType = 1
+transitionType = 2
 settings = ExtResource("35_ib3lh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/ChaseCam"]
@@ -1784,8 +1774,7 @@ transform = Transform3D(-1, -1.51808e-08, -8.60946e-08, 0, 0.984808, -0.173648, 
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/ChaseReverseCam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
-transitionType = 1
+transitionType = 2
 enableInputBlending = true
 settings = ExtResource("36_mti58")
 
@@ -1801,11 +1790,10 @@ transform = Transform3D(-0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, -0.984808
 [node name="Camera" type="Node3D" parent="Trigger/Camera/ChaseStaticCam"]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 0.999999, 0, -1.04308e-07, 0, 1, 0.0419121, 2.7, 18.8021)
 script = ExtResource("36_8t574")
-transitionTime = 0.5
-transitionType = 1
-UpdateEveryFrame = true
+transitionType = 2
 enableInputBlending = true
 settings = ExtResource("28_7w0ww")
+UpdateEveryFrame = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/ChaseStaticCam"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1819,7 +1807,6 @@ transform = Transform3D(-0.087156, 0, -0.996195, 0, 1, 0, 0.996195, 0, -0.087156
 [node name="Camera" type="Node3D" parent="Trigger/Camera/ChaseFollowCam"]
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, -1.04308e-07, 0, 1, -0.779327, 2.7, 18.8776)
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("37_wq224")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/ChaseFollowCam"]
@@ -1833,7 +1820,6 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -154.6
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Chase2Cam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("35_ib3lh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Chase2Cam"]
@@ -1848,10 +1834,9 @@ transform = Transform3D(-0.71877, 0, -0.695248, 0, 1, 0, 0.695248, 0, -0.71877, 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/ChaseStatic2Cam"]
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, -1.49012e-07, 0, 1, -9.50684, -0.727667, 14.5464)
 script = ExtResource("36_8t574")
-transitionTime = 0.5
-transitionType = 1
-UpdateEveryFrame = true
+transitionType = 2
 settings = ExtResource("28_7w0ww")
+UpdateEveryFrame = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/ChaseStatic2Cam"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1863,7 +1848,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -362.8
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/CaveCam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("37_lloeo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/CaveCam"]
@@ -1877,7 +1861,6 @@ transform = Transform3D(-0.999079, 0, -0.0429044, 0, 1, 0, 0.0429044, 0, -0.9990
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/CaveLeftCam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("27_aqrt3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/CaveLeftCam"]
@@ -1891,7 +1874,6 @@ transform = Transform3D(-0.991538, 0, -0.129817, 0, 1, 0, 0.129817, 0, -0.991538
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/CaveRightCam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("27_h0ugs")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/CaveRightCam"]
@@ -1905,9 +1887,8 @@ transform = Transform3D(-0.944325, 0, 0.329015, 0, 1, 0, -0.329015, 0, -0.944325
 [node name="Camera" type="Node3D" parent="Trigger/Camera/SpiralCam1"]
 transform = Transform3D(-0.975312, 0, 0.220834, 0, 1, 0, -0.220834, 0, -0.975312, -2.34045, -1.30722, 10.6233)
 script = ExtResource("36_8t574")
-transitionTime = 0.5
-transitionType = 1
-settings = ExtResource("29_omkni")
+transitionType = 2
+settings = ExtResource("28_7w0ww")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SpiralCam1"]
 shape = SubResource("SphereShape3D_quiap")
@@ -1919,7 +1900,8 @@ transform = Transform3D(-0.978267, 0, 0.207348, 0, 1, 0, -0.207348, 0, -0.978267
 [node name="Camera" type="Node3D" parent="Trigger/Camera/SpiralCam2"]
 transform = Transform3D(0.999999, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 0.999999, 4.79718, -8.70001, 0.355835)
 script = ExtResource("36_8t574")
-settings = ExtResource("29_omkni")
+transitionTime = 0.0
+settings = ExtResource("28_7w0ww")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SpiralCam2"]
 shape = SubResource("SphereShape3D_quiap")
@@ -1941,7 +1923,6 @@ transform = Transform3D(-0.920723, 0, -0.390217, 0, 1, 0, 0.390217, 0, -0.920723
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/CaveExitCam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("34_qb2qj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/CaveExitCam"]
@@ -1954,7 +1935,6 @@ transform = Transform3D(-0.698416, 0, 0.715693, 0, 1, 0, -0.715693, 0, -0.698416
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/LogWallCam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("35_mtslr")
 previousSettings = ExtResource("34_qb2qj")
 
@@ -1970,7 +1950,6 @@ transform = Transform3D(-0.698416, 0, 0.715693, 0, 1, 0, -0.715693, 0, -0.698416
 [node name="Camera" type="Node3D" parent="Trigger/Camera/DinoCrossingCam"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("36_hewn5")
 previousSettings = ExtResource("35_mtslr")
 
@@ -1986,7 +1965,6 @@ transform = Transform3D(0.397148, 0, 0.917755, 0, 1, 0, -0.917755, 0, 0.397148, 
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/LogCam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("29_jpgcf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/LogCam"]
@@ -2001,7 +1979,6 @@ transform = Transform3D(-0.663926, 0, 0.747798, 0, 1, 0, -0.747798, 0, -0.663926
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/FlyingPotCam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("38_j47cl")
 previousSettings = ExtResource("36_hewn5")
 
@@ -2017,7 +1994,6 @@ transform = Transform3D(-0.986856, 0, -0.161604, 0, 1, 0, 0.161604, 0, -0.986856
 [node name="Camera" type="Node3D" parent="Trigger/Camera/DinoCrossingCam2"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("36_hewn5")
 previousSettings = ExtResource("29_eqruc")
 
@@ -2033,7 +2009,6 @@ transform = Transform3D(-0.0993197, 0, -0.995056, 0, 1, 0, 0.995056, 0, -0.09931
 [node name="Camera" type="Node3D" parent="Trigger/Camera/SidleCam"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("44_d1e8a")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SidleCam"]
@@ -2047,7 +2022,6 @@ transform = Transform3D(-0.981084, 0, -0.193584, 0, 1, 0, 0.193584, 0, -0.981084
 [node name="Camera" type="Node3D" parent="Trigger/Camera/FeedingTunnelCam"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("37_lloeo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/FeedingTunnelCam"]
@@ -2062,7 +2036,6 @@ transform = Transform3D(0.998279, 0, -0.0586443, 0, 1, 0, 0.0586443, 0, 0.998279
 
 [node name="Cam" type="Node3D" parent="Trigger/Camera/DinoFeedingRocksBitesCam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("52_tpulw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/DinoFeedingRocksBitesCam"]
@@ -2078,7 +2051,6 @@ transform = Transform3D(0.590071, 0, -0.807352, 0, 1, 0, 0.807352, 0, 0.590071, 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/BackstepWallCam"]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("45_r78fw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/BackstepWallCam"]
@@ -2093,7 +2065,6 @@ transform = Transform3D(-0.515038, 0, -0.857167, 0, 1, 0, 0.857167, 0, -0.515038
 
 [node name="Cam" type="Node3D" parent="Trigger/Camera/FirstEndIslandCamWall"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("48_brq7k")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/FirstEndIslandCamWall"]
@@ -2120,7 +2091,6 @@ transform = Transform3D(-0.981084, 0, -0.193584, 0, 1, 0, 0.193584, 0, -0.981084
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/EndIslandCam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("46_oc3qf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/EndIslandCam"]
@@ -2134,7 +2104,6 @@ transform = Transform3D(-0.239177, 0, -0.970976, 0, 1, 0, 0.970976, 0, -0.239177
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/EndFollowCam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("47_cd0o2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/EndFollowCam"]
@@ -2148,7 +2117,6 @@ transform = Transform3D(0.946436, 0, -0.322894, 0, 1, 0, 0.322894, 0, 0.946436, 
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/EndCam"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 settings = ExtResource("47_6j2j6")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/EndCam"]
@@ -2162,7 +2130,6 @@ transform = Transform3D(-0.315368, 0, 0.94897, 0, 1, 0, -0.94897, 0, -0.315368, 
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/EndFollowCam2"]
 script = ExtResource("36_8t574")
-transitionTime = 0.5
 deactivationTransitionTime = 0.2
 settings = ExtResource("47_cd0o2")
 
@@ -2183,28 +2150,6 @@ reflectionRenderer = NodePath("../../../../PlanarReflectionRenderer")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Reflection/LowerReflection"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
-
-[node name="Lighting" type="Node3D" parent="Trigger"]
-
-[node name="CavernEnter" type="Area3D" parent="Trigger/Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -570.943, -244.376, -1096.23)
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Lighting/CavernEnter"]
-transform = Transform3D(0.996154, 0, 0.0876252, 0, 1, 0, -0.0876252, 0, 0.996154, 67.4445, -35.9698, -11.246)
-shape = SubResource("BoxShape3D_xaffb")
-
-[node name="CavernExit" type="Area3D" parent="Trigger/Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -570.943, -244.376, -1096.23)
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Lighting/CavernExit"]
-transform = Transform3D(0.711989, 0, 0.70219, 0, 1, 0, -0.70219, 0, 0.711989, -60.9026, -27.0661, 37.8761)
-shape = SubResource("BoxShape3D_xaffb")
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Lighting/CavernExit"]
-transform = Transform3D(0.711989, 0, 0.70219, 0, 1, 0, -0.70219, 0, 0.711989, 106.569, -27.0661, -31.0936)
-shape = SubResource("BoxShape3D_xaffb")
 
 [node name="Path" type="Node3D" parent="."]
 
@@ -2307,7 +2252,14 @@ curve = ExtResource("81_vy7ml")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_f4b5x")
 
-[node name="BGM" parent="." instance=ExtResource("36_8otvo")]
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("95_tbflj")
+bus = &"BGM"
+script = ExtResource("96_ubg5c")
+startPosition = 0.5
+loopStartPosition = 24.213
+loopEndPosition = 164.51
+isStageMusic = true
 
 [node name="CompletionDemo" parent="." instance=ExtResource("89_i1ci7")]
 
@@ -2420,8 +2372,6 @@ reflectionMaterials = [ExtResource("36_7bv1x")]
 [connection signal="Deactivated" from="Trigger/Object/IslandRecenterTrigger/StartTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/IslandRecenterTrigger/StopTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/IslandRecenterTrigger/StopTrigger" to="Trigger/Object/IslandRecenterTrigger/Lockout" method="Deactivate"]
-[connection signal="area_entered" from="Trigger/Lighting/CavernEnter" to="Lighting/CaveLightEvent/PlayerLight" method="_on_cavern_enter_area_entered"]
-[connection signal="area_entered" from="Trigger/Lighting/CavernExit" to="Lighting/CaveLightEvent/PlayerLight" method="_on_cavern_exit_area_entered"]
 
 [editable path="Trigger/Object/DinoParaGroup/DinoPara1"]
 [editable path="Trigger/Object/DinoParaGroup/DinoPara2"]

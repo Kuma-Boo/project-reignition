@@ -5,27 +5,50 @@ namespace Project.Gameplay;
 
 public partial class LandState : PlayerState
 {
-	[Export]
-	private PlayerState runState;
-	[Export]
-	private PlayerState idleState;
-	[Export]
-	private PlayerState backstepState;
+	[Export] private PlayerState runState;
+	[Export] private PlayerState idleState;
+	[Export] private PlayerState fallState;
+	[Export] private PlayerState crouchState;
+	[Export] private PlayerState slideState;
+	[Export] private PlayerState backstepState;
+
+	private float knockbackTimer;
+	private readonly float KnockbackLandingLength = .3f;
 
 	public override void EnterState()
 	{
+		if (Player.IsLockoutActive &&
+			Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnLand))
+		{
+			Player.RemoveLockoutData(Player.ActiveLockoutData);
+		}
+
 		Player.VerticalSpeed = 0;
 		Player.UpdateOrientation();
 		Player.SnapToGround();
 		Player.DisableAccelerationJump = false;
 		Player.Lockon.IsMonitoring = false;
-		Player.Animator.LandingAnimation();
+
+		if (Player.IsKnockback)
+		{
+			knockbackTimer = KnockbackLandingLength;
+			Player.MoveSpeed = 0;
+			Player.IsKnockback = false;
+			Player.AllowLandingSkills = false;
+			Player.Animator.StopHurt(true);
+			Player.Animator.ResetState(0);
+		}
+		else
+		{
+			knockbackTimer = 0;
+			Player.Animator.LandingAnimation();
+		}
 	}
 
 	public override void ExitState()
 	{
 		// Snap to ground
-		if (Player.IsGrinding)
+		if (Player.IsGrindRailActive)
 			return;
 
 		// IsStomping is set false here so LandingSkills can check against it
@@ -38,6 +61,16 @@ public partial class LandState : PlayerState
 	public override PlayerState ProcessPhysics()
 	{
 		Player.CheckGround();
+
+		if (!Mathf.IsZeroApprox(knockbackTimer))
+		{
+			knockbackTimer = Mathf.MoveToward(knockbackTimer, 0, PhysicsManager.physicsDelta);
+			return null;
+		}
+
+		if (!Player.IsOnGround)
+			return fallState;
+
 		if (Player.AllowLandingSkills)
 		{
 			// Apply landing skills
@@ -46,6 +79,10 @@ public partial class LandState : PlayerState
 
 			Player.AllowLandingSkills = false;
 		}
+
+		// Allow buffering jump charge transition for responsiveness
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && Input.IsActionPressed("button_jump"))
+			return Mathf.IsZeroApprox(Player.MoveSpeed) ? crouchState : slideState;
 
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))
 			return idleState;
@@ -60,6 +97,9 @@ public partial class LandState : PlayerState
 	{
 		bool applyLandingBoost = (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompDash) && Player.IsStomping) ||
 			(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LandDash) && !Player.IsStomping);
+
+		if (Player.Controller.IsBrakeHeld())
+			applyLandingBoost = false;
 
 		if (!applyLandingBoost)
 			return;

@@ -8,6 +8,8 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class PlayerAnimator : Node3D
 {
+	[Signal] public delegate void CountdownLandingEventHandler();
+
 	private PlayerController Player;
 	public void Initialize(PlayerController player)
 	{
@@ -58,9 +60,7 @@ public partial class PlayerAnimator : Node3D
 	/// </summary>
 	public void ProcessPhysics()
 	{
-		if (!Player.IsOnGround)
-			AirAnimations();
-
+		AirAnimations();
 		UpdateVisualRotation();
 		UpdateShaderVariables();
 	}
@@ -91,7 +91,7 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(OneshotSeek, 0);
 		animationTree.Set(OneshotTransition, animation);
 
-		CancelCrouch();
+		StopCrouching(0f);
 	}
 
 	/// <summary>
@@ -362,6 +362,7 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(BackflipTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(StompTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
 	public void JumpAnimation()
@@ -396,9 +397,11 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName BackflipTrigger = "parameters/air_tree/backflip_trigger/request";
 	public void BackflipAnimation()
 	{
+		IsFallTransitionEnabled = false;
 		animationTree.Set(AirStateTransition, FallState);
 		animationTree.Set(BackflipTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		animationTree.Set(BrakeTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(FallTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
 	private readonly StringName SplashJumpTrigger = "parameters/air_tree/splash_jump_trigger/request";
@@ -420,6 +423,12 @@ public partial class PlayerAnimator : Node3D
 
 	private void AirAnimations()
 	{
+		if (Player.IsOnGround)
+			return;
+
+		if (Player.ExternalController != null)
+			return;
+
 		Player.Effect.IsEmittingStepDust = false;
 		animationTree.Set(GroundTransition, DisabledConstant);
 
@@ -436,42 +445,46 @@ public partial class PlayerAnimator : Node3D
 
 	private readonly StringName CrouchStateStart = "crouch-start";
 	private readonly StringName CrouchStateStop = "crouch-stop";
+	private readonly StringName ChargeStationaryStateStart = "charge-stationary-start";
+	private readonly StringName ChargeStationaryStateStop = "charge-stationary-stop";
 
 	private readonly StringName SlideStateStart = "slide-start";
 	private readonly StringName SlideStateStop = "slide-stop";
+	private readonly StringName ChargeSlideStateStart = "charge-slide-start";
+	private readonly StringName ChargeSlideStateStop = "charge-slide-stop";
 	private readonly StringName CrouchTransition = "parameters/ground_tree/crouch_transition/transition_request";
 	private readonly StringName CurrentCrouchState = "parameters/ground_tree/crouch_transition/current_state";
 
-	public bool IsCrouchingActive => (StringName)animationTree.Get(CurrentCrouchState) == EnabledConstant;
-	public bool IsSlideTransitionActive => CrouchStatePlayback.GetCurrentNode() == SlideStateStart;
+	public bool IsSlideTransitionActive => CrouchStatePlayback.GetCurrentNode() == SlideStateStart || CrouchStatePlayback.GetCurrentNode() == ChargeSlideStateStart;
 
 	public void StartSliding()
 	{
 		crouchTransition.XfadeTime = .05;
-		CrouchStatePlayback.Travel(SlideStateStart);
+		CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+			ChargeSlideStateStart : SlideStateStart);
 		animationTree.Set(CrouchTransition, EnabledConstant);
 	}
 
-	public void SlideToCrouch() => CrouchStatePlayback.Travel(SlideStateStop);
+	public void SlideToCrouch() => CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+		ChargeSlideStateStop : SlideStateStop);
 	public void StartCrouching()
 	{
-		if (IsCrouchingActive)
-			return;
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ||
+			!CrouchStatePlayback.GetCurrentNode().ToString().Contains("charge-slide"))
+		{
+			CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+				ChargeStationaryStateStart : CrouchStateStart);
+		}
 
-		CrouchStatePlayback.Travel(CrouchStateStart);
 		crouchTransition.XfadeTime = .1;
 		animationTree.Set(CrouchTransition, EnabledConstant);
 	}
 
-	public void StopCrouching(float transitionTime = 0.0f)
+	public void StopCrouching(float transitionTime = 0.2f)
 	{
 		crouchTransition.XfadeTime = transitionTime;
-		CrouchStatePlayback.Travel(CrouchStateStop);
-	}
-
-	private void CancelCrouch()
-	{
-		crouchTransition.XfadeTime = 0.0;
+		CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+			ChargeStationaryStateStop : CrouchStateStop);
 		animationTree.Set(CrouchTransition, DisabledConstant);
 	}
 
@@ -479,8 +492,7 @@ public partial class PlayerAnimator : Node3D
 	{
 		// Limit blending to the time remaining in current animation
 		float max = CrouchStatePlayback.GetCurrentLength() - CrouchStatePlayback.GetCurrentPlayPosition();
-		crouchTransition.XfadeTime = Mathf.Clamp(0.2, 0, max);
-		animationTree.Set(CrouchTransition, DisabledConstant);
+		StopCrouching(Mathf.Clamp(0.2f, 0f, max));
 	}
 
 	public void StartMotionBlur() => bodyMesh.MaterialOverride = blurOverrideMaterial;
@@ -530,11 +542,13 @@ public partial class PlayerAnimator : Node3D
 	/// </summary>
 	private void UpdateVisualRotation()
 	{
-		if (Player.IsGrindstepping) return; // Use the same angle as the grindrail
+		if (Player.IsGrindstepping)
+			return;
 
-		// Don't update directions when externally controlled or on launchers
+		if (Player.IsLaunching)
+			return;
+
 		float targetRotation = Player.MovementAngle;
-
 		if (Player.ExternalController != null)
 			targetRotation = ExternalAngle;
 		else if (Player.IsHomingAttacking) // Face target
@@ -750,8 +764,25 @@ public partial class PlayerAnimator : Node3D
 
 	#region Hurt
 	private readonly StringName HurtTrigger = "parameters/hurt_trigger/request";
-	public void StartHurt() => animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-	public void StopHurt() => animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+	private readonly StringName HurtBackwardState = "hurt-backward-start";
+	private readonly StringName HurtForwardStartState = "hurt-forward-start";
+	private readonly StringName HurtForwardStopState = "hurt-forward-stop";
+	private readonly StringName HurtPlayback = "parameters/hurt_state/playback";
+	private AnimationNodeStateMachinePlayback HurtStatePlayback => animationTree.Get(HurtPlayback).Obj as AnimationNodeStateMachinePlayback;
+
+	public void StartHurt(bool forwardLaunch)
+	{
+		HurtStatePlayback.Start(forwardLaunch ? HurtForwardStartState : HurtBackwardState);
+		animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	public void StopHurt(bool useTransition)
+	{
+		if (useTransition)
+			HurtStatePlayback.Travel(HurtForwardStopState);
+		else
+			animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+	}
 	#endregion
 
 	#region Spin

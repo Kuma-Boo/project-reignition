@@ -1,0 +1,1628 @@
+[gd_scene load_steps=23 format=3 uid="uid://csklj2c6xwiet"]
+
+[ext_resource type="PackedScene" uid="uid://r2f87qdkkpvm" path="res://area/2 dino jungle/act 2/Static.tscn" id="1_agbjm"]
+[ext_resource type="Resource" uid="uid://dbuyuheakyob0" path="res://resource/level data/dinosaur jungle/Act2Chain.tres" id="2_ekgjy"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_h5dtx"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="4_j1ctu"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="5_odbdt"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="6_n407h"]
+[ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="7_8yqcs"]
+[ext_resource type="Resource" uid="uid://u1ajlm54dtyt" path="res://area/2 dino jungle/act 1/camera/DinoCrossingFlyingPotCam.tres" id="8_i1gnx"]
+[ext_resource type="PackedScene" uid="uid://dermptym044v8" path="res://object/enemy/majin/data/dino jungle/RedMajin.tscn" id="9_a1rcp"]
+[ext_resource type="PackedScene" uid="uid://dhb5ti1oiktuk" path="res://area/2 dino jungle/object/Cactus.tscn" id="10_7m87i"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="11_kt6yb"]
+[ext_resource type="PackedScene" uid="uid://8imymng7so3h" path="res://object/enemy/majin/data/dino jungle/BlueMajin.tscn" id="12_yb8bu"]
+[ext_resource type="PackedScene" uid="uid://dj1cswbo7iqnb" path="res://area/2 dino jungle/object/platform/LotusPlatform.tscn" id="13_2i2tt"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="14_epid6"]
+[ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="15_qbnc6"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="16_cqekf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x626i"]
+size = Vector3(20, 20, 5)
+
+[sub_resource type="Curve" id="Curve_3pjpb"]
+min_value = -3.0
+max_value = 0.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -2.1), -4.64161, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_vpwoc"]
+min_value = -0.5
+max_value = 0.0
+_data = [Vector2(0, 0), 0.0, -1.91313, 0, 0, Vector2(0.5, -0.4), 0.0, 0.0, 0, 0, Vector2(1, -0.25), 1.10506, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_lkk1j"]
+min_value = -1.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -0.431672), -1.28906, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vm0wt"]
+size = Vector3(15, 20, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7im1x"]
+size = Vector3(15, 20, 5)
+
+[node name="Stage" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_agbjm")]
+Data = ExtResource("2_ekgjy")
+metadata/_edit_group_ = true
+
+[node name="02RiverReverse" parent="Static/Visuals" index="1"]
+startEnabled = false
+
+[node name="03Cave" parent="Static/Visuals" index="2"]
+startEnabled = false
+
+[node name="03CaveSky" parent="Static/Visuals" index="3"]
+startEnabled = false
+
+[node name="05Crossing" parent="Static/Visuals" index="6"]
+startEnabled = true
+
+[node name="06CavernEntrance" parent="Static/Visuals" index="7"]
+startEnabled = true
+
+[node name="Head" parent="Static/Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" index="1"]
+transform = Transform3D(-0.984788, -0.173647, -0.0063563, 0.00640272, 0.000292879, -0.999979, 0.173645, -0.984808, 0.000823389, -4.24603, -18.4884, 3.43817)
+
+[node name="Head" parent="Static/Trigger/Object/Apatos2/Event" index="1"]
+transform = Transform3D(0.999979, -9.23872e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -9.23872e-07, 1, 0.000292879, 6.10352e-05, 19.7418, 38.5259)
+
+[node name="Skeleton3D" parent="Static/Trigger/Object/DinoParaGroup/DinoPara1/DinoParaRoot" index="0"]
+bones/0/rotation = Quaternion(-0.755882, -1.5337e-08, -1.5337e-08, 0.654708)
+bones/1/rotation = Quaternion(0.0715426, 2.2151e-11, 2.13815e-08, 0.997438)
+bones/3/rotation = Quaternion(0.954904, 1.78626e-08, 4.04656e-08, -0.296914)
+bones/4/rotation = Quaternion(-0.285949, -2.46977e-09, -1.37883e-07, 0.958245)
+bones/7/rotation = Quaternion(-0.29286, 4.03649e-07, -3.44362e-08, 0.956155)
+bones/8/rotation = Quaternion(0.621122, -1.14779e-07, 2.11389e-08, 0.783714)
+bones/10/rotation = Quaternion(-0.683858, -1.70603e-08, -6.72718e-08, 0.729616)
+bones/11/rotation = Quaternion(0.28767, 3.05702e-07, 3.35709e-08, 0.95773)
+bones/12/rotation = Quaternion(-0.683857, -1.3686e-08, 1.85714e-08, 0.729616)
+bones/13/rotation = Quaternion(0.287656, 4.25619e-07, 4.84677e-09, 0.957734)
+bones/15/rotation = Quaternion(0.939107, -6.78055e-08, 1.76936e-08, 0.343625)
+bones/16/rotation = Quaternion(0.941786, 6.88404e-08, 1.2379e-07, 0.336214)
+
+[node name="Head" parent="Static/Trigger/Object/DinoParaGroup/DinoPara1" index="3"]
+transform = Transform3D(1, 4.47035e-08, -4.32134e-07, -4.16082e-07, -0.185597, -0.982626, -8.9407e-08, 0.982626, -0.185597, 0.00012207, 6.40689, 8.30835)
+
+[node name="Skeleton3D" parent="Static/Trigger/Object/DinoParaGroup/DinoPara2/DinoParaRoot" index="0"]
+bones/0/rotation = Quaternion(-0.755882, -1.5337e-08, -1.5337e-08, 0.654708)
+bones/1/rotation = Quaternion(0.0715426, 2.2151e-11, 2.13815e-08, 0.997438)
+bones/3/rotation = Quaternion(0.954904, 1.78626e-08, 4.04656e-08, -0.296914)
+bones/4/rotation = Quaternion(-0.285949, -2.46977e-09, -1.37883e-07, 0.958245)
+bones/7/rotation = Quaternion(-0.29286, 4.03649e-07, -3.44362e-08, 0.956155)
+bones/8/rotation = Quaternion(0.621122, -1.14779e-07, 2.11389e-08, 0.783714)
+bones/10/rotation = Quaternion(-0.683858, -1.70603e-08, -6.72718e-08, 0.729616)
+bones/11/rotation = Quaternion(0.28767, 3.05702e-07, 3.35709e-08, 0.95773)
+bones/12/rotation = Quaternion(-0.683857, -1.3686e-08, 1.85714e-08, 0.729616)
+bones/13/rotation = Quaternion(0.287656, 4.25619e-07, 4.84677e-09, 0.957734)
+bones/15/rotation = Quaternion(0.939107, -6.78055e-08, 1.76936e-08, 0.343625)
+bones/16/rotation = Quaternion(0.941786, 6.88404e-08, 1.2379e-07, 0.336214)
+
+[node name="Head" parent="Static/Trigger/Object/DinoParaGroup/DinoPara2" index="3"]
+transform = Transform3D(1, 2.98023e-08, -4.24683e-07, -4.16082e-07, -0.185597, -0.982626, -1.19209e-07, 0.982626, -0.185597, 0, 6.40689, 8.30835)
+
+[node name="CavernBoatPathFollower" parent="Static/Path/BoatPath" index="0"]
+transform = Transform3D(0.683927, 0, -0.729551, 0, 1, 0, 0.729551, 0, 0.683927, 0, 0, 0)
+
+[node name="DemoCamera" parent="Static" index="7"]
+transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, -362, -209, -624)
+
+[node name="MainAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="MainAct"]
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, -360, -255, -966)
+metadata/_edit_lock_ = true
+
+[node name="InvisibleWall" type="StaticBody3D" parent="MainAct/SpawnPosition" groups=["wall"]]
+transform = Transform3D(0.84354, 0, 0.537066, 0, 1, 0, -0.537066, 0, 0.84354, -3.47412, 0, -3.49133)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/SpawnPosition/InvisibleWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_x626i")
+
+[node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("3_h5dtx")]
+
+[node name="Crossing" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -435, -265, -923)
+
+[node name="Rings" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(-0.414081, 0.269419, -0.869454, -0.0302956, 0.950584, 0.308987, 0.909736, 0.154286, -0.385456, 81.267, 10.3565, -39.317)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 10
+Shape = 2
+Path = NodePath("../../../Static/Path/DinoPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.7
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Crossing/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, 0, 1, 0, 0, -1.11759e-08, 1, 0, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, 0, 1, 0, 0, -1.11759e-08, 1, 0.0753784, 0.339355, -2.69061)
+
+[node name="Child03" parent="MainAct/Crossing/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, 0, 1, 0, 0, -1.11759e-08, 1, 0.128052, 0.620789, -5.40125)
+
+[node name="Child04" parent="MainAct/Crossing/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, 0, 1, 0, 0, -1.11759e-08, 1, 0.117737, 0.794434, -8.1358)
+
+[node name="Child05" parent="MainAct/Crossing/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, 0, 1, 0, 0, -1.11759e-08, 1, 0.00524902, 0.827759, -10.872)
+
+[node name="Child06" parent="MainAct/Crossing/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, 0, 1, 0, 0, -1.11759e-08, 1, -0.198853, 0.755951, -13.5914)
+
+[node name="Child07" parent="MainAct/Crossing/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, 0, 1, 0, 0, -1.11759e-08, 1, -0.454407, 0.638489, -16.276)
+
+[node name="Child08" parent="MainAct/Crossing/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, 0, 1, 0, 0, -1.11759e-08, 1, -0.736572, 0.50885, -18.9583)
+
+[node name="Child09" parent="MainAct/Crossing/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, 0, 1, 0, 0, -1.11759e-08, 1, -1.03094, 0.38147, -21.6369)
+
+[node name="Child10" parent="MainAct/Crossing/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, 0, 1, 0, 0, -1.11759e-08, 1, -1.33081, 0.261536, -24.3145)
+
+[node name="RingPearlGroup1" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 152.8, 28.3, -65.575)
+
+[node name="Ring" parent="MainAct/Crossing/RingPearlGroup1" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, -3.20142e-10, 0, -1.16415e-10, 1, 0, 1.86265e-09, 4.65661e-10, 1, 0, 0, 0)
+
+[node name="Pearls1" type="Node3D" parent="MainAct/Crossing/RingPearlGroup1"]
+transform = Transform3D(1, -7.71252e-10, 0, -1.16415e-10, 1, 0, 3.72529e-09, 9.31323e-10, 1, 0.00012207, 0.0292969, 0.000183105)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 20
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.646
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.646, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.614383, 0.199625, 0)
+
+[node name="Child03" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.522625, 0.379709, 0)
+
+[node name="Child04" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.379709, 0.522625, 0)
+
+[node name="Child05" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.199625, 0.614383, 0)
+
+[node name="Child06" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.64751e-08, 0.646, 0)
+
+[node name="Child07" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.199625, 0.614383, 0)
+
+[node name="Child08" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.379709, 0.522625, 0)
+
+[node name="Child09" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.522625, 0.379709, 0)
+
+[node name="Child10" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.614383, 0.199625, 0)
+
+[node name="Child11" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.646, -5.64751e-08, 0)
+
+[node name="Child12" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.614383, -0.199625, 0)
+
+[node name="Child13" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.522625, -0.379709, 0)
+
+[node name="Child14" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.379709, -0.522625, 0)
+
+[node name="Child15" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.199625, -0.614383, 0)
+
+[node name="Child16" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1295e-07, -0.646, 0)
+
+[node name="Child17" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.199625, -0.614383, 0)
+
+[node name="Child18" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.37971, -0.522625, 0)
+
+[node name="Child19" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.522625, -0.379709, 0)
+
+[node name="Child20" parent="MainAct/Crossing/RingPearlGroup1/Pearls1" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.614383, -0.199625, 0)
+
+[node name="Pearls2" type="Node3D" parent="MainAct/Crossing/RingPearlGroup1"]
+transform = Transform3D(1, -7.71252e-10, -1.86265e-09, -1.16415e-10, 1, 0, 3.72529e-09, 9.31323e-10, 1, 0.00012207, 0.0292969, 0.000183105)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 20
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.527
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.527, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45226, 0, 0.471869)
+
+[node name="Child03" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.23537, 0, 0.897548)
+
+[node name="Child04" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.897548, 0, 1.23537)
+
+[node name="Child05" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.471869, 0, 1.45226)
+
+[node name="Child06" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.33495e-07, 0, 1.527)
+
+[node name="Child07" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.471869, 0, 1.45226)
+
+[node name="Child08" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.897548, 0, 1.23537)
+
+[node name="Child09" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.23537, 0, 0.897548)
+
+[node name="Child10" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45226, 0, 0.471869)
+
+[node name="Child11" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.527, 0, -1.33495e-07)
+
+[node name="Child12" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45226, 0, -0.471869)
+
+[node name="Child13" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.23537, 0, -0.897548)
+
+[node name="Child14" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.897548, 0, -1.23537)
+
+[node name="Child15" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.471869, 0, -1.45226)
+
+[node name="Child16" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.66989e-07, 0, -1.527)
+
+[node name="Child17" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.471869, 0, -1.45226)
+
+[node name="Child18" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.897549, 0, -1.23537)
+
+[node name="Child19" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.23537, 0, -0.897548)
+
+[node name="Child20" parent="MainAct/Crossing/RingPearlGroup1/Pearls2" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45226, 0, -0.471869)
+
+[node name="FlyingPotRings" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.610145, 0, -0.792289, 0, 1, 0, 0.792289, 0, 0.610145, 133.851, 3.42291, -36.3929)
+
+[node name="Child01" parent="MainAct/Crossing/FlyingPotRings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/FlyingPotRings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 0, 1.375, 0)
+
+[node name="Child03" parent="MainAct/Crossing/FlyingPotRings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 0, 0, 1, 0, 2.75, 0)
+
+[node name="Child04" parent="MainAct/Crossing/FlyingPotRings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 9.31323e-10, -2.98023e-08, -2.79397e-09, 1, 4.65661e-10, 0, -4.65661e-10, 1, -6.10352e-05, 4.78604, -6.10352e-05)
+
+[node name="Child05" parent="MainAct/Crossing/FlyingPotRings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 9.31323e-10, -2.98023e-08, -2.79397e-09, 1, 4.65661e-10, 0, -4.65661e-10, 1, -0.00012207, 8.84447, -6.10352e-05)
+
+[node name="Child06" parent="MainAct/Crossing/FlyingPotRings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.86265e-09, -2.98023e-08, -7.45058e-09, 1, 4.65661e-10, 0, -4.65661e-10, 1, -0.000305176, 11.8225, -0.000183105)
+
+[node name="Child07" parent="MainAct/Crossing/FlyingPotRings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.39698e-09, -2.98023e-08, -9.31323e-09, 1, 4.65661e-10, 0, -1.39698e-09, 1, -0.000427246, 14.5988, -0.000305176)
+
+[node name="FlyingPot" parent="MainAct/Crossing" instance=ExtResource("7_8yqcs")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 133.822, 0.899994, -36.374)
+travelBounds = Vector2(2, 17)
+customCameraSettings = ExtResource("8_i1gnx")
+
+[node name="Rings2" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.782329, -0.00435713, -0.62285, 0.00764376, 0.999968, 0.00260564, 0.622819, -0.00679935, 0.782337, 139.786, 8.71957, -43.3986)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.433
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Crossing/Rings2" instance=ExtResource("5_odbdt")]
+
+[node name="Child02" parent="MainAct/Crossing/Rings2" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.433)
+
+[node name="Child03" parent="MainAct/Crossing/Rings2" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.866)
+
+[node name="Child04" parent="MainAct/Crossing/Rings2" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.299)
+
+[node name="Child05" parent="MainAct/Crossing/Rings2" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.732)
+
+[node name="Rings3" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.782329, -0.00435713, -0.62285, 0.00764376, 0.999968, 0.00260564, 0.622819, -0.00679935, 0.782337, 140.87, 12.0786, -44.819)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 4
+Shape = 0
+Orientation = 1
+Spacing = 1.1
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Crossing/Rings3" instance=ExtResource("5_odbdt")]
+
+[node name="Child02" parent="MainAct/Crossing/Rings3" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+
+[node name="Child03" parent="MainAct/Crossing/Rings3" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+
+[node name="Child04" parent="MainAct/Crossing/Rings3" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
+
+[node name="RedMajin" parent="MainAct/Crossing" instance=ExtResource("9_a1rcp")]
+transform = Transform3D(0.782329, -0.00435713, -0.62285, 0.00764376, 0.999968, 0.00260564, 0.622819, -0.00679935, 0.782337, 140.888, 9.13229, -44.7899)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 5.0
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 2.5
+rangeOverride = 30
+metadata/_edit_group_ = true
+
+[node name="Rings5" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.998198, 0, 0.0600033, 0, 1, 0, -0.0600033, 0, 0.998198, 153.369, 14.0632, -71.149)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = SubResource("Curve_3pjpb")
+
+[node name="Child01" parent="MainAct/Crossing/Rings5" instance=ExtResource("5_odbdt")]
+
+[node name="Child02" parent="MainAct/Crossing/Rings5" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.11055, -1.5)
+
+[node name="Child03" parent="MainAct/Crossing/Rings5" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.469799, -3)
+
+[node name="Child04" parent="MainAct/Crossing/Rings5" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.11915, -4.5)
+
+[node name="Child05" parent="MainAct/Crossing/Rings5" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.1, -6)
+
+[node name="Rings6" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.994606, -0.0733481, 0.0733483, 0, 0.707107, 0.707108, -0.10373, -0.703292, 0.703293, 152.547, 1.38461, -83.835)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = SubResource("Curve_vpwoc")
+
+[node name="Child01" parent="MainAct/Crossing/Rings6" instance=ExtResource("5_odbdt")]
+
+[node name="Child02" parent="MainAct/Crossing/Rings6" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.31957, -1.5)
+
+[node name="Child03" parent="MainAct/Crossing/Rings6" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, -3)
+
+[node name="Child04" parent="MainAct/Crossing/Rings6" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.394067, -4.5)
+
+[node name="Child05" parent="MainAct/Crossing/Rings6" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, -6)
+
+[node name="Pearls3" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.984946, 0.0640724, 0.16055, -0.0570541, 0.997219, -0.0479537, -0.163176, 0.0380717, 0.985863, 151.14, -2.38226, -96.3508)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.97
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/Pearls3" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/Pearls3" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, 0.570152)
+
+[node name="Child03" parent="MainAct/Crossing/Pearls3" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299746, 0, 0.922525)
+
+[node name="Child04" parent="MainAct/Crossing/Pearls3" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299747, 0, 0.922525)
+
+[node name="Child05" parent="MainAct/Crossing/Pearls3" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784747, 0, 0.570152)
+
+[node name="Child06" parent="MainAct/Crossing/Pearls3" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.97, 0, -8.48001e-08)
+
+[node name="Child07" parent="MainAct/Crossing/Pearls3" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784746, 0, -0.570152)
+
+[node name="Child08" parent="MainAct/Crossing/Pearls3" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299746, 0, -0.922525)
+
+[node name="Child09" parent="MainAct/Crossing/Pearls3" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299747, 0, -0.922525)
+
+[node name="Child10" parent="MainAct/Crossing/Pearls3" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, -0.570151)
+
+[node name="Pearls4" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.984946, 0.0640724, 0.16055, -0.0570541, 0.997219, -0.0479537, -0.163176, 0.0380717, 0.985863, 151.283, -0.15451, -96.2659)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.97
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/Pearls4" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/Pearls4" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, 0.570152)
+
+[node name="Child03" parent="MainAct/Crossing/Pearls4" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299746, 0, 0.922525)
+
+[node name="Child04" parent="MainAct/Crossing/Pearls4" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299747, 0, 0.922525)
+
+[node name="Child05" parent="MainAct/Crossing/Pearls4" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784747, 0, 0.570152)
+
+[node name="Child06" parent="MainAct/Crossing/Pearls4" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.97, 0, -8.48001e-08)
+
+[node name="Child07" parent="MainAct/Crossing/Pearls4" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784746, 0, -0.570152)
+
+[node name="Child08" parent="MainAct/Crossing/Pearls4" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299746, 0, -0.922525)
+
+[node name="Child09" parent="MainAct/Crossing/Pearls4" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299747, 0, -0.922525)
+
+[node name="Child10" parent="MainAct/Crossing/Pearls4" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, -0.570151)
+
+[node name="Pearls5" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.984946, 0.0640724, 0.16055, -0.0570541, 0.997219, -0.0479537, -0.163176, 0.0380717, 0.985863, 151.419, 1.96811, -96.1849)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.97
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/Pearls5" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/Pearls5" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, 0.570152)
+
+[node name="Child03" parent="MainAct/Crossing/Pearls5" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299746, 0, 0.922525)
+
+[node name="Child04" parent="MainAct/Crossing/Pearls5" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299747, 0, 0.922525)
+
+[node name="Child05" parent="MainAct/Crossing/Pearls5" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784747, 0, 0.570152)
+
+[node name="Child06" parent="MainAct/Crossing/Pearls5" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.97, 0, -8.48001e-08)
+
+[node name="Child07" parent="MainAct/Crossing/Pearls5" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784746, 0, -0.570152)
+
+[node name="Child08" parent="MainAct/Crossing/Pearls5" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299746, 0, -0.922525)
+
+[node name="Child09" parent="MainAct/Crossing/Pearls5" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299747, 0, -0.922525)
+
+[node name="Child10" parent="MainAct/Crossing/Pearls5" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, -0.570151)
+
+[node name="Pearls6" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.984946, 0.0640724, 0.16055, -0.0570541, 0.997219, -0.0479537, -0.163176, 0.0380717, 0.985863, 151.558, 4.12671, -96.1024)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.97
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/Pearls6" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/Pearls6" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, 0.570152)
+
+[node name="Child03" parent="MainAct/Crossing/Pearls6" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299746, 0, 0.922525)
+
+[node name="Child04" parent="MainAct/Crossing/Pearls6" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299747, 0, 0.922525)
+
+[node name="Child05" parent="MainAct/Crossing/Pearls6" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784747, 0, 0.570152)
+
+[node name="Child06" parent="MainAct/Crossing/Pearls6" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.97, 0, -8.48001e-08)
+
+[node name="Child07" parent="MainAct/Crossing/Pearls6" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784746, 0, -0.570152)
+
+[node name="Child08" parent="MainAct/Crossing/Pearls6" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299746, 0, -0.922525)
+
+[node name="Child09" parent="MainAct/Crossing/Pearls6" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299747, 0, -0.922525)
+
+[node name="Child10" parent="MainAct/Crossing/Pearls6" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, -0.570151)
+
+[node name="Pearls7" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.984946, 0.0640724, 0.16055, -0.0570541, 0.997219, -0.0479537, -0.163176, 0.0380717, 0.985863, 151.698, 6.3074, -96.0192)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 0.97
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/Pearls7" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/Pearls7" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, 0.570152)
+
+[node name="Child03" parent="MainAct/Crossing/Pearls7" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299746, 0, 0.922525)
+
+[node name="Child04" parent="MainAct/Crossing/Pearls7" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299747, 0, 0.922525)
+
+[node name="Child05" parent="MainAct/Crossing/Pearls7" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784747, 0, 0.570152)
+
+[node name="Child06" parent="MainAct/Crossing/Pearls7" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.97, 0, -8.48001e-08)
+
+[node name="Child07" parent="MainAct/Crossing/Pearls7" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.784746, 0, -0.570152)
+
+[node name="Child08" parent="MainAct/Crossing/Pearls7" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.299746, 0, -0.922525)
+
+[node name="Child09" parent="MainAct/Crossing/Pearls7" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.299747, 0, -0.922525)
+
+[node name="Child10" parent="MainAct/Crossing/Pearls7" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.784747, 0, -0.570151)
+
+[node name="Rings8" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.984946, 0.0640724, 0.16055, -0.0570541, 0.997219, -0.0479537, -0.163176, 0.0380717, 0.985863, 151.14, -2.37997, -96.3508)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 5
+Shape = 0
+Orientation = 1
+Spacing = 2.192
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Crossing/Rings8" instance=ExtResource("5_odbdt")]
+
+[node name="Child02" parent="MainAct/Crossing/Rings8" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.192, 0)
+
+[node name="Child03" parent="MainAct/Crossing/Rings8" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.384, 0)
+
+[node name="Child04" parent="MainAct/Crossing/Rings8" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.576, 0)
+
+[node name="Child05" parent="MainAct/Crossing/Rings8" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.768, 0)
+
+[node name="Rings9" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.986358, 0.0235409, 0.162926, -0.0554175, 0.979439, 0.193981, -0.15501, -0.200364, 0.967382, 148.63, -3.10559, -110.287)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 12
+Shape = 0
+Orientation = 0
+Spacing = 2.017
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Crossing/Rings9" instance=ExtResource("5_odbdt")]
+
+[node name="Child02" parent="MainAct/Crossing/Rings9" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.017)
+
+[node name="Child03" parent="MainAct/Crossing/Rings9" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.034)
+
+[node name="Child04" parent="MainAct/Crossing/Rings9" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.051)
+
+[node name="Child05" parent="MainAct/Crossing/Rings9" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.068)
+
+[node name="Child06" parent="MainAct/Crossing/Rings9" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.085)
+
+[node name="Child07" parent="MainAct/Crossing/Rings9" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.102)
+
+[node name="Child08" parent="MainAct/Crossing/Rings9" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.119)
+
+[node name="Child09" parent="MainAct/Crossing/Rings9" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.136)
+
+[node name="Child10" parent="MainAct/Crossing/Rings9" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 0, 1, -1.49012e-08, -1.49012e-08, -1.49012e-08, 1, 3.05176e-05, -1.52588e-05, -18.1531)
+
+[node name="Child11" parent="MainAct/Crossing/Rings9" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.17)
+
+[node name="Child12" parent="MainAct/Crossing/Rings9" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.187)
+
+[node name="Pearls8" type="Node3D" parent="MainAct/Crossing/Rings9"]
+transform = Transform3D(1, 1.86265e-09, -1.49012e-08, 0, 1, -1.49012e-08, -1.49012e-08, -1.49012e-08, 1, 0, 0, 0)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 12
+Shape = 0
+Orientation = 0
+Spacing = 2.017
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Crossing/Rings9/Pearls8" instance=ExtResource("6_n407h")]
+
+[node name="Child02" parent="MainAct/Crossing/Rings9/Pearls8" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.017)
+
+[node name="Child03" parent="MainAct/Crossing/Rings9/Pearls8" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.034)
+
+[node name="Child04" parent="MainAct/Crossing/Rings9/Pearls8" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.051)
+
+[node name="Child05" parent="MainAct/Crossing/Rings9/Pearls8" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.068)
+
+[node name="Child06" parent="MainAct/Crossing/Rings9/Pearls8" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.085)
+
+[node name="Child07" parent="MainAct/Crossing/Rings9/Pearls8" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.102)
+
+[node name="Child08" parent="MainAct/Crossing/Rings9/Pearls8" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.119)
+
+[node name="Child09" parent="MainAct/Crossing/Rings9/Pearls8" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.136)
+
+[node name="Child10" parent="MainAct/Crossing/Rings9/Pearls8" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18.153)
+
+[node name="Child11" parent="MainAct/Crossing/Rings9/Pearls8" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.17)
+
+[node name="Child12" parent="MainAct/Crossing/Rings9/Pearls8" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.187)
+
+[node name="Rings10" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 140.546, -11.2, -154.381)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 6
+Shape = 1
+Orientation = 0
+"Ring Size" = 2.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/Rings10" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/Rings10" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1.73205)
+
+[node name="Child03" parent="MainAct/Crossing/Rings10" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1.73205)
+
+[node name="Child04" parent="MainAct/Crossing/Rings10" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -1.74846e-07)
+
+[node name="Child05" parent="MainAct/Crossing/Rings10" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1.73205)
+
+[node name="Child06" parent="MainAct/Crossing/Rings10" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1.73205)
+
+[node name="Rings11" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 136.234, -10, -167.709)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 11
+Shape = 1
+Orientation = 0
+"Ring Size" = 2.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/Rings11" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/Rings11" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.68251, 0, 1.08128)
+
+[node name="Child03" parent="MainAct/Crossing/Rings11" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.83083, 0, 1.81926)
+
+[node name="Child04" parent="MainAct/Crossing/Rings11" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28463, 0, 1.97964)
+
+[node name="Child05" parent="MainAct/Crossing/Rings11" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30972, 0, 1.5115)
+
+[node name="Child06" parent="MainAct/Crossing/Rings11" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91899, 0, 0.563465)
+
+[node name="Child07" parent="MainAct/Crossing/Rings11" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91899, 0, -0.563466)
+
+[node name="Child08" parent="MainAct/Crossing/Rings11" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.30972, 0, -1.5115)
+
+[node name="Child09" parent="MainAct/Crossing/Rings11" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.284629, 0, -1.97964)
+
+[node name="Child10" parent="MainAct/Crossing/Rings11" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.830831, 0, -1.81926)
+
+[node name="Child11" parent="MainAct/Crossing/Rings11" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.68251, 0, -1.08128)
+
+[node name="Rings12" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.994725, 0.0574838, 0.0849665, -0.0574534, 0.998345, -0.00280479, -0.0849874, -0.0020916, 0.99638, 124.653, -11.2005, -171.597)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 6
+Shape = 1
+Orientation = 0
+"Ring Size" = 2.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/Rings12" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/Rings12" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1.73205)
+
+[node name="Child03" parent="MainAct/Crossing/Rings12" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1.73205)
+
+[node name="Child04" parent="MainAct/Crossing/Rings12" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -1.74846e-07)
+
+[node name="Child05" parent="MainAct/Crossing/Rings12" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1.73205)
+
+[node name="Child06" parent="MainAct/Crossing/Rings12" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1.73205)
+
+[node name="Rings13" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.850759, 0.0574837, -0.522403, -0.0478894, 0.998344, 0.0318647, 0.52337, -0.00209164, 0.852103, 104.261, -10, -184.208)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 2.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/Rings13" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/Rings13" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, 1.17557)
+
+[node name="Child03" parent="MainAct/Crossing/Rings13" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.618034, 0, 1.90211)
+
+[node name="Child04" parent="MainAct/Crossing/Rings13" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.618034, 0, 1.90211)
+
+[node name="Child05" parent="MainAct/Crossing/Rings13" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.61803, 0, 1.17557)
+
+[node name="Child06" parent="MainAct/Crossing/Rings13" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -1.74846e-07)
+
+[node name="Child07" parent="MainAct/Crossing/Rings13" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.61803, 0, -1.17557)
+
+[node name="Child08" parent="MainAct/Crossing/Rings13" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.618034, 0, -1.90211)
+
+[node name="Child09" parent="MainAct/Crossing/Rings13" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.618035, 0, -1.90211)
+
+[node name="Child10" parent="MainAct/Crossing/Rings13" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61803, 0, -1.17557)
+
+[node name="Rings14" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.408482, 0.0115445, 0.912694, -0.0861793, 0.995941, 0.0259727, -0.908689, -0.0892646, 0.407819, 79.116, -7.30823, -193.874)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Crossing/Rings14" instance=ExtResource("5_odbdt")]
+
+[node name="Child02" parent="MainAct/Crossing/Rings14" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="MainAct/Crossing/Rings14" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="MainAct/Crossing/Rings14" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="MainAct/Crossing/Rings14" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Cactus1" parent="MainAct/Crossing" instance=ExtResource("10_7m87i")]
+transform = Transform3D(0.387642, 0.235839, 1.12714, 0.0376687, 0.981165, -0.193674, -0.921041, 0.139386, 0.466459, 55.9681, -4.33813, -204.483)
+
+[node name="Cactus2" parent="MainAct/Crossing" instance=ExtResource("10_7m87i")]
+transform = Transform3D(0.387642, -0.0639212, 1.14977, 0.0376687, 0.997859, 0.0668696, -0.921041, 0.0139076, 0.486641, 49.3169, -4.23022, -207.555)
+
+[node name="RichRingPearlGroup1" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.389124, 0, 0.921185, 0, 1, 0, -0.921185, 0, 0.389124, 58.2841, -2.10059, -203.416)
+
+[node name="RichRing" parent="MainAct/Crossing/RichRingPearlGroup1" instance=ExtResource("11_kt6yb")]
+
+[node name="Pearls" type="Node3D" parent="MainAct/Crossing/RichRingPearlGroup1"]
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 15
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.913545, 0.406737, 0)
+
+[node name="Child03" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.669131, 0.743145, 0)
+
+[node name="Child04" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0.951057, 0)
+
+[node name="Child05" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.104529, 0.994522, 0)
+
+[node name="Child06" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.866025, 0)
+
+[node name="Child07" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0.587785, 0)
+
+[node name="Child08" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.978148, 0.207912, 0)
+
+[node name="Child09" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.978148, -0.207912, 0)
+
+[node name="Child10" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, -0.587785, 0)
+
+[node name="Child11" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.866026, 0)
+
+[node name="Child12" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.104528, -0.994522, 0)
+
+[node name="Child13" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, -0.951056, 0)
+
+[node name="Child14" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.669131, -0.743145, 0)
+
+[node name="Child15" parent="MainAct/Crossing/RichRingPearlGroup1/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.913546, -0.406736, 0)
+
+[node name="RichRingPearlGroup2" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.416455, 0, 0.909156, 0, 1, 0, -0.909156, 0, 0.416455, 52.7196, -1.57578, -206.028)
+
+[node name="RichRing" parent="MainAct/Crossing/RichRingPearlGroup2" instance=ExtResource("11_kt6yb")]
+
+[node name="Pearls" type="Node3D" parent="MainAct/Crossing/RichRingPearlGroup2"]
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 15
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.913545, 0.406737, 0)
+
+[node name="Child03" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.669131, 0.743145, 0)
+
+[node name="Child04" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0.951057, 0)
+
+[node name="Child05" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.104529, 0.994522, 0)
+
+[node name="Child06" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.866025, 0)
+
+[node name="Child07" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0.587785, 0)
+
+[node name="Child08" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.978148, 0.207912, 0)
+
+[node name="Child09" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.978148, -0.207912, 0)
+
+[node name="Child10" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, -0.587785, 0)
+
+[node name="Child11" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.866026, 0)
+
+[node name="Child12" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.104528, -0.994522, 0)
+
+[node name="Child13" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, -0.951056, 0)
+
+[node name="Child14" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.669131, -0.743145, 0)
+
+[node name="Child15" parent="MainAct/Crossing/RichRingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.913546, -0.406736, 0)
+
+[node name="RichRingPearlGroup3" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.403066, 0, 0.915171, 0, 1, 0, -0.915171, 0, 0.403066, 46.796, -1.99423, -208.912)
+
+[node name="RichRing" parent="MainAct/Crossing/RichRingPearlGroup3" instance=ExtResource("11_kt6yb")]
+
+[node name="Pearls" type="Node3D" parent="MainAct/Crossing/RichRingPearlGroup3"]
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 15
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.913545, 0.406737, 0)
+
+[node name="Child03" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.669131, 0.743145, 0)
+
+[node name="Child04" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0.951057, 0)
+
+[node name="Child05" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.104529, 0.994522, 0)
+
+[node name="Child06" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.866025, 0)
+
+[node name="Child07" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0.587785, 0)
+
+[node name="Child08" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.978148, 0.207912, 0)
+
+[node name="Child09" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.978148, -0.207912, 0)
+
+[node name="Child10" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, -0.587785, 0)
+
+[node name="Child11" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.866026, 0)
+
+[node name="Child12" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.104528, -0.994522, 0)
+
+[node name="Child13" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, -0.951056, 0)
+
+[node name="Child14" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.669131, -0.743145, 0)
+
+[node name="Child15" parent="MainAct/Crossing/RichRingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.913546, -0.406736, 0)
+
+[node name="Rings15" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(0.419452, 0.107484, 0.901392, 0, 0.992965, -0.118404, -0.907777, 0.0496648, 0.416501, 16.4459, 2.5043, -223.087)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = SubResource("Curve_lkk1j")
+
+[node name="Child01" parent="MainAct/Crossing/Rings15" instance=ExtResource("5_odbdt")]
+
+[node name="Child02" parent="MainAct/Crossing/Rings15" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00702417, -1.5)
+
+[node name="Child03" parent="MainAct/Crossing/Rings15" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0547038, -3)
+
+[node name="Child04" parent="MainAct/Crossing/Rings15" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.182949, -4.5)
+
+[node name="Child05" parent="MainAct/Crossing/Rings15" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.431672, -6)
+
+[node name="MajinRingGroup1" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(-0.669001, 0, 0.743261, 0, 1, 0, -0.743261, 0, -0.669001, -1.43021, -2, -220.974)
+
+[node name="BlueMajin" parent="MainAct/Crossing/MajinRingGroup1" instance=ExtResource("12_yb8bu")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.5, 0, -3.05176e-05)
+rangeOverride = 30
+
+[node name="Rings" type="Node3D" parent="MainAct/Crossing/MajinRingGroup1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 4
+Shape = 0
+Orientation = 1
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Crossing/MajinRingGroup1/Rings" instance=ExtResource("5_odbdt")]
+
+[node name="Child02" parent="MainAct/Crossing/MajinRingGroup1/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Child03" parent="MainAct/Crossing/MajinRingGroup1/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Child04" parent="MainAct/Crossing/MajinRingGroup1/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="MajinRingGroup2" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(-0.669001, 0, 0.743261, 0, 1, 0, -0.743261, 0, -0.669001, -4.74512, -2, -217.183)
+
+[node name="BlueMajin" parent="MainAct/Crossing/MajinRingGroup2" instance=ExtResource("12_yb8bu")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+rangeOverride = 30
+
+[node name="Rings" type="Node3D" parent="MainAct/Crossing/MajinRingGroup2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 4
+Shape = 0
+Orientation = 1
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Crossing/MajinRingGroup2/Rings" instance=ExtResource("5_odbdt")]
+
+[node name="Child02" parent="MainAct/Crossing/MajinRingGroup2/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Child03" parent="MainAct/Crossing/MajinRingGroup2/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Child04" parent="MainAct/Crossing/MajinRingGroup2/Rings" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="RingPearlGroup2" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0437622, -2.30005, -225.805)
+
+[node name="Ring" parent="MainAct/Crossing/RingPearlGroup2" instance=ExtResource("5_odbdt")]
+
+[node name="Pearls" type="Node3D" parent="MainAct/Crossing/RingPearlGroup2"]
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/RingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/RingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, 0.587785)
+
+[node name="Child03" parent="MainAct/Crossing/RingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, 0.951057)
+
+[node name="Child04" parent="MainAct/Crossing/RingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, 0.951057)
+
+[node name="Child05" parent="MainAct/Crossing/RingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, 0.587785)
+
+[node name="Child06" parent="MainAct/Crossing/RingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -8.74228e-08)
+
+[node name="Child07" parent="MainAct/Crossing/RingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, -0.587785)
+
+[node name="Child08" parent="MainAct/Crossing/RingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, -0.951057)
+
+[node name="Child09" parent="MainAct/Crossing/RingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, -0.951056)
+
+[node name="Child10" parent="MainAct/Crossing/RingPearlGroup2/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, -0.587785)
+
+[node name="RingPearlGroup3" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2085, -2.30005, -221.234)
+
+[node name="Ring" parent="MainAct/Crossing/RingPearlGroup3" instance=ExtResource("5_odbdt")]
+
+[node name="Pearls" type="Node3D" parent="MainAct/Crossing/RingPearlGroup3"]
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/RingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/RingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, 0.587785)
+
+[node name="Child03" parent="MainAct/Crossing/RingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, 0.951057)
+
+[node name="Child04" parent="MainAct/Crossing/RingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, 0.951057)
+
+[node name="Child05" parent="MainAct/Crossing/RingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, 0.587785)
+
+[node name="Child06" parent="MainAct/Crossing/RingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -8.74228e-08)
+
+[node name="Child07" parent="MainAct/Crossing/RingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, -0.587785)
+
+[node name="Child08" parent="MainAct/Crossing/RingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, -0.951057)
+
+[node name="Child09" parent="MainAct/Crossing/RingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, -0.951056)
+
+[node name="Child10" parent="MainAct/Crossing/RingPearlGroup3/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, -0.587785)
+
+[node name="RingPearlGroup4" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.96777, -2.30005, -221.371)
+
+[node name="Ring" parent="MainAct/Crossing/RingPearlGroup4" instance=ExtResource("5_odbdt")]
+
+[node name="Pearls" type="Node3D" parent="MainAct/Crossing/RingPearlGroup4"]
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/RingPearlGroup4/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/RingPearlGroup4/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, 0.587785)
+
+[node name="Child03" parent="MainAct/Crossing/RingPearlGroup4/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, 0.951057)
+
+[node name="Child04" parent="MainAct/Crossing/RingPearlGroup4/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, 0.951057)
+
+[node name="Child05" parent="MainAct/Crossing/RingPearlGroup4/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, 0.587785)
+
+[node name="Child06" parent="MainAct/Crossing/RingPearlGroup4/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -8.74228e-08)
+
+[node name="Child07" parent="MainAct/Crossing/RingPearlGroup4/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, -0.587785)
+
+[node name="Child08" parent="MainAct/Crossing/RingPearlGroup4/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, -0.951057)
+
+[node name="Child09" parent="MainAct/Crossing/RingPearlGroup4/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, -0.951056)
+
+[node name="Child10" parent="MainAct/Crossing/RingPearlGroup4/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, -0.587785)
+
+[node name="RingPearlGroup5" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.16779, -2.30005, -217.671)
+
+[node name="Ring" parent="MainAct/Crossing/RingPearlGroup5" instance=ExtResource("5_odbdt")]
+
+[node name="Pearls" type="Node3D" parent="MainAct/Crossing/RingPearlGroup5"]
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/RingPearlGroup5/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/RingPearlGroup5/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, 0.587785)
+
+[node name="Child03" parent="MainAct/Crossing/RingPearlGroup5/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, 0.951057)
+
+[node name="Child04" parent="MainAct/Crossing/RingPearlGroup5/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, 0.951057)
+
+[node name="Child05" parent="MainAct/Crossing/RingPearlGroup5/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, 0.587785)
+
+[node name="Child06" parent="MainAct/Crossing/RingPearlGroup5/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -8.74228e-08)
+
+[node name="Child07" parent="MainAct/Crossing/RingPearlGroup5/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, -0.587785)
+
+[node name="Child08" parent="MainAct/Crossing/RingPearlGroup5/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, -0.951057)
+
+[node name="Child09" parent="MainAct/Crossing/RingPearlGroup5/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, -0.951056)
+
+[node name="Child10" parent="MainAct/Crossing/RingPearlGroup5/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, -0.587785)
+
+[node name="RingPearlGroup6" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.16779, -2.30005, -218.671)
+
+[node name="Ring" parent="MainAct/Crossing/RingPearlGroup6" instance=ExtResource("5_odbdt")]
+
+[node name="Pearls" type="Node3D" parent="MainAct/Crossing/RingPearlGroup6"]
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/RingPearlGroup6/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/RingPearlGroup6/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, 0.587785)
+
+[node name="Child03" parent="MainAct/Crossing/RingPearlGroup6/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, 0.951057)
+
+[node name="Child04" parent="MainAct/Crossing/RingPearlGroup6/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, 0.951057)
+
+[node name="Child05" parent="MainAct/Crossing/RingPearlGroup6/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, 0.587785)
+
+[node name="Child06" parent="MainAct/Crossing/RingPearlGroup6/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -8.74228e-08)
+
+[node name="Child07" parent="MainAct/Crossing/RingPearlGroup6/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, -0.587785)
+
+[node name="Child08" parent="MainAct/Crossing/RingPearlGroup6/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, -0.951057)
+
+[node name="Child09" parent="MainAct/Crossing/RingPearlGroup6/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, -0.951056)
+
+[node name="Child10" parent="MainAct/Crossing/RingPearlGroup6/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, -0.587785)
+
+[node name="RingPearlGroup7" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.16779, -2.30005, -213.671)
+
+[node name="Ring" parent="MainAct/Crossing/RingPearlGroup7" instance=ExtResource("5_odbdt")]
+
+[node name="Pearls" type="Node3D" parent="MainAct/Crossing/RingPearlGroup7"]
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/RingPearlGroup7/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/RingPearlGroup7/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, 0.587785)
+
+[node name="Child03" parent="MainAct/Crossing/RingPearlGroup7/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, 0.951057)
+
+[node name="Child04" parent="MainAct/Crossing/RingPearlGroup7/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, 0.951057)
+
+[node name="Child05" parent="MainAct/Crossing/RingPearlGroup7/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, 0.587785)
+
+[node name="Child06" parent="MainAct/Crossing/RingPearlGroup7/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -8.74228e-08)
+
+[node name="Child07" parent="MainAct/Crossing/RingPearlGroup7/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, -0.587785)
+
+[node name="Child08" parent="MainAct/Crossing/RingPearlGroup7/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, -0.951057)
+
+[node name="Child09" parent="MainAct/Crossing/RingPearlGroup7/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, -0.951056)
+
+[node name="Child10" parent="MainAct/Crossing/RingPearlGroup7/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, -0.587785)
+
+[node name="RingPearlGroup8" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.1678, -2.30005, -212.671)
+
+[node name="Ring" parent="MainAct/Crossing/RingPearlGroup8" instance=ExtResource("5_odbdt")]
+
+[node name="Pearls" type="Node3D" parent="MainAct/Crossing/RingPearlGroup8"]
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("6_n407h")
+Amount = 10
+Shape = 1
+Orientation = 0
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="MainAct/Crossing/RingPearlGroup8/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="MainAct/Crossing/RingPearlGroup8/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, 0.587785)
+
+[node name="Child03" parent="MainAct/Crossing/RingPearlGroup8/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, 0.951057)
+
+[node name="Child04" parent="MainAct/Crossing/RingPearlGroup8/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, 0.951057)
+
+[node name="Child05" parent="MainAct/Crossing/RingPearlGroup8/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, 0.587785)
+
+[node name="Child06" parent="MainAct/Crossing/RingPearlGroup8/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -8.74228e-08)
+
+[node name="Child07" parent="MainAct/Crossing/RingPearlGroup8/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0, -0.587785)
+
+[node name="Child08" parent="MainAct/Crossing/RingPearlGroup8/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0, -0.951057)
+
+[node name="Child09" parent="MainAct/Crossing/RingPearlGroup8/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0, -0.951056)
+
+[node name="Child10" parent="MainAct/Crossing/RingPearlGroup8/Pearls" instance=ExtResource("6_n407h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0, -0.587785)
+
+[node name="Rings22" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(-0.557745, -0.317632, 0.766831, 0, 0.92388, 0.382683, -0.830012, 0.21344, -0.515289, -27.8345, -8.03189, -204.813)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/DinoPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Crossing/Rings22" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, -1.49012e-08, 1, 2.23517e-08, -5.96046e-08, -2.23517e-08, 1, 0, -3.05176e-05, -0.000183105)
+
+[node name="Child02" parent="MainAct/Crossing/Rings22" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, -1.49012e-08, 1, 2.23517e-08, -5.96046e-08, -2.23517e-08, 1, -0.0606689, -0.163788, -1.48193)
+
+[node name="Child03" parent="MainAct/Crossing/Rings22" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, -1.49012e-08, 1, 2.23517e-08, -5.96046e-08, -2.23517e-08, 1, -0.119995, -0.302216, -2.96164)
+
+[node name="Child04" parent="MainAct/Crossing/Rings22" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, -1.49012e-08, 1, 2.23517e-08, -5.96046e-08, -2.23517e-08, 1, -0.179565, -0.400665, -4.44519)
+
+[node name="Child05" parent="MainAct/Crossing/Rings22" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, -1.49012e-08, 1, 2.23517e-08, -5.96046e-08, -2.23517e-08, 1, -0.241455, -0.437073, -5.92346)
+
+[node name="Rings23" type="Node3D" parent="MainAct/Crossing"]
+transform = Transform3D(-0.557745, -0.317632, 0.766831, 0, 0.92388, 0.382683, -0.830012, 0.21344, -0.515289, -26.2672, -8.04672, -202.493)
+script = ExtResource("4_j1ctu")
+Generate = false
+Source = ExtResource("5_odbdt")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../Static/Path/DinoPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Crossing/Rings23" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, -1.49012e-08, 1, 2.23517e-08, -5.96046e-08, -2.23517e-08, 1, 0, -3.05176e-05, -0.000152588)
+
+[node name="Child02" parent="MainAct/Crossing/Rings23" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, -1.49012e-08, 1, 2.23517e-08, -5.96046e-08, -2.23517e-08, 1, -0.060791, -0.160095, -1.48642)
+
+[node name="Child03" parent="MainAct/Crossing/Rings23" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, -1.49012e-08, 1, 2.23517e-08, -5.96046e-08, -2.23517e-08, 1, -0.120117, -0.295044, -2.96979)
+
+[node name="Child04" parent="MainAct/Crossing/Rings23" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, -1.49012e-08, 1, 2.23517e-08, -5.96046e-08, -2.23517e-08, 1, -0.179688, -0.389404, -4.4487)
+
+[node name="Child05" parent="MainAct/Crossing/Rings23" instance=ExtResource("5_odbdt")]
+transform = Transform3D(1, 1.49012e-08, -2.98023e-08, -1.49012e-08, 1, 2.23517e-08, -5.96046e-08, -2.23517e-08, 1, -0.241455, -0.421539, -5.91953)
+
+[node name="LotusPlatform" parent="MainAct/Crossing" instance=ExtResource("13_2i2tt")]
+transform = Transform3D(1.36647, 0, 0, 0, 1, 0, 0, 0, 1.29253, -47.4252, -26.6595, -186.664)
+
+[node name="JumpTrigger" parent="MainAct/Crossing" instance=ExtResource("14_epid6")]
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, -37.6409, -13.5, -199.065)
+"Enter Mode" = 0
+
+[node name="Jump" type="Node3D" parent="MainAct/Crossing/JumpTrigger"]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 3.65186, -0.0422363, 15.7546)
+script = ExtResource("15_qbnc6")
+jumpHeight = 4.0
+autoAlign = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Crossing/JumpTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_vm0wt")
+
+[node name="Goal" parent="MainAct/Crossing" instance=ExtResource("16_cqekf")]
+transform = Transform3D(-0.565615, 0, 0.82467, 0, 1, 0, -0.82467, 0, -0.565615, -47.082, -4.5, -187.7)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Crossing/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00012207, 0, -0.259949)
+shape = SubResource("BoxShape3D_7im1x")
+
+[editable path="Static"]
+[editable path="Static/Visuals/03CaveSky"]
+[editable path="Static/Trigger/Object/DinoParaGroup/DinoPara1"]
+[editable path="Static/Trigger/Object/DinoParaGroup/DinoPara2"]

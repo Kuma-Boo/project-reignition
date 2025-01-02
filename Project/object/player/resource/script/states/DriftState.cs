@@ -11,13 +11,19 @@ public partial class DriftState : PlayerState
 	[Export]
 	private PlayerState runState;
 	[Export]
+	private PlayerState crouchState;
+	[Export]
+	private PlayerState slideState;
+	[Export]
 	private PlayerState jumpState;
 	[Export]
 	private LockoutResource LockoutSettings { get; set; }
 
 	public DriftTrigger Trigger { get; set; }
 
-	private float entrySpeed; // Entry speed
+	/// <summary> Did the player enter the drift trigger charging a jump? </summary>
+	private bool isChargingJump;
+	private float entrySpeed;
 	private enum DriftStatus
 	{
 		Processing, // Drift is being processed
@@ -55,12 +61,16 @@ public partial class DriftState : PlayerState
 		Player.Effect.StartDust();
 		Player.Animator.ExternalAngle = Player.MovementAngle;
 		Player.Animator.StartDrift(Trigger.IsRightTurn);
+		Player.AttackState = PlayerController.AttackStates.Weak;
+
+		isChargingJump = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && Input.IsActionPressed("button_jump");
 	}
 
 	public override void ExitState()
 	{
 		Player.Effect.StopDust();
 		Player.Skills.IsSpeedBreakEnabled = true;
+		Player.AttackState = PlayerController.AttackStates.None;
 
 		if (driftStatus != DriftStatus.JumpFail)
 			Player.Animator.ResetState(.4f);
@@ -71,13 +81,28 @@ public partial class DriftState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
+		if (UpdateChargeJump())
+			return jumpState;
+
 		if (driftAnimationTimer > 0)
 		{
+			if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+				Player.Controller.IsJumpBufferActive)
+			{
+				Player.Controller.ResetJumpBuffer();
+				return jumpState;
+			}
+
 			driftAnimationTimer = Mathf.MoveToward(driftAnimationTimer, 0, PhysicsManager.physicsDelta);
 			Player.ApplyMovement();
 
 			if (Mathf.IsZeroApprox(driftAnimationTimer))
-				return driftStatus == DriftStatus.Success ? runState : idleState;
+			{
+				if (isChargingJump)
+					return driftStatus == DriftStatus.Success ? slideState : crouchState;
+				else
+					return driftStatus == DriftStatus.Success ? runState : idleState;
+			}
 
 			return null;
 		}
@@ -85,14 +110,11 @@ public partial class DriftState : PlayerState
 		if (driftStatus == DriftStatus.Success)
 			SuccessfulDrift();
 
-		if (Player.Controller.IsJumpBufferActive) // Allow character to jump out of drift at any time
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+			Player.Controller.IsJumpBufferActive) // Allow character to jump out of drift at any time
 		{
 			Player.Controller.ResetJumpBuffer();
-			driftStatus = DriftStatus.JumpFail;
-			Trigger.ApplyBonus(false);
-
-			Player.MoveSpeed = driftVelocity.Length(); // Keep speed from drift
-			Player.Animator.ResetState(0f);
+			StartJumpFail();
 			return jumpState;
 		}
 
@@ -100,6 +122,38 @@ public partial class DriftState : PlayerState
 		float distance = Player.GlobalPosition.Flatten().DistanceTo(targetPosition.Flatten());
 		ProcessEntranceMovement(targetPosition, distance);
 		return null;
+	}
+
+	private void StartJumpFail()
+	{
+		driftStatus = DriftStatus.JumpFail;
+		Trigger.ApplyBonus(false);
+
+		Player.MoveSpeed = driftVelocity.Length(); // Keep speed from drift
+		Player.Animator.ResetState(0f);
+	}
+
+	/// <summary> Returns true if the player releases a charge jump. </summary>
+	private bool UpdateChargeJump()
+	{
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+			Input.IsActionPressed("button_jump"))
+		{
+			isChargingJump = true;
+			Player.Skills.ChargeJump();
+			return false;
+		}
+
+		if (!isChargingJump)
+			return false;
+
+		if (Mathf.IsZeroApprox(driftAnimationTimer)) // Entry Jump
+		{
+			StartJumpFail();
+			return true;
+		}
+
+		return true;
 	}
 
 	private void ProcessEntranceMovement(Vector3 targetPosition, float distance)
@@ -166,6 +220,7 @@ public partial class DriftState : PlayerState
 	private void SuccessfulDrift()
 	{
 		driftAnimationTimer = LaunchAnimationLength;
+		Player.MoveSpeed = Player.Stats.GroundSettings.Speed;
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Trigger.ExitDirection, Player.PathFollower.Up());
 		Player.MovementAngle -= Mathf.Pi * .1f * Player.Controller.InputHorizontal;
 		Player.AddLockoutData(LockoutSettings); // Apply lockout

@@ -1,0 +1,2049 @@
+[gd_scene load_steps=45 format=3 uid="uid://drn4sdpegneyc"]
+
+[ext_resource type="PackedScene" uid="uid://sap50uvjitma" path="res://area/3 evil foundry/act 3/Static.tscn" id="1_j3frc"]
+[ext_resource type="Resource" uid="uid://65ue45m7uvt1" path="res://resource/level data/evil foundry/Act3Chain.tres" id="2_2meg0"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_3bm4r"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_7x3hx"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="5_q35jl"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="6_m0t1x"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="7_qo73h"]
+[ext_resource type="PackedScene" uid="uid://cswcb8bgweh5m" path="res://area/3 evil foundry/object/scrap/ScrapMachineShort.tscn" id="8_g2g3w"]
+[ext_resource type="PackedScene" uid="uid://bdxneanubmcid" path="res://area/3 evil foundry/object/GasTank.tscn" id="9_7jrhr"]
+[ext_resource type="PackedScene" uid="uid://c3b6ygc13a33j" path="res://object/enemy/majin/data/evil foundry/GreenMajin.tscn" id="10_4deqf"]
+[ext_resource type="PackedScene" uid="uid://bn8lomrei46ap" path="res://area/3 evil foundry/object/Door.tscn" id="14_bgo6m"]
+[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="15_lahxt"]
+[ext_resource type="PackedScene" uid="uid://det4s2txdn4ka" path="res://area/3 evil foundry/object/Furnace.tscn" id="16_gpivp"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="17_x8d6c"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="20_hvdiw"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="20_mvqlt"]
+[ext_resource type="PackedScene" uid="uid://c10y5dhqmy3gk" path="res://area/3 evil foundry/object/FanBroken.tscn" id="21_5eri8"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="22_ejl76"]
+[ext_resource type="PackedScene" uid="uid://61g1iq7igxi" path="res://area/3 evil foundry/object/Fan.tscn" id="23_dvean"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="34_ldn7q"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="38_ql0hq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jgghs"]
+size = Vector3(20, 20, 2.5)
+
+[sub_resource type="Animation" id="Animation_gcx7a"]
+resource_name = "event"
+length = 4.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Door1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Door2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Door3")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Door4")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Door5")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Door6")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(2.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Door7")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(3.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Door8")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(3.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kdbck"]
+_data = {
+"event": SubResource("Animation_gcx7a")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fie53"]
+size = Vector3(20, 20, 2.5)
+
+[sub_resource type="Curve" id="Curve_1mfn5"]
+min_value = -0.5
+max_value = 0.5
+_data = [Vector2(0, 1.49012e-08), 0.0, -2.78677, 0, 0, Vector2(0.3, -0.5), 0.0, 0.0, 0, 0, Vector2(0.7, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), -2.86481, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Animation" id="Animation_6u27i"]
+resource_name = "event"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Door1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Door2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Door4")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_f4d8d"]
+_data = {
+"event": SubResource("Animation_6u27i")
+}
+
+[sub_resource type="Curve" id="Curve_qkbya"]
+min_value = -0.5
+max_value = 0.5
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.245955, -0.5), 0.0, 0.0, 0, 0, Vector2(0.750809, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_h1f8d"]
+max_value = 2.0
+_data = [Vector2(0, 0), 0.0, 7.71808, 0, 0, Vector2(0.5, 1.6), 0.439154, 0.439154, 0, 0, Vector2(1, 1), -4.26821, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_c6e1l"]
+min_value = -1.0
+max_value = 0.0
+_data = [Vector2(0, 1.49012e-08), 0.0, -0.5, 0, 1, Vector2(1, -0.5), -0.5, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_xhu4x"]
+max_value = 2.0
+_data = [Vector2(0, 0), 0.0, 5.57639, 0, 0, Vector2(1, 1.6), -1.45278, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_11vpl"]
+min_value = -2.0
+_data = [Vector2(0, 0), 0.0, -8.56113, 0, 0, Vector2(1, -1.6), 2.581, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_0t8x7"]
+min_value = -0.5
+max_value = 0.5
+_data = [Vector2(0, 0), 0.0, -2.07433, 0, 0, Vector2(0.3, -0.5), 0.0, 0.0, 0, 0, Vector2(0.7, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), -2.91811, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_v2yde"]
+min_value = -0.5
+max_value = 0.5
+_data = [Vector2(0, 7.45058e-09), 0.0, 3.20418, 0, 0, Vector2(0.2, 0.5), 0.0, 0.0, 0, 0, Vector2(0.4, -0.5), 0.0, 0.0, 0, 0, Vector2(0.6, 0.5), 0.0, 0.0, 0, 0, Vector2(0.8, -0.5), 0.0, 0.0, 0, 0, Vector2(1, 7.45058e-09), 3.83086, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="Curve" id="Curve_l2t0t"]
+max_value = 2.0
+_data = [Vector2(0, 0), 0.0, 0.530692, 0, 0, Vector2(1, 2), 5.19664, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_ngh7h"]
+_data = [Vector2(0, 0.1), 0.0, 8.09784, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.35203, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_s14ln"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_ngh7h")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5wkrc"]
+lifetime_randomness = 0.5
+emission_shape_scale = Vector3(2, 0, 3)
+emission_shape = 3
+emission_box_extents = Vector3(1, 0, 1)
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 5.0
+color = Color(1, 0.639216, 0.180392, 0.313726)
+alpha_curve = SubResource("CurveTexture_s14ln")
+
+[sub_resource type="QuadMesh" id="QuadMesh_2xv43"]
+material = ExtResource("20_mvqlt")
+
+[sub_resource type="Animation" id="Animation_kf55r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Furnace/Furnace:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Furnace:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_hygex"]
+resource_name = "event"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Furnace/Furnace:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.5, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Furnace:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 1.5708)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Dust1")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ik3yp"]
+_data = {
+"RESET": SubResource("Animation_kf55r"),
+"event": SubResource("Animation_hygex")
+}
+
+[sub_resource type="Curve" id="Curve_e8ggv"]
+min_value = -1.0
+_data = [Vector2(0, 1.49012e-08), 0.0, -3.13914, 0, 0, Vector2(0.3, -0.6), 0.0, 0.0, 0, 0, Vector2(0.7, 0.6), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), -3.29018, 0.0, 0, 0]
+point_count = 4
+
+[node name="Stage" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_j3frc")]
+Data = ExtResource("2_2meg0")
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="DemoCamera" parent="Static" index="5"]
+transform = Transform3D(-3.61999e-06, 0, 1, 0, 1, 0, -1, 0, -3.61999e-06, -100, -24, -120)
+
+[node name="RingChainAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="RingChainAct"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -162, -30, -120)
+
+[node name="CharacterSpawn" parent="RingChainAct/SpawnPosition" instance=ExtResource("3_3bm4r")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="RingChainAct" groups=["wall"]]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -160, -30, -120)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RingChainAct/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jgghs")
+
+[node name="CullingMap" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -162, -30, -120)
+visible = false
+
+[node name="FurnaceHall-L" parent="CullingMap" instance=ExtResource("4_7x3hx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -152, 0, 0)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CullingMap/FurnaceHall-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jgghs")
+
+[node name="MainHall-U" parent="CullingMap" instance=ExtResource("4_7x3hx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -216, 0, 60)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CullingMap/MainHall-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jgghs")
+
+[node name="FanHall-L" parent="CullingMap" instance=ExtResource("4_7x3hx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -273, -22.5, 80)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CullingMap/FanHall-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jgghs")
+
+[node name="FurnaceHall-U" parent="CullingMap" instance=ExtResource("4_7x3hx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -400, -27.8, 65)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CullingMap/FurnaceHall-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jgghs")
+
+[node name="LavaCrossway-L" parent="CullingMap" instance=ExtResource("4_7x3hx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -468, -33, -30)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CullingMap/LavaCrossway-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jgghs")
+
+[node name="FanHall-U" parent="CullingMap" instance=ExtResource("4_7x3hx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -508, -30, -220)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CullingMap/FanHall-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jgghs")
+
+[node name="MainHall" type="Node3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -162, -30, -120)
+script = ExtResource("5_q35jl")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Rings1" type="Node3D" parent="MainHall"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, 24)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainHall/Rings1" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="MainHall/Rings1" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="MainHall/Rings1" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="MainHall/Rings1" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="MainHall/Rings1" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="ScrapMachineGroup" type="Node3D" parent="MainHall"]
+transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, -0.0210037, 0, 17.906)
+
+[node name="ScrapMachineShort" parent="MainHall/ScrapMachineGroup" instance=ExtResource("8_g2g3w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 0)
+
+[node name="ScrapMachineShort2" parent="MainHall/ScrapMachineGroup" instance=ExtResource("8_g2g3w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0, 0)
+
+[node name="ScrapMachineShort3" parent="MainHall/ScrapMachineGroup" instance=ExtResource("8_g2g3w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0, 0)
+
+[node name="ScrapMachineShort4" parent="MainHall/ScrapMachineGroup" instance=ExtResource("8_g2g3w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, 0)
+
+[node name="GasTank3" parent="MainHall" instance=ExtResource("9_7jrhr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 40)
+height = 2.0
+endPosition = Vector3(0, 3, 11)
+
+[node name="ScrapMachineGroup2" type="Node3D" parent="MainHall"]
+transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, -0.0210037, 0, 39.906)
+
+[node name="ScrapMachineShort" parent="MainHall/ScrapMachineGroup2" instance=ExtResource("8_g2g3w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 0)
+
+[node name="ScrapMachineShort2" parent="MainHall/ScrapMachineGroup2" instance=ExtResource("8_g2g3w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0, 0)
+
+[node name="ScrapMachineShort3" parent="MainHall/ScrapMachineGroup2" instance=ExtResource("8_g2g3w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0, 0)
+
+[node name="ScrapMachineShort4" parent="MainHall/ScrapMachineGroup2" instance=ExtResource("8_g2g3w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, 0)
+
+[node name="Rings2" type="Node3D" parent="MainHall"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, 47)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainHall/Rings2" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="MainHall/Rings2" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="MainHall/Rings2" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="MainHall/Rings2" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="MainHall/Rings2" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="GreenMajin2" parent="MainHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 2.5, 51.5)
+rangeOverride = 45
+
+[node name="GreenMajin3" parent="MainHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.75, 51.5)
+rangeOverride = 45
+
+[node name="GreenMajin4" parent="MainHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.5, 2.5, 51.5)
+rangeOverride = 45
+
+[node name="DashPanelGroup" type="Node3D" parent="MainHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 59)
+
+[node name="DashPanelL" parent="MainHall/DashPanelGroup" instance=ExtResource("34_ldn7q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="DashPanelR" parent="MainHall/DashPanelGroup" instance=ExtResource("34_ldn7q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="DoorEvent" parent="MainHall" instance=ExtResource("4_7x3hx")]
+transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, 0, 0, 50)
+
+[node name="Door1" parent="MainHall/DoorEvent" instance=ExtResource("14_bgo6m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, 36)
+SpikeState = 1
+PivotPoint = 1
+
+[node name="Door2" parent="MainHall/DoorEvent" instance=ExtResource("14_bgo6m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.00002, 0, 56)
+SpikeState = 1
+
+[node name="Door3" parent="MainHall/DoorEvent" instance=ExtResource("14_bgo6m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.99998, 0, 76)
+SpikeState = 1
+PivotPoint = 1
+
+[node name="Door4" parent="MainHall/DoorEvent" instance=ExtResource("14_bgo6m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.00003, 0, 76)
+SpikeState = 1
+SwingMode = 1
+
+[node name="Door5" parent="MainHall/DoorEvent" instance=ExtResource("14_bgo6m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0, 96)
+
+[node name="Door6" parent="MainHall/DoorEvent" instance=ExtResource("14_bgo6m")]
+transform = Transform3D(-1, 0, 8.74227e-08, 0, 1, 0, -8.74227e-08, 0, -1, -2, 0, 96)
+SpikeState = 1
+PivotPoint = 1
+SwingMode = 1
+
+[node name="Door7" parent="MainHall/DoorEvent" instance=ExtResource("14_bgo6m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, 116)
+PivotPoint = 1
+SwingMode = 2
+
+[node name="Door8" parent="MainHall/DoorEvent" instance=ExtResource("14_bgo6m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0, 116)
+SwingMode = 1
+
+[node name="Event" type="Node3D" parent="MainHall/DoorEvent" node_paths=PackedStringArray("animator")]
+script = ExtResource("15_lahxt")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("../AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainHall/DoorEvent"]
+libraries = {
+"": SubResource("AnimationLibrary_kdbck")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainHall/DoorEvent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_fie53")
+
+[node name="Rings3" type="Node3D" parent="MainHall"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.52588e-05, 1, 91)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainHall/Rings3" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="MainHall/Rings3" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="MainHall/Rings3" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="MainHall/Rings3" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Rings4" type="Node3D" parent="MainHall"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -7.62939e-06, 1, 113)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainHall/Rings4" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="MainHall/Rings4" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="MainHall/Rings4" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="MainHall/Rings4" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Rings5" type="Node3D" parent="MainHall"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, 135)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainHall/Rings5" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="MainHall/Rings5" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="MainHall/Rings5" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="MainHall/Rings5" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Rings6" type="Node3D" parent="MainHall"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, 154)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainHall/Rings6" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="MainHall/Rings6" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="MainHall/Rings6" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Rings7" type="Node3D" parent="MainHall"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, 180)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainHall/Rings7" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="MainHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="MainHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="FurnaceHall" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -360, -30, -120)
+visible = false
+script = ExtResource("5_q35jl")
+saveVisibilityOnCheckpoint = true
+
+[node name="Rings" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-0.999999, 0, -8.74227e-08, 0, 1, 0, 8.74227e-08, 0, -0.999999, 0, 1, 13)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Rings" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FurnaceHall/Rings" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="FurnaceHall/Rings" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Furnace" parent="FurnaceHall" instance=ExtResource("16_gpivp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 32)
+
+[node name="GreenMajin" parent="FurnaceHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(-0.999862, 0, 0.0166321, 0, 1, 0, -0.0166321, 0, -0.999862, -0.149689, 0.299999, 33.9987)
+
+[node name="Rings2" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-0.999999, 0, -8.74227e-08, 0, 1, 0, 8.74227e-08, 0, -0.999999, 0, 1, 36)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Rings2" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FurnaceHall/Rings2" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="FurnaceHall/Rings2" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Furnace2" parent="FurnaceHall" instance=ExtResource("16_gpivp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, 41)
+
+[node name="Furnace3" parent="FurnaceHall" instance=ExtResource("16_gpivp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 48)
+
+[node name="Rings3" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-0.999999, 0, -8.74227e-08, 0, 1, 0, 8.74227e-08, 0, -0.999999, 0, 1, 48)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Rings3" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FurnaceHall/Rings3" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="FurnaceHall/Rings3" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Rings4" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-7.45058e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -7.45058e-08, -7, 1, 60)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Rings4" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FurnaceHall/Rings4" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="FurnaceHall/Rings4" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Pearls" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-4.37113e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37113e-08, -14, 0.6, 62)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("20_hvdiw")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = SubResource("Curve_1mfn5")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, 0)
+
+[node name="Child02" parent="FurnaceHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.277708, 0, -1)
+
+[node name="Child03" parent="FurnaceHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.458228, 0, -2)
+
+[node name="Child04" parent="FurnaceHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.480324, 0, -3)
+
+[node name="Child05" parent="FurnaceHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.202975, 0, -4)
+
+[node name="Child06" parent="FurnaceHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.202975, 0, -5)
+
+[node name="Child07" parent="FurnaceHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.480324, 0, -6)
+
+[node name="Child08" parent="FurnaceHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.459394, 0, -7)
+
+[node name="Child09" parent="FurnaceHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.281146, 0, -8)
+
+[node name="Child10" parent="FurnaceHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, -9)
+
+[node name="DoorEvent" parent="FurnaceHall" instance=ExtResource("4_7x3hx")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6.20001, 0, 60)
+
+[node name="Door1" parent="FurnaceHall/DoorEvent" instance=ExtResource("14_bgo6m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0, 22)
+SwingMode = 2
+
+[node name="Door2" parent="FurnaceHall/DoorEvent" instance=ExtResource("14_bgo6m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, 22)
+PivotPoint = 1
+SwingMode = 1
+
+[node name="Door3" parent="FurnaceHall/DoorEvent" instance=ExtResource("14_bgo6m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, 42)
+PivotPoint = 1
+SwingMode = 2
+
+[node name="Door4" parent="FurnaceHall/DoorEvent" instance=ExtResource("14_bgo6m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0, 42)
+SwingMode = 1
+
+[node name="Event" type="Node3D" parent="FurnaceHall/DoorEvent" node_paths=PackedStringArray("animator")]
+script = ExtResource("15_lahxt")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("../AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="FurnaceHall/DoorEvent"]
+libraries = {
+"": SubResource("AnimationLibrary_f4d8d")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FurnaceHall/DoorEvent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_fie53")
+
+[node name="Pearls2" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-4.37113e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37113e-08, -33.3396, 0.6, 58)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("20_hvdiw")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = SubResource("Curve_1mfn5")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Pearls2" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, 0)
+
+[node name="Child02" parent="FurnaceHall/Pearls2" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.277708, 0, -1)
+
+[node name="Child03" parent="FurnaceHall/Pearls2" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.458228, 0, -2)
+
+[node name="Child04" parent="FurnaceHall/Pearls2" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.480324, 0, -3)
+
+[node name="Child05" parent="FurnaceHall/Pearls2" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.202975, 0, -4)
+
+[node name="Child06" parent="FurnaceHall/Pearls2" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.202975, 0, -5)
+
+[node name="Child07" parent="FurnaceHall/Pearls2" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.480324, 0, -6)
+
+[node name="Child08" parent="FurnaceHall/Pearls2" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.459394, 0, -7)
+
+[node name="Child09" parent="FurnaceHall/Pearls2" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.281146, 0, -8)
+
+[node name="Child10" parent="FurnaceHall/Pearls2" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, -9)
+
+[node name="Rings5" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-7.45058e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -7.45058e-08, -38, 1, 60)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Rings5" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FurnaceHall/Rings5" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="FurnaceHall/Rings5" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="GreenMajin2" parent="FurnaceHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -52, 1, 62.5)
+
+[node name="Rings6" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -73, 1, 60)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 4.5
+"Horizontal Offset" = SubResource("Curve_qkbya")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Rings6" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FurnaceHall/Rings6" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.420502, 0, -4.5)
+
+[node name="Child03" parent="FurnaceHall/Rings6" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.425926, 0, -9)
+
+[node name="Child04" parent="FurnaceHall/Rings6" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, -13.5)
+
+[node name="Rings7" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-0.325766, 0, 0.94545, 0, 1, 0, -0.94545, 0, -0.325766, -100.976, -0.799999, 59.8523)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 5
+Shape = 2
+Path = NodePath("../../Static/Path/StartingPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 5.0
+"Horizontal Offset" = SubResource("Curve_h1f8d")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000152588, 0.000495911, 0.00283813)
+
+[node name="Child02" parent="FurnaceHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.62079, -0.979202, -4.89783)
+
+[node name="Child03" parent="FurnaceHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.48506, -2.13902, -9.28577)
+
+[node name="Child04" parent="FurnaceHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.02711, -3.3871, -13.2201)
+
+[node name="Child05" parent="FurnaceHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.0632, -4.6353, -16.9106)
+
+[node name="Pearls3" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-0.999329, 0, -0.0366262, 0, 1, 0, 0.0366262, 0, -0.999329, -115.819, -6.1918, 76.826)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("20_hvdiw")
+Amount = 20
+Shape = 2
+Path = NodePath("../../Static/Path/StartingPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.10352e-05, -0.000102997, -0.000431061)
+
+[node name="Child02" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.168121, -0.22625, -1.00849)
+
+[node name="Child03" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.286804, -0.445942, -2.02502)
+
+[node name="Child04" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.355469, -0.658436, -3.04777)
+
+[node name="Child05" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.367615, -0.868603, -4.09163)
+
+[node name="Child06" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.313751, -1.08445, -5.13597)
+
+[node name="Child07" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19696, -1.30517, -6.17104)
+
+[node name="Child08" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0207825, -1.53003, -7.19358)
+
+[node name="Child09" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.211426, -1.75843, -8.20106)
+
+[node name="Child10" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496246, -1.98982, -9.19136)
+
+[node name="Child11" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.830383, -2.22371, -10.1628)
+
+[node name="Child12" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.21106, -2.45971, -11.114)
+
+[node name="Child13" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.63528, -2.69746, -12.0438)
+
+[node name="Child14" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.10083, -2.93667, -12.9513)
+
+[node name="Child15" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.60529, -3.1771, -13.8356)
+
+[node name="Child16" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.14679, -3.41853, -14.696)
+
+[node name="Child17" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.72357, -3.66075, -15.5316)
+
+[node name="Child18" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.33401, -3.90362, -16.3417)
+
+[node name="Child19" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.97687, -4.14698, -17.1255)
+
+[node name="Child20" parent="FurnaceHall/Pearls3" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.65085, -4.39069, -17.8821)
+
+[node name="RichRing" parent="FurnaceHall" instance=ExtResource("17_x8d6c")]
+transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, -100, -10, 98.5)
+
+[node name="GreenMajin3" parent="FurnaceHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, -100, -13.5, 98.5)
+rangeOverride = 40
+
+[node name="Rings8" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(0.0699652, 0, -0.997549, 0, 1, 0, 0.997549, 0, 0.0699652, -92.6984, -14.7, 100.773)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 4
+Shape = 2
+Path = NodePath("../../Static/Path/StartingPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 5.0
+"Horizontal Offset" = SubResource("Curve_c6e1l")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Rings8" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000137329, -0.000591278, -0.00256348)
+
+[node name="Child02" parent="FurnaceHall/Rings8" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.858356, -1.16769, -5.05869)
+
+[node name="Child03" parent="FurnaceHall/Rings8" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.91692, -2.37542, -9.74197)
+
+[node name="Child04" parent="FurnaceHall/Rings8" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.94533, -3.59223, -13.8771)
+
+[node name="Pearls4" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(-0.999329, 0, -0.0366262, 0, 1, 0, 0.0366262, 0, -0.999329, -94.019, -14.7918, 99.026)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("20_hvdiw")
+Amount = 20
+Shape = 2
+Path = NodePath("../../Static/Path/StartingPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = SubResource("Curve_c6e1l")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00210571, 0.000473022, -4.57764e-05)
+
+[node name="Child02" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.919342, -0.222664, 0.0267715)
+
+[node name="Child03" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.83984, -0.449795, 0.107315)
+
+[node name="Child04" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75632, -0.680321, 0.239815)
+
+[node name="Child05" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.66629, -0.913708, 0.422424)
+
+[node name="Child06" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5675, -1.14947, 0.653175)
+
+[node name="Child07" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.45773, -1.38722, 0.930046)
+
+[node name="Child08" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.33514, -1.62656, 1.25111)
+
+[node name="Child09" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.19806, -1.86717, 1.61438)
+
+[node name="Child10" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.04477, -2.10879, 2.01803)
+
+[node name="Child11" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.8739, -2.35115, 2.46033)
+
+[node name="Child12" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.68399, -2.59407, 2.93961)
+
+[node name="Child13" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.4738, -2.83733, 3.45437)
+
+[node name="Child14" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.242, -3.0808, 4.00321)
+
+[node name="Child15" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.9873, -3.32433, 4.58481)
+
+[node name="Child16" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.7085, -3.56773, 5.19792)
+
+[node name="Child17" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.4042, -3.81091, 5.84146)
+
+[node name="Child18" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.0729, -4.05368, 6.51431)
+
+[node name="Child19" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.7135, -4.29594, 7.21552)
+
+[node name="Child20" parent="FurnaceHall/Pearls4" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.324, -4.53754, 7.94422)
+
+[node name="Rings9" type="Node3D" parent="FurnaceHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -74.0994, -21.7, 79.7446)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 5
+Shape = 2
+Path = NodePath("../../Static/Path/StartingPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 5.0
+"Horizontal Offset" = SubResource("Curve_h1f8d")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FurnaceHall/Rings9" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.000228882, -0.00106049)
+
+[node name="Child02" parent="FurnaceHall/Rings9" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.03503, -1.12803, -4.70738)
+
+[node name="Child03" parent="FurnaceHall/Rings9" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.30423, -2.33475, -8.86643)
+
+[node name="Child04" parent="FurnaceHall/Rings9" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.14691, -3.54493, -12.5957)
+
+[node name="Child05" parent="FurnaceHall/Rings9" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3736, -4.70409, -16.1361)
+
+[node name="FanHall" type="Node3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -475, -60, -60)
+visible = false
+script = ExtResource("5_q35jl")
+saveVisibilityOnCheckpoint = true
+
+[node name="DashPanelGroup" type="Node3D" parent="FanHall"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 11)
+
+[node name="DashPanelL" parent="FanHall/DashPanelGroup" instance=ExtResource("34_ldn7q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="DashPanelR" parent="FanHall/DashPanelGroup" instance=ExtResource("34_ldn7q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="Rings" type="Node3D" parent="FanHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FanHall/Rings" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="FanHall/Rings" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Fan" parent="FanHall" instance=ExtResource("23_dvean")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.67029e-05, 4, -27.7)
+rotationTime = 5.0
+
+[node name="Rings2" type="Node3D" parent="FanHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90735e-05, 1, -29.7)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = SubResource("Curve_xhu4x")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings2" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FanHall/Rings2" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.926667, 0, -2.5)
+
+[node name="Child03" parent="FanHall/Rings2" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50567, 0, -5)
+
+[node name="Child04" parent="FanHall/Rings2" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78133, 0, -7.5)
+
+[node name="Child05" parent="FanHall/Rings2" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.798, 0, -10)
+
+[node name="Child06" parent="FanHall/Rings2" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0, -12.5)
+
+[node name="GreenMajin" parent="FanHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.999981, 1, -39)
+rangeOverride = 40
+
+[node name="Rings3" type="Node3D" parent="FanHall"]
+transform = Transform3D(1, 0, 0, 0, 0.99863, -0.052336, 0, 0.052336, 0.99863, -3.99997, 1.39973, -59.6896)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = SubResource("Curve_11vpl")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings3" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FanHall/Rings3" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.34482, 0, -2.5)
+
+[node name="Child03" parent="FanHall/Rings3" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.04378, 0, -5)
+
+[node name="Child04" parent="FanHall/Rings3" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.23033, 0, -7.5)
+
+[node name="Child05" parent="FanHall/Rings3" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.03792, 0, -10)
+
+[node name="Child06" parent="FanHall/Rings3" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, -12.5)
+
+[node name="Fan2" parent="FanHall" instance=ExtResource("21_5eri8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 5.5, -71)
+rotationTime = 20.0
+
+[node name="GreenMajin2" parent="FanHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.99997, 2, -85)
+
+[node name="Rings4" type="Node3D" parent="FanHall"]
+transform = Transform3D(1, 0, 0, 0, 0.99863, -0.052336, 0, 0.052336, 0.99863, -5, 3, -88)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings4" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FanHall/Rings4" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="FanHall/Rings4" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="FanHall/Rings4" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child05" parent="FanHall/Rings4" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child06" parent="FanHall/Rings4" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="GasTank" parent="FanHall" instance=ExtResource("9_7jrhr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 4, -109)
+endPosition = Vector3(1.5, 1, -16)
+
+[node name="Rings5" type="Node3D" parent="FanHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.99999, 6, -109)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 3
+Shape = 0
+Orientation = 1
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings5" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FanHall/Rings5" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Child03" parent="FanHall/Rings5" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Rings6" type="Node3D" parent="FanHall"]
+transform = Transform3D(-0.173648, 0.17101, -0.969846, 0, 0.984808, 0.173648, 0.984808, 0.0301537, -0.17101, -6.59888, 3.66898, -121.282)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings6" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FanHall/Rings6" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+
+[node name="Child03" parent="FanHall/Rings6" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child04" parent="FanHall/Rings6" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child05" parent="FanHall/Rings6" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="GreenMajin3" parent="FanHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(0.991236, 0, -0.132101, 0, 1, 0, 0.132101, 0, 0.991236, -3.69993, 2, -125.1)
+rangeOverride = 40
+
+[node name="GreenMajin4" parent="FanHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(0.991236, 0, -0.132101, 0, 1, 0, 0.132101, 0, 0.991236, -2.21307, 3, -124.902)
+rangeOverride = 40
+
+[node name="GreenMajin5" parent="FanHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(0.991236, 0, -0.132101, 0, 1, 0, 0.132101, 0, 0.991236, -5.18677, 3.5, -125.298)
+rangeOverride = 40
+
+[node name="SpikeGroup" type="Node3D" parent="FanHall"]
+transform = Transform3D(0.960419, 0.203628, -0.190083, -0.190083, 0.977892, 0.0871557, 0.203628, -0.0475745, 0.977892, -3.803, 2.255, -125)
+
+[node name="SpikePanel" parent="FanHall/SpikeGroup" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="FanHall/SpikeGroup" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="FanHall/SpikeGroup" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="FanHall/SpikeGroup" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24994, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="Rings7" type="Node3D" parent="FanHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1.6, -134)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 7
+Shape = 2
+Path = NodePath("../../Static/Path/StartingPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000457764, -0.000350952, -0.00158691)
+
+[node name="Child02" parent="FanHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.772583, -0.518543, -2.38239)
+
+[node name="Child03" parent="FanHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.67946, -1.01317, -4.72864)
+
+[node name="Child04" parent="FanHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.74339, -1.47369, -7.02515)
+
+[node name="Child05" parent="FanHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.98997, -1.88587, -9.24927)
+
+[node name="Child06" parent="FanHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.44547, -2.23067, -11.3683)
+
+[node name="Child07" parent="FanHall/Rings7" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.13206, -2.48402, -13.337)
+
+[node name="SpikeGroup2" type="Node3D" parent="FanHall"]
+transform = Transform3D(0.612594, 0.164144, -0.773166, -0.258819, 0.965926, 0, 0.746821, 0.20011, 0.634204, 7.80001, -2, -149)
+
+[node name="SpikePanel" parent="FanHall/SpikeGroup2" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="FanHall/SpikeGroup2" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"Current State" = 2
+"Start Time" = 0.3
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="FanHall/SpikeGroup2" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"Current State" = 2
+"Start Time" = 0.3
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="FanHall/SpikeGroup2" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24994, 0, 0)
+"Current State" = 2
+"Start Time" = 0.3
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="Fan3" parent="FanHall" instance=ExtResource("23_dvean")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 35, 4, -155)
+rotationTime = 3.0
+
+[node name="Rings8" type="Node3D" parent="FanHall"]
+transform = Transform3D(-4.37114e-08, 0.0784591, -0.996917, 0, 0.996917, 0.0784591, 1, 3.42956e-09, -4.35766e-08, 35, 0.5, -156)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = SubResource("Curve_0t8x7")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings8" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FanHall/Rings8" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.359786, 0, -2.5)
+
+[node name="Child03" parent="FanHall/Rings8" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.480324, 0, -5)
+
+[node name="Child04" parent="FanHall/Rings8" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="FanHall/Rings8" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.480324, 0, -10)
+
+[node name="Child06" parent="FanHall/Rings8" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.387565, 0, -12.5)
+
+[node name="Child07" parent="FanHall/Rings8" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, -15)
+
+[node name="Pearls" type="Node3D" parent="FanHall"]
+transform = Transform3D(-4.37114e-08, 0.0784591, -0.996917, 0, 0.996917, 0.0784591, 1, 3.42956e-09, -4.35766e-08, 34.0031, 0.578461, -154)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("20_hvdiw")
+Amount = 18
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = SubResource("Curve_v2yde")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.45058e-09, 0, 0)
+
+[node name="Child02" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.198229, 0, -1)
+
+[node name="Child03" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.379403, 0, -2)
+
+[node name="Child04" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.488693, 0, -3)
+
+[node name="Child05" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.417566, 0, -4)
+
+[node name="Child06" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0440667, 0, -5)
+
+[node name="Child07" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.359963, 0, -6)
+
+[node name="Child08" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.490026, 0, -7)
+
+[node name="Child09" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.214228, 0, -8)
+
+[node name="Child10" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.214228, 0, -9)
+
+[node name="Child11" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.490026, 0, -10)
+
+[node name="Child12" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.359963, 0, -11)
+
+[node name="Child13" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0440668, 0, -12)
+
+[node name="Child14" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.417566, 0, -13)
+
+[node name="Child15" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.490224, 0, -14)
+
+[node name="Child16" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.391904, 0, -15)
+
+[node name="Child17" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.216598, 0, -16)
+
+[node name="Child18" parent="FanHall/Pearls" instance=ExtResource("20_hvdiw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.45058e-09, 0, -17)
+
+[node name="Fan4" parent="FanHall" instance=ExtResource("21_5eri8")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 61, 2, -155)
+rotationTime = 30.0
+
+[node name="Rings9" type="Node3D" parent="FanHall"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 68, -2, -155)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings9" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FanHall/Rings9" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="FanHall/Rings9" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="FanHall/Rings9" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="FanHall/Rings9" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="FanHall/Rings9" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Rings10" type="Node3D" parent="FanHall"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 98, -2, -157)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_l2t0t")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings10" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FanHall/Rings10" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.109636, 0, -2)
+
+[node name="Child03" parent="FanHall/Rings10" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.281542, 0, -4)
+
+[node name="Child04" parent="FanHall/Rings10" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.598631, 0, -6)
+
+[node name="Child05" parent="FanHall/Rings10" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.14381, 0, -8)
+
+[node name="Child06" parent="FanHall/Rings10" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -10)
+
+[node name="FurnaceEvent" parent="FanHall" instance=ExtResource("4_7x3hx")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 71, -3, -155)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FanHall/FurnaceEvent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jgghs")
+
+[node name="Furnace" type="Node3D" parent="FanHall/FurnaceEvent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -17)
+
+[node name="Furnace" parent="FanHall/FurnaceEvent/Furnace" instance=ExtResource("16_gpivp")]
+
+[node name="Dust1" type="GPUParticles3D" parent="FanHall/FurnaceEvent"]
+transform = Transform3D(-4.37114e-08, 0, 1, 2.11758e-22, 1, 0, -1, 0, -4.37114e-08, 1.00006, 0, -17)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-4, -2, -4, 8, 8, 8)
+process_material = SubResource("ParticleProcessMaterial_5wkrc")
+draw_pass_1 = SubResource("QuadMesh_2xv43")
+
+[node name="Event" type="Node3D" parent="FanHall/FurnaceEvent" node_paths=PackedStringArray("animator")]
+script = ExtResource("15_lahxt")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("../AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="FanHall/FurnaceEvent"]
+callback_mode_process = 0
+libraries = {
+"": SubResource("AnimationLibrary_ik3yp")
+}
+
+[node name="GreenMajin6" parent="FanHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 96, -3, -157)
+rangeOverride = 40
+
+[node name="Rings11" type="Node3D" parent="FanHall"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 120, -2, -155)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 6
+Shape = 2
+Path = NodePath("../../Static/Path/StartingPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings11" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 8.47033e-22, 0, 1, 0, 0, 0, 1, 0, -7.62939e-06, 0.000183105)
+
+[node name="Child02" parent="FanHall/Rings11" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 8.47033e-22, 0, 1, 0, 0, 0, 1, -0.121887, 0.111561, -1.98199)
+
+[node name="Child03" parent="FanHall/Rings11" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 8.47033e-22, 0, 1, 0, 0, 0, 1, -0.396729, 0.253647, -3.94714)
+
+[node name="Child04" parent="FanHall/Rings11" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 8.47033e-22, 0, 1, 0, 0, 0, 1, -0.837524, 0.424049, -5.88075)
+
+[node name="Child05" parent="FanHall/Rings11" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 8.47033e-22, 0, 1, 0, 0, 0, 1, -1.45313, 0.618492, -7.76608)
+
+[node name="Child06" parent="FanHall/Rings11" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 8.47033e-22, 0, 1, 0, 0, 0, 1, -2.24573, 0.830296, -9.58507)
+
+[node name="Fan5" parent="FanHall" instance=ExtResource("21_5eri8")]
+transform = Transform3D(0.40688, 0, -0.913481, 0, 1, 0, 0.913481, 0, 0.40688, 127.7, 2, -156.5)
+rotationTime = 2.0
+
+[node name="GreenMajin7" parent="FanHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 146, 0.299999, -181)
+
+[node name="Rings12" type="Node3D" parent="FanHall"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 146, 3, -181)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 4
+Shape = 0
+Orientation = 1
+Spacing = 1.1
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings12" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FanHall/Rings12" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+
+[node name="Child03" parent="FanHall/Rings12" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+
+[node name="Child04" parent="FanHall/Rings12" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
+
+[node name="GreenMajin8" parent="FanHall" instance=ExtResource("10_4deqf")]
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 157, 1.5, -189)
+
+[node name="Rings13" type="Node3D" parent="FanHall"]
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 157, 4.3, -189)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 4
+Shape = 0
+Orientation = 1
+Spacing = 1.1
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings13" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FanHall/Rings13" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+
+[node name="Child03" parent="FanHall/Rings13" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+
+[node name="Child04" parent="FanHall/Rings13" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
+
+[node name="SpikeGroup3" type="Node3D" parent="FanHall"]
+transform = Transform3D(0.422618, -0.0789899, -0.902859, 0, 0.996195, -0.0871557, 0.906308, 0.0368336, 0.42101, 160.187, 1.9, -192.655)
+
+[node name="SpikePanel" parent="FanHall/SpikeGroup3" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="FanHall/SpikeGroup3" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="FanHall/SpikeGroup3" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="FanHall/SpikeGroup3" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24994, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="Fan6" parent="FanHall" instance=ExtResource("21_5eri8")]
+transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, 162, 6, -193.5)
+rotationTime = 20.0
+
+[node name="Rings14" type="Node3D" parent="FanHall"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 172, 4, -195)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = SubResource("Curve_e8ggv")
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings14" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, 0)
+
+[node name="Child02" parent="FanHall/Rings14" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.401632, 0, -1.5)
+
+[node name="Child03" parent="FanHall/Rings14" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.598082, 0, -3)
+
+[node name="Child04" parent="FanHall/Rings14" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.307762, 0, -4.5)
+
+[node name="Child05" parent="FanHall/Rings14" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.307763, 0, -6)
+
+[node name="Child06" parent="FanHall/Rings14" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.59818, 0, -7.5)
+
+[node name="Child07" parent="FanHall/Rings14" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.407552, 0, -9)
+
+[node name="Child08" parent="FanHall/Rings14" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, -10.5)
+
+[node name="SpikeGroup4" type="Node3D" parent="FanHall"]
+transform = Transform3D(-4.37114e-08, 0.052336, -0.998629, 0, 0.998629, 0.0523359, 1, 2.28768e-09, -4.36515e-08, 186, 2.8, -195)
+
+[node name="SpikePanel" parent="FanHall/SpikeGroup4" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="FanHall/SpikeGroup4" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="FanHall/SpikeGroup4" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="FanHall/SpikeGroup4" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24994, 0, 0)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="Fan7" parent="FanHall" instance=ExtResource("23_dvean")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 187.75, 7, -195)
+rotationTime = 20.0
+
+[node name="SpikeGroup5" type="Node3D" parent="FanHall"]
+transform = Transform3D(-4.37114e-08, 0.052336, -0.998629, 0, 0.998629, 0.0523359, 1, 2.28768e-09, -4.36515e-08, 211.964, 1.43926, -195)
+
+[node name="SpikePanel" parent="FanHall/SpikeGroup5" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"Current State" = 2
+"Start Time" = 0.4
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="FanHall/SpikeGroup5" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"Current State" = 2
+"Start Time" = 0.3
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="FanHall/SpikeGroup5" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"Current State" = 2
+"Start Time" = 0.3
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="FanHall/SpikeGroup5" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24994, 0, 0)
+"Current State" = 2
+"Start Time" = 0.3
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="RingGroup" type="Node3D" parent="FanHall"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 212.043, 2.93721, -195)
+
+[node name="Ring" parent="FanHall/RingGroup" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, -5.29396e-23, 8.47033e-22, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Ring2" parent="FanHall/RingGroup" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, -2.11758e-22, 3.38813e-21, 0, 1, 0, 0, 0, 1, 0, 1.2, 3.05176e-05)
+
+[node name="Ring3" parent="FanHall/RingGroup" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, -4.23516e-22, 6.77626e-21, 0, 1, 0, 0, 0, 1, 0.599976, 0.600014, 0)
+
+[node name="Ring4" parent="FanHall/RingGroup" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, -5.29396e-22, 8.47033e-21, 0, 1, 0, 0, 0, 1, -0.600037, 0.600018, 3.05176e-05)
+
+[node name="Rings15" type="Node3D" parent="FanHall"]
+transform = Transform3D(-4.37114e-08, 0.0348995, -0.999391, 0, 0.999391, 0.0348995, 1, 1.52551e-09, -4.36848e-08, 219, 1.8, -195)
+script = ExtResource("6_m0t1x")
+Generate = false
+Source = ExtResource("7_qo73h")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="FanHall/Rings15" instance=ExtResource("7_qo73h")]
+
+[node name="Child02" parent="FanHall/Rings15" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="FanHall/Rings15" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child04" parent="FanHall/Rings15" instance=ExtResource("7_qo73h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="SpikeGroup6" type="Node3D" parent="FanHall"]
+transform = Transform3D(-4.37114e-08, 0.052336, -0.998629, 0, 0.998629, 0.0523359, 1, 2.28768e-09, -4.36515e-08, 237.934, 0.178391, -195)
+
+[node name="SpikePanel" parent="FanHall/SpikeGroup6" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)
+"Current State" = 2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel2" parent="FanHall/SpikeGroup6" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"Current State" = 2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel3" parent="FanHall/SpikeGroup6" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"Current State" = 2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="SpikePanel4" parent="FanHall/SpikeGroup6" instance=ExtResource("22_ejl76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.24994, 0, 0)
+"Current State" = 2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.8
+stateLengths = PackedFloat32Array(0.2, 0, 0.8)
+
+[node name="Fan8" parent="FanHall" instance=ExtResource("23_dvean")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 239, 4, -195)
+rotationTime = 2.0
+
+[node name="LavaCrossway" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670, -60, -300)
+visible = false
+script = ExtResource("5_q35jl")
+saveVisibilityOnCheckpoint = true
+
+[node name="Goal" parent="LavaCrossway" instance=ExtResource("38_ql0hq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -40)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LavaCrossway/Goal"]
+shape = SubResource("BoxShape3D_jgghs")
+
+[connection signal="Activated" from="CullingMap/FurnaceHall-L" to="FurnaceHall" method="Activate"]
+[connection signal="Deactivated" from="CullingMap/FurnaceHall-L" to="FurnaceHall" method="Deactivate"]
+[connection signal="Activated" from="CullingMap/MainHall-U" to="MainHall" method="Deactivate"]
+[connection signal="Deactivated" from="CullingMap/MainHall-U" to="MainHall" method="Activate"]
+[connection signal="Activated" from="CullingMap/FanHall-L" to="FanHall" method="Activate"]
+[connection signal="Deactivated" from="CullingMap/FanHall-L" to="FanHall" method="Deactivate"]
+[connection signal="Activated" from="CullingMap/FurnaceHall-U" to="FurnaceHall" method="Deactivate"]
+[connection signal="Deactivated" from="CullingMap/FurnaceHall-U" to="FurnaceHall" method="Activate"]
+[connection signal="Activated" from="CullingMap/LavaCrossway-L" to="LavaCrossway" method="Activate"]
+[connection signal="Deactivated" from="CullingMap/LavaCrossway-L" to="LavaCrossway" method="Deactivate"]
+[connection signal="Activated" from="CullingMap/FanHall-U" to="FanHall" method="Deactivate"]
+[connection signal="Deactivated" from="CullingMap/FanHall-U" to="FanHall" method="Activate"]
+
+[editable path="Static"]

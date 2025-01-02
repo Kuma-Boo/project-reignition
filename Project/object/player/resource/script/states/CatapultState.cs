@@ -32,6 +32,7 @@ public partial class CatapultState : PlayerState
 		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.Effect.StartSpinFX();
 		Player.StartExternal(this, Catapult.PlayerPositionNode);
+		Player.Animator.ExternalAngle = 0;
 		Player.Animator.StartSpin(3f);
 		Player.Animator.SnapRotation(0);
 

@@ -1,12 +1,18 @@
-[gd_scene load_steps=19 format=3 uid="uid://bntrixspwpi2"]
+[gd_scene load_steps=41 format=3 uid="uid://bntrixspwpi2"]
 
 [ext_resource type="Script" path="res://object/enemy/golem/data/GolemMajin.cs" id="1_qx3kf"]
 [ext_resource type="PackedScene" uid="uid://623w0nu8qp3d" path="res://object/enemy/golem/data/model/GolemMajin.gltf" id="1_x1tra"]
 [ext_resource type="Script" path="res://object/enemy/EnemyHurtbox.cs" id="3_r5w0e"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="3_u2idn"]
 [ext_resource type="PackedScene" uid="uid://dvoongbmetjfh" path="res://object/stage/common/Grindrail.tscn" id="3_w2hby"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ju60i"]
-size = Vector3(2.6, 1, 6)
+[ext_resource type="AudioStream" uid="uid://cqk2gptelm4q1" path="res://sound/sfx/enemy/golem/golem step.wav" id="6_7jh6v"]
+[ext_resource type="AudioStream" uid="uid://ddsrwgbnsrdnq" path="res://sound/sfx/enemy/golem/golem throw.wav" id="7_fpp2j"]
+[ext_resource type="AudioStream" uid="uid://dpolp6ta5ir14" path="res://sound/sfx/enemy/golem/golem windup.wav" id="8_ie4eq"]
+[ext_resource type="AudioStream" uid="uid://cuasdjcwd6s0y" path="res://sound/sfx/enemy/golem/golem attacked.wav" id="9_g82kv"]
+[ext_resource type="AudioStream" uid="uid://c8083isqbhdd6" path="res://sound/sfx/enemy/golem/golem grunt.wav" id="10_4lar6"]
+[ext_resource type="AudioStream" uid="uid://k6ads38wj0yd" path="res://sound/sfx/enemy/golem/golem impact.wav" id="11_p5sbo"]
+[ext_resource type="AudioStream" uid="uid://u6ukurl7m57e" path="res://sound/sfx/enemy/golem/golem turn.wav" id="12_m4pf6"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="13_n3hr7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g3a1g"]
 size = Vector3(2.6, 1, 0.4)
@@ -14,12 +20,22 @@ size = Vector3(2.6, 1, 0.4)
 [sub_resource type="BoxShape3D" id="BoxShape3D_dls5v"]
 size = Vector3(0.8, 3, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ju60i"]
+size = Vector3(2.6, 3, 1)
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_u3rel"]
 radius = 0.7
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_m1p6f"]
+size = Vector3(1, 1.68848, 1)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_4c46w"]
+height = 1.0
+radius = 1.5
+
 [sub_resource type="Curve3D" id="Curve3D_eumw5"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -9),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10),
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
@@ -31,6 +47,65 @@ size = Vector3(2, 0.5, 10)
 height = 15.0
 radius = 50.0
 
+[sub_resource type="Curve" id="Curve_n6agv"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_cb1ys"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_n6agv")
+
+[sub_resource type="Curve" id="Curve_l35uv"]
+_data = [Vector2(0, 0.2), 0.0, 1.91163, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_x25jk"]
+width = 64
+curve = SubResource("Curve_l35uv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_eus5d"]
+lifetime_randomness = 0.2
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 2.0
+emission_ring_inner_radius = 0.5
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_x25jk")
+color = Color(1, 0.72549, 0.305882, 0.588235)
+alpha_curve = SubResource("CurveTexture_cb1ys")
+hue_variation_min = -0.05
+hue_variation_max = 0.05
+
+[sub_resource type="QuadMesh" id="QuadMesh_tdyfr"]
+material = ExtResource("13_n3hr7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8t5ej"]
+lifetime_randomness = 0.4
+emission_shape = 3
+emission_box_extents = Vector3(3, 0.5, 6)
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+damping_min = 5.0
+damping_max = 10.0
+scale_min = 2.0
+scale_max = 8.0
+scale_curve = SubResource("CurveTexture_x25jk")
+color = Color(1, 0.72549, 0.305882, 0.588235)
+alpha_curve = SubResource("CurveTexture_cb1ys")
+hue_variation_min = -0.05
+hue_variation_max = 0.05
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_c1lnh"]
 animation = &"defeat"
 
@@ -40,6 +115,12 @@ filters = ["GolemMajinRoot/Skeleton3D:gear"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x3hss"]
 animation = &"gear"
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_mjkmo"]
+filters = ["GolemMajinRoot/Skeleton3D:l_finger01", "GolemMajinRoot/Skeleton3D:l_finger02"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ipsfj"]
+animation = &"tank-hold"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_82vc1"]
 animation = &"idle"
@@ -56,6 +137,13 @@ input_2/name = "defeat"
 input_2/auto_advance = false
 input_2/reset = true
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2q6u5"]
+animation = &"throw"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_r8itt"]
+fadein_time = 0.5
+fadeout_time = 0.5
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xilgg"]
 animation = &"walk"
 
@@ -66,19 +154,33 @@ nodes/gear_add/node = SubResource("AnimationNodeAdd2_4we8v")
 nodes/gear_add/position = Vector2(100, 160)
 nodes/gear_anim/node = SubResource("AnimationNodeAnimation_x3hss")
 nodes/gear_anim/position = Vector2(-60, 400)
+nodes/hand_add/node = SubResource("AnimationNodeAdd2_mjkmo")
+nodes/hand_add/position = Vector2(340, 160)
+nodes/hold_anim/node = SubResource("AnimationNodeAnimation_ipsfj")
+nodes/hold_anim/position = Vector2(140, 360)
 nodes/idle_anim/node = SubResource("AnimationNodeAnimation_82vc1")
 nodes/idle_anim/position = Vector2(-880, 200)
+nodes/output/position = Vector2(500, 160)
 nodes/state_transition/node = SubResource("AnimationNodeTransition_gxn1a")
-nodes/state_transition/position = Vector2(-377.958, 260.481)
+nodes/state_transition/position = Vector2(-400, 200)
+nodes/throw_anim/node = SubResource("AnimationNodeAnimation_2q6u5")
+nodes/throw_anim/position = Vector2(-400, 420)
+nodes/throw_trigger/node = SubResource("AnimationNodeOneShot_r8itt")
+nodes/throw_trigger/position = Vector2(-140, 200)
 nodes/walk_anim/node = SubResource("AnimationNodeAnimation_xilgg")
 nodes/walk_anim/position = Vector2(-880, 320)
-node_connections = [&"gear_add", 0, &"state_transition", &"gear_add", 1, &"gear_anim", &"output", 0, &"gear_add", &"state_transition", 0, &"idle_anim", &"state_transition", 1, &"walk_anim", &"state_transition", 2, &"defeat_anim"]
+node_connections = [&"gear_add", 0, &"throw_trigger", &"gear_add", 1, &"gear_anim", &"hand_add", 0, &"gear_add", &"hand_add", 1, &"hold_anim", &"output", 0, &"hand_add", &"state_transition", 0, &"idle_anim", &"state_transition", 1, &"walk_anim", &"state_transition", 2, &"defeat_anim", &"throw_trigger", 0, &"state_transition", &"throw_trigger", 1, &"throw_anim"]
 
 [node name="GolemMajin" type="Node3D"]
 script = ExtResource("1_qx3kf")
+gasTankParent = NodePath("GolemMajin/GolemMajinRoot/Skeleton3D/Hand/GasTankParent")
+pearlAmount = 20
+root = NodePath("")
 hurtbox = NodePath("GolemMajin/GolemMajinRoot/Skeleton3D/Head/Hurtbox")
+collider = NodePath("")
 rangeCollider = NodePath("RangeTrigger/CollisionShape3D")
 animationTree = NodePath("AnimationTree")
+animationPlayer = NodePath("")
 
 [node name="GolemMajin" parent="." instance=ExtResource("1_x1tra")]
 
@@ -116,23 +218,32 @@ bone_idx = 0
 [node name="StaticBody3D" type="StaticBody3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Root" groups=["floor", "wall"]]
 transform = Transform3D(1, 0, 0, 0, 1, -7.10543e-15, 0, 7.10543e-15, 1, 0, 2.38419e-07, 3)
 
-[node name="Body" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Root/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 0.999992, 0, 0, 0, 0.999992, 0, 0, -3.33786e-06)
-shape = SubResource("BoxShape3D_ju60i")
-
 [node name="Feet" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Root/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, -2.79998)
 shape = SubResource("BoxShape3D_g3a1g")
 disabled = true
 
-[node name="LArm" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Root/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, -4.37111e-08, 0.999993, 0, -0.999993, -4.37111e-08, 0.9, 0, 4.5)
+[node name="CrusherBody" type="StaticBody3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Root" groups=["crusher", "floor", "wall"]]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -4.36971e-09, -0.00046961, 2.89693)
+collision_mask = 24
+
+[node name="LArm" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Root/CrusherBody"]
+transform = Transform3D(1, -1.50995e-07, 1.50995e-07, -1.50996e-07, -0.999993, -1.6292e-07, 1.50996e-07, 1.6292e-07, -0.999993, 0.9, 4.55, -1.49274e-05)
 shape = SubResource("BoxShape3D_dls5v")
 disabled = true
 
-[node name="RArm" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Root/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, -4.37111e-08, 0.999993, 0, -0.999993, -4.37111e-08, -0.9, -2.98023e-08, 4.5)
+[node name="RArm" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Root/CrusherBody"]
+transform = Transform3D(1, -4.36755e-08, 4.36755e-08, -4.36758e-08, -0.999993, -1.6292e-07, 4.36758e-08, 1.6292e-07, -0.999993, -0.9, 4.55, -1.49762e-05)
 shape = SubResource("BoxShape3D_dls5v")
+disabled = true
+
+[node name="Body" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Root/CrusherBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_ju60i")
+
+[node name="Legs" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Root/CrusherBody"]
+transform = Transform3D(1, -3.55271e-15, -1.33227e-15, 3.55271e-15, 1, 0, -1.33227e-15, 0, 1, 7.10543e-15, -0.8, -5.96046e-08)
+shape = SubResource("BoxShape3D_ju60i")
 disabled = true
 
 [node name="Head" type="BoneAttachment3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D" index="2"]
@@ -150,27 +261,98 @@ enemy = NodePath("../../../../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Head/Hurtbox"]
 shape = SubResource("SphereShape3D_u3rel")
 
+[node name="Hand" type="BoneAttachment3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D" index="3"]
+transform = Transform3D(1, -1.08372e-07, 1.0651e-07, 9.61342e-08, 1, -4.83389e-06, -1.0651e-07, 4.83436e-06, 1, 0.875, 8.7, 2.72419e-05)
+bone_name = "l_hand"
+bone_idx = 16
+
+[node name="GasTankParent" type="Node3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/Hand"]
+transform = Transform3D(1, 1.86317e-09, 8.14418e-17, 0, -4.37114e-08, 1, 1.86317e-09, -1, -4.37114e-08, 2.38419e-07, 1.10001, -5.48363e-06)
+
+[node name="LLeg" type="BoneAttachment3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D" index="4"]
+transform = Transform3D(1, -6.21444e-08, -1.47441e-07, -6.26694e-08, -0.999993, -0.00356324, -1.47219e-07, 0.00356324, -0.999993, 0.6, 2.95, 1.11091e-05)
+bone_name = "l_leg01"
+bone_idx = 2
+
+[node name="StaticBody3D" type="StaticBody3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/LLeg" groups=["wall"]]
+
+[node name="Feet" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/LLeg/StaticBody3D"]
+transform = Transform3D(1, -3.90088e-11, -5.68434e-14, 7.99716e-12, 1, 0, 5.40012e-12, 0, 1, -1.19209e-07, 0.344238, 0)
+shape = SubResource("BoxShape3D_m1p6f")
+
+[node name="RLeg" type="BoneAttachment3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D" index="5"]
+transform = Transform3D(1, 4.48364e-07, 2.62605e-09, 4.48371e-07, -0.999993, -0.00356334, 1.02835e-09, 0.00356334, -0.999993, -0.6, 2.95, 1.11091e-05)
+bone_name = "r_leg01"
+bone_idx = 4
+
+[node name="StaticBody3D" type="StaticBody3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/RLeg" groups=["wall"]]
+
+[node name="Feet" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/RLeg/StaticBody3D"]
+transform = Transform3D(1, -3.90088e-11, -5.68434e-14, 7.99716e-12, 1, 0, 5.40012e-12, 0, 1, -1.19209e-07, 0.344238, 0)
+shape = SubResource("BoxShape3D_m1p6f")
+
+[node name="LLeg2" type="BoneAttachment3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D" index="6"]
+transform = Transform3D(1, -1.91101e-07, -2.7426e-07, -1.9012e-07, -0.999994, 0.00357076, -2.74941e-07, -0.00357076, -0.999994, 0.6, 1.55, 0.00499968)
+bone_name = "l_leg02"
+bone_idx = 3
+
+[node name="StaticBody3D" type="StaticBody3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/LLeg2" groups=["wall"]]
+
+[node name="Feet" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/LLeg2/StaticBody3D"]
+transform = Transform3D(1, -3.90088e-11, -5.68434e-14, 7.99716e-12, 1, 0, 5.40012e-12, 0, 1, -1.19209e-07, 0.344238, 0)
+shape = SubResource("BoxShape3D_m1p6f")
+
+[node name="RLeg2" type="BoneAttachment3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D" index="7"]
+transform = Transform3D(1, -1.05567e-07, -5.52064e-07, -1.03595e-07, -0.999994, 0.00357086, -5.52437e-07, -0.00357086, -0.999994, -0.6, 1.55, 0.00499982)
+bone_name = "r_leg02"
+bone_idx = 5
+
+[node name="StaticBody3D" type="StaticBody3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/RLeg2" groups=["wall"]]
+
+[node name="Feet" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/RLeg2/StaticBody3D"]
+transform = Transform3D(1, -3.90088e-11, -5.68434e-14, 7.99716e-12, 1, 0, 5.40012e-12, 0, 1, -1.19209e-07, 0.344238, 0)
+shape = SubResource("BoxShape3D_m1p6f")
+
+[node name="FootHitbox" type="Area3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D" index="8"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_u2idn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GolemMajin/GolemMajinRoot/Skeleton3D/FootHitbox"]
+shape = SubResource("CylinderShape3D_4c46w")
+disabled = true
+
 [node name="AnimationPlayer" parent="GolemMajin" index="1"]
+deterministic = true
 blend_times = [&"walk", &"defeat", 0.2]
 
-[node name="GrindrailR" parent="." node_paths=PackedStringArray("rail") instance=ExtResource("3_w2hby")]
+[node name="GrindrailR" parent="." instance=ExtResource("3_w2hby")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.1, -4.5)
 rail = NodePath("Path")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Path" type="Path3D" parent="GrindrailR"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 5)
 curve = SubResource("Curve3D_eumw5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GrindrailR"]
 shape = SubResource("BoxShape3D_h6tkg")
 disabled = true
 
-[node name="GrindrailL" parent="." node_paths=PackedStringArray("rail") instance=ExtResource("3_w2hby")]
+[node name="GrindrailL" parent="." instance=ExtResource("3_w2hby")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.1, -4.5)
 rail = NodePath("Path")
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="Path" type="Path3D" parent="GrindrailL"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 5)
 curve = SubResource("Curve3D_eumw5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GrindrailL"]
@@ -186,18 +368,105 @@ monitorable = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("CylinderShape3D_s76cu")
 
+[node name="SFX" type="Node3D" parent="."]
+
+[node name="StepSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("6_7jh6v")
+max_db = 0.0
+max_distance = 50.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="ThrowSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("7_fpp2j")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="WindupSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("8_ie4eq")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="AttackedSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("9_g82kv")
+max_db = 0.0
+max_distance = 50.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="GruntSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("10_4lar6")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="ImpactSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("11_p5sbo")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="TurnSFX" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("12_m4pf6")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="VFX" type="Node3D" parent="."]
+
+[node name="FootDust" type="GPUParticles3D" parent="VFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+layers = 32
+emitting = false
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+fract_delta = false
+visibility_aabb = AABB(-3, -1, -3, 6, 4, 6)
+process_material = SubResource("ParticleProcessMaterial_eus5d")
+draw_pass_1 = SubResource("QuadMesh_tdyfr")
+
+[node name="ImpactDust" type="GPUParticles3D" parent="VFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+layers = 32
+emitting = false
+amount = 32
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+fract_delta = false
+visibility_aabb = AABB(-3, -1, -7, 6, 4, 14)
+process_material = SubResource("ParticleProcessMaterial_8t5ej")
+draw_pass_1 = SubResource("QuadMesh_tdyfr")
+
 [node name="AnimationTree" type="AnimationTree" parent="."]
 active = false
 root_node = NodePath("../GolemMajin")
 tree_root = SubResource("AnimationNodeBlendTree_xmh3l")
 anim_player = NodePath("../GolemMajin/AnimationPlayer")
 parameters/gear_add/add_amount = 1.0
+parameters/hand_add/add_amount = 1.0
 parameters/state_transition/current_state = "idle"
 parameters/state_transition/transition_request = ""
 parameters/state_transition/current_index = 0
+parameters/throw_trigger/active = false
+parameters/throw_trigger/internal_active = false
+parameters/throw_trigger/request = 0
 
+[connection signal="TurnStarted" from="." to="SFX/TurnSFX" method="play"]
 [connection signal="area_entered" from="GolemMajin/GolemMajinRoot/Skeleton3D/Head/Hurtbox" to="." method="OnEntered"]
 [connection signal="area_exited" from="GolemMajin/GolemMajinRoot/Skeleton3D/Head/Hurtbox" to="." method="OnExited"]
+[connection signal="area_entered" from="GolemMajin/GolemMajinRoot/Skeleton3D/FootHitbox" to="GolemMajin/GolemMajinRoot/Skeleton3D/FootHitbox" method="OnEntered"]
+[connection signal="area_exited" from="GolemMajin/GolemMajinRoot/Skeleton3D/FootHitbox" to="GolemMajin/GolemMajinRoot/Skeleton3D/FootHitbox" method="OnExited"]
 [connection signal="area_entered" from="RangeTrigger" to="." method="OnRangeEntered"]
 [connection signal="area_exited" from="RangeTrigger" to="." method="OnRangeExited"]
 

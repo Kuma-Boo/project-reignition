@@ -212,7 +212,7 @@ public partial class PlayerEffect : Node3D
 		}
 	}
 
-	public void FullGrindChargeFX()
+	public void StartFullChargeFX()
 	{
 		chargeParticle.Emitting = false;
 		chargeParticle.Visible = false;
@@ -433,6 +433,9 @@ public partial class PlayerEffect : Node3D
 	private AudioStreamPlayer voiceChannel;
 	public void PlayVoice(StringName key)
 	{
+		if (SoundManager.instance.IsDialogActive)
+			return;
+
 		voiceChannel.Stream = voiceLibrary.GetStream(key, SoundManager.LanguageIndex);
 		voiceChannel.Play();
 	}

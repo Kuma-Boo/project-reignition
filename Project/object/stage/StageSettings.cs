@@ -65,6 +65,7 @@ public partial class StageSettings : Node3D
 		}
 
 		InitializeShaders();
+		SetEnvironmentFxFactor(environmentFxFactor, 0);
 	}
 
 	public void UpdatePostProcessingStatus()
@@ -144,6 +145,7 @@ public partial class StageSettings : Node3D
 		}
 
 		UpdateTime();
+		UpdateEnvironmentFXFactor();
 	}
 
 	private void StartLevel()
@@ -173,14 +175,15 @@ public partial class StageSettings : Node3D
 			return -1;
 
 		int rank = 0; // DEFAULT - No rank
+		float completionTime = Mathf.RoundToInt(CurrentTime * 100f) * 0.01f; // Round to nearest millisecond
 
 		if (Data.SkipScore)
 		{
-			if (CurrentTime <= Data.GoldTime)
+			if (completionTime <= Data.GoldTime)
 				rank = 3;
-			else if (CurrentTime <= Data.SilverTime)
+			else if (completionTime <= Data.SilverTime)
 				rank = 2;
-			else if (CurrentTime <= Data.BronzeTime)
+			else if (completionTime <= Data.BronzeTime)
 				rank = 1;
 		}
 		else
@@ -189,11 +192,11 @@ public partial class StageSettings : Node3D
 			if (preCountBonuses)
 				score += BonusManager.instance.QueuedScore;
 
-			if (CurrentTime <= Data.GoldTime && score >= Data.Score) // Perfect run
+			if (completionTime <= Data.GoldTime && score >= Data.Score) // Perfect run
 				rank = 3;
-			else if (CurrentTime <= Data.SilverTime && score >= 3 * (Data.Score / 4)) // Silver score reqs are always 3/4 of gold
+			else if (completionTime <= Data.SilverTime && score >= 3 * (Data.Score / 4)) // Silver score reqs are always 3/4 of gold
 				rank = 2;
-			else if (CurrentTime <= Data.BronzeTime) // Bronze is easy to get
+			else if (completionTime <= Data.BronzeTime) // Bronze is easy to get
 				rank = 1;
 		}
 
@@ -218,10 +221,8 @@ public partial class StageSettings : Node3D
 				return "00:00.00";
 		}
 	}
-	public int GetRequiredScore(int rank)
-	{
-		return Data.Score;
-	}
+	public int GetRequiredScore() => Data.Score;
+
 	#region Level Data
 	public enum MathModeEnum // List of ways the score can be modified
 	{
@@ -340,7 +341,7 @@ public partial class StageSettings : Node3D
 			FinishLevel(false);
 		}
 		else if (CurrentObjectiveCount >= Data.MissionObjectiveCount &&
-						Data.MissionType != LevelDataResource.MissionTypes.Chain)
+				Data.MissionType != LevelDataResource.MissionTypes.Chain)
 		{
 			FinishLevel(true);
 		}
@@ -362,7 +363,9 @@ public partial class StageSettings : Node3D
 		int previousAmount = CurrentRingCount;
 		CurrentRingCount = CalculateMath(CurrentRingCount, amount, mode);
 		RingBonus = CurrentRingCount * 10;
-		if (Data.MissionType == LevelDataResource.MissionTypes.Ring && CurrentRingCount >= Data.MissionObjectiveCount) // For ring based missions
+		if (Data.MissionType == LevelDataResource.MissionTypes.Ring &&
+			CurrentRingCount >= Data.MissionObjectiveCount &&
+			Data.MissionObjectiveCount != 0) // For ring based missions
 		{
 			CurrentRingCount = Data.MissionObjectiveCount; // Clamp
 			FinishLevel(true);
@@ -401,6 +404,10 @@ public partial class StageSettings : Node3D
 
 		EmitSignal(SignalName.TimeChanged);
 	}
+
+	public bool[] fireSoulCheckpoints = new bool[3];
+	public bool IsFireSoulCheckpointFlagSet(int index) => fireSoulCheckpoints[index];
+	public bool SetFireSoulCheckpointFlag(int index, bool value) => fireSoulCheckpoints[index] = value;
 	#endregion
 
 	#region Path Settings
@@ -445,22 +452,23 @@ public partial class StageSettings : Node3D
 	public Triggers.CheckpointTrigger CurrentCheckpoint { get; private set; }
 	private int CheckpointScore { get; set; }
 	private int CheckpointObjectiveCount { get; set; }
-	private int SavedScore { get; set; }
-	private int SavedObjectiveCount { get; set; }
+	private float CheckpointEnvironmentFxFactor { get; set; }
 	public void SetCheckpoint(Triggers.CheckpointTrigger checkpoint)
 	{
 		if (checkpoint == CurrentCheckpoint) return; // Already at this checkpoint
 
 		CurrentCheckpoint = checkpoint;
-		SavedScore = CurrentScore;
-		SavedObjectiveCount = CurrentObjectiveCount;
+		CheckpointScore = CurrentScore;
+		CheckpointObjectiveCount = CurrentObjectiveCount;
+		CheckpointEnvironmentFxFactor = targetEnvironmentFxFactor;
 		EmitSignal(SignalName.TriggeredCheckpoint);
 	}
 
 	public void RevertToCheckpointData()
 	{
-		ResetObjective(SavedObjectiveCount);
-		UpdateScore(SavedScore, MathModeEnum.Replace);
+		ResetObjective(CheckpointObjectiveCount);
+		UpdateScore(CheckpointScore, MathModeEnum.Replace);
+		SetEnvironmentFxFactor(CheckpointEnvironmentFxFactor, 0);
 	}
 
 	[Signal]
@@ -505,6 +513,10 @@ public partial class StageSettings : Node3D
 	[Signal]
 	public delegate void LevelCompletedEventHandler(); // Called when the level is completed
 	[Signal]
+	public delegate void LevelFailedEventHandler(); // Called when the level is failed
+	[Signal]
+	public delegate void LevelSuccessEventHandler(); // Called when the level is successfully finished
+	[Signal]
 	public delegate void LevelDemoStartedEventHandler(); // Called when the level demo starts
 
 	public enum LevelStateEnum
@@ -516,6 +528,7 @@ public partial class StageSettings : Node3D
 		Success,
 	}
 	public LevelStateEnum LevelState { get; private set; }
+	public bool IsLevelLoading => LevelState == LevelStateEnum.Probes || LevelState == LevelStateEnum.Shaders;
 	public bool IsLevelIngame => LevelState == LevelStateEnum.Ingame;
 	/// <summary> Flag for keeping track of Uhu's race status. </summary>
 	public bool IsRaceActive { get; set; }
@@ -537,6 +550,7 @@ public partial class StageSettings : Node3D
 		CalculateTechnicalBonus();
 
 		EmitSignal(SignalName.LevelCompleted);
+		EmitSignal(wasSuccessful ? SignalName.LevelSuccess : SignalName.LevelFailed);
 	}
 
 	/// <summary> Camera demo that gets enabled after the level is cleared. </summary>
@@ -569,8 +583,32 @@ public partial class StageSettings : Node3D
 	#endregion
 
 	/// <summary> Reference to active area's WorldEnvironment node. </summary>
-	[Export]
-	public WorldEnvironment Environment { get; private set; }
+	[Export] public WorldEnvironment Environment { get; private set; }
+	[Export(PropertyHint.Range, "0,1,.1")] private float environmentFxFactor;
+	private float targetEnvironmentFxFactor;
+	private float environmentFxVelocity;
+	private float environmentFxSmoothing;
+	private readonly StringName ShaderEnvironmentFXParameter = "environment_fx_intensity";
+	public void SetEnvironmentFxFactor(float value, float smoothing)
+	{
+		targetEnvironmentFxFactor = Mathf.Clamp(value, 0f, 1f);
+		environmentFxSmoothing = smoothing;
+	}
+
+	private void UpdateEnvironmentFXFactor()
+	{
+		if (Mathf.IsZeroApprox(environmentFxSmoothing))
+		{
+			environmentFxFactor = targetEnvironmentFxFactor;
+			environmentFxVelocity = 0;
+		}
+		else
+		{
+			environmentFxFactor = ExtensionMethods.SmoothDamp(environmentFxFactor, targetEnvironmentFxFactor, ref environmentFxVelocity, environmentFxSmoothing);
+		}
+
+		RenderingServer.GlobalShaderParameterSet(ShaderEnvironmentFXParameter, environmentFxFactor);
+	}
 }
 
 public struct SpawnData(Node parent, Transform3D transform)

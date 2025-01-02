@@ -143,7 +143,7 @@ namespace Project.Gameplay.Bosses
 						{
 							if (duelCharged) //Move
 							{
-								if (SoundManager.instance.IsDialogActive) //Hint is active
+								if (SoundManager.instance.IsSubtitlesActive) //Hint is active
 									timer = DUEL_DIALOG_DELAY;
 								else if (timer >= DUEL_DIALOG_DELAY + .4f) //Extra anticipation after hint disappears
 								{

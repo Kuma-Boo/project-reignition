@@ -38,6 +38,7 @@ public partial class GrindState : PlayerState
 
 		Player.AllowLandingGrind = false;
 		Player.IsGrindstepping = false;
+		Player.IsGrinding = true;
 
 		float positionSmoothing = .2f;
 		float smoothFactor = RailFudgeFactor * 5f;
@@ -51,14 +52,16 @@ public partial class GrindState : PlayerState
 		Player.AllowLandingSkills = false;
 		Player.IsOnGround = true;
 		Player.VerticalSpeed = 0f;
-		Player.MoveSpeed = Player.Stats.GrindSettings.Speed * Player.Stats.CalculateGrindSpeedRatio(); // Start at the correct speed
+
+		float targetMoveSpeed = Player.Stats.GrindSettings.Speed * Player.Stats.CalculateGrindSpeedRatio();
+		Player.MoveSpeed = Mathf.Max(targetMoveSpeed, Player.MoveSpeed);
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.GrindUp) &&
 			SaveManager.ActiveSkillRing.GetAugmentIndex(SkillKey.GrindUp) == 3)
 		{
 			StageSettings.Instance.UpdateRingCount(5, StageSettings.MathModeEnum.Subtract, true);
 		}
 
-		Player.StartExternal(this, ActiveGrindRail.PathFollower, positionSmoothing);
+		Player.StartExternal(null, ActiveGrindRail.PathFollower, positionSmoothing);
 		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.Animator.ExternalAngle = 0; // Reset rotation
 		Player.Animator.StartBalancing();
@@ -75,25 +78,10 @@ public partial class GrindState : PlayerState
 		ProcessPhysics();
 	}
 
-	private void CheckGrindStep(bool allowRedrawing = false)
-	{
-		bool wasAttemptingGrindStep = isAttemptingGrindStep;
-		// Check if the player is holding a direction parallel to rail and start a grindstep
-		float targetInputAngle = Player.Controller.GetTargetInputAngle();
-		isAttemptingGrindStep = !Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) &&
-				(Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle + (Mathf.Pi * .5f)) ||
-				Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle - (Mathf.Pi * .5f)));
-
-		if (allowRedrawing && wasAttemptingGrindStep != isAttemptingGrindStep)
-		{
-			HeadsUpDisplay.Instance.SetPrompt(isAttemptingGrindStep ? GrindStepAction : ShuffleAction, 1);
-			HeadsUpDisplay.Instance.ShowPrompts();
-		}
-	}
-
 	public override void ExitState()
 	{
 		Player.IsOnGround = false; // Disconnect from the ground
+		Player.IsGrinding = false;
 		Player.StopExternal();
 
 		// Preserve speed
@@ -114,7 +102,6 @@ public partial class GrindState : PlayerState
 			HeadsUpDisplay.Instance.HidePrompts();
 
 		ActiveGrindRail.Deactivate();
-		ActiveGrindRail = null;
 	}
 
 	public override PlayerState ProcessPhysics()
@@ -134,6 +121,22 @@ public partial class GrindState : PlayerState
 			return fallState;
 
 		return null;
+	}
+
+	private void CheckGrindStep(bool allowRedrawing = false)
+	{
+		bool wasAttemptingGrindStep = isAttemptingGrindStep;
+		// Check if the player is holding a direction parallel to rail and start a grindstep
+		float targetInputAngle = Player.Controller.GetTargetInputAngle();
+		isAttemptingGrindStep = !Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) &&
+				(Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle + (Mathf.Pi * .5f)) ||
+				Player.Controller.IsHoldingDirection(targetInputAngle, Player.MovementAngle - (Mathf.Pi * .5f)));
+
+		if (allowRedrawing && wasAttemptingGrindStep != isAttemptingGrindStep)
+		{
+			HeadsUpDisplay.Instance.SetPrompt(isAttemptingGrindStep ? GrindStepAction : JumpAction, 1);
+			HeadsUpDisplay.Instance.ShowPrompts();
+		}
 	}
 
 	private void ProcessMovement()
@@ -164,7 +167,10 @@ public partial class GrindState : PlayerState
 
 	public bool IsRailActivationValid(GrindRail grindRail)
 	{
-		if (ActiveGrindRail == grindRail) // Already grinding
+		if (!StageSettings.Instance.IsLevelIngame) // Not in-game
+			return false;
+
+		if (ActiveGrindRail == grindRail) // Already grinding on the target rail
 			return false;
 
 		if (Player.VerticalSpeed > 0f) // Player can't snap to grind rails when moving upwards
@@ -184,7 +190,11 @@ public partial class GrindState : PlayerState
 
 		delta = grindRail.PathFollower.GlobalTransform.Basis.Inverse() * (Player.GlobalPosition - grindRail.PathFollower.GlobalPosition);
 		delta.Y -= Player.VerticalSpeed * PhysicsManager.physicsDelta;
-		if (delta.Y < 0.01f && (!Player.IsOnGround || !Player.AllowLandingGrind) && ActiveGrindRail == null)
+		if (delta.Y < 0.01f && Player.IsOnGround && !Player.AllowLandingGrind && ActiveGrindRail == null)
+			return false;
+
+		// Prevent absurd jumps in height when already on a grind rail
+		if (Mathf.Abs(delta.Y) > .2f && Player.IsGrinding)
 			return false;
 
 		// Horizontal validation
@@ -249,7 +259,7 @@ public partial class GrindState : PlayerState
 		{
 			// Play fully charged VFX
 			perfectChargeTimer = PerfectChargeInputWindow;
-			Player.Effect.FullGrindChargeFX();
+			Player.Effect.StartFullChargeFX();
 		}
 	}
 
@@ -305,8 +315,8 @@ public partial class GrindState : PlayerState
 	{
 		rail ??= ActiveGrindRail;
 		length += Player.CollisionSize.X;
-		RaycastHit hit = rail.CastRay(rail.GlobalPosition, rail.PathFollower.Forward() * length, Player.CollisionMask);
-		DebugManager.DrawRay(rail.GlobalPosition, rail.PathFollower.Forward() * length, hit ? Colors.Red : Colors.White);
+		RaycastHit hit = rail.CastRay(rail.PathFollower.GlobalPosition, rail.PathFollower.Forward() * length, Player.CollisionMask);
+		DebugManager.DrawRay(rail.PathFollower.GlobalPosition, rail.PathFollower.Forward() * length, hit ? Colors.Red : Colors.White);
 
 		// Block grinding through objects in the given group
 		if (hit && hit.collidedObject.IsInGroup("grind wall"))

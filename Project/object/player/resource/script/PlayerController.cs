@@ -48,7 +48,8 @@ public partial class PlayerController : CharacterBody3D
 		// Initialize state machine last to ensure components are ready		
 		StateMachine.Initialize(this);
 
-		ResetOrientation();
+		ChangeHitbox("RESET");
+		ResetCheckpointOrientation();
 		SnapToGround();
 		GetParent<CheckpointTrigger>().Activate(); // Save initial checkpoint
 	}
@@ -146,7 +147,7 @@ public partial class PlayerController : CharacterBody3D
 	private const float CollisionPadding = .02f;
 
 	public bool IsOnGround { get; set; }
-	private RaycastHit GroundHit { get; set; }
+	public RaycastHit GroundHit { get; private set; }
 	private readonly int GroundWhiskerAmount = 8;
 	public bool CheckGround()
 	{
@@ -249,6 +250,7 @@ public partial class PlayerController : CharacterBody3D
 		KinematicCollision3D collision = MoveAndCollide(-UpDirection * distance, true);
 		if (collision == null) return;
 
+		IsOnGround = true;
 		MoveAndCollide(-UpDirection * distance);
 		Animator.SnapToGround();
 	}
@@ -256,7 +258,7 @@ public partial class PlayerController : CharacterBody3D
 	public new bool IsOnWall { get; set; }
 	public RaycastHit WallRaycastHit { get; set; }
 	/// <summary> Checks for walls forward and backwards (only in the direction the player is moving). </summary>
-	public void CheckWall(Vector3 castDirection = new())
+	public void CheckWall(Vector3 castDirection = new(), bool reduceSpeedDuringHeadonCollision = true)
 	{
 		IsOnWall = false;
 
@@ -274,7 +276,7 @@ public partial class PlayerController : CharacterBody3D
 		}
 
 		float wallDelta = ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(WallRaycastHit.normal.RemoveVertical(), IsOnGround ? PathFollower.Up() : Vector3.Up), MovementAngle);
-		if (wallDelta >= Mathf.Pi * .75f) // Process head-on collision
+		if (wallDelta >= Mathf.Pi * .8f) // Process head-on collision
 		{
 			// Cancel speed break
 			if (Skills.IsSpeedBreakActive)
@@ -286,19 +288,22 @@ public partial class PlayerController : CharacterBody3D
 					return;
 				}
 
-				Skills.CallDeferred(CharacterSkillManager.MethodName.ToggleSpeedBreak);
+				Skills.CallDeferred(PlayerSkillController.MethodName.ToggleSpeedBreak);
 			}
 
-			if (WallRaycastHit.distance <= CollisionSize.X + CollisionPadding)
-				MoveSpeed = 0; // Kill speed
-			else if (WallRaycastHit.distance <= CollisionSize.X + CollisionPadding + (MoveSpeed * PhysicsManager.physicsDelta))
-				MoveSpeed *= .9f; // Slow down drastically
+			if (reduceSpeedDuringHeadonCollision)
+			{
+				if (WallRaycastHit.distance <= CollisionSize.X + CollisionPadding)
+					MoveSpeed = 0; // Kill speed
+				else if (WallRaycastHit.distance <= CollisionSize.X + CollisionPadding + (MoveSpeed * PhysicsManager.physicsDelta))
+					MoveSpeed *= .9f; // Slow down drastically
+			}
 
 			IsOnWall = true;
 			return;
 		}
 
-		if (IsMovingBackward || !IsOnGround)
+		if (Controller.IsStrafeModeActive || IsMovingBackward || !IsOnGround)
 			return;
 
 		// Reduce MoveSpeed when running against walls
@@ -310,7 +315,7 @@ public partial class PlayerController : CharacterBody3D
 	private bool ValidateWallCast() => WallRaycastHit && WallRaycastHit.collidedObject.IsInGroup("wall");
 
 	/// <summary> Checks for ceilings and crushers. </summary>
-	public void CheckCeiling()
+	public bool CheckCeiling()
 	{
 		// Start from below the floor and cast through the player to ensure object detection
 		Vector3 castOrigin = GlobalPosition - (UpDirection * CollisionPadding);
@@ -326,10 +331,10 @@ public partial class PlayerController : CharacterBody3D
 		DebugManager.DrawRay(castOrigin, castVector, ceilingHit ? Colors.Red : Colors.White);
 
 		if (!ceilingHit)
-			return;
+			return false;
 
 		// Check if the player is being crushed
-		if (ceilingHit.collidedObject.IsInGroup("crusher") && GroundHit)
+		if (!IsBackflipping && ceilingHit.collidedObject.IsInGroup("crusher") && GroundHit)
 		{
 			// Prevent clipping through the ground
 			AddCollisionExceptionWith(ceilingHit.collidedObject);
@@ -338,11 +343,11 @@ public partial class PlayerController : CharacterBody3D
 				ignoreInvincibility = true,
 			});
 
-			return;
+			return true;
 		}
 
 		if (!ceilingHit.collidedObject.IsInGroup("ceiling"))
-			return;
+			return false;
 
 		GlobalTranslate(ceilingHit.point - (CollisionPosition + (UpDirection * CollisionSize.Y)));
 
@@ -356,7 +361,7 @@ public partial class PlayerController : CharacterBody3D
 			{
 				float deltaAngle = ExtensionMethods.DeltaAngleRad(PathFollower.ForwardAngle, ExtensionMethods.CalculateForwardAngle(ceilingHit.normal, IsOnGround ? PathFollower.Up() : Vector3.Up));
 				if (deltaAngle > Mathf.Pi * .1f) // Wall isn't aligned to the path
-					return;
+					return false;
 
 				// Slide down the wall if it's aligned with the path direction
 				maxVerticalSpeed = -Mathf.Sin(ceilingAngle) * MoveSpeed;
@@ -365,6 +370,8 @@ public partial class PlayerController : CharacterBody3D
 
 		if (VerticalSpeed > maxVerticalSpeed)
 			VerticalSpeed = maxVerticalSpeed;
+
+		return false;
 	}
 
 	/// <summary> Orientates Root to world direction, then rotates the gimbal on the y-axis. </summary>
@@ -378,7 +385,7 @@ public partial class PlayerController : CharacterBody3D
 		GlobalRotate(cross, -UpDirection.SignedAngleTo(Vector3.Up, cross));
 	}
 
-	public void UpdateUpDirection(bool quickReset = true, Vector3 upDirection = new())
+	public void UpdateUpDirection(bool quickReset = false, Vector3 upDirection = new())
 	{
 		// Calculate target up direction
 		if (Camera.ActiveSettings.followPathTilt) // Always use PathFollower.Up when on a tilted path
@@ -578,6 +585,7 @@ public partial class PlayerController : CharacterBody3D
 	[ExportGroup("States")]
 	[Export]
 	private CountdownState countdownState;
+	public bool IsCountdown { get; set; }
 	public void StartCountdown() => StateMachine.ChangeState(countdownState);
 
 	[Signal]
@@ -631,12 +639,19 @@ public partial class PlayerController : CharacterBody3D
 	private GrindState grindState;
 	public bool AllowLandingGrind { get; set; }
 	public bool IsGrindstepping { get; set; }
-	public bool IsGrinding => grindState.ActiveGrindRail != null;
+	public bool IsGrinding { get; set; }
+	public bool IsGrindRailActive => grindState.ActiveGrindRail != null;
 	public bool IsRailActivationValid(GrindRail rail) => grindState.IsRailActivationValid(rail);
 	public void StartGrinding(GrindRail rail)
 	{
 		grindState.ActiveGrindRail = rail;
 		StateMachine.ChangeState(grindState);
+	}
+
+	public void UnregisterGrindrail(GrindRail rail)
+	{
+		if (grindState.ActiveGrindRail == rail)
+			grindState.ActiveGrindRail = null;
 	}
 
 	public bool DisableSidle { get; set; }
@@ -678,10 +693,11 @@ public partial class PlayerController : CharacterBody3D
 	[Export]
 	private BounceState bounceState;
 	public bool IsBouncing { get; set; }
+	public bool IsBounceInteruptable { get; set; }
 	public void StartBounce(bool isUpwardBounce = true)
 	{
 		IsBouncing = true;
-		GD.PrintT("Bouncing", isUpwardBounce);
+		IsBounceInteruptable = false;
 		bounceState.IsUpwardBounce = isUpwardBounce;
 		StateMachine.ChangeState(bounceState);
 	}
@@ -700,15 +716,21 @@ public partial class PlayerController : CharacterBody3D
 	[Export]
 	private KnockbackState knockbackState;
 	public bool IsKnockback { get; set; }
-	public void StartKnockback(KnockbackSettings settings = new())
+	public bool StartKnockback(KnockbackSettings settings = new())
 	{
+		// Disable damage when not in-game
+		if (!Stage.IsLevelIngame) return false;
+
 		EmitSignal(SignalName.Knockback); // Emit signal FIRST so external controllers can be alerted
 
-		if (IsInvincible && !settings.ignoreInvincibility) return;
-		if (ExternalController != null && !settings.ignoreMovementState) return;
+		if (IsTeleporting || IsDefeated) return false;
+		if (IsInvincible && !settings.ignoreInvincibility) return false;
+		if (ExternalController != null && !settings.ignoreMovementState) return false;
 
+		UpDirection = Vector3.Up;
 		knockbackState.Settings = settings;
 		StateMachine.ChangeState(knockbackState);
+		return true;
 	}
 
 	public void TakeDamage()
@@ -723,7 +745,7 @@ public partial class PlayerController : CharacterBody3D
 			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.PearlRespawn) && Skills.IsSoulGaugeCharged)
 			{
 				// Lose soul power and continue
-				Skills.ModifySoulGauge(-CharacterSkillManager.MinimumSoulPower);
+				Skills.ModifySoulGauge(-PlayerSkillController.MinimumSoulPower);
 			}
 			else
 			{
@@ -835,21 +857,21 @@ public partial class PlayerController : CharacterBody3D
 		EmitSignal(SignalName.Defeated);
 	}
 
+	public bool IsDebugRespawn { get; private set; }
 	public void StartRespawn(bool debugRespawn = false)
 	{
+		IsDebugRespawn = debugRespawn;
 		if (TransitionManager.IsTransitionActive || IsTeleporting || IsDefeated || !Stage.IsLevelIngame) return;
 
 		DefeatPlayer();
 
-		if (!debugRespawn)
+		if (!IsDebugRespawn &&
+			(Stage.Data.MissionType == LevelDataResource.MissionTypes.Deathless
+			|| Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect))
 		{
 			// Level failed
-			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Deathless
-				|| Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect)
-			{
-				Stage.FinishLevel(false);
-				return;
-			}
+			Stage.FinishLevel(false);
+			return;
 		}
 
 		// Fade screen out and connect signals
@@ -869,11 +891,21 @@ public partial class PlayerController : CharacterBody3D
 		Skills.IsSpeedBreakEnabled = Skills.IsTimeBreakEnabled = true; // Reenable soul skills
 
 		invincibilityTimer = 0;
-		Teleport(Stage.CurrentCheckpoint);
 		BonusManager.instance.CancelBonuses();
 		Stage.RevertToCheckpointData();
-		PathFollower.SetActivePath(Stage.CurrentCheckpoint.PlayerPath); // Revert path
-		Camera.PathFollower.SetActivePath(Stage.CurrentCheckpoint.CameraPath);
+
+		if (IsDebugRespawn)
+		{
+			Teleport(DebugManager.Instance.DebugCheckpoint);
+			PathFollower.SetActivePath(DebugManager.Instance.DebugCheckpoint.PlayerPath); // Revert path
+			Camera.PathFollower.SetActivePath(DebugManager.Instance.DebugCheckpoint.CameraPath);
+		}
+		else
+		{
+			Teleport(Stage.CurrentCheckpoint);
+			PathFollower.SetActivePath(Stage.CurrentCheckpoint.PlayerPath); // Revert path
+			Camera.PathFollower.SetActivePath(Stage.CurrentCheckpoint.CameraPath);
+		}
 
 		IsDefeated = false;
 		IsMovingBackward = false;
@@ -893,7 +925,7 @@ public partial class PlayerController : CharacterBody3D
 	{
 		PathFollower.Resync();
 		Camera.Respawn();
-		ResetOrientation();
+		ResetCheckpointOrientation();
 		SnapToGround();
 		ChangeHitbox("RESET");
 
@@ -905,11 +937,13 @@ public partial class PlayerController : CharacterBody3D
 		TransitionManager.FinishTransition();
 	}
 
-	private void ResetOrientation()
+	private void ResetCheckpointOrientation()
 	{
 		UpDirection = Vector3.Up;
 
-		if (Stage.CurrentCheckpoint == null) // Default to parent node's position
+		if (IsDebugRespawn)
+			GlobalTransform = DebugManager.Instance.DebugCheckpoint.GlobalTransform;
+		else if (Stage.CurrentCheckpoint == null) // Default to parent node's position
 			Transform = Transform3D.Identity;
 		else
 			GlobalTransform = Stage.CurrentCheckpoint.GlobalTransform;
@@ -976,6 +1010,38 @@ public partial class PlayerController : CharacterBody3D
 		ExternalParent = null;
 		UpdateOrientation();
 		EmitSignal(SignalName.ExternalControlCompleted);
+	}
+
+	public void Activate()
+	{
+		Visible = true;
+		ProcessMode = ProcessModeEnum.Inherit;
+
+		Camera.Camera.Current = true; // Reactivate camera (for cutscenes)
+		Lockon.IsReticleVisible = !DebugManager.Instance.DisableReticle;
+
+		if (Stage.IsControlTest)
+			return;
+
+		HeadsUpDisplay.Instance.Visible = true;
+		Interface.PauseMenu.AllowPausing = true;
+	}
+
+	public void Deactivate()
+	{
+		if (Skills.IsUsingBreakSkills)
+			Skills.CancelBreakSkills();
+
+		Visible = false;
+		ProcessMode = ProcessModeEnum.Disabled;
+
+		Lockon.IsReticleVisible = false;
+
+		if (Stage.IsControlTest)
+			return;
+
+		HeadsUpDisplay.Instance.Visible = false;
+		Interface.PauseMenu.AllowPausing = false;
 	}
 	#endregion
 }

@@ -98,13 +98,15 @@ public partial class ReadyMenu : Menu
 	public void LoadLevel()
 	{
 		TransitionManager.QueueSceneChange(LevelPath);
-		TransitionManager.StartTransition(new TransitionData()
+		TransitionManager.StartTransition(new()
 		{
 			inSpeed = 1f,
 			color = Colors.Black,
 			loadAsynchronously = true,
-			disableAutoTransition = true
+			disableAutoTransition = true,
+			showMissionDescription = true
 		});
+		TransitionManager.instance.SetMissionDescriptionText(missionLabel.Text, description.Text);
 		TransitionManager.instance.UpdateLoadingText("load_level");
 	}
 }

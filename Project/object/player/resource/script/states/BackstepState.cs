@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay;
 
@@ -36,7 +37,8 @@ public partial class BackstepState : PlayerState
 		Player.ApplyMovement();
 		Player.CheckGround();
 		Player.CheckWall();
-		Player.CheckCeiling();
+		if (Player.CheckCeiling())
+			return null;
 
 		if (!Player.IsOnGround)
 			return fallState;
@@ -59,10 +61,14 @@ public partial class BackstepState : PlayerState
 				return backflipState;
 			}
 
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+				return crouchState;
+
 			return jumpState;
 		}
 
-		if (Player.Controller.IsActionBufferActive)
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+			Player.Controller.IsActionBufferActive)
 		{
 			Player.Controller.ResetActionBuffer();
 			return crouchState;
@@ -79,16 +85,10 @@ public partial class BackstepState : PlayerState
 
 	protected override void ProcessTurning()
 	{
-		if (Mathf.IsZeroApprox(Player.MoveSpeed) && !Input.IsActionPressed("button_brake"))
+		float pathControlAmount = Player.Controller.CalculatePathControlAmount();
+		float targetMovementAngle = Player.Controller.GetTargetMovementAngle() + pathControlAmount;
+		if (DisableTurning(targetMovementAngle))
 			return;
-
-		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
-		if (turnInstantly) // Turn instantly
-		{
-			turningVelocity = 0;
-			Player.MovementAngle = targetMovementAngle;
-			return;
-		}
 
 		// Use GroundSettings so backstep turning feels consistent with the run state
 		float speedRatio = Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed);

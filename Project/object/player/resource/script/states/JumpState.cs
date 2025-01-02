@@ -37,6 +37,12 @@ public partial class JumpState : PlayerState
 
 	public override void EnterState()
 	{
+		if (Player.IsLockoutActive &&
+			Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump))
+		{
+			Player.RemoveLockoutData(Player.ActiveLockoutData);
+		}
+
 		if (Player.Skills.IsSpeedBreakActive)
 			Player.Skills.ToggleSpeedBreak();
 
@@ -48,6 +54,10 @@ public partial class JumpState : PlayerState
 		isAccelerationJump = false;
 		isAccelerationJumpQueued = Player.ForceAccelerationJump;
 
+		// Decide accleration jump based on jump charge
+		if (!Player.ForceAccelerationJump && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+			isAccelerationJumpQueued = !Player.Skills.ConsumeJumpCharge();
+
 		Player.ForceAccelerationJump = false;
 		Player.IsOnGround = false;
 		if (Player.IsMovingBackward) // Kill speed when jumping backwards
@@ -58,6 +68,7 @@ public partial class JumpState : PlayerState
 		Player.Lockon.IsMonitoring = true;
 		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 		Player.Animator.JumpAnimation();
+		Player.Controller.ResetJumpBuffer();
 	}
 
 	public override void ExitState()
@@ -67,7 +78,7 @@ public partial class JumpState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		if (!Input.IsActionPressed("button_jump"))
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && !Input.IsActionPressed("button_jump"))
 		{
 			// Check for acceleration jump
 			if (jumpTimer <= AccelerationJumpLength)
@@ -78,12 +89,13 @@ public partial class JumpState : PlayerState
 
 		ProcessMoveSpeed();
 		ProcessTurning();
-		UpdateVerticalSpeed();
+		ProcessGravity();
 		Player.ApplyMovement();
 		Player.IsMovingBackward = Player.Controller.IsHoldingDirection(Player.MovementAngle, Player.PathFollower.BackAngle);
 		Player.CheckGround();
-		Player.CheckWall();
-		Player.CheckCeiling();
+		Player.CheckWall(Vector3.Zero, !isAccelerationJump);
+		if (Player.CheckCeiling())
+			return null;
 		Player.UpdateUpDirection();
 
 		if (Player.IsOnGround)
@@ -129,7 +141,7 @@ public partial class JumpState : PlayerState
 			Player.MovementAngle = ExtensionMethods.ClampAngleRange(Player.MovementAngle, Player.PathFollower.ForwardAngle, MaxAccelerationJumpTurnAmount);
 	}
 
-	private void UpdateVerticalSpeed()
+	protected override void ProcessGravity()
 	{
 		if (isShortenedJump && Player.VerticalSpeed > 0)
 		{
@@ -143,7 +155,7 @@ public partial class JumpState : PlayerState
 				StartAccelerationJump();
 		}
 
-		Player.VerticalSpeed = Mathf.MoveToward(Player.VerticalSpeed, Runtime.MaxGravity, Runtime.Gravity * PhysicsManager.physicsDelta);
+		base.ProcessGravity();
 	}
 
 	private void StartAccelerationJump()
@@ -153,12 +165,14 @@ public partial class JumpState : PlayerState
 			return;
 
 		float inputAngle = Player.Controller.GetTargetMovementAngle();
-		if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+			Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 		{
 			return;
 		}
 
-		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+			!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
 			(!Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.ForwardAngle) ||
 			Player.Controller.GetInputStrength() < .5f))
 		{

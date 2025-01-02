@@ -1,11 +1,45 @@
-[gd_scene load_steps=8 format=3 uid="uid://b0uekqdfkbg6h"]
+[gd_scene load_steps=16 format=3 uid="uid://b0uekqdfkbg6h"]
 
 [ext_resource type="Script" path="res://object/stage/pickups/resource/script/ItemBox.cs" id="2"]
 [ext_resource type="PackedScene" uid="uid://bl0hh6rrv7hxo" path="res://object/stage/common/resource/model/ItemBox.gltf" id="3"]
+[ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="3_8fpsp"]
 [ext_resource type="AudioStream" uid="uid://c3benwqxr66t4" path="res://sound/sfx/objects/treasure chest.wav" id="4_o2niv"]
 
 [sub_resource type="BoxShape3D" id="6"]
 size = Vector3(1.6, 1.4, 1.2)
+
+[sub_resource type="Curve" id="Curve_jemon"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_n6bsf"]
+_data = [Vector2(0, 0.6), 0.0, 3.84665, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.33785, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_nexan"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_u3cay"]
+width = 64
+curve_x = SubResource("Curve_jemon")
+curve_y = SubResource("Curve_n6bsf")
+curve_z = SubResource("Curve_nexan")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yo4sp"]
+lifetime_randomness = 0.4
+direction = Vector3(0, 1, 0)
+spread = 90.0
+initial_velocity_min = 2.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveXYZTexture_u3cay")
+
+[sub_resource type="QuadMesh" id="QuadMesh_q26oc"]
+material = ExtResource("3_8fpsp")
+size = Vector2(0.1, 2)
+center_offset = Vector3(0, 0.5, 0)
 
 [sub_resource type="Animation" id="Animation_bg4xx"]
 length = 0.001
@@ -95,6 +129,22 @@ tracks/6/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_cg8bq"]
+resource_name = "disable-collision"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Collision/CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_hxe17"]
@@ -195,19 +245,34 @@ tracks/7/path = NodePath("Collision/CollisionShape3D:disabled")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.25),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false, true]
+"values": [true]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("CollectFX")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_c756k"]
 _data = {
 "RESET": SubResource("Animation_bg4xx"),
+"disable-collision": SubResource("Animation_cg8bq"),
 "open": SubResource("Animation_hxe17")
 }
 
-[node name="ItemBox" type="Area3D" node_paths=PackedStringArray("animator")]
+[node name="ItemBox" type="Area3D"]
 collision_layer = 12
 collision_mask = 2
 script = ExtResource("2")
@@ -242,6 +307,20 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
 shape = SubResource("6")
+
+[node name="CollectFX" type="GPUParticles3D" parent="."]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 32
+lifetime = 0.4
+one_shot = true
+fixed_fps = 0
+interpolate = false
+local_coords = true
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_yo4sp")
+draw_pass_1 = SubResource("QuadMesh_q26oc")
 
 [node name="SFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_o2niv")

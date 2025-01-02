@@ -28,6 +28,12 @@ public partial class TeleportState : PlayerState
 	public override void EnterState()
 	{
 		Player.IsTeleporting = true;
+		if (Player.IsKnockback)
+		{
+			Player.IsKnockback = false;
+			Player.Animator.StopHurt(false);
+		}
+
 		if (Trigger.resetMovespeed)
 		{
 			Player.MoveSpeed = Player.VerticalSpeed = 0;
@@ -114,6 +120,11 @@ public partial class TeleportState : PlayerState
 		Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
 
 		Trigger.ApplyTeleport(); // Apply any signals/path changes
+
+		if (StopTeleportFX())
+			return;
+
+		currentState = States.Completed;
 	}
 
 	private bool StopTeleportFX()

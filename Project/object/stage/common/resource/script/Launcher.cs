@@ -135,8 +135,18 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	{
 		if (launchDirection == LaunchDirection.Forward)
 			return LaunchPoint.Forward();
-		else if (launchDirection == LaunchDirection.Flatten)
-			return LaunchPoint.Up().RemoveVertical().Normalized();
+
+		if (launchDirection == LaunchDirection.Flatten)
+		{
+			if (Mathf.Abs(LaunchPoint.Forward().Dot(Vector3.Up)) > .9f)
+			{
+				int sign = LaunchPoint.Forward().Y > -0.01f ? 1 : -1;
+				sign *= LaunchPoint.Up().Y > -0.01f ? 1 : -1;
+				return -(LaunchPoint.Up() * sign).RemoveVertical().Normalized();
+			}
+
+			return LaunchPoint.Forward().RemoveVertical().Normalized();
+		}
 
 		return LaunchPoint.Up();
 	}
@@ -159,6 +169,9 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 
 		return settings;
 	}
+
+	public override void _Ready() => SetUp();
+	protected virtual void SetUp() => _sfxPlayer = GetNodeOrNull<AudioStreamPlayer3D>(sfxPlayer);
 
 	public virtual void Activate(Area3D a)
 	{
@@ -210,9 +223,10 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 
 	[Export]
 	/// <summary> Optional SFX player. </summary>
-	private AudioStreamPlayer3D sfxPlayer;
-	protected bool IsSfxActive => sfxPlayer.Playing;
-	protected virtual void PlayLaunchSfx() => sfxPlayer?.Play();
+	private NodePath sfxPlayer;
+	private AudioStreamPlayer3D _sfxPlayer;
+	protected bool IsSfxActive => _sfxPlayer.Playing;
+	protected virtual void PlayLaunchSfx() => _sfxPlayer?.Play();
 	[Export]
 	/// <summary> Option voice to play. </summary>
 	private StringName voiceKey;

@@ -30,9 +30,13 @@ public partial class Goal : Area3D
 			return;
 		}
 
-		if (Stage.Data.MissionObjectiveCount == 0) // For no pearls, ringless, stealth, etc.
+		if (Stage.Data.MissionObjectiveCount == 0) // For ringless, stealth, etc.
 		{
-			Stage.FinishLevel(Stage.CurrentObjectiveCount == 0);
+			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Ring)
+				Stage.FinishLevel(Stage.CurrentRingCount == 0);
+			else
+				Stage.FinishLevel(Stage.CurrentObjectiveCount == 0);
+
 			return;
 		}
 

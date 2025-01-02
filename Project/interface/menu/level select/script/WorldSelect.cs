@@ -215,6 +215,10 @@ public partial class WorldSelect : Menu
 		_levelTextSprites[spriteIndex].RegionRect = levelSpriteRegions[selectionIndex];
 
 		if (spriteIndex == 1) // Updating primary selection
-			description.SetText(levelDescriptionKeys[selectionIndex]);
+		{
+			description.ShowDescription();
+			description.Text = levelDescriptionKeys[selectionIndex];
+		}
+
 	}
 }
