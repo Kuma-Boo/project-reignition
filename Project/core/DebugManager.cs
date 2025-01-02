@@ -93,7 +93,7 @@ public partial class DebugManager : Node2D
 		{
 			if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(StageSettings.Player))
 			{
-				StageSettings.Player.StartRespawn(true);
+				StageSettings.Player.StartRespawn();
 			}
 			else
 			{
@@ -296,33 +296,36 @@ public partial class DebugManager : Node2D
 	#endregion
 
 	#region Checkpoint Cheats
-	private CheckpointTrigger customCheckpoint;
+	[Signal] public delegate void TriggeredDebugCheckpointEventHandler();
+	public CheckpointTrigger DebugCheckpoint { get; private set; }
 
 	private void SaveCustomCheckpoint()
 	{
 		if (!IsInstanceValid(StageSettings.Instance) || !IsInstanceValid(StageSettings.Player)) return;
 
-		if (customCheckpoint == null)
+		if (!IsInstanceValid(DebugCheckpoint))
 		{
-			customCheckpoint = new();
-			AddChild(customCheckpoint);
+			DebugCheckpoint = new();
+			StageSettings.Instance.AddChild(DebugCheckpoint);
 		}
 
-		customCheckpoint.GlobalPosition = StageSettings.Player.GlobalPosition;
-		StageSettings.Instance.SetCheckpoint(customCheckpoint);
-		GD.Print("Checkpoint created.");
+		DebugCheckpoint.GlobalTransform = StageSettings.Player.GlobalTransform;
+		DebugCheckpoint.SaveCheckpointData();
+		GD.Print("Checkpoint created at ", StageSettings.Player.GlobalPosition);
+
+		EmitSignal(SignalName.TriggeredDebugCheckpoint);
 	}
 
 	private void LoadCustomCheckpoint()
 	{
 		if (!IsInstanceValid(StageSettings.Instance) || !IsInstanceValid(StageSettings.Player)) return;
-		if (customCheckpoint == null)
+
+		if (!IsInstanceValid(DebugCheckpoint))
 		{
-			GD.PushWarning("No custom checkpoint.");
+			GD.Print("No custom checkpoint to load.");
 			return;
 		}
 
-		StageSettings.Instance.SetCheckpoint(customCheckpoint);
 		StageSettings.Player.StartRespawn(true);
 	}
 	#endregion
@@ -335,6 +338,15 @@ public partial class DebugManager : Node2D
 
 		if (!IsInstanceValid(HeadsUpDisplay.Instance)) return;
 		HeadsUpDisplay.Instance.Visible = !enabled;
+	}
+
+	public bool DisableReticle { get; private set; }
+	public void ToggleReticle(bool enabled)
+	{
+		DisableReticle = enabled;
+
+		if (!IsInstanceValid(StageSettings.Player)) return;
+		StageSettings.Player.Lockon.IsReticleVisible = !enabled;
 	}
 
 	/// <summary> Hide countdown for recording. </summary>

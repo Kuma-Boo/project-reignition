@@ -404,6 +404,10 @@ public partial class StageSettings : Node3D
 
 		EmitSignal(SignalName.TimeChanged);
 	}
+
+	public bool[] fireSoulCheckpoints = new bool[3];
+	public bool IsFireSoulCheckpointFlagSet(int index) => fireSoulCheckpoints[index];
+	public bool SetFireSoulCheckpointFlag(int index, bool value) => fireSoulCheckpoints[index] = value;
 	#endregion
 
 	#region Path Settings
@@ -448,25 +452,23 @@ public partial class StageSettings : Node3D
 	public Triggers.CheckpointTrigger CurrentCheckpoint { get; private set; }
 	private int CheckpointScore { get; set; }
 	private int CheckpointObjectiveCount { get; set; }
-	private int SavedScore { get; set; }
-	private int SavedObjectiveCount { get; set; }
-	private float SavedEnvironmentFxFactor { get; set; }
+	private float CheckpointEnvironmentFxFactor { get; set; }
 	public void SetCheckpoint(Triggers.CheckpointTrigger checkpoint)
 	{
 		if (checkpoint == CurrentCheckpoint) return; // Already at this checkpoint
 
 		CurrentCheckpoint = checkpoint;
-		SavedScore = CurrentScore;
-		SavedObjectiveCount = CurrentObjectiveCount;
-		SavedEnvironmentFxFactor = targetEnvironmentFxFactor;
+		CheckpointScore = CurrentScore;
+		CheckpointObjectiveCount = CurrentObjectiveCount;
+		CheckpointEnvironmentFxFactor = targetEnvironmentFxFactor;
 		EmitSignal(SignalName.TriggeredCheckpoint);
 	}
 
 	public void RevertToCheckpointData()
 	{
-		ResetObjective(SavedObjectiveCount);
-		UpdateScore(SavedScore, MathModeEnum.Replace);
-		SetEnvironmentFxFactor(SavedEnvironmentFxFactor, 0);
+		ResetObjective(CheckpointObjectiveCount);
+		UpdateScore(CheckpointScore, MathModeEnum.Replace);
+		SetEnvironmentFxFactor(CheckpointEnvironmentFxFactor, 0);
 	}
 
 	[Signal]

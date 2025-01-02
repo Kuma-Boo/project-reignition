@@ -40,6 +40,7 @@ public partial class FireSoul : Pickup
 		isCollected = true;
 		Animator.Play("collect");
 		HeadsUpDisplay.Instance.CollectFireSoul();
+		StageSettings.Instance.SetFireSoulCheckpointFlag(fireSoulIndex - 1, true);
 		StageSettings.Instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint), (uint)ConnectFlags.OneShot);
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.FireSoulLockon) &&
@@ -60,6 +61,7 @@ public partial class FireSoul : Pickup
 		UpdateLockon();
 		Animator.Play("loop");
 
+		StageSettings.Instance.SetFireSoulCheckpointFlag(fireSoulIndex - 1, false);
 		if (StageSettings.Instance.IsConnected(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint)))
 			StageSettings.Instance.Disconnect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveCheckpoint));
 

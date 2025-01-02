@@ -68,11 +68,19 @@ public partial class PlayerCameraController : Node3D
 	public void Respawn()
 	{
 		SnapXform();
+
 		// Revert camera settings
+		CameraSettingsResource resource;
+		if (Player.IsDebugRespawn)
+			resource = DebugManager.Instance.DebugCheckpoint.CameraSettings;
+		else
+			resource = StageSettings.Instance.CurrentCheckpoint.CameraSettings;
+
 		UpdateCameraSettings(new()
 		{
-			SettingsResource = StageSettings.Instance.CurrentCheckpoint.CameraSettings,
+			SettingsResource = resource,
 		});
+
 		SnapFlag = true;
 	}
 
@@ -224,9 +232,10 @@ public partial class PlayerCameraController : Node3D
 		if (data.SettingsResource == null) return; // Invalid data
 
 		if (CameraBlendList.Count != 0 && ActiveSettings == data.SettingsResource &&
-			!(data.SettingsResource.copyPosition || data.SettingsResource.copyRotation))
+			!(data.SettingsResource.copyPosition || data.SettingsResource.copyRotation) &&
+			data.Trigger?.transitionType != CameraTransitionType.Distance)
 		{
-			// When the same data is used for multiple different triggers
+			// When the same data is used for multiple different triggers (except for distance triggers)
 			ActiveBlendData.Trigger = data.Trigger; // Simply update the current trigger
 			return;
 		}

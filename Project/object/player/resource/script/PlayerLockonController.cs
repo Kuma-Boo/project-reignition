@@ -61,6 +61,11 @@ public partial class PlayerLockonController : Node3D
 	public void PlayPerfectStrike() => lockonAnimator.Play("perfect-strike");
 	public Vector3 HomingAttackDirection => Target != null ? (Target.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
 
+	public override void _Ready()
+	{
+		IsReticleVisible = !DebugManager.Instance.DisableReticle;
+	}
+
 	public void ProcessPhysics()
 	{
 		bool wasTargetChanged = false;

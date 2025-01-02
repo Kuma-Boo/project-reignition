@@ -14,6 +14,7 @@ public partial class GolemMajin : Enemy
 	[Export] private GasTank gasTank;
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")] private NodePath gasTankParent;
 	private Node3D _gasTankParent;
+	[Export] private bool automaticallyThrowTank = true;
 	private bool canThrowGasTank;
 
 	private bool isTurning;
@@ -22,7 +23,7 @@ public partial class GolemMajin : Enemy
 	private float startingProgress;
 
 	private Vector3 velocity;
-	private const float RotationResetSpeed = 5f;
+	private const float RotationResetRatio = .5f;
 	private const float WalkSpeed = 2f;
 	private const float DefaultCameraShakeDistance = 20;
 
@@ -46,7 +47,6 @@ public partial class GolemMajin : Enemy
 		{
 			_gasTankParent = GetNodeOrNull<Node3D>(gasTankParent);
 			gasTank.OnStrike += LockGasTankToGolem;
-			gasTank.Monitorable = false;
 		}
 
 		base.SetUp();
@@ -66,7 +66,7 @@ public partial class GolemMajin : Enemy
 
 	private void RespawnGasTank()
 	{
-		canThrowGasTank = true;
+		canThrowGasTank = automaticallyThrowTank;
 		gasTank.GetParent().RemoveChild(gasTank);
 		_gasTankParent.AddChild(gasTank);
 		gasTank.Transform = Transform3D.Identity;
@@ -112,7 +112,18 @@ public partial class GolemMajin : Enemy
 	}
 
 	/// <summary> Update the gas tank to lock onto the golem's head. </summary>
-	private void LockGasTankToGolem() => gasTank.endTarget = Hurtbox;
+	private void LockGasTankToGolem()
+	{
+		if (!gasTank.IsTravelling)
+		{
+			gasTank.height = 2f;
+			gasTank.endPosition = Vector3.Down * 2.0f;
+			return;
+		}
+
+		gasTank.endTarget = Hurtbox;
+		gasTank.height = 2f;
+	}
 
 	protected override void EnterRange()
 	{
@@ -132,6 +143,8 @@ public partial class GolemMajin : Enemy
 			LaunchGasTank();
 	}
 
+	protected override void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, GlobalPosition + (this.Back() * 5f), new Vector2(2, 1.5f), 1.5f);
+
 	protected override void UpdateEnemy()
 	{
 		if (StageSettings.Instance?.IsLevelIngame == false) return;
@@ -140,7 +153,7 @@ public partial class GolemMajin : Enemy
 
 		if (IsDefeated)
 		{
-			pathFollower.Rotation = pathFollower.Rotation.Lerp(Vector3.Zero, RotationResetSpeed * PhysicsManager.physicsDelta);
+			pathFollower.Rotation = pathFollower.Rotation.Lerp(Vector3.Zero, RotationResetRatio);
 			return;
 		}
 

@@ -330,7 +330,7 @@ public partial class IfritGolem : Node3D
 
 		EnterIdle();
 
-		if (SoundManager.instance.IsDialogActive)
+		if (SoundManager.instance.IsSubtitlesActive)
 			return;
 
 		if (dialogFlags[1] < 3 && dialogFlags[3] != 1)
@@ -637,6 +637,7 @@ public partial class IfritGolem : Node3D
 		Root.Rotation = Vector3.Zero;
 		ExitHitstun();
 
+		Player.Skills.DisableBreakSkills();
 		Player.Deactivate();
 		Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 
@@ -657,7 +658,6 @@ public partial class IfritGolem : Node3D
 		EventAnimator.Advance(0.0);
 		AnimationTree.Active = false;
 		Player.Activate();
-		Player.Skills.CancelBreakSkills();
 		StageSettings.Instance.FinishLevel(true);
 	}
 	#endregion
@@ -883,7 +883,7 @@ public partial class IfritGolem : Node3D
 
 		Transform3D t = tank.GlobalTransform;
 		tank.GetParent().RemoveChild(tank);
-		StageSettings.Instance.AddChild(tank);
+		AddChild(tank);
 		tank.GlobalTransform = t;
 
 		if (currentState == GolemState.SpecialAttack)

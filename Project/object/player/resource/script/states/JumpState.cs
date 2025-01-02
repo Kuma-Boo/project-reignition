@@ -68,6 +68,7 @@ public partial class JumpState : PlayerState
 		Player.Lockon.IsMonitoring = true;
 		Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 		Player.Animator.JumpAnimation();
+		Player.Controller.ResetJumpBuffer();
 	}
 
 	public override void ExitState()
@@ -164,8 +165,11 @@ public partial class JumpState : PlayerState
 			return;
 
 		float inputAngle = Player.Controller.GetTargetMovementAngle();
-		if (Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
+			Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
+		{
 			return;
+		}
 
 		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
 			!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&

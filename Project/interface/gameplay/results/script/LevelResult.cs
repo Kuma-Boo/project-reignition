@@ -170,10 +170,7 @@ public partial class LevelResult : Control
 
 	public void PlayRankQuote()
 	{
-		int voiceIndex = 0;
-		if (Stage.LevelState != StageSettings.LevelStateEnum.Failed)
-			voiceIndex = SaveManager.ActiveGameData.GetRank(Stage.Data.LevelID) + 1;
-
+		int voiceIndex = StageSettings.Instance.CalculateRank() + 1;
 		resultsVoicePlayer.Stream = resultsVoiceLibrary.GetStream(voiceIndex, (int)SaveManager.Config.voiceLanguage);
 		resultsVoicePlayer.Play();
 	}

@@ -161,7 +161,7 @@ public partial class PlayerInputController : Node
 					break;
 			}
 
-			if (resource.allowReversing)
+			if (resource.allowReversing && !Player.Skills.IsSpeedBreakActive)
 			{
 				float backwardsAngle = forwardAngle + Mathf.Pi;
 				if ((!Mathf.IsZeroApprox(Player.MoveSpeed) && Player.IsMovingBackward) ||

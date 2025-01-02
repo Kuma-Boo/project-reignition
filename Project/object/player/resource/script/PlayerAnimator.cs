@@ -8,6 +8,8 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class PlayerAnimator : Node3D
 {
+	[Signal] public delegate void CountdownLandingEventHandler();
+
 	private PlayerController Player;
 	public void Initialize(PlayerController player)
 	{

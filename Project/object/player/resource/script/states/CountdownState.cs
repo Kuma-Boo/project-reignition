@@ -26,6 +26,7 @@ public partial class CountdownState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.SnapToGround();
 		Player.IsCountdown = false;
 		Player.Animator.CancelOneshot();
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bt5jbalot5nrx"]
+[gd_scene load_steps=21 format=3 uid="uid://bt5jbalot5nrx"]
 
 [ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="1_cmr73"]
 [ext_resource type="Resource" uid="uid://m5ueqam8sc0c" path="res://resource/level data/evil foundry/Act1Race.tres" id="2_e5v2s"]
@@ -121,13 +121,11 @@ _data = {
 "race": SubResource("Animation_h21mg")
 }
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_tlhgp"]
-size = Vector3(4.19458, 20, 11.3859)
-
 [node name="RaceAct" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_cmr73")]
 Data = ExtResource("2_e5v2s")
+environmentFxFactor = 1.0
 
 [node name="CullingMap" parent="Static/Visuals" index="0"]
 visible = true
@@ -144,7 +142,7 @@ startEnabled = true
 [node name="25Hall" parent="Static/Visuals" index="17"]
 startEnabled = true
 
-[node name="DemoCamera" parent="Static" index="4"]
+[node name="DemoCamera" parent="Static" index="5"]
 transform = Transform3D(-3.61999e-06, 0, -1, 0, 1, 0, 1, 0, -3.61999e-06, -491, -30, -360)
 
 [node name="RaceAct" type="Node3D" parent="."]
@@ -194,13 +192,6 @@ libraries = {
 
 [node name="Start" type="Node3D" parent="RaceAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.8635, 43.3879, -281.106)
-
-[node name="InvisibleWall" type="StaticBody3D" parent="RaceAct/Start"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 21.0653, 40.0087, -232.707)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RaceAct/Start/InvisibleWall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.813354, 8, -1.2641)
-shape = SubResource("BoxShape3D_tlhgp")
 
 [node name="Cratepathway" type="Node3D" parent="RaceAct/Start"]
 
@@ -536,6 +527,13 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 6.7
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RaceAct/End/Goal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+shape = SubResource("BoxShape3D_d83xk")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="RaceAct/End"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.119507, -0.00359726, 136.345)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RaceAct/End/StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_d83xk")
 
 [editable path="Static"]

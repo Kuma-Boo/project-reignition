@@ -49,7 +49,7 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.Initialize(this);
 
 		ChangeHitbox("RESET");
-		ResetOrientation();
+		ResetCheckpointOrientation();
 		SnapToGround();
 		GetParent<CheckpointTrigger>().Activate(); // Save initial checkpoint
 	}
@@ -334,7 +334,7 @@ public partial class PlayerController : CharacterBody3D
 			return false;
 
 		// Check if the player is being crushed
-		if (ceilingHit.collidedObject.IsInGroup("crusher") && GroundHit)
+		if (!IsBackflipping && ceilingHit.collidedObject.IsInGroup("crusher") && GroundHit)
 		{
 			// Prevent clipping through the ground
 			AddCollisionExceptionWith(ceilingHit.collidedObject);
@@ -857,21 +857,21 @@ public partial class PlayerController : CharacterBody3D
 		EmitSignal(SignalName.Defeated);
 	}
 
+	public bool IsDebugRespawn { get; private set; }
 	public void StartRespawn(bool debugRespawn = false)
 	{
+		IsDebugRespawn = debugRespawn;
 		if (TransitionManager.IsTransitionActive || IsTeleporting || IsDefeated || !Stage.IsLevelIngame) return;
 
 		DefeatPlayer();
 
-		if (!debugRespawn)
+		if (!IsDebugRespawn &&
+			(Stage.Data.MissionType == LevelDataResource.MissionTypes.Deathless
+			|| Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect))
 		{
 			// Level failed
-			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Deathless
-				|| Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect)
-			{
-				Stage.FinishLevel(false);
-				return;
-			}
+			Stage.FinishLevel(false);
+			return;
 		}
 
 		// Fade screen out and connect signals
@@ -891,11 +891,21 @@ public partial class PlayerController : CharacterBody3D
 		Skills.IsSpeedBreakEnabled = Skills.IsTimeBreakEnabled = true; // Reenable soul skills
 
 		invincibilityTimer = 0;
-		Teleport(Stage.CurrentCheckpoint);
 		BonusManager.instance.CancelBonuses();
 		Stage.RevertToCheckpointData();
-		PathFollower.SetActivePath(Stage.CurrentCheckpoint.PlayerPath); // Revert path
-		Camera.PathFollower.SetActivePath(Stage.CurrentCheckpoint.CameraPath);
+
+		if (IsDebugRespawn)
+		{
+			Teleport(DebugManager.Instance.DebugCheckpoint);
+			PathFollower.SetActivePath(DebugManager.Instance.DebugCheckpoint.PlayerPath); // Revert path
+			Camera.PathFollower.SetActivePath(DebugManager.Instance.DebugCheckpoint.CameraPath);
+		}
+		else
+		{
+			Teleport(Stage.CurrentCheckpoint);
+			PathFollower.SetActivePath(Stage.CurrentCheckpoint.PlayerPath); // Revert path
+			Camera.PathFollower.SetActivePath(Stage.CurrentCheckpoint.CameraPath);
+		}
 
 		IsDefeated = false;
 		IsMovingBackward = false;
@@ -915,7 +925,7 @@ public partial class PlayerController : CharacterBody3D
 	{
 		PathFollower.Resync();
 		Camera.Respawn();
-		ResetOrientation();
+		ResetCheckpointOrientation();
 		SnapToGround();
 		ChangeHitbox("RESET");
 
@@ -927,11 +937,13 @@ public partial class PlayerController : CharacterBody3D
 		TransitionManager.FinishTransition();
 	}
 
-	private void ResetOrientation()
+	private void ResetCheckpointOrientation()
 	{
 		UpDirection = Vector3.Up;
 
-		if (Stage.CurrentCheckpoint == null) // Default to parent node's position
+		if (IsDebugRespawn)
+			GlobalTransform = DebugManager.Instance.DebugCheckpoint.GlobalTransform;
+		else if (Stage.CurrentCheckpoint == null) // Default to parent node's position
 			Transform = Transform3D.Identity;
 		else
 			GlobalTransform = Stage.CurrentCheckpoint.GlobalTransform;
@@ -1006,7 +1018,7 @@ public partial class PlayerController : CharacterBody3D
 		ProcessMode = ProcessModeEnum.Inherit;
 
 		Camera.Camera.Current = true; // Reactivate camera (for cutscenes)
-		Lockon.IsReticleVisible = true;
+		Lockon.IsReticleVisible = !DebugManager.Instance.DisableReticle;
 
 		if (Stage.IsControlTest)
 			return;
