@@ -1,7 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://bbkkpqrn4few"]
+[gd_scene load_steps=14 format=3 uid="uid://bbkkpqrn4few"]
 
 [ext_resource type="Script" path="res://interface/transition/TransitionManager.cs" id="1"]
 [ext_resource type="PackedScene" uid="uid://rdmkjkkugnvf" path="res://interface/transition/loading/Loading.tscn" id="2_4rxrd"]
+[ext_resource type="LabelSettings" uid="uid://dki35mj1oux2s" path="res://interface/font/DescriptionText.tres" id="2_h67nm"]
+[ext_resource type="Texture2D" uid="uid://b8m4romueky5l" path="res://interface/transition/loading/texture/mission description.png" id="4_ygxbv"]
+[ext_resource type="LabelSettings" uid="uid://bj5wleayu3s78" path="res://interface/font/LoadingMissionDescription.tres" id="5_bx744"]
 
 [sub_resource type="Animation" id="Animation_k4ji2"]
 length = 0.001
@@ -28,6 +31,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../MissionDescription:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_1nhla"]
@@ -57,10 +72,22 @@ tracks/1/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../MissionDescription:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_nn8bs"]
 resource_name = "show"
-length = 0.2
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -81,6 +108,18 @@ tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../MissionDescription:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -122,6 +161,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="3"]
 resource_name = "crossfade"
+step = 0.02
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -129,14 +169,15 @@ tracks/0/path = NodePath("Crossfade:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.02, 0.98, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="2"]
 resource_name = "fade"
+step = 0.02
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -144,10 +185,10 @@ tracks/0/path = NodePath("Fade:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.02, 0.98, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_g2s4k"]
@@ -157,13 +198,16 @@ _data = {
 "fade": SubResource("2")
 }
 
-[node name="TransitionManager" type="CanvasLayer" node_paths=PackedStringArray("fade", "animator", "loadingAnimator")]
+[node name="TransitionManager" type="CanvasLayer" node_paths=PackedStringArray("loadLabel", "fade", "animator", "loadingAnimator", "missionDescriptionRoot", "missionDescriptionLabel")]
 process_mode = 3
 layer = 100
 script = ExtResource("1")
+loadLabel = NodePath("Fade/LoadingText")
 fade = NodePath("Fade")
 animator = NodePath("AnimationPlayer")
 loadingAnimator = NodePath("Loading/LoadingAnimator")
+missionDescriptionRoot = NodePath("MissionDescription")
+missionDescriptionLabel = NodePath("MissionDescription/Background/MissionLabel")
 
 [node name="Fade" type="ColorRect" parent="."]
 self_modulate = Color(1, 1, 1, 0)
@@ -171,6 +215,19 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
 metadata/_edit_lock_ = true
+
+[node name="LoadingText" type="Label" parent="Fade"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 128.0
+offset_top = -184.0
+offset_right = 960.0
+offset_bottom = -122.0
+grow_vertical = 0
+label_settings = ExtResource("2_h67nm")
+vertical_alignment = 1
 
 [node name="Crossfade" type="TextureRect" parent="."]
 self_modulate = Color(1, 1, 1, 0)
@@ -191,6 +248,51 @@ visible = false
 libraries = {
 "": SubResource("AnimationLibrary_41xu3")
 }
+
+[node name="MissionDescription" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Background" type="TextureRect" parent="MissionDescription"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -125.0
+offset_right = 640.0
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ygxbv")
+
+[node name="MissionLabel" type="Label" parent="MissionDescription/Background"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -384.0
+offset_top = -116.0
+offset_right = 384.0
+offset_bottom = 68.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Rampage: Defeat 10 Enemies!"
+label_settings = ExtResource("5_bx744")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

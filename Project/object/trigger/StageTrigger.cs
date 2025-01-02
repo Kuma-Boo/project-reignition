@@ -13,9 +13,8 @@ namespace Project.Gameplay.Triggers
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
 		{
-			Array<Dictionary> properties = new Array<Dictionary>();
+			Array<Dictionary> properties = [ExtensionMethods.CreateProperty("OneShot", Variant.Type.Bool)];
 
-			properties.Add(ExtensionMethods.CreateProperty("OneShot", Variant.Type.Bool));
 			if (isOneShot)
 				properties.Add(ExtensionMethods.CreateProperty("Respawn Mode", Variant.Type.Int, PropertyHint.Enum, respawnMode.EnumToString()));
 
@@ -112,7 +111,8 @@ namespace Project.Gameplay.Triggers
 		public delegate void DeactivatedEventHandler();
 		[Signal]
 		public delegate void RespawnedEventHandler();
-		private CharacterPathFollower PathFollower => CharacterController.instance.PathFollower;
+		private PlayerPathController PathFollower => StageSettings.Player.PathFollower;
+		private bool isInteractingWithPlayer;
 
 		public override void _Ready()
 		{
@@ -124,29 +124,34 @@ namespace Project.Gameplay.Triggers
 				StageTriggerModule module = GetChildOrNull<StageTriggerModule>(i);
 				if (module == null) continue;
 
-				//Connect signals
-				Connect(SignalName.Activated, new Callable(module, StageTriggerModule.MethodName.Activate));
-				Connect(SignalName.Deactivated, new Callable(module, StageTriggerModule.MethodName.Deactivate));
-				Connect(SignalName.Respawned, new Callable(module, StageTriggerModule.MethodName.Respawn));
+				// Connect signals
+				Activated += module.Activate;
+				Deactivated += module.Deactivate;
+				Respawned += module.Respawn;
 			}
 
 			if (respawnMode != RespawnModes.Disabled) //Connect respawn signal
-				StageSettings.instance.ConnectRespawnSignal(this);
+				StageSettings.Instance.ConnectRespawnSignal(this);
 		}
 
 		public void Respawn()
 		{
-			if (respawnMode != RespawnModes.Always) //Validate respawn
+			if (isOneShot && respawnMode != RespawnModes.Always) //Validate respawn
 			{
 				//Compare the currentCheckpoint progress compared to this StageTrigger
 				float eventPosition = PathFollower.GetProgress(GlobalPosition);
-				float checkpointPosition = PathFollower.GetProgress(StageSettings.instance.CurrentCheckpoint.GlobalPosition);
+				float checkpointPosition = PathFollower.GetProgress(StageSettings.Instance.CurrentCheckpoint.GlobalPosition);
 				bool isRespawningAhead = checkpointPosition > eventPosition;
 
 				if ((respawnMode == RespawnModes.CheckpointBefore && isRespawningAhead) ||
 				(respawnMode == RespawnModes.CheckpointAfter && !isRespawningAhead)) //Invalid Respawn
+				{
 					return;
+				}
 			}
+
+			if (isInteractingWithPlayer)
+				OnEntered();
 
 			wasTriggered = false;
 			EmitSignal(SignalName.Respawned);
@@ -155,6 +160,18 @@ namespace Project.Gameplay.Triggers
 		public void OnEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player detection")) return;
+			OnEntered();
+		}
+
+		public void OnExited(Area3D a)
+		{
+			if (!a.IsInGroup("player detection")) return;
+			OnExited();
+		}
+
+		private void OnEntered()
+		{
+			isInteractingWithPlayer = true;
 
 			//Determine whether activation is successful
 			if (triggerMode == TriggerModes.OnExit)
@@ -170,9 +187,9 @@ namespace Project.Gameplay.Triggers
 			Activate();
 		}
 
-		public void OnExited(Area3D a)
+		private void OnExited()
 		{
-			if (!a.IsInGroup("player detection")) return;
+			isInteractingWithPlayer = false;
 
 			//Determine whether deactivation is successful
 			if (triggerMode == TriggerModes.OnEnter)

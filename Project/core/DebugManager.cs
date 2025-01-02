@@ -91,9 +91,9 @@ public partial class DebugManager : Node2D
 
 		if (Input.IsActionJustPressed("debug_restart"))
 		{
-			if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(CharacterController.instance))
+			if (!Input.IsKeyPressed(Key.Shift) && IsInstanceValid(StageSettings.Player))
 			{
-				CharacterController.instance.StartRespawn(true);
+				StageSettings.Player.StartRespawn();
 			}
 			else
 			{
@@ -226,7 +226,7 @@ public partial class DebugManager : Node2D
 	private void ToggleInfiniteRings(bool enabled)
 	{
 		InfiniteRings = enabled;
-		StageSettings.instance?.UpdateRingCount(0, StageSettings.MathModeEnum.Replace, true);
+		StageSettings.Instance?.UpdateRingCount(0, StageSettings.MathModeEnum.Replace, true);
 	}
 	/// <summary> Skip countdowns for faster debugging. </summary>
 	public bool SkipCountdown { get; private set; }
@@ -296,34 +296,37 @@ public partial class DebugManager : Node2D
 	#endregion
 
 	#region Checkpoint Cheats
-	private CheckpointTrigger customCheckpoint;
+	[Signal] public delegate void TriggeredDebugCheckpointEventHandler();
+	public CheckpointTrigger DebugCheckpoint { get; private set; }
 
 	private void SaveCustomCheckpoint()
 	{
-		if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(CharacterController.instance)) return;
+		if (!IsInstanceValid(StageSettings.Instance) || !IsInstanceValid(StageSettings.Player)) return;
 
-		if (customCheckpoint == null)
+		if (!IsInstanceValid(DebugCheckpoint))
 		{
-			customCheckpoint = new();
-			AddChild(customCheckpoint);
+			DebugCheckpoint = new();
+			StageSettings.Instance.AddChild(DebugCheckpoint);
 		}
 
-		customCheckpoint.GlobalPosition = CharacterController.instance.GlobalPosition;
-		StageSettings.instance.SetCheckpoint(customCheckpoint);
-		GD.Print("Checkpoint created.");
+		DebugCheckpoint.GlobalTransform = StageSettings.Player.GlobalTransform;
+		DebugCheckpoint.SaveCheckpointData();
+		GD.Print("Checkpoint created at ", StageSettings.Player.GlobalPosition);
+
+		EmitSignal(SignalName.TriggeredDebugCheckpoint);
 	}
 
 	private void LoadCustomCheckpoint()
 	{
-		if (!IsInstanceValid(StageSettings.instance) || !IsInstanceValid(CharacterController.instance)) return;
-		if (customCheckpoint == null)
+		if (!IsInstanceValid(StageSettings.Instance) || !IsInstanceValid(StageSettings.Player)) return;
+
+		if (!IsInstanceValid(DebugCheckpoint))
 		{
-			GD.PushWarning("No custom checkpoint.");
+			GD.Print("No custom checkpoint to load.");
 			return;
 		}
 
-		StageSettings.instance.SetCheckpoint(customCheckpoint);
-		CharacterController.instance.StartRespawn(true);
+		StageSettings.Player.StartRespawn(true);
 	}
 	#endregion
 
@@ -333,8 +336,17 @@ public partial class DebugManager : Node2D
 	{
 		DisableHUD = enabled;
 
-		if (!IsInstanceValid(HeadsUpDisplay.instance)) return;
-		HeadsUpDisplay.instance.Visible = !enabled;
+		if (!IsInstanceValid(HeadsUpDisplay.Instance)) return;
+		HeadsUpDisplay.Instance.Visible = !enabled;
+	}
+
+	public bool DisableReticle { get; private set; }
+	public void ToggleReticle(bool enabled)
+	{
+		DisableReticle = enabled;
+
+		if (!IsInstanceValid(StageSettings.Player)) return;
+		StageSettings.Player.Lockon.IsReticleVisible = !enabled;
 	}
 
 	/// <summary> Hide countdown for recording. </summary>
@@ -366,8 +378,8 @@ public partial class DebugManager : Node2D
 	private void UpdateCamData(string newData)
 	{
 		if (!newData.IsValidFloat()) return;
-		if (!IsInstanceValid(CharacterController.instance)) return;
-		CameraController cam = CharacterController.instance.Camera;
+		if (!IsInstanceValid(StageSettings.Player)) return;
+		PlayerCameraController cam = StageSettings.Player.Camera;
 
 		Vector3 pos = new(freeCamData[0].Text.ToFloat(), freeCamData[1].Text.ToFloat(), freeCamData[2].Text.ToFloat());
 		Vector3 rot = new(freeCamData[3].Text.ToFloat(), freeCamData[4].Text.ToFloat(), freeCamData[5].Text.ToFloat());

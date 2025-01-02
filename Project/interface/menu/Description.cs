@@ -4,12 +4,16 @@ namespace Project.Interface.Menus
 {
 	public partial class Description : Control
 	{
-		[Export]
-		private Label descriptionLabel;
-		public void SetText(string descriptionText) => descriptionLabel.Text = descriptionText;
+		[Export] private Label descriptionLabel;
+		public string Text
+		{
+			get => descriptionLabel.Text;
+			set => descriptionLabel.Text = value;
+		}
 
-		[Export]
-		private AnimationPlayer animator;
+		[Export] private AnimationPlayer animator;
+
+		private void SetText(string text) => Text = text;
 
 		public void ShowDescription()
 		{

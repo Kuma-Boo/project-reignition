@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode specular_disabled, shadows_disabled;
+render_mode specular_disabled, shadows_disabled, depth_prepass_alpha;
 
 global uniform float time;
 
@@ -12,12 +12,13 @@ void fragment()
 {
 	vec2 uv = UV + texture(displacement, UV * displacement_scale + vec2(0, time * scroll_speed)).ra;
 	vec2 uv2 = UV2 + texture(displacement, UV2 * displacement_scale - vec2(time * scroll_speed, 0)).ra;
-	vec4 col = texture(albedo, uv);
+	vec4 col = texture(albedo, uv) * COLOR;
 	
 	//Bring out red and green channels
 	col.r *= 2.0;
 	col.g *= 1.5;
 	
 	ALBEDO = col.rgb;
+	ALPHA = col.a;
 	EMISSION = col.rgb;
 }

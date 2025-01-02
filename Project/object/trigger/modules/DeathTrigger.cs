@@ -17,13 +17,12 @@ namespace Project.Gameplay.Triggers
 
 		public override void Activate()
 		{
-			//TODO Play VFX
-			Character.Camera.IsDefeatFreezeActive = true;
-			Character.StartRespawn();
-			Character.Effect.PlayVoice("fall");
+			Player.Camera.IsDefeatFreezeActive = true;
+			Player.StartRespawn();
+			Player.Effect.PlayVoice("fall");
 
 			if (triggerType == TriggerType.Water)
-				Character.Effect.PlayLandingWaterFX();
+				Player.Effect.PlayLandingWaterFX();
 		}
 	}
 }

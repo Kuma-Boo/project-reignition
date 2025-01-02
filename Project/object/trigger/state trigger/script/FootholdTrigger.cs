@@ -1,22 +1,20 @@
 using Godot;
 
-namespace Project.Gameplay.Triggers
+namespace Project.Gameplay.Triggers;
+
+public partial class FootholdTrigger : Area3D
 {
-	public partial class FootholdTrigger : Area3D
+	private PlayerController Player => StageSettings.Player;
+
+	public void OnEntered(Area3D a)
 	{
-		public void OnEntered(Area3D a)
-		{
-			if (!a.IsInGroup("player detection")) return;
+		if (!a.IsInGroup("player detection")) return;
+		Player.SetFoothold(this);
+	}
 
-			SidleTrigger.CurrentFoothold = this;
-		}
-
-		public void OnExited(Area3D a)
-		{
-			if (!a.IsInGroup("player detection")) return;
-
-			if (SidleTrigger.CurrentFoothold == this)
-				SidleTrigger.CurrentFoothold = null;
-		}
+	public void OnExited(Area3D a)
+	{
+		if (!a.IsInGroup("player detection")) return;
+		Player.UnsetFoothold(this);
 	}
 }

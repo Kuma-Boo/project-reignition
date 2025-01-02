@@ -135,8 +135,18 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	{
 		if (launchDirection == LaunchDirection.Forward)
 			return LaunchPoint.Forward();
-		else if (launchDirection == LaunchDirection.Flatten)
-			return LaunchPoint.Up().RemoveVertical().Normalized();
+
+		if (launchDirection == LaunchDirection.Flatten)
+		{
+			if (Mathf.Abs(LaunchPoint.Forward().Dot(Vector3.Up)) > .9f)
+			{
+				int sign = LaunchPoint.Forward().Y > -0.01f ? 1 : -1;
+				sign *= LaunchPoint.Up().Y > -0.01f ? 1 : -1;
+				return -(LaunchPoint.Up() * sign).RemoveVertical().Normalized();
+			}
+
+			return LaunchPoint.Forward().RemoveVertical().Normalized();
+		}
 
 		return LaunchPoint.Up();
 	}
@@ -153,14 +163,22 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		Vector3 endPosition = startPosition + (GetLaunchDirection() * blendedDistance) + (Vector3.Up * blendedFinalHeight);
 
 		LaunchSettings settings = LaunchSettings.Create(startPosition, endPosition, blendedMiddleHeight);
+		settings.AllowJumpDash = allowJumpDashing;
 		settings.UseAutoAlign = true;
+		settings.Launcher = this;
 
 		return settings;
 	}
 
+	public override void _Ready() => SetUp();
+	protected virtual void SetUp() => _sfxPlayer = GetNodeOrNull<AudioStreamPlayer3D>(sfxPlayer);
+
 	public virtual void Activate(Area3D a)
 	{
-		if (!a.IsInGroup("player detection")) return;
+		if (!a.IsInGroup("player detection"))
+			return;
+
+		IsPlayerCentered = false;
 		Activate();
 	}
 	public virtual void Activate()
@@ -169,10 +187,10 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		PlayLaunchSfx();
 
 		if (voiceKey?.IsEmpty == false)
-			Character.Effect.PlayVoice(voiceKey);
+			Player.Effect.PlayVoice(voiceKey);
 
-		IsCharacterCentered = recenterSpeed == 0;
-		Character.StartLauncher(GetLaunchSettings(), this);
+		IsPlayerCentered = recenterSpeed == 0;
+		Player.StartLauncher(GetLaunchSettings());
 
 		LaunchAnimation();
 	}
@@ -180,22 +198,24 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	/// <summary> Sets the player's launch animation based on launchsettings. Override as needed. </summary>
 	protected virtual void LaunchAnimation()
 	{
+		Player.Effect.StopSpinFX();
+		Player.Animator.ResetState(.1f);
 		if (GetLaunchSettings().InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
-			Character.Animator.JumpAnimation();
+			Player.Animator.JumpAnimation();
 		else
-			Character.Animator.LaunchAnimation();
+			Player.Animator.LaunchAnimation();
 	}
 
 	[Export]
 	private int recenterSpeed = 32; // How fast to recenter the character
 
-	public virtual bool IsCharacterCentered { get; private set; }
-	protected CharacterController Character => CharacterController.instance;
+	public virtual bool IsPlayerCentered { get; protected set; }
+	protected PlayerController Player => StageSettings.Player;
 
-	public Vector3 RecenterCharacter()
+	public Vector3 RecenterPlayer()
 	{
-		Vector3 pos = Character.GlobalPosition.MoveToward(StartingPoint, recenterSpeed * PhysicsManager.physicsDelta);
-		IsCharacterCentered = pos.IsEqualApprox(StartingPoint);
+		Vector3 pos = Player.GlobalPosition.MoveToward(StartingPoint, recenterSpeed * PhysicsManager.physicsDelta);
+		IsPlayerCentered = pos.IsEqualApprox(StartingPoint);
 		return pos;
 	}
 
@@ -203,9 +223,10 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 
 	[Export]
 	/// <summary> Optional SFX player. </summary>
-	private AudioStreamPlayer3D sfxPlayer;
-	protected bool IsSfxActive => sfxPlayer.Playing;
-	protected virtual void PlayLaunchSfx() => sfxPlayer?.Play();
+	private NodePath sfxPlayer;
+	private AudioStreamPlayer3D _sfxPlayer;
+	protected bool IsSfxActive => _sfxPlayer.Playing;
+	protected virtual void PlayLaunchSfx() => _sfxPlayer?.Play();
 	[Export]
 	/// <summary> Option voice to play. </summary>
 	private StringName voiceKey;

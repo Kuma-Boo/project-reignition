@@ -1,5 +1,4 @@
 using Godot;
-using Project.Core;
 
 namespace Project.Gameplay.Objects;
 
@@ -24,13 +23,16 @@ public partial class PathTraveller : Node3D
 	[ExportGroup("Settings")]
 	[Export]
 	private float maxSpeed;
+	public float MaxSpeed => maxSpeed;
 	/// <summary> How fast to turn. </summary>
 	[Export]
 	private float turnSpeed;
+	public float TurnSpeed => turnSpeed;
 
 	/// <summary> Allow object to move vertically? </summary>
 	[Export]
 	private bool isVerticalMovementDisabled;
+	public bool IsVerticalMovementDisabled => isVerticalMovementDisabled;
 
 	[Export]
 	private float rotationAmount = 45;
@@ -40,22 +42,11 @@ public partial class PathTraveller : Node3D
 	/// <summary> Maximum distance from the path allowed. </summary>
 	[Export]
 	private Vector2 bounds;
+	public Vector2 Bounds => bounds;
+	public void SetHorizontalBounds(float newBound) => bounds.X = Mathf.Abs(newBound);
 	[Export]
 	private bool autosetBounds;
-	private float HorizontalTurnSmoothing => bounds.X - CollisionSmoothingDistance;
-	private float VerticalTurnSmoothing => bounds.Y - CollisionSmoothingDistance;
-
-	/// <summary> How fast is the object currently moving? </summary>
-	private float currentSpeed;
-	/// <summary> How much is the object currently turning? </summary>
-	private Vector2 currentTurnAmount;
-	// Values for smooth damp
-	private float speedVelocity;
-	private Vector2 turnVelocity;
-	private readonly float SpeedSmoothing = .5f;
-	private readonly float TurnSmoothing = .25f;
-	/// <summary> At what distance should inputs start being smoothed? </summary>
-	private readonly float CollisionSmoothingDistance = 1f;
+	public bool AutosetBounds => autosetBounds;
 
 	/// <summary> Reference to the travel path. </summary>
 	[ExportGroup("Components")]
@@ -64,6 +55,7 @@ public partial class PathTraveller : Node3D
 	/// <summary> Reference to the pathfollower. </summary>
 	[Export]
 	private PathFollow3D pathFollower;
+	public PathFollow3D PathFollower => pathFollower;
 	/// <summary> Reference to the root. </summary>
 	[Export]
 	private Node3D root;
@@ -73,18 +65,16 @@ public partial class PathTraveller : Node3D
 	/// <summary> Reference to the player's position. </summary>
 	[Export]
 	private Node3D playerPosition;
+	public Node3D PlayerStandin => playerPosition;
 	/// <summary> Reference to the animator. </summary>
 	[Export]
 	private AnimationPlayer animator;
 
-	/// <summary> Is the carpet currently active? </summary>
-	private bool isActive;
-	private bool isRespawning;
 	private float startingProgress;
 	private Vector3 startingOffset;
 	private SpawnData spawnData;
 
-	private CharacterController Character => CharacterController.instance;
+	private PlayerController Player => StageSettings.Player;
 
 	public override void _Ready()
 	{
@@ -105,97 +95,20 @@ public partial class PathTraveller : Node3D
 		startingOffset = pathFollower.GlobalBasis.Inverse() * (GlobalPosition - pathFollower.GlobalPosition);
 		spawnData = new SpawnData(GetParent(), Transform); // Create spawn data
 
-		StageSettings.instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.ConnectRespawnSignal(this);
 		Respawn();
 	}
 
-	public override void _PhysicsProcess(double _)
-	{
-		if (!isActive)
-			return;
-
-		if (isRespawning)
-			return;
-
-		CalculateMovement();
-		if (autosetBounds)
-			bounds.X = Mathf.Inf;
-		UpdateCollisions(1);
-		UpdateCollisions(-1);
-		ApplyMovement();
-		UpdateAnimation();
-	}
-
-	/// <summary> Handles player input. </summary>
-	private void CalculateMovement()
-	{
-		Vector2 inputVector = Character.InputVector * turnSpeed;
-		if (isVerticalMovementDisabled) // Ignore vertical input
-			inputVector.Y = 0;
-
-		// Smooth out edges
-		bool isSmoothingHorizontal = Mathf.Abs(pathFollower.HOffset) > HorizontalTurnSmoothing &&
-			Mathf.Sign(inputVector.X) != Mathf.Sign(pathFollower.HOffset);
-		bool isSmoothingVertical = Mathf.Abs(pathFollower.VOffset) > VerticalTurnSmoothing &&
-			Mathf.Sign(inputVector.Y) != Mathf.Sign(pathFollower.VOffset);
-
-		if (isSmoothingHorizontal)
-			inputVector.X *= 1.0f - ((Mathf.Abs(pathFollower.HOffset) - HorizontalTurnSmoothing) / (bounds.X - HorizontalTurnSmoothing));
-
-		if (isSmoothingVertical)
-			inputVector.Y *= 1.0f - ((Mathf.Abs(pathFollower.VOffset) - VerticalTurnSmoothing) / (bounds.Y - VerticalTurnSmoothing));
-
-		currentSpeed = ExtensionMethods.SmoothDamp(currentSpeed, maxSpeed, ref speedVelocity, SpeedSmoothing);
-		currentTurnAmount = currentTurnAmount.SmoothDamp(inputVector, ref turnVelocity, TurnSmoothing);
-	}
-
-	/// <summary> Check for walls. </summary>
-	private void UpdateCollisions(int direction)
-	{
-		if (!autosetBounds)
-			return;
-
-		float pathTravellerCollisionSize = Character.CollisionSize.X;
-		float castDistance = pathTravellerCollisionSize + CollisionSmoothingDistance;
-		if (Mathf.Sign(currentTurnAmount.X) == direction)
-			castDistance += Mathf.Abs(currentTurnAmount.X * PhysicsManager.physicsDelta);
-
-		Vector3 castVector = pathFollower.Left() * direction * castDistance;
-		RaycastHit wallCast = this.CastRay(GlobalPosition, castVector, Runtime.Instance.environmentMask);
-		DebugManager.DrawRay(GlobalPosition, castVector, wallCast ? Colors.Green : Colors.White);
-		if (wallCast)
-			bounds.X = Mathf.Abs(pathFollower.HOffset) + (wallCast.distance - pathTravellerCollisionSize);
-
-		if (bounds.X < 0)
-			bounds.X *= -1;
-	}
-
-	private void ApplyMovement()
-	{
-		// Update path follower
-		pathFollower.Progress += currentSpeed * PhysicsManager.physicsDelta;
-		// Add offsets
-		pathFollower.HOffset -= currentTurnAmount.X * PhysicsManager.physicsDelta;
-		pathFollower.VOffset -= currentTurnAmount.Y * PhysicsManager.physicsDelta;
-		// Clamp offsets
-		pathFollower.HOffset = Mathf.Clamp(pathFollower.HOffset, -bounds.X, bounds.X);
-		pathFollower.VOffset = Mathf.Clamp(pathFollower.VOffset, -bounds.Y, bounds.Y);
-
-		// Sync transforms
-		GlobalTransform = pathFollower.GlobalTransform;
-		Character.UpdateExternalControl(true);
-	}
-
-	private void UpdateAnimation()
+	public void UpdateAnimation(Vector2 turnVector, float currentSpeed)
 	{
 		// Update animations
 		if (root != null) // Update visual rotations
 		{
-			float turnAmount = (currentTurnAmount.X / turnSpeed) - (Character.PathFollower.DeltaAngle * 5.0f);
+			float turnAmount = (turnVector.X / turnSpeed) - (Player.PathFollower.DeltaAngle * 5.0f);
 			float tiltAmount = Mathf.DegToRad(rotationAmount) * tiltRatio * turnAmount;
 			root.Rotation = Vector3.Zero;
 
-			root.RotateX(Mathf.DegToRad(rotationAmount) * (currentTurnAmount.Y / turnSpeed));
+			root.RotateX(Mathf.DegToRad(rotationAmount) * (turnVector.Y / turnSpeed));
 			if (localRoot != null)
 				localRoot.Rotation = new(0, 0, tiltAmount);
 			else
@@ -205,11 +118,11 @@ public partial class PathTraveller : Node3D
 
 		if (animator != null) // Update animation speeds
 			animator.SpeedScale = 1.0f + (currentSpeed / maxSpeed * 1.5f);
-		Character.Animator.UpdateBalancing(Character.InputVector.X - (Character.PathFollower.DeltaAngle * 20.0f));
-		Character.Animator.UpdateBalanceSpeed(1f + Character.GroundSettings.GetSpeedRatio(currentSpeed), 0f);
+		Player.Animator.UpdateBalancing(Player.Controller.InputAxis.X - (Player.PathFollower.DeltaAngle * 20.0f));
+		Player.Animator.UpdateBalanceSpeed(1f + Player.Stats.GroundSettings.GetSpeedRatio(currentSpeed), 0f);
 	}
 
-	public void Respawn()
+	private void Respawn()
 	{
 		Deactivate();
 
@@ -229,92 +142,46 @@ public partial class PathTraveller : Node3D
 
 		if (animator != null) // Reset speed scale
 			animator.SpeedScale = 1.0f;
-
-		isRespawning = false;
 	}
 
 	public void Despawn()
 	{
 		if (animator.HasAnimation("despawn"))
 			animator.Play("despawn");
-
-		isRespawning = true;
 	}
 
 	/// <summary> Call this from a trigger. </summary>
 	public void Activate()
 	{
-		isActive = true;
-
 		if (animator.HasAnimation("activate"))
 		{
 			animator.Play("activate");
 			animator.Advance(0.0);
 		}
 
-		Character.StartExternal(this, playerPosition, .1f);
-		Character.Animator.StartBalancing(); // Carpet uses balancing animations
-		Character.Animator.UpdateBalanceSpeed(1f, 0f);
-		Character.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
+		Player.StartPathTraveller(this);
 		EmitSignal(SignalName.Activated);
 	}
 
 	public void Deactivate()
 	{
 		EmitSignal(SignalName.Deactivated);
-		isActive = false;
 
 		if (animator.HasAnimation("deactivate"))
 		{
 			animator.Play("deactivate");
 			animator.Advance(0.0);
 		}
-
-		// Reset damping values
-		currentSpeed = speedVelocity = 0;
-		currentTurnAmount = turnVelocity = Vector2.Zero;
-
-		if (Character.ExternalParent == this)
-		{
-			Character.StopExternal();
-			Character.Animator.ResetState();
-		}
-	}
-
-	private void TakeDamage()
-	{
-		EmitSignal(SignalName.Damaged);
-
-		Deactivate();
-		Despawn();
-
-		// Bump the player off
-		LaunchSettings launchSettings = LaunchSettings.Create(Character.GlobalPosition, Character.GlobalPosition, 2);
-		Character.StartLauncher(launchSettings);
-		Character.Animator.ResetState(0.1f);
-		Character.Animator.StartSpin(3.0f);
-		Character.Animator.SnapRotation(Character.Animator.ExternalAngle);
-	}
-
-	private void Stagger()
-	{
-		EmitSignal(SignalName.Staggered);
-
-		Character.StartInvincibility(5f);
-		Character.Animator.StartBalanceStagger();
-		currentSpeed = speedVelocity = 0;
-		currentTurnAmount = turnVelocity = Vector2.Zero;
 	}
 
 	public void OnBodyEntered(PhysicsBody3D b)
 	{
 		if (b.IsInGroup("stagger"))
 		{
-			Stagger();
+			EmitSignal(SignalName.Staggered);
 			return;
 		}
 
-		TakeDamage();
 		EmitSignal(SignalName.Damaged);
 	}
 }

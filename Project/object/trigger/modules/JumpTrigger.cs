@@ -24,21 +24,23 @@ public partial class JumpTrigger : StageTriggerModule
 
 	public LaunchSettings GetLaunchSettings()
 	{
-		Vector3 startPosition = Character != null ? Character.GlobalPosition : GetParent<Node3D>().GlobalPosition;
+		Vector3 startPosition = Player != null ? Player.GlobalPosition : GetParent<Node3D>().GlobalPosition;
 		LaunchSettings settings = LaunchSettings.Create(startPosition, GlobalPosition, jumpHeight, forceConsistentHeight);
 		settings.IsJump = true;
 		settings.UseAutoAlign = autoAlign;
+		settings.AllowJumpDash = false;
 		return settings;
 	}
 
-	private void FinishJump() => EmitSignal(SignalName.JumpFinished);
+	private void FinishJump()
+	{
+		Player.LaunchFinished -= FinishJump;
+		EmitSignal(SignalName.JumpFinished);
+	}
 
 	public override void Activate()
 	{
-		Character.StartLauncher(GetLaunchSettings());
-		Character.CanJumpDash = false;
-
-		if (!Character.IsConnected(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.FinishJump)))
-			Character.Connect(CharacterController.SignalName.LaunchFinished, new Callable(this, MethodName.FinishJump), (uint)ConnectFlags.OneShot);
+		Player.StartLauncher(GetLaunchSettings());
+		Player.LaunchFinished += FinishJump;
 	}
 }

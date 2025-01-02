@@ -16,10 +16,12 @@ namespace Project.Gameplay.Objects
 		public override void _PhysicsProcess(double _)
 		{
 			if (!isInteractingWithPlayer) return;
-			if (!Character.Skills.IsSpeedBreakActive && Character.ActionState != CharacterController.ActionStates.JumpDash) return;
 
-			if (Character.ActionState == CharacterController.ActionStates.JumpDash) // Bounce the player if necessary
-				Character.Lockon.StartBounce();
+			if (!Player.Skills.IsSpeedBreakActive && !Player.IsJumpDashOrHomingAttack) return;
+
+			if (Player.IsJumpDashOrHomingAttack) // Bounce the player if necessary
+				Player.StartBounce();
+
 			eventHandler.Activate();
 		}
 

@@ -38,7 +38,7 @@ public partial class Pearl : Pickup
 
 		Transform3D t = GlobalTransform;
 		GetParent().RemoveChild(this);
-		Character.AddChild(this);
+		Player.AddChild(this);
 		GlobalTransform = t;
 
 		Tweener?.Kill();
@@ -56,7 +56,7 @@ public partial class Pearl : Pickup
 			midPoint.X *= -1;
 		}
 
-		if (Character.IsMovingBackward)
+		if (Player.IsMovingBackward)
 		{
 			endPoint.Z *= -1;
 			midPoint.Z *= -1;
@@ -66,7 +66,7 @@ public partial class Pearl : Pickup
 		Tweener.TweenProperty(this, "position", endPoint, .2f).SetEase(Tween.EaseType.In);
 		Tweener.Parallel().TweenProperty(this, "scale", Vector3.One * .001f, .2f).SetEase(Tween.EaseType.In);
 
-		Tweener.Parallel().TweenCallback(Callable.From(() => Character.Skills.ModifySoulGauge(isRichPearl ? 20 : 1)));
+		Tweener.Parallel().TweenCallback(Callable.From(() => Player.Skills.ModifySoulGauge(isRichPearl ? 20 : 1)));
 		Tweener.TweenCallback(new Callable(this, MethodName.Despawn)).SetDelay(3f);
 
 		if (isRichPearl) // Play the correct sfx
@@ -76,11 +76,11 @@ public partial class Pearl : Pickup
 
 		isCollected = true;
 
-		StageSettings.instance.UpdateScore(isRichPearl ? 5 : 1, StageSettings.MathModeEnum.Add);
-		if (StageSettings.instance.Data.MissionType == LevelDataResource.MissionTypes.Pearl &&
-			StageSettings.instance.Data.MissionObjectiveCount == 0)
+		StageSettings.Instance.UpdateScore(isRichPearl ? 5 : 1, StageSettings.MathModeEnum.Add);
+		if (StageSettings.Instance.Data.MissionType == LevelDataResource.MissionTypes.Pearl &&
+			StageSettings.Instance.Data.MissionObjectiveCount == 0)
 		{
-			StageSettings.instance.FinishLevel(false);
+			StageSettings.Instance.FinishLevel(false);
 		}
 		base.Collect();
 	}
