@@ -182,7 +182,7 @@ public partial class SaveManager : Node
 				{ nameof(subtitlesEnabled), subtitlesEnabled },
 				{ nameof(voiceLanguage), (int)voiceLanguage },
 				{ nameof(textLanguage), (int)textLanguage },
-				
+
 			};
 		}
 
@@ -521,8 +521,6 @@ public partial class SaveManager : Node
 	{
 		if (ActiveSaveSlotIndex == -1) return; // Invalid save slot
 
-		
-
 		// Write save data to a file.
 		string saveNumber = ActiveSaveSlotIndex.ToString("00");
 		FileAccess file = FileAccess.Open(SaveDirectory + $"save{saveNumber}.dat", FileAccess.ModeFlags.Write);
@@ -532,7 +530,6 @@ public partial class SaveManager : Node
 			file.StoreString(Json.Stringify(ActiveGameData.ToDictionary(), "\t"));
 			file.Close();
 		}
-		GD.Print("Saving.......");
 	}
 
 	/// <summary> Preloads game data so it can be displayed on menus. </summary>
@@ -585,10 +582,8 @@ public partial class SaveManager : Node
 		GD.Print("Deleting save");
 	}
 
-
 	public class GameData
 	{
-
 		/// <summary> Which area was the player in last? (Used for save select) </summary>
 		public WorldEnum lastPlayedWorld;
 
@@ -608,7 +603,6 @@ public partial class SaveManager : Node
 		public int exp;
 		/// <summary> Total playtime, in seconds. </summary>
 		public float playTime;
-		
 
 		public Array<string> presetNames;
 		public Array<Array<SkillKey>> presetSkills;
@@ -820,7 +814,7 @@ public partial class SaveManager : Node
 			return levelData[levelID];
 		}
 		#endregion
-	
+
 
 		/// <summary> Creates a dictionary based on GameData. </summary>
 		public Dictionary ToDictionary()

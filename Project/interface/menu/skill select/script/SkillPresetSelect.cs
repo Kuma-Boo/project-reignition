@@ -1,8 +1,6 @@
 using Godot;
-using System;
 using Godot.Collections;
 using Project.Core;
-using Project.Gameplay;
 
 namespace Project.Interface.Menus;
 
@@ -43,15 +41,23 @@ public partial class SkillPresetSelect : Menu
 
 	private Array<SkillPresetOption> presetList = [];
 
-	//private Array<SkillPreset> currentPresets = [];
-	private Array<string> currentPresetNames = [];
-	private Array<Array<SkillKey>> currentPresetSkills = [];
-	private Array<Dictionary<SkillKey, int>> currentPresetAugments = [];
-
 	private bool isInitialized;
 
 	public bool isSubMenuActive;
 	private int subIndex;
+
+	protected override void SetUp()
+	{
+		// Create Preset Option nodes
+		for (int i = 0; i < PresetsSlots; i++)
+		{
+			SkillPresetOption newPreset = presetOption.Instantiate<SkillPresetOption>();
+			newPreset.DisplayNumber = i + 1; // For displaying the number
+
+			presetList.Add(newPreset);
+			presetContainer.AddChild(newPreset);
+		}
+	}
 
 	public override void ShowMenu()
 	{
@@ -64,63 +70,16 @@ public partial class SkillPresetSelect : Menu
 
 	public void LoadPresets()
 	{
-		GD.Print("Loading Presets");
-
-		if (!isInitialized)
+		//currentPresets = new Array<SkillPreset>();
+		for (int i = 0; i < presetList.Count; i++)
 		{
-			presetList = new Array<SkillPresetOption>();
-			//currentPresets = new Array<SkillPreset>();
-			currentPresetNames = new Array<string>();
-			currentPresetSkills = new Array<Array<SkillKey>>();
-			currentPresetAugments = new Array<Dictionary<SkillKey, int>>();
-			for (int i = 0; i < PresetsSlots; i++)
-			{
-				//presetList.Add(null);
-				currentPresetNames.Add("");
-				currentPresetSkills.Add(null);
-				currentPresetAugments.Add(null);
-				//currentPresets.Add(new SkillPreset("", null, null));
-				SkillPresetOption newPreset = presetOption.Instantiate<SkillPresetOption>();
+			GD.Print("LOADING PRESET " + i);
 
+			presetList[i].presetName = SaveManager.ActiveGameData.presetNames[i];
+			presetList[i].skills = SaveManager.ActiveGameData.presetSkills[i];
+			presetList[i].skillAugments = SaveManager.ActiveGameData.presetSkillAugments[i];
 
-				if (SaveManager.ActiveGameData.presetSkills[i] != null &&
-					SaveManager.ActiveGameData.presetSkillAugments[i] != null &&
-					SaveManager.ActiveGameData.presetNames[i] != "")
-				{
-					GD.Print("LOADING PRESET " + i);
-
-					currentPresetNames[i] = SaveManager.ActiveGameData.presetNames[i];
-					currentPresetSkills[i] = SaveManager.ActiveGameData.presetSkills[i];
-					currentPresetAugments[i] = SaveManager.ActiveGameData.presetSkillAugments[i];
-
-					newPreset.presetName = currentPresetNames[i];
-					newPreset.skills = currentPresetSkills[i];
-					newPreset.skillAugments = currentPresetAugments[i];
-
-					//newPreset.thisPreset = currentPresets[i];
-					//GD.Print("PRESET " + i + ":");
-					//GD.Print(newPreset.thisPreset.presetName.ToString());
-					//GD.Print(newPreset.thisPreset.skills.ToString());
-					//GD.Print(newPreset.thisPreset.skillAugments.ToString());
-
-				}
-				else
-				{
-					currentPresetNames[i] = "";
-					currentPresetSkills[i] = null;
-					currentPresetAugments[i] = null;
-
-				}
-
-
-
-				presetList.Add(newPreset);
-
-				presetContainer.AddChild(newPreset);
-				presetList[i].Index = i + 1;//for displaying the number
-
-				presetList[i].Initialize();
-			}
+			presetList[i].Initialize();
 		}
 
 		isInitialized = true;
@@ -174,7 +133,6 @@ public partial class SkillPresetSelect : Menu
 			return;
 		}
 
-
 		// Show the submenu
 		subIndex = 0;
 		MoveSubCursor();
@@ -197,10 +155,6 @@ public partial class SkillPresetSelect : Menu
 			//Return to skill editing
 		}
 	}
-
-
-
-
 
 	public void MoveSubCursor()
 	{
@@ -257,54 +211,34 @@ public partial class SkillPresetSelect : Menu
 
 	private void SaveSkills(int preset)
 	{
-		if (string.IsNullOrEmpty(currentPresetNames[preset]) &&
-			currentPresetSkills[preset] == null &&
-			currentPresetAugments[preset] == null)
-		{
-			currentPresetNames[preset] = "New Preset";
-			currentPresetSkills[preset] = [];
-			currentPresetAugments[preset] = [];
-		}
+		// Storing our equipped skills into our current preset
+		if (string.IsNullOrEmpty(presetList[preset].presetName))
+			presetList[preset].presetName = "New Preset";
 
+		presetList[preset].skills = SaveManager.ActiveGameData.equippedSkills.Duplicate();
+		presetList[preset].skillAugments = SaveManager.ActiveGameData.equippedAugments.Duplicate();
 
-		//Storing our equipped skills into the temporary preset
-		currentPresetSkills[preset] = SaveManager.ActiveGameData.equippedSkills;
-		currentPresetAugments[preset] = SaveManager.ActiveGameData.equippedAugments;
+		SaveManager.ActiveGameData.presetNames[preset] = presetList[preset].presetName;
+		SaveManager.ActiveGameData.presetSkills[preset] = presetList[preset].skills;
+		SaveManager.ActiveGameData.presetSkillAugments[preset] = presetList[preset].skillAugments;
 
-
-		//Set a new name if our current one is empty
-		if (currentPresetNames[preset] == null || currentPresetNames[preset] == "")
-			currentPresetNames[preset] = "New Preset";
-
-		//Sets the preset selection object to the saved temporary preset
-		presetList[preset].presetName = currentPresetNames[preset];
-		presetList[preset].skills = currentPresetSkills[preset];
-		presetList[preset].skillAugments = currentPresetAugments[preset];
-
-		//Turns the class back into separate data
-		//SaveManager.ActiveGameData.FromSkillPreset(currentPresets[preset], preset); 
-		SaveManager.ActiveGameData.presetNames[preset] = currentPresetNames[preset];
-		SaveManager.ActiveGameData.presetSkills[preset] = currentPresetSkills[preset];
-		SaveManager.ActiveGameData.presetSkillAugments[preset] = currentPresetAugments[preset];
-
-		//Save our new data to the file and play the animation to initialize the on-screen data
+		// Save our new data to the file and play the animation to initialize the on-screen data
 		presetList[preset].SavePreset();
 		SaveManager.SaveGameData();
 
-
+		foreach (SkillPresetOption option in presetList)
+		{
+			GD.PrintT(option.presetName, option.skills, option.skillAugments);
+		}
 	}
 
 	private void LoadSkills(int preset)
 	{
-
-
-		SaveManager.ActiveGameData.equippedSkills = currentPresetSkills[preset];
-		SaveManager.ActiveGameData.equippedAugments = currentPresetAugments[preset];
+		SaveManager.ActiveGameData.equippedSkills = presetList[preset].skills;
+		SaveManager.ActiveGameData.equippedAugments = presetList[preset].skillAugments;
 
 		skillSelectMenu.Redraw();
 		presetList[preset].SelectPreset();
-
-
 	}
 
 	private void RenamePreset()
@@ -314,41 +248,17 @@ public partial class SkillPresetSelect : Menu
 
 	private void DeletePreset(int preset)
 	{
-		if (SaveManager.ActiveGameData.presetNames[preset] != "" &&
-			SaveManager.ActiveGameData.presetSkills[preset] != null &&
-			SaveManager.ActiveGameData.presetSkillAugments[preset] != null)
-		{
-			currentPresetNames[preset] = "";
-			currentPresetSkills[preset] = null;
-			currentPresetAugments[preset] = null;
+		// A null/empty preset means it's already been deleted.
+		if (string.IsNullOrEmpty(SaveManager.ActiveGameData.presetNames[preset]))
+			return;
 
-			presetList[preset].presetName = currentPresetNames[preset];
-			presetList[preset].skills = currentPresetSkills[preset];
-			presetList[preset].skillAugments = currentPresetAugments[preset];
-			//currentPresets[preset].SetName("");
-			//currentPresets[preset].SetSkills(null);
-			//currentPresets[preset].SetSkills(null);
-			//presetList[preset].thisPreset.SetPreset(currentPresets[preset]);
+		presetList[preset].presetName = null;
+		presetList[preset].skills = null;
+		presetList[preset].skillAugments = null;
 
-			//SaveManager.ActiveGameData.FromSkillPreset(currentPresets[preset],preset);
-
-
-			SaveManager.SaveGameData();
-			presetList[preset].Initialize();
-		}
-
+		SaveManager.SaveGameData();
+		presetList[preset].Redraw();
 	}
 
-	private bool IsInvalid(int index)
-	{
-		if (currentPresetNames[index] == "" &&
-			currentPresetSkills[index] == null &&
-			currentPresetAugments[index] == null)
-			return true;
-		else
-			return false;
-
-	}
-
-
+	private bool IsInvalid(int index) => presetList[index].IsInvalid;
 }

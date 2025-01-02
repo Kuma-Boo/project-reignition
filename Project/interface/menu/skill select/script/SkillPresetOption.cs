@@ -6,21 +6,20 @@ using Project.Gameplay;
 
 namespace Project.Interface.Menus;
 
-
 public partial class SkillPresetOption : Control
 {
 	//public SkillPreset thisPreset;
+
+	public bool IsInvalid => string.IsNullOrEmpty(presetName);
 
 	public string presetName;
 	public Array<SkillKey> skills;
 	public Dictionary<SkillKey, int> skillAugments;
 
-	private SkillRing activeSkillRing => SaveManager.ActiveSkillRing;
+	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
 
 	/// <summary> The preset option's menu number. </summary>
-	public int Index { get; set; }
-
-	private bool isInvalid;
+	public int DisplayNumber { get; set; }
 
 	[Export] private Label presetLabel;
 
@@ -37,25 +36,19 @@ public partial class SkillPresetOption : Control
 
 	public void Initialize()
 	{
-		numLabel.Text = Index.ToString();
-		if (presetName == null && skills == null && skillAugments == null)
+		numLabel.Text = DisplayNumber.ToString();
+		if (IsInvalid)
 		{
 			animator.Play("no-preset");
-			isInvalid = true;
 			return;
 		}
-		else
-		{
-			if (string.IsNullOrEmpty(presetName))
-				presetName = "New Preset";
 
-			Redraw();
-			//animator.Play("new-preset");
-			animatorData.Play("show");
-		}
+		Redraw();
+		//animator.Play("new-preset");
+		animatorData.Play("show");
 	}
 
-	private void Redraw()
+	public void Redraw()
 	{
 		presetLabel.Text = presetName;
 
@@ -71,7 +64,7 @@ public partial class SkillPresetOption : Control
 			SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(skills[i]);
 			if (baseSkill == null)
 				continue;
-			int augmentIndex = activeSkillRing.GetAugmentIndex(skills[i]);
+			int augmentIndex = ActiveSkillRing.GetAugmentIndex(skills[i]);
 			if (augmentIndex == 0)
 			{
 				switch (baseSkill.Element)
