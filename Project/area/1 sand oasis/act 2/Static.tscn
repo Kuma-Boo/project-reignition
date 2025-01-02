@@ -66,38 +66,38 @@ size = Vector3(1, 19.4123, 32.3037)
 [sub_resource type="BoxShape3D" id="BoxShape3D_7x33n"]
 size = Vector3(21.605, 21.115, 1)
 
-[sub_resource type="Gradient" id="Gradient_lbers"]
+[sub_resource type="Gradient" id="Gradient_rar0h"]
 offsets = PackedFloat32Array(0.791045)
 colors = PackedColorArray(1, 0.415, 0.1, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_auj1f"]
-gradient = SubResource("Gradient_lbers")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_w1qv4"]
+gradient = SubResource("Gradient_rar0h")
 
-[sub_resource type="Gradient" id="Gradient_4slir"]
+[sub_resource type="Gradient" id="Gradient_6eodn"]
 interpolation_color_space = 2
 offsets = PackedFloat32Array(0.149485, 0.365979, 0.5, 0.994845)
 colors = PackedColorArray(0, 0.654735, 0.948889, 1, 0.952253, 0.690817, 1, 1, 0, 0.116667, 1, 1, 0, 0.654735, 0.948889, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_inq5n"]
-gradient = SubResource("Gradient_4slir")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_uvqpe"]
+gradient = SubResource("Gradient_6eodn")
 use_hdr = true
 fill_from = Vector2(0.982906, 1)
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_ea1lp"]
-panorama = SubResource("GradientTexture2D_inq5n")
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_47ji7"]
+panorama = SubResource("GradientTexture2D_uvqpe")
 
-[sub_resource type="Sky" id="Sky_cdpwp"]
+[sub_resource type="Sky" id="Sky_b8s5y"]
 resource_local_to_scene = true
-sky_material = SubResource("PanoramaSkyMaterial_ea1lp")
+sky_material = SubResource("PanoramaSkyMaterial_47ji7")
 radiance_size = 1
 
-[sub_resource type="Environment" id="Environment_raoto"]
+[sub_resource type="Environment" id="Environment_hqx7n"]
 background_mode = 2
-sky = SubResource("Sky_cdpwp")
+sky = SubResource("Sky_b8s5y")
 sky_rotation = Vector3(0.307178, 0, 0)
 ambient_light_source = 3
-ambient_light_color = Color(0.402667, 0.36, 1, 1)
-ambient_light_sky_contribution = 0.4
+ambient_light_color = Color(0.62779, 0.155496, 1, 1)
+ambient_light_sky_contribution = 0.2
 ambient_light_energy = 0.3
 reflected_light_source = 2
 tonemap_mode = 2
@@ -116,7 +116,7 @@ glow_blend_mode = 1
 glow_hdr_threshold = 3.5
 glow_hdr_scale = 1.0
 glow_map_strength = 1.0
-glow_map = SubResource("GradientTexture1D_auj1f")
+glow_map = SubResource("GradientTexture1D_w1qv4")
 fog_enabled = true
 fog_light_color = Color(0.533585, 0.699592, 1, 1)
 fog_density = 0.0002
@@ -387,13 +387,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_50thi")
 
 [node name="Hall" parent="Trigger/Camera" instance=ExtResource("3_i2fbd")]
-transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -82.7172, -40.0347, -325.603)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -83.4118, -40.0347, -321.664)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/Hall"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
 script = ExtResource("12_ar5h4")
-transitionTime = 0.0
 settings = ExtResource("16_nyn0u")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/Hall"]
@@ -623,7 +623,7 @@ loopEndPosition = 90.42
 isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_raoto")
+environment = SubResource("Environment_hqx7n")
 
 [connection signal="Activated" from="Visuals/CullingMap/02L" to="Visuals/02Islands" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingMap/02L" to="Visuals/02Islands" method="Deactivate"]
