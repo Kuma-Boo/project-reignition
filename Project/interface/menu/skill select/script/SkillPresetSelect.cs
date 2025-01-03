@@ -12,9 +12,11 @@ public partial class SkillPresetSelect : Menu
 		Down
 	}
 
-	[Export] private SkillSelect skillSelectMenu;
 	[Export] private PackedScene presetOption;
 	[Export] private VBoxContainer presetContainer;
+	//[Export] private Node2D cursor;
+	[Export]
+	private Node2D cursor;
 	[Export] private Sprite2D scrollbar;
 
 	[Export] private Label saveLabel; //We're changing this to "overwrite" if a save already exists
@@ -26,17 +28,17 @@ public partial class SkillPresetSelect : Menu
 
 	[Export] private AnimationPlayer animatorNameEditor;
 
+	private Gameplay.SkillRing activeSkillRing => SaveManager.ActiveSkillRing;
 	private int scrollAmount;
 	private float scrollRatio;
 	private Vector2 scrollVelocity;
 	private Vector2 containerVelocity;
 	private const float scrollSmoothing = .1f;
-
-	private readonly int scrollInterval = 63;
-	private readonly int pageSize = 5;
-
-	/// <summary> Number of available save slots for presets. </summary>
-	private readonly int PresetsSlots = 20;
+	private readonly int scrollInterval = 240;
+	private readonly int pageSize = 4;
+	private int cursorPosition;
+	private Vector2 cursorVelocity;
+	private const float cursorSmoothing = .1f;
 
 	private Array<SkillPresetOption> presetList = [];
 
@@ -60,15 +62,49 @@ public partial class SkillPresetSelect : Menu
 		}
 	}
 
+	public override void _Process(double _)
+	{
+		float targetScrollPosition = (160 * scrollRatio) - 80;
+		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, scrollSmoothing);
+
+		// Update cursor position
+		float targetCursorPosition = cursorPosition * scrollInterval;
+		cursor.Position = cursor.Position.SmoothDamp(Vector2.Down * targetCursorPosition, ref cursorVelocity, cursorSmoothing);
+
+		Vector2 targetContainerPosition = new(presetContainer.Position.X, -scrollAmount * scrollInterval);
+		presetContainer.Position = presetContainer.Position.SmoothDamp(targetContainerPosition, ref containerVelocity, scrollSmoothing);
+	}
+
+	private void UpdateScrollAmount(int inputSign)
+	{
+		int listSize = SaveManager.PresetCount;
+
+		if (listSize <= pageSize)
+		{
+			// Disable scrolling
+			scrollAmount = 0;
+			scrollRatio = 0;
+			//cursorPosition = VerticalSelection;
+		}
+		else
+		{
+			if (VerticalSelection == 0 || VerticalSelection == listSize - 1)
+				cursorPosition = scrollAmount = VerticalSelection;
+			else if ((inputSign < 0 && cursorPosition == 0) || (inputSign > 0 && cursorPosition == 3))
+				scrollAmount += inputSign;
+			else
+				cursorPosition += inputSign;
+
+			scrollAmount = Mathf.Clamp(scrollAmount, 0, listSize - pageSize);
+			scrollRatio = (float)VerticalSelection / (SaveManager.PresetCount - 1);
+			//cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
+		}
+	}
+
+
 	public override void ShowMenu()
 	{
 
-		for (int i = 0; i < SaveManager.PresetCount; i++)
-		{
-			presetList[i].DeselectInstant; //Fixes the bug where the skill ring icon stays after loading in again
-		}
-		VerticalSelection = 0;
-		MoveCursor(Direction.Up, 0);
 		GD.Print("Showing presets");
 		animator.Play("show");
 		LoadPresets();
@@ -92,7 +128,7 @@ public partial class SkillPresetSelect : Menu
 		}
 
 		isInitialized = true;
-		presetList[0].SelectRight();
+		presetList[VerticalSelection].SelectRight();
 	}
 
 	protected override void UpdateSelection()
@@ -116,6 +152,8 @@ public partial class SkillPresetSelect : Menu
 			VerticalSelection = WrapSelection(VerticalSelection + inputSign, presetList.Count);
 			MoveCursor(inputSign < 0 ? Direction.Up : Direction.Down, VerticalSelection);
 		}
+
+		UpdateScrollAmount(inputSign);
 
 		GD.Print("Selected index ", VerticalSelection);
 	}
@@ -192,6 +230,7 @@ public partial class SkillPresetSelect : Menu
 		}
 		else
 		{
+
 			animator.Play("hide");
 			SaveManager.SaveGameData();
 			OpenParentMenu();
@@ -288,6 +327,7 @@ public partial class SkillPresetSelect : Menu
 	{
 		SaveManager.ActiveGameData.equippedSkills = presetList[preset].skills.Duplicate();
 		SaveManager.ActiveGameData.equippedAugments = presetList[preset].skillAugments.Duplicate();
+		activeSkillRing.UpdateTotalCost();
 
 		presetList[preset].SelectPreset();
 	}

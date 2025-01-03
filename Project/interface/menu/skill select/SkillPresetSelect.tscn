@@ -2971,7 +2971,7 @@ _data = {
 "show": SubResource("Animation_4t5lb")
 }
 
-[node name="SkillPresetSelect" type="Control" node_paths=PackedStringArray("presetContainer", "scrollbar", "saveLabel", "nameEditor", "animatorOptions", "animatorOptionsSelector", "animatorNameEditor", "animator")]
+[node name="SkillPresetSelect" type="Control" node_paths=PackedStringArray("presetContainer", "cursor", "scrollbar", "saveLabel", "nameEditor", "animatorOptions", "animatorOptionsSelector", "animatorNameEditor", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -2981,6 +2981,7 @@ grow_vertical = 2
 script = ExtResource("1_o0ujo")
 presetOption = ExtResource("2_aav6m")
 presetContainer = NodePath("Content/Clip/VBoxContainer")
+cursor = NodePath("Content/Cursor")
 scrollbar = NodePath("Content/Window/ScrollBar/ScrollPosition")
 saveLabel = NodePath("Control/VBoxContainer/save")
 nameEditor = NodePath("NameEdit/TextEdit")
@@ -3030,6 +3031,9 @@ texture = ExtResource("1_g5uw6")
 region_enabled = true
 region_rect = Rect2(8, 224, 24, 24)
 
+[node name="Cursor" type="Node2D" parent="Content"]
+position = Vector2(640, 0)
+
 [node name="Clip" type="Control" parent="Content"]
 clip_contents = true
 custom_minimum_size = Vector2(1072, 500)
@@ -3072,9 +3076,13 @@ alignment = 2
 
 [node name="Select" parent="NavigationButtons" instance=ExtResource("2_w3g84")]
 layout_mode = 2
+ActionKey = &"sys_select"
+inputKey = &"button_jump"
 
 [node name="Cancel" parent="NavigationButtons" instance=ExtResource("2_w3g84")]
 layout_mode = 2
+ActionKey = &"sys_cancel"
+inputKey = &"button_action"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -3114,7 +3122,7 @@ offset_bottom = 245.0
 modulate = Color(1, 1, 0, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-text = "sys_savep"
+text = "sys_save"
 label_settings = ExtResource("6_esvmo")
 horizontal_alignment = 1
 
@@ -3133,7 +3141,7 @@ region_rect = Rect2(472, 228, 32, 28)
 [node name="load" type="Label" parent="Control/VBoxContainer"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
-text = "sys_loadp"
+text = "sys_load"
 label_settings = ExtResource("6_esvmo")
 horizontal_alignment = 1
 
@@ -3154,7 +3162,7 @@ region_rect = Rect2(472, 228, 32, 28)
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-text = "sys_renamep"
+text = "sys_rename"
 label_settings = ExtResource("6_esvmo")
 horizontal_alignment = 1
 
@@ -3175,7 +3183,7 @@ region_rect = Rect2(472, 228, 32, 28)
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.953041, 0.95304, 0.953041, 1)
-text = "sys_deletep"
+text = "sys_delete"
 label_settings = ExtResource("6_esvmo")
 horizontal_alignment = 1
 
@@ -3196,8 +3204,7 @@ region_rect = Rect2(472, 228, 32, 28)
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-text = "sys_cancelp
-"
+text = "sys_cancel"
 label_settings = ExtResource("6_esvmo")
 horizontal_alignment = 1
 
