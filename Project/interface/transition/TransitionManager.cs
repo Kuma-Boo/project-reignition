@@ -148,6 +148,7 @@ public partial class TransitionManager : Node
 			GetTree().ChangeSceneToFile(QueuedScene);
 		}
 
+		Engine.TimeScale = 1f; // Reset time scale (just in case)
 		QueuedScene = string.Empty; // Clear queue
 		EmitSignal(SignalName.SceneChanged);
 
