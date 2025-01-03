@@ -324,7 +324,7 @@ public partial class Options : Menu
 				videoLabels[7].Text = "8x MSAA";
 				break;
 		}
-		videoLabels[8].Text = SaveManager.Config.useHDBloom ? HIGH_STRING : LOW_STRING;
+		videoLabels[8].Text = CalculateQualityString(SaveManager.Config.bloomMode);
 
 		if (SaveManager.Config.softShadowQuality == SaveManager.QualitySetting.Disabled)
 			videoLabels[9].Text = "option_hard_shadows";
@@ -500,7 +500,11 @@ public partial class Options : Menu
 		}
 		else if (VerticalSelection == 8)
 		{
-			SaveManager.Config.useHDBloom = !SaveManager.Config.useHDBloom;
+			int bloomMode = (int)SaveManager.Config.bloomMode;
+			bloomMode = WrapSelection(bloomMode + direction, (int)SaveManager.QualitySetting.Count);
+			if (bloomMode == (int)SaveManager.QualitySetting.Medium) // Skip medium setting
+				bloomMode = WrapSelection(bloomMode + direction, (int)SaveManager.QualitySetting.Count);
+			SaveManager.Config.bloomMode = (SaveManager.QualitySetting)bloomMode;
 		}
 		else if (VerticalSelection == 9)
 		{
