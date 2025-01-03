@@ -203,7 +203,7 @@ public partial class DebugManager : Node2D
 	public delegate void UnlockStagesToggledEventHandler();
 	private void ToggleUnlockStages(bool enabled)
 	{
-		UnlockAllStages = enabled;
+		UnlockAllStages = UseDemoSave || enabled;
 		EmitSignal(SignalName.UnlockStagesToggled);
 	}
 
