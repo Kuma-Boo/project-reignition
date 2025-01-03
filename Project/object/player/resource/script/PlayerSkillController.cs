@@ -367,6 +367,7 @@ public partial class PlayerSkillController : Node3D
 			if (!IsSoulGaugeCharged) return;
 			if (!IsSpeedBreakEnabled) return;
 			if (!Player.IsOnGround || Player.IsDefeated) return;
+			if (Player.IsDrifting && !IsSpeedBreakActive) return;
 
 			ToggleSpeedBreak();
 		}
