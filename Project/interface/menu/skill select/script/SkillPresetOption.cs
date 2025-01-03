@@ -112,6 +112,7 @@ public partial class SkillPresetOption : Control
         skillCostLabel.Text = skillCost.ToString();
     }
 
+    public void Reset() => animator.Play("RESET");
     public void SelectUp() => animator.Play("select-up");
 
     public void SelectDown() => animator.Play("select-down");

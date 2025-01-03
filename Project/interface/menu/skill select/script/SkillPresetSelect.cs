@@ -50,7 +50,7 @@ public partial class SkillPresetSelect : Menu
 	protected override void SetUp()
 	{
 		// Create Preset Option nodes
-		for (int i = 0; i < PresetsSlots; i++)
+		for (int i = 0; i < SaveManager.PresetCount; i++)
 		{
 			SkillPresetOption newPreset = presetOption.Instantiate<SkillPresetOption>();
 			newPreset.DisplayNumber = i + 1; // For displaying the number
@@ -62,6 +62,13 @@ public partial class SkillPresetSelect : Menu
 
 	public override void ShowMenu()
 	{
+
+		for (int i = 0; i < SaveManager.PresetCount; i++)
+		{
+			presetList[i].DeselectInstant; //Fixes the bug where the skill ring icon stays after loading in again
+		}
+		VerticalSelection = 0;
+		MoveCursor(Direction.Up, 0);
 		GD.Print("Showing presets");
 		animator.Play("show");
 		LoadPresets();
@@ -74,6 +81,7 @@ public partial class SkillPresetSelect : Menu
 		//currentPresets = new Array<SkillPreset>();
 		for (int i = 0; i < presetList.Count; i++)
 		{
+			presetList[i].Reset();
 			GD.Print("LOADING PRESET " + i);
 
 			presetList[i].presetName = SaveManager.ActiveGameData.presetNames[i];
@@ -93,22 +101,28 @@ public partial class SkillPresetSelect : Menu
 		if (inputSign == 0)
 			return;
 
-		if (isSubMenuActive)
+		if (isSubMenuActive && isEditingName == false)
 		{
 			subIndex = WrapSelection(subIndex + inputSign, 5);
 			MoveSubCursor();
 			return;
 		}
 
-		presetList[VerticalSelection].DeselectInstant();
-		VerticalSelection = WrapSelection(VerticalSelection + inputSign, presetList.Count);
-		MoveCursor(inputSign < 0 ? Direction.Up : Direction.Down, VerticalSelection);
+
+
+		if (isEditingName == false)
+		{
+			presetList[VerticalSelection].DeselectInstant();
+			VerticalSelection = WrapSelection(VerticalSelection + inputSign, presetList.Count);
+			MoveCursor(inputSign < 0 ? Direction.Up : Direction.Down, VerticalSelection);
+		}
+
 		GD.Print("Selected index ", VerticalSelection);
 	}
 
 	protected override void Confirm()
 	{
-		if (isSubMenuActive)
+		if (isSubMenuActive && isEditingName == false)
 		{
 			switch (subIndex)
 			{
@@ -134,19 +148,31 @@ public partial class SkillPresetSelect : Menu
 			}
 			return;
 		}
+		else if (isEditingName)
+		{
+			Enter();
+		}
+		else
+		{
+			// Show the submenu
+			subIndex = 0;
+			MoveSubCursor();
+			animatorOptions.Play("show");
+			isSubMenuActive = true;
+		}
 
-		// Show the submenu
-		subIndex = 0;
-		MoveSubCursor();
-		animatorOptions.Play("show");
-		isSubMenuActive = true;
+
 	}
 
 	protected override void Enter()
 	{
 		if (isEditingName)
 		{
+			if (nameEditor.Text == "")
+				presetList[VerticalSelection].presetName = "New Preset";
+
 			presetList[VerticalSelection].presetName = nameEditor.Text;
+			SaveSkills(VerticalSelection);
 			isEditingName = false;
 			animatorNameEditor.Play("hide");
 		}
@@ -154,7 +180,7 @@ public partial class SkillPresetSelect : Menu
 
 	protected override void Cancel()
 	{
-		if (isSubMenuActive)
+		if (isSubMenuActive && isEditingName == false)
 		{
 			animatorOptions.Play("hide");
 			isSubMenuActive = false;
@@ -233,12 +259,15 @@ public partial class SkillPresetSelect : Menu
 		if (string.IsNullOrEmpty(presetList[preset].presetName) && subIndex == 0)
 			presetList[preset].presetName = "New Preset";
 
+		presetList[preset].presetName = presetList[preset].presetName.Replace("\n", ""); //when we edit names, remove the newline code
+
 		presetList[preset].skills = SaveManager.ActiveGameData.equippedSkills.Duplicate();
 		presetList[preset].skillAugments = SaveManager.ActiveGameData.equippedAugments.Duplicate();
 
 		SaveManager.ActiveGameData.presetNames[preset] = presetList[preset].presetName;
 		SaveManager.ActiveGameData.presetSkills[preset] = presetList[preset].skills.Duplicate();
 		SaveManager.ActiveGameData.presetSkillAugments[preset] = presetList[preset].skillAugments.Duplicate();
+
 
 		// Save our new data to the file and play the animation to initialize the on-screen data
 		if (subIndex == 0 || subIndex == 1) //Only play the save animation if we are selecting save or load, otherewise just display the data
@@ -247,6 +276,7 @@ public partial class SkillPresetSelect : Menu
 			presetList[preset].Initialize();
 
 		SaveManager.SaveGameData();
+		MoveSubCursor(); //After saving, change the option box colors
 
 		foreach (SkillPresetOption option in presetList)
 		{
@@ -265,6 +295,7 @@ public partial class SkillPresetSelect : Menu
 	private void RenamePreset()
 	{
 		isEditingName = true;
+		nameEditor.Text = "New Preset";
 		animatorNameEditor.Play("show");
 	}
 
@@ -275,17 +306,17 @@ public partial class SkillPresetSelect : Menu
 			return;
 
 		presetList[preset].presetName = "";
-		presetList[preset].skills.Clear();
-		presetList[preset].skillAugments.Clear();
+		presetList[preset].skills = null;
+		presetList[preset].skillAugments = null;
 
-		GD.Print(presetList[preset].presetName.ToString());
-		GD.Print(presetList[preset].skills.ToString());
-		GD.Print(presetList[preset].skillAugments.ToString());
-
-		SaveSkills(preset);
+		SaveManager.ActiveGameData.presetNames[preset] = "";
+		SaveManager.ActiveGameData.presetSkills[preset] = null;
+		SaveManager.ActiveGameData.presetSkillAugments[preset] = null;
 
 		SaveManager.SaveGameData();
 		presetList[preset].Initialize();
+		//SaveSkills(preset);
+
 		MoveSubCursor();//Grays out the options menu 
 	}
 
