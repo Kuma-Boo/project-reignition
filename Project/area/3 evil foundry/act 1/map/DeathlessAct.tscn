@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://wm6qp8wc4aik"]
+[gd_scene load_steps=61 format=3 uid="uid://wm6qp8wc4aik"]
 
 [ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="1_8qxdg"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_qk3u2"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="8_e6mti"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="9_tksp5"]
 [ext_resource type="PackedScene" uid="uid://c3b6ygc13a33j" path="res://object/enemy/majin/data/evil foundry/GreenMajin.tscn" id="10_ac17n"]
+[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="15_mlg12"]
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="15_x6g2j"]
 [ext_resource type="PackedScene" uid="uid://2fyo48r8yibn" path="res://area/3 evil foundry/object/platform/HallPlatformLong.tscn" id="16_xbsy4"]
 [ext_resource type="PackedScene" uid="uid://c1o8jxmiiryrj" path="res://object/stage/common/JumpCarpet.tscn" id="17_6twug"]
@@ -33,13 +34,13 @@
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="24_lhmrn"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="25_l0jjy"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="31_o07cn"]
-[ext_resource type="Resource" uid="uid://ccjhqcuypdtc0" path="res://area/3 evil foundry/data/ElevatorLockout.tres" id="32_qsn7x"]
+[ext_resource type="Resource" path="res://area/3 evil foundry/data/ElevatorLockout.tres" id="32_qsn7x"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="33_paq22"]
-[ext_resource type="Resource" uid="uid://dnk158xtx3lvc" path="res://area/3 evil foundry/act 1/camera/ElevatorCam.tres" id="34_iwx46"]
-[ext_resource type="Resource" uid="uid://x2wnppe3iny1" path="res://area/3 evil foundry/act 1/camera/ElevatorBaseCam.tres" id="36_wwwlt"]
-[ext_resource type="Resource" uid="uid://deb2j8xspvlfq" path="res://area/3 evil foundry/act 1/camera/NarrowHallCam.tres" id="37_5m7l6"]
+[ext_resource type="Resource" path="res://area/3 evil foundry/act 1/camera/ElevatorCam.tres" id="34_iwx46"]
+[ext_resource type="Resource" path="res://area/3 evil foundry/act 1/camera/ElevatorBaseCam.tres" id="36_wwwlt"]
+[ext_resource type="Resource" path="res://area/3 evil foundry/act 1/camera/NarrowHallCam.tres" id="37_5m7l6"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="38_fwdur"]
-[ext_resource type="Resource" uid="uid://dy7imtvsy4rtp" path="res://area/3 evil foundry/act 1/camera/ElevatorPlatformingCam.tres" id="39_et0ch"]
+[ext_resource type="Resource" path="res://area/3 evil foundry/act 1/camera/ElevatorPlatformingCam.tres" id="39_et0ch"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s1mwa"]
 size = Vector3(20, 20, 5)
@@ -301,6 +302,112 @@ _data = {
 "event": SubResource("Animation_187ur")
 }
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_2sexc"]
+size = Vector3(20, 100, 10)
+
+[sub_resource type="Animation" id="Animation_u3ylg"]
+resource_name = "event"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../ElevatorGroup/Elevator1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"SetStartingLock"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../ElevatorGroup/Elevator2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"SetStartingLock"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_a4q2x"]
+resource_name = "event-deactivate"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../ElevatorGroup/Elevator1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"SetStartingLock"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../ElevatorGroup/Elevator2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"SetStartingLock"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_6igho"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../ElevatorGroup/Elevator1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"SetStartingLock"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../ElevatorGroup/Elevator2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"SetStartingLock"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rc37i"]
+_data = {
+"RESET": SubResource("Animation_6igho"),
+"event": SubResource("Animation_u3ylg"),
+"event-deactivate": SubResource("Animation_a4q2x")
+}
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_vcj4s"]
 size = Vector3(20, 10, 5)
 
@@ -499,14 +606,24 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 16.708
 "Movement/Cycle Length" = 3.0
 Movement/Distance = 6.0
 
-[node name="LaunchRing" parent="DeathlessAct/Opening" instance=ExtResource("9_tksp5")]
-transform = Transform3D(-4.37114e-08, -1, 0, -4.37114e-08, 0, 1, -1, 4.37114e-08, -4.37114e-08, 92.5636, 1.22758, 0)
+[node name="LaunchRing" type="Node3D" parent="DeathlessAct/Opening"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 92.5636, 1.22758, 0)
+
+[node name="LaunchRing" parent="DeathlessAct/Opening/LaunchRing" instance=ExtResource("9_tksp5")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 "Secondary Settings/Middle Height" = 15.0
 "Secondary Settings/Final Height" = 14.0
 "Secondary Settings/Distance" = 5.0
 finalHeight = 5.0
 distance = 0.0
 launchDirection = 2
+
+[node name="Camera" type="Node3D" parent="DeathlessAct/Opening/LaunchRing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -5)
+script = ExtResource("33_paq22")
+transitionTime = 1.0
+settings = ExtResource("15_mlg12")
+UpdateEveryFrame = true
 
 [node name="GreenMajin" parent="DeathlessAct/Opening" instance=ExtResource("10_ac17n")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 92.5941, 3.08256, 0)
@@ -1052,6 +1169,29 @@ libraries = {
 "": SubResource("AnimationLibrary_jn613")
 }
 
+[node name="ElevatorMovementTrigger" parent="DeathlessAct/Ending/ElevatorStuff" instance=ExtResource("4_vuoeu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Event" type="Node3D" parent="DeathlessAct/Ending/ElevatorStuff/ElevatorMovementTrigger" node_paths=PackedStringArray("animator")]
+script = ExtResource("25_l0jjy")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("../AnimationPlayer")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Ending/ElevatorStuff/ElevatorMovementTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 60, -4)
+shape = SubResource("BoxShape3D_2sexc")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Ending/ElevatorStuff/ElevatorMovementTrigger"]
+root_node = NodePath(".")
+libraries = {
+"": SubResource("AnimationLibrary_rc37i")
+}
+
 [node name="CullingTrigger" type="Node3D" parent="DeathlessAct/Ending/ElevatorStuff"]
 script = ExtResource("4_khgg8")
 startEnabled = true
@@ -1111,6 +1251,9 @@ shape = SubResource("BoxShape3D_t3h8b")
 [connection signal="Deactivated" from="DeathlessAct/CullingMap/Ending-L" to="DeathlessAct/Ending" method="Deactivate"]
 [connection signal="Activated" from="DeathlessAct/CullingMap/MineEntrance-U" to="DeathlessAct/MineEntrance" method="Deactivate"]
 [connection signal="Deactivated" from="DeathlessAct/CullingMap/MineEntrance-U" to="DeathlessAct/MineEntrance" method="Activate"]
+[connection signal="Deactivated" from="DeathlessAct/Opening/LaunchRing/LaunchRing" to="DeathlessAct/Opening/LaunchRing/Camera" method="Deactivate"]
+[connection signal="Entered" from="DeathlessAct/Opening/LaunchRing/LaunchRing" to="DeathlessAct/Opening/LaunchRing/Camera" method="Activate"]
+[connection signal="Exited" from="DeathlessAct/Opening/LaunchRing/LaunchRing" to="DeathlessAct/Opening/LaunchRing/Camera" method="Deactivate"]
 [connection signal="SpinStarted" from="DeathlessAct/Ending/MajinMover/BlueMajin" to="DeathlessAct/Ending/MajinMover" method="Unpause"]
 [connection signal="SpinStarted" from="DeathlessAct/Ending/MajinMover2/BlueMajin" to="DeathlessAct/Ending/MajinMover2" method="Unpause"]
 [connection signal="Activated" from="DeathlessAct/Ending/ElevatorStuff/DashPanel1" to="DeathlessAct/Ending/ElevatorStuff/AutorunLockout" method="Activate"]
