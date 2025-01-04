@@ -111,6 +111,7 @@ public partial class SaveManager : Node
 		new(640, 360), // 360p
 		new(854, 480), // 480p
 		new(1280, 720), // 720p
+		new(1280, 800), // 800p (Steam Deck resolution)
 		new(1600, 900), // 900p
 		new(1920, 1080), // 1080p
 		new(2560, 1440), // 1440p
@@ -161,7 +162,7 @@ public partial class SaveManager : Node
 		// Controls
 		public float deadZone = .5f;
 		public ControllerType controllerType = ControllerType.Automatic;
-		public Dictionary inputConfiguration = new();
+		public Dictionary inputConfiguration = [];
 
 		// Language
 		public bool subtitlesEnabled = true;
@@ -549,6 +550,8 @@ public partial class SaveManager : Node
 	/// <summary> Maximum number of save slots that can be created. </summary>
 	public const int SaveSlotCount = 9;
 
+	/// <summary> Maximum number of preset slots
+	public const int PresetCount = 20;
 	/// <summary> Saves active game data to a file. </summary>
 	public static void SaveGameData()
 	{
@@ -578,6 +581,18 @@ public partial class SaveManager : Node
 			{
 				GameSaveSlots[i].FromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
 				file.Close();
+			}
+
+			if (GameSaveSlots[i].presetNames == null &&
+				GameSaveSlots[i].presetSkills == null &&
+				GameSaveSlots[i].presetSkillAugments == null)
+			{
+				for (int j = 0; j < PresetCount; j++)
+				{
+					GameSaveSlots[i].presetNames.Add(null);
+					GameSaveSlots[i].presetSkills.Add(null);
+					GameSaveSlots[i].presetSkillAugments.Add(null);
+				}
 			}
 		}
 	}
@@ -624,6 +639,10 @@ public partial class SaveManager : Node
 		public int exp;
 		/// <summary> Total playtime, in seconds. </summary>
 		public float playTime;
+
+		public Array<string> presetNames;
+		public Array<Array<SkillKey>> presetSkills;
+		public Array<Dictionary<SkillKey, int>> presetSkillAugments;
 
 		public Array<SkillKey> equippedSkills;
 		public Dictionary<SkillKey, int> equippedAugments;
@@ -866,6 +885,9 @@ public partial class SaveManager : Node
 				{ nameof(playTime), Mathf.RoundToInt(playTime) },
 				{ nameof(equippedSkills), skillDictionary },
 				{ nameof(equippedAugments), augmentDictionary },
+				{ nameof(presetNames), presetNames},
+				{ nameof(presetSkills), presetSkills},
+				{ nameof(presetSkillAugments), presetSkillAugments},
 			};
 		}
 
@@ -909,6 +931,12 @@ public partial class SaveManager : Node
 				exp = (int)var;
 			if (dictionary.TryGetValue(nameof(playTime), out var))
 				playTime = (float)var;
+			if (dictionary.TryGetValue(nameof(presetNames), out var))
+				presetNames = (Array<string>)var;
+			if (dictionary.TryGetValue(nameof(presetSkills), out var))
+				presetSkills = (Array<Array<SkillKey>>)var;
+			if (dictionary.TryGetValue(nameof(presetSkillAugments), out var))
+				presetSkillAugments = (Array<Dictionary<SkillKey, int>>)var;
 
 			if (dictionary.TryGetValue(nameof(equippedSkills), out var))
 			{
@@ -968,6 +996,9 @@ public partial class SaveManager : Node
 				worldRingsCollected = [],
 				worldsUnlocked = [],
 				stagesUnlocked = [],
+				presetNames = [],
+				presetSkills = [],
+				presetSkillAugments = [],
 				equippedSkills = [],
 				equippedAugments = [],
 				level = 0,
@@ -978,6 +1009,13 @@ public partial class SaveManager : Node
 			data.UnlockStage("so_a1_main");
 			data.UnlockWorld(WorldEnum.LostPrologue);
 			data.UnlockWorld(WorldEnum.SandOasis); // Lock this in the final build
+
+			for (int i = 0; i < PresetCount; i++)
+			{
+				data.presetNames.Add(null);
+				data.presetSkills.Add(null);
+				data.presetSkillAugments.Add(null);
+			}
 
 			return data;
 		}

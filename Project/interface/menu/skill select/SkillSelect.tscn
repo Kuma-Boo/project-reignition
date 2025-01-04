@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://bt32kmhyoo7ec"]
+[gd_scene load_steps=48 format=3 uid="uid://bt32kmhyoo7ec"]
 
 [ext_resource type="Script" path="res://interface/menu/skill select/script/SkillSelect.cs" id="1_v1nov"]
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="2_ww16u"]
@@ -969,6 +969,128 @@ tracks/2/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_codox"]
+resource_name = "enter-skill-preset"
+length = 0.500003
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Content/Header:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Content/Window:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Content/Window:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(640, 480), Vector2(640, 480)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("NavigationButtons:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.166667, 0.333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.333333, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.4995),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"OpenSubmenu"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Content/Clip:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SFX/Cancel")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Description")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"HideDescription"
+}]
+}
+
 [sub_resource type="Animation" id="Animation_qo4fo"]
 resource_name = "equip"
 length = 0.001
@@ -1058,7 +1180,7 @@ tracks/5/path = NodePath(".")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 0.4995),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -1247,11 +1369,14 @@ tracks/5/path = NodePath(".")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.0333, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [],
 "method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"Redraw"
 }, {
 "args": [],
 "method": &"EnableProcessing"
@@ -1314,6 +1439,30 @@ tracks/9/keys = {
 "method": &"ShowDescription"
 }]
 }
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Content/Window/Header:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0.1665, 0.333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Content/Window/Body:modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.1665, 0.333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_tf8ok"]
 resource_name = "unequip"
@@ -1338,6 +1487,7 @@ _data = {
 "RESET": SubResource("Animation_ax45n"),
 "augment-hide": SubResource("Animation_t1p3u"),
 "augment-show": SubResource("Animation_q1d8y"),
+"enter-skill-preset": SubResource("Animation_codox"),
 "equip": SubResource("Animation_qo4fo"),
 "hide": SubResource("Animation_r372w"),
 "select": SubResource("Animation_ug8bd"),
@@ -1364,6 +1514,7 @@ levelLabel = NodePath("Content/Header/LevelLabel")
 skillPointLabel = NodePath("Content/Header/SPValue")
 alertAnimator = NodePath("AlertMenu/AnimationPlayer")
 alertLabel = NodePath("AlertMenu/Menu/Parent/Text/Label")
+submenus = Array[NodePath]([NodePath("")])
 animator = NodePath("AnimationPlayer")
 metadata/_edit_lock_ = true
 
@@ -1548,20 +1699,25 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 448.0
 offset_top = 760.0
-offset_right = -446.0
+offset_right = -380.0
 offset_bottom = -256.0
 theme_override_constants/separation = 64
 alignment = 2
 
+[node name="Presets" parent="NavigationButtons" instance=ExtResource("9_kp51v")]
+layout_mode = 2
+ActionKey = &"sys_presets"
+inputKey = &"button_pause"
+
 [node name="Select" parent="NavigationButtons" instance=ExtResource("9_kp51v")]
 layout_mode = 2
-ActionKey = "sys_select"
-inputKey = "button_jump"
+ActionKey = &"sys_select"
+inputKey = &"button_jump"
 
 [node name="Cancel" parent="NavigationButtons" instance=ExtResource("9_kp51v")]
 layout_mode = 2
-ActionKey = "sys_cancel"
-inputKey = "button_action"
+ActionKey = &"sys_cancel"
+inputKey = &"button_action"
 
 [node name="SFX" type="Node" parent="."]
 

@@ -306,6 +306,38 @@ tracks/0/keys = {
 "values": [ExtResource("5_rmfvq")]
 }
 
+[sub_resource type="Animation" id="Animation_r7yeo"]
+resource_name = "disable-augment"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AugmentArrow:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_scqtq"]
+resource_name = "enable-augment"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AugmentArrow:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="Animation" id="Animation_0dlo8"]
 resource_name = "equipped"
 length = 0.001
@@ -552,38 +584,6 @@ tracks/0/keys = {
 "values": [ExtResource("5_e8s7r")]
 }
 
-[sub_resource type="Animation" id="Animation_r7yeo"]
-resource_name = "disable-augment"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AugmentArrow:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="Animation" id="Animation_scqtq"]
-resource_name = "enable-augment"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AugmentArrow:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lm6e8"]
 _data = {
 "RESET": SubResource("Animation_t3g2o"),
@@ -608,19 +608,21 @@ _data = {
 "wind": SubResource("Animation_st7wf")
 }
 
-[node name="SkillOption" type="Control" node_paths=PackedStringArray("numberLabel", "nameLabel", "costLabel", "animator", "augmentContainer")]
+[node name="SkillOption" type="Control" node_paths=PackedStringArray("light", "numberLabel", "nameLabel", "costLabel", "elementLabel", "animator", "augmentContainer")]
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 3
 anchor_right = 0.558
 anchor_bottom = 0.059
 offset_right = 0.639893
-offset_bottom = 0.279995
+offset_bottom = 0.279999
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_djcyy")
+light = NodePath("Light")
 numberLabel = NodePath("Tint/NumberLabel")
 nameLabel = NodePath("Tint/NameLabel")
 costLabel = NodePath("Tint/CostLabel")
+elementLabel = NodePath("Element")
 animator = NodePath("AnimationPlayer")
 augmentContainer = NodePath("Augments")
 

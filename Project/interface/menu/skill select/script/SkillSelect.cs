@@ -107,6 +107,17 @@ public partial class SkillSelect : Menu
 		optionContainer.Position = optionContainer.Position.SmoothDamp(targetContainerPosition, ref containerVelocity, ScrollSmoothing);
 	}
 
+	protected override void ProcessMenu()
+	{
+		if (Input.IsActionJustPressed("button_pause"))
+		{
+			OpenPresetMenu();
+			return;
+		}
+
+		base.ProcessMenu();
+	}
+
 	protected override void Cancel()
 	{
 		if (IsAlertMenuActive)
@@ -259,6 +270,23 @@ public partial class SkillSelect : Menu
 		base.ShowMenu();
 	}
 
+	public void ShowSkills()
+	{
+		for (int i = 0; i < skillOptionList.Count; i++)
+			skillOptionList[i].Visible = true;
+
+		description.Visible = true;
+	}
+
+	private void OpenPresetMenu()
+	{
+		if (IsAlertMenuActive)
+			return;
+
+		SaveManager.SaveGameData();
+		animator.Play("enter-skill-preset");
+	}
+
 	protected override void Confirm()
 	{
 		if (IsAlertMenuActive)
@@ -281,10 +309,13 @@ public partial class SkillSelect : Menu
 			return;
 
 		UpdateAugmentHierarchy(SelectedSkill);
+
 		Redraw();
 	}
 
-	private void Redraw()
+	public override void OpenSubmenu() => _submenus[0].ShowMenu();
+
+	public void Redraw()
 	{
 		skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
 		skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);

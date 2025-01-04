@@ -112,7 +112,6 @@ public partial class Menu : Control
 			GD.PrintErr($"No parent menu found for '{Name}'.");
 			return;
 		}
-
 		parentMenu.ShowMenu();
 	}
 	public virtual void OpenSubmenu() => GD.PrintErr($"Submenus unimplemented on '{Name}'.");
