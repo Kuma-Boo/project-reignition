@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://wm6qp8wc4aik"]
+[gd_scene load_steps=59 format=3 uid="uid://wm6qp8wc4aik"]
 
 [ext_resource type="PackedScene" uid="uid://wufpyrm8jour" path="res://area/3 evil foundry/act 1/Static.tscn" id="1_8qxdg"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_qk3u2"]
@@ -34,13 +34,13 @@
 [ext_resource type="Script" path="res://object/stage/MovingObject.cs" id="24_lhmrn"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="25_l0jjy"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="31_o07cn"]
-[ext_resource type="Resource" path="res://area/3 evil foundry/data/ElevatorLockout.tres" id="32_qsn7x"]
+[ext_resource type="Resource" uid="uid://ccjhqcuypdtc0" path="res://area/3 evil foundry/data/ElevatorLockout.tres" id="32_qsn7x"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="33_paq22"]
-[ext_resource type="Resource" path="res://area/3 evil foundry/act 1/camera/ElevatorCam.tres" id="34_iwx46"]
-[ext_resource type="Resource" path="res://area/3 evil foundry/act 1/camera/ElevatorBaseCam.tres" id="36_wwwlt"]
-[ext_resource type="Resource" path="res://area/3 evil foundry/act 1/camera/NarrowHallCam.tres" id="37_5m7l6"]
+[ext_resource type="Resource" uid="uid://dnk158xtx3lvc" path="res://area/3 evil foundry/act 1/camera/ElevatorCam.tres" id="34_iwx46"]
+[ext_resource type="Resource" uid="uid://x2wnppe3iny1" path="res://area/3 evil foundry/act 1/camera/ElevatorBaseCam.tres" id="36_wwwlt"]
+[ext_resource type="Resource" uid="uid://deb2j8xspvlfq" path="res://area/3 evil foundry/act 1/camera/NarrowHallCam.tres" id="37_5m7l6"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="38_fwdur"]
-[ext_resource type="Resource" path="res://area/3 evil foundry/act 1/camera/ElevatorPlatformingCam.tres" id="39_et0ch"]
+[ext_resource type="Resource" uid="uid://dy7imtvsy4rtp" path="res://area/3 evil foundry/act 1/camera/ElevatorPlatformingCam.tres" id="39_et0ch"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s1mwa"]
 size = Vector3(20, 20, 5)
@@ -224,9 +224,6 @@ _data = {
 "event": SubResource("Animation_m0l34")
 }
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_cvoto"]
-size = Vector3(5, 20, 20)
-
 [sub_resource type="Animation" id="Animation_yedi7"]
 resource_name = "RESET"
 length = 0.001
@@ -305,6 +302,38 @@ _data = {
 [sub_resource type="BoxShape3D" id="BoxShape3D_2sexc"]
 size = Vector3(20, 100, 10)
 
+[sub_resource type="Animation" id="Animation_6igho"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../ElevatorGroup/Elevator1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"SetStartingLock"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../ElevatorGroup/Elevator2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"SetStartingLock"
+}]
+}
+
 [sub_resource type="Animation" id="Animation_u3ylg"]
 resource_name = "event"
 length = 0.001
@@ -369,38 +398,6 @@ tracks/1/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_6igho"]
-resource_name = "RESET"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../../ElevatorGroup/Elevator1")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [true],
-"method": &"SetStartingLock"
-}]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../../ElevatorGroup/Elevator2")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [true],
-"method": &"SetStartingLock"
-}]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rc37i"]
 _data = {
 "RESET": SubResource("Animation_6igho"),
@@ -410,9 +407,6 @@ _data = {
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vcj4s"]
 size = Vector3(20, 10, 5)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_t3h8b"]
-size = Vector3(15, 13, 12.9072)
 
 [node name="Stage" type="Node"]
 
@@ -877,8 +871,8 @@ libraries = {
 speed_scale = 1.2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/MineEntrance/FurnaceEvent"]
-transform = Transform3D(0.967828, 0, -0.251613, 0, 1, 0, 0.251613, 0, 0.967828, -10.5785, 6.7704, 0.890259)
-shape = SubResource("BoxShape3D_cvoto")
+transform = Transform3D(0.252069, 0, 0.967709, 0, 1, 0, -0.967709, 0, 0.252069, -10.5785, 6.7704, 0.890259)
+shape = SubResource("BoxShape3D_s1mwa")
 
 [node name="Grindrail" parent="DeathlessAct/MineEntrance" instance=ExtResource("17_mr6ev")]
 transform = Transform3D(-4.37114e-08, -0.112041, -0.993704, 0, 0.993704, -0.112041, 1, -4.89748e-09, -4.34362e-08, 51.4996, 1.97189, 6.24069)
@@ -1241,7 +1235,15 @@ fireSoulIndex = 3
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 70.638, 100.75, 110)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Ending/Goal"]
-shape = SubResource("BoxShape3D_t3h8b")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+shape = SubResource("BoxShape3D_s1mwa")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="DeathlessAct/Ending"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 81.293, 94.7464, 109.88)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Ending/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_s1mwa")
 
 [connection signal="Activated" from="DeathlessAct/CullingMap/MineEntrance-L" to="DeathlessAct/MineEntrance" method="Activate"]
 [connection signal="Deactivated" from="DeathlessAct/CullingMap/MineEntrance-L" to="DeathlessAct/MineEntrance" method="Deactivate"]
