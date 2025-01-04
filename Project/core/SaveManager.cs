@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Collections;
 using Godot;
 using Godot.Collections;
 using Project.Gameplay;
@@ -163,7 +162,7 @@ public partial class SaveManager : Node
 		// Controls
 		public float deadZone = .5f;
 		public ControllerType controllerType = ControllerType.Automatic;
-		public Dictionary inputConfiguration = new();
+		public Dictionary inputConfiguration = [];
 
 		// Language
 		public bool subtitlesEnabled = true;
@@ -212,7 +211,6 @@ public partial class SaveManager : Node
 				{ nameof(subtitlesEnabled), subtitlesEnabled },
 				{ nameof(voiceLanguage), (int)voiceLanguage },
 				{ nameof(textLanguage), (int)textLanguage },
-
 			};
 		}
 
@@ -543,8 +541,6 @@ public partial class SaveManager : Node
 		}
 	}
 
-
-
 	/// <summary> Game Data to use during the menu so things don't break. </summary>
 	public static GameData MenuData { get; set; }
 	/// <summary> Current skill ring. </summary>
@@ -591,7 +587,7 @@ public partial class SaveManager : Node
 				GameSaveSlots[i].presetSkills == null &&
 				GameSaveSlots[i].presetSkillAugments == null)
 			{
-				for (int j = 0; j < 20; j++)
+				for (int j = 0; j < PresetCount; j++)
 				{
 					GameSaveSlots[i].presetNames.Add(null);
 					GameSaveSlots[i].presetSkills.Add(null);
@@ -854,7 +850,6 @@ public partial class SaveManager : Node
 			return levelData[levelID];
 		}
 		#endregion
-
 
 		/// <summary> Creates a dictionary based on GameData. </summary>
 		public Dictionary ToDictionary()
