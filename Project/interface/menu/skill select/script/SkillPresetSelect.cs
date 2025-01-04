@@ -79,6 +79,9 @@ public partial class SkillPresetSelect : Menu
 			return;
 		}
 
+		if (Input.IsActionJustPressed("button_pause"))
+			Confirm();
+
 		base.ProcessMenu();
 	}
 
@@ -188,7 +191,6 @@ public partial class SkillPresetSelect : Menu
 
 		//  Show the submenu
 		subIndex = 0;
-		MoveSubCursor();
 		animatorOptions.Play("show");
 		isSubMenuActive = true;
 	}
@@ -250,7 +252,7 @@ public partial class SkillPresetSelect : Menu
 		if (IsInvalid(VerticalSelection))
 			targetAnimation += "-invalid";
 
-		animatorOptionsSelector.Play(targetAnimation);
+		animatorOptions.Play(targetAnimation);
 
 		if (!isSelectionScrolling)
 			StartSelectionTimer();
