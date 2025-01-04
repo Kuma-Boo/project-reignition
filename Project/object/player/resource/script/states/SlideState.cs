@@ -30,6 +30,7 @@ public partial class SlideState : PlayerState
 
 		Player.DisableSidle = true;
 		Player.Animator.StartSliding();
+		Player.Effect.StartDust();
 		Player.ChangeHitbox("slide");
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideDefense))
@@ -58,6 +59,7 @@ public partial class SlideState : PlayerState
 	{
 		Player.DisableSidle = false;
 		Player.ChangeHitbox("RESET");
+		Player.Effect.StopDust();
 
 		if (!Player.IsDrifting &&
 			Player.StateMachine.QueuedState != jumpState &&
