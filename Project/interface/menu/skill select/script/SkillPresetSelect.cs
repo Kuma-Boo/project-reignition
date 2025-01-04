@@ -9,7 +9,7 @@ public partial class SkillPresetSelect : Menu
 {
 	[Export] private PackedScene presetOption;
 	[Export] private VBoxContainer presetContainer;
-	// [Export] private Node2D cursor;
+
 	[Export]
 	private Node2D cursor;
 	[Export] private Sprite2D scrollbar;
@@ -167,11 +167,10 @@ public partial class SkillPresetSelect : Menu
 					isSubMenuActive = false;
 					break;
 			}
-			return;
 		}
 		else if (isEditingName)
 		{
-			Enter();
+			Rename();
 		}
 		else
 		{
@@ -183,18 +182,18 @@ public partial class SkillPresetSelect : Menu
 		}
 	}
 
-	protected override void Enter()
+	private void Rename()
 	{
-		if (isEditingName)
-		{
-			if (string.IsNullOrEmpty(nameEditor.Text))
-				presetList[VerticalSelection].presetName = "New Preset";
+		if (!isEditingName)
+			return;
 
-			presetList[VerticalSelection].presetName = nameEditor.Text;
-			SaveSkills(VerticalSelection);
-			isEditingName = false;
-			animatorNameEditor.Play("hide");
-		}
+		if (string.IsNullOrEmpty(nameEditor.Text))
+			presetList[VerticalSelection].presetName = "New Preset";
+
+		presetList[VerticalSelection].presetName = nameEditor.Text;
+		SaveSkills(VerticalSelection);
+		isEditingName = false;
+		animatorNameEditor.Play("hide");
 	}
 
 	protected override void Cancel()

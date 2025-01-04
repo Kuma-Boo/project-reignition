@@ -46,7 +46,6 @@ public partial class Menu : Control
 
 	protected readonly StringName CONFIRM_ANIMATION = "confirm";
 	protected readonly StringName CANCEL_ANIMATION = "cancel";
-	protected readonly StringName ENTER_ANIMATION = "enter";
 	protected readonly StringName SHOW_ANIMATION = "show";
 	protected readonly StringName HIDE_ANIMATION = "hide";
 	protected readonly StringName SCROLL_UP_ANIMATION = "scroll-up";
@@ -131,10 +130,6 @@ public partial class Menu : Control
 		{
 			Cancel();
 		}
-		else if (Input.IsActionJustPressed("button_pause"))
-		{
-			Enter();
-		}
 		else if (Input.GetVector("move_left", "move_right", "move_up", "move_down").Length() > SaveManager.Config.deadZone)
 		{
 			if (Mathf.IsZeroApprox(cursorSelectionTimer))
@@ -187,12 +182,6 @@ public partial class Menu : Control
 	{
 		if (animator?.HasAnimation(CANCEL_ANIMATION) == true)
 			animator.Play(CANCEL_ANIMATION);
-	}
-
-	protected virtual void Enter()
-	{
-		if (animator?.HasAnimation(ENTER_ANIMATION) == true)
-			animator.Play(ENTER_ANIMATION);
 	}
 
 	/// <summary>

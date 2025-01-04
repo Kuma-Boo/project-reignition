@@ -107,6 +107,17 @@ public partial class SkillSelect : Menu
 		optionContainer.Position = optionContainer.Position.SmoothDamp(targetContainerPosition, ref containerVelocity, ScrollSmoothing);
 	}
 
+	protected override void ProcessMenu()
+	{
+		if (Input.IsActionJustPressed("button_pause"))
+		{
+			OpenPresetMenu();
+			return;
+		}
+
+		base.ProcessMenu();
+	}
+
 	protected override void Cancel()
 	{
 		if (IsAlertMenuActive)
@@ -130,15 +141,6 @@ public partial class SkillSelect : Menu
 
 		SaveManager.SaveGameData();
 		animator.Play("hide");
-	}
-
-	protected override void Enter()
-	{
-		if (IsAlertMenuActive == false)
-		{
-			SaveManager.SaveGameData();
-			animator.Play("enter-skill-preset");
-		}
 	}
 
 	protected override void UpdateSelection()
@@ -181,8 +183,6 @@ public partial class SkillSelect : Menu
 			MoveCursor();
 			UpdateDescription();
 		}
-
-
 
 		// TODO Change sort method when speedbreak is pressed
 	}
@@ -266,20 +266,25 @@ public partial class SkillSelect : Menu
 			UpdateAugmentHierarchy(skillOptionList[i]);
 		}
 
-
 		Redraw();
 		base.ShowMenu();
 	}
 
-
 	public void ShowSkills()
 	{
 		for (int i = 0; i < skillOptionList.Count; i++)
-		{
 			skillOptionList[i].Visible = true;
-		}
-		description.Visible = true;
 
+		description.Visible = true;
+	}
+
+	private void OpenPresetMenu()
+	{
+		if (IsAlertMenuActive)
+			return;
+
+		SaveManager.SaveGameData();
+		animator.Play("enter-skill-preset");
 	}
 
 	protected override void Confirm()
@@ -300,7 +305,6 @@ public partial class SkillSelect : Menu
 			return;
 		}
 
-
 		if (!ToggleSkill())
 			return;
 
@@ -309,10 +313,7 @@ public partial class SkillSelect : Menu
 		Redraw();
 	}
 
-	public override void OpenSubmenu()
-	{
-		_submenus[0].ShowMenu();
-	}
+	public override void OpenSubmenu() => _submenus[0].ShowMenu();
 
 	public void Redraw()
 	{
