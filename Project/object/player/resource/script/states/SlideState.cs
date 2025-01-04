@@ -23,7 +23,8 @@ public partial class SlideState : PlayerState
 
 		Player.DisableSidle = true;
 		Player.Animator.StartSliding();
-		Player.Effect.PlayActionSFX(Player.Effect.SlideSfx);
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+			Player.Effect.PlayActionSFX(Player.Effect.SlideSfx); // So the SlideSFX can be synced to the ChargeFX
 		Player.ChangeHitbox("slide");
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideDefense))
@@ -106,6 +107,7 @@ public partial class SlideState : PlayerState
 			Player.Skills.ChargeJump();
 			if (!Input.IsActionPressed("button_jump"))
 			{
+				Player.Effect.AbortActionSFX(Player.Effect.SlideSfx);
 				if (!Player.Controller.IsBrakeHeld())
 					return jumpState;
 

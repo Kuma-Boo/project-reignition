@@ -179,7 +179,7 @@ public partial class RunState : PlayerState
 			return;
 
 		Player.Animator.StartBrake();
-		Player.Effect.PlayActionSFX(Player.Effect.SlideSfx);
+		Player.Effect.PlayActionSFX(Player.Effect.BrakeSfx);
 	}
 
 	private void ProcessBrakeAnimation()
