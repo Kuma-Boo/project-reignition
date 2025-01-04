@@ -417,7 +417,7 @@ public partial class PauseMenu : Node
 			unpausedSpeed = (float)Engine.TimeScale;
 			Engine.TimeScale = 1.0f;
 		}
-		else
+		else if (!TransitionManager.IsTransitionActive)
 		{
 			Engine.TimeScale = unpausedSpeed;
 		}

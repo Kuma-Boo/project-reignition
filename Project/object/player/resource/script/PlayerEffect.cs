@@ -28,6 +28,7 @@ public partial class PlayerEffect : Node3D
 
 	public readonly StringName JumpSfx = "jump";
 	public readonly StringName JumpDashSfx = "jump dash";
+	public readonly StringName BrakeSfx = "brake";
 	public readonly StringName SlideSfx = "slide";
 	public readonly StringName SplashSfx = "splash";
 	public readonly StringName SidleSfx = "sidle";
@@ -41,22 +42,25 @@ public partial class PlayerEffect : Node3D
 	[ExportGroup("Skill Effects")]
 	[Export]
 	private SFXLibraryResource actionSFXLibrary;
+	private readonly List<StringName> activeActionChannelKeys = [];
 	private readonly List<AudioStreamPlayer> actionChannels = []; // Audio channels for playing action sound effects
+	/// <summary> Plays a sound effect given an key (key names are based on actionSFXLibrary). </summary>
 	public void PlayActionSFX(StringName key)
 	{
 		AudioStreamPlayer targetChannel = null;
 		AudioStream targetStream = actionSFXLibrary.GetStream(key);
 
-		foreach (AudioStreamPlayer actionChannel in actionChannels)
+		for (int i = 0; i < actionChannels.Count; i++)
 		{
-			if (actionChannel.Playing &&
-				actionChannel.Stream != targetStream)
+			if (actionChannels[i].Playing &&
+				actionChannels[i].Stream != targetStream)
 			{
-				// Audio channel is already busy
+				// Audio channel is already busy playing a different sound effect
 				continue;
 			}
 
-			targetChannel = actionChannel;
+			targetChannel = actionChannels[i];
+			activeActionChannelKeys[i] = key;
 		}
 
 		if (targetChannel == null) // Add new target channels as needed
@@ -68,10 +72,24 @@ public partial class PlayerEffect : Node3D
 
 			GetChild(0).AddChild(targetChannel);
 			actionChannels.Add(targetChannel);
+			activeActionChannelKeys.Add(key);
 		}
 
 		targetChannel.Stream = targetStream;
 		targetChannel.Play();
+	}
+
+	/// <summary> Stops all action channels with the given key. </summary> 
+	public void AbortActionSFX(StringName key)
+	{
+		while (activeActionChannelKeys.Contains(key))
+		{
+			int index = activeActionChannelKeys.IndexOf(key);
+			if (actionChannels[index].Playing)
+				actionChannels[index].Stop();
+
+			activeActionChannelKeys[index] = null;
+		}
 	}
 
 	[Export]

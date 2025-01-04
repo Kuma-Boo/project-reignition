@@ -73,6 +73,7 @@ public partial class StageSettings : Node3D
 		bool postProcessingEnabled = SaveManager.Config.postProcessingQuality != SaveManager.QualitySetting.Disabled;
 		Environment.Environment.SsaoEnabled = postProcessingEnabled;
 		Environment.Environment.SsilEnabled = postProcessingEnabled;
+		Environment.Environment.GlowEnabled = SaveManager.Config.bloomMode != SaveManager.QualitySetting.Disabled;
 	}
 
 	#region Shader Compilation

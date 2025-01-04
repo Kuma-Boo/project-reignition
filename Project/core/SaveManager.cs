@@ -140,7 +140,7 @@ public partial class SaveManager : Node
 		public int renderScale = 100;
 		public RenderingServer.ViewportScaling3DMode resizeMode = RenderingServer.ViewportScaling3DMode.Bilinear;
 		public int antiAliasing = 1; // Default to FXAA
-		public bool useHDBloom = true;
+		public QualitySetting bloomMode = QualitySetting.High;
 		public bool useMotionBlur = true;
 		public bool useScreenShake = true;
 		public int screenShake = 100;
@@ -184,7 +184,7 @@ public partial class SaveManager : Node
 				{ nameof(renderScale), renderScale },
 				{ nameof(resizeMode), (int)resizeMode },
 				{ nameof(antiAliasing), antiAliasing },
-				{ nameof(useHDBloom), useHDBloom },
+				{ nameof(bloomMode), (int)bloomMode },
 				{ nameof(softShadowQuality), (int)softShadowQuality },
 				{ nameof(postProcessingQuality), (int)postProcessingQuality },
 				{ nameof(reflectionQuality), (int)reflectionQuality },
@@ -236,8 +236,8 @@ public partial class SaveManager : Node
 				resizeMode = (RenderingServer.ViewportScaling3DMode)(int)var;
 			if (dictionary.TryGetValue(nameof(antiAliasing), out var))
 				antiAliasing = (int)var;
-			if (dictionary.TryGetValue(nameof(useHDBloom), out var))
-				useHDBloom = (bool)var;
+			if (dictionary.TryGetValue(nameof(bloomMode), out var))
+				bloomMode = (QualitySetting)(int)var;
 			if (dictionary.TryGetValue(nameof(softShadowQuality), out var))
 				softShadowQuality = (QualitySetting)(int)var;
 			if (dictionary.TryGetValue(nameof(postProcessingQuality), out var))
@@ -367,7 +367,7 @@ public partial class SaveManager : Node
 		RenderingServer.ViewportSetScreenSpaceAA(viewportRid, targetSSAA);
 		RenderingServer.ViewportSetMsaa3D(viewportRid, targetMSAA);
 
-		RenderingServer.EnvironmentGlowSetUseBicubicUpscale(Config.useHDBloom);
+		RenderingServer.EnvironmentGlowSetUseBicubicUpscale(Config.bloomMode == QualitySetting.High);
 
 		int targetShadowAtlasSize = 4096;
 		bool use16BitShadowAtlas = Config.softShadowQuality == QualitySetting.High;

@@ -127,11 +127,8 @@ public partial class PlayerInputController : Node
 	/// <summary> Returns the automaticly calculated input angle based on the game's settings and skills. </summary>
 	public float GetTargetInputAngle()
 	{
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
-		{
-			if (InputAxis.IsZeroApprox())
-				return Player.PathFollower.ForwardAngle;
-		}
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) && InputAxis.IsZeroApprox())
+			return Player.PathFollower.ForwardAngle;
 
 		return NonZeroInputAxis.Rotated(-XformAngle).AngleTo(Vector2.Down);
 	}
@@ -190,14 +187,17 @@ public partial class PlayerInputController : Node
 	{
 		CameraSettingsResource.ControlModeEnum controlMode = Player.Camera.ActiveSettings.controlMode;
 		Vector2 inputs = InputAxis;
+		float baseAngle = Player.PathFollower.ForwardAngle;
 
 		if (controlMode == CameraSettingsResource.ControlModeEnum.Sidescrolling)
-			GD.PushWarning("Sidescrolling Control Mode Hasn't Been Implemented!");
+		{
+			int rotationDirection = Mathf.Sign(ExtensionMethods.SignedDeltaAngleRad(XformAngle, baseAngle));
+			inputs = inputs.Rotated(rotationDirection * Mathf.Pi * .5f);
+		}
 
 		if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
 			inputs.X *= -1;
 
-		float baseAngle = Player.PathFollower.ForwardAngle;
 		if (allowBackstep && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun)) // Check for backstep
 		{
 			if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
