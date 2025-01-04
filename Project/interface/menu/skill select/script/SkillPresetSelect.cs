@@ -1,25 +1,20 @@
 using Godot;
 using Godot.Collections;
 using Project.Core;
+using Project.Gameplay;
 
 namespace Project.Interface.Menus;
 
 public partial class SkillPresetSelect : Menu
 {
-	private enum Direction
-	{
-		Up,
-		Down
-	}
-
 	[Export] private PackedScene presetOption;
 	[Export] private VBoxContainer presetContainer;
-	//[Export] private Node2D cursor;
+	// [Export] private Node2D cursor;
 	[Export]
 	private Node2D cursor;
 	[Export] private Sprite2D scrollbar;
 
-	[Export] private Label saveLabel; //We're changing this to "overwrite" if a save already exists
+	[Export] private Label saveLabel; // We're changing this to "overwrite" if a save already exists
 
 	[Export] private TextEdit nameEditor;
 
@@ -28,21 +23,21 @@ public partial class SkillPresetSelect : Menu
 
 	[Export] private AnimationPlayer animatorNameEditor;
 
-	private Gameplay.SkillRing activeSkillRing => SaveManager.ActiveSkillRing;
+	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
+
 	private int scrollAmount;
 	private float scrollRatio;
 	private Vector2 scrollVelocity;
 	private Vector2 containerVelocity;
-	private const float scrollSmoothing = .1f;
-	private readonly int scrollInterval = 240;
-	private readonly int pageSize = 4;
+	private const float ScrollSmoothing = .1f;
+	private readonly int ScrollInterval = 240;
+	private readonly int PageSize = 4;
+
 	private int cursorPosition;
 	private Vector2 cursorVelocity;
-	private const float cursorSmoothing = .1f;
+	private const float CursorSmoothing = .1f;
 
 	private Array<SkillPresetOption> presetList = [];
-
-	private bool isInitialized;
 
 	public bool isSubMenuActive;
 
@@ -51,11 +46,11 @@ public partial class SkillPresetSelect : Menu
 
 	protected override void SetUp()
 	{
-		// Create Preset Option nodes
+		//  Create Preset Option nodes
 		for (int i = 0; i < SaveManager.PresetCount; i++)
 		{
 			SkillPresetOption newPreset = presetOption.Instantiate<SkillPresetOption>();
-			newPreset.DisplayNumber = i + 1; // For displaying the number
+			newPreset.DisplayNumber = i + 1; //  For displaying the number
 
 			presetList.Add(newPreset);
 			presetContainer.AddChild(newPreset);
@@ -65,26 +60,25 @@ public partial class SkillPresetSelect : Menu
 	public override void _Process(double _)
 	{
 		float targetScrollPosition = (160 * scrollRatio) - 80;
-		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, scrollSmoothing);
+		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, ScrollSmoothing);
 
-		// Update cursor position
-		float targetCursorPosition = cursorPosition * scrollInterval;
-		cursor.Position = cursor.Position.SmoothDamp(Vector2.Down * targetCursorPosition, ref cursorVelocity, cursorSmoothing);
+		//  Update cursor position
+		float targetCursorPosition = cursorPosition * ScrollInterval;
+		cursor.Position = cursor.Position.SmoothDamp(Vector2.Down * targetCursorPosition, ref cursorVelocity, CursorSmoothing);
 
-		Vector2 targetContainerPosition = new(presetContainer.Position.X, -scrollAmount * scrollInterval);
-		presetContainer.Position = presetContainer.Position.SmoothDamp(targetContainerPosition, ref containerVelocity, scrollSmoothing);
+		Vector2 targetContainerPosition = new(presetContainer.Position.X, -scrollAmount * ScrollInterval);
+		presetContainer.Position = presetContainer.Position.SmoothDamp(targetContainerPosition, ref containerVelocity, ScrollSmoothing);
 	}
 
 	private void UpdateScrollAmount(int inputSign)
 	{
 		int listSize = SaveManager.PresetCount;
 
-		if (listSize <= pageSize)
+		if (listSize <= PageSize)
 		{
-			// Disable scrolling
+			//  Disable scrolling
 			scrollAmount = 0;
 			scrollRatio = 0;
-			//cursorPosition = VerticalSelection;
 		}
 		else
 		{
@@ -95,17 +89,13 @@ public partial class SkillPresetSelect : Menu
 			else
 				cursorPosition += inputSign;
 
-			scrollAmount = Mathf.Clamp(scrollAmount, 0, listSize - pageSize);
+			scrollAmount = Mathf.Clamp(scrollAmount, 0, listSize - PageSize);
 			scrollRatio = (float)VerticalSelection / (SaveManager.PresetCount - 1);
-			//cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
 		}
 	}
 
-
 	public override void ShowMenu()
 	{
-
-		GD.Print("Showing presets");
 		animator.Play("show");
 		LoadPresets();
 
@@ -114,11 +104,9 @@ public partial class SkillPresetSelect : Menu
 
 	public void LoadPresets()
 	{
-		//currentPresets = new Array<SkillPreset>();
 		for (int i = 0; i < presetList.Count; i++)
 		{
 			presetList[i].Reset();
-			GD.Print("LOADING PRESET " + i);
 
 			presetList[i].presetName = SaveManager.ActiveGameData.presetNames[i];
 			presetList[i].skills = SaveManager.ActiveGameData.presetSkills[i];
@@ -127,7 +115,6 @@ public partial class SkillPresetSelect : Menu
 			presetList[i].Initialize();
 		}
 
-		isInitialized = true;
 		presetList[VerticalSelection].SelectRight();
 	}
 
@@ -137,30 +124,26 @@ public partial class SkillPresetSelect : Menu
 		if (inputSign == 0)
 			return;
 
-		if (isSubMenuActive && isEditingName == false)
+		if (!isEditingName)
 		{
-			subIndex = WrapSelection(subIndex + inputSign, 5);
-			MoveSubCursor();
-			return;
-		}
+			if (isSubMenuActive)
+			{
+				subIndex = WrapSelection(subIndex + inputSign, 5);
+				MoveSubCursor();
+				return;
+			}
 
-
-
-		if (isEditingName == false)
-		{
 			presetList[VerticalSelection].DeselectInstant();
 			VerticalSelection = WrapSelection(VerticalSelection + inputSign, presetList.Count);
-			MoveCursor(inputSign < 0 ? Direction.Up : Direction.Down, VerticalSelection);
+			MoveCursor(inputSign, VerticalSelection);
 		}
 
 		UpdateScrollAmount(inputSign);
-
-		GD.Print("Selected index ", VerticalSelection);
 	}
 
 	protected override void Confirm()
 	{
-		if (isSubMenuActive && isEditingName == false)
+		if (isSubMenuActive && !isEditingName)
 		{
 			switch (subIndex)
 			{
@@ -192,21 +175,19 @@ public partial class SkillPresetSelect : Menu
 		}
 		else
 		{
-			// Show the submenu
+			//  Show the submenu
 			subIndex = 0;
 			MoveSubCursor();
 			animatorOptions.Play("show");
 			isSubMenuActive = true;
 		}
-
-
 	}
 
 	protected override void Enter()
 	{
 		if (isEditingName)
 		{
-			if (nameEditor.Text == "")
+			if (string.IsNullOrEmpty(nameEditor.Text))
 				presetList[VerticalSelection].presetName = "New Preset";
 
 			presetList[VerticalSelection].presetName = nameEditor.Text;
@@ -218,7 +199,7 @@ public partial class SkillPresetSelect : Menu
 
 	protected override void Cancel()
 	{
-		if (isSubMenuActive && isEditingName == false)
+		if (isSubMenuActive && !isEditingName)
 		{
 			animatorOptions.Play("hide");
 			isSubMenuActive = false;
@@ -230,62 +211,49 @@ public partial class SkillPresetSelect : Menu
 		}
 		else
 		{
-
+			// Return to skill editing
 			animator.Play("hide");
 			SaveManager.SaveGameData();
 			OpenParentMenu();
-			//Return to skill editing
 		}
 	}
 
 	public void MoveSubCursor()
 	{
+		string targetAnimation = string.Empty;
 		switch (subIndex)
 		{
 			case 0:
-				if (!IsInvalid(VerticalSelection))
-					animatorOptionsSelector.Play("select-save");
-				else
-					animatorOptionsSelector.Play("select-save-invalid");
+				targetAnimation = "select-save";
 				break;
 			case 1:
-				if (!IsInvalid(VerticalSelection))
-					animatorOptionsSelector.Play("select-load");
-
-				else
-					animatorOptionsSelector.Play("select-load-invalid");
+				targetAnimation = "select-load";
 				break;
 			case 2:
-				if (!IsInvalid(VerticalSelection))
-					animatorOptionsSelector.Play("select-rename");
-				else
-					animatorOptionsSelector.Play("select-rename-invalid");
+				targetAnimation = "select-rename";
 				break;
 			case 3:
-				if (!IsInvalid(VerticalSelection))
-					animatorOptionsSelector.Play("select-delete");
-				else
-					animatorOptionsSelector.Play("select-delete-invalid");
+				targetAnimation = "select-delete";
 				break;
 			case 4:
-				if (!IsInvalid(VerticalSelection))
-					animatorOptionsSelector.Play("select-cancel");
-				else
-					animatorOptionsSelector.Play("select-cancel-invalid");
+				targetAnimation = "select-cancel";
 				break;
 		}
+
+		if (IsInvalid(VerticalSelection))
+			targetAnimation += "-invalid";
+
+		animatorOptionsSelector.Play(targetAnimation);
 
 		if (!isSelectionScrolling)
 			StartSelectionTimer();
 	}
 
-	private void MoveCursor(Direction dir, int index)
+	private void MoveCursor(int dir, int index)
 	{
-		GD.Print("Index: " + index);
-
-		if (dir == Direction.Up)
+		if (dir < 0)
 			presetList[index].SelectUp();
-		else if (dir == Direction.Down)
+		else
 			presetList[index].SelectDown();
 
 		if (!isSelectionScrolling)
@@ -294,11 +262,11 @@ public partial class SkillPresetSelect : Menu
 
 	private void SaveSkills(int preset)
 	{
-		// Storing our equipped skills into our current preset
+		//  Storing our equipped skills into our current preset
 		if (string.IsNullOrEmpty(presetList[preset].presetName) && subIndex == 0)
 			presetList[preset].presetName = "New Preset";
 
-		presetList[preset].presetName = presetList[preset].presetName.Replace("\n", ""); //when we edit names, remove the newline code
+		presetList[preset].presetName = presetList[preset].presetName.Replace("\n", ""); // when we edit names, remove the newline code
 
 		presetList[preset].skills = SaveManager.ActiveGameData.equippedSkills.Duplicate();
 		presetList[preset].skillAugments = SaveManager.ActiveGameData.equippedAugments.Duplicate();
@@ -307,27 +275,21 @@ public partial class SkillPresetSelect : Menu
 		SaveManager.ActiveGameData.presetSkills[preset] = presetList[preset].skills.Duplicate();
 		SaveManager.ActiveGameData.presetSkillAugments[preset] = presetList[preset].skillAugments.Duplicate();
 
-
-		// Save our new data to the file and play the animation to initialize the on-screen data
-		if (subIndex == 0 || subIndex == 1) //Only play the save animation if we are selecting save or load, otherewise just display the data
+		//  Save our new data to the file and play the animation to initialize the on-screen data
+		if (subIndex == 0 || subIndex == 1) // Only play the save animation if we are selecting save or load, otherewise just display the data
 			presetList[preset].SavePreset();
 		else
 			presetList[preset].Initialize();
 
 		SaveManager.SaveGameData();
-		MoveSubCursor(); //After saving, change the option box colors
-
-		foreach (SkillPresetOption option in presetList)
-		{
-			GD.PrintT(option.presetName, option.skills, option.skillAugments);
-		}
+		MoveSubCursor(); // After saving, change the option box colors
 	}
 
 	private void LoadSkills(int preset)
 	{
 		SaveManager.ActiveGameData.equippedSkills = presetList[preset].skills.Duplicate();
 		SaveManager.ActiveGameData.equippedAugments = presetList[preset].skillAugments.Duplicate();
-		activeSkillRing.UpdateTotalCost();
+		ActiveSkillRing.UpdateTotalCost();
 
 		presetList[preset].SelectPreset();
 	}
@@ -335,13 +297,13 @@ public partial class SkillPresetSelect : Menu
 	private void RenamePreset()
 	{
 		isEditingName = true;
-		nameEditor.Text = "New Preset";
+		nameEditor.Text = SaveManager.ActiveGameData.presetNames[VerticalSelection];
 		animatorNameEditor.Play("show");
 	}
 
 	private void DeletePreset(int preset)
 	{
-		// A null/empty preset means it's already been deleted.
+		//  A null/empty preset means it's already been deleted.
 		if (string.IsNullOrEmpty(SaveManager.ActiveGameData.presetNames[preset]))
 			return;
 
@@ -355,9 +317,8 @@ public partial class SkillPresetSelect : Menu
 
 		SaveManager.SaveGameData();
 		presetList[preset].Initialize();
-		//SaveSkills(preset);
 
-		MoveSubCursor();//Grays out the options menu 
+		MoveSubCursor(); // Grays out the options menu 
 	}
 
 	private bool IsInvalid(int index) => presetList[index].IsInvalid;
