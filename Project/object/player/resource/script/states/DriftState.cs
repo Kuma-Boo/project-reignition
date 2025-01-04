@@ -57,7 +57,6 @@ public partial class DriftState : PlayerState
 		driftVelocity = Vector3.Zero;
 		driftStatus = DriftStatus.Processing;
 
-		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.Effect.StartDust();
 		Player.Animator.ExternalAngle = Player.MovementAngle;
 		Player.Animator.StartDrift(Trigger.IsRightTurn);
@@ -69,7 +68,6 @@ public partial class DriftState : PlayerState
 	public override void ExitState()
 	{
 		Player.Effect.StopDust();
-		Player.Skills.IsSpeedBreakEnabled = true;
 		Player.AttackState = PlayerController.AttackStates.None;
 
 		if (driftStatus != DriftStatus.JumpFail)

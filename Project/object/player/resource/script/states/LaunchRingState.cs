@@ -45,7 +45,7 @@ public partial class LaunchRingState : PlayerState
 	{
 		if (!Launcher.IsPlayerCentered)
 		{
-			Player.CenterPosition = Launcher.RecenterPlayer();
+			Player.GlobalPosition = Launcher.RecenterPlayer();
 			Player.Controller.ResetJumpBuffer(); // Reset jump buffers just in case
 			return null;
 		}

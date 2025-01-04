@@ -159,15 +159,16 @@ public partial class MovingObject : Node3D
 	/// <summary> Current travel direction (Linear only). </summary>
 	private int travelDirection;
 	/// <summary> Set this if you want a non-linear travel time. Only works on Linear movement modes. </summary>
-	[Export]
-	private Curve timeCurve;
-	[Export]
-	private bool startPaused;
-	[Export]
-	private bool smoothPausing;
+	[Export] private Curve timeCurve;
+	[Export] private bool startPaused;
+	[Export] private bool smoothPausing;
 	/// <summary> Is movement paused? </summary>
 	private bool isPaused;
 	private const float PauseSmoothing = .1f;
+
+	/// <summary> Enable this to have objects move to their starting position. </summary>
+	[Export] private bool lockToStartingPosition;
+	public void SetStartingLock(bool value) => lockToStartingPosition = value;
 
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
 	private NodePath root;
@@ -203,14 +204,22 @@ public partial class MovingObject : Node3D
 	{
 		if (Engine.IsEditorHint()) return;
 		if (IsMovementInvalid()) return; // No movement
+
 		if (isPaused && !smoothPausing) return;
 
 		if (smoothPausing || StageSettings.Player.IsInvincible)
 			TimeScale = Mathf.Lerp(TimeScale, isPaused ? 0 : 1, PauseSmoothing);
 
-		currentTime += PhysicsManager.physicsDelta * Mathf.Sign(cycleLength) * TimeScale;
-		if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) // Rollover
-			currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength) * Mathf.Sign(cycleLength);
+		if (lockToStartingPosition)
+		{
+			currentTime = Mathf.MoveToward(currentTime, StartingOffset * Mathf.Abs(cycleLength), PhysicsManager.physicsDelta * TimeScale);
+		}
+		else
+		{
+			currentTime += PhysicsManager.physicsDelta * Mathf.Sign(cycleLength) * TimeScale;
+			if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) // Rollover
+				currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength) * Mathf.Sign(cycleLength);
+		}
 
 		if (Root?.IsInsideTree() == true)
 			Root.GlobalPosition = InterpolatePosition(currentTime / Mathf.Abs(cycleLength));
