@@ -283,7 +283,6 @@ public partial class SkillSelect : Menu
 		if (IsAlertMenuActive)
 			return;
 
-		SaveManager.SaveGameData();
 		animator.Play("enter-skill-preset");
 	}
 

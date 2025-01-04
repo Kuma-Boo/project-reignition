@@ -41,6 +41,7 @@ public partial class ReadyMenu : Menu
 			fromSkillMenu = true;
 			HideDescription();
 			OpenSubmenu();
+			animator.Play("open-skill-menu");
 			return;
 		}
 

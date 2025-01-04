@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=3 uid="uid://byf372uaewx1u"]
+[gd_scene load_steps=81 format=3 uid="uid://byf372uaewx1u"]
 
 [ext_resource type="Script" path="res://interface/menu/level select/script/ReadyMenu.cs" id="1_ldudh"]
 [ext_resource type="Texture2D" uid="uid://bgtxik1dsbu0u" path="res://interface/menu/level select/texture/ready text/ready en.png" id="2_eg5ps"]
@@ -40,6 +40,7 @@
 [ext_resource type="SpriteFrames" uid="uid://btjml6xghvlgt" path="res://effect/particle/sprite frames/Flame Menu Tall.tres" id="32_skf7y"]
 [ext_resource type="LabelSettings" uid="uid://d2esxoalpgwjg" path="res://interface/font/MenuText.tres" id="33_te2os"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="35_edhiv"]
+[ext_resource type="AudioStream" uid="uid://fjiifn0tycil" path="res://sound/sfx/system/skill ring save.wav" id="41_k7nhr"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ibf4p"]
 animations = [{
@@ -1442,11 +1443,44 @@ tracks/0/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_sns38"]
+resource_name = "open-skill-menu"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/Skill")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"OpenSubmenu"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hjga2"]
 _data = {
 "RESET": SubResource("Animation_fjqwi"),
 "cancel": SubResource("Animation_ow2hg"),
 "confirm": SubResource("Animation_xs86i"),
+"open-skill-menu": SubResource("Animation_sns38"),
 "select-no": SubResource("Animation_ablxt"),
 "select-yes": SubResource("Animation_l7odi"),
 "show": SubResource("Animation_wy8hm"),
@@ -1911,6 +1945,10 @@ bus = &"SFX"
 
 [node name="Select" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("7_5a0w1")
+bus = &"SFX"
+
+[node name="Skill" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("41_k7nhr")
 bus = &"SFX"
 
 [node name="Cancel" type="AudioStreamPlayer" parent="SFX"]

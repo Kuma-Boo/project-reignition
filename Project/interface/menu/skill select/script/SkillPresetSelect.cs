@@ -16,7 +16,7 @@ public partial class SkillPresetSelect : Menu
 
 	[Export] private Label saveLabel; // We're changing this to "overwrite" if a save already exists
 
-	[Export] private TextEdit nameEditor;
+	[Export] private LineEdit nameEditor;
 
 	[Export] private AnimationPlayer animatorOptions;
 	[Export] private AnimationPlayer animatorOptionsSelector;
@@ -68,6 +68,18 @@ public partial class SkillPresetSelect : Menu
 
 		Vector2 targetContainerPosition = new(presetContainer.Position.X, -scrollAmount * ScrollInterval);
 		presetContainer.Position = presetContainer.Position.SmoothDamp(targetContainerPosition, ref containerVelocity, ScrollSmoothing);
+	}
+
+	protected override void ProcessMenu()
+	{
+		if (isEditingName &&
+			(Input.IsKeyPressed(Key.Enter) || Input.IsActionJustPressed("button_pause")))
+		{
+			Rename();
+			return;
+		}
+
+		base.ProcessMenu();
 	}
 
 	private void UpdateScrollAmount(int inputSign)
@@ -143,7 +155,10 @@ public partial class SkillPresetSelect : Menu
 
 	protected override void Confirm()
 	{
-		if (isSubMenuActive && !isEditingName)
+		if (isEditingName)
+			return;
+
+		if (isSubMenuActive)
 		{
 			switch (subIndex)
 			{
@@ -167,26 +182,19 @@ public partial class SkillPresetSelect : Menu
 					isSubMenuActive = false;
 					break;
 			}
+
+			return;
 		}
-		else if (isEditingName)
-		{
-			Rename();
-		}
-		else
-		{
-			//  Show the submenu
-			subIndex = 0;
-			MoveSubCursor();
-			animatorOptions.Play("show");
-			isSubMenuActive = true;
-		}
+
+		//  Show the submenu
+		subIndex = 0;
+		MoveSubCursor();
+		animatorOptions.Play("show");
+		isSubMenuActive = true;
 	}
 
 	private void Rename()
 	{
-		if (!isEditingName)
-			return;
-
 		if (string.IsNullOrEmpty(nameEditor.Text))
 			presetList[VerticalSelection].presetName = "New Preset";
 
