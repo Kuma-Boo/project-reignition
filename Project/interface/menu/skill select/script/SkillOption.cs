@@ -19,23 +19,16 @@ public partial class SkillOption : Control
 	public int Number { get; set; }
 
 	[Export]
-	private TextureRect light;
-	[Export]
 	private Label numberLabel;
 	[Export]
 	private Label nameLabel;
 	[Export]
 	private Label costLabel;
 	[Export]
-	private TextureRect elementLabel;
-	[Export]
 	private AnimationPlayer animator;
 	[Export]
 	private VBoxContainer augmentContainer;
 	private float augmentMenuMinimumSize;
-
-	[Export]
-	private Label createPresetLabel;
 
 	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
 
@@ -108,7 +101,6 @@ public partial class SkillOption : Control
 		}
 
 		RedrawStaticData();
-
 		Redraw();
 	}
 
@@ -200,10 +192,5 @@ public partial class SkillOption : Control
 		}
 
 		return offset;
-	}
-
-	public void ChangeName(string name)
-	{
-		nameLabel.Text = name;
 	}
 }
