@@ -18,13 +18,18 @@ public partial class SlideState : PlayerState
 
 	public override void EnterState()
 	{
-		if (Player.MoveSpeed <= Player.Stats.InitialSlideSpeed)
-			Player.MoveSpeed = Player.Stats.InitialSlideSpeed;
+		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
+		{
+			// Only add initial slide speed for normal sliding
+			if (Player.MoveSpeed <= Player.Stats.InitialSlideSpeed)
+				Player.MoveSpeed = Player.Stats.InitialSlideSpeed;
+
+			// So the SlideSFX can be synced to the ChargeFX
+			Player.Effect.PlayActionSFX(Player.Effect.SlideSfx);
+		}
 
 		Player.DisableSidle = true;
 		Player.Animator.StartSliding();
-		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
-			Player.Effect.PlayActionSFX(Player.Effect.SlideSfx); // So the SlideSFX can be synced to the ChargeFX
 		Player.ChangeHitbox("slide");
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideDefense))

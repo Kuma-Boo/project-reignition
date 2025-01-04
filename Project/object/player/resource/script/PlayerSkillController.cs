@@ -38,7 +38,9 @@ public partial class PlayerSkillController : Node3D
 		if (canStartFX && JumpCharge >= ChargeFXDelay)
 		{
 			Player.Effect.StartChargeFX();
-			Player.Effect.PlayActionSFX(Player.Effect.SlideSfx);
+
+			if (Player.MoveSpeed > Player.Stats.InitialSlideSpeed)
+				Player.Effect.PlayActionSFX(Player.Effect.SlideSfx);
 		}
 
 		if (IsJumpCharged && !isFullyCharged)
