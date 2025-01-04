@@ -34,7 +34,7 @@ public partial class SkillPresetOption : Control
 
 	public void Initialize()
 	{
-		numLabel.Text = DisplayNumber.ToString();
+		numLabel.Text = DisplayNumber.ToString("00");
 		if (IsInvalid)
 		{
 			animator.Play("no-preset");

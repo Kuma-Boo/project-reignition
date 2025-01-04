@@ -1,16 +1,21 @@
-[gd_scene load_steps=30 format=3 uid="uid://c3qhbk31d0gc4"]
+[gd_scene load_steps=35 format=3 uid="uid://c3qhbk31d0gc4"]
 
 [ext_resource type="Script" path="res://interface/menu/skill select/script/SkillPresetOption.cs" id="1_adrm6"]
-[ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="1_pce6s"]
 [ext_resource type="LabelSettings" uid="uid://d2esxoalpgwjg" path="res://interface/font/MenuText.tres" id="1_rp60a"]
+[ext_resource type="Texture2D" uid="uid://cjev26eattovg" path="res://interface/menu/skill select/texture/preset background.png" id="2_n3hua"]
 [ext_resource type="Shader" path="res://interface/menu/skill select/SkillPresetOption.gdshader" id="2_rnnji"]
-[ext_resource type="Texture2D" uid="uid://bx1cy4uyloj7q" path="res://interface/menu/skill select/texture/dark.png" id="3_7vdsa"]
-[ext_resource type="Texture2D" uid="uid://cdhux01qob8mb" path="res://interface/menu/skill select/texture/wind.png" id="3_23rlb"]
-[ext_resource type="Texture2D" uid="uid://epdfxhqugwg2" path="res://interface/menu/skill select/texture/fire.png" id="4_rwyg3"]
+[ext_resource type="Texture2D" uid="uid://b4o5li6c5oqec" path="res://interface/menu/skill select/texture/skill ring shadow.png" id="4_mpvku"]
+[ext_resource type="Texture2D" uid="uid://cfr42bqabcunm" path="res://interface/menu/skill select/texture/wind preset.png" id="5_l8p8m"]
 [ext_resource type="Texture2D" uid="uid://h57ufh8w0gvg" path="res://interface/menu/skill select/texture/skill ring.png" id="6_w7vqq"]
+[ext_resource type="Texture2D" uid="uid://esj5pbrx8grh" path="res://interface/menu/skill select/texture/fire preset.png" id="6_x2em1"]
+[ext_resource type="Texture2D" uid="uid://dfofeg781fs1y" path="res://interface/menu/skill select/texture/dark preset.png" id="7_u0dox"]
+[ext_resource type="Texture2D" uid="uid://n4o8qvki6yi7" path="res://interface/menu/skill select/texture/skill atlas.png" id="8_yst6r"]
+[ext_resource type="LabelSettings" uid="uid://bx53haw8tuhx" path="res://interface/font/SkillSelectFont.tres" id="9_4ssdy"]
 [ext_resource type="AudioStream" uid="uid://fjiifn0tycil" path="res://sound/sfx/system/skill ring save.wav" id="9_g0ld8"]
 [ext_resource type="AudioStream" uid="uid://cl54rftw5aiyf" path="res://sound/sfx/system/menu cancel.wav" id="10_0arbv"]
+[ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="10_w4aci"]
 [ext_resource type="AudioStream" uid="uid://l2e1do1wwkg" path="res://sound/sfx/system/menu confirm.wav" id="11_ar60m"]
+[ext_resource type="Texture2D" uid="uid://sn6871vb7ats" path="res://interface/menu/skill select/texture/glow.png" id="11_lpkow"]
 [ext_resource type="AudioStream" uid="uid://dc6pp0ugxo4e3" path="res://sound/sfx/system/menu pause.wav" id="12_tj37a"]
 [ext_resource type="AudioStream" uid="uid://bc6pmkxr1e25r" path="res://sound/sfx/system/skill equip.wav" id="13_huje2"]
 [ext_resource type="AudioStream" uid="uid://dmf8plsfsakc6" path="res://sound/sfx/system/skill unequip.wav" id="14_fe7yt"]
@@ -46,10 +51,46 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("BackgroundWhite:modulate")
+tracks/2/path = NodePath("Background/BackgroundWhite:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SkillRing:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 100)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SkillRing/Shadow:self_modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Number/Glow:self_modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -95,6 +136,18 @@ tracks/2/keys = {
 "update": 1,
 "values": [null]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Number/Glow:self_modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_srxj5"]
 resource_name = "deselect_instant"
@@ -134,6 +187,18 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [null]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Number/Glow:self_modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1ktj2"]
@@ -212,11 +277,11 @@ tracks/4/keys = {
 
 [sub_resource type="Animation" id="Animation_vduk7"]
 resource_name = "no-preset"
-length = 0.1
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HeaderLabels/NameLabel:visible")
+tracks/0/path = NodePath("NameLabel:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -228,7 +293,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Text/Labels:visible")
+tracks/1/path = NodePath("Text:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -353,7 +418,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("BackgroundWhite:modulate")
+tracks/6/path = NodePath("Background/BackgroundWhite:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -361,6 +426,18 @@ tracks/6/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 0.313726), Color(1, 1, 1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SkillRing/Shadow:self_modulate")
+tracks/7/interp = 2
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(0.5, 3, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_qb1ps"]
@@ -388,7 +465,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1.62451),
 "update": 0,
-"values": [Vector2(0, -50), Vector2(0, 40)]
+"values": [Vector2(0, -50), Vector2(0, 80)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -397,6 +474,18 @@ tracks/2/path = NodePath("SkillRing:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Number/Glow:self_modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
@@ -428,7 +517,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1.62451),
 "update": 0,
-"values": [Vector2(-50, 40), Vector2(0, 40)]
+"values": [Vector2(-120, 80), Vector2(0, 80)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -437,6 +526,18 @@ tracks/2/path = NodePath("SkillRing:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Number/Glow:self_modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
@@ -468,7 +569,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1.62451),
 "update": 0,
-"values": [Vector2(0, 90), Vector2(0, 40)]
+"values": [Vector2(0, 200), Vector2(0, 80)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -477,6 +578,18 @@ tracks/2/path = NodePath("SkillRing:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Number/Glow:self_modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
@@ -502,7 +615,7 @@ length = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("../HeaderLabels/NameLabel:modulate")
+tracks/0/path = NodePath("../NameLabel:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -514,7 +627,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../Text/Labels:modulate")
+tracks/1/path = NodePath("../Text:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -566,7 +679,7 @@ length = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("../HeaderLabels/NameLabel:modulate")
+tracks/0/path = NodePath("../NameLabel:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -578,7 +691,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../Text/Labels:modulate")
+tracks/1/path = NodePath("../Text:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -626,7 +739,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("../HeaderLabels/NameLabel:visible")
+tracks/5/path = NodePath("../NameLabel:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -638,7 +751,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("../Text/Labels:visible")
+tracks/6/path = NodePath("../Text:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -697,16 +810,16 @@ anchor_left = -0.006
 anchor_top = 0.006
 anchor_right = 0.592
 anchor_bottom = 0.243
-offset_left = 11.52
-offset_top = 0.52
-offset_right = 0.359985
-offset_bottom = -13.44
+offset_left = 11.02
+offset_top = -6.48
+offset_right = 0.859985
+offset_bottom = -20.44
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_adrm6")
-presetLabel = NodePath("HeaderLabels/NameLabel")
-numLabel = NodePath("HeaderLabels/NumberLabel")
-skillCountLabel = NodePath("Text/Labels/SkillCountLabel")
+presetLabel = NodePath("NameLabel")
+numLabel = NodePath("Number/NumberLabel")
+skillCountLabel = NodePath("Text/Values/SkillCountValue")
 skillCostLabel = NodePath("Text/Values/SkillCostValue")
 windAmtLabel = NodePath("Elements/Wind/NumberLabel")
 fireAmtLabel = NodePath("Elements/Fire/NumberLabel")
@@ -714,95 +827,39 @@ darkAmtLabel = NodePath("Elements/Dark/NumberLabel")
 animator = NodePath("AnimationPlayer")
 animatorData = NodePath("AnimationPlayer_Data")
 
-[node name="Background" type="NinePatchRect" parent="."]
+[node name="Background" type="TextureRect" parent="."]
+clip_children = 2
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 1.0
-offset_right = -3.0
-offset_bottom = 20.0
+offset_bottom = 14.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(567.5, 130.5)
-texture = ExtResource("1_pce6s")
-region_rect = Rect2(64, 176, 48, 48)
-patch_margin_left = 32
-patch_margin_top = 32
-patch_margin_right = 32
-patch_margin_bottom = 32
+texture = ExtResource("2_n3hua")
 
-[node name="BackgroundWhite" type="ColorRect" parent="."]
+[node name="BackgroundWhite" type="ColorRect" parent="Background"]
 modulate = Color(1, 1, 1, 0)
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 1.0
-offset_right = -3.0
-offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(567.5, 130.5)
 
-[node name="Bottom" type="NinePatchRect" parent="."]
+[node name="NameLabel" type="Label" parent="."]
 visible = false
-custom_minimum_size = Vector2(432, 33)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.104
-anchor_top = 0.89
-anchor_right = 0.889
-anchor_bottom = 1.0
-offset_left = -115.936
-offset_top = -23.38
-offset_right = -444.126
-offset_bottom = -15.0
-scale = Vector2(2, 2)
-texture = ExtResource("1_pce6s")
-region_rect = Rect2(189.5, 30, 50, 30)
-axis_stretch_horizontal = 1
-
-[node name="Top" type="NinePatchRect" parent="."]
-custom_minimum_size = Vector2(432, 33)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.104
-anchor_top = 0.89
-anchor_right = 0.889
-anchor_bottom = 1.0
-offset_left = -116.248
-offset_top = -255.38
-offset_right = -443.438
-offset_bottom = -244.0
-rotation = -6.28318
-scale = Vector2(2, 2)
-texture = ExtResource("1_pce6s")
-region_rect = Rect2(189.5, 30, 50, 30)
-axis_stretch_horizontal = 1
-
-[node name="HeaderLabels" type="HBoxContainer" parent="."]
-layout_mode = 0
-offset_left = 80.5
-offset_top = 41.0
-offset_right = 668.5
-offset_bottom = 105.0
-theme_override_constants/separation = 24
-
-[node name="NumberLabel" type="Label" parent="HeaderLabels"]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-text = "01"
-label_settings = ExtResource("1_rp60a")
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="NameLabel" type="Label" parent="HeaderLabels"]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(500, 64)
 layout_mode = 2
+offset_left = 129.0
+offset_top = 25.0
+offset_right = 629.0
+offset_bottom = 97.0
 text = "Lorem Ipsum"
 label_settings = ExtResource("1_rp60a")
 vertical_alignment = 1
@@ -810,16 +867,17 @@ clip_text = true
 text_overrun_behavior = 3
 
 [node name="Text" type="HBoxContainer" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0)
 layout_mode = 2
-offset_left = 680.0
-offset_top = 49.0
-offset_right = 1089.0
-offset_bottom = 135.0
+offset_left = 680.5
+offset_top = 40.0
+offset_right = 1089.5
+offset_bottom = 134.0
 theme_override_constants/separation = 16
 alignment = 2
 
 [node name="Labels" type="VBoxContainer" parent="Text"]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_constants/separation = 12
 alignment = 2
@@ -856,24 +914,43 @@ vertical_alignment = 1
 [node name="Elements" type="HBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 1.0
-offset_top = 161.0
+offset_top = 153.0
 offset_right = 1130.0
-offset_bottom = 225.0
+offset_bottom = 217.0
+theme_override_constants/separation = -12
 alignment = 1
 
 [node name="Wind" type="TextureRect" parent="Elements"]
+visible = false
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(180, 64)
 layout_mode = 2
-texture = ExtResource("3_23rlb")
+texture = ExtResource("5_l8p8m")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Shadow" type="TextureRect" parent="Elements/Wind"]
+modulate = Color(0, 0, 0, 0.784314)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_l8p8m")
 expand_mode = 1
 stretch_mode = 4
 
 [node name="NumberLabel" type="Label" parent="Elements/Wind"]
 layout_mode = 1
 anchors_preset = -1
-offset_left = 72.5
-offset_right = 200.5
+offset_left = 60.0
+offset_right = 188.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -882,18 +959,36 @@ label_settings = ExtResource("1_rp60a")
 vertical_alignment = 1
 
 [node name="Fire" type="TextureRect" parent="Elements"]
+visible = false
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(180, 64)
 layout_mode = 2
-texture = ExtResource("4_rwyg3")
+texture = ExtResource("6_x2em1")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Shadow" type="TextureRect" parent="Elements/Fire"]
+modulate = Color(0, 0, 0, 0.784314)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_x2em1")
 expand_mode = 1
 stretch_mode = 4
 
 [node name="NumberLabel" type="Label" parent="Elements/Fire"]
 layout_mode = 1
 anchors_preset = -1
-offset_left = 63.5
-offset_right = 191.5
+offset_left = 60.0
+offset_right = 188.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -902,18 +997,36 @@ label_settings = ExtResource("1_rp60a")
 vertical_alignment = 1
 
 [node name="Dark" type="TextureRect" parent="Elements"]
+visible = false
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(180, 64)
 layout_mode = 2
-texture = ExtResource("3_7vdsa")
+texture = ExtResource("7_u0dox")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Shadow" type="TextureRect" parent="Elements/Dark"]
+modulate = Color(0, 0, 0, 0.784314)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_u0dox")
 expand_mode = 1
 stretch_mode = 4
 
 [node name="NumberLabel" type="Label" parent="Elements/Dark"]
 layout_mode = 1
 anchors_preset = -1
-offset_left = 66.5
-offset_right = 194.5
+offset_left = 60.0
+offset_right = 188.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -921,13 +1034,70 @@ text = "×00"
 label_settings = ExtResource("1_rp60a")
 vertical_alignment = 1
 
+[node name="Number" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 32.5
+offset_top = 25.0
+offset_right = -1001.5
+offset_bottom = -113.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("8_yst6r")
+region_rect = Rect2(356, 104, 92, 92)
+
+[node name="NumberLabel" type="Label" parent="Number"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+offset_left = 24.0
+offset_top = 18.0
+offset_right = 93.0
+offset_bottom = 82.0
+scale = Vector2(0.8, 0.8)
+text = "01"
+label_settings = ExtResource("9_4ssdy")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Glow" type="TextureRect" parent="Number"]
+self_modulate = Color(1, 1, 1, 0)
+material = ExtResource("10_w4aci")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -35.0
+offset_right = 200.0
+offset_bottom = 197.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("11_lpkow")
+
 [node name="SkillRing" type="TextureRect" parent="."]
 visible = false
 layout_mode = 0
-offset_top = 40.0
-offset_right = 65.0
-offset_bottom = 105.0
+offset_top = 100.0
+offset_right = 256.0
+offset_bottom = 228.0
+pivot_offset = Vector2(128, 64)
 texture = ExtResource("6_w7vqq")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Shadow" type="TextureRect" parent="SkillRing"]
+show_behind_parent = true
+layout_mode = 0
+offset_left = -23.5
+offset_top = -3.0
+offset_right = 312.5
+offset_bottom = 165.0
+pivot_offset = Vector2(128, 64)
+texture = ExtResource("4_mpvku")
 expand_mode = 1
 stretch_mode = 5
 

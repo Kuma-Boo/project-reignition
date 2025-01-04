@@ -11,13 +11,13 @@
 [ext_resource type="LabelSettings" uid="uid://bqrydgixkulbv" path="res://interface/font/NavigationFont.tres" id="8_j35me"]
 [ext_resource type="LabelSettings" uid="uid://d2esxoalpgwjg" path="res://interface/font/MenuText.tres" id="9_5dt0h"]
 [ext_resource type="Texture2D" uid="uid://epdfxhqugwg2" path="res://interface/menu/skill select/texture/fire.png" id="10_jrr8x"]
+[ext_resource type="Texture2D" uid="uid://dq3e58qnn7y56" path="res://interface/menu/skill select/texture/augment arrow.png" id="10_mt4ha"]
 [ext_resource type="Texture2D" uid="uid://cyelehkbxtyyb" path="res://interface/menu/skill select/texture/air.png" id="11_82cis"]
 [ext_resource type="Texture2D" uid="uid://djonxolhpgwoo" path="res://interface/menu/skill select/texture/contract.png" id="12_f4jnt"]
 [ext_resource type="Texture2D" uid="uid://0moi5ue4oj" path="res://interface/menu/skill select/texture/combat.png" id="14_563c4"]
 [ext_resource type="Texture2D" uid="uid://dcy5gvo5deiwq" path="res://interface/menu/skill select/texture/crest.png" id="15_8sg8b"]
 [ext_resource type="Texture2D" uid="uid://dde4ae03nv4gp" path="res://interface/menu/skill select/texture/assist.png" id="15_idxrv"]
 [ext_resource type="Texture2D" uid="uid://dyqt8s6yseq0j" path="res://interface/menu/skill select/texture/ground.png" id="16_xu6u5"]
-[ext_resource type="Texture2D" uid="uid://n4o8qvki6yi7" path="res://interface/menu/skill select/texture/skill atlas.png" id="18_ykcbc"]
 
 [sub_resource type="Animation" id="Animation_03o5k"]
 resource_name = "RESET"
@@ -608,7 +608,7 @@ _data = {
 "wind": SubResource("Animation_st7wf")
 }
 
-[node name="SkillOption" type="Control" node_paths=PackedStringArray("light", "numberLabel", "nameLabel", "costLabel", "elementLabel", "animator", "augmentContainer")]
+[node name="SkillOption" type="Control" node_paths=PackedStringArray("numberLabel", "nameLabel", "costLabel", "animator", "augmentContainer")]
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 3
 anchor_right = 0.558
@@ -618,11 +618,9 @@ offset_bottom = 0.279999
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_djcyy")
-light = NodePath("Light")
 numberLabel = NodePath("Tint/NumberLabel")
 nameLabel = NodePath("Tint/NameLabel")
 costLabel = NodePath("Tint/CostLabel")
-elementLabel = NodePath("Element")
 animator = NodePath("AnimationPlayer")
 augmentContainer = NodePath("Augments")
 
@@ -774,7 +772,7 @@ label_settings = ExtResource("9_5dt0h")
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="AugmentArrow" type="NinePatchRect" parent="."]
+[node name="AugmentArrow" type="TextureRect" parent="."]
 visible = false
 layout_mode = 0
 offset_left = 136.0
@@ -784,8 +782,7 @@ offset_bottom = 46.0
 rotation = 1.5708
 scale = Vector2(1.5, 1.5)
 pivot_offset = Vector2(16, 14)
-texture = ExtResource("18_ykcbc")
-region_rect = Rect2(472, 228, 32, 28)
+texture = ExtResource("10_mt4ha")
 
 [node name="Augments" type="VBoxContainer" parent="."]
 visible = false
