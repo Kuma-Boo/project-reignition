@@ -11,7 +11,6 @@ public partial class ReadyMenu : Menu
 	private Label missionLabel;
 	[Export]
 	private Description description;
-	private bool fromSkillMenu;
 	public void ShowDescription() => description.ShowDescription();
 	public void HideDescription() => description.HideDescription();
 
@@ -20,7 +19,7 @@ public partial class ReadyMenu : Menu
 
 	public override void ShowMenu()
 	{
-		if (fromSkillMenu)
+		if (menuMemory[MemoryKeys.SkillMenuOpen] == 1)
 		{
 			EnableProcessing();
 			animator.Play("show-from-skill");
@@ -30,7 +29,7 @@ public partial class ReadyMenu : Menu
 			base.ShowMenu();
 		}
 
-		fromSkillMenu = false;
+		menuMemory[MemoryKeys.SkillMenuOpen] = 0;
 		HorizontalSelection = 0; // Default to yes
 	}
 
@@ -38,7 +37,7 @@ public partial class ReadyMenu : Menu
 	{
 		if (Input.IsActionJustPressed("button_pause"))
 		{
-			fromSkillMenu = true;
+			menuMemory[MemoryKeys.SkillMenuOpen] = 1;
 			HideDescription();
 			OpenSubmenu();
 			animator.Play("open-skill-menu");
