@@ -199,6 +199,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	protected virtual void LaunchAnimation()
 	{
 		Player.Effect.StopSpinFX();
+		Player.Effect.StopTrailFX();
 		Player.Animator.ResetState(.1f);
 		if (GetLaunchSettings().InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
 			Player.Animator.JumpAnimation();
