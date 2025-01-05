@@ -21,9 +21,10 @@ public partial class SkillPresetOption : Control
 	[Export] private Label presetLabel;
 
 	[Export] private Label numLabel;
-	[Export] private Label numSkillsLabel;
 
+	[Export] private Label skillCountLabel;
 	[Export] private Label skillCostLabel;
+
 	[Export] private Label windAmtLabel;
 	[Export] private Label fireAmtLabel;
 	[Export] private Label darkAmtLabel;
@@ -33,7 +34,7 @@ public partial class SkillPresetOption : Control
 
 	public void Initialize()
 	{
-		numLabel.Text = DisplayNumber.ToString();
+		numLabel.Text = DisplayNumber.ToString("00");
 		if (IsInvalid)
 		{
 			animator.Play("no-preset");
@@ -48,7 +49,7 @@ public partial class SkillPresetOption : Control
 	{
 		presetLabel.Text = presetName;
 
-		int numSkills = 0;
+		int skillCount = 0;
 		int skillCost = 0;
 		int windAmt = 0;
 		int fireAmt = 0;
@@ -79,7 +80,7 @@ public partial class SkillPresetOption : Control
 				}
 
 				skillCost += baseSkill.Cost;
-				numSkills++;
+				skillCount++;
 				continue;
 			}
 
@@ -98,14 +99,14 @@ public partial class SkillPresetOption : Control
 					break;
 			}
 			skillCost += baseSkill.Augments[augmentIndex - 1].Cost;
-			numSkills++;
+			skillCount++;
 		}
 
-		windAmtLabel.Text = windAmt.ToString();
-		fireAmtLabel.Text = fireAmt.ToString();
-		darkAmtLabel.Text = darkAmt.ToString();
-		numSkillsLabel.Text = numSkills.ToString();
-		skillCostLabel.Text = skillCost.ToString();
+		windAmtLabel.Text = "×" + windAmt.ToString("00");
+		fireAmtLabel.Text = "×" + fireAmt.ToString("00");
+		darkAmtLabel.Text = "×" + darkAmt.ToString("00");
+		skillCountLabel.Text = skillCount.ToString("000");
+		skillCostLabel.Text = skillCost.ToString("000");
 	}
 
 	public void Reset() => animator.Play("RESET");

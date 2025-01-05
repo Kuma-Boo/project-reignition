@@ -17,6 +17,8 @@ public partial class Menu : Control
 		SaveSelect,
 		WorldSelect,
 		LevelSelect,
+		SkillMenuOpen,
+		PresetsOpen,
 
 		SpecialBook,
 

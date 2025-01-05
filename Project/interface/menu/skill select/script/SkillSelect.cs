@@ -222,7 +222,7 @@ public partial class SkillSelect : Menu
 				cursorPosition += inputSign;
 
 			scrollAmount = Mathf.Clamp(scrollAmount, 0, listSize - PageSize);
-			scrollRatio = (float)VerticalSelection / (currentSkillOptionList.Count - 1);
+			scrollRatio = (float)VerticalSelection / (listSize - 1);
 			cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
 		}
 	}
@@ -237,8 +237,7 @@ public partial class SkillSelect : Menu
 	{
 		animator.Play("select");
 		animator.Seek(0, true);
-		if (!isSelectionScrolling || IsEditingAugment)
-			StartSelectionTimer();
+		StartSelectionTimer();
 	}
 
 	public override void ShowMenu()
@@ -267,7 +266,13 @@ public partial class SkillSelect : Menu
 		}
 
 		Redraw();
-		base.ShowMenu();
+
+		if (menuMemory[MemoryKeys.PresetsOpen] == 1)
+			animator.Play("show-from-preset");
+		else
+			base.ShowMenu();
+
+		menuMemory[MemoryKeys.PresetsOpen] = 0; // Reset memory
 	}
 
 	public void ShowSkills()
@@ -283,7 +288,7 @@ public partial class SkillSelect : Menu
 		if (IsAlertMenuActive)
 			return;
 
-		SaveManager.SaveGameData();
+		menuMemory[MemoryKeys.PresetsOpen] = 1; // Set flag so we can play the correct animation later
 		animator.Play("enter-skill-preset");
 	}
 
