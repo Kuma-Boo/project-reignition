@@ -1075,7 +1075,7 @@ shape = SubResource("BoxShape3D_7jbaj")
 transform = Transform3D(-0.955618, 0, -0.294607, 0, 1, 0, 0.294607, 0, -0.955618, -293.984, -276.99, -1075.71)
 "Enter Mode" = 0
 
-[node name="checkpoint" type="Node3D" parent="Trigger/Checkpoints/DinoCheckpoint"]
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoints/DinoCheckpoint"]
 script = ExtResource("22_svm17")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoints/DinoCheckpoint"]
@@ -1182,7 +1182,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58.2767, 44, 253.661)
 shape = SubResource("BoxShape3D_x053g")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Object/WaterTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 0, -32.043)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 0, -90)
 shape = SubResource("BoxShape3D_x053g")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="Trigger/Object/WaterTrigger"]
@@ -1268,13 +1268,15 @@ transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 
 
 [node name="ActivateTrigger" parent="Trigger/Object/Apatos1" instance=ExtResource("4_ko444")]
 transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, -4.77853, 38.2302, 41.1746)
+OneShot = true
+"Respawn Mode" = 0
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
 [node name="EventTrigger" type="Node3D" parent="Trigger/Object/Apatos1/ActivateTrigger" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0, 0)
 script = ExtResource("20_vf0rp")
-"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
 "Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("DinoApatos/AnimationPlayer")
@@ -2131,6 +2133,7 @@ reflectionMaterials = [ExtResource("100_3sdt7")]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Path" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Camera" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/Apatos1/ActivateTrigger" to="Collision/WallDinoOneWay" method="Deactivate"]
+[connection signal="Respawned" from="Trigger/Object/Apatos1/ActivateTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" method="Respawn"]
 [connection signal="Activated" from="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger/Head/Activate" method="play"]
 [connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Collision/WallDinoOneWay" method="Activate"]
 [connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/Camera" method="Deactivate"]
