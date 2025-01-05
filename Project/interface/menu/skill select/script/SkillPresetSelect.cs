@@ -98,26 +98,26 @@ public partial class SkillPresetSelect : Menu
 
 	private void UpdateScrollAmount(int inputSign)
 	{
-		int listSize = SaveManager.PresetCount;
+		int listSize = presetList.Count;
 
 		if (listSize <= PageSize)
 		{
 			//  Disable scrolling
 			scrollAmount = 0;
 			scrollRatio = 0;
+			return;
 		}
-		else
-		{
-			if (VerticalSelection == 0 || VerticalSelection == listSize - 1)
-				cursorPosition = scrollAmount = VerticalSelection;
-			else if ((inputSign < 0 && cursorPosition == 0) || (inputSign > 0 && cursorPosition == 3))
-				scrollAmount += inputSign;
-			else
-				cursorPosition += inputSign;
 
-			scrollAmount = Mathf.Clamp(scrollAmount, 0, listSize - PageSize);
-			scrollRatio = (float)VerticalSelection / (SaveManager.PresetCount - 1);
-		}
+		if (VerticalSelection == 0 || VerticalSelection == listSize - 1)
+			cursorPosition = scrollAmount = VerticalSelection;
+		else if ((inputSign < 0 && cursorPosition == 0) || (inputSign > 0 && cursorPosition == 3))
+			scrollAmount += inputSign;
+		else
+			cursorPosition += inputSign;
+
+		scrollAmount = Mathf.Clamp(scrollAmount, 0, listSize - PageSize);
+		scrollRatio = (float)VerticalSelection / (listSize - 1);
+		cursorPosition = Mathf.Clamp(cursorPosition, 0, PageSize - 1);
 	}
 
 	public override void ShowMenu()
