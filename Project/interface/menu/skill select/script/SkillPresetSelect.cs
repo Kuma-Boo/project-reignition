@@ -274,11 +274,8 @@ public partial class SkillPresetSelect : Menu
 
 		animatorOptions.Play(targetAnimation);
 
-		if (!isSelectionScrolling)
-		{
-			selectSFX.Play();
-			StartSelectionTimer();
-		}
+		selectSFX.Play();
+		StartSelectionTimer();
 	}
 
 	private void MoveCursor(int dir, int index)
@@ -288,8 +285,7 @@ public partial class SkillPresetSelect : Menu
 		else
 			presetList[index].SelectDown();
 
-		if (!isSelectionScrolling)
-			StartSelectionTimer();
+		StartSelectionTimer();
 	}
 
 	private void SaveSkills(int preset)

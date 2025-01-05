@@ -237,8 +237,7 @@ public partial class SkillSelect : Menu
 	{
 		animator.Play("select");
 		animator.Seek(0, true);
-		if (!isSelectionScrolling || IsEditingAugment)
-			StartSelectionTimer();
+		StartSelectionTimer();
 	}
 
 	public override void ShowMenu()
