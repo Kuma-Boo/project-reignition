@@ -266,7 +266,13 @@ public partial class SkillSelect : Menu
 		}
 
 		Redraw();
-		base.ShowMenu();
+
+		if (menuMemory[MemoryKeys.PresetsOpen] == 1)
+			animator.Play("show-from-preset");
+		else
+			base.ShowMenu();
+
+		menuMemory[MemoryKeys.PresetsOpen] = 0; // Reset memory
 	}
 
 	public void ShowSkills()
@@ -282,6 +288,7 @@ public partial class SkillSelect : Menu
 		if (IsAlertMenuActive)
 			return;
 
+		menuMemory[MemoryKeys.PresetsOpen] = 1; // Set flag so we can play the correct animation later
 		animator.Play("enter-skill-preset");
 	}
 
