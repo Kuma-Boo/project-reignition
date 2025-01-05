@@ -1773,7 +1773,6 @@ _data = {
 }
 
 [node name="SkillPresetSelect" type="Control" node_paths=PackedStringArray("presetContainer", "cursor", "scrollbar", "saveLabel", "nameEditor", "animatorOptions", "animatorNameEditor", "confirmSFX", "cancelSFX", "selectSFX", "failSFX", "animator")]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1785,9 +1784,9 @@ presetOption = ExtResource("2_aav6m")
 presetContainer = NodePath("Content/Clip/VBoxContainer")
 cursor = NodePath("Content/Cursor")
 scrollbar = NodePath("Content/Window/ScrollBar/ScrollPosition")
-saveLabel = NodePath("Control/SubmenuOptions/Save")
+saveLabel = NodePath("Submenu/SubmenuOptions/Save")
 nameEditor = NodePath("NameEdit/TextEdit")
-animatorOptions = NodePath("Control/AnimationPlayer")
+animatorOptions = NodePath("Submenu/AnimationPlayer")
 animatorNameEditor = NodePath("NameEdit/AnimationPlayer")
 confirmSFX = NodePath("SFX/Confirm")
 cancelSFX = NodePath("SFX/Cancel")
@@ -1861,8 +1860,7 @@ custom_minimum_size = Vector2(1135, 250)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 43.0
-offset_right = 33.0
+offset_right = -10.0
 offset_bottom = 2628.0
 grow_horizontal = 2
 theme_override_constants/separation = 0
@@ -1895,7 +1893,7 @@ libraries = {
 "": SubResource("AnimationLibrary_b2l6e")
 }
 
-[node name="Control" type="Control" parent="."]
+[node name="Submenu" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -1909,9 +1907,10 @@ offset_right = 952.0
 offset_bottom = -275.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(1e-05, 1)
 pivot_offset = Vector2(180, 120)
 
-[node name="Background" type="NinePatchRect" parent="Control"]
+[node name="Background" type="NinePatchRect" parent="Submenu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1924,7 +1923,7 @@ patch_margin_left = 4
 patch_margin_top = 4
 patch_margin_right = 4
 
-[node name="SubmenuOptions" type="VBoxContainer" parent="Control"]
+[node name="SubmenuOptions" type="VBoxContainer" parent="Submenu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1933,7 +1932,7 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Save" type="Label" parent="Control/SubmenuOptions"]
+[node name="Save" type="Label" parent="Submenu/SubmenuOptions"]
 modulate = Color(1, 1, 0, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -1941,7 +1940,7 @@ text = "sys_save"
 label_settings = ExtResource("6_esvmo")
 horizontal_alignment = 1
 
-[node name="Arrow" type="TextureRect" parent="Control/SubmenuOptions/Save"]
+[node name="Arrow" type="TextureRect" parent="Submenu/SubmenuOptions/Save"]
 layout_mode = 0
 offset_left = 296.0
 offset_top = 10.0001
@@ -1952,14 +1951,14 @@ scale = Vector2(1.5, 1.5)
 pivot_offset = Vector2(16, 14)
 texture = ExtResource("8_ateip")
 
-[node name="Load" type="Label" parent="Control/SubmenuOptions"]
+[node name="Load" type="Label" parent="Submenu/SubmenuOptions"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 text = "sys_load"
 label_settings = ExtResource("6_esvmo")
 horizontal_alignment = 1
 
-[node name="Arrow" type="TextureRect" parent="Control/SubmenuOptions/Load"]
+[node name="Arrow" type="TextureRect" parent="Submenu/SubmenuOptions/Load"]
 visible = false
 layout_mode = 0
 offset_left = 298.0
@@ -1971,7 +1970,7 @@ scale = Vector2(1.5, 1.5)
 pivot_offset = Vector2(16, 14)
 texture = ExtResource("8_ateip")
 
-[node name="Rename" type="Label" parent="Control/SubmenuOptions"]
+[node name="Rename" type="Label" parent="Submenu/SubmenuOptions"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -1979,7 +1978,7 @@ text = "sys_rename"
 label_settings = ExtResource("6_esvmo")
 horizontal_alignment = 1
 
-[node name="Arrow" type="TextureRect" parent="Control/SubmenuOptions/Rename"]
+[node name="Arrow" type="TextureRect" parent="Submenu/SubmenuOptions/Rename"]
 visible = false
 layout_mode = 0
 offset_left = 298.0
@@ -1991,7 +1990,7 @@ scale = Vector2(1.5, 1.5)
 pivot_offset = Vector2(16, 14)
 texture = ExtResource("8_ateip")
 
-[node name="Delete" type="Label" parent="Control/SubmenuOptions"]
+[node name="Delete" type="Label" parent="Submenu/SubmenuOptions"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.953041, 0.95304, 0.953041, 1)
@@ -1999,7 +1998,7 @@ text = "sys_delete"
 label_settings = ExtResource("6_esvmo")
 horizontal_alignment = 1
 
-[node name="Arrow" type="TextureRect" parent="Control/SubmenuOptions/Delete"]
+[node name="Arrow" type="TextureRect" parent="Submenu/SubmenuOptions/Delete"]
 visible = false
 layout_mode = 0
 offset_left = 298.0
@@ -2011,7 +2010,7 @@ scale = Vector2(1.5, 1.5)
 pivot_offset = Vector2(16, 14)
 texture = ExtResource("8_ateip")
 
-[node name="Cancel" type="Label" parent="Control/SubmenuOptions"]
+[node name="Cancel" type="Label" parent="Submenu/SubmenuOptions"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -2019,7 +2018,7 @@ text = "sys_cancel"
 label_settings = ExtResource("6_esvmo")
 horizontal_alignment = 1
 
-[node name="Arrow" type="TextureRect" parent="Control/SubmenuOptions/Cancel"]
+[node name="Arrow" type="TextureRect" parent="Submenu/SubmenuOptions/Cancel"]
 visible = false
 layout_mode = 0
 offset_left = 296.0
@@ -2031,7 +2030,7 @@ scale = Vector2(1.5, 1.5)
 pivot_offset = Vector2(16, 14)
 texture = ExtResource("8_ateip")
 
-[node name="Left" type="Sprite2D" parent="Control"]
+[node name="Left" type="Sprite2D" parent="Submenu"]
 position = Vector2(-5, 235)
 rotation = -1.5708
 scale = Vector2(5.26018, 2.2)
@@ -2041,7 +2040,7 @@ flip_h = true
 region_enabled = true
 region_rect = Rect2(73, 95, 44, 4)
 
-[node name="Right" type="Sprite2D" parent="Control"]
+[node name="Right" type="Sprite2D" parent="Submenu"]
 position = Vector2(360, 5)
 rotation = 1.5708
 scale = Vector2(5.26018, 2.2)
@@ -2051,7 +2050,7 @@ flip_h = true
 region_enabled = true
 region_rect = Rect2(73, 95, 44, 4)
 
-[node name="Top" type="Sprite2D" parent="Control"]
+[node name="Top" type="Sprite2D" parent="Submenu"]
 position = Vector2(-5, -4)
 scale = Vector2(8.29545, 2.2)
 texture = ExtResource("1_g5uw6")
@@ -2060,7 +2059,7 @@ flip_h = true
 region_enabled = true
 region_rect = Rect2(73, 95, 44, 4)
 
-[node name="Bottom" type="Sprite2D" parent="Control"]
+[node name="Bottom" type="Sprite2D" parent="Submenu"]
 position = Vector2(-5, 239)
 scale = Vector2(8.29545, 2.2)
 texture = ExtResource("1_g5uw6")
@@ -2069,7 +2068,7 @@ flip_h = true
 region_enabled = true
 region_rect = Rect2(73, 95, 44, 4)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Control"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Submenu"]
 libraries = {
 "": SubResource("AnimationLibrary_2bfnq")
 }
