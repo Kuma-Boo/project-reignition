@@ -19,9 +19,12 @@ public partial class SkillPresetSelect : Menu
 	[Export] private LineEdit nameEditor;
 
 	[Export] private AnimationPlayer animatorOptions;
-	[Export] private AnimationPlayer animatorOptionsSelector;
-
 	[Export] private AnimationPlayer animatorNameEditor;
+
+	[Export] private AudioStreamPlayer confirmSFX;
+	[Export] private AudioStreamPlayer cancelSFX;
+	[Export] private AudioStreamPlayer selectSFX;
+	[Export] private AudioStreamPlayer failSFX;
 
 	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
 
@@ -72,11 +75,19 @@ public partial class SkillPresetSelect : Menu
 
 	protected override void ProcessMenu()
 	{
-		if (isEditingName &&
-			(Input.IsKeyPressed(Key.Enter) || Input.IsActionJustPressed("button_pause")))
+		if (isEditingName)
 		{
-			Rename();
-			return;
+			if (Input.IsKeyPressed(Key.Enter) || Input.IsActionJustPressed("button_pause"))
+			{
+				Rename();
+				return;
+			}
+
+			if (Input.IsKeyPressed(Key.Escape))
+			{
+				StopRenaming();
+				return;
+			}
 		}
 
 		if (Input.IsActionJustPressed("button_pause"))
@@ -150,6 +161,7 @@ public partial class SkillPresetSelect : Menu
 
 			presetList[VerticalSelection].DeselectInstant();
 			VerticalSelection = WrapSelection(VerticalSelection + inputSign, presetList.Count);
+			selectSFX.Play();
 			MoveCursor(inputSign, VerticalSelection);
 		}
 
@@ -171,14 +183,20 @@ public partial class SkillPresetSelect : Menu
 				case 1:
 					if (!IsInvalid(VerticalSelection))
 						LoadSkills(VerticalSelection);
+					else
+						failSFX.Play();
 					break;
 				case 2:
 					if (!IsInvalid(VerticalSelection))
-						RenamePreset();
+						StartRenaming();
+					else
+						failSFX.Play();
 					break;
 				case 3:
 					if (!IsInvalid(VerticalSelection))
 						DeletePreset(VerticalSelection);
+					else
+						failSFX.Play();
 					break;
 				case 4:
 					animatorOptions.Play("hide");
@@ -191,6 +209,9 @@ public partial class SkillPresetSelect : Menu
 
 		//  Show the submenu
 		subIndex = 0;
+
+		animatorOptions.Play(IsInvalid(VerticalSelection) ? "select-save-invalid" : "select-save");
+		animatorOptions.Advance(0.0);
 		animatorOptions.Play("show");
 		isSubMenuActive = true;
 	}
@@ -200,6 +221,7 @@ public partial class SkillPresetSelect : Menu
 		if (string.IsNullOrEmpty(nameEditor.Text))
 			presetList[VerticalSelection].presetName = "New Preset";
 
+		confirmSFX.Play();
 		presetList[VerticalSelection].presetName = nameEditor.Text;
 		SaveSkills(VerticalSelection);
 		isEditingName = false;
@@ -208,15 +230,13 @@ public partial class SkillPresetSelect : Menu
 
 	protected override void Cancel()
 	{
-		if (isSubMenuActive && !isEditingName)
+		if (isEditingName)
+			return;
+
+		if (isSubMenuActive)
 		{
 			animatorOptions.Play("hide");
 			isSubMenuActive = false;
-		}
-		else if (isEditingName)
-		{
-			animatorNameEditor.Play("hide");
-			isEditingName = false;
 		}
 		else
 		{
@@ -255,7 +275,10 @@ public partial class SkillPresetSelect : Menu
 		animatorOptions.Play(targetAnimation);
 
 		if (!isSelectionScrolling)
+		{
+			selectSFX.Play();
 			StartSelectionTimer();
+		}
 	}
 
 	private void MoveCursor(int dir, int index)
@@ -291,7 +314,7 @@ public partial class SkillPresetSelect : Menu
 			presetList[preset].Initialize();
 
 		SaveManager.SaveGameData();
-		MoveSubCursor(); // After saving, change the option box colors
+		animatorOptions.Play("select-save");
 	}
 
 	private void LoadSkills(int preset)
@@ -303,11 +326,22 @@ public partial class SkillPresetSelect : Menu
 		presetList[preset].SelectPreset();
 	}
 
-	private void RenamePreset()
+	private void StartRenaming()
 	{
 		isEditingName = true;
+		confirmSFX.Play();
+
 		nameEditor.Text = SaveManager.ActiveGameData.presetNames[VerticalSelection];
+		nameEditor.CaretColumn = nameEditor.Text.Length;
+		nameEditor.SelectAll();
 		animatorNameEditor.Play("show");
+	}
+
+	private void StopRenaming()
+	{
+		cancelSFX.Play();
+		animatorNameEditor.Play("hide");
+		isEditingName = false;
 	}
 
 	private void DeletePreset(int preset)
@@ -315,6 +349,8 @@ public partial class SkillPresetSelect : Menu
 		//  A null/empty preset means it's already been deleted.
 		if (string.IsNullOrEmpty(SaveManager.ActiveGameData.presetNames[preset]))
 			return;
+
+		confirmSFX.Play();
 
 		presetList[preset].presetName = "";
 		presetList[preset].skills = null;
@@ -327,7 +363,8 @@ public partial class SkillPresetSelect : Menu
 		SaveManager.SaveGameData();
 		presetList[preset].Initialize();
 
-		MoveSubCursor(); // Grays out the options menu 
+		animatorOptions.CurrentAnimation = "select-delete-invalid";
+		animatorOptions.Seek(0.0, true, true); // Grays out the options menu
 	}
 
 	private bool IsInvalid(int index) => presetList[index].IsInvalid;
