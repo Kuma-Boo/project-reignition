@@ -854,21 +854,15 @@ public partial class SaveManager : Node
 		/// <summary> Creates a dictionary based on GameData. </summary>
 		public Dictionary ToDictionary()
 		{
-			Dictionary<string, int> augmentDictionary = [];
+			Array<Array<string>> presetDictionary = [];
+			presetDictionary.Resize(presetSkills.Count);
+			for (int i = 0; i < presetDictionary.Count; i++)
+				presetDictionary[i] = SaveSkills(presetSkills[i]);
 
-			for (int i = 0; i < equippedAugments.Keys.Count; i++)
-			{
-				SkillKey key = equippedAugments.Keys.ToArray()[i];
-				augmentDictionary.Add(key.ToString(), equippedAugments[key]);
-			}
-
-			Array<string> skillDictionary = [];
-
-			for (int i = 0; i < equippedSkills.Count; i++)
-			{
-				SkillKey key = equippedSkills[i];
-				skillDictionary.Add(key.ToString());
-			}
+			Array<Dictionary<string, int>> augmentDictionary = [];
+			augmentDictionary.Resize(presetSkillAugments.Count);
+			for (int i = 0; i < augmentDictionary.Count; i++)
+				augmentDictionary[i] = SaveAugments(presetSkillAugments[i]);
 
 			return new()
 			{
@@ -883,11 +877,11 @@ public partial class SaveManager : Node
 				{ nameof(level), level },
 				{ nameof(exp), exp },
 				{ nameof(playTime), Mathf.RoundToInt(playTime) },
-				{ nameof(equippedSkills), skillDictionary },
-				{ nameof(equippedAugments), augmentDictionary },
+				{ nameof(equippedSkills), SaveSkills(equippedSkills) },
+				{ nameof(equippedAugments), SaveAugments(equippedAugments) },
 				{ nameof(presetNames), presetNames},
-				{ nameof(presetSkills), presetSkills},
-				{ nameof(presetSkillAugments), presetSkillAugments},
+				{ nameof(presetSkills), presetDictionary},
+				{ nameof(presetSkillAugments), augmentDictionary},
 			};
 		}
 
@@ -919,6 +913,7 @@ public partial class SaveManager : Node
 				for (int i = 0; i < worlds.Count; i++)
 					worldRingsCollected.Add((WorldEnum)worlds[i]);
 			}
+
 			if (dictionary.TryGetValue(nameof(stagesUnlocked), out var) && var.VariantType == Variant.Type.Array)
 				stagesUnlocked = (Array<string>)var;
 
@@ -931,36 +926,34 @@ public partial class SaveManager : Node
 				exp = (int)var;
 			if (dictionary.TryGetValue(nameof(playTime), out var))
 				playTime = (float)var;
-			if (dictionary.TryGetValue(nameof(presetNames), out var))
-				presetNames = (Array<string>)var;
-			if (dictionary.TryGetValue(nameof(presetSkills), out var))
-				presetSkills = (Array<Array<SkillKey>>)var;
-			if (dictionary.TryGetValue(nameof(presetSkillAugments), out var))
-				presetSkillAugments = (Array<Dictionary<SkillKey, int>>)var;
 
+			// Load Skill Ring
 			if (dictionary.TryGetValue(nameof(equippedSkills), out var))
-			{
-				equippedSkills.Clear();
-
-				Array<string> skills = (Array<string>)var;
-				for (int i = 0; i < skills.Count; i++)
-				{
-					if (Enum.TryParse(skills[i], out SkillKey key))
-						equippedSkills.Add(key);
-				}
-			}
+				equippedSkills = LoadSkills((Array<string>)var);
 
 			if (dictionary.TryGetValue(nameof(equippedAugments), out var))
-			{
-				equippedAugments.Clear();
-				Dictionary<string, int> augments = (Dictionary<string, int>)var;
-				string[] augmentKeys = [.. augments.Keys];
+				equippedAugments = LoadAugments((Dictionary<string, int>)var);
 
-				for (int i = 0; i < augmentKeys.Length; i++)
-				{
-					if (Enum.TryParse(augmentKeys[i], out SkillKey key))
-						equippedAugments.Add(key, augments[augmentKeys[i]]);
-				}
+			// Load Presets
+			if (dictionary.TryGetValue(nameof(presetNames), out var))
+				presetNames = (Array<string>)var;
+
+			if (dictionary.TryGetValue(nameof(presetSkills), out var))
+			{
+				Array<Array<string>> presets = (Array<Array<string>>)var;
+				presetSkills.Clear();
+				presetSkills.Resize(presets.Count);
+				for (int i = 0; i < presetSkills.Count; i++)
+					presetSkills[i] = LoadSkills(presets[i]);
+			}
+
+			if (dictionary.TryGetValue(nameof(presetSkillAugments), out var))
+			{
+				Array<Dictionary<string, int>> presetAugments = (Array<Dictionary<string, int>>)var;
+				presetSkillAugments.Clear();
+				presetSkillAugments.Resize(presetAugments.Count);
+				for (int i = 0; i < presetSkillAugments.Count; i++)
+					presetSkillAugments[i] = LoadAugments(presetAugments[i]);
 			}
 
 			// Update runtime data based on save data
@@ -975,6 +968,59 @@ public partial class SaveManager : Node
 						FireSoulCount++;
 				}
 			}
+		}
+
+		/// <summary> Converts an array of SkillKeys to an array of strings for index-agnostic saving. </summary>
+		private Array<string> SaveSkills(Array<SkillKey> skillArray)
+		{
+			Array<string> stringArray = [];
+
+			for (int i = 0; i < skillArray.Count; i++)
+			{
+				SkillKey key = equippedSkills[i];
+				stringArray.Add(key.ToString());
+			}
+
+			return stringArray;
+		}
+
+		private Dictionary<string, int> SaveAugments(Dictionary<SkillKey, int> augmentDictionary)
+		{
+			Dictionary<string, int> stringDictionary = [];
+
+			for (int i = 0; i < augmentDictionary.Keys.Count; i++)
+			{
+				SkillKey key = augmentDictionary.Keys.ToArray()[i];
+				stringDictionary.Add(key.ToString(), augmentDictionary[key]);
+			}
+
+			return stringDictionary;
+		}
+
+		private Array<SkillKey> LoadSkills(Array<string> stringArray)
+		{
+			Array<SkillKey> skills = [];
+
+			for (int i = 0; i < stringArray.Count; i++)
+			{
+				if (Enum.TryParse(stringArray[i], out SkillKey key))
+					skills.Add(key);
+			}
+
+			return skills;
+		}
+
+		private Dictionary<SkillKey, int> LoadAugments(Dictionary<string, int> stringDictionary)
+		{
+			string[] augmentKeys = [.. stringDictionary.Keys];
+			Dictionary<SkillKey, int> augmentDictionary = [];
+
+			for (int i = 0; i < augmentKeys.Length; i++)
+			{
+				if (Enum.TryParse(augmentKeys[i], out SkillKey key))
+					augmentDictionary.Add(key, stringDictionary[augmentKeys[i]]);
+			}
+			return augmentDictionary;
 		}
 
 		private void UpdateMedals(int rank, int oldRank = 0)
