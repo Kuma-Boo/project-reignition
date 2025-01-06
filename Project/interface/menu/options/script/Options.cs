@@ -206,6 +206,9 @@ public partial class Options : Menu
 		if (currentSubmenu == Submenus.Test)
 			return;
 
+		if (maxSelection == 0)
+			return;
+
 		if (currentSubmenu == Submenus.Mapping && !controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
 			return;
 
