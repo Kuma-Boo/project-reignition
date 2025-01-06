@@ -206,6 +206,9 @@ public partial class Options : Menu
 		if (currentSubmenu == Submenus.Test)
 			return;
 
+		if (maxSelection == 0)
+			return;
+
 		if (currentSubmenu == Submenus.Mapping && !controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
 			return;
 
@@ -253,7 +256,7 @@ public partial class Options : Menu
 		}
 		else
 		{
-			scrollBar.Position = ExtensionMethods.SmoothDamp(scrollBar.Position, targetPosition, ref scrollBarVelocity, scrollBarSmoothing);
+			scrollBar.Position = scrollBar.Position.SmoothDamp(targetPosition, ref scrollBarVelocity, scrollBarSmoothing);
 		}
 	}
 

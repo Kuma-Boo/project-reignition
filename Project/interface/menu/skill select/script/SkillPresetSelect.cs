@@ -242,7 +242,6 @@ public partial class SkillPresetSelect : Menu
 		{
 			// Return to skill editing
 			animator.Play("hide");
-			SaveManager.SaveGameData();
 			OpenParentMenu();
 		}
 	}
@@ -317,7 +316,7 @@ public partial class SkillPresetSelect : Menu
 	{
 		SaveManager.ActiveGameData.equippedSkills = presetList[preset].skills.Duplicate();
 		SaveManager.ActiveGameData.equippedAugments = presetList[preset].skillAugments.Duplicate();
-		ActiveSkillRing.UpdateTotalCost();
+		ActiveSkillRing.LoadFromActiveData();
 
 		presetList[preset].SelectPreset();
 	}

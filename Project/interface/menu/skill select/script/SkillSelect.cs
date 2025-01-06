@@ -265,8 +265,6 @@ public partial class SkillSelect : Menu
 			UpdateAugmentHierarchy(skillOptionList[i]);
 		}
 
-		Redraw();
-
 		if (menuMemory[MemoryKeys.PresetsOpen] == 1)
 			animator.Play("show-from-preset");
 		else

@@ -132,6 +132,7 @@ public partial class BonusManager : VBoxContainer
 	public void UpdateEnemyChain()
 	{
 		if (!Player.IsOnGround) return; // Chain is never counted when the player is in the air
+		if (Player.AllowLandingGrind || Player.IsGrinding) return; // Ignore Grindrails
 		if (Player.ExternalController != null) return; // Chains only end during normal movement
 
 		if (Player.Skills.IsSpeedBreakActive)

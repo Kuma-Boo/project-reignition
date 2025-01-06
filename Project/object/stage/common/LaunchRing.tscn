@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://bcsww42lqxn6w"]
+[gd_scene load_steps=11 format=3 uid="uid://bcsww42lqxn6w"]
 
 [ext_resource type="Script" path="res://object/stage/common/resource/script/LaunchRing.cs" id="1_17ata"]
 [ext_resource type="PackedScene" uid="uid://boex8m7dhjl24" path="res://object/stage/common/resource/model/LaunchRing.gltf" id="2_gkfym"]
 [ext_resource type="AudioStream" uid="uid://dkssgqqfjtfbp" path="res://sound/sfx/objects/launch ring 2.wav" id="3_lq4d6"]
+[ext_resource type="AudioStream" uid="uid://c45k5tg8wn5m2" path="res://sound/sfx/objects/launch ring 1.wav" id="3_ovn5f"]
 [ext_resource type="AudioStream" uid="uid://b5v6qhgo3y63l" path="res://sound/sfx/objects/launch ring enter.wav" id="4_wmq7e"]
 [ext_resource type="AudioStream" uid="uid://dssbm1q3ojha0" path="res://sound/sfx/objects/launch ring launch.wav" id="5_b618j"]
 
@@ -32,6 +33,54 @@ tracks/1/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Loop:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Loop:volume_db")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-80.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Loop2:playing")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Loop2:volume_db")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-80.0]
+}
 
 [sub_resource type="Animation" id="Animation_lguue"]
 resource_name = "charge"
@@ -60,6 +109,54 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 0, 6.28319)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Loop:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Loop:volume_db")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Loop2:playing")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Loop2:volume_db")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tk06v"]
@@ -102,9 +199,19 @@ blend_times = [&"charge", &"RESET", 0.5]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("CylinderShape3D_eaqjp")
 
-[node name="Loop" type="AudioStreamPlayer" parent="."]
+[node name="Loop" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_ovn5f")
+volume_db = -80.0
+max_db = -9.0
+pitch_scale = 0.8
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="Loop2" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_lq4d6")
-pitch_scale = 0.85
+volume_db = -80.0
+max_db = -3.0
+max_distance = 50.0
 bus = &"GAME SFX"
 
 [node name="Enter" type="AudioStreamPlayer3D" parent="."]
@@ -115,9 +222,12 @@ bus = &"GAME SFX"
 
 [node name="Launch" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("5_b618j")
+attenuation_model = 3
 max_db = 0.0
-max_distance = 20.0
+max_distance = 50.0
 bus = &"GAME SFX"
 
+[connection signal="Entered" from="." to="Enter" method="play"]
+[connection signal="Exited" from="." to="Enter" method="play"]
 [connection signal="area_entered" from="." to="." method="OnEntered"]
 [connection signal="area_exited" from="." to="." method="OnExited"]

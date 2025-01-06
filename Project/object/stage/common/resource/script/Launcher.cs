@@ -151,6 +151,8 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		return LaunchPoint.Up();
 	}
 
+	/// <summary> Overload method so launch rings can recenter the player visually. </summary>
+	protected virtual Vector3 CalculateStartingPoint() => StartingPoint;
 	public Vector3 StartingPoint => LaunchPoint.GlobalPosition + (Vector3.Up * startingHeight);
 
 	public LaunchSettings GetLaunchSettings()
@@ -159,8 +161,8 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		float blendedMiddleHeight = Mathf.Lerp(middleHeight, secondaryMiddleHeight, GetLaunchRatio());
 		float blendedFinalHeight = Mathf.Lerp(finalHeight, secondaryFinalHeight, GetLaunchRatio());
 
-		Vector3 startPosition = StartingPoint;
-		Vector3 endPosition = startPosition + (GetLaunchDirection() * blendedDistance) + (Vector3.Up * blendedFinalHeight);
+		Vector3 startPosition = CalculateStartingPoint();
+		Vector3 endPosition = StartingPoint + (GetLaunchDirection() * blendedDistance) + (Vector3.Up * blendedFinalHeight);
 
 		LaunchSettings settings = LaunchSettings.Create(startPosition, endPosition, blendedMiddleHeight);
 		settings.AllowJumpDash = allowJumpDashing;
@@ -199,6 +201,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	protected virtual void LaunchAnimation()
 	{
 		Player.Effect.StopSpinFX();
+		Player.Effect.StopTrailFX();
 		Player.Animator.ResetState(.1f);
 		if (GetLaunchSettings().InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
 			Player.Animator.JumpAnimation();
@@ -214,8 +217,9 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 
 	public Vector3 RecenterPlayer()
 	{
-		Vector3 pos = Player.GlobalPosition.MoveToward(StartingPoint, recenterSpeed * PhysicsManager.physicsDelta);
-		IsPlayerCentered = pos.IsEqualApprox(StartingPoint);
+		Vector3 targetPosition = CalculateStartingPoint();
+		Vector3 pos = Player.GlobalPosition.MoveToward(targetPosition, recenterSpeed * PhysicsManager.physicsDelta);
+		IsPlayerCentered = pos.IsEqualApprox(targetPosition);
 		return pos;
 	}
 

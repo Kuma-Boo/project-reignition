@@ -46,6 +46,7 @@ public partial class LaunchRing : Launcher
 		UpdatePieces();
 	}
 
+	protected override Vector3 CalculateStartingPoint() => StartingPoint + (Vector3.Down * .5f); // Offset because the spin animation isn't centered
 	protected override void LaunchAnimation() => Player.Animator.SetSpinSpeed(5); // Keep spinning, but do it faster
 
 	private void InitializePieces()
