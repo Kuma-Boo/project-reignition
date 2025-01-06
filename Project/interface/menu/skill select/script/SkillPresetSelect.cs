@@ -337,6 +337,7 @@ public partial class SkillPresetSelect : Menu
 		cancelSFX.Play();
 		animatorNameEditor.Play("hide");
 		isEditingName = false;
+		SaveManager.SaveGameData();
 	}
 
 	private void DeletePreset(int preset)
