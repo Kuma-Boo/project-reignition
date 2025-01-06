@@ -51,6 +51,8 @@ public partial class PlayerInputController : Node
 
 	/// <summary> Maximum amount the player can turn when running at full speed. </summary>
 	public readonly float TurningDampingRange = Mathf.Pi * .35f;
+	/// <summary> Rotation amount to just flat-out ignore player input. </summary>
+	public readonly float TurningDeadzone = Mathf.Pi * .05f;
 
 	public void ProcessInputs()
 	{
@@ -237,7 +239,9 @@ public partial class PlayerInputController : Node
 			return inputAngle;
 
 		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(inputAngle, referenceAngle);
-		if (Mathf.Abs(deltaAngle) < TurningDampingRange)
+		if (Mathf.Abs(deltaAngle) < TurningDeadzone)
+			inputAngle -= deltaAngle;
+		else if (Mathf.Abs(deltaAngle) < TurningDampingRange)
 			inputAngle -= deltaAngle * .5f;
 
 		return inputAngle;

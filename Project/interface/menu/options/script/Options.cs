@@ -256,7 +256,7 @@ public partial class Options : Menu
 		}
 		else
 		{
-			scrollBar.Position = ExtensionMethods.SmoothDamp(scrollBar.Position, targetPosition, ref scrollBarVelocity, scrollBarSmoothing);
+			scrollBar.Position = scrollBar.Position.SmoothDamp(targetPosition, ref scrollBarVelocity, scrollBarSmoothing);
 		}
 	}
 
