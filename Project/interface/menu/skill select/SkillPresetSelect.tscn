@@ -1772,7 +1772,7 @@ _data = {
 "show": SubResource("Animation_4t5lb")
 }
 
-[node name="SkillPresetSelect" type="Control" node_paths=PackedStringArray("presetContainer", "cursor", "scrollbar", "saveLabel", "nameEditor", "animatorOptions", "animatorNameEditor", "confirmSFX", "cancelSFX", "selectSFX", "failSFX", "animator")]
+[node name="SkillPresetSelect" type="Control" node_paths=PackedStringArray("presetContainer", "cursor", "scrollbar", "saveLabel", "nameEditor", "submenuAnimator", "nameEditorAnimator", "confirmSFX", "cancelSFX", "selectSFX", "failSFX", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1786,8 +1786,8 @@ cursor = NodePath("Content/Cursor")
 scrollbar = NodePath("Content/Window/ScrollBar/ScrollPosition")
 saveLabel = NodePath("Submenu/SubmenuOptions/Save")
 nameEditor = NodePath("NameEdit/TextEdit")
-animatorOptions = NodePath("Submenu/AnimationPlayer")
-animatorNameEditor = NodePath("NameEdit/AnimationPlayer")
+submenuAnimator = NodePath("Submenu/AnimationPlayer")
+nameEditorAnimator = NodePath("NameEdit/AnimationPlayer")
 confirmSFX = NodePath("SFX/Confirm")
 cancelSFX = NodePath("SFX/Cancel")
 selectSFX = NodePath("SFX/Select")
@@ -1907,7 +1907,6 @@ offset_right = 952.0
 offset_bottom = -275.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1e-05, 1)
 pivot_offset = Vector2(180, 120)
 
 [node name="Background" type="NinePatchRect" parent="Submenu"]
@@ -1941,6 +1940,7 @@ label_settings = ExtResource("6_esvmo")
 horizontal_alignment = 1
 
 [node name="Arrow" type="TextureRect" parent="Submenu/SubmenuOptions/Save"]
+visible = false
 layout_mode = 0
 offset_left = 296.0
 offset_top = 10.0001
@@ -1979,7 +1979,6 @@ label_settings = ExtResource("6_esvmo")
 horizontal_alignment = 1
 
 [node name="Arrow" type="TextureRect" parent="Submenu/SubmenuOptions/Rename"]
-visible = false
 layout_mode = 0
 offset_left = 298.0
 offset_top = 10.0001
@@ -2090,7 +2089,7 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 15.8
 anchor_bottom = 1.75
-offset_left = 649.0
+offset_left = 640.0
 offset_top = 480.0
 offset_right = 649.0
 offset_bottom = 480.0
@@ -2107,6 +2106,27 @@ drag_and_drop_selection_enabled = false
 select_all_on_focus = true
 caret_blink = true
 caret_mid_grapheme = true
+
+[node name="NavigationButtons" type="HBoxContainer" parent="NameEdit"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 648.0
+offset_top = 576.0
+offset_right = 1240.0
+offset_bottom = 600.0
+theme_override_constants/separation = 64
+
+[node name="Save" parent="NameEdit/NavigationButtons" instance=ExtResource("2_w3g84")]
+layout_mode = 2
+ActionKey = &"sys_save"
+overrideKey = 4194309
+
+[node name="Cancel" parent="NameEdit/NavigationButtons" instance=ExtResource("2_w3g84")]
+layout_mode = 2
+ActionKey = &"sys_cancel"
+overrideKey = 4194305
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="NameEdit"]
 libraries = {

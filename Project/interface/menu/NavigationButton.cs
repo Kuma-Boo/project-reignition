@@ -6,10 +6,12 @@ namespace Project.Interface;
 
 public partial class NavigationButton : Control
 {
-	[Export]
-	public StringName ActionKey { get; set; }
-	[Export]
-	private StringName inputKey;
+	[Export] public StringName ActionKey { get; set; }
+	[Export] private StringName inputKey;
+
+	/// <summary> Set this to something if you only want to display a particular keyboard input. </summary>
+	[Export] private Key overrideKey = Key.None;
+
 	[Export(PropertyHint.ArrayType, "ControllerSpriteResource")]
 	private ControllerSpriteResource[] controllerResources;
 
@@ -46,6 +48,12 @@ public partial class NavigationButton : Control
 	{
 		ActionLabel.Text = Tr(ActionKey);
 
+		if (overrideKey != Key.None)
+		{
+			RedrawAsKeyboard(overrideKey);
+			return;
+		}
+
 		Array<InputEvent> eventList = InputMap.ActionGetEvents(inputKey);
 
 		InputEventKey key = null;
@@ -80,11 +88,14 @@ public partial class NavigationButton : Control
 			return;
 		}
 
-		// Keyboard
 		if (key == null) return;
+		RedrawAsKeyboard(key.Keycode);
+	}
 
+	private void RedrawAsKeyboard(Key keycode)
+	{
 		ButtonLabel.Visible = true;
-		ButtonLabel.Text = Runtime.Instance.GetKeyLabel(key.Keycode);
+		ButtonLabel.Text = Runtime.Instance.GetKeyLabel(keycode);
 		int keySpriteIndex = ButtonLabel.Text.Length <= 3 ? 0 : 1;
 		ButtonTextureRect.Texture = controllerResources[^1].buttons[keySpriteIndex]; // Last controller resource should be the keyboard sprites
 	}
