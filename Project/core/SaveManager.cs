@@ -111,7 +111,7 @@ public partial class SaveManager : Node
 		new(640, 360), // 360p
 		new(854, 480), // 480p
 		new(1280, 720), // 720p
-		new(1280, 800), // 800p (Steam Deck resolution)
+		//new(1280, 800), // 800p (Steam Deck resolution)
 		new(1600, 900), // 900p
 		new(1920, 1080), // 1080p
 		new(2560, 1440), // 1440p
