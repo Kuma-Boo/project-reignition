@@ -170,7 +170,7 @@ public partial class SkillPresetSelect : Menu
 			switch (subIndex)
 			{
 				case 0:
-					SaveSkills(VerticalSelection);
+					SaveSkills(VerticalSelection, false);
 					submenuAnimator.Play("select-save");
 					break;
 				case 1:
@@ -211,13 +211,10 @@ public partial class SkillPresetSelect : Menu
 
 	private void Rename()
 	{
-		if (string.IsNullOrEmpty(nameEditor.Text))
-			presetList[VerticalSelection].PresetName = "New Preset";
-		else
-			presetList[VerticalSelection].PresetName = nameEditor.Text;
+		presetList[VerticalSelection].PresetName = nameEditor.Text;
 
 		confirmSFX.Play();
-		SaveSkills(VerticalSelection);
+		SaveSkills(VerticalSelection, true);
 		isEditingName = false;
 		nameEditorAnimator.Play("hide");
 	}
@@ -281,20 +278,23 @@ public partial class SkillPresetSelect : Menu
 		StartSelectionTimer();
 	}
 
-	private void SaveSkills(int preset)
+	private void SaveSkills(int preset, bool renameOnly)
 	{
 		//  Storing our equipped skills into our current preset
-		if (string.IsNullOrEmpty(presetList[preset].PresetName) && subIndex == 0)
+		if (string.IsNullOrEmpty(presetList[preset].PresetName))
 			presetList[preset].PresetName = "New Preset";
 
 		presetList[preset].PresetName = presetList[preset].PresetName.TrimEnd('\n'); // Remove the newline code
 		SaveManager.ActiveGameData.presetNames[preset] = presetList[preset].PresetName;
 
-		presetList[preset].Skills = SaveManager.ActiveGameData.equippedSkills.Duplicate();
-		presetList[preset].Augments = SaveManager.ActiveGameData.equippedAugments.Duplicate();
+		if (!renameOnly)
+		{
+			presetList[preset].Skills = SaveManager.ActiveGameData.equippedSkills.Duplicate();
+			presetList[preset].Augments = SaveManager.ActiveGameData.equippedAugments.Duplicate();
+		}
 
 		//  Save our new data to the file and play the animation to initialize the on-screen data
-		if (subIndex == 0 || subIndex == 1) // Only play the save animation if we are selecting save or load, otherewise just display the data
+		if (subIndex == 0) // Only play the save animation if we are selecting save
 			presetList[preset].SavePreset();
 		else
 			presetList[preset].Initialize();
