@@ -7,16 +7,12 @@ namespace Project.Interface.Menus;
 
 public partial class SkillPresetOption : Control
 {
-	public bool IsInvalid => string.IsNullOrEmpty(presetName);
+	public bool IsInvalid => string.IsNullOrEmpty(PresetName);
 
-	public string presetName;
-	public Array<SkillKey> skills;
-	public Dictionary<SkillKey, int> skillAugments;
-
-	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
-
+	/// <summary> The preset option's 0-based index number. </summary>
+	public int Index { get; set; }
 	/// <summary> The preset option's menu number. </summary>
-	public int DisplayNumber { get; set; }
+	public int DisplayNumber => Index + 1;
 
 	[Export] private Label presetLabel;
 
@@ -31,6 +27,24 @@ public partial class SkillPresetOption : Control
 
 	[Export] private AnimationPlayer animator;
 	[Export] private AnimationPlayer animatorData;
+
+	public string PresetName
+	{
+		get => SaveManager.ActiveGameData.presetNames[Index];
+		set => SaveManager.ActiveGameData.presetNames[Index] = value;
+	}
+
+	public Array<SkillKey> Skills
+	{
+		get => SaveManager.ActiveGameData.presetSkills[Index];
+		set => SaveManager.ActiveGameData.presetSkills[Index] = value;
+	}
+
+	public Dictionary<SkillKey, int> Augments
+	{
+		get => SaveManager.ActiveGameData.presetSkillAugments[Index];
+		set => SaveManager.ActiveGameData.presetSkillAugments[Index] = value;
+	}
 
 	public void Initialize()
 	{
@@ -47,7 +61,7 @@ public partial class SkillPresetOption : Control
 
 	public void Redraw()
 	{
-		presetLabel.Text = presetName;
+		presetLabel.Text = PresetName;
 
 		int skillCount = 0;
 		int skillCost = 0;
@@ -56,12 +70,13 @@ public partial class SkillPresetOption : Control
 		int darkAmt = 0;
 
 		// Update all the above totals
-		for (int i = 0; i < skills.Count; i++)
+		for (int i = 0; i < Skills.Count; i++)
 		{
-			SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(skills[i]);
+			SkillResource baseSkill = Runtime.Instance.SkillList.GetSkill(Skills[i]);
 			if (baseSkill == null)
 				continue;
-			int augmentIndex = ActiveSkillRing.GetAugmentIndex(skills[i]);
+
+			int augmentIndex = SaveManager.ActiveSkillRing.GetAugmentIndex(Skills[i]);
 			if (augmentIndex == 0)
 			{
 				switch (baseSkill.Element)
@@ -109,7 +124,6 @@ public partial class SkillPresetOption : Control
 		skillCostLabel.Text = skillCost.ToString("000");
 	}
 
-	public void Reset() => animator.Play("RESET");
 	public void SelectUp() => animator.Play("select-up");
 
 	public void SelectDown() => animator.Play("select-down");

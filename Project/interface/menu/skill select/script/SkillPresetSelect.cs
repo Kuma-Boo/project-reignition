@@ -53,7 +53,7 @@ public partial class SkillPresetSelect : Menu
 		for (int i = 0; i < SaveManager.PresetCount; i++)
 		{
 			SkillPresetOption newPreset = presetOption.Instantiate<SkillPresetOption>();
-			newPreset.DisplayNumber = i + 1; //  For displaying the number
+			newPreset.Index = i;
 
 			presetList.Add(newPreset);
 			presetContainer.AddChild(newPreset);
@@ -131,15 +131,7 @@ public partial class SkillPresetSelect : Menu
 	public void LoadPresets()
 	{
 		for (int i = 0; i < presetList.Count; i++)
-		{
-			presetList[i].Reset();
-
-			presetList[i].presetName = SaveManager.ActiveGameData.presetNames[i];
-			presetList[i].skills = SaveManager.ActiveGameData.presetSkills[i];
-			presetList[i].skillAugments = SaveManager.ActiveGameData.presetSkillAugments[i];
-
 			presetList[i].Initialize();
-		}
 
 		presetList[VerticalSelection].SelectRight();
 	}
@@ -220,10 +212,10 @@ public partial class SkillPresetSelect : Menu
 	private void Rename()
 	{
 		if (string.IsNullOrEmpty(nameEditor.Text))
-			presetList[VerticalSelection].presetName = "New Preset";
+			presetList[VerticalSelection].PresetName = "New Preset";
 
 		confirmSFX.Play();
-		presetList[VerticalSelection].presetName = nameEditor.Text;
+		presetList[VerticalSelection].PresetName = nameEditor.Text;
 		SaveSkills(VerticalSelection);
 		isEditingName = false;
 		nameEditorAnimator.Play("hide");
@@ -291,17 +283,14 @@ public partial class SkillPresetSelect : Menu
 	private void SaveSkills(int preset)
 	{
 		//  Storing our equipped skills into our current preset
-		if (string.IsNullOrEmpty(presetList[preset].presetName) && subIndex == 0)
-			presetList[preset].presetName = "New Preset";
+		if (string.IsNullOrEmpty(presetList[preset].PresetName) && subIndex == 0)
+			presetList[preset].PresetName = "New Preset";
 
-		presetList[preset].presetName = presetList[preset].presetName.Replace("\n", ""); // when we edit names, remove the newline code
+		presetList[preset].PresetName = presetList[preset].PresetName.TrimEnd('\n'); // Remove the newline code
+		SaveManager.ActiveGameData.presetNames[preset] = presetList[preset].PresetName;
 
-		presetList[preset].skills = SaveManager.ActiveGameData.equippedSkills.Duplicate();
-		presetList[preset].skillAugments = SaveManager.ActiveGameData.equippedAugments.Duplicate();
-
-		SaveManager.ActiveGameData.presetNames[preset] = presetList[preset].presetName;
-		SaveManager.ActiveGameData.presetSkills[preset] = presetList[preset].skills.Duplicate();
-		SaveManager.ActiveGameData.presetSkillAugments[preset] = presetList[preset].skillAugments.Duplicate();
+		presetList[preset].Skills = SaveManager.ActiveGameData.equippedSkills.Duplicate();
+		presetList[preset].Augments = SaveManager.ActiveGameData.equippedAugments.Duplicate();
 
 		//  Save our new data to the file and play the animation to initialize the on-screen data
 		if (subIndex == 0 || subIndex == 1) // Only play the save animation if we are selecting save or load, otherewise just display the data
@@ -314,10 +303,9 @@ public partial class SkillPresetSelect : Menu
 
 	private void LoadSkills(int preset)
 	{
-		SaveManager.ActiveGameData.equippedSkills = presetList[preset].skills.Duplicate();
-		SaveManager.ActiveGameData.equippedAugments = presetList[preset].skillAugments.Duplicate();
+		SaveManager.ActiveGameData.equippedSkills = presetList[preset].Skills.Duplicate();
+		SaveManager.ActiveGameData.equippedAugments = presetList[preset].Augments.Duplicate();
 		ActiveSkillRing.LoadFromActiveData();
-
 		presetList[preset].SelectPreset();
 	}
 
@@ -347,13 +335,9 @@ public partial class SkillPresetSelect : Menu
 
 		confirmSFX.Play();
 
-		presetList[preset].presetName = "";
-		presetList[preset].skills = null;
-		presetList[preset].skillAugments = null;
-
-		SaveManager.ActiveGameData.presetNames[preset] = "";
-		SaveManager.ActiveGameData.presetSkills[preset] = null;
-		SaveManager.ActiveGameData.presetSkillAugments[preset] = null;
+		presetList[preset].PresetName = "";
+		presetList[preset].Skills = null;
+		presetList[preset].Augments = null;
 
 		SaveManager.SaveGameData();
 		presetList[preset].Initialize();
