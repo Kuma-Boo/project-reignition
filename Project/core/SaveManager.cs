@@ -977,7 +977,7 @@ public partial class SaveManager : Node
 
 			for (int i = 0; i < skillArray.Count; i++)
 			{
-				SkillKey key = equippedSkills[i];
+				SkillKey key = skillArray[i];
 				stringArray.Add(key.ToString());
 			}
 
