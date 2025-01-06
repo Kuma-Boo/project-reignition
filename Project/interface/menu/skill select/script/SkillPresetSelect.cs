@@ -213,9 +213,10 @@ public partial class SkillPresetSelect : Menu
 	{
 		if (string.IsNullOrEmpty(nameEditor.Text))
 			presetList[VerticalSelection].PresetName = "New Preset";
+		else
+			presetList[VerticalSelection].PresetName = nameEditor.Text;
 
 		confirmSFX.Play();
-		presetList[VerticalSelection].PresetName = nameEditor.Text;
 		SaveSkills(VerticalSelection);
 		isEditingName = false;
 		nameEditorAnimator.Play("hide");
