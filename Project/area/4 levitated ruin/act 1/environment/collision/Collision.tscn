@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://cwmjxd611bhbi"]
+
+[ext_resource type="PackedScene" uid="uid://c21hdbg70dgkr" path="res://area/4 levitated ruin/act 1/environment/collision/Collision.gltf" id="1_lmyk5"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_6lpdy"]
+
+[node name="Collision" instance=ExtResource("1_lmyk5")]
+
+[node name="StaticBody3D" parent="Wall" index="0" groups=["wall"]]
+
+[node name="StaticBody3D" parent="Floor" index="0" groups=["floor"]]
+
+[node name="OneWayWall" parent="." index="2"]
+script = ExtResource("2_6lpdy")
+startEnabled = true
+
+[node name="StaticBody3D" parent="OneWayWall" index="0" groups=["wall"]]
