@@ -1,6 +1,7 @@
-[gd_scene load_steps=33 format=3 uid="uid://bm61nw4o1jcrb"]
+[gd_scene load_steps=35 format=3 uid="uid://bm61nw4o1jcrb"]
 
 [ext_resource type="PackedScene" uid="uid://c1htg25bw2rso" path="res://area/4 levitated ruin/act 1/environment/Rukh1.tscn" id="1_3akmk"]
+[ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_sruem"]
 [ext_resource type="PackedScene" uid="uid://cwmjxd611bhbi" path="res://area/4 levitated ruin/act 1/environment/collision/Collision.tscn" id="1_y3f8c"]
 [ext_resource type="PackedScene" uid="uid://bu0aufloda72i" path="res://area/4 levitated ruin/act 1/environment/Rukh1LOD.tscn" id="2_rrbip"]
 [ext_resource type="PackedScene" uid="uid://e3tsepyaicsg" path="res://area/4 levitated ruin/act 1/environment/Rukh2.tscn" id="3_3xcmp"]
@@ -33,7 +34,18 @@
 [ext_resource type="Curve3D" uid="uid://chfducytiuale" path="res://area/4 levitated ruin/act 1/environment/path/TowerPath.tres" id="30_pmep3"]
 [ext_resource type="Curve3D" uid="uid://bjdcg8aicc5fw" path="res://area/4 levitated ruin/act 1/environment/path/TowerTopPath.tres" id="31_qnjdi"]
 
-[node name="Static" type="Node3D"]
+[sub_resource type="Environment" id="Environment_5x5bb"]
+ambient_light_source = 2
+ambient_light_color = Color(0.177227, 0.372054, 0.558208, 1)
+tonemap_mode = 2
+fog_light_color = Color(0.609183, 0.509982, 0.689695, 1)
+fog_density = 0.0005
+adjustment_enabled = true
+
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
+script = ExtResource("1_sruem")
+pathParent = NodePath("Paths")
+Environment = NodePath("Environment")
 
 [node name="Collision" parent="." instance=ExtResource("1_y3f8c")]
 visible = false
@@ -79,6 +91,25 @@ startEnabled = true
 visible = false
 
 [node name="Rukh7LOD" parent="Visuals" instance=ExtResource("15_4yfry")]
+
+[node name="Lighting" type="Node3D" parent="Visuals"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Visuals/Lighting"]
+transform = Transform3D(-0.866025, 1.02312e-07, 0.5, 0.482963, 0.258819, 0.836516, -0.129409, 0.965926, -0.224144, 0, 0, 0)
+layers = 1024
+light_color = Color(1, 0.662745, 0, 1)
+light_cull_mask = 4293918722
+directional_shadow_mode = 0
+
+[node name="Triggers" type="Node3D" parent="."]
+
+[node name="Object" type="Node3D" parent="Triggers"]
+
+[node name="Environment" type="Node3D" parent="Triggers"]
+
+[node name="Checkpoint" type="Node3D" parent="Triggers"]
+
+[node name="Camera" type="Node3D" parent="Triggers"]
 
 [node name="Paths" type="Node3D" parent="."]
 
@@ -144,3 +175,8 @@ curve = ExtResource("30_pmep3")
 [node name="TowerTopPath" type="Path3D" parent="Paths"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.5, 10, -1370)
 curve = ExtResource("31_qnjdi")
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_5x5bb")
+
+[connection signal="EventFinished" from="Visuals/Rukh2Event" to="Visuals/Rukh2" method="Activate"]
