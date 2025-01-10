@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bm61nw4o1jcrb"]
+[gd_scene load_steps=36 format=3 uid="uid://bm61nw4o1jcrb"]
 
 [ext_resource type="PackedScene" uid="uid://c1htg25bw2rso" path="res://area/4 levitated ruin/act 1/environment/Rukh1.tscn" id="1_3akmk"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_sruem"]
@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://be5mcrotir76l" path="res://area/4 levitated ruin/act 1/environment/Rukh7LOD.tscn" id="15_4yfry"]
 [ext_resource type="Curve3D" uid="uid://cu3g4ru5g7yhk" path="res://area/4 levitated ruin/act 1/environment/path/Rukh1Path.tres" id="16_7k8vg"]
 [ext_resource type="Curve3D" uid="uid://be3wqb4ek2pr8" path="res://area/4 levitated ruin/act 1/environment/path/Rukh2Path.tres" id="17_7hhlk"]
+[ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="18_0sql3"]
 [ext_resource type="Curve3D" uid="uid://bmfswsswv36m0" path="res://area/4 levitated ruin/act 1/environment/path/Rukh3Path.tres" id="18_almbb"]
 [ext_resource type="Curve3D" uid="uid://86s3wlh8amyg" path="res://area/4 levitated ruin/act 1/environment/path/Rukh4Path.tres" id="19_wan5a"]
 [ext_resource type="Curve3D" uid="uid://cfkwgecif71so" path="res://area/4 levitated ruin/act 1/environment/path/Rukh5Path.tres" id="20_yh5aq"]
@@ -35,12 +36,14 @@
 [ext_resource type="Curve3D" uid="uid://bjdcg8aicc5fw" path="res://area/4 levitated ruin/act 1/environment/path/TowerTopPath.tres" id="31_qnjdi"]
 
 [sub_resource type="Environment" id="Environment_5x5bb"]
+background_mode = 1
+background_color = Color(0.956863, 0.588235, 0.0431373, 1)
 ambient_light_source = 2
 ambient_light_color = Color(0.177227, 0.372054, 0.558208, 1)
 tonemap_mode = 2
-fog_light_color = Color(0.609183, 0.509982, 0.689695, 1)
-fog_density = 0.0005
-adjustment_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.79, 0.546417, 0.395, 1)
+fog_density = 0.001
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_sruem")
@@ -97,9 +100,11 @@ visible = false
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Visuals/Lighting"]
 transform = Transform3D(-0.866025, 1.02312e-07, 0.5, 0.482963, 0.258819, 0.836516, -0.129409, 0.965926, -0.224144, 0, 0, 0)
 layers = 1024
-light_color = Color(1, 0.662745, 0, 1)
+light_color = Color(1, 0.771168, 0.471408, 1)
 light_cull_mask = 4293918722
 directional_shadow_mode = 0
+
+[node name="LRSky" parent="Visuals" instance=ExtResource("18_0sql3")]
 
 [node name="Triggers" type="Node3D" parent="."]
 
