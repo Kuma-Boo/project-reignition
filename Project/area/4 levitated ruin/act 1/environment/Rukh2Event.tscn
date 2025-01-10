@@ -8,11 +8,12 @@
 script = ExtResource("2_5vtbe")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
-"Trigger Settings/Player Stand-in" = null
+"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
 [node name="Rukh02FlyingRoot" parent="." index="0"]
 script = ExtResource("3_bifjl")
+saveVisibilityOnCheckpoint = true
 
 [node name="Skeleton3D" parent="Rukh02FlyingRoot" index="0"]
 bones/0/position = Vector3(-322.828, 229.671, 445.024)
@@ -169,3 +170,5 @@ cast_shadow = 0
 [node name="stg0614_f_manta01_Mesh_0051" parent="Rukh02FlyingRoot/Skeleton3D" index="30"]
 layers = 2
 cast_shadow = 0
+
+[connection signal="EventFinished" from="." to="Rukh02FlyingRoot" method="Deactivate"]

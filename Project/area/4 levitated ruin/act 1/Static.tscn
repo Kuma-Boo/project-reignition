@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://bm61nw4o1jcrb"]
+[gd_scene load_steps=38 format=3 uid="uid://bm61nw4o1jcrb"]
 
 [ext_resource type="PackedScene" uid="uid://c1htg25bw2rso" path="res://area/4 levitated ruin/act 1/environment/Rukh1.tscn" id="1_3akmk"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_sruem"]
@@ -21,6 +21,7 @@
 [ext_resource type="Curve3D" uid="uid://be3wqb4ek2pr8" path="res://area/4 levitated ruin/act 1/environment/path/Rukh2Path.tres" id="17_7hhlk"]
 [ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="18_0sql3"]
 [ext_resource type="Curve3D" uid="uid://bmfswsswv36m0" path="res://area/4 levitated ruin/act 1/environment/path/Rukh3Path.tres" id="18_almbb"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="19_fp3yh"]
 [ext_resource type="Curve3D" uid="uid://86s3wlh8amyg" path="res://area/4 levitated ruin/act 1/environment/path/Rukh4Path.tres" id="19_wan5a"]
 [ext_resource type="Curve3D" uid="uid://cfkwgecif71so" path="res://area/4 levitated ruin/act 1/environment/path/Rukh5Path.tres" id="20_yh5aq"]
 [ext_resource type="Curve3D" uid="uid://t2w1qo240gc6" path="res://area/4 levitated ruin/act 1/environment/path/Rukh5TowerPath.tres" id="21_xampo"]
@@ -35,15 +36,25 @@
 [ext_resource type="Curve3D" uid="uid://chfducytiuale" path="res://area/4 levitated ruin/act 1/environment/path/TowerPath.tres" id="30_pmep3"]
 [ext_resource type="Curve3D" uid="uid://bjdcg8aicc5fw" path="res://area/4 levitated ruin/act 1/environment/path/TowerTopPath.tres" id="31_qnjdi"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_gwjfc"]
+size = Vector3(20, 20, 5)
+
 [sub_resource type="Environment" id="Environment_5x5bb"]
 background_mode = 1
 background_color = Color(0.956863, 0.588235, 0.0431373, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.177227, 0.372054, 0.558208, 1)
+ambient_light_color = Color(0.3192, 0.351307, 0.56, 1)
+ambient_light_energy = 0.8
 tonemap_mode = 2
+tonemap_white = 1.3
+glow_strength = 0.2
+glow_blend_mode = 0
+glow_hdr_threshold = 2.0
 fog_enabled = true
 fog_light_color = Color(0.79, 0.546417, 0.395, 1)
 fog_density = 0.001
+adjustment_enabled = true
+adjustment_contrast = 1.05
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_sruem")
@@ -64,7 +75,6 @@ visible = false
 
 [node name="Rukh2Event" parent="Visuals" instance=ExtResource("4_px5bn")]
 visible = false
-"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="Rukh2LOD" parent="Visuals" instance=ExtResource("5_t3vhq")]
 visible = false
@@ -95,20 +105,38 @@ visible = false
 
 [node name="Rukh7LOD" parent="Visuals" instance=ExtResource("15_4yfry")]
 
-[node name="Lighting" type="Node3D" parent="Visuals"]
+[node name="LRSky" parent="Visuals" instance=ExtResource("18_0sql3")]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Visuals/Lighting"]
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="MainLight" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(-0.866025, 1.02312e-07, 0.5, 0.482963, 0.258819, 0.836516, -0.129409, 0.965926, -0.224144, 0, 0, 0)
 layers = 1024
 light_color = Color(1, 0.771168, 0.471408, 1)
+light_energy = 1.1
 light_cull_mask = 4293918722
-directional_shadow_mode = 0
+shadow_enabled = true
 
-[node name="LRSky" parent="Visuals" instance=ExtResource("18_0sql3")]
+[node name="ObjectLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(0.939693, 0.17101, 0.296198, -0.0885213, -0.714911, 0.693589, 0.330366, -0.677981, -0.656659, 0, 0, 0)
+layers = 1024
+light_color = Color(1, 0.8, 0.415686, 1)
+light_energy = 2.5
+light_cull_mask = 4293918785
 
 [node name="Triggers" type="Node3D" parent="."]
 
 [node name="Object" type="Node3D" parent="Triggers"]
+
+[node name="Rukh2" parent="Triggers/Object" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/Rukh2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
 
 [node name="Environment" type="Node3D" parent="Triggers"]
 
@@ -185,3 +213,4 @@ curve = ExtResource("31_qnjdi")
 environment = SubResource("Environment_5x5bb")
 
 [connection signal="EventFinished" from="Visuals/Rukh2Event" to="Visuals/Rukh2" method="Activate"]
+[connection signal="Activated" from="Triggers/Object/Rukh2" to="Visuals/Rukh2Event" method="Activate"]
