@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=14 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="8_qs4sb"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="9_kt1ho"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="10_ca5xv"]
+[ext_resource type="PackedScene" uid="uid://dtf23iudr7saa" path="res://object/enemy/gargoyle/GargoyleSkyroad.tscn" id="11_yfe32"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ye645"]
 size = Vector3(20, 20, 5)
@@ -22,8 +23,8 @@ size = Vector3(20, 20, 5)
 [node name="Static" parent="." instance=ExtResource("1_jeukd")]
 Data = ExtResource("2_5dvfu")
 
-[node name="Collision" parent="Static" index="0"]
-visible = true
+[node name="Rukh3" parent="Static/Visuals" index="6"]
+startEnabled = true
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -31,6 +32,7 @@ visible = true
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_065fl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.6564, -85, -935.903)
 
 [node name="Rukh1" type="Node3D" parent="MainAct"]
 script = ExtResource("4_4rpxf")
@@ -95,8 +97,12 @@ shape = SubResource("BoxShape3D_ye645")
 [node name="Rukh3" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -100, -700)
 
+[node name="GargoyleSkyroad" parent="MainAct/Rukh3" node_paths=PackedStringArray("activeRoad") instance=ExtResource("11_yfe32")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 14, -273)
+activeRoad = NodePath("../../../Static/SkyRoad/SkyRoad01")
+
 [node name="SkyRoad" parent="MainAct/Rukh3" instance=ExtResource("8_qs4sb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, -265)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.2, -252)
 "Enter Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/SkyRoad"]
@@ -110,5 +116,6 @@ shape = SubResource("BoxShape3D_gpp2f")
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRing2" to="MainAct/Rukh1/LaunchRing2/Path" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Rukh2/Jump" to="Static/Visuals/Rukh2" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Rukh2/Jump" to="Static/Visuals/Rukh2LOD" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/SkyRoad" to="MainAct/Rukh3/GargoyleSkyroad" method="Activate"]
 
 [editable path="Static"]
