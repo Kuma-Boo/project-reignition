@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://bm61nw4o1jcrb"]
+[gd_scene load_steps=45 format=3 uid="uid://bm61nw4o1jcrb"]
 
 [ext_resource type="PackedScene" uid="uid://c1htg25bw2rso" path="res://area/4 levitated ruin/act 1/environment/Rukh1.tscn" id="1_3akmk"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_sruem"]
@@ -24,8 +24,11 @@
 [ext_resource type="Curve3D" uid="uid://86s3wlh8amyg" path="res://area/4 levitated ruin/act 1/environment/path/Rukh4Path.tres" id="19_wan5a"]
 [ext_resource type="Script" path="res://object/trigger/modules/DeathTrigger.cs" id="20_t6g8f"]
 [ext_resource type="Curve3D" uid="uid://cfkwgecif71so" path="res://area/4 levitated ruin/act 1/environment/path/Rukh5Path.tres" id="20_yh5aq"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="21_22ibx"]
 [ext_resource type="Curve3D" uid="uid://t2w1qo240gc6" path="res://area/4 levitated ruin/act 1/environment/path/Rukh5TowerPath.tres" id="21_xampo"]
+[ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="22_hfpio"]
 [ext_resource type="Curve3D" uid="uid://cct7q7v6mtjem" path="res://area/4 levitated ruin/act 1/environment/path/Rukh7Path.tres" id="22_slium"]
+[ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/run/AutorunRecenterLockout.tres" id="23_1yees"]
 [ext_resource type="PackedScene" uid="uid://bsdebv0cjpq2x" path="res://area/4 levitated ruin/act 1/environment/SkyRoad01.tscn" id="29_3lidu"]
 [ext_resource type="PackedScene" uid="uid://id850ax8r86w" path="res://area/4 levitated ruin/act 1/environment/SkyRoad02.tscn" id="30_7j1qt"]
 [ext_resource type="Curve3D" uid="uid://chfducytiuale" path="res://area/4 levitated ruin/act 1/environment/path/TowerPath.tres" id="30_pmep3"]
@@ -35,6 +38,7 @@
 [ext_resource type="PackedScene" uid="uid://dmycgl8v6xs75" path="res://area/4 levitated ruin/act 1/environment/SkyRoad05.tscn" id="33_earok"]
 [ext_resource type="PackedScene" uid="uid://b288posnslcwq" path="res://area/4 levitated ruin/act 1/environment/SkyRoad06.tscn" id="34_dlj6a"]
 [ext_resource type="PackedScene" uid="uid://1r3x3vs5mllp" path="res://area/4 levitated ruin/act 1/environment/SkyRoadLoop.tscn" id="35_gmfj6"]
+[ext_resource type="PackedScene" uid="uid://cwmjxd611bhbi" path="res://area/4 levitated ruin/act 1/environment/collision/Collision.tscn" id="36_2mkr5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gwjfc"]
 size = Vector3(20, 20, 5)
@@ -75,7 +79,7 @@ script = ExtResource("1_sruem")
 pathParent = NodePath("Paths")
 Environment = NodePath("Environment")
 
-[node name="Collision" type="Node3D" parent="."]
+[node name="Collision" parent="." instance=ExtResource("36_2mkr5")]
 visible = false
 
 [node name="Visuals" type="Node3D" parent="."]
@@ -153,6 +157,16 @@ light_cull_mask = 4293918785
 
 [node name="Object" type="Node3D" parent="Triggers"]
 
+[node name="FallTrigger" parent="Triggers/Object" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -200, 0)
+"Enter Mode" = 0
+
+[node name="Fall" type="Node3D" parent="Triggers/Object/FallTrigger"]
+script = ExtResource("20_t6g8f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/FallTrigger"]
+shape = SubResource("BoxShape3D_a746d")
+
 [node name="Rukh2" parent="Triggers/Object" instance=ExtResource("19_fp3yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 OneShot = true
@@ -163,15 +177,21 @@ OneShot = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
-[node name="FallTrigger" parent="Triggers/Object" instance=ExtResource("19_fp3yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -200, 0)
+[node name="SkyRoad1" parent="Triggers/Object" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -90.3, -978)
 "Enter Mode" = 0
 
-[node name="Fall" type="Node3D" parent="Triggers/Object/FallTrigger"]
-script = ExtResource("20_t6g8f")
+[node name="Path" type="Node3D" parent="Triggers/Object/SkyRoad1" node_paths=PackedStringArray("path")]
+script = ExtResource("21_22ibx")
+path = NodePath("../../../../SkyRoad/SkyRoad01/SkyRoad1")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/FallTrigger"]
-shape = SubResource("BoxShape3D_a746d")
+[node name="Lockout" type="Node3D" parent="Triggers/Object/SkyRoad1"]
+script = ExtResource("22_hfpio")
+lockoutData = ExtResource("23_1yees")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/SkyRoad1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
 
 [node name="Environment" type="Node3D" parent="Triggers"]
 

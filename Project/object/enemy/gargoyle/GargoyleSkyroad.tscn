@@ -1,12 +1,17 @@
 [gd_scene load_steps=3 format=3 uid="uid://dtf23iudr7saa"]
 
+[ext_resource type="Script" path="res://object/enemy/gargoyle/data/GargoyleSkyroad.cs" id="1_b2tip"]
 [ext_resource type="PackedScene" uid="uid://b4n1751vh5d4s" path="res://object/enemy/gargoyle/data/model/Gargoyle.gltf" id="1_rymmj"]
-[ext_resource type="Script" path="res://object/enemy/gargoyle/data/Gargoyle.cs" id="2_ejkew"]
 
-[node name="Gargoyle" instance=ExtResource("1_rymmj")]
-script = ExtResource("2_ejkew")
+[node name="GargoyleSkyroad" type="PathFollow3D" node_paths=PackedStringArray("root")]
+use_model_front = true
+loop = false
+script = ExtResource("1_b2tip")
+root = NodePath("Gargoyle")
 
-[node name="Skeleton3D" parent="GargoyleRoot" index="0"]
+[node name="Gargoyle" parent="." instance=ExtResource("1_rymmj")]
+
+[node name="Skeleton3D" parent="Gargoyle/GargoyleRoot" index="0"]
 bones/2/rotation = Quaternion(0.767752, -2.50455e-07, -2.16896e-07, 0.640747)
 bones/5/rotation = Quaternion(0.5, 0.5, 0.5, -0.5)
 bones/9/rotation = Quaternion(0.5, -0.5, -0.5, -0.5)
@@ -17,3 +22,8 @@ bones/16/rotation = Quaternion(-0.707107, -2.10687e-09, -3.30155e-08, 0.707107)
 bones/17/rotation = Quaternion(-0.0617495, -4.71268e-10, -0.0875849, 0.994241)
 bones/18/rotation = Quaternion(0.0616908, -0.00269341, 0.130869, 0.989475)
 bones/19/rotation = Quaternion(-0.707107, 2.40748e-15, 4.39029e-08, 0.707107)
+
+[node name="AnimationPlayer" parent="Gargoyle" index="1"]
+autoplay = "skyroad"
+
+[editable path="Gargoyle"]
