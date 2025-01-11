@@ -210,6 +210,7 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		if (isOneShot && isActivated) return;
 
+		Visible = true;
 		PlayAnimation(EventAnimation);
 		EmitSignal(SignalName.Activated);
 	}

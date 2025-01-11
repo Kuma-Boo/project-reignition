@@ -1,8 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=12 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_065fl"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_4rpxf"]
+[ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="5_2txni"]
+[ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="6_s2poe"]
+[ext_resource type="PackedScene" uid="uid://db770ujvjdio4" path="res://object/stage/common/LaunchRingSpike.tscn" id="7_txkek"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="8_qs4sb"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="9_kt1ho"]
+[ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="10_ca5xv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ye645"]
+size = Vector3(20, 20, 5)
 
 [node name="Stage" type="Node"]
 
@@ -15,3 +25,73 @@ Data = ExtResource("2_5dvfu")
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_065fl")]
+
+[node name="Rukh1" type="Node3D" parent="MainAct"]
+script = ExtResource("4_4rpxf")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="JumpPanel" parent="MainAct/Rukh1" instance=ExtResource("5_2txni")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -4.37114e-07, 8.4, -286)
+middleHeight = 10.0
+finalHeight = -20.0
+distance = 47.0
+
+[node name="LaunchRing1" parent="MainAct/Rukh1" instance=ExtResource("6_s2poe")]
+transform = Transform3D(-0.182235, 0.851524, -0.491627, 0, 0.5, 0.866025, 0.983255, 0.157821, -0.0911177, 0, -10, -333)
+"Secondary Settings/Middle Height" = 15.0
+"Secondary Settings/Final Height" = 0.0
+"Secondary Settings/Distance" = 92.0
+middleHeight = 10.0
+finalHeight = 1.0
+distance = 80.0
+launchDirection = 2
+
+[node name="LaunchRingSpike" parent="MainAct/Rukh1" instance=ExtResource("7_txkek")]
+transform = Transform3D(-0.414693, -0.64344, 0.64344, 0, 0.707107, 0.707107, -0.909961, 0.293232, -0.293232, -90, -10, -350)
+"Secondary Settings/Middle Height" = 10.0
+"Secondary Settings/Final Height" = 6.0
+"Secondary Settings/Distance" = 72.0
+launchDirection = 2
+
+[node name="LaunchRing2" parent="MainAct/Rukh1" instance=ExtResource("6_s2poe")]
+transform = Transform3D(-0.5, 0.612372, -0.612372, 0, 0.707107, 0.707107, 0.866025, 0.353553, -0.353553, -24, -4, -380)
+"Secondary Settings/Final Height" = -15.0
+"Secondary Settings/Distance" = 30.0
+finalHeight = -20.0
+distance = 25.0
+launchDirection = 2
+
+[node name="Path" type="Node3D" parent="MainAct/Rukh1/LaunchRing2" node_paths=PackedStringArray("path")]
+script = ExtResource("9_kt1ho")
+path = NodePath("../../../../Static/Paths/Rukh2")
+
+[node name="Rukh2" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -20, -380)
+
+[node name="Jump" parent="MainAct/Rukh2" instance=ExtResource("8_qs4sb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -284)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="MainAct/Rukh2/Jump" node_paths=PackedStringArray("path")]
+script = ExtResource("9_kt1ho")
+path = NodePath("../../../../Static/Paths/Rukh3")
+
+[node name="Jump" type="Node3D" parent="MainAct/Rukh2/Jump"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -89, -45)
+script = ExtResource("10_ca5xv")
+jumpHeight = 2.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh2/Jump"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ye645")
+
+[connection signal="Entered" from="MainAct/Rukh1/LaunchRing1" to="Static/Visuals/Rukh2" method="Activate"]
+[connection signal="Entered" from="MainAct/Rukh1/LaunchRing1" to="Static/Visuals/Rukh2Event" method="Deactivate"]
+[connection signal="Entered" from="MainAct/Rukh1/LaunchRingSpike" to="Static/Visuals/Rukh1" method="Deactivate"]
+[connection signal="Entered" from="MainAct/Rukh1/LaunchRingSpike" to="Static/Visuals/Rukh1LOD" method="Activate"]
+[connection signal="Entered" from="MainAct/Rukh1/LaunchRing2" to="MainAct/Rukh1/LaunchRing2/Path" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Rukh2/Jump" to="Static/Visuals/Rukh2" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Rukh2/Jump" to="Static/Visuals/Rukh2LOD" method="Activate"]
+
+[editable path="Static"]
