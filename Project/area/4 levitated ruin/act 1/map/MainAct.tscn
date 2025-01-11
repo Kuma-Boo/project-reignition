@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=13 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_065fl"]
+[ext_resource type="Script" path="res://area/4 levitated ruin/data/script/SkyRoad.cs" id="3_fqdrx"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_4rpxf"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="5_2txni"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="6_s2poe"]
@@ -18,6 +19,12 @@ size = Vector3(20, 20, 5)
 
 [node name="Static" parent="." instance=ExtResource("1_jeukd")]
 Data = ExtResource("2_5dvfu")
+
+[node name="Collision" parent="Static" index="0"]
+visible = true
+
+[node name="SkyRoad01" parent="Static/SkyRoad" index="0"]
+script = ExtResource("3_fqdrx")
 
 [node name="MainAct" type="Node3D" parent="."]
 
