@@ -81,8 +81,8 @@ public partial class PlayerInputController : Node
 
 		if (!Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.ActionButton))
 			UpdateActionBuffer();
-
-		ResetActionBuffer();
+		else
+			ResetActionBuffer();
 	}
 
 	private void UpdateJumpBuffer()
