@@ -95,7 +95,7 @@ public partial class HomingAttackState : PlayerState
 		Player.PathFollower.Resync();
 
 		bool isColliding = Player.GetSlideCollisionCount() != 0;
-		if (isColliding && ProcessEnvironmentCollision())
+		if (isColliding && ProcessObstructions())
 		{
 			Player.StartBounce();
 			return null;
@@ -110,7 +110,7 @@ public partial class HomingAttackState : PlayerState
 		return null;
 	}
 
-	private bool ProcessEnvironmentCollision()
+	private bool ProcessObstructions()
 	{
 		// Check from the floor
 		Vector3 castOffset = Vector3.Up * Player.CollisionSize.Y * .5f;
@@ -118,7 +118,7 @@ public partial class HomingAttackState : PlayerState
 		if (Player.VerticalSpeed < 0)
 			castPosition += Player.UpDirection * Player.VerticalSpeed * PhysicsManager.physicsDelta;
 		Vector3 castVector = Player.Lockon.Target.GlobalPosition - castPosition;
-		RaycastHit hit = Player.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
+		RaycastHit hit = Player.CastRay(castPosition, castVector, Runtime.Instance.lockonObstructionMask);
 		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
 		return hit && hit.collidedObject.IsInGroup("wall") && !hit.collidedObject.IsInGroup("level wall");
 	}

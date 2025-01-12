@@ -36,6 +36,10 @@ public partial class Runtime : Node
 	[Export(PropertyHint.Layers3DPhysics)]
 	public uint environmentMask;
 
+	/// <summary> Collision layer for things that obstruct lockon targeting. </summary>
+	[Export(PropertyHint.Layers3DPhysics)]
+	public uint lockonObstructionMask;
+
 	/// <summary> Collision layer for destructable particle effects. </summary>
 	[Export(PropertyHint.Layers3DPhysics)]
 	public uint particleCollisionLayer;
