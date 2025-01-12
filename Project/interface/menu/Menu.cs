@@ -93,18 +93,29 @@ public partial class Menu : Control
 	public virtual void ShowMenu()
 	{
 		// Attempt to play "show" animation
-		if (animator != null && animator.HasAnimation(SHOW_ANIMATION))
+		if (animator?.HasAnimation(SHOW_ANIMATION) == true)
+		{
 			animator.Play(SHOW_ANIMATION);
-		else // Fallback
-			Visible = true;
+			animator.Advance(0.0);
+			return;
+		}
+
+		// Fallback
+		Visible = true;
 	}
+
 	public virtual void HideMenu()
 	{
 		// Attempt to play "hide" animation
-		if (animator != null && animator.HasAnimation(HIDE_ANIMATION))
+		if (animator?.HasAnimation(HIDE_ANIMATION) == true)
+		{
 			animator.Play(HIDE_ANIMATION);
-		else // Fallback
-			Visible = false;
+			animator.Advance(0.0);
+			return;
+		}
+
+		// Fallback
+		Visible = false;
 	}
 
 	public virtual void OpenParentMenu()
