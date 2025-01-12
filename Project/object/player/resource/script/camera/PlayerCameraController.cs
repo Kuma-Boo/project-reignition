@@ -351,11 +351,28 @@ public partial class PlayerCameraController : Node3D
 			if (CameraBlendList[i].Trigger?.UseDistanceBlending == true)
 			{
 				i++; // Iterate so we can simulate the next item in the blend list
-				iData.BlendWith(SimulateCamera(i), CameraBlendList[i].Trigger.CalculateInfluence());
+				CameraPositionData secondaryData = SimulateCamera(i);
+				float secondaryInfluence = CameraBlendList[i].Trigger.CalculateInfluence();
+				iData.BlendWith(secondaryData, secondaryInfluence);
+
+				float blendedDistance = Mathf.Lerp(iData.blendData.distance, secondaryData.blendData.distance, secondaryInfluence);
+				distance = Mathf.Lerp(distance, blendedDistance, CameraBlendList[i].SmoothedInfluence);
+				float blendedFov = Mathf.Lerp(iData.blendData.Fov, secondaryData.blendData.Fov, secondaryInfluence);
+				fov = Mathf.Lerp(fov, blendedFov, CameraBlendList[i].SmoothedInfluence);
+
+				Vector2 blendedViewportOffset = iData.blendData.SettingsResource.viewportOffset;
+				blendedViewportOffset = blendedViewportOffset.Lerp(secondaryData.blendData.SettingsResource.viewportOffset, secondaryInfluence);
+				viewportOffset = viewportOffset.Lerp(blendedViewportOffset, CameraBlendList[i].SmoothedInfluence);
+			}
+			else
+			{
+				distance = Mathf.Lerp(distance, iData.blendData.distance, CameraBlendList[i].SmoothedInfluence);
+				fov = Mathf.Lerp(fov, iData.blendData.Fov, CameraBlendList[i].SmoothedInfluence);
+
+				viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
 			}
 
 			data.offsetBasis = data.offsetBasis.Slerp(iData.offsetBasis, CameraBlendList[i].SmoothedInfluence);
-			distance = Mathf.Lerp(distance, iData.blendData.distance, CameraBlendList[i].SmoothedInfluence);
 
 			data.precalculatedPosition = data.precalculatedPosition.Lerp(iData.precalculatedPosition, CameraBlendList[i].SmoothedInfluence);
 
@@ -367,9 +384,6 @@ public partial class PlayerCameraController : Node3D
 			data.verticalTrackingOffset = Mathf.Lerp(data.verticalTrackingOffset, iData.verticalTrackingOffset, CameraBlendList[i].SmoothedInfluence);
 
 			staticBlendRatio = Mathf.Lerp(staticBlendRatio, CameraBlendList[i].SettingsResource.copyPosition ? 1 : 0, CameraBlendList[i].SmoothedInfluence);
-			viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
-
-			fov = Mathf.Lerp(fov, iData.blendData.Fov, CameraBlendList[i].SmoothedInfluence);
 		}
 
 		// Recalculate non-static camera positions for better transition rotations.
