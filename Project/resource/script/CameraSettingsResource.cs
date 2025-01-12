@@ -249,7 +249,7 @@ public partial class CameraSettingsResource : Resource
 	}
 
 	/// <summary> How closely to follow the path. </summary>
-	public float pathControlInfluence;
+	public float pathControlInfluence = 1.0f;
 	/// <summary> How should pitch be applied? </summary>
 	public OverrideModeEnum pitchOverrideMode;
 	/// <summary> How should yaw be applied? </summary>
