@@ -90,12 +90,12 @@ public partial class PlayerSkillController : Node3D
 		}
 		else if (SkillRing.IsSkillEquipped(SkillKey.CrestFire))
 		{
-			crestRequirement = 8;
+			crestRequirement = 6;
 			crestType = SkillResource.SkillElement.Fire;
 		}
 		else if (SkillRing.IsSkillEquipped(SkillKey.CrestDark))
 		{
-			crestRequirement = 6;
+			crestRequirement = 8;
 			crestType = SkillResource.SkillElement.Dark;
 		}
 		else
