@@ -104,6 +104,8 @@ public partial class Runtime : Node
 	public void SpawnPearls(int amount, Vector3 spawnPosition, Vector2 radius, float heightOffset = 0)
 	{
 		Tween tween = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Cubic);
+		tween.SetProcessMode(Tween.TweenProcessMode.Physics);
+		tween.SetPauseMode(Tween.TweenPauseMode.Stop);
 
 		for (int i = 0; i < amount; i++)
 		{
