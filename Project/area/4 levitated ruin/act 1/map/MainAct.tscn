@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=19 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
@@ -9,9 +9,13 @@
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="6_s2poe"]
 [ext_resource type="PackedScene" uid="uid://db770ujvjdio4" path="res://object/stage/common/LaunchRingSpike.tscn" id="7_txkek"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="8_qs4sb"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="8_xcxgd"]
+[ext_resource type="Resource" uid="uid://jvsbdfsrni4p" path="res://area/4 levitated ruin/act 1/camera/main/LaunchRing1Cam.tres" id="9_b6tta"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="9_kt1ho"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="10_ca5xv"]
+[ext_resource type="Resource" uid="uid://b3h54r5awfek0" path="res://area/4 levitated ruin/act 1/camera/main/Rukh2PreviewCam.tres" id="11_kaap7"]
 [ext_resource type="PackedScene" uid="uid://dtf23iudr7saa" path="res://object/enemy/gargoyle/GargoyleSkyroad.tscn" id="11_yfe32"]
+[ext_resource type="Resource" path="res://area/4 levitated ruin/act 1/camera/RukhCam.tres" id="12_ndxd2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ye645"]
 size = Vector3(20, 20, 5)
@@ -24,9 +28,6 @@ size = Vector3(20, 20, 5)
 [node name="Static" parent="." instance=ExtResource("1_jeukd")]
 Data = ExtResource("2_5dvfu")
 InitialCameraSettings = ExtResource("3_35kks")
-
-[node name="Collision" parent="Static" index="0"]
-visible = true
 
 [node name="Rukh3" parent="Static/Visuals" index="6"]
 startEnabled = true
@@ -59,9 +60,17 @@ finalHeight = 1.0
 distance = 80.0
 launchDirection = 2
 
+[node name="Cam" type="Node3D" parent="MainAct/Rukh1/LaunchRing1"]
+transform = Transform3D(0.182236, -1.56462e-07, -0.983255, -0.851524, 0.5, -0.15782, 0.491628, 0.866026, 0.0911175, 46.213, 16.6175, 11.6524)
+script = ExtResource("8_xcxgd")
+transitionTime = 1.0
+deactivationTransitionTime = 0.5
+settings = ExtResource("9_b6tta")
+previousSettings = ExtResource("11_kaap7")
+
 [node name="LaunchRingSpike" parent="MainAct/Rukh1" instance=ExtResource("7_txkek")]
 transform = Transform3D(-0.414693, -0.64344, 0.64344, 0, 0.707107, 0.707107, -0.909961, 0.293232, -0.293232, -90, -10, -350)
-"Secondary Settings/Middle Height" = 10.0
+"Secondary Settings/Middle Height" = 15.0
 "Secondary Settings/Final Height" = 6.0
 "Secondary Settings/Distance" = 72.0
 launchDirection = 2
@@ -73,6 +82,11 @@ transform = Transform3D(-0.5, 0.612372, -0.612372, 0, 0.707107, 0.707107, 0.8660
 finalHeight = -20.0
 distance = 25.0
 launchDirection = 2
+
+[node name="Cam" type="Node3D" parent="MainAct/Rukh1/LaunchRing2"]
+transform = Transform3D(0.5, 1.29048e-08, -0.866026, -0.612373, 0.707107, -0.353554, 0.612373, 0.707107, 0.353554, 69.4064, 56.6991, -39.1629)
+script = ExtResource("8_xcxgd")
+settings = ExtResource("12_ndxd2")
 
 [node name="Path" type="Node3D" parent="MainAct/Rukh1/LaunchRing2" node_paths=PackedStringArray("path")]
 script = ExtResource("9_kt1ho")
@@ -93,6 +107,7 @@ path = NodePath("../../../../Static/Paths/Rukh3")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -89, -45)
 script = ExtResource("10_ca5xv")
 jumpHeight = 2.0
+autoAlign = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh2/Jump"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -115,13 +130,18 @@ shape = SubResource("BoxShape3D_gpp2f")
 
 [connection signal="Activated" from="MainAct/Rukh1/JumpPanel" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Rukh1/JumpPanel" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh1/LaunchRing1" to="MainAct/Rukh1/LaunchRing1/Cam" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Rukh1/LaunchRing1" to="MainAct/Rukh1/LaunchRing1/Cam" method="Deactivate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRing1" to="Static/Visuals/Rukh2" method="Activate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRing1" to="Static/Visuals/Rukh2Event" method="Deactivate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRingSpike" to="Static/Visuals/Rukh1" method="Deactivate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRingSpike" to="Static/Visuals/Rukh1LOD" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Rukh1/LaunchRing2" to="MainAct/Rukh1/LaunchRing2/Cam" method="Activate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRing2" to="MainAct/Rukh1/LaunchRing2/Path" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh2/Jump" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Rukh2/Jump" to="Static/Visuals/Rukh2" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Rukh2/Jump" to="Static/Visuals/Rukh2LOD" method="Activate"]
+[connection signal="JumpFinished" from="MainAct/Rukh2/Jump/Jump" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh3/SkyRoad" to="MainAct/Rukh3/GargoyleSkyroad" method="Activate"]
 
 [editable path="Static"]
