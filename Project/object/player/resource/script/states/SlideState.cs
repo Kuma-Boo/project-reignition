@@ -143,7 +143,8 @@ public partial class SlideState : PlayerState
 			}
 		}
 
-		if (Player.IsLockoutDisablingActions)
+		// Lockout is disabling action button (slides included)
+		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.ActionButton))
 			return runState;
 
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))

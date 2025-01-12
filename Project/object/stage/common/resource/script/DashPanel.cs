@@ -51,7 +51,7 @@ public partial class DashPanel : Area3D
 			spaceMode = LockoutResource.SpaceModes.Local,
 			movementAngle = 0,
 			speedRatio = speedRatio,
-			disableActions = true,
+			disableActionFlags = LockoutResource.ActionFlags.JumpButton + (int)LockoutResource.ActionFlags.ActionButton,
 			overrideSpeed = true,
 			tractionMultiplier = -1,
 			frictionMultiplier = 0,
