@@ -62,18 +62,25 @@ public partial class PlayerInputController : Node
 		if (!InputAxis.IsZeroApprox())
 			NonZeroInputAxis = InputAxis;
 
-		if (!Player.IsLockoutDisablingActions)
+		if (Player.ActiveLockoutData == null)
 		{
 			UpdateJumpBuffer();
 			UpdateActionBuffer();
 			return;
 		}
 
-		// Allow player to jump out of certain lockouts (i.e. DriftLockout)
-		if (Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump))
+		if (!Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.JumpButton) ||
+			Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump))
+		{
 			UpdateJumpBuffer();
+		}
 		else
+		{
 			ResetJumpBuffer();
+		}
+
+		if (!Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.ActionButton))
+			UpdateActionBuffer();
 
 		ResetActionBuffer();
 	}

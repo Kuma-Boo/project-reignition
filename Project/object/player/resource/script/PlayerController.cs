@@ -2,6 +2,7 @@ using Godot;
 using Project.Core;
 using Project.Gameplay.Objects;
 using Project.Gameplay.Triggers;
+using System;
 using System.Collections.Generic;
 
 namespace Project.Gameplay;
@@ -434,7 +435,7 @@ public partial class PlayerController : CharacterBody3D
 	private float lockoutTimer;
 	public bool IsLockoutActive => ActiveLockoutData != null;
 	public bool IsLockoutOverridingMovementAngle => IsLockoutActive && ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free;
-	public bool IsLockoutDisablingActions => IsLockoutActive && ActiveLockoutData.disableActions;
+	public bool IsLockoutDisablingAction(LockoutResource.ActionFlags flag) => IsLockoutActive && ActiveLockoutData.disableActionFlags.HasFlag(flag);
 	public LockoutResource ActiveLockoutData { get; private set; }
 
 	private readonly List<LockoutResource> lockoutDataList = [];

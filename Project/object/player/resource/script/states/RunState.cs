@@ -64,7 +64,9 @@ public partial class RunState : PlayerState
 
 				float inputAngle = Player.Controller.GetTargetInputAngle();
 				float inputStrength = Player.Controller.GetInputStrength();
-				if (!Mathf.IsZeroApprox(inputStrength) &&
+
+				if (!Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Backflip) &&
+					!Mathf.IsZeroApprox(inputStrength) &&
 					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 				{
 					return backflipState;
