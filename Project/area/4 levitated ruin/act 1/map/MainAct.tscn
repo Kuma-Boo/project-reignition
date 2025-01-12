@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=15 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_065fl"]
+[ext_resource type="Resource" uid="uid://cqb8i042q3bsb" path="res://area/4 levitated ruin/act 1/camera/StartCam.tres" id="3_35kks"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_4rpxf"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="5_2txni"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="6_s2poe"]
@@ -22,6 +23,10 @@ size = Vector3(20, 20, 5)
 
 [node name="Static" parent="." instance=ExtResource("1_jeukd")]
 Data = ExtResource("2_5dvfu")
+InitialCameraSettings = ExtResource("3_35kks")
+
+[node name="Collision" parent="Static" index="0"]
+visible = true
 
 [node name="Rukh3" parent="Static/Visuals" index="6"]
 startEnabled = true
@@ -32,7 +37,6 @@ startEnabled = true
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_065fl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.6564, -85, -935.903)
 
 [node name="Rukh1" type="Node3D" parent="MainAct"]
 script = ExtResource("4_4rpxf")
@@ -109,6 +113,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.2, -252)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gpp2f")
 
+[connection signal="Activated" from="MainAct/Rukh1/JumpPanel" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/Rukh1/JumpPanel" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRing1" to="Static/Visuals/Rukh2" method="Activate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRing1" to="Static/Visuals/Rukh2Event" method="Deactivate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRingSpike" to="Static/Visuals/Rukh1" method="Deactivate"]
@@ -119,3 +125,4 @@ shape = SubResource("BoxShape3D_gpp2f")
 [connection signal="Activated" from="MainAct/Rukh3/SkyRoad" to="MainAct/Rukh3/GargoyleSkyroad" method="Activate"]
 
 [editable path="Static"]
+[editable path="Static/Collision"]
