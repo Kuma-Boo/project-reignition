@@ -175,6 +175,8 @@ public partial class HeadsUpDisplay : Control
 	private Label time;
 	private void UpdateTime()
 	{
+		UpdateRankPreviewer(); // Update rank every frame
+
 		if (Stage.Data.MissionTimeLimit != 0) // Time limit; Draw time counting DOWN
 		{
 			float timeLeft = Mathf.Clamp(Stage.Data.MissionTimeLimit - Stage.CurrentTime, 0, Stage.Data.MissionTimeLimit);
@@ -183,7 +185,6 @@ public partial class HeadsUpDisplay : Control
 		}
 
 		time.Text = Stage.DisplayTime;
-		UpdateRankPreviewer(); // Update rank every frame
 	}
 
 	[Export]
