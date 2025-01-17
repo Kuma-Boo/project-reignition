@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://bm61nw4o1jcrb"]
+[gd_scene load_steps=59 format=3 uid="uid://bm61nw4o1jcrb"]
 
 [ext_resource type="PackedScene" uid="uid://c1htg25bw2rso" path="res://area/4 levitated ruin/act 1/environment/Rukh1.tscn" id="1_3akmk"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_sruem"]
@@ -48,6 +48,7 @@
 [ext_resource type="PackedScene" uid="uid://b288posnslcwq" path="res://area/4 levitated ruin/act 1/environment/SkyRoad06.tscn" id="34_dlj6a"]
 [ext_resource type="PackedScene" uid="uid://1r3x3vs5mllp" path="res://area/4 levitated ruin/act 1/environment/SkyRoadLoop.tscn" id="35_gmfj6"]
 [ext_resource type="PackedScene" uid="uid://cwmjxd611bhbi" path="res://area/4 levitated ruin/act 1/environment/collision/Collision.tscn" id="36_2mkr5"]
+[ext_resource type="PackedScene" uid="uid://dtf23iudr7saa" path="res://object/enemy/gargoyle/GargoyleSkyroad.tscn" id="41_qtcx1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gwjfc"]
 size = Vector3(20, 20, 5)
@@ -63,6 +64,9 @@ size = Vector3(10, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xkoon"]
 size = Vector3(10, 20, 11)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_crwnd"]
+size = Vector3(10, 20, 120)
 
 [sub_resource type="Gradient" id="Gradient_tynqt"]
 offsets = PackedFloat32Array(0.0169014, 0.0450704, 0.721127, 1)
@@ -205,22 +209,6 @@ OneShot = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
-[node name="SkyRoad1" parent="Triggers/Object" instance=ExtResource("19_fp3yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -90.3, -978)
-"Enter Mode" = 0
-
-[node name="Path" type="Node3D" parent="Triggers/Object/SkyRoad1" node_paths=PackedStringArray("path")]
-script = ExtResource("21_22ibx")
-path = NodePath("../../../../SkyRoad/SkyRoad01/SkyRoad1")
-
-[node name="Lockout" type="Node3D" parent="Triggers/Object/SkyRoad1"]
-script = ExtResource("22_hfpio")
-lockoutData = ExtResource("23_1yees")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/SkyRoad1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_gwjfc")
-
 [node name="TreeLockout" parent="Triggers/Object" instance=ExtResource("19_fp3yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.1, -8.5, -604)
 "Trigger Mode" = 2
@@ -242,25 +230,6 @@ OneShot = true
 "Enter Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/Rukh4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_gwjfc")
-
-[node name="Rukh4Jump" parent="Triggers/Object" instance=ExtResource("19_fp3yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 3.5, -1348)
-OneShot = true
-"Respawn Mode" = 0
-
-[node name="Jump" type="Node3D" parent="Triggers/Object/Rukh4Jump"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, -4)
-script = ExtResource("24_dfgcd")
-jumpHeight = 1.0
-
-[node name="Path" type="Node3D" parent="Triggers/Object/Rukh4Jump" node_paths=PackedStringArray("path")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, -4)
-script = ExtResource("21_22ibx")
-path = NodePath("../../../../Paths/Rukh4")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/Rukh4Jump"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
@@ -353,6 +322,21 @@ previousSettings = ExtResource("30_e0bl8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -5)
 shape = SubResource("BoxShape3D_xkoon")
 
+[node name="Rukh2Camera" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -18, -436)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/Rukh2Camera"]
+transform = Transform3D(1, -6.66134e-16, 0, 7.77156e-16, 1, -5.55112e-16, 0, 1.11022e-15, 1, 0, 0, 0)
+script = ExtResource("25_0q5pg")
+settings = ExtResource("26_ctmls")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Rukh2Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_crwnd")
+
 [node name="Rukh2EndCamera" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
 transform = Transform3D(0.707107, 1.13133e-08, -0.707107, -6.94653e-09, 1, 9.0529e-09, 0.707107, -1.48943e-09, 0.707107, -57.7478, -8.1, -622.441)
 "Trigger Mode" = 2
@@ -407,9 +391,94 @@ curve = ExtResource("31_qnjdi")
 
 [node name="SkyRoad" type="Node3D" parent="."]
 
+[node name="SkyroadLockout" type="Node3D" parent="SkyRoad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -90.3, -978)
+script = ExtResource("22_hfpio")
+lockoutData = ExtResource("23_1yees")
+
 [node name="SkyRoad01" parent="SkyRoad" instance=ExtResource("29_3lidu")]
 
+[node name="GargoyleTrigger" parent="SkyRoad/SkyRoad01" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -85.8, -952)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad01/GargoyleTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="Gargoyle" parent="SkyRoad/SkyRoad01" node_paths=PackedStringArray("activeRoad") instance=ExtResource("41_qtcx1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, -86, -973)
+activeRoad = NodePath("..")
+
+[node name="Lockout" parent="SkyRoad/SkyRoad01" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -90.3, -976)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="SkyRoad/SkyRoad01/Lockout" node_paths=PackedStringArray("path")]
+script = ExtResource("21_22ibx")
+path = NodePath("../../SkyRoad1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad01/Lockout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="Rukh4Jump" parent="SkyRoad/SkyRoad01" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 3.6, -1348)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Jump" type="Node3D" parent="SkyRoad/SkyRoad01/Rukh4Jump"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, -4)
+script = ExtResource("24_dfgcd")
+jumpHeight = 5.0
+forceConsistentHeight = true
+
+[node name="Path" type="Node3D" parent="SkyRoad/SkyRoad01/Rukh4Jump" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, -4)
+script = ExtResource("21_22ibx")
+path = NodePath("../../../../Paths/Rukh4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad01/Rukh4Jump"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
 [node name="SkyRoad02" parent="SkyRoad" instance=ExtResource("30_7j1qt")]
+
+[node name="GargoyleTrigger" parent="SkyRoad/SkyRoad02" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -93, 9, -1527)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad02/GargoyleTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="Gargoyle" parent="SkyRoad/SkyRoad02" node_paths=PackedStringArray("activeRoad") instance=ExtResource("41_qtcx1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 11, -1542)
+activeRoad = NodePath("..")
+
+[node name="Lockout" parent="SkyRoad/SkyRoad02" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 10, -1541)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="SkyRoad/SkyRoad02/Lockout" node_paths=PackedStringArray("path")]
+script = ExtResource("21_22ibx")
+path = NodePath("../../SkyRoad2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad02/Lockout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="Lockout2" parent="SkyRoad/SkyRoad02" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30, -1428)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="SkyRoad/SkyRoad02/Lockout2" node_paths=PackedStringArray("path")]
+script = ExtResource("21_22ibx")
+path = NodePath("../../SkyRoad2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad02/Lockout2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
 
 [node name="SkyRoad03" parent="SkyRoad" instance=ExtResource("31_pvcy4")]
 
@@ -431,6 +500,16 @@ environment = SubResource("Environment_5x5bb")
 [connection signal="Deactivated" from="Visuals/CullingTriggers/L4" to="Visuals/Rukh4" method="Deactivate"]
 [connection signal="Activated" from="Triggers/Object/Rukh2" to="Visuals/Rukh2Event" method="Activate"]
 [connection signal="Activated" from="Triggers/Object/Rukh4" to="Visuals/Rukh4Event" method="Activate"]
-[connection signal="Activated" from="Triggers/Object/Rukh4Jump" to="Visuals/Rukh4Event" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad01/GargoyleTrigger" to="SkyRoad/SkyRoad01/Gargoyle" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad01/Lockout" to="Collision/OneWayWall" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad01/Lockout" to="SkyRoad/SkyroadLockout" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad01/Rukh4Jump" to="Visuals/Rukh4Event" method="Activate"]
+[connection signal="JumpFinished" from="SkyRoad/SkyRoad01/Rukh4Jump/Jump" to="Collision/OneWayWall" method="Activate"]
+[connection signal="JumpFinished" from="SkyRoad/SkyRoad01/Rukh4Jump/Jump" to="SkyRoad/SkyroadLockout" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/GargoyleTrigger" to="SkyRoad/SkyRoad02/Gargoyle" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/Lockout" to="Collision/OneWayWall" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/Lockout" to="SkyRoad/SkyroadLockout" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/Lockout2" to="Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/Lockout2" to="SkyRoad/SkyroadLockout" method="Deactivate"]
 
 [editable path="Collision"]
