@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://bm61nw4o1jcrb"]
+[gd_scene load_steps=61 format=3 uid="uid://bm61nw4o1jcrb"]
 
 [ext_resource type="PackedScene" uid="uid://c1htg25bw2rso" path="res://area/4 levitated ruin/act 1/environment/Rukh1.tscn" id="1_3akmk"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_sruem"]
@@ -33,6 +33,7 @@
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="24_v02si"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="25_0q5pg"]
 [ext_resource type="Resource" uid="uid://xgeeyqcwlofq" path="res://area/4 levitated ruin/act 1/camera/RukhCam.tres" id="26_ctmls"]
+[ext_resource type="Resource" uid="uid://cqb8i042q3bsb" path="res://area/4 levitated ruin/act 1/camera/StartCam.tres" id="26_vi4uj"]
 [ext_resource type="Resource" uid="uid://bmrvsw8winllx" path="res://area/4 levitated ruin/act 1/camera/main/Rukh1JumpCam.tres" id="27_a3nc6"]
 [ext_resource type="PackedScene" uid="uid://bsdebv0cjpq2x" path="res://area/4 levitated ruin/act 1/environment/SkyRoad01.tscn" id="29_3lidu"]
 [ext_resource type="Resource" uid="uid://dxlu45yb8brdp" path="res://area/4 levitated ruin/act 1/camera/TreeOverheadCam.tres" id="29_e4jrv"]
@@ -58,6 +59,9 @@ size = Vector3(10000, 10, 10000)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_642io"]
 size = Vector3(40, 20, 40)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6ei0p"]
+size = Vector3(20, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ub6mb"]
 size = Vector3(10, 20, 5)
@@ -224,6 +228,29 @@ lockoutData = ExtResource("24_v02si")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 8, -1.5)
 shape = SubResource("BoxShape3D_642io")
 
+[node name="Rukh3Jump" parent="Triggers/Object" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -12, -670)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="Triggers/Object/Rukh3Jump" node_paths=PackedStringArray("path")]
+script = ExtResource("21_22ibx")
+path = NodePath("")
+
+[node name="Jump" type="Node3D" parent="Triggers/Object/Rukh3Jump"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -88, -30)
+script = ExtResource("24_dfgcd")
+jumpHeight = 1.0
+autoAlign = true
+
+[node name="Camera" type="Node3D" parent="Triggers/Object/Rukh3Jump/Jump"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 88, 30)
+script = ExtResource("25_0q5pg")
+settings = ExtResource("26_vi4uj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/Rukh3Jump"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_6ei0p")
+
 [node name="Rukh4" parent="Triggers/Object" instance=ExtResource("19_fp3yh")]
 transform = Transform3D(0.866025, 0.17101, -0.469846, 0, 0.939693, 0.34202, 0.5, -0.296198, 0.813798, -42, -91, -1080)
 OneShot = true
@@ -351,6 +378,32 @@ settings = ExtResource("26_ctmls")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Rukh2EndCamera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ub6mb")
+
+[node name="Rukh2JumpCamera" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -9.5, -647.555)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/Rukh2JumpCamera"]
+script = ExtResource("25_0q5pg")
+settings = ExtResource("27_a3nc6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Rukh2JumpCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="Rukh3Camera" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -97.7, -774)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/Rukh3Camera"]
+script = ExtResource("25_0q5pg")
+settings = ExtResource("26_ctmls")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Rukh3Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
 
 [node name="Paths" type="Node3D" parent="."]
 
@@ -528,6 +581,8 @@ environment = SubResource("Environment_5x5bb")
 [connection signal="Activated" from="Visuals/CullingTriggers/L4" to="Visuals/Rukh4Event" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingTriggers/L4" to="Visuals/Rukh4" method="Deactivate"]
 [connection signal="Activated" from="Triggers/Object/Rukh2" to="Visuals/Rukh2Event" method="Activate"]
+[connection signal="JumpFinished" from="Triggers/Object/Rukh3Jump/Jump" to="Collision/OneWayWall" method="Activate"]
+[connection signal="JumpFinished" from="Triggers/Object/Rukh3Jump/Jump" to="Triggers/Object/Rukh3Jump/Jump/Camera" method="Activate"]
 [connection signal="Activated" from="Triggers/Object/Rukh4" to="Visuals/Rukh4Event" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/GargoyleTrigger" to="SkyRoad/SkyRoad01/Gargoyle" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/Lockout" to="Collision/OneWayWall" method="Deactivate"]

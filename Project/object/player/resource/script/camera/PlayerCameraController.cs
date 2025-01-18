@@ -161,6 +161,8 @@ public partial class PlayerCameraController : Node3D
 	private const float LockonBlendOutSmoothing = 20.0f;
 	/// <summary> How much extra distance to add when performing a homing attack. </summary>
 	private const float LockonDistance = 3f;
+	/// <summary> How much extra distance to add when performing a jump dash. </summary>
+	private const float JumpDashDistance = 2f;
 	public void SetLockonTarget(Node3D lockonTarget)
 	{
 		if (LockonTarget == lockonTarget) return;
@@ -590,8 +592,13 @@ public partial class PlayerCameraController : Node3D
 		if (Player.IsMovingBackward)
 			targetDistance += settings.backstepDistance;
 
-		if (!settings.ignoreHomingAttack && IsLockonCameraActive)
-			targetDistance += LockonDistance;
+		if (!settings.ignoreHomingAttack)
+		{
+			if (IsLockonCameraActive)
+				targetDistance += LockonDistance;
+			else if (Player.IsJumpDashing)
+				targetDistance += JumpDashDistance;
+		}
 
 		if (PathFollower.Progress < targetDistance &&
 			!PathFollower.Loop &&

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=13 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
@@ -8,15 +8,10 @@
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="5_2txni"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="6_s2poe"]
 [ext_resource type="PackedScene" uid="uid://db770ujvjdio4" path="res://object/stage/common/LaunchRingSpike.tscn" id="7_txkek"]
-[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="8_qs4sb"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="8_xcxgd"]
 [ext_resource type="Resource" uid="uid://jvsbdfsrni4p" path="res://area/4 levitated ruin/act 1/camera/main/LaunchRing1Cam.tres" id="9_b6tta"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="9_kt1ho"]
-[ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="10_ca5xv"]
 [ext_resource type="Resource" uid="uid://b3h54r5awfek0" path="res://area/4 levitated ruin/act 1/camera/main/Rukh2PreviewCam.tres" id="11_kaap7"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ye645"]
-size = Vector3(20, 20, 5)
 
 [node name="Stage" type="Node"]
 
@@ -94,27 +89,10 @@ path = NodePath("../../../../Static/Paths/Rukh2")
 [node name="Rukh2" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -20, -380)
 
-[node name="Jump" parent="MainAct/Rukh2" instance=ExtResource("8_qs4sb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -290)
-"Enter Mode" = 0
-
-[node name="Path" type="Node3D" parent="MainAct/Rukh2/Jump" node_paths=PackedStringArray("path")]
-script = ExtResource("9_kt1ho")
-path = NodePath("../../../../Static/Paths/Rukh3")
-
-[node name="Jump" type="Node3D" parent="MainAct/Rukh2/Jump"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -88, -30)
-script = ExtResource("10_ca5xv")
-jumpHeight = 1.0
-autoAlign = true
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh2/Jump"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ye645")
-
 [node name="Rukh3" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -100, -700)
 
+[connection signal="JumpFinished" from="Static/Triggers/Object/Rukh3Jump/Jump" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="Static/SkyRoad/SkyRoad01/Lockout" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="JumpFinished" from="Static/SkyRoad/SkyRoad01/Rukh4Jump/Jump" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="Static/SkyRoad/SkyRoad02/Lockout" to="Static/Collision/OneWayWall" method="Deactivate"]
@@ -130,10 +108,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -100, -700)
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRingSpike" to="Static/Visuals/Rukh1" method="Deactivate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRingSpike" to="Static/Visuals/Rukh1LOD" method="Activate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRing2" to="MainAct/Rukh1/LaunchRing2/Path" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh2/Jump" to="Static/Collision/OneWayWall" method="Deactivate"]
-[connection signal="Deactivated" from="MainAct/Rukh2/Jump" to="Static/Visuals/Rukh2" method="Activate"]
-[connection signal="Deactivated" from="MainAct/Rukh2/Jump" to="Static/Visuals/Rukh2LOD" method="Activate"]
-[connection signal="JumpFinished" from="MainAct/Rukh2/Jump/Jump" to="Static/Collision/OneWayWall" method="Activate"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]
