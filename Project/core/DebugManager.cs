@@ -83,6 +83,9 @@ public partial class DebugManager : Node2D
 			}
 		}
 
+		if (!IsPaused)
+			isAttemptingPause = false;
+
 		if (Input.IsActionJustPressed("debug_window_small"))
 		{
 			SaveManager.Config.windowSize = 0;
