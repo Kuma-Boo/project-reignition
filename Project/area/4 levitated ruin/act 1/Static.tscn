@@ -154,9 +154,9 @@ visible = false
 visible = false
 
 [node name="Rukh5" parent="Visuals" instance=ExtResource("11_0opci")]
+visible = false
 
 [node name="Rukh5LOD" parent="Visuals" instance=ExtResource("12_s4qub")]
-visible = false
 startEnabled = true
 
 [node name="Rukh6" parent="Visuals" instance=ExtResource("13_iqpvj")]
@@ -165,6 +165,7 @@ startEnabled = true
 visible = false
 
 [node name="Rukh7LOD" parent="Visuals" instance=ExtResource("15_4yfry")]
+startEnabled = true
 
 [node name="LRSky" parent="Visuals" instance=ExtResource("18_0sql3")]
 
@@ -468,19 +469,47 @@ path = NodePath("../../SkyRoad2")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
-[node name="Lockout2" parent="SkyRoad/SkyRoad02" instance=ExtResource("19_fp3yh")]
+[node name="LockoutEnd" parent="SkyRoad/SkyRoad02" instance=ExtResource("19_fp3yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30, -1428)
 "Enter Mode" = 0
 
-[node name="Path" type="Node3D" parent="SkyRoad/SkyRoad02/Lockout2" node_paths=PackedStringArray("path")]
-script = ExtResource("21_22ibx")
-path = NodePath("../../SkyRoad2")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad02/Lockout2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad02/LockoutEnd"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
 [node name="SkyRoad03" parent="SkyRoad" instance=ExtResource("31_pvcy4")]
+
+[node name="GargoyleTrigger" parent="SkyRoad/SkyRoad03" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30, -1425)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad03/GargoyleTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="Gargoyle" parent="SkyRoad/SkyRoad03" node_paths=PackedStringArray("activeRoad") instance=ExtResource("41_qtcx1")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 238.236, -27.0001, -1423.85)
+activeRoad = NodePath("..")
+
+[node name="Lockout" parent="SkyRoad/SkyRoad03" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30, -1415)
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="SkyRoad/SkyRoad03/Lockout" node_paths=PackedStringArray("path")]
+script = ExtResource("21_22ibx")
+path = NodePath("../../SkyRoad3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad03/Lockout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="LockoutEnd" parent="SkyRoad/SkyRoad03" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 650, -104, -1486)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad03/LockoutEnd"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
 
 [node name="SkyRoad04" parent="SkyRoad" instance=ExtResource("32_g1mpj")]
 
@@ -509,7 +538,12 @@ environment = SubResource("Environment_5x5bb")
 [connection signal="Activated" from="SkyRoad/SkyRoad02/GargoyleTrigger" to="SkyRoad/SkyRoad02/Gargoyle" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad02/Lockout" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad02/Lockout" to="SkyRoad/SkyroadLockout" method="Activate"]
-[connection signal="Activated" from="SkyRoad/SkyRoad02/Lockout2" to="Collision/OneWayWall" method="Activate"]
-[connection signal="Activated" from="SkyRoad/SkyRoad02/Lockout2" to="SkyRoad/SkyroadLockout" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/LockoutEnd" to="Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/LockoutEnd" to="SkyRoad/SkyroadLockout" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad03/GargoyleTrigger" to="SkyRoad/SkyRoad03/Gargoyle" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad03/Lockout" to="Collision/OneWayWall" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad03/Lockout" to="SkyRoad/SkyroadLockout" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad03/LockoutEnd" to="Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad03/LockoutEnd" to="SkyRoad/SkyroadLockout" method="Deactivate"]
 
 [editable path="Collision"]
