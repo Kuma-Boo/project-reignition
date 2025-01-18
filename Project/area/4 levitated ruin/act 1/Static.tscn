@@ -28,7 +28,6 @@
 [ext_resource type="Curve3D" uid="uid://t2w1qo240gc6" path="res://area/4 levitated ruin/act 1/environment/path/Rukh5TowerPath.tres" id="21_xampo"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="22_hfpio"]
 [ext_resource type="Curve3D" uid="uid://cct7q7v6mtjem" path="res://area/4 levitated ruin/act 1/environment/path/Rukh7Path.tres" id="22_slium"]
-[ext_resource type="Resource" uid="uid://iutdqdo7diqe" path="res://resource/preset/lockout/run/AutorunRecenterLockout.tres" id="23_1yees"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="24_dfgcd"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="24_v02si"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="25_0q5pg"]
@@ -51,6 +50,7 @@
 [ext_resource type="PackedScene" uid="uid://1r3x3vs5mllp" path="res://area/4 levitated ruin/act 1/environment/SkyRoadLoop.tscn" id="35_gmfj6"]
 [ext_resource type="PackedScene" uid="uid://cwmjxd611bhbi" path="res://area/4 levitated ruin/act 1/environment/collision/Collision.tscn" id="36_2mkr5"]
 [ext_resource type="PackedScene" uid="uid://dtf23iudr7saa" path="res://object/enemy/gargoyle/GargoyleSkyroad.tscn" id="41_qtcx1"]
+[ext_resource type="PackedScene" uid="uid://co2wg02egbm0x" path="res://object/trigger/state trigger/AutomationTrigger.tscn" id="46_x224c"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gwjfc"]
 size = Vector3(20, 20, 5)
@@ -461,7 +461,7 @@ curve = ExtResource("31_qnjdi")
 [node name="SkyroadLockout" type="Node3D" parent="SkyRoad"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -90.3, -978)
 script = ExtResource("22_hfpio")
-lockoutData = ExtResource("23_1yees")
+lockoutData = ExtResource("24_v02si")
 
 [node name="SkyRoad01" parent="SkyRoad" instance=ExtResource("29_3lidu")]
 
@@ -535,6 +535,33 @@ path = NodePath("../../SkyRoad2")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
+[node name="AutomationTrigger1" parent="SkyRoad/SkyRoad02" instance=ExtResource("46_x224c")]
+transform = Transform3D(0.396586, 0.433013, -0.809457, -0.852868, 0.5, -0.150384, 0.33961, 0.75, 0.567596, -91.7174, 58.3688, -1597.97)
+endPoint = 165.0
+ignoreDirection = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad02/AutomationTrigger1"]
+transform = Transform3D(1, -2.98023e-08, -1.49012e-08, 0, 1, 2.98023e-08, -1.49012e-08, 2.98023e-08, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="AutomationTrigger2" parent="SkyRoad/SkyRoad02" instance=ExtResource("46_x224c")]
+transform = Transform3D(-0.640856, -0.298836, -0.707107, -0.422618, 0.906308, 0, 0.640856, 0.298836, -0.707107, 36.0826, -5.03123, -1604.47)
+endPoint = 320.0
+ignoreDirection = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad02/AutomationTrigger2"]
+transform = Transform3D(1, -2.98023e-08, 0, 2.98023e-08, 1, 0, 0, 0, 1, 0, 8.00003, 0.00012207)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="AutomationTrigger3" parent="SkyRoad/SkyRoad02" instance=ExtResource("46_x224c")]
+transform = Transform3D(-0.5, -0.0754791, -0.86273, 0, 0.996195, -0.0871557, 0.866025, -0.0435779, -0.498097, 117.952, -5.68359, -1568.56)
+endPoint = 480.0
+ignoreDirection = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad02/AutomationTrigger3"]
+transform = Transform3D(1, -3.72529e-09, -2.98023e-08, 0, 1, 3.72529e-09, 0, -7.45058e-09, 1, 0, 8, 6.10352e-05)
+shape = SubResource("BoxShape3D_gwjfc")
+
 [node name="LockoutEnd" parent="SkyRoad/SkyRoad02" instance=ExtResource("19_fp3yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30, -1428)
 "Enter Mode" = 0
@@ -567,6 +594,24 @@ path = NodePath("../../SkyRoad3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad03/Lockout"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="AutomationTrigger1" parent="SkyRoad/SkyRoad03" instance=ExtResource("46_x224c")]
+transform = Transform3D(0.197883, 0.691975, -0.694272, -0.262003, 0.719846, 0.642788, 0.944562, 0.0547045, 0.323744, 308.355, -14.6665, -1432.98)
+endPoint = 500.0
+ignoreDirection = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad03/AutomationTrigger1"]
+transform = Transform3D(1, -2.98023e-08, -1.49012e-08, 0, 1, 2.98023e-08, -1.49012e-08, 2.98023e-08, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="AutomationTrigger2" parent="SkyRoad/SkyRoad03" instance=ExtResource("46_x224c")]
+transform = Transform3D(-4.37114e-08, -4.37114e-08, -1, 4.37114e-08, 1, -4.37114e-08, 1, -4.37114e-08, -4.37114e-08, 515.655, -82.0665, -1607.08)
+endPoint = 760.0
+ignoreDirection = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad03/AutomationTrigger2"]
+transform = Transform3D(1, -2.98023e-08, -1.49012e-08, 0, 1, 2.98023e-08, -1.49012e-08, 2.98023e-08, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
 [node name="LockoutEnd" parent="SkyRoad/SkyRoad03" instance=ExtResource("19_fp3yh")]

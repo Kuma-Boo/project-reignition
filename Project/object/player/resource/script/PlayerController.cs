@@ -196,7 +196,6 @@ public partial class PlayerController : CharacterBody3D
 		// Whisker casts (For smoother collision)
 		float interval = Mathf.Tau / GroundWhiskerAmount;
 		Vector3 castOffset = this.Forward() * ((CollisionSize.Y * .5f) - CollisionPadding);
-		Vector3 pos = Vector3.Zero;
 		for (int i = 0; i < GroundWhiskerAmount; i++)
 		{
 			castOffset = castOffset.Rotated(this.Down(), interval);
@@ -206,9 +205,7 @@ public partial class PlayerController : CharacterBody3D
 				continue;
 
 			GroundHit = RaycastHit.Add(GroundHit, hit);
-
 			raysHit++;
-			pos += hit.point;
 			checkOffset += castOffset;
 		}
 
@@ -217,7 +214,6 @@ public partial class PlayerController : CharacterBody3D
 			GroundHit = RaycastHit.Divide(GroundHit, raysHit);
 			Effect.UpdateGroundType(GroundHit.collidedObject);
 			DebugManager.DrawRay(GroundHit.point, GroundHit.normal * 5f, Colors.Orange);
-			DebugManager.DrawRay(pos / raysHit, GroundHit.normal * 5f, Colors.Green);
 		}
 
 		return GroundHit;
@@ -383,9 +379,9 @@ public partial class PlayerController : CharacterBody3D
 
 		// Untested! This may end up breaking in certain scenarios
 		GlobalRotation = Vector3.Zero;
-		Vector3 cross = Vector3.Left.Rotated(Vector3.Up, UpDirection.Flatten().AngleTo(Vector2.Down));
+		float angle = UpDirection.Flatten().AngleTo(Vector2.Down);
+		Vector3 cross = Vector3.Left.Rotated(Vector3.Up, angle);
 		GlobalRotate(cross, -UpDirection.SignedAngleTo(Vector3.Up, cross));
-		DebugManager.DrawRay(GlobalPosition, this.Forward() * 2f, Colors.Brown);
 	}
 
 	public void UpdateUpDirection(bool quickReset = false, Vector3 upDirection = new())
