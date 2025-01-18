@@ -72,8 +72,15 @@ public partial class DebugManager : Node2D
 
 		if (Input.IsActionJustPressed("debug_pause"))
 		{
-			isAttemptingPause = !IsPaused;
-			GetTree().Paused = isAttemptingPause;
+			if (IsPaused)
+			{
+				GetTree().Paused = false;
+				isAttemptingPause = false;
+			}
+			else
+			{
+				DebugPause();
+			}
 		}
 
 		if (Input.IsActionJustPressed("debug_window_small"))
@@ -89,11 +96,7 @@ public partial class DebugManager : Node2D
 		}
 
 		if (Input.IsActionJustPressed("debug_step"))
-		{
-			GetTree().Paused = false;
-			isAttemptingPause = false;
-			isAdvancingFrame = true;
-		}
+			DebugPause();
 
 		if (Input.IsActionJustPressed("debug_restart"))
 		{
@@ -113,6 +116,13 @@ public partial class DebugManager : Node2D
 	{
 		if (IsDebugRaysEnabled) // Queue Raycast Redraw
 			QueueRedraw();
+	}
+
+	private void DebugPause()
+	{
+		GetTree().Paused = false;
+		isAttemptingPause = true;
+		isAdvancingFrame = true;
 	}
 
 	#region Raycast Debug Code
