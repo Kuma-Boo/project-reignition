@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://bm61nw4o1jcrb"]
+[gd_scene load_steps=62 format=3 uid="uid://bm61nw4o1jcrb"]
 
 [ext_resource type="PackedScene" uid="uid://c1htg25bw2rso" path="res://area/4 levitated ruin/act 1/environment/Rukh1.tscn" id="1_3akmk"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_sruem"]
@@ -45,6 +45,7 @@
 [ext_resource type="PackedScene" uid="uid://cqfecg1jhoyf1" path="res://area/4 levitated ruin/act 1/environment/SkyRoad03.tscn" id="31_pvcy4"]
 [ext_resource type="Curve3D" uid="uid://bjdcg8aicc5fw" path="res://area/4 levitated ruin/act 1/environment/path/TowerTopPath.tres" id="31_qnjdi"]
 [ext_resource type="PackedScene" uid="uid://dfd751gvwsy8u" path="res://area/4 levitated ruin/act 1/environment/SkyRoad04.tscn" id="32_g1mpj"]
+[ext_resource type="Resource" uid="uid://nslpxyd4ubxt" path="res://area/4 levitated ruin/act 1/camera/SkyroadCam.tres" id="33_7xq47"]
 [ext_resource type="PackedScene" uid="uid://dmycgl8v6xs75" path="res://area/4 levitated ruin/act 1/environment/SkyRoad05.tscn" id="33_earok"]
 [ext_resource type="PackedScene" uid="uid://b288posnslcwq" path="res://area/4 levitated ruin/act 1/environment/SkyRoad06.tscn" id="34_dlj6a"]
 [ext_resource type="PackedScene" uid="uid://1r3x3vs5mllp" path="res://area/4 levitated ruin/act 1/environment/SkyRoadLoop.tscn" id="35_gmfj6"]
@@ -232,9 +233,8 @@ shape = SubResource("BoxShape3D_642io")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -12, -670)
 "Enter Mode" = 0
 
-[node name="Path" type="Node3D" parent="Triggers/Object/Rukh3Jump" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="Triggers/Object/Rukh3Jump"]
 script = ExtResource("21_22ibx")
-path = NodePath("")
 
 [node name="Jump" type="Node3D" parent="Triggers/Object/Rukh3Jump"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -88, -30)
@@ -402,6 +402,19 @@ script = ExtResource("25_0q5pg")
 settings = ExtResource("26_ctmls")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Rukh3Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="SkyroadCamera" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100.085, 56.1, -1580.13)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/SkyroadCamera"]
+script = ExtResource("25_0q5pg")
+settings = ExtResource("33_7xq47")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/SkyroadCamera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
