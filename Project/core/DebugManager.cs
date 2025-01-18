@@ -16,7 +16,8 @@ public partial class DebugManager : Node2D
 	private Control debugMenuRoot;
 
 	private bool isAdvancingFrame;
-	private bool IsPaused => GetTree().Paused || isAdvancingFrame;
+	private bool isAttemptingPause;
+	private bool IsPaused => GetTree().Paused;
 
 	private enum Properties
 	{
@@ -57,6 +58,7 @@ public partial class DebugManager : Node2D
 		if (isAdvancingFrame)
 		{
 			GetTree().Paused = true;
+			isAttemptingPause = true;
 			isAdvancingFrame = false;
 		}
 
@@ -70,10 +72,8 @@ public partial class DebugManager : Node2D
 
 		if (Input.IsActionJustPressed("debug_pause"))
 		{
-			if (GetTree().Paused)
-				GetTree().Paused = false;
-			else
-				isAdvancingFrame = true;
+			isAttemptingPause = !IsPaused;
+			GetTree().Paused = isAttemptingPause;
 		}
 
 		if (Input.IsActionJustPressed("debug_window_small"))
@@ -91,6 +91,7 @@ public partial class DebugManager : Node2D
 		if (Input.IsActionJustPressed("debug_step"))
 		{
 			GetTree().Paused = false;
+			isAttemptingPause = false;
 			isAdvancingFrame = true;
 		}
 
@@ -127,7 +128,7 @@ public partial class DebugManager : Node2D
 		for (int i = line2d.Count - 1; i >= 0; i--)
 		{
 			DrawLine(line2d[i].start, line2d[i].end, line3d[i].color, 1.0f, true);
-			if (!IsPaused)
+			if (!isAttemptingPause)
 				line2d.RemoveAt(i);
 		}
 
@@ -142,7 +143,7 @@ public partial class DebugManager : Node2D
 		{
 			if (cam.IsPositionBehind(line3d[i].start) || cam.IsPositionBehind(line3d[i].end))
 			{
-				if (!IsPaused)
+				if (!isAttemptingPause)
 					line3d.RemoveAt(i);
 
 				continue;
@@ -153,7 +154,7 @@ public partial class DebugManager : Node2D
 
 			DrawLine(startPos, endPos, line3d[i].color, 1.0f, true);
 
-			if (!IsPaused)
+			if (!isAttemptingPause)
 				line3d.RemoveAt(i);
 		}
 	}
