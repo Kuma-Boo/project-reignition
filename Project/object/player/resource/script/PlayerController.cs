@@ -2,7 +2,6 @@ using Godot;
 using Project.Core;
 using Project.Gameplay.Objects;
 using Project.Gameplay.Triggers;
-using System;
 using System.Collections.Generic;
 
 namespace Project.Gameplay;
@@ -197,26 +196,28 @@ public partial class PlayerController : CharacterBody3D
 		// Whisker casts (For smoother collision)
 		float interval = Mathf.Tau / GroundWhiskerAmount;
 		Vector3 castOffset = this.Forward() * ((CollisionSize.Y * .5f) - CollisionPadding);
+		Vector3 pos = Vector3.Zero;
 		for (int i = 0; i < GroundWhiskerAmount; i++)
 		{
 			castOffset = castOffset.Rotated(this.Down(), interval);
 			RaycastHit hit = this.CastRay(castOrigin + castOffset, castVector, CollisionMask, false, GetCollisionExceptions());
 			DebugManager.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
-			if (ValidateGroundCast(ref hit))
-			{
-				if (!GroundHit)
-					GroundHit = hit;
-				else
-					GroundHit.Add(hit);
-				checkOffset += castOffset;
-				raysHit++;
-			}
+			if (!ValidateGroundCast(ref hit))
+				continue;
+
+			GroundHit = RaycastHit.Add(GroundHit, hit);
+
+			raysHit++;
+			pos += hit.point;
+			checkOffset += castOffset;
 		}
 
 		if (GroundHit)
 		{
-			GroundHit.Divide(raysHit);
+			GroundHit = RaycastHit.Divide(GroundHit, raysHit);
 			Effect.UpdateGroundType(GroundHit.collidedObject);
+			DebugManager.DrawRay(GroundHit.point, GroundHit.normal * 5f, Colors.Orange);
+			DebugManager.DrawRay(pos / raysHit, GroundHit.normal * 5f, Colors.Green);
 		}
 
 		return GroundHit;
@@ -384,6 +385,7 @@ public partial class PlayerController : CharacterBody3D
 		GlobalRotation = Vector3.Zero;
 		Vector3 cross = Vector3.Left.Rotated(Vector3.Up, UpDirection.Flatten().AngleTo(Vector2.Down));
 		GlobalRotate(cross, -UpDirection.SignedAngleTo(Vector3.Up, cross));
+		DebugManager.DrawRay(GlobalPosition, this.Forward() * 2f, Colors.Brown);
 	}
 
 	public void UpdateUpDirection(bool quickReset = false, Vector3 upDirection = new())
