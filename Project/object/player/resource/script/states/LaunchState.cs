@@ -50,6 +50,7 @@ public partial class LaunchState : PlayerState
 		if (settings.UseAutoAlign)
 		{
 			Player.MovementAngle = GetLaunchFacingAngle();
+			Player.Rotation = Vector3.Zero; // Reset rotation
 			Player.Animator.SnapRotation(Player.MovementAngle);
 		}
 
