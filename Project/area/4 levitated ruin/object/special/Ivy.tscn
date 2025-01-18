@@ -1,0 +1,82 @@
+[gd_scene load_steps=8 format=3 uid="uid://ci8d3jdqrc0nr"]
+
+[ext_resource type="Script" path="res://area/4 levitated ruin/data/script/Ivy.cs" id="1_3x35n"]
+[ext_resource type="PackedScene" uid="uid://bhyhksqbx12de" path="res://area/4 levitated ruin/object/model/special/IvyBase.gltf" id="1_mnuw2"]
+[ext_resource type="PackedScene" uid="uid://loro11gywkcy" path="res://area/4 levitated ruin/object/model/special/IvyLink.gltf" id="2_17bjr"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bxmnq"]
+height = 1.5
+
+[sub_resource type="Animation" id="Animation_x132s"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:SwingRatio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_tu0fs"]
+resource_name = "swing"
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:SwingRatio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 2, 1),
+"update": 0,
+"values": [0.0, 1.0, 0.0, -1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nd8xj"]
+_data = {
+"RESET": SubResource("Animation_x132s"),
+"swing": SubResource("Animation_tu0fs")
+}
+
+[node name="Ivy" type="Node3D" node_paths=PackedStringArray("launchPoint")]
+script = ExtResource("1_3x35n")
+"Secondary Settings/Enabled" = true
+"Secondary Settings/Middle Height" = 0.0
+"Secondary Settings/Final Height" = 5.0
+"Secondary Settings/Distance" = 10.0
+"Secondary Settings/Blend" = 1.0
+Length = 5
+maxRotation = 15.0
+root = NodePath("LinkRoot")
+ivyScene = ExtResource("2_17bjr")
+middleHeight = 1.0
+distance = 2.0
+launchDirection = 2
+sfxPlayer = NodePath("")
+voiceKey = &""
+launchPoint = NodePath("Lockon")
+
+[node name="IvyBase" parent="." instance=ExtResource("1_mnuw2")]
+
+[node name="LinkRoot" parent="." instance=ExtResource("2_17bjr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+
+[node name="Lockon" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.8, 0)
+collision_layer = 8
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lockon"]
+shape = SubResource("CapsuleShape3D_bxmnq")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_nd8xj")
+}
