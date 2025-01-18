@@ -123,6 +123,9 @@ public partial class DebugManager : Node2D
 		GetTree().Paused = false;
 		isAttemptingPause = true;
 		isAdvancingFrame = true;
+
+		line2d.Clear();
+		line3d.Clear();
 	}
 
 	#region Raycast Debug Code
