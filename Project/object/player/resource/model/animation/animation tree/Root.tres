@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=264 format=3 uid="uid://biwe75w273iq7"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=272 format=3 uid="uid://biwe75w273iq7"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_hf2vv"]
 
@@ -541,6 +541,51 @@ nodes/left_state/position = Vector2(-112, 128)
 nodes/right_state/node = SubResource("AnimationNodeStateMachine_ns7wx")
 nodes/right_state/position = Vector2(-112, 256)
 node_connections = [&"direction_transition", 0, &"left_state", &"direction_transition", 1, &"right_state", &"output", 0, &"direction_transition"]
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_yoke2"]
+input_0/name = "ivy"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "zipline"
+input_1/auto_advance = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mj7tj"]
+animation = &"GimmickLibrary/ivy-swing"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tvthr"]
+animation = &"GimmickLibrary/ivy-back"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_a1tyu"]
+animation = &"GimmickLibrary/ivy-front"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w2ahn"]
+animation = &"GimmickLibrary/ivy"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_a0iqa"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_tvthr")
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_a1tyu")
+blend_point_1/pos = 1.0
+blend_point_2/node = SubResource("AnimationNodeAnimation_w2ahn")
+blend_point_2/pos = 0.0
+sync = true
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_yufxx"]
+fadein_time = 0.1
+fadeout_time = 0.1
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ip0io"]
+graph_offset = Vector2(-859.572, 2.27169)
+nodes/Transition/node = SubResource("AnimationNodeTransition_yoke2")
+nodes/Transition/position = Vector2(120, 140)
+nodes/swing_animation/node = SubResource("AnimationNodeAnimation_mj7tj")
+nodes/swing_animation/position = Vector2(-400, 300)
+nodes/swing_blend/node = SubResource("AnimationNodeBlendSpace1D_a0iqa")
+nodes/swing_blend/position = Vector2(-400, 160)
+nodes/swing_trigger/node = SubResource("AnimationNodeOneShot_yufxx")
+nodes/swing_trigger/position = Vector2(-100, 160)
+node_connections = [&"Transition", 0, &"swing_trigger", &"output", 0, &"Transition", &"swing_trigger", 0, &"swing_blend", &"swing_trigger", 1, &"swing_animation"]
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_yjaps"]
 xfade_time = 0.1
@@ -1303,21 +1348,26 @@ input_3/reset = true
 input_4/name = "spin"
 input_4/auto_advance = false
 input_4/reset = true
+input_5/name = "gimmick"
+input_5/auto_advance = false
+input_5/reset = true
 
 [resource]
-graph_offset = Vector2(-1173.3, 5.25653)
+graph_offset = Vector2(-1333.1, 321.712)
 nodes/air_tree/node = SubResource("AnimationNodeBlendTree_2rvqt")
 nodes/air_tree/position = Vector2(-1120, 112)
 nodes/balance_tree/node = SubResource("AnimationNodeBlendTree_gi378")
 nodes/balance_tree/position = Vector2(-960, 288)
 nodes/drift_tree/node = SubResource("AnimationNodeBlendTree_umbst")
 nodes/drift_tree/position = Vector2(-1120, 224)
+nodes/gimmick_tree/node = SubResource("AnimationNodeBlendTree_ip0io")
+nodes/gimmick_tree/position = Vector2(-800, 540)
 nodes/ground_transition/node = SubResource("AnimationNodeTransition_yjaps")
 nodes/ground_transition/position = Vector2(-820, 60)
 nodes/ground_tree/node = SubResource("AnimationNodeBlendTree_vw7yp")
 nodes/ground_tree/position = Vector2(-1120, 0)
 nodes/hurt_state/node = SubResource("AnimationNodeStateMachine_kdifa")
-nodes/hurt_state/position = Vector2(-544, 448)
+nodes/hurt_state/position = Vector2(-540, 440)
 nodes/hurt_trigger/node = SubResource("AnimationNodeOneShot_ep02e")
 nodes/hurt_trigger/position = Vector2(-320, 176)
 nodes/oneshot_tree/node = SubResource("132")
@@ -1327,9 +1377,9 @@ nodes/oneshot_trigger/position = Vector2(48, 144)
 nodes/sidle_tree/node = SubResource("AnimationNodeBlendTree_yi2da")
 nodes/sidle_tree/position = Vector2(-1120, 368)
 nodes/spin_speed/node = SubResource("AnimationNodeTimeScale_taids")
-nodes/spin_speed/position = Vector2(-743.193, 377.99)
+nodes/spin_speed/position = Vector2(-920, 420)
 nodes/spin_state/node = SubResource("AnimationNodeStateMachine_xchh2")
-nodes/spin_state/position = Vector2(-940, 460)
+nodes/spin_state/position = Vector2(-1120, 500)
 nodes/state_transition/node = SubResource("70")
 nodes/state_transition/position = Vector2(-560, 140)
-node_connections = [&"ground_transition", 0, &"ground_tree", &"ground_transition", 1, &"air_tree", &"hurt_trigger", 0, &"state_transition", &"hurt_trigger", 1, &"hurt_state", &"oneshot_trigger", 0, &"hurt_trigger", &"oneshot_trigger", 1, &"oneshot_tree", &"output", 0, &"oneshot_trigger", &"spin_speed", 0, &"spin_state", &"state_transition", 0, &"ground_transition", &"state_transition", 1, &"drift_tree", &"state_transition", 2, &"balance_tree", &"state_transition", 3, &"sidle_tree", &"state_transition", 4, &"spin_speed"]
+node_connections = [&"ground_transition", 0, &"ground_tree", &"ground_transition", 1, &"air_tree", &"hurt_trigger", 0, &"state_transition", &"hurt_trigger", 1, &"hurt_state", &"oneshot_trigger", 0, &"hurt_trigger", &"oneshot_trigger", 1, &"oneshot_tree", &"output", 0, &"oneshot_trigger", &"spin_speed", 0, &"spin_state", &"state_transition", 0, &"ground_transition", &"state_transition", 1, &"drift_tree", &"state_transition", 2, &"balance_tree", &"state_transition", 3, &"sidle_tree", &"state_transition", 4, &"spin_speed", &"state_transition", 5, &"gimmick_tree"]
