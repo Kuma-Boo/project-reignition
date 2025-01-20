@@ -6,13 +6,19 @@ namespace Project.Gameplay.Objects;
 [Tool]
 public partial class Ivy : Launcher
 {
-	[Export(PropertyHint.Range, "2, 10")]
-	public int Length
+	[Export]
+	public bool RegenerateIvy
 	{
-		get => length;
-		set => SetLength(value);
+		get => false;
+		set
+		{
+			if (value)
+				Initialize();
+		}
 	}
-	private int length;
+
+	[Export(PropertyHint.Range, "2, 20")]
+	public int length;
 
 	[Export(PropertyHint.Range, "0,45,1")]
 	private float maxRotation;
@@ -32,6 +38,10 @@ public partial class Ivy : Launcher
 	private PackedScene ivyScene;
 	private Array<Node3D> ivyLinks = [];
 
+	[Export(PropertyHint.NodePathValidTypes, "AnimationMixer")]
+	private NodePath animator;
+	private AnimationMixer _animator;
+
 	public override float GetLaunchRatio()
 	{
 		if (isSwingingForward)
@@ -43,14 +53,39 @@ public partial class Ivy : Launcher
 		return LaunchRatio;
 	}
 
-	public override void _Ready()
+	protected override void SetUp()
 	{
 		Initialize();
+
+		if (Engine.IsEditorHint())
+			return;
+
+		//_animator = GetNode<AnimationMixer>(animator);
+		//_animator.Active = true;
+	}
+
+	/// <summary> Sets the Ivy's state based on the player. </summary>
+	public void ProcessIvy()
+	{
+
+	}
+
+	public void OnEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player detection") || Engine.IsEditorHint())
+			return;
+	}
+
+	public void OnExited(Area3D a)
+	{
+		if (!a.IsInGroup("player detection") || Engine.IsEditorHint())
+			return;
 	}
 
 	public void SetLength(int newLength)
 	{
 		length = newLength;
+		GD.Print("Setting Length");
 		Initialize();
 	}
 
@@ -74,10 +109,12 @@ public partial class Ivy : Launcher
 
 	private void Initialize()
 	{
+		GD.Print("Initializing");
 		_root = GetNodeOrNull<Node3D>(root);
 
 		if (_root == null || launchPoint == null)
 		{
+			GD.PrintT(GetNodeOrNull<Node3D>(root), _root, launchPoint);
 			GD.PushError("Ivy references not found. (Check Launch Point).");
 			return;
 		}

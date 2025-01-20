@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://ci8d3jdqrc0nr"]
+[gd_scene load_steps=15 format=3 uid="uid://ci8d3jdqrc0nr"]
 
 [ext_resource type="Script" path="res://area/4 levitated ruin/data/script/Ivy.cs" id="1_3x35n"]
 [ext_resource type="PackedScene" uid="uid://bhyhksqbx12de" path="res://area/4 levitated ruin/object/model/special/IvyBase.gltf" id="1_mnuw2"]
@@ -34,10 +34,10 @@ tracks/1/keys = {
 "values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_tu0fs"]
-resource_name = "swing"
-loop_mode = 1
-step = 0.05
+[sub_resource type="Animation" id="Animation_1vwer"]
+resource_name = "swing_disabled"
+length = 1.00001
+step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -45,7 +45,24 @@ tracks/0/path = NodePath(".:LaunchRatio")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_tu0fs"]
+resource_name = "swing_enabled"
+loop_mode = 1
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:LaunchRatio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.5, 0.733333, 1),
 "transitions": PackedFloat32Array(0.5, 2, 0.5, 2, 1),
 "update": 0,
 "values": [0.0, 1.0, 0.0, -1.0, 0.0]
@@ -57,7 +74,7 @@ tracks/1/path = NodePath(".:isSwingingForward")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.75),
+"times": PackedFloat32Array(0, 0.266667, 0.733333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [true, false, true]
@@ -66,8 +83,36 @@ tracks/1/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nd8xj"]
 _data = {
 "RESET": SubResource("Animation_x132s"),
-"swing": SubResource("Animation_tu0fs")
+"swing_disabled": SubResource("Animation_1vwer"),
+"swing_enabled": SubResource("Animation_tu0fs")
 }
+
+[sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_qcxkj"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_tis47"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2cg5t"]
+animation = &"swing_disabled"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2egcg"]
+animation = &"swing_enabled"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_xatho"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_2cg5t")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_2egcg")
+blend_point_1/pos = 1.0
+min_space = 0.0
+sync = true
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ja5gt"]
+nodes/swing_seek/node = SubResource("AnimationNodeTimeSeek_qcxkj")
+nodes/swing_seek/position = Vector2(0, 140)
+nodes/swing_speed/node = SubResource("AnimationNodeTimeScale_tis47")
+nodes/swing_speed/position = Vector2(140, 140)
+nodes/swing_strength/node = SubResource("AnimationNodeBlendSpace1D_xatho")
+nodes/swing_strength/position = Vector2(-180, 140)
+node_connections = [&"output", 0, &"swing_speed", &"swing_seek", 0, &"swing_strength", &"swing_speed", 0, &"swing_seek"]
 
 [node name="Ivy" type="Node3D" node_paths=PackedStringArray("launchPoint")]
 script = ExtResource("1_3x35n")
@@ -76,26 +121,26 @@ script = ExtResource("1_3x35n")
 "Secondary Settings/Final Height" = 3.0
 "Secondary Settings/Distance" = 5.0
 "Secondary Settings/Blend" = 0.0
-Length = 5
+length = 5
 maxRotation = 5.0
 isSwingingForward = true
-root = NodePath("LinkRoot")
+root = NodePath("IvyLink")
 ivyScene = ExtResource("2_17bjr")
+animator = NodePath("AnimationTree")
 middleHeight = 1.0
 distance = 2.0
+allowJumpDashing = true
 launchDirection = 2
-sfxPlayer = NodePath("")
-voiceKey = &""
 launchPoint = NodePath("Lockon")
 
 [node name="IvyBase" parent="." instance=ExtResource("1_mnuw2")]
 
-[node name="LinkRoot" parent="." instance=ExtResource("2_17bjr")]
+[node name="IvyLink" parent="." instance=ExtResource("2_17bjr")]
 
 [node name="Lockon" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.5, 0)
-collision_layer = 8
-collision_mask = 4
+collision_layer = 12
+collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Lockon"]
 shape = SubResource("CapsuleShape3D_bxmnq")
@@ -104,3 +149,14 @@ shape = SubResource("CapsuleShape3D_bxmnq")
 libraries = {
 "": SubResource("AnimationLibrary_nd8xj")
 }
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
+tree_root = SubResource("AnimationNodeBlendTree_ja5gt")
+anim_player = NodePath("../AnimationPlayer")
+parameters/swing_seek/seek_request = -1.0
+parameters/swing_speed/scale = 1.0
+parameters/swing_strength/blend_position = 0.0
+
+[connection signal="area_entered" from="Lockon" to="." method="OnEntered"]
+[connection signal="area_exited" from="Lockon" to="." method="OnExited"]
