@@ -23,10 +23,10 @@ public partial class Ivy : Launcher
 	[Export(PropertyHint.Range, "0,45,1")]
 	private float maxRotation;
 	[Export(PropertyHint.Range, "-1,1")]
-	private float LaunchRatio
+	public float LaunchRatio
 	{
 		get => launchRatio;
-		set => SetRotation(value);
+		private set => SetRotation(value);
 	}
 	[Export]
 	private bool isSwingingForward;
@@ -60,20 +60,22 @@ public partial class Ivy : Launcher
 		if (Engine.IsEditorHint())
 			return;
 
-		//_animator = GetNode<AnimationMixer>(animator);
-		//_animator.Active = true;
+		_animator = GetNode<AnimationMixer>(animator);
+		_animator.Active = true;
 	}
 
-	/// <summary> Sets the Ivy's state based on the player. </summary>
-	public void ProcessIvy()
+	protected override void LaunchAnimation()
 	{
-
+		Player.Effect.StartSpinFX();
+		Player.Animator.StartSpin(3.0f);
 	}
 
 	public void OnEntered(Area3D a)
 	{
 		if (!a.IsInGroup("player detection") || Engine.IsEditorHint())
 			return;
+
+		Player.StartIvy(this);
 	}
 
 	public void OnExited(Area3D a)

@@ -236,6 +236,6 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	private StringName voiceKey;
 	/// <summary> Optional launch point override node. </summary>
 	[Export]
-	public Node3D launchPoint;
-	private Node3D LaunchPoint => launchPoint ?? this;
+	protected Node3D launchPoint;
+	public Node3D LaunchPoint => launchPoint ?? this;
 }

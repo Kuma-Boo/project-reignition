@@ -115,6 +115,7 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName BalanceState = "balance";
 	private readonly StringName SidleState = "sidle";
 	private readonly StringName SpinState = "spin";
+	private readonly StringName GimmickState = "gimmick";
 
 	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
 
@@ -796,6 +797,33 @@ public partial class PlayerAnimator : Node3D
 	}
 
 	public void SetSpinSpeed(float speed = 1.0f) => animationTree.Set(SpinSpeed, speed);
+	#endregion
+
+	#region Gimmicks
+	private readonly StringName GimmickTransition = "parameters/gimmick_tree/Transition/transition_request";
+
+	private readonly StringName IvyState = "ivy";
+	private readonly StringName IvyBlend = "parameters/gimmick_tree/ivy_blend/blend_position";
+	private readonly StringName IvyStartTrigger = "parameters/gimmick_tree/ivy_start_trigger/request";
+	private readonly StringName IvySwingTrigger = "parameters/gimmick_tree/ivy_swing_trigger/request";
+	private readonly StringName IvyStartActive = "parameters/gimmick_tree/ivy_start_trigger/active";
+	private readonly StringName IvySwingActive = "parameters/gimmick_tree/ivy_swing_trigger/active";
+
+	public bool IsIvyStartActive => (bool)animationTree.Get(IvyStartActive);
+	public bool IsIvySwingActive => (bool)animationTree.Get(IvySwingActive);
+
+	public void StartIvy()
+	{
+		SetStateXfade(.2f);
+		animationTree.Set(StateTransition, GimmickState);
+		animationTree.Set(GimmickTransition, IvyState);
+		animationTree.Set(IvyStartTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	public void StartIvySwing() => animationTree.Set(IvySwingTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+
+	public void SetIvyBlend(float ratio) => animationTree.Set(IvyBlend, ratio);
+
 	#endregion
 
 	// Shaders

@@ -710,6 +710,14 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(driftState);
 	}
 
+	[Export]
+	private IvyState ivyState;
+	public void StartIvy(Ivy trigger)
+	{
+		ivyState.Trigger = trigger;
+		StateMachine.ChangeState(ivyState);
+	}
+
 	[Signal]
 	public delegate void KnockbackEventHandler();
 	[Export]
