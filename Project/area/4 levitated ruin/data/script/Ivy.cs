@@ -68,7 +68,7 @@ public partial class Ivy : Launcher
 		_animator.Active = true;
 
 		// Adjust swing speed based on length (longer ivys swing slower)
-		float swingSpeed = Mathf.Clamp(10f / length, 0.5f, 1.5f);
+		float swingSpeed = Mathf.Clamp(8f / length, 0.5f, 1f);
 		_animator.Set(SwingSpeedParameter, swingSpeed);
 	}
 

@@ -1,7 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://01vxs3in41h"]
+[gd_scene load_steps=3 format=3 uid="uid://01vxs3in41h"]
 
 [ext_resource type="PackedScene" uid="uid://b7y46mjl7k5uv" path="res://area/4 levitated ruin/object/model/special/Zipline.gltf" id="1_qwps4"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_d5xjm"]
 
 [node name="Zipline" type="Node3D"]
 
 [node name="Zipline" parent="." instance=ExtResource("1_qwps4")]
+
+[node name="Lockon" type="Area3D" parent="Zipline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.1, 0)
+collision_layer = 12
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Zipline/Lockon"]
+shape = SubResource("SphereShape3D_d5xjm")
