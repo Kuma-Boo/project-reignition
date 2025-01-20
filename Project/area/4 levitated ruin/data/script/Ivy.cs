@@ -7,7 +7,7 @@ namespace Project.Gameplay.Objects;
 public partial class Ivy : Launcher
 {
 	[Export]
-	public bool RegenerateIvy
+	public bool Regenerate
 	{
 		get => false;
 		set
@@ -17,30 +17,28 @@ public partial class Ivy : Launcher
 		}
 	}
 
-	[Export(PropertyHint.Range, "2, 20")]
-	public int length;
-
+	[ExportGroup("Settings")]
+	[Export(PropertyHint.Range, "2, 20")] public int length;
 	[Export(PropertyHint.Range, "0,45,1")]
 	private float maxRotation;
+
+	[Export] public bool IsSleeping { get; private set; } = true;
 	[Export(PropertyHint.Range, "-1,1")]
 	public float LaunchRatio
 	{
 		get => launchRatio;
-		private set => SetRotation(value);
+		private set => launchRatio = value;
 	}
-	[Export]
-	public bool IsSwingingForward { get; private set; }
 
-	[Export]
-	private PackedScene ivyScene;
+	[Export] public bool IsSwingingForward { get; private set; }
+
+	[ExportGroup("Components")]
+	[Export] private PackedScene ivyScene;
 	private Node3D linkRoot;
 	private Array<Node3D> ivyLinks = [];
-
 	[Export(PropertyHint.NodePathValidTypes, "AnimationMixer")]
 	private NodePath animator;
 	private AnimationMixer _animator;
-
-	public bool IsSleeping { get; private set; }
 
 	public override float GetLaunchRatio()
 	{
@@ -74,7 +72,12 @@ public partial class Ivy : Launcher
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (Engine.IsEditorHint() || IsSleeping)
+		if (IsSleeping)
+			return;
+
+		SetRotation();
+
+		if (Engine.IsEditorHint())
 			return;
 
 		UpdateSwing();
@@ -137,15 +140,15 @@ public partial class Ivy : Launcher
 	}
 
 	#region Setup
-	public void SetRotation(float ratio)
+	public void SetRotation()
 	{
-		launchRatio = ratio;
 		float rotation = maxRotation * launchRatio;
 
 		for (int i = 0; i < ivyLinks.Count; i++)
 			ivyLinks[i].RotationDegrees = Vector3.Left * rotation;
 
-		UpdateAreaPosition();
+		if (Engine.IsEditorHint())
+			UpdateAreaPosition();
 	}
 
 	/// <summary> Moves the area trigger to the last link's position. </summary>
