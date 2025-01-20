@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=16 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
@@ -14,6 +14,13 @@
 [ext_resource type="Resource" uid="uid://b3h54r5awfek0" path="res://area/4 levitated ruin/act 1/camera/main/Rukh2PreviewCam.tres" id="11_kaap7"]
 [ext_resource type="PackedScene" uid="uid://ci8d3jdqrc0nr" path="res://area/4 levitated ruin/object/special/Ivy.tscn" id="13_xqwht"]
 [ext_resource type="PackedScene" uid="uid://01vxs3in41h" path="res://area/4 levitated ruin/object/special/Zipline.tscn" id="14_ym4ng"]
+
+[sub_resource type="Curve3D" id="Curve3D_xwhik"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8.5, 97),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
 
 [node name="Stage" type="Node"]
 
@@ -115,8 +122,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 65)
 "Secondary Settings/Middle Height" = 2.0
 "Secondary Settings/Final Height" = 1.0
 
-[node name="Zipline" parent="MainAct/Rukh4" instance=ExtResource("14_ym4ng")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 85.5)
+[node name="Path3D" type="Path3D" parent="MainAct/Rukh4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.75, 85.5)
+curve = SubResource("Curve3D_xwhik")
+
+[node name="Zipline" parent="MainAct/Rukh4/Path3D" instance=ExtResource("14_ym4ng")]
 
 [connection signal="Activated" from="MainAct/Rukh1/JumpPanel" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Rukh1/JumpPanel" to="Static/Collision/OneWayWall" method="Activate"]

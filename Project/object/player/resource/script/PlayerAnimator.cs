@@ -824,6 +824,16 @@ public partial class PlayerAnimator : Node3D
 
 	public void SetIvyBlend(float ratio) => animationTree.Set(IvyBlend, ratio);
 
+	private readonly StringName ZiplineState = "zipline";
+	private readonly StringName ZiplineBlend = "parameters/gimmick_tree/zipline_blend/blend_position";
+	public void StartZipline()
+	{
+		SetStateXfade(.2f);
+		animationTree.Set(StateTransition, GimmickState);
+		animationTree.Set(GimmickTransition, ZiplineState);
+	}
+	public void SetZiplineBlend(float ratio) => animationTree.Set(ZiplineBlend, ratio);
+	public float GetZiplineBlend() => (float)animationTree.Get(ZiplineBlend);
 	#endregion
 
 	// Shaders

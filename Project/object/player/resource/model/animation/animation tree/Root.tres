@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=274 format=3 uid="uid://biwe75w273iq7"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=278 format=3 uid="uid://biwe75w273iq7"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_hf2vv"]
 
@@ -581,8 +581,26 @@ animation = &"GimmickLibrary/ivy-swing"
 fadein_time = 0.1
 fadeout_time = 0.2
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_og5x5"]
+animation = &"GimmickLibrary/zipline"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rai7b"]
+animation = &"GimmickLibrary/zipline-left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fomxy"]
+animation = &"GimmickLibrary/zipline-right"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_himq6"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_og5x5")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_rai7b")
+blend_point_1/pos = -1.0
+blend_point_2/node = SubResource("AnimationNodeAnimation_fomxy")
+blend_point_2/pos = 1.0
+sync = true
+
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ip0io"]
-graph_offset = Vector2(-979.104, -23.6283)
+graph_offset = Vector2(-715.111, 3.58194)
 nodes/Transition/node = SubResource("AnimationNodeTransition_yoke2")
 nodes/Transition/position = Vector2(200, 140)
 nodes/ivy_blend/node = SubResource("AnimationNodeBlendSpace1D_a0iqa")
@@ -596,7 +614,9 @@ nodes/ivy_swing_animation/position = Vector2(-680, 140)
 nodes/ivy_swing_trigger/node = SubResource("AnimationNodeOneShot_1gyrh")
 nodes/ivy_swing_trigger/position = Vector2(-400, 0)
 nodes/output/position = Vector2(400, 140)
-node_connections = [&"Transition", 0, &"ivy_start_trigger", &"ivy_start_trigger", 0, &"ivy_swing_trigger", &"ivy_start_trigger", 1, &"ivy_start_animation", &"ivy_swing_trigger", 0, &"ivy_blend", &"ivy_swing_trigger", 1, &"ivy_swing_animation", &"output", 0, &"Transition"]
+nodes/zipline_blend/node = SubResource("AnimationNodeBlendSpace1D_himq6")
+nodes/zipline_blend/position = Vector2(-400, 320)
+node_connections = [&"Transition", 0, &"ivy_start_trigger", &"Transition", 1, &"zipline_blend", &"ivy_start_trigger", 0, &"ivy_swing_trigger", &"ivy_start_trigger", 1, &"ivy_start_animation", &"ivy_swing_trigger", 0, &"ivy_blend", &"ivy_swing_trigger", 1, &"ivy_swing_animation", &"output", 0, &"Transition"]
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_yjaps"]
 xfade_time = 0.1
@@ -1105,7 +1125,7 @@ input_4/reset = true
 animation = &"EventLibrary/so_a1_sandfall_event"
 
 [sub_resource type="AnimationNodeBlendTree" id="132"]
-graph_offset = Vector2(-913.738, 187.137)
+graph_offset = Vector2(-1091.22, 222.579)
 nodes/completion_crouch_anim/node = SubResource("AnimationNodeAnimation_y04wd")
 nodes/completion_crouch_anim/position = Vector2(-620, 280)
 nodes/completion_standing_anim/node = SubResource("AnimationNodeAnimation_c8ug4")
@@ -1364,7 +1384,7 @@ input_5/auto_advance = false
 input_5/reset = true
 
 [resource]
-graph_offset = Vector2(-1401.5, 211.091)
+graph_offset = Vector2(-1123.79, 149.209)
 nodes/air_tree/node = SubResource("AnimationNodeBlendTree_2rvqt")
 nodes/air_tree/position = Vector2(-1120, 112)
 nodes/balance_tree/node = SubResource("AnimationNodeBlendTree_gi378")

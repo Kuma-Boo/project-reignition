@@ -719,6 +719,14 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(ivyState);
 	}
 
+	[Export]
+	private ZiplineState ziplineState;
+	public void StartZipline(Zipline trigger)
+	{
+		ziplineState.Trigger = trigger;
+		StateMachine.ChangeState(ziplineState);
+	}
+
 	[Signal]
 	public delegate void KnockbackEventHandler();
 	[Export]
