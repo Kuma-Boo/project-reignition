@@ -29,22 +29,25 @@ public partial class Ivy : Launcher
 		private set => SetRotation(value);
 	}
 	[Export]
-	private bool isSwingingForward;
+	public bool IsSwingingForward { get; private set; }
 
 	[Export]
-	private NodePath root;
-	private Node3D _root;
-	[Export]
 	private PackedScene ivyScene;
+	private Node3D linkRoot;
 	private Array<Node3D> ivyLinks = [];
 
 	[Export(PropertyHint.NodePathValidTypes, "AnimationMixer")]
 	private NodePath animator;
 	private AnimationMixer _animator;
 
+	public bool IsSleeping { get; private set; }
+
 	public override float GetLaunchRatio()
 	{
-		if (isSwingingForward)
+		if (IsSleeping)
+			return 0;
+
+		if (IsSwingingForward)
 			return Mathf.Clamp(LaunchRatio + 1, 0f, 1f);
 
 		if (LaunchRatio <= 0)
@@ -60,8 +63,22 @@ public partial class Ivy : Launcher
 		if (Engine.IsEditorHint())
 			return;
 
+		IsSleeping = true;
 		_animator = GetNode<AnimationMixer>(animator);
 		_animator.Active = true;
+
+		// Adjust swing speed based on length (longer ivys swing slower)
+		float swingSpeed = Mathf.Clamp(10f / length, 0.5f, 1.5f);
+		_animator.Set(SwingSpeedParameter, swingSpeed);
+	}
+
+	public override void _PhysicsProcess(double _)
+	{
+		if (Engine.IsEditorHint() || IsSleeping)
+			return;
+
+		UpdateSwing();
+		CallDeferred(MethodName.UpdateAreaPosition);
 	}
 
 	protected override void LaunchAnimation()
@@ -84,13 +101,42 @@ public partial class Ivy : Launcher
 			return;
 	}
 
-	public void SetLength(int newLength)
+	public float TargetSwingStrength { get; private set; }
+	private float currentSwingStrength;
+	private float swingStrengthVelocity;
+	private readonly float SwingStrengthSmoothing = 0.3f;
+	/// <summary> Adds some force from the player. </summary>
+	public void AddForce(float amount)
 	{
-		length = newLength;
-		GD.Print("Setting Length");
-		Initialize();
+		TargetSwingStrength = Mathf.Clamp(TargetSwingStrength + amount, 0f, 1f);
+
+		if (IsSleeping && !Mathf.IsZeroApprox(TargetSwingStrength))
+		{
+			GD.Print("Seek from Zero");
+			_animator.Set(SwingSeekParameter, 0f);
+			IsSleeping = false;
+		}
+
+		_animator.Set(SwingStrengthParameter, currentSwingStrength);
 	}
 
+	private readonly StringName SwingSeekParameter = "parameters/swing_seek/seek_request";
+	private readonly StringName SwingSpeedParameter = "parameters/swing_speed/scale";
+	private readonly StringName SwingStrengthParameter = "parameters/swing_strength/blend_position";
+	private void UpdateSwing()
+	{
+		currentSwingStrength = ExtensionMethods.SmoothDamp(currentSwingStrength, TargetSwingStrength, ref swingStrengthVelocity, SwingStrengthSmoothing);
+
+		if (TargetSwingStrength <= currentSwingStrength && currentSwingStrength < 0.01f)
+		{
+			IsSleeping = true;
+			currentSwingStrength = 0;
+		}
+
+		_animator.Set(SwingStrengthParameter, currentSwingStrength);
+	}
+
+	#region Setup
 	public void SetRotation(float ratio)
 	{
 		launchRatio = ratio;
@@ -105,24 +151,17 @@ public partial class Ivy : Launcher
 	/// <summary> Moves the area trigger to the last link's position. </summary>
 	private void UpdateAreaPosition()
 	{
-		launchPoint.GlobalPosition = ivyLinks[ivyLinks.Count - 1].GlobalPosition;
+		launchPoint.GlobalTransform = ivyLinks[ivyLinks.Count - 1].GlobalTransform;
 		launchPoint.GlobalPosition -= ivyLinks[ivyLinks.Count - 1].Up() * .5f;
 	}
 
 	private void Initialize()
 	{
-		GD.Print("Initializing");
-		_root = GetNodeOrNull<Node3D>(root);
-
-		if (_root == null || launchPoint == null)
+		if (launchPoint == null)
 		{
-			GD.PrintT(GetNodeOrNull<Node3D>(root), _root, launchPoint);
-			GD.PushError("Ivy references not found. (Check Launch Point).");
+			GD.PushError("Ivy launch Point could not be found.");
 			return;
 		}
-
-		if (ivyLinks.Count == 0)
-			ivyLinks.Add(_root);
 
 		// Resize ivy to the proper length
 		UpdateIvyLength();
@@ -140,7 +179,17 @@ public partial class Ivy : Launcher
 		}
 
 		if (ivyScene == null)
+		{
+			GD.PushError("Ivy Scene could not be found.");
 			return;
+		}
+
+		if (ivyLinks.Count == 0)
+		{
+			linkRoot = ivyScene.Instantiate<Node3D>();
+			AddChild(linkRoot);
+			ivyLinks.Add(linkRoot);
+		}
 
 		// Add ivy individually as needed
 		while (ivyLinks.Count < length)
@@ -151,4 +200,5 @@ public partial class Ivy : Launcher
 			ivyLinks.Add(linkNode);
 		}
 	}
+	#endregion
 }

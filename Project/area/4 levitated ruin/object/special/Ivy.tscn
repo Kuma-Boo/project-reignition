@@ -24,20 +24,20 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:isSwingingForward")
+tracks/1/path = NodePath(".:IsSwingingForward")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_1vwer"]
 resource_name = "swing_disabled"
 length = 1.00001
-step = 0.0333333
+step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -54,7 +54,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_tu0fs"]
 resource_name = "swing_enabled"
 loop_mode = 1
-step = 0.0333333
+step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -62,7 +62,7 @@ tracks/0/path = NodePath(".:LaunchRatio")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.266667, 0.5, 0.733333, 1),
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1),
 "transitions": PackedFloat32Array(0.5, 2, 0.5, 2, 1),
 "update": 0,
 "values": [0.0, 1.0, 0.0, -1.0, 0.0]
@@ -70,14 +70,31 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:isSwingingForward")
+tracks/1/path = NodePath(".:IsSwingingForward")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.266667, 0.733333),
+"times": PackedFloat32Array(0, 0.25, 0.75),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [true, false, true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.25, 0.75),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [-0.05],
+"method": &"AddForce"
+}, {
+"args": [-0.05],
+"method": &"AddForce"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nd8xj"]
@@ -106,6 +123,7 @@ min_space = 0.0
 sync = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ja5gt"]
+graph_offset = Vector2(-615.07, 105.718)
 nodes/swing_seek/node = SubResource("AnimationNodeTimeSeek_qcxkj")
 nodes/swing_seek/position = Vector2(0, 140)
 nodes/swing_speed/node = SubResource("AnimationNodeTimeScale_tis47")
@@ -123,18 +141,16 @@ script = ExtResource("1_3x35n")
 "Secondary Settings/Blend" = 0.0
 length = 5
 maxRotation = 5.0
-isSwingingForward = true
-root = NodePath("IvyLink")
 ivyScene = ExtResource("2_17bjr")
 animator = NodePath("AnimationTree")
-middleHeight = 2.0
+finalHeight = 2.0
 allowJumpDashing = true
 launchDirection = 2
+sfxPlayer = NodePath("")
+voiceKey = &""
 launchPoint = NodePath("Lockon")
 
 [node name="IvyBase" parent="." instance=ExtResource("1_mnuw2")]
-
-[node name="IvyLink" parent="." instance=ExtResource("2_17bjr")]
 
 [node name="Lockon" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.5, 0)
@@ -145,12 +161,14 @@ collision_mask = 2
 shape = SubResource("CapsuleShape3D_bxmnq")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+callback_mode_process = 0
 libraries = {
 "": SubResource("AnimationLibrary_nd8xj")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 active = false
+callback_mode_process = 0
 tree_root = SubResource("AnimationNodeBlendTree_ja5gt")
 anim_player = NodePath("../AnimationPlayer")
 parameters/swing_seek/seek_request = -1.0
