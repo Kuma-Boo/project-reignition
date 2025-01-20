@@ -12,7 +12,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:SwingRatio")
+tracks/0/path = NodePath(".:LaunchRatio")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -20,6 +20,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:isSwingingForward")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_tu0fs"]
@@ -29,7 +41,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:SwingRatio")
+tracks/0/path = NodePath(".:LaunchRatio")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -37,6 +49,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(0.5, 2, 0.5, 2, 1),
 "update": 0,
 "values": [0.0, 1.0, 0.0, -1.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:isSwingingForward")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nd8xj"]
@@ -48,12 +72,13 @@ _data = {
 [node name="Ivy" type="Node3D" node_paths=PackedStringArray("launchPoint")]
 script = ExtResource("1_3x35n")
 "Secondary Settings/Enabled" = true
-"Secondary Settings/Middle Height" = 0.0
-"Secondary Settings/Final Height" = 5.0
-"Secondary Settings/Distance" = 10.0
-"Secondary Settings/Blend" = 1.0
+"Secondary Settings/Middle Height" = 4.0
+"Secondary Settings/Final Height" = 3.0
+"Secondary Settings/Distance" = 5.0
+"Secondary Settings/Blend" = 0.0
 Length = 5
-maxRotation = 15.0
+maxRotation = 5.0
+isSwingingForward = true
 root = NodePath("LinkRoot")
 ivyScene = ExtResource("2_17bjr")
 middleHeight = 1.0
@@ -66,10 +91,9 @@ launchPoint = NodePath("Lockon")
 [node name="IvyBase" parent="." instance=ExtResource("1_mnuw2")]
 
 [node name="LinkRoot" parent="." instance=ExtResource("2_17bjr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
 
 [node name="Lockon" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.5, 0)
 collision_layer = 8
 collision_mask = 4
 

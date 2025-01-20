@@ -17,12 +17,13 @@ public partial class Ivy : Launcher
 	[Export(PropertyHint.Range, "0,45,1")]
 	private float maxRotation;
 	[Export(PropertyHint.Range, "-1,1")]
-	private float SwingRatio
+	private float LaunchRatio
 	{
-		get => swingRatio;
+		get => launchRatio;
 		set => SetRotation(value);
 	}
-	private float swingRatio;
+	[Export]
+	private bool isSwingingForward;
 
 	[Export]
 	private NodePath root;
@@ -30,6 +31,17 @@ public partial class Ivy : Launcher
 	[Export]
 	private PackedScene ivyScene;
 	private Array<Node3D> ivyLinks = [];
+
+	public override float GetLaunchRatio()
+	{
+		if (isSwingingForward)
+			return Mathf.Clamp(LaunchRatio + 1, 0f, 1f);
+
+		if (LaunchRatio <= 0)
+			return 0;
+
+		return LaunchRatio;
+	}
 
 	public override void _Ready()
 	{
@@ -44,11 +56,20 @@ public partial class Ivy : Launcher
 
 	public void SetRotation(float ratio)
 	{
-		swingRatio = ratio;
-		float rotation = maxRotation * swingRatio;
+		launchRatio = ratio;
+		float rotation = maxRotation * launchRatio;
 
 		for (int i = 0; i < ivyLinks.Count; i++)
 			ivyLinks[i].RotationDegrees = Vector3.Left * rotation;
+
+		UpdateAreaPosition();
+	}
+
+	/// <summary> Moves the area trigger to the last link's position. </summary>
+	private void UpdateAreaPosition()
+	{
+		launchPoint.GlobalPosition = ivyLinks[ivyLinks.Count - 1].GlobalPosition;
+		launchPoint.GlobalPosition -= ivyLinks[ivyLinks.Count - 1].Up() * .5f;
 	}
 
 	private void Initialize()
@@ -64,18 +85,9 @@ public partial class Ivy : Launcher
 		if (ivyLinks.Count == 0)
 			ivyLinks.Add(_root);
 
-		launchPoint.GetParent().RemoveChild(launchPoint);
-
 		// Resize ivy to the proper length
 		UpdateIvyLength();
-
-		// Parent trigger to the last link
-		ivyLinks[ivyLinks.Count - 1].AddChild(launchPoint);
-		launchPoint.Transform = new()
-		{
-			Origin = Vector3.Down * .5f,
-			Basis = Basis.Identity,
-		};
+		UpdateAreaPosition();
 	}
 
 	private void UpdateIvyLength()
