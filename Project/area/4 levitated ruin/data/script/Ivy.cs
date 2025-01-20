@@ -22,7 +22,7 @@ public partial class Ivy : Launcher
 	[Export(PropertyHint.Range, "0,45,1")]
 	private float maxRotation;
 
-	[Export] public bool IsSleeping { get; private set; } = true;
+	[Export] public bool IsSleeping { get; private set; }
 	[Export(PropertyHint.Range, "-1,1")]
 	public float LaunchRatio
 	{
@@ -115,7 +115,6 @@ public partial class Ivy : Launcher
 
 		if (IsSleeping && !Mathf.IsZeroApprox(TargetSwingStrength))
 		{
-			GD.Print("Seek from Zero");
 			_animator.Set(SwingSeekParameter, 0f);
 			IsSleeping = false;
 		}
@@ -147,8 +146,7 @@ public partial class Ivy : Launcher
 		for (int i = 0; i < ivyLinks.Count; i++)
 			ivyLinks[i].RotationDegrees = Vector3.Left * rotation;
 
-		if (Engine.IsEditorHint())
-			UpdateAreaPosition();
+		UpdateAreaPosition();
 	}
 
 	/// <summary> Moves the area trigger to the last link's position. </summary>
