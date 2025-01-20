@@ -50,8 +50,9 @@ public partial class Zipline : PathFollow3D
 
 		if (isOverRotated && isFalling) // Force player back to normal rotation
 		{
-			isFullSwingActive = false;
-			targetRotation = currentRotation - (Mathf.Sign(clampedRotation) * NormalRotationLimit);
+			float leadBlend = (Mathf.Abs(clampedRotation) - NormalRotationLimit) / (Mathf.Pi - NormalRotationLimit);
+			float leadAmount = Mathf.Lerp(Mathf.Pi * .9f, NormalRotationLimit, leadBlend);
+			targetRotation = currentRotation - (Mathf.Sign(clampedRotation) * leadAmount);
 			return;
 		}
 
@@ -60,21 +61,30 @@ public partial class Zipline : PathFollow3D
 			if (isOverRotated) // Force player to make it around
 			{
 				targetRotation = currentRotation + (Mathf.Sign(inputValue) * NormalRotationLimit);
+				rotationSmoothing = SlowRotationSmoothing;
 				return;
 			}
 
 			if (!isFalling)
 			{
 				targetRotation = Mathf.Sign(inputValue) * Mathf.Pi;
+				rotationSmoothing = FastRotationSmoothing;
 				return;
 			}
 		}
 
-		if (isOverRotated)
+		if (isOverRotated) // Abitrary logic to deal with direction changes
+		{
+			float inputInfluence = 1f - ((Mathf.Abs(clampedRotation) - NormalRotationLimit) / (Mathf.Pi - NormalRotationLimit));
+			inputInfluence *= 3f * Mathf.Sign(rotationVelocity);
+			inputInfluence += inputValue;
+			targetRotation = currentRotation + (inputInfluence * NormalRotationLimit);
 			rotationSmoothing = SlowRotationSmoothing;
-		else
-			rotationSmoothing = Mathf.Lerp(SlowRotationSmoothing, FastRotationSmoothing, Mathf.Abs(inputValue));
+			return;
+		}
+
 		targetRotation = inputValue * NormalRotationLimit;
+		rotationSmoothing = Mathf.Lerp(SlowRotationSmoothing, FastRotationSmoothing, Mathf.Abs(inputValue));
 	}
 
 	private void CheckFullSwing(float clampedRotation)
@@ -90,10 +100,10 @@ public partial class Zipline : PathFollow3D
 			return;
 		}
 
-		if (isSignAligned || isHoldingDirection)
+		if (isSignAligned || !isHoldingDirection)
 			return;
 
-		if (Mathf.Abs(clampedRotation) < NormalRotationLimit * .5f) // Full Swing must start from near the normal rotation limit
+		if (Mathf.Abs(clampedRotation) < NormalRotationLimit * .6f) // Full Swing must start from near the normal rotation limit
 			return;
 
 		isFullSwingActive = true;

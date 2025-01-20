@@ -8,7 +8,7 @@ public partial class ZiplineState : PlayerState
 	public Zipline Trigger { get; set; }
 
 	private float animationVelocity;
-	private readonly float AnimationSmoothing = 1.5f;
+	private readonly float AnimationSmoothing = 2f;
 
 	public override void EnterState()
 	{
