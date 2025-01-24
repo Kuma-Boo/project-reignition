@@ -47,7 +47,7 @@ public partial class GargoyleSkyroad : PathFollow3D
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (activeRoad == null)
+		if (currentPathIndex >= paths.Length)
 			return;
 
 		// Smoothly move the local position to the correct distance
@@ -56,8 +56,6 @@ public partial class GargoyleSkyroad : PathFollow3D
 		// Move gargoyle along the path
 		float movementDelta = BaseMovementSpeed * PhysicsManager.physicsDelta;
 		Progress += movementDelta;
-		if (Mathf.IsEqualApprox(ProgressRatio, 1.0f))
-			IncrementPathIndex();
 
 		// Ensure we're a set distance away from the player
 		float playerProgress = CurrentPath.Curve.GetClosestOffset(Player.PathFollower.GlobalPosition - CurrentPath.GlobalPosition);
@@ -66,6 +64,8 @@ public partial class GargoyleSkyroad : PathFollow3D
 			Progress = playerProgress + MinDistanceToPlayer;
 
 		activeRoad.SetPathRatio((traveledDistance + Progress) / totalDistance); // Update visuals
+		if (Mathf.IsEqualApprox(ProgressRatio, 1.0f))
+			IncrementPathIndex();
 	}
 
 	public void IncrementPathIndex()
@@ -102,8 +102,9 @@ public partial class GargoyleSkyroad : PathFollow3D
 		Vector3 offset = root.GlobalPosition;
 		GetParent().RemoveChild(this);
 		CurrentPath.AddChild(this);
-		Progress = 0;
 		root.GlobalPosition = offset;
+
+		Progress = 0;
 	}
 
 	private void PlayEntryAnimation()
@@ -116,7 +117,6 @@ public partial class GargoyleSkyroad : PathFollow3D
 	private void PlayExitAnimation()
 	{
 		// TODO play proper leaving FX
-		activeRoad = null;
 		Visible = false;
 		ProcessMode = ProcessModeEnum.Disabled;
 	}
