@@ -14,11 +14,11 @@ void fragment()
 {
 	float distance_fade = clamp(smoothstep(distance_fade_min, distance_fade_max, length(VERTEX)), 0.0, 1.0);
 	float distant_transparency = clamp(smoothstep(100.0, 50.0, length(VERTEX)), 0.0, 1.0);
-	distant_transparency = mix(abs(mod(UV2.y, 0.2) - 0.1), 1.0, distant_transparency);
+	distant_transparency = mix(abs(mod(UV.y, 0.2) - 0.1), 1.0, distant_transparency);
 	
 	ALBEDO = COLOR.rgb * glow_intensity * distant_transparency * COLOR.a;
 	
-	float scroll_amount = (path_ratio * path_length) - UV2.x;
+	float scroll_amount = (path_ratio * path_length) - UV.x;
 	float smoothing = mix(end_smoothness, 2.0, path_ratio);
 	ALPHA *= clamp(scroll_amount * smoothing, 0.0, 1.0) * distance_fade;
 }

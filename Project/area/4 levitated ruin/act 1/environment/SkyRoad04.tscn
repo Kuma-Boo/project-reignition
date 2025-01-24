@@ -1,16 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://dfd751gvwsy8u"]
+[gd_scene load_steps=3 format=3 uid="uid://dfd751gvwsy8u"]
 
 [ext_resource type="PackedScene" uid="uid://dkjo16ychoy0d" path="res://area/4 levitated ruin/act 1/environment/model/SkyRoad04.gltf" id="1_rbvus"]
 [ext_resource type="Script" path="res://area/4 levitated ruin/data/script/SkyRoad.cs" id="2_jhni7"]
-[ext_resource type="Curve3D" uid="uid://cue6aytdoptm2" path="res://area/4 levitated ruin/act 1/environment/path/SkyRoadPath4.tres" id="3_m5uuw"]
 
-[node name="SkyRoad04" node_paths=PackedStringArray("mesh", "path") instance=ExtResource("1_rbvus")]
+[node name="SkyRoad04" node_paths=PackedStringArray("mesh") instance=ExtResource("1_rbvus")]
 script = ExtResource("2_jhni7")
 mesh = NodePath("SkyRoad04")
-path = NodePath("SkyRoad4")
+totalPathLength = 742.0
+
+[node name="SkyRoad04" parent="." index="0"]
+instance_shader_parameters/path_length = 742.0
 
 [node name="StaticBody3D" parent="SkyRoad04" index="0" groups=["floor"]]
-
-[node name="SkyRoad4" type="Path3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 650, -90, -1308)
-curve = ExtResource("3_m5uuw")
