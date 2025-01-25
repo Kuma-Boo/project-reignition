@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=3 uid="uid://bm61nw4o1jcrb"]
+[gd_scene load_steps=72 format=3 uid="uid://bm61nw4o1jcrb"]
 
 [ext_resource type="PackedScene" uid="uid://c1htg25bw2rso" path="res://area/4 levitated ruin/act 1/environment/Rukh1.tscn" id="1_3akmk"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_sruem"]
@@ -82,8 +82,6 @@ size = Vector3(10, 20, 11)
 [sub_resource type="BoxShape3D" id="BoxShape3D_crwnd"]
 size = Vector3(10, 20, 120)
 
-[sub_resource type="SphereMesh" id="SphereMesh_p0hu2"]
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_nc0m7"]
 size = Vector3(5, 20, 5)
 
@@ -144,6 +142,24 @@ transform = Transform3D(0.488445, 0.190032, 0.851651, 0.24321, 0.907673, -0.3420
 "Exit Mode" = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingTriggers/L4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="L6" parent="Visuals/CullingTriggers" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(0.164516, -0.9362, -0.310588, 0.747653, 0.323744, -0.579832, 0.643389, -0.13682, 0.753213, 668.154, -47.3536, -1179.28)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingTriggers/L6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="L5" parent="Visuals/CullingTriggers" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 252.936, -7.2, -1074.86)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingTriggers/L5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
@@ -272,6 +288,16 @@ OneShot = true
 "Enter Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/Rukh4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="Rukh6" parent="Triggers/Object" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 647.6, -95.5, -1267.2)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/Rukh6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
@@ -499,14 +525,6 @@ curve = ExtResource("48_2u5hj")
 [node name="SkyRoad6" type="Path3D" parent="Paths/SkyroadPaths"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 329.189, -6.837, -1074.54)
 curve = ExtResource("49_frbc6")
-
-[node name="PathFollow3D" type="PathFollow3D" parent="Paths/SkyroadPaths/SkyRoad6"]
-transform = Transform3D(0.274488, 0, 0.9616, 0, 0.999989, 0, -0.96158, 0, 0.274494, -9.79303, 0, -1.96518)
-progress = 10.0
-loop = false
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Paths/SkyroadPaths/SkyRoad6/PathFollow3D"]
-mesh = SubResource("SphereMesh_p0hu2")
 
 [node name="SkyRoad" type="Node3D" parent="."]
 
@@ -757,7 +775,6 @@ transform = Transform3D(-0.0520222, 0, -0.998646, 0, 1, 0, 0.998646, 0, -0.05202
 "Enter Mode" = 0
 
 [node name="LoopPath" type="Node3D" parent="SkyRoad/SkyRoad05/LoopPathTrigger" node_paths=PackedStringArray("path")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("21_22ibx")
 path = NodePath("../../../../Paths/SkyroadPaths/SkyRoadLoopAutomationPath")
 
@@ -774,7 +791,6 @@ transform = Transform3D(-0.138862, 0, -0.990312, 0, 1, 0, 0.990312, 0, -0.138862
 "Enter Mode" = 0
 
 [node name="Path" type="Node3D" parent="SkyRoad/SkyRoad05/EndRoadTrigger" node_paths=PackedStringArray("path")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("21_22ibx")
 path = NodePath("../../../../Paths/SkyroadPaths/SkyRoad6")
 
@@ -826,11 +842,17 @@ environment = SubResource("Environment_5x5bb")
 [connection signal="Deactivated" from="Visuals/CullingTriggers/L3" to="Visuals/Rukh3" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingTriggers/L4" to="Visuals/Rukh4" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingTriggers/L4" to="Visuals/Rukh4Event" method="Deactivate"]
-[connection signal="Deactivated" from="Visuals/CullingTriggers/L4" to="Visuals/Rukh4" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingTriggers/L6" to="Visuals/Rukh6" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingTriggers/L6" to="Visuals/Rukh6Event" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingTriggers/L5" to="Visuals/Rukh5" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingTriggers/L5" to="Visuals/Rukh5LOD" method="Deactivate"]
 [connection signal="Activated" from="Triggers/Object/Rukh2" to="Visuals/Rukh2Event" method="Activate"]
 [connection signal="JumpFinished" from="Triggers/Object/Rukh3Jump/Jump" to="Collision/OneWayWall" method="Activate"]
 [connection signal="JumpFinished" from="Triggers/Object/Rukh3Jump/Jump" to="Triggers/Object/Rukh3Jump/Jump/Camera" method="Activate"]
+[connection signal="Activated" from="Triggers/Object/Rukh4" to="Visuals/Rukh3" method="Deactivate"]
+[connection signal="Activated" from="Triggers/Object/Rukh4" to="Visuals/Rukh3LOD" method="Activate"]
 [connection signal="Activated" from="Triggers/Object/Rukh4" to="Visuals/Rukh4Event" method="Activate"]
+[connection signal="Activated" from="Triggers/Object/Rukh6" to="Visuals/Rukh6Event" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/GargoyleTrigger" to="SkyRoad/SkyRoad01/Gargoyle" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/Lockout" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/Lockout" to="SkyRoad/SkyroadLockout" method="Activate"]
