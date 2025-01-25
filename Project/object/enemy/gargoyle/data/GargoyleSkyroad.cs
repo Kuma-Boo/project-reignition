@@ -58,10 +58,13 @@ public partial class GargoyleSkyroad : PathFollow3D
 		Progress += movementDelta;
 
 		// Ensure we're a set distance away from the player
-		float playerProgress = CurrentPath.Curve.GetClosestOffset(Player.PathFollower.GlobalPosition - CurrentPath.GlobalPosition);
-		float delta = Progress - playerProgress;
-		if (delta < MinDistanceToPlayer && !Mathf.IsZeroApprox(playerProgress))
-			Progress = playerProgress + MinDistanceToPlayer;
+		if (Player.PathFollower.ActivePath == CurrentPath)
+		{
+			float playerProgress = Player.PathFollower.Progress;
+			float delta = Progress - Player.PathFollower.Progress;
+			if (delta < MinDistanceToPlayer)
+				Progress = playerProgress + MinDistanceToPlayer;
+		}
 
 		activeRoad.SetPathRatio((traveledDistance + Progress) / totalDistance); // Update visuals
 		if (Mathf.IsEqualApprox(ProgressRatio, 1.0f))
@@ -102,9 +105,8 @@ public partial class GargoyleSkyroad : PathFollow3D
 		Vector3 offset = root.GlobalPosition;
 		GetParent().RemoveChild(this);
 		CurrentPath.AddChild(this);
-		root.GlobalPosition = offset;
-
 		Progress = 0;
+		root.GlobalPosition = offset;
 	}
 
 	private void PlayEntryAnimation()
