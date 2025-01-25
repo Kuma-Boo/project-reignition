@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://bt32kmhyoo7ec"]
+[gd_scene load_steps=49 format=3 uid="uid://bt32kmhyoo7ec"]
 
 [ext_resource type="Script" path="res://interface/menu/skill select/script/SkillSelect.cs" id="1_v1nov"]
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="2_ww16u"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="5_q6eds"]
 [ext_resource type="LabelSettings" uid="uid://bx53haw8tuhx" path="res://interface/font/SkillSelectFont.tres" id="6_4a5gt"]
 [ext_resource type="AudioStream" uid="uid://bc6pmkxr1e25r" path="res://sound/sfx/system/skill equip.wav" id="7_5j0l1"]
+[ext_resource type="LabelSettings" uid="uid://dki35mj1oux2s" path="res://interface/font/DescriptionText.tres" id="7_b8vu0"]
 [ext_resource type="AudioStream" uid="uid://fjiifn0tycil" path="res://sound/sfx/system/skill ring save.wav" id="7_n4imj"]
 [ext_resource type="AudioStream" uid="uid://dmf8plsfsakc6" path="res://sound/sfx/system/skill unequip.wav" id="8_rnu1p"]
 [ext_resource type="AudioStream" uid="uid://huxte6rhwx58" path="res://sound/sfx/system/menu selection.wav" id="9_1265f"]
@@ -1585,7 +1586,7 @@ _data = {
 "unequip": SubResource("Animation_tf8ok")
 }
 
-[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "description", "scrollbar", "skillPointFill", "levelLabel", "skillPointLabel", "alertAnimator", "alertLabel", "animator")]
+[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "description", "scrollbar", "skillPointFill", "levelLabel", "skillPointLabel", "alertAnimator", "alertLabel", "sortTypeLabel", "animator")]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 15
@@ -1604,6 +1605,7 @@ levelLabel = NodePath("Content/Header/LevelLabel")
 skillPointLabel = NodePath("Content/Header/SPValue")
 alertAnimator = NodePath("AlertMenu/AnimationPlayer")
 alertLabel = NodePath("AlertMenu/Menu/Parent/Text/Label")
+sortTypeLabel = NodePath("Content/HBoxContainer/SortingMethodLabel")
 submenus = Array[NodePath]([NodePath("")])
 animator = NodePath("AnimationPlayer")
 metadata/_edit_lock_ = true
@@ -1633,7 +1635,6 @@ modulate = Color(1, 1, 1, 0)
 position = Vector2(640, 480)
 
 [node name="Header" type="Sprite2D" parent="Content/Window"]
-modulate = Color(1, 1, 1, 0)
 position = Vector2(0, -304)
 scale = Vector2(2.4, 2.25)
 texture = ExtResource("4_x4q03")
@@ -1641,7 +1642,6 @@ region_enabled = true
 region_rect = Rect2(0, 232, 512, 40)
 
 [node name="Body" type="Sprite2D" parent="Content/Window"]
-modulate = Color(1, 1, 1, 0)
 scale = Vector2(2.4, 2.25)
 texture = ExtResource("4_x4q03")
 region_enabled = true
@@ -1784,6 +1784,30 @@ offset_bottom = 883.0
 grow_horizontal = 2
 theme_override_constants/separation = -1
 
+[node name="HBoxContainer" type="HBoxContainer" parent="Content"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.316
+anchor_top = 0.118
+anchor_right = 0.937
+anchor_bottom = 0.17
+offset_left = 0.519989
+offset_top = -0.44001
+offset_right = 0.639893
+offset_bottom = 0.399994
+
+[node name="SortingLabel" type="Label" parent="Content/HBoxContainer"]
+layout_mode = 2
+text = "sys_sortby:"
+label_settings = ExtResource("7_b8vu0")
+vertical_alignment = 1
+
+[node name="SortingMethodLabel" type="Label" parent="Content/HBoxContainer"]
+layout_mode = 2
+text = "sys_sort_default"
+label_settings = ExtResource("7_b8vu0")
+vertical_alignment = 1
+
 [node name="NavigationButtons" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
@@ -1795,6 +1819,11 @@ offset_right = -380.0
 offset_bottom = -256.0
 theme_override_constants/separation = 64
 alignment = 2
+
+[node name="Sort" parent="NavigationButtons" instance=ExtResource("9_kp51v")]
+layout_mode = 2
+ActionKey = &"sys_sort"
+inputKey = &"button_speedbreak"
 
 [node name="Presets" parent="NavigationButtons" instance=ExtResource("9_kp51v")]
 layout_mode = 2
