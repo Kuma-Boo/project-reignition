@@ -9,8 +9,8 @@ uniform sampler2D center_gradient : hint_default_white;
 
 const float distance_fade_min = 0.1;
 const float distance_fade_max = 1.0;
-const float start_smoothing = 5.0;
-const float end_smoothing = 0.05;
+const float start_smoothing = 10.0;
+const float end_smoothing = 5.0;
 
 void fragment()
 {
@@ -22,6 +22,7 @@ void fragment()
 	ALBEDO = COLOR.rgb * glow_intensity * distant_transparency * detail * COLOR.a;
 	
 	float scroll_amount = (path_ratio * path_length) - UV.x;
-	float start_blend = clamp((UV.x / path_length) * start_smoothing, 0.0, 1.0);
-	ALPHA *= clamp(scroll_amount * end_smoothing * start_blend, 0.0, 1.0) * distance_fade;
+	scroll_amount = clamp(scroll_amount / end_smoothing, 0.0, glow_intensity);
+	float start_blend = clamp(UV.x / start_smoothing, 0.0, 1.0);
+	ALPHA *= scroll_amount * start_blend * distance_fade;
 }
