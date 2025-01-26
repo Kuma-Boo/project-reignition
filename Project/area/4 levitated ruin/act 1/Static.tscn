@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://bm61nw4o1jcrb"]
+[gd_scene load_steps=74 format=3 uid="uid://bm61nw4o1jcrb"]
 
 [ext_resource type="PackedScene" uid="uid://c1htg25bw2rso" path="res://area/4 levitated ruin/act 1/environment/Rukh1.tscn" id="1_3akmk"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_sruem"]
@@ -45,6 +45,7 @@
 [ext_resource type="Curve3D" uid="uid://bjdcg8aicc5fw" path="res://area/4 levitated ruin/act 1/environment/path/TowerTopPath.tres" id="31_qnjdi"]
 [ext_resource type="PackedScene" uid="uid://dfd751gvwsy8u" path="res://area/4 levitated ruin/act 1/environment/SkyRoad04.tscn" id="32_g1mpj"]
 [ext_resource type="Resource" uid="uid://nslpxyd4ubxt" path="res://area/4 levitated ruin/act 1/camera/SkyroadCam.tres" id="33_7xq47"]
+[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="34_8riae"]
 [ext_resource type="PackedScene" uid="uid://cwmjxd611bhbi" path="res://area/4 levitated ruin/act 1/environment/collision/Collision.tscn" id="36_2mkr5"]
 [ext_resource type="PackedScene" uid="uid://dtf23iudr7saa" path="res://object/enemy/gargoyle/GargoyleSkyroad.tscn" id="41_qtcx1"]
 [ext_resource type="Curve3D" uid="uid://dpji70opk0job" path="res://area/4 levitated ruin/act 1/environment/path/SkyRoadPath1.tres" id="43_7e6ce"]
@@ -81,6 +82,10 @@ size = Vector3(10, 20, 11)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_crwnd"]
 size = Vector3(10, 20, 120)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xf1wr"]
+height = 7.0
+radius = 10.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nc0m7"]
 size = Vector3(5, 20, 5)
@@ -184,6 +189,7 @@ visible = false
 [node name="Rukh4" parent="Visuals" instance=ExtResource("8_2woxs")]
 
 [node name="Rukh4Event" parent="Visuals" instance=ExtResource("9_d5ubt")]
+visible = false
 
 [node name="Rukh4LOD" parent="Visuals" instance=ExtResource("10_6ogvt")]
 visible = false
@@ -458,6 +464,62 @@ settings = ExtResource("33_7xq47")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
+[node name="TowerCamera1" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -22, -1375)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/TowerCamera1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("25_0q5pg")
+settings = ExtResource("34_8riae")
+followObject = NodePath(".")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/TowerCamera1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("CylinderShape3D_xf1wr")
+
+[node name="TowerCamera2" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -14, -1375)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/TowerCamera2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("25_0q5pg")
+settings = ExtResource("34_8riae")
+followObject = NodePath(".")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/TowerCamera2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("CylinderShape3D_xf1wr")
+
+[node name="TowerCamera3" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -6, -1375)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/TowerCamera3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("25_0q5pg")
+settings = ExtResource("34_8riae")
+followObject = NodePath(".")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/TowerCamera3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("CylinderShape3D_xf1wr")
+
+[node name="TowerCamera4" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 2, -1375)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/TowerCamera4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("25_0q5pg")
+settings = ExtResource("34_8riae")
+followObject = NodePath(".")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/TowerCamera4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("CylinderShape3D_xf1wr")
+
 [node name="Paths" type="Node3D" parent="."]
 
 [node name="Rukh1" type="Path3D" parent="Paths"]
@@ -507,7 +569,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 10, -1540)
 curve = ExtResource("44_n0see")
 
 [node name="SkyRoad3" type="Path3D" parent="Paths/SkyroadPaths"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30, -1415)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30.2, -1415)
 curve = ExtResource("45_5wfls")
 
 [node name="SkyRoad4" type="Path3D" parent="Paths/SkyroadPaths"]
@@ -657,9 +719,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30, -1425)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
-[node name="Gargoyle" parent="SkyRoad/SkyRoad03" node_paths=PackedStringArray("activeRoad", "paths") instance=ExtResource("41_qtcx1")]
+[node name="Gargoyle" parent="SkyRoad/SkyRoad03" node_paths=PackedStringArray("paths") instance=ExtResource("41_qtcx1")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 238.236, -27.0001, -1423.85)
-activeRoad = NodePath("..")
 paths = [NodePath("../../../Paths/SkyroadPaths/SkyRoad3")]
 
 [node name="Lockout" parent="SkyRoad/SkyRoad03" instance=ExtResource("19_fp3yh")]
@@ -847,35 +908,35 @@ environment = SubResource("Environment_5x5bb")
 [connection signal="Activated" from="Visuals/CullingTriggers/L5" to="Visuals/Rukh5" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingTriggers/L5" to="Visuals/Rukh5LOD" method="Deactivate"]
 [connection signal="Activated" from="Triggers/Object/Rukh2" to="Visuals/Rukh2Event" method="Activate"]
-[connection signal="JumpFinished" from="Triggers/Object/Rukh3Jump/Jump" to="Collision/OneWayWall" method="Activate"]
 [connection signal="JumpFinished" from="Triggers/Object/Rukh3Jump/Jump" to="Triggers/Object/Rukh3Jump/Jump/Camera" method="Activate"]
+[connection signal="JumpFinished" from="Triggers/Object/Rukh3Jump/Jump" to="Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="Triggers/Object/Rukh4" to="Visuals/Rukh3" method="Deactivate"]
 [connection signal="Activated" from="Triggers/Object/Rukh4" to="Visuals/Rukh3LOD" method="Activate"]
 [connection signal="Activated" from="Triggers/Object/Rukh4" to="Visuals/Rukh4Event" method="Activate"]
 [connection signal="Activated" from="Triggers/Object/Rukh6" to="Visuals/Rukh6Event" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/GargoyleTrigger" to="SkyRoad/SkyRoad01/Gargoyle" method="Activate"]
-[connection signal="Activated" from="SkyRoad/SkyRoad01/Lockout" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/Lockout" to="SkyRoad/SkyroadLockout" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad01/Lockout" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/Rukh4Jump" to="Visuals/Rukh4Event" method="Activate"]
-[connection signal="JumpFinished" from="SkyRoad/SkyRoad01/Rukh4Jump/Jump" to="Collision/OneWayWall" method="Activate"]
 [connection signal="JumpFinished" from="SkyRoad/SkyRoad01/Rukh4Jump/Jump" to="SkyRoad/SkyroadLockout" method="Deactivate"]
+[connection signal="JumpFinished" from="SkyRoad/SkyRoad01/Rukh4Jump/Jump" to="Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad02/GargoyleTrigger" to="SkyRoad/SkyRoad02/Gargoyle" method="Activate"]
-[connection signal="Activated" from="SkyRoad/SkyRoad02/Lockout" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad02/Lockout" to="SkyRoad/SkyroadLockout" method="Activate"]
-[connection signal="Activated" from="SkyRoad/SkyRoad02/LockoutEnd" to="Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/Lockout" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad02/LockoutEnd" to="SkyRoad/SkyroadLockout" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/LockoutEnd" to="Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad03/GargoyleTrigger" to="SkyRoad/SkyRoad03/Gargoyle" method="Activate"]
-[connection signal="Activated" from="SkyRoad/SkyRoad03/Lockout" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad03/Lockout" to="SkyRoad/SkyroadLockout" method="Activate"]
-[connection signal="Activated" from="SkyRoad/SkyRoad03/LockoutEnd" to="Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad03/Lockout" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad03/LockoutEnd" to="SkyRoad/SkyroadLockout" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad03/LockoutEnd" to="Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad04/GargoyleTrigger" to="SkyRoad/SkyRoad04/Gargoyle" method="Activate"]
 [connection signal="JumpFinished" from="SkyRoad/SkyRoad04/JumpTrigger/Jump" to="SkyRoad/SkyroadLockout" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad05/GargoyleTrigger" to="SkyRoad/SkyRoad05/Gargoyle" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad05/LockoutTrigger" to="SkyRoad/SkyRoad05/LockoutTrigger/AutomationTrigger" method="AttemptAutomation" flags=3]
 [connection signal="Activated" from="SkyRoad/SkyRoad05/LoopPathTrigger" to="SkyRoad/SkyRoad05/LoopPathTrigger/AutomationTrigger" method="AttemptAutomation" flags=3]
 [connection signal="Activated" from="SkyRoad/SkyRoad05/EndRoadTrigger" to="SkyRoad/SkyRoad05/EndRoadTrigger/AutomationTrigger" method="AttemptAutomation" flags=3]
-[connection signal="JumpFinished" from="SkyRoad/SkyRoad05/Rukh5Jump/Jump" to="Collision/OneWayWall" method="Activate"]
 [connection signal="JumpFinished" from="SkyRoad/SkyRoad05/Rukh5Jump/Jump" to="SkyRoad/SkyroadLockout" method="Deactivate"]
+[connection signal="JumpFinished" from="SkyRoad/SkyRoad05/Rukh5Jump/Jump" to="Collision/OneWayWall" method="Activate"]
 
 [editable path="Collision"]

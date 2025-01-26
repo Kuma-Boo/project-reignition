@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://bxvbg3oku2gpf"]
+
+[ext_resource type="PackedScene" uid="uid://bfyvb1e3nfkat" path="res://area/4 levitated ruin/object/model/obstacle/Gate.gltf" id="1_deajx"]
+[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="2_yqnff"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_i6ja8"]
+size = Vector3(6, 3, 0.5)
+
+[node name="Gate" node_paths=PackedStringArray("animator") instance=ExtResource("1_deajx")]
+script = ExtResource("2_yqnff")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("AnimationPlayer")
+
+[node name="Skeleton3D" parent="GateRoot" index="0"]
+bones/0/rotation = Quaternion(-0.707107, 2.66924e-08, 2.66924e-08, 0.707107)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="2" groups=["crusher", "wall"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+shape = SubResource("BoxShape3D_i6ja8")
