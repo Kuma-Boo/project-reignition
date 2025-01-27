@@ -277,7 +277,7 @@ public partial class PlayerController : CharacterBody3D
 		if (wallDelta >= Mathf.Pi * .8f) // Process head-on collision
 		{
 			// Cancel speed break
-			if (Skills.IsSpeedBreakActive)
+			if (Skills.IsSpeedBreakActive && !WallRaycastHit.collidedObject.IsInGroup("level wall"))
 			{
 				float pathDelta = ExtensionMethods.DeltaAngleRad(PathFollower.BackAngle, ExtensionMethods.CalculateForwardAngle(WallRaycastHit.normal));
 				if (pathDelta >= Mathf.Pi * .25f) // Snap to path direction
