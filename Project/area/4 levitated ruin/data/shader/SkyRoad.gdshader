@@ -4,7 +4,7 @@ render_mode blend_add, unshaded, specular_disabled, cull_disabled;
 instance uniform float path_ratio : hint_range(0.0, 1.0) = 1.0;
 instance uniform float path_length = 1000.0;
 
-uniform float glow_intensity = 5.0;
+uniform float glow_intensity = 3.0;
 uniform sampler2D center_gradient : hint_default_white;
 
 const float distance_fade_min = 0.1;
