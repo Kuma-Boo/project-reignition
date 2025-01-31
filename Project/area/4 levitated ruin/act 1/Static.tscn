@@ -238,6 +238,7 @@ light_energy = 2.5
 light_cull_mask = 4293918785
 
 [node name="Triggers" type="Node3D" parent="."]
+visible = false
 
 [node name="Object" type="Node3D" parent="Triggers"]
 
@@ -1077,6 +1078,46 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 657, -90, -1319)
 activeRoad = NodePath("..")
 paths = [NodePath("../../../Paths/SkyroadPaths/SkyRoad4")]
 
+[node name="GroundLockout" parent="SkyRoad/SkyRoad04" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(0.931275, 0.354022, -0.0859983, -0.337478, 0.927213, 0.162431, 0.137243, -0.122245, 0.982965, 635.011, -83.0836, -1205.7)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad04/GroundLockout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="NormalLockout" parent="SkyRoad/SkyRoad04" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(-0.0871558, 0, -0.996195, 0, 1, 0, 0.996195, 0, -0.0871558, 650.011, -31.6836, -1199.7)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad04/NormalLockout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="GroundLockout2" parent="SkyRoad/SkyRoad04" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(0.0871558, 0, -0.996195, 0, 1, 0, 0.996195, 0, 0.0871558, 551.421, -23.2836, -1176.47)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad04/GroundLockout2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="NormalLockout2" parent="SkyRoad/SkyRoad04" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 555.531, 1.51636, -1157.06)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad04/NormalLockout2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="GroundLockout3" parent="SkyRoad/SkyRoad04" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(0.992899, -0.0682319, 0.0974452, 7.45058e-09, 0.819152, 0.573576, -0.118959, -0.569504, 0.813335, 558.776, 24.1164, -1108.46)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad04/GroundLockout3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_gwjfc")
+
 [node name="AutomationTrigger1" parent="SkyRoad/SkyRoad04" instance=ExtResource("46_x224c")]
 transform = Transform3D(1, -4.37114e-08, -1.42109e-14, 4.37114e-08, 1, 4.37114e-08, 1.06581e-14, -4.37114e-08, 1, 549.955, 33.6335, -1067.48)
 endPoint = 900.0
@@ -1233,6 +1274,16 @@ environment = SubResource("Environment_5x5bb")
 [connection signal="Activated" from="SkyRoad/SkyRoad03/LockoutEnd" to="SkyRoad/SkyroadLockout" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad04/GargoyleTrigger" to="SkyRoad/SkyRoad04/Gargoyle" method="Activate"]
 [connection signal="JumpFinished" from="SkyRoad/SkyRoad04/JumpTrigger/Jump" to="SkyRoad/SkyroadLockout" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad04/GroundLockout" to="SkyRoad/SkyroadLockout" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad04/GroundLockout" to="SkyRoad/SkyroadGroundLockout" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad04/NormalLockout" to="SkyRoad/SkyroadLockout" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad04/NormalLockout" to="SkyRoad/SkyroadGroundLockout" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad04/GroundLockout2" to="SkyRoad/SkyroadLockout" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad04/GroundLockout2" to="SkyRoad/SkyroadGroundLockout" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad04/NormalLockout2" to="SkyRoad/SkyroadLockout" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad04/NormalLockout2" to="SkyRoad/SkyroadGroundLockout" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad04/GroundLockout3" to="SkyRoad/SkyroadLockout" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad04/GroundLockout3" to="SkyRoad/SkyroadGroundLockout" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad04/AutomationTrigger1" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="SkyRoad/SkyRoad04/AutomationTrigger1" to="Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad05/GargoyleTrigger" to="SkyRoad/SkyRoad05/Gargoyle" method="Activate"]
