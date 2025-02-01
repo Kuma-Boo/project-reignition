@@ -5,13 +5,15 @@ namespace Project.Gameplay;
 
 public partial class Zipline : PathFollow3D
 {
-	[Export]
-	public Node3D Root { get; set; }
-	[Export]
-	public Node3D FollowObject { get; set; }
+	[Signal]
+	public delegate void ActivatedEventHandler();
 
-	[Export]
-	private float ziplineSpeed = 10.0f;
+	[Export] public Node3D Root { get; set; }
+	[Export] public Node3D FollowObject { get; set; }
+
+	[Export] private float ziplineSpeed = 10.0f;
+
+	private float startingProgress;
 
 	private bool isFullSwingActive;
 
@@ -25,6 +27,19 @@ public partial class Zipline : PathFollow3D
 
 	private float inputValue;
 	public void SetInput(float input) => inputValue = input;
+
+	public override void _Ready()
+	{
+		StageSettings.Instance.ConnectRespawnSignal(this);
+		startingProgress = Progress;
+	}
+
+	public void Respawn()
+	{
+		Progress = startingProgress;
+		Root.Rotation = Vector3.Zero;
+		currentRotation = targetRotation = 0;
+	}
 
 	public void ProcessZipline()
 	{
@@ -115,6 +130,7 @@ public partial class Zipline : PathFollow3D
 			return;
 
 		StageSettings.Player.StartZipline(this);
+		EmitSignal(SignalName.Activated);
 	}
 
 	public void OnExited(Area3D a)
