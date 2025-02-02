@@ -267,7 +267,7 @@ public partial class PlayerController : CharacterBody3D
 		WallRaycastHit = this.CastRay(CollisionPosition, castDirection * castLength, CollisionMask, false, GetCollisionExceptions());
 		DebugManager.DrawRay(CollisionPosition, castDirection * castLength, WallRaycastHit ? Colors.Red : Colors.White);
 
-		if (!ValidateWallCast())
+		if (!ValidateWallCast(WallRaycastHit))
 		{
 			WallRaycastHit = new();
 			return;
@@ -301,7 +301,13 @@ public partial class PlayerController : CharacterBody3D
 			return;
 		}
 
-		if (Controller.IsStrafeModeActive || IsMovingBackward || !IsOnGround)
+		if (Controller.IsStrafeModeActive)
+		{
+			CheckStrafeWall();
+			return;
+		}
+
+		if (IsMovingBackward || !IsOnGround)
 			return;
 
 		// Reduce MoveSpeed when running against walls
@@ -310,7 +316,21 @@ public partial class PlayerController : CharacterBody3D
 			MoveSpeed *= speedClamp;
 	}
 
-	private bool ValidateWallCast() => WallRaycastHit && WallRaycastHit.collidedObject.IsInGroup("wall");
+	/// <summary> Checks Sonic's side, then realigns to PathFollower if necessary. </summary>
+	private void CheckStrafeWall()
+	{
+		float angle = ExtensionMethods.SignedDeltaAngleRad(PathFollower.ForwardAngle, MovementAngle);
+		Vector3 castDirection = PathFollower.SideAxis * Mathf.Sign(angle);
+		float castLength = CollisionSize.X + CollisionPadding + (Mathf.Sin(Mathf.Abs(angle)) * Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta); ;
+
+		RaycastHit wallHit = this.CastRay(CollisionPosition, castDirection * castLength, CollisionMask, false, GetCollisionExceptions());
+		DebugManager.DrawRay(CollisionPosition, castDirection * castLength, wallHit ? Colors.Red : Colors.White);
+
+		if (ValidateWallCast(wallHit))
+			MovementAngle = PathFollower.ForwardAngle;
+	}
+
+	private bool ValidateWallCast(RaycastHit hit) => hit && hit.collidedObject.IsInGroup("wall");
 
 	/// <summary> Checks for ceilings and crushers. </summary>
 	public bool CheckCeiling()
