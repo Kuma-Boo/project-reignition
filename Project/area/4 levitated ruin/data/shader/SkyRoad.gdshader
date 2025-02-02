@@ -7,8 +7,8 @@ instance uniform float path_length = 1000.0;
 uniform float glow_intensity = 3.0;
 uniform sampler2D center_gradient : hint_default_white;
 
-const float distance_fade_min = 0.1;
-const float distance_fade_max = 1.0;
+const float distance_fade_min = 0.5;
+const float distance_fade_max = 5.0;
 const float start_smoothing = 10.0;
 const float end_smoothing = 5.0;
 

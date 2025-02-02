@@ -132,8 +132,8 @@ public partial class CameraTrigger : StageTriggerModule
 			return 1f;
 		}
 
-		float playerProgress = Player.PathFollower.Progress;
-		float triggerProgress = Player.PathFollower.GetProgress(GlobalPosition);
+		float playerProgress = Camera.PathFollower.Progress;
+		float triggerProgress = Camera.PathFollower.GetProgress(GlobalPosition);
 		return Mathf.SmoothStep(0f, 1f, Mathf.Clamp((playerProgress - triggerProgress) / distanceBlending, 0f, 1f));
 	}
 }
