@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=27 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://cqb8i042q3bsb" path="res://area/4 levitated ruin/act 1/camera/StartCam.tres" id="3_35kks"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_4rpxf"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="5_2txni"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_yejv7"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="6_s2poe"]
 [ext_resource type="PackedScene" uid="uid://db770ujvjdio4" path="res://object/stage/common/LaunchRingSpike.tscn" id="7_txkek"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="8_xcxgd"]
@@ -24,15 +25,15 @@
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="19_tcciv"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="23_iw0rv"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ypvwq"]
+size = Vector3(10, 20, 2.5)
+
 [sub_resource type="Curve3D" id="Curve3D_xwhik"]
 _data = {
 "points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8.5, 97),
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ypvwq"]
-size = Vector3(10, 10, 2.5)
 
 [node name="Stage" type="Node"]
 
@@ -47,6 +48,17 @@ metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_065fl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 649.9, -102.6, -1474)
+
+[node name="CullingTrigger" type="Node3D" parent="MainAct"]
+
+[node name="Tower" parent="MainAct/CullingTrigger" instance=ExtResource("5_yejv7")]
+transform = Transform3D(-0.258819, 0.25, 0.933013, -7.45058e-09, 0.965926, -0.258819, -0.965926, -0.0669873, -0.25, 241.9, -4.38637, -1069.97)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingTrigger/Tower"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
 
 [node name="Rukh1" type="Node3D" parent="MainAct"]
 script = ExtResource("4_4rpxf")
@@ -273,10 +285,6 @@ finalHeight = 7.5
 distance = 2.5
 voiceKey = &""
 
-[node name="Cam" type="Node3D" parent="MainAct/Tower/Spring5"]
-script = ExtResource("8_xcxgd")
-settings = ExtResource("3_35kks")
-
 [node name="Gate5" parent="MainAct/Tower" instance=ExtResource("16_cr60c")]
 transform = Transform3D(-0.469847, 0, -0.34202, 0, 2.1, 0, 0.17101, 0, -0.939692, 7.74, 37.48, -3)
 
@@ -284,9 +292,11 @@ transform = Transform3D(-0.469847, 0, -0.34202, 0, 2.1, 0, 0.17101, 0, -0.939692
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 48, 16)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Tower/Goal"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 3)
 shape = SubResource("BoxShape3D_ypvwq")
 
+[connection signal="Activated" from="MainAct/CullingTrigger/Tower" to="MainAct/Tower" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingTrigger/Tower" to="MainAct/Tower" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Rukh1/JumpPanel" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Rukh1/JumpPanel" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh1/LaunchRing1" to="MainAct/Rukh1/LaunchRing1/Cam" method="Activate"]
@@ -296,11 +306,13 @@ shape = SubResource("BoxShape3D_ypvwq")
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRingSpike" to="Static/Visuals/Rukh1" method="Deactivate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRingSpike" to="Static/Visuals/Rukh1LOD" method="Activate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRing2" to="MainAct/Rukh1/LaunchRing2/Path" method="Activate"]
+[connection signal="Activated" from="MainAct/Tower/IvyShortcut/Spring1" to="Static/Triggers/Camera/TowerCameras" method="Activate"]
 [connection signal="Activated" from="MainAct/Tower/IvyShortcut/Spring2" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Tower/IvyShortcut/Spring2" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Tower/IvyShortcut/Spring2" to="MainAct/Tower/TriggerData/LoopPath" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Tower/IvyShortcut/Spring2" to="MainAct/Tower/TriggerData/LoopLockout" method="Activate"]
 [connection signal="Activated" from="MainAct/Tower/Spring1" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Tower/Spring1" to="Static/Triggers/Camera/TowerCameras" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Tower/Spring1" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Tower/Spring1" to="MainAct/Tower/TriggerData/LoopPath" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Tower/Spring1" to="MainAct/Tower/TriggerData/LoopLockout" method="Activate"]
@@ -308,4 +320,3 @@ shape = SubResource("BoxShape3D_ypvwq")
 [connection signal="Activated" from="MainAct/Tower/Spring5" to="MainAct/Tower/TriggerData/LoopLockout" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Tower/Spring5" to="MainAct/Tower/TriggerData/TopPath" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Tower/Spring5" to="Static/Collision/OneWayWall" method="Activate"]
-[connection signal="Deactivated" from="MainAct/Tower/Spring5" to="MainAct/Tower/Spring5/Cam" method="Activate"]

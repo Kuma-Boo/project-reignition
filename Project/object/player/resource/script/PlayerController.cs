@@ -677,6 +677,9 @@ public partial class PlayerController : CharacterBody3D
 	public bool IsAutomationActive => automationState.Automation != null;
 	public void StartAutomation(AutomationTrigger automation)
 	{
+		if (IsAutomationActive && automationState.Automation != automation)
+			automationState.ExitState();
+
 		automationState.Automation = automation;
 		StateMachine.ChangeState(automationState);
 	}
@@ -721,6 +724,7 @@ public partial class PlayerController : CharacterBody3D
 
 	[Export]
 	private ZiplineState ziplineState;
+	public bool IsZiplineActive => ziplineState.Trigger != null;
 	public void StartZipline(Zipline trigger)
 	{
 		ziplineState.Trigger = trigger;

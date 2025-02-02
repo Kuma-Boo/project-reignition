@@ -1,4 +1,4 @@
-[gd_scene load_steps=98 format=3 uid="uid://bm61nw4o1jcrb"]
+[gd_scene load_steps=99 format=3 uid="uid://bm61nw4o1jcrb"]
 
 [ext_resource type="PackedScene" uid="uid://c1htg25bw2rso" path="res://area/4 levitated ruin/act 1/environment/Rukh1.tscn" id="1_3akmk"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_sruem"]
@@ -52,6 +52,7 @@
 [ext_resource type="Resource" uid="uid://cstpuwfenywgv" path="res://area/4 levitated ruin/act 1/camera/main/GargoyleFightCam.tres" id="35_e880x"]
 [ext_resource type="PackedScene" uid="uid://cwmjxd611bhbi" path="res://area/4 levitated ruin/act 1/environment/collision/Collision.tscn" id="36_2mkr5"]
 [ext_resource type="Resource" uid="uid://txdw8ov1bs7c" path="res://area/4 levitated ruin/act 1/camera/Skyroad1ChaseCam.tres" id="37_0nipk"]
+[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="38_wn3s6"]
 [ext_resource type="Resource" uid="uid://cqnh1vxcqo8sy" path="res://area/4 levitated ruin/act 1/camera/Rukh4Cam.tres" id="39_poxbl"]
 [ext_resource type="Resource" uid="uid://d4aeyldx2si5r" path="res://area/4 levitated ruin/act 1/camera/main/ZiplineCam.tres" id="39_u2iyf"]
 [ext_resource type="PackedScene" uid="uid://dtf23iudr7saa" path="res://object/enemy/gargoyle/GargoyleSkyroad.tscn" id="41_qtcx1"]
@@ -252,7 +253,6 @@ light_energy = 2.5
 light_cull_mask = 4293918785
 
 [node name="Triggers" type="Node3D" parent="."]
-visible = false
 
 [node name="Object" type="Node3D" parent="Triggers"]
 
@@ -337,7 +337,6 @@ shape = SubResource("BoxShape3D_gwjfc")
 [node name="Environment" type="Node3D" parent="Triggers"]
 
 [node name="Checkpoint" type="Node3D" parent="Triggers"]
-visible = false
 
 [node name="Checkpoint1" parent="Triggers/Checkpoint" instance=ExtResource("19_fp3yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -19, -388)
@@ -621,62 +620,6 @@ settings = ExtResource("39_poxbl")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
-[node name="TowerCamera1" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -22, -1375)
-"Enter Mode" = 0
-
-[node name="Camera" type="Node3D" parent="Triggers/Camera/TowerCamera1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-script = ExtResource("25_0q5pg")
-settings = ExtResource("34_8riae")
-followObject = NodePath(".")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/TowerCamera1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
-shape = SubResource("CylinderShape3D_xf1wr")
-
-[node name="TowerCamera2" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -14, -1375)
-"Enter Mode" = 0
-
-[node name="Camera" type="Node3D" parent="Triggers/Camera/TowerCamera2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-script = ExtResource("25_0q5pg")
-settings = ExtResource("34_8riae")
-followObject = NodePath(".")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/TowerCamera2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
-shape = SubResource("CylinderShape3D_xf1wr")
-
-[node name="TowerCamera3" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -6, -1375)
-"Enter Mode" = 0
-
-[node name="Camera" type="Node3D" parent="Triggers/Camera/TowerCamera3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-script = ExtResource("25_0q5pg")
-settings = ExtResource("34_8riae")
-followObject = NodePath(".")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/TowerCamera3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
-shape = SubResource("CylinderShape3D_xf1wr")
-
-[node name="TowerCamera4" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 2, -1375)
-"Enter Mode" = 0
-
-[node name="Camera" type="Node3D" parent="Triggers/Camera/TowerCamera4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-script = ExtResource("25_0q5pg")
-settings = ExtResource("34_8riae")
-followObject = NodePath(".")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/TowerCamera4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
-shape = SubResource("CylinderShape3D_xf1wr")
-
 [node name="ZiplineCamera" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 650, -104, -1464)
 "Trigger Mode" = 2
@@ -691,6 +634,80 @@ followObject = NodePath(".")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/ZiplineCamera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
+
+[node name="TowerCameras" type="Node3D" parent="Triggers/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -22, -1375)
+script = ExtResource("38_wn3s6")
+saveVisibilityOnCheckpoint = true
+
+[node name="TowerCamera1" parent="Triggers/Camera/TowerCameras" instance=ExtResource("19_fp3yh")]
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/TowerCameras/TowerCamera1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("25_0q5pg")
+settings = ExtResource("34_8riae")
+followObject = NodePath(".")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/TowerCameras/TowerCamera1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("CylinderShape3D_xf1wr")
+
+[node name="TowerCamera2" parent="Triggers/Camera/TowerCameras" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/TowerCameras/TowerCamera2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("25_0q5pg")
+settings = ExtResource("34_8riae")
+followObject = NodePath(".")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/TowerCameras/TowerCamera2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("CylinderShape3D_xf1wr")
+
+[node name="TowerCamera3" parent="Triggers/Camera/TowerCameras" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16, 0)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/TowerCameras/TowerCamera3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("25_0q5pg")
+settings = ExtResource("34_8riae")
+followObject = NodePath(".")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/TowerCameras/TowerCamera3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("CylinderShape3D_xf1wr")
+
+[node name="TowerCamera4" parent="Triggers/Camera/TowerCameras" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 24, 0)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/TowerCameras/TowerCamera4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("25_0q5pg")
+settings = ExtResource("34_8riae")
+followObject = NodePath(".")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/TowerCameras/TowerCamera4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("CylinderShape3D_xf1wr")
+
+[node name="TowerCamera5" parent="Triggers/Camera/TowerCameras" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32, 0)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/TowerCameras/TowerCamera5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("25_0q5pg")
+settings = ExtResource("26_vi4uj")
+followObject = NodePath(".")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/TowerCameras/TowerCamera5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("CylinderShape3D_xf1wr")
 
 [node name="Paths" type="Node3D" parent="."]
 

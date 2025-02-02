@@ -37,7 +37,7 @@ public partial class AutomationTrigger : Area3D
 
 	private void AttemptAutomation()
 	{
-		if (Player.IsAutomationActive || !Player.IsOnGround)
+		if (!Player.IsOnGround)
 			return;
 
 		if (Player.IsCountdown)
