@@ -12,6 +12,7 @@ public partial class Zipline : PathFollow3D
 	[Export] public Node3D FollowObject { get; set; }
 
 	[Export] private float ziplineSpeed = 10.0f;
+	private float currentSpeed;
 
 	private float startingProgress;
 
@@ -32,6 +33,25 @@ public partial class Zipline : PathFollow3D
 	{
 		StageSettings.Instance.ConnectRespawnSignal(this);
 		startingProgress = Progress;
+		ProcessMode = ProcessModeEnum.Disabled;
+	}
+
+	public override void _PhysicsProcess(double _delta)
+	{
+		// Attempts to reset rotation, then disables zipline node
+		if (StageSettings.Player.IsZiplineActive)
+			return;
+
+		currentSpeed = Mathf.Lerp(currentSpeed, 0, .1f);
+		ProcessZipline();
+
+		if (Mathf.Abs(currentRotation) < Mathf.Pi * .01f)
+		{
+			currentSpeed = 0;
+			currentRotation = 0;
+			Root.Rotation = Vector3.Forward * currentRotation;
+			ProcessMode = ProcessModeEnum.Disabled;
+		}
 	}
 
 	public void Respawn()
@@ -39,12 +59,18 @@ public partial class Zipline : PathFollow3D
 		Progress = startingProgress;
 		Root.Rotation = Vector3.Zero;
 		currentRotation = targetRotation = 0;
+		rotationVelocity = rotationSmoothing = 0;
+		isFullSwingActive = false;
 	}
 
 	public void ProcessZipline()
 	{
-		Progress += ziplineSpeed * PhysicsManager.physicsDelta; // Move forward
+		Progress += currentSpeed * PhysicsManager.physicsDelta; // Move forward
+		ProcessRotation();
+	}
 
+	private void ProcessRotation()
+	{
 		// Ensure rotation is between -Mathf.Pi & Mathf.Pi
 		float clampedRotation = ExtensionMethods.ModAngle(currentRotation);
 		if (clampedRotation > Mathf.Pi)
@@ -130,12 +156,10 @@ public partial class Zipline : PathFollow3D
 			return;
 
 		StageSettings.Player.StartZipline(this);
-		EmitSignal(SignalName.Activated);
-	}
 
-	public void OnExited(Area3D a)
-	{
-		if (!a.IsInGroup("player detection"))
-			return;
+		currentSpeed = ziplineSpeed;
+		ProcessMode = ProcessModeEnum.Inherit;
+
+		EmitSignal(SignalName.Activated);
 	}
 }

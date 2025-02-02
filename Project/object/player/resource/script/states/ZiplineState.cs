@@ -20,6 +20,8 @@ public partial class ZiplineState : PlayerState
 	public override void ExitState()
 	{
 		Player.StopExternal();
+		Trigger.SetInput(0);
+		Trigger = null;
 	}
 
 	public override PlayerState ProcessPhysics()
