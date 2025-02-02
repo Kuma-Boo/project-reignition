@@ -258,6 +258,9 @@ public partial class PlayerController : CharacterBody3D
 	/// <summary> Checks for walls forward and backwards (only in the direction the player is moving). </summary>
 	public void CheckWall(Vector3 castDirection = new(), bool reduceSpeedDuringHeadonCollision = true)
 	{
+		if (Controller.IsStrafeModeActive)
+			CheckStrafeWall();
+
 		IsOnWall = false;
 
 		if (castDirection.IsZeroApprox())
@@ -301,13 +304,7 @@ public partial class PlayerController : CharacterBody3D
 			return;
 		}
 
-		if (Controller.IsStrafeModeActive)
-		{
-			CheckStrafeWall();
-			return;
-		}
-
-		if (IsMovingBackward || !IsOnGround)
+		if (Controller.IsStrafeModeActive || IsMovingBackward || !IsOnGround)
 			return;
 
 		// Reduce MoveSpeed when running against walls
@@ -320,7 +317,7 @@ public partial class PlayerController : CharacterBody3D
 	private void CheckStrafeWall()
 	{
 		float angle = ExtensionMethods.SignedDeltaAngleRad(PathFollower.ForwardAngle, MovementAngle);
-		Vector3 castDirection = PathFollower.SideAxis * Mathf.Sign(angle);
+		Vector3 castDirection = Animator.Left() * Mathf.Sign(angle);
 		float castLength = CollisionSize.X + CollisionPadding + (Mathf.Sin(Mathf.Abs(angle)) * Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta); ;
 
 		RaycastHit wallHit = this.CastRay(CollisionPosition, castDirection * castLength, CollisionMask, false, GetCollisionExceptions());
