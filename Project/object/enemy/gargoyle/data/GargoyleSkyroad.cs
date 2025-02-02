@@ -29,13 +29,12 @@ public partial class GargoyleSkyroad : PathFollow3D
 
 	public override void _Ready()
 	{
-		Visible = false;
 		InitializePathLength();
 
 		spawnData = new(GetParent(), Transform);
 		StageSettings.Instance.ConnectRespawnSignal(this);
 
-		ProcessMode = ProcessModeEnum.Disabled;
+		Respawn();
 	}
 
 	public void Respawn()
@@ -43,6 +42,11 @@ public partial class GargoyleSkyroad : PathFollow3D
 		currentPathIndex = 0;
 		velocity = Vector3.Zero;
 		spawnData.Respawn(this);
+
+		activeRoad.SetPathRatio(0.0f);
+
+		Visible = false;
+		ProcessMode = ProcessModeEnum.Disabled;
 	}
 
 	public override void _PhysicsProcess(double _)
