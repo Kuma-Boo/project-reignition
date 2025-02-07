@@ -1,0 +1,156 @@
+[gd_scene load_steps=9 format=3 uid="uid://cfcqcvct272ct"]
+
+[ext_resource type="Script" path="res://area/4 levitated ruin/data/script/FlyingDestructableObject.cs" id="1_2cduu"]
+[ext_resource type="PackedScene" uid="uid://bhqoe78kgcy60" path="res://area/4 levitated ruin/object/model/platform/SquarePillarFly.gltf" id="2_xkydh"]
+[ext_resource type="PackedScene" uid="uid://bhssvno7d30m2" path="res://area/4 levitated ruin/object/model/platform/SquarePillarPieces.gltf" id="4_dsw7f"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x3idx"]
+size = Vector3(1.2, 2.5, 1.2)
+
+[sub_resource type="Animation" id="Animation_3al21"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/SquarePillarFly/SquarePillarFlyMesh/Trigger:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root/SquarePillarFly/SquarePillarFlyMesh:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_fgo1a"]
+resource_name = "fly"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/SquarePillarFly/SquarePillarFlyMesh:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(3.14159, 0, 0), Vector3(6.28319, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_yrfwa"]
+resource_name = "shatter"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/SquarePillarFly/SquarePillarFlyMesh/Trigger:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pmcqp"]
+_data = {
+"RESET": SubResource("Animation_3al21"),
+"fly": SubResource("Animation_fgo1a"),
+"shatter": SubResource("Animation_yrfwa")
+}
+
+[node name="SquarePillarFly" type="Node3D" node_paths=PackedStringArray("rotationRoot", "root", "pieceRoot", "animator")]
+script = ExtResource("1_2cduu")
+rotationRoot = NodePath("Root/SquarePillarFly/SquarePillarFlyMesh")
+pieceMass = 0.5
+damagePlayer = true
+shatterFlags = 16
+root = NodePath("Root")
+pieceRoot = NodePath("SquarePillarPieces")
+animator = NodePath("AnimationPlayer")
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="SquarePillarFly" parent="Root" instance=ExtResource("2_xkydh")]
+
+[node name="SquarePillarFlyMesh" parent="Root/SquarePillarFly" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+
+[node name="Trigger" type="Area3D" parent="Root/SquarePillarFly/SquarePillarFlyMesh" index="0"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/SquarePillarFly/SquarePillarFlyMesh/Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 8.52651e-14)
+shape = SubResource("BoxShape3D_x3idx")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Root/SquarePillarFly/SquarePillarFlyMesh" index="1" groups=["wall"]]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/SquarePillarFly/SquarePillarFlyMesh/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 8.52651e-14)
+shape = SubResource("BoxShape3D_x3idx")
+
+[node name="SquarePillarWallCollision" parent="Root/SquarePillarFly" index="2"]
+visible = false
+
+[node name="StaticBody3D" parent="Root/SquarePillarFly/SquarePillarWallCollision" index="0" groups=["wall"]]
+
+[node name="SquarePillarFloorCollision" parent="Root/SquarePillarFly" index="3"]
+visible = false
+
+[node name="StaticBody3D" parent="Root/SquarePillarFly/SquarePillarFloorCollision" index="0" groups=["floor"]]
+
+[node name="SquarePillarPieces" parent="." instance=ExtResource("4_dsw7f")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_pmcqp")
+}
+
+[connection signal="area_entered" from="Root/SquarePillarFly/SquarePillarFlyMesh/Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/SquarePillarFly/SquarePillarFlyMesh/Trigger" to="." method="OnExited"]
+
+[editable path="Root/SquarePillarFly"]

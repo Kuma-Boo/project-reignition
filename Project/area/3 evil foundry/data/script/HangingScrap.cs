@@ -14,9 +14,9 @@ public partial class HangingScrap : DestructableObject
 	/// <summary> The number of seconds to delay dropping when the player stands on the platform. </summary>
 	private readonly float StandingDelaySeconds = 0.5f;
 
-	public override void _PhysicsProcess(double delta)
+	protected override void ProcessObject()
 	{
-		base._PhysicsProcess(delta);
+		base.ProcessObject();
 		ProcessDrop();
 	}
 

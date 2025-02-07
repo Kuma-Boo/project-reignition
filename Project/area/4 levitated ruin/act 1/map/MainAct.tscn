@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=30 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_yejv7"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="6_s2poe"]
 [ext_resource type="PackedScene" uid="uid://db770ujvjdio4" path="res://object/stage/common/LaunchRingSpike.tscn" id="7_txkek"]
+[ext_resource type="PackedScene" uid="uid://cfcqcvct272ct" path="res://area/4 levitated ruin/object/platform/SquarePillarFly.tscn" id="7_x6tsb"]
+[ext_resource type="PackedScene" uid="uid://x3scwb5r13dw" path="res://area/4 levitated ruin/object/platform/GrindPillarFly.tscn" id="8_6mhfy"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="8_xcxgd"]
 [ext_resource type="Resource" uid="uid://jvsbdfsrni4p" path="res://area/4 levitated ruin/act 1/camera/main/LaunchRing1Cam.tres" id="9_b6tta"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="9_kt1ho"]
@@ -20,6 +22,7 @@
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="16_4h2cm"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="16_8guxi"]
 [ext_resource type="PackedScene" uid="uid://bxvbg3oku2gpf" path="res://area/4 levitated ruin/object/Gate.tscn" id="16_cr60c"]
+[ext_resource type="PackedScene" uid="uid://b6030p0x15kq0" path="res://area/4 levitated ruin/object/platform/GargoyleStatic.tscn" id="16_ff5ry"]
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="18_6xh0d"]
 [ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="18_rpxg1"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="19_tcciv"]
@@ -47,7 +50,6 @@ InitialCameraSettings = ExtResource("3_35kks")
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_065fl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 649.9, -102.6, -1474)
 
 [node name="CullingTrigger" type="Node3D" parent="MainAct"]
 
@@ -64,6 +66,31 @@ shape = SubResource("BoxShape3D_ypvwq")
 script = ExtResource("4_4rpxf")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
+
+[node name="SquarePillarFlyTrigger" parent="MainAct/Rukh1" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -14)
+"Enter Mode" = 0
+
+[node name="SquarePillarFly" parent="MainAct/Rukh1/SquarePillarFlyTrigger" instance=ExtResource("7_x6tsb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.06137, -10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh1/SquarePillarFlyTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+
+[node name="GrindPillarFlyTrigger" parent="MainAct/Rukh1" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -52)
+"Enter Mode" = 0
+
+[node name="GrindPillarFly1" parent="MainAct/Rukh1/GrindPillarFlyTrigger" instance=ExtResource("8_6mhfy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 0.185524, -20)
+
+[node name="GrindPillarFly2" parent="MainAct/Rukh1/GrindPillarFlyTrigger" instance=ExtResource("8_6mhfy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 0.185524, -20)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh1/GrindPillarFlyTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
 
 [node name="JumpPanel" parent="MainAct/Rukh1" instance=ExtResource("5_2txni")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -4.37114e-07, 8.4, -286)
@@ -107,6 +134,9 @@ launchDirection = 2
 [node name="Path" type="Node3D" parent="MainAct/Rukh1/LaunchRing2" node_paths=PackedStringArray("path")]
 script = ExtResource("9_kt1ho")
 path = NodePath("../../../../Static/Paths/Rukh2")
+
+[node name="GargoyleStatic" parent="MainAct/Rukh1" instance=ExtResource("16_ff5ry")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
 [node name="Rukh2" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -20, -380)
@@ -297,6 +327,9 @@ shape = SubResource("BoxShape3D_ypvwq")
 
 [connection signal="Activated" from="MainAct/CullingTrigger/Tower" to="MainAct/Tower" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingTrigger/Tower" to="MainAct/Tower" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Rukh1/SquarePillarFlyTrigger" to="MainAct/Rukh1/SquarePillarFlyTrigger/SquarePillarFly" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh1/GrindPillarFlyTrigger" to="MainAct/Rukh1/GrindPillarFlyTrigger/GrindPillarFly1" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh1/GrindPillarFlyTrigger" to="MainAct/Rukh1/GrindPillarFlyTrigger/GrindPillarFly2" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh1/JumpPanel" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Rukh1/JumpPanel" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh1/LaunchRing1" to="MainAct/Rukh1/LaunchRing1/Cam" method="Activate"]

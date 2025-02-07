@@ -32,14 +32,6 @@ public partial class DestructableObject : Node3D
 	/// <summary> Don't automatically respawn this object. Call Respawn() manually instead. </summary>
 	private bool disableRespawn;
 
-	[Export]
-	/// <summary> Unshattered model. </summary>
-	private Node3D root;
-	[Export]
-	/// <summary> Parent node of all the pieces. </summary>
-	private Node3D pieceRoot;
-	[Export]
-	protected AnimationPlayer animator;
 	[Export(PropertyHint.Flags, "PlayerCollision,ObjectCollision,AttackSkill,JumpDash,SpeedBreak")]
 	private int shatterFlags;
 	private enum ShatterFlags
@@ -63,6 +55,11 @@ public partial class DestructableObject : Node3D
 	protected bool isShattered;
 	protected bool isInteractingWithPlayer;
 
+	/// <summary> Unshattered model. </summary>
+	[Export] protected Node3D root;
+	/// <summary> Parent node of all the pieces. </summary>
+	[Export] protected Node3D pieceRoot;
+	[Export] protected AnimationPlayer animator;
 	private readonly List<Piece> pieces = [];
 	private class Piece
 	{
@@ -73,8 +70,13 @@ public partial class DestructableObject : Node3D
 		public Vector3 position; // Local transform to spawn with
 	}
 
-	public override void _Ready()
+	public override void _Ready() => SetUp();
+
+	public override void _PhysicsProcess(double _) => ProcessObject();
+
+	protected virtual void SetUp()
 	{
+
 		for (int i = 0; i < pieceRoot.GetChildCount(); i++)
 		{
 			RigidBody3D rigidbody = pieceRoot.GetChildOrNull<RigidBody3D>(i);
@@ -110,10 +112,9 @@ public partial class DestructableObject : Node3D
 		StageSettings.Instance.ConnectUnloadSignal(this);
 	}
 
-	public override void _PhysicsProcess(double _)
+	protected virtual void ProcessObject()
 	{
 		if (!isInteractingWithPlayer) return;
-
 		ProcessPlayerCollision();
 	}
 
