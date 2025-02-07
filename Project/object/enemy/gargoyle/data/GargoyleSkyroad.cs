@@ -98,9 +98,10 @@ public partial class GargoyleSkyroad : PathFollow3D
 
 	public void Activate()
 	{
-		if (!Visible)
-			PlayEntryAnimation();
+		if (Visible)
+			return;
 
+		PlayEntryAnimation();
 		ReparentToPath();
 	}
 
