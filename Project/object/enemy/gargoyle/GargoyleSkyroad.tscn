@@ -1,29 +1,35 @@
 [gd_scene load_steps=3 format=3 uid="uid://dtf23iudr7saa"]
 
 [ext_resource type="Script" path="res://object/enemy/gargoyle/data/GargoyleSkyroad.cs" id="1_b2tip"]
-[ext_resource type="PackedScene" uid="uid://b4n1751vh5d4s" path="res://object/enemy/gargoyle/data/model/Gargoyle.gltf" id="1_rymmj"]
+[ext_resource type="PackedScene" uid="uid://brhbgxve4dsf1" path="res://object/enemy/gargoyle/data/model/GargoyleSkyroad.gltf" id="2_bjje6"]
 
-[node name="GargoyleSkyroad" type="PathFollow3D" node_paths=PackedStringArray("root")]
+[node name="GargoyleSkyroad" type="PathFollow3D" node_paths=PackedStringArray("root", "paths")]
 use_model_front = true
 loop = false
 script = ExtResource("1_b2tip")
-root = NodePath("Gargoyle")
+root = NodePath("GargoyleSkyroad")
+paths = []
 
-[node name="Gargoyle" parent="." instance=ExtResource("1_rymmj")]
+[node name="GargoyleSkyroad" parent="." instance=ExtResource("2_bjje6")]
 
-[node name="Skeleton3D" parent="Gargoyle/GargoyleRoot" index="0"]
+[node name="Skeleton3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot" index="0"]
 bones/2/rotation = Quaternion(0.767752, -2.50455e-07, -2.16896e-07, 0.640747)
+bones/4/rotation = Quaternion(-0.0383763, -1.02244e-06, 2.90416e-07, 0.999263)
 bones/5/rotation = Quaternion(0.5, 0.5, 0.5, -0.5)
+bones/8/rotation = Quaternion(-1.09807e-21, 5.62898e-22, 6.44043e-08, 1)
 bones/9/rotation = Quaternion(0.5, -0.5, -0.5, -0.5)
 bones/13/rotation = Quaternion(-0.707107, -2.10687e-09, -3.30155e-08, 0.707107)
 bones/14/rotation = Quaternion(-0.0617484, -4.72917e-11, 0.0875847, 0.994241)
+bones/14/scale = Vector3(1, 1, 1)
 bones/15/rotation = Quaternion(0.0616896, 0.00269337, -0.130869, 0.989475)
+bones/15/scale = Vector3(0.999994, 0.999994, 1)
 bones/16/rotation = Quaternion(-0.707107, -2.10687e-09, -3.30155e-08, 0.707107)
 bones/17/rotation = Quaternion(-0.0617495, -4.71268e-10, -0.0875849, 0.994241)
 bones/18/rotation = Quaternion(0.0616908, -0.00269341, 0.130869, 0.989475)
-bones/19/rotation = Quaternion(-0.707107, 2.40748e-15, 4.39029e-08, 0.707107)
+bones/19/rotation = Quaternion(-0.707107, 0, 4.39029e-08, 0.707107)
+bones/19/scale = Vector3(1, 1, 1)
 
-[node name="AnimationPlayer" parent="Gargoyle" index="1"]
+[node name="AnimationPlayer" parent="GargoyleSkyroad" index="1"]
 autoplay = "skyroad"
 
-[editable path="Gargoyle"]
+[editable path="GargoyleSkyroad"]

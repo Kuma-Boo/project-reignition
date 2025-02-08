@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=33 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
@@ -23,7 +23,11 @@
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="16_8guxi"]
 [ext_resource type="PackedScene" uid="uid://bxvbg3oku2gpf" path="res://area/4 levitated ruin/object/Gate.tscn" id="16_cr60c"]
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="18_6xh0d"]
+[ext_resource type="PackedScene" uid="uid://b6030p0x15kq0" path="res://area/4 levitated ruin/object/platform/GargoyleStatic.tscn" id="18_7b7on"]
 [ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="18_rpxg1"]
+[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="18_w6abm"]
+[ext_resource type="PackedScene" uid="uid://b2jsh7hensgem" path="res://object/enemy/gargoyle/Gargoyle.tscn" id="19_78g2p"]
+[ext_resource type="PackedScene" uid="uid://diq31c5i622qs" path="res://area/4 levitated ruin/object/platform/GargoylePatform.tscn" id="19_efhpe"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="19_tcciv"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="23_iw0rv"]
 
@@ -49,6 +53,7 @@ InitialCameraSettings = ExtResource("3_35kks")
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_065fl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -84.9965, -921)
 
 [node name="CullingTrigger" type="Node3D" parent="MainAct"]
 
@@ -143,6 +148,29 @@ respawnAnimation = 2
 
 [node name="Rukh3" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -100, -700)
+
+[node name="Stone" parent="MainAct/Rukh3" instance=ExtResource("18_rpxg1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 16, -225)
+shatterFlags = 18
+
+[node name="Stone2" parent="MainAct/Rukh3" instance=ExtResource("18_rpxg1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 16, -225)
+shatterFlags = 18
+
+[node name="GargoylePlatform" parent="MainAct/Rukh3" instance=ExtResource("19_efhpe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -232)
+
+[node name="Gargoyle" parent="MainAct/Rukh3/GargoylePlatform" instance=ExtResource("19_78g2p")]
+
+[node name="GargoyleStatic" parent="MainAct/Rukh3" instance=ExtResource("18_7b7on")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5, 15, -230)
+
+[node name="GargoyleStatic2" parent="MainAct/Rukh3" instance=ExtResource("18_7b7on")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 5, 15, -230)
+
+[node name="EnemyStone" parent="MainAct/Rukh3" instance=ExtResource("18_w6abm")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 18, -237)
+enemyCount = 1
 
 [node name="Rukh4" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 650, -103, -1484)
@@ -338,6 +366,7 @@ shape = SubResource("BoxShape3D_ypvwq")
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRingSpike" to="Static/Visuals/Rukh1" method="Deactivate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRingSpike" to="Static/Visuals/Rukh1LOD" method="Activate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRing2" to="MainAct/Rukh1/LaunchRing2/Path" method="Activate"]
+[connection signal="Defeated" from="MainAct/Rukh3/GargoylePlatform/Gargoyle" to="MainAct/Rukh3/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Tower/IvyShortcut/Spring1" to="Static/Triggers/Camera/TowerCameras" method="Activate"]
 [connection signal="Activated" from="MainAct/Tower/IvyShortcut/Spring2" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Tower/IvyShortcut/Spring2" to="Static/Collision/OneWayWall" method="Activate"]
