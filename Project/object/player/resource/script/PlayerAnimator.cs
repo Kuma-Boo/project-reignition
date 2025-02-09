@@ -834,6 +834,22 @@ public partial class PlayerAnimator : Node3D
 	}
 	public void SetZiplineBlend(float ratio) => animationTree.Set(ZiplineBlend, ratio);
 	public float GetZiplineBlend() => (float)animationTree.Get(ZiplineBlend);
+
+	public void StartPetrify()
+	{
+		eventAnimationPlayer.Play("petrify-start");
+		eventAnimationPlayer.Advance(0.0);
+	}
+	public void ShakePetrify()
+	{
+		eventAnimationPlayer.Stop(true);
+		eventAnimationPlayer.Play("petrify-shake");
+	}
+	public void StopPetrify()
+	{
+		eventAnimationPlayer.Play("petrify-stop");
+		eventAnimationPlayer.Advance(0.0);
+	}
 	#endregion
 
 	// Shaders

@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://bqck0hqdn3o8r"]
+[gd_scene load_steps=60 format=3 uid="uid://bqck0hqdn3o8r"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -41,6 +41,7 @@
 [ext_resource type="Script" path="res://object/player/resource/script/states/CatapultState.cs" id="38_xdgt8"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/ZiplineState.cs" id="39_4d42d"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/EventState.cs" id="39_4sg6h"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/PetrifyState.cs" id="40_yw7xc"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hfii6"]
 radius = 0.3
@@ -1012,7 +1013,7 @@ point_count = 4
 _data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "ivyState", "ziplineState", "knockbackState", "teleportState") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "ivyState", "ziplineState", "petrifyState", "knockbackState", "teleportState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1042,6 +1043,7 @@ bounceState = NodePath("StateMachine/Special/Bounce")
 driftState = NodePath("StateMachine/Special/Drift")
 ivyState = NodePath("StateMachine/Special/Ivy")
 ziplineState = NodePath("StateMachine/Special/Zipline")
+petrifyState = NodePath("StateMachine/Special/Petrify")
 knockbackState = NodePath("StateMachine/Special/Knockback")
 teleportState = NodePath("StateMachine/Special/Teleport")
 
@@ -1092,16 +1094,14 @@ bones/46/rotation = Quaternion(-0.23467, -2.52169e-06, 8.92783e-06, 0.972075)
 transform = Transform3D(1, 7.92686e-07, -7.92687e-07, -7.92686e-07, 1, 1.59254e-08, 7.92687e-07, -1.59248e-08, 1, 5.80681e-08, 0.55419, -2.23517e-08)
 
 [node name="RFoot" parent="Sonic/SonicRoot/GeneralSkeleton" index="5"]
-transform = Transform3D(0.999999, -2.62901e-13, -3.84359e-13, 3.89272e-13, 2.08151e-07, 0.999999, -2.16716e-13, -0.999998, 2.15601e-07, -0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, 6.44818e-13, -2.91239e-13, 2.84869e-13, 9.49949e-08, 0.999999, 7.4607e-13, -0.999998, 1.11293e-07, -0.0397276, 0.155469, 0.00205613)
 
 [node name="LFoot" parent="Sonic/SonicRoot/GeneralSkeleton" index="6"]
-transform = Transform3D(1, 1.17417e-12, 6.20932e-12, -6.27323e-12, 1.07102e-06, 1, 1.26121e-12, -1, 1.06776e-06, 0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, 1.16351e-12, 6.27176e-12, -6.27749e-12, 5.3551e-08, 1, 1.25233e-12, -1, 5.68107e-08, 0.0397276, 0.155469, 0.00205613)
 
-[node name="Effect" parent="Sonic" node_paths=PackedStringArray("rightFoot", "leftFoot", "landingParticles", "stepEmitters") instance=ExtResource("19_3dctg")]
+[node name="Effect" parent="Sonic" node_paths=PackedStringArray("rightFoot", "leftFoot") instance=ExtResource("19_3dctg")]
 rightFoot = NodePath("../SonicRoot/GeneralSkeleton/RFoot")
 leftFoot = NodePath("../SonicRoot/GeneralSkeleton/LFoot")
-landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, null, null, NodePath("VFX/LandingFX/LandingWater")]
-stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, null, null, NodePath("VFX/StepFX/WaterStep")]
 
 [node name="Skills" parent="Sonic" instance=ExtResource("6_ywq6t")]
 
@@ -1316,6 +1316,10 @@ script = ExtResource("38_f13ef")
 
 [node name="Zipline" type="Node" parent="StateMachine/Special"]
 script = ExtResource("39_4d42d")
+
+[node name="Petrify" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("idleState")]
+script = ExtResource("40_yw7xc")
+idleState = NodePath("../../Basic/Idle")
 
 [node name="Controller" type="Node" parent="."]
 script = ExtResource("2_pk07e")

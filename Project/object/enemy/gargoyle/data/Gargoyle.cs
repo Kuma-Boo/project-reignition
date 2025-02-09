@@ -62,8 +62,7 @@ public partial class Gargoyle : Enemy
 
 	public override void Respawn()
 	{
-		base.Respawn();
-
+		state = State.Statue;
 		velocity = Vector3.Zero;
 
 		DisableActionTimer();
@@ -71,6 +70,8 @@ public partial class Gargoyle : Enemy
 
 		MovementState.Start(StatueState);
 		AnimationTree.Set(DefeatTransition, "reset");
+
+		base.Respawn();
 	}
 
 	protected override void UpdateEnemy()
@@ -153,9 +154,7 @@ public partial class Gargoyle : Enemy
 	private void UpdateActions()
 	{
 		if (state == State.Idle)
-		{
 			GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref velocity, MovementSmoothing);
-		}
 
 		if (isActionTimerPaused)
 			return;
@@ -173,6 +172,8 @@ public partial class Gargoyle : Enemy
 		AnimationTree.Set(ActionTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
+	public void ApplyPetrification() => Player.StartPetrify();
+
 	private void StartSlash()
 	{
 		state = State.Slash;
@@ -186,6 +187,7 @@ public partial class Gargoyle : Enemy
 	private void StartIdle()
 	{
 		state = State.Idle;
+		targetPosition = homePosition;
 		EnableActionTimer();
 	}
 

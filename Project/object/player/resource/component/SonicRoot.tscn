@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://wfh54hnc028k"]
+[gd_scene load_steps=32 format=3 uid="uid://wfh54hnc028k"]
 
 [ext_resource type="PackedScene" uid="uid://b5jl3vv1j1fck" path="res://object/player/resource/model/Sonic.gltf" id="1_ea3e1"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerAnimator.cs" id="2_3qp24"]
@@ -16,6 +16,7 @@
 [ext_resource type="AudioStream" uid="uid://c5did7u4f8gq2" path="res://sound/sfx/player/flame countdown 1.wav" id="12_3lyoq"]
 [ext_resource type="Resource" uid="uid://ukcne4um86a6" path="res://resource/preset/camera/common/CutsceneCam.tres" id="14_u1car"]
 [ext_resource type="Material" uid="uid://cyphajdqgwnj8" path="res://object/player/resource/model/material/BodyTransparent.tres" id="16_icvwi"]
+[ext_resource type="PackedScene" uid="uid://nvbpiay8inap" path="res://area/4 levitated ruin/object/model/special/SonicStone.gltf" id="17_8pfgv"]
 
 [sub_resource type="Curve" id="Curve_skwgn"]
 max_value = 2.5
@@ -110,6 +111,18 @@ tracks/4/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SonicStone:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_3gene"]
 resource_name = "invincibility"
@@ -158,10 +171,99 @@ tracks/0/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_o34mb"]
+resource_name = "petrify-shake"
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SonicStone:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3, 0.5, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.0872665), Vector3(0, 0, -0.0872665), Vector3(0, 0, 0.0349066), Vector3(0, 0, -0.0174533), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_stm5v"]
+resource_name = "petrify-start"
+length = 0.001
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SonicStone:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SonicStone:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SonicRoot:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_cbaa0"]
+resource_name = "petrify-stop"
+length = 0.001
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SonicStone:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SonicRoot:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r0udk"]
 _data = {
 "RESET": SubResource("Animation_tuy1q"),
 "invincibility": SubResource("Animation_3gene"),
+"petrify-shake": SubResource("Animation_o34mb"),
+"petrify-start": SubResource("Animation_stm5v"),
+"petrify-stop": SubResource("Animation_cbaa0"),
 "teleport-end": SubResource("Animation_ju8e7"),
 "teleport-start": SubResource("Animation_jxy1t")
 }
@@ -290,23 +392,10 @@ bone_idx = 3
 [node name="SoleOffset" type="Node3D" parent="SonicRoot/GeneralSkeleton/LFoot" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.085, -0.15)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
-libraries = {
-"": SubResource("AnimationLibrary_6smkh"),
-"ActionLibrary": ExtResource("5_21j6r"),
-"BalanceLibrary": ExtResource("5_a0jad"),
-"EventLibrary": ExtResource("8_7bg0r"),
-"GimmickLibrary": ExtResource("11_yfqvr"),
-"SidleLibrary": ExtResource("6_pf4ty")
-}
+[node name="SonicStone" parent="." index="1" instance=ExtResource("17_8pfgv")]
+visible = false
 
-[node name="EventAnimationPlayer" type="AnimationPlayer" parent="." index="2"]
-callback_mode_process = 0
-libraries = {
-"": SubResource("AnimationLibrary_r0udk")
-}
-
-[node name="CountdownRoot" type="Node3D" parent="." index="3"]
+[node name="CountdownRoot" type="Node3D" parent="." index="2"]
 transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
 
 [node name="FlameBurstSFX" type="AudioStreamPlayer" parent="CountdownRoot" index="0"]
@@ -322,7 +411,24 @@ settings = ExtResource("14_u1car")
 UpdateEveryFrame = true
 followObject = NodePath(".")
 
-[node name="AnimationTree" type="AnimationTree" parent="." index="4"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="3"]
+libraries = {
+"": SubResource("AnimationLibrary_6smkh"),
+"ActionLibrary": ExtResource("5_21j6r"),
+"BalanceLibrary": ExtResource("5_a0jad"),
+"EventLibrary": ExtResource("8_7bg0r"),
+"GimmickLibrary": ExtResource("11_yfqvr"),
+"SidleLibrary": ExtResource("6_pf4ty")
+}
+
+[node name="EventAnimationPlayer" type="AnimationPlayer" parent="." index="4"]
+callback_mode_process = 0
+libraries = {
+"": SubResource("AnimationLibrary_r0udk")
+}
+blend_times = [&"petrify-shake", &"petrify-shake", 0.2]
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="5"]
 active = false
 callback_mode_process = 0
 tree_root = ExtResource("8_sfnih")

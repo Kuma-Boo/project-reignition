@@ -115,7 +115,6 @@ public partial class PlayerEffect : Node3D
 		PlayActionSFX("teleport end");
 	}
 
-
 	/// <summary> VFX for drifting dust. </summary>
 	[Export]
 	private GpuParticles3D dustParticle;
@@ -155,10 +154,7 @@ public partial class PlayerEffect : Node3D
 
 	[Export]
 	private GroupGpuParticles3D splashJumpParticle;
-	public void PlaySplashJumpFX()
-	{
-		splashJumpParticle.RestartGroup();
-	}
+	public void PlaySplashJumpFX() => splashJumpParticle.RestartGroup();
 
 	[Export]
 	private GroupGpuParticles3D aegisSlideParticle;
@@ -255,6 +251,10 @@ public partial class PlayerEffect : Node3D
 		grindrailSparkParticle.Emitting = false;
 		StopChargeFX();
 	}
+
+	[Export]
+	private GpuParticles3D petrifyParticle;
+	public void StartPetrifyShatterFX() => petrifyParticle.Restart();
 	#endregion
 
 	#region Ground

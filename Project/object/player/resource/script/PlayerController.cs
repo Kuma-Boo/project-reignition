@@ -754,6 +754,11 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(ziplineState);
 	}
 
+	[Export]
+	private PetrifyState petrifyState;
+	public bool IsPetrified => StateMachine.CurrentState == petrifyState;
+	public void StartPetrify() => StateMachine.ChangeState(petrifyState);
+
 	[Signal]
 	public delegate void KnockbackEventHandler();
 	[Export]
