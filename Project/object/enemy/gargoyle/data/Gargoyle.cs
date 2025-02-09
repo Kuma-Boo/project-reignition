@@ -33,14 +33,21 @@ public partial class Gargoyle : Enemy
 	private bool isActionTimerPaused;
 	private float actionTimer;
 	private readonly float ActionInterval = 2.0f;
+	private readonly float BlockLength = 3.0f;
 	public void DisableActionTimer() => isActionTimerPaused = true;
 	public void EnableActionTimer() => isActionTimerPaused = false;
 
-	private AnimationNodeStateMachinePlayback MovementState => AnimationTree.Get(MovementPlaybackParameter).Obj as AnimationNodeStateMachinePlayback;
+	private AnimationNodeStateMachinePlayback MovementStatePlayback => AnimationTree.Get(MovementPlaybackParameter).Obj as AnimationNodeStateMachinePlayback;
 	private readonly StringName MovementPlaybackParameter = "parameters/movement_state/playback";
-	private readonly StringName StatueState = "statue";
+	private readonly StringName InitialMovementState = "RESET";
 	private readonly StringName IdleState = "idle";
 	private readonly StringName SkyroadState = "skyroad";
+
+	private AnimationNodeStateMachinePlayback BlockStatePlayback => AnimationTree.Get(BlockPlaybackParameter).Obj as AnimationNodeStateMachinePlayback;
+	private readonly StringName BlockPlaybackParameter = "parameters/block_state/playback";
+	private readonly StringName BlockStartState = "block-start";
+	private readonly StringName BlockStunState = "block-stun";
+	private readonly StringName BlockEndState = "block-end";
 
 	private readonly StringName ActionTrigger = "parameters/action_trigger/request";
 	private readonly StringName ActionTransition = "parameters/action_transition/transition_request";
@@ -70,8 +77,13 @@ public partial class Gargoyle : Enemy
 		DisableActionTimer();
 		actionTimer = ActionInterval;
 
-		MovementState.Start(StatueState);
-		AnimationTree.Set(DefeatTransition, "reset");
+		currentRotation = 0;
+		Root.Rotation = Vector3.Zero;
+
+		MovementStatePlayback.Start(InitialMovementState);
+		AnimationTree.Set(DefeatTransition, "disabled");
+		AnimationTree.Set(DamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		AnimationTree.Set(ActionTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 		base.Respawn();
 	}
@@ -81,7 +93,7 @@ public partial class Gargoyle : Enemy
 		if (state == State.Statue)
 			return;
 
-		if (!IsInRange)
+		if (!IsInRange && !Player.IsPetrified)
 			return;
 
 		UpdateActions();
@@ -91,9 +103,8 @@ public partial class Gargoyle : Enemy
 	{
 		base.Spawn();
 
-		state = State.Idle;
-		targetPosition = homePosition;
-		MovementState.Travel(IdleState);
+		StartIdle();
+		MovementStatePlayback.Travel(IdleState);
 	}
 
 	protected override void UpdateInteraction()
@@ -106,8 +117,19 @@ public partial class Gargoyle : Enemy
 
 		if (state == State.Block)
 		{
+			if (Player.AttackState == PlayerController.AttackStates.Weak)
+			{
+				actionTimer = Mathf.MoveToward(actionTimer, 0f, 1f);
+				BlockStatePlayback.Travel(BlockStunState);
+			}
+			else if (Player.AttackState == PlayerController.AttackStates.Strong)
+			{
+				actionTimer = 0f;
+			}
+
 			Player.StartBounce();
-			actionTimer = 0;
+			SetInteractionProcessed();
+			return;
 		}
 
 		base.UpdateInteraction();
@@ -130,6 +152,7 @@ public partial class Gargoyle : Enemy
 	protected override void Defeat()
 	{
 		base.Defeat();
+		SetHitboxStatus(false);
 		AnimationTree.Set(DefeatTransition, "enabled");
 	}
 
@@ -142,11 +165,18 @@ public partial class Gargoyle : Enemy
 		{
 			case State.Idle:
 				if (Player.IsPetrified || Runtime.randomNumberGenerator.Randf() < .5f)
-					StartPetrify();
-				else
+				{
 					StartSlash();
+				}
+				else
+				{
+					actionTimer *= .5f;
+					StartPetrify();
+				}
 				break;
-			case State.Hitstun:
+			case State.Block:
+				BlockStatePlayback.Travel(BlockEndState);
+				StartIdle();
 				break;
 		}
 	}
@@ -154,7 +184,11 @@ public partial class Gargoyle : Enemy
 	private void UpdateActions()
 	{
 		if (state == State.Idle || isSlashMovementEnabled)
+		{
 			GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref velocity, MovementSmoothing);
+			TrackPlayer();
+			Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
+		}
 
 		if (isActionTimerPaused)
 			return;
@@ -185,7 +219,7 @@ public partial class Gargoyle : Enemy
 	private void StartSlashMovement()
 	{
 		isSlashMovementEnabled = true;
-		targetPosition = Player.GlobalPosition + ((Player.GlobalPosition - GlobalPosition).Normalized() * 3.0f);
+		targetPosition = Player.GlobalPosition + ((Player.GlobalPosition - GlobalPosition).Normalized() * 5.0f);
 		targetPosition.Y = Mathf.Lerp(homePosition.Y, targetPosition.Y, .5f); // Reduce vertical following ability
 	}
 
@@ -195,6 +229,16 @@ public partial class Gargoyle : Enemy
 		targetPosition = homePosition;
 		isSlashMovementEnabled = false;
 		EnableActionTimer();
+	}
+
+	private void StartBlock()
+	{
+		state = State.Block;
+		actionTimer = BlockLength;
+
+		BlockStatePlayback.Start(BlockStartState);
+		AnimationTree.Set(ActionTransition, BlockState);
+		AnimationTree.Set(ActionTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
 	/// <summary> Called whenever the player touches the gargoyle's hands. </summary>
