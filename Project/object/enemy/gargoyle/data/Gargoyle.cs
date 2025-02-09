@@ -24,6 +24,7 @@ public partial class Gargoyle : Enemy
 
 	private State queuedState;
 
+	private bool isSlashMovementEnabled;
 	private Vector3 homePosition;
 	private Vector3 targetPosition;
 	private Vector3 velocity;
@@ -31,7 +32,7 @@ public partial class Gargoyle : Enemy
 
 	private bool isActionTimerPaused;
 	private float actionTimer;
-	private readonly float ActionInterval = 3.0f;
+	private readonly float ActionInterval = 2.0f;
 	public void DisableActionTimer() => isActionTimerPaused = true;
 	public void EnableActionTimer() => isActionTimerPaused = false;
 
@@ -64,6 +65,7 @@ public partial class Gargoyle : Enemy
 	{
 		state = State.Statue;
 		velocity = Vector3.Zero;
+		isSlashMovementEnabled = false;
 
 		DisableActionTimer();
 		actionTimer = ActionInterval;
@@ -139,12 +141,10 @@ public partial class Gargoyle : Enemy
 		switch (state)
 		{
 			case State.Idle:
-				float randomNumber = Runtime.randomNumberGenerator.Randf();
-				if (randomNumber < .5f)
+				if (Player.IsPetrified || Runtime.randomNumberGenerator.Randf() < .5f)
 					StartPetrify();
 				else
 					StartSlash();
-
 				break;
 			case State.Hitstun:
 				break;
@@ -153,7 +153,7 @@ public partial class Gargoyle : Enemy
 
 	private void UpdateActions()
 	{
-		if (state == State.Idle)
+		if (state == State.Idle || isSlashMovementEnabled)
 			GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref velocity, MovementSmoothing);
 
 		if (isActionTimerPaused)
@@ -177,17 +177,23 @@ public partial class Gargoyle : Enemy
 	private void StartSlash()
 	{
 		state = State.Slash;
-		targetPosition = Player.GlobalPosition;
-		targetPosition.Y = Mathf.Lerp(homePosition.Y, targetPosition.Y, .5f); // Reduce vertical following ability
 
 		AnimationTree.Set(ActionTransition, SlashState);
 		AnimationTree.Set(ActionTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	private void StartSlashMovement()
+	{
+		isSlashMovementEnabled = true;
+		targetPosition = Player.GlobalPosition + ((Player.GlobalPosition - GlobalPosition).Normalized() * 3.0f);
+		targetPosition.Y = Mathf.Lerp(homePosition.Y, targetPosition.Y, .5f); // Reduce vertical following ability
 	}
 
 	private void StartIdle()
 	{
 		state = State.Idle;
 		targetPosition = homePosition;
+		isSlashMovementEnabled = false;
 		EnableActionTimer();
 	}
 
