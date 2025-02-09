@@ -59,6 +59,7 @@ public partial class FlyingDestructableObject : DestructableObject
 	public void Deactivate()
 	{
 		isSleeping = true;
-		Despawn();
+		if (animator.HasAnimation("deactivate"))
+			animator.Play("deactivate");
 	}
 }

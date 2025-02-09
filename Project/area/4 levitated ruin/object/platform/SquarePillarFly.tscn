@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cfcqcvct272ct"]
+[gd_scene load_steps=10 format=3 uid="uid://cfcqcvct272ct"]
 
 [ext_resource type="Script" path="res://area/4 levitated ruin/data/script/FlyingDestructableObject.cs" id="1_2cduu"]
 [ext_resource type="PackedScene" uid="uid://bhqoe78kgcy60" path="res://area/4 levitated ruin/object/model/platform/SquarePillarFly.gltf" id="2_xkydh"]
@@ -46,6 +46,18 @@ tracks/2/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0)]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Root/SquarePillarFly/SquarePillarFlyMesh:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_fgo1a"]
 resource_name = "fly"
@@ -92,9 +104,25 @@ tracks/1/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_nceh3"]
+resource_name = "deactivate"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/SquarePillarFly/SquarePillarFlyMesh:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pmcqp"]
 _data = {
 "RESET": SubResource("Animation_3al21"),
+"deactivate": SubResource("Animation_nceh3"),
 "fly": SubResource("Animation_fgo1a"),
 "shatter": SubResource("Animation_yrfwa")
 }
@@ -144,6 +172,7 @@ visible = false
 [node name="StaticBody3D" parent="Root/SquarePillarFly/SquarePillarFloorCollision" index="0" groups=["floor"]]
 
 [node name="SquarePillarPieces" parent="." instance=ExtResource("4_dsw7f")]
+visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
