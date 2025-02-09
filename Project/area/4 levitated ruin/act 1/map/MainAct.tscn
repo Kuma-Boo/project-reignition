@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=35 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
@@ -30,6 +30,7 @@
 [ext_resource type="PackedScene" uid="uid://diq31c5i622qs" path="res://area/4 levitated ruin/object/platform/GargoylePatform.tscn" id="19_efhpe"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="19_tcciv"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="23_iw0rv"]
+[ext_resource type="PackedScene" uid="uid://bmsfpsjjdiitu" path="res://area/4 levitated ruin/object/WindTrigger.tscn" id="31_jvmbg"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ypvwq"]
 size = Vector3(10, 20, 2.5)
@@ -40,6 +41,9 @@ _data = {
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x4cke"]
+size = Vector3(10, 20, 20)
 
 [node name="Stage" type="Node"]
 
@@ -53,7 +57,6 @@ InitialCameraSettings = ExtResource("3_35kks")
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_065fl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -84.9965, -921)
 
 [node name="CullingTrigger" type="Node3D" parent="MainAct"]
 
@@ -351,6 +354,18 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 48,
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Tower/Goal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 3)
 shape = SubResource("BoxShape3D_ypvwq")
+
+[node name="WindTrigger1" parent="." instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -16)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="WindTrigger" parent="WindTrigger1" instance=ExtResource("31_jvmbg")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WindTrigger1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_x4cke")
 
 [connection signal="Activated" from="MainAct/CullingTrigger/Tower" to="MainAct/Tower" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingTrigger/Tower" to="MainAct/Tower" method="Deactivate"]

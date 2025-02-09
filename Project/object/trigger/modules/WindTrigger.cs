@@ -5,7 +5,8 @@ namespace Project.Gameplay.Triggers;
 
 public partial class WindTrigger : StageTriggerModule
 {
-	[Export] private GpuParticles3D windFX;
+	[Export(PropertyHint.NodePathValidTypes, "GPUParticles3D")] private NodePath windFX;
+	private GpuParticles3D _windFX;
 	[Export] private float windStrength = 15.0f;
 
 	private bool isActive;
@@ -15,7 +16,8 @@ public partial class WindTrigger : StageTriggerModule
 
 	public override void _Ready()
 	{
-		if (IsInstanceValid(windFX))
+		_windFX = GetNodeOrNull<GpuParticles3D>(windFX);
+		if (IsInstanceValid(_windFX))
 		{
 			// Place WindFX in the right spot
 			foreach (Node node in GetParent().GetChildren())
@@ -26,7 +28,7 @@ public partial class WindTrigger : StageTriggerModule
 				Shape3D shape = (node as CollisionShape3D).Shape;
 				if (shape is BoxShape3D)
 				{
-					windFX.GlobalPosition = GlobalPosition + (this.Back() * (shape as BoxShape3D).Size.Z);
+					_windFX.GlobalPosition = GlobalPosition + (this.Back() * (shape as BoxShape3D).Size.Z);
 					break;
 				}
 			}
@@ -51,15 +53,15 @@ public partial class WindTrigger : StageTriggerModule
 		ProcessMode = ProcessModeEnum.Inherit;
 
 		isActive = true;
-		if (IsInstanceValid(windFX))
-			windFX.Restart();
+		if (IsInstanceValid(_windFX))
+			_windFX.Restart();
 	}
 
 	public override void Deactivate()
 	{
 		isActive = false;
-		if (IsInstanceValid(windFX))
-			windFX.Emitting = false;
+		if (IsInstanceValid(_windFX))
+			_windFX.Emitting = false;
 	}
 
 	public override void Respawn() => Deactivate();
