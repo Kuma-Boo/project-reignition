@@ -75,6 +75,8 @@ public partial class PlayerController : CharacterBody3D
 	/// <summary> Player's vertical speed -- only effective when not on the ground. </summary>
 	public float VerticalSpeed { get; set; }
 	public bool IsMovingBackward { get; set; }
+	/// <summary> For movement that doesn't affect animations (e.x. wind). Reset every frame after it's applied. </summary>
+	public Vector3 ExternalVelocity { get; set; }
 
 	/// <summary> Global movement angle, in radians. Note - VISUAL ROTATION is controlled by CharacterAnimator.cs. </summary>
 	public float MovementAngle { get; set; }
@@ -124,7 +126,8 @@ public partial class PlayerController : CharacterBody3D
 
 	public void ApplyMovement()
 	{
-		Velocity = (GetMovementDirection() * MoveSpeed) + (UpDirection * VerticalSpeed);
+		Velocity = (GetMovementDirection() * MoveSpeed) + (UpDirection * VerticalSpeed) + ExternalVelocity;
+		ExternalVelocity = Vector3.Zero;
 		MoveAndSlide();
 	}
 
@@ -187,6 +190,9 @@ public partial class PlayerController : CharacterBody3D
 			castLength += Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta; // Attempt to remain stuck to the ground when moving quickly
 		else if (VerticalSpeed < 0)
 			castLength += Mathf.Abs(VerticalSpeed) * PhysicsManager.physicsDelta;
+
+		if (!ExternalVelocity.IsZeroApprox())
+			castLength += ExternalVelocity.Length() * PhysicsManager.physicsDelta;
 
 		Vector3 checkOffset = Vector3.Zero;
 		GroundHit = new();

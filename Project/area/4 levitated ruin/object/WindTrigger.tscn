@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3 uid="uid://bmsfpsjjdiitu"]
+
+[ext_resource type="Script" path="res://object/trigger/modules/WindTrigger.cs" id="1_jup8o"]
+[ext_resource type="Material" uid="uid://bxy6jkw0pwvlg" path="res://area/4 levitated ruin/data/material/Wind.tres" id="2_t0ki4"]
+
+[sub_resource type="Curve" id="Curve_t3bp7"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(0.6, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_yqt7d"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_t3bp7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7olii"]
+lifetime_randomness = 0.2
+emission_shape_scale = Vector3(10, 10, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 0, 1)
+spread = 5.0
+initial_velocity_min = 50.0
+initial_velocity_max = 80.0
+scale_min = 0.2
+scale_max = 0.5
+alpha_curve = SubResource("CurveTexture_yqt7d")
+anim_offset_max = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_mh0mi"]
+material = ExtResource("2_t0ki4")
+
+[node name="WindTrigger" type="Node3D" node_paths=PackedStringArray("windFX")]
+script = ExtResource("1_jup8o")
+windFX = NodePath("")
+
+[node name="Wind" type="GPUParticles3D" parent="."]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.6
+fixed_fps = 0
+fract_delta = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_7olii")
+draw_pass_1 = SubResource("QuadMesh_mh0mi")

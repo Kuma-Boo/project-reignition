@@ -30,6 +30,7 @@ public partial class IdleState : PlayerState
 			Mathf.IsZeroApprox(Player.ActiveLockoutData.speedRatio))
 		{
 			Player.Animator.IdleAnimation();
+			Player.ApplyMovement();
 			return null;
 		}
 
@@ -90,6 +91,7 @@ public partial class IdleState : PlayerState
 		}
 
 		Player.Animator.IdleAnimation();
+		Player.ApplyMovement();
 		return null;
 	}
 
