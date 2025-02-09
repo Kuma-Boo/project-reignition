@@ -53,6 +53,9 @@ public partial class Gargoyle : Enemy
 
 	protected override void SetUp()
 	{
+		if (Engine.IsEditorHint())
+			return;
+
 		base.SetUp();
 		homePosition = GlobalPosition + (this.Forward() * 2.0f);
 	}
