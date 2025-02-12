@@ -7,10 +7,14 @@ namespace Project.Gameplay.Hazards;
 public partial class Missile : Node3D
 {
 	[Export] private float lifetime = 5.0f;
+	public void SetLifetime(float value) => lifetime = value;
 	[Export] private float moveSpeed = 20.0f;
+	public void SetSpeed(float value) => moveSpeed = value;
 	[Export] private AnimationPlayer animator;
-	private SpawnData spawnData;
+
 	private float currentLifetime;
+	private SpawnData spawnData;
+	public void UpdateSpawnTransform(Transform3D t) => spawnData.spawnTransform = t;
 
 	private PathFollow3D pathFollow;
 	private float initialProgress;
@@ -29,7 +33,7 @@ public partial class Missile : Node3D
 		Respawn();
 	}
 
-	private void Respawn()
+	public void Respawn()
 	{
 		spawnData.Respawn(this);
 		if (pathFollow != null)
