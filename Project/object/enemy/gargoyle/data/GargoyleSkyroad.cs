@@ -8,15 +8,17 @@ public partial class GargoyleSkyroad : PathFollow3D
 {
 	private PlayerController Player => StageSettings.Player;
 
-	private SpawnData spawnData;
-
-	[Export] private Node3D root;
-	private Vector3 velocity;
-
 	[Export] private SkyRoad activeRoad;
 	/// <summary> The sequence of paths this Gargoyle will travel (in order). </summary>
 	[Export] private Path3D[] paths;
 	private Path3D CurrentPath => paths[currentPathIndex];
+
+	[ExportGroup("Components")]
+	[Export] private AnimationPlayer animator;
+	[Export] private Node3D root;
+
+	private Vector3 velocity;
+	private SpawnData spawnData;
 
 	// Alternative variables because we're working with multiple paths
 	private float traveledDistance; // Distance we finished based on completed paths' baked length 
@@ -116,14 +118,15 @@ public partial class GargoyleSkyroad : PathFollow3D
 
 	private void PlayEntryAnimation()
 	{
-		// TODO play FX
 		Visible = true;
 		ProcessMode = ProcessModeEnum.Inherit;
+		animator.Play("spawn");
 	}
 
-	private void PlayExitAnimation()
+	private void PlayExitAnimation() => animator.Play("despawn");
+
+	private void Deactivate()
 	{
-		// TODO play proper leaving FX
 		Visible = false;
 		ProcessMode = ProcessModeEnum.Disabled;
 	}
