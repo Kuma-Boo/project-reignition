@@ -14,8 +14,9 @@ public partial class GargoyleSkyroad : PathFollow3D
 	private Path3D CurrentPath => paths[currentPathIndex];
 
 	[ExportGroup("Components")]
-	[Export] private AnimationPlayer animator;
 	[Export] private Node3D root;
+	[Export] private AnimationPlayer animator;
+	[Export] private AnimationTree animationTree;
 
 	private Vector3 velocity;
 	private SpawnData spawnData;
@@ -25,9 +26,19 @@ public partial class GargoyleSkyroad : PathFollow3D
 	private float totalDistance;
 	private int currentPathIndex;
 
+	private bool isFastSpeed;
+	private float speedBlend;
+	private float speedTimer;
+	private readonly float SpeedSmoothing = 5f;
+	private readonly float BaseMovementSpeed = 20f;
+	private readonly float FastMovementSpeed = 40f;
+	private readonly StringName FlapSpeedParameter = "parameters/flap_speed/scale";
+	private readonly StringName FlapTransitionParameter = "parameters/flap_transition/transition_request";
+	private readonly StringName EnabledState = "enabled";
+	private readonly StringName DisabledState = "disabled";
+
 	private readonly float PositionSmoothing = 0.2f;
-	private readonly float MinDistanceToPlayer = 20.0f;
-	private readonly float BaseMovementSpeed = 20.0f;
+	private readonly float MinDistanceToPlayer = 3.0f;
 
 	public override void _Ready()
 	{
@@ -36,6 +47,7 @@ public partial class GargoyleSkyroad : PathFollow3D
 		spawnData = new(GetParent(), Transform);
 		StageSettings.Instance.ConnectRespawnSignal(this);
 
+		animationTree.Active = true;
 		Respawn();
 	}
 
@@ -48,6 +60,7 @@ public partial class GargoyleSkyroad : PathFollow3D
 		Progress = 0;
 		traveledDistance = 0;
 		activeRoad.SetPathRatio(0.0f);
+		speedBlend = 0.0f;
 
 		Visible = false;
 		ProcessMode = ProcessModeEnum.Disabled;
@@ -62,7 +75,7 @@ public partial class GargoyleSkyroad : PathFollow3D
 		root.Position = root.Position.SmoothDamp(Vector3.Back * 2.0f, ref velocity, PositionSmoothing);
 
 		// Move gargoyle along the path
-		float movementDelta = BaseMovementSpeed * PhysicsManager.physicsDelta;
+		float movementDelta = CalculateMoveSpeed() * PhysicsManager.physicsDelta;
 		Progress += movementDelta;
 
 		// Ensure we're a set distance away from the player
@@ -71,12 +84,46 @@ public partial class GargoyleSkyroad : PathFollow3D
 			float playerProgress = Player.PathFollower.Progress;
 			float delta = Progress - Player.PathFollower.Progress;
 			if (delta < MinDistanceToPlayer)
+			{
 				Progress = playerProgress + MinDistanceToPlayer;
+
+				if (!isFastSpeed && Player.Skills.IsSpeedBreakActive)
+					ToggleFastSpeed();
+			}
 		}
 
 		activeRoad.SetPathRatio((traveledDistance + Progress) / totalDistance); // Update visuals
 		if (Mathf.IsEqualApprox(ProgressRatio, 1.0f))
 			IncrementPathIndex();
+	}
+
+	private float CalculateMoveSpeed()
+	{
+		if (Mathf.IsZeroApprox(speedBlend) || Mathf.IsEqualApprox(speedBlend, 1.0f))
+		{
+			// Only update timer when movement speed isn't changing
+			speedTimer = Mathf.MoveToward(speedTimer, 0.0f, PhysicsManager.physicsDelta);
+			if (Mathf.IsZeroApprox(speedTimer))
+				ToggleFastSpeed();
+		}
+
+		speedBlend = Mathf.MoveToward(speedBlend, isFastSpeed ? 1.0f : 0.0f, SpeedSmoothing * PhysicsManager.physicsDelta);
+		if (isFastSpeed) // Update flapping speed
+			animationTree.Set(FlapSpeedParameter, 1f + (speedBlend * .5f));
+
+		return Mathf.Lerp(BaseMovementSpeed, FastMovementSpeed, speedBlend);
+	}
+
+	private void ToggleFastSpeed()
+	{
+		isFastSpeed = !isFastSpeed;
+
+		if (isFastSpeed)
+			speedTimer = Runtime.randomNumberGenerator.RandfRange(1f, 2f);
+		else
+			speedTimer = Runtime.randomNumberGenerator.RandfRange(3f, 5f);
+
+		animationTree.Set(FlapTransitionParameter, isFastSpeed ? EnabledState : DisabledState);
 	}
 
 	public void IncrementPathIndex()
@@ -107,6 +154,7 @@ public partial class GargoyleSkyroad : PathFollow3D
 
 		PlayEntryAnimation();
 		ReparentToPath();
+		ToggleFastSpeed();
 	}
 
 	private void ReparentToPath()

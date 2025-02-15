@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dtf23iudr7saa"]
+[gd_scene load_steps=36 format=3 uid="uid://dtf23iudr7saa"]
 
 [ext_resource type="Script" path="res://object/enemy/gargoyle/data/GargoyleSkyroad.cs" id="1_b2tip"]
 [ext_resource type="PackedScene" uid="uid://brhbgxve4dsf1" path="res://object/enemy/gargoyle/data/model/GargoyleSkyroad.gltf" id="2_bjje6"]
@@ -142,60 +142,6 @@ alpha_curve = SubResource("CurveTexture_2ywup")
 [sub_resource type="QuadMesh" id="QuadMesh_myhi4"]
 material = ExtResource("7_yi8bl")
 
-[sub_resource type="Animation" id="Animation_6pne8"]
-resource_name = "spawn"
-length = 0.5
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot/SpawnParticle")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"RestartGroup"
-}]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("GargoyleSkyroad:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot/Skeleton3D/GargoyleSkyroadMesh:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-
 [sub_resource type="Animation" id="Animation_dv1ej"]
 length = 0.001
 tracks/0/type = "value"
@@ -303,6 +249,60 @@ tracks/4/keys = {
 "values": [true, false]
 }
 
+[sub_resource type="Animation" id="Animation_6pne8"]
+resource_name = "spawn"
+length = 0.5
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot/SpawnParticle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"RestartGroup"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GargoyleSkyroad:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot/Skeleton3D/GargoyleSkyroadMesh:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v4rfn"]
 _data = {
 "RESET": SubResource("Animation_dv1ej"),
@@ -310,13 +310,44 @@ _data = {
 "spawn": SubResource("Animation_6pne8")
 }
 
-[node name="GargoyleSkyroad" type="PathFollow3D" node_paths=PackedStringArray("paths", "animator", "root")]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_y6855"]
+animation = &"flap"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_ebl08"]
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_mrmwx"]
+sync = true
+xfade_time = 0.3
+input_0/name = "enabled"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "disabled"
+input_1/auto_advance = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vgspr"]
+animation = &"glide"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ve3gn"]
+graph_offset = Vector2(-581.727, 78.4545)
+nodes/flap-anim/node = SubResource("AnimationNodeAnimation_y6855")
+nodes/flap-anim/position = Vector2(-400, 140)
+nodes/flap_speed/node = SubResource("AnimationNodeTimeScale_ebl08")
+nodes/flap_speed/position = Vector2(-140, 120)
+nodes/flap_transition/node = SubResource("AnimationNodeTransition_mrmwx")
+nodes/flap_transition/position = Vector2(80, 140)
+nodes/glide-anim/node = SubResource("AnimationNodeAnimation_vgspr")
+nodes/glide-anim/position = Vector2(-160, 280)
+node_connections = [&"flap_speed", 0, &"flap-anim", &"flap_transition", 0, &"flap_speed", &"flap_transition", 1, &"glide-anim", &"output", 0, &"flap_transition"]
+
+[node name="GargoyleSkyroad" type="PathFollow3D" node_paths=PackedStringArray("paths", "root", "animator", "animationTree")]
 use_model_front = true
 loop = false
 script = ExtResource("1_b2tip")
 paths = []
-animator = NodePath("AnimationPlayer")
 root = NodePath("GargoyleSkyroad")
+animator = NodePath("AnimationPlayer")
+animationTree = NodePath("AnimationTree")
 
 [node name="GargoyleSkyroad" parent="." instance=ExtResource("2_bjje6")]
 
@@ -443,12 +474,19 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_kkx8r")
 draw_pass_1 = SubResource("QuadMesh_myhi4")
 
-[node name="AnimationPlayer" parent="GargoyleSkyroad" index="1"]
-autoplay = "skyroad"
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_v4rfn")
 }
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
+root_node = NodePath("../GargoyleSkyroad")
+tree_root = SubResource("AnimationNodeBlendTree_ve3gn")
+anim_player = NodePath("../GargoyleSkyroad/AnimationPlayer")
+parameters/flap_speed/scale = 1.0
+parameters/flap_transition/current_state = "flap"
+parameters/flap_transition/transition_request = ""
+parameters/flap_transition/current_index = 0
 
 [editable path="GargoyleSkyroad"]
