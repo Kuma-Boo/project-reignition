@@ -45,6 +45,8 @@ public partial class GargoyleSkyroad : PathFollow3D
 		velocity = Vector3.Zero;
 		spawnData.Respawn(this);
 
+		Progress = 0;
+		traveledDistance = 0;
 		activeRoad.SetPathRatio(0.0f);
 
 		Visible = false;
@@ -123,7 +125,7 @@ public partial class GargoyleSkyroad : PathFollow3D
 		animator.Play("spawn");
 	}
 
-	private void PlayExitAnimation() => animator.Play("despawn");
+	private void PlayExitAnimation() => animator.Play("despawn", 0.1);
 
 	private void Deactivate()
 	{
