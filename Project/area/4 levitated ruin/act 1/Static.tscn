@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=3 uid="uid://bm61nw4o1jcrb"]
+[gd_scene load_steps=100 format=3 uid="uid://bm61nw4o1jcrb"]
 
 [ext_resource type="PackedScene" uid="uid://c1htg25bw2rso" path="res://area/4 levitated ruin/act 1/environment/Rukh1.tscn" id="1_3akmk"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_sruem"]
@@ -91,7 +91,10 @@
 size = Vector3(20, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a746d"]
-size = Vector3(10000, 10, 10000)
+size = Vector3(5000, 10, 5000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dgjdn"]
+size = Vector3(500, 10, 500)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_642io"]
 size = Vector3(40, 20, 40)
@@ -266,6 +269,14 @@ script = ExtResource("20_t6g8f")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/FallTrigger"]
 shape = SubResource("BoxShape3D_a746d")
 
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Triggers/Object/FallTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 132, -402)
+shape = SubResource("BoxShape3D_dgjdn")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Triggers/Object/FallTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 671, 75, -1325)
+shape = SubResource("BoxShape3D_dgjdn")
+
 [node name="Rukh2" parent="Triggers/Object" instance=ExtResource("19_fp3yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 OneShot = true
@@ -333,8 +344,6 @@ OneShot = true
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Object/Rukh6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
-
-[node name="Environment" type="Node3D" parent="Triggers"]
 
 [node name="Checkpoint" type="Node3D" parent="Triggers"]
 visible = false
@@ -1000,7 +1009,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
 [node name="AutomationTrigger2" parent="SkyRoad/SkyRoad02" instance=ExtResource("46_x224c")]
-transform = Transform3D(-0.696364, -0.122788, -0.707107, -0.173648, 0.984808, 0, 0.696364, 0.122788, -0.707107, 36.0826, -5.03123, -1604.47)
+transform = Transform3D(-0.728104, -0.119085, -0.675043, -0.00259792, 0.985266, -0.17101, 0.685461, -0.122759, -0.717686, 39.569, -4.63731, -1600.89)
 endPoint = 320.0
 ignoreDirection = true
 
@@ -1558,6 +1567,7 @@ environment = SubResource("Environment_5x5bb")
 [connection signal="Activated" from="SkyRoad/SkyRoad02/GargoyleTrigger" to="SkyRoad/SkyRoad02/Gargoyle" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad02/GroundLockout" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad02/GroundLockout" to="SkyRoad/SkyroadGroundLockout" method="Activate"]
+[connection signal="Deactivated" from="SkyRoad/SkyRoad02/AutomationTrigger1" to="Collision/OneWayWall" method="Activate"]
 [connection signal="Deactivated" from="SkyRoad/SkyRoad02/AutomationTrigger1" to="SkyRoad/SkyroadLockout" method="Activate"]
 [connection signal="Deactivated" from="SkyRoad/SkyRoad02/AutomationTrigger1" to="SkyRoad/SkyroadGroundLockout" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad02/AutomationTrigger2" to="Collision/OneWayWall" method="Deactivate"]
