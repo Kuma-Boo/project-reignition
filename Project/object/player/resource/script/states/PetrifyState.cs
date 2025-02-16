@@ -36,6 +36,7 @@ public partial class PetrifyState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
+		Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
 		ProcessGravity();
 		Player.CheckGround();
 		Player.ApplyMovement();
