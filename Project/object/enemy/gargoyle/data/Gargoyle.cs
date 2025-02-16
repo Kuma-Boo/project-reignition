@@ -11,6 +11,10 @@ Gargoyle always tries to slash if the player is petrified
 [Tool]
 public partial class Gargoyle : Enemy
 {
+	[Export] private Node3D windball;
+	private bool isWindballActive;
+	private readonly float WindballMoveSpeed = 10.0f;
+
 	private State state;
 	private enum State
 	{
@@ -73,6 +77,7 @@ public partial class Gargoyle : Enemy
 		state = State.Statue;
 		velocity = Vector3.Zero;
 		isSlashMovementEnabled = false;
+		isWindballActive = false;
 
 		DisableActionTimer();
 		actionTimer = ActionInterval;
@@ -190,6 +195,9 @@ public partial class Gargoyle : Enemy
 			Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
 		}
 
+		if (isWindballActive)
+			windball.GlobalPosition += windball.Forward() * WindballMoveSpeed * PhysicsManager.physicsDelta;
+
 		if (isActionTimerPaused)
 			return;
 
@@ -241,6 +249,13 @@ public partial class Gargoyle : Enemy
 		AnimationTree.Set(ActionTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
+	private void StartWindball()
+	{
+		isWindballActive = true;
+		windball.GlobalTransform = Root.GlobalTransform;
+	}
+	private void StopWindball() => isWindballActive = false;
+
 	/// <summary> Called whenever the player touches the gargoyle's hands. </summary>
 	private void OnHitboxEntered(Area3D a)
 	{
@@ -248,5 +263,13 @@ public partial class Gargoyle : Enemy
 			return;
 
 		Player.StartKnockback();
+	}
+
+	private void OnWindballEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player detection"))
+			return;
+
+		Player.StartBounce();
 	}
 }

@@ -18,7 +18,6 @@ public partial class PetrifyState : PlayerState
 		Player.MoveSpeed = 0;
 		Player.VerticalSpeed = 0;
 
-		Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
 		Player.Animator.StartPetrify();
 	}
 

@@ -1,7 +1,8 @@
-[gd_scene load_steps=44 format=3 uid="uid://b2jsh7hensgem"]
+[gd_scene load_steps=46 format=3 uid="uid://b2jsh7hensgem"]
 
 [ext_resource type="PackedScene" uid="uid://b4n1751vh5d4s" path="res://object/enemy/gargoyle/data/model/Gargoyle.gltf" id="1_gl7tb"]
 [ext_resource type="Script" path="res://object/enemy/gargoyle/data/Gargoyle.cs" id="2_gr8hu"]
+[ext_resource type="PackedScene" uid="uid://dyg4af257op4a" path="res://object/enemy/gargoyle/data/model/Windball.gltf" id="3_mw58f"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_nm3dx"]
 
@@ -13,6 +14,9 @@ radius = 1.0
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_nr7cm"]
 height = 30.0
 radius = 10.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_el5bw"]
+radius = 2.0
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_6t1i8"]
 input_0/name = "petrify"
@@ -177,6 +181,7 @@ animation = &"petrify"
 animation = &"slash"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_a4b7b"]
+graph_offset = Vector2(-58.1818, -5)
 nodes/action_transition/node = SubResource("AnimationNodeTransition_6t1i8")
 nodes/action_transition/position = Vector2(-720, 140)
 nodes/action_trigger/node = SubResource("AnimationNodeOneShot_2kn1h")
@@ -204,8 +209,9 @@ nodes/slash_anim/node = SubResource("AnimationNodeAnimation_oy0p3")
 nodes/slash_anim/position = Vector2(-1160, 240)
 node_connections = [&"action_transition", 0, &"petrify_anim", &"action_transition", 1, &"slash_anim", &"action_transition", 2, &"block_state", &"action_trigger", 0, &"movement_state", &"action_trigger", 1, &"action_transition", &"damage_direction_transition", 0, &"damage_left_anim", &"damage_direction_transition", 1, &"damage_right_anim", &"damage_trigger", 0, &"action_trigger", &"damage_trigger", 1, &"damage_direction_transition", &"defeat_transition", 0, &"defeat_anim", &"defeat_transition", 1, &"damage_trigger", &"output", 0, &"defeat_transition"]
 
-[node name="Gargoyle" type="Node3D"]
+[node name="Gargoyle" type="Node3D" node_paths=PackedStringArray("windball")]
 script = ExtResource("2_gr8hu")
+windball = NodePath("Windball")
 rangeOverride = 10
 pearlAmount = 15
 maxHealth = 3
@@ -308,6 +314,20 @@ monitorable = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("CylinderShape3D_nr7cm")
 
+[node name="Windball" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Windball" parent="Windball" instance=ExtResource("3_mw58f")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2.5, 0)
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Windball"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+shape = SubResource("SphereShape3D_el5bw")
+disabled = true
+
 [node name="AnimationTree" type="AnimationTree" parent="."]
 root_node = NodePath("../Root")
 tree_root = SubResource("AnimationNodeBlendTree_a4b7b")
@@ -343,5 +363,6 @@ color = Color(1, 1, 1, 0)
 [connection signal="area_exited" from="Root/GargoyleRoot/Skeleton3D/Head/Lockon" to="." method="OnExited"]
 [connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
 [connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
+[connection signal="area_entered" from="Windball" to="." method="OnWindballEntered"]
 
 [editable path="Root"]
