@@ -74,36 +74,43 @@ public partial class GargoyleSkyroad : PathFollow3D
 		// Smoothly move the local position to the correct distance
 		root.Position = root.Position.SmoothDamp(Vector3.Back * 2.0f, ref velocity, PositionSmoothing);
 
+		float pathDelta = CalculateMovementDelta();
+
 		// Move gargoyle along the path
-		float movementDelta = CalculateMoveSpeed() * PhysicsManager.physicsDelta;
-		Progress += movementDelta;
+		float movementDelta = CalculateMoveSpeed(pathDelta) * PhysicsManager.physicsDelta;
 
 		// Ensure we're a set distance away from the player
-		if (Player.PathFollower.ActivePath == CurrentPath)
+		if (pathDelta < MinDistanceToPlayer)
 		{
-			float playerProgress = Player.PathFollower.Progress;
-			float delta = Progress - Player.PathFollower.Progress;
-			if (delta < MinDistanceToPlayer)
-			{
-				Progress = playerProgress + MinDistanceToPlayer;
+			Progress = Player.PathFollower.Progress + MinDistanceToPlayer;
 
-				if (!isFastSpeed && Player.Skills.IsSpeedBreakActive)
-					ToggleFastSpeed();
-			}
+			if (!isFastSpeed && Player.Skills.IsSpeedBreakActive)
+				ToggleFastSpeed();
 		}
+
+		Progress += movementDelta;
 
 		activeRoad.SetPathRatio((traveledDistance + Progress) / totalDistance); // Update visuals
 		if (Mathf.IsEqualApprox(ProgressRatio, 1.0f))
 			IncrementPathIndex();
 	}
 
-	private float CalculateMoveSpeed()
+	private float CalculateMovementDelta()
+	{
+		if (Player.PathFollower.ActivePath == CurrentPath)
+			return Progress - Player.PathFollower.Progress;
+
+		// Different path
+		return Mathf.Inf;
+	}
+
+	private float CalculateMoveSpeed(float pathDelta)
 	{
 		if (Mathf.IsZeroApprox(speedBlend) || Mathf.IsEqualApprox(speedBlend, 1.0f))
 		{
 			// Only update timer when movement speed isn't changing
 			speedTimer = Mathf.MoveToward(speedTimer, 0.0f, PhysicsManager.physicsDelta);
-			if (Mathf.IsZeroApprox(speedTimer))
+			if (CanToggleSpeed(pathDelta))
 				ToggleFastSpeed();
 		}
 
@@ -112,6 +119,18 @@ public partial class GargoyleSkyroad : PathFollow3D
 			animationTree.Set(FlapSpeedParameter, 1f + (speedBlend * .5f));
 
 		return Mathf.Lerp(BaseMovementSpeed, FastMovementSpeed, speedBlend);
+	}
+
+	private bool CanToggleSpeed(float pathDelta)
+	{
+		if (!Mathf.IsZeroApprox(speedTimer))
+			return false;
+
+		// Prevent gargoyle from flying ahead too far
+		if (!isFastSpeed && pathDelta > MinDistanceToPlayer * 5f)
+			return false;
+
+		return true;
 	}
 
 	private void ToggleFastSpeed()
