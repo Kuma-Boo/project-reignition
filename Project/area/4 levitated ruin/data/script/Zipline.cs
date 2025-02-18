@@ -8,9 +8,6 @@ public partial class Zipline : PathFollow3D
 	[Signal]
 	public delegate void ActivatedEventHandler();
 
-	[Export] public Node3D Root { get; set; }
-	[Export] public Node3D FollowObject { get; set; }
-
 	[Export] private float ziplineSpeed = 10.0f;
 	private float currentSpeed;
 
@@ -29,9 +26,14 @@ public partial class Zipline : PathFollow3D
 	private float inputValue;
 	public void SetInput(float input) => inputValue = input;
 
+	[ExportGroup("Components")]
+	[Export] public Node3D Root { get; private set; }
+	[Export] public Node3D FollowObject { get; private set; }
+	[Export] public CollisionShape3D Collider { get; private set; }
+
 	public override void _Ready()
 	{
-		StageSettings.Instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.Respawned += Respawn;
 		startingProgress = Progress;
 		ProcessMode = ProcessModeEnum.Disabled;
 	}
@@ -61,6 +63,7 @@ public partial class Zipline : PathFollow3D
 		currentRotation = targetRotation = 0;
 		rotationVelocity = rotationSmoothing = 0;
 		isFullSwingActive = false;
+		Collider.Disabled = false;
 	}
 
 	public void ProcessZipline()
@@ -159,6 +162,7 @@ public partial class Zipline : PathFollow3D
 
 		currentSpeed = ziplineSpeed;
 		ProcessMode = ProcessModeEnum.Inherit;
+		Collider.Disabled = true;
 
 		EmitSignal(SignalName.Activated);
 	}

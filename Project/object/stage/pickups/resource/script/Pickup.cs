@@ -26,8 +26,8 @@ namespace Project.Gameplay.Objects
 
 			if (!DisableAutoRespawning) // Connect respawn triggers
 			{
-				Stage.ConnectRespawnSignal(this);
-				Stage.ConnectUnloadSignal(this);
+				Stage.Respawned += Respawn;
+				Stage.Unloaded += Unload;
 			}
 		}
 

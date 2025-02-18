@@ -131,7 +131,7 @@ namespace Project.Gameplay.Triggers
 			}
 
 			if (respawnMode != RespawnModes.Disabled) //Connect respawn signal
-				StageSettings.Instance.ConnectRespawnSignal(this);
+				StageSettings.Instance.Respawned += Respawn;
 		}
 
 		public void Respawn()

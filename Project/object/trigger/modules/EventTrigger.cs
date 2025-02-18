@@ -152,7 +152,7 @@ public partial class EventTrigger : StageTriggerModule
 		if (Engine.IsEditorHint()) return;
 
 		if (autoRespawn)
-			StageSettings.Instance.ConnectRespawnSignal(this);
+			StageSettings.Instance.Respawned += Respawn;
 
 		StageSettings.Instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.Respawn));
 
