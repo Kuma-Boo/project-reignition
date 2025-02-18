@@ -490,6 +490,8 @@ public partial class StageSettings : Node3D
 
 	[Signal]
 	public delegate void RespawnedEventHandler();
+	[Signal]
+	public delegate void RespawnedEnemiesEventHandler();
 	public readonly static StringName RESPAWN_FUNCTION = "Respawn"; // Default name of respawn functions
 	public void ConnectRespawnSignal(Node node)
 	{
@@ -507,7 +509,11 @@ public partial class StageSettings : Node3D
 	{
 		SoundManager.instance.CancelDialog(); // Cancel any active dialog
 		EmitSignal(SignalName.Respawned);
+
+		GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Timeout += RespawnEnemies;
 	}
+
+	private void RespawnEnemies() => EmitSignal(SignalName.RespawnedEnemies);
 	#endregion
 
 	#region Level Completion

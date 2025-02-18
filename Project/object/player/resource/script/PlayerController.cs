@@ -964,8 +964,7 @@ public partial class PlayerController : CharacterBody3D
 			RemoveCollisionExceptionWith(exception);
 
 		TransitionManager.instance.TransitionProcess -= ProcessRespawn;
-		// Wait a single physics frame to ensure objects update properly
-		GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Timeout += FinishRespawn;
+		FinishRespawn();
 	}
 
 	/// <summary> Final step of the respawn process. Re-enable area collider and finish transition. </summary>
