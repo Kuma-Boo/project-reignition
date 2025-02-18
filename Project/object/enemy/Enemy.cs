@@ -82,8 +82,8 @@ public partial class Enemy : Node3D
 		AnimationPlayer = GetNodeOrNull<AnimationPlayer>(animationPlayer);
 
 		SpawnData = new(GetParent(), Transform);
-		StageSettings.Instance.ConnectRespawnSignal(this);
-		StageSettings.Instance.ConnectUnloadSignal(this);
+		StageSettings.Instance.Respawned += Respawn;
+		StageSettings.Instance.Unloaded += Unload;
 		StageSettings.Instance.RespawnedEnemies += RespawnRange;
 		Respawn();
 

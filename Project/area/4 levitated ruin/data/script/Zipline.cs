@@ -33,7 +33,7 @@ public partial class Zipline : PathFollow3D
 
 	public override void _Ready()
 	{
-		StageSettings.Instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.Respawned += Respawn;
 		startingProgress = Progress;
 		ProcessMode = ProcessModeEnum.Disabled;
 	}

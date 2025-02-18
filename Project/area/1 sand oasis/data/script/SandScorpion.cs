@@ -89,8 +89,8 @@ public partial class SandScorpion : Node3D
 
 		SetUpMissiles();
 
-		StageSettings.Instance.ConnectUnloadSignal(this);
-		StageSettings.Instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.Unloaded += Unload;
+		StageSettings.Instance.Respawned += Respawn;
 
 		StageSettings.Instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.StartIntroduction));
 	}

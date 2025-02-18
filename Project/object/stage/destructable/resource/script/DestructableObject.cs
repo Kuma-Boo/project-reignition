@@ -107,9 +107,9 @@ public partial class DestructableObject : Node3D
 		Respawn();
 
 		if (!disableRespawn)
-			StageSettings.Instance.ConnectRespawnSignal(this);
+			StageSettings.Instance.Respawned += Respawn;
 
-		StageSettings.Instance.ConnectUnloadSignal(this);
+		StageSettings.Instance.Unloaded += Unload;
 	}
 
 	protected virtual void ProcessObject()

@@ -45,7 +45,7 @@ public partial class GargoyleSkyroad : PathFollow3D
 		InitializePathLength();
 
 		spawnData = new(GetParent(), Transform);
-		StageSettings.Instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.Respawned += Respawn;
 
 		animationTree.Active = true;
 		Respawn();

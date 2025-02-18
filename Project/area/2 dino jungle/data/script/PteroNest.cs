@@ -15,7 +15,7 @@ public partial class PteroNest : Node3D
 	public override void _Ready()
 	{
 		Animator = GetNodeOrNull<AnimationPlayer>(animator);
-		StageSettings.Instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.Respawned += Respawn;
 	}
 
 	public void Respawn()

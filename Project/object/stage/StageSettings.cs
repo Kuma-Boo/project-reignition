@@ -68,6 +68,11 @@ public partial class StageSettings : Node3D
 		SetEnvironmentFxFactor(environmentFxFactor, 0);
 	}
 
+	public override void _ExitTree()
+	{
+		EmitSignal(SignalName.Unloaded);
+	}
+
 	public void UpdatePostProcessingStatus()
 	{
 		bool postProcessingEnabled = SaveManager.Config.postProcessingQuality != SaveManager.QualitySetting.Disabled;
@@ -473,37 +478,11 @@ public partial class StageSettings : Node3D
 	}
 
 	[Signal]
-	public delegate void UnloadedEventHandler();
-	private const string UNLOAD_FUNCTION = "Unload"; // Clean up any memory leaks in this function
-	public override void _ExitTree() => EmitSignal(SignalName.Unloaded);
-	public void ConnectUnloadSignal(Node node)
-	{
-		if (!node.HasMethod(UNLOAD_FUNCTION))
-		{
-			GD.PrintErr($"Node {node.Name} doesn't have a function '{UNLOAD_FUNCTION}!'");
-			return;
-		}
-
-		if (!IsConnected(SignalName.Unloaded, new Callable(node, UNLOAD_FUNCTION)))
-			Connect(SignalName.Unloaded, new Callable(node, UNLOAD_FUNCTION));
-	}
-
-	[Signal]
 	public delegate void RespawnedEventHandler();
 	[Signal]
 	public delegate void RespawnedEnemiesEventHandler();
-	public readonly static StringName RESPAWN_FUNCTION = "Respawn"; // Default name of respawn functions
-	public void ConnectRespawnSignal(Node node)
-	{
-		if (!node.HasMethod(RESPAWN_FUNCTION))
-		{
-			GD.PrintErr($"Node {node.Name} doesn't have a function '{RESPAWN_FUNCTION}!'");
-			return;
-		}
-
-		if (!IsConnected(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION)))
-			Connect(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION), (uint)ConnectFlags.Deferred);
-	}
+	[Signal]
+	public delegate void UnloadedEventHandler();
 
 	public void RespawnObjects()
 	{

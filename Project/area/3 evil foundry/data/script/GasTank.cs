@@ -63,7 +63,7 @@ public partial class GasTank : Area3D
 		currentTimeScale = timeScale;
 
 		if (!disableRespawning)
-			StageSettings.Instance.ConnectRespawnSignal(this);
+			StageSettings.Instance.Respawned += Respawn;
 	}
 
 	public void InitializeSpawnData() => spawnData = new SpawnData(GetParent(), Transform);

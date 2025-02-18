@@ -23,7 +23,7 @@ public partial class AutomationTrigger : Area3D
 	private PlayerController Player => StageSettings.Player;
 	public bool IsFinished => Player.PathFollower.Progress >= endPoint;
 
-	public override void _Ready() => StageSettings.Instance.ConnectRespawnSignal(this);
+	public override void _Ready() => StageSettings.Instance.Respawned += Respawn;
 
 	public override void _PhysicsProcess(double _)
 	{
