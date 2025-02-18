@@ -74,6 +74,8 @@ public partial class Gargoyle : Enemy
 
 	public override void Respawn()
 	{
+		base.Respawn();
+
 		state = State.Statue;
 		velocity = Vector3.Zero;
 		isSlashMovementEnabled = false;
@@ -89,8 +91,6 @@ public partial class Gargoyle : Enemy
 		AnimationTree.Set(DefeatTransition, "disabled");
 		AnimationTree.Set(DamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		AnimationTree.Set(ActionTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
-
-		base.Respawn();
 	}
 
 	protected override void UpdateEnemy()
@@ -188,7 +188,7 @@ public partial class Gargoyle : Enemy
 
 	private void UpdateActions()
 	{
-		if (state == State.Idle || isSlashMovementEnabled)
+		if (state == State.Idle || state == State.Petrify || isSlashMovementEnabled)
 		{
 			GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref velocity, MovementSmoothing);
 			TrackPlayer();

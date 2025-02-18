@@ -4,10 +4,10 @@
 [ext_resource type="Script" path="res://object/enemy/gargoyle/data/Gargoyle.cs" id="2_gr8hu"]
 [ext_resource type="PackedScene" uid="uid://dyg4af257op4a" path="res://object/enemy/gargoyle/data/model/Windball.gltf" id="3_mw58f"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_nm3dx"]
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_tsk0o"]
 radius = 1.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_nm3dx"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_inmb1"]
 
@@ -181,7 +181,7 @@ animation = &"petrify"
 animation = &"slash"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_a4b7b"]
-graph_offset = Vector2(-58.1818, -5)
+graph_offset = Vector2(-1351.56, 15.0661)
 nodes/action_transition/node = SubResource("AnimationNodeTransition_6t1i8")
 nodes/action_transition/position = Vector2(-720, 140)
 nodes/action_trigger/node = SubResource("AnimationNodeOneShot_2kn1h")
@@ -240,37 +240,17 @@ bones/19/rotation = Quaternion(-0.707107, 2.40748e-15, 4.39029e-08, 0.707107)
 [node name="GargoyleMesh" parent="Root/GargoyleRoot/Skeleton3D" index="0"]
 instance_shader_parameters/defeat_blend = 0.0
 
-[node name="RHand" type="BoneAttachment3D" parent="Root/GargoyleRoot/Skeleton3D" index="1"]
-transform = Transform3D(-0.979585, -0.0616084, -0.191352, -0.168702, -0.265693, 0.94918, -0.109319, 0.962083, 0.249876, -0.477946, 2.24118, 0.167372)
-bone_name = "r_hand"
-bone_idx = 11
-
-[node name="Hitbox" type="Area3D" parent="Root/GargoyleRoot/Skeleton3D/RHand"]
-transform = Transform3D(1, 0, 1.77636e-15, 0, 1, -7.81229e-15, 0, 2.84585e-15, 1, 7.10543e-15, 0.2, 0)
+[node name="Hitbox" type="Area3D" parent="Root/GargoyleRoot/Skeleton3D" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.5)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/GargoyleRoot/Skeleton3D/RHand/Hitbox"]
-shape = SubResource("SphereShape3D_nm3dx")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/GargoyleRoot/Skeleton3D/Hitbox"]
+shape = SubResource("SphereShape3D_tsk0o")
 disabled = true
 
-[node name="LHand" type="BoneAttachment3D" parent="Root/GargoyleRoot/Skeleton3D" index="2"]
-transform = Transform3D(-0.979584, 0.0616082, 0.191352, 0.168702, -0.265692, 0.94918, 0.109319, 0.962083, 0.249876, 0.477946, 2.24118, 0.167372)
-bone_name = "l_hand"
-bone_idx = 7
-
-[node name="Hitbox" type="Area3D" parent="Root/GargoyleRoot/Skeleton3D/LHand"]
-transform = Transform3D(1, 0, 1.77636e-15, 0, 1, -7.81229e-15, 0, 2.84585e-15, 1, 7.10543e-15, 0.2, 0)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/GargoyleRoot/Skeleton3D/LHand/Hitbox"]
-shape = SubResource("SphereShape3D_nm3dx")
-disabled = true
-
-[node name="Head" type="BoneAttachment3D" parent="Root/GargoyleRoot/Skeleton3D" index="3"]
+[node name="Head" type="BoneAttachment3D" parent="Root/GargoyleRoot/Skeleton3D" index="2"]
 transform = Transform3D(1, -9.6032e-08, -3.76046e-07, -2.9006e-07, -0.828684, -0.559717, -2.57873e-07, 0.559717, -0.828684, -3.9284e-08, 3.42603, 0.730909)
 bone_name = "head"
 bone_idx = 3
@@ -289,7 +269,7 @@ transform = Transform3D(1, 1.42109e-14, 4.26326e-14, 0, 1, -2.98023e-08, 1.42109
 shape = SubResource("SphereShape3D_tsk0o")
 disabled = true
 
-[node name="Root" type="BoneAttachment3D" parent="Root/GargoyleRoot/Skeleton3D" index="4"]
+[node name="Root" type="BoneAttachment3D" parent="Root/GargoyleRoot/Skeleton3D" index="3"]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.77636e-16, 3.16, 1.18615e-07)
 bone_name = "root"
 bone_idx = 0
@@ -332,9 +312,9 @@ disabled = true
 root_node = NodePath("../Root")
 tree_root = SubResource("AnimationNodeBlendTree_a4b7b")
 anim_player = NodePath("../Root/AnimationPlayer")
-parameters/action_transition/current_state = "block"
+parameters/action_transition/current_state = "petrify"
 parameters/action_transition/transition_request = ""
-parameters/action_transition/current_index = 2
+parameters/action_transition/current_index = 0
 parameters/action_trigger/active = false
 parameters/action_trigger/internal_active = false
 parameters/action_trigger/request = 0
@@ -357,8 +337,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
 
-[connection signal="area_entered" from="Root/GargoyleRoot/Skeleton3D/RHand/Hitbox" to="." method="OnHitboxEntered"]
-[connection signal="area_entered" from="Root/GargoyleRoot/Skeleton3D/LHand/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_entered" from="Root/GargoyleRoot/Skeleton3D/Hitbox" to="." method="OnHitboxEntered"]
 [connection signal="area_entered" from="Root/GargoyleRoot/Skeleton3D/Head/Lockon" to="." method="OnEntered"]
 [connection signal="area_exited" from="Root/GargoyleRoot/Skeleton3D/Head/Lockon" to="." method="OnExited"]
 [connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
