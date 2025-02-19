@@ -327,8 +327,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.1)
 transform = Transform3D(-0.972537, -0.0400305, -0.229279, -0.12416, 0.922455, 0.365598, 0.196865, 0.384025, -0.902092, -0.76367, 10.4903, -195.886)
 sfxPlayer = NodePath("../DashPanel/SFX")
 
-[node name="SquarePillarFly" parent="MainAct/Rukh1" instance=ExtResource("7_x6tsb")]
-transform = Transform3D(-0.0706806, -0.0676749, 0.995201, 0.127111, 0.988951, 0.0762775, -0.989367, 0.131892, -0.0612974, -0.83155, 15.9143, -208.648)
+[node name="SquarePillarFlyTrigger2" parent="MainAct/Rukh1" instance=ExtResource("5_yejv7")]
+transform = Transform3D(0.989211, 0, 0.146497, 0, 1, 0, -0.146497, 0, 0.989211, 0.312197, 14.8664, -198.046)
+"Enter Mode" = 0
+
+[node name="SquarePillarFly" parent="MainAct/Rukh1/SquarePillarFlyTrigger2" node_paths=PackedStringArray("rotationRoot", "root", "pieceRoot", "animator") instance=ExtResource("7_x6tsb")]
+transform = Transform3D(0.00134468, -0.109237, 0.994016, 0.122509, 0.986546, 0.108251, -0.992467, 0.121631, 0.0147092, 0.368605, 1.11381, -10.64)
+rotationRoot = NodePath("../../SquarePillarFlyTrigger/SquarePillarFly/Root/SquarePillarFly/SquarePillarFlyMesh")
+root = NodePath("../../SquarePillarFlyTrigger/SquarePillarFly/Root")
+pieceRoot = NodePath("../../SquarePillarFlyTrigger/SquarePillarFly/SquarePillarPieces")
+animator = NodePath("../../SquarePillarFlyTrigger/SquarePillarFly/AnimationPlayer")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh1/SquarePillarFlyTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
 
 [node name="GrindPillarStatic" parent="MainAct/Rukh1" instance=ExtResource("15_oja87")]
 transform = Transform3D(0.999755, 0.00461863, -0.0216416, 0, 0.977977, 0.208714, 0.022129, -0.208663, 0.977737, -6.49758, 15.33, -212.491)
@@ -528,21 +540,21 @@ animator = NodePath("../../../Rukh1/GrindPillarFlyTrigger/GrindPillarFly2/Animat
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ypvwq")
 
-[node name="SquarePillarFlyTrigger2" parent="MainAct/Rukh2" instance=ExtResource("5_yejv7")]
+[node name="SquarePillarFlyTrigger5" parent="MainAct/Rukh2" instance=ExtResource("5_yejv7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 5.96046e-08, 0, 1, 0.928696, 0.836075, -13.0379)
 "Enter Mode" = 0
 
-[node name="SquarePillarFly" parent="MainAct/Rukh2/SquarePillarFlyTrigger2" instance=ExtResource("7_x6tsb")]
+[node name="SquarePillarFly" parent="MainAct/Rukh2/SquarePillarFlyTrigger5" instance=ExtResource("7_x6tsb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -5.96047e-08, 0, 1, -3.49321, 1.17369, -38.418)
 
-[node name="SquarePillarFly2" parent="MainAct/Rukh2/SquarePillarFlyTrigger2" node_paths=PackedStringArray("rotationRoot", "root", "pieceRoot", "animator") instance=ExtResource("7_x6tsb")]
+[node name="SquarePillarFly2" parent="MainAct/Rukh2/SquarePillarFlyTrigger5" node_paths=PackedStringArray("rotationRoot", "root", "pieceRoot", "animator") instance=ExtResource("7_x6tsb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -5.96047e-08, 0, 1, 1.56902, 1.17369, -38.418)
 rotationRoot = NodePath("../SquarePillarFly/Root/SquarePillarFly/SquarePillarFlyMesh")
 root = NodePath("../SquarePillarFly/Root")
 pieceRoot = NodePath("../SquarePillarFly/SquarePillarPieces")
 animator = NodePath("../SquarePillarFly/AnimationPlayer")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh2/SquarePillarFlyTrigger2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh2/SquarePillarFlyTrigger5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ypvwq")
 
@@ -1232,6 +1244,7 @@ shape = SubResource("BoxShape3D_x4cke")
 [connection signal="Activated" from="MainAct/CullingTrigger/Tower" to="MainAct/Tower" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingTrigger/Tower" to="MainAct/Tower" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Rukh1/SquarePillarFlyTrigger" to="MainAct/Rukh1/SquarePillarFlyTrigger/SquarePillarFly" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh1/SquarePillarFlyTrigger2" to="MainAct/Rukh1/SquarePillarFlyTrigger2/SquarePillarFly" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh1/GrindPillarFlyTrigger" to="MainAct/Rukh1/GrindPillarFlyTrigger/GrindPillarFly1" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh1/GrindPillarFlyTrigger" to="MainAct/Rukh1/GrindPillarFlyTrigger/GrindPillarFly2" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh1/JumpPanel" to="Static/Collision/OneWayWall" method="Deactivate"]
@@ -1244,9 +1257,10 @@ shape = SubResource("BoxShape3D_x4cke")
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRingSpike" to="Static/Visuals/Rukh1LOD" method="Activate"]
 [connection signal="Entered" from="MainAct/Rukh1/LaunchRing2" to="MainAct/Rukh1/LaunchRing2/Path" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh2/GrindPillarFlyTrigger2" to="MainAct/Rukh2/GrindPillarFlyTrigger2/GrindPillarFly3" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh2/GrindPillarFlyTrigger2" to="MainAct/Rukh2/GrindPillarFlyTrigger2/GrindPillarFly4" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh2/GrindPillarFlyTrigger2" to="MainAct/Rukh2/GrindPillarFlyTrigger2/GrindPillarFly5" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh2/SquarePillarFlyTrigger2" to="MainAct/Rukh2/SquarePillarFlyTrigger2/SquarePillarFly" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh2/SquarePillarFlyTrigger2" to="MainAct/Rukh2/SquarePillarFlyTrigger2/SquarePillarFly2" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh2/SquarePillarFlyTrigger5" to="MainAct/Rukh2/SquarePillarFlyTrigger5/SquarePillarFly" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh2/SquarePillarFlyTrigger5" to="MainAct/Rukh2/SquarePillarFlyTrigger5/SquarePillarFly2" method="Activate"]
 [connection signal="Defeated" from="MainAct/Rukh3/GargoylePlatform/Gargoyle" to="MainAct/Rukh3/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Tower/IvyShortcut/Spring1" to="Static/Triggers/Camera/TowerCameras" method="Activate"]
 [connection signal="Activated" from="MainAct/Tower/IvyShortcut/Spring2" to="Static/Collision/OneWayWall" method="Deactivate"]
