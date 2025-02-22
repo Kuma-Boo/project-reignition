@@ -222,6 +222,8 @@ public partial class ControlOption : Control
 			SaveManager.Config.inputConfiguration[InputId] = mappingString;
 		else
 			SaveManager.Config.inputConfiguration.Add(InputId, mappingString);
+
+		SaveManager.ApplyConfig();
 	}
 
 	/// <summary> Checks whether the input can be remapped to the target binding. </summary>
