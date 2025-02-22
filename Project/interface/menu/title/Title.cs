@@ -27,8 +27,8 @@ namespace Project.Interface.Menus
 		{
 			if (isCutsceneActive)
 			{
-				if (Input.IsActionJustPressed("button_pause") ||
-					Input.IsActionJustPressed("button_jump"))
+				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept") ||
+					Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select"))
 					FinishCutscene();
 			}
 			else if (Input.IsAnythingPressed()) //Change menu

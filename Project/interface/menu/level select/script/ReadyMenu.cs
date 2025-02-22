@@ -35,7 +35,7 @@ public partial class ReadyMenu : Menu
 
 	protected override void ProcessMenu()
 	{
-		if (Input.IsActionJustPressed("button_pause"))
+		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
 		{
 			menuMemory[MemoryKeys.SkillMenuOpen] = 1;
 			HideDescription();
@@ -77,7 +77,7 @@ public partial class ReadyMenu : Menu
 
 	protected override void UpdateSelection()
 	{
-		int sign = Mathf.Sign(Input.GetAxis("move_left", "move_right"));
+		int sign = Mathf.Sign(Input.GetAxis("ui_left", "ui_right"));
 		if (sign == 0) return;
 
 		if (sign > 0 && HorizontalSelection == 0)

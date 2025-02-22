@@ -109,7 +109,7 @@ public partial class SkillSelect : Menu
 
 	protected override void ProcessMenu()
 	{
-		if (Input.IsActionJustPressed("button_pause"))
+		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
 		{
 			OpenPresetMenu();
 			return;
@@ -147,7 +147,7 @@ public partial class SkillSelect : Menu
 	{
 		if (IsAlertMenuActive)
 		{
-			int input = Mathf.Sign(Input.GetAxis("move_left", "move_right"));
+			int input = Mathf.Sign(Input.GetAxis("ui_left", "ui_right"));
 			if (input < 0 && AlertSelection == 0)
 			{
 				AlertSelection = 1;
@@ -162,7 +162,7 @@ public partial class SkillSelect : Menu
 			return;
 		}
 
-		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		int inputSign = Mathf.Sign(Input.GetAxis("ui_up", "ui_down"));
 		if (IsEditingAugment)
 		{
 			if (inputSign != 0)

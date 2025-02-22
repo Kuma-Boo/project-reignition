@@ -120,75 +120,68 @@ public partial class Menu : Control
 
 	/// <summary> How long between each interval selection. </summary>
 	protected float cursorSelectionTimer;
-	protected const float SELECTION_INTERVAL = .2f;
-	protected const float SELECTION_SCROLLING_INTERVAL = .1f;
+	protected readonly float SelectionInterval = .2f;
+	protected readonly float SelectionScrollingInterval = .1f;
 	protected virtual void ProcessMenu()
 	{
-		if (Input.IsActionJustPressed("button_jump"))
+		if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select") || Input.IsActionJustPressed("ui_select"))
 		{
 			Confirm();
+			return;
 		}
-		else if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("escape"))
+
+		if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel") || Input.IsActionJustPressed("ui_cancel"))
 		{
 			Cancel();
+			return;
 		}
-		else if (Input.GetVector("move_left", "move_right", "move_up", "move_down").Length() > SaveManager.Config.deadZone)
+
+		if (Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down").Length() > SaveManager.Config.deadZone)
 		{
 			if (Mathf.IsZeroApprox(cursorSelectionTimer))
 				UpdateSelection();
 			else
 				cursorSelectionTimer = Mathf.MoveToward(cursorSelectionTimer, 0, PhysicsManager.physicsDelta);
+
+			return;
 		}
-		else
-		{
-			cursorSelectionTimer = 0;
-			isSelectionScrolling = false;
-		}
+
+		cursorSelectionTimer = 0;
+		isSelectionScrolling = false;
 	}
 
-	/// <summary>
-	/// Called when selection was changed.
-	/// </summary>
+	/// <summary> Called when selection was changed. </summary>
 	protected virtual void UpdateSelection() { }
 
 	protected bool isSelectionScrolling;
-	/// <summary>
-	/// Call this to avoid selection changing too quickly.
-	/// </summary>
+	/// <summary> Call this to avoid selection changing too quickly. </summary>
 	protected void StartSelectionTimer()
 	{
-		if (!isSelectionScrolling)
+		if (isSelectionScrolling)
 		{
-			isSelectionScrolling = true;
-			cursorSelectionTimer = SELECTION_INTERVAL;
+			cursorSelectionTimer = SelectionScrollingInterval;
+			return;
 		}
-		else
-		{
-			cursorSelectionTimer = SELECTION_SCROLLING_INTERVAL;
-		}
+
+		isSelectionScrolling = true;
+		cursorSelectionTimer = SelectionInterval;
 	}
 
-	/// <summary>
-	/// Called when the Confirmbutton is pressed.
-	/// </summary>
+	/// <summary> Called when the Confirmbutton is pressed. </summary>
 	protected virtual void Confirm()
 	{
 		if (animator?.HasAnimation(ConfirmAnimation) == true)
 			animator.Play(ConfirmAnimation);
 	}
 
-	/// <summary>
-	/// Called when the Cancel button is pressed.
-	/// </summary>
+	/// <summary> Called when the Cancel button is pressed. </summary>
 	protected virtual void Cancel()
 	{
 		if (animator?.HasAnimation(CancelAnimation) == true)
 			animator.Play(CancelAnimation);
 	}
 
-	/// <summary>
-	/// Wraps a selection around max selection.
-	/// </summary>
+	/// <summary> Wraps a selection around max selection. </summary>
 	protected int WrapSelection(int currentSelection, int maxSelection)
 	{
 		currentSelection %= maxSelection;

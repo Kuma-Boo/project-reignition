@@ -247,7 +247,7 @@ public partial class SandScorpion : Node3D
 		switch (fightState)
 		{
 			case FightState.Introduction:
-				if (Input.IsActionJustPressed("button_pause"))
+				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
 					FinishIntroduction();
 				break;
 			case FightState.Waiting:
@@ -266,7 +266,7 @@ public partial class SandScorpion : Node3D
 				UpdateHitboxes();
 				break;
 			case FightState.Defeated:
-				if (Input.IsActionJustPressed("button_pause"))
+				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
 				{
 					eventAnimator.Play("finish-defeat");
 					rootAnimationTree.Set(DefeatSeekParameter, 10);

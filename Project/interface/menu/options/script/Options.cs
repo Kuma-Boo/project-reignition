@@ -93,7 +93,7 @@ public partial class Options : Menu
 		UpdateScrolling();
 		UpdateCursor();
 
-		if (Input.IsActionJustPressed("button_pause"))
+		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
 			Select();
 		else
 			base.ProcessMenu();
@@ -245,14 +245,14 @@ public partial class Options : Menu
 		if (currentSubmenu == Submenus.Mapping && !controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
 			return;
 
-		if (currentSubmenu == Submenus.Reset || Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down")))
+		if (currentSubmenu == Submenus.Reset || Mathf.IsZeroApprox(Input.GetAxis("ui_up", "ui_down")))
 		{
 			UpdateHorizontalSelection();
 			return;
 		}
 
 		StartSelectionTimer();
-		int targetSelection = VerticalSelection + Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		int targetSelection = VerticalSelection + Mathf.Sign(Input.GetAxis("ui_up", "ui_down"));
 		VerticalSelection = WrapSelection(targetSelection, maxSelection);
 
 		animator.Play("select");
@@ -441,9 +441,9 @@ public partial class Options : Menu
 
 	private void UpdateHorizontalSelection()
 	{
-		if (Mathf.IsZeroApprox(Input.GetAxis("move_left", "move_right"))) return;
+		if (Mathf.IsZeroApprox(Input.GetAxis("ui_left", "ui_right"))) return;
 
-		int direction = Mathf.Sign(Input.GetAxis("move_left", "move_right"));
+		int direction = Mathf.Sign(Input.GetAxis("ui_left", "ui_right"));
 
 		if (currentSubmenu == Submenus.Reset)
 		{
