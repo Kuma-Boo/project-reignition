@@ -85,9 +85,9 @@ public partial class ControlOption : Control
 	}
 
 	public void ReceiveInput(InputEvent e) => ReceiveInput(e, false);
-	public void ReceiveInput(InputEvent e, bool isSwappedInput)
+	public void ReceiveInput(InputEvent e, bool isSwappingInput)
 	{
-		if (!isSwappedInput) // Only filter remaps, not swaps
+		if (!isSwappingInput) // Only filter remaps, not swaps
 		{
 			if (state != RemapState.Listening) return;
 			if (!e.IsPressed() || e.IsEcho()) return; // Only listen for press
@@ -95,20 +95,21 @@ public partial class ControlOption : Control
 			if (!FilterInput(e)) return;
 		}
 
-		// Allow user to cancel remapping
-		if (e is InputEventKey && (e as InputEventKey).Keycode == Key.Escape)
+		// Allow user to cancel remapping if ESC is pressed or the action already has the target event
+		if ((e is InputEventKey && (e as InputEventKey).Keycode == Key.Escape) ||
+			InputMap.ActionHasEvent(InputId, e))
 		{
 			StopListening();
 			return;
 		}
 
-		RemapInput(e, isSwappedInput);
+		RemapInput(e, isSwappingInput);
 		state = RemapState.Rebinding;
 		StopListening();
 	}
 
 	/// <summary> Remaps the target input to the given input event's binding. </summary>
-	private void RemapInput(InputEvent e, bool isSwappedInput)
+	private void RemapInput(InputEvent e, bool isSwappingInput)
 	{
 		if (e is InputEventJoypadMotion denoisedEvent) // Snap sign
 		{
@@ -116,33 +117,39 @@ public partial class ControlOption : Control
 			e = denoisedEvent;
 		}
 
-		StringName swapAction = null;
-		if (!isSwappedInput) // Only look for conflicts when not swapping for inputs
+		StringName swapAction = GetActionConflict(isSwappingInput, e);
+		InputEvent swapEvent = RemapEvent(e);
+
+		// Resolve mapping conflict by swapping input mapping with this menu option's mapping
+		if (!isSwappingInput)
+			ResolveMappingConflicts(swapAction, swapEvent, e);
+
+		SaveConfig();
+	}
+
+	private StringName GetActionConflict(bool isSwappingInput, InputEvent e)
+	{
+		// Only look for conflicts when not swapping inputs
+		if (isSwappingInput)
+			return null;
+
+		// Check for conflicting input mappings
+		foreach (StringName actionId in InputMap.GetActions())
 		{
-			// Check for conflicting input mappings
-			Array<StringName> actionList = InputMap.GetActions();
+			if (!SaveManager.Config.inputConfiguration.ContainsKey(actionId) || !InputMap.ActionHasEvent(actionId, e))
+				continue;
 
-			for (int i = 0; i < actionList.Count; i++)
-			{
-				if (!SaveManager.Config.inputConfiguration.ContainsKey(actionList[i]))
-					continue;
-
-				if (!InputMap.ActionHasEvent(actionList[i], e)) continue;
-
-				if (actionList[i] == InputId)
-				{
-					EmitSignal(SignalName.SwapMapping, string.Empty, new());
-					return; // Nothing changed
-				}
-
-				// Store conflict for a swap later
-				swapAction = actionList[i];
-			}
+			// Store conflict for a swap later
+			return actionId;
 		}
 
-		Array<InputEvent> eventList = InputMap.ActionGetEvents(InputId);
-		InputEvent swapEvent = null;
+		return null;
+	}
 
+	/// <summary> Remaps the InputAction's event and returns the InputEvent for possible swapping. </summary>
+	private InputEvent RemapEvent(InputEvent e)
+	{
+		Array<InputEvent> eventList = InputMap.ActionGetEvents(InputId);
 		for (int i = 0; i < eventList.Count; i++)
 		{
 			if (e.GetType() != eventList[i].GetType())
@@ -150,56 +157,39 @@ public partial class ControlOption : Control
 
 			InputMap.ActionEraseEvent(InputId, eventList[i]); // Erase the old action
 
-			if (e is InputEventKey key && key.Keycode == Key.None)
-				break;
-			else if (e is InputEventJoypadMotion motion && motion.Axis == JoyAxis.Max)
-				break;
-			else if (e is InputEventJoypadButton button && button.ButtonIndex == JoyButton.Max)
-				break;
-
-			swapEvent = eventList[i];
-			InputMap.ActionAddEvent(InputId, e); // Add the new action
-			break;
-		}
-
-		// Resolve mapping conflict by swapping input mapping with this menu option's mapping
-		if (!isSwappedInput)
-		{
-			if (swapAction != null)
+			if ((e is InputEventKey key && key.Keycode == Key.None) ||
+				(e is InputEventJoypadMotion motion && motion.Axis == JoyAxis.Max) ||
+				(e is InputEventJoypadButton button && button.ButtonIndex == JoyButton.Max))
 			{
-				if (swapEvent == null)
-				{
-					if (e is InputEventKey)
-					{
-						swapEvent = new InputEventKey()
-						{
-							Keycode = Key.None
-						};
-					}
-					else if (e is InputEventJoypadMotion)
-					{
-						swapEvent = new InputEventJoypadMotion()
-						{
-							Axis = JoyAxis.Max
-						};
-					}
-					else if (e is InputEventJoypadButton)
-					{
-						swapEvent = new InputEventJoypadButton()
-						{
-							ButtonIndex = JoyButton.Max
-						};
-					}
-				}
-
-				EmitSignal(SignalName.SwapMapping, swapAction, swapEvent);
+				break;
 			}
 
-			if (!InputMap.ActionHasEvent(InputId, e)) // Failed to add the new action
-				InputMap.ActionAddEvent(InputId, e); // Add the new action anyway
+			InputMap.ActionAddEvent(InputId, e); // Add the new action
+			return eventList[i];
 		}
 
-		SaveConfig();
+		return null;
+	}
+
+	private void ResolveMappingConflicts(StringName swapAction, InputEvent swapEvent, InputEvent e)
+	{
+		if (swapAction != null)
+		{
+			if (swapEvent == null)
+			{
+				if (e is InputEventKey)
+					swapEvent = new InputEventKey() { Keycode = Key.None };
+				else if (e is InputEventJoypadMotion)
+					swapEvent = new InputEventJoypadMotion() { Axis = JoyAxis.Max };
+				else if (e is InputEventJoypadButton)
+					swapEvent = new InputEventJoypadButton() { ButtonIndex = JoyButton.Max };
+			}
+
+			EmitSignal(SignalName.SwapMapping, swapAction, swapEvent);
+		}
+
+		if (!InputMap.ActionHasEvent(InputId, e)) // Failed to add the new action
+			InputMap.ActionAddEvent(InputId, e); // Add the new action anyway
 	}
 
 	private void SaveConfig()
@@ -272,6 +262,8 @@ public partial class ControlOption : Control
 			{
 				case Key.Alt:
 				case Key.Meta:
+				case Key.Escape:
+				case Key.Space:
 				case Key.Numlock:
 					return false;
 			}

@@ -419,7 +419,7 @@ public partial class Options : Menu
 	private void SetUpControlOptions()
 	{
 		foreach (ControlOption controlOption in controlMappingOptions)
-			controlOption.Connect(ControlOption.SignalName.SwapMapping, new(this, MethodName.RedrawControlOptions));
+			controlOption.SwapMapping += RedrawControlOptions;
 	}
 
 	private void RedrawControlOptions(StringName id, InputEvent e)
