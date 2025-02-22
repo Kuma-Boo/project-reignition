@@ -89,7 +89,7 @@ public partial class WorldSelect : Menu
 		if (animator.AssignedAnimation == "init" || animator.AssignedAnimation == "cancel")
 			animator.Play("show-fade-video");
 		else
-			animator.Play(SHOW_ANIMATION);
+			animator.Play(ShowAnimation);
 
 		menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.WorldSelect;
 	}
@@ -144,7 +144,7 @@ public partial class WorldSelect : Menu
 			int transitionIndex = WrapSelection(isScrollingUp ? VerticalSelection - 1 : VerticalSelection + 1, (int)SaveManager.WorldEnum.Max);
 			UpdateSpriteRegion(3, transitionIndex); // Update level text
 
-			animator.Play(isScrollingUp ? SCROLL_UP_ANIMATION : SCROLL_DOWN_ANIMATION);
+			animator.Play(isScrollingUp ? ScrollUpAnimation : ScrollDownAnimation);
 			animator.Seek(0.0, true);
 			DisableProcessing();
 		}

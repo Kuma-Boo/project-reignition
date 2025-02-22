@@ -54,7 +54,7 @@ namespace Project.Interface.Menus
 		{
 			animator.Play("RESET");
 			animator.Seek(0, true);
-			animator.Play(SHOW_ANIMATION);
+			animator.Play(ShowAnimation);
 
 			cutsceneTimer = 0;
 		}

@@ -46,14 +46,14 @@ public partial class Menu : Control
 	[Export]
 	protected AnimationPlayer animator;
 
-	protected readonly StringName CONFIRM_ANIMATION = "confirm";
-	protected readonly StringName CANCEL_ANIMATION = "cancel";
-	protected readonly StringName SHOW_ANIMATION = "show";
-	protected readonly StringName HIDE_ANIMATION = "hide";
-	protected readonly StringName SCROLL_UP_ANIMATION = "scroll-up";
-	protected readonly StringName SCROLL_DOWN_ANIMATION = "scroll-down";
-	protected readonly StringName SCROLL_LEFT_ANIMATION = "scroll-up";
-	protected readonly StringName SCROLL_RIGHT_ANIMATION = "scroll-down";
+	protected readonly StringName ConfirmAnimation = "confirm";
+	protected readonly StringName CancelAnimation = "cancel";
+	protected readonly StringName ShowAnimation = "show";
+	protected readonly StringName HideAnimation = "hide";
+	protected readonly StringName ScrollUpAnimation = "scroll-up";
+	protected readonly StringName ScrollDownAnimation = "scroll-down";
+	protected readonly StringName ScrollLeftAnimation = "scroll-up";
+	protected readonly StringName ScrollRightAnimation = "scroll-down";
 
 	protected int HorizontalSelection { get; set; }
 	protected int VerticalSelection { get; set; }
@@ -93,16 +93,16 @@ public partial class Menu : Control
 	public virtual void ShowMenu()
 	{
 		// Attempt to play "show" animation
-		if (animator != null && animator.HasAnimation(SHOW_ANIMATION))
-			animator.Play(SHOW_ANIMATION);
+		if (animator?.HasAnimation(ShowAnimation) == true)
+			animator.Play(ShowAnimation);
 		else // Fallback
 			Visible = true;
 	}
 	public virtual void HideMenu()
 	{
 		// Attempt to play "hide" animation
-		if (animator != null && animator.HasAnimation(HIDE_ANIMATION))
-			animator.Play(HIDE_ANIMATION);
+		if (animator?.HasAnimation(HideAnimation) == true)
+			animator.Play(HideAnimation);
 		else // Fallback
 			Visible = false;
 	}
@@ -173,8 +173,8 @@ public partial class Menu : Control
 	/// </summary>
 	protected virtual void Confirm()
 	{
-		if (animator?.HasAnimation(CONFIRM_ANIMATION) == true)
-			animator.Play(CONFIRM_ANIMATION);
+		if (animator?.HasAnimation(ConfirmAnimation) == true)
+			animator.Play(ConfirmAnimation);
 	}
 
 	/// <summary>
@@ -182,8 +182,8 @@ public partial class Menu : Control
 	/// </summary>
 	protected virtual void Cancel()
 	{
-		if (animator?.HasAnimation(CANCEL_ANIMATION) == true)
-			animator.Play(CANCEL_ANIMATION);
+		if (animator?.HasAnimation(CancelAnimation) == true)
+			animator.Play(CancelAnimation);
 	}
 
 	/// <summary>

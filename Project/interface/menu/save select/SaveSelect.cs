@@ -102,7 +102,7 @@ public partial class SaveSelect : Menu
 		if (inputSign == 0) return;
 
 		VerticalSelection = WrapSelection(VerticalSelection + inputSign, SaveManager.SaveSlotCount);
-		animator.Play(inputSign < 0 ? SCROLL_UP_ANIMATION : SCROLL_DOWN_ANIMATION);
+		animator.Play(inputSign < 0 ? ScrollUpAnimation : ScrollDownAnimation);
 		scrollRatio = VerticalSelection / (SaveManager.SaveSlotCount - 1.0f);
 		menuMemory[MemoryKeys.SaveSelect] = VerticalSelection;
 
