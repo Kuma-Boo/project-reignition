@@ -20,7 +20,7 @@ public partial class SaveManager : Node
 	{
 		Instance = this;
 
-		SaveDirectory = GetSaveDirectory().SimplifyPath();
+		SaveDirectory = ProjectSettings.GlobalizePath(GetSaveDirectory());
 		MenuData = GameData.CreateDefaultData(); // Create a default game data object for the menu
 
 		LoadConfig();
@@ -47,11 +47,6 @@ public partial class SaveManager : Node
 
 	private string GetSaveDirectory()
 	{
-		/*
-		if (OS.IsDebugBuild())
-			return "user://";
-		*/
-
 		FileAccess f = FileAccess.Open(SaveLocationFile, FileAccess.ModeFlags.Read);
 		if (f != null && f.GetError() == Error.Ok)
 		{
