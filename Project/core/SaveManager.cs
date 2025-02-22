@@ -165,6 +165,7 @@ public partial class SaveManager : Node
 		// Controls
 		public float deadZone = .5f;
 		public ControllerType controllerType = ControllerType.Automatic;
+		public bool useHoldBreakMode = true;
 		public Dictionary inputConfiguration = [];
 
 		// Language
@@ -206,11 +207,13 @@ public partial class SaveManager : Node
 				{ nameof(isVoiceMuted), isVoiceMuted },
 				{ nameof(voiceVolume), voiceVolume },
 
+				// Controls
 				{ nameof(deadZone), deadZone },
 				{ nameof(controllerType), (int)controllerType },
+				{ nameof(useHoldBreakMode), useHoldBreakMode },
 				{ nameof(inputConfiguration), Json.Stringify(inputConfiguration) },
 
-				// Langauge
+				// Language
 				{ nameof(subtitlesEnabled), subtitlesEnabled },
 				{ nameof(voiceLanguage), (int)voiceLanguage },
 				{ nameof(textLanguage), (int)textLanguage },
@@ -255,6 +258,7 @@ public partial class SaveManager : Node
 			if (dictionary.TryGetValue(nameof(screenShake), out var))
 				screenShake = (int)var;
 
+			// Audio
 			if (dictionary.TryGetValue(nameof(isMasterMuted), out var))
 				isMasterMuted = (bool)var;
 			if (dictionary.TryGetValue(nameof(masterVolume), out var))
@@ -272,13 +276,17 @@ public partial class SaveManager : Node
 			if (dictionary.TryGetValue(nameof(voiceVolume), out var))
 				voiceVolume = (int)var;
 
+			// Controls
 			if (dictionary.TryGetValue(nameof(deadZone), out var))
 				deadZone = (float)var;
 			if (dictionary.TryGetValue(nameof(controllerType), out var))
 				controllerType = (ControllerType)(int)var;
+			if (dictionary.TryGetValue(nameof(useHoldBreakMode), out var))
+				useHoldBreakMode = (bool)var;
 			if (dictionary.TryGetValue(nameof(inputConfiguration), out var))
 				inputConfiguration = (Dictionary)Json.ParseString((string)var);
 
+			// Language
 			if (dictionary.TryGetValue(nameof(subtitlesEnabled), out var))
 				subtitlesEnabled = (bool)var;
 			if (dictionary.TryGetValue(nameof(voiceLanguage), out var))

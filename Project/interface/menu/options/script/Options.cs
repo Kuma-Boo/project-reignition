@@ -6,12 +6,9 @@ namespace Project.Interface.Menus;
 
 public partial class Options : Menu
 {
-	[Export]
-	private Control cursor;
-	[Export]
-	private AnimationPlayer cursorAnimator;
-	[Export]
-	private Control contentContainer;
+	[Export] private Control cursor;
+	[Export] private AnimationPlayer cursorAnimator;
+	[Export] private Control contentContainer;
 
 	private int maxSelection;
 	private int scrollOffset;
@@ -33,7 +30,7 @@ public partial class Options : Menu
 				maxSelection = 3;
 				break;
 			case Submenus.Control:
-				maxSelection = 4;
+				maxSelection = 5;
 				break;
 			case Submenus.Mapping:
 				maxSelection = controlMappingOptions.Length;
@@ -101,12 +98,19 @@ public partial class Options : Menu
 			CallDeferred(MethodName.UpdatePlayerPosition);
 	}
 
-	[Export]
-	private Node3D lockNode;
+	[Export] private Node3D lockNode;
 	private bool isPlayerLocked;
 	private PlayerController Player => StageSettings.Player;
-	private void LockPlayer() => isPlayerLocked = true;
-	private void UnlockPlayer() => isPlayerLocked = false;
+	private void LockPlayer()
+	{
+		isPlayerLocked = true;
+		StageSettings.Player.Skills.EnableBreakSkills();
+	}
+	private void UnlockPlayer()
+	{
+		isPlayerLocked = false;
+		StageSettings.Player.Skills.DisableBreakSkills();
+	}
 	private void UpdatePlayerPosition()
 	{
 		Vector3 lockPosition = Player.GlobalPosition;
@@ -198,7 +202,6 @@ public partial class Options : Menu
 		UnlockPlayer();
 		animator.Play("test_end");
 		currentSubmenu = Submenus.Control;
-		StageSettings.Player.Skills.DisableBreakSkills();
 	}
 
 	protected override void UpdateSelection()
@@ -278,41 +281,39 @@ public partial class Options : Menu
 		CallDeferred(MethodName.UpdateCursor);
 	}
 
+	[Export] private Label[] videoLabels;
+	[Export] private Label[] audioLabels;
+	[Export] private Label[] languageLabels;
+	[Export] private Label[] controlLabels;
 
-	[Export]
-	private Label[] videoLabels;
-	[Export]
-	private Label[] audioLabels;
-	[Export]
-	private Label[] languageLabels;
-	[Export]
-	private Label[] controlLabels;
-	private string ENABLED_STRING = "option_enable";
-	private string DISABLED_STRING = "option_disable";
-	private string LOW_STRING = "option_low";
-	private string MEDIUM_STRING = "option_medium";
-	private string HIGH_STRING = "option_high";
-	private string MUTE_STRING = "option_mute";
-	private string FULLSCREEN_STRING = "option_fullscreen";
-	private string FULLSCREEN_NORMAL_STRING = "option_normal_fullscreen";
-	private string FULLSCREEN_EXCLUSIVE_STRING = "option_exclusive_fullscreen";
+	private readonly string EnabledString = "option_enable";
+	private readonly string DisabledString = "option_disable";
+	private readonly string HoldString = "option_hold";
+	private readonly string ToggleString = "option_toggle";
+	private readonly string LowString = "option_low";
+	private readonly string MediumString = "option_medium";
+	private readonly string HighString = "option_high";
+	private readonly string MuteString = "option_mute";
+	private readonly string FullscreenString = "option_fullscreen";
+	private readonly string FullscreenNormalString = "option_normal_fullscreen";
+	private readonly string FullscreenExclusiveString = "option_exclusive_fullscreen";
 	private void UpdateLabels()
 	{
 		Vector2I resolution = SaveManager.WindowSizes[SaveManager.Config.windowSize];
 		videoLabels[0].Text = Tr("option_display").Replace("0", (SaveManager.Config.targetDisplay + 1).ToString());
-		videoLabels[1].Text = SaveManager.Config.useFullscreen ? FULLSCREEN_STRING : $"{resolution.X}:{resolution.Y}";
-		videoLabels[2].Text = SaveManager.Config.useExclusiveFullscreen ? FULLSCREEN_EXCLUSIVE_STRING : FULLSCREEN_NORMAL_STRING;
+		videoLabels[1].Text = SaveManager.Config.useFullscreen ? FullscreenString : $"{resolution.X}:{resolution.Y}";
+		videoLabels[2].Text = SaveManager.Config.useExclusiveFullscreen ? FullscreenExclusiveString : FullscreenNormalString;
 		if (SaveManager.Config.framerate == 0)
 			videoLabels[3].Text = Tr("option_unlimited_fps");
 		else
 			videoLabels[3].Text = Tr("option_fps").Replace("0", SaveManager.FrameRates[SaveManager.Config.framerate].ToString());
-		videoLabels[4].Text = SaveManager.Config.useVsync ? ENABLED_STRING : DISABLED_STRING;
+		videoLabels[4].Text = SaveManager.Config.useVsync ? EnabledString : DisabledString;
 		videoLabels[5].Text = $"{SaveManager.Config.renderScale}%";
 		videoLabels[6].Text = SaveManager.Config.resizeMode.ToString();
 		switch (SaveManager.Config.antiAliasing)
 		{
 			case 0:
-				videoLabels[7].Text = DISABLED_STRING;
+				videoLabels[7].Text = DisabledString;
 				break;
 			case 1:
 				videoLabels[7].Text = "FXAA";
@@ -335,15 +336,15 @@ public partial class Options : Menu
 			videoLabels[9].Text = CalculateQualityString(SaveManager.Config.softShadowQuality);
 		videoLabels[10].Text = CalculateQualityString(SaveManager.Config.postProcessingQuality);
 		videoLabels[11].Text = CalculateQualityString(SaveManager.Config.reflectionQuality);
-		videoLabels[12].Text = SaveManager.Config.useMotionBlur ? ENABLED_STRING : DISABLED_STRING;
-		videoLabels[13].Text = SaveManager.Config.useScreenShake ? $"{SaveManager.Config.screenShake}%" : DISABLED_STRING;
+		videoLabels[12].Text = SaveManager.Config.useMotionBlur ? EnabledString : DisabledString;
+		videoLabels[13].Text = SaveManager.Config.useScreenShake ? $"{SaveManager.Config.screenShake}%" : DisabledString;
 
-		audioLabels[0].Text = SaveManager.Config.isMasterMuted ? MUTE_STRING : $"{SaveManager.Config.masterVolume}%";
-		audioLabels[1].Text = SaveManager.Config.isBgmMuted ? MUTE_STRING : $"{SaveManager.Config.bgmVolume}%";
-		audioLabels[2].Text = SaveManager.Config.isSfxMuted ? MUTE_STRING : $"{SaveManager.Config.sfxVolume}%";
-		audioLabels[3].Text = SaveManager.Config.isVoiceMuted ? MUTE_STRING : $"{SaveManager.Config.voiceVolume}%";
+		audioLabels[0].Text = SaveManager.Config.isMasterMuted ? MuteString : $"{SaveManager.Config.masterVolume}%";
+		audioLabels[1].Text = SaveManager.Config.isBgmMuted ? MuteString : $"{SaveManager.Config.bgmVolume}%";
+		audioLabels[2].Text = SaveManager.Config.isSfxMuted ? MuteString : $"{SaveManager.Config.sfxVolume}%";
+		audioLabels[3].Text = SaveManager.Config.isVoiceMuted ? MuteString : $"{SaveManager.Config.voiceVolume}%";
 
-		languageLabels[0].Text = SaveManager.Config.subtitlesEnabled ? ENABLED_STRING : DISABLED_STRING;
+		languageLabels[0].Text = SaveManager.Config.subtitlesEnabled ? EnabledString : DisabledString;
 		languageLabels[2].Text = SaveManager.Config.voiceLanguage == SaveManager.VoiceLanguage.English ? "lang_en" : "lang_ja";
 
 		switch (SaveManager.Config.controllerType)
@@ -366,6 +367,7 @@ public partial class Options : Menu
 		}
 
 		controlLabels[1].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
+		controlLabels[2].Text = SaveManager.Config.useHoldBreakMode ? HoldString : ToggleString;
 	}
 
 	private string CalculateQualityString(SaveManager.QualitySetting setting)
@@ -373,14 +375,14 @@ public partial class Options : Menu
 		switch (setting)
 		{
 			case SaveManager.QualitySetting.Low:
-				return LOW_STRING;
+				return LowString;
 			case SaveManager.QualitySetting.Medium:
-				return MEDIUM_STRING;
+				return MediumString;
 			case SaveManager.QualitySetting.High:
-				return HIGH_STRING;
+				return HighString;
 		}
 
-		return DISABLED_STRING;
+		return DisabledString;
 	}
 
 	[Export]
@@ -639,6 +641,11 @@ public partial class Options : Menu
 			SaveManager.ApplyInputMap();
 			return true;
 		}
+		else if (VerticalSelection == 2)
+		{
+			SaveManager.Config.useHoldBreakMode = !SaveManager.Config.useHoldBreakMode;
+			return true;
+		}
 
 		return false;
 	}
@@ -683,6 +690,8 @@ public partial class Options : Menu
 		if (VerticalSelection == 0)
 			SlideControlOption(1);
 		else if (VerticalSelection == 2)
+			SlideControlOption(1);
+		else if (VerticalSelection == 3)
 			FlipBook(Submenus.Mapping, false, 0);
 		else
 			FlipBook(Submenus.Test, false, VerticalSelection);

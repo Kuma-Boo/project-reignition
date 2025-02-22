@@ -1332,7 +1332,7 @@ scrollBar = NodePath("MenuBase/ScrollBar/ScrollPosition")
 videoLabels = [NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/DisplayLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/WindowSizeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/FullscreenLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/FPSLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/VsyncLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/RenderScaleLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ResizeModeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/AntiAliasingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/BloomLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ShadowLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/PostProcessingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ReflectionLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/MotionBlurLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ScreenShakeLabel")]
 audioLabels = [NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MainLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MusicLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/SFXLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/VoiceLabel")]
 languageLabels = [NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/UseSubtitleLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/TextLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/VoiceLabel")]
-controlLabels = [NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/ControllerLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/DeadzoneLabel")]
+controlLabels = [NodePath("MenuBase/ContentClip/Content/Control/Common/LSide/RSide/Options/ControllerLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/LSide/RSide/Options/DeadzoneLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/LSide/RSide/Options/BreakLabel")]
 controlMappingOptions = [NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveUp"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveDown"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveLeft"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/MoveRight"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Jump"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Action"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Brake"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/SpeedBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/TimeBreak"), NodePath("MenuBase/ContentClip/Content/Control/Mapping/Options/Pause")]
 bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
@@ -2174,6 +2174,13 @@ label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
+[node name="BreakLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+layout_mode = 2
+text = "option_break_mode"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
 [node name="MappingLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
 layout_mode = 2
 text = "option_mapping"
@@ -2188,18 +2195,18 @@ label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
-[node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Control/Common"]
+[node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Control/Common/LSide"]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -992.0
-offset_right = -192.0
+offset_left = -456.0
+offset_right = 344.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/Common/RSide"]
+[node name="Options" type="VBoxContainer" parent="MenuBase/ContentClip/Content/Control/Common/LSide/RSide"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2209,7 +2216,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 16
 
-[node name="ControllerLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+[node name="ControllerLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/RSide/Options"]
 layout_mode = 2
 text = "playstation"
 label_settings = ExtResource("23_616uf")
@@ -2217,7 +2224,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="DeadzoneLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+[node name="DeadzoneLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/RSide/Options"]
 layout_mode = 2
 text = "100%"
 label_settings = ExtResource("23_616uf")
@@ -2225,7 +2232,15 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="MappingLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+[node name="BreakLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/RSide/Options"]
+layout_mode = 2
+text = "hold"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="MappingLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/RSide/Options"]
 layout_mode = 2
 text = ">>>"
 label_settings = ExtResource("23_616uf")
@@ -2233,7 +2248,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="TestLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/RSide/Options"]
+[node name="TestLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/RSide/Options"]
 layout_mode = 2
 text = ">>>"
 label_settings = ExtResource("23_616uf")

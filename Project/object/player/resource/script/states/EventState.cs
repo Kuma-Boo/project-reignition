@@ -50,7 +50,7 @@ public partial class EventState : PlayerState
 			Player.AddLockoutData(Trigger.CharacterExitLockout);
 
 		// Re-enable break skills
-		Player.Skills.IsSpeedBreakEnabled = Player.Skills.IsTimeBreakEnabled = true;
+		Player.Skills.EnableBreakSkills();
 
 		Trigger.EventFinished -= FinishEvent;
 		Trigger = null;
