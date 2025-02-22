@@ -9,8 +9,7 @@ public partial class ControlOption : Control
 	[Signal]
 	public delegate void SwapMappingEventHandler(StringName id, InputEvent e); // Emitted when a remap results in a mapping swap
 
-	[Export]
-	public StringName InputId { get; private set; }
+	[Export] public StringName InputId { get; private set; }
 
 	[ExportGroup("Components")]
 	[Export(PropertyHint.NodePathValidTypes, "Label")]
@@ -92,15 +91,16 @@ public partial class ControlOption : Control
 			if (state != RemapState.Listening) return;
 			if (!e.IsPressed() || e.IsEcho()) return; // Only listen for press
 			if (e is not (InputEventKey or InputEventJoypadButton or InputEventJoypadMotion)) return; // Only listen for keys and button presses.
-			if (!FilterInput(e)) return;
-		}
 
-		// Allow user to cancel remapping if ESC is pressed or the action already has the target event
-		if ((e is InputEventKey && (e as InputEventKey).Keycode == Key.Escape) ||
-			InputMap.ActionHasEvent(InputId, e))
-		{
-			StopListening();
-			return;
+			// Allow user to cancel remapping if ESC is pressed or the action already has the target event
+			if ((e is InputEventKey && (e as InputEventKey).Keycode == Key.Escape) ||
+				InputMap.ActionHasEvent(InputId, e))
+			{
+				StopListening();
+				return;
+			}
+
+			if (!FilterInput(e)) return;
 		}
 
 		RemapInput(e, isSwappingInput);
