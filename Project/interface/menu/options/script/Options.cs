@@ -190,7 +190,7 @@ public partial class Options : Menu
 				if (!controlMappingOptions[VerticalSelection].IsReady) return;
 
 				CancelSFX();
-				FlipBook(Submenus.Control, true, 2);
+				FlipBook(Submenus.Control, true, 3);
 				break;
 			case Submenus.Test:
 				return;
