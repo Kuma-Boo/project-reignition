@@ -54,18 +54,20 @@ public partial class ControlOption : Control
 		ButtonTextureRect = GetNodeOrNull<TextureRect>(buttonTextureRect);
 
 		ActionLabel.Text = Tr(InputId.ToString());
+
 		SaveConfig();
 		RedrawBinding();
-		Runtime.Instance.Connect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
-		Runtime.Instance.Connect(Runtime.SignalName.ControllerChanged, new(this, MethodName.ControllerChanged));
-		SaveManager.Instance.Connect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.RedrawBinding));
+
+		Runtime.Instance.EventInputed += ReceiveInput;
+		Runtime.Instance.ControllerChanged += ControllerChanged;
+		SaveManager.Instance.ConfigApplied += RedrawBinding;
 	}
 
 	public override void _ExitTree()
 	{
-		Runtime.Instance.Disconnect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
-		Runtime.Instance.Disconnect(Runtime.SignalName.ControllerChanged, new(this, MethodName.ControllerChanged));
-		SaveManager.Instance.Disconnect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.RedrawBinding));
+		Runtime.Instance.EventInputed -= ReceiveInput;
+		Runtime.Instance.ControllerChanged -= ControllerChanged;
+		SaveManager.Instance.ConfigApplied -= RedrawBinding;
 	}
 
 	public void StartListening()
@@ -91,6 +93,13 @@ public partial class ControlOption : Control
 			if (!e.IsPressed() || e.IsEcho()) return; // Only listen for press
 			if (e is not (InputEventKey or InputEventJoypadButton or InputEventJoypadMotion)) return; // Only listen for keys and button presses.
 			if (!FilterInput(e)) return;
+		}
+
+		// Allow user to cancel remapping
+		if (e is InputEventKey && (e as InputEventKey).Keycode == Key.Escape)
+		{
+			StopListening();
+			return;
 		}
 
 		RemapInput(e, isSwappedInput);
