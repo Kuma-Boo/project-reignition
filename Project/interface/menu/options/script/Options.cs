@@ -42,7 +42,7 @@ public partial class Options : Menu
 	}
 
 	private Callable FullscreenToggleCallable => new(this, MethodName.ToggleFullscreen);
-	public static readonly StringName MENU_PARAMETER = "menu_texture";
+	public static readonly StringName MenuParameter = "menu_texture";
 
 	private Submenus currentSubmenu = Submenus.Options;
 	private enum Submenus
@@ -232,8 +232,7 @@ public partial class Options : Menu
 		cursorAnimator.Seek(0, true);
 	}
 
-	[Export]
-	private Control scrollBar;
+	[Export] private Control scrollBar;
 	private Vector2 scrollBarVelocity;
 	private const float scrollBarSmoothing = .2f;
 	private void UpdateScrolling(bool snap = false)
@@ -657,7 +656,7 @@ public partial class Options : Menu
 			SaveManager.Config.useFullscreen = !SaveManager.Config.useFullscreen;
 			SaveManager.Config.windowSize = FindLargestWindowResolution();
 		}
-		else if (VerticalSelection == 12)
+		else if (VerticalSelection == 13)
 		{
 			SaveManager.Config.useScreenShake = !SaveManager.Config.useScreenShake;
 		}
