@@ -170,8 +170,8 @@ public partial class SaveManager : Node
 
 		// Language
 		public bool subtitlesEnabled = true;
-		public VoiceLanguage voiceLanguage = VoiceLanguage.English;
-		public TextLanguage textLanguage = TextLanguage.English;
+		public TextLanguage textLanguage = AutoDetectTextLocale();
+		public VoiceLanguage voiceLanguage = AutoDetectVoiceLocale();
 
 		/// <summary> Creates a dictionary based on config data. </summary>
 		public Dictionary ToDictionary()
@@ -288,6 +288,24 @@ public partial class SaveManager : Node
 				textLanguage = (TextLanguage)(int)var;
 		}
 	}
+
+	private static TextLanguage AutoDetectTextLocale()
+	{
+		return OS.GetLocaleLanguage() switch
+		{
+			"ja" => TextLanguage.Japanese,
+			"de" => TextLanguage.German,
+			"it" => TextLanguage.Italian,
+			"fr" => TextLanguage.French,
+			"es" => TextLanguage.Spanish,
+			"pt" => TextLanguage.BrazilianPortuguese,
+			"pl" => TextLanguage.Polish,
+			"zh" => TextLanguage.Chinese,
+			_ => TextLanguage.English,
+		};
+	}
+
+	private static VoiceLanguage AutoDetectVoiceLocale() => Config.textLanguage == TextLanguage.English ? VoiceLanguage.English : VoiceLanguage.Japanese;
 
 	/// <summary> Attempts to load config data from file. </summary>
 	public static void LoadConfig()
