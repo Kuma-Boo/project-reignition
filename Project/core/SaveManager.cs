@@ -305,7 +305,7 @@ public partial class SaveManager : Node
 		};
 	}
 
-	private static VoiceLanguage AutoDetectVoiceLocale() => Config.textLanguage == TextLanguage.English ? VoiceLanguage.English : VoiceLanguage.Japanese;
+	private static VoiceLanguage AutoDetectVoiceLocale() => AutoDetectTextLocale() == TextLanguage.English ? VoiceLanguage.English : VoiceLanguage.Japanese;
 
 	/// <summary> Attempts to load config data from file. </summary>
 	public static void LoadConfig()
