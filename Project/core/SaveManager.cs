@@ -211,7 +211,7 @@ public partial class SaveManager : Node
 				{ nameof(deadZone), deadZone },
 				{ nameof(controllerType), (int)controllerType },
 				{ nameof(useHoldBreakMode), useHoldBreakMode },
-				{ nameof(inputConfiguration), Json.Stringify(inputConfiguration) },
+				{ nameof(inputConfiguration), inputConfiguration },
 
 				// Language
 				{ nameof(subtitlesEnabled), subtitlesEnabled },
@@ -602,7 +602,7 @@ public partial class SaveManager : Node
 
 		if (FileAccess.GetOpenError() == Error.Ok)
 		{
-			file.StoreString(Json.Stringify(ActiveGameData.ToDictionary(), "\t"));
+			file.StoreString(Json.Stringify(ActiveGameData.ToDictionary()));
 			file.Close();
 		}
 	}
