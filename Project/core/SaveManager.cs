@@ -13,29 +13,14 @@ public partial class SaveManager : Node
 	[Signal]
 	public delegate void ConfigAppliedEventHandler();
 
-	private static bool IsPortableMode { get; set; }
-	private static string SaveDirectory
-	{
-		get
-		{
-			if (OS.IsDebugBuild() || !IsPortableMode)
-				return "user://";
-
-			return OS.GetExecutablePath().GetBaseDir() + "/save/";
-		}
-	}
-	private string PortableFile => OS.GetExecutablePath().GetBaseDir() + "/portable.txt";
+	private static string SaveDirectory;
+	private static string SaveLocationFile => OS.GetExecutablePath().GetBaseDir() + "/saveLocation.txt";
 
 	public override void _EnterTree()
 	{
 		Instance = this;
-		FileAccess f = FileAccess.Open(PortableFile, FileAccess.ModeFlags.Read);
-		if (f != null && f.GetError() == Error.Ok)
-		{
-			IsPortableMode = true;
-			f.Close();
-		}
 
+		SaveDirectory = GetSaveDirectory().SimplifyPath();
 		MenuData = GameData.CreateDefaultData(); // Create a default game data object for the menu
 
 		LoadConfig();
@@ -58,6 +43,30 @@ public partial class SaveManager : Node
 				Mathf.RoundToInt(Mathf.DbToLinear(AudioServer.GetBusVolumeDb((int)SoundManager.AudioBuses.Voice)) * 100);
 			ApplyConfig();
 		}
+	}
+
+	private string GetSaveDirectory()
+	{
+		/*
+		if (OS.IsDebugBuild())
+			return "user://";
+		*/
+
+		FileAccess f = FileAccess.Open(SaveLocationFile, FileAccess.ModeFlags.Read);
+		if (f != null && f.GetError() == Error.Ok)
+		{
+			string targetDirectory = f.GetAsText();
+			f.Close();
+
+			if (!string.IsNullOrWhiteSpace(targetDirectory) && DirAccess.DirExistsAbsolute(targetDirectory))
+				return targetDirectory;
+
+			// Fallback to executable path when directory is missing (only when a saveLocation file exists).
+			return OS.GetExecutablePath().GetBaseDir() + "/save/";
+		}
+
+		// Fallback to appdata
+		return "user://";
 	}
 
 	#region Config
@@ -288,7 +297,8 @@ public partial class SaveManager : Node
 	/// <summary> Attempts to load config data from file. </summary>
 	public static void LoadConfig()
 	{
-		FileAccess file = FileAccess.Open(SaveDirectory + ConfigFileName, FileAccess.ModeFlags.Read);
+		string configFile = SaveDirectory.PathJoin(ConfigFileName);
+		FileAccess file = FileAccess.Open(configFile, FileAccess.ModeFlags.Read);
 
 		try
 		{
@@ -311,8 +321,16 @@ public partial class SaveManager : Node
 	/// <summary> Attempts to save config data to file. </summary>
 	public static void SaveConfig()
 	{
-		FileAccess file = FileAccess.Open(SaveDirectory + ConfigFileName, FileAccess.ModeFlags.Write);
+		if (!DirAccess.DirExistsAbsolute(SaveDirectory))
+			DirAccess.MakeDirRecursiveAbsolute(SaveDirectory);
+
+		string configFile = SaveDirectory.PathJoin(ConfigFileName);
+		FileAccess file = FileAccess.Open(configFile, FileAccess.ModeFlags.Write);
 		file.StoreString(Json.Stringify(Config.ToDictionary(), "\t"));
+		file.Close();
+
+		file = FileAccess.Open(SaveLocationFile, FileAccess.ModeFlags.Write);
+		file.StoreString(SaveDirectory);
 		file.Close();
 	}
 
@@ -558,8 +576,9 @@ public partial class SaveManager : Node
 		if (ActiveSaveSlotIndex == -1) return; // Invalid save slot
 
 		// Write save data to a file.
-		string saveNumber = ActiveSaveSlotIndex.ToString("00");
-		FileAccess file = FileAccess.Open(SaveDirectory + $"save{saveNumber}.dat", FileAccess.ModeFlags.Write);
+		string saveFile = ActiveSaveSlotIndex.ToString("00");
+		saveFile = SaveDirectory.PathJoin($"save{saveFile}.dat");
+		FileAccess file = FileAccess.Open(saveFile, FileAccess.ModeFlags.Write);
 
 		if (FileAccess.GetOpenError() == Error.Ok)
 		{
@@ -575,8 +594,9 @@ public partial class SaveManager : Node
 		{
 			GameSaveSlots[i] = GameData.CreateDefaultData();
 
-			string saveNumber = i.ToString("00");
-			FileAccess file = FileAccess.Open(SaveDirectory + $"save{saveNumber}.dat", FileAccess.ModeFlags.Read);
+			string saveFile = i.ToString("00");
+			saveFile = SaveDirectory.PathJoin($"save{saveFile}.dat");
+			FileAccess file = FileAccess.Open(saveFile, FileAccess.ModeFlags.Read);
 			if (FileAccess.GetOpenError() == Error.Ok)
 			{
 				GameSaveSlots[i].FromDictionary((Dictionary)Json.ParseString(file.GetAsText()));
@@ -609,13 +629,13 @@ public partial class SaveManager : Node
 	// <summary> Deletes a save file at the given index
 	public static void DeleteSaveData(int index)
 	{
-		string saveNumber = index.ToString("00");
-		string savePath = SaveDirectory + $"save{saveNumber}.dat";
+		string saveFile = index.ToString("00");
+		saveFile = SaveDirectory.PathJoin($"save{saveFile}.dat");
 
-		if (!FileAccess.FileExists(savePath))
+		if (!FileAccess.FileExists(saveFile))
 			return;
 
-		OS.MoveToTrash(ProjectSettings.GlobalizePath(savePath));
+		OS.MoveToTrash(ProjectSettings.GlobalizePath(saveFile));
 	}
 
 	public class GameData
