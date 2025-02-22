@@ -10,6 +10,9 @@ public partial class Options : Menu
 	[Export] private AnimationPlayer cursorAnimator;
 	[Export] private Control contentContainer;
 
+	[Export] private AnimationPlayer resetAnimator;
+	private bool isResetSelected;
+
 	private int maxSelection;
 	private int scrollOffset;
 	private void CalculateMaxSelection()
@@ -18,7 +21,7 @@ public partial class Options : Menu
 		switch (currentSubmenu)
 		{
 			case Submenus.Options:
-				maxSelection = 4;
+				maxSelection = 5;
 				break;
 			case Submenus.Video:
 				maxSelection = videoLabels.Length;
@@ -52,6 +55,7 @@ public partial class Options : Menu
 		Audio,  // Menu for configuring audio volume
 		Language, // Menu for localization and language
 		Control, // Menu for configuring general control settings
+		Reset, // Submenu for resetting the configuration settings
 		Mapping, // Control submenu for configuring input mappings
 		Unbind, // Control sub-submenu for unbinding inputs
 		Test // Control submenu for testing controls
@@ -124,8 +128,7 @@ public partial class Options : Menu
 		switch (currentSubmenu)
 		{
 			case Submenus.Options:
-				ConfirmSFX();
-				FlipBook((Submenus)VerticalSelection + 1, false, 0);
+				ConfirmOption();
 				break;
 			case Submenus.Video:
 				ConfirmVideoOption();
@@ -149,6 +152,17 @@ public partial class Options : Menu
 				break;
 			case Submenus.Test:
 				return;
+			case Submenus.Reset:
+				if (!isResetSelected)
+				{
+					CancelResetMenu();
+					return;
+				}
+
+				SaveManager.Config = new();
+				resetAnimator.Play("confirm");
+				currentSubmenu = Submenus.Options;
+				break;
 		}
 
 		UpdateLabels();
@@ -180,11 +194,27 @@ public partial class Options : Menu
 				break;
 			case Submenus.Test:
 				return;
+			case Submenus.Reset:
+				CancelResetMenu();
+				break;
 			default:
 				CancelSFX();
 				FlipBook(Submenus.Options, true, (int)currentSubmenu - 1);
 				break;
 		}
+	}
+
+	private void CancelResetMenu()
+	{
+		if (isResetSelected)
+		{
+			resetAnimator.Play("select-no");
+			resetAnimator.Advance(0.0);
+		}
+
+		isResetSelected = false;
+		resetAnimator.Play("hide");
+		currentSubmenu = Submenus.Options;
 	}
 
 	private void Select()
@@ -215,7 +245,7 @@ public partial class Options : Menu
 		if (currentSubmenu == Submenus.Mapping && !controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
 			return;
 
-		if (Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down")))
+		if (currentSubmenu == Submenus.Reset || Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down")))
 		{
 			UpdateHorizontalSelection();
 			return;
@@ -414,8 +444,19 @@ public partial class Options : Menu
 		if (Mathf.IsZeroApprox(Input.GetAxis("move_left", "move_right"))) return;
 
 		int direction = Mathf.Sign(Input.GetAxis("move_left", "move_right"));
-		bool settingUpdated = false;
 
+		if (currentSubmenu == Submenus.Reset)
+		{
+			if ((direction > 0 && isResetSelected) || (direction < 0 && !isResetSelected))
+			{
+				isResetSelected = !isResetSelected;
+				resetAnimator.Play(isResetSelected ? "select-yes" : "select-no");
+			}
+
+			return;
+		}
+
+		bool settingUpdated = false;
 		switch (currentSubmenu)
 		{
 			case Submenus.Video:
@@ -647,6 +688,20 @@ public partial class Options : Menu
 		}
 
 		return false;
+	}
+
+	private void ConfirmOption()
+	{
+		if (VerticalSelection == 4)
+		{
+			currentSubmenu = Submenus.Reset;
+			resetAnimator.Play("show");
+			isResetSelected = false;
+			return;
+		}
+
+		ConfirmSFX();
+		FlipBook((Submenus)VerticalSelection + 1, false, 0);
 	}
 
 	private void ConfirmVideoOption()
