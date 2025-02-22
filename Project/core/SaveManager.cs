@@ -155,11 +155,11 @@ public partial class SaveManager : Node
 
 		// Audio
 		public bool isMasterMuted;
-		public int masterVolume = 50;
+		public int masterVolume = 30;
 		public bool isBgmMuted;
 		public int bgmVolume = 50;
 		public bool isSfxMuted;
-		public int sfxVolume = 50;
+		public int sfxVolume = 30;
 		public bool isVoiceMuted;
 		public int voiceVolume = 50;
 
