@@ -11,9 +11,14 @@ public partial class ControlOption : Control
 
 	[Export] private StringName inputId;
 	public StringName ActionName => IsPartyModeMapping ? inputId + PartyModeControllerIndex.ToString() : inputId;
-	[Export(PropertyHint.Range, "1, 4, 1")] private int PartyModeControllerIndex = 1;
+	[Export(PropertyHint.Range, "1, 4, 1")] private int partyModeControllerIndex = 1;
+	public int PartyModeControllerIndex
+	{
+		get => partyModeControllerIndex;
+		set => partyModeControllerIndex = value;
+	}
 	[Export] private bool IsPartyModeMapping { get; set; }
-	private byte deviceIndex;
+	public int DeviceIndex => SaveManager.Config.partyModeDevices[PartyModeControllerIndex - 1];
 
 	[ExportGroup("Components")]
 	[Export(PropertyHint.NodePathValidTypes, "Label")]
@@ -105,7 +110,7 @@ public partial class ControlOption : Control
 			}
 
 			// Filter inputs to a specific joypad if editing party mode controls
-			if (IsPartyModeMapping && (e is not InputEventKey) && e.Device != deviceIndex)
+			if (IsPartyModeMapping && (e is not InputEventKey) && e.Device != DeviceIndex)
 				return;
 
 			if (!FilterInput(e)) return;
@@ -125,7 +130,7 @@ public partial class ControlOption : Control
 			e = denoisedEvent;
 		}
 
-		StringName swapAction = GetActionConflict(isSwappingInput, e);
+		StringName swapAction = GetActionConflict(e, isSwappingInput);
 		InputEvent swapEvent = RemapEvent(e);
 
 		// Resolve mapping conflict by swapping input mapping with this menu option's mapping
@@ -135,7 +140,7 @@ public partial class ControlOption : Control
 		SaveConfig();
 	}
 
-	private StringName GetActionConflict(bool isSwappingInput, InputEvent e)
+	private StringName GetActionConflict(InputEvent e, bool isSwappingInput)
 	{
 		// Only look for conflicts when not swapping inputs
 		if (isSwappingInput)
@@ -144,8 +149,9 @@ public partial class ControlOption : Control
 		// Check for conflicting input mappings
 		foreach (StringName actionId in InputMap.GetActions())
 		{
-			// Only allow party mode to conflict with other party mode mappings (and adventure with adventure)
-			if (IsPartyModeMapping != char.IsDigit(actionId.ToString()[^1]))
+			// Only allow adventure mappings to conflict with each other.
+			// This way, a single player *can* configure all 4 players to a single controller (if they want to)
+			if (!IsPartyModeMapping && char.IsDigit(actionId.ToString()[^1]))
 				continue;
 
 			if (!SaveManager.Config.inputConfiguration.ContainsKey(actionId) || !InputMap.ActionHasEvent(actionId, e))
@@ -333,12 +339,23 @@ public partial class ControlOption : Control
 	{
 		string deviceString = "Unknown Gamepad";
 
-		if (Input.GetConnectedJoypads().Contains(deviceIndex))
-		{
-			deviceString = Input.GetJoyName(deviceIndex);
-			deviceString += " (" + Tr(DeviceString).Replace("0", deviceIndex.ToString()) + ")";
-		}
+		if (Input.GetConnectedJoypads().Contains(DeviceIndex))
+			deviceString = Input.GetJoyName(DeviceIndex);
 
+		deviceString += " (" + Tr(DeviceString).Replace("0", DeviceIndex.ToString()) + ")";
 		return deviceString;
+	}
+
+	public void UpdateDevice()
+	{
+		// Update all event actions to use the correct device
+		foreach (InputEvent e in InputMap.ActionGetEvents(ActionName))
+		{
+			if (e is not InputEventJoypadButton && e is not InputEventJoypadMotion)
+				continue;
+
+			e.Device = DeviceIndex;
+			RemapEvent(e);
+		}
 	}
 }

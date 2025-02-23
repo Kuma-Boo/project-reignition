@@ -72,6 +72,7 @@ public partial class Options : Menu
 		SetUpControlOptions();
 		UpdateLabels();
 		CalculateMaxSelection();
+		UpdatePartyModeDevice(0);
 		DebugManager.Instance.Connect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
 	}
 
@@ -92,7 +93,7 @@ public partial class Options : Menu
 		VerticalSelection = selection;
 
 		if (submenu == Submenus.PartyMapping)
-			RedrawPartyMapping();
+			UpdateLabels();
 	}
 
 	protected override void ProcessMenu()
@@ -158,8 +159,11 @@ public partial class Options : Menu
 				controlMappingOptions[VerticalSelection].CallDeferred(ControlOption.MethodName.StartListening);
 				break;
 			case Submenus.PartyMapping:
-				if (VerticalSelection < ExtraPartyModeOptionCount)
+				if (SlidePartyMappingOption(1))
+				{
+					ConfirmSFX();
 					return;
+				}
 
 				int selectedIndex = VerticalSelection - ExtraPartyModeOptionCount;
 				if (!controlMappingOptions[selectedIndex].IsReady)
@@ -458,7 +462,7 @@ public partial class Options : Menu
 
 	[Export] private ControlOption[] controlMappingOptions;
 	[Export] private ControlOption[] partyMappingOptions;
-	private byte partyPlayerIndex = 1; // Index of the player whose controls are currently being edited
+	private int partyPlayerIndex = 1; // Index of the player whose controls are currently being edited
 	private readonly int ExtraPartyModeOptionCount = 2; // Offset for playerIndex and controllerIndex
 	private void SetUpControlOptions()
 	{
@@ -492,11 +496,6 @@ public partial class Options : Menu
 		}
 	}
 
-	private void RedrawPartyMapping()
-	{
-
-	}
-
 	private void UpdateHorizontalSelection()
 	{
 		if (Mathf.IsZeroApprox(Input.GetAxis("ui_left", "ui_right"))) return;
@@ -528,6 +527,9 @@ public partial class Options : Menu
 				break;
 			case Submenus.Control:
 				settingUpdated = SlideControlOption(direction);
+				break;
+			case Submenus.PartyMapping:
+				settingUpdated = SlidePartyMappingOption(direction);
 				break;
 		}
 
@@ -746,6 +748,50 @@ public partial class Options : Menu
 		}
 
 		return false;
+	}
+
+	private bool SlidePartyMappingOption(int direction)
+	{
+		if (VerticalSelection < ExtraPartyModeOptionCount)
+		{
+			if (VerticalSelection == 0)
+			{
+				// Change player index
+				partyPlayerIndex += direction;
+				if (partyPlayerIndex > 4)
+					partyPlayerIndex = 1;
+				else if (partyPlayerIndex < 1)
+					partyPlayerIndex = 4;
+				foreach (ControlOption controlOption in partyMappingOptions)
+				{
+					controlOption.PartyModeControllerIndex = partyPlayerIndex;
+					controlOption.RedrawBinding();
+				}
+			}
+
+			UpdatePartyModeDevice(direction);
+			return true;
+		}
+
+		return false;
+	}
+
+	private void UpdatePartyModeDevice(int direction)
+	{
+		// Change device
+		if (VerticalSelection == 1)
+		{
+			int deviceIndex = SaveManager.Config.partyModeDevices[partyPlayerIndex - 1];
+			deviceIndex += direction;
+			if (deviceIndex < 0)
+				deviceIndex = 7;
+			else if (deviceIndex > 7)
+				deviceIndex = 0;
+			SaveManager.Config.partyModeDevices[partyPlayerIndex - 1] = deviceIndex;
+		}
+
+		foreach (ControlOption controlOption in partyMappingOptions)
+			controlOption.UpdateDevice();
 	}
 
 	private void ConfirmOption()

@@ -166,6 +166,7 @@ public partial class SaveManager : Node
 		public float deadZone = .5f;
 		public ControllerType controllerType = ControllerType.Automatic;
 		public bool useHoldBreakMode = true;
+		public int[] partyModeDevices = [0, 0, 0, 0];
 		public Dictionary inputConfiguration = [];
 
 		// Language
@@ -211,6 +212,7 @@ public partial class SaveManager : Node
 				{ nameof(deadZone), deadZone },
 				{ nameof(controllerType), (int)controllerType },
 				{ nameof(useHoldBreakMode), useHoldBreakMode },
+				{ nameof(partyModeDevices), partyModeDevices },
 				{ nameof(inputConfiguration), inputConfiguration },
 
 				// Language
@@ -283,6 +285,8 @@ public partial class SaveManager : Node
 				controllerType = (ControllerType)(int)var;
 			if (dictionary.TryGetValue(nameof(useHoldBreakMode), out var))
 				useHoldBreakMode = (bool)var;
+			if (dictionary.TryGetValue(nameof(partyModeDevices), out var))
+				partyModeDevices = (int[])var;
 			if (dictionary.TryGetValue(nameof(inputConfiguration), out var))
 				inputConfiguration = (Dictionary)Json.ParseString((string)var);
 
