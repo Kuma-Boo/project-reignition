@@ -33,10 +33,13 @@ public partial class Options : Menu
 				maxSelection = 3;
 				break;
 			case Submenus.Control:
-				maxSelection = 5;
+				maxSelection = 6;
 				break;
 			case Submenus.Mapping:
 				maxSelection = controlMappingOptions.Length;
+				break;
+			case Submenus.PartyMapping:
+				maxSelection = partyMappingOptions.Length + ExtraPartyModeOptionCount;
 				break;
 			case Submenus.Test:
 				maxSelection = 0;
@@ -56,7 +59,8 @@ public partial class Options : Menu
 		Language, // Menu for localization and language
 		Control, // Menu for configuring general control settings
 		Reset, // Submenu for resetting the configuration settings
-		Mapping, // Control submenu for configuring input mappings
+		Mapping, // Control submenu for configuring adventure mode's input mappings
+		PartyMapping, // Control submenu for configuring party mode's input mappings
 		Unbind, // Control sub-submenu for unbinding inputs
 		Test // Control submenu for testing controls
 	}
@@ -86,6 +90,9 @@ public partial class Options : Menu
 		animator.Play(flipRight ? "flip-right" : "flip-left");
 		animator.Seek(0.0, true);
 		VerticalSelection = selection;
+
+		if (submenu == Submenus.PartyMapping)
+			RedrawPartyMapping();
 	}
 
 	protected override void ProcessMenu()
@@ -150,6 +157,17 @@ public partial class Options : Menu
 				ConfirmSFX();
 				controlMappingOptions[VerticalSelection].CallDeferred(ControlOption.MethodName.StartListening);
 				break;
+			case Submenus.PartyMapping:
+				if (VerticalSelection < ExtraPartyModeOptionCount)
+					return;
+
+				int selectedIndex = VerticalSelection - ExtraPartyModeOptionCount;
+				if (!controlMappingOptions[selectedIndex].IsReady)
+					return;
+
+				ConfirmSFX();
+				partyMappingOptions[selectedIndex].CallDeferred(ControlOption.MethodName.StartListening);
+				break;
 			case Submenus.Test:
 				return;
 			case Submenus.Reset:
@@ -191,6 +209,16 @@ public partial class Options : Menu
 
 				CancelSFX();
 				FlipBook(Submenus.Control, true, 3);
+				break;
+			case Submenus.PartyMapping:
+				if (VerticalSelection >= ExtraPartyModeOptionCount &&
+					!partyMappingOptions[VerticalSelection - ExtraPartyModeOptionCount].IsReady)
+				{
+					return;
+				}
+
+				CancelSFX();
+				FlipBook(Submenus.Control, true, 4);
 				break;
 			case Submenus.Test:
 				return;
@@ -242,8 +270,17 @@ public partial class Options : Menu
 		if (maxSelection == 0)
 			return;
 
-		if (currentSubmenu == Submenus.Mapping && !controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
+		// Listening for inputs
+		if (currentSubmenu == Submenus.Mapping && !controlMappingOptions[VerticalSelection].IsReady)
 			return;
+
+		// Listening for inputs
+		if (currentSubmenu == Submenus.PartyMapping &&
+			VerticalSelection >= ExtraPartyModeOptionCount &&
+			!partyMappingOptions[VerticalSelection - ExtraPartyModeOptionCount].IsReady)
+		{
+			return;
+		}
 
 		if (currentSubmenu == Submenus.Reset || Mathf.IsZeroApprox(Input.GetAxis("ui_up", "ui_down")))
 		{
@@ -314,6 +351,7 @@ public partial class Options : Menu
 	[Export] private Label[] audioLabels;
 	[Export] private Label[] languageLabels;
 	[Export] private Label[] controlLabels;
+	[Export] private Label[] partyMappingLabels;
 
 	private readonly string EnabledString = "option_enable";
 	private readonly string DisabledString = "option_disable";
@@ -326,6 +364,7 @@ public partial class Options : Menu
 	private readonly string FullscreenString = "option_fullscreen";
 	private readonly string FullscreenNormalString = "option_normal_fullscreen";
 	private readonly string FullscreenExclusiveString = "option_exclusive_fullscreen";
+	private readonly string PlayerString = "option_player_number";
 	private void UpdateLabels()
 	{
 		Vector2I resolution = SaveManager.WindowSizes[SaveManager.Config.windowSize];
@@ -397,6 +436,9 @@ public partial class Options : Menu
 
 		controlLabels[1].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
 		controlLabels[2].Text = SaveManager.Config.useHoldBreakMode ? HoldString : ToggleString;
+
+		partyMappingLabels[0].Text = Tr(PlayerString).Replace("0", partyPlayerIndex.ToString());
+		partyMappingLabels[1].Text = partyMappingOptions[0].GetDevice();
 	}
 
 	private string CalculateQualityString(SaveManager.QualitySetting setting)
@@ -414,11 +456,16 @@ public partial class Options : Menu
 		return DisabledString;
 	}
 
-	[Export]
-	private ControlOption[] controlMappingOptions;
+	[Export] private ControlOption[] controlMappingOptions;
+	[Export] private ControlOption[] partyMappingOptions;
+	private byte partyPlayerIndex = 1; // Index of the player whose controls are currently being edited
+	private readonly int ExtraPartyModeOptionCount = 2; // Offset for playerIndex and controllerIndex
 	private void SetUpControlOptions()
 	{
 		foreach (ControlOption controlOption in controlMappingOptions)
+			controlOption.SwapMapping += RedrawControlOptions;
+
+		foreach (ControlOption controlOption in partyMappingOptions)
 			controlOption.SwapMapping += RedrawControlOptions;
 	}
 
@@ -434,9 +481,20 @@ public partial class Options : Menu
 
 		foreach (ControlOption controlOption in controlMappingOptions)
 		{
-			if (controlOption.InputId == id)
+			if (controlOption.ActionName == id)
 				controlOption.ReceiveInput(e, true);
 		}
+
+		foreach (ControlOption controlOption in partyMappingOptions)
+		{
+			if (controlOption.ActionName == id)
+				controlOption.ReceiveInput(e, true);
+		}
+	}
+
+	private void RedrawPartyMapping()
+	{
+
 	}
 
 	private void UpdateHorizontalSelection()
@@ -747,6 +805,8 @@ public partial class Options : Menu
 			SlideControlOption(1);
 		else if (VerticalSelection == 3)
 			FlipBook(Submenus.Mapping, false, 0);
+		else if (VerticalSelection == 4)
+			FlipBook(Submenus.PartyMapping, false, 0);
 		else
 			FlipBook(Submenus.Test, false, VerticalSelection);
 
