@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=53 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
@@ -22,7 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://ci8d3jdqrc0nr" path="res://area/4 levitated ruin/object/special/Ivy.tscn" id="13_xqwht"]
 [ext_resource type="PackedScene" uid="uid://01vxs3in41h" path="res://area/4 levitated ruin/object/special/Zipline.tscn" id="14_ym4ng"]
 [ext_resource type="Script" path="res://object/trigger/modules/LockoutTrigger.cs" id="15_a5o6r"]
-[ext_resource type="PackedScene" uid="uid://o3wp38uypn2q" path="res://area/4 levitated ruin/object/platform/GrindPillarStatic.tscn" id="15_oja87"]
+[ext_resource type="PackedScene" uid="uid://o3wp38uypn2q" path="res://area/4 levitated ruin/act 1/map/GrindPillarStatic.tscn" id="15_oja87"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="15_q7qwf"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="16_4h2cm"]
 [ext_resource type="PackedScene" uid="uid://caoftgb3g6qwh" path="res://area/4 levitated ruin/object/grindrail/Grindrail02.tscn" id="16_8bsas"]
@@ -47,6 +47,7 @@
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="32_p08w8"]
 [ext_resource type="PackedScene" uid="uid://dopa8mdu5d47j" path="res://area/4 levitated ruin/object/platform/RoundPillarFly.tscn" id="33_0ylmb"]
 [ext_resource type="PackedScene" uid="uid://h1nyheprfepp" path="res://area/4 levitated ruin/object/grindrail/Grindrail03.tscn" id="34_35j7t"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="37_65231"]
 [ext_resource type="PackedScene" uid="uid://b724x1op3kfpc" path="res://object/enemy/majin/data/levitated ruin/RedMajin.tscn" id="40_chfyb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ypvwq"]
@@ -890,7 +891,7 @@ transform = Transform3D(1, -1.86265e-09, 0, 1.39698e-09, 1, -1.86265e-09, -1.490
 transform = Transform3D(1, -1.86265e-09, 0, 1.39698e-09, 1, -1.86265e-09, -1.49012e-08, -1.86265e-09, 1, -4.25145, -1.39178, -9.57306)
 
 [node name="Rings10" type="Node3D" parent="MainAct/Rukh2"]
-transform = Transform3D(0.980565, 0.0604191, 0.186666, -0.0632506, 0.997957, 0.00924533, -0.185726, -0.0208724, 0.98238, -2.68124, 11.3166, -246.579)
+transform = Transform3D(0.980565, 0.0604191, 0.186666, -0.0632506, 0.997957, 0.00924533, -0.185726, -0.0208724, 0.98238, -2.35389, 11.3166, -246.579)
 script = ExtResource("9_v4ux6")
 Generate = false
 Source = ExtResource("10_250we")
@@ -1441,8 +1442,55 @@ shape = SubResource("BoxShape3D_ypvwq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.272694, 23.0913, -206.708)
 
 [node name="Spring" parent="MainAct/Rukh3/Switch" instance=ExtResource("15_q7qwf")]
-transform = Transform3D(0.999725, 0.0234376, 0, -0.0234376, 0.999725, 0, 0, 0, 1, -0.0729141, 0.52092, 0.0574951)
+transform = Transform3D(0.999725, 0.0234376, 0, -0.0234376, 0.999725, 0, 0, 0, 1, 0.0204124, 0.35096, 0.0574951)
 voiceKey = &""
+
+[node name="FireSoul" parent="MainAct/Rukh3/Switch" instance=ExtResource("37_65231")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0381432, 9.25733, 0.0130615)
+
+[node name="Rings" type="Node3D" parent="MainAct/Rukh3/Switch"]
+transform = Transform3D(0.999727, 0.0234376, 0, 0.000660544, -0.0281754, -0.999603, -0.0234283, 0.999329, -0.0281836, 0.0204239, 11.4448, 0.0574951)
+script = ExtResource("9_v4ux6")
+Generate = false
+Source = ExtResource("10_250we")
+Amount = 11
+Shape = 0
+Orientation = 0
+Spacing = 2.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+
+[node name="Child02" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.2)
+
+[node name="Child03" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.4)
+
+[node name="Child04" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.6)
+
+[node name="Child05" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.8)
+
+[node name="Child06" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
+
+[node name="Child07" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.2)
+
+[node name="Child08" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.4)
+
+[node name="Child09" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.6)
+
+[node name="Child10" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.8)
+
+[node name="Child11" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
 
 [node name="Stone" parent="MainAct/Rukh3" instance=ExtResource("18_rpxg1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 16, -225)
@@ -2096,12 +2144,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -102.73, 5.14662, -1455.4)
 [node name="RedMajin" parent="MainAct" instance=ExtResource("40_chfyb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -99.9649, 7.73092, -1457.49)
 
+[node name="EnemyStone" parent="MainAct" instance=ExtResource("18_w6abm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -99.9942, 6.05994, -1457.42)
+
+[node name="Spring" parent="MainAct/EnemyStone" instance=ExtResource("15_q7qwf")]
+transform = Transform3D(0.904797, -0.322807, 0.277736, 1.97902e-09, 0.652204, 0.758043, -0.425843, -0.685876, 0.590113, -0.0668259, -1.09319, 0.0386963)
+
 [node name="GreenMajin4" parent="MainAct" instance=ExtResource("31_ueb1o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -97.4132, 5.0618, -1455.41)
 "Attack Settings/Attack Type" = 1
 
 [node name="BlueMajin" parent="MainAct" instance=ExtResource("11_427b8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -104.593, 8.7762, -1475.56)
+
+[node name="GrindPillarFly" parent="MainAct" instance=ExtResource("8_6mhfy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -106.001, 9.33425, -1489.36)
 
 [node name="GrindPillarFlyTrigger12" parent="MainAct" instance=ExtResource("5_yejv7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 5.96046e-08, 0, 1, -101.24, 5.17354, -1465.5)
@@ -2116,6 +2173,10 @@ shape = SubResource("BoxShape3D_ypvwq")
 
 [node name="Grindrail" parent="MainAct" instance=ExtResource("17_8qnjt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -106.003, 11.6916, -1479.35)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
 [node name="BlueMajin2" parent="MainAct" instance=ExtResource("11_427b8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -102.737, 11.8773, -1478.97)
@@ -2311,12 +2372,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -19)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WindTrigger1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("BoxShape3D_x4cke")
-
-[node name="EnemyStone" parent="." instance=ExtResource("18_w6abm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -99.9942, 6.05994, -1457.42)
-
-[node name="GrindPillarFly" parent="." instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -106.001, 9.33425, -1489.36)
 
 [connection signal="Activated" from="MainAct/CullingTrigger/Tower" to="MainAct/Tower" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingTrigger/Tower" to="MainAct/Tower" method="Deactivate"]
