@@ -77,7 +77,7 @@ public partial class SkillPresetSelect : Menu
 	{
 		if (isEditingName)
 		{
-			if (Input.IsKeyPressed(Key.Enter) || Input.IsActionJustPressed("button_pause"))
+			if (Input.IsKeyPressed(Key.Enter) || Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
 			{
 				Rename();
 				return;
@@ -90,7 +90,7 @@ public partial class SkillPresetSelect : Menu
 			}
 		}
 
-		if (Input.IsActionJustPressed("button_pause"))
+		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
 			Confirm();
 
 		base.ProcessMenu();
@@ -138,7 +138,7 @@ public partial class SkillPresetSelect : Menu
 
 	protected override void UpdateSelection()
 	{
-		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		int inputSign = Mathf.Sign(Input.GetAxis("ui_up", "ui_down"));
 		if (inputSign == 0)
 			return;
 

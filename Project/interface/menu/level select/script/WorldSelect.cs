@@ -89,7 +89,7 @@ public partial class WorldSelect : Menu
 		if (animator.AssignedAnimation == "init" || animator.AssignedAnimation == "cancel")
 			animator.Play("show-fade-video");
 		else
-			animator.Play(SHOW_ANIMATION);
+			animator.Play(ShowAnimation);
 
 		menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.WorldSelect;
 	}
@@ -133,7 +133,7 @@ public partial class WorldSelect : Menu
 
 	protected override void UpdateSelection()
 	{
-		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		int inputSign = Mathf.Sign(Input.GetAxis("ui_up", "ui_down"));
 		if (inputSign != 0)
 		{
 			VerticalSelection = WrapSelection(VerticalSelection + inputSign, (int)SaveManager.WorldEnum.Max);
@@ -144,7 +144,7 @@ public partial class WorldSelect : Menu
 			int transitionIndex = WrapSelection(isScrollingUp ? VerticalSelection - 1 : VerticalSelection + 1, (int)SaveManager.WorldEnum.Max);
 			UpdateSpriteRegion(3, transitionIndex); // Update level text
 
-			animator.Play(isScrollingUp ? SCROLL_UP_ANIMATION : SCROLL_DOWN_ANIMATION);
+			animator.Play(isScrollingUp ? ScrollUpAnimation : ScrollDownAnimation);
 			animator.Seek(0.0, true);
 			DisableProcessing();
 		}
@@ -178,7 +178,7 @@ public partial class WorldSelect : Menu
 		// Don't change video?
 		if (ActiveVideoPlayer != null && ActiveVideoPlayer.Stream == videoStreams[VerticalSelection]) return;
 		if (!SaveManager.ActiveGameData.IsWorldUnlocked((SaveManager.WorldEnum)VerticalSelection)) return; // World is locked
-		if (!Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down"))) return; // Still scrolling
+		if (!Mathf.IsZeroApprox(Input.GetAxis("ui_up", "ui_down"))) return; // Still scrolling
 
 		if (ActiveVideoPlayer?.IsPlaying() == true)
 		{

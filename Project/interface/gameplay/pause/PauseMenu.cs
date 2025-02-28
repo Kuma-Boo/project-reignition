@@ -108,7 +108,7 @@ public partial class PauseMenu : Node
 			}
 		}
 
-		if (Input.IsActionJustPressed("button_pause") && !Input.IsActionJustPressed("toggle_fullscreen"))
+		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen"))
 		{
 			TogglePause();
 			return;
@@ -134,20 +134,20 @@ public partial class PauseMenu : Node
 			return;
 		}
 
-		int sign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		int sign = Mathf.Sign(Input.GetAxis("ui_up", "ui_down"));
 		if (sign != 0)
 			ChangeSelection(sign);
 	}
 
 	private void UpdateBuffers()
 	{
-		if (Input.IsActionJustPressed("button_jump"))
+		if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select"))
 		{
 			isConfirmButtonBuffered = true;
 			isCancelButtonBuffered = false;
 		}
 
-		if (Input.IsActionJustPressed("button_action"))
+		if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel"))
 		{
 			isConfirmButtonBuffered = false;
 			isCancelButtonBuffered = true;

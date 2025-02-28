@@ -6,12 +6,12 @@ namespace Project.Interface.Menus;
 
 public partial class Options : Menu
 {
-	[Export]
-	private Control cursor;
-	[Export]
-	private AnimationPlayer cursorAnimator;
-	[Export]
-	private Control contentContainer;
+	[Export] private Control cursor;
+	[Export] private AnimationPlayer cursorAnimator;
+	[Export] private Control contentContainer;
+
+	[Export] private AnimationPlayer resetAnimator;
+	private bool isResetSelected;
 
 	private int maxSelection;
 	private int scrollOffset;
@@ -21,7 +21,7 @@ public partial class Options : Menu
 		switch (currentSubmenu)
 		{
 			case Submenus.Options:
-				maxSelection = 4;
+				maxSelection = 5;
 				break;
 			case Submenus.Video:
 				maxSelection = videoLabels.Length;
@@ -33,10 +33,13 @@ public partial class Options : Menu
 				maxSelection = 3;
 				break;
 			case Submenus.Control:
-				maxSelection = 4;
+				maxSelection = 7;
 				break;
 			case Submenus.Mapping:
 				maxSelection = controlMappingOptions.Length;
+				break;
+			case Submenus.PartyMapping:
+				maxSelection = partyMappingOptions.Length + ExtraPartyModeOptionCount;
 				break;
 			case Submenus.Test:
 				maxSelection = 0;
@@ -45,7 +48,7 @@ public partial class Options : Menu
 	}
 
 	private Callable FullscreenToggleCallable => new(this, MethodName.ToggleFullscreen);
-	public static readonly StringName MENU_PARAMETER = "menu_texture";
+	public static readonly StringName MenuParameter = "menu_texture";
 
 	private Submenus currentSubmenu = Submenus.Options;
 	private enum Submenus
@@ -55,7 +58,10 @@ public partial class Options : Menu
 		Audio,  // Menu for configuring audio volume
 		Language, // Menu for localization and language
 		Control, // Menu for configuring general control settings
-		Mapping, // Control submenu for configuring input mappings
+		ResetSettings, // Submenu for resetting the configuration settings
+		ResetControls, // Submenu for resetting the control settings
+		Mapping, // Control submenu for configuring adventure mode's input mappings
+		PartyMapping, // Control submenu for configuring party mode's input mappings
 		Unbind, // Control sub-submenu for unbinding inputs
 		Test // Control submenu for testing controls
 	}
@@ -67,6 +73,7 @@ public partial class Options : Menu
 		SetUpControlOptions();
 		UpdateLabels();
 		CalculateMaxSelection();
+		UpdatePartyModeDevice(0);
 		DebugManager.Instance.Connect(DebugManager.SignalName.FullscreenToggled, FullscreenToggleCallable);
 	}
 
@@ -85,6 +92,9 @@ public partial class Options : Menu
 		animator.Play(flipRight ? "flip-right" : "flip-left");
 		animator.Seek(0.0, true);
 		VerticalSelection = selection;
+
+		if (submenu == Submenus.PartyMapping)
+			UpdateLabels();
 	}
 
 	protected override void ProcessMenu()
@@ -92,7 +102,7 @@ public partial class Options : Menu
 		UpdateScrolling();
 		UpdateCursor();
 
-		if (Input.IsActionJustPressed("button_pause"))
+		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept") || Input.IsActionJustPressed("ui_clear"))
 			Select();
 		else
 			base.ProcessMenu();
@@ -101,12 +111,19 @@ public partial class Options : Menu
 			CallDeferred(MethodName.UpdatePlayerPosition);
 	}
 
-	[Export]
-	private Node3D lockNode;
+	[Export] private Node3D lockNode;
 	private bool isPlayerLocked;
 	private PlayerController Player => StageSettings.Player;
-	private void LockPlayer() => isPlayerLocked = true;
-	private void UnlockPlayer() => isPlayerLocked = false;
+	private void LockPlayer()
+	{
+		isPlayerLocked = true;
+		StageSettings.Player.Skills.EnableBreakSkills();
+	}
+	private void UnlockPlayer()
+	{
+		isPlayerLocked = false;
+		StageSettings.Player.Skills.DisableBreakSkills();
+	}
 	private void UpdatePlayerPosition()
 	{
 		Vector3 lockPosition = Player.GlobalPosition;
@@ -120,8 +137,7 @@ public partial class Options : Menu
 		switch (currentSubmenu)
 		{
 			case Submenus.Options:
-				ConfirmSFX();
-				FlipBook((Submenus)VerticalSelection + 1, false, 0);
+				ConfirmOption();
 				break;
 			case Submenus.Video:
 				ConfirmVideoOption();
@@ -141,10 +157,55 @@ public partial class Options : Menu
 					return;
 
 				ConfirmSFX();
+
+				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_clear"))
+				{
+					// Clear input mapping
+					controlMappingOptions[VerticalSelection].ClearMapping();
+					return;
+				}
+
 				controlMappingOptions[VerticalSelection].CallDeferred(ControlOption.MethodName.StartListening);
+				break;
+			case Submenus.PartyMapping:
+				if (SlidePartyMappingOption(1))
+				{
+					ConfirmSFX();
+					return;
+				}
+
+				int selectedIndex = VerticalSelection - ExtraPartyModeOptionCount;
+				if (!controlMappingOptions[selectedIndex].IsReady)
+					return;
+
+				ConfirmSFX();
+
+				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_clear"))
+				{
+					// Clear input mapping
+					partyMappingOptions[selectedIndex].ClearMapping();
+					return;
+				}
+
+				partyMappingOptions[selectedIndex].CallDeferred(ControlOption.MethodName.StartListening);
 				break;
 			case Submenus.Test:
 				return;
+			case Submenus.ResetSettings:
+			case Submenus.ResetControls:
+				if (!isResetSelected)
+				{
+					CancelResetMenu();
+					return;
+				}
+
+				if (currentSubmenu == Submenus.ResetSettings)
+					SaveManager.Config = new();
+
+				SaveManager.ResetInputMap();
+				resetAnimator.Play("confirm");
+				currentSubmenu = currentSubmenu == Submenus.ResetSettings ? Submenus.Options : Submenus.Control;
+				break;
 		}
 
 		UpdateLabels();
@@ -172,15 +233,42 @@ public partial class Options : Menu
 				if (!controlMappingOptions[VerticalSelection].IsReady) return;
 
 				CancelSFX();
-				FlipBook(Submenus.Control, true, 2);
+				FlipBook(Submenus.Control, true, 3);
+				break;
+			case Submenus.PartyMapping:
+				if (VerticalSelection >= ExtraPartyModeOptionCount &&
+					!partyMappingOptions[VerticalSelection - ExtraPartyModeOptionCount].IsReady)
+				{
+					return;
+				}
+
+				CancelSFX();
+				FlipBook(Submenus.Control, true, 4);
 				break;
 			case Submenus.Test:
 				return;
+			case Submenus.ResetSettings:
+			case Submenus.ResetControls:
+				CancelResetMenu();
+				break;
 			default:
 				CancelSFX();
 				FlipBook(Submenus.Options, true, (int)currentSubmenu - 1);
 				break;
 		}
+	}
+
+	private void CancelResetMenu()
+	{
+		if (isResetSelected)
+		{
+			resetAnimator.Play("select-no");
+			resetAnimator.Advance(0.0);
+		}
+
+		isResetSelected = false;
+		resetAnimator.Play("hide");
+		currentSubmenu = currentSubmenu == Submenus.ResetSettings ? Submenus.Options : Submenus.Control;
 	}
 
 	private void Select()
@@ -198,7 +286,6 @@ public partial class Options : Menu
 		UnlockPlayer();
 		animator.Play("test_end");
 		currentSubmenu = Submenus.Control;
-		StageSettings.Player.Skills.DisableBreakSkills();
 	}
 
 	protected override void UpdateSelection()
@@ -209,17 +296,26 @@ public partial class Options : Menu
 		if (maxSelection == 0)
 			return;
 
-		if (currentSubmenu == Submenus.Mapping && !controlMappingOptions[VerticalSelection].IsReady) // Listening for inputs
+		// Listening for inputs
+		if (currentSubmenu == Submenus.Mapping && !controlMappingOptions[VerticalSelection].IsReady)
 			return;
 
-		if (Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down")))
+		// Listening for inputs
+		if (currentSubmenu == Submenus.PartyMapping &&
+			VerticalSelection >= ExtraPartyModeOptionCount &&
+			!partyMappingOptions[VerticalSelection - ExtraPartyModeOptionCount].IsReady)
+		{
+			return;
+		}
+
+		if (currentSubmenu == Submenus.ResetSettings || Mathf.IsZeroApprox(Input.GetAxis("ui_up", "ui_down")))
 		{
 			UpdateHorizontalSelection();
 			return;
 		}
 
 		StartSelectionTimer();
-		int targetSelection = VerticalSelection + Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		int targetSelection = VerticalSelection + Mathf.Sign(Input.GetAxis("ui_up", "ui_down"));
 		VerticalSelection = WrapSelection(targetSelection, maxSelection);
 
 		animator.Play("select");
@@ -229,8 +325,7 @@ public partial class Options : Menu
 		cursorAnimator.Seek(0, true);
 	}
 
-	[Export]
-	private Control scrollBar;
+	[Export] private Control scrollBar;
 	private Vector2 scrollBarVelocity;
 	private const float scrollBarSmoothing = .2f;
 	private void UpdateScrolling(bool snap = false)
@@ -278,41 +373,41 @@ public partial class Options : Menu
 		CallDeferred(MethodName.UpdateCursor);
 	}
 
+	[Export] private Label[] videoLabels;
+	[Export] private Label[] audioLabels;
+	[Export] private Label[] languageLabels;
+	[Export] private Label[] controlLabels;
+	[Export] private Label[] partyMappingLabels;
 
-	[Export]
-	private Label[] videoLabels;
-	[Export]
-	private Label[] audioLabels;
-	[Export]
-	private Label[] languageLabels;
-	[Export]
-	private Label[] controlLabels;
-	private string ENABLED_STRING = "option_enable";
-	private string DISABLED_STRING = "option_disable";
-	private string LOW_STRING = "option_low";
-	private string MEDIUM_STRING = "option_medium";
-	private string HIGH_STRING = "option_high";
-	private string MUTE_STRING = "option_mute";
-	private string FULLSCREEN_STRING = "option_fullscreen";
-	private string FULLSCREEN_NORMAL_STRING = "option_normal_fullscreen";
-	private string FULLSCREEN_EXCLUSIVE_STRING = "option_exclusive_fullscreen";
+	private readonly string EnabledString = "option_enable";
+	private readonly string DisabledString = "option_disable";
+	private readonly string HoldString = "option_hold";
+	private readonly string ToggleString = "option_toggle";
+	private readonly string LowString = "option_low";
+	private readonly string MediumString = "option_medium";
+	private readonly string HighString = "option_high";
+	private readonly string MuteString = "option_mute";
+	private readonly string FullscreenString = "option_fullscreen";
+	private readonly string FullscreenNormalString = "option_normal_fullscreen";
+	private readonly string FullscreenExclusiveString = "option_exclusive_fullscreen";
+	private readonly string PlayerString = "option_player_number";
 	private void UpdateLabels()
 	{
 		Vector2I resolution = SaveManager.WindowSizes[SaveManager.Config.windowSize];
 		videoLabels[0].Text = Tr("option_display").Replace("0", (SaveManager.Config.targetDisplay + 1).ToString());
-		videoLabels[1].Text = SaveManager.Config.useFullscreen ? FULLSCREEN_STRING : $"{resolution.X}:{resolution.Y}";
-		videoLabels[2].Text = SaveManager.Config.useExclusiveFullscreen ? FULLSCREEN_EXCLUSIVE_STRING : FULLSCREEN_NORMAL_STRING;
+		videoLabels[1].Text = SaveManager.Config.useFullscreen ? FullscreenString : $"{resolution.X}:{resolution.Y}";
+		videoLabels[2].Text = SaveManager.Config.useExclusiveFullscreen ? FullscreenExclusiveString : FullscreenNormalString;
 		if (SaveManager.Config.framerate == 0)
 			videoLabels[3].Text = Tr("option_unlimited_fps");
 		else
 			videoLabels[3].Text = Tr("option_fps").Replace("0", SaveManager.FrameRates[SaveManager.Config.framerate].ToString());
-		videoLabels[4].Text = SaveManager.Config.useVsync ? ENABLED_STRING : DISABLED_STRING;
+		videoLabels[4].Text = SaveManager.Config.useVsync ? EnabledString : DisabledString;
 		videoLabels[5].Text = $"{SaveManager.Config.renderScale}%";
 		videoLabels[6].Text = SaveManager.Config.resizeMode.ToString();
 		switch (SaveManager.Config.antiAliasing)
 		{
 			case 0:
-				videoLabels[7].Text = DISABLED_STRING;
+				videoLabels[7].Text = DisabledString;
 				break;
 			case 1:
 				videoLabels[7].Text = "FXAA";
@@ -335,15 +430,15 @@ public partial class Options : Menu
 			videoLabels[9].Text = CalculateQualityString(SaveManager.Config.softShadowQuality);
 		videoLabels[10].Text = CalculateQualityString(SaveManager.Config.postProcessingQuality);
 		videoLabels[11].Text = CalculateQualityString(SaveManager.Config.reflectionQuality);
-		videoLabels[12].Text = SaveManager.Config.useMotionBlur ? ENABLED_STRING : DISABLED_STRING;
-		videoLabels[13].Text = SaveManager.Config.useScreenShake ? $"{SaveManager.Config.screenShake}%" : DISABLED_STRING;
+		videoLabels[12].Text = SaveManager.Config.useMotionBlur ? EnabledString : DisabledString;
+		videoLabels[13].Text = SaveManager.Config.useScreenShake ? $"{SaveManager.Config.screenShake}%" : DisabledString;
 
-		audioLabels[0].Text = SaveManager.Config.isMasterMuted ? MUTE_STRING : $"{SaveManager.Config.masterVolume}%";
-		audioLabels[1].Text = SaveManager.Config.isBgmMuted ? MUTE_STRING : $"{SaveManager.Config.bgmVolume}%";
-		audioLabels[2].Text = SaveManager.Config.isSfxMuted ? MUTE_STRING : $"{SaveManager.Config.sfxVolume}%";
-		audioLabels[3].Text = SaveManager.Config.isVoiceMuted ? MUTE_STRING : $"{SaveManager.Config.voiceVolume}%";
+		audioLabels[0].Text = SaveManager.Config.isMasterMuted ? MuteString : $"{SaveManager.Config.masterVolume}%";
+		audioLabels[1].Text = SaveManager.Config.isBgmMuted ? MuteString : $"{SaveManager.Config.bgmVolume}%";
+		audioLabels[2].Text = SaveManager.Config.isSfxMuted ? MuteString : $"{SaveManager.Config.sfxVolume}%";
+		audioLabels[3].Text = SaveManager.Config.isVoiceMuted ? MuteString : $"{SaveManager.Config.voiceVolume}%";
 
-		languageLabels[0].Text = SaveManager.Config.subtitlesEnabled ? ENABLED_STRING : DISABLED_STRING;
+		languageLabels[0].Text = SaveManager.Config.subtitlesEnabled ? EnabledString : DisabledString;
 		languageLabels[2].Text = SaveManager.Config.voiceLanguage == SaveManager.VoiceLanguage.English ? "lang_en" : "lang_ja";
 
 		switch (SaveManager.Config.controllerType)
@@ -366,6 +461,10 @@ public partial class Options : Menu
 		}
 
 		controlLabels[1].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
+		controlLabels[2].Text = SaveManager.Config.useHoldBreakMode ? HoldString : ToggleString;
+
+		partyMappingLabels[0].Text = Tr(PlayerString).Replace("0", partyPlayerIndex.ToString());
+		partyMappingLabels[1].Text = partyMappingOptions[0].GetDevice();
 	}
 
 	private string CalculateQualityString(SaveManager.QualitySetting setting)
@@ -373,22 +472,27 @@ public partial class Options : Menu
 		switch (setting)
 		{
 			case SaveManager.QualitySetting.Low:
-				return LOW_STRING;
+				return LowString;
 			case SaveManager.QualitySetting.Medium:
-				return MEDIUM_STRING;
+				return MediumString;
 			case SaveManager.QualitySetting.High:
-				return HIGH_STRING;
+				return HighString;
 		}
 
-		return DISABLED_STRING;
+		return DisabledString;
 	}
 
-	[Export]
-	private ControlOption[] controlMappingOptions;
+	[Export] private ControlOption[] controlMappingOptions;
+	[Export] private ControlOption[] partyMappingOptions;
+	private int partyPlayerIndex = 1; // Index of the player whose controls are currently being edited
+	private readonly int ExtraPartyModeOptionCount = 2; // Offset for playerIndex and controllerIndex
 	private void SetUpControlOptions()
 	{
 		foreach (ControlOption controlOption in controlMappingOptions)
-			controlOption.Connect(ControlOption.SignalName.SwapMapping, new(this, MethodName.RedrawControlOptions));
+			controlOption.SwapMapping += RedrawControlOptions;
+
+		foreach (ControlOption controlOption in partyMappingOptions)
+			controlOption.SwapMapping += RedrawControlOptions;
 	}
 
 	private void RedrawControlOptions(StringName id, InputEvent e)
@@ -403,18 +507,35 @@ public partial class Options : Menu
 
 		foreach (ControlOption controlOption in controlMappingOptions)
 		{
-			if (controlOption.InputId == id)
+			if (controlOption.ActionName == id)
+				controlOption.ReceiveInput(e, true);
+		}
+
+		foreach (ControlOption controlOption in partyMappingOptions)
+		{
+			if (controlOption.ActionName == id)
 				controlOption.ReceiveInput(e, true);
 		}
 	}
 
 	private void UpdateHorizontalSelection()
 	{
-		if (Mathf.IsZeroApprox(Input.GetAxis("move_left", "move_right"))) return;
+		if (Mathf.IsZeroApprox(Input.GetAxis("ui_left", "ui_right"))) return;
 
-		int direction = Mathf.Sign(Input.GetAxis("move_left", "move_right"));
+		int direction = Mathf.Sign(Input.GetAxis("ui_left", "ui_right"));
+
+		if (currentSubmenu == Submenus.ResetSettings || currentSubmenu == Submenus.ResetControls)
+		{
+			if ((direction > 0 && isResetSelected) || (direction < 0 && !isResetSelected))
+			{
+				isResetSelected = !isResetSelected;
+				resetAnimator.Play(isResetSelected ? "select-yes" : "select-no");
+			}
+
+			return;
+		}
+
 		bool settingUpdated = false;
-
 		switch (currentSubmenu)
 		{
 			case Submenus.Video:
@@ -428,6 +549,9 @@ public partial class Options : Menu
 				break;
 			case Submenus.Control:
 				settingUpdated = SlideControlOption(direction);
+				break;
+			case Submenus.PartyMapping:
+				settingUpdated = SlidePartyMappingOption(direction);
 				break;
 		}
 
@@ -639,8 +763,78 @@ public partial class Options : Menu
 			SaveManager.ApplyInputMap();
 			return true;
 		}
+		else if (VerticalSelection == 2)
+		{
+			SaveManager.Config.useHoldBreakMode = !SaveManager.Config.useHoldBreakMode;
+			return true;
+		}
 
 		return false;
+	}
+
+	private bool SlidePartyMappingOption(int direction)
+	{
+		if (VerticalSelection < ExtraPartyModeOptionCount)
+		{
+			if (VerticalSelection == 0)
+			{
+				// Change player index
+				partyPlayerIndex += direction;
+				if (partyPlayerIndex > 4)
+					partyPlayerIndex = 1;
+				else if (partyPlayerIndex < 1)
+					partyPlayerIndex = 4;
+				foreach (ControlOption controlOption in partyMappingOptions)
+				{
+					controlOption.PartyModeControllerIndex = partyPlayerIndex;
+					controlOption.RedrawBinding();
+				}
+			}
+
+			UpdatePartyModeDevice(direction);
+			return true;
+		}
+
+		return false;
+	}
+
+	private void UpdatePartyModeDevice(int direction)
+	{
+		// Change device
+		if (VerticalSelection == 1)
+		{
+			int deviceIndex = SaveManager.Config.partyModeDevices[partyPlayerIndex - 1];
+			deviceIndex += direction;
+			if (deviceIndex < 0)
+				deviceIndex = 7;
+			else if (deviceIndex > 7)
+				deviceIndex = 0;
+			SaveManager.Config.partyModeDevices[partyPlayerIndex - 1] = deviceIndex;
+		}
+
+		foreach (ControlOption controlOption in partyMappingOptions)
+			controlOption.UpdateDevice();
+	}
+
+	private void ConfirmOption()
+	{
+		if (VerticalSelection == 4)
+		{
+			currentSubmenu = Submenus.ResetSettings;
+			ShowResetMenu();
+			return;
+		}
+
+		ConfirmSFX();
+		FlipBook((Submenus)VerticalSelection + 1, false, 0);
+	}
+
+	private void ShowResetMenu()
+	{
+		resetAnimator.Play(currentSubmenu == Submenus.ResetSettings ? "text-settings" : "text-controls");
+		resetAnimator.Advance(0.0);
+		resetAnimator.Play("show");
+		isResetSelected = false;
 	}
 
 	private void ConfirmVideoOption()
@@ -650,7 +844,7 @@ public partial class Options : Menu
 			SaveManager.Config.useFullscreen = !SaveManager.Config.useFullscreen;
 			SaveManager.Config.windowSize = FindLargestWindowResolution();
 		}
-		else if (VerticalSelection == 12)
+		else if (VerticalSelection == 13)
 		{
 			SaveManager.Config.useScreenShake = !SaveManager.Config.useScreenShake;
 		}
@@ -681,11 +875,30 @@ public partial class Options : Menu
 		if (VerticalSelection == 1) return;
 
 		if (VerticalSelection == 0)
+		{
 			SlideControlOption(1);
+		}
 		else if (VerticalSelection == 2)
+		{
+			SlideControlOption(1);
+		}
+		else if (VerticalSelection == 3)
+		{
 			FlipBook(Submenus.Mapping, false, 0);
-		else
+		}
+		else if (VerticalSelection == 4)
+		{
+			FlipBook(Submenus.PartyMapping, false, 0);
+		}
+		else if (VerticalSelection == 5)
+		{
 			FlipBook(Submenus.Test, false, VerticalSelection);
+		}
+		else
+		{
+			currentSubmenu = Submenus.ResetControls;
+			ShowResetMenu();
+		}
 
 		ConfirmSFX();
 	}
