@@ -77,6 +77,12 @@ public partial class ControlOption : Control
 		SaveManager.Instance.ConfigApplied -= RedrawBinding;
 	}
 
+	public void ClearMapping()
+	{
+		InputMap.ActionEraseEvents(ActionName);
+		SaveManager.SaveInputAction(ActionName);
+	}
+
 	public void StartListening()
 	{
 		state = RemapState.Listening;
@@ -88,6 +94,8 @@ public partial class ControlOption : Control
 	{
 		await ToSignal(GetTree().CreateTimer(PhysicsManager.physicsDelta, false), SceneTreeTimer.SignalName.Timeout);
 		state = RemapState.Ready;
+
+		Input.ActionRelease(ActionName);
 		RedrawBinding();
 	}
 

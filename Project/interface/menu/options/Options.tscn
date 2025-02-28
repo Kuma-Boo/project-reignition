@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://bwehljjnagemy"]
+[gd_scene load_steps=76 format=3 uid="uid://bwehljjnagemy"]
 
 [ext_resource type="Script" path="res://interface/menu/options/script/Options.cs" id="1_yejdm"]
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="2_x1aix"]
@@ -331,6 +331,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Rect2(0, 92, 128, 50)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Menu/Parent/Text/Label:text")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["option_reset_settings_description"]
 }
 
 [sub_resource type="Animation" id="Animation_yred1"]
@@ -738,6 +750,38 @@ tracks/8/keys = {
 "values": [Rect2(0, 141, 128, 50)]
 }
 
+[sub_resource type="Animation" id="Animation_nmxf3"]
+resource_name = "text-settings"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Menu/Parent/Text/Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["option_reset_settings_description"]
+}
+
+[sub_resource type="Animation" id="Animation_0cf1n"]
+resource_name = "text-controls"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Menu/Parent/Text/Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["option_reset_controls_description"]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_0q5cx"]
 _data = {
 "RESET": SubResource("Animation_usxt6"),
@@ -745,7 +789,9 @@ _data = {
 "hide": SubResource("Animation_crj0a"),
 "select-no": SubResource("Animation_yxa58"),
 "select-yes": SubResource("Animation_1q86i"),
-"show": SubResource("Animation_56tgp")
+"show": SubResource("Animation_56tgp"),
+"text-controls": SubResource("Animation_0cf1n"),
+"text-settings": SubResource("Animation_nmxf3")
 }
 
 [sub_resource type="Animation" id="Animation_w5dih"]
@@ -965,6 +1011,18 @@ tracks/17/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 0, -6)]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("MenuBase/NavigationButtons/Clear:visible")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_24v0k"]
@@ -1286,6 +1344,18 @@ tracks/15/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("MenuBase/NavigationButtons/Clear:visible")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_k03le"]
 resource_name = "flip-left"
@@ -1478,6 +1548,18 @@ tracks/2/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MenuBase/NavigationButtons/Clear:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_kujvr"]
 resource_name = "options"
@@ -1627,6 +1709,18 @@ tracks/2/path = NodePath("MenuBase/ContentClip/Content/Control/PartyMapping:visi
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MenuBase/NavigationButtons/Clear:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -2310,7 +2404,7 @@ uppercase = true
 
 [node name="ResetLabel" type="Label" parent="MenuBase/ContentClip/Content/Options/LSide/Options"]
 layout_mode = 2
-text = "option_reset"
+text = "option_reset_settings"
 label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
@@ -2859,6 +2953,13 @@ label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
+[node name="ResetLabel" type="Label" parent="MenuBase/ContentClip/Content/Control/Common/LSide/Options"]
+layout_mode = 2
+text = "option_reset_controls"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
 [node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Control/Common"]
 layout_mode = 1
 anchors_preset = 11
@@ -2972,10 +3073,6 @@ inputId = &"button_jump"
 layout_mode = 2
 inputId = &"button_action"
 
-[node name="Brake" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
-layout_mode = 2
-inputId = &"button_brake"
-
 [node name="SpeedBreak" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
 inputId = &"button_speedbreak"
@@ -2987,6 +3084,10 @@ inputId = &"button_timebreak"
 [node name="Pause" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
 layout_mode = 2
 inputId = &"button_pause"
+
+[node name="Brake" parent="MenuBase/ContentClip/Content/Control/Mapping/Options" instance=ExtResource("14_itn8j")]
+layout_mode = 2
+inputId = &"button_brake"
 
 [node name="PartyMapping" type="Control" parent="MenuBase/ContentClip/Content/Control"]
 visible = false
@@ -3148,6 +3249,13 @@ offset_right = 1378.0
 offset_bottom = 864.0
 theme_override_constants/separation = 64
 alignment = 2
+
+[node name="Clear" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
+visible = false
+layout_mode = 2
+ActionKey = &"sys_clear"
+inputKey = &"button_pause"
+fallbackKey = &"ui_clear"
 
 [node name="Select" parent="MenuBase/NavigationButtons" instance=ExtResource("27_30n1q")]
 layout_mode = 2
@@ -3332,7 +3440,7 @@ theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 2
 theme_override_fonts/font = ExtResource("29_fgdsa")
 theme_override_font_sizes/font_size = 32
-text = "option_reset_to_default"
+text = "option_reset_settings_description"
 horizontal_alignment = 1
 vertical_alignment = 1
 
