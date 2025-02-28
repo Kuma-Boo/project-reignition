@@ -182,6 +182,7 @@ public partial class Options : Menu
 				}
 
 				SaveManager.Config = new();
+				SaveManager.ResetInputMap();
 				resetAnimator.Play("confirm");
 				currentSubmenu = Submenus.Options;
 				break;

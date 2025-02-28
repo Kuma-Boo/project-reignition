@@ -20,6 +20,7 @@ public partial class SaveManager : Node
 	{
 		Instance = this;
 
+		CacheInitialInputMap();
 		SaveDirectory = ProjectSettings.GlobalizePath(GetSaveDirectory());
 		MenuData = GameData.CreateDefaultData(); // Create a default game data object for the menu
 
@@ -465,6 +466,101 @@ public partial class SaveManager : Node
 		Instance.EmitSignal(SignalName.ConfigApplied);
 	}
 
+	/// <summary> Applies text localization. Be sure voiceover language is set first. </summary>
+	private static void ApplyLocalization()
+	{
+		switch (Config.textLanguage)
+		{
+			case TextLanguage.Japanese:
+				TranslationServer.SetLocale("ja");
+				break;
+			case TextLanguage.Spanish:
+				TranslationServer.SetLocale("es");
+				break;
+			case TextLanguage.French:
+				TranslationServer.SetLocale("fr");
+				break;
+			case TextLanguage.Italian:
+				TranslationServer.SetLocale("it");
+				break;
+			case TextLanguage.German:
+				TranslationServer.SetLocale("de");
+				break;
+			case TextLanguage.BrazilianPortuguese:
+				TranslationServer.SetLocale("pt_BR");
+				break;
+			case TextLanguage.Polish:
+				TranslationServer.SetLocale("pl");
+				break;
+			case TextLanguage.Chinese:
+				TranslationServer.SetLocale("zh");
+				break;
+			default:
+				TranslationServer.SetLocale(UseEnglishVoices ? "en" : "en_US");
+				break;
+		}
+	}
+
+	#endregion
+
+	#region Input
+	private static readonly Dictionary initialInputMap = [];
+	private static void CacheInitialInputMap()
+	{
+		foreach (StringName action in InputMap.GetActions())
+		{
+			// Only store gameplay actions
+			if (!action.ToString().StartsWith("move_") && !action.ToString().StartsWith("button_"))
+				continue;
+
+			initialInputMap.Add(action, GenerateInputMappingString(action));
+		}
+	}
+
+	private static string GenerateInputMappingString(StringName action)
+	{
+		Array<InputEvent> eventList = InputMap.ActionGetEvents(action); // Refresh event list
+
+		// Construct the mapping string
+		int[] mappingList = [(int)Key.None, (int)JoyAxis.Invalid, (int)JoyButton.Invalid];
+		int axisSign = 0;
+		foreach (var e in eventList)
+		{
+			if (e is InputEventKey key)
+			{
+				mappingList[0] = (int)key.Keycode;
+			}
+			else if (e is InputEventJoypadMotion motion)
+			{
+				mappingList[1] = (int)motion.Axis;
+				axisSign = Mathf.Sign(motion.AxisValue);
+			}
+			else if (e is InputEventJoypadButton button)
+			{
+				mappingList[2] = (int)button.ButtonIndex;
+			}
+		}
+
+		return $"{mappingList[0]}, {mappingList[1]}, {mappingList[2]}, {axisSign}";
+	}
+
+	public static void SaveInputAction(StringName action)
+	{
+		string mappingString = GenerateInputMappingString(action);
+		if (Config.inputConfiguration.ContainsKey(action))
+			Config.inputConfiguration[action] = mappingString;
+		else
+			Config.inputConfiguration.Add(action, mappingString);
+
+		ApplyConfig();
+	}
+
+	public static void ResetInputMap()
+	{
+		Config.inputConfiguration = initialInputMap;
+		ApplyInputMap();
+	}
+
 	/// <summary> Applies input map configuration. </summary>
 	public static void ApplyInputMap()
 	{
@@ -514,42 +610,6 @@ public partial class SaveManager : Node
 			}
 		}
 	}
-
-	/// <summary> Applies text localization. Be sure voiceover language is set first. </summary>
-	private static void ApplyLocalization()
-	{
-		switch (Config.textLanguage)
-		{
-			case TextLanguage.Japanese:
-				TranslationServer.SetLocale("ja");
-				break;
-			case TextLanguage.Spanish:
-				TranslationServer.SetLocale("es");
-				break;
-			case TextLanguage.French:
-				TranslationServer.SetLocale("fr");
-				break;
-			case TextLanguage.Italian:
-				TranslationServer.SetLocale("it");
-				break;
-			case TextLanguage.German:
-				TranslationServer.SetLocale("de");
-				break;
-			case TextLanguage.BrazilianPortuguese:
-				TranslationServer.SetLocale("pt_BR");
-				break;
-			case TextLanguage.Polish:
-				TranslationServer.SetLocale("pl");
-				break;
-			case TextLanguage.Chinese:
-				TranslationServer.SetLocale("zh");
-				break;
-			default:
-				TranslationServer.SetLocale(UseEnglishVoices ? "en" : "en_US");
-				break;
-		}
-	}
-
 	#endregion
 
 	#region Game data

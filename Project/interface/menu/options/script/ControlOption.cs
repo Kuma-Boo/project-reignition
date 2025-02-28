@@ -63,7 +63,6 @@ public partial class ControlOption : Control
 
 		ActionLabel.Text = Tr(inputId.ToString());
 
-		SaveConfig();
 		RedrawBinding();
 
 		Runtime.Instance.EventInputed += ReceiveInput;
@@ -137,7 +136,7 @@ public partial class ControlOption : Control
 		if (!isSwappingInput)
 			ResolveMappingConflicts(swapAction, swapEvent, e);
 
-		SaveConfig();
+		SaveManager.SaveInputAction(ActionName);
 	}
 
 	private StringName GetActionConflict(InputEvent e, bool isSwappingInput)
@@ -208,39 +207,6 @@ public partial class ControlOption : Control
 
 		if (!InputMap.ActionHasEvent(ActionName, e)) // Failed to add the new action
 			InputMap.ActionAddEvent(ActionName, e); // Add the new action anyway
-	}
-
-	private void SaveConfig()
-	{
-		Array<InputEvent> eventList = InputMap.ActionGetEvents(ActionName); // Refresh event list
-
-		// Construct the mapping string
-		int[] mappingList = [(int)Key.None, (int)JoyAxis.Invalid, (int)JoyButton.Invalid];
-		int axisSign = 0;
-		foreach (var e in eventList)
-		{
-			if (e is InputEventKey key)
-			{
-				mappingList[0] = (int)key.Keycode;
-			}
-			else if (e is InputEventJoypadMotion motion)
-			{
-				mappingList[1] = (int)motion.Axis;
-				axisSign = Mathf.Sign(motion.AxisValue);
-			}
-			else if (e is InputEventJoypadButton button)
-			{
-				mappingList[2] = (int)button.ButtonIndex;
-			}
-		}
-		string mappingString = $"{mappingList[0]}, {mappingList[1]}, {mappingList[2]}, {axisSign}";
-
-		if (SaveManager.Config.inputConfiguration.ContainsKey(ActionName))
-			SaveManager.Config.inputConfiguration[ActionName] = mappingString;
-		else
-			SaveManager.Config.inputConfiguration.Add(ActionName, mappingString);
-
-		SaveManager.ApplyConfig();
 	}
 
 	/// <summary> Checks whether the input can be remapped to the target binding. </summary>
