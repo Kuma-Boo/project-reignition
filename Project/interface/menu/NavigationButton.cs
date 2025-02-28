@@ -8,6 +8,7 @@ public partial class NavigationButton : Control
 {
 	[Export] public StringName ActionKey { get; set; }
 	[Export] private StringName inputKey;
+	[Export] private StringName fallbackKey; // Mostly used for menu navigation
 
 	/// <summary> Set this to something if you only want to display a particular keyboard input. </summary>
 	[Export] private Key overrideKey = Key.None;
@@ -54,7 +55,16 @@ public partial class NavigationButton : Control
 			return;
 		}
 
-		Array<InputEvent> eventList = InputMap.ActionGetEvents(inputKey);
+		if (RedrawAs(inputKey))
+			return;
+
+		// Failed to draw -- try again with fallback
+		RedrawAs(fallbackKey);
+	}
+
+	private bool RedrawAs(StringName eventKey)
+	{
+		Array<InputEvent> eventList = InputMap.ActionGetEvents(eventKey);
 
 		InputEventKey key = null;
 		InputEventJoypadButton button = null;
@@ -72,24 +82,28 @@ public partial class NavigationButton : Control
 
 		if (Runtime.Instance.IsUsingController)
 		{
-			if (button == null && motion == null) return;
-			ButtonLabel.Visible = false;
+			if (button == null && motion == null)
+				return false;
 
+			ButtonLabel.Visible = false;
 			int controllerIndex = (int)Runtime.Instance.GetActiveControllerType() - 1;
 
 			if (button != null) // Prioritize using buttons over axis icons
 			{
 				ButtonTextureRect.Texture = controllerResources[controllerIndex].buttons[(int)button.ButtonIndex];
-				return;
+				return true;
 			}
 
 			int axis = Runtime.Instance.ControllerAxisToIndex(motion);
 			ButtonTextureRect.Texture = controllerResources[controllerIndex].axis[axis];
-			return;
+			return true;
 		}
 
-		if (key == null) return;
+		if (key == null)
+			return false;
+
 		RedrawAsKeyboard(key.Keycode);
+		return true;
 	}
 
 	private void RedrawAsKeyboard(Key keycode)
