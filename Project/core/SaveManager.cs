@@ -557,7 +557,6 @@ public partial class SaveManager : Node
 
 	public static void ResetInputMap()
 	{
-		GD.Print("Input Map Reset");
 		Config.inputConfiguration = initialInputMap.Duplicate(true);
 		ApplyInputMap();
 	}

@@ -156,13 +156,24 @@ public partial class ControlOption : Control
 		// Check for conflicting input mappings
 		foreach (StringName actionId in InputMap.GetActions())
 		{
-			// Only allow adventure mappings to conflict with each other.
-			// This way, a single player *can* configure all 4 players to a single controller (if they want to)
-			if (!IsPartyModeMapping && char.IsDigit(actionId.ToString()[^1]))
+			if (!InputMap.ActionHasEvent(actionId, e) || !SaveManager.Config.inputConfiguration.ContainsKey(actionId))
 				continue;
 
-			if (!SaveManager.Config.inputConfiguration.ContainsKey(actionId) || !InputMap.ActionHasEvent(actionId, e))
+			// Only allow adventure mappings to conflict with each other (or the same controller).
+			// This way, a single player *can* configure all 4 players to a single controller (if they want to)
+			char lastChar = actionId.ToString()[^1];
+			if (char.IsDigit(lastChar)) // actionId is for party mode
+			{
+				int controllerIndex = lastChar - '0';
+				// Different party controller (or adventure mode mapping); no conflict
+				if (!IsPartyModeMapping || controllerIndex != PartyModeControllerIndex)
+					continue;
+			}
+			else if (IsPartyModeMapping)
+			{
+				// actionId is for adventure mode
 				continue;
+			}
 
 			// Store conflict for a swap later
 			return actionId;

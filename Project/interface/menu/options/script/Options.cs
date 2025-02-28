@@ -183,7 +183,7 @@ public partial class Options : Menu
 				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_clear"))
 				{
 					// Clear input mapping
-					partyMappingOptions[VerticalSelection].ClearMapping();
+					partyMappingOptions[selectedIndex].ClearMapping();
 					return;
 				}
 
