@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay;
@@ -22,6 +23,7 @@ public partial class EventState : PlayerState
 		BGMPlayer.SetStageMusicVolume(-80f); // Mute BGM
 
 		Player.StartExternal(this, Trigger.PlayerStandin, Trigger.CharacterPositionSmoothing);
+		Player.Controller.ResetJumpBuffer();
 		Player.Animator.ExternalAngle = 0; // Reset external angle
 		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
 		Player.Skills.DisableBreakSkills();
@@ -60,6 +62,9 @@ public partial class EventState : PlayerState
 	{
 		if (!isEventFinished)
 		{
+			if (IsSkippingEvent())
+				SkipEvent();
+
 			// Call deferred so sync happens AFTER event animator updates
 			Player.CallDeferred(PlayerController.MethodName.UpdateExternalControl, true);
 			return null;
@@ -73,6 +78,25 @@ public partial class EventState : PlayerState
 			return idleState;
 
 		return runState;
+	}
+
+	private bool IsSkippingEvent()
+	{
+		if (!Player.Controller.IsJumpBufferActive)
+			return false;
+
+		// Only allow cutscene skipping on repeat level playthroughs
+		StringName levelId = StageSettings.Instance.Data.LevelID;
+		return SaveManager.ActiveGameData.GetClearStatus(levelId) == SaveManager.GameData.LevelStatus.Cleared;
+	}
+
+	private void SkipEvent()
+	{
+		Player.Controller.ResetJumpBuffer();
+
+		Trigger.SkipEvent();
+		if (!Trigger.CharacterAnimation.IsEmpty)
+			Player.Animator.SeekOneshotAnimation(Trigger.EventAnimationLength);
 	}
 
 	private void FinishEvent() => isEventFinished = true;

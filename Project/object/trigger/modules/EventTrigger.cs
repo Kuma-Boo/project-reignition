@@ -28,6 +28,7 @@ public partial class EventTrigger : StageTriggerModule
 	[ExportGroup("Components")]
 	[Export]
 	private AnimationPlayer animator;
+	public float EventAnimationLength => (float)animator.CurrentAnimationLength;
 
 	[Export]
 	private RespawnAnimation respawnAnimation;
@@ -243,6 +244,12 @@ public partial class EventTrigger : StageTriggerModule
 			return;
 
 		Player.StartEvent(this);
+	}
+
+	public void SkipEvent()
+	{
+		Player.Camera.StartCrossfade();
+		animator.Advance(EventAnimationLength);
 	}
 
 	#region Event Animation
