@@ -75,8 +75,8 @@ public partial class SandScorpion : Node3D
 	/// <summary> Extra animator that manages stuff like damage flashing, hitboxes, etc. </summary>
 	[Export] private AnimationPlayer eventAnimator;
 
-	private readonly StringName IntroCutsceneID = "so_boss_intro";
-	private readonly StringName DefeatCutsceneID = "so_boss_defeat";
+	private readonly StringName IntroCutsceneID = "sand_scorpion_intro";
+	private readonly StringName DefeatCutsceneID = "sand_scorpion_defeat";
 
 	private readonly StringName DisabledState = "disabled";
 	private readonly StringName EnabledState = "enabled";
@@ -238,25 +238,13 @@ public partial class SandScorpion : Node3D
 
 	private void FinishDefeat()
 	{
-		eventAnimator.Play("finish-defeat");
-		rootAnimationTree.Set(DefeatSeekParameter, 10);
-		rTailAnimationTree.Set(DefeatSeekParameter, 10);
-		lTailAnimationTree.Set(DefeatSeekParameter, 10);
-
-		SaveManager.ActiveGameData.AllowSkippingCutscene(DefeatCutsceneID);
-		CallDeferred(MethodName.StartResults);
-	}
-
-	private void StartResults()
-	{
-		rootAnimationTree.Active = false;
-		rTailAnimationTree.Active = false;
-		lTailAnimationTree.Active = false;
-		flyingEyeAnimationTree.Active = false;
-
 		cutsceneCamera.Deactivate();
+		rootAnimationTree.Active = rTailAnimationTree.Active = lTailAnimationTree.Active = flyingEyeAnimationTree.Active = false;
+		eventAnimator.Play("finish-defeat");
+
 		Player.Activate();
 		StageSettings.Instance.FinishLevel(true);
+		SaveManager.ActiveGameData.AllowSkippingCutscene(DefeatCutsceneID);
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -286,10 +274,12 @@ public partial class SandScorpion : Node3D
 				UpdateHitboxes();
 				break;
 			case FightState.Defeated:
-				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
-					SaveManager.ActiveGameData.CanSkipCutscene(DefeatCutsceneID))
+				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump"))
 				{
-					FinishDefeat();
+					eventAnimator.Play("finish-defeat");
+					rootAnimationTree.Set(DefeatSeekParameter, 10);
+					rTailAnimationTree.Set(DefeatSeekParameter, 10);
+					lTailAnimationTree.Set(DefeatSeekParameter, 10);
 				}
 				break;
 		}
