@@ -23,12 +23,11 @@ public partial class EventTrigger : StageTriggerModule
 	private bool isActivated;
 
 	[ExportGroup("Components")]
-	[Export]
-	private AnimationPlayer animator;
-	public float EventAnimationLength => (float)animator.CurrentAnimationLength;
+	[Export] private AnimationPlayer animator;
+	public float AnimationLength => (float)animator.CurrentAnimationLength;
+	private float AnimationTimeLeft => (float)(animator.CurrentAnimationLength - animator.CurrentAnimationPosition);
 
-	[Export]
-	private RespawnAnimation respawnAnimation;
+	[Export] private RespawnAnimation respawnAnimation;
 	private enum RespawnAnimation
 	{
 		Reset,
@@ -246,7 +245,9 @@ public partial class EventTrigger : StageTriggerModule
 	public void SkipEvent()
 	{
 		Player.Camera.StartCrossfade();
-		animator.Advance(EventAnimationLength);
+		StageSettings.Instance.AddTime(AnimationTimeLeft);
+
+		animator.Advance(AnimationLength);
 		EmitSignal(SignalName.EventSkipped);
 	}
 

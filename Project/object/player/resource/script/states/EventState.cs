@@ -96,7 +96,7 @@ public partial class EventState : PlayerState
 
 		Trigger.SkipEvent();
 		if (!Trigger.CharacterAnimation.IsEmpty)
-			Player.Animator.SeekOneshotAnimation(Trigger.EventAnimationLength);
+			Player.Animator.SeekOneshotAnimation(Trigger.AnimationLength);
 	}
 
 	private void FinishEvent() => isEventFinished = true;
