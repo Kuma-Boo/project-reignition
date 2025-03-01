@@ -75,8 +75,8 @@ public partial class SandScorpion : Node3D
 	/// <summary> Extra animator that manages stuff like damage flashing, hitboxes, etc. </summary>
 	[Export] private AnimationPlayer eventAnimator;
 
-	private readonly StringName IntroCutsceneID = "sand_scorpion_intro";
-	private readonly StringName DefeatCutsceneID = "sand_scorpion_defeat";
+	private readonly StringName IntroCutsceneID = "so_boss_intro";
+	private readonly StringName DefeatCutsceneID = "so_boss_defeat";
 
 	private readonly StringName DisabledState = "disabled";
 	private readonly StringName EnabledState = "enabled";
@@ -274,7 +274,8 @@ public partial class SandScorpion : Node3D
 				UpdateHitboxes();
 				break;
 			case FightState.Defeated:
-				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump"))
+				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
+					SaveManager.ActiveGameData.CanSkipCutscene(DefeatCutsceneID))
 				{
 					eventAnimator.Play("finish-defeat");
 					rootAnimationTree.Set(DefeatSeekParameter, 10);
