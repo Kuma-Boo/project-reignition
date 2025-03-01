@@ -10,14 +10,11 @@ namespace Project.Gameplay.Triggers;
 [Tool]
 public partial class EventTrigger : StageTriggerModule
 {
-	[Signal]
-	public delegate void ActivatedEventHandler();
-	[Signal]
-	public delegate void DeactivatedEventHandler();
-	[Signal]
-	public delegate void RespawnedEventHandler();
-	[Signal]
-	public delegate void EventFinishedEventHandler();
+	[Signal] public delegate void ActivatedEventHandler();
+	[Signal] public delegate void DeactivatedEventHandler();
+	[Signal] public delegate void RespawnedEventHandler();
+	[Signal] public delegate void EventFinishedEventHandler();
+	[Signal] public delegate void EventSkippedEventHandler();
 
 	/// <summary> Automatically reset the event when player respawns? </summary>
 	private bool autoRespawn;
@@ -250,6 +247,7 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		Player.Camera.StartCrossfade();
 		animator.Advance(EventAnimationLength);
+		EmitSignal(SignalName.EventSkipped);
 	}
 
 	#region Event Animation
