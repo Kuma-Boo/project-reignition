@@ -75,6 +75,9 @@ public partial class SandScorpion : Node3D
 	/// <summary> Extra animator that manages stuff like damage flashing, hitboxes, etc. </summary>
 	[Export] private AnimationPlayer eventAnimator;
 
+	private readonly StringName IntroCutsceneID = "sand_scorpion_intro";
+	private readonly StringName DefeatCutsceneID = "sand_scorpion_defeat";
+
 	private readonly StringName DisabledState = "disabled";
 	private readonly StringName EnabledState = "enabled";
 	private readonly StringName IntroParameter = "parameters/intro_trigger/request";
@@ -179,6 +182,7 @@ public partial class SandScorpion : Node3D
 			color = Colors.Black
 		});
 		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.StartBattle), (uint)ConnectFlags.OneShot);
+		SaveManager.ActiveGameData.AllowSkippingCutscene(IntroCutsceneID);
 	}
 
 	private void StartBattle()
@@ -232,14 +236,28 @@ public partial class SandScorpion : Node3D
 		Player.Deactivate();
 	}
 
-	private void StartResults()
+	private void FinishDefeat()
 	{
-		cutsceneCamera.Deactivate();
-		rootAnimationTree.Active = rTailAnimationTree.Active = lTailAnimationTree.Active = flyingEyeAnimationTree.Active = false;
 		eventAnimator.Play("finish-defeat");
+		rootAnimationTree.Set(DefeatSeekParameter, 10);
+		rTailAnimationTree.Set(DefeatSeekParameter, 10);
+		lTailAnimationTree.Set(DefeatSeekParameter, 10);
 
+		cutsceneCamera.Deactivate();
 		Player.Activate();
+
 		StageSettings.Instance.FinishLevel(true);
+		SaveManager.ActiveGameData.AllowSkippingCutscene(DefeatCutsceneID);
+
+		CallDeferred(MethodName.DisableAnimationTrees);
+	}
+
+	private void DisableAnimationTrees()
+	{
+		rootAnimationTree.Active = false;
+		rTailAnimationTree.Active = false;
+		lTailAnimationTree.Active = false;
+		flyingEyeAnimationTree.Active = false;
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -247,8 +265,11 @@ public partial class SandScorpion : Node3D
 		switch (fightState)
 		{
 			case FightState.Introduction:
-				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
+				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
+					SaveManager.ActiveGameData.CanSkipCutscene(IntroCutsceneID))
+				{
 					FinishIntroduction();
+				}
 				break;
 			case FightState.Waiting:
 				UpdateEyes();
@@ -266,12 +287,10 @@ public partial class SandScorpion : Node3D
 				UpdateHitboxes();
 				break;
 			case FightState.Defeated:
-				if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
+				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
+					SaveManager.ActiveGameData.CanSkipCutscene(DefeatCutsceneID))
 				{
-					eventAnimator.Play("finish-defeat");
-					rootAnimationTree.Set(DefeatSeekParameter, 10);
-					rTailAnimationTree.Set(DefeatSeekParameter, 10);
-					lTailAnimationTree.Set(DefeatSeekParameter, 10);
+					FinishDefeat();
 				}
 				break;
 		}
