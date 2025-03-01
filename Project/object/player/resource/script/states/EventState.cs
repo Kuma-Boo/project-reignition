@@ -85,9 +85,7 @@ public partial class EventState : PlayerState
 		if (!Player.Controller.IsJumpBufferActive)
 			return false;
 
-		// Only allow cutscene skipping on repeat level playthroughs
-		StringName levelId = StageSettings.Instance.Data.LevelID;
-		return SaveManager.ActiveGameData.GetClearStatus(levelId) == SaveManager.GameData.LevelStatus.Cleared;
+		return SaveManager.ActiveGameData.CanSkipCutscene(Trigger.CharacterAnimation);
 	}
 
 	private void SkipEvent()
@@ -99,5 +97,9 @@ public partial class EventState : PlayerState
 			Player.Animator.SeekOneshotAnimation(Trigger.AnimationLength);
 	}
 
-	private void FinishEvent() => isEventFinished = true;
+	private void FinishEvent()
+	{
+		isEventFinished = true;
+		SaveManager.ActiveGameData.AllowSkippingCutscene(Trigger.CharacterAnimation);
+	}
 }

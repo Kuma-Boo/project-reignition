@@ -666,7 +666,7 @@ public partial class SaveManager : Node
 
 		if (FileAccess.GetOpenError() == Error.Ok)
 		{
-			file.StoreString(Json.Stringify(ActiveGameData.ToDictionary()));
+			file.StoreString(Json.Stringify(ActiveGameData.ToDictionary(), "\t"));
 			file.Close();
 		}
 	}
@@ -733,6 +733,8 @@ public partial class SaveManager : Node
 		public Array<WorldEnum> worldsUnlocked;
 		/// <summary> List of stages unlocked. </summary>
 		public Array<string> stagesUnlocked;
+		/// <summary> List of cutscenes that can be skipped. </summary>
+		public Array<string> skippableCutscenes;
 
 		/// <summary> Player level, from 1 -> 99 </summary>
 		public int level;
@@ -955,6 +957,13 @@ public partial class SaveManager : Node
 		}
 		#endregion
 
+		public bool CanSkipCutscene(StringName cutsceneId) => skippableCutscenes.Contains(cutsceneId);
+		public void AllowSkippingCutscene(StringName cutsceneId)
+		{
+			if (!skippableCutscenes.Contains(cutsceneId))
+				skippableCutscenes.Add(cutsceneId);
+		}
+
 		/// <summary> Creates a dictionary based on GameData. </summary>
 		public Dictionary ToDictionary()
 		{
@@ -975,6 +984,7 @@ public partial class SaveManager : Node
 				{ nameof(worldsUnlocked), worldsUnlocked },
 				{ nameof(worldRingsCollected), worldRingsCollected },
 				{ nameof(stagesUnlocked), stagesUnlocked },
+				{ nameof(skippableCutscenes), skippableCutscenes },
 				{ nameof(levelData), (Dictionary)levelData },
 
 				// Player stats
@@ -1020,6 +1030,9 @@ public partial class SaveManager : Node
 
 			if (dictionary.TryGetValue(nameof(stagesUnlocked), out var) && var.VariantType == Variant.Type.Array)
 				stagesUnlocked = (Array<string>)var;
+
+			if (dictionary.TryGetValue(nameof(skippableCutscenes), out var) && var.VariantType == Variant.Type.Array)
+				skippableCutscenes = (Array<string>)var;
 
 			if (dictionary.TryGetValue(nameof(levelData), out var))
 				levelData = (Dictionary<StringName, Dictionary>)var;
@@ -1146,6 +1159,7 @@ public partial class SaveManager : Node
 				worldRingsCollected = [],
 				worldsUnlocked = [],
 				stagesUnlocked = [],
+				skippableCutscenes = [],
 				presetNames = [],
 				presetSkills = [],
 				presetSkillAugments = [],

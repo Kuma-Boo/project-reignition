@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using Project.Core;
 
 namespace Project.Gameplay.Triggers;
 
