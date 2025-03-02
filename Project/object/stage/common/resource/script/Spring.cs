@@ -21,9 +21,15 @@ public partial class Spring : Launcher
 
 		if (startHidden)
 		{
-			animator.Play(HideAnim);
-			animator.Seek(animator.CurrentAnimationLength, true, true);
+			StartHidden();
+			StageSettings.Instance.Respawned += StartHidden;
 		}
+	}
+
+	private void StartHidden()
+	{
+		animator.Play(HideAnim);
+		animator.Seek(animator.CurrentAnimationLength, true, true);
 	}
 
 	protected override void LaunchAnimation()
