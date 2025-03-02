@@ -15,8 +15,15 @@ public partial class Spring : Launcher
 	protected override void SetUp()
 	{
 		base.SetUp();
+
+		if (Engine.IsEditorHint())
+			return;
+
 		if (startHidden)
-			HideLauncher();
+		{
+			animator.Play(HideAnim);
+			animator.Seek(animator.CurrentAnimationLength, true, true);
+		}
 	}
 
 	protected override void LaunchAnimation()

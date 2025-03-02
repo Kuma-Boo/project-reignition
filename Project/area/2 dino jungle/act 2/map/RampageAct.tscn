@@ -11,7 +11,7 @@
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="9_77ulf"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="10_81ydx"]
 [ext_resource type="PackedScene" uid="uid://cbs8o4mdf1wbo" path="res://area/2 dino jungle/object/platform/GrassPillar.tscn" id="11_rqo42"]
-[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="12_jhajo"]
+[ext_resource type="PackedScene" uid="uid://3ho04bqoxv4w" path="res://object/stage/common/Switch.tscn" id="12_jhajo"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="13_tivn7"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="14_c8yr2"]
 [ext_resource type="PackedScene" uid="uid://mhhtlvsxmugl" path="res://object/stage/common/Catapult.tscn" id="15_hynkb"]
@@ -460,22 +460,22 @@ transform = Transform3D(0.270368, 0.0685287, 0.960315, 0.058246, 0.994472, -0.08
 [node name="Switch" parent="RampageAct/Cave" instance=ExtResource("12_jhajo")]
 transform = Transform3D(0.978046, 0.20411, -0.0420166, 0, -0.201625, -0.979463, -0.20839, 0.95796, -0.197199, -4.90121, 5.38797, -29.9643)
 
+[node name="Spring" parent="RampageAct/Cave/Switch" instance=ExtResource("13_tivn7")]
+transform = Transform3D(-0.801483, 0.299008, 0.517899, -0.585735, -0.567124, -0.579039, 0.120575, -0.76744, 0.62968, 4.99796, 10.3774, 2.31772)
+startHidden = true
+middleHeight = 4.0
+finalHeight = 1.0
+distance = 23.0
+
+[node name="Path" type="Node3D" parent="RampageAct/Cave/Switch/Spring" node_paths=PackedStringArray("path")]
+script = ExtResource("14_c8yr2")
+path = NodePath("../../../../../Static/Path/CaveRightPath")
+
 [node name="CullingTrigger" type="Node3D" parent="RampageAct/Cave/Switch"]
 transform = Transform3D(0.978046, 3.72529e-09, -0.20839, 0.20411, -0.201625, 0.95796, -0.0420166, -0.979463, -0.197198, -1.45064, 30.7913, -0.837555)
 script = ExtResource("8_o45ut")
 saveVisibilityOnCheckpoint = true
 respawnOnActivation = true
-
-[node name="Spring" parent="RampageAct/Cave/Switch/CullingTrigger" instance=ExtResource("13_tivn7")]
-transform = Transform3D(-0.908508, 0.208933, 0.361884, 0, 0.866025, -0.5, -0.417867, -0.454254, -0.786792, 2.00775, 1.02547, -21.5217)
-middleHeight = 4.0
-finalHeight = 1.0
-distance = 23.0
-voiceKey = &""
-
-[node name="Path" type="Node3D" parent="RampageAct/Cave/Switch/CullingTrigger/Spring" node_paths=PackedStringArray("path")]
-script = ExtResource("14_c8yr2")
-path = NodePath("../../../../../../Static/Path/CaveRightPath")
 
 [node name="Rings2" type="Node3D" parent="RampageAct/Cave/Switch/CullingTrigger"]
 transform = Transform3D(0.903545, 0.0564338, 0.424761, -2.23517e-08, 0.991289, -0.131703, -0.428494, 0.118999, 0.895674, -6.10352e-05, 1.12376, -19.2726)
@@ -951,7 +951,7 @@ Generate = false
 Source = ExtResource("28_mhs6v")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -995,7 +995,7 @@ Generate = false
 Source = ExtResource("28_mhs6v")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -1039,7 +1039,7 @@ Generate = false
 Source = ExtResource("28_mhs6v")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -1083,7 +1083,7 @@ Generate = false
 Source = ExtResource("28_mhs6v")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -1127,7 +1127,7 @@ Generate = false
 Source = ExtResource("28_mhs6v")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -1171,7 +1171,7 @@ Generate = false
 Source = ExtResource("28_mhs6v")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -1215,7 +1215,7 @@ Generate = false
 Source = ExtResource("28_mhs6v")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -1259,7 +1259,7 @@ Generate = false
 Source = ExtResource("28_mhs6v")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -1303,7 +1303,7 @@ Generate = false
 Source = ExtResource("28_mhs6v")
 Amount = 10
 Shape = 2
-Path = NodePath("../../../Static/Path/RiverPath")
+Path = NodePath("")
 "Path Progress Offset" = -4.0
 "Disable Path Y" = false
 Spacing = 1.0
@@ -1419,15 +1419,15 @@ transform = Transform3D(1, 5.82077e-11, 7.45058e-09, -1.16415e-10, 1, -1.45519e-
 transform = Transform3D(0.730007, -0.683228, 0.017008, 0, -0.0248858, -0.99969, 0.683439, 0.729781, -0.0181668, 68.5992, 5.44296, -41.2009)
 activationLength = 2.0
 
+[node name="Spring" parent="RampageAct/Crossing/Switch1" instance=ExtResource("13_tivn7")]
+transform = Transform3D(-1, 7.45058e-08, -2.98023e-08, 0, -0.422618, -0.906308, -8.00937e-08, -0.906308, 0.422618, -0.177734, 7.8071, 4.95172)
+startHidden = true
+finalHeight = 12.145
+distance = 9.315
+
 [node name="CullingTrigger2" type="Node3D" parent="RampageAct/Crossing/Switch1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.10352e-05, 0.0693054, 0)
 script = ExtResource("8_o45ut")
-
-[node name="Spring" parent="RampageAct/Crossing/Switch1/CullingTrigger2" instance=ExtResource("13_tivn7")]
-transform = Transform3D(-1, 8.74228e-08, 0, -3.69465e-08, -0.422618, -0.906308, -7.92319e-08, -0.906308, 0.422618, -0.177795, 7.73779, 4.95169)
-finalHeight = 12.145
-distance = 9.315
-voiceKey = &""
 
 [node name="Rings9" type="Node3D" parent="RampageAct/Crossing/Switch1/CullingTrigger2"]
 transform = Transform3D(1, -2.98023e-08, 0, 0, 0.00207694, 0.999998, -3.72529e-09, -0.999998, 0.00207693, 0.000366211, 6.10965, 4.71481)
@@ -1473,7 +1473,6 @@ saveVisibilityOnCheckpoint = true
 transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0)
 finalHeight = 15.0
 distance = 10.0
-voiceKey = &""
 
 [node name="Rings" type="Node3D" parent="RampageAct/Crossing/SafetySpring"]
 script = ExtResource("9_77ulf")
@@ -1761,7 +1760,6 @@ middleHeight = 16.0
 finalHeight = -10.0
 distance = 33.0
 launchDirection = 1
-voiceKey = &""
 
 [node name="Camera" type="Node3D" parent="RampageAct/Cavern/Spring"]
 script = ExtResource("16_l2204")
@@ -1977,7 +1975,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.14343, 0.78244, -7.76794)
 distance = 10.0
 allowJumpDashing = false
 launchDirection = 1
-voiceKey = &""
 
 [node name="Teleport" type="Node3D" parent="RampageAct/FeedingTunnel/Spring" node_paths=PackedStringArray("warpTarget")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00311279, -0.78244, -0.337524)
@@ -2023,9 +2020,11 @@ shape = SubResource("BoxShape3D_c4mxl")
 [connection signal="Activated" from="RampageAct/DialogTriggers/Jump/PositioningTrigger" to="RampageAct/DialogTriggers/Jump/DisableEvent" method="Activate" flags=3]
 [connection signal="Activated" from="RampageAct/Cave/Switch" to="RampageAct/Cave/Switch/CullingTrigger" method="Activate"]
 [connection signal="Respawned" from="RampageAct/Cave/Switch" to="RampageAct/Cave/Switch/CullingTrigger" method="Deactivate"]
-[connection signal="Activated" from="RampageAct/Cave/Switch/CullingTrigger/Spring" to="Static/Collision/CaveRightOneWay" method="Deactivate"]
-[connection signal="Activated" from="RampageAct/Cave/Switch/CullingTrigger/Spring" to="RampageAct/Cave/Switch/CullingTrigger/Spring/Path" method="Activate"]
-[connection signal="Deactivated" from="RampageAct/Cave/Switch/CullingTrigger/Spring" to="Static/Collision/CaveRightOneWay" method="Activate"]
+[connection signal="Activated" from="RampageAct/Cave/Switch/Spring" to="Static/Collision/CaveRightOneWay" method="Deactivate"]
+[connection signal="Activated" from="RampageAct/Cave/Switch/Spring" to="RampageAct/Cave/Switch/Spring/Path" method="Activate"]
+[connection signal="Deactivated" from="RampageAct/Cave/Switch/Spring" to="Static/Collision/CaveRightOneWay" method="Activate"]
+[connection signal="Activated" from="RampageAct/Cave/Switch/CullingTrigger" to="RampageAct/Cave/Switch/Spring" method="ShowLauncher"]
+[connection signal="Deactivated" from="RampageAct/Cave/Switch/CullingTrigger" to="RampageAct/Cave/Switch/Spring" method="HideLauncher"]
 [connection signal="Activated" from="RampageAct/Cave/Catapult2" to="Static/Collision/CaveRightOneWay" method="Deactivate"]
 [connection signal="Activated" from="RampageAct/Cave/Catapult2" to="RampageAct/Cave/Catapult2/LaunchCamera" method="Activate"]
 [connection signal="Deactivated" from="RampageAct/Cave/Catapult2" to="Static/Collision/CaveRightOneWay" method="Activate"]
@@ -2041,6 +2040,8 @@ shape = SubResource("BoxShape3D_c4mxl")
 [connection signal="Activated" from="RampageAct/Spiral/SpiralAutomationTrigger" to="RampageAct/Spiral/SpiralAutomationTrigger/Path" method="Activate"]
 [connection signal="Activated" from="RampageAct/Crossing/Switch1" to="RampageAct/Crossing/Switch1/CullingTrigger2" method="Activate"]
 [connection signal="Deactivated" from="RampageAct/Crossing/Switch1" to="RampageAct/Crossing/Switch1/CullingTrigger2" method="Deactivate" flags=3]
+[connection signal="Activated" from="RampageAct/Crossing/Switch1/CullingTrigger2" to="RampageAct/Crossing/Switch1/Spring" method="ShowLauncher"]
+[connection signal="Deactivated" from="RampageAct/Crossing/Switch1/CullingTrigger2" to="RampageAct/Crossing/Switch1/Spring" method="HideLauncher"]
 [connection signal="Activated" from="RampageAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/Event" method="Activate"]
 [connection signal="Deactivated" from="RampageAct/Crossing/Switch" to="Static/Trigger/Object/Apatos2/Event" method="Deactivate"]
 [connection signal="JumpFinished" from="RampageAct/Cavern/JumpTrigger1/LandJump" to="RampageAct/Cavern/JumpTrigger1/LandJump/LandPathTrigger" method="Activate"]
