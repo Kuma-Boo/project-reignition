@@ -88,7 +88,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	public delegate void DeactivatedEventHandler(); // Called after character finishes processing this launcher.
 
 	/// <summary> Height at the beginning of the arc. </summary>
-	[ExportCategory("Launch Settings")]
+	[ExportGroup("Launch Settings")]
 	[Export]
 	private float startingHeight;
 	/// <summary> Height at the highest point of the arc. </summary>
