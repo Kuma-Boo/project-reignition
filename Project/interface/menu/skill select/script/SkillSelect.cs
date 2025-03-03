@@ -133,7 +133,7 @@ public partial class SkillSelect : Menu
 			return;
 		}
 
-		if (Input.IsActionJustPressed("button_speedbreak") && !IsEditingAugment)
+		if ((Input.IsActionJustPressed("button_speedbreak") || Input.IsActionJustPressed("ui_sort")) && !IsEditingAugment)
 		{
 			if (isDescendingSort || currentSortType >= SortEnum.Wind)
 			{
