@@ -33,7 +33,7 @@ public partial class SkillSelect : Menu
 
 	private bool IsEditingAugment { get; set; }
 
-	private SkillOption SelectedSkill => currentSkillOptionList[VerticalSelection];
+	private SkillOption SelectedSkill => visualSkillOptionList[VerticalSelection];
 
 	private SkillListResource SkillList => Runtime.Instance.SkillList;
 	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
@@ -52,9 +52,8 @@ public partial class SkillSelect : Menu
 	/// <summary> Number of skills on a single page. </summary>
 	private readonly int PageSize = 8;
 
-	private Array<SkillOption> skillOptionList = [];
-	private Array<SkillOption> currentSkillOptionList = [];
-	private readonly Array<SkillResource> sortedSkillOptionList = [];
+	private readonly Array<SkillOption> skillOptionList = [];
+	private readonly Array<SkillOption> visualSkillOptionList = [];
 
 	[Export]
 	private Label sortTypeLabel;
@@ -93,7 +92,6 @@ public partial class SkillSelect : Menu
 
 			skillOptionList.Add(newSkill);
 			optionContainer.AddChild(newSkill);
-			sortedSkillOptionList.Add(skillOptionList[i].Skill);
 
 			if (!newSkill.Skill.HasAugments) // Skip augments
 				continue;
@@ -208,7 +206,7 @@ public partial class SkillSelect : Menu
 
 		if (inputSign != 0)
 		{
-			VerticalSelection = WrapSelection(VerticalSelection + inputSign, currentSkillOptionList.Count);
+			VerticalSelection = WrapSelection(VerticalSelection + inputSign, visualSkillOptionList.Count);
 			UpdateScrollAmount(inputSign);
 			MoveCursor();
 			UpdateDescription();
@@ -228,7 +226,7 @@ public partial class SkillSelect : Menu
 
 	private void UpdateScrollAmount(int inputSign)
 	{
-		int listSize = currentSkillOptionList.Count;
+		int listSize = visualSkillOptionList.Count;
 		if (IsEditingAugment)
 			listSize += SelectedSkill.AugmentMenuCount;
 
@@ -271,7 +269,7 @@ public partial class SkillSelect : Menu
 	public override void ShowMenu()
 	{
 		// Update visible skill list to account for multiple save files
-		currentSkillOptionList.Clear();
+		visualSkillOptionList.Clear();
 		for (int i = 0; i < skillOptionList.Count; i++)
 		{
 			if (skillOptionList[i] == null)
@@ -286,7 +284,7 @@ public partial class SkillSelect : Menu
 				continue;
 			}
 
-			currentSkillOptionList.Add(skillOptionList[i]);
+			visualSkillOptionList.Add(skillOptionList[i]);
 			skillOptionList[i].Visible = true;
 
 			// Process augments
@@ -348,7 +346,7 @@ public partial class SkillSelect : Menu
 	{
 		skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
 		skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);
-		foreach (SkillOption skillOption in currentSkillOptionList)
+		foreach (SkillOption skillOption in visualSkillOptionList)
 		{
 			if (skillOption.HasUnlockedAugments())
 			{
@@ -442,42 +440,20 @@ public partial class SkillSelect : Menu
 	{
 		// Update label
 		sortTypeLabel.Text = "sys_sort_" + currentSortType.ToString().ToLower();
+		SkillOption currentSkill = SelectedSkill;
 
+		// Sort
 		for (int i = skillOptionList.Count - 1; i > 0; i--)
 		{
 			for (int j = 0; j < i; j++)
-			{
-				switch (currentSortType)
-				{
-					case SortEnum.Default:
-						if (skillOptionList[j].Skill.Key > skillOptionList[j + 1].Skill.Key)
-							PerformExchange(j);
-						break;
-					case SortEnum.Name:
-						string skill1 = GetSkillName(j);
-						string skill2 = GetSkillName(j + 1);
-						if (skill1.CompareTo(skill2) > 0)
-							PerformExchange(j);
-						break;
-					case SortEnum.Cost:
-						if (skillOptionList[j].Skill.Cost > skillOptionList[j + 1].Skill.Cost)
-							PerformExchange(j);
-						break;
-					case SortEnum.Wind:
-						if (skillOptionList[j].Skill.Element != skillOptionList[j + 1].Skill.Element && skillOptionList[j + 1].Skill.Element == SkillResource.SkillElement.Wind)
-							PerformExchange(j);
-						break;
-					case SortEnum.Fire:
-						if (skillOptionList[j].Skill.Element != skillOptionList[j + 1].Skill.Element && skillOptionList[j + 1].Skill.Element == SkillResource.SkillElement.Fire)
-							PerformExchange(j);
-						break;
-					case SortEnum.Dark:
-						if (skillOptionList[j].Skill.Element != skillOptionList[j + 1].Skill.Element && skillOptionList[j + 1].Skill.Element == SkillResource.SkillElement.Dark)
-							PerformExchange(j);
-						break;
-				}
-			}
+				CalculateExchange(j);
 		}
+
+		// Maintain selection
+		int targetSelection = visualSkillOptionList.IndexOf(currentSkill);
+		scrollAmount += targetSelection - VerticalSelection;
+		VerticalSelection = targetSelection;
+		UpdateScrollAmount(0);
 	}
 
 	private string GetSkillName(int index)
@@ -490,10 +466,43 @@ public partial class SkillSelect : Menu
 		return Tr(nameString);
 	}
 
+	private void CalculateExchange(int index)
+	{
+		switch (currentSortType)
+		{
+			case SortEnum.Default:
+				if (skillOptionList[index].Skill.Key > skillOptionList[index + 1].Skill.Key)
+					PerformExchange(index);
+				break;
+			case SortEnum.Name:
+				string skill1 = GetSkillName(index);
+				string skill2 = GetSkillName(index + 1);
+				if (skill1.CompareTo(skill2) > 0)
+					PerformExchange(index);
+				break;
+			case SortEnum.Cost:
+				if (skillOptionList[index].Skill.Cost > skillOptionList[index + 1].Skill.Cost)
+					PerformExchange(index);
+				break;
+			case SortEnum.Wind:
+				if (skillOptionList[index].Skill.Element != skillOptionList[index + 1].Skill.Element && skillOptionList[index + 1].Skill.Element == SkillResource.SkillElement.Wind)
+					PerformExchange(index);
+				break;
+			case SortEnum.Fire:
+				if (skillOptionList[index].Skill.Element != skillOptionList[index + 1].Skill.Element && skillOptionList[index + 1].Skill.Element == SkillResource.SkillElement.Fire)
+					PerformExchange(index);
+				break;
+			case SortEnum.Dark:
+				if (skillOptionList[index].Skill.Element != skillOptionList[index + 1].Skill.Element && skillOptionList[index + 1].Skill.Element == SkillResource.SkillElement.Dark)
+					PerformExchange(index);
+				break;
+		}
+	}
+
 	private void PerformExchange(int i)
 	{
 		ExchangeSkill(skillOptionList, i, i + 1);
-		ExchangeSkill(currentSkillOptionList, i, i + 1);
+		ExchangeSkill(visualSkillOptionList, i, i + 1);
 		ExchangeOption(optionContainer, i, i + 1);
 	}
 
