@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=264 format=3 uid="uid://biwe75w273iq7"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=268 format=3 uid="uid://biwe75w273iq7"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_hf2vv"]
 
@@ -490,6 +490,9 @@ input_1/name = "right"
 input_1/auto_advance = false
 input_1/reset = true
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w3ic6"]
+animation = &"ActionLibrary/drift-left-fail"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ncge2"]
 animation = &"ActionLibrary/drift-left-launch"
 
@@ -502,14 +505,22 @@ xfade_time = 0.1
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1oxea"]
 xfade_time = 0.2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ixliy"]
+xfade_time = 0.1
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_uwp2s"]
 states/End/position = Vector2(199.68, 176)
+states/drift-fail/node = SubResource("AnimationNodeAnimation_w3ic6")
+states/drift-fail/position = Vector2(535, 98.4)
 states/drift-launch/node = SubResource("AnimationNodeAnimation_ncge2")
 states/drift-launch/position = Vector2(369.856, 175.28)
 states/drift-start/node = SubResource("AnimationNodeAnimation_tm6ro")
 states/drift-start/position = Vector2(369.6, 100.4)
-transitions = ["drift-start", "drift-launch", SubResource("AnimationNodeStateMachineTransition_u1vpp"), "Start", "drift-start", SubResource("AnimationNodeStateMachineTransition_1oxea")]
+transitions = ["drift-start", "drift-launch", SubResource("AnimationNodeStateMachineTransition_u1vpp"), "Start", "drift-start", SubResource("AnimationNodeStateMachineTransition_1oxea"), "drift-start", "drift-fail", SubResource("AnimationNodeStateMachineTransition_ixliy")]
 graph_offset = Vector2(-146, 40)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_iu0c8"]
+animation = &"ActionLibrary/drift-right-fail"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_05uy2"]
 animation = &"ActionLibrary/drift-right-launch"
@@ -523,17 +534,22 @@ xfade_time = 0.1
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8w63c"]
 xfade_time = 0.2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bswuj"]
+xfade_time = 0.1
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ns7wx"]
 states/End/position = Vector2(200.32, 180.16)
+states/drift-fail/node = SubResource("AnimationNodeAnimation_iu0c8")
+states/drift-fail/position = Vector2(543, 100)
 states/drift-launch/node = SubResource("AnimationNodeAnimation_05uy2")
 states/drift-launch/position = Vector2(370.4, 179.6)
 states/drift-start/node = SubResource("AnimationNodeAnimation_s2nhb")
 states/drift-start/position = Vector2(370.4, 99.76)
-transitions = ["drift-start", "drift-launch", SubResource("AnimationNodeStateMachineTransition_pxru7"), "Start", "drift-start", SubResource("AnimationNodeStateMachineTransition_8w63c")]
+transitions = ["drift-start", "drift-launch", SubResource("AnimationNodeStateMachineTransition_pxru7"), "Start", "drift-start", SubResource("AnimationNodeStateMachineTransition_8w63c"), "drift-start", "drift-fail", SubResource("AnimationNodeStateMachineTransition_bswuj")]
 graph_offset = Vector2(-17, 49)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_umbst"]
-graph_offset = Vector2(-628.85, 55.6007)
+graph_offset = Vector2(-634.85, 121.601)
 nodes/direction_transition/node = SubResource("AnimationNodeTransition_ktt7m")
 nodes/direction_transition/position = Vector2(96, 160)
 nodes/left_state/node = SubResource("AnimationNodeStateMachine_uwp2s")
@@ -1305,7 +1321,7 @@ input_4/auto_advance = false
 input_4/reset = true
 
 [resource]
-graph_offset = Vector2(-1173.3, 5.25653)
+graph_offset = Vector2(-1272.88, 85.58)
 nodes/air_tree/node = SubResource("AnimationNodeBlendTree_2rvqt")
 nodes/air_tree/position = Vector2(-1120, 112)
 nodes/balance_tree/node = SubResource("AnimationNodeBlendTree_gi378")

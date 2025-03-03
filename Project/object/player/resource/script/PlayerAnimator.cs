@@ -580,6 +580,7 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName DriftDirectionTransition = "parameters/drift_tree/direction_transition/transition_request";
 	private readonly StringName DriftStartState = "drift-start";
 	private readonly StringName DriftLaunchState = "drift-launch";
+	private readonly StringName DriftFailState = "drift-fail";
 
 	public void StartDrift(bool isDriftFacingRight)
 	{
@@ -589,6 +590,13 @@ public partial class PlayerAnimator : Node3D
 
 		SetStateXfade(.2f); // Transition into drift
 		animationTree.Set(StateTransition, DriftState);
+	}
+
+	/// <summary> Called when drift is failed. </summary>
+	public void FailDrift()
+	{
+		ActiveDriftStatePlayback.Travel(DriftFailState);
+		SetStateXfade(0.1f); // Remove xfade in case player wants to jump early
 	}
 
 	/// <summary> Called when drift is performed. </summary>

@@ -42,7 +42,7 @@ public partial class HomingAttackState : PlayerState
 		Player.Effect.StartSpinFX();
 		Player.Effect.PlayVoice("grunt");
 
-		Player.Animator.StartSpin(2.0f);
+		Player.Animator.StartSpin(5.0f);
 		Player.ChangeHitbox("spin");
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire))
