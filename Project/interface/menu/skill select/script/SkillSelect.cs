@@ -141,7 +141,8 @@ public partial class SkillSelect : Menu
 			if (currentSortType >= SortEnum.Count)
 				currentSortType = SortEnum.Default;
 
-			SortSkills(currentSortType);
+			SortSkills();
+			Redraw();
 		}
 
 		base.ProcessMenu();
@@ -170,8 +171,6 @@ public partial class SkillSelect : Menu
 
 		SaveManager.SaveGameData();
 		animator.Play("hide");
-
-
 	}
 
 	protected override void UpdateSelection()
@@ -214,8 +213,6 @@ public partial class SkillSelect : Menu
 			MoveCursor();
 			UpdateDescription();
 		}
-
-		// TODO Change sort method when speedbreak is pressed
 	}
 
 	private void UpdateDescription()
@@ -285,7 +282,7 @@ public partial class SkillSelect : Menu
 
 			if (!SaveManager.ActiveSkillRing.IsSkillUnlocked(key))
 			{
-				GD.Print(key);
+				GD.Print($"{key} is not unlocked.");
 				continue;
 			}
 
@@ -341,8 +338,6 @@ public partial class SkillSelect : Menu
 
 		if (!ToggleSkill())
 			return;
-
-		UpdateAugmentHierarchy(SelectedSkill);
 
 		Redraw();
 	}
@@ -443,7 +438,7 @@ public partial class SkillSelect : Menu
 		return false; // Something failed
 	}
 
-	private void SortSkills(SortEnum sortType)
+	private void SortSkills()
 	{
 		// Update label
 		sortTypeLabel.Text = "sys_sort_" + currentSortType.ToString().ToLower();
@@ -452,14 +447,16 @@ public partial class SkillSelect : Menu
 		{
 			for (int j = 0; j < i; j++)
 			{
-				switch (sortType)
+				switch (currentSortType)
 				{
 					case SortEnum.Default:
 						if (skillOptionList[j].Skill.Key > skillOptionList[j + 1].Skill.Key)
 							PerformExchange(j);
 						break;
 					case SortEnum.Name:
-						if (String.Compare(Tr("skill_" + skillOptionList[j].Skill.NameString), Tr("skill_" + skillOptionList[j + 1].Skill.NameString), true, new System.Globalization.CultureInfo(TranslationServer.GetLocale().ToString())) > 0)
+						string skill1 = GetSkillName(j);
+						string skill2 = GetSkillName(j + 1);
+						if (skill1.CompareTo(skill2) > 0)
 							PerformExchange(j);
 						break;
 					case SortEnum.Cost:
@@ -481,8 +478,16 @@ public partial class SkillSelect : Menu
 				}
 			}
 		}
+	}
 
-		Redraw();
+	private string GetSkillName(int index)
+	{
+		SkillOption skill = skillOptionList[index];
+		StringName nameString = skill.HasUnlockedAugments() ?
+			skill.GetAugmentSkill(ActiveSkillRing.GetAugmentIndex(skill.Skill.Key)).NameKey :
+			skill.Skill.NameKey;
+
+		return Tr(nameString);
 	}
 
 	private void PerformExchange(int i)
@@ -547,6 +552,7 @@ public partial class SkillSelect : Menu
 		SelectedSkill.HideAugmentMenu();
 
 		UpdateScrollAmount(0);
+		SortSkills();
 	}
 
 	/// <summary> Updates a skill option so the correct augment appears on the skill select menu. </summary>
