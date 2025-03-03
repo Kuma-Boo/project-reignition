@@ -17,9 +17,6 @@ public partial class JumpState : PlayerState
 	private PlayerState homingAttackState;
 
 	[Export]
-	private float jumpCurve = .95f;
-
-	[Export]
 	private float accelerationJumpSpeed = 36;
 	[Export]
 	private float accelerationJumpHeightVelocity = 5;
@@ -30,6 +27,7 @@ public partial class JumpState : PlayerState
 	private bool isAccelerationJump;
 	private bool isAccelerationJumpQueued;
 
+	private readonly float JumpCurve = .95f;
 	/// <summary> How fast the jump button needs to be released to count as an Acceleration Jump. </summary>
 	private readonly float AccelerationJumpLength = .1f;
 	/// <summary> Maximum deviation from PathFollower.ForwardAngle allowed during an Acceleration Jump. </summary>
@@ -59,6 +57,7 @@ public partial class JumpState : PlayerState
 			isAccelerationJumpQueued = !Player.Skills.ConsumeJumpCharge();
 
 		Player.ForceAccelerationJump = false;
+
 		Player.IsOnGround = false;
 		if (Player.IsMovingBackward) // Kill speed when jumping backwards
 			Player.MoveSpeed = 0;
@@ -97,6 +96,23 @@ public partial class JumpState : PlayerState
 		if (Player.CheckCeiling())
 			return null;
 		Player.UpdateUpDirection();
+
+		if (!isAccelerationJump)
+		{
+			jumpTimer += PhysicsManager.physicsDelta;
+
+			if (jumpTimer > AccelerationJumpLength)
+			{
+				if (isAccelerationJumpQueued)
+					StartAccelerationJump();
+
+				if (!isAccelerationJump && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SpinJump))
+				{
+					Player.StartSpinJump(isShortenedJump);
+					return null;
+				}
+			}
+		}
 
 		if (Player.IsOnGround)
 			return landState;
@@ -144,16 +160,7 @@ public partial class JumpState : PlayerState
 	protected override void ProcessGravity()
 	{
 		if (isShortenedJump && Player.VerticalSpeed > 0)
-		{
-			Player.VerticalSpeed *= jumpCurve; // Kill jump height
-		}
-		else if (!isAccelerationJump)
-		{
-			jumpTimer += PhysicsManager.physicsDelta;
-
-			if (isAccelerationJumpQueued && jumpTimer > AccelerationJumpLength)
-				StartAccelerationJump();
-		}
+			Player.VerticalSpeed *= JumpCurve; // Kill jump height
 
 		base.ProcessGravity();
 	}

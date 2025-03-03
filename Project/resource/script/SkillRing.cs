@@ -285,9 +285,10 @@ public enum SkillKey
 
 	// Jump skills
 	AccelJumpAttack, // Increases attack power of accel jump
+	SpinJump, // Have Sonic instantly enter a spinning state
+	ArmorJump, // Allow Sonic to bounce off enemies
 
 	// Backflip skills
-	// Backflip, // TODO Replace Secret Rings backstep with a backflip?
 	BackstepAttack, // Increases attack power of Backflip
 
 	// Landing skills

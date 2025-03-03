@@ -70,6 +70,8 @@ public partial class Enemy : Node3D
 	protected bool IsDefeated => currentHealth <= 0;
 	protected bool IsSpeedbreakDefeat { get; private set; }
 
+	private readonly float SpinJumpBounceAmount = 3.0f;
+
 	public override void _Ready() => SetUp();
 	protected virtual void SetUp()
 	{
@@ -262,7 +264,12 @@ public partial class Enemy : Node3D
 				break;
 		}
 
-		if (Player.IsJumpDashOrHomingAttack || (Player.IsBouncing && !Player.IsBounceInteruptable))
+		if (Player.IsSpinJump)
+		{
+			Player.VerticalSpeed = Runtime.CalculateJumpPower(SpinJumpBounceAmount);
+		}
+		else if (Player.IsJumpDashOrHomingAttack || (Player.IsBouncing && !Player.IsBounceInteruptable) ||
+			((Player.VerticalSpeed > 0 || Player.IsAccelerationJumping) && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ArmorJump)))
 		{
 			UpdateLockon();
 			Player.StartBounce(IsDefeated);
@@ -319,6 +326,9 @@ public partial class Enemy : Node3D
 	{
 		if (!a.IsInGroup("player")) return;
 		IsInteracting = false;
+
+		if (Player.IsSpinJump)
+			ResetInteractionProcessed();
 	}
 
 	public void OnRangeEntered(Area3D a)

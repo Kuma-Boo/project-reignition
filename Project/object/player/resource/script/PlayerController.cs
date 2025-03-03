@@ -636,6 +636,15 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	[Export]
+	private SpinJumpState spinJumpState;
+	public bool IsSpinJump { get; set; }
+	public void StartSpinJump(bool isShortenedJump)
+	{
+		spinJumpState.IsShortenedJump = isShortenedJump;
+		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, spinJumpState);
+	}
+
+	[Export]
 	private GrindState grindState;
 	public bool AllowLandingGrind { get; set; }
 	public bool IsGrindstepping { get; set; }
