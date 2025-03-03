@@ -19,7 +19,8 @@ public partial class SkillResource : Resource
 	{
 		Wind,
 		Fire,
-		Dark
+		Dark,
+		Config
 	}
 
 	/// <summary> The skill's category type. </summary>
