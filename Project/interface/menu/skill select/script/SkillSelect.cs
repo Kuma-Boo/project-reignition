@@ -461,6 +461,9 @@ public partial class SkillSelect : Menu
 		scrollAmount += targetSelection - VerticalSelection;
 		VerticalSelection = targetSelection;
 		UpdateScrollAmount(0);
+
+		// Reupdate cursor since clamping is applied in UpdateScrollAmount()
+		cursorPosition = VerticalSelection - scrollAmount;
 	}
 
 	private string GetSkillName(int index)
