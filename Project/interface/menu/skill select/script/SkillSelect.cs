@@ -8,16 +8,6 @@ namespace Project.Interface.Menus;
 
 public partial class SkillSelect : Menu
 {
-	public enum SortType
-	{
-		Default,
-		Name,
-		Cost,
-		Wind,
-		Fire,
-		Dark,
-	}
-
 	[Export]
 	private PackedScene skillOption;
 	[Export]
@@ -62,23 +52,29 @@ public partial class SkillSelect : Menu
 	/// <summary> Number of skills on a single page. </summary>
 	private readonly int PageSize = 8;
 
-
 	private Array<SkillOption> skillOptionList = [];
 	private Array<SkillOption> currentSkillOptionList = [];
-
-	private System.Collections.Generic.List<SkillResource> sortedSkillOptionList;
-
+	private readonly Array<SkillResource> sortedSkillOptionList = [];
 
 	[Export]
 	private Label sortTypeLabel;
 	[Export]
 	private Sprite2D sortOrderCursor;
-	private SortType currentSortType = SortType.Default;
+
+	private SortEnum currentSortType;
+	public enum SortEnum
+	{
+		Default,
+		Name,
+		Cost,
+		Wind,
+		Fire,
+		Dark,
+		Count,
+	}
 
 	protected override void SetUp()
 	{
-		GD.Print("Current Locale:" + TranslationServer.GetLocale().ToString());
-		sortedSkillOptionList = new System.Collections.Generic.List<SkillResource>();
 		for (int i = 0; i < (int)SkillKey.Max; i++)
 		{
 			SkillKey key = (SkillKey)i;
@@ -113,7 +109,6 @@ public partial class SkillSelect : Menu
 			SkillOption baseAugment = skillOption.Instantiate<SkillOption>();
 			baseAugment.Skill = newSkill.Skill;
 			newSkill.RegisterAugment(baseAugment);
-
 		}
 
 		base.SetUp();
@@ -142,11 +137,11 @@ public partial class SkillSelect : Menu
 
 		if (Input.IsActionJustPressed("button_speedbreak") && !IsEditingAugment)
 		{
-			currentSortType += 1;
-			if ((int)currentSortType > 5)
-				currentSortType = 0;
+			currentSortType++;
+			if (currentSortType >= SortEnum.Count)
+				currentSortType = SortEnum.Default;
+
 			SortSkills(currentSortType);
-			sortTypeLabel.Text = "sys_sort_" + currentSortType.ToString().ToLower();
 		}
 
 		base.ProcessMenu();
@@ -448,50 +443,47 @@ public partial class SkillSelect : Menu
 		return false; // Something failed
 	}
 
-	private void SortSkills(SortType sortType)
+	private void SortSkills(SortEnum sortType)
 	{
-		int i, j;
-		int n = skillOptionList.Count;
+		// Update label
+		sortTypeLabel.Text = "sys_sort_" + currentSortType.ToString().ToLower();
 
-		for (j = n - 1; j > 0; j--)
+		for (int i = skillOptionList.Count - 1; i > 0; i--)
 		{
-			for (i = 0; i < j; i++)
+			for (int j = 0; j < i; j++)
 			{
 				switch (sortType)
 				{
-					case SortType.Default:
-						if (skillOptionList[i].Skill.Key > skillOptionList[i + 1].Skill.Key)
-							PerformExchange(i);
+					case SortEnum.Default:
+						if (skillOptionList[j].Skill.Key > skillOptionList[j + 1].Skill.Key)
+							PerformExchange(j);
 						break;
-					case SortType.Name:
-						if (String.Compare(Tr("skill_" + skillOptionList[i].Skill.NameString), Tr("skill_" + skillOptionList[i + 1].Skill.NameString), true, new System.Globalization.CultureInfo(TranslationServer.GetLocale().ToString())) > 0)
-							PerformExchange(i);
+					case SortEnum.Name:
+						if (String.Compare(Tr("skill_" + skillOptionList[j].Skill.NameString), Tr("skill_" + skillOptionList[j + 1].Skill.NameString), true, new System.Globalization.CultureInfo(TranslationServer.GetLocale().ToString())) > 0)
+							PerformExchange(j);
 						break;
-					case SortType.Cost:
-						if (skillOptionList[i].Skill.Cost > skillOptionList[i + 1].Skill.Cost)
-							PerformExchange(i);
+					case SortEnum.Cost:
+						if (skillOptionList[j].Skill.Cost > skillOptionList[j + 1].Skill.Cost)
+							PerformExchange(j);
 						break;
-					case SortType.Wind:
-						if (skillOptionList[i].Skill.Element != skillOptionList[i + 1].Skill.Element && skillOptionList[i + 1].Skill.Element == SkillResource.SkillElement.Wind)
-							PerformExchange(i);
+					case SortEnum.Wind:
+						if (skillOptionList[j].Skill.Element != skillOptionList[j + 1].Skill.Element && skillOptionList[j + 1].Skill.Element == SkillResource.SkillElement.Wind)
+							PerformExchange(j);
 						break;
-					case SortType.Fire:
-						if (skillOptionList[i].Skill.Element != skillOptionList[i + 1].Skill.Element && skillOptionList[i + 1].Skill.Element == SkillResource.SkillElement.Fire)
-							PerformExchange(i);
+					case SortEnum.Fire:
+						if (skillOptionList[j].Skill.Element != skillOptionList[j + 1].Skill.Element && skillOptionList[j + 1].Skill.Element == SkillResource.SkillElement.Fire)
+							PerformExchange(j);
 						break;
-					case SortType.Dark:
-						if (skillOptionList[i].Skill.Element != skillOptionList[i + 1].Skill.Element && skillOptionList[i + 1].Skill.Element == SkillResource.SkillElement.Dark)
-							PerformExchange(i);
+					case SortEnum.Dark:
+						if (skillOptionList[j].Skill.Element != skillOptionList[j + 1].Skill.Element && skillOptionList[j + 1].Skill.Element == SkillResource.SkillElement.Dark)
+							PerformExchange(j);
 						break;
 				}
 			}
 		}
 
-
 		Redraw();
-
 	}
-
 
 	private void PerformExchange(int i)
 	{
@@ -499,20 +491,17 @@ public partial class SkillSelect : Menu
 		ExchangeSkill(currentSkillOptionList, i, i + 1);
 		ExchangeOption(optionContainer, i, i + 1);
 	}
+
 	private static void ExchangeSkill(Array<SkillOption> skill, int m, int n)
 	{
-		SkillOption temporary;
-
-		temporary = skill[m];
+		SkillOption temporary = skill[m];
 		skill[m] = skill[n];
 		skill[n] = temporary;
 	}
 
 	private static void ExchangeOption(Node option, int m, int n)
 	{
-		Node temporary;
-
-		temporary = option.GetChild(m);
+		Node temporary = option.GetChild(m);
 		option.MoveChild(option.GetChild(n), m);
 		option.MoveChild(temporary, n);
 	}
