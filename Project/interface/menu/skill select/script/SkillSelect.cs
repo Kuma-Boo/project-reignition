@@ -2,7 +2,6 @@ using Godot;
 using Godot.Collections;
 using Project.Core;
 using Project.Gameplay;
-using System;
 
 namespace Project.Interface.Menus;
 
@@ -58,8 +57,9 @@ public partial class SkillSelect : Menu
 	[Export]
 	private Label sortTypeLabel;
 	[Export]
-	private Sprite2D sortOrderCursor;
+	private TextureRect sortOrderCursor;
 
+	private bool isDescendingSort;
 	private SortEnum currentSortType;
 	public enum SortEnum
 	{
@@ -135,9 +135,16 @@ public partial class SkillSelect : Menu
 
 		if (Input.IsActionJustPressed("button_speedbreak") && !IsEditingAugment)
 		{
-			currentSortType++;
-			if (currentSortType >= SortEnum.Count)
-				currentSortType = SortEnum.Default;
+			if (isDescendingSort || currentSortType >= SortEnum.Wind)
+			{
+				currentSortType++;
+				if (currentSortType >= SortEnum.Count)
+					currentSortType = SortEnum.Default;
+			}
+
+			isDescendingSort = sortOrderCursor.Visible && !isDescendingSort;
+			sortOrderCursor.FlipV = isDescendingSort;
+			sortOrderCursor.Visible = currentSortType < SortEnum.Wind;
 
 			SortSkills();
 			Redraw();
@@ -471,18 +478,27 @@ public partial class SkillSelect : Menu
 		switch (currentSortType)
 		{
 			case SortEnum.Default:
-				if (skillOptionList[index].Skill.Key > skillOptionList[index + 1].Skill.Key)
+				if ((!isDescendingSort && skillOptionList[index].Skill.Key > skillOptionList[index + 1].Skill.Key) ||
+					(isDescendingSort && skillOptionList[index].Skill.Key < skillOptionList[index + 1].Skill.Key))
+				{
 					PerformExchange(index);
+				}
 				break;
 			case SortEnum.Name:
 				string skill1 = GetSkillName(index);
 				string skill2 = GetSkillName(index + 1);
-				if (skill1.CompareTo(skill2) > 0)
+				if ((!isDescendingSort && skill1.CompareTo(skill2) > 0) ||
+					(isDescendingSort && skill1.CompareTo(skill2) < 0))
+				{
 					PerformExchange(index);
+				}
 				break;
 			case SortEnum.Cost:
-				if (skillOptionList[index].Skill.Cost > skillOptionList[index + 1].Skill.Cost)
+				if ((!isDescendingSort && skillOptionList[index].Skill.Cost > skillOptionList[index + 1].Skill.Cost) ||
+					(isDescendingSort && skillOptionList[index].Skill.Cost < skillOptionList[index + 1].Skill.Cost))
+				{
 					PerformExchange(index);
+				}
 				break;
 			case SortEnum.Wind:
 				if (skillOptionList[index].Skill.Element != skillOptionList[index + 1].Skill.Element && skillOptionList[index + 1].Skill.Element == SkillResource.SkillElement.Wind)
