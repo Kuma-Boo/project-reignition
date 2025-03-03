@@ -6,10 +6,13 @@ namespace Project.Interface;
 
 public partial class NavigationButton : Control
 {
-	[Export]
-	public StringName ActionKey { get; set; }
-	[Export]
-	private StringName inputKey;
+	[Export] public StringName ActionKey { get; set; }
+	[Export] private StringName inputKey;
+	[Export] private StringName fallbackKey; // Mostly used for menu navigation
+
+	/// <summary> Set this to something if you only want to display a particular keyboard input. </summary>
+	[Export] private Key overrideKey = Key.None;
+
 	[Export(PropertyHint.ArrayType, "ControllerSpriteResource")]
 	private ControllerSpriteResource[] controllerResources;
 
@@ -46,7 +49,22 @@ public partial class NavigationButton : Control
 	{
 		ActionLabel.Text = Tr(ActionKey);
 
-		Array<InputEvent> eventList = InputMap.ActionGetEvents(inputKey);
+		if (overrideKey != Key.None)
+		{
+			RedrawAsKeyboard(overrideKey);
+			return;
+		}
+
+		if (RedrawAs(inputKey))
+			return;
+
+		// Failed to draw -- try again with fallback
+		RedrawAs(fallbackKey);
+	}
+
+	private bool RedrawAs(StringName eventKey)
+	{
+		Array<InputEvent> eventList = InputMap.ActionGetEvents(eventKey);
 
 		InputEventKey key = null;
 		InputEventJoypadButton button = null;
@@ -64,27 +82,34 @@ public partial class NavigationButton : Control
 
 		if (Runtime.Instance.IsUsingController)
 		{
-			if (button == null && motion == null) return;
-			ButtonLabel.Visible = false;
+			if (button == null && motion == null)
+				return false;
 
+			ButtonLabel.Visible = false;
 			int controllerIndex = (int)Runtime.Instance.GetActiveControllerType() - 1;
 
 			if (button != null) // Prioritize using buttons over axis icons
 			{
 				ButtonTextureRect.Texture = controllerResources[controllerIndex].buttons[(int)button.ButtonIndex];
-				return;
+				return true;
 			}
 
 			int axis = Runtime.Instance.ControllerAxisToIndex(motion);
 			ButtonTextureRect.Texture = controllerResources[controllerIndex].axis[axis];
-			return;
+			return true;
 		}
 
-		// Keyboard
-		if (key == null) return;
+		if (key == null)
+			return false;
 
+		RedrawAsKeyboard(key.Keycode);
+		return true;
+	}
+
+	private void RedrawAsKeyboard(Key keycode)
+	{
 		ButtonLabel.Visible = true;
-		ButtonLabel.Text = Runtime.Instance.GetKeyLabel(key.Keycode);
+		ButtonLabel.Text = Runtime.Instance.GetKeyLabel(keycode);
 		int keySpriteIndex = ButtonLabel.Text.Length <= 3 ? 0 : 1;
 		ButtonTextureRect.Texture = controllerResources[^1].buttons[keySpriteIndex]; // Last controller resource should be the keyboard sprites
 	}

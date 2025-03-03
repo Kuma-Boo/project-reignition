@@ -94,6 +94,8 @@ public partial class PlayerAnimator : Node3D
 		StopCrouching(0f);
 	}
 
+	public void SeekOneshotAnimation(float time) => animationTree.Set(OneshotSeek, time);
+
 	/// <summary>
 	/// Cancels the oneshot animation early.
 	/// </summary>

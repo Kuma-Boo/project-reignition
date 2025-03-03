@@ -39,7 +39,7 @@ public partial class MainMenu : Menu
 
 	protected override void ProcessMenu()
 	{
-		if (!isQuitMenuActive && Input.IsActionJustPressed("button_pause"))
+		if (!isQuitMenuActive && Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
 		{
 			quitAnimator.Play("show");
 			isQuitMenuActive = true;
@@ -71,7 +71,7 @@ public partial class MainMenu : Menu
 	{
 		if (isQuitMenuActive)
 		{
-			int input = Mathf.Sign(Input.GetAxis("move_left", "move_right"));
+			int input = Mathf.Sign(Input.GetAxis("ui_left", "ui_right"));
 			if ((input > 0 && isQuitSelected) || (input < 0 && !isQuitSelected))
 			{
 				isQuitSelected = !isQuitSelected;
@@ -81,8 +81,8 @@ public partial class MainMenu : Menu
 			return;
 		}
 
-		HorizontalSelection = Mathf.Clamp(HorizontalSelection + Mathf.Sign(Input.GetAxis("move_left", "move_right")), 0, 1);
-		VerticalSelection = Mathf.Clamp(VerticalSelection + Mathf.Sign(Input.GetAxis("move_up", "move_down")), 0, 1);
+		HorizontalSelection = Mathf.Clamp(HorizontalSelection + Mathf.Sign(Input.GetAxis("ui_left", "ui_right")), 0, 1);
+		VerticalSelection = Mathf.Clamp(VerticalSelection + Mathf.Sign(Input.GetAxis("ui_up", "ui_down")), 0, 1);
 
 		int targetSelection = HorizontalSelection + (VerticalSelection * 2);
 		if (targetSelection != currentSelection)

@@ -111,14 +111,19 @@ textKeys = ["oas_sandfall_event_so", "oas_sandfall_event_sh", "oas_sandfall_even
 [node name="JumpSFX" type="AudioStreamPlayer" parent="SFX" index="0"]
 stream = ExtResource("7_400wk")
 bus = &"GAME SFX"
+process_mode = 1
 
 [node name="LandSFX" type="AudioStreamPlayer" parent="SFX" index="1"]
 stream = ExtResource("9_okurp")
 bus = &"GAME SFX"
+process_mode = 1
 
 [node name="SandfallSFX" type="AudioStreamPlayer" parent="SFX" index="2"]
 stream = ExtResource("9_pqrfn")
 bus = &"GAME SFX"
+process_mode = 1
 
 [connection signal="Activated" from="." to="SandfallEventRoot/Skeleton3D/Camera/CameraReference" method="Activate"]
 [connection signal="Activated" from="." to="Dialog" method="Activate"]
+[connection signal="EventSkipped" from="." to="Dialog" method="Deactivate"]
+[connection signal="EventSkipped" from="." to="SFX/SandfallSFX" method="stop"]

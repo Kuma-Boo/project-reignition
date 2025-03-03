@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="8_4d187"]
 [ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="8_5jrmk"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="9_twagj"]
-[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="10_4c02x"]
+[ext_resource type="PackedScene" uid="uid://3ho04bqoxv4w" path="res://object/stage/common/Switch.tscn" id="10_4c02x"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="11_ptg20"]
 [ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="12_cx2mb"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="13_im14l"]
@@ -685,7 +685,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.353554, 0, -0.353553)
 
 [node name="RichPearl4" parent="RinglessAct/Ending/PEARLS" instance=ExtResource("8_5jrmk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.7115, -25.4136, 2.73657)
-collider = NodePath("../RichPearl/CollisionShape3D")
 
 [node name="Pearls2" type="Node3D" parent="RinglessAct/Ending/PEARLS"]
 transform = Transform3D(-4.37114e-08, 0.111642, -0.993748, 0, 0.993748, 0.111642, 1, 4.88004e-09, -4.34381e-08, -0.692932, -19.4983, 34.8568)
@@ -787,21 +786,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.8)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.7184, -20.1679, 14.6326)
 toggleMode = true
 
-[node name="CullingTrigger" type="Node3D" parent="RinglessAct/Ending/GIMMICKS/Switch"]
-script = ExtResource("13_im14l")
-
-[node name="Spring" parent="RinglessAct/Ending/GIMMICKS/Switch/CullingTrigger" instance=ExtResource("11_ptg20")]
+[node name="HiddenSpring1" parent="RinglessAct/Ending/GIMMICKS/Switch" instance=ExtResource("11_ptg20")]
 transform = Transform3D(1, 0, 0, 0, 0.926935, -0.375221, 0, 0.375221, 0.926935, -0.764725, 0, 3.20923)
+startHidden = true
 distance = 8.0
 launchDirection = 1
-voiceKey = &""
 
-[node name="Spring2" parent="RinglessAct/Ending/GIMMICKS/Switch/CullingTrigger" instance=ExtResource("11_ptg20")]
+[node name="HiddenSpring2" parent="RinglessAct/Ending/GIMMICKS/Switch" instance=ExtResource("11_ptg20")]
 transform = Transform3D(1, 0, 0, 0, 0.926935, -0.375221, 0, 0.375221, 0.926935, 0.766571, 0, 3.20923)
+startHidden = true
 distance = 8.0
 launchDirection = 1
 sfxPlayer = NodePath("")
-voiceKey = &""
 
 [node name="ItemBoxFlying" parent="RinglessAct/Ending/GIMMICKS" instance=ExtResource("12_cx2mb")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -35.1328, -16.5848, 32.0265)
@@ -983,7 +979,8 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.5702
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 shape = SubResource("BoxShape3D_obefh")
 
-[connection signal="Activated" from="RinglessAct/Ending/GIMMICKS/Switch" to="RinglessAct/Ending/GIMMICKS/Switch/CullingTrigger" method="Activate"]
+[connection signal="Activated" from="RinglessAct/Ending/GIMMICKS/Switch" to="RinglessAct/Ending/GIMMICKS/Switch/HiddenSpring1" method="ShowLauncher"]
+[connection signal="Activated" from="RinglessAct/Ending/GIMMICKS/Switch" to="RinglessAct/Ending/GIMMICKS/Switch/HiddenSpring2" method="ShowLauncher"]
 [connection signal="Activated" from="RinglessAct/Ending/GIMMICKS/Switch2" to="RinglessAct/Ending/GIMMICKS/Switch2/CullingTrigger" method="Activate"]
 
 [editable path="Static"]

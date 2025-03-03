@@ -69,7 +69,7 @@ public partial class EventPlayer : Node
 
 		// Only do this when viewing from the special book
 		if (Menu.menuMemory[Menu.MemoryKeys.ActiveMenu] == (int)Menu.MemoryKeys.SpecialBook &&
-			Input.IsActionJustPressed("button_action")) // Return to the special book menu
+			Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel")) // Return to the special book menu
 		{
 		}
 	}

@@ -260,7 +260,7 @@ public partial class PlayerLockonController : Node3D
 			castPosition += Player.UpDirection * Player.VerticalSpeed * PhysicsManager.physicsDelta;
 		Vector3 castVector = target.GlobalPosition - castPosition;
 
-		RaycastHit h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
+		RaycastHit h = this.CastRay(castPosition, castVector, Runtime.Instance.lockonObstructionMask);
 		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
 
 		if (h && h.collidedObject != target)
@@ -272,7 +272,7 @@ public partial class PlayerLockonController : Node3D
 			{
 				castPosition = h.point + (h.direction.Normalized() * .1f);
 				castVector = target.GlobalPosition - castPosition;
-				h = this.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
+				h = this.CastRay(castPosition, castVector, Runtime.Instance.lockonObstructionMask);
 				DebugManager.DrawRay(castPosition, castVector, Colors.Red);
 
 				if (h && h.collidedObject != target)

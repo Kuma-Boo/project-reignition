@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using Project.Core;
 
 namespace Project.Gameplay.Triggers;
 
@@ -10,14 +11,11 @@ namespace Project.Gameplay.Triggers;
 [Tool]
 public partial class EventTrigger : StageTriggerModule
 {
-	[Signal]
-	public delegate void ActivatedEventHandler();
-	[Signal]
-	public delegate void DeactivatedEventHandler();
-	[Signal]
-	public delegate void RespawnedEventHandler();
-	[Signal]
-	public delegate void EventFinishedEventHandler();
+	[Signal] public delegate void ActivatedEventHandler();
+	[Signal] public delegate void DeactivatedEventHandler();
+	[Signal] public delegate void RespawnedEventHandler();
+	[Signal] public delegate void EventFinishedEventHandler();
+	[Signal] public delegate void EventSkippedEventHandler();
 
 	/// <summary> Automatically reset the event when player respawns? </summary>
 	private bool autoRespawn;
@@ -26,11 +24,11 @@ public partial class EventTrigger : StageTriggerModule
 	private bool isActivated;
 
 	[ExportGroup("Components")]
-	[Export]
-	private AnimationPlayer animator;
+	[Export] private AnimationPlayer animator;
+	public float AnimationLength => (float)animator.CurrentAnimationLength;
+	private float AnimationTimeLeft => (float)(animator.CurrentAnimationLength - animator.CurrentAnimationPosition);
 
-	[Export]
-	private RespawnAnimation respawnAnimation;
+	[Export] private RespawnAnimation respawnAnimation;
 	private enum RespawnAnimation
 	{
 		Reset,
@@ -243,6 +241,15 @@ public partial class EventTrigger : StageTriggerModule
 			return;
 
 		Player.StartEvent(this);
+	}
+
+	public void SkipEvent()
+	{
+		Player.Camera.StartCrossfade();
+		StageSettings.Instance.AddTime(AnimationTimeLeft);
+
+		animator.Advance(AnimationLength);
+		EmitSignal(SignalName.EventSkipped);
 	}
 
 	#region Event Animation

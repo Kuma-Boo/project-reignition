@@ -36,6 +36,10 @@ public partial class Runtime : Node
 	[Export(PropertyHint.Layers3DPhysics)]
 	public uint environmentMask;
 
+	/// <summary> Collision layer for things that obstruct lockon targeting. </summary>
+	[Export(PropertyHint.Layers3DPhysics)]
+	public uint lockonObstructionMask;
+
 	/// <summary> Collision layer for destructable particle effects. </summary>
 	[Export(PropertyHint.Layers3DPhysics)]
 	public uint particleCollisionLayer;
@@ -100,6 +104,8 @@ public partial class Runtime : Node
 	public void SpawnPearls(int amount, Vector3 spawnPosition, Vector2 radius, float heightOffset = 0)
 	{
 		Tween tween = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Cubic);
+		tween.SetProcessMode(Tween.TweenProcessMode.Physics);
+		tween.SetPauseMode(Tween.TweenPauseMode.Stop);
 
 		for (int i = 0; i < amount; i++)
 		{

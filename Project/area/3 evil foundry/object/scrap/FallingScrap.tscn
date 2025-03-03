@@ -1,14 +1,17 @@
 [gd_scene load_steps=3 format=3 uid="uid://bgp5prexgdala"]
 
 [ext_resource type="PackedScene" uid="uid://deraagepvpo2a" path="res://area/3 evil foundry/object/model/scrap/FallingScrap.gltf" id="1_6l4mg"]
+[ext_resource type="PackedScene" uid="uid://cqy0toaib6thq" path="res://area/3 evil foundry/object/model/scrap/FallingScrapCollision.gltf" id="1_43ep3"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_sycyr"]
-size = Vector3(5, 3, 5)
+[node name="FallingScrap" type="Node3D" groups=["floor", "splash jump", "wall"]]
 
-[node name="FallingScrap" type="StaticBody3D" groups=["floor", "splash jump", "wall"]]
+[node name="FallingScrapCollision" parent="." instance=ExtResource("1_43ep3")]
+visible = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.5, 0)
-shape = SubResource("BoxShape3D_sycyr")
+[node name="StaticBody3D" parent="FallingScrapCollision/FallingScrapCollisionWall" index="0" groups=["wall"]]
+
+[node name="StaticBody3D" parent="FallingScrapCollision/FallingScrapCollisionFloor" index="0" groups=["floor"]]
 
 [node name="FallingScrap" parent="." instance=ExtResource("1_6l4mg")]
+
+[editable path="FallingScrapCollision"]

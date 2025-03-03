@@ -33,13 +33,13 @@ public partial class BonusManager : VBoxContainer
 		if (ringChain >= 10)
 		{
 			BonusData ringBonus = new(BonusType.Ring, ringChain);
-			QueuedScore = ringBonus.CalculateBonusPoints();
+			QueuedScore += ringBonus.CalculateBonusPoints();
 		}
 
 		if (enemyChain >= 2)
 		{
 			BonusData enemyBonus = new(BonusType.Enemy, enemyChain);
-			QueuedScore = enemyBonus.CalculateBonusPoints();
+			QueuedScore += enemyBonus.CalculateBonusPoints();
 		}
 	}
 

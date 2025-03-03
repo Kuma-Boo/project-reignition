@@ -63,7 +63,7 @@ public partial class NotificationMenu : Control
 		if (!isProcessing)
 			return;
 
-		if (Input.IsActionJustPressed("button_jump"))
+		if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select"))
 			ShowUnlock();
 	}
 

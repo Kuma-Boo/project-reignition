@@ -9,8 +9,16 @@ public partial class ControlOption : Control
 	[Signal]
 	public delegate void SwapMappingEventHandler(StringName id, InputEvent e); // Emitted when a remap results in a mapping swap
 
-	[Export]
-	public StringName InputId { get; private set; }
+	[Export] private StringName inputId;
+	public StringName ActionName => IsPartyModeMapping ? inputId + PartyModeControllerIndex.ToString() : inputId;
+	[Export(PropertyHint.Range, "1, 4, 1")] private int partyModeControllerIndex = 1;
+	public int PartyModeControllerIndex
+	{
+		get => partyModeControllerIndex;
+		set => partyModeControllerIndex = value;
+	}
+	[Export] private bool IsPartyModeMapping { get; set; }
+	public int DeviceIndex => SaveManager.Config.partyModeDevices[PartyModeControllerIndex - 1];
 
 	[ExportGroup("Components")]
 	[Export(PropertyHint.NodePathValidTypes, "Label")]
@@ -53,19 +61,26 @@ public partial class ControlOption : Control
 		AxisTextureRect = GetNodeOrNull<TextureRect>(axisTextureRect);
 		ButtonTextureRect = GetNodeOrNull<TextureRect>(buttonTextureRect);
 
-		ActionLabel.Text = Tr(InputId.ToString());
-		SaveConfig();
+		ActionLabel.Text = Tr(inputId.ToString());
+
 		RedrawBinding();
-		Runtime.Instance.Connect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
-		Runtime.Instance.Connect(Runtime.SignalName.ControllerChanged, new(this, MethodName.ControllerChanged));
-		SaveManager.Instance.Connect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.RedrawBinding));
+
+		Runtime.Instance.EventInputed += ReceiveInput;
+		Runtime.Instance.ControllerChanged += ControllerChanged;
+		SaveManager.Instance.ConfigApplied += RedrawBinding;
 	}
 
 	public override void _ExitTree()
 	{
-		Runtime.Instance.Disconnect(Runtime.SignalName.EventInputed, new(this, MethodName.ReceiveInput));
-		Runtime.Instance.Disconnect(Runtime.SignalName.ControllerChanged, new(this, MethodName.ControllerChanged));
-		SaveManager.Instance.Disconnect(SaveManager.SignalName.ConfigApplied, new(this, MethodName.RedrawBinding));
+		Runtime.Instance.EventInputed -= ReceiveInput;
+		Runtime.Instance.ControllerChanged -= ControllerChanged;
+		SaveManager.Instance.ConfigApplied -= RedrawBinding;
+	}
+
+	public void ClearMapping()
+	{
+		InputMap.ActionEraseEvents(ActionName);
+		SaveManager.SaveInputAction(ActionName);
 	}
 
 	public void StartListening()
@@ -79,27 +94,42 @@ public partial class ControlOption : Control
 	{
 		await ToSignal(GetTree().CreateTimer(PhysicsManager.physicsDelta, false), SceneTreeTimer.SignalName.Timeout);
 		state = RemapState.Ready;
+
+		Input.ActionRelease(ActionName);
 		RedrawBinding();
 	}
 
 	public void ReceiveInput(InputEvent e) => ReceiveInput(e, false);
-	public void ReceiveInput(InputEvent e, bool isSwappedInput)
+	public void ReceiveInput(InputEvent e, bool isSwappingInput)
 	{
-		if (!isSwappedInput) // Only filter remaps, not swaps
+		if (!isSwappingInput) // Only filter remaps, not swaps
 		{
 			if (state != RemapState.Listening) return;
 			if (!e.IsPressed() || e.IsEcho()) return; // Only listen for press
 			if (e is not (InputEventKey or InputEventJoypadButton or InputEventJoypadMotion)) return; // Only listen for keys and button presses.
+
+			// Allow user to cancel remapping if ESC is pressed or the action already has the target event
+			if ((e is InputEventKey && (e as InputEventKey).Keycode == Key.Escape) ||
+				InputMap.ActionHasEvent(ActionName, e))
+			{
+				StopListening();
+				return;
+			}
+
+			// Filter inputs to a specific joypad if editing party mode controls
+			if (IsPartyModeMapping && (e is not InputEventKey) && e.Device != DeviceIndex)
+				return;
+
 			if (!FilterInput(e)) return;
 		}
 
-		RemapInput(e, isSwappedInput);
+		RemapInput(e, isSwappingInput);
 		state = RemapState.Rebinding;
 		StopListening();
 	}
 
 	/// <summary> Remaps the target input to the given input event's binding. </summary>
-	private void RemapInput(InputEvent e, bool isSwappedInput)
+	private void RemapInput(InputEvent e, bool isSwappingInput)
 	{
 		if (e is InputEventJoypadMotion denoisedEvent) // Snap sign
 		{
@@ -107,121 +137,95 @@ public partial class ControlOption : Control
 			e = denoisedEvent;
 		}
 
-		StringName swapAction = null;
-		if (!isSwappedInput) // Only look for conflicts when not swapping for inputs
+		StringName swapAction = GetActionConflict(e, isSwappingInput);
+		InputEvent swapEvent = RemapEvent(e);
+
+		// Resolve mapping conflict by swapping input mapping with this menu option's mapping
+		if (!isSwappingInput)
+			ResolveMappingConflicts(swapAction, swapEvent, e);
+
+		SaveManager.SaveInputAction(ActionName);
+	}
+
+	private StringName GetActionConflict(InputEvent e, bool isSwappingInput)
+	{
+		// Only look for conflicts when not swapping inputs
+		if (isSwappingInput)
+			return null;
+
+		// Check for conflicting input mappings
+		foreach (StringName actionId in InputMap.GetActions())
 		{
-			// Check for conflicting input mappings
-			Array<StringName> actionList = InputMap.GetActions();
+			if (!InputMap.ActionHasEvent(actionId, e) || !SaveManager.Config.inputConfiguration.ContainsKey(actionId))
+				continue;
 
-			for (int i = 0; i < actionList.Count; i++)
+			// Only allow adventure mappings to conflict with each other (or the same controller).
+			// This way, a single player *can* configure all 4 players to a single controller (if they want to)
+			char lastChar = actionId.ToString()[^1];
+			if (char.IsDigit(lastChar)) // actionId is for party mode
 			{
-				if (!SaveManager.Config.inputConfiguration.ContainsKey(actionList[i]))
+				int controllerIndex = lastChar - '0';
+				// Different party controller (or adventure mode mapping); no conflict
+				if (!IsPartyModeMapping || controllerIndex != PartyModeControllerIndex)
 					continue;
-
-				if (!InputMap.ActionHasEvent(actionList[i], e)) continue;
-
-				if (actionList[i] == InputId)
-				{
-					EmitSignal(SignalName.SwapMapping, string.Empty, new());
-					return; // Nothing changed
-				}
-
-				// Store conflict for a swap later
-				swapAction = actionList[i];
 			}
+			else if (IsPartyModeMapping)
+			{
+				// actionId is for adventure mode
+				continue;
+			}
+
+			// Store conflict for a swap later
+			return actionId;
 		}
 
-		Array<InputEvent> eventList = InputMap.ActionGetEvents(InputId);
-		InputEvent swapEvent = null;
+		return null;
+	}
 
+	/// <summary> Remaps the InputAction's event and returns the InputEvent for possible swapping. </summary>
+	private InputEvent RemapEvent(InputEvent e)
+	{
+		Array<InputEvent> eventList = InputMap.ActionGetEvents(ActionName);
 		for (int i = 0; i < eventList.Count; i++)
 		{
 			if (e.GetType() != eventList[i].GetType())
 				continue;
 
-			InputMap.ActionEraseEvent(InputId, eventList[i]); // Erase the old action
+			InputMap.ActionEraseEvent(ActionName, eventList[i]); // Erase the old action
 
-			if (e is InputEventKey key && key.Keycode == Key.None)
-				break;
-			else if (e is InputEventJoypadMotion motion && motion.Axis == JoyAxis.Max)
-				break;
-			else if (e is InputEventJoypadButton button && button.ButtonIndex == JoyButton.Max)
-				break;
-
-			swapEvent = eventList[i];
-			InputMap.ActionAddEvent(InputId, e); // Add the new action
-			break;
-		}
-
-		// Resolve mapping conflict by swapping input mapping with this menu option's mapping
-		if (!isSwappedInput)
-		{
-			if (swapAction != null)
+			if ((e is InputEventKey key && key.Keycode == Key.None) ||
+				(e is InputEventJoypadMotion motion && motion.Axis == JoyAxis.Max) ||
+				(e is InputEventJoypadButton button && button.ButtonIndex == JoyButton.Max))
 			{
-				if (swapEvent == null)
-				{
-					if (e is InputEventKey)
-					{
-						swapEvent = new InputEventKey()
-						{
-							Keycode = Key.None
-						};
-					}
-					else if (e is InputEventJoypadMotion)
-					{
-						swapEvent = new InputEventJoypadMotion()
-						{
-							Axis = JoyAxis.Max
-						};
-					}
-					else if (e is InputEventJoypadButton)
-					{
-						swapEvent = new InputEventJoypadButton()
-						{
-							ButtonIndex = JoyButton.Max
-						};
-					}
-				}
-
-				EmitSignal(SignalName.SwapMapping, swapAction, swapEvent);
+				break;
 			}
 
-			if (!InputMap.ActionHasEvent(InputId, e)) // Failed to add the new action
-				InputMap.ActionAddEvent(InputId, e); // Add the new action anyway
+			InputMap.ActionAddEvent(ActionName, e); // Add the new action
+			return eventList[i];
 		}
 
-		SaveConfig();
+		return null;
 	}
 
-	private void SaveConfig()
+	private void ResolveMappingConflicts(StringName swapAction, InputEvent swapEvent, InputEvent e)
 	{
-		Array<InputEvent> eventList = InputMap.ActionGetEvents(InputId); // Refresh event list
-
-		// Construct the mapping string
-		int[] mappingList = [(int)Key.None, (int)JoyAxis.Invalid, (int)JoyButton.Invalid];
-		int axisSign = 0;
-		foreach (var e in eventList)
+		if (swapAction != null)
 		{
-			if (e is InputEventKey key)
+			if (swapEvent == null)
 			{
-				mappingList[0] = (int)key.Keycode;
+				if (e is InputEventKey)
+					swapEvent = new InputEventKey() { Keycode = Key.None };
+				else if (e is InputEventJoypadMotion)
+					swapEvent = new InputEventJoypadMotion() { Axis = JoyAxis.Max };
+				else if (e is InputEventJoypadButton)
+					swapEvent = new InputEventJoypadButton() { ButtonIndex = JoyButton.Max };
 			}
-			else if (e is InputEventJoypadMotion motion)
-			{
-				mappingList[1] = (int)motion.Axis;
-				axisSign = Mathf.Sign(motion.AxisValue);
-			}
-			else if (e is InputEventJoypadButton button)
-			{
-				mappingList[2] = (int)button.ButtonIndex;
-			}
-		}
-		string mappingString = $"{mappingList[0]}, {mappingList[1]}, {mappingList[2]}, {axisSign}";
 
-		if (SaveManager.Config.inputConfiguration.ContainsKey(InputId))
-			SaveManager.Config.inputConfiguration[InputId] = mappingString;
-		else
-			SaveManager.Config.inputConfiguration.Add(InputId, mappingString);
+			EmitSignal(SignalName.SwapMapping, swapAction, swapEvent);
+		}
+
+		if (!InputMap.ActionHasEvent(ActionName, e)) // Failed to add the new action
+			InputMap.ActionAddEvent(ActionName, e); // Add the new action anyway
 	}
 
 	/// <summary> Checks whether the input can be remapped to the target binding. </summary>
@@ -261,6 +265,8 @@ public partial class ControlOption : Control
 			{
 				case Key.Alt:
 				case Key.Meta:
+				case Key.Escape:
+				case Key.Space:
 				case Key.Numlock:
 					return false;
 			}
@@ -281,7 +287,7 @@ public partial class ControlOption : Control
 		if (!IsReady)
 			return;
 
-		Array<InputEvent> eventList = InputMap.ActionGetEvents(InputId);
+		Array<InputEvent> eventList = InputMap.ActionGetEvents(ActionName);
 
 		for (int i = 0; i < eventList.Count; i++)
 		{
@@ -310,6 +316,31 @@ public partial class ControlOption : Control
 				int keySpriteIndex = InputLabel.Text.Length <= 3 ? 0 : 1;
 				KeyTextureRect.Texture = controllerResources[^1].buttons[keySpriteIndex]; // Last controller resource should be the keyboard sprites
 			}
+		}
+	}
+
+	private readonly StringName DeviceString = "option_device_number";
+	public string GetDevice()
+	{
+		string deviceString = "Unknown Gamepad";
+
+		if (Input.GetConnectedJoypads().Contains(DeviceIndex))
+			deviceString = Input.GetJoyName(DeviceIndex);
+
+		deviceString += " (" + Tr(DeviceString).Replace("0", DeviceIndex.ToString()) + ")";
+		return deviceString;
+	}
+
+	public void UpdateDevice()
+	{
+		// Update all event actions to use the correct device
+		foreach (InputEvent e in InputMap.ActionGetEvents(ActionName))
+		{
+			if (e is not InputEventJoypadButton && e is not InputEventJoypadMotion)
+				continue;
+
+			e.Device = DeviceIndex;
+			RemapEvent(e);
 		}
 	}
 }
