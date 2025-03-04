@@ -330,13 +330,19 @@ public partial class PlayerAnimator : Node3D
 	private AnimationNodeStateMachinePlayback LightDashStatePlayback => animationTree.Get(LightDashPlayback).Obj as AnimationNodeStateMachinePlayback;
 	private readonly StringName LightDashPlayback = "parameters/air_tree/light_dash_state/playback";
 	private readonly StringName LightDashTrigger = "parameters/air_tree/light_dash_trigger/request";
+	private readonly StringName LightDashSpeed = "parameters/air_tree/light_dash_speed/scale";
 	public void StartLightDashAnimation()
 	{
 		animationTree.Set(LightDashTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animationTree.Set(LightDashSpeed, 2f);
 		LightDashStatePlayback.Start("start");
 	}
 
-	public void StopLightDashAnimation() => LightDashStatePlayback.Start("stop");
+	public void StopLightDashAnimation()
+	{
+		LightDashStatePlayback.Start("stop");
+		animationTree.Set(LightDashSpeed, 1f);
+	}
 
 	/// <summary> Blend from -1 <-> 1 of how much the player is turning. </summary>
 	private float groundTurnRatio;
@@ -387,6 +393,7 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(QuickStepTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(LightDashTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
 	public void JumpAnimation()

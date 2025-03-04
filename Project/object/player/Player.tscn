@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://bqck0hqdn3o8r"]
+[gd_scene load_steps=63 format=3 uid="uid://bqck0hqdn3o8r"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -224,6 +224,42 @@ tracks/13/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Sonic/LightDashRingDetector/CollisionShape3D:position")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Sonic/LightDashRingDetector/CollisionShape3D:shape:height")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [4.0]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Sonic/LightDashRingDetector/CollisionShape3D:shape:radius")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
 }
 
 [sub_resource type="Animation" id="Animation_bcu8q"]
@@ -533,6 +569,46 @@ tracks/12/keys = {
 "args": [],
 "method": &"ResetAttackState"
 }]
+}
+
+[sub_resource type="Animation" id="Animation_gifhc"]
+resource_name = "light-dash"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sonic/LightDashRingDetector/CollisionShape3D:shape:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [10.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sonic/LightDashRingDetector/CollisionShape3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 3)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sonic/LightDashRingDetector/CollisionShape3D:shape:radius")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [4.0]
 }
 
 [sub_resource type="Animation" id="Animation_cxie3"]
@@ -994,6 +1070,7 @@ _data = {
 "disable": SubResource("Animation_bhgay"),
 "disable-environment": SubResource("Animation_2s3ot"),
 "fire-crest": SubResource("Animation_dp7pp"),
+"light-dash": SubResource("Animation_gifhc"),
 "slide": SubResource("Animation_cxie3"),
 "speed break": SubResource("Animation_hgkeo"),
 "spin": SubResource("Animation_mb10g"),
@@ -1002,8 +1079,8 @@ _data = {
 }
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hnnsk"]
-radius = 1.5
-height = 8.0
+radius = 2.0
+height = 4.0
 
 [sub_resource type="Curve" id="Curve_0y4at"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0645833, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0777784, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -1135,7 +1212,7 @@ collision_mask = 8
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Sonic/LightDashRingDetector"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -1.19209e-07, 2.5)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_hnnsk")
 
 [node name="Lockon" parent="." node_paths=PackedStringArray("areaTrigger") instance=ExtResource("33_q1dko")]
@@ -1347,12 +1424,11 @@ slideState = NodePath("../../Basic/Slide")
 jumpState = NodePath("../../Basic/Jump")
 movementCurve = SubResource("Curve_1rk8e")
 
-[node name="LightSpeedDash" type="Node" parent="StateMachine/Skill" node_paths=PackedStringArray("runState", "fallState", "jumpState", "backflipState")]
+[node name="LightSpeedDash" type="Node" parent="StateMachine/Skill" node_paths=PackedStringArray("landState", "fallState", "jumpState")]
 script = ExtResource("40_t4xrr")
-runState = NodePath("../../Basic/Run")
+landState = NodePath("../../Basic/Land")
 fallState = NodePath("../../Basic/Fall")
 jumpState = NodePath("../../Basic/Jump")
-backflipState = NodePath("../../Basic/Backflip")
 lightDashSpeed = 60.0
 lightDashSpeedAcceleration = 200.0
 

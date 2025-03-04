@@ -7,7 +7,7 @@ namespace Project.Gameplay;
 public partial class LightSpeedDashState : PlayerState
 {
 	[Export]
-	private PlayerState runState;
+	private PlayerState landState;
 	[Export]
 	private PlayerState fallState;
 	[Export]
@@ -73,17 +73,25 @@ public partial class LightSpeedDashState : PlayerState
 
 		Player.Lockon.IsMonitoring = false;
 		Player.Controller.ResetLightDashBuffer(); // Always reset light dash input buffer
+		Player.ChangeHitbox("light-dash");
+		Player.AttackState = PlayerController.AttackStates.Weak;
 
 		// Play animations
-		Player.Animator.StartLightDashAnimation();
+		Player.Effect.StartTrailFX();
 		Player.Effect.StartLightDashFX();
+		Player.Animator.StartLightDashAnimation();
 	}
 
 	public override void ExitState()
 	{
 		CurrentTarget = null;
+		Player.Effect.StopTrailFX();
 		Player.Effect.StopLightDashFX();
 		Player.Animator.StopLightDashAnimation();
+		Player.Animator.IsFallTransitionEnabled = false;
+
+		Player.ChangeHitbox("RESET");
+		Player.AttackState = PlayerController.AttackStates.None;
 	}
 
 	public override PlayerState ProcessPhysics()
@@ -109,7 +117,7 @@ public partial class LightSpeedDashState : PlayerState
 				return jumpState;
 			}
 
-			return Player.IsOnGround ? runState : fallState;
+			return Player.IsOnGround ? landState : fallState;
 		}
 
 		Vector3 movementDirection = (CurrentTarget.GlobalPosition - Player.CenterPosition).Normalized();
