@@ -264,15 +264,12 @@ public partial class Enemy : Node3D
 				break;
 		}
 
-		if (IsDefeated)
-			return;
-
 		if (Player.IsSpinJump)
 		{
 			Player.VerticalSpeed = Runtime.CalculateJumpPower(SpinJumpBounceAmount);
 		}
 		else if (Player.IsJumpDashOrHomingAttack || (Player.IsBouncing && !Player.IsBounceInteruptable) ||
-			((Player.VerticalSpeed > 0 || Player.IsAccelerationJumping) && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ArmorJump)))
+			(Player.IsJumping && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ArmorJump)))
 		{
 			UpdateLockon();
 			Player.StartBounce(IsDefeated);
@@ -323,15 +320,15 @@ public partial class Enemy : Node3D
 
 		if (!a.IsInGroup("player")) return;
 		IsInteracting = true;
+
+		if (Player.IsSpinJump && Player.VerticalSpeed <= 0)
+			ResetInteractionProcessed();
 	}
 
 	public void OnExited(Area3D a)
 	{
 		if (!a.IsInGroup("player")) return;
 		IsInteracting = false;
-
-		if (Player.IsSpinJump)
-			ResetInteractionProcessed();
 	}
 
 	public void OnRangeEntered(Area3D a)

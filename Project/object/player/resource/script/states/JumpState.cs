@@ -44,6 +44,7 @@ public partial class JumpState : PlayerState
 		if (Player.Skills.IsSpeedBreakActive)
 			Player.Skills.ToggleSpeedBreak();
 
+		Player.IsJumping = true;
 		Player.AllowLandingSkills = true;
 
 		turningVelocity = 0;
@@ -72,6 +73,7 @@ public partial class JumpState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.IsJumping = false;
 		Player.IsAccelerationJumping = false;
 	}
 

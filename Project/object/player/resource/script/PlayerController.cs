@@ -572,6 +572,7 @@ public partial class PlayerController : CharacterBody3D
 	public bool IsJumpDashing { get; set; }
 	public bool IsHomingAttacking { get; set; }
 	public bool IsJumpDashOrHomingAttack => IsJumpDashing || IsHomingAttacking;
+	public bool IsJumping { get; set; }
 	public bool IsAccelerationJumping { get; set; }
 	public bool IsBackflipping { get; set; }
 	public bool IsStomping { get; set; }
