@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://bqck0hqdn3o8r"]
+[gd_scene load_steps=60 format=3 uid="uid://bqck0hqdn3o8r"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -40,6 +40,7 @@
 [ext_resource type="Script" path="res://object/player/resource/script/states/SpinJumpState.cs" id="38_krfaq"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/CatapultState.cs" id="38_xdgt8"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/EventState.cs" id="39_4sg6h"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/QuickStepState.cs" id="39_iqbcj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hfii6"]
 radius = 0.3
@@ -1003,6 +1004,11 @@ _data = {
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0645833, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0777784, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 4
 
+[sub_resource type="Curve" id="Curve_1rk8e"]
+max_value = 20.0
+_data = [Vector2(0, 0), 0.0, 461.42, 0, 0, Vector2(0.142857, 20), 0.0, 0.0, 0, 0, Vector2(0.334232, 6.0201), -39.5151, -39.5151, 0, 0, Vector2(0.8, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
 [sub_resource type="Curve" id="Curve_l0cmy"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 0), 0.0, 0.0, 0, 0, Vector2(0.4, 0.5), 4.05151, 4.05151, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0]
 point_count = 4
@@ -1011,7 +1017,7 @@ point_count = 4
 _data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "spinJumpState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "knockbackState", "teleportState") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "spinJumpState", "quickStepState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "knockbackState", "teleportState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1034,6 +1040,7 @@ catapultState = NodePath("StateMachine/Object/Catapult")
 flyingPotState = NodePath("StateMachine/Object/FlyingPot")
 pathTravellerState = NodePath("StateMachine/Object/PathTraveller")
 spinJumpState = NodePath("StateMachine/Special/SpinJump")
+quickStepState = NodePath("StateMachine/Special/QuickStep")
 grindState = NodePath("StateMachine/Object/Grind")
 sidleState = NodePath("StateMachine/Special/Sidle")
 automationState = NodePath("StateMachine/Special/Automation")
@@ -1071,17 +1078,12 @@ bones/0/rotation = Quaternion(3.57711e-14, -1.80861e-07, -3.0007e-07, 1)
 bones/1/rotation = Quaternion(0.999986, 2.99907e-07, -1.92129e-07, 0.00531361)
 bones/8/rotation = Quaternion(-0.507972, -0.493846, -0.492108, 0.505876)
 bones/11/position = Vector3(0.0662359, 0.0606951, -0.0182575)
-bones/19/rotation = Quaternion(0.0166958, 0.0143342, 0.000456244, 0.999758)
 bones/22/position = Vector3(-0.0580948, 0.1219, 0.00920521)
 bones/28/position = Vector3(-0.066236, 0.0606951, -0.0182575)
-bones/28/rotation = Quaternion(-0.55867, 0.762376, -0.094618, 0.312598)
 bones/30/rotation = Quaternion(0.0274165, -0.0283704, 0.0518215, 0.997877)
-bones/32/rotation = Quaternion(0.014017, -0.00409223, -0.00361268, 0.999887)
-bones/33/rotation = Quaternion(0.0030857, -0.00362121, -0.0545012, 0.998502)
 bones/35/rotation = Quaternion(0.0249171, -0.00388378, -0.000898509, 0.999682)
 bones/36/rotation = Quaternion(0.0166958, -0.0143343, -0.000456251, 0.999758)
 bones/39/position = Vector3(0.0580948, 0.1219, 0.00920527)
-bones/39/rotation = Quaternion(0.0130255, -0.007344, -0.117758, 0.99293)
 bones/40/rotation = Quaternion(-0.00150024, -0.00739151, 0.000392114, 0.999972)
 bones/42/rotation = Quaternion(9.46508e-09, 3.96343e-07, 3.96343e-07, 1)
 bones/46/rotation = Quaternion(-0.23467, -2.52169e-06, 8.92783e-06, 0.972075)
@@ -1094,6 +1096,9 @@ transform = Transform3D(1, -2.54019e-13, -3.87024e-13, 3.89383e-13, 2.03494e-07,
 
 [node name="LFoot" parent="Sonic/SonicRoot/GeneralSkeleton" index="6"]
 transform = Transform3D(1, 1.1493e-12, 6.20876e-12, -6.27318e-12, 1.0673e-06, 1, 1.2701e-12, -1, 1.07242e-06, 0.0397276, 0.155469, 0.00205613)
+
+[node name="AnimationTree" parent="Sonic" index="4"]
+parameters/ground_tree/quick_step_speed/scale = 1.0
 
 [node name="Effect" parent="Sonic" node_paths=PackedStringArray("rightFoot", "leftFoot", "landingParticles", "stepEmitters") instance=ExtResource("19_3dctg")]
 rightFoot = NodePath("../SonicRoot/GeneralSkeleton/RFoot")
@@ -1315,6 +1320,16 @@ stompState = NodePath("../../Basic/Stomp")
 landState = NodePath("../../Basic/Land")
 jumpDashState = NodePath("../../Basic/JumpDash")
 homingAttackState = NodePath("../../Basic/HomingAttack")
+
+[node name="QuickStep" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("idleState", "runState", "fallState", "backflipState", "slideState", "jumpState")]
+script = ExtResource("39_iqbcj")
+idleState = NodePath("../../Basic/Idle")
+runState = NodePath("../../Basic/Run")
+fallState = NodePath("../../Basic/Fall")
+backflipState = NodePath("../../Basic/Backflip")
+slideState = NodePath("../../Basic/Slide")
+jumpState = NodePath("../../Basic/Jump")
+movementCurve = SubResource("Curve_1rk8e")
 
 [node name="Controller" type="Node" parent="."]
 script = ExtResource("2_pk07e")

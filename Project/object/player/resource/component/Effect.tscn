@@ -1,4 +1,4 @@
-[gd_scene load_steps=214 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=225 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -38,6 +38,7 @@
 [ext_resource type="Material" uid="uid://bvpcekopblbht" path="res://object/player/resource/effect/material/Crest Wind Spark.tres" id="31_4gjme"]
 [ext_resource type="Material" uid="uid://bef3nf037vgw8" path="res://object/stage/common/resource/model/material/Flying Pot Shine.tres" id="33_4e01p"]
 [ext_resource type="Resource" uid="uid://svgihnonyl8d" path="res://resource/preset/sfx library/SonicVoiceLibrary.tres" id="33_pyanb"]
+[ext_resource type="Texture2D" uid="uid://cq2moh8cttu1r" path="res://effect/particle/texture/ember blue.png" id="33_q8rgh"]
 [ext_resource type="Shader" path="res://effect/shader/particle/AnimatedNonbillboard.gdshader" id="34_fub5g"]
 [ext_resource type="Texture2D" uid="uid://cn2jkjpa6m0ut" path="res://object/stage/common/resource/model/texture/goal flame detail atlas.png" id="34_ss1rs"]
 
@@ -1021,6 +1022,68 @@ color_initial_ramp = SubResource("GradientTexture1D_ftecu")
 alpha_curve = SubResource("CurveTexture_kwvbn")
 hue_variation_max = 0.12
 
+[sub_resource type="Curve" id="Curve_s2ttg"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3teqf"]
+width = 64
+curve = SubResource("Curve_s2ttg")
+
+[sub_resource type="Gradient" id="Gradient_lo4ng"]
+offsets = PackedFloat32Array(0.366197, 1)
+colors = PackedColorArray(0.537011, 0.537011, 0.537011, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ba7bs"]
+gradient = SubResource("Gradient_lo4ng")
+width = 64
+
+[sub_resource type="Curve" id="Curve_ndb0j"]
+_data = [Vector2(0, 0), 0.0, 1.36717, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_cb3qa"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_115tc"]
+width = 64
+curve_x = SubResource("Curve_ndb0j")
+curve_y = SubResource("Curve_ndb0j")
+curve_z = SubResource("Curve_cb3qa")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8c5l6"]
+lifetime_randomness = 0.6
+particle_flag_rotate_y = true
+emission_shape_offset = Vector3(0, 0.5, 0)
+emission_shape = 3
+emission_box_extents = Vector3(0, 0.5, 0.4)
+spread = 30.0
+initial_velocity_min = -1.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_max = 3.0
+scale_curve = SubResource("CurveXYZTexture_115tc")
+color = Color(0.878431, 0.870588, 0.792157, 1)
+color_initial_ramp = SubResource("GradientTexture1D_ba7bs")
+alpha_curve = SubResource("CurveTexture_3teqf")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oo6hs"]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+specular_mode = 2
+disable_fog = true
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("33_q8rgh")
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_55sp8"]
+material = SubResource("StandardMaterial3D_oo6hs")
+size = Vector2(1, 0.2)
+center_offset = Vector3(0.4, 0, 0)
+
 [sub_resource type="Curve" id="Curve_awull"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -1302,7 +1365,7 @@ anim_speed_min = 1.0
 anim_speed_max = 2.0
 anim_offset_max = 1.0
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "teleportParticle", "dustParticle", "windParticle", "fireParticle", "stompParticle", "splashJumpParticle", "aegisSlideParticle", "volcanoSlideParticle", "soulSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "fireCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "perfectShuffleParticle", "grindrailSfx", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "teleportParticle", "dustParticle", "windParticle", "fireParticle", "stompParticle", "splashJumpParticle", "quickStepParticle", "aegisSlideParticle", "volcanoSlideParticle", "soulSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "fireCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "perfectShuffleParticle", "grindrailSfx", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 trailFX = NodePath("VFX/ActionFX/TrailMesh")
@@ -1313,6 +1376,7 @@ windParticle = NodePath("VFX/ActionFX/Wind")
 fireParticle = NodePath("VFX/ActionFX/Fire")
 stompParticle = NodePath("VFX/ActionFX/Stomp")
 splashJumpParticle = NodePath("VFX/ActionFX/SplashJump")
+quickStepParticle = NodePath("VFX/StepFX/QuickStepFX")
 aegisSlideParticle = NodePath("VFX/ActionFX/AegisFeather")
 volcanoSlideParticle = NodePath("VFX/ActionFX/FireLingering")
 soulSlideParticle = NodePath("VFX/ActionFX/SoulSlide")
@@ -1342,19 +1406,19 @@ voiceChannel = NodePath("SFX/VoiceChannel")
 bus = &"VOICE"
 
 [node name="LandingChannel" type="AudioStreamPlayer" parent="SFX"]
+process_mode = 1
 volume_db = 3.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="FootstepChannel" type="AudioStreamPlayer" parent="SFX"]
-bus = &"GAME SFX"
 process_mode = 1
+bus = &"GAME SFX"
 
 [node name="GrindrailSFX" type="AudioStreamPlayer" parent="SFX"]
+process_mode = 1
 stream = ExtResource("28_elah2")
 pitch_scale = 1.2
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="VFX" type="Node3D" parent="."]
 
@@ -1821,6 +1885,22 @@ fixed_fps = 0
 interpolate = false
 process_material = SubResource("ParticleProcessMaterial_gqw78")
 draw_pass_1 = SubResource("QuadMesh_vbyha")
+
+[node name="QuickStepFX" type="GPUParticles3D" parent="VFX/StepFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.2
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_8c5l6")
+draw_pass_1 = SubResource("QuadMesh_55sp8")
 
 [node name="RailFX" type="Node3D" parent="VFX"]
 

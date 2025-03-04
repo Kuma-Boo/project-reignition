@@ -37,6 +37,16 @@ public partial class PlayerInputController : Node
 	public bool IsActionBufferActive => !Mathf.IsZeroApprox(actionBuffer);
 	public void ResetActionBuffer() => actionBuffer = 0;
 
+	private float stepBuffer;
+	private int stepDirection;
+	public int StepDirection => stepDirection * (Player.Camera.ActiveSettings.controlMode == CameraSettingsResource.ControlModeEnum.Reverse ? -1 : 1);
+	public bool IsStepBufferActive => !Mathf.IsZeroApprox(stepBuffer);
+	public void ResetStepBuffer()
+	{
+		stepDirection = 0;
+		stepBuffer = 0;
+	}
+
 	/// <summary> Angle to use when transforming from world space to camera space. </summary>
 	public float XformAngle { get; set; }
 	public Vector2 InputAxis { get; private set; }
@@ -66,6 +76,7 @@ public partial class PlayerInputController : Node
 		{
 			UpdateJumpBuffer();
 			UpdateActionBuffer();
+			UpdateStepBuffer();
 			return;
 		}
 
@@ -98,6 +109,25 @@ public partial class PlayerInputController : Node
 		}
 
 		actionBuffer = Mathf.MoveToward(actionBuffer, 0, PhysicsManager.physicsDelta);
+	}
+
+	private void UpdateStepBuffer()
+	{
+		if (Input.IsActionJustPressed("button_step_right"))
+		{
+			stepBuffer = InputBufferLength;
+			stepDirection = -1;
+			return;
+		}
+
+		if (Input.IsActionJustPressed("button_step_left"))
+		{
+			stepBuffer = InputBufferLength;
+			stepDirection = 1;
+			return;
+		}
+
+		stepBuffer = Mathf.MoveToward(stepBuffer, 0, PhysicsManager.physicsDelta);
 	}
 
 	public bool IsBrakeHeld()

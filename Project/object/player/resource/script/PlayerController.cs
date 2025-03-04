@@ -645,6 +645,14 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	[Export]
+	private QuickStepState quickStepState;
+	public void StartQuickStep(bool isSteppingRight)
+	{
+		quickStepState.IsSteppingRight = isSteppingRight;
+		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, quickStepState);
+	}
+
+	[Export]
 	private GrindState grindState;
 	public bool AllowLandingGrind { get; set; }
 	public bool IsGrindstepping { get; set; }

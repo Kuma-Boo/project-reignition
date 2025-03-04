@@ -82,6 +82,15 @@ public partial class RunState : PlayerState
 				Player.Controller.ResetActionBuffer();
 				return slideState;
 			}
+
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.QuickStep) &&
+				Player.Controller.IsStepBufferActive &&
+				!(Player.IsLockoutActive && Player.ActiveLockoutData.recenterPlayer))
+			{
+				Player.StartQuickStep(Player.Controller.StepDirection < 0);
+				Player.Controller.ResetStepBuffer();
+				return null;
+			}
 		}
 
 		if (!Player.IsOnGround)

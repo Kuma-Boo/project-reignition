@@ -318,6 +318,7 @@ public enum SkillKey
 
 	// New skills
 	RankPreview, // Shows the current rank on the heads-up display
+	QuickStep, // Quick Step, Unleashed style
 	PerfectHomingAttack, // Perfect homing attack, Colors Ultimate style
 
 	// Crest skills

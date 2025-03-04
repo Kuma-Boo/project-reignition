@@ -317,6 +317,14 @@ public partial class PlayerAnimator : Node3D
 		BrakeStatePlayback.Travel(isFacingRight ? "r" + BrakeStopState : "l" + BrakeStopState);
 	}
 
+	private readonly StringName QuickStepTrigger = "parameters/ground_tree/quick_step_trigger/request";
+	private readonly StringName QuickStepTransition = "parameters/ground_tree/quick_step_transition/transition_request";
+	public void StartQuickStep(bool isSteppingRight)
+	{
+		animationTree.Set(QuickStepTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animationTree.Set(QuickStepTransition, isSteppingRight ? RightConstant : LeftConstant);
+	}
+
 	/// <summary> Blend from -1 <-> 1 of how much the player is turning. </summary>
 	private float groundTurnRatio;
 	/// <summary> How much should the turning animation be smoothed by? </summary>
