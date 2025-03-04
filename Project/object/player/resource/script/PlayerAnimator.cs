@@ -319,10 +319,12 @@ public partial class PlayerAnimator : Node3D
 
 	private readonly StringName QuickStepTrigger = "parameters/ground_tree/quick_step_trigger/request";
 	private readonly StringName QuickStepTransition = "parameters/ground_tree/quick_step_transition/transition_request";
+	private readonly StringName QuickStepSpeed = "parameters/ground_tree/quick_step_speed/scale";
 	public void StartQuickStep(bool isSteppingRight)
 	{
 		animationTree.Set(QuickStepTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		animationTree.Set(QuickStepTransition, isSteppingRight ? RightConstant : LeftConstant);
+		animationTree.Set(QuickStepSpeed, 1.5f);
 	}
 
 	/// <summary> Blend from -1 <-> 1 of how much the player is turning. </summary>
@@ -373,6 +375,7 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(StompTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(QuickStepTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
 	public void JumpAnimation()

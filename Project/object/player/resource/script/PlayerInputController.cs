@@ -72,11 +72,11 @@ public partial class PlayerInputController : Node
 		if (!InputAxis.IsZeroApprox())
 			NonZeroInputAxis = InputAxis;
 
+		UpdateStepBuffer();
 		if (!Player.IsLockoutDisablingActions)
 		{
 			UpdateJumpBuffer();
 			UpdateActionBuffer();
-			UpdateStepBuffer();
 			return;
 		}
 

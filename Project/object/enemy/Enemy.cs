@@ -264,6 +264,9 @@ public partial class Enemy : Node3D
 				break;
 		}
 
+		if (IsDefeated)
+			return;
+
 		if (Player.IsSpinJump)
 		{
 			Player.VerticalSpeed = Runtime.CalculateJumpPower(SpinJumpBounceAmount);
