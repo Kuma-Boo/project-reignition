@@ -91,6 +91,12 @@ public partial class RunState : PlayerState
 				Player.Controller.ResetStepBuffer();
 				return null;
 			}
+
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedDash) &&
+				Player.Controller.IsLightDashBufferActive && Player.StartLightSpeedDash())
+			{
+				return null;
+			}
 		}
 
 		if (!Player.IsOnGround)

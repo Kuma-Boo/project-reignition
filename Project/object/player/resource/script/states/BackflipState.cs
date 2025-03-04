@@ -71,6 +71,12 @@ public partial class BackflipState : PlayerState
 			return jumpDashState;
 		}
 
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedDash) &&
+			Player.Controller.IsLightDashBufferActive)
+		{
+			Player.StartLightSpeedDash();
+		}
+
 		return null;
 	}
 

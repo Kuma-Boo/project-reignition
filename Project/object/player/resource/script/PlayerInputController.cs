@@ -47,6 +47,10 @@ public partial class PlayerInputController : Node
 		stepBuffer = 0;
 	}
 
+	private float lightDashBuffer;
+	public bool IsLightDashBufferActive => !Mathf.IsZeroApprox(lightDashBuffer);
+	public void ResetLightDashBuffer() => lightDashBuffer = 0;
+
 	/// <summary> Angle to use when transforming from world space to camera space. </summary>
 	public float XformAngle { get; set; }
 	public Vector2 InputAxis { get; private set; }
@@ -77,6 +81,7 @@ public partial class PlayerInputController : Node
 		{
 			UpdateJumpBuffer();
 			UpdateActionBuffer();
+			UpdateLightDashBuffer();
 			return;
 		}
 
@@ -128,6 +133,17 @@ public partial class PlayerInputController : Node
 		}
 
 		stepBuffer = Mathf.MoveToward(stepBuffer, 0, PhysicsManager.physicsDelta);
+	}
+
+	private void UpdateLightDashBuffer()
+	{
+		if (Input.IsActionJustPressed("button_light_dash"))
+		{
+			lightDashBuffer = InputBufferLength;
+			return;
+		}
+
+		lightDashBuffer = Mathf.MoveToward(lightDashBuffer, 0, PhysicsManager.physicsDelta);
 	}
 
 	public bool IsBrakeHeld()

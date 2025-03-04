@@ -62,6 +62,12 @@ public partial class IdleState : PlayerState
 				Player.Controller.ResetActionBuffer();
 				return crouchState;
 			}
+
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedDash) &&
+				Player.Controller.IsLightDashBufferActive && Player.StartLightSpeedDash())
+			{
+				return null;
+			}
 		}
 
 		if (!Player.CheckGround())

@@ -252,7 +252,6 @@ public enum SkillEquipStatusEnum
 	Success,
 	Expensive,
 	Conflict,
-	// Should never be called from the actual game
 	Equipped,
 	Missing,
 }
@@ -263,6 +262,7 @@ public enum SkillKey
 	// Control skills
 	Autorun,
 	ChargeJump,
+	//HomingAttackRemap, // Remap Homing Attack to a different button to recreate the original game
 	SlowTurn, // Decreases Sonic's turning sensitivity
 	QuickTurn, // Increases Sonic's turning sensitivity
 
@@ -320,6 +320,7 @@ public enum SkillKey
 	RankPreview, // Shows the current rank on the heads-up display
 	QuickStep, // Quick Step, Unleashed style
 	PerfectHomingAttack, // Perfect homing attack, Colors Ultimate style
+	LightSpeedDash, // Perfect homing attack, Colors Ultimate style
 
 	// Crest skills
 	CrestWind,

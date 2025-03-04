@@ -137,6 +137,12 @@ public partial class JumpState : PlayerState
 			return stompState;
 		}
 
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedDash) &&
+			Player.Controller.IsLightDashBufferActive)
+		{
+			Player.StartLightSpeedDash();
+		}
+
 		return null;
 	}
 

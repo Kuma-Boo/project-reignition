@@ -43,6 +43,12 @@ public partial class FallState : PlayerState
 			return stompState;
 		}
 
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedDash) &&
+			Player.Controller.IsLightDashBufferActive)
+		{
+			Player.StartLightSpeedDash();
+		}
+
 		return null;
 	}
 }

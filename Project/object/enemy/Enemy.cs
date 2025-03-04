@@ -70,8 +70,6 @@ public partial class Enemy : Node3D
 	protected bool IsDefeated => currentHealth <= 0;
 	protected bool IsSpeedbreakDefeat { get; private set; }
 
-	private readonly float SpinJumpBounceAmount = 3.0f;
-
 	public override void _Ready() => SetUp();
 	protected virtual void SetUp()
 	{
@@ -266,7 +264,7 @@ public partial class Enemy : Node3D
 
 		if (Player.IsSpinJump)
 		{
-			Player.VerticalSpeed = Runtime.CalculateJumpPower(SpinJumpBounceAmount);
+			Player.StartSpinJumpBounce();
 		}
 		else if (Player.IsJumpDashOrHomingAttack || (Player.IsBouncing && !Player.IsBounceInteruptable) ||
 			(Player.IsJumping && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ArmorJump)))

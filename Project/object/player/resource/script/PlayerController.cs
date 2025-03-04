@@ -645,12 +645,26 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, spinJumpState);
 	}
 
+	private readonly float SpinJumpBounceAmount = 3.0f;
+	public void StartSpinJumpBounce() => VerticalSpeed = Runtime.CalculateJumpPower(SpinJumpBounceAmount);
+
 	[Export]
 	private QuickStepState quickStepState;
 	public void StartQuickStep(bool isSteppingRight)
 	{
 		quickStepState.IsSteppingRight = isSteppingRight;
 		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, quickStepState);
+	}
+
+	[Export]
+	private LightSpeedDashState lightSpeedDashState;
+	public bool IsLightDashing => lightSpeedDashState.CurrentTarget != null;
+	public bool StartLightSpeedDash()
+	{
+		if (lightSpeedDashState.GetNewTarget() != null)
+			StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, lightSpeedDashState);
+
+		return IsLightDashing;
 	}
 
 	[Export]
