@@ -327,6 +327,17 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(QuickStepSpeed, 1.5f);
 	}
 
+	private AnimationNodeStateMachinePlayback LightDashStatePlayback => animationTree.Get(LightDashPlayback).Obj as AnimationNodeStateMachinePlayback;
+	private readonly StringName LightDashPlayback = "parameters/air_tree/light_dash_state/playback";
+	private readonly StringName LightDashTrigger = "parameters/air_tree/light_dash_trigger/request";
+	public void StartLightDashAnimation()
+	{
+		animationTree.Set(LightDashTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		LightDashStatePlayback.Start("start");
+	}
+
+	public void StopLightDashAnimation() => LightDashStatePlayback.Start("stop");
+
 	/// <summary> Blend from -1 <-> 1 of how much the player is turning. </summary>
 	private float groundTurnRatio;
 	/// <summary> How much should the turning animation be smoothed by? </summary>

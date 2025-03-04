@@ -169,6 +169,16 @@ public partial class PlayerEffect : Node3D
 	}
 
 	[Export]
+	private GpuParticles3D lightDashParticle;
+	public void StartLightDashFX()
+	{
+		lightDashParticle.Emitting = true;
+		PlayActionSFX("light dash");
+	}
+
+	public void StopLightDashFX() => lightDashParticle.Emitting = false;
+
+	[Export]
 	private GroupGpuParticles3D aegisSlideParticle;
 	public void StartAegisFX() => aegisSlideParticle.SetEmitting(true);
 	public void StopAegisFX() => aegisSlideParticle.SetEmitting(false);

@@ -74,12 +74,16 @@ public partial class LightSpeedDashState : PlayerState
 		Player.Lockon.IsMonitoring = false;
 		Player.Controller.ResetLightDashBuffer(); // Always reset light dash input buffer
 
-		// TODO Play animations and Light Dash FX
+		// Play animations
+		Player.Animator.StartLightDashAnimation();
+		Player.Effect.StartLightDashFX();
 	}
 
 	public override void ExitState()
 	{
 		CurrentTarget = null;
+		Player.Effect.StopLightDashFX();
+		Player.Animator.StopLightDashAnimation();
 	}
 
 	public override PlayerState ProcessPhysics()
