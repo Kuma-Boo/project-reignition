@@ -1,21 +1,24 @@
-[gd_scene load_steps=58 format=3 uid="uid://chn7ckbhlrr2g"]
+[gd_scene load_steps=61 format=3 uid="uid://chn7ckbhlrr2g"]
 
 [ext_resource type="Script" path="res://interface/gameplay/hud/script/HeadsUpDisplay.cs" id="1_x1dw0"]
 [ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/bitmap fonts/HUD Numbers.fnt" id="2_lj78h"]
 [ext_resource type="Texture2D" uid="uid://btu2qfmfefcpo" path="res://interface/gameplay/hud/texture/rings/ring atlas.png" id="2_vvimn"]
 [ext_resource type="AudioStream" uid="uid://crk7fy6bd8job" path="res://sound/sfx/objects/ring loss.wav" id="2_y70id"]
+[ext_resource type="Texture2D" uid="uid://daym7a6tnri40" path="res://interface/gameplay/results/texture/bronze.png" id="3_hfkas"]
 [ext_resource type="Script" path="res://addons/custom_nodes/script/Sprite2DPlus.cs" id="3_wydbw"]
+[ext_resource type="Texture2D" uid="uid://cbnh0am0av0ts" path="res://interface/gameplay/results/texture/silver.png" id="4_ih3yl"]
 [ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/texture/soul gauge/sprite atlas.png" id="5_phsyj"]
 [ext_resource type="LabelSettings" uid="uid://bqrydgixkulbv" path="res://interface/font/NavigationFont.tres" id="7_568eh"]
 [ext_resource type="Texture2D" uid="uid://kii0umom7seh" path="res://interface/gameplay/hud/texture/rings/ring.png" id="7_tsef6"]
 [ext_resource type="AudioStream" uid="uid://dk0nbt6u6r65r" path="res://sound/sfx/system/objective.wav" id="8_2ws5b"]
-[ext_resource type="Texture2D" uid="uid://ftko0u3nnv8" path="res://interface/gameplay/pause/texture/text/status/status common en.png" id="8_4xdo7"]
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="8_rl1c5"]
 [ext_resource type="Material" uid="uid://b5getvsmwl4ql" path="res://interface/gameplay/hud/material/Soul Gauge Fill.tres" id="8_t3t32"]
 [ext_resource type="AudioStream" uid="uid://c2ntlq8k605f0" path="res://sound/sfx/system/SYSTEM_57.wav" id="9_52u7d"]
 [ext_resource type="AudioStream" uid="uid://bsa7lyjyg7nhi" path="res://sound/sfx/system/soul gauge charged.wav" id="9_glv62"]
 [ext_resource type="AudioStream" uid="uid://dnehqc85xb54p" path="res://sound/sfx/system/SYSTEM_58.wav" id="10_el1o5"]
 [ext_resource type="Material" uid="uid://bxllidy1ci2b1" path="res://interface/gameplay/hud/material/Soul Gauge Surface.tres" id="10_k6fym"]
+[ext_resource type="Texture2D" uid="uid://clnr8mw5xvxn1" path="res://interface/gameplay/results/texture/no medal.png" id="10_sgggl"]
+[ext_resource type="Texture2D" uid="uid://bongvk7uwqsco" path="res://interface/gameplay/results/texture/gold.png" id="11_renim"]
 [ext_resource type="Texture2D" uid="uid://dgtjbbydbhw88" path="res://interface/gameplay/hud/texture/soul gauge/gradient.png" id="13_0tpqw"]
 [ext_resource type="Texture2D" uid="uid://bypa7d6a6vjnr" path="res://interface/gameplay/hud/texture/soul gauge/fill dimensions.png" id="15_t6wdk"]
 [ext_resource type="Texture2D" uid="uid://bfpp6wa7clovs" path="res://interface/gameplay/hud/texture/soul gauge/surface dimensions.png" id="17_i26wo"]
@@ -1328,6 +1331,7 @@ fireSoulAnimator = NodePath("FireSoul/Label/AnimationPlayer")
 rankPreviewerRoot = NodePath("Values/Rank")
 mainRank = NodePath("Values/Rank/MainRank")
 transitionRank = NodePath("Values/Rank/TransitionRank")
+rankTextures = Array[Texture2D]([ExtResource("10_sgggl"), ExtResource("3_hfkas"), ExtResource("4_ih3yl"), ExtResource("11_renim")])
 rankUpSFX = NodePath("Values/Rank/RankUp")
 rankDownSFX = NodePath("Values/Rank/RankDown")
 time = NodePath("Values/Time")
@@ -1668,9 +1672,9 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Sfx" type="AudioStreamPlayer" parent="Objectives"]
+process_mode = 1
 stream = ExtResource("8_2ws5b")
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Values" type="Control" parent="."]
 layout_mode = 1
@@ -1702,20 +1706,26 @@ theme_override_font_sizes/font_size = 64
 text = "00:00.00"
 vertical_alignment = 1
 
-[node name="Rank" type="Node2D" parent="Values"]
-position = Vector2(-64, 64)
+[node name="Rank" type="Control" parent="Values"]
+anchors_preset = 0
+offset_left = -128.0
+offset_right = -128.0
 scale = Vector2(2, 2)
 
-[node name="MainRank" type="Sprite2D" parent="Values/Rank"]
-texture = ExtResource("8_4xdo7")
-region_enabled = true
-region_rect = Rect2(420, 110, 60, 60)
+[node name="MainRank" type="TextureRect" parent="Values/Rank"]
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("10_sgggl")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="TransitionRank" type="Sprite2D" parent="Values/Rank"]
+[node name="TransitionRank" type="TextureRect" parent="Values/Rank"]
 self_modulate = Color(1, 1, 1, 0)
-texture = ExtResource("8_4xdo7")
-region_enabled = true
-region_rect = Rect2(420, 110, 60, 60)
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("11_renim")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="RankUp" type="AudioStreamPlayer" parent="Values/Rank"]
 stream = ExtResource("9_52u7d")

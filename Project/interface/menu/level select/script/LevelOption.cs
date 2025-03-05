@@ -21,9 +21,13 @@ public partial class LevelOption : Control
 	[Export]
 	private Sprite2D[] fireSoulSprites;
 	[Export]
-	private Sprite2D rankSprite;
-	[Export]
 	private AnimationPlayer animator;
+
+	private readonly string NoMedalAnimation = "no-medal";
+	private readonly string GoldAnimation = "gold";
+	private readonly string SilverAnimation = "silver";
+	private readonly string BronzeAnimation = "bronze";
+
 	private readonly string ShowAnimation = "show";
 	private readonly string HideAnimation = "hide";
 	private readonly string NewAnimation = "new";
@@ -104,7 +108,21 @@ public partial class LevelOption : Control
 			}
 		}
 
-		int rank = SaveManager.ActiveGameData.GetRankClamped(data.LevelID);
-		rankSprite.RegionRect = new(new(96 + (40 * rank), rankSprite.RegionRect.Position.Y), rankSprite.RegionRect.Size);
+		switch (SaveManager.ActiveGameData.GetRankClamped(data.LevelID))
+		{
+			case 1:
+				animator.Play(BronzeAnimation);
+				break;
+			case 2:
+				animator.Play(SilverAnimation);
+				break;
+			case 3:
+				animator.Play(GoldAnimation);
+				break;
+			default:
+				animator.Play(NoMedalAnimation);
+				break;
+		}
+		animator.Advance(0.0);
 	}
 }

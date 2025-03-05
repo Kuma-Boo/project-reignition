@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bxhhmqrkph0a"]
+[gd_scene load_steps=26 format=3 uid="uid://bxhhmqrkph0a"]
 
 [ext_resource type="Script" path="res://interface/menu/level select/script/LevelOption.cs" id="1_dsbqj"]
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="2_7n0bw"]
@@ -6,6 +6,10 @@
 [ext_resource type="LabelSettings" uid="uid://bqrydgixkulbv" path="res://interface/font/NavigationFont.tres" id="3_a8nb3"]
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="3_d3is1"]
 [ext_resource type="LabelSettings" uid="uid://d2esxoalpgwjg" path="res://interface/font/MenuText.tres" id="6_88sbs"]
+[ext_resource type="Texture2D" uid="uid://cbnh0am0av0ts" path="res://interface/gameplay/results/texture/silver.png" id="7_nutrd"]
+[ext_resource type="Texture2D" uid="uid://clnr8mw5xvxn1" path="res://interface/gameplay/results/texture/no medal.png" id="7_umnuq"]
+[ext_resource type="Texture2D" uid="uid://bongvk7uwqsco" path="res://interface/gameplay/results/texture/gold.png" id="8_3csb8"]
+[ext_resource type="Texture2D" uid="uid://daym7a6tnri40" path="res://interface/gameplay/results/texture/bronze.png" id="10_pu4tu"]
 
 [sub_resource type="Animation" id="Animation_03o5k"]
 resource_name = "RESET"
@@ -148,62 +152,62 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Rank:modulate")
+tracks/6/path = NodePath("Light/Glow:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
+"update": 1,
+"values": [true]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Light/Glow:visible")
+tracks/7/path = NodePath("Light:region_rect")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [Rect2(170, 180, 40, 40)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Light:region_rect")
+tracks/8/path = NodePath("New:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Rect2(170, 180, 40, 40)]
+"update": 1,
+"values": [true]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("New:visible")
+tracks/9/path = NodePath("New:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("New:modulate")
+tracks/10/path = NodePath("Rank:texture")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
+"update": 1,
+"values": [ExtResource("7_umnuq")]
 }
 
 [sub_resource type="Animation" id="Animation_oujva"]
@@ -244,6 +248,22 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_clca2"]
+resource_name = "bronze"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rank:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("10_pu4tu")]
 }
 
 [sub_resource type="Animation" id="Animation_w71wl"]
@@ -301,6 +321,22 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_m7wlw"]
+resource_name = "gold"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rank:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_3csb8")]
 }
 
 [sub_resource type="Animation" id="Animation_klask"]
@@ -440,7 +476,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Rank:modulate")
+tracks/5/path = NodePath("New:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -449,31 +485,55 @@ tracks/5/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("New:modulate")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.466667, 0.666667),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+
+[sub_resource type="Animation" id="Animation_ij2sj"]
+resource_name = "silver"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rank:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("7_nutrd")]
+}
+
+[sub_resource type="Animation" id="Animation_jq2jx"]
+resource_name = "no-medal"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rank:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("7_umnuq")]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_gnepi"]
 _data = {
 "RESET": SubResource("Animation_4fbev"),
 "attempt": SubResource("Animation_oujva"),
+"bronze": SubResource("Animation_clca2"),
 "clear": SubResource("Animation_w71wl"),
 "clear-loop": SubResource("Animation_xec1w"),
+"gold": SubResource("Animation_m7wlw"),
 "hide": SubResource("Animation_klask"),
 "new": SubResource("Animation_43h1e"),
-"show": SubResource("Animation_7p3x4")
+"no-medal": SubResource("Animation_jq2jx"),
+"show": SubResource("Animation_7p3x4"),
+"silver": SubResource("Animation_ij2sj")
 }
 
-[node name="LevelOption" type="Control" node_paths=PackedStringArray("missionLabel", "fireSoulParent", "fireSoulSprites", "rankSprite", "animator")]
+[node name="LevelOption" type="Control" node_paths=PackedStringArray("missionLabel", "fireSoulParent", "fireSoulSprites", "animator")]
 custom_minimum_size = Vector2(1020, 64)
 layout_mode = 3
 anchor_right = 0.53125
@@ -483,7 +543,6 @@ script = ExtResource("1_dsbqj")
 missionLabel = NodePath("MissionLabel")
 fireSoulParent = NodePath("FireSouls")
 fireSoulSprites = [NodePath("FireSouls/FireSoul1"), NodePath("FireSouls/FireSoul2"), NodePath("FireSouls/FireSoul3")]
-rankSprite = NodePath("Rank")
 animator = NodePath("AnimationPlayer")
 metadata/_edit_use_anchors_ = true
 
@@ -586,12 +645,15 @@ texture = ExtResource("2_7n0bw")
 region_enabled = true
 region_rect = Rect2(60, 100, 32, 32)
 
-[node name="Rank" type="Sprite2D" parent="."]
-position = Vector2(976, 40)
-scale = Vector2(2.5, 2.5)
-texture = ExtResource("2_7n0bw")
-region_enabled = true
-region_rect = Rect2(96, 128, 40, 40)
+[node name="Rank" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 920.0
+offset_top = -10.0
+offset_right = 1020.0
+offset_bottom = 90.0
+texture = ExtResource("7_umnuq")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
