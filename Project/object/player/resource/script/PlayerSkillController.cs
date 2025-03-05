@@ -71,6 +71,7 @@ public partial class PlayerSkillController : Node3D
 	{
 		// Expand hitbox if skills is equipped
 		Runtime.Instance.UpdatePearlCollisionShapes(SkillRing.IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
+		Runtime.Instance.UpdateRingCollisionShapes(SkillRing.IsSkillEquipped(SkillKey.RingRange) ? 5 : 1);
 
 		InitializeCrestSkills();
 		// Update crest of flame's trail color

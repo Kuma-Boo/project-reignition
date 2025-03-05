@@ -67,7 +67,7 @@ public partial class Enemy : Node3D
 	protected SpawnData SpawnData { get; private set; }
 	protected PlayerController Player => StageSettings.Player;
 
-	protected bool IsDefeated => currentHealth <= 0;
+	public bool IsDefeated => currentHealth <= 0;
 	protected bool IsSpeedbreakDefeat { get; private set; }
 
 	public override void _Ready() => SetUp();
@@ -193,6 +193,7 @@ public partial class Enemy : Node3D
 	{
 		currentHealth = 0;
 		Player.Camera.SetLockonTarget(null);
+		Player.Lockon.ResetLockonTarget();
 		BonusManager.instance.AddEnemyChain();
 		StageSettings.Instance.UpdateScore(50 * maxHealth, StageSettings.MathModeEnum.Add); // Add points based on max health
 
@@ -262,8 +263,29 @@ public partial class Enemy : Node3D
 				break;
 		}
 
-		if (Player.IsJumpDashOrHomingAttack || (Player.IsBouncing && !Player.IsBounceInteruptable))
+		if (Player.IsSpinJump)
 		{
+			Player.StartSpinJumpBounce();
+		}
+		else if (Player.IsJumpDashOrHomingAttack)
+		{
+			UpdateLockon();
+
+			if (!IsDefeated)
+			{
+				Player.StartBounce();
+			}
+			else if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedAttack) ||
+				(!Input.IsActionPressed("button_attack") && !Input.IsActionPressed("button_jump")) ||
+				!Player.StartLightSpeedAttack())
+			{
+				Player.StartBounce(IsDefeated);
+			}
+		}
+		else if ((Player.IsBouncing && !Player.IsBounceInteruptable) ||
+			(Player.IsJumping && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ArmorJump)))
+		{
+			// Bouncing off an enemy
 			UpdateLockon();
 			Player.StartBounce(IsDefeated);
 		}
@@ -279,12 +301,12 @@ public partial class Enemy : Node3D
 	protected void SetInteractionProcessed()
 	{
 		IsInteractionProcessed = true;
-		Player.AttackStateChange += ResetInteractionProcessed;
+		Player.AttackStateChanged += ResetInteractionProcessed;
 	}
 	protected void ResetInteractionProcessed()
 	{
 		IsInteractionProcessed = false;
-		Player.AttackStateChange -= ResetInteractionProcessed;
+		Player.AttackStateChanged -= ResetInteractionProcessed;
 	}
 
 	/// <summary> Current local rotation of the enemy. </summary>
@@ -313,6 +335,9 @@ public partial class Enemy : Node3D
 
 		if (!a.IsInGroup("player")) return;
 		IsInteracting = true;
+
+		if (Player.IsSpinJump && Player.VerticalSpeed <= 0)
+			ResetInteractionProcessed();
 	}
 
 	public void OnExited(Area3D a)
