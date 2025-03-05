@@ -13,15 +13,8 @@ public partial class LightSpeedAttackState : PlayerState
 	[Export] private float perfectStrikeSpeed;
 	[Export] private float acceleration;
 
-	public Vector3 startPosition;
-	public Vector3 endPosition;
-	public Vector3 inHandle => startPosition;
-	public Vector3 outHandle => endPosition;
-
 	public override void EnterState()
 	{
-		startPosition = Player.GlobalPosition;
-
 		// Note: Animation and hitbox properties carry over from HomingAttackState.
 		Player.Effect.PlayActionSFX(Player.Effect.JumpDashSfx);
 	}
