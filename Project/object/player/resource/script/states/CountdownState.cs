@@ -10,7 +10,7 @@ public partial class CountdownState : PlayerState
 	[Export]
 	private PlayerState runState;
 	private float countdownBoostTimer;
-	private readonly float BoostWindow = .4f;
+	private readonly float BoostWindow = .5f;
 
 	public override void EnterState()
 	{
@@ -40,20 +40,20 @@ public partial class CountdownState : PlayerState
 		if (Player.Controller.IsActionBufferActive)
 		{
 			Player.Controller.ResetActionBuffer();
-			countdownBoostTimer = 1f;
+			countdownBoostTimer = (countdownBoostTimer > 0) ? -BoostWindow : BoostWindow;
 		}
 
 		if (!Interface.Countdown.IsCountdownActive)
 			return ProcessLevelStart();
 
-		countdownBoostTimer -= PhysicsManager.physicsDelta;
+		countdownBoostTimer = Mathf.MoveToward(countdownBoostTimer, 0, PhysicsManager.physicsDelta);
 		return null;
 	}
 
 	private PlayerState ProcessLevelStart()
 	{
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RocketStart) &&
-			countdownBoostTimer > 0 && countdownBoostTimer < BoostWindow) // Successful starting boost
+			countdownBoostTimer > 0) // Successful starting boost
 		{
 			Player.MoveSpeed = Player.Skills.countdownBoostSpeed;
 			Player.Effect.PlayWindFX();
