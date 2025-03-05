@@ -536,13 +536,13 @@ public partial class IfritGolem : Node3D
 	private void SetInteractionProcessed()
 	{
 		isInteractionProcessed = true;
-		Player.AttackStateChange += ResetInteractionProcessed;
+		Player.AttackStateChanged += ResetInteractionProcessed;
 	}
 
 	private void ResetInteractionProcessed()
 	{
 		isInteractionProcessed = false;
-		Player.AttackStateChange -= ResetInteractionProcessed;
+		Player.AttackStateChanged -= ResetInteractionProcessed;
 	}
 
 	private void UpdateInteraction()

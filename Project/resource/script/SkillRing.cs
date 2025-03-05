@@ -320,7 +320,8 @@ public enum SkillKey
 	RankPreview, // Shows the current rank on the heads-up display
 	QuickStep, // Quick Step, Unleashed style
 	PerfectHomingAttack, // Perfect homing attack, Colors Ultimate style
-	LightSpeedDash, // Perfect homing attack, Colors Ultimate style
+	LightSpeedDash, // SA2 style
+	LightSpeedAttack, // SA2 style
 
 	// Crest skills
 	CrestWind,

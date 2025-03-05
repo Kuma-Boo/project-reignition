@@ -56,6 +56,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public override void _PhysicsProcess(double _)
 	{
+		Lockon.ProcessPhysics();
 		Controller.ProcessInputs();
 		StateMachine.ProcessPhysics();
 
@@ -65,7 +66,6 @@ public partial class PlayerController : CharacterBody3D
 		UpdateRecenter();
 
 		Skills.ProcessPhysics();
-		Lockon.ProcessPhysics();
 		Animator.ProcessPhysics();
 		PathFollower.Resync();
 	}
@@ -410,7 +410,7 @@ public partial class PlayerController : CharacterBody3D
 		hitboxAnimator.Play(hitboxAnimation);
 	}
 	[Signal]
-	public delegate void AttackStateChangeEventHandler();
+	public delegate void AttackStateChangedEventHandler();
 	/// <summary> Keeps track of how much attack the player will deal. </summary>
 	public AttackStates AttackState
 	{
@@ -418,7 +418,7 @@ public partial class PlayerController : CharacterBody3D
 		set
 		{
 			attackState = value;
-			EmitSignal(SignalName.AttackStateChange);
+			EmitSignal(SignalName.AttackStateChanged);
 		}
 	}
 	private AttackStates attackState;
@@ -571,6 +571,7 @@ public partial class PlayerController : CharacterBody3D
 	public bool CanJumpDash { get; set; }
 	public bool IsJumpDashing { get; set; }
 	public bool IsHomingAttacking { get; set; }
+	public bool IsPerfectHomingAttacking { get; set; }
 	public bool IsJumpDashOrHomingAttack => IsJumpDashing || IsHomingAttacking;
 	public bool IsJumping { get; set; }
 	public bool IsAccelerationJumping { get; set; }
@@ -665,6 +666,19 @@ public partial class PlayerController : CharacterBody3D
 			StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, lightSpeedDashState);
 
 		return IsLightDashing;
+	}
+
+	[Export]
+	private LightSpeedAttackState lightSpeedAttackState;
+	public bool IsLightSpeedAttacking { get; set; }
+	public bool StartLightSpeedAttack()
+	{
+		Lockon.ProcessPhysics();
+		if (Lockon.IsTargetAttackable)
+			StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, lightSpeedAttackState);
+		IsLightSpeedAttacking = Lockon.IsTargetAttackable;
+
+		return IsLightSpeedAttacking;
 	}
 
 	[Export]

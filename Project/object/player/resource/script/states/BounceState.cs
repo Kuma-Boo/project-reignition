@@ -70,7 +70,7 @@ public partial class BounceState : PlayerState
 		{
 			Player.Controller.ResetJumpBuffer();
 			Player.Controller.ResetAttackBuffer();
-			if (Player.Lockon.Target != null && Player.Lockon.IsTargetAttackable)
+			if (Player.Lockon.IsTargetAttackable)
 				return homingAttackState;
 
 			return jumpDashState;

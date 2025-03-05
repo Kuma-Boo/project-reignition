@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://bqck0hqdn3o8r"]
+[gd_scene load_steps=64 format=3 uid="uid://bqck0hqdn3o8r"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -42,6 +42,7 @@
 [ext_resource type="Script" path="res://object/player/resource/script/states/EventState.cs" id="39_4sg6h"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/QuickStepState.cs" id="39_iqbcj"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/LightSpeedDashState.cs" id="40_t4xrr"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/LightSpeedAttackState.cs" id="41_8jpjm"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hfii6"]
 radius = 0.3
@@ -1099,7 +1100,7 @@ point_count = 4
 _data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "spinJumpState", "quickStepState", "lightSpeedDashState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "knockbackState", "teleportState") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "spinJumpState", "quickStepState", "lightSpeedDashState", "lightSpeedAttackState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "knockbackState", "teleportState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1124,6 +1125,7 @@ pathTravellerState = NodePath("StateMachine/Object/PathTraveller")
 spinJumpState = NodePath("StateMachine/Skill/SpinJump")
 quickStepState = NodePath("StateMachine/Skill/QuickStep")
 lightSpeedDashState = NodePath("StateMachine/Skill/LightSpeedDash")
+lightSpeedAttackState = NodePath("StateMachine/Skill/LightSpeedAttack")
 grindState = NodePath("StateMachine/Object/Grind")
 sidleState = NodePath("StateMachine/Special/Sidle")
 automationState = NodePath("StateMachine/Special/Automation")
@@ -1431,6 +1433,15 @@ fallState = NodePath("../../Basic/Fall")
 jumpState = NodePath("../../Basic/Jump")
 lightDashSpeed = 60.0
 lightDashSpeedAcceleration = 200.0
+
+[node name="LightSpeedAttack" type="Node" parent="StateMachine/Skill" node_paths=PackedStringArray("fallState", "stompState", "jumpDashState")]
+script = ExtResource("41_8jpjm")
+fallState = NodePath("../../Basic/Fall")
+stompState = NodePath("../../Basic/Stomp")
+jumpDashState = NodePath("../../Basic/JumpDash")
+normalStrikeSpeed = 60.0
+perfectStrikeSpeed = 120.0
+acceleration = 200.0
 
 [node name="Controller" type="Node" parent="."]
 script = ExtResource("2_pk07e")

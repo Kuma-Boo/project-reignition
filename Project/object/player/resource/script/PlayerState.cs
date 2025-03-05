@@ -162,8 +162,6 @@ public partial class PlayerState : Node
 
 		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi))
 		{
-			GD.Print("Player is turning around.");
-
 			// Check for turning around
 			if (!Player.IsLockoutActive || Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
 				return true;

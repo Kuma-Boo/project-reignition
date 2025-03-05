@@ -181,6 +181,9 @@ public partial class PlayerLockonController : Node3D
 		if (target == null || !potentialTargets.Contains(target)) // Not in target list anymore (target hitbox may have been disabled)
 			return TargetState.NotInList;
 
+		if (target is Area3D && !(target as Area3D).Monitorable) // Treat deactivated hitboxes as not in the list
+			return TargetState.NotInList;
+
 		if (Player.IsKnockback || !StageSettings.Instance.IsLevelIngame) // Character is busy
 			return TargetState.PlayerBusy;
 
@@ -290,6 +293,7 @@ public partial class PlayerLockonController : Node3D
 
 		// Reset Active Target
 		Target = null;
+		IsTargetAttackable = false;
 		DisableLockonReticle();
 	}
 

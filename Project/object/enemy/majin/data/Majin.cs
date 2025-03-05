@@ -415,8 +415,6 @@ public partial class Majin : Enemy
 
 	protected override void Defeat()
 	{
-		base.Defeat();
-
 		SetHitboxStatus(false, IsDefeatLaunchEnabled);
 
 		AnimationPlayer.Play("defeat");
@@ -449,6 +447,8 @@ public partial class Majin : Enemy
 			if (IsSpeedbreakDefeat) // Skip defeat animation and explode instantly
 				AnimationPlayer.Advance(0.5);
 		}
+
+		base.Defeat();
 	}
 
 	protected override void UpdateEnemy()

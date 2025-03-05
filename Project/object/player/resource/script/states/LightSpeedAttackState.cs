@@ -3,64 +3,38 @@ using Project.Core;
 
 namespace Project.Gameplay;
 
-public partial class HomingAttackState : PlayerState
+public partial class LightSpeedAttackState : PlayerState
 {
-	[Export]
-	private PlayerState landState;
-	[Export]
-	private PlayerState stompState;
-	[Export]
-	private PlayerState jumpDashState;
+	[Export] private PlayerState fallState;
+	[Export] private PlayerState stompState;
+	[Export] private PlayerState jumpDashState;
 
-	[Export]
-	private float normalStrikeSpeed;
-	[Export]
-	private float perfectStrikeSpeed;
-	[Export]
-	private float homingAttackAcceleration;
+	[Export] private float normalStrikeSpeed;
+	[Export] private float perfectStrikeSpeed;
+	[Export] private float acceleration;
 
+	public Vector3 startPosition;
+	public Vector3 endPosition;
+	public Vector3 inHandle => startPosition;
+	public Vector3 outHandle => endPosition;
 
 	public override void EnterState()
 	{
-		Player.VerticalSpeed = 0;
-		Player.IsMovingBackward = false;
-		Player.IsHomingAttacking = true;
-		Player.ChangeHitbox("spin");
-		Player.AttackState = PlayerController.AttackStates.Weak;
+		startPosition = Player.GlobalPosition;
 
-		Player.IsPerfectHomingAttacking = Player.Lockon.IsMonitoringPerfectHomingAttack;
-		if (Player.IsPerfectHomingAttacking)
-		{
-			Player.Lockon.PlayPerfectStrike();
-			Player.AttackState = PlayerController.AttackStates.Strong;
-		}
-
-		Player.Effect.StartSpinFX();
+		// Note: Animation and hitbox properties carry over from HomingAttackState.
 		Player.Effect.PlayActionSFX(Player.Effect.JumpDashSfx);
-		Player.Effect.StartTrailFX();
-		Player.Effect.StartSpinFX();
-		Player.Effect.PlayVoice("grunt");
-
-		Player.Animator.StartSpin(5.0f);
-		Player.ChangeHitbox("spin");
-
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire))
-			Player.Skills.ActivateFireCrest();
 	}
 
 	public override void ExitState()
 	{
-		if (!Player.IsLightSpeedAttacking)
-		{
-			Player.IsHomingAttacking = false;
-			Player.AttackState = PlayerController.AttackStates.None;
-			Player.ChangeHitbox("RESET");
-			Player.Effect.StopSpinFX();
-			Player.Effect.StopTrailFX();
-			Player.Animator.ResetState();
-		}
-
+		Player.IsLightSpeedAttacking = Player.IsHomingAttacking = false;
+		Player.AttackState = PlayerController.AttackStates.None;
+		Player.ChangeHitbox("RESET");
 		Player.Lockon.CallDeferred(PlayerLockonController.MethodName.ResetLockonTarget);
+		Player.Effect.StopSpinFX();
+		Player.Effect.StopTrailFX();
+		Player.Animator.ResetState();
 
 		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire))
 			return;
@@ -86,9 +60,9 @@ public partial class HomingAttackState : PlayerState
 		}
 
 		if (Player.IsPerfectHomingAttacking)
-			Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, perfectStrikeSpeed, homingAttackAcceleration * 2.0f * PhysicsManager.physicsDelta);
+			Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, perfectStrikeSpeed, acceleration * 2.0f * PhysicsManager.physicsDelta);
 		else
-			Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, normalStrikeSpeed, homingAttackAcceleration * PhysicsManager.physicsDelta);
+			Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, normalStrikeSpeed, acceleration * PhysicsManager.physicsDelta);
 		Player.Velocity = Player.Lockon.HomingAttackDirection.Normalized() * Player.MoveSpeed;
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Player.Lockon.HomingAttackDirection);
 		Player.MoveAndSlide();
