@@ -37,6 +37,10 @@ public partial class PlayerInputController : Node
 	public bool IsActionBufferActive => !Mathf.IsZeroApprox(actionBuffer);
 	public void ResetActionBuffer() => actionBuffer = 0;
 
+	private float attackBuffer;
+	public bool IsAttackBufferActive => !Mathf.IsZeroApprox(attackBuffer);
+	public void ResetAttackBuffer() => attackBuffer = 0;
+
 	private float stepBuffer;
 	private int stepDirection;
 	public int StepDirection => stepDirection * (Player.Camera.ActiveSettings.controlMode == CameraSettingsResource.ControlModeEnum.Reverse ? -1 : 1);
@@ -81,6 +85,7 @@ public partial class PlayerInputController : Node
 		{
 			UpdateJumpBuffer();
 			UpdateActionBuffer();
+			UpdateAttackBuffer();
 			UpdateLightDashBuffer();
 			return;
 		}
@@ -114,6 +119,17 @@ public partial class PlayerInputController : Node
 		}
 
 		actionBuffer = Mathf.MoveToward(actionBuffer, 0, PhysicsManager.physicsDelta);
+	}
+
+	private void UpdateAttackBuffer()
+	{
+		if (Input.IsActionJustPressed("button_attack"))
+		{
+			attackBuffer = InputBufferLength;
+			return;
+		}
+
+		attackBuffer = Mathf.MoveToward(attackBuffer, 0, PhysicsManager.physicsDelta);
 	}
 
 	private void UpdateStepBuffer()
@@ -151,8 +167,7 @@ public partial class PlayerInputController : Node
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
 			return Input.IsActionPressed("button_action");
 
-		return SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
-			Input.IsActionPressed("button_brake");
+		return Input.IsActionPressed("button_brake");
 	}
 
 	/// <summary> Returns the angle between the player's input angle and movementAngle. </summary>

@@ -122,9 +122,10 @@ public partial class JumpState : PlayerState
 		if (Player.VerticalSpeed <= 0 && !isAccelerationJump)
 			return fallState;
 
-		if (Player.Controller.IsJumpBufferActive)
+		if (Player.Controller.IsJumpBufferActive || Player.Controller.IsAttackBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
+			Player.Controller.ResetAttackBuffer();
 			if (Player.Lockon.Target != null && Player.Lockon.IsTargetAttackable)
 				return homingAttackState;
 

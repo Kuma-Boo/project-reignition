@@ -262,7 +262,6 @@ public enum SkillKey
 	// Control skills
 	Autorun,
 	ChargeJump,
-	//HomingAttackRemap, // Remap Homing Attack to a different button to recreate the original game
 	SlowTurn, // Decreases Sonic's turning sensitivity
 	QuickTurn, // Increases Sonic's turning sensitivity
 
