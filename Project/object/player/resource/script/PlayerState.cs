@@ -59,11 +59,9 @@ public partial class PlayerState : Node
 			return;
 		}
 
-		float inputAngle = Player.Controller.GetTargetInputAngle();
 		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
-		if (IsBraking(inputAngle)) // Turning around
+		if (IsBraking(targetMovementAngle)) // Turning around
 		{
-			GD.Print("Braking");
 			Brake();
 			return;
 		}
@@ -96,7 +94,7 @@ public partial class PlayerState : Node
 		if (Player.Camera.IsCrossfading)
 			return false;
 
-		return Player.Controller.IsHoldingDirection(inputAngle, Player.MovementAngle + Mathf.Pi, Mathf.Pi * .3f);
+		return Player.Controller.IsHoldingDirection(inputAngle, Player.MovementAngle + Mathf.Pi);
 	}
 
 	protected virtual void Deccelerate() => Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, 0);
@@ -164,6 +162,8 @@ public partial class PlayerState : Node
 
 		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi))
 		{
+			GD.Print("Player is turning around.");
+
 			// Check for turning around
 			if (!Player.IsLockoutActive || Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
 				return true;
