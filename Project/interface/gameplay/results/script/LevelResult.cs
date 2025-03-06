@@ -7,33 +7,21 @@ namespace Project.Interface;
 
 public partial class LevelResult : Control
 {
-	[Signal]
-	public delegate void ContinuePressedEventHandler();
+	[Signal] public delegate void ContinuePressedEventHandler();
 
-	[Export]
-	private Label score;
-	[Export]
-	private Label time;
-	[Export]
-	private Label ring;
-	[Export]
-	private Label technical;
-	[Export]
-	private Label total;
-	[Export]
-	private Control requirementRoot;
-	[Export]
-	private Label requirementTime;
-	[Export]
-	private Label requirementScore;
-	[Export]
-	private BGMPlayer bgm;
-	[Export]
-	private AnimationPlayer animator;
-	[Export]
-	private AudioStreamPlayer resultsVoicePlayer;
-	[Export]
-	private SFXLibraryResource resultsVoiceLibrary;
+	[Export] private Label score;
+	[Export] private Label time;
+	[Export] private Label ring;
+	[Export] private Label technical;
+	[Export] private Label total;
+	[Export] private Control requirementRoot;
+	[Export] private Label requirementTime;
+	[Export] private Label requirementScore;
+	[Export] private BGMPlayer[] bgm;
+	private int bgmIndex;
+	[Export] private AnimationPlayer animator;
+	[Export] private AudioStreamPlayer resultsVoicePlayer;
+	[Export] private SFXLibraryResource resultsVoiceLibrary;
 
 	private bool isProcessing;
 	private bool isFadingBgm;
@@ -50,7 +38,7 @@ public partial class LevelResult : Control
 		if (!isProcessing)
 		{
 			if (isFadingBgm)
-				isFadingBgm = SoundManager.FadeAudioPlayer(bgm, 2.0f);
+				isFadingBgm = SoundManager.FadeAudioPlayer(bgm[bgmIndex], 2.0f);
 			return;
 		}
 
@@ -122,26 +110,39 @@ public partial class LevelResult : Control
 			requirementRoot.Visible = false;
 		}
 
-		if (rank <= 0) // Didn't obtain a medal
-			animator.Play("medal-none");
-		else if (rank == 1)
-			animator.Play("medal-bronze");
-		else if (rank == 2)
-			animator.Play("medal-silver");
+		switch (rank)
+		{
+			case 1:
+				animator.Play("medal-bronze");
+				break;
+			case 2:
+				animator.Play("medal-silver");
+				break;
+			case 3:
+				animator.Play("medal-gold");
+				break;
+			default:
+				// No medal
+				animator.Play("medal-none");
+				break;
+		}
+
+		bool isStageCleared = Stage.LevelState == StageSettings.LevelStateEnum.Success;
+
+		if (isStageCleared)
+			bgmIndex = rank == 3 ? 2 : 1;
 		else
-			animator.Play("medal-gold");
+			bgmIndex = 0;
+		bgm[bgmIndex].Play();
 
-		bool stageCleared = Stage.LevelState == StageSettings.LevelStateEnum.Success;
-		SaveManager.GameData.LevelStatus clearStatus = stageCleared ? SaveManager.GameData.LevelStatus.Cleared : SaveManager.GameData.LevelStatus.Attempted;
-
-		bgm.Play();
 		animator.Advance(0.0);
-		animator.Play(stageCleared ? "success-start" : "fail-start");
+		animator.Play(isStageCleared ? "success-start" : "fail-start");
 
 		// Update unlock notifications
-		if (stageCleared)
+		if (isStageCleared)
 		{
-			if (Stage.Data.UnlockWorld != SaveManager.WorldEnum.LostPrologue && !SaveManager.ActiveGameData.IsWorldUnlocked(Stage.Data.UnlockWorld))
+			if (Stage.Data.UnlockWorld != SaveManager.WorldEnum.LostPrologue &&
+				!SaveManager.ActiveGameData.IsWorldUnlocked(Stage.Data.UnlockWorld))
 			{
 				SaveManager.ActiveGameData.UnlockWorld(Stage.Data.UnlockWorld);
 				NotificationMenu.AddNotification(NotificationMenu.NotificationType.World, $"unlock_{Stage.Data.UnlockWorld.ToString().ToSnakeCase()}");
@@ -149,11 +150,11 @@ public partial class LevelResult : Control
 
 			foreach (var stage in Stage.Data.UnlockStage)
 			{
-				if (!SaveManager.ActiveGameData.IsStageUnlocked(stage.LevelID))
-				{
-					SaveManager.ActiveGameData.UnlockStage(stage.LevelID);
-					NotificationMenu.AddNotification(NotificationMenu.NotificationType.Mission, "unlock_mission");
-				}
+				if (SaveManager.ActiveGameData.IsStageUnlocked(stage.LevelID))
+					continue;
+
+				SaveManager.ActiveGameData.UnlockStage(stage.LevelID);
+				NotificationMenu.AddNotification(NotificationMenu.NotificationType.Mission, "unlock_mission");
 			}
 
 			// Only write these when the stage is a success
@@ -161,9 +162,9 @@ public partial class LevelResult : Control
 			SaveManager.ActiveGameData.SetBestTime(Stage.Data.LevelID, Stage.CurrentTime);
 		}
 
-		// Write common save file
+		// Write common data to save file
 		SaveManager.ActiveGameData.SetRank(Stage.Data.LevelID, rank);
-		SaveManager.ActiveGameData.SetClearStatus(Stage.Data.LevelID, clearStatus);
+		SaveManager.ActiveGameData.SetClearStatus(Stage.Data.LevelID, isStageCleared ? SaveManager.GameData.LevelStatus.Cleared : SaveManager.GameData.LevelStatus.Attempted);
 	}
 
 	public void SetInputProcessing(bool value) => isProcessing = value;

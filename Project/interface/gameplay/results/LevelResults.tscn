@@ -1,6 +1,6 @@
-[gd_scene load_steps=35 format=3 uid="uid://x03eut8s4p3l"]
+[gd_scene load_steps=37 format=3 uid="uid://x03eut8s4p3l"]
 
-[ext_resource type="AudioStream" uid="uid://dbv5ecruxgfsy" path="res://sound/ost/jingle/Stage Clear.mp3" id="1"]
+[ext_resource type="AudioStream" uid="uid://dbv5ecruxgfsy" path="res://sound/ost/jingle/Mission Clear.mp3" id="1"]
 [ext_resource type="Script" path="res://sound/script/BGMPlayer.cs" id="2"]
 [ext_resource type="Resource" uid="uid://cf1j44s01044o" path="res://resource/preset/sfx library/ResultsVoiceLibrary.tres" id="2_50vl2"]
 [ext_resource type="Texture2D" uid="uid://daym7a6tnri40" path="res://interface/gameplay/results/texture/bronze.png" id="3"]
@@ -17,7 +17,9 @@
 [ext_resource type="Texture2D" uid="uid://bongvk7uwqsco" path="res://interface/gameplay/results/texture/gold.png" id="9_sn0cs"]
 [ext_resource type="AudioStream" uid="uid://biwixrje8ahed" path="res://sound/sfx/system/result fail.wav" id="9_xr8rf"]
 [ext_resource type="AudioStream" uid="uid://sm8k2fwwnwnk" path="res://sound/sfx/system/result data.wav" id="10_m50k4"]
+[ext_resource type="AudioStream" uid="uid://f642nem7jtt" path="res://sound/ost/jingle/Mission Fail.mp3" id="11_ta76m"]
 [ext_resource type="AudioStream" uid="uid://b4nrxor8mt3ef" path="res://sound/sfx/system/result rank.wav" id="11_w8yyn"]
+[ext_resource type="AudioStream" uid="uid://pc0i47kafvut" path="res://sound/ost/jingle/Mission Clear Gold.mp3" id="14_cabbv"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3cijd"]
 light_mode = 1
@@ -1841,7 +1843,7 @@ total = NodePath("Data/Labels/Total/Value")
 requirementRoot = NodePath("Data/RequirementRoot")
 requirementTime = NodePath("Data/RequirementRoot/Numbers/Time")
 requirementScore = NodePath("Data/RequirementRoot/Numbers/Score")
-bgm = NodePath("BGM")
+bgm = [NodePath("MissionFail"), NodePath("MissionClear"), NodePath("MissionClearGold")]
 animator = NodePath("AnimationPlayer")
 resultsVoicePlayer = NodePath("ResultsVoice")
 resultsVoiceLibrary = ExtResource("2_50vl2")
@@ -2191,12 +2193,25 @@ ActionKey = &"sys_next"
 inputKey = &"button_jump"
 fallbackKey = &"ui_select"
 
-[node name="BGM" type="AudioStreamPlayer" parent="."]
+[node name="MissionFail" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_ta76m")
+bus = &"BGM"
+script = ExtResource("2")
+loopEndPosition = 81.335
+
+[node name="MissionClear" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("1")
 bus = &"BGM"
 script = ExtResource("2")
 loopStartPosition = 5.789
 loopEndPosition = 28.7
+
+[node name="MissionClearGold" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("14_cabbv")
+bus = &"BGM"
+script = ExtResource("2")
+loopStartPosition = 5.83
+loopEndPosition = 34.85
 
 [node name="FailSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("9_xr8rf")
@@ -2228,4 +2243,6 @@ libraries = {
 next/fail-start = &"fail-result"
 next/success-start = &"success-result"
 
-[connection signal="finished" from="BGM" to="BGM" method="RestartLoop"]
+[connection signal="finished" from="MissionFail" to="MissionFail" method="RestartLoop"]
+[connection signal="finished" from="MissionClear" to="MissionClear" method="RestartLoop"]
+[connection signal="finished" from="MissionClearGold" to="MissionClearGold" method="RestartLoop"]
