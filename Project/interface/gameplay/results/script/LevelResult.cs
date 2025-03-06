@@ -56,6 +56,10 @@ public partial class LevelResult : Control
 
 		if (animator.IsPlaying())
 		{
+			// Don't allow instantly skipping animation (since players may be spamming the jump button)
+			if (animator.CurrentAnimationPosition < 1f)
+				return;
+
 			if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select") ||
 				Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel")) // Skip animation
 			{
@@ -78,19 +82,15 @@ public partial class LevelResult : Control
 
 			// Determine which scene to load without connecting it
 			if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel")) // Retry stage
-			{
 				TransitionManager.instance.QueuedScene = string.Empty;
-				EmitSignal(SignalName.ContinuePressed);
-			}
 			else// if (Level.storyEventIndex == 0) // Load main menu
-			{
 				TransitionManager.instance.QueuedScene = TransitionManager.MENU_SCENE_PATH;
-				EmitSignal(SignalName.ContinuePressed);
-			}
 
 			// TODO Load story event
 			//TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}{Level.storyEventIndex}.tscn");
+
 			// Actual scene transition is handled by the experience results screen (which is connected via this signal)
+			EmitSignal(SignalName.ContinuePressed);
 		}
 	}
 
