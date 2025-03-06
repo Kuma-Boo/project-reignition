@@ -8,6 +8,8 @@ public partial class PauseMenu : Node
 {
 	public static bool AllowPausing = true;
 
+	[Signal] public delegate void OnSceneChangeSelectedEventHandler();
+
 	[Export] AnimationTree animator;
 	[Export] private Node2D pauseCursor;
 	[Export] private AnimationPlayer pauseCursorAnimator;
@@ -90,8 +92,6 @@ public partial class PauseMenu : Node
 			pauseSkill.Initialize();
 			skillContainer.AddChild(pauseSkill);
 		}
-
-		TransitionManager.instance.TransitionProcess += DisablePause;
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -108,7 +108,8 @@ public partial class PauseMenu : Node
 			}
 		}
 
-		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen"))
+		if (Input.IsActionJustPressed("button_pause") ||
+			(Input.IsActionJustPressed("ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen")))
 		{
 			TogglePause();
 			return;
@@ -230,7 +231,8 @@ public partial class PauseMenu : Node
 					ApplyPause();
 					break;
 				case 1: // Restart
-					StartSceneTransition(string.Empty);
+					TransitionManager.instance.QueuedScene = string.Empty;
+					EmitSignal(SignalName.OnSceneChangeSelected);
 					break;
 				case 2: // Status menu
 					submenu = Submenu.Status;
@@ -241,9 +243,10 @@ public partial class PauseMenu : Node
 					UpdateCursorPosition();
 					UpdateStatusMenuData();
 					break;
-				case 3: // Return to the main menu
+				case 3: // Open EXP menu
 					SaveManager.SaveGameData();
-					StartSceneTransition(TransitionManager.MENU_SCENE_PATH);
+					TransitionManager.instance.QueuedScene = TransitionManager.MENU_SCENE_PATH;
+					EmitSignal(SignalName.OnSceneChangeSelected);
 					break;
 			}
 		}
@@ -288,7 +291,6 @@ public partial class PauseMenu : Node
 			{
 				bool isSaveCollected = SaveManager.ActiveGameData.IsFireSoulCollected(Stage.Data.LevelID, i + 1);
 				bool isCheckpointCollected = StageSettings.Instance.fireSoulCheckpoints[i];
-				GD.Print(isCheckpointCollected);
 
 				fireSoulSprites[i].RegionRect = new(new(isSaveCollected || isCheckpointCollected ? 450 : 400, fireSoulSprites[i].RegionRect.Position.Y), fireSoulSprites[i].RegionRect.Size);
 				fireSoulSprites[i].SelfModulate = isCheckpointCollected ? new(1f, 1f, 1f, .5f) : Colors.White;
@@ -376,12 +378,12 @@ public partial class PauseMenu : Node
 
 	private void UpdateStatusDescription()
 	{
-		if (currentSelection == 0)
-			description.Text = "pause_status_description";
-		else if (currentSelection == 1)
-			description.Text = "pause_mission_description";
-		else
-			description.Text = "pause_skill_description";
+		description.Text = currentSelection switch
+		{
+			0 => "pause_status_description",
+			1 => "pause_mission_description",
+			_ => "pause_skill_description",
+		};
 		description.ShowDescription();
 	}
 
@@ -423,12 +425,6 @@ public partial class PauseMenu : Node
 		}
 	}
 
-	private void DisablePause()
-	{
-		if (isActive)
-			TogglePause();
-	}
-
 	private void ApplyPause()
 	{
 		if (submenu != Submenu.Pause)
@@ -440,27 +436,4 @@ public partial class PauseMenu : Node
 		GetTree().Paused = isActive;
 		BGMPlayer.StageMusicPaused = isActive;
 	}
-
-	private void StartSceneTransition(string targetScene)
-	{
-		TransitionData data = new()
-		{
-			inSpeed = 0.5f,
-			outSpeed = 0.5f,
-			color = Colors.Black,
-			disableAutoTransition = string.IsNullOrEmpty(targetScene)
-		};
-
-		if (currentSelection == 1) // Restarting -- speed up transition
-			data.inSpeed = 0.2f;
-
-		TransitionManager.instance.Connect(TransitionManager.SignalName.TransitionProcess, new Callable(this, MethodName.TransitionFinished), (uint)ConnectFlags.OneShot);
-		TransitionManager.QueueSceneChange(targetScene);
-		TransitionManager.StartTransition(data);
-	}
-
-	/// <summary>
-	/// Unpause and finish scene transition.
-	/// </summary>
-	private void TransitionFinished() => GetTree().SetDeferred("paused", false);
 }
