@@ -116,6 +116,10 @@ public partial class WorldSelect : Menu
 		if (primaryVideoPlayer.IsVisibleInTree())
 		{
 			UpdateVideo();
+
+			if (ActiveVideoPlayer == null)
+				return;
+
 			if (ActiveVideoPlayer.Stream != null)
 			{
 				if (!ActiveVideoPlayer.IsPlaying())

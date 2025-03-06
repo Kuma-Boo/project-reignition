@@ -4665,9 +4665,14 @@ nodes/value_selection/node = SubResource("AnimationNodeTransition_6f5vy")
 nodes/value_selection/position = Vector2(-1020, 820)
 node_connections = [&"confirm", 0, &"confirm-0", &"confirm", 1, &"confirm-1", &"confirm", 2, &"confirm-3", &"confirm_enabled", 0, &"pause_add", &"confirm_enabled", 1, &"confirm", &"output", 0, &"confirm_enabled", &"pause_add", 0, &"state", &"pause_add", 1, &"status_hide_trigger", &"selection", 0, &"select-0", &"selection", 1, &"select-1", &"selection", 2, &"select-2", &"selection", 3, &"select-3", &"show_trigger", 0, &"selection", &"show_trigger", 1, &"select_show", &"state", 0, &"hide", &"state", 1, &"hide-static", &"state", 2, &"show", &"state", 3, &"show-static", &"state", 4, &"status-hide", &"status_add", 0, &"value_selection", &"status_add", 1, &"status_selection", &"status_hide_trigger", 0, &"status_show_trigger", &"status_hide_trigger", 1, &"cancel-2", &"status_selection", 0, &"status-0", &"status_selection", 1, &"status-1", &"status_selection", 2, &"status-2", &"status_show_trigger", 0, &"submenu_transition", &"status_show_trigger", 1, &"confirm-2", &"submenu_transition", 0, &"show_trigger", &"submenu_transition", 1, &"status_add", &"value_selection", 0, &"value-0", &"value_selection", 1, &"value-1", &"value_selection", 2, &"value-2"]
 
-[node name="Pause" type="CanvasLayer" node_paths=PackedStringArray("animator", "pauseCursor", "pauseCursorAnimator", "selectSFX", "description", "statusCursor", "statusCursorAnimator", "values", "missionTypeLabel", "missionDescriptionLabel", "fireSoulParent", "fireSoulSprites", "rankSprite", "noSkillLabel", "skillContainer", "skillCursor", "skillCursorAnimator", "levelSprite", "skillScrollbar")]
+[node name="Pause" type="Control" node_paths=PackedStringArray("animator", "pauseCursor", "pauseCursorAnimator", "selectSFX", "description", "statusCursor", "statusCursorAnimator", "values", "missionTypeLabel", "missionDescriptionLabel", "fireSoulParent", "fireSoulSprites", "rankSprite", "noSkillLabel", "skillContainer", "skillCursor", "skillCursorAnimator", "levelSprite", "skillScrollbar")]
 process_mode = 3
-layer = 64
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1")
 animator = NodePath("AnimationTree")
 pauseCursor = NodePath("Pause/Options/PauseCursorAnchor/Cursor")
@@ -4693,13 +4698,13 @@ skillScrollbar = NodePath("Pause/StatusMenu/ValueMenu/Skill/ScrollBar/ScrollPosi
 
 [node name="Pause" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.705882)
-metadata/_edit_lock_ = true
 
 [node name="Paper" type="TextureRect" parent="Pause"]
 material = ExtResource("7_u01fk")

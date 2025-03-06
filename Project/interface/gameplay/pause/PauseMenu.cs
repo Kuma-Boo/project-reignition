@@ -8,6 +8,8 @@ public partial class PauseMenu : Node
 {
 	public static bool AllowPausing = true;
 
+	[Signal] public delegate void OnQuitEventHandler();
+
 	[Export] AnimationTree animator;
 	[Export] private Node2D pauseCursor;
 	[Export] private AnimationPlayer pauseCursorAnimator;
@@ -90,8 +92,6 @@ public partial class PauseMenu : Node
 			pauseSkill.Initialize();
 			skillContainer.AddChild(pauseSkill);
 		}
-
-		TransitionManager.instance.TransitionProcess += DisablePause;
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -108,7 +108,8 @@ public partial class PauseMenu : Node
 			}
 		}
 
-		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen"))
+		if (Input.IsActionJustPressed("button_pause") ||
+			(Input.IsActionJustPressed("ui_accept") && !Input.IsActionJustPressed("toggle_fullscreen")))
 		{
 			TogglePause();
 			return;
@@ -241,9 +242,11 @@ public partial class PauseMenu : Node
 					UpdateCursorPosition();
 					UpdateStatusMenuData();
 					break;
-				case 3: // Return to the main menu
+				case 3: // Open EXP and return to the main menue
 					SaveManager.SaveGameData();
-					StartSceneTransition(TransitionManager.MENU_SCENE_PATH);
+					SoundManager.SetAudioBusVolume(SoundManager.AudioBuses.GameSfx, 0);
+					TransitionManager.instance.QueuedScene = TransitionManager.MENU_SCENE_PATH;
+					EmitSignal(SignalName.OnQuit);
 					break;
 			}
 		}
@@ -376,12 +379,12 @@ public partial class PauseMenu : Node
 
 	private void UpdateStatusDescription()
 	{
-		if (currentSelection == 0)
-			description.Text = "pause_status_description";
-		else if (currentSelection == 1)
-			description.Text = "pause_mission_description";
-		else
-			description.Text = "pause_skill_description";
+		description.Text = currentSelection switch
+		{
+			0 => "pause_status_description",
+			1 => "pause_mission_description",
+			_ => "pause_skill_description",
+		};
 		description.ShowDescription();
 	}
 
@@ -421,12 +424,6 @@ public partial class PauseMenu : Node
 		{
 			Engine.TimeScale = unpausedSpeed;
 		}
-	}
-
-	private void DisablePause()
-	{
-		if (isActive)
-			TogglePause();
 	}
 
 	private void ApplyPause()

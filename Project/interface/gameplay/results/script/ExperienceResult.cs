@@ -243,9 +243,9 @@ public partial class ExperienceResult : Control
 		int soulGaugeGain = maxSoulPower - StageSettings.Player.Skills.MaxSoulPower;
 		int skillPointGain = maxSkillPoints - SaveManager.ActiveSkillRing.MaxSkillPoints;
 
-		levelGainLabel.Text = $"+{levelsGained.ToString("00")}";
-		skillPointGainLabel.Text = $"+{skillPointGain.ToString("000")}";
-		soulGainLabel.Text = $"+{soulGaugeGain.ToString("000")}";
+		levelGainLabel.Text = $"+{levelsGained:00}";
+		skillPointGainLabel.Text = $"+{skillPointGain:000}";
+		soulGainLabel.Text = $"+{soulGaugeGain:000}";
 
 		SaveManager.ActiveSkillRing.UpdateTotalSkillPoints();
 

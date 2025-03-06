@@ -22,16 +22,17 @@ Camera = NodePath("../Camera")
 
 [node name="HeadsUpDisplay" parent="." instance=ExtResource("4_up51o")]
 
+[node name="PauseMenu" parent="." instance=ExtResource("6_xh2b0")]
+
 [node name="LevelResults" parent="." instance=ExtResource("5_oeox1")]
 
 [node name="ExperienceResults" parent="." instance=ExtResource("7_dwc5n")]
 
 [node name="NotificationMenu" parent="." instance=ExtResource("8_ajhxl")]
 
-[node name="PauseMenu" parent="." instance=ExtResource("6_xh2b0")]
-
 [connection signal="CountdownFinished" from="Countdown" to="HeadsUpDisplay" method="SetVisibility" binds= [true]]
 [connection signal="CountdownStarted" from="Countdown" to="Player" method="OnCountdownStarted"]
 [connection signal="CountdownStarted" from="Countdown" to="HeadsUpDisplay" method="SetVisibility" binds= [false]]
+[connection signal="OnQuit" from="PauseMenu" to="ExperienceResults" method="OnResultsClosed"]
 [connection signal="ContinuePressed" from="LevelResults" to="ExperienceResults" method="OnResultsClosed"]
 [connection signal="Finished" from="ExperienceResults" to="NotificationMenu" method="OnExperienceClosed"]
