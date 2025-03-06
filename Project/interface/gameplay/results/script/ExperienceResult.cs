@@ -7,6 +7,9 @@ namespace Project.Interface.Menus;
 
 public partial class ExperienceResult : Control
 {
+	/// <summary> Amount of exp accumulated from repeat playthroughs of a level. </summary>
+	public static int AccumulatedExp { get; private set; }
+
 	[Signal]
 	public delegate void FinishedEventHandler();
 
@@ -261,7 +264,7 @@ public partial class ExperienceResult : Control
 			animator.Play(LevelUpAnimation);
 	}
 
-	private void OnResultsClosed()
+	private void StartExperienceResults()
 	{
 		levelupRequirement = CalculateLevelUpRequirement(SaveManager.ActiveGameData.level);
 		previousLevelupRequirement = CalculateLevelUpRequirement(SaveManager.ActiveGameData.level - 1);
