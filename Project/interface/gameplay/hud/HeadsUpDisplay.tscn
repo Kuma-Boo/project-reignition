@@ -1,10 +1,10 @@
 [gd_scene load_steps=58 format=3 uid="uid://chn7ckbhlrr2g"]
 
-[ext_resource type="Script" path="res://interface/gameplay/hud/script/HeadsUpDisplay.cs" id="1_x1dw0"]
+[ext_resource type="Script" uid="uid://bp3jrebic5b1y" path="res://interface/gameplay/hud/script/HeadsUpDisplay.cs" id="1_x1dw0"]
 [ext_resource type="FontFile" uid="uid://metby7j5vbho" path="res://interface/font/bitmap fonts/HUD Numbers.fnt" id="2_lj78h"]
 [ext_resource type="Texture2D" uid="uid://btu2qfmfefcpo" path="res://interface/gameplay/hud/texture/rings/ring atlas.png" id="2_vvimn"]
 [ext_resource type="AudioStream" uid="uid://crk7fy6bd8job" path="res://sound/sfx/objects/ring loss.wav" id="2_y70id"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/Sprite2DPlus.cs" id="3_wydbw"]
+[ext_resource type="Script" uid="uid://cvdq5k05y8o4e" path="res://addons/custom_nodes/script/Sprite2DPlus.cs" id="3_wydbw"]
 [ext_resource type="Texture2D" uid="uid://hjdee6dcqgs1" path="res://interface/gameplay/hud/texture/soul gauge/sprite atlas.png" id="5_phsyj"]
 [ext_resource type="LabelSettings" uid="uid://bqrydgixkulbv" path="res://interface/font/NavigationFont.tres" id="7_568eh"]
 [ext_resource type="Texture2D" uid="uid://kii0umom7seh" path="res://interface/gameplay/hud/texture/rings/ring.png" id="7_tsef6"]
@@ -21,7 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://bfpp6wa7clovs" path="res://interface/gameplay/hud/texture/soul gauge/surface dimensions.png" id="17_i26wo"]
 [ext_resource type="Texture2D" uid="uid://y6m76qloqq21" path="res://interface/gameplay/hud/texture/soul gauge/fill blue.png" id="18_15170"]
 [ext_resource type="PackedScene" uid="uid://cesb27ri52utw" path="res://interface/gameplay/hud/Bonus.tscn" id="18_auu0g"]
-[ext_resource type="Script" path="res://interface/gameplay/hud/script/BonusManager.cs" id="18_cynqg"]
+[ext_resource type="Script" uid="uid://bv0kihe4pbjc3" path="res://interface/gameplay/hud/script/BonusManager.cs" id="18_cynqg"]
 [ext_resource type="Texture2D" uid="uid://d2chsgj5rnd0g" path="res://interface/gameplay/hud/texture/soul gauge/surface blue.png" id="19_tj43x"]
 [ext_resource type="Texture2D" uid="uid://2c2b843w6r0j" path="res://interface/gameplay/hud/texture/soul gauge/fill orange.png" id="20_qpetu"]
 [ext_resource type="Texture2D" uid="uid://wehmqy1nfvqd" path="res://interface/gameplay/hud/texture/soul gauge/surface orange.png" id="21_xt5s7"]
@@ -892,11 +892,11 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_kw3qf"]
 _data = {
-"RESET": SubResource("2"),
-"collect": SubResource("1"),
-"damage": SubResource("46"),
-"ring": SubResource("Animation_dq8eb"),
-"ringless": SubResource("Animation_kv36n")
+&"RESET": SubResource("2"),
+&"collect": SubResource("1"),
+&"damage": SubResource("46"),
+&"ring": SubResource("Animation_dq8eb"),
+&"ringless": SubResource("Animation_kv36n")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rarei"]
@@ -924,9 +924,11 @@ animation = &"ringless"
 xfade_time = 0.05
 input_0/name = "enabled"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "disabled"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_06lyc"]
@@ -1007,8 +1009,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nui8w"]
 _data = {
-"RESET": SubResource("Animation_svyvt"),
-"firesoul": SubResource("Animation_qx0uv")
+&"RESET": SubResource("Animation_svyvt"),
+&"firesoul": SubResource("Animation_qx0uv")
 }
 
 [sub_resource type="Animation" id="56"]
@@ -1131,8 +1133,8 @@ tracks/4/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_x2ft5"]
 _data = {
-"RESET": SubResource("56"),
-"charged": SubResource("55")
+&"RESET": SubResource("56"),
+&"charged": SubResource("55")
 }
 
 [sub_resource type="Animation" id="Animation_lljc8"]
@@ -1304,11 +1306,11 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lenaq"]
 _data = {
-"RESET": SubResource("Animation_lljc8"),
-"change": SubResource("Animation_twsa2"),
-"hide": SubResource("Animation_mxu6s"),
-"init": SubResource("Animation_sd1i3"),
-"show": SubResource("Animation_rfoup")
+&"RESET": SubResource("Animation_lljc8"),
+&"change": SubResource("Animation_twsa2"),
+&"hide": SubResource("Animation_mxu6s"),
+&"init": SubResource("Animation_sd1i3"),
+&"show": SubResource("Animation_rfoup")
 }
 
 [node name="HeadsUpDisplay" type="Control" node_paths=PackedStringArray("ringLabel", "maxRingLabel", "ringLossLabel", "ringDividerSprite", "ringAnimator", "fireSoulAnimator", "rankPreviewerRoot", "mainRank", "transitionRank", "rankUpSFX", "rankDownSFX", "time", "score", "objectiveRoot", "objectiveSprite", "objectiveValue", "objectiveMaxValue", "objectiveSfx", "soulGauge", "soulGaugeRoot", "soulGaugeFill", "soulGaugeBackground", "soulGaugeAnimator", "raceRoot", "raceUhu", "racePlayer", "buttons", "promptAnimator")]
