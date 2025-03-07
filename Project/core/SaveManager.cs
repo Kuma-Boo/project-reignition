@@ -1176,9 +1176,9 @@ public partial class SaveManager : Node
 
 			for (int i = 0; i < PresetCount; i++)
 			{
-				data.presetNames.Add(null);
-				data.presetSkills.Add(null);
-				data.presetSkillAugments.Add(null);
+				data.presetNames.Add(string.Empty);
+				data.presetSkills.Add([]);
+				data.presetSkillAugments.Add([]);
 			}
 
 			return data;
