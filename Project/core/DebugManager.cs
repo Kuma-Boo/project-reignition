@@ -212,9 +212,6 @@ public partial class DebugManager : Node2D
 
 	/// <summary> Use a custom save. </summary>
 	public bool UseDemoSave { get; private set; }
-
-	public bool IsShaderCompilationEnabled { get; private set; }
-	private void SetShaderCompilation(bool enabled) => IsShaderCompilationEnabled = enabled;
 	#endregion
 
 	#region Gameplay Cheats

@@ -119,6 +119,7 @@ public partial class TransitionManager : Node
 	/// <summary> Queues a scene to load and connects the TransitionProcess signal. Be sure to call StartTransition to actually transition to the scene. </summary>
 	public static void QueueSceneChange(string scene)
 	{
+		GD.Print("Scene Change Queued");
 		instance.QueuedScene = scene;
 
 		var call = new Callable(instance, MethodName.ApplySceneChange);
@@ -128,23 +129,31 @@ public partial class TransitionManager : Node
 
 	private async void ApplySceneChange()
 	{
+		GD.Print("Scene Change");
 		SoundManager.instance.CancelDialog(); // Cancel any active dialog
 		IsReloadingScene = string.IsNullOrEmpty(QueuedScene);
 		if (IsReloadingScene) // Reload the current scene
 		{
 			GetTree().ReloadCurrentScene();
 		}
-		else if (CurrentTransitionData.loadAsynchronously)
-		{
-			ResourceLoader.LoadThreadedRequest(QueuedScene, "");
-			while (ResourceLoader.LoadThreadedGetStatus(QueuedScene) == ResourceLoader.ThreadLoadStatus.InProgress) // Still loading
-				await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout); // Wait a bit
-
-			var scene = ResourceLoader.LoadThreadedGet(QueuedScene) as PackedScene;
-			GetTree().ChangeSceneToPacked(scene);
-		}
 		else
 		{
+			/* TODO Godot v4.5 Fix asynchronous loading
+			if (CurrentTransitionData.loadAsynchronously)
+			{
+				GD.Print(ResourceLoader.LoadThreadedRequest(QueuedScene));
+				while (ResourceLoader.LoadThreadedGetStatus(QueuedScene) == ResourceLoader.ThreadLoadStatus.InProgress) // Still loading
+				{
+					GD.PrintT("Loading Scene...", );
+					await ToSignal(GetTree().CreateTimer(.1f), SceneTreeTimer.SignalName.Timeout); // Wait a bit
+				}
+
+				var scene = ResourceLoader.LoadThreadedGet(QueuedScene) as PackedScene;
+				GetTree().ChangeSceneToPacked(scene);
+				GD.Print("Scene Changed.");
+			}
+			*/
+
 			GetTree().ChangeSceneToFile(QueuedScene);
 		}
 
