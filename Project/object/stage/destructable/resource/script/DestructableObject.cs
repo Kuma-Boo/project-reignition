@@ -92,14 +92,19 @@ public partial class DestructableObject : Node3D
 			if (disableEnvironmentCollision)
 				rigidbody.CollisionMask &= ~Core.Runtime.Instance.environmentMask;
 
-			pieces.Add(new Piece()
+			Piece piece = new()
 			{
 				rigidbody = rigidbody,
 				mesh = mesh,
 				collider = collider,
 				scale = pieceRoot.GlobalTransform.Basis.Scale,
 				position = rigidbody.Position
-			});
+			};
+			pieces.Add(piece);
+
+			// Force piece shaders to compile
+			piece.mesh.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
+			piece.mesh.Transparency = 0.01f;
 		}
 
 		Respawn();
