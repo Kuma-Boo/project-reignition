@@ -129,7 +129,6 @@ public partial class TransitionManager : Node
 
 	private async void ApplySceneChange()
 	{
-		GD.Print("Scene Change");
 		SoundManager.instance.CancelDialog(); // Cancel any active dialog
 		IsReloadingScene = string.IsNullOrEmpty(QueuedScene);
 		if (IsReloadingScene) // Reload the current scene

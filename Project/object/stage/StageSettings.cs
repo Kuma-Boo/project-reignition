@@ -90,7 +90,6 @@ public partial class StageSettings : Node3D
 
 		if (LevelState == LevelStateEnum.Probes)
 		{
-			GD.Print("Started Probe Timer");
 			probeTimer += PhysicsManager.normalDelta;
 			if (probeTimer >= ProbeWaitLength)
 				StartLevel();
