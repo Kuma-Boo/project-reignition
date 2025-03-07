@@ -201,6 +201,9 @@ public partial class Majin : Enemy
 	[Export(PropertyHint.NodeType, "Node3D")]
 	private NodePath flameRoot;
 	private Node3D FlameRoot { get; set; }
+	[Export(PropertyHint.NodeType, "Node3D")]
+	private NodePath hitboxRoot;
+	private Node3D HitboxRoot { get; set; }
 	[Export(PropertyHint.NodeType, "BoneAttachment3D")]
 	private NodePath hitboxAttachment;
 	private BoneAttachment3D HitboxAttachment { get; set; }
@@ -324,6 +327,7 @@ public partial class Majin : Enemy
 		if (Engine.IsEditorHint()) return; // In Editor
 
 		FlameRoot = GetNodeOrNull<Node3D>(flameRoot);
+		HitboxRoot = GetNodeOrNull<Node3D>(hitboxRoot);
 		HitboxAttachment = GetNodeOrNull<BoneAttachment3D>(hitboxAttachment);
 		calculationBasis = GlobalBasis; // Cache GlobalBasis for calculations
 		base.SetUp();
@@ -338,7 +342,6 @@ public partial class Majin : Enemy
 		// Skeleton3D node is always 3 nodes away from the root node
 		HitboxAttachment.SetExternalSkeleton(HitboxAttachment.GetPathTo(Root.GetChild(0).GetChild(0).GetChild(0)));
 		HitboxAttachment.BoneIdx = 0;
-		HitboxAttachment.SetDisableScale(true);
 	}
 
 	public override void Respawn()
@@ -455,6 +458,10 @@ public partial class Majin : Enemy
 	protected override void UpdateEnemy()
 	{
 		if (Engine.IsEditorHint()) return; // In Editor
+
+		// Update hitbox transforms manually to avoid JoltPhysics scaling errors
+		HitboxRoot.GlobalPosition = HitboxAttachment.GlobalPosition;
+		HitboxRoot.GlobalRotation = HitboxAttachment.GlobalRotation;
 
 		if (SpawnIntervalEnabled)
 			UpdateSpawnInterval();

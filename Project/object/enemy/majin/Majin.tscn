@@ -178,7 +178,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("RootAttachment/Hitbox/SpinCollisionShape3D:disabled")
+tracks/7/path = NodePath("HitboxRoot/Hitbox/SpinCollisionShape3D:disabled")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -825,7 +825,7 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("RootAttachment/Hitbox/SpinCollisionShape3D:disabled")
+tracks/0/path = NodePath("HitboxRoot/Hitbox/SpinCollisionShape3D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -967,7 +967,8 @@ _data = {
 [node name="Majin" type="Node3D"]
 script = ExtResource("1")
 flameRoot = NodePath("FX/FireFX")
-hitboxAttachment = NodePath("RootAttachment")
+hitboxRoot = NodePath("HitboxRoot")
+hitboxAttachment = NodePath("HitboxAttachment")
 "Spawn Settings/Spawn Travel Time" = 0.0
 "Spawn Interval Settings/Enable Spawn Interval" = false
 "Rotation Settings/Track Player" = true
@@ -976,43 +977,45 @@ hitboxAttachment = NodePath("RootAttachment")
 pearlAmount = 15
 damagePlayer = true
 root = NodePath("Root")
-hurtbox = NodePath("RootAttachment/Hitbox")
-collider = NodePath("RootAttachment/EnvironmentCollider/CollisionShape3D")
+hurtbox = NodePath("HitboxRoot/Hitbox")
+collider = NodePath("HitboxRoot/EnvironmentCollider/CollisionShape3D")
 rangeCollider = NodePath("Range/CollisionShape3D")
 animationTree = NodePath("AnimationTree")
 animationPlayer = NodePath("AnimationPlayer")
 
 [node name="Root" type="Node3D" parent="."]
 
-[node name="RootAttachment" type="BoneAttachment3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.75753e-20, 1.085, 0)
-use_external_skeleton = true
-external_skeleton = NodePath("")
+[node name="HitboxRoot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.085, 0)
 
-[node name="Hitbox" type="Area3D" parent="RootAttachment" node_paths=PackedStringArray("enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+[node name="Hitbox" type="Area3D" parent="HitboxRoot" node_paths=PackedStringArray("enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.75753e-20, 0.15, 0)
 collision_layer = 12
 collision_mask = 2
 script = ExtResource("2_onhwc")
 enemy = NodePath("../..")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RootAttachment/Hitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxRoot/Hitbox"]
 transform = Transform3D(1, -4.17596e-23, 0, -4.17596e-23, 1, 0, 0, 0, 1, 0, 0.1, 0)
 shape = SubResource("CapsuleShape3D_mlr0h")
 
-[node name="SpinCollisionShape3D" type="CollisionShape3D" parent="RootAttachment/Hitbox"]
+[node name="SpinCollisionShape3D" type="CollisionShape3D" parent="HitboxRoot/Hitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("CylinderShape3D_xbynq")
 disabled = true
 
-[node name="EnvironmentCollider" type="StaticBody3D" parent="RootAttachment" groups=["enemy", "wall"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, -1.05879e-22)
+[node name="EnvironmentCollider" type="StaticBody3D" parent="HitboxRoot" groups=["enemy", "wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.75753e-20, 0.15, -1.05879e-22)
 collision_layer = 8
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RootAttachment/EnvironmentCollider"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxRoot/EnvironmentCollider"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 shape = SubResource("CapsuleShape3D_mlr0h")
+
+[node name="HitboxAttachment" type="BoneAttachment3D" parent="."]
+use_external_skeleton = true
+external_skeleton = NodePath("")
 
 [node name="Range" type="Area3D" parent="."]
 visible = false
@@ -1290,8 +1293,8 @@ libraries = {
 }
 next/launch-end = &"explode"
 
-[connection signal="area_entered" from="RootAttachment/Hitbox" to="." method="OnEntered"]
-[connection signal="area_exited" from="RootAttachment/Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="HitboxRoot/Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="HitboxRoot/Hitbox" to="." method="OnExited"]
 [connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
 [connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
 [connection signal="area_entered" from="FX/FireFX/FlameHitbox" to="FX/FireFX/FlameHitbox" method="OnEntered"]
