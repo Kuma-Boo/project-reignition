@@ -338,6 +338,7 @@ public partial class Majin : Enemy
 		// Skeleton3D node is always 3 nodes away from the root node
 		HitboxAttachment.SetExternalSkeleton(HitboxAttachment.GetPathTo(Root.GetChild(0).GetChild(0).GetChild(0)));
 		HitboxAttachment.BoneIdx = 0;
+		HitboxAttachment.SetDisableScale(true);
 	}
 
 	public override void Respawn()
