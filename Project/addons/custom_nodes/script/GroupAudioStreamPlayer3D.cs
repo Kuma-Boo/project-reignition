@@ -18,4 +18,6 @@ public partial class GroupAudioStreamPlayer3D : AudioStreamPlayer3D
 		MaxDb = SoundManager.instance.AddGroupSFX(groupKey);
 		Play();
 	}
+
+	public void Play() => Play(0.0f);
 }
