@@ -17,7 +17,7 @@ public partial class GroupGpuParticles3D : GpuParticles3D
 	[Export]
 	private bool EditorStopGroup { get; set; }
 
-	public void SetEmitting(bool value)
+	public new void SetEmitting(bool value)
 	{
 		for (int i = 0; i < subSystems.Count; i++)
 			subSystems[i].Emitting = value;
