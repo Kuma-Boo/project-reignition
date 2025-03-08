@@ -34,6 +34,7 @@ namespace Project.Gameplay.Objects
 		public void OnEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player detection")) return;
+			if (!Stage.IsLevelIngame) return;
 			if (Player.IsTeleporting) return; // Don't allow collections during teleport/respawn
 
 			CallDeferred(MethodName.Collect);

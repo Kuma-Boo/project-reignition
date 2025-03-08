@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay.Objects;
 
 namespace Project.Gameplay;
 
@@ -10,6 +11,7 @@ public partial class LaunchState : PlayerState
 
 	private float launcherTime;
 	private LaunchSettings settings;
+	public Launcher ActiveLauncher => settings.Launcher;
 	private RaycastHit wallHit;
 	public bool UpdateSettings(LaunchSettings settings)
 	{

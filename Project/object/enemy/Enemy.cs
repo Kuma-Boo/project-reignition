@@ -85,9 +85,11 @@ public partial class Enemy : Node3D
 		StageSettings.Instance.Respawned += Respawn;
 		StageSettings.Instance.Unloaded += Unload;
 		StageSettings.Instance.RespawnedEnemies += RespawnRange;
-		Respawn();
 
 		InitializeRangeCollider();
+
+		Respawn();
+		RespawnRange();
 	}
 
 	private void InitializeRangeCollider()

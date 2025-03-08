@@ -613,6 +613,7 @@ public partial class PlayerController : CharacterBody3D
 	[Signal]
 	public delegate void LaunchFinishedEventHandler();
 	public bool IsLaunching { get; set; }
+	public Launcher ActiveLauncher => launchState.ActiveLauncher;
 	[Export]
 	private LaunchState launchState;
 	public void StartLauncher(LaunchSettings settings)

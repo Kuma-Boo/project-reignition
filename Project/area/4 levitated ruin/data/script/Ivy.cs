@@ -18,9 +18,10 @@ public partial class Ivy : Launcher
 	}
 
 	[ExportGroup("Settings")]
-	[Export(PropertyHint.Range, "2, 20")] public int length;
-	[Export(PropertyHint.Range, "0,45,1")]
+	[Export(PropertyHint.Range, "2, 50")] public int length;
+	[Export]
 	private float maxRotation;
+	private float IndividualRotation => maxRotation / length;
 
 	[Export] public bool IsSleeping { get; private set; }
 	[Export(PropertyHint.Range, "-1,1")]
@@ -39,6 +40,8 @@ public partial class Ivy : Launcher
 	[Export(PropertyHint.NodePathValidTypes, "AnimationMixer")]
 	private NodePath animator;
 	private AnimationMixer _animator;
+
+	[Signal] public delegate void IvyStartedEventHandler();
 
 	public override float GetLaunchRatio()
 	{
@@ -66,7 +69,7 @@ public partial class Ivy : Launcher
 		_animator.Active = true;
 
 		// Adjust swing speed based on length (longer ivys swing slower)
-		float swingSpeed = Mathf.Clamp(8f / length, 0.5f, 1f);
+		float swingSpeed = Mathf.Clamp(8f / length, 0.2f, 1f);
 		_animator.Set(SwingSpeedParameter, swingSpeed);
 	}
 
@@ -95,7 +98,12 @@ public partial class Ivy : Launcher
 		if (!a.IsInGroup("player detection") || Engine.IsEditorHint())
 			return;
 
+		GD.Print(Player.ActiveLauncher);
+		if (Player.ActiveLauncher == this)
+			return;
+
 		Player.StartIvy(this);
+		EmitSignal(SignalName.IvyStarted);
 	}
 
 	public void OnExited(Area3D a)
@@ -141,7 +149,7 @@ public partial class Ivy : Launcher
 	#region Setup
 	public void SetRotation()
 	{
-		float rotation = maxRotation * launchRatio;
+		float rotation = IndividualRotation * launchRatio;
 
 		for (int i = 0; i < ivyLinks.Count; i++)
 			ivyLinks[i].RotationDegrees = Vector3.Left * rotation;
