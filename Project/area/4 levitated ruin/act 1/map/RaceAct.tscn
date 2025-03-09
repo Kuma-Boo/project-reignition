@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://b8vx5vuk7fc1e"]
+[gd_scene load_steps=28 format=3 uid="uid://b8vx5vuk7fc1e"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_ld6sm"]
 [ext_resource type="Resource" uid="uid://bo77l8y7n4q4y" path="res://resource/level data/levitated ruin/Act1Race.tres" id="2_4b0he"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="3_mgbh4"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="4_5myds"]
 [ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="5_k8qnh"]
-[ext_resource type="PackedScene" uid="uid://diq31c5i622qs" path="res://area/4 levitated ruin/object/platform/GargoylePatform.tscn" id="7_dmlfn"]
 [ext_resource type="PackedScene" uid="uid://b6030p0x15kq0" path="res://area/4 levitated ruin/object/platform/GargoyleStatic.tscn" id="8_vx42o"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="9_ym8ar"]
 [ext_resource type="PackedScene" uid="uid://y7w1jrfgsii7" path="res://object/enemy/majin/data/levitated ruin/GreenMajin.tscn" id="10_4v360"]
@@ -196,12 +195,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
 "State Lengths/active" = 0.4
 stateLengths = PackedFloat32Array(0.3, 0.2, 0.4)
 
-[node name="GargoylePlatform1" parent="Rukh1" instance=ExtResource("7_dmlfn")]
+[node name="GargoyleStatic1" parent="Rukh1" instance=ExtResource("8_vx42o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, -107)
 
-[node name="GargoyleStatic" parent="Rukh1/GargoylePlatform1" instance=ExtResource("8_vx42o")]
-
-[node name="SpikeBall" parent="Rukh1/GargoylePlatform1" instance=ExtResource("9_ym8ar")]
+[node name="SpikeBall" parent="Rukh1/GargoyleStatic1" instance=ExtResource("9_ym8ar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 Movement/Mode = 2
 "Movement/Cycle Length" = 1.0
@@ -235,23 +232,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
 [node name="Child05" parent="Rukh1/Rings2" instance=ExtResource("4_5myds")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
-[node name="GargoylePlatform2" parent="Rukh1" instance=ExtResource("7_dmlfn")]
+[node name="GargoyleStatic2" parent="Rukh1" instance=ExtResource("8_vx42o")]
 transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, -2.5, 5.5, -126)
 
-[node name="GargoyleStatic" parent="Rukh1/GargoylePlatform2" instance=ExtResource("8_vx42o")]
-
-[node name="GargoylePlatform3" parent="Rukh1" instance=ExtResource("7_dmlfn")]
+[node name="GargoyleStatic3" parent="Rukh1" instance=ExtResource("8_vx42o")]
 transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, 2.5, 5.5, -126)
 
-[node name="GargoyleStatic" parent="Rukh1/GargoylePlatform3" instance=ExtResource("8_vx42o")]
-
-[node name="GargoylePlatform4" parent="Rukh1" instance=ExtResource("7_dmlfn")]
+[node name="GargoyleStatic4" parent="Rukh1" instance=ExtResource("8_vx42o")]
 transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, 0, 6.675, -138)
 
-[node name="GargoyleStatic" parent="Rukh1/GargoylePlatform4" instance=ExtResource("8_vx42o")]
-
-[node name="SpikeBall" parent="Rukh1/GargoylePlatform4" instance=ExtResource("9_ym8ar")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+[node name="SpikeBall" parent="Rukh1/GargoyleStatic4" instance=ExtResource("9_ym8ar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1.52588e-05)
 Movement/Mode = 2
 "Movement/Cycle Length" = -1.0
 "Movement/Horizontal Size" = 0.0
@@ -604,15 +595,13 @@ animator = NodePath("../AnimationPlayer")
 [node name="Stone" parent="Rukh2/GargoyleGroup1" instance=ExtResource("21_3och7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="GargoylePlatform" parent="Rukh2/GargoyleGroup1" instance=ExtResource("7_dmlfn")]
+[node name="GargoyleStatic" parent="Rukh2/GargoyleGroup1" instance=ExtResource("8_vx42o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
-[node name="StaticBody3D" parent="Rukh2/GargoyleGroup1/GargoylePlatform" index="1" groups=["crusher"]]
-
-[node name="GargoyleStatic" parent="Rukh2/GargoyleGroup1/GargoylePlatform" instance=ExtResource("8_vx42o")]
+[node name="StaticBody3D" parent="Rukh2/GargoyleGroup1/GargoyleStatic/GargoyleStaticCollision" index="0" groups=["crusher"]]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Rukh2/GargoyleGroup1"]
-root_node = NodePath("../GargoylePlatform")
+root_node = NodePath("../GargoyleStatic")
 callback_mode_process = 0
 libraries = {
 "": SubResource("AnimationLibrary_r8ogo")
@@ -631,13 +620,13 @@ animator = NodePath("../AnimationPlayer")
 [node name="Stone" parent="Rukh2/GargoyleGroup2" instance=ExtResource("21_3och7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="GargoylePlatform" parent="Rukh2/GargoyleGroup2" instance=ExtResource("7_dmlfn")]
+[node name="GargoyleStatic" parent="Rukh2/GargoyleGroup2" instance=ExtResource("8_vx42o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
-[node name="GargoyleStatic" parent="Rukh2/GargoyleGroup2/GargoylePlatform" instance=ExtResource("8_vx42o")]
+[node name="StaticBody3D" parent="Rukh2/GargoyleGroup2/GargoyleStatic/GargoyleStaticCollision" index="0" groups=["crusher"]]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Rukh2/GargoyleGroup2"]
-root_node = NodePath("../GargoylePlatform")
+root_node = NodePath("../GargoyleStatic")
 callback_mode_process = 0
 libraries = {
 "": SubResource("AnimationLibrary_r8ogo")
@@ -656,13 +645,13 @@ animator = NodePath("../AnimationPlayer")
 [node name="Stone" parent="Rukh2/GargoyleGroup3" instance=ExtResource("21_3och7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="GargoylePlatform" parent="Rukh2/GargoyleGroup3" instance=ExtResource("7_dmlfn")]
+[node name="GargoyleStatic" parent="Rukh2/GargoyleGroup3" instance=ExtResource("8_vx42o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
-[node name="GargoyleStatic" parent="Rukh2/GargoyleGroup3/GargoylePlatform" instance=ExtResource("8_vx42o")]
+[node name="StaticBody3D" parent="Rukh2/GargoyleGroup3/GargoyleStatic/GargoyleStaticCollision" index="0" groups=["crusher"]]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Rukh2/GargoyleGroup3"]
-root_node = NodePath("../GargoylePlatform")
+root_node = NodePath("../GargoyleStatic")
 callback_mode_process = 0
 libraries = {
 "": SubResource("AnimationLibrary_r8ogo")
@@ -682,6 +671,6 @@ shape = SubResource("BoxShape3D_syr7h")
 
 [editable path="Static"]
 [editable path="Static/Collision"]
-[editable path="Rukh2/GargoyleGroup1/GargoylePlatform"]
-[editable path="Rukh2/GargoyleGroup2/GargoylePlatform"]
-[editable path="Rukh2/GargoyleGroup3/GargoylePlatform"]
+[editable path="Rukh2/GargoyleGroup1/GargoyleStatic"]
+[editable path="Rukh2/GargoyleGroup2/GargoyleStatic"]
+[editable path="Rukh2/GargoyleGroup3/GargoyleStatic"]
