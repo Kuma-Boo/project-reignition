@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://b8vx5vuk7fc1e"]
+[gd_scene load_steps=32 format=3 uid="uid://b8vx5vuk7fc1e"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_ld6sm"]
 [ext_resource type="Resource" uid="uid://bo77l8y7n4q4y" path="res://resource/level data/levitated ruin/Act1Race.tres" id="2_4b0he"]
@@ -18,10 +18,13 @@
 [ext_resource type="PackedScene" uid="uid://de84rofxiblby" path="res://area/4 levitated ruin/object/grindrail/Grindrail04.tscn" id="16_18qlj"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="17_g8ucr"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="18_mmu0i"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="19_7uomv"]
+[ext_resource type="Resource" uid="uid://qtg1igfg1t1x" path="res://area/4 levitated ruin/act 1/camera/race/SpringCam.tres" id="19_m787d"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="19_y4dgd"]
 [ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="20_n7swa"]
 [ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="21_3och7"]
 [ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="21_x27io"]
+[ext_resource type="Resource" uid="uid://fv80hvr2clwy" path="res://area/4 levitated ruin/act 1/camera/race/GrindCam.tres" id="23_b455k"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="23_yq5vv"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_o71pg"]
@@ -433,6 +436,11 @@ finalHeight = -2.0
 distance = 10.0
 voiceKey = &""
 
+[node name="Camera" type="Node3D" parent="Rukh1/Grindrail/Spring"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("19_7uomv")
+settings = ExtResource("19_m787d")
+
 [node name="RichRing" parent="Rukh1/Grindrail/Spring" instance=ExtResource("12_ma70f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 4.5)
 
@@ -534,14 +542,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.62939e-06, -79)
 "Enter Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rukh1/InvisibleGrindrail2/Jump"]
-shape = SubResource("SphereShape3D_o71pg")
-
-[node name="Node3D" type="Node3D" parent="Rukh1/InvisibleGrindrail2/Jump"]
-transform = Transform3D(1, 0, 0, -1.49012e-08, 1, 0, 2.98023e-08, -4.47035e-08, 1, 1.64191, -4.74081, -4.35989)
+[node name="Jump" type="Node3D" parent="Rukh1/InvisibleGrindrail2/Jump"]
+transform = Transform3D(1, 1.49012e-08, 0, 1.49012e-08, 1, 0, -2.98023e-08, -1.49012e-08, 1, 1.64192, -4.74081, -4.35986)
 script = ExtResource("20_n7swa")
 jumpHeight = 2.0
 autoAlign = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rukh1/InvisibleGrindrail2/Jump"]
+shape = SubResource("SphereShape3D_o71pg")
+
+[node name="Camera" type="Node3D" parent="Rukh1/InvisibleGrindrail2"]
+script = ExtResource("19_7uomv")
+settings = ExtResource("23_b455k")
 
 [node name="Rukh2" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -20, -380)
@@ -678,6 +690,9 @@ shape = SubResource("BoxShape3D_syr7h")
 
 [connection signal="EventFinished" from="Static/Visuals/Rukh2Event" to="Static/Visuals/Rukh2" method="Activate"]
 [connection signal="EventFinished" from="Static/Visuals/Rukh2Event" to="Static/Visuals/Rukh2Event" method="Deactivate"]
+[connection signal="Activated" from="Rukh1/Grindrail/Spring" to="Rukh1/Grindrail/Spring/Camera" method="Activate"]
+[connection signal="Deactivated" from="Rukh1/Grindrail/Spring" to="Rukh1/Grindrail/Spring/Camera" method="Deactivate"]
+[connection signal="GrindStarted" from="Rukh1/InvisibleGrindrail2" to="Rukh1/InvisibleGrindrail2/Camera" method="Activate"]
 [connection signal="Shattered" from="Rukh2/GargoyleGroup1/Stone" to="Rukh2/GargoyleGroup1/Event" method="Activate"]
 [connection signal="Shattered" from="Rukh2/GargoyleGroup2/Stone" to="Rukh2/GargoyleGroup2/Event" method="Activate"]
 [connection signal="Shattered" from="Rukh2/GargoyleGroup3/Stone" to="Rukh2/GargoyleGroup3/Event" method="Activate"]
