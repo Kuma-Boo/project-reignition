@@ -109,7 +109,8 @@ public partial class Ivy : Launcher
 		IsSleeping = true;
 
 		// Adjust swing speed based on length (longer ivys swing slower)
-		lengthInfluence = Mathf.Clamp(8f / length, 0.5f, 1f);
+		lengthInfluence = Mathf.Clamp(20f / length, 0.5f, 5f);
+		GD.Print(lengthInfluence);
 		StageSettings.Instance.Respawned += Respawn;
 	}
 
@@ -139,11 +140,18 @@ public partial class Ivy : Launcher
 		float gravityAmount = Gravity;
 		if (Mathf.Sign(LaunchRatio) == Mathf.Sign(rotationVelocity))
 		{
-			// Kill speed quickly when not interacting with player
-			if (!isInteractingWithPlayer)
+			if (isInteractingWithPlayer)
+			{
+				// Only apply heavy gravity when swinging far to keep swinging slowly when idle
+				if (Mathf.Abs(LaunchRatio) > .2f)
+					gravityAmount *= GravityMultiplier;
+			}
+			else
+			{
+				// Kill speed quickly when not interacting with player
 				rotationVelocity *= 0.9f;
+			}
 
-			gravityAmount *= GravityMultiplier;
 		}
 
 		rotationVelocity -= Mathf.Sign(LaunchRatio) * gravityAmount * PhysicsManager.physicsDelta; // Apply gravity
@@ -158,13 +166,14 @@ public partial class Ivy : Launcher
 		AddGravity();
 
 		float rotationClampAmount = Mathf.Clamp(1f - Mathf.Abs(LaunchRatio), 0f, 1f);
+		GD.PrintT(LaunchRatio, rotationVelocity, MaxRotationSpeed * rotationClampAmount / lengthInfluence);
 		if (Mathf.Sign(LaunchRatio) == Mathf.Sign(rotationVelocity))
-			rotationVelocity = Mathf.Min(rotationVelocity, MaxRotationSpeed * rotationClampAmount);
+			rotationVelocity = Mathf.Min(rotationVelocity, MaxRotationSpeed * rotationClampAmount / lengthInfluence);
 
-		float targetRatio = LaunchRatio + rotationVelocity * lengthInfluence * PhysicsManager.physicsDelta;
+		float targetRatio = LaunchRatio + (rotationVelocity * lengthInfluence * PhysicsManager.physicsDelta);
 		LaunchRatio = Mathf.Clamp(targetRatio, -1f, 1f);
 
-		if (Mathf.IsZeroApprox(targetImpulse))
+		if (!isInteractingWithPlayer)
 		{
 			if (Mathf.Abs(LaunchRatio) < 0.01f && Mathf.Abs(rotationVelocity) < 0.01f)
 			{
