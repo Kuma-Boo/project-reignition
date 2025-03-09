@@ -1,11 +1,14 @@
 using Godot;
 using Godot.Collections;
+using Project.Core;
 
 namespace Project.Gameplay.Objects;
 
 [Tool]
 public partial class Ivy : Launcher
 {
+	[Signal] public delegate void IvyStartedEventHandler();
+
 	[Export]
 	public bool Regenerate
 	{
@@ -28,27 +31,66 @@ public partial class Ivy : Launcher
 	public float LaunchRatio
 	{
 		get => launchRatio;
-		private set => launchRatio = value;
+		private set
+		{
+			launchRatio = value;
+			SetRotation();
+		}
 	}
-
-	[Export] public bool IsSwingingForward { get; private set; }
 
 	[ExportGroup("Components")]
 	[Export] private PackedScene ivyScene;
 	private Node3D linkRoot;
 	private Array<Node3D> ivyLinks = [];
-	[Export(PropertyHint.NodePathValidTypes, "AnimationMixer")]
-	private NodePath animator;
-	private AnimationMixer _animator;
 
-	[Signal] public delegate void IvyStartedEventHandler();
+	private bool isInteractingWithPlayer;
+
+	private float rotationVelocity;
+	private float targetImpulse;
+	private float impulseVelocity;
+	private float lengthInfluence;
+	private readonly float ImpulseAcceleration = 10.0f;
+	private readonly float ImpulseDecceleration = 2.5f;
+	private readonly float Gravity = 1.2f;
+	private readonly float GravityMultiplier = 1.5f;
+	private readonly float MaxRotationSpeed = 15.0f;
+
+	public override void _PhysicsProcess(double _)
+	{
+		if (Engine.IsEditorHint() || IsSleeping)
+			return;
+
+		UpdateSwing();
+		CallDeferred(MethodName.UpdateAreaPosition);
+	}
+
+	public void OnEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player detection") || Engine.IsEditorHint())
+			return;
+
+		if (Player.IsLaunching && Player.ActiveLauncher == this)
+			return;
+
+		Player.StartIvy(this);
+		isInteractingWithPlayer = true;
+		EmitSignal(SignalName.IvyStarted);
+	}
+
+	public void OnExited(Area3D a)
+	{
+		if (!a.IsInGroup("player detection") || Engine.IsEditorHint())
+			return;
+
+		isInteractingWithPlayer = false;
+	}
 
 	public override float GetLaunchRatio()
 	{
 		if (IsSleeping)
 			return 0;
 
-		if (IsSwingingForward)
+		if (LaunchRatio > 0 && rotationVelocity > 0)
 			return Mathf.Clamp(LaunchRatio + 1, 0f, 1f);
 
 		if (LaunchRatio <= 0)
@@ -65,26 +107,18 @@ public partial class Ivy : Launcher
 			return;
 
 		IsSleeping = true;
-		_animator = GetNode<AnimationMixer>(animator);
-		_animator.Active = true;
 
 		// Adjust swing speed based on length (longer ivys swing slower)
-		float swingSpeed = Mathf.Clamp(8f / length, 0.2f, 1f);
-		_animator.Set(SwingSpeedParameter, swingSpeed);
+		lengthInfluence = Mathf.Clamp(8f / length, 0.5f, 1f);
+		StageSettings.Instance.Respawned += Respawn;
 	}
 
-	public override void _PhysicsProcess(double _)
+	private void Respawn()
 	{
-		if (IsSleeping)
-			return;
-
-		SetRotation();
-
-		if (Engine.IsEditorHint())
-			return;
-
-		UpdateSwing();
-		CallDeferred(MethodName.UpdateAreaPosition);
+		targetImpulse = impulseVelocity = 0;
+		rotationVelocity = 0;
+		LaunchRatio = 0;
+		IsSleeping = true;
 	}
 
 	protected override void LaunchAnimation()
@@ -93,57 +127,57 @@ public partial class Ivy : Launcher
 		Player.Animator.StartSpin(3.0f);
 	}
 
-	public void OnEntered(Area3D a)
-	{
-		if (!a.IsInGroup("player detection") || Engine.IsEditorHint())
-			return;
-
-		GD.Print(Player.ActiveLauncher);
-		if (Player.ActiveLauncher == this)
-			return;
-
-		Player.StartIvy(this);
-		EmitSignal(SignalName.IvyStarted);
-	}
-
-	public void OnExited(Area3D a)
-	{
-		if (!a.IsInGroup("player detection") || Engine.IsEditorHint())
-			return;
-	}
-
-	public float TargetSwingStrength { get; private set; }
-	private float currentSwingStrength;
-	private float swingStrengthVelocity;
-	private readonly float SwingStrengthSmoothing = 0.3f;
 	/// <summary> Adds some force from the player. </summary>
-	public void AddForce(float amount)
+	public void AddImpulseForce(float amount)
 	{
-		TargetSwingStrength = Mathf.Clamp(TargetSwingStrength + amount, 0f, 1f);
+		targetImpulse = Mathf.Clamp(targetImpulse + amount, 0f, 1f);
+		IsSleeping = false;
+	}
 
-		if (IsSleeping && !Mathf.IsZeroApprox(TargetSwingStrength))
+	public void AddGravity()
+	{
+		float gravityAmount = Gravity;
+		if (Mathf.Sign(LaunchRatio) == Mathf.Sign(rotationVelocity))
 		{
-			_animator.Set(SwingSeekParameter, 0f);
-			IsSleeping = false;
+			// Kill speed quickly when not interacting with player
+			if (!isInteractingWithPlayer)
+				rotationVelocity *= 0.9f;
+
+			gravityAmount *= GravityMultiplier;
 		}
 
-		_animator.Set(SwingStrengthParameter, currentSwingStrength);
+		rotationVelocity -= Mathf.Sign(LaunchRatio) * gravityAmount * PhysicsManager.physicsDelta; // Apply gravity
 	}
 
-	private readonly StringName SwingSeekParameter = "parameters/swing_seek/seek_request";
-	private readonly StringName SwingSpeedParameter = "parameters/swing_speed/scale";
-	private readonly StringName SwingStrengthParameter = "parameters/swing_strength/blend_position";
 	private void UpdateSwing()
 	{
-		currentSwingStrength = ExtensionMethods.SmoothDamp(currentSwingStrength, TargetSwingStrength, ref swingStrengthVelocity, SwingStrengthSmoothing);
+		targetImpulse = Mathf.MoveToward(targetImpulse, 0, ImpulseDecceleration * PhysicsManager.physicsDelta);
+		impulseVelocity = Mathf.MoveToward(impulseVelocity, targetImpulse, ImpulseAcceleration * PhysicsManager.physicsDelta);
 
-		if (TargetSwingStrength <= currentSwingStrength && currentSwingStrength < 0.01f)
+		rotationVelocity += impulseVelocity; // Add impulse velocity
+		AddGravity();
+
+		float rotationClampAmount = Mathf.Clamp(1f - Mathf.Abs(LaunchRatio), 0f, 1f);
+		if (Mathf.Sign(LaunchRatio) == Mathf.Sign(rotationVelocity))
+			rotationVelocity = Mathf.Min(rotationVelocity, MaxRotationSpeed * rotationClampAmount);
+
+		float targetRatio = LaunchRatio + rotationVelocity * lengthInfluence * PhysicsManager.physicsDelta;
+		LaunchRatio = Mathf.Clamp(targetRatio, -1f, 1f);
+
+		if (Mathf.IsZeroApprox(targetImpulse))
 		{
-			IsSleeping = true;
-			currentSwingStrength = 0;
+			if (Mathf.Abs(LaunchRatio) < 0.01f && Mathf.Abs(rotationVelocity) < 0.01f)
+			{
+				LaunchRatio = 0;
+				rotationVelocity = 0;
+				IsSleeping = true;
+			}
+			else if (Mathf.Abs(LaunchRatio) < 0.05f && Mathf.Abs(rotationVelocity) < 0.5f &&
+				Mathf.Sign(LaunchRatio) == Mathf.Sign(rotationVelocity))
+			{
+				rotationVelocity *= 0.9f;
+			}
 		}
-
-		_animator.Set(SwingStrengthParameter, currentSwingStrength);
 	}
 
 	#region Setup

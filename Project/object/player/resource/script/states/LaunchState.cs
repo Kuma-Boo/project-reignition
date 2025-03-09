@@ -29,6 +29,7 @@ public partial class LaunchState : PlayerState
 			return false;
 		}
 
+		GD.Print("Launch Started");
 		this.settings = settings;
 		return true;
 	}

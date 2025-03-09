@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bv4u8as8ffj76"]
+[gd_scene load_steps=18 format=3 uid="uid://bv4u8as8ffj76"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_vv3mv"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="2_e171u"]
@@ -12,6 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="7_q81mj"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="10_hmeqa"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="11_j6onj"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="12_mu566"]
+[ext_resource type="Resource" uid="uid://cbakeucrpdafq" path="res://area/4 levitated ruin/act 1/camera/rampage/EnemyCam.tres" id="13_ji7qd"]
 
 [sub_resource type="Curve3D" id="Curve3D_1vxpw"]
 _data = {
@@ -21,7 +23,10 @@ _data = {
 point_count = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_25c7k"]
-size = Vector3(20, 20, 5)
+size = Vector3(20, 20, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_62udo"]
+size = Vector3(150, 150, 5)
 
 [node name="Stage" type="Node"]
 
@@ -44,7 +49,7 @@ path = NodePath("Path")
 curve = SubResource("Curve3D_1vxpw")
 
 [node name="SpawnPosition" type="Node3D" parent="RampageAct"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, -10)
 
 [node name="CharacterSpawn" parent="RampageAct/SpawnPosition" instance=ExtResource("4_uidvt")]
 
@@ -92,11 +97,23 @@ settings = ExtResource("11_j6onj")
 previousSettings = ExtResource("3_qbu3x")
 
 [node name="FireSoul2" parent="RampageAct/Objects" instance=ExtResource("3_rd0hr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.36424e-12, 45.9, 45.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 45, 45)
 fireSoulIndex = 2
 
+[node name="EnemyCamera" parent="RampageAct/Objects" instance=ExtResource("12_mu566")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 60)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="RampageAct/Objects/EnemyCamera"]
+script = ExtResource("10_hmeqa")
+settings = ExtResource("13_ji7qd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Objects/EnemyCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+shape = SubResource("BoxShape3D_62udo")
+
 [node name="FireSoul3" parent="RampageAct/Objects" instance=ExtResource("3_rd0hr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 100)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 99)
 fireSoulIndex = 3
 
 [node name="BlueMajin" parent="RampageAct/Objects" instance=ExtResource("5_qrx72")]

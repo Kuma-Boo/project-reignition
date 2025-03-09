@@ -11,9 +11,9 @@ public partial class IvyState : PlayerState
 	private float animationBlendVelocity;
 	private float animationBlendSmoothing = .2f;
 
-	private readonly float HighSpeedSwingStrength = .8f;
-	private readonly float InitialSwingStrength = .6f;
-	private readonly float AdditionalSwingStrength = .2f;
+	private readonly float HighSpeedSwingStrength = .6f;
+	private readonly float InitialSwingStrength = .4f;
+	private readonly float AdditionalSwingStrength = .35f;
 
 	/// <summary> Determines whether the ivy should have some force automatically applied when starting. </summary>
 	private bool isHighSpeedEntry;
@@ -32,11 +32,9 @@ public partial class IvyState : PlayerState
 		if (isHighSpeedEntry)
 			initialForce = HighSpeedSwingStrength;
 		else
-			initialForce = InitialSwingStrength * (Player.MoveSpeed / Player.Stats.baseGroundSpeed);
-		if (!Trigger.IsSleeping && !Trigger.IsSwingingForward)
-			initialForce *= -1;
+			initialForce = HighSpeedSwingStrength * (Player.MoveSpeed / Player.Stats.baseGroundSpeed);
 
-		Trigger.AddForce(initialForce);
+		Trigger.AddImpulseForce(initialForce);
 
 		Player.MoveSpeed = 0;
 		Player.StartExternal(Trigger, Trigger.LaunchPoint, 0.2f);
@@ -60,6 +58,7 @@ public partial class IvyState : PlayerState
 		if (Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
+			GD.Print("Activated");
 			Trigger.Activate();
 			return null;
 		}
@@ -69,7 +68,7 @@ public partial class IvyState : PlayerState
 			Player.Controller.ResetActionBuffer();
 			Player.Animator.StartIvySwing();
 
-			Trigger.AddForce(CalculateSwingForce());
+			Trigger.AddImpulseForce(CalculateSwingForce());
 		}
 
 		CalculateAnimationBlend();
@@ -85,14 +84,12 @@ public partial class IvyState : PlayerState
 		if (Trigger.IsSleeping)
 			return InitialSwingStrength;
 
-		if (Trigger.IsSwingingForward)
-			return AdditionalSwingStrength;
+		if (Trigger.LaunchRatio >= 0)
+			return AdditionalSwingStrength * (1f - Trigger.LaunchRatio);
 
-		if (Trigger.TargetSwingStrength < AdditionalSwingStrength)
-			return -Trigger.TargetSwingStrength * .5f;
-
-		return -AdditionalSwingStrength;
+		return AdditionalSwingStrength;
 	}
+
 
 	private void CalculateAnimationBlend()
 	{

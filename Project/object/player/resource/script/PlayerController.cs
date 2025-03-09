@@ -741,6 +741,7 @@ public partial class PlayerController : CharacterBody3D
 	private IvyState ivyState;
 	public void StartIvy(Ivy trigger)
 	{
+		GD.Print("Ivy Started");
 		ivyState.Trigger = trigger;
 		ivyState.UpdateHighSpeedEntry();
 		StateMachine.ChangeState(ivyState);
