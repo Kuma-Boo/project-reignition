@@ -1,10 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://b6030p0x15kq0"]
+[gd_scene load_steps=4 format=3 uid="uid://b6030p0x15kq0"]
 
 [ext_resource type="PackedScene" uid="uid://drodrl1ypysnt" path="res://area/4 levitated ruin/object/model/platform/GargoyleStatic.gltf" id="1_svwed"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ngx0r"]
+size = Vector3(1.4, 1.9, 1.4)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u1n46"]
+radius = 0.7
+height = 2.4
+
 [node name="GargoyleStatic" instance=ExtResource("1_svwed")]
 
-[node name="GargoyleStaticCollision" parent="." index="0"]
-visible = false
+[node name="PlatformCollision" type="StaticBody3D" parent="." index="0" groups=["crusher", "floor", "splash jump", "wall"]]
 
-[node name="StaticBody3D" parent="GargoyleStaticCollision" index="0" groups=["splash jump", "wall"]]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlatformCollision" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, 1.05, -5.96046e-08)
+shape = SubResource("BoxShape3D_ngx0r")
+
+[node name="GargoyleCollision" type="StaticBody3D" parent="." index="1" groups=["splash jump", "wall"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GargoyleCollision" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, 2.85, -5.96046e-08)
+shape = SubResource("CapsuleShape3D_u1n46")

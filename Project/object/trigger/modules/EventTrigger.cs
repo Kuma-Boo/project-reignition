@@ -24,6 +24,7 @@ public partial class EventTrigger : StageTriggerModule
 	/// <summary> Only allow event to play once? </summary>
 	private bool isOneShot = true;
 	private bool isActivated;
+	private float animationBlending;
 
 	[ExportGroup("Components")]
 	[Export]
@@ -51,6 +52,7 @@ public partial class EventTrigger : StageTriggerModule
 			{
 				ExtensionMethods.CreateProperty("Trigger Settings/Automatically Respawn", Variant.Type.Bool),
 				ExtensionMethods.CreateProperty("Trigger Settings/Is One Shot", Variant.Type.Bool),
+				ExtensionMethods.CreateProperty("Trigger Settings/Animation Blending", Variant.Type.Float),
 				ExtensionMethods.CreateProperty("Trigger Settings/Player Stand-in", Variant.Type.NodePath)
 			};
 
@@ -77,6 +79,8 @@ public partial class EventTrigger : StageTriggerModule
 				return autoRespawn;
 			case "Trigger Settings/Is One Shot":
 				return isOneShot;
+			case "Trigger Settings/Animation Blending":
+				return animationBlending;
 			case "Trigger Settings/Player Stand-in":
 				return playerStandin;
 
@@ -109,6 +113,9 @@ public partial class EventTrigger : StageTriggerModule
 				break;
 			case "Trigger Settings/Is One Shot":
 				isOneShot = (bool)value;
+				break;
+			case "Trigger Settings/Animation Blending":
+				animationBlending = (float)value;
 				break;
 			case "Trigger Settings/Player Stand-in":
 				playerStandin = (NodePath)value;
@@ -237,7 +244,7 @@ public partial class EventTrigger : StageTriggerModule
 		if (!blendAnimations)
 			animator.Seek(0, true); // Reset animation if necessary
 
-		animator.Play(animation, blendAnimations ? .1f : 0.0f);
+		animator.Play(animation, blendAnimations ? animationBlending : 0.0f);
 		animator.Advance(0);
 
 		if (playerStandin?.IsEmpty != false) // Not a player event -- return early
