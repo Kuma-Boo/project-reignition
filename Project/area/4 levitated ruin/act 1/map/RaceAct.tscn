@@ -1,0 +1,687 @@
+[gd_scene load_steps=29 format=3 uid="uid://b8vx5vuk7fc1e"]
+
+[ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_ld6sm"]
+[ext_resource type="Resource" uid="uid://bo77l8y7n4q4y" path="res://resource/level data/levitated ruin/Act1Race.tres" id="2_4b0he"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_rm6v0"]
+[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="3_mgbh4"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="4_5myds"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="5_k8qnh"]
+[ext_resource type="PackedScene" uid="uid://diq31c5i622qs" path="res://area/4 levitated ruin/object/platform/GargoylePatform.tscn" id="7_dmlfn"]
+[ext_resource type="PackedScene" uid="uid://b6030p0x15kq0" path="res://area/4 levitated ruin/object/platform/GargoyleStatic.tscn" id="8_vx42o"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="9_ym8ar"]
+[ext_resource type="PackedScene" uid="uid://y7w1jrfgsii7" path="res://object/enemy/majin/data/levitated ruin/GreenMajin.tscn" id="10_4v360"]
+[ext_resource type="PackedScene" uid="uid://cggks1kly71mq" path="res://object/enemy/majin/data/levitated ruin/BlueMajin.tscn" id="11_6xikx"]
+[ext_resource type="PackedScene" uid="uid://b724x1op3kfpc" path="res://object/enemy/majin/data/levitated ruin/RedMajin.tscn" id="12_02x86"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="12_ma70f"]
+[ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="14_kmxr2"]
+[ext_resource type="PackedScene" uid="uid://o3wp38uypn2q" path="res://area/4 levitated ruin/object/platform/GrindPillarStatic.tscn" id="15_82ijd"]
+[ext_resource type="PackedScene" uid="uid://de84rofxiblby" path="res://area/4 levitated ruin/object/grindrail/Grindrail04.tscn" id="16_18qlj"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="17_g8ucr"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="18_mmu0i"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="19_y4dgd"]
+[ext_resource type="Script" path="res://object/trigger/modules/JumpTrigger.cs" id="20_n7swa"]
+[ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="21_3och7"]
+[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="21_x27io"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="23_yq5vv"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_o71pg"]
+
+[sub_resource type="Animation" id="Animation_d0n61"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ksouc"]
+resource_name = "event"
+length = 0.66667
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.666667),
+"transitions": PackedFloat32Array(0.5, 3, 1),
+"update": 0,
+"values": [Vector3(0, 2, 0), Vector3(0, 4, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r8ogo"]
+_data = {
+"RESET": SubResource("Animation_d0n61"),
+"event": SubResource("Animation_ksouc")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_syr7h"]
+size = Vector3(20, 20, 5)
+
+[node name="RaceAct" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_ld6sm")]
+Data = ExtResource("2_4b0he")
+
+[node name="SpawnPosition" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="CharacterSpawn" parent="SpawnPosition" instance=ExtResource("2_rm6v0")]
+
+[node name="Rukh1" type="Node3D" parent="."]
+
+[node name="Rings1" type="Node3D" parent="Rukh1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, -23)
+script = ExtResource("3_mgbh4")
+Generate = false
+Source = ExtResource("4_5myds")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Rukh1/Rings1" instance=ExtResource("4_5myds")]
+
+[node name="Child02" parent="Rukh1/Rings1" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="Rukh1/Rings1" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="Rukh1/Rings1" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="Rukh1/Rings1" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="SpikePanelGroup1" type="Node3D" parent="Rukh1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.4, -43)
+
+[node name="SpikePanelL" parent="Rukh1/SpikePanelGroup1" instance=ExtResource("5_k8qnh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.4)
+
+[node name="SpikePanelR" parent="Rukh1/SpikePanelGroup1" instance=ExtResource("5_k8qnh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.4)
+
+[node name="SpikePanelGroup2" type="Node3D" parent="Rukh1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2.1, -52)
+
+[node name="SpikePanelL" parent="Rukh1/SpikePanelGroup2" instance=ExtResource("5_k8qnh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.4)
+
+[node name="SpikePanelR" parent="Rukh1/SpikePanelGroup2" instance=ExtResource("5_k8qnh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.4)
+
+[node name="SpikePanelGroup3" type="Node3D" parent="Rukh1"]
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, 1, 1.35, -62)
+
+[node name="SpikePanelL" parent="Rukh1/SpikePanelGroup3" instance=ExtResource("5_k8qnh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.4)
+
+[node name="SpikePanelR" parent="Rukh1/SpikePanelGroup3" instance=ExtResource("5_k8qnh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.4)
+
+[node name="SpikePanelGroup4" type="Node3D" parent="Rukh1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2.1, -72)
+
+[node name="SpikePanelL" parent="Rukh1/SpikePanelGroup4" instance=ExtResource("5_k8qnh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.4)
+
+[node name="SpikePanelR" parent="Rukh1/SpikePanelGroup4" instance=ExtResource("5_k8qnh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.4)
+
+[node name="SpikePanelGroup5" type="Node3D" parent="Rukh1"]
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, 0, 4.4, -86)
+
+[node name="SpikePanelL" parent="Rukh1/SpikePanelGroup5" instance=ExtResource("5_k8qnh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.4)
+
+[node name="SpikePanelM" parent="Rukh1/SpikePanelGroup5" instance=ExtResource("5_k8qnh")]
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.4)
+
+[node name="SpikePanelR" parent="Rukh1/SpikePanelGroup5" instance=ExtResource("5_k8qnh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
+"State Lengths/inactive" = 0.3
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.3, 0.2, 0.4)
+
+[node name="GargoylePlatform1" parent="Rukh1" instance=ExtResource("7_dmlfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, -107)
+
+[node name="GargoyleStatic" parent="Rukh1/GargoylePlatform1" instance=ExtResource("8_vx42o")]
+
+[node name="SpikeBall" parent="Rukh1/GargoylePlatform1" instance=ExtResource("9_ym8ar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = 1.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="Rings2" type="Node3D" parent="Rukh1"]
+transform = Transform3D(1, 0, 0, 0, 0.99863, -0.052336, 0, 0.052336, 0.99863, 0, 5.6, -118)
+script = ExtResource("3_mgbh4")
+Generate = false
+Source = ExtResource("4_5myds")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Rukh1/Rings2" instance=ExtResource("4_5myds")]
+
+[node name="Child02" parent="Rukh1/Rings2" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="Rukh1/Rings2" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="Rukh1/Rings2" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="Rukh1/Rings2" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="GargoylePlatform2" parent="Rukh1" instance=ExtResource("7_dmlfn")]
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, -2.5, 5.5, -126)
+
+[node name="GargoyleStatic" parent="Rukh1/GargoylePlatform2" instance=ExtResource("8_vx42o")]
+
+[node name="GargoylePlatform3" parent="Rukh1" instance=ExtResource("7_dmlfn")]
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, 2.5, 5.5, -126)
+
+[node name="GargoyleStatic" parent="Rukh1/GargoylePlatform3" instance=ExtResource("8_vx42o")]
+
+[node name="GargoylePlatform4" parent="Rukh1" instance=ExtResource("7_dmlfn")]
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, 0, 6.675, -138)
+
+[node name="GargoyleStatic" parent="Rukh1/GargoylePlatform4" instance=ExtResource("8_vx42o")]
+
+[node name="SpikeBall" parent="Rukh1/GargoylePlatform4" instance=ExtResource("9_ym8ar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+Movement/Mode = 2
+"Movement/Cycle Length" = -1.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 2.0
+
+[node name="GreenMajin1" parent="Rukh1" instance=ExtResource("10_4v360")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 11.675, -157)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 25
+
+[node name="GreenMajin2" parent="Rukh1" instance=ExtResource("10_4v360")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 11.675, -157)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 25
+
+[node name="BlueMajin1" parent="Rukh1" instance=ExtResource("11_6xikx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 12.075, -161)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 20
+
+[node name="RedMajin1" parent="Rukh1" instance=ExtResource("12_02x86")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 10, -176)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 20
+"Attack Settings/Attack Instantly" = true
+rangeOverride = 30
+
+[node name="RichRing" parent="Rukh1" instance=ExtResource("12_ma70f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 9.5, -176)
+
+[node name="BlueMajin2" parent="Rukh1" instance=ExtResource("11_6xikx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 9.5, -192.7)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(8, 2, -3)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 30
+
+[node name="BlueMajin3" parent="Rukh1" instance=ExtResource("11_6xikx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 11.7, -198.7)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-10, 0, 2)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 30
+
+[node name="BlueMajin4" parent="Rukh1" instance=ExtResource("11_6xikx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 15.7, -206.7)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-2, 5, 30)
+"Spawn Settings/Spawn In Offset" = Vector3(-5, 0, -10)
+"Spawn Settings/Spawn Out Offset" = Vector3(-5, 0, -5)
+rangeOverride = 30
+
+[node name="InvisibleGrindrail" parent="Rukh1" instance=ExtResource("14_kmxr2")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -3, 16.7, -217.7)
+railLength = 30
+
+[node name="Rings" type="Node3D" parent="Rukh1/InvisibleGrindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -5)
+script = ExtResource("3_mgbh4")
+Generate = false
+Source = ExtResource("4_5myds")
+Amount = 7
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Rukh1/InvisibleGrindrail/Rings" instance=ExtResource("4_5myds")]
+
+[node name="Child02" parent="Rukh1/InvisibleGrindrail/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="Rukh1/InvisibleGrindrail/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="Rukh1/InvisibleGrindrail/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="Rukh1/InvisibleGrindrail/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child06" parent="Rukh1/InvisibleGrindrail/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child07" parent="Rukh1/InvisibleGrindrail/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="SpikeBall" parent="Rukh1/InvisibleGrindrail" instance=ExtResource("9_ym8ar")]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 1, -28)
+Movement/Mode = 0
+
+[node name="RedMajin2" parent="Rukh1" instance=ExtResource("12_02x86")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 9.5, -238)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 20
+"Attack Settings/Attack Instantly" = true
+rangeOverride = 40
+
+[node name="GrindPillarStatic1" parent="Rukh1" instance=ExtResource("15_82ijd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.3, -267)
+
+[node name="GrindPillarStatic2" parent="Rukh1" instance=ExtResource("15_82ijd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.8, -281)
+
+[node name="Grindrail" parent="Rukh1" instance=ExtResource("16_18qlj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.3, -267)
+
+[node name="Rings" type="Node3D" parent="Rukh1/Grindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -30)
+script = ExtResource("3_mgbh4")
+Generate = false
+Source = ExtResource("4_5myds")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Rukh1/Grindrail/Rings" instance=ExtResource("4_5myds")]
+
+[node name="Child02" parent="Rukh1/Grindrail/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="Rukh1/Grindrail/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="Rukh1/Grindrail/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="Rukh1/Grindrail/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Spring" parent="Rukh1/Grindrail" instance=ExtResource("17_g8ucr")]
+transform = Transform3D(-0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, -0.766044, 0, 0.2, -58.6)
+middleHeight = 15.0
+finalHeight = -2.0
+distance = 10.0
+
+[node name="RichRing" parent="Rukh1/Grindrail/Spring" instance=ExtResource("12_ma70f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 4.5)
+
+[node name="PearlRing" type="Node3D" parent="Rukh1/Grindrail/Spring"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 4.5)
+script = ExtResource("3_mgbh4")
+Generate = false
+Source = ExtResource("18_mmu0i")
+Amount = 8
+Shape = 1
+Orientation = 1
+"Ring Size" = 1.0
+"Ring Ratio" = 1.0
+
+[node name="Child01" parent="Rukh1/Grindrail/Spring/PearlRing" instance=ExtResource("18_mmu0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Child02" parent="Rukh1/Grindrail/Spring/PearlRing" instance=ExtResource("18_mmu0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707107, 0.707107, 0)
+
+[node name="Child03" parent="Rukh1/Grindrail/Spring/PearlRing" instance=ExtResource("18_mmu0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.37114e-08, 1, 0)
+
+[node name="Child04" parent="Rukh1/Grindrail/Spring/PearlRing" instance=ExtResource("18_mmu0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.707107, 0.707107, 0)
+
+[node name="Child05" parent="Rukh1/Grindrail/Spring/PearlRing" instance=ExtResource("18_mmu0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
+
+[node name="Child06" parent="Rukh1/Grindrail/Spring/PearlRing" instance=ExtResource("18_mmu0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.707107, -0.707107, 0)
+
+[node name="Child07" parent="Rukh1/Grindrail/Spring/PearlRing" instance=ExtResource("18_mmu0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19249e-08, -1, 0)
+
+[node name="Child08" parent="Rukh1/Grindrail/Spring/PearlRing" instance=ExtResource("18_mmu0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.707107, -0.707107, 0)
+
+[node name="BlueMajin" parent="Rukh1" instance=ExtResource("11_6xikx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 13.3, -329)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-10, 0, 40)
+"Spawn Settings/Spawn In Offset" = Vector3(5, 0, -16)
+"Spawn Settings/Spawn Out Offset" = Vector3(-10, 3, -5)
+
+[node name="InvisibleGrindrail2" parent="Rukh1" instance=ExtResource("14_kmxr2")]
+transform = Transform3D(0.766044, -0.219846, 0.604023, 0, 0.939693, 0.34202, -0.642788, -0.262003, 0.719846, -2, 13, -328)
+railLength = 80
+
+[node name="Rings" type="Node3D" parent="Rukh1/InvisibleGrindrail2"]
+transform = Transform3D(1, 0, 0, -1.49012e-08, 1, 0, 2.98023e-08, -1.49012e-08, 1, 0, 1.1, -15)
+script = ExtResource("3_mgbh4")
+Generate = false
+Source = ExtResource("4_5myds")
+Amount = 12
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="Rukh1/InvisibleGrindrail2/Rings" instance=ExtResource("4_5myds")]
+
+[node name="Child02" parent="Rukh1/InvisibleGrindrail2/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="Rukh1/InvisibleGrindrail2/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="Rukh1/InvisibleGrindrail2/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="Rukh1/InvisibleGrindrail2/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child06" parent="Rukh1/InvisibleGrindrail2/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child07" parent="Rukh1/InvisibleGrindrail2/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child08" parent="Rukh1/InvisibleGrindrail2/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.5)
+
+[node name="Child09" parent="Rukh1/InvisibleGrindrail2/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child10" parent="Rukh1/InvisibleGrindrail2/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13.5)
+
+[node name="Child11" parent="Rukh1/InvisibleGrindrail2/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child12" parent="Rukh1/InvisibleGrindrail2/Rings" instance=ExtResource("4_5myds")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.5)
+
+[node name="Jump" parent="Rukh1/InvisibleGrindrail2" instance=ExtResource("19_y4dgd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.62939e-06, -79)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rukh1/InvisibleGrindrail2/Jump"]
+shape = SubResource("SphereShape3D_o71pg")
+
+[node name="Node3D" type="Node3D" parent="Rukh1/InvisibleGrindrail2/Jump"]
+transform = Transform3D(1, 0, 0, -1.49012e-08, 1, 0, 2.98023e-08, -4.47035e-08, 1, 1.64191, -4.74081, -4.35989)
+script = ExtResource("20_n7swa")
+jumpHeight = 2.0
+autoAlign = true
+
+[node name="Rukh2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -20, -380)
+
+[node name="BlueMajin1" parent="Rukh2" instance=ExtResource("11_6xikx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 5, -2)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(10, -3, 10)
+"Defeat Settings/Local Transform" = true
+
+[node name="BlueMajin2" parent="Rukh2" instance=ExtResource("11_6xikx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -13)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(15, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, -5)
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(-5, 1, 4)
+"Defeat Settings/Local Transform" = true
+
+[node name="RedMajin1" parent="Rukh2" instance=ExtResource("12_02x86")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.5, -43)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-25, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 30
+"Attack Settings/Attack Instantly" = true
+
+[node name="RedMajin2" parent="Rukh2" instance=ExtResource("12_02x86")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.3, -61)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(25, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 3.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 30
+"Attack Settings/Attack Instantly" = true
+
+[node name="GargoyleGroup1" type="Node3D" parent="Rukh2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 3.5, -80)
+
+[node name="Event" type="Node3D" parent="Rukh2/GargoyleGroup1" node_paths=PackedStringArray("animator")]
+script = ExtResource("21_x27io")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("../AnimationPlayer")
+
+[node name="Stone" parent="Rukh2/GargoyleGroup1" instance=ExtResource("21_3och7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="GargoylePlatform" parent="Rukh2/GargoyleGroup1" instance=ExtResource("7_dmlfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="StaticBody3D" parent="Rukh2/GargoyleGroup1/GargoylePlatform" index="1" groups=["crusher"]]
+
+[node name="GargoyleStatic" parent="Rukh2/GargoyleGroup1/GargoylePlatform" instance=ExtResource("8_vx42o")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Rukh2/GargoyleGroup1"]
+root_node = NodePath("../GargoylePlatform")
+callback_mode_process = 0
+libraries = {
+"": SubResource("AnimationLibrary_r8ogo")
+}
+
+[node name="GargoyleGroup2" type="Node3D" parent="Rukh2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 4.5, -90)
+
+[node name="Event" type="Node3D" parent="Rukh2/GargoyleGroup2" node_paths=PackedStringArray("animator")]
+script = ExtResource("21_x27io")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("../AnimationPlayer")
+
+[node name="Stone" parent="Rukh2/GargoyleGroup2" instance=ExtResource("21_3och7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="GargoylePlatform" parent="Rukh2/GargoyleGroup2" instance=ExtResource("7_dmlfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="GargoyleStatic" parent="Rukh2/GargoyleGroup2/GargoylePlatform" instance=ExtResource("8_vx42o")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Rukh2/GargoyleGroup2"]
+root_node = NodePath("../GargoylePlatform")
+callback_mode_process = 0
+libraries = {
+"": SubResource("AnimationLibrary_r8ogo")
+}
+
+[node name="GargoyleGroup3" type="Node3D" parent="Rukh2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 4.4, -100)
+
+[node name="Event" type="Node3D" parent="Rukh2/GargoyleGroup3" node_paths=PackedStringArray("animator")]
+script = ExtResource("21_x27io")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Player Stand-in" = NodePath("")
+animator = NodePath("../AnimationPlayer")
+
+[node name="Stone" parent="Rukh2/GargoyleGroup3" instance=ExtResource("21_3och7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="GargoylePlatform" parent="Rukh2/GargoyleGroup3" instance=ExtResource("7_dmlfn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="GargoyleStatic" parent="Rukh2/GargoyleGroup3/GargoylePlatform" instance=ExtResource("8_vx42o")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Rukh2/GargoyleGroup3"]
+root_node = NodePath("../GargoylePlatform")
+callback_mode_process = 0
+libraries = {
+"": SubResource("AnimationLibrary_r8ogo")
+}
+
+[node name="Goal" parent="Rukh2" instance=ExtResource("23_yq5vv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13, -111)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rukh2/Goal"]
+shape = SubResource("BoxShape3D_syr7h")
+
+[connection signal="EventFinished" from="Static/Visuals/Rukh2Event" to="Static/Visuals/Rukh2" method="Activate"]
+[connection signal="EventFinished" from="Static/Visuals/Rukh2Event" to="Static/Visuals/Rukh2Event" method="Deactivate"]
+[connection signal="Shattered" from="Rukh2/GargoyleGroup1/Stone" to="Rukh2/GargoyleGroup1/Event" method="Activate"]
+[connection signal="Shattered" from="Rukh2/GargoyleGroup2/Stone" to="Rukh2/GargoyleGroup2/Event" method="Activate"]
+[connection signal="Shattered" from="Rukh2/GargoyleGroup3/Stone" to="Rukh2/GargoyleGroup3/Event" method="Activate"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]
+[editable path="Rukh2/GargoyleGroup1/GargoylePlatform"]
+[editable path="Rukh2/GargoyleGroup2/GargoylePlatform"]
+[editable path="Rukh2/GargoyleGroup3/GargoylePlatform"]
