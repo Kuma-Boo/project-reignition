@@ -53,7 +53,7 @@ public partial class Ivy : Launcher
 	private readonly float ImpulseDecceleration = 2.5f;
 	private readonly float Gravity = 1.2f;
 	private readonly float GravityMultiplier = 1.5f;
-	private readonly float MaxRotationSpeed = 15.0f;
+	private readonly float MaxRotationSpeed = 10.0f;
 
 	public override void _PhysicsProcess(double _)
 	{
@@ -110,7 +110,6 @@ public partial class Ivy : Launcher
 
 		// Adjust swing speed based on length (longer ivys swing slower)
 		lengthInfluence = Mathf.Clamp(20f / length, 0.5f, 5f);
-		GD.Print(lengthInfluence);
 		StageSettings.Instance.Respawned += Respawn;
 	}
 
@@ -151,7 +150,6 @@ public partial class Ivy : Launcher
 				// Kill speed quickly when not interacting with player
 				rotationVelocity *= 0.9f;
 			}
-
 		}
 
 		rotationVelocity -= Mathf.Sign(LaunchRatio) * gravityAmount * PhysicsManager.physicsDelta; // Apply gravity
@@ -166,7 +164,6 @@ public partial class Ivy : Launcher
 		AddGravity();
 
 		float rotationClampAmount = Mathf.Clamp(1f - Mathf.Abs(LaunchRatio), 0f, 1f);
-		GD.PrintT(LaunchRatio, rotationVelocity, MaxRotationSpeed * rotationClampAmount / lengthInfluence);
 		if (Mathf.Sign(LaunchRatio) == Mathf.Sign(rotationVelocity))
 			rotationVelocity = Mathf.Min(rotationVelocity, MaxRotationSpeed * rotationClampAmount / lengthInfluence);
 
