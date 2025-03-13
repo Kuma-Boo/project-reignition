@@ -76,18 +76,17 @@ public partial class Runtime : Node
 	}
 
 	#region Pearl Stuff
+	[Export] public PackedScene pearlScene;
 	public SphereShape3D PearlCollisionShape = new();
 	public SphereShape3D RichPearlCollisionShape = new();
-	[Export]
-	public PackedScene pearlScene;
 
 	/// <summary> Pool of auto-collected pearls used whenever enemies are defeated or itemboxes are opened. </summary>
 	private readonly Array<Gameplay.Objects.Pearl> pearlPool = [];
 	private readonly Array<Gameplay.Objects.Pearl> tweeningPearls = [];
 	private readonly Array<Tween> pearlTweens = [];
 
-	private const float PearlCollisionSize = .4f;
-	private const float RichPearlCollisionSize = .6f;
+	private readonly float PearlCollisionSize = .4f;
+	private readonly float RichPearlCollisionSize = .6f;
 
 	public void UpdatePearlCollisionShapes(float sizeMultiplier = 1f)
 	{
@@ -172,6 +171,16 @@ public partial class Runtime : Node
 			tween.Kill();
 
 		pearlTweens.Remove(tween);
+	}
+
+	public SphereShape3D RingCollisionShape = new();
+	public SphereShape3D RichRingCollisionShape = new();
+	private readonly float RingCollisionSize = .5f;
+	private readonly float RichRingCollisionSize = .7f;
+	public void UpdateRingCollisionShapes(float sizeMultiplier = 1f)
+	{
+		RingCollisionShape.Radius = RingCollisionSize * sizeMultiplier;
+		RichRingCollisionShape.Radius = RichRingCollisionSize * sizeMultiplier;
 	}
 	#endregion
 

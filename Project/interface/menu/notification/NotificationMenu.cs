@@ -63,11 +63,11 @@ public partial class NotificationMenu : Control
 		if (!isProcessing)
 			return;
 
-		if (Input.IsActionJustPressed("button_jump"))
+		if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select"))
 			ShowUnlock();
 	}
 
-	private void OnExperienceClosed()
+	private void StartNotifications()
 	{
 		// Loop through save data keys to see if their unlock status has changed
 		for (int i = 0; i < (int)SkillKey.Max; i++)
@@ -139,16 +139,20 @@ public partial class NotificationMenu : Control
 
 	private void FinishMenu()
 	{
+		TransitionData data = new()
+		{
+			inSpeed = 0.5f,
+			outSpeed = 0.5f,
+			color = Colors.Black,
+			disableAutoTransition = string.IsNullOrEmpty(TransitionManager.instance.QueuedScene)
+		};
+
+		if (data.disableAutoTransition) // Restarting -- speed up transition
+			data.inSpeed = 0.2f;
+
 		// Connect the queued scene to transition signals
 		TransitionManager.QueueSceneChange(TransitionManager.instance.QueuedScene);
 		// Load to the next scene
-		TransitionManager.StartTransition(new()
-		{
-			color = Colors.Black,
-			inSpeed = 0.5f,
-			outSpeed = 0.5f,
-			loadAsynchronously = true,
-			disableAutoTransition = string.IsNullOrEmpty(TransitionManager.instance.QueuedScene),
-		});
+		TransitionManager.StartTransition(data);
 	}
 }

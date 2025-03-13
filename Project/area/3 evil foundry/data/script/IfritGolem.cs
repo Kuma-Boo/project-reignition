@@ -170,17 +170,26 @@ public partial class IfritGolem : Node3D
 		EnterIdle();
 	}
 
+	private readonly StringName IntroCutsceneID = "ef_boss_intro";
+	private readonly StringName DefeatCutsceneID = "ef_boss_defeat";
+
 	public override void _PhysicsProcess(double _)
 	{
 		switch (currentState)
 		{
 			case GolemState.Introduction:
-				if (Input.IsActionJustPressed("button_pause"))
+				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
+					SaveManager.ActiveGameData.CanSkipCutscene(IntroCutsceneID))
+				{
 					FinishIntroduction();
+				}
 				break;
 			case GolemState.Defeated:
-				if (Input.IsActionJustPressed("button_pause"))
+				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
+					SaveManager.ActiveGameData.CanSkipCutscene(DefeatCutsceneID))
+				{
 					AnimationTree.Set(DefeatSeek, 20);
+				}
 				break;
 			case GolemState.Idle:
 				ProcessIdle();
@@ -242,6 +251,7 @@ public partial class IfritGolem : Node3D
 		});
 
 		TransitionManager.instance.TransitionProcess += StartBattle;
+		SaveManager.ActiveGameData.AllowSkippingCutscene(IntroCutsceneID);
 	}
 
 	private void StartBattle()
@@ -526,13 +536,13 @@ public partial class IfritGolem : Node3D
 	private void SetInteractionProcessed()
 	{
 		isInteractionProcessed = true;
-		Player.AttackStateChange += ResetInteractionProcessed;
+		Player.AttackStateChanged += ResetInteractionProcessed;
 	}
 
 	private void ResetInteractionProcessed()
 	{
 		isInteractionProcessed = false;
-		Player.AttackStateChange -= ResetInteractionProcessed;
+		Player.AttackStateChanged -= ResetInteractionProcessed;
 	}
 
 	private void UpdateInteraction()
@@ -659,6 +669,7 @@ public partial class IfritGolem : Node3D
 		AnimationTree.Active = false;
 		Player.Activate();
 		StageSettings.Instance.FinishLevel(true);
+		SaveManager.ActiveGameData.AllowSkippingCutscene(DefeatCutsceneID);
 	}
 	#endregion
 

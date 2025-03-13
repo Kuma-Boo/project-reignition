@@ -159,13 +159,29 @@ namespace Project.Gameplay.Triggers
 
 		public void OnEntered(Area3D a)
 		{
-			if (!a.IsInGroup("player detection")) return;
+			if (!a.IsInGroup("player detection"))
+				return;
+
+			if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Failed ||
+				StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Success)
+			{
+				return;
+			}
+
 			OnEntered();
 		}
 
 		public void OnExited(Area3D a)
 		{
-			if (!a.IsInGroup("player detection")) return;
+			if (!a.IsInGroup("player detection"))
+				return;
+
+			if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Failed ||
+				StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Success)
+			{
+				return;
+			}
+
 			OnExited();
 		}
 

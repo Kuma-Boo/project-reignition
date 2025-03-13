@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://bt32kmhyoo7ec"]
+[gd_scene load_steps=49 format=3 uid="uid://bt32kmhyoo7ec"]
 
 [ext_resource type="Script" path="res://interface/menu/skill select/script/SkillSelect.cs" id="1_v1nov"]
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="2_ww16u"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cqp20lub7h6aq" path="res://interface/menu/skill select/texture/skill menu.png" id="4_x4q03"]
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="5_q6eds"]
 [ext_resource type="LabelSettings" uid="uid://bx53haw8tuhx" path="res://interface/font/SkillSelectFont.tres" id="6_4a5gt"]
+[ext_resource type="Texture2D" uid="uid://dq3e58qnn7y56" path="res://interface/menu/skill select/texture/augment arrow.png" id="7_2pdxw"]
 [ext_resource type="AudioStream" uid="uid://bc6pmkxr1e25r" path="res://sound/sfx/system/skill equip.wav" id="7_5j0l1"]
 [ext_resource type="AudioStream" uid="uid://fjiifn0tycil" path="res://sound/sfx/system/skill ring save.wav" id="7_n4imj"]
 [ext_resource type="AudioStream" uid="uid://dmf8plsfsakc6" path="res://sound/sfx/system/skill unequip.wav" id="8_rnu1p"]
@@ -1594,7 +1595,7 @@ _data = {
 "unequip": SubResource("Animation_tf8ok")
 }
 
-[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "description", "scrollbar", "skillPointFill", "levelLabel", "skillPointLabel", "alertAnimator", "alertLabel", "animator")]
+[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "description", "scrollbar", "skillPointFill", "levelLabel", "skillPointLabel", "alertAnimator", "alertLabel", "sortTypeLabel", "sortOrderCursor", "animator")]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 15
@@ -1613,6 +1614,8 @@ levelLabel = NodePath("Content/Header/LevelLabel")
 skillPointLabel = NodePath("Content/Header/SPValue")
 alertAnimator = NodePath("AlertMenu/AnimationPlayer")
 alertLabel = NodePath("AlertMenu/Menu/Parent/Text/Label")
+sortTypeLabel = NodePath("Content/SortingMethodLabel")
+sortOrderCursor = NodePath("Content/SortArrow")
 submenus = Array[NodePath]([NodePath("")])
 animator = NodePath("AnimationPlayer")
 metadata/_edit_lock_ = true
@@ -1642,7 +1645,6 @@ modulate = Color(1, 1, 1, 0)
 position = Vector2(640, 480)
 
 [node name="Header" type="Sprite2D" parent="Content/Window"]
-modulate = Color(1, 1, 1, 0)
 position = Vector2(0, -304)
 scale = Vector2(2.4, 2.25)
 texture = ExtResource("4_x4q03")
@@ -1650,7 +1652,6 @@ region_enabled = true
 region_rect = Rect2(0, 232, 512, 40)
 
 [node name="Body" type="Sprite2D" parent="Content/Window"]
-modulate = Color(1, 1, 1, 0)
 scale = Vector2(2.4, 2.25)
 texture = ExtResource("4_x4q03")
 region_enabled = true
@@ -1793,12 +1794,33 @@ offset_bottom = 883.0
 grow_horizontal = 2
 theme_override_constants/separation = -1
 
+[node name="SortingMethodLabel" type="Label" parent="Content"]
+layout_mode = 2
+offset_left = 112.0
+offset_top = 144.0
+offset_right = 816.0
+offset_bottom = 216.0
+scale = Vector2(0.75, 0.75)
+text = "sys_sort_default"
+label_settings = ExtResource("6_4a5gt")
+vertical_alignment = 1
+uppercase = true
+
+[node name="SortArrow" type="TextureRect" parent="Content"]
+layout_mode = 0
+offset_left = 1088.0
+offset_top = 144.0
+offset_right = 1144.0
+offset_bottom = 200.0
+texture = ExtResource("7_2pdxw")
+stretch_mode = 5
+
 [node name="NavigationButtons" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 448.0
+offset_left = 64.0
 offset_top = 760.0
 offset_right = -380.0
 offset_bottom = -256.0
@@ -1809,6 +1831,12 @@ alignment = 2
 layout_mode = 2
 ActionKey = &"sys_presets"
 inputKey = &"button_pause"
+
+[node name="Sort" parent="NavigationButtons" instance=ExtResource("9_kp51v")]
+layout_mode = 2
+ActionKey = &"sys_sort"
+inputKey = &"button_speedbreak"
+fallbackKey = &"ui_sort"
 
 [node name="Select" parent="NavigationButtons" instance=ExtResource("9_kp51v")]
 layout_mode = 2
@@ -1863,6 +1891,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/_edit_group_ = true
 metadata/_edit_lock_ = true
 
 [node name="Fade" type="ColorRect" parent="AlertMenu"]
@@ -1873,7 +1902,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.588235)
-metadata/_edit_lock_ = true
 
 [node name="Menu" type="Control" parent="AlertMenu"]
 layout_mode = 1

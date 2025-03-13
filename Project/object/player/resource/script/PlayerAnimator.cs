@@ -94,6 +94,8 @@ public partial class PlayerAnimator : Node3D
 		StopCrouching(0f);
 	}
 
+	public void SeekOneshotAnimation(float time) => animationTree.Set(OneshotSeek, time);
+
 	/// <summary>
 	/// Cancels the oneshot animation early.
 	/// </summary>
@@ -316,6 +318,33 @@ public partial class PlayerAnimator : Node3D
 		BrakeStatePlayback.Travel(isFacingRight ? "r" + BrakeStopState : "l" + BrakeStopState);
 	}
 
+	private readonly StringName QuickStepTrigger = "parameters/ground_tree/quick_step_trigger/request";
+	private readonly StringName QuickStepTransition = "parameters/ground_tree/quick_step_transition/transition_request";
+	private readonly StringName QuickStepSpeed = "parameters/ground_tree/quick_step_speed/scale";
+	public void StartQuickStep(bool isSteppingRight)
+	{
+		animationTree.Set(QuickStepTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animationTree.Set(QuickStepTransition, isSteppingRight ? RightConstant : LeftConstant);
+		animationTree.Set(QuickStepSpeed, 1.5f);
+	}
+
+	private AnimationNodeStateMachinePlayback LightDashStatePlayback => animationTree.Get(LightDashPlayback).Obj as AnimationNodeStateMachinePlayback;
+	private readonly StringName LightDashPlayback = "parameters/air_tree/light_dash_state/playback";
+	private readonly StringName LightDashTrigger = "parameters/air_tree/light_dash_trigger/request";
+	private readonly StringName LightDashSpeed = "parameters/air_tree/light_dash_speed/scale";
+	public void StartLightDashAnimation()
+	{
+		animationTree.Set(LightDashTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animationTree.Set(LightDashSpeed, 2f);
+		LightDashStatePlayback.Start("start");
+	}
+
+	public void StopLightDashAnimation()
+	{
+		LightDashStatePlayback.Start("stop");
+		animationTree.Set(LightDashSpeed, 1f);
+	}
+
 	/// <summary> Blend from -1 <-> 1 of how much the player is turning. </summary>
 	private float groundTurnRatio;
 	/// <summary> How much should the turning animation be smoothed by? </summary>
@@ -364,6 +393,8 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(StompTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(QuickStepTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(LightDashTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
 	public void JumpAnimation()
@@ -579,6 +610,7 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName DriftDirectionTransition = "parameters/drift_tree/direction_transition/transition_request";
 	private readonly StringName DriftStartState = "drift-start";
 	private readonly StringName DriftLaunchState = "drift-launch";
+	private readonly StringName DriftFailState = "drift-fail";
 
 	public void StartDrift(bool isDriftFacingRight)
 	{
@@ -588,6 +620,13 @@ public partial class PlayerAnimator : Node3D
 
 		SetStateXfade(.2f); // Transition into drift
 		animationTree.Set(StateTransition, DriftState);
+	}
+
+	/// <summary> Called when drift is failed. </summary>
+	public void FailDrift()
+	{
+		ActiveDriftStatePlayback.Travel(DriftFailState);
+		SetStateXfade(0.1f); // Remove xfade in case player wants to jump early
 	}
 
 	/// <summary> Called when drift is performed. </summary>

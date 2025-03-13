@@ -173,7 +173,7 @@ public partial class GrindState : PlayerState
 		if (ActiveGrindRail == grindRail) // Already grinding on the target rail
 			return false;
 
-		if (Player.IsTeleporting)
+		if (Player.IsTeleporting || Player.IsLightDashing)
 			return false;
 
 		if (Player.VerticalSpeed > 0f) // Player can't snap to grind rails when moving upwards

@@ -71,6 +71,7 @@ public partial class PlayerSkillController : Node3D
 	{
 		// Expand hitbox if skills is equipped
 		Runtime.Instance.UpdatePearlCollisionShapes(SkillRing.IsSkillEquipped(SkillKey.PearlRange) ? 5 : 1);
+		Runtime.Instance.UpdateRingCollisionShapes(SkillRing.IsSkillEquipped(SkillKey.RingRange) ? 5 : 1);
 
 		InitializeCrestSkills();
 		// Update crest of flame's trail color
@@ -304,7 +305,9 @@ public partial class PlayerSkillController : Node3D
 			}
 			timeBreakDrainTimer--;
 
-			if (IsSoulGaugeEmpty || !Input.IsActionPressed("button_timebreak")) // Cancel time break?
+			bool disablingTimeBreak = (SaveManager.Config.useHoldBreakMode && !Input.IsActionPressed("button_timebreak")) ||
+				(!SaveManager.Config.useHoldBreakMode && Input.IsActionJustPressed("button_timebreak"));
+			if (IsSoulGaugeEmpty || disablingTimeBreak) // Cancel time break?
 				ToggleTimeBreak();
 
 			return;
@@ -344,7 +347,9 @@ public partial class PlayerSkillController : Node3D
 				}
 
 				ModifySoulGauge(-1); // Drain soul gauge
-				if (IsSoulGaugeEmpty || !Input.IsActionPressed("button_speedbreak"))// Check whether we shoudl cancel speed break
+				bool disablingSpeedBreak = (SaveManager.Config.useHoldBreakMode && !Input.IsActionPressed("button_speedbreak")) ||
+					(!SaveManager.Config.useHoldBreakMode && Input.IsActionJustPressed("button_speedbreak"));
+				if (IsSoulGaugeEmpty || disablingSpeedBreak)// Check whether we shoudl cancel speed break
 					ToggleSpeedBreak();
 
 				if (!IsSpeedBreakOverrideActive && Player.IsOnGround) // Speed is only applied while on the ground
@@ -451,6 +456,7 @@ public partial class PlayerSkillController : Node3D
 		HeadsUpDisplay.Instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);
 	}
 
+	public void EnableBreakSkills() => IsTimeBreakEnabled = IsSpeedBreakEnabled = true;
 	public void DisableBreakSkills() => IsTimeBreakEnabled = IsSpeedBreakEnabled = false;
 
 	public int SoulPower { get; private set; } // Current soul power

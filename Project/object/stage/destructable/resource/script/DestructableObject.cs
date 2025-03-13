@@ -236,9 +236,9 @@ public partial class DestructableObject : Node3D
 	{
 		if (isShattered) return;
 
-		if (!a.IsInGroup("player") && !a.IsInGroup("player detection") && !a.IsInGroup("stackable"))
+		if (!a.IsInGroup("player") && !a.IsInGroup("player detection"))
 		{
-			if (FlagSetting.HasFlag(ShatterFlags.ObjectCollision))
+			if (!a.IsInGroup("ignore destructable") && FlagSetting.HasFlag(ShatterFlags.ObjectCollision))
 				Shatter();
 
 			return;
@@ -278,6 +278,10 @@ public partial class DestructableObject : Node3D
 		if (FlagSetting.HasFlag(ShatterFlags.AttackSkill) && Player.AttackState != PlayerController.AttackStates.None)
 		{
 			Shatter();
+
+			if (Player.IsSpinJump)
+				Player.StartSpinJumpBounce();
+
 			return;
 		}
 

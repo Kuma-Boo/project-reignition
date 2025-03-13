@@ -6,6 +6,8 @@ public partial class Hazard : Node3D
 {
 	/// <summary> Should this hitbox be disabled? </summary>
 	[Export] public bool isDisabled;
+	/// <summary> Should this hitbox ignore character interactions when speedbreak is active? </summary>
+	[Export] public bool ignoreSpeedbreakingCharacters;
 
 	private bool isInteractingWithPlayer;
 	protected PlayerController Player => StageSettings.Player;
@@ -18,6 +20,9 @@ public partial class Hazard : Node3D
 	protected void ProcessCollision()
 	{
 		if (isDisabled || !isInteractingWithPlayer)
+			return;
+
+		if (ignoreSpeedbreakingCharacters && Player.Skills.IsSpeedBreakActive)
 			return;
 
 		if (!Player.StartKnockback())

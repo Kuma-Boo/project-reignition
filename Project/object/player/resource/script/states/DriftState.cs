@@ -45,7 +45,7 @@ public partial class DriftState : PlayerState
 	private float driftAnimationTimer;
 	/// <summary> Length of animation when player succeeds. </summary>
 	private const float LaunchAnimationLength = .4f;
-	/// <summary> Length of animation when player faceplants. </summary>
+	/// <summary> Length of animation when player fails a drift. </summary>
 	private const float FailAnimationLength = .8f;
 
 	public override void EnterState()
@@ -146,10 +146,7 @@ public partial class DriftState : PlayerState
 			return false;
 
 		if (Mathf.IsZeroApprox(driftAnimationTimer)) // Entry Jump
-		{
 			StartJumpFail();
-			return true;
-		}
 
 		return true;
 	}
@@ -197,6 +194,7 @@ public partial class DriftState : PlayerState
 		{
 			driftStatus = DriftStatus.TimingFail;
 			driftAnimationTimer = FailAnimationLength;
+			Player.Animator.FailDrift();
 			Trigger.FadeSfx();
 			return;
 		}

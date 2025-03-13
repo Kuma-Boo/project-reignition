@@ -399,16 +399,24 @@ public partial class StageSettings : Node3D
 
 	public float CurrentTime { get; private set; } // How long has the player been on this level? (In Seconds)
 	public string DisplayTime { get; private set; } // Current time formatted in mm:ss.ff
-	private void UpdateTime()
+	private void UpdateTime(bool skipPhysicsTick = false)
 	{
 		if (!IsLevelIngame || !Interface.PauseMenu.AllowPausing) return;
 
-		CurrentTime += PhysicsManager.normalDelta; // Add current time
+		if (!skipPhysicsTick)
+			CurrentTime += PhysicsManager.normalDelta; // Add current time
 		DisplayTime = ExtensionMethods.FormatTime(CurrentTime);
 		if (Data.MissionTimeLimit != 0 && CurrentTime >= Data.MissionTimeLimit) // Time's up!
 			FinishLevel(false);
 
 		EmitSignal(SignalName.TimeChanged);
+	}
+
+	/// <summary> Artifically add time. Used when skipping cutscenes. </summary>
+	public void AddTime(float amount)
+	{
+		CurrentTime += amount;
+		UpdateTime(true);
 	}
 
 	public bool[] fireSoulCheckpoints = new bool[3];
