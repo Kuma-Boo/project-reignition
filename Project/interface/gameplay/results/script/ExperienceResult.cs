@@ -7,38 +7,29 @@ namespace Project.Interface.Menus;
 
 public partial class ExperienceResult : Control
 {
-	[Signal]
-	public delegate void FinishedEventHandler();
+	/// <summary> Amount of exp accumulated from repeat playthroughs of a level. </summary>
+	public static int AccumulatedExp { get; private set; }
 
-	[Export]
-	private Control expFill;
-	[Export]
-	private Label expLabel;
-	[Export]
-	private Label scoreLabel;
+	[Signal] public delegate void FinishedEventHandler();
+
+	[Export] private Control expFill;
+	[Export] private Label expLabel;
+	[Export] private Label scoreLabel;
 	/// <summary> Label for the skill bonus. </summary>
-	[Export]
-	private Label skillLabel;
+	[Export] private Label skillLabel;
 	/// <summary> Label for the first clear bonus. </summary>
-	[Export]
-	private Label missionLabel;
+	[Export] private Label missionLabel;
+	/// <summary> Label for accumulated exp. </summary>
+	[Export] private Label accumulatedLabel;
 	/// <summary> Label for the player's current level. </summary>
-	[Export]
-	private Label levelLabel;
-	[Export]
-	private Label levelGainLabel;
-	[Export]
-	private Label skillPointLabel;
-	[Export]
-	private Label skillPointGainLabel;
-	[Export]
-	private Label soulLabel;
-	[Export]
-	private Label soulGainLabel;
-	[Export]
-	private BGMPlayer bgm;
-	[Export]
-	private AnimationPlayer animator;
+	[Export] private Label levelLabel;
+	[Export] private Label levelGainLabel;
+	[Export] private Label skillPointLabel;
+	[Export] private Label skillPointGainLabel;
+	[Export] private Label soulLabel;
+	[Export] private Label soulGainLabel;
+	[Export] private BGMPlayer bgm;
+	[Export] private AnimationPlayer animator;
 	private bool isSkippingLevel;
 	private bool isSkippingResults;
 	private readonly string IncreaseAnimation = "increase";
@@ -62,8 +53,12 @@ public partial class ExperienceResult : Control
 	private int skillExp;
 	/// <summary> Number to draw on the mission label. </summary>
 	private int missionExp;
+	/// <summary> Number to draw on the accumulated label. </summary>
+	private int accumulatedExp;
 	/// <summary> Is the first clear bonus being added? </summary>
 	private bool useMissionExp;
+	/// <summary> Is there accumulated EXP? </summary>
+	private bool useAccumulatedExp;
 
 	/// <summary> Is level up data already being shown? </summary>
 	private bool isLevelUpShown;
@@ -93,6 +88,7 @@ public partial class ExperienceResult : Control
 		SaveManager.ActiveGameData.level = CalculateLevel(SaveManager.ActiveGameData.exp); // Update from old save data, just in case
 		SaveManager.ActiveGameData.level = Mathf.Min(SaveManager.ActiveGameData.level, MaxLevel);
 		useMissionExp = SaveManager.ActiveGameData.GetClearStatus(Stage.Data.LevelID) != SaveManager.GameData.LevelStatus.Cleared;
+		useAccumulatedExp = AccumulatedExp != 0;
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -155,6 +151,7 @@ public partial class ExperienceResult : Control
 		{
 			isSkippingLevel = false;
 			interpolatedExp = endExp;
+			AccumulatedExp = 0;
 		}
 		else
 		{
@@ -180,9 +177,18 @@ public partial class ExperienceResult : Control
 		if (useMissionExp)
 			missionExp = Math.Clamp(Stage.CurrentEXP + Stage.TotalScore + Stage.Data.FirstClearBonus - addedExp, 0, Stage.Data.FirstClearBonus);
 
+		if (useAccumulatedExp)
+		{
+			int targetAccumulatedExp = Stage.CurrentEXP + Stage.TotalScore + AccumulatedExp - addedExp;
+			if (useMissionExp)
+				targetAccumulatedExp += Stage.Data.FirstClearBonus;
+			accumulatedExp = Math.Clamp(targetAccumulatedExp, 0, AccumulatedExp);
+		}
+
 		scoreLabel.Text = ExtensionMethods.FormatMenuNumber(scoreExp);
 		skillLabel.Text = ExtensionMethods.FormatMenuNumber(skillExp);
 		missionLabel.Text = ExtensionMethods.FormatMenuNumber(missionExp);
+		accumulatedLabel.Text = ExtensionMethods.FormatMenuNumber(accumulatedExp);
 	}
 
 	private void SkipAnimations()
@@ -199,6 +205,7 @@ public partial class ExperienceResult : Control
 		// Skip everything
 		SkipAnimations();
 		SaveManager.ActiveGameData.exp = targetExp;
+		AccumulatedExp = 0;
 		interpolatedExp = targetExp;
 		expInterpolation = 1.0f;
 		ProcessLevelUp();
@@ -215,6 +222,7 @@ public partial class ExperienceResult : Control
 			{
 				SaveManager.ActiveGameData.level = MaxLevel;
 				SaveManager.ActiveGameData.exp = targetExp;
+				AccumulatedExp = 0;
 				break;
 			}
 
@@ -243,9 +251,9 @@ public partial class ExperienceResult : Control
 		int soulGaugeGain = maxSoulPower - StageSettings.Player.Skills.MaxSoulPower;
 		int skillPointGain = maxSkillPoints - SaveManager.ActiveSkillRing.MaxSkillPoints;
 
-		levelGainLabel.Text = $"+{levelsGained.ToString("00")}";
-		skillPointGainLabel.Text = $"+{skillPointGain.ToString("000")}";
-		soulGainLabel.Text = $"+{soulGaugeGain.ToString("000")}";
+		levelGainLabel.Text = $"+{levelsGained:00}";
+		skillPointGainLabel.Text = $"+{skillPointGain:000}";
+		soulGainLabel.Text = $"+{soulGaugeGain:000}";
 
 		SaveManager.ActiveSkillRing.UpdateTotalSkillPoints();
 
@@ -261,8 +269,16 @@ public partial class ExperienceResult : Control
 			animator.Play(LevelUpAnimation);
 	}
 
-	private void OnResultsClosed()
+	private void StartExperienceResults()
 	{
+		if (string.IsNullOrEmpty(TransitionManager.instance.QueuedScene))
+		{
+			// Player is restarting a level -- accumulate exp and skip experience screen
+			AccumulatedExp += Stage.TotalScore + Stage.CurrentEXP;
+			EmitSignal(SignalName.Finished);
+			return;
+		}
+
 		levelupRequirement = CalculateLevelUpRequirement(SaveManager.ActiveGameData.level);
 		previousLevelupRequirement = CalculateLevelUpRequirement(SaveManager.ActiveGameData.level - 1);
 
@@ -279,6 +295,10 @@ public partial class ExperienceResult : Control
 				targetExp += Stage.Data.FirstClearBonus;
 		}
 		missionLabel.GetParent<Control>().Visible = useMissionExp;
+
+		if (useAccumulatedExp) // Add EXP from previous runs
+			targetExp += AccumulatedExp;
+		accumulatedLabel.GetParent<Control>().Visible = useAccumulatedExp;
 
 		if (targetExp == startingExp) // No EXP was gained
 		{

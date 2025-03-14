@@ -255,7 +255,6 @@ public partial class DestructableObject : Node3D
 
 	protected virtual void ProcessPlayerCollision()
 	{
-		GD.Print($"{Name} is Processing Player Collision");
 		if (isShattered)
 			return;
 
