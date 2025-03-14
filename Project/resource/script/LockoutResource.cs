@@ -195,6 +195,8 @@ public partial class LockoutResource : Resource
 	{
 		OnJump = 1,
 		OnLand = 2,
+		OnAction = 4,
+		OnAttack = 8,
 	}
 
 	/// <summary> Disable certain actions while active? </summary>

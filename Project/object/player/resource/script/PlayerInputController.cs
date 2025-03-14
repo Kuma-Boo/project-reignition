@@ -91,13 +91,20 @@ public partial class PlayerInputController : Node
 		}
 
 		// Allow player to jump out of certain lockouts (i.e. DriftLockout)
-		GD.Print(Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump));
 		if (Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump))
 			UpdateJumpBuffer();
 		else
 			ResetJumpBuffer();
 
-		ResetActionBuffer();
+		if (Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnAction))
+			UpdateActionBuffer();
+		else
+			ResetActionBuffer();
+
+		if (Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnAttack))
+			UpdateAttackBuffer();
+		else
+			ResetAttackBuffer();
 	}
 
 	private void UpdateJumpBuffer()
