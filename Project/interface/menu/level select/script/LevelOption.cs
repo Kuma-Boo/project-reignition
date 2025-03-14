@@ -14,14 +14,12 @@ public partial class LevelOption : Control
 	public LevelDataResource data;
 
 	[ExportGroup("Components")]
-	[Export]
-	private Label missionLabel;
-	[Export]
-	private Node2D fireSoulParent;
-	[Export]
-	private Sprite2D[] fireSoulSprites;
-	[Export]
-	private AnimationPlayer animator;
+	[Export] private Label missionLabel;
+	[Export] private Control fireSoulParent;
+	[Export] private TextureRect[] fireSoulSprites;
+	[Export] private Texture2D fireSoulSprite;
+	[Export] private Texture2D noFireSoulSprite;
+	[Export] private AnimationPlayer animator;
 
 	private readonly string NoMedalAnimation = "no-medal";
 	private readonly string GoldAnimation = "gold";
@@ -104,7 +102,7 @@ public partial class LevelOption : Control
 			for (int i = 0; i < fireSoulSprites.Length; i++)
 			{
 				bool isCollected = SaveManager.ActiveGameData.IsFireSoulCollected(data.LevelID, i + 1);
-				fireSoulSprites[i].RegionRect = new(new(fireSoulSprites[i].RegionRect.Position.X, isCollected ? 140 : 100), fireSoulSprites[i].RegionRect.Size);
+				fireSoulSprites[i].Texture = isCollected ? fireSoulSprite : noFireSoulSprite;
 			}
 		}
 
