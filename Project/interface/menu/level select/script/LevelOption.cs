@@ -16,7 +16,7 @@ public partial class LevelOption : Control
 	[ExportGroup("Components")]
 	[Export] private Label missionLabel;
 	[Export] private Control fireSoulParent;
-	[Export] private TextureRect[] fireSoulSprites;
+	[Export] private TextureRect[] fireSoulRects;
 	[Export] private Texture2D fireSoulSprite;
 	[Export] private Texture2D noFireSoulSprite;
 	[Export] private AnimationPlayer animator;
@@ -99,10 +99,10 @@ public partial class LevelOption : Control
 
 		if (data.HasFireSouls)
 		{
-			for (int i = 0; i < fireSoulSprites.Length; i++)
+			for (int i = 0; i < fireSoulRects.Length; i++)
 			{
 				bool isCollected = SaveManager.ActiveGameData.IsFireSoulCollected(data.LevelID, i + 1);
-				fireSoulSprites[i].Texture = isCollected ? fireSoulSprite : noFireSoulSprite;
+				fireSoulRects[i].Texture = isCollected ? fireSoulSprite : noFireSoulSprite;
 			}
 		}
 
