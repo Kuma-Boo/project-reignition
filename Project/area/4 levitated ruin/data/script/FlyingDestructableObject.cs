@@ -15,7 +15,6 @@ public partial class FlyingDestructableObject : DestructableObject
 	protected override void SetUp()
 	{
 		initialTransform = rotationRoot.Transform;
-
 		base.SetUp();
 	}
 
@@ -34,7 +33,7 @@ public partial class FlyingDestructableObject : DestructableObject
 
 		if (!isSleeping)
 		{
-			rotationRoot.Position += this.Forward() * flyingSpeed * PhysicsManager.physicsDelta;
+			rotationRoot.GlobalPosition += this.Forward() * flyingSpeed * PhysicsManager.physicsDelta;
 			currentLifetime += PhysicsManager.physicsDelta;
 			if (currentLifetime >= lifetime)
 				Deactivate();

@@ -127,7 +127,6 @@ instance_shader_parameters/path_length = 1000.0
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_065fl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, -1350)
 
 [node name="CullingTrigger" type="Node3D" parent="MainAct"]
 
@@ -262,6 +261,7 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.8, 4
 
 [node name="DashPanel2" parent="MainAct/Rukh1" instance=ExtResource("8_qbwj7")]
 transform = Transform3D(-0.965926, -0.00451702, 0.25878, 0, 0.999848, 0.0174524, -0.258819, 0.0168577, -0.965779, -2, 4.9, -115.4)
+alignToPath = false
 
 [node name="GargoyleStatic3" parent="MainAct/Rukh1" instance=ExtResource("18_7b7on")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.9, 5.219, -124)
@@ -1560,7 +1560,7 @@ stateLengths = PackedFloat32Array(0.2, 0, 0.4)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.8, -170.5)
 "Enter Mode" = 0
 
-[node name="GrindPillarFly" parent="MainAct/Rukh3/RoundPillarFlyTrigger1" instance=ExtResource("33_0ylmb")]
+[node name="RoundPillarFly" parent="MainAct/Rukh3/RoundPillarFlyTrigger1" instance=ExtResource("33_0ylmb")]
 transform = Transform3D(7.54979e-08, 0, -1, 0, 1, 0, 1, 0, 7.54979e-08, 5, 0.849998, -27.6)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/RoundPillarFlyTrigger1"]
@@ -1571,8 +1571,8 @@ shape = SubResource("BoxShape3D_ypvwq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.6, -193)
 "Enter Mode" = 0
 
-[node name="GrindPillarFly" parent="MainAct/Rukh3/RoundPillarFlyTrigger2" instance=ExtResource("33_0ylmb")]
-transform = Transform3D(7.54979e-08, 0, -1, 0, 1, 0, 1, 0, 7.54979e-08, 5, 0, -7.2)
+[node name="RoundPillarFly" parent="MainAct/Rukh3/RoundPillarFlyTrigger2" instance=ExtResource("33_0ylmb")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 5, 0, -7.20001)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/RoundPillarFlyTrigger2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1594,9 +1594,8 @@ distance = 16.0
 [node name="Cam" type="Node3D" parent="MainAct/Rukh3/UpperPath/Switch/Spring"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 10, -1)
 script = ExtResource("8_xcxgd")
-transitionType = 1
+transitionTime = 0.0
 settings = ExtResource("36_jok85")
-previousSettings = ExtResource("37_pcwhs")
 
 [node name="FireSoul" parent="MainAct/Rukh3/UpperPath" instance=ExtResource("37_65231")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -1)
@@ -1650,8 +1649,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 22.5, 3.6691)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25, 4.20651)
 
 [node name="CameraTrigger" parent="MainAct/Rukh3/UpperPath" instance=ExtResource("5_yejv7")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 30, -18)
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 25, -18)
 "Enter Mode" = 0
+
+[node name="FightCam" type="Node3D" parent="MainAct/Rukh3/UpperPath/CameraTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -19.649, -19)
+script = ExtResource("8_xcxgd")
+transitionType = 1
+settings = ExtResource("37_pcwhs")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/UpperPath/CameraTrigger"]
 shape = SubResource("BoxShape3D_6g03t")
@@ -2471,6 +2476,7 @@ smoothPausing = true
 root = NodePath("BlueMajin")
 
 [node name="BlueMajin" parent="MainAct/Rukh4/MovingMajin3" instance=ExtResource("11_427b8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
@@ -3217,14 +3223,13 @@ shape = SubResource("BoxShape3D_x4cke")
 [connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger" to="MainAct/Rukh3/RoundPillarFlyTrigger/GrindPillarFly2" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger" to="MainAct/Rukh3/RoundPillarFlyTrigger/GreenMajin1" method="Spawn"]
 [connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger" to="MainAct/Rukh3/RoundPillarFlyTrigger/GreenMajin2" method="Spawn"]
-[connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger1" to="MainAct/Rukh3/RoundPillarFlyTrigger1/GrindPillarFly" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger2" to="MainAct/Rukh3/RoundPillarFlyTrigger2/GrindPillarFly" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger1" to="MainAct/Rukh3/RoundPillarFlyTrigger1/RoundPillarFly" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger2" to="MainAct/Rukh3/RoundPillarFlyTrigger2/RoundPillarFly" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh3/UpperPath/Switch" to="MainAct/Rukh3/UpperPath/Switch/Spring" method="ShowLauncher"]
 [connection signal="Activated" from="MainAct/Rukh3/UpperPath/Switch" to="MainAct/Rukh3/UpperPath/SwitchCullingTrigger" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Rukh3/UpperPath/Switch" to="MainAct/Rukh3/UpperPath/Switch/Spring" method="HideLauncher"]
 [connection signal="Deactivated" from="MainAct/Rukh3/UpperPath/Switch" to="MainAct/Rukh3/UpperPath/SwitchCullingTrigger" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Rukh3/UpperPath/Switch/Spring" to="MainAct/Rukh3/UpperPath/Switch/Spring/Cam" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh3/UpperPath/CameraTrigger" to="MainAct/Rukh3/UpperPath/Switch/Spring/Cam" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Rukh3/GargoylePlatform/Gargoyle" to="MainAct/Rukh3/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Rukh4/GrindPillarFlyTrigger" to="MainAct/Rukh4/GrindPillarFlyTrigger/GrindPillarFly1" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh4/GrindPillarFlyTrigger" to="MainAct/Rukh4/GrindPillarFlyTrigger/GrindPillarFly2" method="Activate"]
