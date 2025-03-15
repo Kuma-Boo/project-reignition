@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=58 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
@@ -45,7 +45,9 @@
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="32_p08w8"]
 [ext_resource type="PackedScene" uid="uid://dopa8mdu5d47j" path="res://area/4 levitated ruin/object/platform/RoundPillarFly.tscn" id="33_0ylmb"]
 [ext_resource type="PackedScene" uid="uid://h1nyheprfepp" path="res://area/4 levitated ruin/object/grindrail/Grindrail03.tscn" id="34_35j7t"]
+[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="36_jok85"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="37_65231"]
+[ext_resource type="Resource" uid="uid://cstpuwfenywgv" path="res://area/4 levitated ruin/act 1/camera/main/GargoyleFightCam.tres" id="37_pcwhs"]
 [ext_resource type="PackedScene" path="res://object/enemy/majin/data/levitated ruin/RedMajin.tscn" id="40_chfyb"]
 [ext_resource type="PackedScene" uid="uid://dk16orwwj2o0" path="res://area/4 levitated ruin/object/platform/SquarePillarStatic.tscn" id="50_iy6ic"]
 
@@ -55,6 +57,20 @@ size = Vector3(20, 40, 2.5)
 [sub_resource type="Curve" id="Curve_k0wty"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 0.4), 0.0, 0.0, 0, 0, Vector2(1, 0.3), 0.0, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="Curve" id="Curve_h1c5x"]
+min_value = -0.3
+max_value = 0.0
+_data = [Vector2(0, 0), 0.0, -1.79283, 0, 0, Vector2(0.2, -0.18), 0.0, 0.0, 0, 0, Vector2(0.6, 0), 0.0, 0.0, 0, 0, Vector2(1, -0.06), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_ltabp"]
+max_value = 5.0
+_data = [Vector2(0, 0), 0.0, 2.71411, 0, 0, Vector2(1, 4.20651), 5.4821, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6g03t"]
+size = Vector3(20, 5, 20)
 
 [sub_resource type="Curve3D" id="Curve3D_xwhik"]
 _data = {
@@ -136,7 +152,7 @@ shape = SubResource("BoxShape3D_ypvwq")
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.46, -27)
 
 [node name="Rings1" type="Node3D" parent="MainAct/Rukh1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -27)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -30)
 script = ExtResource("9_v4ux6")
 Generate = false
 Source = ExtResource("10_250we")
@@ -321,7 +337,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 10, -180)
 "Enter Mode" = 0
 
 [node name="SquarePillarFly" parent="MainAct/Rukh1/SquarePillarFlyTrigger2" instance=ExtResource("7_x6tsb")]
-transform = Transform3D(0.996195, -0.0871557, 0, 0.0865061, 0.988769, -0.121869, 0.0106216, 0.121406, 0.992547, -1.8, 6, -29)
+transform = Transform3D(0.991478, -0.0974053, -0.0865062, 0.0865061, 0.988769, -0.121869, 0.0974053, 0.113347, 0.98877, -1.8, 6, -29)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh1/SquarePillarFlyTrigger2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -576,13 +592,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -15)
 "Enter Mode" = 0
 
 [node name="GrindPillarFly1" parent="MainAct/Rukh2/GrindPillarFlyTrigger" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0.549999, -20)
+transform = Transform3D(1, 0, 0, 0, 0.999391, 0.0348995, 0, -0.0348995, 0.999391, -1.25, 0.55, -20)
 
 [node name="GrindPillarFly2" parent="MainAct/Rukh2/GrindPillarFlyTrigger" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.549999, -20)
+transform = Transform3D(1, 0, 0, 0, 0.999391, 0.0348995, 0, -0.0348995, 0.999391, 0, 0.549999, -20)
 
 [node name="GrindPillarFly3" parent="MainAct/Rukh2/GrindPillarFlyTrigger" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 0.549999, -20)
+transform = Transform3D(1, 0, 0, 0, 0.999391, 0.0348995, 0, -0.0348995, 0.999391, 1.25, 0.55, -20)
 
 [node name="SquarePillarFly" parent="MainAct/Rukh2/GrindPillarFlyTrigger" instance=ExtResource("7_x6tsb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -1.03029e-13, 0, 1, 2.5, 0.8, -39)
@@ -616,6 +632,7 @@ toggleMode = true
 [node name="Gate" parent="MainAct/Rukh2/GateGroup" instance=ExtResource("16_cr60c")]
 transform = Transform3D(1.5, 0, 0, 0, 4, 0, 0, 0, 1.5, 0, 2.5, -60)
 "Trigger Settings/Animation Blending" = 0.0
+respawnAnimation = 2
 
 [node name="RichPearls1" type="Node3D" parent="MainAct/Rukh2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 2.5, -67)
@@ -994,490 +1011,638 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.33765, -0.186402, -11.2526)
 [node name="Rukh3" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -100, -700)
 
-[node name="Rings11" type="Node3D" parent="MainAct/Rukh3"]
-transform = Transform3D(0.979254, 0.060273, 0.193468, -0.0632506, 0.997957, 0.00924533, -0.192516, -0.0212905, 0.981063, 0.131176, 1.9912, -14.0581)
+[node name="Rings1" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.992548, -0.121869, 0, 0.12187, 0.992546, 0, 1, -14)
 script = ExtResource("9_v4ux6")
 Generate = false
 Source = ExtResource("10_250we")
 Amount = 5
-Shape = 2
-Path = NodePath("../../../Static/Paths/Rukh3")
-"Path Progress Offset" = 0.0
-"Disable Path Y" = false
+Shape = 0
+Orientation = 0
 Spacing = 2.0
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="MainAct/Rukh3/Rings11" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -1.11759e-08, 0, 3.72529e-09, 1, -1.86265e-09, 0, 1.86265e-09, 1, 0, 0, 0)
+[node name="Child01" parent="MainAct/Rukh3/Rings1" instance=ExtResource("10_250we")]
 
-[node name="Child02" parent="MainAct/Rukh3/Rings11" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -1.11759e-08, 0, 3.72529e-09, 1, -1.86265e-09, 0, 1.86265e-09, 1, 0.382111, 0.0856476, -1.96088)
+[node name="Child02" parent="MainAct/Rukh3/Rings1" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
-[node name="Child03" parent="MainAct/Rukh3/Rings11" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -1.11759e-08, 0, 3.72529e-09, 1, -1.86265e-09, 0, 1.86265e-09, 1, 0.764198, 0.171936, -3.92169)
+[node name="Child03" parent="MainAct/Rukh3/Rings1" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 
-[node name="Child04" parent="MainAct/Rukh3/Rings11" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -1.11759e-08, 0, 3.72529e-09, 1, -1.86265e-09, 0, 1.86265e-09, 1, 1.14622, 0.258865, -5.88239)
+[node name="Child04" parent="MainAct/Rukh3/Rings1" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
-[node name="Child05" parent="MainAct/Rukh3/Rings11" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -1.11759e-08, 0, 3.72529e-09, 1, -1.86265e-09, 0, 1.86265e-09, 1, 1.52823, 0.346481, -7.8432)
+[node name="Child05" parent="MainAct/Rukh3/Rings1" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
-[node name="GrindPillarFlyTrigger3" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 5.96046e-08, 0, 1, 0.964542, 1.61932, -16.506)
+[node name="GrindPillarFlyTrigger1" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 5.96046e-08, 0, 1, 0, 0.5, -16)
 "Enter Mode" = 0
 
-[node name="GrindPillarFly" parent="MainAct/Rukh3/GrindPillarFlyTrigger3" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999222, 0.0394517, -5.96046e-08, -0.0394517, 0.999222, 0.754887, -0.187027, -15.4371)
+[node name="GrindPillarFly1" parent="MainAct/Rukh3/GrindPillarFlyTrigger1" instance=ExtResource("8_6mhfy")]
+transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871557, 0, -0.0871557, 0.996195, 1.5, 0.7, -16)
+
+[node name="GrindPillarFly2" parent="MainAct/Rukh3/GrindPillarFlyTrigger1" instance=ExtResource("8_6mhfy")]
+transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871557, 0, -0.0871557, 0.996195, -1.5, 0.7, -16)
+
+[node name="GrindPillarFly3" parent="MainAct/Rukh3/GrindPillarFlyTrigger1" instance=ExtResource("8_6mhfy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -20)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/GrindPillarFlyTrigger1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+
+[node name="Rings2" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, -0.75, 2, -44)
+script = ExtResource("9_v4ux6")
+Generate = false
+Source = ExtResource("10_250we")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Rukh3/Rings2" instance=ExtResource("10_250we")]
+
+[node name="Child02" parent="MainAct/Rukh3/Rings2" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="MainAct/Rukh3/Rings2" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="MainAct/Rukh3/Rings2" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="MainAct/Rukh3/Rings2" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="GrindPillarFlyTrigger2" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -42)
+"Enter Mode" = 0
+
+[node name="GrindPillarFly1" parent="MainAct/Rukh3/GrindPillarFlyTrigger2" instance=ExtResource("8_6mhfy")]
+transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871557, 0, -0.0871557, 0.996195, -2.2, 0, -20)
+
+[node name="GrindPillarStatic" parent="MainAct/Rukh3/GrindPillarFlyTrigger2" instance=ExtResource("15_oja87")]
+transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871557, 0, -0.0871557, 0.996195, -0.75, 0, -20)
+
+[node name="GrindPillarFly2" parent="MainAct/Rukh3/GrindPillarFlyTrigger2" instance=ExtResource("8_6mhfy")]
+transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871557, 0, -0.0871557, 0.996195, 0.75, 0, -20)
+
+[node name="GrindPillarFly3" parent="MainAct/Rukh3/GrindPillarFlyTrigger2" instance=ExtResource("8_6mhfy")]
+transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871557, 0, -0.0871557, 0.996195, 2.2, 0, -20)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/GrindPillarFlyTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+
+[node name="DashPanel" parent="MainAct/Rukh3" instance=ExtResource("8_qbwj7")]
+transform = Transform3D(-1, 9.89654e-09, -8.68608e-08, 0, 0.993572, 0.113203, 8.74228e-08, 0.113203, -0.993571, -0.75, 1.5, -64)
+
+[node name="GrindPillarFlyTrigger3" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 5.96046e-08, 0, 1, 0, 1.7, -60)
+"Enter Mode" = 0
+
+[node name="GrindPillarFly1" parent="MainAct/Rukh3/GrindPillarFlyTrigger3" instance=ExtResource("8_6mhfy")]
+transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871557, 0, -0.0871557, 0.996195, -1.5, 1.4, -17)
 
 [node name="GrindPillarFly2" parent="MainAct/Rukh3/GrindPillarFlyTrigger3" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999461, -0.0328412, -5.96046e-08, 0.0328412, 0.999461, -2.82461, -0.187027, -15.4371)
+transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871557, 0, -0.0871557, 0.996195, 0, 1.39999, -17)
 
 [node name="GrindPillarFly3" parent="MainAct/Rukh3/GrindPillarFlyTrigger3" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999461, -0.0328412, -5.96046e-08, 0.0328412, 0.999461, -1.09887, -0.0813065, -20.0607)
+transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871557, 0, -0.0871557, 0.996195, 1.5, 1.4, -17)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/GrindPillarFlyTrigger3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ypvwq")
 
-[node name="Rings12" type="Node3D" parent="MainAct/Rukh3"]
-transform = Transform3D(0.979254, 0.060273, 0.193468, -0.0632506, 0.997957, 0.00924533, -0.192516, -0.0212905, 0.981063, 0.131176, 2.34486, -43.7022)
+[node name="Rings3" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.98481, -0.173648, 0, 0.173649, 0.984808, 1.5, 2.6, -70)
 script = ExtResource("9_v4ux6")
 Generate = false
 Source = ExtResource("10_250we")
 Amount = 5
-Shape = 2
-Path = NodePath("../../../Static/Paths/Rukh3")
-"Path Progress Offset" = 0.0
-"Disable Path Y" = false
-Spacing = 2.1
+Shape = 0
+Orientation = 0
+Spacing = 2.0
 "Horizontal Offset" = null
-"Vertical Offset" = null
+"Vertical Offset" = SubResource("Curve_h1c5x")
 
-[node name="Child01" parent="MainAct/Rukh3/Rings12" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -1.11759e-08, 0, 3.72529e-09, 1, -1.86265e-09, 0, 1.86265e-09, 1, 1.52588e-05, 1.52588e-05, -0.00012207)
+[node name="Child01" parent="MainAct/Rukh3/Rings3" instance=ExtResource("10_250we")]
 
-[node name="Child02" parent="MainAct/Rukh3/Rings12" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -1.11759e-08, 0, 3.72529e-09, 1, -1.86265e-09, 0, 1.86265e-09, 1, 0.399445, 0.113503, -2.05725)
+[node name="Child02" parent="MainAct/Rukh3/Rings3" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.174228, -2)
 
-[node name="Child03" parent="MainAct/Rukh3/Rings12" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -1.11759e-08, 0, 3.72529e-09, 1, -1.86265e-09, 0, 1.86265e-09, 1, 0.798508, 0.231499, -4.11389)
+[node name="Child03" parent="MainAct/Rukh3/Rings3" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0466667, -4)
 
-[node name="Child04" parent="MainAct/Rukh3/Rings12" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -1.11759e-08, 0, 3.72529e-09, 1, -1.86265e-09, 0, 1.86265e-09, 1, 1.19696, 0.355835, -6.16937)
+[node name="Child04" parent="MainAct/Rukh3/Rings3" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0189844, -6)
 
-[node name="Child05" parent="MainAct/Rukh3/Rings12" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -1.11759e-08, 0, 3.72529e-09, 1, -1.86265e-09, 0, 1.86265e-09, 1, 1.59433, 0.490204, -8.22266)
+[node name="Child05" parent="MainAct/Rukh3/Rings3" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, -8)
 
-[node name="GrindPillarFlyTrigger4" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 5.96046e-08, 0, 1, -1.45962, 1.63477, -62.6337)
+[node name="SquarePillarFlyTrigger1" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -70)
 "Enter Mode" = 0
 
-[node name="GrindPillarFly4" parent="MainAct/Rukh3/GrindPillarFlyTrigger4" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999461, -0.0328412, -5.96046e-08, 0.0328412, 0.999461, -0.578415, -0.2724, 1.44568)
+[node name="SquarePillarFly1" parent="MainAct/Rukh3/SquarePillarFlyTrigger1" instance=ExtResource("7_x6tsb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 2, -15)
 
-[node name="GrindPillarFly5" parent="MainAct/Rukh3/GrindPillarFlyTrigger4" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999413, -0.0342541, -5.96046e-08, 0.0342541, 0.999413, 0.847237, -0.2724, 1.44568)
+[node name="SquarePillarFly2" parent="MainAct/Rukh3/SquarePillarFlyTrigger1" instance=ExtResource("7_x6tsb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -1.03029e-13, 0, 1, 1.6, 2, -15)
 
-[node name="GrindPillarFly6" parent="MainAct/Rukh3/GrindPillarFlyTrigger4" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999461, -0.0328412, -5.96046e-08, 0.0328412, 0.999461, 2.22806, -0.2724, 1.44568)
+[node name="SquarePillarFly3" parent="MainAct/Rukh3/SquarePillarFlyTrigger1" instance=ExtResource("7_x6tsb")]
+transform = Transform3D(1, 0, 0, 0, 0.999391, -0.0348995, 0, 0.0348995, 0.999391, 0, 3, -25)
 
-[node name="GrindPillarFly7" parent="MainAct/Rukh3/GrindPillarFlyTrigger4" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.996733, -0.080773, -5.96046e-08, 0.080773, 0.996733, 2.22806, -0.2724, 1.44568)
-
-[node name="GrindPillarFly8" parent="MainAct/Rukh3/GrindPillarFlyTrigger4" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 1, -0.000785388, -5.96046e-08, 0.000785388, 1, 3.54799, -0.2724, 1.44568)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/GrindPillarFlyTrigger4"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/SquarePillarFlyTrigger1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ypvwq")
 
-[node name="DashPanel" parent="MainAct/Rukh3" instance=ExtResource("8_qbwj7")]
-transform = Transform3D(-0.999968, 0, -0.00801093, -0.000900195, 0.993666, 0.112367, 0.00796019, 0.112371, -0.993634, -0.53698, 1.48573, -63.4355)
+[node name="BlueMajin1" parent="MainAct/Rukh3" instance=ExtResource("11_427b8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, -95)
+rangeOverride = 20
 
-[node name="Rings13" type="Node3D" parent="MainAct/Rukh3"]
-transform = Transform3D(0.979254, 0.060273, 0.193468, -0.0632506, 0.997957, 0.00924533, -0.192516, -0.0212905, 0.981063, 1.53955, 2.70246, -68.5344)
-script = ExtResource("9_v4ux6")
-Generate = false
-Source = ExtResource("10_250we")
-Amount = 5
-Shape = 2
-Path = NodePath("../../../Static/Paths/Rukh3")
-"Path Progress Offset" = 0.0
-"Disable Path Y" = false
-Spacing = 2.2
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Rukh3/Rings13" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 0, 0, -1.86265e-09, 1, 0, 0, 0, 1, 3.05176e-05, 1.52588e-05, -0.000183105)
-
-[node name="Child02" parent="MainAct/Rukh3/Rings13" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 0, 0, -1.86265e-09, 1, 0, 0, 0, 1, 0.415405, 0.147789, -2.14862)
-
-[node name="Child03" parent="MainAct/Rukh3/Rings13" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 0, 0, -1.86265e-09, 1, 0, 0, 0, 1, 0.822357, 0.332672, -4.26605)
-
-[node name="Child04" parent="MainAct/Rukh3/Rings13" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 0, 0, -1.86265e-09, 1, 0, 0, 0, 1, 1.21436, 0.678406, -6.35797)
-
-[node name="Child05" parent="MainAct/Rukh3/Rings13" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 0, 0, -1.86265e-09, 1, 0, 0, 0, 1, 1.60941, 1.06655, -8.47839)
-
-[node name="GrindPillarFlyTrigger5" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 5.96046e-08, 0, 1, -1.54349, 2.78925, -77.4482)
+[node name="RoundPillarFlyTrigger" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, -95)
 "Enter Mode" = 0
 
-[node name="GrindPillarFly9" parent="MainAct/Rukh3/GrindPillarFlyTrigger5" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999461, -0.0328412, -5.96046e-08, 0.0328412, 0.999461, 0.333511, -0.2724, 1.44568)
+[node name="GrindPillarFly1" parent="MainAct/Rukh3/RoundPillarFlyTrigger" instance=ExtResource("33_0ylmb")]
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, 0, 3.2, -12.1)
 
-[node name="GrindPillarFly10" parent="MainAct/Rukh3/GrindPillarFlyTrigger5" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999413, -0.0342541, -5.96046e-08, 0.0342541, 0.999413, 1.75916, -0.2724, 1.44568)
+[node name="GrindPillarFly2" parent="MainAct/Rukh3/RoundPillarFlyTrigger" instance=ExtResource("33_0ylmb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 4.2, -24.5)
 
-[node name="GrindPillarFly11" parent="MainAct/Rukh3/GrindPillarFlyTrigger5" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999461, -0.0328412, -5.96046e-08, 0.0328412, 0.999461, 3.13999, -0.2724, 1.44568)
+[node name="GreenMajin1" parent="MainAct/Rukh3/RoundPillarFlyTrigger" instance=ExtResource("31_ueb1o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, -12)
+SpawnMode = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/GrindPillarFlyTrigger5"]
+[node name="GreenMajin2" parent="MainAct/Rukh3/RoundPillarFlyTrigger" instance=ExtResource("31_ueb1o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 5.9, -24.4)
+SpawnMode = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/RoundPillarFlyTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ypvwq")
 
-[node name="BlueMajin" parent="MainAct/Rukh3" instance=ExtResource("11_427b8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.152523, 4.96877, -88.417)
+[node name="RailGroup1" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.999048, -0.0436194, 0, 0.0436194, 0.999048, -1, 10.4, -118.5)
 
-[node name="BlueMajin2" parent="MainAct/Rukh3" instance=ExtResource("11_427b8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.426998, 11.3426, -107.478)
+[node name="GrindPillarStatic1" parent="MainAct/Rukh3/RailGroup1" instance=ExtResource("15_oja87")]
 
-[node name="SquarePillarFlyTrigger5" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 5.96046e-08, 0, 1, 0.670227, 2.3679, -41.8384)
-"Enter Mode" = 0
+[node name="Grindrail" parent="MainAct/Rukh3/RailGroup1" instance=ExtResource("34_35j7t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
-[node name="SquarePillarFly" parent="MainAct/Rukh3/SquarePillarFlyTrigger5" instance=ExtResource("7_x6tsb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, -5.96047e-08, 0, 1, -2.17036, 1.17369, -41.4206)
-
-[node name="SquarePillarFly2" parent="MainAct/Rukh3/SquarePillarFlyTrigger5" instance=ExtResource("7_x6tsb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, -5.96047e-08, 0, 1, 1.25201, 1.17369, -41.4206)
-
-[node name="SquarePillarFly3" parent="MainAct/Rukh3/SquarePillarFlyTrigger5" instance=ExtResource("7_x6tsb")]
-transform = Transform3D(0.999877, -0.0156724, 7.32214e-12, 0.0156724, 0.999877, -9.34148e-10, -5.95974e-08, 9.34148e-10, 1, -0.49744, 2.09028, -46.6955)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/SquarePillarFlyTrigger5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ypvwq")
-
-[node name="BlueMajin3" parent="MainAct/Rukh3" instance=ExtResource("11_427b8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.05565, 12.4327, -119.379)
-
-[node name="GrindPillarFly12" parent="MainAct/Rukh3" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999413, -0.0342541, 0, 0.0342541, 0.999413, -1.19075, 9.93533, -118.773)
-
-[node name="Rings14" type="Node3D" parent="MainAct/Rukh3"]
-transform = Transform3D(0.996093, 0.062555, 0.0623476, -0.0632506, 0.997957, 0.00924533, -0.0616426, -0.0131527, 0.998012, -1.23815, 13.2675, -120.351)
+[node name="Rings" type="Node3D" parent="MainAct/Rukh3/RailGroup1/Grindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -2)
 script = ExtResource("9_v4ux6")
 Generate = false
 Source = ExtResource("10_250we")
 Amount = 6
-Shape = 2
-Path = NodePath("../../../Static/Paths/Rukh3")
-"Path Progress Offset" = 0.0
-"Disable Path Y" = false
-Spacing = 2.6
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Rukh3/Rings14" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -7.68341e-09, -3.72529e-09, 5.06407e-09, 1, 0, -3.72529e-09, 0, 1, 3.8147e-06, 7.62939e-06, -6.10352e-05)
-
-[node name="Child02" parent="MainAct/Rukh3/Rings14" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -7.68341e-09, -3.72529e-09, 5.06407e-09, 1, 0, -3.72529e-09, 0, 1, 0.152836, 0.149376, -2.59161)
-
-[node name="Child03" parent="MainAct/Rukh3/Rings14" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -7.68341e-09, -3.72529e-09, 5.06407e-09, 1, 0, -3.72529e-09, 0, 1, 0.305714, 0.298111, -5.18335)
-
-[node name="Child04" parent="MainAct/Rukh3/Rings14" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -7.68341e-09, -3.72529e-09, 5.06407e-09, 1, 0, -3.72529e-09, 0, 1, 0.458641, 0.44619, -7.77509)
-
-[node name="Child05" parent="MainAct/Rukh3/Rings14" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -7.68341e-09, -3.72529e-09, 5.06407e-09, 1, 0, -3.72529e-09, 0, 1, 0.611607, 0.59362, -10.3669)
-
-[node name="Child06" parent="MainAct/Rukh3/Rings14" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -7.68341e-09, -3.72529e-09, 5.06407e-09, 1, 0, -3.72529e-09, 0, 1, 0.764641, 0.740379, -12.9592)
-
-[node name="Grindrail" parent="MainAct/Rukh3" instance=ExtResource("34_35j7t")]
-transform = Transform3D(0.999981, 0.000317683, 0.00622546, -0.000108821, 0.999438, -0.0335213, -0.00623261, 0.03352, 0.999419, -1.16461, 12.5844, -118.483)
-railModel = NodePath("")
-startCap = NodePath("")
-endCap = NodePath("")
-collider = NodePath("")
-
-[node name="GrindPillarFly13" parent="MainAct/Rukh3" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999413, -0.0342541, 0, 0.0342541, 0.999413, -1.38008, 11.1221, -148.433)
-
-[node name="SquarePillarFly4" parent="MainAct/Rukh3" instance=ExtResource("7_x6tsb")]
-transform = Transform3D(0.999877, -0.0156724, 7.32214e-12, 0.015669, 0.99966, -0.0208377, 0.000326577, 0.0208352, 0.999783, -2.50396, 11.1953, -137.792)
-
-[node name="Grindrail3" parent="MainAct/Rukh3" instance=ExtResource("34_35j7t")]
-transform = Transform3D(0.999981, 0.000317683, 0.00622546, -0.000108821, 0.999438, -0.0335213, -0.00623261, 0.03352, 0.999419, -2.50839, 15.2302, -138.338)
-railModel = NodePath("")
-startCap = NodePath("")
-endCap = NodePath("")
-collider = NodePath("")
-
-[node name="Rings15" type="Node3D" parent="MainAct/Rukh3"]
-transform = Transform3D(0.996093, 0.062555, 0.0623476, -0.0632506, 0.997957, 0.00924533, -0.0616426, -0.0131527, 0.998012, -2.42701, 15.6373, -139.753)
-script = ExtResource("9_v4ux6")
-Generate = false
-Source = ExtResource("10_250we")
-Amount = 6
-Shape = 2
-Path = NodePath("../../../Static/Paths/Rukh3")
-"Path Progress Offset" = 0.0
-"Disable Path Y" = false
-Spacing = 4.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Rukh3/Rings15" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -7.68341e-09, -3.72529e-09, 5.06407e-09, 1, 0, -3.72529e-09, 0, 1, 0, 0, 0)
-
-[node name="Child02" parent="MainAct/Rukh3/Rings15" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -7.68341e-09, -3.72529e-09, 5.06407e-09, 1, 0, -3.72529e-09, 0, 1, 0.235764, 0.221527, -3.98895)
-
-[node name="Child03" parent="MainAct/Rukh3/Rings15" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -7.68341e-09, -3.72529e-09, 5.06407e-09, 1, 0, -3.72529e-09, 0, 1, 0.471657, 0.441124, -7.97803)
-
-[node name="Child04" parent="MainAct/Rukh3/Rings15" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -7.68341e-09, -3.72529e-09, 5.06407e-09, 1, 0, -3.72529e-09, 0, 1, 0.707691, 0.65863, -11.9672)
-
-[node name="Child05" parent="MainAct/Rukh3/Rings15" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -7.68341e-09, -3.72529e-09, 5.06407e-09, 1, 0, -3.72529e-09, 0, 1, 0.943878, 0.873894, -15.9567)
-
-[node name="Child06" parent="MainAct/Rukh3/Rings15" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -7.68341e-09, -3.72529e-09, 5.06407e-09, 1, 0, -3.72529e-09, 0, 1, 1.18025, 1.0867, -19.9465)
-
-[node name="GrindPillarFly6" parent="MainAct/Rukh3" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999413, -0.0342541, 0, 0.0342541, 0.999413, 1.94208, 9.77174, -130.257)
-
-[node name="Rings16" type="Node3D" parent="MainAct/Rukh3"]
-transform = Transform3D(0.996093, 0.062555, 0.0623476, -0.0632506, 0.997957, 0.00924532, -0.0616426, -0.0131527, 0.998012, 0.315483, 13.3112, -171.553)
-script = ExtResource("9_v4ux6")
-Generate = false
-Source = ExtResource("10_250we")
-Amount = 5
-Shape = 2
-Path = NodePath("../../../Static/Paths/Rukh3")
-"Path Progress Offset" = 0.0
-"Disable Path Y" = false
-Spacing = 3.0
-"Horizontal Offset" = null
-"Vertical Offset" = null
-
-[node name="Child01" parent="MainAct/Rukh3/Rings16" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -1.05356e-08, -7.45058e-09, 8.26549e-09, 1, -9.31323e-10, 0, 1.86265e-09, 1, 3.8147e-06, 0, -6.10352e-05)
-
-[node name="Child02" parent="MainAct/Rukh3/Rings16" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -6.40284e-09, -3.72529e-09, 1.22236e-09, 1, -9.31323e-10, 0, 9.31323e-10, 1, 0.178043, 0.148277, -2.99323)
-
-[node name="Child03" parent="MainAct/Rukh3/Rings16" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -6.40284e-09, -3.72529e-09, 1.22236e-09, 1, -9.31323e-10, 0, 9.31323e-10, 1, 0.35627, 0.293953, -5.98682)
-
-[node name="Child04" parent="MainAct/Rukh3/Rings16" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -6.40284e-09, -3.72529e-09, 1.22236e-09, 1, -9.31323e-10, 0, 9.31323e-10, 1, 0.534714, 0.436653, -8.98083)
-
-[node name="Child05" parent="MainAct/Rukh3/Rings16" instance=ExtResource("10_250we")]
-transform = Transform3D(1, -6.40284e-09, -3.72529e-09, 1.22236e-09, 1, -9.31323e-10, 0, 9.31323e-10, 1, 0.713402, 0.575981, -11.9755)
-
-[node name="SpikePanel" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.39942, 11.4577, -139.626)
-
-[node name="SpikePanel2" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.39942, 11.4577, -141.062)
-
-[node name="SpikePanel3" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.39942, 11.4577, -142.471)
-
-[node name="SpikePanel4" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.39942, 11.4577, -143.644)
-
-[node name="SpikePanel6" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.999352, -0.0359984, 0, 0.0359984, 0.999352, 2.01612, 11.511, -141.635)
-
-[node name="SpikePanel7" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.999352, -0.0359984, 0, 0.0359984, 0.999352, 2.01612, 11.5519, -143.07)
-
-[node name="SpikePanel8" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.999352, -0.0359984, 0, 0.0359984, 0.999352, 2.01612, 11.6049, -144.479)
-
-[node name="GrindPillarFly7" parent="MainAct/Rukh3" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999413, -0.0342541, 0, 0.0342541, 0.999413, 1.96898, 9.99914, -145.797)
-
-[node name="Grindrail4" parent="MainAct/Rukh3" instance=ExtResource("34_35j7t")]
-transform = Transform3D(0.999933, 0.0017917, 0.0114494, 0.000410909, 0.981873, -0.189539, -0.0115814, 0.189531, 0.981807, 1.94957, 12.6695, -145.735)
-railModel = NodePath("")
-startCap = NodePath("")
-endCap = NodePath("")
-collider = NodePath("")
-
-[node name="Grindrail5" parent="MainAct/Rukh3" instance=ExtResource("34_35j7t")]
-transform = Transform3D(0.999933, 0.0017917, 0.0114494, 0.000210947, 0.984998, -0.172564, -0.0115868, 0.172555, 0.984932, -1.68582, 17.4622, -176.041)
-railModel = NodePath("")
-startCap = NodePath("")
-endCap = NodePath("")
-collider = NodePath("")
-
-[node name="SpikePanel9" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.999729, -0.023298, 0, 0.023298, 0.999729, -2.36687, 12.5219, -161.492)
-
-[node name="SpikePanel10" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.999729, -0.023298, 0, 0.023298, 0.999729, -2.36687, 12.5446, -162.927)
-
-[node name="SpikePanel11" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.999729, -0.023298, 0, 0.023298, 0.999729, -2.36687, 12.5796, -164.336)
-
-[node name="SpikePanel12" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.999729, -0.023298, 0, 0.023298, 0.999729, -2.36687, 12.5796, -165.747)
-
-[node name="SpikePanel13" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.999729, -0.023298, 0, 0.023298, 0.999729, -2.36687, 12.5796, -167.255)
-
-[node name="SpikePanel14" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.999729, -0.023298, 0, 0.023298, 0.999729, -2.49725, 16.6451, -168.904)
-
-[node name="Grindrail2" parent="MainAct/Rukh3" instance=ExtResource("17_8qnjt")]
-transform = Transform3D(1, 0, 0, 0, 0.999487, -0.0320213, 0, 0.0320213, 0.999487, 1.96838, 12.1813, -130.393)
-railModel = NodePath("")
-startCap = NodePath("")
-endCap = NodePath("")
-collider = NodePath("")
-
-[node name="SquarePillarFly5" parent="MainAct/Rukh3" instance=ExtResource("7_x6tsb")]
-transform = Transform3D(0.999877, -0.0156724, 7.32214e-12, 0.015669, 0.99966, -0.0208377, 0.000326577, 0.0208352, 0.999783, -2.50396, 12.586, -169.055)
-
-[node name="SpikePanel5" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.39942, 11.5617, -145.077)
-
-[node name="RoundPillar" parent="MainAct/Rukh3" instance=ExtResource("18_3nm5m")]
-transform = Transform3D(-0.930833, 0, -0.365446, 0, 1, 0, 0.365446, 0, -0.930833, 1.55385, 11.1925, -175.109)
-
-[node name="RoundPillar2" parent="MainAct/Rukh3" instance=ExtResource("18_3nm5m")]
-transform = Transform3D(-0.930833, 0, -0.365446, 0, 1, 0, 0.365446, 0, -0.930833, -1.67627, 10.5423, -176.477)
-
-[node name="GreenMajin" parent="MainAct/Rukh3" instance=ExtResource("31_ueb1o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.67212, 17.9065, -178.649)
-
-[node name="SpikePanel15" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.997911, -0.0646194, 0, 0.0646194, 0.997911, -2.36687, 13.0954, -179.907)
-
-[node name="SpikePanel16" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.997911, -0.0646194, 0, 0.0646194, 0.997911, -2.36687, 13.1774, -181.34)
-
-[node name="SpikePanel17" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.997911, -0.0646194, 0, 0.0646194, 0.997911, -2.36687, 13.2706, -182.747)
-
-[node name="SpikePanel18" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.997911, -0.0646194, 0, 0.0646194, 0.997911, -2.36687, 13.329, -184.156)
-
-[node name="SpikePanel19" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.997911, -0.0646194, 0, 0.0646194, 0.997911, -2.36687, 13.3913, -185.663)
-
-[node name="SpikePanel20" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.997911, -0.0646194, 0, 0.0646194, 0.997911, -2.36687, 13.5064, -189.266)
-
-[node name="SpikePanel21" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.997911, -0.0646194, 0, 0.0646194, 0.997911, -2.36687, 13.5884, -190.698)
-
-[node name="SpikePanel22" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.997911, -0.0646194, 0, 0.0646194, 0.997911, -2.36687, 13.6817, -192.105)
-
-[node name="SpikePanel23" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.997911, -0.0646194, 0, 0.0646194, 0.997911, -2.36687, 13.74, -193.514)
-
-[node name="SpikePanel24" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(1, 0, 0, 0, 0.997911, -0.0646194, 0, 0.0646194, 0.997911, -2.36687, 13.8024, -195.021)
-
-[node name="SpikePanel25" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(-0.00496672, -0.00977284, -0.99994, 0.0002729, 0.999953, -0.00977431, 0.999988, -0.00032143, -0.00496381, 0.438412, 13.3984, -188.053)
-
-[node name="SpikePanel26" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(-0.00496672, -0.00977284, -0.99994, 0.0002729, 0.999953, -0.00977431, 0.999988, -0.00032143, -0.00496381, 1.84933, 13.3793, -188.046)
-
-[node name="SpikePanel27" parent="MainAct/Rukh3" instance=ExtResource("29_w4hsv")]
-transform = Transform3D(-0.00496672, -0.00977284, -0.99994, 0.0002729, 0.999953, -0.00977431, 0.999988, -0.00032143, -0.00496381, 3.35718, 13.3589, -188.038)
-
-[node name="GrindPillarFly15" parent="MainAct/Rukh3" instance=ExtResource("8_6mhfy")]
-transform = Transform3D(1, 0, 0, 0, 0.999413, -0.0342541, 0, 0.0342541, 0.999413, 1.94208, 10.0896, -140.371)
-
-[node name="RoundPillarFlyTrigger3" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 5.96046e-08, 0, 1, 0.670227, 2.3679, -138.666)
-"Enter Mode" = 0
-
-[node name="GrindPillarFly" parent="MainAct/Rukh3/RoundPillarFlyTrigger3" instance=ExtResource("33_0ylmb")]
-transform = Transform3D(1, 0, 0, -9.15156e-09, 0.999982, -0.00602148, -5.88979e-08, 0.00602148, 0.999982, 3.70327, 11.252, -59.2642)
-
-[node name="GrindPillarFly2" parent="MainAct/Rukh3/RoundPillarFlyTrigger3" instance=ExtResource("33_0ylmb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, -5.96046e-08, 0, 1, 3.80532, 11.3213, -61.7869)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/RoundPillarFlyTrigger3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00585938, 8.11759, 0.0463867)
-shape = SubResource("BoxShape3D_ypvwq")
-
-[node name="Switch" parent="MainAct/Rukh3" instance=ExtResource("27_lcrpn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.272694, 23.0913, -206.708)
-
-[node name="Spring" parent="MainAct/Rukh3/Switch" instance=ExtResource("15_q7qwf")]
-transform = Transform3D(0.999725, 0.0234376, 0, -0.0234376, 0.999725, 0, 0, 0, 1, 0.0204124, 0.35096, 0.0574951)
-
-[node name="FireSoul" parent="MainAct/Rukh3/Switch" instance=ExtResource("37_65231")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0381432, 9.25733, 0.0130615)
-
-[node name="Rings" type="Node3D" parent="MainAct/Rukh3/Switch"]
-transform = Transform3D(0.999727, 0.0234376, 0, -0.000317429, 0.0135398, -0.999908, -0.0234355, 0.999634, 0.0135431, 0.0204239, 11.4448, 0.0574951)
-script = ExtResource("9_v4ux6")
-Generate = false
-Source = ExtResource("10_250we")
-Amount = 11
 Shape = 0
 Orientation = 0
 Spacing = 2.6
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+[node name="Child01" parent="MainAct/Rukh3/RailGroup1/Grindrail/Rings" instance=ExtResource("10_250we")]
 
-[node name="Child02" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+[node name="Child02" parent="MainAct/Rukh3/RailGroup1/Grindrail/Rings" instance=ExtResource("10_250we")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.6)
 
-[node name="Child03" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+[node name="Child03" parent="MainAct/Rukh3/RailGroup1/Grindrail/Rings" instance=ExtResource("10_250we")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.2)
 
-[node name="Child04" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+[node name="Child04" parent="MainAct/Rukh3/RailGroup1/Grindrail/Rings" instance=ExtResource("10_250we")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.8)
 
-[node name="Child05" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+[node name="Child05" parent="MainAct/Rukh3/RailGroup1/Grindrail/Rings" instance=ExtResource("10_250we")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.4)
 
-[node name="Child06" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
+[node name="Child06" parent="MainAct/Rukh3/RailGroup1/Grindrail/Rings" instance=ExtResource("10_250we")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
 
-[node name="Child07" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.6)
+[node name="GrindPillarStatic2" parent="MainAct/Rukh3/RailGroup1" instance=ExtResource("15_oja87")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
 
-[node name="Child08" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18.2)
+[node name="RailGroup2" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.999048, -0.0436194, 0, 0.0436194, 0.999048, 1.6, 10, -130)
 
-[node name="Child09" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.8)
+[node name="GrindPillarStatic1" parent="MainAct/Rukh3/RailGroup2" instance=ExtResource("15_oja87")]
 
-[node name="Child10" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23.4)
+[node name="Grindrail" parent="MainAct/Rukh3/RailGroup2" instance=ExtResource("17_8qnjt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
 
-[node name="Child11" parent="MainAct/Rukh3/Switch/Rings" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26)
+[node name="GrindPillarStatic2" parent="MainAct/Rukh3/RailGroup2" instance=ExtResource("15_oja87")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
-[node name="Stone" parent="MainAct/Rukh3" instance=ExtResource("18_rpxg1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 16, -225)
-shatterFlags = 18
+[node name="RailGroup3" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.999048, -0.0436194, 0, 0.0436194, 0.999048, -2.2, 11.2, -138.5)
 
-[node name="Rings17" type="Node3D" parent="MainAct/Rukh3"]
+[node name="SquarePillarStatic1" parent="MainAct/Rukh3/RailGroup3" instance=ExtResource("50_iy6ic")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="Grindrail" parent="MainAct/Rukh3/RailGroup3" instance=ExtResource("34_35j7t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="Rings" type="Node3D" parent="MainAct/Rukh3/RailGroup3/Grindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -4)
+script = ExtResource("9_v4ux6")
+Generate = false
+Source = ExtResource("10_250we")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Rukh3/RailGroup3/Grindrail/Rings" instance=ExtResource("10_250we")]
+
+[node name="Child02" parent="MainAct/Rukh3/RailGroup3/Grindrail/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="MainAct/Rukh3/RailGroup3/Grindrail/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="MainAct/Rukh3/RailGroup3/Grindrail/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="MainAct/Rukh3/RailGroup3/Grindrail/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child06" parent="MainAct/Rukh3/RailGroup3/Grindrail/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="SquarePillarStatic2" parent="MainAct/Rukh3/RailGroup3" instance=ExtResource("50_iy6ic")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="SpikePanel" parent="MainAct/Rukh3/RailGroup3" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -30)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.2
+stateLengths = PackedFloat32Array(0.2, 0, 0.2)
+
+[node name="SpikePanelGroup1" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.999048, -0.0436194, 0, 0.0436194, 0.999048, -2, 11.5, -140.5)
+
+[node name="SpikePanel1" parent="MainAct/Rukh3/SpikePanelGroup1" instance=ExtResource("29_w4hsv")]
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel2" parent="MainAct/Rukh3/SpikePanelGroup1" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel3" parent="MainAct/Rukh3/SpikePanelGroup1" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel4" parent="MainAct/Rukh3/SpikePanelGroup1" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel5" parent="MainAct/Rukh3/SpikePanelGroup1" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanelGroup2" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.999048, -0.0436194, 0, 0.0436194, 0.999048, 1.8, 11.5, -141.5)
+
+[node name="SpikePanel1" parent="MainAct/Rukh3/SpikePanelGroup2" instance=ExtResource("29_w4hsv")]
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel2" parent="MainAct/Rukh3/SpikePanelGroup2" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel3" parent="MainAct/Rukh3/SpikePanelGroup2" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanelGroup3" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.999048, -0.0436194, 0, 0.0436194, 0.999048, -2, 12.3, -160)
+
+[node name="SpikePanel1" parent="MainAct/Rukh3/SpikePanelGroup3" instance=ExtResource("29_w4hsv")]
+"Current State" = 2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel2" parent="MainAct/Rukh3/SpikePanelGroup3" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+"Current State" = 2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel3" parent="MainAct/Rukh3/SpikePanelGroup3" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+"Current State" = 2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel4" parent="MainAct/Rukh3/SpikePanelGroup3" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+"Current State" = 2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel5" parent="MainAct/Rukh3/SpikePanelGroup3" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+"Current State" = 2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="RailGroup4" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.999048, -0.0436194, 0, 0.0436194, 0.999048, 1.6, 10, -146)
+
+[node name="GrindPillarStatic" parent="MainAct/Rukh3/RailGroup4" instance=ExtResource("15_oja87")]
+
+[node name="Grindrail" parent="MainAct/Rukh3/RailGroup4" instance=ExtResource("34_35j7t")]
+transform = Transform3D(1, 0, 0, 0, 0.989016, -0.147809, 0, 0.147809, 0.989016, 0, 2.6, 0)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="RoundPillarStatic" parent="MainAct/Rukh3/RailGroup4" instance=ExtResource("18_3nm5m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 4.44089e-16, 1, 0, 8.74228e-08, 0, -1, 0, 0, -29.9999)
+
+[node name="RailGroup5" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.999048, -0.0436194, 0, 0.0436194, 0.999048, -2, 11, -175)
+
+[node name="RoundPillarStatic" parent="MainAct/Rukh3/RailGroup5" instance=ExtResource("18_3nm5m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="Grindrail" parent="MainAct/Rukh3/RailGroup5" instance=ExtResource("34_35j7t")]
+transform = Transform3D(1, 0, 0, 0, 0.992546, -0.121869, 0, 0.121869, 0.992546, 0, 7, 0)
+railModel = NodePath("")
+startCap = NodePath("")
+endCap = NodePath("")
+collider = NodePath("")
+
+[node name="GreenMajin" parent="MainAct/Rukh3/RailGroup5" instance=ExtResource("31_ueb1o")]
+transform = Transform3D(1, 0, 0, 0, 0.999048, 0.0436194, 0, -0.0436194, 0.999048, 0, 7, -3)
+
+[node name="Rings4" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.999048, -0.0436194, 0, 0.0436194, 0.999048, 0, 13.311, -171.553)
+script = ExtResource("9_v4ux6")
+Generate = false
+Source = ExtResource("10_250we")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+
+[node name="Child01" parent="MainAct/Rukh3/Rings4" instance=ExtResource("10_250we")]
+
+[node name="Child02" parent="MainAct/Rukh3/Rings4" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="MainAct/Rukh3/Rings4" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="MainAct/Rukh3/Rings4" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Child05" parent="MainAct/Rukh3/Rings4" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="SpikePanelGroup4" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.999048, -0.0436194, 0, 0.0436194, 0.999048, -2, 13.1, -180)
+
+[node name="SpikePanel1" parent="MainAct/Rukh3/SpikePanelGroup4" instance=ExtResource("29_w4hsv")]
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel2" parent="MainAct/Rukh3/SpikePanelGroup4" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel3" parent="MainAct/Rukh3/SpikePanelGroup4" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel4" parent="MainAct/Rukh3/SpikePanelGroup4" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel5" parent="MainAct/Rukh3/SpikePanelGroup4" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanelGroup5" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.999048, -0.0436194, 0, 0.0436194, 0.999048, 1.75, 13.4, -188)
+
+[node name="SpikePanelL" parent="MainAct/Rukh3/SpikePanelGroup5" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+"Current State" = 2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanelM" parent="MainAct/Rukh3/SpikePanelGroup5" instance=ExtResource("29_w4hsv")]
+"Current State" = 2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanelR" parent="MainAct/Rukh3/SpikePanelGroup5" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
+"Current State" = 2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanelGroup6" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.999048, -0.0436194, 0, 0.0436194, 0.999048, -2, 13.5, -190)
+
+[node name="SpikePanel1" parent="MainAct/Rukh3/SpikePanelGroup6" instance=ExtResource("29_w4hsv")]
+"Current State" = 2
+"Start Time" = 0.2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel2" parent="MainAct/Rukh3/SpikePanelGroup6" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+"Current State" = 2
+"Start Time" = 0.2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel3" parent="MainAct/Rukh3/SpikePanelGroup6" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+"Current State" = 2
+"Start Time" = 0.2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel4" parent="MainAct/Rukh3/SpikePanelGroup6" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+"Current State" = 2
+"Start Time" = 0.2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="SpikePanel5" parent="MainAct/Rukh3/SpikePanelGroup6" instance=ExtResource("29_w4hsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+"Current State" = 2
+"Start Time" = 0.2
+"State Lengths/inactive" = 0.2
+"State Lengths/active" = 0.4
+stateLengths = PackedFloat32Array(0.2, 0, 0.4)
+
+[node name="RoundPillarFlyTrigger1" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.8, -170.5)
+"Enter Mode" = 0
+
+[node name="GrindPillarFly" parent="MainAct/Rukh3/RoundPillarFlyTrigger1" instance=ExtResource("33_0ylmb")]
+transform = Transform3D(7.54979e-08, 0, -1, 0, 1, 0, 1, 0, 7.54979e-08, 5, 0.849998, -27.6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/RoundPillarFlyTrigger1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+
+[node name="RoundPillarFlyTrigger2" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.6, -193)
+"Enter Mode" = 0
+
+[node name="GrindPillarFly" parent="MainAct/Rukh3/RoundPillarFlyTrigger2" instance=ExtResource("33_0ylmb")]
+transform = Transform3D(7.54979e-08, 0, -1, 0, 1, 0, 1, 0, 7.54979e-08, 5, 0, -7.2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/RoundPillarFlyTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+
+[node name="UpperPath" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.272694, 23.0913, -206.708)
+
+[node name="Switch" parent="MainAct/Rukh3/UpperPath" instance=ExtResource("27_lcrpn")]
+activationLength = 0.5
+
+[node name="Spring" parent="MainAct/Rukh3/UpperPath/Switch" instance=ExtResource("15_q7qwf")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0.351, 0)
+startHidden = true
+middleHeight = 40.0
+finalHeight = -8.0
+distance = 16.0
+
+[node name="Cam" type="Node3D" parent="MainAct/Rukh3/UpperPath/Switch/Spring"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 10, -1)
+script = ExtResource("8_xcxgd")
+transitionType = 1
+settings = ExtResource("36_jok85")
+previousSettings = ExtResource("37_pcwhs")
+
+[node name="FireSoul" parent="MainAct/Rukh3/UpperPath" instance=ExtResource("37_65231")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -1)
+
+[node name="SwitchCullingTrigger" type="Node3D" parent="MainAct/Rukh3/UpperPath"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+script = ExtResource("4_4rpxf")
+
+[node name="Rings" type="Node3D" parent="MainAct/Rukh3/UpperPath/SwitchCullingTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.5, 1)
+script = ExtResource("9_v4ux6")
+Generate = false
+Source = ExtResource("10_250we")
+Amount = 11
+Shape = 0
+Orientation = 1
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = SubResource("Curve_ltabp")
+
+[node name="Child01" parent="MainAct/Rukh3/UpperPath/SwitchCullingTrigger/Rings" instance=ExtResource("10_250we")]
+
+[node name="Child02" parent="MainAct/Rukh3/UpperPath/SwitchCullingTrigger/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0.288286)
+
+[node name="Child03" parent="MainAct/Rukh3/UpperPath/SwitchCullingTrigger/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0.609455)
+
+[node name="Child04" parent="MainAct/Rukh3/UpperPath/SwitchCullingTrigger/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0.962207)
+
+[node name="Child05" parent="MainAct/Rukh3/UpperPath/SwitchCullingTrigger/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 1.34524)
+
+[node name="Child06" parent="MainAct/Rukh3/UpperPath/SwitchCullingTrigger/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.5, 1.75726)
+
+[node name="Child07" parent="MainAct/Rukh3/UpperPath/SwitchCullingTrigger/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 2.19695)
+
+[node name="Child08" parent="MainAct/Rukh3/UpperPath/SwitchCullingTrigger/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17.5, 2.66302)
+
+[node name="Child09" parent="MainAct/Rukh3/UpperPath/SwitchCullingTrigger/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 3.15418)
+
+[node name="Child10" parent="MainAct/Rukh3/UpperPath/SwitchCullingTrigger/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 22.5, 3.6691)
+
+[node name="Child11" parent="MainAct/Rukh3/UpperPath/SwitchCullingTrigger/Rings" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25, 4.20651)
+
+[node name="CameraTrigger" parent="MainAct/Rukh3/UpperPath" instance=ExtResource("5_yejv7")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 30, -18)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/UpperPath/CameraTrigger"]
+shape = SubResource("BoxShape3D_6g03t")
+
+[node name="Rings" type="Node3D" parent="MainAct/Rukh3"]
 transform = Transform3D(0.998085, 0.00449875, 0.0617055, -0.00530141, 0.999905, 0.0128502, -0.0616426, -0.0131527, 0.998012, 0.0111084, 15.6791, -216.158)
 script = ExtResource("9_v4ux6")
 Generate = false
@@ -1491,108 +1656,106 @@ Spacing = 2.2
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="MainAct/Rukh3/Rings17" instance=ExtResource("10_250we")]
+[node name="Child01" parent="MainAct/Rukh3/Rings" instance=ExtResource("10_250we")]
 transform = Transform3D(1, -3.0268e-09, -3.72529e-09, 8.26549e-09, 1, 0, 0, 9.31323e-10, 1, -1.14441e-05, -7.62939e-06, 0.000183105)
 
-[node name="Child02" parent="MainAct/Rukh3/Rings17" instance=ExtResource("10_250we")]
+[node name="Child02" parent="MainAct/Rukh3/Rings" instance=ExtResource("10_250we")]
 transform = Transform3D(1, -3.0268e-09, -3.72529e-09, 8.26549e-09, 1, 0, 0, 9.31323e-10, 1, 0.13414, 0.0505524, -2.19379)
 
-[node name="Child03" parent="MainAct/Rukh3/Rings17" instance=ExtResource("10_250we")]
+[node name="Child03" parent="MainAct/Rukh3/Rings" instance=ExtResource("10_250we")]
 transform = Transform3D(1, -3.0268e-09, -3.72529e-09, 8.26549e-09, 1, 0, 0, 9.31323e-10, 1, 0.268261, 0.102318, -4.38855)
 
-[node name="Child04" parent="MainAct/Rukh3/Rings17" instance=ExtResource("10_250we")]
+[node name="Child04" parent="MainAct/Rukh3/Rings" instance=ExtResource("10_250we")]
 transform = Transform3D(1, -3.0268e-09, -3.72529e-09, 8.26549e-09, 1, 0, 0, 9.31323e-10, 1, 0.402386, 0.154572, -6.5838)
 
-[node name="Child05" parent="MainAct/Rukh3/Rings17" instance=ExtResource("10_250we")]
+[node name="Child05" parent="MainAct/Rukh3/Rings" instance=ExtResource("10_250we")]
 transform = Transform3D(1, -3.0268e-09, -3.72529e-09, 8.26549e-09, 1, 0, 0, 9.31323e-10, 1, 0.536545, 0.206718, -8.77948)
 
-[node name="Stone2" parent="MainAct/Rukh3" instance=ExtResource("18_rpxg1")]
+[node name="StoneL" parent="MainAct/Rukh3" instance=ExtResource("18_rpxg1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 16, -225)
+shatterFlags = 18
+
+[node name="StoneR" parent="MainAct/Rukh3" instance=ExtResource("18_rpxg1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 16, -225)
 shatterFlags = 18
+
+[node name="GargoyleStaticL" parent="MainAct/Rukh3" instance=ExtResource("18_7b7on")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5, 15, -230)
 
 [node name="GargoylePlatform" parent="MainAct/Rukh3" instance=ExtResource("19_efhpe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -232)
 
 [node name="Gargoyle" parent="MainAct/Rukh3/GargoylePlatform" instance=ExtResource("19_78g2p")]
 
-[node name="GargoyleStatic" parent="MainAct/Rukh3" instance=ExtResource("18_7b7on")]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5, 15, -230)
-
-[node name="GargoyleStatic2" parent="MainAct/Rukh3" instance=ExtResource("18_7b7on")]
+[node name="GargoyleStaticR" parent="MainAct/Rukh3" instance=ExtResource("18_7b7on")]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 5, 15, -230)
 
 [node name="EnemyStone" parent="MainAct/Rukh3" instance=ExtResource("18_w6abm")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 18, -237.5)
 enemyCount = 1
 
-[node name="Rings18" type="Node3D" parent="MainAct/Rukh3"]
-transform = Transform3D(0.99977, 0.00503224, 0.0208884, -0.00530141, 0.999905, 0.0128502, -0.0208226, -0.012958, 0.9997, 0.403286, 12.6902, -265.631)
+[node name="RingsR" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 0.6, 12.8, -265)
 script = ExtResource("9_v4ux6")
 Generate = false
 Source = ExtResource("10_250we")
 Amount = 5
-Shape = 2
-Path = NodePath("../../../Static/Paths/Rukh3")
-"Path Progress Offset" = 0.0
-"Disable Path Y" = false
+Shape = 0
+Orientation = 0
 Spacing = 1.8
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="MainAct/Rukh3/Rings18" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 2.91038e-11, 0, 2.32831e-10, 1, 0, 0, 0, 1, 0, 2.28882e-05, 6.10352e-05)
+[node name="Child01" parent="MainAct/Rukh3/RingsR" instance=ExtResource("10_250we")]
 
-[node name="Child02" parent="MainAct/Rukh3/Rings18" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 2.91038e-11, 0, 2.32831e-10, 1, 0, 0, 0, 1, 0.0386581, -0.351852, -1.76556)
+[node name="Child02" parent="MainAct/Rukh3/RingsR" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
 
-[node name="Child03" parent="MainAct/Rukh3/Rings18" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 2.91038e-11, 0, 2.32831e-10, 1, 0, 0, 0, 1, 0.0773315, -0.723755, -3.52692)
+[node name="Child03" parent="MainAct/Rukh3/RingsR" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
 
-[node name="Child04" parent="MainAct/Rukh3/Rings18" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 2.91038e-11, 0, 2.32831e-10, 1, 0, 0, 0, 1, 0.116013, -1.11273, -5.28461)
+[node name="Child04" parent="MainAct/Rukh3/RingsR" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.4)
 
-[node name="Child05" parent="MainAct/Rukh3/Rings18" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 2.91038e-11, 0, 2.32831e-10, 1, 0, 0, 0, 1, 0.154697, -1.51637, -7.03882)
+[node name="Child05" parent="MainAct/Rukh3/RingsR" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
 
-[node name="Rings19" type="Node3D" parent="MainAct/Rukh3"]
-transform = Transform3D(0.99977, 0.00503224, 0.0208884, -0.00530141, 0.999905, 0.0128502, -0.0208226, -0.012958, 0.9997, -0.92247, 12.6902, -265.685)
+[node name="RingsL" type="Node3D" parent="MainAct/Rukh3"]
+transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, -0.6, 12.8, -265)
 script = ExtResource("9_v4ux6")
 Generate = false
 Source = ExtResource("10_250we")
 Amount = 5
-Shape = 2
-Path = NodePath("../../../Static/Paths/Rukh3")
-"Path Progress Offset" = 0.0
-"Disable Path Y" = false
-Spacing = 1.7
+Shape = 0
+Orientation = 0
+Spacing = 1.8
 "Horizontal Offset" = null
 "Vertical Offset" = null
 
-[node name="Child01" parent="MainAct/Rukh3/Rings19" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 2.91038e-11, 0, 2.32831e-10, 1, 0, 0, 0, 1, 0, 1.52588e-05, 0)
+[node name="Child01" parent="MainAct/Rukh3/RingsL" instance=ExtResource("10_250we")]
 
-[node name="Child02" parent="MainAct/Rukh3/Rings19" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 2.91038e-11, 0, 2.32831e-10, 1, 0, 0, 0, 1, 0.0365105, -0.332382, -1.6676)
+[node name="Child02" parent="MainAct/Rukh3/RingsL" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
 
-[node name="Child03" parent="MainAct/Rukh3/Rings19" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 2.91038e-11, 0, 2.32831e-10, 1, 0, 0, 0, 1, 0.07304, -0.682732, -3.33148)
+[node name="Child03" parent="MainAct/Rukh3/RingsL" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
 
-[node name="Child04" parent="MainAct/Rukh3/Rings19" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 2.91038e-11, 0, 2.32831e-10, 1, 0, 0, 0, 1, 0.109573, -1.04849, -4.992)
+[node name="Child04" parent="MainAct/Rukh3/RingsL" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.4)
 
-[node name="Child05" parent="MainAct/Rukh3/Rings19" instance=ExtResource("10_250we")]
-transform = Transform3D(1, 2.91038e-11, 0, 2.32831e-10, 1, 0, 0, 0, 1, 0.146111, -1.4276, -6.64941)
+[node name="Child05" parent="MainAct/Rukh3/RingsL" instance=ExtResource("10_250we")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
 
-[node name="Skyroad" type="Node3D" parent="MainAct/Rukh3"]
-transform = Transform3D(-0.999871, -0.011687, 0.0110207, -0.0126102, 0.996058, -0.0878021, -0.00995116, -0.0879298, -0.996077, -0.780075, 10.1104, -273.59)
+[node name="DashPanelL" parent="MainAct/Rukh3" instance=ExtResource("8_qbwj7")]
+transform = Transform3D(-1, 1.97089e-08, 1.49704e-07, 0, 0.991445, -0.130526, -1.50996e-07, -0.130526, -0.991445, -1, 10, -274)
 
-[node name="DashPanel2" parent="MainAct/Rukh3/Skyroad" instance=ExtResource("8_qbwj7")]
-transform = Transform3D(1, -4.07454e-10, 0, -5.23869e-10, 1, 7.45058e-09, 0, 0, 1, -1.50754, -0.0176163, 0.0166626)
+[node name="DashPanelR" parent="MainAct/Rukh3" instance=ExtResource("8_qbwj7")]
+transform = Transform3D(-1, -1.97089e-08, -1.49704e-07, 0, 0.991445, -0.130526, 1.50996e-07, -0.130526, -0.991445, 1, 10, -274)
 
-[node name="DashPanel3" parent="MainAct/Rukh3/Skyroad" instance=ExtResource("8_qbwj7")]
-transform = Transform3D(1, -2.91038e-10, 0, -1.45519e-09, 1, 1.49012e-08, 0, 0, 1, 0, 0, 0)
+[node name="Rukh3Skyroad" type="Node3D" parent="MainAct"]
+transform = Transform3D(-0.999871, -0.011687, 0.0110207, -0.0126102, 0.996058, -0.0878021, -0.00995116, -0.0879298, -0.996077, -40.7801, -89.8896, -973.59)
 
-[node name="RichPearlring1" type="Node3D" parent="MainAct/Rukh3/Skyroad"]
+[node name="RichPearlring1" type="Node3D" parent="MainAct/Rukh3Skyroad"]
 transform = Transform3D(0.0868212, -0.94969, 0.300916, 0.995095, 0.0682956, -0.0715671, 0.0474146, 0.305654, 0.950961, 0.673458, -16.9922, 43.0786)
 script = ExtResource("9_v4ux6")
 Generate = false
@@ -1603,16 +1766,16 @@ Orientation = 1
 "Ring Size" = 0.8
 "Ring Ratio" = 1.0
 
-[node name="Child01" parent="MainAct/Rukh3/Skyroad/RichPearlring1" instance=ExtResource("28_g0j2g")]
+[node name="Child01" parent="MainAct/Rukh3Skyroad/RichPearlring1" instance=ExtResource("28_g0j2g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 0)
 
-[node name="Child02" parent="MainAct/Rukh3/Skyroad/RichPearlring1" instance=ExtResource("28_g0j2g")]
+[node name="Child02" parent="MainAct/Rukh3Skyroad/RichPearlring1" instance=ExtResource("28_g0j2g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.69282, 0)
 
-[node name="Child03" parent="MainAct/Rukh3/Skyroad/RichPearlring1" instance=ExtResource("28_g0j2g")]
+[node name="Child03" parent="MainAct/Rukh3Skyroad/RichPearlring1" instance=ExtResource("28_g0j2g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.69282, 0)
 
-[node name="PearlsRing1" type="Node3D" parent="MainAct/Rukh3/Skyroad"]
+[node name="PearlsRing1" type="Node3D" parent="MainAct/Rukh3Skyroad"]
 transform = Transform3D(-0.887737, -0.113645, 0.446095, 0.00883902, 0.96466, 0.263341, -0.460257, 0.237722, -0.855363, 2.57619, 9.58518, 105.447)
 script = ExtResource("9_v4ux6")
 Generate = false
@@ -1623,37 +1786,37 @@ Orientation = 1
 "Ring Size" = 0.9
 "Ring Ratio" = 1.0
 
-[node name="Child01" parent="MainAct/Rukh3/Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
+[node name="Child01" parent="MainAct/Rukh3Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0, 0)
 
-[node name="Child02" parent="MainAct/Rukh3/Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
+[node name="Child02" parent="MainAct/Rukh3Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.728115, 0.529007, 0)
 
-[node name="Child03" parent="MainAct/Rukh3/Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
+[node name="Child03" parent="MainAct/Rukh3Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278115, 0.855951, 0)
 
-[node name="Child04" parent="MainAct/Rukh3/Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
+[node name="Child04" parent="MainAct/Rukh3Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.278115, 0.855951, 0)
 
-[node name="Child05" parent="MainAct/Rukh3/Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
+[node name="Child05" parent="MainAct/Rukh3Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.728115, 0.529007, 0)
 
-[node name="Child06" parent="MainAct/Rukh3/Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
+[node name="Child06" parent="MainAct/Rukh3Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, -7.86805e-08, 0)
 
-[node name="Child07" parent="MainAct/Rukh3/Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
+[node name="Child07" parent="MainAct/Rukh3Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.728115, -0.529007, 0)
 
-[node name="Child08" parent="MainAct/Rukh3/Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
+[node name="Child08" parent="MainAct/Rukh3Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.278115, -0.855951, 0)
 
-[node name="Child09" parent="MainAct/Rukh3/Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
+[node name="Child09" parent="MainAct/Rukh3Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278115, -0.855951, 0)
 
-[node name="Child10" parent="MainAct/Rukh3/Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
+[node name="Child10" parent="MainAct/Rukh3Skyroad/PearlsRing1" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.728115, -0.529006, 0)
 
-[node name="PearlsRing2" type="Node3D" parent="MainAct/Rukh3/Skyroad"]
+[node name="PearlsRing2" type="Node3D" parent="MainAct/Rukh3Skyroad"]
 transform = Transform3D(-0.745606, 0.114162, -0.65653, 0.316078, 0.927916, -0.197608, 0.58665, -0.354851, -0.727952, 3.29036, 5.31495, 148.07)
 script = ExtResource("9_v4ux6")
 Generate = false
@@ -1664,37 +1827,37 @@ Orientation = 1
 "Ring Size" = 1.1
 "Ring Ratio" = 1.0
 
-[node name="Child01" parent="MainAct/Rukh3/Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
+[node name="Child01" parent="MainAct/Rukh3Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0, 0)
 
-[node name="Child02" parent="MainAct/Rukh3/Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
+[node name="Child02" parent="MainAct/Rukh3Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, 0.646564, 0)
 
-[node name="Child03" parent="MainAct/Rukh3/Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
+[node name="Child03" parent="MainAct/Rukh3Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.339919, 1.04616, 0)
 
-[node name="Child04" parent="MainAct/Rukh3/Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
+[node name="Child04" parent="MainAct/Rukh3Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.339919, 1.04616, 0)
 
-[node name="Child05" parent="MainAct/Rukh3/Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
+[node name="Child05" parent="MainAct/Rukh3Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889919, 0.646564, 0)
 
-[node name="Child06" parent="MainAct/Rukh3/Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
+[node name="Child06" parent="MainAct/Rukh3Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -9.61651e-08, 0)
 
-[node name="Child07" parent="MainAct/Rukh3/Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
+[node name="Child07" parent="MainAct/Rukh3Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889919, -0.646564, 0)
 
-[node name="Child08" parent="MainAct/Rukh3/Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
+[node name="Child08" parent="MainAct/Rukh3Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.339919, -1.04616, 0)
 
-[node name="Child09" parent="MainAct/Rukh3/Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
+[node name="Child09" parent="MainAct/Rukh3Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.339919, -1.04616, 0)
 
-[node name="Child10" parent="MainAct/Rukh3/Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
+[node name="Child10" parent="MainAct/Rukh3Skyroad/PearlsRing2" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, -0.646563, 0)
 
-[node name="Pearlsring3" type="Node3D" parent="MainAct/Rukh3/Skyroad"]
+[node name="Pearlsring3" type="Node3D" parent="MainAct/Rukh3Skyroad"]
 transform = Transform3D(0.653282, -0.478017, 0.587122, 0.320438, 0.877162, 0.357619, -0.685953, -0.0454894, 0.726217, 22.3396, 13.8721, 169.352)
 script = ExtResource("9_v4ux6")
 Generate = false
@@ -1705,37 +1868,37 @@ Orientation = 1
 "Ring Size" = 1.0
 "Ring Ratio" = 1.0
 
-[node name="Child01" parent="MainAct/Rukh3/Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
+[node name="Child01" parent="MainAct/Rukh3Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 
-[node name="Child02" parent="MainAct/Rukh3/Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
+[node name="Child02" parent="MainAct/Rukh3Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0.587785, 0)
 
-[node name="Child03" parent="MainAct/Rukh3/Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
+[node name="Child03" parent="MainAct/Rukh3Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0.951057, 0)
 
-[node name="Child04" parent="MainAct/Rukh3/Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
+[node name="Child04" parent="MainAct/Rukh3Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0.951057, 0)
 
-[node name="Child05" parent="MainAct/Rukh3/Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
+[node name="Child05" parent="MainAct/Rukh3Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0.587785, 0)
 
-[node name="Child06" parent="MainAct/Rukh3/Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
+[node name="Child06" parent="MainAct/Rukh3Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
 
-[node name="Child07" parent="MainAct/Rukh3/Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
+[node name="Child07" parent="MainAct/Rukh3Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, -0.587785, 0)
 
-[node name="Child08" parent="MainAct/Rukh3/Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
+[node name="Child08" parent="MainAct/Rukh3Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, -0.951056, 0)
 
-[node name="Child09" parent="MainAct/Rukh3/Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
+[node name="Child09" parent="MainAct/Rukh3Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, -0.951056, 0)
 
-[node name="Child10" parent="MainAct/Rukh3/Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
+[node name="Child10" parent="MainAct/Rukh3Skyroad/Pearlsring3" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, -0.587785, 0)
 
-[node name="PearlsRings4" type="Node3D" parent="MainAct/Rukh3/Skyroad"]
+[node name="PearlsRings4" type="Node3D" parent="MainAct/Rukh3Skyroad"]
 transform = Transform3D(0.794991, -0.529026, 0.29683, 0.389751, 0.820411, 0.418335, -0.464836, -0.216882, 0.858419, 35.2863, 25.0635, 191.436)
 script = ExtResource("9_v4ux6")
 Generate = false
@@ -1746,37 +1909,37 @@ Orientation = 1
 "Ring Size" = 1.0
 "Ring Ratio" = 1.0
 
-[node name="Child01" parent="MainAct/Rukh3/Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
+[node name="Child01" parent="MainAct/Rukh3Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 
-[node name="Child02" parent="MainAct/Rukh3/Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
+[node name="Child02" parent="MainAct/Rukh3Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, 0.587785, 0)
 
-[node name="Child03" parent="MainAct/Rukh3/Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
+[node name="Child03" parent="MainAct/Rukh3Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, 0.951057, 0)
 
-[node name="Child04" parent="MainAct/Rukh3/Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
+[node name="Child04" parent="MainAct/Rukh3Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, 0.951057, 0)
 
-[node name="Child05" parent="MainAct/Rukh3/Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
+[node name="Child05" parent="MainAct/Rukh3Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, 0.587785, 0)
 
-[node name="Child06" parent="MainAct/Rukh3/Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
+[node name="Child06" parent="MainAct/Rukh3Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -8.74228e-08, 0)
 
-[node name="Child07" parent="MainAct/Rukh3/Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
+[node name="Child07" parent="MainAct/Rukh3Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.809017, -0.587785, 0)
 
-[node name="Child08" parent="MainAct/Rukh3/Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
+[node name="Child08" parent="MainAct/Rukh3Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309017, -0.951056, 0)
 
-[node name="Child09" parent="MainAct/Rukh3/Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
+[node name="Child09" parent="MainAct/Rukh3Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309017, -0.951056, 0)
 
-[node name="Child10" parent="MainAct/Rukh3/Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
+[node name="Child10" parent="MainAct/Rukh3Skyroad/PearlsRings4" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.809017, -0.587785, 0)
 
-[node name="Pearlsring5" type="Node3D" parent="MainAct/Rukh3/Skyroad"]
+[node name="Pearlsring5" type="Node3D" parent="MainAct/Rukh3Skyroad"]
 transform = Transform3D(0.837837, -0.387615, -0.38441, 0.509716, 0.807578, 0.296633, 0.195463, -0.44447, 0.874204, 34.3764, 36.5448, 218.434)
 script = ExtResource("9_v4ux6")
 Generate = false
@@ -1787,37 +1950,37 @@ Orientation = 1
 "Ring Size" = 1.1
 "Ring Ratio" = 1.0
 
-[node name="Child01" parent="MainAct/Rukh3/Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
+[node name="Child01" parent="MainAct/Rukh3Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0, 0)
 
-[node name="Child02" parent="MainAct/Rukh3/Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
+[node name="Child02" parent="MainAct/Rukh3Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, 0.646564, 0)
 
-[node name="Child03" parent="MainAct/Rukh3/Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
+[node name="Child03" parent="MainAct/Rukh3Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.339919, 1.04616, 0)
 
-[node name="Child04" parent="MainAct/Rukh3/Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
+[node name="Child04" parent="MainAct/Rukh3Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.339919, 1.04616, 0)
 
-[node name="Child05" parent="MainAct/Rukh3/Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
+[node name="Child05" parent="MainAct/Rukh3Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889919, 0.646564, 0)
 
-[node name="Child06" parent="MainAct/Rukh3/Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
+[node name="Child06" parent="MainAct/Rukh3Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -9.61651e-08, 0)
 
-[node name="Child07" parent="MainAct/Rukh3/Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
+[node name="Child07" parent="MainAct/Rukh3Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889919, -0.646564, 0)
 
-[node name="Child08" parent="MainAct/Rukh3/Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
+[node name="Child08" parent="MainAct/Rukh3Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.339919, -1.04616, 0)
 
-[node name="Child09" parent="MainAct/Rukh3/Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
+[node name="Child09" parent="MainAct/Rukh3Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.339919, -1.04616, 0)
 
-[node name="Child10" parent="MainAct/Rukh3/Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
+[node name="Child10" parent="MainAct/Rukh3Skyroad/Pearlsring5" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, -0.646563, 0)
 
-[node name="PearlsRings6" type="Node3D" parent="MainAct/Rukh3/Skyroad"]
+[node name="PearlsRings6" type="Node3D" parent="MainAct/Rukh3Skyroad"]
 transform = Transform3D(0.876675, 0.427289, -0.221014, -0.328921, 0.867661, 0.37277, 0.351047, -0.254102, 0.901217, 11.7803, 86.1077, 258.077)
 script = ExtResource("9_v4ux6")
 Generate = false
@@ -1828,37 +1991,37 @@ Orientation = 1
 "Ring Size" = 1.1
 "Ring Ratio" = 1.0
 
-[node name="Child01" parent="MainAct/Rukh3/Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
+[node name="Child01" parent="MainAct/Rukh3Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0, 0)
 
-[node name="Child02" parent="MainAct/Rukh3/Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
+[node name="Child02" parent="MainAct/Rukh3Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, 0.646564, 0)
 
-[node name="Child03" parent="MainAct/Rukh3/Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
+[node name="Child03" parent="MainAct/Rukh3Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.339919, 1.04616, 0)
 
-[node name="Child04" parent="MainAct/Rukh3/Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
+[node name="Child04" parent="MainAct/Rukh3Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.339919, 1.04616, 0)
 
-[node name="Child05" parent="MainAct/Rukh3/Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
+[node name="Child05" parent="MainAct/Rukh3Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889919, 0.646564, 0)
 
-[node name="Child06" parent="MainAct/Rukh3/Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
+[node name="Child06" parent="MainAct/Rukh3Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -9.61651e-08, 0)
 
-[node name="Child07" parent="MainAct/Rukh3/Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
+[node name="Child07" parent="MainAct/Rukh3Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889919, -0.646564, 0)
 
-[node name="Child08" parent="MainAct/Rukh3/Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
+[node name="Child08" parent="MainAct/Rukh3Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.339919, -1.04616, 0)
 
-[node name="Child09" parent="MainAct/Rukh3/Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
+[node name="Child09" parent="MainAct/Rukh3Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.339919, -1.04616, 0)
 
-[node name="Child10" parent="MainAct/Rukh3/Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
+[node name="Child10" parent="MainAct/Rukh3Skyroad/PearlsRings6" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, -0.646563, 0)
 
-[node name="PearlsRings7" type="Node3D" parent="MainAct/Rukh3/Skyroad"]
+[node name="PearlsRings7" type="Node3D" parent="MainAct/Rukh3Skyroad"]
 transform = Transform3D(0.878403, 0.45319, -0.151686, -0.357734, 0.833987, 0.420089, 0.316885, -0.314744, 0.894714, 10.2653, 89.3811, 265.485)
 script = ExtResource("9_v4ux6")
 Generate = false
@@ -1869,37 +2032,37 @@ Orientation = 1
 "Ring Size" = 1.1
 "Ring Ratio" = 1.0
 
-[node name="Child01" parent="MainAct/Rukh3/Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
+[node name="Child01" parent="MainAct/Rukh3Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0, 0)
 
-[node name="Child02" parent="MainAct/Rukh3/Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
+[node name="Child02" parent="MainAct/Rukh3Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, 0.646564, 0)
 
-[node name="Child03" parent="MainAct/Rukh3/Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
+[node name="Child03" parent="MainAct/Rukh3Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.339919, 1.04616, 0)
 
-[node name="Child04" parent="MainAct/Rukh3/Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
+[node name="Child04" parent="MainAct/Rukh3Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.339919, 1.04616, 0)
 
-[node name="Child05" parent="MainAct/Rukh3/Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
+[node name="Child05" parent="MainAct/Rukh3Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889919, 0.646564, 0)
 
-[node name="Child06" parent="MainAct/Rukh3/Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
+[node name="Child06" parent="MainAct/Rukh3Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -9.61651e-08, 0)
 
-[node name="Child07" parent="MainAct/Rukh3/Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
+[node name="Child07" parent="MainAct/Rukh3Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889919, -0.646564, 0)
 
-[node name="Child08" parent="MainAct/Rukh3/Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
+[node name="Child08" parent="MainAct/Rukh3Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.339919, -1.04616, 0)
 
-[node name="Child09" parent="MainAct/Rukh3/Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
+[node name="Child09" parent="MainAct/Rukh3Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.339919, -1.04616, 0)
 
-[node name="Child10" parent="MainAct/Rukh3/Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
+[node name="Child10" parent="MainAct/Rukh3Skyroad/PearlsRings7" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, -0.646563, 0)
 
-[node name="PearlsRings8" type="Node3D" parent="MainAct/Rukh3/Skyroad"]
+[node name="PearlsRings8" type="Node3D" parent="MainAct/Rukh3Skyroad"]
 transform = Transform3D(0.882966, 0.462449, -0.0805769, -0.377736, 0.801876, 0.462919, 0.27869, -0.378305, 0.882729, 9.51801, 92.2926, 271.324)
 script = ExtResource("9_v4ux6")
 Generate = false
@@ -1910,34 +2073,34 @@ Orientation = 1
 "Ring Size" = 1.4
 "Ring Ratio" = 1.0
 
-[node name="Child01" parent="MainAct/Rukh3/Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
+[node name="Child01" parent="MainAct/Rukh3Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0, 0)
 
-[node name="Child02" parent="MainAct/Rukh3/Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
+[node name="Child02" parent="MainAct/Rukh3Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, 0.646564, 0)
 
-[node name="Child03" parent="MainAct/Rukh3/Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
+[node name="Child03" parent="MainAct/Rukh3Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.339919, 1.04616, 0)
 
-[node name="Child04" parent="MainAct/Rukh3/Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
+[node name="Child04" parent="MainAct/Rukh3Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.339919, 1.04616, 0)
 
-[node name="Child05" parent="MainAct/Rukh3/Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
+[node name="Child05" parent="MainAct/Rukh3Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889919, 0.646564, 0)
 
-[node name="Child06" parent="MainAct/Rukh3/Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
+[node name="Child06" parent="MainAct/Rukh3Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -9.61651e-08, 0)
 
-[node name="Child07" parent="MainAct/Rukh3/Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
+[node name="Child07" parent="MainAct/Rukh3Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.889919, -0.646564, 0)
 
-[node name="Child08" parent="MainAct/Rukh3/Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
+[node name="Child08" parent="MainAct/Rukh3Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.339919, -1.04616, 0)
 
-[node name="Child09" parent="MainAct/Rukh3/Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
+[node name="Child09" parent="MainAct/Rukh3Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.339919, -1.04616, 0)
 
-[node name="Child10" parent="MainAct/Rukh3/Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
+[node name="Child10" parent="MainAct/Rukh3Skyroad/PearlsRings8" instance=ExtResource("32_p08w8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.889919, -0.646563, 0)
 
 [node name="Rukh4" type="Node3D" parent="MainAct"]
@@ -2813,19 +2976,31 @@ shape = SubResource("BoxShape3D_x4cke")
 [connection signal="Activated" from="MainAct/Rukh2/GateGroup/Switch2" to="MainAct/Rukh2/GateGroup/Gate" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Rukh2/GateGroup/Switch2" to="MainAct/Rukh2/GateGroup/Gate" method="Deactivate"]
 [connection signal="Respawned" from="MainAct/Rukh2/GateGroup/Switch2" to="MainAct/Rukh2/GateGroup/Gate" method="Respawn"]
-[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger3" to="MainAct/Rukh3/GrindPillarFlyTrigger3/GrindPillarFly" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger1" to="MainAct/Rukh3/GrindPillarFlyTrigger1/GrindPillarFly1" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger1" to="MainAct/Rukh3/GrindPillarFlyTrigger1/GrindPillarFly2" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger1" to="MainAct/Rukh3/GrindPillarFlyTrigger1/GrindPillarFly3" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger2" to="MainAct/Rukh3/GrindPillarFlyTrigger2/GrindPillarFly1" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger2" to="MainAct/Rukh3/GrindPillarFlyTrigger2/GrindPillarFly2" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger2" to="MainAct/Rukh3/GrindPillarFlyTrigger2/GrindPillarFly3" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger3" to="MainAct/Rukh3/GrindPillarFlyTrigger3/GrindPillarFly1" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger3" to="MainAct/Rukh3/GrindPillarFlyTrigger3/GrindPillarFly2" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger3" to="MainAct/Rukh3/GrindPillarFlyTrigger3/GrindPillarFly3" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger4" to="MainAct/Rukh3/GrindPillarFlyTrigger4/GrindPillarFly4" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger4" to="MainAct/Rukh3/GrindPillarFlyTrigger4/GrindPillarFly6" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger4" to="MainAct/Rukh3/GrindPillarFlyTrigger4/GrindPillarFly7" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger4" to="MainAct/Rukh3/GrindPillarFlyTrigger4/GrindPillarFly8" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger5" to="MainAct/Rukh3/GrindPillarFlyTrigger5/GrindPillarFly9" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger5" to="MainAct/Rukh3/GrindPillarFlyTrigger5/GrindPillarFly10" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger5" to="MainAct/Rukh3/GrindPillarFlyTrigger5/GrindPillarFly11" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh3/SquarePillarFlyTrigger5" to="MainAct/Rukh3/SquarePillarFlyTrigger5/SquarePillarFly" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh3/SquarePillarFlyTrigger5" to="MainAct/Rukh3/SquarePillarFlyTrigger5/SquarePillarFly2" method="Activate"]
-[connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger3" to="MainAct/Rukh3/RoundPillarFlyTrigger3/GrindPillarFly2" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/SquarePillarFlyTrigger1" to="MainAct/Rukh3/SquarePillarFlyTrigger1/SquarePillarFly1" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/SquarePillarFlyTrigger1" to="MainAct/Rukh3/SquarePillarFlyTrigger1/SquarePillarFly2" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/SquarePillarFlyTrigger1" to="MainAct/Rukh3/SquarePillarFlyTrigger1/SquarePillarFly3" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger" to="MainAct/Rukh3/RoundPillarFlyTrigger/GrindPillarFly1" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger" to="MainAct/Rukh3/RoundPillarFlyTrigger/GrindPillarFly2" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger" to="MainAct/Rukh3/RoundPillarFlyTrigger/GreenMajin1" method="Spawn"]
+[connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger" to="MainAct/Rukh3/RoundPillarFlyTrigger/GreenMajin2" method="Spawn"]
+[connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger1" to="MainAct/Rukh3/RoundPillarFlyTrigger1/GrindPillarFly" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/RoundPillarFlyTrigger2" to="MainAct/Rukh3/RoundPillarFlyTrigger2/GrindPillarFly" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/UpperPath/Switch" to="MainAct/Rukh3/UpperPath/Switch/Spring" method="ShowLauncher"]
+[connection signal="Activated" from="MainAct/Rukh3/UpperPath/Switch" to="MainAct/Rukh3/UpperPath/SwitchCullingTrigger" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Rukh3/UpperPath/Switch" to="MainAct/Rukh3/UpperPath/Switch/Spring" method="HideLauncher"]
+[connection signal="Deactivated" from="MainAct/Rukh3/UpperPath/Switch" to="MainAct/Rukh3/UpperPath/SwitchCullingTrigger" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Rukh3/UpperPath/Switch/Spring" to="MainAct/Rukh3/UpperPath/Switch/Spring/Cam" method="Activate"]
+[connection signal="Activated" from="MainAct/Rukh3/UpperPath/CameraTrigger" to="MainAct/Rukh3/UpperPath/Switch/Spring/Cam" method="Deactivate"]
+[connection signal="Defeated" from="MainAct/Rukh3/GargoylePlatform/Gargoyle" to="MainAct/Rukh3/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Rukh4/GrindPillarFlyTrigger8" to="MainAct/Rukh4/GrindPillarFlyTrigger8/GrindPillarFly10" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh4/GrindPillarFlyTrigger9" to="MainAct/Rukh4/GrindPillarFlyTrigger9/GrindPillarFly10" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh4/GrindPillarFlyTrigger11" to="MainAct/Rukh4/GrindPillarFlyTrigger11/GrindPillarFly" method="Activate"]
