@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://wfh54hnc028k"]
+[gd_scene load_steps=32 format=3 uid="uid://wfh54hnc028k"]
 
 [ext_resource type="PackedScene" uid="uid://b5jl3vv1j1fck" path="res://object/player/resource/model/Sonic.gltf" id="1_ea3e1"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerAnimator.cs" id="2_3qp24"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://nvbpiay8inap" path="res://area/4 levitated ruin/object/model/special/SonicStone.gltf" id="8_r3bdb"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://biwe75w273iq7" path="res://object/player/resource/model/animation/animation tree/Root.tres" id="8_sfnih"]
 [ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="10_iki8q"]
+[ext_resource type="AnimationLibrary" uid="uid://dpd4w3nuuvybs" path="res://object/player/resource/model/animation/GimmickLibrary.gltf" id="12_0ewgh"]
 [ext_resource type="AudioStream" uid="uid://c5did7u4f8gq2" path="res://sound/sfx/player/flame countdown 1.wav" id="12_3lyoq"]
 [ext_resource type="Resource" uid="uid://ukcne4um86a6" path="res://resource/preset/camera/common/CutsceneCam.tres" id="14_u1car"]
 [ext_resource type="Material" uid="uid://cyphajdqgwnj8" path="res://object/player/resource/model/material/BodyTransparent.tres" id="16_icvwi"]
@@ -152,34 +153,21 @@ tracks/0/keys = {
 "values": [false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true]
 }
 
-[sub_resource type="Animation" id="Animation_ju8e7"]
-resource_name = "teleport-end"
+[sub_resource type="Animation" id="Animation_s0wax"]
+resource_name = "petrify-shake"
+length = 0.5
+step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SonicRoot:visible")
-tracks/0/interp = 1
+tracks/0/path = NodePath("SonicStone:rotation")
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-
-[sub_resource type="Animation" id="Animation_jxy1t"]
-resource_name = "teleport-start"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SonicRoot:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"times": PackedFloat32Array(0, 0.0666667, 0.1, 0.2, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.0872665), Vector3(0, 0, -0.0349066), Vector3(0, 0, 0.0523599), Vector3(0, 0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_c4tcg"]
@@ -210,23 +198,6 @@ tracks/1/keys = {
 "values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_s0wax"]
-resource_name = "petrify-shake"
-length = 0.5
-step = 0.0333333
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SonicStone:rotation")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0666667, 0.1, 0.2, 0.333333),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.0872665), Vector3(0, 0, -0.0349066), Vector3(0, 0, 0.0523599), Vector3(0, 0, 0)]
-}
-
 [sub_resource type="Animation" id="Animation_3mom7"]
 resource_name = "petrify-stop"
 length = 0.001
@@ -255,6 +226,36 @@ tracks/1/keys = {
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_ju8e7"]
+resource_name = "teleport-end"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SonicRoot:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_jxy1t"]
+resource_name = "teleport-start"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SonicRoot:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r0udk"]
 _data = {
 "RESET": SubResource("Animation_tuy1q"),
@@ -275,13 +276,16 @@ blurOverrideMaterial = ExtResource("16_icvwi")
 movementAnimationSpeedCurve = SubResource("Curve_skwgn")
 
 [node name="GeneralSkeleton" parent="SonicRoot" index="0"]
+bones/1/scale = Vector3(1, 1, 1)
 bones/2/rotation = Quaternion(0.00897831, -5.98702e-12, 1.91381e-09, 0.99996)
 bones/3/rotation = Quaternion(0.704511, 6.86235e-09, -1.13115e-08, 0.709693)
+bones/3/scale = Vector3(1, 0.999998, 0.999999)
 bones/4/rotation = Quaternion(0.996924, 1.07903e-15, 1.37244e-14, -0.0783794)
 bones/6/rotation = Quaternion(0.923503, 0.0930435, 0.0930429, -0.360317)
 bones/7/rotation = Quaternion(0.923503, -0.0930431, -0.0930439, -0.360317)
 bones/9/rotation = Quaternion(0.00762178, 0.70522, -0.0119404, 0.708847)
 bones/10/rotation = Quaternion(0.00230452, -0.69927, 0.00217972, 0.714851)
+bones/10/scale = Vector3(0.999988, 1, 0.999995)
 bones/11/rotation = Quaternion(0.55867, 0.762376, -0.0946179, -0.312598)
 bones/12/rotation = Quaternion(0.00527088, 0.0365675, -0.0021433, 0.999315)
 bones/13/position = Vector3(0.0471311, 0.131563, 0.0147976)
@@ -299,9 +303,10 @@ bones/22/rotation = Quaternion(0.0130255, 0.00734399, 0.117758, 0.99293)
 bones/23/rotation = Quaternion(-0.00150023, 0.00739151, -0.000392204, 0.999972)
 bones/24/rotation = Quaternion(0.00834599, -0.0104869, 0.000889611, 0.99991)
 bones/25/rotation = Quaternion(-0.507969, 0.493849, 0.492113, 0.505871)
+bones/25/scale = Vector3(1, 1, 1)
 bones/26/rotation = Quaternion(0.00761439, -0.70522, 0.0119288, 0.708847)
-bones/26/scale = Vector3(1, 0.999999, 1)
 bones/27/rotation = Quaternion(0.00230789, 0.69927, -0.00217438, 0.714851)
+bones/27/scale = Vector3(0.999988, 1, 0.999996)
 bones/29/rotation = Quaternion(0.00527071, -0.0365676, 0.00214331, 0.999315)
 bones/31/rotation = Quaternion(0.00294867, -0.00678224, 0.000281738, 0.999973)
 bones/34/rotation = Quaternion(0.0167333, -0.0107753, -0.000105105, 0.999802)
@@ -321,6 +326,7 @@ bones/52/rotation = Quaternion(-0.151181, -0.0372496, -0.0645466, 0.985693)
 bones/53/rotation = Quaternion(-0.724152, 0.0852654, 0.0852654, 0.679016)
 bones/54/rotation = Quaternion(-0.253687, -0.0999927, 0.0414427, 0.961211)
 bones/56/rotation = Quaternion(0.999986, 2.97474e-07, -1.92112e-07, 0.0053232)
+bones/56/scale = Vector3(1, 1, 1)
 bones/57/rotation = Quaternion(0.00899519, -2.3455e-12, -2.37187e-09, 0.99996)
 bones/58/rotation = Quaternion(0.704506, 8.15635e-09, -9.99258e-09, 0.709699)
 bones/59/rotation = Quaternion(0.996924, -1.09643e-15, -1.39458e-14, -0.0783794)
@@ -370,7 +376,7 @@ process_material = SubResource("ParticleProcessMaterial_ny081")
 draw_pass_1 = SubResource("QuadMesh_vcbic")
 
 [node name="RFoot" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="5"]
-transform = Transform3D(1, -6.92779e-14, -5.1853e-13, 5.12881e-13, 9.54606e-08, 0.999999, -1.77636e-14, -0.999998, 1.13156e-07, -0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, -9.76996e-14, -5.18738e-13, 5.12243e-13, 9.49949e-08, 0.999999, -2.13163e-14, -0.999998, 1.11293e-07, -0.0397276, 0.155469, 0.00205613)
 bone_name = "r_foot"
 bone_idx = 58
 
@@ -378,7 +384,7 @@ bone_idx = 58
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, -0.085, -0.15)
 
 [node name="LFoot" type="BoneAttachment3D" parent="SonicRoot/GeneralSkeleton" index="6"]
-transform = Transform3D(1, -3.55271e-15, 6.16018e-12, -6.22079e-12, 5.9139e-08, 1, 1.19016e-13, -1, 6.37956e-08, 0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, 2.4869e-14, 6.21635e-12, -6.22082e-12, 6.00703e-08, 1, 1.15463e-13, -1, 6.33299e-08, 0.0397276, 0.155469, 0.00205613)
 bone_name = "l_foot"
 bone_idx = 3
 
@@ -394,6 +400,7 @@ libraries = {
 "ActionLibrary": ExtResource("5_21j6r"),
 "BalanceLibrary": ExtResource("5_a0jad"),
 "EventLibrary": ExtResource("8_7bg0r"),
+"GimmickLibrary": ExtResource("12_0ewgh"),
 "SidleLibrary": ExtResource("6_pf4ty")
 }
 
@@ -474,6 +481,20 @@ parameters/balance_tree/wind_blend/blend_position = 0.0
 parameters/drift_tree/direction_transition/current_state = "left"
 parameters/drift_tree/direction_transition/transition_request = ""
 parameters/drift_tree/direction_transition/current_index = 0
+parameters/gimmick_tree/ivy_blend/blend_position = 0.0
+parameters/gimmick_tree/ivy_start_trigger/active = false
+parameters/gimmick_tree/ivy_start_trigger/internal_active = false
+parameters/gimmick_tree/ivy_start_trigger/request = 0
+parameters/gimmick_tree/ivy_swing_trigger/active = false
+parameters/gimmick_tree/ivy_swing_trigger/internal_active = false
+parameters/gimmick_tree/ivy_swing_trigger/request = 0
+parameters/gimmick_tree/petrify_stop_trigger/active = false
+parameters/gimmick_tree/petrify_stop_trigger/internal_active = false
+parameters/gimmick_tree/petrify_stop_trigger/request = 0
+parameters/gimmick_tree/state_transition/current_state = "ivy"
+parameters/gimmick_tree/state_transition/transition_request = ""
+parameters/gimmick_tree/state_transition/current_index = 0
+parameters/gimmick_tree/zipline_blend/blend_position = 0.0
 parameters/ground_transition/current_state = "enabled"
 parameters/ground_transition/transition_request = ""
 parameters/ground_transition/current_index = 0

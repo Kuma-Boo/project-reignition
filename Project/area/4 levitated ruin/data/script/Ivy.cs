@@ -109,7 +109,7 @@ public partial class Ivy : Launcher
 		IsSleeping = true;
 
 		// Adjust swing speed based on length (longer ivys swing slower)
-		lengthInfluence = Mathf.Clamp(20f / length, 0.5f, 5f);
+		lengthInfluence = Mathf.Clamp(50f / length, 0.5f, 5f);
 		StageSettings.Instance.Respawned += Respawn;
 	}
 

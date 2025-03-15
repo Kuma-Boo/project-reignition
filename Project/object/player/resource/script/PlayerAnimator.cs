@@ -839,7 +839,7 @@ public partial class PlayerAnimator : Node3D
 	#endregion
 
 	#region Gimmicks
-	private readonly StringName GimmickTransition = "parameters/gimmick_tree/Transition/transition_request";
+	private readonly StringName GimmickTransition = "parameters/gimmick_tree/state_transition/transition_request";
 
 	private readonly StringName IvyState = "ivy";
 	private readonly StringName IvyBlend = "parameters/gimmick_tree/ivy_blend/blend_position";
@@ -876,16 +876,27 @@ public partial class PlayerAnimator : Node3D
 
 	public void StartPetrify()
 	{
+		SetStateXfade(0f);
+		animationTree.Set(StateTransition, GimmickState);
+
 		eventAnimationPlayer.Play("petrify-start");
 		eventAnimationPlayer.Advance(0.0);
 	}
+
 	public void ShakePetrify()
 	{
 		eventAnimationPlayer.Stop(true);
 		eventAnimationPlayer.Play("petrify-shake");
 	}
+
+	private readonly StringName PetrifyState = "petrify";
+	private readonly StringName PetrifyStopTrigger = "parameters/gimmick_tree/petrify_stop_trigger/request";
 	public void StopPetrify()
 	{
+		animationTree.Set(GimmickTransition, ZiplineState);
+		animationTree.Set(PetrifyStopTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		ResetState(.2f);
+
 		eventAnimationPlayer.Play("petrify-stop");
 		eventAnimationPlayer.Advance(0.0);
 	}
