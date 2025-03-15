@@ -209,6 +209,10 @@ public partial class LockoutResource : Resource
 
 		// Individual actions start here. Add more as needed.
 		Backflip = 4,
+		Attacks = 8,
+		Sidestep = 16,
+		Lightdash = 32,
+		GeneralActions = ActionButton + Attacks + Backflip + Sidestep + Lightdash,
 	}
 
 	public float ApplySpeed(float currentSpeed, MovementSetting movementSettings)
