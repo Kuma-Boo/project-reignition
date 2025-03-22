@@ -17,23 +17,6 @@ public partial class WindTrigger : StageTriggerModule
 	public override void _Ready()
 	{
 		_windFX = GetNodeOrNull<GpuParticles3D>(windFX);
-		if (IsInstanceValid(_windFX))
-		{
-			// Place WindFX in the right spot
-			foreach (Node node in GetParent().GetChildren())
-			{
-				if (node is not CollisionShape3D)
-					continue;
-
-				Shape3D shape = (node as CollisionShape3D).Shape;
-				if (shape is BoxShape3D)
-				{
-					_windFX.GlobalPosition = GlobalPosition + (this.Back() * (shape as BoxShape3D).Size.Z);
-					break;
-				}
-			}
-		}
-
 		DisableProcessing();
 	}
 
@@ -45,6 +28,8 @@ public partial class WindTrigger : StageTriggerModule
 
 		if (!Player.Skills.IsSpeedBreakActive)
 			Player.ExternalVelocity += this.Forward() * windStrength * influence;
+
+		GlobalPosition = Player.PathFollower.GlobalPosition;
 	}
 
 	public override void Activate()

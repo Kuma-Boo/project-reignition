@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=69 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
@@ -58,9 +58,21 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_ypvwq"]
 size = Vector3(20, 40, 5)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_x4cke"]
+size = Vector3(20, 20, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6dno5"]
+size = Vector3(20, 20, 80)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ijdpl"]
+size = Vector3(20, 20, 90)
+
 [sub_resource type="Curve" id="Curve_k0wty"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 0.4), 0.0, 0.0, 0, 0, Vector2(1, 0.3), 0.0, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_aevxi"]
+size = Vector3(20, 20, 80)
 
 [sub_resource type="Curve" id="Curve_h1c5x"]
 min_value = -0.3
@@ -76,6 +88,9 @@ point_count = 2
 [sub_resource type="BoxShape3D" id="BoxShape3D_6g03t"]
 size = Vector3(20, 5, 20)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_cbueu"]
+size = Vector3(20, 40, 180)
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_xifpu"]
 
 [sub_resource type="Curve3D" id="Curve3D_xwhik"]
@@ -90,8 +105,8 @@ min_value = -1.0
 _data = [Vector2(0, -0.8), 0.0, 0.0, 0, 0, Vector2(0.3, 0.8), 0.0, 0.0, 0, 0, Vector2(0.7, -0.8), 0.0, 0.0, 0, 0, Vector2(1, 0.8), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_x4cke"]
-size = Vector3(10, 20, 30)
+[sub_resource type="BoxShape3D" id="BoxShape3D_t85uo"]
+size = Vector3(20, 40, 130)
 
 [node name="Stage" type="Node"]
 
@@ -123,6 +138,34 @@ shape = SubResource("BoxShape3D_ypvwq")
 script = ExtResource("4_4rpxf")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
+
+[node name="WindTrigger1" parent="MainAct/Rukh1" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -19)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="WindTrigger" parent="MainAct/Rukh1/WindTrigger1" instance=ExtResource("31_jvmbg")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh1/WindTrigger1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_x4cke")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="MainAct/Rukh1/WindTrigger1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, -53)
+shape = SubResource("BoxShape3D_x4cke")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="MainAct/Rukh1/WindTrigger1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.6, -107)
+shape = SubResource("BoxShape3D_x4cke")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="MainAct/Rukh1/WindTrigger1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 15.6, -161)
+shape = SubResource("BoxShape3D_6dno5")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="MainAct/Rukh1/WindTrigger1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16, -234)
+shape = SubResource("BoxShape3D_x4cke")
 
 [node name="SquarePillarFlyTrigger" parent="MainAct/Rukh1" instance=ExtResource("5_yejv7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -14)
@@ -552,6 +595,18 @@ script = ExtResource("4_4rpxf")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
 
+[node name="WindTrigger2" parent="MainAct/Rukh2" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, -42)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="WindTrigger" parent="MainAct/Rukh2/WindTrigger2" instance=ExtResource("31_jvmbg")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh2/WindTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -20)
+shape = SubResource("BoxShape3D_ijdpl")
+
 [node name="Rings1" type="Node3D" parent="MainAct/Rukh2"]
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 2, -21)
 script = ExtResource("9_v4ux6")
@@ -770,7 +825,7 @@ endCap = NodePath("")
 collider = NodePath("")
 
 [node name="GreenMajin3" parent="MainAct/Rukh2" instance=ExtResource("31_ueb1o")]
-transform = Transform3D(0.998568, 0, -0.0535037, 0, 1, 0, 0.0535037, 0, 0.998568, -1.20973, 9.03142, -137.625)
+transform = Transform3D(0.998568, 0, -0.0535037, 0, 1, 0, 0.0535037, 0, 0.998568, -1.50973, 9.03142, -137.625)
 rangeOverride = 40
 
 [node name="GrindPillarStatic2" parent="MainAct/Rukh2" instance=ExtResource("15_oja87")]
@@ -798,7 +853,7 @@ collider = NodePath("")
 transform = Transform3D(0.984808, -0.173648, 0, 0.173642, 0.98477, 0.00872654, -0.00151535, -0.00859396, 0.999962, 9.50113, 11.0178, -159.733)
 
 [node name="GreenMajin6" parent="MainAct/Rukh2" instance=ExtResource("31_ueb1o")]
-transform = Transform3D(0.951471, 0, -0.307739, 0, 1, 0, 0.307739, 0, 0.951471, 7.77678, 12.6231, -162.183)
+transform = Transform3D(0.951471, 0, -0.307739, 0, 1, 0, 0.307739, 0, 0.951471, 8.27678, 13.0231, -162.883)
 rangeOverride = 40
 
 [node name="GrindPillarStatic5" parent="MainAct/Rukh2" instance=ExtResource("15_oja87")]
@@ -1003,6 +1058,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -100, -700)
 script = ExtResource("4_4rpxf")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
+
+[node name="WindTrigger3" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -40)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="WindTrigger" parent="MainAct/Rukh3/WindTrigger3" instance=ExtResource("31_jvmbg")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/WindTrigger3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -25)
+shape = SubResource("BoxShape3D_aevxi")
 
 [node name="Rings1" type="Node3D" parent="MainAct/Rukh3"]
 transform = Transform3D(1, 0, 0, 0, 0.992548, -0.121869, 0, 0.12187, 0.992546, 0, 1, -14)
@@ -2110,6 +2177,18 @@ script = ExtResource("4_4rpxf")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
 
+[node name="WindTrigger4" parent="MainAct/Rukh4" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -16)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="WindTrigger" parent="MainAct/Rukh4/WindTrigger4" instance=ExtResource("31_jvmbg")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh4/WindTrigger4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -75)
+shape = SubResource("BoxShape3D_cbueu")
+
 [node name="GrindPillarFlyTrigger" parent="MainAct/Rukh4" instance=ExtResource("5_yejv7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -5)
 "Enter Mode" = 0
@@ -2455,7 +2534,7 @@ smoothPausing = true
 root = NodePath("BlueMajin")
 
 [node name="BlueMajin" parent="MainAct/Rukh4/MovingMajin3" instance=ExtResource("11_427b8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, 0, 0)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
@@ -4130,6 +4209,18 @@ script = ExtResource("4_4rpxf")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
 
+[node name="WindTrigger5" parent="MainAct/Rukh5" instance=ExtResource("5_yejv7")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 9.15527e-05, 5.5, 84)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="WindTrigger" parent="MainAct/Rukh5/WindTrigger5" instance=ExtResource("31_jvmbg")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh5/WindTrigger5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -50)
+shape = SubResource("BoxShape3D_t85uo")
+
 [node name="DashPanel1" parent="MainAct/Rukh5" instance=ExtResource("8_qbwj7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62939e-05, 4.3, 95)
 
@@ -4650,18 +4741,6 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 48,
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Tower/Goal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 3)
 shape = SubResource("BoxShape3D_ypvwq")
-
-[node name="WindTrigger1" parent="." instance=ExtResource("5_yejv7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -19)
-"Trigger Mode" = 2
-"Enter Mode" = 0
-"Exit Mode" = 0
-
-[node name="WindTrigger" parent="WindTrigger1" instance=ExtResource("31_jvmbg")]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WindTrigger1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
-shape = SubResource("BoxShape3D_x4cke")
 
 [connection signal="Activated" from="MainAct/CullingTrigger/Tower" to="MainAct/Tower" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingTrigger/Tower" to="MainAct/Tower" method="Deactivate"]

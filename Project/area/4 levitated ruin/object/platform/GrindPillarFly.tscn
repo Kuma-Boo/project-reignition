@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://x3scwb5r13dw"]
+[gd_scene load_steps=10 format=3 uid="uid://x3scwb5r13dw"]
 
 [ext_resource type="Script" path="res://area/4 levitated ruin/data/script/FlyingDestructableObject.cs" id="1_nmd6a"]
 [ext_resource type="PackedScene" uid="uid://vdrt1jk4o1vd" path="res://area/4 levitated ruin/object/model/platform/GrindPillar.gltf" id="2_me0lf"]
@@ -70,6 +70,70 @@ tracks/4/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Root/Rotation/Trigger/CollisionShape3D:disabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Root/Rotation/GrindPillar/GrindPillarMesh:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_xoqmn"]
+resource_name = "deactivate"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/Rotation/Trigger/CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/Rotation/GrindPillar/GrindPillarCollision/StaticBody3D/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root/Rotation/GrindPillar/GrindPillarMesh:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_fgo1a"]
 resource_name = "fly"
@@ -131,6 +195,7 @@ tracks/2/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pmcqp"]
 _data = {
 "RESET": SubResource("Animation_3al21"),
+"deactivate": SubResource("Animation_xoqmn"),
 "fly": SubResource("Animation_fgo1a"),
 "shatter": SubResource("Animation_yrfwa")
 }

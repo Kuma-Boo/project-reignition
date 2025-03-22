@@ -68,6 +68,8 @@ public partial class PlayerController : CharacterBody3D
 		Skills.ProcessPhysics();
 		Animator.ProcessPhysics();
 		PathFollower.Resync();
+
+		ExternalVelocity = Vector3.Zero; // Reset external velocity after updating player
 	}
 
 	/// <summary> Player's horizontal movespeed, ignoring slopes. </summary>
@@ -124,10 +126,10 @@ public partial class PlayerController : CharacterBody3D
 			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, Stats.GroundSettings.Friction * SlopeRatio * PhysicsManager.physicsDelta);
 	}
 
-	public void ApplyMovement()
+	public void ApplyMovement() => ApplyMovement(GetMovementDirection());
+	public void ApplyMovement(Vector3 overrideDirection)
 	{
-		Velocity = (GetMovementDirection() * MoveSpeed) + (UpDirection * VerticalSpeed) + ExternalVelocity;
-		ExternalVelocity = Vector3.Zero;
+		Velocity = (overrideDirection * MoveSpeed) + (UpDirection * VerticalSpeed) + ExternalVelocity;
 		MoveAndSlide();
 	}
 
