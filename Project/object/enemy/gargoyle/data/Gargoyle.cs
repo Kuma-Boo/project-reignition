@@ -33,6 +33,7 @@ public partial class Gargoyle : Enemy
 	private Vector3 targetPosition;
 	private Vector3 velocity;
 	private readonly float MovementSmoothing = .5f;
+	private readonly float CollisionRadius = 0.5f;
 
 	private bool isActionTimerPaused;
 	private float actionTimer;
@@ -70,6 +71,7 @@ public partial class Gargoyle : Enemy
 
 		base.SetUp();
 		homePosition = GlobalPosition + (this.Forward() * 2.0f);
+		AnimationTree.Active = true;
 	}
 
 	public override void Respawn()
@@ -98,14 +100,28 @@ public partial class Gargoyle : Enemy
 		if (state == State.Statue)
 			return;
 
+		if (state == State.Idle || state == State.Petrify || isSlashMovementEnabled)
+			ProcessMovement();
+
 		if (!IsInRange && !Player.IsPetrified)
 			return;
 
-		UpdateActions();
+		if (isWindballActive)
+			windball.GlobalPosition += windball.Forward() * WindballMoveSpeed * PhysicsManager.physicsDelta;
+
+		if (isActionTimerPaused)
+			return;
+
+		actionTimer = Mathf.MoveToward(actionTimer, 0, PhysicsManager.physicsDelta);
+		if (Mathf.IsZeroApprox(actionTimer))
+			StartAction();
 	}
 
 	protected override void Spawn()
 	{
+		if (state != State.Statue)
+			return;
+
 		base.Spawn();
 
 		StartIdle();
@@ -161,6 +177,13 @@ public partial class Gargoyle : Enemy
 		AnimationTree.Set(DefeatTransition, "enabled");
 	}
 
+	private void ProcessMovement()
+	{
+		GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref velocity, MovementSmoothing);
+		TrackPlayer();
+		Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
+	}
+
 	private void StartAction()
 	{
 		actionTimer = ActionInterval;
@@ -186,26 +209,6 @@ public partial class Gargoyle : Enemy
 		}
 	}
 
-	private void UpdateActions()
-	{
-		if (state == State.Idle || state == State.Petrify || isSlashMovementEnabled)
-		{
-			GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref velocity, MovementSmoothing);
-			TrackPlayer();
-			Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
-		}
-
-		if (isWindballActive)
-			windball.GlobalPosition += windball.Forward() * WindballMoveSpeed * PhysicsManager.physicsDelta;
-
-		if (isActionTimerPaused)
-			return;
-
-		actionTimer = Mathf.MoveToward(actionTimer, 0, PhysicsManager.physicsDelta);
-		if (Mathf.IsZeroApprox(actionTimer))
-			StartAction();
-	}
-
 	private void StartPetrify()
 	{
 		state = State.Petrify;
@@ -227,8 +230,17 @@ public partial class Gargoyle : Enemy
 	private void StartSlashMovement()
 	{
 		isSlashMovementEnabled = true;
-		targetPosition = Player.GlobalPosition + ((Player.GlobalPosition - GlobalPosition).Normalized() * 5.0f);
+		Vector3 direction = (Player.GlobalPosition - GlobalPosition).Normalized();
+		targetPosition = Player.GlobalPosition + (direction * 5.0f);
 		targetPosition.Y = Mathf.Lerp(homePosition.Y, targetPosition.Y, .5f); // Reduce vertical following ability
+
+		Vector3 castPosition = GlobalPosition + (Vector3.Up * 2f);
+		RaycastHit hit = this.CastRay(castPosition, targetPosition - castPosition, Runtime.Instance.environmentMask);
+		DebugManager.DrawRay(castPosition, targetPosition - castPosition, Colors.Pink);
+		if (hit)
+		{
+			targetPosition = hit.point - (direction * CollisionRadius);
+		}
 	}
 
 	private void StartIdle()
