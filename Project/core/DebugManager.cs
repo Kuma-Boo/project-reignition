@@ -248,7 +248,13 @@ public partial class DebugManager : Node2D
 	}
 
 	public bool DrawDebugCam { get; private set; }
-	public void ToggleCamera(bool enabled) => DrawDebugCam = enabled;
+	[Signal]
+	public delegate void CameraVisibilityToggledEventHandler();
+	public void ToggleCamera(bool enabled)
+	{
+		DrawDebugCam = enabled;
+		EmitSignal(SignalName.CameraVisibilityToggled);
+	}
 
 	/// <summary> Use a custom save. </summary>
 	public bool UseDemoSave { get; private set; }

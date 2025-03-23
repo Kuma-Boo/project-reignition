@@ -49,6 +49,7 @@ public partial class PlayerCameraController : Node3D
 		CameraSettingsResource targetSettings = (StageSettings.Instance?.InitialCameraSettings) ?? defaultSettings;
 
 		SnapXform();
+		UpdateCameraVisibility();
 		UpdateCameraSettings(new()
 		{
 			SettingsResource = targetSettings,
@@ -63,6 +64,9 @@ public partial class PlayerCameraController : Node3D
 
 		Runtime.Instance.EventInputed += ReceiveInput;
 	}
+
+	public override void _EnterTree() => DebugManager.Instance.CameraVisibilityToggled += UpdateCameraVisibility;
+	public override void _ExitTree() => DebugManager.Instance.CameraVisibilityToggled -= UpdateCameraVisibility;
 
 	public void Respawn()
 	{
@@ -961,14 +965,15 @@ public partial class PlayerCameraController : Node3D
 			UpdateMotionBlur();
 	}
 
+	private void UpdateCameraVisibility()
+	{
+		debugMesh.Visible = DebugManager.Instance.DrawDebugCam;
+		PathFollower.Visible = DebugManager.Instance.DrawDebugCam;
+		Player.PathFollower.Visible = DebugManager.Instance.DrawDebugCam;
+	}
+
 	private void ToggleFreeCam()
 	{
-		// Update visibility
-		bool showCamera = isFreeCamActive && DebugManager.Instance.DrawDebugCam;
-		debugMesh.Visible = showCamera;
-		PathFollower.Visible = showCamera;
-		Player.PathFollower.Visible = showCamera;
-
 		if (isFreeCamActive)
 		{
 			Camera.Rotation = FreeCamRoot.GlobalRotation.RemoveVertical();
