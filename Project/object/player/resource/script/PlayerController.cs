@@ -193,7 +193,7 @@ public partial class PlayerController : CharacterBody3D
 		else if (VerticalSpeed < 0)
 			castLength += Mathf.Abs(VerticalSpeed) * PhysicsManager.physicsDelta;
 
-		if (!ExternalVelocity.IsZeroApprox())
+		if (!ExternalVelocity.IsZeroApprox() && IsOnGround)
 			castLength += ExternalVelocity.Length() * PhysicsManager.physicsDelta;
 
 		Vector3 checkOffset = Vector3.Zero;
