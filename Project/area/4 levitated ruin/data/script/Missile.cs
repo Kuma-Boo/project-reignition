@@ -23,7 +23,7 @@ public partial class Missile : Node3D
 	public override void _Ready()
 	{
 		StageSettings.Instance.Respawned += Respawn;
-		spawnData = new SpawnData(GetParent(), Transform);
+		spawnData = new(GetParent(), Transform);
 
 		if (GetParent() is PathFollow3D)
 		{

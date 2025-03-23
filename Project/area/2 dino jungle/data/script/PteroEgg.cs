@@ -39,7 +39,7 @@ public partial class PteroEgg : Area3D
 	{
 		Root = GetNodeOrNull<Node3D>(root);
 		Animator = GetNodeOrNull<AnimationPlayer>(animator);
-		spawnData = new SpawnData(GetParent(), Transform);
+		spawnData = new(GetParent(), Transform);
 		StageSettings.Instance.Respawned += Respawn;
 	}
 

@@ -168,7 +168,8 @@ public partial class Enemy : Node3D
 	public virtual void Despawn()
 	{
 		if (!IsInsideTree()) return;
-		GetParent().CallDeferred("remove_child", this);
+		Visible = false;
+		ProcessMode = ProcessModeEnum.Disabled;
 		EmitSignal(SignalName.Despawned);
 	}
 

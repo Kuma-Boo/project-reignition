@@ -49,9 +49,10 @@ namespace Project.Gameplay.Objects
 
 		public virtual void Despawn()
 		{
-			if (!IsInsideTree()) return;
+			if (!Visible) return;
 
-			GetParent().CallDeferred(MethodName.RemoveChild, this);
+			Visible = false;
+			ProcessMode = ProcessModeEnum.Disabled;
 			EmitSignal(SignalName.Despawned);
 		}
 

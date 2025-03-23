@@ -612,7 +612,7 @@ public struct SpawnData(Node parent, Transform3D transform)
 	/// <summary> Local transform to spawn with. </summary>
 	public Transform3D spawnTransform = transform;
 
-	public readonly void Respawn(Node n)
+	public readonly void Respawn(Node3D n)
 	{
 		if (parentNode != null && n.GetParent() != parentNode)
 		{
@@ -622,6 +622,8 @@ public struct SpawnData(Node parent, Transform3D transform)
 			parentNode.AddChild(n);
 		}
 
+		n.Visible = true;
+		n.ProcessMode = Node.ProcessModeEnum.Inherit;
 		n.SetDeferred("transform", spawnTransform);
 	}
 }

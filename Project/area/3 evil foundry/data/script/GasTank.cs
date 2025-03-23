@@ -66,7 +66,7 @@ public partial class GasTank : Area3D
 			StageSettings.Instance.Respawned += Respawn;
 	}
 
-	public void InitializeSpawnData() => spawnData = new SpawnData(GetParent(), Transform);
+	public void InitializeSpawnData() => spawnData = new(GetParent(), Transform);
 
 	private void Respawn()
 	{
