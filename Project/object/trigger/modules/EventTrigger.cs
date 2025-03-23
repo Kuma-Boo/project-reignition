@@ -42,6 +42,9 @@ public partial class EventTrigger : StageTriggerModule
 	private readonly StringName EventAnimation = "event";
 	private readonly StringName DeactivateEventAnimation = "event-deactivate";
 
+	[Export(PropertyHint.Range, "0.1,5,0.1")] private float activationSpeedScale = 1f;
+	[Export(PropertyHint.Range, "0.1,5,0.1")] private float deactivationSpeedScale = 1f;
+
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
 	{
@@ -215,7 +218,7 @@ public partial class EventTrigger : StageTriggerModule
 		if (isOneShot && isActivated) return;
 
 		Visible = true;
-		PlayAnimation(EventAnimation);
+		PlayAnimation(EventAnimation, activationSpeedScale);
 		EmitSignal(SignalName.Activated);
 	}
 
@@ -223,11 +226,11 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		if (isOneShot && !isActivated) return;
 
-		PlayAnimation(DeactivateEventAnimation);
+		PlayAnimation(DeactivateEventAnimation, deactivationSpeedScale);
 		EmitSignal(SignalName.Deactivated);
 	}
 
-	private void PlayAnimation(StringName animation)
+	private void PlayAnimation(StringName animation, float speedScale = 1f)
 	{
 		isActivated = true; // Update activation flag
 
@@ -241,7 +244,7 @@ public partial class EventTrigger : StageTriggerModule
 		if (!blendAnimations)
 			animator.Seek(0, true); // Reset animation if necessary
 
-		animator.Play(animation, blendAnimations ? animationBlending : 0.0f);
+		animator.Play(animation, blendAnimations ? animationBlending : 0.0f, speedScale);
 		animator.Advance(0);
 
 		if (playerStandin?.IsEmpty != false) // Not a player event -- return early

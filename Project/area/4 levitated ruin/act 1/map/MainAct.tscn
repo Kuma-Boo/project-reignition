@@ -126,7 +126,7 @@ instance_shader_parameters/path_length = 1000.0
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_065fl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -89, -971)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -20, -383)
 
 [node name="CullingTrigger" type="Node3D" parent="MainAct"]
 visible = false
@@ -686,6 +686,7 @@ path = NodePath("../../../../Static/Paths/Rukh2")
 [node name="Rukh2" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -20, -380)
 script = ExtResource("4_4rpxf")
+startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="WindTrigger2" parent="MainAct/Rukh2" instance=ExtResource("5_yejv7")]
@@ -762,7 +763,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -54)
 
 [node name="Switch1" parent="MainAct/Rukh2/GateGroup" instance=ExtResource("27_lcrpn")]
 transform = Transform3D(1, 0, 0, 0, 0.992546, 0.121869, 0, -0.121869, 0.992546, 0, 0, 0)
-toggleMode = true
 
 [node name="Switch2" parent="MainAct/Rukh2/GateGroup" instance=ExtResource("27_lcrpn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3, -57)
@@ -770,7 +770,10 @@ toggleMode = true
 
 [node name="Gate" parent="MainAct/Rukh2/GateGroup" instance=ExtResource("16_cr60c")]
 transform = Transform3D(1.5, 0, 0, 0, 4, 0, 0, 0, 1.5, 0, 2.5, -60)
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.2
 respawnAnimation = 2
+activationSpeedScale = 0.2
 
 [node name="RichPearls1" type="Node3D" parent="MainAct/Rukh2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 2.5, -67)
@@ -2710,7 +2713,7 @@ smoothPausing = true
 root = NodePath("BlueMajin")
 
 [node name="BlueMajin" parent="MainAct/Rukh4/MovingMajin3" instance=ExtResource("11_427b8")]
-transform = Transform3D(0.999997, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 0.999997, 0, 0, 0)
+transform = Transform3D(0.999997, 0, 0, 0, 1, 0, 0, 0, 0.999997, 0, 0, 0)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
@@ -5148,7 +5151,6 @@ shape = SubResource("BoxShape3D_ypvwq")
 [connection signal="Activated" from="MainAct/Rukh2/GrindPillarFlyTrigger" to="MainAct/Rukh2/GrindPillarFlyTrigger/SquarePillarFly" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh2/SquarePillarFlyTrigger" to="MainAct/Rukh2/SquarePillarFlyTrigger/SquarePillarFly" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh2/GateGroup/Switch1" to="MainAct/Rukh2/GateGroup/Switch2" method="Activate"]
-[connection signal="Deactivated" from="MainAct/Rukh2/GateGroup/Switch1" to="MainAct/Rukh2/GateGroup/Switch2" method="ToggleSwitch"]
 [connection signal="Activated" from="MainAct/Rukh2/GateGroup/Switch2" to="MainAct/Rukh2/GateGroup/Gate" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Rukh2/GateGroup/Switch2" to="MainAct/Rukh2/GateGroup/Gate" method="Deactivate"]
 [connection signal="Respawned" from="MainAct/Rukh2/GateGroup/Switch2" to="MainAct/Rukh2/GateGroup/Gate" method="Respawn"]
