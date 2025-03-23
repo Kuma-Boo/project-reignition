@@ -6,6 +6,9 @@ namespace Project.Gameplay.Hazards;
 /// <summary> Flies in a straight line or follows a path. </summary>
 public partial class Missile : Node3D
 {
+	[Signal] public delegate void ExplodedEventHandler();
+	[Signal] public delegate void DisabledEventHandler();
+
 	[Export] private float lifetime = 5.0f;
 	public void SetLifetime(float value) => lifetime = value;
 	[Export] private float moveSpeed = 20.0f;
@@ -77,12 +80,14 @@ public partial class Missile : Node3D
 	{
 		isExploded = true;
 		animator.Play("explode");
+		EmitSignal(SignalName.Exploded);
 	}
 
-	private void Disable()
+	public void Disable()
 	{
 		Visible = false;
 		ProcessMode = ProcessModeEnum.Disabled;
+		EmitSignal(SignalName.Disabled);
 	}
 
 	public void OnEntered(Area3D a)

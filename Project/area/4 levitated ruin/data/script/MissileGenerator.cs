@@ -43,15 +43,16 @@ public partial class MissileGenerator : Node3D
 	private void PoolMissile()
 	{
 		Missile missile = missileScene.Instantiate<Missile>();
+		missile.Disabled += () => QueueMissile(missile);
+
 		missile.SetLifetime(missileLifetime);
 		missile.SetSpeed(missleSpeed);
-		missilePool.Enqueue(missile);
-
-		missile.Visible = false;
-		missile.ProcessMode = ProcessModeEnum.Disabled;
+		missile.Disable();
 
 		AddChild(missile);
 	}
+
+	private void QueueMissile(Missile missile) => missilePool.Enqueue(missile);
 
 	private void SpawnMissile()
 	{
