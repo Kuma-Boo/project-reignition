@@ -6,25 +6,27 @@ namespace Project.Gameplay.Hazards;
 
 public partial class MissileGenerator : Node3D
 {
+	[Export] private bool isInvisibleSpawner;
 	[Export(PropertyHint.Range, "0,10,0.1, or_greater")] private float missileLifetime = 5.0f;
 	[Export(PropertyHint.Range, "0,30,0.1, or_greater")] private float missleSpeed = 20.0f;
 	[Export(PropertyHint.Range, "0,1,0.1, or_greater")] private float spawnInterval = 3.0f;
-	private float spawnTimer;
+	[Export] private float spawnTimer = 2.0f;
 
 	[ExportGroup("Components")]
 	[Export] private PackedScene missileScene;
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")] private NodePath spawnTransform;
 	private Node3D _spawnTransform;
-	private Queue<Missile> missilePool = [];
 
-	private readonly int DEFAULT_POOL_SIZE = 5;
+	private readonly int DefaultPoolSize = 5;
+	private readonly Queue<Missile> missilePool = [];
 
 	public override void _Ready()
 	{
-		spawnTimer = spawnInterval;
+		if (isInvisibleSpawner)
+			GetChild<Node3D>(0).Visible = false;
 		_spawnTransform = GetNode<Node3D>(spawnTransform);
 
-		for (int i = 0; i < DEFAULT_POOL_SIZE; i++)
+		for (int i = 0; i < DefaultPoolSize; i++)
 			PoolMissile();
 	}
 

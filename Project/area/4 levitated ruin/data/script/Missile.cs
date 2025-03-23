@@ -18,6 +18,7 @@ public partial class Missile : Node3D
 
 	private PathFollow3D pathFollow;
 	private float initialProgress;
+	private bool isExploded;
 
 	public override void _Ready()
 	{
@@ -35,6 +36,7 @@ public partial class Missile : Node3D
 
 	public void Respawn()
 	{
+		isExploded = false;
 		spawnData.Respawn(this);
 		if (pathFollow != null)
 			pathFollow.Progress = initialProgress;
@@ -56,7 +58,10 @@ public partial class Missile : Node3D
 			pathFollow.Progress += moveSpeed * PhysicsManager.physicsDelta;
 
 			if (Mathf.IsEqualApprox(pathFollow.ProgressRatio, 1f))
+			{
+				GD.Print("Exploded.");
 				Explode();
+			}
 
 			return;
 		}
@@ -68,7 +73,11 @@ public partial class Missile : Node3D
 			Explode();
 	}
 
-	private void Explode() => animator.Play("explode");
+	private void Explode()
+	{
+		isExploded = true;
+		animator.Play("explode");
+	}
 
 	private void Disable()
 	{

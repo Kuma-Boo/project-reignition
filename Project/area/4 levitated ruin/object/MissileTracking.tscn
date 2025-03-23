@@ -349,6 +349,7 @@ loop = false
 [node name="MissileTracking" parent="." node_paths=PackedStringArray("animator") instance=ExtResource("1_yglsj")]
 script = ExtResource("2_b3xn8")
 lifetime = 0.0
+moveSpeed = 30.0
 animator = NodePath("../AnimationPlayer")
 
 [node name="Trail" type="GPUParticles3D" parent="MissileTracking"]
@@ -356,7 +357,7 @@ layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
 emitting = false
-amount = 16
+amount = 32
 lifetime = 0.8
 fixed_fps = 0
 interpolate = false
@@ -387,7 +388,7 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_xdek0")
 draw_pass_1 = SubResource("QuadMesh_2pl6o")
 script = ExtResource("5_kvy46")
-subSystems = [null, null, null, null]
+subSystems = [NodePath("Flash"), NodePath("HitSpark"), NodePath("EmberBlue"), NodePath("CommonDust")]
 
 [node name="Flash" type="GPUParticles3D" parent="MissileTracking/Explosion"]
 layers = 32
