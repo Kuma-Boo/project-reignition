@@ -61,10 +61,7 @@ public partial class Missile : Node3D
 			pathFollow.Progress += moveSpeed * PhysicsManager.physicsDelta;
 
 			if (Mathf.IsEqualApprox(pathFollow.ProgressRatio, 1f))
-			{
-				GD.Print("Exploded.");
 				Explode();
-			}
 
 			return;
 		}
@@ -95,7 +92,10 @@ public partial class Missile : Node3D
 		if (!a.IsInGroup("player detection"))
 			return;
 
-		StageSettings.Player.StartKnockback();
+		// Prevent unfair hits
+		if (!StageSettings.Player.IsLaunching && !StageSettings.Player.IsAutomationActive)
+			StageSettings.Player.StartKnockback();
+
 		Explode();
 	}
 }
