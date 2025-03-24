@@ -133,22 +133,25 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 
 	public virtual Vector3 GetLaunchDirection()
 	{
+		Vector3 forward = ignoreLaunchPointRotation ? this.Forward() : LaunchPoint.Forward();
+		Vector3 up = ignoreLaunchPointRotation ? this.Up() : LaunchPoint.Up();
+
 		if (launchDirection == LaunchDirection.Forward)
-			return LaunchPoint.Forward();
+			return forward;
 
 		if (launchDirection == LaunchDirection.Flatten)
 		{
-			if (Mathf.Abs(LaunchPoint.Forward().Dot(Vector3.Up)) > .9f)
+			if (Mathf.Abs(forward.Dot(Vector3.Up)) > .9f)
 			{
-				int sign = LaunchPoint.Forward().Y > -0.01f ? 1 : -1;
-				sign *= LaunchPoint.Up().Y > -0.01f ? 1 : -1;
-				return -(LaunchPoint.Up() * sign).RemoveVertical().Normalized();
+				int sign = forward.Y > -0.01f ? 1 : -1;
+				sign *= up.Y > -0.01f ? 1 : -1;
+				return -(up * sign).RemoveVertical().Normalized();
 			}
 
-			return LaunchPoint.Forward().RemoveVertical().Normalized();
+			return forward.RemoveVertical().Normalized();
 		}
 
-		return LaunchPoint.Up();
+		return up;
 	}
 
 	/// <summary> Overload method so launch rings can recenter the player visually. </summary>
@@ -236,6 +239,8 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	private StringName voiceKey;
 	/// <summary> Optional launch point override node. </summary>
 	[Export]
-	public Node3D launchPoint;
-	private Node3D LaunchPoint => launchPoint ?? this;
+	protected Node3D launchPoint;
+	public Node3D LaunchPoint => launchPoint ?? this;
+	[Export]
+	protected bool ignoreLaunchPointRotation;
 }

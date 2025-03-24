@@ -120,7 +120,7 @@ public partial class Runtime : Node
 				pearl = pearlScene.Instantiate<Gameplay.Objects.Pearl>();
 				pearl.DisableAutoRespawning = true; // Don't auto-respawn
 				pearl.Monitoring = pearl.Monitorable = false; // Unlike normal pearls, these are automatically collected
-				pearl.Connect(Gameplay.Objects.Pearl.SignalName.Despawned, Callable.From(() => RepoolPearl(pearl)));
+				pearl.Despawned += () => RepoolPearl(pearl);
 			}
 
 			AddChild(pearl);
@@ -143,7 +143,7 @@ public partial class Runtime : Node
 		pearlTweens.Add(tween);
 
 		tween.Play();
-		tween.Connect(Tween.SignalName.Finished, Callable.From(() => KillPearlTween(tween))); // Kill tween after completing
+		tween.Finished += () => KillPearlTween(tween); // Kill tween after completing
 	}
 
 	private void RepoolPearl(Gameplay.Objects.Pearl pearl)
@@ -152,6 +152,7 @@ public partial class Runtime : Node
 			pearlPool.Add(pearl);
 
 		tweeningPearls.Remove(pearl);
+		pearl.GetParent().RemoveChild(pearl);
 	}
 
 	private void ClearPearls()

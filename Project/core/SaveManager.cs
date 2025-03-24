@@ -164,7 +164,7 @@ public partial class SaveManager : Node
 		public int voiceVolume = 50;
 
 		// Controls
-		public float deadZone = .5f;
+		public float deadZone = .2f;
 		public ControllerType controllerType = ControllerType.Automatic;
 		public bool useHoldBreakMode = true;
 		public int[] partyModeDevices = [0, 0, 0, 0];

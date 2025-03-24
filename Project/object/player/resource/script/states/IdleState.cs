@@ -30,6 +30,7 @@ public partial class IdleState : PlayerState
 			Mathf.IsZeroApprox(Player.ActiveLockoutData.speedRatio))
 		{
 			Player.Animator.IdleAnimation();
+			Player.ApplyMovement();
 			return null;
 		}
 
@@ -44,7 +45,8 @@ public partial class IdleState : PlayerState
 
 				float inputAngle = Player.Controller.GetTargetInputAngle();
 				float inputStrength = Player.Controller.GetInputStrength();
-				if (!Mathf.IsZeroApprox(inputStrength) &&
+				if (!Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Backflip) &&
+					!Mathf.IsZeroApprox(inputStrength) &&
 					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 				{
 					return backflipState;
@@ -95,6 +97,7 @@ public partial class IdleState : PlayerState
 		}
 
 		Player.Animator.IdleAnimation();
+		Player.ApplyMovement();
 		return null;
 	}
 

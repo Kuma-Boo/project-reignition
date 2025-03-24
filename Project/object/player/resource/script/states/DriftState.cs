@@ -105,9 +105,6 @@ public partial class DriftState : PlayerState
 			return null;
 		}
 
-		if (driftStatus == DriftStatus.Success)
-			SuccessfulDrift();
-
 		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) &&
 			Player.Controller.IsJumpBufferActive) // Allow character to jump out of drift at any time
 		{

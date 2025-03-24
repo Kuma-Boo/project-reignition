@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://bqck0hqdn3o8r"]
+[gd_scene load_steps=67 format=3 uid="uid://bqck0hqdn3o8r"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -36,11 +36,14 @@
 [ext_resource type="PackedScene" uid="uid://q0b2gswncxck" path="res://object/player/resource/component/Lockon.tscn" id="33_q1dko"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/LaunchRingState.cs" id="36_00l6c"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/PathTravellerState.cs" id="37_rlyto"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/IvyState.cs" id="38_b64oq"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/FlyingPotState.cs" id="38_jno1x"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/SpinJumpState.cs" id="38_krfaq"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/CatapultState.cs" id="38_xdgt8"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/EventState.cs" id="39_4sg6h"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/QuickStepState.cs" id="39_iqbcj"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/ZiplineState.cs" id="39_ixnde"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/PetrifyState.cs" id="40_co4ay"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/LightSpeedDashState.cs" id="40_t4xrr"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/LightSpeedAttackState.cs" id="41_8jpjm"]
 
@@ -1100,7 +1103,7 @@ point_count = 4
 _data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "spinJumpState", "quickStepState", "lightSpeedDashState", "lightSpeedAttackState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "knockbackState", "teleportState") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "spinJumpState", "quickStepState", "lightSpeedDashState", "lightSpeedAttackState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "ivyState", "ziplineState", "petrifyState", "knockbackState", "teleportState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1132,6 +1135,9 @@ automationState = NodePath("StateMachine/Special/Automation")
 eventState = NodePath("StateMachine/Special/Event")
 bounceState = NodePath("StateMachine/Special/Bounce")
 driftState = NodePath("StateMachine/Special/Drift")
+ivyState = NodePath("StateMachine/Special/Ivy")
+ziplineState = NodePath("StateMachine/Special/Zipline")
+petrifyState = NodePath("StateMachine/Special/Petrify")
 knockbackState = NodePath("StateMachine/Special/Knockback")
 teleportState = NodePath("StateMachine/Special/Teleport")
 
@@ -1406,6 +1412,16 @@ jumpState = NodePath("../../Basic/Jump")
 script = ExtResource("27_t835u")
 runState = NodePath("../../Basic/Run")
 backstepState = NodePath("../../Basic/Backstep")
+
+[node name="Ivy" type="Node" parent="StateMachine/Special"]
+script = ExtResource("38_b64oq")
+
+[node name="Zipline" type="Node" parent="StateMachine/Special"]
+script = ExtResource("39_ixnde")
+
+[node name="Petrify" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("idleState")]
+script = ExtResource("40_co4ay")
+idleState = NodePath("../../Basic/Idle")
 
 [node name="Skill" type="Node" parent="StateMachine"]
 

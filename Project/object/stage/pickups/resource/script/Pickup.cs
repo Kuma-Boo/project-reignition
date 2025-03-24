@@ -26,14 +26,15 @@ namespace Project.Gameplay.Objects
 
 			if (!DisableAutoRespawning) // Connect respawn triggers
 			{
-				Stage.ConnectRespawnSignal(this);
-				Stage.ConnectUnloadSignal(this);
+				Stage.Respawned += Respawn;
+				Stage.Unloaded += Unload;
 			}
 		}
 
 		public void OnEntered(Area3D a)
 		{
 			if (!a.IsInGroup("player detection")) return;
+			if (!Stage.IsLevelIngame) return;
 			if (Player.IsTeleporting) return; // Don't allow collections during teleport/respawn
 
 			CallDeferred(MethodName.Collect);
@@ -48,9 +49,10 @@ namespace Project.Gameplay.Objects
 
 		public virtual void Despawn()
 		{
-			if (!IsInsideTree()) return;
+			if (!Visible) return;
 
-			GetParent().CallDeferred(MethodName.RemoveChild, this);
+			Visible = false;
+			ProcessMode = ProcessModeEnum.Disabled;
 			EmitSignal(SignalName.Despawned);
 		}
 

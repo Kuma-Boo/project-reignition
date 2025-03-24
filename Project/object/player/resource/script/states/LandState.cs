@@ -61,6 +61,7 @@ public partial class LandState : PlayerState
 	public override PlayerState ProcessPhysics()
 	{
 		Player.CheckGround();
+		Player.ApplyMovement();
 
 		if (!Mathf.IsZeroApprox(knockbackTimer))
 		{

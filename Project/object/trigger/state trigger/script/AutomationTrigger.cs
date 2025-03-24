@@ -13,26 +13,31 @@ public partial class AutomationTrigger : Area3D
 	public delegate void DeactivatedEventHandler();
 
 	/// <summary> The distance along the path where automation stops. </summary>
-	[Export]
-	private float endPoint;
+	[Export] private float endPoint;
 	/// <summary> Always activate regardless of which way the player entered/moves. </summary>
-	[Export]
-	private bool ignoreDirection;
+	[Export] private bool ignoreDirection;
+	/// <summary> Queue the automation to start after landing even if the player is in the air. </summary>
+	[Export] private bool autoQueueOnLand = true;
 	private bool isInteractingWithPlayer;
+	private bool isAutomationQueued;
 	private PlayerController Player => StageSettings.Player;
 	public bool IsFinished => Player.PathFollower.Progress >= endPoint;
 
+	public override void _Ready() => StageSettings.Instance.Respawned += Respawn;
+
 	public override void _PhysicsProcess(double _)
 	{
-		if (!isInteractingWithPlayer)
+		if (!isInteractingWithPlayer && !isAutomationQueued)
 			return;
 
 		AttemptAutomation();
 	}
 
+	private void Respawn() => isAutomationQueued = false;
+
 	private void AttemptAutomation()
 	{
-		if (Player.IsAutomationActive || !Player.IsOnGround)
+		if (!Player.IsOnGround)
 			return;
 
 		if (Player.IsCountdown)
@@ -49,12 +54,17 @@ public partial class AutomationTrigger : Area3D
 				return;
 		}
 
+		isAutomationQueued = false;
 		Player.StartAutomation(this);
 	}
 
 	public void Activate() => EmitSignal(SignalName.Activated);
 	public void Deactivate() => EmitSignal(SignalName.Deactivated);
 
-	public void OnEntered(Area3D _) => isInteractingWithPlayer = true;
+	public void OnEntered(Area3D _)
+	{
+		isAutomationQueued = autoQueueOnLand;
+		isInteractingWithPlayer = true;
+	}
 	public void OnExited(Area3D _) => isInteractingWithPlayer = false;
 }

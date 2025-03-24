@@ -1,0 +1,348 @@
+[gd_scene load_steps=46 format=3 uid="uid://b2jsh7hensgem"]
+
+[ext_resource type="PackedScene" uid="uid://b4n1751vh5d4s" path="res://object/enemy/gargoyle/data/model/Gargoyle.gltf" id="1_gl7tb"]
+[ext_resource type="Script" path="res://object/enemy/gargoyle/data/Gargoyle.cs" id="2_gr8hu"]
+[ext_resource type="PackedScene" uid="uid://dyg4af257op4a" path="res://object/enemy/gargoyle/data/model/Windball.gltf" id="3_mw58f"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_tsk0o"]
+radius = 1.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_nm3dx"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_inmb1"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_nr7cm"]
+height = 30.0
+radius = 10.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_el5bw"]
+radius = 2.0
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_6t1i8"]
+input_0/name = "petrify"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "slash"
+input_1/auto_advance = false
+input_1/reset = true
+input_2/name = "block"
+input_2/auto_advance = false
+input_2/reset = true
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_2kn1h"]
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nk07e"]
+animation = &"block-end"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ghhm6"]
+animation = &"block-start"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1inio"]
+animation = &"block-stun"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i3m43"]
+animation = &"block"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ncgvq"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_urqqm"]
+xfade_time = 0.05
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1em0r"]
+xfade_time = 0.1
+
+[sub_resource type="Curve" id="Curve_850pw"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_txma8"]
+xfade_time = 0.8
+xfade_curve = SubResource("Curve_850pw")
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_uitgs"]
+xfade_time = 0.05
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7xkrj"]
+xfade_time = 0.05
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7kimf"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_anmqt"]
+states/block/node = SubResource("AnimationNodeAnimation_i3m43")
+states/block/position = Vector2(522, 101)
+states/block-end/node = SubResource("AnimationNodeAnimation_nk07e")
+states/block-end/position = Vector2(672, 100)
+states/block-start/node = SubResource("AnimationNodeAnimation_ghhm6")
+states/block-start/position = Vector2(367, 103)
+states/block-stun/node = SubResource("AnimationNodeAnimation_1inio")
+states/block-stun/position = Vector2(522, 16)
+transitions = ["Start", "block-start", SubResource("AnimationNodeStateMachineTransition_ncgvq"), "block-start", "block", SubResource("AnimationNodeStateMachineTransition_urqqm"), "block", "block-end", SubResource("AnimationNodeStateMachineTransition_1em0r"), "block-end", "End", SubResource("AnimationNodeStateMachineTransition_txma8"), "block", "block-stun", SubResource("AnimationNodeStateMachineTransition_uitgs"), "block-stun", "block", SubResource("AnimationNodeStateMachineTransition_7xkrj"), "block-stun", "block-end", SubResource("AnimationNodeStateMachineTransition_7kimf")]
+graph_offset = Vector2(-81, -64)
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_3t50f"]
+input_0/name = "left"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "right"
+input_1/auto_advance = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4kqom"]
+animation = &"damage-left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_u8uc1"]
+animation = &"damage-right"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_0rp3p"]
+fadein_time = 0.05
+fadeout_time = 0.1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gwae1"]
+animation = &"defeat"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_wgx27"]
+input_0/name = "enabled"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "disabled"
+input_1/auto_advance = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7solm"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5h5sk"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ulq7k"]
+animation = &"skyroad"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4eicd"]
+animation = &"statue-activate"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0d1aa"]
+animation = &"statue"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_76l51"]
+xfade_time = 0.2
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_pv0ga"]
+
+[sub_resource type="Curve" id="Curve_62auc"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1uuwp"]
+xfade_time = 0.4
+xfade_curve = SubResource("Curve_62auc")
+switch_mode = 1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0f7yr"]
+xfade_time = 0.4
+xfade_curve = SubResource("Curve_62auc")
+switch_mode = 1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_y208m"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5t8ip"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_1srrh"]
+states/RESET/node = SubResource("AnimationNodeAnimation_7solm")
+states/RESET/position = Vector2(352, 31)
+states/Start/position = Vector2(200, 31)
+states/idle/node = SubResource("AnimationNodeAnimation_5h5sk")
+states/idle/position = Vector2(528, 181)
+states/skyroad/node = SubResource("AnimationNodeAnimation_ulq7k")
+states/skyroad/position = Vector2(528, 100)
+states/statue/node = SubResource("AnimationNodeAnimation_0d1aa")
+states/statue/position = Vector2(352, 100)
+states/statue-activate/node = SubResource("AnimationNodeAnimation_4eicd")
+states/statue-activate/position = Vector2(352, 181)
+transitions = ["statue-activate", "idle", SubResource("AnimationNodeStateMachineTransition_76l51"), "statue", "statue-activate", SubResource("AnimationNodeStateMachineTransition_pv0ga"), "idle", "skyroad", SubResource("AnimationNodeStateMachineTransition_1uuwp"), "skyroad", "idle", SubResource("AnimationNodeStateMachineTransition_0f7yr"), "Start", "RESET", SubResource("AnimationNodeStateMachineTransition_y208m"), "RESET", "statue", SubResource("AnimationNodeStateMachineTransition_5t8ip")]
+graph_offset = Vector2(-344, -3)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d3875"]
+animation = &"petrify"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_oy0p3"]
+animation = &"slash"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_a4b7b"]
+graph_offset = Vector2(-1290.41, 39.5621)
+nodes/action_transition/node = SubResource("AnimationNodeTransition_6t1i8")
+nodes/action_transition/position = Vector2(-720, 140)
+nodes/action_trigger/node = SubResource("AnimationNodeOneShot_2kn1h")
+nodes/action_trigger/position = Vector2(-400, 40)
+nodes/block_state/node = SubResource("AnimationNodeStateMachine_anmqt")
+nodes/block_state/position = Vector2(-1000, 300)
+nodes/damage_direction_transition/node = SubResource("AnimationNodeTransition_3t50f")
+nodes/damage_direction_transition/position = Vector2(-480, 340)
+nodes/damage_left_anim/node = SubResource("AnimationNodeAnimation_4kqom")
+nodes/damage_left_anim/position = Vector2(-740, 340)
+nodes/damage_right_anim/node = SubResource("AnimationNodeAnimation_u8uc1")
+nodes/damage_right_anim/position = Vector2(-740, 480)
+nodes/damage_trigger/node = SubResource("AnimationNodeOneShot_0rp3p")
+nodes/damage_trigger/position = Vector2(-220, 180)
+nodes/defeat_anim/node = SubResource("AnimationNodeAnimation_gwae1")
+nodes/defeat_anim/position = Vector2(0, 0)
+nodes/defeat_transition/node = SubResource("AnimationNodeTransition_wgx27")
+nodes/defeat_transition/position = Vector2(200, 100)
+nodes/movement_state/node = SubResource("AnimationNodeStateMachine_1srrh")
+nodes/movement_state/position = Vector2(-1000, 20)
+nodes/output/position = Vector2(420, 140)
+nodes/petrify_anim/node = SubResource("AnimationNodeAnimation_d3875")
+nodes/petrify_anim/position = Vector2(-1000, 160)
+nodes/slash_anim/node = SubResource("AnimationNodeAnimation_oy0p3")
+nodes/slash_anim/position = Vector2(-1160, 240)
+node_connections = [&"action_transition", 0, &"petrify_anim", &"action_transition", 1, &"slash_anim", &"action_transition", 2, &"block_state", &"action_trigger", 0, &"movement_state", &"action_trigger", 1, &"action_transition", &"damage_direction_transition", 0, &"damage_left_anim", &"damage_direction_transition", 1, &"damage_right_anim", &"damage_trigger", 0, &"action_trigger", &"damage_trigger", 1, &"damage_direction_transition", &"defeat_transition", 0, &"defeat_anim", &"defeat_transition", 1, &"damage_trigger", &"output", 0, &"defeat_transition"]
+
+[node name="Gargoyle" type="Node3D" node_paths=PackedStringArray("windball")]
+script = ExtResource("2_gr8hu")
+windball = NodePath("Windball")
+rangeOverride = 10
+pearlAmount = 15
+maxHealth = 3
+damagePlayer = true
+root = NodePath("Root")
+hurtbox = NodePath("Root/GargoyleRoot/Skeleton3D/Head/Lockon")
+collider = NodePath("Root/GargoyleRoot/Skeleton3D/Root/StaticBody3D/CollisionShape3D")
+rangeCollider = NodePath("Range/CollisionShape3D")
+animationTree = NodePath("AnimationTree")
+animationPlayer = NodePath("")
+
+[node name="Root" parent="." instance=ExtResource("1_gl7tb")]
+
+[node name="Skeleton3D" parent="Root/GargoyleRoot" index="0"]
+bones/2/rotation = Quaternion(0.767752, -2.50455e-07, -2.16896e-07, 0.640747)
+bones/5/rotation = Quaternion(0.5, 0.5, 0.5, -0.5)
+bones/9/rotation = Quaternion(0.5, -0.5, -0.5, -0.5)
+bones/13/rotation = Quaternion(-0.707107, -2.10687e-09, -3.30155e-08, 0.707107)
+bones/14/rotation = Quaternion(-0.0617484, -4.72917e-11, 0.0875847, 0.994241)
+bones/15/rotation = Quaternion(0.0616896, 0.00269337, -0.130869, 0.989475)
+bones/15/scale = Vector3(0.999994, 0.999994, 1)
+bones/16/rotation = Quaternion(-0.707107, -2.10687e-09, -3.30155e-08, 0.707107)
+bones/17/rotation = Quaternion(-0.0617495, -4.71268e-10, -0.0875849, 0.994241)
+bones/18/rotation = Quaternion(0.0616908, -0.00269341, 0.130869, 0.989475)
+bones/19/rotation = Quaternion(-0.707107, 2.40748e-15, 4.39029e-08, 0.707107)
+
+[node name="GargoyleMesh" parent="Root/GargoyleRoot/Skeleton3D" index="0"]
+instance_shader_parameters/defeat_blend = 0.0
+
+[node name="Hitbox" type="Area3D" parent="Root/GargoyleRoot/Skeleton3D" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.5)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/GargoyleRoot/Skeleton3D/Hitbox"]
+shape = SubResource("SphereShape3D_tsk0o")
+disabled = true
+
+[node name="Head" type="BoneAttachment3D" parent="Root/GargoyleRoot/Skeleton3D" index="2"]
+transform = Transform3D(1, -9.6032e-08, -3.76046e-07, -2.9006e-07, -0.828684, -0.559717, -2.57873e-07, 0.559717, -0.828684, -3.9284e-08, 3.42603, 0.730909)
+bone_name = "head"
+bone_idx = 3
+
+[node name="Lockon" type="Area3D" parent="Root/GargoyleRoot/Skeleton3D/Head"]
+transform = Transform3D(1, 1.42109e-14, 4.26326e-14, 0, 1, -2.98023e-08, 4.26326e-14, 2.98023e-08, 1, 0, 0.2, -0.2)
+collision_layer = 12
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/GargoyleRoot/Skeleton3D/Head/Lockon"]
+shape = SubResource("SphereShape3D_nm3dx")
+disabled = true
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Root/GargoyleRoot/Skeleton3D/Head/Lockon"]
+transform = Transform3D(1, 1.42109e-14, 4.26326e-14, 0, 1, -2.98023e-08, 1.42109e-14, 2.98023e-08, 1, 1.13687e-13, 0, 1)
+shape = SubResource("SphereShape3D_tsk0o")
+disabled = true
+
+[node name="Root" type="BoneAttachment3D" parent="Root/GargoyleRoot/Skeleton3D" index="3"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.77636e-16, 3.16, 1.18615e-07)
+bone_name = "root"
+bone_idx = 0
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Root/GargoyleRoot/Skeleton3D/Root" groups=["wall"]]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/GargoyleRoot/Skeleton3D/Root/StaticBody3D"]
+shape = SubResource("CapsuleShape3D_inmb1")
+
+[node name="AnimationPlayer" parent="Root" index="1"]
+deterministic = true
+
+[node name="Range" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Range"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("CylinderShape3D_nr7cm")
+
+[node name="Windball" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Windball" parent="Windball" instance=ExtResource("3_mw58f")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2.5, 0)
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Windball"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+shape = SubResource("SphereShape3D_el5bw")
+disabled = true
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../Root")
+tree_root = SubResource("AnimationNodeBlendTree_a4b7b")
+anim_player = NodePath("../Root/AnimationPlayer")
+parameters/action_transition/current_state = "slash"
+parameters/action_transition/transition_request = "petrify"
+parameters/action_transition/current_index = 1
+parameters/action_trigger/active = false
+parameters/action_trigger/internal_active = false
+parameters/action_trigger/request = 0
+parameters/damage_direction_transition/current_state = "left"
+parameters/damage_direction_transition/transition_request = ""
+parameters/damage_direction_transition/current_index = 0
+parameters/damage_trigger/active = false
+parameters/damage_trigger/internal_active = false
+parameters/damage_trigger/request = 0
+parameters/defeat_transition/current_state = "disabled"
+parameters/defeat_transition/transition_request = ""
+parameters/defeat_transition/current_index = 1
+
+[node name="Flash" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+
+[connection signal="area_entered" from="Root/GargoyleRoot/Skeleton3D/Hitbox" to="." method="OnHitboxEntered"]
+[connection signal="area_entered" from="Root/GargoyleRoot/Skeleton3D/Head/Lockon" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/GargoyleRoot/Skeleton3D/Head/Lockon" to="." method="OnExited"]
+[connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
+[connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
+[connection signal="area_entered" from="Windball" to="." method="OnWindballEntered"]
+
+[editable path="Root"]

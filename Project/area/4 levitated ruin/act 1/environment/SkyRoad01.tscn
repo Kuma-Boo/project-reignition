@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://bsdebv0cjpq2x"]
+
+[ext_resource type="PackedScene" uid="uid://p8faujkgt06b" path="res://area/4 levitated ruin/act 1/environment/model/SkyRoad01.gltf" id="1_j685j"]
+[ext_resource type="Script" path="res://area/4 levitated ruin/data/script/SkyRoad.cs" id="2_0g2vd"]
+
+[node name="SkyRoad01" node_paths=PackedStringArray("mesh") instance=ExtResource("1_j685j")]
+script = ExtResource("2_0g2vd")
+mesh = NodePath("SkyRoad01")
+totalPathLength = 289.0
+
+[node name="SkyRoad01" parent="." index="0"]
+cast_shadow = 0
+instance_shader_parameters/path_length = 289.0
+instance_shader_parameters/path_ratio = 1.0
+
+[node name="StaticBody3D" parent="SkyRoad01" index="0" groups=["floor"]]
+
+[node name="SkyRoadWall01" parent="." index="1"]
+visible = false
+
+[node name="StaticBody3D" parent="SkyRoadWall01" index="0" groups=["level wall", "wall"]]
