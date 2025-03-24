@@ -92,10 +92,16 @@ public partial class Missile : Node3D
 		if (!a.IsInGroup("player detection"))
 			return;
 
-		// Prevent unfair hits
-		if (!StageSettings.Player.IsLaunching && !StageSettings.Player.IsAutomationActive)
-			StageSettings.Player.StartKnockback();
-
 		Explode();
+
+		// Prevent unfair hits
+		if (StageSettings.Player.IsLaunching ||
+			StageSettings.Player.IsAutomationActive ||
+			StageSettings.Player.Skills.IsSpeedBreakActive)
+		{
+			return;
+		}
+
+		StageSettings.Player.StartKnockback();
 	}
 }

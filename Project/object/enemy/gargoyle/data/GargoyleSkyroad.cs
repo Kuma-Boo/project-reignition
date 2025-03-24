@@ -75,19 +75,19 @@ public partial class GargoyleSkyroad : PathFollow3D
 		root.Position = root.Position.SmoothDamp(Vector3.Back * 2.0f, ref velocity, PositionSmoothing);
 
 		float pathDelta = CalculateMovementDelta();
+		ProcessSlipstream(pathDelta);
 
-		// Move gargoyle along the path
-		float movementDelta = CalculateMoveSpeed(pathDelta) * PhysicsManager.physicsDelta;
-
-		// Ensure we're a set distance away from the player
 		if (pathDelta < MinDistanceToPlayer)
 		{
+			// Ensure we're a set distance away from the player
 			Progress = Player.PathFollower.Progress + MinDistanceToPlayer;
 
 			if (!isFastSpeed && Player.Skills.IsSpeedBreakActive)
 				ToggleFastSpeed();
 		}
 
+		// Move gargoyle along the path
+		float movementDelta = CalculateMoveSpeed(pathDelta) * PhysicsManager.physicsDelta;
 		Progress += movementDelta;
 
 		activeRoad.SetPathRatio((traveledDistance + Progress) / totalDistance); // Update visuals
@@ -136,6 +136,7 @@ public partial class GargoyleSkyroad : PathFollow3D
 	private void ToggleFastSpeed()
 	{
 		isFastSpeed = !isFastSpeed;
+		slipstreamTimer = SlipstreamInterval;
 
 		if (isFastSpeed)
 			speedTimer = Runtime.randomNumberGenerator.RandfRange(1f, 2f);
@@ -143,6 +144,35 @@ public partial class GargoyleSkyroad : PathFollow3D
 			speedTimer = Runtime.randomNumberGenerator.RandfRange(3f, 5f);
 
 		animationTree.Set(FlapTransitionParameter, isFastSpeed ? EnabledState : DisabledState);
+	}
+
+	/// <summary>
+	/// New addition to Reignition.
+	/// Increases player speed when near Gargyole to make skyroads less boring.
+	/// </summary>
+	private float slipstreamTimer;
+	private readonly float SlipstreamInterval = 1f;
+	private readonly float SlipstreamMultiplier = 2f;
+	private readonly float SlipstreamRange = 3f;
+	private void ProcessSlipstream(float pathDelta)
+	{
+		if (pathDelta > MinDistanceToPlayer + SlipstreamRange)
+			return;
+
+		slipstreamTimer = Mathf.MoveToward(slipstreamTimer, 0, PhysicsManager.physicsDelta);
+
+		if (!Mathf.IsZeroApprox(slipstreamTimer))
+			return;
+
+		Slipstream();
+	}
+
+	private void Slipstream()
+	{
+		slipstreamTimer = SlipstreamInterval;
+		Player.MoveSpeed = Mathf.Max(Player.MoveSpeed, Player.Stats.GroundSettings.Speed * SlipstreamMultiplier);
+		Player.Effect.PlayWindFX();
+		Player.Effect.PlayWindCrestFX();
 	}
 
 	public void IncrementPathIndex()

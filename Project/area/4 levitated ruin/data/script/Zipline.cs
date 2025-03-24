@@ -30,6 +30,7 @@ public partial class Zipline : PathFollow3D
 	[Export] public Node3D Root { get; private set; }
 	[Export] public Node3D FollowObject { get; private set; }
 	[Export] public CollisionShape3D Collider { get; private set; }
+	[Export] public GpuParticles3D SparkFX { get; private set; }
 
 	public override void _Ready()
 	{
@@ -70,6 +71,12 @@ public partial class Zipline : PathFollow3D
 	{
 		Progress += currentSpeed * PhysicsManager.physicsDelta; // Move forward
 		ProcessRotation();
+	}
+
+	public void StopZipline()
+	{
+		SetInput(0);
+		SparkFX.Emitting = false;
 	}
 
 	private void ProcessRotation()
@@ -163,6 +170,7 @@ public partial class Zipline : PathFollow3D
 		currentSpeed = ziplineSpeed;
 		ProcessMode = ProcessModeEnum.Inherit;
 		Collider.Disabled = true;
+		SparkFX.Emitting = true;
 
 		EmitSignal(SignalName.Activated);
 	}
