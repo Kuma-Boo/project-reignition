@@ -1,15 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://bamlrdh04dqov"]
+[gd_scene load_steps=7 format=3 uid="uid://bamlrdh04dqov"]
 
 [ext_resource type="PackedScene" uid="uid://bwjl2wg7nmiry" path="res://area/3 evil foundry/act 3/environment/model/03Spiral.gltf" id="1_xwka1"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_7we2h"]
 [ext_resource type="Shader" uid="uid://dt8heyml4biim" path="res://effect/shader/bloom/material/customfade/CentralFadeBloom.tres" id="3_mvrfn"]
+[ext_resource type="Material" uid="uid://nuefm40mud43" path="res://area/3 evil foundry/data/material/Exterior Glow Blue.tres" id="4_73rtw"]
+[ext_resource type="Material" uid="uid://bor4kpaxjnls6" path="res://area/3 evil foundry/data/material/Blue God Ray.tres" id="4_nppbh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_em8hx"]
 render_priority = 0
 shader = ExtResource("3_mvrfn")
 shader_parameter/albedo = Color(4.20784, 3.60392, 0, 1)
 shader_parameter/rim_bias = 0.453
-shader_parameter/vert_col_influence = 0.0
 shader_parameter/distance_fade_min = 10.0
 shader_parameter/distance_fade_max = 20.0
 
@@ -19,6 +20,7 @@ saveVisibilityOnCheckpoint = true
 isStageVisuals = true
 
 [node name="stg033_g07_Mesh_0000" parent="." index="0"]
+visible = false
 layers = 4
 cast_shadow = 0
 surface_material_override/0 = SubResource("ShaderMaterial_em8hx")
@@ -31,10 +33,12 @@ cast_shadow = 0
 [node name="stg033_k07_Mesh_0000" parent="." index="2"]
 layers = 4
 cast_shadow = 0
+surface_material_override/0 = ExtResource("4_73rtw")
 
 [node name="stg033_lighting_07_Mesh_0000" parent="." index="3"]
 layers = 4
 cast_shadow = 0
+surface_material_override/0 = ExtResource("4_nppbh")
 
 [node name="stg033_o07_Mesh_0000" parent="." index="4"]
 layers = 4

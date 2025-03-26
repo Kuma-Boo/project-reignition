@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://sap50uvjitma"]
+[gd_scene load_steps=38 format=3 uid="uid://sap50uvjitma"]
 
 [ext_resource type="Script" path="res://object/stage/StageSettings.cs" id="1_y3xwh"]
 [ext_resource type="Resource" uid="uid://dmv3a7tioyyl6" path="res://area/3 evil foundry/data/DialogLibrary.tres" id="2_s1lnd"]
@@ -539,57 +539,46 @@ _data = {
 
 [sub_resource type="Gradient" id="Gradient_uhv47"]
 interpolation_color_space = 2
-offsets = PackedFloat32Array(0.0307167, 0.0580205, 0.320819, 0.897727, 1)
-colors = PackedColorArray(0, 0.00392157, 0, 1, 0.00884778, 0.0219422, 0.0080423, 1, 0.41, 0.41, 0.41, 1, 0.904192, 0.855356, 0.812669, 1, 1, 1, 1, 1)
+offsets = PackedFloat32Array(0, 0.390152, 0.628788, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.282817, 0.282817, 0.282817, 1, 0.589574, 0.589573, 0.589574, 1, 1, 1, 1, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_nih00"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ldi0c"]
 gradient = SubResource("Gradient_uhv47")
 
-[sub_resource type="Gradient" id="Gradient_ca44f"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.484848)
-colors = PackedColorArray(1, 0.583333, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_ycw5t"]
-gradient = SubResource("Gradient_ca44f")
-
-[sub_resource type="Environment" id="Environment_hnlum"]
+[sub_resource type="Environment" id="Environment_mhcig"]
 ambient_light_source = 2
-ambient_light_color = Color(0.686275, 0.564706, 0.258824, 1)
+ambient_light_color = Color(0.345087, 0.619548, 0.619592, 1)
+ambient_light_energy = 0.5
 tonemap_exposure = 1.4
 tonemap_white = 1.2
+ssao_radius = 4.31
 ssil_enabled = true
 ssil_radius = 10.0
-ssil_intensity = 1.5
 glow_enabled = true
 glow_levels/2 = 2.0
 glow_levels/3 = 0.3
 glow_levels/5 = 0.0
 glow_levels/7 = 0.01
 glow_intensity = 0.2
-glow_strength = 1.2
 glow_bloom = 0.1
-glow_blend_mode = 4
+glow_blend_mode = 1
 glow_hdr_threshold = 1.5
 glow_hdr_scale = 2.5
-glow_map = SubResource("GradientTexture1D_ycw5t")
 fog_enabled = true
-fog_light_color = Color(0.607001, 0.518554, 0, 1)
+fog_light_color = Color(0.44, 0.44, 1, 1)
 fog_light_energy = 0.4
-fog_density = 0.002
+fog_density = 0.006
 fog_sky_affect = 0.0
 fog_height = -59.54
-fog_height_density = 0.003
-volumetric_fog_density = 0.1008
-volumetric_fog_albedo = Color(0, 0, 0, 1)
-volumetric_fog_emission = Color(0.466667, 0, 0, 1)
+volumetric_fog_density = 0.0294
 volumetric_fog_anisotropy = 0.11
-volumetric_fog_length = 100.0
+volumetric_fog_length = 200.0
 volumetric_fog_sky_affect = 0.0
 volumetric_fog_temporal_reprojection_enabled = false
 adjustment_enabled = true
 adjustment_brightness = 1.2
-adjustment_color_correction = SubResource("GradientTexture1D_nih00")
+adjustment_saturation = 0.5
+adjustment_color_correction = SubResource("GradientTexture1D_ldi0c")
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_y3xwh")
@@ -607,15 +596,18 @@ visible = false
 [node name="ObjectLight" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
-light_color = Color(0.92549, 0.8, 0.466667, 1)
+light_color = Color(0.465, 0.58125, 0.93, 1)
+light_energy = 0.2
 light_cull_mask = 4293918785
 directional_shadow_max_distance = 10.0
 
 [node name="DropShadows" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
+light_energy = 0.1
 light_cull_mask = 4293918726
 shadow_enabled = true
+directional_shadow_max_distance = 20.0
 
 [node name="LavaLight" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, 1.31134e-07, -1, 0, 1, 1.31134e-07, 0, 0, 0)
@@ -1307,7 +1299,7 @@ loopEndPosition = 129.3
 isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_hnlum")
+environment = SubResource("Environment_mhcig")
 
 [node name="ScreenWarp" parent="." instance=ExtResource("28_c7cby")]
 
