@@ -94,10 +94,10 @@ _data = {
 [node name="Stone" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
 script = ExtResource("1_vjnw7")
 pieceMass = 0.4
+shatterFlags = 16
 root = NodePath("Root")
 pieceRoot = NodePath("StonePieces")
 animator = NodePath("AnimationPlayer")
-shatterFlags = 16
 
 [node name="Root" type="StaticBody3D" parent="." groups=["floor", "grind wall", "splash jump", "wall"]]
 collision_layer = 8
@@ -110,7 +110,7 @@ shape = SubResource("BoxShape3D_l8c8x")
 
 [node name="Trigger" type="Area3D" parent="."]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 10
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
@@ -126,3 +126,4 @@ libraries = {
 
 [connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Trigger" to="." method="OnExited"]
+[connection signal="body_entered" from="Trigger" to="." method="OnBodyEntered"]

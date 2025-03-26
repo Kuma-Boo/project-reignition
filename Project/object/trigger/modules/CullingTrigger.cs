@@ -46,7 +46,7 @@ public partial class CullingTrigger : StageTriggerModule
 		{
 			foreach (Node child in GetChildren(true))
 			{
-				if (child.HasMethod(StageSettings.RESPAWN_FUNCTION))
+				if (child.HasMethod(MethodName.Respawn))
 					respawnableNodes.Add(child);
 			}
 		}
@@ -59,7 +59,7 @@ public partial class CullingTrigger : StageTriggerModule
 			// Listen for checkpoint signals
 			DebugManager.Instance.TriggeredDebugCheckpoint += ProcessDebugCheckpoint;
 			Stage.TriggeredCheckpoint += ProcessCheckpoint;
-			Stage.ConnectRespawnSignal(this);
+			Stage.Respawned += Respawn;
 		}
 
 		if (isStageVisuals)
@@ -115,7 +115,7 @@ public partial class CullingTrigger : StageTriggerModule
 		if (respawnOnActivation)
 		{
 			foreach (Node node in respawnableNodes)
-				node.Call(StageSettings.RESPAWN_FUNCTION);
+				node.Call(MethodName.Respawn);
 		}
 
 		EmitSignal(SignalName.Activated);

@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://sap50uvjitma"]
+[gd_scene load_steps=41 format=3 uid="uid://sap50uvjitma"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_y3xwh"]
 [ext_resource type="Resource" uid="uid://dmv3a7tioyyl6" path="res://area/3 evil foundry/data/DialogLibrary.tres" id="2_s1lnd"]
@@ -31,6 +31,9 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_y4n3u"]
 size = Vector3(20, 20, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d605o"]
+size = Vector3(20, 20, 30)
 
 [sub_resource type="Animation" id="Animation_cwd0w"]
 length = 0.001
@@ -892,17 +895,17 @@ shape = SubResource("BoxShape3D_y4n3u")
 [node name="NarrowCam" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -476, -60, -60)
 "Trigger Mode" = 2
+"Enter Mode" = 0
 "Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/NarrowCam"]
 script = ExtResource("8_qip82")
-transitionTime = 20.0
-transitionType = 1
+distanceBlending = 20
 settings = ExtResource("2_tbo3m")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/NarrowCam"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_y4n3u")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62939e-06, 8, 12)
+shape = SubResource("BoxShape3D_d605o")
 
 [node name="PitHallCam1" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -617.1, -30, -420)
@@ -985,17 +988,17 @@ shape = SubResource("BoxShape3D_y4n3u")
 [node name="NarrowCam2" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
 transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, -364, -60, -360)
 "Trigger Mode" = 2
+"Enter Mode" = 0
 "Exit Mode" = 2
 
 [node name="Camera" type="Node3D" parent="Trigger/Camera/NarrowCam2"]
 script = ExtResource("8_qip82")
-transitionTime = 20.0
-transitionType = 1
+distanceBlending = 20
 settings = ExtResource("2_tbo3m")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/NarrowCam2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_y4n3u")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -12.5)
+shape = SubResource("BoxShape3D_d605o")
 
 [node name="SpiralCam3" parent="Trigger/Camera" instance=ExtResource("4_ighux")]
 transform = Transform3D(1, 1.48943e-09, 1.58932e-08, -1.48943e-09, 1, 1.13133e-08, -1.58932e-08, -1.13133e-08, 1, -100, -60, -174)

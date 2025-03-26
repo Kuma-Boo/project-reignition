@@ -59,8 +59,8 @@ public partial class PlayerState : Node
 			return;
 		}
 
-		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
-		if (IsBraking(targetMovementAngle)) // Turning around
+		float targetInputAngle = Player.Controller.GetTargetInputAngle();
+		if (IsBraking(targetInputAngle)) // Turning around
 		{
 			Brake();
 			return;
@@ -76,7 +76,7 @@ public partial class PlayerState : Node
 		if (Player.IsLockoutActive && Player.ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.PathFollower) // Zipper exception
 		{
 			// Arbitrary math to make it easier to maintain speed
-			float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle));
+			float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(Player.MovementAngle, targetInputAngle));
 			inputStrength *= Mathf.Clamp(inputDot + .5f, 0, 1f);
 		}
 

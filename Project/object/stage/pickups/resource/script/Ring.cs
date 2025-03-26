@@ -15,8 +15,10 @@ namespace Project.Gameplay.Objects
 		private CollisionShape3D Collider { get; set; }
 
 		private bool isMagnetized;
+		/* <summary> A timer to keep track of how long the ring has been trailing the player.
+			Artificially increases speed to force rings to be collected. </summary> */
+		private float collectionTimer;
 		private float collectionRange;
-		private Vector3 collectionVelocity;
 		private readonly float CollectionSpeed = 10.0f;
 
 		protected override void SetUp()
@@ -33,6 +35,8 @@ namespace Project.Gameplay.Objects
 		public override void Respawn()
 		{
 			isMagnetized = false;
+			collectionTimer = 0f;
+
 			Animator.Play("RESET");
 			Animator.Queue("loop");
 
@@ -57,7 +61,8 @@ namespace Project.Gameplay.Objects
 
 			if (!Player.IsLightDashing)
 			{
-				GlobalPosition = GlobalPosition.SmoothDamp(Player.CenterPosition, ref collectionVelocity, CollectionSpeed * PhysicsManager.physicsDelta);
+				collectionTimer = Mathf.Min(collectionTimer + (CollectionSpeed * PhysicsManager.physicsDelta), 1f);
+				GlobalPosition = GlobalPosition.Lerp(Player.CenterPosition, collectionTimer);
 				GlobalPosition = GlobalPosition.MoveToward(Player.CenterPosition, Player.MoveSpeed * PhysicsManager.physicsDelta);
 			}
 

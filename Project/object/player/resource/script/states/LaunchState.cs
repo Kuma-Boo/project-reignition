@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay.Objects;
 
 namespace Project.Gameplay;
 
@@ -10,6 +11,7 @@ public partial class LaunchState : PlayerState
 
 	private float launcherTime;
 	private LaunchSettings settings;
+	public Launcher ActiveLauncher => settings.Launcher;
 	private RaycastHit wallHit;
 	public bool UpdateSettings(LaunchSettings settings)
 	{
@@ -27,6 +29,7 @@ public partial class LaunchState : PlayerState
 			return false;
 		}
 
+		GD.Print("Launch Started");
 		this.settings = settings;
 		return true;
 	}
@@ -50,6 +53,7 @@ public partial class LaunchState : PlayerState
 		if (settings.UseAutoAlign)
 		{
 			Player.MovementAngle = GetLaunchFacingAngle();
+			Player.Rotation = Vector3.Zero; // Reset rotation
 			Player.Animator.SnapRotation(Player.MovementAngle);
 		}
 

@@ -82,11 +82,14 @@ public partial class Enemy : Node3D
 		AnimationPlayer = GetNodeOrNull<AnimationPlayer>(animationPlayer);
 
 		SpawnData = new(GetParent(), Transform);
-		StageSettings.Instance.ConnectRespawnSignal(this);
-		StageSettings.Instance.ConnectUnloadSignal(this);
-		Respawn();
+		StageSettings.Instance.Respawned += Respawn;
+		StageSettings.Instance.Unloaded += Unload;
+		StageSettings.Instance.RespawnedEnemies += RespawnRange;
 
 		InitializeRangeCollider();
+
+		Respawn();
+		RespawnRange();
 	}
 
 	private void InitializeRangeCollider()
@@ -146,13 +149,16 @@ public partial class Enemy : Node3D
 		SetHitboxStatus(true);
 		ResetInteractionProcessed();
 
+		EmitSignal(SignalName.Respawned);
+	}
+
+	private void RespawnRange()
+	{
 		if (SpawnMode == SpawnModes.Always ||
-			(SpawnMode == SpawnModes.Range && IsInRange)) // No activation trigger. Activate immediately.
+			(SpawnMode == SpawnModes.Range && IsInRange))
 		{
 			EnterRange();
 		}
-
-		EmitSignal(SignalName.Respawned);
 	}
 
 	/// <summary> Overload function to allow using Godot's built-in Area3D.OnEntered(Area3D area) signal. </summary>
@@ -162,7 +168,8 @@ public partial class Enemy : Node3D
 	public virtual void Despawn()
 	{
 		if (!IsInsideTree()) return;
-		GetParent().CallDeferred("remove_child", this);
+		Visible = false;
+		ProcessMode = ProcessModeEnum.Disabled;
 		EmitSignal(SignalName.Despawned);
 	}
 

@@ -133,7 +133,8 @@ public partial class SlideState : PlayerState
 
 				float inputAngle = Player.Controller.GetTargetInputAngle();
 				float inputStrength = Player.Controller.GetInputStrength();
-				if (!Mathf.IsZeroApprox(inputStrength) &&
+				if (!Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Backflip) &&
+					!Mathf.IsZeroApprox(inputStrength) &&
 					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 				{
 					return backflipState;
@@ -143,7 +144,8 @@ public partial class SlideState : PlayerState
 			}
 		}
 
-		if (Player.IsLockoutDisablingActions)
+		// Lockout is disabling action button (slides included)
+		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.ActionButton))
 			return runState;
 
 		if (Mathf.IsZeroApprox(Player.MoveSpeed))

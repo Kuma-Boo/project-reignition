@@ -80,27 +80,26 @@ public partial class PlayerInputController : Node
 		if (!InputAxis.IsZeroApprox())
 			NonZeroInputAxis = InputAxis;
 
+		UpdateJumpBuffer();
+		UpdateActionBuffer();
+		UpdateAttackBuffer();
 		UpdateStepBuffer();
-		if (!Player.IsLockoutDisablingActions)
-		{
-			UpdateJumpBuffer();
-			UpdateActionBuffer();
-			UpdateAttackBuffer();
-			UpdateLightDashBuffer();
-			return;
-		}
-
-		// Allow player to jump out of certain lockouts (i.e. DriftLockout)
-		if (Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump))
-			UpdateJumpBuffer();
-		else
-			ResetJumpBuffer();
-
-		ResetActionBuffer();
+		UpdateLightDashBuffer();
 	}
 
 	private void UpdateJumpBuffer()
 	{
+		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.JumpButton))
+		{
+			// Allow player to jump out of certain lockouts (i.e. DriftLockout)
+			if (Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump))
+				UpdateJumpBuffer();
+			else
+				ResetJumpBuffer();
+
+			return;
+		}
+
 		if (Input.IsActionJustPressed("button_jump"))
 		{
 			jumpBuffer = InputBufferLength;
@@ -112,6 +111,14 @@ public partial class PlayerInputController : Node
 
 	private void UpdateActionBuffer()
 	{
+		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.ActionButton))
+		{
+			if (Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnAction))
+				UpdateActionBuffer();
+			else
+				ResetActionBuffer();
+		}
+
 		if (Input.IsActionJustPressed("button_action"))
 		{
 			actionBuffer = InputBufferLength;
@@ -123,6 +130,16 @@ public partial class PlayerInputController : Node
 
 	private void UpdateAttackBuffer()
 	{
+		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Attacks))
+		{
+			if (Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnAttack))
+				UpdateAttackBuffer();
+			else
+				ResetAttackBuffer();
+
+			return;
+		}
+
 		if (Input.IsActionJustPressed("button_attack"))
 		{
 			attackBuffer = InputBufferLength;
@@ -134,6 +151,12 @@ public partial class PlayerInputController : Node
 
 	private void UpdateStepBuffer()
 	{
+		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Sidestep))
+		{
+			ResetStepBuffer();
+			return;
+		}
+
 		if (Input.IsActionJustPressed("button_step_right"))
 		{
 			stepBuffer = InputBufferLength;
@@ -153,6 +176,12 @@ public partial class PlayerInputController : Node
 
 	private void UpdateLightDashBuffer()
 	{
+		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Lightdash))
+		{
+			ResetLightDashBuffer();
+			return;
+		}
+
 		if (Input.IsActionJustPressed("button_light_dash"))
 		{
 			lightDashBuffer = InputBufferLength;

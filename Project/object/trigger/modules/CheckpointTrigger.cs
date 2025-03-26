@@ -9,7 +9,7 @@ namespace Project.Gameplay.Triggers
 	{
 		public Path3D PlayerPath { get; private set; }
 		public Path3D CameraPath { get; private set; }
-		public CameraSettingsResource CameraSettings;
+		[Export] public CameraSettingsResource CameraSettings;
 
 		private StageSettings Stage => StageSettings.Instance;
 
@@ -27,7 +27,9 @@ namespace Project.Gameplay.Triggers
 		{
 			PlayerPath = StageSettings.Player.PathFollower.ActivePath; // Store current player path
 			CameraPath = StageSettings.Player.Camera.PathFollower.ActivePath; // Store current camera path
-			CameraSettings = StageSettings.Player.Camera.ActiveSettings;
+
+			if (CameraSettings == null)
+				CameraSettings = StageSettings.Player.Camera.ActiveSettings;
 		}
 	}
 }

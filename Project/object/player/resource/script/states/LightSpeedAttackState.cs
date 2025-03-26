@@ -56,9 +56,8 @@ public partial class LightSpeedAttackState : PlayerState
 			Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, perfectStrikeSpeed, acceleration * 2.0f * PhysicsManager.physicsDelta);
 		else
 			Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, normalStrikeSpeed, acceleration * PhysicsManager.physicsDelta);
-		Player.Velocity = Player.Lockon.HomingAttackDirection.Normalized() * Player.MoveSpeed;
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Player.Lockon.HomingAttackDirection);
-		Player.MoveAndSlide();
+		Player.ApplyMovement(Player.Lockon.HomingAttackDirection.Normalized());
 		Player.CheckGround();
 		Player.CheckWall();
 		Player.UpdateUpDirection(true);

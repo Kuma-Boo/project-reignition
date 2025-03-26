@@ -1,0 +1,20 @@
+[gd_resource type="Shader" format=3 uid="uid://dffdo5sycpy05"]
+
+[resource]
+code = "shader_type spatial;
+render_mode diffuse_burley, unshaded, fog_disabled;
+
+uniform sampler2D albedo : source_color, hint_default_black;
+uniform sampler2D detail : source_color, hint_default_black;
+uniform sampler2D lut : source_color, hint_default_black;
+
+void fragment()
+{
+	vec4 col = texture(albedo, UV);
+	vec4 detail_col = texture(detail, UV);
+	float mix_amount = texture(lut, UV2).r;
+	col = mix(col, detail_col, mix_amount);
+	
+	ALBEDO = col.rgb * COLOR.rgb;
+}
+"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=230 format=3 uid="uid://gp7nom61rmtj"]
+[gd_scene load_steps=232 format=3 uid="uid://gp7nom61rmtj"]
 
 [ext_resource type="Script" uid="uid://b1jbgylbmqgrv" path="res://object/player/resource/script/PlayerEffect.cs" id="1_udd16"]
 [ext_resource type="Resource" uid="uid://dkaxxcf5mo3ow" path="res://resource/preset/sfx library/ActionSFXLibrary.tres" id="2_fxiha"]
@@ -41,6 +41,7 @@
 [ext_resource type="Texture2D" uid="uid://cq2moh8cttu1r" path="res://effect/particle/texture/ember blue.png" id="33_q8rgh"]
 [ext_resource type="Shader" uid="uid://bf4qu1y7iievw" path="res://effect/shader/particle/AnimatedNonbillboard.gdshader" id="34_fub5g"]
 [ext_resource type="Texture2D" uid="uid://cn2jkjpa6m0ut" path="res://object/stage/common/resource/model/texture/goal flame detail atlas.png" id="34_ss1rs"]
+[ext_resource type="ArrayMesh" uid="uid://dvnvynbtfcbe6" path="res://area/4 levitated ruin/object/model/special/SonicStoneParticle.res" id="38_o21sv"]
 
 [sub_resource type="Curve" id="Curve_4rxi1"]
 _data = [Vector2(0, 0), 0.0, 5.05237, 0, 0, Vector2(0.621993, 1), 0.0, 0.0, 0, 0, Vector2(0.99999, 0), -6.37551, 0.0, 0, 0]
@@ -1217,6 +1218,25 @@ color = Color(0.737255, 0.85098, 1, 1)
 hue_variation_min = -0.05
 hue_variation_max = 0.15
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mm7nw"]
+lifetime_randomness = 0.4
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.2
+emission_ring_inner_radius = 0.2
+angle_min = -90.0
+angle_max = 90.0
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, -10, 0)
+linear_accel_min = -10.0
+linear_accel_max = -8.0
+scale_max = 2.5
+scale_curve = SubResource("CurveTexture_nepbu")
+
 [sub_resource type="Gradient" id="Gradient_fsk5e"]
 offsets = PackedFloat32Array(0.202128, 0.816489)
 colors = PackedColorArray(0.196078, 0, 0.701961, 1, 0.54902, 0, 0.701961, 1)
@@ -1406,7 +1426,7 @@ anim_speed_min = 1.0
 anim_speed_max = 2.0
 anim_offset_max = 1.0
 
-[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "teleportParticle", "dustParticle", "windParticle", "fireParticle", "stompParticle", "splashJumpParticle", "quickStepParticle", "lightDashParticle", "aegisSlideParticle", "volcanoSlideParticle", "soulSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "fireCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "perfectShuffleParticle", "grindrailSfx", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
+[node name="Effect" type="Node3D" node_paths=PackedStringArray("trailFX", "spinFX", "teleportParticle", "dustParticle", "windParticle", "fireParticle", "stompParticle", "splashJumpParticle", "quickStepParticle", "lightDashParticle", "aegisSlideParticle", "volcanoSlideParticle", "soulSlideParticle", "darkSpiralParticle", "darkCrestParticle", "windCrestParticle", "fireCrestParticle", "chargeParticle", "fullChargeParticle", "grindrailSparkParticle", "grindrailBurstParticle", "perfectShuffleParticle", "grindrailSfx", "petrifyParticle", "footstepChannel", "landingChannel", "landingParticles", "stepEmitters", "waterStep", "voiceChannel")]
 script = ExtResource("1_udd16")
 actionSFXLibrary = ExtResource("2_fxiha")
 trailFX = NodePath("VFX/ActionFX/TrailMesh")
@@ -1432,6 +1452,7 @@ grindrailSparkParticle = NodePath("VFX/RailFX/GrindrailSparks")
 grindrailBurstParticle = NodePath("VFX/RailFX/GrindrailBurst")
 perfectShuffleParticle = NodePath("VFX/RailFX/PerfectShuffle")
 grindrailSfx = NodePath("SFX/GrindrailSFX")
+petrifyParticle = NodePath("VFX/PetrifyFX")
 materialSFXLibrary = ExtResource("5_h4i1s")
 footstepChannel = NodePath("SFX/FootstepChannel")
 landingChannel = NodePath("SFX/LandingChannel")
@@ -2032,6 +2053,20 @@ visibility_aabb = AABB(-2, -1, -2, 4, 4, 4)
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_jvm8h")
 draw_pass_1 = SubResource("PlaneMesh_lwk0r")
+
+[node name="PetrifyFX" type="GPUParticles3D" parent="VFX"]
+layers = 32
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.95
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -1, -2, 4, 4, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_mm7nw")
+draw_pass_1 = ExtResource("38_o21sv")
 
 [node name="CrestFX" type="Node3D" parent="VFX"]
 

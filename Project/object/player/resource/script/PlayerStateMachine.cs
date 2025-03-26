@@ -7,7 +7,7 @@ public partial class PlayerStateMachine : Node
 {
 	[Export]
 	private NodePath startingState;
-	private PlayerState currentState;
+	public PlayerState CurrentState { get; private set; }
 	public PlayerState QueuedState { get; private set; }
 	[Export]
 	private Array<NodePath> stateParents;
@@ -32,13 +32,13 @@ public partial class PlayerStateMachine : Node
 	public void ChangeState(PlayerState state)
 	{
 		QueuedState = state;
-		if (currentState != state)
-			currentState?.ExitState();
+		if (CurrentState != state)
+			CurrentState?.ExitState();
 
 		QueuedState = null;
-		currentState = state;
-		currentState.EnterState();
-		GD.Print($"State changed to {currentState.Name}.");
+		CurrentState = state;
+		CurrentState.EnterState();
+		GD.Print($"State changed to {CurrentState.Name}.");
 	}
 
 	public void ProcessPhysics()
@@ -46,7 +46,7 @@ public partial class PlayerStateMachine : Node
 		if (StageSettings.Instance.IsLevelLoading)
 			return;
 
-		PlayerState newState = currentState.ProcessPhysics();
+		PlayerState newState = CurrentState.ProcessPhysics();
 		if (newState != null)
 			ChangeState(newState);
 	}

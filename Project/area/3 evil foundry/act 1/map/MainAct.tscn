@@ -1,4 +1,4 @@
-[gd_scene load_steps=138 format=3 uid="uid://brkruyjmgn4t2"]
+[gd_scene load_steps=139 format=3 uid="uid://brkruyjmgn4t2"]
 
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="1_1wjgq"]
 [ext_resource type="Resource" uid="uid://cb3ms5pdsayec" path="res://resource/level data/evil foundry/Act1Main.tres" id="2_qt87d"]
@@ -102,6 +102,9 @@ size = Vector3(20, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mgxoj"]
 size = Vector3(20, 10, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dqk4v"]
+size = Vector3(20, 20, 20)
 
 [sub_resource type="Curve" id="Curve_iw12v"]
 _data = [Vector2(0, 0.1), 0.0, 8.09784, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.35203, 0.0, 0, 0]
@@ -2406,18 +2409,16 @@ shape = SubResource("BoxShape3D_ssstx")
 
 [node name="SpikeBallCam" parent="MainAct/CameraMap" instance=ExtResource("7_d57bs")]
 transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, 137, 40.0007, -194.2)
-"Trigger Mode" = 2
-"Exit Mode" = 2
+"Enter Mode" = 0
 
 [node name="Camera" type="Node3D" parent="MainAct/CameraMap/SpikeBallCam"]
 script = ExtResource("6_8b1i8")
-transitionTime = 5.0
-transitionType = 1
+distanceBlending = 5
 settings = ExtResource("10_nme58")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CameraMap/SpikeBallCam"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ssstx")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 7.5)
+shape = SubResource("BoxShape3D_dqk4v")
 
 [node name="NarrowCam4" parent="MainAct/CameraMap" instance=ExtResource("7_d57bs")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 215, 30.0007, -199)

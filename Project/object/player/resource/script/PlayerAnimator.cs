@@ -117,6 +117,7 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName BalanceState = "balance";
 	private readonly StringName SidleState = "sidle";
 	private readonly StringName SpinState = "spin";
+	private readonly StringName GimmickState = "gimmick";
 
 	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
 
@@ -835,6 +836,70 @@ public partial class PlayerAnimator : Node3D
 	}
 
 	public void SetSpinSpeed(float speed = 1.0f) => animationTree.Set(SpinSpeed, speed);
+	#endregion
+
+	#region Gimmicks
+	private readonly StringName GimmickTransition = "parameters/gimmick_tree/state_transition/transition_request";
+
+	private readonly StringName IvyState = "ivy";
+	private readonly StringName IvyBlend = "parameters/gimmick_tree/ivy_blend/blend_position";
+	private readonly StringName IvyStartTrigger = "parameters/gimmick_tree/ivy_start_trigger/request";
+	private readonly StringName IvySwingTrigger = "parameters/gimmick_tree/ivy_swing_trigger/request";
+	private readonly StringName IvyStartActive = "parameters/gimmick_tree/ivy_start_trigger/active";
+	private readonly StringName IvySwingActive = "parameters/gimmick_tree/ivy_swing_trigger/active";
+
+	public bool IsIvyStartActive => (bool)animationTree.Get(IvyStartActive);
+	public bool IsIvySwingActive => (bool)animationTree.Get(IvySwingActive);
+
+	public void StartIvy()
+	{
+		SetStateXfade(.2f);
+		animationTree.Set(StateTransition, GimmickState);
+		animationTree.Set(GimmickTransition, IvyState);
+		animationTree.Set(IvyStartTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	public void StartIvySwing() => animationTree.Set(IvySwingTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+
+	public void SetIvyBlend(float ratio) => animationTree.Set(IvyBlend, ratio);
+
+	private readonly StringName ZiplineState = "zipline";
+	private readonly StringName ZiplineBlend = "parameters/gimmick_tree/zipline_blend/blend_position";
+	public void StartZipline()
+	{
+		SetStateXfade(.2f);
+		animationTree.Set(StateTransition, GimmickState);
+		animationTree.Set(GimmickTransition, ZiplineState);
+	}
+	public void SetZiplineBlend(float ratio) => animationTree.Set(ZiplineBlend, ratio);
+	public float GetZiplineBlend() => (float)animationTree.Get(ZiplineBlend);
+
+	public void StartPetrify()
+	{
+		SetStateXfade(0f);
+		animationTree.Set(StateTransition, GimmickState);
+
+		eventAnimationPlayer.Play("petrify-start");
+		eventAnimationPlayer.Advance(0.0);
+	}
+
+	public void ShakePetrify()
+	{
+		eventAnimationPlayer.Stop(true);
+		eventAnimationPlayer.Play("petrify-shake");
+	}
+
+	private readonly StringName PetrifyState = "petrify";
+	private readonly StringName PetrifyStopTrigger = "parameters/gimmick_tree/petrify_stop_trigger/request";
+	public void StopPetrify()
+	{
+		animationTree.Set(GimmickTransition, ZiplineState);
+		animationTree.Set(PetrifyStopTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		ResetState(.2f);
+
+		eventAnimationPlayer.Play("petrify-stop");
+		eventAnimationPlayer.Advance(0.0);
+	}
 	#endregion
 
 	// Shaders
