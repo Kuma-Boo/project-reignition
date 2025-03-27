@@ -11,7 +11,7 @@
 [ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="9_77ulf"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="10_81ydx"]
 [ext_resource type="PackedScene" uid="uid://cbs8o4mdf1wbo" path="res://area/2 dino jungle/object/platform/GrassPillar.tscn" id="11_rqo42"]
-[ext_resource type="PackedScene" uid="uid://3ho04bqoxv4w" path="res://object/stage/common/Switch.tscn" id="12_jhajo"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="12_jhajo"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="13_tivn7"]
 [ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="14_c8yr2"]
 [ext_resource type="PackedScene" uid="uid://mhhtlvsxmugl" path="res://object/stage/common/Catapult.tscn" id="15_hynkb"]
@@ -151,11 +151,26 @@ Data = ExtResource("2_n572r")
 InitialCameraSettings = ExtResource("3_uvabf")
 metadata/_edit_group_ = true
 
+[node name="CaveLightEvent" parent="Static/Lighting" index="0"]
+"Trigger Settings/Animation Blending" = 0.0
+
+[node name="EventTrigger" parent="Static/Trigger/Object/Apatos1/ActivateTrigger" index="0"]
+"Trigger Settings/Animation Blending" = 0.0
+
 [node name="Head" parent="Static/Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" index="1"]
 transform = Transform3D(-0.984788, -0.173647, -0.0063563, 0.00640272, 0.000292879, -0.999979, 0.173645, -0.984808, 0.000823389, -4.24603, -18.4884, 3.43817)
 
+[node name="Event" parent="Static/Trigger/Object/Apatos2" index="3"]
+"Trigger Settings/Animation Blending" = 0.0
+
 [node name="Head" parent="Static/Trigger/Object/Apatos2/Event" index="1"]
 transform = Transform3D(0.999979, -9.23872e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -9.23872e-07, 1, 0.000292879, 6.10352e-05, 19.7418, 38.5259)
+
+[node name="PathSelectionEvent" parent="Static/Trigger/Object/Apatos2/Event" index="2"]
+"Trigger Settings/Animation Blending" = 0.0
+
+[node name="Event" parent="Static/Trigger/Object/DinoParaGroup/Startle" index="0"]
+"Trigger Settings/Animation Blending" = 0.0
 
 [node name="Skeleton3D" parent="Static/Trigger/Object/DinoParaGroup/DinoPara1/DinoParaRoot" index="0"]
 bones/0/rotation = Quaternion(-0.755882, -1.5337e-08, -1.5337e-08, 0.654708)
@@ -327,6 +342,7 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
 script = ExtResource("7_14wmj")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 
@@ -356,6 +372,7 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
 script = ExtResource("7_14wmj")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("../../Positioning/DisableEvent/AnimationPlayer")
 
@@ -1352,7 +1369,6 @@ saveVisibilityOnCheckpoint = true
 [node name="FlowerMajin1" parent="RampageAct/Crossing" instance=ExtResource("21_1rbip")]
 transform = Transform3D(0.329872, 0, -0.944026, 0, 1, 0, 0.944026, 0, 0.329872, 32.9695, -0.0720215, -9.49957)
 disableAttacking = true
-passiveLength = 0.0
 preAttackLength = 0.0
 postAttackLength = 1.0
 weakDefense = true
@@ -2067,6 +2083,12 @@ shape = SubResource("BoxShape3D_c4mxl")
 [connection signal="Teleport" from="RampageAct/FeedingTunnel/Spring/Teleport" to="RampageAct/FeedingTunnel/Spring/Teleport/Camera" method="Activate"]
 
 [editable path="Static"]
+[editable path="Static/Visuals/02RiverReverse"]
+[editable path="Static/Visuals/03Cave"]
 [editable path="Static/Visuals/03CaveSky"]
+[editable path="Static/Visuals/04Spiral"]
+[editable path="Static/Visuals/05Crossing"]
+[editable path="Static/Visuals/06CavernEntrance"]
+[editable path="Static/Visuals/Skybox2"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara1"]
 [editable path="Static/Trigger/Object/DinoParaGroup/DinoPara2"]

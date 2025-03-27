@@ -1,37 +1,39 @@
-[gd_scene load_steps=9 format=3 uid="uid://g7vhevg8ipxh"]
+[gd_scene load_steps=8 format=3 uid="uid://g7vhevg8ipxh"]
 
 [ext_resource type="PackedScene" uid="uid://61g2uccyuul7" path="res://area/1 sand oasis/act 2/environment/model/01Opening.gltf" id="1_3t3r4"]
 [ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_opkha"]
-[ext_resource type="Texture2D" uid="uid://v845jakv7sc5" path="res://area/1 sand oasis/data/texture/window shadow subtract.png" id="3_rtvri"]
-[ext_resource type="Texture2D" uid="uid://bnamc3sj4l00m" path="res://area/1 sand oasis/data/texture/floor glow.png" id="4_7qtui"]
+[ext_resource type="Material" uid="uid://bor4kpaxjnls6" path="res://area/3 evil foundry/data/material/Blue God Ray.tres" id="3_6at6g"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hjeqm"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p1huf"]
 transparency = 1
 blend_mode = 1
 shading_mode = 0
-albedo_color = Color(1.70196, 1.50196, 1.30196, 1)
+albedo_color = Color(1.95, 1.9, 1.7, 1)
 proximity_fade_enabled = true
-proximity_fade_distance = 4.55
+proximity_fade_distance = 2.0
 distance_fade_mode = 1
-distance_fade_max_distance = 20.0
 
-[sub_resource type="QuadMesh" id="QuadMesh_ohc72"]
-material = SubResource("StandardMaterial3D_hjeqm")
+[sub_resource type="QuadMesh" id="QuadMesh_l6d4k"]
+material = SubResource("StandardMaterial3D_p1huf")
 size = Vector2(7.5, 15)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nkpqa"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g60b5"]
 transparency = 1
 blend_mode = 1
 shading_mode = 0
-albedo_color = Color(1.8, 1.4, 0.8, 1)
+albedo_color = Color(1.5, 1.5, 1.5, 1)
 proximity_fade_enabled = true
-proximity_fade_distance = 4.55
+proximity_fade_distance = 15.0
 distance_fade_mode = 1
-distance_fade_max_distance = 20.0
 
-[sub_resource type="QuadMesh" id="QuadMesh_66xmq"]
-material = SubResource("StandardMaterial3D_nkpqa")
-size = Vector2(7.5, 15)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oeia6"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(1.5, 1.5, 1.5, 1)
+proximity_fade_enabled = true
+proximity_fade_distance = 2.0
+distance_fade_mode = 1
 
 [node name="01Opening" instance=ExtResource("1_3t3r4")]
 script = ExtResource("2_opkha")
@@ -151,7 +153,7 @@ layers = 4
 cast_shadow = 0
 
 [node name="stg013_a35_Mesh_0000" parent="." index="28"]
-layers = 4
+layers = 2
 cast_shadow = 0
 
 [node name="stg013_a35_Mesh_0003_001" parent="." index="29"]
@@ -161,6 +163,7 @@ cast_shadow = 0
 [node name="stg013_k07_Mesh_0001_001" parent="." index="30"]
 layers = 4
 cast_shadow = 0
+surface_material_override/0 = ExtResource("3_6at6g")
 
 [node name="stg013_p08_Mesh_0002_001" parent="." index="31"]
 layers = 2
@@ -169,6 +172,7 @@ cast_shadow = 0
 [node name="stg013_k07_Mesh_0000_001" parent="." index="32"]
 layers = 4
 cast_shadow = 0
+surface_material_override/0 = ExtResource("3_6at6g")
 
 [node name="stg013_p07_Mesh_0001_001" parent="." index="33"]
 layers = 6
@@ -178,124 +182,40 @@ cast_shadow = 0
 layers = 4
 cast_shadow = 0
 
-[node name="EnvironmentProbe" type="ReflectionProbe" parent="." index="35"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -219, -54.5292, -395.947)
-layers = 4
-size = Vector3(251.42, 61.3035, 140.99)
-interior = true
-cull_mask = 5
-ambient_mode = 2
-ambient_color = Color(0.772545, 0.799443, 0.989929, 1)
-ambient_color_energy = 0.5
-
-[node name="ObjectProbe1" type="ReflectionProbe" parent="." index="36"]
-transform = Transform3D(0.722874, 0.0510934, -0.689089, -0.0705051, 0.997511, -4.93175e-08, 0.687374, 0.0485843, 0.724677, -115.805, -67.9511, -324.281)
-layers = 64
-max_distance = 5.0
-size = Vector3(57.4835, 71.6976, 32.6671)
-interior = true
-cull_mask = 64
-ambient_mode = 2
-ambient_color = Color(0.4416, 0.45888, 0.96, 1)
-ambient_color_energy = 0.2
-
-[node name="ObjectProbe2" type="ReflectionProbe" parent="." index="37"]
-transform = Transform3D(0.722874, 0.0510934, -0.689089, -0.0705051, 0.997511, -4.86195e-08, 0.687374, 0.0485843, 0.724677, -195.867, -59.823, -406.966)
-layers = 64
-max_distance = 5.0
-size = Vector3(178.311, 71.6976, 93.1371)
-interior = true
-cull_mask = 64
-ambient_mode = 2
-ambient_color = Color(0.99, 0.396, 0.396, 1)
-ambient_color_energy = 0.2
-
-[node name="ObjectProbe3" type="ReflectionProbe" parent="." index="38"]
-transform = Transform3D(0.722957, -0.0499074, -0.689089, 0.0688685, 0.997626, 2.23075e-08, 0.687453, -0.0474565, 0.724677, -283.961, -54.5605, -411.474)
-layers = 64
-max_distance = 5.0
-size = Vector3(69.1662, 61.3035, 59.3877)
-interior = true
-cull_mask = 64
-ambient_mode = 2
-ambient_color = Color(0.99, 0.93555, 0.7722, 1)
-ambient_color_energy = 0.3
-
-[node name="ObjectProbe4" type="ReflectionProbe" parent="." index="39"]
-transform = Transform3D(0.722957, -0.0499074, -0.689089, 0.0688685, 0.997626, 1.9375e-08, 0.687453, -0.0474565, 0.724677, -330.059, -55.4047, -447.717)
-layers = 64
-max_distance = 5.0
-size = Vector3(51.946, 27.4414, 35.5918)
-interior = true
-cull_mask = 64
-ambient_mode = 2
-ambient_color = Color(0.4416, 0.45888, 0.96, 1)
-ambient_color_energy = 0.3
-
-[node name="DoorLight" type="MeshInstance3D" parent="." index="40"]
-transform = Transform3D(0.678006, 0, 0.735057, 0, 1, 0, -0.735057, 0, 0.678006, -316.633, -57.887, -428.224)
-mesh = SubResource("QuadMesh_ohc72")
-
-[node name="DoorLight2" type="MeshInstance3D" parent="." index="41"]
-transform = Transform3D(1.00625, 0, 0.687265, 0, 1, 0, -0.952025, 0, 0.726407, -290.52, -57.887, -429.065)
-mesh = SubResource("QuadMesh_ohc72")
-
-[node name="DoorLight3" type="MeshInstance3D" parent="." index="42"]
-transform = Transform3D(1.39761, 1.40091, 0.123952, 0.383315, 2.38419e-07, -0.983147, -1.51521, 1.29218, -0.134382, -295.746, -48.9861, -401.424)
-mesh = SubResource("QuadMesh_66xmq")
-
-[node name="WindowL1" type="Decal" parent="." index="43"]
-transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -291.956, -61.6198, -425.803)
-size = Vector3(2.47357, 4.27441, 2.26294)
-texture_emission = ExtResource("3_rtvri")
-emission_energy = 0.1
-modulate = Color(1, 0.768492, 0.582346, 1)
-normal_fade = 0.5
-upper_fade = 0.0111488
-lower_fade = 2.14355
-cull_mask = 4
-
-[node name="WindowL2" type="Decal" parent="." index="44"]
-transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -288.124, -61.6198, -429.635)
-size = Vector3(2.47357, 4.27441, 2.26294)
-texture_emission = ExtResource("3_rtvri")
-emission_energy = 0.1
-modulate = Color(1, 0.768492, 0.582346, 1)
-normal_fade = 0.5
-upper_fade = 0.0111488
-lower_fade = 2.14355
-cull_mask = 4
-
-[node name="Decal" type="Decal" parent="." index="45"]
-transform = Transform3D(0.721579, 0, -0.692333, 0, 1, 0, 0.692333, 0, 0.721579, -318.515, -63.6543, -429.875)
-size = Vector3(26.7215, 13.4144, 7.68296)
-texture_emission = ExtResource("4_7qtui")
-emission_energy = 0.3
-modulate = Color(1, 0.784436, 0.695204, 1)
-normal_fade = 0.5
-upper_fade = 0.126135
-lower_fade = 1.0
-cull_mask = 4
-
-[node name="OmniLight3D" type="OmniLight3D" parent="." index="46"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -192.243, -59.042, -418.71)
-layers = 64
-light_color = Color(1, 0.839216, 0.537255, 1)
-light_energy = 4.0
-light_cull_mask = 4293918784
-omni_range = 29.07
-omni_attenuation = 0.00897417
-
-[node name="SpotLight3D" type="SpotLight3D" parent="." index="47"]
-transform = Transform3D(0.999995, -0.000359179, 0.00312099, -0.00311502, 0.0155508, 0.999874, -0.000407667, -0.999879, 0.0155496, -294.161, -36.4911, -403.714)
+[node name="SpotLight3D" type="SpotLight3D" parent="." index="35"]
+transform = Transform3D(0.999995, -0.000359178, 0.00312098, -0.00311502, 0.0155508, 0.999874, -0.000407667, -0.999879, 0.0155496, -294.856, -49.6284, -405.395)
 layers = 5
-light_color = Color(1, 0.881353, 0.761749, 1)
+light_color = Color(0, 0.433333, 1, 1)
 light_energy = 16.0
 light_size = 1.0
 light_cull_mask = 68
-shadow_enabled = true
 shadow_blur = 0.2
 spot_range = 41.674
 spot_attenuation = 0.25
-spot_angle = 12.51
+spot_angle = 30.01
 spot_angle_attenuation = 10.1965
+
+[node name="doorLight0" type="MeshInstance3D" parent="." index="36"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -316.737, -59, -427.708)
+mesh = SubResource("QuadMesh_l6d4k")
+surface_material_override/0 = SubResource("StandardMaterial3D_g60b5")
+
+[node name="doorLight1" type="MeshInstance3D" parent="." index="37"]
+transform = Transform3D(11.9925, 0, -0.707107, 0, 2.1, 0, 11.9925, 0, 0.707107, -180.648, -55.9363, -409.653)
+mesh = SubResource("QuadMesh_l6d4k")
+surface_material_override/0 = SubResource("StandardMaterial3D_oeia6")
+
+[node name="doorLight3" type="MeshInstance3D" parent="." index="38"]
+transform = Transform3D(12.2112, 0, 0, 0, 2.1, 0, 0, 0, 1, -266.127, -55.9363, -445.653)
+mesh = SubResource("QuadMesh_l6d4k")
+surface_material_override/0 = SubResource("StandardMaterial3D_oeia6")
+
+[node name="doorLight2" type="MeshInstance3D" parent="." index="39"]
+transform = Transform3D(-0.707107, -2.55972e-06, -0.707107, -1.06027e-06, 1, -2.55972e-06, 0.707107, -1.06027e-06, -0.707107, -130.151, -63, -343.122)
+mesh = SubResource("QuadMesh_l6d4k")
+surface_material_override/0 = SubResource("StandardMaterial3D_g60b5")
+
+[node name="doorLight4" type="MeshInstance3D" parent="." index="40"]
+transform = Transform3D(-2.33345, -0.707107, 2.563e-06, -3.63886e-06, -2.60343e-06, -1, 2.33345, -0.707107, 1.04308e-06, -296.781, -51.5213, -402.272)
+mesh = SubResource("QuadMesh_l6d4k")
+surface_material_override/0 = SubResource("StandardMaterial3D_oeia6")
