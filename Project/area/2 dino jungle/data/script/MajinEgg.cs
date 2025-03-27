@@ -23,7 +23,7 @@ namespace Project.Gameplay.Objects
 
 		public override void _Ready()
 		{
-			StageSettings.Instance.ConnectRespawnSignal(this);
+			StageSettings.Instance.Respawned += Respawn;
 			StageSettings.Instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveDestructionStatus));
 
 			Respawn();
@@ -88,16 +88,16 @@ namespace Project.Gameplay.Objects
 		{
 			IsInteractionProcessed = true;
 			// Connect a signal
-			if (!Player.IsConnected(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-				Player.Connect(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
+			if (!Player.IsConnected(PlayerController.SignalName.AttackStateChanged, new(this, MethodName.ResetInteractionProcessed)))
+				Player.Connect(PlayerController.SignalName.AttackStateChanged, new(this, MethodName.ResetInteractionProcessed), (uint)ConnectFlags.OneShot + (uint)ConnectFlags.Deferred);
 		}
 
 		private void ResetInteractionProcessed()
 		{
 			IsInteractionProcessed = false;
 
-			if (Player.IsConnected(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed)))
-				Player.Disconnect(PlayerController.SignalName.AttackStateChange, new(this, MethodName.ResetInteractionProcessed));
+			if (Player.IsConnected(PlayerController.SignalName.AttackStateChanged, new(this, MethodName.ResetInteractionProcessed)))
+				Player.Disconnect(PlayerController.SignalName.AttackStateChanged, new(this, MethodName.ResetInteractionProcessed));
 		}
 
 		private void SaveDestructionStatus() => permanentlyDestroyed = isShattered;

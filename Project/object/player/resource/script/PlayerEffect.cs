@@ -32,10 +32,10 @@ public partial class PlayerEffect : Node3D
 	public readonly StringName SlideSfx = "slide";
 	public readonly StringName SplashSfx = "splash";
 	public readonly StringName SidleSfx = "sidle";
-	private readonly StringName StompSfx = "stomp";
-	private readonly StringName WindSfx = "wind";
-	private readonly StringName FireSfx = "fire";
-	private readonly StringName DarkSfx = "dark";
+	public readonly StringName StompSfx = "stomp";
+	public readonly StringName WindSfx = "wind";
+	public readonly StringName FireSfx = "fire";
+	public readonly StringName DarkSfx = "dark";
 
 	#region Actions
 	// Actions (Jumping, sliding, etc)
@@ -115,7 +115,6 @@ public partial class PlayerEffect : Node3D
 		PlayActionSFX("teleport end");
 	}
 
-
 	/// <summary> VFX for drifting dust. </summary>
 	[Export]
 	private GpuParticles3D dustParticle;
@@ -155,10 +154,26 @@ public partial class PlayerEffect : Node3D
 
 	[Export]
 	private GroupGpuParticles3D splashJumpParticle;
-	public void PlaySplashJumpFX()
+	public void PlaySplashJumpFX() => splashJumpParticle.RestartGroup();
+
+	[Export]
+	private GpuParticles3D quickStepParticle;
+	public void PlayQuickStepFX(bool isSteppingRight)
 	{
-		splashJumpParticle.RestartGroup();
+		quickStepParticle.Rotation = isSteppingRight ? Vector3.Zero : Vector3.Up * Mathf.Pi;
+		quickStepParticle.Restart();
+		PlayActionSFX("quick step");
 	}
+
+	[Export]
+	private GpuParticles3D lightDashParticle;
+	public void StartLightDashFX()
+	{
+		lightDashParticle.Emitting = true;
+		PlayActionSFX("light dash");
+	}
+
+	public void StopLightDashFX() => lightDashParticle.Emitting = false;
 
 	[Export]
 	private GroupGpuParticles3D aegisSlideParticle;
@@ -255,6 +270,10 @@ public partial class PlayerEffect : Node3D
 		grindrailSparkParticle.Emitting = false;
 		StopChargeFX();
 	}
+
+	[Export]
+	private GpuParticles3D petrifyParticle;
+	public void StartPetrifyShatterFX() => petrifyParticle.Restart();
 	#endregion
 
 	#region Ground

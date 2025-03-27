@@ -36,6 +36,10 @@ public partial class Runtime : Node
 	[Export(PropertyHint.Layers3DPhysics)]
 	public uint environmentMask;
 
+	/// <summary> Collision layer for things that obstruct lockon targeting. </summary>
+	[Export(PropertyHint.Layers3DPhysics)]
+	public uint lockonObstructionMask;
+
 	/// <summary> Collision layer for destructable particle effects. </summary>
 	[Export(PropertyHint.Layers3DPhysics)]
 	public uint particleCollisionLayer;
@@ -72,18 +76,17 @@ public partial class Runtime : Node
 	}
 
 	#region Pearl Stuff
+	[Export] public PackedScene pearlScene;
 	public SphereShape3D PearlCollisionShape = new();
 	public SphereShape3D RichPearlCollisionShape = new();
-	[Export]
-	public PackedScene pearlScene;
 
 	/// <summary> Pool of auto-collected pearls used whenever enemies are defeated or itemboxes are opened. </summary>
 	private readonly Array<Gameplay.Objects.Pearl> pearlPool = [];
 	private readonly Array<Gameplay.Objects.Pearl> tweeningPearls = [];
 	private readonly Array<Tween> pearlTweens = [];
 
-	private const float PearlCollisionSize = .4f;
-	private const float RichPearlCollisionSize = .6f;
+	private readonly float PearlCollisionSize = .4f;
+	private readonly float RichPearlCollisionSize = .6f;
 
 	public void UpdatePearlCollisionShapes(float sizeMultiplier = 1f)
 	{
@@ -100,6 +103,8 @@ public partial class Runtime : Node
 	public void SpawnPearls(int amount, Vector3 spawnPosition, Vector2 radius, float heightOffset = 0)
 	{
 		Tween tween = CreateTween().SetParallel(true).SetTrans(Tween.TransitionType.Cubic);
+		tween.SetProcessMode(Tween.TweenProcessMode.Physics);
+		tween.SetPauseMode(Tween.TweenPauseMode.Stop);
 
 		for (int i = 0; i < amount; i++)
 		{
@@ -115,7 +120,7 @@ public partial class Runtime : Node
 				pearl = pearlScene.Instantiate<Gameplay.Objects.Pearl>();
 				pearl.DisableAutoRespawning = true; // Don't auto-respawn
 				pearl.Monitoring = pearl.Monitorable = false; // Unlike normal pearls, these are automatically collected
-				pearl.Connect(Gameplay.Objects.Pearl.SignalName.Despawned, Callable.From(() => RepoolPearl(pearl)));
+				pearl.Despawned += () => RepoolPearl(pearl);
 			}
 
 			AddChild(pearl);
@@ -138,7 +143,7 @@ public partial class Runtime : Node
 		pearlTweens.Add(tween);
 
 		tween.Play();
-		tween.Connect(Tween.SignalName.Finished, Callable.From(() => KillPearlTween(tween))); // Kill tween after completing
+		tween.Finished += () => KillPearlTween(tween); // Kill tween after completing
 	}
 
 	private void RepoolPearl(Gameplay.Objects.Pearl pearl)
@@ -147,6 +152,7 @@ public partial class Runtime : Node
 			pearlPool.Add(pearl);
 
 		tweeningPearls.Remove(pearl);
+		pearl.GetParent().RemoveChild(pearl);
 	}
 
 	private void ClearPearls()
@@ -166,6 +172,16 @@ public partial class Runtime : Node
 			tween.Kill();
 
 		pearlTweens.Remove(tween);
+	}
+
+	public SphereShape3D RingCollisionShape = new();
+	public SphereShape3D RichRingCollisionShape = new();
+	private readonly float RingCollisionSize = .5f;
+	private readonly float RichRingCollisionSize = .7f;
+	public void UpdateRingCollisionShapes(float sizeMultiplier = 1f)
+	{
+		RingCollisionShape.Radius = RingCollisionSize * sizeMultiplier;
+		RichRingCollisionShape.Radius = RichRingCollisionSize * sizeMultiplier;
 	}
 	#endregion
 

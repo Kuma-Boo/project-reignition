@@ -94,6 +94,8 @@ public partial class PlayerAnimator : Node3D
 		StopCrouching(0f);
 	}
 
+	public void SeekOneshotAnimation(float time) => animationTree.Set(OneshotSeek, time);
+
 	/// <summary>
 	/// Cancels the oneshot animation early.
 	/// </summary>
@@ -115,6 +117,7 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName BalanceState = "balance";
 	private readonly StringName SidleState = "sidle";
 	private readonly StringName SpinState = "spin";
+	private readonly StringName GimmickState = "gimmick";
 
 	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
 
@@ -315,6 +318,33 @@ public partial class PlayerAnimator : Node3D
 		BrakeStatePlayback.Travel(isFacingRight ? "r" + BrakeStopState : "l" + BrakeStopState);
 	}
 
+	private readonly StringName QuickStepTrigger = "parameters/ground_tree/quick_step_trigger/request";
+	private readonly StringName QuickStepTransition = "parameters/ground_tree/quick_step_transition/transition_request";
+	private readonly StringName QuickStepSpeed = "parameters/ground_tree/quick_step_speed/scale";
+	public void StartQuickStep(bool isSteppingRight)
+	{
+		animationTree.Set(QuickStepTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animationTree.Set(QuickStepTransition, isSteppingRight ? RightConstant : LeftConstant);
+		animationTree.Set(QuickStepSpeed, 1.5f);
+	}
+
+	private AnimationNodeStateMachinePlayback LightDashStatePlayback => animationTree.Get(LightDashPlayback).Obj as AnimationNodeStateMachinePlayback;
+	private readonly StringName LightDashPlayback = "parameters/air_tree/light_dash_state/playback";
+	private readonly StringName LightDashTrigger = "parameters/air_tree/light_dash_trigger/request";
+	private readonly StringName LightDashSpeed = "parameters/air_tree/light_dash_speed/scale";
+	public void StartLightDashAnimation()
+	{
+		animationTree.Set(LightDashTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animationTree.Set(LightDashSpeed, 2f);
+		LightDashStatePlayback.Start("start");
+	}
+
+	public void StopLightDashAnimation()
+	{
+		LightDashStatePlayback.Start("stop");
+		animationTree.Set(LightDashSpeed, 1f);
+	}
+
 	/// <summary> Blend from -1 <-> 1 of how much the player is turning. </summary>
 	private float groundTurnRatio;
 	/// <summary> How much should the turning animation be smoothed by? </summary>
@@ -363,6 +393,8 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(StompTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(QuickStepTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(LightDashTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
 	public void JumpAnimation()
@@ -578,6 +610,7 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName DriftDirectionTransition = "parameters/drift_tree/direction_transition/transition_request";
 	private readonly StringName DriftStartState = "drift-start";
 	private readonly StringName DriftLaunchState = "drift-launch";
+	private readonly StringName DriftFailState = "drift-fail";
 
 	public void StartDrift(bool isDriftFacingRight)
 	{
@@ -587,6 +620,13 @@ public partial class PlayerAnimator : Node3D
 
 		SetStateXfade(.2f); // Transition into drift
 		animationTree.Set(StateTransition, DriftState);
+	}
+
+	/// <summary> Called when drift is failed. </summary>
+	public void FailDrift()
+	{
+		ActiveDriftStatePlayback.Travel(DriftFailState);
+		SetStateXfade(0.1f); // Remove xfade in case player wants to jump early
 	}
 
 	/// <summary> Called when drift is performed. </summary>
@@ -796,6 +836,70 @@ public partial class PlayerAnimator : Node3D
 	}
 
 	public void SetSpinSpeed(float speed = 1.0f) => animationTree.Set(SpinSpeed, speed);
+	#endregion
+
+	#region Gimmicks
+	private readonly StringName GimmickTransition = "parameters/gimmick_tree/state_transition/transition_request";
+
+	private readonly StringName IvyState = "ivy";
+	private readonly StringName IvyBlend = "parameters/gimmick_tree/ivy_blend/blend_position";
+	private readonly StringName IvyStartTrigger = "parameters/gimmick_tree/ivy_start_trigger/request";
+	private readonly StringName IvySwingTrigger = "parameters/gimmick_tree/ivy_swing_trigger/request";
+	private readonly StringName IvyStartActive = "parameters/gimmick_tree/ivy_start_trigger/active";
+	private readonly StringName IvySwingActive = "parameters/gimmick_tree/ivy_swing_trigger/active";
+
+	public bool IsIvyStartActive => (bool)animationTree.Get(IvyStartActive);
+	public bool IsIvySwingActive => (bool)animationTree.Get(IvySwingActive);
+
+	public void StartIvy()
+	{
+		SetStateXfade(.2f);
+		animationTree.Set(StateTransition, GimmickState);
+		animationTree.Set(GimmickTransition, IvyState);
+		animationTree.Set(IvyStartTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	public void StartIvySwing() => animationTree.Set(IvySwingTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+
+	public void SetIvyBlend(float ratio) => animationTree.Set(IvyBlend, ratio);
+
+	private readonly StringName ZiplineState = "zipline";
+	private readonly StringName ZiplineBlend = "parameters/gimmick_tree/zipline_blend/blend_position";
+	public void StartZipline()
+	{
+		SetStateXfade(.2f);
+		animationTree.Set(StateTransition, GimmickState);
+		animationTree.Set(GimmickTransition, ZiplineState);
+	}
+	public void SetZiplineBlend(float ratio) => animationTree.Set(ZiplineBlend, ratio);
+	public float GetZiplineBlend() => (float)animationTree.Get(ZiplineBlend);
+
+	public void StartPetrify()
+	{
+		SetStateXfade(0f);
+		animationTree.Set(StateTransition, GimmickState);
+
+		eventAnimationPlayer.Play("petrify-start");
+		eventAnimationPlayer.Advance(0.0);
+	}
+
+	public void ShakePetrify()
+	{
+		eventAnimationPlayer.Stop(true);
+		eventAnimationPlayer.Play("petrify-shake");
+	}
+
+	private readonly StringName PetrifyState = "petrify";
+	private readonly StringName PetrifyStopTrigger = "parameters/gimmick_tree/petrify_stop_trigger/request";
+	public void StopPetrify()
+	{
+		animationTree.Set(GimmickTransition, ZiplineState);
+		animationTree.Set(PetrifyStopTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		ResetState(.2f);
+
+		eventAnimationPlayer.Play("petrify-stop");
+		eventAnimationPlayer.Advance(0.0);
+	}
 	#endregion
 
 	// Shaders

@@ -33,13 +33,13 @@ public partial class BonusManager : VBoxContainer
 		if (ringChain >= 10)
 		{
 			BonusData ringBonus = new(BonusType.Ring, ringChain);
-			QueuedScore = ringBonus.CalculateBonusPoints();
+			QueuedScore += ringBonus.CalculateBonusPoints();
 		}
 
 		if (enemyChain >= 2)
 		{
 			BonusData enemyBonus = new(BonusType.Enemy, enemyChain);
-			QueuedScore = enemyBonus.CalculateBonusPoints();
+			QueuedScore += enemyBonus.CalculateBonusPoints();
 		}
 	}
 
@@ -132,6 +132,7 @@ public partial class BonusManager : VBoxContainer
 	public void UpdateEnemyChain()
 	{
 		if (!Player.IsOnGround) return; // Chain is never counted when the player is in the air
+		if (Player.AllowLandingGrind || Player.IsGrinding) return; // Ignore Grindrails
 		if (Player.ExternalController != null) return; // Chains only end during normal movement
 
 		if (Player.Skills.IsSpeedBreakActive)

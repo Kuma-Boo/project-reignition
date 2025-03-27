@@ -20,7 +20,7 @@ public partial class LockoutResource : Resource
 			ExtensionMethods.CreateProperty("General/Invincible", Variant.Type.Bool),
 			ExtensionMethods.CreateProperty("General/Priority", Variant.Type.Int, PropertyHint.Range, $"-1, {MaxPriority}"),
 			ExtensionMethods.CreateProperty("Actions/Reset Actions", Variant.Type.Bool),
-			ExtensionMethods.CreateProperty("Actions/Disable Actions", Variant.Type.Bool),
+			ExtensionMethods.CreateProperty("Actions/Disable Action Flags", Variant.Type.Int, PropertyHint.Flags, disableActionFlags.EnumToString()),
 			ExtensionMethods.CreateProperty("Actions/Reset Flags", Variant.Type.Int, PropertyHint.Flags, resetFlags.EnumToString()),
 			ExtensionMethods.CreateProperty("Controls/Override Speed", Variant.Type.Bool),
 		];
@@ -60,8 +60,8 @@ public partial class LockoutResource : Resource
 				priority = (int)value;
 				break;
 
-			case "Actions/Disable Actions":
-				disableActions = (bool)value;
+			case "Actions/Disable Action Flags":
+				disableActionFlags = (ActionFlags)(int)value;
 				break;
 			case "Actions/Reset Flags":
 				resetFlags = (ResetFlags)(int)value;
@@ -118,8 +118,8 @@ public partial class LockoutResource : Resource
 			case "General/Priority":
 				return priority;
 
-			case "Actions/Disable Actions":
-				return disableActions;
+			case "Actions/Disable Action Flags":
+				return (int)disableActionFlags;
 			case "Actions/Reset Flags":
 				return (int)resetFlags;
 
@@ -189,14 +189,30 @@ public partial class LockoutResource : Resource
 		Local,
 	}
 
-	/// <summary> Don't let the player perform (particularly ground) actions while active </summary>
-	public bool disableActions;
 	/// <summary> How can this lockout be reset? </summary>
 	public ResetFlags resetFlags;
 	public enum ResetFlags
 	{
 		OnJump = 1,
 		OnLand = 2,
+		OnAction = 4,
+		OnAttack = 8,
+	}
+
+	/// <summary> Disable certain actions while active? </summary>
+	public ActionFlags disableActionFlags;
+	public enum ActionFlags
+	{
+		// Note that disabling actions works by disabling inputs first, then individual actions.
+		JumpButton = 1, // Includes jumping and backflips.
+		ActionButton = 2, // Includes sliding, braking, etc.
+
+		// Individual actions start here. Add more as needed.
+		Backflip = 4,
+		Attacks = 8,
+		Sidestep = 16,
+		Lightdash = 32,
+		GeneralActions = ActionButton + Attacks + Backflip + Sidestep + Lightdash,
 	}
 
 	public float ApplySpeed(float currentSpeed, MovementSetting movementSettings)
@@ -222,7 +238,7 @@ public partial class LockoutResource : Resource
 
 		invincible = false;
 		resetFlags = 0;
-		disableActions = false;
+		disableActionFlags = 0;
 
 		speedRatio = 1;
 		tractionMultiplier = 1;

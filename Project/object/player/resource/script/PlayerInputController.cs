@@ -37,6 +37,24 @@ public partial class PlayerInputController : Node
 	public bool IsActionBufferActive => !Mathf.IsZeroApprox(actionBuffer);
 	public void ResetActionBuffer() => actionBuffer = 0;
 
+	private float attackBuffer;
+	public bool IsAttackBufferActive => !Mathf.IsZeroApprox(attackBuffer);
+	public void ResetAttackBuffer() => attackBuffer = 0;
+
+	private float stepBuffer;
+	private int stepDirection;
+	public int StepDirection => stepDirection * (Player.Camera.ActiveSettings.controlMode == CameraSettingsResource.ControlModeEnum.Reverse ? -1 : 1);
+	public bool IsStepBufferActive => !Mathf.IsZeroApprox(stepBuffer);
+	public void ResetStepBuffer()
+	{
+		stepDirection = 0;
+		stepBuffer = 0;
+	}
+
+	private float lightDashBuffer;
+	public bool IsLightDashBufferActive => !Mathf.IsZeroApprox(lightDashBuffer);
+	public void ResetLightDashBuffer() => lightDashBuffer = 0;
+
 	/// <summary> Angle to use when transforming from world space to camera space. </summary>
 	public float XformAngle { get; set; }
 	public Vector2 InputAxis { get; private set; }
@@ -51,6 +69,8 @@ public partial class PlayerInputController : Node
 
 	/// <summary> Maximum amount the player can turn when running at full speed. </summary>
 	public readonly float TurningDampingRange = Mathf.Pi * .35f;
+	/// <summary> Rotation amount to just flat-out ignore player input. </summary>
+	public readonly float TurningDeadzone = Mathf.Pi * .05f;
 
 	public void ProcessInputs()
 	{
@@ -60,24 +80,26 @@ public partial class PlayerInputController : Node
 		if (!InputAxis.IsZeroApprox())
 			NonZeroInputAxis = InputAxis;
 
-		if (!Player.IsLockoutDisablingActions)
-		{
-			UpdateJumpBuffer();
-			UpdateActionBuffer();
-			return;
-		}
-
-		// Allow player to jump out of certain lockouts (i.e. DriftLockout)
-		if (Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump))
-			UpdateJumpBuffer();
-		else
-			ResetJumpBuffer();
-
-		ResetActionBuffer();
+		UpdateJumpBuffer();
+		UpdateActionBuffer();
+		UpdateAttackBuffer();
+		UpdateStepBuffer();
+		UpdateLightDashBuffer();
 	}
 
 	private void UpdateJumpBuffer()
 	{
+		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.JumpButton))
+		{
+			// Allow player to jump out of certain lockouts (i.e. DriftLockout)
+			if (Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnJump))
+				UpdateJumpBuffer();
+			else
+				ResetJumpBuffer();
+
+			return;
+		}
+
 		if (Input.IsActionJustPressed("button_jump"))
 		{
 			jumpBuffer = InputBufferLength;
@@ -89,6 +111,14 @@ public partial class PlayerInputController : Node
 
 	private void UpdateActionBuffer()
 	{
+		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.ActionButton))
+		{
+			if (Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnAction))
+				UpdateActionBuffer();
+			else
+				ResetActionBuffer();
+		}
+
 		if (Input.IsActionJustPressed("button_action"))
 		{
 			actionBuffer = InputBufferLength;
@@ -98,13 +128,75 @@ public partial class PlayerInputController : Node
 		actionBuffer = Mathf.MoveToward(actionBuffer, 0, PhysicsManager.physicsDelta);
 	}
 
+	private void UpdateAttackBuffer()
+	{
+		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Attacks))
+		{
+			if (Player.ActiveLockoutData.resetFlags.HasFlag(LockoutResource.ResetFlags.OnAttack))
+				UpdateAttackBuffer();
+			else
+				ResetAttackBuffer();
+
+			return;
+		}
+
+		if (Input.IsActionJustPressed("button_attack"))
+		{
+			attackBuffer = InputBufferLength;
+			return;
+		}
+
+		attackBuffer = Mathf.MoveToward(attackBuffer, 0, PhysicsManager.physicsDelta);
+	}
+
+	private void UpdateStepBuffer()
+	{
+		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Sidestep))
+		{
+			ResetStepBuffer();
+			return;
+		}
+
+		if (Input.IsActionJustPressed("button_step_right"))
+		{
+			stepBuffer = InputBufferLength;
+			stepDirection = -1;
+			return;
+		}
+
+		if (Input.IsActionJustPressed("button_step_left"))
+		{
+			stepBuffer = InputBufferLength;
+			stepDirection = 1;
+			return;
+		}
+
+		stepBuffer = Mathf.MoveToward(stepBuffer, 0, PhysicsManager.physicsDelta);
+	}
+
+	private void UpdateLightDashBuffer()
+	{
+		if (Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Lightdash))
+		{
+			ResetLightDashBuffer();
+			return;
+		}
+
+		if (Input.IsActionJustPressed("button_light_dash"))
+		{
+			lightDashBuffer = InputBufferLength;
+			return;
+		}
+
+		lightDashBuffer = Mathf.MoveToward(lightDashBuffer, 0, PhysicsManager.physicsDelta);
+	}
+
 	public bool IsBrakeHeld()
 	{
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump))
 			return Input.IsActionPressed("button_action");
 
-		return SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) &&
-			Input.IsActionPressed("button_brake");
+		return Input.IsActionPressed("button_brake");
 	}
 
 	/// <summary> Returns the angle between the player's input angle and movementAngle. </summary>
@@ -237,7 +329,9 @@ public partial class PlayerInputController : Node
 			return inputAngle;
 
 		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(inputAngle, referenceAngle);
-		if (Mathf.Abs(deltaAngle) < TurningDampingRange)
+		if (Mathf.Abs(deltaAngle) < TurningDeadzone)
+			inputAngle -= deltaAngle;
+		else if (Mathf.Abs(deltaAngle) < TurningDampingRange)
 			inputAngle -= deltaAngle * .5f;
 
 		return inputAngle;

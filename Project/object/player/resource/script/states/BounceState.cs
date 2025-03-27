@@ -66,10 +66,11 @@ public partial class BounceState : PlayerState
 			return null;
 		}
 
-		if (Player.Controller.IsJumpBufferActive)
+		if (Player.Controller.IsJumpBufferActive || Player.Controller.IsAttackBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
-			if (Player.Lockon.Target != null && Player.Lockon.IsTargetAttackable)
+			Player.Controller.ResetAttackBuffer();
+			if (Player.Lockon.IsTargetAttackable)
 				return homingAttackState;
 
 			return jumpDashState;

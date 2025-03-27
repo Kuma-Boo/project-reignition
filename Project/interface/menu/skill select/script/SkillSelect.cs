@@ -32,7 +32,7 @@ public partial class SkillSelect : Menu
 
 	private bool IsEditingAugment { get; set; }
 
-	private SkillOption SelectedSkill => currentSkillOptionList[VerticalSelection];
+	private SkillOption SelectedSkill => visualSkillOptionList[VerticalSelection];
 
 	private SkillListResource SkillList => Runtime.Instance.SkillList;
 	private SkillRing ActiveSkillRing => SaveManager.ActiveSkillRing;
@@ -51,8 +51,26 @@ public partial class SkillSelect : Menu
 	/// <summary> Number of skills on a single page. </summary>
 	private readonly int PageSize = 8;
 
-	private Array<SkillOption> skillOptionList = [];
-	private Array<SkillOption> currentSkillOptionList = [];
+	private readonly Array<SkillOption> skillOptionList = [];
+	private readonly Array<SkillOption> visualSkillOptionList = [];
+
+	[Export]
+	private Label sortTypeLabel;
+	[Export]
+	private TextureRect sortOrderCursor;
+
+	private bool isDescendingSort;
+	private SortEnum currentSortType;
+	public enum SortEnum
+	{
+		Default,
+		Name,
+		Cost,
+		Wind,
+		Fire,
+		Dark,
+		Count,
+	}
 
 	protected override void SetUp()
 	{
@@ -109,10 +127,27 @@ public partial class SkillSelect : Menu
 
 	protected override void ProcessMenu()
 	{
-		if (Input.IsActionJustPressed("button_pause"))
+		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
 		{
 			OpenPresetMenu();
 			return;
+		}
+
+		if ((Input.IsActionJustPressed("button_speedbreak") || Input.IsActionJustPressed("ui_sort")) && !IsEditingAugment)
+		{
+			if (isDescendingSort || currentSortType >= SortEnum.Wind)
+			{
+				currentSortType++;
+				if (currentSortType >= SortEnum.Count)
+					currentSortType = SortEnum.Default;
+			}
+
+			isDescendingSort = sortOrderCursor.Visible && !isDescendingSort;
+			sortOrderCursor.FlipV = isDescendingSort;
+			sortOrderCursor.Visible = currentSortType < SortEnum.Wind;
+
+			SortSkills();
+			Redraw();
 		}
 
 		base.ProcessMenu();
@@ -147,7 +182,7 @@ public partial class SkillSelect : Menu
 	{
 		if (IsAlertMenuActive)
 		{
-			int input = Mathf.Sign(Input.GetAxis("move_left", "move_right"));
+			int input = Mathf.Sign(Input.GetAxis("ui_left", "ui_right"));
 			if (input < 0 && AlertSelection == 0)
 			{
 				AlertSelection = 1;
@@ -162,7 +197,7 @@ public partial class SkillSelect : Menu
 			return;
 		}
 
-		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		int inputSign = Mathf.Sign(Input.GetAxis("ui_up", "ui_down"));
 		if (IsEditingAugment)
 		{
 			if (inputSign != 0)
@@ -178,13 +213,11 @@ public partial class SkillSelect : Menu
 
 		if (inputSign != 0)
 		{
-			VerticalSelection = WrapSelection(VerticalSelection + inputSign, currentSkillOptionList.Count);
+			VerticalSelection = WrapSelection(VerticalSelection + inputSign, visualSkillOptionList.Count);
 			UpdateScrollAmount(inputSign);
 			MoveCursor();
 			UpdateDescription();
 		}
-
-		// TODO Change sort method when speedbreak is pressed
 	}
 
 	private void UpdateDescription()
@@ -200,7 +233,7 @@ public partial class SkillSelect : Menu
 
 	private void UpdateScrollAmount(int inputSign)
 	{
-		int listSize = currentSkillOptionList.Count;
+		int listSize = visualSkillOptionList.Count;
 		if (IsEditingAugment)
 			listSize += SelectedSkill.AugmentMenuCount;
 
@@ -243,7 +276,7 @@ public partial class SkillSelect : Menu
 	public override void ShowMenu()
 	{
 		// Update visible skill list to account for multiple save files
-		currentSkillOptionList.Clear();
+		visualSkillOptionList.Clear();
 		for (int i = 0; i < skillOptionList.Count; i++)
 		{
 			if (skillOptionList[i] == null)
@@ -254,18 +287,16 @@ public partial class SkillSelect : Menu
 
 			if (!SaveManager.ActiveSkillRing.IsSkillUnlocked(key))
 			{
-				GD.Print(key);
+				GD.Print($"{key} is not unlocked.");
 				continue;
 			}
 
-			currentSkillOptionList.Add(skillOptionList[i]);
+			visualSkillOptionList.Add(skillOptionList[i]);
 			skillOptionList[i].Visible = true;
 
 			// Process augments
 			UpdateAugmentHierarchy(skillOptionList[i]);
 		}
-
-		Redraw();
 
 		if (menuMemory[MemoryKeys.PresetsOpen] == 1)
 			animator.Play("show-from-preset");
@@ -313,8 +344,6 @@ public partial class SkillSelect : Menu
 		if (!ToggleSkill())
 			return;
 
-		UpdateAugmentHierarchy(SelectedSkill);
-
 		Redraw();
 	}
 
@@ -324,7 +353,7 @@ public partial class SkillSelect : Menu
 	{
 		skillPointLabel.Text = ActiveSkillRing.TotalCost.ToString("000") + "/" + ActiveSkillRing.MaxSkillPoints.ToString("000");
 		skillPointFill.Scale = new(ActiveSkillRing.TotalCost / (float)ActiveSkillRing.MaxSkillPoints, skillPointFill.Scale.Y);
-		foreach (SkillOption skillOption in currentSkillOptionList)
+		foreach (SkillOption skillOption in visualSkillOptionList)
 		{
 			if (skillOption.HasUnlockedAugments())
 			{
@@ -414,6 +443,102 @@ public partial class SkillSelect : Menu
 		return false; // Something failed
 	}
 
+	private void SortSkills()
+	{
+		// Update label
+		sortTypeLabel.Text = "sys_sort_" + currentSortType.ToString().ToLower();
+		SkillOption currentSkill = SelectedSkill;
+
+		// Sort
+		for (int i = skillOptionList.Count - 1; i > 0; i--)
+		{
+			for (int j = 0; j < i; j++)
+				CalculateExchange(j);
+		}
+
+		// Maintain selection
+		int targetSelection = visualSkillOptionList.IndexOf(currentSkill);
+		scrollAmount += targetSelection - VerticalSelection;
+		VerticalSelection = targetSelection;
+		UpdateScrollAmount(0);
+
+		// Reupdate cursor since clamping is applied in UpdateScrollAmount()
+		cursorPosition = VerticalSelection - scrollAmount;
+	}
+
+	private string GetSkillName(int index)
+	{
+		SkillOption skill = skillOptionList[index];
+		StringName nameString = skill.HasUnlockedAugments() ?
+			skill.GetAugmentSkill(ActiveSkillRing.GetAugmentIndex(skill.Skill.Key)).NameKey :
+			skill.Skill.NameKey;
+
+		return Tr(nameString);
+	}
+
+	private void CalculateExchange(int index)
+	{
+		switch (currentSortType)
+		{
+			case SortEnum.Default:
+				if ((!isDescendingSort && skillOptionList[index].Skill.Key > skillOptionList[index + 1].Skill.Key) ||
+					(isDescendingSort && skillOptionList[index].Skill.Key < skillOptionList[index + 1].Skill.Key))
+				{
+					PerformExchange(index);
+				}
+				break;
+			case SortEnum.Name:
+				string skill1 = GetSkillName(index);
+				string skill2 = GetSkillName(index + 1);
+				if ((!isDescendingSort && skill1.CompareTo(skill2) > 0) ||
+					(isDescendingSort && skill1.CompareTo(skill2) < 0))
+				{
+					PerformExchange(index);
+				}
+				break;
+			case SortEnum.Cost:
+				if ((!isDescendingSort && skillOptionList[index].Skill.Cost > skillOptionList[index + 1].Skill.Cost) ||
+					(isDescendingSort && skillOptionList[index].Skill.Cost < skillOptionList[index + 1].Skill.Cost))
+				{
+					PerformExchange(index);
+				}
+				break;
+			case SortEnum.Wind:
+				if (skillOptionList[index].Skill.Element != skillOptionList[index + 1].Skill.Element && skillOptionList[index + 1].Skill.Element == SkillResource.SkillElement.Wind)
+					PerformExchange(index);
+				break;
+			case SortEnum.Fire:
+				if (skillOptionList[index].Skill.Element != skillOptionList[index + 1].Skill.Element && skillOptionList[index + 1].Skill.Element == SkillResource.SkillElement.Fire)
+					PerformExchange(index);
+				break;
+			case SortEnum.Dark:
+				if (skillOptionList[index].Skill.Element != skillOptionList[index + 1].Skill.Element && skillOptionList[index + 1].Skill.Element == SkillResource.SkillElement.Dark)
+					PerformExchange(index);
+				break;
+		}
+	}
+
+	private void PerformExchange(int i)
+	{
+		ExchangeSkill(skillOptionList, i, i + 1);
+		ExchangeSkill(visualSkillOptionList, i, i + 1);
+		ExchangeOption(optionContainer, i, i + 1);
+	}
+
+	private static void ExchangeSkill(Array<SkillOption> skill, int m, int n)
+	{
+		SkillOption temporary = skill[m];
+		skill[m] = skill[n];
+		skill[n] = temporary;
+	}
+
+	private static void ExchangeOption(Node option, int m, int n)
+	{
+		Node temporary = option.GetChild(m);
+		option.MoveChild(option.GetChild(n), m);
+		option.MoveChild(temporary, n);
+	}
+
 	public void AlertMenuClosed()
 	{
 		IsAlertMenuActive = false;
@@ -455,6 +580,7 @@ public partial class SkillSelect : Menu
 		SelectedSkill.HideAugmentMenu();
 
 		UpdateScrollAmount(0);
+		SortSkills();
 	}
 
 	/// <summary> Updates a skill option so the correct augment appears on the skill select menu. </summary>

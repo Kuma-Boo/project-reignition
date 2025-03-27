@@ -64,7 +64,9 @@ public partial class RunState : PlayerState
 
 				float inputAngle = Player.Controller.GetTargetInputAngle();
 				float inputStrength = Player.Controller.GetInputStrength();
-				if (!Mathf.IsZeroApprox(inputStrength) &&
+
+				if (!Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Backflip) &&
+					!Mathf.IsZeroApprox(inputStrength) &&
 					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 				{
 					return backflipState;
@@ -81,6 +83,21 @@ public partial class RunState : PlayerState
 			{
 				Player.Controller.ResetActionBuffer();
 				return slideState;
+			}
+
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.QuickStep) &&
+				Player.Controller.IsStepBufferActive &&
+				(!Player.IsLockoutActive || !Player.ActiveLockoutData.recenterPlayer))
+			{
+				Player.StartQuickStep(Player.Controller.StepDirection < 0);
+				Player.Controller.ResetStepBuffer();
+				return null;
+			}
+
+			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedDash) &&
+				Player.Controller.IsLightDashBufferActive && Player.StartLightSpeedDash())
+			{
+				return null;
 			}
 		}
 

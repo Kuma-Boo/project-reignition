@@ -19,7 +19,6 @@ public partial class HomingAttackState : PlayerState
 	[Export]
 	private float homingAttackAcceleration;
 
-	private bool IsPerfectHomingAttack { get; set; }
 
 	public override void EnterState()
 	{
@@ -29,8 +28,8 @@ public partial class HomingAttackState : PlayerState
 		Player.ChangeHitbox("spin");
 		Player.AttackState = PlayerController.AttackStates.Weak;
 
-		IsPerfectHomingAttack = Player.Lockon.IsMonitoringPerfectHomingAttack;
-		if (IsPerfectHomingAttack)
+		Player.IsPerfectHomingAttacking = Player.Lockon.IsMonitoringPerfectHomingAttack;
+		if (Player.IsPerfectHomingAttacking)
 		{
 			Player.Lockon.PlayPerfectStrike();
 			Player.AttackState = PlayerController.AttackStates.Strong;
@@ -42,7 +41,7 @@ public partial class HomingAttackState : PlayerState
 		Player.Effect.StartSpinFX();
 		Player.Effect.PlayVoice("grunt");
 
-		Player.Animator.StartSpin(2.0f);
+		Player.Animator.StartSpin(5.0f);
 		Player.ChangeHitbox("spin");
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire))
@@ -51,13 +50,17 @@ public partial class HomingAttackState : PlayerState
 
 	public override void ExitState()
 	{
-		Player.IsHomingAttacking = false;
-		Player.AttackState = PlayerController.AttackStates.None;
-		Player.ChangeHitbox("RESET");
+		if (!Player.IsLightSpeedAttacking)
+		{
+			Player.IsHomingAttacking = false;
+			Player.AttackState = PlayerController.AttackStates.None;
+			Player.ChangeHitbox("RESET");
+			Player.Effect.StopSpinFX();
+			Player.Effect.StopTrailFX();
+			Player.Animator.ResetState();
+		}
+
 		Player.Lockon.CallDeferred(PlayerLockonController.MethodName.ResetLockonTarget);
-		Player.Effect.StopSpinFX();
-		Player.Effect.StopTrailFX();
-		Player.Animator.ResetState();
 
 		if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestFire))
 			return;
@@ -75,27 +78,26 @@ public partial class HomingAttackState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		if (Player.Lockon.Target == null) // Target disappeared. Transition to jumpdash
+		if (!Player.Lockon.IsTargetAttackable) // Target disappeared. Transition to jumpdash
 		{
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;
 			Player.ChangeHitbox("RESET");
 			return jumpDashState;
 		}
 
-		if (IsPerfectHomingAttack)
+		if (Player.IsPerfectHomingAttacking)
 			Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, perfectStrikeSpeed, homingAttackAcceleration * 2.0f * PhysicsManager.physicsDelta);
 		else
 			Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, normalStrikeSpeed, homingAttackAcceleration * PhysicsManager.physicsDelta);
-		Player.Velocity = Player.Lockon.HomingAttackDirection.Normalized() * Player.MoveSpeed;
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Player.Lockon.HomingAttackDirection);
-		Player.MoveAndSlide();
+		Player.ApplyMovement(Player.Lockon.HomingAttackDirection.Normalized());
 		Player.CheckGround();
 		Player.CheckWall();
 		Player.UpdateUpDirection(true);
 		Player.PathFollower.Resync();
 
 		bool isColliding = Player.GetSlideCollisionCount() != 0;
-		if (isColliding && ProcessEnvironmentCollision())
+		if (isColliding && ProcessObstructions())
 		{
 			Player.StartBounce();
 			return null;
@@ -110,7 +112,7 @@ public partial class HomingAttackState : PlayerState
 		return null;
 	}
 
-	private bool ProcessEnvironmentCollision()
+	private bool ProcessObstructions()
 	{
 		// Check from the floor
 		Vector3 castOffset = Vector3.Up * Player.CollisionSize.Y * .5f;
@@ -118,7 +120,7 @@ public partial class HomingAttackState : PlayerState
 		if (Player.VerticalSpeed < 0)
 			castPosition += Player.UpDirection * Player.VerticalSpeed * PhysicsManager.physicsDelta;
 		Vector3 castVector = Player.Lockon.Target.GlobalPosition - castPosition;
-		RaycastHit hit = Player.CastRay(castPosition, castVector, Runtime.Instance.environmentMask);
+		RaycastHit hit = Player.CastRay(castPosition, castVector, Runtime.Instance.lockonObstructionMask);
 		DebugManager.DrawRay(castPosition, castVector, Colors.Magenta);
 		return hit && hit.collidedObject.IsInGroup("wall") && !hit.collidedObject.IsInGroup("level wall");
 	}

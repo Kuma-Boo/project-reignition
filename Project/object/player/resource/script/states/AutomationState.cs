@@ -35,11 +35,15 @@ public partial class AutomationState : PlayerState
 	{
 		Automation.Deactivate();
 
-		Player.PathFollower.Resync();
-		Player.StopExternal();
 		Player.UpDirection = Player.PathFollower.Up();
+		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		Player.Animator.SnapRotation(Player.MovementAngle);
 		Player.Effect.IsEmittingStepDust = false;
+
+		Player.StopExternal();
+		Player.CheckGround();
+		Player.PathFollower.Resync();
+		Player.Camera.PathFollower.Resync();
 
 		Automation = null;
 	}

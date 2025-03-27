@@ -46,7 +46,7 @@ public partial class SaveSelect : Menu
 	{
 		if (isDeleteMenuActive)
 		{
-			if (Input.IsActionJustPressed("button_jump"))
+			if (Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("ui_select"))
 			{
 				if (isDeleteSelected)
 				{
@@ -61,13 +61,13 @@ public partial class SaveSelect : Menu
 					return;
 				}
 			}
-			else if (Input.IsActionJustPressed("button_action"))
+			else if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel"))
 			{
 				CancelDeleteMenu();
 				return;
 			}
 		}
-		else if (Input.IsActionJustPressed("button_pause"))
+		else if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept"))
 		{
 			int saveIndex = _saveOptions[ActiveSaveOptionIndex].SaveIndex;
 			if (SaveManager.GameSaveSlots[saveIndex].IsNewFile()) // Check if a save file is new
@@ -86,7 +86,7 @@ public partial class SaveSelect : Menu
 	{
 		if (isDeleteMenuActive)
 		{
-			int input = Mathf.Sign(Input.GetAxis("move_left", "move_right"));
+			int input = Mathf.Sign(Input.GetAxis("ui_left", "ui_right"));
 			if ((input > 0 && isDeleteSelected) ||
 				(input < 0 && !isDeleteSelected))
 			{
@@ -98,11 +98,11 @@ public partial class SaveSelect : Menu
 		}
 
 		// Only listen for vertical scrolling
-		int inputSign = Mathf.Sign(Input.GetAxis("move_up", "move_down"));
+		int inputSign = Mathf.Sign(Input.GetAxis("ui_up", "ui_down"));
 		if (inputSign == 0) return;
 
 		VerticalSelection = WrapSelection(VerticalSelection + inputSign, SaveManager.SaveSlotCount);
-		animator.Play(inputSign < 0 ? SCROLL_UP_ANIMATION : SCROLL_DOWN_ANIMATION);
+		animator.Play(inputSign < 0 ? ScrollUpAnimation : ScrollDownAnimation);
 		scrollRatio = VerticalSelection / (SaveManager.SaveSlotCount - 1.0f);
 		menuMemory[MemoryKeys.SaveSelect] = VerticalSelection;
 

@@ -103,9 +103,9 @@ public partial class LevelSelect : Menu
 
 	protected override void UpdateSelection()
 	{
-		if (Mathf.IsZeroApprox(Input.GetAxis("move_up", "move_down"))) return;
+		if (Mathf.IsZeroApprox(Input.GetAxis("ui_up", "ui_down"))) return;
 
-		VerticalSelection = WrapSelection(VerticalSelection + Mathf.Sign(Input.GetAxis("move_up", "move_down")), levelOptions.Count);
+		VerticalSelection = WrapSelection(VerticalSelection + Mathf.Sign(Input.GetAxis("ui_up", "ui_down")), levelOptions.Count);
 		menuMemory[MemoryKeys.LevelSelect] = VerticalSelection;
 		animator.Play("select");
 		animator.Seek(0, true);

@@ -4,11 +4,13 @@ using Godot.Collections;
 namespace Project.Gameplay.Triggers
 {
 	/// <summary>
-	/// Extended Area3D node that can determine the direction the player enters.
+	/// A trigger that determines the direction the player enters.
+	/// Instance a StageTrigger.tscn to trigger signals based on collision shapes
+	/// Otherwise, attach this script to a Node3D to trigger events based on Switches.
 	/// Automatically sets up signals for children that inherit from StageTriggerModule.
 	/// </summary>
 	[Tool]
-	public partial class StageTrigger : Area3D
+	public partial class StageTrigger : Node3D
 	{
 		#region Editor
 		public override Array<Dictionary> _GetPropertyList()
@@ -131,7 +133,7 @@ namespace Project.Gameplay.Triggers
 			}
 
 			if (respawnMode != RespawnModes.Disabled) //Connect respawn signal
-				StageSettings.Instance.ConnectRespawnSignal(this);
+				StageSettings.Instance.Respawned += Respawn;
 		}
 
 		public void Respawn()
@@ -159,13 +161,29 @@ namespace Project.Gameplay.Triggers
 
 		public void OnEntered(Area3D a)
 		{
-			if (!a.IsInGroup("player detection")) return;
+			if (!a.IsInGroup("player detection"))
+				return;
+
+			if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Failed ||
+				StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Success)
+			{
+				return;
+			}
+
 			OnEntered();
 		}
 
 		public void OnExited(Area3D a)
 		{
-			if (!a.IsInGroup("player detection")) return;
+			if (!a.IsInGroup("player detection"))
+				return;
+
+			if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Failed ||
+				StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Success)
+			{
+				return;
+			}
+
 			OnExited();
 		}
 
@@ -219,8 +237,5 @@ namespace Project.Gameplay.Triggers
 		}
 
 		private void Deactivate() => EmitSignal(SignalName.Deactivated);
-
-		public void EnableMonitoring() => Monitoring = true;
-		public void DisableMonitoring() => Monitoring = false;
 	}
 }

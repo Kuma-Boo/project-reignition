@@ -1185,7 +1185,7 @@ shape = SubResource("BoxShape3D_7jbaj")
 transform = Transform3D(-0.955618, 0, -0.294607, 0, 1, 0, 0.294607, 0, -0.955618, -293.984, -276.99, -1075.71)
 "Enter Mode" = 0
 
-[node name="checkpoint" type="Node3D" parent="Trigger/Checkpoints/DinoCheckpoint"]
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoints/DinoCheckpoint"]
 script = ExtResource("22_svm17")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoints/DinoCheckpoint"]
@@ -1240,6 +1240,7 @@ autoplay = true
 max_distance = 50.0
 panning_strength = 0.0
 bus = &"GAME SFX"
+process_mode = 1
 
 [node name="RiverBGSFX2" type="AudioStreamPlayer3D" parent="Trigger/Object/CavernSFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.0256, 0, 35.348)
@@ -1250,6 +1251,7 @@ autoplay = true
 max_distance = 50.0
 panning_strength = 0.0
 bus = &"GAME SFX"
+process_mode = 1
 
 [node name="RiverBGSFX3" type="AudioStreamPlayer3D" parent="Trigger/Object/CavernSFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.626, 0, -44.6625)
@@ -1260,6 +1262,7 @@ autoplay = true
 max_distance = 50.0
 panning_strength = 0.0
 bus = &"GAME SFX"
+process_mode = 1
 
 [node name="CaveRejoinTrigger" parent="Trigger/Object" instance=ExtResource("4_ko444")]
 transform = Transform3D(-0.999182, 0, 0.0404277, 0, 1, 0, -0.0404277, 0, -0.999182, -362.983, -218.815, -776.465)
@@ -1292,7 +1295,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58.2767, 44, 253.661)
 shape = SubResource("BoxShape3D_x053g")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Trigger/Object/WaterTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 0, -32.043)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 0, -90)
 shape = SubResource("BoxShape3D_x053g")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="Trigger/Object/WaterTrigger"]
@@ -1378,13 +1381,15 @@ transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 
 
 [node name="ActivateTrigger" parent="Trigger/Object/Apatos1" instance=ExtResource("4_ko444")]
 transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, -4.77853, 38.2302, 41.1746)
+OneShot = true
+"Respawn Mode" = 0
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
 [node name="EventTrigger" type="Node3D" parent="Trigger/Object/Apatos1/ActivateTrigger" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0, 0)
 script = ExtResource("20_vf0rp")
-"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
 "Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("DinoApatos/AnimationPlayer")
@@ -1411,6 +1416,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 200.0
 bus = &"GAME SFX"
+process_mode = 1
 
 [node name="Splatter" type="GPUParticles3D" parent="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger/Head"]
 transform = Transform3D(1, -2.98023e-08, -7.45058e-09, 0, 1, -6.51926e-09, 7.45058e-09, 5.58794e-09, 1, 0, 6.99997, 2.00003)
@@ -1457,6 +1463,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 200.0
 bus = &"GAME SFX"
+process_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Apatos1/GruntTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1564,6 +1571,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 200.0
 bus = &"GAME SFX"
+process_mode = 1
 
 [node name="PathSelectionEvent" type="Node3D" parent="Trigger/Object/Apatos2/Event" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0269775, 20.2, -45.5857)
@@ -1618,6 +1626,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1634,6 +1643,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1650,6 +1660,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1666,6 +1677,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1682,6 +1694,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1698,6 +1711,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1714,6 +1728,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1730,6 +1745,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1746,6 +1762,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1762,6 +1779,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1779,6 +1797,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
+process_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/FallsBG"]
 shape = SubResource("SphereShape3D_quiap")
@@ -1794,6 +1813,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
+process_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/FallsSoft"]
 shape = SubResource("SphereShape3D_quiap")
@@ -1809,6 +1829,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
+process_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/FallsLoud1"]
 shape = SubResource("SphereShape3D_quiap")
@@ -1824,6 +1845,7 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
+process_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/FallsLoud2"]
 shape = SubResource("SphereShape3D_quiap")
@@ -1964,7 +1986,7 @@ transform = Transform3D(-0.944325, 0, 0.329015, 0, 1, 0, -0.329015, 0, -0.944325
 [node name="Camera" type="Node3D" parent="Trigger/Camera/SpiralCam1"]
 transform = Transform3D(-0.975312, 0, 0.220834, 0, 1, 0, -0.220834, 0, -0.975312, -2.34045, -1.30722, 10.6233)
 script = ExtResource("26_r56l8")
-transitionType = 2
+transitionType = 1
 settings = ExtResource("40_7k40h")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Camera/SpiralCam1"]
@@ -2228,6 +2250,8 @@ reflectionMaterials = [ExtResource("100_3sdt7")]
 [connection signal="Deactivated" from="Visuals/CullingMap/08-L" to="Visuals/08FeedingTunnel" method="Deactivate"]
 [connection signal="Activated" from="Lighting/CaveTrigger" to="Lighting/CaveLightEvent" method="Activate"]
 [connection signal="Deactivated" from="Lighting/CaveTrigger" to="Lighting/CaveLightEvent" method="Deactivate"]
+[connection signal="Activated" from="Trigger/Checkpoints/DinoCheckpoint" to="Collision/LSideWall" method="Deactivate"]
+[connection signal="Activated" from="Trigger/Checkpoints/DinoCheckpoint" to="Collision/RSideWall" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Checkpoints/BoatLCheckpoint" to="Collision/LSideWall" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Checkpoints/BoatLCheckpoint" to="Collision/RSideWall" method="Activate"]
 [connection signal="Teleport" from="Trigger/Checkpoints/BoatLCheckpoint/Checkpoint" to="Collision/LSideWall" method="Deactivate"]
@@ -2241,6 +2265,7 @@ reflectionMaterials = [ExtResource("100_3sdt7")]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Path" method="Deactivate"]
 [connection signal="Deactivated" from="Trigger/Object/LogAutomationTrigger" to="Trigger/Object/LogAutomationTrigger/Camera" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Object/Apatos1/ActivateTrigger" to="Collision/WallDinoOneWay" method="Deactivate"]
+[connection signal="Respawned" from="Trigger/Object/Apatos1/ActivateTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" method="Respawn"]
 [connection signal="Activated" from="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger/Head/Activate" method="play"]
 [connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Collision/WallDinoOneWay" method="Activate"]
 [connection signal="JumpFinished" from="Trigger/Object/Apatos1/ActivateTrigger/JumpTrigger" to="Trigger/Object/Apatos1/ActivateTrigger/Camera" method="Deactivate"]

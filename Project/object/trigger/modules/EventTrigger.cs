@@ -10,27 +10,25 @@ namespace Project.Gameplay.Triggers;
 [Tool]
 public partial class EventTrigger : StageTriggerModule
 {
-	[Signal]
-	public delegate void ActivatedEventHandler();
-	[Signal]
-	public delegate void DeactivatedEventHandler();
-	[Signal]
-	public delegate void RespawnedEventHandler();
-	[Signal]
-	public delegate void EventFinishedEventHandler();
+	[Signal] public delegate void ActivatedEventHandler();
+	[Signal] public delegate void DeactivatedEventHandler();
+	[Signal] public delegate void RespawnedEventHandler();
+	[Signal] public delegate void EventFinishedEventHandler();
+	[Signal] public delegate void EventSkippedEventHandler();
 
 	/// <summary> Automatically reset the event when player respawns? </summary>
 	private bool autoRespawn;
 	/// <summary> Only allow event to play once? </summary>
 	private bool isOneShot = true;
 	private bool isActivated;
+	private float animationBlending;
 
 	[ExportGroup("Components")]
-	[Export]
-	private AnimationPlayer animator;
+	[Export] private AnimationPlayer animator;
+	public float AnimationLength => (float)animator.CurrentAnimationLength;
+	private float AnimationTimeLeft => (float)(animator.CurrentAnimationLength - animator.CurrentAnimationPosition);
 
-	[Export]
-	private RespawnAnimation respawnAnimation;
+	[Export] private RespawnAnimation respawnAnimation;
 	private enum RespawnAnimation
 	{
 		Reset,
@@ -44,6 +42,9 @@ public partial class EventTrigger : StageTriggerModule
 	private readonly StringName EventAnimation = "event";
 	private readonly StringName DeactivateEventAnimation = "event-deactivate";
 
+	[Export(PropertyHint.Range, "0.1,5,0.1")] private float activationSpeedScale = 1f;
+	[Export(PropertyHint.Range, "0.1,5,0.1")] private float deactivationSpeedScale = 1f;
+
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
 	{
@@ -51,6 +52,7 @@ public partial class EventTrigger : StageTriggerModule
 			{
 				ExtensionMethods.CreateProperty("Trigger Settings/Automatically Respawn", Variant.Type.Bool),
 				ExtensionMethods.CreateProperty("Trigger Settings/Is One Shot", Variant.Type.Bool),
+				ExtensionMethods.CreateProperty("Trigger Settings/Animation Blending", Variant.Type.Float),
 				ExtensionMethods.CreateProperty("Trigger Settings/Player Stand-in", Variant.Type.NodePath)
 			};
 
@@ -77,6 +79,8 @@ public partial class EventTrigger : StageTriggerModule
 				return autoRespawn;
 			case "Trigger Settings/Is One Shot":
 				return isOneShot;
+			case "Trigger Settings/Animation Blending":
+				return animationBlending;
 			case "Trigger Settings/Player Stand-in":
 				return playerStandin;
 
@@ -109,6 +113,9 @@ public partial class EventTrigger : StageTriggerModule
 				break;
 			case "Trigger Settings/Is One Shot":
 				isOneShot = (bool)value;
+				break;
+			case "Trigger Settings/Animation Blending":
+				animationBlending = (float)value;
 				break;
 			case "Trigger Settings/Player Stand-in":
 				playerStandin = (NodePath)value;
@@ -152,7 +159,7 @@ public partial class EventTrigger : StageTriggerModule
 		if (Engine.IsEditorHint()) return;
 
 		if (autoRespawn)
-			StageSettings.Instance.ConnectRespawnSignal(this);
+			StageSettings.Instance.Respawned += Respawn;
 
 		StageSettings.Instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.Respawn));
 
@@ -210,7 +217,8 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		if (isOneShot && isActivated) return;
 
-		PlayAnimation(EventAnimation);
+		Visible = true;
+		PlayAnimation(EventAnimation, activationSpeedScale);
 		EmitSignal(SignalName.Activated);
 	}
 
@@ -218,11 +226,11 @@ public partial class EventTrigger : StageTriggerModule
 	{
 		if (isOneShot && !isActivated) return;
 
-		PlayAnimation(DeactivateEventAnimation);
+		PlayAnimation(DeactivateEventAnimation, deactivationSpeedScale);
 		EmitSignal(SignalName.Deactivated);
 	}
 
-	private void PlayAnimation(StringName animation)
+	private void PlayAnimation(StringName animation, float speedScale = 1f)
 	{
 		isActivated = true; // Update activation flag
 
@@ -236,13 +244,22 @@ public partial class EventTrigger : StageTriggerModule
 		if (!blendAnimations)
 			animator.Seek(0, true); // Reset animation if necessary
 
-		animator.Play(animation, blendAnimations ? .1f : 0.0f);
+		animator.Play(animation, blendAnimations ? animationBlending : 0.0f, speedScale);
 		animator.Advance(0);
 
 		if (playerStandin?.IsEmpty != false) // Not a player event -- return early
 			return;
 
 		Player.StartEvent(this);
+	}
+
+	public void SkipEvent()
+	{
+		Player.Camera.StartCrossfade();
+		StageSettings.Instance.AddTime(AnimationTimeLeft);
+
+		animator.Advance(AnimationLength);
+		EmitSignal(SignalName.EventSkipped);
 	}
 
 	#region Event Animation

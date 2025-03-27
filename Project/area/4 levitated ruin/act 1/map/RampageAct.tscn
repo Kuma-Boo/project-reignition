@@ -1,0 +1,130 @@
+[gd_scene load_steps=18 format=3 uid="uid://bv4u8as8ffj76"]
+
+[ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_vv3mv"]
+[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="2_e171u"]
+[ext_resource type="Resource" uid="uid://bht2vy5odmerj" path="res://resource/level data/levitated ruin/Act1Rampage.tres" id="2_jy6pq"]
+[ext_resource type="Resource" uid="uid://0mcdne0uivxf" path="res://area/4 levitated ruin/act 1/camera/rampage/StartCam.tres" id="3_qbu3x"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="3_rd0hr"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="4_uidvt"]
+[ext_resource type="PackedScene" uid="uid://bsoom6k2m0r83" path="res://area/4 levitated ruin/object/platform/RoundPillarStatic.tscn" id="5_klixx"]
+[ext_resource type="PackedScene" uid="uid://cggks1kly71mq" path="res://object/enemy/majin/data/levitated ruin/BlueMajin.tscn" id="5_qrx72"]
+[ext_resource type="PackedScene" uid="uid://ci8d3jdqrc0nr" path="res://area/4 levitated ruin/object/special/Ivy.tscn" id="6_ek6sl"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="7_q81mj"]
+[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="10_hmeqa"]
+[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="11_j6onj"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="12_mu566"]
+[ext_resource type="Resource" uid="uid://cbakeucrpdafq" path="res://area/4 levitated ruin/act 1/camera/rampage/EnemyCam.tres" id="13_ji7qd"]
+
+[sub_resource type="Curve3D" id="Curve3D_1vxpw"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 500),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_25c7k"]
+size = Vector3(20, 20, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_62udo"]
+size = Vector3(150, 150, 5)
+
+[node name="Stage" type="Node"]
+
+[node name="Static" parent="." node_paths=PackedStringArray("pathParent") instance=ExtResource("1_vv3mv")]
+Data = ExtResource("2_jy6pq")
+InitialCameraSettings = ExtResource("3_qbu3x")
+pathParent = NodePath("../RampageAct/LevelPath")
+
+[node name="CollisionShape3D" parent="Static/Triggers/Camera/Rukh1Camera" index="1"]
+disabled = true
+
+[node name="RampageAct" type="Node3D" parent="."]
+
+[node name="LevelPath" type="Node3D" parent="RampageAct" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -141)
+script = ExtResource("2_e171u")
+path = NodePath("Path")
+
+[node name="Path" type="Path3D" parent="RampageAct/LevelPath"]
+curve = SubResource("Curve3D_1vxpw")
+
+[node name="SpawnPosition" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, -10)
+
+[node name="CharacterSpawn" parent="RampageAct/SpawnPosition" instance=ExtResource("4_uidvt")]
+
+[node name="Objects" type="Node3D" parent="RampageAct"]
+
+[node name="RoundPillar1" parent="RampageAct/Objects" instance=ExtResource("5_klixx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 4.88772, -110)
+
+[node name="RoundPillar2" parent="RampageAct/Objects" instance=ExtResource("5_klixx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.72848e-12, 4.88772, -110)
+
+[node name="RoundPillar3" parent="RampageAct/Objects" instance=ExtResource("5_klixx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 4.88772, -110)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="RampageAct/Objects" groups=["wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.72848e-12, 5, -110)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Objects/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_25c7k")
+
+[node name="FireSoul1" parent="RampageAct/Objects" instance=ExtResource("3_rd0hr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.91172e-12, 2.8, -70)
+
+[node name="Spring" parent="RampageAct/Objects" instance=ExtResource("7_q81mj")]
+transform = Transform3D(1, 5.14749e-15, -1.37927e-15, -5.32907e-15, 0.965926, -0.258819, 3.28225e-21, 0.258819, 0.965926, 0, 0.2, 0)
+middleHeight = 6.0
+finalHeight = 5.0
+distance = 10.0
+voiceKey = &""
+
+[node name="Ivy" parent="RampageAct/Objects" instance=ExtResource("6_ek6sl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.68434e-14, 55, 10)
+"Secondary Settings/Middle Height" = 15.0
+"Secondary Settings/Final Height" = 0.0
+"Secondary Settings/Distance" = 40.0
+length = 50
+maxRotation = 150.0
+launchDirection = 2
+
+[node name="StaticCamera" type="Node3D" parent="RampageAct/Objects/Ivy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -40, -5)
+script = ExtResource("10_hmeqa")
+settings = ExtResource("11_j6onj")
+previousSettings = ExtResource("3_qbu3x")
+
+[node name="FireSoul2" parent="RampageAct/Objects" instance=ExtResource("3_rd0hr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 45, 45)
+fireSoulIndex = 2
+
+[node name="EnemyCamera" parent="RampageAct/Objects" instance=ExtResource("12_mu566")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 60)
+"Enter Mode" = 0
+
+[node name="Camera" type="Node3D" parent="RampageAct/Objects/EnemyCamera"]
+script = ExtResource("10_hmeqa")
+settings = ExtResource("13_ji7qd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Objects/EnemyCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+shape = SubResource("BoxShape3D_62udo")
+
+[node name="FireSoul3" parent="RampageAct/Objects" instance=ExtResource("3_rd0hr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 99)
+fireSoulIndex = 3
+
+[node name="BlueMajin" parent="RampageAct/Objects" instance=ExtResource("5_qrx72")]
+transform = Transform3D(-1, 0, 8.74232e-08, 0, 1, 0, -8.74232e-08, 0, -1, -9.09495e-13, 0, 100)
+SpawnMode = 2
+
+[connection signal="Activated" from="RampageAct/Objects/Spring" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="RampageAct/Objects/Ivy" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Deactivated" from="RampageAct/Objects/Ivy" to="RampageAct/Objects/Ivy/StaticCamera" method="Deactivate"]
+[connection signal="IvyStarted" from="RampageAct/Objects/Ivy" to="RampageAct/Objects/Ivy/StaticCamera" method="Activate"]
+[connection signal="Defeated" from="RampageAct/Objects/BlueMajin" to="Static" method="IncrementObjective"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]

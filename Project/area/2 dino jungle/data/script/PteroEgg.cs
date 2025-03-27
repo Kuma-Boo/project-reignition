@@ -39,8 +39,8 @@ public partial class PteroEgg : Area3D
 	{
 		Root = GetNodeOrNull<Node3D>(root);
 		Animator = GetNodeOrNull<AnimationPlayer>(animator);
-		spawnData = new SpawnData(GetParent(), Transform);
-		StageSettings.Instance.ConnectRespawnSignal(this);
+		spawnData = new(GetParent(), Transform);
+		StageSettings.Instance.Respawned += Respawn;
 	}
 
 	public override void _PhysicsProcess(double _)

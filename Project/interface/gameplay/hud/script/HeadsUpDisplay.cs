@@ -142,6 +142,7 @@ public partial class HeadsUpDisplay : Control
 	{
 		rankDownSFX.Play();
 		transitionRank.RegionRect = mainRank.RegionRect;
+		transitionRank.Position = Vector2.Zero;
 		transitionRank.SelfModulate = Colors.White;
 		mainRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * amount * 60), mainRank.RegionRect.Size);
 		rankTween = CreateTween().SetParallel();
@@ -154,13 +155,12 @@ public partial class HeadsUpDisplay : Control
 	{
 		rankUpSFX.Play();
 		transitionRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * amount * 60), mainRank.RegionRect.Size);
-		transitionRank.Position += Vector2.Up * 256;
+		transitionRank.Position = Vector2.Up * 256;
 		rankTween = CreateTween().SetParallel();
 		rankTween.TweenProperty(transitionRank, "self_modulate", Colors.White, .5f);
 		rankTween.TweenProperty(transitionRank, "position", Vector2.Zero, .5f).SetTrans(Tween.TransitionType.Bounce);
 		rankTween.TweenCallback(new Callable(this, MethodName.CompleteRankUpTween)).SetDelay(.5f);
 	}
-
 
 	private void CompleteRankUpTween()
 	{
@@ -169,14 +169,14 @@ public partial class HeadsUpDisplay : Control
 		rankTween.Kill();
 	}
 
-
 	private void CompleteRankDownTween() => rankTween.Kill();
-
 
 	[Export]
 	private Label time;
 	private void UpdateTime()
 	{
+		UpdateRankPreviewer(); // Update rank every frame
+
 		if (Stage.Data.MissionTimeLimit != 0) // Time limit; Draw time counting DOWN
 		{
 			float timeLeft = Mathf.Clamp(Stage.Data.MissionTimeLimit - Stage.CurrentTime, 0, Stage.Data.MissionTimeLimit);
@@ -185,7 +185,6 @@ public partial class HeadsUpDisplay : Control
 		}
 
 		time.Text = Stage.DisplayTime;
-		UpdateRankPreviewer(); // Update rank every frame
 	}
 
 	[Export]

@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay;
@@ -22,6 +23,7 @@ public partial class EventState : PlayerState
 		BGMPlayer.SetStageMusicVolume(-80f); // Mute BGM
 
 		Player.StartExternal(this, Trigger.PlayerStandin, Trigger.CharacterPositionSmoothing);
+		Player.Controller.ResetJumpBuffer();
 		Player.Animator.ExternalAngle = 0; // Reset external angle
 		Player.Animator.SnapRotation(Player.Animator.ExternalAngle);
 		Player.Skills.DisableBreakSkills();
@@ -50,7 +52,7 @@ public partial class EventState : PlayerState
 			Player.AddLockoutData(Trigger.CharacterExitLockout);
 
 		// Re-enable break skills
-		Player.Skills.IsSpeedBreakEnabled = Player.Skills.IsTimeBreakEnabled = true;
+		Player.Skills.EnableBreakSkills();
 
 		Trigger.EventFinished -= FinishEvent;
 		Trigger = null;
@@ -60,6 +62,9 @@ public partial class EventState : PlayerState
 	{
 		if (!isEventFinished)
 		{
+			if (IsSkippingEvent())
+				SkipEvent();
+
 			// Call deferred so sync happens AFTER event animator updates
 			Player.CallDeferred(PlayerController.MethodName.UpdateExternalControl, true);
 			return null;
@@ -75,5 +80,26 @@ public partial class EventState : PlayerState
 		return runState;
 	}
 
-	private void FinishEvent() => isEventFinished = true;
+	private bool IsSkippingEvent()
+	{
+		if (!Player.Controller.IsJumpBufferActive)
+			return false;
+
+		return SaveManager.ActiveGameData.CanSkipCutscene(Trigger.CharacterAnimation);
+	}
+
+	private void SkipEvent()
+	{
+		Player.Controller.ResetJumpBuffer();
+
+		Trigger.SkipEvent();
+		if (!Trigger.CharacterAnimation.IsEmpty)
+			Player.Animator.SeekOneshotAnimation(Trigger.AnimationLength);
+	}
+
+	private void FinishEvent()
+	{
+		isEventFinished = true;
+		SaveManager.ActiveGameData.AllowSkippingCutscene(Trigger.CharacterAnimation);
+	}
 }

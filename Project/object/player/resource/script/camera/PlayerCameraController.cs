@@ -8,7 +8,6 @@ namespace Project.Gameplay;
 public enum CameraTransitionType
 {
 	Time,
-	Distance,
 	Crossfade,
 }
 
@@ -50,6 +49,7 @@ public partial class PlayerCameraController : Node3D
 		CameraSettingsResource targetSettings = (StageSettings.Instance?.InitialCameraSettings) ?? defaultSettings;
 
 		SnapXform();
+		UpdateCameraVisibility();
 		UpdateCameraSettings(new()
 		{
 			SettingsResource = targetSettings,
@@ -64,6 +64,9 @@ public partial class PlayerCameraController : Node3D
 
 		Runtime.Instance.EventInputed += ReceiveInput;
 	}
+
+	public override void _EnterTree() => DebugManager.Instance.CameraVisibilityToggled += UpdateCameraVisibility;
+	public override void _ExitTree() => DebugManager.Instance.CameraVisibilityToggled -= UpdateCameraVisibility;
 
 	public void Respawn()
 	{
@@ -162,6 +165,8 @@ public partial class PlayerCameraController : Node3D
 	private const float LockonBlendOutSmoothing = 20.0f;
 	/// <summary> How much extra distance to add when performing a homing attack. </summary>
 	private const float LockonDistance = 3f;
+	/// <summary> How much extra distance to add when performing a jump dash. </summary>
+	private const float JumpDashDistance = 2f;
 	public void SetLockonTarget(Node3D lockonTarget)
 	{
 		if (LockonTarget == lockonTarget) return;
@@ -233,7 +238,7 @@ public partial class PlayerCameraController : Node3D
 
 		if (CameraBlendList.Count != 0 && ActiveSettings == data.SettingsResource &&
 			!(data.SettingsResource.copyPosition || data.SettingsResource.copyRotation) &&
-			data.Trigger?.transitionType != CameraTransitionType.Distance)
+			data.Trigger?.UseDistanceBlending == false)
 		{
 			// When the same data is used for multiple different triggers (except for distance triggers)
 			ActiveBlendData.Trigger = data.Trigger; // Simply update the current trigger
@@ -280,9 +285,8 @@ public partial class PlayerCameraController : Node3D
 			}
 
 			CameraBlendList[0].SetInfluence(1);
-			// Attempt to snap the active blend settings' influence
 			if (CameraBlendList[^1].UseDistanceBlending)
-				CameraBlendList[^1].CalculateInfluence(Player.PathFollower);
+				CameraBlendList[^1].SetInfluence(1);
 			return;
 		}
 
@@ -293,19 +297,23 @@ public partial class PlayerCameraController : Node3D
 	/// <summary> Update the influence of a particular blend. </summary>
 	private void UpdateCameraBlendInfluence(int blendIndex)
 	{
-		// Removes completed blends (Excluding active/distance blend data)
-		if (blendIndex < CameraBlendList.Count - 1 && Mathf.IsEqualApprox(CameraBlendList[blendIndex + 1].LinearInfluence, 1.0f) &&
-			!CameraBlendList[^1].UseDistanceBlending)
+		// Removes completed normal blends
+		if (!CameraBlendList[blendIndex].UseDistanceBlending &&
+			blendIndex < CameraBlendList.Count - 1 &&
+			Mathf.IsEqualApprox(CameraBlendList[blendIndex + 1].LinearInfluence, 1.0f))
 		{
 			CameraBlendList[blendIndex].Free();
 			CameraBlendList.RemoveAt(blendIndex);
 			return;
 		}
 
-		// Don't automatically update influence when using distance blending
-		if (CameraBlendList[blendIndex].UseDistanceBlending)
+		// Remove completed distance blends
+		if (CameraBlendList[blendIndex].UseDistanceBlending &&
+			ActiveBlendData.Trigger != CameraBlendList[blendIndex].Trigger &&
+			Mathf.IsEqualApprox(ActiveBlendData.LinearInfluence, 1.0f))
 		{
-			CameraBlendList[blendIndex].CalculateInfluence(Player.PathFollower);
+			CameraBlendList[blendIndex].Free();
+			CameraBlendList.RemoveAt(blendIndex);
 			return;
 		}
 
@@ -341,8 +349,36 @@ public partial class PlayerCameraController : Node3D
 		for (int i = 0; i < CameraBlendList.Count; i++) // Simulate each blend data separately
 		{
 			CameraPositionData iData = SimulateCamera(i);
+
+			/*	For distance blends, simulate two cameras at once, then blend between them.
+				Note that since distance blend datas come in pairs of two, it's safe to access
+				the Trigger even after we increment i.
+			*/
+			if (CameraBlendList[i].Trigger?.UseDistanceBlending == true)
+			{
+				i++; // Iterate so we can simulate the next item in the blend list
+				CameraPositionData secondaryData = SimulateCamera(i);
+				float secondaryInfluence = CameraBlendList[i].Trigger.CalculateInfluence();
+				iData.BlendWith(secondaryData, secondaryInfluence);
+
+				float blendedDistance = Mathf.Lerp(iData.blendData.distance, secondaryData.blendData.distance, secondaryInfluence);
+				distance = Mathf.Lerp(distance, blendedDistance, CameraBlendList[i].SmoothedInfluence);
+				float blendedFov = Mathf.Lerp(iData.blendData.Fov, secondaryData.blendData.Fov, secondaryInfluence);
+				fov = Mathf.Lerp(fov, blendedFov, CameraBlendList[i].SmoothedInfluence);
+
+				Vector2 blendedViewportOffset = iData.blendData.SettingsResource.viewportOffset;
+				blendedViewportOffset = blendedViewportOffset.Lerp(secondaryData.blendData.SettingsResource.viewportOffset, secondaryInfluence);
+				viewportOffset = viewportOffset.Lerp(blendedViewportOffset, CameraBlendList[i].SmoothedInfluence);
+			}
+			else
+			{
+				distance = Mathf.Lerp(distance, iData.blendData.distance, CameraBlendList[i].SmoothedInfluence);
+				fov = Mathf.Lerp(fov, iData.blendData.Fov, CameraBlendList[i].SmoothedInfluence);
+
+				viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
+			}
+
 			data.offsetBasis = data.offsetBasis.Slerp(iData.offsetBasis, CameraBlendList[i].SmoothedInfluence);
-			distance = Mathf.Lerp(distance, iData.blendData.distance, CameraBlendList[i].SmoothedInfluence);
 
 			data.precalculatedPosition = data.precalculatedPosition.Lerp(iData.precalculatedPosition, CameraBlendList[i].SmoothedInfluence);
 
@@ -354,9 +390,6 @@ public partial class PlayerCameraController : Node3D
 			data.verticalTrackingOffset = Mathf.Lerp(data.verticalTrackingOffset, iData.verticalTrackingOffset, CameraBlendList[i].SmoothedInfluence);
 
 			staticBlendRatio = Mathf.Lerp(staticBlendRatio, CameraBlendList[i].SettingsResource.copyPosition ? 1 : 0, CameraBlendList[i].SmoothedInfluence);
-			viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
-
-			fov = Mathf.Lerp(fov, iData.blendData.Fov, CameraBlendList[i].SmoothedInfluence);
 		}
 
 		// Recalculate non-static camera positions for better transition rotations.
@@ -563,8 +596,13 @@ public partial class PlayerCameraController : Node3D
 		if (Player.IsMovingBackward)
 			targetDistance += settings.backstepDistance;
 
-		if (!settings.ignoreHomingAttack && IsLockonCameraActive)
-			targetDistance += LockonDistance;
+		if (!settings.ignoreHomingAttack)
+		{
+			if (IsLockonCameraActive)
+				targetDistance += LockonDistance;
+			else if (Player.IsJumpDashing)
+				targetDistance += JumpDashDistance;
+		}
 
 		if (PathFollower.Progress < targetDistance &&
 			!PathFollower.Loop &&
@@ -672,6 +710,19 @@ public partial class PlayerCameraController : Node3D
 
 		/// <summary> Reference to the CameraBlendData being used. </summary>
 		public CameraBlendData blendData;
+
+		public void BlendWith(CameraPositionData data, float influence)
+		{
+			offsetBasis = offsetBasis.Slerp(data.offsetBasis, influence);
+			precalculatedPosition = precalculatedPosition.Lerp(data.precalculatedPosition, influence);
+
+			yawTracking = Mathf.LerpAngle(yawTracking, data.yawTracking, influence);
+			secondaryYawTracking = Mathf.LerpAngle(secondaryYawTracking, data.secondaryYawTracking, influence);
+			pitchTracking = Mathf.Lerp(pitchTracking, data.pitchTracking, influence);
+
+			horizontalTrackingOffset = Mathf.Lerp(horizontalTrackingOffset, data.horizontalTrackingOffset, influence);
+			verticalTrackingOffset = Mathf.Lerp(verticalTrackingOffset, data.verticalTrackingOffset, influence);
+		}
 	}
 	#endregion
 
@@ -914,14 +965,15 @@ public partial class PlayerCameraController : Node3D
 			UpdateMotionBlur();
 	}
 
+	private void UpdateCameraVisibility()
+	{
+		debugMesh.Visible = DebugManager.Instance.DrawDebugCam;
+		PathFollower.Visible = DebugManager.Instance.DrawDebugCam;
+		Player.PathFollower.Visible = DebugManager.Instance.DrawDebugCam;
+	}
+
 	private void ToggleFreeCam()
 	{
-		// Update visibility
-		bool showCamera = isFreeCamActive && DebugManager.Instance.DrawDebugCam;
-		debugMesh.Visible = showCamera;
-		PathFollower.Visible = showCamera;
-		Player.PathFollower.Visible = showCamera;
-
 		if (isFreeCamActive)
 		{
 			Camera.Rotation = FreeCamRoot.GlobalRotation.RemoveVertical();
@@ -1076,7 +1128,7 @@ public partial class CameraBlendData : GodotObject
 	public float SmoothedInfluence { get; private set; }
 	/// <summary> Actual amount to blend each frame. </summary>
 	public float BlendSpeed { get; private set; }
-	public bool UseDistanceBlending => Trigger?.transitionType == CameraTransitionType.Distance;
+	public bool UseDistanceBlending => Trigger?.UseDistanceBlending == true;
 
 	/// <summary> Hall tracking position. </summary>
 	public float hallPosition;
@@ -1144,21 +1196,6 @@ public partial class CameraBlendData : GodotObject
 	public CameraSettingsResource SettingsResource { get; set; }
 	/// <summary> Reference to the cameraTrigger, if it exists. </summary>
 	public CameraTrigger Trigger { get; set; }
-
-	public void CalculateInfluence(PlayerPathController pathController)
-	{
-		if (Mathf.IsZeroApprox(Trigger.transitionTime))
-		{
-			GD.PushWarning("Warning: ActiveCameraSettings distance amount is 0.");
-			SetInfluence(1f);
-			return;
-		}
-
-		float playerProgress = pathController.Progress;
-		float triggerProgress = pathController.GetProgress(Trigger.GlobalPosition);
-		float influence = Mathf.Clamp((playerProgress - triggerProgress) / Trigger.transitionTime, 0f, 1f);
-		SetInfluence(influence);
-	}
 
 	public void SetInfluence(float rawInfluence)
 	{

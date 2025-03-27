@@ -17,6 +17,9 @@ namespace Project.Gameplay.Triggers
 
 		public override void Activate()
 		{
+			if (!StageSettings.Instance.IsLevelIngame)
+				return;
+
 			Player.Camera.IsDefeatFreezeActive = true;
 			Player.StartRespawn();
 			Player.Effect.PlayVoice("fall");

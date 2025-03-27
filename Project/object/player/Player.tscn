@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://bqck0hqdn3o8r"]
+[gd_scene load_steps=67 format=3 uid="uid://bqck0hqdn3o8r"]
 
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -36,9 +36,16 @@
 [ext_resource type="PackedScene" uid="uid://q0b2gswncxck" path="res://object/player/resource/component/Lockon.tscn" id="33_q1dko"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/LaunchRingState.cs" id="36_00l6c"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/PathTravellerState.cs" id="37_rlyto"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/IvyState.cs" id="38_b64oq"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/FlyingPotState.cs" id="38_jno1x"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/SpinJumpState.cs" id="38_krfaq"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/CatapultState.cs" id="38_xdgt8"]
 [ext_resource type="Script" path="res://object/player/resource/script/states/EventState.cs" id="39_4sg6h"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/QuickStepState.cs" id="39_iqbcj"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/ZiplineState.cs" id="39_ixnde"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/PetrifyState.cs" id="40_co4ay"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/LightSpeedDashState.cs" id="40_t4xrr"]
+[ext_resource type="Script" path="res://object/player/resource/script/states/LightSpeedAttackState.cs" id="41_8jpjm"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hfii6"]
 radius = 0.3
@@ -221,6 +228,42 @@ tracks/13/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Sonic/LightDashRingDetector/CollisionShape3D:position")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Sonic/LightDashRingDetector/CollisionShape3D:shape:height")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [4.0]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Sonic/LightDashRingDetector/CollisionShape3D:shape:radius")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
 }
 
 [sub_resource type="Animation" id="Animation_bcu8q"]
@@ -530,6 +573,46 @@ tracks/12/keys = {
 "args": [],
 "method": &"ResetAttackState"
 }]
+}
+
+[sub_resource type="Animation" id="Animation_gifhc"]
+resource_name = "light-dash"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sonic/LightDashRingDetector/CollisionShape3D:shape:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [10.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sonic/LightDashRingDetector/CollisionShape3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 3)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sonic/LightDashRingDetector/CollisionShape3D:shape:radius")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [4.0]
 }
 
 [sub_resource type="Animation" id="Animation_cxie3"]
@@ -991,6 +1074,7 @@ _data = {
 "disable": SubResource("Animation_bhgay"),
 "disable-environment": SubResource("Animation_2s3ot"),
 "fire-crest": SubResource("Animation_dp7pp"),
+"light-dash": SubResource("Animation_gifhc"),
 "slide": SubResource("Animation_cxie3"),
 "speed break": SubResource("Animation_hgkeo"),
 "spin": SubResource("Animation_mb10g"),
@@ -998,8 +1082,17 @@ _data = {
 "volcano-slide": SubResource("Animation_flrr5")
 }
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hnnsk"]
+radius = 2.0
+height = 4.0
+
 [sub_resource type="Curve" id="Curve_0y4at"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0645833, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0777784, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_1rk8e"]
+max_value = 20.0
+_data = [Vector2(0, 0), 0.0, 153.807, 0, 0, Vector2(0.266846, 20), 0.0, 0.0, 0, 0, Vector2(0.58221, 6.28141), -39.5151, -39.5151, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 4
 
 [sub_resource type="Curve" id="Curve_l0cmy"]
@@ -1010,7 +1103,7 @@ point_count = 4
 _data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "knockbackState", "teleportState") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "spinJumpState", "quickStepState", "lightSpeedDashState", "lightSpeedAttackState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "ivyState", "ziplineState", "petrifyState", "knockbackState", "teleportState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1032,17 +1125,25 @@ launchRingState = NodePath("StateMachine/Object/LaunchRing")
 catapultState = NodePath("StateMachine/Object/Catapult")
 flyingPotState = NodePath("StateMachine/Object/FlyingPot")
 pathTravellerState = NodePath("StateMachine/Object/PathTraveller")
+spinJumpState = NodePath("StateMachine/Skill/SpinJump")
+quickStepState = NodePath("StateMachine/Skill/QuickStep")
+lightSpeedDashState = NodePath("StateMachine/Skill/LightSpeedDash")
+lightSpeedAttackState = NodePath("StateMachine/Skill/LightSpeedAttack")
 grindState = NodePath("StateMachine/Object/Grind")
 sidleState = NodePath("StateMachine/Special/Sidle")
 automationState = NodePath("StateMachine/Special/Automation")
 eventState = NodePath("StateMachine/Special/Event")
 bounceState = NodePath("StateMachine/Special/Bounce")
 driftState = NodePath("StateMachine/Special/Drift")
+ivyState = NodePath("StateMachine/Special/Ivy")
+ziplineState = NodePath("StateMachine/Special/Zipline")
+petrifyState = NodePath("StateMachine/Special/Petrify")
 knockbackState = NodePath("StateMachine/Special/Knockback")
 teleportState = NodePath("StateMachine/Special/Teleport")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+visible = false
 shape = SubResource("CapsuleShape3D_hfii6")
 
 [node name="StageTriggerDetector" type="Area3D" parent="." groups=["player detection"]]
@@ -1069,17 +1170,12 @@ bones/0/rotation = Quaternion(3.57711e-14, -1.80861e-07, -3.0007e-07, 1)
 bones/1/rotation = Quaternion(0.999986, 2.99907e-07, -1.92129e-07, 0.00531361)
 bones/8/rotation = Quaternion(-0.507972, -0.493846, -0.492108, 0.505876)
 bones/11/position = Vector3(0.0662359, 0.0606951, -0.0182575)
-bones/19/rotation = Quaternion(0.0166958, 0.0143342, 0.000456244, 0.999758)
 bones/22/position = Vector3(-0.0580948, 0.1219, 0.00920521)
 bones/28/position = Vector3(-0.066236, 0.0606951, -0.0182575)
-bones/28/rotation = Quaternion(-0.55867, 0.762376, -0.094618, 0.312598)
 bones/30/rotation = Quaternion(0.0274165, -0.0283704, 0.0518215, 0.997877)
-bones/32/rotation = Quaternion(0.014017, -0.00409223, -0.00361268, 0.999887)
-bones/33/rotation = Quaternion(0.0030857, -0.00362121, -0.0545012, 0.998502)
 bones/35/rotation = Quaternion(0.0249171, -0.00388378, -0.000898509, 0.999682)
 bones/36/rotation = Quaternion(0.0166958, -0.0143343, -0.000456251, 0.999758)
 bones/39/position = Vector3(0.0580948, 0.1219, 0.00920527)
-bones/39/rotation = Quaternion(0.0130255, -0.007344, -0.117758, 0.99293)
 bones/40/rotation = Quaternion(-0.00150024, -0.00739151, 0.000392114, 0.999972)
 bones/42/rotation = Quaternion(9.46508e-09, 3.96343e-07, 3.96343e-07, 1)
 bones/46/rotation = Quaternion(-0.23467, -2.52169e-06, 8.92783e-06, 0.972075)
@@ -1117,13 +1213,23 @@ libraries = {
 "": SubResource("AnimationLibrary_8j388")
 }
 
+[node name="LightDashRingDetector" type="Area3D" parent="Sonic"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+collision_layer = 0
+collision_mask = 8
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sonic/LightDashRingDetector"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_hnnsk")
+
 [node name="Lockon" parent="." node_paths=PackedStringArray("areaTrigger") instance=ExtResource("33_q1dko")]
 areaTrigger = NodePath("../Sonic/HitboxTrigger")
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("2_ehi1f")
 startingState = NodePath("Basic/Idle")
-stateParents = Array[NodePath]([NodePath("Basic"), NodePath("Object"), NodePath("Special")])
+stateParents = Array[NodePath]([NodePath("Basic"), NodePath("Object"), NodePath("Special"), NodePath("Skill")])
 
 [node name="Basic" type="Node" parent="StateMachine"]
 
@@ -1307,6 +1413,52 @@ script = ExtResource("27_t835u")
 runState = NodePath("../../Basic/Run")
 backstepState = NodePath("../../Basic/Backstep")
 
+[node name="Ivy" type="Node" parent="StateMachine/Special"]
+script = ExtResource("38_b64oq")
+
+[node name="Zipline" type="Node" parent="StateMachine/Special"]
+script = ExtResource("39_ixnde")
+
+[node name="Petrify" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("idleState")]
+script = ExtResource("40_co4ay")
+idleState = NodePath("../../Basic/Idle")
+
+[node name="Skill" type="Node" parent="StateMachine"]
+
+[node name="SpinJump" type="Node" parent="StateMachine/Skill" node_paths=PackedStringArray("stompState", "landState", "jumpDashState", "homingAttackState")]
+script = ExtResource("38_krfaq")
+stompState = NodePath("../../Basic/Stomp")
+landState = NodePath("../../Basic/Land")
+jumpDashState = NodePath("../../Basic/JumpDash")
+homingAttackState = NodePath("../../Basic/HomingAttack")
+
+[node name="QuickStep" type="Node" parent="StateMachine/Skill" node_paths=PackedStringArray("idleState", "runState", "fallState", "backflipState", "slideState", "jumpState")]
+script = ExtResource("39_iqbcj")
+idleState = NodePath("../../Basic/Idle")
+runState = NodePath("../../Basic/Run")
+fallState = NodePath("../../Basic/Fall")
+backflipState = NodePath("../../Basic/Backflip")
+slideState = NodePath("../../Basic/Slide")
+jumpState = NodePath("../../Basic/Jump")
+movementCurve = SubResource("Curve_1rk8e")
+
+[node name="LightSpeedDash" type="Node" parent="StateMachine/Skill" node_paths=PackedStringArray("landState", "fallState", "jumpState")]
+script = ExtResource("40_t4xrr")
+landState = NodePath("../../Basic/Land")
+fallState = NodePath("../../Basic/Fall")
+jumpState = NodePath("../../Basic/Jump")
+lightDashSpeed = 60.0
+lightDashSpeedAcceleration = 200.0
+
+[node name="LightSpeedAttack" type="Node" parent="StateMachine/Skill" node_paths=PackedStringArray("fallState", "stompState", "jumpDashState")]
+script = ExtResource("41_8jpjm")
+fallState = NodePath("../../Basic/Fall")
+stompState = NodePath("../../Basic/Stomp")
+jumpDashState = NodePath("../../Basic/JumpDash")
+normalStrikeSpeed = 60.0
+perfectStrikeSpeed = 120.0
+acceleration = 200.0
+
 [node name="Controller" type="Node" parent="."]
 script = ExtResource("2_pk07e")
 InputCurve = SubResource("Curve_l0cmy")
@@ -1348,5 +1500,7 @@ sidleMovementCurve = SubResource("Curve_jakcp")
 
 [connection signal="body_exited" from="StageTriggerDetector" to="." method="OnBodyExited"]
 [connection signal="CountdownLanding" from="Sonic" to="Sonic/Effect" method="PlayLandingFX"]
+[connection signal="area_entered" from="Sonic/LightDashRingDetector" to="StateMachine/Skill/LightSpeedDash" method="OnAreaEntered"]
+[connection signal="area_exited" from="Sonic/LightDashRingDetector" to="StateMachine/Skill/LightSpeedDash" method="OnAreaExited"]
 
 [editable path="Sonic"]

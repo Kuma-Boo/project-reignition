@@ -88,7 +88,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	public delegate void DeactivatedEventHandler(); // Called after character finishes processing this launcher.
 
 	/// <summary> Height at the beginning of the arc. </summary>
-	[ExportCategory("Launch Settings")]
+	[ExportGroup("Launch Settings")]
 	[Export]
 	private float startingHeight;
 	/// <summary> Height at the highest point of the arc. </summary>
@@ -133,24 +133,29 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 
 	public virtual Vector3 GetLaunchDirection()
 	{
+		Vector3 forward = ignoreLaunchPointRotation ? this.Forward() : LaunchPoint.Forward();
+		Vector3 up = ignoreLaunchPointRotation ? this.Up() : LaunchPoint.Up();
+
 		if (launchDirection == LaunchDirection.Forward)
-			return LaunchPoint.Forward();
+			return forward;
 
 		if (launchDirection == LaunchDirection.Flatten)
 		{
-			if (Mathf.Abs(LaunchPoint.Forward().Dot(Vector3.Up)) > .9f)
+			if (Mathf.Abs(forward.Dot(Vector3.Up)) > .9f)
 			{
-				int sign = LaunchPoint.Forward().Y > -0.01f ? 1 : -1;
-				sign *= LaunchPoint.Up().Y > -0.01f ? 1 : -1;
-				return -(LaunchPoint.Up() * sign).RemoveVertical().Normalized();
+				int sign = forward.Y > -0.01f ? 1 : -1;
+				sign *= up.Y > -0.01f ? 1 : -1;
+				return -(up * sign).RemoveVertical().Normalized();
 			}
 
-			return LaunchPoint.Forward().RemoveVertical().Normalized();
+			return forward.RemoveVertical().Normalized();
 		}
 
-		return LaunchPoint.Up();
+		return up;
 	}
 
+	/// <summary> Overload method so launch rings can recenter the player visually. </summary>
+	protected virtual Vector3 CalculateStartingPoint() => StartingPoint;
 	public Vector3 StartingPoint => LaunchPoint.GlobalPosition + (Vector3.Up * startingHeight);
 
 	public LaunchSettings GetLaunchSettings()
@@ -159,8 +164,8 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		float blendedMiddleHeight = Mathf.Lerp(middleHeight, secondaryMiddleHeight, GetLaunchRatio());
 		float blendedFinalHeight = Mathf.Lerp(finalHeight, secondaryFinalHeight, GetLaunchRatio());
 
-		Vector3 startPosition = StartingPoint;
-		Vector3 endPosition = startPosition + (GetLaunchDirection() * blendedDistance) + (Vector3.Up * blendedFinalHeight);
+		Vector3 startPosition = CalculateStartingPoint();
+		Vector3 endPosition = StartingPoint + (GetLaunchDirection() * blendedDistance) + (Vector3.Up * blendedFinalHeight);
 
 		LaunchSettings settings = LaunchSettings.Create(startPosition, endPosition, blendedMiddleHeight);
 		settings.AllowJumpDash = allowJumpDashing;
@@ -199,6 +204,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	protected virtual void LaunchAnimation()
 	{
 		Player.Effect.StopSpinFX();
+		Player.Effect.StopTrailFX();
 		Player.Animator.ResetState(.1f);
 		if (GetLaunchSettings().InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
 			Player.Animator.JumpAnimation();
@@ -214,8 +220,9 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 
 	public Vector3 RecenterPlayer()
 	{
-		Vector3 pos = Player.GlobalPosition.MoveToward(StartingPoint, recenterSpeed * PhysicsManager.physicsDelta);
-		IsPlayerCentered = pos.IsEqualApprox(StartingPoint);
+		Vector3 targetPosition = CalculateStartingPoint();
+		Vector3 pos = Player.GlobalPosition.MoveToward(targetPosition, recenterSpeed * PhysicsManager.physicsDelta);
+		IsPlayerCentered = pos.IsEqualApprox(targetPosition);
 		return pos;
 	}
 
@@ -232,6 +239,8 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	private StringName voiceKey;
 	/// <summary> Optional launch point override node. </summary>
 	[Export]
-	public Node3D launchPoint;
-	private Node3D LaunchPoint => launchPoint ?? this;
+	protected Node3D launchPoint;
+	public Node3D LaunchPoint => launchPoint ?? this;
+	[Export]
+	protected bool ignoreLaunchPointRotation;
 }

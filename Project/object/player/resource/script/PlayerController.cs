@@ -56,6 +56,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public override void _PhysicsProcess(double _)
 	{
+		Lockon.ProcessPhysics();
 		Controller.ProcessInputs();
 		StateMachine.ProcessPhysics();
 
@@ -65,9 +66,10 @@ public partial class PlayerController : CharacterBody3D
 		UpdateRecenter();
 
 		Skills.ProcessPhysics();
-		Lockon.ProcessPhysics();
 		Animator.ProcessPhysics();
 		PathFollower.Resync();
+
+		ExternalVelocity = Vector3.Zero; // Reset external velocity after updating player
 	}
 
 	/// <summary> Player's horizontal movespeed, ignoring slopes. </summary>
@@ -75,6 +77,8 @@ public partial class PlayerController : CharacterBody3D
 	/// <summary> Player's vertical speed -- only effective when not on the ground. </summary>
 	public float VerticalSpeed { get; set; }
 	public bool IsMovingBackward { get; set; }
+	/// <summary> For movement that doesn't affect animations (e.x. wind). Reset every frame after it's applied. </summary>
+	public Vector3 ExternalVelocity { get; set; }
 
 	/// <summary> Global movement angle, in radians. Note - VISUAL ROTATION is controlled by CharacterAnimator.cs. </summary>
 	public float MovementAngle { get; set; }
@@ -122,9 +126,10 @@ public partial class PlayerController : CharacterBody3D
 			MoveSpeed = Mathf.MoveToward(MoveSpeed, 0, Stats.GroundSettings.Friction * SlopeRatio * PhysicsManager.physicsDelta);
 	}
 
-	public void ApplyMovement()
+	public void ApplyMovement() => ApplyMovement(GetMovementDirection());
+	public void ApplyMovement(Vector3 overrideDirection)
 	{
-		Velocity = (GetMovementDirection() * MoveSpeed) + (UpDirection * VerticalSpeed);
+		Velocity = (overrideDirection * MoveSpeed) + (UpDirection * VerticalSpeed) + ExternalVelocity;
 		MoveAndSlide();
 	}
 
@@ -188,6 +193,9 @@ public partial class PlayerController : CharacterBody3D
 		else if (VerticalSpeed < 0)
 			castLength += Mathf.Abs(VerticalSpeed) * PhysicsManager.physicsDelta;
 
+		if (!ExternalVelocity.IsZeroApprox() && IsOnGround)
+			castLength += ExternalVelocity.Length() * PhysicsManager.physicsDelta;
+
 		Vector3 checkOffset = Vector3.Zero;
 		GroundHit = new();
 		Vector3 castVector = this.Down() * castLength;
@@ -201,21 +209,19 @@ public partial class PlayerController : CharacterBody3D
 			castOffset = castOffset.Rotated(this.Down(), interval);
 			RaycastHit hit = this.CastRay(castOrigin + castOffset, castVector, CollisionMask, false, GetCollisionExceptions());
 			DebugManager.DrawRay(castOrigin + castOffset, castVector, hit ? Colors.Red : Colors.White);
-			if (ValidateGroundCast(ref hit))
-			{
-				if (!GroundHit)
-					GroundHit = hit;
-				else
-					GroundHit.Add(hit);
-				checkOffset += castOffset;
-				raysHit++;
-			}
+			if (!ValidateGroundCast(ref hit))
+				continue;
+
+			GroundHit = RaycastHit.Add(GroundHit, hit);
+			raysHit++;
+			checkOffset += castOffset;
 		}
 
 		if (GroundHit)
 		{
-			GroundHit.Divide(raysHit);
+			GroundHit = RaycastHit.Divide(GroundHit, raysHit);
 			Effect.UpdateGroundType(GroundHit.collidedObject);
+			DebugManager.DrawRay(GroundHit.point, GroundHit.normal * 5f, Colors.Orange);
 		}
 
 		return GroundHit;
@@ -260,6 +266,9 @@ public partial class PlayerController : CharacterBody3D
 	/// <summary> Checks for walls forward and backwards (only in the direction the player is moving). </summary>
 	public void CheckWall(Vector3 castDirection = new(), bool reduceSpeedDuringHeadonCollision = true)
 	{
+		if (Controller.IsStrafeModeActive)
+			CheckStrafeWall();
+
 		IsOnWall = false;
 
 		if (castDirection.IsZeroApprox())
@@ -269,7 +278,7 @@ public partial class PlayerController : CharacterBody3D
 		WallRaycastHit = this.CastRay(CollisionPosition, castDirection * castLength, CollisionMask, false, GetCollisionExceptions());
 		DebugManager.DrawRay(CollisionPosition, castDirection * castLength, WallRaycastHit ? Colors.Red : Colors.White);
 
-		if (!ValidateWallCast())
+		if (!ValidateWallCast(WallRaycastHit))
 		{
 			WallRaycastHit = new();
 			return;
@@ -279,7 +288,7 @@ public partial class PlayerController : CharacterBody3D
 		if (wallDelta >= Mathf.Pi * .8f) // Process head-on collision
 		{
 			// Cancel speed break
-			if (Skills.IsSpeedBreakActive)
+			if (Skills.IsSpeedBreakActive && !WallRaycastHit.collidedObject.IsInGroup("level wall"))
 			{
 				float pathDelta = ExtensionMethods.DeltaAngleRad(PathFollower.BackAngle, ExtensionMethods.CalculateForwardAngle(WallRaycastHit.normal));
 				if (pathDelta >= Mathf.Pi * .25f) // Snap to path direction
@@ -312,7 +321,21 @@ public partial class PlayerController : CharacterBody3D
 			MoveSpeed *= speedClamp;
 	}
 
-	private bool ValidateWallCast() => WallRaycastHit && WallRaycastHit.collidedObject.IsInGroup("wall");
+	/// <summary> Checks Sonic's side, then realigns to PathFollower if necessary. </summary>
+	private void CheckStrafeWall()
+	{
+		float angle = ExtensionMethods.SignedDeltaAngleRad(PathFollower.ForwardAngle, MovementAngle);
+		Vector3 castDirection = Animator.Left() * Mathf.Sign(angle);
+		float castLength = CollisionSize.X + CollisionPadding + (Mathf.Sin(Mathf.Abs(angle)) * Mathf.Abs(MoveSpeed) * PhysicsManager.physicsDelta); ;
+
+		RaycastHit wallHit = this.CastRay(CollisionPosition, castDirection * castLength, CollisionMask, false, GetCollisionExceptions());
+		DebugManager.DrawRay(CollisionPosition, castDirection * castLength, wallHit ? Colors.Red : Colors.White);
+
+		if (ValidateWallCast(wallHit))
+			MovementAngle = PathFollower.ForwardAngle;
+	}
+
+	private bool ValidateWallCast(RaycastHit hit) => hit && hit.collidedObject.IsInGroup("wall");
 
 	/// <summary> Checks for ceilings and crushers. </summary>
 	public bool CheckCeiling()
@@ -381,7 +404,8 @@ public partial class PlayerController : CharacterBody3D
 
 		// Untested! This may end up breaking in certain scenarios
 		GlobalRotation = Vector3.Zero;
-		Vector3 cross = Vector3.Left.Rotated(Vector3.Up, UpDirection.Flatten().AngleTo(Vector2.Down));
+		float angle = UpDirection.Flatten().AngleTo(Vector2.Down);
+		Vector3 cross = Vector3.Left.Rotated(Vector3.Up, angle);
 		GlobalRotate(cross, -UpDirection.SignedAngleTo(Vector3.Up, cross));
 	}
 
@@ -410,7 +434,7 @@ public partial class PlayerController : CharacterBody3D
 		hitboxAnimator.Play(hitboxAnimation);
 	}
 	[Signal]
-	public delegate void AttackStateChangeEventHandler();
+	public delegate void AttackStateChangedEventHandler();
 	/// <summary> Keeps track of how much attack the player will deal. </summary>
 	public AttackStates AttackState
 	{
@@ -418,7 +442,7 @@ public partial class PlayerController : CharacterBody3D
 		set
 		{
 			attackState = value;
-			EmitSignal(SignalName.AttackStateChange);
+			EmitSignal(SignalName.AttackStateChanged);
 		}
 	}
 	private AttackStates attackState;
@@ -434,7 +458,7 @@ public partial class PlayerController : CharacterBody3D
 	private float lockoutTimer;
 	public bool IsLockoutActive => ActiveLockoutData != null;
 	public bool IsLockoutOverridingMovementAngle => IsLockoutActive && ActiveLockoutData.movementMode != LockoutResource.MovementModes.Free;
-	public bool IsLockoutDisablingActions => IsLockoutActive && ActiveLockoutData.disableActions;
+	public bool IsLockoutDisablingAction(LockoutResource.ActionFlags flag) => IsLockoutActive && ActiveLockoutData.disableActionFlags.HasFlag(flag);
 	public LockoutResource ActiveLockoutData { get; private set; }
 
 	private readonly List<LockoutResource> lockoutDataList = [];
@@ -571,7 +595,9 @@ public partial class PlayerController : CharacterBody3D
 	public bool CanJumpDash { get; set; }
 	public bool IsJumpDashing { get; set; }
 	public bool IsHomingAttacking { get; set; }
+	public bool IsPerfectHomingAttacking { get; set; }
 	public bool IsJumpDashOrHomingAttack => IsJumpDashing || IsHomingAttacking;
+	public bool IsJumping { get; set; }
 	public bool IsAccelerationJumping { get; set; }
 	public bool IsBackflipping { get; set; }
 	public bool IsStomping { get; set; }
@@ -591,6 +617,7 @@ public partial class PlayerController : CharacterBody3D
 	[Signal]
 	public delegate void LaunchFinishedEventHandler();
 	public bool IsLaunching { get; set; }
+	public Launcher ActiveLauncher => launchState.ActiveLauncher;
 	[Export]
 	private LaunchState launchState;
 	public void StartLauncher(LaunchSettings settings)
@@ -636,6 +663,50 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	[Export]
+	private SpinJumpState spinJumpState;
+	public bool IsSpinJump { get; set; }
+	public void StartSpinJump(bool isShortenedJump)
+	{
+		spinJumpState.IsShortenedJump = isShortenedJump;
+		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, spinJumpState);
+	}
+
+	private readonly float SpinJumpBounceAmount = 3.0f;
+	public void StartSpinJumpBounce() => VerticalSpeed = Runtime.CalculateJumpPower(SpinJumpBounceAmount);
+
+	[Export]
+	private QuickStepState quickStepState;
+	public void StartQuickStep(bool isSteppingRight)
+	{
+		quickStepState.IsSteppingRight = isSteppingRight;
+		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, quickStepState);
+	}
+
+	[Export]
+	private LightSpeedDashState lightSpeedDashState;
+	public bool IsLightDashing => lightSpeedDashState.CurrentTarget != null;
+	public bool StartLightSpeedDash()
+	{
+		if (lightSpeedDashState.GetNewTarget() != null)
+			StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, lightSpeedDashState);
+
+		return IsLightDashing;
+	}
+
+	[Export]
+	private LightSpeedAttackState lightSpeedAttackState;
+	public bool IsLightSpeedAttacking { get; set; }
+	public bool StartLightSpeedAttack()
+	{
+		Lockon.ProcessPhysics();
+		if (Lockon.IsTargetAttackable)
+			StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, lightSpeedAttackState);
+		IsLightSpeedAttacking = Lockon.IsTargetAttackable;
+
+		return IsLightSpeedAttacking;
+	}
+
+	[Export]
 	private GrindState grindState;
 	public bool AllowLandingGrind { get; set; }
 	public bool IsGrindstepping { get; set; }
@@ -678,6 +749,9 @@ public partial class PlayerController : CharacterBody3D
 	public bool IsAutomationActive => automationState.Automation != null;
 	public void StartAutomation(AutomationTrigger automation)
 	{
+		if (IsAutomationActive && automationState.Automation != automation)
+			automationState.ExitState();
+
 		automationState.Automation = automation;
 		StateMachine.ChangeState(automationState);
 	}
@@ -710,6 +784,30 @@ public partial class PlayerController : CharacterBody3D
 		driftState.Trigger = trigger;
 		StateMachine.ChangeState(driftState);
 	}
+
+	[Export]
+	private IvyState ivyState;
+	public void StartIvy(Ivy trigger)
+	{
+		GD.Print("Ivy Started");
+		ivyState.Trigger = trigger;
+		ivyState.UpdateHighSpeedEntry();
+		StateMachine.ChangeState(ivyState);
+	}
+
+	[Export]
+	private ZiplineState ziplineState;
+	public bool IsZiplineActive => ziplineState.Trigger != null;
+	public void StartZipline(Zipline trigger)
+	{
+		ziplineState.Trigger = trigger;
+		StateMachine.ChangeState(ziplineState);
+	}
+
+	[Export]
+	private PetrifyState petrifyState;
+	public bool IsPetrified => StateMachine.CurrentState == petrifyState;
+	public void StartPetrify() => StateMachine.ChangeState(petrifyState);
 
 	[Signal]
 	public delegate void KnockbackEventHandler();
@@ -916,8 +1014,7 @@ public partial class PlayerController : CharacterBody3D
 			RemoveCollisionExceptionWith(exception);
 
 		TransitionManager.instance.TransitionProcess -= ProcessRespawn;
-		// Wait a single physics frame to ensure objects update properly
-		GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Timeout += FinishRespawn;
+		FinishRespawn();
 	}
 
 	/// <summary> Final step of the respawn process. Re-enable area collider and finish transition. </summary>

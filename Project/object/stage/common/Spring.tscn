@@ -1,18 +1,230 @@
-[gd_scene load_steps=5 format=3 uid="uid://b8m1x0tudbcbd"]
+[gd_scene load_steps=15 format=3 uid="uid://b8m1x0tudbcbd"]
 
-[ext_resource type="Script" path="res://object/stage/common/resource/script/Launcher.cs" id="1"]
-[ext_resource type="PackedScene" uid="uid://ca61otsuvlklb" path="res://object/stage/common/resource/model/Spring.gltf" id="2"]
-[ext_resource type="AudioStream" uid="uid://cq48r8fmf6vox" path="res://sound/sfx/objects/spring.wav" id="3_pvl70"]
+[ext_resource type="Script" path="res://object/stage/common/resource/script/Spring.cs" id="1_g6rce"]
+[ext_resource type="PackedScene" uid="uid://ca61otsuvlklb" path="res://object/stage/common/resource/model/Spring.gltf" id="2_q6vtr"]
+[ext_resource type="Material" uid="uid://bef3nf037vgw8" path="res://object/stage/common/resource/model/material/Flying Pot Shine.tres" id="3_u05ns"]
+[ext_resource type="AudioStream" uid="uid://cq48r8fmf6vox" path="res://sound/sfx/objects/spring.wav" id="4_pha0k"]
 
 [sub_resource type="SphereShape3D" id="3"]
 radius = 0.65
 
-[node name="Spring" type="Node3D"]
-script = ExtResource("1")
+[sub_resource type="Curve" id="Curve_0qex2"]
+_data = [Vector2(0, 0), 0.0, 9.5, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_maqd5"]
+width = 64
+curve = SubResource("Curve_0qex2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_b38y0"]
+lifetime_randomness = 0.4
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.2
+emission_ring_inner_radius = 0.2
+angle_min = -90.0
+angle_max = 90.0
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, -10, 0)
+linear_accel_min = -10.0
+linear_accel_max = -8.0
+scale_max = 2.5
+scale_curve = SubResource("CurveTexture_maqd5")
+color = Color(0.737255, 0.85098, 1, 1)
+hue_variation_min = -0.05
+hue_variation_max = 0.15
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pu2is"]
+material = ExtResource("3_u05ns")
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="Animation" id="Animation_fe7ww"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ActivationTrigger/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_kl70x"]
+resource_name = "hide"
+length = 0.333337
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ActivationTrigger/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.166667, 0.233333, 0.333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1.2, 0.8, 1.2), Vector3(1, 1.1, 1), Vector3(0.2, 0.5, 0.2), Vector3(0.01, 0.01, 0.01)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ShowFX")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_otifw"]
+resource_name = "launch"
+length = 0.333337
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.333333),
+"transitions": PackedFloat32Array(0.5, 0.5, 0.5, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1.5, 0.5, 1.5), Vector3(0.8, 1.5, 0.8), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_iulyy"]
+resource_name = "show"
+length = 0.400003
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ActivationTrigger/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Root:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.266667, 0.4),
+"transitions": PackedFloat32Array(0.5, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(1, 1.5, 1), Vector3(1.2, 0.8, 1.2), Vector3(1, 1, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ShowFX")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fjrev"]
+_data = {
+"RESET": SubResource("Animation_fe7ww"),
+"hide": SubResource("Animation_kl70x"),
+"launch": SubResource("Animation_otifw"),
+"show": SubResource("Animation_iulyy")
+}
+
+[node name="Spring" type="Node3D" node_paths=PackedStringArray("animator")]
+script = ExtResource("1_g6rce")
 "Secondary Settings/Enabled" = false
+animator = NodePath("AnimationPlayer")
 allowJumpDashing = true
 launchDirection = 2
 sfxPlayer = NodePath("SFX")
+voiceKey = &""
 
 [node name="ActivationTrigger" type="Area3D" parent="."]
 collision_layer = 4
@@ -21,13 +233,38 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ActivationTrigger"]
 shape = SubResource("3")
 
-[node name="Spring" parent="." instance=ExtResource("2")]
+[node name="Root" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+
+[node name="Spring" parent="Root" instance=ExtResource("2_q6vtr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+
+[node name="ShowFX" type="GPUParticles3D" parent="."]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.95
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_b38y0")
+draw_pass_1 = SubResource("PlaneMesh_pu2is")
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("3_pvl70")
+process_mode = 1
+stream = ExtResource("4_pha0k")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 10000.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_fjrev")
+}
 
 [connection signal="area_entered" from="ActivationTrigger" to="." method="Activate"]

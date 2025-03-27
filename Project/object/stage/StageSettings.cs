@@ -68,6 +68,11 @@ public partial class StageSettings : Node3D
 		SetEnvironmentFxFactor(environmentFxFactor, 0);
 	}
 
+	public override void _ExitTree()
+	{
+		EmitSignal(SignalName.Unloaded);
+	}
+
 	public void UpdatePostProcessingStatus()
 	{
 		bool postProcessingEnabled = SaveManager.Config.postProcessingQuality != SaveManager.QualitySetting.Disabled;
@@ -394,16 +399,24 @@ public partial class StageSettings : Node3D
 
 	public float CurrentTime { get; private set; } // How long has the player been on this level? (In Seconds)
 	public string DisplayTime { get; private set; } // Current time formatted in mm:ss.ff
-	private void UpdateTime()
+	private void UpdateTime(bool skipPhysicsTick = false)
 	{
 		if (!IsLevelIngame || !Interface.PauseMenu.AllowPausing) return;
 
-		CurrentTime += PhysicsManager.normalDelta; // Add current time
+		if (!skipPhysicsTick)
+			CurrentTime += PhysicsManager.normalDelta; // Add current time
 		DisplayTime = ExtensionMethods.FormatTime(CurrentTime);
 		if (Data.MissionTimeLimit != 0 && CurrentTime >= Data.MissionTimeLimit) // Time's up!
 			FinishLevel(false);
 
 		EmitSignal(SignalName.TimeChanged);
+	}
+
+	/// <summary> Artifically add time. Used when skipping cutscenes. </summary>
+	public void AddTime(float amount)
+	{
+		CurrentTime += amount;
+		UpdateTime(true);
 	}
 
 	public bool[] fireSoulCheckpoints = new bool[3];
@@ -473,41 +486,21 @@ public partial class StageSettings : Node3D
 	}
 
 	[Signal]
-	public delegate void UnloadedEventHandler();
-	private const string UNLOAD_FUNCTION = "Unload"; // Clean up any memory leaks in this function
-	public override void _ExitTree() => EmitSignal(SignalName.Unloaded);
-	public void ConnectUnloadSignal(Node node)
-	{
-		if (!node.HasMethod(UNLOAD_FUNCTION))
-		{
-			GD.PrintErr($"Node {node.Name} doesn't have a function '{UNLOAD_FUNCTION}!'");
-			return;
-		}
-
-		if (!IsConnected(SignalName.Unloaded, new Callable(node, UNLOAD_FUNCTION)))
-			Connect(SignalName.Unloaded, new Callable(node, UNLOAD_FUNCTION));
-	}
-
-	[Signal]
 	public delegate void RespawnedEventHandler();
-	public readonly static StringName RESPAWN_FUNCTION = "Respawn"; // Default name of respawn functions
-	public void ConnectRespawnSignal(Node node)
-	{
-		if (!node.HasMethod(RESPAWN_FUNCTION))
-		{
-			GD.PrintErr($"Node {node.Name} doesn't have a function '{RESPAWN_FUNCTION}!'");
-			return;
-		}
-
-		if (!IsConnected(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION)))
-			Connect(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION), (uint)ConnectFlags.Deferred);
-	}
+	[Signal]
+	public delegate void RespawnedEnemiesEventHandler();
+	[Signal]
+	public delegate void UnloadedEventHandler();
 
 	public void RespawnObjects()
 	{
 		SoundManager.instance.CancelDialog(); // Cancel any active dialog
 		EmitSignal(SignalName.Respawned);
+
+		GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Timeout += RespawnEnemies;
 	}
+
+	private void RespawnEnemies() => EmitSignal(SignalName.RespawnedEnemies);
 	#endregion
 
 	#region Level Completion
@@ -619,7 +612,7 @@ public struct SpawnData(Node parent, Transform3D transform)
 	/// <summary> Local transform to spawn with. </summary>
 	public Transform3D spawnTransform = transform;
 
-	public readonly void Respawn(Node n)
+	public readonly void Respawn(Node3D n)
 	{
 		if (parentNode != null && n.GetParent() != parentNode)
 		{
@@ -629,6 +622,8 @@ public struct SpawnData(Node parent, Transform3D transform)
 			parentNode.AddChild(n);
 		}
 
+		n.Visible = true;
+		n.ProcessMode = Node.ProcessModeEnum.Inherit;
 		n.SetDeferred("transform", spawnTransform);
 	}
 }

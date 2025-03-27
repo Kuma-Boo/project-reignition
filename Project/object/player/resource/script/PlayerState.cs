@@ -59,11 +59,9 @@ public partial class PlayerState : Node
 			return;
 		}
 
-		float inputAngle = Player.Controller.GetTargetInputAngle();
-		float targetMovementAngle = Player.Controller.GetTargetMovementAngle();
-		if (IsBraking(inputAngle)) // Turning around
+		float targetInputAngle = Player.Controller.GetTargetInputAngle();
+		if (IsBraking(targetInputAngle)) // Turning around
 		{
-			GD.Print("Braking");
 			Brake();
 			return;
 		}
@@ -78,7 +76,7 @@ public partial class PlayerState : Node
 		if (Player.IsLockoutActive && Player.ActiveLockoutData.spaceMode == LockoutResource.SpaceModes.PathFollower) // Zipper exception
 		{
 			// Arbitrary math to make it easier to maintain speed
-			float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(Player.MovementAngle, targetMovementAngle));
+			float inputDot = Mathf.Abs(ExtensionMethods.DotAngle(Player.MovementAngle, targetInputAngle));
 			inputStrength *= Mathf.Clamp(inputDot + .5f, 0, 1f);
 		}
 
@@ -96,7 +94,7 @@ public partial class PlayerState : Node
 		if (Player.Camera.IsCrossfading)
 			return false;
 
-		return Player.Controller.IsHoldingDirection(inputAngle, Player.MovementAngle + Mathf.Pi, Mathf.Pi * .3f);
+		return Player.Controller.IsHoldingDirection(inputAngle, Player.MovementAngle + Mathf.Pi);
 	}
 
 	protected virtual void Deccelerate() => Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, 0);

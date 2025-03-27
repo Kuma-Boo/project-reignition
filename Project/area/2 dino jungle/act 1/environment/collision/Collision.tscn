@@ -74,7 +74,9 @@ startEnabled = true
 [node name="ArenaOneWay" parent="." index="18"]
 script = ExtResource("2_77j5w")
 
-[node name="LSideWall" type="Node3D" parent="." index="19"]
+[node name="StaticBody3D" parent="LevelWall" index="0" groups=["level wall", "wall"]]
+
+[node name="LSideWall" type="Node3D" parent="." index="20" groups=["wall"]]
 script = ExtResource("2_77j5w")
 
 [node name="LDinoPathWall" type="StaticBody3D" parent="LSideWall" index="0"]
@@ -84,7 +86,11 @@ transform = Transform3D(9.92095e-10, 0, -1, 0, 1, 0, 1, 0, 9.92095e-10, -465.996
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ovbg5")
 
-[node name="RSideWall" type="Node3D" parent="." index="20"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="LSideWall/LDinoPathWall" index="1"]
+transform = Transform3D(0.866025, -3.2398e-08, -0.5, 6.94656e-09, 1, -5.27643e-08, 0.5, 4.2222e-08, 0.866025, -47.0106, 8, -57.3202)
+shape = SubResource("BoxShape3D_ovbg5")
+
+[node name="RSideWall" type="Node3D" parent="." index="21" groups=["wall"]]
 script = ExtResource("2_77j5w")
 
 [node name="RDinoPathWall" type="StaticBody3D" parent="RSideWall" index="0"]
@@ -92,4 +98,8 @@ transform = Transform3D(1, 0, 4.47035e-08, 0, 1, 0, -4.47035e-08, 0, 1, -473.496
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RSideWall/RDinoPathWall" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ovbg5")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="RSideWall/RDinoPathWall" index="1"]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 45.866, 18, -24.5)
 shape = SubResource("BoxShape3D_ovbg5")

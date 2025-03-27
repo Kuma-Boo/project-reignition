@@ -64,7 +64,7 @@ public partial class DinoTrio : PathFollow3D
 	public override void _Ready()
 	{
 		animationTree.Active = true;
-		StageSettings.Instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.Respawned += Respawn;
 		Respawn();
 	}
 
