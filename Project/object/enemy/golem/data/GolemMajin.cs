@@ -35,6 +35,9 @@ public partial class GolemMajin : Enemy
 
 	protected override void SetUp()
 	{
+		if (Engine.IsEditorHint())
+			return;
+
 		if (GetParent() is PathFollow3D)
 		{
 			pathFollower = GetParent<PathFollow3D>();
@@ -147,9 +150,17 @@ public partial class GolemMajin : Enemy
 
 	protected override void UpdateEnemy()
 	{
-		if (StageSettings.Instance?.IsLevelIngame == false) return;
-		if (!IsActive) return;
-		if (pathFollower == null) return;
+		if (Engine.IsEditorHint())
+			return;
+
+		if (StageSettings.Instance?.IsLevelIngame == false)
+			return;
+
+		if (!IsActive)
+			return;
+
+		if (pathFollower == null)
+			return;
 
 		if (IsDefeated)
 		{

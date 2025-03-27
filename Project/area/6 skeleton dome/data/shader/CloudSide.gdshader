@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, blend_add;
+render_mode unshaded, blend_add, fog_disabled;
 
 global uniform float time;
 

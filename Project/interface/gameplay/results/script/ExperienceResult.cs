@@ -290,7 +290,7 @@ public partial class ExperienceResult : Control
 
 		if (useMissionExp) // Add mission bonus
 		{
-			if (Stage.LevelState == StageSettings.LevelStateEnum.Failed) // Don't add mission exp when player fails a level
+			if (Stage.LevelState != StageSettings.LevelStateEnum.Success) // Only add mission exp if the stage was completed 
 				useMissionExp = false;
 			else
 				targetExp += Stage.Data.FirstClearBonus;
