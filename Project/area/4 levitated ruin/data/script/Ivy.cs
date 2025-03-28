@@ -9,17 +9,6 @@ public partial class Ivy : Launcher
 {
 	[Signal] public delegate void IvyStartedEventHandler();
 
-	[Export]
-	public bool Regenerate
-	{
-		get => false;
-		set
-		{
-			if (value)
-				Initialize();
-		}
-	}
-
 	[ExportGroup("Settings")]
 	[Export(PropertyHint.Range, "2, 50")] public int length;
 	[Export]
@@ -55,9 +44,30 @@ public partial class Ivy : Launcher
 	private readonly float GravityMultiplier = 1.5f;
 	private readonly float MaxRotationSpeed = 10.0f;
 
+	public override void _Ready()
+	{
+		Initialize();
+
+		if (Engine.IsEditorHint())
+			return;
+
+		IsSleeping = true;
+
+		// Adjust swing speed based on length (longer ivys swing slower)
+		lengthInfluence = Mathf.Clamp(50f / length, 0.5f, 5f);
+		StageSettings.Instance.Respawned += Respawn;
+	}
+
 	public override void _PhysicsProcess(double _)
 	{
-		if (Engine.IsEditorHint() || IsSleeping)
+		if (Engine.IsEditorHint())
+		{
+			Initialize();
+			SetRotation();
+			return;
+		}
+
+		if (IsSleeping)
 			return;
 
 		UpdateSwing();
@@ -97,20 +107,6 @@ public partial class Ivy : Launcher
 			return 0;
 
 		return LaunchRatio;
-	}
-
-	protected override void SetUp()
-	{
-		Initialize();
-
-		if (Engine.IsEditorHint())
-			return;
-
-		IsSleeping = true;
-
-		// Adjust swing speed based on length (longer ivys swing slower)
-		lengthInfluence = Mathf.Clamp(50f / length, 0.5f, 5f);
-		StageSettings.Instance.Respawned += Respawn;
 	}
 
 	private void Respawn()

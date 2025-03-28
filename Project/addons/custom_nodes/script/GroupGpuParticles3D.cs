@@ -12,10 +12,10 @@ public partial class GroupGpuParticles3D : GpuParticles3D
 	[Export]
 	public Array<GpuParticles3D> subSystems;
 	public bool IsGroupEmitting { get; private set; }
-	[Export]
-	private bool EditorRestartGroup { get; set; }
-	[Export]
-	private bool EditorStopGroup { get; set; }
+	[ExportToolButton("Restart Group")]
+	public Callable EditorRestartGroup => Callable.From(RestartGroup);
+	[ExportToolButton("Stop Group")]
+	public Callable EditorStopGroup => Callable.From(StopGroup);
 
 	public new void SetEmitting(bool value)
 	{
@@ -32,17 +32,12 @@ public partial class GroupGpuParticles3D : GpuParticles3D
 
 		Restart();
 		IsGroupEmitting = true;
-		EditorRestartGroup = false;
 	}
+
+	public void StopGroup() => SetEmitting(false);
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (EditorRestartGroup)
-			RestartGroup();
-
-		if (EditorStopGroup)
-			SetEmitting(false);
-
 		base._PhysicsProcess(delta);
 
 		if (!IsGroupEmitting) return;
