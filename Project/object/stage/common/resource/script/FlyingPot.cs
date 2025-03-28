@@ -49,7 +49,7 @@ public partial class FlyingPot : Node3D
 		if (Engine.IsEditorHint()) return;
 
 		animationTree.Active = true;
-		StageSettings.Instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.Respawned += Respawn;
 
 		if (customCameraSettings == null)
 			return;

@@ -44,7 +44,7 @@ public partial class SpikeBallSpawner : Node3D
 			AddChild(spikeBall);
 		}
 
-		StageSettings.Instance.ConnectUnloadSignal(this);
+		StageSettings.Instance.Unloaded += Unload;
 	}
 
 	public override void _PhysicsProcess(double _)

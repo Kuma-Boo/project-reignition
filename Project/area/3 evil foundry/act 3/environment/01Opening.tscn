@@ -1,9 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://bolh38bdssjtb"]
+[gd_scene load_steps=8 format=3 uid="uid://bolh38bdssjtb"]
 
 [ext_resource type="PackedScene" uid="uid://dhbg8or7lks4u" path="res://area/3 evil foundry/act 3/environment/model/01Opening.gltf" id="1_br6gi"]
-[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_1y7j2"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_1y7j2"]
 [ext_resource type="PackedScene" uid="uid://wnnthoykndrj" path="res://effect/particle/Lantern.tscn" id="3_6enp2"]
 [ext_resource type="Material" uid="uid://b8uxyl81rlo5v" path="res://area/3 evil foundry/data/material/New Godray.tres" id="3_q7q5c"]
+[ext_resource type="Material" uid="uid://nuefm40mud43" path="res://area/3 evil foundry/data/material/Exterior Glow Blue.tres" id="4_ppjdd"]
+[ext_resource type="Material" uid="uid://bor4kpaxjnls6" path="res://area/3 evil foundry/data/material/Blue God Ray.tres" id="4_qox6f"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_vj5ve"]
+size = Vector2(10, 10)
 
 [node name="01Opening" instance=ExtResource("1_br6gi")]
 script = ExtResource("2_1y7j2")
@@ -12,6 +17,7 @@ saveVisibilityOnCheckpoint = true
 isStageVisuals = true
 
 [node name="stg033_g03_Mesh_0000" parent="." index="0"]
+visible = false
 layers = 4
 cast_shadow = 0
 surface_material_override/0 = ExtResource("3_q7q5c")
@@ -20,10 +26,12 @@ surface_material_override/0 = ExtResource("3_q7q5c")
 visible = false
 layers = 4
 cast_shadow = 0
+surface_material_override/0 = ExtResource("4_ppjdd")
 
 [node name="stg033_lighting_03_Mesh_0000" parent="." index="2"]
 layers = 4
 cast_shadow = 0
+surface_material_override/0 = ExtResource("4_qox6f")
 
 [node name="stg033_o03_Mesh_0001" parent="." index="3"]
 layers = 4
@@ -183,6 +191,7 @@ cast_shadow = 0
 
 [node name="Lanterns" type="Node3D" parent="." index="42"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -239.5, -21.5, -119.8)
+visible = false
 
 [node name="Lantern" parent="Lanterns" index="0" instance=ExtResource("3_6enp2")]
 
@@ -197,3 +206,38 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -61.25, 0, 0)
 
 [node name="Lantern5" parent="Lanterns" index="4" instance=ExtResource("3_6enp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.65, 0, 0)
+
+[node name="new exterior glow" type="MeshInstance3D" parent="." index="43"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -100.135, -22.8153, -109.869)
+mesh = SubResource("QuadMesh_vj5ve")
+surface_material_override/0 = ExtResource("4_ppjdd")
+
+[node name="new exterior glow2" type="MeshInstance3D" parent="." index="44"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -135.675, -22.8153, -109.875)
+mesh = SubResource("QuadMesh_vj5ve")
+surface_material_override/0 = ExtResource("4_ppjdd")
+
+[node name="new exterior glow3" type="MeshInstance3D" parent="." index="45"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -180.117, -22.8153, -109.869)
+mesh = SubResource("QuadMesh_vj5ve")
+surface_material_override/0 = ExtResource("4_ppjdd")
+
+[node name="new exterior glow4" type="MeshInstance3D" parent="." index="46"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -209.721, -22.8153, -109.875)
+mesh = SubResource("QuadMesh_vj5ve")
+surface_material_override/0 = ExtResource("4_ppjdd")
+
+[node name="new exterior glow5" type="MeshInstance3D" parent="." index="47"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -360.336, -22.8153, -130.628)
+mesh = SubResource("QuadMesh_vj5ve")
+surface_material_override/0 = ExtResource("4_ppjdd")
+
+[node name="new exterior glow6" type="MeshInstance3D" parent="." index="48"]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -348.142, -22.8153, -129.113)
+mesh = SubResource("QuadMesh_vj5ve")
+surface_material_override/0 = ExtResource("4_ppjdd")
+
+[node name="new exterior glow7" type="MeshInstance3D" parent="." index="49"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -371.834, -22.8153, -129.113)
+mesh = SubResource("QuadMesh_vj5ve")
+surface_material_override/0 = ExtResource("4_ppjdd")

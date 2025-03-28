@@ -1,6 +1,6 @@
-[gd_scene load_steps=255 format=3 uid="uid://dr0pf7vprim86"]
+[gd_scene load_steps=255 format=4 uid="uid://dr0pf7vprim86"]
 
-[ext_resource type="Script" path="res://area/1 sand oasis/data/script/SandScorpion.cs" id="1_8xsd2"]
+[ext_resource type="Script" uid="uid://qdk7x6xpjbji" path="res://area/1 sand oasis/data/script/SandScorpion.cs" id="1_8xsd2"]
 [ext_resource type="PackedScene" uid="uid://b8irusmhs8rjm" path="res://area/1 sand oasis/boss/data/Missile.tscn" id="2_e5gye"]
 [ext_resource type="PackedScene" uid="uid://cyme78kdqgxjq" path="res://area/1 sand oasis/boss/data/model/SandScorpion.gltf" id="3_3bccp"]
 [ext_resource type="PackedScene" uid="uid://0ve2qaciq6l8" path="res://area/1 sand oasis/boss/data/FootVFX.tscn" id="4_2w16d"]
@@ -25,13 +25,13 @@
 [ext_resource type="Material" uid="uid://ctkxyqv6hyynk" path="res://area/1 sand oasis/boss/effect/material/Charge.tres" id="23_m5kka"]
 [ext_resource type="Material" uid="uid://41ul482823lb" path="res://area/1 sand oasis/boss/effect/material/Heavy Tail Attack.tres" id="24_hxt5e"]
 [ext_resource type="Material" uid="uid://b8gp75f0k20mk" path="res://area/1 sand oasis/boss/effect/material/Shockwave.tres" id="25_su3q3"]
-[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="25_wqkkv"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="26_8pxat"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="25_wqkkv"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="26_8pxat"]
 [ext_resource type="Resource" uid="uid://ukcne4um86a6" path="res://resource/preset/camera/common/CutsceneCam.tres" id="26_mkoai"]
 [ext_resource type="Material" uid="uid://cfj2lar13vb43" path="res://effect/particle/material/environment/Water Splash Ripple.tres" id="27_lkocg"]
 [ext_resource type="Material" uid="uid://bi78t1ox4k8gl" path="res://area/1 sand oasis/boss/effect/material/Hit Spark.tres" id="28_a5ncv"]
 [ext_resource type="Material" uid="uid://b58kb6shymt58" path="res://area/1 sand oasis/boss/effect/material/Hit Splatter.tres" id="29_ytajl"]
-[ext_resource type="Script" path="res://object/trigger/modules/DialogTrigger.cs" id="30_wx5g0"]
+[ext_resource type="Script" uid="uid://bitgnn108jmaa" path="res://object/trigger/modules/DialogTrigger.cs" id="30_wx5g0"]
 [ext_resource type="AudioStream" uid="uid://hlgw036dtj12" path="res://sound/boss/sand scorpion/STG012_3.wav" id="31_8yspn"]
 [ext_resource type="AudioStream" uid="uid://be6i0yngksdow" path="res://sound/boss/sand scorpion/STG012_4.wav" id="32_vo6kn"]
 [ext_resource type="AudioStream" uid="uid://dp7cb1grirhyp" path="res://sound/boss/sand scorpion/STG012_5.wav" id="33_8pogv"]
@@ -70,6 +70,7 @@ emission_ring_axis = Vector3(0, 0, 1)
 emission_ring_height = 1.0
 emission_ring_radius = 2.0
 emission_ring_inner_radius = 1.0
+emission_ring_cone_angle = 90.0
 angle_max = 360.0
 direction = Vector3(0, 0, 1)
 initial_velocity_min = 5.0
@@ -108,12 +109,15 @@ xfade_time = 0.2
 xfade_curve = SubResource("Curve_ccwhf")
 input_0/name = "disabled"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "bite"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 input_2/name = "retreat"
 input_2/auto_advance = false
+input_2/break_loop_at_end = false
 input_2/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_54dah"]
@@ -431,7 +435,7 @@ gradient = SubResource("Gradient_uwf2q")
 width = 64
 
 [sub_resource type="Curve" id="Curve_ccsig"]
-max_value = 5.0
+_limits = [0.0, 5.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 61.2863, 0, 0, Vector2(0.2, 5), 0.0, 0.0, 0, 0, Vector2(1, 0), -14.077, 0.0, 0, 0]
 point_count = 3
 
@@ -566,6 +570,7 @@ emission_ring_axis = Vector3(0, 0, 1)
 emission_ring_height = 0.0
 emission_ring_radius = 0.1
 emission_ring_inner_radius = 0.1
+emission_ring_cone_angle = 90.0
 gravity = Vector3(0, 0, 0)
 attractor_interaction_enabled = false
 scale_min = 1.2
@@ -587,7 +592,7 @@ width = 64
 curve = SubResource("Curve_xpjk1")
 
 [sub_resource type="Curve" id="Curve_wbrxj"]
-max_value = 5.0
+_limits = [0.0, 5.0, 0.0, 1.0]
 _data = [Vector2(0, 0.0749371), 0.0, 16.2497, 0, 0, Vector2(0.5, 5), 0.0, 0.0, 0, 0]
 point_count = 2
 
@@ -673,12 +678,15 @@ animation = &"l-attack-heavy-start"
 xfade_time = 0.2
 input_0/name = "disabled"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "strike"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 input_2/name = "recovery"
 input_2/auto_advance = true
+input_2/break_loop_at_end = false
 input_2/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fl1c0"]
@@ -719,9 +727,11 @@ xfade_time = 0.5
 xfade_curve = SubResource("Curve_8jl1e")
 input_0/name = "enabled"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "disabled"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_wjd4q"]
@@ -779,12 +789,15 @@ animation = &"r-attack-heavy-start"
 xfade_time = 0.2
 input_0/name = "disabled"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "strike"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 input_2/name = "recovery"
 input_2/auto_advance = true
+input_2/break_loop_at_end = false
 input_2/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3os1l"]
@@ -825,9 +838,11 @@ xfade_time = 0.5
 xfade_curve = SubResource("Curve_nykdt")
 input_0/name = "enabled"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "disabled"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_m1chd"]
@@ -882,7 +897,7 @@ _data = [Vector2(0, 0), 0.0, 3.74218, 0, 0, Vector2(1, 1), 0.0350498, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_va8ub"]
-max_value = 2.0
+_limits = [0.0, 2.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 13.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
@@ -915,32 +930,32 @@ alpha_curve = SubResource("CurveTexture_whuyv")
 resource_name = "Shockwave_Shockwave"
 _surfaces = [{
 "aabb": AABB(-1.5, 0, -1.5, 3, 1, 3),
-"attribute_data": PackedByteArray(254, 255, 255, 62, 1, 0, 128, 63, 166, 0, 224, 62, 1, 0, 128, 63, 78, 1, 192, 62, 0, 0, 128, 63, 248, 1, 160, 62, 0, 0, 128, 63, 160, 2, 128, 62, 0, 0, 128, 63, 148, 6, 64, 62, 254, 255, 127, 63, 232, 7, 0, 62, 252, 255, 127, 63, 112, 18, 128, 61, 252, 255, 127, 63, 0, 128, 40, 56, 250, 255, 127, 63, 98, 253, 127, 63, 254, 255, 127, 63, 181, 253, 111, 63, 0, 0, 128, 63, 8, 254, 95, 63, 0, 0, 128, 63, 93, 254, 79, 63, 1, 0, 128, 63, 176, 254, 63, 63, 1, 0, 128, 63, 3, 255, 47, 63, 1, 0, 128, 63, 88, 255, 31, 63, 1, 0, 128, 63, 172, 255, 15, 63, 1, 0, 128, 63, 172, 255, 15, 63, 32, 215, 163, 60, 88, 255, 31, 63, 32, 215, 163, 60, 3, 255, 47, 63, 32, 215, 163, 60, 175, 254, 63, 63, 0, 215, 163, 60, 91, 254, 79, 63, 0, 215, 163, 60, 7, 254, 95, 63, 0, 215, 163, 60, 179, 253, 111, 63, 128, 214, 163, 60, 0, 64, 42, 56, 128, 214, 163, 60, 96, 253, 127, 63, 128, 214, 163, 60, 144, 18, 128, 61, 128, 214, 163, 60, 248, 7, 0, 62, 192, 214, 163, 60, 156, 6, 64, 62, 0, 215, 163, 60, 166, 2, 128, 62, 0, 215, 163, 60, 254, 1, 160, 62, 0, 215, 163, 60, 82, 1, 192, 62, 32, 215, 163, 60, 170, 0, 224, 62, 32, 215, 163, 60, 0, 0, 0, 63, 32, 215, 163, 60),
+"attribute_data": PackedByteArray("/v//PgEAgD+mAOA+AQCAP04BwD4AAIA/+AGgPgAAgD+gAoA+AACAP5QGQD7+/38/6AcAPvz/fz9wEoA9/P9/PwCAKDj6/38/Yv1/P/7/fz+1/W8/AACAPwj+Xz8AAIA/Xf5PPwEAgD+w/j8/AQCAPwP/Lz8BAIA/WP8fPwEAgD+s/w8/AQCAP6z/Dz8g16M8WP8fPyDXozwD/y8/INejPK/+Pz8A16M8W/5PPwDXozwH/l8/ANejPLP9bz+A1qM8AEAqOIDWozxg/X8/gNajPJASgD2A1qM8+AcAPsDWozycBkA+ANejPKYCgD4A16M8/gGgPgDXozxSAcA+INejPKoA4D4g16M8AAAAPyDXozw="),
 "format": 34359742487,
 "index_count": 96,
-"index_data": PackedByteArray(8, 0, 26, 0, 7, 0, 8, 0, 24, 0, 26, 0, 12, 0, 22, 0, 11, 0, 12, 0, 21, 0, 22, 0, 16, 0, 18, 0, 15, 0, 16, 0, 17, 0, 18, 0, 3, 0, 31, 0, 2, 0, 3, 0, 30, 0, 31, 0, 7, 0, 27, 0, 6, 0, 7, 0, 26, 0, 27, 0, 11, 0, 23, 0, 10, 0, 11, 0, 22, 0, 23, 0, 15, 0, 19, 0, 14, 0, 15, 0, 18, 0, 19, 0, 2, 0, 32, 0, 1, 0, 2, 0, 31, 0, 32, 0, 6, 0, 28, 0, 5, 0, 6, 0, 27, 0, 28, 0, 10, 0, 25, 0, 9, 0, 10, 0, 23, 0, 25, 0, 14, 0, 20, 0, 13, 0, 14, 0, 19, 0, 20, 0, 5, 0, 29, 0, 4, 0, 5, 0, 28, 0, 29, 0, 0, 0, 17, 0, 16, 0, 0, 0, 33, 0, 17, 0, 13, 0, 21, 0, 12, 0, 13, 0, 20, 0, 21, 0, 1, 0, 33, 0, 0, 0, 1, 0, 32, 0, 33, 0, 4, 0, 30, 0, 3, 0, 4, 0, 29, 0, 30, 0),
-"lods": [0.202665, PackedByteArray(8, 0, 26, 0, 6, 0, 8, 0, 24, 0, 26, 0, 6, 0, 26, 0, 28, 0, 6, 0, 28, 0, 30, 0, 6, 0, 30, 0, 2, 0, 2, 0, 30, 0, 32, 0, 2, 0, 32, 0, 19, 0, 2, 0, 19, 0, 15, 0, 15, 0, 19, 0, 23, 0, 15, 0, 23, 0, 11, 0, 11, 0, 23, 0, 25, 0, 11, 0, 25, 0, 9, 0), 0.729141, PackedByteArray(8, 0, 28, 0, 6, 0, 8, 0, 24, 0, 28, 0, 6, 0, 28, 0, 15, 0, 15, 0, 28, 0, 19, 0, 15, 0, 19, 0, 25, 0, 15, 0, 25, 0, 9, 0)],
+"index_data": PackedByteArray("CAAaAAcACAAYABoADAAWAAsADAAVABYAEAASAA8AEAARABIAAwAfAAIAAwAeAB8ABwAbAAYABwAaABsACwAXAAoACwAWABcADwATAA4ADwASABMAAgAgAAEAAgAfACAABgAcAAUABgAbABwACgAZAAkACgAXABkADgAUAA0ADgATABQABQAdAAQABQAcAB0AAAARABAAAAAhABEADQAVAAwADQAUABUAAQAhAAAAAQAgACEABAAeAAMABAAdAB4A"),
+"lods": [0.202665, PackedByteArray("CAAaAAYACAAYABoABgAaABwABgAcAB4ABgAeAAIAAgAeACAAAgAgABMAAgATAA8ADwATABcADwAXAAsACwAXABkACwAZAAkA"), 0.729141, PackedByteArray("CAAcAAYACAAYABwABgAcAA8ADwAcABMADwATABkADwAZAAkA")],
 "material": ExtResource("25_su3q3"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 34,
-"vertex_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 191, 22, 239, 195, 190, 0, 0, 0, 0, 94, 131, 108, 191, 243, 4, 53, 191, 0, 0, 0, 0, 243, 4, 53, 191, 94, 131, 108, 191, 0, 0, 0, 0, 22, 239, 195, 190, 0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 0, 128, 94, 131, 108, 191, 0, 0, 0, 0, 22, 239, 195, 62, 243, 4, 53, 191, 0, 0, 0, 0, 243, 4, 53, 63, 22, 239, 195, 190, 0, 0, 0, 0, 94, 131, 108, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 22, 239, 195, 62, 0, 0, 0, 0, 94, 131, 108, 63, 243, 4, 53, 63, 0, 0, 0, 0, 243, 4, 53, 63, 94, 131, 108, 63, 0, 0, 0, 0, 22, 239, 195, 62, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 128, 94, 131, 108, 63, 0, 0, 0, 0, 22, 239, 195, 190, 243, 4, 53, 63, 0, 0, 0, 0, 243, 4, 53, 191, 22, 239, 195, 62, 0, 0, 0, 0, 94, 131, 108, 191, 80, 243, 18, 63, 0, 0, 128, 63, 134, 98, 177, 191, 182, 195, 135, 63, 0, 0, 128, 63, 182, 195, 135, 191, 134, 98, 177, 63, 0, 0, 128, 63, 80, 243, 18, 191, 0, 0, 192, 63, 0, 0, 128, 63, 0, 0, 128, 49, 134, 98, 177, 63, 0, 0, 128, 63, 80, 243, 18, 63, 182, 195, 135, 63, 0, 0, 128, 63, 182, 195, 135, 63, 80, 243, 18, 63, 0, 0, 128, 63, 134, 98, 177, 63, 0, 0, 0, 50, 0, 0, 128, 63, 0, 0, 192, 63, 0, 0, 0, 50, 0, 0, 128, 63, 0, 0, 192, 63, 80, 243, 18, 191, 0, 0, 128, 63, 134, 98, 177, 63, 182, 195, 135, 191, 0, 0, 128, 63, 182, 195, 135, 63, 134, 98, 177, 191, 0, 0, 128, 63, 80, 243, 18, 63, 0, 0, 192, 191, 0, 0, 128, 63, 0, 0, 128, 49, 134, 98, 177, 191, 0, 0, 128, 63, 80, 243, 18, 191, 182, 195, 135, 191, 0, 0, 128, 63, 182, 195, 135, 191, 80, 243, 18, 191, 0, 0, 128, 63, 134, 98, 177, 191, 0, 0, 0, 50, 0, 0, 128, 63, 0, 0, 192, 191, 255, 127, 169, 170, 255, 255, 255, 191, 28, 155, 108, 163, 254, 255, 189, 210, 71, 175, 110, 161, 255, 255, 255, 223, 116, 193, 108, 163, 255, 255, 64, 237, 84, 213, 170, 170, 0, 0, 255, 255, 145, 220, 137, 190, 0, 0, 64, 237, 144, 222, 182, 208, 0, 0, 255, 223, 145, 220, 225, 228, 0, 0, 189, 210, 84, 213, 255, 255, 25, 9, 44, 185, 84, 213, 255, 255, 165, 13, 139, 196, 109, 35, 225, 228, 125, 37, 255, 191, 110, 33, 182, 208, 255, 63, 255, 191, 109, 35, 137, 190, 130, 90, 255, 191, 170, 42, 170, 170, 255, 127, 255, 191, 138, 62, 108, 163, 124, 165, 255, 191, 183, 80, 110, 161, 255, 191, 255, 191, 226, 100, 108, 163, 129, 218, 255, 191, 226, 100, 108, 163, 129, 218, 255, 191, 183, 80, 110, 161, 255, 191, 255, 191, 138, 62, 108, 163, 124, 165, 255, 191, 170, 42, 170, 170, 255, 127, 255, 191, 109, 35, 137, 190, 130, 90, 255, 191, 110, 33, 182, 208, 255, 63, 255, 191, 109, 35, 225, 228, 125, 37, 255, 191, 84, 213, 255, 255, 25, 9, 44, 185, 84, 213, 255, 255, 165, 13, 139, 196, 145, 220, 225, 228, 0, 0, 189, 210, 144, 222, 182, 208, 0, 0, 255, 223, 145, 220, 137, 190, 0, 0, 64, 237, 84, 213, 170, 170, 0, 0, 255, 255, 116, 193, 108, 163, 255, 255, 64, 237, 71, 175, 110, 161, 255, 255, 255, 223, 28, 155, 108, 163, 255, 255, 189, 210, 255, 127, 169, 170, 255, 255, 255, 191)
+"vertex_data": PackedByteArray("AAAAAAAAAAAAAIC/Fu/DvgAAAABeg2y/8wQ1vwAAAADzBDW/XoNsvwAAAAAW78O+AACAvwAAAAAAAACAXoNsvwAAAAAW78M+8wQ1vwAAAADzBDU/Fu/DvgAAAABeg2w/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/Fu/DPgAAAABeg2w/8wQ1PwAAAADzBDU/XoNsPwAAAAAW78M+AACAPwAAAAAAAACAXoNsPwAAAAAW78O+8wQ1PwAAAADzBDW/Fu/DPgAAAABeg2y/UPMSPwAAgD+GYrG/tsOHPwAAgD+2w4e/hmKxPwAAgD9Q8xK/AADAPwAAgD8AAIAxhmKxPwAAgD9Q8xI/tsOHPwAAgD+2w4c/UPMSPwAAgD+GYrE/AAAAMgAAgD8AAMA/AAAAMgAAgD8AAMA/UPMSvwAAgD+GYrE/tsOHvwAAgD+2w4c/hmKxvwAAgD9Q8xI/AADAvwAAgD8AAIAxhmKxvwAAgD9Q8xK/tsOHvwAAgD+2w4e/UPMSvwAAgD+GYrG/AAAAMgAAgD8AAMC//3+pqv///78cm2yj/v+90kevbqH////fdMFso///QO1U1aqqAAD//5Hcib4AAEDtkN620AAA/9+R3OHkAAC90lTV//8ZCSy5VNX//6UNi8RtI+HkfSX/v24httD/P/+/bSOJvoJa/7+qKqqq/3//v4o+bKN8pf+/t1Buof+//7/iZGyjgdr/v+JkbKOB2v+/t1Buof+//7+KPmyjfKX/v6oqqqr/f/+/bSOJvoJa/79uIbbQ/z//v20j4eR9Jf+/VNX//xkJLLlU1f//pQ2LxJHc4eQAAL3SkN620AAA/9+R3Im+AABA7VTVqqoAAP//dMFso///QO1Hr26h////3xybbKP//73S/3+pqv///78=")
 }]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_puyoe"]
 resource_name = "Shockwave_ShockwaveFlat"
 _surfaces = [{
 "aabb": AABB(-1.8, 0, -1.8, 3.6, 0.5, 3.6),
-"attribute_data": PackedByteArray(254, 255, 255, 62, 1, 0, 128, 63, 166, 0, 224, 62, 1, 0, 128, 63, 78, 1, 192, 62, 0, 0, 128, 63, 248, 1, 160, 62, 0, 0, 128, 63, 160, 2, 128, 62, 0, 0, 128, 63, 148, 6, 64, 62, 254, 255, 127, 63, 232, 7, 0, 62, 252, 255, 127, 63, 112, 18, 128, 61, 252, 255, 127, 63, 0, 128, 40, 56, 250, 255, 127, 63, 98, 253, 127, 63, 254, 255, 127, 63, 181, 253, 111, 63, 0, 0, 128, 63, 8, 254, 95, 63, 0, 0, 128, 63, 93, 254, 79, 63, 1, 0, 128, 63, 176, 254, 63, 63, 1, 0, 128, 63, 3, 255, 47, 63, 1, 0, 128, 63, 88, 255, 31, 63, 1, 0, 128, 63, 172, 255, 15, 63, 1, 0, 128, 63, 172, 255, 15, 63, 32, 215, 163, 60, 88, 255, 31, 63, 32, 215, 163, 60, 3, 255, 47, 63, 32, 215, 163, 60, 175, 254, 63, 63, 0, 215, 163, 60, 91, 254, 79, 63, 0, 215, 163, 60, 7, 254, 95, 63, 0, 215, 163, 60, 179, 253, 111, 63, 128, 214, 163, 60, 0, 64, 42, 56, 128, 214, 163, 60, 96, 253, 127, 63, 128, 214, 163, 60, 144, 18, 128, 61, 128, 214, 163, 60, 248, 7, 0, 62, 192, 214, 163, 60, 156, 6, 64, 62, 0, 215, 163, 60, 166, 2, 128, 62, 0, 215, 163, 60, 254, 1, 160, 62, 0, 215, 163, 60, 82, 1, 192, 62, 32, 215, 163, 60, 170, 0, 224, 62, 32, 215, 163, 60, 0, 0, 0, 63, 32, 215, 163, 60, 3, 255, 47, 63, 32, 215, 163, 60, 78, 1, 192, 62, 0, 0, 128, 63, 232, 7, 0, 62, 252, 255, 127, 63, 88, 255, 31, 63, 1, 0, 128, 63, 3, 255, 47, 63, 32, 215, 163, 60, 170, 0, 224, 62, 32, 215, 163, 60),
+"attribute_data": PackedByteArray("/v//PgEAgD+mAOA+AQCAP04BwD4AAIA/+AGgPgAAgD+gAoA+AACAP5QGQD7+/38/6AcAPvz/fz9wEoA9/P9/PwCAKDj6/38/Yv1/P/7/fz+1/W8/AACAPwj+Xz8AAIA/Xf5PPwEAgD+w/j8/AQCAPwP/Lz8BAIA/WP8fPwEAgD+s/w8/AQCAP6z/Dz8g16M8WP8fPyDXozwD/y8/INejPK/+Pz8A16M8W/5PPwDXozwH/l8/ANejPLP9bz+A1qM8AEAqOIDWozxg/X8/gNajPJASgD2A1qM8+AcAPsDWozycBkA+ANejPKYCgD4A16M8/gGgPgDXozxSAcA+INejPKoA4D4g16M8AAAAPyDXozwD/y8/INejPE4BwD4AAIA/6AcAPvz/fz9Y/x8/AQCAPwP/Lz8g16M8qgDgPiDXozw="),
 "format": 34359742487,
 "index_count": 96,
-"index_data": PackedByteArray(8, 0, 26, 0, 24, 0, 8, 0, 7, 0, 26, 0, 12, 0, 22, 0, 21, 0, 12, 0, 11, 0, 22, 0, 16, 0, 18, 0, 17, 0, 16, 0, 15, 0, 18, 0, 3, 0, 31, 0, 30, 0, 3, 0, 2, 0, 31, 0, 7, 0, 27, 0, 26, 0, 7, 0, 6, 0, 27, 0, 11, 0, 23, 0, 22, 0, 11, 0, 10, 0, 23, 0, 15, 0, 19, 0, 18, 0, 15, 0, 14, 0, 19, 0, 2, 0, 32, 0, 31, 0, 2, 0, 1, 0, 32, 0, 6, 0, 28, 0, 27, 0, 6, 0, 5, 0, 28, 0, 10, 0, 25, 0, 23, 0, 10, 0, 9, 0, 25, 0, 14, 0, 20, 0, 19, 0, 14, 0, 13, 0, 20, 0, 5, 0, 29, 0, 28, 0, 5, 0, 4, 0, 29, 0, 0, 0, 17, 0, 33, 0, 0, 0, 16, 0, 17, 0, 13, 0, 21, 0, 20, 0, 13, 0, 12, 0, 21, 0, 1, 0, 33, 0, 32, 0, 1, 0, 0, 0, 33, 0, 4, 0, 30, 0, 29, 0, 4, 0, 3, 0, 30, 0),
-"lods": [0.140218, PackedByteArray(8, 0, 26, 0, 24, 0, 8, 0, 6, 0, 26, 0, 6, 0, 28, 0, 26, 0, 6, 0, 4, 0, 28, 0, 4, 0, 30, 0, 28, 0, 4, 0, 2, 0, 30, 0, 2, 0, 32, 0, 30, 0, 2, 0, 1, 0, 32, 0, 1, 0, 33, 0, 32, 0, 1, 0, 0, 0, 33, 0, 0, 0, 17, 0, 33, 0, 0, 0, 15, 0, 17, 0, 15, 0, 19, 0, 17, 0, 15, 0, 13, 0, 19, 0, 13, 0, 21, 0, 19, 0, 13, 0, 11, 0, 21, 0, 11, 0, 23, 0, 21, 0, 11, 0, 10, 0, 23, 0, 10, 0, 25, 0, 23, 0, 10, 0, 9, 0, 25, 0), 0.323304, PackedByteArray(8, 0, 28, 0, 24, 0, 8, 0, 36, 0, 28, 0, 36, 0, 39, 0, 28, 0, 36, 0, 35, 0, 39, 0, 35, 0, 38, 0, 39, 0, 35, 0, 37, 0, 38, 0, 37, 0, 23, 0, 38, 0, 37, 0, 11, 0, 23, 0, 11, 0, 25, 0, 23, 0, 11, 0, 9, 0, 25, 0), 1.24253, PackedByteArray(8, 0, 28, 0, 24, 0, 8, 0, 11, 0, 28, 0, 11, 0, 19, 0, 28, 0, 11, 0, 9, 0, 25, 0, 11, 0, 25, 0, 34, 0)],
+"index_data": PackedByteArray("CAAaABgACAAHABoADAAWABUADAALABYAEAASABEAEAAPABIAAwAfAB4AAwACAB8ABwAbABoABwAGABsACwAXABYACwAKABcADwATABIADwAOABMAAgAgAB8AAgABACAABgAcABsABgAFABwACgAZABcACgAJABkADgAUABMADgANABQABQAdABwABQAEAB0AAAARACEAAAAQABEADQAVABQADQAMABUAAQAhACAAAQAAACEABAAeAB0ABAADAB4A"),
+"lods": [0.140218, PackedByteArray("CAAaABgACAAGABoABgAcABoABgAEABwABAAeABwABAACAB4AAgAgAB4AAgABACAAAQAhACAAAQAAACEAAAARACEAAAAPABEADwATABEADwANABMADQAVABMADQALABUACwAXABUACwAKABcACgAZABcACgAJABkA"), 0.323304, PackedByteArray("CAAcABgACAAkABwAJAAnABwAJAAjACcAIwAmACcAIwAlACYAJQAXACYAJQALABcACwAZABcACwAJABkA"), 1.24253, PackedByteArray("CAAcABgACAALABwACwATABwACwAJABkACwAZACIA")],
 "material": ExtResource("25_su3q3"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 40,
-"vertex_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 154, 153, 153, 191, 231, 30, 235, 190, 0, 0, 0, 0, 107, 232, 141, 191, 35, 57, 89, 191, 0, 0, 0, 0, 35, 57, 89, 191, 107, 232, 141, 191, 0, 0, 0, 0, 231, 30, 235, 190, 154, 153, 153, 191, 0, 0, 0, 0, 0, 0, 0, 128, 107, 232, 141, 191, 0, 0, 0, 0, 231, 30, 235, 62, 35, 57, 89, 191, 0, 0, 0, 0, 35, 57, 89, 63, 231, 30, 235, 190, 0, 0, 0, 0, 107, 232, 141, 63, 0, 0, 0, 0, 0, 0, 0, 0, 154, 153, 153, 63, 0, 0, 0, 0, 0, 0, 0, 0, 154, 153, 153, 63, 231, 30, 235, 62, 0, 0, 0, 0, 107, 232, 141, 63, 35, 57, 89, 63, 0, 0, 0, 0, 35, 57, 89, 63, 107, 232, 141, 63, 0, 0, 0, 0, 231, 30, 235, 62, 154, 153, 153, 63, 0, 0, 0, 0, 0, 0, 0, 128, 107, 232, 141, 63, 0, 0, 0, 0, 231, 30, 235, 190, 35, 57, 89, 63, 0, 0, 0, 0, 35, 57, 89, 191, 231, 30, 235, 62, 0, 0, 0, 0, 107, 232, 141, 191, 45, 87, 48, 63, 0, 0, 0, 63, 160, 220, 212, 191, 219, 234, 162, 63, 0, 0, 0, 63, 219, 234, 162, 191, 160, 220, 212, 63, 0, 0, 0, 63, 45, 87, 48, 191, 103, 102, 230, 63, 0, 0, 0, 63, 154, 153, 153, 49, 160, 220, 212, 63, 0, 0, 0, 63, 45, 87, 48, 63, 219, 234, 162, 63, 0, 0, 0, 63, 219, 234, 162, 63, 45, 87, 48, 63, 0, 0, 0, 63, 160, 220, 212, 63, 154, 153, 25, 50, 0, 0, 0, 63, 103, 102, 230, 63, 154, 153, 25, 50, 0, 0, 0, 63, 103, 102, 230, 63, 45, 87, 48, 191, 0, 0, 0, 63, 160, 220, 212, 63, 219, 234, 162, 191, 0, 0, 0, 63, 219, 234, 162, 63, 160, 220, 212, 191, 0, 0, 0, 63, 45, 87, 48, 63, 103, 102, 230, 191, 0, 0, 0, 63, 154, 153, 153, 49, 160, 220, 212, 191, 0, 0, 0, 63, 45, 87, 48, 191, 219, 234, 162, 191, 0, 0, 0, 63, 219, 234, 162, 191, 45, 87, 48, 191, 0, 0, 0, 63, 160, 220, 212, 191, 154, 153, 25, 50, 0, 0, 0, 63, 103, 102, 230, 191, 160, 220, 212, 63, 0, 0, 0, 63, 45, 87, 48, 191, 35, 57, 89, 191, 0, 0, 0, 0, 35, 57, 89, 191, 35, 57, 89, 191, 0, 0, 0, 0, 35, 57, 89, 63, 35, 57, 89, 63, 0, 0, 0, 0, 35, 57, 89, 191, 160, 220, 212, 63, 0, 0, 0, 63, 45, 87, 48, 191, 45, 87, 48, 191, 0, 0, 0, 63, 160, 220, 212, 191, 209, 69, 0, 0, 255, 255, 255, 63, 71, 61, 138, 19, 255, 255, 65, 45, 193, 58, 159, 34, 255, 255, 255, 31, 71, 61, 45, 47, 255, 255, 190, 18, 209, 69, 46, 58, 0, 0, 0, 0, 209, 80, 184, 66, 0, 0, 190, 18, 96, 93, 62, 69, 0, 0, 255, 31, 116, 108, 184, 66, 0, 0, 65, 45, 255, 127, 46, 58, 77, 10, 85, 75, 255, 127, 46, 58, 171, 22, 216, 58, 138, 147, 184, 66, 125, 37, 255, 63, 158, 162, 62, 69, 255, 63, 255, 63, 45, 175, 184, 66, 130, 90, 255, 63, 45, 186, 46, 58, 255, 127, 255, 63, 183, 194, 45, 47, 124, 165, 255, 63, 61, 197, 159, 34, 255, 191, 255, 63, 183, 194, 138, 19, 129, 218, 255, 63, 183, 194, 138, 19, 129, 218, 255, 63, 61, 197, 159, 34, 255, 191, 255, 63, 183, 194, 45, 47, 124, 165, 255, 63, 45, 186, 46, 58, 255, 127, 255, 63, 45, 175, 184, 66, 130, 90, 255, 63, 158, 162, 62, 69, 255, 63, 255, 63, 138, 147, 184, 66, 125, 37, 255, 63, 255, 127, 46, 58, 77, 10, 85, 75, 255, 127, 46, 58, 171, 22, 216, 58, 116, 108, 184, 66, 0, 0, 65, 45, 96, 93, 62, 69, 0, 0, 255, 31, 209, 80, 184, 66, 0, 0, 190, 18, 209, 69, 46, 58, 0, 0, 0, 0, 71, 61, 45, 47, 255, 255, 190, 18, 193, 58, 159, 34, 255, 255, 255, 31, 71, 61, 138, 19, 255, 255, 65, 45, 45, 186, 0, 0, 255, 255, 255, 63, 182, 171, 176, 66, 124, 165, 255, 63, 105, 67, 243, 18, 255, 255, 255, 31, 71, 82, 189, 60, 0, 0, 255, 31, 110, 186, 21, 40, 255, 191, 255, 63, 114, 190, 61, 30, 124, 165, 255, 63, 81, 65, 56, 36, 255, 255, 65, 45)
+"vertex_data": PackedByteArray("AAAAAAAAAACamZm/5x7rvgAAAABr6I2/IzlZvwAAAAAjOVm/a+iNvwAAAADnHuu+mpmZvwAAAAAAAACAa+iNvwAAAADnHus+IzlZvwAAAAAjOVk/5x7rvgAAAABr6I0/AAAAAAAAAACamZk/AAAAAAAAAACamZk/5x7rPgAAAABr6I0/IzlZPwAAAAAjOVk/a+iNPwAAAADnHus+mpmZPwAAAAAAAACAa+iNPwAAAADnHuu+IzlZPwAAAAAjOVm/5x7rPgAAAABr6I2/LVcwPwAAAD+g3NS/2+qiPwAAAD/b6qK/oNzUPwAAAD8tVzC/Z2bmPwAAAD+amZkxoNzUPwAAAD8tVzA/2+qiPwAAAD/b6qI/LVcwPwAAAD+g3NQ/mpkZMgAAAD9nZuY/mpkZMgAAAD9nZuY/LVcwvwAAAD+g3NQ/2+qivwAAAD/b6qI/oNzUvwAAAD8tVzA/Z2bmvwAAAD+amZkxoNzUvwAAAD8tVzC/2+qivwAAAD/b6qK/LVcwvwAAAD+g3NS/mpkZMgAAAD9nZua/oNzUPwAAAD8tVzC/IzlZvwAAAAAjOVm/IzlZvwAAAAAjOVk/IzlZPwAAAAAjOVm/oNzUPwAAAD8tVzC/LVcwvwAAAD+g3NS/0UUAAP///z9HPYoT//9BLcE6nyL///8fRz0tL///vhLRRS46AAAAANFQuEIAAL4SYF0+RQAA/x90bLhCAABBLf9/LjpNClVL/38uOqsW2DqKk7hCfSX/P56iPkX/P/8/La+4QoJa/z8tui46/3//P7fCLS98pf8/PcWfIv+//z+3wooTgdr/P7fCihOB2v8/PcWfIv+//z+3wi0vfKX/Py26Ljr/f/8/La+4QoJa/z+eoj5F/z//P4qTuEJ9Jf8//38uOk0KVUv/fy46qxbYOnRsuEIAAEEtYF0+RQAA/x/RULhCAAC+EtFFLjoAAAAARz0tL///vhLBOp8i////H0c9ihP//0EtLboAAP///z+2q7BCfKX/P2lD8xL///8fR1K9PAAA/x9uuhUo/7//P3K+PR58pf8/UUE4JP//QS0=")
 }]
 
 [sub_resource type="Gradient" id="Gradient_30qe7"]
@@ -1019,7 +1034,7 @@ width = 64
 curve = SubResource("Curve_hlcn1")
 
 [sub_resource type="Curve" id="Curve_sanu8"]
-max_value = 2.0
+_limits = [0.0, 2.0, 0.0, 1.0]
 _data = [Vector2(0, 0.4), 0.0, 3.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
 point_count = 2
 
@@ -1136,9 +1151,11 @@ xfade_time = 0.2
 xfade_curve = SubResource("Curve_0clkj")
 input_0/name = "disabled"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "enabled"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tmtda"]
@@ -2709,19 +2726,19 @@ tracks/5/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6oscl"]
 _data = {
-"RESET": SubResource("Animation_74b1e"),
-"cage": SubResource("Animation_r2wq4"),
-"damage": SubResource("Animation_7vnlo"),
-"defeat": SubResource("Animation_8nbtn"),
-"disable-hurtbox-01": SubResource("Animation_yiv12"),
-"disable-hurtbox-02": SubResource("Animation_vg5tu"),
-"disable-hurtbox-03": SubResource("Animation_pyyk2"),
-"finish-defeat": SubResource("Animation_26xm2"),
-"finish-intro": SubResource("Animation_l8rgh"),
-"l-heavy-attack": SubResource("Animation_yw0g7"),
-"l-light-attack": SubResource("Animation_6u87m"),
-"r-heavy-attack": SubResource("Animation_qhi1d"),
-"r-light-attack": SubResource("Animation_7ofif")
+&"RESET": SubResource("Animation_74b1e"),
+&"cage": SubResource("Animation_r2wq4"),
+&"damage": SubResource("Animation_7vnlo"),
+&"defeat": SubResource("Animation_8nbtn"),
+&"disable-hurtbox-01": SubResource("Animation_yiv12"),
+&"disable-hurtbox-02": SubResource("Animation_vg5tu"),
+&"disable-hurtbox-03": SubResource("Animation_pyyk2"),
+&"finish-defeat": SubResource("Animation_26xm2"),
+&"finish-intro": SubResource("Animation_l8rgh"),
+&"l-heavy-attack": SubResource("Animation_yw0g7"),
+&"l-light-attack": SubResource("Animation_6u87m"),
+&"r-heavy-attack": SubResource("Animation_qhi1d"),
+&"r-light-attack": SubResource("Animation_7ofif")
 }
 
 [node name="SandScorpion" type="Node3D" node_paths=PackedStringArray("cutsceneCamera", "hitDialogs", "hintDialogs", "rootAnimationTree", "lTailAnimationTree", "rTailAnimationTree", "flyingEyeAnimationTree", "eventAnimator", "impactEffect", "hitEffect", "flyingEyeVFX", "mainEyes", "tailEyes", "flyingEyeHitbox", "flyingEyeRoot", "flyingEyeBone")]

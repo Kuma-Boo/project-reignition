@@ -47,10 +47,8 @@ public partial class FlowerMajin : Enemy
 	}
 
 	/// <summary> Allow the player to force the flower majin out of it's passive state? </summary>
-	[Export]
-	private bool weakDefense;
-	[Export]
-	private PackedScene seed;
+	[Export] private bool weakDefense;
+	[Export] private PackedScene seed;
 	private int seedIndex;
 	private const int MaxSeedCount = 3;
 	/// <summary> Only three seeds are ever spawned at a time. </summary>
@@ -141,7 +139,7 @@ public partial class FlowerMajin : Enemy
 				Player.StartBounce(false);
 				UpdateLockon();
 
-				if (weakDefense)
+				if (weakDefense || Player.AttackState == PlayerController.AttackStates.Strong)
 					StartStaggerState();
 				else
 					EmitSignal(SignalName.Deflect);

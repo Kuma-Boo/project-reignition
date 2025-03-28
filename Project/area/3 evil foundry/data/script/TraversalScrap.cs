@@ -22,7 +22,7 @@ public partial class TraversalScrap : Area3D
 
 	public override void _Ready()
 	{
-		spawnData = new SpawnData(GetParent(), Transform);
+		spawnData = new(GetParent(), Transform);
 
 		_animator = GetNode<AnimationPlayer>(animator);
 		_animator.Play("init");

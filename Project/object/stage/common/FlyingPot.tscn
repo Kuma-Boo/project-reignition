@@ -1,7 +1,7 @@
 [gd_scene load_steps=49 format=3 uid="uid://153wwjnd7nv6"]
 
 [ext_resource type="PackedScene" uid="uid://dbyn2iyw87kug" path="res://object/stage/common/resource/model/FlyingPot.gltf" id="1"]
-[ext_resource type="Script" path="res://object/stage/common/resource/script/FlyingPot.cs" id="2"]
+[ext_resource type="Script" uid="uid://cnoeetlb03upm" path="res://object/stage/common/resource/script/FlyingPot.cs" id="2"]
 [ext_resource type="Resource" uid="uid://mdlg0ek0ee5v" path="res://resource/preset/camera/object/FlyingPotCam.tres" id="2_gdkjt"]
 [ext_resource type="Material" uid="uid://drgtm3le1tx81" path="res://object/stage/common/resource/model/material/Flying Pot Feather.tres" id="4_dhjjw"]
 [ext_resource type="Material" uid="uid://hpb2xgpvq2l4" path="res://object/stage/common/resource/model/material/Flying Pot Dust.tres" id="6_e2e4l"]
@@ -138,7 +138,7 @@ gradient = SubResource("Gradient_spk85")
 width = 64
 
 [sub_resource type="Curve" id="Curve_3mcfs"]
-max_value = 2.0
+_limits = [0.0, 2.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 2.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
 point_count = 2
 
@@ -180,9 +180,11 @@ animation = &"pot-fall"
 xfade_time = 0.2
 input_0/name = "disabled"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "enabled"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yusvq"]
@@ -343,8 +345,8 @@ tracks/5/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hb8l8"]
 _data = {
-"RESET": SubResource("Animation_f1hvo"),
-"shatter": SubResource("Animation_gp4pg")
+&"RESET": SubResource("Animation_f1hvo"),
+&"shatter": SubResource("Animation_gp4pg")
 }
 
 [node name="FlyingPot" type="Node3D" node_paths=PackedStringArray("root", "lockonArea", "environmentCollider", "animationTree", "interactionAnimator", "enterSFX", "exitSFX")]

@@ -93,9 +93,9 @@ public partial class PathTraveller : Node3D
 		pathFollower.Progress = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition);
 		startingProgress = pathFollower.Progress;
 		startingOffset = pathFollower.GlobalBasis.Inverse() * (GlobalPosition - pathFollower.GlobalPosition);
-		spawnData = new SpawnData(GetParent(), Transform); // Create spawn data
+		spawnData = new(GetParent(), Transform); // Create spawn data
 
-		StageSettings.Instance.ConnectRespawnSignal(this);
+		StageSettings.Instance.Respawned += Respawn;
 		Respawn();
 	}
 

@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://ci8d3jdqrc0nr"]
+
+[ext_resource type="Script" path="res://area/4 levitated ruin/data/script/Ivy.cs" id="1_3x35n"]
+[ext_resource type="PackedScene" uid="uid://bhyhksqbx12de" path="res://area/4 levitated ruin/object/model/special/IvyBase.gltf" id="1_mnuw2"]
+[ext_resource type="PackedScene" uid="uid://loro11gywkcy" path="res://area/4 levitated ruin/object/model/special/IvyLink.gltf" id="2_17bjr"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bxmnq"]
+height = 1.5
+
+[node name="Ivy" type="Node3D" node_paths=PackedStringArray("launchPoint")]
+script = ExtResource("1_3x35n")
+"Secondary Settings/Enabled" = true
+"Secondary Settings/Middle Height" = 4.0
+"Secondary Settings/Final Height" = 3.0
+"Secondary Settings/Distance" = 5.0
+"Secondary Settings/Blend" = 0.0
+length = 5
+maxRotation = 45.0
+ivyScene = ExtResource("2_17bjr")
+finalHeight = 2.0
+allowJumpDashing = true
+recenterSpeed = 0
+sfxPlayer = NodePath("")
+voiceKey = &""
+launchPoint = NodePath("Lockon")
+ignoreLaunchPointRotation = true
+
+[node name="IvyBase" parent="." instance=ExtResource("1_mnuw2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+
+[node name="Lockon" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.5, 0)
+collision_layer = 12
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lockon"]
+shape = SubResource("CapsuleShape3D_bxmnq")
+
+[connection signal="area_entered" from="Lockon" to="." method="OnEntered"]

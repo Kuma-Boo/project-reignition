@@ -3,9 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://skx536edn7yd" path="res://area/1 sand oasis/act 2/Static.tscn" id="1_bisxc"]
 [ext_resource type="Resource" uid="uid://dvnuufmf05gc4" path="res://resource/level data/sand oasis/Act2Time.tres" id="2_82tvw"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_fyywe"]
-[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="4_j40le"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="4_j40le"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_kds4s"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_hejx8"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_hejx8"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_a2050"]
 [ext_resource type="PackedScene" uid="uid://chwt62jenntgq" path="res://area/1 sand oasis/object/grindrail/Grindrail03.tscn" id="7_0gntm"]
 [ext_resource type="PackedScene" uid="uid://dsms0ivmnpaq8" path="res://area/1 sand oasis/object/Jar.tscn" id="7_4ap88"]
@@ -18,8 +18,8 @@
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="13_lhs2t"]
 [ext_resource type="PackedScene" uid="uid://c0wwow83r4jry" path="res://object/enemy/majin/data/sand oasis/BlueMajin.tscn" id="14_xhs4f"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="15_uj0tw"]
-[ext_resource type="Script" path="res://object/trigger/modules/PathTrigger.cs" id="16_d5ycc"]
-[ext_resource type="Script" path="res://object/trigger/modules/CameraTrigger.cs" id="17_cssad"]
+[ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="16_d5ycc"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="17_cssad"]
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="17_j1qhp"]
 [ext_resource type="Resource" uid="uid://cm5dcqw8kt7d1" path="res://area/1 sand oasis/act 2/camera/IslandCam.tres" id="18_leqpa"]
 [ext_resource type="PackedScene" uid="uid://cyabnlg7vd3v6" path="res://area/1 sand oasis/object/grindrail/Grindrail04.tscn" id="19_db57d"]
@@ -46,6 +46,12 @@ size = Vector3(36.9868, 12.769, 2.27792)
 [node name="Static" parent="." instance=ExtResource("1_bisxc")]
 Data = ExtResource("2_82tvw")
 metadata/_edit_lock_ = true
+
+[node name="ObjectLighting" parent="Static/Visuals/Lighting" index="1"]
+light_cull_mask = 4293918784
+
+[node name="InteriorLighting" parent="Static/Visuals/Lighting" index="2"]
+light_cull_mask = 4293918724
 
 [node name="TimedAct" type="Node3D" parent="."]
 
@@ -1373,4 +1379,6 @@ shape = SubResource("BoxShape3D_hqpy5")
 [connection signal="Defeated" from="TimedAct/Forest/RedMajin" to="TimedAct/Forest/EnemyStone6" method="IncrementCounter"]
 
 [editable path="Static"]
+[editable path="Static/Visuals/Skybox"]
 [editable path="Static/CompletionDemo"]
+[editable path="Static/PlanarReflectionRenderer"]

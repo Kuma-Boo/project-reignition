@@ -87,7 +87,8 @@ public partial class ExperienceResult : Control
 	{
 		SaveManager.ActiveGameData.level = CalculateLevel(SaveManager.ActiveGameData.exp); // Update from old save data, just in case
 		SaveManager.ActiveGameData.level = Mathf.Min(SaveManager.ActiveGameData.level, MaxLevel);
-		useMissionExp = SaveManager.ActiveGameData.GetClearStatus(Stage.Data.LevelID) != SaveManager.GameData.LevelStatus.Cleared;
+		useMissionExp = Stage.LevelState == StageSettings.LevelStateEnum.Success &&
+			SaveManager.ActiveGameData.GetClearStatus(Stage.Data.LevelID) != SaveManager.GameData.LevelStatus.Cleared;
 		useAccumulatedExp = AccumulatedExp != 0;
 	}
 
@@ -289,7 +290,7 @@ public partial class ExperienceResult : Control
 
 		if (useMissionExp) // Add mission bonus
 		{
-			if (Stage.LevelState == StageSettings.LevelStateEnum.Failed) // Don't add mission exp when player fails a level
+			if (Stage.LevelState != StageSettings.LevelStateEnum.Success) // Only add mission exp if the stage was completed 
 				useMissionExp = false;
 			else
 				targetExp += Stage.Data.FirstClearBonus;

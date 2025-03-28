@@ -137,6 +137,12 @@ public partial class TimedHazard : Hazard
 
 		currentStateIndex = Mathf.Clamp(currentStateIndex, 0, stateNames.Count);
 		Interface.Countdown.Instance.CountdownFinished += StartHazard;
+
+		if (!autoAdvance)
+		{
+			Animator.Play(stateNames[currentStateIndex]);
+			Animator.Advance(Animator.CurrentAnimationLength);
+		}
 	}
 
 	private void StartHazard()

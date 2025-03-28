@@ -17,9 +17,9 @@ namespace Project.CustomNodes
 
 		public enum LoopMode
 		{
-			STOP, // Stop after the final frame
-			LOOP, // Loop indefinitely
-			RETURN // Return to the first frame
+			Stop, // Stop after the final frame
+			Loop, // Loop indefinitely
+			Return // Return to the first frame
 		}
 
 		[Export(PropertyHint.Range, "0, 60")]
@@ -51,10 +51,10 @@ namespace Project.CustomNodes
 			{
 				switch (loopMode)
 				{
-					case LoopMode.LOOP: // Loop back to the beginning
+					case LoopMode.Loop: // Loop back to the beginning
 						Frame = 0;
 						break;
-					case LoopMode.RETURN: // Return to the first frame
+					case LoopMode.Return: // Return to the first frame
 						Frame = 0;
 						playing = false;
 						break;

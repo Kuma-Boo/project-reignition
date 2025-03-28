@@ -13,13 +13,19 @@ public partial class CameraTrigger : StageTriggerModule
 	/// <summary> Override to have a different blend time during deactivation. </summary>
 	[Export(PropertyHint.Range, "-1,2,0.1")]
 	public float deactivationTransitionTime = -1f;
+
+	/// <summary> Set this to a non-zero value to use distance blending. </summary>
+	[Export(PropertyHint.Range, "0,50,1")]
+	public int distanceBlending;
+	public bool UseDistanceBlending => distanceBlending != 0;
+
 	[Export] public CameraTransitionType transitionType;
 	[Export] public bool enableInputBlending;
 
 	/// <summary> Must be assigned to something. </summary>
 	[Export] public CameraSettingsResource settings;
 	/// <summary> Reference to the camera data that was being used when this trigger was entered. </summary>
-	[Export] private CameraSettingsResource previousSettings;
+	[Export] public CameraSettingsResource previousSettings;
 
 	[ExportGroup("Transform Overrides")]
 	/// <summary> Update positions and rotations every frame? </summary>
@@ -75,6 +81,18 @@ public partial class CameraTrigger : StageTriggerModule
 			cachedPreviousSettings = true;
 		}
 
+		if (UseDistanceBlending)
+		{
+			// Ensure we add the previous camera settings so we have something to blend with
+			Camera.UpdateCameraSettings(new()
+			{
+				BlendTime = transitionTime,
+				SettingsResource = previousSettings,
+				TransitionType = transitionType,
+				Trigger = this
+			}, enableInputBlending);
+		}
+
 		Camera.UpdateCameraSettings(new()
 		{
 			BlendTime = transitionTime,
@@ -104,5 +122,18 @@ public partial class CameraTrigger : StageTriggerModule
 			Position = previousStaticPosition, // Restore cached static position
 			RotationBasis = previousStaticRotation // Restore cached static rotation
 		}, enableInputBlending);
+	}
+
+	public float CalculateInfluence()
+	{
+		if (Mathf.IsZeroApprox(distanceBlending))
+		{
+			GD.PushWarning("Warning: ActiveCameraSettings distance amount is 0.");
+			return 1f;
+		}
+
+		float playerProgress = Camera.PathFollower.Progress;
+		float triggerProgress = Camera.PathFollower.GetProgress(GlobalPosition);
+		return Mathf.SmoothStep(0f, 1f, Mathf.Clamp((playerProgress - triggerProgress) / distanceBlending, 0f, 1f));
 	}
 }

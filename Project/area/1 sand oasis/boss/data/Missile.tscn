@@ -1,13 +1,13 @@
 [gd_scene load_steps=37 format=3 uid="uid://b8irusmhs8rjm"]
 
-[ext_resource type="Script" path="res://area/1 sand oasis/data/script/Missile.cs" id="1_1rlvb"]
+[ext_resource type="Script" uid="uid://01bsn0f21qa0" path="res://area/1 sand oasis/data/script/Missile.cs" id="1_1rlvb"]
 [ext_resource type="PackedScene" uid="uid://cmlev1vsg4lag" path="res://area/1 sand oasis/boss/data/model/Missile.gltf" id="1_q671j"]
 [ext_resource type="Material" uid="uid://bq1q3tp1cq76v" path="res://effect/particle/material/explosion/Explosion Smoke Add.tres" id="3_2rram"]
 [ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="4_bjx7k"]
 [ext_resource type="Material" uid="uid://boyiki4rgce2h" path="res://effect/particle/material/environment/Common Dust Splatter.tres" id="5_q67im"]
 [ext_resource type="Material" uid="uid://72qi5wpg8kme" path="res://area/1 sand oasis/boss/effect/material/Sand Scorpion Splatter Add.tres" id="6_dbo2r"]
 [ext_resource type="AudioStream" uid="uid://dab60io2y0f6d" path="res://sound/boss/sand scorpion/STG012_13.wav" id="7_h121c"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="8_nplt5"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="8_nplt5"]
 [ext_resource type="AudioStream" uid="uid://4s8882ghxtda" path="res://sound/boss/sand scorpion/STG012_14.wav" id="9_230w5"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ykuxf"]
@@ -22,8 +22,7 @@ gradient = SubResource("Gradient_3krm2")
 width = 128
 
 [sub_resource type="Curve" id="Curve_rqmhy"]
-min_value = 1.0
-max_value = 4.0
+_limits = [0.99, 4.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, -0.0416666, 0, 0, Vector2(1, 4), 1.0, 0.0, 0, 0]
 point_count = 2
 
@@ -52,7 +51,7 @@ gradient = SubResource("Gradient_yeklr")
 width = 128
 
 [sub_resource type="Curve" id="Curve_md06t"]
-max_value = 2.0
+_limits = [0.0, 2.0, 0.0, 1.0]
 _data = [Vector2(0, 0.4), 0.0, 3.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
 point_count = 2
 
@@ -91,6 +90,7 @@ emission_ring_axis = Vector3(0, 1, 0)
 emission_ring_height = 0.0
 emission_ring_radius = 1.0
 emission_ring_inner_radius = 1.0
+emission_ring_cone_angle = 90.0
 angle_min = -45.0
 angle_max = 45.0
 direction = Vector3(0, 1, 0)
@@ -475,9 +475,9 @@ tracks/9/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rfc3l"]
 _data = {
-"RESET": SubResource("Animation_ad8ll"),
-"impact": SubResource("Animation_3tuoq"),
-"launch": SubResource("Animation_ymqqu")
+&"RESET": SubResource("Animation_ad8ll"),
+&"impact": SubResource("Animation_3tuoq"),
+&"launch": SubResource("Animation_ymqqu")
 }
 
 [node name="Missile" type="Area3D" node_paths=PackedStringArray("animator")]

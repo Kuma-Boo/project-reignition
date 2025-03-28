@@ -106,7 +106,7 @@ public partial class GrindState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		ProcessMovement();
+		float movementDelta = ProcessMovement();
 		CheckGrindStep(true);
 		UpdateCharge();
 
@@ -117,7 +117,7 @@ public partial class GrindState : PlayerState
 			return ProcessJump();
 		}
 
-		if (isGrindCompleted || Mathf.IsZeroApprox(Player.MoveSpeed)) // Disconnect from the rail
+		if (isGrindCompleted || movementDelta <= 0) // Disconnect from the rail
 			return fallState;
 
 		return null;
@@ -139,10 +139,16 @@ public partial class GrindState : PlayerState
 		}
 	}
 
-	private void ProcessMovement()
+	private float ProcessMovement()
 	{
 		// Check wall
 		float movementDelta = Player.MoveSpeed * PhysicsManager.physicsDelta;
+		if (!Player.ExternalVelocity.IsZeroApprox())
+		{
+			float externalDotProduct = ActiveGrindRail.PathFollower.Forward().Dot(Player.ExternalVelocity.Normalized());
+			movementDelta += Player.ExternalVelocity.Length() * externalDotProduct * PhysicsManager.physicsDelta;
+		}
+
 		RaycastHit hit = CheckWall(movementDelta);
 		if (hit && hit.collidedObject is StaticBody3D) // Stop player when colliding with a static body
 		{
@@ -163,6 +169,7 @@ public partial class GrindState : PlayerState
 
 		Player.UpDirection = ActiveGrindRail.PathFollower.Up();
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(ActiveGrindRail.PathFollower.Forward(), ActiveGrindRail.PathFollower.Up());
+		return movementDelta;
 	}
 
 	public bool IsRailActivationValid(GrindRail grindRail)

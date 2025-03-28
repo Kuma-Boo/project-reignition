@@ -16,6 +16,7 @@ public partial class DebugManager : Node2D
 	private Control debugMenuRoot;
 
 	private bool isAdvancingFrame;
+	private bool isAttemptingPause;
 	private bool IsPaused => GetTree().Paused;
 
 	private enum Properties
@@ -57,6 +58,7 @@ public partial class DebugManager : Node2D
 		if (isAdvancingFrame)
 		{
 			GetTree().Paused = true;
+			isAttemptingPause = true;
 			isAdvancingFrame = false;
 		}
 
@@ -69,7 +71,20 @@ public partial class DebugManager : Node2D
 			Engine.TimeScale = 1f;
 
 		if (Input.IsActionJustPressed("debug_pause"))
-			GetTree().Paused = !IsPaused;
+		{
+			if (IsPaused)
+			{
+				GetTree().Paused = false;
+				isAttemptingPause = false;
+			}
+			else
+			{
+				DebugPause();
+			}
+		}
+
+		if (!IsPaused)
+			isAttemptingPause = false;
 
 		if (Input.IsActionJustPressed("debug_window_small"))
 		{
@@ -84,10 +99,7 @@ public partial class DebugManager : Node2D
 		}
 
 		if (Input.IsActionJustPressed("debug_step"))
-		{
-			GetTree().Paused = false;
-			isAdvancingFrame = true;
-		}
+			DebugPause();
 
 		if (Input.IsActionJustPressed("debug_restart"))
 		{
@@ -105,8 +117,18 @@ public partial class DebugManager : Node2D
 
 	public override void _Process(double _)
 	{
-		if (line3d.Count + line2d.Count != 0 && !IsPaused) // Queue Raycast Redraw
+		if (IsDebugRaysEnabled) // Queue Raycast Redraw
 			QueueRedraw();
+	}
+
+	private void DebugPause()
+	{
+		GetTree().Paused = false;
+		isAttemptingPause = true;
+		isAdvancingFrame = true;
+
+		line2d.Clear();
+		line3d.Clear();
 	}
 
 	#region Raycast Debug Code
@@ -122,65 +144,83 @@ public partial class DebugManager : Node2D
 		for (int i = line2d.Count - 1; i >= 0; i--)
 		{
 			DrawLine(line2d[i].start, line2d[i].end, line3d[i].color, 1.0f, true);
-			line2d.RemoveAt(i);
+			if (!isAttemptingPause)
+				line2d.RemoveAt(i);
 		}
 
 		Camera3D cam = GetViewport().GetCamera3D();
 		if (cam == null)
 		{
 			line3d.Clear();
-			return; //NO CAMERA
+			return; // NO CAMERA
 		}
 
 		for (int i = line3d.Count - 1; i >= 0; i--)
 		{
 			if (cam.IsPositionBehind(line3d[i].start) || cam.IsPositionBehind(line3d[i].end))
+			{
+				if (!isAttemptingPause)
+					line3d.RemoveAt(i);
+
 				continue;
+			}
 
 			Vector2 startPos = cam.UnprojectPosition(line3d[i].start);
 			Vector2 endPos = cam.UnprojectPosition(line3d[i].end);
 
 			DrawLine(startPos, endPos, line3d[i].color, 1.0f, true);
-			line3d.RemoveAt(i);
+
+			if (!isAttemptingPause)
+				line3d.RemoveAt(i);
 		}
 	}
 
-	public struct Line3D
+	public struct Line3D(Vector3 s, Vector3 e, Color c)
 	{
-		public Vector3 start;
-		public Vector3 end;
-		public Color color;
-
-		public Line3D(Vector3 s, Vector3 e, Color c)
-		{
-			start = s;
-			end = e;
-			color = c;
-		}
+		public Vector3 start = s;
+		public Vector3 end = e;
+		public Color color = c;
 	}
 
-	public struct Line2D
+	public struct Line2D(Vector2 s, Vector2 e, Color c)
 	{
-		public Vector2 start;
-		public Vector2 end;
-		public Color color;
-
-		public Line2D(Vector2 s, Vector2 e, Color c)
-		{
-			start = s;
-			end = e;
-			color = c;
-		}
+		public Vector2 start = s;
+		public Vector2 end = e;
+		public Color color = c;
 	}
 
-	private static readonly List<Line3D> line3d = new();
-	private static readonly List<Line2D> line2d = new();
+	private static readonly List<Line3D> line3d = [];
+	private static readonly List<Line2D> line2d = [];
 
-	public static void DrawLn(Vector3 s, Vector3 e, Color c) => line3d.Add(new Line3D(s, e, c));
-	public static void DrawRay(Vector3 s, Vector3 r, Color c) => line3d.Add(new Line3D(s, s + r, c));
+	public static void DrawLn(Vector3 s, Vector3 e, Color c)
+	{
+		if (!Instance.IsDebugRaysEnabled)
+			return;
 
-	public static void DrawLn(Vector2 s, Vector2 e, Color c) => line2d.Add(new Line2D(s, e, c));
-	public static void DrawRay(Vector2 s, Vector2 r, Color c) => line2d.Add(new Line2D(s, s + r, c));
+		line3d.Add(new Line3D(s, e, c));
+	}
+	public static void DrawRay(Vector3 s, Vector3 r, Color c)
+	{
+		if (!Instance.IsDebugRaysEnabled)
+			return;
+
+		line3d.Add(new Line3D(s, s + r, c));
+	}
+
+	public static void DrawLn(Vector2 s, Vector2 e, Color c)
+	{
+		if (!Instance.IsDebugRaysEnabled)
+			return;
+
+		line2d.Add(new Line2D(s, e, c));
+	}
+	public static void DrawRay(Vector2 s, Vector2 r, Color c)
+	{
+		if (!Instance.IsDebugRaysEnabled)
+			return;
+
+		line2d.Add(new Line2D(s, s + r, c));
+	}
 	#endregion
 
 	#region Debug Cheats
@@ -208,13 +248,16 @@ public partial class DebugManager : Node2D
 	}
 
 	public bool DrawDebugCam { get; private set; }
-	public void ToggleCamera(bool enabled) => DrawDebugCam = enabled;
+	[Signal]
+	public delegate void CameraVisibilityToggledEventHandler();
+	public void ToggleCamera(bool enabled)
+	{
+		DrawDebugCam = enabled;
+		EmitSignal(SignalName.CameraVisibilityToggled);
+	}
 
 	/// <summary> Use a custom save. </summary>
 	public bool UseDemoSave { get; private set; }
-
-	public bool IsShaderCompilationEnabled { get; private set; }
-	private void SetShaderCompilation(bool enabled) => IsShaderCompilationEnabled = enabled;
 	#endregion
 
 	#region Gameplay Cheats

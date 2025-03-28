@@ -17,6 +17,7 @@ namespace Project.Editor.StageObjectPreviewer
 		private static Camera3D editorCam;
 		private readonly Color DefaultDrawColor = Colors.Blue;
 		private readonly Color SpecialDrawColor = Colors.Red;
+		private const int PreviewResolution = 32;
 
 		public override bool _Handles(GodotObject var) => true;
 		public override void _Edit(GodotObject var)
@@ -35,8 +36,6 @@ namespace Project.Editor.StageObjectPreviewer
 
 			return base._Forward3DGuiInput(cam, e);
 		}
-
-		private const int PREVIEW_RESOLUTION = 32;
 
 		public override void _Forward3DDrawOverViewport(Control overlay)
 		{
@@ -110,9 +109,9 @@ namespace Project.Editor.StageObjectPreviewer
 
 			Array<Vector2> points = [];
 
-			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
+			for (int i = 0; i < PreviewResolution; i++)
 			{
-				float simulationRatio = i / ((float)PREVIEW_RESOLUTION - 1);
+				float simulationRatio = i / ((float)PreviewResolution - 1);
 				Vector3 position = obj.InterpolatePosition(simulationRatio);
 				if (!editorCam.IsPositionBehind(position))
 					points.Add(editorCam.UnprojectPosition(position));
@@ -166,13 +165,12 @@ namespace Project.Editor.StageObjectPreviewer
 			if (editorCam.IsPositionInFrustum(majin.OutHandle))
 				viewportOverlay.DrawCircle(editorCam.UnprojectPosition(majin.OutHandle), 5f, SpecialDrawColor);
 
-
 			// Draw the spawn curve
 			Array<Vector2> points = [];
 
-			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
+			for (int i = 0; i < PreviewResolution; i++)
 			{
-				float simulationRatio = i / ((float)PREVIEW_RESOLUTION - 1);
+				float simulationRatio = i / ((float)PreviewResolution - 1);
 				Vector3 position = majin.CalculateTravelPosition(simulationRatio);
 				if (editorCam.IsPositionInFrustum(position))
 					points.Add(editorCam.UnprojectPosition(position));
@@ -189,9 +187,9 @@ namespace Project.Editor.StageObjectPreviewer
 		{
 			Array<Vector2> points = [];
 
-			for (int i = 0; i < PREVIEW_RESOLUTION; i++)
+			for (int i = 0; i < PreviewResolution; i++)
 			{
-				float simulationRatio = i / ((float)PREVIEW_RESOLUTION - 1);
+				float simulationRatio = i / ((float)PreviewResolution - 1);
 				Vector3 position = LaunchSettings.InterpolatePositionRatio(simulationRatio);
 				if (!editorCam.IsPositionBehind(position))
 					points.Add(editorCam.UnprojectPosition(position));
@@ -204,14 +202,13 @@ namespace Project.Editor.StageObjectPreviewer
 			viewportOverlay.DrawPolyline(pointsList, col, 1, true);
 		}
 
-
 		private void DrawPerspectiveCircle(Vector3 center, Basis basis, float radius, Vector3 startingAxis, Vector3 rotationAxis, Color col)
 		{
 			Array<Vector2> points = [];
 
-			for (int i = 0; i < PREVIEW_RESOLUTION + 1; i++)
+			for (int i = 0; i < PreviewResolution + 1; i++)
 			{
-				float angle = Mathf.Tau * ((float)i / PREVIEW_RESOLUTION);
+				float angle = Mathf.Tau * ((float)i / PreviewResolution);
 				Vector3 position = center + (basis * startingAxis.Rotated(rotationAxis, angle).Normalized() * radius);
 				if (!editorCam.IsPositionBehind(position))
 					points.Add(editorCam.UnprojectPosition(position));
@@ -221,7 +218,6 @@ namespace Project.Editor.StageObjectPreviewer
 			points.CopyTo(pointsList, 0);
 			viewportOverlay.DrawPolyline(pointsList, col, 1, true);
 		}
-
 
 		private void DrawLine(Vector3 s, Vector3 e, Color c)
 		{

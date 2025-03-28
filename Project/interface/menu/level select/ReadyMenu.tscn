@@ -1,13 +1,13 @@
 [gd_scene load_steps=81 format=3 uid="uid://byf372uaewx1u"]
 
-[ext_resource type="Script" path="res://interface/menu/level select/script/ReadyMenu.cs" id="1_ldudh"]
+[ext_resource type="Script" uid="uid://ov6ixvow1c38" path="res://interface/menu/level select/script/ReadyMenu.cs" id="1_ldudh"]
 [ext_resource type="Texture2D" uid="uid://bgtxik1dsbu0u" path="res://interface/menu/level select/texture/ready text/ready en.png" id="2_eg5ps"]
 [ext_resource type="Texture2D" uid="uid://bjqi4q2ct4ip8" path="res://interface/menu/level select/texture/transition/tile000.png" id="3_75xjq"]
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="4_bpbq1"]
 [ext_resource type="Texture2D" uid="uid://dqc305hbcit0e" path="res://interface/menu/level select/texture/transition/tile001.png" id="4_eno73"]
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="4_x0w6p"]
 [ext_resource type="Texture2D" uid="uid://2d31ymbbwmh0" path="res://interface/menu/level select/texture/transition/tile002.png" id="5_tu1d4"]
-[ext_resource type="Shader" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="6_03cqa"]
+[ext_resource type="Shader" uid="uid://dj2vtehay1fej" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="6_03cqa"]
 [ext_resource type="Texture2D" uid="uid://0fssctskuel7" path="res://interface/menu/level select/texture/transition/tile003.png" id="6_qxet6"]
 [ext_resource type="AudioStream" uid="uid://huxte6rhwx58" path="res://sound/sfx/system/menu selection.wav" id="7_5a0w1"]
 [ext_resource type="Texture2D" uid="uid://r6a7pbtg5wys" path="res://interface/menu/level select/texture/transition/tile004.png" id="7_eiosu"]
@@ -450,8 +450,8 @@ tracks/7/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4ix1o"]
 _data = {
-"RESET": SubResource("Animation_0gx1k"),
-"transition": SubResource("Animation_dodqd")
+&"RESET": SubResource("Animation_0gx1k"),
+&"transition": SubResource("Animation_dodqd")
 }
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ialef"]
@@ -533,9 +533,9 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ykvc1"]
 _data = {
-"RESET": SubResource("Animation_wu83y"),
-"confirm": SubResource("Animation_1cvv4"),
-"loop": SubResource("Animation_se451")
+&"RESET": SubResource("Animation_wu83y"),
+&"confirm": SubResource("Animation_1cvv4"),
+&"loop": SubResource("Animation_se451")
 }
 
 [sub_resource type="Animation" id="Animation_fjqwi"]
@@ -998,6 +998,38 @@ tracks/9/keys = {
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_sns38"]
+resource_name = "open-skill-menu"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/Skill")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"OpenSubmenu"
+}]
+}
+
 [sub_resource type="Animation" id="Animation_ablxt"]
 resource_name = "select-no"
 length = 0.001
@@ -1443,48 +1475,16 @@ tracks/0/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_sns38"]
-resource_name = "open-skill-menu"
-length = 0.001
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SFX/Skill")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"OpenSubmenu"
-}]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hjga2"]
 _data = {
-"RESET": SubResource("Animation_fjqwi"),
-"cancel": SubResource("Animation_ow2hg"),
-"confirm": SubResource("Animation_xs86i"),
-"open-skill-menu": SubResource("Animation_sns38"),
-"select-no": SubResource("Animation_ablxt"),
-"select-yes": SubResource("Animation_l7odi"),
-"show": SubResource("Animation_wy8hm"),
-"show-from-skill": SubResource("Animation_sgy3m")
+&"RESET": SubResource("Animation_fjqwi"),
+&"cancel": SubResource("Animation_ow2hg"),
+&"confirm": SubResource("Animation_xs86i"),
+&"open-skill-menu": SubResource("Animation_sns38"),
+&"select-no": SubResource("Animation_ablxt"),
+&"select-yes": SubResource("Animation_l7odi"),
+&"show": SubResource("Animation_wy8hm"),
+&"show-from-skill": SubResource("Animation_sgy3m")
 }
 
 [node name="ReadyMenu" type="Control" node_paths=PackedStringArray("mapLabel", "missionLabel", "animator")]

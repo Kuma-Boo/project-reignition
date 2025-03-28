@@ -64,8 +64,12 @@ public partial class StageSettings : Node3D
 			});
 		}
 
-		InitializeShaders();
 		SetEnvironmentFxFactor(environmentFxFactor, 0);
+	}
+
+	public override void _ExitTree()
+	{
+		EmitSignal(SignalName.Unloaded);
 	}
 
 	public void UpdatePostProcessingStatus()
@@ -77,34 +81,6 @@ public partial class StageSettings : Node3D
 	}
 
 	#region Shader Compilation
-	/// <summary> Gets ALL the materials in this stage, then compiles them. </summary>
-	public void InitializeShaders()
-	{
-		if (OS.IsDebugBuild() && !DebugManager.Instance.IsShaderCompilationEnabled)
-			return;
-
-		foreach (Node node in GetChildren(GetTree().Root, []))
-		{
-			if (node is GpuParticles3D)
-			{
-				GpuParticles3D particles = node as GpuParticles3D;
-				ShaderManager.Instance.QueueParticle(particles.ProcessMaterial, particles.DrawPass1);
-				continue;
-			}
-
-			if (node is MeshInstance3D)
-				ShaderManager.Instance.QueueMesh((node as MeshInstance3D).Mesh);
-		}
-	}
-
-	private List<Node> GetChildren(Node parent, List<Node> nodes)
-	{
-		nodes.Add(parent);
-		foreach (Node child in parent.GetChildren())
-			nodes = GetChildren(child, nodes);
-		return nodes;
-	}
-
 	[Signal]
 	public delegate void LevelStartedEventHandler();
 	private float probeTimer;
@@ -121,25 +97,6 @@ public partial class StageSettings : Node3D
 		{
 			probeTimer += PhysicsManager.normalDelta;
 			if (probeTimer >= ProbeWaitLength)
-			{
-				if (TransitionManager.instance.IsReloadingScene)
-				{
-					// Skip level setup when reloading a level
-					StartLevel();
-					return;
-				}
-
-				// Start Shader Caching
-				LevelState = LevelStateEnum.Shaders;
-				ShaderManager.Instance.StartCompilation();
-			}
-
-			return;
-		}
-
-		if (LevelState == LevelStateEnum.Shaders)
-		{
-			if (!ShaderManager.Instance.IsCompilingShaders)
 				StartLevel();
 
 			return;
@@ -481,41 +438,21 @@ public partial class StageSettings : Node3D
 	}
 
 	[Signal]
-	public delegate void UnloadedEventHandler();
-	private const string UNLOAD_FUNCTION = "Unload"; // Clean up any memory leaks in this function
-	public override void _ExitTree() => EmitSignal(SignalName.Unloaded);
-	public void ConnectUnloadSignal(Node node)
-	{
-		if (!node.HasMethod(UNLOAD_FUNCTION))
-		{
-			GD.PrintErr($"Node {node.Name} doesn't have a function '{UNLOAD_FUNCTION}!'");
-			return;
-		}
-
-		if (!IsConnected(SignalName.Unloaded, new Callable(node, UNLOAD_FUNCTION)))
-			Connect(SignalName.Unloaded, new Callable(node, UNLOAD_FUNCTION));
-	}
-
-	[Signal]
 	public delegate void RespawnedEventHandler();
-	public readonly static StringName RESPAWN_FUNCTION = "Respawn"; // Default name of respawn functions
-	public void ConnectRespawnSignal(Node node)
-	{
-		if (!node.HasMethod(RESPAWN_FUNCTION))
-		{
-			GD.PrintErr($"Node {node.Name} doesn't have a function '{RESPAWN_FUNCTION}!'");
-			return;
-		}
-
-		if (!IsConnected(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION)))
-			Connect(SignalName.Respawned, new Callable(node, RESPAWN_FUNCTION), (uint)ConnectFlags.Deferred);
-	}
+	[Signal]
+	public delegate void RespawnedEnemiesEventHandler();
+	[Signal]
+	public delegate void UnloadedEventHandler();
 
 	public void RespawnObjects()
 	{
 		SoundManager.instance.CancelDialog(); // Cancel any active dialog
 		EmitSignal(SignalName.Respawned);
+
+		GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Timeout += RespawnEnemies;
 	}
+
+	private void RespawnEnemies() => EmitSignal(SignalName.RespawnedEnemies);
 	#endregion
 
 	#region Level Completion
@@ -531,13 +468,12 @@ public partial class StageSettings : Node3D
 	public enum LevelStateEnum
 	{
 		Probes,
-		Shaders,
 		Ingame,
 		Failed,
 		Success,
 	}
 	public LevelStateEnum LevelState { get; private set; }
-	public bool IsLevelLoading => LevelState == LevelStateEnum.Probes || LevelState == LevelStateEnum.Shaders;
+	public bool IsLevelLoading => LevelState == LevelStateEnum.Probes;
 	public bool IsLevelIngame => LevelState == LevelStateEnum.Ingame;
 	/// <summary> Flag for keeping track of Uhu's race status. </summary>
 	public bool IsRaceActive { get; set; }
@@ -627,7 +563,7 @@ public struct SpawnData(Node parent, Transform3D transform)
 	/// <summary> Local transform to spawn with. </summary>
 	public Transform3D spawnTransform = transform;
 
-	public readonly void Respawn(Node n)
+	public readonly void Respawn(Node3D n)
 	{
 		if (parentNode != null && n.GetParent() != parentNode)
 		{
@@ -637,6 +573,8 @@ public struct SpawnData(Node parent, Transform3D transform)
 			parentNode.AddChild(n);
 		}
 
+		n.Visible = true;
+		n.ProcessMode = Node.ProcessModeEnum.Inherit;
 		n.SetDeferred("transform", spawnTransform);
 	}
 }
