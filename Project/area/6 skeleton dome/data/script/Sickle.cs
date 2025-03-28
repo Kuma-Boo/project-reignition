@@ -36,16 +36,15 @@ namespace Project.Gameplay.Hazards
 		private PackedScene chainScene;
 		[Export(PropertyHint.Range, "0,32")]
 		private int chainLength;
-		[Export]
-		/// <summary> Set this to True to force the editor to update. </summary>
-		private bool update;
 
 		/// <summary> Length of each independant chain segment. </summary>
-		private const float CHAIN_SEGMENT_LENGTH = 1.2f;
-		private const float CHAIN_BASE_OFFSET = 1.3f;
+		private const float ChainSegmentLength = 1.2f;
+		private const float ChainBaseOffset = 1.3f;
 
-		//Set up length when loading into the scene
-		public override void _Ready()
+		// Set up length when loading into the scene
+		public override void _Ready() => GenerateSickle();
+
+		private void GenerateSickle()
 		{
 			UpdateLength();
 			UpdateHeadPosition();
@@ -55,36 +54,31 @@ namespace Project.Gameplay.Hazards
 		{
 			if (Engine.IsEditorHint())
 			{
-				if (update)
-				{
-					UpdateLength();
-					UpdateHeadPosition();
-				}
+				GenerateSickle();
+				return;
 			}
-			else
+
+			float targetRatio = isSwingingRight ? 1 : 0;
+			currentRatio = Mathf.MoveToward(currentRatio, targetRatio, (1.0f / cycleLength) * PhysicsManager.physicsDelta);
+
+			if (Mathf.IsEqualApprox(currentRatio, targetRatio))
 			{
-				float targetRatio = isSwingingRight ? 1 : 0;
-				currentRatio = Mathf.MoveToward(currentRatio, targetRatio, (1.0f / cycleLength) * PhysicsManager.physicsDelta);
-
-				if (Mathf.IsEqualApprox(currentRatio, targetRatio))
-				{
-					emittedSparks = false;
-					isSwingingRight = !isSwingingRight;
-				}
-
-				if (enableSparkParticles && !emittedSparks)
-				{
-					if (Mathf.Abs(rootNode.Rotation.Z) < Mathf.Pi * .05f &&
-					Mathf.Sign(targetRatio - .5f) != Mathf.Sign(currentRatio - .5f))
-					{
-						sparkParticles.Rotation = Vector3.Up * Mathf.Pi * targetRatio;
-						sparkParticles.Restart();
-						emittedSparks = true;
-					}
-				}
-
-				UpdateHeadPosition();
+				emittedSparks = false;
+				isSwingingRight = !isSwingingRight;
 			}
+
+			if (enableSparkParticles && !emittedSparks)
+			{
+				if (Mathf.Abs(rootNode.Rotation.Z) < Mathf.Pi * .05f &&
+				Mathf.Sign(targetRatio - .5f) != Mathf.Sign(currentRatio - .5f))
+				{
+					sparkParticles.Rotation = Vector3.Up * Mathf.Pi * targetRatio;
+					sparkParticles.Restart();
+					emittedSparks = true;
+				}
+			}
+
+			UpdateHeadPosition();
 		}
 
 		private void UpdateHeadPosition()
@@ -95,8 +89,6 @@ namespace Project.Gameplay.Hazards
 
 		private void UpdateLength()
 		{
-			update = false;
-
 			rootNode = GetNodeOrNull<Node3D>(root);
 			headNode = GetNodeOrNull<Node3D>(head);
 			if (headNode == null || rootNode == null)
@@ -117,10 +109,10 @@ namespace Project.Gameplay.Hazards
 			{
 				Node3D chainNode = chainScene.Instantiate<Node3D>();
 				rootNode.AddChild(chainNode);
-				chainNode.Position = Vector3.Down * (i * CHAIN_SEGMENT_LENGTH);
+				chainNode.Position = Vector3.Down * (i * ChainSegmentLength);
 			}
 
-			headNode.Position = Vector3.Down * (chainLength * CHAIN_SEGMENT_LENGTH + CHAIN_BASE_OFFSET);
+			headNode.Position = Vector3.Down * ((chainLength * ChainSegmentLength) + ChainBaseOffset);
 		}
 	}
 }

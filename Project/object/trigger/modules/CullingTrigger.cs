@@ -28,9 +28,6 @@ public partial class CullingTrigger : StageTriggerModule
 		Visible = true;
 		if (isStageVisuals)
 			DebugManager.Instance.StageCullingToggled += UpdateCullingState;
-
-		if (isStageVisuals && !TransitionManager.instance.IsReloadingScene)
-			ShaderManager.Instance.RegisterCullingTrigger(this);
 	}
 
 	public override void _ExitTree()
@@ -76,8 +73,7 @@ public partial class CullingTrigger : StageTriggerModule
 	/// <summary> Saves the current visiblity. Called when the player passes a checkpoint. </summary>
 	private void ProcessCheckpoint()
 	{
-		if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Probes ||
-			StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Shaders)
+		if (StageSettings.Instance.IsLevelLoading)
 		{
 			visibleOnCheckpoint = startEnabled;
 		}

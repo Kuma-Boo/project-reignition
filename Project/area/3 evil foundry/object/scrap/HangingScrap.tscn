@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://b5dibkkf5v0en"]
 
 [ext_resource type="PackedScene" uid="uid://b7m6ycj60sqx5" path="res://area/3 evil foundry/object/model/scrap/ScrapClaw.gltf" id="1_7go6u"]
-[ext_resource type="Script" path="res://area/3 evil foundry/data/script/HangingScrap.cs" id="1_cv8j3"]
+[ext_resource type="Script" uid="uid://bk7f1koqs4cq0" path="res://area/3 evil foundry/data/script/HangingScrap.cs" id="1_cv8j3"]
 [ext_resource type="PackedScene" uid="uid://cptiijnhwgwjm" path="res://area/3 evil foundry/object/model/scrap/HangingScrap.gltf" id="2_rhjaa"]
 [ext_resource type="PackedScene" uid="uid://cgjdnwcl27ndq" path="res://area/3 evil foundry/object/model/scrap/HangingScrapPieces.gltf" id="4_mqh2e"]
 [ext_resource type="AudioStream" uid="uid://db7hww3ufbe68" path="res://sound/sfx/stage/evil foundry/hanging scrap attacked.wav" id="4_rerat"]
@@ -117,6 +117,58 @@ tracks/7/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_kcbku"]
+resource_name = "hide-base-mesh"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Collision:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Collision/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Collision/CollisionShape3D2:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Collision/Hitbox/CollisionShape3D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="Animation" id="Animation_3hncg"]
 resource_name = "shatter"
 length = 2.0
@@ -187,63 +239,11 @@ tracks/4/keys = {
 "values": [false]
 }
 
-[sub_resource type="Animation" id="Animation_kcbku"]
-resource_name = "hide-base-mesh"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Collision:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Collision/CollisionShape3D:disabled")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Collision/CollisionShape3D2:disabled")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Collision/Hitbox/CollisionShape3D:disabled")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_uxish"]
 _data = {
-"RESET": SubResource("Animation_tapwj"),
-"hide-base-mesh": SubResource("Animation_kcbku"),
-"shatter": SubResource("Animation_3hncg")
+&"RESET": SubResource("Animation_tapwj"),
+&"hide-base-mesh": SubResource("Animation_kcbku"),
+&"shatter": SubResource("Animation_3hncg")
 }
 
 [node name="HangingScrap" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]

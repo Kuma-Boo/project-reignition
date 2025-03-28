@@ -1,7 +1,7 @@
 [gd_scene load_steps=53 format=3 uid="uid://rh85bh20fk6r"]
 
-[ext_resource type="Script" path="res://object/enemy/majin/data/Majin.cs" id="1"]
-[ext_resource type="Script" path="res://object/enemy/EnemyHurtbox.cs" id="2_onhwc"]
+[ext_resource type="Script" uid="uid://coe4ch77wt31y" path="res://object/enemy/majin/data/Majin.cs" id="1"]
+[ext_resource type="Script" uid="uid://cp6er04j2b86u" path="res://object/enemy/EnemyHurtbox.cs" id="2_onhwc"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="3_6ikv1"]
 [ext_resource type="Material" uid="uid://bqu7wt3ng1x5a" path="res://object/enemy/majin/data/particle/material/Majin Ember Charge Process Material.tres" id="3_pspvd"]
 [ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="4_p44e7"]
@@ -10,11 +10,11 @@
 [ext_resource type="Material" uid="uid://efv6ms0uv2sg" path="res://object/enemy/majin/data/particle/material/Majin Flame.tres" id="6_t5qur"]
 [ext_resource type="Material" uid="uid://nwln85mverv7" path="res://object/enemy/majin/data/particle/material/Majin Flame Process Material.tres" id="7_2ja3p"]
 [ext_resource type="Material" uid="uid://rhqpvcj8ph13" path="res://object/enemy/majin/data/particle/material/Majin Glow.tres" id="7_6w2wy"]
-[ext_resource type="Script" path="res://object/stage/common/resource/script/Hazard.cs" id="7_vd724"]
+[ext_resource type="Script" uid="uid://pnh70abopq8e" path="res://object/stage/common/resource/script/Hazard.cs" id="7_vd724"]
 [ext_resource type="AudioStream" uid="uid://bqt0gpwc55dfl" path="res://sound/sfx/enemy/majin/majin spawn.wav" id="8_4kwy5"]
 [ext_resource type="Material" uid="uid://m0d6jfnxdrwg" path="res://effect/particle/material/Teleport Dust.tres" id="8_a28yl"]
 [ext_resource type="Material" uid="uid://bwvsqjnpry0xm" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters Process Material.tres" id="8_awltq"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="9_4bnd7"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="9_4bnd7"]
 [ext_resource type="Texture2D" uid="uid://cpjydx5buf0av" path="res://effect/particle/texture/teleport dust.png" id="9_6teur"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://byf5qdjpi8ur4" path="res://object/enemy/majin/data/animation/MajinAnimationTreeRoot.tres" id="9_osrkc"]
 [ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="9_yw7li"]
@@ -178,7 +178,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("ChestAttachment/Hitbox/SpinCollisionShape3D:disabled")
+tracks/7/path = NodePath("HitboxRoot/Hitbox/SpinCollisionShape3D:disabled")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -825,7 +825,7 @@ step = 0.0333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ChestAttachment/Hitbox/SpinCollisionShape3D:disabled")
+tracks/0/path = NodePath("HitboxRoot/Hitbox/SpinCollisionShape3D:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -951,68 +951,71 @@ tracks/6/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stb46"]
 _data = {
-"RESET": SubResource("Animation_ojgnd"),
-"defeat": SubResource("Animation_1j3bl"),
-"despawn": SubResource("Animation_o85fj"),
-"explode": SubResource("Animation_xx2t8"),
-"fire-end": SubResource("Animation_thps5"),
-"fire-start": SubResource("Animation_c8j0n"),
-"launch-end": SubResource("Animation_hrty8"),
-"spawn": SubResource("Animation_aucka"),
-"spin": SubResource("Animation_1nwld"),
-"stagger": SubResource("Animation_13cad"),
-"travel": SubResource("Animation_y1q6p")
+&"RESET": SubResource("Animation_ojgnd"),
+&"defeat": SubResource("Animation_1j3bl"),
+&"despawn": SubResource("Animation_o85fj"),
+&"explode": SubResource("Animation_xx2t8"),
+&"fire-end": SubResource("Animation_thps5"),
+&"fire-start": SubResource("Animation_c8j0n"),
+&"launch-end": SubResource("Animation_hrty8"),
+&"spawn": SubResource("Animation_aucka"),
+&"spin": SubResource("Animation_1nwld"),
+&"stagger": SubResource("Animation_13cad"),
+&"travel": SubResource("Animation_y1q6p")
 }
 
 [node name="Majin" type="Node3D"]
 script = ExtResource("1")
+flameRoot = NodePath("FX/FireFX")
+hitboxRoot = NodePath("HitboxRoot")
+hitboxAttachment = NodePath("HitboxAttachment")
 "Spawn Settings/Spawn Travel Time" = 0.0
 "Spawn Interval Settings/Enable Spawn Interval" = false
 "Rotation Settings/Track Player" = true
 "Attack Settings/Attack Type" = 0
 "Defeat Settings/Enable Enemy Launching" = false
-flameRoot = NodePath("FX/FireFX")
-hitboxAttachment = NodePath("ChestAttachment")
 pearlAmount = 15
 damagePlayer = true
 root = NodePath("Root")
-hurtbox = NodePath("ChestAttachment/Hitbox")
-collider = NodePath("ChestAttachment/EnvironmentCollider/CollisionShape3D")
+hurtbox = NodePath("HitboxRoot/Hitbox")
+collider = NodePath("HitboxRoot/EnvironmentCollider/CollisionShape3D")
 rangeCollider = NodePath("Range/CollisionShape3D")
 animationTree = NodePath("AnimationTree")
 animationPlayer = NodePath("AnimationPlayer")
 
 [node name="Root" type="Node3D" parent="."]
 
-[node name="ChestAttachment" type="BoneAttachment3D" parent="."]
-transform = Transform3D(1, -4.37115e-08, 4.37115e-08, 4.37115e-08, 1, 9.55347e-16, -4.37115e-08, 9.55346e-16, 1, -3.75753e-20, 1.085, 0)
-use_external_skeleton = true
-external_skeleton = NodePath("")
+[node name="HitboxRoot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.085, 0)
 
-[node name="Hitbox" type="Area3D" parent="ChestAttachment" node_paths=PackedStringArray("enemy")]
-transform = Transform3D(1, -4.17596e-23, 0, -4.17596e-23, 1, 0, 0, 0, 1, 0, 0.15, 0)
+[node name="Hitbox" type="Area3D" parent="HitboxRoot" node_paths=PackedStringArray("enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.75753e-20, 0.15, 0)
 collision_layer = 12
 collision_mask = 2
 script = ExtResource("2_onhwc")
 enemy = NodePath("../..")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ChestAttachment/Hitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxRoot/Hitbox"]
 transform = Transform3D(1, -4.17596e-23, 0, -4.17596e-23, 1, 0, 0, 0, 1, 0, 0.1, 0)
 shape = SubResource("CapsuleShape3D_mlr0h")
 
-[node name="SpinCollisionShape3D" type="CollisionShape3D" parent="ChestAttachment/Hitbox"]
+[node name="SpinCollisionShape3D" type="CollisionShape3D" parent="HitboxRoot/Hitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("CylinderShape3D_xbynq")
 disabled = true
 
-[node name="EnvironmentCollider" type="StaticBody3D" parent="ChestAttachment" groups=["enemy", "wall"]]
-transform = Transform3D(1, -4.17596e-23, 0, -4.17597e-23, 1, 0, 0, 0, 1, 0, 0.15, -1.05879e-22)
+[node name="EnvironmentCollider" type="StaticBody3D" parent="HitboxRoot" groups=["enemy", "wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.75753e-20, 0.15, -1.05879e-22)
 collision_layer = 8
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ChestAttachment/EnvironmentCollider"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxRoot/EnvironmentCollider"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 shape = SubResource("CapsuleShape3D_mlr0h")
+
+[node name="HitboxAttachment" type="BoneAttachment3D" parent="."]
+use_external_skeleton = true
+external_skeleton = NodePath("")
 
 [node name="Range" type="Area3D" parent="."]
 visible = false
@@ -1286,12 +1289,12 @@ parameters/state_transition/current_index = 0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_stb46")
+&"": SubResource("AnimationLibrary_stb46")
 }
 next/launch-end = &"explode"
 
-[connection signal="area_entered" from="ChestAttachment/Hitbox" to="." method="OnEntered"]
-[connection signal="area_exited" from="ChestAttachment/Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="HitboxRoot/Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="HitboxRoot/Hitbox" to="." method="OnExited"]
 [connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
 [connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
 [connection signal="area_entered" from="FX/FireFX/FlameHitbox" to="FX/FireFX/FlameHitbox" method="OnEntered"]

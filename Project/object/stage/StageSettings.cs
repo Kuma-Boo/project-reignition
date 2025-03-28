@@ -64,7 +64,6 @@ public partial class StageSettings : Node3D
 			});
 		}
 
-		InitializeShaders();
 		SetEnvironmentFxFactor(environmentFxFactor, 0);
 	}
 
@@ -82,34 +81,6 @@ public partial class StageSettings : Node3D
 	}
 
 	#region Shader Compilation
-	/// <summary> Gets ALL the materials in this stage, then compiles them. </summary>
-	public void InitializeShaders()
-	{
-		if (OS.IsDebugBuild() && !DebugManager.Instance.IsShaderCompilationEnabled)
-			return;
-
-		foreach (Node node in GetChildren(GetTree().Root, []))
-		{
-			if (node is GpuParticles3D)
-			{
-				GpuParticles3D particles = node as GpuParticles3D;
-				ShaderManager.Instance.QueueParticle(particles.ProcessMaterial, particles.DrawPass1);
-				continue;
-			}
-
-			if (node is MeshInstance3D)
-				ShaderManager.Instance.QueueMesh((node as MeshInstance3D).Mesh);
-		}
-	}
-
-	private List<Node> GetChildren(Node parent, List<Node> nodes)
-	{
-		nodes.Add(parent);
-		foreach (Node child in parent.GetChildren())
-			nodes = GetChildren(child, nodes);
-		return nodes;
-	}
-
 	[Signal]
 	public delegate void LevelStartedEventHandler();
 	private float probeTimer;
@@ -126,25 +97,6 @@ public partial class StageSettings : Node3D
 		{
 			probeTimer += PhysicsManager.normalDelta;
 			if (probeTimer >= ProbeWaitLength)
-			{
-				if (TransitionManager.instance.IsReloadingScene)
-				{
-					// Skip level setup when reloading a level
-					StartLevel();
-					return;
-				}
-
-				// Start Shader Caching
-				LevelState = LevelStateEnum.Shaders;
-				ShaderManager.Instance.StartCompilation();
-			}
-
-			return;
-		}
-
-		if (LevelState == LevelStateEnum.Shaders)
-		{
-			if (!ShaderManager.Instance.IsCompilingShaders)
 				StartLevel();
 
 			return;
@@ -516,13 +468,12 @@ public partial class StageSettings : Node3D
 	public enum LevelStateEnum
 	{
 		Probes,
-		Shaders,
 		Ingame,
 		Failed,
 		Success,
 	}
 	public LevelStateEnum LevelState { get; private set; }
-	public bool IsLevelLoading => LevelState == LevelStateEnum.Probes || LevelState == LevelStateEnum.Shaders;
+	public bool IsLevelLoading => LevelState == LevelStateEnum.Probes;
 	public bool IsLevelIngame => LevelState == LevelStateEnum.Ingame;
 	/// <summary> Flag for keeping track of Uhu's race status. </summary>
 	public bool IsRaceActive { get; set; }

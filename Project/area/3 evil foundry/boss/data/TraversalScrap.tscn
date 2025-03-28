@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=3 uid="uid://75f72xq1jhqo"]
 
-[ext_resource type="Script" path="res://area/3 evil foundry/data/script/TraversalScrap.cs" id="1_3b4ar"]
+[ext_resource type="Script" uid="uid://itcitubu7e71" path="res://area/3 evil foundry/data/script/TraversalScrap.cs" id="1_3b4ar"]
 [ext_resource type="PackedScene" uid="uid://fy07foymgkig" path="res://area/3 evil foundry/boss/data/model/TraversalScrap.gltf" id="2_gqs3j"]
 [ext_resource type="Material" uid="uid://dxchrwvn2cemd" path="res://effect/particle/material/Common Sparkle.tres" id="3_2pgr1"]
 [ext_resource type="AudioStream" uid="uid://dyns0pvatlxul" path="res://sound/boss/ifrit golem/traversal scrap.wav" id="4_xjmsd"]
@@ -29,6 +29,7 @@ emission_ring_axis = Vector3(0, 1, 0)
 emission_ring_height = 2.0
 emission_ring_radius = 2.0
 emission_ring_inner_radius = 1.0
+emission_ring_cone_angle = 90.0
 gravity = Vector3(0, 0, 0)
 scale_min = 0.5
 scale_max = 2.0
@@ -275,10 +276,10 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_we8ah"]
 _data = {
-"RESET": SubResource("Animation_up82g"),
-"fall": SubResource("Animation_uo77h"),
-"init": SubResource("Animation_ucuux"),
-"show": SubResource("Animation_6vqmq")
+&"RESET": SubResource("Animation_up82g"),
+&"fall": SubResource("Animation_uo77h"),
+&"init": SubResource("Animation_ucuux"),
+&"show": SubResource("Animation_6vqmq")
 }
 
 [node name="TraversalScrap" type="Area3D"]
@@ -316,10 +317,10 @@ process_material = SubResource("ParticleProcessMaterial_i36ch")
 draw_pass_1 = SubResource("QuadMesh_jbtny")
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="Root"]
+process_mode = 1
 stream = ExtResource("4_xjmsd")
 volume_db = -3.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_mb02e")
@@ -328,7 +329,7 @@ disabled = true
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 deterministic = true
 libraries = {
-"": SubResource("AnimationLibrary_we8ah")
+&"": SubResource("AnimationLibrary_we8ah")
 }
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]
