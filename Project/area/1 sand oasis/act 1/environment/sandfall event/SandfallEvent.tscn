@@ -20,8 +20,10 @@ orientation = 2
 
 [node name="SandfallEvent" node_paths=PackedStringArray("animator") instance=ExtResource("1_yr102")]
 script = ExtResource("1_5mwi3")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("SandfallEventRoot/Skeleton3D/Player")
 "Player Event Settings/Animation" = &"so_a1_sandfall_event"
 "Player Event Settings/Animation Fadeout Time" = 0.2
@@ -30,22 +32,14 @@ script = ExtResource("1_5mwi3")
 "Player Event Settings/Exit Move Speed" = 1.0
 "Player Event Settings/Exit Vertical Speed" = 0.0
 "Player Event Settings/Exit Lockout" = ExtResource("3_g58y6")
-animator = NodePath("AnimationPlayer")
-
-[node name="Skeleton3D" parent="SandfallEventRoot" index="0"]
-bones/1/rotation = Quaternion(-0.070041, 0.70636, 0.0705935, 0.700833)
-bones/2/position = Vector3(2.25, 2.99434, 0)
-bones/3/position = Vector3(0, 1.50001, 0)
-bones/4/position = Vector3(2, 1.50001, -3.5)
-bones/5/position = Vector3(2, 1.50001, 3)
 
 [node name="Player" type="BoneAttachment3D" parent="SandfallEventRoot/Skeleton3D" index="0"]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 2.25, 2.99434, 0)
+transform = Transform3D(0, 2.22045e-16, 1, 2.22045e-16, 1, -2.22045e-16, -1, 2.22045e-16, 0, 2.25, 2.99434, 0)
 bone_name = "player"
 bone_idx = 2
 
 [node name="Piece1" type="BoneAttachment3D" parent="SandfallEventRoot/Skeleton3D" index="1"]
-transform = Transform3D(1, 0, -4.37114e-08, 0, 1, 0, 4.37114e-08, 0, 1, 0, 1.50001, 0)
+transform = Transform3D(1, -2.93651e-15, -4.37114e-08, -2.93651e-15, 1, -1.34359e-07, 4.37114e-08, 1.34359e-07, 1, 0, 1.50001, 0)
 bone_name = "piece1"
 bone_idx = 3
 
@@ -81,7 +75,7 @@ process_material = ExtResource("6_i7tgn")
 draw_pass_1 = SubResource("PlaneMesh_7nyph")
 
 [node name="Camera" type="BoneAttachment3D" parent="SandfallEventRoot/Skeleton3D" index="2"]
-transform = Transform3D(0.567124, -0.162999, 0.807342, 1.86265e-07, 0.980222, 0.197903, -0.823632, -0.112235, 0.555907, 6.41502, 4.37531, 2.86788)
+transform = Transform3D(0.567123, -0.162999, 0.807343, 1.49012e-08, 0.980222, 0.197903, -0.823633, -0.112235, 0.555907, 6.41502, 4.37531, 2.86788)
 bone_name = "camera"
 bone_idx = 1
 
@@ -96,6 +90,7 @@ UpdateEveryFrame = true
 
 [node name="SandfallEventMesh" parent="SandfallEventRoot/Skeleton3D" index="3"]
 layers = 2
+extra_cull_margin = 100.0
 
 [node name="AnimationPlayer" parent="." index="1"]
 callback_mode_process = 0
