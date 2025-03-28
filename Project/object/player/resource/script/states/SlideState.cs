@@ -69,10 +69,7 @@ public partial class SlideState : PlayerState
 		}
 
 		if (!Mathf.IsZeroApprox(Player.MoveSpeed))
-		{
-			Player.Animator.StopCrouching();
 			Player.Animator.CrouchToMoveTransition();
-		}
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideDefense))
 		{
