@@ -82,134 +82,14 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_ibe76"]
 size = Vector3(20, 20, 5)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_3fp3q"]
-size = Vector3(20, 30, 2.5)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_uf0uo"]
-render_priority = 2
-shader = ExtResource("7_n0ru2")
-shader_parameter/albedo = ExtResource("8_djasg")
-shader_parameter/scroll_vector = Vector2(1, 0)
-shader_parameter/scroll_speed = 0.1
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1imof"]
-resource_name = "Light Shadow"
-blend_mode = 3
-specular_mode = 2
-disable_fog = true
-vertex_color_use_as_albedo = true
-albedo_color = Color(2.163, 1.5, 1.6, 1)
-albedo_texture = ExtResource("9_wtn1p")
-metallic_specular = 0.0
-emission_enabled = true
-emission = Color(1, 1, 1, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glchr"]
-resource_name = "Effect Bloom"
-render_priority = 127
-depth_draw_mode = 2
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_color = Color(0, 0, 0, 1)
-emission_enabled = true
-emission = Color(0.66, 0.47575, 0.2178, 1)
-emission_energy_multiplier = 6.23
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tj41h"]
-resource_name = "Imposter Mountain"
-transparency = 2
-alpha_scissor_threshold = 0.985
-alpha_antialiasing_mode = 0
-cull_mode = 2
-depth_draw_mode = 1
-shading_mode = 0
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.65, 0.482083, 0.247, 1)
-albedo_texture = ExtResource("14_vu8ws")
-heightmap_scale = -16.0
-heightmap_deep_parallax = true
-heightmap_min_layers = 8
-heightmap_max_layers = 32
-heightmap_flip_binormal = true
-texture_filter = 5
-grow_amount = 16.0
-point_size = 128.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v8k07"]
-render_priority = 0
-shader = ExtResource("17_21qir")
-shader_parameter/albedo = ExtResource("18_8jugo")
-shader_parameter/scroll_speed = 0.01
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xffrx"]
-render_priority = -126
-transparency = 1
-shading_mode = 0
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("19_wtyyg")
-
-[sub_resource type="Animation" id="Animation_fgslk"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../CaveLightEvent/PlayerLight:light_energy")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.1]
-}
-
-[sub_resource type="Animation" id="Animation_m17ve"]
-resource_name = "event"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../CaveLightEvent/PlayerLight:light_energy")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.1, 0.0]
-}
-
-[sub_resource type="Animation" id="Animation_avq68"]
-resource_name = "event-deactivate"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../CaveLightEvent/PlayerLight:light_energy")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.0, 0.1]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_c8ckv"]
-_data = {
-&"RESET": SubResource("Animation_fgslk"),
-&"event": SubResource("Animation_m17ve"),
-&"event-deactivate": SubResource("Animation_avq68")
-}
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_c6wh8"]
-size = Vector3(66, 44, 143)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_7jbaj"]
 size = Vector3(24.2676, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_74bek"]
 size = Vector3(10, 20, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3fp3q"]
+size = Vector3(20, 30, 2.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x053g"]
 size = Vector3(218, 2, 244)
@@ -367,46 +247,125 @@ size = Vector3(25, 80, 15)
 [sub_resource type="BoxShape3D" id="BoxShape3D_c5pbm"]
 size = Vector3(5, 20, 5)
 
-[sub_resource type="Gradient" id="Gradient_nbp5c"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0, 0.518939, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0.5, 0.464, 0.32, 1, 1, 1, 1, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uf0uo"]
+render_priority = 2
+shader = ExtResource("7_n0ru2")
+shader_parameter/albedo = ExtResource("8_djasg")
+shader_parameter/scroll_vector = Vector2(1, 0)
+shader_parameter/scroll_speed = 0.1
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_dce1u"]
-gradient = SubResource("Gradient_nbp5c")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1imof"]
+resource_name = "Light Shadow"
+blend_mode = 3
+specular_mode = 2
+disable_fog = true
+vertex_color_use_as_albedo = true
+albedo_color = Color(2.163, 1.5, 1.6, 1)
+albedo_texture = ExtResource("9_wtn1p")
+metallic_specular = 0.0
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
 
-[sub_resource type="Environment" id="Environment_h4l33"]
-background_mode = 1
-ambient_light_source = 3
-ambient_light_color = Color(1, 1, 1, 1)
-ambient_light_sky_contribution = 0.0
-ambient_light_energy = 0.15
-reflected_light_source = 1
-tonemap_mode = 1
-tonemap_exposure = 1.3
-tonemap_white = 1.5
-ssao_intensity = 1.59
-ssao_power = 2.89781
-glow_enabled = true
-glow_levels/1 = 0.1
-glow_levels/2 = 9.19
-glow_levels/4 = 0.5
-glow_levels/5 = 0.0
-glow_intensity = 0.1
-glow_strength = 1.04
-glow_bloom = 0.01
-glow_blend_mode = 1
-glow_hdr_threshold = 1.2
-glow_map_strength = 1.0
-fog_enabled = true
-fog_light_color = Color(0.57, 0, 0, 1)
-fog_density = 0.0002
-fog_sky_affect = 0.0
-adjustment_enabled = true
-adjustment_brightness = 1.4
-adjustment_contrast = 0.9
-adjustment_saturation = 0.9
-adjustment_color_correction = SubResource("GradientTexture1D_dce1u")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glchr"]
+resource_name = "Effect Bloom"
+render_priority = 127
+depth_draw_mode = 2
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(0.66, 0.47575, 0.2178, 1)
+emission_energy_multiplier = 6.23
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tj41h"]
+resource_name = "Imposter Mountain"
+transparency = 2
+alpha_scissor_threshold = 0.985
+alpha_antialiasing_mode = 0
+cull_mode = 2
+depth_draw_mode = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.65, 0.482083, 0.247, 1)
+albedo_texture = ExtResource("14_vu8ws")
+heightmap_scale = -16.0
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+heightmap_flip_binormal = true
+texture_filter = 5
+grow_amount = 16.0
+point_size = 128.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v8k07"]
+render_priority = 0
+shader = ExtResource("17_21qir")
+shader_parameter/albedo = ExtResource("18_8jugo")
+shader_parameter/scroll_speed = 0.01
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xffrx"]
+render_priority = -126
+transparency = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("19_wtyyg")
+
+[sub_resource type="Animation" id="Animation_fgslk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../CaveLightEvent/PlayerLight:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.1]
+}
+
+[sub_resource type="Animation" id="Animation_m17ve"]
+resource_name = "event"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../CaveLightEvent/PlayerLight:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.1, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_avq68"]
+resource_name = "event-deactivate"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../CaveLightEvent/PlayerLight:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_c8ckv"]
+_data = {
+&"RESET": SubResource("Animation_fgslk"),
+&"event": SubResource("Animation_m17ve"),
+&"event-deactivate": SubResource("Animation_avq68")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c6wh8"]
+size = Vector3(66, 44, 143)
 
 [sub_resource type="Animation" id="Animation_b7tc5"]
 length = 0.001
@@ -887,6 +846,47 @@ _data = {
 &"demo3": SubResource("Animation_llwld")
 }
 
+[sub_resource type="Gradient" id="Gradient_nbp5c"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.518939, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.5, 0.464, 0.32, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dce1u"]
+gradient = SubResource("Gradient_nbp5c")
+
+[sub_resource type="Environment" id="Environment_h4l33"]
+background_mode = 1
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_sky_contribution = 0.0
+ambient_light_energy = 0.15
+reflected_light_source = 1
+tonemap_mode = 1
+tonemap_exposure = 1.3
+tonemap_white = 1.5
+ssao_intensity = 1.59
+ssao_power = 2.89781
+glow_enabled = true
+glow_levels/1 = 0.1
+glow_levels/2 = 9.19
+glow_levels/4 = 0.5
+glow_levels/5 = 0.0
+glow_intensity = 0.1
+glow_strength = 1.04
+glow_bloom = 0.01
+glow_blend_mode = 1
+glow_hdr_threshold = 1.2
+glow_map_strength = 1.0
+fog_enabled = true
+fog_light_color = Color(0.57, 0, 0, 1)
+fog_density = 0.0002
+fog_sky_affect = 0.0
+adjustment_enabled = true
+adjustment_brightness = 1.4
+adjustment_contrast = 0.9
+adjustment_saturation = 0.9
+adjustment_color_correction = SubResource("GradientTexture1D_dce1u")
+
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_ahfub")
 dialogLibrary = ExtResource("2_fu16f")
@@ -896,236 +896,6 @@ Environment = NodePath("WorldEnvironment")
 
 [node name="Collision" parent="." instance=ExtResource("3_y36ly")]
 visible = false
-
-[node name="Visuals" type="Node3D" parent="."]
-metadata/_edit_lock_ = true
-metadata/_edit_group_ = true
-
-[node name="CullingMap" type="Node3D" parent="Visuals"]
-visible = false
-
-[node name="03-L" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
-transform = Transform3D(-0.144544, -0.309975, -0.939693, 0.397131, 0.851651, -0.34202, 0.906308, -0.422618, 2.49739e-08, -328.748, -193.534, -540.25)
-"Enter Mode" = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/03-L"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
-
-[node name="04-L" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
-transform = Transform3D(-1.19209e-07, 0, -1, 0, 1, 0, 1, 0, -1.19209e-07, -380.507, -217.465, -796.974)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/04-L"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13, 0)
-shape = SubResource("BoxShape3D_3fp3q")
-
-[node name="04-U" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
-transform = Transform3D(-0.699364, 0, 0.714766, 0, 1, 0, -0.714766, 0, -0.699364, -391.879, -265.061, -939.041)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/04-U"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
-
-[node name="05-L" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
-transform = Transform3D(-0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, -0.939693, -431.192, -263.797, -909.761)
-"Enter Mode" = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/05-L"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
-
-[node name="06-L" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
-transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -369.891, -264.997, -959.972)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/06-L"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
-
-[node name="0506-U" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
-transform = Transform3D(0.638392, 0, -0.769711, 0, 1, 0, 0.769711, 0, 0.638392, -618.675, -280.961, -1071.58)
-"Enter Mode" = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/0506-U"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
-
-[node name="07-L" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
-transform = Transform3D(0.596841, 0, -0.80236, 0, 1, 0, 0.80236, 0, 0.596841, -473.46, -276.984, -1118.56)
-"Enter Mode" = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/07-L"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
-
-[node name="07-U" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
-transform = Transform3D(-0.269323, 0, -0.963049, 0, 1, 0, 0.963049, 0, -0.269323, -648.081, -277.681, -1057.29)
-"Trigger Mode" = 2
-"Exit Mode" = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/07-U"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
-
-[node name="08-L" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
-transform = Transform3D(0.784171, 0, -0.620546, 0, 1, 0, 0.620546, 0, 0.784171, -539.747, -280.884, -1117.13)
-"Enter Mode" = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/08-L"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_ibe76")
-
-[node name="02RiverReverse" parent="Visuals" instance=ExtResource("7_vlbul")]
-startEnabled = true
-
-[node name="EnvironmentReflectionProbe" parent="Visuals/02RiverReverse" index="5"]
-ambient_color_energy = 0.3
-
-[node name="03Cave" parent="Visuals" instance=ExtResource("8_u2eqs")]
-startEnabled = true
-
-[node name="stg020_a03_Mesh_0001" parent="Visuals/03Cave" index="0"]
-surface_material_override/0 = SubResource("ShaderMaterial_uf0uo")
-
-[node name="stg020_a03_Mesh_0002" parent="Visuals/03Cave" index="1"]
-surface_material_override/0 = SubResource("StandardMaterial3D_1imof")
-
-[node name="EnvironmentReflectionProbe" parent="Visuals/03Cave" index="18"]
-ambient_color = Color(1, 0.802, 0.56, 1)
-ambient_color_energy = 0.5
-
-[node name="SpotLight3D" parent="Visuals/03Cave" index="20"]
-light_color = Color(1, 0.720167, 0.27, 1)
-
-[node name="SpotLight3D2" parent="Visuals/03Cave" index="21"]
-light_color = Color(1, 0.720167, 0.27, 1)
-
-[node name="SpotLight3D3" parent="Visuals/03Cave" index="22"]
-light_color = Color(1, 0.720167, 0.27, 1)
-
-[node name="Decal9" type="Decal" parent="Visuals/03Cave"]
-transform = Transform3D(0.983242, 0, 0.182304, 0, 1, 0, -0.182304, 0, 0.983242, -360.057, -210.646, -790.439)
-visible = false
-size = Vector3(33.1533, 20.261, 59.7146)
-texture_albedo = ExtResource("10_eld5b")
-emission_energy = 0.0
-albedo_mix = 0.02
-normal_fade = 0.062
-upper_fade = 1.0
-lower_fade = 0.201712
-cull_mask = 4
-
-[node name="03CaveSky" parent="Visuals" instance=ExtResource("9_p15kj")]
-startEnabled = true
-
-[node name="stg020_g08_Mesh_0000" parent="Visuals/03CaveSky" index="0"]
-surface_material_override/0 = SubResource("StandardMaterial3D_glchr")
-
-[node name="03CaveReverse" parent="Visuals" instance=ExtResource("10_q3pap")]
-
-[node name="04Spiral" parent="Visuals" instance=ExtResource("11_4xcu3")]
-
-[node name="EnvironmentReflectionProbe" parent="Visuals/04Spiral" index="20"]
-visible = false
-ambient_color = Color(1, 1, 1, 1)
-ambient_color_energy = 11.18
-
-[node name="05Crossing" parent="Visuals" instance=ExtResource("12_m4xj3")]
-
-[node name="stg020_p21_Mesh_52" parent="Visuals/05Crossing" index="10"]
-surface_material_override/0 = SubResource("StandardMaterial3D_tj41h")
-
-[node name="EnvironmentReflectionProbe" parent="Visuals/05Crossing" index="31"]
-ambient_color = Color(1, 0.73, 0.73, 1)
-
-[node name="ObjectReflectionProbe" parent="Visuals/05Crossing" index="32"]
-ambient_color = Color(1, 0.66, 0.66, 1)
-ambient_color_energy = 0.07
-
-[node name="06CavernEntrance" parent="Visuals" instance=ExtResource("13_vc0wq")]
-
-[node name="stg020_p21_Mesh_52_001" parent="Visuals/06CavernEntrance" index="8"]
-surface_material_override/0 = SubResource("StandardMaterial3D_tj41h")
-
-[node name="07Cavern" parent="Visuals" instance=ExtResource("14_mw2ws")]
-
-[node name="08FeedingTunnel" parent="Visuals" instance=ExtResource("15_gp3p4")]
-
-[node name="Skybox2" parent="Visuals" instance=ExtResource("16_71gb0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -520.204, 0)
-
-[node name="CloudsBlend" parent="Visuals/Skybox2/SkyRoot/Skeleton3D" index="0"]
-surface_material_override/0 = SubResource("ShaderMaterial_v8k07")
-
-[node name="CloudsSide" parent="Visuals/Skybox2/SkyRoot/Skeleton3D" index="1"]
-visible = false
-
-[node name="CloudsTop" parent="Visuals/Skybox2/SkyRoot/Skeleton3D" index="2"]
-surface_material_override/0 = SubResource("StandardMaterial3D_xffrx")
-
-[node name="SkyBottom" parent="Visuals/Skybox2/SkyRoot/Skeleton3D" index="3"]
-visible = false
-
-[node name="Lighting" type="Node3D" parent="."]
-
-[node name="CaveLightEvent" type="Node3D" parent="Lighting" node_paths=PackedStringArray("animator")]
-script = ExtResource("20_vf0rp")
-"Trigger Settings/Automatically Respawn" = false
-"Trigger Settings/Is One Shot" = false
-"Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
-
-[node name="PlayerLight" type="DirectionalLight3D" parent="Lighting/CaveLightEvent"]
-transform = Transform3D(1, 0, 0, 0, -0.20658, 0.97843, 0, -0.97843, -0.20658, 0, 0, 0)
-layers = 1024
-light_color = Color(0.992, 1, 0.76, 1)
-light_energy = 0.1
-light_cull_mask = 4293918784
-shadow_blur = 10.0
-directional_shadow_mode = 0
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Lighting/CaveLightEvent"]
-root_node = NodePath("../../CaveTrigger")
-libraries = {
-"": SubResource("AnimationLibrary_c8ckv")
-}
-
-[node name="CaveTrigger" parent="Lighting" instance=ExtResource("4_ko444")]
-transform = Transform3D(-0.212945, 0, 0.977064, 0, 1, 0, -0.977064, 0, -0.212945, -555.679, -281, -1093.48)
-"Trigger Mode" = 2
-"Enter Mode" = 0
-"Exit Mode" = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/CaveTrigger"]
-transform = Transform3D(0.999998, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 0.999998, -2.00049, 20, -11.75)
-shape = SubResource("BoxShape3D_c6wh8")
-
-[node name="ObjectLight" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, -0.20658, 0.97843, 0, -0.97843, -0.20658, 0, 0, 0)
-layers = 1024
-light_color = Color(0.97, 0.96418, 0.7954, 1)
-light_energy = 0.7
-light_cull_mask = 4293918721
-shadow_blur = 10.0
-directional_shadow_mode = 0
-
-[node name="EnvironmentLightOutside" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(-1, 0, 8.74228e-08, 8.74228e-08, -4.37114e-08, 1, 3.82137e-15, 1, 4.37114e-08, 0, 0, 0)
-layers = 1024
-light_color = Color(1, 0.7095, 0.17, 1)
-light_energy = 0.2
-light_cull_mask = 4293918722
-shadow_enabled = true
-shadow_opacity = 0.9
-directional_shadow_mode = 1
-directional_shadow_blend_splits = true
-directional_shadow_fade_start = 0.9
-directional_shadow_max_distance = 75.0
 
 [node name="Trigger" type="Node3D" parent="."]
 
@@ -1233,6 +1003,7 @@ shape = SubResource("BoxShape3D_74bek")
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -552.803, -280.9, -1094.96)
 
 [node name="RiverBGSFX1" type="AudioStreamPlayer3D" parent="Trigger/Object/CavernSFX"]
+process_mode = 1
 stream = ExtResource("25_k7r07")
 attenuation_model = 3
 max_db = 0.0
@@ -1240,9 +1011,9 @@ autoplay = true
 max_distance = 50.0
 panning_strength = 0.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="RiverBGSFX2" type="AudioStreamPlayer3D" parent="Trigger/Object/CavernSFX"]
+process_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.0256, 0, 35.348)
 stream = ExtResource("25_k7r07")
 attenuation_model = 3
@@ -1251,9 +1022,9 @@ autoplay = true
 max_distance = 50.0
 panning_strength = 0.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="RiverBGSFX3" type="AudioStreamPlayer3D" parent="Trigger/Object/CavernSFX"]
+process_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.626, 0, -44.6625)
 stream = ExtResource("25_k7r07")
 attenuation_model = 3
@@ -1262,7 +1033,6 @@ autoplay = true
 max_distance = 50.0
 panning_strength = 0.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="CaveRejoinTrigger" parent="Trigger/Object" instance=ExtResource("4_ko444")]
 transform = Transform3D(-0.999182, 0, 0.0404277, 0, 1, 0, -0.0404277, 0, -0.999182, -362.983, -218.815, -776.465)
@@ -1389,34 +1159,35 @@ OneShot = true
 [node name="EventTrigger" type="Node3D" parent="Trigger/Object/Apatos1/ActivateTrigger" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0, 0)
 script = ExtResource("20_vf0rp")
+animator = NodePath("DinoApatos/AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("DinoApatos/AnimationPlayer")
 
 [node name="DinoApatos" parent="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger" instance=ExtResource("35_t2d43")]
 transform = Transform3D(-0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, -0.984808, 2.44394, -38.2302, 41.3788)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger/DinoApatos"]
 libraries = {
-"": ExtResource("36_2kk6r")
+&"": ExtResource("36_2kk6r")
 }
 
 [node name="Head" type="BoneAttachment3D" parent="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger"]
-transform = Transform3D(-0.984788, -0.173647, -0.0063563, 0.00640272, 0.000292879, -0.999979, 0.173645, -0.984808, 0.000823389, -4.24603, -18.4884, 3.43817)
+transform = Transform3D(-0.325425, 0.941019, 0.0926455, 0.0064027, 0.100169, -0.99495, -0.945547, -0.323188, -0.0386227, 10.7242, -21.9637, 8.53583)
 bone_name = "head"
 bone_idx = 1
 use_external_skeleton = true
 external_skeleton = NodePath("../DinoApatos/DinoApatoRoot/GeneralSkeleton")
 
 [node name="Activate" type="AudioStreamPlayer3D" parent="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger/Head"]
+process_mode = 1
 transform = Transform3D(0.999999, 0, -9.41509e-09, 1.49012e-08, 0.999999, -4.65661e-10, -1.45519e-11, 0, 1, 3.05176e-05, 5.00006, -3.05176e-05)
 stream = ExtResource("37_x1gmf")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 200.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Splatter" type="GPUParticles3D" parent="Trigger/Object/Apatos1/ActivateTrigger/EventTrigger/Head"]
 transform = Transform3D(1, -2.98023e-08, -7.45058e-09, 0, 1, -6.51926e-09, 7.45058e-09, 5.58794e-09, 1, 0, 6.99997, 2.00003)
@@ -1457,13 +1228,13 @@ OneShot = true
 "Enter Mode" = 0
 
 [node name="Grunt" type="AudioStreamPlayer3D" parent="Trigger/Object/Apatos1/GruntTrigger"]
+process_mode = 1
 transform = Transform3D(-0.156288, 0.982843, 0.0979446, 0.00640267, 0.100169, -0.99495, -0.98769, -0.154872, -0.0219481, 13.9014, -6.76373, -48.6816)
 stream = ExtResource("42_4s1x6")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 200.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Apatos1/GruntTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1544,49 +1315,51 @@ shape = SubResource("BoxShape3D_betid")
 
 [node name="Event" type="Node3D" parent="Trigger/Object/Apatos2" node_paths=PackedStringArray("animator")]
 script = ExtResource("20_vf0rp")
-"Trigger Settings/Automatically Respawn" = true
-"Trigger Settings/Is One Shot" = false
-"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("DinoApatos/AnimationPlayer")
 respawnAnimation = 2
+"Trigger Settings/Automatically Respawn" = true
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="DinoApatos" parent="Trigger/Object/Apatos2/Event" instance=ExtResource("35_t2d43")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Trigger/Object/Apatos2/Event/DinoApatos"]
 libraries = {
-"": ExtResource("44_gbs2h")
+&"": ExtResource("44_gbs2h")
 }
 
 [node name="Head" type="BoneAttachment3D" parent="Trigger/Object/Apatos2/Event"]
-transform = Transform3D(0.999979, -9.23872e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -9.23872e-07, 1, 0.000292879, 6.10352e-05, 19.7418, 38.5259)
+transform = Transform3D(0.999979, -9.23872e-07, 0.00640272, 0.00640272, 0.000292879, -0.999979, -9.23872e-07, 1, 0.000292879, 6.10352e-05, 29.7625, 37.3079)
 bone_name = "head"
 bone_idx = 1
 use_external_skeleton = true
 external_skeleton = NodePath("../DinoApatos/DinoApatoRoot/GeneralSkeleton")
 
 [node name="Grunt" type="AudioStreamPlayer3D" parent="Trigger/Object/Apatos2/Event/Head"]
+process_mode = 1
 transform = Transform3D(1, -2.98023e-08, -4.65661e-10, 0, 1, -2.32831e-10, 0, 2.32831e-10, 1, 6.10352e-05, 4.99988, 0)
 stream = ExtResource("42_4s1x6")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 200.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="PathSelectionEvent" type="Node3D" parent="Trigger/Object/Apatos2/Event" node_paths=PackedStringArray("animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0269775, 20.2, -45.5857)
 script = ExtResource("20_vf0rp")
-"Trigger Settings/Automatically Respawn" = false
-"Trigger Settings/Is One Shot" = false
-"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("AnimationPlayer")
 respawnAnimation = 2
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="CullingTrigger" type="Node3D" parent="Trigger/Object/Apatos2/Event/PathSelectionEvent"]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Trigger/Object/Apatos2/Event/PathSelectionEvent"]
 libraries = {
-"": SubResource("AnimationLibrary_318ej")
+&"": SubResource("AnimationLibrary_318ej")
 }
 
 [node name="LeftPathTrigger" parent="Trigger/Object/Apatos2/Event" instance=ExtResource("4_ko444")]
@@ -1621,12 +1394,12 @@ transform = Transform3D(-0.986569, 0, 0.163343, 0, 1, 0, -0.163343, 0, -0.986569
 "Enter Mode" = 0
 
 [node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf1"]
+process_mode = 1
 stream = ExtResource("45_k5ext")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1638,12 +1411,12 @@ transform = Transform3D(-0.376337, 0, -0.926483, 0, 1, 0, 0.926483, 0, -0.376337
 "Enter Mode" = 0
 
 [node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf2"]
+process_mode = 1
 stream = ExtResource("45_k5ext")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1655,12 +1428,12 @@ transform = Transform3D(0.984038, 0, 0.177961, 0, 1, 0, -0.177961, 0, 0.984038, 
 "Enter Mode" = 0
 
 [node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf3"]
+process_mode = 1
 stream = ExtResource("45_k5ext")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1672,12 +1445,12 @@ transform = Transform3D(-0.996574, 0, 0.0827039, 0, 1, 0, -0.0827039, 0, -0.9965
 "Enter Mode" = 0
 
 [node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf4"]
+process_mode = 1
 stream = ExtResource("45_k5ext")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1689,12 +1462,12 @@ transform = Transform3D(-0.996574, 0, 0.0827039, 0, 1, 0, -0.0827039, 0, -0.9965
 "Enter Mode" = 0
 
 [node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf5"]
+process_mode = 1
 stream = ExtResource("45_k5ext")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1706,12 +1479,12 @@ transform = Transform3D(0.951374, 0, -0.308038, 0, 1, 0, 0.308038, 0, 0.951374, 
 "Enter Mode" = 0
 
 [node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf6"]
+process_mode = 1
 stream = ExtResource("45_k5ext")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1723,12 +1496,12 @@ transform = Transform3D(-0.947098, 0, 0.320944, 0, 1, 0, -0.320944, 0, -0.947098
 "Enter Mode" = 0
 
 [node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf7"]
+process_mode = 1
 stream = ExtResource("45_k5ext")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1740,12 +1513,12 @@ transform = Transform3D(0.871154, 0, 0.49101, 0, 1, 0, -0.49101, 0, 0.871154, -1
 "Enter Mode" = 0
 
 [node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf8"]
+process_mode = 1
 stream = ExtResource("45_k5ext")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1757,12 +1530,12 @@ transform = Transform3D(0.157176, 0, -0.987571, 0, 1, 0, 0.987571, 0, 0.157176, 
 "Enter Mode" = 0
 
 [node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf9"]
+process_mode = 1
 stream = ExtResource("45_k5ext")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1774,12 +1547,12 @@ transform = Transform3D(0.47481, 0, 0.880088, 0, 1, 0, -0.880088, 0, 0.47481, -7
 "Enter Mode" = 0
 
 [node name="LeafSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/SpiralLeaf10"]
+process_mode = 1
 stream = ExtResource("45_k5ext")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 script = ExtResource("46_70tsf")
 groupKey = &"spiral_leaf"
 
@@ -1791,13 +1564,13 @@ transform = Transform3D(-0.918121, 0, 0.396298, 0, 1, 0, -0.396298, 0, -0.918121
 "Enter Mode" = 0
 
 [node name="FallsBGSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/FallsBG"]
+process_mode = 1
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("47_v1aeb")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/FallsBG"]
 shape = SubResource("SphereShape3D_quiap")
@@ -1807,13 +1580,13 @@ transform = Transform3D(0.0583827, 0, 0.998294, 0, 1, 0, -0.998294, 0, 0.0583827
 "Enter Mode" = 0
 
 [node name="FallsSoftSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/FallsSoft"]
+process_mode = 1
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("48_f3iug")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/FallsSoft"]
 shape = SubResource("SphereShape3D_quiap")
@@ -1823,13 +1596,13 @@ transform = Transform3D(0.0583827, 0, 0.998294, 0, 1, 0, -0.998294, 0, 0.0583827
 "Enter Mode" = 0
 
 [node name="FallsLoudSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/FallsLoud1"]
+process_mode = 1
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("49_u8mw0")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/FallsLoud1"]
 shape = SubResource("SphereShape3D_quiap")
@@ -1839,13 +1612,13 @@ transform = Transform3D(0.47481, 0, 0.880088, 0, 1, 0, -0.880088, 0, 0.47481, 2.
 "Enter Mode" = 0
 
 [node name="FallsLoudSFX" type="AudioStreamPlayer3D" parent="Trigger/Object/Spiral/FallsLoud2"]
+process_mode = 1
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
 stream = ExtResource("49_u8mw0")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/Spiral/FallsLoud2"]
 shape = SubResource("SphereShape3D_quiap")
@@ -1859,11 +1632,12 @@ transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 
 
 [node name="Event" type="Node3D" parent="Trigger/Object/DinoParaGroup/Startle" node_paths=PackedStringArray("animator")]
 script = ExtResource("20_vf0rp")
-"Trigger Settings/Automatically Respawn" = false
-"Trigger Settings/Is One Shot" = false
-"Trigger Settings/Player Stand-in" = NodePath("")
 animator = NodePath("../../DinoPara2/AnimationPlayer")
 respawnAnimation = 2
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Object/DinoParaGroup/Startle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.99997, 0)
@@ -1882,7 +1656,7 @@ bones/8/rotation = Quaternion(0.621122, -1.14779e-07, 2.11389e-08, 0.783714)
 bones/10/rotation = Quaternion(-0.683858, -1.70603e-08, -6.72718e-08, 0.729616)
 bones/11/rotation = Quaternion(0.28767, 3.05702e-07, 3.35709e-08, 0.95773)
 bones/12/rotation = Quaternion(-0.683857, -1.3686e-08, 1.85714e-08, 0.729616)
-bones/13/rotation = Quaternion(0.287656, 4.25619e-07, 4.84677e-09, 0.957734)
+bones/13/rotation = Quaternion(0.287656, 4.25619e-07, 4.84679e-09, 0.957734)
 bones/15/rotation = Quaternion(0.939107, -6.78055e-08, 1.76936e-08, 0.343625)
 bones/16/rotation = Quaternion(0.941786, 6.88404e-08, 1.2379e-07, 0.336214)
 
@@ -1890,7 +1664,7 @@ bones/16/rotation = Quaternion(0.941786, 6.88404e-08, 1.2379e-07, 0.336214)
 autoplay = "para-stand"
 
 [node name="Head" parent="Trigger/Object/DinoParaGroup/DinoPara1" index="3"]
-transform = Transform3D(1, 4.47035e-08, -4.32134e-07, -4.16082e-07, -0.185597, -0.982626, -8.9407e-08, 0.982626, -0.185597, 0.00012207, 6.40689, 8.30835)
+transform = Transform3D(1, 4.47035e-08, -4.28408e-07, -4.16082e-07, -0.185597, -0.982626, -8.9407e-08, 0.982626, -0.185596, 0.00012207, 6.40689, 8.30835)
 
 [node name="DinoPara2" parent="Trigger/Object/DinoParaGroup" instance=ExtResource("50_f86qt")]
 transform = Transform3D(0.955961, 0, -1.36525, 0, 1.66667, 0, 1.36525, 0, 0.955961, 11.3036, 0, 11.6873)
@@ -1905,7 +1679,7 @@ bones/8/rotation = Quaternion(0.621122, -1.14779e-07, 2.11389e-08, 0.783714)
 bones/10/rotation = Quaternion(-0.683858, -1.70603e-08, -6.72718e-08, 0.729616)
 bones/11/rotation = Quaternion(0.28767, 3.05702e-07, 3.35709e-08, 0.95773)
 bones/12/rotation = Quaternion(-0.683857, -1.3686e-08, 1.85714e-08, 0.729616)
-bones/13/rotation = Quaternion(0.287656, 4.25619e-07, 4.84677e-09, 0.957734)
+bones/13/rotation = Quaternion(0.287656, 4.25619e-07, 4.84679e-09, 0.957734)
 bones/15/rotation = Quaternion(0.939107, -6.78055e-08, 1.76936e-08, 0.343625)
 bones/16/rotation = Quaternion(0.941786, 6.88404e-08, 1.2379e-07, 0.336214)
 
@@ -1913,7 +1687,7 @@ bones/16/rotation = Quaternion(0.941786, 6.88404e-08, 1.2379e-07, 0.336214)
 autoplay = "event-deactivate"
 
 [node name="Head" parent="Trigger/Object/DinoParaGroup/DinoPara2" index="3"]
-transform = Transform3D(1, 2.98023e-08, -4.24683e-07, -4.16082e-07, -0.185597, -0.982626, -1.19209e-07, 0.982626, -0.185597, 0, 6.40689, 8.30835)
+transform = Transform3D(1, 5.96046e-08, -4.28408e-07, -4.16082e-07, -0.185597, -0.982626, -1.19209e-07, 0.982626, -0.185596, 0, 6.40689, 8.30835)
 
 [node name="FeedingRecenterTrigger" type="Node3D" parent="Trigger/Object"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670.544, -283.473, -1075.94)
@@ -2142,6 +1916,247 @@ reflectionRenderer = NodePath("../../../../PlanarReflectionRenderer")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ibe76")
 
+[node name="Visuals" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="CullingMap" type="Node3D" parent="Visuals"]
+visible = false
+
+[node name="03-L" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
+transform = Transform3D(-0.144544, -0.309975, -0.939693, 0.397131, 0.851651, -0.34202, 0.906308, -0.422618, 2.49739e-08, -328.748, -193.534, -540.25)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/03-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="04-L" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
+transform = Transform3D(-1.19209e-07, 0, -1, 0, 1, 0, 1, 0, -1.19209e-07, -380.507, -217.465, -796.974)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/04-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13, 0)
+shape = SubResource("BoxShape3D_3fp3q")
+
+[node name="04-U" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
+transform = Transform3D(-0.699364, 0, 0.714766, 0, 1, 0, -0.714766, 0, -0.699364, -391.879, -265.061, -939.041)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/04-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="05-L" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
+transform = Transform3D(-0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, -0.939693, -431.192, -263.797, -909.761)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/05-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="06-L" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -369.891, -264.997, -959.972)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/06-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="0506-U" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
+transform = Transform3D(0.638392, 0, -0.769711, 0, 1, 0, 0.769711, 0, 0.638392, -618.675, -280.961, -1071.58)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/0506-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="07-L" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
+transform = Transform3D(0.596841, 0, -0.80236, 0, 1, 0, 0.80236, 0, 0.596841, -473.46, -276.984, -1118.56)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/07-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="07-U" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
+transform = Transform3D(-0.269323, 0, -0.963049, 0, 1, 0, 0.963049, 0, -0.269323, -648.081, -277.681, -1057.29)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/07-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="08-L" parent="Visuals/CullingMap" instance=ExtResource("4_ko444")]
+transform = Transform3D(0.784171, 0, -0.620546, 0, 1, 0, 0.620546, 0, 0.784171, -539.747, -280.884, -1117.13)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Visuals/CullingMap/08-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ibe76")
+
+[node name="02RiverReverse" parent="Visuals" instance=ExtResource("7_vlbul")]
+startEnabled = true
+
+[node name="03Cave" parent="Visuals" instance=ExtResource("8_u2eqs")]
+startEnabled = true
+
+[node name="stg020_a03_Mesh_0001" parent="Visuals/03Cave" index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_uf0uo")
+
+[node name="stg020_a03_Mesh_0002" parent="Visuals/03Cave" index="1"]
+surface_material_override/0 = SubResource("StandardMaterial3D_1imof")
+
+[node name="EnvironmentReflectionProbe" parent="Visuals/03Cave" index="18"]
+ambient_color = Color(1, 0.802, 0.56, 1)
+ambient_color_energy = 0.5
+
+[node name="SpotLight3D" parent="Visuals/03Cave" index="20"]
+light_color = Color(1, 0.720167, 0.27, 1)
+
+[node name="SpotLight3D2" parent="Visuals/03Cave" index="21"]
+light_color = Color(1, 0.720167, 0.27, 1)
+
+[node name="SpotLight3D3" parent="Visuals/03Cave" index="22"]
+light_color = Color(1, 0.720167, 0.27, 1)
+
+[node name="Decal9" type="Decal" parent="Visuals/03Cave"]
+transform = Transform3D(0.983242, 0, 0.182304, 0, 1, 0, -0.182304, 0, 0.983242, -360.057, -210.646, -790.439)
+visible = false
+size = Vector3(33.1533, 20.261, 59.7146)
+texture_albedo = ExtResource("10_eld5b")
+emission_energy = 0.0
+albedo_mix = 0.02
+normal_fade = 0.062
+upper_fade = 1.0
+lower_fade = 0.201712
+cull_mask = 4
+
+[node name="03CaveSky" parent="Visuals" instance=ExtResource("9_p15kj")]
+startEnabled = true
+
+[node name="stg020_g08_Mesh_0000" parent="Visuals/03CaveSky" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_glchr")
+
+[node name="03CaveReverse" parent="Visuals" instance=ExtResource("10_q3pap")]
+
+[node name="04Spiral" parent="Visuals" instance=ExtResource("11_4xcu3")]
+
+[node name="EnvironmentReflectionProbe" parent="Visuals/04Spiral" index="20"]
+visible = false
+ambient_color = Color(1, 1, 1, 1)
+ambient_color_energy = 11.18
+
+[node name="05Crossing" parent="Visuals" instance=ExtResource("12_m4xj3")]
+
+[node name="stg020_p21_Mesh_52" parent="Visuals/05Crossing" index="10"]
+surface_material_override/0 = SubResource("StandardMaterial3D_tj41h")
+
+[node name="EnvironmentReflectionProbe" parent="Visuals/05Crossing" index="31"]
+ambient_color = Color(1, 0.73, 0.73, 1)
+
+[node name="ObjectReflectionProbe" parent="Visuals/05Crossing" index="32"]
+ambient_color = Color(1, 0.66, 0.66, 1)
+ambient_color_energy = 0.07
+
+[node name="06CavernEntrance" parent="Visuals" instance=ExtResource("13_vc0wq")]
+
+[node name="stg020_p21_Mesh_52_001" parent="Visuals/06CavernEntrance" index="8"]
+surface_material_override/0 = SubResource("StandardMaterial3D_tj41h")
+
+[node name="07Cavern" parent="Visuals" instance=ExtResource("14_mw2ws")]
+
+[node name="08FeedingTunnel" parent="Visuals" instance=ExtResource("15_gp3p4")]
+
+[node name="Skybox2" parent="Visuals" instance=ExtResource("16_71gb0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -520.204, 0)
+
+[node name="CloudsBlend" parent="Visuals/Skybox2/SkyRoot/Skeleton3D" index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_v8k07")
+
+[node name="CloudsSide" parent="Visuals/Skybox2/SkyRoot/Skeleton3D" index="1"]
+visible = false
+
+[node name="CloudsTop" parent="Visuals/Skybox2/SkyRoot/Skeleton3D" index="2"]
+surface_material_override/0 = SubResource("StandardMaterial3D_xffrx")
+
+[node name="SkyBottom" parent="Visuals/Skybox2/SkyRoot/Skeleton3D" index="3"]
+visible = false
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="CaveLightEvent" type="Node3D" parent="Lighting" node_paths=PackedStringArray("animator")]
+script = ExtResource("20_vf0rp")
+animator = NodePath("AnimationPlayer")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="PlayerLight" type="DirectionalLight3D" parent="Lighting/CaveLightEvent"]
+transform = Transform3D(1, 0, 0, 0, -0.20658, 0.97843, 0, -0.97843, -0.20658, 0, 0, 0)
+layers = 1024
+light_color = Color(0.992, 1, 0.76, 1)
+light_energy = 0.1
+light_cull_mask = 4293918784
+shadow_blur = 10.0
+directional_shadow_mode = 0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Lighting/CaveLightEvent"]
+root_node = NodePath("../../CaveTrigger")
+libraries = {
+&"": SubResource("AnimationLibrary_c8ckv")
+}
+
+[node name="CaveTrigger" parent="Lighting" instance=ExtResource("4_ko444")]
+transform = Transform3D(-0.212945, 0, 0.977064, 0, 1, 0, -0.977064, 0, -0.212945, -555.679, -281, -1093.48)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lighting/CaveTrigger"]
+transform = Transform3D(0.999998, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 0.999998, -2.00049, 20, -11.75)
+shape = SubResource("BoxShape3D_c6wh8")
+
+[node name="ObjectLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -0.20658, 0.97843, 0, -0.97843, -0.20658, 0, 0, 0)
+layers = 1024
+light_color = Color(0.97, 0.96418, 0.7954, 1)
+light_energy = 0.7
+light_cull_mask = 4293918721
+shadow_blur = 10.0
+directional_shadow_mode = 0
+
+[node name="EnvironmentLightOutside" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(-1, 0, 8.74228e-08, 8.74228e-08, -4.37114e-08, 1, 3.82137e-15, 1, 4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(1, 0.7095, 0.17, 1)
+light_energy = 0.2
+light_cull_mask = 4293918722
+shadow_enabled = true
+shadow_opacity = 0.9
+directional_shadow_mode = 1
+directional_shadow_blend_splits = true
+directional_shadow_fade_start = 0.9
+directional_shadow_max_distance = 75.0
+
+[node name="ReflectionProbes" type="Node3D" parent="."]
+
+[node name="OpeningEnvironmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -353.986, -194.291, -553.42)
+layers = 1024
+size = Vector3(173.78, 141.82, 160.182)
+interior = true
+cull_mask = 20
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(1, 1, 1, 1)
+ambient_color_energy = 0.5
+
 [node name="Path" type="Node3D" parent="."]
 
 [node name="CavePath" type="Path3D" parent="Path"]
@@ -2194,9 +2209,6 @@ curve = ExtResource("86_ychf6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -619.189, -280.996, -1071.37)
 curve = ExtResource("87_mva33")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_h4l33")
-
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("96_3stjd")
 bus = &"BGM"
@@ -2215,7 +2227,7 @@ fov = 60.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DemoCamera"]
 libraries = {
-"": SubResource("AnimationLibrary_blwh0")
+&"": SubResource("AnimationLibrary_blwh0")
 }
 
 [node name="DepthRenderer" parent="." instance=ExtResource("98_hqa3d")]
@@ -2224,32 +2236,9 @@ libraries = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -366, -281, -1077)
 reflectionMaterials = [ExtResource("100_3sdt7")]
 
-[connection signal="Activated" from="Visuals/CullingMap/03-L" to="Visuals/03Cave" method="Activate"]
-[connection signal="Activated" from="Visuals/CullingMap/03-L" to="Visuals/03CaveSky" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/03-L" to="Visuals/03Cave" method="Deactivate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/03-L" to="Visuals/03CaveSky" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/04-L" to="Visuals/04Spiral" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/04-L" to="Visuals/04Spiral" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/04-U" to="Visuals/04Spiral" method="Deactivate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/04-U" to="Visuals/04Spiral" method="Activate"]
-[connection signal="Activated" from="Visuals/CullingMap/05-L" to="Visuals/03CaveSky" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/05-L" to="Visuals/03CaveReverse" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/05-L" to="Visuals/05Crossing" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/05-L" to="Visuals/03CaveSky" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/05-L" to="Visuals/03CaveReverse" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/05-L" to="Visuals/05Crossing" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/06-L" to="Visuals/06CavernEntrance" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/06-L" to="Visuals/06CavernEntrance" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/0506-U" to="Visuals/05Crossing" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/0506-U" to="Visuals/06CavernEntrance" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/07-L" to="Visuals/07Cavern" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/07-L" to="Visuals/07Cavern" method="Deactivate"]
-[connection signal="Activated" from="Visuals/CullingMap/07-U" to="Visuals/07Cavern" method="Deactivate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/07-U" to="Visuals/07Cavern" method="Activate"]
-[connection signal="Activated" from="Visuals/CullingMap/08-L" to="Visuals/08FeedingTunnel" method="Activate"]
-[connection signal="Deactivated" from="Visuals/CullingMap/08-L" to="Visuals/08FeedingTunnel" method="Deactivate"]
-[connection signal="Activated" from="Lighting/CaveTrigger" to="Lighting/CaveLightEvent" method="Activate"]
-[connection signal="Deactivated" from="Lighting/CaveTrigger" to="Lighting/CaveLightEvent" method="Deactivate"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_h4l33")
+
 [connection signal="Activated" from="Trigger/Checkpoints/DinoCheckpoint" to="Collision/LSideWall" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Checkpoints/DinoCheckpoint" to="Collision/RSideWall" method="Deactivate"]
 [connection signal="Activated" from="Trigger/Checkpoints/BoatLCheckpoint" to="Collision/LSideWall" method="Deactivate"]
@@ -2300,7 +2289,35 @@ reflectionMaterials = [ExtResource("100_3sdt7")]
 [connection signal="Activated" from="Trigger/Object/Spiral/FallsLoud2" to="Trigger/Object/Spiral/FallsLoud2/FallsLoudSFX" method="play"]
 [connection signal="Activated" from="Trigger/Object/FeedingRecenterTrigger/StartTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Activate"]
 [connection signal="Deactivated" from="Trigger/Object/FeedingRecenterTrigger/StartTrigger" to="Trigger/Object/FeedingRecenterTrigger/Lockout" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/03-L" to="Visuals/03Cave" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/03-L" to="Visuals/03CaveSky" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/03-L" to="Visuals/03Cave" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/03-L" to="Visuals/03CaveSky" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/04-L" to="Visuals/04Spiral" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/04-L" to="Visuals/04Spiral" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/04-U" to="Visuals/04Spiral" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/04-U" to="Visuals/04Spiral" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/05-L" to="Visuals/03CaveSky" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/05-L" to="Visuals/03CaveReverse" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/05-L" to="Visuals/05Crossing" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/05-L" to="Visuals/03CaveSky" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/05-L" to="Visuals/03CaveReverse" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/05-L" to="Visuals/05Crossing" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/06-L" to="Visuals/06CavernEntrance" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/06-L" to="Visuals/06CavernEntrance" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/0506-U" to="Visuals/05Crossing" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/0506-U" to="Visuals/06CavernEntrance" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/07-L" to="Visuals/07Cavern" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/07-L" to="Visuals/07Cavern" method="Deactivate"]
+[connection signal="Activated" from="Visuals/CullingMap/07-U" to="Visuals/07Cavern" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/07-U" to="Visuals/07Cavern" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingMap/08-L" to="Visuals/08FeedingTunnel" method="Activate"]
+[connection signal="Deactivated" from="Visuals/CullingMap/08-L" to="Visuals/08FeedingTunnel" method="Deactivate"]
+[connection signal="Activated" from="Lighting/CaveTrigger" to="Lighting/CaveLightEvent" method="Activate"]
+[connection signal="Deactivated" from="Lighting/CaveTrigger" to="Lighting/CaveLightEvent" method="Deactivate"]
 
+[editable path="Trigger/Object/DinoParaGroup/DinoPara1"]
+[editable path="Trigger/Object/DinoParaGroup/DinoPara2"]
 [editable path="Visuals/02RiverReverse"]
 [editable path="Visuals/03Cave"]
 [editable path="Visuals/03CaveSky"]
@@ -2308,5 +2325,3 @@ reflectionMaterials = [ExtResource("100_3sdt7")]
 [editable path="Visuals/05Crossing"]
 [editable path="Visuals/06CavernEntrance"]
 [editable path="Visuals/Skybox2"]
-[editable path="Trigger/Object/DinoParaGroup/DinoPara1"]
-[editable path="Trigger/Object/DinoParaGroup/DinoPara2"]
