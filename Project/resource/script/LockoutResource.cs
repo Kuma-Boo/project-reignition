@@ -19,7 +19,6 @@ public partial class LockoutResource : Resource
 			ExtensionMethods.CreateProperty("General/Recenter Player", Variant.Type.Bool),
 			ExtensionMethods.CreateProperty("General/Invincible", Variant.Type.Bool),
 			ExtensionMethods.CreateProperty("General/Priority", Variant.Type.Int, PropertyHint.Range, $"-1, {MaxPriority}"),
-			ExtensionMethods.CreateProperty("Actions/Reset Actions", Variant.Type.Bool),
 			ExtensionMethods.CreateProperty("Actions/Disable Action Flags", Variant.Type.Int, PropertyHint.Flags, disableActionFlags.EnumToString()),
 			ExtensionMethods.CreateProperty("Actions/Reset Flags", Variant.Type.Int, PropertyHint.Flags, resetFlags.EnumToString()),
 			ExtensionMethods.CreateProperty("Controls/Override Speed", Variant.Type.Bool),
