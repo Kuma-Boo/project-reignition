@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bpxj0juyhbmxs"]
+[gd_scene load_steps=34 format=3 uid="uid://bpxj0juyhbmxs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_16rgi"]
 [ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="2_dq0yd"]
@@ -14,6 +14,24 @@
 [ext_resource type="PackedScene" uid="uid://bvft4ug7urpq6" path="res://area/4 levitated ruin/act 2/environment/Rukh5LOD.tscn" id="12_it03k"]
 [ext_resource type="PackedScene" uid="uid://c0dgmelbkergu" path="res://area/4 levitated ruin/act 2/environment/Zipline.tscn" id="13_p27ay"]
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="14_h17nb"]
+[ext_resource type="Curve3D" uid="uid://ceyxa8kv6wyp6" path="res://area/4 levitated ruin/act 2/environment/path/Rukh2Path.tres" id="14_pfd68"]
+[ext_resource type="Curve3D" uid="uid://dop3mxxws32gb" path="res://area/4 levitated ruin/act 2/environment/path/Rukh3Path.tres" id="15_ht7o1"]
+[ext_resource type="Curve3D" uid="uid://d0prmpl1rlr6w" path="res://area/4 levitated ruin/act 2/environment/path/Rukh4Path.tres" id="16_it03k"]
+[ext_resource type="Curve3D" uid="uid://vb8wm0cfjf38" path="res://area/4 levitated ruin/act 2/environment/path/Rukh5Path.tres" id="17_p27ay"]
+[ext_resource type="Curve3D" uid="uid://mtulat3gydtp" path="res://area/4 levitated ruin/act 2/environment/path/Tower1Path.tres" id="18_h17nb"]
+[ext_resource type="Curve3D" uid="uid://djmfbtynsdppj" path="res://area/4 levitated ruin/act 2/environment/path/Tower2Path.tres" id="19_v5nmh"]
+[ext_resource type="Curve3D" uid="uid://dqs85jdmydyht" path="res://area/4 levitated ruin/act 2/environment/path/Tower3Path.tres" id="20_s7bpm"]
+[ext_resource type="Curve3D" uid="uid://diibs5eox7jtt" path="res://area/4 levitated ruin/act 2/environment/path/Tower4Path.tres" id="21_7ougu"]
+[ext_resource type="Curve3D" uid="uid://cgcubh6bcfa7d" path="res://area/4 levitated ruin/act 2/environment/path/Tower5Path.tres" id="22_d34ml"]
+[ext_resource type="Curve3D" uid="uid://drjxatqu8kc62" path="res://area/4 levitated ruin/act 2/environment/path/Tower1TopPath.tres" id="23_v5nmh"]
+[ext_resource type="Curve3D" uid="uid://bg5sqldgl5v88" path="res://area/4 levitated ruin/act 2/environment/path/Tower2TopPath.tres" id="24_s7bpm"]
+[ext_resource type="Curve3D" uid="uid://q888cvyubdg0" path="res://area/4 levitated ruin/act 2/environment/path/Tower3TopPath.tres" id="25_7ougu"]
+[ext_resource type="Curve3D" uid="uid://bom0wsi4f25u1" path="res://area/4 levitated ruin/act 2/environment/path/Tower4TopPath.tres" id="26_d34ml"]
+[ext_resource type="Curve3D" uid="uid://by0mwyvkcdeng" path="res://area/4 levitated ruin/act 2/environment/path/Tower5TopPath.tres" id="27_f3657"]
+[ext_resource type="Curve3D" uid="uid://oimrmhv1wlmn" path="res://area/4 levitated ruin/act 2/environment/path/Zipline1Path.tres" id="28_f3657"]
+[ext_resource type="Curve3D" uid="uid://c6dmpniq0buub" path="res://area/4 levitated ruin/act 2/environment/path/Zipline2Path.tres" id="29_ibnot"]
+[ext_resource type="Curve3D" uid="uid://cmcxoht21qovk" path="res://area/4 levitated ruin/act 2/environment/path/Zipline3Path.tres" id="30_4qmrk"]
+[ext_resource type="Curve3D" uid="uid://bbqujhkw17efi" path="res://area/4 levitated ruin/act 2/environment/path/Zipline4Path.tres" id="31_rqc87"]
 
 [sub_resource type="Environment" id="Environment_v5nmh"]
 ambient_light_source = 2
@@ -27,8 +45,10 @@ glow_enabled = true
 glow_blend_mode = 0
 adjustment_enabled = true
 
-[node name="Static" type="Node3D"]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_16rgi")
+pathParent = NodePath("Paths")
+Environment = NodePath("WorldEnvironment")
 
 [node name="Visuals" type="Node3D" parent="."]
 
@@ -69,16 +89,90 @@ startEnabled = true
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="Sun" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(0.5, 0.75, 0.433013, 0.433013, -0.649519, 0.625, 0.75, -0.125, -0.649519, 256, 0, -1344)
+transform = Transform3D(0.5, 0.75, 0.433013, 0.433013, -0.649519, 0.625, 0.75, -0.125, -0.649519, 0, 0, 0)
 layers = 2
 light_color = Color(0.96, 0.71808, 0.4224, 1)
 light_energy = 1.8
 
 [node name="Bounce" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(-0.433013, 0.649519, -0.625, 0.0580125, 0.712019, 0.699759, 0.899519, 0.266747, -0.345994, 256, 0, -1344)
+transform = Transform3D(-0.433013, 0.649519, -0.625, 0.0580125, 0.712019, 0.699759, 0.899519, 0.266747, -0.345994, 0, 0, 0)
 layers = 2
 light_color = Color(0.3492, 0.78376, 0.97, 1)
 light_energy = 0.6
+
+[node name="Paths" type="Node3D" parent="."]
+
+[node name="Rukh2" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, -1350)
+curve = ExtResource("14_pfd68")
+
+[node name="Rukh3" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 650, -80.003, -1299)
+curve = ExtResource("15_ht7o1")
+
+[node name="Rukh4" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -96.231, -989.511)
+curve = ExtResource("16_it03k")
+
+[node name="Rukh5" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 550.243, 27.07, -1089.51)
+curve = ExtResource("17_p27ay")
+
+[node name="Tower1" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 253.177, -29.995, -1382.67)
+curve = ExtResource("18_h17nb")
+
+[node name="Tower2" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -96.823, 10, -1567.33)
+curve = ExtResource("19_v5nmh")
+
+[node name="Tower3" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 650.379, -69.999, -1516.97)
+curve = ExtResource("20_s7bpm")
+
+[node name="Tower4" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -85, -932.79)
+curve = ExtResource("21_7ougu")
+
+[node name="Tower5" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 550.122, 30.008, -1032.79)
+curve = ExtResource("22_d34ml")
+
+[node name="TowerTop1" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 10, -1397.5)
+curve = ExtResource("23_v5nmh")
+
+[node name="TowerTop2" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -103.177, 50, -1582.67)
+curve = ExtResource("24_s7bpm")
+
+[node name="TowerTop3" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 644.613, -29.9, -1519.42)
+curve = ExtResource("25_7ougu")
+
+[node name="TowerTop4" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.823, -45, -932.671)
+curve = ExtResource("26_d34ml")
+
+[node name="TowerTop5" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 555.632, 70.007, -1019.49)
+curve = ExtResource("27_f3657")
+
+[node name="Zipline1" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 239.497, 15.05, -1375.01)
+curve = ExtResource("28_f3657")
+
+[node name="Zipline2" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 259.4, 6.453, -1375)
+curve = ExtResource("29_ibnot")
+
+[node name="Zipline3" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.835, -1.45, -1367.82)
+curve = ExtResource("30_4qmrk")
+
+[node name="Zipline4" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 257.165, -1.45, -1367.82)
+curve = ExtResource("31_rqc87")
 
 [node name="DepthRenderer" parent="." instance=ExtResource("14_h17nb")]
 
