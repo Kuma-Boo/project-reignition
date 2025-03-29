@@ -1,0 +1,86 @@
+[gd_scene load_steps=16 format=3 uid="uid://bpxj0juyhbmxs"]
+
+[ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_16rgi"]
+[ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="2_dq0yd"]
+[ext_resource type="PackedScene" uid="uid://cx4ihvfopidgr" path="res://area/4 levitated ruin/act 2/environment/Rukh1.tscn" id="3_8fsym"]
+[ext_resource type="PackedScene" uid="uid://bajew0cci4m54" path="res://area/4 levitated ruin/act 2/environment/Rukh1LOD.tscn" id="4_qm0g2"]
+[ext_resource type="PackedScene" uid="uid://coqvsdvf2uaop" path="res://area/4 levitated ruin/act 2/environment/Rukh2.tscn" id="5_ywrk3"]
+[ext_resource type="PackedScene" uid="uid://e1ogicqf6iyb" path="res://area/4 levitated ruin/act 2/environment/Rukh2LOD.tscn" id="6_yh2tw"]
+[ext_resource type="PackedScene" uid="uid://dtdg801dspc6e" path="res://area/4 levitated ruin/act 2/environment/Rukh3.tscn" id="7_t4pd1"]
+[ext_resource type="PackedScene" uid="uid://8f5qkpcg4ml5" path="res://area/4 levitated ruin/act 2/environment/Rukh3LOD.tscn" id="8_yms8o"]
+[ext_resource type="PackedScene" uid="uid://daw4ifj8lu703" path="res://area/4 levitated ruin/act 2/environment/Rukh4.tscn" id="9_ro48b"]
+[ext_resource type="PackedScene" uid="uid://emgg67whvfr" path="res://area/4 levitated ruin/act 2/environment/Rukh4LOD.tscn" id="10_pfd68"]
+[ext_resource type="PackedScene" uid="uid://ytum20tuve3h" path="res://area/4 levitated ruin/act 2/environment/Rukh5.tscn" id="11_ht7o1"]
+[ext_resource type="PackedScene" uid="uid://bvft4ug7urpq6" path="res://area/4 levitated ruin/act 2/environment/Rukh5LOD.tscn" id="12_it03k"]
+[ext_resource type="PackedScene" uid="uid://c0dgmelbkergu" path="res://area/4 levitated ruin/act 2/environment/Zipline.tscn" id="13_p27ay"]
+[ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="14_h17nb"]
+
+[sub_resource type="Environment" id="Environment_v5nmh"]
+ambient_light_source = 2
+ambient_light_color = Color(0.173492, 0.320012, 0.674406, 1)
+ambient_light_energy = 1.2
+tonemap_mode = 2
+tonemap_exposure = 1.2
+tonemap_white = 1.2
+ssao_enabled = true
+glow_enabled = true
+glow_blend_mode = 0
+adjustment_enabled = true
+
+[node name="Static" type="Node3D"]
+script = ExtResource("1_16rgi")
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="LRSky" parent="Visuals" instance=ExtResource("2_dq0yd")]
+
+[node name="Rukh1" parent="Visuals" instance=ExtResource("3_8fsym")]
+startEnabled = true
+
+[node name="Rukh1LOD" parent="Visuals" instance=ExtResource("4_qm0g2")]
+visible = false
+
+[node name="Rukh2" parent="Visuals" instance=ExtResource("5_ywrk3")]
+
+[node name="Rukh2LOD" parent="Visuals" instance=ExtResource("6_yh2tw")]
+visible = false
+startEnabled = true
+
+[node name="Rukh3" parent="Visuals" instance=ExtResource("7_t4pd1")]
+
+[node name="Rukh3LOD" parent="Visuals" instance=ExtResource("8_yms8o")]
+visible = false
+startEnabled = true
+
+[node name="Rukh4" parent="Visuals" instance=ExtResource("9_ro48b")]
+
+[node name="Rukh4LOD" parent="Visuals" instance=ExtResource("10_pfd68")]
+visible = false
+startEnabled = true
+
+[node name="Rukh5" parent="Visuals" instance=ExtResource("11_ht7o1")]
+
+[node name="Rukh5LOD" parent="Visuals" instance=ExtResource("12_it03k")]
+visible = false
+startEnabled = true
+
+[node name="Zipline" parent="Visuals" instance=ExtResource("13_p27ay")]
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="Sun" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(0.5, 0.75, 0.433013, 0.433013, -0.649519, 0.625, 0.75, -0.125, -0.649519, 256, 0, -1344)
+layers = 2
+light_color = Color(0.96, 0.71808, 0.4224, 1)
+light_energy = 1.8
+
+[node name="Bounce" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(-0.433013, 0.649519, -0.625, 0.0580125, 0.712019, 0.699759, 0.899519, 0.266747, -0.345994, 256, 0, -1344)
+layers = 2
+light_color = Color(0.3492, 0.78376, 0.97, 1)
+light_energy = 0.6
+
+[node name="DepthRenderer" parent="." instance=ExtResource("14_h17nb")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_v5nmh")
