@@ -521,13 +521,37 @@ mesh = SubResource("ArrayMesh_dvrhv")
 skin = SubResource("Skin_c5mqb")
 skeleton = NodePath("../..")
 
+[node name="ReflectionProbe" type="Node3D" parent="."]
+
+[node name="PlayerProbe" type="ReflectionProbe" parent="ReflectionProbe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150.704, 0, 5.41309)
+layers = 1024
+size = Vector3(338.956, 20, 408.637)
+interior = true
+cull_mask = 64
+reflection_mask = 64
+ambient_mode = 2
+ambient_color = Color(0.77, 0.487025, 0.3927, 1)
+ambient_color_energy = 0.5
+
+[node name="ObjectProbe" type="ReflectionProbe" parent="ReflectionProbe"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150.704, 0, 5.41309)
+layers = 1024
+size = Vector3(338.956, 20, 408.637)
+interior = true
+cull_mask = 0
+reflection_mask = 1
+ambient_mode = 2
+ambient_color = Color(1, 0.86, 0.86, 1)
+ambient_color_energy = 0.4
+
 [node name="Path" type="Node3D" parent="."]
 
 [node name="MainPath" type="Path3D" parent="Path"]
 curve = ExtResource("4_nrma0")
 
 [node name="BossPathFollower" type="PathFollow3D" parent="Path/MainPath"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -60)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -60)
 progress = 60.0
 use_model_front = true
 cubic_interp = false
@@ -540,7 +564,7 @@ cull_mask = 30
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DemoCamera"]
 libraries = {
-"": SubResource("AnimationLibrary_vh30f")
+&"": SubResource("AnimationLibrary_vh30f")
 }
 next/demo1 = &"demo2"
 next/demo2 = &"demo3"
@@ -558,22 +582,3 @@ isStageMusic = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_nt3em")
-
-[node name="ReflectionProbe" type="ReflectionProbe" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150.704, 0, 5.41309)
-layers = 64
-size = Vector3(338.956, 20, 408.637)
-interior = true
-cull_mask = 64
-ambient_mode = 2
-ambient_color = Color(0.77, 0.487025, 0.3927, 1)
-ambient_color_energy = 0.5
-
-[node name="ReflectionProbe2" type="ReflectionProbe" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150.704, 0, 5.41309)
-size = Vector3(338.956, 20, 408.637)
-interior = true
-cull_mask = 1
-ambient_mode = 2
-ambient_color = Color(1, 0.86, 0.86, 1)
-ambient_color_energy = 0.4

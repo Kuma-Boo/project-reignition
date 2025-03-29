@@ -527,7 +527,6 @@ transform = Transform3D(-0.93274, 0, 0.36055, 0, 1, 0, -0.36055, 0, -0.93274, 31
 
 [node name="Camera" type="Node3D" parent="Trigger/HallCam1"]
 script = ExtResource("5_qbof6")
-transitionTime = 0.5
 settings = ExtResource("6_gwtbf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/HallCam1"]
@@ -557,7 +556,6 @@ transform = Transform3D(-0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.939693, 
 
 [node name="Camera" type="Node3D" parent="Trigger/HallCam2"]
 script = ExtResource("5_qbof6")
-transitionTime = 0.5
 settings = ExtResource("6_gwtbf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/HallCam2"]
@@ -571,7 +569,6 @@ transform = Transform3D(-0.934628, 0, 0.355629, 0, 1, 0, -0.355629, 0, -0.934628
 
 [node name="Camera" type="Node3D" parent="Trigger/UpperCam"]
 script = ExtResource("5_qbof6")
-transitionTime = 0.5
 settings = ExtResource("2_lhfq0")
 previousSettings = ExtResource("6_gwtbf")
 
@@ -704,9 +701,9 @@ shape = SubResource("BoxShape3D_nwi4p")
 [node name="Skybox" parent="Visuals" instance=ExtResource("2_1co7j")]
 transform = Transform3D(0.693201, 0, 0.720745, 0, 1, 0, -0.720745, 0, 0.693201, -56.7324, 0, -529.891)
 
-[node name="Lighting" type="Node3D" parent="Visuals"]
+[node name="Lighting" type="Node3D" parent="."]
 
-[node name="InteriorLighting" type="DirectionalLight3D" parent="Visuals/Lighting"]
+[node name="InteriorLighting" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(-0.430447, -0.709785, 0.557603, 0.899382, -0.285031, 0.331465, -0.0763344, 0.644176, 0.761059, 0, 0, 0)
 layers = 1024
 light_color = Color(0.741176, 0.678431, 0.45098, 1)
@@ -714,7 +711,7 @@ light_energy = 1.2
 light_cull_mask = 4293918724
 directional_shadow_max_distance = 50.0
 
-[node name="ObjectLighting" type="DirectionalLight3D" parent="Visuals/Lighting"]
+[node name="ObjectLighting" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
 light_color = Color(1, 0.815686, 0.411765, 1)
@@ -723,7 +720,7 @@ light_cull_mask = 4293918785
 directional_shadow_mode = 0
 directional_shadow_max_distance = 50.0
 
-[node name="ExteriorLighting" type="DirectionalLight3D" parent="Visuals/Lighting"]
+[node name="ExteriorLighting" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(0.999903, -0.00751763, -0.0117013, 0.00859073, -0.327816, 0.944703, -0.0109378, -0.944712, -0.327719, 0, 0, 0)
 layers = 1024
 light_color = Color(0.85098, 0.807843, 0.705882, 1)
@@ -731,18 +728,100 @@ light_energy = 1.5
 light_cull_mask = 4293918722
 shadow_enabled = true
 shadow_bias = 0.02
+shadow_caster_mask = 4293918785
 directional_shadow_blend_splits = true
 
-[node name="ExteriorBounceLighting" type="DirectionalLight3D" parent="Visuals/Lighting"]
-transform = Transform3D(-0.430447, -0.709785, 0.557603, 0.899382, -0.285031, 0.331465, -0.0763344, 0.644176, 0.761059, 0, 0, 0)
-visible = false
-layers = 1024
-light_color = Color(0.74902, 0.631373, 0.509804, 1)
-light_energy = 0.5
-light_cull_mask = 4293918722
-directional_shadow_mode = 0
+[node name="LightBlocker" parent="Lighting" instance=ExtResource("14_5tb48")]
 
-[node name="LightBlocker" parent="Visuals/Lighting" instance=ExtResource("14_5tb48")]
+[node name="ReflectionProbes" type="Node3D" parent="."]
+
+[node name="TopEnvironmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
+layers = 1024
+size = Vector3(190, 36, 419)
+interior = true
+cull_mask = 4
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(0.767381, 0.794726, 0.98972, 1)
+
+[node name="TopObjectProbe" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.20532, 0)
+layers = 65
+size = Vector3(190, 44.4106, 419)
+interior = true
+cull_mask = 4
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.688, 0.7944, 0.8, 1)
+ambient_color_energy = 0.15
+
+[node name="DescentEnvironmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.662484, -24.405, 140.465)
+layers = 1024
+size = Vector3(136, 48.8101, 129)
+interior = true
+cull_mask = 4
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(0.767381, 0.794726, 0.98972, 1)
+ambient_color_energy = 0.75
+
+[node name="DescentObjectProbe" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6625, 10.7479, 141.465)
+layers = 1024
+size = Vector3(134, 105.005, 127)
+interior = true
+cull_mask = 4
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.688, 0.7944, 0.8, 1)
+ambient_color_energy = 0.15
+
+[node name="BottomEnvironmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, -40, 0)
+layers = 1024
+size = Vector3(190, 36, 419)
+interior = true
+cull_mask = 4
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(1, 1, 1, 1)
+ambient_color_energy = 0.25
+
+[node name="BottomObjectProbe" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(0.925342, 0, -0.379133, 0, 1, 0, 0.379133, 0, 0.925342, 4.05516, -44.6929, -7.54908)
+layers = 1024
+max_distance = 100.0
+size = Vector3(103, 26.6141, 272.047)
+interior = true
+cull_mask = 4
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(1, 0.358667, 0.26, 1)
+ambient_color_energy = 0.2
+
+[node name="AscentEnvironmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.18003, -24.405, -140.201)
+layers = 1024
+size = Vector3(136, 48.8101, 129)
+interior = true
+cull_mask = 4
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(0.767381, 0.794726, 0.98972, 1)
+ambient_color_energy = 0.75
+
+[node name="AscentObjectProbe" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.18003, -23.7351, -141.961)
+layers = 1024
+max_distance = 100.0
+size = Vector3(136, 67.9842, 132.52)
+interior = true
+cull_mask = 4
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.688, 0.7944, 0.8, 1)
+ambient_color_energy = 0.15
 
 [node name="Path" type="Node3D" parent="."]
 
@@ -757,7 +836,7 @@ fov = 60.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DemoCamera"]
 libraries = {
-"": SubResource("AnimationLibrary_xrkpy")
+&"": SubResource("AnimationLibrary_xrkpy")
 }
 next/demo1 = &"demo2"
 next/demo2 = &"demo3"
