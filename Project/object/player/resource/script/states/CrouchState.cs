@@ -68,7 +68,7 @@ public partial class CrouchState : PlayerState
 			Player.Controller.ResetJumpBuffer();
 			return jumpState;
 		}
-		else if (!Input.IsActionPressed("button_action"))
+		else if (!Input.IsActionPressed("button_action") && !Player.Animator.IsCrouchTransitionActive)
 		{
 			return idleState;
 		}

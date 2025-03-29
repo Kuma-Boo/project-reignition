@@ -488,6 +488,7 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName CrouchTransition = "parameters/ground_tree/crouch_transition/transition_request";
 	private readonly StringName CurrentCrouchState = "parameters/ground_tree/crouch_transition/current_state";
 
+	public bool IsCrouchTransitionActive => CrouchStatePlayback.GetCurrentNode() == CrouchStateStart || CrouchStatePlayback.GetCurrentNode() == ChargeStationaryStateStart;
 	public bool IsSlideTransitionActive => CrouchStatePlayback.GetCurrentNode() == SlideStateStart || CrouchStatePlayback.GetCurrentNode() == ChargeSlideStateStart;
 
 	public void StartSliding()
@@ -503,11 +504,11 @@ public partial class PlayerAnimator : Node3D
 	public void StartCrouching()
 	{
 		string currentAnimation = CrouchStatePlayback.GetCurrentNode().ToString();
-		if (!currentAnimation.Contains("charge-slide") && !currentAnimation.Contains("slide"))
-		{
-			CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
-				ChargeStationaryStateStart : CrouchStateStart);
-		}
+		if (currentAnimation.Contains("slide")) // Slide transition
+			return;
+
+		CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+			ChargeStationaryStateStart : CrouchStateStart);
 
 		crouchTransition.XfadeTime = .1;
 		animationTree.SetDeferred(CrouchTransition, EnabledConstant);
