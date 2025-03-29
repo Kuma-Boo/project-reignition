@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://bpxj0juyhbmxs"]
+[gd_scene load_steps=36 format=3 uid="uid://bpxj0juyhbmxs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_16rgi"]
 [ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="2_dq0yd"]
@@ -32,6 +32,8 @@
 [ext_resource type="Curve3D" uid="uid://c6dmpniq0buub" path="res://area/4 levitated ruin/act 2/environment/path/Zipline2Path.tres" id="29_ibnot"]
 [ext_resource type="Curve3D" uid="uid://cmcxoht21qovk" path="res://area/4 levitated ruin/act 2/environment/path/Zipline3Path.tres" id="30_4qmrk"]
 [ext_resource type="Curve3D" uid="uid://bbqujhkw17efi" path="res://area/4 levitated ruin/act 2/environment/path/Zipline4Path.tres" id="31_rqc87"]
+[ext_resource type="AudioStream" uid="uid://bil7mtgriir7u" path="res://sound/ost/bonus disc/Levitated Ruin Act 2.mp3" id="33_4qmrk"]
+[ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="34_rqc87"]
 
 [sub_resource type="Environment" id="Environment_v5nmh"]
 ambient_light_source = 2
@@ -243,3 +245,11 @@ curve = ExtResource("31_rqc87")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_v5nmh")
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("33_4qmrk")
+bus = &"BGM"
+script = ExtResource("34_rqc87")
+loopStartPosition = 0.855
+loopEndPosition = 131.133
+isStageMusic = true
