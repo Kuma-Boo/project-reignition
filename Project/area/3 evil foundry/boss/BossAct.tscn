@@ -322,14 +322,15 @@ external_skeleton = NodePath("../IfritGolem/IfritRoot/Skeleton3D")
 
 [node name="PathEvent" type="Node3D" parent="BossAct/Boss/RootBone" node_paths=PackedStringArray("animator")]
 script = ExtResource("15_iu7y7")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = false
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="BossAct/Boss/RootBone/PathEvent"]
 libraries = {
-"": SubResource("AnimationLibrary_c5yuc")
+&"": SubResource("AnimationLibrary_c5yuc")
 }
 
 [node name="IfritGolemCollision" parent="BossAct/Boss/RootBone" instance=ExtResource("8_8mqqf")]
@@ -3355,8 +3356,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 6, 1.1365e-06)
 
 [node name="Cycle" type="Node3D" parent="BossAct/Boss/LapCenter/LapCycle"]
 script = ExtResource("20_vfrv4")
-itemCycles = [NodePath("../../../Objects/Lap1"), NodePath("../../../Objects/Lap2"), NodePath("../../../Objects/Lap3"), NodePath("../../../Objects/Lap4"), NodePath("../../../Objects/Lap5"), NodePath("../../../Objects/Lap6"), NodePath("../../../Objects/Lap7"), NodePath("../../../Objects/Lap8")]
-transitionNodes = [NodePath("../../../Objects/TransitionLap1"), NodePath("../../../Objects/TransitionLap2"), NodePath("../../../Objects/TransitionLap3"), NodePath("../../../Objects/TransitionLap4"), NodePath("../../../Objects/TransitionLap5"), NodePath("../../../Objects/TransitionLap6"), NodePath("../../../Objects/TransitionLap7"), NodePath("../../../Objects/TransitionLap8")]
+itemCycles = Array[NodePath]([NodePath("../../../Objects/Lap1"), NodePath("../../../Objects/Lap2"), NodePath("../../../Objects/Lap3"), NodePath("../../../Objects/Lap4"), NodePath("../../../Objects/Lap5"), NodePath("../../../Objects/Lap6"), NodePath("../../../Objects/Lap7"), NodePath("../../../Objects/Lap8")])
+transitionNodes = Array[NodePath]([NodePath("../../../Objects/TransitionLap1"), NodePath("../../../Objects/TransitionLap2"), NodePath("../../../Objects/TransitionLap3"), NodePath("../../../Objects/TransitionLap4"), NodePath("../../../Objects/TransitionLap5"), NodePath("../../../Objects/TransitionLap6"), NodePath("../../../Objects/TransitionLap7"), NodePath("../../../Objects/TransitionLap8")])
 
 [node name="Checkpoint" parent="BossAct/Boss/LapCenter/LapCycle" instance=ExtResource("5_evmsn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 0, -2.27374e-13)
