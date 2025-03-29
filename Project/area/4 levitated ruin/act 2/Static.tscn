@@ -1,7 +1,8 @@
-[gd_scene load_steps=36 format=3 uid="uid://bpxj0juyhbmxs"]
+[gd_scene load_steps=37 format=3 uid="uid://bpxj0juyhbmxs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_16rgi"]
 [ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="2_dq0yd"]
+[ext_resource type="PackedScene" uid="uid://01m7uv7kdr5j" path="res://area/4 levitated ruin/act 2/environment/collision/Collision.tscn" id="2_rqc87"]
 [ext_resource type="PackedScene" uid="uid://cx4ihvfopidgr" path="res://area/4 levitated ruin/act 2/environment/Rukh1.tscn" id="3_8fsym"]
 [ext_resource type="PackedScene" uid="uid://bajew0cci4m54" path="res://area/4 levitated ruin/act 2/environment/Rukh1LOD.tscn" id="4_qm0g2"]
 [ext_resource type="PackedScene" uid="uid://coqvsdvf2uaop" path="res://area/4 levitated ruin/act 2/environment/Rukh2.tscn" id="5_ywrk3"]
@@ -38,7 +39,7 @@
 [sub_resource type="Environment" id="Environment_v5nmh"]
 ambient_light_source = 2
 ambient_light_color = Color(0.173492, 0.320012, 0.674406, 1)
-ambient_light_energy = 1.2
+ambient_light_energy = 0.2
 tonemap_mode = 2
 tonemap_exposure = 1.2
 tonemap_white = 1.2
@@ -54,6 +55,9 @@ adjustment_enabled = true
 script = ExtResource("1_16rgi")
 pathParent = NodePath("Paths")
 Environment = NodePath("WorldEnvironment")
+
+[node name="Collision" parent="." instance=ExtResource("2_rqc87")]
+visible = false
 
 [node name="Visuals" type="Node3D" parent="."]
 
@@ -106,6 +110,17 @@ light_color = Color(0.3492, 0.78376, 0.97, 1)
 light_energy = 0.6
 
 [node name="ReflectionProbes" type="Node3D" parent="."]
+
+[node name="ExteriorEnvionmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 262.5, -5, -1160)
+layers = 1024
+size = Vector3(1371, 308, 1120)
+interior = true
+cull_mask = 0
+reflection_mask = 2
+ambient_mode = 2
+ambient_color = Color(0.4601, 0.3268, 0.86, 1)
+ambient_color_energy = 1.5
 
 [node name="Tower1EnvionmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -11, -1375)
