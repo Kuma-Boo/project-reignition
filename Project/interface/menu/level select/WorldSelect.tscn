@@ -13,9 +13,9 @@
 [ext_resource type="PackedScene" uid="uid://endap5o7x08y" path="res://interface/menu/level select/Flames.tscn" id="16_hpwaj"]
 [ext_resource type="PackedScene" uid="uid://bcdrs2nrai80q" path="res://interface/menu/level select/level lists/EvilFoundry.tscn" id="16_tfnbe"]
 [ext_resource type="PackedScene" uid="uid://cje3136x4i7df" path="res://interface/menu/level select/level lists/LevitatedRuin.tscn" id="17_6ds0g"]
-[ext_resource type="Shader" uid="uid://bvyh6seeihpwy" path="res://effect/shader/interface/InterfaceFlash.gdshader" id="17_61ktb"]
+[ext_resource type="Shader" uid="uid://c134blkogbnf8" path="res://effect/shader/interface/InterfaceFlash.gdshader" id="17_61ktb"]
 [ext_resource type="PackedScene" uid="uid://byf372uaewx1u" path="res://interface/menu/level select/ReadyMenu.tscn" id="17_c7rwi"]
-[ext_resource type="Shader" uid="uid://dj2vtehay1fej" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="17_uyu6q"]
+[ext_resource type="Shader" uid="uid://cywcr73eavwo2" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="17_uyu6q"]
 [ext_resource type="PackedScene" uid="uid://bohjl852ydsyo" path="res://interface/menu/level select/level lists/LostPrologue.tscn" id="17_xanqf"]
 [ext_resource type="AudioStream" uid="uid://d36ykovj7lr0l" path="res://sound/ost/jingle/Level Select.mp3" id="17_ybr17"]
 [ext_resource type="PackedScene" uid="uid://23pgo77oav55" path="res://interface/menu/level select/level lists/SandOasis.tscn" id="18_0kdsm"]
@@ -1989,13 +1989,13 @@ offset_bottom = 1080.0
 script = ExtResource("1_7vrge")
 primaryVideoPlayer = NodePath("DemoVideo/PrimaryVideoPlayer")
 secondaryVideoPlayer = NodePath("DemoVideo/SecondaryVideoPlayer")
-videoStreamPaths = [&"res://video/demo/Movie Test 00.mp4", &"res://video/demo/Movie Test 01.mp4", &"res://video/demo/Movie Test 02.mp4", &"res://video/demo/Movie Test 03.mp4", &"res://video/demo/Movie Test 04.mp4", &"res://video/demo/Movie Test 05.mp4", &"res://video/demo/Movie Test 06.mp4", &"res://video/demo/Movie Test 07.mp4"]
+videoStreamPaths = Array[StringName]([&"res://video/demo/Movie Test 00.mp4", &"res://video/demo/Movie Test 01.mp4", &"res://video/demo/Movie Test 02.mp4", &"res://video/demo/Movie Test 03.mp4", &"res://video/demo/Movie Test 04.mp4", &"res://video/demo/Movie Test 05.mp4", &"res://video/demo/Movie Test 06.mp4", &"res://video/demo/Movie Test 07.mp4"])
 description = NodePath("Description")
-levelSpriteRegions = [Rect2(0, 400, 512, 60), Rect2(0, 0, 512, 60), Rect2(0, 230, 512, 60), Rect2(0, 290, 512, 50), Rect2(0, 350, 512, 50), Rect2(0, 120, 512, 50), Rect2(0, 63, 512, 50), Rect2(0, 180, 512, 50), Rect2(0, 460, 512, 50)]
-levelDescriptionKeys = ["lost_prologue_description", "sand_oasis_description", "dinosaur_jungle_description", "evil_foundry_description", "levitated_ruin_description", "pirate_storm_description", "skeleton_dome_description", "night_palace_description", "sys_world_locked"]
-levelTextSprites = [NodePath("AreaSelection/Text/Top/Sprite"), NodePath("AreaSelection/Text/Center/Sprite"), NodePath("AreaSelection/Text/Bottom/Sprite"), NodePath("AreaSelection/Text/TransitionText/Sprite")]
-levelGlowSprites = [NodePath("AreaSelection/Text/Top/Sprite/Glow"), NodePath("AreaSelection/Text/Center/Sprite/Glow"), NodePath("AreaSelection/Text/Bottom/Sprite/Glow")]
-levelNewSprites = [NodePath("AreaSelection/Text/Top/New"), NodePath("AreaSelection/Text/Center/New"), NodePath("AreaSelection/Text/Bottom/New"), NodePath("AreaSelection/Text/TransitionText/New")]
+levelSpriteRegions = Array[Rect2]([Rect2(0, 400, 512, 60), Rect2(0, 0, 512, 60), Rect2(0, 230, 512, 60), Rect2(0, 290, 512, 50), Rect2(0, 350, 512, 50), Rect2(0, 120, 512, 50), Rect2(0, 63, 512, 50), Rect2(0, 180, 512, 50), Rect2(0, 460, 512, 50)])
+levelDescriptionKeys = Array[String](["lost_prologue_description", "sand_oasis_description", "dinosaur_jungle_description", "evil_foundry_description", "levitated_ruin_description", "pirate_storm_description", "skeleton_dome_description", "night_palace_description", "sys_world_locked"])
+levelTextSprites = Array[NodePath]([NodePath("AreaSelection/Text/Top/Sprite"), NodePath("AreaSelection/Text/Center/Sprite"), NodePath("AreaSelection/Text/Bottom/Sprite"), NodePath("AreaSelection/Text/TransitionText/Sprite")])
+levelGlowSprites = Array[NodePath]([NodePath("AreaSelection/Text/Top/Sprite/Glow"), NodePath("AreaSelection/Text/Center/Sprite/Glow"), NodePath("AreaSelection/Text/Bottom/Sprite/Glow")])
+levelNewSprites = Array[NodePath]([NodePath("AreaSelection/Text/Top/New"), NodePath("AreaSelection/Text/Center/New"), NodePath("AreaSelection/Text/Bottom/New"), NodePath("AreaSelection/Text/TransitionText/New")])
 submenus = Array[NodePath]([NodePath("Submenus/LostPrologue"), NodePath("Submenus/SandOasis"), NodePath("Submenus/DinosaurJungle"), NodePath("Submenus/EvilFoundry"), NodePath("Submenus/LevitatedRuin"), NodePath("Submenus/PirateStorm"), NodePath("Submenus/SkeletonDome"), NodePath("Submenus/NightPalace")])
 bgm = NodePath("LevelSelectBGM")
 animator = NodePath("AnimationPlayer")
@@ -2112,7 +2112,7 @@ uppercase = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="AreaSelection/Text/Top/New"]
 libraries = {
-"": SubResource("AnimationLibrary_8gw72")
+&"": SubResource("AnimationLibrary_8gw72")
 }
 autoplay = "loop"
 
@@ -2174,7 +2174,7 @@ uppercase = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="AreaSelection/Text/Center/New"]
 libraries = {
-"": SubResource("AnimationLibrary_8gw72")
+&"": SubResource("AnimationLibrary_8gw72")
 }
 autoplay = "loop"
 
@@ -2238,7 +2238,7 @@ uppercase = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="AreaSelection/Text/Bottom/New"]
 libraries = {
-"": SubResource("AnimationLibrary_8gw72")
+&"": SubResource("AnimationLibrary_8gw72")
 }
 autoplay = "loop"
 
@@ -2292,7 +2292,7 @@ uppercase = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="AreaSelection/Text/TransitionText/New"]
 libraries = {
-"": SubResource("AnimationLibrary_8gw72")
+&"": SubResource("AnimationLibrary_8gw72")
 }
 autoplay = "loop"
 
@@ -2405,15 +2405,9 @@ alignment = 2
 
 [node name="Select" parent="NavigationButtons" instance=ExtResource("18_be3y4")]
 layout_mode = 2
-ActionKey = "sys_select"
-inputKey = "button_jump"
-fallbackKey = "ui_select"
 
 [node name="Cancel" parent="NavigationButtons" instance=ExtResource("18_be3y4")]
 layout_mode = 2
-ActionKey = "sys_cancel"
-inputKey = "button_action"
-fallbackKey = "ui_cancel"
 
 [node name="Description" parent="." instance=ExtResource("18_w35s5")]
 z_index = 10
@@ -2446,7 +2440,7 @@ loopEndPosition = 12.514
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_rqnfw")
+&"": SubResource("AnimationLibrary_rqnfw")
 }
 autoplay = "init"
 next/reset-scroll = &"loop"
@@ -2454,4 +2448,4 @@ next/scroll-down = &"reset-scroll"
 next/scroll-up = &"reset-scroll"
 next/show = &"loop"
 next/show-fade-video = &"loop"
-blend_times = [&"loop", &"scroll-down", 0.05, &"loop", &"scroll-up", 0.05, &"show-fade-video", &"loop", 0.1, &"show", &"loop", 0.1]
+blend_times = [&"loop", &"scroll-down", 0.05, &"loop", &"scroll-up", 0.05, &"show", &"loop", 0.1, &"show-fade-video", &"loop", 0.1]

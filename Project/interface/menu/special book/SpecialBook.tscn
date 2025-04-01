@@ -1,0 +1,823 @@
+[gd_scene load_steps=16 format=3 uid="uid://cfxpl43xw0rn6"]
+
+[ext_resource type="Script" uid="uid://cvy63h3pgw1qv" path="res://interface/menu/special book/SpecialBook.cs" id="1_b5eh1"]
+[ext_resource type="PackedScene" uid="uid://du2vludpypmy3" path="res://interface/menu/special book/SpecialBookTab.tscn" id="2_33lvu"]
+[ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="2_m75ed"]
+[ext_resource type="PackedScene" uid="uid://bwqgjo2ywq68m" path="res://interface/menu/special book/SpecialBookWindow.tscn" id="3_5sbsj"]
+[ext_resource type="Texture2D" uid="uid://lpcucr8756t8" path="res://interface/menu/special book/texture/book objects/book.png" id="3_b5eh1"]
+[ext_resource type="FontFile" uid="uid://bsoin3p4iygoo" path="res://interface/font/otf/Chiaro Std B.otf" id="4_ur5td"]
+[ext_resource type="Texture2D" uid="uid://d05grpa7bmo6m" path="res://interface/menu/special book/texture/book objects/frame_number.png" id="5_5dwdj"]
+[ext_resource type="LabelSettings" uid="uid://dki35mj1oux2s" path="res://interface/font/DescriptionText.tres" id="5_xehf1"]
+[ext_resource type="Texture2D" uid="uid://ctegpy2ajh2nu" path="res://interface/menu/special book/texture/book objects/textbox_middle.png" id="9_cyesu"]
+[ext_resource type="Texture2D" uid="uid://bu8jdsn1wexlk" path="res://interface/menu/special book/texture/book objects/textbox_end.png" id="9_f7tqs"]
+[ext_resource type="AudioStream" uid="uid://ck7pgnocb31ki" path="res://sound/ost/treasure disc/6 ALI BABA & SINBAD RESCUED!.mp3" id="10_yxyel"]
+[ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="11_llt0s"]
+
+[sub_resource type="Animation" id="Animation_f7tqs"]
+resource_name = "show"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("book:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("book:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(2, 2.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(2.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayBGM"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("void:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.733333, 1.23333, 1.96667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Background:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.966667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("void:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_cyesu"]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("book:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("book:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("void:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Background:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("void:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yxyel"]
+_data = {
+&"RESET": SubResource("Animation_cyesu"),
+&"show": SubResource("Animation_f7tqs")
+}
+
+[node name="SpecialBook" type="Control" node_paths=PackedStringArray("tabs", "bgm", "animator")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_b5eh1")
+chapters = PackedStringArray("spb_chapter_history", "spb_chapter_illustrations", "spb_chapter_illustrations", "spb_chapter_illustrations", "spb_chapter_illustrations", "spb_chapter_illustrations", "spb_chapter_illustrations", "spb_chapter_movie", "spb_chapter_movie", "spb_chapter_dev", "spb_chapter_music", "spb_chapter_music", "spb_chapter_music", "spb_chapter_rank", "spb_chapter_rank", "spb_chapter_diary")
+tabs = [NodePath("book/tabs/tab_history"), NodePath("book/tabs/tab_illust"), NodePath("book/tabs/tab_illust2"), NodePath("book/tabs/tab_illust3"), NodePath("book/tabs/tab_illust4"), NodePath("book/tabs/tab_illust5"), NodePath("book/tabs/tab_illust6"), NodePath("book/tabs/tab_movie"), NodePath("book/tabs/tab_movie2"), NodePath("book/tabs/tab_dev"), NodePath("book/tabs/tab_music"), NodePath("book/tabs/tab_music2"), NodePath("book/tabs/tab_music3"), NodePath("book/tabs/tab_rank"), NodePath("book/tabs/tab_rank2"), NodePath("book/tabs/tab_diary")]
+submenus = Array[NodePath]([])
+bgm = NodePath("SpecialBookBGM")
+animator = NodePath("AnimationPlayer")
+
+[node name="Background" type="TextureRect" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("2_m75ed")
+
+[node name="book" type="TextureRect" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0)
+z_index = 1
+layout_mode = 0
+offset_left = 252.0
+offset_top = 109.0
+offset_right = 852.0
+offset_bottom = 509.0
+scale = Vector2(2.3, 2.3)
+texture = ExtResource("3_b5eh1")
+stretch_mode = 4
+
+[node name="panels" type="VBoxContainer" parent="book"]
+layout_mode = 0
+offset_left = 119.935
+offset_top = 96.6087
+offset_right = 499.935
+offset_bottom = 234.609
+theme_override_constants/separation = 69
+
+[node name="panels row 1" type="HBoxContainer" parent="book/panels"]
+layout_mode = 2
+theme_override_constants/separation = 95
+
+[node name="window1" parent="book/panels/panels row 1" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 1/window1"]
+layout_mode = 0
+offset_left = 6.58697
+offset_top = -2.69565
+offset_right = 46.587
+offset_bottom = 37.3043
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 1/window1/window numframe"]
+layout_mode = 0
+offset_left = 15.6522
+offset_top = 13.4783
+offset_right = 46.6522
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "1"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="window2" parent="book/panels/panels row 1" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 1/window2"]
+layout_mode = 0
+offset_left = 6.58697
+offset_top = -2.69565
+offset_right = 46.587
+offset_bottom = 37.3043
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 1/window2/window numframe"]
+layout_mode = 0
+offset_left = 15.6522
+offset_top = 13.4783
+offset_right = 46.6522
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "2"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="window3" parent="book/panels/panels row 1" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 1/window3"]
+layout_mode = 0
+offset_left = 6.58698
+offset_top = -2.69565
+offset_right = 46.587
+offset_bottom = 37.3043
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 1/window3/window numframe"]
+layout_mode = 0
+offset_left = 15.6522
+offset_top = 13.4783
+offset_right = 46.6522
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "3"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="window4" parent="book/panels/panels row 1" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 1/window4"]
+layout_mode = 0
+offset_left = 6.58698
+offset_top = -2.69565
+offset_right = 46.587
+offset_bottom = 37.3043
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 1/window4/window numframe"]
+layout_mode = 0
+offset_left = 15.6522
+offset_top = 13.4783
+offset_right = 46.6522
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "4"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="window5" parent="book/panels/panels row 1" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 1/window5"]
+layout_mode = 0
+offset_left = 6.58698
+offset_top = -2.69565
+offset_right = 46.587
+offset_bottom = 37.3043
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 1/window5/window numframe"]
+layout_mode = 0
+offset_left = 15.6522
+offset_top = 13.4783
+offset_right = 46.6522
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "5"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="panels row 2" type="HBoxContainer" parent="book/panels"]
+layout_mode = 2
+theme_override_constants/separation = 95
+
+[node name="window6" parent="book/panels/panels row 2" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 2/window6"]
+layout_mode = 0
+offset_left = 6.58697
+offset_top = -3.13044
+offset_right = 46.587
+offset_bottom = 36.8696
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 2/window6/window numframe"]
+layout_mode = 0
+offset_left = 15.6522
+offset_top = 13.4783
+offset_right = 46.6522
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "6"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="window7" parent="book/panels/panels row 2" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 2/window7"]
+layout_mode = 0
+offset_left = 6.58697
+offset_top = -3.13044
+offset_right = 46.587
+offset_bottom = 36.8696
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 2/window7/window numframe"]
+layout_mode = 0
+offset_left = 15.6522
+offset_top = 13.4783
+offset_right = 46.6522
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "7"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="window8" parent="book/panels/panels row 2" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 2/window8"]
+layout_mode = 0
+offset_left = 6.58698
+offset_top = -3.13044
+offset_right = 46.587
+offset_bottom = 36.8696
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 2/window8/window numframe"]
+layout_mode = 0
+offset_left = 15.6522
+offset_top = 13.4783
+offset_right = 46.6522
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "8"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="window9" parent="book/panels/panels row 2" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 2/window9"]
+layout_mode = 0
+offset_left = 6.58698
+offset_top = -3.13044
+offset_right = 46.587
+offset_bottom = 36.8696
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 2/window9/window numframe"]
+layout_mode = 0
+offset_left = 15.6522
+offset_top = 13.4783
+offset_right = 46.6522
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "9"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="window10" parent="book/panels/panels row 2" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 2/window10"]
+layout_mode = 0
+offset_left = 6.58698
+offset_top = -3.13044
+offset_right = 46.587
+offset_bottom = 36.8696
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 2/window10/window numframe"]
+layout_mode = 0
+offset_left = 15.2174
+offset_top = 13.4783
+offset_right = 46.2174
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "10"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="panels row 3" type="HBoxContainer" parent="book/panels"]
+layout_mode = 2
+theme_override_constants/separation = 95
+
+[node name="window11" parent="book/panels/panels row 3" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 3/window11"]
+layout_mode = 0
+offset_left = 6.58697
+offset_top = -3.13044
+offset_right = 46.587
+offset_bottom = 36.8696
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 3/window11/window numframe"]
+layout_mode = 0
+offset_left = 15.2175
+offset_top = 13.4783
+offset_right = 46.2175
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "11"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="window12" parent="book/panels/panels row 3" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 3/window12"]
+layout_mode = 0
+offset_left = 6.58697
+offset_top = -3.13044
+offset_right = 46.587
+offset_bottom = 36.8696
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 3/window12/window numframe"]
+layout_mode = 0
+offset_left = 15.2175
+offset_top = 13.4783
+offset_right = 46.2175
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "12"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="window13" parent="book/panels/panels row 3" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 3/window13"]
+layout_mode = 0
+offset_left = 6.58698
+offset_top = -3.13044
+offset_right = 46.587
+offset_bottom = 36.8696
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 3/window13/window numframe"]
+layout_mode = 0
+offset_left = 15.2174
+offset_top = 13.4783
+offset_right = 46.2174
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "13"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="window14" parent="book/panels/panels row 3" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 3/window14"]
+layout_mode = 0
+offset_left = 6.58698
+offset_top = -3.13044
+offset_right = 46.587
+offset_bottom = 36.8696
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 3/window14/window numframe"]
+layout_mode = 0
+offset_left = 15.2174
+offset_top = 13.4783
+offset_right = 46.2174
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "14"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="window15" parent="book/panels/panels row 3" instance=ExtResource("3_5sbsj")]
+layout_mode = 2
+
+[node name="window numframe" type="TextureRect" parent="book/panels/panels row 3/window15"]
+layout_mode = 0
+offset_left = 6.58697
+offset_top = -4.00001
+offset_right = 46.587
+offset_bottom = 36.0
+texture = ExtResource("5_5dwdj")
+stretch_mode = 3
+
+[node name="num" type="Label" parent="book/panels/panels row 3/window15/window numframe"]
+layout_mode = 0
+offset_left = 15.2174
+offset_top = 13.4783
+offset_right = 46.2174
+offset_bottom = 59.4783
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "15"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="tabs" type="HBoxContainer" parent="book"]
+z_index = -1
+layout_mode = 0
+offset_left = 30.4348
+offset_top = -31.7391
+offset_right = 90.4348
+offset_bottom = 8.26087
+theme_override_constants/separation = 34
+
+[node name="tab_history" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+
+[node name="tab_illust" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 1
+
+[node name="tab_illust2" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 1
+
+[node name="tab_illust3" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 1
+
+[node name="tab_illust4" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 1
+
+[node name="tab_illust5" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 1
+
+[node name="tab_illust6" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 1
+
+[node name="tab_movie" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 2
+
+[node name="tab_movie2" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 2
+
+[node name="tab_dev" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 3
+
+[node name="tab_music" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 4
+
+[node name="tab_music2" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 4
+
+[node name="tab_music3" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 4
+
+[node name="tab_rank" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 5
+
+[node name="tab_rank2" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 5
+
+[node name="tab_diary" parent="book/tabs" instance=ExtResource("2_33lvu")]
+layout_mode = 2
+thisTabType = 6
+
+[node name="textbox" type="Node2D" parent="book"]
+position = Vector2(260.435, 309.609)
+
+[node name="box_left" type="TextureRect" parent="book/textbox"]
+modulate = Color(0.117647, 0.117647, 0.117647, 0.701961)
+offset_left = -176.522
+offset_top = -34.8261
+offset_right = -136.522
+offset_bottom = 34.1739
+texture = ExtResource("9_f7tqs")
+stretch_mode = 4
+
+[node name="box_left2" type="TextureRect" parent="book/textbox"]
+modulate = Color(0.117647, 0.117647, 0.117647, 0.701961)
+offset_left = 266.087
+offset_top = -34.8264
+offset_right = 306.087
+offset_bottom = 34.1736
+texture = ExtResource("9_f7tqs")
+stretch_mode = 4
+flip_h = true
+
+[node name="box_middle" type="TextureRect" parent="book/textbox"]
+modulate = Color(0.117647, 0.117647, 0.117647, 0.701961)
+offset_left = -168.0
+offset_top = -35.0
+offset_right = -137.0
+offset_bottom = 34.0
+scale = Vector2(14, 0.996)
+texture = ExtResource("9_cyesu")
+stretch_mode = 4
+
+[node name="label_chaptername" type="Label" parent="book/textbox"]
+offset_left = -130.0
+offset_top = -30.0
+offset_right = 862.0
+offset_bottom = 138.0
+scale = Vector2(0.36, 0.36)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "[CHAPTER]"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="label_description" type="Label" parent="book/textbox"]
+offset_left = -171.5
+offset_top = -30.0
+offset_right = 820.5
+offset_bottom = 138.0
+scale = Vector2(0.36, 0.36)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "???"
+label_settings = ExtResource("5_xehf1")
+autowrap_mode = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_yxyel")
+}
+
+[node name="SpecialBookBGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_yxyel")
+bus = &"BGM"
+script = ExtResource("11_llt0s")
+loopEndPosition = 199.52
+
+[node name="void" type="TextureRect" parent="."]
+visible = false
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(48.04, 15.68)
+texture = ExtResource("9_cyesu")
