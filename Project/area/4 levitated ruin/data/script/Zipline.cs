@@ -185,6 +185,9 @@ public partial class Zipline : PathFollow3D
 			return;
 		}
 
+		if (Mathf.Abs(clampedRotation) < NormalRotationLimit * .5f) // Full Swing must start from near the normal rotation limit
+			return;
+
 		tapBuffer = TapTimer;
 	}
 
