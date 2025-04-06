@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://bpxj0juyhbmxs"]
+[gd_scene load_steps=53 format=3 uid="uid://bpxj0juyhbmxs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_16rgi"]
 [ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="2_dq0yd"]
@@ -36,24 +36,16 @@
 [ext_resource type="Curve3D" uid="uid://bom0wsi4f25u1" path="res://area/4 levitated ruin/act 2/environment/path/Tower4TopPath.tres" id="26_d34ml"]
 [ext_resource type="Curve3D" uid="uid://by0mwyvkcdeng" path="res://area/4 levitated ruin/act 2/environment/path/Tower5TopPath.tres" id="27_f3657"]
 [ext_resource type="Curve3D" path="res://area/4 levitated ruin/act 2/environment/path/Tower2Automation1Path.tres" id="28_d6hrm"]
-[ext_resource type="Curve3D" uid="uid://oimrmhv1wlmn" path="res://area/4 levitated ruin/act 2/environment/path/Zipline1Path.tres" id="28_f3657"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="29_flomb"]
-[ext_resource type="Curve3D" uid="uid://c6dmpniq0buub" path="res://area/4 levitated ruin/act 2/environment/path/Zipline2Path.tres" id="29_ibnot"]
 [ext_resource type="Curve3D" path="res://area/4 levitated ruin/act 2/environment/path/Tower2Automation2Path.tres" id="29_toorb"]
-[ext_resource type="Curve3D" uid="uid://cmcxoht21qovk" path="res://area/4 levitated ruin/act 2/environment/path/Zipline3Path.tres" id="30_4qmrk"]
 [ext_resource type="Curve3D" uid="uid://bu500amaad8y0" path="res://area/4 levitated ruin/act 2/environment/path/Tower2Automation3Path.tres" id="30_bam1r"]
 [ext_resource type="Curve3D" path="res://area/4 levitated ruin/act 2/environment/path/Tower2SidlePath.tres" id="30_c0tbi"]
 [ext_resource type="Script" uid="uid://cciy1oeuvbh3e" path="res://object/trigger/modules/JumpTrigger.cs" id="30_cwr62"]
-[ext_resource type="Curve3D" uid="uid://bbqujhkw17efi" path="res://area/4 levitated ruin/act 2/environment/path/Zipline4Path.tres" id="31_rqc87"]
-[ext_resource type="PackedScene" uid="uid://01vxs3in41h" path="res://area/4 levitated ruin/object/special/Zipline.tscn" id="32_3amqa"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="33_3amqa"]
-[ext_resource type="Resource" uid="uid://drcjvx2788hww" path="res://area/4 levitated ruin/act 2/camera/ZiplineCam.tres" id="33_4oa80"]
 [ext_resource type="AudioStream" uid="uid://bil7mtgriir7u" path="res://sound/ost/bonus disc/Levitated Ruin Act 2.mp3" id="33_4qmrk"]
 [ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="33_cwr62"]
-[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="34_jtd2r"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="34_rqc87"]
 [ext_resource type="Script" uid="uid://bd2g6rmrn77eo" path="res://object/trigger/modules/LockoutTrigger.cs" id="35_31wxi"]
-[ext_resource type="Resource" uid="uid://csd3eox0qlbwl" path="res://area/4 levitated ruin/act 2/camera/Rukh2Cam.tres" id="36_jtd2r"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mwnvi"]
 size = Vector3(5, 8, 3)
@@ -70,9 +62,6 @@ radius = 10.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bam1r"]
 size = Vector3(5, 8, 5)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_31wxi"]
-size = Vector3(5, 8, 3)
 
 [sub_resource type="Environment" id="Environment_v5nmh"]
 ambient_light_source = 2
@@ -453,155 +442,6 @@ curve = ExtResource("26_d34ml")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 555.632, 70.007, -1019.49)
 curve = ExtResource("27_f3657")
 
-[node name="Ziplines" type="Node3D" parent="."]
-
-[node name="Zipline1" type="Path3D" parent="Ziplines"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 239.497, 15.05, -1375.01)
-curve = ExtResource("28_f3657")
-
-[node name="Start" parent="Ziplines/Zipline1" instance=ExtResource("29_flomb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.80301, -5.05, 0.0100098)
-OneShot = true
-"Respawn Mode" = 0
-"Enter Mode" = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ziplines/Zipline1/Start"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
-shape = SubResource("BoxShape3D_31wxi")
-
-[node name="Jump" type="Node3D" parent="Ziplines/Zipline1/Start"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 4.2, -0.300049)
-script = ExtResource("30_cwr62")
-jumpHeight = 0.5
-autoAlign = true
-forceConsistentHeight = true
-
-[node name="Path" type="Node3D" parent="Ziplines/Zipline1/Start" node_paths=PackedStringArray("path")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 4.2, -0.300049)
-script = ExtResource("33_cwr62")
-path = NodePath("../..")
-cameraPathBlendTime = 0.5
-
-[node name="Camera" type="Node3D" parent="Ziplines/Zipline1/Start"]
-script = ExtResource("33_3amqa")
-settings = ExtResource("33_4oa80")
-
-[node name="Zipline" parent="Ziplines/Zipline1" instance=ExtResource("32_3amqa")]
-transform = Transform3D(-0.275637, 0, -0.961261, 0, 1, 0, 0.961261, 0, -0.275637, -0.961262, 1.97632e-08, -0.275637)
-progress = 1.0
-
-[node name="Camera" parent="Ziplines/Zipline1" instance=ExtResource("29_flomb")]
-transform = Transform3D(-0.275632, 0, -0.961263, 0, 1, 0, 0.961263, 0, -0.275632, -298.953, 0.000300407, -85.7211)
-"Enter Mode" = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ziplines/Zipline1/Camera"]
-shape = SubResource("BoxShape3D_jtd2r")
-
-[node name="Camera" type="Node3D" parent="Ziplines/Zipline1/Camera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 42)
-script = ExtResource("33_3amqa")
-transitionType = 1
-settings = ExtResource("34_jtd2r")
-
-[node name="End" parent="Ziplines/Zipline1" instance=ExtResource("29_flomb")]
-transform = Transform3D(-0.275632, 0, -0.961263, 0, 1, 0, 0.961263, 0, -0.275632, -335.481, 0.000300407, -96.195)
-OneShot = true
-"Respawn Mode" = 0
-"Enter Mode" = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ziplines/Zipline1/End"]
-shape = SubResource("BoxShape3D_jtd2r")
-
-[node name="Jump" type="Node3D" parent="Ziplines/Zipline1/End"]
-transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, 2, -8.77146, 4.00006)
-script = ExtResource("30_cwr62")
-jumpHeight = 2.0
-autoAlign = true
-
-[node name="Path" type="Node3D" parent="Ziplines/Zipline1/End" node_paths=PackedStringArray("path")]
-script = ExtResource("33_cwr62")
-path = NodePath("../../../../Paths/Rukh2")
-
-[node name="Camera" type="Node3D" parent="Ziplines/Zipline1/End"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.99988, 0, 4.00006)
-script = ExtResource("33_3amqa")
-settings = ExtResource("36_jtd2r")
-
-[node name="Zipline2" type="Path3D" parent="Ziplines"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 259.4, 6.453, -1375)
-curve = ExtResource("29_ibnot")
-
-[node name="Start" parent="Ziplines/Zipline2" instance=ExtResource("29_flomb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69998, -4.453, 0)
-OneShot = true
-"Respawn Mode" = 0
-"Enter Mode" = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ziplines/Zipline2/Start"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
-shape = SubResource("BoxShape3D_31wxi")
-
-[node name="Jump" type="Node3D" parent="Ziplines/Zipline2/Start"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.69998, 3.4, -0.200073)
-script = ExtResource("30_cwr62")
-jumpHeight = 0.5
-autoAlign = true
-forceConsistentHeight = true
-
-[node name="Zipline" parent="Ziplines/Zipline2" instance=ExtResource("32_3amqa")]
-transform = Transform3D(-0.193644, 0, 0.98107, 0, 1, 0, -0.98107, 0, -0.193644, 0.966714, -0.170458, -0.190811)
-progress = 1.0
-
-[node name="Zipline3" type="Path3D" parent="Ziplines"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.835, -1.45, -1367.82)
-curve = ExtResource("30_4qmrk")
-
-[node name="Start" parent="Ziplines/Zipline3" instance=ExtResource("29_flomb")]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 2.14799, -4.55, -1.46008)
-OneShot = true
-"Respawn Mode" = 0
-"Enter Mode" = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ziplines/Zipline3/Start"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
-shape = SubResource("BoxShape3D_31wxi")
-
-[node name="Jump" type="Node3D" parent="Ziplines/Zipline3/Start"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.69998, 3.4, -0.200073)
-script = ExtResource("30_cwr62")
-jumpHeight = 0.5
-autoAlign = true
-forceConsistentHeight = true
-
-[node name="Zipline" parent="Ziplines/Zipline3" instance=ExtResource("32_3amqa")]
-transform = Transform3D(0.812258, 0, -0.583295, 0, 1, 0, 0.583295, 0, 0.812258, -0.575796, -0.159844, 0.801816)
-progress = 1.0
-
-[node name="Zipline4" type="Path3D" parent="Ziplines"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 257.165, -1.45, -1367.82)
-curve = ExtResource("31_rqc87")
-
-[node name="Start" parent="Ziplines/Zipline4" instance=ExtResource("29_flomb")]
-transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -1.858, -4.55, -1.89001)
-OneShot = true
-"Respawn Mode" = 0
-"Enter Mode" = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ziplines/Zipline4/Start"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
-shape = SubResource("BoxShape3D_31wxi")
-
-[node name="Jump" type="Node3D" parent="Ziplines/Zipline4/Start"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.69998, 3.4, -0.200073)
-script = ExtResource("30_cwr62")
-jumpHeight = 0.5
-autoAlign = true
-forceConsistentHeight = true
-
-[node name="Zipline" parent="Ziplines/Zipline4" instance=ExtResource("32_3amqa")]
-transform = Transform3D(0.711659, 0, 0.702523, 0, 1, 0, -0.702523, 0, 0.711659, 0.699766, 0.0885217, 0.708866)
-progress = 1.0
-
 [node name="DepthRenderer" parent="." instance=ExtResource("14_h17nb")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -620,9 +460,3 @@ isStageMusic = true
 [connection signal="Deactivated" from="Triggers/SidleTrigger1" to="Triggers/Tower2LoopPath" method="Activate"]
 [connection signal="Activated" from="Triggers/SidleTrigger2" to="Triggers/SidleTrigger2/Path" method="Activate"]
 [connection signal="Deactivated" from="Triggers/SidleTrigger2" to="Triggers/Tower2LoopPath" method="Activate"]
-[connection signal="Activated" from="Ziplines/Zipline1/Start" to="Triggers/RecenterLockout" method="Deactivate"]
-[connection signal="Activated" from="Ziplines/Zipline1/Camera" to="Visuals/Rukh2" method="Activate"]
-[connection signal="Activated" from="Ziplines/Zipline1/Camera" to="Visuals/Rukh2LOD" method="Deactivate"]
-[connection signal="Activated" from="Ziplines/Zipline2/Start" to="Triggers/RecenterLockout" method="Deactivate"]
-[connection signal="Activated" from="Ziplines/Zipline3/Start" to="Triggers/RecenterLockout" method="Deactivate"]
-[connection signal="Activated" from="Ziplines/Zipline4/Start" to="Triggers/RecenterLockout" method="Deactivate"]

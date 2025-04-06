@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Project.Core;
 
@@ -22,9 +23,19 @@ public partial class Zipline : PathFollow3D
 	private readonly float FastRotationSmoothing = 15.0f;
 	private readonly float SlowRotationSmoothing = 20.0f;
 	private readonly float NormalRotationLimit = Mathf.Pi * .4f;
+	private readonly float ReverseSwingRotationLimit = Mathf.Pi * .8f;
 
 	private float inputValue;
-	public void SetInput(float input) => inputValue = input;
+	private bool isDoubleTapping;
+	private float tapBuffer;
+	private readonly float TapTimer = .2f;
+	public void SetInput(float input)
+	{
+		inputValue = input;
+
+		if (Mathf.Abs(inputValue) <= SaveManager.Config.deadZone && !Mathf.IsZeroApprox(tapBuffer))
+			isDoubleTapping = true;
+	}
 
 	[ExportGroup("Components")]
 	[Export] public Node3D Root { get; private set; }
@@ -143,6 +154,10 @@ public partial class Zipline : PathFollow3D
 		bool isSignAligned = Mathf.Sign(clampedRotation) == Mathf.Sign(inputValue);
 		bool isHoldingDirection = Mathf.Abs(inputValue) > .5f;
 
+		// Allow switching directions mid full-swing
+		if (Math.Abs(currentRotation) > ReverseSwingRotationLimit && isHoldingDirection)
+			isFullSwingActive = true;
+
 		if (isFullSwingActive)
 		{
 			if (!isHoldingDirection)
@@ -151,13 +166,26 @@ public partial class Zipline : PathFollow3D
 			return;
 		}
 
-		if (isSignAligned || !isHoldingDirection)
+		tapBuffer = Mathf.MoveToward(tapBuffer, 0, PhysicsManager.physicsDelta);
+
+		if (isSignAligned)
+		{
+			isDoubleTapping = false;
+			return;
+		}
+
+		if (!isHoldingDirection)
 			return;
 
-		if (Mathf.Abs(clampedRotation) < NormalRotationLimit * .6f) // Full Swing must start from near the normal rotation limit
+		if (isDoubleTapping)
+		{
+			isFullSwingActive = true;
+			isDoubleTapping = false;
+			tapBuffer = 0;
 			return;
+		}
 
-		isFullSwingActive = true;
+		tapBuffer = TapTimer;
 	}
 
 	public void OnEntered(Area3D a)

@@ -35,7 +35,7 @@ public partial class ZiplineState : PlayerState
 		animationBlend = ExtensionMethods.SmoothDamp(animationBlend, input, ref animationVelocity, AnimationSmoothing * PhysicsManager.physicsDelta);
 		Player.Animator.SetZiplineBlend(animationBlend);
 
-		Player.CallDeferred(PlayerController.MethodName.UpdateExternalControl, false);
+		Player.UpdateExternalControl(false);
 		return null;
 	}
 }
