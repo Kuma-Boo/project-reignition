@@ -1,10 +1,10 @@
 [gd_scene load_steps=39 format=3 uid="uid://cs6htuvfje508"]
 
 [ext_resource type="PackedScene" uid="uid://cd15ckfvp1igu" path="res://area/4 levitated ruin/object/model/obstacle/MissileTracking.gltf" id="1_yglsj"]
-[ext_resource type="Script" path="res://area/4 levitated ruin/data/script/Missile.cs" id="2_b3xn8"]
+[ext_resource type="Script" uid="uid://c27oe48qjsjv4" path="res://area/4 levitated ruin/data/script/Missile.cs" id="2_b3xn8"]
 [ext_resource type="Material" uid="uid://bq1q3tp1cq76v" path="res://effect/particle/material/explosion/Explosion Smoke Add.tres" id="3_lgh7f"]
 [ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="4_rp5es"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="5_kvy46"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="5_kvy46"]
 [ext_resource type="Material" uid="uid://b4847susbcf6p" path="res://area/1 sand oasis/boss/effect/material/Hit Spark Billboard.tres" id="6_lba56"]
 [ext_resource type="Material" uid="uid://db4kropnhyudk" path="res://effect/particle/material/Ember Blue Billboard.tres" id="7_7m33f"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="8_7n4uh"]
@@ -18,8 +18,7 @@ gradient = SubResource("Gradient_2u714")
 width = 128
 
 [sub_resource type="Curve" id="Curve_0pcf1"]
-min_value = 1.0
-max_value = 4.0
+_limits = [0.99, 4.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, -0.0416666, 0, 0, Vector2(1, 4), 1.0, 0.0, 0, 0]
 point_count = 2
 
@@ -360,12 +359,13 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_u57hx"]
 _data = {
-"RESET": SubResource("Animation_v038j"),
-"explode": SubResource("Animation_ij6x6"),
-"fly": SubResource("Animation_2clm2")
+&"RESET": SubResource("Animation_v038j"),
+&"explode": SubResource("Animation_ij6x6"),
+&"fly": SubResource("Animation_2clm2")
 }
 
 [node name="MissileTracking" type="PathFollow3D"]
+physics_interpolation_mode = 2
 use_model_front = true
 cubic_interp = false
 loop = false
@@ -476,7 +476,7 @@ draw_pass_1 = SubResource("QuadMesh_bdumk")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_u57hx")
+&"": SubResource("AnimationLibrary_u57hx")
 }
 autoplay = "fly"
 

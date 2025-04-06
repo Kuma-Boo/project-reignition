@@ -1,10 +1,10 @@
 [gd_scene load_steps=39 format=3 uid="uid://bnefjsj5g2emm"]
 
 [ext_resource type="PackedScene" uid="uid://e6oju4xygbmm" path="res://area/4 levitated ruin/object/model/obstacle/MissileSimple.gltf" id="1_kw57j"]
-[ext_resource type="Script" path="res://area/4 levitated ruin/data/script/Missile.cs" id="2_vnv7l"]
+[ext_resource type="Script" uid="uid://c27oe48qjsjv4" path="res://area/4 levitated ruin/data/script/Missile.cs" id="2_vnv7l"]
 [ext_resource type="Material" uid="uid://bq1q3tp1cq76v" path="res://effect/particle/material/explosion/Explosion Smoke Add.tres" id="3_udap6"]
 [ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="4_2kxas"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="5_tm7hj"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="5_tm7hj"]
 [ext_resource type="Material" uid="uid://b4847susbcf6p" path="res://area/1 sand oasis/boss/effect/material/Hit Spark Billboard.tres" id="6_qpsq6"]
 [ext_resource type="Material" uid="uid://db4kropnhyudk" path="res://effect/particle/material/Ember Blue Billboard.tres" id="7_q3i3w"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="8_13i2u"]
@@ -18,8 +18,7 @@ gradient = SubResource("Gradient_8a8yj")
 width = 128
 
 [sub_resource type="Curve" id="Curve_nehro"]
-min_value = 1.0
-max_value = 4.0
+_limits = [1.0, 4.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 9.45211, 0, 0, Vector2(1, 4), 0.371934, 0.0, 0, 0]
 point_count = 2
 
@@ -336,12 +335,13 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tfwu0"]
 _data = {
-"RESET": SubResource("Animation_mftqq"),
-"explode": SubResource("Animation_5brwi"),
-"fly": SubResource("Animation_n41uu")
+&"RESET": SubResource("Animation_mftqq"),
+&"explode": SubResource("Animation_5brwi"),
+&"fly": SubResource("Animation_n41uu")
 }
 
 [node name="MissileSimple" node_paths=PackedStringArray("animator") instance=ExtResource("1_kw57j")]
+physics_interpolation_mode = 2
 script = ExtResource("2_vnv7l")
 animator = NodePath("AnimationPlayer")
 
@@ -445,7 +445,7 @@ draw_pass_1 = SubResource("QuadMesh_yndoj")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="4"]
 libraries = {
-"": SubResource("AnimationLibrary_tfwu0")
+&"": SubResource("AnimationLibrary_tfwu0")
 }
 autoplay = "fly"
 

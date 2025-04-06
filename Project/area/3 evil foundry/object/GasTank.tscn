@@ -526,6 +526,7 @@ _data = {
 }
 
 [node name="GasTank" type="Area3D"]
+physics_interpolation_mode = 2
 collision_layer = 12
 collision_mask = 3
 script = ExtResource("1_35lqu")
@@ -556,20 +557,20 @@ shape = SubResource("SphereShape3D_p2ke1")
 [node name="Strike" type="Node3D" parent="FX"]
 
 [node name="Strike" type="AudioStreamPlayer3D" parent="FX/Strike"]
+process_mode = 1
 stream = ExtResource("3_pmf55")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="Launch" type="AudioStreamPlayer3D" parent="FX/Strike"]
+process_mode = 1
 stream = ExtResource("4_jxiu4")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
-process_mode = 1
 script = ExtResource("5_fvurk")
 groupKey = &"gas_tank_launch"
 
@@ -609,12 +610,12 @@ draw_pass_1 = SubResource("QuadMesh_3k587")
 [node name="Explosion" type="Node3D" parent="FX"]
 
 [node name="Explosion" type="AudioStreamPlayer3D" parent="FX/Explosion"]
+process_mode = 1
 stream = ExtResource("4_jqcuq")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 150.0
 bus = &"GAME SFX"
-process_mode = 1
 script = ExtResource("5_fvurk")
 groupKey = &"gas_tank_explosion"
 
@@ -673,7 +674,7 @@ draw_pass_1 = SubResource("QuadMesh_kvel3")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_4kdib")
+&"": SubResource("AnimationLibrary_4kdib")
 }
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]

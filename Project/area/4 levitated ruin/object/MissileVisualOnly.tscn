@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://c5uhjh0ra11u6"]
 
 [ext_resource type="PackedScene" uid="uid://e6oju4xygbmm" path="res://area/4 levitated ruin/object/model/obstacle/MissileSimple.gltf" id="1_d3y0y"]
-[ext_resource type="Script" path="res://area/4 levitated ruin/data/script/Missile.cs" id="2_bokip"]
+[ext_resource type="Script" uid="uid://c27oe48qjsjv4" path="res://area/4 levitated ruin/data/script/Missile.cs" id="2_bokip"]
 [ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="3_do4d1"]
 
 [sub_resource type="Gradient" id="Gradient_8a8yj"]
@@ -13,8 +13,7 @@ gradient = SubResource("Gradient_8a8yj")
 width = 128
 
 [sub_resource type="Curve" id="Curve_nehro"]
-min_value = 1.0
-max_value = 4.0
+_limits = [0.99, 4.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 9.45211, 0, 0, Vector2(1, 4), 0.371934, 0.0, 0, 0]
 point_count = 2
 
@@ -144,12 +143,13 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tfwu0"]
 _data = {
-"RESET": SubResource("Animation_mftqq"),
-"explode": SubResource("Animation_5brwi"),
-"fly": SubResource("Animation_n41uu")
+&"RESET": SubResource("Animation_mftqq"),
+&"explode": SubResource("Animation_5brwi"),
+&"fly": SubResource("Animation_n41uu")
 }
 
 [node name="MissileVisualOnly" node_paths=PackedStringArray("animator") instance=ExtResource("1_d3y0y")]
+physics_interpolation_mode = 2
 script = ExtResource("2_bokip")
 animator = NodePath("AnimationPlayer")
 
@@ -168,6 +168,6 @@ draw_pass_1 = SubResource("QuadMesh_yvuiw")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="2"]
 libraries = {
-"": SubResource("AnimationLibrary_tfwu0")
+&"": SubResource("AnimationLibrary_tfwu0")
 }
 autoplay = "fly"
