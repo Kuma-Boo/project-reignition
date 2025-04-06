@@ -39,7 +39,7 @@
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="29_flomb"]
 [ext_resource type="Curve3D" path="res://area/4 levitated ruin/act 2/environment/path/Tower2Automation2Path.tres" id="29_toorb"]
 [ext_resource type="Curve3D" uid="uid://bu500amaad8y0" path="res://area/4 levitated ruin/act 2/environment/path/Tower2Automation3Path.tres" id="30_bam1r"]
-[ext_resource type="Curve3D" path="res://area/4 levitated ruin/act 2/environment/path/Tower2SidlePath.tres" id="30_c0tbi"]
+[ext_resource type="Curve3D" uid="uid://cgk5q8xpcuqyy" path="res://area/4 levitated ruin/act 2/environment/path/Tower2SidlePath.tres" id="30_c0tbi"]
 [ext_resource type="Script" uid="uid://cciy1oeuvbh3e" path="res://object/trigger/modules/JumpTrigger.cs" id="30_cwr62"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="33_3amqa"]
 [ext_resource type="AudioStream" uid="uid://bil7mtgriir7u" path="res://sound/ost/bonus disc/Levitated Ruin Act 2.mp3" id="33_4qmrk"]
@@ -341,32 +341,25 @@ script = ExtResource("33_3amqa")
 settings = ExtResource("24_pufbh")
 
 [node name="Tower2LoopPath" type="Node3D" parent="Triggers" node_paths=PackedStringArray("path")]
-transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -105.354, 34, -1569.65)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 10, -1575)
 script = ExtResource("33_cwr62")
 path = NodePath("../../Paths/Tower2")
 
-[node name="SidleTrigger1" parent="Triggers" instance=ExtResource("24_toorb")]
+[node name="Sidle" type="Node3D" parent="Triggers"]
+
+[node name="SidleTrigger1" parent="Triggers/Sidle" instance=ExtResource("24_toorb")]
 transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -105.354, 34, -1569.65)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/SidleTrigger1"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Sidle/SidleTrigger1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 shape = SubResource("BoxShape3D_bam1r")
 
-[node name="Path" type="Node3D" parent="Triggers/SidleTrigger1" node_paths=PackedStringArray("path")]
-script = ExtResource("33_cwr62")
-path = NodePath("../../../Paths/Tower2Sidle")
-
-[node name="SidleTrigger2" parent="Triggers" instance=ExtResource("24_toorb")]
+[node name="SidleTrigger2" parent="Triggers/Sidle" instance=ExtResource("24_toorb")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -105.495, 34, -1580.51)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/SidleTrigger2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Sidle/SidleTrigger2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 shape = SubResource("BoxShape3D_bam1r")
-
-[node name="Path" type="Node3D" parent="Triggers/SidleTrigger2" node_paths=PackedStringArray("path")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -7.57935, 0, 7.77881)
-script = ExtResource("33_cwr62")
-path = NodePath("../../../Paths/Tower2Sidle")
 
 [node name="Paths" type="Node3D" parent="."]
 
@@ -387,7 +380,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 550.243, 27.07, -1089.51)
 curve = ExtResource("17_p27ay")
 
 [node name="Tower2Sidle" type="Path3D" parent="Paths"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 34, -1567.21)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -92.208, 34, -1575)
 curve = ExtResource("30_c0tbi")
 
 [node name="Tower2Automation1" type="Path3D" parent="Paths"]
@@ -456,7 +449,3 @@ loopEndPosition = 131.133
 isStageMusic = true
 
 [connection signal="Activated" from="Triggers/Jumps/Rukh1Jump1Trigger" to="Triggers/RecenterLockout" method="Activate"]
-[connection signal="Activated" from="Triggers/SidleTrigger1" to="Triggers/SidleTrigger1/Path" method="Activate"]
-[connection signal="Deactivated" from="Triggers/SidleTrigger1" to="Triggers/Tower2LoopPath" method="Activate"]
-[connection signal="Activated" from="Triggers/SidleTrigger2" to="Triggers/SidleTrigger2/Path" method="Activate"]
-[connection signal="Deactivated" from="Triggers/SidleTrigger2" to="Triggers/Tower2LoopPath" method="Activate"]

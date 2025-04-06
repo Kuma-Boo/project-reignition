@@ -55,7 +55,7 @@ _data = [Vector2(0, 0), 0.0, 2.0, 0, 1, Vector2(0.3, 0.6), 0.0, 0.0, 0, 0, Vecto
 point_count = 5
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_7f5hg"]
-height = 10.0
+height = 8.0
 radius = 10.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5yb3a"]
@@ -510,7 +510,7 @@ script = ExtResource("9_t2qcg")
 lockoutData = ExtResource("10_ib1ve")
 
 [node name="GroundPathTrigger" parent="CageAct/Tower2" instance=ExtResource("6_f8ouc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 "Enter Mode" = 0
 
 [node name="GroundPath" type="Node3D" parent="CageAct/Tower2/GroundPathTrigger" node_paths=PackedStringArray("path")]
@@ -770,6 +770,17 @@ startHidden = true
 middleHeight = 10.0
 finalHeight = 7.5
 distance = 2.0
+
+[node name="SidlePathTrigger" parent="CageAct/Tower2" instance=ExtResource("6_f8ouc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 27.5, 0)
+"Enter Mode" = 0
+
+[node name="SidlePath" type="Node3D" parent="CageAct/Tower2/SidlePathTrigger" node_paths=PackedStringArray("path")]
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/Tower2Sidle")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower2/SidlePathTrigger"]
+shape = SubResource("CylinderShape3D_7f5hg")
 
 [node name="StaticGate3" parent="CageAct/Tower2" instance=ExtResource("11_t2qcg")]
 transform = Transform3D(0.282843, 0, 0.707107, 0, 2.2, 0, -0.282843, 0, 0.707107, 5.48586, 16, -5.26941)
@@ -1088,5 +1099,3 @@ shape = SubResource("SphereShape3D_ocnes")
 [connection signal="Deactivated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/Camera" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/CameraTrigger" to="CageAct/Tower2/Gate1" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/CameraTrigger" to="CageAct/Tower2/Gate2" method="Activate"]
-
-[editable path="Static"]
