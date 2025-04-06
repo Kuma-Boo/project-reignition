@@ -60,6 +60,9 @@ public partial class Missile : Node3D
 
 	public override void _PhysicsProcess(double _)
 	{
+		if (isExploded)
+			return;
+
 		if (pathFollow != null)
 		{
 			pathFollow.Progress += moveSpeed * PhysicsManager.physicsDelta;
