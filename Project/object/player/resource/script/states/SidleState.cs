@@ -135,7 +135,7 @@ public partial class SidleState : PlayerState
 			velocity = Mathf.Lerp(velocity, targetInput, FrictionSmoothing);
 
 		// Check walls
-		Vector3 castVector = Player.PathFollower.Forward() * Mathf.Sign(velocity) * (Player.CollisionSize.X + Mathf.Abs(velocity * PhysicsManager.physicsDelta));
+		Vector3 castVector = Player.PathFollower.ForwardAxis * Mathf.Sign(velocity) * (Player.CollisionSize.X + Mathf.Abs(velocity * PhysicsManager.physicsDelta));
 		RaycastHit hit = Player.CastRay(Player.CenterPosition, castVector, Runtime.Instance.environmentMask);
 		DebugManager.DrawRay(Player.CenterPosition, castVector, hit ? Colors.Red : Colors.White);
 		if (hit && hit.collidedObject.IsInGroup("sidle wall")) // Kill speed

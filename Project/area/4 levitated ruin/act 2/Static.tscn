@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://bpxj0juyhbmxs"]
+[gd_scene load_steps=62 format=3 uid="uid://bpxj0juyhbmxs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_16rgi"]
 [ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="2_dq0yd"]
@@ -61,12 +61,15 @@ size = Vector3(5, 8, 3)
 [sub_resource type="BoxShape3D" id="BoxShape3D_jtd2r"]
 size = Vector3(10, 20, 2.5)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_c0tbi"]
+size = Vector3(10, 8.70264, 2.5)
+
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_k5ypd"]
 height = 16.0
 radius = 10.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bam1r"]
-size = Vector3(7, 8, 5)
+size = Vector3(5, 8, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_31wxi"]
 size = Vector3(5, 8, 3)
@@ -277,6 +280,33 @@ shape = SubResource("BoxShape3D_jtd2r")
 [node name="Camera" type="Node3D" parent="Triggers/Camera/Tower2Entrance"]
 script = ExtResource("33_3amqa")
 settings = ExtResource("22_k5ypd")
+
+[node name="Tower2ForwardPath" parent="Triggers/Camera" instance=ExtResource("29_flomb")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -100, 9, -1558)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower2ForwardPath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+shape = SubResource("BoxShape3D_c0tbi")
+
+[node name="Path" type="Node3D" parent="Triggers/Camera/Tower2ForwardPath" node_paths=PackedStringArray("path")]
+script = ExtResource("33_cwr62")
+path = NodePath("../../../../Paths/Rukh2")
+cameraPathBlendTime = 0.5
+
+[node name="Tower2ReversePath" parent="Triggers/Camera" instance=ExtResource("29_flomb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 9, -1583.86)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower2ReversePath"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+shape = SubResource("BoxShape3D_c0tbi")
+
+[node name="Path" type="Node3D" parent="Triggers/Camera/Tower2ReversePath" node_paths=PackedStringArray("path")]
+script = ExtResource("33_cwr62")
+path = NodePath("../../../../Paths/Rukh2")
+reversePath = true
+cameraPathBlendTime = 0.5
 
 [node name="Tower2Base" parent="Triggers/Camera" instance=ExtResource("29_flomb")]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -99.6676, 10, -1564.86)

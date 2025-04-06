@@ -10,11 +10,15 @@ public partial class PathTrigger : StageTriggerModule
 	[Export(PropertyHint.NodePathValidTypes, "Path3D")]
 	private Path3D path;
 
+	private bool playerPathDeactivateReverse;
+	private bool cameraPathDeactivateReverse;
 	private Path3D playerDeactivatePath;
 	private Path3D cameraDeactivatePath;
 	/// <summary> Did the previous path limit the camera's distance? </summary>
 	private bool deactivateLimitCameraDistance;
 
+	/// <summary> Should this path be run in reverse? </summary>
+	[Export] public bool reversePath;
 	/// <summary> Should the path be assigned to the player? </summary>
 	[Export] public bool affectPlayer = true;
 	/// <summary> Should the path be assigned to the camera? </summary>
@@ -29,16 +33,19 @@ public partial class PathTrigger : StageTriggerModule
 		if (affectPlayer)
 		{
 			playerDeactivatePath ??= Player.PathFollower.ActivePath;
-			Player.PathFollower.SetActivePath(path);
+			playerPathDeactivateReverse = Player.PathFollower.IsReversingPath;
+			Player.PathFollower.SetActivePath(path, reversePath);
 		}
 
 		if (!affectCamera)
 			return;
 
 		cameraDeactivatePath ??= Player.Camera.PathFollower.ActivePath;
-		Player.Camera.PathFollower.SetActivePath(path);
-
+		cameraPathDeactivateReverse = Player.Camera.PathFollower.IsReversingPath;
 		deactivateLimitCameraDistance = Player.Camera.LimitToPathDistance;
+
+		if (!Player.Camera.PathFollower.SetActivePath(path, reversePath))
+			return;
 		Player.Camera.LimitToPathDistance = limitCameraDistanceToPath;
 		Player.Camera.UpdatePathBlendSpeed(Mathf.IsZeroApprox(cameraPathBlendTime) ? 0.0f : 1.0f / cameraPathBlendTime);
 	}
@@ -46,12 +53,18 @@ public partial class PathTrigger : StageTriggerModule
 	public override void Deactivate()
 	{
 		//Ensure player's path hasn't already been changed
-		if (affectPlayer && Player.PathFollower.ActivePath == path)
-			Player.PathFollower.SetActivePath(playerDeactivatePath);
-
-		if (affectCamera && Player.Camera.PathFollower.ActivePath == path)
+		if (affectPlayer &&
+			Player.PathFollower.ActivePath == path &&
+			Player.PathFollower.IsReversingPath == reversePath)
 		{
-			Player.Camera.PathFollower.SetActivePath(cameraDeactivatePath);
+			Player.PathFollower.SetActivePath(playerDeactivatePath, playerPathDeactivateReverse);
+		}
+
+		if (affectCamera &&
+			Player.Camera.PathFollower.ActivePath == path &&
+			Player.Camera.PathFollower.IsReversingPath == cameraPathDeactivateReverse)
+		{
+			Player.Camera.PathFollower.SetActivePath(cameraDeactivatePath, cameraPathDeactivateReverse);
 			Player.Camera.LimitToPathDistance = limitCameraDistanceToPath;
 		}
 	}

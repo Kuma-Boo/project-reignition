@@ -67,6 +67,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 10, -1391)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="CageAct/SpawnPosition" instance=ExtResource("3_oq4a5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -350, 0.1, -148)
 
 [node name="MainTower" type="Node3D" parent="CageAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 10, -1391)
@@ -274,6 +275,7 @@ script = ExtResource("7_h6cqm")
 startPaused = true
 smoothPausing = true
 root = NodePath("GreenMajin")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 10.0
 "Movement/Starting Offset" = 0.25
@@ -310,7 +312,7 @@ Movement/Angle = 180.0
 "Vertical Orientation" = false
 
 [node name="GreenMajin" parent="CageAct/Zipline1/MajinMover2" instance=ExtResource("7_nggpy")]
-transform = Transform3D(1.00001, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1.00001, 0, 0, 10)
+transform = Transform3D(1.00001, 0, -1.04308e-07, 0, 1, 0, 1.04308e-07, 0, 1.00001, 0, 0, 9.99988)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
@@ -424,7 +426,6 @@ transform = Transform3D(0.282843, 0, -0.707107, 0, 2.2, 0, 0.282843, 0, 0.707107
 transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -4.63, 8, 6.22998)
 
 [node name="Path" type="Node3D" parent="CageAct/Tower2/DashPanel1" node_paths=PackedStringArray("path")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("8_mxhyu")
 path = NodePath("../../../../Static/Paths/Tower2Automation1")
 
@@ -571,7 +572,6 @@ script = ExtResource("5_im11i")
 respawnOnActivation = true
 
 [node name="Rings2" type="Node3D" parent="CageAct/Tower2/CullingTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("5_f8ouc")
 Source = ExtResource("6_nggpy")
 Amount = 5
@@ -585,7 +585,6 @@ Spacing = 4.0
 metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
 
 [node name="Child01" parent="CageAct/Tower2/CullingTrigger/Rings2" instance=ExtResource("6_nggpy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Child02" parent="CageAct/Tower2/CullingTrigger/Rings2" instance=ExtResource("6_nggpy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125732, 0, 3.86926)
@@ -905,21 +904,21 @@ shape = SubResource("SphereShape3D_ocnes")
 [connection signal="Shattered" from="CageAct/Tower2/EnemyStone" to="CageAct/Tower2/Spring1" method="ShowLauncher"]
 [connection signal="Deactivated" from="CageAct/Tower2/Spring1" to="CageAct/Tower2/LoopPath" method="Activate"]
 [connection signal="Deactivated" from="CageAct/Tower2/Spring1" to="CageAct/Tower2/Lockout" method="Activate"]
-[connection signal="Activated" from="CageAct/Tower2/DashPanel1" to="CageAct/Tower2/DashPanel1/AutomationTrigger" method="AttemptAutomation" flags=3]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel1" to="CageAct/Tower2/DashPanel1/Path" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/DashPanel1" to="CageAct/Tower2/DashPanel1/AutomationTrigger" method="AttemptAutomation" flags=3]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel1/AutomationTrigger" to="CageAct/Tower2/DashPanel1/Path" method="Activate"]
 [connection signal="Deactivated" from="CageAct/Tower2/DashPanel1/AutomationTrigger" to="CageAct/Tower2/LoopPath" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/Switch1" to="CageAct/Tower2/Switch1/Spring" method="ShowLauncher"]
 [connection signal="Deactivated" from="CageAct/Tower2/Switch1" to="CageAct/Tower2/Switch1/Spring" method="HideLauncher"]
-[connection signal="Activated" from="CageAct/Tower2/DashPanel2" to="CageAct/Tower2/DashPanel2/AutomationTrigger" method="AttemptAutomation" flags=3]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel2" to="CageAct/Tower2/DashPanel2/Path" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/DashPanel2" to="CageAct/Tower2/DashPanel2/AutomationTrigger" method="AttemptAutomation" flags=3]
 [connection signal="Deactivated" from="CageAct/Tower2/DashPanel2/AutomationTrigger" to="CageAct/Tower2/LoopPath" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/Switch2" to="CageAct/Tower2/CullingTrigger" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/Switch3" to="CageAct/Tower2/Switch3/Spring" method="ShowLauncher"]
 [connection signal="Deactivated" from="CageAct/Tower2/Switch3" to="CageAct/Tower2/Switch3/Spring" method="HideLauncher"]
 [connection signal="Activated" from="CageAct/Tower2/GateTrigger2" to="CageAct/Tower2/Gate3" method="Activate"]
-[connection signal="Activated" from="CageAct/Tower2/DashPanel3" to="CageAct/Tower2/DashPanel3/AutomationTrigger" method="AttemptAutomation" flags=3]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel3" to="CageAct/Tower2/DashPanel3/Path" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/DashPanel3" to="CageAct/Tower2/DashPanel3/AutomationTrigger" method="AttemptAutomation" flags=3]
 [connection signal="Deactivated" from="CageAct/Tower2/DashPanel3/AutomationTrigger" to="CageAct/Tower2/LoopPath" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/Path" method="Activate"]
 [connection signal="Deactivated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/Camera" method="Activate"]

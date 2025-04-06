@@ -820,7 +820,7 @@ public partial class SandScorpion : Node3D
 		horizontalTracking = Mathf.Clamp(horizontalTracking, -FlyingEyeMaxTracking, FlyingEyeMaxTracking);
 		flyingEyeTarget = Player.PathFollower.GlobalPosition + (Vector3.Up * flyingEyeAttackPosition.Y);
 		flyingEyeTarget += Player.PathFollower.Right() * horizontalTracking;
-		flyingEyeTarget += Player.PathFollower.Forward() * FlyingEyeRadius;
+		flyingEyeTarget += Player.PathFollower.ForwardAxis * FlyingEyeRadius;
 	}
 
 	private readonly StringName EyeBiteState = "bite";

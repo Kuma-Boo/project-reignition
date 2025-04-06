@@ -108,6 +108,6 @@ public partial class IdleState : PlayerState
 
 		float targetAngle = Player.Controller.GetTargetMovementAngle();
 		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(targetAngle, Player.PathFollower.ForwardAngle);
-		return Player.PathFollower.Forward().Rotated(Player.UpDirection, deltaAngle);
+		return Player.PathFollower.ForwardAxis.Rotated(Player.UpDirection, deltaAngle);
 	}
 }

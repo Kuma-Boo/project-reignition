@@ -86,7 +86,7 @@ public partial class PlayerController : CharacterBody3D
 	public Vector3 GetMovementDirection()
 	{
 		float deltaAngle = ExtensionMethods.SignedDeltaAngleRad(MovementAngle, PathFollower.ForwardAngle);
-		return PathFollower.Forward().Rotated(UpDirection, deltaAngle);
+		return PathFollower.ForwardAxis.Rotated(UpDirection, deltaAngle);
 	}
 
 	/// <summary> How much is the slope currently influencing the player? </summary>
@@ -100,7 +100,7 @@ public partial class PlayerController : CharacterBody3D
 		if (Mathf.IsZeroApprox(MoveSpeed)) return; // Idle/Backstepping isn't affected by slopes
 
 		// Calculate slope influence
-		SlopeRatio = PathFollower.Forward().Dot(Vector3.Up);
+		SlopeRatio = PathFollower.ForwardAxis.Dot(Vector3.Up);
 		if (Mathf.Abs(SlopeRatio) <= SlopeThreshold) return;
 
 		SlopeRatio = Mathf.Lerp(-Stats.slopeInfluence, Stats.slopeInfluence, (SlopeRatio * .5f) + .5f);
@@ -559,7 +559,7 @@ public partial class PlayerController : CharacterBody3D
 			return;
 		}
 
-		Vector3 recenterDirection = PathFollower.Forward().Rotated(UpDirection, Mathf.Pi * .5f);
+		Vector3 recenterDirection = PathFollower.ForwardAxis.Rotated(UpDirection, Mathf.Pi * .5f);
 		float currentOffset = PathFollower.LocalPlayerPositionDelta.X;
 		float movementOffset = currentOffset;
 		if (!isRecentered) // Smooth out recenter speed
