@@ -34,7 +34,13 @@ public partial class PathTrigger : StageTriggerModule
 		{
 			playerDeactivatePath ??= Player.PathFollower.ActivePath;
 			playerPathDeactivateReverse = Player.PathFollower.IsReversingPath;
-			Player.PathFollower.SetActivePath(path, reversePath);
+			if (Player.PathFollower.SetActivePath(path, reversePath) &&
+				playerPathDeactivateReverse != reversePath &&
+				playerDeactivatePath == Player.PathFollower.ActivePath)
+			{
+				// Only enter reverse path state when reversing the current path
+				Player.StartReversePath();
+			}
 		}
 
 		if (!affectCamera)

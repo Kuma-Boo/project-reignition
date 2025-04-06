@@ -146,6 +146,8 @@ public partial class PlayerAnimator : Node3D
 
 	private readonly StringName TurnBlend = "parameters/ground_tree/turn_blend/blend_position";
 	private readonly StringName LandTrigger = "parameters/ground_tree/land_trigger/request";
+	private readonly StringName ReversePathTrigger = "parameters/ground_tree/reverse_path_trigger/request";
+	private readonly StringName ReversePathActive = "parameters/ground_tree/reverse_path_trigger/active";
 
 	private readonly StringName SpeedBreakTrigger = "parameters/ground_tree/speedbreak_trigger/request";
 
@@ -175,6 +177,14 @@ public partial class PlayerAnimator : Node3D
 		ResetGroundTree();
 		animationTree.Set(LandTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		animationTree.Set(SplashJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+		groundTransition.XfadeTime = .05f;
+		animationTree.Set(GroundTransition, EnabledConstant);
+	}
+
+	public bool IsReversePathAnimationActive => (bool)animationTree.Get(ReversePathActive);
+	public void ReversePathAnimation()
+	{
+		animationTree.Set(ReversePathTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		groundTransition.XfadeTime = .05f;
 		animationTree.Set(GroundTransition, EnabledConstant);
 	}
@@ -588,6 +598,8 @@ public partial class PlayerAnimator : Node3D
 			targetRotation = ExternalAngle;
 		else if (Player.IsHomingAttacking) // Face target
 			targetRotation = ExtensionMethods.CalculateForwardAngle(Player.Lockon.HomingAttackDirection);
+		else if (Player.IsReversePath && Player.IsOnGround)
+			targetRotation = Player.PathFollower.ForwardAngle;
 		else if (Player.IsMovingBackward) // Backstepping
 			targetRotation = Player.PathFollower.ForwardAngle + (groundTurnRatio * Mathf.Pi * .15f);
 		else if (Player.IsLockoutActive && Player.ActiveLockoutData.recenterPlayer)

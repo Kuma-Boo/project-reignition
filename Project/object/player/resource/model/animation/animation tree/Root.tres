@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=300 format=3 uid="uid://biwe75w273iq7"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=302 format=3 uid="uid://biwe75w273iq7"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_hf2vv"]
 
@@ -1057,6 +1057,13 @@ input_1/reset = true
 fadein_time = 0.05
 fadeout_time = 0.1
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xh678"]
+animation = &"ActionLibrary/reverse-path"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_g25ih"]
+sync = true
+fadeout_time = 0.2
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6khq4"]
 animation = &"ActionLibrary/speedbreak"
 
@@ -1114,13 +1121,13 @@ min_space = Vector2(-1, 0)
 sync = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_vw7yp"]
-graph_offset = Vector2(-1352.28, 128.907)
+graph_offset = Vector2(-2680.97, -250.079)
 nodes/backstep_anim/node = SubResource("AnimationNodeAnimation_0v11u")
-nodes/backstep_anim/position = Vector2(-2760, -20)
+nodes/backstep_anim/position = Vector2(-3280, -60)
 nodes/backstep_seek/node = SubResource("AnimationNodeTimeSeek_1yce3")
-nodes/backstep_seek/position = Vector2(-2540, -20)
+nodes/backstep_seek/position = Vector2(-3060, -60)
 nodes/brake_state/node = SubResource("AnimationNodeStateMachine_iw2er")
-nodes/brake_state/position = Vector2(-1360, 280)
+nodes/brake_state/position = Vector2(-1480, 340)
 nodes/brake_trigger/node = SubResource("AnimationNodeOneShot_yhgis")
 nodes/brake_trigger/position = Vector2(-1160, 80)
 nodes/crouch_state/node = SubResource("AnimationNodeStateMachine_l2wf8")
@@ -1128,17 +1135,17 @@ nodes/crouch_state/position = Vector2(-940, 180)
 nodes/crouch_transition/node = SubResource("AnimationNodeTransition_oo2i4")
 nodes/crouch_transition/position = Vector2(-660, 80)
 nodes/forward_blend/node = SubResource("AnimationNodeBlendSpace1D_jet85")
-nodes/forward_blend/position = Vector2(-2760, 240)
+nodes/forward_blend/position = Vector2(-3280, 200)
 nodes/forward_seek/node = SubResource("AnimationNodeTimeSeek_l7cul")
-nodes/forward_seek/position = Vector2(-2540, 240)
+nodes/forward_seek/position = Vector2(-3060, 200)
 nodes/ground_seek/node = SubResource("AnimationNodeTimeSeek_pf45a")
-nodes/ground_seek/position = Vector2(-1960, 60)
+nodes/ground_seek/position = Vector2(-2480, 20)
 nodes/ground_speed/node = SubResource("AnimationNodeTimeScale_pev3d")
-nodes/ground_speed/position = Vector2(-1800, 60)
+nodes/ground_speed/position = Vector2(-2320, 20)
 nodes/idle_anim/node = SubResource("AnimationNodeAnimation_4ig5s")
-nodes/idle_anim/position = Vector2(-2760, 120)
+nodes/idle_anim/position = Vector2(-3280, 80)
 nodes/idle_blend/node = SubResource("AnimationNodeBlend3_a0t15")
-nodes/idle_blend/position = Vector2(-2320, 40)
+nodes/idle_blend/position = Vector2(-2840, 0)
 nodes/land_anim/node = SubResource("AnimationNodeAnimation_me7fr")
 nodes/land_anim/position = Vector2(-1880, 260)
 nodes/land_speed/node = SubResource("AnimationNodeTimeScale_gcdof")
@@ -1152,6 +1159,10 @@ nodes/quick_step_transition/node = SubResource("AnimationNodeTransition_ppg6f")
 nodes/quick_step_transition/position = Vector2(-200, 320)
 nodes/quick_step_trigger/node = SubResource("AnimationNodeOneShot_rjupj")
 nodes/quick_step_trigger/position = Vector2(240, 40)
+nodes/reverse_path_anim/node = SubResource("AnimationNodeAnimation_xh678")
+nodes/reverse_path_anim/position = Vector2(-2320, 200)
+nodes/reverse_path_trigger/node = SubResource("AnimationNodeOneShot_g25ih")
+nodes/reverse_path_trigger/position = Vector2(-1992.07, -8.16273)
 nodes/speedbreak_anim/node = SubResource("AnimationNodeAnimation_6khq4")
 nodes/speedbreak_anim/position = Vector2(-860, 360)
 nodes/speedbreak_trigger/node = SubResource("AnimationNodeOneShot_4d0du")
@@ -1161,10 +1172,10 @@ nodes/step_left_anim/position = Vector2(-480, 320)
 nodes/step_right_anim/node = SubResource("AnimationNodeAnimation_4bael")
 nodes/step_right_anim/position = Vector2(-480, 460)
 nodes/turn_add/node = SubResource("AnimationNodeAdd2_qscfu")
-nodes/turn_add/position = Vector2(-2140, 80)
+nodes/turn_add/position = Vector2(-2660, 40)
 nodes/turn_blend/node = SubResource("AnimationNodeBlendSpace2D_pei0v")
-nodes/turn_blend/position = Vector2(-2320, 300)
-node_connections = [&"backstep_seek", 0, &"backstep_anim", &"brake_trigger", 0, &"land_trigger", &"brake_trigger", 1, &"brake_state", &"crouch_transition", 0, &"brake_trigger", &"crouch_transition", 1, &"crouch_state", &"forward_seek", 0, &"forward_blend", &"ground_seek", 0, &"turn_add", &"ground_speed", 0, &"ground_seek", &"idle_blend", 0, &"backstep_seek", &"idle_blend", 1, &"idle_anim", &"idle_blend", 2, &"forward_seek", &"land_speed", 0, &"land_anim", &"land_trigger", 0, &"ground_speed", &"land_trigger", 1, &"land_speed", &"output", 0, &"quick_step_trigger", &"quick_step_speed", 0, &"quick_step_transition", &"quick_step_transition", 0, &"step_left_anim", &"quick_step_transition", 1, &"step_right_anim", &"quick_step_trigger", 0, &"speedbreak_trigger", &"quick_step_trigger", 1, &"quick_step_speed", &"speedbreak_trigger", 0, &"crouch_transition", &"speedbreak_trigger", 1, &"speedbreak_anim", &"turn_add", 0, &"idle_blend", &"turn_add", 1, &"turn_blend"]
+nodes/turn_blend/position = Vector2(-2840, 260)
+node_connections = [&"backstep_seek", 0, &"backstep_anim", &"brake_trigger", 0, &"land_trigger", &"brake_trigger", 1, &"brake_state", &"crouch_transition", 0, &"brake_trigger", &"crouch_transition", 1, &"crouch_state", &"forward_seek", 0, &"forward_blend", &"ground_seek", 0, &"turn_add", &"ground_speed", 0, &"ground_seek", &"idle_blend", 0, &"backstep_seek", &"idle_blend", 1, &"idle_anim", &"idle_blend", 2, &"forward_seek", &"land_speed", 0, &"land_anim", &"land_trigger", 0, &"reverse_path_trigger", &"land_trigger", 1, &"land_speed", &"output", 0, &"quick_step_trigger", &"quick_step_speed", 0, &"quick_step_transition", &"quick_step_transition", 0, &"step_left_anim", &"quick_step_transition", 1, &"step_right_anim", &"quick_step_trigger", 0, &"speedbreak_trigger", &"quick_step_trigger", 1, &"quick_step_speed", &"reverse_path_trigger", 0, &"ground_speed", &"reverse_path_trigger", 1, &"reverse_path_anim", &"speedbreak_trigger", 0, &"crouch_transition", &"speedbreak_trigger", 1, &"speedbreak_anim", &"turn_add", 0, &"idle_blend", &"turn_add", 1, &"turn_blend"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yavkw"]
 animation = &"ActionLibrary/hurt"
@@ -1262,19 +1273,19 @@ input_4/reset = true
 animation = &"EventLibrary/so_a1_sandfall_event"
 
 [sub_resource type="AnimationNodeBlendTree" id="132"]
-graph_offset = Vector2(-913.738, 187.137)
+graph_offset = Vector2(-913.385, -86.58)
 nodes/completion_crouch_anim/node = SubResource("AnimationNodeAnimation_y04wd")
 nodes/completion_crouch_anim/position = Vector2(-620, 280)
 nodes/completion_standing_anim/node = SubResource("AnimationNodeAnimation_c8ug4")
 nodes/completion_standing_anim/position = Vector2(-620, 160)
 nodes/countdown/node = SubResource("131")
-nodes/countdown/position = Vector2(-400, 40)
+nodes/countdown/position = Vector2(-380, -60)
 nodes/dj_a1_river_event/node = SubResource("AnimationNodeAnimation_sak77")
 nodes/dj_a1_river_event/position = Vector2(-400, 520)
 nodes/oneshot_seek/node = SubResource("AnimationNodeTimeSeek_ovnpd")
 nodes/oneshot_seek/position = Vector2(176, 144)
 nodes/oneshot_transition/node = SubResource("130")
-nodes/oneshot_transition/position = Vector2(-16, 144)
+nodes/oneshot_transition/position = Vector2(-20, 140)
 nodes/output/position = Vector2(336, 144)
 nodes/so_a1_sandfall_event/node = SubResource("AnimationNodeAnimation_d1kei")
 nodes/so_a1_sandfall_event/position = Vector2(-740, 480)
@@ -1529,6 +1540,7 @@ input_5/break_loop_at_end = false
 input_5/reset = true
 
 [resource]
+graph_offset = Vector2(-1370.64, -103.833)
 nodes/air_tree/node = SubResource("AnimationNodeBlendTree_2rvqt")
 nodes/air_tree/position = Vector2(-1300, 100)
 nodes/balance_tree/node = SubResource("AnimationNodeBlendTree_gi378")
@@ -1548,7 +1560,7 @@ nodes/hurt_trigger/position = Vector2(-320, 176)
 nodes/oneshot_tree/node = SubResource("132")
 nodes/oneshot_tree/position = Vector2(-160, 260)
 nodes/oneshot_trigger/node = SubResource("AnimationNodeOneShot_fl47a")
-nodes/oneshot_trigger/position = Vector2(48, 144)
+nodes/oneshot_trigger/position = Vector2(40, 140)
 nodes/sidle_tree/node = SubResource("AnimationNodeBlendTree_yi2da")
 nodes/sidle_tree/position = Vector2(-1120, 368)
 nodes/spin_speed/node = SubResource("AnimationNodeTimeScale_taids")

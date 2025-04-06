@@ -425,8 +425,7 @@ public partial class PlayerController : CharacterBody3D
 		UpDirection = UpDirection.Lerp(upDirection, Mathf.Clamp(resetFactor, 0f, 1f)).Normalized();
 	}
 
-	[Export]
-	private AnimationPlayer hitboxAnimator;
+	[Export] private AnimationPlayer hitboxAnimator;
 	public void ChangeHitbox(StringName hitboxAnimation)
 	{
 		hitboxAnimator.Play(hitboxAnimation);
@@ -609,17 +608,19 @@ public partial class PlayerController : CharacterBody3D
 	public bool AllowLandingSkills { get; set; }
 
 	[ExportGroup("States")]
-	[Export]
-	private CountdownState countdownState;
+	[Export] private CountdownState countdownState;
 	public bool IsCountdown { get; set; }
 	public void StartCountdown() => StateMachine.ChangeState(countdownState);
+
+	[Export] private ReversePathState reversePathState;
+	public bool IsReversePath => StateMachine.CurrentState == reversePathState;
+	public void StartReversePath() => StateMachine.ChangeState(reversePathState);
 
 	[Signal]
 	public delegate void LaunchFinishedEventHandler();
 	public bool IsLaunching { get; set; }
 	public Launcher ActiveLauncher => launchState.ActiveLauncher;
-	[Export]
-	private LaunchState launchState;
+	[Export] private LaunchState launchState;
 	public void StartLauncher(LaunchSettings settings)
 	{
 		if (!launchState.UpdateSettings(settings)) // Failed to start launcher state
@@ -628,16 +629,14 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(launchState);
 	}
 
-	[Export]
-	private LaunchRingState launchRingState;
+	[Export] private LaunchRingState launchRingState;
 	public void StartLaunchRing(LaunchRing launcher)
 	{
 		launchRingState.Launcher = launcher;
 		StateMachine.ChangeState(launchRingState);
 	}
 
-	[Export]
-	private CatapultState catapultState;
+	[Export] private CatapultState catapultState;
 	public bool IsCatapultActive => catapultState.Catapult != null;
 	public void StartCatapult(Catapult catapult)
 	{
@@ -645,8 +644,7 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, catapultState);
 	}
 
-	[Export]
-	private FlyingPotState flyingPotState;
+	[Export] private FlyingPotState flyingPotState;
 	public bool IsFlyingPotActive => flyingPotState.Pot != null;
 	public void StartFlyingPot(FlyingPot pot)
 	{
@@ -654,16 +652,14 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, flyingPotState);
 	}
 
-	[Export]
-	private PathTravellerState pathTravellerState;
+	[Export] private PathTravellerState pathTravellerState;
 	public void StartPathTraveller(PathTraveller traveller)
 	{
 		pathTravellerState.Traveller = traveller;
 		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, pathTravellerState);
 	}
 
-	[Export]
-	private SpinJumpState spinJumpState;
+	[Export] private SpinJumpState spinJumpState;
 	public bool IsSpinJump { get; set; }
 	public void StartSpinJump(bool isShortenedJump)
 	{
@@ -674,16 +670,14 @@ public partial class PlayerController : CharacterBody3D
 	private readonly float SpinJumpBounceAmount = 3.0f;
 	public void StartSpinJumpBounce() => VerticalSpeed = Runtime.CalculateJumpPower(SpinJumpBounceAmount);
 
-	[Export]
-	private QuickStepState quickStepState;
+	[Export] private QuickStepState quickStepState;
 	public void StartQuickStep(bool isSteppingRight)
 	{
 		quickStepState.IsSteppingRight = isSteppingRight;
 		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, quickStepState);
 	}
 
-	[Export]
-	private LightSpeedDashState lightSpeedDashState;
+	[Export] private LightSpeedDashState lightSpeedDashState;
 	public bool IsLightDashing => lightSpeedDashState.CurrentTarget != null;
 	public bool StartLightSpeedDash()
 	{
@@ -693,8 +687,7 @@ public partial class PlayerController : CharacterBody3D
 		return IsLightDashing;
 	}
 
-	[Export]
-	private LightSpeedAttackState lightSpeedAttackState;
+	[Export] private LightSpeedAttackState lightSpeedAttackState;
 	public bool IsLightSpeedAttacking { get; set; }
 	public bool StartLightSpeedAttack()
 	{
@@ -706,8 +699,7 @@ public partial class PlayerController : CharacterBody3D
 		return IsLightSpeedAttacking;
 	}
 
-	[Export]
-	private GrindState grindState;
+	[Export] private GrindState grindState;
 	public bool AllowLandingGrind { get; set; }
 	public bool IsGrindstepping { get; set; }
 	public bool IsGrinding { get; set; }
@@ -727,8 +719,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public bool DisableSidle { get; set; }
 	public bool IsSidling => sidleState.Trigger != null;
-	[Export]
-	private SidleState sidleState;
+	[Export] private SidleState sidleState;
 	public void StartSidle(SidleTrigger trigger)
 	{
 		sidleState.Trigger = trigger;
@@ -744,8 +735,7 @@ public partial class PlayerController : CharacterBody3D
 			sidleState.ActiveFoothold = null;
 	}
 
-	[Export]
-	private AutomationState automationState;
+	[Export] private AutomationState automationState;
 	public bool IsAutomationActive => automationState.Automation != null;
 	public void StartAutomation(AutomationTrigger automation)
 	{
@@ -756,16 +746,14 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(automationState);
 	}
 
-	[Export]
-	private EventState eventState;
+	[Export] private EventState eventState;
 	public void StartEvent(EventTrigger trigger)
 	{
 		eventState.Trigger = trigger;
 		StateMachine.CallDeferred(PlayerStateMachine.MethodName.ChangeState, eventState);
 	}
 
-	[Export]
-	private BounceState bounceState;
+	[Export] private BounceState bounceState;
 	public bool IsBouncing { get; set; }
 	public bool IsBounceInteruptable { get; set; }
 	public void StartBounce(bool isUpwardBounce = true)
@@ -776,8 +764,7 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(bounceState);
 	}
 
-	[Export]
-	private DriftState driftState;
+	[Export] private DriftState driftState;
 	public bool IsDrifting => driftState.Trigger != null;
 	public void StartDrift(DriftTrigger trigger)
 	{
@@ -785,18 +772,15 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(driftState);
 	}
 
-	[Export]
-	private IvyState ivyState;
+	[Export] private IvyState ivyState;
 	public void StartIvy(Ivy trigger)
 	{
-		GD.Print("Ivy Started");
 		ivyState.Trigger = trigger;
 		ivyState.UpdateHighSpeedEntry();
 		StateMachine.ChangeState(ivyState);
 	}
 
-	[Export]
-	private ZiplineState ziplineState;
+	[Export] private ZiplineState ziplineState;
 	public bool IsZiplineActive => ziplineState.Trigger != null;
 	public void StartZipline(Zipline trigger)
 	{
@@ -804,15 +788,13 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(ziplineState);
 	}
 
-	[Export]
-	private PetrifyState petrifyState;
+	[Export] private PetrifyState petrifyState;
 	public bool IsPetrified => StateMachine.CurrentState == petrifyState;
 	public void StartPetrify() => StateMachine.ChangeState(petrifyState);
 
 	[Signal]
 	public delegate void KnockbackEventHandler();
-	[Export]
-	private KnockbackState knockbackState;
+	[Export] private KnockbackState knockbackState;
 	public bool IsKnockback { get; set; }
 	public bool StartKnockback(KnockbackSettings settings = new())
 	{
@@ -1049,8 +1031,7 @@ public partial class PlayerController : CharacterBody3D
 		Animator.SnapRotation(MovementAngle);
 	}
 
-	[Export]
-	private TeleportState teleportState;
+	[Export] private TeleportState teleportState;
 	public bool IsTeleporting { get; set; }
 	public void Teleport(TeleportTrigger trigger)
 	{
