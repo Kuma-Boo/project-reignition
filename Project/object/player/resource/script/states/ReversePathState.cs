@@ -33,25 +33,25 @@ public partial class ReversePathState : PlayerState
 		Player.CheckWall();
 		Player.UpdateUpDirection();
 
-		if (Player.CheckGround())
+		if (!Player.CheckGround())
+			return null;
+
+		Player.MoveSpeed = 0;
+
+		if (!playedTurnaroundAnimation)
 		{
-			Player.MoveSpeed = 0;
-
-			if (!playedTurnaroundAnimation)
-			{
-				Player.Animator.ReversePathAnimation();
-				playedTurnaroundAnimation = true;
-				return null;
-			}
-
-			if (!Player.Animator.IsReversePathAnimationActive)
-			{
-				Player.Animator.DisabledSpeedSmoothing = true;
-				return idleState;
-			}
-
-			Player.Animator.IdleAnimation();
+			Player.Animator.ReversePathAnimation();
+			playedTurnaroundAnimation = true;
+			return null;
 		}
+
+		if (!Player.Animator.IsReversePathAnimationActive)
+		{
+			Player.Animator.DisabledSpeedSmoothing = true;
+			return idleState;
+		}
+
+		Player.Animator.IdleAnimation();
 
 		if (!Player.Skills.IsSpeedBreakActive)
 		{
