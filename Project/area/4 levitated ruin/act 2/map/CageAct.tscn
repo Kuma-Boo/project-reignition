@@ -1,8 +1,59 @@
-[gd_scene load_steps=4 format=3 uid="uid://djirww1p1qtu2"]
+[gd_scene load_steps=37 format=3 uid="uid://djirww1p1qtu2"]
 
 [ext_resource type="PackedScene" uid="uid://bpxj0juyhbmxs" path="res://area/4 levitated ruin/act 2/Static.tscn" id="1_ox5ni"]
 [ext_resource type="Resource" uid="uid://xi0dj64h1rxj" path="res://resource/level data/levitated ruin/Act2Cage.tres" id="2_gm4t4"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="3_oq4a5"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_f8ouc"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="5_im11i"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="6_f8ouc"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_nggpy"]
+[ext_resource type="Script" uid="uid://dpt5o0lh62p6t" path="res://object/stage/MovingObject.cs" id="7_h6cqm"]
+[ext_resource type="PackedScene" uid="uid://y7w1jrfgsii7" path="res://object/enemy/majin/data/levitated ruin/GreenMajin.tscn" id="7_nggpy"]
+[ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="8_mxhyu"]
+[ext_resource type="Script" uid="uid://bd2g6rmrn77eo" path="res://object/trigger/modules/LockoutTrigger.cs" id="9_t2qcg"]
+[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="9_vvs7k"]
+[ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="10_ib1ve"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="10_mxhyu"]
+[ext_resource type="PackedScene" uid="uid://bxvbg3oku2gpf" path="res://area/4 levitated ruin/object/Gate.tscn" id="11_t2qcg"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="12_n25nf"]
+[ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="13_5yb3a"]
+[ext_resource type="PackedScene" uid="uid://co2wg02egbm0x" path="res://object/trigger/state trigger/AutomationTrigger.tscn" id="13_snb4x"]
+[ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="15_wx1l8"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="18_m6eo3"]
+[ext_resource type="PackedScene" uid="uid://doc2lrkdh0ga3" path="res://object/trigger/state trigger/FootholdTrigger.tscn" id="19_mloak"]
+[ext_resource type="PackedScene" uid="uid://dlqcmkgbysmtt" path="res://area/4 levitated ruin/object/MissileGenerator.tscn" id="19_s5d0m"]
+[ext_resource type="PackedScene" uid="uid://bxubd1hew76yn" path="res://area/4 levitated ruin/object/foothold/FootholdCenter.tscn" id="20_vgx66"]
+[ext_resource type="PackedScene" uid="uid://bpuen1pddy3ps" path="res://area/4 levitated ruin/object/model/foothold/FootholdLeft.gltf" id="20_wxrhk"]
+[ext_resource type="PackedScene" uid="uid://dj0mvj1132k0a" path="res://area/4 levitated ruin/object/model/foothold/FootholdRight.gltf" id="22_s5d0m"]
+[ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="24_7f5hg"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="27_vns5j"]
+[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="28_a4ysn"]
+[ext_resource type="Resource" uid="uid://btwxbkcgrhhq5" path="res://area/4 levitated ruin/act 2/camera/Tower2TopCam.tres" id="28_ocnes"]
+
+[sub_resource type="Curve" id="Curve_f8ouc"]
+_limits = [-1.5, 1.5, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 7.06514, 0, 0, Vector2(0.3, 1.5), 0.0, 0.0, 0, 0, Vector2(0.7, -1.5), 0.0, 0.0, 0, 0, Vector2(1, 2.98023e-08), 10.8324, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_h6cqm"]
+_limits = [0.0, 1.5, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 2.0, 0, 1, Vector2(0.3, 0.6), 0.0, 0.0, 0, 0, Vector2(0.5, 5.96046e-08), 0.0, 0.0, 0, 0, Vector2(0.7, 0.6), 0.0, 0.0, 0, 0, Vector2(1, 2.98023e-08), -2.0, 0.0, 1, 0]
+point_count = 5
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_7f5hg"]
+height = 10.0
+radius = 10.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5yb3a"]
+size = Vector3(10, 9, 2.5)
+
+[sub_resource type="Curve" id="Curve_wx1l8"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vgx66"]
+size = Vector3(5, 5, 5)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ocnes"]
+radius = 2.0
 
 [node name="World" type="Node"]
 
@@ -11,5 +62,866 @@ Data = ExtResource("2_gm4t4")
 
 [node name="CageAct" type="Node3D" parent="."]
 
-[node name="CharacterSpawn" parent="CageAct" instance=ExtResource("3_oq4a5")]
+[node name="SpawnPosition" type="Node3D" parent="CageAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 10, -1391)
+metadata/_edit_lock_ = true
+
+[node name="CharacterSpawn" parent="CageAct/SpawnPosition" instance=ExtResource("3_oq4a5")]
+
+[node name="MainTower" type="Node3D" parent="CageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 10, -1391)
+script = ExtResource("5_im11i")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Zipline1" type="Node3D" parent="CageAct"]
+transform = Transform3D(-0.275637, 0, -0.961262, 0, 1, 0, 0.961262, 0, -0.275637, 239.497, 15.05, -1375.01)
+script = ExtResource("5_im11i")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="Rings1" type="Node3D" parent="CageAct/Zipline1"]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, -1.5, 40)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("6_nggpy")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="CageAct/Zipline1/Rings1" instance=ExtResource("6_nggpy")]
+
+[node name="Child02" parent="CageAct/Zipline1/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="CageAct/Zipline1/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child04" parent="CageAct/Zipline1/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child05" parent="CageAct/Zipline1/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child06" parent="CageAct/Zipline1/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+
+[node name="Child07" parent="CageAct/Zipline1/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="Child08" parent="CageAct/Zipline1/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -35)
+
+[node name="Child09" parent="CageAct/Zipline1/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
+
+[node name="Child10" parent="CageAct/Zipline1/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45)
+
+[node name="Rings2" type="Node3D" parent="CageAct/Zipline1"]
+transform = Transform3D(-1, -3.12078e-16, 1.50996e-07, 0, 1, 2.0668e-09, -1.50996e-07, 2.0668e-09, -1, 1.06079, -1.06162, 100)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("6_nggpy")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="CageAct/Zipline1/Rings2" instance=ExtResource("6_nggpy")]
+
+[node name="Child02" parent="CageAct/Zipline1/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="CageAct/Zipline1/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child04" parent="CageAct/Zipline1/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child05" parent="CageAct/Zipline1/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child06" parent="CageAct/Zipline1/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+
+[node name="Child07" parent="CageAct/Zipline1/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="Child08" parent="CageAct/Zipline1/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -35)
+
+[node name="Child09" parent="CageAct/Zipline1/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
+
+[node name="Child10" parent="CageAct/Zipline1/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45)
+
+[node name="Rings3" type="Node3D" parent="CageAct/Zipline1"]
+transform = Transform3D(-1, 2.56344e-15, -1.50996e-07, 0, 1, 1.69769e-08, 1.50996e-07, 1.69769e-08, -1, -1.06104, -1.06156, 160)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("6_nggpy")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="CageAct/Zipline1/Rings3" instance=ExtResource("6_nggpy")]
+
+[node name="Child02" parent="CageAct/Zipline1/Rings3" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child03" parent="CageAct/Zipline1/Rings3" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child04" parent="CageAct/Zipline1/Rings3" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child05" parent="CageAct/Zipline1/Rings3" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child06" parent="CageAct/Zipline1/Rings3" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+
+[node name="Child07" parent="CageAct/Zipline1/Rings3" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="Child08" parent="CageAct/Zipline1/Rings3" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -35)
+
+[node name="Child09" parent="CageAct/Zipline1/Rings3" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
+
+[node name="Child10" parent="CageAct/Zipline1/Rings3" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45)
+
+[node name="Rings4" type="Node3D" parent="CageAct/Zipline1"]
+transform = Transform3D(-1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, -1, -0.00012356, -1.5, 220)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("6_nggpy")
+Amount = 18
+Shape = 0
+Orientation = 0
+Spacing = 5.0
+"Horizontal Offset" = SubResource("Curve_f8ouc")
+"Vertical Offset" = SubResource("Curve_h6cqm")
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+
+[node name="Child02" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.418991, 0.136192, -5)
+
+[node name="Child03" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.818219, 0.291381, -10)
+
+[node name="Child04" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15786, 0.438429, -15)
+
+[node name="Child05" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.39809, 0.550196, -20)
+
+[node name="Child06" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49909, 0.599543, -25)
+
+[node name="Child07" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35626, 0.496133, -30)
+
+[node name="Child08" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.928245, 0.247303, -35)
+
+[node name="Child09" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.328497, 0.035111, -40)
+
+[node name="Child10" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.328497, 0.0351111, -45)
+
+[node name="Child11" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.928246, 0.247303, -50)
+
+[node name="Child12" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35626, 0.496133, -55)
+
+[node name="Child13" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.49952, 0.599543, -60)
+
+[node name="Child14" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43933, 0.550196, -65)
+
+[node name="Child15" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.27058, 0.438429, -70)
+
+[node name="Child16" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.981972, 0.291381, -75)
+
+[node name="Child17" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.56221, 0.136192, -80)
+
+[node name="Child18" parent="CageAct/Zipline1/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 2.98023e-08, -85)
+
+[node name="MajinMover1" type="Node3D" parent="CageAct/Zipline1"]
+transform = Transform3D(-0.275637, 0, 0.961262, 0, 1, 0, -0.961262, 0, -0.275637, -29.5317, -4.75, 366.432)
+script = ExtResource("7_h6cqm")
+startPaused = true
+smoothPausing = true
+root = NodePath("GreenMajin")
+Movement/Mode = 1
+"Movement/Cycle Length" = 10.0
+"Movement/Starting Offset" = 0.25
+Movement/Distance = 20.0
+Movement/Angle = 180.0
+"Vertical Orientation" = false
+
+[node name="GreenMajin" parent="CageAct/Zipline1/MajinMover1" instance=ExtResource("7_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(40, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Attack Settings/Attack Type" = 1
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(0, 0, 10)
+"Defeat Settings/Local Transform" = true
+rangeOverride = 30
+
+[node name="MajinMover2" type="Node3D" parent="CageAct/Zipline1"]
+transform = Transform3D(-0.190809, 0, 0.981627, 0, 1, 0, -0.981627, 0, -0.190809, -36.1262, -4.75, 365.202)
+script = ExtResource("7_h6cqm")
+startPaused = true
+smoothPausing = true
+root = NodePath("GreenMajin")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 10.0
+"Movement/Starting Offset" = 0.75
+Movement/Distance = 20.0
+Movement/Angle = 180.0
+"Vertical Orientation" = false
+
+[node name="GreenMajin" parent="CageAct/Zipline1/MajinMover2" instance=ExtResource("7_nggpy")]
+transform = Transform3D(1.00001, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1.00001, 0, 0, 10)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Attack Settings/Attack Type" = 1
+rangeOverride = 30
+
+[node name="GreenMajin3" parent="CageAct/Zipline1" instance=ExtResource("7_nggpy")]
+transform = Transform3D(-0.275639, 0, 0.961268, 0, 1, 0, -0.961268, 0, -0.275639, -31.3765, -4.55, 362.176)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Attack Settings/Attack Type" = 1
+rangeOverride = 30
+
+[node name="Tower2" type="Node3D" parent="CageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 10, -1575)
+script = ExtResource("5_im11i")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="LoopPath" type="Node3D" parent="CageAct/Tower2" node_paths=PackedStringArray("path")]
+transform = Transform3D(0.906308, 0.144544, 0.397131, 0, 0.939693, -0.34202, -0.422618, 0.309976, 0.851651, 0, 0.2, -3)
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../Static/Paths/Tower2")
+
+[node name="Lockout" type="Node3D" parent="CageAct/Tower2"]
+transform = Transform3D(0.906308, 0.144544, 0.397131, 0, 0.939693, -0.34202, -0.422618, 0.309976, 0.851651, 0, 0.2, -3)
+script = ExtResource("9_t2qcg")
+lockoutData = ExtResource("10_ib1ve")
+
+[node name="GroundPathTrigger" parent="CageAct/Tower2" instance=ExtResource("6_f8ouc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+"Enter Mode" = 0
+
+[node name="GroundPath" type="Node3D" parent="CageAct/Tower2/GroundPathTrigger" node_paths=PackedStringArray("path")]
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/Rukh2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower2/GroundPathTrigger"]
+shape = SubResource("CylinderShape3D_7f5hg")
+
+[node name="Gate1" parent="CageAct/Tower2" instance=ExtResource("11_t2qcg")]
+transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 18)
+respawnAnimation = 2
+activationSpeedScale = 5.0
+
+[node name="GateTrigger" parent="CageAct/Tower2" instance=ExtResource("6_f8ouc")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 13)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="CageAct/Tower2/GateTrigger"]
+script = ExtResource("13_5yb3a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower2/GateTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("BoxShape3D_5yb3a")
+
+[node name="Rings1" type="Node3D" parent="CageAct/Tower2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 12)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("6_nggpy")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="CageAct/Tower2/Rings1" instance=ExtResource("6_nggpy")]
+
+[node name="Child02" parent="CageAct/Tower2/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="CageAct/Tower2/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="CageAct/Tower2/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="GreenMajin1" parent="CageAct/Tower2" instance=ExtResource("7_nggpy")]
+transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, -1.5, 0, 0)
+"Attack Settings/Attack Type" = 1
+rangeOverride = 30
+
+[node name="GreenMajin2" parent="CageAct/Tower2" instance=ExtResource("7_nggpy")]
+transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 1.5, 0, 0)
+"Attack Settings/Attack Type" = 1
+rangeOverride = 30
+
+[node name="EnemyStone" parent="CageAct/Tower2" instance=ExtResource("9_vvs7k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -3)
+enemyCount = 2
+
+[node name="Spring1" parent="CageAct/Tower2" instance=ExtResource("10_mxhyu")]
+transform = Transform3D(0.906308, 0.144544, 0.397131, 0, 0.939693, -0.34202, -0.422618, 0.309976, 0.851651, 0, 0.2, -3)
+startHidden = true
+middleHeight = 10.0
+finalHeight = 8.0
+distance = 10.0
+
+[node name="StaticGate1" parent="CageAct/Tower2" instance=ExtResource("11_t2qcg")]
+transform = Transform3D(0.282843, 0, -0.707107, 0, 2.2, 0, 0.282843, 0, 0.707107, 5.15, 8, 5.59998)
+
+[node name="DashPanel1" parent="CageAct/Tower2" instance=ExtResource("12_n25nf")]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -4.63, 8, 6.22998)
+
+[node name="Path" type="Node3D" parent="CageAct/Tower2/DashPanel1" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/Tower2Automation1")
+
+[node name="AutomationTrigger" parent="CageAct/Tower2/DashPanel1" instance=ExtResource("13_snb4x")]
+endPoint = 28.0
+ignoreDirection = true
+
+[node name="PearlsTop1" type="Node3D" parent="CageAct/Tower2"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -8.5, 9.4, 1.85)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("15_wx1l8")
+Amount = 12
+Shape = 2
+Path = NodePath("../../../Static/Paths/Tower2Automation1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="CageAct/Tower2/PearlsTop1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -7.62939e-06, 0.000143051, 0.000488281)
+
+[node name="Child02" parent="CageAct/Tower2/PearlsTop1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -0.0270004, 0.256248, 0.983887)
+
+[node name="Child03" parent="CageAct/Tower2/PearlsTop1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -0.0488815, 0.459347, 2.00085)
+
+[node name="Child04" parent="CageAct/Tower2/PearlsTop1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -0.0400848, 0.583586, 3.02991)
+
+[node name="Child05" parent="CageAct/Tower2/PearlsTop1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -0.0379181, 0.642506, 4.03687)
+
+[node name="Child06" parent="CageAct/Tower2/PearlsTop1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -0.0951691, 0.6602, 4.99646)
+
+[node name="Child07" parent="CageAct/Tower2/PearlsTop1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -0.428268, 0.659472, 5.69397)
+
+[node name="Child08" parent="CageAct/Tower2/PearlsTop1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -1.08272, 0.637611, 6.40613)
+
+[node name="Child09" parent="CageAct/Tower2/PearlsTop1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -1.80115, 0.573605, 7.11548)
+
+[node name="Child10" parent="CageAct/Tower2/PearlsTop1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -2.53696, 0.440798, 7.83911)
+
+[node name="Child11" parent="CageAct/Tower2/PearlsTop1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -3.23836, 0.227819, 8.56909)
+
+[node name="Child12" parent="CageAct/Tower2/PearlsTop1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -3.91857, -0.0449581, 9.27319)
+
+[node name="PearlsBottom1" type="Node3D" parent="CageAct/Tower2"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -8.5, 8.8, 1.65)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("15_wx1l8")
+Amount = 12
+Shape = 2
+Path = NodePath("../../../Static/Paths/Tower2Automation1")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.0
+"Horizontal Offset" = SubResource("Curve_wx1l8")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="CageAct/Tower2/PearlsBottom1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -2.28882e-05, 0.000434875, 0.00146484)
+
+[node name="Child02" parent="CageAct/Tower2/PearlsBottom1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -0.0290375, 0.245964, 0.950684)
+
+[node name="Child03" parent="CageAct/Tower2/PearlsBottom1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -0.0453186, 0.440037, 1.9303)
+
+[node name="Child04" parent="CageAct/Tower2/PearlsBottom1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -0.0357971, 0.555883, 2.90857)
+
+[node name="Child05" parent="CageAct/Tower2/PearlsBottom1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -0.0352631, 0.611704, 3.88428)
+
+[node name="Child06" parent="CageAct/Tower2/PearlsBottom1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -0.0953979, 0.628178, 4.8219)
+
+[node name="Child07" parent="CageAct/Tower2/PearlsBottom1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -0.4375, 0.627256, 5.51074)
+
+[node name="Child08" parent="CageAct/Tower2/PearlsBottom1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -1.08064, 0.604988, 6.20886)
+
+[node name="Child09" parent="CageAct/Tower2/PearlsBottom1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -1.7766, 0.541729, 6.89636)
+
+[node name="Child10" parent="CageAct/Tower2/PearlsBottom1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -2.47386, 0.414089, 7.58069)
+
+[node name="Child11" parent="CageAct/Tower2/PearlsBottom1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -3.15045, 0.207502, 8.28137)
+
+[node name="Child12" parent="CageAct/Tower2/PearlsBottom1" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -3.80057, -0.0561008, 8.95935)
+
+[node name="Gate2" parent="CageAct/Tower2" instance=ExtResource("11_t2qcg")]
+transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, -9.5)
+respawnAnimation = 2
+activationSpeedScale = 5.0
+
+[node name="Switch1" parent="CageAct/Tower2" instance=ExtResource("18_m6eo3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.75, 8, -1.2)
+activationLength = 0.5
+
+[node name="Spring" parent="CageAct/Tower2/Switch1" instance=ExtResource("10_mxhyu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+startHidden = true
+middleHeight = 10.0
+finalHeight = 7.5
+distance = 2.0
+
+[node name="StaticGate2" parent="CageAct/Tower2" instance=ExtResource("11_t2qcg")]
+transform = Transform3D(0.4, 0, 0, 0, 2.2, 0, 0, 0, 1, 7.69558, 8, 0.160303)
+
+[node name="DashPanel2" parent="CageAct/Tower2" instance=ExtResource("12_n25nf")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 1.37, 16, 7.72998)
+
+[node name="Path" type="Node3D" parent="CageAct/Tower2/DashPanel2" node_paths=PackedStringArray("path")]
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/Tower2Automation2")
+
+[node name="AutomationTrigger" parent="CageAct/Tower2/DashPanel2" instance=ExtResource("13_snb4x")]
+endPoint = 34.0
+ignoreDirection = true
+
+[node name="Switch2" parent="CageAct/Tower2" instance=ExtResource("18_m6eo3")]
+transform = Transform3D(0, 0.642788, -0.766044, 1, -3.34849e-08, -2.80971e-08, -4.37114e-08, -0.766044, -0.642788, -4.86531, 17.7, 7.51971)
+
+[node name="CullingTrigger" type="Node3D" parent="CageAct/Tower2"]
+transform = Transform3D(-0.707107, 0, -0.707107, -1.33227e-15, 1, 8.88178e-16, 0.707107, 0, -0.707106, -5.00001, 17.7, 6.3739)
+script = ExtResource("5_im11i")
+respawnOnActivation = true
+
+[node name="Rings2" type="Node3D" parent="CageAct/Tower2/CullingTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("6_nggpy")
+Amount = 5
+Shape = 2
+Path = NodePath("../../../../Static/Paths/Tower2Automation2")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = true
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="CageAct/Tower2/CullingTrigger/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Child02" parent="CageAct/Tower2/CullingTrigger/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125732, 0, 3.86926)
+
+[node name="Child03" parent="CageAct/Tower2/CullingTrigger/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.32617, 0, 6.56555)
+
+[node name="Child04" parent="CageAct/Tower2/CullingTrigger/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.04211, 0, 8.86926)
+
+[node name="Child05" parent="CageAct/Tower2/CullingTrigger/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.84033, 0, 9.00757)
+
+[node name="Switch3" parent="CageAct/Tower2" instance=ExtResource("18_m6eo3")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 4.57071, 16, -6.42929)
+activationLength = 0.5
+
+[node name="Spring" parent="CageAct/Tower2/Switch3" instance=ExtResource("10_mxhyu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+startHidden = true
+middleHeight = 10.0
+finalHeight = 7.5
+distance = 2.0
+
+[node name="StaticGate3" parent="CageAct/Tower2" instance=ExtResource("11_t2qcg")]
+transform = Transform3D(0.282843, 0, 0.707107, 0, 2.2, 0, -0.282843, 0, 0.707107, 5.48586, 16, -5.26941)
+
+[node name="MissileGenerator1" parent="CageAct/Tower2" instance=ExtResource("19_s5d0m")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -4.97932, 39, 4.87268)
+missleSpeed = 7.0
+spawnInterval = 2.0
+
+[node name="FootholdTrigger1" parent="CageAct/Tower2" instance=ExtResource("19_mloak")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -4.97932, 24, 4.87273)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower2/FootholdTrigger1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_vgx66")
+
+[node name="FootholdLeft" parent="CageAct/Tower2/FootholdTrigger1" instance=ExtResource("20_wxrhk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.5, 1)
+
+[node name="FootholdCenter1" parent="CageAct/Tower2/FootholdTrigger1/FootholdLeft" instance=ExtResource("20_vgx66")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.499878, 0, 0)
+
+[node name="FootholdCenter2" parent="CageAct/Tower2/FootholdTrigger1/FootholdLeft" instance=ExtResource("20_vgx66")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
+
+[node name="FootholdCenter3" parent="CageAct/Tower2/FootholdTrigger1/FootholdLeft" instance=ExtResource("20_vgx66")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.49988, 0, 0)
+
+[node name="FootholdCenter4" parent="CageAct/Tower2/FootholdTrigger1/FootholdLeft" instance=ExtResource("20_vgx66")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 0)
+
+[node name="FootholdCenter5" parent="CageAct/Tower2/FootholdTrigger1/FootholdLeft" instance=ExtResource("20_vgx66")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, 0)
+
+[node name="FootholdRight" parent="CageAct/Tower2/FootholdTrigger1/FootholdLeft" instance=ExtResource("22_s5d0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1, 0, 0)
+
+[node name="GateTrigger2" parent="CageAct/Tower2" instance=ExtResource("6_f8ouc")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -7.7, 24, -6.73155e-07)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower2/GateTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("BoxShape3D_5yb3a")
+
+[node name="Gate3" parent="CageAct/Tower2" instance=ExtResource("11_t2qcg")]
+transform = Transform3D(-0.469846, 0, 0.34202, 0, 1.8, 0, -0.17101, 0, -0.939693, -8.05524, 25.33, -3.01151)
+deactivationSpeedScale = 0.1
+
+[node name="FootholdTrigger2" parent="CageAct/Tower2" instance=ExtResource("19_mloak")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -4.97932, 24, -5.02673)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower2/FootholdTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_vgx66")
+
+[node name="FootholdLeft" parent="CageAct/Tower2/FootholdTrigger2" instance=ExtResource("20_wxrhk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.5, 1)
+
+[node name="FootholdCenter1" parent="CageAct/Tower2/FootholdTrigger2/FootholdLeft" instance=ExtResource("20_vgx66")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.499878, 0, 0)
+
+[node name="FootholdCenter2" parent="CageAct/Tower2/FootholdTrigger2/FootholdLeft" instance=ExtResource("20_vgx66")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
+
+[node name="FootholdCenter3" parent="CageAct/Tower2/FootholdTrigger2/FootholdLeft" instance=ExtResource("20_vgx66")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.49988, 0, 0)
+
+[node name="FootholdCenter4" parent="CageAct/Tower2/FootholdTrigger2/FootholdLeft" instance=ExtResource("20_vgx66")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 0)
+
+[node name="FootholdCenter5" parent="CageAct/Tower2/FootholdTrigger2/FootholdLeft" instance=ExtResource("20_vgx66")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, 0)
+
+[node name="FootholdRight" parent="CageAct/Tower2/FootholdTrigger2/FootholdLeft" instance=ExtResource("22_s5d0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1, 0, 0)
+
+[node name="MissileGeneratorGroup" type="Node3D" parent="CageAct/Tower2"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -4.90862, 31, -4.95605)
+
+[node name="MissileGenerator1" parent="CageAct/Tower2/MissileGeneratorGroup" instance=ExtResource("19_s5d0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.75)
+missileLifetime = 1.0
+missleSpeed = 7.0
+spawnInterval = 2.0
+
+[node name="MissileGenerator2" parent="CageAct/Tower2/MissileGeneratorGroup" instance=ExtResource("19_s5d0m")]
+missileLifetime = 1.0
+missleSpeed = 7.0
+spawnInterval = 2.0
+spawnTimer = 0.8
+
+[node name="MissileGenerator3" parent="CageAct/Tower2/MissileGeneratorGroup" instance=ExtResource("19_s5d0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.75)
+missileLifetime = 1.0
+missleSpeed = 7.0
+spawnInterval = 2.0
+spawnTimer = 0.6
+
+[node name="DashPanel3" parent="CageAct/Tower2" instance=ExtResource("12_n25nf")]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 0.0258212, 24, -7.96376)
+
+[node name="Path" type="Node3D" parent="CageAct/Tower2/DashPanel3" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/Tower2Automation3")
+
+[node name="AutomationTrigger" parent="CageAct/Tower2/DashPanel3" instance=ExtResource("13_snb4x")]
+endPoint = 55.0
+ignoreDirection = true
+
+[node name="PearlsTop2" type="Node3D" parent="CageAct/Tower2"]
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 4.33206, 33.9, -7.50701)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("15_wx1l8")
+Amount = 19
+Shape = 2
+Path = NodePath("../../../Static/Paths/Tower2Automation3")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.7
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000244141, -0.00044632, -0.00219727)
+
+[node name="Child02" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.310547, 0.18782, 1.69464)
+
+[node name="Child03" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.733276, 0.196293, 3.35815)
+
+[node name="Child04" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12207, 0.196293, 4.99976)
+
+[node name="Child05" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.99561, 0.196293, 6.05872)
+
+[node name="Child06" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.48938, 0.196293, 6.86017)
+
+[node name="Child07" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.97803, 0.196293, 7.711)
+
+[node name="Child08" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.42932, 0.196293, 8.60834)
+
+[node name="Child09" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.76794, 0.196293, 9.10461)
+
+[node name="Child10" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.34924, 0.196293, 8.66382)
+
+[node name="Child11" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9971, 0.196293, 8.19391)
+
+[node name="Child12" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.6602, 0.196293, 7.78625)
+
+[node name="Child13" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.1785, 0.196293, 7.3446)
+
+[node name="Child14" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.0283, 0.196293, 6.10944)
+
+[node name="Child15" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.8473, 0.196293, 4.6001)
+
+[node name="Child16" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.6865, 0.194534, 3.12921)
+
+[node name="Child17" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.4268, 0.173744, 1.64178)
+
+[node name="Child18" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.4775, 0.0426941, 0.151062)
+
+[node name="Child19" parent="CageAct/Tower2/PearlsTop2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.0466, -0.146248, -1.48389)
+
+[node name="PearlsBottom2" type="Node3D" parent="CageAct/Tower2"]
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 4.59186, 32.9, -7.35701)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("15_wx1l8")
+Amount = 19
+Shape = 2
+Path = NodePath("../../../Static/Paths/Tower2Automation3")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 1.7
+"Horizontal Offset" = SubResource("Curve_wx1l8")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000732422, -0.000766754, -0.00408936)
+
+[node name="Child02" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.305298, 0.152504, 1.53271)
+
+[node name="Child03" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.721191, 0.157501, 3.1698)
+
+[node name="Child04" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.11328, 0.157501, 4.80481)
+
+[node name="Child05" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0675, 0.157501, 5.84253)
+
+[node name="Child06" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.56372, 0.157501, 6.64417)
+
+[node name="Child07" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.04919, 0.157501, 7.4978)
+
+[node name="Child08" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.49121, 0.157501, 8.39148)
+
+[node name="Child09" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.86316, 0.157501, 8.82813)
+
+[node name="Child10" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.46155, 0.157501, 8.36938)
+
+[node name="Child11" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.1086, 0.157501, 7.90369)
+
+[node name="Child12" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.7708, 0.157501, 7.5)
+
+[node name="Child13" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.2646, 0.157501, 7.03247)
+
+[node name="Child14" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.1105, 0.157501, 5.73462)
+
+[node name="Child15" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.9291, 0.157501, 4.23309)
+
+[node name="Child16" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.7683, 0.155357, 2.76007)
+
+[node name="Child17" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.4845, 0.13221, 1.29517)
+
+[node name="Child18" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5183, -0.00125885, -0.141968)
+
+[node name="Child19" parent="CageAct/Tower2/PearlsBottom2" instance=ExtResource("15_wx1l8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.0846, -0.190228, -1.78735)
+
+[node name="RichPearl" parent="CageAct/Tower2" instance=ExtResource("24_7f5hg")]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -6.32157, 33.2, 5.65268)
+
+[node name="Spring2" parent="CageAct/Tower2" instance=ExtResource("10_mxhyu")]
+transform = Transform3D(-0.573576, 0, 0.819152, 0, 1, 0, -0.819152, 0, -0.573576, -4.14142, 32.2, -6.64142)
+middleHeight = 30.0
+finalHeight = 7.5
+distance = 2.0
+
+[node name="Camera" type="Node3D" parent="CageAct/Tower2/Spring2"]
+script = ExtResource("27_vns5j")
+transitionTime = 1.0
+settings = ExtResource("28_ocnes")
+
+[node name="Path" type="Node3D" parent="CageAct/Tower2/Spring2" node_paths=PackedStringArray("path")]
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/TowerTop2")
+
+[node name="CameraTrigger" parent="CageAct/Tower2" instance=ExtResource("6_f8ouc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 41, -7)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Camera" type="Node3D" parent="CageAct/Tower2/CameraTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 5, -18)
+script = ExtResource("27_vns5j")
+transitionTime = 0.0
+settings = ExtResource("28_a4ysn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower2/CameraTrigger"]
+shape = SubResource("SphereShape3D_ocnes")
+
+[connection signal="SpinStarted" from="CageAct/Zipline1/MajinMover1/GreenMajin" to="CageAct/Zipline1/MajinMover1" method="Unpause"]
+[connection signal="SpinStarted" from="CageAct/Zipline1/MajinMover2/GreenMajin" to="CageAct/Zipline1/MajinMover2" method="Unpause"]
+[connection signal="Activated" from="CageAct/Tower2/GroundPathTrigger" to="CageAct/Tower2/Lockout" method="Deactivate"]
+[connection signal="Activated" from="CageAct/Tower2/GateTrigger" to="CageAct/Tower2/Gate1" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/GateTrigger" to="CageAct/Tower2/Gate2" method="Activate"]
+[connection signal="Defeated" from="CageAct/Tower2/GreenMajin1" to="CageAct/Tower2/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="CageAct/Tower2/GreenMajin2" to="CageAct/Tower2/EnemyStone" method="IncrementCounter"]
+[connection signal="Shattered" from="CageAct/Tower2/EnemyStone" to="CageAct/Tower2/Spring1" method="ShowLauncher"]
+[connection signal="Deactivated" from="CageAct/Tower2/Spring1" to="CageAct/Tower2/LoopPath" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower2/Spring1" to="CageAct/Tower2/Lockout" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/DashPanel1" to="CageAct/Tower2/DashPanel1/AutomationTrigger" method="AttemptAutomation" flags=3]
+[connection signal="Activated" from="CageAct/Tower2/DashPanel1" to="CageAct/Tower2/DashPanel1/Path" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/DashPanel1/AutomationTrigger" to="CageAct/Tower2/DashPanel1/Path" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower2/DashPanel1/AutomationTrigger" to="CageAct/Tower2/LoopPath" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/Switch1" to="CageAct/Tower2/Switch1/Spring" method="ShowLauncher"]
+[connection signal="Deactivated" from="CageAct/Tower2/Switch1" to="CageAct/Tower2/Switch1/Spring" method="HideLauncher"]
+[connection signal="Activated" from="CageAct/Tower2/DashPanel2" to="CageAct/Tower2/DashPanel2/AutomationTrigger" method="AttemptAutomation" flags=3]
+[connection signal="Activated" from="CageAct/Tower2/DashPanel2" to="CageAct/Tower2/DashPanel2/Path" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower2/DashPanel2/AutomationTrigger" to="CageAct/Tower2/LoopPath" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/Switch2" to="CageAct/Tower2/CullingTrigger" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/Switch3" to="CageAct/Tower2/Switch3/Spring" method="ShowLauncher"]
+[connection signal="Deactivated" from="CageAct/Tower2/Switch3" to="CageAct/Tower2/Switch3/Spring" method="HideLauncher"]
+[connection signal="Activated" from="CageAct/Tower2/GateTrigger2" to="CageAct/Tower2/Gate3" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/DashPanel3" to="CageAct/Tower2/DashPanel3/AutomationTrigger" method="AttemptAutomation" flags=3]
+[connection signal="Activated" from="CageAct/Tower2/DashPanel3" to="CageAct/Tower2/DashPanel3/Path" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower2/DashPanel3/AutomationTrigger" to="CageAct/Tower2/LoopPath" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/Path" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/Camera" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/CameraTrigger" to="CageAct/Tower2/Gate1" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/CameraTrigger" to="CageAct/Tower2/Gate2" method="Activate"]
