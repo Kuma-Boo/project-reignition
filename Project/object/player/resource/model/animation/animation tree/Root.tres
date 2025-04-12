@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=302 format=3 uid="uid://biwe75w273iq7"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=311 format=3 uid="uid://biwe75w273iq7"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_hf2vv"]
 
@@ -651,6 +651,42 @@ animation = &"GimmickLibrary/ivy-swing"
 fadein_time = 0.2
 fadeout_time = 0.5
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_g25ih"]
+animation = &"GimmickLibrary/lever-left-loop"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sgmhy"]
+animation = &"GimmickLibrary/lever-left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_362oh"]
+animation = &"GimmickLibrary/lever-right-loop"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_iubfl"]
+animation = &"GimmickLibrary/lever-right"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cd6vn"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8kago"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ninx3"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3o1j2"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_oumfq"]
+states/left/node = SubResource("AnimationNodeAnimation_sgmhy")
+states/left/position = Vector2(623, 100)
+states/left-loop/node = SubResource("AnimationNodeAnimation_g25ih")
+states/left-loop/position = Vector2(454, 100)
+states/right/node = SubResource("AnimationNodeAnimation_iubfl")
+states/right/position = Vector2(623, 193)
+states/right-loop/node = SubResource("AnimationNodeAnimation_362oh")
+states/right-loop/position = Vector2(454, 193)
+transitions = ["Start", "left-loop", SubResource("AnimationNodeStateMachineTransition_cd6vn"), "Start", "right-loop", SubResource("AnimationNodeStateMachineTransition_8kago"), "right-loop", "right", SubResource("AnimationNodeStateMachineTransition_ninx3"), "left-loop", "left", SubResource("AnimationNodeStateMachineTransition_3o1j2")]
+graph_offset = Vector2(-166, -64)
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wjjju"]
 animation = &"GimmickLibrary/petrify-recover"
 
@@ -670,6 +706,10 @@ input_2/name = "petrify"
 input_2/auto_advance = false
 input_2/break_loop_at_end = false
 input_2/reset = true
+input_3/name = "lever"
+input_3/auto_advance = false
+input_3/break_loop_at_end = false
+input_3/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hu28u"]
 animation = &"GimmickLibrary/zipline"
@@ -690,9 +730,9 @@ blend_point_2/pos = 1.0
 sync = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_m8twf"]
-graph_offset = Vector2(-1386.86, -69.6891)
+graph_offset = Vector2(-990.86, 110.311)
 nodes/idle_anim/node = SubResource("AnimationNodeAnimation_xpufo")
-nodes/idle_anim/position = Vector2(-700, 480)
+nodes/idle_anim/position = Vector2(-960, 520)
 nodes/ivy_blend/node = SubResource("AnimationNodeBlendSpace1D_n6eio")
 nodes/ivy_blend/position = Vector2(-880, -40)
 nodes/ivy_start_anim/node = SubResource("AnimationNodeAnimation_4fcb5")
@@ -700,18 +740,20 @@ nodes/ivy_start_anim/position = Vector2(-680, 180)
 nodes/ivy_start_trigger/node = SubResource("AnimationNodeOneShot_tjhp0")
 nodes/ivy_start_trigger/position = Vector2(-400, -40)
 nodes/ivy_swing_anim/node = SubResource("AnimationNodeAnimation_uubck")
-nodes/ivy_swing_anim/position = Vector2(-960, 100)
+nodes/ivy_swing_anim/position = Vector2(-960, 160)
 nodes/ivy_swing_trigger/node = SubResource("AnimationNodeOneShot_ri8jf")
 nodes/ivy_swing_trigger/position = Vector2(-680, -40)
+nodes/lever_state/node = SubResource("AnimationNodeStateMachine_oumfq")
+nodes/lever_state/position = Vector2(-340, 560)
 nodes/petrify_recover_anim/node = SubResource("AnimationNodeAnimation_wjjju")
-nodes/petrify_recover_anim/position = Vector2(-700, 600)
+nodes/petrify_recover_anim/position = Vector2(-960, 700)
 nodes/petrify_stop_trigger/node = SubResource("AnimationNodeOneShot_iywqm")
-nodes/petrify_stop_trigger/position = Vector2(-350.521, 425.362)
+nodes/petrify_stop_trigger/position = Vector2(-600, 460)
 nodes/state_transition/node = SubResource("AnimationNodeTransition_050f5")
 nodes/state_transition/position = Vector2(-60, 100)
 nodes/zipline_blend/node = SubResource("AnimationNodeBlendSpace1D_1mbie")
-nodes/zipline_blend/position = Vector2(-600, 320)
-node_connections = [&"ivy_start_trigger", 0, &"ivy_swing_trigger", &"ivy_start_trigger", 1, &"ivy_start_anim", &"ivy_swing_trigger", 0, &"ivy_blend", &"ivy_swing_trigger", 1, &"ivy_swing_anim", &"output", 0, &"state_transition", &"petrify_stop_trigger", 0, &"idle_anim", &"petrify_stop_trigger", 1, &"petrify_recover_anim", &"state_transition", 0, &"ivy_start_trigger", &"state_transition", 1, &"zipline_blend", &"state_transition", 2, &"petrify_stop_trigger"]
+nodes/zipline_blend/position = Vector2(-960, 340)
+node_connections = [&"ivy_start_trigger", 0, &"ivy_swing_trigger", &"ivy_start_trigger", 1, &"ivy_start_anim", &"ivy_swing_trigger", 0, &"ivy_blend", &"ivy_swing_trigger", 1, &"ivy_swing_anim", &"output", 0, &"state_transition", &"petrify_stop_trigger", 0, &"idle_anim", &"petrify_stop_trigger", 1, &"petrify_recover_anim", &"state_transition", 0, &"ivy_start_trigger", &"state_transition", 1, &"zipline_blend", &"state_transition", 2, &"petrify_stop_trigger", &"state_transition", 3, &"lever_state"]
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_yjaps"]
 xfade_time = 0.1
@@ -1540,7 +1582,7 @@ input_5/break_loop_at_end = false
 input_5/reset = true
 
 [resource]
-graph_offset = Vector2(-1370.64, -103.833)
+graph_offset = Vector2(-1166.6, 110.988)
 nodes/air_tree/node = SubResource("AnimationNodeBlendTree_2rvqt")
 nodes/air_tree/position = Vector2(-1300, 100)
 nodes/balance_tree/node = SubResource("AnimationNodeBlendTree_gi378")

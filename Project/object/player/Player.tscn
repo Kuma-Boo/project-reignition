@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=3 uid="uid://bqck0hqdn3o8r"]
+[gd_scene load_steps=69 format=3 uid="uid://bqck0hqdn3o8r"]
 
 [ext_resource type="Script" uid="uid://cy7pw3hj351lp" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" uid="uid://72x88nalpw8i" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -47,6 +47,7 @@
 [ext_resource type="Script" uid="uid://d14o5qsomfyvs" path="res://object/player/resource/script/states/PetrifyState.cs" id="40_co4ay"]
 [ext_resource type="Script" uid="uid://dx40vr65jur0y" path="res://object/player/resource/script/states/LightSpeedDashState.cs" id="40_t4xrr"]
 [ext_resource type="Script" uid="uid://chob23143e6b0" path="res://object/player/resource/script/states/LightSpeedAttackState.cs" id="41_8jpjm"]
+[ext_resource type="Script" uid="uid://cyxq45dgf674k" path="res://object/player/resource/script/states/LeverState.cs" id="42_51gfe"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hfii6"]
 radius = 0.3
@@ -1104,7 +1105,7 @@ point_count = 4
 _data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "reversePathState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "spinJumpState", "quickStepState", "lightSpeedDashState", "lightSpeedAttackState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "ivyState", "ziplineState", "petrifyState", "knockbackState", "teleportState") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "reversePathState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "spinJumpState", "quickStepState", "lightSpeedDashState", "lightSpeedAttackState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "ivyState", "ziplineState", "petrifyState", "leverState", "knockbackState", "teleportState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1140,6 +1141,7 @@ driftState = NodePath("StateMachine/Special/Drift")
 ivyState = NodePath("StateMachine/Special/Ivy")
 ziplineState = NodePath("StateMachine/Special/Zipline")
 petrifyState = NodePath("StateMachine/Special/Petrify")
+leverState = NodePath("StateMachine/Special/Lever")
 knockbackState = NodePath("StateMachine/Special/Knockback")
 teleportState = NodePath("StateMachine/Special/Teleport")
 
@@ -1178,13 +1180,13 @@ bones/40/rotation = Quaternion(-0.00150024, -0.00739151, 0.000392114, 0.999972)
 bones/42/rotation = Quaternion(9.46508e-09, 3.96343e-07, 3.96343e-07, 1)
 
 [node name="ChestAttachment" parent="Sonic/SonicRoot/GeneralSkeleton" index="4"]
-transform = Transform3D(1, 7.92686e-07, -7.92687e-07, -7.92686e-07, 1, 1.59254e-08, 7.92687e-07, -1.59248e-08, 1, 5.80681e-08, 0.55419, -2.23517e-08)
+transform = Transform3D(1, 7.92686e-07, -7.92686e-07, -7.92686e-07, 1, 1.59254e-08, 7.92686e-07, -1.59248e-08, 1, 5.80681e-08, 0.55419, -2.23517e-08)
 
 [node name="RFoot" parent="Sonic/SonicRoot/GeneralSkeleton" index="5"]
-transform = Transform3D(1, 7.0699e-13, 2.88949e-13, -2.94709e-13, 9.35979e-08, 0.999999, 7.81597e-13, -0.999998, 1.11293e-07, -0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, -2.30926e-13, 1.77844e-13, -1.75721e-13, 2.03494e-07, 0.999999, -1.81188e-13, -0.999998, 2.21189e-07, -0.0397276, 0.155469, 0.00205613)
 
 [node name="LFoot" parent="Sonic/SonicRoot/GeneralSkeleton" index="6"]
-transform = Transform3D(1, 6.96332e-13, 1.24442e-13, -1.86531e-13, 5.9139e-08, 1, 8.15348e-13, -1, 6.37956e-08, 0.0397276, 0.155469, 0.00205613)
+transform = Transform3D(1, 1.1422e-12, -4.2244e-14, -2.17881e-14, 1.0673e-06, 1, 1.26299e-12, -1, 1.07242e-06, 0.0397276, 0.155469, 0.00205613)
 
 [node name="Effect" parent="Sonic" node_paths=PackedStringArray("rightFoot", "leftFoot", "landingParticles", "stepEmitters") instance=ExtResource("19_3dctg")]
 rightFoot = NodePath("../SonicRoot/GeneralSkeleton/RFoot")
@@ -1426,6 +1428,9 @@ script = ExtResource("39_ixnde")
 [node name="Petrify" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("idleState")]
 script = ExtResource("40_co4ay")
 idleState = NodePath("../../Basic/Idle")
+
+[node name="Lever" type="Node" parent="StateMachine/Special"]
+script = ExtResource("42_51gfe")
 
 [node name="Skill" type="Node" parent="StateMachine"]
 

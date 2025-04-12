@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://djirww1p1qtu2"]
+[gd_scene load_steps=59 format=3 uid="uid://djirww1p1qtu2"]
 
 [ext_resource type="PackedScene" uid="uid://bpxj0juyhbmxs" path="res://area/4 levitated ruin/act 2/Static.tscn" id="1_ox5ni"]
 [ext_resource type="Resource" uid="uid://xi0dj64h1rxj" path="res://resource/level data/levitated ruin/Act2Cage.tres" id="2_gm4t4"]
@@ -41,6 +41,11 @@
 [ext_resource type="Resource" uid="uid://btwxbkcgrhhq5" path="res://area/4 levitated ruin/act 2/camera/Tower2TopCam.tres" id="28_ocnes"]
 [ext_resource type="PackedScene" uid="uid://cb2ts4tbs4fky" path="res://area/4 levitated ruin/object/special/Lever.tscn" id="40_6dght"]
 [ext_resource type="PackedScene" uid="uid://6qax2suxlpx1" path="res://area/4 levitated ruin/object/special/Mirror.tscn" id="41_3bj00"]
+[ext_resource type="Resource" uid="uid://c12vpdrrm3joi" path="res://area/4 levitated ruin/act 2/camera/LeverCam.tres" id="41_q4org"]
+[ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="41_txknb"]
+[ext_resource type="Resource" uid="uid://ukcne4um86a6" path="res://resource/preset/camera/common/CutsceneCam.tres" id="42_3bj00"]
+[ext_resource type="Script" uid="uid://dtvj1vg0nkhi6" path="res://object/trigger/modules/TeleportTrigger.cs" id="43_q3nif"]
+[ext_resource type="Resource" uid="uid://dcdaodh4d1b13" path="res://area/4 levitated ruin/act 2/camera/StartCam.tres" id="44_g2bsq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q3nif"]
 size = Vector3(5, 8, 3)
@@ -73,10 +78,172 @@ size = Vector3(5, 5, 5)
 [sub_resource type="SphereShape3D" id="SphereShape3D_ocnes"]
 radius = 2.0
 
+[sub_resource type="Animation" id="Animation_txknb"]
+resource_name = "event"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CameraRoot/CameraFollow:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.13333, 1.16667, 1.66667, 1.83333, 2.16667, 2.33333),
+"transitions": PackedFloat32Array(1, 1e-05, 1, 2, 0.5, 1, 1e-05),
+"update": 0,
+"values": [Vector3(0, 0, 0.174533), Vector3(0, 0, 0.174533), Vector3(0, 0, -0.0872665), Vector3(0, 0, -0.0349066), Vector3(0, -1.26536, -0.174533), Vector3(0, -2.53073, 0), Vector3(0, -2.53073, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CameraRoot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 1.13333, 1.16667, 2.16667, 2.33333),
+"transitions": PackedFloat32Array(1, 1, 1e-05, 1, 1, 1e-05),
+"update": 0,
+"values": [Vector3(-0.0872665, -2.0944, 0), Vector3(-0.0872665, -2.0944, 0), Vector3(-0.0872665, -2.0944, 0), Vector3(0, -1.309, 0), Vector3(0, -1.309, 0), Vector3(0, -1.309, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CameraRoot/CameraFollow:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.13333, 1.16667, 1.66667, 1.83333, 2.16667, 2.33333),
+"transitions": PackedFloat32Array(1, 1e-05, 0.5, 2, 1, 1, 1e-05),
+"update": 0,
+"values": [Vector3(0, 6, 14), Vector3(0, 6, 15), Vector3(0, 0, 75), Vector3(0, 0, 73), Vector3(0, 2, 75), Vector3(0, 5, 75), Vector3(0, 5, 75)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../LockCamera")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(2.33333, 3.83333),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}, {
+"args": [],
+"method": &"Deactivate"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Mirror/AnimationPlayer")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"mirror-1", -1, 1.0, false],
+"method": &"play"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("CameraRoot/CameraFollow")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"FinishEvent"
+}]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../../MainTower/PrisonDoor/Lock1/PrisonLock")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(2.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Shatter"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_q4org"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CameraRoot/CameraFollow:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0.174533)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CameraRoot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -2.0944, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CameraRoot/CameraFollow:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 3, 10)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_q4org"]
+_data = {
+&"RESET": SubResource("Animation_q4org"),
+&"event": SubResource("Animation_txknb")
+}
+
 [node name="World" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_ox5ni")]
 Data = ExtResource("2_gm4t4")
+InitialCameraSettings = ExtResource("44_g2bsq")
+
+[node name="LRSky" parent="Static/Visuals" index="0"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0, 0)
 
 [node name="CageAct" type="Node3D" parent="."]
 
@@ -154,15 +321,26 @@ jumpHeight = 0.5
 autoAlign = true
 forceConsistentHeight = true
 
+[node name="Camera" type="Node3D" parent="CageAct/Ziplines/Zipline1/Start/Jump"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, -4.2, 0.300049)
+script = ExtResource("27_vns5j")
+settings = ExtResource("10_gl56w")
+
+[node name="Path" type="Node3D" parent="CageAct/Ziplines/Zipline1/Start/Jump" node_paths=PackedStringArray("path")]
+script = ExtResource("8_mxhyu")
+path = NodePath("../../..")
+affectPlayer = false
+
+[node name="Camera" type="Node3D" parent="CageAct/Ziplines/Zipline1/Start"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 2)
+script = ExtResource("27_vns5j")
+settings = ExtResource("28_a4ysn")
+
 [node name="Path" type="Node3D" parent="CageAct/Ziplines/Zipline1/Start" node_paths=PackedStringArray("path")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 4.2, -0.300049)
 script = ExtResource("8_mxhyu")
 path = NodePath("../..")
-cameraPathBlendTime = 0.5
-
-[node name="Camera" type="Node3D" parent="CageAct/Ziplines/Zipline1/Start"]
-script = ExtResource("27_vns5j")
-settings = ExtResource("10_gl56w")
+affectCamera = false
 
 [node name="Zipline" parent="CageAct/Ziplines/Zipline1" instance=ExtResource("11_nfauo")]
 transform = Transform3D(-0.275637, 0, -0.961261, 0, 1, 0, 0.961261, 0, -0.275637, -0.961262, 1.97632e-08, -0.275637)
@@ -1111,16 +1289,78 @@ settings = ExtResource("28_a4ysn")
 shape = SubResource("SphereShape3D_ocnes")
 
 [node name="Lever" parent="CageAct/Tower2" instance=ExtResource("40_6dght")]
-transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -11.5858, 40, 11.5858)
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -11.5858, 40, 11.5858)
+
+[node name="Cam" type="Node3D" parent="CageAct/Tower2/Lever"]
+script = ExtResource("27_vns5j")
+settings = ExtResource("41_q4org")
+
+[node name="Mirrors" type="Node3D" parent="CageAct"]
+
+[node name="LockCamera" type="Node3D" parent="CageAct/Mirrors"]
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 250, 13, -1390)
+script = ExtResource("27_vns5j")
+deactivationTransitionTime = 0.0
+transitionType = 1
+settings = ExtResource("42_3bj00")
+previousSettings = ExtResource("41_q4org")
+
+[node name="Teleport" type="Node3D" parent="CageAct/Mirrors" node_paths=PackedStringArray("warpTarget")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 10, -1391)
+script = ExtResource("43_q3nif")
+enableStartFX = true
+crossfade = true
+warpTarget = NodePath(".")
+
+[node name="Path" type="Node3D" parent="CageAct/Mirrors/Teleport" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/TowerTop1")
+
+[node name="Camera" type="Node3D" parent="CageAct/Mirrors/Teleport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("27_vns5j")
+transitionTime = 0.0
+settings = ExtResource("44_g2bsq")
+
+[node name="Checkpoint" type="Node3D" parent="CageAct/Mirrors/Teleport"]
+script = ExtResource("13_5yb3a")
+CameraSettings = ExtResource("44_g2bsq")
+
+[node name="MirrorEvent1" type="Node3D" parent="CageAct/Mirrors" node_paths=PackedStringArray("animator")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -115.828, 50, -1559.17)
+script = ExtResource("41_txknb")
+animator = NodePath("AnimationPlayer")
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
 
-[node name="Mirror" parent="CageAct/Tower2" instance=ExtResource("41_3bj00")]
-transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -15.8284, 40, 15.8285)
-"Trigger Settings/Player Stand-in" = NodePath("")
+[node name="Mirror" parent="CageAct/Mirrors/MirrorEvent1" instance=ExtResource("41_3bj00")]
+
+[node name="CameraRoot" type="Node3D" parent="CageAct/Mirrors/MirrorEvent1"]
+transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, 0, 0, 0)
+
+[node name="CameraFollow" type="Node3D" parent="CageAct/Mirrors/MirrorEvent1/CameraRoot"]
+transform = Transform3D(0.984808, -0.173648, 0, 0.173648, 0.984808, 0, 0, 0, 1, 0, 3, 10)
+script = ExtResource("27_vns5j")
+transitionType = 1
+settings = ExtResource("42_3bj00")
+UpdateEveryFrame = true
+
+[node name="Camera3D" type="Camera3D" parent="CageAct/Mirrors/MirrorEvent1/CameraRoot/CameraFollow"]
+fov = 70.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CageAct/Mirrors/MirrorEvent1"]
+libraries = {
+&"": SubResource("AnimationLibrary_q4org")
+}
 
 [connection signal="Shattered" from="CageAct/MainTower/PrisonDoor/Lock4/PrisonLock" to="CageAct/MainTower/PrisonDoor" method="Activate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Start" to="Static/Collision/OneWay" method="Deactivate"]
 [connection signal="JumpFinished" from="CageAct/Ziplines/Zipline1/Start/Jump" to="Static/Collision/OneWay" method="Activate"]
+[connection signal="JumpFinished" from="CageAct/Ziplines/Zipline1/Start/Jump" to="CageAct/Ziplines/Zipline1/Start/Jump/Camera" method="Activate"]
+[connection signal="JumpFinished" from="CageAct/Ziplines/Zipline1/Start/Jump" to="CageAct/Ziplines/Zipline1/Start/Jump/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Camera" to="Static/Visuals/Rukh2" method="Activate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Camera" to="Static/Visuals/Rukh2LOD" method="Deactivate"]
 [connection signal="SpinStarted" from="CageAct/Zipline1/MajinMover1/GreenMajin" to="CageAct/Zipline1/MajinMover1" method="Unpause"]
@@ -1153,7 +1393,13 @@ transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107
 [connection signal="Deactivated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/Camera" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/CameraTrigger" to="CageAct/Tower2/Gate1" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/CameraTrigger" to="CageAct/Tower2/Gate2" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/Lever" to="CageAct/Mirrors/MirrorEvent1" method="Activate"]
+[connection signal="Started" from="CageAct/Tower2/Lever" to="CageAct/Tower2/Lever/Cam" method="Activate"]
+[connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="CageAct/Mirrors/Teleport/Path" method="Activate"]
+[connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="CageAct/Mirrors/Teleport/Camera" method="Activate"]
+[connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="CageAct/Mirrors/Teleport/Checkpoint" method="Activate"]
+[connection signal="EventFinished" from="CageAct/Mirrors/MirrorEvent1" to="CageAct/Mirrors/Teleport" method="Activate"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]
-[editable path="CageAct/Tower2/Mirror"]
+[editable path="CageAct/Mirrors/MirrorEvent1/Mirror"]

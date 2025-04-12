@@ -910,11 +910,25 @@ public partial class PlayerAnimator : Node3D
 	{
 		animationTree.Set(GimmickTransition, ZiplineState);
 		animationTree.Set(PetrifyStopTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-		ResetState(.2f);
+		ResetState(0.2f);
 
 		eventAnimationPlayer.Play("petrify-stop");
 		eventAnimationPlayer.Advance(0.0);
 	}
+
+	private readonly StringName LeverState = "lever";
+	private AnimationNodeStateMachinePlayback LeverStatePlayback => animationTree.Get(LeverPlayback).Obj as AnimationNodeStateMachinePlayback;
+
+	private readonly StringName LeverPlayback = "parameters/gimmick_tree/lever_state/playback";
+	public void StartLever(bool isRightLever)
+	{
+		SetStateXfade(0.2f);
+		animationTree.Set(StateTransition, GimmickState);
+		animationTree.Set(GimmickTransition, LeverState);
+		LeverStatePlayback.Start((isRightLever ? RightConstant : LeftConstant) + "-loop");
+	}
+
+	public void StartLeverTurn(bool isRightLever) => LeverStatePlayback.Travel(isRightLever ? RightConstant : LeftConstant);
 	#endregion
 
 	// Shaders

@@ -792,6 +792,14 @@ public partial class PlayerController : CharacterBody3D
 	public bool IsPetrified => StateMachine.CurrentState == petrifyState;
 	public void StartPetrify() => StateMachine.ChangeState(petrifyState);
 
+	[Export] private LeverState leverState;
+	public void StartLever(Lever lever)
+	{
+		leverState.Trigger = lever;
+		StateMachine.ChangeState(leverState);
+	}
+
+
 	[Signal]
 	public delegate void KnockbackEventHandler();
 	[Export] private KnockbackState knockbackState;
