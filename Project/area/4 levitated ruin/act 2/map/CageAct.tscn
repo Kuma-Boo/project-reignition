@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://djirww1p1qtu2"]
+[gd_scene load_steps=51 format=3 uid="uid://djirww1p1qtu2"]
 
 [ext_resource type="PackedScene" uid="uid://bpxj0juyhbmxs" path="res://area/4 levitated ruin/act 2/Static.tscn" id="1_ox5ni"]
 [ext_resource type="Resource" uid="uid://xi0dj64h1rxj" path="res://resource/level data/levitated ruin/Act2Cage.tres" id="2_gm4t4"]
@@ -6,7 +6,9 @@
 [ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_f8ouc"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="5_im11i"]
 [ext_resource type="Curve3D" uid="uid://oimrmhv1wlmn" path="res://area/4 levitated ruin/act 2/environment/path/Zipline1Path.tres" id="5_nyvgh"]
+[ext_resource type="PackedScene" uid="uid://dn82pe8xhvwee" path="res://area/4 levitated ruin/object/special/PrisonDoor.tscn" id="5_qcr5r"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="6_f8ouc"]
+[ext_resource type="PackedScene" uid="uid://c4w14cw47i887" path="res://area/4 levitated ruin/object/special/PrisonLock.tscn" id="6_gl56w"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_nggpy"]
 [ext_resource type="Script" uid="uid://dpt5o0lh62p6t" path="res://object/stage/MovingObject.cs" id="7_h6cqm"]
 [ext_resource type="PackedScene" uid="uid://y7w1jrfgsii7" path="res://object/enemy/majin/data/levitated ruin/GreenMajin.tscn" id="7_nggpy"]
@@ -37,6 +39,8 @@
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="27_vns5j"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="28_a4ysn"]
 [ext_resource type="Resource" uid="uid://btwxbkcgrhhq5" path="res://area/4 levitated ruin/act 2/camera/Tower2TopCam.tres" id="28_ocnes"]
+[ext_resource type="PackedScene" uid="uid://cb2ts4tbs4fky" path="res://area/4 levitated ruin/object/special/Lever.tscn" id="40_6dght"]
+[ext_resource type="PackedScene" uid="uid://6qax2suxlpx1" path="res://area/4 levitated ruin/object/special/Mirror.tscn" id="41_3bj00"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q3nif"]
 size = Vector3(5, 8, 3)
@@ -87,6 +91,45 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 10, -1391)
 script = ExtResource("5_im11i")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
+
+[node name="PrisonDoor" parent="CageAct/MainTower" instance=ExtResource("5_qcr5r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.5)
+
+[node name="Lock1" type="BoneAttachment3D" parent="CageAct/MainTower/PrisonDoor"]
+transform = Transform3D(0.939693, -0.34202, 6.70552e-08, 0.321393, 0.883021, -0.342024, 0.116979, 0.321397, 0.939691, 0.516495, 1.86809, 2.10022)
+bone_name = "lock01"
+bone_idx = 1
+use_external_skeleton = true
+external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
+
+[node name="PrisonLock" parent="CageAct/MainTower/PrisonDoor/Lock1" instance=ExtResource("6_gl56w")]
+
+[node name="Lock2" type="BoneAttachment3D" parent="CageAct/MainTower/PrisonDoor"]
+transform = Transform3D(0.965926, 0.25, -0.0669873, -0.258819, 0.933012, -0.250004, -9.2122e-07, 0.258823, 0.965925, -0.550537, 0.592514, 2.05786)
+bone_name = "lock02"
+bone_idx = 2
+use_external_skeleton = true
+external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
+
+[node name="PrisonLock" parent="CageAct/MainTower/PrisonDoor/Lock2" instance=ExtResource("6_gl56w")]
+
+[node name="Lock3" type="BoneAttachment3D" parent="CageAct/MainTower/PrisonDoor"]
+transform = Transform3D(0.906307, 0.42262, 4.88013e-07, -0.416199, 0.892538, -0.17365, -0.0733884, 0.15738, 0.984807, -0.494125, 1.89076, 2.10291)
+bone_name = "lock03"
+bone_idx = 3
+use_external_skeleton = true
+external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
+
+[node name="PrisonLock" parent="CageAct/MainTower/PrisonDoor/Lock3" instance=ExtResource("6_gl56w")]
+
+[node name="Lock4" type="BoneAttachment3D" parent="CageAct/MainTower/PrisonDoor"]
+transform = Transform3D(0.965926, 0.258819, 5.96046e-07, -0.23457, 0.875426, 0.422618, 0.109381, -0.408217, 0.906308, 0.493484, 0.600325, 2.08044)
+bone_name = "lock04"
+bone_idx = 4
+use_external_skeleton = true
+external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
+
+[node name="PrisonLock" parent="CageAct/MainTower/PrisonDoor/Lock4" instance=ExtResource("6_gl56w")]
 
 [node name="Ziplines" type="Node3D" parent="CageAct"]
 
@@ -474,7 +517,7 @@ Movement/Angle = 180.0
 "Vertical Orientation" = false
 
 [node name="GreenMajin" parent="CageAct/Zipline1/MajinMover2" instance=ExtResource("7_nggpy")]
-transform = Transform3D(1.00002, 0, -2.16067e-07, 0, 1, 0, 2.16067e-07, 0, 1.00002, 0, 0, 9.99988)
+transform = Transform3D(1.00002, 0, -2.23517e-07, 0, 1, 0, 2.23517e-07, 0, 1.00002, 0, 0, 9.99988)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
@@ -1067,6 +1110,15 @@ settings = ExtResource("28_a4ysn")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower2/CameraTrigger"]
 shape = SubResource("SphereShape3D_ocnes")
 
+[node name="Lever" parent="CageAct/Tower2" instance=ExtResource("40_6dght")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -11.5858, 40, 11.5858)
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[node name="Mirror" parent="CageAct/Tower2" instance=ExtResource("41_3bj00")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -15.8284, 40, 15.8285)
+"Trigger Settings/Player Stand-in" = NodePath("")
+
+[connection signal="Shattered" from="CageAct/MainTower/PrisonDoor/Lock4/PrisonLock" to="CageAct/MainTower/PrisonDoor" method="Activate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Start" to="Static/Collision/OneWay" method="Deactivate"]
 [connection signal="JumpFinished" from="CageAct/Ziplines/Zipline1/Start/Jump" to="Static/Collision/OneWay" method="Activate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Camera" to="Static/Visuals/Rukh2" method="Activate"]
@@ -1104,3 +1156,4 @@ shape = SubResource("SphereShape3D_ocnes")
 
 [editable path="Static"]
 [editable path="Static/Collision"]
+[editable path="CageAct/Tower2/Mirror"]

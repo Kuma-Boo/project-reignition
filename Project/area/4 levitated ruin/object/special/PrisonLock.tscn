@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4w14cw47i887"]
+
+[ext_resource type="PackedScene" uid="uid://b2txhlf36uiy8" path="res://area/4 levitated ruin/object/model/special/PrisonLock.gltf" id="1_weos1"]
+[ext_resource type="Script" uid="uid://bj7jhdknn12cl" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="2_axihf"]
+[ext_resource type="PackedScene" uid="uid://vo0xb5g37yld" path="res://area/4 levitated ruin/object/model/special/PrisonLockPieces.gltf" id="3_dc3ag"]
+
+[node name="PrisonLock" node_paths=PackedStringArray("root", "pieceRoot") instance=ExtResource("1_weos1")]
+script = ExtResource("2_axihf")
+pieceMass = 1.0
+snapPlayerOnBounce = false
+root = NodePath("PrisonLockMesh")
+pieceRoot = NodePath("PrisonLockPieces")
+
+[node name="PrisonLockMesh" parent="." index="0"]
+cast_shadow = 0
+
+[node name="PrisonLockPieces" parent="." index="1" instance=ExtResource("3_dc3ag")]
+visible = false
