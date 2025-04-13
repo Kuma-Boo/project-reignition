@@ -22,6 +22,8 @@ public partial class ReversePathState : PlayerState
 	public override void ExitState()
 	{
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
+		Player.Animator.DisabledSpeedSmoothing = true;
+		Player.Animator.IdleAnimation();
 		Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
 	}
 
