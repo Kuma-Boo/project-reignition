@@ -1,9 +1,9 @@
 [gd_scene load_steps=11 format=3 uid="uid://bwqgjo2ywq68m"]
 
 [ext_resource type="Script" uid="uid://cmksigg2bddki" path="res://interface/menu/special book/SpecialBookWindow.cs" id="1_a31tl"]
-[ext_resource type="Texture2D" uid="uid://2vgy8gf8go4w" path="res://interface/menu/special book/texture/book objects/frame.png" id="2_xnwnq"]
-[ext_resource type="Texture2D" uid="uid://clekx6l57c2yk" path="res://interface/menu/special book/texture/book objects/frame_question.png" id="3_i5uf0"]
-[ext_resource type="Texture2D" uid="uid://bwjxid6bj6140" path="res://interface/menu/special book/texture/book objects/frame_glow.png" id="4_i5uf0"]
+[ext_resource type="Texture2D" uid="uid://qys1j7pgsm0p" path="res://interface/menu/special book/texture/book objects/enhanced/frame.png" id="2_i5uf0"]
+[ext_resource type="Texture2D" uid="uid://baor555ii24fi" path="res://interface/menu/special book/texture/book objects/enhanced/frame_question.png" id="3_i5uf0"]
+[ext_resource type="Texture2D" uid="uid://0ihwssoc3k0e" path="res://interface/menu/special book/texture/book objects/enhanced/frame_glow.png" id="4_i5uf0"]
 
 [sub_resource type="Animation" id="Animation_6gyq1"]
 resource_name = "RESET"
@@ -69,7 +69,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.5, 1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
+"values": [Vector2(0.8, 0.8), Vector2(0.9, 0.9), Vector2(0.8, 0.8)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_n5mwb"]
@@ -78,7 +78,7 @@ _data = {
 &"glow": SubResource("Animation_xnwnq")
 }
 
-[node name="SpecialBookWindow" type="Control" node_paths=PackedStringArray("windowAnimator")]
+[node name="SpecialBookWindow" type="Control" node_paths=PackedStringArray("windowAnimator", "windowAnimator2")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -87,29 +87,31 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_a31tl")
 windowAnimator = NodePath("AnimationPlayer")
+windowAnimator2 = NodePath("AnimationPlayer2")
 
 [node name="frame" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = -45.0
-offset_top = -31.0
-offset_right = 44.0
-offset_bottom = 31.0
-texture = ExtResource("2_xnwnq")
+offset_right = 233.0
+offset_bottom = 155.0
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("2_i5uf0")
 stretch_mode = 4
 
 [node name="questionmark" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = -20.0
-offset_top = -19.0
-offset_right = 20.0
-offset_bottom = 21.0
+offset_left = 78.0
+offset_top = 29.0
+offset_right = 118.0
+offset_bottom = 117.0
+scale = Vector2(0.8, 0.8)
 texture = ExtResource("3_i5uf0")
 stretch_mode = 3
 
 [node name="glow" type="Sprite2D" parent="."]
 visible = false
 modulate = Color(0.478431, 1, 0.698039, 0.764706)
-position = Vector2(-0.5, 0)
+position = Vector2(94, 62)
+scale = Vector2(0.8, 0.8)
 texture = ExtResource("4_i5uf0")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

@@ -9,6 +9,13 @@ public partial class SpecialBookWindow : Control
 
     [Export]
     private AnimationPlayer windowAnimator;
+    [Export]
+    private AnimationPlayer windowAnimator2;
+
+    public void Glow()
+    {
+        windowAnimator2.Play("glow");
+    }
 
     public void Select()
     {
