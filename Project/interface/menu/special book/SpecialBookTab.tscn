@@ -58,6 +58,18 @@ tracks/2/keys = {
 "method": &"ChangeTabImage"
 }]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("tab:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_ty4te"]
 resource_name = "deselect"
@@ -77,7 +89,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("glow:visible")
+tracks/1/path = NodePath("tab/glow:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -100,6 +112,18 @@ tracks/2/keys = {
 "method": &"ChangeTabImage"
 }]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("tab:position")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.233333),
+"transitions": PackedFloat32Array(1, 2),
+"update": 0,
+"values": [Vector2(0, -30), Vector2(0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_fevaw"]
 resource_name = "hide_glow"
@@ -107,7 +131,7 @@ length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("glow:visible")
+tracks/0/path = NodePath("tab/glow:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -135,7 +159,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("glow:visible")
+tracks/1/path = NodePath("tab/glow:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -172,6 +196,86 @@ tracks/3/keys = {
 "method": &"ChangeTabImage"
 }]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("tab:position")
+tracks/4/interp = 2
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.233333),
+"transitions": PackedFloat32Array(1, 2),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -30)]
+}
+
+[sub_resource type="Animation" id="Animation_mu2et"]
+resource_name = "select_noglow"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:z_index")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("tab/glow:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimationPlayer2")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"glow", -1, 1.0, false],
+"method": &"play"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"ChangeTabImage"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("tab:position")
+tracks/4/interp = 2
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.233333),
+"transitions": PackedFloat32Array(1, 2),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -30)]
+}
 
 [sub_resource type="Animation" id="Animation_qagm4"]
 resource_name = "select_nosfx"
@@ -191,7 +295,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("glow:visible")
+tracks/1/path = NodePath("tab/glow:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -214,46 +318,18 @@ tracks/2/keys = {
 "method": &"play"
 }]
 }
-
-[sub_resource type="Animation" id="Animation_mu2et"]
-resource_name = "select_noglow"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:z_index")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [2]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("glow:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("AnimationPlayer2")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [&"glow", -1, 1.0, false],
-"method": &"play"
+"args": [true],
+"method": &"ChangeTabImage"
 }]
 }
 
@@ -307,7 +383,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("glow:modulate")
+tracks/0/path = NodePath("tab/glow:modulate")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -319,7 +395,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("glow:scale")
+tracks/1/path = NodePath("tab/glow:scale")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -351,19 +427,20 @@ tabs = Array[Texture]([ExtResource("5_fevaw"), ExtResource("6_it8bj"), ExtResour
 tabsSelected = Array[Texture]([ExtResource("11_r4vcw"), ExtResource("12_exvd4"), ExtResource("13_o8hte"), ExtResource("9_qagm4"), ExtResource("14_46chu"), ExtResource("15_g8c53"), ExtResource("10_mu2et")])
 tabAnimator = NodePath("AnimationPlayer")
 
-[node name="glow" type="Sprite2D" parent="."]
-visible = false
-modulate = Color(0.478431, 1, 0.698039, 0.764706)
-position = Vector2(34.9375, 81.25)
-scale = Vector2(1.1, 1.1)
-texture = ExtResource("2_it8bj")
-
 [node name="tab" type="TextureRect" parent="."]
 layout_mode = 0
 offset_right = 69.0
 offset_bottom = 160.0
 texture = ExtResource("3_x0vye")
 stretch_mode = 4
+
+[node name="glow" type="Sprite2D" parent="tab"]
+visible = false
+modulate = Color(0.478431, 1, 0.698039, 0.764706)
+z_index = -1
+position = Vector2(34.9375, 81.25)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("2_it8bj")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

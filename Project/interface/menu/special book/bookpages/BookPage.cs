@@ -6,33 +6,64 @@ using Project.Core;
 [GlobalClass]
 public partial class BookPage : Resource
 {
-    [Export]
-    public bool unlocked; //has the player unlocked this page?
-    [Export]
-    public bool unlock_clear; //unlock via clearing a stage
-    [Export]
-    public bool unlock_gold; //unlock via getting gold in a stage
-    [Export]
-    public bool unlock_silver; //unlock by getting a certain number of silver medals
+    public enum World
+    { LP, SO, DJ, EF, LR, PS, SD, NP }
 
+    ///<summary>Has the player unlocked this page?</summary>
     [Export]
-    public string[] unlock_stage; //stage string used for determining unlocks
-    [Export]
-    public int unlock_stageNum; //stage number used for determining unlocks
-    [Export]
-    public int unlock_numSilver; //amount of silver medals needed to unlock the stage
+    public bool unlocked;
 
+    ///<summary>Unlolck via clearing a stage</summary>
     [Export]
-    public Texture page_preview; //the image used to preview the page in the list
-    [Export]
-    public Texture page_preview_big; //the image used to preivew the page in the description view
-    [Export]
-    public Texture page_full; //the full image used for the page
-    [Export]
-    public AudioStream track; //the music track to be played
+    public bool unlock_clear;
 
+    ///<summary>Unlock via getting gold in a stage</summary>
+    [Export]
+    public bool unlock_gold;
+
+    ///<summary>Unlock by getting a certain number of Silver Medals</summary>
+    [Export]
+    public bool unlock_silver;
+
+    ///<summary>Unlock by getting all Medals of a type in a stage</summary>
+    [Export]
+    public bool unlock_allstage;
+
+    ///<summary>Which world for the All Stages condition, Clear condition, and Gold Medal condition</summary>
+    [Export]
+    public World unlock_world;
+
+    ///<summary>Stage string used for determining unlocks</summary>
+    [Export]
+    public string unlock_stage;
+
+    ///<summary>Stage number used for determining unlocks</summary>
+    [Export]
+    public int unlock_stageNum;
+
+    ///<summary>Amount of Silver Medals needed to unlock this stage</summary>
+    [Export]
+    public int unlock_numSilver;
+
+    ///<summary>The image used to preview this page in the main view</summary>
+    [Export]
+    public Texture page_preview;
+
+    ///<summary>The image used to preview this page in the description view</summary>
+    [Export]
+    public Texture page_preview_big;
+
+    ///<summary>The image used in the full-image view</summary>
+    [Export]
+    public Texture page_full;
+
+    ///<summary>The music track to be played</summary>
+    [Export]
+    public AudioStream track;
+
+    ///<summary>The video file to be played</summary>
     [Export(PropertyHint.File)]
-    public string videoFilePath; //the video file to be played
+    public string videoFilePath;
 
 
     [Export]
@@ -43,7 +74,7 @@ public partial class BookPage : Resource
 
     public BookPage(
                     bool unlock_clear, bool unlock_gold, bool unlock_silver,
-                    string[] unlock_stage, int unlock_stageNum, int unlock_numSilver,
+                    string unlock_stage, int unlock_stageNum, int unlock_numSilver,
                     Texture page_preview, Texture page_preview_big, Texture page_full,
                     Rect2 image_preview)
     {
