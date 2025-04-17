@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://cfxpl43xw0rn6"]
+[gd_scene load_steps=40 format=3 uid="uid://cfxpl43xw0rn6"]
 
 [ext_resource type="Script" uid="uid://cvy63h3pgw1qv" path="res://interface/menu/special book/SpecialBook.cs" id="1_b5eh1"]
 [ext_resource type="Resource" uid="uid://c8780f2wj6f5c" path="res://interface/menu/special book/bookpages/Chapters/Chapter1.tres" id="2_6b0v7"]
@@ -32,6 +32,8 @@
 [ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="20_w41nb"]
 [ext_resource type="Texture2D" uid="uid://dv04kvw4ixivf" path="res://interface/menu/special book/texture/book objects/enhanced/frame_number.png" id="21_gni62"]
 [ext_resource type="LabelSettings" uid="uid://bqrydgixkulbv" path="res://interface/font/NavigationFont.tres" id="21_sqodb"]
+[ext_resource type="LabelSettings" uid="uid://d2esxoalpgwjg" path="res://interface/font/MenuText.tres" id="30_m7bbf"]
+[ext_resource type="Texture2D" uid="uid://bfh6vgvpgcx8m" path="res://interface/menu/special book/texture/chapter 2/29Preview.png" id="31_fil6e"]
 
 [sub_resource type="Animation" id="Animation_cyesu"]
 resource_name = "RESET"
@@ -94,6 +96,42 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("book/windows:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("book/textbox:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("book/Preview:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_f7tqs"]
@@ -194,13 +232,127 @@ tracks/6/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_sqodb"]
+resource_name = "show_description"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("book/windows:modulate")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("book/textbox:modulate")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("book/Preview:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"EnableProcessing"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_fil6e"]
+resource_name = "hide_description"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("book/windows:modulate")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("book/textbox:modulate")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("book/Preview:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"EnableProcessing"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yxyel"]
 _data = {
 &"RESET": SubResource("Animation_cyesu"),
-&"show": SubResource("Animation_f7tqs")
+&"hide_description": SubResource("Animation_fil6e"),
+&"show": SubResource("Animation_f7tqs"),
+&"show_description": SubResource("Animation_sqodb")
 }
 
-[node name="SpecialBook" type="Control" node_paths=PackedStringArray("tabs", "windows", "previewImages", "chapterName", "chapterLabel", "textboxTitle", "bgm", "animator")]
+[node name="SpecialBook" type="Control" node_paths=PackedStringArray("tabs", "windows", "previewImages", "chapterName", "chapterLabel", "textboxTitle", "previewDescription", "previewImage", "previewNumber", "bgm", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -215,6 +367,9 @@ chapters = Array[Object]([ExtResource("2_6b0v7"), ExtResource("3_sqodb"), ExtRes
 chapterName = NodePath("book/textbox/label_chaptername")
 chapterLabel = NodePath("book/label_chapter")
 textboxTitle = NodePath("book/textbox/label_boxTitle")
+previewDescription = NodePath("book/Preview/preview description")
+previewImage = NodePath("book/Preview/preview image")
+previewNumber = NodePath("book/Preview/preview number")
 submenus = Array[Object]([])
 bgm = NodePath("SpecialBookBGM")
 animator = NodePath("AnimationPlayer")
@@ -258,9 +413,8 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_fonts/font = ExtResource("20_w41nb")
 theme_override_font_sizes/font_size = 40
-text = "spb_chapter"
+text = "Chapter 1"
 label_settings = ExtResource("21_sqodb")
-horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
@@ -984,6 +1138,57 @@ text = "???"
 label_settings = ExtResource("5_xehf1")
 autowrap_mode = 2
 
+[node name="Preview" type="Control" parent="book"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="preview description" type="Label" parent="book/Preview"]
+layout_mode = 0
+offset_left = 201.0
+offset_top = 116.0
+offset_right = 710.0
+offset_bottom = 893.0
+scale = Vector2(0.8, 0.8)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "Description Title
+Description Text"
+label_settings = ExtResource("30_m7bbf")
+autowrap_mode = 3
+
+[node name="preview number" type="Label" parent="book/Preview"]
+layout_mode = 0
+offset_left = 1067.0
+offset_top = 681.0
+offset_right = 1203.0
+offset_bottom = 751.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("4_ur5td")
+theme_override_font_sizes/font_size = 50
+text = "-000-"
+label_settings = ExtResource("5_xehf1")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="preview image" type="TextureRect" parent="book/Preview"]
+layout_mode = 0
+offset_left = 652.0
+offset_top = 102.0
+offset_right = 1204.0
+offset_bottom = 654.0
+texture = ExtResource("31_fil6e")
+stretch_mode = 4
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_yxyel")
@@ -1000,7 +1205,7 @@ visible = false
 modulate = Color(0, 0, 0, 1)
 layout_mode = 0
 offset_right = 40.0
-offset_bottom = 40.0
+offset_bottom = 69.0
 scale = Vector2(48.04, 15.68)
 texture = ExtResource("9_cyesu")
 

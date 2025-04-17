@@ -9,6 +9,9 @@ public partial class BookPage : Resource
     public enum World
     { LP, SO, DJ, EF, LR, PS, SD, NP }
 
+    [Export]
+    public string name;
+
     ///<summary>Has the player unlocked this page?</summary>
     [Export]
     public bool unlocked;
@@ -70,14 +73,15 @@ public partial class BookPage : Resource
     public Rect2 image_preview; //the region preview for page in the list
 
 
-    public BookPage() : this(false, false, false, null, 0, 0, null, null, null, new Rect2()) { }
+    public BookPage() : this("", false, false, false, null, 0, 0, null, null, null, new Rect2()) { }
 
     public BookPage(
-                    bool unlock_clear, bool unlock_gold, bool unlock_silver,
+                    string name, bool unlock_clear, bool unlock_gold, bool unlock_silver,
                     string unlock_stage, int unlock_stageNum, int unlock_numSilver,
                     Texture page_preview, Texture page_preview_big, Texture page_full,
                     Rect2 image_preview)
     {
+        this.name = name;
         this.unlock_clear = unlock_clear;
         this.unlock_gold = unlock_gold;
         this.unlock_silver = unlock_silver;

@@ -2,6 +2,7 @@ using Godot;
 using Godot.Collections;
 using System.Collections.Generic;
 using Project.Core;
+using System;
 
 namespace Project.Interface.Menus;
 
@@ -20,6 +21,7 @@ public partial class SpecialBook : Menu
 
     [Export]
     private SpecialBookTab[] tabs;
+
     [Export]
     private SpecialBookWindow[] windows;
     [Export]
@@ -38,7 +40,13 @@ public partial class SpecialBook : Menu
     private Label textboxTitle;
 
     [Export]
-    private Label description;
+    private Label previewDescription;
+
+    [Export]
+    private TextureRect previewImage;
+
+    [Export]
+    private Label previewNumber;
 
 
 
@@ -63,6 +71,8 @@ public partial class SpecialBook : Menu
             windows[i].Glow();
         }
 
+
+
         UnlockAll();
     }
 
@@ -82,6 +92,7 @@ public partial class SpecialBook : Menu
                     tabs[chapterSelection].Select_NoGlow();
 
                 LoadChapter(chapters[chapterSelection].pages);
+                LoadPage(GetPage(chapterSelection, pageSelection));
             }
 
             if (Input.IsActionJustPressed("button_step_right"))
@@ -95,14 +106,18 @@ public partial class SpecialBook : Menu
                     tabs[chapterSelection].Select_NoGlow();
 
                 LoadChapter(chapters[chapterSelection].pages);
+                LoadPage(GetPage(chapterSelection, pageSelection));
             }
         }
+
+
         base.ProcessMenu();
     }
 
     protected override void UpdateSelection()
     {
 
+        //BUG: Only dpad seems to work, stick doesn't
         Vector2 input = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
 
         if (input == Vector2.Zero)
@@ -110,7 +125,46 @@ public partial class SpecialBook : Menu
 
         StartSelectionTimer();
 
+        MenuControls(input);
 
+    }
+
+    protected override void Confirm()
+    {
+        if (menuFocus == 1)
+        {
+            if (GetPage(chapterSelection, pageSelection).unlocked)
+            {
+                animator.Play("show_description");
+                menuFocus = 2;
+            }
+
+        }
+    }
+
+    protected override void Cancel()
+    {
+        if (menuFocus == 2)
+        {
+            animator.Play("hide_description");
+            menuFocus = 1;
+        }
+    }
+
+
+    public override void ShowMenu()
+    {
+
+        tabs[0].Select_NoSFX();
+        chapterSelection = 0;
+        pageSelection = 0;
+        menuFocus = 0;
+
+        base.ShowMenu();
+    }
+
+    private void MenuControls(Vector2 input)
+    {
         if (menuFocus == 0)
         {
             if (input.X != 0)//move left or right
@@ -171,24 +225,44 @@ public partial class SpecialBook : Menu
 
                 pageSelection = WrapSelection(pageSelection + (5 * (int)input.Y), 14, pageSelection - 10);
                 windows[pageSelection].Select();
+                LoadPage(GetPage(chapterSelection, pageSelection));
                 return;
 
             }
 
         }
-        //base.UpdateSelection();
+        else if (menuFocus == 2 || menuFocus == 3)
+        {
+
+
+            if (input.X != 0)
+            {
+                windows[pageSelection].Deselect();
+
+
+                pageSelection += (int)input.X;
+
+                if (pageSelection > 14 || pageSelection < 0)
+                {
+                    tabs[chapterSelection].Deselect();
+
+                    pageSelection = WrapSelection(pageSelection, 15);
+                    chapterSelection = WrapSelection(chapterSelection + (int)input.X, 16);
+
+                    tabs[chapterSelection].Select_NoGlow();
+                    LoadChapter(GetChapter(chapterSelection));
+                }
+
+                windows[pageSelection].Select();
+                LoadPage(GetPage(chapterSelection, pageSelection));
+            }
+        }
     }
-    public override void ShowMenu()
+
+    private BookPage[] GetChapter(int chapter)
     {
-
-        tabs[0].Select_NoSFX();
-        chapterSelection = 0;
-        pageSelection = 0;
-        menuFocus = 0;
-
-        base.ShowMenu();
+        return chapters[chapter].pages;
     }
-
     private BookPage GetPage(int chapter, int page)
     {
         return chapters[chapter].pages[page];
@@ -198,8 +272,8 @@ public partial class SpecialBook : Menu
     {
         chapterLabel.Text = "spb_chapter " + (chapterSelection + 1);
         GD.Print(chapterLabel.Text);
-        if (menuFocus == 0)
-            chapterName.Text = "[" + Tr("spb_chapter_" + tabs[chapterSelection].thisChapterType.ToString().ToLower()) + "]";
+
+        chapterName.Text = "[" + Tr("spb_chapter_" + tabs[chapterSelection].thisChapterType.ToString().ToLower()) + "]";
 
         for (int i = 0; i < 15; i++)
         {
@@ -213,12 +287,10 @@ public partial class SpecialBook : Menu
 
         if (page.unlocked)
         {
-            GD.Print(page.ResourceName.Replace("page", "title"));
-            textboxTitle.Text = Tr(page.ResourceName.Replace("page", "title"));
-            //TODO:
-            //load page preview
-            //load full page
-            //load description
+            textboxTitle.Text = chapterName.Text + "\n" + Tr(page.name);
+            previewDescription.Text = Tr(page.name.Replace("title", "desc"));
+            previewImage.Texture = (Texture2D)page.page_preview_big;
+            previewNumber.Text = "-" + ((15 * chapterSelection) + (pageSelection + 1)).ToString("D3") + "-";
         }
         else
         {
