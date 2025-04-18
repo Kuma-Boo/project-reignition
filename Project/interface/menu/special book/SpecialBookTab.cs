@@ -41,6 +41,8 @@ public partial class SpecialBookTab : Control
 
     public void Select_NoSFX() => tabAnimator.Play("select_nosfx");
 
+    public void Select_NoMove() => tabAnimator.Play("select_nomove");
+
     public void Select_Glow() => tabAnimator.Play("show_glow");
 
     public void Deselect() => tabAnimator.Play("deselect");

@@ -48,6 +48,8 @@ public partial class SpecialBook : Menu
     [Export]
     private Label previewNumber;
 
+    [Export]
+    private TextureRect fullImage;
 
 
 
@@ -73,7 +75,7 @@ public partial class SpecialBook : Menu
 
 
 
-        UnlockAll();
+        //UnlockAll();
     }
 
     protected override void ProcessMenu()
@@ -131,23 +133,63 @@ public partial class SpecialBook : Menu
 
     protected override void Confirm()
     {
+        BookPage thisPage = GetPage(chapterSelection, pageSelection);
+
         if (menuFocus == 1)
         {
             if (GetPage(chapterSelection, pageSelection).unlocked)
             {
                 animator.Play("show_description");
                 menuFocus = 2;
+                return;
             }
 
+        }
+        if (menuFocus == 2)
+        {
+            if (GetPage(chapterSelection, pageSelection).unlocked)
+            {
+                if (thisPage.track == null && thisPage.videoFilePath == "") //if this is an image
+                {
+                    animator.Play("show_fullimage");
+                    menuFocus = 3;
+                    StartSelectionTimer();
+                }
+
+
+                //if (thisPage.track != null) //if this is audio
+                //TODO: play audio track
+
+                //if (thisPage.videoFilePath != null) //if this is video
+                //TODO: play video file
+            }
         }
     }
 
     protected override void Cancel()
     {
+        if (menuFocus == 0)
+        {
+            animator.Play("hide");
+        }
+
+        if (menuFocus == 1)
+        {
+            tabs[chapterSelection].Select_NoMove();
+            windows[pageSelection].Deselect();
+            menuFocus = 0;
+        }
+
         if (menuFocus == 2)
         {
             animator.Play("hide_description");
             menuFocus = 1;
+        }
+
+        if (menuFocus == 3)
+        {
+            animator.Play("hide_fullimage");
+            menuFocus = 2;
         }
     }
 
@@ -216,7 +258,7 @@ public partial class SpecialBook : Menu
 
                 if ((int)input.Y < 0 && pageSelection <= 4)//If we are going up on the first row
                 {
-                    tabs[chapterSelection].Select();
+                    tabs[chapterSelection].Select_NoMove();
                     menuFocus = 0;
                     chapterName.Visible = true;
                     textboxTitle.Visible = false;
@@ -233,8 +275,6 @@ public partial class SpecialBook : Menu
         }
         else if (menuFocus == 2 || menuFocus == 3)
         {
-
-
             if (input.X != 0)
             {
                 windows[pageSelection].Deselect();
@@ -242,6 +282,8 @@ public partial class SpecialBook : Menu
 
                 pageSelection += (int)input.X;
 
+                //do
+                //{
                 if (pageSelection > 14 || pageSelection < 0)
                 {
                     tabs[chapterSelection].Deselect();
@@ -250,14 +292,33 @@ public partial class SpecialBook : Menu
                     chapterSelection = WrapSelection(chapterSelection + (int)input.X, 16);
 
                     tabs[chapterSelection].Select_NoGlow();
-                    LoadChapter(GetChapter(chapterSelection));
                 }
+                //} while (!IsValid(GetPage(chapterSelection, pageSelection)));//Skips over every page we don't have unlocked. If we're on the full view, skips over movies and music
+
 
                 windows[pageSelection].Select();
+                LoadChapter(GetChapter(chapterSelection));
                 LoadPage(GetPage(chapterSelection, pageSelection));
             }
         }
     }
+
+
+    private bool IsValid(BookPage page)//Checks if we can view the page
+    {
+        if (menuFocus == 1 || menuFocus == 2)
+        {
+            if (page.unlocked)
+                return true;
+        }
+        else if (menuFocus == 3)
+        {
+            if (page.unlocked || page.videoFilePath != null || page.track != null)
+                return true;
+        }
+        return false;
+    }
+
 
     private BookPage[] GetChapter(int chapter)
     {
@@ -279,6 +340,7 @@ public partial class SpecialBook : Menu
         {
             if (chapter != null && chapter[i].unlocked)
                 previewImages[i].Texture = (Texture2D)chapter[i].page_preview;
+            else previewImages[i].Texture = null;
         }
     }
 
@@ -291,6 +353,7 @@ public partial class SpecialBook : Menu
             previewDescription.Text = Tr(page.name.Replace("title", "desc"));
             previewImage.Texture = (Texture2D)page.page_preview_big;
             previewNumber.Text = "-" + ((15 * chapterSelection) + (pageSelection + 1)).ToString("D3") + "-";
+            fullImage.Texture = (Texture2D)page.page_full;
         }
         else
         {
@@ -306,73 +369,13 @@ public partial class SpecialBook : Menu
             return Tr("spb_hint_silvermedal").Replace("XX", page.unlock_numSilver.ToString());
 
         if (page.unlock_clear)
-        {
-            switch (page.unlock_world)
-            {
-                case BookPage.World.LP:
-                    return Tr("spb_hint_complete_lp").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.SO:
-                    return Tr("spb_hint_complete_so").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.DJ:
-                    return Tr("spb_hint_complete_dj").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.EF:
-                    return Tr("spb_hint_complete_ef").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.LR:
-                    return Tr("spb_hint_complete_lr").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.PS:
-                    return Tr("spb_hint_complete_ps").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.SD:
-                    return Tr("spb_hint_complete_sd").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.NP:
-                    return Tr("spb_hint_complete_np").Replace("XX", page.unlock_stageNum.ToString());
-            }
-        }
+            return Tr("spb_hint_complete_" + page.unlock_world.ToString().ToLower()).Replace("XX", page.unlock_stageNum.ToString());
 
         if (page.unlock_gold)
-        {
-            switch (page.unlock_world)
-            {
-                case BookPage.World.LP:
-                    return Tr("spb_hint_goldmedal_lp").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.SO:
-                    return Tr("spb_hint_goldmedal_so").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.DJ:
-                    return Tr("spb_hint_goldmedal_dj").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.EF:
-                    return Tr("spb_hint_goldmedal_ef").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.LR:
-                    return Tr("spb_hint_goldmedal_lr").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.PS:
-                    return Tr("spb_hint_goldmedal_ps").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.SD:
-                    return Tr("spb_hint_goldmedal_sd").Replace("XX", page.unlock_stageNum.ToString());
-                case BookPage.World.NP:
-                    return Tr("spb_hint_goldmedal_np").Replace("XX", page.unlock_stageNum.ToString());
-            }
-        }
+            return Tr("spb_hint_goldmedal_" + page.unlock_world.ToString().ToLower()).Replace("XX", page.unlock_stageNum.ToString());
 
         if (page.unlock_allstage)
-        {
-            switch (page.unlock_world)
-            {
-                case BookPage.World.LP:
-                    return Tr("spb_hint_allmission_lp");
-                case BookPage.World.SO:
-                    return Tr("spb_hint_allmission_so");
-                case BookPage.World.DJ:
-                    return Tr("spb_hint_allmission_dj");
-                case BookPage.World.EF:
-                    return Tr("spb_hint_allmission_ef");
-                case BookPage.World.LR:
-                    return Tr("spb_hint_allmission_lr");
-                case BookPage.World.PS:
-                    return Tr("spb_hint_allmission_ps");
-                case BookPage.World.SD:
-                    return Tr("spb_hint_allmission_sd");
-                case BookPage.World.NP:
-                    return Tr("spb_hint_allmission_np");
-            }
-        }
+            return Tr("spb_hint_allmission_" + page.unlock_world.ToString().ToLower());
 
         return "???";
     }
