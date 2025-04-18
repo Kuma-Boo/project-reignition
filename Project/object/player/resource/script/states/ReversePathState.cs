@@ -17,6 +17,8 @@ public partial class ReversePathState : PlayerState
 	{
 		playedTurnaroundAnimation = false;
 		Player.IsMovingBackward = false;
+		if (Player.Skills.IsSpeedBreakActive)
+			Player.Skills.ToggleSpeedBreak();
 	}
 
 	public override void ExitState()
