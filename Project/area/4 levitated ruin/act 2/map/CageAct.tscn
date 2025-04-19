@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://djirww1p1qtu2"]
+[gd_scene load_steps=71 format=3 uid="uid://djirww1p1qtu2"]
 
 [ext_resource type="PackedScene" uid="uid://bpxj0juyhbmxs" path="res://area/4 levitated ruin/act 2/Static.tscn" id="1_ox5ni"]
 [ext_resource type="Resource" uid="uid://xi0dj64h1rxj" path="res://resource/level data/levitated ruin/Act2Cage.tres" id="2_gm4t4"]
@@ -54,6 +54,10 @@
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="46_jlls3"]
 [ext_resource type="PackedScene" uid="uid://b6030p0x15kq0" path="res://area/4 levitated ruin/object/platform/GargoyleStatic.tscn" id="49_biwra"]
 [ext_resource type="PackedScene" uid="uid://cggks1kly71mq" path="res://object/enemy/majin/data/levitated ruin/BlueMajin.tscn" id="50_kuvve"]
+[ext_resource type="PackedScene" uid="uid://b724x1op3kfpc" path="res://object/enemy/majin/data/levitated ruin/RedMajin.tscn" id="51_lfjem"]
+[ext_resource type="PackedScene" uid="uid://ci8d3jdqrc0nr" path="res://area/4 levitated ruin/object/special/Ivy.tscn" id="52_gy57v"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="53_3de7l"]
+[ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="54_gg5un"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q3nif"]
 size = Vector3(5, 8, 3)
@@ -377,7 +381,6 @@ OneShot = true
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Ziplines/Zipline1/Start"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 shape = SubResource("BoxShape3D_q3nif")
-disabled = true
 
 [node name="Jump" type="Node3D" parent="CageAct/Ziplines/Zipline1/Start"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 4.2, -0.300049)
@@ -509,7 +512,6 @@ autoAlign = true
 forceConsistentHeight = true
 
 [node name="Camera" type="Node3D" parent="CageAct/Ziplines/Zipline2/End/Jump"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("27_vns5j")
 settings = ExtResource("22_hvimn")
 
@@ -835,25 +837,25 @@ script = ExtResource("5_im11i")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
 
-[node name="LoopPath" type="Node3D" parent="CageAct/Tower2" node_paths=PackedStringArray("path")]
-transform = Transform3D(0.906308, 0.144544, 0.397131, 0, 0.939693, -0.34202, -0.422618, 0.309976, 0.851651, 0, 0.2, -3)
-script = ExtResource("8_mxhyu")
-path = NodePath("../../../Static/Paths/Tower2")
+[node name="Triggers" type="Node3D" parent="CageAct/Tower2"]
 
-[node name="Lockout" type="Node3D" parent="CageAct/Tower2"]
-transform = Transform3D(0.906308, 0.144544, 0.397131, 0, 0.939693, -0.34202, -0.422618, 0.309976, 0.851651, 0, 0.2, -3)
+[node name="LoopPath" type="Node3D" parent="CageAct/Tower2/Triggers" node_paths=PackedStringArray("path")]
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/Tower2")
+
+[node name="Lockout" type="Node3D" parent="CageAct/Tower2/Triggers"]
 script = ExtResource("9_t2qcg")
 lockoutData = ExtResource("10_ib1ve")
 
-[node name="GroundPathTrigger" parent="CageAct/Tower2" instance=ExtResource("6_f8ouc")]
+[node name="GroundPathTrigger" parent="CageAct/Tower2/Triggers" instance=ExtResource("6_f8ouc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 "Enter Mode" = 0
 
-[node name="GroundPath" type="Node3D" parent="CageAct/Tower2/GroundPathTrigger" node_paths=PackedStringArray("path")]
+[node name="GroundPath" type="Node3D" parent="CageAct/Tower2/Triggers/GroundPathTrigger" node_paths=PackedStringArray("path")]
 script = ExtResource("8_mxhyu")
-path = NodePath("../../../../Static/Paths/Rukh2")
+path = NodePath("../../../../../Static/Paths/Rukh2")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower2/GroundPathTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower2/Triggers/GroundPathTrigger"]
 shape = SubResource("CylinderShape3D_7f5hg")
 
 [node name="Gate1" parent="CageAct/Tower2" instance=ExtResource("11_t2qcg")]
@@ -1196,7 +1198,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1, 0, 0)
 
 [node name="MissileGeneratorGroup" type="Node3D" parent="CageAct/Tower2"]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -4.90862, 39, -4.95605)
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -4.41364, 39, -4.46107)
 
 [node name="MissileGenerator1" parent="CageAct/Tower2/MissileGeneratorGroup" instance=ExtResource("19_s5d0m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 0, 0)
@@ -1647,6 +1649,7 @@ script = ExtResource("7_h6cqm")
 startPaused = true
 smoothPausing = true
 root = NodePath("BlueMajin")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 10.0
 "Movement/Starting Offset" = 0.75
@@ -1655,7 +1658,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="CageAct/Tower3/Exterior/MovingMajin1" instance=ExtResource("50_kuvve")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.4999)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
@@ -1679,7 +1682,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="CageAct/Tower3/Exterior/MovingMajin2" instance=ExtResource("50_kuvve")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.4999)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
@@ -1688,25 +1691,30 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
 "Attack Settings/Attack Type" = 1
 rangeOverride = 20
 
-[node name="LoopPath" type="Node3D" parent="CageAct/Tower3" node_paths=PackedStringArray("path")]
-transform = Transform3D(0.906308, 0.144544, 0.397131, 0, 0.939693, -0.34202, -0.422618, 0.309976, 0.851651, 0, 0.2, -3)
-script = ExtResource("8_mxhyu")
-path = NodePath("../../../Static/Paths/Tower3")
+[node name="Triggers" type="Node3D" parent="CageAct/Tower3"]
 
-[node name="Lockout" type="Node3D" parent="CageAct/Tower3"]
-transform = Transform3D(0.906308, 0.144544, 0.397131, 0, 0.939693, -0.34202, -0.422618, 0.309976, 0.851651, 0, 0.2, -3)
+[node name="LoopPath" type="Node3D" parent="CageAct/Tower3/Triggers" node_paths=PackedStringArray("path")]
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/Tower3")
+
+[node name="LoopReversePath" type="Node3D" parent="CageAct/Tower3/Triggers" node_paths=PackedStringArray("path")]
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/Tower3")
+reversePath = true
+
+[node name="Lockout" type="Node3D" parent="CageAct/Tower3/Triggers"]
 script = ExtResource("9_t2qcg")
 lockoutData = ExtResource("10_ib1ve")
 
-[node name="GroundPathTrigger" parent="CageAct/Tower3" instance=ExtResource("6_f8ouc")]
+[node name="GroundPathTrigger" parent="CageAct/Tower3/Triggers" instance=ExtResource("6_f8ouc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 "Enter Mode" = 0
 
-[node name="GroundPath" type="Node3D" parent="CageAct/Tower3/GroundPathTrigger" node_paths=PackedStringArray("path")]
+[node name="GroundPath" type="Node3D" parent="CageAct/Tower3/Triggers/GroundPathTrigger" node_paths=PackedStringArray("path")]
 script = ExtResource("8_mxhyu")
-path = NodePath("../../../../Static/Paths/Rukh3")
+path = NodePath("../../../../../Static/Paths/Rukh3")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower3/GroundPathTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower3/Triggers/GroundPathTrigger"]
 shape = SubResource("CylinderShape3D_7f5hg")
 
 [node name="Gate1" parent="CageAct/Tower3" instance=ExtResource("11_t2qcg")]
@@ -1726,17 +1734,364 @@ script = ExtResource("13_5yb3a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 shape = SubResource("BoxShape3D_5yb3a")
 
-[node name="Lever" parent="CageAct/Tower3" instance=ExtResource("40_6dght")]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 11.586, 40, 11.586)
+[node name="Rings1" type="Node3D" parent="CageAct/Tower3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.699997, 9)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("6_nggpy")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
 
-[node name="Cam" type="Node3D" parent="CageAct/Tower3/Lever"]
-script = ExtResource("27_vns5j")
-settings = ExtResource("41_q4org")
+[node name="Child01" parent="CageAct/Tower3/Rings1" instance=ExtResource("6_nggpy")]
+
+[node name="Child02" parent="CageAct/Tower3/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="CageAct/Tower3/Rings1" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="GreenMajin1" parent="CageAct/Tower3" instance=ExtResource("7_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+rangeOverride = 10
+
+[node name="GreenMajin2" parent="CageAct/Tower3" instance=ExtResource("7_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+rangeOverride = 10
+
+[node name="RedMajin" parent="CageAct/Tower3" instance=ExtResource("51_lfjem")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 1.5
+"Attack Settings/Flame Inactive Time" = 1.5
+"Attack Settings/Attack Instantly" = true
+rangeOverride = 10
+
+[node name="EnemyStone" parent="CageAct/Tower3" instance=ExtResource("9_vvs7k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -3)
+enemyCount = 1
+
+[node name="Spring" parent="CageAct/Tower3" instance=ExtResource("10_mxhyu")]
+transform = Transform3D(-1, -7.6194e-09, -8.70901e-08, 0, 0.996195, -0.0871557, 8.74228e-08, -0.0871557, -0.996195, 0, 0.300003, -3)
+middleHeight = 18.0
+finalHeight = 15.5
+distance = 5.0
 
 [node name="Gate2" parent="CageAct/Tower3" instance=ExtResource("11_t2qcg")]
 transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, -9.5)
 respawnAnimation = 2
 activationSpeedScale = 5.0
+
+[node name="Rings2" type="Node3D" parent="CageAct/Tower3"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.8, 16.8, -7.7)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("6_nggpy")
+Amount = 4
+Shape = 2
+Path = NodePath("../../../Static/Paths/Tower3")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = true
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="CageAct/Tower3/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.000183105)
+
+[node name="Child02" parent="CageAct/Tower3/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.236816, 0, 2.45361)
+
+[node name="Child03" parent="CageAct/Tower3/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9541, 0, 4.25708)
+
+[node name="Child04" parent="CageAct/Tower3/Rings2" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.74316, 0, 6.00293)
+
+[node name="IvyGroup1" type="Node3D" parent="CageAct/Tower3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.53607, 22.7, 0.153564)
+
+[node name="Ivy1" parent="CageAct/Tower3/IvyGroup1" instance=ExtResource("52_gy57v")]
+transform = Transform3D(0.891007, 0, 0.453991, 0, 1, 0, -0.453991, 0, 0.891007, 0, 0, 0)
+length = 9
+maxRotation = 30.0
+"Secondary Settings/Middle Height" = 3.0
+"Secondary Settings/Final Height" = 1.5
+
+[node name="Ivy2" parent="CageAct/Tower3/IvyGroup1" instance=ExtResource("52_gy57v")]
+transform = Transform3D(0.139173, 0, 0.990268, 0, 1, 0, -0.990268, 0, 0.139173, 3.09766, 0, 6.30481)
+length = 7
+maxRotation = 30.0
+"Secondary Settings/Middle Height" = 2.0
+"Secondary Settings/Final Height" = 0.5
+"Secondary Settings/Distance" = 4.5
+
+[node name="Ivy3" parent="CageAct/Tower3/IvyGroup1" instance=ExtResource("52_gy57v")]
+transform = Transform3D(-0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, -0.642788, 9.28668, 0, 7.18994)
+length = 6
+maxRotation = 30.0
+"Secondary Settings/Middle Height" = 2.0
+"Secondary Settings/Final Height" = 1.0
+"Secondary Settings/Distance" = 3.0
+
+[node name="StaticGate3" parent="CageAct/Tower3" instance=ExtResource("11_t2qcg")]
+transform = Transform3D(0.375877, 0, -0.34202, 0, 2.2, 0, 0.136808, 0, 0.939693, 7.6781, 16, 2.82825)
+
+[node name="StaticGate4" parent="CageAct/Tower3" instance=ExtResource("11_t2qcg")]
+transform = Transform3D(-0.136808, 0, -0.939693, 0, 2.2, 0, 0.375877, 0, -0.34202, -2.82159, 32.3, 7.63513)
+
+[node name="Switch" parent="CageAct/Tower3" instance=ExtResource("18_m6eo3")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 6.53329, 16.3, 4.26011)
+activationLength = 0.5
+
+[node name="Spring" parent="CageAct/Tower3/Switch" instance=ExtResource("10_mxhyu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+startHidden = true
+middleHeight = 10.0
+finalHeight = 7.5
+distance = 2.0
+
+[node name="Rings3" type="Node3D" parent="CageAct/Tower3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.79999, 24.8, 2)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("6_nggpy")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="CageAct/Tower3/Rings3" instance=ExtResource("6_nggpy")]
+
+[node name="Child02" parent="CageAct/Tower3/Rings3" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="CageAct/Tower3/Rings3" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="IvyGroup2" type="Node3D" parent="CageAct/Tower3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.79999, 30.7, -5)
+
+[node name="Ivy1" parent="CageAct/Tower3/IvyGroup2" instance=ExtResource("52_gy57v")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 0, 0, 0)
+length = 7
+"Secondary Settings/Middle Height" = 2.0
+"Secondary Settings/Final Height" = 1.0
+"Secondary Settings/Distance" = 2.0
+
+[node name="GreenMajin1" parent="CageAct/Tower3/IvyGroup2" instance=ExtResource("7_nggpy")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7, -9, -2)
+rangeOverride = 10
+
+[node name="GreenMajin2" parent="CageAct/Tower3/IvyGroup2" instance=ExtResource("7_nggpy")]
+transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, -10.1107, -8, -1.12783)
+rangeOverride = 10
+
+[node name="Ivy2" parent="CageAct/Tower3/IvyGroup2" instance=ExtResource("52_gy57v")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -11.6393, 0, 0.146613)
+length = 6
+"Secondary Settings/Final Height" = 2.0
+"Secondary Settings/Distance" = 4.0
+
+[node name="SpikePanelGroup1" type="Node3D" parent="CageAct/Tower3"]
+transform = Transform3D(0.8, 0, 0, 0, 1, 0, 0, 0, 1, -7.54001, 24.1, -2)
+
+[node name="SpikePanelL" parent="CageAct/Tower3/SpikePanelGroup1" instance=ExtResource("53_3de7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+stateLengths = PackedFloat32Array(1, 0.2, 2)
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 2.0
+
+[node name="SpikePanelR" parent="CageAct/Tower3/SpikePanelGroup1" instance=ExtResource("53_3de7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+stateLengths = PackedFloat32Array(1, 0.2, 2)
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 2.0
+
+[node name="Rings4" type="Node3D" parent="CageAct/Tower3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.40001, 24.8, 1.5)
+script = ExtResource("5_f8ouc")
+Source = ExtResource("6_nggpy")
+Amount = 4
+Shape = 2
+Path = NodePath("../../../Static/Paths/Tower3")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = true
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="CageAct/Tower3/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.000244141)
+
+[node name="Child02" parent="CageAct/Tower3/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.855896, 0, 2.51941)
+
+[node name="Child03" parent="CageAct/Tower3/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.95636, 0, 4.64587)
+
+[node name="Child04" parent="CageAct/Tower3/Rings4" instance=ExtResource("6_nggpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.24432, 0, 6.0636)
+
+[node name="IvyGroup3" type="Node3D" parent="CageAct/Tower3"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 32, 7.6)
+
+[node name="TowerPlatform1" parent="CageAct/Tower3/IvyGroup3" instance=ExtResource("39_qgsj1")]
+
+[node name="Ivy1" parent="CageAct/Tower3/IvyGroup3" instance=ExtResource("52_gy57v")]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 0, -0.5, 0)
+length = 6
+maxRotation = 50.0
+
+[node name="Ivy2" parent="CageAct/Tower3/IvyGroup3" instance=ExtResource("52_gy57v")]
+transform = Transform3D(-0.765706, -0.029736, 0.642503, -0.0227791, 0.999558, 0.019114, -0.642788, 2.59961e-09, -0.766044, -7, 6.7, 4)
+length = 10
+"Secondary Settings/Distance" = 1.0
+
+[node name="Ivy3" parent="CageAct/Tower3/IvyGroup3" instance=ExtResource("52_gy57v")]
+transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, -3.8, 6.7, 0.5)
+length = 7
+maxRotation = 50.0
+
+[node name="TowerPlatform2" parent="CageAct/Tower3/IvyGroup3" instance=ExtResource("39_qgsj1")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -8, 7.5, 7.80005)
+
+[node name="Ivy4" parent="CageAct/Tower3/IvyGroup3" instance=ExtResource("52_gy57v")]
+transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, -7.61698, 6.9, 9.67861)
+length = 6
+maxRotation = 30.0
+"Secondary Settings/Middle Height" = 2.0
+"Secondary Settings/Final Height" = 1.0
+"Secondary Settings/Distance" = 3.0
+
+[node name="SpikePanelGroup2" type="Node3D" parent="CageAct/Tower3"]
+transform = Transform3D(0.565685, 0, 0.707107, 0, 1, 0, -0.565685, 0, 0.707107, 6.89856, 32.2, -4.23352)
+
+[node name="SpikePanelL" parent="CageAct/Tower3/SpikePanelGroup2" instance=ExtResource("53_3de7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+stateLengths = PackedFloat32Array(1, 0.2, 2)
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 2.0
+
+[node name="SpikePanelR" parent="CageAct/Tower3/SpikePanelGroup2" instance=ExtResource("53_3de7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+stateLengths = PackedFloat32Array(1, 0.2, 2)
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 2.0
+
+[node name="ItemBox1" parent="CageAct/Tower3" instance=ExtResource("54_gg5un")]
+transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 3.36303, 32.6, -7.20337)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 50
+
+[node name="ItemBox2" parent="CageAct/Tower3" instance=ExtResource("54_gg5un")]
+transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -0.494858, 32.6, -7.58542)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 50
+
+[node name="SpikePanelGroup3" type="Node3D" parent="CageAct/Tower3"]
+transform = Transform3D(-0.565685, 0, 0.707107, 0, 1, 0, -0.565685, 0, -0.707107, -5.88931, 32.2, -4.87997)
+
+[node name="SpikePanelL" parent="CageAct/Tower3/SpikePanelGroup3" instance=ExtResource("53_3de7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+stateLengths = PackedFloat32Array(1, 0.2, 2)
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 2.0
+
+[node name="SpikePanelR" parent="CageAct/Tower3/SpikePanelGroup3" instance=ExtResource("53_3de7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+stateLengths = PackedFloat32Array(1, 0.2, 2)
+"State Lengths/inactive" = 1.0
+"State Lengths/warning" = 0.2
+"State Lengths/active" = 2.0
+
+[node name="SpikeBall" parent="CageAct/Tower3" instance=ExtResource("46_jlls3")]
+transform = Transform3D(-1.2, 0, 1.81195e-07, 0, 1.2, 0, -1.81195e-07, 0, -1.2, -7.52374, 39.4, -1.53284)
+"Movement/Cycle Length" = 8.0
+Movement/Distance = 8.0
+Movement/Angle = 180.0
+"Vertical Orientation" = true
+
+[node name="IvyGroup4" type="Node3D" parent="CageAct/Tower3"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5.126, 39.6, -5.612)
+
+[node name="TowerPlatform1" parent="CageAct/Tower3/IvyGroup4" instance=ExtResource("39_qgsj1")]
+
+[node name="TowerPlatform2" parent="CageAct/Tower3/IvyGroup4" instance=ExtResource("39_qgsj1")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.9, 0, 7.5)
+
+[node name="Ivy1" parent="CageAct/Tower3/IvyGroup4" instance=ExtResource("52_gy57v")]
+transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, 1.5, -0.6, -2.18557e-08)
+length = 6
+LaunchRatio = 1.0
+"Secondary Settings/Final Height" = 2.0
+"Secondary Settings/Distance" = 4.0
+"Secondary Settings/Blend" = 1.0
+
+[node name="Ivy2" parent="CageAct/Tower3/IvyGroup4" instance=ExtResource("52_gy57v")]
+transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, -8.08293, -0.6, 7.14367)
+length = 7
+maxRotation = 30.0
+LaunchRatio = -1.0
+"Secondary Settings/Blend" = -1.0
+
+[node name="Switch" parent="CageAct/Tower3/IvyGroup4" instance=ExtResource("18_m6eo3")]
+transform = Transform3D(-4.37114e-08, 1, -5.96046e-08, -1, -4.37114e-08, -9.47312e-16, -3.55271e-15, 5.96046e-08, 1, -9.07068, -6, 7.7848)
+
+[node name="Spring2" parent="CageAct/Tower3" instance=ExtResource("10_mxhyu")]
+transform = Transform3D(0.906308, 0.211309, 0.365998, 0, 0.866025, -0.5, -0.422618, 0.453154, 0.784886, -6.89411, 32.3, -3.84442)
+startHidden = true
+middleHeight = 15.0
+finalHeight = 8.0
+distance = 12.5
+sfxPlayer = NodePath("../Spring/SFX")
+
+[node name="Camera" type="Node3D" parent="CageAct/Tower3/Spring2"]
+script = ExtResource("27_vns5j")
+transitionTime = 1.0
+settings = ExtResource("28_ocnes")
+
+[node name="Path" type="Node3D" parent="CageAct/Tower3/Spring2" node_paths=PackedStringArray("path")]
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/TowerTop3")
+
+[node name="CameraTrigger" parent="CageAct/Tower3" instance=ExtResource("6_f8ouc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 42, -1)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Camera" type="Node3D" parent="CageAct/Tower3/CameraTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -2)
+script = ExtResource("27_vns5j")
+transitionType = 1
+settings = ExtResource("28_a4ysn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower3/CameraTrigger"]
+shape = SubResource("SphereShape3D_ocnes")
+
+[node name="Lever" parent="CageAct" instance=ExtResource("40_6dght")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 661.586, -30, -1513.41)
+
+[node name="Cam" type="Node3D" parent="CageAct/Lever"]
+script = ExtResource("27_vns5j")
+settings = ExtResource("41_q4org")
 
 [node name="Mirrors" type="Node3D" parent="CageAct"]
 
@@ -1824,30 +2179,30 @@ script = ExtResource("41_txknb")
 [connection signal="JumpFinished" from="CageAct/Ziplines/Zipline2/End/Jump" to="CageAct/Ziplines/Zipline2/End/Jump/Camera" method="Activate"]
 [connection signal="SpinStarted" from="CageAct/Zipline1/MajinMover1/GreenMajin" to="CageAct/Zipline1/MajinMover1" method="Unpause"]
 [connection signal="SpinStarted" from="CageAct/Zipline1/MajinMover2/GreenMajin" to="CageAct/Zipline1/MajinMover2" method="Unpause"]
-[connection signal="Activated" from="CageAct/Tower2/GroundPathTrigger" to="CageAct/Tower2/Lockout" method="Deactivate"]
+[connection signal="Activated" from="CageAct/Tower2/Triggers/GroundPathTrigger" to="CageAct/Tower2/Triggers/Lockout" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Tower2/GateTrigger" to="CageAct/Tower2/Gate1" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/GateTrigger" to="CageAct/Tower2/Gate2" method="Activate"]
 [connection signal="Defeated" from="CageAct/Tower2/GreenMajin1" to="CageAct/Tower2/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="CageAct/Tower2/GreenMajin2" to="CageAct/Tower2/EnemyStone" method="IncrementCounter"]
 [connection signal="Shattered" from="CageAct/Tower2/EnemyStone" to="CageAct/Tower2/Spring1" method="ShowLauncher"]
-[connection signal="Deactivated" from="CageAct/Tower2/Spring1" to="CageAct/Tower2/LoopPath" method="Activate"]
-[connection signal="Deactivated" from="CageAct/Tower2/Spring1" to="CageAct/Tower2/Lockout" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower2/Spring1" to="CageAct/Tower2/Triggers/LoopPath" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower2/Spring1" to="CageAct/Tower2/Triggers/Lockout" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel1" to="CageAct/Tower2/DashPanel1/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel1" to="CageAct/Tower2/DashPanel1/AutomationTrigger" method="AttemptAutomation" flags=3]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel1/AutomationTrigger" to="CageAct/Tower2/DashPanel1/Path" method="Activate"]
-[connection signal="Deactivated" from="CageAct/Tower2/DashPanel1/AutomationTrigger" to="CageAct/Tower2/LoopPath" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower2/DashPanel1/AutomationTrigger" to="CageAct/Tower2/Triggers/LoopPath" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/Switch1" to="CageAct/Tower2/Switch1/Spring" method="ShowLauncher"]
 [connection signal="Deactivated" from="CageAct/Tower2/Switch1" to="CageAct/Tower2/Switch1/Spring" method="HideLauncher"]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel2" to="CageAct/Tower2/DashPanel2/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel2" to="CageAct/Tower2/DashPanel2/AutomationTrigger" method="AttemptAutomation" flags=3]
-[connection signal="Deactivated" from="CageAct/Tower2/DashPanel2/AutomationTrigger" to="CageAct/Tower2/LoopPath" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower2/DashPanel2/AutomationTrigger" to="CageAct/Tower2/Triggers/LoopPath" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/Switch2" to="CageAct/Tower2/CullingTrigger" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/Switch3" to="CageAct/Tower2/Switch3/Spring" method="ShowLauncher"]
 [connection signal="Deactivated" from="CageAct/Tower2/Switch3" to="CageAct/Tower2/Switch3/Spring" method="HideLauncher"]
 [connection signal="Activated" from="CageAct/Tower2/GateTrigger2" to="CageAct/Tower2/Gate3" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel3" to="CageAct/Tower2/DashPanel3/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel3" to="CageAct/Tower2/DashPanel3/AutomationTrigger" method="AttemptAutomation" flags=3]
-[connection signal="Deactivated" from="CageAct/Tower2/DashPanel3/AutomationTrigger" to="CageAct/Tower2/LoopPath" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower2/DashPanel3/AutomationTrigger" to="CageAct/Tower2/Triggers/LoopPath" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/Path" method="Activate"]
 [connection signal="Deactivated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/Camera" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/CameraTrigger" to="CageAct/Tower2/Gate1" method="Activate"]
@@ -1858,11 +2213,21 @@ script = ExtResource("41_txknb")
 [connection signal="SpinStarted" from="CageAct/Tower3/Exterior/MovingMajin1/BlueMajin" to="CageAct/Tower3/Exterior/MovingMajin1" method="Unpause"]
 [connection signal="Defeated" from="CageAct/Tower3/Exterior/MovingMajin2/BlueMajin" to="CageAct/Tower3/Exterior/EnemyStone" method="IncrementCounter"]
 [connection signal="SpinStarted" from="CageAct/Tower3/Exterior/MovingMajin2/BlueMajin" to="CageAct/Tower3/Exterior/MovingMajin2" method="Unpause"]
-[connection signal="Activated" from="CageAct/Tower3/GroundPathTrigger" to="CageAct/Tower3/Lockout" method="Deactivate"]
+[connection signal="Activated" from="CageAct/Tower3/Triggers/GroundPathTrigger" to="CageAct/Tower3/Triggers/Lockout" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Tower3/GateTrigger" to="CageAct/Tower3/Gate1" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower3/GateTrigger" to="CageAct/Tower3/Gate2" method="Activate"]
-[connection signal="Activated" from="CageAct/Tower3/Lever" to="CageAct/Mirrors/MirrorEvent2" method="Activate"]
-[connection signal="Started" from="CageAct/Tower3/Lever" to="CageAct/Tower3/Lever/Cam" method="Activate"]
+[connection signal="Defeated" from="CageAct/Tower3/RedMajin" to="CageAct/Tower3/EnemyStone" method="IncrementCounter"]
+[connection signal="Activated" from="CageAct/Tower3/Spring" to="CageAct/Tower3/Triggers/LoopPath" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower3/Spring" to="CageAct/Tower3/Triggers/Lockout" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower3/Switch" to="CageAct/Tower3/Switch/Spring" method="ShowLauncher"]
+[connection signal="Deactivated" from="CageAct/Tower3/Switch" to="CageAct/Tower3/Switch/Spring" method="HideLauncher"]
+[connection signal="Activated" from="CageAct/Tower3/IvyGroup4/Switch" to="CageAct/Tower3/Spring2" method="ShowLauncher"]
+[connection signal="Deactivated" from="CageAct/Tower3/Spring2" to="CageAct/Tower3/Spring2/Camera" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower3/Spring2" to="CageAct/Tower3/Spring2/Path" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower3/CameraTrigger" to="CageAct/Tower2/Gate1" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower3/CameraTrigger" to="CageAct/Tower2/Gate2" method="Activate"]
+[connection signal="Activated" from="CageAct/Lever" to="CageAct/Mirrors/MirrorEvent2" method="Activate"]
+[connection signal="Started" from="CageAct/Lever" to="CageAct/Lever/Cam" method="Activate"]
 [connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="Static/Visuals/Rukh2" method="Deactivate"]
 [connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="Static/Visuals/Rukh2LOD" method="Activate"]
 [connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="Static/Visuals/Rukh3" method="Deactivate"]
