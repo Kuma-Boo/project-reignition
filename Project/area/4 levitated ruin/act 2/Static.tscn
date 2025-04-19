@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://bpxj0juyhbmxs"]
+[gd_scene load_steps=54 format=3 uid="uid://bpxj0juyhbmxs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_16rgi"]
 [ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="2_dq0yd"]
@@ -22,7 +22,7 @@
 [ext_resource type="Curve3D" uid="uid://mtulat3gydtp" path="res://area/4 levitated ruin/act 2/environment/path/Tower1Path.tres" id="18_h17nb"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="19_5d7iq"]
 [ext_resource type="Curve3D" uid="uid://i4vvfqy2l0qw" path="res://area/4 levitated ruin/act 2/environment/path/Tower2Path.tres" id="19_v5nmh"]
-[ext_resource type="Curve3D" path="res://area/4 levitated ruin/act 2/environment/path/Tower3Path.tres" id="20_s7bpm"]
+[ext_resource type="Curve3D" uid="uid://cjory82wtil52" path="res://area/4 levitated ruin/act 2/environment/path/Tower3Path.tres" id="20_s7bpm"]
 [ext_resource type="Curve3D" uid="uid://diibs5eox7jtt" path="res://area/4 levitated ruin/act 2/environment/path/Tower4Path.tres" id="21_7ougu"]
 [ext_resource type="Resource" uid="uid://bs6nww33wlhi" path="res://area/4 levitated ruin/act 2/camera/TowerBaseCam.tres" id="21_mwnvi"]
 [ext_resource type="Curve3D" uid="uid://cgcubh6bcfa7d" path="res://area/4 levitated ruin/act 2/environment/path/Tower5Path.tres" id="22_d34ml"]
@@ -59,6 +59,10 @@ size = Vector3(10, 8.70264, 2.5)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_iqfm0"]
 height = 15.0
+radius = 10.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_mwnvi"]
+height = 12.0
 radius = 10.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bam1r"]
@@ -234,9 +238,8 @@ shape = SubResource("BoxShape3D_mwnvi")
 [node name="Jump" type="Node3D" parent="Triggers/Jumps/Rukh1Jump1Trigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -7.99976, 1.19995)
 script = ExtResource("30_cwr62")
-jumpHeight = 10.0
+jumpHeight = 2.0
 autoAlign = true
-forceConsistentHeight = true
 
 [node name="Path" type="Node3D" parent="Triggers/Jumps/Rukh1Jump1Trigger" node_paths=PackedStringArray("path")]
 script = ExtResource("33_cwr62")
@@ -359,7 +362,7 @@ script = ExtResource("33_3amqa")
 settings = ExtResource("25_k5ypd")
 
 [node name="Tower3Triggers" type="Node3D" parent="Triggers/Camera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 650, -70, -1525)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 650, -71, -1525)
 
 [node name="Entrance" parent="Triggers/Camera/Tower3Triggers" instance=ExtResource("29_flomb")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.332397, 0, 22.14)
@@ -421,7 +424,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17, 0)
 "Exit Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower3Triggers/Layer1"]
-shape = SubResource("CylinderShape3D_iqfm0")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("CylinderShape3D_mwnvi")
 
 [node name="Camera" type="Node3D" parent="Triggers/Camera/Tower3Triggers/Layer1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
