@@ -37,7 +37,7 @@ public partial class JumpCarpet : Launcher
 		animator.Play("launch");
 		animator.Seek(0.0);
 
-		launchRatio = ratioIncrement * currentBounceCount;
+		LaunchRatio = ratioIncrement * currentBounceCount;
 		base.Activate(a);
 
 		// Increment bounce counter
@@ -45,13 +45,13 @@ public partial class JumpCarpet : Launcher
 		if (currentBounceCount >= maxBounceCount)
 		{
 			currentBounceCount = maxBounceCount;
-			launchRatio = 1;
+			LaunchRatio = 1;
 		}
 	}
 
 	private void Reset()
 	{
-		launchRatio = 0;
+		LaunchRatio = 0;
 		currentBounceCount = 0;
 	}
 }

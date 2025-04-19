@@ -84,8 +84,8 @@ public partial class IvyState : PlayerState
 		if (Trigger.IsSleeping)
 			return InitialSwingStrength;
 
-		if (Trigger.LaunchRatio >= 0)
-			return AdditionalSwingStrength * (1f - Trigger.LaunchRatio);
+		if (Trigger.IvyRatio >= 0)
+			return AdditionalSwingStrength * (1f - Trigger.IvyRatio);
 
 		return AdditionalSwingStrength;
 	}
@@ -93,7 +93,7 @@ public partial class IvyState : PlayerState
 
 	private void CalculateAnimationBlend()
 	{
-		float targetAnimationBlend = (1f - (Trigger.GetLaunchRatio() * 2)) * Mathf.Abs(Trigger.LaunchRatio);
+		float targetAnimationBlend = (1f - (Trigger.GetLaunchRatio() * 2)) * Mathf.Abs(Trigger.IvyRatio);
 		currentAnimationBlend = ExtensionMethods.SmoothDamp(currentAnimationBlend, targetAnimationBlend, ref animationBlendVelocity, animationBlendSmoothing);
 	}
 }
