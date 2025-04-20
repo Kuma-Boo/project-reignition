@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://djirww1p1qtu2"]
+[gd_scene load_steps=71 format=3 uid="uid://djirww1p1qtu2"]
 
 [ext_resource type="PackedScene" uid="uid://bpxj0juyhbmxs" path="res://area/4 levitated ruin/act 2/Static.tscn" id="1_ox5ni"]
 [ext_resource type="Resource" uid="uid://xi0dj64h1rxj" path="res://resource/level data/levitated ruin/Act2Cage.tres" id="2_gm4t4"]
@@ -38,7 +38,6 @@
 [ext_resource type="PackedScene" uid="uid://bpuen1pddy3ps" path="res://area/4 levitated ruin/object/model/foothold/FootholdLeft.gltf" id="20_wxrhk"]
 [ext_resource type="Resource" uid="uid://npcok2qfnco4" path="res://area/4 levitated ruin/act 2/camera/Rukh3Cam.tres" id="22_hvimn"]
 [ext_resource type="PackedScene" uid="uid://dj0mvj1132k0a" path="res://area/4 levitated ruin/object/model/foothold/FootholdRight.gltf" id="22_s5d0m"]
-[ext_resource type="Resource" uid="uid://bxs7ldg3u2r2m" path="res://area/4 levitated ruin/act 2/camera/Zipline2EndCam.tres" id="23_c226m"]
 [ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="24_7f5hg"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="27_vns5j"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="28_a4ysn"]
@@ -385,6 +384,7 @@ OneShot = true
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Ziplines/Zipline1/Start"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 shape = SubResource("BoxShape3D_q3nif")
+disabled = true
 
 [node name="Jump" type="Node3D" parent="CageAct/Ziplines/Zipline1/Start"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 4.2, -0.300049)
@@ -523,9 +523,10 @@ script = ExtResource("8_mxhyu")
 path = NodePath("../../../../../Static/Paths/Rukh3")
 
 [node name="Camera" type="Node3D" parent="CageAct/Ziplines/Zipline2/End"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000120163, -2, -23.9999)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.00012, -4, 14.5001)
 script = ExtResource("27_vns5j")
-settings = ExtResource("23_c226m")
+transitionType = 1
+settings = ExtResource("28_a4ysn")
 
 [node name="Zipline3" type="Path3D" parent="CageAct/Ziplines"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242.835, -1.45, -1367.82)
@@ -814,7 +815,7 @@ Movement/Angle = 180.0
 "Vertical Orientation" = false
 
 [node name="GreenMajin" parent="CageAct/Zipline1/MajinMover2" instance=ExtResource("7_nggpy")]
-transform = Transform3D(1.00002, 0, -2.23517e-07, 0, 1, 0, 2.23517e-07, 0, 1.00002, 0, 0, 9.99988)
+transform = Transform3D(1.00002, 0, -2.38419e-07, 0, 1, 0, 2.38419e-07, 0, 1.00002, 0, 0, 9.99988)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(-20, 0, 0)
@@ -1660,7 +1661,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="CageAct/Tower3/Exterior/MovingMajin1" instance=ExtResource("50_kuvve")]
-transform = Transform3D(1, -5.00586e-09, 0, 0, 0.999986, -3.98606e-07, 0, 5.58794e-08, 1, 0, 0, -20.635)
+transform = Transform3D(1, -3.95812e-09, 0, 0, 0.999984, -4.56348e-07, 0, 1.50874e-07, 1, 6.10352e-05, -7.62939e-06, -20.6349)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
@@ -1684,7 +1685,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="CageAct/Tower3/Exterior/MovingMajin2" instance=ExtResource("50_kuvve")]
-transform = Transform3D(1, -1.52504e-08, 1.19209e-07, -1.30385e-08, 1.00001, -2.79397e-07, 6.85453e-07, 9.87202e-08, 1.00001, 0, 7.62939e-06, -17.5)
+transform = Transform3D(1, -1.87429e-08, -1.11759e-07, -1.66474e-08, 1.00001, -3.37139e-07, 6.85453e-07, 1.08033e-07, 1.00001, 0, -7.62939e-06, -17.5)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
@@ -1827,23 +1828,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.53607, 22.7, 0.153564)
 transform = Transform3D(0.891007, 0, 0.453991, 0, 1, 0, -0.453991, 0, 0.891007, 0, 0, 0)
 Length = 8
 MaxRotation = 30.0
-"Secondary Settings/Middle Height" = 3.0
-"Secondary Settings/Final Height" = 1.5
+"Secondary Settings/Middle Height" = 2.0
+"Secondary Settings/Final Height" = 2.0
+"Secondary Settings/Distance" = 3.0
 
 [node name="Ivy2" parent="CageAct/Tower3/IvyGroup1" instance=ExtResource("52_gy57v")]
 transform = Transform3D(0.139173, 0, 0.990268, 0, 1, 0, -0.990268, 0, 0.139173, 3.09766, 0, 6.30481)
 Length = 7
 MaxRotation = 30.0
-"Secondary Settings/Middle Height" = 2.0
-"Secondary Settings/Final Height" = 0.5
-"Secondary Settings/Distance" = 4.5
+"Secondary Settings/Middle Height" = 1.0
+"Secondary Settings/Final Height" = 1.0
+"Secondary Settings/Distance" = 3.0
 
 [node name="Ivy3" parent="CageAct/Tower3/IvyGroup1" instance=ExtResource("52_gy57v")]
 transform = Transform3D(-0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, -0.642788, 9.28668, 0, 7.18994)
 Length = 6
 MaxRotation = 30.0
-"Secondary Settings/Middle Height" = 2.0
-"Secondary Settings/Final Height" = 1.0
+"Secondary Settings/Middle Height" = 0.5
+"Secondary Settings/Final Height" = 0.0
 "Secondary Settings/Distance" = 3.0
 
 [node name="StaticGate3" parent="CageAct/Tower3" instance=ExtResource("11_t2qcg")]
@@ -1889,22 +1891,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.79999, 30.7, -5)
 [node name="Ivy1" parent="CageAct/Tower3/IvyGroup2" instance=ExtResource("52_gy57v")]
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 0, 0, 0)
 Length = 7
-"Secondary Settings/Middle Height" = 2.0
-"Secondary Settings/Final Height" = 1.0
+"Secondary Settings/Middle Height" = 1.0
+"Secondary Settings/Final Height" = 0.5
 "Secondary Settings/Distance" = 2.0
 
 [node name="GreenMajin1" parent="CageAct/Tower3/IvyGroup2" instance=ExtResource("7_nggpy")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7, -9, -2)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6, -8, -2)
 rangeOverride = 10
 
 [node name="GreenMajin2" parent="CageAct/Tower3/IvyGroup2" instance=ExtResource("7_nggpy")]
-transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, -10.1107, -8, -1.12783)
+transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, -9.17101, -7, -1.46985)
 rangeOverride = 10
 
 [node name="Ivy2" parent="CageAct/Tower3/IvyGroup2" instance=ExtResource("52_gy57v")]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -11.6393, 0, 0.146613)
 Length = 6
-"Secondary Settings/Final Height" = 2.0
+"Secondary Settings/Middle Height" = 1.0
+"Secondary Settings/Final Height" = 0.0
 "Secondary Settings/Distance" = 4.0
 
 [node name="SpikePanelGroup1" type="Node3D" parent="CageAct/Tower3"]
@@ -1959,16 +1962,22 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 32,
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 0, -0.5, 0)
 Length = 6
 MaxRotation = 50.0
+"Secondary Settings/Middle Height" = 5.0
+"Secondary Settings/Final Height" = 4.0
 
 [node name="Ivy2" parent="CageAct/Tower3/IvyGroup3" instance=ExtResource("52_gy57v")]
 transform = Transform3D(-0.765706, -0.029736, 0.642503, -0.0227791, 0.999558, 0.019114, -0.642788, 2.59961e-09, -0.766044, -7, 6.7, 4)
-Length = 10
-"Secondary Settings/Distance" = 1.0
+Length = 9
+"Secondary Settings/Middle Height" = 2.0
+"Secondary Settings/Final Height" = 1.0
+"Secondary Settings/Distance" = 3.0
 
 [node name="Ivy3" parent="CageAct/Tower3/IvyGroup3" instance=ExtResource("52_gy57v")]
-transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, -3.8, 6.7, 0.5)
+transform = Transform3D(0.819152, 0, -0.573577, 0, 1, 0, 0.573577, 0, 0.819152, -3.8, 6.7, 0.5)
 Length = 6
-MaxRotation = 50.0
+MaxRotation = 30.0
+"Secondary Settings/Middle Height" = 1.5
+"Secondary Settings/Final Height" = 1.0
 
 [node name="TowerPlatform2" parent="CageAct/Tower3/IvyGroup3" instance=ExtResource("39_qgsj1")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -8, 7.5, 7.80005)
@@ -1977,8 +1986,8 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -8, 7.
 transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, -7.61698, 6.9, 9.67861)
 Length = 6
 MaxRotation = 30.0
-"Secondary Settings/Middle Height" = 2.0
-"Secondary Settings/Final Height" = 1.0
+"Secondary Settings/Middle Height" = 0.5
+"Secondary Settings/Final Height" = 0.0
 "Secondary Settings/Distance" = 3.0
 
 [node name="SpikePanelGroup2" type="Node3D" parent="CageAct/Tower3"]
@@ -2041,15 +2050,19 @@ transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.9, 0, 7.5)
 
 [node name="Ivy1" parent="CageAct/Tower3/IvyGroup4" instance=ExtResource("52_gy57v")]
-transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, 1.5, -0.6, -2.18557e-08)
+transform = Transform3D(0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, 0.34202, 1.5, -0.6, -2.18557e-08)
 Length = 6
-"Secondary Settings/Middle Height" = 3.0
-"Secondary Settings/Final Height" = 2.0
+MaxRotation = 40.0
+"Secondary Settings/Middle Height" = 2.0
+"Secondary Settings/Final Height" = 1.0
 "Secondary Settings/Distance" = 6.0
 
 [node name="Ivy2" parent="CageAct/Tower3/IvyGroup4" instance=ExtResource("52_gy57v")]
-transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, -7.58293, -0.6, 6.27765)
+transform = Transform3D(-0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, -0.819152, -7.58293, -0.6, 6.27765)
 Length = 7
+MaxRotation = 40.0
+"Secondary Settings/Middle Height" = 1.0
+"Secondary Settings/Final Height" = 0.0
 
 [node name="Switch" parent="CageAct/Tower3/IvyGroup4" instance=ExtResource("18_m6eo3")]
 transform = Transform3D(-4.37114e-08, 1, -5.96046e-08, -1, -4.37114e-08, -9.47312e-16, -3.55271e-15, 5.96046e-08, 1, -9.07068, -6, 7.7848)
@@ -2064,7 +2077,6 @@ sfxPlayer = NodePath("../Spring/SFX")
 
 [node name="Camera" type="Node3D" parent="CageAct/Tower3/Spring2"]
 script = ExtResource("27_vns5j")
-transitionTime = 1.0
 settings = ExtResource("28_ocnes")
 
 [node name="CameraTrigger" parent="CageAct/Tower3" instance=ExtResource("6_f8ouc")]

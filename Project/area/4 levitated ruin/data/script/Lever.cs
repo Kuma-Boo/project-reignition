@@ -12,7 +12,7 @@ public partial class Lever : Node3D
 	[Export] public bool IsRightLever { get; private set; }
 	[Export(PropertyHint.NodeType, "EventTrigger")] private NodePath root;
 	private EventTrigger _root;
-	public Vector3 TargetStandingPosition => GlobalPosition + this.Forward() * (IsRightLever ? -0.25f : 0.25f);
+	public Vector3 TargetStandingPosition => GlobalPosition + this.Forward() * -0.25f;
 
 	[ExportToolButton("Update Lever")]
 	public Callable EditorUpdateLever => Callable.From(UpdateLever);
