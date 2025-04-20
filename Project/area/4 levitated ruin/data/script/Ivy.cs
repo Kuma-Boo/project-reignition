@@ -8,11 +8,13 @@ namespace Project.Gameplay.Objects;
 public partial class Ivy : Launcher
 {
 	[Signal] public delegate void IvyStartedEventHandler();
+	private Callable ClearReversePathCallable => new(this, MethodName.ClearReversePath);
 
 	[ExportGroup("Settings")]
 	[Export(PropertyHint.Range, "2, 50")] public int Length { get; private set; }
 	[Export] private float MaxRotation { get; set; }
 	private float IndividualRotation => MaxRotation / Length;
+	[Export] private bool ReversePathTemporarily { get; set; }
 
 	[Export] public bool IsSleeping { get; private set; }
 	[Export(PropertyHint.Range, "-1,1")]
@@ -122,13 +124,40 @@ public partial class Ivy : Launcher
 	{
 		Player.Effect.StartSpinFX();
 		Player.Animator.StartSpin(3.0f);
+
+		// Update direction
+		Player.PathFollower.SetActivePath(Player.PathFollower.ActivePath, ReversePathTemporarily);
+
+		if (ReversePathTemporarily &&
+			!Player.IsConnected(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable))
+		{
+			// Connect signal so we can reset when we land
+			Player.Connect(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable);
+		}
+	}
+
+	public void UnlinkReversePath()
+	{
+		if (Player.IsConnected(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable))
+			Player.Disconnect(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable);
+	}
+
+	public void ClearReversePath()
+	{
+		if (!Player.PathFollower.IsReversingPath)
+			return;
+
+		// Revert to the correct path direction
+		Player.PathFollower.SetActivePath(Player.PathFollower.ActivePath, false);
+		if (Player.IsOnGround) // Play turnaround animation if we're on the ground
+			Player.CallDeferred(PlayerController.MethodName.StartReversePath);
 	}
 
 	/// <summary> Adds some force from the player. </summary>
-	public void AddImpulseForce(float amount)
+	public void AddImpulseForce(float amount, bool isEntryForce = false)
 	{
-		targetImpulse = Mathf.Clamp(targetImpulse + amount, 0f, 1f);
 		IsSleeping = false;
+		targetImpulse = Mathf.Clamp(targetImpulse + amount, 0f, 1f);
 	}
 
 	public void AddGravity()

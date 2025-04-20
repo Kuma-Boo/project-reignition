@@ -134,6 +134,8 @@ public partial class PlayerController : CharacterBody3D
 	}
 
 	#region Physics
+	[Signal]
+	public delegate void LandedOnGroundEventHandler();
 	/// <summary> Size to use for collision checks. </summary>
 	[ExportGroup("Physics")]
 	[Export]
@@ -166,6 +168,7 @@ public partial class PlayerController : CharacterBody3D
 			{
 				UpDirection = groundHit.normal;
 				IsOnGround = true;
+				EmitSignal(SignalName.LandedOnGround);
 			}
 
 			float snapDistance = groundHit.distance - CollisionSize.Y;

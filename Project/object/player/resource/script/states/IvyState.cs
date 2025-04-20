@@ -34,7 +34,7 @@ public partial class IvyState : PlayerState
 		else
 			initialForce = HighSpeedSwingStrength * (Player.MoveSpeed / Player.Stats.baseGroundSpeed);
 
-		Trigger.AddImpulseForce(initialForce);
+		Trigger.AddImpulseForce(initialForce, true);
 
 		Player.MoveSpeed = 0;
 		Player.StartExternal(Trigger, Trigger.LaunchPoint, 0.2f);
@@ -51,6 +51,8 @@ public partial class IvyState : PlayerState
 	{
 		Player.StopExternal();
 		HeadsUpDisplay.Instance.HidePrompts();
+		Trigger.UnlinkReversePath(); // Clear any reverse paths
+		Trigger = null;
 	}
 
 	public override PlayerState ProcessPhysics()
