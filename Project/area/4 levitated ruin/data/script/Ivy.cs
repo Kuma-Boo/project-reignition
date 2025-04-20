@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Godot.Collections;
 using Project.Core;
@@ -156,8 +157,15 @@ public partial class Ivy : Launcher
 	/// <summary> Adds some force from the player. </summary>
 	public void AddImpulseForce(float amount, bool isEntryForce = false)
 	{
+		if (isEntryForce)
+		{
+			float forwardAngle = ExtensionMethods.CalculateForwardAngle(this.Forward());
+			if (ExtensionMethods.DeltaAngleRad(Player.MovementAngle, forwardAngle) >= Mathf.Pi * 0.5f)
+				amount *= -1;
+		}
+
 		IsSleeping = false;
-		targetImpulse = Mathf.Clamp(targetImpulse + amount, 0f, 1f);
+		targetImpulse = Mathf.Min(targetImpulse + amount, 1f);
 	}
 
 	public void AddGravity()
@@ -187,11 +195,12 @@ public partial class Ivy : Launcher
 		impulseVelocity = Mathf.MoveToward(impulseVelocity, targetImpulse, ImpulseAcceleration * PhysicsManager.physicsDelta);
 
 		rotationVelocity += impulseVelocity; // Add impulse velocity
+		GD.PrintT(impulseVelocity, rotationVelocity);
 		AddGravity();
 
 		float rotationClampAmount = Mathf.Clamp(1f - Mathf.Abs(IvyRatio), 0f, 1f);
-		if (Mathf.Sign(IvyRatio) == Mathf.Sign(rotationVelocity))
-			rotationVelocity = Mathf.Min(rotationVelocity, MaxRotationSpeed * rotationClampAmount / lengthInfluence);
+		float velocityClamp = MaxRotationSpeed * rotationClampAmount / lengthInfluence;
+		rotationVelocity = Mathf.Clamp(rotationVelocity, -velocityClamp, velocityClamp);
 
 		float targetRatio = IvyRatio + (rotationVelocity * lengthInfluence * PhysicsManager.physicsDelta);
 		IvyRatio = Mathf.Clamp(targetRatio, -1f, 1f);
