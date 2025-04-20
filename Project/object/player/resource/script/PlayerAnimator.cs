@@ -194,6 +194,7 @@ public partial class PlayerAnimator : Node3D
 		DisabledSpeedSmoothing = true;
 		animationTree.Set(GroundSeek, 0);
 		animationTree.Set(LandTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(ReversePathTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(CrouchTransition, DisabledConstant);
 	}
 

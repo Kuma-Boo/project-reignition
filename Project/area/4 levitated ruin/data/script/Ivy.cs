@@ -195,7 +195,6 @@ public partial class Ivy : Launcher
 		impulseVelocity = Mathf.MoveToward(impulseVelocity, targetImpulse, ImpulseAcceleration * PhysicsManager.physicsDelta);
 
 		rotationVelocity += impulseVelocity; // Add impulse velocity
-		GD.PrintT(impulseVelocity, rotationVelocity);
 		AddGravity();
 
 		float rotationClampAmount = Mathf.Clamp(1f - Mathf.Abs(IvyRatio), 0f, 1f);
