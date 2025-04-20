@@ -7,14 +7,18 @@ public partial class ZiplineState : PlayerState
 {
 	public Zipline Trigger { get; set; }
 
+	private float damageLockout;
 	private float animationVelocity;
 	private readonly float AnimationSmoothing = 2f;
+	private readonly float DamageLockoutLength = 0.5f;
 
 	public override void EnterState()
 	{
+		damageLockout = 0;
 		Player.Animator.StartZipline();
 		Player.Animator.SetZiplineBlend(0f);
 		Player.StartExternal(Trigger, Trigger.FollowObject, .5f);
+		Player.Knockback += OnPlayerDamaged;
 	}
 
 	public override void ExitState()
@@ -22,13 +26,15 @@ public partial class ZiplineState : PlayerState
 		Player.StopExternal();
 		Trigger.StopZipline();
 		Trigger = null;
+		Player.Knockback -= OnPlayerDamaged;
 	}
 
 	public override PlayerState ProcessPhysics()
 	{
-		// TODO Have the controller take the camera into account?
-		float input = Player.Controller.InputHorizontal;
+		damageLockout = Mathf.MoveToward(damageLockout, 0, PhysicsManager.physicsDelta);
+		float input = Mathf.IsZeroApprox(damageLockout) ? Player.Controller.InputAxis.X : 0;
 		Trigger.SetInput(input);
+		Trigger.SetSpeed(Trigger.ZiplineSpeed);
 		Trigger.ProcessZipline();
 
 		float animationBlend = Player.Animator.GetZiplineBlend();
@@ -37,5 +43,28 @@ public partial class ZiplineState : PlayerState
 
 		Player.UpdateExternalControl(false);
 		return null;
+	}
+
+	private void OnPlayerDamaged()
+	{
+		if (Player.IsDefeated || Player.IsInvincible) return;
+
+		if (StageSettings.Instance.CurrentRingCount == 0)
+		{
+			Player.Knockback -= OnPlayerDamaged;
+			Player.StartKnockback(new()
+			{
+				ignoreMovementState = true
+			});
+			return;
+		}
+
+		damageLockout = DamageLockoutLength;
+
+		Player.TakeDamage();
+		Player.StartInvincibility();
+		Player.Camera.StartMediumCameraShake();
+
+		Trigger.SetSpeed(0, true); // Kill speed
 	}
 }

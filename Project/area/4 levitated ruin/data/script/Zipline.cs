@@ -9,8 +9,18 @@ public partial class Zipline : PathFollow3D
 	[Signal]
 	public delegate void ActivatedEventHandler();
 
-	[Export] private float ziplineSpeed = 10.0f;
-	private float currentSpeed;
+	[Export] public float ZiplineSpeed { get; private set; }
+	public float CurrentSpeed { get; private set; }
+	public void SetSpeed(float targetSpeed, bool snapSpeed = false)
+	{
+		if (snapSpeed)
+		{
+			CurrentSpeed = targetSpeed;
+			return;
+		}
+
+		CurrentSpeed = Mathf.MoveToward(CurrentSpeed, targetSpeed, NaturalAcceleration * PhysicsManager.physicsDelta);
+	}
 
 	private float startingProgress;
 
@@ -24,6 +34,7 @@ public partial class Zipline : PathFollow3D
 	private readonly float SlowRotationSmoothing = 20.0f;
 	private readonly float NormalRotationLimit = Mathf.Pi * .4f;
 	private readonly float ReverseSwingRotationLimit = Mathf.Pi * .8f;
+	private readonly float NaturalAcceleration = 10.0f;
 
 	private float inputValue;
 	private bool isDoubleTapping;
@@ -52,16 +63,15 @@ public partial class Zipline : PathFollow3D
 
 	public override void _PhysicsProcess(double _delta)
 	{
-		// Attempts to reset rotation, then disables zipline node
 		if (StageSettings.Player.IsZiplineActive)
 			return;
 
-		currentSpeed = Mathf.Lerp(currentSpeed, 0, .1f);
+		// Attempts to reset rotation, then disables zipline node
+		CurrentSpeed = Mathf.MoveToward(CurrentSpeed, 0, NaturalAcceleration * PhysicsManager.physicsDelta);
 		ProcessZipline();
 
-		if (Mathf.Abs(currentRotation) < Mathf.Pi * .01f)
+		if (Mathf.Abs(currentRotation) < Mathf.Pi * .01f && Mathf.IsZeroApprox(CurrentSpeed))
 		{
-			currentSpeed = 0;
 			currentRotation = 0;
 			Root.Rotation = Vector3.Forward * currentRotation;
 			ProcessMode = ProcessModeEnum.Disabled;
@@ -72,6 +82,7 @@ public partial class Zipline : PathFollow3D
 	{
 		Progress = startingProgress;
 		Root.Rotation = Vector3.Zero;
+		CurrentSpeed = 0;
 		currentRotation = targetRotation = 0;
 		rotationVelocity = rotationSmoothing = 0;
 		isFullSwingActive = false;
@@ -80,7 +91,7 @@ public partial class Zipline : PathFollow3D
 
 	public void ProcessZipline()
 	{
-		Progress += currentSpeed * PhysicsManager.physicsDelta; // Move forward
+		Progress += CurrentSpeed * PhysicsManager.physicsDelta; // Move forward
 		ProcessRotation();
 	}
 
@@ -198,7 +209,7 @@ public partial class Zipline : PathFollow3D
 
 		StageSettings.Player.StartZipline(this);
 
-		currentSpeed = ziplineSpeed;
+		SetSpeed(ZiplineSpeed, true);
 		ProcessMode = ProcessModeEnum.Inherit;
 		Collider.Disabled = true;
 		SparkFX.Emitting = true;
