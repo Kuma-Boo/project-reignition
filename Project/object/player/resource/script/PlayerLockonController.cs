@@ -61,10 +61,7 @@ public partial class PlayerLockonController : Node3D
 	public void PlayPerfectStrike() => lockonAnimator.Play("perfect-strike");
 	public Vector3 HomingAttackDirection => Target != null ? (Target.GlobalPosition - GlobalPosition).Normalized() : this.Forward();
 
-	public override void _Ready()
-	{
-		IsReticleVisible = !DebugManager.Instance.DisableReticle;
-	}
+	public override void _Ready() => IsReticleVisible = !DebugManager.Instance.DisableReticle;
 
 	public void ProcessPhysics()
 	{
@@ -119,7 +116,7 @@ public partial class PlayerLockonController : Node3D
 			if (potentialState != TargetState.Valid && potentialState != TargetState.LowPriority)
 				continue;
 
-			float potentialDistance = potentialTargets[i].GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
+			float potentialDistance = potentialTargets[i].GlobalPosition.DistanceSquaredTo(Player.GlobalPosition);
 			if (activeTarget != null)
 			{
 				bool prioritizeActiveTarget = activeState == TargetState.Valid || potentialState == TargetState.LowPriority;
