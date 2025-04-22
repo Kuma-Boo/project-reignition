@@ -1,4 +1,3 @@
-using Godot;
 using Project.Gameplay.Objects;
 
 namespace Project.Gameplay;
@@ -12,6 +11,7 @@ public partial class LeverState : PlayerState
 	{
 		isTurningLever = false;
 		Player.Animator.StartLever(Trigger.IsRightLever);
+		Player.GlobalPosition = Trigger.TargetStandingPosition;
 	}
 
 	public override PlayerState ProcessPhysics()
