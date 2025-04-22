@@ -51,6 +51,17 @@ public partial class SpecialBook : Menu
     [Export]
     private TextureRect fullImage;
 
+    [Export]
+    private AnimationPlayer animatorNav;
+    [Export]
+    private AnimationPlayer animatorRandom;
+
+    private Godot.Collections.Array randomPages;
+
+    private bool playRandom;
+    private int seekRandom;
+
+
 
 
 
@@ -59,6 +70,8 @@ public partial class SpecialBook : Menu
         chapterSelection = 0;
         pageSelection = 0;
         menuFocus = 0;
+        playRandom = false;
+        seekRandom = 0;
 
 
         GD.Print("Length: " + tabs.Length);
@@ -75,7 +88,7 @@ public partial class SpecialBook : Menu
 
 
 
-        //UnlockAll();
+        UnlockAll();
     }
 
     protected override void ProcessMenu()
@@ -110,6 +123,19 @@ public partial class SpecialBook : Menu
                 LoadChapter(chapters[chapterSelection].pages);
                 LoadPage(GetPage(chapterSelection, pageSelection));
             }
+
+            if (Input.IsActionJustPressed("button_pause"))
+            {
+                RandomizeList();
+                playRandom = true;
+                seekRandom = 0;
+                menuFocus = 3;
+                randomPages.Shuffle();
+                animator.Play("show_playrandom");
+                animatorRandom.Play("playrandom");
+                animatorRandom.Seek(0.0);
+
+            }
         }
 
 
@@ -122,8 +148,19 @@ public partial class SpecialBook : Menu
         //BUG: Only dpad seems to work, stick doesn't
         Vector2 input = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
 
+
+
         if (input == Vector2.Zero)
             return;
+        else
+        {
+            if (menuFocus == 3 && !playRandom)
+            {
+                animatorNav.Play("hide_navbuttons");//Hides the nav buttons after 5 seconds of inactivity
+                animatorNav.Seek(0.0);
+            }
+
+        }
 
         StartSelectionTimer();
 
@@ -135,6 +172,11 @@ public partial class SpecialBook : Menu
     {
         BookPage thisPage = GetPage(chapterSelection, pageSelection);
 
+        if (menuFocus == 0)
+        {
+            MenuControls(new Vector2(0, 1));
+            return;
+        }
         if (menuFocus == 1)
         {
             if (GetPage(chapterSelection, pageSelection).unlocked)
@@ -153,6 +195,8 @@ public partial class SpecialBook : Menu
                 {
                     animator.Play("show_fullimage");
                     menuFocus = 3;
+                    animatorNav.Play("hide_navbuttons");
+                    animatorNav.Seek(0.0);
                     StartSelectionTimer();
                 }
 
@@ -188,8 +232,21 @@ public partial class SpecialBook : Menu
 
         if (menuFocus == 3)
         {
-            animator.Play("hide_fullimage");
-            menuFocus = 2;
+            if (!playRandom)
+            {
+                animator.Play("hide_fullimage");
+                menuFocus = 2;
+            }
+            else
+            {
+                animator.Play("hide_playrandom");
+                animatorRandom.Stop();
+                menuFocus = 1;
+                playRandom = false;
+                tabs[chapterSelection].Deselect_NoGlow();
+                windows[pageSelection].Select();
+            }
+
         }
     }
 
@@ -201,6 +258,9 @@ public partial class SpecialBook : Menu
         chapterSelection = 0;
         pageSelection = 0;
         menuFocus = 0;
+        playRandom = false;
+
+
 
         base.ShowMenu();
     }
@@ -265,7 +325,7 @@ public partial class SpecialBook : Menu
                     return;
                 }
 
-                pageSelection = WrapSelection(pageSelection + (5 * (int)input.Y), 14, pageSelection - 10);
+                pageSelection = WrapSelection(pageSelection + (5 * (int)input.Y), 14, pageSelection - 10); //Wraps the selection vertically
                 windows[pageSelection].Select();
                 LoadPage(GetPage(chapterSelection, pageSelection));
                 return;
@@ -275,7 +335,7 @@ public partial class SpecialBook : Menu
         }
         else if (menuFocus == 2 || menuFocus == 3)
         {
-            if (input.X != 0)
+            if (input.X != 0 && !playRandom)
             {
                 windows[pageSelection].Deselect();
 
@@ -303,6 +363,30 @@ public partial class SpecialBook : Menu
         }
     }
 
+    public void PlayRandomPage()
+    {
+
+        do
+        {
+            seekRandom = WrapSelection(seekRandom + 1, randomPages.Count);
+        } while (!IsValid((BookPage)randomPages[seekRandom]));
+
+        LoadPage((BookPage)randomPages[seekRandom]);
+
+    }
+
+    private void RandomizeList()
+    {
+        randomPages = new Godot.Collections.Array();
+        for (int i = 0; i < 2; i++)
+        {
+            for (int j = 0; j < 15; j++)
+            {
+                GD.Print("Adding Page [" + i + "," + j + "]");
+                randomPages.Add(GetPage(i, j));
+            }
+        }
+    }
 
     private bool IsValid(BookPage page)//Checks if we can view the page
     {
@@ -313,11 +397,12 @@ public partial class SpecialBook : Menu
         }
         else if (menuFocus == 3)
         {
-            if (page.unlocked || page.videoFilePath != null || page.track != null)
+            if (page.unlocked || (page.videoFilePath != "" && page.track != null)) //If this is an image, then we can view it
                 return true;
         }
         return false;
     }
+
 
 
     private BookPage[] GetChapter(int chapter)
@@ -331,7 +416,7 @@ public partial class SpecialBook : Menu
 
     private void LoadChapter(BookPage[] chapter)
     {
-        chapterLabel.Text = "spb_chapter " + (chapterSelection + 1);
+        chapterLabel.Text = Tr("spb_chapter") + " " + (chapterSelection + 1);
         GD.Print(chapterLabel.Text);
 
         chapterName.Text = "[" + Tr("spb_chapter_" + tabs[chapterSelection].thisChapterType.ToString().ToLower()) + "]";

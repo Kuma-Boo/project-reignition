@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://cfxpl43xw0rn6"]
+[gd_scene load_steps=54 format=3 uid="uid://cfxpl43xw0rn6"]
 
 [ext_resource type="Script" uid="uid://cvy63h3pgw1qv" path="res://interface/menu/special book/SpecialBook.cs" id="1_b5eh1"]
 [ext_resource type="Resource" uid="uid://c8780f2wj6f5c" path="res://interface/menu/special book/bookpages/Chapters/Chapter1.tres" id="2_6b0v7"]
@@ -36,6 +36,7 @@
 [ext_resource type="Texture2D" uid="uid://bfh6vgvpgcx8m" path="res://interface/menu/special book/texture/chapter 2/29Preview.png" id="31_fil6e"]
 [ext_resource type="Texture2D" uid="uid://borcvta166tja" path="res://interface/menu/special book/texture/chapter 1/03.png" id="32_1hqjm"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="35_6o01v"]
+[ext_resource type="AudioStream" uid="uid://bsbrq3tvqb7yu" path="res://sound/ost/treasure disc/7 SHIMMER OF HOT AIR.mp3" id="35_ior2v"]
 
 [sub_resource type="Animation" id="Animation_cyesu"]
 resource_name = "RESET"
@@ -174,7 +175,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("NavigationButtons Full:modulate")
+tracks/11/path = NodePath("Nav Buttons Full:modulate")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -182,6 +183,102 @@ tracks/11/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ior2v"]
+resource_name = "hide"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("book:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("book:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.733333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.86667, 1.13334),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"StopBGM"
+}, {
+"args": [],
+"method": &"OpenParentMenu"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("void:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.733333, 1.13333, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Background:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.966667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("void:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("NavigationButtons Main:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.733333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_fil6e"]
@@ -262,6 +359,86 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_6o01v"]
+resource_name = "hide_fullimage"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("book/Preview:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"EnableProcessing"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("book:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Full View:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("NavigationButtons Book:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Nav Buttons Full:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_f7tqs"]
@@ -524,22 +701,133 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("NavigationButtons Full:modulate")
+tracks/5/path = NodePath("Nav Buttons Full:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0.2, 0.4),
+"times": PackedFloat32Array(0.2, 0.433333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_6o01v"]
-resource_name = "hide_fullimage"
+[sub_resource type="Animation" id="Animation_wy6kt"]
+resource_name = "show_playrandom"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("book/Preview:modulate")
+tracks/0/path = NodePath("book/windows:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("book/textbox:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("NavigationButtons Main:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Full View:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("book:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpecialBookBGM")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"stop"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("PlayRandomBGM")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Play"
+}]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [],
+"method": &"DisableProcessing"
+}, {
+"args": [],
+"method": &"PlayRandomPage"
+}, {
+"args": [],
+"method": &"EnableProcessing"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_4b6ew"]
+resource_name = "hide_playrandom"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("book/windows:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -548,31 +836,26 @@ tracks/0/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
-tracks/1/type = "method"
+tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".")
+tracks/1/path = NodePath("book/textbox:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"DisableProcessing"
-}, {
-"args": [],
-"method": &"EnableProcessing"
-}]
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("book:modulate")
+tracks/2/path = NodePath("NavigationButtons Main:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.2, 0.4),
+"times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -592,122 +875,59 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("NavigationButtons Full:modulate")
+tracks/4/path = NodePath("book:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
-tracks/5/type = "value"
+tracks/5/type = "method"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("NavigationButtons Book:modulate")
+tracks/5/path = NodePath("SpecialBookBGM")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0.2, 0.4),
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Play"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("PlayRandomBGM")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"stop"
+}]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_ior2v"]
-resource_name = "hide"
-length = 2.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("book:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"update": 1,
-"values": []
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("book:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.733333),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.86667, 1.13334),
-"transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [],
 "method": &"DisableProcessing"
 }, {
 "args": [],
-"method": &"StopBGM"
-}, {
-"args": [],
-"method": &"OpenParentMenu"
+"method": &"EnableProcessing"
 }]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("void:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.733333, 1.13333, 1.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Background:visible")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0.966667),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("void:visible")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("NavigationButtons Main:modulate")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.733333),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yxyel"]
@@ -716,12 +936,127 @@ _data = {
 &"hide": SubResource("Animation_ior2v"),
 &"hide_description": SubResource("Animation_fil6e"),
 &"hide_fullimage": SubResource("Animation_6o01v"),
+&"hide_playrandom": SubResource("Animation_4b6ew"),
 &"show": SubResource("Animation_f7tqs"),
 &"show_description": SubResource("Animation_sqodb"),
-&"show_fullimage": SubResource("Animation_1hqjm")
+&"show_fullimage": SubResource("Animation_1hqjm"),
+&"show_playrandom": SubResource("Animation_wy6kt")
 }
 
-[node name="SpecialBook" type="Control" node_paths=PackedStringArray("tabs", "windows", "previewImages", "chapterName", "chapterLabel", "textboxTitle", "previewDescription", "previewImage", "previewNumber", "fullImage", "bgm", "animator")]
+[sub_resource type="Animation" id="Animation_wuupq"]
+resource_name = "playrandom"
+length = 8.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Full View/full image:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(7.6, 7.8, 8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(7.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayRandomPage"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_jftlp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Full View/full image:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4b6ew"]
+_data = {
+&"RESET": SubResource("Animation_jftlp"),
+&"playrandom": SubResource("Animation_wuupq")
+}
+
+[sub_resource type="Animation" id="Animation_pk3ru"]
+resource_name = "hide_navbuttons"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Nav Buttons Full/box_middle:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(4.76667, 4.96667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.117647, 0.117647, 0.117647, 0.701961), Color(0.117647, 0.117647, 0.117647, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Nav Buttons Full/NavigationButtons Full:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(4.76667, 4.96667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ildlb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Nav Buttons Full/box_middle:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.117647, 0.117647, 0.117647, 0.701961)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Nav Buttons Full/NavigationButtons Full:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wuupq"]
+_data = {
+&"RESET": SubResource("Animation_ildlb"),
+&"hide_navbuttons": SubResource("Animation_pk3ru")
+}
+
+[node name="SpecialBook" type="Control" node_paths=PackedStringArray("tabs", "windows", "previewImages", "chapterName", "chapterLabel", "textboxTitle", "previewDescription", "previewImage", "previewNumber", "fullImage", "animatorNav", "animatorRandom", "bgm", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -740,6 +1075,8 @@ previewDescription = NodePath("book/Preview/preview description")
 previewImage = NodePath("book/Preview/preview image")
 previewNumber = NodePath("book/Preview/preview number")
 fullImage = NodePath("Full View/full image")
+animatorNav = NodePath("Nav Buttons Full/animator_navbuttons")
+animatorRandom = NodePath("AnimationPlayer_PlayRandom")
 submenus = Array[Object]([])
 bgm = NodePath("SpecialBookBGM")
 animator = NodePath("AnimationPlayer")
@@ -1581,11 +1918,70 @@ libraries = {
 &"": SubResource("AnimationLibrary_yxyel")
 }
 
+[node name="AnimationPlayer_PlayRandom" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_4b6ew")
+}
+
 [node name="SpecialBookBGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_yxyel")
 bus = &"BGM"
 script = ExtResource("11_llt0s")
 loopEndPosition = 199.52
+
+[node name="PlayRandomBGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("35_ior2v")
+bus = &"BGM"
+script = ExtResource("11_llt0s")
+loopEndPosition = 101.64
+
+[node name="Nav Buttons Full" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="box_middle" type="TextureRect" parent="Nav Buttons Full"]
+modulate = Color(0.117647, 0.117647, 0.117647, 0.701961)
+offset_top = 987.0
+offset_right = 31.0
+offset_bottom = 1056.0
+scale = Vector2(61.88, 0.996)
+texture = ExtResource("9_cyesu")
+stretch_mode = 4
+
+[node name="NavigationButtons Full" type="HBoxContainer" parent="Nav Buttons Full"]
+modulate = Color(1, 1, 1, 0)
+z_index = 1
+layout_mode = 0
+offset_left = 461.0
+offset_top = 987.0
+offset_right = 1553.0
+offset_bottom = 1051.0
+scale = Vector2(0.995991, 0.982118)
+theme_override_constants/separation = 64
+alignment = 2
+
+[node name="Previous" parent="Nav Buttons Full/NavigationButtons Full" instance=ExtResource("35_6o01v")]
+layout_mode = 2
+ActionKey = &"spb_controls_previous"
+inputKey = &"move_left"
+
+[node name="Next" parent="Nav Buttons Full/NavigationButtons Full" instance=ExtResource("35_6o01v")]
+layout_mode = 2
+ActionKey = &"spb_controls_next"
+inputKey = &"move_right"
+
+[node name="Back" parent="Nav Buttons Full/NavigationButtons Full" instance=ExtResource("35_6o01v")]
+layout_mode = 2
+ActionKey = &"spb_controls_back"
+inputKey = &"button_action"
+
+[node name="animator_navbuttons" type="AnimationPlayer" parent="Nav Buttons Full"]
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_wuupq")
+}
 
 [node name="NavigationButtons Main" type="HBoxContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -1642,38 +2038,12 @@ inputKey = &"move_right"
 [node name="To Chapter Top" parent="NavigationButtons Book" instance=ExtResource("35_6o01v")]
 layout_mode = 2
 ActionKey = &"spb_controls_tochaptertop"
-inputKey = &"button_jump"
+inputKey = &"button_action"
 
 [node name="Zoom" parent="NavigationButtons Book" instance=ExtResource("35_6o01v")]
 layout_mode = 2
 ActionKey = &"spb_controls_zoom"
-inputKey = &"button_action"
-
-[node name="NavigationButtons Full" type="HBoxContainer" parent="."]
-modulate = Color(1, 1, 1, 0)
-z_index = 1
-layout_mode = 0
-offset_left = 461.0
-offset_top = 987.0
-offset_right = 1553.0
-offset_bottom = 1051.0
-theme_override_constants/separation = 64
-alignment = 2
-
-[node name="Previous" parent="NavigationButtons Full" instance=ExtResource("35_6o01v")]
-layout_mode = 2
-ActionKey = &"spb_controls_previous"
-inputKey = &"move_left"
-
-[node name="Next" parent="NavigationButtons Full" instance=ExtResource("35_6o01v")]
-layout_mode = 2
-ActionKey = &"spb_controls_next"
-inputKey = &"move_right"
-
-[node name="Back" parent="NavigationButtons Full" instance=ExtResource("35_6o01v")]
-layout_mode = 2
-ActionKey = &"spb_controls_back"
-inputKey = &"button_action"
+inputKey = &"button_jump"
 
 [node name="void" type="TextureRect" parent="."]
 visible = false
