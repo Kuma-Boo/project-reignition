@@ -738,6 +738,9 @@ public partial class Majin : Enemy
 		Position = CalculateTravelPosition(currentTravelRatio);
 		ApplyRotation();
 
+		if (Mathf.IsEqualApprox(currentTravelRatio, 1f))
+			return;
+
 		// TODO Update animations
 		Vector3 acceleration = CalculationBasis.Inverse() * CalculateTravelAcceleration(currentTravelRatio).Normalized();
 		Vector2 moveBlend = new(acceleration.X, Mathf.Clamp(velocity.Y, 0, 1));

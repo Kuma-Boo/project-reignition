@@ -232,14 +232,15 @@ transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, 24
 "Enter Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Jumps/Rukh1Jump1Trigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 1)
 shape = SubResource("BoxShape3D_mwnvi")
 
 [node name="Jump" type="Node3D" parent="Triggers/Jumps/Rukh1Jump1Trigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -7.99976, 1.19995)
 script = ExtResource("30_cwr62")
-jumpHeight = 2.0
+jumpHeight = 10.0
 autoAlign = true
+forceConsistentHeight = true
 
 [node name="Path" type="Node3D" parent="Triggers/Jumps/Rukh1Jump1Trigger" node_paths=PackedStringArray("path")]
 script = ExtResource("33_cwr62")
@@ -250,14 +251,15 @@ transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107
 "Enter Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Jumps/Rukh1Jump2Trigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 1)
 shape = SubResource("BoxShape3D_mwnvi")
 
 [node name="Jump" type="Node3D" parent="Triggers/Jumps/Rukh1Jump2Trigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 0.8)
 script = ExtResource("30_cwr62")
-jumpHeight = 2.0
+jumpHeight = 10.0
 autoAlign = true
+forceConsistentHeight = true
 
 [node name="Camera" type="Node3D" parent="Triggers"]
 
@@ -275,6 +277,21 @@ shape = SubResource("CylinderShape3D_k5ypd")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 script = ExtResource("33_3amqa")
 settings = ExtResource("24_mwnvi")
+
+[node name="Tower1LowerSidescrolling" parent="Triggers/Camera" instance=ExtResource("29_flomb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -7, -1375)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower1LowerSidescrolling"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CylinderShape3D_k5ypd")
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/Tower1LowerSidescrolling"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+script = ExtResource("33_3amqa")
+settings = ExtResource("25_k5ypd")
 
 [node name="Tower2Triggers" type="Node3D" parent="Triggers/Camera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 9, -1575)
