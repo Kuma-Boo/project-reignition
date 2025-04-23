@@ -110,7 +110,10 @@ public partial class LaunchState : PlayerState
 		Player.PathFollower.Resync();
 
 		if (heightDelta < 0 && Player.CheckGround()) // Only check ground when falling
+		{
+			Player.MoveSpeed = 0;
 			return landState;
+		}
 
 		if (settings.IsLauncherFinished(launcherTime)) // Revert to normal state
 			return fallState;

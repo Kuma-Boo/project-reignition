@@ -39,6 +39,7 @@ public partial class IvyState : PlayerState
 		Player.MoveSpeed = 0;
 		Player.StartExternal(Trigger, Trigger.LaunchPoint, 0.2f);
 
+		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.Lockon.IsMonitoring = false;
 		Player.Animator.StartIvy();
 
@@ -49,6 +50,7 @@ public partial class IvyState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.Skills.IsSpeedBreakEnabled = true;
 		Player.StopExternal();
 		HeadsUpDisplay.Instance.HidePrompts();
 		Trigger.UnlinkReversePath(); // Clear any reverse paths

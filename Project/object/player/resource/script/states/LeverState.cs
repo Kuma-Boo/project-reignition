@@ -10,8 +10,14 @@ public partial class LeverState : PlayerState
 	public override void EnterState()
 	{
 		isTurningLever = false;
+		Player.Skills.DisableBreakSkills();
 		Player.Animator.StartLever(Trigger.IsRightLever);
 		Player.GlobalPosition = Trigger.TargetStandingPosition;
+	}
+
+	public override void ExitState()
+	{
+		Player.Skills.EnableBreakSkills();
 	}
 
 	public override PlayerState ProcessPhysics()
