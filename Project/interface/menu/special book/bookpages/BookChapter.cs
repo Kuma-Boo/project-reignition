@@ -8,15 +8,12 @@ public partial class BookChapter : Resource
 {
 
     [Export]
-    SpecialBookTab.ChapterType type;
-    [Export]
     public BookPage[] pages;
 
-    public BookChapter() : this(SpecialBookTab.ChapterType.DEV, null) { }
+    public BookChapter() : this(null) { }
 
-    public BookChapter(SpecialBookTab.ChapterType type, BookPage[] pages)
+    public BookChapter(BookPage[] pages)
     {
-        this.type = type;
         this.pages = pages;
     }
 }
