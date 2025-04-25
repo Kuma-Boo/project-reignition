@@ -88,7 +88,7 @@ public partial class SpecialBook : Menu
 
 
 
-        UnlockAll();
+        //UnlockAll();
     }
 
     protected override void ProcessMenu()
@@ -342,18 +342,18 @@ public partial class SpecialBook : Menu
 
                 pageSelection += (int)input.X;
 
-                //do
-                //{
-                if (pageSelection > 14 || pageSelection < 0)
+                do
                 {
-                    tabs[chapterSelection].Deselect();
+                    if (pageSelection > 14 || pageSelection < 0)
+                    {
+                        tabs[chapterSelection].Deselect();
 
-                    pageSelection = WrapSelection(pageSelection, 15);
-                    chapterSelection = WrapSelection(chapterSelection + (int)input.X, 16);
+                        pageSelection = WrapSelection(pageSelection, 15);
+                        chapterSelection = WrapSelection(chapterSelection + (int)input.X, 16);
 
-                    tabs[chapterSelection].Select_NoGlow();
-                }
-                //} while (!IsValid(GetPage(chapterSelection, pageSelection)));//Skips over every page we don't have unlocked. If we're on the full view, skips over movies and music
+                        tabs[chapterSelection].Select_NoGlow();
+                    }
+                } while (!IsValid(GetPage(chapterSelection, pageSelection)));//Skips over every page we don't have unlocked. If we're on the full view, skips over movies and music
 
 
                 windows[pageSelection].Select();
@@ -464,6 +464,8 @@ public partial class SpecialBook : Menu
 
         return "???";
     }
+
+
 
     private void UnlockAll()
     {
