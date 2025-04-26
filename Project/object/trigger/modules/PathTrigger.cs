@@ -18,7 +18,13 @@ public partial class PathTrigger : StageTriggerModule
 	private bool deactivateLimitCameraDistance;
 
 	/// <summary> Should this path be run in reverse? </summary>
-	[Export] public bool reversePath;
+	[Export] public PathMode pathMode;
+	public enum PathMode
+	{
+		Forward,
+		Reverse,
+		Autodetect
+	}
 	/// <summary> Should the path be assigned to the player? </summary>
 	[Export] public bool affectPlayer = true;
 	/// <summary> Should the path be assigned to the camera? </summary>
@@ -30,6 +36,7 @@ public partial class PathTrigger : StageTriggerModule
 
 	public override void Activate()
 	{
+		bool reversePath = IsReversePath();
 		if (affectPlayer)
 		{
 			playerDeactivatePath ??= Player.PathFollower.ActivePath;
@@ -58,7 +65,8 @@ public partial class PathTrigger : StageTriggerModule
 
 	public override void Deactivate()
 	{
-		//Ensure player's path hasn't already been changed
+		bool reversePath = IsReversePath();
+		// Ensure player's path hasn't already been changed
 		if (affectPlayer &&
 			Player.PathFollower.ActivePath == path &&
 			Player.PathFollower.IsReversingPath == reversePath)
@@ -73,5 +81,23 @@ public partial class PathTrigger : StageTriggerModule
 			Player.Camera.PathFollower.SetActivePath(cameraDeactivatePath, cameraPathDeactivateReverse);
 			Player.Camera.LimitToPathDistance = limitCameraDistanceToPath;
 		}
+	}
+
+	private bool IsReversePath()
+	{
+		if (pathMode == PathMode.Forward)
+			return false;
+
+		if (pathMode == PathMode.Reverse)
+			return true;
+
+		// Decide whether this is a reverse path based on the player's forward direction
+		// Figure out the "forward" angle by sampling two nearby points on the curve.
+		float samplePoint = path.Curve.GetClosestOffset(path.GlobalBasis.Inverse() * (Player.GlobalPosition - path.GlobalPosition));
+		float sampleOffsetPoint = samplePoint + path.Curve.BakeInterval * 2f;
+		// Calculate the direction of the path at the player's current position
+		Vector3 dir = path.Curve.SampleBaked(sampleOffsetPoint) - path.Curve.SampleBaked(samplePoint);
+		// Reverse path if the player's current forward direction is different by over 90 degrees
+		return ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(dir), Player.MovementAngle) > Mathf.Pi * .5f;
 	}
 }

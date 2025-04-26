@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=3 uid="uid://djirww1p1qtu2"]
+[gd_scene load_steps=84 format=3 uid="uid://djirww1p1qtu2"]
 
 [ext_resource type="PackedScene" uid="uid://bpxj0juyhbmxs" path="res://area/4 levitated ruin/act 2/Static.tscn" id="1_ox5ni"]
 [ext_resource type="Resource" uid="uid://xi0dj64h1rxj" path="res://resource/level data/levitated ruin/Act2Cage.tres" id="2_gm4t4"]
@@ -63,6 +63,7 @@
 [ext_resource type="Resource" uid="uid://cs5v1y5o1dtag" path="res://area/4 levitated ruin/act 2/camera/Rukh3BackstepCam.tres" id="57_xx2nh"]
 [ext_resource type="PackedScene" uid="uid://cxb1fxhrsja13" path="res://object/stage/common/SpikeBallStatic.tscn" id="58_q5r6l"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="59_tn0r1"]
+[ext_resource type="Resource" uid="uid://bva0csvbiyycl" path="res://area/4 levitated ruin/act 2/camera/LaunchRingShortcutCam.tres" id="60_ljtko"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_gg5un"]
 
@@ -83,7 +84,7 @@ _data = [Vector2(0, 0), 0.0, 2.0, 0, 1, Vector2(0.3, 0.6), 0.0, 0.0, 0, 0, Vecto
 point_count = 5
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_7f5hg"]
-height = 8.0
+height = 6.0
 radius = 10.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5yb3a"]
@@ -330,39 +331,6 @@ InitialCameraSettings = ExtResource("44_g2bsq")
 
 [node name="Triggers" parent="Static" index="4"]
 visible = false
-
-[node name="Tower4SidleTrigger1" parent="Static/Triggers/Sidle" index="4"]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -34.354, -77, -930.499)
-
-[node name="Tower4SidleTrigger2" parent="Static/Triggers/Sidle" index="6"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -32.2327, -69, -925.135)
-
-[node name="CollisionShape3D1" parent="Static/Triggers/Sidle/Tower4SidleTrigger2" index="0"]
-transform = Transform3D(1, 0, 4.37114e-08, 0, 1, 0, -4.37114e-08, 0, 1, 0, 3.5, 0)
-
-[node name="CollisionShape3D3" parent="Static/Triggers/Sidle/Tower4SidleTrigger2" index="1"]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5.36395, 3.5, 2.12132)
-
-[node name="CollisionShape3D2" parent="Static/Triggers/Sidle/Tower4SidleTrigger2" index="2"]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -2.77271, 3.5, 0.207058)
-
-[node name="Tower4SidleTrigger3" parent="Static/Triggers/Sidle" index="7"]
-transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -34.562, -53, -919.847)
-
-[node name="CollisionShape3D1" parent="Static/Triggers/Sidle/Tower4SidleTrigger3" index="0"]
-transform = Transform3D(1, 0, 4.37114e-08, 0, 1, 0, -4.37114e-08, 0, 1, 0, 3.5, 0)
-
-[node name="CollisionShape3D2" parent="Static/Triggers/Sidle/Tower4SidleTrigger3" index="1"]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -2.77264, 3.5, 0.207092)
-
-[node name="CollisionShape3D3" parent="Static/Triggers/Sidle/Tower4SidleTrigger3" index="2"]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5.36395, 3.5, 2.12132)
-
-[node name="CollisionShape3D4" parent="Static/Triggers/Sidle/Tower4SidleTrigger3" index="3"]
-transform = Transform3D(-5.96046e-08, 0, 1, 0, 1, 0, -1, 0, -5.96046e-08, -7.67902, 3.5, 7.38495)
-
-[node name="CollisionShape3D5" parent="Static/Triggers/Sidle/Tower4SidleTrigger3" index="4"]
-transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, -7.20026, 3.5, 4.19904)
 
 [node name="CageAct" type="Node3D" parent="."]
 
@@ -1042,18 +1010,19 @@ script = ExtResource("9_t2qcg")
 lockoutData = ExtResource("10_ib1ve")
 
 [node name="GroundPathTrigger" parent="CageAct/Tower2/Triggers" instance=ExtResource("6_f8ouc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 "Enter Mode" = 0
 
 [node name="GroundPath" type="Node3D" parent="CageAct/Tower2/Triggers/GroundPathTrigger" node_paths=PackedStringArray("path")]
 script = ExtResource("8_mxhyu")
 path = NodePath("../../../../../Static/Paths/Rukh2")
+pathMode = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower2/Triggers/GroundPathTrigger"]
 shape = SubResource("CylinderShape3D_7f5hg")
 
 [node name="Gate1" parent="CageAct/Tower2" instance=ExtResource("11_t2qcg")]
-transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 18)
+transform = Transform3D(1, 0, 0, 0, 1.75, 0, 0, 0, 1, 0, 0, 18)
 respawnAnimation = 2
 activationSpeedScale = 5.0
 
@@ -1064,6 +1033,7 @@ OneShot = true
 
 [node name="Checkpoint" type="Node3D" parent="CageAct/Tower2/GateTrigger"]
 script = ExtResource("13_5yb3a")
+CameraSettings = ExtResource("26_nskpe")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower2/GateTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
@@ -1228,7 +1198,7 @@ transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -3.15045
 transform = Transform3D(1, 0, -1.42109e-14, 0, 1, 0, 7.10543e-15, 0, 1, -3.80057, -0.0561008, 8.95935)
 
 [node name="Gate2" parent="CageAct/Tower2" instance=ExtResource("11_t2qcg")]
-transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, -9.5)
+transform = Transform3D(1, 0, 0, 0, 1.75, 0, 0, 0, 1, 0, 0, -9.5)
 respawnAnimation = 2
 activationSpeedScale = 5.0
 
@@ -1841,7 +1811,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="CageAct/Tower3/Exterior/MovingMajin1" instance=ExtResource("50_kuvve")]
-transform = Transform3D(1, 2.32831e-09, 0, 0, 0.99998, -5.84871e-07, 0, 2.75671e-07, 1, 6.10352e-05, -7.62939e-06, -20.6349)
+transform = Transform3D(1, 6.51926e-09, 0, 0, 0.999979, -6.38887e-07, 0, 3.09199e-07, 1, 6.10352e-05, -7.62939e-06, -20.6349)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
@@ -1865,7 +1835,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="CageAct/Tower3/Exterior/MovingMajin2" instance=ExtResource("50_kuvve")]
-transform = Transform3D(1, -2.52621e-08, -2.23517e-07, -2.468e-08, 1.00001, -4.65661e-07, 6.85453e-07, 2.27243e-07, 1.00001, 0, -7.62939e-06, -17.5)
+transform = Transform3D(1, -2.85218e-08, -2.23517e-07, -2.80561e-08, 1.00001, -5.19678e-07, 6.85453e-07, 2.30968e-07, 1.00001, 0, -7.62939e-06, -17.5)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
@@ -1883,26 +1853,27 @@ path = NodePath("../../../../Static/Paths/Tower3")
 [node name="LoopReversePath" type="Node3D" parent="CageAct/Tower3/Triggers" node_paths=PackedStringArray("path")]
 script = ExtResource("8_mxhyu")
 path = NodePath("../../../../Static/Paths/Tower3")
-reversePath = true
+pathMode = 1
 
 [node name="Lockout" type="Node3D" parent="CageAct/Tower3/Triggers"]
 script = ExtResource("9_t2qcg")
 lockoutData = ExtResource("10_ib1ve")
 
 [node name="GroundPathTrigger" parent="CageAct/Tower3/Triggers" instance=ExtResource("6_f8ouc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 "Enter Mode" = 0
 
 [node name="GroundPath" type="Node3D" parent="CageAct/Tower3/Triggers/GroundPathTrigger" node_paths=PackedStringArray("path")]
 script = ExtResource("8_mxhyu")
 path = NodePath("../../../../../Static/Paths/Rukh3")
+pathMode = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower3/Triggers/GroundPathTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("CylinderShape3D_gg5un")
 
 [node name="Gate1" parent="CageAct/Tower3" instance=ExtResource("11_t2qcg")]
-transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 18)
+transform = Transform3D(1, 0, 0, 0, 1.75, 0, 0, 0, 1, 0, 0, 18)
 respawnAnimation = 2
 activationSpeedScale = 5.0
 
@@ -1913,6 +1884,7 @@ OneShot = true
 
 [node name="Checkpoint" type="Node3D" parent="CageAct/Tower3/GateTrigger"]
 script = ExtResource("13_5yb3a")
+CameraSettings = ExtResource("26_nskpe")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower3/GateTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
@@ -1971,7 +1943,7 @@ FinalHeight = 15.5
 Distance = 5.0
 
 [node name="Gate2" parent="CageAct/Tower3" instance=ExtResource("11_t2qcg")]
-transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, -9.5)
+transform = Transform3D(1, 0, 0, 0, 1.75, 0, 0, 0, 1, 0, 0, -9.5)
 respawnAnimation = 2
 activationSpeedScale = 5.0
 
@@ -2426,7 +2398,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, -4.5)
 
 [node name="Switch" parent="CageAct/Tower4/Exterior" instance=ExtResource("18_m6eo3")]
 transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871557, 0, -0.0871557, 0.996195, 0, 0, 0)
-startActive = true
 
 [node name="Camera" type="Node3D" parent="CageAct/Tower4/Exterior/Switch"]
 script = ExtResource("27_vns5j")
@@ -2450,16 +2421,12 @@ OneShot = true
 "Respawn Mode" = 0
 "Enter Mode" = 0
 
-[node name="Camera" type="Node3D" parent="CageAct/Tower4/Exterior/EnemySpawnTrigger"]
-script = ExtResource("27_vns5j")
-settings = ExtResource("57_xx2nh")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower4/Exterior/EnemySpawnTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 shape = SubResource("BoxShape3D_q3nif")
 
 [node name="Gate" parent="CageAct/Tower4/Exterior" instance=ExtResource("11_t2qcg")]
-transform = Transform3D(1, 0, 0, 0, -2.5, -1.50996e-07, 0, 3.77489e-07, -1, 0, 6.3942, 9.98071)
+transform = Transform3D(1.25, 0, 0, 0, -2.5, -1.88745e-07, 0, 3.77489e-07, -1.25, 0, 6.3942, 9.98071)
 respawnAnimation = 1
 "Trigger Settings/Is One Shot" = false
 
@@ -2471,6 +2438,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 "Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 SpawnMode = 1
+
+[node name="Camera" type="Node3D" parent="CageAct/Tower4/Exterior/BlueMajin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+script = ExtResource("27_vns5j")
+settings = ExtResource("57_xx2nh")
 
 [node name="MovingMajin1" type="Node3D" parent="CageAct/Tower4/Exterior"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 8)
@@ -2529,19 +2501,20 @@ path = NodePath("../../../../Static/Paths/Tower4")
 [node name="LoopReversePath" type="Node3D" parent="CageAct/Tower4/Triggers" node_paths=PackedStringArray("path")]
 script = ExtResource("8_mxhyu")
 path = NodePath("../../../../Static/Paths/Tower4")
-reversePath = true
+pathMode = 1
 
 [node name="Lockout" type="Node3D" parent="CageAct/Tower4/Triggers"]
 script = ExtResource("9_t2qcg")
 lockoutData = ExtResource("10_ib1ve")
 
 [node name="GroundPathTrigger" parent="CageAct/Tower4/Triggers" instance=ExtResource("6_f8ouc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 "Enter Mode" = 0
 
 [node name="GroundPath" type="Node3D" parent="CageAct/Tower4/Triggers/GroundPathTrigger" node_paths=PackedStringArray("path")]
 script = ExtResource("8_mxhyu")
 path = NodePath("../../../../../Static/Paths/Rukh4")
+pathMode = 2
 
 [node name="Camera" type="Node3D" parent="CageAct/Tower4/Triggers/GroundPathTrigger"]
 script = ExtResource("27_vns5j")
@@ -2551,7 +2524,7 @@ settings = ExtResource("26_nskpe")
 shape = SubResource("CylinderShape3D_7f5hg")
 
 [node name="Gate1" parent="CageAct/Tower4" instance=ExtResource("11_t2qcg")]
-transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 9.5)
+transform = Transform3D(1, 0, 0, 0, 1.75, 0, 0, 0, 1, 0, 0, 9.5)
 respawnAnimation = 2
 activationSpeedScale = 5.0
 
@@ -2562,13 +2535,14 @@ OneShot = true
 
 [node name="Checkpoint" type="Node3D" parent="CageAct/Tower4/GateTrigger"]
 script = ExtResource("13_5yb3a")
+CameraSettings = ExtResource("26_nskpe")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower4/GateTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 shape = SubResource("BoxShape3D_5yb3a")
 
 [node name="Gate2" parent="CageAct/Tower4" instance=ExtResource("11_t2qcg")]
-transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, -18)
+transform = Transform3D(1, 0, 0, 0, 1.75, 0, 0, 0, 1, 0, 0, -18)
 respawnAnimation = 2
 activationSpeedScale = 5.0
 
@@ -2773,25 +2747,41 @@ FinalHeight = -9.0
 Distance = 7.0
 
 [node name="LaunchRing1" parent="CageAct/Tower4" instance=ExtResource("59_tn0r1")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 15.5, -2.18557e-08)
+transform = Transform3D(0.996195, -0.0871557, -3.8097e-09, 0, -4.37114e-08, 1, -0.0871557, -0.996195, -4.35451e-08, 0, 14.5, 0)
 "Secondary Settings/Middle Height" = 0.0
-"Secondary Settings/Final Height" = 0.0
-"Secondary Settings/Distance" = 10.0
+"Secondary Settings/Final Height" = 10.0
+"Secondary Settings/Distance" = 1.0
 MiddleHeight = 0.0
-Distance = 5.0
+FinalHeight = 5.0
+Distance = 0.1
+LauncherDirection = 1
+
+[node name="Path" type="Node3D" parent="CageAct/Tower4/LaunchRing1" node_paths=PackedStringArray("path")]
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/Rukh4")
+pathMode = 1
+
+[node name="Camera" type="Node3D" parent="CageAct/Tower4/LaunchRing1"]
+script = ExtResource("27_vns5j")
+settings = ExtResource("60_ljtko")
 
 [node name="LaunchRing2" parent="CageAct/Tower4" instance=ExtResource("59_tn0r1")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 23.5, -3.71547e-07)
+transform = Transform3D(0.996195, -0.0871557, -3.8097e-09, 0, -4.37114e-08, 1, -0.0871557, -0.996195, -4.35451e-08, 0, 23.5, -3.71547e-07)
 "Secondary Settings/Middle Height" = 0.0
-"Secondary Settings/Final Height" = 0.0
-"Secondary Settings/Distance" = 12.0
+"Secondary Settings/Final Height" = 12.0
+"Secondary Settings/Distance" = 1.0
 MiddleHeight = 0.0
-Distance = 5.0
+FinalHeight = 5.0
+Distance = 0.1
 AllowJumpDashing = false
+LauncherDirection = 1
 
 [node name="LaunchRing3" parent="CageAct/Tower4" instance=ExtResource("59_tn0r1")]
-transform = Transform3D(0.996195, -0.0871557, 0, -3.8097e-09, -4.35451e-08, 1, -0.0871557, -0.996195, -4.37114e-08, 0, 34.5, -8.52372e-07)
-MiddleHeight = 20.0
+transform = Transform3D(0.996195, -0.0871557, -3.8097e-09, 0, -4.37114e-08, 1, -0.0871557, -0.996195, -4.35451e-08, 0, 34.5, -8.52372e-07)
+"Secondary Settings/Middle Height" = 15.0
+"Secondary Settings/Final Height" = 5.0
+"Secondary Settings/Distance" = 8.0
+MiddleHeight = 10.0
 FinalHeight = 5.0
 Distance = 8.0
 LauncherDirection = 1
@@ -2933,7 +2923,7 @@ Movement/Mode = 0
 
 [node name="Spring5" parent="CageAct/Tower4" instance=ExtResource("10_mxhyu")]
 transform = Transform3D(8.9407e-08, 0, -1, 0, 1, 0, 1, 0, 8.9407e-08, 0.832588, 32.2, -7.63849)
-MiddleHeight = 50.0
+MiddleHeight = 30.0
 FinalHeight = 7.5
 Distance = 2.0
 
@@ -3131,25 +3121,36 @@ libraries = {
 [connection signal="Activated" from="CageAct/Tower3/CameraTrigger" to="CageAct/Tower2/Gate2" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower3/Lever" to="CageAct/Mirrors/MirrorEvent2" method="Activate"]
 [connection signal="Started" from="CageAct/Tower3/Lever" to="CageAct/Tower3/Lever/Cam" method="Activate"]
-[connection signal="Deactivated" from="CageAct/Tower4/Exterior/Switch" to="CageAct/Tower4/Exterior/Switch/Camera" method="Activate"]
-[connection signal="Deactivated" from="CageAct/Tower4/Exterior/Switch" to="CageAct/Tower4/Exterior/Gate" method="Deactivate"]
+[connection signal="Activated" from="CageAct/Tower4/Exterior/Switch" to="Static/Triggers/Camera/Tower4Triggers/EntranceCamera" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower4/Exterior/Switch" to="CageAct/Tower4/Exterior/Switch/Camera" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower4/Exterior/Switch" to="CageAct/Tower4/Exterior/Gate" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Tower4/Exterior/EnemySpawnTrigger" to="CageAct/Tower4/Exterior/BlueMajin" method="Spawn"]
 [connection signal="Activated" from="CageAct/Tower4/Exterior/EnemySpawnTrigger" to="CageAct/Tower4/Exterior/MovingMajin1/GreenMajin" method="Spawn"]
 [connection signal="Activated" from="CageAct/Tower4/Exterior/EnemySpawnTrigger" to="CageAct/Tower4/Exterior/MovingMajin2/GreenMajin" method="Spawn"]
 [connection signal="Defeated" from="CageAct/Tower4/Exterior/BlueMajin" to="CageAct/Tower4/Exterior/EnemyStone1" method="IncrementCounter"]
 [connection signal="Defeated" from="CageAct/Tower4/Exterior/BlueMajin" to="CageAct/Tower4/Exterior/EnemyStone2" method="IncrementCounter"]
 [connection signal="Defeated" from="CageAct/Tower4/Exterior/BlueMajin" to="CageAct/Tower4/Exterior/EnemyStone3" method="IncrementCounter"]
+[connection signal="Spawned" from="CageAct/Tower4/Exterior/BlueMajin" to="CageAct/Tower4/Exterior/BlueMajin/Camera" method="Activate"]
 [connection signal="SpinStarted" from="CageAct/Tower4/Exterior/MovingMajin1/GreenMajin" to="CageAct/Tower4/Exterior/MovingMajin1" method="Unpause"]
 [connection signal="SpinStarted" from="CageAct/Tower4/Exterior/MovingMajin2/GreenMajin" to="CageAct/Tower4/Exterior/MovingMajin2" method="Unpause"]
+[connection signal="Activated" from="CageAct/Tower4/Triggers/GroundPathTrigger" to="Static/Collision/LaunchRingWall" method="Deactivate"]
+[connection signal="Activated" from="CageAct/Tower4/Triggers/GroundPathTrigger" to="Static/Triggers/Camera/Tower4Triggers/LaunchRingCull" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/Triggers/GroundPathTrigger" to="CageAct/Tower2/Triggers/Lockout" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Tower4/GateTrigger" to="CageAct/Tower4/Gate1" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/GateTrigger" to="CageAct/Tower4/Gate2" method="Activate"]
-[connection signal="Deactivated" from="CageAct/Tower4/Spring" to="CageAct/Tower4/Triggers/LoopPath" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower4/Spring" to="Static/Triggers/Camera/Tower4Triggers/LaunchRingCull" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower4/Spring" to="Static/Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer1/Camera" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower4/Spring" to="Static/Triggers/Camera/Tower4Triggers/LaunchRingCull/SidlePathTrigger1/SidlePath" method="Activate"]
 [connection signal="Deactivated" from="CageAct/Tower4/Spring" to="CageAct/Tower4/Triggers/Lockout" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/Switch" to="CageAct/Tower4/SpikeBall1" method="Unpause"]
 [connection signal="Activated" from="CageAct/Tower4/Switch" to="CageAct/Tower4/SpikeBall2" method="Unpause"]
 [connection signal="Collected" from="CageAct/Tower4/ItemBox2" to="CageAct/Tower4/ItemBoxCullingTrigger" method="Activate"]
+[connection signal="Respawned" from="CageAct/Tower4/ItemBox2" to="CageAct/Tower4/ItemBoxCullingTrigger" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Tower4/Switch2" to="CageAct/Tower4/Switch2/Spring" method="ShowLauncher"]
+[connection signal="Activated" from="CageAct/Tower4/Switch2/Spring" to="Static/Triggers/Camera/Tower4Triggers/LaunchRingCull" method="Deactivate"]
+[connection signal="Entered" from="CageAct/Tower4/LaunchRing1" to="Static/Collision/LaunchRingWall" method="Activate"]
+[connection signal="Entered" from="CageAct/Tower4/LaunchRing1" to="CageAct/Tower4/LaunchRing1/Path" method="Activate"]
+[connection signal="Entered" from="CageAct/Tower4/LaunchRing1" to="CageAct/Tower4/LaunchRing1/Camera" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/Lever" to="CageAct/Mirrors/MirrorEvent3" method="Activate"]
 [connection signal="Started" from="CageAct/Tower4/Lever" to="CageAct/Tower4/Lever/Cam" method="Activate"]
 [connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="CageAct/MainTower" method="Activate"]

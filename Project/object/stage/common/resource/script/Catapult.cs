@@ -26,7 +26,7 @@ public partial class Catapult : Launcher
 	private AudioStreamPlayer3D aimSFX;
 
 	private Tween tweener;
-	public float LaunchRatio
+	public new float LaunchRatio
 	{
 		get => base.LaunchRatio;
 		set => base.LaunchRatio = value;

@@ -26,7 +26,7 @@ public partial class LaunchRing : Launcher
 	[Export] private bool isSpikeVariant;
 	[Export] private AnimationPlayer animator;
 
-	public float LaunchRatio => base.LaunchRatio;
+	public new float LaunchRatio => base.LaunchRatio;
 	public override float GetLaunchRatio() => isSpikeVariant ? 1f : Mathf.SmoothStep(0, 1, base.LaunchRatio);
 
 	protected override void SetUp()
