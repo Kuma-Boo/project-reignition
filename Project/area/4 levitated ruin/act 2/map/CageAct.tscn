@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=3 uid="uid://djirww1p1qtu2"]
+[gd_scene load_steps=86 format=3 uid="uid://djirww1p1qtu2"]
 
 [ext_resource type="PackedScene" uid="uid://bpxj0juyhbmxs" path="res://area/4 levitated ruin/act 2/Static.tscn" id="1_ox5ni"]
 [ext_resource type="Resource" uid="uid://xi0dj64h1rxj" path="res://resource/level data/levitated ruin/Act2Cage.tres" id="2_gm4t4"]
@@ -64,6 +64,8 @@
 [ext_resource type="PackedScene" uid="uid://cxb1fxhrsja13" path="res://object/stage/common/SpikeBallStatic.tscn" id="58_q5r6l"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="59_tn0r1"]
 [ext_resource type="Resource" uid="uid://bva0csvbiyycl" path="res://area/4 levitated ruin/act 2/camera/LaunchRingShortcutCam.tres" id="60_ljtko"]
+[ext_resource type="Resource" uid="uid://dupp7j8fxmpdw" path="res://area/4 levitated ruin/act 2/camera/Tower4TopCam.tres" id="61_hxx3w"]
+[ext_resource type="Resource" uid="uid://s0hwj5n2n5q1" path="res://area/4 levitated ruin/act 2/camera/Tower4SpringCam.tres" id="61_lgrye"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_gg5un"]
 
@@ -2786,6 +2788,16 @@ FinalHeight = 5.0
 Distance = 8.0
 LauncherDirection = 1
 
+[node name="Camera" type="Node3D" parent="CageAct/Tower4/LaunchRing3"]
+script = ExtResource("27_vns5j")
+transitionType = 1
+settings = ExtResource("61_lgrye")
+previousSettings = ExtResource("61_hxx3w")
+
+[node name="Path" type="Node3D" parent="CageAct/Tower4/LaunchRing3" node_paths=PackedStringArray("path")]
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/TowerTop4")
+
 [node name="SpikeBallStatic2" parent="CageAct/Tower4" instance=ExtResource("58_q5r6l")]
 transform = Transform3D(0.562255, -0.309976, -0.766671, -0.0835781, 0.901044, -0.425598, 0.82273, 0.303372, 0.480709, -7.67193, 24.2, 1.71332)
 
@@ -2926,6 +2938,16 @@ transform = Transform3D(8.9407e-08, 0, -1, 0, 1, 0, 1, 0, 8.9407e-08, 0.832588, 
 MiddleHeight = 30.0
 FinalHeight = 7.5
 Distance = 2.0
+
+[node name="Camera" type="Node3D" parent="CageAct/Tower4/Spring5"]
+script = ExtResource("27_vns5j")
+transitionType = 1
+settings = ExtResource("61_lgrye")
+previousSettings = ExtResource("61_hxx3w")
+
+[node name="Path" type="Node3D" parent="CageAct/Tower4/Spring5" node_paths=PackedStringArray("path")]
+script = ExtResource("8_mxhyu")
+path = NodePath("../../../../Static/Paths/TowerTop4")
 
 [node name="BlueMajin" parent="CageAct/Tower4" instance=ExtResource("50_kuvve")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -8.86447, 40.2, -8.76986)
@@ -3151,6 +3173,12 @@ libraries = {
 [connection signal="Entered" from="CageAct/Tower4/LaunchRing1" to="Static/Collision/LaunchRingWall" method="Activate"]
 [connection signal="Entered" from="CageAct/Tower4/LaunchRing1" to="CageAct/Tower4/LaunchRing1/Path" method="Activate"]
 [connection signal="Entered" from="CageAct/Tower4/LaunchRing1" to="CageAct/Tower4/LaunchRing1/Camera" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower4/LaunchRing3" to="CageAct/Tower4/LaunchRing3/Camera" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower4/LaunchRing3" to="CageAct/Tower4/LaunchRing3/Camera" method="Deactivate"]
+[connection signal="Deactivated" from="CageAct/Tower4/LaunchRing3" to="CageAct/Tower4/LaunchRing3/Path" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower4/Spring5" to="CageAct/Tower4/Spring5/Camera" method="Activate"]
+[connection signal="Deactivated" from="CageAct/Tower4/Spring5" to="CageAct/Tower4/Spring5/Camera" method="Deactivate"]
+[connection signal="Deactivated" from="CageAct/Tower4/Spring5" to="CageAct/Tower4/Spring5/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/Lever" to="CageAct/Mirrors/MirrorEvent3" method="Activate"]
 [connection signal="Started" from="CageAct/Tower4/Lever" to="CageAct/Tower4/Lever/Cam" method="Activate"]
 [connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="CageAct/MainTower" method="Activate"]
