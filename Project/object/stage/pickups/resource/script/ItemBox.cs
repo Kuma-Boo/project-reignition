@@ -183,7 +183,7 @@ public partial class ItemBox : Pickup
 		_animator.Play("RESET");
 		_animator.Seek(0, true);
 
-		DisablePickupParent();
+		CallDeferred(MethodName.DisablePickupParent);
 
 		for (int i = 0; i < objectPool.Count; i++)
 			objectPool[i].Respawn();
