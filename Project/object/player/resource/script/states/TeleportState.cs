@@ -34,6 +34,8 @@ public partial class TeleportState : PlayerState
 			Player.Animator.StopHurt(false);
 		}
 
+		Player.ChangeHitbox("disable");
+
 		if (Trigger.resetMovespeed)
 		{
 			Player.MoveSpeed = Player.VerticalSpeed = 0;
@@ -54,7 +56,11 @@ public partial class TeleportState : PlayerState
 		currentState = States.Completed;
 	}
 
-	public override void ExitState() => Player.IsTeleporting = false;
+	public override void ExitState()
+	{
+		Player.ChangeHitbox("RESET");
+		Player.IsTeleporting = false;
+	}
 
 	public override PlayerState ProcessPhysics()
 	{
@@ -111,6 +117,8 @@ public partial class TeleportState : PlayerState
 	private void ApplyTeleport()
 	{
 		Player.GlobalPosition = Trigger.WarpPosition;
+		Player.ResetPhysicsInterpolation();
+
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		Player.SnapToGround();
 		Player.CheckGround();

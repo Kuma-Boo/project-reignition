@@ -981,22 +981,17 @@ public partial class PlayerController : CharacterBody3D
 		AllowLandingSkills = false; // Disable landing skills temporarily
 		Skills.IsSpeedBreakEnabled = Skills.IsTimeBreakEnabled = true; // Reenable soul skills
 
-		invincibilityTimer = 0;
 		BonusManager.instance.CancelBonuses();
-		Stage.RevertToCheckpointData();
 
-		if (IsDebugRespawn)
-		{
-			Teleport(DebugManager.Instance.DebugCheckpoint);
-			PathFollower.SetActivePath(DebugManager.Instance.DebugCheckpoint.PlayerPath); // Revert path
-			Camera.PathFollower.SetActivePath(DebugManager.Instance.DebugCheckpoint.CameraPath);
-		}
-		else
-		{
-			Teleport(Stage.CurrentCheckpoint);
-			PathFollower.SetActivePath(Stage.CurrentCheckpoint.PlayerPath); // Revert path
-			Camera.PathFollower.SetActivePath(Stage.CurrentCheckpoint.CameraPath);
-		}
+		Stage.RevertToCheckpointData();
+		Stage.RespawnObjects();
+		Stage.IncrementRespawnCount();
+		Stage.UpdateRingCount(Skills.RespawnRingCount, StageSettings.MathModeEnum.Replace, true); // Reset ring count
+
+		CheckpointTrigger currentCheckpoint = IsDebugRespawn ? DebugManager.Instance.DebugCheckpoint : Stage.CurrentCheckpoint;
+		Teleport(currentCheckpoint);
+		PathFollower.SetActivePath(currentCheckpoint.PlayerPath); // Revert path
+		Camera.PathFollower.SetActivePath(currentCheckpoint.CameraPath);
 
 		IsDefeated = false;
 		IsMovingBackward = false;
@@ -1013,17 +1008,14 @@ public partial class PlayerController : CharacterBody3D
 	/// <summary> Final step of the respawn process. Re-enable area collider and finish transition. </summary>
 	private void FinishRespawn()
 	{
-		PathFollower.Resync();
-		Camera.Respawn();
 		ResetCheckpointOrientation();
 		SnapToGround();
 		ChangeHitbox("RESET");
 
-		Stage.RespawnObjects();
-		Stage.IncrementRespawnCount();
-		Stage.UpdateRingCount(Skills.RespawnRingCount, StageSettings.MathModeEnum.Replace, true); // Reset ring count
 		invincibilityTimer = 0; // Reset invincibility
 
+		PathFollower.Resync();
+		Camera.CallDeferred(PlayerCameraController.MethodName.Respawn);
 		TransitionManager.FinishTransition();
 	}
 
