@@ -1,8 +1,17 @@
-[gd_scene load_steps=14 format=3 uid="uid://c5uhjh0ra11u6"]
+[gd_scene load_steps=16 format=3 uid="uid://c5uhjh0ra11u6"]
 
 [ext_resource type="PackedScene" uid="uid://e6oju4xygbmm" path="res://area/4 levitated ruin/object/model/obstacle/MissileSimple.gltf" id="1_d3y0y"]
 [ext_resource type="Script" uid="uid://c27oe48qjsjv4" path="res://area/4 levitated ruin/data/script/Missile.cs" id="2_bokip"]
 [ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="3_do4d1"]
+
+[sub_resource type="Curve" id="Curve_1x8is"]
+_data = [Vector2(0.00656455, 1), 0.0, -1.00661, 0, 1, Vector2(1, 0), -1.00661, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_4s46d"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_1x8is")
 
 [sub_resource type="Gradient" id="Gradient_8a8yj"]
 offsets = PackedFloat32Array(0, 0.505495, 0.895604, 1)
@@ -13,7 +22,7 @@ gradient = SubResource("Gradient_8a8yj")
 width = 128
 
 [sub_resource type="Curve" id="Curve_nehro"]
-_limits = [0.99, 4.0, 0.0, 1.0]
+_limits = [1.0, 4.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 9.45211, 0, 0, Vector2(1, 4), 0.371934, 0.0, 0, 0]
 point_count = 2
 
@@ -24,10 +33,11 @@ curve = SubResource("Curve_nehro")
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nlsiu"]
 particle_flag_align_y = true
 gravity = Vector3(0, 0, 0)
-scale_min = 1.5
-scale_max = 1.5
+scale_min = 0.5
+scale_max = 0.5
 scale_curve = SubResource("CurveTexture_mc0fb")
 color_ramp = SubResource("GradientTexture1D_ldb2c")
+alpha_curve = SubResource("CurveTexture_4s46d")
 
 [sub_resource type="QuadMesh" id="QuadMesh_yvuiw"]
 material = ExtResource("3_do4d1")
