@@ -69,10 +69,7 @@ public partial class SlideState : PlayerState
 		}
 
 		if (!Mathf.IsZeroApprox(Player.MoveSpeed))
-		{
-			Player.Animator.StopCrouching();
 			Player.Animator.CrouchToMoveTransition();
-		}
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.SlideDefense))
 		{
@@ -122,26 +119,24 @@ public partial class SlideState : PlayerState
 				return runState;
 			}
 		}
-		else
+		else if (Player.Controller.IsJumpBufferActive)
 		{
-			if (!Input.IsActionPressed("button_action") && !Player.Animator.IsSlideTransitionActive)
-				return runState;
+			Player.Controller.ResetJumpBuffer();
 
-			if (Player.Controller.IsJumpBufferActive)
+			float inputAngle = Player.Controller.GetTargetInputAngle();
+			float inputStrength = Player.Controller.GetInputStrength();
+			if (!Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Backflip) &&
+				!Mathf.IsZeroApprox(inputStrength) &&
+				Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
 			{
-				Player.Controller.ResetJumpBuffer();
-
-				float inputAngle = Player.Controller.GetTargetInputAngle();
-				float inputStrength = Player.Controller.GetInputStrength();
-				if (!Player.IsLockoutDisablingAction(LockoutResource.ActionFlags.Backflip) &&
-					!Mathf.IsZeroApprox(inputStrength) &&
-					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle))
-				{
-					return backflipState;
-				}
-
-				return jumpState;
+				return backflipState;
 			}
+
+			return jumpState;
+		}
+		else if (!Input.IsActionPressed("button_action") && !Player.Animator.IsSlideTransitionActive)
+		{
+			return runState;
 		}
 
 		// Lockout is disabling action button (slides included)

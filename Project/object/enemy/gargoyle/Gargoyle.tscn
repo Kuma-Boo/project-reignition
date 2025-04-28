@@ -1,7 +1,7 @@
 [gd_scene load_steps=46 format=3 uid="uid://b2jsh7hensgem"]
 
 [ext_resource type="PackedScene" uid="uid://b4n1751vh5d4s" path="res://object/enemy/gargoyle/data/model/Gargoyle.gltf" id="1_gl7tb"]
-[ext_resource type="Script" path="res://object/enemy/gargoyle/data/Gargoyle.cs" id="2_gr8hu"]
+[ext_resource type="Script" uid="uid://db7pahktq6q6v" path="res://object/enemy/gargoyle/data/Gargoyle.cs" id="2_gr8hu"]
 [ext_resource type="PackedScene" uid="uid://dyg4af257op4a" path="res://object/enemy/gargoyle/data/model/Windball.gltf" id="3_mw58f"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tsk0o"]
@@ -21,12 +21,15 @@ radius = 2.0
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_6t1i8"]
 input_0/name = "petrify"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "slash"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 input_2/name = "block"
 input_2/auto_advance = false
+input_2/break_loop_at_end = false
 input_2/reset = true
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_2kn1h"]
@@ -90,9 +93,11 @@ graph_offset = Vector2(-81, -64)
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_3t50f"]
 input_0/name = "left"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "right"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4kqom"]
@@ -111,9 +116,11 @@ animation = &"defeat"
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_wgx27"]
 input_0/name = "enabled"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "disabled"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7solm"]
@@ -172,7 +179,7 @@ states/statue/position = Vector2(352, 100)
 states/statue-activate/node = SubResource("AnimationNodeAnimation_4eicd")
 states/statue-activate/position = Vector2(352, 181)
 transitions = ["statue-activate", "idle", SubResource("AnimationNodeStateMachineTransition_76l51"), "statue", "statue-activate", SubResource("AnimationNodeStateMachineTransition_pv0ga"), "idle", "skyroad", SubResource("AnimationNodeStateMachineTransition_1uuwp"), "skyroad", "idle", SubResource("AnimationNodeStateMachineTransition_0f7yr"), "Start", "RESET", SubResource("AnimationNodeStateMachineTransition_y208m"), "RESET", "statue", SubResource("AnimationNodeStateMachineTransition_5t8ip")]
-graph_offset = Vector2(-344, -3)
+graph_offset = Vector2(-337, -16)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d3875"]
 animation = &"petrify"
@@ -181,7 +188,7 @@ animation = &"petrify"
 animation = &"slash"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_a4b7b"]
-graph_offset = Vector2(-1290.41, 39.5621)
+graph_offset = Vector2(-1246.29, -101.219)
 nodes/action_transition/node = SubResource("AnimationNodeTransition_6t1i8")
 nodes/action_transition/position = Vector2(-720, 140)
 nodes/action_trigger/node = SubResource("AnimationNodeOneShot_2kn1h")
@@ -201,7 +208,7 @@ nodes/defeat_anim/position = Vector2(0, 0)
 nodes/defeat_transition/node = SubResource("AnimationNodeTransition_wgx27")
 nodes/defeat_transition/position = Vector2(200, 100)
 nodes/movement_state/node = SubResource("AnimationNodeStateMachine_1srrh")
-nodes/movement_state/position = Vector2(-1000, 20)
+nodes/movement_state/position = Vector2(-1000, -40)
 nodes/output/position = Vector2(420, 140)
 nodes/petrify_anim/node = SubResource("AnimationNodeAnimation_d3875")
 nodes/petrify_anim/position = Vector2(-1000, 160)
@@ -226,20 +233,7 @@ animationPlayer = NodePath("")
 [node name="Root" parent="." instance=ExtResource("1_gl7tb")]
 
 [node name="Skeleton3D" parent="Root/GargoyleRoot" index="0"]
-bones/2/rotation = Quaternion(0.767752, -2.50455e-07, -2.16896e-07, 0.640747)
-bones/5/rotation = Quaternion(0.5, 0.5, 0.5, -0.5)
-bones/9/rotation = Quaternion(0.5, -0.5, -0.5, -0.5)
-bones/13/rotation = Quaternion(-0.707107, -2.10687e-09, -3.30155e-08, 0.707107)
-bones/14/rotation = Quaternion(-0.0617484, -4.72917e-11, 0.0875847, 0.994241)
-bones/15/rotation = Quaternion(0.0616896, 0.00269337, -0.130869, 0.989475)
 bones/15/scale = Vector3(0.999994, 0.999994, 1)
-bones/16/rotation = Quaternion(-0.707107, -2.10687e-09, -3.30155e-08, 0.707107)
-bones/17/rotation = Quaternion(-0.0617495, -4.71268e-10, -0.0875849, 0.994241)
-bones/18/rotation = Quaternion(0.0616908, -0.00269341, 0.130869, 0.989475)
-bones/19/rotation = Quaternion(-0.707107, 2.40748e-15, 4.39029e-08, 0.707107)
-
-[node name="GargoyleMesh" parent="Root/GargoyleRoot/Skeleton3D" index="0"]
-instance_shader_parameters/defeat_blend = 0.0
 
 [node name="Hitbox" type="Area3D" parent="Root/GargoyleRoot/Skeleton3D" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.5)
@@ -252,7 +246,7 @@ shape = SubResource("SphereShape3D_tsk0o")
 disabled = true
 
 [node name="Head" type="BoneAttachment3D" parent="Root/GargoyleRoot/Skeleton3D" index="2"]
-transform = Transform3D(1, -9.6032e-08, -3.76046e-07, -2.9006e-07, -0.828684, -0.559717, -2.57873e-07, 0.559717, -0.828684, -3.9284e-08, 3.42603, 0.730909)
+transform = Transform3D(1, -9.67494e-08, -3.49296e-07, -3.49296e-07, -0.514496, -0.857493, -9.67496e-08, 0.857493, -0.514496, -5.96046e-08, 1.9, 0.55)
 bone_name = "head"
 bone_idx = 3
 
@@ -271,7 +265,7 @@ shape = SubResource("SphereShape3D_tsk0o")
 disabled = true
 
 [node name="Root" type="BoneAttachment3D" parent="Root/GargoyleRoot/Skeleton3D" index="3"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.77636e-16, 3.16, 1.18615e-07)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.77636e-16, 1.35, 1.18615e-07)
 bone_name = "root"
 bone_idx = 0
 
@@ -311,11 +305,12 @@ disabled = true
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 root_node = NodePath("../Root")
+callback_mode_discrete = 0
 tree_root = SubResource("AnimationNodeBlendTree_a4b7b")
 anim_player = NodePath("../Root/AnimationPlayer")
-parameters/action_transition/current_state = "slash"
-parameters/action_transition/transition_request = "petrify"
-parameters/action_transition/current_index = 1
+parameters/action_transition/current_state = "petrify"
+parameters/action_transition/transition_request = ""
+parameters/action_transition/current_index = 0
 parameters/action_trigger/active = false
 parameters/action_trigger/internal_active = false
 parameters/action_trigger/request = 0
