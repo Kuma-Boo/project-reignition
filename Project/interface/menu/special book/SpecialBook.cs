@@ -97,7 +97,6 @@ public partial class SpecialBook : Menu
 
 	protected override void ProcessMenu()
 	{
-
 		if (menuFocus == 0 || menuFocus == 1)//Change chapter by using the bumpers
 		{
 			if (Input.IsActionJustPressed("button_step_left"))
@@ -241,6 +240,7 @@ public partial class SpecialBook : Menu
 		{
 			tabs[chapterSelection].Deselect();
 			animator.Play("hide");
+			return;
 		}
 
 		if (menuFocus == 1)
@@ -277,7 +277,6 @@ public partial class SpecialBook : Menu
 
 	}
 
-
 	public override void ShowMenu()
 	{
 		menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.SpecialBook;
@@ -299,6 +298,19 @@ public partial class SpecialBook : Menu
 		LoadSaveData();
 
 		base.ShowMenu();
+	}
+
+	public override void OpenParentMenu()
+	{
+		// Return to main menu
+		FadeBGM(.5f);
+		menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.MainMenu;
+		TransitionManager.QueueSceneChange(TransitionManager.MenuScenePath);
+		TransitionManager.StartTransition(new()
+		{
+			color = Colors.Black,
+			inSpeed = .5f,
+		});
 	}
 
 	private void MenuControls(Vector2 input)

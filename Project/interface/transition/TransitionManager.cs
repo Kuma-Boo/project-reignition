@@ -14,6 +14,7 @@ public partial class TransitionManager : Node
 	public const string MenuScenePath = "res://interface/menu/Menu.tscn";
 	/// <summary> Path to story events. </summary>
 	public const string EventScenePath = "res://video/event/scene/Event";
+	public const string OptionsScenePath = "res://interface/menu/options/Options.tscn";
 	public const string SpecialBookScenePath = "res://interface/menu/special book/SpecialBook.tscn";
 
 	public bool IsReloadingScene { get; private set; }

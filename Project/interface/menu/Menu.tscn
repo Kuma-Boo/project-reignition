@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dsougvfwmdiun"]
+[gd_scene load_steps=9 format=3 uid="uid://dsougvfwmdiun"]
 
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="1_mkeet"]
 [ext_resource type="PackedScene" uid="uid://do5h1l0j40l23" path="res://interface/menu/main/MainMenu.tscn" id="3"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://cbamk7p3d1ddn" path="res://interface/menu/title/Title.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://dad2hh4ttgaox" path="res://interface/menu/flames/Flames.tscn" id="5_7t67l"]
 [ext_resource type="AudioStream" uid="uid://cib0n7jo2ae8f" path="res://sound/ost/treasure disc/2 Sandstorm.mp3" id="6_iu1dc"]
-[ext_resource type="PackedScene" uid="uid://cfxpl43xw0rn6" path="res://interface/menu/special book/SpecialBook.tscn" id="6_p2s00"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="7_25e2d"]
 
 [node name="Menu" type="Control"]
@@ -25,7 +24,7 @@ texture = ExtResource("1_mkeet")
 [node name="MainMenu" parent="." node_paths=PackedStringArray("parentMenu", "bgm") instance=ExtResource("3")]
 layout_mode = 1
 parentMenu = NodePath("../Title")
-submenus = [NodePath("../SaveSelect"), NodePath("../SpecialBook"), NodePath("../SpecialBook")]
+submenus = [NodePath("../SaveSelect")]
 bgm = NodePath("../MainMenuBGM")
 
 [node name="WorldSelect" parent="." node_paths=PackedStringArray("parentMenu") instance=ExtResource("3_ftqsn")]
@@ -39,10 +38,6 @@ layout_mode = 1
 parentMenu = NodePath("../MainMenu")
 submenus = Array[NodePath]([NodePath("../WorldSelect")])
 bgm = NodePath("../MainMenuBGM")
-
-[node name="SpecialBook" parent="." node_paths=PackedStringArray("parentMenu") instance=ExtResource("6_p2s00")]
-layout_mode = 1
-parentMenu = NodePath("../MainMenu")
 
 [node name="Title" parent="." node_paths=PackedStringArray("bgm") instance=ExtResource("5")]
 layout_mode = 1
