@@ -85,7 +85,7 @@ public partial class SpecialBook : Menu
 				if (menuFocus == MenuFocus.Chapter)
 					tabs[chapterSelection].Select();
 				else
-					tabs[chapterSelection].Select_NoGlow();
+					tabs[chapterSelection].SelectNoGlow();
 
 				LoadChapter();
 				LoadPage(GetPage(chapterSelection, pageSelection));
@@ -102,7 +102,7 @@ public partial class SpecialBook : Menu
 				if (menuFocus == MenuFocus.Chapter)
 					tabs[chapterSelection].Select();
 				else
-					tabs[chapterSelection].Select_NoGlow();
+					tabs[chapterSelection].SelectNoGlow();
 
 				LoadChapter();
 				LoadPage(GetPage(chapterSelection, pageSelection));
@@ -135,8 +135,7 @@ public partial class SpecialBook : Menu
 
 	protected override void UpdateSelection()
 	{
-		// BUG: Only dpad seems to work, stick doesn't
-		Vector2 input = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
+		Vector2I input = new(Mathf.Sign(Input.GetAxis("ui_left", "ui_right")), Mathf.Sign(Input.GetAxis("ui_up", "ui_down")));
 
 		if (input == Vector2.Zero)
 			return;
@@ -158,7 +157,7 @@ public partial class SpecialBook : Menu
 
 		if (menuFocus == MenuFocus.Chapter)
 		{
-			MenuControls(new Vector2(0, 1));
+			MenuControls(new Vector2I(0, 1));
 			sfxSelect.Play();
 			return;
 		}
@@ -225,7 +224,7 @@ public partial class SpecialBook : Menu
 
 		if (menuFocus == MenuFocus.Page)
 		{
-			tabs[chapterSelection].Select_NoMove();
+			tabs[chapterSelection].SelectNoMove();
 			pages[pageSelection].Deselect();
 			menuFocus = 0;
 
@@ -254,7 +253,7 @@ public partial class SpecialBook : Menu
 				animatorRandom.Stop();
 				menuFocus = MenuFocus.Page;
 				playRandom = false;
-				tabs[chapterSelection].Deselect_NoGlow();
+				tabs[chapterSelection].DeselectNoGlow();
 				pages[pageSelection].Select();
 			}
 			sfxCancel.Play();
@@ -275,7 +274,7 @@ public partial class SpecialBook : Menu
 			chapterSelection = GetChapterFromMemory();
 			pageSelection = GetPageFromMemory() + 1;
 
-			tabs[chapterSelection].Select_NoGlow();
+			tabs[chapterSelection].SelectNoGlow();
 			pages[pageSelection].Select();
 
 			chapterName.Visible = false;
@@ -293,7 +292,7 @@ public partial class SpecialBook : Menu
 			chapterSelection = 0;
 			pageSelection = 0;
 
-			tabs[0].Select_NoSFX();
+			tabs[0].SelectNoSFX();
 		}
 
 		for (int chapter = 0; chapter < chapters.Length; chapter++)
@@ -319,79 +318,21 @@ public partial class SpecialBook : Menu
 		});
 	}
 
-	private void MenuControls(Vector2 input)
+	private void MenuControls(Vector2I input)
 	{
 		if (menuFocus == MenuFocus.Chapter)
 		{
-			if (input.X != 0) // move left or right
-			{
-				tabs[chapterSelection].Deselect();
-				chapterSelection = WrapSelection(chapterSelection + (int)input.X, 16);
-				tabs[chapterSelection].Select();
-
-				LoadChapter();
-				sfxCategorySelect.Play();
-				return;
-			}
-
-			if (input.Y > 0) // Move down
-			{
-				tabs[chapterSelection].Deselect_NoGlow();
-				menuFocus = MenuFocus.Page;
-				pageSelection = 0;
-				pages[pageSelection].Select();
-				chapterName.Visible = false;
-				textboxTitle.Visible = true;
-
-				LoadPage(GetPage(chapterSelection, pageSelection));
-				sfxSelect.Play();
-				return;
-			}
+			ProcessChapterSelection(input);
+			return;
 		}
-		else if (menuFocus == MenuFocus.Page)
+
+		if (menuFocus == MenuFocus.Page)
 		{
-			if (input.X != 0) // If we are going left or right
-			{
-				pages[pageSelection].Deselect();
-
-				if (pageSelection <= 4) // row 1
-					pageSelection = WrapSelection(pageSelection + (int)input.X, 4, 0);
-				else if (pageSelection >= 5 && pageSelection <= 9) // row 2
-					pageSelection = WrapSelection(pageSelection + (int)input.X, 9, 5);
-				else if (pageSelection >= 10 && pageSelection <= 14) // row 3
-					pageSelection = WrapSelection(pageSelection + (int)input.X, 14, 10);
-
-				pages[pageSelection].Select();
-				LoadPage(GetPage(chapterSelection, pageSelection));
-
-				sfxSelect.Play();
-				return;
-			}
-			if (input.Y != 0)
-			{
-				pages[pageSelection].Deselect();
-
-				if ((int)input.Y < 0 && pageSelection <= 4) // If we are going up on the first row
-				{
-					tabs[chapterSelection].Select_NoMove();
-					menuFocus = 0;
-					chapterName.Visible = true;
-					textboxTitle.Visible = false;
-					sfxCategorySelect.Play();
-					return;
-				}
-
-				pageSelection = WrapSelection(pageSelection + (5 * (int)input.Y), 14, pageSelection - 10); // Wraps the selection vertically
-				pages[pageSelection].Select();
-				LoadPage(GetPage(chapterSelection, pageSelection));
-
-				sfxSelect.Play();
-				return;
-
-			}
-
+			ProcessPageSelection(input);
+			return;
 		}
-		else if (menuFocus == MenuFocus.Description || menuFocus == MenuFocus.Image)
+
+		if (menuFocus == MenuFocus.Description || menuFocus == MenuFocus.Image)
 		{
 			if (input.X != 0 && !playRandom)
 			{
@@ -413,7 +354,7 @@ public partial class SpecialBook : Menu
 				if (ogChapter != chapterSelection)
 				{
 					tabs[ogChapter].Deselect();
-					tabs[chapterSelection].Select_NoGlow();
+					tabs[chapterSelection].SelectNoGlow();
 				}
 
 				if (input.X > 0)
@@ -425,6 +366,73 @@ public partial class SpecialBook : Menu
 				LoadChapter();
 				LoadPage(GetPage(chapterSelection, pageSelection));
 			}
+		}
+	}
+
+	private void ProcessChapterSelection(Vector2I input)
+	{
+		if (input.X != 0) // move left or right
+		{
+			tabs[chapterSelection].Deselect();
+			chapterSelection = WrapSelection(chapterSelection + (int)input.X, 16);
+			tabs[chapterSelection].Select();
+
+			LoadChapter();
+			sfxCategorySelect.Play();
+			return;
+		}
+
+		if (input.Y > 0) // Move down to the pages
+		{
+			tabs[chapterSelection].DeselectNoGlow();
+			menuFocus = MenuFocus.Page;
+			pageSelection = 0;
+			pages[pageSelection].Select();
+			chapterName.Visible = false;
+			textboxTitle.Visible = true;
+
+			LoadPage(GetPage(chapterSelection, pageSelection));
+			sfxSelect.Play();
+		}
+	}
+
+	private void ProcessPageSelection(Vector2I input)
+	{
+		if (input.X != 0) // If we are going left or right
+		{
+			pages[pageSelection].Deselect();
+
+			if (pageSelection <= 4) // row 1
+				pageSelection = WrapSelection(pageSelection + input.X, 4, 0);
+			else if (pageSelection >= 5 && pageSelection <= 9) // row 2
+				pageSelection = WrapSelection(pageSelection + input.X, 9, 5);
+			else if (pageSelection >= 10 && pageSelection <= 14) // row 3
+				pageSelection = WrapSelection(pageSelection + input.X, 14, 10);
+
+			pages[pageSelection].Select();
+			LoadPage(GetPage(chapterSelection, pageSelection));
+
+			sfxSelect.Play();
+		}
+		if (input.Y != 0)
+		{
+			pages[pageSelection].Deselect();
+
+			if (input.Y < 0 && pageSelection <= 4) // If we are going up on the first row
+			{
+				tabs[chapterSelection].SelectNoMove();
+				menuFocus = 0;
+				chapterName.Visible = true;
+				textboxTitle.Visible = false;
+				sfxCategorySelect.Play();
+				return;
+			}
+
+			pageSelection = WrapSelection(pageSelection + (5 * input.Y), 14, pageSelection - 10); // Wraps the selection vertically
+			pages[pageSelection].Select();
+			LoadPage(GetPage(chapterSelection, pageSelection));
+
+			sfxSelect.Play();
 		}
 	}
 
