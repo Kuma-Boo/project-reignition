@@ -245,7 +245,7 @@ public partial class PauseMenu : Node
 					break;
 				case 3: // Open EXP menu
 					SaveManager.SaveGameData();
-					TransitionManager.instance.QueuedScene = TransitionManager.MENU_SCENE_PATH;
+					TransitionManager.instance.QueuedScene = TransitionManager.MenuScenePath;
 					EmitSignal(SignalName.OnSceneChangeSelected);
 					break;
 			}

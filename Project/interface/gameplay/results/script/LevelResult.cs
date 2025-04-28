@@ -72,7 +72,7 @@ public partial class LevelResult : Control
 			if (Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel")) // Retry stage
 				TransitionManager.instance.QueuedScene = string.Empty;
 			else// if (Level.storyEventIndex == 0) // Load main menu
-				TransitionManager.instance.QueuedScene = TransitionManager.MENU_SCENE_PATH;
+				TransitionManager.instance.QueuedScene = TransitionManager.MenuScenePath;
 
 			// TODO Load story event
 			//TransitionManager.QueueSceneChange($"{TransitionManager.EVENT_SCENE_PATH}{Level.storyEventIndex}.tscn");

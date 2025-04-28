@@ -795,6 +795,14 @@ public partial class SaveManager : Node
 			worldsUnlocked.Add(world);
 		}
 
+		public void UnlockWorldRing(WorldEnum world)
+		{
+			if (worldRingsCollected.Contains(world))
+				return;
+
+			worldRingsCollected.Add(world);
+		}
+
 		public void UnlockAllWorlds()
 		{
 			for (int i = 0; i < (int)WorldEnum.Max; i++)
