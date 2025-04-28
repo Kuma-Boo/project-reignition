@@ -1,16 +1,19 @@
-[gd_scene load_steps=11 format=3 uid="uid://bwqgjo2ywq68m"]
+[gd_scene load_steps=14 format=3 uid="uid://bwqgjo2ywq68m"]
 
 [ext_resource type="Script" uid="uid://cmksigg2bddki" path="res://interface/menu/special book/SpecialBookWindow.cs" id="1_a31tl"]
 [ext_resource type="Texture2D" uid="uid://qys1j7pgsm0p" path="res://interface/menu/special book/texture/book objects/enhanced/frame.png" id="2_i5uf0"]
 [ext_resource type="Texture2D" uid="uid://baor555ii24fi" path="res://interface/menu/special book/texture/book objects/enhanced/frame_question.png" id="3_i5uf0"]
 [ext_resource type="Texture2D" uid="uid://0ihwssoc3k0e" path="res://interface/menu/special book/texture/book objects/enhanced/frame_glow.png" id="4_i5uf0"]
+[ext_resource type="Texture2D" uid="uid://dv04kvw4ixivf" path="res://interface/menu/special book/texture/book objects/enhanced/frame_number.png" id="6_l6bkd"]
+[ext_resource type="FontFile" uid="uid://bsoin3p4iygoo" path="res://interface/font/otf/Chiaro Std B.otf" id="7_utkmo"]
+[ext_resource type="LabelSettings" uid="uid://dki35mj1oux2s" path="res://interface/font/DescriptionText.tres" id="8_8qxfd"]
 
 [sub_resource type="Animation" id="Animation_6gyq1"]
 resource_name = "RESET"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("glow:visible")
+tracks/0/path = NodePath("Glow:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -25,7 +28,7 @@ resource_name = "select"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("glow:visible")
+tracks/0/path = NodePath("Glow:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -50,7 +53,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("glow:modulate")
+tracks/0/path = NodePath("Glow:modulate")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -62,7 +65,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("glow:scale")
+tracks/1/path = NodePath("Glow:scale")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -78,18 +81,21 @@ _data = {
 &"glow": SubResource("Animation_xnwnq")
 }
 
-[node name="SpecialBookWindow" type="Control" node_paths=PackedStringArray("windowAnimator", "windowAnimator2")]
+[node name="SpecialBookWindow" type="Control" node_paths=PackedStringArray("numberLabel", "windowAnimator", "windowAnimator2")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -1734.0
+offset_bottom = -956.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_a31tl")
+numberLabel = NodePath("NumberFrame/NumberLabel")
 windowAnimator = NodePath("AnimationPlayer")
 windowAnimator2 = NodePath("AnimationPlayer2")
 
-[node name="frame" type="TextureRect" parent="."]
+[node name="Frame" type="TextureRect" parent="."]
 layout_mode = 0
 offset_right = 233.0
 offset_bottom = 155.0
@@ -97,7 +103,7 @@ scale = Vector2(0.8, 0.8)
 texture = ExtResource("2_i5uf0")
 stretch_mode = 4
 
-[node name="questionmark" type="TextureRect" parent="."]
+[node name="Questionmark" type="TextureRect" parent="."]
 layout_mode = 0
 offset_left = 78.0
 offset_top = 29.0
@@ -107,12 +113,39 @@ scale = Vector2(0.8, 0.8)
 texture = ExtResource("3_i5uf0")
 stretch_mode = 3
 
-[node name="glow" type="Sprite2D" parent="."]
+[node name="Glow" type="Sprite2D" parent="."]
 visible = false
-modulate = Color(0.478431, 1, 0.698039, 0.764706)
+modulate = Color(0.559409, 1, 0.741028, 0.764706)
 position = Vector2(94, 62)
-scale = Vector2(0.8, 0.8)
+scale = Vector2(0.825493, 0.825493)
 texture = ExtResource("4_i5uf0")
+
+[node name="NumberFrame" type="TextureRect" parent="."]
+z_index = 1
+offset_left = 118.0
+offset_top = 76.0
+offset_right = 176.0
+offset_bottom = 116.0
+texture = ExtResource("6_l6bkd")
+stretch_mode = 4
+
+[node name="NumberLabel" type="Label" parent="NumberFrame"]
+layout_mode = 0
+offset_left = 23.4347
+offset_top = 7.0
+offset_right = 54.4347
+offset_bottom = 53.0
+scale = Vector2(0.5, 0.5)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("7_utkmo")
+theme_override_font_sizes/font_size = 50
+text = "00"
+label_settings = ExtResource("8_8qxfd")
+horizontal_alignment = 1
+autowrap_mode = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
