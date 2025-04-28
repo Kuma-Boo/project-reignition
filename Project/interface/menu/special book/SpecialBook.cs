@@ -56,11 +56,18 @@ public partial class SpecialBook : Menu
     [Export]
     private AnimationPlayer animatorRandom;
 
+    [Export]
+    private NavigationButton navZoom;
+    [Export]
+    private NavigationButton navPlay;
+    [Export]
+    private BGMPlayer player;
+
+
     private Godot.Collections.Array randomPages;
 
     private bool playRandom;
     private int seekRandom;
-
 
 
 
@@ -108,6 +115,8 @@ public partial class SpecialBook : Menu
 
                 LoadChapter(chapters[chapterSelection].pages);
                 LoadPage(GetPage(chapterSelection, pageSelection));
+
+
             }
 
             if (Input.IsActionJustPressed("button_step_right"))
@@ -126,14 +135,18 @@ public partial class SpecialBook : Menu
 
             if (Input.IsActionJustPressed("button_pause"))
             {
-                RandomizeList();
-                playRandom = true;
-                seekRandom = 0;
-                menuFocus = 3;
-                randomPages.Shuffle();
-                animator.Play("show_playrandom");
-                animatorRandom.Play("playrandom");
-                animatorRandom.Seek(0.0);
+                if (CheckNumUnlocked() > 1) //If we have more than one page unlocked, then play the slideshow
+                {
+                    RandomizeList();
+                    playRandom = true;
+                    seekRandom = 0;
+                    menuFocus = 3;
+                    randomPages.Shuffle();
+                    animator.Play("show_playrandom");
+                    animatorRandom.Play("playrandom");
+                    animatorRandom.Seek(0.0);
+                }
+
 
             }
         }
@@ -183,6 +196,7 @@ public partial class SpecialBook : Menu
             {
                 animator.Play("show_description");
                 menuFocus = 2;
+
                 return;
             }
 
@@ -191,7 +205,7 @@ public partial class SpecialBook : Menu
         {
             if (GetPage(chapterSelection, pageSelection).unlocked)
             {
-                if (thisPage.track == null && thisPage.videoFilePath == "") //if this is an image
+                if (thisPage.page_full != null) //if this is an image
                 {
                     animator.Play("show_fullimage");
                     menuFocus = 3;
@@ -200,12 +214,26 @@ public partial class SpecialBook : Menu
                     StartSelectionTimer();
                 }
 
+                if (thisPage.videoFilePath != "")
+                {
+                    bgm.Stop();
+                    menuFocus = 4;
 
-                //if (thisPage.track != null) //if this is audio
-                //TODO: play audio track
+                    TransitionManager.QueueSceneChange(thisPage.videoFilePath);
+                    TransitionManager.StartTransition(new()
+                    {
+                        color = Colors.Black,
+                        inSpeed = .5f,
+                    });
+                }
 
-                //if (thisPage.videoFilePath != null) //if this is video
-                //TODO: play video file
+                if (thisPage.track != null)
+                {
+                    bgm.Stop();
+                    player.Stream = thisPage.track;
+                    player.Play();
+                }
+
             }
         }
     }
@@ -214,6 +242,7 @@ public partial class SpecialBook : Menu
     {
         if (menuFocus == 0)
         {
+            tabs[chapterSelection].Deselect();
             animator.Play("hide");
         }
 
@@ -248,11 +277,13 @@ public partial class SpecialBook : Menu
             }
 
         }
+
     }
 
 
     public override void ShowMenu()
     {
+        menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.SpecialBook;
 
         tabs[0].Select_NoSFX();
         chapterSelection = 0;
@@ -260,7 +291,15 @@ public partial class SpecialBook : Menu
         menuFocus = 0;
         playRandom = false;
 
+        for (int chapter = 0; chapter < chapters.Length; chapter++)
+        {
+            for (int page = 0; page < 15; page++)
+            {
+                GetPage(chapter, page).unlocked = false;
+            }
+        }
 
+        LoadSaveData();
 
         base.ShowMenu();
     }
@@ -276,7 +315,6 @@ public partial class SpecialBook : Menu
                 chapterSelection = WrapSelection(chapterSelection + (int)input.X, 16);
                 tabs[chapterSelection].Select();
 
-                //GD.Print(chapterSelection);
                 LoadChapter(chapters[chapterSelection].pages);
                 return;
             }
@@ -339,21 +377,23 @@ public partial class SpecialBook : Menu
             {
                 windows[pageSelection].Deselect();
 
-
-                pageSelection += (int)input.X;
-
+                int ogChapter = chapterSelection;
                 do
                 {
+                    pageSelection += (int)input.X;
                     if (pageSelection > 14 || pageSelection < 0)
                     {
-                        tabs[chapterSelection].Deselect();
-
                         pageSelection = WrapSelection(pageSelection, 15);
                         chapterSelection = WrapSelection(chapterSelection + (int)input.X, 16);
-
-                        tabs[chapterSelection].Select_NoGlow();
                     }
-                } while (!IsValid(GetPage(chapterSelection, pageSelection)));//Skips over every page we don't have unlocked. If we're on the full view, skips over movies and music
+
+                } while (!IsValid(GetPage(chapterSelection, pageSelection), menuFocus));//Skips over every page we don't have unlocked. If we're on the full view, skips over movies and music too
+
+                if (ogChapter != chapterSelection)
+                {
+                    tabs[ogChapter].Deselect();
+                    tabs[chapterSelection].Select_NoGlow();
+                }
 
 
                 windows[pageSelection].Select();
@@ -369,7 +409,7 @@ public partial class SpecialBook : Menu
         do
         {
             seekRandom = WrapSelection(seekRandom + 1, randomPages.Count);
-        } while (!IsValid((BookPage)randomPages[seekRandom]));
+        } while (!IsValid((BookPage)randomPages[seekRandom], menuFocus));
 
         LoadPage((BookPage)randomPages[seekRandom]);
 
@@ -382,28 +422,93 @@ public partial class SpecialBook : Menu
         {
             for (int j = 0; j < 15; j++)
             {
-                GD.Print("Adding Page [" + i + "," + j + "]");
                 randomPages.Add(GetPage(i, j));
             }
         }
     }
 
-    private bool IsValid(BookPage page)//Checks if we can view the page
+    private bool IsValid(BookPage page, int focus)//Checks if we can view the page
     {
-        if (menuFocus == 1 || menuFocus == 2)
+        if (focus == 1 || focus == 2)
         {
             if (page.unlocked)
                 return true;
         }
-        else if (menuFocus == 3)
+        else if (focus == 3)
         {
-            if (page.unlocked || (page.videoFilePath != "" && page.track != null)) //If this is an image, then we can view it
+            if (page.unlocked && page.page_full != null) //If this is an image, then we can view it
                 return true;
         }
         return false;
     }
 
+    private void LoadSaveData()
+    {
+        SaveManager.LoadGameData();
 
+        for (int i = 0; i < chapters.Length; i++)
+        {
+            foreach (BookPage page in chapters[i].pages)
+            {
+                if (page.unlock_clear)
+                {
+                    foreach (SaveManager.GameData data in SaveManager.GameSaveSlots)
+                    {
+                        if (data.GetRank((StringName)page.StageUnlock()) > 0) //If we have at least a bronze medal
+                        {
+                            page.unlocked = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (page.unlock_gold)
+                {
+                    foreach (SaveManager.GameData data in SaveManager.GameSaveSlots)
+                    {
+                        if (data.GetRank((StringName)page.StageUnlock()) > 2) //If we have a gold medal
+                        {
+                            page.unlocked = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (page.unlock_silver)
+                {
+                    int silver = 0;
+                    for (int world = 0; world < 8; world++)
+                    {
+                        for (int level = 1; level < 30; level++)
+                        {
+                            foreach (SaveManager.GameData data in SaveManager.GameSaveSlots)
+                            {
+                                if (page.StageUnlock((BookPage.World)world, level) != "")
+                                {
+                                    if (data.GetRank((StringName)page.StageUnlock((BookPage.World)world, level)) > 1)
+                                    {
+                                        silver++;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (silver >= page.unlock_numSilver)
+                                break;
+                        }
+                        if (silver >= page.unlock_numSilver)
+                        {
+                            page.unlocked = true;
+                            break;
+                        }
+                    }
+
+
+                }
+
+            }
+        }
+
+    }
 
     private BookPage[] GetChapter(int chapter)
     {
@@ -417,7 +522,6 @@ public partial class SpecialBook : Menu
     private void LoadChapter(BookPage[] chapter)
     {
         chapterLabel.Text = Tr("spb_chapter") + " " + (chapterSelection + 1);
-        GD.Print(chapterLabel.Text);
 
         chapterName.Text = "[" + Tr("spb_chapter_" + tabs[chapterSelection].thisChapterType.ToString().ToLower()) + "]";
 
@@ -431,6 +535,17 @@ public partial class SpecialBook : Menu
 
     private void LoadPage(BookPage page)
     {
+        menuMemory[MemoryKeys.SpecialBook] = (15 * chapterSelection) + (pageSelection);
+        if (page.page_full != null)
+        {
+            navZoom.Visible = true;
+            navPlay.Visible = false;
+        }
+        else if (page.videoFilePath != "" || page.track != null)
+        {
+            navZoom.Visible = false;
+            navPlay.Visible = true;
+        }
 
         if (page.unlocked)
         {
@@ -466,7 +581,20 @@ public partial class SpecialBook : Menu
     }
 
 
+    private int CheckNumUnlocked()
+    {
+        int num = 0;
 
+        for (int chapter = 0; chapter < chapters.Length; chapter++)
+        {
+            for (int page = 0; page < 15; page++)
+            {
+                if (chapters[chapter].pages[page].unlocked == true && IsValid(chapters[chapter].pages[page], 3))
+                    num++;
+            }
+        }
+        return num;
+    }
     private void UnlockAll()
     {
         for (int i = 0; i < chapters.Length; i++)

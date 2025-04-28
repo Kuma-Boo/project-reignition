@@ -7,7 +7,7 @@ using Project.Core;
 public partial class BookPage : Resource
 {
     public enum World
-    { LP, SO, DJ, EF, LR, PS, SD, NP }
+    { LP = 0, SO = 1, DJ = 2, EF = 3, LR = 4, PS = 5, SD = 6, NP = 7 }
 
     [Export]
     public string name;
@@ -89,12 +89,13 @@ public partial class BookPage : Resource
         this.image_preview = image_preview;
     }
 
-    public string StageUnlock()
+
+    public string StageUnlock(World world, int stageNum)
     {
-        switch (unlock_world)
+        switch (world)
         {
             case World.SO:
-                switch (unlock_stageNum)
+                switch (stageNum)
                 {
                     case 1:
                         return "so_a1_main";
@@ -122,8 +123,9 @@ public partial class BookPage : Resource
                         return "so_a3_chain";
                     case 13:
                         return "so_boss";
+                    default:
+                        return "";
                 }
-                break;
             case World.DJ:
                 switch (unlock_stageNum)
                 {
@@ -151,8 +153,9 @@ public partial class BookPage : Resource
                         return "dj_a3_ring";
                     case 12:
                         return "dj_a3_pearless";
+                    default:
+                        return "";
                 }
-                break;
             case World.EF:
                 switch (unlock_stageNum)
                 {
@@ -182,9 +185,10 @@ public partial class BookPage : Resource
                         return "ef_a3_chain";
                     case 13:
                         return "ef_boss";
+                    default:
+                        return "";
 
                 }
-                break;
             case World.LR:
                 switch (unlock_stageNum)
                 {
@@ -212,8 +216,10 @@ public partial class BookPage : Resource
                         return "lr_a3_ring";
                     case 12:
                         return "lr_a3_pearless";
+                    default:
+                        return "";
                 }
-                break;
+
             case World.PS:
                 switch (unlock_stageNum)
                 {
@@ -243,8 +249,9 @@ public partial class BookPage : Resource
                         return "ps_a3_perfect";
                     case 13:
                         return "ps_boss";
+                    default:
+                        return "";
                 }
-                break;
             case World.SD:
                 switch (unlock_stageNum)
                 {
@@ -272,8 +279,9 @@ public partial class BookPage : Resource
                         return "sd_a3_ring";
                     case 12:
                         return "sd_a3_chain";
+                    default:
+                        return "";
                 }
-                break;
             case World.NP:
                 switch (unlock_stageNum)
                 {
@@ -305,11 +313,16 @@ public partial class BookPage : Resource
                         return "np_boss";
                     case 14:
                         return "np_last";
+                    default:
+                        return "";
                 }
-                break;
         }
 
         return "";
+    }
+    public string StageUnlock()
+    {
+        return StageUnlock(unlock_world, unlock_stageNum);
     }
 
 }
