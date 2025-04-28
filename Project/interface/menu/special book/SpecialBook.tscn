@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://cfxpl43xw0rn6"]
+[gd_scene load_steps=57 format=3 uid="uid://cfxpl43xw0rn6"]
 
 [ext_resource type="Script" uid="uid://cvy63h3pgw1qv" path="res://interface/menu/special book/SpecialBook.cs" id="1_b5eh1"]
 [ext_resource type="Resource" uid="uid://c8780f2wj6f5c" path="res://interface/menu/special book/bookpages/Chapters/Chapter1.tres" id="2_6b0v7"]
@@ -36,6 +36,10 @@
 [ext_resource type="Texture2D" uid="uid://ptwaihnc347f" path="res://interface/menu/special book/texture/chapter 1/C1_03.png" id="32_1hqjm"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="35_6o01v"]
 [ext_resource type="AudioStream" uid="uid://crv7bkfoihdpv" path="res://sound/ost/bonus disc/Slideshow Special Book.mp3" id="35_ior2v"]
+[ext_resource type="AudioStream" uid="uid://d3o0o85sotlrf" path="res://sound/sfx/system/special book cancel.wav" id="37_ildlb"]
+[ext_resource type="AudioStream" uid="uid://pl5vnbme4wmg" path="res://sound/sfx/system/special book select.wav" id="38_wuupq"]
+[ext_resource type="AudioStream" uid="uid://ysuyyr6346w6" path="res://sound/sfx/system/special book confirm.wav" id="39_jftlp"]
+[ext_resource type="AudioStream" uid="uid://dt50f72s1ukxq" path="res://sound/sfx/system/special book category select.wav" id="40_4b6ew"]
 
 [sub_resource type="Animation" id="Animation_cyesu"]
 resource_name = "RESET"
@@ -904,7 +908,7 @@ _data = {
 &"hide_navbuttons": SubResource("Animation_pk3ru")
 }
 
-[node name="SpecialBook" type="Control" node_paths=PackedStringArray("tabs", "windows", "previewImages", "chapterName", "chapterLabel", "textboxTitle", "previewDescription", "previewImage", "previewNumber", "fullImage", "animatorNav", "animatorRandom", "navZoom", "navPlay", "player", "bgm", "animator")]
+[node name="SpecialBook" type="Control" node_paths=PackedStringArray("tabs", "windows", "previewImages", "chapterName", "chapterLabel", "textboxTitle", "previewDescription", "previewImage", "previewNumber", "fullImage", "animatorNav", "animatorRandom", "navZoom", "navPlay", "player", "sfxOpen", "sfxSelect", "sfxCancel", "sfxConfirm", "sfxCategorySelect", "bgm", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -928,6 +932,11 @@ animatorRandom = NodePath("AnimationPlayer_PlayRandom")
 navZoom = NodePath("NavigationButtons Book/Zoom")
 navPlay = NodePath("NavigationButtons Book/Play")
 player = NodePath("BookBGM 2")
+sfxOpen = NodePath("SFX/Flipping")
+sfxSelect = NodePath("SFX/Select")
+sfxCancel = NodePath("SFX/Cancel")
+sfxConfirm = NodePath("SFX/Confirm")
+sfxCategorySelect = NodePath("SFX/Category Select")
 bgm = NodePath("SpecialBookBGM")
 animator = NodePath("AnimationPlayer")
 isProcessing = true
@@ -1786,7 +1795,7 @@ stream = ExtResource("35_ior2v")
 bus = &"BGM"
 parameters/looping = false
 script = ExtResource("11_llt0s")
-loopEndPosition = 361.43
+loopEndPosition = 50.0
 
 [node name="Nav Buttons Full" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -1910,4 +1919,20 @@ inputKey = &"button_jump"
 
 [node name="Flipping" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("13_m75ed")
+bus = &"SFX"
+
+[node name="Select" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("38_wuupq")
+bus = &"SFX"
+
+[node name="Cancel" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("37_ildlb")
+bus = &"SFX"
+
+[node name="Confirm" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("39_jftlp")
+bus = &"SFX"
+
+[node name="Category Select" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("40_4b6ew")
 bus = &"SFX"

@@ -89,7 +89,19 @@ public partial class BookPage : Resource
         this.image_preview = image_preview;
     }
 
+    public int NumStages(World world)
+    {
+        int num = 0;
+        for (int i = 1; i < 30; i++)
+        {
+            if (StageUnlock(world, i) == "")
+                return num;
+            else
+                num++;
+        }
+        return num;
 
+    }
     public string StageUnlock(World world, int stageNum)
     {
         switch (world)
