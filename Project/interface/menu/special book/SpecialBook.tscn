@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://cfxpl43xw0rn6"]
+[gd_scene load_steps=57 format=3 uid="uid://cfxpl43xw0rn6"]
 
 [ext_resource type="Script" uid="uid://cvy63h3pgw1qv" path="res://interface/menu/special book/script/SpecialBook.cs" id="1_b5eh1"]
 [ext_resource type="Resource" uid="uid://c8780f2wj6f5c" path="res://resource/special book/Chapters/Chapter1.tres" id="2_6b0v7"]
@@ -917,12 +917,12 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_pk3ru"]
-resource_name = "hide_navbuttons"
-length = 5.0
+resource_name = "hide"
+length = 0.16667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -930,7 +930,7 @@ tracks/0/path = NodePath("NavButtonsFull/Middle:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(4.76667, 4.96667),
+"times": PackedFloat32Array(0, 0.166667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(0.117647, 0.117647, 0.117647, 0.701961), Color(0.117647, 0.117647, 0.117647, 0)]
@@ -942,19 +942,48 @@ tracks/1/path = NodePath("NavButtonsFull/NavigationButtonsFull:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(4.76667, 4.96667),
+"times": PackedFloat32Array(0, 0.166667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_mfyml"]
+resource_name = "show"
+length = 0.16667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("NavButtonsFull/Middle:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.117647, 0.117647, 0.117647, 0), Color(0.117647, 0.117647, 0.117647, 0.701961)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("NavButtonsFull/NavigationButtonsFull:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wuupq"]
 _data = {
 &"RESET": SubResource("Animation_ildlb"),
-&"hide_navbuttons": SubResource("Animation_pk3ru")
+&"hide": SubResource("Animation_pk3ru"),
+&"show": SubResource("Animation_mfyml")
 }
 
-[node name="SpecialBook" type="Control" node_paths=PackedStringArray("tabs", "pages", "previewImages", "chapterName", "chapterLabel", "textboxTitle", "previewDescription", "previewImage", "previewNumber", "fullImage", "animatorNav", "animatorRandom", "navZoom", "navPlay", "player", "sfxOpen", "sfxSelect", "sfxCancel", "sfxConfirm", "sfxCategorySelect", "bgm", "animator")]
+[node name="SpecialBook" type="Control" node_paths=PackedStringArray("tabs", "pages", "previewImages", "chapterName", "chapterLabel", "textboxTitle", "previewDescription", "previewImage", "previewNumber", "fullImage", "navigationAnimator", "navZoom", "navPlay", "player", "sfxOpen", "sfxSelect", "sfxCancel", "sfxConfirm", "sfxCategorySelect", "randomAnimator", "bgm", "animator")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -973,8 +1002,7 @@ previewDescription = NodePath("Book/Preview/Description")
 previewImage = NodePath("Book/Preview/Image")
 previewNumber = NodePath("Book/Preview/Number")
 fullImage = NodePath("FullView/FullImage")
-animatorNav = NodePath("NavButtonsFull/NavButtonAnimationPlayer")
-animatorRandom = NodePath("AnimationPlayer_PlayRandom")
+navigationAnimator = NodePath("NavButtonsFull/NavigationAnimationPlayer")
 navZoom = NodePath("NavigationButtonsBook/Zoom")
 navPlay = NodePath("NavigationButtonsBook/Play")
 player = NodePath("MusicPlayer")
@@ -983,6 +1011,7 @@ sfxSelect = NodePath("SFX/Select")
 sfxCancel = NodePath("SFX/Cancel")
 sfxConfirm = NodePath("SFX/Confirm")
 sfxCategorySelect = NodePath("SFX/CategorySelect")
+randomAnimator = NodePath("RandomAnimationPlayer")
 bgm = NodePath("SpecialBookBGM")
 animator = NodePath("AnimationPlayer")
 isProcessing = true
@@ -1392,7 +1421,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_yxyel")
 }
 
-[node name="AnimationPlayer_PlayRandom" type="AnimationPlayer" parent="."]
+[node name="RandomAnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_4b6ew")
 }
@@ -1433,7 +1462,6 @@ texture = ExtResource("9_cyesu")
 stretch_mode = 4
 
 [node name="NavigationButtonsFull" type="HBoxContainer" parent="NavButtonsFull"]
-modulate = Color(1, 1, 1, 0)
 z_index = 1
 layout_mode = 0
 offset_left = 384.0
@@ -1443,17 +1471,17 @@ offset_bottom = 1051.0
 theme_override_constants/separation = 64
 alignment = 2
 
+[node name="Back" parent="NavButtonsFull/NavigationButtonsFull" instance=ExtResource("35_6o01v")]
+layout_mode = 2
+ActionKey = &"sys_back"
+inputKey = &"button_action"
+
 [node name="Hide" parent="NavButtonsFull/NavigationButtonsFull" instance=ExtResource("35_6o01v")]
 layout_mode = 2
 ActionKey = &"spb_controls_hide"
 inputKey = &"button_jump"
 
-[node name="Back" parent="NavButtonsFull/NavigationButtonsFull" instance=ExtResource("35_6o01v")]
-layout_mode = 2
-ActionKey = &"spb_controls_back"
-inputKey = &"button_action"
-
-[node name="NavButtonAnimationPlayer" type="AnimationPlayer" parent="NavButtonsFull"]
+[node name="NavigationAnimationPlayer" type="AnimationPlayer" parent="NavButtonsFull"]
 root_node = NodePath("../..")
 libraries = {
 &"": SubResource("AnimationLibrary_wuupq")
@@ -1472,12 +1500,12 @@ alignment = 1
 
 [node name="PlayRandom" parent="NavigationButtonsMain" instance=ExtResource("35_6o01v")]
 layout_mode = 2
-ActionKey = &"spb_controls_playrandom"
+ActionKey = &"spb_controls_random"
 inputKey = &"button_pause"
 
 [node name="Back" parent="NavigationButtonsMain" instance=ExtResource("35_6o01v")]
 layout_mode = 2
-ActionKey = &"sys_return"
+ActionKey = &"sys_back"
 inputKey = &"button_action"
 
 [node name="Select" parent="NavigationButtonsMain" instance=ExtResource("35_6o01v")]
@@ -1498,7 +1526,7 @@ alignment = 2
 
 [node name="Back" parent="NavigationButtonsBook" instance=ExtResource("35_6o01v")]
 layout_mode = 2
-ActionKey = &"sys_return"
+ActionKey = &"sys_back"
 inputKey = &"button_action"
 
 [node name="Zoom" parent="NavigationButtonsBook" instance=ExtResource("35_6o01v")]
