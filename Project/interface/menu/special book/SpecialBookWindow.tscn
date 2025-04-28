@@ -1,0 +1,159 @@
+[gd_scene load_steps=14 format=3 uid="uid://bwqgjo2ywq68m"]
+
+[ext_resource type="Script" uid="uid://cmksigg2bddki" path="res://interface/menu/special book/script/SpecialBookWindow.cs" id="1_a31tl"]
+[ext_resource type="Texture2D" uid="uid://qys1j7pgsm0p" path="res://interface/menu/special book/texture/book objects/frame.png" id="2_i5uf0"]
+[ext_resource type="Texture2D" uid="uid://baor555ii24fi" path="res://interface/menu/special book/texture/book objects/frame_question.png" id="3_i5uf0"]
+[ext_resource type="Texture2D" uid="uid://0ihwssoc3k0e" path="res://interface/menu/special book/texture/book objects/frame_glow.png" id="4_i5uf0"]
+[ext_resource type="Texture2D" uid="uid://dv04kvw4ixivf" path="res://interface/menu/special book/texture/book objects/frame_number.png" id="6_l6bkd"]
+[ext_resource type="FontFile" uid="uid://bsoin3p4iygoo" path="res://interface/font/otf/Chiaro Std B.otf" id="7_utkmo"]
+[ext_resource type="LabelSettings" uid="uid://dki35mj1oux2s" path="res://interface/font/DescriptionText.tres" id="8_8qxfd"]
+
+[sub_resource type="Animation" id="Animation_6gyq1"]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Glow:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_a31tl"]
+resource_name = "select"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Glow:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a31tl"]
+_data = {
+&"RESET": SubResource("Animation_6gyq1"),
+&"select": SubResource("Animation_a31tl")
+}
+
+[sub_resource type="Animation" id="Animation_i5uf0"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_xnwnq"]
+resource_name = "glow"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Glow:modulate")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.478431, 1, 0.698039, 0.764706), Color(0.796078, 1, 0.866667, 0.764706), Color(0.478431, 1, 0.698039, 0.764706)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Glow:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.8, 0.8), Vector2(0.9, 0.9), Vector2(0.8, 0.8)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_n5mwb"]
+_data = {
+&"RESET": SubResource("Animation_i5uf0"),
+&"glow": SubResource("Animation_xnwnq")
+}
+
+[node name="SpecialBookWindow" type="Control" node_paths=PackedStringArray("numberLabel", "windowAnimator", "windowAnimator2")]
+custom_minimum_size = Vector2(186, 124)
+layout_mode = 3
+anchor_right = 0.097
+anchor_bottom = 0.115
+offset_right = -0.240005
+offset_bottom = -0.200005
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a31tl")
+numberLabel = NodePath("NumberFrame/NumberLabel")
+windowAnimator = NodePath("AnimationPlayer")
+windowAnimator2 = NodePath("AnimationPlayer2")
+
+[node name="Frame" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 233.0
+offset_bottom = 155.0
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("2_i5uf0")
+stretch_mode = 4
+
+[node name="Questionmark" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 78.0
+offset_top = 29.0
+offset_right = 118.0
+offset_bottom = 117.0
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("3_i5uf0")
+stretch_mode = 3
+
+[node name="Glow" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(0.559409, 1, 0.741028, 0.764706)
+position = Vector2(94, 62)
+scale = Vector2(0.825493, 0.825493)
+texture = ExtResource("4_i5uf0")
+
+[node name="NumberFrame" type="TextureRect" parent="."]
+z_index = 1
+layout_mode = 0
+offset_left = 118.0
+offset_top = 76.0
+offset_right = 176.0
+offset_bottom = 116.0
+texture = ExtResource("6_l6bkd")
+stretch_mode = 4
+
+[node name="NumberLabel" type="Label" parent="NumberFrame"]
+layout_mode = 0
+offset_left = 23.4347
+offset_top = 7.0
+offset_right = 54.4347
+offset_bottom = 53.0
+scale = Vector2(0.5, 0.5)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("7_utkmo")
+theme_override_font_sizes/font_size = 50
+text = "00"
+label_settings = ExtResource("8_8qxfd")
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_a31tl")
+}
+
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_n5mwb")
+}

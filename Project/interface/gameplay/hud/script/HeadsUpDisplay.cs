@@ -99,11 +99,13 @@ public partial class HeadsUpDisplay : Control
 	#region Time and Score
 	[ExportGroup("Time & Score")]
 	[Export]
-	private Node2D rankPreviewerRoot;
+	private Control rankPreviewerRoot;
 	[Export]
-	private Sprite2D mainRank;
+	private TextureRect mainRank;
 	[Export]
-	private Sprite2D transitionRank;
+	private TextureRect transitionRank;
+	[Export]
+	private Texture2D[] rankTextures;
 	[Export]
 	private AudioStreamPlayer rankUpSFX;
 	[Export]
@@ -116,8 +118,8 @@ public partial class HeadsUpDisplay : Control
 		if (!rankPreviewerRoot.Visible)
 			return;
 
-		CurrentRank = Stage.CalculateRank(true);
-		mainRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * CurrentRank * 60), mainRank.RegionRect.Size);
+		CurrentRank = Mathf.Max(0, Stage.CalculateRank(true));
+		mainRank.Texture = rankTextures[CurrentRank];
 	}
 
 	private void UpdateRankPreviewer()
@@ -138,23 +140,23 @@ public partial class HeadsUpDisplay : Control
 		CurrentRank = rank;
 	}
 
-	private void StartRankDownTween(int amount)
+	private void StartRankDownTween(int rankDirection)
 	{
 		rankDownSFX.Play();
-		transitionRank.RegionRect = mainRank.RegionRect;
+		transitionRank.Texture = mainRank.Texture;
 		transitionRank.Position = Vector2.Zero;
 		transitionRank.SelfModulate = Colors.White;
-		mainRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * amount * 60), mainRank.RegionRect.Size);
+		mainRank.Texture = rankTextures[CurrentRank + rankDirection];
 		rankTween = CreateTween().SetParallel();
 		rankTween.TweenProperty(transitionRank, "self_modulate", Colors.Transparent, .5f);
 		rankTween.TweenProperty(transitionRank, "position", Vector2.Down * 128, .5f).SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.In);
 		rankTween.TweenCallback(new Callable(this, MethodName.CompleteRankDownTween)).SetDelay(.5f);
 	}
 
-	private void StartRankUpTween(int amount)
+	private void StartRankUpTween(int rankDirection)
 	{
 		rankUpSFX.Play();
-		transitionRank.RegionRect = new(mainRank.RegionRect.Position + (Vector2.Down * amount * 60), mainRank.RegionRect.Size);
+		transitionRank.Texture = rankTextures[CurrentRank + rankDirection];
 		transitionRank.Position = Vector2.Up * 256;
 		rankTween = CreateTween().SetParallel();
 		rankTween.TweenProperty(transitionRank, "self_modulate", Colors.White, .5f);
@@ -164,7 +166,7 @@ public partial class HeadsUpDisplay : Control
 
 	private void CompleteRankUpTween()
 	{
-		mainRank.RegionRect = transitionRank.RegionRect;
+		mainRank.Texture = transitionRank.Texture;
 		transitionRank.SelfModulate = Colors.Transparent;
 		rankTween.Kill();
 	}

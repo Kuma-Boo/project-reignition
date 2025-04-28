@@ -25,8 +25,11 @@ public partial class PauseMenu : Node
 	[Export] private Label missionTypeLabel;
 	[Export] private Label missionDescriptionLabel;
 	[Export] private Control fireSoulParent;
-	[Export] private Sprite2D[] fireSoulSprites;
-	[Export] private Sprite2D rankSprite;
+	[Export] private TextureRect[] fireSoulRects;
+	[Export] private Texture2D fireSoulSprite;
+	[Export] private Texture2D noFireSoulSprite;
+	[Export] private TextureRect rankRect;
+	[Export] private Texture2D[] rankSprites;
 
 	[ExportSubgroup("Skill Menu")]
 	[Export] private Label noSkillLabel;
@@ -245,7 +248,7 @@ public partial class PauseMenu : Node
 					break;
 				case 3: // Open EXP menu
 					SaveManager.SaveGameData();
-					TransitionManager.instance.QueuedScene = TransitionManager.MENU_SCENE_PATH;
+					TransitionManager.instance.QueuedScene = TransitionManager.MenuScenePath;
 					EmitSignal(SignalName.OnSceneChangeSelected);
 					break;
 			}
@@ -287,18 +290,18 @@ public partial class PauseMenu : Node
 		fireSoulParent.Visible = Stage.Data.HasFireSouls;
 		if (Stage.Data.HasFireSouls)
 		{
-			for (int i = 0; i < fireSoulSprites.Length; i++)
+			for (int i = 0; i < fireSoulRects.Length; i++)
 			{
 				bool isSaveCollected = SaveManager.ActiveGameData.IsFireSoulCollected(Stage.Data.LevelID, i + 1);
 				bool isCheckpointCollected = StageSettings.Instance.fireSoulCheckpoints[i];
 
-				fireSoulSprites[i].RegionRect = new(new(isSaveCollected || isCheckpointCollected ? 450 : 400, fireSoulSprites[i].RegionRect.Position.Y), fireSoulSprites[i].RegionRect.Size);
-				fireSoulSprites[i].SelfModulate = isCheckpointCollected ? new(1f, 1f, 1f, .5f) : Colors.White;
+				fireSoulRects[i].Texture = (isSaveCollected || isCheckpointCollected) ? fireSoulSprite : noFireSoulSprite;
+				fireSoulRects[i].SelfModulate = isCheckpointCollected ? new(1f, 1f, 1f, .5f) : Colors.White;
 			}
 		}
 
 		int rank = SaveManager.ActiveGameData.GetRankClamped(Stage.Data.LevelID);
-		rankSprite.RegionRect = new(new(rankSprite.RegionRect.Position.X, 110 + (60 * rank)), rankSprite.RegionRect.Size);
+		rankRect.Texture = rankSprites[rank];
 	}
 
 	/// <summary> Selected menu option. </summary>
