@@ -109,7 +109,7 @@ public partial class MainMenu : Menu
 		}
 
 		//Ignore unimplemented menus.
-		if (currentSelection == 1 || currentSelection == 2) return;
+		if (currentSelection == 1) return;
 		animator.Play("confirm");
 	}
 
@@ -132,12 +132,12 @@ public partial class MainMenu : Menu
 			return;
 		}
 
-		if (currentSelection != 3)
+		if (currentSelection < 2)
 			return;
 
 		FadeBGM(.5f);
 		menuMemory[MemoryKeys.MainMenu] = currentSelection;
-		TransitionManager.QueueSceneChange("res://interface/menu/options/Options.tscn");
+		TransitionManager.QueueSceneChange(currentSelection == 2 ? TransitionManager.SpecialBookScenePath : TransitionManager.OptionsScenePath);
 		TransitionManager.StartTransition(new()
 		{
 			color = Colors.Black,

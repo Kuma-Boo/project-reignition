@@ -38,7 +38,7 @@ public partial class Menu : Control
 	public Menu parentMenu;
 	[Export]
 	public Array<NodePath> submenus;
-	public Array<Menu> _submenus = new(); // Also ensure the order of submenus is correct in the inspector hierarchy
+	public Array<Menu> _submenus = []; // Also ensure the order of submenus is correct in the inspector hierarchy
 
 	[Export]
 	protected AudioStreamPlayer bgm;
@@ -190,6 +190,17 @@ public partial class Menu : Control
 			currentSelection += maxSelection;
 		else if (currentSelection >= maxSelection)
 			currentSelection -= maxSelection;
+
+		return currentSelection;
+	}
+
+	/// <summary> Wraps a selection around max and min selection </summary>
+	protected int WrapSelection(int currentSelection, int maxSelection, int minSelection)
+	{
+		if (currentSelection < minSelection)
+			currentSelection = maxSelection;
+		else if (currentSelection > maxSelection)
+			currentSelection = minSelection;
 
 		return currentSelection;
 	}

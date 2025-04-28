@@ -222,7 +222,7 @@ public partial class Options : Menu
 				FadeBGM(.5f);
 				SaveManager.SaveConfig();
 				menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.MainMenu;
-				TransitionManager.QueueSceneChange(TransitionManager.MENU_SCENE_PATH);
+				TransitionManager.QueueSceneChange(TransitionManager.MenuScenePath);
 				TransitionManager.StartTransition(new()
 				{
 					color = Colors.Black,
