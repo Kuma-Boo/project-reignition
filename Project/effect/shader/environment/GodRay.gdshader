@@ -14,4 +14,3 @@ void fragment()
 	ALBEDO = col.rgb * COLOR.rgb;
 	ALPHA *= clamp(smoothstep(0, 5, length(VERTEX)), 0.0, 1.0);
 }
-
