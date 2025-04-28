@@ -72,11 +72,12 @@ public partial class SpecialBook : Menu
 		pageSelection = menuMemory[MemoryKeys.SpecialBook] % pages.Length;
 
 		// Select the tab and load the chapter's data
-		tabs[chapterSelection].SelectNoGlow();
 		LoadChapter();
+		PlayBGM();
 
 		if (menuMemory[MemoryKeys.SpecialBook] != 0)
 		{
+			tabs[chapterSelection].SelectNoGlow();
 			// If we are returning from an event scene
 			pages[pageSelection].Select();
 			chapterName.Visible = false;
@@ -90,6 +91,7 @@ public partial class SpecialBook : Menu
 			return;
 		}
 
+		tabs[chapterSelection].Select(); // Select chapter tab
 		base.ShowMenu();
 	}
 
