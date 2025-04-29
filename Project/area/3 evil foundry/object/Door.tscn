@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bn8lomrei46ap"]
+[gd_scene load_steps=25 format=3 uid="uid://bn8lomrei46ap"]
 
 [ext_resource type="PackedScene" uid="uid://bjhq4tu61hyom" path="res://area/3 evil foundry/object/model/Door.gltf" id="1_13c01"]
 [ext_resource type="Script" uid="uid://mrs44oflcm84" path="res://area/3 evil foundry/data/script/FoundryDoor.cs" id="1_d8fuq"]
@@ -12,6 +12,9 @@ size = Vector3(4, 6, 2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jrdri"]
 size = Vector3(4, 6, 0.5)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_1mfj6"]
+points = PackedVector3Array(2, 0, -0.2, 2, 0, 0.2, -2, 0, -0.2, -2, 0, 0.2, 2, 0.25, 0, -2, 0.25, 0)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3j4i5"]
 animation = &"RESET"
@@ -159,11 +162,9 @@ extra_cull_margin = 5.0
 extra_cull_margin = 5.0
 
 [node name="DoorSpiked" parent="Door/DoorRoot/Skeleton3D" index="2"]
-visible = false
 extra_cull_margin = 5.0
 
 [node name="DoorAttachment" type="BoneAttachment3D" parent="Door/DoorRoot/Skeleton3D/DoorSpiked" index="0"]
-transform = Transform3D(-1.19209e-07, 0, 1, 0, 1, 0, -1, 0, -1.19209e-07, -2, 0, -2)
 bone_name = "door_center"
 bone_idx = 3
 use_external_skeleton = true
@@ -180,7 +181,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0.5)
 shape = SubResource("BoxShape3D_8nglt")
 
 [node name="BaseAttachment" type="BoneAttachment3D" parent="Door/DoorRoot/Skeleton3D" index="3"]
-transform = Transform3D(-1.19209e-07, 0, 1, 0, 1, 0, -1, 0, -1.19209e-07, -2, 0, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 bone_name = "hinge_r"
 bone_idx = 2
 
@@ -202,6 +203,10 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Door/DoorRoot/Skeleton3D/BaseAttachment/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 shape = SubResource("BoxShape3D_jrdri")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Door/DoorRoot/Skeleton3D/BaseAttachment/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+shape = SubResource("ConvexPolygonShape3D_1mfj6")
 
 [node name="AnimationPlayer" parent="Door" index="1"]
 reset_on_save = false

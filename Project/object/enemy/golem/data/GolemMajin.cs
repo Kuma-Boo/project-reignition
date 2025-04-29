@@ -140,7 +140,7 @@ public partial class GolemMajin : Enemy
 	{
 		AnimationTree.Set(StateTransition, "defeat");
 		base.Defeat();
-		CallDeferred(MethodName.SetHitboxStatus, false, false);
+		SetHitboxStatus(false, false);
 
 		if (gasTank != null) // Drop the gas tank
 			LaunchGasTank();
