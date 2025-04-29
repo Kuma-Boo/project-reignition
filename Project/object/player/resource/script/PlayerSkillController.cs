@@ -268,7 +268,7 @@ public partial class PlayerSkillController : Node3D
 
 	private float breakTimer; // Timer for break skills
 	public const float TimebreakRatio = .6f; // Time scale
-	private const float SpeedBreakDelay = 0.4f; // Time to say SPEED BREAK!
+	private const float SpeedBreakDelay = 0.2f; // Time to say SPEED BREAK!
 	private const float BreakSkillsCooldown = 1f; // Prevent skill spam
 	private readonly string SpeedbreakOverlayOpacityKey = "opacity";
 
