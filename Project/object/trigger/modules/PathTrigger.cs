@@ -59,8 +59,11 @@ public partial class PathTrigger : StageTriggerModule
 
 		if (!Player.Camera.PathFollower.SetActivePath(path, reversePath))
 			return;
+
+		Player.Camera.ReversePathInfluence = cameraPathDeactivateReverse == reversePath ? 0f : 1f;
+
 		Player.Camera.LimitToPathDistance = limitCameraDistanceToPath;
-		Player.Camera.UpdatePathBlendSpeed(Mathf.IsZeroApprox(cameraPathBlendTime) ? 0.0f : 1.0f / cameraPathBlendTime);
+		Player.Camera.UpdatePathBlendSpeed(Mathf.IsZeroApprox(cameraPathBlendTime) ? 0f : 1f / cameraPathBlendTime);
 	}
 
 	public override void Deactivate()

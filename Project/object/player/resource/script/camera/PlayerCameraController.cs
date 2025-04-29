@@ -1,7 +1,6 @@
 using Godot;
 using Project.Core;
 using Project.Gameplay.Triggers;
-using System;
 using System.Collections.Generic;
 
 namespace Project.Gameplay;
@@ -116,6 +115,7 @@ public partial class PlayerCameraController : Node3D
 			UpdateFreeCam();
 	}
 
+	public float ReversePathInfluence { get; set; }
 	private float reverseBlendRotationAmount;
 	private float pathBlend = 1.0f;
 	private float pathBlendSmoothed = 1.0f;
@@ -150,8 +150,12 @@ public partial class PlayerCameraController : Node3D
 
 	private float CalculateReversePathBlendRotation()
 	{
-		float starting = PathFollower.IsReversingPath ? 0 : Mathf.Pi;
 		float target = PathFollower.IsReversingPath ? Mathf.Pi : 0;
+		if (Mathf.IsZeroApprox(ReversePathInfluence))
+			return target;
+
+		float starting = PathFollower.IsReversingPath ? 0 : Mathf.Pi;
+		ReversePathInfluence = 1f - pathBlendSmoothed;
 		return Mathf.Lerp(starting, target, pathBlendSmoothed);
 	}
 
