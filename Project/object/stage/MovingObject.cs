@@ -248,11 +248,7 @@ public partial class MovingObject : Node3D
 			Root.GlobalPosition = InterpolatePosition(currentTime);
 	}
 
-	public void DamagePlayer()
-	{
-		GD.Print("Damaging Player");
-		EmitSignal(SignalName.DamagedPlayer);
-	}
+	public void DamagePlayer() => EmitSignal(SignalName.DamagedPlayer);
 
 	public Vector3 InterpolatePosition(float ratio)
 	{

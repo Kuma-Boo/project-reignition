@@ -998,7 +998,6 @@ public partial class PlayerCameraController : Node3D
 			isFreeCamActive = isFreeCamRotating = false;
 			Camera.Transform = Transform3D.Identity;
 			FreeCamRoot.Transform = Transform3D.Identity;
-			GD.Print("Free cam disabled.");
 		}
 	}
 

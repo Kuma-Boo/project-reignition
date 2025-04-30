@@ -133,18 +133,22 @@ public partial class Ivy : Launcher
 			!Player.IsConnected(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable))
 		{
 			// Connect signal so we can reset when we land
-			Player.Connect(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable);
+			Player.Connect(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable, (int)ConnectFlags.OneShot);
 		}
 	}
 
 	public void UnlinkReversePath()
 	{
-		if (Player.IsConnected(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable))
-			Player.Disconnect(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable);
+		if (!Player.IsConnected(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable))
+			return;
+
+		Player.Disconnect(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable);
 	}
 
 	public void ClearReversePath()
 	{
+		UnlinkReversePath();
+
 		if (!Player.PathFollower.IsReversingPath)
 			return;
 
@@ -152,8 +156,6 @@ public partial class Ivy : Launcher
 		Player.PathFollower.SetActivePath(Player.PathFollower.ActivePath, false);
 		if (Player.IsOnGround) // Play turnaround animation if we're on the ground
 			Player.CallDeferred(PlayerController.MethodName.StartReversePath);
-
-		UnlinkReversePath();
 	}
 
 	/// <summary> Adds some force from the player. </summary>

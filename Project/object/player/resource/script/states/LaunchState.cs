@@ -25,11 +25,9 @@ public partial class LaunchState : PlayerState
 			this.settings.Launcher != null &&
 			this.settings.Launcher == settings.Launcher) // Already launching
 		{
-			GD.Print("Launch Failed");
 			return false;
 		}
 
-		GD.Print("Launch Started");
 		this.settings = settings;
 		return true;
 	}
