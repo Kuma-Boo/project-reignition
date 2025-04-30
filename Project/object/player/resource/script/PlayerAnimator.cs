@@ -94,6 +94,25 @@ public partial class PlayerAnimator : Node3D
 		StopCrouching(0f);
 	}
 
+
+	public bool IsOneshotAnimationValid(StringName animation)
+	{
+		if (animation.IsEmpty)
+			return false;
+
+		bool isAnimationValid = false;
+		for (int i = 0; i < oneShotTransition.GetInputCount(); i++)
+		{
+			if (!oneShotTransition.GetInputName(i).Equals(animation))
+				continue;
+
+			isAnimationValid = true;
+			break;
+		}
+
+		return isAnimationValid;
+	}
+
 	public void SeekOneshotAnimation(float time) => animationTree.Set(OneshotSeek, time);
 
 	/// <summary>

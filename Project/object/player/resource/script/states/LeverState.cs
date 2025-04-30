@@ -15,11 +15,6 @@ public partial class LeverState : PlayerState
 		Player.GlobalPosition = Trigger.TargetStandingPosition;
 	}
 
-	public override void ExitState()
-	{
-		Player.Skills.EnableBreakSkills();
-	}
-
 	public override PlayerState ProcessPhysics()
 	{
 		if (isTurningLever)

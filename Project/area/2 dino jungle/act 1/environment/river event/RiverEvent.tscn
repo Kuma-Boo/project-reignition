@@ -68,28 +68,22 @@ material = ExtResource("8_ya4t4")
 
 [node name="RiverEvent" type="Node3D" node_paths=PackedStringArray("animator")]
 script = ExtResource("1_8cup1")
+animator = NodePath("RiverEvent/AnimationPlayer")
+EventID = "dj_a1_river_event"
+overrideEventLength = 7.0
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("PlayerBone/Player")
-"Player Event Settings/Animation" = &"dj_a1_river_event"
+"Player Event Settings/Animation" = null
 "Player Event Settings/Animation Fadeout Time" = 0.2
 "Player Event Settings/Position Smoothing" = 0.0
 "Player Event Settings/Normalize Exit Move Speed" = true
 "Player Event Settings/Exit Move Speed" = 0.0
 "Player Event Settings/Exit Vertical Speed" = -15.0
 "Player Event Settings/Exit Lockout" = ExtResource("2_qspwl")
-animator = NodePath("RiverEvent/AnimationPlayer")
 
 [node name="RiverEvent" parent="." instance=ExtResource("1_wmk6n")]
-
-[node name="Skeleton3D" parent="RiverEvent/RiverEventRoot" index="0"]
-bones/2/rotation = Quaternion(-0.500022, 0.500026, 0.499982, -0.49997)
-bones/3/rotation = Quaternion(-0.500008, 0.500013, 0.49998, -0.499999)
-bones/4/rotation = Quaternion(-0.500011, 0.500015, 0.499995, -0.499978)
-bones/6/rotation = Quaternion(-0.500012, 0.500016, 0.500039, -0.499934)
-bones/8/rotation = Quaternion(-0.121753, 0.0432943, 0.00531587, 0.991602)
-bones/9/position = Vector3(7.81476, -15.5345, 0.694639)
-bones/9/rotation = Quaternion(-0.40558, -0.579228, -0.40558, 0.579228)
 
 [node name="AnimationPlayer" parent="RiverEvent" index="1"]
 callback_mode_process = 0
@@ -154,9 +148,9 @@ process_material = SubResource("ParticleProcessMaterial_vqr16")
 draw_pass_1 = SubResource("QuadMesh_cotso")
 
 [node name="RiverSFX" type="AudioStreamPlayer" parent="."]
+process_mode = 1
 stream = ExtResource("3_6r8nl")
 bus = &"GAME SFX"
-process_mode = 1
 
 [connection signal="Activated" from="." to="Camera/CameraReference" method="Activate"]
 [connection signal="EventFinished" from="." to="Camera/CameraReference/CameraDeactivateTrigger" method="Activate"]

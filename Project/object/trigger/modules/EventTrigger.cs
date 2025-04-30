@@ -26,7 +26,16 @@ public partial class EventTrigger : StageTriggerModule
 	[ExportGroup("Components")]
 	[Export] private AnimationPlayer animator;
 	public float AnimationLength => (float)animator.CurrentAnimationLength;
-	private float AnimationTimeLeft => (float)(animator.CurrentAnimationLength - animator.CurrentAnimationPosition);
+	private float AnimationTimeLeft
+	{
+		get
+		{
+			if (!Mathf.IsZeroApprox(overrideEventLength))
+				return overrideEventLength - (float)animator.CurrentAnimationPosition;
+
+			return (float)(animator.CurrentAnimationLength - animator.CurrentAnimationPosition);
+		}
+	}
 
 	[Export] private RespawnAnimation respawnAnimation;
 	private enum RespawnAnimation
@@ -35,26 +44,28 @@ public partial class EventTrigger : StageTriggerModule
 		Activate,
 		Deactivate,
 	}
-	[Export]
-	private bool respawnToEnd = true;
+	[Export] private bool respawnToEnd = true;
 
 	private readonly StringName ResetAnimation = "RESET";
 	private readonly StringName EventAnimation = "event";
 	private readonly StringName DeactivateEventAnimation = "event-deactivate";
 
-	[Export(PropertyHint.Range, "0.1,5,0.1")] private float activationSpeedScale = 1f;
-	[Export(PropertyHint.Range, "0.1,5,0.1")] private float deactivationSpeedScale = 1f;
+	[Export(PropertyHint.Range, "0.1,10,0.1")] private float activationSpeedScale = 1f;
+	[Export(PropertyHint.Range, "0.1,10,0.1")] private float deactivationSpeedScale = 1f;
+	/// <summary> Optional id used for skippable events. </summary>
+	[Export] public string EventID { get; private set; }
+	[Export(PropertyHint.Range, "0,10,0.1,or_greater")] public float overrideEventLength;
 
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
 	{
-		Array<Dictionary> properties = new()
-			{
+		Array<Dictionary> properties =
+			[
 				ExtensionMethods.CreateProperty("Trigger Settings/Automatically Respawn", Variant.Type.Bool),
 				ExtensionMethods.CreateProperty("Trigger Settings/Is One Shot", Variant.Type.Bool),
 				ExtensionMethods.CreateProperty("Trigger Settings/Animation Blending", Variant.Type.Float),
 				ExtensionMethods.CreateProperty("Trigger Settings/Player Stand-in", Variant.Type.NodePath)
-			};
+			];
 
 		if (playerStandin?.IsEmpty == false) // Add player event settings
 		{
@@ -84,8 +95,6 @@ public partial class EventTrigger : StageTriggerModule
 			case "Trigger Settings/Player Stand-in":
 				return playerStandin;
 
-			case "Player Event Settings/Animation":
-				return characterAnimation;
 			case "Player Event Settings/Animation Fadeout Time":
 				return characterFadeoutTime;
 			case "Player Event Settings/Position Smoothing":
@@ -122,9 +131,6 @@ public partial class EventTrigger : StageTriggerModule
 				NotifyPropertyListChanged();
 				break;
 
-			case "Player Event Settings/Animation":
-				characterAnimation = (string)value;
-				break;
 			case "Player Event Settings/Animation Fadeout Time":
 				characterFadeoutTime = (float)value;
 				break;
@@ -247,7 +253,7 @@ public partial class EventTrigger : StageTriggerModule
 		animator.Play(animation, blendAnimations ? animationBlending : 0.0f, speedScale);
 		animator.Advance(0);
 
-		if (playerStandin?.IsEmpty != false) // Not a player event -- return early
+		if (playerStandin?.IsEmpty != false && string.IsNullOrEmpty(EventID)) // Not a player event -- return early
 			return;
 
 		Player.StartEvent(this);
@@ -274,9 +280,6 @@ public partial class EventTrigger : StageTriggerModule
 	/// <summary> How much to fadeout character's animation by. </summary>
 	private float characterFadeoutTime;
 	public float CharacterFadeoutTime => characterFadeoutTime;
-	/// <summary> Which event animation to play on the Player. </summary>
-	private StringName characterAnimation;
-	public StringName CharacterAnimation => characterAnimation;
 
 	/// <summary> Evaluate exit move speed as a ratio instead of a default value. </summary>
 	private bool normalizeExitMoveSpeed = true;

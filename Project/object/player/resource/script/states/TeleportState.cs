@@ -27,6 +27,8 @@ public partial class TeleportState : PlayerState
 
 	public override void EnterState()
 	{
+		Player.Skills.DisableBreakSkills();
+
 		Player.IsTeleporting = true;
 		if (Player.IsKnockback)
 		{
@@ -60,6 +62,7 @@ public partial class TeleportState : PlayerState
 	{
 		Player.ChangeHitbox("RESET");
 		Player.IsTeleporting = false;
+		Player.Skills.EnableBreakSkills();
 	}
 
 	public override PlayerState ProcessPhysics()
