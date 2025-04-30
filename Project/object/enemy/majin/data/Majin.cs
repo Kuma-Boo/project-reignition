@@ -794,6 +794,9 @@ public partial class Majin : Enemy
 	/// <summary> Called after spin attack's windup animation. </summary>
 	public void OnSpinActivated()
 	{
+		if (IsDefeated)
+			return;
+
 		AnimationPlayer.Play("spin");
 		EmitSignal(SignalName.SpinStarted);
 	}
