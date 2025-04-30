@@ -50,8 +50,8 @@ public partial class EventTrigger : StageTriggerModule
 	private readonly StringName EventAnimation = "event";
 	private readonly StringName DeactivateEventAnimation = "event-deactivate";
 
-	[Export(PropertyHint.Range, "0.1,10,0.1")] private float activationSpeedScale = 1f;
-	[Export(PropertyHint.Range, "0.1,10,0.1")] private float deactivationSpeedScale = 1f;
+	[Export(PropertyHint.Range, "0.1,10,0.1,or_greater")] private float activationSpeedScale = 1f;
+	[Export(PropertyHint.Range, "0.1,10,0.1,or_greater")] private float deactivationSpeedScale = 1f;
 	/// <summary> Optional id used for skippable events. </summary>
 	[Export] public string EventID { get; private set; }
 	[Export(PropertyHint.Range, "0,10,0.1,or_greater")] public float overrideEventLength;
