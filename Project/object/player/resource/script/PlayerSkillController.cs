@@ -301,18 +301,19 @@ public partial class PlayerSkillController : Node3D
 		speedBreakAnimator.Advance(0);
 	}
 
-	private int timeBreakDrainTimer;
-	private const int TimeBreakSoulDrainInterval = 3; // Drain 1 point every x frames
+	private float breakDrainTimer;
+	private const float TimeBreakSoulDrainInterval = 3f / 60f; // Drain 1 point every x frames
+	private const float SpeedBreakSoulDrainInterval = 1.8f / 60f; // Drain 1 point every x frames
 	private void UpdateTimeBreak()
 	{
 		if (IsTimeBreakActive)
 		{
-			if (timeBreakDrainTimer <= 0)
+			if (Mathf.IsZeroApprox(breakDrainTimer))
 			{
 				ModifySoulGauge(-1);
-				timeBreakDrainTimer = TimeBreakSoulDrainInterval;
+				breakDrainTimer = TimeBreakSoulDrainInterval;
 			}
-			timeBreakDrainTimer--;
+			breakDrainTimer = Mathf.MoveToward(breakDrainTimer, 0, PhysicsManager.physicsDelta);
 
 			bool disablingTimeBreak = (SaveManager.Config.useHoldBreakMode && !Input.IsActionPressed("button_timebreak")) ||
 				(!SaveManager.Config.useHoldBreakMode && Input.IsActionJustPressed("button_timebreak"));
@@ -355,7 +356,13 @@ public partial class PlayerSkillController : Node3D
 					ModifySoulGauge(-15); // Instantly lose a bunch of soul power
 				}
 
-				ModifySoulGauge(-1); // Drain soul gauge
+				if (Mathf.IsZeroApprox(breakDrainTimer))
+				{
+					ModifySoulGauge(-1);
+					breakDrainTimer = SpeedBreakSoulDrainInterval;
+				}
+				breakDrainTimer = Mathf.MoveToward(breakDrainTimer, 0, PhysicsManager.physicsDelta);
+
 				bool disablingSpeedBreak = (SaveManager.Config.useHoldBreakMode && !Input.IsActionPressed("button_speedbreak")) ||
 					(!SaveManager.Config.useHoldBreakMode && Input.IsActionJustPressed("button_speedbreak"));
 				if (IsSoulGaugeEmpty || disablingSpeedBreak)// Check whether we shoudl cancel speed break
@@ -394,7 +401,7 @@ public partial class PlayerSkillController : Node3D
 
 	public void ToggleTimeBreak()
 	{
-		timeBreakDrainTimer = 0;
+		breakDrainTimer = 0;
 		IsTimeBreakActive = !IsTimeBreakActive;
 		SoundManager.IsBreakChannelMuted = IsTimeBreakActive;
 		Engine.TimeScale = IsTimeBreakActive ? TimebreakRatio : 1f;
@@ -430,6 +437,7 @@ public partial class PlayerSkillController : Node3D
 
 	public void ToggleSpeedBreak()
 	{
+		breakDrainTimer = 0;
 		IsSpeedBreakActive = !IsSpeedBreakActive;
 		SoundManager.IsBreakChannelMuted = IsSpeedBreakActive;
 		breakTimer = IsSpeedBreakActive ? SpeedBreakDelay : BreakSkillsCooldown;

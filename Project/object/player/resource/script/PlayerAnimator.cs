@@ -240,7 +240,7 @@ public partial class PlayerAnimator : Node3D
 		}
 		else if (baseSpeedRatio >= RunRatio) // Running
 		{
-			float extraSpeed = Mathf.Clamp((baseSpeedRatio - 1.0f) * 5.0f, 0f, 2f);
+			float extraSpeed = Mathf.Clamp((baseSpeedRatio - 1.0f) * 5.0f, 0f, 3f);
 			animationSpeed = 2.5f + extraSpeed;
 		}
 		else // Jogging
