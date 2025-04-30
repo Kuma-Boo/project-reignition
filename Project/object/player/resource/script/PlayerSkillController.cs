@@ -8,6 +8,15 @@ namespace Project.Gameplay;
 /// </summary>
 public partial class PlayerSkillController : Node3D
 {
+	[Signal]
+	public delegate void TimeBreakStartedEventHandler();
+	[Signal]
+	public delegate void SpeedBreakStartedEventHandler();
+	[Signal]
+	public delegate void TimeBreakStoppedEventHandler();
+	[Signal]
+	public delegate void SpeedBreakStoppedEventHandler();
+
 	private PlayerController Player;
 	public void Initialize(PlayerController player)
 	{
@@ -404,6 +413,7 @@ public partial class PlayerSkillController : Node3D
 			timeBreakSFX.VolumeDb = heartbeatSFX.VolumeDb = 0f;
 			timeBreakSFX.Play();
 			heartbeatSFX.Play();
+			EmitSignal(SignalName.TimeBreakStarted);
 		}
 		else
 		{
@@ -414,6 +424,7 @@ public partial class PlayerSkillController : Node3D
 			breakTimer = BreakSkillsCooldown;
 			BGMPlayer.SetStageMusicVolume(0f);
 			HeadsUpDisplay.Instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);
+			EmitSignal(SignalName.TimeBreakStopped);
 		}
 	}
 
@@ -438,6 +449,7 @@ public partial class PlayerSkillController : Node3D
 			Player.AttackState = PlayerController.AttackStates.OneShot;
 			Player.Camera.RequestMotionBlur();
 			Player.Animator.StartMotionBlur();
+			EmitSignal(SignalName.SpeedBreakStarted);
 		}
 		else
 		{
@@ -451,6 +463,7 @@ public partial class PlayerSkillController : Node3D
 			Player.ChangeHitbox("RESET");
 			Player.Camera.UnrequestMotionBlur();
 			Player.Animator.StopMotionBlur();
+			EmitSignal(SignalName.SpeedBreakStopped);
 		}
 
 		HeadsUpDisplay.Instance?.UpdateSoulGaugeColor(IsSoulGaugeCharged);

@@ -21,6 +21,8 @@ public partial class BounceState : PlayerState
 	[Export]
 	private float bounceHeight;
 
+	/// <summary> Used to override how high the bounce takes the player. </summary>
+	public float BounceHeightScale { get; set; }
 	public bool IsUpwardBounce { get; set; }
 	/// <summary> Used to determine whether targeting is enabled or not. </summary>
 	private float bounceInterruptTimer;
@@ -33,7 +35,7 @@ public partial class BounceState : PlayerState
 		Player.IsOnGround = false;
 		Player.CanJumpDash = true;
 		Player.Lockon.IsMonitoring = true;
-		Player.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
+		Player.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight * BounceHeightScale);
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 
 		if (!Player.IsLockoutActive || Player.ActiveLockoutData != LockoutSettings)

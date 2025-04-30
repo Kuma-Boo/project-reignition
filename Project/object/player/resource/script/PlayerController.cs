@@ -759,10 +759,11 @@ public partial class PlayerController : CharacterBody3D
 	[Export] private BounceState bounceState;
 	public bool IsBouncing { get; set; }
 	public bool IsBounceInteruptable { get; set; }
-	public void StartBounce(bool isUpwardBounce = true)
+	public void StartBounce(bool isUpwardBounce = true, float bounceScaleOverride = 1f)
 	{
 		IsBouncing = true;
 		IsBounceInteruptable = false;
+		bounceState.BounceHeightScale = bounceScaleOverride;
 		bounceState.IsUpwardBounce = isUpwardBounce;
 		StateMachine.ChangeState(bounceState);
 	}

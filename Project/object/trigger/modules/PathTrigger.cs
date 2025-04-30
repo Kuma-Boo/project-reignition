@@ -37,7 +37,6 @@ public partial class PathTrigger : StageTriggerModule
 	public override void Activate()
 	{
 		bool reversePath = IsReversePath();
-		GD.Print(reversePath);
 		if (affectPlayer)
 		{
 			playerDeactivatePath ??= Player.PathFollower.ActivePath;

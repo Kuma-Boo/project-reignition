@@ -117,7 +117,6 @@ public partial class SidleState : PlayerState
 		if (hit)
 			return;
 
-		GD.Print("Ground not found!!!");
 		StartRespawn();
 		Player.Animator.SidleFall();
 	}

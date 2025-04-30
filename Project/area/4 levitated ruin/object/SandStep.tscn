@@ -1,0 +1,82 @@
+[gd_scene load_steps=13 format=3 uid="uid://br4bp3m6g4l8g"]
+
+[ext_resource type="Script" uid="uid://der7w6b5fd4vk" path="res://area/4 levitated ruin/data/script/SandStep.cs" id="1_xg4nq"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="2_l0ttg"]
+[ext_resource type="Material" uid="uid://boyiki4rgce2h" path="res://effect/particle/material/environment/Common Dust Splatter.tres" id="3_6e2ye"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="3_xg4nq"]
+
+[sub_resource type="Curve" id="Curve_rgsko"]
+_data = [Vector2(0, 0), 0.0, 29.3125, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.9, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_m5cm5"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_rgsko")
+
+[sub_resource type="Curve" id="Curve_xg4nq"]
+_data = [Vector2(0, 0.5), 0.0, 1.62946, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_l0ttg"]
+width = 64
+curve = SubResource("Curve_xg4nq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_e71ed"]
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 0, 1)
+spread = 0.0
+initial_velocity_min = 3.0
+initial_velocity_max = 3.0
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_l0ttg")
+color = Color(1, 0.894118, 0.835294, 0.317647)
+alpha_curve = SubResource("CurveTexture_m5cm5")
+
+[sub_resource type="QuadMesh" id="QuadMesh_jt26i"]
+material = ExtResource("2_l0ttg")
+
+[sub_resource type="QuadMesh" id="QuadMesh_f06j3"]
+material = ExtResource("3_6e2ye")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_5bxov"]
+
+[node name="SandStep" type="Node3D" node_paths=PackedStringArray("particleParent", "lockonTrigger")]
+script = ExtResource("1_xg4nq")
+isSandFlowing = true
+particleParent = NodePath("Dust")
+lockonTrigger = NodePath("Lockon")
+
+[node name="Dust" type="GPUParticles3D" parent="." node_paths=PackedStringArray("subSystems")]
+layers = 32
+cast_shadow = 0
+visibility_aabb = AABB(-1, -4, -0.5, 2, 5, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_e71ed")
+draw_pass_1 = SubResource("QuadMesh_jt26i")
+script = ExtResource("3_xg4nq")
+subSystems = [NodePath("Splatter")]
+
+[node name="Splatter" type="GPUParticles3D" parent="Dust"]
+layers = 32
+cast_shadow = 0
+fixed_fps = 60
+fract_delta = false
+visibility_aabb = AABB(-1, -4, -0.5, 2, 5, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_e71ed")
+draw_pass_1 = SubResource("QuadMesh_f06j3")
+
+[node name="Lockon" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+collision_layer = 12
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Lockon"]
+shape = SubResource("SphereShape3D_5bxov")
+
+[connection signal="area_entered" from="Lockon" to="." method="OnEntered"]
+[connection signal="area_exited" from="Lockon" to="." method="OnExited"]
