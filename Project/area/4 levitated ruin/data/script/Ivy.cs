@@ -152,6 +152,8 @@ public partial class Ivy : Launcher
 		Player.PathFollower.SetActivePath(Player.PathFollower.ActivePath, false);
 		if (Player.IsOnGround) // Play turnaround animation if we're on the ground
 			Player.CallDeferred(PlayerController.MethodName.StartReversePath);
+
+		UnlinkReversePath();
 	}
 
 	/// <summary> Adds some force from the player. </summary>

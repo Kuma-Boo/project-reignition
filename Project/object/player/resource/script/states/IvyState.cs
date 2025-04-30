@@ -62,7 +62,6 @@ public partial class IvyState : PlayerState
 		if (Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
-			GD.Print("Activated");
 			Trigger.Activate();
 			return null;
 		}
@@ -71,7 +70,6 @@ public partial class IvyState : PlayerState
 		{
 			Player.Controller.ResetActionBuffer();
 			Player.Animator.StartIvySwing();
-
 			Trigger.AddImpulseForce(CalculateSwingForce());
 		}
 

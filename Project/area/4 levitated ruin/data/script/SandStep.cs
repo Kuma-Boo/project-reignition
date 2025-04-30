@@ -30,7 +30,6 @@ public partial class SandStep : Node3D
 		if (Engine.IsEditorHint() || !isInteractingWithPlayer)
 			return;
 
-
 		if (StageSettings.Player.IsHomingAttacking)
 			StageSettings.Player.StartBounce(true, .5f);
 	}
