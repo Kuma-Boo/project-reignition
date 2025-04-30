@@ -17,6 +17,7 @@ public partial class ZiplineState : PlayerState
 		damageLockout = 0;
 		Player.Animator.StartZipline();
 		Player.Animator.SetZiplineBlend(0f);
+		Player.Animator.ExternalAngle = 0;
 		Player.StartExternal(Trigger, Trigger.FollowObject, .5f);
 		Player.Knockback += OnPlayerDamaged;
 	}
