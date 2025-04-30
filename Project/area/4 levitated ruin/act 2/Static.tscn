@@ -33,7 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://cry4fy5icucbc" path="res://object/trigger/state trigger/SidleTrigger.tscn" id="24_toorb"]
 [ext_resource type="Curve3D" uid="uid://q888cvyubdg0" path="res://area/4 levitated ruin/act 2/environment/path/Tower3TopPath.tres" id="25_7ougu"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="25_d6hrm"]
-[ext_resource type="Resource" uid="uid://b7bxtatp8ucmy" path="res://resource/preset/camera/common/StaticTransitionCam.tres" id="25_k5ypd"]
+[ext_resource type="Resource" uid="uid://c886rphxqnhnb" path="res://resource/preset/camera/common/StaticTransitionCam.tres" id="25_k5ypd"]
 [ext_resource type="Curve3D" uid="uid://bom0wsi4f25u1" path="res://area/4 levitated ruin/act 2/environment/path/Tower4TopPath.tres" id="26_d34ml"]
 [ext_resource type="Curve3D" uid="uid://by0mwyvkcdeng" path="res://area/4 levitated ruin/act 2/environment/path/Tower5TopPath.tres" id="27_f3657"]
 [ext_resource type="Curve3D" path="res://area/4 levitated ruin/act 2/environment/path/Tower2Automation1Path.tres" id="28_d6hrm"]
@@ -754,70 +754,68 @@ path = NodePath("../../../../../Paths/Rukh5")
 pathMode = 1
 cameraPathBlendTime = 0.5
 
-[node name="LaunchRingCull" type="Node3D" parent="Triggers/Camera/Tower5Triggers"]
+[node name="SpringCull" type="Node3D" parent="Triggers/Camera/Tower5Triggers"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, 0)
 script = ExtResource("25_d6hrm")
 startEnabled = true
 
-[node name="Layer1" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull" instance=ExtResource("29_flomb")]
-"Trigger Mode" = 2
+[node name="Layer1" parent="Triggers/Camera/Tower5Triggers/SpringCull" instance=ExtResource("29_flomb")]
 "Enter Mode" = 0
-"Exit Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull/Layer1"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/SpringCull/Layer1"]
 shape = SubResource("CylinderShape3D_vgqrq")
 
-[node name="Camera" type="Node3D" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull/Layer1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+[node name="Camera" type="Node3D" parent="Triggers/Camera/Tower5Triggers/SpringCull/Layer1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 script = ExtResource("33_3amqa")
 settings = ExtResource("24_mwnvi")
 
-[node name="Layer2" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull" instance=ExtResource("29_flomb")]
+[node name="Layer2" parent="Triggers/Camera/Tower5Triggers/SpringCull" instance=ExtResource("29_flomb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16, 0)
 "Enter Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull/Layer2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/SpringCull/Layer2"]
 shape = SubResource("CylinderShape3D_vgqrq")
 
-[node name="Camera" type="Node3D" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull/Layer2"]
+[node name="Camera" type="Node3D" parent="Triggers/Camera/Tower5Triggers/SpringCull/Layer2"]
 script = ExtResource("33_3amqa")
 settings = ExtResource("25_k5ypd")
 
-[node name="Layer3" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull" instance=ExtResource("29_flomb")]
+[node name="Layer3" parent="Triggers/Camera/Tower5Triggers/SpringCull" instance=ExtResource("29_flomb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25, 0)
 "Enter Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull/Layer3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/SpringCull/Layer3"]
 shape = SubResource("CylinderShape3D_vgqrq")
 
-[node name="Camera" type="Node3D" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull/Layer3"]
+[node name="Camera" type="Node3D" parent="Triggers/Camera/Tower5Triggers/SpringCull/Layer3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 script = ExtResource("33_3amqa")
 settings = ExtResource("24_mwnvi")
 
-[node name="SidlePathTrigger1" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull" instance=ExtResource("29_flomb")]
+[node name="SidlePathTrigger1" parent="Triggers/Camera/Tower5Triggers/SpringCull" instance=ExtResource("29_flomb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16.5, 0)
 "Enter Mode" = 0
 
-[node name="SidlePath" type="Node3D" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull/SidlePathTrigger1" node_paths=PackedStringArray("path")]
+[node name="SidlePath" type="Node3D" parent="Triggers/Camera/Tower5Triggers/SpringCull/SidlePathTrigger1" node_paths=PackedStringArray("path")]
 script = ExtResource("33_cwr62")
 path = NodePath("../../../../../../Paths/Tower5Sidle")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull/SidlePathTrigger1"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/SpringCull/SidlePathTrigger1"]
 shape = SubResource("CylinderShape3D_d6hrm")
 
-[node name="SidleTrigger1" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull" instance=ExtResource("24_toorb")]
+[node name="SidleTrigger1" parent="Triggers/Camera/Tower5Triggers/SpringCull" instance=ExtResource("24_toorb")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 6.79907, 13, 0.125)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull/SidleTrigger1"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/SpringCull/SidleTrigger1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 shape = SubResource("BoxShape3D_bam1r")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull/SidleTrigger1"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/SpringCull/SidleTrigger1"]
 transform = Transform3D(0.923879, 0, -0.382683, 0, 1, 0, 0.382683, 0, 0.923879, 0.532636, 3.5, -2.56637)
 shape = SubResource("BoxShape3D_bam1r")
 
-[node name="CollisionShape3D3" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/LaunchRingCull/SidleTrigger1"]
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Triggers/Camera/Tower5Triggers/SpringCull/SidleTrigger1"]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 2.19203, 3.5, -4.87904)
 shape = SubResource("BoxShape3D_bam1r")
 
