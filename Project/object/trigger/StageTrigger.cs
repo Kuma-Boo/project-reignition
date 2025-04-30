@@ -81,30 +81,32 @@ namespace Project.Gameplay.Triggers
 		private bool isOneShot;
 		/// <summary> For keeping track of oneshot triggers. </summary>
 		private bool wasTriggered;
+		private bool isRespawnEnabled;
 		private RespawnModes respawnMode = RespawnModes.CheckpointBefore;
 		private enum RespawnModes
 		{
-			CheckpointBefore, //Only respawn if the current checkpoint is BEFORE the object (Default)
-			CheckpointAfter, //Only respawn if the current checkpoint AFTER the object
-			Always, //Always respawn
-			Disabled, //Never Respawn
+			CheckpointBefore, // Only respawn if the current checkpoint is BEFORE the object (Default)
+			CheckpointAfter, // Only respawn if the current checkpoint is AFTER the object
+			NoCheckpoint, // Only respawn if the player hasn't hit any checkpoints
+			Always, // Always respawn
+			Disabled, // Never Respawn
 		}
 
-		private TriggerModes triggerMode = TriggerModes.OnEnter; //How should this area be activated?
+		private TriggerModes triggerMode = TriggerModes.OnEnter; // How should this area be activated?
 		private enum TriggerModes
 		{
-			OnEnter, //Activate on enter
-			OnExit, //Activate on exit
-			OnStay, //Activate on enter, Deactivate on exit.
+			OnEnter, // Activate on enter
+			OnExit, // Activate on exit
+			OnStay, // Activate on enter, Deactivate on exit.
 		}
 
 		private ActivationMode enterMode = ActivationMode.MovingForward;
 		private ActivationMode exitMode = ActivationMode.MovingBackward;
 		private enum ActivationMode
 		{
-			BothWays, //Valid both ways
-			MovingForward, //Only valid when the player leaves the trigger moving forward
-			MovingBackward, //Only valid when the player leaves the trigger moving backward
+			BothWays, // Valid both ways
+			MovingForward, // Only valid when the player leaves the trigger moving forward
+			MovingBackward, // Only valid when the player leaves the trigger moving backward
 		}
 
 		[Signal]
@@ -120,7 +122,7 @@ namespace Project.Gameplay.Triggers
 		{
 			if (Engine.IsEditorHint()) return;
 
-			//Connect child modules
+			// Connect child modules
 			for (int i = 0; i < GetChildCount(); i++)
 			{
 				StageTriggerModule module = GetChildOrNull<StageTriggerModule>(i);
@@ -132,25 +134,46 @@ namespace Project.Gameplay.Triggers
 				Respawned += module.Respawn;
 			}
 
-			if (respawnMode != RespawnModes.Disabled) //Connect respawn signal
+			if (respawnMode != RespawnModes.Disabled) // Connect respawn signal
+			{
 				StageSettings.Instance.Respawned += Respawn;
+
+				if (respawnMode != RespawnModes.Always)
+					StageSettings.Instance.TriggeredCheckpoint += ProcessRespawnable;
+			}
+		}
+
+		private void ProcessRespawnable()
+		{
+			if (!wasTriggered)
+				return;
+
+			if (respawnMode == RespawnModes.NoCheckpoint)
+			{
+				// Disable on checkpoint
+				isRespawnEnabled = false;
+				return;
+			}
+
+			// Compare the currentCheckpoint progress compared to this StageTrigger
+			float eventPosition = PathFollower.GetProgress(GlobalPosition);
+			float checkpointPosition = PathFollower.GetProgress(StageSettings.Instance.CurrentCheckpoint.GlobalPosition);
+			bool isRespawningAhead = checkpointPosition > eventPosition;
+
+			if ((respawnMode == RespawnModes.CheckpointBefore && isRespawningAhead) ||
+			(respawnMode == RespawnModes.CheckpointAfter && !isRespawningAhead)) // Invalid Respawn
+			{
+				isRespawnEnabled = false;
+				return;
+			}
+
+			isRespawnEnabled = true;
 		}
 
 		public void Respawn()
 		{
-			if (isOneShot && respawnMode != RespawnModes.Always) //Validate respawn
-			{
-				//Compare the currentCheckpoint progress compared to this StageTrigger
-				float eventPosition = PathFollower.GetProgress(GlobalPosition);
-				float checkpointPosition = PathFollower.GetProgress(StageSettings.Instance.CurrentCheckpoint.GlobalPosition);
-				bool isRespawningAhead = checkpointPosition > eventPosition;
-
-				if ((respawnMode == RespawnModes.CheckpointBefore && isRespawningAhead) ||
-				(respawnMode == RespawnModes.CheckpointAfter && !isRespawningAhead)) //Invalid Respawn
-				{
-					return;
-				}
-			}
+			if (isOneShot && respawnMode != RespawnModes.Always && !isRespawnEnabled) // Validate respawn
+				return;
 
 			if (isInteractingWithPlayer)
 				OnEntered();
@@ -191,7 +214,7 @@ namespace Project.Gameplay.Triggers
 		{
 			isInteractingWithPlayer = true;
 
-			//Determine whether activation is successful
+			// Determine whether activation is successful
 			if (triggerMode == TriggerModes.OnExit)
 				return;
 
@@ -209,7 +232,7 @@ namespace Project.Gameplay.Triggers
 		{
 			isInteractingWithPlayer = false;
 
-			//Determine whether deactivation is successful
+			// Determine whether deactivation is successful
 			if (triggerMode == TriggerModes.OnEnter)
 				return;
 
@@ -231,7 +254,10 @@ namespace Project.Gameplay.Triggers
 			if (wasTriggered) return;
 
 			if (isOneShot)
+			{
 				wasTriggered = true;
+				isRespawnEnabled = true;
+			}
 
 			EmitSignal(SignalName.Activated);
 		}
