@@ -100,6 +100,9 @@ public partial class PathTrigger : StageTriggerModule
 		// Calculate the direction of the path at the player's current position
 		Vector3 dir = path.Curve.SampleBaked(sampleOffsetPoint) - path.Curve.SampleBaked(samplePoint);
 		// Reverse path if the player's current forward direction is different by over 90 degrees
-		return ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(dir), Player.MovementAngle) > Mathf.Pi * .5f;
+		float movementAngle = Player.MovementAngle;
+		if (Player.IsMovingBackward)
+			movementAngle += Mathf.Pi;
+		return ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(dir), movementAngle) > Mathf.Pi * .5f;
 	}
 }
