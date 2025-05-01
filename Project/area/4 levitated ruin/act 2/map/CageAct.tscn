@@ -855,13 +855,12 @@ startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="Knuckles" parent="CageAct/MainTower" instance=ExtResource("12_43tv5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -6.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -5)
 
 [node name="Lighting" type="OmniLight3D" parent="CageAct/MainTower"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -4.5)
 layers = 1024
-light_color = Color(0.494423, 0.697422, 1, 1)
-light_energy = 3.0
+light_color = Color(0.671914, 0.640048, 0.993158, 1)
 light_cull_mask = 3
 
 [node name="Rings1" type="Node3D" parent="CageAct/MainTower"]
@@ -1154,8 +1153,12 @@ shape = SubResource("BoxShape3D_g2bsq")
 [node name="Jump" type="Node3D" parent="CageAct/Ziplines/Zipline2/End"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.74846e-08, -12.1441, 14.6)
 script = ExtResource("7_qcr5r")
-jumpHeight = 5.0
-autoAlign = true
+
+[node name="Checkpoint" type="Node3D" parent="CageAct/Ziplines/Zipline2/End/Jump" node_paths=PackedStringArray("PlayerPath", "CameraPath")]
+script = ExtResource("13_5yb3a")
+PlayerPath = NodePath("../../../../../../Static/Paths/Rukh3")
+CameraPath = NodePath("../../../../../../Static/Paths/Rukh3")
+CameraSettings = ExtResource("22_hvimn")
 
 [node name="Camera" type="Node3D" parent="CageAct/Ziplines/Zipline2/End/Jump"]
 script = ExtResource("27_vns5j")
@@ -1284,7 +1287,7 @@ transform = Transform3D(0.711659, 0, 0.702523, 0, 1, 0, -0.702523, 0, 0.711659, 
 progress = 1.0
 
 [node name="MissileTrigger" parent="CageAct/Ziplines/Zipline4" instance=ExtResource("6_f8ouc")]
-transform = Transform3D(0.71166, -0.0621886, 0.699766, 0, 0.996074, 0.0885217, -0.702524, -0.0629974, 0.708866, 236.521, 29.9204, 239.597)
+transform = Transform3D(0.71166, -0.0621886, 0.699766, 0, 0.996074, 0.0885217, -0.702524, -0.0629974, 0.708866, 238.62, 30.186, 241.724)
 OneShot = true
 "Respawn Mode" = 0
 "Enter Mode" = 0
@@ -1303,6 +1306,13 @@ transform = Transform3D(0.709317, 0.0620572, -0.702153, -0.0871557, 0.996195, 0,
 script = ExtResource("7_qcr5r")
 jumpHeight = 3.0
 autoAlign = true
+
+[node name="Checkpoint" type="Node3D" parent="CageAct/Ziplines/Zipline4/End/Jump" node_paths=PackedStringArray("PlayerPath", "CameraPath")]
+transform = Transform3D(1, -1.86265e-09, 0, 5.38421e-10, 1, -7.45058e-09, 0, 0, 1, 0, 0, 0)
+script = ExtResource("13_5yb3a")
+PlayerPath = NodePath("../../../../../../Static/Paths/Rukh5")
+CameraPath = NodePath("../../../../../../Static/Paths/Rukh5")
+CameraSettings = ExtResource("29_ixki1")
 
 [node name="Camera" type="Node3D" parent="CageAct/Ziplines/Zipline4/End/Jump"]
 script = ExtResource("27_vns5j")
@@ -3665,12 +3675,12 @@ moveSpeed = 5.0
 transform = Transform3D(-1, 5.62503e-16, -1.50996e-07, 0, 1, 3.72529e-09, 1.50996e-07, 3.72529e-09, -1, 0, 0, 120)
 
 [node name="MissileSimple1" parent="CageAct/Zipline4/MissileGroup2" instance=ExtResource("64_dprgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -1.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, -1.5, 0)
 lifetime = 50.0
 moveSpeed = 5.0
 
 [node name="MissileSimple2" parent="CageAct/Zipline4/MissileGroup2" instance=ExtResource("64_dprgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -1.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -1.5, 0)
 lifetime = 50.0
 moveSpeed = 5.0
 
@@ -3719,12 +3729,12 @@ moveSpeed = 5.0
 transform = Transform3D(-1, 5.62503e-16, -1.50996e-07, 0, 1, 3.72529e-09, 1.50996e-07, 3.72529e-09, -1, 0, 0, 250)
 
 [node name="MissileSimple1" parent="CageAct/Zipline4/MissileGroup5" instance=ExtResource("64_dprgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, -0.8, 0)
 lifetime = 50.0
 moveSpeed = 5.0
 
 [node name="MissileSimple2" parent="CageAct/Zipline4/MissileGroup5" instance=ExtResource("64_dprgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.8, 0)
 lifetime = 50.0
 moveSpeed = 5.0
 
@@ -3848,23 +3858,23 @@ respawnOnActivation = true
 
 [node name="MissileVisualOnly1" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("65_kctvq")]
 transform = Transform3D(0.965926, -1.86265e-09, 0.258819, -0.257834, -0.0871558, 0.96225, 0.0225576, -0.996195, -0.084186, -8.71907, -14.0635, -29.3829)
-lifetime = 2.0
+lifetime = 2.5
 
 [node name="MissileVisualOnly2" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("65_kctvq")]
 transform = Transform3D(0.996195, 0.00759615, 0.0868241, -0.086824, -0.000330403, 0.996224, 0.00759617, -0.999971, 0.000330314, -11.0071, -14.533, -24.8302)
-lifetime = 2.0
+lifetime = 2.5
 
 [node name="MissileVisualOnly3" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("65_kctvq")]
 transform = Transform3D(0.996195, 3.1665e-08, 0.0871558, -0.086824, -0.0871558, 0.992404, 0.00759617, -0.996195, -0.0868241, -7.94293, -16.4324, -19.6449)
-lifetime = 2.0
+lifetime = 2.5
 
 [node name="MissileVisualOnly4" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("65_kctvq")]
 transform = Transform3D(0.996195, 5.96046e-08, 0.0871558, -0.086824, -0.0871557, 0.992404, 0.00759617, -0.996195, -0.0868242, -5.65479, -16.9949, -11.9317)
-lifetime = 2.0
+lifetime = 2.5
 
 [node name="MissileVisualOnly5" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("65_kctvq")]
 transform = Transform3D(0.704416, -0.67858, 0.208152, -0.123022, 0.172098, 0.977368, -0.699045, -0.714081, 0.0377482, 1.14249, -25.5985, -2.36262)
-lifetime = 2.0
+lifetime = 2.5
 
 [node name="Tower5" type="Node3D" parent="CageAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 550, 30, -1025)
@@ -3885,7 +3895,7 @@ transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 
 "Spawn Settings/Travel Height" = 3.0
 
 [node name="RichRing" parent="CageAct/Tower5/Exterior/ItemBox" instance=ExtResource("56_nskpe")]
-transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, -1.8, -1.40341, 11.3299)
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, -1.3, -1.40341, 11.3299)
 
 [node name="Rings" type="Node3D" parent="CageAct/Tower5/Exterior"]
 transform = Transform3D(-0.999771, -0.0212244, 0.00274221, -0.021163, 0.99956, 0.0207688, -0.0031818, 0.020706, -0.999781, 0.00169867, 0.524929, 3.30045)
@@ -4640,6 +4650,7 @@ libraries = {
 [connection signal="Activated" from="CageAct/Ziplines/Zipline2/End" to="CageAct/MainTower" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline2/End" to="CageAct/Tower3" method="Activate"]
 [connection signal="JumpFinished" from="CageAct/Ziplines/Zipline2/End/Jump" to="CageAct/Ziplines/Zipline2/End/Jump/Camera" method="Activate"]
+[connection signal="JumpFinished" from="CageAct/Ziplines/Zipline2/End/Jump" to="CageAct/Ziplines/Zipline2/End/Jump/Checkpoint" method="Activate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline3/Start" to="Static/Visuals/Rukh4" method="Activate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline3/Start" to="Static/Visuals/Rukh4LOD" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline3/Start" to="Static/Triggers/RecenterLockout" method="Deactivate"]
@@ -4658,6 +4669,7 @@ libraries = {
 [connection signal="JumpFinished" from="CageAct/Ziplines/Zipline4/Start/Jump" to="CageAct/Ziplines/Zipline4/Start/Jump/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline4/MissileTrigger" to="CageAct/Zipline4/VisualMissileGroup" method="Activate"]
 [connection signal="JumpFinished" from="CageAct/Ziplines/Zipline4/End/Jump" to="CageAct/Ziplines/Zipline4/End/Jump/Camera" method="Activate"]
+[connection signal="JumpFinished" from="CageAct/Ziplines/Zipline4/End/Jump" to="CageAct/Ziplines/Zipline4/End/Jump/Checkpoint" method="Activate"]
 [connection signal="SpinStarted" from="CageAct/Zipline1/MajinMover1/GreenMajin" to="CageAct/Zipline1/MajinMover1" method="Unpause"]
 [connection signal="SpinStarted" from="CageAct/Zipline1/MajinMover2/GreenMajin" to="CageAct/Zipline1/MajinMover2" method="Unpause"]
 [connection signal="Activated" from="CageAct/Tower2/Triggers/GroundPathTrigger" to="CageAct/Tower2/Triggers/Lockout" method="Deactivate"]
