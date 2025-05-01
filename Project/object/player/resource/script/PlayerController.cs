@@ -693,7 +693,7 @@ public partial class PlayerController : CharacterBody3D
 
 	[Export] private LightSpeedAttackState lightSpeedAttackState;
 	public bool IsLightSpeedAttacking { get; set; }
-	public bool StartLightSpeedAttack()
+	public bool AttemptLightSpeedAttack()
 	{
 		Lockon.ProcessPhysics();
 		if (Lockon.IsTargetAttackable)

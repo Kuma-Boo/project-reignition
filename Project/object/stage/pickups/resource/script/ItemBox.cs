@@ -253,7 +253,7 @@ public partial class ItemBox : Pickup
 		{
 			_animator.Play("disable-collision");
 			_animator.Advance(0.0);
-			Player.StartBounce();
+			Player.StartBounce(BounceState.SnapMode.SnappingEnabledNoHeight);
 		}
 
 		_animator.Play("open");
