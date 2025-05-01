@@ -16,6 +16,18 @@ public partial class NavigationButton : Control
 	[Export(PropertyHint.ArrayType, "ControllerSpriteResource")]
 	private ControllerSpriteResource[] controllerResources;
 
+	[Export(PropertyHint.ArrayType, "ControllerSpriteResource")]
+	private ControllerSpriteResource[] controllerResourcesStyle2;
+
+	private ControllerSpriteResource GetActiveSpriteResource(int controllerIndex)
+	{
+		if (SaveManager.Config.controllerStyle == SaveManager.ControllerStyle.Style1)
+			return controllerResources[controllerIndex];
+
+		return controllerResourcesStyle2[controllerIndex];
+	}
+
+
 	[ExportCategory("Components")]
 	[Export(PropertyHint.NodePathValidTypes, "Label")]
 	private NodePath buttonLabel;
@@ -26,6 +38,8 @@ public partial class NavigationButton : Control
 	[Export(PropertyHint.NodePathValidTypes, "Label")]
 	private NodePath actionLabel;
 	private Label ActionLabel { get; set; }
+
+	[Export] private LabelSettings[] keyboardLabelSettings;
 
 	public override void _Ready()
 	{
@@ -90,12 +104,12 @@ public partial class NavigationButton : Control
 
 			if (button != null) // Prioritize using buttons over axis icons
 			{
-				ButtonTextureRect.Texture = controllerResources[controllerIndex].buttons[(int)button.ButtonIndex];
+				ButtonTextureRect.Texture = GetActiveSpriteResource(controllerIndex).buttons[(int)button.ButtonIndex];
 				return true;
 			}
 
 			int axis = Runtime.Instance.ControllerAxisToIndex(motion);
-			ButtonTextureRect.Texture = controllerResources[controllerIndex].axis[axis];
+			ButtonTextureRect.Texture = GetActiveSpriteResource(controllerIndex).axis[axis];
 			return true;
 		}
 
@@ -108,9 +122,12 @@ public partial class NavigationButton : Control
 
 	private void RedrawAsKeyboard(Key keycode)
 	{
+		ButtonLabel.LabelSettings = keyboardLabelSettings[(int)SaveManager.Config.controllerStyle];
 		ButtonLabel.Visible = true;
 		ButtonLabel.Text = Runtime.Instance.GetKeyLabel(keycode);
-		int keySpriteIndex = ButtonLabel.Text.Length <= 3 ? 0 : 1;
-		ButtonTextureRect.Texture = controllerResources[^1].buttons[keySpriteIndex]; // Last controller resource should be the keyboard sprites
+		bool isShortButton = ButtonLabel.Text.Length <= 1;
+		int keySpriteIndex = isShortButton ? 0 : 1;
+		ButtonLabel.Scale = isShortButton ? Vector2.One * 1.5f : Vector2.One;
+		ButtonTextureRect.Texture = GetActiveSpriteResource(controllerResources.Length - 1).buttons[keySpriteIndex]; // Last controller resource should be the keyboard sprites
 	}
 }

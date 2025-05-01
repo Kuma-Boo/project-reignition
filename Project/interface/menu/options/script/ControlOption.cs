@@ -313,7 +313,9 @@ public partial class ControlOption : Control
 				KeyTextureRect.Modulate = Colors.White;
 
 				InputLabel.Text = Runtime.Instance.GetKeyLabel(key.Keycode);
-				int keySpriteIndex = InputLabel.Text.Length <= 3 ? 0 : 1;
+				bool isShortButton = InputLabel.Text.Length <= 1;
+				int keySpriteIndex = isShortButton ? 0 : 1;
+				InputLabel.Scale = isShortButton ? Vector2.One * 1.5f : Vector2.One;
 				KeyTextureRect.Texture = controllerResources[^1].buttons[keySpriteIndex]; // Last controller resource should be the keyboard sprites
 			}
 		}
