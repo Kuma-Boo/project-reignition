@@ -547,6 +547,7 @@ public partial class PlayerController : CharacterBody3D
 	private bool isRecentered; // Is the recenter complete?
 	private const float MinRecenterPower = .1f;
 	private const float MaxRecenterPower = .2f;
+	private const float AirRecenterPower = .3f;
 	/// <summary> Recenters the  Only call this AFTER movement has occurred. </summary>
 	private void UpdateRecenter()
 	{
@@ -571,7 +572,7 @@ public partial class PlayerController : CharacterBody3D
 			inputInfluence = (inputInfluence + 1) * 0.5f;
 			inputInfluence = Mathf.Lerp(MinRecenterPower, MaxRecenterPower, inputInfluence);
 
-			float recenterSpeed = MoveSpeed * inputInfluence;
+			float recenterSpeed = MoveSpeed * inputInfluence + Mathf.Abs(VerticalSpeed * AirRecenterPower);
 			movementOffset = Mathf.MoveToward(movementOffset, 0, recenterSpeed * PhysicsManager.physicsDelta);
 			if (Mathf.IsZeroApprox(movementOffset))
 				isRecentered = true;
