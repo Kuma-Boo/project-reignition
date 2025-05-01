@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 using Project.Gameplay.Objects;
 
 namespace Project.Gameplay;
@@ -39,6 +40,7 @@ public partial class IvyState : PlayerState
 		Player.MoveSpeed = 0;
 		Player.StartExternal(Trigger, Trigger.LaunchPoint, 0.2f);
 
+		Player.Controller.ResetActionBuffer();
 		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.Lockon.IsMonitoring = false;
 		Player.Animator.StartIvy();
@@ -66,7 +68,7 @@ public partial class IvyState : PlayerState
 			return null;
 		}
 
-		if (Player.Controller.IsActionBufferActive && !Player.Animator.IsIvySwingActive)
+		if (Player.Controller.IsActionBufferActive && (!Player.Animator.IsIvySwingActive || Player.Animator.IsIvyStartActive))
 		{
 			Player.Controller.ResetActionBuffer();
 			Player.Animator.StartIvySwing();
@@ -83,7 +85,7 @@ public partial class IvyState : PlayerState
 	/// <summary> Calculates how much addition force to add based on swing state. </summary>
 	private float CalculateSwingForce()
 	{
-		if (Trigger.IsSleeping)
+		if (Trigger.IsSleeping || Player.Animator.IsIvyStartActive)
 			return InitialSwingStrength;
 
 		if (Trigger.IvyRatio >= 0)

@@ -15,18 +15,24 @@ public partial class ZiplineState : PlayerState
 	public override void EnterState()
 	{
 		damageLockout = 0;
+
 		Player.Animator.StartZipline();
 		Player.Animator.SetZiplineBlend(0f);
 		Player.Animator.ExternalAngle = 0;
+		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.StartExternal(Trigger, Trigger.FollowObject, .5f);
+
 		Player.Knockback += OnPlayerDamaged;
 	}
 
 	public override void ExitState()
 	{
+		Player.Skills.IsSpeedBreakEnabled = true;
 		Player.StopExternal();
+
 		Trigger.StopZipline();
 		Trigger = null;
+
 		Player.Knockback -= OnPlayerDamaged;
 	}
 
