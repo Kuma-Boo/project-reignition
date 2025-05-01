@@ -81,6 +81,13 @@ public partial class SaveManager : Node
 		Count
 	}
 
+	public enum ControllerStyle
+	{
+		Style1, // Standard controller theme
+		Style2, // White/Nintendo Wii controller theme
+		Count
+	}
+
 	public enum VoiceLanguage
 	{
 		English,
@@ -166,6 +173,7 @@ public partial class SaveManager : Node
 		// Controls
 		public float deadZone = .2f;
 		public ControllerType controllerType = ControllerType.Automatic;
+		public ControllerStyle controllerStyle = ControllerStyle.Style1;
 		public bool useHoldBreakMode = true;
 		public int[] partyModeDevices = [0, 0, 0, 0];
 		public Dictionary inputConfiguration = [];
@@ -212,6 +220,7 @@ public partial class SaveManager : Node
 				// Controls
 				{ nameof(deadZone), deadZone },
 				{ nameof(controllerType), (int)controllerType },
+				{ nameof(controllerStyle), (int)controllerStyle},
 				{ nameof(useHoldBreakMode), useHoldBreakMode },
 				{ nameof(partyModeDevices), partyModeDevices },
 				{ nameof(inputConfiguration), inputConfiguration },
@@ -284,6 +293,8 @@ public partial class SaveManager : Node
 				deadZone = (float)var;
 			if (dictionary.TryGetValue(nameof(controllerType), out var))
 				controllerType = (ControllerType)(int)var;
+			if (dictionary.TryGetValue(nameof(controllerStyle), out var))
+				controllerStyle = (ControllerStyle)(int)var;
 			if (dictionary.TryGetValue(nameof(useHoldBreakMode), out var))
 				useHoldBreakMode = (bool)var;
 			if (dictionary.TryGetValue(nameof(partyModeDevices), out var))

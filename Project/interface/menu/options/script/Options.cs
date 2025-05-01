@@ -33,7 +33,7 @@ public partial class Options : Menu
 				maxSelection = 3;
 				break;
 			case Submenus.Control:
-				maxSelection = 7;
+				maxSelection = 8;
 				break;
 			case Submenus.Mapping:
 				maxSelection = controlMappingOptions.Length;
@@ -233,7 +233,7 @@ public partial class Options : Menu
 				if (!controlMappingOptions[VerticalSelection].IsReady) return;
 
 				CancelSFX();
-				FlipBook(Submenus.Control, true, 3);
+				FlipBook(Submenus.Control, true, 4);
 				break;
 			case Submenus.PartyMapping:
 				if (VerticalSelection >= ExtraPartyModeOptionCount &&
@@ -243,7 +243,7 @@ public partial class Options : Menu
 				}
 
 				CancelSFX();
-				FlipBook(Submenus.Control, true, 4);
+				FlipBook(Submenus.Control, true, 5);
 				break;
 			case Submenus.Test:
 				return;
@@ -334,7 +334,12 @@ public partial class Options : Menu
 		if (maxSelection < 8)
 			scrollOffset = 0;
 
-		if (!scrollBar.IsVisibleInTree()) return;
+		if (!scrollBar.IsVisibleInTree())
+		{
+			scrollBar.Position = Vector2.Zero;
+			scrollOffset = 0;
+			return;
+		}
 
 		if (VerticalSelection > scrollOffset + 7)
 			scrollOffset = VerticalSelection - 7;
@@ -460,8 +465,18 @@ public partial class Options : Menu
 				break;
 		}
 
-		controlLabels[1].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
-		controlLabels[2].Text = SaveManager.Config.useHoldBreakMode ? HoldString : ToggleString;
+		switch (SaveManager.Config.controllerStyle)
+		{
+			case SaveManager.ControllerStyle.Style1:
+				controlLabels[1].Text = "option_controller_style1";
+				break;
+			case SaveManager.ControllerStyle.Style2:
+				controlLabels[1].Text = "option_controller_style2";
+				break;
+		}
+
+		controlLabels[2].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
+		controlLabels[3].Text = SaveManager.Config.useHoldBreakMode ? HoldString : ToggleString;
 
 		partyMappingLabels[0].Text = Tr(PlayerString).Replace("0", partyPlayerIndex.ToString());
 		partyMappingLabels[1].Text = partyMappingOptions[0].GetDevice();
@@ -469,17 +484,13 @@ public partial class Options : Menu
 
 	private string CalculateQualityString(SaveManager.QualitySetting setting)
 	{
-		switch (setting)
+		return setting switch
 		{
-			case SaveManager.QualitySetting.Low:
-				return LowString;
-			case SaveManager.QualitySetting.Medium:
-				return MediumString;
-			case SaveManager.QualitySetting.High:
-				return HighString;
-		}
-
-		return DisabledString;
+			SaveManager.QualitySetting.Low => LowString,
+			SaveManager.QualitySetting.Medium => MediumString,
+			SaveManager.QualitySetting.High => HighString,
+			_ => DisabledString,
+		};
 	}
 
 	[Export] private ControlOption[] controlMappingOptions;
@@ -757,13 +768,19 @@ public partial class Options : Menu
 		}
 		else if (VerticalSelection == 1)
 		{
+			int style = WrapSelection((int)SaveManager.Config.controllerStyle + direction, (int)SaveManager.ControllerStyle.Count);
+			SaveManager.Config.controllerStyle = (SaveManager.ControllerStyle)style;
+			return true;
+		}
+		else if (VerticalSelection == 2)
+		{
 			float deadZone = SaveManager.Config.deadZone;
 			deadZone = Mathf.Clamp(deadZone + (.1f * direction), 0f, .9f);
 			SaveManager.Config.deadZone = deadZone;
 			SaveManager.ApplyInputMap();
 			return true;
 		}
-		else if (VerticalSelection == 2)
+		else if (VerticalSelection == 3)
 		{
 			SaveManager.Config.useHoldBreakMode = !SaveManager.Config.useHoldBreakMode;
 			return true;
@@ -872,25 +889,19 @@ public partial class Options : Menu
 
 	private void ConfirmControlOption()
 	{
-		if (VerticalSelection == 1) return;
-
-		if (VerticalSelection == 0)
+		if (VerticalSelection >= 0 && VerticalSelection <= 3)
 		{
 			SlideControlOption(1);
-		}
-		else if (VerticalSelection == 2)
-		{
-			SlideControlOption(1);
-		}
-		else if (VerticalSelection == 3)
-		{
-			FlipBook(Submenus.Mapping, false, 0);
 		}
 		else if (VerticalSelection == 4)
 		{
-			FlipBook(Submenus.PartyMapping, false, 0);
+			FlipBook(Submenus.Mapping, false, 0);
 		}
 		else if (VerticalSelection == 5)
+		{
+			FlipBook(Submenus.PartyMapping, false, 0);
+		}
+		else if (VerticalSelection == 6)
 		{
 			FlipBook(Submenus.Test, false, VerticalSelection);
 		}
