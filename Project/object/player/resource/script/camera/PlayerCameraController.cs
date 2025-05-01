@@ -116,6 +116,7 @@ public partial class PlayerCameraController : Node3D
 	}
 
 	public float ReversePathInfluence { get; set; }
+	public int ReversePathRotationDirection { get; set; }
 	private float reverseBlendRotationAmount;
 	private float pathBlend = 1.0f;
 	private float pathBlendSmoothed = 1.0f;
@@ -150,13 +151,13 @@ public partial class PlayerCameraController : Node3D
 
 	private float CalculateReversePathBlendRotation()
 	{
-		float target = PathFollower.IsReversingPath ? Mathf.Pi : 0;
+		float target = PathFollower.IsReversingPath ? Mathf.Pi * ReversePathRotationDirection : 0;
 		if (Mathf.IsZeroApprox(ReversePathInfluence))
 			return target;
 
-		float starting = PathFollower.IsReversingPath ? 0 : Mathf.Pi;
+		float starting = PathFollower.IsReversingPath ? 0 : Mathf.Pi * ReversePathRotationDirection;
 		ReversePathInfluence = 1f - pathBlendSmoothed;
-		return Mathf.Lerp(starting, target, pathBlendSmoothed);
+		return Mathf.LerpAngle(starting, target, pathBlendSmoothed);
 	}
 
 	/// <summary> Enabled when the camera should freeze due to a DeathTrigger. </summary>

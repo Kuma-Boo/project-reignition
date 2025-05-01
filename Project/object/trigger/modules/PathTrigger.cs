@@ -39,11 +39,12 @@ public partial class PathTrigger : StageTriggerModule
 		bool reversePath = IsReversePath();
 		if (affectPlayer)
 		{
+			Path3D previousPath = Player.PathFollower.ActivePath;
 			playerDeactivatePath ??= Player.PathFollower.ActivePath;
 			playerPathDeactivateReverse = Player.PathFollower.IsReversingPath;
 			if (Player.PathFollower.SetActivePath(path, reversePath) &&
 				playerPathDeactivateReverse != reversePath &&
-				playerDeactivatePath == Player.PathFollower.ActivePath)
+				previousPath == Player.PathFollower.ActivePath)
 			{
 				// Only enter reverse path state when reversing the current path
 				Player.StartReversePath();
@@ -61,6 +62,11 @@ public partial class PathTrigger : StageTriggerModule
 			return;
 
 		Player.Camera.ReversePathInfluence = cameraPathDeactivateReverse == reversePath ? 0f : 1f;
+		// Reverse path camera swivel
+		Player.Camera.ReversePathRotationDirection = Player.PathFollower.LocalPlayerPositionDelta.X > 0 ? 1 : -1;
+		if (reversePath)
+			Player.Camera.ReversePathRotationDirection *= -1;
+
 		Player.Camera.LimitToPathDistance = limitCameraDistanceToPath;
 		Player.Camera.UpdatePathBlendSpeed(Mathf.IsZeroApprox(cameraPathBlendTime) ? 0f : 1f / cameraPathBlendTime);
 	}
