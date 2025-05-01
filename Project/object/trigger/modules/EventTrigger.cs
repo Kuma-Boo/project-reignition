@@ -69,7 +69,6 @@ public partial class EventTrigger : StageTriggerModule
 
 		if (playerStandin?.IsEmpty == false) // Add player event settings
 		{
-			properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Animation", Variant.Type.StringName));
 			properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Animation Fadeout Time", Variant.Type.Float));
 			properties.Add(ExtensionMethods.CreateProperty("Player Event Settings/Position Smoothing", Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
 

@@ -21,7 +21,10 @@ public partial class PlayerAnimator : Node3D
 		stateTransition = animationRoot.GetNode("state_transition") as AnimationNodeTransition;
 		groundTransition = animationRoot.GetNode("ground_transition") as AnimationNodeTransition;
 		crouchTransition = (animationRoot.GetNode("ground_tree") as AnimationNodeBlendTree).GetNode("crouch_transition") as AnimationNodeTransition;
-		oneShotTransition = animationRoot.GetNode("oneshot_trigger") as AnimationNodeOneShot;
+		oneShotTrigger = animationRoot.GetNode("oneshot_trigger") as AnimationNodeOneShot;
+
+		AnimationNodeBlendTree oneShotTree = animationRoot.GetNode("oneshot_tree") as AnimationNodeBlendTree;
+		oneShotTransition = oneShotTree.GetNode("oneshot_transition") as AnimationNodeTransition;
 	}
 
 	[Export]
@@ -66,7 +69,8 @@ public partial class PlayerAnimator : Node3D
 	}
 
 	#region Oneshot Animations
-	private AnimationNodeOneShot oneShotTransition;
+	private AnimationNodeTransition oneShotTransition;
+	private AnimationNodeOneShot oneShotTrigger;
 	/// <summary> Animation index for countdown animation. </summary>
 	private readonly StringName CountdownAnimation = "countdown";
 
@@ -76,7 +80,7 @@ public partial class PlayerAnimator : Node3D
 
 		// Prevent sluggish transitions into gameplay
 		DisabledSpeedSmoothing = true;
-		oneShotTransition.FadeOutTime = 0;
+		oneShotTrigger.FadeOutTime = 0;
 	}
 
 	private readonly StringName OneshotTrigger = "parameters/oneshot_trigger/request";
@@ -86,7 +90,7 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName OneshotTransition = "parameters/oneshot_tree/oneshot_transition/transition_request";
 	public void PlayOneshotAnimation(StringName animation, float fadein = 0) // Play a specific one-shot animation
 	{
-		oneShotTransition.FadeInTime = fadein;
+		oneShotTrigger.FadeInTime = fadein;
 		animationTree.Set(OneshotTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		animationTree.Set(OneshotSeek, 0);
 		animationTree.Set(OneshotTransition, animation);
@@ -95,14 +99,15 @@ public partial class PlayerAnimator : Node3D
 	}
 
 
-	public bool IsOneshotAnimationValid(StringName animation)
+	public bool IsOneshotAnimationValid(string animation)
 	{
-		if (animation.IsEmpty)
+		if (string.IsNullOrEmpty(animation))
 			return false;
 
 		bool isAnimationValid = false;
 		for (int i = 0; i < oneShotTransition.GetInputCount(); i++)
 		{
+			GD.Print(oneShotTransition.GetInputName(i));
 			if (!oneShotTransition.GetInputName(i).Equals(animation))
 				continue;
 
@@ -120,7 +125,7 @@ public partial class PlayerAnimator : Node3D
 	/// </summary>
 	public void CancelOneshot(float fadeout = 0)
 	{
-		oneShotTransition.FadeOutTime = fadeout;
+		oneShotTrigger.FadeOutTime = fadeout;
 
 		// Abort accidental landing animations
 		if (Mathf.IsZeroApprox(fadeout))
