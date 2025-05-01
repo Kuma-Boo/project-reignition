@@ -152,12 +152,12 @@ _data = {
 [node name="Cage" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
 script = ExtResource("1_4wep3")
 pieceMass = 2.5
+shatterFlags = 24
+bounceStrength = 1.0
+snapMode = 1
 root = NodePath("Root")
 pieceRoot = NodePath("CagePieces")
 animator = NodePath("AnimationPlayer")
-shatterFlags = 24
-bouncePlayerOnJumpDash = true
-snapPlayerOnBounce = false
 
 [node name="Root" type="StaticBody3D" parent="." groups=["floor", "grind wall", "metal", "wall"]]
 collision_layer = 8
@@ -179,14 +179,14 @@ shape = SubResource("BoxShape3D_0pm0a")
 visible = false
 
 [node name="SFX" type="AudioStreamPlayer" parent="."]
+process_mode = 1
 stream = ExtResource("4_rehhr")
 volume_db = -6.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_8wuil")
+&"": SubResource("AnimationLibrary_8wuil")
 }
 
 [connection signal="area_entered" from="Root/Lockon" to="." method="OnEntered"]

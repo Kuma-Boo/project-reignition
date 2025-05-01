@@ -117,11 +117,11 @@ pieceMass = 0.6
 shakeScreenOnShatter = false
 stopPlayerOnShatter = true
 disableRespawn = true
+shatterFlags = 31
+bounceStrength = 1.0
 root = NodePath("Root")
 pieceRoot = NodePath("JarPieces")
 animator = NodePath("AnimationPlayer")
-shatterFlags = 31
-bouncePlayerOnJumpDash = true
 
 [node name="Root" type="StaticBody3D" parent="." groups=["wall"]]
 collision_layer = 8
@@ -146,16 +146,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0999999, 0)
 shape = SubResource("CapsuleShape3D_v3ose")
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
 stream = ExtResource("4_0p6u3")
 max_db = 0.0
 pitch_scale = 0.86
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_f43ij")
+&"": SubResource("AnimationLibrary_f43ij")
 }
 
 [connection signal="area_entered" from="Trigger" to="." method="OnEntered"]

@@ -760,14 +760,17 @@ public partial class PlayerController : CharacterBody3D
 	[Export] private BounceState bounceState;
 	public bool IsBouncing { get; set; }
 	public bool IsBounceInteruptable { get; set; }
-	public void StartBounce(bool isUpwardBounce = true, float bounceScaleOverride = 1f)
+	public void StartBounce(BounceState.SnapMode bounceMode, float bounceScaleOverride = 1f)
 	{
 		IsBouncing = true;
 		IsBounceInteruptable = false;
 		bounceState.BounceHeightScale = bounceScaleOverride;
-		bounceState.IsUpwardBounce = isUpwardBounce;
+		bounceState.SetBounceSnapping(bounceMode);
 		StateMachine.ChangeState(bounceState);
 	}
+
+	// Overload method for standard bouncing
+	public void StartBounce(bool isUpwardBounce = false, float bounceScaleOverride = 1f) => StartBounce(isUpwardBounce ? BounceState.SnapMode.SnappingEnabled : BounceState.SnapMode.Disabled, bounceScaleOverride);
 
 	[Export] private DriftState driftState;
 	public bool IsDrifting => driftState.Trigger != null;

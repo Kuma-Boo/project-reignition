@@ -26,7 +26,7 @@ public partial class MovingObject : Node3D
 
 		if (movementMode != MovementModes.Static)
 		{
-			properties.Add(ExtensionMethods.CreateProperty("Movement/Cycle Length", Variant.Type.Float, PropertyHint.Range, "-10,10,.1"));
+			properties.Add(ExtensionMethods.CreateProperty("Movement/Cycle Length", Variant.Type.Float, PropertyHint.Range, "-10,10,.1,or_greater"));
 			properties.Add(ExtensionMethods.CreateProperty("Movement/Starting Offset", Variant.Type.Float, PropertyHint.Range, "0,1,.01"));
 
 			if (movementMode == MovementModes.Linear)

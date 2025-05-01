@@ -5,6 +5,16 @@ namespace Project.Gameplay;
 
 public partial class BounceState : PlayerState
 {
+	public enum SnapMode
+	{
+		SnappingEnabled, // Snap player to the target's exact position
+		SnappingEnabledNoHeight, // Snap player, but ignore height (useful for cages)
+		Disabled,
+	}
+
+	private SnapMode snapMode;
+	public void SetBounceSnapping(SnapMode mode) => snapMode = mode;
+
 	[Export]
 	private PlayerState fallState;
 	[Export]
@@ -23,7 +33,6 @@ public partial class BounceState : PlayerState
 
 	/// <summary> Used to override how high the bounce takes the player. </summary>
 	public float BounceHeightScale { get; set; }
-	public bool IsUpwardBounce { get; set; }
 	/// <summary> Used to determine whether targeting is enabled or not. </summary>
 	private float bounceInterruptTimer;
 
@@ -89,7 +98,7 @@ public partial class BounceState : PlayerState
 
 	private void AttemptBounceSnapping()
 	{
-		if (!IsUpwardBounce) // Not a snap bounce -- bounce the player backwards
+		if (snapMode == SnapMode.Disabled) // Not a snap bounce -- bounce the player backwards
 		{
 			Player.MoveSpeed = -bounceSpeed;
 			return;
@@ -111,6 +120,10 @@ public partial class BounceState : PlayerState
 		}
 
 		// Only snap when target being hit is correct
-		Player.GlobalPosition = Player.Lockon.Target.GlobalPosition;
+		Vector3 targetSnapPosition = Player.Lockon.Target.GlobalPosition;
+		if (snapMode == SnapMode.SnappingEnabledNoHeight)
+			targetSnapPosition.Y = Player.GlobalPosition.Y;
+
+		Player.GlobalPosition = targetSnapPosition;
 	}
 }
