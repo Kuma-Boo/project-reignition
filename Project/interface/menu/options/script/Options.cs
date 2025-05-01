@@ -233,7 +233,7 @@ public partial class Options : Menu
 				if (!controlMappingOptions[VerticalSelection].IsReady) return;
 
 				CancelSFX();
-				FlipBook(Submenus.Control, true, 3);
+				FlipBook(Submenus.Control, true, 4);
 				break;
 			case Submenus.PartyMapping:
 				if (VerticalSelection >= ExtraPartyModeOptionCount &&
@@ -243,7 +243,7 @@ public partial class Options : Menu
 				}
 
 				CancelSFX();
-				FlipBook(Submenus.Control, true, 4);
+				FlipBook(Submenus.Control, true, 5);
 				break;
 			case Submenus.Test:
 				return;
@@ -334,7 +334,12 @@ public partial class Options : Menu
 		if (maxSelection < 8)
 			scrollOffset = 0;
 
-		if (!scrollBar.IsVisibleInTree()) return;
+		if (!scrollBar.IsVisibleInTree())
+		{
+			scrollBar.Position = Vector2.Zero;
+			scrollOffset = 0;
+			return;
+		}
 
 		if (VerticalSelection > scrollOffset + 7)
 			scrollOffset = VerticalSelection - 7;
