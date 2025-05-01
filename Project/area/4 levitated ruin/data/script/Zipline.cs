@@ -171,7 +171,7 @@ public partial class Zipline : PathFollow3D
 
 		if (isFullSwingActive)
 		{
-			if (!isHoldingDirection)
+			if (!isHoldingDirection || (!isSignAligned && Mathf.Abs(currentRotation) > NormalRotationLimit))
 				isFullSwingActive = false;
 
 			return;
