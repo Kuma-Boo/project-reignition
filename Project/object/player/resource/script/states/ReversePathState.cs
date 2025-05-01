@@ -17,12 +17,12 @@ public partial class ReversePathState : PlayerState
 	{
 		playedTurnaroundAnimation = false;
 		Player.IsMovingBackward = false;
-		if (Player.Skills.IsSpeedBreakActive)
-			Player.Skills.ToggleSpeedBreak();
+		Player.Skills.IsSpeedBreakEnabled = false;
 	}
 
 	public override void ExitState()
 	{
+		Player.Skills.IsSpeedBreakEnabled = true;
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		Player.Animator.DisabledSpeedSmoothing = true;
 		Player.Animator.IdleAnimation();
