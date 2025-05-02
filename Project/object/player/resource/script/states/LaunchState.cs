@@ -57,7 +57,7 @@ public partial class LaunchState : PlayerState
 
 		if (settings.IsJump) // Play jump effects
 		{
-			Player.Animator.JumpAnimation();
+			Player.Animator.AutoJumpAnimation();
 			Player.UpDirection = Vector3.Up;
 			Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 		}

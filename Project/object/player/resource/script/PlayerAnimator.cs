@@ -453,6 +453,7 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(HurtTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(QuickStepTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(LightDashTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(AutoJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 	}
 
 	public void JumpAnimation()
@@ -460,6 +461,15 @@ public partial class PlayerAnimator : Node3D
 		ResetState();
 		UpdateAirState("jump", true);
 	}
+
+	private readonly StringName AutoJumpTrigger = "parameters/air_tree/autojump_trigger/request";
+	public void AutoJumpAnimation()
+	{
+		ResetState();
+		UpdateAirState(FallState, false);
+		animationTree.Set(AutoJumpTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
 	public void JumpAccelAnimation()
 	{
 		IsFallTransitionEnabled = false;
@@ -957,9 +967,9 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName PetrifyStopTrigger = "parameters/gimmick_tree/petrify_stop_trigger/request";
 	public void StopPetrify()
 	{
-		animationTree.Set(GimmickTransition, ZiplineState);
+		animationTree.Set(GimmickTransition, PetrifyState);
 		animationTree.Set(PetrifyStopTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-		ResetState(0.2f);
+		ResetState(0.5f);
 
 		eventAnimationPlayer.Play("petrify-stop");
 		eventAnimationPlayer.Advance(0.0);

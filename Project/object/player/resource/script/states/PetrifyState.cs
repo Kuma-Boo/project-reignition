@@ -27,10 +27,7 @@ public partial class PetrifyState : PlayerState
 		Player.Effect.StartPetrifyShatterFX();
 
 		if (Player.IsOnGround) // Ensure landing animation is played properly
-		{
-			Player.Animator.ResetState(0);
 			Player.Animator.SnapToGround();
-		}
 	}
 
 	public override PlayerState ProcessPhysics()

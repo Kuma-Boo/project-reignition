@@ -1,6 +1,13 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=312 format=3 uid="uid://biwe75w273iq7"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=314 format=3 uid="uid://biwe75w273iq7"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_hf2vv"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cd6vn"]
+animation = &"ActionLibrary/auto-jump"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_8kago"]
+fadein_time = 0.1
+fadeout_time = 0.1
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8m3pk"]
 animation = &"ActionLibrary/backflip"
@@ -205,9 +212,13 @@ animation = &"ActionLibrary/stomp-start"
 fadeout_time = 0.02
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_2rvqt"]
-graph_offset = Vector2(-1983.4, 11.4844)
+graph_offset = Vector2(-447.212, 49.1499)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_hf2vv")
 nodes/TimeScale/position = Vector2(-980, 80)
+nodes/autojump_anim/node = SubResource("AnimationNodeAnimation_cd6vn")
+nodes/autojump_anim/position = Vector2(40, 380)
+nodes/autojump_trigger/node = SubResource("AnimationNodeOneShot_8kago")
+nodes/autojump_trigger/position = Vector2(360, 120)
 nodes/backflip_anim/node = SubResource("AnimationNodeAnimation_8m3pk")
 nodes/backflip_anim/position = Vector2(-800, 256)
 nodes/backflip_trigger/node = SubResource("AnimationNodeOneShot_0x4r8")
@@ -246,6 +257,7 @@ nodes/light_dash_state/node = SubResource("AnimationNodeStateMachine_s4dev")
 nodes/light_dash_state/position = Vector2(-2000, 200)
 nodes/light_dash_trigger/node = SubResource("AnimationNodeOneShot_8cjyu")
 nodes/light_dash_trigger/position = Vector2(-1580, -20)
+nodes/output/position = Vector2(600, 100)
 nodes/splash_jump_trigger/node = SubResource("AnimationNodeOneShot_xgt07")
 nodes/splash_jump_trigger/position = Vector2(-820, -20)
 "nodes/splash_jump_trigger 2/node" = SubResource("AnimationNodeAnimation_s4gld")
@@ -258,7 +270,7 @@ nodes/stomp_start_anim/node = SubResource("AnimationNodeAnimation_8buvv")
 nodes/stomp_start_anim/position = Vector2(-1580, 200)
 nodes/stomp_trigger/node = SubResource("AnimationNodeOneShot_fuwvi")
 nodes/stomp_trigger/position = Vector2(-1300, 0)
-node_connections = [&"TimeScale", 0, &"splash_jump_trigger 2", &"backflip_trigger", 0, &"splash_jump_trigger", &"backflip_trigger", 1, &"backflip_anim", &"bounce_transition", 0, &"bounce_trick_1_anim", &"bounce_transition", 1, &"bounce_trick_2_anim", &"bounce_transition", 2, &"bounce_trick_3_anim", &"bounce_transition", 3, &"bounce_trick_4_anim", &"bounce_trigger", 0, &"backflip_trigger", &"bounce_trigger", 1, &"bounce_transition", &"fall_speed", 0, &"fall_start_anim", &"fall_trigger", 0, &"state_transition", &"fall_trigger", 1, &"fall_speed", &"jump_accel_trigger", 0, &"jump_state", &"jump_accel_trigger", 1, &"jump_accel_state", &"light_dash_speed", 0, &"light_dash_state", &"light_dash_trigger", 0, &"fall_trigger", &"light_dash_trigger", 1, &"light_dash_speed", &"output", 0, &"bounce_trigger", &"splash_jump_trigger", 0, &"stomp_trigger", &"splash_jump_trigger", 1, &"TimeScale", &"state_transition", 0, &"fall_anim", &"state_transition", 1, &"jump_accel_trigger", &"state_transition", 2, &"launch_state", &"state_transition", 3, &"stomp_anim", &"stomp_trigger", 0, &"light_dash_trigger", &"stomp_trigger", 1, &"stomp_start_anim"]
+node_connections = [&"TimeScale", 0, &"splash_jump_trigger 2", &"autojump_trigger", 0, &"bounce_trigger", &"autojump_trigger", 1, &"autojump_anim", &"backflip_trigger", 0, &"splash_jump_trigger", &"backflip_trigger", 1, &"backflip_anim", &"bounce_transition", 0, &"bounce_trick_1_anim", &"bounce_transition", 1, &"bounce_trick_2_anim", &"bounce_transition", 2, &"bounce_trick_3_anim", &"bounce_transition", 3, &"bounce_trick_4_anim", &"bounce_trigger", 0, &"backflip_trigger", &"bounce_trigger", 1, &"bounce_transition", &"fall_speed", 0, &"fall_start_anim", &"fall_trigger", 0, &"state_transition", &"fall_trigger", 1, &"fall_speed", &"jump_accel_trigger", 0, &"jump_state", &"jump_accel_trigger", 1, &"jump_accel_state", &"light_dash_speed", 0, &"light_dash_state", &"light_dash_trigger", 0, &"fall_trigger", &"light_dash_trigger", 1, &"light_dash_speed", &"output", 0, &"autojump_trigger", &"splash_jump_trigger", 0, &"stomp_trigger", &"splash_jump_trigger", 1, &"TimeScale", &"state_transition", 0, &"fall_anim", &"state_transition", 1, &"jump_accel_trigger", &"state_transition", 2, &"launch_state", &"state_transition", 3, &"stomp_anim", &"stomp_trigger", 0, &"light_dash_trigger", &"stomp_trigger", 1, &"stomp_start_anim"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_f60fx"]
 
@@ -730,7 +742,7 @@ blend_point_2/pos = 1.0
 sync = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_m8twf"]
-graph_offset = Vector2(-990.86, 110.311)
+graph_offset = Vector2(-1179.24, 299.374)
 nodes/idle_anim/node = SubResource("AnimationNodeAnimation_xpufo")
 nodes/idle_anim/position = Vector2(-960, 520)
 nodes/ivy_blend/node = SubResource("AnimationNodeBlendSpace1D_n6eio")
@@ -1586,7 +1598,7 @@ input_5/break_loop_at_end = false
 input_5/reset = true
 
 [resource]
-graph_offset = Vector2(-1210.14, -15.5857)
+graph_offset = Vector2(-1213.86, 250.724)
 nodes/air_tree/node = SubResource("AnimationNodeBlendTree_2rvqt")
 nodes/air_tree/position = Vector2(-1300, 100)
 nodes/balance_tree/node = SubResource("AnimationNodeBlendTree_gi378")
