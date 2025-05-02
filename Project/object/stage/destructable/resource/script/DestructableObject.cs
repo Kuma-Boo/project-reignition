@@ -76,7 +76,6 @@ public partial class DestructableObject : Node3D
 
 	protected virtual void SetUp()
 	{
-
 		for (int i = 0; i < pieceRoot.GetChildCount(); i++)
 		{
 			RigidBody3D rigidbody = pieceRoot.GetChildOrNull<RigidBody3D>(i);

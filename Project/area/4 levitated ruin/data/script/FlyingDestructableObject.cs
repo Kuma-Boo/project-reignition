@@ -36,7 +36,7 @@ public partial class FlyingDestructableObject : DestructableObject
 			rotationRoot.GlobalPosition += this.Forward() * flyingSpeed * PhysicsManager.physicsDelta;
 			currentLifetime += PhysicsManager.physicsDelta;
 			if (currentLifetime >= lifetime)
-				Deactivate();
+				Shatter();
 		}
 	}
 

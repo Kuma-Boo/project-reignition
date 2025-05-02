@@ -444,15 +444,17 @@ public partial class StageSettings : Node3D
 	[Signal]
 	public delegate void UnloadedEventHandler();
 
-	public void RespawnObjects()
+	public void StartRespawn()
 	{
 		SoundManager.instance.CancelDialog(); // Cancel any active dialog
-		EmitSignal(SignalName.Respawned);
-
 		GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Timeout += RespawnEnemies;
 	}
 
-	private void RespawnEnemies() => EmitSignal(SignalName.RespawnedEnemies);
+	private void RespawnEnemies()
+	{
+		EmitSignal(SignalName.Respawned);
+		EmitSignal(SignalName.RespawnedEnemies);
+	}
 	#endregion
 
 	#region Level Completion

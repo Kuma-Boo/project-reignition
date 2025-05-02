@@ -989,8 +989,8 @@ public partial class PlayerController : CharacterBody3D
 		BonusManager.instance.CancelBonuses();
 
 		Stage.RevertToCheckpointData();
-		Stage.RespawnObjects();
 		Stage.IncrementRespawnCount();
+		Stage.StartRespawn();
 		Stage.UpdateRingCount(Skills.RespawnRingCount, StageSettings.MathModeEnum.Replace, true); // Reset ring count
 
 		CheckpointTrigger currentCheckpoint = IsDebugRespawn ? DebugManager.Instance.DebugCheckpoint : Stage.CurrentCheckpoint;
