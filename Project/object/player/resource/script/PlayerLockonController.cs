@@ -8,14 +8,10 @@ namespace Project.Gameplay;
 /// Responsible for figuring out which target to lock onto.
 /// Also contains the code for bouncing off stuff when using the homing attack.
 /// </summary>
-public partial class PlayerLockonController : Node3D
+public partial class PlayerLockonController : Area3D
 {
 	private PlayerController Player;
 	public void Initialize(PlayerController player) => Player = player;
-
-	[Export] private Area3D areaTrigger;
-	public Array<Area3D> GetOverlappingAreas() => areaTrigger.GetOverlappingAreas();
-	public Array<Node3D> GetOverlappingBodies() => areaTrigger.GetOverlappingBodies();
 
 	/// <summary> Active lockon target shown on the HUD. </summary>
 	public Node3D Target { get; private set; }

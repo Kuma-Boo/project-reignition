@@ -100,6 +100,7 @@ public partial class BounceState : PlayerState
 	{
 		if (snapMode == SnapMode.Disabled) // Not a snap bounce -- bounce the player backwards
 		{
+			GD.Print("Wrong mode");
 			Player.MoveSpeed = -bounceSpeed;
 			return;
 		}
@@ -107,17 +108,26 @@ public partial class BounceState : PlayerState
 		Player.MoveSpeed = 0; // Reset speed
 
 		if (Player.Lockon.Target == null) // Nothing to snap to
+		{
+			GD.Print("No target");
 			return;
+		}
 
 		if (!Mathf.IsZeroApprox(bounceInterruptTimer)) // Player is already bouncing -- don't snap
+		{
+			GD.Print("Already bouncing");
 			return;
+		}
 
 		if ((Player.Lockon.Target is Area3D && !Player.Lockon.GetOverlappingAreas().Contains(Player.Lockon.Target as Area3D)) ||
 			(Player.Lockon.Target is PhysicsBody3D && !Player.Lockon.GetOverlappingBodies().Contains(Player.Lockon.Target as PhysicsBody3D)))
 		{
 			// Failed to find a target to snap to
+			GD.Print("Couldn't find target");
 			return;
 		}
+
+		GD.Print("Snapped");
 
 		// Only snap when target being hit is correct
 		Vector3 targetSnapPosition = Player.Lockon.Target.GlobalPosition;
