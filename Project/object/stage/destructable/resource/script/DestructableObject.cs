@@ -200,7 +200,7 @@ public partial class DestructableObject : Node3D
 			animator.Play("shatter");
 
 		if (shakeScreenOnShatter)
-			Player.Camera.StartMediumCameraShake();
+			Player.Camera.StartMediumCameraShake(root.GlobalPosition);
 
 		pieceRoot.Visible = true; // Make sure piece root is visible
 		pieceRoot.ProcessMode = ProcessModeEnum.Inherit;

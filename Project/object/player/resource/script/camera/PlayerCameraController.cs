@@ -852,6 +852,18 @@ public partial class PlayerCameraController : Node3D
 		});
 	}
 
+	public void StartMediumCameraShake(Vector3 origin, float length = .2f)
+	{
+		StartCameraShake(new()
+		{
+			magnitude = Vector3.One.RemoveDepth() * .4f,
+			intensity = Vector3.One * 50.0f,
+			duration = length,
+			origin = origin,
+			maximumDistance = 30f,
+		});
+	}
+
 	private void UpdateScreenShake()
 	{
 		if (!SaveManager.Config.useScreenShake)
