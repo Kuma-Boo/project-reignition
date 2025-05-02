@@ -58,7 +58,7 @@ public partial class LightSpeedDashState : PlayerState
 			return false;
 
 		Vector3 direction = target.GlobalPosition - Player.CenterPosition;
-		bool isValidFacingDirection = direction.Dot(Player.Animator.Forward()) >= 0.5f && direction.Dot(Player.PathFollower.Forward()) >= 0.5f;
+		bool isValidFacingDirection = direction.Dot(Player.Animator.Forward()) >= 0.5f && direction.Dot(Player.PathFollower.ForwardAxis) >= 0.5f;
 
 		return isValidFacingDirection;
 	}

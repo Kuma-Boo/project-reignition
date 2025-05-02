@@ -26,8 +26,8 @@ public partial class LaunchRing : Launcher
 	[Export] private bool isSpikeVariant;
 	[Export] private AnimationPlayer animator;
 
-	public float LaunchRatio => launchRatio;
-	public override float GetLaunchRatio() => isSpikeVariant ? 1f : Mathf.SmoothStep(0, 1, launchRatio);
+	public new float LaunchRatio => base.LaunchRatio;
+	public override float GetLaunchRatio() => isSpikeVariant ? 1f : Mathf.SmoothStep(0, 1, base.LaunchRatio);
 
 	protected override void SetUp()
 	{
@@ -65,7 +65,7 @@ public partial class LaunchRing : Launcher
 			if (_pieces[i] == null) continue;
 
 			Vector3 movementVector = -Vector3.Up.Rotated(Vector3.Forward, interval * (i + .5f)); // Offset rotation slightly, since visual model is offset
-			_pieces[i].Position = movementVector * launchRatio * RingSize;
+			_pieces[i].Position = movementVector * base.LaunchRatio * RingSize;
 		}
 	}
 
@@ -85,7 +85,7 @@ public partial class LaunchRing : Launcher
 		if (!a.IsInGroup("player detection"))
 			return;
 
-		animator.Play("RESET", .2 * (1 + launchRatio));
+		animator.Play("RESET", .2 * (1 + base.LaunchRatio));
 
 		if (!Player.IsLaunching)
 			EmitSignal(SignalName.Exited);

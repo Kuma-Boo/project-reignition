@@ -43,10 +43,10 @@ public partial class DestructableObject : Node3D
 		JumpDash = 8, // Break when player is jumpdashing/homing attacking. Must be enabled even if AttackSkill is active.
 		SpeedBreak = 16, // Break when speedbreak is active. Must be enabled even if AttackSkill is active.
 	}
+	[Export(PropertyHint.Range, "0,1,0.1")]
+	private float bounceStrength;
 	[Export]
-	private bool bouncePlayerOnJumpDash;
-	[Export]
-	private bool snapPlayerOnBounce = true;
+	private BounceState.SnapMode snapMode = BounceState.SnapMode.SnappingEnabled;
 	private const float ShatterStrength = 10.0f;
 
 	private ShatterFlags FlagSetting => (ShatterFlags)shatterFlags;
@@ -268,8 +268,8 @@ public partial class DestructableObject : Node3D
 		if (FlagSetting.HasFlag(ShatterFlags.JumpDash) && Player.IsJumpDashOrHomingAttack)
 		{
 			Shatter();
-			if (bouncePlayerOnJumpDash)
-				Player.StartBounce(snapPlayerOnBounce);
+			if (!Mathf.IsZeroApprox(bounceStrength))
+				Player.StartBounce(snapMode, bounceStrength);
 
 			return;
 		}

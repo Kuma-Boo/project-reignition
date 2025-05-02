@@ -71,7 +71,7 @@ public partial class DriftTrigger : Area3D
 
 		// Check for any obstructions
 		Vector3 targetCastPosition = Player.CollisionPosition + Player.PathFollower.GlobalPlayerPositionDelta.RemoveVertical();
-		targetCastPosition += Player.PathFollower.Forward() * slideDistance;
+		targetCastPosition += Player.PathFollower.ForwardAxis * slideDistance;
 		Vector3 castVector = Player.CollisionPosition - targetCastPosition;
 		RaycastHit hit = Player.CastRay(Player.CollisionPosition, castVector, Runtime.Instance.environmentMask);
 		DebugManager.DrawRay(Player.CollisionPosition, castVector, Colors.Green);

@@ -111,16 +111,14 @@ public partial class GasTank : Area3D
 
 	private bool CheckInteraction()
 	{
-		if (!isInteractingWithPlayer) return false;
+		if (!isInteractingWithPlayer || Player.AttackState == PlayerController.AttackStates.None)
+			return false;
 
-		// TODO Check for stomp
-		if (Player.Skills.IsSpeedBreakActive)
+		if (Player.AttackState == PlayerController.AttackStates.OneShot)
 		{
 			Detonate(); // Detonate instantly
 			return false;
 		}
-
-		if (!Player.IsJumpDashOrHomingAttack) return false;
 
 		StrikeTank();
 		return true;
@@ -141,6 +139,9 @@ public partial class GasTank : Area3D
 
 	public void Launch()
 	{
+		if (IsTravelling) // Already traveling
+			return;
+
 		if (endTarget != null)
 			endPosition = endTarget.GlobalPosition - GlobalPosition;
 
@@ -192,7 +193,7 @@ public partial class GasTank : Area3D
 		}
 		BonusManager.instance.UnregisterEnemyComboExtender(this);
 
-		if (isPlayerInExplosion)
+		if (isPlayerInExplosion && !Player.Skills.IsSpeedBreakActive)
 			Player.StartKnockback();
 	}
 

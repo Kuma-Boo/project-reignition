@@ -1,13 +1,22 @@
-[gd_scene load_steps=39 format=3 uid="uid://bnefjsj5g2emm"]
+[gd_scene load_steps=41 format=3 uid="uid://bnefjsj5g2emm"]
 
 [ext_resource type="PackedScene" uid="uid://e6oju4xygbmm" path="res://area/4 levitated ruin/object/model/obstacle/MissileSimple.gltf" id="1_kw57j"]
-[ext_resource type="Script" path="res://area/4 levitated ruin/data/script/Missile.cs" id="2_vnv7l"]
+[ext_resource type="Script" uid="uid://c27oe48qjsjv4" path="res://area/4 levitated ruin/data/script/Missile.cs" id="2_vnv7l"]
 [ext_resource type="Material" uid="uid://bq1q3tp1cq76v" path="res://effect/particle/material/explosion/Explosion Smoke Add.tres" id="3_udap6"]
 [ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="4_2kxas"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="5_tm7hj"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="5_tm7hj"]
 [ext_resource type="Material" uid="uid://b4847susbcf6p" path="res://area/1 sand oasis/boss/effect/material/Hit Spark Billboard.tres" id="6_qpsq6"]
 [ext_resource type="Material" uid="uid://db4kropnhyudk" path="res://effect/particle/material/Ember Blue Billboard.tres" id="7_q3i3w"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="8_13i2u"]
+
+[sub_resource type="Curve" id="Curve_1x8is"]
+_data = [Vector2(0.00656455, 1), 0.0, -1.00661, 0, 1, Vector2(1, 0), -1.00661, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_4s46d"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_1x8is")
 
 [sub_resource type="Gradient" id="Gradient_8a8yj"]
 offsets = PackedFloat32Array(0, 0.505495, 0.895604, 1)
@@ -18,8 +27,7 @@ gradient = SubResource("Gradient_8a8yj")
 width = 128
 
 [sub_resource type="Curve" id="Curve_nehro"]
-min_value = 1.0
-max_value = 4.0
+_limits = [1.0, 4.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 9.45211, 0, 0, Vector2(1, 4), 0.371934, 0.0, 0, 0]
 point_count = 2
 
@@ -30,10 +38,11 @@ curve = SubResource("Curve_nehro")
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nlsiu"]
 particle_flag_align_y = true
 gravity = Vector3(0, 0, 0)
-scale_min = 1.5
-scale_max = 1.5
+scale_min = 0.5
+scale_max = 0.5
 scale_curve = SubResource("CurveTexture_mc0fb")
 color_ramp = SubResource("GradientTexture1D_ldb2c")
+alpha_curve = SubResource("CurveTexture_4s46d")
 
 [sub_resource type="QuadMesh" id="QuadMesh_yvuiw"]
 material = ExtResource("4_2kxas")
@@ -225,6 +234,18 @@ tracks/4/keys = {
 "update": 0,
 "values": [1.4]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Hitbox/CollisionShape3D:disabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_5brwi"]
 resource_name = "explode"
@@ -250,7 +271,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [1.0]
+"values": [0.8]
 }
 tracks/2/type = "method"
 tracks/2/imported = false
@@ -302,7 +323,19 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [2.0]
+"values": [1.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Hitbox/CollisionShape3D:disabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
 }
 
 [sub_resource type="Animation" id="Animation_n41uu"]
@@ -336,12 +369,13 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tfwu0"]
 _data = {
-"RESET": SubResource("Animation_mftqq"),
-"explode": SubResource("Animation_5brwi"),
-"fly": SubResource("Animation_n41uu")
+&"RESET": SubResource("Animation_mftqq"),
+&"explode": SubResource("Animation_5brwi"),
+&"fly": SubResource("Animation_n41uu")
 }
 
 [node name="MissileSimple" node_paths=PackedStringArray("animator") instance=ExtResource("1_kw57j")]
+physics_interpolation_mode = 2
 script = ExtResource("2_vnv7l")
 animator = NodePath("AnimationPlayer")
 
@@ -445,7 +479,7 @@ draw_pass_1 = SubResource("QuadMesh_yndoj")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="4"]
 libraries = {
-"": SubResource("AnimationLibrary_tfwu0")
+&"": SubResource("AnimationLibrary_tfwu0")
 }
 autoplay = "fly"
 

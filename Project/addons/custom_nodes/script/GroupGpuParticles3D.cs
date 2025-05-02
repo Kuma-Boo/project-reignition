@@ -25,6 +25,14 @@ public partial class GroupGpuParticles3D : GpuParticles3D
 		Emitting = value;
 	}
 
+	public new void SetSpeedScale(double value)
+	{
+		for (int i = 0; i < subSystems.Count; i++)
+			subSystems[i].SpeedScale = value;
+
+		SpeedScale = value;
+	}
+
 	public void RestartGroup()
 	{
 		for (int i = 0; i < subSystems.Count; i++)

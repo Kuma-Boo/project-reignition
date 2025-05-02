@@ -87,7 +87,8 @@ public partial class RunState : PlayerState
 
 			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.QuickStep) &&
 				Player.Controller.IsStepBufferActive &&
-				(!Player.IsLockoutActive || !Player.ActiveLockoutData.recenterPlayer))
+				(!Player.IsLockoutActive || !Player.ActiveLockoutData.recenterPlayer) &&
+				Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed) > .5f)
 			{
 				Player.StartQuickStep(Player.Controller.StepDirection < 0);
 				Player.Controller.ResetStepBuffer();

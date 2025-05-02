@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://6qax2suxlpx1"]
+
+[ext_resource type="PackedScene" uid="uid://psw1albkc6qu" path="res://area/4 levitated ruin/object/model/special/Mirror.gltf" id="1_6jhe6"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="2_nuvb4"]
+[ext_resource type="Resource" uid="uid://ukcne4um86a6" path="res://resource/preset/camera/common/CutsceneCam.tres" id="3_nhwwq"]
+
+[node name="Mirror" instance=ExtResource("1_6jhe6")]
+
+[node name="CameraRoot" type="Node3D" parent="." index="2"]
+
+[node name="CameraFollow" type="Node3D" parent="CameraRoot" index="0"]
+script = ExtResource("2_nuvb4")
+transitionType = 1
+settings = ExtResource("3_nhwwq")
+UpdateEveryFrame = true
+
+[node name="Camera3D" type="Camera3D" parent="CameraRoot/CameraFollow" index="0"]
+fov = 70.0

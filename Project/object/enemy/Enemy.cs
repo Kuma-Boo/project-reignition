@@ -69,6 +69,7 @@ public partial class Enemy : Node3D
 
 	public bool IsDefeated => currentHealth <= 0;
 	protected bool IsSpeedbreakDefeat { get; private set; }
+	protected bool IsLightSpeedAttackValid { get; private set; }
 
 	public override void _Ready() => SetUp();
 	protected virtual void SetUp()
@@ -140,6 +141,7 @@ public partial class Enemy : Node3D
 	{
 		IsActive = false; // Start disabled
 		IsInteracting = false; // Disable interactions
+		IsLightSpeedAttackValid = false;
 
 		SpawnData.Respawn(this);
 		currentHealth = maxHealth;
@@ -190,7 +192,7 @@ public partial class Enemy : Node3D
 			currentHealth -= amount;
 
 		if (IsDefeated)
-			Defeat();
+			CallDeferred(MethodName.Defeat);
 	}
 
 	/// <summary>
@@ -201,6 +203,9 @@ public partial class Enemy : Node3D
 		currentHealth = 0;
 		Player.Camera.SetLockonTarget(null);
 		Player.Lockon.ResetLockonTarget();
+
+		CheckLightSpeedAttack();
+
 		BonusManager.instance.AddEnemyChain();
 		StageSettings.Instance.UpdateScore(50 * maxHealth, StageSettings.MathModeEnum.Add); // Add points based on max health
 
@@ -277,17 +282,12 @@ public partial class Enemy : Node3D
 		else if (Player.IsJumpDashOrHomingAttack)
 		{
 			UpdateLockon();
+			IsLightSpeedAttackValid = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedAttack) &&
+				(Input.IsActionPressed("button_attack") || Input.IsActionPressed("button_jump"));
 
-			if (!IsDefeated)
-			{
-				Player.StartBounce();
-			}
-			else if (!SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedAttack) ||
-				(!Input.IsActionPressed("button_attack") && !Input.IsActionPressed("button_jump")) ||
-				!Player.StartLightSpeedAttack())
-			{
+			// If the player is trying to perform a light speed attack, only do the bounce AFTER checking the next target
+			if (!IsLightSpeedAttackValid)
 				Player.StartBounce(IsDefeated);
-			}
 		}
 		else if ((Player.IsBouncing && !Player.IsBounceInteruptable) ||
 			(Player.IsJumping && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ArmorJump)))
@@ -314,6 +314,19 @@ public partial class Enemy : Node3D
 	{
 		IsInteractionProcessed = false;
 		Player.AttackStateChanged -= ResetInteractionProcessed;
+	}
+
+
+	protected void CheckLightSpeedAttack()
+	{
+		if (!IsLightSpeedAttackValid)
+			return;
+
+		if (Player.AttemptLightSpeedAttack()) // Transition to Light Speed Attack
+			return;
+
+		// Otherwise, do the delayed bounce
+		Player.StartBounce(IsDefeated);
 	}
 
 	/// <summary> Current local rotation of the enemy. </summary>

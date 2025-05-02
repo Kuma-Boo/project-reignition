@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Godot.Collections;
 using Project.Core;
@@ -8,27 +9,28 @@ namespace Project.Gameplay.Objects;
 public partial class Ivy : Launcher
 {
 	[Signal] public delegate void IvyStartedEventHandler();
+	private Callable ClearReversePathCallable => new(this, MethodName.ClearReversePath);
 
 	[ExportGroup("Settings")]
-	[Export(PropertyHint.Range, "2, 50")] public int length;
-	[Export]
-	private float maxRotation;
-	private float IndividualRotation => maxRotation / length;
+	[Export(PropertyHint.Range, "2, 50")] public int Length { get; private set; }
+	[Export] private float MaxRotation { get; set; }
+	private float IndividualRotation => MaxRotation / Length;
+	[Export] private bool ReversePathTemporarily { get; set; }
 
 	[Export] public bool IsSleeping { get; private set; }
 	[Export(PropertyHint.Range, "-1,1")]
-	public float LaunchRatio
+	public float IvyRatio
 	{
-		get => launchRatio;
+		get => LaunchRatio;
 		private set
 		{
-			launchRatio = value;
+			LaunchRatio = value;
 			SetRotation();
 		}
 	}
 
 	[ExportGroup("Components")]
-	[Export] private PackedScene ivyScene;
+	[Export] private PackedScene IvyScene { get; set; }
 	private Node3D linkRoot;
 	private Array<Node3D> ivyLinks = [];
 
@@ -44,8 +46,9 @@ public partial class Ivy : Launcher
 	private readonly float GravityMultiplier = 1.5f;
 	private readonly float MaxRotationSpeed = 10.0f;
 
-	public override void _Ready()
+	protected override void SetUp()
 	{
+		base.SetUp();
 		Initialize();
 
 		if (Engine.IsEditorHint())
@@ -54,7 +57,7 @@ public partial class Ivy : Launcher
 		IsSleeping = true;
 
 		// Adjust swing speed based on length (longer ivys swing slower)
-		lengthInfluence = Mathf.Clamp(50f / length, 0.5f, 5f);
+		lengthInfluence = Mathf.Clamp(50f / Length, 0.5f, 5f);
 		StageSettings.Instance.Respawned += Respawn;
 	}
 
@@ -62,7 +65,8 @@ public partial class Ivy : Launcher
 	{
 		if (Engine.IsEditorHint())
 		{
-			Initialize();
+			if (Length != ivyLinks.Count)
+				Initialize();
 			SetRotation();
 			return;
 		}
@@ -100,20 +104,20 @@ public partial class Ivy : Launcher
 		if (IsSleeping)
 			return 0;
 
-		if (LaunchRatio > 0 && rotationVelocity > 0)
-			return Mathf.Clamp(LaunchRatio + 1, 0f, 1f);
+		if (IvyRatio > 0 && rotationVelocity > 0)
+			return Mathf.Clamp(IvyRatio + 1, 0f, 1f);
 
-		if (LaunchRatio <= 0)
+		if (IvyRatio <= 0)
 			return 0;
 
-		return LaunchRatio;
+		return IvyRatio;
 	}
 
 	private void Respawn()
 	{
 		targetImpulse = impulseVelocity = 0;
 		rotationVelocity = 0;
-		LaunchRatio = 0;
+		IvyRatio = 0;
 		IsSleeping = true;
 	}
 
@@ -121,24 +125,62 @@ public partial class Ivy : Launcher
 	{
 		Player.Effect.StartSpinFX();
 		Player.Animator.StartSpin(3.0f);
+
+		// Update direction
+		Player.PathFollower.SetActivePath(Player.PathFollower.ActivePath, ReversePathTemporarily);
+
+		if (ReversePathTemporarily &&
+			!Player.IsConnected(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable))
+		{
+			// Connect signal so we can reset when we land
+			Player.Connect(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable, (int)ConnectFlags.OneShot);
+		}
+	}
+
+	public void UnlinkReversePath()
+	{
+		if (!Player.IsConnected(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable))
+			return;
+
+		Player.Disconnect(PlayerController.SignalName.LandedOnGround, ClearReversePathCallable);
+	}
+
+	public void ClearReversePath()
+	{
+		UnlinkReversePath();
+
+		if (!Player.PathFollower.IsReversingPath)
+			return;
+
+		// Revert to the correct path direction
+		Player.PathFollower.SetActivePath(Player.PathFollower.ActivePath, false);
+		if (Player.IsOnGround) // Play turnaround animation if we're on the ground
+			Player.CallDeferred(PlayerController.MethodName.StartReversePath);
 	}
 
 	/// <summary> Adds some force from the player. </summary>
-	public void AddImpulseForce(float amount)
+	public void AddImpulseForce(float amount, bool isEntryForce = false)
 	{
-		targetImpulse = Mathf.Clamp(targetImpulse + amount, 0f, 1f);
+		if (isEntryForce)
+		{
+			float forwardAngle = ExtensionMethods.CalculateForwardAngle(this.Forward());
+			if (ExtensionMethods.DeltaAngleRad(Player.MovementAngle, forwardAngle) >= Mathf.Pi * 0.5f)
+				amount *= -1;
+		}
+
 		IsSleeping = false;
+		targetImpulse = Mathf.Min(targetImpulse + amount, 1f);
 	}
 
 	public void AddGravity()
 	{
 		float gravityAmount = Gravity;
-		if (Mathf.Sign(LaunchRatio) == Mathf.Sign(rotationVelocity))
+		if (Mathf.Sign(IvyRatio) == Mathf.Sign(rotationVelocity))
 		{
 			if (isInteractingWithPlayer)
 			{
 				// Only apply heavy gravity when swinging far to keep swinging slowly when idle
-				if (Mathf.Abs(LaunchRatio) > .2f)
+				if (Mathf.Abs(IvyRatio) > .2f)
 					gravityAmount *= GravityMultiplier;
 			}
 			else
@@ -148,7 +190,7 @@ public partial class Ivy : Launcher
 			}
 		}
 
-		rotationVelocity -= Mathf.Sign(LaunchRatio) * gravityAmount * PhysicsManager.physicsDelta; // Apply gravity
+		rotationVelocity -= Mathf.Sign(IvyRatio) * gravityAmount * PhysicsManager.physicsDelta; // Apply gravity
 	}
 
 	private void UpdateSwing()
@@ -159,23 +201,23 @@ public partial class Ivy : Launcher
 		rotationVelocity += impulseVelocity; // Add impulse velocity
 		AddGravity();
 
-		float rotationClampAmount = Mathf.Clamp(1f - Mathf.Abs(LaunchRatio), 0f, 1f);
-		if (Mathf.Sign(LaunchRatio) == Mathf.Sign(rotationVelocity))
-			rotationVelocity = Mathf.Min(rotationVelocity, MaxRotationSpeed * rotationClampAmount / lengthInfluence);
+		float rotationClampAmount = Mathf.Clamp(1f - Mathf.Abs(IvyRatio), 0f, 1f);
+		float velocityClamp = MaxRotationSpeed * rotationClampAmount / lengthInfluence;
+		rotationVelocity = Mathf.Clamp(rotationVelocity, -velocityClamp, velocityClamp);
 
-		float targetRatio = LaunchRatio + (rotationVelocity * lengthInfluence * PhysicsManager.physicsDelta);
-		LaunchRatio = Mathf.Clamp(targetRatio, -1f, 1f);
+		float targetRatio = IvyRatio + (rotationVelocity * lengthInfluence * PhysicsManager.physicsDelta);
+		IvyRatio = Mathf.Clamp(targetRatio, -1f, 1f);
 
 		if (!isInteractingWithPlayer)
 		{
-			if (Mathf.Abs(LaunchRatio) < 0.01f && Mathf.Abs(rotationVelocity) < 0.01f)
+			if (Mathf.Abs(IvyRatio) < 0.01f && Mathf.Abs(rotationVelocity) < 0.01f)
 			{
-				LaunchRatio = 0;
+				IvyRatio = 0;
 				rotationVelocity = 0;
 				IsSleeping = true;
 			}
-			else if (Mathf.Abs(LaunchRatio) < 0.05f && Mathf.Abs(rotationVelocity) < 0.5f &&
-				Mathf.Sign(LaunchRatio) == Mathf.Sign(rotationVelocity))
+			else if (Mathf.Abs(IvyRatio) < 0.05f && Mathf.Abs(rotationVelocity) < 0.5f &&
+				Mathf.Sign(IvyRatio) == Mathf.Sign(rotationVelocity))
 			{
 				rotationVelocity *= 0.9f;
 			}
@@ -185,7 +227,7 @@ public partial class Ivy : Launcher
 	#region Setup
 	public void SetRotation()
 	{
-		float rotation = IndividualRotation * launchRatio;
+		float rotation = IndividualRotation * IvyRatio;
 
 		for (int i = 0; i < ivyLinks.Count; i++)
 			ivyLinks[i].RotationDegrees = Vector3.Left * rotation;
@@ -196,6 +238,9 @@ public partial class Ivy : Launcher
 	/// <summary> Moves the area trigger to the last link's position. </summary>
 	private void UpdateAreaPosition()
 	{
+		if (ivyLinks.Count == 0)
+			return;
+
 		launchPoint.GlobalTransform = ivyLinks[ivyLinks.Count - 1].GlobalTransform;
 		launchPoint.GlobalPosition -= ivyLinks[ivyLinks.Count - 1].Up() * .5f;
 	}
@@ -215,15 +260,15 @@ public partial class Ivy : Launcher
 
 	private void UpdateIvyLength()
 	{
-		if (ivyLinks.Count > length)
+		if (ivyLinks.Count > Length)
 		{
 			// Since every ivy link is parented, we only need to delete one.
-			ivyLinks[length].QueueFree();
-			ivyLinks.Resize(length);
+			ivyLinks[Length].QueueFree();
+			ivyLinks.Resize(Length);
 			return;
 		}
 
-		if (ivyScene == null)
+		if (IvyScene == null)
 		{
 			GD.PushError("Ivy Scene could not be found.");
 			return;
@@ -231,15 +276,15 @@ public partial class Ivy : Launcher
 
 		if (ivyLinks.Count == 0)
 		{
-			linkRoot = ivyScene.Instantiate<Node3D>();
+			linkRoot = IvyScene.Instantiate<Node3D>();
 			AddChild(linkRoot);
 			ivyLinks.Add(linkRoot);
 		}
 
 		// Add ivy individually as needed
-		while (ivyLinks.Count < length)
+		while (ivyLinks.Count < Length)
 		{
-			Node3D linkNode = ivyScene.Instantiate<Node3D>();
+			Node3D linkNode = IvyScene.Instantiate<Node3D>();
 			ivyLinks[ivyLinks.Count - 1].AddChild(linkNode); // Add as a child so rotations carry over
 			linkNode.Position = Vector3.Down;
 			ivyLinks.Add(linkNode);

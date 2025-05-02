@@ -17,7 +17,11 @@ public partial class Missile : Node3D
 
 	private float currentLifetime;
 	private SpawnData spawnData;
-	public void UpdateSpawnTransform(Transform3D t) => spawnData.spawnTransform = t;
+	public void UpdateSpawnTransform(Transform3D t)
+	{
+		spawnData.spawnTransform = t;
+		ResetPhysicsInterpolation();
+	}
 
 	private PathFollow3D pathFollow;
 	private float initialProgress;
@@ -56,6 +60,9 @@ public partial class Missile : Node3D
 
 	public override void _PhysicsProcess(double _)
 	{
+		if (isExploded)
+			return;
+
 		if (pathFollow != null)
 		{
 			pathFollow.Progress += moveSpeed * PhysicsManager.physicsDelta;

@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Project.Core;
 
@@ -11,6 +12,7 @@ namespace Project.Gameplay
 	{
 		private PlayerController Controller { get; set; }
 
+		public bool IsReversingPath { get; private set; }
 		/// <summary> PathFollower's current path. </summary>
 		public Path3D ActivePath { get; private set; }
 		/// <summary> PathFollower's previous path. </summary>
@@ -43,18 +45,27 @@ namespace Project.Gameplay
 			SetActivePath(StageSettings.Instance.CalculateStartingPath(GlobalPosition));
 		}
 
-		public void SetActivePath(Path3D newPath)
+		public bool SetActivePath(Path3D newPath, bool reversePath = false)
 		{
-			if (newPath == null || newPath == ActivePath) return;
+			if (newPath == null ||
+				(newPath == ActivePath && reversePath == IsReversingPath))
+			{
+				return false;
+			}
 
-			if (IsInsideTree()) //Unparent
-				GetParent().RemoveChild(this);
-			newPath.AddChild(this);
+			if (newPath != ActivePath)
+			{
+				if (IsInsideTree()) // Reparent if needed
+					GetParent().RemoveChild(this);
+				newPath.AddChild(this);
+			}
 
+			IsReversingPath = reversePath;
 			PreviousPath = ActivePath;
 			ActivePath = newPath;
 			Loop = ActivePath.Curve.GetPointPosition(0).IsEqualApprox(ActivePath.Curve.GetPointPosition(ActivePath.Curve.PointCount - 1));
 			Resync();
+			return true;
 		}
 
 		public void Resync()
@@ -64,30 +75,31 @@ namespace Project.Gameplay
 
 			Vector3 syncPoint = Controller.GlobalPosition;
 			Progress = ActivePath.Curve.GetClosestOffset(ActivePath.GlobalBasis.Inverse() * (syncPoint - ActivePath.GlobalPosition));
-
 			RecalculateData();
 		}
 
 		public void RecalculateData()
 		{
-			float newForwardAngle = ExtensionMethods.CalculateForwardAngle(this.Forward(), this.Up());
+			ForwardAxis = IsReversingPath ? this.Back() : this.Forward();
+			float newForwardAngle = ExtensionMethods.CalculateForwardAngle(ForwardAxis, this.Up());
 			DeltaAngle = ExtensionMethods.SignedDeltaAngleRad(newForwardAngle, ForwardAngle);
 			ForwardAngle = newForwardAngle;
 
 			BackAngle = ForwardAngle + Mathf.Pi;
 			LocalPlayerPositionDelta = GlobalBasis.Inverse() * (Controller.GlobalPosition - GlobalPosition);
-			LocalPlayerPositionDelta *= new Vector3(-1, 1, 1); // Convert to model space
+			if (!IsReversingPath)
+				LocalPlayerPositionDelta *= new Vector3(-1, 1, 1); // Convert to model space
 			GlobalPlayerPositionDelta = CalculateDeltaPosition(Controller.GlobalPosition);
 
 			// Update custom orientations
-			ForwardAxis = Vector3.Forward.Rotated(Vector3.Up, ForwardAngle).Normalized();
-			float upDotProduct = this.Forward().Dot(Vector3.Up);
+			Vector3 localForwardAxis = Vector3.Forward.Rotated(Vector3.Up, ForwardAngle).Normalized();
+			float upDotProduct = ForwardAxis.Dot(Vector3.Up);
 			if (upDotProduct < .9f)
-				SideAxis = this.Forward().Cross(Vector3.Up).Normalized();
+				SideAxis = ForwardAxis.Cross(Vector3.Up).Normalized();
 			else // Moving straight up/down
-				SideAxis = this.Forward().Cross(ForwardAxis).Normalized();
+				SideAxis = ForwardAxis.Cross(localForwardAxis).Normalized();
 
-			HeightAxis = this.Forward().Rotated(SideAxis, Mathf.Pi * .5f).Normalized();
+			HeightAxis = ForwardAxis.Rotated(SideAxis, Mathf.Pi * .5f).Normalized();
 
 			DebugManager.DrawRay(GlobalPosition, HeightAxis, Colors.Green);
 			DebugManager.DrawRay(GlobalPosition, ForwardAxis, Colors.Blue);

@@ -24,7 +24,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 				ExtensionMethods.CreateProperty(SecondarySettingsEnabled, Variant.Type.Bool)
 			];
 
-		if (!enableSecondarySettings)
+		if (!EnableSecondarySettings)
 			return properties;
 
 		properties.Add(ExtensionMethods.CreateProperty(SecondarySettingsMiddleHeight, Variant.Type.Float));
@@ -40,15 +40,15 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		switch ((string)property)
 		{
 			case SecondarySettingsEnabled:
-				return enableSecondarySettings;
+				return EnableSecondarySettings;
 			case SecondarySettingsMiddleHeight:
-				return secondaryMiddleHeight;
+				return SecondaryMiddleHeight;
 			case SecondarySettingsFinalHeight:
-				return secondaryFinalHeight;
+				return SecondaryFinalHeight;
 			case SecondarySettingsDistance:
-				return secondaryDistance;
+				return SecondaryDistance;
 			case SecondarySettingsBlend:
-				return launchRatio;
+				return LaunchRatio;
 		}
 
 		return base._Get(property);
@@ -59,20 +59,20 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		switch ((string)property)
 		{
 			case SecondarySettingsEnabled:
-				enableSecondarySettings = (bool)value;
+				EnableSecondarySettings = (bool)value;
 				NotifyPropertyListChanged();
 				break;
 			case SecondarySettingsMiddleHeight:
-				secondaryMiddleHeight = (float)value;
+				SecondaryMiddleHeight = (float)value;
 				break;
 			case SecondarySettingsFinalHeight:
-				secondaryFinalHeight = (float)value;
+				SecondaryFinalHeight = (float)value;
 				break;
 			case SecondarySettingsDistance:
-				secondaryDistance = (float)value;
+				SecondaryDistance = (float)value;
 				break;
 			case SecondarySettingsBlend:
-				launchRatio = (float)value;
+				LaunchRatio = (float)value;
 				break;
 			default:
 				return false;
@@ -89,24 +89,19 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 
 	/// <summary> Height at the beginning of the arc. </summary>
 	[ExportGroup("Launch Settings")]
-	[Export]
-	private float startingHeight;
+	[Export] private float StartingHeight { get; set; }
 	/// <summary> Height at the highest point of the arc. </summary>
-	[Export]
-	private float middleHeight;
+	[Export] private float MiddleHeight { get; set; }
 	/// <summary> Height at the end of the arc. </summary>
-	[Export]
-	private float finalHeight;
+	[Export] private float FinalHeight { get; set; }
 	/// <summary> How far to travel. </summary>
-	[Export]
-	private float distance;
+	[Export] private float Distance { get; set; }
 
 	/// <summary> Should the player be allowed to perform a Jump Dash after the launch is completed? </summary>
-	[Export]
-	public bool allowJumpDashing;
+	[Export] public bool AllowJumpDashing { get; set; }
 
 	[Export]
-	public LaunchDirection launchDirection;
+	public LaunchDirection LauncherDirection { get; private set; }
 	public enum LaunchDirection
 	{
 		Forward,
@@ -115,18 +110,18 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	}
 
 	/// <summary> Allows the launcher to blend between secondary launch settings. </summary>
-	protected bool enableSecondarySettings;
+	protected bool EnableSecondarySettings { get; private set; }
 	/// <summary> Controls the blend between launch settings. Mostly used for editor previewing. </summary>
-	protected float launchRatio;
-	protected float secondaryMiddleHeight;
-	protected float secondaryFinalHeight;
-	protected float secondaryDistance;
+	protected float LaunchRatio { get; set; }
+	protected float SecondaryMiddleHeight { get; private set; }
+	protected float SecondaryFinalHeight { get; private set; }
+	protected float SecondaryDistance { get; private set; }
 
 	/// <summary> Returns the blend value between the launch settings. Can be overridden by scripts that inherit Launcher.cs. </summary>
 	public virtual float GetLaunchRatio()
 	{
-		if (enableSecondarySettings)
-			return launchRatio;
+		if (EnableSecondarySettings)
+			return LaunchRatio;
 
 		return 0; // Use the primary launch settings
 	}
@@ -136,10 +131,10 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		Vector3 forward = ignoreLaunchPointRotation ? this.Forward() : LaunchPoint.Forward();
 		Vector3 up = ignoreLaunchPointRotation ? this.Up() : LaunchPoint.Up();
 
-		if (launchDirection == LaunchDirection.Forward)
+		if (LauncherDirection == LaunchDirection.Forward)
 			return forward;
 
-		if (launchDirection == LaunchDirection.Flatten)
+		if (LauncherDirection == LaunchDirection.Flatten)
 		{
 			if (Mathf.Abs(forward.Dot(Vector3.Up)) > .9f)
 			{
@@ -156,19 +151,19 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 
 	/// <summary> Overload method so launch rings can recenter the player visually. </summary>
 	protected virtual Vector3 CalculateStartingPoint() => StartingPoint;
-	public Vector3 StartingPoint => LaunchPoint.GlobalPosition + (Vector3.Up * startingHeight);
+	public Vector3 StartingPoint => LaunchPoint.GlobalPosition + (Vector3.Up * StartingHeight);
 
 	public LaunchSettings GetLaunchSettings()
 	{
-		float blendedDistance = Mathf.Lerp(distance, secondaryDistance, GetLaunchRatio());
-		float blendedMiddleHeight = Mathf.Lerp(middleHeight, secondaryMiddleHeight, GetLaunchRatio());
-		float blendedFinalHeight = Mathf.Lerp(finalHeight, secondaryFinalHeight, GetLaunchRatio());
+		float blendedDistance = Mathf.Lerp(Distance, SecondaryDistance, GetLaunchRatio());
+		float blendedMiddleHeight = Mathf.Lerp(MiddleHeight, SecondaryMiddleHeight, GetLaunchRatio());
+		float blendedFinalHeight = Mathf.Lerp(FinalHeight, SecondaryFinalHeight, GetLaunchRatio());
 
 		Vector3 startPosition = CalculateStartingPoint();
 		Vector3 endPosition = StartingPoint + (GetLaunchDirection() * blendedDistance) + (Vector3.Up * blendedFinalHeight);
 
 		LaunchSettings settings = LaunchSettings.Create(startPosition, endPosition, blendedMiddleHeight);
-		settings.AllowJumpDash = allowJumpDashing;
+		settings.AllowJumpDash = AllowJumpDashing;
 		settings.UseAutoAlign = true;
 		settings.Launcher = this;
 

@@ -10,11 +10,21 @@ public partial class PathTrigger : StageTriggerModule
 	[Export(PropertyHint.NodePathValidTypes, "Path3D")]
 	private Path3D path;
 
+	private bool playerPathDeactivateReverse;
+	private bool cameraPathDeactivateReverse;
 	private Path3D playerDeactivatePath;
 	private Path3D cameraDeactivatePath;
 	/// <summary> Did the previous path limit the camera's distance? </summary>
 	private bool deactivateLimitCameraDistance;
 
+	/// <summary> Should this path be run in reverse? </summary>
+	[Export] public PathMode pathMode;
+	public enum PathMode
+	{
+		Forward,
+		Reverse,
+		Autodetect
+	}
 	/// <summary> Should the path be assigned to the player? </summary>
 	[Export] public bool affectPlayer = true;
 	/// <summary> Should the path be assigned to the camera? </summary>
@@ -26,33 +36,79 @@ public partial class PathTrigger : StageTriggerModule
 
 	public override void Activate()
 	{
+		bool reversePath = IsReversePath();
 		if (affectPlayer)
 		{
+			Path3D previousPath = Player.PathFollower.ActivePath;
 			playerDeactivatePath ??= Player.PathFollower.ActivePath;
-			Player.PathFollower.SetActivePath(path);
+			playerPathDeactivateReverse = Player.PathFollower.IsReversingPath;
+			if (Player.PathFollower.SetActivePath(path, reversePath) &&
+				playerPathDeactivateReverse != reversePath &&
+				previousPath == Player.PathFollower.ActivePath)
+			{
+				// Only enter reverse path state when reversing the current path
+				Player.StartReversePath();
+			}
 		}
 
 		if (!affectCamera)
 			return;
 
 		cameraDeactivatePath ??= Player.Camera.PathFollower.ActivePath;
-		Player.Camera.PathFollower.SetActivePath(path);
-
+		cameraPathDeactivateReverse = Player.Camera.PathFollower.IsReversingPath;
 		deactivateLimitCameraDistance = Player.Camera.LimitToPathDistance;
+
+		if (!Player.Camera.PathFollower.SetActivePath(path, reversePath))
+			return;
+
+		Player.Camera.ReversePathInfluence = cameraPathDeactivateReverse == reversePath ? 0f : 1f;
+		// Reverse path camera swivel
+		Player.Camera.ReversePathRotationDirection = Player.PathFollower.LocalPlayerPositionDelta.X > 0 ? 1 : -1;
+		if (reversePath)
+			Player.Camera.ReversePathRotationDirection *= -1;
+
 		Player.Camera.LimitToPathDistance = limitCameraDistanceToPath;
-		Player.Camera.UpdatePathBlendSpeed(Mathf.IsZeroApprox(cameraPathBlendTime) ? 0.0f : 1.0f / cameraPathBlendTime);
+		Player.Camera.UpdatePathBlendSpeed(Mathf.IsZeroApprox(cameraPathBlendTime) ? 0f : 1f / cameraPathBlendTime);
 	}
 
 	public override void Deactivate()
 	{
-		//Ensure player's path hasn't already been changed
-		if (affectPlayer && Player.PathFollower.ActivePath == path)
-			Player.PathFollower.SetActivePath(playerDeactivatePath);
-
-		if (affectCamera && Player.Camera.PathFollower.ActivePath == path)
+		bool reversePath = IsReversePath();
+		// Ensure player's path hasn't already been changed
+		if (affectPlayer &&
+			Player.PathFollower.ActivePath == path &&
+			Player.PathFollower.IsReversingPath == reversePath)
 		{
-			Player.Camera.PathFollower.SetActivePath(cameraDeactivatePath);
+			Player.PathFollower.SetActivePath(playerDeactivatePath, playerPathDeactivateReverse);
+		}
+
+		if (affectCamera &&
+			Player.Camera.PathFollower.ActivePath == path &&
+			Player.Camera.PathFollower.IsReversingPath == cameraPathDeactivateReverse)
+		{
+			Player.Camera.PathFollower.SetActivePath(cameraDeactivatePath, cameraPathDeactivateReverse);
 			Player.Camera.LimitToPathDistance = limitCameraDistanceToPath;
 		}
+	}
+
+	private bool IsReversePath()
+	{
+		if (pathMode == PathMode.Forward)
+			return false;
+
+		if (pathMode == PathMode.Reverse)
+			return true;
+
+		// Decide whether this is a reverse path based on the player's forward direction
+		// Figure out the "forward" angle by sampling two nearby points on the curve.
+		float samplePoint = path.Curve.GetClosestOffset(path.GlobalBasis.Inverse() * (Player.GlobalPosition - path.GlobalPosition));
+		float sampleOffsetPoint = samplePoint + path.Curve.BakeInterval * 2f;
+		// Calculate the direction of the path at the player's current position
+		Vector3 dir = path.Curve.SampleBaked(sampleOffsetPoint) - path.Curve.SampleBaked(samplePoint);
+		// Reverse path if the player's current forward direction is different by over 90 degrees
+		float movementAngle = Player.MovementAngle;
+		if (Player.IsMovingBackward)
+			movementAngle += Mathf.Pi;
+		return ExtensionMethods.DeltaAngleRad(ExtensionMethods.CalculateForwardAngle(dir), movementAngle) > Mathf.Pi * .5f;
 	}
 }

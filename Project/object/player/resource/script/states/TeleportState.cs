@@ -27,12 +27,16 @@ public partial class TeleportState : PlayerState
 
 	public override void EnterState()
 	{
+		Player.Skills.DisableBreakSkills();
+
 		Player.IsTeleporting = true;
 		if (Player.IsKnockback)
 		{
 			Player.IsKnockback = false;
 			Player.Animator.StopHurt(false);
 		}
+
+		Player.ChangeHitbox("disable");
 
 		if (Trigger.resetMovespeed)
 		{
@@ -54,7 +58,12 @@ public partial class TeleportState : PlayerState
 		currentState = States.Completed;
 	}
 
-	public override void ExitState() => Player.IsTeleporting = false;
+	public override void ExitState()
+	{
+		Player.ChangeHitbox("RESET");
+		Player.IsTeleporting = false;
+		Player.Skills.EnableBreakSkills();
+	}
 
 	public override PlayerState ProcessPhysics()
 	{
@@ -111,6 +120,8 @@ public partial class TeleportState : PlayerState
 	private void ApplyTeleport()
 	{
 		Player.GlobalPosition = Trigger.WarpPosition;
+		Player.ResetPhysicsInterpolation();
+
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		Player.SnapToGround();
 		Player.CheckGround();

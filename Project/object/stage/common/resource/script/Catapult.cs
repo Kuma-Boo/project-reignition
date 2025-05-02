@@ -26,10 +26,10 @@ public partial class Catapult : Launcher
 	private AudioStreamPlayer3D aimSFX;
 
 	private Tween tweener;
-	public float LaunchRatio
+	public new float LaunchRatio
 	{
-		get => launchRatio;
-		set => launchRatio = value;
+		get => base.LaunchRatio;
+		set => base.LaunchRatio = value;
 	}
 
 	public bool IsAtLaunchPoint => armNode.Rotation.X < Mathf.Pi * .5f;
@@ -48,7 +48,7 @@ public partial class Catapult : Launcher
 
 	public override void Activate()
 	{
-		launchRatio = Mathf.SmoothStep(0, 1, launchRatio); // Cheat launch power slightly towards extremes
+		base.LaunchRatio = Mathf.SmoothStep(0, 1, base.LaunchRatio); // Cheat launch power slightly towards extremes
 		base.Activate();
 	}
 
@@ -69,7 +69,7 @@ public partial class Catapult : Launcher
 
 	public void UpdateArmRotation(float targetLaunchPower = 0)
 	{
-		float targetRotation = Mathf.Lerp(Mathf.Pi * .25f, 0, launchRatio);
+		float targetRotation = Mathf.Lerp(Mathf.Pi * .25f, 0, base.LaunchRatio);
 		armNode.Rotation = Vector3.Right * targetRotation;
 
 		if (Engine.IsEditorHint())

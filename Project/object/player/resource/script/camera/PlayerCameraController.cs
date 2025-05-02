@@ -93,6 +93,7 @@ public partial class PlayerCameraController : Node3D
 			return;
 
 		UpdatePathFollower();
+		reverseBlendRotationAmount = CalculateReversePathBlendRotation();
 
 		// Don't update the camera when the player is defeated from a DeathTrigger
 		if (IsDefeatFreezeActive)
@@ -114,6 +115,9 @@ public partial class PlayerCameraController : Node3D
 			UpdateFreeCam();
 	}
 
+	public float ReversePathInfluence { get; set; }
+	public int ReversePathRotationDirection { get; set; }
+	private float reverseBlendRotationAmount;
 	private float pathBlend = 1.0f;
 	private float pathBlendSmoothed = 1.0f;
 	private float pathBlendSpeed;
@@ -143,6 +147,17 @@ public partial class PlayerCameraController : Node3D
 
 		pathBlend = Mathf.MoveToward(pathBlend, 1.0f, pathBlendSpeed * PhysicsManager.physicsDelta);
 		pathBlendSmoothed = Mathf.SmoothStep(0.0f, 1.0f, pathBlend);
+	}
+
+	private float CalculateReversePathBlendRotation()
+	{
+		float target = PathFollower.IsReversingPath ? Mathf.Pi * ReversePathRotationDirection : 0;
+		if (Mathf.IsZeroApprox(ReversePathInfluence))
+			return target;
+
+		float starting = PathFollower.IsReversingPath ? 0 : Mathf.Pi * ReversePathRotationDirection;
+		ReversePathInfluence = 1f - pathBlendSmoothed;
+		return Mathf.LerpAngle(starting, target, pathBlendSmoothed);
 	}
 
 	/// <summary> Enabled when the camera should freeze due to a DeathTrigger. </summary>
@@ -631,15 +646,14 @@ public partial class PlayerCameraController : Node3D
 		PathFollower.Progress = currentProgress; // Revert progress
 
 		if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
+		{
 			sampledTargetYawAngle += ExtensionMethods.CalculateForwardAngle(sampledForward);
-		if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
-			sampledTargetPitchAngle += sampledForward.AngleTo(sampledForward.RemoveVertical().Normalized()) * Mathf.Sign(sampledForward.Y);
-
-		// Calculate target angles when DistanceMode is set to Offset
-		if (settings.yawOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 			targetYawAngle += ExtensionMethods.CalculateForwardAngle(sampler.Forward(), sampler.Up());
+		}
+
 		if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 		{
+			sampledTargetPitchAngle += sampledForward.AngleTo(sampledForward.RemoveVertical().Normalized()) * Mathf.Sign(sampledForward.Y);
 			Vector3 forwardDirection = sampler.Forward();
 			if (Mathf.Abs(forwardDirection.Dot(Vector3.Up)) > 0.9f)
 				forwardDirection = sampler.Up() * Mathf.Sign(-forwardDirection.Y);
@@ -669,7 +683,7 @@ public partial class PlayerCameraController : Node3D
 		sampledTargetPitchAngle *= yawSamplingFix;
 
 		// Interpolate angles
-		data.blendData.yawAngle = Mathf.LerpAngle(targetYawAngle, sampledTargetYawAngle, data.blendData.SampleBlend);
+		data.blendData.yawAngle = Mathf.LerpAngle(targetYawAngle, sampledTargetYawAngle, data.blendData.SampleBlend) + reverseBlendRotationAmount;
 		data.blendData.pitchAngle = Mathf.Lerp(targetPitchAngle, sampledTargetPitchAngle, data.blendData.SampleBlend);
 		PathFollower.TiltEnabled = settings.followPathTilt;
 		if (settings.followPathTilt) // Calculate tilt
@@ -985,7 +999,6 @@ public partial class PlayerCameraController : Node3D
 			isFreeCamActive = isFreeCamRotating = false;
 			Camera.Transform = Transform3D.Identity;
 			FreeCamRoot.Transform = Transform3D.Identity;
-			GD.Print("Free cam disabled.");
 		}
 	}
 

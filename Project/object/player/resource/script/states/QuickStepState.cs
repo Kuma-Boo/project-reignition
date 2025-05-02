@@ -92,4 +92,6 @@ public partial class QuickStepState : PlayerState
 
 		return null;
 	}
+
+	protected override void ProcessTurning() => Player.MovementAngle = Player.PathFollower.ForwardAngle;
 }

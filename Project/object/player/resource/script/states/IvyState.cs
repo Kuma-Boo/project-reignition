@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 using Project.Gameplay.Objects;
 
 namespace Project.Gameplay;
@@ -34,11 +35,13 @@ public partial class IvyState : PlayerState
 		else
 			initialForce = HighSpeedSwingStrength * (Player.MoveSpeed / Player.Stats.baseGroundSpeed);
 
-		Trigger.AddImpulseForce(initialForce);
+		Trigger.AddImpulseForce(initialForce, true);
 
 		Player.MoveSpeed = 0;
 		Player.StartExternal(Trigger, Trigger.LaunchPoint, 0.2f);
 
+		Player.Controller.ResetActionBuffer();
+		Player.Skills.IsSpeedBreakEnabled = false;
 		Player.Lockon.IsMonitoring = false;
 		Player.Animator.StartIvy();
 
@@ -49,8 +52,11 @@ public partial class IvyState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.Skills.IsSpeedBreakEnabled = true;
 		Player.StopExternal();
 		HeadsUpDisplay.Instance.HidePrompts();
+		Trigger.UnlinkReversePath(); // Clear any reverse paths
+		Trigger = null;
 	}
 
 	public override PlayerState ProcessPhysics()
@@ -58,16 +64,14 @@ public partial class IvyState : PlayerState
 		if (Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
-			GD.Print("Activated");
 			Trigger.Activate();
 			return null;
 		}
 
-		if (Player.Controller.IsActionBufferActive && !Player.Animator.IsIvySwingActive)
+		if (Player.Controller.IsActionBufferActive && (!Player.Animator.IsIvySwingActive || Player.Animator.IsIvyStartActive))
 		{
 			Player.Controller.ResetActionBuffer();
 			Player.Animator.StartIvySwing();
-
 			Trigger.AddImpulseForce(CalculateSwingForce());
 		}
 
@@ -81,11 +85,11 @@ public partial class IvyState : PlayerState
 	/// <summary> Calculates how much addition force to add based on swing state. </summary>
 	private float CalculateSwingForce()
 	{
-		if (Trigger.IsSleeping)
+		if (Trigger.IsSleeping || Player.Animator.IsIvyStartActive)
 			return InitialSwingStrength;
 
-		if (Trigger.LaunchRatio >= 0)
-			return AdditionalSwingStrength * (1f - Trigger.LaunchRatio);
+		if (Trigger.IvyRatio >= 0)
+			return AdditionalSwingStrength * (1f - Trigger.IvyRatio);
 
 		return AdditionalSwingStrength;
 	}
@@ -93,7 +97,7 @@ public partial class IvyState : PlayerState
 
 	private void CalculateAnimationBlend()
 	{
-		float targetAnimationBlend = (1f - (Trigger.GetLaunchRatio() * 2)) * Mathf.Abs(Trigger.LaunchRatio);
+		float targetAnimationBlend = (1f - (Trigger.GetLaunchRatio() * 2)) * Mathf.Abs(Trigger.IvyRatio);
 		currentAnimationBlend = ExtensionMethods.SmoothDamp(currentAnimationBlend, targetAnimationBlend, ref animationBlendVelocity, animationBlendSmoothing);
 	}
 }

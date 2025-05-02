@@ -38,7 +38,6 @@ public partial class PlayerStateMachine : Node
 		QueuedState = null;
 		CurrentState = state;
 		CurrentState.EnterState();
-		GD.Print($"State changed to {CurrentState.Name}.");
 	}
 
 	public void ProcessPhysics()

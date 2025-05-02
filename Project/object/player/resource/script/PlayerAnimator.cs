@@ -21,7 +21,10 @@ public partial class PlayerAnimator : Node3D
 		stateTransition = animationRoot.GetNode("state_transition") as AnimationNodeTransition;
 		groundTransition = animationRoot.GetNode("ground_transition") as AnimationNodeTransition;
 		crouchTransition = (animationRoot.GetNode("ground_tree") as AnimationNodeBlendTree).GetNode("crouch_transition") as AnimationNodeTransition;
-		oneShotTransition = animationRoot.GetNode("oneshot_trigger") as AnimationNodeOneShot;
+		oneShotTrigger = animationRoot.GetNode("oneshot_trigger") as AnimationNodeOneShot;
+
+		AnimationNodeBlendTree oneShotTree = animationRoot.GetNode("oneshot_tree") as AnimationNodeBlendTree;
+		oneShotTransition = oneShotTree.GetNode("oneshot_transition") as AnimationNodeTransition;
 	}
 
 	[Export]
@@ -66,7 +69,8 @@ public partial class PlayerAnimator : Node3D
 	}
 
 	#region Oneshot Animations
-	private AnimationNodeOneShot oneShotTransition;
+	private AnimationNodeTransition oneShotTransition;
+	private AnimationNodeOneShot oneShotTrigger;
 	/// <summary> Animation index for countdown animation. </summary>
 	private readonly StringName CountdownAnimation = "countdown";
 
@@ -76,7 +80,7 @@ public partial class PlayerAnimator : Node3D
 
 		// Prevent sluggish transitions into gameplay
 		DisabledSpeedSmoothing = true;
-		oneShotTransition.FadeOutTime = 0;
+		oneShotTrigger.FadeOutTime = 0;
 	}
 
 	private readonly StringName OneshotTrigger = "parameters/oneshot_trigger/request";
@@ -86,12 +90,32 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName OneshotTransition = "parameters/oneshot_tree/oneshot_transition/transition_request";
 	public void PlayOneshotAnimation(StringName animation, float fadein = 0) // Play a specific one-shot animation
 	{
-		oneShotTransition.FadeInTime = fadein;
+		oneShotTrigger.FadeInTime = fadein;
 		animationTree.Set(OneshotTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		animationTree.Set(OneshotSeek, 0);
 		animationTree.Set(OneshotTransition, animation);
 
 		StopCrouching(0f);
+	}
+
+
+	public bool IsOneshotAnimationValid(string animation)
+	{
+		if (string.IsNullOrEmpty(animation))
+			return false;
+
+		bool isAnimationValid = false;
+		for (int i = 0; i < oneShotTransition.GetInputCount(); i++)
+		{
+			GD.Print(oneShotTransition.GetInputName(i));
+			if (!oneShotTransition.GetInputName(i).Equals(animation))
+				continue;
+
+			isAnimationValid = true;
+			break;
+		}
+
+		return isAnimationValid;
 	}
 
 	public void SeekOneshotAnimation(float time) => animationTree.Set(OneshotSeek, time);
@@ -101,7 +125,7 @@ public partial class PlayerAnimator : Node3D
 	/// </summary>
 	public void CancelOneshot(float fadeout = 0)
 	{
-		oneShotTransition.FadeOutTime = fadeout;
+		oneShotTrigger.FadeOutTime = fadeout;
 
 		// Abort accidental landing animations
 		if (Mathf.IsZeroApprox(fadeout))
@@ -146,6 +170,8 @@ public partial class PlayerAnimator : Node3D
 
 	private readonly StringName TurnBlend = "parameters/ground_tree/turn_blend/blend_position";
 	private readonly StringName LandTrigger = "parameters/ground_tree/land_trigger/request";
+	private readonly StringName ReversePathTrigger = "parameters/ground_tree/reverse_path_trigger/request";
+	private readonly StringName ReversePathActive = "parameters/ground_tree/reverse_path_trigger/active";
 
 	private readonly StringName SpeedBreakTrigger = "parameters/ground_tree/speedbreak_trigger/request";
 
@@ -179,11 +205,20 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(GroundTransition, EnabledConstant);
 	}
 
+	public bool IsReversePathAnimationActive => (bool)animationTree.Get(ReversePathActive);
+	public void ReversePathAnimation()
+	{
+		animationTree.Set(ReversePathTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		groundTransition.XfadeTime = .05f;
+		animationTree.Set(GroundTransition, EnabledConstant);
+	}
+
 	private void ResetGroundTree()
 	{
 		DisabledSpeedSmoothing = true;
 		animationTree.Set(GroundSeek, 0);
 		animationTree.Set(LandTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animationTree.Set(ReversePathTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animationTree.Set(CrouchTransition, DisabledConstant);
 	}
 
@@ -229,7 +264,7 @@ public partial class PlayerAnimator : Node3D
 		}
 		else if (baseSpeedRatio >= RunRatio) // Running
 		{
-			float extraSpeed = Mathf.Clamp((baseSpeedRatio - 1.0f) * 5.0f, 0f, 2f);
+			float extraSpeed = Mathf.Clamp((baseSpeedRatio - 1.0f) * 5.0f, 0f, 3f);
 			animationSpeed = 2.5f + extraSpeed;
 		}
 		else // Jogging
@@ -588,6 +623,8 @@ public partial class PlayerAnimator : Node3D
 			targetRotation = ExternalAngle;
 		else if (Player.IsHomingAttacking) // Face target
 			targetRotation = ExtensionMethods.CalculateForwardAngle(Player.Lockon.HomingAttackDirection);
+		else if (Player.IsReversePath && Player.IsOnGround)
+			targetRotation = Player.PathFollower.ForwardAngle;
 		else if (Player.IsMovingBackward) // Backstepping
 			targetRotation = Player.PathFollower.ForwardAngle + (groundTurnRatio * Mathf.Pi * .15f);
 		else if (Player.IsLockoutActive && Player.ActiveLockoutData.recenterPlayer)
@@ -898,11 +935,25 @@ public partial class PlayerAnimator : Node3D
 	{
 		animationTree.Set(GimmickTransition, ZiplineState);
 		animationTree.Set(PetrifyStopTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-		ResetState(.2f);
+		ResetState(0.2f);
 
 		eventAnimationPlayer.Play("petrify-stop");
 		eventAnimationPlayer.Advance(0.0);
 	}
+
+	private readonly StringName LeverState = "lever";
+	private AnimationNodeStateMachinePlayback LeverStatePlayback => animationTree.Get(LeverPlayback).Obj as AnimationNodeStateMachinePlayback;
+
+	private readonly StringName LeverPlayback = "parameters/gimmick_tree/lever_state/playback";
+	public void StartLever(bool isRightLever)
+	{
+		SetStateXfade(0.2f);
+		animationTree.Set(StateTransition, GimmickState);
+		animationTree.Set(GimmickTransition, LeverState);
+		LeverStatePlayback.Start((isRightLever ? RightConstant : LeftConstant) + "-loop");
+	}
+
+	public void StartLeverTurn(bool isRightLever) => LeverStatePlayback.Travel(isRightLever ? RightConstant : LeftConstant);
 	#endregion
 
 	// Shaders

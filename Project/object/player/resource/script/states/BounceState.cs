@@ -5,6 +5,16 @@ namespace Project.Gameplay;
 
 public partial class BounceState : PlayerState
 {
+	public enum SnapMode
+	{
+		SnappingEnabled, // Snap player to the target's exact position
+		SnappingEnabledNoHeight, // Snap player, but ignore height (useful for cages)
+		Disabled,
+	}
+
+	private SnapMode snapMode;
+	public void SetBounceSnapping(SnapMode mode) => snapMode = mode;
+
 	[Export]
 	private PlayerState fallState;
 	[Export]
@@ -21,7 +31,8 @@ public partial class BounceState : PlayerState
 	[Export]
 	private float bounceHeight;
 
-	public bool IsUpwardBounce { get; set; }
+	/// <summary> Used to override how high the bounce takes the player. </summary>
+	public float BounceHeightScale { get; set; }
 	/// <summary> Used to determine whether targeting is enabled or not. </summary>
 	private float bounceInterruptTimer;
 
@@ -33,7 +44,7 @@ public partial class BounceState : PlayerState
 		Player.IsOnGround = false;
 		Player.CanJumpDash = true;
 		Player.Lockon.IsMonitoring = true;
-		Player.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight);
+		Player.VerticalSpeed = Runtime.CalculateJumpPower(bounceHeight * BounceHeightScale);
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 
 		if (!Player.IsLockoutActive || Player.ActiveLockoutData != LockoutSettings)
@@ -87,8 +98,9 @@ public partial class BounceState : PlayerState
 
 	private void AttemptBounceSnapping()
 	{
-		if (!IsUpwardBounce) // Not a snap bounce -- bounce the player backwards
+		if (snapMode == SnapMode.Disabled) // Not a snap bounce -- bounce the player backwards
 		{
+			GD.Print("Wrong mode");
 			Player.MoveSpeed = -bounceSpeed;
 			return;
 		}
@@ -96,19 +108,32 @@ public partial class BounceState : PlayerState
 		Player.MoveSpeed = 0; // Reset speed
 
 		if (Player.Lockon.Target == null) // Nothing to snap to
+		{
+			GD.Print("No target");
 			return;
+		}
 
 		if (!Mathf.IsZeroApprox(bounceInterruptTimer)) // Player is already bouncing -- don't snap
+		{
+			GD.Print("Already bouncing");
 			return;
+		}
 
 		if ((Player.Lockon.Target is Area3D && !Player.Lockon.GetOverlappingAreas().Contains(Player.Lockon.Target as Area3D)) ||
 			(Player.Lockon.Target is PhysicsBody3D && !Player.Lockon.GetOverlappingBodies().Contains(Player.Lockon.Target as PhysicsBody3D)))
 		{
 			// Failed to find a target to snap to
+			GD.Print("Couldn't find target");
 			return;
 		}
 
+		GD.Print("Snapped");
+
 		// Only snap when target being hit is correct
-		Player.GlobalPosition = Player.Lockon.Target.GlobalPosition;
+		Vector3 targetSnapPosition = Player.Lockon.Target.GlobalPosition;
+		if (snapMode == SnapMode.SnappingEnabledNoHeight)
+			targetSnapPosition.Y = Player.GlobalPosition.Y;
+
+		Player.GlobalPosition = targetSnapPosition;
 	}
 }
