@@ -250,10 +250,20 @@ public partial class Enemy : Node3D
 	protected bool IsInteracting { get; set; }
 	/// <summary> True when a particular interaction has already been processed. </summary>
 	protected bool IsInteractionProcessed { get; private set; }
+	/// <summary> How long it's been since the enemy last interacted with the player. </summary>
+	private float timeSinceLastInteraction;
+	/// <summary> How long an interaction can last before being "reset". </summary>
+	private readonly float MaxInteractionLength = .5f;
 	protected virtual void UpdateInteraction()
 	{
 		if (IsInteractionProcessed)
-			return;
+		{
+			timeSinceLastInteraction += PhysicsManager.physicsDelta;
+			if (timeSinceLastInteraction < MaxInteractionLength)
+				return;
+
+			ResetInteractionProcessed();
+		}
 
 		if (!IsHitboxEnabled)
 			return;
@@ -282,7 +292,7 @@ public partial class Enemy : Node3D
 		else if (Player.IsJumpDashOrHomingAttack)
 		{
 			UpdateLockon();
-			IsLightSpeedAttackValid = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedAttack) &&
+			IsLightSpeedAttackValid = IsDefeated && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedAttack) &&
 				(Input.IsActionPressed("button_attack") || Input.IsActionPressed("button_jump"));
 
 			// If the player is trying to perform a light speed attack, only do the bounce AFTER checking the next target
@@ -308,14 +318,16 @@ public partial class Enemy : Node3D
 	protected void SetInteractionProcessed()
 	{
 		IsInteractionProcessed = true;
+		timeSinceLastInteraction = 0;
 		Player.AttackStateChanged += ResetInteractionProcessed;
 	}
+
 	protected void ResetInteractionProcessed()
 	{
 		IsInteractionProcessed = false;
+		timeSinceLastInteraction = 0;
 		Player.AttackStateChanged -= ResetInteractionProcessed;
 	}
-
 
 	protected void CheckLightSpeedAttack()
 	{
