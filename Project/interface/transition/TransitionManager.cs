@@ -121,7 +121,6 @@ public partial class TransitionManager : Node
 	/// <summary> Queues a scene to load and connects the TransitionProcess signal. Be sure to call StartTransition to actually transition to the scene. </summary>
 	public static void QueueSceneChange(string scene)
 	{
-		GD.Print("Scene Change Queued");
 		instance.QueuedScene = scene;
 
 		var call = new Callable(instance, MethodName.ApplySceneChange);

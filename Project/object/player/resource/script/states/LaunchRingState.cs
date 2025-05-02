@@ -24,6 +24,7 @@ public partial class LaunchRingState : PlayerState
 		Player.Animator.StartSpin();
 
 		Player.Effect.StartSpinFX();
+		Player.Skills.IsSpeedBreakEnabled = false;
 
 		HeadsUpDisplay.Instance.SetPrompt(LaunchAction, 0);
 		HeadsUpDisplay.Instance.SetPrompt(ExitAction, 1);
@@ -34,6 +35,8 @@ public partial class LaunchRingState : PlayerState
 
 	public override void ExitState()
 	{
+		Player.Skills.IsSpeedBreakEnabled = true;
+
 		HeadsUpDisplay.Instance.HidePrompts();
 
 		Launcher.Damage -= OnDamaged;

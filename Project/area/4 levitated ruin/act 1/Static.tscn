@@ -1,4 +1,4 @@
-[gd_scene load_steps=109 format=3 uid="uid://bm61nw4o1jcrb"]
+[gd_scene load_steps=110 format=3 uid="uid://bm61nw4o1jcrb"]
 
 [ext_resource type="PackedScene" uid="uid://c1htg25bw2rso" path="res://area/4 levitated ruin/act 1/environment/Rukh1.tscn" id="1_3akmk"]
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_sruem"]
@@ -53,6 +53,7 @@
 [ext_resource type="Resource" uid="uid://cstpuwfenywgv" path="res://area/4 levitated ruin/act 1/camera/main/GargoyleFightCam.tres" id="35_e880x"]
 [ext_resource type="PackedScene" uid="uid://cwmjxd611bhbi" path="res://area/4 levitated ruin/act 1/environment/collision/Collision.tscn" id="36_2mkr5"]
 [ext_resource type="Resource" uid="uid://txdw8ov1bs7c" path="res://area/4 levitated ruin/act 1/camera/Skyroad1ChaseCam.tres" id="37_0nipk"]
+[ext_resource type="Resource" uid="uid://c1wm3d46w1r24" path="res://area/4 levitated ruin/act 1/camera/TowerBaseCam.tres" id="38_oq60s"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="38_wn3s6"]
 [ext_resource type="Resource" uid="uid://cqnh1vxcqo8sy" path="res://area/4 levitated ruin/act 1/camera/Rukh4Cam.tres" id="39_poxbl"]
 [ext_resource type="Resource" uid="uid://d4aeyldx2si5r" path="res://area/4 levitated ruin/act 1/camera/main/ZiplineCam.tres" id="39_u2iyf"]
@@ -106,14 +107,14 @@ size = Vector3(40, 20, 57)
 [sub_resource type="BoxShape3D" id="BoxShape3D_6ei0p"]
 size = Vector3(20, 20, 5)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_crwnd"]
+size = Vector3(10, 20, 120)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_ub6mb"]
 size = Vector3(10, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xkoon"]
 size = Vector3(10, 20, 11)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_crwnd"]
-size = Vector3(10, 20, 120)
 
 [sub_resource type="Resource" id="Resource_w5kwl"]
 script = ExtResource("34_er6ij")
@@ -811,6 +812,7 @@ metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
 
 [node name="CullingTriggers" type="Node3D" parent="Visuals"]
+visible = false
 
 [node name="L3" parent="Visuals/CullingTriggers" instance=ExtResource("19_fp3yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.7, -8.2, -617)
@@ -1120,6 +1122,21 @@ settings = ExtResource("27_a3nc6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_gwjfc")
 
+[node name="Rukh2Camera" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -18, -436)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/Camera/Rukh2Camera"]
+transform = Transform3D(1, -6.66134e-16, 0, 7.77156e-16, 1, -5.55112e-16, 0, 1.11022e-15, 1, 0, 0, 0)
+script = ExtResource("25_0q5pg")
+settings = ExtResource("26_ctmls")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Rukh2Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_crwnd")
+
 [node name="TreeOverheadCamera" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.1, -9.2, -582)
 "Trigger Mode" = 2
@@ -1141,6 +1158,7 @@ transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -48.6437, 
 
 [node name="Camera" type="Node3D" parent="Triggers/Camera/TreeRightCamera"]
 script = ExtResource("25_0q5pg")
+transitionTime = 0.2
 distanceBlending = 10
 settings = ExtResource("30_nrehj")
 previousSettings = ExtResource("29_e4jrv")
@@ -1155,6 +1173,7 @@ transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -41.2287
 
 [node name="Camera" type="Node3D" parent="Triggers/Camera/TreeTransitionCamera"]
 script = ExtResource("25_0q5pg")
+transitionTime = 0.0
 distanceBlending = 5
 settings = ExtResource("30_e0bl8")
 previousSettings = ExtResource("30_nrehj")
@@ -1164,11 +1183,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 8, -6)
 shape = SubResource("BoxShape3D_xkoon")
 
 [node name="TreeLeftCamera" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
-transform = Transform3D(-5.96046e-08, 0, 1, 0, 1, 0, -1, 0, -5.96046e-08, -46.8478, -7.1, -612.841)
+transform = Transform3D(-5.96046e-08, 0, 1, 0, 1, 0, -1, 0, -5.96046e-08, -47.8478, -7.1, -612.841)
 "Enter Mode" = 0
 
 [node name="Camera" type="Node3D" parent="Triggers/Camera/TreeLeftCamera"]
 script = ExtResource("25_0q5pg")
+transitionTime = 0.2
 distanceBlending = 5
 settings = ExtResource("31_o2r6x")
 previousSettings = ExtResource("30_e0bl8")
@@ -1177,23 +1197,8 @@ previousSettings = ExtResource("30_e0bl8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -5)
 shape = SubResource("BoxShape3D_xkoon")
 
-[node name="Rukh2Camera" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -18, -436)
-"Trigger Mode" = 2
-"Enter Mode" = 0
-"Exit Mode" = 2
-
-[node name="Camera" type="Node3D" parent="Triggers/Camera/Rukh2Camera"]
-transform = Transform3D(1, -6.66134e-16, 0, 7.77156e-16, 1, -5.55112e-16, 0, 1.11022e-15, 1, 0, 0, 0)
-script = ExtResource("25_0q5pg")
-settings = ExtResource("26_ctmls")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Rukh2Camera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_crwnd")
-
 [node name="Rukh2EndCamera" parent="Triggers/Camera" instance=ExtResource("19_fp3yh")]
-transform = Transform3D(0.707107, 1.13133e-08, -0.707107, -6.94653e-09, 1, 9.0529e-09, 0.707107, -1.48943e-09, 0.707107, -57.7478, -8.1, -622.441)
+transform = Transform3D(0.707107, 1.13133e-08, -0.707107, -6.94653e-09, 1, 9.0529e-09, 0.707107, -1.48944e-09, 0.707107, -57.9478, -8.5, -622.041)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
@@ -1242,7 +1247,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -85, -919)
 script = ExtResource("25_0q5pg")
 distanceBlending = 5
 settings = ExtResource("35_e880x")
-previousSettings = ExtResource("26_vi4uj")
+previousSettings = ExtResource("38_oq60s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/GargoyleFightCamera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
