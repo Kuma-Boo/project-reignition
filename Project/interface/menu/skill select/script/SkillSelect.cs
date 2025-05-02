@@ -7,26 +7,16 @@ namespace Project.Interface.Menus;
 
 public partial class SkillSelect : Menu
 {
-	[Export]
-	private PackedScene skillOption;
-	[Export]
-	private VBoxContainer optionContainer;
-	[Export]
-	private Node2D cursor;
-	[Export]
-	private Description description;
-	[Export]
-	private Sprite2D scrollbar;
-	[Export]
-	private Sprite2D skillPointFill;
-	[Export]
-	private Label levelLabel;
-	[Export]
-	private Label skillPointLabel;
-	[Export]
-	private AnimationPlayer alertAnimator;
-	[Export]
-	private Label alertLabel;
+	[Export] private PackedScene skillOption;
+	[Export] private VBoxContainer optionContainer;
+	[Export] private Node2D cursor;
+	[Export] private Description description;
+	[Export] private Sprite2D scrollbar;
+	[Export] private Sprite2D skillPointFill;
+	[Export] private Label levelLabel;
+	[Export] private Label skillPointLabel;
+	[Export] private AnimationPlayer alertAnimator;
+	[Export] private Label alertLabel;
 	private int AlertSelection;
 	private bool IsAlertMenuActive { get; set; }
 
@@ -54,10 +44,8 @@ public partial class SkillSelect : Menu
 	private readonly Array<SkillOption> skillOptionList = [];
 	private readonly Array<SkillOption> visualSkillOptionList = [];
 
-	[Export]
-	private Label sortTypeLabel;
-	[Export]
-	private TextureRect sortOrderCursor;
+	[Export] private Label sortTypeLabel;
+	[Export] private TextureRect sortOrderCursor;
 
 	private bool isDescendingSort;
 	private SortEnum currentSortType;
@@ -176,6 +164,10 @@ public partial class SkillSelect : Menu
 
 		SaveManager.SaveGameData();
 		animator.Play("hide");
+
+		// Return to level select music
+		FadeBgm(.5f);
+		parentMenu.PlayBgm();
 	}
 
 	protected override void UpdateSelection()
@@ -275,6 +267,13 @@ public partial class SkillSelect : Menu
 
 	public override void ShowMenu()
 	{
+		if (bgm?.Playing == false)
+		{
+			// Start skill select music
+			parentMenu.FadeBgm(0.5f);
+			PlayBgm();
+		}
+
 		// Update visible skill list to account for multiple save files
 		visualSkillOptionList.Clear();
 		for (int i = 0; i < skillOptionList.Count; i++)

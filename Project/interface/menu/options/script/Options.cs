@@ -219,7 +219,7 @@ public partial class Options : Menu
 			case Submenus.Options:
 				CancelSFX();
 				DisableProcessing();
-				FadeBGM(.5f);
+				FadeBgm(.5f);
 				SaveManager.SaveConfig();
 				menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.MainMenu;
 				TransitionManager.QueueSceneChange(TransitionManager.MenuScenePath);

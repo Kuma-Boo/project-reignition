@@ -93,12 +93,14 @@ public partial class LevelSelect : Menu
 		for (int i = 0; i < levelOptions.Count; i++)
 			levelOptions[i].ShowOption();
 
-		if (IsWorldUnlocked() && bgm?.Stream != null)
+		if (IsWorldUnlocked() && bgm?.Stream != null && bgm?.Playing == false)
 		{
 			// Change to world specific level select music
-			parentMenu.FadeBGM(0.5f);
-			FadeBGM(0.5f, true, 0.5f); // Fade in bgm
+			parentMenu.FadeBgm(.5f);
+			FadeBgm(.5f, true, .5f); // Fade in bgm
 			CurrentBgmTime = parentMenu.CurrentBgmTime; // Sync bgm
+
+			readyMenu.SetBgmPlayer(bgm); // Update readymenu's bgm player
 		}
 	}
 
@@ -121,8 +123,8 @@ public partial class LevelSelect : Menu
 		// Revert bgm music
 		if (bgm?.Playing == true)
 		{
-			FadeBGM(0.5f); // Fade out bgm
-			parentMenu.FadeBGM(0.5f, true, 0.5f); // Fade in parent bgm
+			FadeBgm(.5f); // Fade out bgm
+			parentMenu.FadeBgm(.5f, true, .5f); // Fade in parent bgm
 			parentMenu.CurrentBgmTime = CurrentBgmTime; // Sync bgm
 		}
 

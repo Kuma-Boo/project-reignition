@@ -73,7 +73,7 @@ public partial class SpecialBook : Menu
 
 		// Select the tab and load the chapter's data
 		LoadChapter();
-		PlayBGM();
+		PlayBgm();
 
 		if (menuMemory[MemoryKeys.SpecialBook] != 0)
 		{
@@ -98,7 +98,7 @@ public partial class SpecialBook : Menu
 	public override void OpenParentMenu()
 	{
 		// Return to main menu
-		FadeBGM(.5f);
+		FadeBgm(.5f);
 		menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.MainMenu;
 		TransitionManager.QueueSceneChange(TransitionManager.MenuScenePath);
 		TransitionManager.StartTransition(new()

@@ -51,7 +51,7 @@ public partial class ReadyMenu : Menu
 	{
 		if (HorizontalSelection == 0) // Load level
 		{
-			StopBGM(); // Stop bgm
+			StopBgm(); // Stop bgm
 			menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.LevelSelect;
 			base.Confirm();
 		}
@@ -91,6 +91,8 @@ public partial class ReadyMenu : Menu
 			animator.Play("select-yes");
 		}
 	}
+
+	public void SetBgmPlayer(AudioStreamPlayer audioStreamPlayer) => bgm = audioStreamPlayer;
 
 	/// <summary> Path to the level scene. </summary>
 	public string LevelPath { get; set; }

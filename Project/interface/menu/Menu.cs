@@ -80,7 +80,7 @@ public partial class Menu : Control
 
 	public override void _PhysicsProcess(double _)
 	{
-		ProcessBGMFade(); // Always process BGM fade
+		ProcessBgmFade(); // Always process background music fade
 
 		if (!isProcessing || TransitionManager.IsTransitionActive) return;
 		ProcessMenu();
@@ -212,27 +212,27 @@ public partial class Menu : Control
 		get => bgm.GetPlaybackPosition() + (float)AudioServer.GetTimeSinceLastMix();
 	}
 
-	public void PlayBGM()
+	public void PlayBgm()
 	{
 		if (bgm.Playing) return;
 
-		bgmFadeTime = 0.0f; // Stops any active fading
-		bgm.VolumeDb = 0.0f; // Reset volume
+		bgmFadeTime = 0f; // Stops any active fading
+		bgm.VolumeDb = 0f; // Reset volume
 		bgm.Play();
 	}
 
 	/// <summary> Call this function to stop bgm instantly. </summary>
-	public void StopBGM() => bgm.Stop();
+	public void StopBgm() => bgm.Stop();
 
 	// Overload for animation players
-	public void FadeBGM(float fadetime) => FadeBGM(fadetime, false);
+	public void FadeBgm(float fadetime) => FadeBgm(fadetime, false);
 	/// <summary> Call this function to fade bgm in or out. </summary>
-	public void FadeBGM(float fadetime, bool fadeIn, float initialVolume = 0.0f)
+	public void FadeBgm(float fadetime, bool fadeIn, float initialVolume = 0.0f)
 	{
 		if (fadeIn && Mathf.IsZeroApprox(fadetime))
 		{
 			GD.PushWarning("Trying to fade in bgm with 0 fade time! Playing the bgm instead.");
-			PlayBGM();
+			PlayBgm();
 			return;
 		}
 
@@ -246,7 +246,7 @@ public partial class Menu : Control
 		}
 	}
 
-	protected void ProcessBGMFade()
+	protected void ProcessBgmFade()
 	{
 		if (isFadingIn)
 		{

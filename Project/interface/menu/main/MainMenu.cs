@@ -135,7 +135,7 @@ public partial class MainMenu : Menu
 		if (currentSelection < 2)
 			return;
 
-		FadeBGM(.5f);
+		FadeBgm(.5f);
 		menuMemory[MemoryKeys.MainMenu] = currentSelection;
 		TransitionManager.QueueSceneChange(currentSelection == 2 ? TransitionManager.SpecialBookScenePath : TransitionManager.OptionsScenePath);
 		TransitionManager.StartTransition(new()

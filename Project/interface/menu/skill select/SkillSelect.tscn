@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://bt32kmhyoo7ec"]
+[gd_scene load_steps=51 format=3 uid="uid://bt32kmhyoo7ec"]
 
 [ext_resource type="Script" uid="uid://8fsxq4g2aeod" path="res://interface/menu/skill select/script/SkillSelect.cs" id="1_v1nov"]
 [ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="2_ww16u"]
@@ -17,8 +17,10 @@
 [ext_resource type="AudioStream" uid="uid://l2e1do1wwkg" path="res://sound/sfx/system/menu confirm.wav" id="11_xu7kr"]
 [ext_resource type="AudioStream" uid="uid://dc6pp0ugxo4e3" path="res://sound/sfx/system/menu pause.wav" id="12_4pjkd"]
 [ext_resource type="Texture2D" uid="uid://bgtxik1dsbu0u" path="res://interface/menu/level select/texture/ready text/ready en.png" id="17_h4rch"]
-[ext_resource type="Shader" uid="uid://cywcr73eavwo2" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="18_yq62n"]
+[ext_resource type="Shader" uid="uid://dj2vtehay1fej" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="18_yq62n"]
 [ext_resource type="FontFile" uid="uid://bsoin3p4iygoo" path="res://interface/font/otf/Chiaro Std B.otf" id="19_ysjw8"]
+[ext_resource type="AudioStream" uid="uid://u5b4t01a7cva" path="res://sound/ost/bonus disc/Skill Menu.mp3" id="20_tcevv"]
+[ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="21_gfii7"]
 
 [sub_resource type="Animation" id="Animation_fxopk"]
 length = 0.001
@@ -1595,7 +1597,7 @@ _data = {
 &"unequip": SubResource("Animation_tf8ok")
 }
 
-[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "description", "scrollbar", "skillPointFill", "levelLabel", "skillPointLabel", "alertAnimator", "alertLabel", "sortTypeLabel", "sortOrderCursor", "animator")]
+[node name="SkillSelect" type="Control" node_paths=PackedStringArray("optionContainer", "cursor", "description", "scrollbar", "skillPointFill", "levelLabel", "skillPointLabel", "alertAnimator", "alertLabel", "sortTypeLabel", "sortOrderCursor", "bgm", "animator")]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 15
@@ -1617,6 +1619,7 @@ alertLabel = NodePath("AlertMenu/Menu/Parent/Text/Label")
 sortTypeLabel = NodePath("Content/SortingMethodLabel")
 sortOrderCursor = NodePath("Content/SortArrow")
 submenus = Array[NodePath]([NodePath("")])
+bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
 metadata/_edit_lock_ = true
 
@@ -2062,6 +2065,12 @@ vertical_alignment = 1
 libraries = {
 &"": SubResource("AnimationLibrary_8ayj6")
 }
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("20_tcevv")
+bus = &"BGM"
+script = ExtResource("21_gfii7")
+loopEndPosition = 1000.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
