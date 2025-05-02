@@ -264,7 +264,7 @@ public partial class PlayerAnimator : Node3D
 		}
 		else if (baseSpeedRatio >= RunRatio) // Running
 		{
-			float extraSpeed = Mathf.Clamp((baseSpeedRatio - 1.0f) * 5.0f, 0f, 3f);
+			float extraSpeed = Mathf.Clamp((baseSpeedRatio - 1.0f) * 5.0f, 0f, 2.5f);
 			animationSpeed = 2.5f + extraSpeed;
 		}
 		else // Jogging
@@ -272,16 +272,40 @@ public partial class PlayerAnimator : Node3D
 			animationSpeed = movementAnimationSpeedCurve.Sample(baseSpeedRatio / RunRatio); // Normalize speed ratio
 
 			// Speed up animation if player is trying to start running
-			if (Player.Controller.GetInputStrength() >= .5f &&
-				baseSpeedRatio < .3f &&
-				!Player.IsOnWall())
+			if (IsRunAccelerating(baseSpeedRatio))
 			{
-				animationSpeed = 2.5f;
+				DisabledSpeedSmoothing = true;
+				animationSpeed += 2.5f * Mathf.Clamp(1f - baseSpeedRatio / .3f, 0f, 1f);
+				speedRatio = Mathf.Max(speedRatio, 0.2f); // Limit to jog animation
 			}
 		}
 
 		groundTurnRatio = CalculateTurnRatio();
 		UpdateGroundAnimation(idleBlend, speedRatio, animationSpeed);
+	}
+
+	/// <summary>
+	/// Checks whether the player is trying to run, or if they're just walking.
+	/// </summary>
+	/// <returns> True if the player is trying to accelerate. </returns>
+	private bool IsRunAccelerating(float speedRatio)
+	{
+		if (Player.IsOnWall)
+			return false;
+
+		if (speedRatio > .5f)
+			return false;
+
+		float inputStrength = Player.Controller.GetInputStrength();
+		if (inputStrength >= .8f)
+			return true;
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun) && Mathf.IsZeroApprox(inputStrength))
+			return true;
+
+		return Player.IsLockoutActive &&
+			Player.ActiveLockoutData.overrideSpeed &&
+			!Mathf.IsZeroApprox(Player.ActiveLockoutData.speedRatio);
 	}
 
 	public void BackstepAnimation()
