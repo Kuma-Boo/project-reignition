@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dy0oxfmu7ahxi"]
+[gd_scene load_steps=25 format=3 uid="uid://dy0oxfmu7ahxi"]
 
 [ext_resource type="Texture2D" uid="uid://c0j6hn525tqn5" path="res://interface/menu/level select/texture/world text/level en.png" id="1_fuqut"]
 [ext_resource type="Script" uid="uid://c5txxmax7ey8k" path="res://interface/menu/level select/script/LevelSelect.cs" id="1_p6dn7"]
@@ -12,6 +12,7 @@
 [ext_resource type="SpriteFrames" uid="uid://jc646omm5n2y" path="res://effect/particle/sprite frames/Flame Menu Short.tres" id="5_mfe06"]
 [ext_resource type="SpriteFrames" uid="uid://btjml6xghvlgt" path="res://effect/particle/sprite frames/Flame Menu Tall.tres" id="5_yw72e"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="8_38k76"]
+[ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="14_f6v0v"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2vkkl"]
 shader = ExtResource("3_ybchm")
@@ -889,7 +890,7 @@ _data = {
 &"show": SubResource("Animation_8vhjs")
 }
 
-[node name="LevelSelect" type="Control" node_paths=PackedStringArray("cursor", "options", "scrollbar", "animator")]
+[node name="LevelSelect" type="Control" node_paths=PackedStringArray("cursor", "options", "scrollbar", "bgm", "animator")]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -902,6 +903,7 @@ cursor = NodePath("Cursor")
 options = NodePath("Clip/Options")
 scrollbar = NodePath("ScrollBar/ScrollPosition")
 submenus = []
+bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
 metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
@@ -1056,7 +1058,7 @@ anchor_bottom = 1.0
 offset_left = 0.192001
 offset_top = 0.160034
 offset_right = -456.128
-offset_bottom = -39.0
+offset_bottom = -39.0001
 scale = Vector2(2.02, 2)
 texture = ExtResource("3_c1sgp")
 region_rect = Rect2(189.5, 30, 50, 30)
@@ -1093,7 +1095,7 @@ patch_margin_right = 24
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Cursor"]
 libraries = {
-"": SubResource("AnimationLibrary_oqwnn")
+&"": SubResource("AnimationLibrary_oqwnn")
 }
 
 [node name="Clip" type="Control" parent="."]
@@ -1171,5 +1173,11 @@ bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_rf6sp")
+&"": SubResource("AnimationLibrary_rf6sp")
 }
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+bus = &"BGM"
+script = ExtResource("14_f6v0v")
+loopStartPosition = 0.57
+loopEndPosition = 24.525

@@ -1,34 +1,30 @@
 using Godot;
+using Project.Core;
 using System.Collections.Generic;
 
 namespace Project.Interface.Menus;
 
 public partial class LevelSelect : Menu
 {
-	[Export]
-	private string areaKey;
-	[Export]
-	private Description description;
-	[Export]
-	private ReadyMenu readyMenu;
+	[Export] private SaveManager.WorldEnum world;
+	[Export] private string areaKey;
+	[Export] private Description description;
+	[Export] private ReadyMenu readyMenu;
 
-	[Export]
-	private Control cursor;
+	[Export] private Control cursor;
 	private int cursorPosition;
 	private Vector2 cursorWidthVelocity;
 
-	[Export]
-	private Control options;
+	[Export] private Control options;
 	private Vector2 optionVelocity;
-	[Export]
-	private Sprite2D scrollbar;
+	[Export] private Sprite2D scrollbar;
 
 	public bool ContainsNewStage { get; private set; }
 
 	private int scrollAmount;
 	private float scrollRatio;
 	private Vector2 scrollVelocity;
-	private const float SCROLL_SMOOTHING = .05f;
+	private const float ScrollSmoothing = .05f;
 	private readonly List<LevelOption> levelOptions = [];
 
 	public bool HasNewLevel()
@@ -47,6 +43,27 @@ public partial class LevelSelect : Menu
 		return false;
 	}
 
+	public bool IsWorldUnlocked()
+	{
+		if (DebugManager.Instance.UseDemoSave)
+		{
+			/// For the demo, assume the world is unlocked if a stage is available to play.
+			foreach (Node node in options.GetChildren())
+			{
+				if (node is LevelOption levelOption)
+				{
+					if (levelOption.IsUnlocked)
+						return true;
+				}
+			}
+
+			return false;
+		}
+
+		// For the full release--use the actual save data
+		return SaveManager.ActiveGameData.IsWorldUnlocked(world);
+	}
+
 	protected override void SetUp()
 	{
 		foreach (Node node in options.GetChildren())
@@ -61,7 +78,7 @@ public partial class LevelSelect : Menu
 	protected override void ProcessMenu()
 	{
 		base.ProcessMenu();
-		UpdateListPosition(SCROLL_SMOOTHING);
+		UpdateListPosition(ScrollSmoothing);
 	}
 
 	public override void ShowMenu()
@@ -75,6 +92,14 @@ public partial class LevelSelect : Menu
 
 		for (int i = 0; i < levelOptions.Count; i++)
 			levelOptions[i].ShowOption();
+
+		if (IsWorldUnlocked() && bgm?.Stream != null)
+		{
+			// Change to world specific level select music
+			parentMenu.FadeBGM(0.5f);
+			FadeBGM(0.5f, true, 0.5f); // Fade in bgm
+			CurrentBgmTime = parentMenu.CurrentBgmTime; // Sync bgm
+		}
 	}
 
 	public override void HideMenu()
@@ -89,6 +114,19 @@ public partial class LevelSelect : Menu
 			return;
 
 		base.Confirm();
+	}
+
+	protected override void Cancel()
+	{
+		// Revert bgm music
+		if (bgm?.Playing == true)
+		{
+			FadeBGM(0.5f); // Fade out bgm
+			parentMenu.FadeBGM(0.5f, true, 0.5f); // Fade in parent bgm
+			parentMenu.CurrentBgmTime = CurrentBgmTime; // Sync bgm
+		}
+
+		base.Cancel();
 	}
 
 	/// <summary> Shows the "Are you ready?" screen. </summary>

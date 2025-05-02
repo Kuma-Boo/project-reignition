@@ -205,6 +205,13 @@ public partial class Menu : Control
 		return currentSelection;
 	}
 
+	private bool isFadingIn;
+	public float CurrentBgmTime
+	{
+		set => bgm.Seek(value);
+		get => bgm.GetPlaybackPosition() + (float)AudioServer.GetTimeSinceLastMix();
+	}
+
 	public void PlayBGM()
 	{
 		if (bgm.Playing) return;
@@ -217,11 +224,40 @@ public partial class Menu : Control
 	/// <summary> Call this function to stop bgm instantly. </summary>
 	public void StopBGM() => bgm.Stop();
 
-	/// <summary> Call this function to start fading bgm out. </summary>
-	public void FadeBGM(float fadetime) => bgmFadeTime = fadetime;
+	// Overload for animation players
+	public void FadeBGM(float fadetime) => FadeBGM(fadetime, false);
+	/// <summary> Call this function to fade bgm in or out. </summary>
+	public void FadeBGM(float fadetime, bool fadeIn, float initialVolume = 0.0f)
+	{
+		if (fadeIn && Mathf.IsZeroApprox(fadetime))
+		{
+			GD.PushWarning("Trying to fade in bgm with 0 fade time! Playing the bgm instead.");
+			PlayBGM();
+			return;
+		}
+
+		isFadingIn = fadeIn;
+		bgmFadeTime = fadetime;
+
+		if (isFadingIn)
+		{
+			bgm.VolumeDb = Mathf.LinearToDb(initialVolume);
+			bgm.Play(); // Start playing
+		}
+	}
 
 	protected void ProcessBGMFade()
 	{
+		if (isFadingIn)
+		{
+			if (Mathf.IsZeroApprox(bgmFadeTime))
+				return;
+
+			bgmFadeTime = Mathf.MoveToward(bgmFadeTime, 0, PhysicsManager.physicsDelta);
+			bgm.VolumeDb = Mathf.MoveToward(bgm.VolumeDb, 0.0f, (80f / bgmFadeTime) * PhysicsManager.physicsDelta);
+			return;
+		}
+
 		if (bgm?.Playing != true || Mathf.IsZeroApprox(bgmFadeTime)) return;
 
 		if (!SoundManager.FadeAudioPlayer(bgm, bgmFadeTime))
