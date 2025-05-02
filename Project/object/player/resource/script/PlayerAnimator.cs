@@ -566,7 +566,8 @@ public partial class PlayerAnimator : Node3D
 		if (currentAnimation.Contains("slide")) // Slide transition
 			return;
 
-		CrouchStatePlayback.Travel(SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
+		CrouchStatePlayback.CallDeferred(AnimationNodeStateMachinePlayback.MethodName.Travel,
+			SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) ?
 			ChargeStationaryStateStart : CrouchStateStart);
 
 		crouchTransition.XfadeTime = .1;
