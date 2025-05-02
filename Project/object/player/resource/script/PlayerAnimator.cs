@@ -181,7 +181,7 @@ public partial class PlayerAnimator : Node3D
 	public bool DisabledSpeedSmoothing { get; set; }
 	private float idleBlendVelocity;
 	/// <summary> How much should the animation speed be smoothed by? </summary>
-	private const float SpeedSmoothing = .06f;
+	private const float SpeedSmoothing = .1f;
 	/// <summary> How much should the transition from idling be smoothed by? </summary>
 	private const float IdleSmoothing = .05f;
 	/// <summary> What speedratio should be considered as fully running? </summary>
@@ -264,8 +264,8 @@ public partial class PlayerAnimator : Node3D
 		}
 		else if (baseSpeedRatio >= RunRatio) // Running
 		{
-			float extraSpeed = Mathf.Clamp((baseSpeedRatio - 1.0f) * 5.0f, 0f, 2.5f);
-			animationSpeed = 2.5f + extraSpeed;
+			float extraSpeed = Mathf.Clamp((baseSpeedRatio - 1.0f) * 5.0f, 0f, 2f);
+			animationSpeed = 2.8f + extraSpeed;
 		}
 		else // Jogging
 		{
@@ -274,8 +274,7 @@ public partial class PlayerAnimator : Node3D
 			// Speed up animation if player is trying to start running
 			if (IsRunAccelerating(baseSpeedRatio))
 			{
-				DisabledSpeedSmoothing = true;
-				animationSpeed += 2.5f * Mathf.Clamp(1f - baseSpeedRatio / .3f, 0f, 1f);
+				animationSpeed += 2f * Mathf.Clamp(1f - baseSpeedRatio / .4f, 0f, 1f);
 				speedRatio = Mathf.Max(speedRatio, 0.2f); // Limit to jog animation
 			}
 		}
