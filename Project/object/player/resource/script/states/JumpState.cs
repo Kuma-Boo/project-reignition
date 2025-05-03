@@ -75,6 +75,10 @@ public partial class JumpState : PlayerState
 	{
 		Player.IsJumping = false;
 		Player.IsAccelerationJumping = false;
+
+		// Reset attack state
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.AccelJumpAttack))
+			Player.AttackState = PlayerController.AttackStates.None;
 	}
 
 	public override PlayerState ProcessPhysics()
