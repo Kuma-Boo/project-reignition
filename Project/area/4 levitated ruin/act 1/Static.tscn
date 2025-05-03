@@ -1,4 +1,4 @@
-[gd_scene load_steps=110 format=3 uid="uid://bm61nw4o1jcrb"]
+[gd_scene load_steps=113 format=3 uid="uid://bm61nw4o1jcrb"]
 
 [ext_resource type="PackedScene" uid="uid://c1htg25bw2rso" path="res://area/4 levitated ruin/act 1/environment/Rukh1.tscn" id="1_3akmk"]
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_sruem"]
@@ -25,7 +25,7 @@
 [ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="20_t6g8f"]
 [ext_resource type="Curve3D" uid="uid://cfkwgecif71so" path="res://area/4 levitated ruin/act 1/environment/path/Rukh5Path.tres" id="20_yh5aq"]
 [ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="21_22ibx"]
-[ext_resource type="Curve3D" uid="uid://t2w1qo240gc6" path="res://area/4 levitated ruin/act 1/environment/path/Rukh5TowerPath.tres" id="21_xampo"]
+[ext_resource type="Curve3D" uid="uid://ck3ke7p4ghy7h" path="res://area/4 levitated ruin/act 1/environment/path/Rukh5TowerPath.tres" id="21_xampo"]
 [ext_resource type="Script" uid="uid://bd2g6rmrn77eo" path="res://object/trigger/modules/LockoutTrigger.cs" id="22_hfpio"]
 [ext_resource type="Curve3D" uid="uid://cct7q7v6mtjem" path="res://area/4 levitated ruin/act 1/environment/path/Rukh7Path.tres" id="22_slium"]
 [ext_resource type="Script" uid="uid://cciy1oeuvbh3e" path="res://object/trigger/modules/JumpTrigger.cs" id="24_dfgcd"]
@@ -88,6 +88,9 @@
 [ext_resource type="Resource" uid="uid://cr0r7u8gl802l" path="res://area/4 levitated ruin/act 1/camera/Skyroad5ChaseCam.tres" id="81_chcsp"]
 [ext_resource type="Resource" uid="uid://bro7j2f1dg47d" path="res://area/4 levitated ruin/act 1/camera/Skyroad5LoopCam.tres" id="81_fq44k"]
 [ext_resource type="Resource" uid="uid://c4bt8031t51d7" path="res://area/4 levitated ruin/act 1/camera/Skyroad5TurnCam.tres" id="82_4a821"]
+[ext_resource type="PackedScene" uid="uid://dn82pe8xhvwee" path="res://area/4 levitated ruin/object/special/PrisonDoor.tscn" id="89_k1e0v"]
+[ext_resource type="PackedScene" uid="uid://dswy6k421yljf" path="res://area/4 levitated ruin/object/special/Knuckles.tscn" id="90_qssm5"]
+[ext_resource type="PackedScene" uid="uid://c4w14cw47i887" path="res://area/4 levitated ruin/object/special/PrisonLock.tscn" id="91_dkiax"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gwjfc"]
 size = Vector3(20, 20, 5)
@@ -2201,6 +2204,54 @@ libraries = {
 &"": SubResource("AnimationLibrary_txhfh")
 }
 
+[node name="PrisonDoor" parent="." instance=ExtResource("89_k1e0v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 10, -1397.5)
+
+[node name="Knuckles" parent="PrisonDoor" instance=ExtResource("90_qssm5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 1.5)
+
+[node name="Lighting" type="OmniLight3D" parent="PrisonDoor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 2)
+layers = 1024
+light_color = Color(0.671914, 0.640048, 0.993158, 1)
+light_cull_mask = 3
+
+[node name="Lock1" type="BoneAttachment3D" parent="PrisonDoor"]
+transform = Transform3D(0.939693, -0.34202, 6.70552e-08, 0.321393, 0.883021, -0.342024, 0.116979, 0.321397, 0.939691, 0.516495, 1.86809, 2.10022)
+bone_name = "lock01"
+bone_idx = 1
+use_external_skeleton = true
+external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
+
+[node name="PrisonLock" parent="PrisonDoor/Lock1" instance=ExtResource("91_dkiax")]
+
+[node name="Lock2" type="BoneAttachment3D" parent="PrisonDoor"]
+transform = Transform3D(0.965926, 0.25, -0.0669873, -0.258819, 0.933012, -0.250004, -9.2122e-07, 0.258823, 0.965925, -0.550537, 0.592514, 2.05786)
+bone_name = "lock02"
+bone_idx = 2
+use_external_skeleton = true
+external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
+
+[node name="PrisonLock" parent="PrisonDoor/Lock2" instance=ExtResource("91_dkiax")]
+
+[node name="Lock3" type="BoneAttachment3D" parent="PrisonDoor"]
+transform = Transform3D(0.906307, 0.42262, 4.88013e-07, -0.416199, 0.892538, -0.17365, -0.0733884, 0.15738, 0.984807, -0.494125, 1.89076, 2.10291)
+bone_name = "lock03"
+bone_idx = 3
+use_external_skeleton = true
+external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
+
+[node name="PrisonLock" parent="PrisonDoor/Lock3" instance=ExtResource("91_dkiax")]
+
+[node name="Lock4" type="BoneAttachment3D" parent="PrisonDoor"]
+transform = Transform3D(0.965926, 0.258819, 5.96046e-07, -0.23457, 0.875426, 0.422618, 0.109381, -0.408217, 0.906308, 0.493484, 0.600325, 2.08044)
+bone_name = "lock04"
+bone_idx = 4
+use_external_skeleton = true
+external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
+
+[node name="PrisonLock" parent="PrisonDoor/Lock4" instance=ExtResource("91_dkiax")]
+
 [connection signal="Activated" from="Visuals/CullingTriggers/L3" to="Visuals/Rukh3" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingTriggers/L3" to="Visuals/Rukh3" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingTriggers/L4" to="Visuals/Rukh4" method="Activate"]
@@ -2274,5 +2325,6 @@ libraries = {
 [connection signal="Deactivated" from="SkyRoad/SkyRoad05/EndRoadTrigger/AutomationTrigger" to="SkyRoad/SkyroadGroundLockout" method="Deactivate"]
 [connection signal="JumpFinished" from="SkyRoad/SkyRoad05/Rukh5Jump/Jump" to="Collision/OneWayWall" method="Activate"]
 [connection signal="JumpFinished" from="SkyRoad/SkyRoad05/Rukh5Jump/Jump" to="SkyRoad/SkyroadLockout" method="Deactivate"]
+[connection signal="Shattered" from="PrisonDoor/Lock4/PrisonLock" to="PrisonDoor" method="Activate"]
 
 [editable path="Collision"]
