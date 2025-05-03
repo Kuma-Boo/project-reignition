@@ -48,17 +48,18 @@ public partial class LaunchState : PlayerState
 		Player.Lockon.IsMonitoring = false; // Disable lockon monitoring while launch is active
 		Player.AttackState = PlayerController.AttackStates.OneShot; // Launchers always oneshot all enemies
 
+		Player.UpDirection = Vector3.Up;
+		Player.Rotation = Vector3.Zero; // Reset rotation
+
 		if (settings.UseAutoAlign)
 		{
 			Player.MovementAngle = GetLaunchFacingAngle();
-			Player.Rotation = Vector3.Zero; // Reset rotation
 			Player.Animator.SnapRotation(Player.MovementAngle);
 		}
 
 		if (settings.IsJump) // Play jump effects
 		{
 			Player.Animator.AutoJumpAnimation();
-			Player.UpDirection = Vector3.Up;
 			Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 		}
 
