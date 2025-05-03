@@ -21,6 +21,8 @@ public partial class GasTank : Area3D
 	[Export] public Node3D endTarget;
 	private Vector3 startPosition;
 	[Export] public bool disableRespawning;
+	/// <summary> Used to prevent gas tanks from exploding each other. </summary>
+	[Export] public bool disableGasTankInteractions;
 
 	[ExportGroup("Components")]
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
@@ -70,12 +72,14 @@ public partial class GasTank : Area3D
 
 	public void Respawn()
 	{
-		Root.Rotation = Vector3.Zero;
+		tankList.Clear();
 		travelTime = 0;
 		IsFalling = false;
-		IsTravelling = false;
-		Position = spawnData.spawnTransform.Origin;
 		IsDetonated = false;
+		IsTravelling = false;
+
+		Root.Rotation = Vector3.Zero;
+		Position = spawnData.spawnTransform.Origin;
 		Animator.Play("RESET");
 		Animator.Advance(0.0);
 
@@ -188,8 +192,6 @@ public partial class GasTank : Area3D
 
 		for (int i = 0; i < tankList.Count; i++)
 		{
-			GD.Print($"Clash explosion between {Name} and {tankList[i].Name}");
-
 			tankList[i].Launch(); // Launch all gas tanks in range
 			if (BonusManager.instance.IsEnemyComboExtenderRegistered(this))
 				BonusManager.instance.RegisterEnemyComboExtender(tankList[i]);
@@ -233,7 +235,7 @@ public partial class GasTank : Area3D
 				enemyList.Add(targetEnemy);
 		}
 
-		if (a is GasTank)
+		if (a is GasTank && !disableGasTankInteractions)
 		{
 			GasTank tank = a as GasTank;
 			if (a != this && !tankList.Contains(tank))
@@ -255,7 +257,7 @@ public partial class GasTank : Area3D
 			enemyList.Remove(targetEnemy);
 		}
 
-		if (a is GasTank)
+		if (a is GasTank && !disableGasTankInteractions)
 		{
 			GasTank tank = a as GasTank;
 			if (a != this)

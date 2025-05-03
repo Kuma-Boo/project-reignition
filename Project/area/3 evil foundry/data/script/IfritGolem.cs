@@ -869,6 +869,7 @@ public partial class IfritGolem : Node3D
 		GasTank tank = gasTankScene.Instantiate<GasTank>();
 		tank.Name = $"GasTank{activeGasTanks.Count + gasTankPool.Count + queuedGasTanks.Keys.Count}";
 		tank.disableRespawning = true;
+		tank.disableGasTankInteractions = true;
 		tank.Detonated += () => PoolTank(tank);
 		return tank;
 	}
