@@ -87,6 +87,8 @@ public partial class Zipline : PathFollow3D
 		rotationVelocity = rotationSmoothing = 0;
 		isFullSwingActive = false;
 		Collider.Disabled = false;
+
+		SparkFX.Visible = false;
 	}
 
 	public void ProcessZipline()
@@ -212,7 +214,8 @@ public partial class Zipline : PathFollow3D
 		SetSpeed(ZiplineSpeed, true);
 		ProcessMode = ProcessModeEnum.Inherit;
 		Collider.Disabled = true;
-		SparkFX.Emitting = true;
+		SparkFX.Restart();
+		SparkFX.Visible = true;
 
 		EmitSignal(SignalName.Activated);
 	}
