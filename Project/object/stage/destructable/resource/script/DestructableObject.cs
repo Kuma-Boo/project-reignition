@@ -248,14 +248,19 @@ public partial class DestructableObject : Node3D
 			return;
 		}
 
+		if (!a.IsInGroup("player"))
+			return;
+
 		isInteractingWithPlayer = true;
 		ProcessPlayerCollision();
 	}
 
 	public void OnExited(Area3D a)
 	{
-		if (a.IsInGroup("player"))
-			isInteractingWithPlayer = false;
+		if (!a.IsInGroup("player"))
+			return;
+
+		isInteractingWithPlayer = false;
 	}
 
 	protected virtual void ProcessPlayerCollision()
