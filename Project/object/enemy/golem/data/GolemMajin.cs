@@ -138,12 +138,13 @@ public partial class GolemMajin : Enemy
 
 	protected override void Defeat()
 	{
+		SetHitboxStatus(false);
 		AnimationTree.Set(StateTransition, "defeat");
-		base.Defeat();
-		SetHitboxStatus(false, false);
 
 		if (gasTank != null) // Drop the gas tank
 			LaunchGasTank();
+
+		base.Defeat();
 	}
 
 	protected override void SpawnPearls() => Runtime.Instance.SpawnPearls(pearlAmount, GlobalPosition + (this.Back() * 5f), new Vector2(2, 1.5f), 1.5f);

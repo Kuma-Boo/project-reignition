@@ -173,9 +173,9 @@ public partial class Gargoyle : Enemy
 
 	protected override void Defeat()
 	{
-		base.Defeat();
 		SetHitboxStatus(false);
 		AnimationTree.Set(DefeatTransition, "enabled");
+		base.Defeat();
 	}
 
 	private void ProcessMovement()

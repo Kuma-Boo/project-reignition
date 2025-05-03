@@ -173,8 +173,9 @@ public partial class FlowerMajin : Enemy
 
 	protected override void Defeat()
 	{
-		AnimationTree.Set(DefeatTransition, EnabledConstant);
 		SetHitboxStatus(false);
+		AnimationTree.Set(DefeatTransition, EnabledConstant);
+
 		base.Defeat();
 	}
 
