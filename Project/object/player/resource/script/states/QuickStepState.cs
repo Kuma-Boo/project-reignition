@@ -36,6 +36,9 @@ public partial class QuickStepState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
+		if (!Player.IsQuickStepValid) // Exit quick step state
+			return runState;
+
 		// TODO Use External Velocity from the movement
 		currentStepLength += PhysicsManager.physicsDelta;
 		float currentSpeed = -movementCurve.Sample(Mathf.Clamp(currentStepLength / StepLength, 0f, 1f));

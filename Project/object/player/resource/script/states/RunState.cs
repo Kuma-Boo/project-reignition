@@ -86,11 +86,10 @@ public partial class RunState : PlayerState
 			}
 
 			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.QuickStep) &&
-				Player.Controller.IsStepBufferActive &&
-				(!Player.IsLockoutActive || !Player.ActiveLockoutData.recenterPlayer) &&
-				Player.Stats.GroundSettings.GetSpeedRatioClamped(Player.MoveSpeed) > .5f)
+				Player.Controller.IsStepBufferActive)
 			{
-				Player.StartQuickStep(Player.Controller.StepDirection < 0);
+				if (Player.IsQuickStepValid)
+					Player.StartQuickStep(Player.Controller.StepDirection < 0);
 				Player.Controller.ResetStepBuffer();
 				return null;
 			}

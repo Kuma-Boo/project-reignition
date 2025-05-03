@@ -675,6 +675,9 @@ public partial class PlayerController : CharacterBody3D
 	public void StartSpinJumpBounce() => VerticalSpeed = Runtime.CalculateJumpPower(SpinJumpBounceAmount);
 
 	[Export] private QuickStepState quickStepState;
+	public bool IsQuickStepValid => !IsAutomationActive &&
+				!(IsLockoutActive && ActiveLockoutData.recenterPlayer) &&
+				Stats.GroundSettings.GetSpeedRatioClamped(MoveSpeed) > .5f;
 	public void StartQuickStep(bool isSteppingRight)
 	{
 		quickStepState.IsSteppingRight = isSteppingRight;
