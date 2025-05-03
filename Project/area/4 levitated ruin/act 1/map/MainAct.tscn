@@ -2335,7 +2335,7 @@ curve = ExtResource("44_r3tf7")
 script = ExtResource("4_4rpxf")
 
 [node name="MissileTracking1" parent="MainAct/Skyroad1/TrackingMissileGroup" instance=ExtResource("45_o7bxy")]
-transform = Transform3D(-0.880403, -0.473714, 0.0216899, -0.422186, 0.803827, 0.419055, -0.215948, 0.359782, -0.907698, -7.86663, 69.9972, -282.427)
+transform = Transform3D(-0.880403, -0.473713, 0.0216899, -0.422186, 0.803827, 0.419055, -0.215948, 0.359782, -0.907698, -7.86663, 69.9972, -282.427)
 progress = 450.0
 h_offset = -0.5
 v_offset = 1.0
@@ -2730,7 +2730,7 @@ Movement/Angle = 90.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="MainAct/Rukh4/MovingMajin3" instance=ExtResource("11_427b8")]
-transform = Transform3D(0.999996, 0, 0, 0, 1, 0, 0, 0, 0.999996, 0, 0, 0)
+transform = Transform3D(0.999996, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 0.999996, 0, 0, 0)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
@@ -5105,6 +5105,7 @@ Distance = 12.0
 
 [node name="Spring2" parent="MainAct/Tower/IvyShortcut" instance=ExtResource("15_q7qwf")]
 transform = Transform3D(0.5, -0.433013, -0.75, 0, 0.866025, -0.5, 0.866025, 0.25, 0.433013, 0, 16, -6)
+startHidden = true
 MiddleHeight = 10.0
 FinalHeight = 8.0
 Distance = 9.0
@@ -5306,14 +5307,17 @@ shape = SubResource("BoxShape3D_ypvwq")
 [connection signal="Activated" from="MainAct/Rukh5/SquarePillarFlyTrigger4" to="MainAct/Rukh5/SquarePillarFlyTrigger4/SquarePillarFlyL" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh5/SquarePillarFlyTrigger4" to="MainAct/Rukh5/SquarePillarFlyTrigger4/SquarePillarFlyM" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh5/SquarePillarFlyTrigger4" to="MainAct/Rukh5/SquarePillarFlyTrigger4/SquarePillarFlyR" method="Activate"]
+[connection signal="Respawned" from="MainAct/Rukh5/GreenMajin1" to="MainAct/Rukh5/GreenMajin1Missiles" method="Deactivate"]
 [connection signal="SpinStarted" from="MainAct/Rukh5/GreenMajin1" to="MainAct/Rukh5/GreenMajin1Missiles" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh5/RoundPillarFlyTrigger1" to="MainAct/Rukh5/RoundPillarFlyTrigger1/RoundPillarFly1" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh5/RoundPillarFlyTrigger1" to="MainAct/Rukh5/RoundPillarFlyTrigger1/RoundPillarFly2" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh5/RoundPillarFlyTrigger1" to="MainAct/Rukh5/RoundPillarFlyTrigger1/RoundPillarFly3" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh5/RoundPillarFlyTrigger1" to="MainAct/Rukh5/RoundPillarFlyTrigger1/RoundPillarFly4" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh5/RoundPillarFlyTrigger2" to="MainAct/Rukh5/RoundPillarFlyTrigger2/RoundPillarFly" method="Activate"]
+[connection signal="Respawned" from="MainAct/Rukh5/GreenMajin2" to="MainAct/Rukh5/GreenMajin2Missiles" method="Deactivate"]
 [connection signal="SpinStarted" from="MainAct/Rukh5/GreenMajin2" to="MainAct/Rukh5/GreenMajin2Missiles" method="Activate"]
 [connection signal="Activated" from="MainAct/Tower/IvyShortcut/Spring1" to="Static/Triggers/Camera/TowerCameras" method="Activate"]
+[connection signal="Activated" from="MainAct/Tower/IvyShortcut/Spring1" to="MainAct/Tower/IvyShortcut/Spring2" method="ShowLauncher"]
 [connection signal="Activated" from="MainAct/Tower/IvyShortcut/Spring2" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Tower/IvyShortcut/Spring2" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Tower/IvyShortcut/Spring2" to="MainAct/Tower/TriggerData/LoopPath" method="Activate"]
