@@ -976,7 +976,7 @@ public partial class SaveManager : Node
 		}
 		#endregion
 
-		public bool CanSkipCutscene(StringName cutsceneId) => skippableCutscenes.Contains(cutsceneId);
+		public bool CanSkipCutscene(StringName cutsceneId) => skippableCutscenes.Contains(cutsceneId) || OS.IsDebugBuild();
 		public void AllowSkippingCutscene(StringName cutsceneId)
 		{
 			if (!skippableCutscenes.Contains(cutsceneId))

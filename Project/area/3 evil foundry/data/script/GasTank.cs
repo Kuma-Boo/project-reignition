@@ -68,7 +68,7 @@ public partial class GasTank : Area3D
 
 	public void InitializeSpawnData() => spawnData = new(GetParent(), Transform);
 
-	private void Respawn()
+	public void Respawn()
 	{
 		Root.Rotation = Vector3.Zero;
 		travelTime = 0;
@@ -77,6 +77,7 @@ public partial class GasTank : Area3D
 		Position = spawnData.spawnTransform.Origin;
 		IsDetonated = false;
 		Animator.Play("RESET");
+		Animator.Advance(0.0);
 
 		BonusManager.instance.UnregisterEnemyComboExtender(this);
 	}
@@ -187,6 +188,8 @@ public partial class GasTank : Area3D
 
 		for (int i = 0; i < tankList.Count; i++)
 		{
+			GD.Print($"Clash explosion between {Name} and {tankList[i].Name}");
+
 			tankList[i].Launch(); // Launch all gas tanks in range
 			if (BonusManager.instance.IsEnemyComboExtenderRegistered(this))
 				BonusManager.instance.RegisterEnemyComboExtender(tankList[i]);

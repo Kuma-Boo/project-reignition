@@ -421,7 +421,7 @@ public partial class IfritGolem : Node3D
 		Player.MoveSpeed = 0.0f;
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 
-		// TODO Play hit dialog
+		// Play hit dialog
 		if (currentHealth < MaxHealth && dialogFlags[0] == 1)
 		{
 			hitDialogs[1].Activate();
@@ -807,6 +807,7 @@ public partial class IfritGolem : Node3D
 		if (Mathf.IsEqualApprox(rightShutterTimer, RightShutterInterval))
 		{
 			rightShutterTimer = 0;
+			// Release 2 tanks at a time
 			for (int i = 0; i < 2; i++)
 				StartGasTankAttack(true, Runtime.randomNumberGenerator.RandiRange(1, MaxShutterIndex));
 		}
@@ -815,7 +816,7 @@ public partial class IfritGolem : Node3D
 		if (Mathf.IsEqualApprox(leftShutterTimer, LeftShutterInterval))
 		{
 			leftShutterTimer = 0;
-			// Left shutter releases 2 gas tanks at a time so it's easier for the player to hit the cores
+			// Release 2 tanks at a time
 			for (int i = 0; i < 2; i++)
 				StartGasTankAttack(false, Runtime.randomNumberGenerator.RandiRange(1, MaxShutterIndex));
 		}
@@ -859,13 +860,14 @@ public partial class IfritGolem : Node3D
 	private readonly Dictionary<int, GasTank> queuedGasTanks = [];
 	private void PoolGasTanks()
 	{
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 12; i++)
 			gasTankPool.Enqueue(GenerateGasTank());
 	}
 
 	private GasTank GenerateGasTank()
 	{
 		GasTank tank = gasTankScene.Instantiate<GasTank>();
+		tank.Name = $"GasTank{activeGasTanks.Count + gasTankPool.Count + queuedGasTanks.Keys.Count}";
 		tank.disableRespawning = true;
 		tank.Detonated += () => PoolTank(tank);
 		return tank;
@@ -873,14 +875,15 @@ public partial class IfritGolem : Node3D
 
 	private void SpawnGasTank(int index)
 	{
+		if (queuedGasTanks.ContainsKey(index)) // A tank is already queued...
+			return;
+
 		if (!gasTankPool.TryDequeue(out GasTank tank))
 			tank = GenerateGasTank();
 
-		if (tank.IsInsideTree())
-			tank.GetParent().RemoveChild(tank);
-
+		tank.GetParent()?.RemoveChild(tank);
 		gasTankSpawnPositions[index].AddChild(tank);
-		tank.Call(GasTank.MethodName.Respawn);
+		tank.Respawn();
 		tank.Transform = Transform3D.Identity;
 
 		queuedGasTanks.Add(index, tank);
@@ -888,13 +891,19 @@ public partial class IfritGolem : Node3D
 
 	private void LaunchGasTank(int index)
 	{
+		if (currentState == GolemState.Step && updateRotations)
+		{
+			GetTree().CreateTimer(PhysicsManager.physicsDelta, false, true).Timeout += () => LaunchGasTank(index);
+			return;
+		}
+
 		// There isn't any gas tank queued at the given shutter!
 		if (!queuedGasTanks.TryGetValue(index, out GasTank tank))
 			return;
 
-		Transform3D t = tank.GlobalTransform;
+		Transform3D t = gasTankSpawnPositions[index].GlobalTransform;
 		tank.GetParent().RemoveChild(tank);
-		AddChild(tank);
+		StageSettings.Instance.AddChild(tank);
 		tank.GlobalTransform = t;
 
 		if (currentState == GolemState.SpecialAttack)
