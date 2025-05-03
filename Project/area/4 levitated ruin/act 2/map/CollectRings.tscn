@@ -1,0 +1,363 @@
+[gd_scene load_steps=16 format=3 uid="uid://do63gaf6kay0j"]
+
+[ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_wt0th"]
+[ext_resource type="Resource" uid="uid://d1b7gjmlic4uf" path="res://resource/level data/levitated ruin/Act1Perfect.tres" id="2_qetag"]
+[ext_resource type="PackedScene" uid="uid://bbgtmxw55soah" path="res://object/stage/destructable/Stone.tscn" id="4_es7sm"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="7_eq0v5"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="8_j30w4"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="9_nrqwf"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="10_cagqa"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="11_1nt5s"]
+[ext_resource type="PackedScene" uid="uid://c1o8jxmiiryrj" path="res://object/stage/common/JumpCarpet.tscn" id="12_bbja8"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="37_pntr2"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="41_slvdi"]
+[ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="48_ttwqm"]
+[ext_resource type="PackedScene" uid="uid://cggks1kly71mq" path="res://object/enemy/majin/data/levitated ruin/BlueMajin.tscn" id="56_wbd1p"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="63_ommp0"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_isgee"]
+size = Vector3(10, 20, 2.5)
+
+[node name="CollectRingsAct" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_wt0th")]
+Data = ExtResource("2_qetag")
+
+[node name="Rukh1" parent="Static/Visuals" index="1"]
+startEnabled = false
+
+[node name="Rukh4LOD" parent="Static/Visuals" index="10"]
+startEnabled = true
+
+[node name="Rukh5" parent="Static/Visuals" index="11"]
+startEnabled = true
+
+[node name="Rukh5LOD" parent="Static/Visuals" index="12"]
+startEnabled = false
+
+[node name="SkyroadPaths" parent="Static/Paths" index="9"]
+visible = false
+
+[node name="Lock1" parent="Static/PrisonDoor" index="4"]
+transform = Transform3D(0.939693, -0.34202, 6.70552e-08, 0.321393, 0.883021, -0.342024, 0.116979, 0.321397, 0.939691, 0.516495, 1.86809, 2.10022)
+
+[node name="Lock2" parent="Static/PrisonDoor" index="5"]
+transform = Transform3D(0.965926, 0.25, -0.0669873, -0.258819, 0.933012, -0.250004, -9.2122e-07, 0.258823, 0.965925, -0.550537, 0.592514, 2.05786)
+
+[node name="Lock3" parent="Static/PrisonDoor" index="6"]
+transform = Transform3D(0.906307, 0.42262, 4.88013e-07, -0.416199, 0.892538, -0.17365, -0.0733884, 0.15738, 0.984807, -0.494125, 1.89076, 2.10291)
+
+[node name="Lock4" parent="Static/PrisonDoor" index="7"]
+transform = Transform3D(0.965926, 0.258819, 5.96046e-07, -0.23457, 0.875426, 0.422618, 0.109381, -0.408217, 0.906308, 0.493484, 0.600325, 2.08044)
+
+[node name="SpawnPosition" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -37.9, -1219)
+
+[node name="CharacterSpawn" parent="SpawnPosition" instance=ExtResource("7_eq0v5")]
+transform = Transform3D(-0.999152, 0, 0.0411782, 0, 1, 0, -0.0411782, 0, -0.999152, -0.115204, 0.0168877, 0.0136719)
+
+[node name="Exterior" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -38, -1219)
+
+[node name="Stone" parent="Exterior" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.822372, 2.4559, -11.0426)
+
+[node name="Stone2" parent="Exterior/Stone" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.89864, 0, -0.0281982)
+
+[node name="Ringsline" type="Node3D" parent="Exterior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00405884, 5.6417, -14.9177)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 4
+Shape = 0
+Orientation = 1
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="Exterior/Ringsline" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="Exterior/Ringsline" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="Child03" parent="Exterior/Ringsline" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+
+[node name="Child04" parent="Exterior/Ringsline" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, 0)
+
+[node name="RichRing" parent="Exterior/Ringsline" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9721, 0)
+
+[node name="BlueMajin" parent="Exterior" instance=ExtResource("56_wbd1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0289001, 4.67469, -16.8867)
+
+[node name="Stone2" parent="Exterior" instance=ExtResource("4_es7sm")]
+transform = Transform3D(0.999311, 0, 0.0371146, 0, 1, 0, -0.0371146, 0, 0.999311, -1.63933, 5.93939, -65.7981)
+
+[node name="Stone2" parent="Exterior/Stone2" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.89864, 0, -0.0281982)
+
+[node name="Stone3" parent="Exterior/Stone2" instance=ExtResource("4_es7sm")]
+transform = Transform3D(0.999989, 0, 0.00464256, 0, 1, 0, -0.00464256, 0, 0.999989, 3.81766, 0, -0.0281982)
+
+[node name="Ringsline2" type="Node3D" parent="Exterior"]
+transform = Transform3D(0.0142239, 0, 0.999899, 0, 1, 0, -0.999898, 0, 0.0142239, 1.83904, 11.0607, -68.2285)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 1.7
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="Exterior/Ringsline2" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="Exterior/Ringsline2" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.7)
+
+[node name="Child03" parent="Exterior/Ringsline2" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.4)
+
+[node name="Ringsline3" type="Node3D" parent="Exterior"]
+transform = Transform3D(0.0142239, 0, 0.999899, 0, 1, 0, -0.999898, 0, 0.0142239, 1.83904, 9.86688, -68.2285)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 3
+Shape = 0
+Orientation = 0
+Spacing = 1.7
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="Exterior/Ringsline3" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="Exterior/Ringsline3" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.7)
+
+[node name="Child03" parent="Exterior/Ringsline3" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.4)
+
+[node name="RichPearls" type="Node3D" parent="Exterior"]
+transform = Transform3D(0.0030249, 0.0503802, 0.998726, 0.998202, -0.0599336, 0, 0.0598572, 0.99693, -0.0504709, 0.409409, 12.8756, -68.2285)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("48_ttwqm")
+Amount = 2
+Shape = 0
+Orientation = 0
+Spacing = 0.6
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="Exterior/RichPearls" instance=ExtResource("48_ttwqm")]
+
+[node name="Child02" parent="Exterior/RichPearls" instance=ExtResource("48_ttwqm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.6)
+
+[node name="RichRing" parent="Exterior" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.80011, 12.9788, -68.2285)
+
+[node name="RichRing2" parent="Exterior" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.58652, 12.9788, -68.2285)
+
+[node name="BlueMajin2" parent="Exterior" instance=ExtResource("56_wbd1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.70198, 7.46086, -70.1975)
+
+[node name="Stone3" parent="Exterior" instance=ExtResource("4_es7sm")]
+transform = Transform3D(0.999993, 0, 0.00380481, 0, 1, 0, -0.00380481, 0, 0.999993, -1.63933, 6.90233, -85.9867)
+
+[node name="Stone2" parent="Exterior/Stone3" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.89864, 0, -0.0281982)
+
+[node name="Stone3" parent="Exterior/Stone3" instance=ExtResource("4_es7sm")]
+transform = Transform3D(0.999989, 0, 0.00464256, 0, 1, 0, -0.00464256, 0, 0.999989, 3.81766, 0, -0.0281982)
+
+[node name="Ringsline4" type="Node3D" parent="Exterior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.73842, 10.2512, -88.047)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 3
+Shape = 0
+Orientation = 1
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="Exterior/Ringsline4" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="Exterior/Ringsline4" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Child03" parent="Exterior/Ringsline4" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="RichRing3" parent="Exterior" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.422806, 12.7499, -88.047)
+animator = NodePath("../RichRing/AnimationPlayer")
+collider = NodePath("../RichRing/CollisionShape3D")
+
+[node name="Ringsline5" type="Node3D" parent="Exterior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.56847, 10.2512, -88.047)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 3
+Shape = 0
+Orientation = 1
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="Exterior/Ringsline5" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="Exterior/Ringsline5" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Child03" parent="Exterior/Ringsline5" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="BlueMajin3" parent="Exterior" instance=ExtResource("56_wbd1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.96838, 8.16636, -90.0142)
+
+[node name="Switch2" parent="Exterior" instance=ExtResource("41_slvdi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.500565, 6.29864, -96.4684)
+
+[node name="CullingTrigger" type="Node3D" parent="Exterior/Switch2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 1.26218e-29, 1, -0.320606, 0.799999, -5.776)
+script = ExtResource("8_j30w4")
+
+[node name="Spring" parent="Exterior/Switch2/CullingTrigger" instance=ExtResource("37_pntr2")]
+transform = Transform3D(-0.999482, -0.00694242, 0.0314226, -0.00992588, 0.99535, -0.0958099, -0.0306114, -0.0960723, -0.994904, 0.251846, -0.688841, 5.68201)
+MiddleHeight = 5.0
+FinalHeight = 6.5
+Distance = 3.0
+
+[node name="Stone4" parent="Exterior" instance=ExtResource("4_es7sm")]
+transform = Transform3D(0.999993, 0, 0.00380481, 0, 1, 0, -0.00380481, 0, 0.999993, -1.63933, 7.14305, -99.1403)
+
+[node name="Stone2" parent="Exterior/Stone4" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.89864, 0, -0.0281982)
+
+[node name="Stone3" parent="Exterior/Stone4" instance=ExtResource("4_es7sm")]
+transform = Transform3D(0.999989, 0, 0.00464256, 0, 1, 0, -0.00464256, 0, 0.999989, 3.81766, 0, -0.0281982)
+
+[node name="JumpCarpet" parent="Exterior" instance=ExtResource("12_bbja8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.776199, 11.8506, -100.979)
+FinalHeight = 3.0
+LauncherDirection = 2
+
+[node name="Ringsline6" type="Node3D" parent="Exterior"]
+transform = Transform3D(0.443431, 0, 0.896308, 0, 1, 0, -0.896308, 0, 0.443431, 3.08008, 10.6804, -110.391)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="Exterior/Ringsline6" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="Exterior/Ringsline6" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child04" parent="Exterior/Ringsline6" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="Exterior/Ringsline6" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Ringsline7" type="Node3D" parent="Exterior"]
+transform = Transform3D(0.443431, 0, 0.896308, 0, 1, 0, -0.896308, 0, 0.443431, 3.08008, 11.8419, -110.391)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("10_cagqa")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="Exterior/Ringsline7" instance=ExtResource("10_cagqa")]
+
+[node name="Child02" parent="Exterior/Ringsline7" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Child04" parent="Exterior/Ringsline7" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child05" parent="Exterior/Ringsline7" instance=ExtResource("10_cagqa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Richrings4" type="Node3D" parent="Exterior"]
+transform = Transform3D(0.443431, 0, 0.896308, 0, 1, 0, -0.896308, 0, 0.443431, 1.27672, 10.8306, -111.198)
+script = ExtResource("9_nrqwf")
+Source = ExtResource("63_ommp0")
+Amount = 3
+Shape = 0
+Orientation = 1
+Spacing = 1.4
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="Exterior/Richrings4" instance=ExtResource("63_ommp0")]
+
+[node name="Child02" parent="Exterior/Richrings4" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+
+[node name="Child03" parent="Exterior/Richrings4" instance=ExtResource("63_ommp0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, 0)
+
+[node name="RichRing5" parent="Exterior" instance=ExtResource("63_ommp0")]
+transform = Transform3D(0.443431, 0, 0.896309, 0, 1, 0, -0.896309, 0, 0.443431, 3.14255, 13.2192, -110.351)
+animator = NodePath("../RichRing/AnimationPlayer")
+collider = NodePath("../RichRing/CollisionShape3D")
+
+[node name="RichRing6" parent="Exterior" instance=ExtResource("63_ommp0")]
+transform = Transform3D(0.443431, 0, 0.896309, 0, 1, 0, -0.896309, 0, 0.443431, -0.546692, 13.2192, -112.162)
+animator = NodePath("../RichRing/AnimationPlayer")
+collider = NodePath("../RichRing/CollisionShape3D")
+
+[node name="BlueMajin4" parent="Exterior" instance=ExtResource("56_wbd1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.32893, 9.46068, -115.169)
+
+[node name="Stone5" parent="Exterior" instance=ExtResource("4_es7sm")]
+transform = Transform3D(0.999993, 0, 0.00380481, 0, 1, 0, -0.00380481, 0, 0.999993, -1.63933, 7.8326, -119.117)
+
+[node name="Stone2" parent="Exterior/Stone5" instance=ExtResource("4_es7sm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.89864, 0, -0.0281982)
+
+[node name="Stone3" parent="Exterior/Stone5" instance=ExtResource("4_es7sm")]
+transform = Transform3D(0.999989, 0, 0.00464256, 0, 1, 0, -0.00464256, 0, 0.999989, 3.81766, 0, -0.0281982)
+
+[node name="BlueMajin5" parent="Exterior" instance=ExtResource("56_wbd1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.691833, 9.7916, -121.283)
+
+[node name="RichRing7" parent="Exterior" instance=ExtResource("63_ommp0")]
+transform = Transform3D(0.443431, 0, 0.896309, 0, 1, 0, -0.896309, 0, 0.443431, 0.820969, 14.5198, -121.452)
+animator = NodePath("../RichRing2/AnimationPlayer")
+collider = NodePath("../RichRing2/CollisionShape3D")
+
+[node name="Goal" parent="Exterior" instance=ExtResource("11_1nt5s")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 16.366, -130.777)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Exterior/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 3)
+shape = SubResource("BoxShape3D_isgee")
+
+[connection signal="Activated" from="Exterior/Switch2" to="Exterior/Switch2/CullingTrigger" method="Activate"]
+[connection signal="Deactivated" from="Exterior/Switch2" to="Exterior/Switch2/CullingTrigger" method="Deactivate"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]
