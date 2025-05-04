@@ -1,0 +1,314 @@
+[gd_scene load_steps=21 format=3 uid="uid://cl65se1nwqp1o"]
+
+[ext_resource type="PackedScene" uid="uid://pqaytcsp2twi" path="res://area/4 levitated ruin/act 3/Static.tscn" id="1_olcxc"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_27a8u"]
+[ext_resource type="Resource" uid="uid://q3jyn7vwlw8g" path="res://resource/level data/levitated ruin/Act3Rampage.tres" id="2_upc4a"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="4_vrsxk"]
+[ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_xsa3e"]
+[ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_yk01e"]
+[ext_resource type="PackedScene" uid="uid://b6030p0x15kq0" path="res://area/4 levitated ruin/object/platform/GargoyleStatic.tscn" id="7_ardol"]
+[ext_resource type="PackedScene" uid="uid://bxvbg3oku2gpf" path="res://area/4 levitated ruin/object/Gate.tscn" id="7_xsa3e"]
+[ext_resource type="PackedScene" uid="uid://diq31c5i622qs" path="res://area/4 levitated ruin/object/platform/GargoylePatform.tscn" id="8_58waf"]
+[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="9_1648i"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="10_aqqyc"]
+[ext_resource type="PackedScene" uid="uid://b2jsh7hensgem" path="res://object/enemy/gargoyle/Gargoyle.tscn" id="11_58waf"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="13_aqqyc"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="14_l333p"]
+[ext_resource type="Script" uid="uid://bd2g6rmrn77eo" path="res://object/trigger/modules/LockoutTrigger.cs" id="15_jfslb"]
+[ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="16_h5xjf"]
+[ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="17_h5xjf"]
+[ext_resource type="PackedScene" uid="uid://cggks1kly71mq" path="res://object/enemy/majin/data/levitated ruin/BlueMajin.tscn" id="18_og2ii"]
+[ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="19_lju68"]
+[ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="19_s70ep"]
+
+[node name="RampageAct" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_olcxc")]
+Data = ExtResource("2_upc4a")
+
+[node name="PathFollow3D" parent="Static/Paths/SkyRoad1" index="0"]
+transform = Transform3D(-0.999996, -4.12629e-05, -8.74191e-08, -4.12603e-05, 0.99995, -0.00943775, 4.76843e-07, -0.00943768, -0.999958, 0.0083, -73.7862, 50.1454)
+
+[node name="RampageAct" type="Node3D" parent="."]
+
+[node name="StartPosition" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -38.7795, -1210)
+metadata/_edit_lock_ = true
+
+[node name="CharacterSpawn" parent="RampageAct/StartPosition" instance=ExtResource("2_27a8u")]
+
+[node name="Top" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -40, -1150)
+
+[node name="RichRing" parent="RampageAct/Top" instance=ExtResource("4_vrsxk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9, -76)
+
+[node name="RingsL" type="Node3D" parent="RampageAct/Top"]
+transform = Transform3D(1, 0, 0, 0, 0.993572, -0.113203, 0, 0.113203, 0.993572, -0.6, 4.3, -78)
+script = ExtResource("5_xsa3e")
+Source = ExtResource("6_yk01e")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Top/RingsL" instance=ExtResource("6_yk01e")]
+
+[node name="Child02" parent="RampageAct/Top/RingsL" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="RampageAct/Top/RingsL" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="RampageAct/Top/RingsL" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="RampageAct/Top/RingsL" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="RingsR" type="Node3D" parent="RampageAct/Top"]
+transform = Transform3D(1, 0, 0, 0, 0.993572, -0.113203, 0, 0.113203, 0.993572, 0.6, 4.3, -78)
+script = ExtResource("5_xsa3e")
+Source = ExtResource("6_yk01e")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Top/RingsR" instance=ExtResource("6_yk01e")]
+
+[node name="Child02" parent="RampageAct/Top/RingsR" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="RampageAct/Top/RingsR" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="RampageAct/Top/RingsR" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="RampageAct/Top/RingsR" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="GargoyleStaticR1" parent="RampageAct/Top" instance=ExtResource("7_ardol")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 5.5, 8.3, -168)
+
+[node name="GargoyleStaticR2" parent="RampageAct/Top" instance=ExtResource("7_ardol")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6.5, 8.3, -176.5)
+
+[node name="GargoylePlatformL1" parent="RampageAct/Top" instance=ExtResource("8_58waf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 8, -168)
+
+[node name="EnemyStone" parent="RampageAct/Top/GargoylePlatformL1" instance=ExtResource("9_1648i")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 2.71, 0)
+enemyCount = 1
+
+[node name="FireSoul" parent="RampageAct/Top/GargoylePlatformL1" instance=ExtResource("10_aqqyc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+
+[node name="GargoyleStaticL2" parent="RampageAct/Top" instance=ExtResource("7_ardol")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6.5, 8.3, -176.5)
+
+[node name="EnemyStone" parent="RampageAct/Top" instance=ExtResource("9_1648i")]
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 0, 12.5, -207.5)
+enemyCount = 1
+
+[node name="Gargoyle" parent="RampageAct/Top" instance=ExtResource("11_58waf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, -198.8)
+
+[node name="Tower" type="Node3D" parent="RampageAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30, -1375)
+
+[node name="TowerLockout" type="Node3D" parent="RampageAct/Tower"]
+transform = Transform3D(0.5373, -0.146453, -0.830579, -6.10316e-09, 0.984808, -0.173648, 0.843391, 0.0933011, 0.529137, 0, 0, -5)
+script = ExtResource("15_jfslb")
+lockoutData = ExtResource("16_h5xjf")
+
+[node name="StaticGate1" parent="RampageAct/Tower" instance=ExtResource("7_xsa3e")]
+transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0.149994, 0, -9.40002)
+
+[node name="Switch1" parent="RampageAct/Tower" instance=ExtResource("13_aqqyc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Spring" parent="RampageAct/Tower/Switch1" instance=ExtResource("14_l333p")]
+transform = Transform3D(0.5373, -0.146453, -0.830579, -6.10316e-09, 0.984808, -0.173648, 0.843391, 0.0933011, 0.529137, 0, 0, 0)
+startHidden = true
+MiddleHeight = 10.0
+FinalHeight = 8.0
+Distance = 9.0
+
+[node name="Path" type="Node3D" parent="RampageAct/Tower/Switch1/Spring" node_paths=PackedStringArray("path")]
+script = ExtResource("17_h5xjf")
+path = NodePath("../../../../../Static/Paths/TowerPath")
+
+[node name="StaticGate2" parent="RampageAct/Tower" instance=ExtResource("7_xsa3e")]
+transform = Transform3D(-0.362523, 0, -0.422618, 0, 2.2, 0, 0.169047, 0, -0.906308, -7.39265, 8, 3.3573)
+
+[node name="Rings1" type="Node3D" parent="RampageAct/Tower"]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -7.14142, 8.6, -3.71713)
+script = ExtResource("5_xsa3e")
+Source = ExtResource("6_yk01e")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Tower/Rings1" instance=ExtResource("6_yk01e")]
+
+[node name="Child02" parent="RampageAct/Tower/Rings1" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="RampageAct/Tower/Rings1" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="RampageAct/Tower/Rings1" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Rings2" type="Node3D" parent="RampageAct/Tower"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -2.25, 8.6, -7.6)
+script = ExtResource("5_xsa3e")
+Source = ExtResource("6_yk01e")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="RampageAct/Tower/Rings2" instance=ExtResource("6_yk01e")]
+
+[node name="Child02" parent="RampageAct/Tower/Rings2" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="RampageAct/Tower/Rings2" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="RampageAct/Tower/Rings2" instance=ExtResource("6_yk01e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="StaticGate3" parent="RampageAct/Tower" instance=ExtResource("7_xsa3e")]
+transform = Transform3D(0, 0, -1, 0, 2.2, 0, 0.4, 0, 0, -0.150006, 8, 7.59998)
+
+[node name="Switch2" parent="RampageAct/Tower" instance=ExtResource("13_aqqyc")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.35, 8.1, 7.8)
+activationLength = 0.5
+
+[node name="Spring" parent="RampageAct/Tower/Switch2" instance=ExtResource("14_l333p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+startHidden = true
+MiddleHeight = 10.0
+FinalHeight = 7.5
+Distance = 2.0
+
+[node name="BlueMajin1" parent="RampageAct/Tower" instance=ExtResource("18_og2ii")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.14999, 15.1, -3.30005)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 5, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[node name="BlueMajin2" parent="RampageAct/Tower" instance=ExtResource("18_og2ii")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -2.48309, 17.1, -7.96695)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 5, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+
+[node name="Switch3" parent="RampageAct/Tower" instance=ExtResource("13_aqqyc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.85001, 16.1, -1.30005)
+activationLength = 0.5
+
+[node name="Spring" parent="RampageAct/Tower/Switch3" instance=ExtResource("14_l333p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+startHidden = true
+MiddleHeight = 10.0
+FinalHeight = 7.5
+Distance = 2.0
+
+[node name="StaticGate4" parent="RampageAct/Tower" instance=ExtResource("7_xsa3e")]
+transform = Transform3D(0.4, 0, 2.18557e-07, 0, 2.2, 0, -8.74229e-08, 0, 1, 7.57, 16, 0.2)
+
+[node name="SpikeBallSpawner1" parent="RampageAct/Tower" instance=ExtResource("19_lju68")]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 8.277, 28, 8.307)
+lifetime = 3.0
+spawnInterval = 3.0
+
+[node name="SpikeBallSpawner2" parent="RampageAct/Tower" instance=ExtResource("19_lju68")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -8.137, 28, 8.166)
+lifetime = 3.0
+spawnInterval = 3.0
+
+[node name="Switch4" parent="RampageAct/Tower" instance=ExtResource("13_aqqyc")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 4.5266, 24.1, -6.46193)
+activationLength = 0.5
+
+[node name="Spring" parent="RampageAct/Tower/Switch4" instance=ExtResource("14_l333p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+startHidden = true
+MiddleHeight = 10.0
+FinalHeight = 7.5
+Distance = 2.0
+
+[node name="StaticGate5" parent="RampageAct/Tower" instance=ExtResource("7_xsa3e")]
+transform = Transform3D(0.282843, 0, 0.707107, 0, 2.2, 0, -0.282843, 0, 0.707107, 5.64142, 24, -5.35852)
+
+[node name="SpikeBallSpawner3" parent="RampageAct/Tower" instance=ExtResource("19_lju68")]
+transform = Transform3D(2.68221e-07, 0, -1, 0, 1, 0, 1, 0, 2.68221e-07, 10.5, 36, 0)
+lifetime = 3.0
+spawnInterval = 3.0
+
+[node name="Switch5" parent="RampageAct/Tower" instance=ExtResource("13_aqqyc")]
+transform = Transform3D(-0.819152, 0, -0.573577, 0, 1, 0, 0.573577, 0, -0.819152, -6.57497, 32.1, 4.35681)
+activationLength = 0.5
+
+[node name="Spring" parent="RampageAct/Tower/Switch5" instance=ExtResource("14_l333p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+startHidden = true
+MiddleHeight = 10.0
+FinalHeight = 7.5
+Distance = 2.0
+
+[node name="Path" type="Node3D" parent="RampageAct/Tower/Switch5/Spring" node_paths=PackedStringArray("path")]
+script = ExtResource("17_h5xjf")
+path = NodePath("../../../../../Static/Paths/TowerTopPath")
+
+[node name="DashPanelGroup" type="Node3D" parent="RampageAct/Tower"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 40, -13)
+
+[node name="DashPanelL" parent="RampageAct/Tower/DashPanelGroup" instance=ExtResource("19_s70ep")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="DashPanelR" parent="RampageAct/Tower/DashPanelGroup" instance=ExtResource("19_s70ep")]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -1, 0, 0)
+
+[connection signal="Defeated" from="RampageAct/Top/Gargoyle" to="RampageAct/Top/GargoylePlatformL1/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="RampageAct/Top/Gargoyle" to="RampageAct/Top/EnemyStone" method="IncrementCounter"]
+[connection signal="Activated" from="RampageAct/Tower/Switch1" to="RampageAct/Tower/Switch1/Spring" method="ShowLauncher"]
+[connection signal="Respawned" from="RampageAct/Tower/Switch1" to="RampageAct/Tower/Switch1/Spring" method="HideLauncher"]
+[connection signal="Activated" from="RampageAct/Tower/Switch1/Spring" to="RampageAct/Tower/TowerLockout" method="Activate"]
+[connection signal="Activated" from="RampageAct/Tower/Switch1/Spring" to="RampageAct/Tower/Switch1/Spring/Path" method="Activate"]
+[connection signal="Activated" from="RampageAct/Tower/Switch2" to="RampageAct/Tower/Switch2/Spring" method="ShowLauncher"]
+[connection signal="Deactivated" from="RampageAct/Tower/Switch2" to="RampageAct/Tower/Switch2/Spring" method="HideLauncher"]
+[connection signal="Activated" from="RampageAct/Tower/Switch3" to="RampageAct/Tower/Switch3/Spring" method="ShowLauncher"]
+[connection signal="Deactivated" from="RampageAct/Tower/Switch3" to="RampageAct/Tower/Switch3/Spring" method="HideLauncher"]
+[connection signal="Activated" from="RampageAct/Tower/Switch4" to="RampageAct/Tower/Switch4/Spring" method="ShowLauncher"]
+[connection signal="Deactivated" from="RampageAct/Tower/Switch4" to="RampageAct/Tower/Switch4/Spring" method="HideLauncher"]
+[connection signal="Activated" from="RampageAct/Tower/Switch5" to="RampageAct/Tower/Switch5/Spring" method="ShowLauncher"]
+[connection signal="Deactivated" from="RampageAct/Tower/Switch5" to="RampageAct/Tower/Switch5/Spring" method="HideLauncher"]
+[connection signal="Activated" from="RampageAct/Tower/Switch5/Spring" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="RampageAct/Tower/Switch5/Spring" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Deactivated" from="RampageAct/Tower/Switch5/Spring" to="RampageAct/Tower/Switch5/Spring/Path" method="Activate"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]

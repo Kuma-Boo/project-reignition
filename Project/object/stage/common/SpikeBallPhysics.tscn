@@ -77,7 +77,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Root/Hitbox:monitoring")
+tracks/2/path = NodePath("Hitbox:monitoring")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -116,7 +116,7 @@ resource_name = "despawn"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Root/Hitbox:monitoring")
+tracks/0/path = NodePath("Hitbox:monitoring")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -220,7 +220,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Root/Hitbox:monitoring")
+tracks/2/path = NodePath("Hitbox:monitoring")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -251,7 +251,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0.999996, 1, 0.999996)]
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(0.999996, 1, 0.999996)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_x4w3n"]
@@ -283,13 +283,14 @@ draw_pass_1 = SubResource("QuadMesh_udrot")
 [node name="Root" parent="." instance=ExtResource("3_1adac")]
 transform = Transform3D(0.999996, 0, 0, 0, 1, 0, 0, 0, 0.999996, 0, 0, 0)
 
-[node name="Hitbox" type="Area3D" parent="Root"]
+[node name="Hitbox" type="Area3D" parent="."]
+transform = Transform3D(0.999996, 0, 0, 0, 1, 0, 0, 0, 0.999996, 0, 0, 0)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("4_0wlt3")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Hitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
 shape = SubResource("2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -299,8 +300,8 @@ shape = SubResource("3")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_x4w3n")
+&"": SubResource("AnimationLibrary_x4w3n")
 }
 
-[connection signal="area_entered" from="Root/Hitbox" to="Root/Hitbox" method="OnEntered"]
-[connection signal="area_exited" from="Root/Hitbox" to="Root/Hitbox" method="OnExited"]
+[connection signal="area_entered" from="Hitbox" to="Hitbox" method="OnEntered"]
+[connection signal="area_exited" from="Hitbox" to="Hitbox" method="OnExited"]
