@@ -74,13 +74,7 @@ public partial class Enemy : Node3D
 	public override void _Ready() => SetUp();
 	protected virtual void SetUp()
 	{
-		// Get components
-		Root = GetNodeOrNull<Node3D>(root);
-		Hurtbox = GetNodeOrNull<Area3D>(hurtbox);
-		Collider = GetNodeOrNull<CollisionShape3D>(collider);
-		RangeCollider = GetNodeOrNull<CollisionShape3D>(rangeCollider);
-		AnimationTree = GetNodeOrNull<AnimationTree>(animationTree);
-		AnimationPlayer = GetNodeOrNull<AnimationPlayer>(animationPlayer);
+		GetComponents();
 
 		SpawnData = new(GetParent(), Transform);
 		StageSettings.Instance.Respawned += Respawn;
@@ -91,6 +85,16 @@ public partial class Enemy : Node3D
 
 		Respawn();
 		RespawnRange();
+	}
+
+	protected void GetComponents()
+	{
+		Root = GetNodeOrNull<Node3D>(root);
+		Hurtbox = GetNodeOrNull<Area3D>(hurtbox);
+		Collider = GetNodeOrNull<CollisionShape3D>(collider);
+		RangeCollider = GetNodeOrNull<CollisionShape3D>(rangeCollider);
+		AnimationTree = GetNodeOrNull<AnimationTree>(animationTree);
+		AnimationPlayer = GetNodeOrNull<AnimationPlayer>(animationPlayer);
 	}
 
 	private void InitializeRangeCollider()
