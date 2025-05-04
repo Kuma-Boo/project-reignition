@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cl65se1nwqp1o"]
+[gd_scene load_steps=19 format=3 uid="uid://cl65se1nwqp1o"]
 
 [ext_resource type="PackedScene" uid="uid://pqaytcsp2twi" path="res://area/4 levitated ruin/act 3/Static.tscn" id="1_olcxc"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_27a8u"]
@@ -14,8 +14,6 @@
 [ext_resource type="PackedScene" uid="uid://b2jsh7hensgem" path="res://object/enemy/gargoyle/Gargoyle.tscn" id="11_58waf"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="13_aqqyc"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="14_l333p"]
-[ext_resource type="Script" uid="uid://bd2g6rmrn77eo" path="res://object/trigger/modules/LockoutTrigger.cs" id="15_jfslb"]
-[ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="16_h5xjf"]
 [ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="17_h5xjf"]
 [ext_resource type="PackedScene" uid="uid://cggks1kly71mq" path="res://object/enemy/majin/data/levitated ruin/BlueMajin.tscn" id="18_og2ii"]
 [ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="19_lju68"]
@@ -27,7 +25,7 @@
 Data = ExtResource("2_upc4a")
 
 [node name="PathFollow3D" parent="Static/Paths/SkyRoad1" index="0"]
-transform = Transform3D(-0.999996, -4.12629e-05, -8.74191e-08, -4.12603e-05, 0.99995, -0.00943775, 4.76843e-07, -0.00943768, -0.999958, 0.0083, -73.7862, 50.1454)
+transform = Transform3D(0.99995, 8.79467e-05, -0.00958694, -2.58648e-07, 0.999952, 0.00914634, 0.00958728, -0.00914584, 0.999915, 0.00495984, -37.6325, -32.0682)
 
 [node name="RampageAct" type="Node3D" parent="."]
 
@@ -123,11 +121,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, -198.8)
 
 [node name="Tower" type="Node3D" parent="RampageAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30, -1375)
-
-[node name="TowerLockout" type="Node3D" parent="RampageAct/Tower"]
-transform = Transform3D(0.5373, -0.146453, -0.830579, -6.10316e-09, 0.984808, -0.173648, 0.843391, 0.0933011, 0.529137, 0, 0, -5)
-script = ExtResource("15_jfslb")
-lockoutData = ExtResource("16_h5xjf")
 
 [node name="StaticGate1" parent="RampageAct/Tower" instance=ExtResource("7_xsa3e")]
 transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0.149994, 0, -9.40002)
@@ -292,11 +285,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
 [node name="DashPanelR" parent="RampageAct/Tower/DashPanelGroup" instance=ExtResource("19_s70ep")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -1, 0, 0)
 
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad01/AutomationTrigger1" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="Static/SkyRoad/SkyRoad01/AutomationTrigger1" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad01/AutomationTrigger2" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="Static/SkyRoad/SkyRoad01/AutomationTrigger2" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad01/AutomationTrigger3" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="Static/SkyRoad/SkyRoad01/AutomationTrigger3" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Defeated" from="RampageAct/Top/Gargoyle" to="RampageAct/Top/GargoylePlatformL1/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="RampageAct/Top/Gargoyle" to="RampageAct/Top/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="RampageAct/Tower/Switch1" to="RampageAct/Tower/Switch1/Spring" method="ShowLauncher"]
 [connection signal="Respawned" from="RampageAct/Tower/Switch1" to="RampageAct/Tower/Switch1/Spring" method="HideLauncher"]
-[connection signal="Activated" from="RampageAct/Tower/Switch1/Spring" to="RampageAct/Tower/TowerLockout" method="Activate"]
 [connection signal="Activated" from="RampageAct/Tower/Switch1/Spring" to="RampageAct/Tower/Switch1/Spring/Path" method="Activate"]
 [connection signal="Activated" from="RampageAct/Tower/Switch2" to="RampageAct/Tower/Switch2/Spring" method="ShowLauncher"]
 [connection signal="Deactivated" from="RampageAct/Tower/Switch2" to="RampageAct/Tower/Switch2/Spring" method="HideLauncher"]
