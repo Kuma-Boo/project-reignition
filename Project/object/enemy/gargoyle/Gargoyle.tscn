@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://b2jsh7hensgem"]
+[gd_scene load_steps=67 format=3 uid="uid://b2jsh7hensgem"]
 
 [ext_resource type="PackedScene" uid="uid://b4n1751vh5d4s" path="res://object/enemy/gargoyle/data/model/Gargoyle.gltf" id="1_gl7tb"]
 [ext_resource type="Script" uid="uid://db7pahktq6q6v" path="res://object/enemy/gargoyle/data/Gargoyle.cs" id="2_gr8hu"]
@@ -11,6 +11,13 @@
 [ext_resource type="Material" uid="uid://rhqpvcj8ph13" path="res://object/enemy/majin/data/particle/material/Majin Glow.tres" id="9_pxsym"]
 [ext_resource type="AudioStream" uid="uid://bqt0gpwc55dfl" path="res://sound/sfx/enemy/majin/majin spawn.wav" id="10_nrx4w"]
 [ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="11_37lc7"]
+[ext_resource type="AudioStream" uid="uid://dmtmemmgn333x" path="res://sound/sfx/enemy/gargoyle/gargoyle flap.wav" id="12_w0cpa"]
+[ext_resource type="AudioStream" uid="uid://dkrvxb66a34rp" path="res://sound/sfx/enemy/gargoyle/gargoyle swipe.wav" id="13_5vb6p"]
+[ext_resource type="AudioStream" uid="uid://c36o7iiftrtnt" path="res://sound/sfx/enemy/gargoyle/gargoyle strike.wav" id="14_a5g66"]
+[ext_resource type="AudioStream" uid="uid://bqbuntl6rv6af" path="res://sound/sfx/enemy/gargoyle/gargoyle defeat.wav" id="15_a5g66"]
+[ext_resource type="AudioStream" uid="uid://dxahgos3gjxnf" path="res://sound/sfx/enemy/gargoyle/gargoyle petrify.wav" id="16_37lc7"]
+[ext_resource type="AudioStream" uid="uid://bisuf6ofohigp" path="res://sound/sfx/enemy/gargoyle/gargoyle petrify warn.wav" id="17_xnarc"]
+[ext_resource type="AudioStream" uid="uid://ces0gaaorjfpn" path="res://sound/sfx/enemy/gargoyle/gargoyle windball.wav" id="18_lafif"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tsk0o"]
 radius = 1.0
@@ -341,7 +348,6 @@ shape = SubResource("SphereShape3D_el5bw")
 disabled = true
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-active = false
 root_node = NodePath("../Root")
 callback_mode_discrete = 0
 tree_root = SubResource("AnimationNodeBlendTree_a4b7b")
@@ -436,6 +442,75 @@ max_distance = 200.0
 bus = &"GAME SFX"
 script = ExtResource("11_37lc7")
 groupKey = &"majin_spawn"
+
+[node name="FlapSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("12_w0cpa")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="SlashSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("13_5vb6p")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="StrikeSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("14_a5g66")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="DefeatSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("15_a5g66")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="PetrifySFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("16_37lc7")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="PetrifyWarnSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("17_xnarc")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="WindballSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("18_lafif")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
 
 [connection signal="area_entered" from="Root/GargoyleRoot/Skeleton3D/Hitbox" to="." method="OnHitboxEntered"]
 [connection signal="area_entered" from="Root/GargoyleRoot/Skeleton3D/Head/Lockon" to="." method="OnEntered"]
