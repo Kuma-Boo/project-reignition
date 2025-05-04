@@ -1182,7 +1182,7 @@ public partial class CameraBlendData : GodotObject
 	/// <summary> [0 -> 1] Used to smooth out backstep pitch blending. </summary>
 	public float BackstepPitchBlend { get; private set; }
 	private float backstepPitchVelocity;
-	private readonly float BackstepPitchSmoothing = 5f;
+	private readonly float BackstepPitchSmoothing = 10f;
 	public void UpdateBackstepBlend(bool IsMovingBackward, bool snapFlag)
 	{
 		float target = IsMovingBackward ? 1f : 0f;
