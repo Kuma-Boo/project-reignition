@@ -1,6 +1,7 @@
-[gd_scene load_steps=39 format=3 uid="uid://pqaytcsp2twi"]
+[gd_scene load_steps=47 format=3 uid="uid://pqaytcsp2twi"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_ul5kf"]
+[ext_resource type="Resource" uid="uid://tw5qyw6eup1u" path="res://area/4 levitated ruin/act 3/camera/TopCam.tres" id="2_2fdgt"]
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="2_718ew"]
 [ext_resource type="PackedScene" uid="uid://dur8p206no0vn" path="res://area/4 levitated ruin/act 3/environment/collision/Collision.tscn" id="2_o2x0g"]
 [ext_resource type="PackedScene" uid="uid://cesleei0vilx5" path="res://area/4 levitated ruin/act 3/environment/Rukh1.tscn" id="2_ur2fq"]
@@ -16,7 +17,7 @@
 [ext_resource type="Resource" uid="uid://dg62uh7g5xdbg" path="res://area/4 levitated ruin/data/SkyroadLockout.tres" id="9_4prap"]
 [ext_resource type="Curve3D" uid="uid://b7alt60i56jo4" path="res://area/4 levitated ruin/act 3/environment/path/SkyRoadPath1.tres" id="9_m4nyc"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="10_arh3h"]
-[ext_resource type="Curve3D" uid="uid://mei57cgq7vnr" path="res://area/4 levitated ruin/act 3/environment/path/SkyRoadPath2.tres" id="10_fw5eo"]
+[ext_resource type="Curve3D" uid="uid://t2uk65jpodw1" path="res://area/4 levitated ruin/act 3/environment/path/SkyRoadPath2.tres" id="10_fw5eo"]
 [ext_resource type="Resource" uid="uid://bhy1xqntrsc7p" path="res://area/4 levitated ruin/data/SkyroadGroundLockout.tres" id="10_j46ok"]
 [ext_resource type="Curve3D" path="res://area/4 levitated ruin/act 3/environment/path/TopPath.tres" id="11_fw5eo"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="12_1ingi"]
@@ -27,12 +28,18 @@
 [ext_resource type="PackedScene" uid="uid://chp4atj2vfa7d" path="res://area/4 levitated ruin/act 3/environment/SkyRoad01.tscn" id="15_2k5mh"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="15_4t71x"]
 [ext_resource type="Resource" uid="uid://c886rphxqnhnb" path="res://resource/preset/camera/common/StaticTransitionCam.tres" id="16_2fdgt"]
+[ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="16_4vbwn"]
 [ext_resource type="PackedScene" uid="uid://j7dkjf81un2n" path="res://area/4 levitated ruin/act 3/environment/SkyRoad02.tscn" id="16_k0h44"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="16_v2r05"]
 [ext_resource type="PackedScene" uid="uid://dtf23iudr7saa" path="res://object/enemy/gargoyle/GargoyleSkyroad.tscn" id="17_o2x0g"]
+[ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="18_6v3ym"]
 [ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="18_cuwbc"]
+[ext_resource type="Resource" uid="uid://b7gjtdumg05ao" path="res://area/4 levitated ruin/act 3/camera/BottomCam.tres" id="19_isxns"]
+[ext_resource type="PackedScene" uid="uid://01vxs3in41h" path="res://area/4 levitated ruin/object/special/Zipline.tscn" id="23_4r3df"]
 [ext_resource type="PackedScene" uid="uid://co2wg02egbm0x" path="res://object/trigger/state trigger/AutomationTrigger.tscn" id="23_cuwbc"]
+[ext_resource type="Resource" uid="uid://c7qitysqk7msy" path="res://area/4 levitated ruin/act 3/camera/ZiplineCam.tres" id="25_4t71x"]
 [ext_resource type="Resource" uid="uid://df4carswnge5u" path="res://area/4 levitated ruin/act 3/camera/Skyroad1Cam.tres" id="29_1ingi"]
+[ext_resource type="Script" uid="uid://cciy1oeuvbh3e" path="res://object/trigger/modules/JumpTrigger.cs" id="37_rtwwr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6v3ym"]
 size = Vector3(10, 8.70264, 2.5)
@@ -41,11 +48,14 @@ size = Vector3(10, 8.70264, 2.5)
 height = 8.0
 radius = 10.0
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_arh3h"]
-size = Vector3(5, 20, 5)
+[sub_resource type="BoxShape3D" id="BoxShape3D_4t71x"]
+size = Vector3(1000, 20, 1000)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ee6d1"]
 size = Vector3(5, 20, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_arh3h"]
+size = Vector3(5, 5, 5)
 
 [sub_resource type="Environment" id="Environment_o2x0g"]
 ambient_light_source = 2
@@ -65,6 +75,7 @@ adjustment_enabled = true
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_ul5kf")
+InitialCameraSettings = ExtResource("2_2fdgt")
 pathParent = NodePath("Paths")
 Environment = NodePath("WorldEnvironment")
 
@@ -177,6 +188,45 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 script = ExtResource("12_1ingi")
 settings = ExtResource("15_4t71x")
 
+[node name="FallTrigger" parent="Triggers" instance=ExtResource("16_v2r05")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -130, -1375)
+"Enter Mode" = 0
+
+[node name="Fall" type="Node3D" parent="Triggers/FallTrigger"]
+script = ExtResource("16_4vbwn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/FallTrigger"]
+shape = SubResource("BoxShape3D_4t71x")
+
+[node name="Checkpoint1" parent="Triggers" instance=ExtResource("16_v2r05")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -38.8, -1210)
+"Enter Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="Triggers/Checkpoint1" node_paths=PackedStringArray("PlayerPath", "CameraPath")]
+script = ExtResource("18_6v3ym")
+PlayerPath = NodePath("../../../Paths/TopPath")
+CameraPath = NodePath("../../../Paths/TopPath")
+CameraSettings = ExtResource("2_2fdgt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoint1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+shape = SubResource("BoxShape3D_6v3ym")
+
+[node name="Checkpoint2" parent="Triggers" instance=ExtResource("16_v2r05")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -63, -1333)
+"Enter Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="Triggers/Checkpoint2" node_paths=PackedStringArray("PlayerPath", "CameraPath")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.261997, 0)
+script = ExtResource("18_6v3ym")
+PlayerPath = NodePath("../../../Paths/BottomPath")
+CameraPath = NodePath("../../../Paths/BottomPath")
+CameraSettings = ExtResource("19_isxns")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoint2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+shape = SubResource("BoxShape3D_6v3ym")
+
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="MainLight" type="DirectionalLight3D" parent="Lighting"]
@@ -204,14 +254,13 @@ curve = ExtResource("8_4prap")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 10, -1387.19)
 curve = ExtResource("9_m4nyc")
 
-[node name="PathFollow3D" type="PathFollow3D" parent="Paths/SkyRoad1"]
-transform = Transform3D(0.99995, 8.79465e-05, -0.00958692, -2.58648e-07, 0.99995, 0.00914632, 0.00958728, -0.00914582, 0.999913, 0.00495984, -37.6325, -32.0682)
-progress = 66.0
-loop = false
-
 [node name="SkyRoad2" type="Path3D" parent="Paths"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -52, -1160)
 curve = ExtResource("10_fw5eo")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Paths/SkyRoad2"]
+transform = Transform3D(-0.999996, 3.47566e-13, -8.74227e-08, 0, 0.999989, 3.97573e-06, 8.74224e-08, 3.97569e-06, -0.999999, 0, 0, 0)
+loop = false
 
 [node name="TopPath" type="Path3D" parent="Paths"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -41, -1100)
@@ -228,6 +277,14 @@ curve = ExtResource("13_tvodj")
 [node name="ZiplinePath" type="Path3D" parent="Paths"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -54.357, -1249.81)
 curve = ExtResource("14_8ftag")
+
+[node name="Zipline" parent="Paths/ZiplinePath" instance=ExtResource("23_4r3df")]
+transform = Transform3D(1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, 1, 0, 0.0871555, 0.996195)
+progress = 1.0
+
+[node name="Cam" type="Node3D" parent="Paths/ZiplinePath/Zipline"]
+script = ExtResource("12_1ingi")
+settings = ExtResource("25_4t71x")
 
 [node name="SkyRoad" type="Node3D" parent="."]
 
@@ -249,10 +306,10 @@ transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad01/GargoyleTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, 0)
-shape = SubResource("BoxShape3D_arh3h")
+shape = SubResource("BoxShape3D_ee6d1")
 
 [node name="Gargoyle" parent="SkyRoad/SkyRoad01" node_paths=PackedStringArray("activeRoad", "paths") instance=ExtResource("17_o2x0g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 4, -1396)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 258, 12, -1390)
 activeRoad = NodePath("..")
 paths = [NodePath("../../../Paths/SkyRoad1")]
 
@@ -283,7 +340,7 @@ settings = ExtResource("15_4t71x")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad01/Camera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_arh3h")
+shape = SubResource("BoxShape3D_ee6d1")
 
 [node name="AutomationTrigger2" parent="SkyRoad/SkyRoad01" instance=ExtResource("23_cuwbc")]
 transform = Transform3D(0.909255, 0.00588231, -0.416198, -0.0858316, 0.98106, -0.173648, 0.407293, 0.193613, 0.892539, 276.275, -38.2, -1488.45)
@@ -305,12 +362,17 @@ settings = ExtResource("29_1ingi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad01/SkyroadCamera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_arh3h")
+shape = SubResource("BoxShape3D_ee6d1")
 
 [node name="AutomationTrigger3" parent="SkyRoad/SkyRoad01" instance=ExtResource("23_cuwbc")]
 transform = Transform3D(0.642807, -0.00808773, 0.765985, 0.0115489, 0.999933, 0.000866171, -0.765941, 0.0082895, 0.642857, 247.066, -66.6758, -1412.59)
 endPoint = 532.0
 ignoreDirection = true
+
+[node name="Cam" type="Node3D" parent="SkyRoad/SkyRoad01/AutomationTrigger3"]
+transform = Transform3D(1, -4.65661e-10, -2.98023e-08, 4.65661e-10, 1, -4.65661e-10, 5.96046e-08, -4.65661e-10, 1, 0, 0, 0)
+script = ExtResource("12_1ingi")
+settings = ExtResource("19_isxns")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad01/AutomationTrigger3"]
 transform = Transform3D(1, -2.98023e-08, -1.49012e-08, 0, 1, 2.98023e-08, -1.49012e-08, 2.98023e-08, 1, 0, 8, 0)
@@ -318,10 +380,58 @@ shape = SubResource("BoxShape3D_ee6d1")
 
 [node name="SkyRoad02" parent="SkyRoad" instance=ExtResource("16_k0h44")]
 
-[node name="GargoyleSkyroad" parent="SkyRoad/SkyRoad02" node_paths=PackedStringArray("activeRoad", "paths") instance=ExtResource("17_o2x0g")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 240, -52, -1147)
+[node name="GargoyleTrigger" parent="SkyRoad/SkyRoad02" instance=ExtResource("16_v2r05")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -47, -1165.64)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad02/GargoyleTrigger"]
+shape = SubResource("BoxShape3D_arh3h")
+
+[node name="JumpTrigger" parent="SkyRoad/SkyRoad02" instance=ExtResource("16_v2r05")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -46.4, -1158.64)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="Jump" type="Node3D" parent="SkyRoad/SkyRoad02/JumpTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.5, 5)
+script = ExtResource("37_rtwwr")
+jumpHeight = 4.0
+autoAlign = true
+forceConsistentHeight = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad02/JumpTrigger"]
+shape = SubResource("BoxShape3D_arh3h")
+
+[node name="Gargoyle" parent="SkyRoad/SkyRoad02" node_paths=PackedStringArray("activeRoad", "paths") instance=ExtResource("17_o2x0g")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 240, -52, -1153)
 activeRoad = NodePath("..")
 paths = [NodePath("../../../Paths/SkyRoad2")]
+
+[node name="AutomationTrigger1" parent="SkyRoad/SkyRoad02" instance=ExtResource("23_cuwbc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250.01, -44.5, -1085)
+endPoint = 245.0
+ignoreDirection = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad02/AutomationTrigger1"]
+transform = Transform3D(1, -2.98023e-08, -1.49012e-08, 0, 1, 2.98023e-08, -1.49012e-08, 2.98023e-08, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ee6d1")
+
+[node name="JumpEndTrigger" parent="SkyRoad/SkyRoad02" instance=ExtResource("16_v2r05")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 250, -32, -1152.64)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="Jump" type="Node3D" parent="SkyRoad/SkyRoad02/JumpEndTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.00043, 5)
+script = ExtResource("37_rtwwr")
+jumpHeight = 1.0
+autoAlign = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad02/JumpEndTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ee6d1")
 
 [node name="DepthRenderer" parent="." instance=ExtResource("2_718ew")]
 
@@ -337,22 +447,32 @@ loopEndPosition = 131.133
 isStageMusic = true
 
 [connection signal="Activated" from="Triggers/Tower2Triggers/Layer1" to="Triggers/TowerLockout" method="Activate"]
+[connection signal="Activated" from="Paths/ZiplinePath/Zipline" to="Paths/ZiplinePath/Zipline/Cam" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad01/GargoyleTrigger" to="Paths/ZiplinePath/Zipline" method="Respawn"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/GargoyleTrigger" to="SkyRoad/SkyRoad01/Gargoyle" method="Activate"]
-[connection signal="Activated" from="SkyRoad/SkyRoad01/AutomationTrigger1" to="Collision/OneWayWall" method="Deactivate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad01/GargoyleTrigger" to="SkyRoad/SkyRoad02/Gargoyle" method="Respawn"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/AutomationTrigger1" to="Triggers/TowerLockout" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/AutomationTrigger1" to="SkyRoad/SkyroadLockout" method="Activate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/AutomationTrigger1" to="SkyRoad/SkyRoad01/AutomationTrigger1/Path" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad01/AutomationTrigger1" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="SkyRoad/SkyRoad01/AutomationTrigger1" to="Collision/OneWayWall" method="Activate"]
-[connection signal="Activated" from="SkyRoad/SkyRoad01/AutomationTrigger2" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/AutomationTrigger2" to="SkyRoad/SkyroadLockout" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/AutomationTrigger2" to="SkyRoad/SkyroadGroundLockout" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad01/AutomationTrigger2" to="Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="SkyRoad/SkyRoad01/AutomationTrigger2" to="Collision/OneWayWall" method="Activate"]
-[connection signal="Deactivated" from="SkyRoad/SkyRoad01/AutomationTrigger2" to="SkyRoad/SkyroadLockout" method="Activate"]
-[connection signal="Deactivated" from="SkyRoad/SkyRoad01/AutomationTrigger2" to="SkyRoad/SkyroadGroundLockout" method="Deactivate"]
 [connection signal="Activated" from="SkyRoad/SkyRoad01/AutomationTrigger3" to="Collision/OneWayWall" method="Deactivate"]
-[connection signal="Activated" from="SkyRoad/SkyRoad01/AutomationTrigger3" to="SkyRoad/SkyroadLockout" method="Deactivate"]
-[connection signal="Activated" from="SkyRoad/SkyRoad01/AutomationTrigger3" to="SkyRoad/SkyroadGroundLockout" method="Activate"]
-[connection signal="Deactivated" from="SkyRoad/SkyRoad01/AutomationTrigger3" to="Collision/OneWayWall" method="Activate"]
 [connection signal="Deactivated" from="SkyRoad/SkyRoad01/AutomationTrigger3" to="SkyRoad/SkyroadGroundLockout" method="Deactivate"]
+[connection signal="Deactivated" from="SkyRoad/SkyRoad01/AutomationTrigger3" to="SkyRoad/SkyRoad01/AutomationTrigger3/Cam" method="Activate"]
+[connection signal="Deactivated" from="SkyRoad/SkyRoad01/AutomationTrigger3" to="Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/GargoyleTrigger" to="SkyRoad/SkyRoad01/Gargoyle" method="Respawn"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/GargoyleTrigger" to="SkyRoad/SkyRoad02/Gargoyle" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/JumpTrigger" to="SkyRoad/SkyRoad01/Gargoyle" method="Respawn"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/JumpTrigger" to="SkyRoad/SkyRoad02/Gargoyle" method="Activate"]
+[connection signal="JumpFinished" from="SkyRoad/SkyRoad02/JumpTrigger/Jump" to="SkyRoad/SkyroadLockout" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/AutomationTrigger1" to="Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="SkyRoad/SkyRoad02/AutomationTrigger1" to="Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="SkyRoad/SkyRoad02/JumpEndTrigger" to="Collision/OneWayWall" method="Deactivate"]
+[connection signal="JumpFinished" from="SkyRoad/SkyRoad02/JumpEndTrigger/Jump" to="SkyRoad/SkyroadLockout" method="Deactivate"]
+[connection signal="JumpFinished" from="SkyRoad/SkyRoad02/JumpEndTrigger/Jump" to="Collision/OneWayWall" method="Activate"]
 
 [editable path="Collision"]
