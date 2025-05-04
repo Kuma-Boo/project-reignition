@@ -41,13 +41,6 @@ point_count = 4
 [node name="Static" parent="." instance=ExtResource("1_olcxc")]
 Data = ExtResource("2_upc4a")
 
-[node name="PathFollow3D" parent="Static/Paths/SkyRoad2" index="0"]
-transform = Transform3D(-0.999996, -4.8929e-09, -8.72855e-08, 0, 0.998421, -0.0559687, 8.74224e-08, -0.0559682, -0.99843, 0, 0.424243, 14.992)
-progress = 15.0
-
-[node name="Zipline" parent="Static/Paths/ZiplinePath" index="0"]
-transform = Transform3D(1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, 1, 0, 0.0871555, 0.996195)
-
 [node name="GargoyleTrigger" parent="Static/SkyRoad/SkyRoad02" index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -52, -1165.64)
 
@@ -199,7 +192,7 @@ transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0.149994, 0, -9.40002)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
 
 [node name="Spring" parent="RampageAct/Tower/Switch1" instance=ExtResource("14_l333p")]
-transform = Transform3D(0.5373, -0.146453, -0.830579, -6.10316e-09, 0.984808, -0.173648, 0.843391, 0.0933011, 0.529137, 0, 0, 0)
+transform = Transform3D(0.5373, -0.146453, -0.830579, -6.10316e-09, 0.984808, -0.173648, 0.843391, 0.0933011, 0.529137, 0, 0.299999, 0)
 startHidden = true
 MiddleHeight = 10.0
 FinalHeight = 8.0
@@ -826,7 +819,7 @@ Movement/Angle = 90.0
 "Vertical Orientation" = false
 
 [node name="GreenMajin" parent="RampageAct/Bottom/LaunchRingGroup2/MovingMajin" instance=ExtResource("27_l77el")]
-transform = Transform3D(1.00001, 0, -9.76026e-07, 0, 1, 0, 9.23872e-07, 0, 1.00001, -5, 0, -1.52588e-05)
+transform = Transform3D(1.00001, 0, -9.76026e-07, 0, 1, 0, 9.61125e-07, 0, 1.00001, -5, 0, -1.52588e-05)
 "Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
@@ -1020,6 +1013,16 @@ transform = Transform3D(1, -4.44089e-16, -7.10543e-15, 0, 1, 0, 0, 3.72529e-09, 
 [node name="Child10" parent="RampageAct/SkyRoad02/Rings1" instance=ExtResource("6_yk01e")]
 transform = Transform3D(1, -4.44089e-16, -7.10543e-15, 0, 1, 0, 0, 3.72529e-09, 1, 1.52588e-05, 2.47869, -44.855)
 
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad01/AutomationTrigger1" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="Static/SkyRoad/SkyRoad01/AutomationTrigger1" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad01/AutomationTrigger2" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="Static/SkyRoad/SkyRoad01/AutomationTrigger2" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad01/AutomationTrigger3" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="Static/SkyRoad/SkyRoad01/AutomationTrigger3" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad02/AutomationTrigger1" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="Static/SkyRoad/SkyRoad02/AutomationTrigger1" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad02/JumpEndTrigger" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="JumpFinished" from="Static/SkyRoad/SkyRoad02/JumpEndTrigger/Jump" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Defeated" from="RampageAct/Top/Gargoyle1" to="RampageAct/Top/GargoylePlatformL1/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="RampageAct/Top/Gargoyle1" to="RampageAct/Top/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="RampageAct/Top/Gargoyle2" to="RampageAct/Top/GargoylePlatformL1/EnemyStone" method="IncrementCounter"]

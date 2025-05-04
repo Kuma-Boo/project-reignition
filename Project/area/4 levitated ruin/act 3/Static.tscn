@@ -258,10 +258,6 @@ curve = ExtResource("9_m4nyc")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -52, -1160)
 curve = ExtResource("10_fw5eo")
 
-[node name="PathFollow3D" type="PathFollow3D" parent="Paths/SkyRoad2"]
-transform = Transform3D(-0.999996, 3.47566e-13, -8.74227e-08, 0, 0.999989, 3.97573e-06, 8.74224e-08, 3.97569e-06, -0.999999, 0, 0, 0)
-loop = false
-
 [node name="TopPath" type="Path3D" parent="Paths"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -41, -1100)
 curve = ExtResource("11_fw5eo")
@@ -393,6 +389,12 @@ OneShot = true
 "Respawn Mode" = 0
 "Enter Mode" = 0
 
+[node name="Path" type="Node3D" parent="SkyRoad/SkyRoad02/JumpTrigger" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00999451, 0, 0)
+script = ExtResource("18_cuwbc")
+path = NodePath("../../../../Paths/SkyRoad2")
+cameraPathBlendTime = 1.0
+
 [node name="Jump" type="Node3D" parent="SkyRoad/SkyRoad02/JumpTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.5, 5)
 script = ExtResource("37_rtwwr")
@@ -409,7 +411,7 @@ activeRoad = NodePath("..")
 paths = [NodePath("../../../Paths/SkyRoad2")]
 
 [node name="AutomationTrigger1" parent="SkyRoad/SkyRoad02" instance=ExtResource("23_cuwbc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250.01, -44.5, -1085)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -44.5, -1085)
 endPoint = 245.0
 ignoreDirection = true
 
@@ -422,6 +424,16 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 250, -
 OneShot = true
 "Respawn Mode" = 0
 "Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="SkyRoad/SkyRoad02/JumpEndTrigger" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00999451, 0, 0)
+script = ExtResource("18_cuwbc")
+path = NodePath("../../../../Paths/TopPath")
+
+[node name="Camera" type="Node3D" parent="SkyRoad/SkyRoad02/JumpEndTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00999451, 0, 0)
+script = ExtResource("12_1ingi")
+settings = ExtResource("2_2fdgt")
 
 [node name="Jump" type="Node3D" parent="SkyRoad/SkyRoad02/JumpEndTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.00043, 5)
