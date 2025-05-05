@@ -257,7 +257,7 @@ public partial class Enemy : Node3D
 	/// <summary> How long it's been since the enemy last interacted with the player. </summary>
 	private float timeSinceLastInteraction;
 	/// <summary> How long an interaction can last before being "reset". </summary>
-	private readonly float MaxInteractionLength = .5f;
+	private readonly float MaxInteractionLength = .2f;
 	protected virtual void UpdateInteraction()
 	{
 		if (IsInteractionProcessed)
