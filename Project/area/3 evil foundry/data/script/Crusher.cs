@@ -30,6 +30,7 @@ public partial class Crusher : Node3D
 	private Node3D _light;
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")] private NodePath crusher;
 	private Node3D _crusher;
+	[Export] private AudioStreamPlayer3D sfx;
 	private readonly int PositionOffset = 8;
 
 	public override void _Ready()
@@ -63,7 +64,10 @@ public partial class Crusher : Node3D
 				break;
 			case States.Falling:
 				if (IsStateCompleted(fallingTime))
+				{
+					sfx.Play();
 					currentState = States.Closed;
+				}
 				break;
 			case States.Closed:
 				if (IsStateCompleted(closedTime)) // Start rising

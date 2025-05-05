@@ -34,7 +34,7 @@ public partial class PlayerLockonController : Area3D
 
 	private bool isMonitoring;
 	/// <summary> Should the controller check for new lockonTargets? </summary>
-	public bool IsMonitoring
+	public new bool IsMonitoring
 	{
 		get => isMonitoring;
 		set

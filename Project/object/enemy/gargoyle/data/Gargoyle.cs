@@ -11,6 +11,12 @@ Gargoyle always tries to slash if the player is petrified
 [Tool]
 public partial class Gargoyle : Enemy
 {
+	[ExportToolButton("Update Teleport Spawn Visuals")]
+	public Callable UpdateTeleportSpawnVisualGroup => Callable.From(UpdateTeleportSpawnVisual);
+	/// <summary> Optional home position (if you want to spawn from a really high building, for example). </summary>
+	[Export] private Node3D homeOverride;
+	/// <summary> Enable this if you want the gargoyle to spawn like a normal majins. </summary>
+	[Export] private bool useTeleportSpawn;
 	[Export] private Node3D windball;
 	private bool isWindballActive;
 	private readonly float WindballMoveSpeed = 10.0f;
@@ -54,6 +60,7 @@ public partial class Gargoyle : Enemy
 	private readonly StringName BlockStunState = "block-stun";
 	private readonly StringName BlockEndState = "block-end";
 
+	private readonly StringName SpawnTrigger = "parameters/spawn_trigger/request";
 	private readonly StringName ActionTrigger = "parameters/action_trigger/request";
 	private readonly StringName ActionTransition = "parameters/action_transition/transition_request";
 	private readonly StringName PetrifyState = "petrify";
@@ -67,13 +74,30 @@ public partial class Gargoyle : Enemy
 	protected override void SetUp()
 	{
 		if (Engine.IsEditorHint())
+		{
+			UpdateTeleportSpawnVisual();
 			return;
-
-		homePosition = GlobalPosition + (this.Forward() * 2.0f);
+		}
 
 		base.SetUp();
+
 		AnimationTree.Active = true;
+		homePosition = (homeOverride != null) ? homeOverride.GlobalPosition : GlobalPosition + (this.Forward() * 2.0f);
 	}
+
+	private void UpdateTeleportSpawnVisual()
+	{
+		GetComponents();
+
+		if (AnimationTree == null)
+			return;
+
+		AnimationTree.Active = true;
+		MovementStatePlayback.Start(useTeleportSpawn ? IdleState : InitialMovementState);
+		GetTree().CreateTimer(0.1f).Timeout += DisableAnimator;
+	}
+
+	private void DisableAnimator() => AnimationTree.Active = false;
 
 	public override void Respawn()
 	{
@@ -93,12 +117,16 @@ public partial class Gargoyle : Enemy
 		MovementStatePlayback.Start(InitialMovementState);
 		AnimationTree.Set(DefeatTransition, "disabled");
 		AnimationTree.Set(DamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		AnimationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		AnimationTree.Set(ActionTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+
+		if (useTeleportSpawn)
+			Visible = false;
 	}
 
 	protected override void UpdateEnemy()
 	{
-		if (state == State.Statue)
+		if (state == State.Statue || !StageSettings.Instance.IsLevelIngame)
 			return;
 
 		if (state == State.Idle || state == State.Petrify || isSlashMovementEnabled)
@@ -110,7 +138,7 @@ public partial class Gargoyle : Enemy
 		if (isWindballActive)
 			windball.GlobalPosition += windball.Forward() * WindballMoveSpeed * PhysicsManager.physicsDelta;
 
-		if (isActionTimerPaused)
+		if (isActionTimerPaused || Player.Camera.IsBehindCamera(GlobalPosition))
 			return;
 
 		actionTimer = Mathf.MoveToward(actionTimer, 0, PhysicsManager.physicsDelta);
@@ -126,6 +154,16 @@ public partial class Gargoyle : Enemy
 		base.Spawn();
 
 		StartIdle();
+
+		if (useTeleportSpawn)
+		{
+			// Play spawn animation
+			Visible = true;
+			AnimationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			MovementStatePlayback.Start(IdleState);
+			return;
+		}
+
 		MovementStatePlayback.Travel(IdleState);
 	}
 

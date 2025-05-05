@@ -23,7 +23,6 @@ public partial class Missile : Node3D
 		ResetPhysicsInterpolation();
 	}
 
-	private PathFollow3D pathFollow;
 	private float initialProgress;
 	private bool isExploded;
 
@@ -32,12 +31,6 @@ public partial class Missile : Node3D
 		StageSettings.Instance.Respawned += Respawn;
 		spawnData = new(GetParent(), Transform);
 
-		if (GetParent() is PathFollow3D)
-		{
-			pathFollow = GetParent<PathFollow3D>();
-			initialProgress = pathFollow.Progress;
-		}
-
 		Respawn();
 	}
 
@@ -45,8 +38,6 @@ public partial class Missile : Node3D
 	{
 		isExploded = false;
 		spawnData.Respawn(this);
-		if (pathFollow != null)
-			pathFollow.Progress = initialProgress;
 
 		animator.Play("RESET");
 		animator.Advance(0.0);
@@ -62,16 +53,6 @@ public partial class Missile : Node3D
 	{
 		if (isExploded)
 			return;
-
-		if (pathFollow != null)
-		{
-			pathFollow.Progress += moveSpeed * PhysicsManager.physicsDelta;
-
-			if (Mathf.IsEqualApprox(pathFollow.ProgressRatio, 1f))
-				Explode();
-
-			return;
-		}
 
 		GlobalPosition += this.Forward() * moveSpeed * PhysicsManager.physicsDelta;
 
@@ -92,23 +73,5 @@ public partial class Missile : Node3D
 		Visible = false;
 		ProcessMode = ProcessModeEnum.Disabled;
 		EmitSignal(SignalName.Disabled);
-	}
-
-	public void OnEntered(Area3D a)
-	{
-		if (!a.IsInGroup("player detection"))
-			return;
-
-		Explode();
-
-		// Prevent unfair hits
-		if (StageSettings.Player.IsLaunching ||
-			StageSettings.Player.IsAutomationActive ||
-			StageSettings.Player.Skills.IsSpeedBreakActive)
-		{
-			return;
-		}
-
-		StageSettings.Player.StartKnockback();
 	}
 }

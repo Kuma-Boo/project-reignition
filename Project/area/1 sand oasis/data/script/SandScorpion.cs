@@ -2,6 +2,7 @@ using Godot;
 using Godot.Collections;
 using Project.Core;
 using Project.CustomNodes;
+using Project.Gameplay.Hazards;
 using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay.Bosses;
@@ -454,7 +455,7 @@ public partial class SandScorpion : Node3D
 	private Array<NodePath> missilePositionPaths;
 	private Node3D[] missilePositions; // Where to fire missiles from
 	[Export] private PackedScene missileScene;
-	private readonly Array<Missile> missilePool = []; // Pool of missiles
+	private readonly Array<BombMissile> missilePool = []; // Pool of missiles
 	private readonly int MaxMissleCount = 5; // Same as the original game, only 5 missiles can be fired at a time
 
 	private void SetUpMissiles()
@@ -464,7 +465,7 @@ public partial class SandScorpion : Node3D
 			missilePositions[i] = GetNode<Node3D>(missilePositionPaths[i]);
 
 		for (int i = 0; i < MaxMissleCount; i++) // Pool missiles
-			missilePool.Add(missileScene.Instantiate<Missile>());
+			missilePool.Add(missileScene.Instantiate<BombMissile>());
 	}
 
 	private void RespawnMissiles()
@@ -485,8 +486,6 @@ public partial class SandScorpion : Node3D
 	private const float MissleInterval = .1f;
 	/// <summary> Interval length between missile groups. </summary>
 	private const float MissleGroupInterval = 2.5f;
-	/// <summary> How much horizontal spread to allow. </summary>
-	private const float MissleSpread = 1.5f;
 	/// <summary> Starting delay so missiles don't fire immediately. </summary>
 	private const float MissleDelay = 1.5f;
 
@@ -522,33 +521,16 @@ public partial class SandScorpion : Node3D
 			GetTree().Root.AddChild(missilePool[missileIndex]);
 
 		int spawnFrom = Runtime.randomNumberGenerator.RandiRange(0, 2); // Figure out which position to spawn from
-		Vector3 spawnPosition = missilePositions[spawnFrom].GlobalPosition; // Move missile to the spawn position
-		missilePool[missileIndex].Launch(LaunchSettings.Create(spawnPosition, GetMissileTargetPosition(missileIndex), 5)); // Recalculate trajectory
+		bool allowSpread = missileIndex != 0 && missileIndex < MaxMissleCount - 1;
+		float tracking = Runtime.randomNumberGenerator.RandfRange(1f, 2f);
 
-		missileIndex++;
-	}
-
-	/// <summary>
-	/// Gets the position where the missile will target based on how fast the player is moving.
-	/// </summary>
-	private Vector3 GetMissileTargetPosition(int i)
-	{
-		float progress = bossPathFollower.Progress; // Cache current progress
-
-		// Try to predict where the player will be when the missile lands
-		float dot = Player.GetMovementDirection().Dot(PathFollower.Forward());
-		float offsetPrediction = Player.MoveSpeed * Runtime.randomNumberGenerator.RandfRange(1f, 2f) * dot;
-		bossPathFollower.Progress = PathFollower.Progress + offsetPrediction;
-		bossPathFollower.HOffset = -PathFollower.LocalPlayerPositionDelta.X; // Works since the path is flat
-		if (i != 0 && i < MaxMissleCount - 1) // Slightly randomize the middle missile's spread
-			bossPathFollower.HOffset += Runtime.randomNumberGenerator.RandfRange(-MissleSpread, MissleSpread);
-
-		Vector3 targetPosition = bossPathFollower.GlobalPosition;
-		bossPathFollower.Progress = progress; // Reset progress
-		bossPathFollower.HOffset = 0; // Reset HOffset
+		Vector3 targetPosition = missilePool[missileIndex].GetTargetPosition(allowSpread, tracking);
 		targetPosition.Y = 0; // Make sure missiles end up on the floor
 
-		return targetPosition;
+		Vector3 spawnPosition = missilePositions[spawnFrom].GlobalPosition; // Move missile to the spawn position
+		missilePool[missileIndex].Launch(LaunchSettings.Create(spawnPosition, targetPosition, 5)); // Recalculate trajectory
+
+		missileIndex++;
 	}
 
 	/// <summary> Which side is the boss attacking? -1 for left, 1 for right. </summary>

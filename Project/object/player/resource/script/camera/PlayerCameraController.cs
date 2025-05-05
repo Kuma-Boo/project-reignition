@@ -526,6 +526,9 @@ public partial class PlayerCameraController : Node3D
 		if (settings.pitchOverrideMode == CameraSettingsResource.OverrideModeEnum.Add)
 			targetPitchAngle += delta.AngleTo(delta.RemoveVertical().Normalized()) * Mathf.Sign(delta.Y);
 
+		targetPitchAngle += settings.extraBackstepPitchAngle * data.blendData.BackstepPitchBlend;
+		data.blendData.UpdateBackstepBlend(Player.IsMovingBackward, SnapFlag);
+
 		data.blendData.yawAngle = targetYawAngle;
 		data.blendData.pitchAngle = targetPitchAngle;
 		data.CalculateBasis();
@@ -632,7 +635,8 @@ public partial class PlayerCameraController : Node3D
 	private void CalculateRotation(CameraSettingsResource settings, ref CameraPositionData data)
 	{
 		float targetYawAngle = settings.yawAngle;
-		float targetPitchAngle = settings.pitchAngle;
+		float targetPitchAngle = settings.pitchAngle + (settings.extraBackstepPitchAngle * data.blendData.BackstepPitchBlend);
+
 		// Calculate targetAngles when DistanceMode is set to Sample.
 		float sampledTargetYawAngle = targetYawAngle;
 		float sampledTargetPitchAngle = targetPitchAngle;
@@ -688,6 +692,9 @@ public partial class PlayerCameraController : Node3D
 		PathFollower.TiltEnabled = settings.followPathTilt;
 		if (settings.followPathTilt) // Calculate tilt
 			data.blendData.tiltAngle = sampler.Right().SignedAngleTo(-PathFollower.SideAxis, sampler.Forward()) * yawSamplingFix;
+
+		// Update backstep blend
+		data.blendData.UpdateBackstepBlend(Player.IsMovingBackward, SnapFlag);
 	}
 
 	private struct CameraPositionData
@@ -1170,6 +1177,23 @@ public partial class CameraBlendData : GodotObject
 		}
 
 		hallPosition = ExtensionMethods.SmoothDamp(hallPosition, target, ref hallVelocity, HallSmoothing * PhysicsManager.physicsDelta);
+	}
+
+	/// <summary> [0 -> 1] Used to smooth out backstep pitch blending. </summary>
+	public float BackstepPitchBlend { get; private set; }
+	private float backstepPitchVelocity;
+	private readonly float BackstepPitchSmoothing = 10f;
+	public void UpdateBackstepBlend(bool IsMovingBackward, bool snapFlag)
+	{
+		float target = IsMovingBackward ? 1f : 0f;
+		if (snapFlag)
+		{
+			backstepPitchVelocity = 0;
+			BackstepPitchBlend = target;
+			return;
+		}
+
+		BackstepPitchBlend = ExtensionMethods.SmoothDamp(BackstepPitchBlend, target, ref backstepPitchVelocity, BackstepPitchSmoothing * PhysicsManager.physicsDelta);
 	}
 
 	/// <summary> [0 -> 1] Blend between offset and sample. </summary>

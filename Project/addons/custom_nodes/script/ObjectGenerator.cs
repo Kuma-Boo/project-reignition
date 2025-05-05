@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 using Project.Gameplay;
@@ -50,6 +51,28 @@ public partial class ObjectGenerator : Node3D
 	public bool disablePathY;
 	public Curve hOffsetCurve;
 	public Curve vOffsetCurve;
+
+	/// <summary> Allows respawning ObjectGenerated nodes via signal/method call. </summary>
+	private readonly List<Node> respawnableNodes = [];
+
+	/// <summary> Called from a parent culling trigger that has "respawnOnActivation" enabled. </summary>
+	public void SetUpRespawning()
+	{
+		// Set up respawning
+		for (int i = 0; i < GetChildCount(); i++)
+		{
+			if (!GetChild(i).HasMethod(MethodName.Respawn))
+				continue;
+
+			respawnableNodes.Add(GetChild(i));
+		}
+	}
+
+	public void Respawn()
+	{
+		foreach (Node node in respawnableNodes)
+			node.CallDeferred(MethodName.Respawn);
+	}
 
 	public override Array<Dictionary> _GetPropertyList()
 	{

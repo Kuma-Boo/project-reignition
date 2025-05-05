@@ -74,13 +74,7 @@ public partial class Enemy : Node3D
 	public override void _Ready() => SetUp();
 	protected virtual void SetUp()
 	{
-		// Get components
-		Root = GetNodeOrNull<Node3D>(root);
-		Hurtbox = GetNodeOrNull<Area3D>(hurtbox);
-		Collider = GetNodeOrNull<CollisionShape3D>(collider);
-		RangeCollider = GetNodeOrNull<CollisionShape3D>(rangeCollider);
-		AnimationTree = GetNodeOrNull<AnimationTree>(animationTree);
-		AnimationPlayer = GetNodeOrNull<AnimationPlayer>(animationPlayer);
+		GetComponents();
 
 		SpawnData = new(GetParent(), Transform);
 		StageSettings.Instance.Respawned += Respawn;
@@ -89,8 +83,18 @@ public partial class Enemy : Node3D
 
 		InitializeRangeCollider();
 
-		Respawn();
-		RespawnRange();
+		CallDeferred(MethodName.Respawn);
+		CallDeferred(MethodName.RespawnRange);
+	}
+
+	protected void GetComponents()
+	{
+		Root = GetNodeOrNull<Node3D>(root);
+		Hurtbox = GetNodeOrNull<Area3D>(hurtbox);
+		Collider = GetNodeOrNull<CollisionShape3D>(collider);
+		RangeCollider = GetNodeOrNull<CollisionShape3D>(rangeCollider);
+		AnimationTree = GetNodeOrNull<AnimationTree>(animationTree);
+		AnimationPlayer = GetNodeOrNull<AnimationPlayer>(animationPlayer);
 	}
 
 	private void InitializeRangeCollider()
@@ -253,7 +257,7 @@ public partial class Enemy : Node3D
 	/// <summary> How long it's been since the enemy last interacted with the player. </summary>
 	private float timeSinceLastInteraction;
 	/// <summary> How long an interaction can last before being "reset". </summary>
-	private readonly float MaxInteractionLength = .5f;
+	private readonly float MaxInteractionLength = .2f;
 	protected virtual void UpdateInteraction()
 	{
 		if (IsInteractionProcessed)

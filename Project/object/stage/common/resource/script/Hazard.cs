@@ -22,6 +22,9 @@ public partial class Hazard : Node3D
 		if (isDisabled || !isInteractingWithPlayer)
 			return;
 
+		if (Player.IsLaunching || Player.IsAutomationActive) // Prevent unfair damage
+			return;
+
 		if (ignoreSpeedbreakingCharacters && Player.Skills.IsSpeedBreakActive)
 			return;
 
