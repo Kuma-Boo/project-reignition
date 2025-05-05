@@ -6,22 +6,16 @@ namespace Project.Gameplay.Triggers;
 
 public partial class CullingTrigger : StageTriggerModule
 {
-	[Signal]
-	public delegate void ActivatedEventHandler();
-	[Signal]
-	public delegate void DeactivatedEventHandler();
+	[Signal] public delegate void ActivatedEventHandler();
+	[Signal] public delegate void DeactivatedEventHandler();
 
-	[Export]
-	private bool startEnabled; // Generally things should start culled
-	[Export]
-	private bool saveVisibilityOnCheckpoint;
-	[Export]
-	private bool isStageVisuals;
+	[Export] private bool startEnabled; // Generally things should start culled
+	[Export] private bool saveVisibilityOnCheckpoint;
+	[Export] private bool isStageVisuals;
 	private bool isActive;
 	private StageSettings Stage => StageSettings.Instance;
-	[Export]
-	private bool respawnOnActivation;
-	private Array<Node> respawnableNodes = [];
+	[Export] private bool respawnOnActivation;
+	private readonly Array<Node> respawnableNodes = [];
 
 	public override void _EnterTree()
 	{
@@ -43,13 +37,7 @@ public partial class CullingTrigger : StageTriggerModule
 
 		// Cache all children with a respawn method
 		if (respawnOnActivation)
-		{
-			foreach (Node child in GetChildren(true))
-			{
-				if (child.HasMethod(MethodName.Respawn))
-					respawnableNodes.Add(child);
-			}
-		}
+			SetUpRespawning();
 
 		if (saveVisibilityOnCheckpoint)
 		{
@@ -66,6 +54,19 @@ public partial class CullingTrigger : StageTriggerModule
 			Stage.Connect(StageSettings.SignalName.LevelStarted, new Callable(this, MethodName.Respawn), (uint)ConnectFlags.Deferred);
 		else
 			CallDeferred(MethodName.Respawn);
+	}
+
+	/// <summary> An expensive operation that automatically connects respawning methods for child nodes. </summary>
+	private void SetUpRespawning()
+	{
+		foreach (Node child in GetChildren(true))
+		{
+			if (child.HasMethod(MethodName.SetUpRespawning))
+				child.Call(MethodName.SetUpRespawning);
+
+			if (child.HasMethod(MethodName.Respawn))
+				respawnableNodes.Add(child);
+		}
 	}
 
 	private bool visibleOnCheckpoint;
@@ -115,7 +116,7 @@ public partial class CullingTrigger : StageTriggerModule
 		if (respawnOnActivation)
 		{
 			foreach (Node node in respawnableNodes)
-				node.Call(MethodName.Respawn);
+				node.CallDeferred(MethodName.Respawn);
 		}
 
 		EmitSignal(SignalName.Activated);

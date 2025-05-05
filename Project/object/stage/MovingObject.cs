@@ -10,10 +10,11 @@ namespace Project.Gameplay;
 [Tool]
 public partial class MovingObject : Node3D
 {
+	[Signal] public delegate void RespawnedEventHandler();
 	/// <summary> Emitted when the object starts to leave its initial position. </summary>
-	[Signal] public delegate void OnLeaveEventHandler();
+	[Signal] public delegate void LeftInitialPositionEventHandler();
 	/// <summary> Emitted when the object starts to return to its initial position. </summary>
-	[Signal] public delegate void OnReturnEventHandler();
+	[Signal] public delegate void ReturnedToInitialPositionEventHandler();
 	[Signal] public delegate void DamagedPlayerEventHandler();
 
 	#region Editor
@@ -246,6 +247,8 @@ public partial class MovingObject : Node3D
 
 		if (Root?.IsInsideTree() == true)
 			Root.GlobalPosition = InterpolatePosition(currentTime);
+
+		EmitSignal(SignalName.Respawned);
 	}
 
 	public void DamagePlayer() => EmitSignal(SignalName.DamagedPlayer);
@@ -280,9 +283,9 @@ public partial class MovingObject : Node3D
 				if (travelDirection != currentTravelDirection)
 				{
 					if (currentTravelDirection == 1)
-						EmitSignal(SignalName.OnLeave);
+						EmitSignal(SignalName.LeftInitialPosition);
 					else if (currentTravelDirection == -1)
-						EmitSignal(SignalName.OnReturn);
+						EmitSignal(SignalName.ReturnedToInitialPosition);
 
 					travelDirection = currentTravelDirection;
 				}

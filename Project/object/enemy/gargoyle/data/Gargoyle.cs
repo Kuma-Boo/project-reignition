@@ -126,7 +126,7 @@ public partial class Gargoyle : Enemy
 
 	protected override void UpdateEnemy()
 	{
-		if (state == State.Statue)
+		if (state == State.Statue || !StageSettings.Instance.IsLevelIngame)
 			return;
 
 		if (state == State.Idle || state == State.Petrify || isSlashMovementEnabled)
