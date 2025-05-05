@@ -1,6 +1,6 @@
 [gd_scene load_steps=37 format=3 uid="uid://b8irusmhs8rjm"]
 
-[ext_resource type="Script" uid="uid://01bsn0f21qa0" path="res://area/1 sand oasis/data/script/Missile.cs" id="1_1rlvb"]
+[ext_resource type="Script" uid="uid://01bsn0f21qa0" path="res://object/stage/common/resource/script/BombMissile.cs" id="1_1rlvb"]
 [ext_resource type="PackedScene" uid="uid://cmlev1vsg4lag" path="res://area/1 sand oasis/boss/data/model/Missile.gltf" id="1_q671j"]
 [ext_resource type="Material" uid="uid://bq1q3tp1cq76v" path="res://effect/particle/material/explosion/Explosion Smoke Add.tres" id="3_2rram"]
 [ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://area/1 sand oasis/data/particle/material/Sand Dust.tres" id="4_bjx7k"]
@@ -217,7 +217,7 @@ tracks/5/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_3tuoq"]
-resource_name = "impact"
+resource_name = "explode"
 length = 0.4
 tracks/0/type = "method"
 tracks/0/imported = false
@@ -349,7 +349,7 @@ tracks/9/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_ymqqu"]
-resource_name = "launch"
+resource_name = "fly"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -476,8 +476,8 @@ tracks/9/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rfc3l"]
 _data = {
 &"RESET": SubResource("Animation_ad8ll"),
-&"impact": SubResource("Animation_3tuoq"),
-&"launch": SubResource("Animation_ymqqu")
+&"explode": SubResource("Animation_3tuoq"),
+&"fly": SubResource("Animation_ymqqu")
 }
 
 [node name="Missile" type="Area3D" node_paths=PackedStringArray("animator")]
@@ -487,7 +487,13 @@ collision_mask = 2
 monitoring = false
 monitorable = false
 script = ExtResource("1_1rlvb")
+disableRespawning = true
 animator = NodePath("AnimationPlayer")
+"Launch Settings/Mode" = 0
+"Launch Settings/Target" = NodePath("")
+"Launch Settings/Middle Height" = 5.0
+"Launch Settings/Speed Tracking" = 1.0
+"Launch Settings/Spread" = 1.5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_ykuxf")
@@ -558,11 +564,6 @@ transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_k1cqg")
 draw_pass_1 = SubResource("PlaneMesh_0vxsp")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_rfc3l")
-}
-
 [node name="SFX" type="Node3D" parent="."]
 
 [node name="Launch" type="AudioStreamPlayer3D" parent="SFX"]
@@ -585,4 +586,9 @@ bus = &"GAME SFX"
 script = ExtResource("8_nplt5")
 groupKey = &"soboss_missile_impact"
 
-[connection signal="area_entered" from="." to="." method="OnAreaEntered"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_rfc3l")
+}
+
+[connection signal="area_entered" from="." to="." method="OnEntered"]
