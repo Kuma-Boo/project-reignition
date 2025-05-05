@@ -651,7 +651,6 @@ public partial class Majin : Enemy
 			AnimationPlayer.Advance(0.0);
 			fireState.Travel("attack-fire-end");
 			stateTransition.XfadeTime = 0.4;
-			AnimationTree.Set(StateRequestParameter, IdleState);
 		}
 
 		flameTimer = 0; // Reset timer
@@ -741,7 +740,6 @@ public partial class Majin : Enemy
 		if (Mathf.IsEqualApprox(currentTravelRatio, 1f))
 			return;
 
-		// TODO Update animations
 		Vector3 acceleration = CalculationBasis.Inverse() * CalculateTravelAcceleration(currentTravelRatio).Normalized();
 		Vector2 moveBlend = new(acceleration.X, Mathf.Clamp(velocity.Y, 0, 1));
 		if (Mathf.IsZeroApprox(acceleration.X))

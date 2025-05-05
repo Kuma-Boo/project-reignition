@@ -18,6 +18,7 @@ public partial class CameraSettingsResource : Resource
 	private const string HOMING_ATTACK_DISTANCE_KEY = "Distance/Ignore Homing Attack";
 
 	private const string PITCH_ANGLE_KEY = "Rotation/Pitch Angle";
+	private const string BACKSTEP_PITCH_KEY = "Rotation/Extra Backstep Pitch Angle";
 	private const string YAW_ANGLE_KEY = "Rotation/Yaw Angle";
 	private const string PITCH_OVERRIDE_KEY = "Rotation/Pitch Override Mode";
 	private const string YAW_OVERRIDE_KEY = "Rotation/Yaw Override Mode";
@@ -64,6 +65,7 @@ public partial class CameraSettingsResource : Resource
 		if (!copyRotation)
 		{
 			properties.Add(ExtensionMethods.CreateProperty(PITCH_ANGLE_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,1"));
+			properties.Add(ExtensionMethods.CreateProperty(BACKSTEP_PITCH_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,1"));
 			properties.Add(ExtensionMethods.CreateProperty(YAW_ANGLE_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,1"));
 			properties.Add(ExtensionMethods.CreateProperty(PITCH_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, pitchOverrideMode.EnumToString()));
 			properties.Add(ExtensionMethods.CreateProperty(YAW_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, yawOverrideMode.EnumToString()));
@@ -105,6 +107,8 @@ public partial class CameraSettingsResource : Resource
 
 			case PITCH_ANGLE_KEY:
 				return Mathf.RadToDeg(pitchAngle);
+			case BACKSTEP_PITCH_KEY:
+				return Mathf.RadToDeg(extraBackstepPitchAngle);
 			case YAW_ANGLE_KEY:
 				return Mathf.RadToDeg(yawAngle);
 			case PITCH_OVERRIDE_KEY:
@@ -176,6 +180,9 @@ public partial class CameraSettingsResource : Resource
 			case PITCH_ANGLE_KEY:
 				pitchAngle = Mathf.DegToRad((float)value);
 				break;
+			case BACKSTEP_PITCH_KEY:
+				extraBackstepPitchAngle = Mathf.DegToRad((float)value);
+				break;
 			case YAW_ANGLE_KEY:
 				yawAngle = Mathf.DegToRad((float)value);
 				break;
@@ -235,6 +242,8 @@ public partial class CameraSettingsResource : Resource
 
 	/// <summary> Angle (in radians) of pitch (X rotation). </summary>
 	public float pitchAngle;
+	/// <summary> Extra pitch angle to add when moving backwards. </summary>
+	public float extraBackstepPitchAngle;
 	/// <summary> Angle (in radians) of yaw (Y rotation). </summary>
 	public float yawAngle;
 	/// <summary> Should the camera tilt (Z rotation) with the path? </summary>

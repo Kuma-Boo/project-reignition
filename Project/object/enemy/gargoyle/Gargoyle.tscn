@@ -1,8 +1,23 @@
-[gd_scene load_steps=46 format=3 uid="uid://b2jsh7hensgem"]
+[gd_scene load_steps=67 format=3 uid="uid://b2jsh7hensgem"]
 
 [ext_resource type="PackedScene" uid="uid://b4n1751vh5d4s" path="res://object/enemy/gargoyle/data/model/Gargoyle.gltf" id="1_gl7tb"]
 [ext_resource type="Script" uid="uid://db7pahktq6q6v" path="res://object/enemy/gargoyle/data/Gargoyle.cs" id="2_gr8hu"]
 [ext_resource type="PackedScene" uid="uid://dyg4af257op4a" path="res://object/enemy/gargoyle/data/model/Windball.gltf" id="3_mw58f"]
+[ext_resource type="Material" uid="uid://bwvsqjnpry0xm" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters Process Material.tres" id="4_rchb7"]
+[ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="5_w0cpa"]
+[ext_resource type="Material" uid="uid://b4vmiws2hdmhs" path="res://object/enemy/majin/data/particle/material/Majin Spawn Smoke Process Material.tres" id="6_4tu6r"]
+[ext_resource type="Texture2D" uid="uid://cpjydx5buf0av" path="res://effect/particle/texture/teleport dust.png" id="7_5vb6p"]
+[ext_resource type="Material" uid="uid://do5esuoehqh56" path="res://object/enemy/majin/data/particle/material/Majin Flash Process Material.tres" id="8_a5g66"]
+[ext_resource type="Material" uid="uid://rhqpvcj8ph13" path="res://object/enemy/majin/data/particle/material/Majin Glow.tres" id="9_pxsym"]
+[ext_resource type="AudioStream" uid="uid://bqt0gpwc55dfl" path="res://sound/sfx/enemy/majin/majin spawn.wav" id="10_nrx4w"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="11_37lc7"]
+[ext_resource type="AudioStream" uid="uid://dmtmemmgn333x" path="res://sound/sfx/enemy/gargoyle/gargoyle flap.wav" id="12_w0cpa"]
+[ext_resource type="AudioStream" uid="uid://dkrvxb66a34rp" path="res://sound/sfx/enemy/gargoyle/gargoyle swipe.wav" id="13_5vb6p"]
+[ext_resource type="AudioStream" uid="uid://c36o7iiftrtnt" path="res://sound/sfx/enemy/gargoyle/gargoyle strike.wav" id="14_a5g66"]
+[ext_resource type="AudioStream" uid="uid://bqbuntl6rv6af" path="res://sound/sfx/enemy/gargoyle/gargoyle defeat.wav" id="15_a5g66"]
+[ext_resource type="AudioStream" uid="uid://dxahgos3gjxnf" path="res://sound/sfx/enemy/gargoyle/gargoyle petrify.wav" id="16_37lc7"]
+[ext_resource type="AudioStream" uid="uid://bisuf6ofohigp" path="res://sound/sfx/enemy/gargoyle/gargoyle petrify warn.wav" id="17_xnarc"]
+[ext_resource type="AudioStream" uid="uid://ces0gaaorjfpn" path="res://sound/sfx/enemy/gargoyle/gargoyle windball.wav" id="18_lafif"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tsk0o"]
 radius = 1.0
@@ -179,7 +194,7 @@ states/statue/position = Vector2(352, 100)
 states/statue-activate/node = SubResource("AnimationNodeAnimation_4eicd")
 states/statue-activate/position = Vector2(352, 181)
 transitions = ["statue-activate", "idle", SubResource("AnimationNodeStateMachineTransition_76l51"), "statue", "statue-activate", SubResource("AnimationNodeStateMachineTransition_pv0ga"), "idle", "skyroad", SubResource("AnimationNodeStateMachineTransition_1uuwp"), "skyroad", "idle", SubResource("AnimationNodeStateMachineTransition_0f7yr"), "Start", "RESET", SubResource("AnimationNodeStateMachineTransition_y208m"), "RESET", "statue", SubResource("AnimationNodeStateMachineTransition_5t8ip")]
-graph_offset = Vector2(-337, -16)
+graph_offset = Vector2(-442, 1)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d3875"]
 animation = &"petrify"
@@ -187,33 +202,66 @@ animation = &"petrify"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_oy0p3"]
 animation = &"slash"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rchb7"]
+animation = &"spawn"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_w0cpa"]
+
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_a4b7b"]
+graph_offset = Vector2(-1081.62, -68.7691)
 nodes/action_transition/node = SubResource("AnimationNodeTransition_6t1i8")
-nodes/action_transition/position = Vector2(-720, 140)
+nodes/action_transition/position = Vector2(-880, 80)
 nodes/action_trigger/node = SubResource("AnimationNodeOneShot_2kn1h")
-nodes/action_trigger/position = Vector2(-400, 40)
+nodes/action_trigger/position = Vector2(-560, -20)
 nodes/block_state/node = SubResource("AnimationNodeStateMachine_anmqt")
-nodes/block_state/position = Vector2(-1000, 300)
+nodes/block_state/position = Vector2(-1160, 240)
 nodes/damage_direction_transition/node = SubResource("AnimationNodeTransition_3t50f")
-nodes/damage_direction_transition/position = Vector2(-480, 340)
+nodes/damage_direction_transition/position = Vector2(-640, 280)
 nodes/damage_left_anim/node = SubResource("AnimationNodeAnimation_4kqom")
-nodes/damage_left_anim/position = Vector2(-740, 340)
+nodes/damage_left_anim/position = Vector2(-900, 280)
 nodes/damage_right_anim/node = SubResource("AnimationNodeAnimation_u8uc1")
-nodes/damage_right_anim/position = Vector2(-740, 480)
+nodes/damage_right_anim/position = Vector2(-900, 420)
 nodes/damage_trigger/node = SubResource("AnimationNodeOneShot_0rp3p")
-nodes/damage_trigger/position = Vector2(-220, 180)
+nodes/damage_trigger/position = Vector2(-380, 120)
 nodes/defeat_anim/node = SubResource("AnimationNodeAnimation_gwae1")
 nodes/defeat_anim/position = Vector2(0, 0)
 nodes/defeat_transition/node = SubResource("AnimationNodeTransition_wgx27")
 nodes/defeat_transition/position = Vector2(200, 100)
 nodes/movement_state/node = SubResource("AnimationNodeStateMachine_1srrh")
-nodes/movement_state/position = Vector2(-1000, -40)
+nodes/movement_state/position = Vector2(-1160, -100)
 nodes/output/position = Vector2(420, 140)
 nodes/petrify_anim/node = SubResource("AnimationNodeAnimation_d3875")
-nodes/petrify_anim/position = Vector2(-1000, 160)
+nodes/petrify_anim/position = Vector2(-1160, 100)
 nodes/slash_anim/node = SubResource("AnimationNodeAnimation_oy0p3")
-nodes/slash_anim/position = Vector2(-1160, 240)
-node_connections = [&"action_transition", 0, &"petrify_anim", &"action_transition", 1, &"slash_anim", &"action_transition", 2, &"block_state", &"action_trigger", 0, &"movement_state", &"action_trigger", 1, &"action_transition", &"damage_direction_transition", 0, &"damage_left_anim", &"damage_direction_transition", 1, &"damage_right_anim", &"damage_trigger", 0, &"action_trigger", &"damage_trigger", 1, &"damage_direction_transition", &"defeat_transition", 0, &"defeat_anim", &"defeat_transition", 1, &"damage_trigger", &"output", 0, &"defeat_transition"]
+nodes/slash_anim/position = Vector2(-1320, 180)
+nodes/spawn_animation/node = SubResource("AnimationNodeAnimation_rchb7")
+nodes/spawn_animation/position = Vector2(-380, 420)
+nodes/spawn_trigger/node = SubResource("AnimationNodeOneShot_w0cpa")
+nodes/spawn_trigger/position = Vector2(-168.318, 119.031)
+node_connections = [&"action_transition", 0, &"petrify_anim", &"action_transition", 1, &"slash_anim", &"action_transition", 2, &"block_state", &"action_trigger", 0, &"movement_state", &"action_trigger", 1, &"action_transition", &"damage_direction_transition", 0, &"damage_left_anim", &"damage_direction_transition", 1, &"damage_right_anim", &"damage_trigger", 0, &"action_trigger", &"damage_trigger", 1, &"damage_direction_transition", &"defeat_transition", 0, &"defeat_anim", &"defeat_transition", 1, &"spawn_trigger", &"output", 0, &"defeat_transition", &"spawn_trigger", 0, &"damage_trigger", &"spawn_trigger", 1, &"spawn_animation"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_xnarc"]
+material = ExtResource("5_w0cpa")
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lafif"]
+transparency = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("7_5vb6p")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_1l3sk"]
+material = SubResource("StandardMaterial3D_lafif")
+
+[sub_resource type="QuadMesh" id="QuadMesh_301wf"]
+material = ExtResource("9_pxsym")
 
 [node name="Gargoyle" type="Node3D" node_paths=PackedStringArray("windball")]
 script = ExtResource("2_gr8hu")
@@ -230,9 +278,6 @@ animationTree = NodePath("AnimationTree")
 animationPlayer = NodePath("")
 
 [node name="Root" parent="." instance=ExtResource("1_gl7tb")]
-
-[node name="Skeleton3D" parent="Root/GargoyleRoot" index="0"]
-bones/15/scale = Vector3(0.999994, 0.999994, 1)
 
 [node name="Hitbox" type="Area3D" parent="Root/GargoyleRoot/Skeleton3D" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.5)
@@ -322,6 +367,9 @@ parameters/damage_trigger/request = 0
 parameters/defeat_transition/current_state = "disabled"
 parameters/defeat_transition/transition_request = ""
 parameters/defeat_transition/current_index = 1
+parameters/spawn_trigger/active = false
+parameters/spawn_trigger/internal_active = false
+parameters/spawn_trigger/request = 0
 
 [node name="Flash" type="ColorRect" parent="."]
 visible = false
@@ -331,6 +379,138 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
+
+[node name="FX" type="Node3D" parent="."]
+
+[node name="SpawnFX" type="Node3D" parent="FX"]
+visible = false
+
+[node name="SpawnLetter" type="GPUParticles3D" parent="FX/SpawnFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 2.0
+one_shot = true
+speed_scale = 2.5
+explosiveness = 0.4
+randomness = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
+process_material = ExtResource("4_rchb7")
+draw_pass_1 = SubResource("PlaneMesh_xnarc")
+
+[node name="SpawnSmoke" type="GPUParticles3D" parent="FX/SpawnFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.8
+one_shot = true
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
+process_material = ExtResource("6_4tu6r")
+draw_pass_1 = SubResource("QuadMesh_1l3sk")
+
+[node name="Flash" type="GPUParticles3D" parent="FX/SpawnFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 1
+lifetime = 0.15
+one_shot = true
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = ExtResource("8_a5g66")
+draw_pass_1 = SubResource("QuadMesh_301wf")
+
+[node name="SpawnSFX" type="AudioStreamPlayer3D" parent="FX/SpawnFX"]
+process_mode = 1
+stream = ExtResource("10_nrx4w")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+script = ExtResource("11_37lc7")
+groupKey = &"majin_spawn"
+
+[node name="FlapSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("12_w0cpa")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+
+[node name="SlashSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("13_5vb6p")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="StrikeSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("14_a5g66")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="DefeatSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("15_a5g66")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="PetrifySFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("16_37lc7")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="PetrifyWarnSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("17_xnarc")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+
+[node name="WindballSFX" type="AudioStreamPlayer3D" parent="FX"]
+process_mode = 1
+stream = ExtResource("18_lafif")
+attenuation_model = 3
+unit_size = 100.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
 
 [connection signal="area_entered" from="Root/GargoyleRoot/Skeleton3D/Hitbox" to="." method="OnHitboxEntered"]
 [connection signal="area_entered" from="Root/GargoyleRoot/Skeleton3D/Head/Lockon" to="." method="OnEntered"]

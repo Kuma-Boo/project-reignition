@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=45 format=3 uid="uid://byf5qdjpi8ur4"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=46 format=3 uid="uid://byf5qdjpi8ur4"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_h8h87"]
 animation = &"MajinLibrary/boop"
@@ -61,6 +61,10 @@ xfade_time = 0.2
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jewks"]
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_flnka"]
+switch_mode = 2
+advance_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_0x208"]
 states/attack-fire/node = SubResource("AnimationNodeAnimation_hb06p")
 states/attack-fire/position = Vector2(552, 99.9712)
@@ -68,7 +72,7 @@ states/attack-fire-end/node = SubResource("AnimationNodeAnimation_axquc")
 states/attack-fire-end/position = Vector2(736, 100.044)
 states/attack-fire-start/node = SubResource("AnimationNodeAnimation_aqr4b")
 states/attack-fire-start/position = Vector2(355.2, 99.664)
-transitions = ["attack-fire-start", "attack-fire", SubResource("AnimationNodeStateMachineTransition_pl6au"), "attack-fire", "attack-fire-end", SubResource("AnimationNodeStateMachineTransition_u3f6h"), "Start", "attack-fire-start", SubResource("AnimationNodeStateMachineTransition_jewks")]
+transitions = ["attack-fire-start", "attack-fire", SubResource("AnimationNodeStateMachineTransition_pl6au"), "attack-fire", "attack-fire-end", SubResource("AnimationNodeStateMachineTransition_u3f6h"), "Start", "attack-fire-start", SubResource("AnimationNodeStateMachineTransition_jewks"), "attack-fire-end", "End", SubResource("AnimationNodeStateMachineTransition_flnka")]
 graph_offset = Vector2(194, -29)
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_ww3d8"]
@@ -202,12 +206,12 @@ input_1/auto_advance = false
 input_1/break_loop_at_end = false
 input_1/reset = true
 input_2/name = "fire"
-input_2/auto_advance = false
+input_2/auto_advance = true
 input_2/break_loop_at_end = false
 input_2/reset = true
 
 [resource]
-graph_offset = Vector2(-1021.03, 31.7724)
+graph_offset = Vector2(-1378.48, 222.96)
 nodes/boop_anim/node = SubResource("AnimationNodeAnimation_h8h87")
 nodes/boop_anim/position = Vector2(-660, 560)
 nodes/defeat_anim/node = SubResource("AnimationNodeAnimation_m3ri3")

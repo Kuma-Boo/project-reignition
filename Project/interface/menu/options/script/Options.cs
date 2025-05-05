@@ -629,7 +629,8 @@ public partial class Options : Menu
 		else if (VerticalSelection == 6)
 		{
 			int resizeMode = (int)SaveManager.Config.resizeMode;
-			resizeMode = WrapSelection(resizeMode + direction, (int)RenderingServer.ViewportScaling3DMode.Max);
+			// TODO Enable Metal rendering backend on AppleOS
+			resizeMode = WrapSelection(resizeMode + direction, (int)RenderingServer.ViewportScaling3DMode.Fsr2 + 1);
 			SaveManager.Config.resizeMode = (RenderingServer.ViewportScaling3DMode)resizeMode;
 		}
 		else if (VerticalSelection == 7) // TODO Change this to 6 when upgrading to godot v4.3
