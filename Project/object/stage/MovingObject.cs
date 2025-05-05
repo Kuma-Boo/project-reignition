@@ -209,7 +209,7 @@ public partial class MovingObject : Node3D
 		if (isPaused && !smoothPausing) return;
 
 		if (smoothPausing || StageSettings.Player.IsInvincible)
-			TimeScale = Mathf.Lerp(TimeScale, isPaused ? 0 : 1, PauseSmoothing);
+			TimeScale = Mathf.Lerp(TimeScale, isPaused ? 0f : 1f, PauseSmoothing);
 
 		if (lockToStartingPosition)
 		{
@@ -240,7 +240,7 @@ public partial class MovingObject : Node3D
 	/// <summary> Resets currentTime to StartingOffset. </summary>
 	public void Respawn()
 	{
-		TimeScale = 1f;
+		TimeScale = (smoothPausing && startPaused) ? 0f : 1f;
 		isPaused = startPaused;
 		currentTime = StartingOffset * Mathf.Abs(cycleLength);
 		travelDirection = 0;
