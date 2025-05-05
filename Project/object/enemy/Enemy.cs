@@ -83,8 +83,8 @@ public partial class Enemy : Node3D
 
 		InitializeRangeCollider();
 
-		Respawn();
-		RespawnRange();
+		CallDeferred(MethodName.Respawn);
+		CallDeferred(MethodName.RespawnRange);
 	}
 
 	protected void GetComponents()
