@@ -16,7 +16,7 @@ void fragment()
 	ALPHA = col.a;
 	ALPHA_SCISSOR_THRESHOLD = .99;
 	SPECULAR = 0.0;
-	
+
 	{
 		// Distance Fade: Pixel Dither
 		float fade_distance = length(VERTEX);
@@ -30,4 +30,3 @@ void fragment()
 		}
 	}
 }
-

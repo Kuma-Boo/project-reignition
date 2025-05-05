@@ -255,10 +255,7 @@ public partial class BombMissile : Node3D
 
 		// Reached the ground
 		if (travelInterpolation >= LaunchSettings.TotalTravelTime)
-		{
-			animator.Play("explode"); // Impact effect
-			IsActive = false;
-		}
+			Explode();
 
 		if (!alignModelForward || previousPosition.IsEqualApprox(GlobalPosition))
 			return;
@@ -285,11 +282,9 @@ public partial class BombMissile : Node3D
 		UpdatePosition();
 	}
 
-	public void OnEntered(Area3D a)
+	public void Explode()
 	{
-		if (!a.IsInGroup("player") || StageSettings.Player.Skills.IsSpeedBreakActive)
-			return;
-
-		StageSettings.Player.StartKnockback();
+		animator.Play("explode"); // Impact effect
+		IsActive = false;
 	}
 }

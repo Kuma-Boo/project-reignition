@@ -1,8 +1,9 @@
-[gd_scene load_steps=41 format=3 uid="uid://ck5jasnqj5yv1"]
+[gd_scene load_steps=42 format=3 uid="uid://ck5jasnqj5yv1"]
 
 [ext_resource type="PackedScene" uid="uid://cd15ckfvp1igu" path="res://area/4 levitated ruin/object/model/obstacle/MissileTracking.gltf" id="1_3nssn"]
 [ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="2_0dh8p"]
 [ext_resource type="Script" uid="uid://01bsn0f21qa0" path="res://object/stage/common/resource/script/BombMissile.cs" id="2_rlbjh"]
+[ext_resource type="Script" uid="uid://pnh70abopq8e" path="res://object/stage/common/resource/script/Hazard.cs" id="4_q6hqs"]
 [ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="4_vxjl6"]
 [ext_resource type="Material" uid="uid://bq1q3tp1cq76v" path="res://effect/particle/material/explosion/Explosion Smoke Add.tres" id="5_q6hqs"]
 [ext_resource type="Material" uid="uid://b4847susbcf6p" path="res://area/1 sand oasis/boss/effect/material/Hit Spark Billboard.tres" id="6_jpaog"]
@@ -387,6 +388,8 @@ draw_pass_1 = SubResource("QuadMesh_p36d8")
 collision_layer = 0
 collision_mask = 2
 monitorable = false
+script = ExtResource("4_q6hqs")
+ignoreSpeedbreakingCharacters = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" index="0"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
@@ -474,4 +477,6 @@ libraries = {
 }
 autoplay = "fly"
 
-[connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
+[connection signal="DamagedPlayer" from="Hitbox" to="." method="Explode"]
+[connection signal="area_entered" from="Hitbox" to="Hitbox" method="OnEntered"]
+[connection signal="area_exited" from="Hitbox" to="Hitbox" method="OnExited"]

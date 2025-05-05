@@ -3,19 +3,16 @@ using Project.Core;
 
 namespace Project.Gameplay.Hazards;
 
-/// <summary> Flies in a straight line or follows a path. </summary>
-public partial class Missile : Node3D
+/// <summary> Follows a path. </summary>
+public partial class MissileTracking : PathFollow3D
 {
 	[Signal] public delegate void ExplodedEventHandler();
 	[Signal] public delegate void DisabledEventHandler();
 
-	[Export] private float lifetime = 5.0f;
-	public void SetLifetime(float value) => lifetime = value;
-	[Export] private float moveSpeed = 20.0f;
+	[Export] private float moveSpeed = 30.0f;
 	public void SetSpeed(float value) => moveSpeed = value;
 	[Export] private AnimationPlayer animator;
 
-	private float currentLifetime;
 	private SpawnData spawnData;
 	public void UpdateSpawnTransform(Transform3D t)
 	{
@@ -30,6 +27,7 @@ public partial class Missile : Node3D
 	{
 		StageSettings.Instance.Respawned += Respawn;
 		spawnData = new(GetParent(), Transform);
+		initialProgress = Progress;
 
 		Respawn();
 	}
@@ -38,12 +36,11 @@ public partial class Missile : Node3D
 	{
 		isExploded = false;
 		spawnData.Respawn(this);
+		Progress = initialProgress;
 
 		animator.Play("RESET");
 		animator.Advance(0.0);
 		animator.Play("fly");
-
-		currentLifetime = lifetime;
 
 		Visible = true;
 		ProcessMode = ProcessModeEnum.Inherit;
@@ -54,10 +51,9 @@ public partial class Missile : Node3D
 		if (isExploded)
 			return;
 
-		GlobalPosition += this.Forward() * moveSpeed * PhysicsManager.physicsDelta;
+		Progress += moveSpeed * PhysicsManager.physicsDelta;
 
-		currentLifetime = Mathf.MoveToward(currentLifetime, 0, PhysicsManager.physicsDelta);
-		if (Mathf.IsZeroApprox(currentLifetime))
+		if (Mathf.IsEqualApprox(ProgressRatio, 1f))
 			Explode();
 	}
 
