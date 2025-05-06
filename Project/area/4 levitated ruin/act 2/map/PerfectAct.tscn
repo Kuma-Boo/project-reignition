@@ -1,0 +1,473 @@
+[gd_scene load_steps=31 format=3 uid="uid://cwqbha6bstwrp"]
+
+[ext_resource type="PackedScene" uid="uid://bpxj0juyhbmxs" path="res://area/4 levitated ruin/act 2/Static.tscn" id="1_n5x1h"]
+[ext_resource type="Resource" uid="uid://bxwpjg4ij4uki" path="res://resource/level data/levitated ruin/Act2Perfect.tres" id="2_txk0p"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_guc1f"]
+[ext_resource type="Script" uid="uid://bd2g6rmrn77eo" path="res://object/trigger/modules/LockoutTrigger.cs" id="5_snm3l"]
+[ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="6_q02yx"]
+[ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="7_af3f0"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="8_chn6w"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="11_wdp83"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="17_b586c"]
+[ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="19_3jnno"]
+[ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="26_sxofc"]
+[ext_resource type="PackedScene" uid="uid://l7k4j5p2l1ax" path="res://area/4 levitated ruin/object/InvisibleMissileGenerator.tscn" id="28_om2pp"]
+[ext_resource type="Resource" uid="uid://bs6nww33wlhi" path="res://area/4 levitated ruin/act 2/camera/TowerBaseCam.tres" id="29_7wf5w"]
+[ext_resource type="PackedScene" uid="uid://y7w1jrfgsii7" path="res://object/enemy/majin/data/levitated ruin/GreenMajin.tscn" id="34_ttm40"]
+[ext_resource type="PackedScene" uid="uid://bxvbg3oku2gpf" path="res://area/4 levitated ruin/object/Gate.tscn" id="35_b8nsb"]
+[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="36_yp1q0"]
+[ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="37_r34q0"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="41_ax6yr"]
+[ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="54_8sats"]
+[ext_resource type="PackedScene" uid="uid://b6030p0x15kq0" path="res://area/4 levitated ruin/object/platform/GargoyleStatic.tscn" id="55_jg6oy"]
+[ext_resource type="PackedScene" uid="uid://cggks1kly71mq" path="res://object/enemy/majin/data/levitated ruin/BlueMajin.tscn" id="56_l6hdc"]
+[ext_resource type="PackedScene" uid="uid://b724x1op3kfpc" path="res://object/enemy/majin/data/levitated ruin/RedMajin.tscn" id="57_b4m25"]
+[ext_resource type="PackedScene" uid="uid://ci8d3jdqrc0nr" path="res://area/4 levitated ruin/object/special/Ivy.tscn" id="58_apfho"]
+[ext_resource type="PackedScene" uid="uid://xeuluo21g3tw" path="res://object/stage/common/SpikePanel.tscn" id="59_2hgap"]
+[ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="60_bwopr"]
+[ext_resource type="PackedScene" uid="uid://cxb1fxhrsja13" path="res://object/stage/common/SpikeBallStatic.tscn" id="66_0ttn5"]
+[ext_resource type="Resource" uid="uid://d1v1gp585e8c7" path="res://area/4 levitated ruin/act 2/camera/cage/Tower5SpringCam.tres" id="75_3ijk8"]
+[ext_resource type="PackedScene" uid="uid://jbfxcttlv66w" path="res://area/4 levitated ruin/object/platform/TowerInteriorPlatform.tscn" id="76_eq8su"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5yb3a"]
+size = Vector3(10, 9, 2.5)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_kgcgh"]
+height = 10.0
+radius = 10.0
+
+[node name="World" type="Node"]
+
+[node name="Static" parent="." instance=ExtResource("1_n5x1h")]
+Data = ExtResource("2_txk0p")
+
+[node name="Rukh1" parent="Static/Visuals" index="1"]
+startEnabled = false
+
+[node name="Rukh1LOD" parent="Static/Visuals" index="2"]
+startEnabled = true
+
+[node name="Rukh5" parent="Static/Visuals" index="9"]
+startEnabled = true
+
+[node name="Rukh5LOD" parent="Static/Visuals" index="10"]
+startEnabled = false
+
+[node name="PerfectAct" type="Node3D" parent="."]
+
+[node name="SpawnPosition" type="Node3D" parent="PerfectAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 550, 29.18, -1055)
+metadata/_edit_lock_ = true
+
+[node name="InvisibleWall" type="StaticBody3D" parent="PerfectAct/SpawnPosition" groups=["wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/SpawnPosition/InvisibleWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+shape = SubResource("BoxShape3D_5yb3a")
+
+[node name="CharacterSpawn" parent="PerfectAct/SpawnPosition" instance=ExtResource("7_af3f0")]
+
+[node name="Objects" type="Node3D" parent="PerfectAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 550, 30, -1025)
+
+[node name="Exterior" type="Node3D" parent="PerfectAct/Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -52)
+
+[node name="GargoyleStaticL" parent="PerfectAct/Objects/Exterior" instance=ExtResource("55_jg6oy")]
+transform = Transform3D(-4.35451e-08, 3.8097e-09, -1, 0.0871557, 0.996195, 0, 0.996195, -0.0871557, -4.37114e-08, 4, -0.300381, -0.0087154)
+
+[node name="GargoyleStaticR" parent="PerfectAct/Objects/Exterior" instance=ExtResource("55_jg6oy")]
+transform = Transform3D(-4.35451e-08, -3.8097e-09, 1, -0.0871557, 0.996195, 0, -0.996195, -0.0871557, -4.37114e-08, -4, -0.300381, -0.00871505)
+
+[node name="Triggers" type="Node3D" parent="PerfectAct/Objects"]
+
+[node name="LoopPath" type="Node3D" parent="PerfectAct/Objects/Triggers" node_paths=PackedStringArray("path")]
+script = ExtResource("19_3jnno")
+path = NodePath("../../../../Static/Paths/Tower5")
+
+[node name="LoopReversePath" type="Node3D" parent="PerfectAct/Objects/Triggers" node_paths=PackedStringArray("path")]
+script = ExtResource("19_3jnno")
+path = NodePath("../../../../Static/Paths/Tower5")
+pathMode = 1
+
+[node name="Lockout" type="Node3D" parent="PerfectAct/Objects/Triggers"]
+script = ExtResource("5_snm3l")
+lockoutData = ExtResource("6_q02yx")
+
+[node name="GroundPathTrigger" parent="PerfectAct/Objects/Triggers" instance=ExtResource("4_guc1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+"Enter Mode" = 0
+
+[node name="GroundPath" type="Node3D" parent="PerfectAct/Objects/Triggers/GroundPathTrigger" node_paths=PackedStringArray("path")]
+script = ExtResource("19_3jnno")
+path = NodePath("../../../../../Static/Paths/Rukh5")
+pathMode = 2
+enableReversePathTransition = true
+
+[node name="Camera" type="Node3D" parent="PerfectAct/Objects/Triggers/GroundPathTrigger"]
+script = ExtResource("17_b586c")
+settings = ExtResource("29_7wf5w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/Objects/Triggers/GroundPathTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_kgcgh")
+
+[node name="Gate1" parent="PerfectAct/Objects" instance=ExtResource("35_b8nsb")]
+transform = Transform3D(1, 0, 0, 0, 1.75, 0, 0, 0, 1, 0, 0, 9.5)
+respawnAnimation = 2
+activationSpeedScale = 10.0
+
+[node name="GateTrigger" parent="PerfectAct/Objects" instance=ExtResource("4_guc1f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
+OneShot = true
+"Respawn Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="PerfectAct/Objects/GateTrigger" node_paths=PackedStringArray("PlayerPath", "CameraPath")]
+script = ExtResource("26_sxofc")
+PlayerPath = NodePath("../../../../Static/Paths/Rukh5")
+CameraPath = NodePath("../../../../Static/Paths/Rukh5")
+CameraSettings = ExtResource("29_7wf5w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/Objects/GateTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("BoxShape3D_5yb3a")
+
+[node name="Gate2" parent="PerfectAct/Objects" instance=ExtResource("35_b8nsb")]
+transform = Transform3D(1, 0, 0, 0, 1.75, 0, 0, 0, 1, 0, 0, -18)
+respawnAnimation = 2
+activationSpeedScale = 10.0
+
+[node name="EnemyStone1" parent="PerfectAct/Objects" instance=ExtResource("36_yp1q0")]
+transform = Transform3D(-1.5, 0, -2.26494e-07, 0, 1, 0, 2.26494e-07, 0, -1.5, 0, 1, 5)
+enemyCount = 3
+
+[node name="EnemyStone2" parent="PerfectAct/Objects" instance=ExtResource("36_yp1q0")]
+transform = Transform3D(-1.5, 0, -1.31134e-07, 0, 1, 0, 1.31134e-07, 0, -1.5, -4, 1.1, 0)
+enemyCount = 1
+
+[node name="EnemyStone3" parent="PerfectAct/Objects" instance=ExtResource("36_yp1q0")]
+transform = Transform3D(-1.5, 0, -1.31134e-07, 0, 1, 0, 1.31134e-07, 0, -1.5, 4, 1, 0)
+enemyCount = 1
+
+[node name="EnemyGroup1" type="Node3D" parent="PerfectAct/Objects"]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0)
+
+[node name="GreenMajin" parent="PerfectAct/Objects/EnemyGroup1" instance=ExtResource("34_ttm40")]
+transform = Transform3D(1, 0, -6.3573e-08, 0, 1, 0, 6.3573e-08, 0, 1, -0.5, 0, 5)
+
+[node name="BlueMajin" parent="PerfectAct/Objects/EnemyGroup1" instance=ExtResource("56_l6hdc")]
+transform = Transform3D(1, 0, -6.3573e-08, 0, 1, 0, 6.3573e-08, 0, 1, 2, 1, 2)
+
+[node name="RedMajin" parent="PerfectAct/Objects/EnemyGroup1" instance=ExtResource("57_b4m25")]
+transform = Transform3D(1, 0, -6.3573e-08, 0, 1, 0, 6.3573e-08, 0, 1, 0, 2, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 1.5
+"Attack Settings/Attack Instantly" = true
+
+[node name="Switch1" parent="PerfectAct/Objects/EnemyGroup1" instance=ExtResource("41_ax6yr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -5)
+
+[node name="Spring" parent="PerfectAct/Objects/EnemyGroup1/Switch1" instance=ExtResource("37_r34q0")]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0, 0, 0)
+startHidden = true
+MiddleHeight = 20.0
+FinalHeight = 16.0
+Distance = 3.0
+
+[node name="Path" type="Node3D" parent="PerfectAct/Objects/EnemyGroup1/Switch1/Spring" node_paths=PackedStringArray("path")]
+script = ExtResource("19_3jnno")
+path = NodePath("../../../../../../Static/Paths/Tower5")
+affectCamera = false
+
+[node name="Camera" type="Node3D" parent="PerfectAct/Objects/EnemyGroup1/Switch1/Spring"]
+script = ExtResource("17_b586c")
+settings = ExtResource("75_3ijk8")
+
+[node name="FirstFloor" type="Node3D" parent="PerfectAct/Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 0)
+
+[node name="TowerInteriorPlatform1" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("76_eq8su")]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 5.09119, 12, 5.62012)
+
+[node name="StaticGate1" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("35_b8nsb")]
+transform = Transform3D(-1.74846e-08, 0, -1, 0, 2.3, 0, 0.4, 0, -4.37114e-08, 0.150024, 1.00001, 7.59998)
+
+[node name="TowerInteriorPlatform2" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("76_eq8su")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 9, 7.59998)
+
+[node name="StaticGate2" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("35_b8nsb")]
+transform = Transform3D(-0.282843, 0, 0.707107, 0, 3.2, 0, -0.282843, 0, -0.707107, 5.21063, 1.00001, 5.40796)
+
+[node name="SpikeBallStatic1" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("66_0ttn5")]
+transform = Transform3D(0.702745, 0.485715, -0.519837, -0.423861, 0.872687, 0.242404, 0.571394, 0.0499905, 0.819152, -7.59998, 1, -3.19995)
+
+[node name="SpikeBallStatic2" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("66_0ttn5")]
+transform = Transform3D(0.524685, -0.375, 0.764252, 0.00661426, 0.899519, 0.436831, -0.851271, -0.224144, 0.474444, -4.1062, 1.5, -6.75)
+
+[node name="TowerInteriorPlatform3" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("76_eq8su")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -7.5)
+
+[node name="Ivy1" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("58_apfho")]
+transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 0, 8.40001, -6.69995)
+Length = 7
+"Secondary Settings/Middle Height" = 3.0
+"Secondary Settings/Final Height" = 2.0
+"Secondary Settings/Distance" = 4.0
+
+[node name="SpikeBall1" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("54_8sats")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3, 0.2, -6.5)
+Movement/Mode = 0
+
+[node name="SpikeBall2" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("54_8sats")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -8)
+Movement/Mode = 0
+
+[node name="SpikeBall3" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("54_8sats")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 0.2, -6.5)
+Movement/Mode = 0
+
+[node name="SpikeBall4" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("54_8sats")]
+transform = Transform3D(1.06066, 0, -1.06066, 0, 1.5, 0, 1.06066, 0, 1.06066, 4.497, 0.5, -5.79699)
+Movement/Mode = 0
+
+[node name="SpikeBall5" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("54_8sats")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 7.48, 0.5, -3)
+Movement/Mode = 0
+
+[node name="BlueMajin1" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("56_l6hdc")]
+transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 7, 2, -3)
+rangeOverride = 10
+
+[node name="BlueMajin2" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("56_l6hdc")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 7.5, 1.2, 1)
+rangeOverride = 10
+
+[node name="Switch" parent="PerfectAct/Objects/FirstFloor" instance=ExtResource("41_ax6yr")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 6.5, 1.1, 4.5)
+
+[node name="Spring" parent="PerfectAct/Objects/FirstFloor/Switch" instance=ExtResource("37_r34q0")]
+transform = Transform3D(-0.34202, -0.469846, -0.813798, 0, 0.866025, -0.5, 0.939692, -0.17101, -0.296198, 0, 0, 0)
+startHidden = true
+MiddleHeight = 5.0
+FinalHeight = -16.0
+Distance = 15.0
+
+[node name="Path" type="Node3D" parent="PerfectAct/Objects/FirstFloor/Switch/Spring" node_paths=PackedStringArray("path")]
+script = ExtResource("19_3jnno")
+path = NodePath("../../../../../../Static/Paths/Rukh5")
+pathMode = 1
+
+[node name="Layer1Culler" type="Node3D" parent="PerfectAct/Objects"]
+script = ExtResource("8_chn6w")
+
+[node name="ItemBox" parent="PerfectAct/Objects/Layer1Culler" instance=ExtResource("60_bwopr")]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -15)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 10
+
+[node name="EnemyGroup" type="Node3D" parent="PerfectAct/Objects/Layer1Culler"]
+transform = Transform3D(-1, 0, -8.74227e-08, 0, 1, 0, 8.74228e-08, 0, -1, -4, 0.1, 8.74228e-08)
+
+[node name="RedMajin" parent="PerfectAct/Objects/Layer1Culler/EnemyGroup" instance=ExtResource("57_b4m25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -1.42109e-14, 0, 1, 0, 2, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 2.0
+
+[node name="Switch" parent="PerfectAct/Objects/Layer1Culler/EnemyGroup" instance=ExtResource("41_ax6yr")]
+
+[node name="Spring" parent="PerfectAct/Objects/Layer1Culler/EnemyGroup" instance=ExtResource("37_r34q0")]
+transform = Transform3D(-0.939693, -0.0885214, -0.330366, 0, 0.965926, -0.258819, 0.34202, -0.24321, -0.907673, 0, 0.199999, 0)
+startHidden = true
+MiddleHeight = 37.0
+FinalHeight = 31.5
+Distance = 8.0
+
+[node name="Path" type="Node3D" parent="PerfectAct/Objects/Layer1Culler/EnemyGroup/Spring" node_paths=PackedStringArray("path")]
+script = ExtResource("19_3jnno")
+path = NodePath("../../../../../../Static/Paths/Tower5Sidle")
+
+[node name="Camera" type="Node3D" parent="PerfectAct/Objects/Layer1Culler/EnemyGroup/Spring"]
+script = ExtResource("17_b586c")
+settings = ExtResource("75_3ijk8")
+
+[node name="SecondFloor" type="Node3D" parent="PerfectAct/Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32, 0)
+
+[node name="StaticGate1" parent="PerfectAct/Objects/SecondFloor" instance=ExtResource("35_b8nsb")]
+transform = Transform3D(0.282843, 0, -0.707107, 0, 2.3, 0, 0.282843, 0, 0.707107, 5.3119, 0.0800079, 5.54937)
+
+[node name="SpikeBall1" parent="PerfectAct/Objects/SecondFloor" instance=ExtResource("54_8sats")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 1.625, -0.5, 7.475)
+
+[node name="SpikeBall2" parent="PerfectAct/Objects/SecondFloor" instance=ExtResource("54_8sats")]
+transform = Transform3D(0.883883, 0, -0.883883, 0, 1.25, 0, 0.883883, 0, 0.883883, 4.14798, -0.5, 6.64089)
+
+[node name="StaticGate2" parent="PerfectAct/Objects/SecondFloor" instance=ExtResource("35_b8nsb")]
+transform = Transform3D(-0.4, 0, 1.50996e-07, 0, 1.8, 0, -6.03983e-08, 0, -1, -8, 1.5, 2)
+
+[node name="SpikePanelGroup1" type="Node3D" parent="PerfectAct/Objects/SecondFloor"]
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 0, -7.09998, 0.799999, 0)
+
+[node name="SpikePanel1" parent="PerfectAct/Objects/SecondFloor/SpikePanelGroup1" instance=ExtResource("59_2hgap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+stateLengths = PackedFloat32Array(2, 0.5, 0.5)
+"Start Time" = 1.0
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.5
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel2" parent="PerfectAct/Objects/SecondFloor/SpikePanelGroup1" instance=ExtResource("59_2hgap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+stateLengths = PackedFloat32Array(2, 0.5, 0.5)
+"Start Time" = 1.0
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.5
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel3" parent="PerfectAct/Objects/SecondFloor" instance=ExtResource("59_2hgap")]
+transform = Transform3D(0.422618, 0.906308, -4.37114e-08, -1.84732e-08, -3.9616e-08, -1, -0.906308, 0.422618, 0, -6.81874, 0.8, -2.91548)
+stateLengths = PackedFloat32Array(2, 0.5, 0.5)
+"Current State" = 2
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.5
+"State Lengths/active" = 0.5
+
+[node name="SpikePanelGroup2" type="Node3D" parent="PerfectAct/Objects/SecondFloor"]
+transform = Transform3D(0.707107, 0.707107, -4.37114e-08, -3.09086e-08, -3.09086e-08, -1, -0.707107, 0.707107, 0, -5.02008, 0.799999, -5.09119)
+
+[node name="SpikePanel1" parent="PerfectAct/Objects/SecondFloor/SpikePanelGroup2" instance=ExtResource("59_2hgap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+stateLengths = PackedFloat32Array(2, 0.5, 0.5)
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.5
+"State Lengths/active" = 0.5
+
+[node name="SpikePanel2" parent="PerfectAct/Objects/SecondFloor/SpikePanelGroup2" instance=ExtResource("59_2hgap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+stateLengths = PackedFloat32Array(2, 0.5, 0.5)
+"State Lengths/inactive" = 2.0
+"State Lengths/warning" = 0.5
+"State Lengths/active" = 0.5
+
+[node name="StaticGate3" parent="PerfectAct/Objects/SecondFloor" instance=ExtResource("35_b8nsb")]
+transform = Transform3D(-0.282843, 0, 0.707107, 0, 1.8, 0, -0.282843, 0, -0.707107, -4, 1.5, -6.8)
+
+[node name="Switch" parent="PerfectAct/Objects/SecondFloor" instance=ExtResource("41_ax6yr")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 6.42426, 0.1, 4.57574)
+
+[node name="Spring" parent="PerfectAct/Objects/SecondFloor/Switch" instance=ExtResource("37_r34q0")]
+transform = Transform3D(0.34202, 0.469846, 0.813798, 0, 0.866025, -0.5, -0.939693, 0.17101, 0.296198, 0, 0, 0)
+startHidden = true
+MiddleHeight = 2.0
+FinalHeight = -32.0
+Distance = 15.0
+
+[node name="Layer2Culler" type="Node3D" parent="PerfectAct/Objects"]
+script = ExtResource("8_chn6w")
+
+[node name="ItemBox" parent="PerfectAct/Objects/Layer2Culler" instance=ExtResource("60_bwopr")]
+transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -15)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 10
+
+[node name="EnemyGroup" type="Node3D" parent="PerfectAct/Objects/Layer2Culler"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 4, 0, -8.74228e-08)
+
+[node name="RedMajin" parent="PerfectAct/Objects/Layer2Culler/EnemyGroup" instance=ExtResource("57_b4m25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -1.42109e-14, 0, 1, 0, 2, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Active Time" = 2.0
+"Attack Settings/Flame Inactive Time" = 2.0
+
+[node name="Switch" parent="PerfectAct/Objects/Layer2Culler/EnemyGroup" instance=ExtResource("41_ax6yr")]
+
+[node name="Spring" parent="PerfectAct/Objects/Layer2Culler/EnemyGroup" instance=ExtResource("37_r34q0")]
+transform = Transform3D(-0.984808, -0.0449435, -0.167731, 0, 0.965926, -0.258819, 0.173648, -0.254887, -0.951251, 0, 0.3, 0)
+startHidden = true
+MiddleHeight = 44.0
+FinalHeight = 40.0
+Distance = 6.0
+
+[node name="Path" type="Node3D" parent="PerfectAct/Objects/Layer2Culler/EnemyGroup/Spring" node_paths=PackedStringArray("path")]
+script = ExtResource("19_3jnno")
+path = NodePath("../../../../../../Static/Paths/TowerTop5")
+
+[node name="Camera" type="Node3D" parent="PerfectAct/Objects/Layer2Culler/EnemyGroup/Spring"]
+script = ExtResource("17_b586c")
+settings = ExtResource("75_3ijk8")
+
+[node name="MissileGeneratorGroup" type="Node3D" parent="PerfectAct/Objects"]
+transform = Transform3D(-0.707107, -0.0123407, 0.706999, 0, 0.999848, 0.0174524, -0.707107, 0.0123407, -0.706999, 80, 42, -80)
+
+[node name="MissileGenerator1" parent="PerfectAct/Objects/MissileGeneratorGroup" instance=ExtResource("28_om2pp")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -1.5, 0, 0)
+missileLifetime = 4.0
+missleSpeed = 30.0
+spawnInterval = 2.0
+spawnTimer = 0.0
+
+[node name="MissileGenerator2" parent="PerfectAct/Objects/MissileGeneratorGroup" instance=ExtResource("28_om2pp")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+missileLifetime = 4.0
+missleSpeed = 30.0
+spawnInterval = 2.0
+spawnTimer = 0.0
+
+[node name="MissileGenerator3" parent="PerfectAct/Objects/MissileGeneratorGroup" instance=ExtResource("28_om2pp")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 1.5, 0, 0)
+missileLifetime = 4.0
+missleSpeed = 30.0
+spawnInterval = 2.0
+spawnTimer = 0.0
+
+[node name="Goal" parent="PerfectAct/Objects" instance=ExtResource("11_wdp83")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 13.435, 48, -13.435)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PerfectAct/Objects/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
+shape = SubResource("BoxShape3D_5yb3a")
+
+[connection signal="Activated" from="PerfectAct/Objects/Triggers/GroundPathTrigger" to="Static/Collision/LaunchRingWall" method="Deactivate"]
+[connection signal="Activated" from="PerfectAct/Objects/Triggers/GroundPathTrigger" to="Static/Triggers/Camera/Tower4Triggers/LaunchRingCull" method="Activate"]
+[connection signal="Activated" from="PerfectAct/Objects/GateTrigger" to="PerfectAct/Objects/Gate1" method="Activate"]
+[connection signal="Activated" from="PerfectAct/Objects/GateTrigger" to="PerfectAct/Objects/Gate2" method="Activate"]
+[connection signal="Defeated" from="PerfectAct/Objects/EnemyGroup1/GreenMajin" to="PerfectAct/Objects/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="PerfectAct/Objects/EnemyGroup1/BlueMajin" to="PerfectAct/Objects/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="PerfectAct/Objects/EnemyGroup1/RedMajin" to="PerfectAct/Objects/EnemyStone1" method="IncrementCounter"]
+[connection signal="Activated" from="PerfectAct/Objects/EnemyGroup1/Switch1" to="PerfectAct/Objects/EnemyGroup1/Switch1/Spring" method="ShowLauncher"]
+[connection signal="Activated" from="PerfectAct/Objects/EnemyGroup1/Switch1/Spring" to="Static/Triggers/Camera/Tower5Triggers/SpringCull" method="Deactivate"]
+[connection signal="Activated" from="PerfectAct/Objects/EnemyGroup1/Switch1/Spring" to="PerfectAct/Objects/EnemyGroup1/Switch1/Spring/Path" method="Activate"]
+[connection signal="Activated" from="PerfectAct/Objects/EnemyGroup1/Switch1/Spring" to="PerfectAct/Objects/EnemyGroup1/Switch1/Spring/Camera" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/Objects/EnemyGroup1/Switch1/Spring" to="Static/Triggers/Camera/Tower5Triggers/SpringCull" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/Objects/EnemyGroup1/Switch1/Spring" to="PerfectAct/Objects/Triggers/Lockout" method="Activate"]
+[connection signal="Activated" from="PerfectAct/Objects/FirstFloor/Switch" to="PerfectAct/Objects/FirstFloor/Switch/Spring" method="ShowLauncher"]
+[connection signal="Activated" from="PerfectAct/Objects/FirstFloor/Switch" to="PerfectAct/Objects/Layer1Culler" method="Activate"]
+[connection signal="Respawned" from="PerfectAct/Objects/FirstFloor/Switch" to="PerfectAct/Objects/Layer1Culler" method="Deactivate"]
+[connection signal="Deactivated" from="PerfectAct/Objects/FirstFloor/Switch/Spring" to="PerfectAct/Objects/Triggers/Lockout" method="Deactivate"]
+[connection signal="Defeated" from="PerfectAct/Objects/Layer1Culler/EnemyGroup/RedMajin" to="PerfectAct/Objects/EnemyStone2" method="IncrementCounter"]
+[connection signal="Activated" from="PerfectAct/Objects/Layer1Culler/EnemyGroup/Switch" to="PerfectAct/Objects/Layer1Culler/EnemyGroup/Spring" method="ShowLauncher"]
+[connection signal="Activated" from="PerfectAct/Objects/Layer1Culler/EnemyGroup/Spring" to="Static/Triggers/Camera/Tower5Triggers/SpringCull" method="Deactivate"]
+[connection signal="Activated" from="PerfectAct/Objects/Layer1Culler/EnemyGroup/Spring" to="PerfectAct/Objects/Layer1Culler/EnemyGroup/Spring/Camera" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/Objects/Layer1Culler/EnemyGroup/Spring" to="Static/Triggers/Camera/Tower5Triggers/SpringCull" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/Objects/Layer1Culler/EnemyGroup/Spring" to="PerfectAct/Objects/Triggers/Lockout" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/Objects/Layer1Culler/EnemyGroup/Spring" to="PerfectAct/Objects/Layer1Culler/EnemyGroup/Spring/Path" method="Activate"]
+[connection signal="Activated" from="PerfectAct/Objects/SecondFloor/Switch" to="PerfectAct/Objects/SecondFloor/Switch/Spring" method="ShowLauncher"]
+[connection signal="Activated" from="PerfectAct/Objects/SecondFloor/Switch" to="PerfectAct/Objects/Layer2Culler" method="Activate"]
+[connection signal="Respawned" from="PerfectAct/Objects/SecondFloor/Switch" to="PerfectAct/Objects/Layer2Culler" method="Deactivate"]
+[connection signal="Deactivated" from="PerfectAct/Objects/SecondFloor/Switch/Spring" to="PerfectAct/Objects/Triggers/Lockout" method="Deactivate"]
+[connection signal="Defeated" from="PerfectAct/Objects/Layer2Culler/EnemyGroup/RedMajin" to="PerfectAct/Objects/EnemyStone3" method="IncrementCounter"]
+[connection signal="Activated" from="PerfectAct/Objects/Layer2Culler/EnemyGroup/Switch" to="PerfectAct/Objects/Layer2Culler/EnemyGroup/Spring" method="ShowLauncher"]
+[connection signal="Activated" from="PerfectAct/Objects/Layer2Culler/EnemyGroup/Spring" to="Static/Triggers/Camera/Tower5Triggers/SpringCull" method="Deactivate"]
+[connection signal="Activated" from="PerfectAct/Objects/Layer2Culler/EnemyGroup/Spring" to="PerfectAct/Objects/Layer2Culler/EnemyGroup/Spring/Camera" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/Objects/Layer2Culler/EnemyGroup/Spring" to="Static/Triggers/Camera/Tower5Triggers/SpringCull" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/Objects/Layer2Culler/EnemyGroup/Spring" to="PerfectAct/Objects/Triggers/Lockout" method="Activate"]
+[connection signal="Deactivated" from="PerfectAct/Objects/Layer2Culler/EnemyGroup/Spring" to="PerfectAct/Objects/Layer2Culler/EnemyGroup/Spring/Path" method="Activate"]
+
+[editable path="Static"]
+[editable path="Static/Collision"]
