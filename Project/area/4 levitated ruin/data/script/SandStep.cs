@@ -21,6 +21,7 @@ public partial class SandStep : Node3D
 
 		if (Engine.IsEditorHint())
 			return;
+
 		StageSettings.Player.Skills.TimeBreakStarted += EnableSandCollision;
 		StageSettings.Player.Skills.TimeBreakStopped += DisableSandCollision;
 	}
@@ -54,8 +55,8 @@ public partial class SandStep : Node3D
 	private void EnableSandCollision()
 	{
 		particleParent?.SetSpeedScale(0);
-		lockonTrigger.SetDeferred("monitorable", true);
-		lockonTrigger.SetDeferred("monitoring", true);
+		lockonTrigger.SetDeferred("monitorable", isSandFlowing);
+		lockonTrigger.SetDeferred("monitoring", isSandFlowing);
 	}
 
 	private void DisableSandCollision()
