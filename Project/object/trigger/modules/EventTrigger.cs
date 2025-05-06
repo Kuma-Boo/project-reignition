@@ -165,8 +165,7 @@ public partial class EventTrigger : StageTriggerModule
 
 		if (autoRespawn)
 			StageSettings.Instance.Respawned += Respawn;
-
-		StageSettings.Instance.Connect(StageSettings.SignalName.LevelStarted, new(this, MethodName.Respawn));
+		Respawn();
 
 		PlayerStandin = GetNodeOrNull<Node3D>(playerStandin);
 		if (PlayerStandin == null)
@@ -234,6 +233,9 @@ public partial class EventTrigger : StageTriggerModule
 		PlayAnimation(DeactivateEventAnimation, deactivationSpeedScale);
 		EmitSignal(SignalName.Deactivated);
 	}
+
+	public void PauseEvent() => animator.Pause();
+	public void ResumeEvent() => animator.Play();
 
 	private void PlayAnimation(StringName animation, float speedScale = 1f)
 	{

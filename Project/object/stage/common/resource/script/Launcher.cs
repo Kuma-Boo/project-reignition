@@ -97,6 +97,8 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	/// <summary> How far to travel. </summary>
 	[Export] private float Distance { get; set; }
 
+	[Export] public bool oneshotEnemies = true;
+
 	/// <summary> Should the player be allowed to perform a Jump Dash after the launch is completed? </summary>
 	[Export] public bool AllowJumpDashing { get; set; }
 

@@ -25,6 +25,9 @@ public partial class PathTrigger : StageTriggerModule
 		Reverse,
 		Autodetect
 	}
+
+	[Export] public bool enableReversePathTransition;
+
 	/// <summary> Should the path be assigned to the player? </summary>
 	[Export] public bool affectPlayer = true;
 	/// <summary> Should the path be assigned to the camera? </summary>
@@ -43,6 +46,7 @@ public partial class PathTrigger : StageTriggerModule
 			playerDeactivatePath ??= Player.PathFollower.ActivePath;
 			playerPathDeactivateReverse = Player.PathFollower.IsReversingPath;
 			if (Player.PathFollower.SetActivePath(path, reversePath) &&
+				enableReversePathTransition &&
 				playerPathDeactivateReverse != reversePath &&
 				previousPath == Player.PathFollower.ActivePath)
 			{
@@ -98,6 +102,10 @@ public partial class PathTrigger : StageTriggerModule
 
 		if (pathMode == PathMode.Reverse)
 			return true;
+
+		// Only autodetect directions when the player's path is changing
+		if (Player.PathFollower.ActivePath == path)
+			return Player.PathFollower.IsReversingPath;
 
 		// Decide whether this is a reverse path based on the player's forward direction
 		// Figure out the "forward" angle by sampling two nearby points on the curve.

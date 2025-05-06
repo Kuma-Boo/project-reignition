@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://bpxj0juyhbmxs"]
+[gd_scene load_steps=62 format=3 uid="uid://bpxj0juyhbmxs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_16rgi"]
 [ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="2_dq0yd"]
@@ -17,7 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="14_h17nb"]
 [ext_resource type="Curve3D" uid="uid://ceyxa8kv6wyp6" path="res://area/4 levitated ruin/act 2/environment/path/Rukh2Path.tres" id="14_pfd68"]
 [ext_resource type="Curve3D" uid="uid://dop3mxxws32gb" path="res://area/4 levitated ruin/act 2/environment/path/Rukh3Path.tres" id="15_ht7o1"]
-[ext_resource type="Curve3D" uid="uid://d0prmpl1rlr6w" path="res://area/4 levitated ruin/act 2/environment/path/Rukh4Path.tres" id="16_it03k"]
+[ext_resource type="Curve3D" uid="uid://dwulsfu05b38q" path="res://area/4 levitated ruin/act 2/environment/path/Rukh4Path.tres" id="16_it03k"]
 [ext_resource type="Curve3D" uid="uid://vb8wm0cfjf38" path="res://area/4 levitated ruin/act 2/environment/path/Rukh5Path.tres" id="17_p27ay"]
 [ext_resource type="Curve3D" uid="uid://mtulat3gydtp" path="res://area/4 levitated ruin/act 2/environment/path/Tower1Path.tres" id="18_h17nb"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="19_5d7iq"]
@@ -80,6 +80,9 @@ size = Vector3(5, 2, 5)
 height = 8.0
 radius = 9.5
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_pufbh"]
+size = Vector3(8, 7, 4)
+
 [sub_resource type="Environment" id="Environment_v5nmh"]
 ambient_light_source = 2
 ambient_light_color = Color(0.592718, 0.711016, 0.955683, 1)
@@ -98,6 +101,7 @@ adjustment_enabled = true
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_16rgi")
+InitialCameraSettings = ExtResource("21_mwnvi")
 pathParent = NodePath("Paths")
 Environment = NodePath("WorldEnvironment")
 
@@ -342,6 +346,7 @@ shape = SubResource("BoxShape3D_toorb")
 [node name="Path" type="Node3D" parent="Triggers/Camera/Tower2Triggers/ForwardPath" node_paths=PackedStringArray("path")]
 script = ExtResource("33_cwr62")
 path = NodePath("../../../../../Paths/Rukh2")
+enableReversePathTransition = true
 cameraPathBlendTime = 0.5
 
 [node name="ReversePath" parent="Triggers/Camera/Tower2Triggers" instance=ExtResource("29_flomb")]
@@ -355,6 +360,7 @@ shape = SubResource("BoxShape3D_toorb")
 script = ExtResource("33_cwr62")
 path = NodePath("../../../../../Paths/Rukh2")
 pathMode = 1
+enableReversePathTransition = true
 cameraPathBlendTime = 0.5
 
 [node name="Layer1" parent="Triggers/Camera/Tower2Triggers" instance=ExtResource("29_flomb")]
@@ -448,6 +454,7 @@ shape = SubResource("BoxShape3D_toorb")
 [node name="Path" type="Node3D" parent="Triggers/Camera/Tower3Triggers/ForwardPath" node_paths=PackedStringArray("path")]
 script = ExtResource("33_cwr62")
 path = NodePath("../../../../../Paths/Rukh3")
+enableReversePathTransition = true
 cameraPathBlendTime = 0.5
 
 [node name="ReversePath" parent="Triggers/Camera/Tower3Triggers" instance=ExtResource("29_flomb")]
@@ -461,6 +468,7 @@ shape = SubResource("BoxShape3D_toorb")
 script = ExtResource("33_cwr62")
 path = NodePath("../../../../../Paths/Rukh3")
 pathMode = 1
+enableReversePathTransition = true
 cameraPathBlendTime = 0.5
 
 [node name="Layer1" parent="Triggers/Camera/Tower3Triggers" instance=ExtResource("29_flomb")]
@@ -542,6 +550,7 @@ shape = SubResource("BoxShape3D_toorb")
 [node name="Path" type="Node3D" parent="Triggers/Camera/Tower4Triggers/ForwardPath" node_paths=PackedStringArray("path")]
 script = ExtResource("33_cwr62")
 path = NodePath("../../../../../Paths/Rukh4")
+enableReversePathTransition = true
 cameraPathBlendTime = 0.5
 
 [node name="ReversePath" parent="Triggers/Camera/Tower4Triggers" instance=ExtResource("29_flomb")]
@@ -555,6 +564,7 @@ shape = SubResource("BoxShape3D_toorb")
 script = ExtResource("33_cwr62")
 path = NodePath("../../../../../Paths/Rukh4")
 pathMode = 1
+enableReversePathTransition = true
 cameraPathBlendTime = 0.5
 
 [node name="LaunchRingCull" type="Node3D" parent="Triggers/Camera/Tower4Triggers"]
@@ -563,23 +573,90 @@ script = ExtResource("25_d6hrm")
 startEnabled = true
 
 [node name="Layer1" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull" instance=ExtResource("29_flomb")]
-"Trigger Mode" = 2
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 "Enter Mode" = 0
-"Exit Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer1"]
-shape = SubResource("CylinderShape3D_vgqrq")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer1"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5.6, 0, -5.6)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer1"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -8, 0, 0)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer1"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -5.6, 0, 5.6)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer1"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 5.6, 0, -5.6)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D7" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer1"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8, 0, 0)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D8" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer1"]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 5.6, 0, 5.59998)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="Path" type="Node3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer1" node_paths=PackedStringArray("path")]
+script = ExtResource("33_cwr62")
+path = NodePath("../../../../../../Paths/Tower4Sidle1")
+cameraPathBlendTime = 1.0
 
 [node name="Camera" type="Node3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer1"]
 script = ExtResource("33_3amqa")
 settings = ExtResource("24_mwnvi")
 
 [node name="Layer2" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull" instance=ExtResource("29_flomb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
 "Enter Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer2"]
-shape = SubResource("CylinderShape3D_vgqrq")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer2"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5.6, 0, -5.59998)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer2"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -8, 0, 0)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer2"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -5.6, 0, 5.59998)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer2"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 5.6, 0, -5.59998)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D7" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer2"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8, 0, 0)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D8" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer2"]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 5.6, 0, 5.59998)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="Path" type="Node3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer2" node_paths=PackedStringArray("path")]
+script = ExtResource("33_cwr62")
+path = NodePath("../../../../../../Paths/Tower4Sidle2")
+cameraPathBlendTime = 1.0
 
 [node name="Camera" type="Node3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer2"]
 script = ExtResource("33_3amqa")
@@ -590,7 +667,41 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17, 0)
 "Enter Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer3"]
-shape = SubResource("CylinderShape3D_vgqrq")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer3"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5.6, 0, -5.59998)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer3"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -8, 0, 0)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer3"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -5.6, 0, 5.59998)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer3"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 5.6, 0, -5.59998)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D7" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer3"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8, 0, 0)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D8" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer3"]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 5.6, 0, 5.59998)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="Path" type="Node3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer3" node_paths=PackedStringArray("path")]
+script = ExtResource("33_cwr62")
+path = NodePath("../../../../../../Paths/Tower4")
+cameraPathBlendTime = 1.0
 
 [node name="Camera" type="Node3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer3"]
 script = ExtResource("33_3amqa")
@@ -601,22 +712,45 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25, 0)
 "Enter Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer4"]
-shape = SubResource("CylinderShape3D_vgqrq")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer4"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5.6, 0, -5.59998)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer4"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -8, 0, 0)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer4"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -5.6, 0, 5.59998)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer4"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 5.6, 0, -5.59998)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D7" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer4"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8, 0, 0)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="CollisionShape3D8" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer4"]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 5.6, 0, 5.59998)
+shape = SubResource("BoxShape3D_pufbh")
+
+[node name="Path" type="Node3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer4" node_paths=PackedStringArray("path")]
+script = ExtResource("33_cwr62")
+path = NodePath("../../../../../../Paths/Tower4Sidle3")
+cameraPathBlendTime = 1.0
 
 [node name="Camera" type="Node3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer4"]
 script = ExtResource("33_3amqa")
 settings = ExtResource("25_k5ypd")
-
-[node name="SidlePathTrigger1" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull" instance=ExtResource("29_flomb")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1.5, 0)
-"Enter Mode" = 0
-
-[node name="SidlePath" type="Node3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/SidlePathTrigger1" node_paths=PackedStringArray("path")]
-script = ExtResource("33_cwr62")
-path = NodePath("../../../../../../Paths/Tower4Sidle1")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/SidlePathTrigger1"]
-shape = SubResource("CylinderShape3D_d6hrm")
 
 [node name="SidleTrigger1" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull" instance=ExtResource("24_toorb")]
 transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -5.646, -2, 5.49902)
@@ -625,17 +759,6 @@ isFacingRight = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/SidleTrigger1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_bam1r")
-
-[node name="SidlePathTrigger2" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull" instance=ExtResource("29_flomb")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 9.5, 0)
-"Enter Mode" = 0
-
-[node name="SidlePath" type="Node3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/SidlePathTrigger2" node_paths=PackedStringArray("path")]
-script = ExtResource("33_cwr62")
-path = NodePath("../../../../../../Paths/Tower4Sidle2")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/SidlePathTrigger2"]
-shape = SubResource("CylinderShape3D_d6hrm")
 
 [node name="SidleTrigger2" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull" instance=ExtResource("24_toorb")]
 transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, -7.7673, 6, 0.13501)
@@ -676,17 +799,6 @@ shape = SubResource("BoxShape3D_bam1r")
 [node name="CollisionShape3D5" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/SidleTrigger3"]
 transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, -7.20026, 0.5, 4.19904)
 shape = SubResource("BoxShape3D_bam1r")
-
-[node name="SidlePathTrigger3" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull" instance=ExtResource("29_flomb")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 25.5, 0)
-"Enter Mode" = 0
-
-[node name="SidlePath" type="Node3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/SidlePathTrigger3" node_paths=PackedStringArray("path")]
-script = ExtResource("33_cwr62")
-path = NodePath("../../../../../../Paths/Tower4Sidle3")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower4Triggers/LaunchRingCull/SidlePathTrigger3"]
-shape = SubResource("CylinderShape3D_d6hrm")
 
 [node name="Tower5Triggers" type="Node3D" parent="Triggers/Camera"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 550, 30, -1025)
@@ -729,6 +841,7 @@ shape = SubResource("BoxShape3D_toorb")
 [node name="Path" type="Node3D" parent="Triggers/Camera/Tower5Triggers/ForwardPath" node_paths=PackedStringArray("path")]
 script = ExtResource("33_cwr62")
 path = NodePath("../../../../../Paths/Rukh5")
+enableReversePathTransition = true
 cameraPathBlendTime = 0.5
 
 [node name="ReversePath" parent="Triggers/Camera/Tower5Triggers" instance=ExtResource("29_flomb")]
@@ -742,6 +855,7 @@ shape = SubResource("BoxShape3D_toorb")
 script = ExtResource("33_cwr62")
 path = NodePath("../../../../../Paths/Rukh5")
 pathMode = 1
+enableReversePathTransition = true
 cameraPathBlendTime = 0.5
 
 [node name="Layer1" parent="Triggers/Camera/Tower5Triggers" instance=ExtResource("29_flomb")]

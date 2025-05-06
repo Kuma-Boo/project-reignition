@@ -10,6 +10,8 @@ public partial class Majin : Enemy
 {
 	[Signal]
 	public delegate void SpinStartedEventHandler();
+	[Signal]
+	public delegate void WanderStartedEventHandler();
 
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
@@ -286,6 +288,7 @@ public partial class Majin : Enemy
 		Disabled, // Just idle
 		Spin, // Spin like a top
 		Fire, // Spit fire out
+		Wander, // Stay in a "moving forward" state. Works best as a child of a pathfollower.
 	}
 
 	public bool IsRedMajin => attackType == AttackTypes.Fire;
@@ -761,7 +764,7 @@ public partial class Majin : Enemy
 		finishedTraveling = true;
 		SetHitboxStatus(true);
 
-		if (SpawnTravelEnabled)
+		if (SpawnTravelEnabled && attackType != AttackTypes.Wander)
 		{
 			moveTransition.XfadeTime = MovementTransitionLength;
 			AnimationTree.Set(MoveTransition, DisabledState); // Stopped moving
@@ -775,6 +778,11 @@ public partial class Majin : Enemy
 			tweener?.Kill();
 			tweener = CreateTween();
 			tweener.TweenCallback(new Callable(this, MethodName.OnSpinActivated)).SetDelay(0.3f); // Delay spin activation by windup animation length
+		}
+		else if (attackType == AttackTypes.Wander)
+		{
+			AnimationTree.Set(MoveTransition, EnabledState); // Keep moving
+			EmitSignal(SignalName.WanderStarted);
 		}
 
 		if (SpawnIntervalEnabled)
