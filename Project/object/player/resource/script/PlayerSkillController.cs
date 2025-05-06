@@ -75,7 +75,7 @@ public partial class PlayerSkillController : Node3D
 	/// <summary> Minimum speed when landing on the ground and holding forward. Makes Sonic feel faster. </summary>
 	[Export]
 	public float landingDashSpeed;
-	private bool AllowCrestSkill;
+	public bool AllowCrestSkill { get; private set; }
 	private void SetUpSkills()
 	{
 		// Expand hitbox if skills is equipped
@@ -149,7 +149,7 @@ public partial class PlayerSkillController : Node3D
 		}
 	}
 
-	private readonly int DarkCrestSoulAmount = 3;
+	private readonly int DarkCrestSoulAmount = 5;
 	public void ActivateDarkCrest()
 	{
 		if (!AllowCrestSkill || IsUsingBreakSkills)

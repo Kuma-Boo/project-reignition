@@ -838,6 +838,17 @@ public partial class PlayerController : CharacterBody3D
 
 		AllowLandingSkills = false; // Disable landing skills
 
+		// New to Project Reignition: CoD provides damage negation if you have enough soul
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestDark) &&
+			Skills.AllowCrestSkill && Skills.IsSoulGaugeCharged)
+		{
+			Effect.PlayDarkCrestFX();
+
+			// Lose soul power and continue
+			Skills.ModifySoulGauge(-PlayerSkillController.MinimumSoulPower);
+			return;
+		}
+
 		// No rings; Respawn
 		if (Stage.CurrentRingCount == 0)
 		{
