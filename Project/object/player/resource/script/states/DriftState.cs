@@ -39,6 +39,8 @@ public partial class DriftState : PlayerState
 	private Vector3 driftVelocity;
 	/// <summary> Positional smoothing. </summary>
 	private readonly float DriftSmoothing = .25f;
+	/// <summary> Positional smoothing when SpeedBreaking. </summary>
+	private readonly float SpeedBreakDriftSmoothing = .1f;
 	/// <summary> How generous the input window is (Due to player's decceleration, it's harder to get an early drift.) </summary>
 	private readonly float InputWindowDistance = 1f;
 	/// <summary> Delay animation state reset for this amount of time. </summary>
@@ -154,7 +156,8 @@ public partial class DriftState : PlayerState
 			return;
 
 		// Process drift
-		Player.GlobalPosition = Player.GlobalPosition.SmoothDamp(targetPosition, ref driftVelocity, DriftSmoothing, entrySpeed);
+		float positionSmoothing = Player.Skills.IsSpeedBreakActive ? SpeedBreakDriftSmoothing : DriftSmoothing;
+		Player.GlobalPosition = Player.GlobalPosition.SmoothDamp(targetPosition, ref driftVelocity, positionSmoothing, entrySpeed);
 		Player.UpDirection = Player.PathFollower.Up(); // Use pathfollower's up direction when drifting
 		Player.UpdateExternalControl(true);
 		Player.UpdateOrientation();
