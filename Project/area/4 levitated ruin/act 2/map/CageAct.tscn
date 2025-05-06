@@ -828,9 +828,6 @@ _data = {
 Data = ExtResource("2_gm4t4")
 InitialCameraSettings = ExtResource("44_g2bsq")
 
-[node name="Triggers" parent="Static" index="4"]
-visible = false
-
 [node name="CageAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="CageAct"]
@@ -1020,6 +1017,7 @@ curve = ExtResource("5_nyvgh")
 
 [node name="Start" parent="CageAct/Ziplines/Zipline1" instance=ExtResource("6_f8ouc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.80301, -5.05, 0.0100098)
+monitoring = false
 OneShot = true
 "Respawn Mode" = 2
 "Enter Mode" = 0
@@ -1103,6 +1101,7 @@ curve = ExtResource("14_3bj00")
 
 [node name="Start" parent="CageAct/Ziplines/Zipline2" instance=ExtResource("6_f8ouc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -4.5, 0)
+monitoring = false
 OneShot = true
 "Respawn Mode" = 2
 "Enter Mode" = 0
@@ -1621,6 +1620,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 script = ExtResource("8_mxhyu")
 path = NodePath("../../../../../Static/Paths/Rukh2")
 pathMode = 2
+enableReversePathTransition = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower2/Triggers/GroundPathTrigger"]
 shape = SubResource("CylinderShape3D_7f5hg")
@@ -2464,7 +2464,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="CageAct/Tower3/Exterior/MovingMajin1" instance=ExtResource("50_kuvve")]
-transform = Transform3D(1, 1.47847e-08, 0, 0, 0.999973, -8.86619e-07, 0, 4.93601e-07, 1, 6.10352e-05, -7.62939e-06, -20.6349)
+transform = Transform3D(1, 1.49012e-08, 0, 0, 0.999973, -8.88482e-07, 0, 4.93601e-07, 1, 6.10352e-05, -7.62939e-06, -20.6349)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
@@ -2488,7 +2488,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="CageAct/Tower3/Exterior/MovingMajin2" instance=ExtResource("50_kuvve")]
-transform = Transform3D(1, -4.43542e-08, -4.39584e-07, -4.35393e-08, 1.00001, -7.59959e-07, 6.85453e-07, 2.34693e-07, 1.00001, 0, -7.62939e-06, -17.5)
+transform = Transform3D(1, -4.44707e-08, -4.39584e-07, -4.36557e-08, 1.00001, -7.61822e-07, 6.85453e-07, 2.34693e-07, 1.00001, 0, -7.62939e-06, -17.5)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
@@ -2520,6 +2520,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 script = ExtResource("8_mxhyu")
 path = NodePath("../../../../../Static/Paths/Rukh3")
 pathMode = 2
+enableReversePathTransition = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower3/Triggers/GroundPathTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -3171,6 +3172,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 script = ExtResource("8_mxhyu")
 path = NodePath("../../../../../Static/Paths/Rukh4")
 pathMode = 2
+enableReversePathTransition = true
 
 [node name="Camera" type="Node3D" parent="CageAct/Tower4/Triggers/GroundPathTrigger"]
 script = ExtResource("27_vns5j")
@@ -4045,6 +4047,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 script = ExtResource("8_mxhyu")
 path = NodePath("../../../../../Static/Paths/Rukh5")
 pathMode = 2
+enableReversePathTransition = true
 
 [node name="Camera" type="Node3D" parent="CageAct/Tower5/Triggers/GroundPathTrigger"]
 script = ExtResource("27_vns5j")
@@ -4749,23 +4752,17 @@ libraries = {
 [connection signal="SpinStarted" from="CageAct/Tower4/Exterior/MovingMajin1/GreenMajin" to="CageAct/Tower4/Exterior/MovingMajin1" method="Unpause"]
 [connection signal="Defeated" from="CageAct/Tower4/Exterior/MovingMajin2/GreenMajin" to="CageAct/Tower4/Exterior/MovingMajin2" method="Pause"]
 [connection signal="SpinStarted" from="CageAct/Tower4/Exterior/MovingMajin2/GreenMajin" to="CageAct/Tower4/Exterior/MovingMajin2" method="Unpause"]
-[connection signal="Activated" from="CageAct/Tower4/Triggers/GroundPathTrigger" to="Static/Collision/LaunchRingWall" method="Deactivate"]
-[connection signal="Activated" from="CageAct/Tower4/Triggers/GroundPathTrigger" to="Static/Triggers/Camera/Tower4Triggers/LaunchRingCull" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/Triggers/GroundPathTrigger" to="CageAct/Tower4/Triggers/Lockout" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Tower4/GateTrigger" to="CageAct/Tower4/Gate1" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/GateTrigger" to="CageAct/Tower4/Gate2" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/Spring" to="Static/Triggers/Camera/Tower4Triggers/LaunchRingCull" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Tower4/Spring" to="Static/Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer1/Camera" method="Activate"]
 [connection signal="Deactivated" from="CageAct/Tower4/Spring" to="Static/Triggers/Camera/Tower4Triggers/LaunchRingCull" method="Activate"]
-[connection signal="Deactivated" from="CageAct/Tower4/Spring" to="Static/Triggers/Camera/Tower4Triggers/LaunchRingCull/SidlePathTrigger1/SidlePath" method="Activate"]
-[connection signal="Deactivated" from="CageAct/Tower4/Spring" to="CageAct/Tower4/Triggers/Lockout" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/Switch" to="CageAct/Tower4/SpikeBall1" method="Unpause"]
 [connection signal="Activated" from="CageAct/Tower4/Switch" to="CageAct/Tower4/SpikeBall2" method="Unpause"]
 [connection signal="Collected" from="CageAct/Tower4/ItemBox2" to="CageAct/Tower4/ItemBoxCullingTrigger" method="Activate"]
 [connection signal="Respawned" from="CageAct/Tower4/ItemBox2" to="CageAct/Tower4/ItemBoxCullingTrigger" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Tower4/Switch2" to="CageAct/Tower4/Switch2/Spring" method="ShowLauncher"]
-[connection signal="Activated" from="CageAct/Tower4/Switch2/Spring" to="Static/Triggers/Camera/Tower4Triggers/LaunchRingCull" method="Deactivate"]
-[connection signal="Entered" from="CageAct/Tower4/LaunchRing1" to="Static/Collision/LaunchRingWall" method="Activate"]
 [connection signal="Entered" from="CageAct/Tower4/LaunchRing1" to="CageAct/Tower4/LaunchRing1/Path" method="Activate"]
 [connection signal="Entered" from="CageAct/Tower4/LaunchRing1" to="CageAct/Tower4/LaunchRing1/Camera" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/LaunchRing3" to="CageAct/Tower4/LaunchRing3/Camera" method="Activate"]

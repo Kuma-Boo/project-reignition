@@ -46,7 +46,11 @@ public partial class LaunchState : PlayerState
 		Player.VerticalSpeed = settings.InitialVerticalVelocity;
 
 		Player.Lockon.IsMonitoring = false; // Disable lockon monitoring while launch is active
-		Player.AttackState = ActiveLauncher.oneshotEnemies ? PlayerController.AttackStates.OneShot : PlayerController.AttackStates.None; // Launchers always oneshot all enemies
+
+		if (ActiveLauncher == null || ActiveLauncher.oneshotEnemies)
+			Player.AttackState = PlayerController.AttackStates.OneShot; // Launchers typically oneshot enemies for fairness
+		else
+			Player.AttackState = PlayerController.AttackStates.None;
 
 		Player.UpDirection = Vector3.Up;
 		Player.Rotation = Vector3.Zero; // Reset rotation
