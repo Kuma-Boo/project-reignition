@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://bpxj0juyhbmxs"]
+[gd_scene load_steps=68 format=3 uid="uid://bpxj0juyhbmxs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_16rgi"]
 [ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="2_dq0yd"]
@@ -35,6 +35,7 @@
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="25_d6hrm"]
 [ext_resource type="Resource" uid="uid://c886rphxqnhnb" path="res://resource/preset/camera/common/StaticTransitionCam.tres" id="25_k5ypd"]
 [ext_resource type="Curve3D" uid="uid://bom0wsi4f25u1" path="res://area/4 levitated ruin/act 2/environment/path/Tower4TopPath.tres" id="26_d34ml"]
+[ext_resource type="Curve3D" path="res://area/4 levitated ruin/act 2/environment/path/Rukh1Path.tres" id="27_bam1r"]
 [ext_resource type="Curve3D" uid="uid://by0mwyvkcdeng" path="res://area/4 levitated ruin/act 2/environment/path/Tower5TopPath.tres" id="27_f3657"]
 [ext_resource type="Curve3D" path="res://area/4 levitated ruin/act 2/environment/path/Tower2Automation1Path.tres" id="28_d6hrm"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="29_flomb"]
@@ -55,15 +56,15 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_mwnvi"]
 size = Vector3(5, 8, 3)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_toorb"]
+size = Vector3(10, 2, 2.5)
+
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_k5ypd"]
 height = 16.0
 radius = 10.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c0tbi"]
 size = Vector3(10, 8.70264, 2.5)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_toorb"]
-size = Vector3(10, 2, 2.5)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_iqfm0"]
 height = 15.0
@@ -943,32 +944,62 @@ forceConsistentHeight = true
 
 [node name="Camera" type="Node3D" parent="Triggers"]
 
-[node name="Tower1Sidescrolling" parent="Triggers/Camera" instance=ExtResource("29_flomb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 1, -1375)
+[node name="Tower1Triggers" type="Node3D" parent="Triggers/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30, -1375)
+
+[node name="ForwardPath" parent="Triggers/Camera/Tower1Triggers" instance=ExtResource("29_flomb")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, 17)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower1Triggers/ForwardPath"]
+shape = SubResource("BoxShape3D_toorb")
+
+[node name="Path" type="Node3D" parent="Triggers/Camera/Tower1Triggers/ForwardPath" node_paths=PackedStringArray("path")]
+script = ExtResource("33_cwr62")
+path = NodePath("../../../../../Paths/Rukh1")
+enableReversePathTransition = true
+cameraPathBlendTime = 0.5
+
+[node name="ReversePath" parent="Triggers/Camera/Tower1Triggers" instance=ExtResource("29_flomb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -8.85999)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower1Triggers/ReversePath"]
+shape = SubResource("BoxShape3D_toorb")
+
+[node name="Path" type="Node3D" parent="Triggers/Camera/Tower1Triggers/ReversePath" node_paths=PackedStringArray("path")]
+script = ExtResource("33_cwr62")
+path = NodePath("../../../../../Paths/Rukh1")
+pathMode = 1
+enableReversePathTransition = true
+cameraPathBlendTime = 0.5
+
+[node name="Tower1Sidescrolling" parent="Triggers/Camera/Tower1Triggers" instance=ExtResource("29_flomb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 31, 0)
 "Trigger Mode" = 2
 "Enter Mode" = 0
 "Exit Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower1Sidescrolling"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower1Triggers/Tower1Sidescrolling"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CylinderShape3D_k5ypd")
 
-[node name="Camera" type="Node3D" parent="Triggers/Camera/Tower1Sidescrolling"]
+[node name="Camera" type="Node3D" parent="Triggers/Camera/Tower1Triggers/Tower1Sidescrolling"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 script = ExtResource("33_3amqa")
 settings = ExtResource("24_mwnvi")
 
-[node name="Tower1LowerSidescrolling" parent="Triggers/Camera" instance=ExtResource("29_flomb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -7, -1375)
+[node name="Tower1LowerSidescrolling" parent="Triggers/Camera/Tower1Triggers" instance=ExtResource("29_flomb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 23, 0)
 "Trigger Mode" = 2
 "Enter Mode" = 0
 "Exit Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower1LowerSidescrolling"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Camera/Tower1Triggers/Tower1LowerSidescrolling"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CylinderShape3D_k5ypd")
 
-[node name="Camera" type="Node3D" parent="Triggers/Camera/Tower1LowerSidescrolling"]
+[node name="Camera" type="Node3D" parent="Triggers/Camera/Tower1Triggers/Tower1LowerSidescrolling"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 script = ExtResource("33_3amqa")
 settings = ExtResource("25_k5ypd")
@@ -1590,6 +1621,10 @@ transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 
 shape = SubResource("BoxShape3D_bam1r")
 
 [node name="Paths" type="Node3D" parent="."]
+
+[node name="Rukh1" type="Path3D" parent="Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -41.01, -1101.09)
+curve = ExtResource("27_bam1r")
 
 [node name="Rukh2" type="Path3D" parent="Paths"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, -1350)

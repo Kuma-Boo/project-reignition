@@ -179,7 +179,7 @@ public partial class MovingObject : Node3D
 	private NodePath animator;
 	/// <summary> Object to actually move. </summary>
 	private AnimationPlayer Animator;
-	[Export(PropertyHint.Range, "0,2,.1")]
+	[Export(PropertyHint.Range, "-2,2,.1")]
 	private float animatorSpeedScale = 1f;
 
 	public override void _EnterTree()

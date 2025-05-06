@@ -34,7 +34,7 @@ public partial class Zipline : PathFollow3D
 	private readonly float SlowRotationSmoothing = 20.0f;
 	private readonly float NormalRotationLimit = Mathf.Pi * .4f;
 	private readonly float ReverseSwingRotationLimit = Mathf.Pi * .8f;
-	private readonly float NaturalAcceleration = 10.0f;
+	private readonly float NaturalAcceleration = 5.0f;
 
 	private float inputValue;
 	private bool isDoubleTapping;
