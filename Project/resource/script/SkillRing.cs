@@ -298,8 +298,8 @@ public enum SkillKey
 	PearlRange, // Makes collecting pearls easier
 	PearlRespawn, // Allows cheating death with enough soul power
 	PearlDamage, // Reduces the amount of soul power lost when taking damage
-	RingRange, // Makes collecting rings closer
 	RingLossConvert, // Increases soul power when taking damage
+	RingRange, // Makes collecting rings closer
 	RingPearlConvert, // Converts rings to pearls when collected
 
 	// Ring skills
