@@ -335,6 +335,7 @@ Distance = 2.0
 
 [node name="FireSoul1" parent="DeathlessAct/Objects/Layer2/Spring3" instance=ExtResource("61_6vfek")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, 0)
+isTimeBreakOnly = true
 
 [node name="Switch" parent="DeathlessAct/Objects/Layer2" instance=ExtResource("41_xcwgr")]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -8.9, 1.1, 0)
@@ -427,7 +428,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -1.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -1.5)
 
 [node name="WanderingMajin1" type="Path3D" parent="DeathlessAct/Objects/LaunchRingPath" node_paths=PackedStringArray("animator")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26, 0)
 curve = SubResource("Curve3D_y2040")
 script = ExtResource("82_r5e7m")
 animator = NodePath("AnimationPlayer")
@@ -448,6 +449,10 @@ transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
 "Rotation Settings/Track Player" = false
 "Rotation Settings/Rotation Time" = 0.0
 "Attack Settings/Attack Type" = 3
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(0, 10, 0)
+"Defeat Settings/Local Transform" = true
 SpawnMode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Objects/LaunchRingPath/WanderingMajin1"]
@@ -457,7 +462,7 @@ libraries = {
 speed_scale = 0.2
 
 [node name="WanderingMajin2" type="Path3D" parent="DeathlessAct/Objects/LaunchRingPath" node_paths=PackedStringArray("animator")]
-transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 0, 21, 0)
+transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 0, 29, 0)
 curve = SubResource("Curve3D_y2040")
 script = ExtResource("82_r5e7m")
 animator = NodePath("AnimationPlayer")
@@ -478,6 +483,10 @@ transform = Transform3D(1.00001, 0, 0, 0, 1, 0, 0, 0, 1.00001, 0, 0, 0)
 "Rotation Settings/Track Player" = false
 "Rotation Settings/Rotation Time" = 0.0
 "Attack Settings/Attack Type" = 3
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 0.5
+"Defeat Settings/Launch Direction" = Vector3(0, 10, 0)
+"Defeat Settings/Local Transform" = true
 SpawnMode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DeathlessAct/Objects/LaunchRingPath/WanderingMajin2"]
@@ -486,7 +495,7 @@ libraries = {
 }
 speed_scale = 0.2
 
-[node name="LaunchRingSpike" parent="DeathlessAct/Objects/LaunchRingPath" instance=ExtResource("29_sd24j")]
+[node name="LaunchRingSpike1" parent="DeathlessAct/Objects/LaunchRingPath" instance=ExtResource("29_sd24j")]
 transform = Transform3D(0.996195, -0.0871557, -3.8097e-09, 0, -4.37114e-08, 1, -0.0871557, -0.996195, -4.3545e-08, 0, 14.5, 0)
 windupTime = 10.0
 "Secondary Settings/Middle Height" = 0.0
@@ -494,28 +503,25 @@ windupTime = 10.0
 "Secondary Settings/Distance" = 0.5
 LauncherDirection = 1
 
-[node name="Path" type="Node3D" parent="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike1" node_paths=PackedStringArray("path")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 4.44089e-16, 3.55271e-15, 1, 0, 0, 0)
 script = ExtResource("19_jr7j8")
 path = NodePath("../../../../../Static/Paths/Rukh4")
 pathMode = 1
 
-[node name="Camera" type="Node3D" parent="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike"]
+[node name="Camera" type="Node3D" parent="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 4.44089e-16, 3.55271e-15, 1, 0, 0, 0)
 script = ExtResource("17_4enth")
 settings = ExtResource("68_rnouh")
 previousSettings = ExtResource("29_fxl47")
 
-[node name="LaunchRing2" parent="DeathlessAct/Objects/LaunchRingPath" instance=ExtResource("67_s2pn0")]
+[node name="LaunchRingSpike2" parent="DeathlessAct/Objects/LaunchRingPath" instance=ExtResource("29_sd24j")]
 transform = Transform3D(0.996195, -0.0871557, -3.8097e-09, 0, -4.37114e-08, 1, -0.0871557, -0.996195, -4.35451e-08, 0, 23.5, 0)
+windupTime = 10.0
 "Secondary Settings/Middle Height" = 0.0
 "Secondary Settings/Final Height" = 12.0
 "Secondary Settings/Distance" = 1.0
-MiddleHeight = 0.0
-FinalHeight = 5.0
-Distance = 0.1
-AllowJumpDashing = false
-LauncherDirection = 1
+sfxPlayer = NodePath("../LaunchRingSpike1/Launch")
 
 [node name="FireSoul3" parent="DeathlessAct/Objects/LaunchRingPath" instance=ExtResource("61_6vfek")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 23.5, 0)
@@ -775,9 +781,9 @@ shape = SubResource("BoxShape3D_ut4ab")
 [connection signal="WanderStarted" from="DeathlessAct/Objects/LaunchRingPath/WanderingMajin1/PathFollow/GreenMajin" to="DeathlessAct/Objects/LaunchRingPath/WanderingMajin1" method="Activate"]
 [connection signal="Defeated" from="DeathlessAct/Objects/LaunchRingPath/WanderingMajin2/PathFollow/GreenMajin" to="DeathlessAct/Objects/LaunchRingPath/WanderingMajin2" method="PauseEvent"]
 [connection signal="WanderStarted" from="DeathlessAct/Objects/LaunchRingPath/WanderingMajin2/PathFollow/GreenMajin" to="DeathlessAct/Objects/LaunchRingPath/WanderingMajin2" method="Activate"]
-[connection signal="Entered" from="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike" to="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike/Path" method="Activate"]
-[connection signal="Entered" from="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike" to="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike/Camera" method="Activate"]
-[connection signal="Exited" from="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike" to="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike/Camera" method="Deactivate"]
+[connection signal="Entered" from="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike1" to="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike1/Path" method="Activate"]
+[connection signal="Entered" from="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike1" to="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike1/Camera" method="Activate"]
+[connection signal="Exited" from="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike1" to="DeathlessAct/Objects/LaunchRingPath/LaunchRingSpike1/Camera" method="Deactivate"]
 [connection signal="Activated" from="DeathlessAct/Objects/LaunchRingPath/LaunchRing3" to="DeathlessAct/Objects/LaunchRingPath/LaunchRing3/Camera" method="Activate"]
 [connection signal="Activated" from="DeathlessAct/Objects/LaunchRingPath/LaunchRing3" to="DeathlessAct/Objects/LaunchRingPath/LaunchRing3/Path" method="Activate"]
 [connection signal="Activated" from="DeathlessAct/Objects/LaunchRingPath/LaunchRing3" to="DeathlessAct/Objects/BlueMajin1" method="Spawn"]

@@ -5,13 +5,14 @@ namespace Project.Gameplay.Objects;
 
 public partial class FireSoul : Pickup
 {
-	[Export(PropertyHint.Range, "1, 3")]
-	public int fireSoulIndex = 1; // Which fire soul is this?
+	/// <summary> Determines which save data index this fire soul references. </summary>
+	[Export(PropertyHint.Range, "1, 3")] public int fireSoulIndex = 1;
+	/// <summary> Enable this if you want to hide the firesoul behind a Time Break. </summary>
+	[Export] private bool isTimeBreakOnly;
 	private bool isCollected;
 	private bool isCollectedInCheckpoint;
 	private bool isCollectedInSaveFile;
-	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
-	private NodePath animator;
+	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")] private NodePath animator;
 	private AnimationPlayer Animator;
 
 	protected override void SetUp()
@@ -30,6 +31,13 @@ public partial class FireSoul : Pickup
 
 		UpdateLockon();
 		Respawn();
+
+		if (isTimeBreakOnly)
+		{
+			Player.Skills.TimeBreakStarted += ShowFireSoul;
+			Player.Skills.TimeBreakStopped += HideFireSoul;
+			HideFireSoul();
+		}
 	}
 
 	protected override void Collect()
@@ -47,6 +55,12 @@ public partial class FireSoul : Pickup
 			Player.IsHomingAttacking)
 		{
 			Player.StartBounce();
+		}
+
+		if (isTimeBreakOnly)
+		{
+			Player.Skills.TimeBreakStarted -= ShowFireSoul;
+			Player.Skills.TimeBreakStopped -= HideFireSoul;
 		}
 	}
 
@@ -75,6 +89,22 @@ public partial class FireSoul : Pickup
 			Animator.Play("enable-lockon");
 			Animator.Advance(0);
 		}
+	}
+
+	private void ShowFireSoul()
+	{
+		if (isCollected)
+			return;
+
+		Animator.Play("show");
+	}
+
+	private void HideFireSoul()
+	{
+		if (isCollected)
+			return;
+
+		Animator.Play("hide");
 	}
 
 	private void SaveCheckpoint() => isCollectedInCheckpoint = true;
