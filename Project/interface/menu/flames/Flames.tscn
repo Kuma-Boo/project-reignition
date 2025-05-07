@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://dad2hh4ttgaox"]
+[gd_scene load_steps=7 format=3 uid="uid://dad2hh4ttgaox"]
 
 [ext_resource type="SpriteFrames" uid="uid://mcf4xjlise6g" path="res://effect/particle/sprite frames/Flame Menu Footer.tres" id="1_cxnaw"]
 [ext_resource type="Material" uid="uid://d1ar7f674pt0i" path="res://effect/material/Canvas Item Screen.tres" id="1_n3mht"]
+[ext_resource type="SpriteFrames" uid="uid://b0cxja2u8su8l" path="res://effect/particle/sprite frames/Sparks Menu.tres" id="2_oslu0"]
 
 [sub_resource type="Animation" id="Animation_1slf5"]
 resource_name = "RESET"
@@ -47,14 +48,22 @@ _data = {
 material = ExtResource("1_n3mht")
 layout_mode = 3
 anchors_preset = 0
-offset_left = 960.0
-offset_top = 1080.0
-offset_right = 960.0
-offset_bottom = 1080.0
+offset_left = 950.0
+offset_top = 842.0
+offset_right = 950.0
+offset_bottom = 842.0
 scale = Vector2(1, 1e-05)
 
 [node name="BackBufferCopy" type="BackBufferCopy" parent="."]
 copy_mode = 2
+
+[node name="Sparks" type="AnimatedSprite2D" parent="."]
+use_parent_material = true
+position = Vector2(-6.10352e-05, -168)
+scale = Vector2(1.875, 4)
+sprite_frames = ExtResource("2_oslu0")
+autoplay = "default"
+speed_scale = 5.0
 
 [node name="Flames" type="AnimatedSprite2D" parent="."]
 use_parent_material = true
@@ -65,6 +74,6 @@ autoplay = "default"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_4vh02")
+&"": SubResource("AnimationLibrary_4vh02")
 }
 autoplay = "spawn"
