@@ -207,7 +207,7 @@ public partial class BombMissile : Node3D
 		// Try to predict where the player will be when the missile lands
 		float dot = Player.GetMovementDirection().Dot(PlayerPathfollower.Forward());
 		float offsetPrediction = Player.MoveSpeed * speedTracking * dot;
-		PlayerPathfollower.Progress += offsetPrediction * (middleHeight / Runtime.Gravity);
+		PlayerPathfollower.Progress += offsetPrediction;
 		PlayerPathfollower.HOffset = -PlayerPathfollower.LocalPlayerPositionDelta.X; // Works since the path is flat
 		if (enableSpread) // Slightly randomize the middle missile's spread
 			PlayerPathfollower.HOffset += Runtime.randomNumberGenerator.RandfRange(-spread, spread);
