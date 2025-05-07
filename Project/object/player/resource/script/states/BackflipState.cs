@@ -12,6 +12,8 @@ public partial class BackflipState : PlayerState
 	[Export]
 	private PlayerState homingAttackState;
 	[Export]
+	private PlayerState stompState;
+	[Export]
 	private float backflipHeight;
 
 	/// <summary> How much can the player adjust their angle while backflipping? </summary>
@@ -70,6 +72,12 @@ public partial class BackflipState : PlayerState
 				return homingAttackState;
 
 			return jumpDashState;
+		}
+
+		if (Player.Controller.IsActionBufferActive)
+		{
+			Player.Controller.ResetActionBuffer();
+			return stompState;
 		}
 
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedDash) &&
