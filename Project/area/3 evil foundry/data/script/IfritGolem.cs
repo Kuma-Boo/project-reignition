@@ -397,6 +397,7 @@ public partial class IfritGolem : Node3D
 	private void ExitHitstun()
 	{
 		isInteractingWithPlayer = false;
+		isSpeedbreakHurtboxInteractingWithPlayer = false;
 		bounceCameraSettings.yawAngle = (currentSector * SectorRotationIncrementRad) + Mathf.Pi;
 		RespawnCores();
 
@@ -448,6 +449,12 @@ public partial class IfritGolem : Node3D
 		if (Player.IsOnGround && headHealth != MaxHeadHealth)
 		{
 			EnterRecovery();
+			return;
+		}
+
+		if (isSpeedbreakHurtboxInteractingWithPlayer && Player.Skills.IsSpeedBreakActive)
+		{
+			TakeSpeedbreakDamage();
 			return;
 		}
 
@@ -530,6 +537,7 @@ public partial class IfritGolem : Node3D
 		EnterHitstun(false);
 	}
 
+	private bool isSpeedbreakHurtboxInteractingWithPlayer;
 	private bool isLavaInteractingWithPlayer;
 	private bool isInteractingWithPlayer;
 	private bool isInteractionProcessed;
@@ -634,6 +642,19 @@ public partial class IfritGolem : Node3D
 			CallDeferred(MethodName.EnterDamage);
 	}
 
+	private void TakeSpeedbreakDamage()
+	{
+		// Quick damage
+		isSpeedbreakHurtboxInteractingWithPlayer = false;
+		UpdateHeadDamage(3);
+
+		Player.StartBounce(true);
+		if (Player.Skills.IsSpeedBreakActive)
+			Player.Skills.ToggleSpeedBreak();
+
+		SetInteractionProcessed();
+	}
+
 	private readonly StringName DefeatTrigger = "parameters/defeat_trigger/request";
 	private void DefeatBoss()
 	{
@@ -647,7 +668,6 @@ public partial class IfritGolem : Node3D
 		Root.Rotation = Vector3.Zero;
 		ExitHitstun();
 
-		Player.Skills.DisableBreakSkills();
 		Player.Deactivate();
 		Player.AddLockoutData(Runtime.Instance.DefaultCompletionLockout);
 
@@ -1084,6 +1104,28 @@ public partial class IfritGolem : Node3D
 			return;
 
 		isInteractingWithPlayer = false;
+	}
+
+	private void OnSpeedbreakHurtboxEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player"))
+			return;
+
+		if (Player.Skills.IsSpeedBreakActive)
+		{
+			TakeSpeedbreakDamage();
+			return;
+		}
+
+		isSpeedbreakHurtboxInteractingWithPlayer = true;
+	}
+
+	private void OnSpeedbreakHurtboxExited(Area3D a)
+	{
+		if (!a.IsInGroup("player"))
+			return;
+
+		isSpeedbreakHurtboxInteractingWithPlayer = false;
 	}
 
 	private void OnLavaEntered(Area3D a)

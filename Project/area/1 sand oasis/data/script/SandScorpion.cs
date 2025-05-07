@@ -223,7 +223,7 @@ public partial class SandScorpion : Node3D
 		BonusManager.instance.QueueBonus(new(BonusType.Boss, 1000));
 	}
 
-	private void StartDefeat()
+	private void DefeatBoss()
 	{
 		cutsceneCamera.Activate();
 		rootAnimationTree.Set(DefeatParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
@@ -868,7 +868,7 @@ public partial class SandScorpion : Node3D
 	{
 		if (currentHealth == 0)
 		{
-			StartDefeat();
+			DefeatBoss();
 		}
 		else if (dialogFlags[2] == 0 && currentHealth == 1)
 		{
