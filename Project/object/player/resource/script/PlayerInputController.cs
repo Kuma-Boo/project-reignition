@@ -117,6 +117,8 @@ public partial class PlayerInputController : Node
 				UpdateActionBuffer();
 			else
 				ResetActionBuffer();
+
+			return;
 		}
 
 		if (Input.IsActionJustPressed("button_action"))
