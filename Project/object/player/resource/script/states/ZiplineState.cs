@@ -1,4 +1,3 @@
-using System;
 using Godot;
 using Project.Core;
 
@@ -7,7 +6,6 @@ namespace Project.Gameplay;
 public partial class ZiplineState : PlayerState
 {
 	public Zipline Trigger { get; set; }
-
 
 	private float input;
 	/// <summary> Determines whether the player's tap is registered as a double tap. </summary>
@@ -148,6 +146,10 @@ public partial class ZiplineState : PlayerState
 		if (!isPromptShown)
 			return;
 
+		// Prevent player from being able to spam tap
+		if (Mathf.Sign(input) != Trigger.SwingSide && Player.Animator.IsZiplineTapActive)
+			return;
+
 		if (Mathf.IsZeroApprox(doubleTapTimer))
 			StartTap();
 		else
@@ -164,6 +166,7 @@ public partial class ZiplineState : PlayerState
 	{
 		tapSwingTimer = TapSwingLength;
 		doubleTapTimer = DoubleTapWindow; // Start listening for a double tap
+		Player.Animator.StartZiplineTap(Mathf.Sign(input) > 0);
 	}
 
 	/// <summary> Called when a double tap occurs. Attemps a full swing. </summary>
@@ -180,6 +183,7 @@ public partial class ZiplineState : PlayerState
 		tapSwingTimer = 0;
 		doubleTapTimer = 0;
 		fullSwingDirection = Mathf.Sign(input);
+		Player.Animator.StartZiplineTap(Mathf.Sign(input) > 0);
 	}
 
 	private void UpdatePrompts()
@@ -297,6 +301,7 @@ public partial class ZiplineState : PlayerState
 
 		Player.TakeDamage();
 		Player.StartInvincibility();
+		Player.Animator.CancelZiplineTap();
 		Player.Camera.StartMediumCameraShake();
 
 		Trigger.UpdateSpeed(0, true); // Kill speed
