@@ -33,8 +33,6 @@ public partial class MainMenu : Menu
 		currentSelection = menuMemory[MemoryKeys.MainMenu];
 		HorizontalSelection = currentSelection % 2;
 		VerticalSelection = currentSelection / 2;
-
-		isProcessing = menuMemory[MemoryKeys.ActiveMenu] == (int)MemoryKeys.MainMenu;
 	}
 
 	protected override void ProcessMenu()
