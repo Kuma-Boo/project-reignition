@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using Godot;
-using Godot.Collections;
 using Project.Core;
 
 namespace Project.Gameplay;
@@ -30,7 +30,10 @@ public partial class PlayerLockonController : Area3D
 	/// <summary> Targets whose squared distance is within this range will prioritize height instead of distance. </summary>
 	private readonly float DistanceFudgeAmount = 1f;
 	private readonly string LevelWallGroup = "level wall";
-	private readonly Array<Node3D> potentialTargets = []; // List of targetable objects
+	/// <summary> List of all possible targets. </summary>
+	private readonly List<Node3D> potentialTargets = [];
+	/// <summary> List of all possible objects the player's hitbox is currently colliding with. </summary>
+	private readonly List<Node3D> collidingObjects = [];
 
 	private bool isMonitoring;
 	/// <summary> Should the controller check for new lockonTargets? </summary>
@@ -312,6 +315,15 @@ public partial class PlayerLockonController : Area3D
 			lockonAnimator.Play("enable");
 	}
 
+	/// <summary> Checks whether the player is currently colliding with the Lockon Target. </summary>
+	public bool IsCollidingWithTarget()
+	{
+		if (Target == null)
+			return false;
+
+		return collidingObjects.Contains(Target);
+	}
+
 	// Targeting areas on the lockon layer
 	public void OnTargetTriggerEnter(Area3D area)
 	{
@@ -337,4 +349,20 @@ public partial class PlayerLockonController : Area3D
 		if (potentialTargets.Contains(body))
 			potentialTargets.Remove(body);
 	}
+
+	public void OnHitboxEntered(Area3D a)
+	{
+		if (!collidingObjects.Contains(a))
+			collidingObjects.Add(a);
+	}
+
+	public void OnHitboxExited(Area3D a) => collidingObjects.Remove(a);
+
+	public void OnHitboxBodyEntered(PhysicsBody3D a)
+	{
+		if (!collidingObjects.Contains(a))
+			collidingObjects.Add(a);
+	}
+
+	public void OnHitboxBodyExited(PhysicsBody3D a) => collidingObjects.Remove(a);
 }

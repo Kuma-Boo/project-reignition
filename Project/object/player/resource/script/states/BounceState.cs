@@ -112,12 +112,8 @@ public partial class BounceState : PlayerState
 		if (!Mathf.IsZeroApprox(bounceInterruptTimer)) // Player is already bouncing -- don't snap
 			return;
 
-		if ((Player.Lockon.Target is Area3D && !Player.Lockon.GetOverlappingAreas().Contains(Player.Lockon.Target as Area3D)) ||
-			(Player.Lockon.Target is PhysicsBody3D && !Player.Lockon.GetOverlappingBodies().Contains(Player.Lockon.Target as PhysicsBody3D)))
-		{
-			// Failed to find a target to snap to
+		if (!Player.Lockon.IsCollidingWithTarget()) // Failed to find a target to snap to
 			return;
-		}
 
 		// Only snap when target being hit is correct
 		Vector3 targetSnapPosition = Player.Lockon.Target.GlobalPosition;
