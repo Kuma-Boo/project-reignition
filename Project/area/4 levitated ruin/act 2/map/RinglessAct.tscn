@@ -98,7 +98,7 @@ FinalHeight = 4.5
 Distance = 12.5
 
 [node name="Cam3" type="Node3D" parent="RinglessAct/Tower1"]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 2.82843, 25.808, -2.82843)
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -2.82843, 25.808, -2.82843)
 script = ExtResource("8_r8rt5")
 transitionType = 1
 settings = ExtResource("6_vvfwf")
@@ -862,6 +862,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -40, -78, -951)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RinglessAct/Goal"]
+shape = SubResource("BoxShape3D_u88v8")
+
+[node name="InvisibleWall" type="StaticBody3D" parent="RinglessAct" groups=["wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -78, -944)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RinglessAct/InvisibleWall"]
 shape = SubResource("BoxShape3D_u88v8")
 
 [connection signal="Activated" from="RinglessAct/Tower1/Spring1" to="RinglessAct/Tower1/Cam" method="Activate"]

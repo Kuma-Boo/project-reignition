@@ -1,4 +1,4 @@
-[gd_scene load_steps=214 format=3 uid="uid://dakk7vvkh050f"]
+[gd_scene load_steps=215 format=3 uid="uid://dakk7vvkh050f"]
 
 [ext_resource type="PackedScene" uid="uid://qtevb8yv6s3s" path="res://area/3 evil foundry/boss/data/model/IfritGolem.gltf" id="1_37vkv"]
 [ext_resource type="Script" uid="uid://cxgccu1pbx0e3" path="res://area/3 evil foundry/data/script/IfritGolem.cs" id="2_jm400"]
@@ -493,6 +493,9 @@ shader_parameter/clipping_offset = 1.0
 
 [sub_resource type="QuadMesh" id="QuadMesh_aphx1"]
 material = SubResource("ShaderMaterial_viv8e")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2u2fw"]
+size = Vector3(2, 1, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_c2y7b"]
 radius = 2.0
@@ -1447,20 +1450,6 @@ hintDialogs = [NodePath("Sound/Dialog/Head1"), NodePath("Sound/Dialog/Head2"), N
 gasTankScene = ExtResource("3_7wg3m")
 gasTankSpawnPositions = [NodePath("BoneAttachments/TankSpawn/01L/Tank0"), NodePath("BoneAttachments/TankSpawn/02L/Tank1"), NodePath("BoneAttachments/TankSpawn/03L/Tank2"), NodePath("BoneAttachments/TankSpawn/11L/Tank3"), NodePath("BoneAttachments/TankSpawn/12L/Tank4"), NodePath("BoneAttachments/TankSpawn/13L/Tank5"), NodePath("BoneAttachments/TankSpawn/01R/Tank6"), NodePath("BoneAttachments/TankSpawn/02R/Tank7"), NodePath("BoneAttachments/TankSpawn/03R/Tank8"), NodePath("BoneAttachments/TankSpawn/11R/Tank9"), NodePath("BoneAttachments/TankSpawn/12R/Tank10"), NodePath("BoneAttachments/TankSpawn/13R/Tank11")]
 
-[node name="Skeleton3D" parent="IfritRoot" index="0"]
-bones/17/rotation = Quaternion(2.74181e-06, 1.19129e-08, 3.17165e-14, 1)
-bones/18/rotation = Quaternion(2.74181e-06, 1.19129e-08, 3.17165e-14, 1)
-bones/19/rotation = Quaternion(2.74181e-06, 1.19129e-08, 3.17165e-14, 1)
-bones/20/rotation = Quaternion(2.74181e-06, 1.19129e-08, 3.17165e-14, 1)
-bones/21/rotation = Quaternion(2.74181e-06, 1.19129e-08, 3.17165e-14, 1)
-bones/22/rotation = Quaternion(2.74181e-06, 1.19129e-08, 3.17165e-14, 1)
-bones/61/scale = Vector3(1, 1, 1)
-bones/63/scale = Vector3(1, 1, 1)
-bones/65/scale = Vector3(1, 1, 1)
-bones/67/scale = Vector3(1, 1, 1)
-bones/69/scale = Vector3(1, 1, 1)
-bones/71/scale = Vector3(1, 1, 1)
-
 [node name="BaseMesh" parent="IfritRoot/Skeleton3D" index="0"]
 material_overlay = ExtResource("4_1wjmy")
 cast_shadow = 0
@@ -1584,7 +1573,7 @@ transform = Transform3D(0.156434, -0.987688, 1.18526e-07, 0.987688, 0.156434, 1.
 isRightHand = true
 
 [node name="LCore1" type="BoneAttachment3D" parent="BoneAttachments/Cores" index="3"]
-transform = Transform3D(-0.155962, 0.987763, -3.70154e-07, -0.987763, -0.155962, -3.56747e-06, -3.62648e-06, -2.88374e-07, 1, 36, 9.10001, -2.29996)
+transform = Transform3D(-0.155962, 0.987763, -3.70155e-07, -0.987763, -0.155962, -3.56747e-06, -3.62648e-06, -2.88374e-07, 1, 36, 9.10001, -2.29996)
 bone_name = "l_core1"
 bone_idx = 71
 use_external_skeleton = true
@@ -1715,7 +1704,16 @@ transform_align = 1
 process_material = SubResource("ParticleProcessMaterial_cpgow")
 draw_pass_1 = SubResource("QuadMesh_aphx1")
 
-[node name="HeadHurtbox" type="Area3D" parent="BoneAttachments/BodyParts/Head" index="2"]
+[node name="SpeedbreakHurtbox" type="Area3D" parent="BoneAttachments/BodyParts/Head" index="2"]
+transform = Transform3D(1, -1.41889e-07, -5.16441e-08, 1.50996e-07, 0.939691, 0.342024, -2.13165e-14, -0.342024, 0.939691, -2.22584e-07, 1.47411, -3.25698)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BoneAttachments/BodyParts/Head/SpeedbreakHurtbox" index="0"]
+shape = SubResource("BoxShape3D_2u2fw")
+
+[node name="HeadHurtbox" type="Area3D" parent="BoneAttachments/BodyParts/Head" index="3"]
 transform = Transform3D(1, 1.42084e-14, 0, -2.48097e-18, 1, 0, 0, 0, 1, 2.27374e-13, 4.4, 0)
 collision_layer = 4
 collision_mask = 2
@@ -1726,7 +1724,7 @@ monitorable = false
 transform = Transform3D(1, -1.42133e-14, 0, 1.42084e-14, 1, 0, 0, 0, 1, 2.27374e-13, -1.5, 5.96046e-08)
 shape = SubResource("SphereShape3D_c2y7b")
 
-[node name="Glow" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Head" index="3"]
+[node name="Glow" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Head" index="4"]
 transform = Transform3D(1, -2.47767e-18, 0, -2.48097e-18, 1, 0, 0, 0, 1, 6.82121e-13, 4, 0)
 layers = 32
 amount = 32
@@ -1739,7 +1737,7 @@ transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_n42eo")
 draw_pass_1 = SubResource("QuadMesh_ojqyr")
 
-[node name="Damage" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Head" index="4"]
+[node name="Damage" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Head" index="5"]
 transform = Transform3D(1, -2.47767e-18, 0, -2.48097e-18, 1, 0, 0, 0, 1, 9.09495e-13, 4, 0)
 layers = 32
 cast_shadow = 0
@@ -1754,7 +1752,7 @@ transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_ykglb")
 draw_pass_1 = SubResource("QuadMesh_c0w2a")
 
-[node name="ChinSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Head" index="5"]
+[node name="ChinSmoke" type="GPUParticles3D" parent="BoneAttachments/BodyParts/Head" index="6"]
 transform = Transform3D(1, -2.47767e-18, 0, -2.48097e-18, 1, 0, 0, 0, 1, 2.27374e-13, -6, 3.8)
 layers = 32
 cast_shadow = 0
@@ -2534,6 +2532,8 @@ cull_mask = 37
 [connection signal="StunEnded" from="." to="Environment/Lockout" method="Deactivate"]
 [connection signal="Stunned" from="." to="Environment/Lockout" method="Activate"]
 [connection signal="Activated" from="BoneAttachments/BodyParts/Root/OvershootTrigger" to="." method="EnterRecovery"]
+[connection signal="area_entered" from="BoneAttachments/BodyParts/Head/SpeedbreakHurtbox" to="." method="OnSpeedbreakHurtboxEntered"]
+[connection signal="area_exited" from="BoneAttachments/BodyParts/Head/SpeedbreakHurtbox" to="." method="OnSpeedbreakHurtboxExited"]
 [connection signal="area_entered" from="BoneAttachments/BodyParts/Head/HeadHurtbox" to="." method="OnHeadEntered"]
 [connection signal="area_exited" from="BoneAttachments/BodyParts/Head/HeadHurtbox" to="." method="OnHeadExited"]
 [connection signal="area_entered" from="Environment/Lava/LavaHazard" to="." method="OnLavaEntered"]

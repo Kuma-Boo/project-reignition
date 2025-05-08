@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=314 format=3 uid="uid://biwe75w273iq7"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=319 format=3 uid="uid://biwe75w273iq7"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_hf2vv"]
 
@@ -741,31 +741,65 @@ blend_point_2/node = SubResource("AnimationNodeAnimation_bc1ee")
 blend_point_2/pos = 1.0
 sync = true
 
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_xh678"]
+xfade_time = 0.05
+allow_transition_to_self = true
+input_0/name = "left"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "right"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8kago"]
+animation = &"GimmickLibrary/zipline-tap-left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ninx3"]
+animation = &"GimmickLibrary/zipline-tap-right"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_g25ih"]
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_3o1j2"]
+fadein_time = 0.05
+fadeout_time = 0.4
+
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_m8twf"]
-graph_offset = Vector2(-1179.24, 299.374)
+graph_offset = Vector2(-1409.34, 284.124)
 nodes/idle_anim/node = SubResource("AnimationNodeAnimation_xpufo")
-nodes/idle_anim/position = Vector2(-960, 520)
+nodes/idle_anim/position = Vector2(-960, 860)
 nodes/ivy_blend/node = SubResource("AnimationNodeBlendSpace1D_n6eio")
-nodes/ivy_blend/position = Vector2(-880, -40)
+nodes/ivy_blend/position = Vector2(-920, -180)
 nodes/ivy_start_anim/node = SubResource("AnimationNodeAnimation_4fcb5")
-nodes/ivy_start_anim/position = Vector2(-680, 180)
+nodes/ivy_start_anim/position = Vector2(-720, 100)
 nodes/ivy_start_trigger/node = SubResource("AnimationNodeOneShot_tjhp0")
 nodes/ivy_start_trigger/position = Vector2(-400, -40)
 nodes/ivy_swing_anim/node = SubResource("AnimationNodeAnimation_uubck")
-nodes/ivy_swing_anim/position = Vector2(-960, 160)
+nodes/ivy_swing_anim/position = Vector2(-1000, 20)
 nodes/ivy_swing_trigger/node = SubResource("AnimationNodeOneShot_ri8jf")
-nodes/ivy_swing_trigger/position = Vector2(-680, -40)
+nodes/ivy_swing_trigger/position = Vector2(-720, -180)
 nodes/lever_state/node = SubResource("AnimationNodeStateMachine_oumfq")
-nodes/lever_state/position = Vector2(-340, 560)
+nodes/lever_state/position = Vector2(-340, 900)
 nodes/petrify_recover_anim/node = SubResource("AnimationNodeAnimation_wjjju")
-nodes/petrify_recover_anim/position = Vector2(-960, 700)
+nodes/petrify_recover_anim/position = Vector2(-960, 1040)
 nodes/petrify_stop_trigger/node = SubResource("AnimationNodeOneShot_iywqm")
-nodes/petrify_stop_trigger/position = Vector2(-600, 460)
+nodes/petrify_stop_trigger/position = Vector2(-600, 800)
 nodes/state_transition/node = SubResource("AnimationNodeTransition_050f5")
 nodes/state_transition/position = Vector2(-60, 100)
 nodes/zipline_blend/node = SubResource("AnimationNodeBlendSpace1D_1mbie")
-nodes/zipline_blend/position = Vector2(-960, 340)
-node_connections = [&"ivy_start_trigger", 0, &"ivy_swing_trigger", &"ivy_start_trigger", 1, &"ivy_start_anim", &"ivy_swing_trigger", 0, &"ivy_blend", &"ivy_swing_trigger", 1, &"ivy_swing_anim", &"output", 0, &"state_transition", &"petrify_stop_trigger", 0, &"idle_anim", &"petrify_stop_trigger", 1, &"petrify_recover_anim", &"state_transition", 0, &"ivy_start_trigger", &"state_transition", 1, &"zipline_blend", &"state_transition", 2, &"petrify_stop_trigger", &"state_transition", 3, &"lever_state"]
+nodes/zipline_blend/position = Vector2(-1140, 280)
+nodes/zipline_direction/node = SubResource("AnimationNodeTransition_xh678")
+nodes/zipline_direction/position = Vector2(-920, 460)
+nodes/zipline_tap_left_anim/node = SubResource("AnimationNodeAnimation_8kago")
+nodes/zipline_tap_left_anim/position = Vector2(-1260, 480)
+nodes/zipline_tap_right_anim/node = SubResource("AnimationNodeAnimation_ninx3")
+nodes/zipline_tap_right_anim/position = Vector2(-1260, 660)
+nodes/zipline_tap_speed/node = SubResource("AnimationNodeTimeScale_g25ih")
+nodes/zipline_tap_speed/position = Vector2(-700, 400)
+nodes/zipline_tap_trigger/node = SubResource("AnimationNodeOneShot_3o1j2")
+nodes/zipline_tap_trigger/position = Vector2(-480, 280)
+node_connections = [&"ivy_start_trigger", 0, &"ivy_swing_trigger", &"ivy_start_trigger", 1, &"ivy_start_anim", &"ivy_swing_trigger", 0, &"ivy_blend", &"ivy_swing_trigger", 1, &"ivy_swing_anim", &"output", 0, &"state_transition", &"petrify_stop_trigger", 0, &"idle_anim", &"petrify_stop_trigger", 1, &"petrify_recover_anim", &"state_transition", 0, &"ivy_start_trigger", &"state_transition", 1, &"zipline_tap_trigger", &"state_transition", 2, &"petrify_stop_trigger", &"state_transition", 3, &"lever_state", &"zipline_direction", 0, &"zipline_tap_left_anim", &"zipline_direction", 1, &"zipline_tap_right_anim", &"zipline_tap_speed", 0, &"zipline_direction", &"zipline_tap_trigger", 0, &"zipline_blend", &"zipline_tap_trigger", 1, &"zipline_tap_speed"]
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_yjaps"]
 xfade_time = 0.1
@@ -1598,7 +1632,7 @@ input_5/break_loop_at_end = false
 input_5/reset = true
 
 [resource]
-graph_offset = Vector2(-1097.01, 82.4008)
+graph_offset = Vector2(-1260.91, 255.896)
 nodes/air_tree/node = SubResource("AnimationNodeBlendTree_2rvqt")
 nodes/air_tree/position = Vector2(-1300, 100)
 nodes/balance_tree/node = SubResource("AnimationNodeBlendTree_gi378")
@@ -1622,7 +1656,7 @@ nodes/oneshot_trigger/position = Vector2(40, 140)
 nodes/sidle_tree/node = SubResource("AnimationNodeBlendTree_yi2da")
 nodes/sidle_tree/position = Vector2(-1120, 368)
 nodes/spin_speed/node = SubResource("AnimationNodeTimeScale_taids")
-nodes/spin_speed/position = Vector2(-940, 420)
+nodes/spin_speed/position = Vector2(-940, 440)
 nodes/spin_state/node = SubResource("AnimationNodeStateMachine_xchh2")
 nodes/spin_state/position = Vector2(-1320, 520)
 nodes/state_transition/node = SubResource("70")

@@ -1,7 +1,4 @@
-[gd_resource type="Shader" format=3 uid="uid://dc0qm6yo6x0kv"]
-
-[resource]
-code = "shader_type spatial;
+shader_type spatial;
 render_mode specular_disabled;
 
 uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_enable;
@@ -25,4 +22,3 @@ void fragment() {
 	vec3 emission_tex = texture(texture_emission, base_uv).rgb;
 	EMISSION = (emission.rgb * emission_tex) * (emission_energy + sin(time * PI) * 2.0);
 }
-"

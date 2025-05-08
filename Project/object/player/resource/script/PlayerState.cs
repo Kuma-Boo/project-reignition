@@ -94,7 +94,20 @@ public partial class PlayerState : Node
 		if (Player.Camera.IsCrossfading)
 			return false;
 
-		return Player.Controller.IsHoldingDirection(inputAngle, Player.MovementAngle + Mathf.Pi);
+		bool isHoldingBack = Player.Controller.IsHoldingDirection(inputAngle, Player.MovementAngle + Mathf.Pi);
+
+		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
+		{
+			if (!Player.Controller.InputAxis.IsZeroApprox())
+			{
+				isHoldingBack = isHoldingBack &&
+					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle, Mathf.Pi * .2f);
+			}
+
+			return isHoldingBack;
+		}
+
+		return isHoldingBack;
 	}
 
 	protected virtual void Deccelerate() => Player.MoveSpeed = ActiveMovementSettings.UpdateInterpolate(Player.MoveSpeed, 0);
@@ -160,11 +173,11 @@ public partial class PlayerState : Node
 			return true;
 		}
 
-		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi))
+		// Check for turning around
+		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi) &&
+			!Player.Controller.IsStrafeModeActive)
 		{
-			// Check for turning around
-			if (!Player.IsLockoutActive || Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
-				return true;
+			return true;
 		}
 
 		return false;

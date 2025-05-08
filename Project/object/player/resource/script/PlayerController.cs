@@ -335,7 +335,7 @@ public partial class PlayerController : CharacterBody3D
 		DebugManager.DrawRay(CollisionPosition, castDirection * castLength, wallHit ? Colors.Red : Colors.White);
 
 		if (ValidateWallCast(wallHit))
-			MovementAngle = PathFollower.ForwardAngle;
+			MovementAngle = IsMovingBackward ? PathFollower.BackAngle : PathFollower.ForwardAngle;
 	}
 
 	private bool ValidateWallCast(RaycastHit hit) => hit && hit.collidedObject.IsInGroup("wall");

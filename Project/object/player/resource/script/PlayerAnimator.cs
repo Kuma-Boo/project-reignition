@@ -939,6 +939,9 @@ public partial class PlayerAnimator : Node3D
 
 	private readonly StringName ZiplineState = "zipline";
 	private readonly StringName ZiplineBlend = "parameters/gimmick_tree/zipline_blend/blend_position";
+	private readonly StringName ZiplineDirection = "parameters/gimmick_tree/zipline_direction/transition_request";
+	private readonly StringName ZiplineTapTrigger = "parameters/gimmick_tree/zipline_tap_trigger/request";
+	private readonly StringName ZiplineTapActive = "parameters/gimmick_tree/zipline_tap_trigger/active";
 	public void StartZipline()
 	{
 		SetStateXfade(.2f);
@@ -947,6 +950,16 @@ public partial class PlayerAnimator : Node3D
 	}
 	public void SetZiplineBlend(float ratio) => animationTree.Set(ZiplineBlend, ratio);
 	public float GetZiplineBlend() => (float)animationTree.Get(ZiplineBlend);
+
+	public void StartZiplineTap(bool isFacingRight)
+	{
+		animationTree.Set(ZiplineDirection, isFacingRight ? RightConstant : LeftConstant);
+		animationTree.Set(ZiplineTapTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	public bool IsZiplineTapActive => (bool)animationTree.Get(ZiplineTapActive);
+
+	public void CancelZiplineTap() => animationTree.Set(ZiplineTapTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 
 	public void StartPetrify()
 	{

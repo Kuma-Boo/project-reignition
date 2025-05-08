@@ -1267,11 +1267,12 @@ stompState = NodePath("../Stomp")
 jumpDashState = NodePath("../JumpDash")
 homingAttackState = NodePath("../HomingAttack")
 
-[node name="Backflip" type="Node" parent="StateMachine/Basic" node_paths=PackedStringArray("landState", "jumpDashState", "homingAttackState")]
+[node name="Backflip" type="Node" parent="StateMachine/Basic" node_paths=PackedStringArray("landState", "jumpDashState", "homingAttackState", "stompState")]
 script = ExtResource("9_7wp0f")
 landState = NodePath("../Land")
 jumpDashState = NodePath("../JumpDash")
 homingAttackState = NodePath("../HomingAttack")
+stompState = NodePath("../Stomp")
 backflipHeight = 2.4
 
 [node name="Stomp" type="Node" parent="StateMachine/Basic" node_paths=PackedStringArray("landState")]
@@ -1508,6 +1509,10 @@ sidleMovementCurve = SubResource("Curve_jakcp")
 
 [connection signal="body_exited" from="StageTriggerDetector" to="." method="OnBodyExited"]
 [connection signal="CountdownLanding" from="Sonic" to="Sonic/Effect" method="PlayLandingFX"]
+[connection signal="area_entered" from="Sonic/HitboxTrigger" to="Lockon" method="OnHitboxEntered"]
+[connection signal="area_exited" from="Sonic/HitboxTrigger" to="Lockon" method="OnHitboxExited"]
+[connection signal="body_entered" from="Sonic/HitboxTrigger" to="Lockon" method="OnHitboxBodyEntered"]
+[connection signal="body_exited" from="Sonic/HitboxTrigger" to="Lockon" method="OnHitboxBodyExited"]
 [connection signal="area_entered" from="Sonic/LightDashRingDetector" to="StateMachine/Skill/LightSpeedDash" method="OnAreaEntered"]
 [connection signal="area_exited" from="Sonic/LightDashRingDetector" to="StateMachine/Skill/LightSpeedDash" method="OnAreaExited"]
 

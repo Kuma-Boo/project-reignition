@@ -369,8 +369,10 @@ public partial class Majin : Enemy
 
 		// Reset idle movement
 		idleFactorVelocity = 0;
+		stateTransition.XfadeTime = 0f;
 		AnimationTree.Set(IdleFactorParameter, 0);
 		AnimationTree.Set(DefeatTransitionParameter, DisabledState);
+		AnimationTree.Set(StateRequestParameter, IdleState);
 
 		// Reset stagger
 		staggerTimer = 0;
@@ -773,6 +775,7 @@ public partial class Majin : Enemy
 		if (attackType == AttackTypes.Spin)
 		{
 			spinState.Travel("attack-spin-start");
+			stateTransition.XfadeTime = 0.2f;
 			AnimationTree.Set(StateRequestParameter, SpinState);
 
 			tweener?.Kill();

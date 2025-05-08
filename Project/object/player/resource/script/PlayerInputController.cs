@@ -117,6 +117,8 @@ public partial class PlayerInputController : Node
 				UpdateActionBuffer();
 			else
 				ResetActionBuffer();
+
+			return;
 		}
 
 		if (Input.IsActionJustPressed("button_action"))
@@ -295,7 +297,7 @@ public partial class PlayerInputController : Node
 			if (controlMode == CameraSettingsResource.ControlModeEnum.Reverse) // Transform inputs based on the control mode
 				inputs.Y *= -1;
 
-			if (inputs.Y > SaveManager.Config.deadZone)
+			if (Player.IsMovingBackward)
 				baseAngle = Player.PathFollower.BackAngle;
 		}
 

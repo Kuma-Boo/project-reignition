@@ -81,7 +81,7 @@ public partial class GolemMajin : Enemy
 		if (!canThrowGasTank || !IsActive || !IsInRange || gasTank == null)
 			return;
 
-		if (Player.PathFollower.ForwardAxis.Dot(this.Forward()) < 0.5f) // Not facing the player
+		if (Player.PathFollower.ForwardAxis.Dot(this.Forward()) > -0.5f) // Not facing the player
 			return;
 
 		if (gasTank.CastRay(gasTank.GlobalPosition, Player.GlobalPosition - gasTank.GlobalPosition, Runtime.Instance.environmentMask)) // Obstacle

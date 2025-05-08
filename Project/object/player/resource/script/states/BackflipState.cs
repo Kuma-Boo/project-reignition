@@ -12,6 +12,8 @@ public partial class BackflipState : PlayerState
 	[Export]
 	private PlayerState homingAttackState;
 	[Export]
+	private PlayerState stompState;
+	[Export]
 	private float backflipHeight;
 
 	/// <summary> How much can the player adjust their angle while backflipping? </summary>
@@ -72,6 +74,12 @@ public partial class BackflipState : PlayerState
 			return jumpDashState;
 		}
 
+		if (Player.Controller.IsActionBufferActive)
+		{
+			Player.Controller.ResetActionBuffer();
+			return stompState;
+		}
+
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.LightSpeedDash) &&
 			Player.Controller.IsLightDashBufferActive)
 		{
@@ -121,11 +129,10 @@ public partial class BackflipState : PlayerState
 			return true;
 		}
 
-		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi, Mathf.Pi * .2f))
+		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi, Mathf.Pi * .2f) &&
+			!Player.Controller.IsStrafeModeActive)
 		{
-			// Check for turning around
-			if (!Player.IsLockoutActive || Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
-				return true;
+			return true;
 		}
 
 		return false;

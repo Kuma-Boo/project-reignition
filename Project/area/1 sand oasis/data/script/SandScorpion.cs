@@ -223,7 +223,7 @@ public partial class SandScorpion : Node3D
 		BonusManager.instance.QueueBonus(new(BonusType.Boss, 1000));
 	}
 
-	private void StartDefeat()
+	private void DefeatBoss()
 	{
 		cutsceneCamera.Activate();
 		rootAnimationTree.Set(DefeatParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
@@ -640,6 +640,7 @@ public partial class SandScorpion : Node3D
 	private bool IsHeavyAttackActive => attackState != AttackState.Inactive && attackCounter == 0;
 
 	private readonly StringName HeavyStrikeState = "strike";
+	private readonly StringName HeavyLoopState = "loop";
 	private readonly StringName HeavyRecoveryState = "recovery";
 	private readonly StringName HeavyAttackParameter = "parameters/heavy_attack_transition/transition_request";
 	private readonly StringName HeavyAttackTriggerParameter = "parameters/heavy_attack_trigger/request";
@@ -868,7 +869,7 @@ public partial class SandScorpion : Node3D
 	{
 		if (currentHealth == 0)
 		{
-			StartDefeat();
+			DefeatBoss();
 		}
 		else if (dialogFlags[2] == 0 && currentHealth == 1)
 		{
@@ -898,7 +899,7 @@ public partial class SandScorpion : Node3D
 	}
 	private DamageState damageState;
 	/// <summary> How much force to knockback the boss back with when taking damage. </summary>
-	private readonly float KNOCKBACK = 80.0f;
+	private readonly float KnockbackStrength = 80.0f;
 
 	/// <summary>
 	/// Deals damage to the boss. Returns True if the boss is defeated.
@@ -1075,7 +1076,7 @@ public partial class SandScorpion : Node3D
 		if (Player.IsHomingAttacking)
 			Player.StartBounce(); // Bounce the player
 
-		MoveSpeed = KNOCKBACK; // Start knockback
+		MoveSpeed = KnockbackStrength; // Start knockback
 		damageState = DamageState.Knockback;
 	}
 
@@ -1092,6 +1093,12 @@ public partial class SandScorpion : Node3D
 		Player.StartBounce();
 		damageState = DamageState.Hitstun;
 		Runtime.Instance.SpawnPearls(TraversalEyePearlAmount, Player.GlobalPosition, new Vector2(2, 1.5f));
+		attackCounter = 0; // Reset attack counter whenever a tail eye is hit
+
+		if (attackSide == 1)
+			rTailAnimationTree.Set(HeavyAttackParameter, HeavyLoopState);
+		else if (attackSide == -1)
+			lTailAnimationTree.Set(HeavyAttackParameter, HeavyLoopState);
 
 		// Disable hurtboxes so the player can't just bounce on the same eye infinitely
 		eventAnimator.Play(hitFarEye ? "disable-hurtbox-01" : "disable-hurtbox-02");

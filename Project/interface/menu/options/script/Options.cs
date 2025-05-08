@@ -70,6 +70,9 @@ public partial class Options : Menu
 	{
 		bgm.Play();
 
+		// Prevent the options menu from jumping displays when moving through the options menu
+		SaveManager.Config.targetDisplay = DisplayServer.WindowGetCurrentScreen();
+
 		SetUpControlOptions();
 		UpdateLabels();
 		CalculateMaxSelection();
