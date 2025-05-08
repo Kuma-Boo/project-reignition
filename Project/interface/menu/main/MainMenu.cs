@@ -21,8 +21,6 @@ public partial class MainMenu : Menu
 		cursorVelocity = Vector2.Zero;
 		cursor.Position = options[currentSelection].Position;
 		menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.MainMenu;
-
-		SetUp();
 	}
 
 	protected override void SetUp()
@@ -33,6 +31,9 @@ public partial class MainMenu : Menu
 		currentSelection = menuMemory[MemoryKeys.MainMenu];
 		HorizontalSelection = currentSelection % 2;
 		VerticalSelection = currentSelection / 2;
+
+		if (menuMemory[MemoryKeys.ActiveMenu] == (int)MemoryKeys.MainMenu)
+			ShowMenu();
 	}
 
 	protected override void ProcessMenu()

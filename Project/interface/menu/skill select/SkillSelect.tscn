@@ -1,7 +1,6 @@
-[gd_scene load_steps=51 format=3 uid="uid://bt32kmhyoo7ec"]
+[gd_scene load_steps=50 format=3 uid="uid://bt32kmhyoo7ec"]
 
 [ext_resource type="Script" uid="uid://8fsxq4g2aeod" path="res://interface/menu/skill select/script/SkillSelect.cs" id="1_v1nov"]
-[ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="2_ww16u"]
 [ext_resource type="PackedScene" uid="uid://c4ohuqlywe4f" path="res://interface/menu/Description.tscn" id="3_ud304"]
 [ext_resource type="PackedScene" uid="uid://b6v3sm1vo8for" path="res://interface/menu/skill select/SkillOption.tscn" id="4_sgi6g"]
 [ext_resource type="Texture2D" uid="uid://cqp20lub7h6aq" path="res://interface/menu/skill select/texture/skill menu.png" id="4_x4q03"]
@@ -1089,6 +1088,20 @@ tracks/7/keys = {
 "method": &"HideDescription"
 }]
 }
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Content/CursorOrigin/Cursor/AnimationPlayer")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["hide", -1, 1.0, false],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_qo4fo"]
 resource_name = "equip"
@@ -1616,21 +1629,11 @@ levelLabel = NodePath("Content/Header/LevelLabel")
 skillPointLabel = NodePath("Content/Header/SPValue")
 alertAnimator = NodePath("AlertMenu/AnimationPlayer")
 alertLabel = NodePath("AlertMenu/Menu/Parent/Text/Label")
-sortTypeLabel = NodePath("Content/SortingMethodLabel")
-sortOrderCursor = NodePath("Content/SortArrow")
+sortTypeLabel = NodePath("Content/Header/SortingMethodLabel")
+sortOrderCursor = NodePath("Content/Header/SortArrow")
 submenus = Array[NodePath]([NodePath("")])
 bgm = NodePath("BGM")
 animator = NodePath("AnimationPlayer")
-metadata/_edit_lock_ = true
-
-[node name="Background" type="TextureRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_ww16u")
 metadata/_edit_lock_ = true
 
 [node name="Content" type="Control" parent="."]
@@ -1771,6 +1774,27 @@ text = "000/000"
 label_settings = ExtResource("6_4a5gt")
 vertical_alignment = 1
 
+[node name="SortingMethodLabel" type="Label" parent="Content/Header"]
+layout_mode = 2
+offset_left = 112.0
+offset_top = 80.0
+offset_right = 816.0
+offset_bottom = 152.0
+scale = Vector2(0.75, 0.75)
+text = "sys_sort_default"
+label_settings = ExtResource("6_4a5gt")
+vertical_alignment = 1
+uppercase = true
+
+[node name="SortArrow" type="TextureRect" parent="Content/Header"]
+layout_mode = 0
+offset_left = 1088.0
+offset_top = 80.0
+offset_right = 1144.0
+offset_bottom = 136.0
+texture = ExtResource("7_2pdxw")
+stretch_mode = 5
+
 [node name="Clip" type="Control" parent="Content"]
 modulate = Color(1, 1, 1, 0)
 clip_contents = true
@@ -1796,27 +1820,6 @@ anchor_right = 1.0
 offset_bottom = 883.0
 grow_horizontal = 2
 theme_override_constants/separation = -1
-
-[node name="SortingMethodLabel" type="Label" parent="Content"]
-layout_mode = 2
-offset_left = 112.0
-offset_top = 144.0
-offset_right = 816.0
-offset_bottom = 216.0
-scale = Vector2(0.75, 0.75)
-text = "sys_sort_default"
-label_settings = ExtResource("6_4a5gt")
-vertical_alignment = 1
-uppercase = true
-
-[node name="SortArrow" type="TextureRect" parent="Content"]
-layout_mode = 0
-offset_left = 1088.0
-offset_top = 144.0
-offset_right = 1144.0
-offset_bottom = 200.0
-texture = ExtResource("7_2pdxw")
-stretch_mode = 5
 
 [node name="NavigationButtons" type="HBoxContainer" parent="."]
 layout_mode = 1

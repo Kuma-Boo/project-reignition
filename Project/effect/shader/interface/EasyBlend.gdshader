@@ -23,5 +23,6 @@ void fragment() {
 	output.b = blendColor.b;
 
 	output.rgb = mix(color.rgb, output.rgb, influence);
-	COLOR = output;
+	COLOR.rgb = output.rgb;
+	COLOR.a *= output.a;
 }

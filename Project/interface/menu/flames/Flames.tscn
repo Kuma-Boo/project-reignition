@@ -20,6 +20,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(1, 0)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sparks:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="5"]
 resource_name = "spawn"
@@ -37,6 +49,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(1, 0), Vector2(1, 1)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sparks:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.250008),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4vh02"]
 _data = {
@@ -47,30 +71,32 @@ _data = {
 [node name="Flames" type="Control"]
 material = ExtResource("1_n3mht")
 layout_mode = 3
-anchors_preset = 0
-offset_left = 950.0
-offset_top = 842.0
-offset_right = 950.0
-offset_bottom = 842.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(1, 1e-05)
+pivot_offset = Vector2(0, 1080)
 
 [node name="BackBufferCopy" type="BackBufferCopy" parent="."]
 copy_mode = 2
 
 [node name="Sparks" type="AnimatedSprite2D" parent="."]
 use_parent_material = true
-position = Vector2(-6.10352e-05, -168)
-scale = Vector2(1.875, 4)
+position = Vector2(960, 540)
+scale = Vector2(1.875, 1.875)
 sprite_frames = ExtResource("2_oslu0")
 autoplay = "default"
 speed_scale = 5.0
 
 [node name="Flames" type="AnimatedSprite2D" parent="."]
 use_parent_material = true
-position = Vector2(-3.05176e-05, -176)
-scale = Vector2(1.875, 1.4375)
+position = Vector2(960, 540)
+scale = Vector2(1.875, 1.875)
 sprite_frames = ExtResource("1_cxnaw")
 autoplay = "default"
+frame_progress = 0.983192
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

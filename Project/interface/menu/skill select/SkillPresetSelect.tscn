@@ -1,10 +1,9 @@
-[gd_scene load_steps=36 format=3 uid="uid://bgsvifk5vld4y"]
+[gd_scene load_steps=35 format=3 uid="uid://bgsvifk5vld4y"]
 
 [ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="1_g5uw6"]
 [ext_resource type="Script" uid="uid://bug5i2cjqms7e" path="res://interface/menu/skill select/script/SkillPresetSelect.cs" id="1_o0ujo"]
 [ext_resource type="PackedScene" uid="uid://c3qhbk31d0gc4" path="res://interface/menu/skill select/SkillPresetOption.tscn" id="2_aav6m"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="2_w3g84"]
-[ext_resource type="Texture2D" uid="uid://cno436k6axxi5" path="res://interface/menu/main/texture/background.png" id="3_p4kwu"]
 [ext_resource type="LabelSettings" uid="uid://d2esxoalpgwjg" path="res://interface/font/MenuText.tres" id="6_esvmo"]
 [ext_resource type="Texture2D" uid="uid://dq3e58qnn7y56" path="res://interface/menu/skill select/texture/augment arrow.png" id="8_ateip"]
 [ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="8_qq2en"]
@@ -36,18 +35,6 @@ tracks/1/path = NodePath("NavigationButtons:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Background:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -107,25 +94,13 @@ tracks/3/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
-tracks/4/type = "value"
+tracks/4/type = "method"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Background:modulate")
+tracks/4/path = NodePath("SFX/Cancel")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/5/type = "method"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SFX/Cancel")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -182,18 +157,6 @@ tracks/3/path = NodePath(".:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Background:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
@@ -1794,17 +1757,6 @@ selectSFX = NodePath("SFX/Select")
 failSFX = NodePath("SFX/Fail")
 animator = NodePath("AnimationPlayer")
 
-[node name="Background" type="TextureRect" parent="."]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_p4kwu")
-metadata/_edit_lock_ = true
-
 [node name="Content" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
@@ -1849,7 +1801,7 @@ anchor_bottom = 0.652
 offset_left = -76.32
 offset_top = -0.24
 offset_right = 0.319946
-offset_bottom = 278.84
+offset_bottom = 255.84
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 0
@@ -1892,7 +1844,7 @@ fallbackKey = "ui_cancel"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_b2l6e")
+&"": SubResource("AnimationLibrary_b2l6e")
 }
 
 [node name="Submenu" type="Control" parent="."]
@@ -2071,7 +2023,7 @@ region_rect = Rect2(73, 95, 44, 4)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Submenu"]
 libraries = {
-"": SubResource("AnimationLibrary_2bfnq")
+&"": SubResource("AnimationLibrary_2bfnq")
 }
 
 [node name="NameEdit" type="Control" parent="."]
@@ -2132,7 +2084,7 @@ overrideKey = 4194305
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="NameEdit"]
 libraries = {
-"": SubResource("AnimationLibrary_2ttj6")
+&"": SubResource("AnimationLibrary_2ttj6")
 }
 
 [node name="SFX" type="Node" parent="."]

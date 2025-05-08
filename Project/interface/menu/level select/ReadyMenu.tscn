@@ -676,7 +676,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Menu/Flames:modulate")
+tracks/11/path = NodePath("Flames:modulate")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -736,7 +736,7 @@ tracks/15/keys = {
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("NavigationButtons:modulate")
+tracks/16/path = NodePath("Menu/NavigationButtons:modulate")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
@@ -848,7 +848,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("NavigationButtons:modulate")
+tracks/7/path = NodePath("Menu/NavigationButtons:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -936,7 +936,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Menu/Flames:modulate")
+tracks/5/path = NodePath("Flames:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -988,7 +988,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("NavigationButtons:modulate")
+tracks/9/path = NodePath("Menu/NavigationButtons:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -1000,7 +1000,7 @@ tracks/9/keys = {
 
 [sub_resource type="Animation" id="Animation_sns38"]
 resource_name = "open-skill-menu"
-length = 0.001
+length = 0.16667
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1028,6 +1028,18 @@ tracks/1/keys = {
 "args": [],
 "method": &"OpenSubmenu"
 }]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Menu:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_ablxt"]
@@ -1430,7 +1442,7 @@ tracks/17/keys = {
 tracks/18/type = "method"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("Menu/Flames/AnimationPlayer")
+tracks/18/path = NodePath("Flames/AnimationPlayer")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
@@ -1447,7 +1459,7 @@ tracks/18/keys = {
 tracks/19/type = "value"
 tracks/19/imported = false
 tracks/19/enabled = true
-tracks/19/path = NodePath("NavigationButtons:modulate")
+tracks/19/path = NodePath("Menu/NavigationButtons:modulate")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
@@ -1459,7 +1471,7 @@ tracks/19/keys = {
 
 [sub_resource type="Animation" id="Animation_sgy3m"]
 resource_name = "show-from-skill"
-length = 0.001
+length = 0.16667
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1473,6 +1485,18 @@ tracks/0/keys = {
 "args": [],
 "method": &"ShowDescription"
 }]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Menu:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hjga2"]
@@ -1502,6 +1526,7 @@ metadata/_edit_lock_ = true
 
 [node name="Background" type="Node2D" parent="."]
 visible = false
+z_index = -1
 
 [node name="Black" type="ColorRect" parent="Background"]
 visible = false
@@ -1621,7 +1646,7 @@ autoplay = "default"
 
 [node name="TransitionAnimationPlayer" type="AnimationPlayer" parent="Background"]
 libraries = {
-"": SubResource("AnimationLibrary_4ix1o")
+&"": SubResource("AnimationLibrary_4ix1o")
 }
 
 [node name="Menu" type="Control" parent="."]
@@ -1894,10 +1919,40 @@ region_rect = Rect2(0, 92, 128, 50)
 
 [node name="CursorAnimationPlayer" type="AnimationPlayer" parent="Menu/Text/Cursor"]
 libraries = {
-"": SubResource("AnimationLibrary_ykvc1")
+&"": SubResource("AnimationLibrary_ykvc1")
 }
 
-[node name="Flames" parent="Menu" instance=ExtResource("31_1njce")]
+[node name="NavigationButtons" type="HBoxContainer" parent="Menu"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 448.0
+offset_top = 760.0
+offset_right = 1474.0
+offset_bottom = 824.0
+theme_override_constants/separation = 64
+alignment = 2
+
+[node name="Skill" parent="Menu/NavigationButtons" instance=ExtResource("35_edhiv")]
+layout_mode = 2
+ActionKey = "sys_skill"
+inputKey = "button_pause"
+fallbackKey = "ui_accept"
+
+[node name="Select" parent="Menu/NavigationButtons" instance=ExtResource("35_edhiv")]
+layout_mode = 2
+ActionKey = "sys_select"
+inputKey = "button_jump"
+fallbackKey = "ui_select"
+
+[node name="Cancel" parent="Menu/NavigationButtons" instance=ExtResource("35_edhiv")]
+layout_mode = 2
+ActionKey = "sys_cancel"
+inputKey = "button_action"
+fallbackKey = "ui_cancel"
+
+[node name="Flames" parent="." instance=ExtResource("31_1njce")]
+z_index = -1
+layout_mode = 1
 
 [node name="Fade" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -1911,34 +1966,6 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 metadata/_edit_lock_ = true
-
-[node name="NavigationButtons" type="HBoxContainer" parent="."]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_left = 448.0
-offset_top = 760.0
-offset_right = 1474.0
-offset_bottom = 824.0
-theme_override_constants/separation = 64
-alignment = 2
-
-[node name="Skill" parent="NavigationButtons" instance=ExtResource("35_edhiv")]
-layout_mode = 2
-ActionKey = "sys_skill"
-inputKey = "button_pause"
-fallbackKey = "ui_accept"
-
-[node name="Select" parent="NavigationButtons" instance=ExtResource("35_edhiv")]
-layout_mode = 2
-ActionKey = "sys_select"
-inputKey = "button_jump"
-fallbackKey = "ui_select"
-
-[node name="Cancel" parent="NavigationButtons" instance=ExtResource("35_edhiv")]
-layout_mode = 2
-ActionKey = "sys_cancel"
-inputKey = "button_action"
-fallbackKey = "ui_cancel"
 
 [node name="SFX" type="Node" parent="."]
 
@@ -1964,5 +1991,5 @@ bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_hjga2")
+&"": SubResource("AnimationLibrary_hjga2")
 }
