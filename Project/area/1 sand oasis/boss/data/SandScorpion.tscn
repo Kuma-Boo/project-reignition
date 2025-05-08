@@ -1,4 +1,4 @@
-[gd_scene load_steps=255 format=4 uid="uid://dr0pf7vprim86"]
+[gd_scene load_steps=257 format=4 uid="uid://dr0pf7vprim86"]
 
 [ext_resource type="Script" uid="uid://qdk7x6xpjbji" path="res://area/1 sand oasis/data/script/SandScorpion.cs" id="1_8xsd2"]
 [ext_resource type="PackedScene" uid="uid://b8irusmhs8rjm" path="res://area/1 sand oasis/boss/data/Missile.tscn" id="2_e5gye"]
@@ -671,6 +671,9 @@ animation = &"l-defeat"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wsiw7"]
 animation = &"l-attack-heavy-end"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ui144"]
+animation = &"l-attack-heavy"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l4m58"]
 animation = &"l-attack-heavy-start"
 
@@ -681,13 +684,17 @@ input_0/auto_advance = false
 input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "strike"
-input_1/auto_advance = false
+input_1/auto_advance = true
 input_1/break_loop_at_end = false
 input_1/reset = true
-input_2/name = "recovery"
-input_2/auto_advance = true
+input_2/name = "loop"
+input_2/auto_advance = false
 input_2/break_loop_at_end = false
 input_2/reset = true
+input_3/name = "recovery"
+input_3/auto_advance = true
+input_3/break_loop_at_end = false
+input_3/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fl1c0"]
 animation = &"l-idle2"
@@ -735,42 +742,45 @@ input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_wjd4q"]
+graph_offset = Vector2(-843.738, -83.2923)
 nodes/defeat_animation/node = SubResource("AnimationNodeAnimation_8rgq1")
-nodes/defeat_animation/position = Vector2(-40, 380)
+nodes/defeat_animation/position = Vector2(-60, 460)
 nodes/defeat_seek/node = SubResource("AnimationNodeTimeSeek_5pj3m")
 nodes/defeat_seek/position = Vector2(180, 260)
 nodes/defeat_trigger/node = SubResource("AnimationNodeOneShot_8swj6")
 nodes/defeat_trigger/position = Vector2(336.876, 172.245)
 nodes/heavy_attack_end_animation/node = SubResource("AnimationNodeAnimation_wsiw7")
-nodes/heavy_attack_end_animation/position = Vector2(-448, 432)
+nodes/heavy_attack_end_animation/position = Vector2(-440, 660)
+nodes/heavy_attack_loop_animation/node = SubResource("AnimationNodeAnimation_ui144")
+nodes/heavy_attack_loop_animation/position = Vector2(-440, 500)
 nodes/heavy_attack_start_animation/node = SubResource("AnimationNodeAnimation_l4m58")
-nodes/heavy_attack_start_animation/position = Vector2(-448, 320)
+nodes/heavy_attack_start_animation/position = Vector2(-440, 340)
 nodes/heavy_attack_transition/node = SubResource("AnimationNodeTransition_scp4q")
-nodes/heavy_attack_transition/position = Vector2(-96, 160)
+nodes/heavy_attack_transition/position = Vector2(-100, 160)
 nodes/idle2_animation/node = SubResource("AnimationNodeAnimation_fl1c0")
-nodes/idle2_animation/position = Vector2(-1400, 60)
+nodes/idle2_animation/position = Vector2(-1400, 40)
 nodes/idle_animation/node = SubResource("AnimationNodeAnimation_rkaaq")
-nodes/idle_animation/position = Vector2(-1400, 180)
+nodes/idle_animation/position = Vector2(-1400, 220)
 nodes/intro_animation/node = SubResource("AnimationNodeAnimation_yek0o")
 nodes/intro_animation/position = Vector2(340, 360)
 nodes/intro_trigger/node = SubResource("AnimationNodeOneShot_lxnow")
-nodes/intro_trigger/position = Vector2(620, 160)
+nodes/intro_trigger/position = Vector2(560, 160)
 nodes/light_attack_blend/node = SubResource("AnimationNodeBlend3_1oqqc")
-nodes/light_attack_blend/position = Vector2(-717.147, 197.204)
+nodes/light_attack_blend/position = Vector2(-720, 220)
 nodes/light_attack_trigger/node = SubResource("AnimationNodeOneShot_qqvto")
 nodes/light_attack_trigger/position = Vector2(-480, 64)
 nodes/light_center_animation/node = SubResource("AnimationNodeAnimation_2uya7")
-nodes/light_center_animation/position = Vector2(-1140, 260)
+nodes/light_center_animation/position = Vector2(-1140, 280)
 nodes/light_in_animation/node = SubResource("AnimationNodeAnimation_itnxi")
 nodes/light_in_animation/position = Vector2(-940, 360)
 nodes/light_out_animation/node = SubResource("AnimationNodeAnimation_r0t05")
 nodes/light_out_animation/position = Vector2(-940, 180)
 nodes/movespeed/node = SubResource("AnimationNodeTimeScale_lwv08")
-nodes/movespeed/position = Vector2(-688, 64)
-nodes/output/position = Vector2(800, 140)
+nodes/movespeed/position = Vector2(-680, 0)
+nodes/output/position = Vector2(740, 140)
 nodes/phase_two/node = SubResource("AnimationNodeTransition_fxmqb")
-nodes/phase_two/position = Vector2(-1140, 60)
-node_connections = [&"defeat_seek", 0, &"defeat_animation", &"defeat_trigger", 0, &"heavy_attack_transition", &"defeat_trigger", 1, &"defeat_seek", &"heavy_attack_transition", 0, &"light_attack_trigger", &"heavy_attack_transition", 1, &"heavy_attack_start_animation", &"heavy_attack_transition", 2, &"heavy_attack_end_animation", &"intro_trigger", 0, &"defeat_trigger", &"intro_trigger", 1, &"intro_animation", &"light_attack_blend", 0, &"light_out_animation", &"light_attack_blend", 1, &"light_center_animation", &"light_attack_blend", 2, &"light_in_animation", &"light_attack_trigger", 0, &"movespeed", &"light_attack_trigger", 1, &"light_attack_blend", &"movespeed", 0, &"phase_two", &"output", 0, &"intro_trigger", &"phase_two", 0, &"idle2_animation", &"phase_two", 1, &"idle_animation"]
+nodes/phase_two/position = Vector2(-1140, 20)
+node_connections = [&"defeat_seek", 0, &"defeat_animation", &"defeat_trigger", 0, &"heavy_attack_transition", &"defeat_trigger", 1, &"defeat_seek", &"heavy_attack_transition", 0, &"light_attack_trigger", &"heavy_attack_transition", 1, &"heavy_attack_start_animation", &"heavy_attack_transition", 2, &"heavy_attack_loop_animation", &"heavy_attack_transition", 3, &"heavy_attack_end_animation", &"intro_trigger", 0, &"defeat_trigger", &"intro_trigger", 1, &"intro_animation", &"light_attack_blend", 0, &"light_out_animation", &"light_attack_blend", 1, &"light_center_animation", &"light_attack_blend", 2, &"light_in_animation", &"light_attack_trigger", 0, &"movespeed", &"light_attack_trigger", 1, &"light_attack_blend", &"movespeed", 0, &"phase_two", &"output", 0, &"intro_trigger", &"phase_two", 0, &"idle2_animation", &"phase_two", 1, &"idle_animation"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_h87ys"]
 animation = &"r-defeat"
@@ -782,6 +792,9 @@ animation = &"r-defeat"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4tl1j"]
 animation = &"r-attack-heavy-end"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fl4tk"]
+animation = &"r-attack-heavy"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yu1tj"]
 animation = &"r-attack-heavy-start"
 
@@ -792,13 +805,17 @@ input_0/auto_advance = false
 input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "strike"
-input_1/auto_advance = false
+input_1/auto_advance = true
 input_1/break_loop_at_end = false
 input_1/reset = true
-input_2/name = "recovery"
-input_2/auto_advance = true
+input_2/name = "loop"
+input_2/auto_advance = false
 input_2/break_loop_at_end = false
 input_2/reset = true
+input_3/name = "recovery"
+input_3/auto_advance = true
+input_3/break_loop_at_end = false
+input_3/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3os1l"]
 animation = &"r-idle2"
@@ -846,17 +863,19 @@ input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_m1chd"]
-graph_offset = Vector2(-1017.27, 89.9067)
+graph_offset = Vector2(-837.404, -106.32)
 nodes/defeat_animation/node = SubResource("AnimationNodeAnimation_h87ys")
-nodes/defeat_animation/position = Vector2(-20, 360)
+nodes/defeat_animation/position = Vector2(-100, 440)
 nodes/defeat_seek/node = SubResource("AnimationNodeTimeSeek_yf04b")
 nodes/defeat_seek/position = Vector2(220, 240)
 nodes/defeat_trigger/node = SubResource("AnimationNodeOneShot_q0js7")
 nodes/defeat_trigger/position = Vector2(379.244, 131.614)
 nodes/heavy_attack_end_animation/node = SubResource("AnimationNodeAnimation_4tl1j")
-nodes/heavy_attack_end_animation/position = Vector2(-448, 432)
+nodes/heavy_attack_end_animation/position = Vector2(-460, 660)
+nodes/heavy_attack_loop_animation/node = SubResource("AnimationNodeAnimation_fl4tk")
+nodes/heavy_attack_loop_animation/position = Vector2(-460, 500)
 nodes/heavy_attack_start_animation/node = SubResource("AnimationNodeAnimation_yu1tj")
-nodes/heavy_attack_start_animation/position = Vector2(-448, 320)
+nodes/heavy_attack_start_animation/position = Vector2(-460, 340)
 nodes/heavy_attack_transition/node = SubResource("AnimationNodeTransition_acwjk")
 nodes/heavy_attack_transition/position = Vector2(-100, 160)
 nodes/idle2_animation/node = SubResource("AnimationNodeAnimation_3os1l")
@@ -864,11 +883,11 @@ nodes/idle2_animation/position = Vector2(-1180, -40)
 nodes/idle_animation/node = SubResource("AnimationNodeAnimation_uigcs")
 nodes/idle_animation/position = Vector2(-1180, 100)
 nodes/intro_animation/node = SubResource("AnimationNodeAnimation_40ieh")
-nodes/intro_animation/position = Vector2(320, 360)
+nodes/intro_animation/position = Vector2(380, 420)
 nodes/intro_trigger/node = SubResource("AnimationNodeOneShot_5sogy")
 nodes/intro_trigger/position = Vector2(600, 160)
 nodes/light_attack_blend/node = SubResource("AnimationNodeBlend3_52y3v")
-nodes/light_attack_blend/position = Vector2(-720, 220)
+nodes/light_attack_blend/position = Vector2(-680, 240)
 nodes/light_attack_trigger/node = SubResource("AnimationNodeOneShot_sgp5k")
 nodes/light_attack_trigger/position = Vector2(-480, 64)
 nodes/light_center_animation/node = SubResource("AnimationNodeAnimation_5gdut")
@@ -878,11 +897,11 @@ nodes/light_in_animation/position = Vector2(-960, 420)
 nodes/light_out_animation/node = SubResource("AnimationNodeAnimation_i2d7i")
 nodes/light_out_animation/position = Vector2(-960, 200)
 nodes/movespeed/node = SubResource("AnimationNodeTimeScale_jx0dx")
-nodes/movespeed/position = Vector2(-688, 64)
+nodes/movespeed/position = Vector2(-680, 60)
 nodes/output/position = Vector2(800, 140)
 nodes/phase_two/node = SubResource("AnimationNodeTransition_pepj0")
-nodes/phase_two/position = Vector2(-900, 20)
-node_connections = [&"defeat_seek", 0, &"defeat_animation", &"defeat_trigger", 0, &"heavy_attack_transition", &"defeat_trigger", 1, &"defeat_seek", &"heavy_attack_transition", 0, &"light_attack_trigger", &"heavy_attack_transition", 1, &"heavy_attack_start_animation", &"heavy_attack_transition", 2, &"heavy_attack_end_animation", &"intro_trigger", 0, &"defeat_trigger", &"intro_trigger", 1, &"intro_animation", &"light_attack_blend", 0, &"light_out_animation", &"light_attack_blend", 1, &"light_center_animation", &"light_attack_blend", 2, &"light_in_animation", &"light_attack_trigger", 0, &"movespeed", &"light_attack_trigger", 1, &"light_attack_blend", &"movespeed", 0, &"phase_two", &"output", 0, &"intro_trigger", &"phase_two", 0, &"idle2_animation", &"phase_two", 1, &"idle_animation"]
+nodes/phase_two/position = Vector2(-860, -40)
+node_connections = [&"defeat_seek", 0, &"defeat_animation", &"defeat_trigger", 0, &"heavy_attack_transition", &"defeat_trigger", 1, &"defeat_seek", &"heavy_attack_transition", 0, &"light_attack_trigger", &"heavy_attack_transition", 1, &"heavy_attack_start_animation", &"heavy_attack_transition", 2, &"heavy_attack_loop_animation", &"heavy_attack_transition", 3, &"heavy_attack_end_animation", &"intro_trigger", 0, &"defeat_trigger", &"intro_trigger", 1, &"intro_animation", &"light_attack_blend", 0, &"light_out_animation", &"light_attack_blend", 1, &"light_center_animation", &"light_attack_blend", 2, &"light_in_animation", &"light_attack_trigger", 0, &"movespeed", &"light_attack_trigger", 1, &"light_attack_blend", &"movespeed", 0, &"phase_two", &"output", 0, &"intro_trigger", &"phase_two", 0, &"idle2_animation", &"phase_two", 1, &"idle_animation"]
 
 [sub_resource type="Curve" id="Curve_xoorr"]
 _data = [Vector2(0, 0), 0.0, 13.3582, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -1801,40 +1820,112 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
+tracks/2/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye01/Lockon:monitoring")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
+tracks/3/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D/Eye01/Lockon:monitorable")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
-tracks/4/type = "method"
+tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Sound/SFX/TraversalHit")
+tracks/4/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitoring")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye02/Root/Lockon:monitorable")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye01/Lockon:monitoring")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/RTail/Tail/TailRoot/Skeleton3D/Eye01/Lockon:monitorable")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Sound/SFX/TraversalHit")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [0.0],
 "method": &"play"
 }]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/BackEye/EyeLarge/Hurtbox:monitoring")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/BackEye/EyeLarge/Hurtbox:monitorable")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_vg5tu"]
@@ -1936,13 +2027,37 @@ tracks/7/keys = {
 "update": 1,
 "values": [false]
 }
-tracks/8/type = "method"
+tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Sound/SFX/TraversalHit")
+tracks/8/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/BackEye/EyeLarge/Hurtbox:monitoring")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SandScorpion/ScorpionRoot/Skeleton3D/BackEye/EyeLarge/Hurtbox:monitorable")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Sound/SFX/TraversalHit")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -3465,7 +3580,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 shape = SubResource("SphereShape3D_lgbap")
 
 [node name="LTail02" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D" index="2"]
-transform = Transform3D(1, 3.19432e-14, 4.18114e-15, -3.10772e-15, -0.00960486, 0.999954, 2.08614e-14, -0.999954, -0.00960486, -2.65485e-08, -0.0397764, -3.5)
+transform = Transform3D(1, 3.19432e-14, 4.18114e-15, -3.10772e-15, -0.00960486, 0.999954, 2.08614e-14, -0.999954, -0.00960487, -2.65485e-08, -0.0397764, -3.5)
 bone_name = "tail_03"
 bone_idx = 3
 
@@ -3479,7 +3594,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 shape = SubResource("SphereShape3D_lgbap")
 
 [node name="LTail03" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D" index="3"]
-transform = Transform3D(1, -5.08295e-07, 9.18159e-09, 9.18162e-09, 0.0361153, 0.999348, -5.08295e-07, -0.999347, 0.0361153, -2.65485e-08, -0.0541844, -5)
+transform = Transform3D(1, -5.08294e-07, 9.18156e-09, 9.18162e-09, 0.0361153, 0.999348, -5.08294e-07, -0.999347, 0.0361153, -2.65485e-08, -0.0541844, -5)
 bone_name = "tail_04"
 bone_idx = 4
 
@@ -3493,7 +3608,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 shape = SubResource("SphereShape3D_lgbap")
 
 [node name="LTail04" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D" index="4"]
-transform = Transform3D(1, 2.34118e-13, 2.39808e-14, -2.39808e-14, 3.79235e-06, 1, 2.54768e-13, -1, 3.79235e-06, -7.89489e-07, 2.39536e-05, -6.5)
+transform = Transform3D(1, -1.05888e-13, 0, 8.88178e-16, 3.76627e-06, 1, -8.71803e-14, -1, 3.76627e-06, -7.89488e-07, 2.39052e-05, -6.5)
 bone_name = "tail_05"
 bone_idx = 5
 
@@ -3536,7 +3651,7 @@ transform = Transform3D(1, -3.99971e-14, 0, 4.52685e-14, 1, -9.09495e-13, 0, 9.0
 shape = SubResource("SphereShape3D_v7gw7")
 
 [node name="Eye02" type="BoneAttachment3D" parent="SandScorpion/ScorpionRoot/Skeleton3D/LTail/Tail/TailRoot/Skeleton3D" index="6"]
-transform = Transform3D(1, 8.56668e-08, 3.16e-08, -3.82309e-08, 0.707106, -0.707107, -8.29201e-08, 0.707107, 0.707106, -7.89488e-07, 3.15399e-05, -8.5)
+transform = Transform3D(1, 8.56671e-08, 3.16003e-08, -3.8231e-08, 0.707107, -0.707107, -8.29205e-08, 0.707107, 0.707106, -7.89488e-07, 3.14393e-05, -8.5)
 bone_name = "dummy_tail05_eye"
 bone_idx = 6
 
