@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://cl65se1nwqp1o"]
+[gd_scene load_steps=38 format=3 uid="uid://cl65se1nwqp1o"]
 
 [ext_resource type="PackedScene" uid="uid://pqaytcsp2twi" path="res://area/4 levitated ruin/act 3/Static.tscn" id="1_olcxc"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_27a8u"]
@@ -44,56 +44,10 @@ _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1.49012e-08), 0.0, 6.32881, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.7, -1), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), 5.7931, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="Gradient" id="Gradient_dxwe6"]
-offsets = PackedFloat32Array(0, 0.31117, 0.593085, 0.808511, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0.270985, 0.2079, 0.33, 1, 0.551192, 0.3465, 0.77, 1, 0.868607, 0.6762, 0.98, 1, 1, 1, 1, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_f15ao"]
-gradient = SubResource("Gradient_dxwe6")
-
-[sub_resource type="Gradient" id="Gradient_h8xgy"]
-offsets = PackedFloat32Array(0.583333)
-colors = PackedColorArray(0, 0.116667, 1, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_5u6dt"]
-gradient = SubResource("Gradient_h8xgy")
-
-[sub_resource type="Environment" id="Environment_l3cer"]
-ambient_light_source = 2
-ambient_light_color = Color(0.3584, 0.410027, 0.64, 1)
-ambient_light_sky_contribution = 0.2
-ambient_light_energy = 1.5
-tonemap_mode = 2
-tonemap_white = 1.2
-ssao_radius = 3.19
-ssao_intensity = 3.36
-ssao_detail = 0.0
-ssil_sharpness = 0.9
-ssil_normal_rejection = 0.8
-glow_enabled = true
-glow_levels/2 = 3.7
-glow_levels/3 = 0.0
-glow_levels/4 = 1.0
-glow_levels/7 = 1.0
-glow_intensity = 8.0
-glow_strength = 0.8
-glow_mix = 0.207
-glow_blend_mode = 4
-glow_hdr_scale = 0.0
-glow_map_strength = 0.79
-glow_map = SubResource("GradientTexture1D_5u6dt")
-fog_enabled = true
-fog_light_color = Color(0.441939, 0.227414, 0.413364, 1)
-fog_light_energy = 0.5
-fog_sky_affect = 0.0
-adjustment_enabled = true
-adjustment_color_correction = SubResource("GradientTexture1D_f15ao")
-
 [node name="RampageAct" type="Node"]
 
-[node name="Static" parent="." node_paths=PackedStringArray("Environment") instance=ExtResource("1_olcxc")]
+[node name="Static" parent="." instance=ExtResource("1_olcxc")]
 Data = ExtResource("2_upc4a")
-Environment = NodePath("../WorldEnvironment")
 
 [node name="Skeleton3D" parent="Static/Visuals/LRSky/SkyRoot" index="0"]
 bones/2/position = Vector3(0, 0.000334974, 2820)
@@ -1121,7 +1075,7 @@ Movement/Angle = 90.0
 "Vertical Orientation" = false
 
 [node name="GreenMajin" parent="RampageAct/Bottom/LaunchRingGroup2/MovingMajin" instance=ExtResource("27_l77el")]
-transform = Transform3D(1.00002, 0, -4.61936e-07, 0, 1, 0, 5.43892e-07, 0, 1.00002, -3, 0, -1.52588e-05)
+transform = Transform3D(1.00002, 0, -4.84288e-07, 0, 1, 0, 5.66244e-07, 0, 1.00002, -3, 0, -1.52588e-05)
 "Spawn Settings/Spawn Travel Time" = 1.0
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
@@ -1353,80 +1307,6 @@ spawnInterval = 3.0
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 15, 0, 0)
 missileLifetime = 3.0
 spawnInterval = 3.0
-
-[node name="Lighting" type="Node3D" parent="."]
-
-[node name="MainLight" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-layers = 1024
-light_color = Color(0.752536, 0.529965, 0.738636, 1)
-light_energy = 1.5
-light_cull_mask = 4293918722
-shadow_enabled = true
-
-[node name="ObjectLight" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(-0.601125, 0.662775, 0.446518, -0.125952, -0.630327, 0.766044, 0.789168, 0.404248, 0.462383, 250, -37, -1213)
-layers = 1024
-light_color = Color(0.898217, 0.833633, 0.973153, 1)
-light_energy = 2.0
-light_cull_mask = 4293918721
-
-[node name="PlayerLight" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(0.717363, 0.474869, 0.509795, -0.126533, -0.630756, 0.765595, 0.685113, -0.613715, -0.392395, 250, -37, -1213)
-layers = 1024
-light_color = Color(0.887433, 0.704927, 0.926362, 1)
-light_energy = 0.6
-light_specular = 8.0
-light_cull_mask = 4293918784
-
-[node name="ReflectionProbes" type="Node3D" parent="."]
-
-[node name="Tower" type="ReflectionProbe" parent="ReflectionProbes"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -11.5, -1375)
-layers = 1024
-blend_distance = 3.0
-size = Vector3(25, 45, 45)
-interior = true
-cull_mask = 0
-reflection_mask = 4
-ambient_mode = 2
-ambient_color = Color(0.2232, 0.93, 0.4588, 1)
-ambient_color_energy = 10.0
-
-[node name="TowerObjects" type="ReflectionProbe" parent="ReflectionProbes"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -11.5, -1375)
-layers = 1024
-blend_distance = 3.0
-size = Vector3(25, 45, 45)
-interior = true
-cull_mask = 0
-reflection_mask = 65
-ambient_mode = 2
-ambient_color = Color(0.147602, 0.924986, 0.406798, 1)
-ambient_color_energy = 3.0
-
-[node name="Exterior" type="ReflectionProbe" parent="ReflectionProbes"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 248, -81.5, -1160)
-layers = 1024
-size = Vector3(1301, 593, 1129)
-cull_mask = 0
-reflection_mask = 2
-ambient_mode = 2
-ambient_color = Color(0.579378, 0.570575, 0.769675, 1)
-ambient_color_energy = 2.8
-
-[node name="ExteriorPlayer" type="ReflectionProbe" parent="ReflectionProbes"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 248, -81.5, -1160)
-layers = 1024
-size = Vector3(1301, 593, 1129)
-cull_mask = 0
-reflection_mask = 64
-ambient_mode = 2
-ambient_color = Color(0.385705, 0.122743, 0.337263, 1)
-ambient_color_energy = 2.0
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_l3cer")
 
 [connection signal="Activated" from="RampageAct/CullingMap/Tower-L" to="RampageAct/Tower" method="Activate"]
 [connection signal="Activated" from="RampageAct/CullingMap/Bottom-L Tower-U" to="RampageAct/Tower" method="Deactivate"]
