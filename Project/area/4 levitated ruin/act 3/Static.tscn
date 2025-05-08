@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://dart1s468mr5p" path="res://area/4 levitated ruin/act 3/environment/Rukh2.tscn" id="4_8dhk3"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="4_xu6y8"]
 [ext_resource type="PackedScene" uid="uid://dvw3hbgtjf325" path="res://area/4 levitated ruin/act 3/environment/Rukh3.tscn" id="5_d06nc"]
+[ext_resource type="Material" uid="uid://cmegvv3w6enqo" path="res://area/4 levitated ruin/data/skybox/model/material/Sky Night.tres" id="5_f15ao"]
 [ext_resource type="PackedScene" uid="uid://b106f1ewueu7s" path="res://area/4 levitated ruin/act 3/environment/Rukh4.tscn" id="6_75748"]
 [ext_resource type="PackedScene" uid="uid://c184p4t00xpx" path="res://area/4 levitated ruin/act 3/environment/Rukh5.tscn" id="7_id8t7"]
 [ext_resource type="Curve3D" uid="uid://dkf2fujeif0jn" path="res://area/4 levitated ruin/act 3/environment/path/BottomPath.tres" id="8_4prap"]
@@ -71,21 +72,80 @@ size = Vector3(20, 20, 50)
 [sub_resource type="BoxShape3D" id="BoxShape3D_arh3h"]
 size = Vector3(5, 8, 5)
 
-[sub_resource type="Environment" id="Environment_o2x0g"]
-ambient_light_source = 2
-ambient_light_color = Color(0.592718, 0.711016, 0.955683, 1)
-ambient_light_energy = 0.5
-tonemap_mode = 2
-tonemap_exposure = 1.2
-tonemap_white = 1.2
-ssao_enabled = true
-glow_enabled = true
-glow_intensity = 0.4
-glow_strength = 0.4
-glow_bloom = 0.15
-glow_blend_mode = 0
-glow_hdr_threshold = 1.5
-adjustment_enabled = true
+[sub_resource type="Animation" id="Animation_f15ao"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera:current")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera:fov")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [75.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Camera:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 15, 25)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_jkq8a"]
 resource_name = "demo1"
@@ -176,81 +236,6 @@ tracks/6/keys = {
 "args": [],
 "method": &"OnCameraDemoAdvance"
 }]
-}
-
-[sub_resource type="Animation" id="Animation_f15ao"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Camera:current")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Camera:fov")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [75.0]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Camera:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Camera:rotation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath(".:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 15, 25)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath(".:rotation")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_wii6k"]
@@ -448,7 +433,7 @@ script = ExtResource("1_ul5kf")
 InitialCameraSettings = ExtResource("2_2fdgt")
 pathParent = NodePath("Paths")
 completionAnimator = NodePath("DemoCamera/AnimationPlayer")
-Environment = NodePath("WorldEnvironment")
+Environment = NodePath("")
 
 [node name="Collision" parent="." instance=ExtResource("2_o2x0g")]
 visible = false
@@ -456,6 +441,12 @@ visible = false
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="LRSky" parent="Visuals" instance=ExtResource("3_xu6y8")]
+
+[node name="stg060_tsky_obj_Mesh_0000" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="0"]
+surface_material_override/0 = ExtResource("5_f15ao")
+
+[node name="stg060_tsky_obj_Mesh_0002" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="2"]
+surface_material_override/0 = ExtResource("5_f15ao")
 
 [node name="Rukh1" parent="Visuals" instance=ExtResource("2_ur2fq")]
 
@@ -468,6 +459,7 @@ visible = false
 [node name="Rukh5" parent="Visuals" instance=ExtResource("7_id8t7")]
 
 [node name="Triggers" type="Node3D" parent="."]
+visible = false
 
 [node name="TowerLockout" type="Node3D" parent="Triggers"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30, -1375)
@@ -597,23 +589,6 @@ CameraSettings = ExtResource("19_isxns")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoint2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 shape = SubResource("BoxShape3D_6v3ym")
-
-[node name="Lighting" type="Node3D" parent="."]
-
-[node name="MainLight" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(-0.866025, 1.02312e-07, 0.5, 0.482963, 0.258819, 0.836516, -0.129409, 0.965926, -0.224144, 0, 0, 0)
-layers = 1024
-light_color = Color(1, 0.771168, 0.471408, 1)
-light_energy = 1.8
-light_cull_mask = 4293918722
-shadow_enabled = true
-
-[node name="ObjectLight" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(0.939693, 0.17101, 0.296198, -0.0885213, -0.714911, 0.693589, 0.330366, -0.677981, -0.656659, 0, 0, 0)
-layers = 1024
-light_color = Color(1, 0.8, 0.415686, 1)
-light_energy = 2.5
-light_cull_mask = 4293918785
 
 [node name="Paths" type="Node3D" parent="."]
 
@@ -935,9 +910,6 @@ shape = SubResource("BoxShape3D_ee6d1")
 
 [node name="DepthRenderer" parent="." instance=ExtResource("2_718ew")]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_o2x0g")
-
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_ur2fq")
 bus = &"BGM"
@@ -950,7 +922,7 @@ isStageMusic = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 25)
 
 [node name="Camera" type="Camera3D" parent="DemoCamera"]
-cull_mask = 1086
+cull_mask = 1054
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DemoCamera"]
 libraries = {
@@ -988,3 +960,4 @@ libraries = {
 [connection signal="JumpFinished" from="SkyRoad/SkyRoad02/JumpEndTrigger/Jump" to="SkyRoad/SkyroadLockout" method="Deactivate"]
 
 [editable path="Collision"]
+[editable path="Visuals/LRSky"]

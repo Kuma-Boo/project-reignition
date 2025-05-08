@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_add, unshaded, specular_disabled, cull_disabled;
+render_mode blend_add, unshaded, specular_disabled, fog_disabled, cull_disabled;
 
 instance uniform float path_ratio : hint_range(0.0, 1.0) = 1.0;
 instance uniform float path_length = 1000.0;
