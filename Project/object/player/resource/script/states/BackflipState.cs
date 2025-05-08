@@ -129,11 +129,10 @@ public partial class BackflipState : PlayerState
 			return true;
 		}
 
-		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi, Mathf.Pi * .2f))
+		if (Player.Controller.IsHoldingDirection(targetMovementAngle, Player.MovementAngle + Mathf.Pi, Mathf.Pi * .2f) &&
+			!Player.Controller.IsStrafeModeActive)
 		{
-			// Check for turning around
-			if (!Player.IsLockoutActive || Player.ActiveLockoutData.movementMode != LockoutResource.MovementModes.Strafe)
-				return true;
+			return true;
 		}
 
 		return false;
