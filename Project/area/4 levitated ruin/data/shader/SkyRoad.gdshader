@@ -1,6 +1,8 @@
 shader_type spatial;
 render_mode blend_add, unshaded, specular_disabled, fog_disabled, cull_disabled;
 
+global uniform vec3 player_position;
+
 instance uniform float path_ratio : hint_range(0.0, 1.0) = 1.0;
 instance uniform float path_length = 1000.0;
 
@@ -11,6 +13,7 @@ const float distance_fade_min = 0.1;
 const float distance_fade_max = 1.0;
 const float start_smoothing = 10.0;
 const float end_smoothing = 10.0;
+const float player_radius = 5.0;
 
 void fragment()
 {
@@ -25,4 +28,9 @@ void fragment()
 	scroll_amount = clamp(scroll_amount / end_smoothing, 0.0, glow_intensity);
 	float start_blend = clamp(UV.x / start_smoothing, 0.0, 1.0);
 	ALPHA *= scroll_amount * start_blend * distance_fade;
+	
+	// Prevent invisible skyroads
+	vec4 vert = INV_VIEW_MATRIX * vec4(VERTEX, 1.0);
+	float glow_factor = (1.0 - distance(player_position, vert.xyz) / player_radius);
+	ALPHA += max(glow_factor, 0.0);
 }
