@@ -16,11 +16,7 @@ public partial class SFXLibraryResource : Resource
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
 	{
-		Array<Dictionary> properties =
-		[
-			ExtensionMethods.CreateProperty("Settings/Channel Count", Variant.Type.Int, PropertyHint.Range, "1,9"),
-			ExtensionMethods.CreateProperty("Settings/Key Names", Variant.Type.Array, PropertyHint.TypeString, "21/0:StringName"),
-		];
+		Array<Dictionary> properties = [];
 		ValidateArrays();
 
 		channelEditingIndex = Mathf.Clamp(channelEditingIndex, 1, channelCount);
@@ -42,10 +38,6 @@ public partial class SFXLibraryResource : Resource
 	{
 		switch ((string)property)
 		{
-			case "Settings/Channel Count":
-				return channelCount;
-			case "Settings/Key Names":
-				return keys;
 			case "Editing/Organization/Target":
 				return reorderIndex;
 			case "Editing/Organization/Mode":
@@ -65,16 +57,6 @@ public partial class SFXLibraryResource : Resource
 	{
 		switch ((string)property)
 		{
-			case "Settings/Channel Count":
-				channelCount = (int)value;
-				ValidateArrays();
-				NotifyPropertyListChanged();
-				break;
-			case "Settings/Key Names":
-				keys = (Array<StringName>)value;
-				ValidateArrays();
-				NotifyPropertyListChanged();
-				break;
 			case "Editing/Organization/Target":
 				reorderIndex = (int)value;
 				break;
@@ -220,9 +202,11 @@ public partial class SFXLibraryResource : Resource
 		duplicateKeyChecker.Clear();
 	}
 	#endregion
+
+	[ExportToolButton("Refresh Resource")]
+	public Callable RefreshResourceGroup => Callable.From(NotifyPropertyListChanged);
 	[Export]
 	private SFXLibraryResource fallbackResource;
-	[ExportGroup("DON'T EDIT THESE DIRECTLY!")]
 	[Export]
 	private Array<StringName> keys;
 	public int KeyCount => keys.Count;

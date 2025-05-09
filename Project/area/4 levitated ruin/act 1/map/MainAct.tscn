@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=83 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="5_2txni"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_yejv7"]
 [ext_resource type="PackedScene" uid="uid://bcsww42lqxn6w" path="res://object/stage/common/LaunchRing.tscn" id="6_s2poe"]
+[ext_resource type="Script" uid="uid://bitgnn108jmaa" path="res://object/trigger/modules/DialogTrigger.cs" id="7_gktnu"]
 [ext_resource type="PackedScene" uid="uid://db770ujvjdio4" path="res://object/stage/common/LaunchRingSpike.tscn" id="7_txkek"]
 [ext_resource type="PackedScene" uid="uid://cfcqcvct272ct" path="res://area/4 levitated ruin/object/platform/SquarePillarFly.tscn" id="7_x6tsb"]
 [ext_resource type="PackedScene" uid="uid://x3scwb5r13dw" path="res://area/4 levitated ruin/object/platform/GrindPillarFly.tscn" id="8_6mhfy"]
@@ -130,6 +131,8 @@ size = Vector3(20, 40, 130)
 
 [node name="Static" parent="." instance=ExtResource("1_jeukd")]
 Data = ExtResource("2_5dvfu")
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
 
 [node name="SkyRoad01" parent="Static/SkyRoad/SkyRoad01" index="0"]
 instance_shader_parameters/path_length = 1000.0
@@ -262,6 +265,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -19)
 "Exit Mode" = 0
 
 [node name="WindTrigger" parent="MainAct/Rukh1/WindTrigger1" instance=ExtResource("31_jvmbg")]
+
+[node name="WindDialog" type="Node3D" parent="MainAct/Rukh1/WindTrigger1"]
+script = ExtResource("7_gktnu")
+randomize = true
+textKeys = Array[String](["lev_hint_wind_so", "lev_hint_wind_sh"])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh1/WindTrigger1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
@@ -656,6 +664,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
 [node name="Child03" parent="MainAct/Rukh1/Rings6" instance=ExtResource("10_250we")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
 
+[node name="JumpDialog" parent="MainAct/Rukh1" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.37114e-07, 8.4, -283)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Rukh1/JumpDialog"]
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["common_jump_so", "common_jump_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh1/JumpDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+
 [node name="JumpPanel" parent="MainAct/Rukh1" instance=ExtResource("5_2txni")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -4.37114e-07, 8.4, -286)
 MiddleHeight = 4.0
@@ -967,6 +987,21 @@ collider = NodePath("")
 [node name="GrindPillarStatic6" parent="MainAct/Rukh2" instance=ExtResource("15_oja87")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.39148, 8.76436, -168.708)
 
+[node name="DialogTrigger" type="Node3D" parent="MainAct/Rukh2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4, 8.4, -177)
+script = ExtResource("4_4rpxf")
+
+[node name="EnemyDialog" parent="MainAct/Rukh2/DialogTrigger" instance=ExtResource("5_yejv7")]
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Rukh2/DialogTrigger/EnemyDialog"]
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["common_victory4_sh", "common_victory4_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh2/DialogTrigger/EnemyDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+
 [node name="Rings2" type="Node3D" parent="MainAct/Rukh2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 9.5, -190)
 script = ExtResource("9_v4ux6")
@@ -1146,10 +1181,47 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.33765, -0.251034, -9.24976)
 [node name="Child07" parent="MainAct/Rukh2/Rings4" instance=ExtResource("10_250we")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.33765, -0.186402, -11.2526)
 
+[node name="DownDialog" parent="MainAct/Rukh2" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.8, 11.8, -238)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Rukh2/DownDialog"]
+script = ExtResource("7_gktnu")
+randomize = true
+textKeys = Array[String](["common_down_so", "common_down_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh2/DownDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+
+[node name="JumpDialog" parent="MainAct/Rukh2" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.8, 11.8, -238)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Rukh2/JumpDialog"]
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["common_fall2_so", "common_fall2_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh2/JumpDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+
 [node name="Rukh3" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -100, -700)
 script = ExtResource("4_4rpxf")
 saveVisibilityOnCheckpoint = true
+
+[node name="SinbadDialog" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Rukh3/SinbadDialog"]
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["lev_sinbad_so", "lev_sinbad_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/SinbadDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
 
 [node name="WindTrigger3" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -40)
@@ -1445,6 +1517,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -30)
 stateLengths = PackedFloat32Array(0.2, 0, 0.2)
 "State Lengths/inactive" = 0.2
 "State Lengths/active" = 0.2
+
+[node name="SpikeDialog" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11, -130)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Rukh3/SpikeDialog"]
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["common_hint_spikes_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/SpikeDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
 
 [node name="SpikePanelGroup1" type="Node3D" parent="MainAct/Rukh3"]
 transform = Transform3D(1, 0, 0, 0, 0.999048, -0.0436194, 0, 0.0436194, 0.999048, -2, 11.5, -140.5)
@@ -1845,6 +1929,11 @@ OneShot = true
 "Respawn Mode" = 0
 "Enter Mode" = 0
 
+[node name="GargoyleDialog" type="Node3D" parent="MainAct/Rukh3/GateGroup/GateTrigger"]
+script = ExtResource("7_gktnu")
+randomize = true
+textKeys = Array[String](["lev_hint_gargoyle_so", "lev_hint_gargoyle_sh"])
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/GateGroup/GateTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 5.5)
 shape = SubResource("BoxShape3D_w2mik")
@@ -1896,9 +1985,34 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -232)
 [node name="GargoyleStaticR" parent="MainAct/Rukh3" instance=ExtResource("18_7b7on")]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 5, 15, -230)
 
+[node name="PetrifyDialog [NEEDS A NEW AUDIO CLIP]" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -230)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Rukh3/PetrifyDialog [NEEDS A NEW AUDIO CLIP]"]
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["lev_hint_petrify_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/PetrifyDialog [NEEDS A NEW AUDIO CLIP]"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+disabled = true
+
 [node name="EnemyStone" parent="MainAct/Rukh3" instance=ExtResource("18_w6abm")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 18, -237.5)
 enemyCount = 1
+
+[node name="ChaseDialog" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11, -273)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Rukh3/ChaseDialog"]
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["lev_hint_chase_so", "lev_hint_chase_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/ChaseDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
 
 [node name="RingsR" type="Node3D" parent="MainAct/Rukh3"]
 transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 0.6, 12.8, -265)
@@ -1979,6 +2093,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.69282, 0)
 
 [node name="Child03" parent="MainAct/Skyroad1/RichPearlRing" instance=ExtResource("28_g0j2g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.69282, 0)
+
+[node name="SpeedbreakDialog" parent="MainAct/Skyroad1" instance=ExtResource("5_yejv7")]
+transform = Transform3D(0.707107, 0.122788, 0.696364, 0, 0.984808, -0.173648, -0.707107, 0.122788, 0.696364, -8.84679, -7.6, -154.129)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Skyroad1/SpeedbreakDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["", "common_resolution_so", "common_resolution_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Skyroad1/SpeedbreakDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
 
 [node name="PearlRing1" type="Node3D" parent="MainAct/Skyroad1"]
 transform = Transform3D(0.819152, 0.196175, -0.538986, 0, 0.939693, 0.34202, 0.573576, -0.280167, 0.769751, 1, -1.712, -110)
@@ -2387,6 +2514,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, -1360)
 script = ExtResource("4_4rpxf")
 saveVisibilityOnCheckpoint = true
 
+[node name="CloseCallDialog" parent="MainAct/Rukh4" instance=ExtResource("5_yejv7")]
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Rukh4/CloseCallDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["common_recovery_sh", "common_recovery_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh4/CloseCallDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+
 [node name="WindTrigger4" parent="MainAct/Rukh4" instance=ExtResource("5_yejv7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -16)
 "Trigger Mode" = 2
@@ -2742,7 +2881,7 @@ Movement/Angle = 90.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="MainAct/Rukh4/MovingMajin3" instance=ExtResource("11_427b8")]
-transform = Transform3D(0.999996, 0, 0, 0, 1, 0, 0, 0, 0.999996, 0, 0, 0)
+transform = Transform3D(0.999996, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 0.999996, 0, 0, 0)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(0, 10, 0)
@@ -2980,6 +3119,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 10, -1540)
 script = ExtResource("4_4rpxf")
 saveVisibilityOnCheckpoint = true
 
+[node name="SkyroadStartDialog" parent="MainAct/Skyroad2" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Skyroad2/SkyroadStartDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["common_start4_so", "common_start4_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Skyroad2/SkyroadStartDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+
 [node name="DashPanel" parent="MainAct/Skyroad2" instance=ExtResource("8_qbwj7")]
 transform = Transform3D(-0.999892, 0, 0.014695, 5.96047e-07, 1, -1.58325e-08, -0.014695, 0, -0.999891, 3.05176e-05, -0.0209932, -20.6476)
 
@@ -3078,6 +3230,19 @@ transform = Transform3D(1, 2.32831e-10, 1.50249e-09, 0, 1, 0, 1.8008e-09, 9.3132
 
 [node name="Child04" parent="MainAct/Skyroad2/Rings3" instance=ExtResource("10_250we")]
 transform = Transform3D(1, 2.32831e-10, 1.50249e-09, 0, 1, 0, 1.8008e-09, 9.31323e-10, 1, 0.357494, -0.0793457, -6.90149)
+
+[node name="TagDialog" parent="MainAct/Skyroad2" instance=ExtResource("5_yejv7")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 77, 52.8, -65)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Skyroad2/TagDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["lev_hint_tag_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Skyroad2/TagDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
 
 [node name="Rings4" type="Node3D" parent="MainAct/Skyroad2"]
 transform = Transform3D(0.349884, 0.470197, -0.810244, 1.21445e-05, 0.86491, 0.501926, 0.936793, -0.175626, 0.302612, 102.532, 48.267, -69.1783)
@@ -3466,6 +3631,19 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 350, -
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 50
 
+[node name="ConcernDialog" parent="MainAct/Skyroad2" instance=ExtResource("5_yejv7")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 350, -40, 124)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Skyroad2/ConcernDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["common_concern_sh", "common_concern_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Skyroad2/ConcernDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+
 [node name="Skyroad3" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30, -1418)
 script = ExtResource("4_4rpxf")
@@ -3825,6 +4003,19 @@ transform = Transform3D(1, 1.86265e-08, -2.98023e-08, 1.11759e-08, 1, 0, -2.9802
 [node name="Child08" parent="MainAct/Skyroad3/Rings3" instance=ExtResource("10_250we")]
 transform = Transform3D(1, 1.86265e-08, -2.98023e-08, 1.11759e-08, 1, 0, -2.98023e-08, 0, 1, 9.22638, 1.76414, 17.3652)
 
+[node name="EnemyDialog" parent="MainAct/Skyroad3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 177, -39.3, -109)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Skyroad3/EnemyDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["common_enemy2_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Skyroad3/EnemyDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+
 [node name="BlueMajin6" parent="MainAct/Skyroad3" instance=ExtResource("11_427b8")]
 transform = Transform3D(-0.999386, -0.0019926, -0.0344286, 4.09735e-05, 0.998244, -0.0589658, 0.0344856, -0.0589313, -0.997664, 399.342, -71.8614, -80.1709)
 "Spawn Settings/Spawn Travel Time" = 0.5
@@ -3854,6 +4045,30 @@ transform = Transform3D(-0.999386, -0.0019926, -0.0344286, 4.09751e-05, 0.998244
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 "Attack Settings/Attack Type" = 1
 rangeOverride = 30
+
+[node name="LoopDialog" parent="MainAct/Skyroad3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 285.52, -52.3, -192.438)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Skyroad3/LoopDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["common_dizzy3_so", "common_dizzy3_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Skyroad3/LoopDialog"]
+shape = SubResource("BoxShape3D_ypvwq")
+
+[node name="IvyDialog" parent="MainAct/Skyroad3" instance=ExtResource("5_yejv7")]
+transform = Transform3D(-1, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, -1, 400, -74, -35)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Skyroad3/IvyDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["lev_hint_ivy_so", "lev_hint_ivy_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Skyroad3/IvyDialog"]
+shape = SubResource("BoxShape3D_ypvwq")
 
 [node name="Rings4" type="Node3D" parent="MainAct/Skyroad3"]
 transform = Transform3D(-1, -2.04593e-09, 8.73988e-08, 0, 0.999726, 0.0234027, -8.74228e-08, 0.0234027, -0.999726, 400, -72.4598, -58.9967)
@@ -3983,6 +4198,18 @@ missileLifetime = 0.6
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 650, -90, -1308)
 script = ExtResource("4_4rpxf")
 saveVisibilityOnCheckpoint = true
+
+[node name="SkyroadDialog" parent="MainAct/Skyroad4" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 14)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Skyroad4/SkyroadDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["common_start_so", "common_start_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Skyroad4/SkyroadDialog"]
+shape = SubResource("BoxShape3D_ypvwq")
 
 [node name="MissileGeneratorGroup1" type="Node3D" parent="MainAct/Skyroad4"]
 transform = Transform3D(4.37114e-08, -4.37114e-08, 1, -1.07284e-07, -1, -4.37114e-08, 1, -1.07284e-07, -4.37114e-08, 2, -50, 129.825)
@@ -4415,6 +4642,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.69282, 0)
 [node name="Child03" parent="MainAct/Skyroad4/RichPearlRing2" instance=ExtResource("28_g0j2g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.69282, 0)
 
+[node name="MissileDialog" parent="MainAct/Skyroad4" instance=ExtResource("5_yejv7")]
+transform = Transform3D(-4.37114e-08, 0.173648, 0.984808, 0, 0.984808, -0.173648, -1, -7.5904e-09, -4.30473e-08, -191.5, 109.5, 212.1)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Skyroad4/MissileDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+randomize = true
+textKeys = Array[String](["common_enemy5_so", "common_enemy5_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Skyroad4/MissileDialog"]
+shape = SubResource("BoxShape3D_ypvwq")
+
 [node name="Rings2" type="Node3D" parent="MainAct/Skyroad4"]
 transform = Transform3D(0.998997, -0.0394433, -0.0210761, 0.0421429, 0.988007, 0.148514, 0.0149655, -0.149253, 0.988681, -94.9705, 93.5807, 158.247)
 script = ExtResource("9_v4ux6")
@@ -4618,6 +4858,33 @@ transform = Transform3D(-0.114982, 0, -0.993363, 0, 0.999989, 0, 0.993356, 0, -0
 h_offset = -0.5
 v_offset = 1.0
 
+[node name="SpikesDialog" parent="MainAct/Skyroad4" instance=ExtResource("5_yejv7")]
+transform = Transform3D(0.0871558, 0, 0.996195, 0, 1, 0, -0.996195, 0, 0.0871558, -318.454, 81, 226.054)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Skyroad4/SpikesDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["lev_hint_spikes_sh", "lev_hint_spikes_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Skyroad4/SpikesDialog"]
+shape = SubResource("BoxShape3D_ypvwq")
+disabled = true
+
+[node name="MissilesDialog" parent="MainAct/Skyroad4" instance=ExtResource("5_yejv7")]
+transform = Transform3D(-0.996195, 0, 0.0871558, 0, 1, 0, -0.0871558, 0, -0.996195, -405.721, 63.3, 202.358)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Skyroad4/MissilesDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["lev_hint_tag_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Skyroad4/MissilesDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+disabled = true
+
 [node name="MissileGeneratorGroup2" type="Node3D" parent="MainAct/Skyroad4"]
 transform = Transform3D(0.256328, -0.953236, -0.160114, -0.966074, -0.258063, -0.0102194, -0.0315781, 0.157302, -0.987046, -343.295, 67.7832, 235.395)
 
@@ -4648,6 +4915,20 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 0.984808, -0.173648, -8.9407e-08, 
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 250, -40, -1150)
 script = ExtResource("4_4rpxf")
 saveVisibilityOnCheckpoint = true
+
+[node name="EncourageDialog" parent="MainAct/Rukh5" instance=ExtResource("5_yejv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1, 72)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Rukh5/EncourageDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["common_end_sh", "common_end_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh5/EncourageDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ypvwq")
+disabled = true
 
 [node name="WindTrigger5" parent="MainAct/Rukh5" instance=ExtResource("5_yejv7")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 9.15527e-05, 5.5, 84)
@@ -5217,6 +5498,11 @@ MiddleHeight = 10.0
 FinalHeight = 7.5
 Distance = 2.5
 
+[node name="SinbadDialog" type="Node3D" parent="MainAct/Tower/Spring5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_gktnu")
+textKeys = Array[String](["lev_end_sh", "lev_end_so"])
+
 [node name="Gate5" parent="MainAct/Tower" instance=ExtResource("16_cr60c")]
 transform = Transform3D(-0.469847, 0, -0.34202, 0, 2.1, 0, 0.17101, 0, -0.939692, 7.74001, 32.005, -3)
 
@@ -5268,6 +5554,7 @@ shape = SubResource("BoxShape3D_ypvwq")
 [connection signal="Activated" from="MainAct/Rukh2/GateGroup/Switch2" to="MainAct/Rukh2/GateGroup/Gate" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Rukh2/GateGroup/Switch2" to="MainAct/Rukh2/GateGroup/Gate" method="Deactivate"]
 [connection signal="Respawned" from="MainAct/Rukh2/GateGroup/Switch2" to="MainAct/Rukh2/GateGroup/Gate" method="Respawn"]
+[connection signal="Defeated" from="MainAct/Rukh2/GreenMajin6" to="MainAct/Rukh2/DialogTrigger" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger1" to="MainAct/Rukh3/GrindPillarFlyTrigger1/GrindPillarFly1" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger1" to="MainAct/Rukh3/GrindPillarFlyTrigger1/GrindPillarFly2" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh3/GrindPillarFlyTrigger1" to="MainAct/Rukh3/GrindPillarFlyTrigger1/GrindPillarFly3" method="Activate"]
@@ -5352,6 +5639,7 @@ shape = SubResource("BoxShape3D_ypvwq")
 [connection signal="Activated" from="MainAct/Tower/Spring5" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Tower/Spring5" to="MainAct/Tower/TriggerData/LoopLockout" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Tower/Spring5" to="MainAct/Tower/TriggerData/TopPath" method="Activate"]
+[connection signal="Activated" from="MainAct/Tower/Spring5" to="MainAct/Tower/Spring5/SinbadDialog" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Tower/Spring5" to="Static/Collision/OneWayWall" method="Activate"]
 
 [editable path="Static"]
