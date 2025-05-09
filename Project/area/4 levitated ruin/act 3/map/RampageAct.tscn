@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://cl65se1nwqp1o"]
+[gd_scene load_steps=39 format=3 uid="uid://cl65se1nwqp1o"]
 
 [ext_resource type="PackedScene" uid="uid://pqaytcsp2twi" path="res://area/4 levitated ruin/act 3/Static.tscn" id="1_olcxc"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_27a8u"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://diq31c5i622qs" path="res://area/4 levitated ruin/object/platform/GargoylePatform.tscn" id="8_58waf"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="9_1648i"]
 [ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="10_aqqyc"]
+[ext_resource type="Script" uid="uid://bitgnn108jmaa" path="res://object/trigger/modules/DialogTrigger.cs" id="10_h8xgy"]
 [ext_resource type="PackedScene" uid="uid://ck5jasnqj5yv1" path="res://area/4 levitated ruin/object/MissileBomb.tscn" id="11_4o8ik"]
 [ext_resource type="PackedScene" uid="uid://b2jsh7hensgem" path="res://object/enemy/gargoyle/Gargoyle.tscn" id="11_58waf"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="13_aqqyc"]
@@ -37,7 +38,7 @@
 [ext_resource type="PackedScene" uid="uid://l7k4j5p2l1ax" path="res://area/4 levitated ruin/object/InvisibleMissileGenerator.tscn" id="28_dxwe6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4o8ik"]
-size = Vector3(5, 20, 5)
+size = Vector3(15, 20, 5)
 
 [sub_resource type="Curve" id="Curve_l77el"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
@@ -48,6 +49,8 @@ point_count = 4
 
 [node name="Static" parent="." instance=ExtResource("1_olcxc")]
 Data = ExtResource("2_upc4a")
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
 
 [node name="Zipline" parent="Static/Paths/ZiplinePath" index="0"]
 transform = Transform3D(1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, 1, 0, 0.0871555, 0.996195)
@@ -111,6 +114,19 @@ respawnOnActivation = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 fireSoulIndex = 3
 
+[node name="EnemyDialog" parent="RampageAct/Top/PreStart" instance=ExtResource("4_1kuq5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.799999, -8)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Top/PreStart/EnemyDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+script = ExtResource("10_h8xgy")
+textKeys = Array[String](["common_enemy7_so", "common_enemy7_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Top/PreStart/EnemyDialog"]
+transform = Transform3D(1, -2.98023e-08, -1.49012e-08, 0, 1, 2.98023e-08, -1.49012e-08, 2.98023e-08, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4o8ik")
+
 [node name="BlueMajin1" parent="RampageAct/Top/PreStart" instance=ExtResource("18_og2ii")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -29)
 "Spawn Settings/Spawn Travel Time" = 0.5
@@ -148,6 +164,30 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2, 
 MiddleHeight = 2.0
 FinalHeight = -1.0
 Distance = 15.0
+
+[node name="StartDialog" parent="RampageAct/Top" instance=ExtResource("4_1kuq5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -63)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Top/StartDialog"]
+script = ExtResource("10_h8xgy")
+textKeys = Array[String](["common_start3_so", "common_start3_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Top/StartDialog"]
+transform = Transform3D(1, -2.98023e-08, -1.49012e-08, 0, 1, 2.98023e-08, -1.49012e-08, 2.98023e-08, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4o8ik")
+
+[node name="EnemyDialog" parent="RampageAct/Top" instance=ExtResource("4_1kuq5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -63)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Top/EnemyDialog"]
+script = ExtResource("10_h8xgy")
+textKeys = Array[String](["common_enemy2_so", "common_enemy2_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Top/EnemyDialog"]
+transform = Transform3D(1, -2.98023e-08, -1.49012e-08, 0, 1, 2.98023e-08, -1.49012e-08, 2.98023e-08, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4o8ik")
 
 [node name="RichRing" parent="RampageAct/Top" instance=ExtResource("4_vrsxk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9, -76)
@@ -353,6 +393,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.5, -201.8)
 homeOverride = NodePath("../GargoyleHome")
 rangeOverride = 15
 
+[node name="GargoyleDialog" type="Node3D" parent="RampageAct/Top/Gargoyle2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("10_h8xgy")
+textKeys = Array[String](["lev_eyes_sh", "lev_eyes_so"])
+
 [node name="GargoyleHome" type="Node3D" parent="RampageAct/Top"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.9832, -197.8)
 
@@ -431,6 +476,18 @@ transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 
 [node name="StaticGate1" parent="RampageAct/Tower" instance=ExtResource("7_xsa3e")]
 transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0.149994, 0, -9.40002)
 
+[node name="UpDialog" parent="RampageAct/Tower" instance=ExtResource("4_1kuq5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Tower/UpDialog"]
+script = ExtResource("10_h8xgy")
+textKeys = Array[String](["common_up_so", "common_up_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Tower/UpDialog"]
+transform = Transform3D(1, -2.98023e-08, -1.49012e-08, 0, 1, 2.98023e-08, -1.49012e-08, 2.98023e-08, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_4o8ik")
+
 [node name="Switch1" parent="RampageAct/Tower" instance=ExtResource("13_aqqyc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
 
@@ -472,6 +529,10 @@ startHidden = true
 MiddleHeight = 10.0
 FinalHeight = 7.5
 Distance = 2.0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Tower/Switch3/Spring"]
+script = ExtResource("10_h8xgy")
+textKeys = Array[String](["common_hint_spikeball_sh"])
 
 [node name="StaticGate4" parent="RampageAct/Tower" instance=ExtResource("7_xsa3e")]
 transform = Transform3D(0.4, 0, 2.18557e-07, 0, 2.2, 0, -8.74229e-08, 0, 1, 7.57, 16, 0.2)
@@ -1217,6 +1278,17 @@ script = ExtResource("4_s70ep")
 saveVisibilityOnCheckpoint = true
 respawnOnActivation = true
 
+[node name="SkyroadDialog" parent="RampageAct/SkyRoad02" instance=ExtResource("4_1kuq5")]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74227e-08, 0, -8.74228e-08, -1, -11, 52, 82)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/SkyRoad02/SkyroadDialog"]
+script = ExtResource("10_h8xgy")
+textKeys = Array[String](["common_dizzy3_so", "common_dizzy3_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/SkyRoad02/SkyroadDialog"]
+shape = SubResource("BoxShape3D_4o8ik")
+
 [node name="Rings1" type="Node3D" parent="RampageAct/SkyRoad02"]
 transform = Transform3D(-0.999996, -4.8929e-09, -8.72856e-08, 0, 0.998421, -0.0559687, 8.74225e-08, -0.0559682, -0.99843, 0, 1.22298, 14.9473)
 script = ExtResource("5_xsa3e")
@@ -1328,6 +1400,7 @@ spawnInterval = 3.0
 [connection signal="SpinStarted" from="RampageAct/Top/Respawnable/GreenMajin2" to="RampageAct/Top/Respawnable/MovingMajin3" method="Unpause"]
 [connection signal="Defeated" from="RampageAct/Top/Gargoyle2" to="RampageAct/Top/GargoylePlatformL1/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="RampageAct/Top/Gargoyle2" to="RampageAct/Top/EnemyStone" method="IncrementCounter"]
+[connection signal="Spawned" from="RampageAct/Top/Gargoyle2" to="RampageAct/Top/Gargoyle2/GargoyleDialog" method="Activate"]
 [connection signal="Activated" from="RampageAct/Tower" to="RampageAct/Tower/Respawnable" method="Activate"]
 [connection signal="Activated" from="RampageAct/Tower/Switch1" to="RampageAct/Tower/Switch1/Spring" method="ShowLauncher"]
 [connection signal="Respawned" from="RampageAct/Tower/Switch1" to="RampageAct/Tower/Switch1/Spring" method="HideLauncher"]
@@ -1339,6 +1412,7 @@ spawnInterval = 3.0
 [connection signal="Deactivated" from="RampageAct/Tower/Switch2" to="RampageAct/Tower/Switch2/Spring" method="HideLauncher"]
 [connection signal="Activated" from="RampageAct/Tower/Switch3" to="RampageAct/Tower/Switch3/Spring" method="ShowLauncher"]
 [connection signal="Deactivated" from="RampageAct/Tower/Switch3" to="RampageAct/Tower/Switch3/Spring" method="HideLauncher"]
+[connection signal="Deactivated" from="RampageAct/Tower/Switch3/Spring" to="RampageAct/Tower/Switch3/Spring/Dialog" method="Activate"]
 [connection signal="Activated" from="RampageAct/Tower/Switch4" to="RampageAct/Tower/Switch4/Spring" method="ShowLauncher"]
 [connection signal="Deactivated" from="RampageAct/Tower/Switch4" to="RampageAct/Tower/Switch4/Spring" method="HideLauncher"]
 [connection signal="Activated" from="RampageAct/Tower/Switch5" to="RampageAct/Tower/Switch5/Spring" method="ShowLauncher"]
