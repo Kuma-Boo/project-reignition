@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://pqaytcsp2twi"]
+[gd_scene load_steps=68 format=3 uid="uid://pqaytcsp2twi"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_ul5kf"]
 [ext_resource type="Resource" uid="uid://tw5qyw6eup1u" path="res://area/4 levitated ruin/act 3/camera/TopCam.tres" id="2_2fdgt"]
@@ -6,11 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://dur8p206no0vn" path="res://area/4 levitated ruin/act 3/environment/collision/Collision.tscn" id="2_o2x0g"]
 [ext_resource type="PackedScene" uid="uid://cesleei0vilx5" path="res://area/4 levitated ruin/act 3/environment/Rukh1.tscn" id="2_ur2fq"]
 [ext_resource type="AudioStream" uid="uid://d4flratl3ixxk" path="res://sound/ost/bonus disc/Levitated Ruin Act 3.mp3" id="3_ur2fq"]
-[ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="3_xu6y8"]
 [ext_resource type="PackedScene" uid="uid://dart1s468mr5p" path="res://area/4 levitated ruin/act 3/environment/Rukh2.tscn" id="4_8dhk3"]
+[ext_resource type="PackedScene" uid="uid://bl13l83yvbsj4" path="res://area/4 levitated ruin/data/skybox/SkyboxAct3.tscn" id="4_jkq8a"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="4_xu6y8"]
 [ext_resource type="PackedScene" uid="uid://dvw3hbgtjf325" path="res://area/4 levitated ruin/act 3/environment/Rukh3.tscn" id="5_d06nc"]
-[ext_resource type="Material" uid="uid://cmegvv3w6enqo" path="res://area/4 levitated ruin/data/skybox/model/material/Sky Night.tres" id="5_f15ao"]
 [ext_resource type="PackedScene" uid="uid://b106f1ewueu7s" path="res://area/4 levitated ruin/act 3/environment/Rukh4.tscn" id="6_75748"]
 [ext_resource type="PackedScene" uid="uid://c184p4t00xpx" path="res://area/4 levitated ruin/act 3/environment/Rukh5.tscn" id="7_id8t7"]
 [ext_resource type="Curve3D" uid="uid://dkf2fujeif0jn" path="res://area/4 levitated ruin/act 3/environment/path/BottomPath.tres" id="8_4prap"]
@@ -429,8 +428,8 @@ _data = {
 }
 
 [sub_resource type="Gradient" id="Gradient_f15ao"]
-offsets = PackedFloat32Array(0, 0.31117, 0.587766, 0.808511, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0.270985, 0.2079, 0.33, 1, 0.48073, 0.390163, 0.765051, 1, 0.868607, 0.6762, 0.98, 1, 1, 1, 1, 1)
+offsets = PackedFloat32Array(0, 0.284574, 0.571809, 0.808511, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.196, 0.2114, 0.28, 1, 0.5082, 0.564923, 0.77, 1, 0.6762, 0.716707, 0.98, 1, 1, 1, 1, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_f15ao"]
 gradient = SubResource("Gradient_f15ao")
@@ -449,12 +448,12 @@ sky_material = SubResource("ProceduralSkyMaterial_5u6dt")
 
 [sub_resource type="Environment" id="Environment_id76q"]
 sky = SubResource("Sky_h8xgy")
-ambient_light_source = 3
+ambient_light_source = 2
 ambient_light_color = Color(0.3584, 0.410027, 0.64, 1)
 ambient_light_sky_contribution = 0.2
 ambient_light_energy = 0.8
 tonemap_mode = 2
-tonemap_exposure = 1.1
+tonemap_exposure = 1.2
 tonemap_white = 1.4
 ssao_radius = 3.19
 ssao_intensity = 3.36
@@ -474,8 +473,9 @@ glow_hdr_scale = 0.0
 glow_map_strength = 0.79
 glow_map = SubResource("GradientTexture1D_5u6dt")
 fog_enabled = true
-fog_light_color = Color(0.422665, 0.215755, 0.395155, 1)
-fog_light_energy = 0.8
+fog_light_color = Color(0.356244, 0.238638, 0.475854, 1)
+fog_light_energy = 0.4
+fog_density = 0.005
 fog_sky_affect = 0.0
 adjustment_enabled = true
 adjustment_color_correction = SubResource("GradientTexture1D_f15ao")
@@ -492,13 +492,7 @@ visible = false
 
 [node name="Visuals" type="Node3D" parent="."]
 
-[node name="LRSky" parent="Visuals" instance=ExtResource("3_xu6y8")]
-
-[node name="stg060_tsky_obj_Mesh_0000" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="0"]
-surface_material_override/0 = ExtResource("5_f15ao")
-
-[node name="stg060_tsky_obj_Mesh_0002" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="2"]
-surface_material_override/0 = ExtResource("5_f15ao")
+[node name="LRSky" parent="Visuals" instance=ExtResource("4_jkq8a")]
 
 [node name="Rukh1" parent="Visuals" instance=ExtResource("2_ur2fq")]
 
@@ -515,7 +509,7 @@ surface_material_override/0 = ExtResource("5_f15ao")
 [node name="MainLight" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
-light_color = Color(0.69716, 0.487038, 0.851031, 1)
+light_color = Color(0.745755, 0.726151, 0.935824, 1)
 light_energy = 2.0
 light_cull_mask = 4293918722
 shadow_enabled = true
@@ -566,7 +560,7 @@ cull_mask = 0
 reflection_mask = 97
 ambient_mode = 2
 ambient_color = Color(0.147602, 0.924986, 0.406798, 1)
-ambient_color_energy = 3.0
+ambient_color_energy = 2.0
 
 [node name="Exterior" type="ReflectionProbe" parent="ReflectionProbes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 248, -81.5, -1160)
@@ -575,8 +569,8 @@ size = Vector3(1301, 593, 1129)
 cull_mask = 0
 reflection_mask = 2
 ambient_mode = 2
-ambient_color = Color(0.810407, 0.619961, 0.78787, 1)
-ambient_color_energy = 0.5
+ambient_color = Color(0.489975, 0.541435, 0.717218, 1)
+ambient_color_energy = 1.4
 
 [node name="ExteriorPlayer" type="ReflectionProbe" parent="ReflectionProbes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 248, -50, -1285.5)
@@ -1093,4 +1087,3 @@ environment = SubResource("Environment_id76q")
 [connection signal="JumpFinished" from="SkyRoad/SkyRoad02/JumpEndTrigger/Jump" to="SkyRoad/SkyroadLockout" method="Deactivate"]
 
 [editable path="Collision"]
-[editable path="Visuals/LRSky"]
