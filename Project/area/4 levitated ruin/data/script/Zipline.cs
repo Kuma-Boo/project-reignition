@@ -24,10 +24,11 @@ public partial class Zipline : PathFollow3D
 	private readonly float ZiplineAcceleration = 5.0f;
 
 	[ExportGroup("Components")]
-	[Export] public Node3D Root { get; private set; }
+	[Export] private Node3D root;
 	[Export] public Node3D FollowObject { get; private set; }
-	[Export] public CollisionShape3D Collider { get; private set; }
-	[Export] public GpuParticles3D SparkFX { get; private set; }
+	[Export] private CollisionShape3D collider;
+	[Export] private GpuParticles3D sparkFX;
+	[Export] private AudioStreamPlayer3D ziplineSfx;
 
 	public override void _Ready()
 	{
@@ -47,20 +48,26 @@ public partial class Zipline : PathFollow3D
 		// Attempts to reset rotation, then disables zipline node
 		UpdateSpeed(0f);
 		UpdateRotation(0f, isZiplineStopped ? 0f : ZiplineAcceleration);
+		ziplineSfx.VolumeLinear = CurrentSpeed / ZiplineSpeed;
 
 		// Deactivate Zipline when it comes to a stop
 		if (isZiplineStopped)
+		{
+			ziplineSfx.Stop();
 			ProcessMode = ProcessModeEnum.Disabled;
+		}
 	}
 
 	public void Respawn()
 	{
+		ziplineSfx.VolumeLinear = 1f;
+		ziplineSfx.Stop();
 		Progress = startingProgress;
 		UpdateSpeed(0f, true);
 		UpdateRotation(0f, 0f);
 
-		Collider.Disabled = false;
-		SparkFX.Visible = false;
+		collider.Disabled = false;
+		sparkFX.Visible = false;
 	}
 
 	public void UpdateSpeed(float targetSpeed, bool snapSpeed = false)
@@ -92,10 +99,10 @@ public partial class Zipline : PathFollow3D
 		}
 
 		// Apply rotation
-		Root.Rotation = Vector3.Forward * CurrentRotation;
+		root.Rotation = Vector3.Forward * CurrentRotation;
 	}
 
-	public void StopZipline() => SparkFX.Emitting = false;
+	public void StopZipline() => sparkFX.Emitting = false;
 
 	public void OnEntered(Area3D a)
 	{
@@ -106,9 +113,11 @@ public partial class Zipline : PathFollow3D
 
 		UpdateSpeed(ZiplineSpeed, true);
 		ProcessMode = ProcessModeEnum.Inherit;
-		Collider.Disabled = true;
-		SparkFX.Restart();
-		SparkFX.Visible = true;
+		collider.Disabled = true;
+		sparkFX.Restart();
+		sparkFX.Visible = true;
+		ziplineSfx.Play();
+
 
 		EmitSignal(SignalName.Activated);
 	}

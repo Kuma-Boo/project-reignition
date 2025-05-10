@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://01vxs3in41h"]
+[gd_scene load_steps=9 format=3 uid="uid://01vxs3in41h"]
 
 [ext_resource type="Script" uid="uid://bbm2ici7p2hsv" path="res://area/4 levitated ruin/data/script/Zipline.cs" id="1_mpkc2"]
 [ext_resource type="PackedScene" uid="uid://b7y46mjl7k5uv" path="res://area/4 levitated ruin/object/model/special/Zipline.gltf" id="1_qwps4"]
 [ext_resource type="Material" uid="uid://3j0tx2hxvynp" path="res://object/stage/common/resource/model/material/Grindrail Sparks Process Material.tres" id="3_6nq2x"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="4_hqvss"]
+[ext_resource type="AudioStream" uid="uid://biwdex13eh70l" path="res://sound/sfx/stage/levitated ruin/ivy catch.wav" id="5_usag1"]
+[ext_resource type="AudioStream" uid="uid://dek8tgd61fhc6" path="res://sound/sfx/stage/levitated ruin/zipline.wav" id="6_wyehx"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_d5xjm"]
 
@@ -12,17 +14,18 @@ material = ExtResource("4_hqvss")
 size = Vector2(0.05, 1)
 center_offset = Vector3(0, 0.4, 0)
 
-[node name="Zipline" type="PathFollow3D" node_paths=PackedStringArray("Root", "FollowObject", "Collider", "SparkFX")]
+[node name="Zipline" type="PathFollow3D" node_paths=PackedStringArray("root", "FollowObject", "collider", "sparkFX", "ziplineSfx")]
 rotation_mode = 1
 use_model_front = true
 cubic_interp = false
 loop = false
 script = ExtResource("1_mpkc2")
 ZiplineSpeed = 40.0
-Root = NodePath("Root")
+root = NodePath("Root")
 FollowObject = NodePath("Root/Zipline/FollowObject")
-Collider = NodePath("Root/Zipline/Lockon/CollisionShape3D")
-SparkFX = NodePath("GrindrailSparks")
+collider = NodePath("Root/Zipline/Lockon/CollisionShape3D")
+sparkFX = NodePath("GrindrailSparks")
+ziplineSfx = NodePath("ZiplineSFX")
 
 [node name="Root" type="Node3D" parent="."]
 
@@ -61,4 +64,14 @@ transform_align = 2
 process_material = ExtResource("3_6nq2x")
 draw_pass_1 = SubResource("QuadMesh_hlfs7")
 
+[node name="CatchSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_usag1")
+max_db = 0.0
+bus = &"GAME SFX"
+
+[node name="ZiplineSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_wyehx")
+bus = &"GAME SFX"
+
+[connection signal="Activated" from="." to="CatchSFX" method="play" binds= [0.0]]
 [connection signal="area_entered" from="Root/Zipline/Lockon" to="." method="OnEntered"]

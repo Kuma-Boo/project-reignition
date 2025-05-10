@@ -1,18 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://bxvbg3oku2gpf"]
+[gd_scene load_steps=5 format=3 uid="uid://bxvbg3oku2gpf"]
 
 [ext_resource type="PackedScene" uid="uid://bfyvb1e3nfkat" path="res://area/4 levitated ruin/object/model/obstacle/Gate.gltf" id="1_deajx"]
-[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="2_yqnff"]
+[ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="2_yqnff"]
+[ext_resource type="AudioStream" uid="uid://cg56cp7mw7i7k" path="res://sound/sfx/stage/levitated ruin/gate.wav" id="3_plfjo"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_i6ja8"]
 size = Vector3(6, 3.4, 0.5)
 
 [node name="Gate" node_paths=PackedStringArray("animator") instance=ExtResource("1_deajx")]
 script = ExtResource("2_yqnff")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
 "Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Skeleton3D" parent="GateRoot" index="0"]
 bones/0/rotation = Quaternion(-0.707107, 2.66924e-08, 2.66924e-08, 0.707107)
@@ -25,3 +26,13 @@ extra_cull_margin = 10.0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 shape = SubResource("BoxShape3D_i6ja8")
+
+[node name="GateSFX" type="AudioStreamPlayer3D" parent="." index="3"]
+stream = ExtResource("3_plfjo")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+
+[connection signal="Activated" from="." to="GateSFX" method="play" binds= [0.0]]
+[connection signal="Deactivated" from="." to="GateSFX" method="play" binds= [0.0]]

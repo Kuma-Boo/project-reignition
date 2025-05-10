@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://c4w14cw47i887"]
+[gd_scene load_steps=8 format=3 uid="uid://c4w14cw47i887"]
 
 [ext_resource type="PackedScene" uid="uid://b2txhlf36uiy8" path="res://area/4 levitated ruin/object/model/special/PrisonLock.gltf" id="1_weos1"]
 [ext_resource type="Script" uid="uid://bj7jhdknn12cl" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="2_axihf"]
 [ext_resource type="PackedScene" uid="uid://vo0xb5g37yld" path="res://area/4 levitated ruin/object/model/special/PrisonLockPieces.gltf" id="3_dc3ag"]
+[ext_resource type="AudioStream" uid="uid://mvicyjtmt4r1" path="res://sound/sfx/stage/levitated ruin/lock.wav" id="4_axihf"]
 
 [sub_resource type="Animation" id="Animation_axihf"]
 length = 0.001
@@ -33,6 +34,20 @@ tracks/0/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ShatterSFX")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_axihf"]
 _data = {
@@ -53,7 +68,13 @@ cast_shadow = 0
 [node name="PrisonLockPieces" parent="." index="1" instance=ExtResource("3_dc3ag")]
 visible = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="2"]
+[node name="ShatterSFX" type="AudioStreamPlayer3D" parent="." index="2"]
+stream = ExtResource("4_axihf")
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="3"]
 libraries = {
 &"": SubResource("AnimationLibrary_axihf")
 }

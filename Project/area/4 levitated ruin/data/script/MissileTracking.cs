@@ -6,6 +6,7 @@ namespace Project.Gameplay.Hazards;
 /// <summary> Follows a path. </summary>
 public partial class MissileTracking : PathFollow3D
 {
+	[Signal] public delegate void ActivatedEventHandler();
 	[Signal] public delegate void ExplodedEventHandler();
 	[Signal] public delegate void DisabledEventHandler();
 
@@ -20,8 +21,9 @@ public partial class MissileTracking : PathFollow3D
 		ResetPhysicsInterpolation();
 	}
 
-	private float initialProgress;
+	private bool isActive;
 	private bool isExploded;
+	private float initialProgress;
 
 	public override void _Ready()
 	{
@@ -34,21 +36,27 @@ public partial class MissileTracking : PathFollow3D
 
 	public void Respawn()
 	{
+		isActive = false;
 		isExploded = false;
 		spawnData.Respawn(this);
 		Progress = initialProgress;
 
 		animator.Play("RESET");
 		animator.Advance(0.0);
-		animator.Play("fly");
+	}
 
+	public void Activate()
+	{
 		Visible = true;
+		isActive = true;
+		animator.Play("fly");
 		ProcessMode = ProcessModeEnum.Inherit;
+		EmitSignal(SignalName.Activated);
 	}
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (isExploded)
+		if (!isActive || isExploded)
 			return;
 
 		Progress += moveSpeed * PhysicsManager.physicsDelta;

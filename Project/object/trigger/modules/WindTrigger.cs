@@ -5,6 +5,7 @@ namespace Project.Gameplay.Triggers;
 
 public partial class WindTrigger : StageTriggerModule
 {
+
 	[Export(PropertyHint.NodePathValidTypes, "GPUParticles3D")] private NodePath windFX;
 	private GpuParticles3D _windFX;
 	[Export] private float windStrength = 15.0f;

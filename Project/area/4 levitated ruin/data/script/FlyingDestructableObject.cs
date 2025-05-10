@@ -5,6 +5,9 @@ namespace Project.Gameplay.Objects;
 
 public partial class FlyingDestructableObject : DestructableObject
 {
+	[Signal]
+	public delegate void StartedFlyingEventHandler();
+
 	[Export] private Node3D rotationRoot;
 	private Transform3D initialTransform;
 	[Export] private float flyingSpeed = 10.0f;
@@ -53,6 +56,7 @@ public partial class FlyingDestructableObject : DestructableObject
 	{
 		isSleeping = false;
 		animator.Play("fly", .5f);
+		EmitSignal(SignalName.StartedFlying);
 	}
 
 	public void Deactivate()

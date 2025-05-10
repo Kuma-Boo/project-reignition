@@ -1,8 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://x3scwb5r13dw"]
+[gd_scene load_steps=13 format=3 uid="uid://x3scwb5r13dw"]
 
-[ext_resource type="Script" path="res://area/4 levitated ruin/data/script/FlyingDestructableObject.cs" id="1_nmd6a"]
+[ext_resource type="Script" uid="uid://d4kukq76r26tq" path="res://area/4 levitated ruin/data/script/FlyingDestructableObject.cs" id="1_nmd6a"]
 [ext_resource type="PackedScene" uid="uid://vdrt1jk4o1vd" path="res://area/4 levitated ruin/object/model/platform/GrindPillar.gltf" id="2_me0lf"]
+[ext_resource type="AudioStream" uid="uid://t1glwhq3yrjl" path="res://sound/sfx/stage/levitated ruin/pillar launch.wav" id="4_f8eqs"]
 [ext_resource type="PackedScene" uid="uid://br8rcyxr4dehl" path="res://area/4 levitated ruin/object/model/platform/GrindPillarPieces.gltf" id="4_wggd5"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="5_dppsv"]
+[ext_resource type="AudioStream" uid="uid://bcu4rhb5h3j68" path="res://sound/sfx/stage/levitated ruin/pillar shatter.wav" id="6_5s8y3"]
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_7cx07"]
 data = PackedVector3Array(-0.5, -1.78814e-06, 0.500002, -0.5, 1.7794, -0.499998, -0.5, 1.7794, 0.500002, -0.5, -1.78814e-06, 0.500002, -0.5, -1.78814e-06, -0.499998, -0.5, 1.7794, -0.499998, -0.5, -1.78814e-06, -0.499998, 0.5, 1.7794, -0.499998, -0.5, 1.7794, -0.499998, -0.5, -1.78814e-06, -0.499998, 0.5, -1.78814e-06, -0.499998, 0.5, 1.7794, -0.499998, 0.5, -1.78814e-06, -0.499998, 0.5, 1.7794, 0.500002, 0.5, 1.7794, -0.499998, 0.5, -1.78814e-06, -0.499998, 0.5, -1.78814e-06, 0.500002, 0.5, 1.7794, 0.500002, 0.5, -1.78814e-06, 0.500002, -0.5, 1.7794, 0.500002, 0.5, 1.7794, 0.500002, 0.5, -1.78814e-06, 0.500002, -0.5, -1.78814e-06, 0.500002, -0.5, 1.7794, 0.500002, 0.5, -1.78814e-06, -0.499998, -0.5, -1.78814e-06, 0.500002, 0.5, -1.78814e-06, 0.500002, 0.5, -1.78814e-06, -0.499998, -0.5, -1.78814e-06, -0.499998, -0.5, -1.78814e-06, 0.500002, 0.5, 1.7794, 0.500002, 0, 2.80893, 1.72853e-06, 0.5, 1.7794, -0.499998, -0.5, 1.7794, -0.499998, 0, 2.80893, 1.72853e-06, -0.5, 1.7794, 0.500002, -0.5, 1.7794, 0.500002, 0, 2.80893, 1.72853e-06, 0.5, 1.7794, 0.500002, 0.5, 1.7794, -0.499998, 0, 2.80893, 1.72853e-06, -0.5, 1.7794, -0.499998)
@@ -194,10 +197,10 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pmcqp"]
 _data = {
-"RESET": SubResource("Animation_3al21"),
-"deactivate": SubResource("Animation_xoqmn"),
-"fly": SubResource("Animation_fgo1a"),
-"shatter": SubResource("Animation_yrfwa")
+&"RESET": SubResource("Animation_3al21"),
+&"deactivate": SubResource("Animation_xoqmn"),
+&"fly": SubResource("Animation_fgo1a"),
+&"shatter": SubResource("Animation_yrfwa")
 }
 
 [node name="GrindPillarFly" type="Node3D" node_paths=PackedStringArray("rotationRoot", "root", "pieceRoot", "animator")]
@@ -237,11 +240,31 @@ collision_mask = 0
 [node name="GrindPillarPieces" parent="." instance=ExtResource("4_wggd5")]
 visible = false
 
+[node name="LaunchSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_f8eqs")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+script = ExtResource("5_dppsv")
+groupKey = &"pillar launch"
+
+[node name="ShatterSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_5s8y3")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+script = ExtResource("5_dppsv")
+groupKey = &"pillar shatter"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_pmcqp")
+&"": SubResource("AnimationLibrary_pmcqp")
 }
 
+[connection signal="Shattered" from="." to="ShatterSFX" method="PlayInGroup"]
+[connection signal="StartedFlying" from="." to="LaunchSFX" method="PlayInGroup"]
 [connection signal="area_entered" from="Root/Rotation/Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Root/Rotation/Trigger" to="." method="OnExited"]
 

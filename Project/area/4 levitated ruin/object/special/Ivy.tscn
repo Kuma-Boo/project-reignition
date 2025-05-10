@@ -1,17 +1,20 @@
-[gd_scene load_steps=5 format=3 uid="uid://ci8d3jdqrc0nr"]
+[gd_scene load_steps=7 format=3 uid="uid://ci8d3jdqrc0nr"]
 
 [ext_resource type="Script" uid="uid://b2npn6f8s5xl7" path="res://area/4 levitated ruin/data/script/Ivy.cs" id="1_3x35n"]
 [ext_resource type="PackedScene" uid="uid://bhyhksqbx12de" path="res://area/4 levitated ruin/object/model/special/IvyBase.gltf" id="1_mnuw2"]
 [ext_resource type="PackedScene" uid="uid://loro11gywkcy" path="res://area/4 levitated ruin/object/model/special/IvyLink.gltf" id="2_17bjr"]
+[ext_resource type="AudioStream" uid="uid://lx6yh1sfq2ir" path="res://sound/sfx/stage/levitated ruin/ivy swing.wav" id="4_d1lf5"]
+[ext_resource type="AudioStream" uid="uid://biwdex13eh70l" path="res://sound/sfx/stage/levitated ruin/ivy catch.wav" id="5_724sq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bxmnq"]
 height = 1.5
 
-[node name="Ivy" type="Node3D" node_paths=PackedStringArray("launchPoint")]
+[node name="Ivy" type="Node3D" node_paths=PackedStringArray("swingSfx", "launchPoint")]
 script = ExtResource("1_3x35n")
 Length = 5
 MaxRotation = 45.0
 IvyScene = ExtResource("2_17bjr")
+swingSfx = NodePath("Lockon/SwingSFX")
 "Secondary Settings/Enabled" = true
 "Secondary Settings/Middle Height" = 4.0
 "Secondary Settings/Final Height" = 3.0
@@ -33,7 +36,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.5, 0)
 collision_layer = 12
 collision_mask = 2
 
+[node name="SwingSFX" type="AudioStreamPlayer3D" parent="Lockon"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 0)
+stream = ExtResource("4_d1lf5")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+
+[node name="CatchSFX" type="AudioStreamPlayer3D" parent="Lockon"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 0)
+stream = ExtResource("5_724sq")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Lockon"]
 shape = SubResource("CapsuleShape3D_bxmnq")
 
+[connection signal="IvyStarted" from="." to="Lockon/CatchSFX" method="play" binds= [0.0]]
 [connection signal="area_entered" from="Lockon" to="." method="OnEntered"]

@@ -1,8 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://cfcqcvct272ct"]
+[gd_scene load_steps=13 format=3 uid="uid://cfcqcvct272ct"]
 
 [ext_resource type="Script" uid="uid://d4kukq76r26tq" path="res://area/4 levitated ruin/data/script/FlyingDestructableObject.cs" id="1_2cduu"]
 [ext_resource type="PackedScene" uid="uid://bhqoe78kgcy60" path="res://area/4 levitated ruin/object/model/platform/SquarePillarFly.gltf" id="2_xkydh"]
 [ext_resource type="PackedScene" uid="uid://bhssvno7d30m2" path="res://area/4 levitated ruin/object/model/platform/SquarePillarPieces.gltf" id="4_dsw7f"]
+[ext_resource type="AudioStream" uid="uid://t1glwhq3yrjl" path="res://sound/sfx/stage/levitated ruin/pillar launch.wav" id="4_s4wjp"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="5_ds61p"]
+[ext_resource type="AudioStream" uid="uid://bcu4rhb5h3j68" path="res://sound/sfx/stage/levitated ruin/pillar shatter.wav" id="6_6ahki"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x3idx"]
 size = Vector3(1.2, 2.5, 1.2)
@@ -210,11 +213,31 @@ visible = false
 [node name="SquarePillarPieces" parent="." instance=ExtResource("4_dsw7f")]
 visible = false
 
+[node name="LaunchSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_s4wjp")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+script = ExtResource("5_ds61p")
+groupKey = &"pillar launch"
+
+[node name="ShatterSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_6ahki")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+script = ExtResource("5_ds61p")
+groupKey = &"pillar shatter"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_pmcqp")
 }
 
+[connection signal="Shattered" from="." to="ShatterSFX" method="PlayInGroup"]
+[connection signal="StartedFlying" from="." to="LaunchSFX" method="PlayInGroup"]
 [connection signal="area_entered" from="Root/SquarePillarFly/SquarePillarFlyMesh/Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Root/SquarePillarFly/SquarePillarFlyMesh/Trigger" to="." method="OnExited"]
 

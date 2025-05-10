@@ -1,8 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://dopa8mdu5d47j"]
+[gd_scene load_steps=13 format=3 uid="uid://dopa8mdu5d47j"]
 
 [ext_resource type="Script" uid="uid://d4kukq76r26tq" path="res://area/4 levitated ruin/data/script/FlyingDestructableObject.cs" id="1_pi27e"]
 [ext_resource type="PackedScene" uid="uid://chnb73uwcyvur" path="res://area/4 levitated ruin/object/model/platform/RoundPillarFly.gltf" id="2_nxcas"]
 [ext_resource type="PackedScene" uid="uid://bucgr7e87smyl" path="res://area/4 levitated ruin/object/model/platform/RoundPillarPieces.gltf" id="3_56y5h"]
+[ext_resource type="AudioStream" uid="uid://t1glwhq3yrjl" path="res://sound/sfx/stage/levitated ruin/pillar launch.wav" id="4_ygarv"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="5_d4y0l"]
+[ext_resource type="AudioStream" uid="uid://bcu4rhb5h3j68" path="res://sound/sfx/stage/levitated ruin/pillar shatter.wav" id="6_l50lk"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_lmpj0"]
 height = 6.0
@@ -202,11 +205,31 @@ visible = false
 [node name="RoundPillarPieces" parent="." instance=ExtResource("3_56y5h")]
 visible = false
 
+[node name="LaunchSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_ygarv")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+script = ExtResource("5_d4y0l")
+groupKey = &"pillar launch"
+
+[node name="ShatterSFX" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_l50lk")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+script = ExtResource("5_d4y0l")
+groupKey = &"pillar shatter"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_pmcqp")
 }
 
+[connection signal="Shattered" from="." to="ShatterSFX" method="PlayInGroup"]
+[connection signal="StartedFlying" from="." to="LaunchSFX" method="PlayInGroup"]
 [connection signal="area_entered" from="Root/RoundPillarFly/RoundPillarFlyMesh/Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Root/RoundPillarFly/RoundPillarFlyMesh/Trigger" to="." method="OnExited"]
 

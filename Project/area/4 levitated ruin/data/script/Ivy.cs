@@ -31,6 +31,7 @@ public partial class Ivy : Launcher
 
 	[ExportGroup("Components")]
 	[Export] private PackedScene IvyScene { get; set; }
+	[Export] private AudioStreamPlayer3D swingSfx;
 	private Node3D linkRoot;
 	private Array<Node3D> ivyLinks = [];
 
@@ -113,7 +114,9 @@ public partial class Ivy : Launcher
 		return IvyRatio;
 	}
 
-	private void Respawn()
+	private void Respawn() => StartSleeping();
+
+	private void StartSleeping()
 	{
 		targetImpulse = impulseVelocity = 0;
 		rotationVelocity = 0;
@@ -175,7 +178,8 @@ public partial class Ivy : Launcher
 	public void AddGravity()
 	{
 		float gravityAmount = Gravity;
-		if (Mathf.Sign(IvyRatio) == Mathf.Sign(rotationVelocity))
+		int velocitySign = Mathf.Sign(rotationVelocity);
+		if (Mathf.Sign(IvyRatio) == velocitySign)
 		{
 			if (isInteractingWithPlayer)
 			{
@@ -186,11 +190,28 @@ public partial class Ivy : Launcher
 			else
 			{
 				// Kill speed quickly when not interacting with player
-				rotationVelocity *= 0.9f;
+				rotationVelocity *= 0.8f;
+				gravityAmount *= 0.8f;
 			}
 		}
 
 		rotationVelocity -= Mathf.Sign(IvyRatio) * gravityAmount * PhysicsManager.physicsDelta; // Apply gravity
+
+		if (velocitySign != Mathf.Sign(rotationVelocity))
+			ChangeSwingDirection();
+	}
+
+	private void ChangeSwingDirection()
+	{
+		if (Mathf.Abs(IvyRatio) < 0.01f)
+		{
+			// Barely swinging; start sleeping again
+			StartSleeping();
+			return;
+		}
+
+		// Update swingSfx volume 
+		swingSfx.VolumeLinear = Mathf.Abs(IvyRatio);
 	}
 
 	private void UpdateSwing()
@@ -206,6 +227,7 @@ public partial class Ivy : Launcher
 		rotationVelocity = Mathf.Clamp(rotationVelocity, -velocityClamp, velocityClamp);
 
 		float targetRatio = IvyRatio + (rotationVelocity * lengthInfluence * PhysicsManager.physicsDelta);
+		CheckSwingSfx(targetRatio);
 		IvyRatio = Mathf.Clamp(targetRatio, -1f, 1f);
 
 		if (!isInteractingWithPlayer)
@@ -222,6 +244,15 @@ public partial class Ivy : Launcher
 				rotationVelocity *= 0.9f;
 			}
 		}
+	}
+
+	/// <summary> Checks whether we're switching sides, and plays the swing sound effect. </summary>
+	private void CheckSwingSfx(float targetRatio)
+	{
+		if (Mathf.Sign(targetRatio) == Mathf.Sign(IvyRatio))
+			return;
+
+		swingSfx.Play();
 	}
 
 	#region Setup

@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://c2p0dcedtu8ud"]
+[gd_scene load_steps=9 format=3 uid="uid://c2p0dcedtu8ud"]
 
 [ext_resource type="PackedScene" uid="uid://ce575l111x6tc" path="res://area/4 levitated ruin/act 1/environment/model/Rukh6Event.gltf" id="1_bdrfg"]
-[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="2_tojsq"]
-[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="2_tr4c4"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="2_tojsq"]
+[ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="2_tr4c4"]
 [ext_resource type="Animation" uid="uid://de4gjsv48kib7" path="res://area/4 levitated ruin/act 1/environment/model/animation/rukh06-event.res" id="4_2uu8v"]
+[ext_resource type="AudioStream" uid="uid://b0i86aiy220ru" path="res://sound/sfx/stage/levitated ruin/rukh fly.wav" id="5_20dyh"]
+[ext_resource type="AudioStream" uid="uid://r1lp1kmrgemo" path="res://sound/sfx/stage/levitated ruin/rukh grunt.wav" id="6_avhru"]
 
 [sub_resource type="Animation" id="Animation_obr1q"]
 resource_name = "wing-flap-loop"
@@ -222,16 +224,17 @@ tracks/29/keys = PackedFloat32Array(0, 1, 0.712575, 9.55099e-05, 5.06582e-05, 0.
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ne7wj"]
 _data = {
-"event": ExtResource("4_2uu8v"),
-"wing-flap": SubResource("Animation_obr1q")
+&"event": ExtResource("4_2uu8v"),
+&"wing-flap": SubResource("Animation_obr1q")
 }
 
 [node name="Rukh6Event" node_paths=PackedStringArray("animator") instance=ExtResource("1_bdrfg")]
 script = ExtResource("2_tr4c4")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = false
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Rukh06FlyingRoot" parent="." index="0"]
 script = ExtResource("2_tojsq")
@@ -264,7 +267,7 @@ bones/11/rotation = Quaternion(-0.0737564, 0.00688054, 0.0436613, 0.996296)
 bones/12/position = Vector3(8.37228, -71.8904, 1.59253)
 bones/12/rotation = Quaternion(0.744759, 0.614318, 0.125837, 0.228281)
 bones/13/position = Vector3(4.95923e-05, 11.4855, 1.35419e-05)
-bones/13/rotation = Quaternion(-0.0176421, 8.76921e-06, -0.0907333, 0.995719)
+bones/13/rotation = Quaternion(-0.0176421, 8.76924e-06, -0.0907333, 0.995719)
 bones/14/position = Vector3(3.39864, -26.4986, 0.518651)
 bones/14/rotation = Quaternion(0.641798, 0.696957, -0.248789, -0.201123)
 
@@ -402,13 +405,36 @@ cast_shadow = 0
 
 [node name="AnimationPlayer" parent="." index="1"]
 libraries = {
-"": SubResource("AnimationLibrary_ne7wj")
+&"": SubResource("AnimationLibrary_ne7wj")
 }
 autoplay = "rukh06-fly"
 speed_scale = 1.5
 next/event = &"wing-flap"
 blend_times = [&"event", &"wing-flap", 1.0]
 
+[node name="RootBone" type="BoneAttachment3D" parent="." index="2"]
+transform = Transform3D(0.992832, 0.0359032, -0.113996, -0.106046, -0.175276, -0.978795, -0.0551225, 0.983865, -0.170212, 327.947, 447.049, -524.516)
+bone_name = "root"
+bone_idx = 0
+use_external_skeleton = true
+external_skeleton = NodePath("../Rukh06FlyingRoot/Skeleton3D")
+
+[node name="FlySFX" type="AudioStreamPlayer3D" parent="RootBone" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -133.538, 0)
+stream = ExtResource("5_20dyh")
+unit_size = 100.0
+max_db = 0.0
+bus = &"GAME SFX"
+
+[node name="GruntSFX" type="AudioStreamPlayer3D" parent="RootBone" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -133.538, 0)
+stream = ExtResource("6_avhru")
+unit_size = 100.0
+max_db = 0.0
+bus = &"GAME SFX"
+
 [connection signal="Activated" from="." to="Rukh06FlyingRoot" method="Activate"]
+[connection signal="Activated" from="." to="RootBone/FlySFX" method="play" binds= [0.0]]
 [connection signal="Deactivated" from="." to="Rukh06FlyingRoot" method="Deactivate"]
+[connection signal="EventFinished" from="." to="RootBone/GruntSFX" method="play" binds= [0.0]]
 [connection signal="Respawned" from="." to="Rukh06FlyingRoot" method="Deactivate"]

@@ -65,8 +65,9 @@ public partial class PlayerEffect : Node3D
 
 		if (targetChannel == null) // Add new target channels as needed
 		{
-			targetChannel = new AudioStreamPlayer()
+			targetChannel = new()
 			{
+				VolumeLinear = 0.9f,
 				Bus = "GAME SFX"
 			};
 

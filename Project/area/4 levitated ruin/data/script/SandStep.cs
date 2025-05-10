@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 using Project.CustomNodes;
 
 namespace Project.Gameplay.Objects;
@@ -12,6 +13,7 @@ public partial class SandStep : Node3D
 	[Export] private bool isSandFlowing;
 	[Export] private GroupGpuParticles3D particleParent;
 	[Export] private Area3D lockonTrigger;
+	[Export] private AudioStreamPlayer3D sfx;
 
 	private bool isInteractingWithPlayer;
 
@@ -33,6 +35,20 @@ public partial class SandStep : Node3D
 
 		if (StageSettings.Player.IsHomingAttacking)
 			StageSettings.Player.StartBounce(true, .5f);
+
+		UpdateSfx();
+	}
+
+	private void UpdateSfx()
+	{
+		if (isSandFlowing || !sfx.Playing)
+			return;
+
+		// Fade out sfx
+		sfx.VolumeLinear = Mathf.MoveToward(sfx.VolumeLinear, 0f, PhysicsManager.physicsDelta);
+
+		if (Mathf.IsZeroApprox(sfx.VolumeLinear))
+			sfx.Stop();
 	}
 
 
@@ -45,6 +61,15 @@ public partial class SandStep : Node3D
 	private void UpdateFlowingState()
 	{
 		particleParent?.SetEmitting(isSandFlowing);
+
+		if (isSandFlowing)
+		{
+			// Update sfx
+			sfx.VolumeLinear = 1f;
+
+			if (!sfx.Playing)
+				sfx.Play();
+		}
 
 		if (StageSettings.Player?.Skills.IsTimeBreakActive == true)
 			EnableSandCollision();

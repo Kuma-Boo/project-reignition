@@ -9,6 +9,9 @@ namespace Project.Gameplay.Hazards;
 [Tool]
 public partial class BombMissile : Node3D
 {
+	[Signal] public delegate void LaunchedEventHandler();
+	[Signal] public delegate void ExplodedEventHandler();
+
 	/// <summary> Enable this option to align the model's forward direction with its travel direction. </summary>
 	[Export] private bool alignModelForward;
 	[Export] private bool disableRespawning;
@@ -280,11 +283,13 @@ public partial class BombMissile : Node3D
 		travelInterpolation = 0;
 		animator.Play("fly");
 		UpdatePosition();
+		EmitSignal(SignalName.Launched);
 	}
 
 	public void Explode()
 	{
-		animator.Play("explode"); // Impact effect
 		IsActive = false;
+		animator.Play("explode"); // Impact effect
+		EmitSignal(SignalName.Exploded);
 	}
 }

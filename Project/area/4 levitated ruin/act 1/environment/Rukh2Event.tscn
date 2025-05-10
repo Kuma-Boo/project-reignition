@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://usa7slmjgmsg"]
+[gd_scene load_steps=9 format=3 uid="uid://usa7slmjgmsg"]
 
 [ext_resource type="PackedScene" uid="uid://dqnr7l23oju37" path="res://area/4 levitated ruin/act 1/environment/model/Rukh2Event.gltf" id="1_uqs5j"]
-[ext_resource type="Script" path="res://object/trigger/modules/EventTrigger.cs" id="2_5vtbe"]
-[ext_resource type="Script" path="res://object/trigger/modules/CullingTrigger.cs" id="3_bifjl"]
+[ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="2_5vtbe"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="3_bifjl"]
 [ext_resource type="Animation" uid="uid://dfhfvc22ffy8d" path="res://area/4 levitated ruin/act 1/environment/model/animation/rukh02-event.res" id="4_6w2oj"]
+[ext_resource type="AudioStream" uid="uid://b0i86aiy220ru" path="res://sound/sfx/stage/levitated ruin/rukh fly.wav" id="5_wcb4c"]
+[ext_resource type="AudioStream" uid="uid://r1lp1kmrgemo" path="res://sound/sfx/stage/levitated ruin/rukh grunt.wav" id="6_qi35n"]
 
 [sub_resource type="Animation" id="Animation_qxvrx"]
 resource_name = "wing-flap-loop"
@@ -222,16 +224,17 @@ tracks/29/keys = PackedFloat32Array(0, 1, 0.499473, 0.500284, 0.510914, 0.489091
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ne1km"]
 _data = {
-"event": ExtResource("4_6w2oj"),
-"wing-flap": SubResource("Animation_qxvrx")
+&"event": ExtResource("4_6w2oj"),
+&"wing-flap": SubResource("Animation_qxvrx")
 }
 
 [node name="Rukh2Event" node_paths=PackedStringArray("animator") instance=ExtResource("1_uqs5j")]
 script = ExtResource("2_5vtbe")
+animator = NodePath("AnimationPlayer")
 "Trigger Settings/Automatically Respawn" = true
 "Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
 "Trigger Settings/Player Stand-in" = NodePath("")
-animator = NodePath("AnimationPlayer")
 
 [node name="Rukh02FlyingRoot" parent="." index="0"]
 script = ExtResource("3_bifjl")
@@ -403,12 +406,32 @@ cast_shadow = 0
 
 [node name="AnimationPlayer" parent="." index="1"]
 libraries = {
-"": SubResource("AnimationLibrary_ne1km")
+&"": SubResource("AnimationLibrary_ne1km")
 }
 speed_scale = 1.5
 next/event = &"wing-flap"
 blend_times = [&"event", &"wing-flap", 1.0]
 
+[node name="RootBone" type="BoneAttachment3D" parent="." index="2"]
+bone_name = "root"
+bone_idx = 0
+use_external_skeleton = true
+external_skeleton = NodePath("../Rukh02FlyingRoot/Skeleton3D")
+
+[node name="FlySFX" type="AudioStreamPlayer3D" parent="RootBone" index="0"]
+stream = ExtResource("5_wcb4c")
+unit_size = 100.0
+max_db = 0.0
+bus = &"GAME SFX"
+
+[node name="GruntSFX" type="AudioStreamPlayer3D" parent="RootBone" index="1"]
+stream = ExtResource("6_qi35n")
+unit_size = 100.0
+max_db = 0.0
+bus = &"GAME SFX"
+
 [connection signal="Activated" from="." to="Rukh02FlyingRoot" method="Activate"]
+[connection signal="Activated" from="." to="RootBone/FlySFX" method="play" binds= [0.0]]
 [connection signal="Deactivated" from="." to="Rukh02FlyingRoot" method="Deactivate"]
+[connection signal="EventFinished" from="." to="RootBone/GruntSFX" method="play" binds= [0.0]]
 [connection signal="Respawned" from="." to="Rukh02FlyingRoot" method="Deactivate"]

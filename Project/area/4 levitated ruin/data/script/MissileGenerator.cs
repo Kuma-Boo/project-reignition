@@ -62,5 +62,6 @@ public partial class MissileGenerator : Node3D
 		Missile missile = missilePool.Dequeue();
 		missile.UpdateSpawnTransform(_spawnTransform.Transform);
 		missile.Respawn();
+		missile.Activate();
 	}
 }
