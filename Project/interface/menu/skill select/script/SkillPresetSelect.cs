@@ -10,8 +10,7 @@ public partial class SkillPresetSelect : Menu
 	[Export] private PackedScene presetOption;
 	[Export] private VBoxContainer presetContainer;
 
-	[Export]
-	private Node2D cursor;
+	[Export] private Node2D cursor;
 	[Export] private Sprite2D scrollbar;
 
 	[Export] private Label saveLabel; // We're changing this to "overwrite" if a save already exists
@@ -62,7 +61,7 @@ public partial class SkillPresetSelect : Menu
 
 	public override void _Process(double _)
 	{
-		float targetScrollPosition = (160 * scrollRatio) - 80;
+		float targetScrollPosition = 360 * scrollRatio;
 		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, ScrollSmoothing);
 
 		//  Update cursor position

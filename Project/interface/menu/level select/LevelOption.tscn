@@ -1,7 +1,6 @@
 [gd_scene load_steps=28 format=3 uid="uid://bxhhmqrkph0a"]
 
 [ext_resource type="Script" uid="uid://dujpy81xeb2u7" path="res://interface/menu/level select/script/LevelOption.cs" id="1_dsbqj"]
-[ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="2_7n0bw"]
 [ext_resource type="Texture2D" uid="uid://b6eevqhlu5ymx" path="res://interface/menu/level select/texture/fire soul.png" id="2_a3wse"]
 [ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="3_0ir4n"]
 [ext_resource type="LabelSettings" uid="uid://bqrydgixkulbv" path="res://interface/font/NavigationFont.tres" id="3_a8nb3"]
@@ -10,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dvyihcabrgkby" path="res://interface/menu/level select/texture/no fire soul.png" id="7_cv7h8"]
 [ext_resource type="Texture2D" uid="uid://cbnh0am0av0ts" path="res://interface/menu/level select/texture/silver.png" id="7_nutrd"]
 [ext_resource type="Texture2D" uid="uid://clnr8mw5xvxn1" path="res://interface/menu/level select/texture/no medal.png" id="7_umnuq"]
+[ext_resource type="Texture2D" uid="uid://dx4vxnhtgd13t" path="res://interface/menu/common/common menu atlas.png" id="7_wegvj"]
 [ext_resource type="Texture2D" uid="uid://bongvk7uwqsco" path="res://interface/menu/level select/texture/gold.png" id="8_3csb8"]
 [ext_resource type="Texture2D" uid="uid://daym7a6tnri40" path="res://interface/menu/level select/texture/bronze.png" id="10_pu4tu"]
 
@@ -137,7 +137,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Rect2(170, 180, 40, 40)]
+"values": [Rect2(340, 360, 80, 80)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -201,7 +201,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Rect2(130, 180, 40, 40)]
+"values": [Rect2(260, 360, 80, 80)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -257,7 +257,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Rect2(170, 180, 40, 40)]
+"values": [Rect2(340, 360, 80, 80)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -360,7 +360,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Rect2(130, 180, 40, 40)]
+"values": [Rect2(260, 360, 80, 80)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -453,14 +453,14 @@ _data = {
 &"RESET": SubResource("Animation_4fbev"),
 &"attempt": SubResource("Animation_oujva"),
 &"bronze": SubResource("Animation_clca2"),
-"clear": SubResource("Animation_w71wl"),
+&"clear": SubResource("Animation_w71wl"),
 &"clear-loop": SubResource("Animation_xec1w"),
 &"gold": SubResource("Animation_m7wlw"),
-"hide": SubResource("Animation_klask"),
+&"hide": SubResource("Animation_klask"),
 &"new": SubResource("Animation_43h1e"),
 &"no-medal": SubResource("Animation_jq2jx"),
-"show": SubResource("Animation_7p3x4"),
-"silver": SubResource("Animation_ij2sj")
+&"show": SubResource("Animation_7p3x4"),
+&"silver": SubResource("Animation_ij2sj")
 }
 
 [node name="LevelOption" type="Control" node_paths=PackedStringArray("missionLabel", "fireSoulParent", "fireSoulRects", "animator")]
@@ -520,24 +520,24 @@ uppercase = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="New"]
 libraries = {
-"": SubResource("AnimationLibrary_8gw72")
+&"": SubResource("AnimationLibrary_8gw72")
 }
 autoplay = "loop"
 
 [node name="Light" type="Sprite2D" parent="."]
 position = Vector2(48, 40)
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_7n0bw")
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("7_wegvj")
 region_enabled = true
-region_rect = Rect2(170, 180, 40, 40)
+region_rect = Rect2(340, 360, 80, 80)
 
 [node name="Glow" type="Sprite2D" parent="Light"]
 modulate = Color(0, 1, 0, 1)
 material = ExtResource("3_d3is1")
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_7n0bw")
+scale = Vector2(2, 2)
+texture = ExtResource("7_wegvj")
 region_enabled = true
-region_rect = Rect2(210, 180, 40, 40)
+region_rect = Rect2(420, 360, 80, 80)
 
 [node name="MissionLabel" type="Label" parent="."]
 layout_mode = 0
@@ -590,5 +590,5 @@ stretch_mode = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_gnepi")
+&"": SubResource("AnimationLibrary_gnepi")
 }

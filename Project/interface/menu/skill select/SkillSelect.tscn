@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://8fsxq4g2aeod" path="res://interface/menu/skill select/script/SkillSelect.cs" id="1_v1nov"]
 [ext_resource type="PackedScene" uid="uid://c4ohuqlywe4f" path="res://interface/menu/Description.tscn" id="3_ud304"]
 [ext_resource type="PackedScene" uid="uid://b6v3sm1vo8for" path="res://interface/menu/skill select/SkillOption.tscn" id="4_sgi6g"]
+[ext_resource type="Texture2D" uid="uid://dx4vxnhtgd13t" path="res://interface/menu/common/common menu atlas.png" id="4_tcevv"]
 [ext_resource type="Texture2D" uid="uid://cqp20lub7h6aq" path="res://interface/menu/skill select/texture/skill menu.png" id="4_x4q03"]
-[ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="5_q6eds"]
 [ext_resource type="LabelSettings" uid="uid://bx53haw8tuhx" path="res://interface/font/SkillSelectFont.tres" id="6_4a5gt"]
 [ext_resource type="Texture2D" uid="uid://dq3e58qnn7y56" path="res://interface/menu/skill select/texture/augment arrow.png" id="7_2pdxw"]
 [ext_resource type="AudioStream" uid="uid://bc6pmkxr1e25r" path="res://sound/sfx/system/skill equip.wav" id="7_5j0l1"]
@@ -1623,7 +1623,7 @@ skillOption = ExtResource("4_sgi6g")
 optionContainer = NodePath("Content/Clip/Options")
 cursor = NodePath("Content/CursorOrigin/Cursor")
 description = NodePath("Description")
-scrollbar = NodePath("Content/Window/ScrollBar/ScrollPosition")
+scrollbar = NodePath("Content/Window/Scrollbar/ScrollPosition")
 skillPointFill = NodePath("Content/Header/SkillPointBar/Fill")
 levelLabel = NodePath("Content/Header/LevelLabel")
 skillPointLabel = NodePath("Content/Header/SPValue")
@@ -1663,21 +1663,24 @@ texture = ExtResource("4_x4q03")
 region_enabled = true
 region_rect = Rect2(0, 280, 512, 232)
 
-[node name="ScrollBar" type="Sprite2D" parent="Content/Window"]
-position = Vector2(552, -24)
-rotation = 1.57079
-scale = Vector2(2.25002, 2.25002)
-texture = ExtResource("5_q6eds")
-region_enabled = true
-region_rect = Rect2(32, 224, 224, 32)
+[node name="Scrollbar" type="NinePatchRect" parent="Content/Window"]
+offset_left = 584.0
+offset_top = -272.0
+offset_right = 1081.0
+offset_bottom = -200.0
+rotation = 1.5708
+texture = ExtResource("4_tcevv")
+region_rect = Rect2(64, 448, 448, 64)
+patch_margin_left = 56
+patch_margin_right = 56
 metadata/_edit_lock_ = true
 
-[node name="ScrollPosition" type="Sprite2D" parent="Content/Window/ScrollBar"]
-position = Vector2(-80, 0)
+[node name="ScrollPosition" type="Sprite2D" parent="Content/Window/Scrollbar"]
 rotation = -1.5708
-texture = ExtResource("5_q6eds")
+texture = ExtResource("4_tcevv")
+offset = Vector2(-32, 64)
 region_enabled = true
-region_rect = Rect2(8, 224, 24, 24)
+region_rect = Rect2(0, 448, 62, 64)
 
 [node name="CursorOrigin" type="Node2D" parent="Content"]
 position = Vector2(624, 232)
@@ -1926,12 +1929,12 @@ position = Vector2(960, 470)
 position = Vector2(0, -192)
 
 [node name="TopLeft" type="Sprite2D" parent="AlertMenu/Menu/Parent/Window/TopBar"]
-position = Vector2(-568, 42)
-scale = Vector2(2.26364, -2.2)
-texture = ExtResource("5_q6eds")
+position = Vector2(-560, 36)
+scale = Vector2(1, -1)
+texture = ExtResource("4_tcevv")
 centered = false
 region_enabled = true
-region_rect = Rect2(130, 30, 60, 30)
+region_rect = Rect2(260, 60, 120, 60)
 
 [node name="Top" type="NinePatchRect" parent="AlertMenu/Menu/Parent/Window/TopBar"]
 custom_minimum_size = Vector2(432, 33)
@@ -1940,22 +1943,22 @@ anchor_left = 0.104
 anchor_top = 0.89
 anchor_right = 0.889
 anchor_bottom = 1.0
-offset_left = -432.0
-offset_top = 42.0
-offset_bottom = 75.0
-scale = Vector2(2, -2)
-texture = ExtResource("5_q6eds")
-region_rect = Rect2(189.5, 30, 50, 30)
+offset_left = -440.0
+offset_top = 36.0
+offset_right = 416.0
+offset_bottom = 96.0
+scale = Vector2(1, -1)
+texture = ExtResource("4_tcevv")
+region_rect = Rect2(379, 60, 94, 60)
 axis_stretch_horizontal = 1
 
 [node name="TopRight" type="Sprite2D" parent="AlertMenu/Menu/Parent/Window/TopBar"]
-position = Vector2(432, 42)
-scale = Vector2(2.24697, -2.2)
-texture = ExtResource("5_q6eds")
+position = Vector2(416, 36)
+scale = Vector2(1, -1)
+texture = ExtResource("4_tcevv")
 centered = false
-flip_h = true
 region_enabled = true
-region_rect = Rect2(130, 30, 60, 30)
+region_rect = Rect2(367, 2.5, 140, 60)
 
 [node name="Background" type="NinePatchRect" parent="AlertMenu/Menu/Parent/Window"]
 anchors_preset = 15
@@ -1964,12 +1967,12 @@ anchor_bottom = 1.0
 offset_left = -488.0
 offset_top = -192.0
 offset_right = 488.0
-offset_bottom = 192.0
+offset_bottom = 210.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(488, 192)
-texture = ExtResource("5_q6eds")
-region_rect = Rect2(64, 176, 48, 48)
+texture = ExtResource("4_tcevv")
+region_rect = Rect2(128, 352, 96, 96)
 patch_margin_left = 32
 patch_margin_top = 32
 patch_margin_right = 32
@@ -1979,12 +1982,11 @@ patch_margin_bottom = 32
 position = Vector2(0, 208)
 
 [node name="BottomLeft" type="Sprite2D" parent="AlertMenu/Menu/Parent/Window/BottomBar"]
-position = Vector2(-568, -40)
-scale = Vector2(2.26364, 2.2)
-texture = ExtResource("5_q6eds")
+position = Vector2(-560, -36)
+texture = ExtResource("4_tcevv")
 centered = false
 region_enabled = true
-region_rect = Rect2(130, 30, 60, 30)
+region_rect = Rect2(260, 60, 120, 60)
 
 [node name="Bottom" type="NinePatchRect" parent="AlertMenu/Menu/Parent/Window/BottomBar"]
 custom_minimum_size = Vector2(432, 33)
@@ -1993,22 +1995,20 @@ anchor_left = 0.104
 anchor_top = 0.89
 anchor_right = 0.889
 anchor_bottom = 1.0
-offset_left = -432.0
-offset_top = -40.0
-offset_bottom = -7.0
-scale = Vector2(2, 2)
-texture = ExtResource("5_q6eds")
-region_rect = Rect2(189.5, 30, 50, 30)
+offset_left = -440.0
+offset_top = -36.0
+offset_right = 416.0
+offset_bottom = 24.0
+texture = ExtResource("4_tcevv")
+region_rect = Rect2(379, 60, 94, 60)
 axis_stretch_horizontal = 1
 
 [node name="BottomRight" type="Sprite2D" parent="AlertMenu/Menu/Parent/Window/BottomBar"]
-position = Vector2(432, -40)
-scale = Vector2(2.24697, 2.2)
-texture = ExtResource("5_q6eds")
+position = Vector2(416, -36)
+texture = ExtResource("4_tcevv")
 centered = false
-flip_h = true
 region_enabled = true
-region_rect = Rect2(130, 30, 60, 30)
+region_rect = Rect2(367, 2.5, 140, 60)
 
 [node name="Text" type="Node2D" parent="AlertMenu/Menu/Parent"]
 

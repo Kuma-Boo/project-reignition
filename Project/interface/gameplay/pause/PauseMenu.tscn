@@ -17,12 +17,12 @@
 [ext_resource type="AudioStream" uid="uid://cruu5h1jr78lr" path="res://sound/sfx/system/menu screen change.wav" id="7_m12c2"]
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="7_u01fk"]
 [ext_resource type="LabelSettings" uid="uid://c2ppn463q7sif" path="res://interface/font/PauseOptionFont.tres" id="8_3gka2"]
-[ext_resource type="Texture2D" uid="uid://js0na2rtpuke" path="res://interface/menu/level select/texture/level select atlas.png" id="9_eaqga"]
 [ext_resource type="Texture2D" uid="uid://ftko0u3nnv8" path="res://interface/gameplay/pause/texture/text/status/status common en.png" id="10_lpx5w"]
 [ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="12_mqlo7"]
 [ext_resource type="FontFile" uid="uid://b60t6w3shtof1" path="res://interface/font/bitmap fonts/Status Numbers en.fnt" id="12_tp5bp"]
 [ext_resource type="LabelSettings" uid="uid://b3k06q5urpxjh" path="res://interface/font/PauseStatus.tres" id="12_twx0t"]
 [ext_resource type="Texture2D" uid="uid://b6eevqhlu5ymx" path="res://interface/menu/level select/texture/fire soul.png" id="14_5ds6k"]
+[ext_resource type="Texture2D" uid="uid://dx4vxnhtgd13t" path="res://interface/menu/common/common menu atlas.png" id="15_8pf7g"]
 [ext_resource type="Texture2D" uid="uid://bongvk7uwqsco" path="res://interface/menu/level select/texture/gold.png" id="16_1roho"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ubgac"]
@@ -4624,7 +4624,6 @@ input_2/break_loop_at_end = false
 input_2/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_sm8n7"]
-graph_offset = Vector2(-714.762, 33.1767)
 nodes/cancel-2/node = SubResource("AnimationNodeAnimation_2e06l")
 nodes/cancel-2/position = Vector2(-240, 1020)
 nodes/confirm/node = SubResource("AnimationNodeTransition_86qql")
@@ -4726,7 +4725,7 @@ skillCursorAnimator = NodePath("Pause/StatusMenu/ValueMenu/Skill/CursorAnchor/An
 pauseSkillScene = ExtResource("2_pyysd")
 rectVerticalValues = PackedInt32Array(346, 8, 195, 244, 295, 98, 51, 145)
 levelSprite = NodePath("Pause/StatusMenu/ValueMenu/LevelTop")
-skillScrollbar = NodePath("Pause/StatusMenu/ValueMenu/Skill/ScrollBar/ScrollPosition")
+skillScrollbar = NodePath("Pause/StatusMenu/ValueMenu/Skill/Scrollbar/ScrollPosition")
 
 [node name="Pause" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -4786,7 +4785,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Pause/Options/PauseCursorAnchor"]
 libraries = {
-"": SubResource("AnimationLibrary_qllxi")
+&"": SubResource("AnimationLibrary_qllxi")
 }
 
 [node name="Continue" type="Label" parent="Pause/Options"]
@@ -4835,7 +4834,7 @@ uppercase = true
 self_modulate = Color(1, 1, 1, 0.588235)
 offset_top = 64.0
 offset_right = 200.0
-offset_bottom = 99.0002
+offset_bottom = 99.0
 text = "pause_status"
 label_settings = ExtResource("8_3gka2")
 uppercase = true
@@ -4897,7 +4896,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Pause/StatusMenu/StatusCursorAnchor"]
 libraries = {
-"": SubResource("AnimationLibrary_qllxi")
+&"": SubResource("AnimationLibrary_qllxi")
 }
 
 [node name="Status" type="Label" parent="Pause/StatusMenu"]
@@ -4979,8 +4978,8 @@ offset_top = -288.0
 offset_right = 368.0
 offset_bottom = 244.0
 pivot_offset = Vector2(368, 288)
-texture = ExtResource("9_eaqga")
-region_rect = Rect2(64, 176, 48, 48)
+texture = ExtResource("15_8pf7g")
+region_rect = Rect2(128, 352, 96, 96)
 patch_margin_left = 32
 patch_margin_top = 32
 patch_margin_right = 32
@@ -5380,17 +5379,17 @@ offset_right = 640.0
 offset_bottom = 54.0
 scale = Vector2(1, 1e-05)
 pivot_offset = Vector2(0, 25)
-texture = ExtResource("9_eaqga")
-region_rect = Rect2(136, 96, 120, 16)
-patch_margin_left = 10
-patch_margin_top = 4
-patch_margin_right = 9
-patch_margin_bottom = 6
+texture = ExtResource("15_8pf7g")
+region_rect = Rect2(272, 192, 240, 32)
+patch_margin_left = 20
+patch_margin_top = 10
+patch_margin_right = 18
+patch_margin_bottom = 12
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Pause/StatusMenu/ValueMenu/Skill/CursorAnchor"]
 root_node = NodePath("../Cursor")
 libraries = {
-"": SubResource("AnimationLibrary_d6toc")
+&"": SubResource("AnimationLibrary_d6toc")
 }
 blend_times = [&"show", &"loop", 0.1]
 
@@ -5436,20 +5435,23 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 4
 
-[node name="ScrollBar" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu/Skill"]
-position = Vector2(320, 8)
-rotation = 1.57079
-scale = Vector2(2, 2)
-texture = ExtResource("9_eaqga")
-region_enabled = true
-region_rect = Rect2(32, 224, 224, 32)
+[node name="Scrollbar" type="NinePatchRect" parent="Pause/StatusMenu/ValueMenu/Skill"]
+offset_left = 352.0
+offset_top = -216.0
+offset_right = 801.0
+offset_bottom = -144.0
+rotation = 1.5708
+texture = ExtResource("15_8pf7g")
+region_rect = Rect2(64, 448, 448, 64)
+patch_margin_left = 56
+patch_margin_right = 56
 
-[node name="ScrollPosition" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu/Skill/ScrollBar"]
-position = Vector2(-80, 0)
+[node name="ScrollPosition" type="Sprite2D" parent="Pause/StatusMenu/ValueMenu/Skill/Scrollbar"]
 rotation = -1.5708
-texture = ExtResource("9_eaqga")
+texture = ExtResource("15_8pf7g")
+offset = Vector2(-32, 64)
 region_enabled = true
-region_rect = Rect2(8, 224, 24, 24)
+region_rect = Rect2(0, 448, 62, 64)
 
 [node name="Description" parent="Pause" instance=ExtResource("6_pouoc")]
 layout_mode = 1
@@ -5476,7 +5478,7 @@ bus = &"SFX"
 process_mode = 3
 root_node = NodePath("../Pause")
 libraries = {
-"": SubResource("AnimationLibrary_oiknc")
+&"": SubResource("AnimationLibrary_oiknc")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]

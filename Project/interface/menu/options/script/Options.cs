@@ -367,7 +367,7 @@ public partial class Options : Menu
 	{
 		int offset = VerticalSelection - scrollOffset;
 		contentContainer.Position = Vector2.Up * scrollOffset * 60;
-		cursor.Position = new(cursor.Position.X, 300 + (offset * 60));
+		cursor.Position = new(cursor.Position.X, 306 + (offset * 60));
 	}
 
 	/// <summary> Changes the visible submenu. Called from the page flip animation. </summary>

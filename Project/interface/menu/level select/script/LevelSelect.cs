@@ -193,9 +193,10 @@ public partial class LevelSelect : Menu
 
 	private void UpdateListPosition(float smoothing)
 	{
-		cursor.Position = cursor.Position.SmoothDamp(new(cursor.Position.X, 220 + (96 * cursorPosition)), ref cursorWidthVelocity, smoothing);
+		float targetScrollPosition = 360 * scrollRatio;
+		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * targetScrollPosition, ref scrollVelocity, smoothing);
 
+		cursor.Position = cursor.Position.SmoothDamp(new(cursor.Position.X, 220 + (96 * cursorPosition)), ref cursorWidthVelocity, smoothing);
 		options.Position = options.Position.SmoothDamp(Vector2.Up * ((96 * scrollAmount) - 32), ref optionVelocity, smoothing);
-		scrollbar.Position = scrollbar.Position.SmoothDamp(Vector2.Right * ((160 * scrollRatio) - 80), ref scrollVelocity, smoothing);
 	}
 }

@@ -106,7 +106,7 @@ public partial class PauseMenu : Node
 			float denominator = SaveManager.ActiveSkillRing.EquippedSkills.Count - 1;
 			if (denominator > 0)
 			{
-				float targetPosition = Mathf.Lerp(-80, 80, skillSelection / denominator);
+				float targetPosition = 312 * (skillSelection / denominator);
 				skillScrollbar.Position = skillScrollbar.Position.SmoothDamp(Vector2.Right * targetPosition, ref scrollVelocity, ScrollSmoothing);
 			}
 		}
