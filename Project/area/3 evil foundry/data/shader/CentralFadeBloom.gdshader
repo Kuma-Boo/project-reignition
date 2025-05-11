@@ -1,7 +1,4 @@
-[gd_resource type="Shader" format=3 uid="uid://dt8heyml4biim"]
-
-[resource]
-code = "shader_type spatial;
+shader_type spatial;
 render_mode blend_add, unshaded, fog_disabled;
 uniform vec4 albedo : source_color;
 
@@ -20,4 +17,3 @@ void fragment() {
 	ALBEDO = albedo.rgb * COLOR.rgb * rim * distance_fade;
 	ALBEDO = vec3(clamp(ALBEDO.r, 0, 1), clamp(ALBEDO.g, 0, 1), clamp(ALBEDO.b, 0, 1));
 }
-"
