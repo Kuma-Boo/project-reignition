@@ -168,11 +168,6 @@ public partial class EventTrigger : StageTriggerModule
 		Respawn();
 
 		PlayerStandin = GetNodeOrNull<Node3D>(playerStandin);
-		if (PlayerStandin == null)
-			return;
-
-		animator.Play(EventAnimation);
-		animator.Seek(animator.CurrentAnimationLength, true, true);
 	}
 
 	public override void _PhysicsProcess(double _)
