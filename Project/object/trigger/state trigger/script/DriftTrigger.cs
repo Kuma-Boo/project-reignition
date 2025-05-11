@@ -70,9 +70,7 @@ public partial class DriftTrigger : Area3D
 			return; // Player is already busy
 
 		// Check for any obstructions
-		Vector3 targetCastPosition = Player.CollisionPosition + Player.PathFollower.GlobalPlayerPositionDelta.RemoveVertical();
-		targetCastPosition += Player.PathFollower.ForwardAxis * slideDistance;
-		Vector3 castVector = Player.CollisionPosition - targetCastPosition;
+		Vector3 castVector = MiddlePosition - Player.CollisionPosition;
 		RaycastHit hit = Player.CastRay(Player.CollisionPosition, castVector, Runtime.Instance.environmentMask);
 		DebugManager.DrawRay(Player.CollisionPosition, castVector, Colors.Green);
 		if (hit && !hit.collidedObject.IsInGroup("level wall") && hit.collidedObject.IsInGroup("wall"))
