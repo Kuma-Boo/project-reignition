@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://dk6qdykjn185j"]
+[gd_scene load_steps=12 format=3 uid="uid://dk6qdykjn185j"]
 
-[ext_resource type="Texture2D" uid="uid://cjgl0xkvxm887" path="res://interface/menu/save select/texture/background.png" id="1_f5kj5"]
+[ext_resource type="Texture2D" uid="uid://wup7gvni7yi1" path="res://interface/menu/save select/texture/background.png" id="1_f5kj5"]
 [ext_resource type="Script" uid="uid://dh0fnvpxxlqmh" path="res://interface/menu/save select/SaveOption.cs" id="2_lb1d2"]
+[ext_resource type="Texture2D" uid="uid://cjgl0xkvxm887" path="res://interface/menu/save select/texture/background-backup.png" id="3_058qh"]
 [ext_resource type="FontFile" uid="uid://dk0elybbyvsvw" path="res://interface/font/bitmap fonts/Save Slot Numbers.fnt" id="3_q3h6p"]
 [ext_resource type="Texture2D" uid="uid://bokmpqe3qfali" path="res://interface/menu/save select/texture/save atlas.png" id="3_rmdpm"]
 [ext_resource type="Texture2D" uid="uid://c03fq02jkng5h" path="res://interface/menu/save select/texture/text/location en.png" id="4_ryw03"]
@@ -23,22 +24,22 @@ anchors_preset = 0
 script = ExtResource("2_lb1d2")
 newData = NodePath("Background/Data/New")
 existingData = NodePath("Background/Data/Existing")
-worldRingObtainedRegion = Rect2(0, 88, 120, 100)
-worldRingMissionRegion = Rect2(120, 88, 120, 100)
+worldRingObtainedRegion = Rect2(40, 280, 312, 296)
+worldRingMissingRegion = Rect2(520, 280, 312, 296)
 worldIcon = NodePath("Background/Data/Existing/WorldIcon")
-worldIconRegions = [Rect2(0, 0, 400, 240), Rect2(400, 0, 400, 240), Rect2(0, 260, 400, 240), Rect2(400, 520, 400, 240), Rect2(0, 520, 400, 240), Rect2(400, 260, 400, 240), Rect2(0, 780, 400, 240), Rect2(400, 780, 400, 240)]
+worldIconRegions = Array[Rect2]([Rect2(0, 0, 400, 240), Rect2(400, 0, 400, 240), Rect2(0, 260, 400, 240), Rect2(400, 520, 400, 240), Rect2(0, 520, 400, 240), Rect2(400, 260, 400, 240), Rect2(0, 780, 400, 240), Rect2(400, 780, 400, 240)])
 slotLabel = NodePath("Background/Data/SlotLabel")
 slotShadowLabel = NodePath("Background/Data/SlotLabel/SlotShadowLabel")
-levelLabel = NodePath("Background/Data/Existing/LevelLabel")
-timeLabel = NodePath("Background/Data/Existing/TimeLabel")
-worldRings = [NodePath("Background/Data/Existing/WorldRingBackground/YellowRing"), NodePath("Background/Data/Existing/WorldRingBackground/GreenRing"), NodePath("Background/Data/Existing/WorldRingBackground/RedRing"), NodePath("Background/Data/Existing/WorldRingBackground/BlueRing"), NodePath("Background/Data/Existing/WorldRingBackground/AquaRing"), NodePath("Background/Data/Existing/WorldRingBackground/WhiteRing"), NodePath("Background/Data/Existing/WorldRingBackground/PurpleRing")]
+levelLabel = NodePath("Background/Data/Existing/Text/LevelLabel")
+timeLabel = NodePath("Background/Data/Existing/Text/TimeLabel")
+worldRings = Array[NodePath]([NodePath("Background/Data/Existing/WorldRingBackground/YellowRing"), NodePath("Background/Data/Existing/WorldRingBackground/GreenRing"), NodePath("Background/Data/Existing/WorldRingBackground/RedRing"), NodePath("Background/Data/Existing/WorldRingBackground/BlueRing"), NodePath("Background/Data/Existing/WorldRingBackground/AquaRing"), NodePath("Background/Data/Existing/WorldRingBackground/WhiteRing"), NodePath("Background/Data/Existing/WorldRingBackground/PurpleRing")])
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = -680.0
-offset_top = -100.0
-offset_right = 680.0
-offset_bottom = 484.0
+offset_left = -736.0
+offset_top = -152.0
+offset_right = 764.0
+offset_bottom = 432.0
 texture = ExtResource("1_f5kj5")
 stretch_mode = 5
 
@@ -61,132 +62,132 @@ grow_vertical = 2
 [node name="WorldRingBackground" type="NinePatchRect" parent="Background/Data/Existing"]
 self_modulate = Color(0.784314, 0.784314, 0.784314, 0.784314)
 layout_mode = 0
-offset_left = 512.0
-offset_top = 208.0
-offset_right = 1256.0
-offset_bottom = 324.0
+offset_left = 576.0
+offset_top = 264.0
+offset_right = 1312.0
+offset_bottom = 380.0
 texture = ExtResource("3_rmdpm")
-region_rect = Rect2(15, 192, 430, 112)
-patch_margin_left = 24
+region_rect = Rect2(272, 688, 872, 200)
+patch_margin_left = 32
 patch_margin_right = 24
 metadata/_edit_group_ = true
 
 [node name="YellowRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
-position = Vector2(68, 62)
+position = Vector2(72, 58)
+scale = Vector2(0.35, 0.35)
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(120, 88, 120, 100)
+region_rect = Rect2(40, 280, 312, 296)
 
 [node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/YellowRing"]
-visible = false
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(185, 8, 90, 80)
+region_rect = Rect2(0, 0, 272, 240)
 
 [node name="GreenRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
-position = Vector2(168, 62)
+position = Vector2(172, 58)
+scale = Vector2(0.35, 0.35)
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(120, 88, 120, 100)
+region_rect = Rect2(16, 296, 328, 272)
 
 [node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/GreenRing"]
-visible = false
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(275, 8, 90, 80)
+region_rect = Rect2(272, 0, 272, 240)
 
 [node name="RedRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
-position = Vector2(268, 62)
+position = Vector2(272, 58)
+scale = Vector2(0.35, 0.35)
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(120, 88, 120, 100)
+region_rect = Rect2(16, 296, 328, 272)
 
 [node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/RedRing"]
-visible = false
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(10, 8, 90, 80)
+region_rect = Rect2(544, 0, 272, 240)
 
 [node name="BlueRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
-position = Vector2(368, 62)
+position = Vector2(372, 58)
+scale = Vector2(0.35, 0.35)
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(120, 88, 120, 100)
+region_rect = Rect2(16, 296, 328, 272)
 
 [node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/BlueRing"]
-visible = false
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(100, 8, 90, 80)
+region_rect = Rect2(816, 0, 272, 240)
 
 [node name="AquaRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
-position = Vector2(468, 62)
+position = Vector2(472, 58)
+scale = Vector2(0.35, 0.35)
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(120, 88, 120, 100)
+region_rect = Rect2(16, 296, 328, 272)
 
 [node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/AquaRing"]
-visible = false
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(455, 8, 90, 80)
+region_rect = Rect2(1088, 0, 272, 240)
 
 [node name="WhiteRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
-position = Vector2(568, 62)
+position = Vector2(572, 58)
+scale = Vector2(0.35, 0.35)
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(120, 88, 120, 100)
+region_rect = Rect2(16, 296, 328, 272)
 
 [node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/WhiteRing"]
-visible = false
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(365, 8, 90, 80)
+region_rect = Rect2(1360, 0, 272, 240)
 
 [node name="PurpleRing" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground"]
-position = Vector2(668, 62)
+position = Vector2(672, 58)
+scale = Vector2(0.35, 0.35)
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(120, 88, 120, 100)
+region_rect = Rect2(16, 296, 328, 272)
 
 [node name="Ring" type="Sprite2D" parent="Background/Data/Existing/WorldRingBackground/PurpleRing"]
-visible = false
 texture = ExtResource("3_rmdpm")
 region_enabled = true
-region_rect = Rect2(545, 8, 90, 80)
+region_rect = Rect2(1632, 0, 272, 240)
 
 [node name="WorldIcon" type="Sprite2D" parent="Background/Data/Existing"]
-position = Vector2(304, 236)
+position = Vector2(336, 280)
 scale = Vector2(1.1, 1.1)
 texture = ExtResource("4_ryw03")
 region_enabled = true
 region_rect = Rect2(0, 0, 400, 240)
 
-[node name="LevelText" type="Sprite2D" parent="Background/Data/Existing"]
-position = Vector2(600, 164)
+[node name="Text" type="Node2D" parent="Background/Data/Existing"]
+position = Vector2(656, 200)
+
+[node name="LevelText" type="Sprite2D" parent="Background/Data/Existing/Text"]
 scale = Vector2(2, 2)
 texture = ExtResource("7_c1lef")
 region_enabled = true
 region_rect = Rect2(20, 90, 60, 40)
 
-[node name="LevelLabel" type="Label" parent="Background/Data/Existing"]
-layout_mode = 0
-offset_left = 640.0
-offset_top = 132.0
-offset_right = 792.0
-offset_bottom = 168.0
+[node name="LevelLabel" type="Label" parent="Background/Data/Existing/Text"]
+offset_left = 40.0
+offset_top = -32.0
+offset_right = 192.0
+offset_bottom = 4.0
 scale = Vector2(2, 2)
 theme_override_fonts/font = ExtResource("6_j4dl3")
 theme_override_font_sizes/font_size = 64
 text = ":01"
 vertical_alignment = 1
 
-[node name="TimeLabel" type="Label" parent="Background/Data/Existing"]
-layout_mode = 0
-offset_left = 880.0
-offset_top = 132.0
-offset_right = 1060.0
-offset_bottom = 168.0
+[node name="TimeLabel" type="Label" parent="Background/Data/Existing/Text"]
+offset_left = 280.0
+offset_top = -32.0
+offset_right = 460.0
+offset_bottom = 4.0
 scale = Vector2(2, 2)
 theme_override_fonts/font = ExtResource("6_j4dl3")
 theme_override_font_sizes/font_size = 64
@@ -194,20 +195,27 @@ text = "00:00:00"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="New" type="Sprite2D" parent="Background/Data"]
+[node name="New" type="TextureRect" parent="Background/Data"]
 visible = false
-position = Vector2(680, 232)
-scale = Vector2(2.4, 2.4)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.75, 0.75)
+pivot_offset = Vector2(750, 292)
 texture = ExtResource("7_c1lef")
-region_enabled = true
-region_rect = Rect2(10, 30, 340, 60)
+stretch_mode = 5
 
 [node name="SlotLabel" type="Label" parent="Background/Data"]
 layout_mode = 0
-offset_left = 32.0
-offset_top = 108.0
-offset_right = 88.0
-offset_bottom = 144.0
+offset_left = 72.0
+offset_top = 152.0
+offset_right = 128.0
+offset_bottom = 188.0
 scale = Vector2(2, 2)
 text = "00"
 label_settings = SubResource("LabelSettings_rinwv")
@@ -230,3 +238,13 @@ text = "00"
 label_settings = SubResource("LabelSettings_gu6c4")
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="Background2" type="TextureRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = -680.0
+offset_top = -100.0
+offset_right = 680.0
+offset_bottom = 484.0
+texture = ExtResource("3_058qh")
+stretch_mode = 5

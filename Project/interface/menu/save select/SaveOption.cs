@@ -7,14 +7,14 @@ namespace Project.Interface.Menus;
 public partial class SaveOption : Control
 {
 	[Export]
-	private Sprite2D newData;
+	private TextureRect newData;
 	[Export]
 	private Control existingData;
 
 	[Export]
 	private Rect2 worldRingObtainedRegion;
 	[Export]
-	private Rect2 worldRingMissionRegion;
+	private Rect2 worldRingMissingRegion;
 	[Export]
 	private Sprite2D worldIcon;
 	[Export]
@@ -70,7 +70,7 @@ public partial class SaveOption : Control
 				//Check if world ring is unlocked (+1 because lost prologue doesn't have one.)
 				bool isWorldRingObtained = saveData.IsWorldRingObtained((SaveManager.WorldEnum)i + 1);
 				_worldRings[i].GetChild<Sprite2D>(0).Visible = isWorldRingObtained; //Update visibility
-				_worldRings[i].RegionRect = isWorldRingObtained ? worldRingObtainedRegion : worldRingMissionRegion;
+				_worldRings[i].RegionRect = isWorldRingObtained ? worldRingObtainedRegion : worldRingMissingRegion;
 			}
 		}
 	}
