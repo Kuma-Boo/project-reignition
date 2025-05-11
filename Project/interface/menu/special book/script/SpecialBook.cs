@@ -218,6 +218,8 @@ public partial class SpecialBook : Menu
 
 				if (!string.IsNullOrEmpty(thisPage.videoFilePath))
 				{
+					/*
+					TODO Allow users to play videos once cutscenes have been added to the game. 
 					bgm.Stop();
 					menuFocus = MenuFocus.Video;
 
@@ -227,6 +229,9 @@ public partial class SpecialBook : Menu
 						color = Colors.Black,
 						inSpeed = .5f,
 					});
+					
+					*/
+					return;
 				}
 
 				if (thisPage.track != null)
@@ -610,16 +615,22 @@ public partial class SpecialBook : Menu
 
 	private void LoadPage(BookPage page)
 	{
-		menuMemory[MemoryKeys.SpecialBook] = (15 * chapterSelection) + (pageSelection);
+		menuMemory[MemoryKeys.SpecialBook] = (15 * chapterSelection) + pageSelection;
 		if (page.fullImage != null)
 		{
 			navZoom.Visible = true;
 			navPlay.Visible = false;
 		}
-		else if (page.videoFilePath != "" || page.track != null)
+		else if (page.track != null)
 		{
 			navZoom.Visible = false;
 			navPlay.Visible = true;
+		}
+		else if (!string.IsNullOrEmpty(page.videoFilePath))
+		{
+			// TODO Delete this block and combine the condition to the previous block with an OR to show the prompt for cutscenes
+			navZoom.Visible = false;
+			navPlay.Visible = false;
 		}
 
 		if (page.Unlocked)
