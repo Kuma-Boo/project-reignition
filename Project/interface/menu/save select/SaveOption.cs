@@ -60,7 +60,7 @@ public partial class SaveOption : Control
 			existingData.Visible = true;
 			worldIcon.RegionRect = worldIconRegions[(int)saveData.lastPlayedWorld];
 
-			levelLabel.Text = $":{saveData.level:00}";
+			levelLabel.Text = $" : {saveData.level:00}";
 
 			Vector3 time = ExtensionMethods.CalculateTimeVector(Mathf.FloorToInt(saveData.playTime));
 			timeLabel.Text = $"{time.X:00} : {time.Y:00} : {time.Z:00}";
