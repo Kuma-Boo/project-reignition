@@ -80,7 +80,7 @@ public partial class PauseMenu : Node
 		);
 
 		noSkillLabel.Visible = SaveManager.ActiveSkillRing.EquippedSkills.Count == 0;
-		skillScrollbar.GetParent<Node2D>().Visible = SaveManager.ActiveSkillRing.EquippedSkills.Count != 0;
+		skillScrollbar.GetParent<NinePatchRect>().Visible = SaveManager.ActiveSkillRing.EquippedSkills.Count != 0;
 
 		skills = new PauseSkill[SaveManager.ActiveSkillRing.EquippedSkills.Count];
 		skillContainer.SetDeferred("size", new Vector2(skillContainer.Size.X, skills.Length * 60));
