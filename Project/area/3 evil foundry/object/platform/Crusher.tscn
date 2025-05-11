@@ -21,8 +21,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 
 [node name="StaticBody3D" parent="CrusherTopMesh" index="0" groups=["crusher", "floor", "splash jump", "wall"]]
 
-[node name="PlatformTrigger" parent="CrusherTopMesh" index="1" instance=ExtResource("3_pqcjf")]
-script = null
+[node name="PlatformTrigger" parent="CrusherTopMesh" index="1" node_paths=PackedStringArray("parentCollider") instance=ExtResource("3_pqcjf")]
+parentCollider = NodePath("../StaticBody3D")
+"Falling Platform Settings/Disabled" = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CrusherTopMesh/PlatformTrigger" index="0"]
 shape = SubResource("BoxShape3D_8xdkw")
@@ -33,3 +34,6 @@ attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
+
+[connection signal="area_entered" from="CrusherTopMesh/PlatformTrigger" to="CrusherTopMesh/PlatformTrigger" method="OnEntered"]
+[connection signal="area_exited" from="CrusherTopMesh/PlatformTrigger" to="CrusherTopMesh/PlatformTrigger" method="OnExited"]
