@@ -615,6 +615,8 @@ _data = {
 
 [node name="NotificationMenu" type="Control" node_paths=PackedStringArray("description", "animator")]
 process_mode = 3
+z_index = 50
+z_as_relative = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -674,13 +676,13 @@ material = ExtResource("7_uowj0")
 position = Vector2(960, 384)
 emitting = false
 amount = 16
-process_material = SubResource("ParticleProcessMaterial_gij8y")
 texture = ExtResource("8_es8i3")
 lifetime = 1.5
 one_shot = true
 explosiveness = 1.0
 randomness = 0.3
 fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_gij8y")
 
 [node name="NavigationButtons" type="HBoxContainer" parent="Background"]
 layout_mode = 1
@@ -696,14 +698,11 @@ alignment = 2
 
 [node name="Next" parent="Background/NavigationButtons" instance=ExtResource("9_vyo4i")]
 layout_mode = 2
-ActionKey = "sys_next"
-inputKey = "button_jump"
-fallbackKey = "ui_select"
 
 [node name="Description" parent="Background" instance=ExtResource("10_g1v76")]
 layout_mode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_cyy10")
+&"": SubResource("AnimationLibrary_cyy10")
 }
