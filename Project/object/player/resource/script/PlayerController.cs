@@ -572,7 +572,9 @@ public partial class PlayerController : CharacterBody3D
 			inputInfluence = (inputInfluence + 1) * 0.5f;
 			inputInfluence = Mathf.Lerp(MinRecenterPower, MaxRecenterPower, inputInfluence);
 
-			float recenterSpeed = MoveSpeed * inputInfluence + Mathf.Abs(VerticalSpeed * AirRecenterPower);
+			float recenterSpeed = MoveSpeed * inputInfluence;
+			if (Stage.IsLevelIngame) // Only recenter with vertical speeds when in-game to avoid weird level completion jank
+				recenterSpeed += Mathf.Abs(VerticalSpeed * AirRecenterPower);
 			movementOffset = Mathf.MoveToward(movementOffset, 0, recenterSpeed * PhysicsManager.physicsDelta);
 			if (Mathf.IsZeroApprox(movementOffset))
 				isRecentered = true;
