@@ -664,7 +664,7 @@ public partial class SaveManager : Node
 	public const int SaveSlotCount = 9;
 
 	/// <summary> Maximum number of preset slots
-	public const int PresetCount = 20;
+	public const int PresetCount = 9;
 	/// <summary> Saves active game data to a file. </summary>
 	public static void SaveGameData()
 	{

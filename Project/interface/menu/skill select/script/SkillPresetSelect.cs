@@ -32,8 +32,8 @@ public partial class SkillPresetSelect : Menu
 	private Vector2 scrollVelocity;
 	private Vector2 containerVelocity;
 	private const float ScrollSmoothing = .1f;
-	private readonly int ScrollInterval = 240;
-	private readonly int PageSize = 4;
+	private readonly int ScrollInterval = 276;
+	private readonly int PageSize = 3;
 
 	private int cursorPosition;
 	private Vector2 cursorVelocity;
@@ -109,7 +109,7 @@ public partial class SkillPresetSelect : Menu
 
 		if (VerticalSelection == 0 || VerticalSelection == listSize - 1)
 			cursorPosition = scrollAmount = VerticalSelection;
-		else if ((inputSign < 0 && cursorPosition == 0) || (inputSign > 0 && cursorPosition == 3))
+		else if ((inputSign < 0 && cursorPosition == 0) || (inputSign > 0 && cursorPosition == PageSize - 1))
 			scrollAmount += inputSign;
 		else
 			cursorPosition += inputSign;
