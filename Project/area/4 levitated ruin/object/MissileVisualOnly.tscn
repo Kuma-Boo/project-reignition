@@ -212,6 +212,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_5brwi"]
 resource_name = "explode"
+length = 3.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -231,7 +232,7 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.9),
+"times": PackedFloat32Array(3),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -395,23 +396,27 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_xvsgh")
 draw_pass_1 = SubResource("QuadMesh_g4qtj")
 
-[node name="ExplosionSFX" type="AudioStreamPlayer3D" parent="." index="3"]
-stream = ExtResource("9_qqses")
-attenuation_model = 3
-max_db = 0.0
-max_distance = 100.0
-bus = &"GAME SFX"
-script = ExtResource("10_kwl7k")
-groupKey = &"missile explosion"
-
-[node name="LaunchSFX" type="AudioStreamPlayer3D" parent="." index="4"]
+[node name="LaunchSFX" type="AudioStreamPlayer3D" parent="." index="3"]
 stream = ExtResource("11_kwl7k")
 attenuation_model = 3
+unit_size = 50.0
 max_db = 0.0
+max_distance = 400.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("10_kwl7k")
+groupKey = &"visual missile launch"
+
+[node name="ExplosionSFX" type="AudioStreamPlayer3D" parent="." index="4"]
+stream = ExtResource("9_qqses")
+attenuation_model = 3
+unit_size = 50.0
+max_db = -3.0
 max_distance = 200.0
 bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("10_kwl7k")
-groupKey = &"missile launch"
+groupKey = &"visual missile explosion"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="5"]
 libraries = {

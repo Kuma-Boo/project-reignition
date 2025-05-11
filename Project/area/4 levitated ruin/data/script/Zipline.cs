@@ -22,6 +22,7 @@ public partial class Zipline : PathFollow3D
 	private float rotationVelocity;
 
 	private readonly float ZiplineAcceleration = 5.0f;
+	private readonly float ZiplineDecceleration = 20.0f;
 
 	[ExportGroup("Components")]
 	[Export] private Node3D root;
@@ -74,8 +75,10 @@ public partial class Zipline : PathFollow3D
 	{
 		if (snapSpeed)
 			CurrentSpeed = targetSpeed;
-		else
+		else if (StageSettings.Player.IsZiplineActive)
 			CurrentSpeed = Mathf.MoveToward(CurrentSpeed, targetSpeed, ZiplineAcceleration * PhysicsManager.physicsDelta);
+		else
+			CurrentSpeed = Mathf.MoveToward(CurrentSpeed, targetSpeed, ZiplineDecceleration * PhysicsManager.physicsDelta);
 
 		// Move the Zipline forward by its current speed
 		Progress += CurrentSpeed * PhysicsManager.physicsDelta;
@@ -117,7 +120,6 @@ public partial class Zipline : PathFollow3D
 		sparkFX.Restart();
 		sparkFX.Visible = true;
 		ziplineSfx.Play();
-
 
 		EmitSignal(SignalName.Activated);
 	}

@@ -292,7 +292,7 @@ tracks/7/keys = {
 tracks/8/type = "method"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("../../PrisonDoor/Lock1/PrisonLock")
+tracks/8/path = NodePath("../../PrisonDoor/PrisonLock1")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -463,7 +463,7 @@ tracks/7/keys = {
 tracks/8/type = "method"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("../../PrisonDoor/Lock2/PrisonLock")
+tracks/8/path = NodePath("../../PrisonDoor/PrisonLock2")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -634,7 +634,7 @@ tracks/7/keys = {
 tracks/8/type = "method"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("../../PrisonDoor/Lock3/PrisonLock")
+tracks/8/path = NodePath("../../PrisonDoor/PrisonLock3")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -805,7 +805,7 @@ tracks/7/keys = {
 tracks/8/type = "method"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("../../PrisonDoor/Lock4/PrisonLock")
+tracks/8/path = NodePath("../../PrisonDoor/PrisonLock4")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -836,6 +836,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 10, -1391)
 metadata/_edit_lock_ = true
 
 [node name="LockoutTrigger" parent="CageAct/SpawnPosition" instance=ExtResource("6_f8ouc")]
+"Enter Mode" = 0
 
 [node name="Recenter" type="Node3D" parent="CageAct/SpawnPosition/LockoutTrigger"]
 script = ExtResource("9_t2qcg")
@@ -987,41 +988,17 @@ layers = 1024
 light_color = Color(0.671914, 0.640048, 0.993158, 1)
 light_cull_mask = 3
 
-[node name="Lock1" type="BoneAttachment3D" parent="CageAct/PrisonDoor"]
+[node name="PrisonLock1" parent="CageAct/PrisonDoor" instance=ExtResource("6_gl56w")]
 transform = Transform3D(0.939693, -0.34202, 6.70552e-08, 0.321393, 0.883021, -0.342024, 0.116979, 0.321397, 0.939691, 0.516495, 1.86809, 2.10022)
-bone_name = "lock01"
-bone_idx = 1
-use_external_skeleton = true
-external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
 
-[node name="PrisonLock" parent="CageAct/PrisonDoor/Lock1" instance=ExtResource("6_gl56w")]
-
-[node name="Lock2" type="BoneAttachment3D" parent="CageAct/PrisonDoor"]
+[node name="PrisonLock2" parent="CageAct/PrisonDoor" instance=ExtResource("6_gl56w")]
 transform = Transform3D(0.965926, 0.25, -0.0669873, -0.258819, 0.933012, -0.250004, -9.2122e-07, 0.258823, 0.965925, -0.550537, 0.592514, 2.05786)
-bone_name = "lock02"
-bone_idx = 2
-use_external_skeleton = true
-external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
 
-[node name="PrisonLock" parent="CageAct/PrisonDoor/Lock2" instance=ExtResource("6_gl56w")]
-
-[node name="Lock3" type="BoneAttachment3D" parent="CageAct/PrisonDoor"]
+[node name="PrisonLock3" parent="CageAct/PrisonDoor" instance=ExtResource("6_gl56w")]
 transform = Transform3D(0.906307, 0.42262, 4.88013e-07, -0.416199, 0.892538, -0.17365, -0.0733884, 0.15738, 0.984807, -0.494125, 1.89076, 2.10291)
-bone_name = "lock03"
-bone_idx = 3
-use_external_skeleton = true
-external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
 
-[node name="PrisonLock" parent="CageAct/PrisonDoor/Lock3" instance=ExtResource("6_gl56w")]
-
-[node name="Lock4" type="BoneAttachment3D" parent="CageAct/PrisonDoor"]
+[node name="PrisonLock4" parent="CageAct/PrisonDoor" instance=ExtResource("6_gl56w")]
 transform = Transform3D(0.965926, 0.258819, 5.96046e-07, -0.23457, 0.875426, 0.422618, 0.109381, -0.408217, 0.906308, 0.493484, 0.600325, 2.08044)
-bone_name = "lock04"
-bone_idx = 4
-use_external_skeleton = true
-external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
-
-[node name="PrisonLock" parent="CageAct/PrisonDoor/Lock4" instance=ExtResource("6_gl56w")]
 
 [node name="Ziplines" type="Node3D" parent="CageAct"]
 
@@ -1100,7 +1077,6 @@ jumpHeight = 2.0
 autoAlign = true
 
 [node name="Dialog" type="Node3D" parent="CageAct/Ziplines/Zipline1/End/Jump"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("23_3als8")
 textKeys = Array[String](["common_start2_so", "common_start2_sh"])
 
@@ -1352,7 +1328,6 @@ transitionType = 1
 settings = ExtResource("28_a4ysn")
 
 [node name="RecoveryDialog" type="Node3D" parent="CageAct/Ziplines/Zipline4/End"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("23_3als8")
 textKeys = Array[String](["common_recovery_sh", "common_recovery_so"])
 
@@ -1717,12 +1692,10 @@ FinalHeight = 8.0
 Distance = 10.0
 
 [node name="TowerDialog" type="Node3D" parent="CageAct/Tower2/Spring1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("23_3als8")
 textKeys = Array[String](["lev_seal_sh", "lev_seal_so"])
 
 [node name="LeverDialog" type="Node3D" parent="CageAct/Tower2/Spring1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("23_3als8")
 textKeys = Array[String](["lev_directions_so", "lev_directions_sh"])
 
@@ -2174,7 +2147,6 @@ FinalHeight = 7.5
 Distance = 2.0
 
 [node name="SpringDialog" type="Node3D" parent="CageAct/Tower2/Spring2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("23_3als8")
 textKeys = Array[String](["common_jump2_so", "common_jump2_sh"])
 
@@ -2255,7 +2227,6 @@ moveSpeed = 40.0
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -11.5858, 40, 11.5858)
 
 [node name="LeverDialog" type="Node3D" parent="CageAct/Tower2/Lever"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("23_3als8")
 randomize = true
 textKeys = Array[String](["lev_hint_lever1_so", "lev_hint_lever1_sh"])
@@ -2492,7 +2463,6 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 7, -2,
 "Enter Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="CageAct/Tower3/Exterior/EnemyDialog"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("23_3als8")
 textKeys = Array[String](["common_enemy2_so", "common_enemy2_sh"])
 
@@ -2515,7 +2485,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="CageAct/Tower3/Exterior/MovingMajin1" instance=ExtResource("50_kuvve")]
-transform = Transform3D(1, 1.54832e-08, 0, 0, 0.999973, -9.0152e-07, 0, 4.93601e-07, 1, 6.10352e-05, -7.62939e-06, -20.6349)
+transform = Transform3D(1, 1.6531e-08, 0, 0, 0.999972, -9.53674e-07, 0, 5.01052e-07, 1, 6.10352e-05, -7.62939e-06, -20.6349)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
@@ -2539,7 +2509,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="CageAct/Tower3/Exterior/MovingMajin2" instance=ExtResource("50_kuvve")]
-transform = Transform3D(1, -4.52856e-08, -4.39584e-07, -4.44707e-08, 1.00001, -7.7486e-07, 6.85453e-07, 2.34693e-07, 1.00001, 0, -7.62939e-06, -17.5)
+transform = Transform3D(1, -4.59841e-08, -4.39584e-07, -4.77303e-08, 1.00001, -8.27014e-07, 6.85453e-07, 2.34693e-07, 1.00001, 0, -7.62939e-06, -17.5)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
@@ -2940,7 +2910,6 @@ startHidden = true
 MiddleHeight = 15.0
 FinalHeight = 8.0
 Distance = 12.5
-sfxPlayer = NodePath("../Spring/SFX")
 
 [node name="Camera" type="Node3D" parent="CageAct/Tower3/Spring2"]
 script = ExtResource("27_vns5j")
@@ -2974,7 +2943,6 @@ script = ExtResource("27_vns5j")
 settings = ExtResource("41_q4org")
 
 [node name="LeverDialog" type="Node3D" parent="CageAct/Tower3/Lever"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("23_3als8")
 randomize = true
 textKeys = Array[String](["lev_hint_lever2_so", "lev_hint_lever2_sh"])
@@ -2989,7 +2957,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50)
 "Enter Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="CageAct/Zipline3/EnemyDialog"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("23_3als8")
 textKeys = Array[String](["common_enemy5_so"])
 
@@ -3289,7 +3256,6 @@ transform = Transform3D(0.707105, 0, -0.707105, 0, 1, 0, 0.707105, 0, 0.707105, 
 "Enter Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="CageAct/Tower4/SandflowDialog"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("23_3als8")
 randomize = true
 textKeys = Array[String](["lev_sandflow_so", "lev_sandflow_so"])
@@ -3743,7 +3709,6 @@ script = ExtResource("27_vns5j")
 settings = ExtResource("41_q4org")
 
 [node name="LeverDialog" type="Node3D" parent="CageAct/Tower4/Lever"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("23_3als8")
 randomize = true
 textKeys = Array[String](["lev_hint_lever3_so", "lev_hint_lever3_sh"])
@@ -3919,7 +3884,6 @@ transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0, 0, 99.9998)
 "Enter Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="CageAct/Zipline4/DangerDialog"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("23_3als8")
 textKeys = Array[String](["common_caution_so", "common_caution_sh"])
 
@@ -4583,14 +4547,14 @@ script = ExtResource("27_vns5j")
 settings = ExtResource("41_q4org")
 
 [node name="LeverDialog" type="Node3D" parent="CageAct/Tower5/Lever"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("23_3als8")
+randomize = true
 textKeys = Array[String](["lev_hint_lever4_so", "lev_hint_lever4_sh"])
 
 [node name="Mirrors" type="Node3D" parent="CageAct"]
 
 [node name="LockCamera" type="Node3D" parent="CageAct/Mirrors"]
-transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 250, 15, -1385)
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 250, 12.316, -1391.88)
 script = ExtResource("27_vns5j")
 deactivationTransitionTime = 0.0
 transitionType = 1
@@ -4762,10 +4726,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_3als8")
 }
 
-[connection signal="Activated" from="CageAct/MainTower/StartDialog" to="Static/Collision/OneWay" method="Deactivate"]
-[connection signal="Activated" from="CageAct/MainTower/StartDialog" to="Static/Triggers/RecenterLockout" method="Deactivate"]
-[connection signal="Activated" from="CageAct/MainTower/StartDialog" to="CageAct/Zipline1" method="Activate"]
-[connection signal="Shattered" from="CageAct/PrisonDoor/Lock4/PrisonLock" to="CageAct/PrisonDoor" method="Activate"]
+[connection signal="Shattered" from="CageAct/PrisonDoor/PrisonLock4" to="CageAct/PrisonDoor" method="Activate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Start" to="Static/Collision/OneWay" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Start" to="Static/Triggers/RecenterLockout" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Start" to="CageAct/Zipline1" method="Activate"]
@@ -4835,14 +4796,14 @@ libraries = {
 [connection signal="Activated" from="CageAct/Tower2/DashPanel3" to="CageAct/Tower2/DashPanel3/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel3" to="CageAct/Tower2/DashPanel3/AutomationTrigger" method="AttemptAutomation" flags=3]
 [connection signal="Deactivated" from="CageAct/Tower2/DashPanel3/AutomationTrigger" to="CageAct/Tower2/Triggers/LoopPath" method="Activate"]
-[connection signal="Activated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/SpringDialog" method="Activate"]
+[connection signal="Activated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/Path" method="Activate"]
 [connection signal="Deactivated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/Camera" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/CameraTrigger" to="CageAct/Tower2/MissileGroup1" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/MissileTrigger" to="CageAct/Tower2/MissileGroup2" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/Lever" to="CageAct/Mirrors/MirrorEvent1" method="Activate"]
-[connection signal="Started" from="CageAct/Tower2/Lever" to="CageAct/Tower2/Lever/Cam" method="Activate"]
 [connection signal="Started" from="CageAct/Tower2/Lever" to="CageAct/Tower2/Lever/LeverDialog" method="Activate"]
+[connection signal="Started" from="CageAct/Tower2/Lever" to="CageAct/Tower2/Lever/Cam" method="Activate"]
 [connection signal="Defeated" from="CageAct/Tower3/Exterior/MovingMajin1/BlueMajin" to="CageAct/Tower3/Exterior/EnemyStone" method="IncrementCounter"]
 [connection signal="SpinStarted" from="CageAct/Tower3/Exterior/MovingMajin1/BlueMajin" to="CageAct/Tower3/Exterior/MovingMajin1" method="Unpause"]
 [connection signal="Defeated" from="CageAct/Tower3/Exterior/MovingMajin2/BlueMajin" to="CageAct/Tower3/Exterior/EnemyStone" method="IncrementCounter"]
@@ -4906,6 +4867,7 @@ libraries = {
 [connection signal="Deactivated" from="CageAct/Tower4/Spring5" to="CageAct/Tower4/Spring5/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/Lever" to="CageAct/Mirrors/MirrorEvent3" method="Activate"]
 [connection signal="Started" from="CageAct/Tower4/Lever" to="CageAct/Tower4/Lever/Cam" method="Activate"]
+[connection signal="Started" from="CageAct/Tower4/Lever" to="CageAct/Tower4/Lever/LeverDialog" method="Activate"]
 [connection signal="PlayerEntered" from="CageAct/Tower5/Exterior/Catapult" to="CageAct/Tower5/Exterior/Catapult/Camera" method="Activate"]
 [connection signal="PlayerExited" from="CageAct/Tower5/Exterior/Catapult" to="CageAct/Tower5/Exterior/Catapult/Camera" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Tower5/Exterior/Switch" to="CageAct/Tower5/Exterior/Gate" method="Deactivate"]
@@ -4940,6 +4902,7 @@ libraries = {
 [connection signal="Deactivated" from="CageAct/Tower5/Layer2Culler/Spring" to="CageAct/Tower5/Layer2Culler/Spring/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower5/Lever" to="CageAct/Mirrors/MirrorEvent4" method="Activate"]
 [connection signal="Started" from="CageAct/Tower5/Lever" to="CageAct/Tower5/Lever/Cam" method="Activate"]
+[connection signal="Started" from="CageAct/Tower5/Lever" to="CageAct/Tower5/Lever/LeverDialog" method="Activate"]
 [connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="CageAct/MainTower" method="Activate"]
 [connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="CageAct/Tower2" method="Deactivate"]
 [connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="CageAct/Tower3" method="Deactivate"]

@@ -62,6 +62,9 @@ public partial class SandStep : Node3D
 	{
 		particleParent?.SetEmitting(isSandFlowing);
 
+		if (Engine.IsEditorHint())
+			return;
+
 		if (isSandFlowing)
 		{
 			// Update sfx
