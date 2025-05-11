@@ -16,8 +16,10 @@ public partial class PlayerEffect : Node3D
 		Player = player;
 		trailFX.Player = Player;
 
-		SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechStart, new Callable(this, MethodName.MuteGameplayVoice));
-		SoundManager.instance.Connect(SoundManager.SignalName.SonicSpeechEnd, new Callable(this, MethodName.UnmuteGameplayVoice));
+		SoundManager.instance.SonicSpeechStart += MuteGameplayVoice;
+		SoundManager.instance.SonicSpeechEnd += UnmuteGameplayVoice;
+
+		voiceChannel.Finished += DisableSonicVoiceSfx;
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -474,9 +476,12 @@ public partial class PlayerEffect : Node3D
 		if (SoundManager.instance.IsDialogActive)
 			return;
 
+		SoundManager.instance.IsSonicSfxVoiceChannelActive = true;
 		voiceChannel.Stream = voiceLibrary.GetStream(key, SoundManager.LanguageIndex);
 		voiceChannel.Play();
 	}
+
+	private void DisableSonicVoiceSfx() => SoundManager.instance.IsSonicSfxVoiceChannelActive = false;
 
 	/// <summary> Stops any currently active voice clip and mutes the voice channel. </summary>
 	private void MuteGameplayVoice()

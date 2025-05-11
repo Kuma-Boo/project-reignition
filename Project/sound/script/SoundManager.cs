@@ -75,10 +75,29 @@ public partial class SoundManager : Node
 		subtitleLetterbox.SelfModulate = dialog.IsCutscene ? Colors.White : Colors.Transparent;
 
 		currentDialog = dialog;
-		currentDialogIndex = 0;
-		if (currentDialog.randomize)
-			currentDialogIndex = Runtime.randomNumberGenerator.RandiRange(0, currentDialog.DialogCount - 1);
+		currentDialogIndex = GetInitialDialogIndex();
 		UpdateDialog(true);
+	}
+
+	private int GetInitialDialogIndex()
+	{
+		if (!currentDialog.randomize)
+			return 0;
+
+		if (IsSonicSfxVoiceChannelActive)
+		{
+			// Prioritize others (i.e. Shahra) when Sonic is already speaking from a sound effect
+			for (int i = 0; i < currentDialog.DialogCount; i++)
+			{
+				if (currentDialog.textKeys[i].EndsWith(SonicVoiceSuffix))
+					continue;
+
+				return i;
+			}
+		}
+
+		// Pure random value, used when Sonic isn't already speaking or only Sonic's dialog is available
+		return Runtime.randomNumberGenerator.RandiRange(0, currentDialog.DialogCount - 1);
 	}
 
 	public void CancelDialog()
@@ -191,16 +210,17 @@ public partial class SoundManager : Node
 		delayTimer.Start(currentDialog.displayLength[currentDialogIndex]);
 	}
 
+	public bool IsSonicSfxVoiceChannelActive { get; set; }
 	private bool isSonicSpeaking;
 	[Signal]
 	public delegate void SonicSpeechStartEventHandler();
 	[Signal]
 	public delegate void SonicSpeechEndEventHandler();
-	private const string SONIC_VOICE_SUFFIX = "so"; // Any dialog key that ends with this will be Sonic speaking
+	private const string SonicVoiceSuffix = "so"; // Any dialog key that ends with this will be Sonic speaking
 	private void UpdateSonicDialog() // Checks whether Sonic is the one speaking, and mutes his gameplay audio.
 	{
 		bool wasSonicSpeaking = isSonicSpeaking;
-		isSonicSpeaking = IsSubtitlesActive && currentDialog.textKeys[currentDialogIndex].EndsWith(SONIC_VOICE_SUFFIX);
+		isSonicSpeaking = IsSubtitlesActive && currentDialog.textKeys[currentDialogIndex].EndsWith(SonicVoiceSuffix);
 		if (isSonicSpeaking && !wasSonicSpeaking)
 			EmitSignal(SignalName.SonicSpeechStart);
 		else if (!isSonicSpeaking && wasSonicSpeaking)
@@ -212,11 +232,11 @@ public partial class SoundManager : Node
 	public delegate void ShahraSpeechStartEventHandler();
 	[Signal]
 	public delegate void ShahraSpeechEndEventHandler();
-	private const string SHAHRA_VOICE_SUFFIX = "sh"; // Any dialog key that ends with this will be Shahra speaking
+	private const string ShahraVoiceSuffix = "sh"; // Any dialog key that ends with this will be Shahra speaking
 	private void UpdateShahraDialog() // Checks whether Shahra is the one speaking, and mutes his gameplay audio.
 	{
 		bool wasShahraSpeaking = isShahraSpeaking;
-		isShahraSpeaking = IsSubtitlesActive && currentDialog.textKeys[currentDialogIndex].EndsWith(SHAHRA_VOICE_SUFFIX);
+		isShahraSpeaking = IsSubtitlesActive && currentDialog.textKeys[currentDialogIndex].EndsWith(ShahraVoiceSuffix);
 		if (isShahraSpeaking && !wasShahraSpeaking)
 			EmitSignal(SignalName.ShahraSpeechStart);
 		else if (!isShahraSpeaking && wasShahraSpeaking)
