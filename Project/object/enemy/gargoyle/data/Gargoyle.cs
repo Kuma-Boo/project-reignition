@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Interface;
 
 namespace Project.Gameplay;
 
@@ -126,7 +127,7 @@ public partial class Gargoyle : Enemy
 
 	protected override void UpdateEnemy()
 	{
-		if (state == State.Statue || !StageSettings.Instance.IsLevelIngame)
+		if (state == State.Statue || !StageSettings.Instance.IsLevelIngame || Countdown.IsCountdownActive)
 			return;
 
 		if (state == State.Idle || state == State.Petrify || isSlashMovementEnabled)
