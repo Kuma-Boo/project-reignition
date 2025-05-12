@@ -473,7 +473,8 @@ public partial class PlayerEffect : Node3D
 	private AudioStreamPlayer voiceChannel;
 	public void PlayVoice(StringName key)
 	{
-		if (SoundManager.instance.IsDialogActive)
+		// Don't play anything if someone is already talking
+		if (SoundManager.instance.IsDialogActive || voiceChannel.Playing)
 			return;
 
 		SoundManager.instance.IsSonicSfxVoiceChannelActive = true;
