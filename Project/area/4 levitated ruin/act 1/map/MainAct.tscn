@@ -156,7 +156,6 @@ metadata/_edit_lock_ = true
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_065fl")]
 
 [node name="CullingTrigger" type="Node3D" parent="MainAct"]
-visible = false
 
 [node name="Rukh1-U" parent="MainAct/CullingTrigger" instance=ExtResource("5_yejv7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -16, -460)
@@ -176,39 +175,40 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -15.2, -499)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ypvwq")
 
-[node name="Rukh2-U" parent="MainAct/CullingTrigger" instance=ExtResource("5_yejv7")]
+[node name="Rukh2-U Skyroad1-L" parent="MainAct/CullingTrigger" instance=ExtResource("5_yejv7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -99.6, -706)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingTrigger/Rukh2-U"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingTrigger/Rukh2-U Skyroad1-L"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ypvwq")
 
-[node name="Rukh4-L" parent="MainAct/CullingTrigger" instance=ExtResource("5_yejv7")]
+[node name="Rukh4 Skyroad2-L" parent="MainAct/CullingTrigger" instance=ExtResource("5_yejv7")]
 transform = Transform3D(0.538986, 0.0958226, 0.836847, 0.34202, 0.883022, -0.321394, -0.769751, 0.459445, 0.443163, -64, -4.4, -1285)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingTrigger/Rukh4-L"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingTrigger/Rukh4 Skyroad2-L"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ypvwq")
 
-[node name="Skyroad1-U" parent="MainAct/CullingTrigger" instance=ExtResource("5_yejv7")]
+[node name="Rukh3 Skyroad1-U" parent="MainAct/CullingTrigger" instance=ExtResource("5_yejv7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 1.3, -1360)
-"Trigger Mode" = 2
-"Exit Mode" = 2
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingTrigger/Skyroad1-U"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingTrigger/Rukh3 Skyroad1-U"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ypvwq")
 
-[node name="Skyroad3-L" parent="MainAct/CullingTrigger" instance=ExtResource("5_yejv7")]
+[node name="Skyroad3-L Rukh4-U" parent="MainAct/CullingTrigger" instance=ExtResource("5_yejv7")]
 transform = Transform3D(-1, -4.37114e-08, 8.74228e-08, -4.37114e-08, 1, -4.37114e-08, -8.74228e-08, -4.37114e-08, -1, 250, -30, -1417.8)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingTrigger/Skyroad3-L"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingTrigger/Skyroad3-L Rukh4-U"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_ypvwq")
 
@@ -1212,7 +1212,7 @@ script = ExtResource("4_4rpxf")
 saveVisibilityOnCheckpoint = true
 
 [node name="SinbadDialog" parent="MainAct/Rukh3" instance=ExtResource("5_yejv7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -13)
 "Enter Mode" = 0
 
 [node name="Dialog" type="Node3D" parent="MainAct/Rukh3/SinbadDialog"]
@@ -2441,6 +2441,7 @@ transform = Transform3D(1, 0, 7.45058e-09, 0, 0.996195, 0.0871557, 0, -0.0871558
 isInvisibleSpawner = true
 disableHitboxes = true
 missleSpeed = 80.0
+spawnInterval = 3.0
 spawnTimer = 0.5
 
 [node name="MissileGenerator2" parent="MainAct/Skyroad1/MissleCullingTrigger/MissileGroup1" instance=ExtResource("58_6mbqa")]
@@ -2449,6 +2450,7 @@ isInvisibleSpawner = true
 disableHitboxes = true
 missileLifetime = 4.0
 missleSpeed = 80.0
+spawnInterval = 3.0
 spawnTimer = 0.0
 
 [node name="MissileGenerator3" parent="MainAct/Skyroad1/MissleCullingTrigger/MissileGroup1" instance=ExtResource("58_6mbqa")]
@@ -2457,6 +2459,7 @@ isInvisibleSpawner = true
 disableHitboxes = true
 missileLifetime = 4.0
 missleSpeed = 80.0
+spawnInterval = 3.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Skyroad1/MissleCullingTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -2509,7 +2512,7 @@ h_offset = 1.0
 v_offset = 1.0
 
 [node name="MissileTracking6" parent="MainAct/Skyroad1/TrackingMissileGroup" instance=ExtResource("45_o7bxy")]
-transform = Transform3D(-0.741617, 0.655752, -0.14133, 0.632415, 0.75373, 0.178668, 0.223687, 0.0431239, -0.973705, -19.7241, 52.6178, -220)
+transform = Transform3D(-0.741617, 0.655751, -0.14133, 0.632415, 0.75373, 0.178668, 0.223687, 0.0431239, -0.973705, -19.7241, 52.6178, -220)
 progress = 383.0
 h_offset = -0.5
 v_offset = 1.0
@@ -3659,15 +3662,18 @@ transform = Transform3D(-4.37114e-08, 0.422618, -0.906308, -1, -1.84732e-08, 3.9
 transform = Transform3D(1, 1.66431e-16, -7.50721e-16, 0, 1, 0, 0, 0, 1, 0, 0, 10)
 isInvisibleSpawner = true
 disableHitboxes = true
+spawnInterval = 4.0
 
 [node name="MissileGenerator2" parent="MainAct/Skyroad3/MissileGeneratorGroup1" instance=ExtResource("58_6mbqa")]
 isInvisibleSpawner = true
 disableHitboxes = true
+spawnInterval = 4.0
 
 [node name="MissileGenerator3" parent="MainAct/Skyroad3/MissileGeneratorGroup1" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 isInvisibleSpawner = true
 disableHitboxes = true
+spawnInterval = 4.0
 
 [node name="MissileGeneratorGroup2" type="Node3D" parent="MainAct/Skyroad3"]
 transform = Transform3D(-0.258819, 4.37114e-08, -0.965926, -8.44439e-08, -1, -2.26267e-08, -0.965926, 7.57103e-08, 0.258819, 89.4079, -50, -49.4824)
@@ -3676,15 +3682,18 @@ transform = Transform3D(-0.258819, 4.37114e-08, -0.965926, -8.44439e-08, -1, -2.
 transform = Transform3D(1, 1.66431e-16, -7.50721e-16, 0, 1, 0, 0, 0, 1, 0, 0, 10)
 isInvisibleSpawner = true
 disableHitboxes = true
+spawnInterval = 4.0
 
 [node name="MissileGenerator2" parent="MainAct/Skyroad3/MissileGeneratorGroup2" instance=ExtResource("58_6mbqa")]
 isInvisibleSpawner = true
 disableHitboxes = true
+spawnInterval = 4.0
 
 [node name="MissileGenerator3" parent="MainAct/Skyroad3/MissileGeneratorGroup2" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 isInvisibleSpawner = true
 disableHitboxes = true
+spawnInterval = 4.0
 
 [node name="MissileGeneratorGroup3" type="Node3D" parent="MainAct/Skyroad3"]
 transform = Transform3D(-4.37114e-08, 0.939693, -0.34202, -1, -4.10753e-08, 1.49502e-08, 0, 0.34202, 0.939693, 249.406, -37, -50.5515)
@@ -3694,12 +3703,14 @@ transform = Transform3D(1, 1.66431e-16, -7.50721e-16, 0, 1, 0, 0, 0, 1, 0, -10, 
 isInvisibleSpawner = true
 disableHitboxes = true
 missleSpeed = 80.0
+spawnInterval = 4.0
 spawnTimer = 1.5
 
 [node name="MissileGenerator2" parent="MainAct/Skyroad3/MissileGeneratorGroup3" instance=ExtResource("58_6mbqa")]
 isInvisibleSpawner = true
 disableHitboxes = true
 missleSpeed = 80.0
+spawnInterval = 4.0
 spawnTimer = 1.5
 
 [node name="MissileGenerator3" parent="MainAct/Skyroad3/MissileGeneratorGroup3" instance=ExtResource("58_6mbqa")]
@@ -3707,6 +3718,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -10)
 isInvisibleSpawner = true
 disableHitboxes = true
 missleSpeed = 80.0
+spawnInterval = 4.0
 spawnTimer = 1.5
 
 [node name="BlueMajin1" parent="MainAct/Skyroad3" instance=ExtResource("11_427b8")]
@@ -5539,14 +5551,20 @@ shape = SubResource("BoxShape3D_ypvwq")
 [connection signal="Activated" from="MainAct/CullingTrigger/Rukh1-U" to="MainAct/Rukh1" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingTrigger/Rukh3-L" to="MainAct/Rukh3" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingTrigger/Rukh3-L" to="MainAct/Rukh3" method="Deactivate"]
-[connection signal="Activated" from="MainAct/CullingTrigger/Rukh2-U" to="MainAct/Rukh2" method="Deactivate"]
-[connection signal="Activated" from="MainAct/CullingTrigger/Rukh2-U" to="MainAct/Skyroad1" method="Activate"]
-[connection signal="Deactivated" from="MainAct/CullingTrigger/Rukh2-U" to="MainAct/Rukh2" method="Activate"]
-[connection signal="Deactivated" from="MainAct/CullingTrigger/Rukh2-U" to="MainAct/Skyroad1" method="Deactivate"]
-[connection signal="Activated" from="MainAct/CullingTrigger/Rukh4-L" to="MainAct/Rukh4" method="Activate"]
-[connection signal="Activated" from="MainAct/CullingTrigger/Rukh4-L" to="MainAct/Skyroad2" method="Activate"]
-[connection signal="Activated" from="MainAct/CullingTrigger/Skyroad1-U" to="MainAct/Skyroad1" method="Deactivate"]
-[connection signal="Activated" from="MainAct/CullingTrigger/Skyroad3-L" to="MainAct/Skyroad3" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingTrigger/Rukh2-U Skyroad1-L" to="Static/Visuals/Rukh2" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingTrigger/Rukh2-U Skyroad1-L" to="Static/Visuals/Rukh2LOD" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingTrigger/Rukh2-U Skyroad1-L" to="MainAct/Rukh2" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingTrigger/Rukh2-U Skyroad1-L" to="MainAct/Skyroad1" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingTrigger/Rukh2-U Skyroad1-L" to="MainAct/Rukh2" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingTrigger/Rukh2-U Skyroad1-L" to="MainAct/Skyroad1" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingTrigger/Rukh4 Skyroad2-L" to="MainAct/Rukh4" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingTrigger/Rukh4 Skyroad2-L" to="MainAct/Skyroad2" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingTrigger/Rukh3 Skyroad1-U" to="Static/Visuals/Rukh3" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingTrigger/Rukh3 Skyroad1-U" to="Static/Visuals/Rukh3LOD" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingTrigger/Rukh3 Skyroad1-U" to="MainAct/Rukh3" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingTrigger/Rukh3 Skyroad1-U" to="MainAct/Skyroad1" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingTrigger/Skyroad3-L Rukh4-U" to="MainAct/Rukh4" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingTrigger/Skyroad3-L Rukh4-U" to="MainAct/Skyroad3" method="Activate"]
 [connection signal="Activated" from="MainAct/CullingTrigger/Skyroad2-U" to="MainAct/Skyroad2" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingTrigger/Skyroad4-L" to="MainAct/Skyroad4" method="Activate"]
 [connection signal="Activated" from="MainAct/CullingTrigger/Skyroad3-U" to="MainAct/Skyroad3" method="Deactivate"]

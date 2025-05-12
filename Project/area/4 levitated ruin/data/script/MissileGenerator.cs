@@ -20,7 +20,7 @@ public partial class MissileGenerator : Node3D
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")] private NodePath spawnTransform;
 	private Node3D _spawnTransform;
 
-	private readonly int DefaultPoolSize = 5;
+	private readonly int DefaultPoolSize = 3;
 	private readonly Queue<Missile> missilePool = [];
 
 	public override void _Ready()
@@ -46,6 +46,7 @@ public partial class MissileGenerator : Node3D
 	private void PoolMissile()
 	{
 		Missile missile = missileScene.Instantiate<Missile>();
+		missile.DisableAutoRespawn = true;
 		missile.Disabled += () => QueueMissile(missile);
 
 		missile.SetLifetime(missileLifetime);

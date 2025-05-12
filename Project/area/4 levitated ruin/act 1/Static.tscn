@@ -818,7 +818,6 @@ metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
 
 [node name="CullingTriggers" type="Node3D" parent="Visuals"]
-visible = false
 
 [node name="L3" parent="Visuals/CullingTriggers" instance=ExtResource("19_fp3yh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.7, -8.2, -617)
@@ -865,7 +864,6 @@ visible = false
 
 [node name="Rukh2Event" parent="Visuals" instance=ExtResource("4_px5bn")]
 visible = false
-"Trigger Settings/Animation Blending" = 0.0
 
 [node name="Rukh2LOD" parent="Visuals" instance=ExtResource("5_t3vhq")]
 visible = false
@@ -879,7 +877,6 @@ visible = false
 
 [node name="Rukh4Event" parent="Visuals" instance=ExtResource("9_d5ubt")]
 visible = false
-"Trigger Settings/Animation Blending" = 0.0
 
 [node name="Rukh4LOD" parent="Visuals" instance=ExtResource("10_6ogvt")]
 visible = false
@@ -894,7 +891,6 @@ startEnabled = true
 
 [node name="Rukh6Event" parent="Visuals" instance=ExtResource("14_qfx1b")]
 visible = false
-"Trigger Settings/Animation Blending" = 0.0
 
 [node name="Rukh7LOD" parent="Visuals" instance=ExtResource("15_4yfry")]
 startEnabled = true
@@ -1875,7 +1871,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_nc0m7")
 
 [node name="LockoutEnd" parent="SkyRoad/SkyRoad03" instance=ExtResource("19_fp3yh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 650, -104, -1486)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 650, -104, -1482)
 "Enter Mode" = 0
 
 [node name="Path" type="Node3D" parent="SkyRoad/SkyRoad03/LockoutEnd" node_paths=PackedStringArray("path")]
@@ -2256,7 +2252,9 @@ external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
 [node name="PrisonLock" parent="PrisonDoor/Lock4" instance=ExtResource("91_dkiax")]
 
 [connection signal="Activated" from="Visuals/CullingTriggers/L3" to="Visuals/Rukh3" method="Activate"]
+[connection signal="Activated" from="Visuals/CullingTriggers/L3" to="Visuals/Rukh3LOD" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingTriggers/L3" to="Visuals/Rukh3" method="Deactivate"]
+[connection signal="Deactivated" from="Visuals/CullingTriggers/L3" to="Visuals/Rukh3LOD" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingTriggers/L4" to="Visuals/Rukh4" method="Activate"]
 [connection signal="Activated" from="Visuals/CullingTriggers/L4" to="Visuals/Rukh4Event" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingTriggers/L6" to="Visuals/Rukh6" method="Activate"]

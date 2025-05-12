@@ -121,9 +121,9 @@ public partial class Runtime : Node
 				pearl.DisableAutoRespawning = true; // Don't auto-respawn
 				pearl.Monitoring = pearl.Monitorable = false; // Unlike normal pearls, these are automatically collected
 				pearl.Despawned += () => RepoolPearl(pearl);
+				AddChild(pearl);
 			}
 
-			AddChild(pearl);
 			tweeningPearls.Add(pearl);
 			pearl.Respawn();
 
@@ -153,6 +153,7 @@ public partial class Runtime : Node
 
 		tweeningPearls.Remove(pearl);
 		pearl.GetParent().RemoveChild(pearl);
+		AddChild(pearl);
 	}
 
 	private void ClearPearls()

@@ -11,6 +11,8 @@ public partial class Missile : Node3D
 	[Signal] public delegate void ExplodedEventHandler();
 	[Signal] public delegate void DisabledEventHandler();
 
+	public bool DisableAutoRespawn { get; set; }
+
 	[Export] private bool disableHitboxes;
 	[Export] private float activationDelay;
 	[Export] private float lifetime = 5.0f;
@@ -34,9 +36,10 @@ public partial class Missile : Node3D
 
 	public override void _Ready()
 	{
-		StageSettings.Instance.Respawned += Respawn;
-		spawnData = new(GetParent(), Transform);
+		if (!DisableAutoRespawn)
+			StageSettings.Instance.Respawned += Respawn;
 
+		spawnData = new(GetParent(), Transform);
 		Respawn();
 	}
 
