@@ -206,7 +206,12 @@ public partial class PlayerCameraController : Node3D
 		lockonTargetBlend = ExtensionMethods.SmoothDamp(lockonTargetBlend, LockonTarget == null ? 0f : 1f, ref lockonTargetBlendVelocity, LockonBlendOutSmoothing * PhysicsManager.physicsDelta);
 
 		if (LockonTarget != null)
+		{
+			if (!IsOnScreen(LockonTarget.GlobalPosition) || IsBehindCamera(LockonTarget.GlobalPosition)) // Reset lockon target if it goes offscreen
+				LockonTarget = null;
+
 			lockonTargetTransitionBlend = ExtensionMethods.SmoothDamp(lockonTargetTransitionBlend, 1f, ref lockonTargetTransitionBlendVelocity, LockonBlendInSmoothing * PhysicsManager.physicsDelta);
+		}
 	}
 
 	#region Gameplay Camera
@@ -601,6 +606,7 @@ public partial class PlayerCameraController : Node3D
 			localDelta = data.offsetBasis.Inverse() * globalDelta;
 			localDelta.X = 0; // Ignore x axis for pitch tracking
 			float targetLockonPitchTracking = localDelta.Normalized().AngleTo(localDelta.RemoveVertical().Normalized()) * Mathf.Sign(localDelta.Y);
+			targetLockonPitchTracking = Mathf.Clamp(targetLockonPitchTracking, -Mathf.Pi * 0.6f, 0f); // Only rotate down when tracking lockon targets
 			data.blendData.lockonPitchTracking = Mathf.Lerp(data.blendData.lockonPitchTracking, targetLockonPitchTracking, lockonTargetTransitionBlend);
 		}
 		data.pitchTracking += data.blendData.lockonPitchTracking * lockonTargetBlend;
