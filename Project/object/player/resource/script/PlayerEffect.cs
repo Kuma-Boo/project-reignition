@@ -487,6 +487,9 @@ public partial class PlayerEffect : Node3D
 	/// <summary> Stops any currently active voice clip and mutes the voice channel. </summary>
 	private void MuteGameplayVoice()
 	{
+		if (!IsInstanceValid(voiceChannel))
+			return;
+
 		voiceChannel.Stop();
 		voiceChannel.VolumeDb = -80f;
 	}
