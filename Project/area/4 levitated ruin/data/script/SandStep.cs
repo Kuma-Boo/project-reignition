@@ -13,6 +13,7 @@ public partial class SandStep : Node3D
 	[Export] private bool isSandFlowing;
 	[Export] private GroupGpuParticles3D particleParent;
 	[Export] private Area3D lockonTrigger;
+	[Export] private CollisionShape3D floorCollision;
 	[Export] private AudioStreamPlayer3D sfx;
 
 	private bool isInteractingWithPlayer;
@@ -30,13 +31,26 @@ public partial class SandStep : Node3D
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (Engine.IsEditorHint() || !isInteractingWithPlayer)
+		if (Engine.IsEditorHint())
+			return;
+
+		UpdateFloorCollision();
+
+		if (!isInteractingWithPlayer)
 			return;
 
 		if (StageSettings.Player.IsHomingAttacking)
 			StageSettings.Player.StartBounce(true, .5f);
 
 		UpdateSfx();
+	}
+
+	private void UpdateFloorCollision()
+	{
+		if (floorCollision.Disabled && !lockonTrigger.Monitoring)
+			return;
+
+		floorCollision.Disabled = !lockonTrigger.Monitoring || StageSettings.Player.GlobalPosition.Y <= floorCollision.GlobalPosition.Y;
 	}
 
 	private void UpdateSfx()

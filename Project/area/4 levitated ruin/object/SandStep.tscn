@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://br4bp3m6g4l8g"]
+[gd_scene load_steps=15 format=3 uid="uid://br4bp3m6g4l8g"]
 
 [ext_resource type="Script" uid="uid://der7w6b5fd4vk" path="res://area/4 levitated ruin/data/script/SandStep.cs" id="1_xg4nq"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="2_l0ttg"]
@@ -43,11 +43,15 @@ material = ExtResource("3_6e2ye")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_5bxov"]
 
-[node name="SandStep" type="Node3D" node_paths=PackedStringArray("particleParent", "lockonTrigger", "sfx")]
+[sub_resource type="BoxShape3D" id="BoxShape3D_l0ttg"]
+size = Vector3(1, 0.05, 1)
+
+[node name="SandStep" type="Node3D" node_paths=PackedStringArray("particleParent", "lockonTrigger", "floorCollision", "sfx")]
 script = ExtResource("1_xg4nq")
 isSandFlowing = true
 particleParent = NodePath("Dust")
 lockonTrigger = NodePath("Lockon")
+floorCollision = NodePath("Floor/CollisionShape3D")
 sfx = NodePath("SandStepSFX")
 
 [node name="Dust" type="GPUParticles3D" parent="." node_paths=PackedStringArray("subSystems")]
@@ -79,6 +83,13 @@ monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Lockon"]
 shape = SubResource("SphereShape3D_5bxov")
+
+[node name="Floor" type="StaticBody3D" parent="." groups=["floor", "level wall", "sand"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_l0ttg")
+disabled = true
 
 [node name="SandStepSFX" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("5_l0ttg")
