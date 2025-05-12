@@ -174,6 +174,8 @@ public partial class PlayerCameraController : Node3D
 	/// <summary> Amount when blending between different lockon targets. Reset whenever the lockon target changes. </summary>
 	private float lockonTargetTransitionBlend;
 	private float lockonTargetTransitionBlendVelocity;
+	/// <summary> Current lockon pitch tracking. </summary>
+	private float lockonPitchTracking;
 	/// <summary> Snappier blend when lockon is active to keep things in frame. </summary>
 	private const float LockonBlendInSmoothing = 5.0f;
 	/// <summary> More smoothing/slower blend when resetting lockonBlend. </summary>
@@ -434,10 +436,26 @@ public partial class PlayerCameraController : Node3D
 		cameraTransform.Origin += cameraTransform.Basis.X * viewportOffset.X;
 		cameraTransform.Origin += cameraTransform.Basis.Y * viewportOffset.Y;
 
+		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, CalculateLockonAngle(cameraTransform.Origin, data.blendData.pitchAngle));
+
 		if (!isFreeCamActive || !isFreeCamLocked) // Only update camera transform when free cam isn't locked
 			cameraRoot.GlobalTransform = cameraTransform; // Update transform
 
 		Camera.Fov = fov; // Update fov
+	}
+
+	/// <summary> Calculates the additional pitch angle needed to look at the center of the player and a lockon target. </summary>
+	private float CalculateLockonAngle(Vector3 origin, float pitchAngle)
+	{
+		if (!IsLockonCameraActive || LockonTarget == null)
+			return 0;
+
+		Vector3 targetPosition = LockonTarget.GlobalPosition.Lerp(Player.CenterPosition, .5f);
+		Vector3 globalDelta = targetPosition - origin;
+		Vector3 referenceVector = globalDelta.RemoveVertical().Normalized();
+		float targetLockonPitchTracking = Mathf.Sign(globalDelta.Y) * globalDelta.AngleTo(referenceVector) - pitchAngle;
+		lockonPitchTracking = Mathf.Lerp(lockonPitchTracking, targetLockonPitchTracking, lockonTargetTransitionBlend);
+		return lockonPitchTracking * lockonTargetBlend;
 	}
 
 	/// <summary> Previous xform angle used right before the last camera change. </summary>
@@ -599,18 +617,6 @@ public partial class PlayerCameraController : Node3D
 		// Recalculate position after applying rotational tracking
 		data.CalculatePosition(Player.CenterPosition);
 		data.precalculatedPosition = AddTrackingOffset(data.precalculatedPosition, data);
-
-		if (!settings.ignoreHomingAttack && IsLockonCameraActive && LockonTarget != null)
-		{
-			globalDelta = LockonTarget.GlobalPosition.Lerp(Player.CenterPosition, .5f) - data.precalculatedPosition;
-			localDelta = data.offsetBasis.Inverse() * globalDelta;
-			localDelta.X = 0; // Ignore x axis for pitch tracking
-			float targetLockonPitchTracking = localDelta.Normalized().AngleTo(localDelta.RemoveVertical().Normalized()) * Mathf.Sign(localDelta.Y);
-			targetLockonPitchTracking = Mathf.Clamp(targetLockonPitchTracking, -Mathf.Pi * 0.6f, 0f); // Only rotate down when tracking lockon targets
-			data.blendData.lockonPitchTracking = Mathf.Lerp(data.blendData.lockonPitchTracking, targetLockonPitchTracking, lockonTargetTransitionBlend);
-		}
-		data.pitchTracking += data.blendData.lockonPitchTracking * lockonTargetBlend;
-
 		return data;
 	}
 
@@ -1222,9 +1228,6 @@ public partial class CameraBlendData : GodotObject
 	public float yawAngle;
 	/// <summary> Current tilt angle. </summary>
 	public float tiltAngle;
-
-	/// <summary> Last frame's lockon pitch tracking. </summary>
-	public float lockonPitchTracking;
 
 	/// <summary> How far the camera should be. </summary>
 	public float distance;
