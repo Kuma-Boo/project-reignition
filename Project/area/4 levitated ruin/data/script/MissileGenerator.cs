@@ -6,7 +6,10 @@ namespace Project.Gameplay.Hazards;
 
 public partial class MissileGenerator : Node3D
 {
+	/// <summary> Should the spawner itself be hidden? </summary>
 	[Export] private bool isInvisibleSpawner;
+	/// <summary> Should missiles be purely visual? </summary>
+	[Export] private bool disableHitboxes;
 	[Export(PropertyHint.Range, "0,10,0.1, or_greater")] private float missileLifetime = 5.0f;
 	[Export(PropertyHint.Range, "0,30,0.1, or_greater")] private float missleSpeed = 20.0f;
 	[Export(PropertyHint.Range, "0,1,0.1, or_greater")] private float spawnInterval = 3.0f;
@@ -47,6 +50,7 @@ public partial class MissileGenerator : Node3D
 
 		missile.SetLifetime(missileLifetime);
 		missile.SetSpeed(missleSpeed);
+		missile.SetHitboxState(disableHitboxes);
 		missile.Disable();
 
 		AddChild(missile);
@@ -62,6 +66,5 @@ public partial class MissileGenerator : Node3D
 		Missile missile = missilePool.Dequeue();
 		missile.UpdateSpawnTransform(_spawnTransform.Transform);
 		missile.Respawn();
-		missile.Activate();
 	}
 }

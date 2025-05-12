@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=3 uid="uid://tomoh11jttkl"]
+[gd_scene load_steps=82 format=3 uid="uid://tomoh11jttkl"]
 
 [ext_resource type="PackedScene" uid="uid://bm61nw4o1jcrb" path="res://area/4 levitated ruin/act 1/Static.tscn" id="1_jeukd"]
 [ext_resource type="Resource" uid="uid://4u4smu0br2v8" path="res://resource/level data/levitated ruin/Act1Main.tres" id="2_5dvfu"]
@@ -54,7 +54,6 @@
 [ext_resource type="Resource" uid="uid://c1wm3d46w1r24" path="res://area/4 levitated ruin/act 1/camera/TowerBaseCam.tres" id="42_507jy"]
 [ext_resource type="Resource" uid="uid://cqb8i042q3bsb" path="res://area/4 levitated ruin/act 1/camera/StartCam.tres" id="42_jkj4n"]
 [ext_resource type="Script" uid="uid://cciy1oeuvbh3e" path="res://object/trigger/modules/JumpTrigger.cs" id="43_2bpbk"]
-[ext_resource type="PackedScene" uid="uid://l7k4j5p2l1ax" path="res://area/4 levitated ruin/object/InvisibleMissileGenerator.tscn" id="43_87bgx"]
 [ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="43_hs8bg"]
 [ext_resource type="Script" uid="uid://dpt5o0lh62p6t" path="res://object/stage/MovingObject.cs" id="44_h8qch"]
 [ext_resource type="Curve3D" uid="uid://dpji70opk0job" path="res://area/4 levitated ruin/act 1/environment/path/SkyRoadPath1.tres" id="44_r3tf7"]
@@ -2437,22 +2436,27 @@ OneShot = true
 transform = Transform3D(0.0227343, 0.941293, -0.336824, 0.192364, 0.326497, 0.925417, 0.98106, -0.0858316, -0.173648, 189.693, 108.565, -62.3398)
 script = ExtResource("4_4rpxf")
 
-[node name="MissileGenerator1" parent="MainAct/Skyroad1/MissleCullingTrigger/MissileGroup1" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator1" parent="MainAct/Skyroad1/MissleCullingTrigger/MissileGroup1" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 0, 7.45058e-09, 0, 0.996195, 0.0871557, 0, -0.0871558, 0.996195, 0, 0, 10)
+isInvisibleSpawner = true
+disableHitboxes = true
 missleSpeed = 80.0
 spawnTimer = 0.5
 
-[node name="MissileGenerator2" parent="MainAct/Skyroad1/MissleCullingTrigger/MissileGroup1" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator2" parent="MainAct/Skyroad1/MissleCullingTrigger/MissileGroup1" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 0, 3.55271e-15, 0, 1, 1.77636e-15, 1.77636e-15, 8.88178e-15, 1, 0, 0, 0)
+isInvisibleSpawner = true
+disableHitboxes = true
 missileLifetime = 4.0
 missleSpeed = 80.0
 spawnTimer = 0.0
 
-[node name="MissileGenerator3" parent="MainAct/Skyroad1/MissleCullingTrigger/MissileGroup1" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator3" parent="MainAct/Skyroad1/MissleCullingTrigger/MissileGroup1" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 3.55271e-15, 0.0871557, 0.996195, 0, 0, -10)
+isInvisibleSpawner = true
+disableHitboxes = true
 missileLifetime = 4.0
 missleSpeed = 80.0
-spawnTimer = 1.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Skyroad1/MissleCullingTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -2475,7 +2479,7 @@ script = ExtResource("4_4rpxf")
 respawnOnActivation = true
 
 [node name="MissileTracking1" parent="MainAct/Skyroad1/TrackingMissileGroup" instance=ExtResource("45_o7bxy")]
-transform = Transform3D(-0.880402, -0.473713, 0.0216899, -0.422186, 0.803827, 0.419055, -0.215947, 0.359782, -0.907698, -7.86663, 69.9972, -282.427)
+transform = Transform3D(-0.880402, -0.473713, 0.0216899, -0.422186, 0.803826, 0.419055, -0.215947, 0.359781, -0.907698, -7.86663, 69.9972, -282.427)
 progress = 450.0
 h_offset = -0.5
 v_offset = 1.0
@@ -2505,7 +2509,7 @@ h_offset = 1.0
 v_offset = 1.0
 
 [node name="MissileTracking6" parent="MainAct/Skyroad1/TrackingMissileGroup" instance=ExtResource("45_o7bxy")]
-transform = Transform3D(-0.741617, 0.655752, -0.14133, 0.632415, 0.753731, 0.178668, 0.223687, 0.043124, -0.973705, -19.7241, 52.6178, -220)
+transform = Transform3D(-0.741617, 0.655752, -0.14133, 0.632415, 0.75373, 0.178668, 0.223687, 0.0431239, -0.973705, -19.7241, 52.6178, -220)
 progress = 383.0
 h_offset = -0.5
 v_offset = 1.0
@@ -3651,42 +3655,57 @@ saveVisibilityOnCheckpoint = true
 [node name="MissileGeneratorGroup1" type="Node3D" parent="MainAct/Skyroad3"]
 transform = Transform3D(-4.37114e-08, 0.422618, -0.906308, -1, -1.84732e-08, 3.9616e-08, 0, 0.906308, 0.422618, 120.274, 8, 27.4791)
 
-[node name="MissileGenerator1" parent="MainAct/Skyroad3/MissileGeneratorGroup1" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator1" parent="MainAct/Skyroad3/MissileGeneratorGroup1" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 1.66431e-16, -7.50721e-16, 0, 1, 0, 0, 0, 1, 0, 0, 10)
-spawnTimer = 1.0
+isInvisibleSpawner = true
+disableHitboxes = true
 
-[node name="MissileGenerator2" parent="MainAct/Skyroad3/MissileGeneratorGroup1" instance=ExtResource("43_87bgx")]
-spawnTimer = 1.0
+[node name="MissileGenerator2" parent="MainAct/Skyroad3/MissileGeneratorGroup1" instance=ExtResource("58_6mbqa")]
+isInvisibleSpawner = true
+disableHitboxes = true
 
-[node name="MissileGenerator3" parent="MainAct/Skyroad3/MissileGeneratorGroup1" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator3" parent="MainAct/Skyroad3/MissileGeneratorGroup1" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-spawnTimer = 1.0
+isInvisibleSpawner = true
+disableHitboxes = true
 
 [node name="MissileGeneratorGroup2" type="Node3D" parent="MainAct/Skyroad3"]
 transform = Transform3D(-0.258819, 4.37114e-08, -0.965926, -8.44439e-08, -1, -2.26267e-08, -0.965926, 7.57103e-08, 0.258819, 89.4079, -50, -49.4824)
 
-[node name="MissileGenerator1" parent="MainAct/Skyroad3/MissileGeneratorGroup2" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator1" parent="MainAct/Skyroad3/MissileGeneratorGroup2" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 1.66431e-16, -7.50721e-16, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+isInvisibleSpawner = true
+disableHitboxes = true
 
-[node name="MissileGenerator2" parent="MainAct/Skyroad3/MissileGeneratorGroup2" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator2" parent="MainAct/Skyroad3/MissileGeneratorGroup2" instance=ExtResource("58_6mbqa")]
+isInvisibleSpawner = true
+disableHitboxes = true
 
-[node name="MissileGenerator3" parent="MainAct/Skyroad3/MissileGeneratorGroup2" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator3" parent="MainAct/Skyroad3/MissileGeneratorGroup2" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+isInvisibleSpawner = true
+disableHitboxes = true
 
 [node name="MissileGeneratorGroup3" type="Node3D" parent="MainAct/Skyroad3"]
 transform = Transform3D(-4.37114e-08, 0.939693, -0.34202, -1, -4.10753e-08, 1.49502e-08, 0, 0.34202, 0.939693, 249.406, -37, -50.5515)
 
-[node name="MissileGenerator1" parent="MainAct/Skyroad3/MissileGeneratorGroup3" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator1" parent="MainAct/Skyroad3/MissileGeneratorGroup3" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 1.66431e-16, -7.50721e-16, 0, 1, 0, 0, 0, 1, 0, -10, 10)
+isInvisibleSpawner = true
+disableHitboxes = true
 missleSpeed = 80.0
 spawnTimer = 1.5
 
-[node name="MissileGenerator2" parent="MainAct/Skyroad3/MissileGeneratorGroup3" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator2" parent="MainAct/Skyroad3/MissileGeneratorGroup3" instance=ExtResource("58_6mbqa")]
+isInvisibleSpawner = true
+disableHitboxes = true
 missleSpeed = 80.0
 spawnTimer = 1.5
 
-[node name="MissileGenerator3" parent="MainAct/Skyroad3/MissileGeneratorGroup3" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator3" parent="MainAct/Skyroad3/MissileGeneratorGroup3" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -10)
+isInvisibleSpawner = true
+disableHitboxes = true
 missleSpeed = 80.0
 spawnTimer = 1.5
 
@@ -4210,13 +4229,19 @@ shape = SubResource("BoxShape3D_ypvwq")
 [node name="MissileGeneratorGroup1" type="Node3D" parent="MainAct/Skyroad4"]
 transform = Transform3D(4.37114e-08, -4.37114e-08, 1, -1.07284e-07, -1, -4.37114e-08, 1, -1.07284e-07, -4.37114e-08, 2, -50, 129.825)
 
-[node name="MissileGenerator1" parent="MainAct/Skyroad4/MissileGeneratorGroup1" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator1" parent="MainAct/Skyroad4/MissileGeneratorGroup1" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 1.66431e-16, -7.50721e-16, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+isInvisibleSpawner = true
+disableHitboxes = true
 
-[node name="MissileGenerator2" parent="MainAct/Skyroad4/MissileGeneratorGroup1" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator2" parent="MainAct/Skyroad4/MissileGeneratorGroup1" instance=ExtResource("58_6mbqa")]
+isInvisibleSpawner = true
+disableHitboxes = true
 
-[node name="MissileGenerator3" parent="MainAct/Skyroad4/MissileGeneratorGroup1" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator3" parent="MainAct/Skyroad4/MissileGeneratorGroup1" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+isInvisibleSpawner = true
+disableHitboxes = true
 
 [node name="PearlRing1" type="Node3D" parent="MainAct/Skyroad4"]
 transform = Transform3D(0.997017, -0.000796903, -0.0771777, 2.05386e-07, 0.999947, -0.0103224, 0.0771819, 0.0102915, 0.996964, -2.35883, -4.5985, 39.3848)
@@ -4880,28 +4905,37 @@ shape = SubResource("BoxShape3D_ypvwq")
 [node name="MissileGeneratorGroup2" type="Node3D" parent="MainAct/Skyroad4"]
 transform = Transform3D(0.256328, -0.953236, -0.160114, -0.966074, -0.258063, -0.0102194, -0.0315781, 0.157302, -0.987046, -343.295, 67.7832, 235.395)
 
-[node name="MissileGenerator1" parent="MainAct/Skyroad4/MissileGeneratorGroup2" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator1" parent="MainAct/Skyroad4/MissileGeneratorGroup2" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 1.66431e-16, -7.50721e-16, 0, 1, 0, 0, 0, 1, 0, 0, 10)
-spawnTimer = 1.0
+isInvisibleSpawner = true
+disableHitboxes = true
 
-[node name="MissileGenerator2" parent="MainAct/Skyroad4/MissileGeneratorGroup2" instance=ExtResource("43_87bgx")]
-spawnTimer = 1.0
+[node name="MissileGenerator2" parent="MainAct/Skyroad4/MissileGeneratorGroup2" instance=ExtResource("58_6mbqa")]
+isInvisibleSpawner = true
+disableHitboxes = true
 
-[node name="MissileGenerator3" parent="MainAct/Skyroad4/MissileGeneratorGroup2" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator3" parent="MainAct/Skyroad4/MissileGeneratorGroup2" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-spawnTimer = 1.0
+isInvisibleSpawner = true
+disableHitboxes = true
 
 [node name="MissileGeneratorGroup3" type="Node3D" parent="MainAct/Skyroad4"]
 transform = Transform3D(0.321394, 0.383022, -0.866025, 0.766044, -0.642788, 0, -0.55667, -0.663414, -0.5, -399.939, 47.7013, 204.457)
 
-[node name="MissileGenerator1" parent="MainAct/Skyroad4/MissileGeneratorGroup3" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator1" parent="MainAct/Skyroad4/MissileGeneratorGroup3" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 0, 1.78814e-07, 0, 0.984808, 0.173648, -8.9407e-08, -0.173648, 0.984808, -0.00012207, -0.00012207, 2)
+isInvisibleSpawner = true
+disableHitboxes = true
 
-[node name="MissileGenerator2" parent="MainAct/Skyroad4/MissileGeneratorGroup3" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator2" parent="MainAct/Skyroad4/MissileGeneratorGroup3" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 0, 5.96046e-08, 0, 1, 5.96046e-08, -8.9407e-08, -1.49012e-07, 1, 0, 0, 0)
+isInvisibleSpawner = true
+disableHitboxes = true
 
-[node name="MissileGenerator3" parent="MainAct/Skyroad4/MissileGeneratorGroup3" instance=ExtResource("43_87bgx")]
+[node name="MissileGenerator3" parent="MainAct/Skyroad4/MissileGeneratorGroup3" instance=ExtResource("58_6mbqa")]
 transform = Transform3D(1, 0, 2.98023e-08, 0, 0.984808, -0.173648, -8.9407e-08, 0.173648, 0.984808, -6.10352e-05, 0, -2)
+isInvisibleSpawner = true
+disableHitboxes = true
 
 [node name="Rukh5" type="Node3D" parent="MainAct"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 250, -40, -1150)

@@ -10,7 +10,6 @@
 [ext_resource type="Material" uid="uid://db4kropnhyudk" path="res://effect/particle/material/Ember Blue Billboard.tres" id="7_7m33f"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="8_7n4uh"]
 [ext_resource type="AudioStream" uid="uid://krtje434volg" path="res://sound/sfx/stage/levitated ruin/missile explosion.wav" id="10_e3tvw"]
-[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="11_kit05"]
 [ext_resource type="AudioStream" uid="uid://bktx0sr73366c" path="res://sound/sfx/stage/levitated ruin/missile launch.wav" id="12_kit05"]
 
 [sub_resource type="Curve" id="Curve_1x8is"]
@@ -251,6 +250,18 @@ tracks/5/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("MissileTracking:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_ij6x6"]
 resource_name = "explode"
@@ -343,6 +354,20 @@ tracks/6/keys = {
 "update": 1,
 "values": [false, true]
 }
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("ExplosionSFX")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_2clm2"]
 resource_name = "fly"
@@ -373,11 +398,42 @@ tracks/1/keys = {
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_kit05"]
+resource_name = "launch"
+length = 0.16667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MissileTracking:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.16667),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0.1, 0.1, 0.1), Vector3(1, 1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LaunchSFX")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_u57hx"]
 _data = {
 &"RESET": SubResource("Animation_v038j"),
 &"explode": SubResource("Animation_ij6x6"),
-&"fly": SubResource("Animation_2clm2")
+&"fly": SubResource("Animation_2clm2"),
+&"launch": SubResource("Animation_kit05")
 }
 
 [node name="MissileTracking" type="PathFollow3D" node_paths=PackedStringArray("animator")]
@@ -492,25 +548,18 @@ draw_pass_1 = SubResource("QuadMesh_bdumk")
 
 [node name="LaunchSFX" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("12_kit05")
-attenuation_model = 3
-unit_size = 50.0
-max_db = 0.0
-max_distance = 400.0
+max_db = -3.0
+max_distance = 100.0
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
-script = ExtResource("11_kit05")
-groupKey = &"missile launch"
 
 [node name="ExplosionSFX" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("10_e3tvw")
 attenuation_model = 3
-unit_size = 50.0
 max_db = -3.0
-max_distance = 200.0
+max_distance = 100.0
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
-script = ExtResource("11_kit05")
-groupKey = &"missile explosion"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -518,8 +567,6 @@ libraries = {
 }
 autoplay = "fly"
 
-[connection signal="Activated" from="." to="LaunchSFX" method="PlayInGroup"]
-[connection signal="Exploded" from="." to="ExplosionSFX" method="PlayInGroup"]
 [connection signal="DamagedPlayer" from="Hitbox" to="." method="Explode"]
 [connection signal="KnockbackFailed" from="Hitbox" to="." method="Explode"]
 [connection signal="area_entered" from="Hitbox" to="Hitbox" method="OnEntered"]

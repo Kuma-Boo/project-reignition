@@ -10,6 +10,7 @@ public partial class MissileTracking : PathFollow3D
 	[Signal] public delegate void ExplodedEventHandler();
 	[Signal] public delegate void DisabledEventHandler();
 
+	[Export] private float activationDelay;
 	[Export] private float moveSpeed = 30.0f;
 	public void SetSpeed(float value) => moveSpeed = value;
 	[Export] private AnimationPlayer animator;
@@ -21,7 +22,7 @@ public partial class MissileTracking : PathFollow3D
 		ResetPhysicsInterpolation();
 	}
 
-	private bool isActive;
+	private float activationTimer;
 	private bool isExploded;
 	private float initialProgress;
 
@@ -36,27 +37,39 @@ public partial class MissileTracking : PathFollow3D
 
 	public void Respawn()
 	{
-		isActive = false;
+		Visible = false;
 		isExploded = false;
-		spawnData.Respawn(this);
+		activationTimer = activationDelay;
 		Progress = initialProgress;
+		spawnData.Respawn(this);
 
 		animator.Play("RESET");
 		animator.Advance(0.0);
+
+		if (Mathf.IsZeroApprox(activationTimer))
+			Activate();
 	}
 
 	public void Activate()
 	{
 		Visible = true;
-		isActive = true;
-		animator.Play("fly");
+		animator.Play("launch");
 		ProcessMode = ProcessModeEnum.Inherit;
 		EmitSignal(SignalName.Activated);
 	}
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (!isActive || isExploded)
+		if (!Mathf.IsZeroApprox(activationTimer))
+		{
+			activationTimer = Mathf.MoveToward(activationTimer, 0, PhysicsManager.physicsDelta);
+			if (!Mathf.IsZeroApprox(activationTimer))
+				return;
+
+			Activate();
+		}
+
+		if (isExploded)
 			return;
 
 		Progress += moveSpeed * PhysicsManager.physicsDelta;

@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://bnefjsj5g2emm"]
+[gd_scene load_steps=45 format=3 uid="uid://bnefjsj5g2emm"]
 
 [ext_resource type="PackedScene" uid="uid://e6oju4xygbmm" path="res://area/4 levitated ruin/object/model/obstacle/MissileSimple.gltf" id="1_kw57j"]
 [ext_resource type="Script" uid="uid://c27oe48qjsjv4" path="res://area/4 levitated ruin/data/script/Missile.cs" id="2_vnv7l"]
@@ -249,6 +249,18 @@ tracks/5/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("MissileSimpleMesh:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_5brwi"]
 resource_name = "explode"
@@ -341,6 +353,20 @@ tracks/6/keys = {
 "update": 1,
 "values": [false, true]
 }
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("ExplosionSFX")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_n41uu"]
 resource_name = "fly"
@@ -371,17 +397,49 @@ tracks/1/keys = {
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_71aoi"]
+resource_name = "launch"
+length = 0.16667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MissileSimpleMesh:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.16667),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LaunchSFX")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tfwu0"]
 _data = {
 &"RESET": SubResource("Animation_mftqq"),
 &"explode": SubResource("Animation_5brwi"),
-&"fly": SubResource("Animation_n41uu")
+&"fly": SubResource("Animation_n41uu"),
+&"launch": SubResource("Animation_71aoi")
 }
 
-[node name="MissileSimple" node_paths=PackedStringArray("animator") instance=ExtResource("1_kw57j")]
+[node name="MissileSimple" node_paths=PackedStringArray("animator", "hitbox") instance=ExtResource("1_kw57j")]
 physics_interpolation_mode = 2
 script = ExtResource("2_vnv7l")
 animator = NodePath("AnimationPlayer")
+hitbox = NodePath("Hitbox")
 
 [node name="Trail" type="GPUParticles3D" parent="." index="1"]
 layers = 32
@@ -503,6 +561,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_tfwu0")
 }
 autoplay = "fly"
+next/launch = &"fly"
 
 [connection signal="Activated" from="." to="LaunchSFX" method="play" binds= [0.0]]
 [connection signal="Exploded" from="." to="ExplosionSFX" method="play" binds= [0.0]]

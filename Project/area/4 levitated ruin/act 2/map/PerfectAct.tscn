@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://cwqbha6bstwrp"]
+[gd_scene load_steps=31 format=3 uid="uid://cwqbha6bstwrp"]
 
 [ext_resource type="PackedScene" uid="uid://bpxj0juyhbmxs" path="res://area/4 levitated ruin/act 2/Static.tscn" id="1_n5x1h"]
 [ext_resource type="Resource" uid="uid://bxwpjg4ij4uki" path="res://resource/level data/levitated ruin/Act2Perfect.tres" id="2_txk0p"]
@@ -11,14 +11,13 @@
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="17_b586c"]
 [ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="19_3jnno"]
 [ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="26_sxofc"]
-[ext_resource type="PackedScene" uid="uid://l7k4j5p2l1ax" path="res://area/4 levitated ruin/object/InvisibleMissileGenerator.tscn" id="28_om2pp"]
+[ext_resource type="PackedScene" uid="uid://dlqcmkgbysmtt" path="res://area/4 levitated ruin/object/MissileGenerator.tscn" id="27_om2pp"]
 [ext_resource type="Resource" uid="uid://bs6nww33wlhi" path="res://area/4 levitated ruin/act 2/camera/TowerBaseCam.tres" id="29_7wf5w"]
 [ext_resource type="PackedScene" uid="uid://y7w1jrfgsii7" path="res://object/enemy/majin/data/levitated ruin/GreenMajin.tscn" id="34_ttm40"]
 [ext_resource type="PackedScene" uid="uid://bxvbg3oku2gpf" path="res://area/4 levitated ruin/object/Gate.tscn" id="35_b8nsb"]
 [ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="36_yp1q0"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="37_r34q0"]
 [ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="41_ax6yr"]
-[ext_resource type="PackedScene" uid="uid://bnefjsj5g2emm" path="res://area/4 levitated ruin/object/MissileSimple.tscn" id="51_iq0it"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="54_8sats"]
 [ext_resource type="PackedScene" uid="uid://b6030p0x15kq0" path="res://area/4 levitated ruin/object/platform/GargoyleStatic.tscn" id="55_jg6oy"]
 [ext_resource type="PackedScene" uid="uid://cggks1kly71mq" path="res://object/enemy/majin/data/levitated ruin/BlueMajin.tscn" id="56_l6hdc"]
@@ -41,6 +40,8 @@ radius = 10.0
 
 [node name="Static" parent="." instance=ExtResource("1_n5x1h")]
 Data = ExtResource("2_txk0p")
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
 
 [node name="Rukh1" parent="Static/Visuals" index="1"]
 startEnabled = false
@@ -325,7 +326,7 @@ transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 1.625, -0.5, 7.475)
 transform = Transform3D(0.883883, 0, -0.883883, 0, 1.25, 0, 0.883883, 0, 0.883883, 4.14798, -0.5, 6.64089)
 
 [node name="StaticGate2" parent="PerfectAct/Objects/SecondFloor" instance=ExtResource("35_b8nsb")]
-transform = Transform3D(-0.4, 0, 1.50996e-07, 0, 1.8, 0, -6.03983e-08, 0, -1, -8, 1.5, 2)
+transform = Transform3D(-0.4, 0, 1.50996e-07, 0, 1.8, 0, -6.03983e-08, 0, -1, -7.6, 1.5, 2)
 
 [node name="SpikePanelCull" type="Node3D" parent="PerfectAct/Objects/SecondFloor"]
 transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 0, -7.09998, 0.799999, 0)
@@ -408,29 +409,29 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 4, 2, 
 [node name="MissileGeneratorGroup" type="Node3D" parent="PerfectAct/Objects"]
 transform = Transform3D(-0.707107, -0.0123407, 0.706999, 0, 0.999848, 0.0174524, -0.707107, 0.0123407, -0.706999, 81, 42.6, -81)
 
-[node name="MissileGenerator1" parent="PerfectAct/Objects/MissileGeneratorGroup" instance=ExtResource("28_om2pp")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -1.5, 0, 0)
+[node name="MissileGenerator1" parent="PerfectAct/Objects/MissileGeneratorGroup" instance=ExtResource("27_om2pp")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -1.5, -3.8147e-06, 0)
+isInvisibleSpawner = true
 missileLifetime = 4.0
 missleSpeed = 30.0
 spawnInterval = 2.0
 spawnTimer = 0.0
-missileScene = ExtResource("51_iq0it")
 
-[node name="MissileGenerator2" parent="PerfectAct/Objects/MissileGeneratorGroup" instance=ExtResource("28_om2pp")]
+[node name="MissileGenerator2" parent="PerfectAct/Objects/MissileGeneratorGroup" instance=ExtResource("27_om2pp")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+isInvisibleSpawner = true
 missileLifetime = 4.0
 missleSpeed = 30.0
 spawnInterval = 2.0
 spawnTimer = 0.0
-missileScene = ExtResource("51_iq0it")
 
-[node name="MissileGenerator3" parent="PerfectAct/Objects/MissileGeneratorGroup" instance=ExtResource("28_om2pp")]
+[node name="MissileGenerator3" parent="PerfectAct/Objects/MissileGeneratorGroup" instance=ExtResource("27_om2pp")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 1.5, 0, 0)
+isInvisibleSpawner = true
 missileLifetime = 4.0
 missleSpeed = 30.0
 spawnInterval = 2.0
 spawnTimer = 0.0
-missileScene = ExtResource("51_iq0it")
 
 [node name="Goal" parent="PerfectAct/Objects" instance=ExtResource("11_wdp83")]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 13.435, 48, -13.435)
