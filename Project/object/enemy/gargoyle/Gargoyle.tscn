@@ -381,12 +381,93 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
 
-[node name="FX" type="Node3D" parent="."]
+[node name="SFX" type="Node3D" parent="."]
 
-[node name="SpawnFX" type="Node3D" parent="FX"]
+[node name="SpawnSFX" type="AudioStreamPlayer3D" parent="SFX"]
+process_mode = 1
+stream = ExtResource("10_nrx4w")
+max_db = -6.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("11_37lc7")
+groupKey = &"majin_spawn"
+
+[node name="FlapSFX" type="AudioStreamPlayer3D" parent="SFX"]
+process_mode = 1
+stream = ExtResource("12_w0cpa")
+volume_db = 3.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="SlashSFX" type="AudioStreamPlayer3D" parent="SFX"]
+process_mode = 1
+stream = ExtResource("13_5vb6p")
+volume_db = 3.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="StrikeSFX" type="AudioStreamPlayer3D" parent="SFX"]
+process_mode = 1
+stream = ExtResource("14_a5g66")
+volume_db = 3.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="DefeatSFX" type="AudioStreamPlayer3D" parent="SFX"]
+process_mode = 1
+stream = ExtResource("15_a5g66")
+volume_db = 3.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="PetrifySFX" type="AudioStreamPlayer3D" parent="SFX"]
+process_mode = 1
+stream = ExtResource("16_37lc7")
+volume_db = 3.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="PetrifyWarnSFX" type="AudioStreamPlayer3D" parent="SFX"]
+process_mode = 1
+stream = ExtResource("17_xnarc")
+volume_db = 3.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="WindballSFX" type="AudioStreamPlayer3D" parent="SFX"]
+process_mode = 1
+stream = ExtResource("18_lafif")
+volume_db = 3.0
+max_db = 0.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="VFX" type="Node3D" parent="."]
+
+[node name="SpawnFX" type="Node3D" parent="VFX"]
 visible = false
 
-[node name="SpawnLetter" type="GPUParticles3D" parent="FX/SpawnFX"]
+[node name="SpawnLetter" type="GPUParticles3D" parent="VFX/SpawnFX"]
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
@@ -403,7 +484,7 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
 process_material = ExtResource("4_rchb7")
 draw_pass_1 = SubResource("PlaneMesh_xnarc")
 
-[node name="SpawnSmoke" type="GPUParticles3D" parent="FX/SpawnFX"]
+[node name="SpawnSmoke" type="GPUParticles3D" parent="VFX/SpawnFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 layers = 32
 cast_shadow = 0
@@ -417,7 +498,7 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
 process_material = ExtResource("6_4tu6r")
 draw_pass_1 = SubResource("QuadMesh_1l3sk")
 
-[node name="Flash" type="GPUParticles3D" parent="FX/SpawnFX"]
+[node name="Flash" type="GPUParticles3D" parent="VFX/SpawnFX"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
 layers = 32
 cast_shadow = 0
@@ -432,87 +513,6 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 local_coords = true
 process_material = ExtResource("8_a5g66")
 draw_pass_1 = SubResource("QuadMesh_301wf")
-
-[node name="SpawnSFX" type="AudioStreamPlayer3D" parent="FX/SpawnFX"]
-process_mode = 1
-stream = ExtResource("10_nrx4w")
-attenuation_model = 3
-unit_size = 100.0
-max_db = 0.0
-max_distance = 200.0
-bus = &"GAME SFX"
-script = ExtResource("11_37lc7")
-groupKey = &"majin_spawn"
-
-[node name="FlapSFX" type="AudioStreamPlayer3D" parent="FX"]
-process_mode = 1
-stream = ExtResource("12_w0cpa")
-attenuation_model = 3
-unit_size = 100.0
-max_db = 0.0
-max_distance = 200.0
-max_polyphony = 2
-bus = &"GAME SFX"
-
-[node name="SlashSFX" type="AudioStreamPlayer3D" parent="FX"]
-process_mode = 1
-stream = ExtResource("13_5vb6p")
-attenuation_model = 3
-unit_size = 100.0
-max_db = 0.0
-max_distance = 200.0
-max_polyphony = 2
-bus = &"GAME SFX"
-
-[node name="StrikeSFX" type="AudioStreamPlayer3D" parent="FX"]
-process_mode = 1
-stream = ExtResource("14_a5g66")
-attenuation_model = 3
-unit_size = 100.0
-max_db = 0.0
-max_distance = 200.0
-max_polyphony = 2
-bus = &"GAME SFX"
-
-[node name="DefeatSFX" type="AudioStreamPlayer3D" parent="FX"]
-process_mode = 1
-stream = ExtResource("15_a5g66")
-attenuation_model = 3
-unit_size = 100.0
-max_db = 0.0
-max_distance = 200.0
-max_polyphony = 2
-bus = &"GAME SFX"
-
-[node name="PetrifySFX" type="AudioStreamPlayer3D" parent="FX"]
-process_mode = 1
-stream = ExtResource("16_37lc7")
-attenuation_model = 3
-unit_size = 100.0
-max_db = 0.0
-max_distance = 200.0
-max_polyphony = 2
-bus = &"GAME SFX"
-
-[node name="PetrifyWarnSFX" type="AudioStreamPlayer3D" parent="FX"]
-process_mode = 1
-stream = ExtResource("17_xnarc")
-attenuation_model = 3
-unit_size = 100.0
-max_db = 0.0
-max_distance = 200.0
-max_polyphony = 2
-bus = &"GAME SFX"
-
-[node name="WindballSFX" type="AudioStreamPlayer3D" parent="FX"]
-process_mode = 1
-stream = ExtResource("18_lafif")
-attenuation_model = 3
-unit_size = 100.0
-max_db = 0.0
-max_distance = 200.0
-max_polyphony = 2
-bus = &"GAME SFX"
 
 [connection signal="area_entered" from="Root/GargoyleRoot/Skeleton3D/Hitbox" to="." method="OnHitboxEntered"]
 [connection signal="area_entered" from="Root/GargoyleRoot/Skeleton3D/Head/Lockon" to="." method="OnEntered"]

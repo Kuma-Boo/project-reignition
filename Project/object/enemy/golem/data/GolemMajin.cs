@@ -104,14 +104,16 @@ public partial class GolemMajin : Enemy
 		}
 		else
 		{
+			gasTank.height = 2f;
 			gasTank.endTarget = Player;
 			gasTank.Monitorable = true;
 		}
 
 		_gasTankParent.RemoveChild(gasTank);
 		StageSettings.Instance.AddChild(gasTank);
-		gasTank.SetDeferred("global_position", t.Origin);
-		gasTank.CallDeferred(GasTank.MethodName.Launch);
+		gasTank.GlobalPosition = t.Origin;
+		gasTank.Launch();
+		gasTank.AllowDoubleLaunch = !IsDefeated;
 	}
 
 	/// <summary> Update the gas tank to lock onto the golem's head. </summary>

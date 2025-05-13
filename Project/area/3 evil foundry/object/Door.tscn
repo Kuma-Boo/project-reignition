@@ -1,8 +1,9 @@
-[gd_scene load_steps=25 format=3 uid="uid://bn8lomrei46ap"]
+[gd_scene load_steps=26 format=3 uid="uid://bn8lomrei46ap"]
 
 [ext_resource type="PackedScene" uid="uid://bjhq4tu61hyom" path="res://area/3 evil foundry/object/model/Door.gltf" id="1_13c01"]
 [ext_resource type="Script" uid="uid://mrs44oflcm84" path="res://area/3 evil foundry/data/script/FoundryDoor.cs" id="1_d8fuq"]
 [ext_resource type="Script" uid="uid://pnh70abopq8e" path="res://object/stage/common/resource/script/Hazard.cs" id="3_cphun"]
+[ext_resource type="AudioStream" uid="uid://c42pbnuo6psnf" path="res://sound/sfx/stage/evil foundry/door.wav" id="4_ri4y8"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8nglt"]
 size = Vector3(3.2, 5.2, 0.5)
@@ -106,7 +107,6 @@ input_7/break_loop_at_end = false
 input_7/reset = false
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_gk1ho"]
-graph_offset = Vector2(-649.018, 110.788)
 nodes/RESET_anim/node = SubResource("AnimationNodeAnimation_3j4i5")
 nodes/RESET_anim/position = Vector2(-400, 0)
 nodes/close_left_anim/node = SubResource("AnimationNodeAnimation_1buhq")
@@ -142,11 +142,12 @@ nodes/state_transition/node = SubResource("AnimationNodeTransition_e0hso")
 nodes/state_transition/position = Vector2(-200, 200)
 node_connections = [&"output", 0, &"spike_add", &"spike_add", 0, &"spike_transition", &"spike_add", 1, &"state_speed", &"spike_transition", 0, &"spike_anim", &"spike_transition", 1, &"normal_anim", &"spike_transition", 2, &"RESET_anim", &"state_seek", 0, &"state_transition", &"state_speed", 0, &"state_seek", &"state_transition", 0, &"close_left_anim", &"state_transition", 1, &"close_right_anim", &"state_transition", 2, &"open_left_anim", &"state_transition", 3, &"open_right_anim", &"state_transition", 4, &"fakeout_left_anim", &"state_transition", 5, &"fakeout_right_anim", &"state_transition", 6, &"flip_left_anim", &"state_transition", 7, &"flip_right_anim"]
 
-[node name="Door" type="Node3D"]
+[node name="Door" type="Node3D" node_paths=PackedStringArray("creakSfx")]
 script = ExtResource("1_d8fuq")
 swingLength = 0.4
 animator = NodePath("AnimationTree")
 hazard = NodePath("Door")
+creakSfx = NodePath("Creak")
 
 [node name="Door" parent="." instance=ExtResource("1_13c01")]
 script = ExtResource("3_cphun")
@@ -165,7 +166,6 @@ extra_cull_margin = 5.0
 extra_cull_margin = 5.0
 
 [node name="DoorAttachment" type="BoneAttachment3D" parent="Door/DoorRoot/Skeleton3D/DoorSpiked" index="0"]
-transform = Transform3D(-1.19209e-07, 0, 1, 0, 1, 0, -1, 0, -1.19209e-07, -2, 0, -2)
 bone_name = "door_center"
 bone_idx = 3
 use_external_skeleton = true
@@ -182,7 +182,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0.5)
 shape = SubResource("BoxShape3D_8nglt")
 
 [node name="BaseAttachment" type="BoneAttachment3D" parent="Door/DoorRoot/Skeleton3D" index="3"]
-transform = Transform3D(-1.19209e-07, 0, 1, 0, 1, 0, -1, 0, -1.19209e-07, -2, 0, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 bone_name = "hinge_r"
 bone_idx = 2
 
@@ -211,6 +211,13 @@ shape = SubResource("ConvexPolygonShape3D_1mfj6")
 
 [node name="AnimationPlayer" parent="Door" index="1"]
 reset_on_save = false
+
+[node name="Creak" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_ri4y8")
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 root_node = NodePath("../Door")

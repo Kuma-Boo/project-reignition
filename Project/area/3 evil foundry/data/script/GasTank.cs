@@ -41,6 +41,7 @@ public partial class GasTank : Area3D
 	private readonly List<Enemy> enemyList = [];
 	private readonly List<GasTank> tankList = [];
 
+	public bool AllowDoubleLaunch { get; set; }
 	public bool IsFalling { get; private set; }
 	public bool IsDetonated { get; private set; }
 	public bool IsTravelling { get; private set; }
@@ -77,6 +78,7 @@ public partial class GasTank : Area3D
 		IsFalling = false;
 		IsDetonated = false;
 		IsTravelling = false;
+		AllowDoubleLaunch = false;
 
 		Root.Rotation = Vector3.Zero;
 		Position = spawnData.spawnTransform.Origin;
@@ -102,7 +104,6 @@ public partial class GasTank : Area3D
 		if (!IsTravelling) return;
 
 		LaunchSettings launchSettings = GetLaunchSettings();
-
 		if (launchSettings.IsLauncherFinished(travelTime))
 		{
 			Detonate();
@@ -144,8 +145,10 @@ public partial class GasTank : Area3D
 
 	public void Launch()
 	{
-		if (IsTravelling) // Already traveling
+		if (IsTravelling && !AllowDoubleLaunch) // Already traveling
 			return;
+
+		AllowDoubleLaunch = false;
 
 		if (endTarget != null)
 			endPosition = endTarget.GlobalPosition - GlobalPosition;
@@ -204,13 +207,17 @@ public partial class GasTank : Area3D
 
 	private void OnEntered(Area3D a)
 	{
-		if (a.IsInGroup("player"))
-			isInteractingWithPlayer = true;
+		if (!a.IsInGroup("player"))
+			return;
+
+		isInteractingWithPlayer = true;
 	}
 
 	private void OnExited(Area3D a)
 	{
-		if (!a.IsInGroup("player")) return;
+		if (!a.IsInGroup("player"))
+			return;
+
 		isInteractingWithPlayer = false;
 	}
 

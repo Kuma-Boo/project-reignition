@@ -15,6 +15,7 @@ public partial class SoundManager : Node
 		Bgm,
 		Sfx,
 		Voice,
+		SfxAdjustment,
 		GameSfx,
 		BreakSfx,
 		Count
@@ -45,7 +46,7 @@ public partial class SoundManager : Node
 			isMuted = true;
 
 		AudioServer.SetBusMute((int)bus, isMuted); // Mute or unmute
-		AudioServer.SetBusVolumeDb((int)bus, Mathf.LinearToDb(volumePercentage * .01f));
+		AudioServer.SetBusVolumeLinear((int)bus, volumePercentage * .01f);
 	}
 	#endregion
 

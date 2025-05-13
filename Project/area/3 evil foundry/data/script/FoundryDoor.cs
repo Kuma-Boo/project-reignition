@@ -73,6 +73,7 @@ public partial class FoundryDoor : Node3D
 	[Export(PropertyHint.NodePathValidTypes, "AnimationTree")] private NodePath animator;
 	private AnimationTree Animator { get; set; }
 	[Export] private NodePath hazard;
+	[Export] private AudioStreamPlayer3D creakSfx;
 	private Hazard Hazard { get; set; }
 
 	private bool isActivated;
@@ -162,6 +163,7 @@ public partial class FoundryDoor : Node3D
 		if (swingInReverse)
 			animationSpeed *= -1;
 		Animator.Set(DoorSpeed, animationSpeed);
+		creakSfx.Play();
 	}
 
 	private void OnEntered(Area3D a)

@@ -413,7 +413,7 @@ next/event = &"wing-flap"
 blend_times = [&"event", &"wing-flap", 1.0]
 
 [node name="RootBone" type="BoneAttachment3D" parent="." index="2"]
-transform = Transform3D(0.992832, 0.0359032, -0.113996, -0.106046, -0.175276, -0.978795, -0.0551225, 0.983865, -0.170212, 327.947, 447.049, -524.516)
+transform = Transform3D(0.992832, 0.0359032, -0.113996, -0.106046, -0.175275, -0.978795, -0.0551224, 0.983865, -0.170212, 327.947, 447.049, -524.516)
 bone_name = "root"
 bone_idx = 0
 use_external_skeleton = true
@@ -422,16 +422,20 @@ external_skeleton = NodePath("../Rukh06FlyingRoot/Skeleton3D")
 [node name="FlySFX" type="AudioStreamPlayer3D" parent="RootBone" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -133.538, 0)
 stream = ExtResource("5_20dyh")
-unit_size = 100.0
+attenuation_model = 3
 max_db = 0.0
+max_distance = 2000.0
 bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [node name="GruntSFX" type="AudioStreamPlayer3D" parent="RootBone" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -133.538, 0)
 stream = ExtResource("6_avhru")
-unit_size = 100.0
+attenuation_model = 3
 max_db = 0.0
+max_distance = 2000.0
 bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [connection signal="Activated" from="." to="Rukh06FlyingRoot" method="Activate"]
 [connection signal="Activated" from="." to="RootBone/FlySFX" method="play" binds= [0.0]]
