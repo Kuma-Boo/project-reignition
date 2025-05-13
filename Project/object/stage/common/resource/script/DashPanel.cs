@@ -60,9 +60,6 @@ public partial class DashPanel : Area3D
 			priority = -1, // Not using priority
 		};
 
-		if (Player.IsLockoutActive)
-			lockout.disableActionFlags |= Player.ActiveLockoutData.disableActionFlags;
-
 		if (alignToPath)
 		{
 			lockout.movementAngle = 0f;

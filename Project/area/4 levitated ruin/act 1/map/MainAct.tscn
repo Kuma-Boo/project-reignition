@@ -1940,11 +1940,6 @@ OneShot = true
 "Respawn Mode" = 0
 "Enter Mode" = 0
 
-[node name="GargoyleDialog" type="Node3D" parent="MainAct/Rukh3/GateGroup/GateTrigger"]
-script = ExtResource("7_gktnu")
-randomize = true
-textKeys = Array[String](["lev_hint_gargoyle_so", "lev_hint_gargoyle_sh"])
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Rukh3/GateGroup/GateTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 5.5)
 shape = SubResource("BoxShape3D_w2mik")
@@ -1990,6 +1985,11 @@ transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 
 
 [node name="GargoylePlatform" parent="MainAct/Rukh3" instance=ExtResource("19_efhpe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -232)
+
+[node name="GargoyleDialog" type="Node3D" parent="MainAct/Rukh3/GargoylePlatform"]
+script = ExtResource("7_gktnu")
+randomize = true
+textKeys = Array[String](["lev_hint_gargoyle_so", "lev_hint_gargoyle_sh"])
 
 [node name="Gargoyle" parent="MainAct/Rukh3/GargoylePlatform" instance=ExtResource("19_78g2p")]
 
@@ -5032,14 +5032,14 @@ v_offset = 1.0
 explosionPoint = 1290
 
 [node name="MissileTracking2" parent="MainAct/Skyroad4/TrackingMissileGroup3" instance=ExtResource("45_o7bxy")]
-transform = Transform3D(-0.225947, 0.126458, -0.965892, -4.35446e-05, 0.991531, 0.129825, 0.974129, 0.0293758, -0.22403, -359.57, 86.5141, 222.119)
+transform = Transform3D(-0.225947, 0.126458, -0.965892, -4.35446e-05, 0.991531, 0.129825, 0.974129, 0.0293759, -0.22403, -359.57, 86.5141, 222.119)
 progress = 1140.0
 h_offset = 1.0
 v_offset = 1.0
 explosionPoint = 1190
 
 [node name="MissileTracking3" parent="MainAct/Skyroad4/TrackingMissileGroup3" instance=ExtResource("45_o7bxy")]
-transform = Transform3D(-0.381784, 0.136923, -0.914045, -4.34315e-05, 0.988953, 0.148164, 0.92424, 0.0566068, -0.377566, -350.342, 85.0082, 225.206)
+transform = Transform3D(-0.381785, 0.136923, -0.914045, -4.34315e-05, 0.988953, 0.148164, 0.92424, 0.0566067, -0.377566, -350.342, 85.0082, 225.206)
 progress = 1130.0
 h_offset = 1.0
 v_offset = 1.0
@@ -5806,6 +5806,7 @@ shape = SubResource("BoxShape3D_ypvwq")
 [connection signal="Activated" from="MainAct/Rukh3/GateGroup/GateTrigger" to="MainAct/Rukh3/GateGroup/Checkpoint" method="Activate"]
 [connection signal="Respawned" from="MainAct/Rukh3/GateGroup/GateTrigger" to="MainAct/Rukh3/GateGroup/CullingTrigger/Gate" method="Respawn"]
 [connection signal="Defeated" from="MainAct/Rukh3/GargoylePlatform/Gargoyle" to="MainAct/Rukh3/EnemyStone" method="IncrementCounter"]
+[connection signal="Spawned" from="MainAct/Rukh3/GargoylePlatform/Gargoyle" to="MainAct/Rukh3/GargoylePlatform/GargoyleDialog" method="Activate"]
 [connection signal="Activated" from="MainAct/Skyroad1/TrackingMissleTrigger" to="MainAct/Skyroad1/TrackingMissileGroup" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh4/GrindPillarFlyTrigger" to="MainAct/Rukh4/GrindPillarFlyTrigger/GrindPillarFly1" method="Activate"]
 [connection signal="Activated" from="MainAct/Rukh4/GrindPillarFlyTrigger" to="MainAct/Rukh4/GrindPillarFlyTrigger/GrindPillarFly2" method="Activate"]
@@ -5861,7 +5862,6 @@ shape = SubResource("BoxShape3D_ypvwq")
 [connection signal="Deactivated" from="MainAct/Tower/Spring1" to="MainAct/Tower/TriggerData/LoopPath" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Tower/Spring1" to="MainAct/Tower/TriggerData/LoopLockout" method="Activate"]
 [connection signal="Activated" from="MainAct/Tower/Spring5" to="Static/Collision/OneWayWall" method="Deactivate"]
-[connection signal="Activated" from="MainAct/Tower/Spring5" to="MainAct/Tower/TriggerData/LoopLockout" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Tower/Spring5" to="MainAct/Tower/TriggerData/TopPath" method="Activate"]
 [connection signal="Activated" from="MainAct/Tower/Spring5" to="MainAct/Tower/Spring5/SinbadDialog" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Tower/Spring5" to="Static/Collision/OneWayWall" method="Activate"]

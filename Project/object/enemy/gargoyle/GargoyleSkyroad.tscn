@@ -1,12 +1,15 @@
-[gd_scene load_steps=36 format=3 uid="uid://dtf23iudr7saa"]
+[gd_scene load_steps=39 format=3 uid="uid://dtf23iudr7saa"]
 
-[ext_resource type="Script" path="res://object/enemy/gargoyle/data/GargoyleSkyroad.cs" id="1_b2tip"]
+[ext_resource type="Script" uid="uid://c2mk6oc4phgi2" path="res://object/enemy/gargoyle/data/GargoyleSkyroad.cs" id="1_b2tip"]
 [ext_resource type="PackedScene" uid="uid://brhbgxve4dsf1" path="res://object/enemy/gargoyle/data/model/GargoyleSkyroad.gltf" id="2_bjje6"]
 [ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="3_1v1s6"]
-[ext_resource type="Script" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="4_08iss"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="4_08iss"]
 [ext_resource type="Material" uid="uid://rhqpvcj8ph13" path="res://object/enemy/majin/data/particle/material/Majin Glow.tres" id="5_wlcxs"]
 [ext_resource type="Material" uid="uid://cnue030a3coou" path="res://object/enemy/majin/data/particle/material/Majin Dust.tres" id="6_wwfng"]
+[ext_resource type="AudioStream" uid="uid://bqt0gpwc55dfl" path="res://sound/sfx/enemy/majin/majin spawn.wav" id="7_4makg"]
+[ext_resource type="AudioStream" uid="uid://cttipl3ihmbr5" path="res://sound/sfx/enemy/majin/majin travel.wav" id="7_lb2pe"]
 [ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="7_yi8bl"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="8_lb2pe"]
 
 [sub_resource type="Curve" id="Curve_38m7k"]
 _data = [Vector2(0, 0.2), 0.0, 3.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.2), -5.66667, 0.0, 0, 0]
@@ -248,6 +251,20 @@ tracks/4/keys = {
 "update": 1,
 "values": [true, false]
 }
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot/DespawnParticle/DespawnSFX")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayInGroup"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_6pne8"]
 resource_name = "spawn"
@@ -302,12 +319,26 @@ tracks/3/keys = {
 "update": 1,
 "values": [false, true]
 }
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("GargoyleSkyroad/GargoyleSkyroadRoot/SpawnParticle/SpawnSFX")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"PlayInGroup"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v4rfn"]
 _data = {
-"RESET": SubResource("Animation_dv1ej"),
-"despawn": SubResource("Animation_jmxln"),
-"spawn": SubResource("Animation_6pne8")
+&"RESET": SubResource("Animation_dv1ej"),
+&"despawn": SubResource("Animation_jmxln"),
+&"spawn": SubResource("Animation_6pne8")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_y6855"]
@@ -320,9 +351,11 @@ sync = true
 xfade_time = 0.3
 input_0/name = "enabled"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "disabled"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vgspr"]
@@ -352,18 +385,9 @@ animationTree = NodePath("AnimationTree")
 [node name="GargoyleSkyroad" parent="." instance=ExtResource("2_bjje6")]
 
 [node name="Skeleton3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot" index="0"]
-bones/2/rotation = Quaternion(0.767752, -2.50455e-07, -2.16896e-07, 0.640747)
 bones/4/rotation = Quaternion(-0.0383763, -1.02244e-06, 2.90416e-07, 0.999263)
-bones/5/rotation = Quaternion(0.5, 0.5, 0.5, -0.5)
 bones/8/rotation = Quaternion(-1.09807e-21, 5.62898e-22, 6.44043e-08, 1)
-bones/9/rotation = Quaternion(0.5, -0.5, -0.5, -0.5)
-bones/13/rotation = Quaternion(-0.707107, -2.10687e-09, -3.30155e-08, 0.707107)
-bones/14/rotation = Quaternion(-0.0617484, -4.72917e-11, 0.0875847, 0.994241)
-bones/15/rotation = Quaternion(0.0616896, 0.00269337, -0.130869, 0.989475)
 bones/15/scale = Vector3(0.999994, 0.999994, 1)
-bones/16/rotation = Quaternion(-0.707107, -2.10687e-09, -3.30155e-08, 0.707107)
-bones/17/rotation = Quaternion(-0.0617495, -4.71268e-10, -0.0875849, 0.994241)
-bones/18/rotation = Quaternion(0.0616908, -0.00269341, 0.130869, 0.989475)
 bones/19/rotation = Quaternion(-0.707107, 0, 4.39029e-08, 0.707107)
 
 [node name="SpawnParticle" type="GPUParticles3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot" index="1" node_paths=PackedStringArray("subSystems")]
@@ -412,6 +436,16 @@ interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_ll6hy")
 draw_pass_1 = SubResource("QuadMesh_35ra7")
+
+[node name="SpawnSFX" type="AudioStreamPlayer3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot/SpawnParticle"]
+process_mode = 1
+stream = ExtResource("7_lb2pe")
+unit_size = 50.0
+max_db = -3.0
+max_distance = 100.0
+bus = &"GAME SFX"
+script = ExtResource("8_lb2pe")
+groupKey = &"majin_travel"
 
 [node name="DespawnParticle" type="GPUParticles3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot" index="2" node_paths=PackedStringArray("subSystems")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -474,9 +508,19 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_kkx8r")
 draw_pass_1 = SubResource("QuadMesh_myhi4")
 
+[node name="DespawnSFX" type="AudioStreamPlayer3D" parent="GargoyleSkyroad/GargoyleSkyroadRoot/DespawnParticle"]
+process_mode = 1
+stream = ExtResource("7_4makg")
+unit_size = 50.0
+max_db = -3.0
+max_distance = 200.0
+bus = &"GAME SFX"
+script = ExtResource("8_lb2pe")
+groupKey = &"majin_spawn"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_v4rfn")
+&"": SubResource("AnimationLibrary_v4rfn")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
