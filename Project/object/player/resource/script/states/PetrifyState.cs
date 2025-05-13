@@ -24,7 +24,7 @@ public partial class PetrifyState : PlayerState
 	public override void ExitState()
 	{
 		Player.Animator.StopPetrify();
-		Player.Effect.StartPetrifyShatterFX();
+		Player.Effect.PetrifyShatterFX();
 
 		if (Player.IsOnGround) // Ensure landing animation is played properly
 			Player.Animator.SnapToGround();

@@ -276,7 +276,11 @@ public partial class PlayerEffect : Node3D
 
 	[Export]
 	private GpuParticles3D petrifyParticle;
-	public void StartPetrifyShatterFX() => petrifyParticle.Restart();
+	public void PetrifyShatterFX()
+	{
+		petrifyParticle.Restart();
+		PlayActionSFX("petrify shatter");
+	}
 	#endregion
 
 	#region Ground
