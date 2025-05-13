@@ -365,6 +365,7 @@ public partial class PlayerCameraController : Node3D
 
 		float distance = 0;
 		float staticBlendRatio = 0; // Blend value of whether to use static camera positions or not
+		float lockonPitchReferenceAngle = 0;
 		Vector2 viewportOffset = Vector2.Zero;
 		float fov = DefaultFov;
 
@@ -399,6 +400,8 @@ public partial class PlayerCameraController : Node3D
 
 				viewportOffset = viewportOffset.Lerp(CameraBlendList[i].SettingsResource.viewportOffset, CameraBlendList[i].SmoothedInfluence);
 			}
+
+			lockonPitchReferenceAngle = Mathf.Lerp(lockonPitchReferenceAngle, CameraBlendList[i].pitchAngle, CameraBlendList[i].SmoothedInfluence);
 
 			data.offsetBasis = data.offsetBasis.Slerp(iData.offsetBasis, CameraBlendList[i].SmoothedInfluence);
 
@@ -436,7 +439,7 @@ public partial class PlayerCameraController : Node3D
 		cameraTransform.Origin += cameraTransform.Basis.X * viewportOffset.X;
 		cameraTransform.Origin += cameraTransform.Basis.Y * viewportOffset.Y;
 
-		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, CalculateLockonAngle(cameraTransform.Origin, data.blendData.pitchAngle + data.pitchTracking));
+		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, CalculateLockonAngle(cameraTransform.Origin, lockonPitchReferenceAngle));
 
 		if (!isFreeCamActive || !isFreeCamLocked) // Only update camera transform when free cam isn't locked
 			cameraRoot.GlobalTransform = cameraTransform; // Update transform
@@ -448,7 +451,10 @@ public partial class PlayerCameraController : Node3D
 	private float CalculateLockonAngle(Vector3 origin, float pitchAngle)
 	{
 		if (!IsLockonCameraActive || LockonTarget == null)
-			return 0;
+		{
+			lockonPitchTracking = Mathf.Lerp(lockonPitchTracking, 0f, lockonTargetTransitionBlend);
+			return lockonPitchTracking * lockonTargetBlend;
+		}
 
 		Vector3 targetPosition = LockonTarget.GlobalPosition.Lerp(Player.CenterPosition, .5f);
 		Vector3 globalDelta = targetPosition - origin;
@@ -572,7 +578,8 @@ public partial class PlayerCameraController : Node3D
 	{
 		// Calculate distance
 		float targetDistance = CalculateDistance(settings);
-		data.blendData.DistanceSmoothDamp(targetDistance, Player.IsMovingBackward, SnapFlag);
+		bool snapDistance = SnapFlag || (LimitToPathDistance && Player.IsMovingBackward && targetDistance < data.blendData.distance);
+		data.blendData.DistanceSmoothDamp(targetDistance, snapDistance);
 
 		CalculateRotation(settings, ref data);
 
@@ -1244,9 +1251,9 @@ public partial class CameraBlendData : GodotObject
 	private float distanceVelocity;
 	public const float DistanceSmoothing = 10.0f;
 
-	public void DistanceSmoothDamp(float target, bool movingBackwards, bool snap)
+	public void DistanceSmoothDamp(float target, bool snap)
 	{
-		if (snap || !WasInitialized || (movingBackwards && target < distance))
+		if (snap || !WasInitialized)
 		{
 			distance = target;
 			distanceVelocity = 0;
