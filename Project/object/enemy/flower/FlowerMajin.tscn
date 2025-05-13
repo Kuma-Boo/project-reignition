@@ -11,6 +11,10 @@
 [ext_resource type="AudioStream" uid="uid://djkjwq28o5v4k" path="res://sound/sfx/enemy/flower/flower defeated.wav" id="5_ijj0t"]
 [ext_resource type="AudioStream" uid="uid://bageplss4yb7m" path="res://sound/sfx/enemy/flower/flower hit.wav" id="5_qbppd"]
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_iip0l"]
+radius = 0.2
+height = 3.2
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_4r0or"]
 radius = 0.4
 
@@ -20,10 +24,6 @@ radius = 1.3
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_w6adf"]
 radius = 0.8
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_iip0l"]
-radius = 0.2
-height = 3.2
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4gv11"]
 animation = &"aggressive"
@@ -133,9 +133,7 @@ node_connections = [&"attack_trigger", 0, &"state_transition", &"attack_trigger"
 height = 15.0
 radius = 30.0
 
-[node name="FlowerMajin" type="StaticBody3D"]
-collision_layer = 8
-collision_mask = 0
+[node name="FlowerMajin" type="Node3D"]
 script = ExtResource("2_14l8s")
 skipPassive = true
 passiveLength = 1.0
@@ -146,10 +144,16 @@ pearlAmount = 25
 maxHealth = 3
 root = NodePath("FlowerMajin")
 hurtbox = NodePath("Attachments/HeadAttachment/Hitbox")
-collider = NodePath("CollisionShape3D")
+collider = NodePath("Collider/CollisionShape3D")
 rangeCollider = NodePath("Range/CollisionShape3D")
 animationTree = NodePath("AnimationTree")
 animationPlayer = NodePath("")
+
+[node name="Collider" type="StaticBody3D" parent="." groups=["enemy", "wall"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+shape = SubResource("CapsuleShape3D_iip0l")
 
 [node name="FlowerMajin" parent="." instance=ExtResource("1_g4mq2")]
 
@@ -184,7 +188,7 @@ transform = Transform3D(1, 8.9407e-08, -5.52989e-08, -5.4948e-08, 1, 2.46649e-08
 collision_layer = 12
 collision_mask = 2
 script = ExtResource("4_d2c7i")
-enemy = NodePath("../../..")
+enemy = NodePath("")
 
 [node name="HeadCollisionShape" type="CollisionShape3D" parent="Attachments/HeadAttachment/Hitbox"]
 shape = SubResource("SphereShape3D_4r0or")
@@ -266,10 +270,6 @@ attachment = NodePath("../../Attachments/PetalBackL")
 [node name="PetalBackR" parent="Petals" node_paths=PackedStringArray("attachment") instance=ExtResource("5_glesf")]
 visible = false
 attachment = NodePath("../../Attachments/PetalBackR")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
-shape = SubResource("CapsuleShape3D_iip0l")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 active = false

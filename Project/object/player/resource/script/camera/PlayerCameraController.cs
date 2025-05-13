@@ -436,7 +436,7 @@ public partial class PlayerCameraController : Node3D
 		cameraTransform.Origin += cameraTransform.Basis.X * viewportOffset.X;
 		cameraTransform.Origin += cameraTransform.Basis.Y * viewportOffset.Y;
 
-		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, CalculateLockonAngle(cameraTransform.Origin, data.blendData.pitchAngle));
+		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, CalculateLockonAngle(cameraTransform.Origin, data.blendData.pitchAngle + data.pitchTracking));
 
 		if (!isFreeCamActive || !isFreeCamLocked) // Only update camera transform when free cam isn't locked
 			cameraRoot.GlobalTransform = cameraTransform; // Update transform
@@ -453,8 +453,17 @@ public partial class PlayerCameraController : Node3D
 		Vector3 targetPosition = LockonTarget.GlobalPosition.Lerp(Player.CenterPosition, .5f);
 		Vector3 globalDelta = targetPosition - origin;
 		Vector3 referenceVector = globalDelta.RemoveVertical().Normalized();
-		float targetLockonPitchTracking = Mathf.Sign(globalDelta.Y) * globalDelta.AngleTo(referenceVector) - pitchAngle;
-		lockonPitchTracking = Mathf.Lerp(lockonPitchTracking, targetLockonPitchTracking, lockonTargetTransitionBlend);
+
+		DebugManager.DrawRay(targetPosition, globalDelta, Colors.Green);
+		DebugManager.DrawRay(targetPosition, referenceVector, Colors.Orange);
+
+		if (!referenceVector.IsZeroApprox())
+		{
+			// Only update lockon pitch tracking if we have a valid reference vector
+			float targetLockonPitchTracking = Mathf.Sign(globalDelta.Y) * globalDelta.AngleTo(referenceVector) - pitchAngle;
+			lockonPitchTracking = Mathf.Lerp(lockonPitchTracking, targetLockonPitchTracking, lockonTargetTransitionBlend);
+		}
+
 		return lockonPitchTracking * lockonTargetBlend;
 	}
 
