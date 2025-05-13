@@ -5,7 +5,6 @@ namespace Project.Gameplay.Triggers;
 
 public partial class WindTrigger : StageTriggerModule
 {
-
 	[Export(PropertyHint.NodePathValidTypes, "GPUParticles3D")] private NodePath windFX;
 	private GpuParticles3D _windFX;
 	[Export] private float windStrength = 15.0f;
@@ -23,14 +22,23 @@ public partial class WindTrigger : StageTriggerModule
 
 	public override void _PhysicsProcess(double _)
 	{
-		influence = Mathf.MoveToward(influence, isActive ? 1f : 0f, BlendRatio * PhysicsManager.physicsDelta);
-		if (Mathf.IsZeroApprox(influence))
+		influence = Mathf.MoveToward(influence, isActive && !IsAgainstReverseWall() ? 1f : 0f, BlendRatio * PhysicsManager.physicsDelta);
+		if (Mathf.IsZeroApprox(influence) && !isActive)
 			DisableProcessing();
 
 		if (!Player.Skills.IsSpeedBreakActive)
 			Player.ExternalVelocity += this.Forward() * windStrength * influence;
 
 		GlobalPosition = Player.PathFollower.GlobalPosition;
+	}
+
+	/// <summary> Checks whether the player is pushing against a wall. Used to avoid softlocks. </summary>
+	private bool IsAgainstReverseWall()
+	{
+		Vector3 castVector = this.Forward() * (Player.CollisionSize.X + windStrength * PhysicsManager.physicsDelta);
+		RaycastHit hit = this.CastRay(Player.GlobalPosition, castVector);
+		DebugManager.DrawRay(Player.GlobalPosition, castVector, hit ? Colors.Red : Colors.White);
+		return hit && hit.collidedObject.IsInGroup("wall");
 	}
 
 	public override void Activate()
