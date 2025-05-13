@@ -101,7 +101,7 @@ public partial class ExperienceResult : Control
 			return;
 		}
 
-		if (Input.IsActionJustPressed("ui_select") || Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel"))
+		if (Input.IsActionJustPressed("ui_select") || Input.IsActionJustPressed("button_jump") || Input.IsActionJustPressed("button_action") || Input.IsActionJustPressed("ui_cancel"))
 		{
 			if (isSkippingLevel)
 			{
