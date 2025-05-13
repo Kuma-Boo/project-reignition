@@ -2416,15 +2416,14 @@ OneShot = true
 script = ExtResource("27_l6k7w")
 path = NodePath("../../../../Static/Path/RiverPath")
 
-[node name="Dialog" type="Node3D" parent="MainAct/RiverEvent/Event"]
+[node name="CrashDialog" type="Node3D" parent="MainAct/RiverEvent/Event"]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 0.766998, 2.6837, 18.454)
 script = ExtResource("7_ys7sj")
-delays = [0.0, 0.2, 3.0, 0.0]
-displayLength = [2.8, 0.5, 0.0, null]
-textKeys = ["din_event_river_so", "din_event_river_sh", "din_event_river2_so", "din_event_river2_sh"]
+delays = [0.0, 0.2]
+displayLength = [2.8, 0.5]
+textKeys = ["din_event_river_so", "din_event_river_sh"]
 
 [node name="RiverEvent" parent="MainAct/RiverEvent/Event" instance=ExtResource("19_rr5sk")]
-"Trigger Settings/Animation Blending" = 0.0
 "Player Event Settings/Exit Lockout" = ExtResource("20_gl5qy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/RiverEvent/Event"]
@@ -2433,7 +2432,6 @@ shape = SubResource("BoxShape3D_7im1x")
 
 [node name="River" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -190, -95, -495)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -2442,6 +2440,11 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8.895,
 maxSpeed = 30.0
 path = NodePath("../../../Static/Path/RiverPath")
 pathFollower = NodePath("../../../Static/Path/RiverPath/RiverBoatPathFollower")
+
+[node name="SwimDialog" type="Node3D" parent="MainAct/River/Boat"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 4.42801, 55.898, -12.242)
+script = ExtResource("7_ys7sj")
+textKeys = ["din_event_river2_so", "din_event_river2_sh"]
 
 [node name="BoatStartTrigger" parent="MainAct/River" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8.59502, 0, 4.405)
@@ -4232,7 +4235,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.2)
 
 [node name="Cave" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -362, -223, -621)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -4743,7 +4745,7 @@ transform = Transform3D(1.69593, 0, -1.0601, 0, 0.5, 0, 1.0601, 0, 1.69593, 1.21
 enemyCount = 2
 
 [node name="EnemyStone3" parent="MainAct/Cave" instance=ExtResource("49_g35os")]
-transform = Transform3D(0.866025, 0, -0.5, 0, 0.5, 0, 0.5, 0, 0.866025, -1.60001, 5.99001, -171)
+transform = Transform3D(0.866025, 0, -0.5, 0, 0.6, 0, 0.5, 0, 0.866025, -1.60001, 6.19002, -171)
 enemyCount = 2
 
 [node name="SpringGroup" type="Node3D" parent="MainAct/Cave"]
@@ -5044,7 +5046,6 @@ transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 
 
 [node name="Spiral" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -439.2, -220.4, -848)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -5857,7 +5858,6 @@ shape = SubResource("BoxShape3D_fe0e4")
 
 [node name="Cavern" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -484.8, -275.5, -1110.7)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -6352,7 +6352,6 @@ fireSoulIndex = 3
 
 [node name="FeedingTunnel" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -670.5, -277, -1075.3)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -6494,7 +6493,7 @@ transform = Transform3D(-1.12219, 0, -0.425071, 0, 0.977, 0, 0.425071, 0, -1.122
 transform = Transform3D(-0.49983, 0, 0.0130536, 0, 1, 0, -0.0130536, 0, -0.49983, -8.8252, 10.91, 30.0209)
 
 [node name="WhiteRock14" parent="MainAct/FeedingTunnel" instance=ExtResource("38_158q5")]
-transform = Transform3D(-1.44371, 0, -0.40706, 0, 3, 0, 0.40706, 0, -1.44371, -9.3252, 11.51, 28.9358)
+transform = Transform3D(-0.766849, 0, 1.28916, 0, 3, 0, -1.28916, 0, -0.766849, -9.3252, 11.51, 28.9358)
 
 [node name="BoulderTrigger" parent="MainAct/FeedingTunnel" instance=ExtResource("3_bw6cf")]
 transform = Transform3D(-0.21799, 0, -0.97595, 0, 0.999999, 0, 0.97595, 0, -0.21799, -8.72845, 11.404, 29.1826)
@@ -6515,7 +6514,6 @@ transform = Transform3D(-0.577615, 0, -0.816309, 0, 1, 0, 0.816309, 0, -0.577615
 
 [node name="End" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -742, -262, -1073)
-visible = false
 script = ExtResource("9_uj3dw")
 saveVisibilityOnCheckpoint = true
 
@@ -6959,7 +6957,8 @@ shape = SubResource("BoxShape3D_7im1x")
 [connection signal="Deactivated" from="MainAct/CullingMap/FeedingTunnel-U" to="MainAct/FeedingTunnel" method="Activate"]
 [connection signal="Activated" from="MainAct/DialogTriggers/TrioStartTrigger" to="MainAct/Chase/DinoTrioGroup" method="Activate"]
 [connection signal="Respawned" from="MainAct/DialogTriggers/TrioStartTrigger" to="MainAct/Chase/DinoTrioGroup" method="Deactivate"]
-[connection signal="EventSkipped" from="MainAct/RiverEvent/Event/RiverEvent" to="MainAct/RiverEvent/Event/Dialog" method="Deactivate"]
+[connection signal="EventSkipped" from="MainAct/RiverEvent/Event/RiverEvent" to="MainAct/RiverEvent/Event/CrashDialog" method="Deactivate"]
+[connection signal="Activated" from="MainAct/River/Boat" to="MainAct/River/Boat/SwimDialog" method="Activate"]
 [connection signal="Activated" from="MainAct/River/BoatStartTrigger" to="MainAct/River/Boat" method="Activate"]
 [connection signal="Activated" from="MainAct/River/BoatEndTrigger" to="MainAct/River/Boat" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/Cave/LeftPath/FlowerMajin" to="MainAct/Cave/LeftPath/EnemyStone" method="IncrementCounter"]
