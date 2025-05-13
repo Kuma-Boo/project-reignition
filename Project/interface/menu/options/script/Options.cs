@@ -15,6 +15,11 @@ public partial class Options : Menu
 
 	private int maxSelection;
 	private int scrollOffset;
+
+	private float cursorBasePosition;
+	/// <summary> How much the cursor should move vertically for each option selected. </summary>
+	private readonly int CursorOptionSeparation = 64;
+
 	private void CalculateMaxSelection()
 	{
 		// Recalculate max selection
@@ -73,6 +78,7 @@ public partial class Options : Menu
 		// Prevent the options menu from jumping displays when moving through the options menu
 		SaveManager.Config.targetDisplay = DisplayServer.WindowGetCurrentScreen();
 
+		cursorBasePosition = cursor.Position.Y;
 		SetUpControlOptions();
 		UpdateLabels();
 		CalculateMaxSelection();
@@ -366,8 +372,8 @@ public partial class Options : Menu
 	private void UpdateCursor()
 	{
 		int offset = VerticalSelection - scrollOffset;
-		contentContainer.Position = Vector2.Up * scrollOffset * 60;
-		cursor.Position = new(cursor.Position.X, 306 + (offset * 60));
+		contentContainer.Position = Vector2.Up * scrollOffset * CursorOptionSeparation;
+		cursor.Position = new(cursor.Position.X, cursorBasePosition + (offset * CursorOptionSeparation));
 	}
 
 	/// <summary> Changes the visible submenu. Called from the page flip animation. </summary>
