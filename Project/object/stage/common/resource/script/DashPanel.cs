@@ -51,7 +51,7 @@ public partial class DashPanel : Area3D
 			spaceMode = LockoutResource.SpaceModes.Local,
 			movementAngle = 0,
 			speedRatio = speedRatio,
-			disableActionFlags = LockoutResource.ActionFlags.ActionButton,
+			disableActionFlags = LockoutResource.ActionFlags.ActionButton + (int)LockoutResource.ActionFlags.Backflip,
 			resetFlags = LockoutResource.ResetFlags.OnJump,
 			overrideSpeed = true,
 			tractionMultiplier = -1,
@@ -61,11 +61,7 @@ public partial class DashPanel : Area3D
 		};
 
 		if (Player.IsLockoutActive)
-		{
-			lockout.disableActionFlags = Player.ActiveLockoutData.disableActionFlags;
-			if (!lockout.disableActionFlags.HasFlag(LockoutResource.ActionFlags.ActionButton))
-				lockout.disableActionFlags += (int)LockoutResource.ActionFlags.ActionButton;
-		}
+			lockout.disableActionFlags |= Player.ActiveLockoutData.disableActionFlags;
 
 		if (alignToPath)
 		{
