@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://dlsd43s025utu"]
+
+[ext_resource type="PackedScene" uid="uid://rh85bh20fk6r" path="res://object/enemy/majin/Majin.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://cr4krg6ilhbor" path="res://object/enemy/majin/data/pirate storm/model/BlueMajin.gltf" id="2_wp3vb"]
+[ext_resource type="AnimationLibrary" uid="uid://cefjem82v4yuw" path="res://object/enemy/majin/data/animation/blue majin/MajinLibrary.gltf" id="3_exnuk"]
+
+[node name="BlueMajin" instance=ExtResource("2")]
+
+[node name="BlueMajin" parent="Root" index="0" instance=ExtResource("2_wp3vb")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Root/BlueMajin" index="1"]
+libraries = {
+&"MajinLibrary": ExtResource("3_exnuk")
+}
+
+[node name="AnimationTree" parent="." index="5"]
+root_node = NodePath("../Root/BlueMajin")
+anim_player = NodePath("../Root/BlueMajin/AnimationPlayer")

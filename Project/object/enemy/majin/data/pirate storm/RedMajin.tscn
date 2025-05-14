@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://bl5rffbayfil"]
+
+[ext_resource type="PackedScene" uid="uid://rh85bh20fk6r" path="res://object/enemy/majin/Majin.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://d2d0lynepob3d" path="res://object/enemy/majin/data/pirate storm/model/RedMajin.gltf" id="2_3s7df"]
+[ext_resource type="AnimationLibrary" uid="uid://duuj6x0f00ny7" path="res://object/enemy/majin/data/animation/red majin/MajinLibrary.gltf" id="3_kspgr"]
+
+[node name="RedMajin" instance=ExtResource("1")]
+"Attack Settings/Attack Type" = 2
+"Attack Settings/Flame Active Time" = 1.0
+"Attack Settings/Flame Inactive Time" = 0.0
+"Attack Settings/Flame Aggression Radius" = 0
+"Attack Settings/Attack Instantly" = false
+maxHealth = 2
+
+[node name="RedMajin" parent="Root" index="0" instance=ExtResource("2_3s7df")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Root/RedMajin" index="1"]
+libraries = {
+&"MajinLibrary": ExtResource("3_kspgr")
+}
+
+[node name="AnimationTree" parent="." index="5"]
+root_node = NodePath("../Root/RedMajin")
+anim_player = NodePath("../Root/RedMajin/AnimationPlayer")
