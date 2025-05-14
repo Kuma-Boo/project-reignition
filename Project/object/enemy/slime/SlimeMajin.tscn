@@ -1,0 +1,176 @@
+[gd_scene load_steps=31 format=3 uid="uid://cy240mxcsv0p7"]
+
+[ext_resource type="PackedScene" uid="uid://lb0gab47jte1" path="res://object/enemy/slime/data/model/SlimeMajin.gltf" id="1_gxrr7"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_28g6o"]
+animation = &"defeat"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_x20rx"]
+xfade_time = 0.1
+input_0/name = "enabled"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "disabled"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gxrr7"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_1xo7p"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_t57jp"]
+animation = &"move"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_xewoi"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ukayf"]
+animation = &"shock-end"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d6ith"]
+animation = &"shock-start"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sovow"]
+animation = &"shock-warn"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wwh5e"]
+animation = &"shock"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_28g6o"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_x20rx"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1xo7p"]
+xfade_time = 0.2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_t57jp"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xewoi"]
+xfade_time = 0.2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_lt46f"]
+states/shock/node = SubResource("AnimationNodeAnimation_wwh5e")
+states/shock/position = Vector2(621, 100)
+states/shock-end/node = SubResource("AnimationNodeAnimation_ukayf")
+states/shock-end/position = Vector2(762, 100)
+states/shock-start/node = SubResource("AnimationNodeAnimation_d6ith")
+states/shock-start/position = Vector2(492, 100)
+states/shock-warn/node = SubResource("AnimationNodeAnimation_sovow")
+states/shock-warn/position = Vector2(348, 100)
+transitions = ["Start", "shock-warn", SubResource("AnimationNodeStateMachineTransition_28g6o"), "shock-warn", "shock-start", SubResource("AnimationNodeStateMachineTransition_x20rx"), "shock-start", "shock", SubResource("AnimationNodeStateMachineTransition_1xo7p"), "shock", "shock-end", SubResource("AnimationNodeStateMachineTransition_t57jp"), "shock-end", "End", SubResource("AnimationNodeStateMachineTransition_xewoi")]
+graph_offset = Vector2(-270, 1)
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_iss1x"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bqhcx"]
+animation = &"spawn-end"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0ah1n"]
+animation = &"spawn-start"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pxeob"]
+animation = &"spawn"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yvjin"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ey22j"]
+xfade_time = 0.1
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wt2ef"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jobc0"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ytn4a"]
+states/spawn/node = SubResource("AnimationNodeAnimation_pxeob")
+states/spawn/position = Vector2(479, 100)
+states/spawn-end/node = SubResource("AnimationNodeAnimation_bqhcx")
+states/spawn-end/position = Vector2(646, 100)
+states/spawn-start/node = SubResource("AnimationNodeAnimation_0ah1n")
+states/spawn-start/position = Vector2(349, 100)
+transitions = ["spawn-end", "End", SubResource("AnimationNodeStateMachineTransition_yvjin"), "spawn-start", "spawn", SubResource("AnimationNodeStateMachineTransition_ey22j"), "spawn", "spawn-end", SubResource("AnimationNodeStateMachineTransition_wt2ef"), "Start", "spawn-start", SubResource("AnimationNodeStateMachineTransition_jobc0")]
+graph_offset = Vector2(-249, -17)
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_dr7u3"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lt46f"]
+animation = &"spit"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_bqhcx"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_gxrr7"]
+graph_offset = Vector2(-914.223, 73.6142)
+nodes/defeat_anim/node = SubResource("AnimationNodeAnimation_28g6o")
+nodes/defeat_anim/position = Vector2(120, 40)
+nodes/defeat_transition/node = SubResource("AnimationNodeTransition_x20rx")
+nodes/defeat_transition/position = Vector2(340, 140)
+nodes/idle_anim/node = SubResource("AnimationNodeAnimation_gxrr7")
+nodes/idle_anim/position = Vector2(-920, 180)
+nodes/idle_speed/node = SubResource("AnimationNodeTimeScale_1xo7p")
+nodes/idle_speed/position = Vector2(-700, 180)
+nodes/move_anim/node = SubResource("AnimationNodeAnimation_t57jp")
+nodes/move_anim/position = Vector2(-920, 380)
+nodes/move_trigger/node = SubResource("AnimationNodeOneShot_xewoi")
+nodes/move_trigger/position = Vector2(-520, 180)
+nodes/output/position = Vector2(560, 160)
+nodes/shock_state/node = SubResource("AnimationNodeStateMachine_lt46f")
+nodes/shock_state/position = Vector2(-380, 480)
+nodes/shock_trigger/node = SubResource("AnimationNodeOneShot_iss1x")
+nodes/shock_trigger/position = Vector2(-60, 200)
+nodes/spawn_state/node = SubResource("AnimationNodeStateMachine_ytn4a")
+nodes/spawn_state/position = Vector2(-120, 480)
+nodes/spawn_trigger/node = SubResource("AnimationNodeOneShot_dr7u3")
+nodes/spawn_trigger/position = Vector2(120, 200)
+nodes/spit_anim/node = SubResource("AnimationNodeAnimation_lt46f")
+nodes/spit_anim/position = Vector2(-600, 480)
+nodes/spit_trigger/node = SubResource("AnimationNodeOneShot_bqhcx")
+nodes/spit_trigger/position = Vector2(-280, 200)
+node_connections = [&"defeat_transition", 0, &"defeat_anim", &"defeat_transition", 1, &"spawn_trigger", &"idle_speed", 0, &"idle_anim", &"move_trigger", 0, &"idle_speed", &"move_trigger", 1, &"move_anim", &"output", 0, &"defeat_transition", &"shock_trigger", 0, &"spit_trigger", &"shock_trigger", 1, &"shock_state", &"spawn_trigger", 0, &"shock_trigger", &"spawn_trigger", 1, &"spawn_state", &"spit_trigger", 0, &"move_trigger", &"spit_trigger", 1, &"spit_anim"]
+
+[node name="SlimeMajin" type="Node3D"]
+
+[node name="SlimeMajin" parent="." instance=ExtResource("1_gxrr7")]
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
+root_node = NodePath("../SlimeMajin")
+tree_root = SubResource("AnimationNodeBlendTree_gxrr7")
+anim_player = NodePath("../SlimeMajin/AnimationPlayer")
+parameters/defeat_transition/current_state = "disabled"
+parameters/defeat_transition/transition_request = ""
+parameters/defeat_transition/current_index = 1
+parameters/idle_speed/scale = 0.9
+parameters/move_trigger/active = false
+parameters/move_trigger/internal_active = false
+parameters/move_trigger/request = 0
+parameters/shock_trigger/active = false
+parameters/shock_trigger/internal_active = false
+parameters/shock_trigger/request = 0
+parameters/spawn_trigger/active = false
+parameters/spawn_trigger/internal_active = false
+parameters/spawn_trigger/request = 0
+parameters/spit_trigger/active = false
+parameters/spit_trigger/internal_active = false
+parameters/spit_trigger/request = 0
+
+[editable path="SlimeMajin"]
