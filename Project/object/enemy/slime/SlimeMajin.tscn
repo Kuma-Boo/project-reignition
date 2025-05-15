@@ -1,6 +1,19 @@
-[gd_scene load_steps=31 format=3 uid="uid://cy240mxcsv0p7"]
+[gd_scene load_steps=36 format=3 uid="uid://cy240mxcsv0p7"]
 
 [ext_resource type="PackedScene" uid="uid://lb0gab47jte1" path="res://object/enemy/slime/data/model/SlimeMajin.gltf" id="1_gxrr7"]
+[ext_resource type="Script" uid="uid://dyeh4owv5g3eu" path="res://object/enemy/slime/data/SlimeMajin.cs" id="1_ukayf"]
+[ext_resource type="Script" uid="uid://cp6er04j2b86u" path="res://object/enemy/EnemyHurtbox.cs" id="3_d6ith"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_sovow"]
+radius = 0.6
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_d6ith"]
+radius = 0.6
+height = 1.8
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_d6ith"]
+height = 15.0
+radius = 50.0
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_28g6o"]
 animation = &"defeat"
@@ -119,7 +132,7 @@ fadein_time = 0.2
 fadeout_time = 0.2
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_gxrr7"]
-graph_offset = Vector2(-914.223, 73.6142)
+graph_offset = Vector2(-967.609, 221.389)
 nodes/defeat_anim/node = SubResource("AnimationNodeAnimation_28g6o")
 nodes/defeat_anim/position = Vector2(120, 40)
 nodes/defeat_transition/node = SubResource("AnimationNodeTransition_x20rx")
@@ -148,8 +161,47 @@ nodes/spit_trigger/position = Vector2(-280, 200)
 node_connections = [&"defeat_transition", 0, &"defeat_anim", &"defeat_transition", 1, &"spawn_trigger", &"idle_speed", 0, &"idle_anim", &"move_trigger", 0, &"idle_speed", &"move_trigger", 1, &"move_anim", &"output", 0, &"defeat_transition", &"shock_trigger", 0, &"spit_trigger", &"shock_trigger", 1, &"shock_state", &"spawn_trigger", 0, &"shock_trigger", &"spawn_trigger", 1, &"spawn_state", &"spit_trigger", 0, &"move_trigger", &"spit_trigger", 1, &"spit_anim"]
 
 [node name="SlimeMajin" type="Node3D"]
+script = ExtResource("1_ukayf")
+pearlAmount = 15
+damagePlayer = true
+root = NodePath("SlimeMajin")
+hurtbox = NodePath("HitboxRoot/Hurtbox")
+collider = NodePath("HitboxRoot/Hurtbox/CollisionShape3D")
+rangeCollider = NodePath("Range/CollisionShape3D")
+animationTree = NodePath("AnimationTree")
+animationPlayer = NodePath("")
 
 [node name="SlimeMajin" parent="." instance=ExtResource("1_gxrr7")]
+
+[node name="HitboxRoot" type="Node3D" parent="."]
+
+[node name="Hurtbox" type="Area3D" parent="HitboxRoot" node_paths=PackedStringArray("enemy")]
+transform = Transform3D(1, 2.66947e-15, -3.55271e-15, -1.50942e-14, 1, 2.04636e-12, 1.42109e-14, -2.04636e-12, 1, 3.93404e-08, 0.900002, -2.92193e-06)
+collision_layer = 12
+collision_mask = 2
+script = ExtResource("3_d6ith")
+enemy = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxRoot/Hurtbox"]
+shape = SubResource("SphereShape3D_sovow")
+
+[node name="EnvironmentCollider" type="StaticBody3D" parent="HitboxRoot" groups=["enemy", "wall"]]
+transform = Transform3D(1, 2.66947e-15, -3.55271e-15, -1.50942e-14, 1, 2.04636e-12, 1.42109e-14, -2.04636e-12, 1, 3.93404e-08, 0.900002, -2.92193e-06)
+collision_layer = 12
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxRoot/EnvironmentCollider"]
+transform = Transform3D(1, -7.27012e-27, 0, -2.90806e-26, 1, 0, 0, 0, 1, 7.10543e-15, -0.3, -4.54747e-13)
+shape = SubResource("CapsuleShape3D_d6ith")
+
+[node name="Range" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Range"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("CylinderShape3D_d6ith")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 active = false
@@ -172,5 +224,10 @@ parameters/spawn_trigger/request = 0
 parameters/spit_trigger/active = false
 parameters/spit_trigger/internal_active = false
 parameters/spit_trigger/request = 0
+
+[connection signal="area_entered" from="HitboxRoot/Hurtbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="HitboxRoot/Hurtbox" to="." method="OnExited"]
+[connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
+[connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
 
 [editable path="SlimeMajin"]

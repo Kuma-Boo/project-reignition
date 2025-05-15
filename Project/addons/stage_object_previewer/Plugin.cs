@@ -62,6 +62,8 @@ public partial class Plugin : EditorPlugin
 			UpdateMovingObject();
 		else if (target is Majin)
 			DrawMajin();
+		else if (target is SlimeMajin)
+			DrawSlimeMajin();
 
 		if (target is Enemy)
 			DrawEnemy();
@@ -156,6 +158,18 @@ public partial class Plugin : EditorPlugin
 
 		if (majin.IsRedMajin && majin.FlameAggressionRadius != 0)
 			DrawPerspectiveCircle(majin.GlobalPosition, Basis.Identity, majin.FlameAggressionRadius, Vector3.Forward, Vector3.Up, SpecialDrawColor);
+	}
+
+	private void DrawSlimeMajin()
+	{
+		SlimeMajin slime = target as SlimeMajin;
+		if (slime.IsSpawnLaunchEnabled)
+			DrawLaunchSettings(slime.SpawnLaunchSettings, Colors.Blue);
+
+		if (slime.IsMovementEnabled)
+		{
+			DrawLine(slime.MovementStartPosition, slime.MovementEndPosition, Colors.Blue);
+		}
 	}
 
 	private void DrawMajinPath(Majin majin)
