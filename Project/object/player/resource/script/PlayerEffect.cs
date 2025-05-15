@@ -297,6 +297,7 @@ public partial class PlayerEffect : Node3D
 		Snow,
 		Metal,
 		Water,
+		Rock,
 		Count
 	}
 

@@ -14,7 +14,7 @@ public partial class SlimeMajin : Enemy
 	private Vector3 SpawnPosition => InitialPosition + spawnOffset * GlobalBasis.Inverse();
 	public bool IsSpawnLaunchEnabled => !spawnOffset.IsZeroApprox();
 	private LaunchSettings spawnLaunchSettings;
-	public LaunchSettings SpawnLaunchSettings => LaunchSettings.Create(SpawnPosition, InitialPosition, spawnHeight);
+	public LaunchSettings SpawnLaunchSettings => LaunchSettings.Create(SpawnPosition, InitialPosition, spawnHeight, true);
 	private float spawnTimer;
 
 	[ExportSubgroup("Movement Settings")]

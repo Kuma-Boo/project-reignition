@@ -1,0 +1,117 @@
+[gd_scene load_steps=25 format=3 uid="uid://csk7y7y8vgg6l"]
+
+[ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_g84th"]
+[ext_resource type="PackedScene" uid="uid://npgcl1ctbjyt" path="res://area/5 pirate storm/act 1/environment/01Opening.tscn" id="2_444mk"]
+[ext_resource type="PackedScene" uid="uid://ppx66n6n2ccl" path="res://area/5 pirate storm/act 1/environment/collision/Collision.tscn" id="2_bd1hp"]
+[ext_resource type="Curve3D" uid="uid://cmrjnq8ami33v" path="res://area/5 pirate storm/act 1/environment/path/OpeningShipPath.tres" id="2_hm1f8"]
+[ext_resource type="PackedScene" uid="uid://c6jerupko3il7" path="res://area/5 pirate storm/act 1/environment/02Islands.tscn" id="3_duubi"]
+[ext_resource type="PackedScene" uid="uid://b0fx4f7js5dyt" path="res://area/5 pirate storm/act 1/environment/03Ships.tscn" id="4_ep74v"]
+[ext_resource type="PackedScene" uid="uid://boal0kmojcixy" path="res://area/5 pirate storm/act 1/environment/04Grotto.tscn" id="5_h4y5m"]
+[ext_resource type="PackedScene" uid="uid://c14vakcmcerx5" path="res://area/5 pirate storm/act 1/environment/05Cave.tscn" id="6_x0cas"]
+[ext_resource type="PackedScene" uid="uid://dnlu6nswrjyrn" path="res://area/5 pirate storm/act 1/environment/06GhostShip.tscn" id="7_0trx6"]
+[ext_resource type="PackedScene" uid="uid://o4wc1a8agm1k" path="res://area/5 pirate storm/act 1/environment/07End.tscn" id="8_18uju"]
+[ext_resource type="PackedScene" uid="uid://iavqy6pjpw62" path="res://area/5 pirate storm/act 1/environment/Sea1.tscn" id="9_v0vsi"]
+[ext_resource type="PackedScene" uid="uid://beejs2we1ggra" path="res://area/5 pirate storm/act 1/environment/Sea2.tscn" id="10_4ui3u"]
+[ext_resource type="Curve3D" uid="uid://bccvrpj8t3c3v" path="res://area/5 pirate storm/act 1/environment/path/OpeningWoodPath.tres" id="12_duubi"]
+[ext_resource type="Curve3D" uid="uid://df2ht8cc25i2i" path="res://area/5 pirate storm/act 1/environment/path/OpeningWood2Path.tres" id="13_18uju"]
+[ext_resource type="Curve3D" uid="uid://b3o3fmhpcnbp5" path="res://area/5 pirate storm/act 1/environment/path/BrokenShipPath.tres" id="14_v0vsi"]
+[ext_resource type="Curve3D" uid="uid://cxd83dgsg1ihh" path="res://area/5 pirate storm/act 1/environment/path/IslandPath.tres" id="15_4ui3u"]
+[ext_resource type="Curve3D" uid="uid://j0pw6c8327xs" path="res://area/5 pirate storm/act 1/environment/path/BulletPath.tres" id="16_28ai1"]
+[ext_resource type="Curve3D" uid="uid://bor17g0hl33d6" path="res://area/5 pirate storm/act 1/environment/path/ShipPath.tres" id="17_bd1hp"]
+[ext_resource type="Curve3D" uid="uid://c23n3ie8f2n72" path="res://area/5 pirate storm/act 1/environment/path/CavePath.tres" id="18_v0vsi"]
+[ext_resource type="Curve3D" uid="uid://b68lm1ndi1aq" path="res://area/5 pirate storm/act 1/environment/path/BoatPath.tres" id="19_4ui3u"]
+[ext_resource type="Curve3D" uid="uid://dfatrvei4nnld" path="res://area/5 pirate storm/act 1/environment/path/GrindPath.tres" id="19_28ai1"]
+[ext_resource type="AudioStream" uid="uid://bdupjn76esufr" path="res://sound/ost/adventure disc/9 No Way Through.mp3" id="22_m37yi"]
+[ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="23_s1a7j"]
+
+[sub_resource type="Environment" id="Environment_28ai1"]
+tonemap_mode = 2
+tonemap_exposure = 1.5
+
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
+script = ExtResource("1_g84th")
+pathParent = NodePath("Path")
+Environment = NodePath("WorldEnvironment")
+
+[node name="Collision" parent="." instance=ExtResource("2_bd1hp")]
+visible = false
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="01Opening" parent="Visuals" instance=ExtResource("2_444mk")]
+
+[node name="02Islands" parent="Visuals" instance=ExtResource("3_duubi")]
+
+[node name="03Ships" parent="Visuals" instance=ExtResource("4_ep74v")]
+
+[node name="04Grotto" parent="Visuals" instance=ExtResource("5_h4y5m")]
+
+[node name="05Cave" parent="Visuals" instance=ExtResource("6_x0cas")]
+
+[node name="06GhostShip" parent="Visuals" instance=ExtResource("7_0trx6")]
+
+[node name="07End" parent="Visuals" instance=ExtResource("8_18uju")]
+
+[node name="Sea1" parent="Visuals" instance=ExtResource("9_v0vsi")]
+
+[node name="Sea2" parent="Visuals" instance=ExtResource("10_4ui3u")]
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="OpeningShipPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.426, -49.185)
+curve = ExtResource("2_hm1f8")
+
+[node name="OpeningWoodPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.003, 0.55, 63.919)
+curve = ExtResource("12_duubi")
+
+[node name="OpeningWood2Path" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.747, 9.575, 101.127)
+curve = ExtResource("13_18uju")
+
+[node name="BrokenShipPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.355, 3.107, 165.226)
+curve = ExtResource("14_v0vsi")
+
+[node name="IslandPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.506, 2, 364.778)
+curve = ExtResource("15_4ui3u")
+
+[node name="BulletPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -129.102, 104.707, 770.746)
+curve = ExtResource("16_28ai1")
+
+[node name="ShipPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -129.888, 33.118, 1031.93)
+curve = ExtResource("17_bd1hp")
+
+[node name="CavePath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.24, 2.064, 1547.18)
+curve = ExtResource("18_v0vsi")
+
+[node name="GrindPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -515.492, 55.231, 1584.07)
+curve = ExtResource("19_28ai1")
+
+[node name="BoatPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -497.085, 0, 1958.05)
+curve = ExtResource("19_4ui3u")
+
+[node name="Triggers" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("22_m37yi")
+bus = &"BGM"
+script = ExtResource("23_s1a7j")
+loopStartPosition = 7.44
+loopEndPosition = 227.86
+isStageMusic = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_28ai1")
+
+[editable path="Collision"]
