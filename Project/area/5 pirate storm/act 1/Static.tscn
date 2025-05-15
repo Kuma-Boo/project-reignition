@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://csk7y7y8vgg6l"]
+[gd_scene load_steps=27 format=3 uid="uid://csk7y7y8vgg6l"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_g84th"]
 [ext_resource type="PackedScene" uid="uid://npgcl1ctbjyt" path="res://area/5 pirate storm/act 1/environment/01Opening.tscn" id="2_444mk"]
@@ -23,10 +23,16 @@
 [ext_resource type="Curve3D" uid="uid://dfatrvei4nnld" path="res://area/5 pirate storm/act 1/environment/path/GrindPath.tres" id="19_28ai1"]
 [ext_resource type="AudioStream" uid="uid://bdupjn76esufr" path="res://sound/ost/adventure disc/9 No Way Through.mp3" id="22_m37yi"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="23_s1a7j"]
+[ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="24_havkg"]
+[ext_resource type="Material" uid="uid://8kc12fso5xr1" path="res://area/5 pirate storm/data/material/Water.tres" id="25_88ndg"]
 
 [sub_resource type="Environment" id="Environment_28ai1"]
+ambient_light_source = 2
 tonemap_mode = 2
 tonemap_exposure = 1.5
+glow_enabled = true
+glow_blend_mode = 0
+adjustment_enabled = true
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_g84th")
@@ -102,6 +108,10 @@ curve = ExtResource("19_4ui3u")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+
+[node name="PlanarReflectionRenderer" parent="." instance=ExtResource("24_havkg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -263, -3.1, 1562)
+reflectionMaterials = [ExtResource("25_88ndg")]
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("22_m37yi")
