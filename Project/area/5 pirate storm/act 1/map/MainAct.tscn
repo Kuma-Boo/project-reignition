@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bkuwj6xj81tuv"]
+[gd_scene load_steps=26 format=3 uid="uid://bkuwj6xj81tuv"]
 
 [ext_resource type="PackedScene" uid="uid://csk7y7y8vgg6l" path="res://area/5 pirate storm/act 1/Static.tscn" id="1_8fsep"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_kflh0"]
@@ -11,6 +11,10 @@
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="8_ytq25"]
 [ext_resource type="PackedScene" uid="uid://diybup7aqwl4a" path="res://object/enemy/majin/data/pirate storm/GreenMajin.tscn" id="9_slh8b"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="11_q0cv5"]
+[ext_resource type="Material" uid="uid://6q7k10n0i0bn" path="res://area/5 pirate storm/data/material/Rain Drop.tres" id="12_few40"]
+[ext_resource type="Shader" uid="uid://c3bm50tda03vo" path="res://area/5 pirate storm/data/shader/RainProcessMaterial.gdshader" id="12_p6wrh"]
+[ext_resource type="Script" uid="uid://ch4pb1qqwy5al" path="res://object/stage/common/resource/script/CameraFollower.cs" id="13_2wlyt"]
+[ext_resource type="Material" uid="uid://86s1me03t0lu" path="res://area/5 pirate storm/data/material/Rain Impact.tres" id="13_g88he"]
 
 [sub_resource type="Curve" id="Curve_slh8b"]
 _limits = [-2.0, 0.0, 0.0, 1.0]
@@ -22,11 +26,59 @@ _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.19999, -1), 0.0, 0.0, 0, 0, Vector2(0.2, 1.49012e-08), 5.99108, 5.99108, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(0.6, -0.8), 0.0, 0.0, 0, 0, Vector2(0.79999, -0.8), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), 0.0, 0.0, 0, 0]
 point_count = 8
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bhaba"]
+shader = ExtResource("12_p6wrh")
+shader_parameter/direction = Vector3(0, -1, 0)
+shader_parameter/water_speed = 100.0
+shader_parameter/emission_shape_offset = Vector3(0, 15, 12)
+shader_parameter/emission_box_extents = Vector3(20, 0.1, 20)
+shader_parameter/gravity = Vector3(0, -9.8, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_2wlyt"]
+material = ExtResource("12_few40")
+size = Vector2(0.1, 2)
+center_offset = Vector3(0, 1, 0)
+
+[sub_resource type="Curve" id="Curve_g88he"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 0), -2.3043, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_2wlyt"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_g88he")
+
+[sub_resource type="Curve" id="Curve_2wlyt"]
+_data = [Vector2(0, 0.154067), 0.0, 2.98176, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_p6wrh"]
+width = 64
+curve = SubResource("Curve_2wlyt")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2wlyt"]
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.2
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_p6wrh")
+alpha_curve = SubResource("CurveTexture_2wlyt")
+anim_speed_min = 1.5
+anim_speed_max = 1.5
+
+[sub_resource type="QuadMesh" id="QuadMesh_g88he"]
+material = ExtResource("13_g88he")
+orientation = 1
+
 [node name="MainAct" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_8fsep")]
 Data = ExtResource("2_qkxl1")
 InitialCameraSettings = ExtResource("3_8cccl")
+environmentFxFactor = 1.0
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -209,13 +261,13 @@ jumpCount = 7
 rangeOverride = 25
 
 [node name="SlimeMajin3" parent="MainAct/Opening" instance=ExtResource("3_qkxl1")]
-transform = Transform3D(-0.775224, -0.361493, -0.518027, -0.422618, 0.906308, 0, 0.469492, 0.218928, -0.855364, -0.853782, -8.4832, 229.061)
+transform = Transform3D(-0.775224, -0.361493, -0.518027, -0.422618, 0.906308, 0, 0.469492, 0.218928, -0.855364, -0.817633, -8.57383, 229.039)
 spawnOffset = Vector3(15, -5, 0)
 jumpCount = 7
 rangeOverride = 25
 
 [node name="SlimeMajin4" parent="MainAct/Opening" instance=ExtResource("3_qkxl1")]
-transform = Transform3D(-0.775224, -0.361493, -0.518027, -0.422618, 0.906308, 0, 0.469492, 0.218928, -0.855364, 7.17382, -8.06058, 240.567)
+transform = Transform3D(-0.775224, -0.361493, -0.518027, -0.422618, 0.906308, 0, 0.469492, 0.218928, -0.855364, 7.24612, -8.24184, 240.523)
 spawnOffset = Vector3(-8, -10, 0)
 jumpCount = 7
 rangeOverride = 25
@@ -261,6 +313,43 @@ transform = Transform3D(0.984808, 0.133022, 0.111619, 0, 0.642787, -0.766044, -0
 MiddleHeight = 5.0
 FinalHeight = 2.0
 Distance = 26.0
+
+[node name="Rain" type="GPUParticles3D" parent="."]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 128
+sub_emitter = NodePath("RainImpact")
+lifetime = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ShaderMaterial_bhaba")
+draw_pass_1 = SubResource("QuadMesh_2wlyt")
+script = ExtResource("13_2wlyt")
+
+[node name="RainImpact" type="GPUParticles3D" parent="Rain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 128
+lifetime = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_2wlyt")
+draw_pass_1 = SubResource("QuadMesh_g88he")
+
+[node name="RainCollision" type="GPUParticlesCollisionHeightField3D" parent="Rain"]
+layers = 32
+cull_mask = 4293918752
+size = Vector3(30, 30, 60)
+resolution = 0
+follow_camera_enabled = true
+heightfield_mask = 2
 
 [connection signal="Activated" from="MainAct/Opening/Spring" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Opening/Spring" to="Static/Collision/OneWayWall" method="Activate"]

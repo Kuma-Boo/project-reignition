@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode diffuse_burley, specular_disabled, depth_prepass_alpha, depth_draw_opaque;
+render_mode diffuse_burley, specular_disabled, depth_draw_opaque;
 
 global uniform float time;
 

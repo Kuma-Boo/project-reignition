@@ -3,9 +3,9 @@ using Godot;
 namespace Project.Gameplay.Objects
 {
 	/// <summary>
-	/// Moves the skybox with the current camera.
+	/// Moves the object with the current camera.
 	/// </summary>
-	public partial class Skybox : Node3D
+	public partial class CameraFollower : Node3D
 	{
 		private PlayerController Player => StageSettings.Player;
 
