@@ -8,7 +8,7 @@ public partial class SlimeMajin : Enemy
 {
 	[ExportSubgroup("Spawn Settings")]
 	[Export] private Vector3 spawnOffset;
-	[Export] private float spawnHeight = 12f;
+	[Export] private float spawnHeight = 10f;
 	private Vector3 initialPosition;
 	private Vector3 InitialPosition => Engine.IsEditorHint() ? GlobalPosition : initialPosition;
 	private Vector3 SpawnPosition => InitialPosition + spawnOffset * GlobalBasis.Inverse();
@@ -88,13 +88,16 @@ public partial class SlimeMajin : Enemy
 
 	protected override void Spawn()
 	{
+		if (IsActive)
+			return;
+
 		spawnTimer = 0;
 		spawnLaunchSettings = SpawnLaunchSettings; // Cache launch settings so we don't have to keep recalculating it
 
 		slimeState = SlimeState.Spawning;
 		SpawnStatePlayback.Start(SpawnStartAnimation);
 		AnimationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-
+		IsActive = true;
 
 		base.Spawn();
 	}

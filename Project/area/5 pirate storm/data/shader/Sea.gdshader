@@ -1,4 +1,5 @@
 shader_type spatial;
+render_mode unshaded;
 
 global uniform float time;
 
