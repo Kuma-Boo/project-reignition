@@ -92,6 +92,7 @@ public partial class PathTrigger : StageTriggerModule
 		{
 			Player.Camera.PathFollower.SetActivePath(cameraDeactivatePath, cameraPathDeactivateReverse);
 			Player.Camera.LimitToPathDistance = limitCameraDistanceToPath;
+			Player.Camera.UpdatePathBlendSpeed(Mathf.IsZeroApprox(cameraPathBlendTime) ? 0f : 1f / cameraPathBlendTime);
 		}
 	}
 
