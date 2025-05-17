@@ -415,8 +415,8 @@ public partial class PlayerController : CharacterBody3D
 	public void UpdateUpDirection(bool quickReset = false, Vector3 upDirection = new())
 	{
 		// Calculate target up direction
-		if (Camera.ActiveSettings.followPathTilt) // Always use PathFollower.Up when on a tilted path
-			upDirection = PathFollower.Up();
+		if (Camera.ActiveSettings.tiltMode == CameraSettingsResource.TiltModeEnum.FollowPath)
+			upDirection = PathFollower.Up(); // Always use PathFollower.Up when on a tilted path
 		else if (upDirection.IsEqualApprox(Vector3.Zero))
 			upDirection = Vector3.Up;
 

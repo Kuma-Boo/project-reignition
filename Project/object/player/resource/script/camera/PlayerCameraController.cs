@@ -717,12 +717,46 @@ public partial class PlayerCameraController : Node3D
 		// Interpolate angles
 		data.blendData.yawAngle = Mathf.LerpAngle(targetYawAngle, sampledTargetYawAngle, data.blendData.SampleBlend) + reverseBlendRotationAmount;
 		data.blendData.pitchAngle = Mathf.Lerp(targetPitchAngle, sampledTargetPitchAngle, data.blendData.SampleBlend);
-		PathFollower.TiltEnabled = settings.followPathTilt;
-		if (settings.followPathTilt) // Calculate tilt
-			data.blendData.tiltAngle = sampler.Right().SignedAngleTo(-PathFollower.SideAxis, sampler.Forward()) * yawSamplingFix;
+
+		// Calculate tilt angle
+		data.blendData.tiltAngle = CalculateTilt(settings, ref data, yawSamplingFix);
 
 		// Update backstep blend
 		data.blendData.UpdateBackstepBlend(Player.IsMovingBackward, SnapFlag);
+	}
+
+	private float CalculateTilt(CameraSettingsResource settings, ref CameraPositionData data, int yawSamplingFix)
+	{
+		if (settings.tiltMode == CameraSettingsResource.TiltModeEnum.Disabled)
+			return 0;
+
+		if (settings.tiltMode == CameraSettingsResource.TiltModeEnum.FollowPath)
+		{
+			// Calculate tilt
+			PathFollower.TiltEnabled = true; // Sample the tilt
+			float targetTilt = sampler.Right().SignedAngleTo(-PathFollower.SideAxis, sampler.Forward()) * yawSamplingFix;
+			PathFollower.TiltEnabled = false;
+			return targetTilt;
+		}
+
+		// Override tilt mode (includes sway)
+		if (Mathf.IsZeroApprox(settings.tiltMagnitude)) // No swaying
+			return settings.tiltAngle;
+
+		if (Mathf.IsZeroApprox(settings.tiltLength))
+		{
+			GD.PushError("Cammera swaying is enabled, but the tilt length is 0! Disabling sway.");
+			return settings.tiltAngle;
+		}
+
+		// Swaying logic. Uses a SmoothStep and a [-1, 1] interval.
+		// The timer loops by going from 1 -> -1 so the absolute value cycles between 0 and 1 smoothly.
+		data.blendData.tiltSwayTime += PhysicsManager.physicsDelta / settings.tiltLength;
+		if (data.blendData.tiltSwayTime >= 1f) // Loop timer
+			data.blendData.tiltSwayTime -= 2f;
+
+		float t = Mathf.SmoothStep(0f, 1f, Mathf.Abs(data.blendData.tiltSwayTime));
+		return Mathf.Lerp(settings.tiltAngle - settings.tiltMagnitude, settings.tiltAngle + settings.tiltMagnitude, t);
 	}
 
 	private struct CameraPositionData
@@ -1244,6 +1278,8 @@ public partial class CameraBlendData : GodotObject
 	public float yawAngle;
 	/// <summary> Current tilt angle. </summary>
 	public float tiltAngle;
+	/// <summary> Timer to keep track of swaying time. </summary>
+	public float tiltSwayTime;
 
 	/// <summary> How far the camera should be. </summary>
 	public float distance;

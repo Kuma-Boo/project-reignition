@@ -8,77 +8,90 @@ namespace Project.Gameplay;
 public partial class CameraSettingsResource : Resource
 {
 	#region Editor
-	private const string COPY_POSITION_KEY = "Copy Position";
-	private const string COPY_ROTATION_KEY = "Copy Rotation";
+	private const string CopyPositionKey = "Copy Position";
+	private const string CopyRotationKey = "Copy Rotation";
 
-	private const string DISTANCE_KEY = "Distance/Distance";
-	private const string BACKSTEP_DISTANCE_KEY = "Distance/Backstep Distance";
-	private const string DISTANCE_MODE_KEY = "Distance/Distance Calculation Mode";
-	private const string SAMPLE_OFFSET_KEY = "Distance/Sample Offset";
-	private const string HOMING_ATTACK_DISTANCE_KEY = "Distance/Ignore Homing Attack";
+	private const string DistanceKey = "Distance/Distance";
+	private const string BackstepDistanceKey = "Distance/Backstep Distance";
+	private const string DistanceModeKey = "Distance/Distance Calculation Mode";
+	private const string SampleOffsetKey = "Distance/Sample Offset";
+	private const string HomingAttackDistanceKey = "Distance/Ignore Homing Attack";
 
-	private const string PITCH_ANGLE_KEY = "Rotation/Pitch Angle";
-	private const string BACKSTEP_PITCH_KEY = "Rotation/Extra Backstep Pitch Angle";
-	private const string YAW_ANGLE_KEY = "Rotation/Yaw Angle";
-	private const string PITCH_OVERRIDE_KEY = "Rotation/Pitch Override Mode";
-	private const string YAW_OVERRIDE_KEY = "Rotation/Yaw Override Mode";
-	private const string TILT_KEY = "Rotation/Follow Path Tilt";
-	private const string CONTROL_MODE_KEY = "Rotation/Control Mode";
-	private const string CONTROL_INFLUENCE_KEY = "Rotation/Control Influence";
+	private const string PitchAngleKey = "Rotation/Pitch Angle";
+	private const string BackstepPitchKey = "Rotation/Extra Backstep Pitch Angle";
+	private const string YawAngleKey = "Rotation/Yaw Angle";
+	private const string PitchOverrideKey = "Rotation/Pitch Override Mode";
+	private const string YawOverrideKey = "Rotation/Yaw Override Mode";
 
-	private const string VIEW_OFFSET_KEY = "View/Offset";
-	private const string COPY_FOV_KEY = "View/Copy Fov";
-	private const string FOV_KEY = "View/FOV";
+	private const string TiltModeKey = "Rotation/Tilt Mode";
+	private const string TiltAngleKey = "Rotation/Tilt Angle";
+	private const string TiltLengthKey = "Rotation/Tilt Length";
+	private const string TiltMagnitudeKey = "Rotation/Tilt Magnitude";
 
-	private const string HORIZONTAL_TRACKING_KEY = "Tracking/Horizontal Tracking Mode";
-	private const string VERTICAL_TRACKING_KEY = "Tracking/Vertical Tracking Mode";
-	private const string HALL_WIDTH_KEY = "Tracking/Hall Width";
-	private const string HALL_ROTATION_KEY = "Tracking/Hall Rotation Tracking Strength";
+	private const string ControlModeKey = "Rotation/Control Mode";
+	private const string ControlInfluenceKey = "Rotation/Control Influence";
+
+	private const string ViewOffsetKey = "View/Offset";
+	private const string CopyFovKey = "View/Copy Fov";
+	private const string FovKey = "View/FOV";
+
+	private const string HorizontalTrackingKey = "Tracking/Horizontal Tracking Mode";
+	private const string VerticalTrackingKey = "Tracking/Vertical Tracking Mode";
+	private const string HallWidthKey = "Tracking/Hall Width";
+	private const string HallRotationKey = "Tracking/Hall Rotation Tracking Strength";
 
 	public override Array<Dictionary> _GetPropertyList()
 	{
 		Array<Dictionary> properties = [];
 
-		properties.Add(ExtensionMethods.CreateProperty(COPY_POSITION_KEY, Variant.Type.Bool));
-		properties.Add(ExtensionMethods.CreateProperty(COPY_ROTATION_KEY, Variant.Type.Bool));
+		properties.Add(ExtensionMethods.CreateProperty(CopyPositionKey, Variant.Type.Bool));
+		properties.Add(ExtensionMethods.CreateProperty(CopyRotationKey, Variant.Type.Bool));
 
 		if (!copyPosition)
 		{
-			properties.Add(ExtensionMethods.CreateProperty(DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,30,.1"));
-			properties.Add(ExtensionMethods.CreateProperty(BACKSTEP_DISTANCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
-			properties.Add(ExtensionMethods.CreateProperty(HOMING_ATTACK_DISTANCE_KEY, Variant.Type.Bool));
-			properties.Add(ExtensionMethods.CreateProperty(DISTANCE_MODE_KEY, Variant.Type.Int, PropertyHint.Enum, distanceCalculationMode.EnumToString()));
+			properties.Add(ExtensionMethods.CreateProperty(DistanceKey, Variant.Type.Float, PropertyHint.Range, "0,30,.1"));
+			properties.Add(ExtensionMethods.CreateProperty(BackstepDistanceKey, Variant.Type.Float, PropertyHint.Range, "0,10,.1"));
+			properties.Add(ExtensionMethods.CreateProperty(HomingAttackDistanceKey, Variant.Type.Bool));
+			properties.Add(ExtensionMethods.CreateProperty(DistanceModeKey, Variant.Type.Int, PropertyHint.Enum, distanceCalculationMode.EnumToString()));
 
 			if (distanceCalculationMode != DistanceModeEnum.Offset)
-				properties.Add(ExtensionMethods.CreateProperty(SAMPLE_OFFSET_KEY, Variant.Type.Float));
+				properties.Add(ExtensionMethods.CreateProperty(SampleOffsetKey, Variant.Type.Float));
 
-			properties.Add(ExtensionMethods.CreateProperty(HORIZONTAL_TRACKING_KEY, Variant.Type.Int, PropertyHint.Enum, horizontalTrackingMode.EnumToString()));
-			properties.Add(ExtensionMethods.CreateProperty(VERTICAL_TRACKING_KEY, Variant.Type.Int, PropertyHint.Enum, verticalTrackingMode.EnumToString()));
+			properties.Add(ExtensionMethods.CreateProperty(HorizontalTrackingKey, Variant.Type.Int, PropertyHint.Enum, horizontalTrackingMode.EnumToString()));
+			properties.Add(ExtensionMethods.CreateProperty(VerticalTrackingKey, Variant.Type.Int, PropertyHint.Enum, verticalTrackingMode.EnumToString()));
 
 			if (horizontalTrackingMode == TrackingModeEnum.Move)
 			{
-				properties.Add(ExtensionMethods.CreateProperty(HALL_WIDTH_KEY, Variant.Type.Float));
-				properties.Add(ExtensionMethods.CreateProperty(HALL_ROTATION_KEY, Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
+				properties.Add(ExtensionMethods.CreateProperty(HallWidthKey, Variant.Type.Float));
+				properties.Add(ExtensionMethods.CreateProperty(HallRotationKey, Variant.Type.Float, PropertyHint.Range, "0,1,.1"));
 			}
 		}
 
 		if (!copyRotation)
 		{
-			properties.Add(ExtensionMethods.CreateProperty(PITCH_ANGLE_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,1"));
-			properties.Add(ExtensionMethods.CreateProperty(BACKSTEP_PITCH_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,1"));
-			properties.Add(ExtensionMethods.CreateProperty(YAW_ANGLE_KEY, Variant.Type.Float, PropertyHint.Range, "-180,180,1"));
-			properties.Add(ExtensionMethods.CreateProperty(PITCH_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, pitchOverrideMode.EnumToString()));
-			properties.Add(ExtensionMethods.CreateProperty(YAW_OVERRIDE_KEY, Variant.Type.Int, PropertyHint.Enum, yawOverrideMode.EnumToString()));
-			properties.Add(ExtensionMethods.CreateProperty(TILT_KEY, Variant.Type.Bool));
-			properties.Add(ExtensionMethods.CreateProperty(CONTROL_MODE_KEY, Variant.Type.Int, PropertyHint.Enum, controlMode.EnumToString()));
-			properties.Add(ExtensionMethods.CreateProperty(CONTROL_INFLUENCE_KEY, Variant.Type.Float, PropertyHint.Range, "0,3,.01"));
+			properties.Add(ExtensionMethods.CreateProperty(PitchAngleKey, Variant.Type.Float, PropertyHint.Range, "-180,180,1"));
+			properties.Add(ExtensionMethods.CreateProperty(BackstepPitchKey, Variant.Type.Float, PropertyHint.Range, "-180,180,1"));
+			properties.Add(ExtensionMethods.CreateProperty(YawAngleKey, Variant.Type.Float, PropertyHint.Range, "-180,180,1"));
+			properties.Add(ExtensionMethods.CreateProperty(PitchOverrideKey, Variant.Type.Int, PropertyHint.Enum, pitchOverrideMode.EnumToString()));
+			properties.Add(ExtensionMethods.CreateProperty(YawOverrideKey, Variant.Type.Int, PropertyHint.Enum, yawOverrideMode.EnumToString()));
+
+			properties.Add(ExtensionMethods.CreateProperty(TiltModeKey, Variant.Type.Int, PropertyHint.Enum, tiltMode.EnumToString()));
+			if (tiltMode == TiltModeEnum.Override)
+			{
+				properties.Add(ExtensionMethods.CreateProperty(TiltAngleKey, Variant.Type.Float, PropertyHint.Range, "-180,180,1"));
+				properties.Add(ExtensionMethods.CreateProperty(TiltLengthKey, Variant.Type.Float, PropertyHint.Range, "0,10,0.1"));
+				properties.Add(ExtensionMethods.CreateProperty(TiltMagnitudeKey, Variant.Type.Float, PropertyHint.Range, "0,180,1"));
+			}
+
+			properties.Add(ExtensionMethods.CreateProperty(ControlModeKey, Variant.Type.Int, PropertyHint.Enum, controlMode.EnumToString()));
+			properties.Add(ExtensionMethods.CreateProperty(ControlInfluenceKey, Variant.Type.Float, PropertyHint.Range, "0,3,.01"));
 		}
 
-		properties.Add(ExtensionMethods.CreateProperty(VIEW_OFFSET_KEY, Variant.Type.Vector2));
+		properties.Add(ExtensionMethods.CreateProperty(ViewOffsetKey, Variant.Type.Vector2));
 
-		properties.Add(ExtensionMethods.CreateProperty(COPY_FOV_KEY, Variant.Type.Bool));
+		properties.Add(ExtensionMethods.CreateProperty(CopyFovKey, Variant.Type.Bool));
 		if (!copyFov)
-			properties.Add(ExtensionMethods.CreateProperty(FOV_KEY, Variant.Type.Float, PropertyHint.Range, "0, 179, .1"));
+			properties.Add(ExtensionMethods.CreateProperty(FovKey, Variant.Type.Float, PropertyHint.Range, "0, 179, .1"));
 
 		return properties;
 	}
@@ -87,53 +100,61 @@ public partial class CameraSettingsResource : Resource
 	{
 		switch ((string)property)
 		{
-			case COPY_POSITION_KEY:
+			case CopyPositionKey:
 				return copyPosition;
-			case COPY_ROTATION_KEY:
+			case CopyRotationKey:
 				return copyRotation;
-			case COPY_FOV_KEY:
+			case CopyFovKey:
 				return copyFov;
 
-			case DISTANCE_KEY:
+			case DistanceKey:
 				return distance;
-			case BACKSTEP_DISTANCE_KEY:
+			case BackstepDistanceKey:
 				return backstepDistance;
-			case HOMING_ATTACK_DISTANCE_KEY:
+			case HomingAttackDistanceKey:
 				return ignoreHomingAttack;
-			case DISTANCE_MODE_KEY:
+			case DistanceModeKey:
 				return (int)distanceCalculationMode;
-			case SAMPLE_OFFSET_KEY:
-				return (float)sampleOffset;
+			case SampleOffsetKey:
+				return sampleOffset;
 
-			case PITCH_ANGLE_KEY:
+			case PitchAngleKey:
 				return Mathf.RadToDeg(pitchAngle);
-			case BACKSTEP_PITCH_KEY:
+			case BackstepPitchKey:
 				return Mathf.RadToDeg(extraBackstepPitchAngle);
-			case YAW_ANGLE_KEY:
+			case YawAngleKey:
 				return Mathf.RadToDeg(yawAngle);
-			case PITCH_OVERRIDE_KEY:
+			case PitchOverrideKey:
 				return (int)pitchOverrideMode;
-			case YAW_OVERRIDE_KEY:
+			case YawOverrideKey:
 				return (int)yawOverrideMode;
-			case TILT_KEY:
-				return followPathTilt;
-			case CONTROL_MODE_KEY:
+
+			case TiltModeKey:
+				return (int)tiltMode;
+			case TiltAngleKey:
+				return Mathf.RadToDeg(tiltAngle);
+			case TiltMagnitudeKey:
+				return Mathf.RadToDeg(tiltMagnitude);
+			case TiltLengthKey:
+				return tiltLength;
+
+			case ControlModeKey:
 				return (int)controlMode;
-			case CONTROL_INFLUENCE_KEY:
+			case ControlInfluenceKey:
 				return pathControlInfluence;
 
-			case VIEW_OFFSET_KEY:
+			case ViewOffsetKey:
 				return viewportOffset;
-			case FOV_KEY:
+			case FovKey:
 				return targetFOV;
 
-			case HORIZONTAL_TRACKING_KEY:
+			case HorizontalTrackingKey:
 				return (int)horizontalTrackingMode;
-			case VERTICAL_TRACKING_KEY:
+			case VerticalTrackingKey:
 				return (int)verticalTrackingMode;
-			case HALL_WIDTH_KEY:
+			case HallWidthKey:
 				return hallWidth;
-			case HALL_ROTATION_KEY:
+			case HallRotationKey:
 				return hallRotationStrength;
 			default:
 				break;
@@ -146,82 +167,94 @@ public partial class CameraSettingsResource : Resource
 	{
 		switch ((string)property)
 		{
-			case COPY_POSITION_KEY:
+			case CopyPositionKey:
 				copyPosition = (bool)value;
 				NotifyPropertyListChanged();
 				break;
-			case COPY_ROTATION_KEY:
+			case CopyRotationKey:
 				copyRotation = (bool)value;
 				NotifyPropertyListChanged();
 				break;
-			case COPY_FOV_KEY:
+			case CopyFovKey:
 				copyFov = (bool)value;
 				NotifyPropertyListChanged();
 				break;
 
-			case DISTANCE_KEY:
+			case DistanceKey:
 				distance = (float)value;
 				break;
-			case BACKSTEP_DISTANCE_KEY:
+			case BackstepDistanceKey:
 				backstepDistance = (float)value;
 				break;
-			case HOMING_ATTACK_DISTANCE_KEY:
+			case HomingAttackDistanceKey:
 				ignoreHomingAttack = (bool)value;
 				break;
-			case DISTANCE_MODE_KEY:
+			case DistanceModeKey:
 				distanceCalculationMode = (DistanceModeEnum)(int)value;
 				NotifyPropertyListChanged();
 				break;
-			case SAMPLE_OFFSET_KEY:
+			case SampleOffsetKey:
 				sampleOffset = Mathf.Round((float)value * 10.0f) * .1f;
 				break;
 
 
-			case PITCH_ANGLE_KEY:
+			case PitchAngleKey:
 				pitchAngle = Mathf.DegToRad((float)value);
 				break;
-			case BACKSTEP_PITCH_KEY:
+			case BackstepPitchKey:
 				extraBackstepPitchAngle = Mathf.DegToRad((float)value);
 				break;
-			case YAW_ANGLE_KEY:
+			case YawAngleKey:
 				yawAngle = Mathf.DegToRad((float)value);
 				break;
-			case PITCH_OVERRIDE_KEY:
+			case PitchOverrideKey:
 				pitchOverrideMode = (OverrideModeEnum)(int)value;
 				break;
-			case YAW_OVERRIDE_KEY:
+			case YawOverrideKey:
 				yawOverrideMode = (OverrideModeEnum)(int)value;
 				break;
-			case TILT_KEY:
-				followPathTilt = (bool)value;
+
+			case TiltModeKey:
+				tiltMode = (TiltModeEnum)(int)value;
+				NotifyPropertyListChanged();
 				break;
-			case CONTROL_MODE_KEY:
+			case TiltAngleKey:
+				tiltAngle = Mathf.DegToRad((float)value);
+				break;
+			case TiltMagnitudeKey:
+				tiltMagnitude = Mathf.DegToRad((float)value);
+				break;
+			case TiltLengthKey:
+				tiltLength = (float)value;
+				break;
+
+			case ControlModeKey:
 				controlMode = (ControlModeEnum)(int)value;
 				break;
-			case CONTROL_INFLUENCE_KEY:
+			case ControlInfluenceKey:
 				pathControlInfluence = (float)value;
 				break;
 
-			case VIEW_OFFSET_KEY:
+			case ViewOffsetKey:
 				viewportOffset = (Vector2)value;
 				break;
-			case FOV_KEY:
+			case FovKey:
 				targetFOV = (float)value;
 				break;
 
-			case HORIZONTAL_TRACKING_KEY:
+			case HorizontalTrackingKey:
 				horizontalTrackingMode = (TrackingModeEnum)(int)value;
 				NotifyPropertyListChanged();
 				break;
-			case VERTICAL_TRACKING_KEY:
+			case VerticalTrackingKey:
 				verticalTrackingMode = (TrackingModeEnum)(int)value;
 				break;
-			case HALL_WIDTH_KEY:
+			case HallWidthKey:
 				hallWidth = (float)value;
-				if (hallWidth < 0) //Can't have a negative hall width!
+				if (hallWidth < 0) // Can't have a negative hall width!
 					hallWidth = 0;
 				break;
-			case HALL_ROTATION_KEY:
+			case HallRotationKey:
 				hallRotationStrength = (float)value;
 				break;
 
@@ -246,8 +279,21 @@ public partial class CameraSettingsResource : Resource
 	public float extraBackstepPitchAngle;
 	/// <summary> Angle (in radians) of yaw (Y rotation). </summary>
 	public float yawAngle;
-	/// <summary> Should the camera tilt (Z rotation) with the path? </summary>
-	public bool followPathTilt;
+	/// <summary> Determines how the camera's tilt should behave. </summary>
+	public TiltModeEnum tiltMode;
+	public enum TiltModeEnum
+	{
+		Disabled, // Don't tilt
+		FollowPath, // Use the path's tilt
+		Override, // Use a specific value
+	}
+	/// <summary> Angle (in radians) of tilt (Z rotation). </summary>
+	public float tiltAngle;
+	/// <summary> Magnitude of the sway. </summary>
+	public float tiltMagnitude;
+	/// <summary> How long (in seconds) the sway cycle will take. </summary>
+	public float tiltLength;
+
 	/// <summary> Determines how inputs should be read (mostly for Autorun/Legacy skills). </summary>
 	public ControlModeEnum controlMode;
 	public enum ControlModeEnum
@@ -265,8 +311,8 @@ public partial class CameraSettingsResource : Resource
 	public OverrideModeEnum yawOverrideMode;
 	public enum OverrideModeEnum
 	{
-		Add, //Add the value
-		Replace //Replace the value
+		Add, // Add the value
+		Replace // Replace the value
 	}
 
 	/// <summary> How far to stay from the player. </summary>
@@ -279,9 +325,9 @@ public partial class CameraSettingsResource : Resource
 	public DistanceModeEnum distanceCalculationMode;
 	public enum DistanceModeEnum
 	{
-		Auto, //Use offset when moving forward, and sample when moving backwards
-		Offset, //Add distance * PathFollower.Back() (Better for sharp corners)
-		Sample, //Physically sample to move pathfollower's progress by distance (Better for slopes)
+		Auto, // Use offset when moving forward, and sample when moving backwards
+		Offset, // Add distance * PathFollower.Back() (Better for sharp corners)
+		Sample, // Physically sample to move pathfollower's progress by distance (Better for slopes)
 	}
 	/// <summary> How much to offset sampling. Can be used for cameras that "look ahead." </summary>
 	public float sampleOffset;
