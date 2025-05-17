@@ -9,9 +9,15 @@ size = Vector3(5, 3, 10)
 [sub_resource type="BoxShape3D" id="BoxShape3D_pxyh0"]
 size = Vector3(5, 1, 10)
 
-[node name="FloatingWoodenPlatform" type="Node3D"]
+[node name="FloatingWoodenPlatform" type="Node3D" node_paths=PackedStringArray("parentCollider")]
+script = ExtResource("1_pxyh0")
+parentCollider = NodePath("FloatingWoodenPlatform/Collision")
+"Falling Platform Settings/Enabled" = false
 
 [node name="FloatingWoodenPlatform" parent="." instance=ExtResource("2_fn7qa")]
+
+[node name="FloatingWoodenPlatformMesh" parent="FloatingWoodenPlatform" index="0"]
+layers = 2
 
 [node name="Collision" type="StaticBody3D" parent="FloatingWoodenPlatform" groups=["floor", "wall", "wood"]]
 
@@ -19,14 +25,15 @@ size = Vector3(5, 1, 10)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
 shape = SubResource("BoxShape3D_m5jct")
 
-[node name="Trigger" type="Area3D" parent="FloatingWoodenPlatform" node_paths=PackedStringArray("floorCalculationRoot", "parentCollider")]
+[node name="Trigger" type="Area3D" parent="FloatingWoodenPlatform"]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
-script = ExtResource("1_pxyh0")
-floorCalculationRoot = NodePath(".")
-parentCollider = NodePath("../Collision")
-"Falling Platform Settings/Enabled" = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="FloatingWoodenPlatform/Trigger"]
 shape = SubResource("BoxShape3D_pxyh0")
+
+[connection signal="area_entered" from="FloatingWoodenPlatform/Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="FloatingWoodenPlatform/Trigger" to="." method="OnExited"]
+
+[editable path="FloatingWoodenPlatform"]

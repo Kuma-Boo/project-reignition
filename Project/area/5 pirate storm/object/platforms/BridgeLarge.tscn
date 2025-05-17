@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://bec0iv5nhvchi"]
+
+[ext_resource type="PackedScene" uid="uid://cag5mivk3c1vl" path="res://area/5 pirate storm/object/model/platforms/BridgeLarge.gltf" id="1_lch17"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2wkej"]
+size = Vector3(5, 10, 10)
+
+[node name="BridgeLarge" type="Node3D"]
+
+[node name="BridgeLarge" parent="." instance=ExtResource("1_lch17")]
+
+[node name="BridgeLargeMesh" parent="BridgeLarge" index="0"]
+layers = 2
+
+[node name="Collision" type="StaticBody3D" parent="." groups=["floor", "wall", "wood"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
+shape = SubResource("BoxShape3D_2wkej")
+
+[editable path="BridgeLarge"]

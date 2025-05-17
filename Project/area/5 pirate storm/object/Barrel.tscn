@@ -61,7 +61,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5, 1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector3(0, -2, 0), Vector3(0, 0.2, 0), Vector3(0, 0, 0)]
+"values": [Vector3(0, -3, 0), Vector3(0, 0.2, 0), Vector3(0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -116,7 +116,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5, 1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0.2, 0), Vector3(0, -2, 0)]
+"values": [Vector3(0, 0, 0), Vector3(0, 0.2, 0), Vector3(0, -3, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -156,7 +156,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.333333),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector3(0, 0.2, 0), Vector3(0, -2, 0)]
+"values": [Vector3(0, 0.2, 0), Vector3(0, -3, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -192,13 +192,18 @@ _data = {
 &"strike": SubResource("Animation_uhyf6")
 }
 
-[node name="Barrel" type="Node3D" node_paths=PackedStringArray("animator")]
+[node name="Barrel" type="Node3D" node_paths=PackedStringArray("animator", "launchPoint")]
 script = ExtResource("1_ch4hn")
 animator = NodePath("AnimationPlayer")
 "Secondary Settings/Enabled" = false
 LauncherDirection = 2
+recenterSpeed = 100
 sfxPlayer = NodePath("")
 voiceKey = &""
+launchPoint = NodePath("LaunchPoint")
+
+[node name="LaunchPoint" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -5)
 
 [node name="Barrel" parent="." instance=ExtResource("1_gy1ra")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)

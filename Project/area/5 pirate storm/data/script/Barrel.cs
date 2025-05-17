@@ -7,7 +7,7 @@ namespace Project.Gameplay.Objects;
 public partial class Barrel : Launcher
 {
 	/// <summary> How long to remain on the surface. </summary>
-	[Export] private float floatTime = 3f;
+	[Export] private float floatTime = 2f;
 	/// <summary> How long to remain beneath the surface. Set to 0 if the barrel should never sink. </summary>
 	[Export(PropertyHint.Range, "0,2,0.1")] private float sinkTime;
 	[Export] private AnimationPlayer animator;

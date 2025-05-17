@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://kihlqnxvg34q"]
+
+[ext_resource type="Script" uid="uid://bj7jhdknn12cl" path="res://object/stage/destructable/resource/script/DestructableObject.cs" id="1_gwefs"]
+[ext_resource type="PackedScene" uid="uid://chsvf0ua8yxp0" path="res://area/5 pirate storm/object/model/destructable/FloatingStaircase.gltf" id="2_xvmob"]
+[ext_resource type="PackedScene" uid="uid://8kftwcwnek4k" path="res://area/5 pirate storm/object/model/destructable/FloatingStaircasePieces.gltf" id="3_0eybb"]
+
+[node name="FloatingStaircase" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot")]
+script = ExtResource("1_gwefs")
+pieceMass = 1.0
+stopPlayerOnShatter = true
+shatterFlags = 2
+root = NodePath("FloatingStaircase")
+pieceRoot = NodePath("FloatingStaircasePieces")
+
+[node name="FloatingStaircase" parent="." instance=ExtResource("2_xvmob")]
+
+[node name="FloatingStaircasePieces" parent="." instance=ExtResource("3_0eybb")]

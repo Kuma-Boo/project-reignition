@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://dvq5dnmf3t7g2"]
+
+[ext_resource type="PackedScene" uid="uid://bbbr1dp364qmy" path="res://area/5 pirate storm/object/model/platforms/FloatingThinPlatform.gltf" id="2_8u808"]
+[ext_resource type="Script" uid="uid://bdlofqc6xiigo" path="res://object/trigger/modules/PlatformTrigger.cs" id="2_tf51n"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tf51n"]
+size = Vector3(3, 3, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mm3hk"]
+size = Vector3(3, 1, 10)
+
+[node name="FloatingThinPlatform" type="Node3D" node_paths=PackedStringArray("parentCollider")]
+script = ExtResource("2_tf51n")
+parentCollider = NodePath("FloatingThinPlatform/Collision")
+"Falling Platform Settings/Enabled" = false
+
+[node name="FloatingThinPlatform" parent="." instance=ExtResource("2_8u808")]
+
+[node name="FloatingThinPlatformMesh" parent="FloatingThinPlatform" index="0"]
+layers = 6
+
+[node name="Collision" type="StaticBody3D" parent="FloatingThinPlatform" groups=["floor", "wall", "wood"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FloatingThinPlatform/Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
+shape = SubResource("BoxShape3D_tf51n")
+
+[node name="Trigger" type="Area3D" parent="FloatingThinPlatform"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FloatingThinPlatform/Trigger"]
+shape = SubResource("BoxShape3D_mm3hk")
+
+[connection signal="area_entered" from="FloatingThinPlatform/Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="FloatingThinPlatform/Trigger" to="." method="OnExited"]
+
+[editable path="FloatingThinPlatform"]
