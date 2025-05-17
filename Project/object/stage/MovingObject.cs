@@ -163,6 +163,8 @@ public partial class MovingObject : Node3D
 	[Export] private Curve timeCurve;
 	[Export] private bool startPaused;
 	[Export] private bool smoothPausing;
+	[Export] private float timebreakMultiplier = 1f;
+	private float TimebreakInfluence => StageSettings.Player.Skills.IsTimeBreakActive ? timebreakMultiplier : 1f;
 	/// <summary> Is movement paused? </summary>
 	private bool isPaused;
 	private const float PauseSmoothing = .1f;
@@ -213,11 +215,11 @@ public partial class MovingObject : Node3D
 
 		if (lockToStartingPosition)
 		{
-			currentTime = Mathf.MoveToward(currentTime, StartingOffset * Mathf.Abs(cycleLength), PhysicsManager.physicsDelta * TimeScale);
+			currentTime = Mathf.MoveToward(currentTime, StartingOffset * Mathf.Abs(cycleLength), PhysicsManager.physicsDelta * TimeScale * TimebreakInfluence);
 		}
 		else
 		{
-			currentTime += PhysicsManager.physicsDelta * Mathf.Sign(cycleLength) * TimeScale;
+			currentTime += PhysicsManager.physicsDelta * Mathf.Sign(cycleLength) * TimeScale * TimebreakInfluence;
 			if (Mathf.Abs(currentTime) > Mathf.Abs(cycleLength)) // Rollover
 				currentTime -= Mathf.Sign(cycleLength) * Mathf.Abs(cycleLength) * Mathf.Sign(cycleLength);
 		}

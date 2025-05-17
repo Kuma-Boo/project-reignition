@@ -20,7 +20,6 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	{
 		Array<Dictionary> properties =
 			[
-				ExtensionMethods.CreateCategory("Secondary Settings"),
 				ExtensionMethods.CreateProperty(SecondarySettingsEnabled, Variant.Type.Bool)
 			];
 
@@ -88,7 +87,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	public delegate void DeactivatedEventHandler(); // Called after character finishes processing this launcher.
 
 	/// <summary> Height at the beginning of the arc. </summary>
-	[ExportGroup("Launch Settings")]
+	[ExportSubgroup("Launch Settings")]
 	[Export] private float StartingHeight { get; set; }
 	/// <summary> Height at the highest point of the arc. </summary>
 	[Export] private float MiddleHeight { get; set; }
@@ -155,7 +154,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	protected virtual Vector3 CalculateStartingPoint() => StartingPoint;
 	public Vector3 StartingPoint => LaunchPoint.GlobalPosition + (Vector3.Up * StartingHeight);
 
-	public LaunchSettings GetLaunchSettings()
+	public virtual LaunchSettings GetLaunchSettings()
 	{
 		float blendedDistance = Mathf.Lerp(Distance, SecondaryDistance, GetLaunchRatio());
 		float blendedMiddleHeight = Mathf.Lerp(MiddleHeight, SecondaryMiddleHeight, GetLaunchRatio());

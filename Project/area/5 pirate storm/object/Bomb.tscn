@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://q2mhrprklf7q"]
+
+[ext_resource type="Script" uid="uid://c27oe48qjsjv4" path="res://area/4 levitated ruin/data/script/Missile.cs" id="1_4asmq"]
+[ext_resource type="PackedScene" uid="uid://bmrns4285t26c" path="res://area/5 pirate storm/object/model/Bomb.gltf" id="2_ij281"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_a21m6"]
+
+[node name="Bomb" type="Node3D"]
+script = ExtResource("1_4asmq")
+
+[node name="Bomb" parent="." instance=ExtResource("2_ij281")]
+
+[node name="Hitbox" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+shape = SubResource("SphereShape3D_a21m6")

@@ -7,6 +7,8 @@ namespace Project.Gameplay;
 public partial class LaunchState : PlayerState
 {
 	[Export] private PlayerState landState;
+	[Export] private PlayerState jumpDashState;
+	[Export] private PlayerState stompState;
 	[Export] private PlayerState fallState;
 
 	private float launcherTime;
@@ -116,6 +118,21 @@ public partial class LaunchState : PlayerState
 		{
 			Player.MoveSpeed = 0;
 			return landState;
+		}
+
+		if (settings.AllowInterruption)
+		{
+			if (Player.Controller.IsJumpBufferActive) // Cancel into a jumpdash
+			{
+				Player.Controller.ResetJumpBuffer();
+				return jumpDashState;
+			}
+
+			if (Player.Controller.IsActionBufferActive) // Cancel into a stomp
+			{
+				Player.Controller.ResetActionBuffer();
+				return stompState;
+			}
 		}
 
 		if (settings.IsLauncherFinished(launcherTime)) // Revert to normal state

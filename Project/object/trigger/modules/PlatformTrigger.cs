@@ -13,10 +13,11 @@ public partial class PlatformTrigger : Node3D
 	#region Editor
 	public override Array<Dictionary> _GetPropertyList()
 	{
-		Array<Dictionary> properties = [ExtensionMethods.CreateProperty("Falling Platform Settings/Disabled", Variant.Type.Bool)];
+		Array<Dictionary> properties = [ExtensionMethods.CreateProperty("Falling Platform Settings/Enabled", Variant.Type.Bool)];
 
-		if (!isFallingBehaviourDisabled)
+		if (isFallingBehaviourEnabled)
 		{
+			properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Animator", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "AnimationPlayer"));
 			properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Auto Shake", Variant.Type.Bool));
 			properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Shake Length", Variant.Type.Float, PropertyHint.Range, "0, 10"));
 		}
@@ -28,9 +29,12 @@ public partial class PlatformTrigger : Node3D
 	{
 		switch ((string)property)
 		{
-			case "Falling Platform Settings/Disabled":
-				isFallingBehaviourDisabled = (bool)value;
+			case "Falling Platform Settings/Enabled":
+				isFallingBehaviourEnabled = (bool)value;
 				NotifyPropertyListChanged();
+				break;
+			case "Falling Platform Settings/Animator":
+				fallingPlatformAnimatorPath = (NodePath)value;
 				break;
 			case "Falling Platform Settings/Auto Shake":
 				autoShake = (bool)value;
@@ -39,6 +43,10 @@ public partial class PlatformTrigger : Node3D
 				shakeLength = (float)value;
 				break;
 
+			case "Floating Platform Settings/Enabled":
+				isFloatingBehaviorEnabled = (bool)value;
+				NotifyPropertyListChanged();
+				break;
 			default:
 				return false;
 		}
@@ -50,12 +58,17 @@ public partial class PlatformTrigger : Node3D
 	{
 		switch ((string)property)
 		{
-			case "Falling Platform Settings/Disabled":
-				return isFallingBehaviourDisabled;
+			case "Falling Platform Settings/Enabled":
+				return isFallingBehaviourEnabled;
+			case "Falling Platform Settings/Animator":
+				return fallingPlatformAnimatorPath;
 			case "Falling Platform Settings/Auto Shake":
 				return autoShake;
 			case "Falling Platform Settings/Shake Length":
 				return shakeLength;
+
+			case "Floating Platform Settings/Enabled":
+				return isFloatingBehaviorEnabled;
 		}
 
 		return base._Get(property);
@@ -65,14 +78,24 @@ public partial class PlatformTrigger : Node3D
 	[Signal]
 	public delegate void PlatformInteractedEventHandler();
 
-	/// <summary> Is falling behaviour disabled? </summary>
-	private bool isFallingBehaviourDisabled;
+	/// <summary> Animator to handle falling platform behaviour. </summary>
+	private AnimationPlayer fallingPlatformAnimator;
+	private NodePath fallingPlatformAnimatorPath;
+	/// <summary> Will this platform fall when the player steps on it? </summary>
+	private bool isFallingBehaviourEnabled;
 	/// <summary> Should the platform automatically start to shake when the player steps on it? </summary>
 	private bool autoShake = true;
 	/// <summary> How long to shake before falling. </summary>
 	private float shakeLength;
 	/// <summary> Keeps track of the platform's position from the previous frame. </summary>
 	private Vector3 previousPosition;
+
+	/// <summary> Will this platform bob up and down when the player jumps on it? </summary>
+	private bool isFloatingBehaviorEnabled;
+	/// <summary> Determines the smoothing of how the platform bobs. </summary>
+	private Curve2D buoyancyCurve;
+	/// <summary> Determines how much force it takes to move the platform. </summary>
+	private float massRatio;
 
 	/// <summary> Bump this up to allow the player to go flying when jumping off. </summary>
 	[Export] private float playerJumpInfluenceMultiplier = 1f;
@@ -85,15 +108,10 @@ public partial class PlatformTrigger : Node3D
 	private bool isPlatformShaking;
 
 	[ExportGroup("Components")]
-	[Export]
 	/// <summary> Assign this to enable moving the player with the platform. </summary>
-	private Node3D floorCalculationRoot;
-	[Export]
+	[Export] private Node3D floorCalculationRoot;
 	/// <summary> Reference to the "floor" collider. </summary>
-	private PhysicsBody3D parentCollider;
-	[Export]
-	/// <summary> Animator to handle falling platform behaviour. </summary>
-	private AnimationPlayer fallingPlatformAnimator;
+	[Export] private PhysicsBody3D parentCollider;
 	private PlayerController Player => StageSettings.Player;
 
 	private bool isActive;
@@ -103,13 +121,18 @@ public partial class PlatformTrigger : Node3D
 
 	public override void _Ready()
 	{
-		if (Engine.IsEditorHint() || isFallingBehaviourDisabled) return;
+		if (Engine.IsEditorHint())
+			return;
 
-		if (fallingPlatformAnimator == null)
-			GD.PrintErr($"Falling platform animator is missing on {Name}!");
+		if (isFallingBehaviourEnabled)
+		{
+			fallingPlatformAnimator = GetNodeOrNull<AnimationPlayer>(fallingPlatformAnimatorPath);
+			if (fallingPlatformAnimator == null)
+				GD.PrintErr($"Falling platform animator is missing on {Name}!");
 
-		if (autoShake) // Falling behaviour is enabled, connect signal.
-			Connect(SignalName.PlatformInteracted, new Callable(this, MethodName.StartShaking));
+			if (autoShake) // Falling behaviour is enabled, connect signal.
+				Connect(SignalName.PlatformInteracted, new Callable(this, MethodName.StartShaking));
+		}
 	}
 
 	public override void _PhysicsProcess(double _)

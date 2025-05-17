@@ -1190,8 +1190,8 @@ transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 
 [node name="Effect" parent="Sonic" node_paths=PackedStringArray("rightFoot", "leftFoot", "landingParticles", "stepEmitters") instance=ExtResource("19_3dctg")]
 rightFoot = NodePath("../SonicRoot/GeneralSkeleton/RFoot")
 leftFoot = NodePath("../SonicRoot/GeneralSkeleton/LFoot")
-landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, null, null, NodePath("VFX/LandingFX/LandingWater")]
-stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, null, null, NodePath("VFX/StepFX/WaterStep")]
+landingParticles = [NodePath("VFX/LandingFX/LandingDust"), NodePath("VFX/LandingFX/LandingSand"), NodePath("VFX/LandingFX/LandingGrass"), null, null, null, NodePath("VFX/LandingFX/LandingWater"), null]
+stepEmitters = [NodePath("VFX/StepFX/PavementStep"), NodePath("VFX/StepFX/SandStep"), NodePath("VFX/StepFX/GrassStep"), null, null, null, NodePath("VFX/StepFX/WaterStep"), null]
 
 [node name="Skills" parent="Sonic" instance=ExtResource("6_ywq6t")]
 
@@ -1374,9 +1374,11 @@ jumpState = NodePath("../../Basic/Jump")
 script = ExtResource("17_h1v2w")
 idleState = NodePath("../../Basic/Idle")
 
-[node name="Launch" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("landState", "fallState")]
+[node name="Launch" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("landState", "jumpDashState", "stompState", "fallState")]
 script = ExtResource("13_d17q6")
 landState = NodePath("../../Basic/Land")
+jumpDashState = NodePath("../../Basic/JumpDash")
+stompState = NodePath("../../Basic/Stomp")
 fallState = NodePath("../../Basic/Fall")
 
 [node name="Automation" type="Node" parent="StateMachine/Special" node_paths=PackedStringArray("runState")]

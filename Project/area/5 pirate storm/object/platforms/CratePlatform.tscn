@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://wydcxl4kgcrp"]
+
+[ext_resource type="PackedScene" uid="uid://dr3exa06xf0nh" path="res://area/5 pirate storm/object/model/destructable/Crate.gltf" id="1_320j4"]
+[ext_resource type="Script" uid="uid://bdlofqc6xiigo" path="res://object/trigger/modules/PlatformTrigger.cs" id="2_spymo"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1emgr"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oecqu"]
+size = Vector3(2, 1, 2)
+
+[node name="CratePlatform" type="Node3D"]
+
+[node name="Crate" parent="." instance=ExtResource("1_320j4")]
+
+[node name="Collision" type="StaticBody3D" parent="Crate" groups=["floor", "wall", "wood"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Crate/Collision"]
+shape = SubResource("BoxShape3D_1emgr")
+
+[node name="Trigger" type="Area3D" parent="Crate" node_paths=PackedStringArray("floorCalculationRoot", "parentCollider")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("2_spymo")
+floorCalculationRoot = NodePath(".")
+parentCollider = NodePath("../Collision")
+"Falling Platform Settings/Enabled" = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Crate/Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_oecqu")
