@@ -16,6 +16,8 @@ public partial class BombMissile : Node3D
 	[Export] private bool alignModelForward;
 	[Export] private bool disableRespawning;
 	[Export(PropertyHint.Range, "0.1,1,0.1,or_greater")] private float travelSpeedRatio = 1f;
+	[Export] private float launchDelay;
+	[Export] private Node3D root;
 	[Export] private AnimationPlayer animator;
 	private SpawnData spawnData;
 
@@ -32,10 +34,8 @@ public partial class BombMissile : Node3D
 
 	private Launcher.LaunchDirection launchDirection;
 	private const string LaunchModeKey = "Launch Settings/Mode";
-	private const string LaunchDirectionKey = "Launch Settings/Direction";
-	private const string DistanceKey = "Launch Settings/Distance";
+	private const string LaunchOffsetKey = "Launch Settings/Starting Offset";
 	private const string MiddleHeightKey = "Launch Settings/Middle Height";
-	private const string EndHeightKey = "Launch Settings/End Height";
 
 	private const string TargetNode = "Launch Settings/Target";
 	private const string SpreadKey = "Launch Settings/Spread";
@@ -51,23 +51,20 @@ public partial class BombMissile : Node3D
 		if (LaunchMode == LaunchModes.Code) // No properties to edit if launch settings are determined via code
 			return properties;
 
-		if (LaunchMode == LaunchModes.Manual)
-			properties.Add(ExtensionMethods.CreateProperty(LaunchDirectionKey, Variant.Type.Int, PropertyHint.Enum, launchDirection.EnumToString()));
-		else
+		if (LaunchMode != LaunchModes.Manual)
 			properties.Add(ExtensionMethods.CreateProperty(TargetNode, Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "Node3D"));
-
-		properties.Add(ExtensionMethods.CreateProperty(MiddleHeightKey, Variant.Type.Float));
 
 		if (LaunchMode == LaunchModes.Manual)
 		{
-			properties.Add(ExtensionMethods.CreateProperty(EndHeightKey, Variant.Type.Float));
-			properties.Add(ExtensionMethods.CreateProperty(DistanceKey, Variant.Type.Float));
+			properties.Add(ExtensionMethods.CreateProperty(LaunchOffsetKey, Variant.Type.Vector3));
 		}
 		else
 		{
 			properties.Add(ExtensionMethods.CreateProperty(SpeedTrackingKey, Variant.Type.Float, PropertyHint.Range, "0,2,0.1,or_greater"));
 			properties.Add(ExtensionMethods.CreateProperty(SpreadKey, Variant.Type.Float));
 		}
+
+		properties.Add(ExtensionMethods.CreateProperty(MiddleHeightKey, Variant.Type.Float));
 
 		return properties;
 	}
@@ -80,18 +77,12 @@ public partial class BombMissile : Node3D
 				LaunchMode = (LaunchModes)(int)value;
 				NotifyPropertyListChanged();
 				break;
-			case LaunchDirectionKey:
-				launchDirection = (Launcher.LaunchDirection)(int)value;
-				break;
 
 			case MiddleHeightKey:
 				middleHeight = (float)value;
 				break;
-			case EndHeightKey:
-				endHeight = (float)value;
-				break;
-			case DistanceKey:
-				distance = (float)value;
+			case LaunchOffsetKey:
+				launchOffset = (Vector3)value;
 				break;
 
 			case TargetNode:
@@ -118,14 +109,10 @@ public partial class BombMissile : Node3D
 		{
 			case LaunchModeKey:
 				return (int)LaunchMode;
-			case LaunchDirectionKey:
-				return (int)launchDirection;
 			case MiddleHeightKey:
 				return middleHeight;
-			case EndHeightKey:
-				return endHeight;
-			case DistanceKey:
-				return distance;
+			case LaunchOffsetKey:
+				return launchOffset;
 
 			case TargetNode:
 				return _target;
@@ -141,10 +128,8 @@ public partial class BombMissile : Node3D
 
 	/// <summary> Height at the highest point of the arc. </summary>
 	private float middleHeight = 5;
-	/// <summary> Height at the end of the arc. </summary>
-	private float endHeight;
-	/// <summary> How far to travel. </summary>
-	private float distance;
+	/// <summary> Where to start the launch from. </summary>
+	private Vector3 launchOffset;
 	/// <summary> How much to track the player's speed. </summary>
 	private float speedTracking = 1f;
 	/// <summary> How much horizontal spread to add to the target position. </summary>
@@ -154,21 +139,14 @@ public partial class BombMissile : Node3D
 	private Node3D target;
 
 	public bool IsActive { get; private set; } // Is the missile currently traveling?
-	private float travelInterpolation;
+	private float launchTimer;
+	private Vector3 initialPosition;
 	private Vector3 previousPosition;
 
+	private Vector3 StartPosition => EndPosition + GlobalBasis * launchOffset;
+	private Vector3 EndPosition => Engine.IsEditorHint() ? GlobalPosition : initialPosition;
+
 	private LaunchSettings LaunchSettings { get; set; }
-	public Vector3 GetLaunchDirection()
-	{
-		if (launchDirection == Launcher.LaunchDirection.Forward)
-			return this.Forward();
-		else if (launchDirection == Launcher.LaunchDirection.Flatten)
-			return this.Up().RemoveVertical().Normalized();
-
-		return this.Up();
-	}
-
-	/// <summary> Gets the vanilla LaunchSettings for Manual setup mode. </summary>
 	public LaunchSettings GetLaunchSettings()
 	{
 		if (LaunchMode == LaunchModes.Code)
@@ -177,8 +155,7 @@ public partial class BombMissile : Node3D
 		if (LaunchMode == LaunchModes.Target)
 			return LaunchSettings.Create(GlobalPosition, GetTargetPosition(false), middleHeight, true);
 
-		Vector3 endPosition = GlobalPosition + (GetLaunchDirection() * distance) + (Vector3.Up * endHeight);
-		return LaunchSettings.Create(GlobalPosition, endPosition, middleHeight);
+		return LaunchSettings.Create(StartPosition, EndPosition, middleHeight);
 	}
 
 	public Vector3 GetTargetPosition(bool enableSpread, float overrideTracking = -1f)
@@ -235,9 +212,16 @@ public partial class BombMissile : Node3D
 	public override void _Ready()
 	{
 		target = GetNodeOrNull<Node3D>(_target);
+		root ??= this;
 
 		if (Engine.IsEditorHint() || disableRespawning)
 			return;
+
+		if (LaunchMode == LaunchModes.Manual)
+		{
+			initialPosition = GlobalPosition;
+			GlobalPosition = StartPosition;
+		}
 
 		spawnData = new(GetParent(), Transform);
 		StageSettings.Instance.Respawned += Respawn;
@@ -245,7 +229,21 @@ public partial class BombMissile : Node3D
 
 	public override void _PhysicsProcess(double _)
 	{
-		if (!IsActive) return;
+		if (Engine.IsEditorHint())
+			return;
+
+		if (!IsActive)
+		{
+			if (launchTimer < 0)
+			{
+				launchTimer = Mathf.MoveToward(launchTimer, 0, PhysicsManager.physicsDelta);
+				if (Mathf.IsZeroApprox(launchTimer))
+					Activate();
+
+			}
+
+			return;
+		}
 
 		UpdatePosition();
 	}
@@ -253,34 +251,48 @@ public partial class BombMissile : Node3D
 	private void UpdatePosition()
 	{
 		previousPosition = GlobalPosition;
-		GlobalPosition = LaunchSettings.InterpolatePositionTime(travelInterpolation);
-		travelInterpolation += PhysicsManager.physicsDelta * travelSpeedRatio;
+		GlobalPosition = LaunchSettings.InterpolatePositionTime(launchTimer);
+		launchTimer += PhysicsManager.physicsDelta * travelSpeedRatio;
 
 		// Reached the ground
-		if (travelInterpolation >= LaunchSettings.TotalTravelTime)
+		if (launchTimer >= LaunchSettings.TotalTravelTime)
+		{
+			GlobalPosition = LaunchSettings.endPosition;
 			Explode();
+		}
 
 		if (!alignModelForward || previousPosition.IsEqualApprox(GlobalPosition))
 			return;
 
-		LookAt(previousPosition);
+		root.LookAt(previousPosition);
 	}
 
 	/// <summary> Use this overload to fire at a specific point determined by code. </summary>
 	public void Launch(LaunchSettings settings)
 	{
 		LaunchSettings = settings;
-		Launch();
+		Activate();
 	}
 
 	/// <summary> Launches the bomb with the current launch settings. </summary>
 	public void Launch()
 	{
+		if (Mathf.IsZeroApprox(launchDelay))
+		{
+			Activate();
+			return;
+		}
+
+		launchTimer = -launchDelay;
+	}
+
+	public void Activate()
+	{
 		if (LaunchMode != LaunchModes.Code)
 			LaunchSettings = GetLaunchSettings();
 
 		IsActive = true;
-		travelInterpolation = 0;
+		launchTimer = 0;
 		animator.Play("fly");
 		UpdatePosition();
 		EmitSignal(SignalName.Launched);
