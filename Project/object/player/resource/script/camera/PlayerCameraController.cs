@@ -425,7 +425,7 @@ public partial class PlayerCameraController : Node3D
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.yawTracking);
 
 		// Calculate xform angle before applying pitch tracking
-		UpdateInputXForm(cameraTransform.Basis);
+		UpdateInputXForm(ExtensionMethods.ModAngle(data.blendData.yawAngle + Mathf.Pi));
 
 		// Apply pitch tracking
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTracking);
@@ -486,10 +486,8 @@ public partial class PlayerCameraController : Node3D
 	}
 
 	/// <summary> Blends xform angles for smoother inputs between camera cuts. </summary>
-	private void UpdateInputXForm(Basis cameraBasis)
+	private void UpdateInputXForm(float yawAngle)
 	{
-		float targetXformAngle = ExtensionMethods.CalculateForwardAngle(cameraBasis.Z, cameraBasis.Y);
-
 		// Snap xform blend when no input is held
 		if (Mathf.IsZeroApprox(Player.Controller.GetInputStrength()) ||
 			(Player.IsLockoutActive &&
@@ -500,7 +498,7 @@ public partial class PlayerCameraController : Node3D
 		}
 
 		xformBlend = Mathf.MoveToward(xformBlend, 1, XformSmoothing * PhysicsManager.physicsDelta);
-		Player.Controller.XformAngle = Mathf.LerpAngle(cachedXFormAngle, targetXformAngle, xformBlend);
+		Player.Controller.XformAngle = Mathf.LerpAngle(cachedXFormAngle, yawAngle, xformBlend);
 	}
 
 	public void SnapXform() => xformBlend = 1;
@@ -767,8 +765,8 @@ public partial class PlayerCameraController : Node3D
 		{
 			offsetBasis = Basis.Identity.Rotated(Vector3.Up, Mathf.Pi);
 			offsetBasis = offsetBasis.Rotated(Vector3.Up, blendData.yawAngle);
-			offsetBasis = offsetBasis.Rotated(offsetBasis.X.Normalized(), blendData.pitchAngle);
 			offsetBasis = offsetBasis.Rotated(offsetBasis.Z.Normalized(), blendData.tiltAngle);
+			offsetBasis = offsetBasis.Rotated(offsetBasis.X.Normalized(), blendData.pitchAngle);
 		}
 
 		/// <summary> Yaw rotation data used for tracking. </summary>

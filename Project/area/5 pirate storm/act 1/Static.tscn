@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://csk7y7y8vgg6l"]
+[gd_scene load_steps=38 format=3 uid="uid://csk7y7y8vgg6l"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_g84th"]
 [ext_resource type="PackedScene" uid="uid://npgcl1ctbjyt" path="res://area/5 pirate storm/act 1/environment/01Opening.tscn" id="2_444mk"]
@@ -28,6 +28,9 @@
 [ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="23_vf6sl"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="24_havkg"]
 [ext_resource type="Material" uid="uid://8kc12fso5xr1" path="res://area/5 pirate storm/data/material/Water.tres" id="25_88ndg"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="25_f6rbm"]
+[ext_resource type="Resource" uid="uid://bg886bbesjxi2" path="res://area/5 pirate storm/act 1/camera/NarrowCam.tres" id="26_ybwgy"]
+[ext_resource type="Resource" uid="uid://cahi8d7te0l08" path="res://area/5 pirate storm/act 1/camera/OpeningWoodCam.tres" id="27_ybwgy"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k720b"]
 size = Vector3(25, 20, 5)
@@ -235,61 +238,72 @@ shape = SubResource("BoxShape3D_f6rbm")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 500)
 shape = SubResource("BoxShape3D_f6rbm")
 
-[node name="PathTriggers" type="Node3D" parent="Triggers"]
+[node name="PathAndCameraTriggers" type="Node3D" parent="Triggers"]
 
-[node name="OpeningWood" parent="Triggers/PathTriggers" instance=ExtResource("22_ypnsc")]
+[node name="OpeningWood" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
 transform = Transform3D(0.991445, 0, 0.130526, 0, 1, 0, -0.130526, 0, 0.991445, -1.84013, 0.5, 64.4712)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="Path" type="Node3D" parent="Triggers/PathTriggers/OpeningWood" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="Triggers/PathAndCameraTriggers/OpeningWood" node_paths=PackedStringArray("path")]
 script = ExtResource("23_vf6sl")
 path = NodePath("../../../../Path/OpeningWoodPath")
-cameraPathBlendTime = 1.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathTriggers/OpeningWood"]
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/OpeningWood"]
+script = ExtResource("25_f6rbm")
+settings = ExtResource("26_ybwgy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/OpeningWood"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_k720b")
 
-[node name="OpeningWood2" parent="Triggers/PathTriggers" instance=ExtResource("22_ypnsc")]
-transform = Transform3D(0.887011, 0, -0.461749, 0, 1, 0, 0.461749, 0, 0.887011, 0.304016, 9.3, 103.673)
+[node name="OpeningWood2" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.887011, 0, -0.461749, 0, 1, 0, 0.461749, 0, 0.887011, 0.765765, 9.3, 102.786)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="Path" type="Node3D" parent="Triggers/PathTriggers/OpeningWood2" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="Triggers/PathAndCameraTriggers/OpeningWood2" node_paths=PackedStringArray("path")]
 script = ExtResource("23_vf6sl")
 path = NodePath("../../../../Path/OpeningWood2Path")
-cameraPathBlendTime = 1.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathTriggers/OpeningWood2"]
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/OpeningWood2"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("25_f6rbm")
+settings = ExtResource("27_ybwgy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/OpeningWood2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_k720b")
 
-[node name="BrokenShip" parent="Triggers/PathTriggers" instance=ExtResource("22_ypnsc")]
+[node name="BrokenShip" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
 transform = Transform3D(0.843392, -0.0933011, -0.529137, -7.91624e-09, 0.984808, -0.173648, 0.5373, 0.146453, 0.830578, -37.3201, 2.39763, 168.903)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="Path" type="Node3D" parent="Triggers/PathTriggers/BrokenShip" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="Triggers/PathAndCameraTriggers/BrokenShip" node_paths=PackedStringArray("path")]
 script = ExtResource("23_vf6sl")
 path = NodePath("../../../../Path/BrokenShipPath")
-cameraPathBlendTime = 1.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathTriggers/BrokenShip"]
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/BrokenShip"]
+transform = Transform3D(1, 7.45058e-09, 0, 7.45058e-09, 1, -1.49012e-08, -2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("25_f6rbm")
+settings = ExtResource("26_ybwgy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/BrokenShip"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_k720b")
 
-[node name="Islands" parent="Triggers/PathTriggers" instance=ExtResource("22_ypnsc")]
+[node name="Islands" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.83636, 1.99232, 365.639)
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="Path" type="Node3D" parent="Triggers/PathTriggers/Islands" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="Triggers/PathAndCameraTriggers/Islands" node_paths=PackedStringArray("path")]
 script = ExtResource("23_vf6sl")
 path = NodePath("../../../../Path/IslandPath")
 cameraPathBlendTime = 1.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathTriggers/Islands"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/Islands"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("BoxShape3D_k720b")
 

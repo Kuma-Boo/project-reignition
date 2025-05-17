@@ -20,7 +20,7 @@ public partial class PlanarReflectionRenderer : Node3D
 	private SubViewport reflectionViewport;
 	[Export]
 	private SubViewportContainer reflectionViewportContainer;
-	private Camera3D GameplayCamera => StageSettings.Player.Camera.Camera;
+	private Camera3D GameplayCamera => GetViewport().GetCamera3D();
 
 	[Export]
 	/// <summary> List of materials that use reflection_texture. </summary>

@@ -21,8 +21,8 @@ namespace Project.Gameplay
 		[Export]
 		public Array<ShaderMaterial> depthMaterials; //List of materials that use depth_texture
 
-		private Camera3D Camera => StageSettings.Player.Camera.Camera;
-		private Callable ApplyTextureCallable => new Callable(this, MethodName.ApplyTexture);
+		private Camera3D Camera => GetViewport().GetCamera3D();
+		private Callable ApplyTextureCallable => new(this, MethodName.ApplyTexture);
 
 		public override void _Ready()
 		{
