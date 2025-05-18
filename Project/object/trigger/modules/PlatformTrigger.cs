@@ -167,6 +167,8 @@ public partial class PlatformTrigger : Node3D
 	private bool isActive;
 	private bool isInteractingWithPlayer;
 	private float playerInfluence;
+	/// <summary> Tracks whether the platform can artificially snap the player. </summary>
+	private bool canSnapPlayer;
 	private readonly float PlayerInfluenceReset = .5f;
 
 	public override void _Ready()
@@ -330,7 +332,12 @@ public partial class PlatformTrigger : Node3D
 
 		playerInfluence = 1f; // Set player influence to 1 for when we leave
 		previousPosition = floorCalculationRoot.GlobalPosition;
-		Player.GlobalTranslate(Vector3.Up * (floorCalculationRoot.GlobalPosition.Y - Player.GlobalPosition.Y));
+
+		if (Player.IsOnGround)
+			canSnapPlayer = true;
+
+		if (canSnapPlayer)
+			Player.GlobalTranslate(Vector3.Up * (floorCalculationRoot.GlobalPosition.Y - Player.GlobalPosition.Y));
 	}
 
 	/// <summary> Checks whether the player is currently standing on top of the platform. </summary>
@@ -349,6 +356,7 @@ public partial class PlatformTrigger : Node3D
 	{
 		if (!a.IsInGroup("player detection")) return;
 		isInteractingWithPlayer = true;
+		canSnapPlayer = false; // Prevent initial snapping
 		UpdatePlatform();
 
 		if (isFloatingBehaviorEnabled)
