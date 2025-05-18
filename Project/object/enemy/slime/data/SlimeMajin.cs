@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay.Objects;
 
 namespace Project.Gameplay;
 
@@ -22,27 +23,45 @@ public partial class SlimeMajin : Enemy
 	[Export(PropertyHint.Range, "0,10,1")] private int jumpCount;
 	/// <summary> How far the slime should move. Setting this to 0 allows slimes to jump in place. </summary>
 	[Export(PropertyHint.Range, "0,20,0.1,or_greater")] private float movementDistance = 15f;
-	[Export(PropertyHint.Range, "0,1,0.1")] private float movementOffset = 0.5f;
+	[Export(PropertyHint.Range, "0,1,0.1")] private float startingOffset = 0.5f;
 	public bool IsMovementEnabled => jumpCount != 0;
-	public Vector3 MovementStartPosition => InitialPosition + this.Forward() * movementDistance * (1f - movementOffset);
-	public Vector3 MovementEndPosition => InitialPosition + this.Back() * movementDistance * movementOffset;
+	private float StartingOffset => Mathf.FloorToInt(jumpCount * startingOffset) / (float)jumpCount;
+	public Vector3 MovementStartPosition => InitialPosition + this.Back() * movementDistance * StartingOffset;
+	public Vector3 MovementEndPosition => InitialPosition + this.Forward() * movementDistance * (1f - StartingOffset);
+	private int currentJumpCount;
+	private bool isMovingBackwards;
+	private Vector3 positionVelocity;
+	private readonly float PositionSmoothing = 15.0f;
 
 	[ExportSubgroup("Attack Settings")]
 	[Export] private bool isSpitEnabled;
 	[Export] private bool isShockEnabled;
-	[Export] private float shockRange = -1;
-	/// <summary> How long to stay in a shocking state. Set to 0  </summary>
-	[Export] private float shockLength;
+	/// <summary> After how many jumps should the slime attack? Only takes effect if the slime has movement enabled. </summary>
+	[Export] private int movingAttackInterval = 1;
+	/// <summary> How frequently should the slime attack? Only takes effect if the slime has movement disabled. </summary>
+	[Export] private float staticAttackInterval = 1.0f;
+	[Export] private NodePath shockHitbox;
+	private Hazard ShockHitbox { get; set; }
+	private bool IsAttackingEnabled => isSpitEnabled || isShockEnabled;
+	/// <summary> Timer to track things like shock windup. </summary>
+	private float attackTimer;
+	/// <summary> Keeps track of how many steps the slime has taken since the last attack.  </summary>
+	private float attackCounter;
+	/// <summary> How long the slime should rattle.  </summary>
+	private readonly float ShockWindupTime = 1f;
+	/// <summary> How long the shock attack should remain active.  </summary>
+	private readonly float ShockAttackLength = 0.8f;
+	/// <summary> When both attack modes are enabled, at which point should the slime switch to shocks?  </summary>
+	private readonly float ShockRangeSquared = 100f;
 
 	private SlimeState slimeState;
 	private enum SlimeState
 	{
 		Unspawned,
 		Spawning,
-		Idle,
+		Idle, // Also includes moving
 		Spit,
-		ShockWarning,
-		ShockActive,
+		Shock,
 		Defeated
 	}
 
@@ -52,7 +71,12 @@ public partial class SlimeMajin : Enemy
 	private readonly StringName SpawnEndAnimation = "spawn-end";
 
 	private readonly StringName MoveTrigger = "parameters/move_trigger/request";
+	private readonly StringName MoveTriggerActive = "parameters/move_trigger/active";
 	private readonly StringName ShockTrigger = "parameters/shock_trigger/request";
+	private readonly StringName ShockWarnState = "shock-warn";
+	private readonly StringName ShockStartState = "shock-start";
+	private readonly StringName ShockLoopState = "shock";
+	private readonly StringName ShockEndState = "shock-end";
 	private readonly StringName SpitTrigger = "parameters/spit_trigger/request";
 	private readonly StringName SpawnTrigger = "parameters/spawn_trigger/request";
 	private readonly StringName SpawnPlayback = "parameters/spawn_state/playback";
@@ -64,6 +88,7 @@ public partial class SlimeMajin : Enemy
 		if (Engine.IsEditorHint())
 			return;
 
+		ShockHitbox = GetNodeOrNull<Hazard>(shockHitbox);
 		initialPosition = GlobalPosition;
 		GlobalPosition = SpawnPosition;
 
@@ -75,6 +100,14 @@ public partial class SlimeMajin : Enemy
 	public override void Respawn()
 	{
 		slimeState = SlimeState.Unspawned;
+
+		if (IsMovementEnabled)
+		{
+			currentJumpCount = Mathf.FloorToInt(jumpCount * startingOffset);
+			positionVelocity = Vector3.Zero;
+			currentRotation = 0;
+			rotationVelocity = 0;
+		}
 
 		// Reset all animations
 		AnimationTree.Set(MoveTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
@@ -109,9 +142,138 @@ public partial class SlimeMajin : Enemy
 			case SlimeState.Spawning:
 				ProcessSpawn();
 				break;
+			case SlimeState.Idle:
+				if (IsMovementEnabled)
+					ProcessMovement();
+				break;
+			case SlimeState.Shock:
+				ProcessShock();
+				break;
 			default:
 				break;
 		}
+
+		ProcessAttackTimers();
+	}
+
+	private void ProcessMovement()
+	{
+		bool isMovementActive = (bool)AnimationTree.Get(MoveTriggerActive);
+
+		if (!isMovementActive)
+		{
+			if (IsAttackingEnabled &&
+				attackCounter >= movingAttackInterval &&
+				!isMovingBackwards &&
+				Player.PathFollower.GetProgress(GlobalPosition) > Player.PathFollower.Progress)
+			{
+				StartAttack();
+				return;
+			}
+
+			// Start jumping
+			currentJumpCount += isMovingBackwards ? -1 : 1;
+			attackCounter++;
+			AnimationTree.Set(MoveTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+
+			if (currentJumpCount == jumpCount + 1)
+			{
+				// Reached the end of movement; turn around
+				currentJumpCount = jumpCount;
+				isMovingBackwards = true;
+			}
+			else if (currentJumpCount == -1)
+			{
+				// Turn forward again
+				currentJumpCount = 0;
+				isMovingBackwards = false;
+			}
+
+			return;
+		}
+
+		Vector3 targetPosition = MovementStartPosition.Lerp(MovementEndPosition, currentJumpCount / (float)jumpCount);
+		GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref positionVelocity, PositionSmoothing * PhysicsManager.physicsDelta);
+
+		float targetRotation = isMovingBackwards ? Mathf.Pi : 0f;
+		currentRotation = ExtensionMethods.SmoothDamp(currentRotation, targetRotation, ref rotationVelocity, TrackingSmoothing);
+		Root.Rotation = Vector3.Up * currentRotation;
+	}
+
+	private void ProcessAttackTimers()
+	{
+		if (!IsAttackingEnabled || slimeState != SlimeState.Idle)
+			return;
+
+		if (IsMovementEnabled) // Attack timer is handled via attackCounter
+			return;
+
+		attackTimer += PhysicsManager.physicsDelta;
+		if (attackTimer > staticAttackInterval)
+			StartAttack();
+	}
+
+	private void StartAttack()
+	{
+		if (isShockEnabled && GlobalPosition.DistanceSquaredTo(Player.CenterPosition) < ShockRangeSquared)
+		{
+			StartShockAttack();
+			return;
+		}
+
+		if (isSpitEnabled)
+			StartSpitAttack();
+	}
+
+	private void StartSpitAttack()
+	{
+		slimeState = SlimeState.Spit;
+		AnimationTree.Set(SpitTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	private void StartShockAttack()
+	{
+		attackTimer = 0;
+		slimeState = SlimeState.Shock;
+		ShockStatePlayback.Start(ShockWarnState);
+		AnimationTree.Set(ShockTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	private void ProcessShock()
+	{
+		if (ShockStatePlayback.GetCurrentNode() == ShockEndState)
+			return;
+
+		if (ShockStatePlayback.GetCurrentNode() == ShockLoopState)
+		{
+			// Process shock length
+			attackTimer += PhysicsManager.physicsDelta;
+			if (attackTimer < ShockAttackLength)
+				return;
+
+			attackTimer = 0;
+			ShockStatePlayback.Travel(ShockEndState);
+			return;
+		}
+
+		if (attackTimer > ShockWindupTime)
+			return;
+
+		attackTimer += PhysicsManager.physicsDelta;
+		if (attackTimer < ShockWindupTime) // Still winding up
+			return;
+
+		attackTimer = 0;
+		ShockStatePlayback.Travel(ShockStartState);
+	}
+
+	/// <summary> Resnaps the slime to the ground. Prevents clipping into the ground (called from the animator). </summary>
+	private void GroundSnap()
+	{
+		// Prevent clipping into the ground
+		RaycastHit hit = this.CastRay(GlobalPosition + this.Up() * 0.5f, this.Down(), Runtime.Instance.environmentMask);
+		if (hit)
+			GlobalPosition = hit.point;
 	}
 
 	private void ProcessSpawn()
@@ -121,8 +283,22 @@ public partial class SlimeMajin : Enemy
 
 		if (spawnLaunchSettings.IsLauncherFinished(spawnTimer))
 		{
-			slimeState = SlimeState.Idle;
+			ReturnToIdle();
 			SpawnStatePlayback.Start(SpawnEndAnimation);
 		}
+	}
+
+	/// <summary> Called from animations whenever the slime finishes an attack. </summary>
+	private void ReturnToIdle()
+	{
+		attackCounter = 0;
+		attackTimer = 0;
+		slimeState = SlimeState.Idle;
+	}
+
+	protected override void Defeat()
+	{
+		base.Defeat();
+		AnimationTree.Set(DefeatTransition, "enabled");
 	}
 }

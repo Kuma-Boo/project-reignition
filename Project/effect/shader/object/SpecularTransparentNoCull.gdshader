@@ -10,6 +10,6 @@ void fragment() {
 	SPECULAR = texture(specular, UV).r;
 	ROUGHNESS = roughness;
 	ALBEDO = col.rgb;
-	ALPHA = col.a;
+	ALPHA *= col.a;
 }
 
