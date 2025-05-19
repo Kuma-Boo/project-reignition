@@ -731,9 +731,7 @@ public partial class PlayerCameraController : Node3D
 		if (settings.tiltMode == CameraSettingsResource.TiltModeEnum.FollowPath)
 		{
 			// Calculate tilt
-			PathFollower.TiltEnabled = true; // Sample the tilt
 			float targetTilt = sampler.Right().SignedAngleTo(-PathFollower.SideAxis, sampler.Forward()) * yawSamplingFix;
-			PathFollower.TiltEnabled = false;
 			return targetTilt;
 		}
 
