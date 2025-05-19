@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=3 uid="uid://ukucb8f0iscj"]
+
+[ext_resource type="PackedScene" uid="uid://cg1spna5lkmgc" path="res://area/5 pirate storm/act 1/environment/cannon event/CannonEvent.gltf" id="1_15dks"]
+[ext_resource type="Script" uid="uid://coiui4qvdxbqe" path="res://object/trigger/modules/EventTrigger.cs" id="2_n03it"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="3_bvgsx"]
+[ext_resource type="Resource" uid="uid://ukcne4um86a6" path="res://resource/preset/camera/common/CutsceneCam.tres" id="4_q3031"]
+[ext_resource type="AudioStream" uid="uid://bkktcdsl03any" path="res://sound/sfx/stage/pirate storm/event cannon.ogg" id="5_n03it"]
+
+[node name="CannonEvent" node_paths=PackedStringArray("animator") instance=ExtResource("1_15dks")]
+script = ExtResource("2_n03it")
+animator = NodePath("AnimationPlayer")
+EventID = "ps_a1_cannon_event"
+overrideEventLength = 5.3
+"Trigger Settings/Automatically Respawn" = false
+"Trigger Settings/Is One Shot" = true
+"Trigger Settings/Animation Blending" = 0.0
+"Trigger Settings/Player Stand-in" = NodePath("CannonEventRoot/Skeleton3D/Player/Player")
+"Player Event Settings/Animation Fadeout Time" = 0.0
+"Player Event Settings/Position Smoothing" = 0.2
+"Player Event Settings/Normalize Exit Move Speed" = true
+"Player Event Settings/Exit Move Speed" = 0.0
+"Player Event Settings/Exit Vertical Speed" = 0.0
+"Player Event Settings/Exit Lockout" = null
+
+[node name="Player" type="BoneAttachment3D" parent="CannonEventRoot/Skeleton3D" index="0"]
+transform = Transform3D(1, 2.33962e-24, -2.33962e-24, 2.33962e-24, 0, 1, 2.33962e-24, -1, 0, 0.00427246, 0.00236511, -29.9589)
+bone_name = "player"
+bone_idx = 4
+
+[node name="Player" type="Node3D" parent="CannonEventRoot/Skeleton3D/Player" index="0"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+
+[node name="CannonballFX" type="BoneAttachment3D" parent="CannonEventRoot/Skeleton3D" index="1"]
+transform = Transform3D(1, 1.70096e-16, 1.42728e-16, -2.18671e-16, 0.866025, 0.5, -3.85576e-17, -0.5, 0.866025, 0.00427246, 4.50949, -0.425949)
+bone_name = "cannon_shell_fx"
+bone_idx = 3
+
+[node name="Camera" type="BoneAttachment3D" parent="CannonEventRoot/Skeleton3D" index="2"]
+transform = Transform3D(0.798636, -0.104504, -0.592672, 1.49012e-08, 0.984808, -0.173648, 0.601815, 0.138682, 0.786502, -1.99573, 0.439155, -20.4589)
+bone_name = "camera"
+bone_idx = 5
+
+[node name="Camera" type="Camera3D" parent="CannonEventRoot/Skeleton3D/Camera" index="0"]
+cull_mask = 0
+fov = 100.0
+script = ExtResource("3_bvgsx")
+transitionTime = 0.0
+settings = ExtResource("4_q3031")
+UpdateEveryFrame = true
+followObject = NodePath(".")
+
+[node name="CannonEventMesh" parent="CannonEventRoot/Skeleton3D" index="3"]
+layers = 2
+
+[node name="SFX" type="Node" parent="." index="2"]
+
+[node name="CannonSFX" type="AudioStreamPlayer" parent="SFX" index="0"]
+process_mode = 1
+stream = ExtResource("5_n03it")
+bus = &"GAME SFX"
+
+[connection signal="Activated" from="." to="CannonEventRoot/Skeleton3D/Camera/Camera" method="Activate"]

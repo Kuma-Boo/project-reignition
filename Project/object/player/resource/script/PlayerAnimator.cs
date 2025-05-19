@@ -118,7 +118,11 @@ public partial class PlayerAnimator : Node3D
 		return isAnimationValid;
 	}
 
-	public void SeekOneshotAnimation(float time) => animationTree.Set(OneshotSeek, time);
+	public void SeekOneshotAnimation(float time)
+	{
+		GD.Print("seeking player animation to " + time);
+		animationTree.Set(OneshotSeek, time);
+	}
 
 	/// <summary>
 	/// Cancels the oneshot animation early.
@@ -130,8 +134,8 @@ public partial class PlayerAnimator : Node3D
 		// Abort accidental landing animations
 		if (Mathf.IsZeroApprox(fadeout))
 			animationTree.Set(LandTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
-		else
-			animationTree.Set(OneshotTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
+
+		animationTree.Set(OneshotTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 	}
 	#endregion
 

@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://dwg8morsdrkm"]
+
+[ext_resource type="Script" uid="uid://c0f78bfayvnvc" path="res://object/stage/common/resource/script/PathTraveller.cs" id="1_uaq8f"]
+[ext_resource type="PackedScene" uid="uid://bdsdow54p4xgf" path="res://area/5 pirate storm/object/model/Cannonball.gltf" id="2_ygngy"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uaq8f"]
+radius = 0.4
+height = 1.4
+
+[sub_resource type="Animation" id="Animation_uaq8f"]
+resource_name = "activate"
+
+[sub_resource type="Animation" id="Animation_ygngy"]
+resource_name = "deactivate"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_iayi3"]
+_data = {
+&"activate": SubResource("Animation_uaq8f"),
+&"deactivate": SubResource("Animation_ygngy")
+}
+
+[node name="Cannonball" type="Node3D" node_paths=PackedStringArray("root", "localRoot", "playerPosition", "animator")]
+script = ExtResource("1_uaq8f")
+maxSpeed = 30.0
+turnSpeed = 10.0
+isVerticalMovementDisabled = true
+bounds = Vector2(5, 0)
+root = NodePath("Cannonball")
+localRoot = NodePath("Cannonball/CannonballMesh")
+playerPosition = NodePath("Cannonball/CannonballMesh/PlayerPosition")
+animator = NodePath("AnimationPlayer")
+
+[node name="Cannonball" parent="." instance=ExtResource("2_ygngy")]
+
+[node name="PlayerPosition" type="Node3D" parent="Cannonball/CannonballMesh" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, -0.1)
+
+[node name="Hurtbox" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 8
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_uaq8f")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_iayi3")
+}
+
+[connection signal="body_entered" from="Hurtbox" to="." method="OnBodyEntered"]
+
+[editable path="Cannonball"]

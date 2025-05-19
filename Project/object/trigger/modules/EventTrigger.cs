@@ -260,7 +260,7 @@ public partial class EventTrigger : StageTriggerModule
 		Player.Camera.StartCrossfade();
 		StageSettings.Instance.AddTime(AnimationTimeLeft);
 
-		animator.Advance(AnimationLength);
+		animator.Advance(AnimationTimeLeft);
 		EmitSignal(SignalName.EventSkipped);
 	}
 

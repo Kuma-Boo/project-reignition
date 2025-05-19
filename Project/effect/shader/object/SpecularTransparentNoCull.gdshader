@@ -12,4 +12,3 @@ void fragment() {
 	ALBEDO = col.rgb;
 	ALPHA *= col.a;
 }
-
