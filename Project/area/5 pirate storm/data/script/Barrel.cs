@@ -8,6 +8,7 @@ public partial class Barrel : Launcher
 {
 	/// <summary> How long to remain on the surface. </summary>
 	[Export] private float floatTime = 2f;
+	[Export] private float initialFloatTimer;
 	/// <summary> How long to remain beneath the surface. Set to 0 if the barrel should never sink. </summary>
 	[Export(PropertyHint.Range, "0,2,0.1")] private float sinkTime;
 	[Export] private AnimationPlayer animator;
@@ -21,6 +22,12 @@ public partial class Barrel : Launcher
 		LaunchSettings settings = base.GetLaunchSettings();
 		settings.AllowInterruption = true;
 		return settings;
+	}
+
+	public override void _Ready()
+	{
+		// Initialize floating offset
+		floatTimer = Mathf.Min(initialFloatTimer, floatTime);
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -89,6 +96,7 @@ public partial class Barrel : Launcher
 		base.Activate();
 		Player.Animator.StartSpin(5f);
 		Player.Effect.StartSpinFX();
+		Player.Effect.StartTrailFX();
 	}
 
 	private void OnEntered(Area3D a)

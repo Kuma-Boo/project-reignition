@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://bkuwj6xj81tuv"]
+[gd_scene load_steps=54 format=3 uid="uid://bkuwj6xj81tuv"]
 
 [ext_resource type="PackedScene" uid="uid://csk7y7y8vgg6l" path="res://area/5 pirate storm/act 1/Static.tscn" id="1_8fsep"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_kflh0"]
@@ -25,11 +25,14 @@
 [ext_resource type="PackedScene" uid="uid://dgq2mwyi2qr0c" path="res://area/5 pirate storm/object/platforms/BridgeThin.tscn" id="19_s7fao"]
 [ext_resource type="PackedScene" uid="uid://e37k730a01ee" path="res://area/5 pirate storm/object/platforms/BridgeSquare.tscn" id="20_nrsdk"]
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="20_yq4gl"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="21_1aofs"]
+[ext_resource type="Resource" uid="uid://bvknde6nd8b3x" path="res://area/5 pirate storm/act 1/camera/PlatformingCam.tres" id="22_1aofs"]
 [ext_resource type="PackedScene" uid="uid://dlsd43s025utu" path="res://object/enemy/majin/data/pirate storm/BlueMajin.tscn" id="22_glsjx"]
 [ext_resource type="PackedScene" uid="uid://kihlqnxvg34q" path="res://area/5 pirate storm/object/destructable/FloatingStaircase.tscn" id="23_7u2k2"]
 [ext_resource type="PackedScene" uid="uid://qbkhsy662fxa" path="res://area/5 pirate storm/object/destructable/FloatingShipDeck.tscn" id="24_hlxfd"]
 [ext_resource type="PackedScene" uid="uid://dvq5dnmf3t7g2" path="res://area/5 pirate storm/object/platforms/FloatingThinPlatform.tscn" id="25_xinqt"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="26_1c4me"]
+[ext_resource type="Resource" uid="uid://bg886bbesjxi2" path="res://area/5 pirate storm/act 1/camera/NarrowCam.tres" id="26_ot04w"]
 [ext_resource type="PackedScene" uid="uid://bec0iv5nhvchi" path="res://area/5 pirate storm/object/platforms/BridgeLarge.tscn" id="26_ygwln"]
 [ext_resource type="Script" uid="uid://cciy1oeuvbh3e" path="res://object/trigger/modules/JumpTrigger.cs" id="27_6yc6x"]
 [ext_resource type="PackedScene" uid="uid://q2mhrprklf7q" path="res://area/5 pirate storm/object/Bomb.tscn" id="28_6yc6x"]
@@ -55,13 +58,16 @@ point_count = 2
 _data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
 point_count = 2
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_c8avs"]
+size = Vector3(3, 10, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6yc6x"]
+size = Vector3(20, 20, 5)
+
 [sub_resource type="Curve" id="Curve_hlxfd"]
 _limits = [-1.5, 1.5, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 14.0747, 0, 0, Vector2(0.146154, 1.5), 0.0, 0.0, 0, 0, Vector2(0.379487, -1.5), 0.0, 0.0, 0, 0, Vector2(0.6, 1.5), 0.0, 0.0, 0, 0, Vector2(0.866667, -1.5), 0.0, 0.0, 0, 0, Vector2(1, 2.98023e-08), 17.8904, 0.0, 0, 0]
 point_count = 6
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_6yc6x"]
-size = Vector3(20, 20, 5)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bhaba"]
 shader = ExtResource("12_p6wrh")
@@ -676,22 +682,49 @@ isShockEnabled = true
 rangeOverride = 25
 
 [node name="SlimeMajin3" parent="MainAct/Islands/Island2" instance=ExtResource("3_qkxl1")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -24.5, 0, 41)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -23.5, 0, 41)
 spawnOffset = Vector3(0, 5, -4)
 spawnHeight = 8.0
 isShockEnabled = true
 rangeOverride = 25
 
 [node name="BridgeThin1" parent="MainAct/Islands/Island2" instance=ExtResource("19_s7fao")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -24.5, 0, 48)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -23.5, 0, 48)
 
 [node name="BridgeThin2" parent="MainAct/Islands/Island2" instance=ExtResource("19_s7fao")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -24.5, 0, 64)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -23.5, 0, 64)
+
+[node name="CameraTrigger" parent="MainAct/Islands/Island2/BridgeThin2" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="MainAct/Islands/Island2/BridgeThin2/CameraTrigger"]
+script = ExtResource("21_1aofs")
+settings = ExtResource("22_1aofs")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Islands/Island2/BridgeThin2/CameraTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_c8avs")
 
 [node name="ItemBox" parent="MainAct/Islands/Island2/BridgeThin2" instance=ExtResource("20_yq4gl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, -4)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 50
+
+[node name="EnemyCamera" parent="MainAct/Islands/Island2" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.629321, 0, 0.777146, 0, 1, 0, -0.777146, 0, 0.629321, -16.6763, -0.00768006, 83.8468)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="MainAct/Islands/Island2/EnemyCamera"]
+script = ExtResource("21_1aofs")
+settings = ExtResource("22_1aofs")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Islands/Island2/EnemyCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
 
 [node name="GreenMajin1" parent="MainAct/Islands/Island2" instance=ExtResource("9_slh8b")]
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, -14.154, 0.0999994, 86.948)
@@ -730,6 +763,19 @@ transform = Transform3D(-1, 0, -8.9407e-08, 0, 1, 0, 8.9407e-08, 0, -1, 0, 5.3, 
 "Defeat Settings/Launch Direction" = Vector3(-2, 2, 15)
 "Defeat Settings/Local Transform" = true
 
+[node name="IslandCamera" parent="MainAct/Islands/Island2" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.325568, 0, 0.945519, 0, 1, 0, -0.945519, 0, 0.325568, -2.40414, -0.00768006, 89.8944)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="MainAct/Islands/Island2/IslandCamera"]
+script = ExtResource("21_1aofs")
+settings = ExtResource("26_ot04w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Islands/Island2/IslandCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
 [node name="SpoilsLarge3" parent="MainAct/Islands/Island2" instance=ExtResource("14_hcghg")]
 transform = Transform3D(0.939692, -3.09086e-08, 0.34202, 2.46658e-08, 1, 2.2602e-08, -0.34202, -1.28028e-08, 0.939692, 2.037, 0, 96.801)
 
@@ -738,6 +784,7 @@ transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, 
 
 [node name="Barrel2" parent="MainAct/Islands/Island2" instance=ExtResource("18_id6qa")]
 transform = Transform3D(0.19158, 0, 0.981477, 0, 1, 0, -0.981477, 0, 0.19158, 28.0216, -3.7, 97.494)
+initialFloatTimer = 1.0
 sinkTime = 1.0
 MiddleHeight = 10.0
 FinalHeight = 5.0
@@ -1101,7 +1148,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.412, 5, 38.779)
 [node name="Jump1" type="Node3D" parent="MainAct/Islands/Island3/JumpShortcut"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0, 8)
 script = ExtResource("27_6yc6x")
-jumpHeight = 2.0
+jumpHeight = 1.0
 
 [node name="Jump2" type="Node3D" parent="MainAct/Islands/Island3/JumpShortcut/Jump1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 16.3)
@@ -1111,17 +1158,17 @@ jumpHeight = 2.0
 [node name="Jump3" type="Node3D" parent="MainAct/Islands/Island3/JumpShortcut/Jump1/Jump2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 8.8)
 script = ExtResource("27_6yc6x")
-jumpHeight = 2.0
+jumpHeight = 1.0
 
 [node name="Jump4" type="Node3D" parent="MainAct/Islands/Island3/JumpShortcut/Jump1/Jump2/Jump3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 9.90002)
 script = ExtResource("27_6yc6x")
-jumpHeight = 2.0
+jumpHeight = 1.0
 
 [node name="Jump5" type="Node3D" parent="MainAct/Islands/Island3/JumpShortcut/Jump1/Jump2/Jump3/Jump4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.3, 0, 0.8)
 script = ExtResource("27_6yc6x")
-jumpHeight = 2.0
+jumpHeight = 1.0
 
 [node name="Jump6" type="Node3D" parent="MainAct/Islands/Island3/JumpShortcut/Jump1/Jump2/Jump3/Jump4/Jump5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.9, -3.5, 8.4)
@@ -1224,7 +1271,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="Blade" parent="MainAct/Islands/Island4/MovingBlade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, -1.49012e-08, -2.35367e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
+transform = Transform3D(1, -1.49012e-08, -2.44249e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
 
 [node name="MovingBlade2" type="Node3D" parent="MainAct/Islands/Island4"]
 transform = Transform3D(0.990268, 0, 0.139173, 0, 1, 0, -0.139173, 0, 0.990268, -30.323, 0.3, 6.98822)
@@ -1406,6 +1453,8 @@ heightfield_mask = 2
 
 [connection signal="Activated" from="MainAct/Opening/Spring1" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Opening/Spring1" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="MainAct/Opening/SpringGroup/Spring1" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/Opening/SpringGroup/Spring1" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Islands/Island3/Spring" to="MainAct/Islands/Island3/JumpShortcut/Jump1" method="Activate" flags=3]
 [connection signal="Activated" from="MainAct/Islands/Island3/Bombs/BombTrigger1" to="MainAct/Islands/Island3/Bombs/Bomb1" method="Launch"]
 [connection signal="Activated" from="MainAct/Islands/Island3/Bombs/BombTrigger1" to="MainAct/Islands/Island3/Bombs/Bomb2" method="Launch"]

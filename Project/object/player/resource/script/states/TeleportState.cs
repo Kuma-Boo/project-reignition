@@ -67,6 +67,7 @@ public partial class TeleportState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
+		Player.CheckGround();
 		switch (currentState)
 		{
 			case States.Start:
@@ -124,7 +125,9 @@ public partial class TeleportState : PlayerState
 
 		Player.MovementAngle = Player.PathFollower.ForwardAngle;
 		Player.SnapToGround();
+		Player.UpdateOrientation();
 		Player.CheckGround();
+
 		Player.PathFollower.Resync();
 		Player.Animator.ResetState(0);
 		Player.Animator.IdleAnimation();

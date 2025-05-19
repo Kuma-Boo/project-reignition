@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://csk7y7y8vgg6l"]
+[gd_scene load_steps=43 format=3 uid="uid://csk7y7y8vgg6l"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_g84th"]
 [ext_resource type="PackedScene" uid="uid://npgcl1ctbjyt" path="res://area/5 pirate storm/act 1/environment/01Opening.tscn" id="2_444mk"]
@@ -26,6 +26,7 @@
 [ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="23_k720b"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="23_s1a7j"]
 [ext_resource type="Script" uid="uid://bssd28yqn1cxg" path="res://object/trigger/modules/PathTrigger.cs" id="23_vf6sl"]
+[ext_resource type="Script" uid="uid://cciy1oeuvbh3e" path="res://object/trigger/modules/JumpTrigger.cs" id="24_auuan"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="24_havkg"]
 [ext_resource type="Material" uid="uid://8kc12fso5xr1" path="res://area/5 pirate storm/data/material/Water.tres" id="25_88ndg"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="25_f6rbm"]
@@ -33,6 +34,7 @@
 [ext_resource type="Resource" uid="uid://cahi8d7te0l08" path="res://area/5 pirate storm/act 1/camera/OpeningWoodCam.tres" id="27_ybwgy"]
 [ext_resource type="Resource" uid="uid://43disjglw8xx" path="res://area/5 pirate storm/act 1/camera/BrokenHullCam.tres" id="28_pgga8"]
 [ext_resource type="Resource" uid="uid://bvknde6nd8b3x" path="res://area/5 pirate storm/act 1/camera/PlatformingCam.tres" id="29_flm25"]
+[ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="30_3vwxx"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k720b"]
 size = Vector3(25, 20, 5)
@@ -42,6 +44,9 @@ size = Vector3(50, 80, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_f6rbm"]
 size = Vector3(500, 5, 500)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_auuan"]
+size = Vector3(25, 4, 5)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ypnsc"]
 sky_top_color = Color(0.1457, 0.17856, 0.31, 1)
@@ -240,6 +245,19 @@ shape = SubResource("BoxShape3D_f6rbm")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 500)
 shape = SubResource("BoxShape3D_f6rbm")
 
+[node name="OpeningJump" parent="Triggers" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.887011, 0, -0.461749, 0, 1, 0, 0.461749, 0, 0.887011, 2.50754, 7.3, 98.4664)
+
+[node name="Jump" type="Node3D" parent="Triggers/OpeningJump"]
+transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 0.537663, 2, 5.29753)
+script = ExtResource("24_auuan")
+jumpHeight = 5.0
+autoAlign = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/OpeningJump"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.76837e-07, 0)
+shape = SubResource("BoxShape3D_auuan")
+
 [node name="PathAndCameraTriggers" type="Node3D" parent="Triggers"]
 
 [node name="OpeningWood" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
@@ -353,6 +371,127 @@ settings = ExtResource("29_flm25")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/PlatformingCamera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="IslandCamera2" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.358368, 0, -0.933581, 0, 1, 0, 0.933581, 0, 0.358368, -105.437, 1.99232, 453.966)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/IslandCamera2"]
+script = ExtResource("25_f6rbm")
+settings = ExtResource("26_ybwgy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/IslandCamera2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="PlatformingCamera2" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.241922, 0, 0.970296, 0, 1, 0, -0.970296, 0, 0.241922, -99.6066, 1.99232, 546.531)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/PlatformingCamera2"]
+script = ExtResource("25_f6rbm")
+settings = ExtResource("29_flm25")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/PlatformingCamera2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="IslandCamera3" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(-0.196785, 0, -0.980447, 0, 1, 0, 0.980447, 0, -0.196785, -21.4875, 1.99232, 562.716)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/IslandCamera3"]
+script = ExtResource("25_f6rbm")
+settings = ExtResource("26_ybwgy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/IslandCamera3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="PlatformingCamera3" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.190809, -2.18557e-08, -0.981627, 8.42382e-08, 1, -5.89051e-09, 0.981627, -8.15666e-08, 0.190809, -17.2777, 1.99232, 654.336)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/PlatformingCamera3"]
+script = ExtResource("25_f6rbm")
+settings = ExtResource("29_flm25")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/PlatformingCamera3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="IslandCamera4" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130.042, 4.99232, 712.279)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/IslandCamera4"]
+script = ExtResource("25_f6rbm")
+settings = ExtResource("26_ybwgy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/IslandCamera4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="Checkpoints" type="Node3D" parent="Triggers"]
+
+[node name="ShipHull" parent="Triggers/Checkpoints" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.843391, 0, -0.5373, 0, 1, 0, 0.5373, 0, 0.843391, 36.7511, 3.5, 319.618)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Checkpoint" type="Node3D" parent="Triggers/Checkpoints/ShipHull"]
+transform = Transform3D(0.819152, -0.564862, -0.0996005, 0.573576, 0.806707, 0.142244, -7.42223e-09, -0.173648, 0.984808, 0, 0, 0)
+script = ExtResource("30_3vwxx")
+CameraSettings = ExtResource("28_pgga8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoints/ShipHull"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="Island1" parent="Triggers/Checkpoints" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.502507, 0, -0.864573, 0, 1, 0, 0.864573, 0, 0.502507, -111.832, 2, 456.912)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Checkpoint" type="Node3D" parent="Triggers/Checkpoints/Island1"]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("30_3vwxx")
+CameraSettings = ExtResource("26_ybwgy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoints/Island1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="Island2" parent="Triggers/Checkpoints" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(-0.203095, 0, -0.979159, 0, 1, 0, 0.979159, 0, -0.203095, -21.537, 2, 562.688)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Checkpoint" type="Node3D" parent="Triggers/Checkpoints/Island2"]
+script = ExtResource("30_3vwxx")
+CameraSettings = ExtResource("26_ybwgy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoints/Island2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="Island3" parent="Triggers/Checkpoints" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.144045, -7.5904e-09, -0.989571, 1.75051e-09, 1, -7.41559e-09, 0.989571, -6.64075e-10, 0.144045, -81.7948, 2, 663.393)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Checkpoint" type="Node3D" parent="Triggers/Checkpoints/Island3"]
+script = ExtResource("30_3vwxx")
+CameraSettings = ExtResource("26_ybwgy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoints/Island3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_k720b")
 
 [node name="Lighting" type="Node3D" parent="."]
