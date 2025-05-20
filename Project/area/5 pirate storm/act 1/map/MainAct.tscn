@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://bkuwj6xj81tuv"]
+[gd_scene load_steps=56 format=3 uid="uid://bkuwj6xj81tuv"]
 
 [ext_resource type="PackedScene" uid="uid://csk7y7y8vgg6l" path="res://area/5 pirate storm/act 1/Static.tscn" id="1_8fsep"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_kflh0"]
@@ -69,6 +69,16 @@ _limits = [-1.5, 1.5, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 14.0747, 0, 0, Vector2(0.146154, 1.5), 0.0, 0.0, 0, 0, Vector2(0.379487, -1.5), 0.0, 0.0, 0, 0, Vector2(0.6, 1.5), 0.0, 0.0, 0, 0, Vector2(0.866667, -1.5), 0.0, 0.0, 0, 0, Vector2(1, 2.98023e-08), 17.8904, 0.0, 0, 0]
 point_count = 6
 
+[sub_resource type="Curve" id="Curve_ot04w"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 2.0, 0, 1, Vector2(1, 2), 2.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_c8avs"]
+_limits = [-2.0, 0.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, -2.0, 0, 1, Vector2(1, -2), -2.0, 0.0, 1, 0]
+point_count = 2
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bhaba"]
 shader = ExtResource("12_p6wrh")
 shader_parameter/direction = Vector3(0, -1, -0.3)
@@ -124,7 +134,8 @@ InitialCameraSettings = ExtResource("3_8cccl")
 environmentFxFactor = 1.0
 
 [node name="PathFollow3D" parent="Static/Path/CannonballPath" index="0"]
-transform = Transform3D(-1, 8.24782e-08, -2.89827e-08, 0, 0.331523, 0.943441, 8.74228e-08, 0.943441, -0.331523, 0, -116.225, 188.738)
+transform = Transform3D(-1, 1.77443e-08, -8.56018e-08, 0, 0.97917, 0.202971, 8.74228e-08, 0.202971, -0.97917, 0, 2.27044, 87.0328)
+progress = 88.0
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -133,7 +144,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.69, 0)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_kflh0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -83, -7.7, 663)
 
 [node name="Opening" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
@@ -1275,7 +1285,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="Blade" parent="MainAct/Islands/Island4/MovingBlade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, -1.49012e-08, -2.4869e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
+transform = Transform3D(1, -1.49012e-08, -2.57572e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
 
 [node name="MovingBlade2" type="Node3D" parent="MainAct/Islands/Island4"]
 transform = Transform3D(0.990268, 0, 0.139173, 0, 1, 0, -0.139173, 0, 0.990268, -30.323, 0.3, 6.98822)
@@ -1417,6 +1427,399 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
 [node name="DashPanel2" parent="MainAct/Islands/Island4/DashPanelGroup" instance=ExtResource("29_ihlpu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 
+[node name="Cannonball" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -129.7, 189.707, 821.746)
+
+[node name="Rings1" type="Node3D" parent="MainAct/Cannonball"]
+transform = Transform3D(-1, -8.45467e-09, -8.70122e-08, 0, 0.995304, -0.0967104, 8.74228e-08, -0.0967104, -0.995304, 0, 5.98146, 29.3444)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 8
+Shape = 2
+Path = NodePath("../../../Static/Path/CannonballPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_ot04w")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Cannonball/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Child02" parent="MainAct/Cannonball/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 0, 0, 1, -0.285721, -0.0138092, -2)
+
+[node name="Child03" parent="MainAct/Cannonball/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 0, 0, 1, -0.571426, -0.0549164, -3.99951)
+
+[node name="Child04" parent="MainAct/Cannonball/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 0, 0, 1, -0.857147, -0.122917, -5.99841)
+
+[node name="Child05" parent="MainAct/Cannonball/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 0, 0, 1, -1.14285, -0.217216, -7.99615)
+
+[node name="Child06" parent="MainAct/Cannonball/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 0, 0, 1, -1.42857, -0.337318, -9.99255)
+
+[node name="Child07" parent="MainAct/Cannonball/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 0, 0, 1, -1.71429, -0.482574, -11.9872)
+
+[node name="Child08" parent="MainAct/Cannonball/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 0, 0, 1, -2, -0.652351, -13.9801)
+
+[node name="Rings2" type="Node3D" parent="MainAct/Cannonball"]
+transform = Transform3D(-1, 6.93445e-09, -8.71464e-08, 0, 0.996839, 0.0793205, 8.74228e-08, 0.0793205, -0.996839, -3, 6.06767, 59.3052)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 8
+Shape = 2
+Path = NodePath("../../../Static/Path/CannonballPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Cannonball/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.10352e-05)
+
+[node name="Child02" parent="MainAct/Cannonball/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00921631, -2)
+
+[node name="Child03" parent="MainAct/Cannonball/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0365601, -3.99982)
+
+[node name="Child04" parent="MainAct/Cannonball/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0812988, -5.99933)
+
+[node name="Child05" parent="MainAct/Cannonball/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.142944, -7.99847)
+
+[node name="Child06" parent="MainAct/Cannonball/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.220856, -9.99689)
+
+[node name="Child07" parent="MainAct/Cannonball/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.314484, -11.9947)
+
+[node name="Child08" parent="MainAct/Cannonball/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.423279, -13.9918)
+
+[node name="Rings3" type="Node3D" parent="MainAct/Cannonball"]
+transform = Transform3D(-1, 1.77444e-08, -8.5602e-08, 0, 0.979173, 0.202971, 8.74228e-08, 0.202971, -0.979173, 2.50001, 2.26994, 87.0331)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 8
+Shape = 2
+Path = NodePath("../../../Static/Path/CannonballPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 2.0
+"Horizontal Offset" = SubResource("Curve_c8avs")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Cannonball/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, -1.77636e-15, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Child02" parent="MainAct/Cannonball/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, -1.77636e-15, 0, 0, 1, 0, 0, 0, 1, 0.285713, -0.0305176, -1.99969)
+
+[node name="Child03" parent="MainAct/Cannonball/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, -1.77636e-15, 0, 0, 1, 0, 0, 0, 1, 0.571426, -0.121124, -3.99756)
+
+[node name="Child04" parent="MainAct/Cannonball/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, -1.77636e-15, 0, 0, 1, 0, 0, 0, 1, 0.857147, -0.270416, -5.99194)
+
+[node name="Child05" parent="MainAct/Cannonball/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, -1.77636e-15, 0, 0, 1, 0, 0, 0, 1, 1.14285, -0.476837, -7.9812)
+
+[node name="Child06" parent="MainAct/Cannonball/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, -1.77636e-15, 0, 0, 1, 0, 0, 0, 1, 1.42857, -0.738739, -9.96393)
+
+[node name="Child07" parent="MainAct/Cannonball/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, -1.77636e-15, 0, 0, 1, 0, 0, 0, 1, 1.71428, -1.05429, -11.9388)
+
+[node name="Child08" parent="MainAct/Cannonball/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, -1.77636e-15, 0, 0, 1, 0, 0, 0, 1, 2, -1.42178, -13.9047)
+
+[node name="PearlRing1" type="Node3D" parent="MainAct/Cannonball"]
+transform = Transform3D(-1, 3.72027e-08, -7.91098e-08, 0, 0.904911, 0.425549, 8.74228e-08, 0.425549, -0.904911, 1.52588e-05, -3.16992, 103.097)
+script = ExtResource("6_ytq25")
+Source = ExtResource("8_ytq25")
+Amount = 8
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.8
+"Ring Ratio" = 1.0
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Cannonball/PearlRing1" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 0)
+
+[node name="Child02" parent="MainAct/Cannonball/PearlRing1" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565685, 0.565685, 0)
+
+[node name="Child03" parent="MainAct/Cannonball/PearlRing1" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.49691e-08, 0.8, 0)
+
+[node name="Child04" parent="MainAct/Cannonball/PearlRing1" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, 0.565685, 0)
+
+[node name="Child05" parent="MainAct/Cannonball/PearlRing1" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -6.99382e-08, 0)
+
+[node name="Child06" parent="MainAct/Cannonball/PearlRing1" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, -0.565686, 0)
+
+[node name="Child07" parent="MainAct/Cannonball/PearlRing1" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5399e-09, -0.8, 0)
+
+[node name="Child08" parent="MainAct/Cannonball/PearlRing1" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565686, -0.565685, 0)
+
+[node name="PearlRing2" type="Node3D" parent="MainAct/Cannonball"]
+transform = Transform3D(-1, 3.90895e-08, -7.81948e-08, 0, 0.894444, 0.447131, 8.74228e-08, 0.447131, -0.894444, 1.52588e-05, -4.04282, 104.897)
+script = ExtResource("6_ytq25")
+Source = ExtResource("8_ytq25")
+Amount = 8
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.8
+"Ring Ratio" = 1.0
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Cannonball/PearlRing2" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 0)
+
+[node name="Child02" parent="MainAct/Cannonball/PearlRing2" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565685, 0.565685, 0)
+
+[node name="Child03" parent="MainAct/Cannonball/PearlRing2" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.49691e-08, 0.8, 0)
+
+[node name="Child04" parent="MainAct/Cannonball/PearlRing2" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, 0.565685, 0)
+
+[node name="Child05" parent="MainAct/Cannonball/PearlRing2" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -6.99382e-08, 0)
+
+[node name="Child06" parent="MainAct/Cannonball/PearlRing2" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, -0.565686, 0)
+
+[node name="Child07" parent="MainAct/Cannonball/PearlRing2" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5399e-09, -0.8, 0)
+
+[node name="Child08" parent="MainAct/Cannonball/PearlRing2" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565686, -0.565685, 0)
+
+[node name="PearlRing3" type="Node3D" parent="MainAct/Cannonball"]
+transform = Transform3D(-1, 4.08937e-08, -7.72665e-08, 0, 0.883827, 0.467769, 8.74228e-08, 0.467769, -0.883827, 1.52588e-05, -4.95793, 106.675)
+script = ExtResource("6_ytq25")
+Source = ExtResource("8_ytq25")
+Amount = 8
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.8
+"Ring Ratio" = 1.0
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Cannonball/PearlRing3" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 0)
+
+[node name="Child02" parent="MainAct/Cannonball/PearlRing3" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565685, 0.565685, 0)
+
+[node name="Child03" parent="MainAct/Cannonball/PearlRing3" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.49691e-08, 0.8, 0)
+
+[node name="Child04" parent="MainAct/Cannonball/PearlRing3" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, 0.565685, 0)
+
+[node name="Child05" parent="MainAct/Cannonball/PearlRing3" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -6.99382e-08, 0)
+
+[node name="Child06" parent="MainAct/Cannonball/PearlRing3" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, -0.565686, 0)
+
+[node name="Child07" parent="MainAct/Cannonball/PearlRing3" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5399e-09, -0.8, 0)
+
+[node name="Child08" parent="MainAct/Cannonball/PearlRing3" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565686, -0.565685, 0)
+
+[node name="PearlRing4" type="Node3D" parent="MainAct/Cannonball"]
+transform = Transform3D(-1, 5.26694e-08, -6.97734e-08, 0, 0.798115, 0.602467, 8.74228e-08, 0.602467, -0.798115, 4, -13.5874, 120.128)
+script = ExtResource("6_ytq25")
+Source = ExtResource("8_ytq25")
+Amount = 8
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.8
+"Ring Ratio" = 1.0
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Cannonball/PearlRing4" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 0)
+
+[node name="Child02" parent="MainAct/Cannonball/PearlRing4" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565685, 0.565685, 0)
+
+[node name="Child03" parent="MainAct/Cannonball/PearlRing4" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.49691e-08, 0.8, 0)
+
+[node name="Child04" parent="MainAct/Cannonball/PearlRing4" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, 0.565685, 0)
+
+[node name="Child05" parent="MainAct/Cannonball/PearlRing4" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -6.99382e-08, 0)
+
+[node name="Child06" parent="MainAct/Cannonball/PearlRing4" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, -0.565686, 0)
+
+[node name="Child07" parent="MainAct/Cannonball/PearlRing4" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5399e-09, -0.8, 0)
+
+[node name="Child08" parent="MainAct/Cannonball/PearlRing4" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565686, -0.565685, 0)
+
+[node name="PearlRing5" type="Node3D" parent="MainAct/Cannonball"]
+transform = Transform3D(-1, 5.38536e-08, -6.88635e-08, 0, 0.787707, 0.616013, 8.74228e-08, 0.616013, -0.787707, 3, -14.8061, 121.714)
+script = ExtResource("6_ytq25")
+Source = ExtResource("8_ytq25")
+Amount = 8
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.8
+"Ring Ratio" = 1.0
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Cannonball/PearlRing5" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 0)
+
+[node name="Child02" parent="MainAct/Cannonball/PearlRing5" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565685, 0.565685, 0)
+
+[node name="Child03" parent="MainAct/Cannonball/PearlRing5" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.49691e-08, 0.8, 0)
+
+[node name="Child04" parent="MainAct/Cannonball/PearlRing5" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, 0.565685, 0)
+
+[node name="Child05" parent="MainAct/Cannonball/PearlRing5" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -6.99382e-08, 0)
+
+[node name="Child06" parent="MainAct/Cannonball/PearlRing5" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, -0.565686, 0)
+
+[node name="Child07" parent="MainAct/Cannonball/PearlRing5" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5399e-09, -0.8, 0)
+
+[node name="Child08" parent="MainAct/Cannonball/PearlRing5" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565686, -0.565685, 0)
+
+[node name="PearlRing6" type="Node3D" parent="MainAct/Cannonball"]
+transform = Transform3D(-1, 6.42335e-08, -5.92997e-08, 0, 0.67831, 0.734746, 8.74228e-08, 0.734746, -0.67831, 0, -30.455, 138.536)
+script = ExtResource("6_ytq25")
+Source = ExtResource("8_ytq25")
+Amount = 8
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.8
+"Ring Ratio" = 1.0
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Cannonball/PearlRing6" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 0)
+
+[node name="Child02" parent="MainAct/Cannonball/PearlRing6" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565685, 0.565685, 0)
+
+[node name="Child03" parent="MainAct/Cannonball/PearlRing6" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.49691e-08, 0.8, 0)
+
+[node name="Child04" parent="MainAct/Cannonball/PearlRing6" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, 0.565685, 0)
+
+[node name="Child05" parent="MainAct/Cannonball/PearlRing6" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -6.99382e-08, 0)
+
+[node name="Child06" parent="MainAct/Cannonball/PearlRing6" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, -0.565686, 0)
+
+[node name="Child07" parent="MainAct/Cannonball/PearlRing6" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5399e-09, -0.8, 0)
+
+[node name="Child08" parent="MainAct/Cannonball/PearlRing6" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565686, -0.565685, 0)
+
+[node name="PearlRing7" type="Node3D" parent="MainAct/Cannonball"]
+transform = Transform3D(-1, 7.22294e-08, -4.92475e-08, 0, 0.563326, 0.826208, 8.74228e-08, 0.826208, -0.563326, 0, -53.9926, 157.093)
+script = ExtResource("6_ytq25")
+Source = ExtResource("8_ytq25")
+Amount = 8
+Shape = 1
+Orientation = 1
+"Ring Size" = 0.8
+"Ring Ratio" = 1.0
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Cannonball/PearlRing7" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 0)
+
+[node name="Child02" parent="MainAct/Cannonball/PearlRing7" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565685, 0.565685, 0)
+
+[node name="Child03" parent="MainAct/Cannonball/PearlRing7" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.49691e-08, 0.8, 0)
+
+[node name="Child04" parent="MainAct/Cannonball/PearlRing7" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, 0.565685, 0)
+
+[node name="Child05" parent="MainAct/Cannonball/PearlRing7" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -6.99382e-08, 0)
+
+[node name="Child06" parent="MainAct/Cannonball/PearlRing7" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565685, -0.565686, 0)
+
+[node name="Child07" parent="MainAct/Cannonball/PearlRing7" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5399e-09, -0.8, 0)
+
+[node name="Child08" parent="MainAct/Cannonball/PearlRing7" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.565686, -0.565685, 0)
+
+[node name="Bomb" type="Node3D" parent="MainAct/Cannonball"]
+
+[node name="BombTrigger1" parent="MainAct/Cannonball/Bomb" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 6.7, 46.5001)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cannonball/Bomb/BombTrigger1"]
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Bomb1" parent="MainAct/Cannonball/Bomb" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.99995, -33, 140)
+"Launch Settings/Starting Offset" = Vector3(2, -30, 30)
+
+[node name="Bomb2" parent="MainAct/Cannonball/Bomb" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 3.00005, -30, 138)
+"Launch Settings/Starting Offset" = Vector3(-2, -31, 30)
+
+[node name="Bomb3" parent="MainAct/Cannonball/Bomb" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -1.99995, -26, 133)
+"Launch Settings/Starting Offset" = Vector3(2, -34, 35)
+
+[node name="Bomb4" parent="MainAct/Cannonball/Bomb" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 3.00005, -18, 126)
+"Launch Settings/Starting Offset" = Vector3(-2, -45, 40)
+
+[node name="Bomb5" parent="MainAct/Cannonball/Bomb" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -2.99995, -9, 115)
+"Launch Settings/Starting Offset" = Vector3(2, -50, 50)
+
 [node name="Rain" type="GPUParticles3D" parent="."]
 layers = 32
 cast_shadow = 0
@@ -1447,7 +1850,7 @@ process_material = SubResource("ParticleProcessMaterial_2wlyt")
 draw_pass_1 = SubResource("QuadMesh_g88he")
 
 [node name="RainCollision" type="GPUParticlesCollisionHeightField3D" parent="Rain"]
-transform = Transform3D(1, 0, 0, 0, 1, 7.45058e-09, 0, -7.45058e-09, 1, -84, 4.94719e-06, 664)
+transform = Transform3D(1, 0, 0, 0, 1, 7.45058e-09, 0, -7.45058e-09, 1, -1, 7.45513e-09, 1)
 layers = 32
 cull_mask = 4293918752
 size = Vector3(30, 30, 60)
@@ -1474,6 +1877,11 @@ heightfield_mask = 2
 [connection signal="JumpFinished" from="MainAct/Islands/Island3/JumpShortcut/Jump1/Jump2/Jump3" to="MainAct/Islands/Island3/JumpShortcut/Jump1/Jump2/Jump3/Jump4" method="Activate" flags=3]
 [connection signal="JumpFinished" from="MainAct/Islands/Island3/JumpShortcut/Jump1/Jump2/Jump3/Jump4" to="MainAct/Islands/Island3/JumpShortcut/Jump1/Jump2/Jump3/Jump4/Jump5" method="Activate" flags=3]
 [connection signal="JumpFinished" from="MainAct/Islands/Island3/JumpShortcut/Jump1/Jump2/Jump3/Jump4/Jump5" to="MainAct/Islands/Island3/JumpShortcut/Jump1/Jump2/Jump3/Jump4/Jump5/Jump6" method="Activate" flags=3]
+[connection signal="Activated" from="MainAct/Cannonball/Bomb/BombTrigger1" to="MainAct/Cannonball/Bomb/Bomb1" method="Launch"]
+[connection signal="Activated" from="MainAct/Cannonball/Bomb/BombTrigger1" to="MainAct/Cannonball/Bomb/Bomb2" method="Launch"]
+[connection signal="Activated" from="MainAct/Cannonball/Bomb/BombTrigger1" to="MainAct/Cannonball/Bomb/Bomb3" method="Launch"]
+[connection signal="Activated" from="MainAct/Cannonball/Bomb/BombTrigger1" to="MainAct/Cannonball/Bomb/Bomb4" method="Launch"]
+[connection signal="Activated" from="MainAct/Cannonball/Bomb/BombTrigger1" to="MainAct/Cannonball/Bomb/Bomb5" method="Launch"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]

@@ -218,7 +218,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -129.7, 189.707, 821.746)
 curve = ExtResource("18_fqgif")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path/CannonballPath"]
-transform = Transform3D(-1, 8.24783e-08, -2.89827e-08, 0, 0.331523, 0.943442, 8.74228e-08, 0.943442, -0.331523, 0, -116.225, 188.738)
+transform = Transform3D(-1, 8.24783e-08, -2.89827e-08, 0, 0.331524, 0.943442, 8.74228e-08, 0.943442, -0.331524, 0, -116.225, 188.738)
 progress = 250.0
 loop = false
 
@@ -449,39 +449,42 @@ settings = ExtResource("26_ybwgy")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("BoxShape3D_k720b")
 
-[node name="Ships" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
-transform = Transform3D(-1, -8.74223e-08, -3.82135e-15, 0, -4.37112e-08, 0.999995, -8.74228e-08, 0.999995, 4.37112e-08, -129.7, 59.0002, 1019.86)
+[node name="ShipsStart" type="Node3D" parent="Triggers/PathAndCameraTriggers"]
+transform = Transform3D(1, 0, 0, 0, 0.999995, 0, 0, 0, 0.999995, -129.7, 69.0001, 1011.86)
+
+[node name="Ships" parent="Triggers/PathAndCameraTriggers/ShipsStart" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(-1, -8.60942e-08, 1.51807e-08, 0, 0.173648, 0.984808, -8.74232e-08, 0.984808, -0.173648, 0, 0, 0)
 OneShot = true
 "Respawn Mode" = 0
 "Enter Mode" = 0
 
-[node name="Path" type="Node3D" parent="Triggers/PathAndCameraTriggers/Ships" node_paths=PackedStringArray("path")]
+[node name="Path" type="Node3D" parent="Triggers/PathAndCameraTriggers/ShipsStart/Ships" node_paths=PackedStringArray("path")]
 script = ExtResource("23_vf6sl")
-path = NodePath("../../../../Path/ShipPath")
+path = NodePath("../../../../../Path/ShipPath")
 cameraPathBlendTime = 1.0
 
-[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/Ships"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 28, -26)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/ShipsStart/Ships"]
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="Checkpoint" type="Node3D" parent="Triggers/PathAndCameraTriggers/ShipsStart" node_paths=PackedStringArray("PlayerPath", "CameraPath")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -38.2275, 27.0002)
+script = ExtResource("30_3vwxx")
+PlayerPath = NodePath("../../../../Path/ShipPath")
+CameraPath = NodePath("../../../../Path/ShipPath")
+CameraSettings = ExtResource("32_82sha")
+
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/ShipsStart"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -36, 34)
 script = ExtResource("25_f6rbm")
 deactivationTransitionTime = 0.5
 transitionType = 1
 settings = ExtResource("31_chu3b")
 previousSettings = ExtResource("32_82sha")
 
-[node name="Checkpoint" type="Node3D" parent="Triggers/PathAndCameraTriggers/Ships" node_paths=PackedStringArray("PlayerPath", "CameraPath")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.0002, -28.2275)
-script = ExtResource("30_3vwxx")
-PlayerPath = NodePath("../../../../Path/ShipPath")
-CameraPath = NodePath("../../../../Path/ShipPath")
-CameraSettings = ExtResource("32_82sha")
-
-[node name="Jump" type="Node3D" parent="Triggers/PathAndCameraTriggers/Ships"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.0002, -28.2275)
+[node name="Jump" type="Node3D" parent="Triggers/PathAndCameraTriggers/ShipsStart"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -38.2275, 27.0002)
 script = ExtResource("24_auuan")
 jumpHeight = 3.0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/Ships"]
-shape = SubResource("BoxShape3D_k720b")
 
 [node name="Checkpoints" type="Node3D" parent="Triggers"]
 
@@ -574,7 +577,6 @@ transform = Transform3D(1, 0, 0, 0, 0.975535, 0.219846, 0, -0.219846, 0.975535, 
 script = ExtResource("36_oxnth")
 
 [node name="Cannonball" parent="Triggers/CannonEvent/CannonBallCull" node_paths=PackedStringArray("path") instance=ExtResource("19_fqgif")]
-maxSpeed = 40.0
 path = NodePath("../../../../Path/CannonballPath")
 
 [node name="JumpTrigger" type="Node3D" parent="Triggers/CannonEvent/CannonBallCull/Cannonball"]
@@ -647,13 +649,16 @@ isStageMusic = true
 [connection signal="Deactivated" from="Visuals/CullingTriggers/07-L" to="Visuals/07End" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingTriggers/06-U" to="Visuals/06GhostShip" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingTriggers/06-U" to="Visuals/06GhostShip" method="Activate"]
-[connection signal="JumpFinished" from="Triggers/PathAndCameraTriggers/Ships/Jump" to="Triggers/PathAndCameraTriggers/Ships/Camera" method="Deactivate"]
+[connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Camera" method="Activate"]
+[connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Checkpoint" method="Activate"]
+[connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Jump" method="Activate"]
+[connection signal="JumpFinished" from="Triggers/PathAndCameraTriggers/ShipsStart/Jump" to="Triggers/PathAndCameraTriggers/ShipsStart/Camera" method="Deactivate"]
 [connection signal="Activated" from="Triggers/CannonEvent/CannonEventTrigger" to="Triggers/CannonEvent/CannonEventCull/CannonEvent" method="Activate"]
+[connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/CannonEventCull" method="Deactivate"]
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/Camera" method="Activate"]
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/Path" method="Activate"]
-[connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/CannonBallCull/Cannonball/JumpTrigger" method="Activate" flags=3]
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/CannonBallCull" method="Activate"]
-[connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/CannonEventCull" method="Deactivate"]
+[connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/CannonBallCull/Cannonball/JumpTrigger" method="Activate" flags=3]
 [connection signal="JumpFinished" from="Triggers/CannonEvent/CannonBallCull/Cannonball/JumpTrigger" to="Triggers/CannonEvent/CannonBallCull/Cannonball" method="Activate"]
 
 [editable path="Collision"]
