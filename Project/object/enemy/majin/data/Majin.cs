@@ -535,6 +535,9 @@ public partial class Majin : Enemy
 		if (Mathf.IsEqualApprox(timer, -1)) // Spawn intervals haven't started yet
 			return;
 
+		if (isFlameActive) // Don't allow spawn intervals during a flame attack
+			return;
+
 		timer = Mathf.MoveToward(timer, 0, PhysicsManager.physicsDelta);
 		if (!Mathf.IsZeroApprox(timer))
 			return;

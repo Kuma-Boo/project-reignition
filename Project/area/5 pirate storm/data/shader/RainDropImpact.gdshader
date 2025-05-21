@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode specular_disabled, unshaded;
+render_mode specular_disabled, unshaded, fog_disabled;
 
 global uniform float environment_fx_intensity;
 

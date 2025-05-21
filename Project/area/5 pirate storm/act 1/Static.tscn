@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://csk7y7y8vgg6l"]
+[gd_scene load_steps=62 format=3 uid="uid://csk7y7y8vgg6l"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_g84th"]
 [ext_resource type="PackedScene" uid="uid://npgcl1ctbjyt" path="res://area/5 pirate storm/act 1/environment/01Opening.tscn" id="2_444mk"]
@@ -42,8 +42,8 @@
 [ext_resource type="Resource" uid="uid://c48axuw8cwjqg" path="res://area/5 pirate storm/act 1/camera/CannonballCam.tres" id="34_3rek1"]
 [ext_resource type="Resource" uid="uid://unk8vyncg7mg" path="res://area/5 pirate storm/act 1/camera/ShipCloseCam.tres" id="34_dsog2"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="36_oxnth"]
-[ext_resource type="Shader" uid="uid://c3bm50tda03vo" path="res://area/5 pirate storm/data/shader/RainProcessMaterial.gdshader" id="39_r7nh1"]
-[ext_resource type="Material" uid="uid://6q7k10n0i0bn" path="res://area/5 pirate storm/data/material/Rain Drop.tres" id="40_ki03t"]
+[ext_resource type="Material" uid="uid://ve75fqv3qek3" path="res://area/5 pirate storm/data/material/Rain Process Material.tres" id="39_r7nh1"]
+[ext_resource type="Texture2D" uid="uid://cxhomfcep6jjf" path="res://area/5 pirate storm/data/texture/rain drop.png" id="40_r7nh1"]
 [ext_resource type="Script" uid="uid://ch4pb1qqwy5al" path="res://object/stage/common/resource/script/CameraFollower.cs" id="41_08hmi"]
 [ext_resource type="Material" uid="uid://86s1me03t0lu" path="res://area/5 pirate storm/data/material/Rain Impact.tres" id="42_q3kya"]
 
@@ -59,26 +59,17 @@ size = Vector3(500, 5, 500)
 [sub_resource type="BoxShape3D" id="BoxShape3D_auuan"]
 size = Vector3(20, 2, 2)
 
-[sub_resource type="Curve" id="Curve_r7nh1"]
-_data = [Vector2(0, 0), 0.0, 9.15445, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_ki03t"]
-width = 64
-texture_mode = 1
-curve = SubResource("Curve_r7nh1")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r7nh1"]
-shader = ExtResource("39_r7nh1")
-shader_parameter/direction = Vector3(0, -1, -0.2)
-shader_parameter/water_speed = 100.0
-shader_parameter/emission_shape_offset = Vector3(0, 30, 10)
-shader_parameter/emission_box_extents = Vector3(20, 1, 20)
-shader_parameter/alpha_curve = SubResource("CurveTexture_ki03t")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_15enn"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("40_r7nh1")
 
 [sub_resource type="QuadMesh" id="QuadMesh_5xsdu"]
-material = ExtResource("40_ki03t")
-size = Vector2(0.2, 5)
+material = SubResource("StandardMaterial3D_15enn")
+size = Vector2(0.1, 3)
 center_offset = Vector3(0, 1, 0)
 
 [sub_resource type="Curve" id="Curve_yn16c"]
@@ -279,7 +270,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -129.7, 189.707, 821.746)
 curve = ExtResource("18_fqgif")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path/CannonballPath"]
-transform = Transform3D(-1, 8.24783e-08, -2.89827e-08, 0, 0.331524, 0.943442, 8.74228e-08, 0.943442, -0.331524, 0, -116.225, 188.738)
+transform = Transform3D(-1, 8.24784e-08, -2.89825e-08, 0, 0.331521, 0.943443, 8.74228e-08, 0.943443, -0.331521, 0, -116.225, 188.738)
 progress = 250.0
 loop = false
 
@@ -709,8 +700,10 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -518.726
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="Checkpoint" type="Node3D" parent="Triggers/Checkpoints/CaveEnd"]
+[node name="Checkpoint" type="Node3D" parent="Triggers/Checkpoints/CaveEnd" node_paths=PackedStringArray("PlayerPath", "CameraPath")]
 script = ExtResource("30_3vwxx")
+PlayerPath = NodePath("../../../../Path/CavePath")
+CameraPath = NodePath("../../../../Path/CavePath")
 CameraSettings = ExtResource("26_ybwgy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoints/CaveEnd"]
@@ -797,9 +790,10 @@ fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 transform_align = 2
-process_material = SubResource("ShaderMaterial_r7nh1")
+process_material = ExtResource("39_r7nh1")
 draw_pass_1 = SubResource("QuadMesh_5xsdu")
 script = ExtResource("41_08hmi")
+followYRotation = true
 
 [node name="RainImpact" type="GPUParticles3D" parent="Rain"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)

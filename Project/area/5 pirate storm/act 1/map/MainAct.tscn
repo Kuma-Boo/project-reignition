@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=3 uid="uid://bkuwj6xj81tuv"]
+[gd_scene load_steps=76 format=3 uid="uid://bkuwj6xj81tuv"]
 
 [ext_resource type="PackedScene" uid="uid://csk7y7y8vgg6l" path="res://area/5 pirate storm/act 1/Static.tscn" id="1_8fsep"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_kflh0"]
@@ -56,6 +56,7 @@
 [ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="53_6rj8d"]
 [ext_resource type="PackedScene" uid="uid://677t2a10p81r" path="res://area/5 pirate storm/object/platforms/BridgeLargeFalling.tscn" id="54_k2etd"]
 [ext_resource type="PackedScene" uid="uid://cv703ufhvowof" path="res://area/5 pirate storm/object/platforms/BridgeThinFalling.tscn" id="55_01wgf"]
+[ext_resource type="Resource" uid="uid://b7sswmtsgltin" path="res://area/5 pirate storm/act 1/camera/GrindCam.tres" id="55_pdr65"]
 
 [sub_resource type="Curve" id="Curve_slh8b"]
 _limits = [-2.0, 0.0, 0.0, 1.0]
@@ -1300,7 +1301,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="Blade" parent="MainAct/Islands/Island4/MovingBlade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, -1.49012e-08, -2.57572e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
+transform = Transform3D(1, -1.49012e-08, -2.62013e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
 
 [node name="MovingBlade2" type="Node3D" parent="MainAct/Islands/Island4"]
 transform = Transform3D(0.990268, 0, 0.139173, 0, 1, 0, -0.139173, 0, 0.990268, -30.323, 0.3, 6.98822)
@@ -2971,7 +2972,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65, 2, 1550)
 
 [node name="DashPanel" parent="MainAct/Grotto" instance=ExtResource("29_ihlpu")]
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -4.79697, 0, 14.9129)
-length = 1.5
+length = 1.0
 
 [node name="Rings1" type="Node3D" parent="MainAct/Grotto"]
 transform = Transform3D(0.0871558, 0, -0.996195, 0, 1, 0, 0.996195, 0, 0.0871558, -46, 0.6, 35.4)
@@ -3091,8 +3092,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
 transform = Transform3D(0.173648, -0.0515409, 0.983458, 0, 0.99863, 0.0523359, -0.984807, -0.00908805, 0.17341, -135.675, -4.47501, 33.7869)
 
 [node name="Spring" parent="MainAct/Grotto" instance=ExtResource("11_q0cv5")]
-transform = Transform3D(0.305014, -0.0515409, 0.950952, 0.00707565, 0.998629, 0.0518554, -0.952321, -0.00908805, 0.304961, -158.922, -5.23176, 27.4539)
+transform = Transform3D(-0.30534, 0.0519635, -0.950824, 0.00697169, 0.998605, 0.052336, 0.952217, 0.0093514, -0.305276, -158.922, -5.23176, 27.4539)
 startHidden = true
+MiddleHeight = 8.0
+FinalHeight = 6.5
+Distance = 4.0
 
 [node name="InvisibleGrindrail" parent="MainAct/Grotto" instance=ExtResource("42_my4pc")]
 transform = Transform3D(0.387508, -0.00213414, 0.921863, 0.00695469, 0.999976, -0.000608457, -0.92184, 0.00664706, 0.387513, -162.087, 1, 26.482)
@@ -3557,12 +3561,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 3, -0.5)
 
 [node name="Sword1" parent="MainAct/Cave" instance=ExtResource("48_mujev")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 5, -4.9)
-endOffset = Vector3(0, 4, -1)
+endOffset = Vector3(0, 5, -0.5)
 launchHeight = 5.0
 
 [node name="Sword2" parent="MainAct/Cave" instance=ExtResource("48_mujev")]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -7, 9.5, -5.59998)
-endOffset = Vector3(-2, 4, -1)
+endOffset = Vector3(-2, 5, -0.5)
 launchHeight = 5.0
 
 [node name="Sword3" parent="MainAct/Cave" instance=ExtResource("48_mujev")]
@@ -3641,6 +3645,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -54)
 [node name="Child20" parent="MainAct/Cave/Pearls" instance=ExtResource("8_ytq25")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -57)
 
+[node name="GrindPath" type="Node3D" parent="MainAct/Cave"]
+transform = Transform3D(-0.99824, -0.00743305, 0.0588386, 0, 0.992115, 0.125333, -0.0593063, 0.125113, -0.990368, -11.491, 15.225, 0)
+
+[node name="Camera" type="Node3D" parent="MainAct/Cave/GrindPath"]
+transform = Transform3D(1, 0, 3.72529e-09, -4.65661e-10, 1, -7.45058e-09, 0, 0, 1, 0, 0, 0)
+script = ExtResource("21_1aofs")
+settings = ExtResource("55_pdr65")
+
+[node name="Path" type="Node3D" parent="MainAct/Cave/GrindPath" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 3.72529e-09, -4.65661e-10, 1, -7.45058e-09, 0, 0, 1, 0, 0, 0)
+script = ExtResource("51_01wgf")
+path = NodePath("../../../../Static/Path/GrindPath")
+
+[node name="ExitTrigger" parent="MainAct/Cave/GrindPath" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -82.8)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="Path" type="Node3D" parent="MainAct/Cave/GrindPath/ExitTrigger" node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 4.65661e-10, 7.45058e-09, -9.31323e-10, 1, -1.49012e-08, 0, 7.45058e-09, 1, -3.05176e-05, 0, 78.8)
+script = ExtResource("51_01wgf")
+path = NodePath("../../../../../Static/Path/CavePath")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cave/GrindPath/ExitTrigger"]
+shape = SubResource("BoxShape3D_6rj8d")
+
 [node name="InvisibleGrindrail" parent="MainAct/Cave" instance=ExtResource("42_my4pc")]
 transform = Transform3D(-0.99824, -0.00743305, 0.0588386, 0, 0.992115, 0.125333, -0.0593063, 0.125113, -0.990368, -11.491, 15.225, 0)
 visible = false
@@ -3686,6 +3717,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 script = ExtResource("15_s8u74")
 timebreakMultiplier = 0.5
 root = NodePath("Blade")
+animator = NodePath("")
 Movement/Mode = 1
 "Movement/Cycle Length" = 3.0
 "Movement/Starting Offset" = 0.0
@@ -3829,7 +3861,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, -2.98023e-08, 4.17233e-07, 1.49012e-08, 1, 0, -6.85453e-07, -7.45058e-08, 1, 0, 0, 0)
+transform = Transform3D(1, 7.00355e-07, 1.10269e-06, 1.49012e-08, 1, -3.72529e-07, -6.85453e-07, -7.45058e-08, 0.999999, 0, 0, 0)
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
@@ -3845,7 +3877,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade2" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1.00003, -2.98023e-08, -5.96046e-08, 0, 1, -5.66244e-07, 4.17233e-07, -7.45058e-08, 1.00003, 0, 2.66667, 0)
+transform = Transform3D(1.00003, 7.00355e-07, 1.13249e-06, 0, 1, -8.34465e-07, 4.17233e-07, -7.45058e-08, 1.00003, 0, 2.66667, 0)
 
 [node name="Blade3" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -3, 0, 0)
@@ -3861,7 +3893,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade3" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1.00003, -2.98023e-08, 5.06639e-07, 0, 1, -2.23517e-07, -6.25849e-07, -7.45058e-08, 1.00003, 0, 0.277298, 6.10352e-05)
+transform = Transform3D(1.00003, 7.00355e-07, 1.51992e-06, -1.49012e-08, 1, -4.61936e-07, -6.25849e-07, -7.45058e-08, 1.00003, 0, 0.277298, 6.10352e-05)
 
 [node name="SpoilsSmall4" parent="MainAct/Cave" instance=ExtResource("40_wekfv")]
 transform = Transform3D(1.15429, 0.510258, 1.48484, 0.0283889, 1.3572, -0.851215, -1.63303, 0.384264, 1.03474, -39.1836, 6.97257, 76.2062)
@@ -3882,7 +3914,7 @@ Movement/Angle = 90.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup4/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, 2.22045e-15, -6.10948e-07, -9.31323e-09, 1, -6.27479e-08, -4.91738e-07, -4.00469e-08, 1, -0.416138, 0, 3.05176e-05)
+transform = Transform3D(0.999999, 2.22045e-15, -5.96046e-07, -9.31323e-09, 1, -6.27479e-08, -5.21541e-07, -4.00469e-08, 0.999999, -0.416138, 0, 3.05176e-05)
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -3898,7 +3930,7 @@ Movement/Angle = 90.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup4/Blade2" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1.00003, 3.7253e-09, -8.04663e-07, 1.49012e-08, 1, 3.23635e-07, 5.96046e-07, -9.31322e-09, 1.00003, -4.00012, 0, 0)
+transform = Transform3D(1.00003, 3.7253e-09, -5.96046e-07, 1.49012e-08, 1, 3.23635e-07, 5.96046e-07, -9.31322e-09, 1.00003, -4.00012, 0, 0)
 
 [node name="Blade3" type="Node3D" parent="MainAct/Cave/BladeGroup4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
@@ -3914,7 +3946,7 @@ Movement/Angle = 90.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup4/Blade3" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1.00003, 4.47036e-08, 4.47035e-07, 0, 1, -3.72529e-08, -5.96046e-07, -1.07568e-07, 1.00003, 0, 0, 0)
+transform = Transform3D(1.00003, 4.47036e-08, 6.10948e-07, 0, 1, -3.72529e-08, -6.10948e-07, -1.07568e-07, 1.00003, 0, 0, 0)
 
 [node name="SpoilsLarge2" parent="MainAct/Cave" instance=ExtResource("14_hcghg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.2122, -1.51992e-06, 79.1389)
@@ -4101,7 +4133,7 @@ transform = Transform3D(0.999049, 0, -0.0436196, 0, 1, 0, 0.0436196, 0, 0.999049
 [node name="Jump" type="Node3D" parent="MainAct/Cave/SlopeJump"]
 transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, -0.757391, -1.3, 5.18423)
 script = ExtResource("27_6yc6x")
-jumpHeight = 5.0
+jumpHeight = 3.0
 autoAlign = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Cave/SlopeJump"]
@@ -4128,6 +4160,10 @@ transform = Transform3D(-0.996195, 0, -0.0871558, 0, 1, 0, 0.0871558, 0, -0.9961
 "Spawn Interval Settings/Spawn Delay" = 0.5
 "Spawn Interval Settings/Separate Despawn Interval" = true
 "Spawn Interval Settings/Despawn Delay" = 2.0
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 1.0
+"Defeat Settings/Launch Direction" = Vector3(5, 4, 15)
+"Defeat Settings/Local Transform" = true
 rangeOverride = 45
 
 [node name="GreenMajin2" parent="MainAct/Cave" instance=ExtResource("9_slh8b")]
@@ -4136,6 +4172,10 @@ transform = Transform3D(-0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, -0.984808
 "Spawn Interval Settings/Spawn Delay" = 0.5
 "Spawn Interval Settings/Separate Despawn Interval" = true
 "Spawn Interval Settings/Despawn Delay" = 2.0
+"Defeat Settings/Enable Enemy Launching" = true
+"Defeat Settings/Launch Time" = 1.0
+"Defeat Settings/Launch Direction" = Vector3(-4, 5, 15)
+"Defeat Settings/Local Transform" = true
 rangeOverride = 40
 
 [node name="BridgeThinFalling2" parent="MainAct/Cave" instance=ExtResource("55_01wgf")]
@@ -4143,6 +4183,311 @@ transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 
 
 [node name="GhostShip" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -521, 2, 1829)
+
+[node name="SlimeMajin1" parent="MainAct/GhostShip" instance=ExtResource("3_qkxl1")]
+transform = Transform3D(-0.990156, 0.139968, -8.65622e-08, 0.139968, 0.990156, 1.22364e-08, 8.74228e-08, 0, -1, 14.0255, 2.36507, 32)
+spawnOffset = Vector3(0, 10, -5)
+jumpCount = 9
+isSpitEnabled = true
+isShockEnabled = true
+movingAttackInterval = 4
+rangeOverride = 30
+
+[node name="SlimeMajin2" parent="MainAct/GhostShip" instance=ExtResource("3_qkxl1")]
+transform = Transform3D(-0.990156, 0.139968, -8.65622e-08, 0.139968, 0.990156, 1.22364e-08, 8.74228e-08, 0, -1, 18.0002, 1.90421, 43)
+spawnOffset = Vector3(0, 10, -5)
+jumpCount = 9
+isSpitEnabled = true
+isShockEnabled = true
+movingAttackInterval = 4
+rangeOverride = 30
+
+[node name="GreenMajin1" parent="MainAct/GhostShip" instance=ExtResource("9_slh8b")]
+transform = Transform3D(-1, 0, -8.9407e-08, 0, 1, 0, 8.9407e-08, 0, -1, 18.3, 2, 54)
+rangeOverride = 20
+
+[node name="GreenMajin2" parent="MainAct/GhostShip" instance=ExtResource("9_slh8b")]
+transform = Transform3D(-1, 0, -8.9407e-08, 0, 1, 0, 8.9407e-08, 0, -1, 13, 2.5, 56)
+rangeOverride = 20
+
+[node name="Rings" type="Node3D" parent="MainAct/GhostShip"]
+transform = Transform3D(-0.996195, 0.00228147, 0.0871258, 0, 0.999657, -0.0261769, -0.0871556, -0.0260773, -0.995853, 14.5564, 3.2, 62.4981)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 4
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/GhostShip/Rings" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/GhostShip/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child03" parent="MainAct/GhostShip/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child04" parent="MainAct/GhostShip/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="Chair1" type="Node3D" parent="MainAct/GhostShip"]
+transform = Transform3D(-0.17101, 0.173648, -0.969846, 0.0301537, 0.984808, 0.17101, 0.984808, 7.47509e-09, -0.173648, 11.2883, 3.36666, 62.2431)
+
+[node name="BlueMajin1" parent="MainAct/GhostShip/Chair1" instance=ExtResource("22_glsjx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, -1)
+rangeOverride = 15
+
+[node name="EnemyStone1" parent="MainAct/GhostShip/Chair1" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1.2, 0, 0, -0.2)
+enemyCount = 2
+
+[node name="EnemyStone2" parent="MainAct/GhostShip/Chair1" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 0.4, 0, 2, 0.58)
+enemyCount = 2
+
+[node name="Chair2" type="Node3D" parent="MainAct/GhostShip"]
+transform = Transform3D(-0.17101, 0.173648, -0.969846, 0.0301537, 0.984808, 0.17101, 0.984808, 7.47509e-09, -0.173648, 10.4333, 3.51743, 67.1671)
+
+[node name="EnemyStone1" parent="MainAct/GhostShip/Chair2" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1.2, 0, 0, -0.2)
+enemyCount = 2
+
+[node name="EnemyStone2" parent="MainAct/GhostShip/Chair2" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 0.4, 0, 2, 0.58)
+enemyCount = 2
+
+[node name="Chair3" type="Node3D" parent="MainAct/GhostShip"]
+transform = Transform3D(0.17101, 0.173648, 0.969846, -0.0301537, 0.984808, -0.17101, -0.984808, 7.47509e-09, 0.173648, 17.7352, 2.2299, 65.4283)
+
+[node name="BlueMajin2" parent="MainAct/GhostShip/Chair3" instance=ExtResource("22_glsjx")]
+transform = Transform3D(-1, -1.85303e-09, 8.9407e-08, -1.16141e-08, 1, 6.10307e-08, -8.9407e-08, 1.65416e-08, -1, 0, 1, -1)
+rangeOverride = 15
+
+[node name="EnemyStone1" parent="MainAct/GhostShip/Chair3" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1.2, 0, 0, -0.2)
+enemyCount = 2
+
+[node name="EnemyStone2" parent="MainAct/GhostShip/Chair3" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 0.4, 0, 2, 0.58)
+enemyCount = 2
+
+[node name="Chair4" type="Node3D" parent="MainAct/GhostShip"]
+transform = Transform3D(0.17101, 0.173648, 0.969846, -0.0301537, 0.984808, -0.17101, -0.984808, 7.47509e-09, 0.173648, 16.8802, 2.38067, 70.3523)
+
+[node name="EnemyStone1" parent="MainAct/GhostShip/Chair4" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1.2, 0, 0, -0.2)
+enemyCount = 2
+
+[node name="EnemyStone2" parent="MainAct/GhostShip/Chair4" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 0.4, 0, 2, 0.58)
+enemyCount = 2
+
+[node name="Throne" type="Node3D" parent="MainAct/GhostShip"]
+transform = Transform3D(0.92937, 0.150289, -0.33717, -0.139088, 0.988622, 0.0572838, 0.341942, -0.00634158, 0.9397, 10.0937, 4.24081, 88.7076)
+
+[node name="EnemyStone1" parent="MainAct/GhostShip/Throne" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0)
+enemyCount = 1
+
+[node name="EnemyStone2" parent="MainAct/GhostShip/Throne" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(2, 0, 0, 0, 3, 0, 0, 0, 0.5, 0, 4, 1.5)
+enemyCount = 1
+
+[node name="EnemyStone3" parent="MainAct/GhostShip/Throne" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 1.5, 1.5, 1.4, -0.5)
+enemyCount = 1
+
+[node name="EnemyStone4" parent="MainAct/GhostShip/Throne" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 1.5, -1.5, 1.4, -0.5)
+enemyCount = 1
+
+[node name="EnemyStone5" parent="MainAct/GhostShip/Throne" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(2, 0, 0, 0, 0.5, 0, 0, 0, 1, 0, -0.5, -3)
+enemyCount = 1
+
+[node name="RedMajin" parent="MainAct/GhostShip/Throne" instance=ExtResource("45_22rft")]
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0, 2, -1)
+"Spawn Interval Settings/Enable Spawn Interval" = true
+"Spawn Interval Settings/Spawn Delay" = 1.0
+"Spawn Interval Settings/Separate Despawn Interval" = true
+"Spawn Interval Settings/Despawn Delay" = 0.5
+"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 10
+"Attack Settings/Attack Instantly" = true
+
+[node name="Switch" parent="MainAct/GhostShip/Throne" instance=ExtResource("35_c8avs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
+
+[node name="RingCull" type="Node3D" parent="MainAct/GhostShip/Throne"]
+transform = Transform3D(-1, 1.16415e-08, -1.04308e-07, -1.33878e-08, 1, 9.31323e-10, 8.9407e-08, 3.25963e-09, -1, 3.05152e-05, -0.200008, 3.99988)
+script = ExtResource("36_7jc22")
+
+[node name="Rings1" type="Node3D" parent="MainAct/GhostShip/Throne/RingCull"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/GhostShip/Throne/RingCull/Rings1" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/GhostShip/Throne/RingCull/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+
+[node name="Child03" parent="MainAct/GhostShip/Throne/RingCull/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child04" parent="MainAct/GhostShip/Throne/RingCull/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child05" parent="MainAct/GhostShip/Throne/RingCull/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child06" parent="MainAct/GhostShip/Throne/RingCull/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child07" parent="MainAct/GhostShip/Throne/RingCull/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child08" parent="MainAct/GhostShip/Throne/RingCull/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="Child09" parent="MainAct/GhostShip/Throne/RingCull/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child10" parent="MainAct/GhostShip/Throne/RingCull/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="Rings2" type="Node3D" parent="MainAct/GhostShip/Throne/RingCull"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0, 0)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/GhostShip/Throne/RingCull/Rings2" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/GhostShip/Throne/RingCull/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+
+[node name="Child03" parent="MainAct/GhostShip/Throne/RingCull/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child04" parent="MainAct/GhostShip/Throne/RingCull/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child05" parent="MainAct/GhostShip/Throne/RingCull/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child06" parent="MainAct/GhostShip/Throne/RingCull/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child07" parent="MainAct/GhostShip/Throne/RingCull/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child08" parent="MainAct/GhostShip/Throne/RingCull/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="Child09" parent="MainAct/GhostShip/Throne/RingCull/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child10" parent="MainAct/GhostShip/Throne/RingCull/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="Rings3" type="Node3D" parent="MainAct/GhostShip/Throne/RingCull"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0, 0)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/GhostShip/Throne/RingCull/Rings3" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/GhostShip/Throne/RingCull/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+
+[node name="Child03" parent="MainAct/GhostShip/Throne/RingCull/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child04" parent="MainAct/GhostShip/Throne/RingCull/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child05" parent="MainAct/GhostShip/Throne/RingCull/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child06" parent="MainAct/GhostShip/Throne/RingCull/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child07" parent="MainAct/GhostShip/Throne/RingCull/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child08" parent="MainAct/GhostShip/Throne/RingCull/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="Child09" parent="MainAct/GhostShip/Throne/RingCull/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child10" parent="MainAct/GhostShip/Throne/RingCull/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
+
+[node name="Rings4" type="Node3D" parent="MainAct/GhostShip/Throne/RingCull"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/GhostShip/Throne/RingCull/Rings4" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/GhostShip/Throne/RingCull/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+
+[node name="Child03" parent="MainAct/GhostShip/Throne/RingCull/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.4)
+
+[node name="Child04" parent="MainAct/GhostShip/Throne/RingCull/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+
+[node name="Child05" parent="MainAct/GhostShip/Throne/RingCull/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.8)
+
+[node name="Child06" parent="MainAct/GhostShip/Throne/RingCull/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child07" parent="MainAct/GhostShip/Throne/RingCull/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="Child08" parent="MainAct/GhostShip/Throne/RingCull/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
+
+[node name="Child09" parent="MainAct/GhostShip/Throne/RingCull/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
+
+[node name="Child10" parent="MainAct/GhostShip/Throne/RingCull/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
 
 [connection signal="Activated" from="MainAct/Opening/Spring1" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Opening/Spring1" to="Static/Collision/OneWayWall" method="Activate"]
@@ -4219,8 +4564,34 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -521, 2, 1829)
 [connection signal="Activated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="MainAct/Ships/Ship3/Throne/JumpPanel/Camera" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="MainAct/Ships/Ship3/Throne/JumpPanel/Path" method="Activate"]
-[connection signal="Activated" from="MainAct/Grotto/Switch" to="MainAct/Grotto/Spring" method="StartHidden"]
+[connection signal="Activated" from="MainAct/Grotto/Switch" to="MainAct/Grotto/Spring" method="ShowLauncher"]
 [connection signal="Activated" from="MainAct/Cave/Sword3" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Cave/Sword3" to="MainAct/Cave/GrindPath/Camera" method="Activate"]
+[connection signal="Activated" from="MainAct/Cave/Sword3" to="MainAct/Cave/GrindPath/Path" method="Activate"]
+[connection signal="Activated" from="MainAct/Cave/GrindPath/ExitTrigger" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="MainAct/Cave/GrindPath/ExitTrigger" to="MainAct/Cave/GrindPath/Camera" method="Deactivate"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair1/BlueMajin1" to="MainAct/GhostShip/Chair1/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair1/BlueMajin1" to="MainAct/GhostShip/Chair1/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair1/BlueMajin1" to="MainAct/GhostShip/Chair2/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair1/BlueMajin1" to="MainAct/GhostShip/Chair2/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair1/BlueMajin1" to="MainAct/GhostShip/Chair3/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair1/BlueMajin1" to="MainAct/GhostShip/Chair3/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair1/BlueMajin1" to="MainAct/GhostShip/Chair4/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair1/BlueMajin1" to="MainAct/GhostShip/Chair4/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair3/BlueMajin2" to="MainAct/GhostShip/Chair1/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair3/BlueMajin2" to="MainAct/GhostShip/Chair1/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair3/BlueMajin2" to="MainAct/GhostShip/Chair2/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair3/BlueMajin2" to="MainAct/GhostShip/Chair2/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair3/BlueMajin2" to="MainAct/GhostShip/Chair3/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair3/BlueMajin2" to="MainAct/GhostShip/Chair3/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair3/BlueMajin2" to="MainAct/GhostShip/Chair4/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Chair3/BlueMajin2" to="MainAct/GhostShip/Chair4/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Throne/RedMajin" to="MainAct/GhostShip/Throne/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Throne/RedMajin" to="MainAct/GhostShip/Throne/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Throne/RedMajin" to="MainAct/GhostShip/Throne/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Throne/RedMajin" to="MainAct/GhostShip/Throne/EnemyStone4" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/GhostShip/Throne/RedMajin" to="MainAct/GhostShip/Throne/EnemyStone5" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/GhostShip/Throne/Switch" to="MainAct/GhostShip/Throne/RingCull" method="Activate"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]

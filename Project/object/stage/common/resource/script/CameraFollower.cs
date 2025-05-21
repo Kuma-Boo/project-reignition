@@ -7,6 +7,7 @@ namespace Project.Gameplay.Objects
 	/// </summary>
 	public partial class CameraFollower : Node3D
 	{
+		[Export] private bool followYRotation;
 		private PlayerController Player => StageSettings.Player;
 
 		public override void _Process(double _)
@@ -14,7 +15,11 @@ namespace Project.Gameplay.Objects
 			if (Player.IsDefeated)
 				return;
 
-			GlobalPosition = GetTree().Root.GetCamera3D().GlobalPosition;
+			Camera3D camera = GetTree().Root.GetCamera3D();
+			GlobalPosition = camera.GlobalPosition;
+
+			if (followYRotation)
+				GlobalRotation = Vector3.Up * camera.GlobalRotation.Y;
 		}
 	}
 }
