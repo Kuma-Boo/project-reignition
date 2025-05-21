@@ -6,7 +6,7 @@ uniform vec3 direction;
 uniform float water_speed;
 uniform vec3 emission_shape_offset = vec3(0.0);
 uniform vec3 emission_box_extents;
-uniform vec3 gravity;
+uniform sampler2D alpha_curve : repeat_disable;
 
 float rand_from_seed(inout uint seed) {
 	int k;
@@ -33,11 +33,13 @@ uint hash(uint x) {
 struct DisplayParameters {
 	vec3 scale;
 	float lifetime;
+	float alpha;
 };
 
 void calculate_initial_display_params(inout DisplayParameters params, inout uint alt_seed) {
 	params.scale = vec3(1.0);
 	params.lifetime = 1.0;
+	params.alpha = 1.0;
 }
 
 vec3 calculate_initial_position(inout DisplayParameters params, inout uint alt_seed) {
@@ -48,10 +50,15 @@ vec3 calculate_initial_position(inout DisplayParameters params, inout uint alt_s
 	return pos + emission_shape_offset;
 }
 
+void process_display_param(inout DisplayParameters parameters, float lifetime) {
+	parameters.alpha *= texture(alpha_curve, vec2(lifetime)).r;
+}
+
 void start() {
 	uint alt_seed = hash(NUMBER + uint(1) + RANDOM_SEED);
 	DisplayParameters params;
 	calculate_initial_display_params(params, alt_seed);
+	process_display_param(params, 0.0);
 	if (rand_from_seed(alt_seed) > AMOUNT_RATIO) {
 		ACTIVE = false;
 	}
@@ -79,8 +86,9 @@ void start() {
 void process() {
 	uint alt_seed = hash(NUMBER + uint(1) + RANDOM_SEED);
 	DisplayParameters params;
-	calculate_initial_display_params(params, alt_seed);;
+	calculate_initial_display_params(params, alt_seed);
 
+	float lifetime_percent = CUSTOM.y / params.lifetime;
 	CUSTOM.y += DELTA / LIFETIME;
 	CUSTOM.y = mix(CUSTOM.y, 1.0, INTERPOLATE_TO_END);
 	if (CUSTOM.y > CUSTOM.w) {
@@ -93,7 +101,9 @@ void process() {
 	}
 
 	TRANSFORM[3].xyz += VELOCITY * DELTA;
-
+	process_display_param(params, lifetime_percent);
+	COLOR.a = params.alpha;
+	
 	if (COLLIDED) {
 		mat4 transform = TRANSFORM;
 		transform[0].xyz = cross(vec3(0.0, 0.0, 1.0), -COLLISION_NORMAL);

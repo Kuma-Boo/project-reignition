@@ -1,0 +1,105 @@
+[gd_scene load_steps=9 format=3 uid="uid://677t2a10p81r"]
+
+[ext_resource type="Script" uid="uid://bdlofqc6xiigo" path="res://object/trigger/modules/PlatformTrigger.cs" id="1_8cqtc"]
+[ext_resource type="PackedScene" uid="uid://cag5mivk3c1vl" path="res://area/5 pirate storm/object/model/platforms/BridgeLarge.gltf" id="2_8cqtc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w7e0d"]
+size = Vector3(5, 1, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x2s7a"]
+size = Vector3(5, 10, 10)
+
+[sub_resource type="Animation" id="Animation_ljshm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_qyqc6"]
+resource_name = "fall"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -20, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ql22x"]
+resource_name = "shake"
+length = 0.200003
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.2, 0), Vector3(0, 0.2, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ljshm"]
+_data = {
+&"RESET": SubResource("Animation_ljshm"),
+&"fall": SubResource("Animation_qyqc6"),
+&"shake": SubResource("Animation_ql22x")
+}
+
+[node name="BridgeLargeFalling" type="Node3D" node_paths=PackedStringArray("floorCalculationRoot", "parentCollider")]
+script = ExtResource("1_8cqtc")
+floorCalculationRoot = NodePath("Root/Trigger")
+parentCollider = NodePath("Root/Collision")
+"Falling Platform Settings/Enabled" = true
+"Falling Platform Settings/Animator" = NodePath("AnimationPlayer")
+"Falling Platform Settings/Auto Shake" = true
+"Falling Platform Settings/Shake Length" = 2.0
+"Floating Platform Settings/Enabled" = false
+
+[node name="Root" type="Node3D" parent="."]
+
+[node name="BridgeLarge" parent="Root" instance=ExtResource("2_8cqtc")]
+
+[node name="BridgeLargeMesh" parent="Root/BridgeLarge" index="0"]
+layers = 2
+
+[node name="Trigger" type="Area3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Trigger"]
+shape = SubResource("BoxShape3D_w7e0d")
+
+[node name="Collision" type="StaticBody3D" parent="Root" groups=["floor", "splash jump", "wall", "wood"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Collision"]
+shape = SubResource("BoxShape3D_x2s7a")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ljshm")
+}
+
+[connection signal="area_entered" from="Root/Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Root/Trigger" to="." method="OnExited"]
+
+[editable path="Root/BridgeLarge"]

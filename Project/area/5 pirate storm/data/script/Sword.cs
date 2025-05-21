@@ -5,6 +5,8 @@ namespace Project.Gameplay.Objects;
 [Tool]
 public partial class Sword : Node3D
 {
+	[Signal] public delegate void ActivatedEventHandler();
+
 	[Export] private Vector3 endOffset;
 	[Export] private float launchHeight;
 	[ExportSubgroup("Components")]
@@ -28,6 +30,7 @@ public partial class Sword : Node3D
 		Player.Animator.StartSpin(5f);
 		Player.Effect.StartSpinFX();
 		Player.Effect.StartTrailFX();
+		EmitSignal(SignalName.Activated);
 	}
 
 	public void OnEntered(Area3D a)
