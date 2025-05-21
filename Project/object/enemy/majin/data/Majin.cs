@@ -288,7 +288,7 @@ public partial class Majin : Enemy
 		Disabled, // Just idle
 		Spin, // Spin like a top
 		Fire, // Spit fire out
-		Wander, // Stay in a "moving forward" state. Works best as a child of a pathfollower.
+		Wander, // Stay in a "moving forward" state. Use a pathfollower if you need a consistent movement pattern.
 	}
 
 	public bool IsRedMajin => attackType == AttackTypes.Fire;

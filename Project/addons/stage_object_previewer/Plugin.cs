@@ -52,6 +52,8 @@ public partial class Plugin : EditorPlugin
 			DrawLaunchSettings((target as GasTank).GetLaunchSettings(), DefaultDrawColor);
 		else if (target is BombMissile)
 			DrawLaunchSettings((target as BombMissile).GetLaunchSettings(), DefaultDrawColor);
+		else if (target is Sword)
+			DrawLaunchSettings((target as Sword).GetLaunchSettings(), DefaultDrawColor);
 		else if (target is ItemBox)
 			UpdateItemBox();
 		else if (target is FlyingPot)

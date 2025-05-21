@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://cy240mxcsv0p7"]
+[gd_scene load_steps=67 format=3 uid="uid://cy240mxcsv0p7"]
 
 [ext_resource type="PackedScene" uid="uid://lb0gab47jte1" path="res://object/enemy/slime/data/model/SlimeMajin.gltf" id="1_gxrr7"]
 [ext_resource type="Script" uid="uid://dyeh4owv5g3eu" path="res://object/enemy/slime/data/SlimeMajin.cs" id="1_ukayf"]
@@ -9,6 +9,12 @@
 [ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="6_28g6o"]
 [ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Dust Splatter Add.tres" id="8_1xo7p"]
 [ext_resource type="Material" uid="uid://ph7gwhlyucdx" path="res://effect/particle/material/environment/Common Dust Add.tres" id="9_t57jp"]
+[ext_resource type="Material" uid="uid://bwvsqjnpry0xm" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters Process Material.tres" id="10_pxeob"]
+[ext_resource type="Material" uid="uid://chrq2jlovey6c" path="res://object/enemy/majin/data/particle/material/Majin Spawn Letters.tres" id="11_yvjin"]
+[ext_resource type="Material" uid="uid://b4vmiws2hdmhs" path="res://object/enemy/majin/data/particle/material/Majin Spawn Smoke Process Material.tres" id="12_ey22j"]
+[ext_resource type="Texture2D" uid="uid://cpjydx5buf0av" path="res://effect/particle/texture/teleport dust.png" id="13_wt2ef"]
+[ext_resource type="AudioStream" uid="uid://bqt0gpwc55dfl" path="res://sound/sfx/enemy/majin/majin spawn.wav" id="14_jobc0"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="15_ytn4a"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_d6ith"]
 radius = 0.6
@@ -269,8 +275,29 @@ alpha_curve = SubResource("CurveTexture_28g6o")
 [sub_resource type="QuadMesh" id="QuadMesh_xewoi"]
 material = ExtResource("9_t57jp")
 
-[node name="SlimeMajin" type="Node3D"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_dr7u3"]
+material = ExtResource("11_yvjin")
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eiiup"]
+transparency = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("13_wt2ef")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_r76sd"]
+material = SubResource("StandardMaterial3D_eiiup")
+
+[node name="SlimeMajin" type="Node3D" node_paths=PackedStringArray("instantSpawnFX")]
 script = ExtResource("1_ukayf")
+instantSpawnFX = NodePath("SpawnLetter")
 startingOffset = 0.6
 shockHitbox = NodePath("Hitbox")
 pearlAmount = 15
@@ -411,11 +438,56 @@ interpolate = false
 process_material = SubResource("ParticleProcessMaterial_t57jp")
 draw_pass_1 = SubResource("QuadMesh_xewoi")
 
+[node name="SpawnLetter" type="GPUParticles3D" parent="." node_paths=PackedStringArray("subSystems")]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 2.0
+one_shot = true
+speed_scale = 2.5
+explosiveness = 0.4
+randomness = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
+process_material = ExtResource("10_pxeob")
+draw_pass_1 = SubResource("PlaneMesh_dr7u3")
+script = ExtResource("6_28g6o")
+subSystems = [NodePath("SpawnSmoke")]
+
+[node name="SpawnSmoke" type="GPUParticles3D" parent="SpawnLetter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.8
+one_shot = true
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 8)
+process_material = ExtResource("12_ey22j")
+draw_pass_1 = SubResource("QuadMesh_r76sd")
+
+[node name="SpawnSFX" type="AudioStreamPlayer3D" parent="SpawnLetter"]
+process_mode = 1
+stream = ExtResource("14_jobc0")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 200.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("15_ytn4a")
+groupKey = &"majin_spawn"
+
 [connection signal="area_entered" from="RootAttachment/Hitboxes/Hurtbox" to="." method="OnEntered"]
 [connection signal="area_exited" from="RootAttachment/Hitboxes/Hurtbox" to="." method="OnExited"]
 [connection signal="area_entered" from="Hitbox" to="Hitbox" method="OnEntered"]
 [connection signal="area_exited" from="Hitbox" to="Hitbox" method="OnExited"]
 [connection signal="area_entered" from="Range" to="." method="OnRangeEntered"]
 [connection signal="area_exited" from="Range" to="." method="OnRangeExited"]
+[connection signal="GroupRestarted" from="SpawnLetter" to="SpawnLetter/SpawnSFX" method="PlayInGroup"]
 
 [editable path="SlimeMajin"]

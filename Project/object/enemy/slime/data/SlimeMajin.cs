@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.CustomNodes;
 using Project.Gameplay.Objects;
 
 namespace Project.Gameplay;
@@ -10,6 +11,7 @@ public partial class SlimeMajin : Enemy
 	[ExportSubgroup("Spawn Settings")]
 	[Export] private Vector3 spawnOffset;
 	[Export] private float spawnHeight = 10f;
+	[Export] private GroupGpuParticles3D instantSpawnFX;
 	private Vector3 initialPosition;
 	private Vector3 InitialPosition => Engine.IsEditorHint() ? GlobalPosition : initialPosition;
 	private Vector3 SpawnPosition => InitialPosition + spawnOffset * GlobalBasis.Inverse();
@@ -89,12 +91,12 @@ public partial class SlimeMajin : Enemy
 			return;
 
 		ShockHitbox = GetNodeOrNull<Hazard>(shockHitbox);
-		initialPosition = GlobalPosition;
-		GlobalPosition = SpawnPosition;
 
 		base.SetUp();
 
 		AnimationTree.Active = true;
+		initialPosition = GlobalPosition;
+		Root.GlobalPosition = SpawnPosition;
 	}
 
 	public override void Respawn()
@@ -124,14 +126,22 @@ public partial class SlimeMajin : Enemy
 		if (IsActive)
 			return;
 
-		spawnTimer = 0;
-		spawnLaunchSettings = SpawnLaunchSettings; // Cache launch settings so we don't have to keep recalculating it
+		if (spawnOffset.IsZeroApprox() && Mathf.IsZeroApprox(spawnHeight))
+		{
+			// Instant spawn
+			instantSpawnFX.RestartGroup();
+		}
+		else
+		{
+			spawnTimer = 0;
+			spawnLaunchSettings = SpawnLaunchSettings; // Cache launch settings so we don't have to keep recalculating it
 
-		slimeState = SlimeState.Spawning;
-		SpawnStatePlayback.Start(SpawnStartAnimation);
-		AnimationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			slimeState = SlimeState.Spawning;
+			SpawnStatePlayback.Start(SpawnStartAnimation);
+			AnimationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		}
+
 		IsActive = true;
-
 		base.Spawn();
 	}
 
@@ -279,7 +289,7 @@ public partial class SlimeMajin : Enemy
 	private void ProcessSpawn()
 	{
 		spawnTimer = Mathf.MoveToward(spawnTimer, spawnLaunchSettings.TotalTravelTime, PhysicsManager.physicsDelta);
-		GlobalPosition = spawnLaunchSettings.InterpolatePositionTime(spawnTimer);
+		Root.GlobalPosition = spawnLaunchSettings.InterpolatePositionTime(spawnTimer);
 
 		if (spawnLaunchSettings.IsLauncherFinished(spawnTimer))
 		{

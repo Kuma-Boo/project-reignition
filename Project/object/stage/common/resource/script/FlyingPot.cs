@@ -34,6 +34,7 @@ public partial class FlyingPot : Node3D
 
 	private bool isSleeping = true;
 	private bool interactingWithPlayer;
+	private bool isPlayerJumpingIntoPot;
 	private float angle;
 	public float Angle => angle;
 	public float Velocity { get; set; }
@@ -102,6 +103,7 @@ public partial class FlyingPot : Node3D
 
 	private void StartJump()
 	{
+		isPlayerJumpingIntoPot = true;
 		environmentCollider.Disabled = true;
 
 		float jumpHeight = GlobalPosition.Y + 1 - Player.GlobalPosition.Y;
@@ -126,6 +128,7 @@ public partial class FlyingPot : Node3D
 
 	private void OnEnteredPot()
 	{
+		isPlayerJumpingIntoPot = false;
 		enterSFX.Play();
 		animationTree.Set(EnterTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		Player.StartFlyingPot(this);
@@ -148,6 +151,9 @@ public partial class FlyingPot : Node3D
 
 	public void ApplyMovement()
 	{
+		if (isPlayerJumpingIntoPot) // Don't move when player is jumping into the pot
+			return;
+
 		if (Velocity > 0)
 			localPosition += Vector2.Down.Rotated(-Angle) * Velocity * PhysicsManager.physicsDelta;
 		else
@@ -179,16 +185,24 @@ public partial class FlyingPot : Node3D
 			isSleeping = Mathf.IsZeroApprox(localPosition.Y) && Mathf.IsZeroApprox(Angle); // Update sleeping status
 	}
 
+	private void Activate()
+	{
+		isSleeping = false;
+
+		if (isPlayerJumpingIntoPot)
+			return;
+
+		if (!Player.IsFlyingPotActive && !Player.IsOnGround)
+			StartJump();
+	}
+
 	public void OnEntered(Area3D a)
 	{
 		if (!a.IsInGroup("player detection"))
 			return;
 
-		isSleeping = false;
 		interactingWithPlayer = true;
-
-		if (!Player.IsFlyingPotActive && !Player.IsOnGround)
-			StartJump();
+		Activate();
 	}
 
 	public void OnExited(Area3D a)

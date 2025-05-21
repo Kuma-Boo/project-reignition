@@ -91,9 +91,9 @@ public partial class Barrel : Launcher
 		}
 	}
 
-	public override void Activate()
+	protected override void LaunchAnimation()
 	{
-		base.Activate();
+		Player.Animator.ResetState(.1f);
 		Player.Animator.StartSpin(5f);
 		Player.Effect.StartSpinFX();
 		Player.Effect.StartTrailFX();

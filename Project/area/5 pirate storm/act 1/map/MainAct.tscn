@@ -1,9 +1,9 @@
-[gd_scene load_steps=56 format=3 uid="uid://bkuwj6xj81tuv"]
+[gd_scene load_steps=75 format=3 uid="uid://bkuwj6xj81tuv"]
 
 [ext_resource type="PackedScene" uid="uid://csk7y7y8vgg6l" path="res://area/5 pirate storm/act 1/Static.tscn" id="1_8fsep"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_kflh0"]
 [ext_resource type="Resource" uid="uid://dairbh88148kb" path="res://resource/level data/pirate storm/Act1Main.tres" id="2_qkxl1"]
-[ext_resource type="Resource" uid="uid://unk8vyncg7mg" path="res://area/5 pirate storm/act 1/camera/StartCam.tres" id="3_8cccl"]
+[ext_resource type="Resource" uid="uid://unk8vyncg7mg" path="res://area/5 pirate storm/act 1/camera/ShipCloseCam.tres" id="3_8cccl"]
 [ext_resource type="PackedScene" uid="uid://cy240mxcsv0p7" path="res://object/enemy/slime/SlimeMajin.tscn" id="3_qkxl1"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="4_yyd45"]
 [ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="6_ytq25"]
@@ -38,6 +38,21 @@
 [ext_resource type="PackedScene" uid="uid://q2mhrprklf7q" path="res://area/5 pirate storm/object/Bomb.tscn" id="28_6yc6x"]
 [ext_resource type="PackedScene" uid="uid://bqvtcp8tkbfyt" path="res://object/stage/common/SpikeBall.tscn" id="28_m1od1"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="29_ihlpu"]
+[ext_resource type="PackedScene" uid="uid://c85xw5ix60fe8" path="res://object/stage/common/Switch.tscn" id="35_c8avs"]
+[ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="36_7jc22"]
+[ext_resource type="PackedScene" uid="uid://cx36fswvjfblm" path="res://object/stage/destructable/EnemyStone.tscn" id="36_p0u7c"]
+[ext_resource type="Resource" uid="uid://bq5miu44us6i1" path="res://area/5 pirate storm/act 1/camera/ShipFightCam.tres" id="38_cusk7"]
+[ext_resource type="PackedScene" uid="uid://c4qk3uy80ub6r" path="res://area/5 pirate storm/object/platforms/BridgeSquareFalling.tscn" id="38_wjem1"]
+[ext_resource type="PackedScene" uid="uid://mhhtlvsxmugl" path="res://object/stage/common/Catapult.tscn" id="39_05fdr"]
+[ext_resource type="Resource" uid="uid://cnxy1brw4b7p1" path="res://area/5 pirate storm/act 1/camera/ShipCam.tres" id="40_mujev"]
+[ext_resource type="PackedScene" uid="uid://dwyolettq7wtm" path="res://area/5 pirate storm/object/platforms/SpoilsSmall.tscn" id="40_wekfv"]
+[ext_resource type="PackedScene" uid="uid://cc64d8h51jyx2" path="res://object/stage/common/ItemBoxFlying.tscn" id="41_wekfv"]
+[ext_resource type="PackedScene" uid="uid://cclwh52o4uphx" path="res://object/stage/common/InvisibleGrindrail.tscn" id="42_my4pc"]
+[ext_resource type="PackedScene" uid="uid://153wwjnd7nv6" path="res://object/stage/common/FlyingPot.tscn" id="43_tusv3"]
+[ext_resource type="Resource" uid="uid://cjnkxhoprjmyr" path="res://area/5 pirate storm/act 1/camera/ShipFlyingPotCam.tres" id="44_706b0"]
+[ext_resource type="PackedScene" uid="uid://bl5rffbayfil" path="res://object/enemy/majin/data/pirate storm/RedMajin.tscn" id="45_22rft"]
+[ext_resource type="PackedScene" uid="uid://3o2j3v8jwqtj" path="res://area/5 pirate storm/object/Sword.tscn" id="48_mujev"]
+[ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="49_6rj8d"]
 
 [sub_resource type="Curve" id="Curve_slh8b"]
 _limits = [-2.0, 0.0, 0.0, 1.0]
@@ -78,6 +93,26 @@ point_count = 2
 _limits = [-2.0, 0.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, -2.0, 0, 1, Vector2(1, -2), -2.0, 0.0, 1, 0]
 point_count = 2
+
+[sub_resource type="Curve" id="Curve_7jc22"]
+_limits = [-8.0, 0.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, -8.0, 0, 1, Vector2(1, -8), -8.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_p0u7c"]
+_limits = [0.0, 5.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 5), 16.151, 0.0, 0, 0]
+point_count = 2
+metadata/_snap_enabled = true
+
+[sub_resource type="Curve" id="Curve_wjem1"]
+_limits = [-5.0, 0.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -5), -13.3193, 0.0, 0, 0]
+point_count = 2
+metadata/_snap_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6rj8d"]
+size = Vector3(50, 80, 5)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bhaba"]
 shader = ExtResource("12_p6wrh")
@@ -1820,6 +1855,1125 @@ transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 3.00005, -18, 1
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -2.99995, -9, 115)
 "Launch Settings/Starting Offset" = Vector3(2, -50, 50)
 
+[node name="Ships" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -129.9, 9.9, 1040)
+
+[node name="Ship1" type="Node3D" parent="MainAct/Ships"]
+
+[node name="Rings1" type="Node3D" parent="MainAct/Ships/Ship1"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -13.25, 21, 14)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 8
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = SubResource("Curve_7jc22")
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Ships/Ship1/Rings1" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/Ships/Ship1/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.14286, -2)
+
+[node name="Child03" parent="MainAct/Ships/Ship1/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.28571, -4)
+
+[node name="Child04" parent="MainAct/Ships/Ship1/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.42857, -6)
+
+[node name="Child05" parent="MainAct/Ships/Ship1/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.57143, -8)
+
+[node name="Child06" parent="MainAct/Ships/Ship1/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.71429, -10)
+
+[node name="Child07" parent="MainAct/Ships/Ship1/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.85714, -12)
+
+[node name="Child08" parent="MainAct/Ships/Ship1/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, -14)
+
+[node name="Pearls" type="Node3D" parent="MainAct/Ships/Ship1"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 13.25, 21, 14)
+script = ExtResource("6_ytq25")
+Source = ExtResource("8_ytq25")
+Amount = 12
+Shape = 0
+Orientation = 0
+Spacing = 1.2
+"Horizontal Offset" = null
+"Vertical Offset" = SubResource("Curve_7jc22")
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Ships/Ship1/Pearls" instance=ExtResource("8_ytq25")]
+
+[node name="Child02" parent="MainAct/Ships/Ship1/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.727273, -1.2)
+
+[node name="Child03" parent="MainAct/Ships/Ship1/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.45455, -2.4)
+
+[node name="Child04" parent="MainAct/Ships/Ship1/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.18182, -3.6)
+
+[node name="Child05" parent="MainAct/Ships/Ship1/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.90909, -4.8)
+
+[node name="Child06" parent="MainAct/Ships/Ship1/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.63636, -6)
+
+[node name="Child07" parent="MainAct/Ships/Ship1/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.36364, -7.2)
+
+[node name="Child08" parent="MainAct/Ships/Ship1/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.09091, -8.4)
+
+[node name="Child09" parent="MainAct/Ships/Ship1/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.81818, -9.6)
+
+[node name="Child10" parent="MainAct/Ships/Ship1/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.54545, -10.8)
+
+[node name="Child11" parent="MainAct/Ships/Ship1/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.27273, -12)
+
+[node name="Child12" parent="MainAct/Ships/Ship1/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, -13.2)
+
+[node name="SwitchL" parent="MainAct/Ships/Ship1" instance=ExtResource("35_c8avs")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 13.25, 11, 31.5)
+activationLength = 6.0
+
+[node name="SwitchR" parent="MainAct/Ships/Ship1" instance=ExtResource("35_c8avs")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -13.25, 11, 31.5)
+activationLength = 6.0
+
+[node name="RingCull" type="Node3D" parent="MainAct/Ships/Ship1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 70)
+script = ExtResource("36_7jc22")
+
+[node name="RingsL" type="Node3D" parent="MainAct/Ships/Ship1/RingCull"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 13.25, 1, -13)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 12
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = SubResource("Curve_p0u7c")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Ships/Ship1/RingCull/RingsL" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/Ships/Ship1/RingCull/RingsL" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00489136, 0, -2.5)
+
+[node name="Child03" parent="MainAct/Ships/Ship1/RingCull/RingsL" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00107996, 0, -5)
+
+[node name="Child04" parent="MainAct/Ships/Ship1/RingCull/RingsL" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0391624, 0, -7.5)
+
+[node name="Child05" parent="MainAct/Ships/Ship1/RingCull/RingsL" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.143564, 0, -10)
+
+[node name="Child06" parent="MainAct/Ships/Ship1/RingCull/RingsL" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.339853, 0, -12.5)
+
+[node name="Child07" parent="MainAct/Ships/Ship1/RingCull/RingsL" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.655757, 0, -15)
+
+[node name="Child08" parent="MainAct/Ships/Ship1/RingCull/RingsL" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.11901, 0, -17.5)
+
+[node name="Child09" parent="MainAct/Ships/Ship1/RingCull/RingsL" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75733, 0, -20)
+
+[node name="Child10" parent="MainAct/Ships/Ship1/RingCull/RingsL" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.59845, 0, -22.5)
+
+[node name="Child11" parent="MainAct/Ships/Ship1/RingCull/RingsL" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6701, 0, -25)
+
+[node name="Child12" parent="MainAct/Ships/Ship1/RingCull/RingsL" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -27.5)
+
+[node name="RingsR" type="Node3D" parent="MainAct/Ships/Ship1/RingCull"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -13.25, 1, -13)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 12
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = SubResource("Curve_wjem1")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Ships/Ship1/RingCull/RingsR" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/Ships/Ship1/RingCull/RingsR" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0163839, 0, -2.5)
+
+[node name="Child03" parent="MainAct/Ships/Ship1/RingCull/RingsR" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0755108, 0, -5)
+
+[node name="Child04" parent="MainAct/Ships/Ship1/RingCull/RingsR" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.192344, 0, -7.5)
+
+[node name="Child05" parent="MainAct/Ships/Ship1/RingCull/RingsR" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.381846, 0, -10)
+
+[node name="Child06" parent="MainAct/Ships/Ship1/RingCull/RingsR" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.658981, 0, -12.5)
+
+[node name="Child07" parent="MainAct/Ships/Ship1/RingCull/RingsR" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.03871, 0, -15)
+
+[node name="Child08" parent="MainAct/Ships/Ship1/RingCull/RingsR" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.536, 0, -17.5)
+
+[node name="Child09" parent="MainAct/Ships/Ship1/RingCull/RingsR" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.16581, 0, -20)
+
+[node name="Child10" parent="MainAct/Ships/Ship1/RingCull/RingsR" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9431, 0, -22.5)
+
+[node name="Child11" parent="MainAct/Ships/Ship1/RingCull/RingsR" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.88285, 0, -25)
+
+[node name="Child12" parent="MainAct/Ships/Ship1/RingCull/RingsR" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -27.5)
+
+[node name="EnemyStone" parent="MainAct/Ships/Ship1" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 1, 83.5)
+enemyCount = 4
+
+[node name="ShipFightCamera" parent="MainAct/Ships/Ship1" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.142014, 23.0923, 62.28)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="MainAct/Ships/Ship1/ShipFightCamera"]
+script = ExtResource("21_1aofs")
+settings = ExtResource("38_cusk7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Ships/Ship1/ShipFightCamera"]
+shape = SubResource("BoxShape3D_6rj8d")
+
+[node name="BlueMajin1" parent="MainAct/Ships/Ship1" instance=ExtResource("22_glsjx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 7, 0, 74)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 15, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.0
+"Attack Settings/Attack Type" = 3
+rangeOverride = 30
+
+[node name="BlueMajin2" parent="MainAct/Ships/Ship1" instance=ExtResource("22_glsjx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -7, 0, 74)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 15, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.0
+"Attack Settings/Attack Type" = 3
+rangeOverride = 30
+
+[node name="GreenMajin1" parent="MainAct/Ships/Ship1" instance=ExtResource("9_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 88)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 15, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.0
+"Attack Settings/Attack Type" = 3
+rangeOverride = 30
+
+[node name="GreenMajin2" parent="MainAct/Ships/Ship1" instance=ExtResource("9_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, 88)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 15, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 0.0
+"Attack Settings/Attack Type" = 3
+rangeOverride = 30
+
+[node name="SwitchM" parent="MainAct/Ships/Ship1" instance=ExtResource("35_c8avs")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 83.5)
+
+[node name="BridgeSquareFallingR" parent="MainAct/Ships/Ship1" instance=ExtResource("38_wjem1")]
+transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 0.2, -14, 0, 94.6)
+"Falling Platform Settings/Auto Shake" = false
+
+[node name="BridgeSquareFallingL" parent="MainAct/Ships/Ship1" instance=ExtResource("38_wjem1")]
+transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 0.2, 14, 0, 94.6)
+"Falling Platform Settings/Auto Shake" = false
+
+[node name="ShipCamera" parent="MainAct/Ships/Ship1" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.142014, 23.0923, 98.28)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="MainAct/Ships/Ship1/ShipCamera"]
+script = ExtResource("21_1aofs")
+settings = ExtResource("40_mujev")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Ships/Ship1/ShipCamera"]
+shape = SubResource("BoxShape3D_6rj8d")
+
+[node name="SpoilsLarge" parent="MainAct/Ships/Ship1" instance=ExtResource("14_hcghg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 5, 128)
+
+[node name="SpoilsSmall1" parent="MainAct/Ships/Ship1" instance=ExtResource("40_wekfv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 5, 125.5)
+
+[node name="SpoilsSmall2" parent="MainAct/Ships/Ship1" instance=ExtResource("40_wekfv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.60001, 5, 125.5)
+
+[node name="Catapult" parent="MainAct/Ships/Ship1" instance=ExtResource("39_05fdr")]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 2, 4.9, 125.5)
+"Secondary Settings/Middle Height" = 70.0
+"Secondary Settings/Final Height" = 40.0
+"Secondary Settings/Distance" = 80.0
+"Secondary Settings/Blend" = 0.169
+MiddleHeight = 50.0
+FinalHeight = 30.0
+Distance = 35.0
+
+[node name="JumpTrigger" parent="MainAct/Ships/Ship1" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.998943, 0, 0.0459558, 0, 1, 0, -0.0459558, 0, 0.998943, 1.30509, 39.2, 158.97)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="Jump" type="Node3D" parent="MainAct/Ships/Ship1/JumpTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, -16.4, 13.2)
+script = ExtResource("27_6yc6x")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Ships/Ship1/JumpTrigger"]
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="JumpTrigger2" parent="MainAct/Ships/Ship1" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.922982, 0, 0.384843, 0, 1, 0, -0.384843, 0, 0.922982, 4.97531, 20.2, 172.157)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="Jump" type="Node3D" parent="MainAct/Ships/Ship1/JumpTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.84113, -15.4, 12.953)
+script = ExtResource("27_6yc6x")
+jumpHeight = 1.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Ships/Ship1/JumpTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 0.34202, -0.939693, 0, 0.939693, 0.34202, 0, 0, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Ship2" type="Node3D" parent="MainAct/Ships"]
+transform = Transform3D(0.933042, 0, 0.359769, 0, 1, 0, -0.359769, 0, 0.933042, 24.7148, -0.1, 227.992)
+
+[node name="ItemBoxFlying" parent="MainAct/Ships/Ship2" instance=ExtResource("41_wekfv")]
+transform = Transform3D(-1, 0, -8.9407e-08, 0, 1, 0, 8.9407e-08, 0, -1, 5.40002, 48.6, -36.9999)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 100
+
+[node name="SpoilsSmall1" parent="MainAct/Ships/Ship2" instance=ExtResource("40_wekfv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 47.6, -33)
+
+[node name="SpoilsSmall2" parent="MainAct/Ships/Ship2" instance=ExtResource("40_wekfv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1, 47.6, -33)
+
+[node name="SpoilsSmall3" parent="MainAct/Ships/Ship2" instance=ExtResource("40_wekfv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 47.6, -33)
+
+[node name="SpoilsLarge" parent="MainAct/Ships/Ship2" instance=ExtResource("14_hcghg")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.5, 47.6, -34)
+
+[node name="Spring" parent="MainAct/Ships/Ship2" instance=ExtResource("11_q0cv5")]
+transform = Transform3D(1, -1.86265e-09, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, 0, 47.9, -32.9999)
+MiddleHeight = 12.0
+FinalHeight = 10.0
+Distance = 4.0
+
+[node name="InvisibleGrindrail" parent="MainAct/Ships/Ship2" instance=ExtResource("42_my4pc")]
+transform = Transform3D(-1, -2.23517e-08, -8.9407e-08, 0, 0.96363, -0.267238, 8.9407e-08, -0.267238, -0.96363, 6.10352e-05, 55.9224, -35.2897)
+railLength = 50
+
+[node name="Rings1" type="Node3D" parent="MainAct/Ships/Ship2/InvisibleGrindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -7)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings1" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="Rings2" type="Node3D" parent="MainAct/Ships/Ship2/InvisibleGrindrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -31)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings2" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="MainAct/Ships/Ship2/InvisibleGrindrail/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="SpikeBall" parent="MainAct/Ships/Ship2/InvisibleGrindrail" instance=ExtResource("28_m1od1")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.0999999, -28)
+Movement/Mode = 0
+
+[node name="ShipFightCamera" parent="MainAct/Ships/Ship2" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.10352e-05, 22, -12.0001)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="MainAct/Ships/Ship2/ShipFightCamera"]
+script = ExtResource("21_1aofs")
+settings = ExtResource("38_cusk7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Ships/Ship2/ShipFightCamera"]
+shape = SubResource("BoxShape3D_6rj8d")
+
+[node name="SlimeMajinL" parent="MainAct/Ships/Ship2" instance=ExtResource("3_qkxl1")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 6.00006, 0, 10.2001)
+spawnOffset = Vector3(-25, -10, 0)
+spawnHeight = 15.0
+jumpCount = 9
+movementDistance = 10.0
+isSpitEnabled = true
+isShockEnabled = true
+movingAttackInterval = 4
+rangeOverride = 30
+
+[node name="SlimeMajinR" parent="MainAct/Ships/Ship2" instance=ExtResource("3_qkxl1")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -5.99994, 0, 10.2001)
+spawnOffset = Vector3(25, -10, 0)
+spawnHeight = 15.0
+jumpCount = 9
+movementDistance = 10.0
+isSpitEnabled = true
+isShockEnabled = true
+movingAttackInterval = 4
+rangeOverride = 30
+
+[node name="EnemyStone1" parent="MainAct/Ships/Ship2" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 3, 0, 1, 7.2)
+enemyCount = 2
+
+[node name="Spring2" parent="MainAct/Ships/Ship2" instance=ExtResource("11_q0cv5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.10352e-05, 0.3, 7.20007)
+startHidden = true
+FinalHeight = 20.0
+sfxPlayer = NodePath("../Spring/SFX")
+
+[node name="FlyingPot1" parent="MainAct/Ships/Ship2" instance=ExtResource("43_tusv3")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 20, 3.5)
+travelBounds = Vector2(0, 20)
+customCameraSettings = ExtResource("44_706b0")
+
+[node name="FlyingPot2" parent="MainAct/Ships/Ship2" instance=ExtResource("43_tusv3")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 35, 6)
+travelBounds = Vector2(0, 25)
+customCameraSettings = ExtResource("44_706b0")
+
+[node name="BombL" parent="MainAct/Ships/Ship2" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.00006, 0, 16.2003)
+launchDelay = 1.0
+"Launch Settings/Starting Offset" = Vector3(40, 40, 0)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="BombR" parent="MainAct/Ships/Ship2" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.99994, 0, 16.2001)
+launchDelay = 1.0
+"Launch Settings/Middle Height" = 0.0
+
+[node name="SpikeBall1" parent="MainAct/Ships/Ship2" instance=ExtResource("28_m1od1")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 44, 18.5)
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 12.5
+
+[node name="SpikeBall2" parent="MainAct/Ships/Ship2" instance=ExtResource("28_m1od1")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 58, 18.5)
+Movement/Mode = 2
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.5
+"Movement/Horizontal Size" = 0.0
+"Movement/Vertical Size" = 0.0
+Movement/Radius = 12.5
+
+[node name="Rings1" type="Node3D" parent="MainAct/Ships/Ship2"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0, 59.5, 18.5005)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 12
+Shape = 1
+Orientation = 0
+"Ring Size" = 7.0
+"Ring Ratio" = 1.0
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Ships/Ship2/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 0)
+
+[node name="Child02" parent="MainAct/Ships/Ship2/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.06218, 0, 3.5)
+
+[node name="Child03" parent="MainAct/Ships/Ship2/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, 6.06218)
+
+[node name="Child04" parent="MainAct/Ships/Ship2/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0598e-07, 0, 7)
+
+[node name="Child05" parent="MainAct/Ships/Ship2/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 6.06218)
+
+[node name="Child06" parent="MainAct/Ships/Ship2/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.06218, 0, 3.5)
+
+[node name="Child07" parent="MainAct/Ships/Ship2/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -6.11959e-07)
+
+[node name="Child08" parent="MainAct/Ships/Ship2/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.06218, 0, -3.5)
+
+[node name="Child09" parent="MainAct/Ships/Ship2/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, -6.06218)
+
+[node name="Child10" parent="MainAct/Ships/Ship2/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.34742e-08, 0, -7)
+
+[node name="Child11" parent="MainAct/Ships/Ship2/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, -6.06218)
+
+[node name="Child12" parent="MainAct/Ships/Ship2/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.06218, 0, -3.5)
+
+[node name="BlueMajin" parent="MainAct/Ships/Ship2" instance=ExtResource("22_glsjx")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 0, 59, 12.0001)
+rangeOverride = 20
+
+[node name="Switch1" parent="MainAct/Ships/Ship2" instance=ExtResource("35_c8avs")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 0, 58.8, 12.0002)
+
+[node name="BridgeSquareFalling1" parent="MainAct/Ships/Ship2" instance=ExtResource("38_wjem1")]
+transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 0.2, 0, 0.3, 43)
+"Falling Platform Settings/Auto Shake" = false
+
+[node name="Rings2" type="Node3D" parent="MainAct/Ships/Ship2"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 6.11959e-07, 0.9, 57.3829)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Ships/Ship2/Rings2" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/Ships/Ship2/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Child03" parent="MainAct/Ships/Ship2/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child04" parent="MainAct/Ships/Ship2/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Child05" parent="MainAct/Ships/Ship2/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child06" parent="MainAct/Ships/Ship2/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child07" parent="MainAct/Ships/Ship2/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child08" parent="MainAct/Ships/Ship2/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="Child09" parent="MainAct/Ships/Ship2/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child10" parent="MainAct/Ships/Ship2/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="GreenMajin" parent="MainAct/Ships/Ship2" instance=ExtResource("9_slh8b")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, -1.5, 0, 69.0001)
+rangeOverride = 30
+
+[node name="BlueMajin2" parent="MainAct/Ships/Ship2" instance=ExtResource("22_glsjx")]
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 2, 0, 74.0001)
+rangeOverride = 30
+
+[node name="RedMajin" parent="MainAct/Ships/Ship2" instance=ExtResource("45_22rft")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, 2, 77.0001)
+"Rotation Settings/Track Player" = false
+"Rotation Settings/Rotation Time" = 1.0
+"Attack Settings/Flame Inactive Time" = 1.0
+"Attack Settings/Flame Aggression Radius" = 25
+"Attack Settings/Attack Instantly" = true
+rangeOverride = 30
+
+[node name="EnemyStone2" parent="MainAct/Ships/Ship2" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 3, 0, 1, 81)
+enemyCount = 3
+
+[node name="Switch2" parent="MainAct/Ships/Ship2" instance=ExtResource("35_c8avs")]
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0, 0.1, 81.0004)
+
+[node name="BridgeSquareFalling2" parent="MainAct/Ships/Ship2" instance=ExtResource("38_wjem1")]
+transform = Transform3D(1.6, 0, 0, 0, 2, 0, 0, 0, 0.2, 0, 0.3, 84.4001)
+"Falling Platform Settings/Auto Shake" = false
+"Falling Platform Settings/Shake Length" = 0.0
+
+[node name="JumpPanel" parent="MainAct/Ships/Ship2" instance=ExtResource("4_yyd45")]
+transform = Transform3D(0.990268, 0, -0.139173, 0, 1, 0, 0.139173, 0, 0.990268, 6.10352e-05, 0, 87.7003)
+MiddleHeight = 6.0
+FinalHeight = -1.0
+Distance = 37.0
+
+[node name="Ship3" type="Node3D" parent="MainAct/Ships"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.675, -0.35, 346)
+
+[node name="UpperPath" type="Node3D" parent="MainAct/Ships/Ship3"]
+
+[node name="Spring" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("11_q0cv5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+FinalHeight = 5.0
+
+[node name="SpoilsSmall1" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("40_wekfv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0, 0)
+
+[node name="SpoilsSmall2" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("40_wekfv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0, 1.59998)
+
+[node name="SpoilsSmall3" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("40_wekfv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.800003, 0, 1.59998)
+
+[node name="SpoilsSmall4" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("40_wekfv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.800003, 0, 1.59998)
+
+[node name="SpoilsSmall6" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("40_wekfv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0, 1.59998)
+
+[node name="SpoilsSmall7" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("40_wekfv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0, 0)
+
+[node name="SpoilsLarge1" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("14_hcghg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 25)
+
+[node name="SpoilsLarge2" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("14_hcghg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 25)
+
+[node name="Sword1" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("48_mujev")]
+transform = Transform3D(-0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, -0.642788, -1, 4.5, 8)
+
+[node name="Sword2" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("48_mujev")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1.5, 14, 9.5)
+endOffset = Vector3(-10.4, 4, 18)
+launchHeight = 5.0
+
+[node name="InvisibleGrindrail1" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("42_my4pc")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -14, 18, 25)
+railLength = 30
+
+[node name="Rings" type="Node3D" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -5)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail1/Rings" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail1/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail1/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail1/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail1/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child06" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail1/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail1/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child08" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail1/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+
+[node name="Child09" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail1/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child10" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail1/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
+
+[node name="InvisibleGrindrail2" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("42_my4pc")]
+transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, -14, 18, 55)
+railLength = 30
+
+[node name="Rings" type="Node3D" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -5)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail2/Rings" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail2/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail2/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail2/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail2/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child06" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail2/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail2/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child08" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail2/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+
+[node name="Child09" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail2/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child10" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail2/Rings" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
+
+[node name="InvisibleGrindrail3" parent="MainAct/Ships/Ship3/UpperPath" instance=ExtResource("42_my4pc")]
+transform = Transform3D(-1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, -1, 13.25, 18, 62)
+railLength = 30
+
+[node name="Rings" type="Node3D" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -5)
+script = ExtResource("6_ytq25")
+Source = ExtResource("8_ytq25")
+Amount = 10
+Shape = 0
+Orientation = 0
+Spacing = 2.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail3/Rings" instance=ExtResource("8_ytq25")]
+
+[node name="Child02" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail3/Rings" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Child03" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail3/Rings" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Child04" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail3/Rings" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Child05" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail3/Rings" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Child06" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail3/Rings" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+
+[node name="Child07" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail3/Rings" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="Child08" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail3/Rings" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.5)
+
+[node name="Child09" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail3/Rings" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Child10" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail3/Rings" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
+
+[node name="Spring" parent="MainAct/Ships/Ship3/UpperPath/InvisibleGrindrail3" instance=ExtResource("11_q0cv5")]
+transform = Transform3D(-1, -6.65534e-08, -5.5645e-08, 1.49133e-08, 0.5, -0.866025, 8.54594e-08, -0.866025, -0.5, -1.14441e-05, 0.299999, -30)
+MiddleHeight = 2.0
+FinalHeight = -2.0
+Distance = 20.0
+
+[node name="Bombs" type="Node3D" parent="MainAct/Ships/Ship3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 38)
+
+[node name="Bomb1" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("28_6yc6x")]
+"Launch Settings/Starting Offset" = Vector3(10, 23, 80)
+
+[node name="Bomb2" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 0)
+"Launch Settings/Starting Offset" = Vector3(10, 0, 50)
+"Launch Settings/Middle Height" = 15.0
+
+[node name="Bomb3" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, 0)
+"Launch Settings/Starting Offset" = Vector3(-10, -5, 10)
+"Launch Settings/Middle Height" = 15.0
+
+[node name="BombGroup1" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Ships/Ship3/Bombs/BombGroup1"]
+shape = SubResource("BoxShape3D_6rj8d")
+
+[node name="Bomb4" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0, 7)
+"Launch Settings/Starting Offset" = Vector3(0, 30, 10)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb5" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0, 7)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(0, 30, 10)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb6" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 14)
+"Launch Settings/Starting Offset" = Vector3(-5, 30, 60)
+
+[node name="Bomb7" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 14)
+"Launch Settings/Starting Offset" = Vector3(10, -5, 10)
+"Launch Settings/Middle Height" = 20.0
+
+[node name="Bomb8" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, 14)
+"Launch Settings/Starting Offset" = Vector3(-10, -5, 10)
+"Launch Settings/Middle Height" = 15.0
+
+[node name="BombGroup2" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Ships/Ship3/Bombs/BombGroup2"]
+shape = SubResource("BoxShape3D_6rj8d")
+
+[node name="Bomb9" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0, 22)
+"Launch Settings/Starting Offset" = Vector3(0, 30, 10)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb10" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0, 22)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(0, 30, 10)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb11" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 28)
+launchDelay = 0.6
+"Launch Settings/Starting Offset" = Vector3(0, 30, 10)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb12" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 28)
+launchDelay = 0.4
+"Launch Settings/Starting Offset" = Vector3(0, 30, 10)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="BombGroup3" parent="MainAct/Ships/Ship3/Bombs" instance=ExtResource("26_1c4me")]
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Ships/Ship3/Bombs/BombGroup3"]
+shape = SubResource("BoxShape3D_6rj8d")
+
+[node name="MovingMajin1" type="Node3D" parent="MainAct/Ships/Ship3"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 11.2, -3, 73.5)
+script = ExtResource("15_s8u74")
+startPaused = true
+smoothPausing = true
+root = NodePath("GreenMajin")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 4.0
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+
+[node name="GreenMajin" parent="MainAct/Ships/Ship3/MovingMajin1" instance=ExtResource("9_slh8b")]
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-5, 5, 30)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(-5, 5, -5)
+"Attack Settings/Attack Type" = 1
+rangeOverride = 30
+
+[node name="MovingMajin2" type="Node3D" parent="MainAct/Ships/Ship3"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 11.2, 1, 80)
+script = ExtResource("15_s8u74")
+startPaused = true
+smoothPausing = true
+root = NodePath("GreenMajin")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 3.0
+"Movement/Starting Offset" = 0.75
+Movement/Distance = 4.0
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+
+[node name="GreenMajin" parent="MainAct/Ships/Ship3/MovingMajin2" instance=ExtResource("9_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-15, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Attack Settings/Attack Type" = 1
+rangeOverride = 30
+
+[node name="ItemBoxFlying" parent="MainAct/Ships/Ship3" instance=ExtResource("41_wekfv")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 13.25, 7, 90)
+"Spawn Settings/Pickup Parent" = NodePath("RichRing")
+
+[node name="RichRing" parent="MainAct/Ships/Ship3/ItemBoxFlying" instance=ExtResource("49_6rj8d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -5)
+
+[node name="MovingBlade1" type="Node3D" parent="MainAct/Ships/Ship3"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 11.75, 7, 93)
+script = ExtResource("15_s8u74")
+timebreakMultiplier = 0.5
+root = NodePath("Blade")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 0.8
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 3.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+
+[node name="Blade" parent="MainAct/Ships/Ship3/MovingBlade1" instance=ExtResource("16_scpb0")]
+
+[node name="MovingBlade2" type="Node3D" parent="MainAct/Ships/Ship3"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 11.75, 9.7, 97.7)
+script = ExtResource("15_s8u74")
+timebreakMultiplier = 0.5
+root = NodePath("Blade")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 0.8
+"Movement/Starting Offset" = 0.25
+Movement/Distance = 3.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+
+[node name="Blade" parent="MainAct/Ships/Ship3/MovingBlade2" instance=ExtResource("16_scpb0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
+
+[node name="MovingBlade3" type="Node3D" parent="MainAct/Ships/Ship3"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 11.75, 13.5, 103.9)
+script = ExtResource("15_s8u74")
+timebreakMultiplier = 0.5
+root = NodePath("Blade")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 0.8
+"Movement/Starting Offset" = 0.5
+Movement/Distance = 3.0
+Movement/Angle = -90.0
+"Vertical Orientation" = false
+
+[node name="Blade" parent="MainAct/Ships/Ship3/MovingBlade3" instance=ExtResource("16_scpb0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+
+[node name="MovingMajin3" type="Node3D" parent="MainAct/Ships/Ship3"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -15.3, -3, 73.5)
+script = ExtResource("15_s8u74")
+startPaused = true
+smoothPausing = true
+root = NodePath("GreenMajin")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.0
+Movement/Distance = 4.0
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+
+[node name="GreenMajin" parent="MainAct/Ships/Ship3/MovingMajin3" instance=ExtResource("9_slh8b")]
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-5, 5, 30)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(-5, 5, -5)
+"Attack Settings/Attack Type" = 1
+rangeOverride = 30
+
+[node name="MovingMajin4" type="Node3D" parent="MainAct/Ships/Ship3"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -15.3, 1, 80)
+script = ExtResource("15_s8u74")
+startPaused = true
+smoothPausing = true
+root = NodePath("GreenMajin")
+animator = NodePath("")
+Movement/Mode = 1
+"Movement/Cycle Length" = 2.0
+"Movement/Starting Offset" = 0.75
+Movement/Distance = 4.0
+Movement/Angle = 90.0
+"Vertical Orientation" = false
+
+[node name="GreenMajin" parent="MainAct/Ships/Ship3/MovingMajin4" instance=ExtResource("9_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-15, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+"Attack Settings/Attack Type" = 1
+rangeOverride = 30
+
+[node name="SlimeMajin" parent="MainAct/Ships/Ship3" instance=ExtResource("3_qkxl1")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -13.5, 6, 89.5)
+spawnHeight = 0.0
+isSpitEnabled = true
+isShockEnabled = true
+rangeOverride = 30
+
+[node name="Throne" type="Node3D" parent="MainAct/Ships/Ship3"]
+transform = Transform3D(-1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, -1, -3, 16, 126.2)
+
+[node name="EnemyStone1" parent="MainAct/Ships/Ship3/Throne" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(4, 0, 0, 0, 1, 0, 0, 0, 2.5, 0, 1, -0.5)
+enemyCount = 1
+
+[node name="EnemyStone2" parent="MainAct/Ships/Ship3/Throne" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(2, 0, 0, 0, 3, 0, 0, 0, 0.5, 0, 5, -2.30005)
+enemyCount = 1
+
+[node name="EnemyStone3" parent="MainAct/Ships/Ship3/Throne" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 1.8, -1.5, 2.5, 0)
+enemyCount = 1
+
+[node name="EnemyStone4" parent="MainAct/Ships/Ship3/Throne" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 1.8, 1.5, 2.5, 0)
+enemyCount = 1
+
+[node name="EnemyStone5" parent="MainAct/Ships/Ship3/Throne" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(2.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.5, 2.5)
+enemyCount = 1
+
+[node name="RedMajin" parent="MainAct/Ships/Ship3/Throne" instance=ExtResource("45_22rft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 1)
+"Attack Settings/Flame Active Time" = 2.5
+"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Aggression Radius" = 15
+rangeOverride = 30
+
+[node name="JumpPanel" parent="MainAct/Ships/Ship3/Throne" instance=ExtResource("4_yyd45")]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 0, 0, -0.5)
+
 [node name="Rain" type="GPUParticles3D" parent="."]
 layers = 32
 cast_shadow = 0
@@ -1882,6 +3036,53 @@ heightfield_mask = 2
 [connection signal="Activated" from="MainAct/Cannonball/Bomb/BombTrigger1" to="MainAct/Cannonball/Bomb/Bomb3" method="Launch"]
 [connection signal="Activated" from="MainAct/Cannonball/Bomb/BombTrigger1" to="MainAct/Cannonball/Bomb/Bomb4" method="Launch"]
 [connection signal="Activated" from="MainAct/Cannonball/Bomb/BombTrigger1" to="MainAct/Cannonball/Bomb/Bomb5" method="Launch"]
+[connection signal="Activated" from="MainAct/Ships/Ship1/SwitchL" to="MainAct/Ships/Ship1/SwitchR" method="Activate"]
+[connection signal="Activated" from="MainAct/Ships/Ship1/SwitchL" to="MainAct/Ships/Ship1/RingCull" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Ships/Ship1/SwitchL" to="MainAct/Ships/Ship1/RingCull" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Ships/Ship1/SwitchR" to="MainAct/Ships/Ship1/SwitchL" method="Activate"]
+[connection signal="Activated" from="MainAct/Ships/Ship1/SwitchR" to="MainAct/Ships/Ship1/RingCull" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Ships/Ship1/SwitchR" to="MainAct/Ships/Ship1/RingCull" method="Deactivate"]
+[connection signal="Defeated" from="MainAct/Ships/Ship1/BlueMajin1" to="MainAct/Ships/Ship1/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Ships/Ship1/BlueMajin2" to="MainAct/Ships/Ship1/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Ships/Ship1/GreenMajin1" to="MainAct/Ships/Ship1/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Ships/Ship1/GreenMajin2" to="MainAct/Ships/Ship1/EnemyStone" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/Ships/Ship1/SwitchM" to="MainAct/Ships/Ship1/BridgeSquareFallingR" method="StartShaking"]
+[connection signal="Activated" from="MainAct/Ships/Ship1/SwitchM" to="MainAct/Ships/Ship1/BridgeSquareFallingL" method="StartShaking"]
+[connection signal="Activated" from="MainAct/Ships/Ship1/Catapult" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/Ships/Ship1/Catapult" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Defeated" from="MainAct/Ships/Ship2/SlimeMajinL" to="MainAct/Ships/Ship2/EnemyStone1" method="IncrementCounter"]
+[connection signal="Spawned" from="MainAct/Ships/Ship2/SlimeMajinL" to="MainAct/Ships/Ship2/BombL" method="Launch"]
+[connection signal="Defeated" from="MainAct/Ships/Ship2/SlimeMajinR" to="MainAct/Ships/Ship2/EnemyStone1" method="IncrementCounter"]
+[connection signal="Spawned" from="MainAct/Ships/Ship2/SlimeMajinR" to="MainAct/Ships/Ship2/BombR" method="Launch"]
+[connection signal="Shattered" from="MainAct/Ships/Ship2/EnemyStone1" to="MainAct/Ships/Ship2/Spring2" method="ShowLauncher"]
+[connection signal="Deactivated" from="MainAct/Ships/Ship2/Spring2" to="MainAct/Ships/Ship2/FlyingPot1" method="Activate" flags=3]
+[connection signal="Activated" from="MainAct/Ships/Ship2/Switch1" to="MainAct/Ships/Ship2/BridgeSquareFalling1" method="StartShaking"]
+[connection signal="Defeated" from="MainAct/Ships/Ship2/GreenMajin" to="MainAct/Ships/Ship2/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Ships/Ship2/BlueMajin2" to="MainAct/Ships/Ship2/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Ships/Ship2/RedMajin" to="MainAct/Ships/Ship2/EnemyStone2" method="IncrementCounter"]
+[connection signal="Shattered" from="MainAct/Ships/Ship2/EnemyStone2" to="MainAct/Ships/Ship2/Spring2" method="ShowLauncher"]
+[connection signal="Activated" from="MainAct/Ships/Ship2/Switch2" to="MainAct/Ships/Ship2/BridgeSquareFalling2" method="StartShaking"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Bombs/BombGroup1" to="MainAct/Ships/Ship3/Bombs/Bomb1" method="Launch"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Bombs/BombGroup1" to="MainAct/Ships/Ship3/Bombs/Bomb2" method="Launch"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Bombs/BombGroup1" to="MainAct/Ships/Ship3/Bombs/Bomb3" method="Launch"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Bombs/BombGroup2" to="MainAct/Ships/Ship3/Bombs/Bomb4" method="Launch"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Bombs/BombGroup2" to="MainAct/Ships/Ship3/Bombs/Bomb5" method="Launch"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Bombs/BombGroup2" to="MainAct/Ships/Ship3/Bombs/Bomb6" method="Launch"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Bombs/BombGroup2" to="MainAct/Ships/Ship3/Bombs/Bomb7" method="Launch"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Bombs/BombGroup2" to="MainAct/Ships/Ship3/Bombs/Bomb8" method="Launch"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Bombs/BombGroup3" to="MainAct/Ships/Ship3/Bombs/Bomb9" method="Launch"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Bombs/BombGroup3" to="MainAct/Ships/Ship3/Bombs/Bomb10" method="Launch"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Bombs/BombGroup3" to="MainAct/Ships/Ship3/Bombs/Bomb11" method="Launch"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Bombs/BombGroup3" to="MainAct/Ships/Ship3/Bombs/Bomb12" method="Launch"]
+[connection signal="SpinStarted" from="MainAct/Ships/Ship3/MovingMajin1/GreenMajin" to="MainAct/Ships/Ship3/MovingMajin1" method="Unpause"]
+[connection signal="SpinStarted" from="MainAct/Ships/Ship3/MovingMajin2/GreenMajin" to="MainAct/Ships/Ship3/MovingMajin2" method="Unpause"]
+[connection signal="SpinStarted" from="MainAct/Ships/Ship3/MovingMajin3/GreenMajin" to="MainAct/Ships/Ship3/MovingMajin3" method="Unpause"]
+[connection signal="SpinStarted" from="MainAct/Ships/Ship3/MovingMajin4/GreenMajin" to="MainAct/Ships/Ship3/MovingMajin4" method="Unpause"]
+[connection signal="Defeated" from="MainAct/Ships/Ship3/Throne/RedMajin" to="MainAct/Ships/Ship3/Throne/EnemyStone1" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Ships/Ship3/Throne/RedMajin" to="MainAct/Ships/Ship3/Throne/EnemyStone2" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Ships/Ship3/Throne/RedMajin" to="MainAct/Ships/Ship3/Throne/EnemyStone3" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Ships/Ship3/Throne/RedMajin" to="MainAct/Ships/Ship3/Throne/EnemyStone4" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/Ships/Ship3/Throne/RedMajin" to="MainAct/Ships/Ship3/Throne/EnemyStone5" method="IncrementCounter"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]

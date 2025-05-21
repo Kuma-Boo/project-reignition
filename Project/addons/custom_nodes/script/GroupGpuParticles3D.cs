@@ -9,8 +9,9 @@ namespace Project.CustomNodes;
 [Tool]
 public partial class GroupGpuParticles3D : GpuParticles3D
 {
-	[Export]
-	public Array<GpuParticles3D> subSystems;
+	[Signal] public delegate void GroupRestartedEventHandler();
+
+	[Export] public Array<GpuParticles3D> subSystems;
 	public bool IsGroupEmitting { get; private set; }
 	[ExportToolButton("Restart Group")]
 	public Callable EditorRestartGroup => Callable.From(RestartGroup);
@@ -40,6 +41,7 @@ public partial class GroupGpuParticles3D : GpuParticles3D
 
 		Restart();
 		IsGroupEmitting = true;
+		EmitSignal(SignalName.GroupRestarted);
 	}
 
 	public void StopGroup() => SetEmitting(false);

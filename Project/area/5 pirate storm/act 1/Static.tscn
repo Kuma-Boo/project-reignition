@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://csk7y7y8vgg6l"]
+[gd_scene load_steps=50 format=3 uid="uid://csk7y7y8vgg6l"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_g84th"]
 [ext_resource type="PackedScene" uid="uid://npgcl1ctbjyt" path="res://area/5 pirate storm/act 1/environment/01Opening.tscn" id="2_444mk"]
@@ -40,6 +40,7 @@
 [ext_resource type="Resource" uid="uid://cnxy1brw4b7p1" path="res://area/5 pirate storm/act 1/camera/ShipCam.tres" id="32_82sha"]
 [ext_resource type="PackedScene" uid="uid://ukucb8f0iscj" path="res://area/5 pirate storm/act 1/environment/cannon event/CannonEvent.tscn" id="32_fej2y"]
 [ext_resource type="Resource" uid="uid://c48axuw8cwjqg" path="res://area/5 pirate storm/act 1/camera/CannonballCam.tres" id="34_3rek1"]
+[ext_resource type="Resource" uid="uid://unk8vyncg7mg" path="res://area/5 pirate storm/act 1/camera/ShipCloseCam.tres" id="34_dsog2"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="36_oxnth"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k720b"]
@@ -52,7 +53,7 @@ size = Vector3(50, 80, 5)
 size = Vector3(500, 5, 500)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_auuan"]
-size = Vector3(25, 4, 5)
+size = Vector3(20, 2, 2)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ypnsc"]
 sky_top_color = Color(0.1457, 0.17856, 0.31, 1)
@@ -83,7 +84,6 @@ visible = false
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="CullingTriggers" type="Node3D" parent="Visuals"]
-visible = false
 
 [node name="02-L" parent="Visuals/CullingTriggers" instance=ExtResource("22_ypnsc")]
 transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, -21.1544, 1.9, 198.981)
@@ -218,7 +218,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -129.7, 189.707, 821.746)
 curve = ExtResource("18_fqgif")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path/CannonballPath"]
-transform = Transform3D(-1, 8.24783e-08, -2.89827e-08, 0, 0.331524, 0.943442, 8.74228e-08, 0.943442, -0.331524, 0, -116.225, 188.738)
+transform = Transform3D(-1, 8.24784e-08, -2.89825e-08, 0, 0.331521, 0.943443, 8.74228e-08, 0.943443, -0.331521, 0, -116.225, 188.738)
 progress = 250.0
 loop = false
 
@@ -266,7 +266,7 @@ jumpHeight = 5.0
 autoAlign = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/OpeningJump"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.76837e-07, 0)
+transform = Transform3D(1, 0, 6.85468e-07, 0, 1, 0, -6.85468e-07, 0, 1, 3.8147e-06, -4.76837e-07, -1.49998)
 shape = SubResource("BoxShape3D_auuan")
 
 [node name="PathAndCameraTriggers" type="Node3D" parent="Triggers"]
@@ -474,7 +474,7 @@ CameraPath = NodePath("../../../../Path/ShipPath")
 CameraSettings = ExtResource("32_82sha")
 
 [node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/ShipsStart"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -36, 34)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -38, 31)
 script = ExtResource("25_f6rbm")
 deactivationTransitionTime = 0.5
 transitionType = 1
@@ -485,6 +485,30 @@ previousSettings = ExtResource("32_82sha")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -38.2275, 27.0002)
 script = ExtResource("24_auuan")
 jumpHeight = 3.0
+
+[node name="ShipCloseCamera" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.933042, 0, 0.359769, 0, 1, 0, -0.359769, 0, 0.933042, -88.6358, 29.3, 1310.91)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/ShipCloseCamera"]
+script = ExtResource("25_f6rbm")
+settings = ExtResource("34_dsog2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/ShipCloseCamera"]
+shape = SubResource("BoxShape3D_vf6sl")
+
+[node name="ShipCamera" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.933042, 0, 0.359769, 0, 1, 0, -0.359769, 0, 0.933042, -69.9278, 28.2, 1359.43)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/ShipCamera"]
+script = ExtResource("25_f6rbm")
+settings = ExtResource("32_82sha")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/ShipCamera"]
+shape = SubResource("BoxShape3D_vf6sl")
 
 [node name="Checkpoints" type="Node3D" parent="Triggers"]
 
@@ -649,8 +673,8 @@ isStageMusic = true
 [connection signal="Deactivated" from="Visuals/CullingTriggers/07-L" to="Visuals/07End" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingTriggers/06-U" to="Visuals/06GhostShip" method="Deactivate"]
 [connection signal="Deactivated" from="Visuals/CullingTriggers/06-U" to="Visuals/06GhostShip" method="Activate"]
-[connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Camera" method="Activate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Checkpoint" method="Activate"]
+[connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Camera" method="Activate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Jump" method="Activate"]
 [connection signal="JumpFinished" from="Triggers/PathAndCameraTriggers/ShipsStart/Jump" to="Triggers/PathAndCameraTriggers/ShipsStart/Camera" method="Deactivate"]
 [connection signal="Activated" from="Triggers/CannonEvent/CannonEventTrigger" to="Triggers/CannonEvent/CannonEventCull/CannonEvent" method="Activate"]
