@@ -20,8 +20,10 @@ _data = {
 
 [node name="Surfboard" type="Node3D" node_paths=PackedStringArray("root", "localRoot", "playerPosition", "animator")]
 script = ExtResource("1_onj6u")
-maxSpeed = 30.0
-turnSpeed = 15.0
+initialSpeed = 20.0
+initialTurnSpeed = 15.0
+MaxSpeed = 60.0
+TurnSpeed = 40.0
 isVerticalMovementDisabled = true
 bounds = Vector2(5, 0)
 root = NodePath("Surfboard")
@@ -48,6 +50,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_bp1qf")
 }
 
+[connection signal="area_entered" from="Hurtbox" to="." method="OnEntered"]
 [connection signal="body_entered" from="Hurtbox" to="." method="OnBodyEntered"]
 
 [editable path="Surfboard"]

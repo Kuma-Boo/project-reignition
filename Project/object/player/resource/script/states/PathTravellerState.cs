@@ -1,5 +1,3 @@
-using Godot;
-using Project.Core;
 using Project.Gameplay.Objects;
 
 namespace Project.Gameplay;
@@ -53,7 +51,6 @@ public partial class PathTravellerState : PlayerState
 		Player.StartInvincibility();
 		Player.Animator.StartBalanceStagger();
 		Player.TakeDamage(true);
-		Traveller.StopMovement();
 	}
 
 	private void OnDamage()

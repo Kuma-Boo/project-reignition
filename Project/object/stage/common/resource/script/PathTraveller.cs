@@ -18,9 +18,9 @@ public partial class PathTraveller : Node3D
 
 	/// <summary> How fast to move. </summary>
 	[ExportGroup("Settings")]
-	[Export] private float maxSpeed;
+	[Export] protected float MaxSpeed { get; private set; }
 	/// <summary> How fast to turn. </summary>
-	[Export] private float turnSpeed;
+	[Export] protected float TurnSpeed { get; private set; }
 
 	/// <summary> Allow object to move vertically? </summary>
 	[Export] private bool isVerticalMovementDisabled;
@@ -123,8 +123,7 @@ public partial class PathTraveller : Node3D
 			animator.Play("despawn");
 	}
 
-
-	public void ProcessPathTraveller()
+	public virtual void ProcessPathTraveller()
 	{
 		CalculateMovement();
 		if (AutosetBounds)
@@ -157,7 +156,7 @@ public partial class PathTraveller : Node3D
 	/// <summary> Handles player input. </summary>
 	private void CalculateMovement()
 	{
-		Vector2 inputVector = Player.Controller.InputAxis * turnSpeed;
+		Vector2 inputVector = Player.Controller.InputAxis * GetCurrentTurnSpeed;
 		if (IsVerticalMovementDisabled) // Ignore vertical input
 			inputVector.Y = 0;
 
@@ -174,22 +173,24 @@ public partial class PathTraveller : Node3D
 			inputVector.Y *= 1.0f - ((Mathf.Abs(PathFollower.VOffset) - VerticalTurnSmoothing) / (Bounds.Y - VerticalTurnSmoothing));
 
 		currentTurnAmount = currentTurnAmount.SmoothDamp(inputVector, ref turnVelocity, TurnSmoothing);
-		CurrentSpeed = ExtensionMethods.SmoothDamp(CurrentSpeed, maxSpeed, ref speedVelocity, SpeedSmoothing);
+		CurrentSpeed = ExtensionMethods.SmoothDamp(CurrentSpeed, GetCurrentMaxSpeed, ref speedVelocity, SpeedSmoothing);
 	}
 
 	/// <summary> Override this if you want specific control over the PathFollower's speed. </summary>
-	protected virtual float CalculateMaxSpeed() => maxSpeed;
+	protected virtual float GetCurrentMaxSpeed => MaxSpeed;
+	/// <summary> Override this if you want specific control over the PathFollower's turning. </summary>
+	protected virtual float GetCurrentTurnSpeed => TurnSpeed;
 
 	private void UpdateAnimation()
 	{
 		// Update animations
 		if (root != null) // Update visual rotations
 		{
-			float turnAmount = (currentTurnAmount.X / turnSpeed) - (Player.PathFollower.DeltaAngle * 5.0f);
+			float turnAmount = (currentTurnAmount.X / GetCurrentTurnSpeed) - (Player.PathFollower.DeltaAngle * 5.0f);
 			float tiltAmount = Mathf.DegToRad(rotationAmount) * tiltRatio * turnAmount;
 			root.Rotation = Vector3.Zero;
 
-			root.RotateX(Mathf.DegToRad(rotationAmount) * (currentTurnAmount.Y / turnSpeed));
+			root.RotateX(Mathf.DegToRad(rotationAmount) * (currentTurnAmount.Y / GetCurrentTurnSpeed));
 			if (localRoot != null)
 				localRoot.Rotation = new(0, 0, tiltAmount);
 			else
@@ -198,7 +199,7 @@ public partial class PathTraveller : Node3D
 		}
 
 		if (animator != null) // Update animation speeds
-			animator.SpeedScale = 1.0f + (CurrentSpeed / maxSpeed * 1.5f);
+			animator.SpeedScale = 1.0f + (CurrentSpeed / GetCurrentMaxSpeed * 1.5f);
 	}
 
 	private void ApplyMovement()
@@ -251,10 +252,17 @@ public partial class PathTraveller : Node3D
 	{
 		if (b.IsInGroup("stagger"))
 		{
-			EmitSignal(SignalName.Staggered);
+			Stagger();
 			return;
 		}
 
 		EmitSignal(SignalName.Damaged);
+	}
+
+	/// <summary> Called when the PathTraveller hits a non-lethal hazard. </summary>
+	protected virtual void Stagger()
+	{
+		StopMovement();
+		EmitSignal(SignalName.Staggered);
 	}
 }
