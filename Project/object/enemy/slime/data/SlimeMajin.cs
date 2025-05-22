@@ -209,7 +209,7 @@ public partial class SlimeMajin : Enemy
 		GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref positionVelocity, PositionSmoothing * PhysicsManager.physicsDelta);
 
 		float targetRotation = isMovingBackwards ? Mathf.Pi : 0f;
-		UpdateRotation(targetRotation);
+		ProcessRotation(targetRotation);
 	}
 
 	private void ProcessAttackTimers()

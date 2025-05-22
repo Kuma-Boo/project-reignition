@@ -187,7 +187,7 @@ public partial class FlowerMajin : Enemy
 		if (IsInRange || currentState != State.Passive)
 		{
 			if (IsOpen) // Rotate towards the player
-				UpdateRotation(Player.GlobalPosition);
+				ProcessRotation(Player.GlobalPosition);
 
 			UpdateState();
 		}

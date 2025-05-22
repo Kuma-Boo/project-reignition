@@ -529,7 +529,7 @@ public partial class Majin : Enemy
 	private readonly float MaxWanderLength = 5f;
 	private void UpdateWandering()
 	{
-		UpdateRotation(wanderPosition, WanderRotationSmoothing);
+		ProcessRotation(wanderPosition, WanderRotationSmoothing);
 
 		GlobalPosition += Root.Forward() * WanderSpeed * PhysicsManager.physicsDelta;
 
@@ -572,7 +572,7 @@ public partial class Majin : Enemy
 		bool OutsideFlameAggression = IsRedMajin && !isFlameActive && !IsInFlameAggressionRange();
 		if (OutsideFlameAggression || !IsInRange)
 		{
-			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TrackingSmoothing);
+			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TrackingSmoothing * PhysicsManager.physicsDelta);
 			if (OutsideFlameAggression && !isFlameActive)
 				flameTimer = flameInactiveTime;
 			return;
@@ -580,13 +580,13 @@ public partial class Majin : Enemy
 
 		if (trackPlayer && (attackType == AttackTypes.Disabled || attackType == AttackTypes.Fire)) // Rotate to face player
 		{
-			UpdateRotation(Player.GlobalPosition);
+			ProcessRotation(Player.GlobalPosition);
 			return;
 		}
 
 		if (!Mathf.IsZeroApprox(rotationTime))
 		{
-			rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, TrackingSmoothing);
+			rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, TrackingSmoothing * PhysicsManager.physicsDelta);
 			currentRotation = ExtensionMethods.ModAngle(currentRotation + (PhysicsManager.physicsDelta * rotationVelocity));
 			ApplyRotation();
 		}

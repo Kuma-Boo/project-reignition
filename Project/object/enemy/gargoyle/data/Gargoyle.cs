@@ -220,7 +220,7 @@ public partial class Gargoyle : Enemy
 	private void ProcessMovement()
 	{
 		GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref velocity, MovementSmoothing);
-		UpdateRotation(Player.GlobalPosition);
+		ProcessRotation(Player.GlobalPosition);
 	}
 
 	private void StartAction()

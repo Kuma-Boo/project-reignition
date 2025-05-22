@@ -95,7 +95,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (IsActive)
 			{
-				UpdateRotation(Player.GlobalPosition);
+				ProcessRotation(Player.GlobalPosition);
 
 				if (IsHitboxEnabled && !isAttacking) //Update attack
 				{

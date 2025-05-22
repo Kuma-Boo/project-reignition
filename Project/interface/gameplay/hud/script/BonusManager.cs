@@ -157,7 +157,6 @@ public partial class BonusManager : VBoxContainer
 	/// <summary> Ends the current enemy chain. </summary>
 	public void FinishEnemyChain()
 	{
-		GD.Print("Enemy Chain Ended");
 		if (enemyChain >= 2)
 			QueueBonus(new(BonusType.Enemy, enemyChain));
 
