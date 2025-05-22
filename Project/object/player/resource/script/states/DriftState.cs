@@ -62,7 +62,8 @@ public partial class DriftState : PlayerState
 		Player.Effect.StartDust();
 		Player.Animator.ExternalAngle = Player.MovementAngle;
 		Player.Animator.StartDrift(Trigger.IsRightTurn);
-		Player.AttackState = PlayerController.AttackStates.Weak;
+		if (!Player.Skills.IsSpeedBreakActive)
+			Player.AttackState = PlayerController.AttackStates.Weak;
 
 		isChargingJump = SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ChargeJump) && Input.IsActionPressed("button_jump");
 	}
@@ -70,7 +71,9 @@ public partial class DriftState : PlayerState
 	public override void ExitState()
 	{
 		Player.Effect.StopDust();
-		Player.AttackState = PlayerController.AttackStates.None;
+
+		if (!Player.Skills.IsSpeedBreakActive)
+			Player.AttackState = PlayerController.AttackStates.None;
 
 		if (driftStatus != DriftStatus.JumpFail)
 			Player.Animator.ResetState(.4f);
