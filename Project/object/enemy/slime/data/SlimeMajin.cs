@@ -102,13 +102,16 @@ public partial class SlimeMajin : Enemy
 	{
 		slimeState = SlimeState.Unspawned;
 		Root.GlobalPosition = SpawnPosition;
+		attackTimer = 0;
 
 		if (IsMovementEnabled)
 		{
 			currentJumpCount = Mathf.FloorToInt(jumpCount * startingOffset);
+			isMovingBackwards = false;
 			positionVelocity = Vector3.Zero;
 			currentRotation = 0;
 			rotationVelocity = 0;
+			attackCounter = 0;
 		}
 
 		// Reset all animations
@@ -206,8 +209,7 @@ public partial class SlimeMajin : Enemy
 		GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref positionVelocity, PositionSmoothing * PhysicsManager.physicsDelta);
 
 		float targetRotation = isMovingBackwards ? Mathf.Pi : 0f;
-		currentRotation = ExtensionMethods.SmoothDamp(currentRotation, targetRotation, ref rotationVelocity, TrackingSmoothing);
-		Root.Rotation = Vector3.Up * currentRotation;
+		UpdateRotation(targetRotation);
 	}
 
 	private void ProcessAttackTimers()

@@ -186,20 +186,11 @@ public partial class FlowerMajin : Enemy
 
 		if (IsInRange || currentState != State.Passive)
 		{
-			UpdateRotation();
+			if (IsOpen) // Rotate towards the player
+				UpdateRotation(Player.GlobalPosition);
+
 			UpdateState();
 		}
-	}
-
-	private void UpdateRotation()
-	{
-		if (!IsOpen) return;
-
-		// TODO Update movement
-
-		// Rotate towards the player
-		TrackPlayer();
-		Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z); // Apply rotation
 	}
 
 	private void UpdateState()

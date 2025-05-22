@@ -839,6 +839,7 @@ public partial class PlayerController : CharacterBody3D
 		if (!Stage.IsLevelIngame) return;
 
 		AllowLandingSkills = false; // Disable landing skills
+		BonusManager.instance.ResetEnemyChain();
 
 		// New to Project Reignition: CoD provides damage negation if you have enough soul
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.CrestDark) &&

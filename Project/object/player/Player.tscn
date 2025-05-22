@@ -1116,7 +1116,7 @@ StateMachine = NodePath("StateMachine")
 Controller = NodePath("Controller")
 Stats = NodePath("Stats")
 Skills = NodePath("Sonic/Skills")
-Lockon = NodePath("Lockon")
+Lockon = NodePath("Sonic/Lockon")
 Animator = NodePath("Sonic")
 Effect = NodePath("Sonic/Effect")
 PathFollower = NodePath("PathFollower")
@@ -1221,7 +1221,7 @@ monitorable = false
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_hnnsk")
 
-[node name="Lockon" parent="." instance=ExtResource("33_q1dko")]
+[node name="Lockon" parent="Sonic" instance=ExtResource("33_q1dko")]
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("2_ehi1f")
@@ -1510,10 +1510,10 @@ sidleMovementCurve = SubResource("Curve_jakcp")
 
 [connection signal="body_exited" from="StageTriggerDetector" to="." method="OnBodyExited"]
 [connection signal="CountdownLanding" from="Sonic" to="Sonic/Effect" method="PlayLandingFX"]
-[connection signal="area_entered" from="Sonic/HitboxTrigger" to="Lockon" method="OnHitboxEntered"]
-[connection signal="area_exited" from="Sonic/HitboxTrigger" to="Lockon" method="OnHitboxExited"]
-[connection signal="body_entered" from="Sonic/HitboxTrigger" to="Lockon" method="OnHitboxBodyEntered"]
-[connection signal="body_exited" from="Sonic/HitboxTrigger" to="Lockon" method="OnHitboxBodyExited"]
+[connection signal="area_entered" from="Sonic/HitboxTrigger" to="Sonic/Lockon" method="OnHitboxEntered"]
+[connection signal="area_exited" from="Sonic/HitboxTrigger" to="Sonic/Lockon" method="OnHitboxExited"]
+[connection signal="body_entered" from="Sonic/HitboxTrigger" to="Sonic/Lockon" method="OnHitboxBodyEntered"]
+[connection signal="body_exited" from="Sonic/HitboxTrigger" to="Sonic/Lockon" method="OnHitboxBodyExited"]
 [connection signal="area_entered" from="Sonic/LightDashRingDetector" to="StateMachine/Skill/LightSpeedDash" method="OnAreaEntered"]
 [connection signal="area_exited" from="Sonic/LightDashRingDetector" to="StateMachine/Skill/LightSpeedDash" method="OnAreaExited"]
 

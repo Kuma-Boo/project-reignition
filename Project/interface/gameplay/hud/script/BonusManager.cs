@@ -128,12 +128,20 @@ public partial class BonusManager : VBoxContainer
 		UpdateQueuedScore();
 	}
 
+	/// <summary> Erases the current enemy chain. </summary>
+	public void ResetEnemyChain()
+	{
+		enemyChain = 0;
+		enemyChainTimer = 0;
+	}
+
 	/// <summary> Checks whether the enemy chain should end. </summary>
 	public void UpdateEnemyChain()
 	{
 		if (!Player.IsOnGround) return; // Chain is never counted when the player is in the air
 		if (Player.AllowLandingGrind || Player.IsGrinding) return; // Ignore Grindrails
 		if (Player.ExternalController != null) return; // Chains only end during normal movement
+		if (Player.IsBouncing) return;
 
 		if (Player.Skills.IsSpeedBreakActive)
 		{
@@ -149,6 +157,7 @@ public partial class BonusManager : VBoxContainer
 	/// <summary> Ends the current enemy chain. </summary>
 	public void FinishEnemyChain()
 	{
+		GD.Print("Enemy Chain Ended");
 		if (enemyChain >= 2)
 			QueueBonus(new(BonusType.Enemy, enemyChain));
 
@@ -215,7 +224,7 @@ public readonly struct BonusData(BonusType type, int amount = 0)
 				// 10 rings -> 100 pts
 				return 100;
 			case BonusType.Enemy:
-				return Mathf.Clamp(Amount, 2, 10) * 200; // +200 pts per enemy up to 10 (2000 pts)
+				return Mathf.Min(Amount - 1, 10) * 200; // +200 pts per extra enemy up to 11 (2000 pts)
 			case BonusType.Drift:
 				return 500;
 			case BonusType.Grindstep:

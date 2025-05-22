@@ -38,9 +38,16 @@ public partial class Majin : Enemy
 				properties.Add(ExtensionMethods.CreateProperty("Spawn Interval Settings/Despawn Delay", Variant.Type.Float, PropertyHint.Range, "0.1,10,.1"));
 		}
 
-		properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Track Player", Variant.Type.Bool));
-		if (!trackPlayer)
-			properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Rotation Time", Variant.Type.Float));
+		if (attackType != AttackTypes.Spin && attackType != AttackTypes.Wander)
+		{
+			properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Track Player", Variant.Type.Bool));
+			if (!trackPlayer)
+				properties.Add(ExtensionMethods.CreateProperty("Rotation Settings/Rotation Time", Variant.Type.Float));
+		}
+		else
+		{
+			trackPlayer = false;
+		}
 
 		properties.Add(ExtensionMethods.CreateProperty("Attack Settings/Attack Type", Variant.Type.Int, PropertyHint.Enum, attackType.EnumToString()));
 		if (IsRedMajin) // Show relevant fire-related settings
@@ -345,6 +352,9 @@ public partial class Majin : Enemy
 		// Skeleton3D node is always 3 nodes away from the root node
 		HitboxAttachment.SetExternalSkeleton(HitboxAttachment.GetPathTo(Root.GetChild(0).GetChild(0).GetChild(0)));
 		HitboxAttachment.BoneIdx = 0;
+
+		if (attackType == AttackTypes.Wander)
+			wanderHomePosition = GlobalPosition;
 	}
 
 	public override void Respawn()
@@ -365,7 +375,7 @@ public partial class Majin : Enemy
 
 		rotationVelocity = 0;
 		currentRotation = 0;
-		ApplyRotation();
+		Root.Rotation = Vector3.Zero;
 
 		// Reset idle movement
 		idleFactorVelocity = 0;
@@ -374,8 +384,9 @@ public partial class Majin : Enemy
 		AnimationTree.Set(DefeatTransitionParameter, DisabledState);
 		AnimationTree.Set(StateRequestParameter, IdleState);
 
-		// Reset stagger
+		// Reset timers
 		staggerTimer = 0;
+		wanderTimer = 0;
 
 		// Reset flame attack
 		if (IsRedMajin)
@@ -496,8 +507,64 @@ public partial class Majin : Enemy
 			UpdateFlameAttack();
 
 		UpdateRotation();
-		ApplyRotation();
 		UpdateFidgets();
+
+		if (attackType == AttackTypes.Wander)
+			UpdateWandering();
+	}
+
+	private float wanderTimer;
+	/// <summary> The position the majin considers as "home." </summary>
+	private Vector3 wanderHomePosition;
+	/// <summary> The position where the majin is trying to move. </summary>
+	private Vector3 wanderPosition;
+	/// <summary> How far the majin can move from their home position. </summary>
+	private readonly float WanderRadius = 5f;
+	/// <summary> How fast the majin moves while wandering. </summary>
+	private readonly float WanderSpeed = 2f;
+	private readonly float WanderRotationSmoothing = 50f;
+	/// <summary> The minimum amount of time a majin should wander in a single direction. </summary>
+	private readonly float MinWanderLength = 3f;
+	/// <summary> The maximum amount of time a majin should wander in a single direction. </summary>
+	private readonly float MaxWanderLength = 5f;
+	private void UpdateWandering()
+	{
+		UpdateRotation(wanderPosition, WanderRotationSmoothing);
+
+		GlobalPosition += Root.Forward() * WanderSpeed * PhysicsManager.physicsDelta;
+
+		if (GlobalPosition.DistanceSquaredTo(wanderPosition) < 1f)
+		{
+			// Reached target position; calculate new wandering position
+			UpdateWanderingPosition();
+			return;
+		}
+
+		wanderTimer = Mathf.MoveToward(wanderTimer, 0, PhysicsManager.physicsDelta);
+		if (Mathf.IsZeroApprox(wanderTimer))
+		{
+			// Been travelling in a single direction for too long -- choose a new position
+			UpdateWanderingPosition();
+			return;
+		}
+
+		// Calculate a new wandering position if we hit a wall
+		Vector3 castDirection = wanderPosition - GlobalPosition;
+		RaycastHit hit = this.CastRay(GlobalPosition, castDirection, Runtime.Instance.environmentMask);
+		DebugManager.DrawRay(GlobalPosition, castDirection, Colors.Red);
+		if (hit && hit.collidedObject.IsInGroup("wall")) // Find a new target wandering position
+			UpdateWanderingPosition();
+	}
+
+	/// <summary>
+	/// Chooses a random point within the wander radius around the majin's original position.
+	/// </summary>
+	private void UpdateWanderingPosition()
+	{
+		float wanderRotation = (Runtime.randomNumberGenerator.Randf() - 0.5f) * Mathf.Tau;
+		float wanderRadius = Runtime.randomNumberGenerator.Randf() * WanderRadius;
+		wanderTimer = Runtime.randomNumberGenerator.RandfRange(MinWanderLength, MaxWanderLength);
+		wanderPosition = wanderHomePosition + Vector3.Forward.Rotated(Vector3.Up, wanderRotation) * wanderRadius;
 	}
 
 	private void UpdateRotation()
@@ -511,9 +578,9 @@ public partial class Majin : Enemy
 			return;
 		}
 
-		if (trackPlayer) // Rotate to face player
+		if (trackPlayer && (attackType == AttackTypes.Disabled || attackType == AttackTypes.Fire)) // Rotate to face player
 		{
-			TrackPlayer();
+			UpdateRotation(Player.GlobalPosition);
 			return;
 		}
 
@@ -522,12 +589,6 @@ public partial class Majin : Enemy
 			rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, TrackingSmoothing);
 			currentRotation = ExtensionMethods.ModAngle(currentRotation + (PhysicsManager.physicsDelta * rotationVelocity));
 		}
-	}
-
-	private void ApplyRotation()
-	{
-		Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
-		FlameRoot.Rotation = Vector3.Up * currentRotation;
 	}
 
 	private void UpdateSpawnInterval()
@@ -753,7 +814,7 @@ public partial class Majin : Enemy
 			currentRotation = -velocity.SignedAngleTo(Vector3.Back, Vector3.Up);
 
 		Position = CalculateTravelPosition(currentTravelRatio);
-		ApplyRotation();
+		Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
 
 		if (Mathf.IsEqualApprox(currentTravelRatio, 1f))
 			return;

@@ -95,8 +95,7 @@ namespace Project.Gameplay.Objects
 		{
 			if (IsActive)
 			{
-				TrackPlayer();
-				Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
+				UpdateRotation(Player.GlobalPosition);
 
 				if (IsHitboxEnabled && !isAttacking) //Update attack
 				{

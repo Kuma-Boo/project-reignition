@@ -91,10 +91,6 @@ public partial class HomingAttackState : PlayerState
 			Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, normalStrikeSpeed, homingAttackAcceleration * PhysicsManager.physicsDelta);
 		Player.MovementAngle = ExtensionMethods.CalculateForwardAngle(Player.Lockon.HomingAttackDirection);
 		Player.ApplyMovement(Player.Lockon.HomingAttackDirection.Normalized());
-		Player.CheckGround();
-		Player.CheckWall();
-		Player.UpdateUpDirection(true);
-		Player.PathFollower.Resync();
 
 		bool isColliding = Player.GetSlideCollisionCount() != 0;
 		if (isColliding && ProcessObstructions())
@@ -102,6 +98,11 @@ public partial class HomingAttackState : PlayerState
 			Player.StartBounce();
 			return null;
 		}
+
+		Player.CheckGround();
+		Player.CheckWall();
+		Player.UpdateUpDirection(true);
+		Player.PathFollower.Resync();
 
 		if (Player.Controller.IsActionBufferActive)
 		{

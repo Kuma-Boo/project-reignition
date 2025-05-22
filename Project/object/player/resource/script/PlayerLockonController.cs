@@ -65,7 +65,7 @@ public partial class PlayerLockonController : Area3D
 	public void ProcessPhysics()
 	{
 		bool wasTargetChanged = false;
-		GlobalRotation = Vector3.Up * Player.PathFollower.ForwardAngle;
+		//GlobalRotation = Vector3.Up * Player.PathFollower.ForwardAngle;
 
 		if (IsMonitoring)
 			wasTargetChanged = ProcessMonitoring();
