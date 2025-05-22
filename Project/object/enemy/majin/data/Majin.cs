@@ -698,6 +698,13 @@ public partial class Majin : Enemy
 			tweener.TweenCallback(new Callable(this, MethodName.FinishSpawning)).SetDelay(.5f); // Delay by length of teleport animation
 		}
 
+		// Reset flame attack
+		if (IsRedMajin)
+		{
+			isFlameActive = false;
+			flameTimer = (FlameAggressionRadius != 0 && isInstantFlame) ? flameInactiveTime : 0;
+		}
+
 		AnimationPlayer.Advance(0.0);
 		base.Spawn();
 	}

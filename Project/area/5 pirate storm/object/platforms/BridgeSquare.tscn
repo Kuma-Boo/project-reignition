@@ -1,9 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://e37k730a01ee"]
+[gd_scene load_steps=4 format=3 uid="uid://e37k730a01ee"]
 
 [ext_resource type="PackedScene" uid="uid://c7i5mrcfhvvf8" path="res://area/5 pirate storm/object/model/platforms/BridgeSquare.gltf" id="1_ghye0"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ghye0"]
-size = Vector3(5, 10, 5)
+size = Vector3(5, 9.8, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ql22x"]
+size = Vector3(5, 0.2, 5)
 
 [node name="BridgeSquare" type="Node3D"]
 
@@ -12,11 +15,20 @@ size = Vector3(5, 10, 5)
 [node name="BridgeSquareMesh" parent="BridgeSquare" index="0"]
 layers = 2
 
-[node name="Collision" type="StaticBody3D" parent="." groups=["floor", "splash jump", "wall", "wood"]]
+[node name="Collision" type="StaticBody3D" parent="." groups=["splash jump", "wall"]]
 collision_layer = 17
 collision_mask = 17
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0999999, 0)
 shape = SubResource("BoxShape3D_ghye0")
+
+[node name="Floor" type="StaticBody3D" parent="." groups=["floor", "splash jump", "wall", "wood"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, 0)
+collision_layer = 17
+collision_mask = 17
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_ql22x")
 
 [editable path="BridgeSquare"]

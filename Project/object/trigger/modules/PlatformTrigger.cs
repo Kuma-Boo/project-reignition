@@ -136,6 +136,8 @@ public partial class PlatformTrigger : Node3D
 	private float shakeTimer;
 	/// <summary> Is the platform about to fall? </summary>
 	private bool isPlatformShaking;
+	/// <summary> Is the platform currently falling? </summary>
+	private bool isPlatformFalling;
 
 	// Floating platform variables
 	/// <summary> Will this platform bob up and down when the player jumps on it? </summary>
@@ -144,6 +146,8 @@ public partial class PlatformTrigger : Node3D
 	private float floatingHeightRange = 1f;
 	/// <summary> Determines how much force it takes to move the platform. </summary>
 	private float floatingForceMultiplier = 1f;
+	/// <summary> Keeps track of how much vertical speed the player carries into the platform. </summary>
+	private float floatingEntranceImpact;
 	/// <summary> Determines how strongly the platform bounces back to neutral. </summary>
 	private float buoyancyStrength = 5f;
 	/// <summary>
@@ -155,8 +159,6 @@ public partial class PlatformTrigger : Node3D
 	private float floatingReferenceHeight;
 	/// <summary> The platform's starting Y-Position, used to offset different platforms from each other. </summary>
 	private float floatingInitialHeightRatio;
-	/// <summary> Has the force from the incoming player been added to the platform? </summary>
-	private bool appliedFloatingForce;
 	private readonly float BuoyancySmoothingRatio = 0.4f;
 	private readonly float BaseFloatingForceMultiplier = 0.5f;
 	private readonly float BasePlayerFloatingForce = 5f;
@@ -172,11 +174,10 @@ public partial class PlatformTrigger : Node3D
 	[Export] private PhysicsBody3D parentCollider;
 	private PlayerController Player => StageSettings.Player;
 
-	private bool isActive;
 	private bool isInteractingWithPlayer;
 	private float playerInfluence;
-	/// <summary> Tracks whether the platform can artificially snap the player. </summary>
-	private bool canSnapPlayer;
+	/// <summary> Tracks whether the player has actually landed on the platform yet. </summary>
+	private bool enableGroundSnapping;
 	private readonly float PlayerInfluenceReset = .5f;
 
 	public override void _Ready()
@@ -189,9 +190,6 @@ public partial class PlatformTrigger : Node3D
 			fallingPlatformAnimator = GetNodeOrNull<AnimationPlayer>(fallingPlatformAnimatorPath);
 			if (fallingPlatformAnimator == null)
 				GD.PrintErr($"Falling platform animator is missing on {Name}!");
-
-			if (autoShake) // Falling behaviour is enabled, connect signal.
-				Connect(SignalName.PlatformInteracted, new Callable(this, MethodName.StartShaking));
 		}
 
 		if (isFloatingBehaviorEnabled)
@@ -207,47 +205,49 @@ public partial class PlatformTrigger : Node3D
 	{
 		if (Engine.IsEditorHint()) return;
 
-		UpdateFloatingPlatform();
-		UpdatePlatform();
+		ProcessPlatform();
 	}
 
 	private void Respawn()
 	{
 		if (isFallingBehaviourEnabled)
-			fallingPlatformAnimator.Play("RESET");
-	}
-
-	private void UpdatePlatform()
-	{
-		if (!isPlatformShaking)
 		{
-			if (!isInteractingWithPlayer) return;
-
-			if (!isActive && Player.IsOnGround)
-			{
-				isActive = true;
-				EmitSignal(SignalName.PlatformInteracted);
-			}
-			else
-			{
-				return;
-			}
+			shakeTimer = 0;
+			isPlatformShaking = false;
+			isPlatformFalling = false;
+			fallingPlatformAnimator.Play("RESET");
 		}
 
-		if (isPlatformShaking)
-			UpdateFallingPlatformBehaviour();
+		playerInfluence = 0;
+	}
+
+	private void ProcessPlatform()
+	{
+		ProcessFallingPlatform();
+		ProcessFloatingPlatform();
 
 		if (floorCalculationRoot != null)
 			CallDeferred(MethodName.SyncPlayerMovement);
 	}
 
-	private void UpdateFloatingPlatform()
+	private void ProcessFallingPlatform()
+	{
+		if (!isFallingBehaviourEnabled)
+			return;
+
+		if (isPlatformFalling || !isPlatformShaking)
+			return;
+
+		shakeTimer += PhysicsManager.physicsDelta;
+
+		if (shakeTimer > shakeLength)
+			StartFalling();
+	}
+
+	private void ProcessFloatingPlatform()
 	{
 		if (!isFloatingBehaviorEnabled || Mathf.IsZeroApprox(floatingHeightRange))
 			return;
-
-		if (isInteractingWithPlayer)
-			ProcessIncomingFloatForce();
 
 		float deltaForce = (floatingReferenceHeight - GlobalPosition.Y) / floatingHeightRange;
 		if (Mathf.Abs(deltaForce) > 1.0f - BuoyancySmoothingRatio) // Smooth out bottoms
@@ -269,20 +269,19 @@ public partial class PlatformTrigger : Node3D
 		GlobalPosition += Vector3.Up * currentBuoyancyForce * PhysicsManager.physicsDelta;
 	}
 
-	private void ProcessIncomingFloatForce()
+	private void StartFloatImpact()
 	{
-		if (appliedFloatingForce)
-			return;
+		floatingEntranceImpact = Mathf.Max(floatingEntranceImpact, BasePlayerFloatingForce);
+		currentBuoyancyForce = -floatingEntranceImpact * floatingForceMultiplier * BaseFloatingForceMultiplier;
+	}
 
-		if (!IsPlayerOnPlatform()) // Force isn't going to be applied -- don't bother calculating anything
-			return;
+	private void ProcessInteraction()
+	{
+		if (isFallingBehaviourEnabled && autoShake)
+			StartShaking();
 
-		float targetForce = Mathf.Min(Player.VerticalSpeed, 0f);
-		if (Player.IsOnGround) // Apply a consistent force if the player walks onto a platform
-			targetForce = BasePlayerFloatingForce;
-
-		currentBuoyancyForce = -Mathf.Abs(targetForce) * floatingForceMultiplier * BaseFloatingForceMultiplier;
-		appliedFloatingForce = true;
+		if (isFloatingBehaviorEnabled)
+			StartFloatImpact();
 	}
 
 	/// <summary> Make the platform start shaking. This can also be called from a signal. </summary>
@@ -309,20 +308,15 @@ public partial class PlatformTrigger : Node3D
 		fallingPlatformAnimator.SpeedScale = fallSpeedScale;
 	}
 
-	private void UpdateFallingPlatformBehaviour()
-	{
-		shakeTimer += PhysicsManager.physicsDelta;
-
-		if (shakeTimer > shakeLength)
-		{
-			shakeTimer = 0;
-			StartFalling();
-		}
-	}
-
 	/// <summary> Moves the player with the platform. </summary>
 	private void SyncPlayerMovement()
 	{
+		if (Player.IsTeleporting || Player.IsDefeated)
+		{
+			enableGroundSnapping = false;
+			return;
+		}
+
 		if ((!Player.IsOnGround && Player.Velocity.Y >= 0) || !isInteractingWithPlayer)
 		{
 			Vector3 delta = floorCalculationRoot.GlobalPosition - previousPosition;
@@ -331,7 +325,7 @@ public partial class PlatformTrigger : Node3D
 
 			if (Mathf.IsZeroApprox(playerInfluence))
 			{
-				isActive = false;
+				enableGroundSnapping = false;
 			}
 			else
 			{
@@ -346,16 +340,13 @@ public partial class PlatformTrigger : Node3D
 			return;
 		}
 
-		if (!IsPlayerOnPlatform())
-			return;
+		if (IsPlayerOnPlatform())
+		{
+			playerInfluence = 1f; // Set player influence to 1 for when we leave
+			previousPosition = floorCalculationRoot.GlobalPosition;
+		}
 
-		playerInfluence = 1f; // Set player influence to 1 for when we leave
-		previousPosition = floorCalculationRoot.GlobalPosition;
-
-		if (Player.IsOnGround)
-			canSnapPlayer = true;
-
-		if (canSnapPlayer)
+		if (enableGroundSnapping)
 			Player.GlobalTranslate(Vector3.Up * (floorCalculationRoot.GlobalPosition.Y - Player.GlobalPosition.Y));
 	}
 
@@ -363,26 +354,36 @@ public partial class PlatformTrigger : Node3D
 	private bool IsPlayerOnPlatform()
 	{
 		float checkLength = Mathf.Abs(Player.CenterPosition.Y - floorCalculationRoot.GlobalPosition.Y) + (Player.CollisionSize.Y * 2.0f);
+		checkLength += Mathf.Abs(Mathf.Min(Player.VerticalSpeed, 0f) * PhysicsManager.physicsDelta);
 		KinematicCollision3D collision = Player.MoveAndCollide(-Player.UpDirection * checkLength, true);
 
 		if (collision == null || (Node3D)collision.GetCollider() != parentCollider) // Player is not on the platform
 			return false;
 
-		return true;
+		if (!enableGroundSnapping) // Update ground snapping
+		{
+			if (Player.IsOnGround)
+			{
+				enableGroundSnapping = true;
+				ProcessInteraction();
+				EmitSignal(SignalName.PlatformInteracted);
+			}
+			else
+			{
+				floatingEntranceImpact = Mathf.Max(-Player.VerticalSpeed, 0);
+			}
+		}
+
+		return Player.IsOnGround;
 	}
 
 	public void OnEntered(Area3D a)
 	{
 		if (!a.IsInGroup("player detection")) return;
 		isInteractingWithPlayer = true;
-		canSnapPlayer = false; // Prevent initial snapping
-		UpdatePlatform();
-
-		if (isFloatingBehaviorEnabled)
-		{
-			appliedFloatingForce = false;
-			ProcessIncomingFloatForce();
-		}
+		enableGroundSnapping = false; // Prevent initial snapping
+		floatingEntranceImpact = Mathf.Max(-Player.VerticalSpeed, 0);
+		ProcessPlatform();
 	}
 
 	public void OnExited(Area3D a)
