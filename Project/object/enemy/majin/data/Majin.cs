@@ -242,7 +242,7 @@ public partial class Majin : Enemy
 	private float spawnIntervalDelay;
 	/// <summary> How long should spawning be delayed? </summary>
 	private float despawnIntervalDelay;
-	private bool finishedTraveling;
+	private bool isFinishedTraveling;
 	public bool SpawnTravelEnabled => !Mathf.IsZeroApprox(spawnTravelTime);
 	public Basis CalculationBasis => Engine.IsEditorHint() ? GlobalBasis : GetParent<Node3D>().GlobalBasis.Inverse() * calculationBasis;
 	private Basis calculationBasis;
@@ -364,7 +364,7 @@ public partial class Majin : Enemy
 		timer = -1;
 
 		isSpawning = false;
-		finishedTraveling = false;
+		isFinishedTraveling = false;
 
 		AnimationPlayer.Play("RESET");
 		AnimationPlayer.Advance(0);
@@ -375,7 +375,7 @@ public partial class Majin : Enemy
 
 		rotationVelocity = 0;
 		currentRotation = 0;
-		Root.Rotation = Vector3.Zero;
+		ApplyRotation();
 
 		// Reset idle movement
 		idleFactorVelocity = 0;
@@ -588,7 +588,14 @@ public partial class Majin : Enemy
 		{
 			rotationVelocity = Mathf.Lerp(rotationVelocity, rotationAmount, TrackingSmoothing);
 			currentRotation = ExtensionMethods.ModAngle(currentRotation + (PhysicsManager.physicsDelta * rotationVelocity));
+			ApplyRotation();
 		}
+	}
+
+	protected override void ApplyRotation()
+	{
+		base.ApplyRotation();
+		FlameRoot.Rotation = Vector3.Up * currentRotation;
 	}
 
 	private void UpdateSpawnInterval()
@@ -740,7 +747,7 @@ public partial class Majin : Enemy
 
 		AnimationTree.Set(StateRequestParameter, IdleState); // Idle
 
-		if (SpawnTravelEnabled && !finishedTraveling) // Travel
+		if (SpawnTravelEnabled && !isFinishedTraveling) // Travel
 		{
 			currentTravelRatio = 0;
 			Position = SpawnPosition;
@@ -814,7 +821,7 @@ public partial class Majin : Enemy
 			currentRotation = -velocity.SignedAngleTo(Vector3.Back, Vector3.Up);
 
 		Position = CalculateTravelPosition(currentTravelRatio);
-		Root.Rotation = new Vector3(Root.Rotation.X, currentRotation, Root.Rotation.Z);
+		ApplyRotation();
 
 		if (Mathf.IsEqualApprox(currentTravelRatio, 1f))
 			return;
@@ -837,7 +844,7 @@ public partial class Majin : Enemy
 	{
 		IsActive = true;
 		isSpawning = false;
-		finishedTraveling = true;
+		isFinishedTraveling = true;
 		SetHitboxStatus(true);
 
 		if (SpawnTravelEnabled && attackType != AttackTypes.Wander)

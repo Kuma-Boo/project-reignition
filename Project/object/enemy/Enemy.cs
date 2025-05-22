@@ -348,21 +348,15 @@ public partial class Enemy : Node3D
 	/// <summary> Current local rotation of the enemy. </summary>
 	protected float currentRotation;
 	protected float rotationVelocity;
-	protected const float TrackingSmoothing = 10f;
+	protected const float TrackingSmoothing = .2f;
 	/// <summary>
 	/// Updates current rotation to track the player.
 	/// </summary>
-	protected void UpdateRotation(Vector3 targetPosition, float smoothing = TrackingSmoothing)
+	protected void TrackPlayer()
 	{
-		float targetRotation = ExtensionMethods.Flatten(GlobalPosition - targetPosition).AngleTo(Vector2.Up);
+		float targetRotation = ExtensionMethods.Flatten(GlobalPosition - Player.GlobalPosition).AngleTo(Vector2.Up);
 		targetRotation -= GlobalRotation.Y; // Rotation is in local space
-		UpdateRotation(targetRotation, smoothing);
-	}
-
-	protected void UpdateRotation(float targetRotation, float smoothing = TrackingSmoothing)
-	{
-		currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, smoothing * PhysicsManager.physicsDelta);
-		Root.Rotation = Vector3.Up * currentRotation;
+		currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, TrackingSmoothing);
 	}
 
 	protected virtual void StartUhuBounce() { }
@@ -395,6 +389,24 @@ public partial class Enemy : Node3D
 		EnterRange();
 		IsInRange = true;
 	}
+
+	/// <summary>
+	/// Updates current rotation to track the player.
+	/// </summary>
+	protected void UpdateRotation(Vector3 targetPosition, float smoothing = TrackingSmoothing)
+	{
+		float targetRotation = ExtensionMethods.Flatten(GlobalPosition - targetPosition).AngleTo(Vector2.Up);
+		targetRotation -= GlobalRotation.Y; // Rotation is in local space
+		UpdateRotation(targetRotation, smoothing);
+	}
+
+	protected void UpdateRotation(float targetRotation, float smoothing = TrackingSmoothing)
+	{
+		currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, targetRotation, ref rotationVelocity, smoothing * PhysicsManager.physicsDelta);
+		ApplyRotation();
+	}
+
+	protected virtual void ApplyRotation() => Root.Rotation = Vector3.Up * currentRotation;
 
 	public void OnRangeExited(Area3D a)
 	{
