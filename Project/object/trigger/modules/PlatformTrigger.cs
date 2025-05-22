@@ -20,6 +20,7 @@ public partial class PlatformTrigger : Node3D
 			properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Animator", Variant.Type.NodePath, PropertyHint.NodePathValidTypes, "AnimationPlayer"));
 			properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Auto Shake", Variant.Type.Bool));
 			properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Shake Length", Variant.Type.Float, PropertyHint.Range, "0, 10"));
+			properties.Add(ExtensionMethods.CreateProperty("Falling Platform Settings/Fall Speed", Variant.Type.Float, PropertyHint.Range, "0.1,1,0.1,or_greater"));
 		}
 
 		properties.Add(ExtensionMethods.CreateProperty("Floating Platform Settings/Enabled", Variant.Type.Bool));
@@ -50,6 +51,9 @@ public partial class PlatformTrigger : Node3D
 				break;
 			case "Falling Platform Settings/Shake Length":
 				shakeLength = (float)value;
+				break;
+			case "Falling Platform Settings/Fall Speed":
+				fallSpeedScale = (float)value;
 				break;
 
 			case "Floating Platform Settings/Enabled":
@@ -90,6 +94,8 @@ public partial class PlatformTrigger : Node3D
 				return autoShake;
 			case "Falling Platform Settings/Shake Length":
 				return shakeLength;
+			case "Falling Platform Settings/Fall Speed":
+				return fallSpeedScale;
 
 			case "Floating Platform Settings/Enabled":
 				return isFloatingBehaviorEnabled;
@@ -122,6 +128,8 @@ public partial class PlatformTrigger : Node3D
 	private bool autoShake = true;
 	/// <summary> How long to shake before falling. </summary>
 	private float shakeLength;
+	/// <summary> How quickly to fall. </summary>
+	private float fallSpeedScale = 1f;
 	/// <summary> Keeps track of the platform's position from the previous frame. </summary>
 	private Vector3 previousPosition;
 	/// <summary> Timer to keep track of shaking status. </summary>
@@ -191,6 +199,8 @@ public partial class PlatformTrigger : Node3D
 			floatingReferenceHeight = GlobalPosition.Y;
 			GlobalPosition += Vector3.Up * floatingInitialHeightRatio * floatingHeightRange;
 		}
+
+		StageSettings.Instance.Respawned += Respawn;
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -201,12 +211,16 @@ public partial class PlatformTrigger : Node3D
 		UpdatePlatform();
 	}
 
+	private void Respawn()
+	{
+		if (isFallingBehaviourEnabled)
+			fallingPlatformAnimator.Play("RESET");
+	}
+
 	private void UpdatePlatform()
 	{
-		if (isPlatformShaking)
+		if (!isPlatformShaking)
 		{
-			UpdateFallingPlatformBehaviour();
-
 			if (!isInteractingWithPlayer) return;
 
 			if (!isActive && Player.IsOnGround)
@@ -219,6 +233,9 @@ public partial class PlatformTrigger : Node3D
 				return;
 			}
 		}
+
+		if (isPlatformShaking)
+			UpdateFallingPlatformBehaviour();
 
 		if (floorCalculationRoot != null)
 			CallDeferred(MethodName.SyncPlayerMovement);
@@ -281,6 +298,7 @@ public partial class PlatformTrigger : Node3D
 
 		isPlatformShaking = true;
 		fallingPlatformAnimator.Play("shake");
+		fallingPlatformAnimator.SpeedScale = 1f;
 	}
 
 	/// <summary> Called when the platform begins to fall. </summary>
@@ -288,6 +306,7 @@ public partial class PlatformTrigger : Node3D
 	{
 		isPlatformShaking = false; // Stop shaking
 		fallingPlatformAnimator.Play("fall", .2);
+		fallingPlatformAnimator.SpeedScale = fallSpeedScale;
 	}
 
 	private void UpdateFallingPlatformBehaviour()

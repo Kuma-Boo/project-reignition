@@ -1,0 +1,53 @@
+[gd_scene load_steps=7 format=3 uid="uid://dp0fmxla84ah7"]
+
+[ext_resource type="Script" uid="uid://dumjgm4y7xmk4" path="res://area/5 pirate storm/data/script/Surfboard.cs" id="1_onj6u"]
+[ext_resource type="PackedScene" uid="uid://bn01a41jsnwin" path="res://area/5 pirate storm/object/model/Surfboard.gltf" id="2_hixtt"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_onj6u"]
+size = Vector3(1, 0.133, 1.4)
+
+[sub_resource type="Animation" id="Animation_onj6u"]
+resource_name = "activate"
+
+[sub_resource type="Animation" id="Animation_hixtt"]
+resource_name = "deactivate"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bp1qf"]
+_data = {
+&"activate": SubResource("Animation_onj6u"),
+&"deactivate": SubResource("Animation_hixtt")
+}
+
+[node name="Surfboard" type="Node3D" node_paths=PackedStringArray("root", "localRoot", "playerPosition", "animator")]
+script = ExtResource("1_onj6u")
+maxSpeed = 30.0
+turnSpeed = 15.0
+isVerticalMovementDisabled = true
+bounds = Vector2(5, 0)
+root = NodePath("Surfboard")
+localRoot = NodePath("Surfboard/SurfboardMesh")
+playerPosition = NodePath("Surfboard/SurfboardMesh/PlayerPosition")
+animator = NodePath("AnimationPlayer")
+
+[node name="Surfboard" parent="." instance=ExtResource("2_hixtt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+
+[node name="PlayerPosition" type="Node3D" parent="Surfboard/SurfboardMesh" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.2)
+
+[node name="Hurtbox" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2)
+shape = SubResource("BoxShape3D_onj6u")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_bp1qf")
+}
+
+[connection signal="body_entered" from="Hurtbox" to="." method="OnBodyEntered"]
+
+[editable path="Surfboard"]

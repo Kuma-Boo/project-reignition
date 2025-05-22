@@ -10,65 +10,48 @@ namespace Project.Gameplay.Objects;
 /// </summary>
 public partial class PathTraveller : Node3D
 {
-	[Signal]
-	public delegate void ActivatedEventHandler();
-	[Signal]
-	public delegate void DeactivatedEventHandler();
-	[Signal]
-	public delegate void StaggeredEventHandler();
-	[Signal]
-	public delegate void DamagedEventHandler();
+	[Signal] public delegate void ActivatedEventHandler();
+	[Signal] public delegate void DeactivatedEventHandler();
+	[Signal] public delegate void StaggeredEventHandler();
+	[Signal] public delegate void DamagedEventHandler();
 
 	/// <summary> How fast to move. </summary>
 	[ExportGroup("Settings")]
-	[Export]
-	private float maxSpeed;
+	[Export] private float maxSpeed;
 	public float MaxSpeed => maxSpeed;
 	/// <summary> How fast to turn. </summary>
-	[Export]
-	private float turnSpeed;
+	[Export] private float turnSpeed;
 	public float TurnSpeed => turnSpeed;
 
 	/// <summary> Allow object to move vertically? </summary>
-	[Export]
-	private bool isVerticalMovementDisabled;
+	[Export] private bool isVerticalMovementDisabled;
 	public bool IsVerticalMovementDisabled => isVerticalMovementDisabled;
 
-	[Export]
-	private float rotationAmount = 45;
-	[Export]
-	private float tiltRatio = 1.0f;
+	[Export] private float rotationAmount = 45;
+	[Export] private float tiltRatio = 1.0f;
 
 	/// <summary> Maximum distance from the path allowed. </summary>
-	[Export]
-	private Vector2 bounds;
+	[Export] private Vector2 bounds;
 	public Vector2 Bounds => bounds;
 	public void SetHorizontalBounds(float newBound) => bounds.X = Mathf.Abs(newBound);
-	[Export]
-	private bool autosetBounds;
+	[Export] private bool autosetBounds;
 	public bool AutosetBounds => autosetBounds;
 
 	/// <summary> Reference to the travel path. </summary>
 	[ExportGroup("Components")]
-	[Export]
-	private Path3D path;
+	[Export] private Path3D path;
 	/// <summary> Reference to the pathfollower. </summary>
-	[Export]
-	private PathFollow3D pathFollower;
+	[Export] private PathFollow3D pathFollower;
 	public PathFollow3D PathFollower => pathFollower;
 	/// <summary> Reference to the root. </summary>
-	[Export]
-	private Node3D root;
+	[Export] private Node3D root;
 	/// <summary> Optional node if excluding tilt is needed (boat ripples). </summary>
-	[Export]
-	private Node3D localRoot;
+	[Export] private Node3D localRoot;
 	/// <summary> Reference to the player's position. </summary>
-	[Export]
-	private Node3D playerPosition;
+	[Export] private Node3D playerPosition;
 	public Node3D PlayerStandin => playerPosition;
 	/// <summary> Reference to the animator. </summary>
-	[Export]
-	private AnimationPlayer animator;
+	[Export] private AnimationPlayer animator;
 
 	private float startingProgress;
 	private Vector3 startingOffset;

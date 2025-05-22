@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://bkuwj6xj81tuv"]
+[gd_scene load_steps=90 format=3 uid="uid://bkuwj6xj81tuv"]
 
 [ext_resource type="PackedScene" uid="uid://csk7y7y8vgg6l" path="res://area/5 pirate storm/act 1/Static.tscn" id="1_8fsep"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_kflh0"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="11_q0cv5"]
 [ext_resource type="PackedScene" uid="uid://chpqsi3chn38g" path="res://area/5 pirate storm/object/platforms/FloatingWoodenPlatform.tscn" id="12_bhaba"]
 [ext_resource type="PackedScene" uid="uid://wydcxl4kgcrp" path="res://area/5 pirate storm/object/platforms/CratePlatform.tscn" id="13_8hl4r"]
+[ext_resource type="PackedScene" uid="uid://cu6lpq7q82grk" path="res://object/stage/pickups/FireSoul.tscn" id="13_t8ycy"]
 [ext_resource type="PackedScene" uid="uid://dldp4m07ddqgq" path="res://area/5 pirate storm/object/platforms/SpoilsLarge.tscn" id="14_hcghg"]
 [ext_resource type="Script" uid="uid://dpt5o0lh62p6t" path="res://object/stage/MovingObject.cs" id="15_s8u74"]
 [ext_resource type="PackedScene" uid="uid://b0n0wve76n3ds" path="res://area/5 pirate storm/object/Blade.tscn" id="16_scpb0"]
@@ -57,6 +58,12 @@
 [ext_resource type="PackedScene" uid="uid://677t2a10p81r" path="res://area/5 pirate storm/object/platforms/BridgeLargeFalling.tscn" id="54_k2etd"]
 [ext_resource type="PackedScene" uid="uid://cv703ufhvowof" path="res://area/5 pirate storm/object/platforms/BridgeThinFalling.tscn" id="55_01wgf"]
 [ext_resource type="Resource" uid="uid://b7sswmtsgltin" path="res://area/5 pirate storm/act 1/camera/GrindCam.tres" id="55_pdr65"]
+[ext_resource type="PackedScene" uid="uid://dp0fmxla84ah7" path="res://area/5 pirate storm/object/Surfboard.tscn" id="58_giu0j"]
+[ext_resource type="PackedScene" uid="uid://s08w0w6o0gv" path="res://area/5 pirate storm/object/SurfBoost.tscn" id="59_jvte6"]
+[ext_resource type="Resource" uid="uid://d38frhrq2xc42" path="res://area/5 pirate storm/act 1/camera/SurfboardCam.tres" id="59_qdb0c"]
+[ext_resource type="PackedScene" uid="uid://blngssg16o35r" path="res://area/5 pirate storm/object/destructable/CrateDestructable.tscn" id="61_dec8o"]
+[ext_resource type="PackedScene" uid="uid://o05lipks5eo5" path="res://area/5 pirate storm/object/Wave.tscn" id="61_nn4rh"]
+[ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="63_5y2th"]
 
 [sub_resource type="Curve" id="Curve_slh8b"]
 _limits = [-2.0, 0.0, 0.0, 1.0]
@@ -139,6 +146,38 @@ point_count = 6
 [sub_resource type="BoxShape3D" id="BoxShape3D_pdr65"]
 size = Vector3(20, 2, 2)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_jvte6"]
+size = Vector3(25, 20, 5)
+
+[sub_resource type="Curve" id="Curve_jvte6"]
+_data = [Vector2(0, 0), 0.0, 3.55116, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.34341, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_dec8o"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1.49012e-08), 0.0, 6.95738, 0, 0, Vector2(0.1, 0.6), 0.0, 0.0, 0, 0, Vector2(0.212821, -0.6), 0.0, 0.0, 0, 0, Vector2(0.323077, 0.6), 0.0, 0.0, 0, 0, Vector2(0.425641, -0.6), 0.0, 0.0, 0, 0, Vector2(0.533333, 0.6), 0.0, 0.0, 0, 0, Vector2(0.653846, -0.6), 0.0, 0.0, 0, 0, Vector2(0.766667, 0.6), 0.0, 0.0, 0, 0, Vector2(0.905128, -0.6), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), 11.7406, 0.0, 0, 0]
+point_count = 10
+
+[sub_resource type="Curve" id="Curve_t8ycy"]
+_limits = [-2.0, 0.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, -10.0309, 0, 0, Vector2(0.5, -2), 0.0, 0.0, 0, 0, Vector2(1, 0), 8.85318, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_5y2th"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 7.50786, 0, 0, Vector2(0.5, 2), 0.0, 0.0, 0, 0, Vector2(1, 0), -10.1391, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_vmmrf"]
+_limits = [-2.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 2.98023e-08), 0.0, -18.5852, 0, 0, Vector2(0.151282, -1.2), 0.0, 0.0, 0, 0, Vector2(0.4, 1.2), 0.0, 0.0, 0, 0, Vector2(0.6, -1.2), 0.0, 0.0, 0, 0, Vector2(0.846154, 1.2), 0.0, 0.0, 0, 0, Vector2(1, 2.98023e-08), -16.0852, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="Curve" id="Curve_wf3po"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 7.27226, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(0.4, -1), 0.0, 0.0, 0, 0, Vector2(0.6, 1), 0.0, 0.0, 0, 0, Vector2(0.8, -1), 0.0, 0.0, 0, 0, Vector2(1, 5.96046e-08), 7.0859, 0.0, 0, 0]
+point_count = 6
+
 [node name="MainAct" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_8fsep")]
@@ -146,12 +185,8 @@ Data = ExtResource("2_qkxl1")
 InitialCameraSettings = ExtResource("3_8cccl")
 environmentFxFactor = 1.0
 
-[node name="PathFollow3D" parent="Static/Path/CannonballPath" index="0"]
-transform = Transform3D(-1, 1.77443e-08, -8.56018e-08, 0, 0.97917, 0.202971, 8.74228e-08, 0.202971, -0.97917, 0, 2.27044, 87.0328)
-progress = 88.0
-
 [node name="RainCollision" parent="Static/Rain" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 7.45058e-09, 0, -7.45058e-09, 1, -1, 7.45513e-09, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 7.45058e-09, 0, -7.45058e-09, 1, -1, 7.43603e-09, 1)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -532,6 +567,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.4)
 
 [node name="Child05" parent="MainAct/Opening/FloatingWoodenPlatform2/Rings" instance=ExtResource("7_slh8b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.2)
+
+[node name="FireSoul1" parent="MainAct/Opening" instance=ExtResource("13_t8ycy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -10, 397)
 
 [node name="CratePlatform" parent="MainAct/Opening" instance=ExtResource("13_8hl4r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -12, 397)
@@ -1301,7 +1339,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="Blade" parent="MainAct/Islands/Island4/MovingBlade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, -1.49012e-08, -2.62013e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
+transform = Transform3D(1, -1.49012e-08, -2.53131e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
 
 [node name="MovingBlade2" type="Node3D" parent="MainAct/Islands/Island4"]
 transform = Transform3D(0.990268, 0, 0.139173, 0, 1, 0, -0.139173, 0, 0.990268, -30.323, 0.3, 6.98822)
@@ -2104,10 +2142,12 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 [node name="BridgeSquareFallingR" parent="MainAct/Ships/Ship1" instance=ExtResource("38_wjem1")]
 transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 0.2, -14, 0, 94.6)
 "Falling Platform Settings/Auto Shake" = false
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="BridgeSquareFallingL" parent="MainAct/Ships/Ship1" instance=ExtResource("38_wjem1")]
 transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 0.2, 14, 0, 94.6)
 "Falling Platform Settings/Auto Shake" = false
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="ShipCamera" parent="MainAct/Ships/Ship1" instance=ExtResource("26_1c4me")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.142014, 23.0923, 98.28)
@@ -2193,6 +2233,10 @@ transform = Transform3D(1, -1.86265e-09, 0, 0, 0.996195, -0.0871557, 0, 0.087155
 MiddleHeight = 12.0
 FinalHeight = 10.0
 Distance = 4.0
+
+[node name="FireSoul2" parent="MainAct/Ships/Ship2" instance=ExtResource("13_t8ycy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 66, -8.308)
+fireSoulIndex = 2
 
 [node name="InvisibleGrindrail" parent="MainAct/Ships/Ship2" instance=ExtResource("42_my4pc")]
 transform = Transform3D(-1, -2.23517e-08, -8.9407e-08, 0, 0.96363, -0.267238, 8.9407e-08, -0.267238, -0.96363, 6.10352e-05, 55.9224, -35.2897)
@@ -2423,6 +2467,7 @@ transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 0, 58.8,
 [node name="BridgeSquareFalling1" parent="MainAct/Ships/Ship2" instance=ExtResource("38_wjem1")]
 transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 0.2, 0, 0.3, 43)
 "Falling Platform Settings/Auto Shake" = false
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="Rings2" type="Node3D" parent="MainAct/Ships/Ship2"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 6.11959e-07, 0.9, 57.3829)
@@ -2466,20 +2511,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
 
 [node name="GreenMajin" parent="MainAct/Ships/Ship2" instance=ExtResource("9_slh8b")]
-transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, -1.5, 0, 69.0001)
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, -1.1, 0, 69.0001)
 rangeOverride = 30
 
 [node name="BlueMajin2" parent="MainAct/Ships/Ship2" instance=ExtResource("22_glsjx")]
-transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 2, 0, 74.0001)
+transform = Transform3D(-1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 1.5, 0, 74.0001)
 rangeOverride = 30
 
 [node name="RedMajin" parent="MainAct/Ships/Ship2" instance=ExtResource("45_22rft")]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, 2, 77.0001)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, 1, 77.0001)
 "Rotation Settings/Track Player" = false
 "Rotation Settings/Rotation Time" = 1.0
 "Attack Settings/Flame Inactive Time" = 1.0
 "Attack Settings/Flame Aggression Radius" = 25
-"Attack Settings/Attack Instantly" = true
 rangeOverride = 30
 
 [node name="EnemyStone2" parent="MainAct/Ships/Ship2" instance=ExtResource("36_p0u7c")]
@@ -2493,6 +2537,7 @@ transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0, 0.1
 transform = Transform3D(1.6, 0, 0, 0, 2, 0, 0, 0, 0.2, 0, 0.3, 84.4001)
 "Falling Platform Settings/Auto Shake" = false
 "Falling Platform Settings/Shake Length" = 0.0
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="JumpPanel" parent="MainAct/Ships/Ship2" instance=ExtResource("4_yyd45")]
 transform = Transform3D(0.990268, 0, -0.139173, 0, 1, 0, 0.139173, 0, 0.990268, 6.10352e-05, 0, 87.7003)
@@ -2945,9 +2990,9 @@ transform = Transform3D(2.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.5, 2.5)
 enemyCount = 1
 
 [node name="RedMajin" parent="MainAct/Ships/Ship3/Throne" instance=ExtResource("45_22rft")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 1)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 2.3, 1)
 "Attack Settings/Flame Active Time" = 2.5
-"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Inactive Time" = 1.0
 "Attack Settings/Flame Aggression Radius" = 15
 rangeOverride = 30
 
@@ -3552,12 +3597,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -504, 40, 1584)
 
 [node name="BridgeSquareFalling1" parent="MainAct/Cave" instance=ExtResource("38_wjem1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -3, -1.5)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="BridgeSquareFalling2" parent="MainAct/Cave" instance=ExtResource("38_wjem1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -0.5, -0.5)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="BridgeSquareFalling3" parent="MainAct/Cave" instance=ExtResource("38_wjem1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 3, -0.5)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="Sword1" parent="MainAct/Cave" instance=ExtResource("48_mujev")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 5, -4.9)
@@ -3565,8 +3613,8 @@ endOffset = Vector3(0, 5, -0.5)
 launchHeight = 5.0
 
 [node name="Sword2" parent="MainAct/Cave" instance=ExtResource("48_mujev")]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -7, 9.5, -5.59998)
-endOffset = Vector3(-2, 5, -0.5)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -7.18117, 9.5, -4.92383)
+endOffset = Vector3(-1, 5, -0.5)
 launchHeight = 5.0
 
 [node name="Sword3" parent="MainAct/Cave" instance=ExtResource("48_mujev")]
@@ -3861,7 +3909,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, 7.00355e-07, 1.10269e-06, 1.49012e-08, 1, -3.72529e-07, -6.85453e-07, -7.45058e-08, 0.999999, 0, 0, 0)
+transform = Transform3D(1, 1.87755e-06, 5.06639e-06, 1.49012e-08, 1, -2.38419e-06, -6.85453e-07, -3.12924e-07, 0.999995, 0, 0, 0)
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
@@ -3877,7 +3925,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade2" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1.00003, 7.00355e-07, 1.13249e-06, 0, 1, -8.34465e-07, 4.17233e-07, -7.45058e-08, 1.00003, 0, 2.66667, 0)
+transform = Transform3D(1.00003, 1.87755e-06, 4.23193e-06, -1.49012e-08, 1, -2.10106e-06, 3.8743e-07, -3.12924e-07, 1.00003, 0, 2.66667, 0)
 
 [node name="Blade3" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -3, 0, 0)
@@ -3893,7 +3941,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade3" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1.00003, 7.00355e-07, 1.51992e-06, -1.49012e-08, 1, -4.61936e-07, -6.25849e-07, -7.45058e-08, 1.00003, 0, 0.277298, 6.10352e-05)
+transform = Transform3D(1.00003, 1.87755e-06, 5.69224e-06, -1.49012e-08, 1, -2.5481e-06, -6.25849e-07, -3.12924e-07, 1.00003, 0, 0.277298, 6.10352e-05)
 
 [node name="SpoilsSmall4" parent="MainAct/Cave" instance=ExtResource("40_wekfv")]
 transform = Transform3D(1.15429, 0.510258, 1.48484, 0.0283889, 1.3572, -0.851215, -1.63303, 0.384264, 1.03474, -39.1836, 6.97257, 76.2062)
@@ -3914,7 +3962,7 @@ Movement/Angle = 90.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup4/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(0.999999, 2.22045e-15, -5.96046e-07, -9.31323e-09, 1, -6.27479e-08, -5.21541e-07, -4.00469e-08, 0.999999, -0.416138, 0, 3.05176e-05)
+transform = Transform3D(0.999998, 2.22045e-15, -5.96046e-07, -9.31323e-09, 1, -6.27479e-08, -6.10948e-07, -4.00469e-08, 0.999998, -0.416138, 0, 3.05176e-05)
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -4150,9 +4198,11 @@ Distance = 20.0
 
 [node name="BridgeLargeFalling" parent="MainAct/Cave" instance=ExtResource("54_k2etd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.5, -40, 199)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="BridgeThinFalling1" parent="MainAct/Cave" instance=ExtResource("55_01wgf")]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -21.4147, -38, 211.953)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="GreenMajin1" parent="MainAct/Cave" instance=ExtResource("9_slh8b")]
 transform = Transform3D(-0.996195, 0, -0.0871558, 0, 1, 0, 0.0871558, 0, -0.996195, -19.547, -34, 221.827)
@@ -4180,6 +4230,7 @@ rangeOverride = 40
 
 [node name="BridgeThinFalling2" parent="MainAct/Cave" instance=ExtResource("55_01wgf")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -18.6336, -38, 236.84)
+"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="GhostShip" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -521, 2, 1829)
@@ -4211,7 +4262,7 @@ transform = Transform3D(-1, 0, -8.9407e-08, 0, 1, 0, 8.9407e-08, 0, -1, 13, 2.5,
 rangeOverride = 20
 
 [node name="Rings" type="Node3D" parent="MainAct/GhostShip"]
-transform = Transform3D(-0.996195, 0.00228147, 0.0871258, 0, 0.999657, -0.0261769, -0.0871556, -0.0260773, -0.995853, 14.5564, 3.2, 62.4981)
+transform = Transform3D(-0.996195, 0.00228147, 0.0871258, 0, 0.999657, -0.0261769, -0.0871557, -0.0260773, -0.995853, 15.6522, 3.2, 62.594)
 script = ExtResource("6_ytq25")
 Source = ExtResource("7_slh8b")
 Amount = 4
@@ -4234,7 +4285,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
 
 [node name="Chair1" type="Node3D" parent="MainAct/GhostShip"]
-transform = Transform3D(-0.17101, 0.173648, -0.969846, 0.0301537, 0.984808, 0.17101, 0.984808, 7.47509e-09, -0.173648, 11.2883, 3.36666, 62.2431)
+transform = Transform3D(-0.0845276, 0.172987, -0.98129, 0.0301537, 0.984808, 0.17101, 0.995965, -0.0151344, -0.0884596, 12.3456, 3.36666, 62.5022)
 
 [node name="BlueMajin1" parent="MainAct/GhostShip/Chair1" instance=ExtResource("22_glsjx")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, -1)
@@ -4249,7 +4300,7 @@ transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 0.4, 0, 2, 0.58)
 enemyCount = 2
 
 [node name="Chair2" type="Node3D" parent="MainAct/GhostShip"]
-transform = Transform3D(-0.17101, 0.173648, -0.969846, 0.0301537, 0.984808, 0.17101, 0.984808, 7.47509e-09, -0.173648, 10.4333, 3.51743, 67.1671)
+transform = Transform3D(-0.0845276, 0.172987, -0.98129, 0.0301537, 0.984808, 0.17101, 0.995965, -0.0151344, -0.0884596, 11.9229, 3.51743, 67.4821)
 
 [node name="EnemyStone1" parent="MainAct/GhostShip/Chair2" instance=ExtResource("36_p0u7c")]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1.2, 0, 0, -0.2)
@@ -4260,7 +4311,7 @@ transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 0.4, 0, 2, 0.58)
 enemyCount = 2
 
 [node name="Chair3" type="Node3D" parent="MainAct/GhostShip"]
-transform = Transform3D(0.17101, 0.173648, 0.969846, -0.0301537, 0.984808, -0.17101, -0.984808, 7.47509e-09, 0.173648, 17.7352, 2.2299, 65.4283)
+transform = Transform3D(0.0845276, 0.172987, 0.98129, -0.0301537, 0.984808, -0.17101, -0.995965, -0.0151344, 0.0884596, 19.0455, 2.2299, 65.1134)
 
 [node name="BlueMajin2" parent="MainAct/GhostShip/Chair3" instance=ExtResource("22_glsjx")]
 transform = Transform3D(-1, -1.85303e-09, 8.9407e-08, -1.16141e-08, 1, 6.10307e-08, -8.9407e-08, 1.65416e-08, -1, 0, 1, -1)
@@ -4275,7 +4326,11 @@ transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 0.4, 0, 2, 0.58)
 enemyCount = 2
 
 [node name="Chair4" type="Node3D" parent="MainAct/GhostShip"]
-transform = Transform3D(0.17101, 0.173648, 0.969846, -0.0301537, 0.984808, -0.17101, -0.984808, 7.47509e-09, 0.173648, 16.8802, 2.38067, 70.3523)
+transform = Transform3D(0.0845276, 0.172987, 0.98129, -0.0301537, 0.984808, -0.17101, -0.995965, -0.0151344, 0.0884596, 18.6229, 2.38067, 70.0931)
+
+[node name="FireSoul3" parent="MainAct/GhostShip/Chair4" instance=ExtResource("13_t8ycy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2)
+fireSoulIndex = 3
 
 [node name="EnemyStone1" parent="MainAct/GhostShip/Chair4" instance=ExtResource("36_p0u7c")]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1.2, 0, 0, -0.2)
@@ -4286,7 +4341,7 @@ transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 0.4, 0, 2, 0.58)
 enemyCount = 2
 
 [node name="Throne" type="Node3D" parent="MainAct/GhostShip"]
-transform = Transform3D(0.92937, 0.150289, -0.33717, -0.139088, 0.988622, 0.0572838, 0.341942, -0.00634158, 0.9397, 10.0937, 4.24081, 88.7076)
+transform = Transform3D(0.92937, 0.150289, -0.33717, -0.139088, 0.988622, 0.0572838, 0.341942, -0.00634158, 0.9397, 10.9301, 4.11563, 89.0154)
 
 [node name="EnemyStone1" parent="MainAct/GhostShip/Throne" instance=ExtResource("36_p0u7c")]
 transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0)
@@ -4297,11 +4352,11 @@ transform = Transform3D(2, 0, 0, 0, 3, 0, 0, 0, 0.5, 0, 4, 1.5)
 enemyCount = 1
 
 [node name="EnemyStone3" parent="MainAct/GhostShip/Throne" instance=ExtResource("36_p0u7c")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 1.5, 1.5, 1.4, -0.5)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 1.5, 1.5, 1.5, -0.5)
 enemyCount = 1
 
 [node name="EnemyStone4" parent="MainAct/GhostShip/Throne" instance=ExtResource("36_p0u7c")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 1.5, -1.5, 1.4, -0.5)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 1.5, -1.5, 1.5, -0.5)
 enemyCount = 1
 
 [node name="EnemyStone5" parent="MainAct/GhostShip/Throne" instance=ExtResource("36_p0u7c")]
@@ -4309,14 +4364,13 @@ transform = Transform3D(2, 0, 0, 0, 0.5, 0, 0, 0, 1, 0, -0.5, -3)
 enemyCount = 1
 
 [node name="RedMajin" parent="MainAct/GhostShip/Throne" instance=ExtResource("45_22rft")]
-transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0, 2, -1)
+transform = Transform3D(-1.5, 0, 2.26494e-07, 0, 1.5, 0, -2.26494e-07, 0, -1.5, 2.26494e-07, 1.1, -2.5)
 "Spawn Interval Settings/Enable Spawn Interval" = true
 "Spawn Interval Settings/Spawn Delay" = 1.0
 "Spawn Interval Settings/Separate Despawn Interval" = true
 "Spawn Interval Settings/Despawn Delay" = 0.5
-"Attack Settings/Flame Inactive Time" = 0.5
+"Attack Settings/Flame Inactive Time" = 1.0
 "Attack Settings/Flame Aggression Radius" = 10
-"Attack Settings/Attack Instantly" = true
 
 [node name="Switch" parent="MainAct/GhostShip/Throne" instance=ExtResource("35_c8avs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
@@ -4489,6 +4543,1000 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.6)
 [node name="Child10" parent="MainAct/GhostShip/Throne/RingCull/Rings4" instance=ExtResource("7_slh8b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
 
+[node name="Surf" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -497, 0, 1960)
+
+[node name="SurfJump" parent="MainAct/Surf" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.819152, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819152, -17, 7.3, -5)
+
+[node name="Jump" type="Node3D" parent="MainAct/Surf/SurfJump"]
+transform = Transform3D(0.819152, 0, -0.573577, 0, 1, 0, 0.573577, 0, 0.819152, 6.23376, -7.3, 21.0222)
+script = ExtResource("27_6yc6x")
+jumpHeight = 5.0
+autoAlign = true
+
+[node name="Surfboard" parent="MainAct/Surf/SurfJump" node_paths=PackedStringArray("path") instance=ExtResource("58_giu0j")]
+transform = Transform3D(0.819151, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819151, 6.23401, -7.3, 21.0227)
+path = NodePath("../../../../Static/Path/SurfboardPath")
+
+[node name="Camera" type="Node3D" parent="MainAct/Surf/SurfJump/Surfboard"]
+script = ExtResource("21_1aofs")
+settings = ExtResource("59_qdb0c")
+
+[node name="Path" type="Node3D" parent="MainAct/Surf/SurfJump/Surfboard" node_paths=PackedStringArray("path")]
+script = ExtResource("51_01wgf")
+path = NodePath("../../../../../Static/Path/SurfboardPath")
+cameraPathBlendTime = 1.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Surf/SurfJump"]
+shape = SubResource("BoxShape3D_jvte6")
+
+[node name="SurfEnd" parent="MainAct/Surf" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 4.47035e-07, 0, 1, 0, -4.47035e-07, 0, 1, -98.7185, -0.0999999, 878.802)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="Jump" type="Node3D" parent="MainAct/Surf/SurfEnd"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 8)
+script = ExtResource("27_6yc6x")
+jumpHeight = 5.0
+autoAlign = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Surf/SurfEnd"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jvte6")
+
+[node name="Rings1" type="Node3D" parent="MainAct/Surf"]
+transform = Transform3D(-0.997886, 0, -0.0649851, 0, 1, 0, 0.0649851, 0, -0.997886, 2.40001, 0.5, 60)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = SubResource("Curve_jvte6")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Surf/Rings1" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/Surf/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.607684, 0, -4)
+
+[node name="Child03" parent="MainAct/Surf/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.952819, 0, -8)
+
+[node name="Child04" parent="MainAct/Surf/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.949495, 0, -12)
+
+[node name="Child05" parent="MainAct/Surf/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.592726, 0, -16)
+
+[node name="Child06" parent="MainAct/Surf/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="SurfBoost1" parent="MainAct/Surf" instance=ExtResource("59_jvte6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70001, 0, 83)
+
+[node name="Rings2" type="Node3D" parent="MainAct/Surf"]
+transform = Transform3D(-0.998135, 0, -0.0610486, 0, 1, 0, 0.0610486, 0, -0.998135, 4.14804, 0.5, 85.9988)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 6
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Surf/Rings2" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/Surf/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Child03" parent="MainAct/Surf/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Child04" parent="MainAct/Surf/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="Child05" parent="MainAct/Surf/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="Child06" parent="MainAct/Surf/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="CrateDestructable1" parent="MainAct/Surf" instance=ExtResource("61_dec8o")]
+transform = Transform3D(0.866025, 0.482963, -0.12941, -0.5, 0.836516, -0.224144, 0, 0.258819, 0.965926, 9, -0.5, 98)
+
+[node name="FloatingStaircase" parent="MainAct/Surf" instance=ExtResource("23_7u2k2")]
+transform = Transform3D(0.187728, -0.200611, 0.961516, -0.459129, 0.847468, 0.266457, -0.868308, -0.491481, 0.0669873, 0.5, 0, 89)
+
+[node name="SurfBoost2" parent="MainAct/Surf" instance=ExtResource("59_jvte6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, 110)
+
+[node name="CrateDestructable2" parent="MainAct/Surf" instance=ExtResource("61_dec8o")]
+transform = Transform3D(0.961516, 0.24004, -0.133669, -0.242362, 0.970185, -0.00114128, 0.129409, 0.0334936, 0.991025, 7.5, -0.5, 117)
+
+[node name="Wave1" parent="MainAct/Surf" instance=ExtResource("61_nn4rh")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 115.244)
+
+[node name="SurfBoost3" parent="MainAct/Surf" instance=ExtResource("59_jvte6")]
+transform = Transform3D(0.993493, 0, 0.113897, 0, 1, 0, -0.113897, 0, 0.993493, 14.2507, 0, 195.391)
+
+[node name="Pearls" type="Node3D" parent="MainAct/Surf"]
+transform = Transform3D(-0.993148, 0, -0.116861, 0, 1, 0, 0.116861, 0, -0.993148, 14.7408, 0.4, 199.233)
+script = ExtResource("6_ytq25")
+Source = ExtResource("8_ytq25")
+Amount = 32
+Shape = 0
+Orientation = 0
+Spacing = 1.2
+"Horizontal Offset" = SubResource("Curve_dec8o")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, 0)
+
+[node name="Child02" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.250015, 0, -1.2)
+
+[node name="Child03" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.483491, 0, -2.4)
+
+[node name="Child04" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.598868, 0, -3.6)
+
+[node name="Child05" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.402507, 0, -4.8)
+
+[node name="Child06" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0776647, 0, -6)
+
+[node name="Child07" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.506915, 0, -7.2)
+
+[node name="Child08" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.553982, 0, -8.4)
+
+[node name="Child09" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.159637, 0, -9.6)
+
+[node name="Child10" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.345211, 0, -10.8)
+
+[node name="Child11" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.599927, 0, -12)
+
+[node name="Child12" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.326035, 0, -13.2)
+
+[node name="Child13" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.218951, 0, -14.4)
+
+[node name="Child14" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.587029, 0, -15.6)
+
+[node name="Child15" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.424282, 0, -16.8)
+
+[node name="Child16" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0731101, 0, -18)
+
+[node name="Child17" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.517908, 0, -19.2)
+
+[node name="Child18" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.548505, 0, -20.4)
+
+[node name="Child19" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.190368, 0, -21.6)
+
+[node name="Child20" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.278591, 0, -22.8)
+
+[node name="Child21" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.582202, 0, -24)
+
+[node name="Child22" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.464725, 0, -25.2)
+
+[node name="Child23" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00923741, 0, -26.4)
+
+[node name="Child24" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.452292, 0, -27.6)
+
+[node name="Child25" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.589747, 0, -28.8)
+
+[node name="Child26" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.359712, 0, -30)
+
+[node name="Child27" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0365389, 0, -31.2)
+
+[node name="Child28" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.416916, 0, -32.4)
+
+[node name="Child29" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.599327, 0, -33.6)
+
+[node name="Child30" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.532575, 0, -34.8)
+
+[node name="Child31" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.325895, 0, -36)
+
+[node name="Child32" parent="MainAct/Surf/Pearls" instance=ExtResource("8_ytq25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49012e-08, 0, -37.2)
+
+[node name="FloatingShipDeck1" parent="MainAct/Surf" instance=ExtResource("24_hlxfd")]
+transform = Transform3D(0.992404, 0.0868241, -0.0871557, -0.0871557, 0.996195, -4.65661e-10, 0.0868241, 0.00759612, 0.996195, 18.5371, 0.174311, 204.479)
+
+[node name="FloatingStaircase2" parent="MainAct/Surf" instance=ExtResource("23_7u2k2")]
+transform = Transform3D(0.936682, 0.157691, -0.312667, -0.084186, 0.968089, 0.236045, 0.339912, -0.194777, 0.920066, 10.405, 0, 209.467)
+
+[node name="SurfBoost4" parent="MainAct/Surf" instance=ExtResource("59_jvte6")]
+transform = Transform3D(0.993163, 0, 0.11674, 0, 1, 0, -0.11674, 0, 0.993163, 16.4745, 0, 216.583)
+
+[node name="FloatingStaircase3" parent="MainAct/Surf" instance=ExtResource("23_7u2k2")]
+transform = Transform3D(0.258819, 0, -0.965926, -0.25, 0.965926, -0.0669873, 0.933013, 0.258819, 0.25, 13.405, -0.1, 226.467)
+
+[node name="FloatingStaircase4" parent="MainAct/Surf" instance=ExtResource("23_7u2k2")]
+transform = Transform3D(0.968208, 0.25, -0.00851855, -0.25, 0.965926, -0.0669873, -0.00851858, 0.0669873, 0.997717, 21.405, -0.1, 228.067)
+
+[node name="SurfBoost5" parent="MainAct/Surf" instance=ExtResource("59_jvte6")]
+transform = Transform3D(0.993696, 0, 0.112111, 0, 1, 0, -0.112111, 0, 0.993696, 18.5114, 0, 234.064)
+
+[node name="Wave2" parent="MainAct/Surf" instance=ExtResource("61_nn4rh")]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 13.1, 0, 237.844)
+
+[node name="SurfBoost6" parent="MainAct/Surf" instance=ExtResource("59_jvte6")]
+transform = Transform3D(0.999313, 0, 0.0370623, 0, 1, 0, -0.0370623, 0, 0.999313, 29.6953, 0, 317.996)
+
+[node name="Rings3" type="Node3D" parent="MainAct/Surf"]
+transform = Transform3D(-0.477159, 0, 0.878817, 0, 1, 0, -0.878817, 0, -0.477159, 9.97922, 0.5, 372.846)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 9
+Shape = 2
+Path = NodePath("../../../Static/Path/SurfboardPath")
+"Path Progress Offset" = 0.0
+"Disable Path Y" = false
+Spacing = 4.0
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Surf/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00012207, 0, -0.000244141)
+
+[node name="Child02" parent="MainAct/Surf/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.438721, 0, -4.11938)
+
+[node name="Child03" parent="MainAct/Surf/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.576538, 0, -8.25012)
+
+[node name="Child04" parent="MainAct/Surf/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.435181, 0, -12.3711)
+
+[node name="Child05" parent="MainAct/Surf/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0378418, 0, -16.4651)
+
+[node name="Child06" parent="MainAct/Surf/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.591309, 0, -20.5204)
+
+[node name="Child07" parent="MainAct/Surf/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.40979, 0, -24.4877)
+
+[node name="Child08" parent="MainAct/Surf/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.10815, 0, -28.3204)
+
+[node name="Child09" parent="MainAct/Surf/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.60205, 0, -32.189)
+
+[node name="FloatingStaircase5" parent="MainAct/Surf" instance=ExtResource("23_7u2k2")]
+transform = Transform3D(0.504364, 0.821351, -0.266457, -0.859789, 0.506236, -0.0669873, 0.0798697, 0.262883, 0.961516, -22.495, 0, 389.567)
+
+[node name="FloatingStaircase6" parent="MainAct/Surf" instance=ExtResource("23_7u2k2")]
+transform = Transform3D(0.836516, 0.482963, -0.258819, -0.5, 0.866026, 0, 0.224144, 0.12941, 0.965926, -34.0883, 0, 387.034)
+
+[node name="SurfBoost7" parent="MainAct/Surf" instance=ExtResource("59_jvte6")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -44.8541, 0, 401.994)
+
+[node name="Rings4" type="Node3D" parent="MainAct/Surf"]
+transform = Transform3D(-0.730162, 0, 0.683274, 0, 1, 0, -0.683274, 0, -0.730162, -48.9911, 0.5, 406.53)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 9
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = SubResource("Curve_t8ycy")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Surf/Rings4" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/Surf/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.01779, 0, -4)
+
+[node name="Child03" parent="MainAct/Surf/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.62693, 0, -8)
+
+[node name="Child04" parent="MainAct/Surf/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9226, 0, -12)
+
+[node name="Child05" parent="MainAct/Surf/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -16)
+
+[node name="Child06" parent="MainAct/Surf/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.895, 0, -20)
+
+[node name="Child07" parent="MainAct/Surf/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55332, 0, -24)
+
+[node name="Child08" parent="MainAct/Surf/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.934989, 0, -28)
+
+[node name="Child09" parent="MainAct/Surf/Rings4" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -32)
+
+[node name="CrateDestructable3" parent="MainAct/Surf" instance=ExtResource("61_dec8o")]
+transform = Transform3D(0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0, 1, -68.9755, 0, 432.873)
+
+[node name="CrateDestructable4" parent="MainAct/Surf" instance=ExtResource("61_dec8o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -83.2755, 0, 451.973)
+
+[node name="Rings5" type="Node3D" parent="MainAct/Surf"]
+transform = Transform3D(-0.93252, 0, 0.36112, 0, 1, 0, -0.36112, 0, -0.93252, -79.5437, 0.5, 445.228)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 9
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = SubResource("Curve_t8ycy")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Surf/Rings5" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/Surf/Rings5" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.01779, 0, -4)
+
+[node name="Child03" parent="MainAct/Surf/Rings5" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.62693, 0, -8)
+
+[node name="Child04" parent="MainAct/Surf/Rings5" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9226, 0, -12)
+
+[node name="Child05" parent="MainAct/Surf/Rings5" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -16)
+
+[node name="Child06" parent="MainAct/Surf/Rings5" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.895, 0, -20)
+
+[node name="Child07" parent="MainAct/Surf/Rings5" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55332, 0, -24)
+
+[node name="Child08" parent="MainAct/Surf/Rings5" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.934989, 0, -28)
+
+[node name="Child09" parent="MainAct/Surf/Rings5" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -32)
+
+[node name="SurfBoost8" parent="MainAct/Surf" instance=ExtResource("59_jvte6")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -92.4235, 0, 477.603)
+
+[node name="CrateDestructable5" parent="MainAct/Surf" instance=ExtResource("61_dec8o")]
+transform = Transform3D(0.74257, 0.0971848, 0.66268, -0.612326, 0.499401, 0.612907, -0.271378, -0.860903, 0.430349, -98.9755, 0, 500.873)
+
+[node name="FloatingShipDeck2" parent="MainAct/Surf" instance=ExtResource("24_hlxfd")]
+transform = Transform3D(-4.37114e-08, 0, 1, -0.965926, 0.258819, -2.98023e-08, -0.258819, -0.965926, -2.98023e-08, -93.033, 2.98023e-08, 512.173)
+
+[node name="Rings6" type="Node3D" parent="MainAct/Surf"]
+transform = Transform3D(-0.999792, 0, 0.0204014, 0, 1, 0, -0.0204014, 0, -0.999792, -98.5437, 0.5, 505.228)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 9
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = SubResource("Curve_5y2th")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Surf/Rings6" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/Surf/Rings6" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.840397, 0, -4)
+
+[node name="Child03" parent="MainAct/Surf/Rings6" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46924, 0, -8)
+
+[node name="Child04" parent="MainAct/Surf/Rings6" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.86347, 0, -12)
+
+[node name="Child05" parent="MainAct/Surf/Rings6" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -16)
+
+[node name="Child06" parent="MainAct/Surf/Rings6" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.92514, 0, -20)
+
+[node name="Child07" parent="MainAct/Surf/Rings6" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.63369, 0, -24)
+
+[node name="Child08" parent="MainAct/Surf/Rings6" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0254, 0, -28)
+
+[node name="Child09" parent="MainAct/Surf/Rings6" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -32)
+
+[node name="SurfBoost9" parent="MainAct/Surf" instance=ExtResource("59_jvte6")]
+transform = Transform3D(1, 0, -7.45058e-08, 0, 1, 0, 7.45058e-08, 0, 1, -98.6235, 0, 540.503)
+
+[node name="Wave3" parent="MainAct/Surf" instance=ExtResource("61_nn4rh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, 500)
+
+[node name="Rings7" type="Node3D" parent="MainAct/Surf"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -98.7, 0.5, 775)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 25
+Shape = 0
+Orientation = 0
+Spacing = 4.0
+"Horizontal Offset" = SubResource("Curve_vmmrf")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 0, 0)
+
+[node name="Child02" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.629506, 0, -4)
+
+[node name="Child03" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00366, 0, -8)
+
+[node name="Child04" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.17405, 0, -12)
+
+[node name="Child05" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.17359, 0, -16)
+
+[node name="Child06" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.879098, 0, -20)
+
+[node name="Child07" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.365875, 0, -24)
+
+[node name="Child08" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.230675, 0, -28)
+
+[node name="Child09" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.775145, 0, -32)
+
+[node name="Child10" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.13213, 0, -36)
+
+[node name="Child11" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15278, 0, -40)
+
+[node name="Child12" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.706597, 0, -44)
+
+[node name="Child13" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08616e-07, 0, -48)
+
+[node name="Child14" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.706597, 0, -52)
+
+[node name="Child15" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15278, 0, -56)
+
+[node name="Child16" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.13076, 0, -60)
+
+[node name="Child17" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.767231, 0, -64)
+
+[node name="Child18" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.214594, 0, -68)
+
+[node name="Child19" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.387469, 0, -72)
+
+[node name="Child20" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.899277, 0, -76)
+
+[node name="Child21" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.18115, 0, -80)
+
+[node name="Child22" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15995, 0, -84)
+
+[node name="Child23" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.956411, 0, -88)
+
+[node name="Child24" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.572729, 0, -92)
+
+[node name="Child25" parent="MainAct/Surf/Rings7" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98023e-08, 0, -96)
+
+[node name="FloatingStaircase7" parent="MainAct/Surf" instance=ExtResource("23_7u2k2")]
+transform = Transform3D(0.866025, 0.5, 0, -0.5, 0.866026, 0, 0, 0, 1, -102, 0, 790)
+
+[node name="FloatingShipDeck3" parent="MainAct/Surf" instance=ExtResource("24_hlxfd")]
+transform = Transform3D(0.707107, 0.707107, 0, -0.696364, 0.696364, 0.173648, 0.122788, -0.122788, 0.984808, -110, 0, 810)
+
+[node name="FloatingStaircase8" parent="MainAct/Surf" instance=ExtResource("23_7u2k2")]
+transform = Transform3D(-0.284914, 0.506515, 0.813798, 0.469846, 0.813798, -0.34202, -0.835505, 0.284914, -0.469846, -103.4, 0, 813)
+
+[node name="CrateDestructable6" parent="MainAct/Surf" instance=ExtResource("61_dec8o")]
+transform = Transform3D(0.5, 0.866026, 1.3505e-08, -0.86273, 0.498097, -0.0871558, -0.0754791, 0.0435779, 0.996195, -96, 0, 810)
+
+[node name="CrateDestructable7" parent="MainAct/Surf" instance=ExtResource("61_dec8o")]
+transform = Transform3D(0.5, 0.866026, 1.3505e-08, -0.86273, 0.498097, -0.0871558, -0.0754791, 0.0435779, 0.996195, -101, 0, 839)
+
+[node name="FloatingShipDeck4" parent="MainAct/Surf" instance=ExtResource("24_hlxfd")]
+transform = Transform3D(0.707107, 0.707107, 0, -0.696364, 0.696364, 0.173648, 0.122788, -0.122788, 0.984808, -93, 0, 834)
+
+[node name="FloatingStaircase9" parent="MainAct/Surf" instance=ExtResource("23_7u2k2")]
+transform = Transform3D(0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, -95, 0, 860)
+
+[node name="End" type="Node3D" parent="MainAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -596, 3, 2843)
+
+[node name="Rings1" type="Node3D" parent="MainAct/End"]
+transform = Transform3D(-0.99038, 0, 0.138378, 0, 1, 0, -0.138378, 0, -0.99038, -0.137512, 0.6, 16.1189)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/End/Rings1" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/End/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="MainAct/End/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="MainAct/End/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="MainAct/End/Rings1" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="Rings2" type="Node3D" parent="MainAct/End"]
+transform = Transform3D(-0.99038, 0, 0.138378, 0, 1, 0, -0.138378, 0, -0.99038, -1.32605, 0.6, 15.9524)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 5
+Shape = 0
+Orientation = 0
+Spacing = 1.5
+"Horizontal Offset" = null
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/End/Rings2" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/End/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="Child03" parent="MainAct/End/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Child04" parent="MainAct/End/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
+
+[node name="Child05" parent="MainAct/End/Rings2" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="BridgeThin" parent="MainAct/End" instance=ExtResource("19_s7fao")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -8.23871, -2, 27.2759)
+
+[node name="Gate" type="Node3D" parent="MainAct/End"]
+transform = Transform3D(0.984233, 0, -0.176879, 0, 1, 0, 0.176879, 0, 0.984233, -6, 1, 40)
+
+[node name="BridgeSquare1" parent="MainAct/End/Gate" instance=ExtResource("20_nrsdk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 1, 0)
+
+[node name="SpoilsSmall1" parent="MainAct/End/Gate/BridgeSquare1" instance=ExtResource("40_wekfv")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -2.05, 0)
+
+[node name="SpoilsSmall2" parent="MainAct/End/Gate/BridgeSquare1" instance=ExtResource("40_wekfv")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.05, 0)
+
+[node name="BridgeSquare2" parent="MainAct/End/Gate" instance=ExtResource("20_nrsdk")]
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 4.5, 1, 0)
+
+[node name="SpoilsSmall1" parent="MainAct/End/Gate/BridgeSquare2" instance=ExtResource("40_wekfv")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -2.05, 0)
+
+[node name="SpoilsSmall2" parent="MainAct/End/Gate/BridgeSquare2" instance=ExtResource("40_wekfv")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.05, 0)
+
+[node name="BridgeSquareFalling" parent="MainAct/End/Gate" instance=ExtResource("38_wjem1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.2, 0, 0.2, 0)
+"Falling Platform Settings/Fall Speed" = 1.0
+
+[node name="Switch" parent="MainAct/End/Gate" instance=ExtResource("35_c8avs")]
+transform = Transform3D(1, 0, 4.47035e-08, 0, 1, 0, -4.47035e-08, 0, 1, 0, -0.95, -3)
+
+[node name="EnemyStone" parent="MainAct/End/Gate" instance=ExtResource("36_p0u7c")]
+transform = Transform3D(1.5, 0, 2.98023e-08, 0, 0.5, 0, -2.98023e-08, 0, 1.5, 0, -0.55, -3)
+enemyCount = 3
+
+[node name="BlueMajin" parent="MainAct/End/Gate" instance=ExtResource("22_glsjx")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -1, -8)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(0, 15, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 35
+
+[node name="GreenMajin1" parent="MainAct/End/Gate" instance=ExtResource("9_slh8b")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0, -6)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.2
+"Spawn Settings/Spawn Offset" = Vector3(15, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 35
+
+[node name="GreenMajin2" parent="MainAct/End/Gate" instance=ExtResource("9_slh8b")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1, 0.5, -6)
+"Spawn Settings/Spawn Travel Time" = 1.0
+"Spawn Settings/Spawn Delay" = 0.2
+"Spawn Settings/Spawn Offset" = Vector3(-15, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 35
+
+[node name="SpikeBallSpawner1" parent="MainAct/End" instance=ExtResource("53_6rj8d")]
+transform = Transform3D(-1.44889, 0, 0.388229, 0, 1.5, 0, -0.388229, 0, -1.44889, -10.2588, 10.5, 39.9659)
+maxSpawnAmount = 3
+lifetime = 5.0
+spawnInterval = 4.0
+initialVelocity = 2.0
+
+[node name="SpikeBallSpawner2" parent="MainAct/End" instance=ExtResource("53_6rj8d")]
+transform = Transform3D(-1.44889, 0, 0.388229, 0, 1.5, 0, -0.388229, 0, -1.44889, -1.25879, 10.5, 40.9658)
+maxSpawnAmount = 3
+lifetime = 5.0
+spawnInterval = 4.0
+initialVelocity = 2.0
+
+[node name="Rings3" type="Node3D" parent="MainAct/End"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -16, 0.6, 55)
+script = ExtResource("6_ytq25")
+Source = ExtResource("7_slh8b")
+Amount = 16
+Shape = 0
+Orientation = 0
+Spacing = 3.0
+"Horizontal Offset" = SubResource("Curve_wf3po")
+"Vertical Offset" = null
+metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
+
+[node name="Child01" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+
+[node name="Child02" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.474734, 0, -3)
+
+[node name="Child03" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.848478, 0, -6)
+
+[node name="Child04" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -9)
+
+[node name="Child05" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.481481, 0, -12)
+
+[node name="Child06" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.481482, 0, -15)
+
+[node name="Child07" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -18)
+
+[node name="Child08" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.481482, 0, -21)
+
+[node name="Child09" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.481482, 0, -24)
+
+[node name="Child10" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -27)
+
+[node name="Child11" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.481481, 0, -30)
+
+[node name="Child12" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.481482, 0, -33)
+
+[node name="Child13" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -36)
+
+[node name="Child14" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.845717, 0, -39)
+
+[node name="Child15" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.469212, 0, -42)
+
+[node name="Child16" parent="MainAct/End/Rings3" instance=ExtResource("7_slh8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, 0, -45)
+
+[node name="ItemBoxFlying" parent="MainAct/End" instance=ExtResource("41_wekfv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -64, 0.6, 55)
+"Spawn Settings/Spawn Pearls" = true
+"Spawn Settings/Amount" = 50
+
+[node name="BridgeGroup1" type="Node3D" parent="MainAct/End"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -75, -6, 55.2)
+
+[node name="BridgeLarge1" parent="MainAct/End/BridgeGroup1" instance=ExtResource("26_ygwln")]
+
+[node name="GreenMajin" parent="MainAct/End/BridgeGroup1/BridgeLarge1" instance=ExtResource("9_slh8b")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.5, 5, -4.37114e-08)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-15, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 15
+
+[node name="BridgeLarge2" parent="MainAct/End/BridgeGroup1" instance=ExtResource("26_ygwln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 10)
+
+[node name="GreenMajin" parent="MainAct/End/BridgeGroup1/BridgeLarge2" instance=ExtResource("9_slh8b")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.5, 5, 0)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(15, 0, 0)
+"Spawn Settings/Spawn In Offset" = Vector3(0, 0, 0)
+"Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
+rangeOverride = 15
+
+[node name="BridgeLarge3" parent="MainAct/End/BridgeGroup1" instance=ExtResource("26_ygwln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 20)
+
+[node name="GreenMajin" parent="MainAct/End/BridgeGroup1/BridgeLarge3" instance=ExtResource("9_slh8b")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.5, 5, 0)
+"Spawn Settings/Spawn Travel Time" = 0.5
+"Spawn Settings/Spawn Delay" = 0.0
+"Spawn Settings/Spawn Offset" = Vector3(-4, 4, 15)
+"Spawn Settings/Spawn In Offset" = Vector3(-5, 0, -5)
+"Spawn Settings/Spawn Out Offset" = Vector3(-5, 1, -5)
+rangeOverride = 15
+
+[node name="BridgeLarge4" parent="MainAct/End/BridgeGroup1" instance=ExtResource("26_ygwln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 30)
+
+[node name="BombTrigger" parent="MainAct/End/BridgeGroup1" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 12.7, 12.5001)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/BridgeGroup1/BombTrigger"]
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Bomb1" parent="MainAct/End/BridgeGroup1" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1.5, 9, 22.5)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(-2, 20, 25)
+
+[node name="Bomb2" parent="MainAct/End/BridgeGroup1" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 1.5, 11, 34)
+"Launch Settings/Starting Offset" = Vector3(15, 30, 20)
+
+[node name="Bomb3" parent="MainAct/End/BridgeGroup1" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1.5, 11, 34)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(-15, 20, 5)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="BridgeGroup2" type="Node3D" parent="MainAct/End"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -125, -6, 55.2)
+
+[node name="BombTrigger1" parent="MainAct/End/BridgeGroup2" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 12, -12)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/BridgeGroup2/BombTrigger1"]
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Bomb1" parent="MainAct/End/BridgeGroup2" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1.5, 5, -4)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(-2, 20, 25)
+
+[node name="Bomb2" parent="MainAct/End/BridgeGroup2" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 1.5, 4.99999, -3)
+"Launch Settings/Starting Offset" = Vector3(15, 30, 20)
+
+[node name="Bomb3" parent="MainAct/End/BridgeGroup2" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1.5, 4.99999, 0)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(-15, 20, 5)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="BombTrigger2" parent="MainAct/End/BridgeGroup2" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 12, 4)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/BridgeGroup2/BombTrigger2"]
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Bomb4" parent="MainAct/End/BridgeGroup2" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1.5, 5, 8)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(-2, 20, 25)
+
+[node name="Bomb5" parent="MainAct/End/BridgeGroup2" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 1.5, 4.99999, 14)
+"Launch Settings/Starting Offset" = Vector3(15, 30, 20)
+
+[node name="Bomb6" parent="MainAct/End/BridgeGroup2" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1.5, 6, 18.5)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(-15, 20, 5)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="BombTrigger3" parent="MainAct/End/BridgeGroup2" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 12, 24)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/BridgeGroup2/BombTrigger3"]
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Bomb7" parent="MainAct/End/BridgeGroup2" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 1.5, 6, 28.5)
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(-15, 20, 5)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="BridgeLarge5" parent="MainAct/End/BridgeGroup2" instance=ExtResource("26_ygwln")]
+
+[node name="BridgeLarge6" parent="MainAct/End/BridgeGroup2" instance=ExtResource("26_ygwln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+
+[node name="BridgeLarge7" parent="MainAct/End/BridgeGroup2" instance=ExtResource("26_ygwln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 20)
+
+[node name="BridgeLarge8" parent="MainAct/End/BridgeGroup2" instance=ExtResource("26_ygwln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 30)
+
+[node name="JumpPanel" parent="MainAct/End/BridgeGroup2/BridgeLarge8" instance=ExtResource("4_yyd45")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 7)
+MiddleHeight = 1.5
+FinalHeight = -1.0
+Distance = 20.0
+
+[node name="BridgeGroup3" type="Node3D" parent="MainAct/End"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -185, -5, 55.2)
+
+[node name="BombTrigger" parent="MainAct/End/BridgeGroup3" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 11, 10)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/BridgeGroup3/BombTrigger"]
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Bomb1" parent="MainAct/End/BridgeGroup3" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1.5, 5, 30)
+travelSpeedRatio = 2.0
+"Launch Settings/Starting Offset" = Vector3(-20, 5, 10)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb2" parent="MainAct/End/BridgeGroup3" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 1.5, 5, 35)
+travelSpeedRatio = 2.0
+launchDelay = 0.2
+"Launch Settings/Starting Offset" = Vector3(10, 5, 15)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb3" parent="MainAct/End/BridgeGroup3" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1.5, 5, 42)
+travelSpeedRatio = 2.0
+launchDelay = 0.4
+"Launch Settings/Starting Offset" = Vector3(-20, 5, 10)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb4" parent="MainAct/End/BridgeGroup3" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 1.5, 5, 47)
+travelSpeedRatio = 2.0
+launchDelay = 0.6
+"Launch Settings/Starting Offset" = Vector3(10, 5, 15)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb5" parent="MainAct/End/BridgeGroup3" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -1.5, 5, 53)
+travelSpeedRatio = 2.0
+launchDelay = 0.8
+"Launch Settings/Starting Offset" = Vector3(-20, 5, 10)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="Bomb6" parent="MainAct/End/BridgeGroup3" instance=ExtResource("28_6yc6x")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 1.5, 5, 58)
+travelSpeedRatio = 2.0
+launchDelay = 1.0
+"Launch Settings/Starting Offset" = Vector3(10, 5, 15)
+"Launch Settings/Middle Height" = 0.0
+
+[node name="BridgeLarge9" parent="MainAct/End/BridgeGroup3" instance=ExtResource("26_ygwln")]
+
+[node name="BridgeLarge10" parent="MainAct/End/BridgeGroup3" instance=ExtResource("26_ygwln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+
+[node name="DashPanel" parent="MainAct/End/BridgeGroup3/BridgeLarge10" instance=ExtResource("29_ihlpu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+speedRatio = 1.5
+length = 1.5
+
+[node name="BridgeLarge11" parent="MainAct/End/BridgeGroup3" instance=ExtResource("26_ygwln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
+
+[node name="BridgeSquare1" parent="MainAct/End/BridgeGroup3" instance=ExtResource("20_nrsdk")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, -5, 2, 38.4)
+
+[node name="BridgeSquare2" parent="MainAct/End/BridgeGroup3" instance=ExtResource("20_nrsdk")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 5, 2, 38.4)
+
+[node name="BridgeLarge12" parent="MainAct/End/BridgeGroup3" instance=ExtResource("26_ygwln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 30)
+
+[node name="BridgeLarge13" parent="MainAct/End/BridgeGroup3" instance=ExtResource("26_ygwln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 40)
+
+[node name="BridgeSquare3" parent="MainAct/End/BridgeGroup3" instance=ExtResource("20_nrsdk")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, -5, 2, 58.4)
+
+[node name="BridgeSquare4" parent="MainAct/End/BridgeGroup3" instance=ExtResource("20_nrsdk")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 5, 2, 58.4)
+
+[node name="BridgeLarge14" parent="MainAct/End/BridgeGroup3" instance=ExtResource("26_ygwln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50)
+
+[node name="BridgeLarge15" parent="MainAct/End/BridgeGroup3" instance=ExtResource("26_ygwln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 60)
+
+[node name="BridgeLarge16" parent="MainAct/End/BridgeGroup3" instance=ExtResource("26_ygwln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 70)
+
+[node name="Goal" parent="MainAct/End/BridgeGroup3" instance=ExtResource("63_5y2th")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.04907e-06, 12, 72)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/BridgeGroup3/Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="BridgeLarge17" parent="MainAct/End/BridgeGroup3" instance=ExtResource("26_ygwln")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4.37114e-07, 5, 77.4)
+
 [connection signal="Activated" from="MainAct/Opening/Spring1" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Opening/Spring1" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="MainAct/Opening/SpringGroup/Spring1" to="Static/Collision/OneWayWall" method="Deactivate"]
@@ -4560,16 +5608,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
 [connection signal="Defeated" from="MainAct/Ships/Ship3/Throne/RedMajin" to="MainAct/Ships/Ship3/Throne/EnemyStone3" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Ships/Ship3/Throne/RedMajin" to="MainAct/Ships/Ship3/Throne/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/Ships/Ship3/Throne/RedMajin" to="MainAct/Ships/Ship3/Throne/EnemyStone5" method="IncrementCounter"]
-[connection signal="Activated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="MainAct/Ships/Ship3/Throne/JumpPanel/Camera" method="Activate"]
-[connection signal="Deactivated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="MainAct/Ships/Ship3/Throne/JumpPanel/Path" method="Activate"]
+[connection signal="Deactivated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="MainAct/Grotto/Switch" to="MainAct/Grotto/Spring" method="ShowLauncher"]
-[connection signal="Activated" from="MainAct/Cave/Sword3" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Cave/Sword3" to="MainAct/Cave/GrindPath/Camera" method="Activate"]
 [connection signal="Activated" from="MainAct/Cave/Sword3" to="MainAct/Cave/GrindPath/Path" method="Activate"]
-[connection signal="Activated" from="MainAct/Cave/GrindPath/ExitTrigger" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="MainAct/Cave/Sword3" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Cave/GrindPath/ExitTrigger" to="MainAct/Cave/GrindPath/Camera" method="Deactivate"]
+[connection signal="Activated" from="MainAct/Cave/GrindPath/ExitTrigger" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Defeated" from="MainAct/GhostShip/Chair1/BlueMajin1" to="MainAct/GhostShip/Chair1/EnemyStone1" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/GhostShip/Chair1/BlueMajin1" to="MainAct/GhostShip/Chair1/EnemyStone2" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/GhostShip/Chair1/BlueMajin1" to="MainAct/GhostShip/Chair2/EnemyStone1" method="IncrementCounter"]
@@ -4592,6 +5640,31 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
 [connection signal="Defeated" from="MainAct/GhostShip/Throne/RedMajin" to="MainAct/GhostShip/Throne/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/GhostShip/Throne/RedMajin" to="MainAct/GhostShip/Throne/EnemyStone5" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/GhostShip/Throne/Switch" to="MainAct/GhostShip/Throne/RingCull" method="Activate"]
+[connection signal="JumpFinished" from="MainAct/Surf/SurfJump/Jump" to="MainAct/Surf/SurfJump/Surfboard" method="Activate"]
+[connection signal="Activated" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/Camera" method="Activate"]
+[connection signal="Activated" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/Path" method="Activate"]
+[connection signal="Activated" from="MainAct/Surf/SurfEnd" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="JumpFinished" from="MainAct/Surf/SurfEnd/Jump" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="MainAct/End/Gate/Switch" to="MainAct/End/Gate/BridgeSquareFalling" method="StartShaking"]
+[connection signal="Defeated" from="MainAct/End/Gate/BlueMajin" to="MainAct/End/Gate/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/End/Gate/GreenMajin1" to="MainAct/End/Gate/EnemyStone" method="IncrementCounter"]
+[connection signal="Defeated" from="MainAct/End/Gate/GreenMajin2" to="MainAct/End/Gate/EnemyStone" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup1/BombTrigger" to="MainAct/End/BridgeGroup1/Bomb1" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup1/BombTrigger" to="MainAct/End/BridgeGroup1/Bomb2" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup1/BombTrigger" to="MainAct/End/BridgeGroup1/Bomb3" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup2/BombTrigger1" to="MainAct/End/BridgeGroup2/Bomb1" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup2/BombTrigger1" to="MainAct/End/BridgeGroup2/Bomb2" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup2/BombTrigger1" to="MainAct/End/BridgeGroup2/Bomb3" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup2/BombTrigger2" to="MainAct/End/BridgeGroup2/Bomb4" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup2/BombTrigger2" to="MainAct/End/BridgeGroup2/Bomb5" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup2/BombTrigger2" to="MainAct/End/BridgeGroup2/Bomb6" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup2/BombTrigger3" to="MainAct/End/BridgeGroup2/Bomb7" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup3/BombTrigger" to="MainAct/End/BridgeGroup3/Bomb1" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup3/BombTrigger" to="MainAct/End/BridgeGroup3/Bomb2" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup3/BombTrigger" to="MainAct/End/BridgeGroup3/Bomb3" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup3/BombTrigger" to="MainAct/End/BridgeGroup3/Bomb4" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup3/BombTrigger" to="MainAct/End/BridgeGroup3/Bomb5" method="Launch"]
+[connection signal="Activated" from="MainAct/End/BridgeGroup3/BombTrigger" to="MainAct/End/BridgeGroup3/Bomb6" method="Launch"]
 
 [editable path="Static"]
 [editable path="Static/Collision"]

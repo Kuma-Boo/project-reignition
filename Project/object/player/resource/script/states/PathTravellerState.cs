@@ -127,6 +127,7 @@ public partial class PathTravellerState : PlayerState
 	{
 		Player.StartInvincibility();
 		Player.Animator.StartBalanceStagger();
+		Player.TakeDamage(true);
 		currentSpeed = speedVelocity = 0;
 		currentTurnAmount = turnVelocity = Vector2.Zero;
 	}

@@ -161,10 +161,10 @@ _data = {
 [node name="WhiteRock" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
 script = ExtResource("1_45nuq")
 pieceMass = 0.2
+shatterFlags = 18
 root = NodePath("WhiteRock")
 pieceRoot = NodePath("WhiteRockPieces")
 animator = NodePath("AnimationPlayer")
-shatterFlags = 18
 
 [node name="Trigger" type="Area3D" parent="."]
 collision_layer = 0
@@ -183,11 +183,11 @@ collision_layer = 72
 visible = false
 
 [node name="Shatter" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
 stream = ExtResource("4_v2do2")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ShatterVFX" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -205,7 +205,7 @@ draw_pass_1 = SubResource("QuadMesh_w7x81")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_rshkq")
+&"": SubResource("AnimationLibrary_rshkq")
 }
 
 [connection signal="area_entered" from="Trigger" to="." method="OnEntered"]

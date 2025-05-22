@@ -834,7 +834,7 @@ public partial class PlayerController : CharacterBody3D
 		return true;
 	}
 
-	public void TakeDamage()
+	public void TakeDamage(bool disabledDefeat = false)
 	{
 		if (!Stage.IsLevelIngame) return;
 
@@ -854,6 +854,9 @@ public partial class PlayerController : CharacterBody3D
 		// No rings; Respawn
 		if (Stage.CurrentRingCount == 0)
 		{
+			if (disabledDefeat) // Certain types of damage (such as while on a path traveller) don't defeat the player
+				return;
+
 			if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.PearlRespawn) && Skills.IsSoulGaugeCharged)
 			{
 				// Lose soul power and continue

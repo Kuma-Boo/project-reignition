@@ -91,17 +91,17 @@ public partial class SlimeMajin : Enemy
 			return;
 
 		ShockHitbox = GetNodeOrNull<Hazard>(shockHitbox);
+		initialPosition = GlobalPosition;
 
 		base.SetUp();
 
 		AnimationTree.Active = true;
-		initialPosition = GlobalPosition;
-		Root.GlobalPosition = SpawnPosition;
 	}
 
 	public override void Respawn()
 	{
 		slimeState = SlimeState.Unspawned;
+		Root.GlobalPosition = SpawnPosition;
 
 		if (IsMovementEnabled)
 		{

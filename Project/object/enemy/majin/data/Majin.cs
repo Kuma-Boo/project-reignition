@@ -535,7 +535,7 @@ public partial class Majin : Enemy
 		if (Mathf.IsEqualApprox(timer, -1)) // Spawn intervals haven't started yet
 			return;
 
-		if (isFlameActive) // Don't allow spawn intervals during a flame attack
+		if (IsRedMajin && ((IsActive && IsInFlameAggressionRange()) || isFlameActive)) // Don't allow spawn intervals during a flame attack
 			return;
 
 		timer = Mathf.MoveToward(timer, 0, PhysicsManager.physicsDelta);
@@ -606,6 +606,9 @@ public partial class Majin : Enemy
 
 	private void UpdateFlameAttack()
 	{
+		if (!IsHitboxEnabled)
+			return;
+
 		if (!IsInRange || isFidgetActive) // Out of range or fidget is active
 		{
 			DisableFlameAttack();
@@ -655,10 +658,10 @@ public partial class Majin : Enemy
 		}
 		else // Stop flame attack
 		{
-			AnimationPlayer.Play("fire-end");
-			AnimationPlayer.Advance(0.0);
 			fireState.Travel("attack-fire-end");
-			stateTransition.XfadeTime = 0.4;
+			AnimationPlayer.Play("fire-end");
+			stateTransition.XfadeTime = 0.2;
+			AnimationPlayer.Advance(0.0);
 		}
 
 		flameTimer = 0; // Reset timer

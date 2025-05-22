@@ -186,10 +186,10 @@ _data = {
 [node name="WaterRock" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
 script = ExtResource("1_mm0fn")
 pieceMass = 0.2
+shatterFlags = 18
 root = NodePath("Root")
 pieceRoot = NodePath("WhiteRockPieces")
 animator = NodePath("AnimationPlayer")
-shatterFlags = 18
 
 [node name="Root" type="Node3D" parent="."]
 
@@ -212,11 +212,11 @@ shape = SubResource("ConvexPolygonShape3D_f08fp")
 visible = false
 
 [node name="Shatter" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
 stream = ExtResource("5_icob7")
 max_db = 0.0
 max_distance = 100.0
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="ShatterVFX" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0.2)
@@ -234,7 +234,7 @@ draw_pass_1 = SubResource("QuadMesh_7bqf5")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_ghebx")
+&"": SubResource("AnimationLibrary_ghebx")
 }
 
 [connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
