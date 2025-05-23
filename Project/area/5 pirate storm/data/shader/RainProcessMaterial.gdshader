@@ -4,6 +4,7 @@ render_mode collision_use_scale;
 
 uniform vec3 direction;
 uniform float water_speed;
+uniform float emission_offset;
 uniform vec3 emission_shape_offset = vec3(0.0);
 uniform vec3 emission_box_extents;
 uniform sampler2D alpha_curve : repeat_disable;
@@ -31,15 +32,13 @@ uint hash(uint x) {
 }
 
 struct DisplayParameters {
-	vec3 scale;
 	float lifetime;
 	float alpha;
 };
 
 void calculate_initial_display_params(inout DisplayParameters params, inout uint alt_seed) {
-	params.scale = vec3(1.0);
 	params.lifetime = 1.0;
-	params.alpha = 1.0;
+	params.alpha = mix(0.1, 1.0, rand_from_seed(alt_seed));
 }
 
 vec3 calculate_initial_position(inout DisplayParameters params, inout uint alt_seed) {
@@ -47,7 +46,7 @@ vec3 calculate_initial_position(inout DisplayParameters params, inout uint alt_s
 	{ // Emission shape.
 		pos = vec3(rand_from_seed(alt_seed) * 2.0 - 1.0, rand_from_seed(alt_seed) * 2.0 - 1.0, rand_from_seed(alt_seed) * 2.0 - 1.0) * emission_box_extents;
 	}
-	return pos + emission_shape_offset;
+	return pos - direction * emission_offset + emission_shape_offset;
 }
 
 void process_display_param(inout DisplayParameters parameters, float lifetime) {
@@ -114,7 +113,7 @@ void process() {
 		emit_subparticle(transform, VELOCITY, vec4(0.0), vec4(0.0), flags);
 	}
 
-	if (CUSTOM.y > CUSTOM.w) {
+	if (CUSTOM.y > CUSTOM.w || COLLIDED) {
 		ACTIVE = false;
 	}
 }

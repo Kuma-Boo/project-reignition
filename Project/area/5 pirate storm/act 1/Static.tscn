@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://csk7y7y8vgg6l"]
+[gd_scene load_steps=66 format=3 uid="uid://csk7y7y8vgg6l"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_g84th"]
 [ext_resource type="PackedScene" uid="uid://npgcl1ctbjyt" path="res://area/5 pirate storm/act 1/environment/01Opening.tscn" id="2_444mk"]
@@ -44,9 +44,10 @@
 [ext_resource type="Resource" uid="uid://unk8vyncg7mg" path="res://area/5 pirate storm/act 1/camera/ShipCloseCam.tres" id="34_dsog2"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="36_oxnth"]
 [ext_resource type="Material" uid="uid://ve75fqv3qek3" path="res://area/5 pirate storm/data/material/Rain Process Material.tres" id="39_r7nh1"]
-[ext_resource type="Texture2D" uid="uid://cxhomfcep6jjf" path="res://area/5 pirate storm/data/texture/rain drop.png" id="40_r7nh1"]
+[ext_resource type="Script" uid="uid://5q0bj27pc27q" path="res://object/trigger/modules/EnvironmentFxTrigger.cs" id="40_08hmi"]
 [ext_resource type="Script" uid="uid://ch4pb1qqwy5al" path="res://object/stage/common/resource/script/CameraFollower.cs" id="41_08hmi"]
 [ext_resource type="Material" uid="uid://86s1me03t0lu" path="res://area/5 pirate storm/data/material/Rain Impact.tres" id="42_q3kya"]
+[ext_resource type="Material" uid="uid://6q7k10n0i0bn" path="res://area/5 pirate storm/data/material/Rain Drop.tres" id="43_08hmi"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k720b"]
 size = Vector3(25, 20, 5)
@@ -63,18 +64,16 @@ size = Vector3(35, 36, 100)
 [sub_resource type="BoxShape3D" id="BoxShape3D_auuan"]
 size = Vector3(20, 2, 2)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_15enn"]
-transparency = 1
-cull_mode = 2
+[sub_resource type="BoxMesh" id="BoxMesh_08hmi"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_08hmi"]
 shading_mode = 0
-specular_mode = 2
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("40_r7nh1")
+albedo_color = Color(0, 0, 0, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_5xsdu"]
-material = SubResource("StandardMaterial3D_15enn")
-size = Vector2(0.1, 1)
-center_offset = Vector3(0, 1, 0)
+material = ExtResource("43_08hmi")
+size = Vector2(0.2, 4)
+center_offset = Vector3(0, 2, 0)
 
 [sub_resource type="Curve" id="Curve_yn16c"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 0), -2.3043, 0.0, 0, 0]
@@ -644,7 +643,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_k720b")
 
 [node name="Checkpoints" type="Node3D" parent="Triggers"]
-visible = false
 
 [node name="ShipHull" parent="Triggers/Checkpoints" instance=ExtResource("22_ypnsc")]
 transform = Transform3D(0.843391, 0, -0.5373, 0, 1, 0, 0.5373, 0, 0.843391, 36.7511, 3.5, 319.618)
@@ -746,8 +744,8 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -518.726
 
 [node name="Checkpoint" type="Node3D" parent="Triggers/Checkpoints/CaveEnd" node_paths=PackedStringArray("PlayerPath", "CameraPath")]
 script = ExtResource("30_3vwxx")
-PlayerPath = NodePath("../../../../Path/GrottoPath")
-CameraPath = NodePath("../../../../Path/GrottoPath")
+PlayerPath = NodePath("../../../../Path/CavePath")
+CameraPath = NodePath("../../../../Path/CavePath")
 CameraSettings = ExtResource("26_ybwgy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoints/CaveEnd"]
@@ -759,11 +757,8 @@ transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 
 "Trigger Mode" = 2
 "Exit Mode" = 2
 
-[node name="Checkpoint" type="Node3D" parent="Triggers/Checkpoints/GhostShip" node_paths=PackedStringArray("PlayerPath", "CameraPath")]
+[node name="Checkpoint" type="Node3D" parent="Triggers/Checkpoints/GhostShip"]
 script = ExtResource("30_3vwxx")
-PlayerPath = NodePath("../../../../Path/GrottoPath")
-CameraPath = NodePath("../../../../Path/GrottoPath")
-CameraSettings = ExtResource("26_ybwgy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoints/GhostShip"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -822,13 +817,66 @@ path = NodePath("../../../../Path/CannonballPath")
 script = ExtResource("24_auuan")
 jumpHeight = 1.0
 
+[node name="EnvironmentFX" type="Node3D" parent="Triggers"]
+
+[node name="GrottoEntrance" parent="Triggers/EnvironmentFX" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.450659, 0, -0.892696, 0, 1, 0, 0.892696, 0, 0.450659, -84.5004, 1.82575, 1580.24)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="FX" type="Node3D" parent="Triggers/EnvironmentFX/GrottoEntrance"]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("40_08hmi")
+environmentFxFactor = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/EnvironmentFX/GrottoEntrance"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="GrottoExit" parent="Triggers/EnvironmentFX" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -502, 39.1, 1583.9)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="FX" type="Node3D" parent="Triggers/EnvironmentFX/GrottoExit"]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("40_08hmi")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/EnvironmentFX/GrottoExit"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="OpeningShipRoof" type="MeshInstance3D" parent="Triggers/EnvironmentFX"]
+transform = Transform3D(40, 0, 0, 0, 4.98097, -3.66054, 0, 0.435779, 41.8402, 0, 18.5165, 33.439)
+layers = 2048
+mesh = SubResource("BoxMesh_08hmi")
+surface_material_override/0 = SubResource("StandardMaterial3D_08hmi")
+
+[node name="Ship2Roof" type="MeshInstance3D" parent="Triggers/EnvironmentFX"]
+transform = Transform3D(37.5877, 0, 17.101, 0, 2, 0, -13.6808, 0, 46.9846, -80, 21.3608, 1330.81)
+layers = 2048
+mesh = SubResource("BoxMesh_08hmi")
+surface_material_override/0 = SubResource("StandardMaterial3D_08hmi")
+
+[node name="Ship2Wall" type="MeshInstance3D" parent="Triggers/EnvironmentFX"]
+transform = Transform3D(9.39693, 0, 10.2606, 0, 20, 0, -3.4202, 0, 28.1908, -66.2287, 19.3608, 1327.71)
+layers = 2048
+mesh = SubResource("BoxMesh_08hmi")
+surface_material_override/0 = SubResource("StandardMaterial3D_08hmi")
+
+[node name="GhostShipRoof" type="MeshInstance3D" parent="Triggers/EnvironmentFX"]
+transform = Transform3D(61.4487, 0.0867559, -80.0378, 0.567095, 1.99246, 12.0996, 42.9969, -0.150266, 114.226, -513.917, 26.9175, 1915.41)
+layers = 2048
+mesh = SubResource("BoxMesh_08hmi")
+surface_material_override/0 = SubResource("StandardMaterial3D_08hmi")
+
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="Exterior" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
 light_color = Color(0.91, 0.925, 1, 1)
-light_energy = 2.0
+light_energy = 1.2
 light_cull_mask = 4293918722
 shadow_enabled = true
 shadow_caster_mask = 4293918785
@@ -837,7 +885,7 @@ shadow_caster_mask = 4293918785
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
 light_color = Color(0.697159, 0.804547, 0.963584, 1)
-light_energy = 2.0
+light_energy = 1.2
 light_cull_mask = 4293918724
 shadow_enabled = true
 shadow_caster_mask = 4293918785
@@ -846,17 +894,27 @@ shadow_caster_mask = 4293918785
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
 light_color = Color(0.697159, 0.804547, 0.963584, 1)
-light_energy = 2.0
+light_energy = 0.5
 light_cull_mask = 4293918721
 
-[node name="Rain" type="GPUParticles3D" parent="."]
+[node name="Rain" type="Node3D" parent="."]
+
+[node name="RainCollision" type="GPUParticlesCollisionHeightField3D" parent="Rain"]
+layers = 32
+cull_mask = 4293918752
+size = Vector3(100, 50, 100)
+resolution = 1
+heightfield_mask = 2050
+script = ExtResource("41_08hmi")
+
+[node name="Rain" type="GPUParticles3D" parent="Rain"]
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
 emitting = false
 amount = 256
 sub_emitter = NodePath("RainImpact")
-lifetime = 0.2
+lifetime = 0.5
 fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
@@ -866,7 +924,7 @@ draw_pass_1 = SubResource("QuadMesh_5xsdu")
 script = ExtResource("41_08hmi")
 followYRotation = true
 
-[node name="RainImpact" type="GPUParticles3D" parent="Rain"]
+[node name="RainImpact" type="GPUParticles3D" parent="Rain/Rain"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
 layers = 32
 cast_shadow = 0
@@ -879,15 +937,6 @@ interpolate = false
 visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 process_material = SubResource("ParticleProcessMaterial_djq2b")
 draw_pass_1 = SubResource("QuadMesh_tsasv")
-
-[node name="RainCollision" type="GPUParticlesCollisionHeightField3D" parent="Rain"]
-transform = Transform3D(1, 0, 0, 0, 1, -3.57628e-07, 0, 3.57628e-07, 1, -131, -0.000362515, 730)
-layers = 32
-cull_mask = 4293918752
-size = Vector3(30, 30, 60)
-resolution = 0
-follow_camera_enabled = true
-heightfield_mask = 34
 
 [node name="PlanarReflectionRenderer" parent="." instance=ExtResource("24_havkg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -263, -3.1, 1562)
@@ -904,7 +953,7 @@ loopStartPosition = 7.44
 loopEndPosition = 227.86
 isStageMusic = true
 
-[connection signal="LevelStarted" from="." to="Rain" method="set_emitting" binds= [true]]
+[connection signal="LevelStarted" from="." to="Rain/Rain" method="set_emitting" binds= [true]]
 [connection signal="Activated" from="Visuals/CullingTriggers/02-L" to="Visuals/02Islands" method="Activate"]
 [connection signal="Deactivated" from="Visuals/CullingTriggers/02-L" to="Visuals/02Islands" method="Deactivate"]
 [connection signal="Activated" from="Visuals/CullingTriggers/01-U" to="Visuals/01Opening" method="Deactivate"]
