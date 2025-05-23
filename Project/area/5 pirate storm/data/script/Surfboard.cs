@@ -7,14 +7,98 @@ namespace Project.Gameplay.Objects;
 /// </summary>
 public partial class Surfboard : PathTraveller
 {
+	[Signal] public delegate void WaveStartedEventHandler();
+	[Signal] public delegate void JumpStartedEventHandler();
+	[Signal] public delegate void WaveFinishedEventHandler();
+
 	[Export] private float initialSpeed;
 	[Export] private float initialTurnSpeed;
-	private int currentSpeedIndex;
-	private readonly float MaxSpeedIndex = 10;
-	private float speedFactor;
 
-	protected override float GetCurrentMaxSpeed => Mathf.Lerp(initialSpeed, MaxSpeed, speedFactor);
-	protected override float GetCurrentTurnSpeed => Mathf.Lerp(initialTurnSpeed, TurnSpeed, speedFactor);
+	private int currentSpeedIndex;
+	private float speedFactor;
+	private readonly float MaxSpeedIndex = 10;
+
+	private Wave currentWave;
+	private Path3D originalPath;
+
+	private readonly float SlopeFactor = 80.0f;
+	private readonly float SlopeResetSpeed = 5.0f;
+
+	protected override float GetCurrentMaxSpeed
+	{
+		get
+		{
+			float defaultSpeed = Mathf.Lerp(initialSpeed, MaxSpeed, speedFactor);
+			if (currentWave?.IsWaveCleared == false)
+			{
+				float movementRatio = currentWave.CalculateMovementRatio(GlobalPosition);
+				float speedLossRatio = currentWave.requiredSpeedBoosts / MaxSpeedIndex;
+				defaultSpeed -= Mathf.Lerp(initialSpeed, MaxSpeed, speedLossRatio) * movementRatio;
+				GD.PrintT(defaultSpeed, speedLossRatio, movementRatio);
+			}
+
+			return defaultSpeed;
+		}
+	}
+
+	protected override void Accelerate()
+	{
+		if (currentWave?.IsWaveCleared == false)
+		{
+			CurrentSpeed = GetCurrentMaxSpeed;
+
+			if (CurrentSpeed < 1f) // Going too slow! Fall off the board
+				EmitSignal(SignalName.Damaged);
+
+			return;
+		}
+
+		base.Accelerate();
+	}
+
+
+	protected override float GetCurrentTurnSpeed => Mathf.Lerp(initialTurnSpeed, TurnSpeed, GetCurrentMaxSpeed / MaxSpeed);
+
+	protected override void SetUp()
+	{
+		base.SetUp();
+		originalPath = path;
+	}
+
+	protected override void Respawn()
+	{
+		currentSpeedIndex = 0;
+		speedFactor = 0;
+		base.Respawn();
+	}
+
+	public void SetCurrentWave(Wave wave)
+	{
+		currentWave = wave;
+		path = wave != null ? wave.Path : originalPath;
+		PathFollower.GetParent().RemoveChild(PathFollower);
+		path.AddChild(PathFollower);
+		PathFollower.Progress = path.Curve.GetClosestOffset(GlobalPosition - path.GlobalPosition);
+		EmitSignal(wave != null ? SignalName.WaveStarted : SignalName.WaveFinished);
+	}
+
+	public void StartJump()
+	{
+		GD.Print("TODO -- Perform Jumps");
+		EmitSignal(SignalName.JumpStarted);
+	}
+
+	private void UpdateSpeedIndex(int amount)
+	{
+		currentSpeedIndex = (int)Mathf.Clamp(currentSpeedIndex + amount, 0, MaxSpeedIndex);
+		speedFactor = currentSpeedIndex / MaxSpeedIndex;
+	}
+
+	protected override void Stagger()
+	{
+		UpdateSpeedIndex(-1);
+		base.Stagger();
+	}
 
 	public void OnEntered(Area3D a)
 	{
@@ -24,18 +108,5 @@ public partial class Surfboard : PathTraveller
 		// Vroom Vroom
 		UpdateSpeedIndex(1);
 		CurrentSpeed = GetCurrentMaxSpeed;
-	}
-
-	private void UpdateSpeedIndex(int amount)
-	{
-		currentSpeedIndex = (int)Mathf.Clamp(currentSpeedIndex + amount, 0, MaxSpeedIndex);
-		speedFactor = currentSpeedIndex / MaxSpeedIndex;
-		GD.Print(speedFactor);
-	}
-
-	protected override void Stagger()
-	{
-		UpdateSpeedIndex(-1);
-		base.Stagger();
 	}
 }

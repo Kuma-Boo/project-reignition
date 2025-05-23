@@ -1,8 +1,70 @@
-[gd_scene load_steps=2 format=3 uid="uid://o05lipks5eo5"]
+[gd_scene load_steps=9 format=3 uid="uid://o05lipks5eo5"]
 
 [ext_resource type="PackedScene" uid="uid://dwk8aijinr25g" path="res://area/5 pirate storm/object/model/Wave.gltf" id="1_2g4la"]
+[ext_resource type="Script" uid="uid://dj1gxehwro7g" path="res://area/5 pirate storm/data/script/Wave.cs" id="1_mfdxk"]
 
-[node name="Wave" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_mfdxk"]
+size = Vector3(400, 100, 240)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wukio"]
+size = Vector3(400, 50, 20)
+
+[sub_resource type="Animation" id="Animation_mfdxk"]
+resource_name = "show"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Wave/WaveMesh:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(2, 0.2, 1),
+"update": 0,
+"values": [Vector3(1, 0.001, 1), Vector3(1, 0.5, 1), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_wukio"]
+resource_name = "hide"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Wave/WaveMesh:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 0.001, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_x746k"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Wave/WaveMesh:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_x746k"]
+_data = {
+&"RESET": SubResource("Animation_x746k"),
+&"hide": SubResource("Animation_wukio"),
+&"show": SubResource("Animation_mfdxk")
+}
+
+[node name="Wave" type="Node3D" node_paths=PackedStringArray("animator")]
+script = ExtResource("1_mfdxk")
+animator = NodePath("AnimationPlayer")
 
 [node name="Wave" parent="." instance=ExtResource("1_2g4la")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
@@ -11,7 +73,32 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 layers = 2
 cast_shadow = 0
 
-[node name="WaveCollision" parent="Wave" index="1"]
-visible = false
+[node name="Trigger" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 128)
+collision_layer = 8
+collision_mask = 8
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16)
+shape = SubResource("BoxShape3D_mfdxk")
+
+[node name="JumpTrigger" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 77.4641, 79.4641)
+collision_layer = 8
+collision_mask = 8
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="JumpTrigger"]
+shape = SubResource("BoxShape3D_wukio")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_x746k")
+}
+
+[connection signal="area_entered" from="Trigger" to="." method="OnEntered"]
+[connection signal="area_exited" from="Trigger" to="." method="OnExited"]
+[connection signal="area_entered" from="JumpTrigger" to="." method="OnJumpEntered"]
 
 [editable path="Wave"]

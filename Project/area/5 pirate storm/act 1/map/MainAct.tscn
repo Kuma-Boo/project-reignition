@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=3 uid="uid://bkuwj6xj81tuv"]
+[gd_scene load_steps=93 format=3 uid="uid://bkuwj6xj81tuv"]
 
 [ext_resource type="PackedScene" uid="uid://csk7y7y8vgg6l" path="res://area/5 pirate storm/act 1/Static.tscn" id="1_8fsep"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_kflh0"]
@@ -63,6 +63,7 @@
 [ext_resource type="Resource" uid="uid://d38frhrq2xc42" path="res://area/5 pirate storm/act 1/camera/SurfboardCam.tres" id="59_qdb0c"]
 [ext_resource type="PackedScene" uid="uid://blngssg16o35r" path="res://area/5 pirate storm/object/destructable/CrateDestructable.tscn" id="61_dec8o"]
 [ext_resource type="PackedScene" uid="uid://o05lipks5eo5" path="res://area/5 pirate storm/object/Wave.tscn" id="61_nn4rh"]
+[ext_resource type="Resource" uid="uid://cvf0fdgojrsfs" path="res://area/5 pirate storm/act 1/camera/SurfboardWaveCam.tres" id="61_vmmrf"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="63_5y2th"]
 
 [sub_resource type="Curve" id="Curve_slh8b"]
@@ -149,10 +150,24 @@ size = Vector3(25, 20, 5)
 _data = [Vector2(0, 0), 0.0, 3.55116, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.34341, 0.0, 0, 0]
 point_count = 3
 
+[sub_resource type="Curve3D" id="Curve3D_t8ycy"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5.2, 0, 0, 3, 0, 0, -1.5, 0, 0.4, 1, 0, 8, 7, 0, 4, -4, 0, -0.5, 1, 0, 4, 16, 0, 0.5, -5, 0, 0, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 0, 0, 30),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
+}
+point_count = 6
+
 [sub_resource type="Curve" id="Curve_dec8o"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1.49012e-08), 0.0, 6.95738, 0, 0, Vector2(0.1, 0.6), 0.0, 0.0, 0, 0, Vector2(0.212821, -0.6), 0.0, 0.0, 0, 0, Vector2(0.323077, 0.6), 0.0, 0.0, 0, 0, Vector2(0.425641, -0.6), 0.0, 0.0, 0, 0, Vector2(0.533333, 0.6), 0.0, 0.0, 0, 0, Vector2(0.653846, -0.6), 0.0, 0.0, 0, 0, Vector2(0.766667, 0.6), 0.0, 0.0, 0, 0, Vector2(0.905128, -0.6), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), 11.7406, 0.0, 0, 0]
 point_count = 10
+
+[sub_resource type="Curve3D" id="Curve3D_vmmrf"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 7.5, 0, 0, -3.75, 0, 1, 2.5, 0, 20, 17.5, 0, 10, -10, 0, -1.25, 2.5, 0, 10, 40, 0, 1.25, -12.5, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 75),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
+}
+point_count = 6
 
 [sub_resource type="Curve" id="Curve_t8ycy"]
 _limits = [-2.0, 0.0, 0.0, 1.0]
@@ -163,6 +178,13 @@ point_count = 3
 _limits = [0.0, 2.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 7.50786, 0, 0, Vector2(0.5, 2), 0.0, 0.0, 0, 0, Vector2(1, 0), -10.1391, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="Curve3D" id="Curve3D_wf3po"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52, 0, 0, 30, 0, 0, -15, 0, 0, 15, 0, 75, 70, 0, 45, -40, 0, -20, 25, 0, 32, 160, 0, 2, -60, 0, 0, 0, 0, 0, 260, 0, 0, 0, 0, 0, 0, 0, 0, 300),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
+}
+point_count = 6
 
 [sub_resource type="Curve" id="Curve_vmmrf"]
 _limits = [-2.0, 2.0, 0.0, 1.0]
@@ -182,7 +204,7 @@ InitialCameraSettings = ExtResource("3_8cccl")
 environmentFxFactor = 1.0
 
 [node name="RainCollision" parent="Static/Rain" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 7.45058e-09, 0, -7.45058e-09, 1, -518, 1.36718e-05, 1835)
+transform = Transform3D(1, 0, 0, 0, 1, 7.45058e-09, 0, -7.45058e-09, 1, -1, 7.47332e-09, 1)
 
 [node name="MainAct" type="Node3D" parent="."]
 
@@ -191,7 +213,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.69, 0)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_kflh0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -518.896, -7.7, 1835.42)
 
 [node name="Opening" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
@@ -1336,7 +1357,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="Blade" parent="MainAct/Islands/Island4/MovingBlade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, -1.49012e-08, -2.53131e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
+transform = Transform3D(1, -1.49012e-08, -2.57572e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
 
 [node name="MovingBlade2" type="Node3D" parent="MainAct/Islands/Island4"]
 transform = Transform3D(0.990268, 0, 0.139173, 0, 1, 0, -0.139173, 0, 0.990268, -30.323, 0.3, 6.98822)
@@ -3904,7 +3925,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, 1.87755e-06, 8.10623e-06, 1.49012e-08, 1, -3.53158e-06, -6.85453e-07, -3.12924e-07, 0.999992, 0, 0, 0)
+transform = Transform3D(1, 1.87755e-06, 8.19564e-06, 1.49012e-08, 1, -3.53158e-06, -6.85453e-07, -3.12924e-07, 0.999992, 0, 0, 0)
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
@@ -3920,7 +3941,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade2" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1.00003, 1.87755e-06, 7.12276e-06, -1.49012e-08, 1, -3.03984e-06, 3.8743e-07, -3.12924e-07, 1.00003, 0, 2.66667, 0)
+transform = Transform3D(1.00003, 1.87755e-06, 8.64267e-06, 0, 1, -3.62098e-06, 4.17233e-07, -3.12924e-07, 1.00003, 0, 2.66667, 0)
 
 [node name="Blade3" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -3, 0, 0)
@@ -3936,7 +3957,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade3" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1.00003, 1.87755e-06, 8.07643e-06, -1.49012e-08, 1, -3.26335e-06, -6.25849e-07, -3.12924e-07, 1.00003, 0, 0.277298, 6.10352e-05)
+transform = Transform3D(1.00003, 1.87755e-06, 9.59635e-06, -1.49012e-08, 1, -3.97861e-06, -6.25849e-07, -3.12924e-07, 1.00003, 0, 0.277298, 6.10352e-05)
 
 [node name="SpoilsSmall4" parent="MainAct/Cave" instance=ExtResource("40_wekfv")]
 transform = Transform3D(1.15429, 0.510258, 1.48484, 0.0283889, 1.3572, -0.851215, -1.63303, 0.384264, 1.03474, -39.1836, 6.97257, 76.2062)
@@ -3957,7 +3978,7 @@ Movement/Angle = 90.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup4/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(0.999998, 2.22045e-15, -5.96046e-07, -9.31323e-09, 1, -6.27479e-08, -6.10948e-07, -4.00469e-08, 0.999998, -0.416138, 0, 3.05176e-05)
+transform = Transform3D(0.999998, 2.22045e-15, -6.10948e-07, -9.31323e-09, 1, -6.27479e-08, -5.96046e-07, -4.00469e-08, 0.999998, -0.416138, 0, 3.05176e-05)
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -4552,9 +4573,13 @@ autoAlign = true
 transform = Transform3D(0.819151, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819151, 6.23401, -7.3, 21.0227)
 path = NodePath("../../../../Static/Path/SurfboardPath")
 
-[node name="Camera" type="Node3D" parent="MainAct/Surf/SurfJump/Surfboard"]
+[node name="NormalCamera" type="Node3D" parent="MainAct/Surf/SurfJump/Surfboard"]
 script = ExtResource("21_1aofs")
 settings = ExtResource("59_qdb0c")
+
+[node name="WaveCamera" type="Node3D" parent="MainAct/Surf/SurfJump/Surfboard"]
+script = ExtResource("21_1aofs")
+settings = ExtResource("61_vmmrf")
 
 [node name="Path" type="Node3D" parent="MainAct/Surf/SurfJump/Surfboard" node_paths=PackedStringArray("path")]
 script = ExtResource("51_01wgf")
@@ -4653,8 +4678,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, 110)
 [node name="CrateDestructable2" parent="MainAct/Surf" instance=ExtResource("61_dec8o")]
 transform = Transform3D(0.961516, 0.24004, -0.133669, -0.242362, 0.970185, -0.00114128, 0.129409, 0.0334936, 0.991025, 7.5, -0.5, 117)
 
-[node name="Wave1" parent="MainAct/Surf" instance=ExtResource("61_nn4rh")]
+[node name="Wave1Activate" parent="MainAct/Surf" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0, 13.5)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Surf/Wave1Activate"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jvte6")
+
+[node name="Wave1" parent="MainAct/Surf" node_paths=PackedStringArray("Path") instance=ExtResource("61_nn4rh")]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 115.244)
+Path = NodePath("../Wave1Path")
+
+[node name="Wave1Path" type="Path3D" parent="MainAct/Surf"]
+transform = Transform3D(0.995878, 0, 0.0907021, 0, 1, 0, -0.0907021, 0, 0.995878, 6, 0, 115.244)
+curve = SubResource("Curve3D_t8ycy")
 
 [node name="SurfBoost3" parent="MainAct/Surf" instance=ExtResource("59_jvte6")]
 transform = Transform3D(0.993493, 0, 0.113897, 0, 1, 0, -0.113897, 0, 0.993493, 14.2507, 0, 195.391)
@@ -4785,8 +4825,24 @@ transform = Transform3D(0.968208, 0.25, -0.00851855, -0.25, 0.965926, -0.0669873
 [node name="SurfBoost5" parent="MainAct/Surf" instance=ExtResource("59_jvte6")]
 transform = Transform3D(0.993696, 0, 0.112111, 0, 1, 0, -0.112111, 0, 0.993696, 18.5114, 0, 234.064)
 
-[node name="Wave2" parent="MainAct/Surf" instance=ExtResource("61_nn4rh")]
+[node name="Wave2Activate" parent="MainAct/Surf" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 145)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Surf/Wave2Activate"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jvte6")
+
+[node name="Wave2" parent="MainAct/Surf" node_paths=PackedStringArray("Path") instance=ExtResource("61_nn4rh")]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 13.1, 0, 237.844)
+requiredSpeedBoosts = 2
+Path = NodePath("../Wave2Path")
+
+[node name="Wave2Path" type="Path3D" parent="MainAct/Surf"]
+transform = Transform3D(0.989674, 0, 0.143337, 0, 1, 0, -0.143337, 0, 0.989674, 18.878, 0, 237.783)
+curve = SubResource("Curve3D_vmmrf")
 
 [node name="SurfBoost6" parent="MainAct/Surf" instance=ExtResource("59_jvte6")]
 transform = Transform3D(0.999313, 0, 0.0370623, 0, 1, 0, -0.0370623, 0, 0.999313, 29.6953, 0, 317.996)
@@ -4973,8 +5029,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -32)
 [node name="SurfBoost9" parent="MainAct/Surf" instance=ExtResource("59_jvte6")]
 transform = Transform3D(1, 0, -7.45058e-08, 0, 1, 0, 7.45058e-08, 0, 1, -98.6235, 0, 540.503)
 
-[node name="Wave3" parent="MainAct/Surf" instance=ExtResource("61_nn4rh")]
+[node name="Wave3Activate" parent="MainAct/Surf" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 328)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Surf/Wave3Activate"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_jvte6")
+
+[node name="Wave3" parent="MainAct/Surf" node_paths=PackedStringArray("Path") instance=ExtResource("61_nn4rh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, 500)
+requiredSpeedBoosts = 5
+Path = NodePath("../Wave3Path")
+
+[node name="Wave3Path" type="Path3D" parent="MainAct/Surf"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -98.6808, 0, 500)
+curve = SubResource("Curve3D_wf3po")
 
 [node name="Rings7" type="Node3D" parent="MainAct/Surf"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -98.7, 0.5, 775)
@@ -5628,10 +5700,15 @@ shape = SubResource("BoxShape3D_6yc6x")
 [connection signal="Defeated" from="MainAct/GhostShip/Throne/RedMajin" to="MainAct/GhostShip/Throne/EnemyStone5" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/GhostShip/Throne/Switch" to="MainAct/GhostShip/Throne/RingCull" method="Activate"]
 [connection signal="JumpFinished" from="MainAct/Surf/SurfJump/Jump" to="MainAct/Surf/SurfJump/Surfboard" method="Activate"]
-[connection signal="Activated" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/Camera" method="Activate"]
+[connection signal="Activated" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/NormalCamera" method="Activate"]
 [connection signal="Activated" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/Path" method="Activate"]
+[connection signal="JumpStarted" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/NormalCamera" method="Activate"]
+[connection signal="WaveStarted" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/WaveCamera" method="Activate"]
 [connection signal="Activated" from="MainAct/Surf/SurfEnd" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="JumpFinished" from="MainAct/Surf/SurfEnd/Jump" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="MainAct/Surf/Wave1Activate" to="MainAct/Surf/Wave1" method="OnWaveApproached"]
+[connection signal="Activated" from="MainAct/Surf/Wave2Activate" to="MainAct/Surf/Wave2" method="OnWaveApproached"]
+[connection signal="Activated" from="MainAct/Surf/Wave3Activate" to="MainAct/Surf/Wave3" method="OnWaveApproached"]
 [connection signal="Activated" from="MainAct/End/Gate/Switch" to="MainAct/End/Gate/BridgeSquareFalling" method="StartShaking"]
 [connection signal="Defeated" from="MainAct/End/Gate/BlueMajin" to="MainAct/End/Gate/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/End/Gate/GreenMajin1" to="MainAct/End/Gate/EnemyStone" method="IncrementCounter"]
