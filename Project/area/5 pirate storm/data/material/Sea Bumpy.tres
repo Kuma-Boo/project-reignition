@@ -1,0 +1,25 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://be322geq40u7h"]
+
+[ext_resource type="Shader" uid="uid://bjg68jt2m10st" path="res://area/5 pirate storm/data/shader/SeaBumpy.gdshader" id="1_lm3c8"]
+[ext_resource type="Texture2D" uid="uid://cd0r0vr8ufc7j" path="res://area/5 pirate storm/data/texture/sea base.png" id="2_yogtf"]
+[ext_resource type="Texture2D" uid="uid://c4dfxpeveolj5" path="res://area/5 pirate storm/data/texture/sea.png" id="3_igcq1"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_yogtf"]
+noise_type = 3
+fractal_type = 0
+fractal_octaves = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_igcq1"]
+generate_mipmaps = false
+seamless = true
+noise = SubResource("FastNoiseLite_yogtf")
+
+[resource]
+resource_name = "Sea"
+render_priority = 0
+shader = ExtResource("1_lm3c8")
+shader_parameter/base = ExtResource("2_yogtf")
+shader_parameter/detail = ExtResource("3_igcq1")
+shader_parameter/height_texture = SubResource("NoiseTexture2D_igcq1")
+shader_parameter/height_strength = 3.0
+shader_parameter/height_scroll_speed = 0.4

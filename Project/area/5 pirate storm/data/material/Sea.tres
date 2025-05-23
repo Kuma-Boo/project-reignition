@@ -1,12 +1,31 @@
 [gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://oawymds7c0o5"]
 
-[ext_resource type="Shader" uid="uid://8pgo4wmh8n47" path="res://area/5 pirate storm/data/shader/Sea.gdshader" id="1_kojn3"]
 [ext_resource type="Texture2D" uid="uid://cd0r0vr8ufc7j" path="res://area/5 pirate storm/data/texture/sea base.png" id="2_grhy6"]
 [ext_resource type="Texture2D" uid="uid://c4dfxpeveolj5" path="res://area/5 pirate storm/data/texture/sea.png" id="3_33lop"]
+
+[sub_resource type="Shader" id="Shader_4utmi"]
+code = "shader_type spatial;
+render_mode unshaded;
+
+global uniform float time;
+
+uniform sampler2D base : source_color;
+uniform sampler2D detail : source_color;
+
+const float scroll_speed = 0.3;
+
+void fragment() {
+	vec2 scroll_amount = vec2(scroll_speed * time, 0);
+	vec4 col = texture(base, UV + scroll_amount);
+	col += texture(detail, UV2 + scroll_amount);
+	col *= COLOR;
+	ALBEDO = col.rgb;
+}
+"
 
 [resource]
 resource_name = "Sea"
 render_priority = 0
-shader = ExtResource("1_kojn3")
+shader = SubResource("Shader_4utmi")
 shader_parameter/base = ExtResource("2_grhy6")
 shader_parameter/detail = ExtResource("3_33lop")

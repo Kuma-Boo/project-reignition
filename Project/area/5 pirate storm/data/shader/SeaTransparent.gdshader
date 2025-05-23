@@ -14,5 +14,5 @@ void fragment() {
 	col += texture(detail, UV2 + scroll_amount);
 	col *= COLOR;
 	ALBEDO = col.rgb;
-	ALPHA = clamp(col.a, 0, 1);
+	ALPHA = clamp(col.a, 0.0, 1.0);
 }
