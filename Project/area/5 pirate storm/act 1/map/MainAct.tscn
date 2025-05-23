@@ -1,4 +1,4 @@
-[gd_scene load_steps=93 format=3 uid="uid://bkuwj6xj81tuv"]
+[gd_scene load_steps=94 format=3 uid="uid://bkuwj6xj81tuv"]
 
 [ext_resource type="PackedScene" uid="uid://csk7y7y8vgg6l" path="res://area/5 pirate storm/act 1/Static.tscn" id="1_8fsep"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_kflh0"]
@@ -66,6 +66,12 @@
 [ext_resource type="Resource" uid="uid://cvf0fdgojrsfs" path="res://area/5 pirate storm/act 1/camera/SurfboardWaveCam.tres" id="61_vmmrf"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="63_5y2th"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_6yc6x"]
+size = Vector3(20, 20, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vmmrf"]
+size = Vector3(40, 50, 5)
+
 [sub_resource type="Curve" id="Curve_slh8b"]
 _limits = [-2.0, 0.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, -9.69064, 0, 0, Vector2(0.5, -2), 0.0, 0.0, 0, 0, Vector2(1, 0), 10.0495, 0.0, 0, 0]
@@ -87,9 +93,6 @@ point_count = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c8avs"]
 size = Vector3(3, 10, 10)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_6yc6x"]
-size = Vector3(20, 20, 5)
 
 [sub_resource type="Curve" id="Curve_hlxfd"]
 _limits = [-1.5, 1.5, 0.0, 1.0]
@@ -181,7 +184,7 @@ point_count = 3
 
 [sub_resource type="Curve3D" id="Curve3D_wf3po"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52, 0, 0, 30, 0, 0, -15, 0, 0, 15, 0, 75, 70, 0, 45, -40, 0, -20, 25, 0, 32, 160, 0, 2, -60, 0, 0, 0, 0, 0, 260, 0, 0, 0, 0, 0, 0, 0, 0, 300),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 45, 0, 0, -15, 0, 0, 20, 0, 73, 69, 0, 43, -40, 0, -20, 20, 0, 32, 160, 0, 2, -60, 0, 0, 0, 0, 0, 260, 0, 0, 0, 0, 0, 0, 0, 0, 300),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
 }
 point_count = 6
@@ -214,8 +217,138 @@ metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_kflh0")]
 
+[node name="CullingMap" type="Node3D" parent="MainAct"]
+visible = false
+
+[node name="Islands-L" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.784886, -0.365998, 0.5, 0.422618, 0.906307, 0, -0.453154, 0.211309, 0.866025, 17.1765, 1.44448, 257.898)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/Islands-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Opening-U" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.573576, 0, -0.819152, 0, 0.999999, 0, 0.819152, 0, 0.573576, 1.5, 2, 428.869)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/Opening-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Cannonball-U" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -129.908, 33.1518, 1040.54)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/Cannonball-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+shape = SubResource("BoxShape3D_vmmrf")
+
+[node name="Grotto-L" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -65.403, 28, 1510)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/Grotto-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Ships-U" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.173648, -4.22219e-08, -0.984808, 3.92376e-08, 0.999999, -3.59546e-08, 0.984808, -3.2398e-08, 0.173648, -98.5459, 2.1518, 1583.9)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/Ships-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+shape = SubResource("BoxShape3D_vmmrf")
+
+[node name="Cave-L" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(-0.0384053, 0, -0.999262, 0, 0.999999, 0, 0.999262, 0, -0.0384053, -389.403, 20, 1608.4)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/Cave-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Grotto-U" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.5, 0, -0.866025, 0, 0.999999, 0, 0.866025, 0, 0.5, -535.632, 53.0517, 1589.2)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/Grotto-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Grotto-U2" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.998629, -0.00456289, -0.0521542, 0, 0.996194, -0.0871557, 0.0523534, 0.0870361, 0.994828, -517.047, 51.9517, 1610.39)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/Grotto-U2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="GhostShip-L" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -517.918, 39.6, 1671.41)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/GhostShip-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Cave-U" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.766044, 0, 0.642788, 0, 0.999999, 0, -0.642788, 0, 0.766044, -512.046, 10.2, 1844.39)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/Cave-U"]
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Surf-L" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 0.999999, 0, 0.173648, 0, 0.984808, -505.518, 10.2, 1898.41)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/Surf-L"]
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="GhostShip-U" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.642788, 0.383022, 0.663414, -1.49012e-08, 0.866024, -0.5, -0.766044, 0.321393, 0.55667, -504.974, 8.46795, 1968.17)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/GhostShip-U"]
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="End-L" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.906308, 0, -0.422618, 0, 0.999999, 0, 0.422618, 0, 0.906308, -576.169, 0.200011, 2413.6)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/End-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Surf-U" parent="MainAct/CullingMap" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, -595.674, 0, 2844.67)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/CullingMap/Surf-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
 [node name="Opening" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+script = ExtResource("36_7jc22")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
 
 [node name="JumpPanel" parent="MainAct/Opening" instance=ExtResource("4_yyd45")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.5, 57)
@@ -599,6 +732,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -10, 407)
 
 [node name="Islands" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 2, 414)
+visible = false
+script = ExtResource("36_7jc22")
+saveVisibilityOnCheckpoint = true
 
 [node name="Island1" type="Node3D" parent="MainAct/Islands"]
 
@@ -1501,6 +1637,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 
 [node name="Cannonball" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -129.7, 189.707, 821.746)
+visible = false
+script = ExtResource("36_7jc22")
+saveVisibilityOnCheckpoint = true
 
 [node name="Rings1" type="Node3D" parent="MainAct/Cannonball"]
 transform = Transform3D(-1, -8.45467e-09, -8.70122e-08, 0, 0.995304, -0.0967104, 8.74228e-08, -0.0967104, -0.995304, 0, 5.98146, 29.3444)
@@ -1899,6 +2038,9 @@ travelSpeedRatio = 1.0
 
 [node name="Ships" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -129.9, 9.9, 1040)
+visible = false
+script = ExtResource("36_7jc22")
+saveVisibilityOnCheckpoint = true
 
 [node name="Ship1" type="Node3D" parent="MainAct/Ships"]
 
@@ -2152,10 +2294,12 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 [node name="BridgeSquareFallingR" parent="MainAct/Ships/Ship1" instance=ExtResource("38_wjem1")]
 transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 0.2, -14, 0, 94.6)
 "Falling Platform Settings/Auto Shake" = false
+"Falling Platform Settings/Shake Length" = 1.0
 
 [node name="BridgeSquareFallingL" parent="MainAct/Ships/Ship1" instance=ExtResource("38_wjem1")]
 transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 0.2, 14, 0, 94.6)
 "Falling Platform Settings/Auto Shake" = false
+"Falling Platform Settings/Shake Length" = 1.0
 
 [node name="ShipCamera" parent="MainAct/Ships/Ship1" instance=ExtResource("26_1c4me")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.142014, 23.0923, 98.28)
@@ -2998,7 +3142,7 @@ enemyCount = 1
 [node name="RedMajin" parent="MainAct/Ships/Ship3/Throne" instance=ExtResource("45_22rft")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 2.3, 1)
 "Attack Settings/Flame Inactive Time" = 1.0
-"Attack Settings/Flame Aggression Radius" = 15
+"Attack Settings/Flame Aggression Radius" = 10
 rangeOverride = 30
 
 [node name="JumpPanel" parent="MainAct/Ships/Ship3/Throne" instance=ExtResource("4_yyd45")]
@@ -3019,6 +3163,9 @@ path = NodePath("../../../../../../Static/Path/GrottoPath")
 
 [node name="Grotto" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65, 2, 1550)
+visible = false
+script = ExtResource("36_7jc22")
+saveVisibilityOnCheckpoint = true
 
 [node name="DashPanel" parent="MainAct/Grotto" instance=ExtResource("29_ihlpu")]
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -4.79697, 0, 14.9129)
@@ -3598,6 +3745,9 @@ initialVelocity = 4.0
 
 [node name="Cave" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -504, 40, 1584)
+visible = false
+script = ExtResource("36_7jc22")
+saveVisibilityOnCheckpoint = true
 
 [node name="BridgeSquareFalling1" parent="MainAct/Cave" instance=ExtResource("38_wjem1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -3, -1.5)
@@ -3941,7 +4091,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade2" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1.00003, 1.87755e-06, 1.37389e-05, -1.49012e-08, 1, -5.48363e-06, 3.8743e-07, -3.12924e-07, 1.00003, 0, 2.66667, 0)
+transform = Transform3D(1.00003, 1.87755e-06, 1.40369e-05, -1.49012e-08, 1, -5.51343e-06, 3.8743e-07, -3.12924e-07, 1.00003, 0, 2.66667, 0)
 
 [node name="Blade3" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -3, 0, 0)
@@ -3957,7 +4107,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade3" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1.00003, 1.87755e-06, 1.43349e-05, -1.49012e-08, 1, -5.27501e-06, -6.25849e-07, -3.12924e-07, 1.00003, 0, 0.277298, 6.10352e-05)
+transform = Transform3D(1.00003, 1.87755e-06, 1.44541e-05, -1.49012e-08, 1, -5.39422e-06, -6.25849e-07, -3.12924e-07, 1.00003, 0, 0.277298, 6.10352e-05)
 
 [node name="SpoilsSmall4" parent="MainAct/Cave" instance=ExtResource("40_wekfv")]
 transform = Transform3D(1.15429, 0.510258, 1.48484, 0.0283889, 1.3572, -0.851215, -1.63303, 0.384264, 1.03474, -39.1836, 6.97257, 76.2062)
@@ -4248,6 +4398,8 @@ transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 
 
 [node name="GhostShip" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -521, 2, 1829)
+script = ExtResource("36_7jc22")
+saveVisibilityOnCheckpoint = true
 
 [node name="SlimeMajin1" parent="MainAct/GhostShip" instance=ExtResource("3_qkxl1")]
 transform = Transform3D(-0.990156, 0.139968, -8.65622e-08, 0.139968, 0.990156, 1.22364e-08, 8.74228e-08, 0, -1, 14.0255, 2.36507, 32)
@@ -4382,7 +4534,7 @@ transform = Transform3D(-1.5, 0, 2.26494e-07, 0, 1.5, 0, -2.26494e-07, 0, -1.5, 
 "Spawn Interval Settings/Enable Spawn Interval" = true
 "Spawn Interval Settings/Spawn Delay" = 1.0
 "Spawn Interval Settings/Separate Despawn Interval" = true
-"Spawn Interval Settings/Despawn Delay" = 0.5
+"Spawn Interval Settings/Despawn Delay" = 2.0
 "Attack Settings/Flame Inactive Time" = 1.0
 "Attack Settings/Flame Aggression Radius" = 10
 
@@ -4559,6 +4711,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
 
 [node name="Surf" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -497, 0, 1960)
+visible = false
+script = ExtResource("36_7jc22")
+saveVisibilityOnCheckpoint = true
 
 [node name="SurfJump" parent="MainAct/Surf" instance=ExtResource("26_1c4me")]
 transform = Transform3D(0.819152, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819152, -17, 7.3, -5)
@@ -5158,6 +5313,9 @@ transform = Transform3D(0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, 
 
 [node name="End" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -596, 3, 2843)
+visible = false
+script = ExtResource("36_7jc22")
+saveVisibilityOnCheckpoint = true
 
 [node name="Rings1" type="Node3D" parent="MainAct/End"]
 transform = Transform3D(-0.99038, 0, 0.138378, 0, 1, 0, -0.138378, 0, -0.99038, -0.137512, 0.6, 16.1189)
@@ -5495,7 +5653,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 30)
 
 [node name="JumpPanel" parent="MainAct/End/BridgeGroup2/BridgeLarge8" instance=ExtResource("4_yyd45")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 7)
-MiddleHeight = 1.5
+MiddleHeight = 3.0
 FinalHeight = -1.0
 Distance = 32.0
 
@@ -5590,12 +5748,39 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 70)
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4.37114e-07, 5, 77.4)
 
 [node name="Goal" parent="MainAct/End" instance=ExtResource("63_5y2th")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -257, 7, 55.2)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -255, 7, 55.2)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/End/Goal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 2)
 shape = SubResource("BoxShape3D_6yc6x")
 
+[connection signal="Activated" from="Static/Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="MainAct/Ships" method="Activate"]
+[connection signal="EventFinished" from="Static/Triggers/CannonEvent/CannonEventCull/CannonEvent" to="MainAct/Cannonball" method="Activate"]
+[connection signal="EventFinished" from="Static/Triggers/CannonEvent/CannonEventCull/CannonEvent" to="MainAct/Ships" method="Activate"]
+[connection signal="Activated" from="Static/Triggers/CannonEvent/CannonBallCull/Cannonball" to="MainAct/Islands" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/Islands-L" to="MainAct/Islands" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/Islands-L" to="MainAct/Islands" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/Opening-U" to="MainAct/Opening" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/Opening-U" to="MainAct/Opening" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingMap/Cannonball-U" to="MainAct/Cannonball" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/Grotto-L" to="MainAct/Grotto" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/Grotto-L" to="MainAct/Grotto" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/Ships-U" to="MainAct/Ships" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/Cave-L" to="MainAct/Cave" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/Cave-L" to="MainAct/Cave" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/Grotto-U" to="MainAct/Grotto" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/Grotto-U" to="MainAct/Grotto" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingMap/Grotto-U2" to="MainAct/Grotto" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/Grotto-U2" to="MainAct/Grotto" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingMap/GhostShip-L" to="MainAct/GhostShip" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/GhostShip-L" to="MainAct/GhostShip" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/Cave-U" to="MainAct/Cave" method="Deactivate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/Cave-U" to="MainAct/Cave" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingMap/Surf-L" to="MainAct/Surf" method="Activate"]
+[connection signal="Deactivated" from="MainAct/CullingMap/Surf-L" to="MainAct/Surf" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/GhostShip-U" to="MainAct/GhostShip" method="Deactivate"]
+[connection signal="Activated" from="MainAct/CullingMap/End-L" to="MainAct/End" method="Activate"]
+[connection signal="Activated" from="MainAct/CullingMap/Surf-U" to="MainAct/Surf" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Opening/Spring1" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Deactivated" from="MainAct/Opening/Spring1" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="MainAct/Opening/SpringGroup/Spring1" to="Static/Collision/OneWayWall" method="Deactivate"]
