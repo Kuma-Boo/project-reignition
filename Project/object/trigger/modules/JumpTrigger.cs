@@ -41,6 +41,8 @@ public partial class JumpTrigger : StageTriggerModule
 	public override void Activate()
 	{
 		Player.StartLauncher(GetLaunchSettings());
+		Player.Effect.StopSpinFX();
+		Player.Effect.StopTrailFX();
 		Player.LaunchFinished += FinishJump;
 	}
 }

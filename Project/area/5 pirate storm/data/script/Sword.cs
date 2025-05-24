@@ -38,10 +38,6 @@ public partial class Sword : Node3D
 		if (!a.IsInGroup("player detection"))
 			return;
 
-		// Player must either perform a homing attack or stomp onto the sword
-		if (!Player.IsJumpDashOrHomingAttack && !Player.IsStomping)
-			return;
-
 		Activate();
 	}
 }
