@@ -20,6 +20,6 @@ void fragment()
 	vec4 tint_col = texture(tint, UV2);
 	col += tint_col.rgb * tint_col.a * .5;
 	
-	ALBEDO = col.rgb;
+	ALBEDO = col.rgb * COLOR.rgb;
 	ALPHA = texture(clip_mask, main_uv).a * COLOR.a;
 }
