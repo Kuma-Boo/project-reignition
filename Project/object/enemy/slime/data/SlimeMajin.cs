@@ -8,6 +8,8 @@ namespace Project.Gameplay;
 [Tool]
 public partial class SlimeMajin : Enemy
 {
+	[Signal] public delegate void ShockStartedEventHandler();
+
 	[ExportSubgroup("Spawn Settings")]
 	[Export] private Vector3 spawnOffset;
 	[Export] private float spawnHeight = 10f;
@@ -83,7 +85,7 @@ public partial class SlimeMajin : Enemy
 	private readonly StringName SpawnTrigger = "parameters/spawn_trigger/request";
 	private readonly StringName SpawnPlayback = "parameters/spawn_state/playback";
 	private readonly StringName ShockPlayback = "parameters/shock_state/playback";
-	private readonly StringName DefeatTransition = "parameters/defeat_transition/transition_request";
+	private readonly StringName StateTransition = "parameters/state_transition/transition_request";
 
 	protected override void SetUp()
 	{
@@ -119,7 +121,7 @@ public partial class SlimeMajin : Enemy
 		AnimationTree.Set(ShockTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		AnimationTree.Set(SpitTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		AnimationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
-		AnimationTree.Set(DefeatTransition, "disabled");
+		AnimationTree.Set(StateTransition, "init");
 
 		base.Respawn();
 	}
@@ -144,6 +146,7 @@ public partial class SlimeMajin : Enemy
 			AnimationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		}
 
+		AnimationTree.Set(StateTransition, "active");
 		IsActive = true;
 		base.Spawn();
 	}
@@ -249,6 +252,7 @@ public partial class SlimeMajin : Enemy
 		slimeState = SlimeState.Shock;
 		ShockStatePlayback.Start(ShockWarnState);
 		AnimationTree.Set(ShockTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		EmitSignal(SignalName.ShockStarted);
 	}
 
 	private void ProcessShock()
@@ -311,6 +315,6 @@ public partial class SlimeMajin : Enemy
 	protected override void Defeat()
 	{
 		base.Defeat();
-		AnimationTree.Set(DefeatTransition, "enabled");
+		AnimationTree.Set(StateTransition, "defeated");
 	}
 }

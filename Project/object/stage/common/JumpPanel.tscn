@@ -9,10 +9,10 @@ size = Vector3(4, 0.8, 5.4)
 
 [node name="JumpPanel" type="Node3D"]
 script = ExtResource("1")
-"Secondary Settings/Enabled" = false
 StartingHeight = 1.0
 sfxPlayer = NodePath("SFX")
 voiceKey = &"jump panel"
+"Secondary Settings/Enabled" = false
 
 [node name="ActivationTrigger" type="Area3D" parent="."]
 collision_layer = 0
@@ -26,11 +26,12 @@ shape = SubResource("3")
 [node name="JumpPanel" parent="." instance=ExtResource("2")]
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("3_aivm4")
-max_db = 0.0
-max_distance = 100.0
-bus = &"GAME SFX"
 process_mode = 1
-attenuation_filter_cutoff_hz = 10000.0
+stream = ExtResource("3_aivm4")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 150.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [connection signal="area_entered" from="ActivationTrigger" to="." method="Activate"]

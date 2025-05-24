@@ -306,9 +306,9 @@ public partial class PlayerEffect : Node3D
 	[Export]
 	private Node3D leftFoot;
 	[Export]
-	private AudioStreamPlayer footstepChannel;
+	private AudioStreamPlayer3D footstepChannel;
 	[Export]
-	private AudioStreamPlayer landingChannel;
+	private AudioStreamPlayer3D landingChannel;
 	/// <summary> Index of the current type of ground the player is walking on. </summary>
 	private MaterialEnum groundMaterial;
 	private int GroundMaterialIndex => (int)groundMaterial;
