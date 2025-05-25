@@ -726,7 +726,7 @@ public partial class PlayerCameraController : Node3D
 
 	private float CalculateTilt(CameraSettingsResource settings, ref CameraPositionData data, int yawSamplingFix)
 	{
-		PathFollower.TiltEnabled = settings.tiltMode == CameraSettingsResource.TiltModeEnum.FollowPath;
+		PathFollower.TiltEnabled = settings.tiltMode != CameraSettingsResource.TiltModeEnum.Disabled;
 		if (settings.tiltMode == CameraSettingsResource.TiltModeEnum.Disabled)
 			return 0;
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://csk7y7y8vgg6l"]
+[gd_scene load_steps=72 format=3 uid="uid://csk7y7y8vgg6l"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_g84th"]
 [ext_resource type="PackedScene" uid="uid://npgcl1ctbjyt" path="res://area/5 pirate storm/act 1/environment/01Opening.tscn" id="2_444mk"]
@@ -41,6 +41,7 @@
 [ext_resource type="Resource" uid="uid://ccibomwc7xgs0" path="res://area/5 pirate storm/act 1/camera/NarrowCam.tres" id="31_q3kya"]
 [ext_resource type="Resource" uid="uid://cnxy1brw4b7p1" path="res://area/5 pirate storm/act 1/camera/ShipCam.tres" id="32_82sha"]
 [ext_resource type="PackedScene" uid="uid://ukucb8f0iscj" path="res://area/5 pirate storm/act 1/environment/cannon event/CannonEvent.tscn" id="32_fej2y"]
+[ext_resource type="Resource" uid="uid://sarcvxdyvdrv" path="res://area/5 pirate storm/act 1/camera/BrokenShipWoodCam.tres" id="32_p0r0b"]
 [ext_resource type="Resource" uid="uid://c48axuw8cwjqg" path="res://area/5 pirate storm/act 1/camera/CannonballCam.tres" id="34_3rek1"]
 [ext_resource type="Resource" uid="uid://unk8vyncg7mg" path="res://area/5 pirate storm/act 1/camera/ShipCloseCam.tres" id="34_dsog2"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="36_oxnth"]
@@ -408,6 +409,34 @@ script = ExtResource("25_f6rbm")
 settings = ExtResource("31_q3kya")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/BrokenShip"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="BrokenShipWood" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.767981, -0.358115, 0.530999, 0.422619, 0.906308, 0, -0.481249, 0.22441, 0.847372, -10.6041, 1.67669, 212.918)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/BrokenShipWood"]
+transform = Transform3D(1, 7.45058e-09, 0, 7.45058e-09, 1, -1.49012e-08, -2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("25_f6rbm")
+settings = ExtResource("32_p0r0b")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/BrokenShipWood"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="BrokenHullEntry" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 37.3959, 1.47669, 290.918)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/BrokenHullEntry"]
+transform = Transform3D(1, 7.45058e-09, 0, 7.45058e-09, 1, -1.49012e-08, -2.98023e-08, 0, 1, 0, 0, 0)
+script = ExtResource("25_f6rbm")
+settings = ExtResource("26_ybwgy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/PathAndCameraTriggers/BrokenHullEntry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_k720b")
 
