@@ -467,6 +467,7 @@ public partial class PlayerCameraController : Node3D
 		{
 			// Only update lockon pitch tracking if we have a valid reference vector
 			float targetLockonPitchTracking = Mathf.Sign(globalDelta.Y) * globalDelta.AngleTo(referenceVector) - pitchAngle;
+			targetLockonPitchTracking = Mathf.Min(targetLockonPitchTracking, 0f);
 			lockonPitchTracking = Mathf.Lerp(lockonPitchTracking, targetLockonPitchTracking, lockonTargetTransitionBlend);
 		}
 
