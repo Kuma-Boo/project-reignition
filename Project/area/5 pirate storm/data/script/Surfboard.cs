@@ -7,6 +7,7 @@ namespace Project.Gameplay.Objects;
 /// </summary>
 public partial class Surfboard : PathTraveller
 {
+	[Signal] public delegate void SpeedBoostEventHandler();
 	[Signal] public delegate void WaveStartedEventHandler();
 	[Signal] public delegate void JumpStartedEventHandler();
 	[Signal] public delegate void WaveFinishedEventHandler();
@@ -14,6 +15,9 @@ public partial class Surfboard : PathTraveller
 	[Export] private float initialSpeed;
 	[Export] private float initialTurnSpeed;
 
+	[Export] private AudioStreamPlayer3D[] waveSFX;
+
+	private int waveIndex;
 	private int currentSpeedIndex;
 	private float speedFactor;
 	private readonly float MaxSpeedIndex = 10;
@@ -56,7 +60,6 @@ public partial class Surfboard : PathTraveller
 		base.Accelerate();
 	}
 
-
 	protected override float GetCurrentTurnSpeed => Mathf.Lerp(initialTurnSpeed, TurnSpeed, GetCurrentMaxSpeed / MaxSpeed);
 
 	protected override void SetUp()
@@ -69,11 +72,25 @@ public partial class Surfboard : PathTraveller
 	{
 		currentSpeedIndex = 0;
 		speedFactor = 0;
+		waveIndex = 0;
 		base.Respawn();
 	}
 
 	public void SetCurrentWave(Wave wave)
 	{
+		// Update wave sound effects
+		if (wave == null)
+		{
+			for (int i = 0; i < waveIndex; i++)
+				waveSFX[i].Stop();
+		}
+		else
+		{
+			waveIndex++;
+			for (int i = 0; i < waveIndex; i++)
+				waveSFX[i].Play();
+		}
+
 		currentWave = wave;
 		path = wave != null ? wave.Path : originalPath;
 		PathFollower.GetParent().RemoveChild(PathFollower);
@@ -108,5 +125,6 @@ public partial class Surfboard : PathTraveller
 		// Vroom Vroom
 		UpdateSpeedIndex(1);
 		CurrentSpeed = GetCurrentMaxSpeed;
+		EmitSignal(SignalName.SpeedBoost);
 	}
 }

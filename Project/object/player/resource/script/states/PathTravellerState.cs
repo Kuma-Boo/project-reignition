@@ -36,7 +36,7 @@ public partial class PathTravellerState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
-		if (isRespawning || Traveller == null)
+		if (isRespawning)
 			return null;
 
 		Traveller.ProcessPathTraveller();

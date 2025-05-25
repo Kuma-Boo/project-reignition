@@ -50,22 +50,10 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("../SFX:stream")
+tracks/3/path = NodePath("Spikes:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("3_x6o7f")]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Spikes:scale")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -115,7 +103,7 @@ tracks/2/keys = {
 tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("../SFX")
+tracks/3/path = NodePath("../ActivateSfx")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -129,22 +117,10 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("../SFX:stream")
+tracks/4/path = NodePath("Spikes:scale")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("3_x6o7f")]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Spikes:scale")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.0666667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
@@ -194,7 +170,7 @@ tracks/2/keys = {
 tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("../SFX")
+tracks/3/path = NodePath("../DeactivateSfx")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -202,28 +178,16 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"Play"
+"method": &"PlayInGroup"
 }]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("../SFX:stream")
+tracks/4/path = NodePath("Spikes:scale")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("4_qse3b")]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Spikes:scale")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.133333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
@@ -326,14 +290,23 @@ libraries = {
 &"": SubResource("AnimationLibrary_vh2p2")
 }
 
-[node name="SFX" type="AudioStreamPlayer3D" parent="."]
+[node name="ActivateSfx" type="AudioStreamPlayer3D" parent="."]
 process_mode = 1
 stream = ExtResource("3_x6o7f")
 max_db = 0.0
 max_distance = 50.0
 bus = &"GAME SFX"
 script = ExtResource("4_3uyhn")
-groupKey = &"spike_panel"
+groupKey = &"spike_panel_activate"
+
+[node name="DeactivateSfx" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
+stream = ExtResource("4_qse3b")
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+script = ExtResource("4_3uyhn")
+groupKey = &"spike_panel_deactivate"
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true

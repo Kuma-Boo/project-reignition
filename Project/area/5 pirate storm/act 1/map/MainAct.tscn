@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=3 uid="uid://bkuwj6xj81tuv"]
+[gd_scene load_steps=104 format=3 uid="uid://bkuwj6xj81tuv"]
 
 [ext_resource type="PackedScene" uid="uid://csk7y7y8vgg6l" path="res://area/5 pirate storm/act 1/Static.tscn" id="1_8fsep"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_kflh0"]
@@ -69,6 +69,7 @@
 [ext_resource type="PackedScene" uid="uid://blngssg16o35r" path="res://area/5 pirate storm/object/destructable/CrateDestructable.tscn" id="61_dec8o"]
 [ext_resource type="PackedScene" uid="uid://o05lipks5eo5" path="res://area/5 pirate storm/object/Wave.tscn" id="61_nn4rh"]
 [ext_resource type="Resource" uid="uid://cvf0fdgojrsfs" path="res://area/5 pirate storm/act 1/camera/SurfboardWaveCam.tres" id="61_vmmrf"]
+[ext_resource type="AudioStream" uid="uid://dsmxdvvu42sag" path="res://sound/sfx/stage/pirate storm/blade group.wav" id="62_eaoup"]
 [ext_resource type="PackedScene" uid="uid://dxepb172kmp8n" path="res://object/stage/common/Goal.tscn" id="63_5y2th"]
 [ext_resource type="Resource" uid="uid://c8788hwlkasww" path="res://area/5 pirate storm/act 1/camera/SurfJumpCam.tres" id="64_4ojec"]
 
@@ -1508,7 +1509,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="Blade" parent="MainAct/Islands/Island4/MovingBlade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, -1.49012e-08, -2.62013e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
+transform = Transform3D(1, -1.49012e-08, -2.53131e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
 
 [node name="MovingBlade2" type="Node3D" parent="MainAct/Islands/Island4"]
 transform = Transform3D(0.990268, 0, 0.139173, 0, 1, 0, -0.139173, 0, 0.990268, -30.323, 0.3, 6.98822)
@@ -4006,6 +4007,7 @@ Movement/Angle = 0.0
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup1/Blade1" instance=ExtResource("16_scpb0")]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
+playSFX = false
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup1"]
 script = ExtResource("15_s8u74")
@@ -4021,6 +4023,7 @@ Movement/Angle = 0.0
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup1/Blade2" instance=ExtResource("16_scpb0")]
 transform = Transform3D(1.00003, 0, -7.15256e-07, 0, 1, 0, 7.15256e-07, 0, 1.00003, 0, 0.416, 0)
+playSFX = false
 
 [node name="Blade3" type="Node3D" parent="MainAct/Cave/BladeGroup1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
@@ -4037,6 +4040,15 @@ Movement/Angle = 0.0
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup1/Blade3" instance=ExtResource("16_scpb0")]
 transform = Transform3D(1.00003, 0, -7.15256e-07, 0, 1, 0, 7.15256e-07, 0, 1.00003, 0, 1.408, 0)
+playSFX = false
+
+[node name="BladeGroupSfx" type="AudioStreamPlayer3D" parent="MainAct/Cave/BladeGroup1"]
+stream = ExtResource("62_eaoup")
+unit_size = 20.0
+max_db = 0.0
+autoplay = true
+max_distance = 30.0
+bus = &"GAME SFX"
 
 [node name="SpoilsLarge1" parent="MainAct/Cave" instance=ExtResource("14_hcghg")]
 transform = Transform3D(1.96962, 0, -0.347296, 0, 1.5, 0, 0.347296, 0, 1.96962, -61.2122, 19.6, 34.1389)
@@ -4065,6 +4077,7 @@ Movement/Angle = 90.0
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup2/Blade1" instance=ExtResource("16_scpb0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.40808, 0, -0.00012207)
+playSFX = false
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup2"]
 script = ExtResource("15_s8u74")
@@ -4080,6 +4093,7 @@ Movement/Angle = 90.0
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup2/Blade2" instance=ExtResource("16_scpb0")]
 transform = Transform3D(1.00003, 0, -5.36442e-07, 0, 1, 0, 5.36442e-07, 0, 1.00003, -0.416016, 0, 0)
+playSFX = false
 
 [node name="Blade3" type="Node3D" parent="MainAct/Cave/BladeGroup2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -4096,6 +4110,15 @@ Movement/Angle = 90.0
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup2/Blade3" instance=ExtResource("16_scpb0")]
 transform = Transform3D(1.00003, 0, -5.36442e-07, 0, 1, 0, 5.36442e-07, 0, 1.00003, 0, 0, 0)
+playSFX = false
+
+[node name="BladeGroupSfx" type="AudioStreamPlayer3D" parent="MainAct/Cave/BladeGroup2"]
+stream = ExtResource("62_eaoup")
+unit_size = 20.0
+max_db = 0.0
+autoplay = true
+max_distance = 30.0
+bus = &"GAME SFX"
 
 [node name="Rings2" type="Node3D" parent="MainAct/Cave"]
 transform = Transform3D(-0.819152, 0.218629, -0.530275, 1.30385e-08, 0.924506, 0.381167, 0.573576, 0.312234, -0.757311, -49.867, 15.4525, 62.0632)
@@ -4124,10 +4147,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 transform = Transform3D(0.95204, 0.274171, 0.135831, -0.234006, 0.938448, -0.25408, -0.197132, 0.210109, 0.957598, -50.6588, 13.6953, 66.2226)
 
 [node name="BladeGroup3" type="Node3D" parent="MainAct/Cave"]
-transform = Transform3D(0.595812, 0.22911, 0.769751, 0.0818996, 0.936117, -0.34202, -0.798937, 0.266822, 0.538986, -38.554, 9.16381, 72.9448)
+transform = Transform3D(0.573577, 0.280167, 0.769751, -3.72529e-09, 0.939693, -0.34202, -0.819152, 0.196175, 0.538986, -38.554, 9.16381, 72.9448)
 
 [node name="Blade1" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 3, 0, 0)
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 3, 0, 0)
 script = ExtResource("15_s8u74")
 timebreakMultiplier = 0.5
 root = NodePath("Blade")
@@ -4140,10 +4163,11 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, 1.87755e-06, 8.19564e-06, 1.49012e-08, 1, -3.53158e-06, -6.85453e-07, -3.12924e-07, 0.999992, 0, 0, 0)
+transform = Transform3D(0.999998, 2.20537e-06, 8.16584e-06, -4.32134e-07, 1, -3.47197e-06, -4.17233e-07, -7.22706e-07, 0.999992, 0, 0, 0)
+playSFX = false
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
 script = ExtResource("15_s8u74")
 timebreakMultiplier = 0.5
 root = NodePath("Blade")
@@ -4156,10 +4180,11 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade2" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1.00003, 1.87755e-06, 1.92523e-05, 0, 1, -8.18074e-06, 4.17233e-07, -3.12924e-07, 1.00003, 0, 2.66667, 0)
+transform = Transform3D(1.00003, 2.20537e-06, 2.00272e-05, -4.91738e-07, 1, -8.55327e-06, 4.76837e-07, -6.92904e-07, 1.00003, 0, 3.33331, 3.05176e-05)
+playSFX = false
 
 [node name="Blade3" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -3, 0, 0)
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -3, 0, 0)
 script = ExtResource("15_s8u74")
 timebreakMultiplier = 0.5
 root = NodePath("Blade")
@@ -4172,7 +4197,16 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade3" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1.00003, 1.87755e-06, 1.99676e-05, -1.49012e-08, 1, -8.01682e-06, -6.25849e-07, -3.12924e-07, 1.00003, 0, 0.277298, 6.10352e-05)
+transform = Transform3D(1.00002, 2.22027e-06, 2.10702e-05, -2.5779e-06, 0.999999, -8.76933e-06, 2.98023e-08, -6.18398e-07, 1.00003, -0.00012207, 0.34668, 3.05176e-05)
+playSFX = false
+
+[node name="BladeGroupSfx" type="AudioStreamPlayer3D" parent="MainAct/Cave/BladeGroup3"]
+stream = ExtResource("62_eaoup")
+unit_size = 20.0
+max_db = 0.0
+autoplay = true
+max_distance = 30.0
+bus = &"GAME SFX"
 
 [node name="SpoilsSmall4" parent="MainAct/Cave" instance=ExtResource("40_wekfv")]
 transform = Transform3D(1.15429, 0.510258, 1.48484, 0.0283889, 1.3572, -0.851215, -1.63303, 0.384264, 1.03474, -39.1836, 6.97257, 76.2062)
@@ -4194,6 +4228,7 @@ Movement/Angle = 90.0
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup4/Blade1" instance=ExtResource("16_scpb0")]
 transform = Transform3D(0.999998, 2.22045e-15, -5.96046e-07, -9.31323e-09, 1, -6.27479e-08, -6.10948e-07, -4.00469e-08, 0.999998, -0.416138, 0, 3.05176e-05)
+playSFX = false
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -4210,6 +4245,7 @@ Movement/Angle = 90.0
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup4/Blade2" instance=ExtResource("16_scpb0")]
 transform = Transform3D(1.00003, 3.7253e-09, -5.96046e-07, 1.49012e-08, 1, 3.23635e-07, 5.96046e-07, -9.31322e-09, 1.00003, -4.00012, 0, 0)
+playSFX = false
 
 [node name="Blade3" type="Node3D" parent="MainAct/Cave/BladeGroup4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
@@ -4226,6 +4262,15 @@ Movement/Angle = 90.0
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup4/Blade3" instance=ExtResource("16_scpb0")]
 transform = Transform3D(1.00003, 4.47036e-08, 6.10948e-07, 0, 1, -3.72529e-08, -6.10948e-07, -1.07568e-07, 1.00003, 0, 0, 0)
+playSFX = false
+
+[node name="BladeGroupSfx" type="AudioStreamPlayer3D" parent="MainAct/Cave/BladeGroup4"]
+stream = ExtResource("62_eaoup")
+unit_size = 20.0
+max_db = 0.0
+autoplay = true
+max_distance = 30.0
+bus = &"GAME SFX"
 
 [node name="SpoilsLarge2" parent="MainAct/Cave" instance=ExtResource("14_hcghg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.2122, -1.51992e-06, 79.1389)
@@ -4429,7 +4474,6 @@ Distance = 20.0
 
 [node name="BridgeLargeFalling" parent="MainAct/Cave" instance=ExtResource("54_k2etd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.5, -40, 199)
-"Falling Platform Settings/Fall Speed" = 1.0
 
 [node name="BridgeThinFalling1" parent="MainAct/Cave" instance=ExtResource("55_01wgf")]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -21.4147, -38, 211.953)
@@ -4463,7 +4507,6 @@ transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 
 
 [node name="GhostShip" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -521, 2, 1829)
-visible = false
 script = ExtResource("36_7jc22")
 saveVisibilityOnCheckpoint = true
 

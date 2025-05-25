@@ -1,15 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://b0n0wve76n3ds"]
+[gd_scene load_steps=5 format=3 uid="uid://b0n0wve76n3ds"]
 
 [ext_resource type="Script" uid="uid://l7xcmkupm4aq" path="res://area/3 evil foundry/data/script/FanHazard.cs" id="1_nohir"]
 [ext_resource type="PackedScene" uid="uid://3bvby0scgvbv" path="res://area/5 pirate storm/object/model/Blade.gltf" id="2_smv1a"]
+[ext_resource type="AudioStream" uid="uid://druuvnf5s1c0j" path="res://sound/sfx/stage/pirate storm/blade.wav" id="3_smv1a"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nohir"]
 size = Vector3(0.4, 1.5, 0.175)
 
-[node name="Blade" type="Node3D" node_paths=PackedStringArray("root")]
+[node name="Blade" type="Node3D" node_paths=PackedStringArray("root", "sfx")]
 script = ExtResource("1_nohir")
 rotationTime = 0.5
+playSFX = true
 root = NodePath("Blade")
+sfx = NodePath("Spin")
 
 [node name="Blade" parent="." instance=ExtResource("2_smv1a")]
 
@@ -29,6 +32,12 @@ shape = SubResource("BoxShape3D_nohir")
 [node name="Blade3" type="CollisionShape3D" parent="Blade/Trigger"]
 transform = Transform3D(-0.5, -0.866025, 0, 0.866026, -0.5, 0, 0, 0, 1, -0.693, -0.4, 0)
 shape = SubResource("BoxShape3D_nohir")
+
+[node name="Spin" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_smv1a")
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
 
 [connection signal="area_entered" from="Blade/Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Blade/Trigger" to="." method="OnExited"]

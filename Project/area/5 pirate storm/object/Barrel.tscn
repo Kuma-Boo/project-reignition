@@ -1,7 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://l4u27wg4y0w4"]
+[gd_scene load_steps=14 format=3 uid="uid://l4u27wg4y0w4"]
 
 [ext_resource type="Script" uid="uid://6mcr2se7tnsl" path="res://area/5 pirate storm/data/script/Barrel.cs" id="1_ch4hn"]
 [ext_resource type="PackedScene" uid="uid://pfrne45p8qdq" path="res://area/5 pirate storm/object/model/Barrel.gltf" id="1_gy1ra"]
+[ext_resource type="AudioStream" uid="uid://bc46w6dtk3hb7" path="res://sound/sfx/stage/pirate storm/barrel sink.wav" id="3_ayo7l"]
+[ext_resource type="AudioStream" uid="uid://cfi763l5mnbon" path="res://sound/sfx/stage/pirate storm/barrel surface.wav" id="4_gmasj"]
+[ext_resource type="AudioStream" uid="uid://cxkhvsaow4d0e" path="res://sound/sfx/stage/pirate storm/barrel strike.wav" id="5_gmasj"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ch4hn"]
 radius = 1.2
@@ -87,6 +90,20 @@ tracks/2/keys = {
 "update": 1,
 "values": [false, true]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Surface")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_85q6n"]
 resource_name = "idle"
@@ -142,6 +159,20 @@ tracks/2/keys = {
 "update": 1,
 "values": [true, false]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sink")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.533333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_uhyf6"]
 resource_name = "strike"
@@ -181,6 +212,34 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sink")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Strike")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ayo7l"]
@@ -231,6 +290,28 @@ libraries = {
 autoplay = "idle"
 next/float = &"idle"
 blend_times = [&"float", &"idle", 0.5, &"idle", &"sink", 0.5]
+
+[node name="Sink" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_ayo7l")
+unit_size = 30.0
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="Surface" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_gmasj")
+unit_size = 30.0
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+
+[node name="Strike" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_gmasj")
+unit_size = 30.0
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [connection signal="area_entered" from="Barrel/Trigger" to="." method="OnEntered"]
 [connection signal="area_exited" from="Barrel/Trigger" to="." method="OnExited"]

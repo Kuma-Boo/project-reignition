@@ -32,6 +32,11 @@ public partial class SoundManager : Node
 		TransitionManager.instance.Connect(TransitionManager.SignalName.SceneChanged, new(this, MethodName.CancelDialog));
 	}
 
+	public override void _PhysicsProcess(double _)
+	{
+		UpdateSfxGroups();
+	}
+
 	#region Audio Bus
 	/// <summary> Sets whether the break channel is muted or not (for muting environments) </summary>
 	public static bool IsBreakChannelMuted
@@ -346,28 +351,55 @@ public partial class SoundManager : Node
 			pearlSFXList[i].Stop();
 	}
 
+	private float sfxGroupTimer;
 	private readonly Dictionary<StringName, int> sfxGroups = [];
-	public float AddGroupSFX(StringName key)
+	private readonly Dictionary<StringName, float> sfxGroupTimers = [];
+	/// <summary> Minimum amount of time that must pass before a sfx group can play again. </summary>
+	private readonly float groupSfxSpacing = 0.5f;
+
+	private void UpdateSfxGroups()
 	{
-		if (!sfxGroups.ContainsKey(key))
-			sfxGroups.Add(key, 0);
-		sfxGroups[key]++;
-		return CalculateGroupSFXVolumeDB(key);
+		if (sfxGroups.Count != 0)
+			sfxGroupTimer += PhysicsManager.physicsDelta;
 	}
 
-	public float RemoveGroupSFX(StringName key)
+	public bool CanPlaySfxInGroup(StringName key)
+	{
+		if (!sfxGroupTimers.ContainsKey(key))
+			return true;
+
+		return Mathf.Abs(sfxGroupTimer - sfxGroupTimers[key]) > groupSfxSpacing;
+	}
+
+	public float AddGroupSfx(StringName key)
+	{
+		if (!sfxGroups.ContainsKey(key))
+		{
+			sfxGroups.Add(key, 0);
+			sfxGroupTimers.Add(key, sfxGroupTimer);
+		}
+
+		sfxGroups[key]++;
+		sfxGroupTimers[key] = sfxGroupTimer;
+		return CalculateGroupSfxVolumeDb(key);
+	}
+
+	public float RemoveGroupSfx(StringName key)
 	{
 		if (sfxGroups.TryGetValue(key, out int value))
 		{
 			sfxGroups[key] = --value;
 			if (value < 0)
+			{
 				sfxGroups.Remove(key);
+				sfxGroupTimers.Remove(key);
+			}
 		}
 
-		return CalculateGroupSFXVolumeDB(key);
+		return CalculateGroupSfxVolumeDb(key);
 	}
 
-	public float CalculateGroupSFXVolumeDB(StringName key)
+	public float CalculateGroupSfxVolumeDb(StringName key)
 	{
 		if (sfxGroups.TryGetValue(key, out int value)) // Calculate target db volume
 			return Mathf.LinearToDb(1.0f / value);

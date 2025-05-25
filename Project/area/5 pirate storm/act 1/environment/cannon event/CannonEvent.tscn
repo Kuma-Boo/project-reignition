@@ -23,7 +23,7 @@ overrideEventLength = 5.3
 "Player Event Settings/Exit Lockout" = null
 
 [node name="Player" type="BoneAttachment3D" parent="CannonEventRoot/Skeleton3D" index="0"]
-transform = Transform3D(1, 2.33962e-24, -2.33962e-24, 2.33962e-24, 0, 1, 2.33962e-24, -1, 0, 0.00427246, 0.00236511, -29.9589)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.00427246, 0.00236511, -29.9589)
 bone_name = "player"
 bone_idx = 4
 
@@ -36,7 +36,7 @@ bone_name = "cannon_shell_fx"
 bone_idx = 3
 
 [node name="Camera" type="BoneAttachment3D" parent="CannonEventRoot/Skeleton3D" index="2"]
-transform = Transform3D(0.798636, -0.104504, -0.592672, 1.49012e-08, 0.984808, -0.173648, 0.601815, 0.138682, 0.786502, -1.99573, 0.439155, -20.4589)
+transform = Transform3D(0.798636, -0.104504, -0.592672, 1.11759e-08, 0.984808, -0.173648, 0.601815, 0.138682, 0.786502, -1.99573, 0.439155, -20.4589)
 bone_name = "camera"
 bone_idx = 5
 
@@ -63,3 +63,4 @@ stream = ExtResource("5_n03it")
 bus = &"GAME SFX"
 
 [connection signal="Activated" from="." to="CannonEventRoot/Skeleton3D/Camera/Camera" method="Activate"]
+[connection signal="EventSkipped" from="." to="SFX/CannonSFX" method="stop"]
