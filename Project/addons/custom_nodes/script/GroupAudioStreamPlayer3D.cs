@@ -10,7 +10,7 @@ public partial class GroupAudioStreamPlayer3D : AudioStreamPlayer3D
 	public void PlayInGroup()
 	{
 		// Don't play multiple sounds at the same time--prevent sudden volume spikes
-		if (!SoundManager.instance.CanPlaySfxInGroup(groupKey))
+		if (!SoundManager.instance.CanPlaySfxInGroup(groupKey, MaxPolyphony))
 			return;
 
 		if (Playing)

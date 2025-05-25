@@ -363,12 +363,15 @@ public partial class SoundManager : Node
 			sfxGroupTimer += PhysicsManager.physicsDelta;
 	}
 
-	public bool CanPlaySfxInGroup(StringName key)
+	public bool CanPlaySfxInGroup(StringName key, int maxPolyphony)
 	{
-		if (!sfxGroupTimers.ContainsKey(key))
+		if (!sfxGroups.ContainsKey(key))
 			return true;
 
-		return Mathf.Abs(sfxGroupTimer - sfxGroupTimers[key]) > groupSfxSpacing;
+		if (Mathf.Abs(sfxGroupTimer - sfxGroupTimers[key]) > groupSfxSpacing)
+			return true;
+
+		return sfxGroups[key] < maxPolyphony;
 	}
 
 	public float AddGroupSfx(StringName key)

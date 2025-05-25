@@ -33,6 +33,7 @@ public partial class PlayerCameraController : Node3D
 	/// <summary> Camera's pathfollower. Different than Player.PathFollower. </summary>
 	[Export] public PlayerPathController PathFollower { get; private set; }
 	[Export] private Node3D sampler;
+	private Basis previousSamplerBasis;
 
 	private readonly StringName ShaderPlayerScreenPosition = new("player_screen_position");
 
@@ -135,12 +136,13 @@ public partial class PlayerCameraController : Node3D
 
 	private void UpdatePathFollower()
 	{
+		PathFollower.Resync();
+
 		if (SnapFlag)
 			pathBlend = pathBlendSmoothed = 1.0f;
 
-		PathFollower.Resync();
 		sampler.GlobalPosition = sampler.GlobalPosition.Lerp(PathFollower.GlobalPosition, pathBlendSmoothed);
-		sampler.GlobalBasis = sampler.GlobalBasis.Orthonormalized().Slerp(PathFollower.GlobalBasis.Orthonormalized(), pathBlendSmoothed);
+		previousSamplerBasis = sampler.GlobalBasis;
 
 		if (Mathf.IsEqualApprox(pathBlend, 1.0f))
 			return;
@@ -593,16 +595,19 @@ public partial class PlayerCameraController : Node3D
 		if (settings.horizontalTrackingMode != CameraSettingsResource.TrackingModeEnum.Move)
 		{
 			data.horizontalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.X;
-
 			if (settings.horizontalTrackingMode == CameraSettingsResource.TrackingModeEnum.Rotate)
 				data.secondaryYawTracking = -localDelta.Normalized().Flatten().AngleTo(Vector2.Down);
 		}
 		else if (!Mathf.IsZeroApprox(settings.hallWidth) || !Mathf.IsZeroApprox(settings.hallRotationStrength)) // Process hall width
 		{
-			float positionTracking = Mathf.Clamp(PathFollower.GlobalPlayerPositionDelta.X, -settings.hallWidth, settings.hallWidth);
+			float leadAmount = PathFollower.LocalHorizontalVelocity * PhysicsManager.physicsDelta;
+			data.blendData.HallLeadSmoothDamp(leadAmount, SnapFlag);
+
+			float positionTracking = -PathFollower.LocalPlayerPositionDelta.X + data.blendData.hallLeadAmount;
+			positionTracking = Mathf.Clamp(positionTracking, -settings.hallWidth, settings.hallWidth);
 			data.blendData.HallSmoothDamp(positionTracking, SnapFlag);
 
-			data.horizontalTrackingOffset = -PathFollower.GlobalPlayerPositionDelta.X; // Recenter
+			data.horizontalTrackingOffset = PathFollower.LocalPlayerPositionDelta.X; // Recenter
 			data.horizontalTrackingOffset += data.blendData.hallPosition; // Add clamped position tracking
 
 			if (!Mathf.IsZeroApprox(settings.hallRotationStrength) && Mathf.Abs(localDelta.X) > settings.hallWidth)
@@ -661,6 +666,13 @@ public partial class PlayerCameraController : Node3D
 
 	private void CalculateRotation(CameraSettingsResource settings, ref CameraPositionData data)
 	{
+		// Update sampler rotation based on tilt mode
+		PathFollower.TiltEnabled = settings.tiltMode == CameraSettingsResource.TiltModeEnum.FollowPath;
+		Basis targetBasis = PathFollower.GlobalBasis;
+		if (settings.tiltMode == CameraSettingsResource.TiltModeEnum.Override)
+			targetBasis = targetBasis.Rotated(-targetBasis.Z, settings.tiltAngle);
+		sampler.GlobalBasis = previousSamplerBasis.Orthonormalized().Slerp(targetBasis.Orthonormalized(), pathBlendSmoothed);
+
 		float targetYawAngle = settings.yawAngle;
 		float targetPitchAngle = settings.pitchAngle + (settings.extraBackstepPitchAngle * data.blendData.BackstepPitchBlend);
 
@@ -712,13 +724,12 @@ public partial class PlayerCameraController : Node3D
 		data.CalculateBasis();
 		int yawSamplingFix = Mathf.Sign(sampledForward.Dot(-data.offsetBasis.Z));
 		sampledTargetPitchAngle *= yawSamplingFix;
+		// Calculate tilt angle
+		data.blendData.tiltAngle = CalculateTilt(settings, ref data, yawSamplingFix);
 
 		// Interpolate angles
 		data.blendData.yawAngle = Mathf.LerpAngle(targetYawAngle, sampledTargetYawAngle, data.blendData.SampleBlend) + reverseBlendRotationAmount;
 		data.blendData.pitchAngle = Mathf.Lerp(targetPitchAngle, sampledTargetPitchAngle, data.blendData.SampleBlend);
-
-		// Calculate tilt angle
-		data.blendData.tiltAngle = CalculateTilt(settings, ref data, yawSamplingFix);
 
 		// Update backstep blend
 		data.blendData.UpdateBackstepBlend(Player.IsMovingBackward, SnapFlag);
@@ -726,7 +737,6 @@ public partial class PlayerCameraController : Node3D
 
 	private float CalculateTilt(CameraSettingsResource settings, ref CameraPositionData data, int yawSamplingFix)
 	{
-		PathFollower.TiltEnabled = settings.tiltMode != CameraSettingsResource.TiltModeEnum.Disabled;
 		if (settings.tiltMode == CameraSettingsResource.TiltModeEnum.Disabled)
 			return 0;
 
@@ -1237,6 +1247,24 @@ public partial class CameraBlendData : GodotObject
 		}
 
 		hallPosition = ExtensionMethods.SmoothDamp(hallPosition, target, ref hallVelocity, HallSmoothing * PhysicsManager.physicsDelta);
+	}
+
+	public float hallLeadAmount;
+	private float hallLeadVelocity;
+	private readonly float HallTrackingLeadStrength = 10.0f;
+	private readonly float HallTrackingLeadSmoothing = 10.0f;
+	public void HallLeadSmoothDamp(float target, bool snap)
+	{
+		target *= HallTrackingLeadStrength;
+
+		if (snap || !WasInitialized)
+		{
+			hallLeadAmount = target;
+			hallLeadVelocity = 0;
+			return;
+		}
+
+		hallLeadAmount = ExtensionMethods.SmoothDamp(hallLeadAmount, target, ref hallLeadVelocity, HallTrackingLeadSmoothing * PhysicsManager.physicsDelta);
 	}
 
 	/// <summary> [0 -> 1] Used to smooth out backstep pitch blending. </summary>

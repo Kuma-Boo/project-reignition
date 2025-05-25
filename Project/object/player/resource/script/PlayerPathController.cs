@@ -28,6 +28,8 @@ namespace Project.Gameplay
 		public Vector3 LocalPlayerPositionDelta { get; private set; }
 		/// <summary> Absolute delta to player position. </summary>
 		public Vector3 GlobalPlayerPositionDelta { get; private set; }
+		/// <summary> The velocity of the player's local horizontal movement. </summary>
+		public float LocalHorizontalVelocity { get; private set; }
 
 		/// <summary> Custom up axis. Equal to Forward() rotated 90 degrees around RightAxis. </summary>
 		public Vector3 HeightAxis { get; private set; }
@@ -100,6 +102,11 @@ namespace Project.Gameplay
 				SideAxis = ForwardAxis.Cross(localForwardAxis).Normalized();
 
 			HeightAxis = ForwardAxis.Rotated(SideAxis, Mathf.Pi * .5f).Normalized();
+
+			if (Controller.IsMovingBackward || Mathf.IsZeroApprox(Controller.MoveSpeed))
+				LocalHorizontalVelocity = 0;
+			else
+				LocalHorizontalVelocity = Controller.MoveSpeed * ExtensionMethods.DotAngle(Controller.MovementAngle, ForwardAngle + Mathf.Pi * .5f);
 
 			DebugManager.DrawRay(GlobalPosition, HeightAxis, Colors.Green);
 			DebugManager.DrawRay(GlobalPosition, ForwardAxis, Colors.Blue);
