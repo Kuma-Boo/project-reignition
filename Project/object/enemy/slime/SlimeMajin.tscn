@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=3 uid="uid://cy240mxcsv0p7"]
+[gd_scene load_steps=104 format=3 uid="uid://cy240mxcsv0p7"]
 
 [ext_resource type="PackedScene" uid="uid://lb0gab47jte1" path="res://object/enemy/slime/data/model/SlimeMajin.gltf" id="1_gxrr7"]
 [ext_resource type="Script" uid="uid://dyeh4owv5g3eu" path="res://object/enemy/slime/data/SlimeMajin.cs" id="1_ukayf"]
@@ -21,9 +21,17 @@
 [ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="15_ytn4a"]
 [ext_resource type="AudioStream" uid="uid://b7iib1slsinqx" path="res://sound/sfx/enemy/slime/spawn.wav" id="16_yvjin"]
 [ext_resource type="AudioStream" uid="uid://c235pa73crpxk" path="res://sound/sfx/enemy/slime/defeat.wav" id="19_dr7u3"]
+[ext_resource type="Material" uid="uid://boc260pumvtga" path="res://object/enemy/majin/data/particle/material/Majin Defeat Smoke Process Material.tres" id="19_uyqq0"]
+[ext_resource type="Material" uid="uid://m0d6jfnxdrwg" path="res://effect/particle/material/Teleport Dust.tres" id="20_ggpcx"]
 [ext_resource type="AudioStream" uid="uid://j55cc4bikw0s" path="res://sound/sfx/enemy/slime/defeat horn.wav" id="20_r76sd"]
 [ext_resource type="AudioStream" uid="uid://cr564up85ldbo" path="res://sound/sfx/enemy/slime/defeat clatter.wav" id="21_1p5ta"]
-[ext_resource type="AudioStream" uid="uid://5mlwb3tffqad" path="res://sound/sfx/enemy/slime/spawn end.wav" id="21_ecygy"]
+[ext_resource type="AudioStream" uid="uid://5mlwb3tffqad" path="res://sound/sfx/enemy/slime/land.wav" id="21_ecygy"]
+[ext_resource type="Material" uid="uid://chovk7baskmwi" path="res://object/enemy/majin/data/particle/material/Majin Defeat Letters Process Material.tres" id="21_y2y56"]
+[ext_resource type="Material" uid="uid://c5pcrpavpyreh" path="res://object/enemy/majin/data/particle/material/Majin Defeat Process Material.tres" id="22_vrr8x"]
+[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="23_6qyuk"]
+[ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://effect/particle/material/environment/Water Dust.tres" id="26_y2y56"]
+[ext_resource type="Material" uid="uid://bdk8qnv7ytydw" path="res://effect/particle/material/environment/Common Dust Splatter Add No Billboard.tres" id="27_6qyuk"]
+[ext_resource type="Material" uid="uid://cctsu5ymh5eev" path="res://effect/particle/material/environment/Common Splatter.tres" id="27_vrr8x"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_d6ith"]
 radius = 0.6
@@ -151,6 +159,132 @@ particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_r76sd"]
 material = SubResource("StandardMaterial3D_eiiup")
+
+[sub_resource type="QuadMesh" id="QuadMesh_bmhaq"]
+material = ExtResource("20_ggpcx")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jypwu"]
+material = ExtResource("11_yvjin")
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="QuadMesh" id="QuadMesh_lqfwx"]
+material = ExtResource("23_6qyuk")
+
+[sub_resource type="Curve" id="Curve_6qyuk"]
+_data = [Vector2(0, 0), 0.0, 28.2547, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_bmhaq"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_6qyuk")
+
+[sub_resource type="Curve" id="Curve_uwed5"]
+_data = [Vector2(0, 0), 0.0, 10.3588, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), -0.86792, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_y2y56"]
+width = 64
+curve = SubResource("Curve_uwed5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_y2y56"]
+lifetime_randomness = 0.4
+emission_shape_offset = Vector3(0, 0, -0.5)
+emission_shape = 3
+emission_box_extents = Vector3(1, 0, 0.5)
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, -1, -0.5)
+spread = 20.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_y2y56")
+alpha_curve = SubResource("CurveTexture_bmhaq")
+
+[sub_resource type="QuadMesh" id="QuadMesh_wj56b"]
+material = ExtResource("27_vrr8x")
+
+[sub_resource type="Curve" id="Curve_bmhaq"]
+_data = [Vector2(0, 0.122967), 0.0, 3.56295, 0, 0, Vector2(1, 0.4), -1.35509, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_jypwu"]
+_data = [Vector2(0, 0), 0.0, 11.568, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), -1.7594, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_lqfwx"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_uwed5"]
+width = 64
+curve_x = SubResource("Curve_bmhaq")
+curve_y = SubResource("Curve_jypwu")
+curve_z = SubResource("Curve_lqfwx")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kvh2v"]
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveXYZTexture_uwed5")
+alpha_curve = SubResource("CurveTexture_bmhaq")
+
+[sub_resource type="QuadMesh" id="QuadMesh_3cprv"]
+material = ExtResource("27_6qyuk")
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="CurveTexture" id="CurveTexture_kvh2v"]
+width = 64
+curve = SubResource("Curve_uwed5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3cprv"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 2.0
+emission_ring_inner_radius = 1.0
+emission_ring_cone_angle = 90.0
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_kvh2v")
+alpha_curve = SubResource("CurveTexture_bmhaq")
+
+[sub_resource type="QuadMesh" id="QuadMesh_imaw7"]
+material = ExtResource("26_y2y56")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_u47u0"]
+lifetime_randomness = 0.4
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 2.0
+emission_ring_inner_radius = 1.5
+emission_ring_cone_angle = 90.0
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 5.0
+initial_velocity_min = 8.0
+initial_velocity_max = 12.0
+gravity = Vector3(0, -30, 0)
+damping_min = 10.0
+damping_max = 20.0
+scale_max = 2.5
+scale_curve = SubResource("CurveTexture_y2y56")
+alpha_curve = SubResource("CurveTexture_bmhaq")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_sovow"]
 radius = 1.5
@@ -502,9 +636,111 @@ attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("15_ytn4a")
 groupKey = &"majin_spawn"
 
-[node name="SpawnSFX" type="AudioStreamPlayer3D" parent="RootAttachment"]
+[node name="DefeatFX" type="GPUParticles3D" parent="RootAttachment" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 1.43051e-07, 0.8)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.6
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = ExtResource("19_uyqq0")
+draw_pass_1 = SubResource("QuadMesh_bmhaq")
+script = ExtResource("6_28g6o")
+subSystems = [NodePath("DefeatLetter"), NodePath("DefeatSplatter")]
+
+[node name="DefeatLetter" type="GPUParticles3D" parent="RootAttachment/DefeatFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.6
+randomness = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = ExtResource("21_y2y56")
+draw_pass_1 = SubResource("PlaneMesh_jypwu")
+
+[node name="DefeatSplatter" type="GPUParticles3D" parent="RootAttachment/DefeatFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = ExtResource("22_vrr8x")
+draw_pass_1 = SubResource("QuadMesh_lqfwx")
+
+[node name="DefeatHornSFX" type="AudioStreamPlayer3D" parent="RootAttachment/DefeatFX"]
 process_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 5.68434e-14, 0, -5.68434e-14, 1, -2.77933e-22, 0, 0)
+stream = ExtResource("20_r76sd")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="DefeatClatterSFX" type="AudioStreamPlayer3D" parent="RootAttachment/DefeatFX"]
+process_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 5.68434e-14, 0, -5.68434e-14, 1, -2.77933e-22, 0, 0)
+stream = ExtResource("21_1p5ta")
+unit_size = 20.0
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="MoveFX" type="GPUParticles3D" parent="RootAttachment"]
 transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+lifetime = 0.4
+one_shot = true
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_y2y56")
+draw_pass_1 = SubResource("QuadMesh_wj56b")
+
+[node name="SpawnFX" type="GPUParticles3D" parent="RootAttachment"]
+transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.9
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_kvh2v")
+draw_pass_1 = SubResource("QuadMesh_3cprv")
+
+[node name="SpawnSFX" type="AudioStreamPlayer3D" parent="RootAttachment/SpawnFX"]
+process_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 4.26326e-14, 0, -4.26326e-14, 1, 0, 0, 0)
 stream = ExtResource("16_yvjin")
 unit_size = 20.0
 max_db = 0.0
@@ -514,9 +750,44 @@ attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("15_ytn4a")
 groupKey = &"slime_spawn"
 
-[node name="SpawnEndSFX" type="AudioStreamPlayer3D" parent="RootAttachment"]
-process_mode = 1
+[node name="LandFX" type="GPUParticles3D" parent="RootAttachment" node_paths=PackedStringArray("subSystems")]
 transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.9
+randomness = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_3cprv")
+draw_pass_1 = SubResource("QuadMesh_imaw7")
+script = ExtResource("6_28g6o")
+subSystems = [NodePath("Splatter")]
+
+[node name="Splatter" type="GPUParticles3D" parent="RootAttachment/LandFX"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+gi_mode = 0
+emitting = false
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.8
+randomness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_u47u0")
+draw_pass_1 = SubResource("QuadMesh_wj56b")
+
+[node name="LandSFX" type="AudioStreamPlayer3D" parent="RootAttachment/LandFX"]
+process_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 5.68434e-14, 0, -5.68434e-14, 1, -2.77933e-22, 0, 0)
 stream = ExtResource("21_ecygy")
 unit_size = 20.0
 max_db = 0.0
@@ -524,32 +795,12 @@ max_distance = 100.0
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("15_ytn4a")
-groupKey = &"slime_spawn_end"
+groupKey = &"slime_land"
 
 [node name="DefeatSFX" type="AudioStreamPlayer3D" parent="RootAttachment"]
 process_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 0, 0)
 stream = ExtResource("19_dr7u3")
-unit_size = 20.0
-max_db = 0.0
-max_distance = 100.0
-bus = &"GAME SFX"
-attenuation_filter_cutoff_hz = 20500.0
-
-[node name="DefeatHornSFX" type="AudioStreamPlayer3D" parent="RootAttachment"]
-process_mode = 1
-transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 0, 0)
-stream = ExtResource("20_r76sd")
-unit_size = 20.0
-max_db = 0.0
-max_distance = 100.0
-bus = &"GAME SFX"
-attenuation_filter_cutoff_hz = 20500.0
-
-[node name="DefeatClatterSFX" type="AudioStreamPlayer3D" parent="RootAttachment"]
-process_mode = 1
-transform = Transform3D(1, 0, 0, 0, 1.78814e-07, -1, 0, 1, 1.78814e-07, -1.77636e-16, 0, 0)
-stream = ExtResource("21_1p5ta")
 unit_size = 20.0
 max_db = 0.0
 max_distance = 100.0
