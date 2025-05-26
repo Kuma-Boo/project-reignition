@@ -7,7 +7,6 @@ namespace Project.Gameplay.Objects;
 /// </summary>
 public partial class Surfboard : PathTraveller
 {
-	[Signal] public delegate void SpeedBoostEventHandler();
 	[Signal] public delegate void WaveStartedEventHandler();
 	[Signal] public delegate void JumpStartedEventHandler();
 	[Signal] public delegate void WaveFinishedEventHandler();
@@ -125,6 +124,7 @@ public partial class Surfboard : PathTraveller
 		// Vroom Vroom
 		UpdateSpeedIndex(1);
 		CurrentSpeed = GetCurrentMaxSpeed;
-		EmitSignal(SignalName.SpeedBoost);
+		animator.Play("speedboost");
+		animator.Seek(0.0);
 	}
 }

@@ -50,7 +50,7 @@ public partial class PathTraveller : Node3D
 	[Export] private Node3D playerPosition;
 	public Node3D PlayerStandin => playerPosition;
 	/// <summary> Reference to the animator. </summary>
-	[Export] private AnimationPlayer animator;
+	[Export] protected AnimationPlayer animator;
 
 	/// <summary> How fast is the object currently moving? </summary>
 	public float CurrentSpeed { get; protected set; }
