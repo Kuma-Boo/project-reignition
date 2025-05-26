@@ -298,6 +298,7 @@ public partial class PlayerEffect : Node3D
 		Metal,
 		Water,
 		Rock,
+		WetWood,
 		Count
 	}
 
@@ -330,7 +331,7 @@ public partial class PlayerEffect : Node3D
 		landingChannel.Stream = materialSFXLibrary.GetStream(materialSFXLibrary.GetKeyByIndex(GroundMaterialIndex), 1);
 		landingChannel.Play();
 
-		if (landingParticles[GroundMaterialIndex] == null) // Unimplemented VFX
+		if (landingParticles.Length - 1 < currentStepEmitter || landingParticles[GroundMaterialIndex] == null) // Unimplemented VFX
 			return;
 
 		if (landingParticles[GroundMaterialIndex] is GroupGpuParticles3D)
@@ -340,10 +341,12 @@ public partial class PlayerEffect : Node3D
 	}
 
 	/// <summary> Special method to play water splash fx. Also used by Water DeathTriggers. </summary>
-	public void PlayLandingWaterFX()
+	public void PlayLandingWaterFX(float heightOffset = 0)
 	{
 		PlayActionSFX(SplashSfx);
-		(landingParticles[(int)MaterialEnum.Water] as GroupGpuParticles3D).RestartGroup();
+		GroupGpuParticles3D waterFx = landingParticles[(int)MaterialEnum.Water] as GroupGpuParticles3D;
+		waterFx.Position = Vector3.Up * heightOffset;
+		waterFx.RestartGroup();
 	}
 
 	[Export]

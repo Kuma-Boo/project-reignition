@@ -15,6 +15,8 @@ namespace Project.Gameplay.Triggers
 			Water,
 		}
 
+		[Export] private float waterFxHeightOffset;
+
 		public override void Activate()
 		{
 			if (!StageSettings.Instance.IsLevelIngame)
@@ -25,7 +27,7 @@ namespace Project.Gameplay.Triggers
 			Player.Effect.PlayVoice("fall");
 
 			if (triggerType == TriggerType.Water)
-				Player.Effect.PlayLandingWaterFX();
+				Player.Effect.PlayLandingWaterFX(waterFxHeightOffset);
 		}
 	}
 }
