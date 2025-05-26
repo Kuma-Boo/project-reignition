@@ -310,6 +310,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.5, 100)
 [node name="Death" type="Node3D" parent="Triggers/WaterTrigger"]
 script = ExtResource("23_k720b")
 triggerType = 1
+waterFxHeightOffset = 2.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/WaterTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50)
@@ -1011,6 +1012,24 @@ layers = 2048
 mesh = SubResource("BoxMesh_08hmi")
 surface_material_override/0 = SubResource("StandardMaterial3D_08hmi")
 
+[node name="EnableWaterReflection" parent="Triggers/EnvironmentFX" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.450659, 0, -0.892696, 0, 1, 0, 0.892696, 0, 0.450659, -84.5004, 1.82575, 1580.24)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/EnvironmentFX/EnableWaterReflection"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_k720b")
+
+[node name="DisableWaterReflection" parent="Triggers/EnvironmentFX" instance=ExtResource("22_ypnsc")]
+transform = Transform3D(0.00721759, 0.535069, -0.844777, -0.0133095, 0.844776, 0.534954, 0.999885, 0.00738246, 0.0132187, -487.898, 29.5051, 1584.08)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/EnvironmentFX/DisableWaterReflection"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_k720b")
+
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="Exterior" type="DirectionalLight3D" parent="Lighting"]
@@ -1081,6 +1100,8 @@ draw_pass_1 = SubResource("QuadMesh_tsasv")
 
 [node name="PlanarReflectionRenderer" parent="." instance=ExtResource("24_havkg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -263, -3.1, 1562)
+disableRenderering = true
+heightMode = 2
 reflectionMaterials = [ExtResource("25_88ndg")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -1132,5 +1153,9 @@ isStageMusic = true
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/CannonBallCull" method="Activate"]
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/CannonBallCull/Cannonball/JumpTrigger" method="Activate" flags=3]
 [connection signal="JumpFinished" from="Triggers/CannonEvent/CannonBallCull/Cannonball/JumpTrigger" to="Triggers/CannonEvent/CannonBallCull/Cannonball" method="Activate"]
+[connection signal="Activated" from="Triggers/EnvironmentFX/EnableWaterReflection" to="PlanarReflectionRenderer" method="EnableRendering"]
+[connection signal="Deactivated" from="Triggers/EnvironmentFX/EnableWaterReflection" to="PlanarReflectionRenderer" method="DisableRendering"]
+[connection signal="Activated" from="Triggers/EnvironmentFX/DisableWaterReflection" to="PlanarReflectionRenderer" method="DisableRendering"]
+[connection signal="Deactivated" from="Triggers/EnvironmentFX/DisableWaterReflection" to="PlanarReflectionRenderer" method="EnableRendering"]
 
 [editable path="Collision"]

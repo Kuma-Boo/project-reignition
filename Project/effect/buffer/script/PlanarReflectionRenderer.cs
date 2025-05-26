@@ -14,17 +14,24 @@ public partial class PlanarReflectionRenderer : Node3D
 	// All shaders that use reflections must have this parameter
 	public static readonly StringName ReflectionParameter = "reflection_texture";
 
-	[Export]
-	private Camera3D reflectionCamera;
-	[Export]
-	private SubViewport reflectionViewport;
-	[Export]
-	private SubViewportContainer reflectionViewportContainer;
+	[Export] private bool disableRenderering;
+	private bool checkpointRenderingStateDisabled;
+
+	[Export] private Camera3D reflectionCamera;
+	[Export] private SubViewport reflectionViewport;
+	[Export] private SubViewportContainer reflectionViewportContainer;
 	private Camera3D GameplayCamera => GetViewport().GetCamera3D();
 
-	[Export]
+	[Export] private HeightMode heightMode;
+	private enum HeightMode
+	{
+		Static, // Move the planar reflection manually
+		MatchPlayer, // Match the player's height
+		MatchPlayerWithRaycast, // Raycast downwards, then match the height. Expensive.
+	}
+
 	/// <summary> List of materials that use reflection_texture. </summary>
-	public Array<ShaderMaterial> reflectionMaterials;
+	[Export] public Array<ShaderMaterial> reflectionMaterials;
 
 	private Callable UpdatePositionCallable => new(this, MethodName.UpdatePosition);
 	private Callable ApplyTextureCallable => new(this, MethodName.ApplyTexture);
@@ -59,6 +66,12 @@ public partial class PlanarReflectionRenderer : Node3D
 
 		if (!RenderingServer.Singleton.IsConnected(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable))
 			RenderingServer.Singleton.Connect(RenderingServer.SignalName.FramePostDraw, ApplyTextureCallable, (uint)ConnectFlags.Deferred);
+
+		StageSettings.Instance.TriggeredCheckpoint += SaveCheckpointState;
+		StageSettings.Instance.Respawned += LoadCheckpointState;
+
+		checkpointRenderingStateDisabled = disableRenderering;
+		LoadCheckpointState();
 	}
 
 	public override void _ExitTree()
@@ -75,6 +88,9 @@ public partial class PlanarReflectionRenderer : Node3D
 	// Mirror main camera along plane
 	private void UpdatePosition()
 	{
+		if (disableRenderering)
+			return;
+
 		reflectionCamera.CullMask = GameplayCamera.CullMask;
 		reflectionCamera.Fov = GameplayCamera.Fov;
 		reflectionCamera.Size = GameplayCamera.Size;
@@ -84,7 +100,7 @@ public partial class PlanarReflectionRenderer : Node3D
 		reflectionCamera.Far = GameplayCamera.Far;
 
 		// Calculate reflection position
-		Vector3 reflectionPosition = GlobalPosition;
+		Vector3 reflectionPosition = CalculateReflectionPosition();
 
 		// Update reflectionCamera's position
 		Vector3 reflectionAxis = this.Up();
@@ -105,9 +121,30 @@ public partial class PlanarReflectionRenderer : Node3D
 		reflectionViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
 	}
 
+	private readonly int GroundCheckLength = 50;
+	private Vector3 CalculateReflectionPosition()
+	{
+		Vector3 returnValue = GlobalPosition;
+		if (heightMode == HeightMode.MatchPlayerWithRaycast)
+		{
+			RaycastHit hit = this.CastRay(StageSettings.Player.CenterPosition, Vector3.Down * GroundCheckLength, Runtime.Instance.environmentMask);
+			if (hit)
+				return hit.point;
+		}
+		else if (heightMode == HeightMode.MatchPlayer)
+		{
+			returnValue.Y = StageSettings.Player.GlobalPosition.Y;
+		}
+
+		return GlobalPosition;
+	}
+
 	/// <summary> Applies reflection texture to associated shaders. </summary>
 	private void ApplyTexture()
 	{
+		if (disableRenderering)
+			return;
+
 		ViewportTexture ReflectionTexture = reflectionViewport.GetTexture();
 
 		if (reflectionMaterials != null)
@@ -115,5 +152,29 @@ public partial class PlanarReflectionRenderer : Node3D
 			for (int i = 0; i < reflectionMaterials.Count; i++)
 				reflectionMaterials[i].SetShaderParameter(ReflectionParameter, ReflectionTexture);
 		}
+	}
+
+	private void SaveCheckpointState() => checkpointRenderingStateDisabled = disableRenderering;
+	private void LoadCheckpointState()
+	{
+		if (checkpointRenderingStateDisabled)
+			DisableRendering();
+		else
+			EnableRendering();
+	}
+
+	/// <summary> Call these from signals to save rendering resources. </summary>
+	public void DisableRendering()
+	{
+		reflectionCamera.ClearCurrent();
+		reflectionCamera.ProcessMode = ProcessModeEnum.Disabled;
+		reflectionViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Disabled;
+		disableRenderering = true;
+	}
+	public void EnableRendering()
+	{
+		reflectionCamera.MakeCurrent();
+		reflectionCamera.ProcessMode = ProcessModeEnum.Inherit;
+		disableRenderering = false;
 	}
 }
