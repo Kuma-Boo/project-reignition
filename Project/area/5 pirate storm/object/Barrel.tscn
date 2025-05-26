@@ -1,10 +1,85 @@
-[gd_scene load_steps=14 format=3 uid="uid://l4u27wg4y0w4"]
+[gd_scene load_steps=33 format=3 uid="uid://l4u27wg4y0w4"]
 
 [ext_resource type="Script" uid="uid://6mcr2se7tnsl" path="res://area/5 pirate storm/data/script/Barrel.cs" id="1_ch4hn"]
 [ext_resource type="PackedScene" uid="uid://pfrne45p8qdq" path="res://area/5 pirate storm/object/model/Barrel.gltf" id="1_gy1ra"]
 [ext_resource type="AudioStream" uid="uid://bc46w6dtk3hb7" path="res://sound/sfx/stage/pirate storm/barrel sink.wav" id="3_ayo7l"]
+[ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://effect/particle/material/environment/Water Dust.tres" id="3_eibxh"]
 [ext_resource type="AudioStream" uid="uid://cfi763l5mnbon" path="res://sound/sfx/stage/pirate storm/barrel surface.wav" id="4_gmasj"]
+[ext_resource type="Material" uid="uid://cctsu5ymh5eev" path="res://effect/particle/material/environment/Common Splatter.tres" id="4_ndbba"]
 [ext_resource type="AudioStream" uid="uid://cxkhvsaow4d0e" path="res://sound/sfx/stage/pirate storm/barrel strike.wav" id="5_gmasj"]
+[ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Dust Splatter Add.tres" id="5_ndbba"]
+
+[sub_resource type="Curve" id="Curve_1ksno"]
+_data = [Vector2(0, 0), 0.0, 29.1547, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -0.0631062, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_lf2ma"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_1ksno")
+
+[sub_resource type="Curve" id="Curve_oqkr7"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6r2oy"]
+width = 64
+curve = SubResource("Curve_oqkr7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_om7kd"]
+lifetime_randomness = 0.4
+emission_shape_scale = Vector3(1.5, 1, 1)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 1.5
+emission_ring_inner_radius = 1.2
+emission_ring_cone_angle = 0.0
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 1.0
+initial_velocity_max = 3.0
+damping_min = 2.0
+damping_max = 8.0
+attractor_interaction_enabled = false
+scale_min = 1.5
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_6r2oy")
+color = Color(0.85, 0.87, 1, 1)
+alpha_curve = SubResource("CurveTexture_lf2ma")
+
+[sub_resource type="QuadMesh" id="QuadMesh_fjorp"]
+material = ExtResource("3_eibxh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_uoebc"]
+lifetime_randomness = 0.4
+emission_shape_scale = Vector3(1.5, 1, 1)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 1.5
+emission_ring_inner_radius = 1.2
+emission_ring_cone_angle = 0.0
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 1.0
+initial_velocity_max = 3.0
+damping_min = 2.0
+damping_max = 8.0
+attractor_interaction_enabled = false
+scale_min = 0.5
+scale_max = 1.2
+scale_curve = SubResource("CurveTexture_6r2oy")
+color = Color(0.85, 0.87, 1, 1)
+alpha_curve = SubResource("CurveTexture_lf2ma")
+
+[sub_resource type="QuadMesh" id="QuadMesh_e2373"]
+material = ExtResource("4_ndbba")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ch4hn"]
 radius = 1.2
@@ -50,6 +125,30 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Barrel/Dust:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Barrel/Splatter:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_gmasj"]
@@ -104,6 +203,44 @@ tracks/3/keys = {
 "method": &"play"
 }]
 }
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Splash")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"restart"
+}]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Barrel/Dust:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Barrel/Splatter:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_85q6n"]
 resource_name = "idle"
@@ -119,6 +256,30 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, -0.2, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Barrel/Dust:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Barrel/Splatter:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_ayo7l"]
@@ -172,6 +333,44 @@ tracks/3/keys = {
 "args": [0.0],
 "method": &"play"
 }]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Splash")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.533333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"restart"
+}]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Barrel/Dust:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Barrel/Splatter:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
 }
 
 [sub_resource type="Animation" id="Animation_uhyf6"]
@@ -241,6 +440,44 @@ tracks/4/keys = {
 "method": &"play"
 }]
 }
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Splash")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"restart"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Barrel/Splatter:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Barrel/Dust:emitting")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ayo7l"]
 _data = {
@@ -250,6 +487,54 @@ _data = {
 &"sink": SubResource("Animation_ayo7l"),
 &"strike": SubResource("Animation_uhyf6")
 }
+
+[sub_resource type="Gradient" id="Gradient_1ksno"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_lf2ma"]
+gradient = SubResource("Gradient_1ksno")
+width = 64
+
+[sub_resource type="Curve" id="Curve_6r2oy"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="Curve" id="Curve_om7kd"]
+_data = [Vector2(0, 0.4), 0.0, 5.65603, 0, 0, Vector2(0.1829, 1), 0.685873, 0.685873, 0, 0, Vector2(0.843074, 0.807933), -1.12526, -1.12526, 0, 0, Vector2(1, 0.5), -2.26863, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_fjorp"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_uoebc"]
+width = 64
+curve_x = SubResource("Curve_6r2oy")
+curve_y = SubResource("Curve_om7kd")
+curve_z = SubResource("Curve_fjorp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_e2373"]
+lifetime_randomness = 0.5
+particle_flag_align_y = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 1.0
+emission_ring_cone_angle = 90.0
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 20.0
+initial_velocity_min = 3.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, -9.81, 0)
+scale_min = 1.5
+scale_max = 2.0
+scale_curve = SubResource("CurveXYZTexture_uoebc")
+color_ramp = SubResource("GradientTexture1D_lf2ma")
+
+[sub_resource type="QuadMesh" id="QuadMesh_segpt"]
+material = ExtResource("5_ndbba")
 
 [node name="Barrel" type="Node3D" node_paths=PackedStringArray("animator", "launchPoint")]
 script = ExtResource("1_ch4hn")
@@ -266,6 +551,36 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -5)
 
 [node name="Barrel" parent="." instance=ExtResource("1_gy1ra")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Dust" type="GPUParticles3D" parent="Barrel"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 4
+lifetime = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -1.5, -2, 6, 3, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_om7kd")
+draw_pass_1 = SubResource("QuadMesh_fjorp")
+
+[node name="Splatter" type="GPUParticles3D" parent="Barrel"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+gi_mode = 0
+emitting = false
+amount = 4
+lifetime = 0.3
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-3, -1.5, -2, 6, 3, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_uoebc")
+draw_pass_1 = SubResource("QuadMesh_e2373")
 
 [node name="Trigger" type="Area3D" parent="Barrel"]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0.5, -2.18557e-08, 0)
@@ -290,6 +605,21 @@ libraries = {
 autoplay = "idle"
 next/float = &"idle"
 blend_times = [&"float", &"idle", 0.5, &"idle", &"sink", 0.5]
+
+[node name="Splash" type="GPUParticles3D" parent="."]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.9
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_e2373")
+draw_pass_1 = SubResource("QuadMesh_segpt")
 
 [node name="Sink" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_ayo7l")
