@@ -72,10 +72,7 @@ public partial class PathTraveller : Node3D
 
 	protected PlayerController Player => StageSettings.Player;
 
-	public override void _Ready()
-	{
-		SetUp();
-	}
+	public override void _Ready() => SetUp();
 
 	protected virtual void SetUp()
 	{

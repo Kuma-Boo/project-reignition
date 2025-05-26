@@ -1,22 +1,227 @@
-[gd_scene load_steps=7 format=3 uid="uid://dwg8morsdrkm"]
+[gd_scene load_steps=22 format=3 uid="uid://dwg8morsdrkm"]
 
 [ext_resource type="Script" uid="uid://c0f78bfayvnvc" path="res://object/stage/common/resource/script/PathTraveller.cs" id="1_uaq8f"]
 [ext_resource type="PackedScene" uid="uid://bdsdow54p4xgf" path="res://area/5 pirate storm/object/model/Cannonball.gltf" id="2_ygngy"]
+[ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Dust Splatter Add.tres" id="3_ygngy"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="4_iayi3"]
+[ext_resource type="Material" uid="uid://cyklhdoqtbirt" path="res://effect/particle/material/Feather Billboard.tres" id="5_1ldeh"]
+[ext_resource type="Material" uid="uid://ca62uiedbfw5x" path="res://effect/particle/material/Ember Blue.tres" id="6_nkvwa"]
+
+[sub_resource type="Curve" id="Curve_iayi3"]
+_data = [Vector2(0, 0), 0.0, 27.8295, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_1ldeh"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_iayi3")
+
+[sub_resource type="Curve" id="Curve_ygngy"]
+_data = [Vector2(0, 0.3), 0.0, 0.389219, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_iayi3"]
+width = 64
+curve = SubResource("Curve_ygngy")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iayi3"]
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 0, -1)
+spread = 5.0
+initial_velocity_min = 5.0
+initial_velocity_max = 15.0
+gravity = Vector3(0, 0, 0)
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_iayi3")
+color = Color(0.831016, 0.479425, 9.62615e-07, 1)
+alpha_curve = SubResource("CurveTexture_1ldeh")
+hue_variation_min = -0.1
+hue_variation_max = 0.1
+
+[sub_resource type="QuadMesh" id="QuadMesh_1ldeh"]
+material = ExtResource("3_ygngy")
+
+[sub_resource type="QuadMesh" id="QuadMesh_iayi3"]
+material = ExtResource("5_1ldeh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_732a4"]
+emission_shape_offset = Vector3(0, 0, 1)
+direction = Vector3(0, 0, -1)
+spread = 20.0
+initial_velocity_min = 5.0
+initial_velocity_max = 15.0
+gravity = Vector3(0, 0, 0)
+color = Color(0.948469, 0.734631, 0.568987, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_wcrga"]
+material = ExtResource("6_nkvwa")
+size = Vector2(0.1, 2)
+center_offset = Vector3(0, 2, 0)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uaq8f"]
 radius = 0.4
 height = 1.4
 
+[sub_resource type="Animation" id="Animation_nkvwa"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cannonball:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -0.8, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Cannonball/TrailFX:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="Animation" id="Animation_uaq8f"]
 resource_name = "activate"
+length = 0.16667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cannonball:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -0.8, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Cannonball/TrailFX")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"RestartGroup"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Cannonball/TrailFX:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_ygngy"]
 resource_name = "deactivate"
+length = 1.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cannonball/TrailFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"StopGroup"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Cannonball:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0, -0.8, 0), Vector3(0, -15, 50)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Cannonball/TrailFX:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_732a4"]
+resource_name = "respawn"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cannonball:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -0.8, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Cannonball/TrailFX")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"StopGroup"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Cannonball/TrailFX:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_iayi3"]
 _data = {
+&"RESET": SubResource("Animation_nkvwa"),
 &"activate": SubResource("Animation_uaq8f"),
-&"deactivate": SubResource("Animation_ygngy")
+&"deactivate": SubResource("Animation_ygngy"),
+&"respawn": SubResource("Animation_732a4")
 }
 
 [node name="Cannonball" type="Node3D" node_paths=PackedStringArray("root", "localRoot", "playerPosition", "animator")]
@@ -35,6 +240,49 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8, 0)
 
 [node name="PlayerPosition" type="Node3D" parent="Cannonball/CannonballMesh" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, -0.1)
+
+[node name="TrailFX" type="GPUParticles3D" parent="Cannonball" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.7)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.4
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -2, -6, 4, 4, 8)
+local_coords = true
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_iayi3")
+draw_pass_1 = SubResource("QuadMesh_1ldeh")
+script = ExtResource("4_iayi3")
+subSystems = [NodePath("Burst"), NodePath("Streak")]
+
+[node name="Burst" type="GPUParticles3D" parent="Cannonball/TrailFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.4
+explosiveness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -2, -6, 4, 4, 8)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_iayi3")
+draw_pass_1 = SubResource("QuadMesh_iayi3")
+
+[node name="Streak" type="GPUParticles3D" parent="Cannonball/TrailFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.3
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-2, -2, -6, 4, 4, 8)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_732a4")
+draw_pass_1 = SubResource("QuadMesh_wcrga")
 
 [node name="Hurtbox" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8, 0)
