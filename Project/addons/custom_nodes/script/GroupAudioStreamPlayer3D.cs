@@ -3,9 +3,20 @@ using Project.Core;
 
 public partial class GroupAudioStreamPlayer3D : AudioStreamPlayer3D
 {
-	[Export]
-	public StringName groupKey;
+	[Export] public StringName groupKey;
+	[Export] public float audioLengthOverride;
 	private Callable SignalCallable => Callable.From(() => SoundManager.instance.RemoveGroupSfx(groupKey));
+	private Timer timer;
+
+	public override void _Ready()
+	{
+		timer = new()
+		{
+			OneShot = true
+		};
+		timer.Timeout += () => SoundManager.instance.RemoveGroupSfx(groupKey);
+		AddChild(timer);
+	}
 
 	public void PlayInGroup()
 	{
@@ -16,9 +27,7 @@ public partial class GroupAudioStreamPlayer3D : AudioStreamPlayer3D
 		if (Playing)
 			SoundManager.instance.RemoveGroupSfx(groupKey);
 
-		if (!IsConnected(SignalName.Finished, SignalCallable))
-			Connect(SignalName.Finished, SignalCallable, (uint)ConnectFlags.OneShot);
-
+		timer.Start(Mathf.IsZeroApprox(audioLengthOverride) ? (float)Stream.GetLength() : audioLengthOverride);
 		MaxDb = SoundManager.instance.AddGroupSfx(groupKey);
 		Play();
 	}

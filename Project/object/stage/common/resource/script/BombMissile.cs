@@ -205,6 +205,12 @@ public partial class BombMissile : Node3D
 	{
 		IsActive = false;
 		animator.Play("RESET");
+		if (animator.HasAnimation("init"))
+		{
+			animator.Advance(0.0);
+			animator.Play("init");
+		}
+
 		spawnData.Respawn(this);
 		previousPosition = GlobalPosition;
 	}
@@ -225,6 +231,7 @@ public partial class BombMissile : Node3D
 
 		spawnData = new(GetParent(), Transform);
 		StageSettings.Instance.Respawned += Respawn;
+		Respawn();
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -295,6 +302,7 @@ public partial class BombMissile : Node3D
 		launchTimer = 0;
 		animator.Play("fly");
 		UpdatePosition();
+		ResetPhysicsInterpolation();
 		EmitSignal(SignalName.Launched);
 	}
 

@@ -355,7 +355,7 @@ public partial class SoundManager : Node
 	private readonly Dictionary<StringName, int> sfxGroups = [];
 	private readonly Dictionary<StringName, float> sfxGroupTimers = [];
 	/// <summary> Minimum amount of time that must pass before a sfx group can play again. </summary>
-	private readonly float groupSfxSpacing = 0.5f;
+	private readonly float groupSfxSpacing = 0.2f;
 
 	private void UpdateSfxGroups()
 	{
@@ -365,6 +365,7 @@ public partial class SoundManager : Node
 
 	public bool CanPlaySfxInGroup(StringName key, int maxPolyphony)
 	{
+		GD.Print(key);
 		if (!sfxGroups.ContainsKey(key))
 			return true;
 
