@@ -365,7 +365,6 @@ public partial class SoundManager : Node
 
 	public bool CanPlaySfxInGroup(StringName key, int maxPolyphony)
 	{
-		GD.Print(key);
 		if (!sfxGroups.ContainsKey(key))
 			return true;
 

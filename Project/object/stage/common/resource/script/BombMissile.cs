@@ -17,6 +17,7 @@ public partial class BombMissile : Node3D
 	[Export] private bool disableRespawning;
 	[Export(PropertyHint.Range, "0.1,1,0.1,or_greater")] private float travelSpeedRatio = 1f;
 	[Export] private float launchDelay;
+	[Export] private bool screenShakeEnabled;
 	[Export] private Node3D root;
 	[Export] private AnimationPlayer animator;
 	private SpawnData spawnData;
@@ -310,6 +311,14 @@ public partial class BombMissile : Node3D
 	{
 		IsActive = false;
 		animator.Play("explode"); // Impact effect
+
+		if (screenShakeEnabled)
+			Player.Camera.StartCameraShake(new PlayerCameraController.CameraShakeSettings()
+			{
+				origin = root.GlobalPosition,
+				maximumDistance = 20,
+			});
+
 		EmitSignal(SignalName.Exploded);
 	}
 }
