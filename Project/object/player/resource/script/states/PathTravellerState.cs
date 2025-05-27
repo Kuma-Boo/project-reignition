@@ -42,7 +42,7 @@ public partial class PathTravellerState : PlayerState
 		Traveller.ProcessPathTraveller();
 		Player.UpdateExternalControl(true);
 		Player.Animator.UpdateBalancing(Player.Controller.InputAxis.X - (Player.PathFollower.DeltaAngle * 20.0f));
-		Player.Animator.UpdateBalanceSpeed(1f + Player.Stats.GroundSettings.GetSpeedRatio(Traveller.CurrentSpeed), 0f);
+		Player.Animator.UpdateBalanceSpeed(1f + Player.Stats.GroundSettings.GetSpeedRatio(Traveller.CurrentSpeed));
 		return null;
 	}
 

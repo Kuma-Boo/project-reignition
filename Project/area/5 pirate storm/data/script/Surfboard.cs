@@ -1,4 +1,5 @@
 using Godot;
+using Project.Core;
 
 namespace Project.Gameplay.Objects;
 
@@ -8,11 +9,15 @@ namespace Project.Gameplay.Objects;
 public partial class Surfboard : PathTraveller
 {
 	[Signal] public delegate void WaveStartedEventHandler();
-	[Signal] public delegate void JumpStartedEventHandler();
+	[Signal] public delegate void HighJumpStartedEventHandler();
+	[Signal] public delegate void HighJumpFinishedEventHandler();
+	[Signal] public delegate void MediumJumpStartedEventHandler();
+	[Signal] public delegate void LowJumpStartedEventHandler();
 	[Signal] public delegate void WaveFinishedEventHandler();
 
 	[Export] private float initialSpeed;
 	[Export] private float initialTurnSpeed;
+	private readonly float MinimumSpeed = 2.0f;
 
 	[Export] private AudioStreamPlayer3D[] waveSFX;
 
@@ -24,39 +29,28 @@ public partial class Surfboard : PathTraveller
 	private Wave currentWave;
 	private Path3D originalPath;
 
-	private readonly float SlopeFactor = 80.0f;
-	private readonly float SlopeResetSpeed = 5.0f;
+	private bool isCrouching;
+	private float highJumpCameraTimer;
+	private readonly float HighJumpCameraLength = 1.5f;
 
 	protected override float GetCurrentMaxSpeed
 	{
 		get
 		{
-			float defaultSpeed = Mathf.Lerp(initialSpeed, MaxSpeed, speedFactor);
+			float speed = Mathf.Lerp(initialSpeed, MaxSpeed, speedFactor);
 			if (currentWave?.IsWaveCleared == false)
 			{
-				float movementRatio = currentWave.CalculateMovementRatio(GlobalPosition);
-				float speedLossRatio = currentWave.requiredSpeedBoosts / MaxSpeedIndex;
-				defaultSpeed -= Mathf.Lerp(initialSpeed, MaxSpeed, speedLossRatio) * movementRatio;
-				GD.PrintT(defaultSpeed, speedLossRatio, movementRatio);
+				float waveRatio = currentWave.CalculateMovementRatio(GlobalPosition);
+				float speedLoss = currentWave.requiredSpeedBoosts / (currentSpeedIndex + 0.5f);
+				speed -= Mathf.Lerp(initialSpeed, speed, speedLoss) * waveRatio;
+				if (currentSpeedIndex >= currentWave.requiredSpeedBoosts)
+					speed = Mathf.Max(MinimumSpeed, speed);
+
+				GD.PrintT(speed, speedLoss, waveRatio, currentWave.requiredSpeedBoosts, currentSpeedIndex);
 			}
 
-			return defaultSpeed;
+			return speed;
 		}
-	}
-
-	protected override void Accelerate()
-	{
-		if (currentWave?.IsWaveCleared == false)
-		{
-			CurrentSpeed = GetCurrentMaxSpeed;
-
-			if (CurrentSpeed < 1f) // Going too slow! Fall off the board
-				EmitSignal(SignalName.Damaged);
-
-			return;
-		}
-
-		base.Accelerate();
 	}
 
 	protected override float GetCurrentTurnSpeed => Mathf.Lerp(initialTurnSpeed, TurnSpeed, GetCurrentMaxSpeed / MaxSpeed);
@@ -69,10 +63,48 @@ public partial class Surfboard : PathTraveller
 
 	protected override void Respawn()
 	{
-		currentSpeedIndex = 0;
-		speedFactor = 0;
 		waveIndex = 0;
+		speedFactor = 0;
+		currentSpeedIndex = 0;
+
+		isCrouching = false;
+		highJumpCameraTimer = 0;
 		base.Respawn();
+	}
+
+	public override void ProcessPathTraveller()
+	{
+		base.ProcessPathTraveller();
+
+		if (!Mathf.IsZeroApprox(highJumpCameraTimer)) // Don't allow turning during a high jump
+		{
+			CurrentTurnAmount = Vector2.Zero;
+			turnVelocity = Vector2.Zero;
+		}
+
+		Player.Animator.UpdateBalanceCrouch(isCrouching);
+
+		if (Mathf.IsZeroApprox(highJumpCameraTimer))
+			return;
+
+		highJumpCameraTimer = Mathf.MoveToward(highJumpCameraTimer, 0, PhysicsManager.physicsDelta);
+		if (Mathf.IsZeroApprox(highJumpCameraTimer))
+			EmitSignal(SignalName.HighJumpFinished);
+	}
+
+	protected override void Accelerate()
+	{
+		if (currentWave?.IsWaveCleared == false)
+		{
+			CurrentSpeed = GetCurrentMaxSpeed;
+
+			if (CurrentSpeed < MinimumSpeed) // Going too slow! Fall off the board
+				CallDeferred(MethodName.EmitSignal, SignalName.Damaged);
+
+			return;
+		}
+
+		base.Accelerate();
 	}
 
 	public void SetCurrentWave(Wave wave)
@@ -88,6 +120,12 @@ public partial class Surfboard : PathTraveller
 			waveIndex++;
 			for (int i = 0; i < waveIndex; i++)
 				waveSFX[i].Play();
+
+			Player.Camera.StartCameraShake(new()
+			{
+				magnitude = Vector3.One * 0.5f,
+				duration = waveIndex,
+			});
 		}
 
 		currentWave = wave;
@@ -100,8 +138,25 @@ public partial class Surfboard : PathTraveller
 
 	public void StartJump()
 	{
-		GD.Print("TODO -- Perform Jumps");
-		EmitSignal(SignalName.JumpStarted);
+		isCrouching = false;
+		if (currentSpeedIndex >= 8)
+		{
+			Player.Animator.StartBalanceTrick("high");
+			highJumpCameraTimer = HighJumpCameraLength;
+			EmitSignal(SignalName.HighJumpStarted);
+		}
+		else if (currentSpeedIndex >= 4)
+		{
+			Player.Animator.StartBalanceTrick("medium");
+			EmitSignal(SignalName.MediumJumpStarted);
+		}
+		else
+		{
+			Player.Animator.StartBalanceTrick("low");
+			EmitSignal(SignalName.LowJumpStarted);
+		}
+
+		// TODO Add trick bonuses?
 	}
 
 	private void UpdateSpeedIndex(int amount)
@@ -113,6 +168,7 @@ public partial class Surfboard : PathTraveller
 	protected override void Stagger()
 	{
 		UpdateSpeedIndex(-1);
+		isCrouching = false;
 		base.Stagger();
 	}
 
@@ -123,6 +179,7 @@ public partial class Surfboard : PathTraveller
 
 		// Vroom Vroom
 		UpdateSpeedIndex(1);
+		isCrouching = true;
 		CurrentSpeed = GetCurrentMaxSpeed;
 		animator.Play("speedboost");
 		animator.Seek(0.0);

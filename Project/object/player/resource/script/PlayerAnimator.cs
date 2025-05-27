@@ -740,6 +740,9 @@ public partial class PlayerAnimator : Node3D
 	private readonly StringName BalanceCrouchAdd = "parameters/balance_tree/crouch_add/add_amount";
 	private readonly StringName BalanceDirectionTransition = "parameters/balance_tree/direction_transition/transition_request";
 
+	private readonly StringName BalanceTrickTrigger = "parameters/balance_tree/trick_trigger/request";
+	private readonly StringName BalanceTrickTransition = "parameters/balance_tree/trick_transition/transition_request";
+
 	public void StartBalancing()
 	{
 		IsBalanceShuffleActive = true;
@@ -763,9 +766,12 @@ public partial class PlayerAnimator : Node3D
 		animationTree.Set(BalanceCrouchAdd, current);
 	}
 
-	public void StartBalanceStagger()
+	public void StartBalanceStagger() => BalanceStatePlayback.Travel(isFacingRight ? BalanceStaggerRight : BalanceStaggerLeft, true);
+
+	public void StartBalanceTrick(StringName trickName)
 	{
-		BalanceStatePlayback.Travel(isFacingRight ? BalanceStaggerRight : BalanceStaggerLeft, true);
+		animationTree.Set(BalanceTrickTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animationTree.Set(BalanceTrickTransition, trickName);
 	}
 
 	private readonly StringName BalanceGrindstepTrigger = "parameters/balance_tree/grindstep_trigger/request";
@@ -811,10 +817,10 @@ public partial class PlayerAnimator : Node3D
 
 	private readonly StringName BalanceSpeed = "parameters/balance_tree/balance_speed/scale";
 	private readonly StringName BalanceWindBlend = "parameters/balance_tree/wind_blend/blend_position";
-	public void UpdateBalanceSpeed(float speedRatio, float overrideBlend = -1)
+	public void UpdateBalanceSpeed(float speedRatio, float overrideWindBlend = -1)
 	{
 		animationTree.Set(BalanceSpeed, speedRatio + .8f);
-		animationTree.Set(BalanceWindBlend, Mathf.IsEqualApprox(overrideBlend, -1) ? speedRatio : overrideBlend);
+		animationTree.Set(BalanceWindBlend, Mathf.IsEqualApprox(overrideWindBlend, -1) ? speedRatio : overrideWindBlend);
 	}
 	#endregion
 

@@ -11,7 +11,7 @@ public partial class Wave : Node3D
 
 	private Surfboard surfboard;
 	public bool IsWaveCleared { get; private set; }
-	private readonly float BaseWaveHeight = 80f;
+	private readonly float BaseWaveHeight = 75f;
 
 	public override void _Ready()
 	{
@@ -66,7 +66,7 @@ public partial class Wave : Node3D
 		if (surfboard == null)
 			return;
 
-		IsWaveCleared = true;
+		ClearWave();
 		surfboard.StartJump();
 	}
 }

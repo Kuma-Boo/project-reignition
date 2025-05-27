@@ -57,8 +57,8 @@ public partial class PathTraveller : Node3D
 	/// <summary> How much is the object currently turning? </summary>
 	public Vector2 CurrentTurnAmount { get; protected set; }
 	// Values for smooth damp
-	private float speedVelocity;
-	private Vector2 turnVelocity;
+	protected float speedVelocity;
+	protected Vector2 turnVelocity;
 
 	private float startingProgress;
 	private Vector3 startingOffset;
@@ -67,8 +67,8 @@ public partial class PathTraveller : Node3D
 	private float VerticalTurnSmoothing => Bounds.Y - CollisionSmoothingDistance;
 	/// <summary> At what distance should inputs start being smoothed? </summary>
 	private readonly float CollisionSmoothingDistance = 1f;
-	private readonly float SpeedSmoothing = .5f;
-	private readonly float TurnSmoothing = .25f;
+	private readonly float SpeedSmoothing = 25f;
+	private readonly float TurnSmoothing = 20f;
 
 	protected PlayerController Player => StageSettings.Player;
 
@@ -174,13 +174,13 @@ public partial class PathTraveller : Node3D
 		if (isSmoothingVertical)
 			inputVector.Y *= 1.0f - ((Mathf.Abs(PathFollower.VOffset) - VerticalTurnSmoothing) / (Bounds.Y - VerticalTurnSmoothing));
 
-		CurrentTurnAmount = CurrentTurnAmount.SmoothDamp(inputVector, ref turnVelocity, TurnSmoothing);
+		CurrentTurnAmount = CurrentTurnAmount.SmoothDamp(inputVector, ref turnVelocity, TurnSmoothing * PhysicsManager.physicsDelta);
 		Accelerate();
 	}
 
 	protected virtual void Accelerate()
 	{
-		CurrentSpeed = ExtensionMethods.SmoothDamp(CurrentSpeed, GetCurrentMaxSpeed, ref speedVelocity, SpeedSmoothing);
+		CurrentSpeed = ExtensionMethods.SmoothDamp(CurrentSpeed, GetCurrentMaxSpeed, ref speedVelocity, SpeedSmoothing * PhysicsManager.physicsDelta);
 	}
 
 	/// <summary> Override this if you want specific control over the PathFollower's speed. </summary>
@@ -206,7 +206,7 @@ public partial class PathTraveller : Node3D
 		}
 
 		if (animator != null) // Update animation speeds
-			animator.SpeedScale = 1.0f + (CurrentSpeed / MaxSpeed * 1.5f);
+			animator.SpeedScale = 1.0f + (CurrentSpeed * 1.5f / MaxSpeed);
 	}
 
 	protected virtual void ApplyMovement()
