@@ -1,16 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://bdpbe3up8hmmc"]
+[gd_scene load_steps=7 format=3 uid="uid://bdpbe3up8hmmc"]
 
 [ext_resource type="Script" uid="uid://col5hjihb3lqd" path="res://interface/boot/Boot.cs" id="1_c3660"]
 [ext_resource type="AudioStream" uid="uid://c2y53tq5h1b76" path="res://video/boot/logo.wav" id="2_81oeg"]
 [ext_resource type="Script" uid="uid://bjs225yvpdim2" path="res://video/VideoStreamFileLoadPlayer.cs" id="2_bf4bq"]
-[ext_resource type="FontFile" uid="uid://dakokhex1lp8k" path="res://interface/font/otf/Greco Std B.otf" id="2_eryyg"]
 
 [sub_resource type="Animation" id="Animation_8b1cq"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Logo/Original:visible")
+tracks/0/path = NodePath("Logo/Video:paused")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -18,30 +17,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Logo/Video:paused")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Logo/Original:self_modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_svqda"]
@@ -50,46 +25,22 @@ length = 6.00001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Logo/Original:visible")
+tracks/0/path = NodePath("Logo/Video:paused")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.5, 1.8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [false, true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Logo/Video:paused")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0.5, 3.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [false, true]
 }
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Logo/Original:self_modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(2, 2.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Logo/Audio")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Logo/Audio")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0.5),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -97,13 +48,13 @@ tracks/3/keys = {
 "method": &"play"
 }]
 }
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Logo/Video")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Logo/Video")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0.5),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -111,13 +62,13 @@ tracks/4/keys = {
 "method": &"play"
 }]
 }
-tracks/5/type = "method"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath(".")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(4.1),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -168,26 +119,6 @@ grow_vertical = 2
 expand = true
 script = ExtResource("2_bf4bq")
 videoFilePath = "res://video/boot/logo.mp4"
-
-[node name="Original" type="Label" parent="Logo"]
-visible = false
-layout_mode = 1
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -320.0
-offset_top = 200.0
-offset_right = 320.0
-offset_bottom = -632.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("2_eryyg")
-theme_override_font_sizes/font_size = 72
-text = "Original Game Presented By"
-horizontal_alignment = 1
-autowrap_mode = 2
-uppercase = true
 
 [node name="Audio" type="AudioStreamPlayer" parent="Logo"]
 stream = ExtResource("2_81oeg")
