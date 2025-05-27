@@ -1,4 +1,4 @@
-[gd_scene load_steps=108 format=3 uid="uid://bkuwj6xj81tuv"]
+[gd_scene load_steps=118 format=3 uid="uid://bkuwj6xj81tuv"]
 
 [ext_resource type="PackedScene" uid="uid://csk7y7y8vgg6l" path="res://area/5 pirate storm/act 1/Static.tscn" id="1_8fsep"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_kflh0"]
@@ -76,6 +76,9 @@
 [ext_resource type="Resource" uid="uid://boihpswog6fss" path="res://area/5 pirate storm/act 1/camera/SurfboardHighJumpCam.tres" id="70_l0qrm"]
 [ext_resource type="Resource" uid="uid://prvfkbdn42uc" path="res://area/5 pirate storm/act 1/camera/SurfboardDefeatCam.tres" id="71_rdmy0"]
 [ext_resource type="Resource" uid="uid://b3tn7dus5tmtw" path="res://area/5 pirate storm/act 1/camera/SurfboardClearCam.tres" id="72_rdmy0"]
+[ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://effect/particle/material/environment/Water Dust.tres" id="75_csc40"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="76_7uggd"]
+[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="77_7uggd"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6yc6x"]
 size = Vector3(20, 20, 5)
@@ -173,6 +176,44 @@ size = Vector3(25, 20, 5)
 _data = [Vector2(0, 0), 0.0, 3.55116, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.34341, 0.0, 0, 0]
 point_count = 3
 
+[sub_resource type="Curve" id="Curve_dq5fv"]
+_data = [Vector2(0, 0), 0.0, 24.985, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_mrnau"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_dq5fv")
+
+[sub_resource type="Curve" id="Curve_2fchw"]
+_data = [Vector2(0, 0.2), 0.0, 2.2799, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_vqh3v"]
+width = 64
+curve = SubResource("Curve_2fchw")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0kng0"]
+emission_shape = 3
+emission_box_extents = Vector3(50, 1, 0)
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 0.5, 1)
+spread = 30.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, 0, 0)
+scale_min = 20.0
+scale_max = 50.0
+scale_curve = SubResource("CurveTexture_vqh3v")
+alpha_curve = SubResource("CurveTexture_mrnau")
+
+[sub_resource type="QuadMesh" id="QuadMesh_kyh1p"]
+material = ExtResource("75_csc40")
+
+[sub_resource type="QuadMesh" id="QuadMesh_dq5fv"]
+material = ExtResource("77_7uggd")
+size = Vector2(0.2, 0.2)
+
 [sub_resource type="Curve3D" id="Curve3D_t8ycy"]
 _data = {
 "points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5.2, 0, 0, 3, 0, 0, -1.5, 0, 0.4, 1, 0, 8, 7, 0, 4, -4, 0, -0.5, 1, 0, 4, 16, 0, 0.5, -5, 0, 0, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 0, 0, 30),
@@ -239,7 +280,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.69, 0)
 metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="MainAct/SpawnPosition" instance=ExtResource("2_kflh0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -511, -4.3, 1908)
 
 [node name="CullingMap" type="Node3D" parent="MainAct"]
 visible = false
@@ -1526,7 +1566,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="Blade" parent="MainAct/Islands/Island4/MovingBlade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, -1.49012e-08, -2.62013e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
+transform = Transform3D(1, -1.49012e-08, -2.57572e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
 
 [node name="MovingBlade2" type="Node3D" parent="MainAct/Islands/Island4"]
 transform = Transform3D(0.990268, 0, 0.139173, 0, 1, 0, -0.139173, 0, 0.990268, -30.323, 0.3, 6.98822)
@@ -4179,7 +4219,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(0.999997, 2.35438e-06, 8.76188e-06, -3.09944e-06, 1, -4.29153e-06, 8.04663e-07, -3.65078e-07, 0.999993, 0, 0, 0)
+transform = Transform3D(0.999997, 2.35438e-06, 8.76188e-06, -3.14415e-06, 1, -4.29153e-06, 8.34465e-07, -3.65078e-07, 0.999993, 0, 0, 0)
 playSFX = false
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
@@ -4837,8 +4877,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
 
 [node name="Surf" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -497, 0, 1960)
+visible = false
 script = ExtResource("36_7jc22")
-startEnabled = true
 saveVisibilityOnCheckpoint = true
 
 [node name="SurfJump" parent="MainAct/Surf" instance=ExtResource("26_1c4me")]
@@ -4994,6 +5034,36 @@ shape = SubResource("BoxShape3D_jvte6")
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 115.244)
 Path = NodePath("../Wave1Path")
 
+[node name="WaterFX" type="GPUParticles3D" parent="MainAct/Surf/Wave1" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 68.9995, 74, 67.5605)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.8
+randomness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-60, -20, -10, 120, 40, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_0kng0")
+draw_pass_1 = SubResource("QuadMesh_kyh1p")
+script = ExtResource("76_7uggd")
+subSystems = [NodePath("Splatter")]
+
+[node name="Splatter" type="GPUParticles3D" parent="MainAct/Surf/Wave1/WaterFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 4
+lifetime = 0.4
+randomness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-60, -20, -10, 120, 40, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_0kng0")
+draw_pass_1 = SubResource("QuadMesh_dq5fv")
+
 [node name="Wave1Path" type="Path3D" parent="MainAct/Surf"]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 6.142, 0, 115)
 curve = SubResource("Curve3D_t8ycy")
@@ -5141,6 +5211,36 @@ shape = SubResource("BoxShape3D_jvte6")
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 13.1, 0, 237.844)
 requiredSpeedBoosts = 2
 Path = NodePath("../Wave2Path")
+
+[node name="WaterFX" type="GPUParticles3D" parent="MainAct/Surf/Wave2" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 31.9999, 76.4, 62.624)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.8
+randomness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-60, -20, -10, 120, 40, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_0kng0")
+draw_pass_1 = SubResource("QuadMesh_kyh1p")
+script = ExtResource("76_7uggd")
+subSystems = [NodePath("../../Wave1/WaterFX/Splatter")]
+
+[node name="Splatter" type="GPUParticles3D" parent="MainAct/Surf/Wave2/WaterFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 4
+lifetime = 0.4
+randomness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-60, -20, -10, 120, 40, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_0kng0")
+draw_pass_1 = SubResource("QuadMesh_dq5fv")
 
 [node name="Wave2Path" type="Path3D" parent="MainAct/Surf"]
 transform = Transform3D(0.990509, 0, 0.137445, 0, 1, 0, -0.137445, 0, 0.990509, 19.03, 0, 237)
@@ -5345,6 +5445,36 @@ shape = SubResource("BoxShape3D_jvte6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 1, 515)
 requiredSpeedBoosts = 4
 Path = NodePath("../Wave3Path")
+
+[node name="WaterFX" type="GPUParticles3D" parent="MainAct/Surf/Wave3" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, -88.9, 73.1, 65.5)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.8
+randomness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-60, -20, -10, 120, 40, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_0kng0")
+draw_pass_1 = SubResource("QuadMesh_kyh1p")
+script = ExtResource("76_7uggd")
+subSystems = [NodePath("../../Wave1/WaterFX/Splatter")]
+
+[node name="Splatter" type="GPUParticles3D" parent="MainAct/Surf/Wave3/WaterFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 4
+lifetime = 0.4
+randomness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-60, -20, -10, 120, 40, 20)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_0kng0")
+draw_pass_1 = SubResource("QuadMesh_dq5fv")
 
 [node name="Wave3Path" type="Path3D" parent="MainAct/Surf"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -98.6808, 0, 515)
@@ -6054,8 +6184,14 @@ shape = SubResource("BoxShape3D_6yc6x")
 [connection signal="Activated" from="MainAct/Surf/SurfEnd" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="JumpFinished" from="MainAct/Surf/SurfEnd/Jump" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="MainAct/Surf/Wave1Activate" to="MainAct/Surf/Wave1" method="OnWaveApproached"]
+[connection signal="JumpStarted" from="MainAct/Surf/Wave1" to="MainAct/Surf/Wave1/WaterFX" method="StopGroup"]
+[connection signal="WaveEntered" from="MainAct/Surf/Wave1" to="MainAct/Surf/Wave1/WaterFX" method="RestartGroup"]
 [connection signal="Activated" from="MainAct/Surf/Wave2Activate" to="MainAct/Surf/Wave2" method="OnWaveApproached"]
+[connection signal="JumpStarted" from="MainAct/Surf/Wave2" to="MainAct/Surf/Wave2/WaterFX" method="StopGroup"]
+[connection signal="WaveEntered" from="MainAct/Surf/Wave2" to="MainAct/Surf/Wave2/WaterFX" method="RestartGroup"]
 [connection signal="Activated" from="MainAct/Surf/Wave3Activate" to="MainAct/Surf/Wave3" method="OnWaveApproached"]
+[connection signal="JumpStarted" from="MainAct/Surf/Wave3" to="MainAct/Surf/Wave3/WaterFX" method="StopGroup"]
+[connection signal="WaveEntered" from="MainAct/Surf/Wave3" to="MainAct/Surf/Wave3/WaterFX" method="RestartGroup"]
 [connection signal="Activated" from="MainAct/End/Gate/Switch" to="MainAct/End/Gate/BridgeSquareFalling" method="StartShaking"]
 [connection signal="Defeated" from="MainAct/End/Gate/BlueMajin" to="MainAct/End/Gate/EnemyStone" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/End/Gate/GreenMajin1" to="MainAct/End/Gate/EnemyStone" method="IncrementCounter"]

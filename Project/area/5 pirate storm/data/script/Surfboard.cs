@@ -45,8 +45,6 @@ public partial class Surfboard : PathTraveller
 				speed -= Mathf.Lerp(initialSpeed, speed, speedLoss) * waveRatio;
 				if (currentSpeedIndex >= currentWave.requiredSpeedBoosts)
 					speed = Mathf.Max(MinimumSpeed, speed);
-
-				GD.PrintT(speed, speedLoss, waveRatio, currentWave.requiredSpeedBoosts, currentSpeedIndex);
 			}
 
 			return speed;

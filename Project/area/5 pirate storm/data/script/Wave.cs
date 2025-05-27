@@ -5,6 +5,9 @@ namespace Project.Gameplay.Objects;
 /// <summary> Handles the logic of the waves in Pirate Storm Act 1. </summary>
 public partial class Wave : Node3D
 {
+	[Signal] public delegate void WaveEnteredEventHandler();
+	[Signal] public delegate void JumpStartedEventHandler();
+
 	[Export(PropertyHint.Range, "1, 10")] public int requiredSpeedBoosts = 1;
 	[Export] private AnimationPlayer animator;
 	[Export] public Path3D Path { get; private set; }
@@ -45,6 +48,7 @@ public partial class Wave : Node3D
 		}
 
 		surfboard.SetCurrentWave(this);
+		EmitSignal(SignalName.WaveEntered);
 	}
 
 	public void OnExited(Area3D a)
@@ -68,5 +72,6 @@ public partial class Wave : Node3D
 
 		ClearWave();
 		surfboard.StartJump();
+		EmitSignal(SignalName.JumpStarted);
 	}
 }
