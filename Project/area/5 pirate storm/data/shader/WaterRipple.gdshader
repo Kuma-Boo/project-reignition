@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode diffuse_burley, specular_disabled;
+render_mode blend_add, unshaded, specular_disabled;
 
 global uniform float time;
 
@@ -14,8 +14,8 @@ void fragment()
 	vec2 scroll_offset = vec2(time * scroll_speed.x, sin(time * scroll_speed.y + timing_offset));
 	scroll_offset.y *= scroll_magnitude.y;
 	vec2 uv = UV + uv_offset + scroll_offset;
-	uv.y = clamp(uv.y, 0, 1);
+	uv.y = clamp(uv.y, 0, 1.1);
 	vec4 col = texture(albedo, uv) * COLOR;
 	ALBEDO = col.rgb;
-	ALPHA = col.a;
+	ALPHA = clamp(col.a, 0, 1);
 }

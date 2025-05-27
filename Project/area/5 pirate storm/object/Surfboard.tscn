@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dp0fmxla84ah7"]
+[gd_scene load_steps=36 format=3 uid="uid://dp0fmxla84ah7"]
 
 [ext_resource type="Script" uid="uid://dumjgm4y7xmk4" path="res://area/5 pirate storm/data/script/Surfboard.cs" id="1_onj6u"]
 [ext_resource type="PackedScene" uid="uid://bn01a41jsnwin" path="res://area/5 pirate storm/object/model/Surfboard.gltf" id="2_hixtt"]
@@ -7,8 +7,11 @@
 [ext_resource type="AudioStream" uid="uid://d0blui25wjagt" path="res://sound/sfx/stage/pirate storm/ocean.wav" id="4_bp1qf"]
 [ext_resource type="Texture2D" uid="uid://jvwxk461tccq" path="res://area/5 pirate storm/data/texture/surf speed base.png" id="5_5ybsi"]
 [ext_resource type="AudioStream" uid="uid://bwn4emlqvkv7c" path="res://sound/sfx/stage/pirate storm/wave 1.wav" id="5_qn7v0"]
+[ext_resource type="Material" uid="uid://bhj21xbsvtun5" path="res://effect/particle/material/environment/Common Dust Splatter Add.tres" id="6_5ybsi"]
 [ext_resource type="AudioStream" uid="uid://crhutt3oee5se" path="res://sound/sfx/stage/pirate storm/wave 2.wav" id="6_abf3d"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="7_2btht"]
 [ext_resource type="AudioStream" uid="uid://dhihq8pobcumn" path="res://sound/sfx/stage/pirate storm/wave 3.wav" id="7_drv7k"]
+[ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://effect/particle/material/environment/Water Dust.tres" id="8_1jtkm"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_onj6u"]
 size = Vector3(1, 0.133, 1.4)
@@ -57,6 +60,59 @@ shader_parameter/albedo = ExtResource("5_5ybsi")
 [sub_resource type="QuadMesh" id="QuadMesh_msuho"]
 material = SubResource("ShaderMaterial_wa4ul")
 center_offset = Vector3(0, 0, 0.2)
+
+[sub_resource type="Curve" id="Curve_57jcb"]
+_data = [Vector2(0, 0), 0.0, 27.4773, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_dkmg3"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_57jcb")
+
+[sub_resource type="Curve" id="Curve_hrlvd"]
+_data = [Vector2(0, 0.5), 0.0, 1.72618, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_oo0j4"]
+width = 64
+curve = SubResource("Curve_hrlvd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_msuho"]
+lifetime_randomness = 0.2
+emission_shape = 3
+emission_box_extents = Vector3(0.5, 0, 0)
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 0, 1)
+spread = 15.0
+initial_velocity_min = 5.0
+initial_velocity_max = 8.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_oo0j4")
+alpha_curve = SubResource("CurveTexture_dkmg3")
+
+[sub_resource type="QuadMesh" id="QuadMesh_gy274"]
+material = ExtResource("6_5ybsi")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_x4odf"]
+lifetime_randomness = 0.2
+emission_shape = 3
+emission_box_extents = Vector3(0.5, 0, 0)
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 0.2, 1)
+spread = 5.0
+initial_velocity_min = 5.0
+initial_velocity_max = 8.0
+gravity = Vector3(0, 0, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_oo0j4")
+alpha_curve = SubResource("CurveTexture_dkmg3")
+
+[sub_resource type="QuadMesh" id="QuadMesh_2u6u5"]
+material = ExtResource("8_1jtkm")
 
 [sub_resource type="Animation" id="Animation_bkevs"]
 length = 0.001
@@ -111,6 +167,20 @@ tracks/1/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WaterFX")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"RestartGroup"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_hixtt"]
 resource_name = "deactivate"
@@ -138,6 +208,20 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WaterFX")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"StopGroup"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_gy274"]
@@ -229,6 +313,37 @@ max_db = 0.0
 max_distance = 20.0
 max_polyphony = 2
 bus = &"GAME SFX"
+
+[node name="WaterFX" type="GPUParticles3D" parent="." node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 1.50996e-07, 0, -1)
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 16
+lifetime = 0.4
+randomness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-1.5, -2, -1, 3, 4, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_msuho")
+draw_pass_1 = SubResource("QuadMesh_gy274")
+script = ExtResource("7_2btht")
+subSystems = [NodePath("Dust")]
+
+[node name="Dust" type="GPUParticles3D" parent="WaterFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
+layers = 32
+cast_shadow = 0
+emitting = false
+lifetime = 0.4
+randomness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(-1.5, -2, -1, 3, 4, 4)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_x4odf")
+draw_pass_1 = SubResource("QuadMesh_2u6u5")
 
 [node name="Water" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("4_bp1qf")
