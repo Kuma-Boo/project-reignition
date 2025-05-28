@@ -7,8 +7,10 @@ public partial class Wave : Node3D
 {
 	[Signal] public delegate void WaveEnteredEventHandler();
 	[Signal] public delegate void JumpStartedEventHandler();
+	[Signal] public delegate void WaveExitedEventHandler();
 
 	[Export(PropertyHint.Range, "1, 10")] public int requiredSpeedBoosts = 1;
+	[Export] public int Index { get; private set; }
 	[Export] private AnimationPlayer animator;
 	[Export] public Path3D Path { get; private set; }
 
@@ -26,6 +28,7 @@ public partial class Wave : Node3D
 	{
 		animator.Play("hide");
 		IsWaveCleared = false;
+		EmitSignal(SignalName.WaveExited);
 	}
 
 	public void ClearWave() => IsWaveCleared = true;
@@ -60,6 +63,7 @@ public partial class Wave : Node3D
 			return;
 
 		surfboard.SetCurrentWave(null);
+		EmitSignal(SignalName.WaveExited);
 	}
 
 	public void OnJumpEntered(Area3D a)

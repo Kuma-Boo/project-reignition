@@ -10,7 +10,7 @@ public partial class Surfboard : PathTraveller
 {
 	[Signal] public delegate void WaveStartedEventHandler();
 	[Signal] public delegate void HighJumpStartedEventHandler();
-	[Signal] public delegate void HighJumpFinishedEventHandler();
+	[Signal] public delegate void JumpFinishedEventHandler();
 	[Signal] public delegate void MediumJumpStartedEventHandler();
 	[Signal] public delegate void LowJumpStartedEventHandler();
 	[Signal] public delegate void WaveFinishedEventHandler();
@@ -29,9 +29,17 @@ public partial class Surfboard : PathTraveller
 	private Wave currentWave;
 	private Path3D originalPath;
 
+	[Export] private CameraSettingsResource waveCameraSettings;
 	private bool isCrouching;
-	private float highJumpCameraTimer;
-	private readonly float HighJumpCameraLength = 1.5f;
+	private float jumpCameraTimer;
+	private float screenshakeTimer;
+	private readonly float HighJumpCameraLength = 1.2f;
+	private readonly float MediumJumpCameraLength = 0.5f;
+	private readonly float ScreenShakeInterval = 1f;
+	private readonly float BaseWaveFov = 90f;
+	private readonly float FocusedWaveFov = 70f;
+	private readonly float BaseWaveDistance = 5f;
+	private readonly float FocusedWaveDistance = 3f;
 
 	protected override float GetCurrentMaxSpeed
 	{
@@ -45,6 +53,9 @@ public partial class Surfboard : PathTraveller
 				speed -= Mathf.Lerp(initialSpeed, speed, speedLoss) * waveRatio;
 				if (currentSpeedIndex >= currentWave.requiredSpeedBoosts)
 					speed = Mathf.Max(MinimumSpeed, speed);
+
+				waveCameraSettings.targetFOV = Mathf.Lerp(BaseWaveFov, FocusedWaveFov, waveRatio);
+				waveCameraSettings.distance = Mathf.Lerp(BaseWaveDistance, FocusedWaveDistance, waveRatio);
 			}
 
 			return speed;
@@ -66,7 +77,7 @@ public partial class Surfboard : PathTraveller
 		currentSpeedIndex = 0;
 
 		isCrouching = false;
-		highJumpCameraTimer = 0;
+		jumpCameraTimer = 0;
 		base.Respawn();
 	}
 
@@ -74,20 +85,31 @@ public partial class Surfboard : PathTraveller
 	{
 		base.ProcessPathTraveller();
 
-		if (!Mathf.IsZeroApprox(highJumpCameraTimer)) // Don't allow turning during a high jump
+		if (!Mathf.IsZeroApprox(jumpCameraTimer)) // Don't allow turning during a high jump
 		{
 			CurrentTurnAmount = Vector2.Zero;
 			turnVelocity = Vector2.Zero;
 		}
 
+		screenshakeTimer = Mathf.MoveToward(screenshakeTimer, 0, PhysicsManager.physicsDelta);
+		if (Mathf.IsZeroApprox(screenshakeTimer))
+		{
+			Player.Camera.StartCameraShake(new()
+			{
+				duration = ScreenShakeInterval,
+				magnitude = Vector3.One * (0.05f + 0.1f * speedFactor)
+			});
+			screenshakeTimer = ScreenShakeInterval;
+		}
+
 		Player.Animator.UpdateBalanceCrouch(isCrouching);
 
-		if (Mathf.IsZeroApprox(highJumpCameraTimer))
+		if (Mathf.IsZeroApprox(jumpCameraTimer))
 			return;
 
-		highJumpCameraTimer = Mathf.MoveToward(highJumpCameraTimer, 0, PhysicsManager.physicsDelta);
-		if (Mathf.IsZeroApprox(highJumpCameraTimer))
-			EmitSignal(SignalName.HighJumpFinished);
+		jumpCameraTimer = Mathf.MoveToward(jumpCameraTimer, 0, PhysicsManager.physicsDelta);
+		if (Mathf.IsZeroApprox(jumpCameraTimer))
+			EmitSignal(SignalName.JumpFinished);
 	}
 
 	protected override void Accelerate()
@@ -115,13 +137,13 @@ public partial class Surfboard : PathTraveller
 		}
 		else
 		{
-			waveIndex++;
+			waveIndex = wave.Index;
 			for (int i = 0; i < waveIndex; i++)
 				waveSFX[i].Play();
 
 			Player.Camera.StartCameraShake(new()
 			{
-				magnitude = Vector3.One * 0.5f,
+				magnitude = Vector3.One * 0.2f * waveIndex,
 				duration = waveIndex,
 			});
 		}
@@ -140,12 +162,13 @@ public partial class Surfboard : PathTraveller
 		if (currentSpeedIndex >= 8)
 		{
 			Player.Animator.StartBalanceTrick("high");
-			highJumpCameraTimer = HighJumpCameraLength;
+			jumpCameraTimer = HighJumpCameraLength;
 			EmitSignal(SignalName.HighJumpStarted);
 		}
 		else if (currentSpeedIndex >= 4)
 		{
 			Player.Animator.StartBalanceTrick("medium");
+			jumpCameraTimer = MediumJumpCameraLength;
 			EmitSignal(SignalName.MediumJumpStarted);
 		}
 		else
@@ -153,8 +176,6 @@ public partial class Surfboard : PathTraveller
 			Player.Animator.StartBalanceTrick("low");
 			EmitSignal(SignalName.LowJumpStarted);
 		}
-
-		// TODO Add trick bonuses?
 	}
 
 	private void UpdateSpeedIndex(int amount)
