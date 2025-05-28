@@ -272,6 +272,9 @@ public partial class BombMissile : Node3D
 		if (!alignModelForward || previousPosition.IsEqualApprox(GlobalPosition))
 			return;
 
+		if (Mathf.Abs(Vector3.Up.Dot(root.GlobalPosition - previousPosition)) > .9f) // Co-linear vectors
+			return;
+
 		root.LookAt(previousPosition);
 	}
 

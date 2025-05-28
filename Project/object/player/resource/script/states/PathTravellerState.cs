@@ -17,6 +17,7 @@ public partial class PathTravellerState : PlayerState
 		Player.Animator.ExternalAngle = 0; // Rotate to follow pathfollower
 		Player.StartExternal(this, Traveller.PlayerStandin, .1f);
 
+		Traveller.Advanced += OnAdvance;
 		Traveller.Staggered += OnStagger;
 		Traveller.Damaged += OnDamage;
 	}
@@ -30,6 +31,7 @@ public partial class PathTravellerState : PlayerState
 		Player.Skills.IsSpeedBreakEnabled = true;
 
 		Traveller.StopMovement();
+		Traveller.Advanced -= OnAdvance;
 		Traveller.Staggered -= OnStagger;
 		Traveller.Damaged -= OnDamage;
 		Traveller = null;
@@ -46,6 +48,8 @@ public partial class PathTravellerState : PlayerState
 		Player.Animator.UpdateBalanceSpeed(1f + Player.Stats.GroundSettings.GetSpeedRatio(Traveller.CurrentSpeed));
 		return null;
 	}
+
+	private void OnAdvance() => Player.UpdateExternalControl(true);
 
 	private void OnStagger()
 	{

@@ -56,6 +56,7 @@ public partial class Catapult : Launcher
 	{
 		Player.Animator.StartSpin(5f);
 		Player.Effect.StartSpinFX();
+		Player.Effect.StartTrailFX();
 	}
 
 	public void PlayEnterSfx() => enterSFX.Play();

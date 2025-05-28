@@ -12,15 +12,12 @@ public partial class JumpTrigger : StageTriggerModule
 	/// <summary> Called when jump is finished. </summary>
 	public delegate void JumpFinishedEventHandler();
 
-	[Export]
 	/// <summary> How high to jump. </summary>
-	public float jumpHeight;
-	[Export]
+	[Export] public float jumpHeight;
 	/// <summary> Auto align jump direction? </summary>
-	public bool autoAlign;
-	[Export]
+	[Export] public bool autoAlign;
 	/// <summary> Should height be relative to end? </summary>
-	public bool forceConsistentHeight;
+	[Export] public bool forceConsistentHeight;
 
 	public LaunchSettings GetLaunchSettings()
 	{

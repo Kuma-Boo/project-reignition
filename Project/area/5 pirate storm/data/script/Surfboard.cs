@@ -144,7 +144,7 @@ public partial class Surfboard : PathTraveller
 
 			Player.Camera.StartCameraShake(new()
 			{
-				magnitude = Vector3.One * 0.2f * waveIndex,
+				magnitude = Vector3.One * (0.2f + 0.1f * waveIndex),
 				duration = waveIndex,
 			});
 		}
@@ -177,6 +177,8 @@ public partial class Surfboard : PathTraveller
 			Player.Animator.StartBalanceTrick("low");
 			EmitSignal(SignalName.LowJumpStarted);
 		}
+
+		Player.Camera.StartMediumCameraShake();
 	}
 
 	private void UpdateSpeedIndex(int amount)

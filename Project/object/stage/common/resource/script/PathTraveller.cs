@@ -13,6 +13,7 @@ public partial class PathTraveller : Node3D
 {
 	[Signal] public delegate void ActivatedEventHandler();
 	[Signal] public delegate void DeactivatedEventHandler();
+	[Signal] public delegate void AdvancedEventHandler();
 	[Signal] public delegate void StaggeredEventHandler();
 	[Signal] public delegate void DamagedEventHandler();
 
@@ -123,6 +124,18 @@ public partial class PathTraveller : Node3D
 	{
 		if (animator.HasAnimation("despawn"))
 			animator.Play("despawn");
+	}
+
+	/// <summary>
+	/// Advances the pathfollower by a certain amount.
+	/// Used in Pirate Storm Act 1 to make the cannonball ending faster.
+	/// </summary>
+	public void Advance(float amount)
+	{
+		pathFollower.Progress += amount;
+		GlobalPosition = PathFollower.GlobalPosition;
+		GlobalRotation = PathFollower.GlobalRotation;
+		EmitSignal(SignalName.Advanced);
 	}
 
 	public virtual void ProcessPathTraveller()

@@ -1163,7 +1163,7 @@ shape = SubResource("BoxShape3D_k720b")
 transform = Transform3D(1, 0, 0, 0, 0.999995, 0, 0, 0, 0.999995, -129.7, 69.0001, 1011.86)
 
 [node name="Ships" parent="Triggers/PathAndCameraTriggers/ShipsStart" instance=ExtResource("22_ypnsc")]
-transform = Transform3D(-1, -8.60942e-08, 1.51807e-08, 0, 0.173648, 0.984808, -8.74232e-08, 0.984808, -0.173648, 0, 0, 0)
+transform = Transform3D(-1, -8.60942e-08, 1.51807e-08, 0, 0.173648, 0.984808, -8.74232e-08, 0.984808, -0.173648, 5.16354e-07, 16.2208, -5.90644)
 OneShot = true
 "Respawn Mode" = 0
 "Enter Mode" = 0
@@ -1184,7 +1184,7 @@ CameraPath = NodePath("../../../../Path/ShipPath")
 CameraSettings = ExtResource("32_82sha")
 
 [node name="Camera" type="Node3D" parent="Triggers/PathAndCameraTriggers/ShipsStart"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -38, 31)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -38, 33)
 script = ExtResource("25_f6rbm")
 deactivationTransitionTime = 0.5
 transitionType = 1
@@ -1192,9 +1192,9 @@ settings = ExtResource("31_chu3b")
 previousSettings = ExtResource("32_82sha")
 
 [node name="Jump" type="Node3D" parent="Triggers/PathAndCameraTriggers/ShipsStart"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -38.2275, 27.0002)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -38.2275, 27.0004)
 script = ExtResource("24_auuan")
-jumpHeight = 3.0
+jumpHeight = 1.0
 
 [node name="ShipCloseCamera" parent="Triggers/PathAndCameraTriggers" instance=ExtResource("22_ypnsc")]
 transform = Transform3D(0.933042, 0.0105851, 0.359613, 9.31323e-10, 0.999567, -0.029422, -0.359769, 0.027452, 0.932638, -90.0749, 29.6, 1307.18)
@@ -1746,8 +1746,9 @@ isStageMusic = true
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Visuals/Sea1" method="Deactivate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Checkpoint" method="Activate"]
 [connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Camera" method="Activate"]
-[connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Jump" method="Activate"]
-[connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/CannonEvent/CannonBallCull/Cannonball" method="Deactivate"]
+[connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/PathAndCameraTriggers/ShipsStart/Jump" method="Activate" flags=3]
+[connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/CannonEvent/CannonBallCull/Cannonball" method="Deactivate" flags=3]
+[connection signal="Activated" from="Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Triggers/CannonEvent/CannonBallCull/Cannonball" method="Advance" binds= [30.0]]
 [connection signal="JumpFinished" from="Triggers/PathAndCameraTriggers/ShipsStart/Jump" to="Triggers/PathAndCameraTriggers/ShipsStart/Camera" method="Deactivate"]
 [connection signal="Activated" from="Triggers/CannonEvent/CannonEventTrigger" to="Triggers/CannonEvent/CannonEventCull/CannonEvent" method="Activate"]
 [connection signal="EventFinished" from="Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Triggers/CannonEvent/CannonEventCull" method="Deactivate"]
