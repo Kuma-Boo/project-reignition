@@ -1099,6 +1099,7 @@ public partial class PlayerController : CharacterBody3D
 				(ExternalParent as BoneAttachment3D).OnBonePoseUpdate((ExternalParent as BoneAttachment3D).BoneIdx);
 
 			GlobalTransform = ExternalParent.GlobalTransform;
+			return;
 		}
 
 		ExternalOffset = ExternalOffset.Lerp(Vector3.Zero, externalSmoothing); // Smooth out entry

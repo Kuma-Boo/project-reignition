@@ -14,6 +14,7 @@ public partial class Surfboard : PathTraveller
 	[Signal] public delegate void MediumJumpStartedEventHandler();
 	[Signal] public delegate void LowJumpStartedEventHandler();
 	[Signal] public delegate void WaveFinishedEventHandler();
+	[Signal] public delegate void BoostStartedEventHandler();
 
 	[Export] private float initialSpeed;
 	[Export] private float initialTurnSpeed;
@@ -182,6 +183,7 @@ public partial class Surfboard : PathTraveller
 	{
 		currentSpeedIndex = (int)Mathf.Clamp(currentSpeedIndex + amount, 0, MaxSpeedIndex);
 		speedFactor = currentSpeedIndex / MaxSpeedIndex;
+		animator.SpeedScale = 1f + speedFactor * 2f;
 	}
 
 	protected override void Stagger()
@@ -200,7 +202,6 @@ public partial class Surfboard : PathTraveller
 		UpdateSpeedIndex(1);
 		isCrouching = true;
 		CurrentSpeed = GetCurrentMaxSpeed;
-		animator.Play("speedboost");
-		animator.Seek(0.0);
+		EmitSignal(SignalName.BoostStarted);
 	}
 }

@@ -141,9 +141,22 @@ tracks/1/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Surfboard:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_onj6u"]
 resource_name = "activate"
+length = 0.06667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -225,36 +238,21 @@ tracks/2/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_gy274"]
-resource_name = "speedboost"
-length = 0.06667
-tracks/0/type = "method"
+[sub_resource type="Animation" id="Animation_2btht"]
+resource_name = "move"
+length = 0.66667
+loop_mode = 1
+tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("BoostFX")
-tracks/0/interp = 1
+tracks/0/path = NodePath("Surfboard:position")
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.0333333),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [false],
-"method": &"restart"
-}]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("BoostFX/Boost")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.0333333),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
+"times": PackedFloat32Array(0, 0.333333, 0.666667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.1, 0), Vector3(0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_bp1qf"]
@@ -262,7 +260,7 @@ _data = {
 &"RESET": SubResource("Animation_bkevs"),
 &"activate": SubResource("Animation_onj6u"),
 &"deactivate": SubResource("Animation_hixtt"),
-&"speedboost": SubResource("Animation_gy274")
+&"move": SubResource("Animation_2btht")
 }
 
 [node name="Surfboard" type="Node3D" node_paths=PackedStringArray("waveSFX", "root", "localRoot", "playerPosition", "animator")]
@@ -281,7 +279,6 @@ playerPosition = NodePath("Surfboard/SurfboardMesh/PlayerPosition")
 animator = NodePath("AnimationPlayer")
 
 [node name="Surfboard" parent="." instance=ExtResource("2_hixtt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
 
 [node name="PlayerPosition" type="Node3D" parent="Surfboard/SurfboardMesh" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.2)
@@ -291,7 +288,7 @@ collision_layer = 8
 collision_mask = 8
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
 shape = SubResource("BoxShape3D_onj6u")
 
 [node name="BoostFX" type="GPUParticles3D" parent="."]
@@ -372,10 +369,14 @@ max_distance = 50.0
 bus = &"GAME SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+callback_mode_process = 0
 libraries = {
 &"": SubResource("AnimationLibrary_bp1qf")
 }
+next/activate = &"move"
 
+[connection signal="BoostStarted" from="." to="BoostFX" method="restart" binds= [false]]
+[connection signal="BoostStarted" from="." to="BoostFX/Boost" method="play" binds= [0.0]]
 [connection signal="area_entered" from="Hurtbox" to="." method="OnEntered"]
 [connection signal="body_entered" from="Hurtbox" to="." method="OnBodyEntered"]
 
