@@ -308,7 +308,10 @@ public partial class StageSettings : Node3D
 	public void ResetObjective(int progress = 0)
 	{
 		CurrentObjectiveCount = progress;
-		HeadsUpDisplay.Instance.PlayObjectiveAnimation("bad");
+
+		if (progress == 0 && Player.IsDefeated)
+			HeadsUpDisplay.Instance.PlayObjectiveAnimation("bad");
+
 		EmitSignal(SignalName.ObjectiveReset);
 	}
 

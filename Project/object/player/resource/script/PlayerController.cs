@@ -834,6 +834,8 @@ public partial class PlayerController : CharacterBody3D
 		return true;
 	}
 
+	[Signal]
+	public delegate void DamagedEventHandler();
 	public void TakeDamage(bool disabledDefeat = false)
 	{
 		if (!Stage.IsLevelIngame) return;
@@ -928,6 +930,7 @@ public partial class PlayerController : CharacterBody3D
 		ringLoss = Mathf.Max(ringLoss, 0);
 		Stage.UpdateRingCount(ringLoss, StageSettings.MathModeEnum.Subtract);
 		Stage.IncrementDamageCount();
+		EmitSignal(SignalName.Damaged);
 
 		// Level failed
 		if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect)

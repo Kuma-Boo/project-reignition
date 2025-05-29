@@ -31,9 +31,10 @@ public partial class PteroEgg : Area3D
 	private int eggIndex;
 
 	private Vector3 followVelocity;
-	private readonly float MinDistance = .5f;
-	private readonly float FollowDistanceIncrement = 1.5f;
+	private readonly float FollowDistance = 2f;
 	private readonly float FollowSmoothing = 5.0f;
+	private readonly float BackflipFollowSmoothing = 2.0f;
+	private readonly float FollowRotationAmount = Mathf.DegToRad(60f);
 
 	private float returnTravelRatio;
 	private SpawnData spawnData;
@@ -62,20 +63,21 @@ public partial class PteroEgg : Area3D
 	private void InitializeHud()
 		=> HeadsUpDisplay.Instance.PlayObjectiveAnimation("dino-egg", eggIndex);
 
+	/// <summary> Moves the eggs to circle around the back half of the player. </summary>
 	private void UpdateHeldPosition()
 	{
-		int eggIndex = PteroEggManager.heldEggs.IndexOf(this);
-		Vector3 referencePosition = eggIndex == 0 ? Player.GlobalPosition : PteroEggManager.heldEggs[eggIndex - 1].GlobalPosition;
-		float distanceSquared = GlobalPosition.DistanceSquaredTo(referencePosition);
+		int totalEggCount = PteroEggManager.heldEggs.Count;
 
-		float smoothing = FollowSmoothing;
-		Vector3 targetPosition = referencePosition + (Player.PathFollower.Back() * FollowDistanceIncrement);
-
-		if (distanceSquared < Mathf.Pow(MinDistance, 2.0f)) // Extra snappy when things are too close
+		float smoothing = Player.IsBackflipping ? BackflipFollowSmoothing : FollowSmoothing; // Extra snappy when moving backwards
+		Vector3 followDirection = Player.PathFollower.Back();
+		if (totalEggCount > 1)
 		{
-			smoothing = 2.0f;
-			targetPosition = GlobalPosition - (GlobalPosition.DirectionTo(referencePosition) * MinDistance);
+			float rotationFactor = PteroEggManager.heldEggs.IndexOf(this) / (totalEggCount - 1f);
+			rotationFactor = Mathf.Lerp(-1f, 1f, rotationFactor);
+			followDirection = followDirection.Rotated(Vector3.Up, FollowRotationAmount * rotationFactor);
 		}
+
+		Vector3 targetPosition = Player.GlobalPosition + followDirection * FollowDistance;
 
 		// Update position to trail player
 		GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref followVelocity, smoothing * PhysicsManager.physicsDelta);

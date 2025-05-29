@@ -20,8 +20,8 @@ public partial class PteroEggManager : Node3D
 	public override void _Ready()
 	{
 		heldEggs.Clear();
-		StageSettings.Instance.Connect(StageSettings.SignalName.TriggeredCheckpoint, new(this, MethodName.SaveNestStatus));
-		StageSettings.Player.Connect(PlayerController.SignalName.Knockback, new(this, MethodName.Frighten));
+		StageSettings.Instance.TriggeredCheckpoint += SaveNestStatus;
+		StageSettings.Player.Damaged += Frighten;
 
 		for (int i = 0; i < GetChildCount(); i++)
 		{
