@@ -232,7 +232,12 @@ public partial class HeadsUpDisplay : Control
 		Stage.Connect(nameof(StageSettings.SignalName.ObjectiveReset), new Callable(this, nameof(ResetObjective)));
 	}
 
-	public void PlayObjectiveAnimation(StringName animation, int index = 0) => objectiveAnimators[index].Play(animation);
+	public void PlayObjectiveAnimation(StringName animation, int index = 0)
+	{
+		objectiveAnimators[index].Seek(0f);
+		objectiveAnimators[index].Play(animation);
+	}
+
 
 	private void UpdateObjective()
 	{
