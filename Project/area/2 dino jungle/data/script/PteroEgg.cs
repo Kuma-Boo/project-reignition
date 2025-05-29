@@ -25,6 +25,11 @@ public partial class PteroEgg : Area3D
 	/// <summary> Has this egg been saved at a checkpoint? </summary>
 	public bool IgnoreRespawn { get; set; }
 
+	/// <summary> The index of the egg's pattern, starting from 1. </summary>
+	private int eggPattern;
+	/// <summary> Which objective icon the egg is responsible for. </summary>
+	private int eggIndex;
+
 	private Vector3 followVelocity;
 	private readonly float MinDistance = .5f;
 	private readonly float FollowDistanceIncrement = 1.5f;
@@ -41,6 +46,7 @@ public partial class PteroEgg : Area3D
 		Animator = GetNodeOrNull<AnimationPlayer>(animator);
 		spawnData = new(GetParent(), Transform);
 		StageSettings.Instance.Respawned += Respawn;
+		StageSettings.Instance.LevelStarted += InitializeHud;
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -53,6 +59,9 @@ public partial class PteroEgg : Area3D
 			ReturnToNest();
 	}
 
+	private void InitializeHud()
+		=> HeadsUpDisplay.Instance.PlayObjectiveAnimation("dino-egg", eggIndex);
+
 	private void UpdateHeldPosition()
 	{
 		int eggIndex = PteroEggManager.heldEggs.IndexOf(this);
@@ -64,7 +73,7 @@ public partial class PteroEgg : Area3D
 
 		if (distanceSquared < Mathf.Pow(MinDistance, 2.0f)) // Extra snappy when things are too close
 		{
-			smoothing = 3.0f;
+			smoothing = 2.0f;
 			targetPosition = GlobalPosition - (GlobalPosition.DirectionTo(referencePosition) * MinDistance);
 		}
 
@@ -92,14 +101,21 @@ public partial class PteroEgg : Area3D
 	private void SaveNestStatus() => IgnoreRespawn = IsReturnedToNest;
 
 	// Called when the player takes damage or respawns
-	public void Frighten() => Animator.Play("frighten");
+	public void Frighten()
+	{
+		Animator.Play("frighten");
+		HeadsUpDisplay.Instance.PlayObjectiveAnimation("dino-egg-loss", eggIndex);
+	}
 
 	private void Respawn()
 	{
 		if (IgnoreRespawn) return; // Don't respawn if we're already at the nest. Don't force the player to redo stuff they already did.
 
 		if (IsHeld)
+		{
 			PteroEggManager.heldEggs.Remove(this);
+			HeadsUpDisplay.Instance.PlayObjectiveAnimation("dino-egg", eggIndex);
+		}
 
 		IsReturnedToNest = false;
 		followVelocity = Vector3.Zero;
@@ -107,8 +123,10 @@ public partial class PteroEgg : Area3D
 		Animator.Play("idle");
 	}
 
-	public void SetType(Node3D model) // Adds the egg model as a child
+	public void SetType(int pattern, int index, Node3D model) // Adds the egg model as a child
 	{
+		eggPattern = pattern;
+		eggIndex = index;
 		Root.AddChild(model);
 		model.GlobalTransform = GlobalTransform;
 		model.Position += Vector3.Up * .5f;
@@ -121,13 +139,17 @@ public partial class PteroEgg : Area3D
 		if (IsHeld) return;
 
 		PteroEggManager.heldEggs.Add(this);
+		HeadsUpDisplay.Instance.PlayObjectiveAnimation("dino-egg" + eggPattern, eggIndex);
 		Animator.Play("pick-up", .1f);
 	}
 
 	public void ReturnToNest(PteroNest nest)
 	{
 		if (IsHeld)
+		{
 			PteroEggManager.heldEggs.Remove(this);
+			HeadsUpDisplay.Instance.PlayObjectiveAnimation("dino-egg-return", eggIndex);
+		}
 
 		IsReturningToNest = true;
 

@@ -2,8 +2,8 @@ using Godot;
 
 namespace Project.Gameplay.Objects;
 
-// / <summary> For that one act in Dinosaur Jungle. </summary>
-public partial class PteroNest : Node3D
+/// <summary> For that one act in Dinosaur Jungle. </summary>
+public partial class PteroNest : StaticBody3D
 {
 	[Export(PropertyHint.NodePathValidTypes, "AnimationPlayer")]
 	private NodePath animator;

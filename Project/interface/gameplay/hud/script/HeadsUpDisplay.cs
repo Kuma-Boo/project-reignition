@@ -205,6 +205,8 @@ public partial class HeadsUpDisplay : Control
 	[Export]
 	private Label objectiveMaxValue;
 	[Export]
+	private AnimationPlayer[] objectiveAnimators;
+	[Export]
 	private AudioStreamPlayer objectiveSfx;
 	private void InitializeObjectives()
 	{
@@ -215,14 +217,22 @@ public partial class HeadsUpDisplay : Control
 			Stage.Data.MissionType == LevelDataResource.MissionTypes.Chain);
 		if (!objectiveRoot.Visible) return; // Don't do anything when objective counter isn't visible
 
-		// TODO Implement proper objective sprites
-		objectiveSprite.Visible = false;
+		if (Stage.Data.MissionObjectiveCount != 0)
+		{
+			if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Enemy)
+				PlayObjectiveAnimation("enemy");
+			else if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Chain)
+				PlayObjectiveAnimation("ring_chain");
+		}
+
 		objectiveValue.Text = Stage.CurrentObjectiveCount.ToString("00");
 		objectiveMaxValue.Text = Stage.Data.MissionObjectiveCount.ToString("00");
 
 		Stage.Connect(nameof(StageSettings.SignalName.ObjectiveChanged), new Callable(this, nameof(UpdateObjective)));
 		Stage.Connect(nameof(StageSettings.SignalName.ObjectiveReset), new Callable(this, nameof(ResetObjective)));
 	}
+
+	public void PlayObjectiveAnimation(StringName animation, int index = 0) => objectiveAnimators[index].Play(animation);
 
 	private void UpdateObjective()
 	{
