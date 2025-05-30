@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://skx536edn7yd"]
+[gd_scene load_steps=61 format=3 uid="uid://skx536edn7yd"]
 
 [ext_resource type="PackedScene" uid="uid://g7vhevg8ipxh" path="res://area/1 sand oasis/act 2/environment/01Opening.tscn" id="1_vn5mm"]
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_yumdi"]
@@ -35,8 +35,10 @@
 [ext_resource type="AudioStream" uid="uid://btny7mardoxn7" path="res://sound/ost/bonus disc/Sand Oasis Act 2.mp3" id="21_yo7ty"]
 [ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="28_s8f82"]
 [ext_resource type="PackedScene" uid="uid://bd40ra0xnjbfv" path="res://area/1 sand oasis/data/skybox/Skybox.tscn" id="29_7usu5"]
+[ext_resource type="Shader" uid="uid://ckbpl50myf7p6" path="res://effect/sun/shader/Sun.gdshader" id="30_n3txd"]
 [ext_resource type="Material" uid="uid://cq2wpqdv8gtcs" path="res://area/1 sand oasis/data/skybox/model/material/Sky Top Dusty.tres" id="30_rcypk"]
 [ext_resource type="Material" uid="uid://bsgdi50gupc5s" path="res://area/1 sand oasis/data/skybox/model/material/Sky Mountain Dusty.tres" id="31_eo4wn"]
+[ext_resource type="Texture2D" uid="uid://cq8nonxnp634w" path="res://effect/sun/texture/base.png" id="31_t41dx"]
 [ext_resource type="PackedScene" uid="uid://bxso4ejxqcm4k" path="res://area/1 sand oasis/act 2/completion/CompletionDemo.gltf" id="34_7u7yr"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="36_o3cna"]
 [ext_resource type="PackedScene" uid="uid://0o1ds8o5k04j" path="res://effect/buffer/PlanarReflectionRenderer.tscn" id="43_ggjet"]
@@ -66,22 +68,22 @@ size = Vector3(1, 19.4123, 32.3037)
 [sub_resource type="BoxShape3D" id="BoxShape3D_7x33n"]
 size = Vector3(21.605, 21.115, 1)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f37hi"]
+render_priority = 0
+shader = ExtResource("30_n3txd")
+shader_parameter/movement_affect = 0.0
+shader_parameter/occlusion_affect = 0.0
+shader_parameter/albedo = ExtResource("31_t41dx")
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_vii8o"]
 
-[sub_resource type="Gradient" id="Gradient_7nucs"]
+[sub_resource type="Gradient" id="Gradient_eo4wn"]
 interpolation_color_space = 2
-offsets = PackedFloat32Array(0, 0.143617, 0.555851, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0.209428, 0.088364, 0.0743468, 1, 0.63, 0.627795, 0.4977, 1, 1, 1, 1, 1)
+offsets = PackedFloat32Array(0, 0.159091, 1)
+colors = PackedColorArray(0.0552, 0.036, 0.1, 1, 0.1764, 0.147, 0.21, 1, 1, 0.948667, 0.78, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_3f3yu"]
-gradient = SubResource("Gradient_7nucs")
-
-[sub_resource type="Gradient" id="Gradient_ukxed"]
-offsets = PackedFloat32Array(0.583333)
-colors = PackedColorArray(0, 0.116667, 1, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_c3q73"]
-gradient = SubResource("Gradient_ukxed")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wehji"]
+gradient = SubResource("Gradient_eo4wn")
 
 [sub_resource type="Gradient" id="Gradient_6eodn"]
 interpolation_color_space = 2
@@ -101,46 +103,43 @@ resource_local_to_scene = true
 sky_material = SubResource("PanoramaSkyMaterial_47ji7")
 radiance_size = 1
 
-[sub_resource type="Environment" id="Environment_4velm"]
+[sub_resource type="Environment" id="Environment_n3txd"]
 background_mode = 1
 sky = SubResource("Sky_b8s5y")
 sky_rotation = Vector3(0.307178, 0, 0)
 ambient_light_source = 2
-ambient_light_color = Color(0.2115, 0.255225, 0.45, 1)
+ambient_light_color = Color(0.755115, 0.803947, 1, 1)
 ambient_light_sky_contribution = 0.2
-ambient_light_energy = 2.0
-reflected_light_source = 2
-tonemap_mode = 2
-tonemap_exposure = 1.5
-tonemap_white = 2.5
+ambient_light_energy = 0.05
+tonemap_mode = 1
+tonemap_white = 1.02
 ssao_radius = 3.19
 ssao_intensity = 3.36
 ssao_detail = 0.0
-ssil_enabled = true
 ssil_sharpness = 0.9
 ssil_normal_rejection = 0.8
 glow_enabled = true
-glow_levels/2 = 3.7
-glow_levels/3 = 0.0
-glow_levels/4 = 1.0
-glow_levels/7 = 1.0
-glow_intensity = 8.0
-glow_strength = 0.8
-glow_mix = 0.207
-glow_blend_mode = 4
-glow_hdr_scale = 0.0
-glow_map_strength = 0.79
-glow_map = SubResource("GradientTexture1D_c3q73")
+glow_levels/2 = 1.0
+glow_normalized = true
+glow_strength = 0.77
+glow_mix = 0.185
+glow_bloom = 1.0
+glow_blend_mode = 1
 fog_enabled = true
-fog_light_color = Color(0.88, 0.69608, 0.5456, 1)
-fog_light_energy = 0.5
+fog_mode = 1
+fog_light_color = Color(1, 0.796, 0.49, 1)
+fog_density = 1.0
 fog_sky_affect = 0.0
+fog_depth_curve = 1.27456
+fog_depth_begin = 0.0
+fog_depth_end = 125.0
 volumetric_fog_density = 0.02
 volumetric_fog_albedo = Color(0.909315, 0.766043, 0.239109, 1)
 volumetric_fog_gi_inject = 0.0
 volumetric_fog_temporal_reprojection_enabled = false
 adjustment_enabled = true
-adjustment_color_correction = SubResource("GradientTexture1D_3f3yu")
+adjustment_saturation = 1.2
+adjustment_color_correction = SubResource("GradientTexture1D_wehji")
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_yumdi")
@@ -480,16 +479,34 @@ startEnabled = true
 
 [node name="Skybox" parent="Visuals" instance=ExtResource("29_7usu5")]
 
+[node name="Base" parent="Visuals/Skybox/Sun" index="0"]
+transform = Transform3D(0.365, 4.24915e-10, 1.69966e-10, -4.24915e-10, 0.365, 0, -1.69966e-10, -1.97866e-19, 0.365, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_f37hi")
+transparency = 0.53
+
+[node name="Glow" parent="Visuals/Skybox/Sun" index="1"]
+visible = false
+
+[node name="Occluded" parent="Visuals/Skybox/Sun" index="2"]
+visible = false
+
 [node name="stg010_sky_Mesh_0001" parent="Visuals/Skybox/SkyRoot/Skeleton3D" index="1"]
 surface_material_override/0 = ExtResource("30_rcypk")
 
+[node name="stg010_sky_Mesh_0002" parent="Visuals/Skybox/SkyRoot/Skeleton3D" index="2"]
+visible = false
+
 [node name="stg010_sky_Mesh_0003" parent="Visuals/Skybox/SkyRoot/Skeleton3D" index="3"]
 surface_material_override/0 = ExtResource("31_eo4wn")
+
+[node name="stg010_sky_Mesh_0004" parent="Visuals/Skybox/SkyRoot/Skeleton3D" index="4"]
+visible = false
 
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="ExteriorLighting" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(0.939693, 0.296198, 0.17101, 0, -0.5, 0.866025, 0.34202, -0.813797, -0.469846, -11, -6, -374)
+visible = false
 layers = 1024
 light_color = Color(0.465907, 0.4399, 0.83, 1)
 light_energy = 1.2
@@ -501,6 +518,7 @@ directional_shadow_blend_splits = true
 
 [node name="ObjectLighting" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(0.88027, 0.449809, 0.150984, -4.65661e-10, -0.318215, 0.948019, 0.474472, -0.834513, -0.280115, -11, 108, -67)
+visible = false
 layers = 1024
 light_color = Color(0.821109, 0.737766, 0.475436, 1)
 light_energy = 1.2
@@ -511,10 +529,9 @@ shadow_opacity = 0.8
 shadow_blur = 0.5
 
 [node name="InteriorLighting" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(-0.656888, -0.288539, -0.696594, 0, -0.92388, 0.382683, -0.753988, 0.25138, 0.606885, -203, -64, -416)
+transform = Transform3D(-0.656888, -0.585769, 0.474735, 5.96046e-08, 0.629633, 0.776893, -0.753988, 0.510332, -0.413598, -203, -64, -416)
 layers = 1024
-light_color = Color(0.943098, 0.775262, 0.771364, 1)
-light_energy = 1.365
+light_color = Color(0.94, 0.8648, 0.927467, 1)
 light_indirect_energy = 0.0
 light_cull_mask = 4293918724
 shadow_bias = 0.02
@@ -627,11 +644,12 @@ size = Vector3(1338, 332, 1615)
 cull_mask = 18
 reflection_mask = 2
 ambient_mode = 2
-ambient_color = Color(0.466973, 0.581024, 0.979815, 1)
-ambient_color_energy = 0.3
+ambient_color = Color(1, 0.841333, 0.66, 1)
+ambient_color_energy = 0.1
 
 [node name="ExteriorObjectProbe" type="ReflectionProbe" parent="ReflectionProbes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57, 29, -378)
+visible = false
 layers = 1024
 size = Vector3(1338, 332, 1615)
 cull_mask = 18
@@ -647,8 +665,8 @@ size = Vector3(1338, 332, 1615)
 cull_mask = 18
 reflection_mask = 64
 ambient_mode = 2
-ambient_color = Color(0.321965, 0.461901, 0.699756, 1)
-ambient_color_energy = 0.5
+ambient_color = Color(1, 1, 1, 1)
+ambient_color_energy = 0.03
 
 [node name="WaterEnvironmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 230.5, -14.5, -488)
@@ -659,17 +677,6 @@ reflection_mask = 8200
 ambient_mode = 2
 ambient_color = Color(0.466973, 0.581024, 0.979815, 1)
 ambient_color_energy = 0.63
-
-[node name="ForestEnvironmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37, -24.1899, -157)
-layers = 1024
-blend_distance = 20.0
-size = Vector3(178, 88, 139)
-cull_mask = 18
-reflection_mask = 2
-ambient_mode = 2
-ambient_color = Color(0.3886, 0.44488, 0.67, 1)
-ambient_color_energy = 1.5
 
 [node name="Paths" type="Node3D" parent="."]
 
@@ -712,7 +719,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, -50, -250)
 reflectionMaterials = [ExtResource("44_bp8pk")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_4velm")
+environment = SubResource("Environment_n3txd")
 
 [connection signal="Activated" from="Trigger/Object/UTurn" to="Trigger/Object/UTurn/Camera" method="Activate"]
 [connection signal="Activated" from="Trigger/Object/UTurn" to="Trigger/Object/UTurn/ActivatePath" method="Activate"]
@@ -742,5 +749,6 @@ environment = SubResource("Environment_4velm")
 [connection signal="Deactivated" from="Visuals/CullingMap/06L" to="Visuals/06End" method="Deactivate"]
 
 [editable path="Visuals/Skybox"]
+[editable path="Visuals/Skybox/Sun"]
 [editable path="CompletionDemo"]
 [editable path="PlanarReflectionRenderer"]
