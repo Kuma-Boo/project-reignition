@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://pqaytcsp2twi"]
+[gd_scene load_steps=79 format=3 uid="uid://pqaytcsp2twi"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_ul5kf"]
 [ext_resource type="Resource" uid="uid://tw5qyw6eup1u" path="res://area/4 levitated ruin/act 3/camera/TopCam.tres" id="2_2fdgt"]
@@ -7,20 +7,27 @@
 [ext_resource type="PackedScene" uid="uid://cesleei0vilx5" path="res://area/4 levitated ruin/act 3/environment/Rukh1.tscn" id="2_ur2fq"]
 [ext_resource type="Resource" uid="uid://coec06lsmbqe0" path="res://area/4 levitated ruin/data/DialogLibrary.tres" id="3_f15ao"]
 [ext_resource type="AudioStream" uid="uid://d4flratl3ixxk" path="res://sound/ost/bonus disc/Levitated Ruin Act 3.mp3" id="3_ur2fq"]
-[ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="3_xu6y8"]
 [ext_resource type="PackedScene" uid="uid://dart1s468mr5p" path="res://area/4 levitated ruin/act 3/environment/Rukh2.tscn" id="4_8dhk3"]
+[ext_resource type="PackedScene" path="res://area/4 levitated ruin/data/skybox/SkyboxAct3.tscn" id="4_jkq8a"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="4_xu6y8"]
+[ext_resource type="Texture2D" uid="uid://dyni0wv1fddpl" path="res://area/4 levitated ruin/data/skybox/model/texture/sky new.png" id="5_5u6dt"]
 [ext_resource type="PackedScene" uid="uid://dvw3hbgtjf325" path="res://area/4 levitated ruin/act 3/environment/Rukh3.tscn" id="5_d06nc"]
 [ext_resource type="PackedScene" uid="uid://b106f1ewueu7s" path="res://area/4 levitated ruin/act 3/environment/Rukh4.tscn" id="6_75748"]
+[ext_resource type="Shader" uid="uid://phi2fs7xsqqw" path="res://area/4 levitated ruin/data/shader/CloudLowScroll.tres" id="6_id76q"]
 [ext_resource type="PackedScene" uid="uid://c184p4t00xpx" path="res://area/4 levitated ruin/act 3/environment/Rukh5.tscn" id="7_id8t7"]
+[ext_resource type="Texture2D" uid="uid://5kpkjq0h5x72" path="res://area/4 levitated ruin/data/skybox/model/texture/cloud top.png" id="7_q2maa"]
 [ext_resource type="Curve3D" uid="uid://dkf2fujeif0jn" path="res://area/4 levitated ruin/act 3/environment/path/BottomPath.tres" id="8_4prap"]
+[ext_resource type="Shader" uid="uid://bvy2ec2np12wx" path="res://effect/shader/environment/CloudScroll.gdshader" id="8_bd1ok"]
 [ext_resource type="Script" uid="uid://bd2g6rmrn77eo" path="res://object/trigger/modules/LockoutTrigger.cs" id="8_id8t7"]
 [ext_resource type="Resource" uid="uid://dg62uh7g5xdbg" path="res://area/4 levitated ruin/data/SkyroadLockout.tres" id="9_4prap"]
 [ext_resource type="Curve3D" uid="uid://c8o1cau8jr321" path="res://area/4 levitated ruin/act 3/environment/path/SkyRoadPath1.tres" id="9_m4nyc"]
+[ext_resource type="Texture2D" uid="uid://ci67vk7f1lly" path="res://area/4 levitated ruin/data/skybox/model/texture/cloud side.png" id="9_xc0tm"]
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="10_arh3h"]
 [ext_resource type="Curve3D" uid="uid://ciqpgw5px0gdi" path="res://area/4 levitated ruin/act 3/environment/path/SkyRoadPath2.tres" id="10_fw5eo"]
+[ext_resource type="Texture2D" uid="uid://buvo6ko7q7533" path="res://area/1 sand oasis/data/skybox/model/texture/cloud detail.png" id="10_hoppa"]
 [ext_resource type="Resource" uid="uid://bhy1xqntrsc7p" path="res://area/4 levitated ruin/data/SkyroadGroundLockout.tres" id="10_j46ok"]
 [ext_resource type="Curve3D" uid="uid://bqhhu443t76v3" path="res://area/4 levitated ruin/act 3/environment/path/TopPath.tres" id="11_fw5eo"]
+[ext_resource type="Texture2D" uid="uid://d1xxyy80ur76a" path="res://area/2 dino jungle/data/skybox/model/texture/cloud side.png" id="11_hdtum"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="12_1ingi"]
 [ext_resource type="Curve3D" uid="uid://clmymdo7ft56m" path="res://area/4 levitated ruin/act 3/environment/path/TowerPath.tres" id="12_h1rns"]
 [ext_resource type="Curve3D" uid="uid://ckyttw8cd82ou" path="res://area/4 levitated ruin/act 3/environment/path/TowerTopPath.tres" id="13_tvodj"]
@@ -50,6 +57,45 @@
 [ext_resource type="Resource" uid="uid://dp065pv71hu3k" path="res://area/4 levitated ruin/act 3/camera/Skyroad2LoopCam.tres" id="43_r7xw4"]
 [ext_resource type="Resource" uid="uid://gnwkyayk82gs" path="res://area/4 levitated ruin/act 3/camera/Skyroad2AscentCam.tres" id="45_jkq8a"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q6mh6"]
+resource_name = "Sky"
+render_priority = -128
+shading_mode = 0
+specular_mode = 2
+disable_ambient_light = true
+disable_fog = true
+albedo_color = Color(0.472, 0.432, 0.48, 1)
+albedo_texture = ExtResource("5_5u6dt")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bd1ok"]
+render_priority = -126
+shader = ExtResource("6_id76q")
+shader_parameter/albedo = ExtResource("7_q2maa")
+shader_parameter/tint = Color(0, 0.512, 0.64, 1)
+shader_parameter/scroll_speed = 0.05
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xc0tm"]
+render_priority = -128
+shader = ExtResource("6_id76q")
+shader_parameter/albedo = ExtResource("7_q2maa")
+shader_parameter/tint = Color(0.431667, 0, 0.7, 0.0745098)
+shader_parameter/scroll_speed = 0.1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5u6dt"]
+render_priority = -128
+shader = ExtResource("6_id76q")
+shader_parameter/albedo = ExtResource("7_q2maa")
+shader_parameter/tint = Color(0.718, 0.64, 1, 0.105882)
+shader_parameter/scroll_speed = 0.1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ntdde"]
+render_priority = -127
+shader = ExtResource("8_bd1ok")
+shader_parameter/albedo = ExtResource("9_xc0tm")
+shader_parameter/detail = ExtResource("11_hdtum")
+shader_parameter/clip_mask = ExtResource("10_hoppa")
+shader_parameter/scroll_speed = 0.02
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_6v3ym"]
 size = Vector3(10, 8.70264, 2.5)
 
@@ -64,29 +110,13 @@ size = Vector3(1000, 20, 1000)
 size = Vector3(5, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1u8ri"]
-size = Vector3(30, 30, 40)
+size = Vector3(20, 20, 30)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mc3iu"]
 size = Vector3(20, 20, 50)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_arh3h"]
 size = Vector3(5, 8, 5)
-
-[sub_resource type="Environment" id="Environment_o2x0g"]
-ambient_light_source = 2
-ambient_light_color = Color(0.592718, 0.711016, 0.955683, 1)
-ambient_light_energy = 0.5
-tonemap_mode = 2
-tonemap_exposure = 1.2
-tonemap_white = 1.2
-ssao_enabled = true
-glow_enabled = true
-glow_intensity = 0.4
-glow_strength = 0.4
-glow_bloom = 0.15
-glow_blend_mode = 0
-glow_hdr_threshold = 1.5
-adjustment_enabled = true
 
 [sub_resource type="Animation" id="Animation_f15ao"]
 length = 0.001
@@ -444,6 +474,53 @@ _data = {
 &"demo3": SubResource("Animation_5u6dt")
 }
 
+[sub_resource type="Gradient" id="Gradient_5u6dt"]
+offsets = PackedFloat32Array(0, 0.849265, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.687904, 0.763206, 0.849265, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_id76q"]
+gradient = SubResource("Gradient_5u6dt")
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5u6dt"]
+sky_top_color = Color(0.489622, 0.489622, 0.489622, 1)
+sky_horizon_color = Color(0.617463, 0.5893, 0.71, 1)
+
+[sub_resource type="Sky" id="Sky_bd1ok"]
+sky_material = SubResource("ProceduralSkyMaterial_5u6dt")
+
+[sub_resource type="Environment" id="Environment_id76q"]
+background_mode = 1
+sky = SubResource("Sky_bd1ok")
+ambient_light_source = 2
+ambient_light_color = Color(0.472, 0.432, 0.48, 1)
+ambient_light_sky_contribution = 0.2
+ssao_radius = 3.19
+ssao_intensity = 3.36
+ssao_detail = 0.0
+ssil_sharpness = 0.9
+ssil_normal_rejection = 0.8
+glow_enabled = true
+glow_levels/2 = 3.7
+glow_levels/3 = 0.0
+glow_levels/4 = 1.0
+glow_levels/7 = 1.0
+glow_intensity = 8.0
+glow_strength = 0.8
+glow_mix = 0.207
+glow_blend_mode = 4
+glow_hdr_scale = 0.0
+glow_map_strength = 0.79
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.337255, 0.305882, 0.341176, 1)
+fog_density = 1.0
+fog_depth_curve = 1.31951
+fog_depth_begin = 0.0
+fog_depth_end = 2041.0
+adjustment_enabled = true
+adjustment_brightness = 1.2
+adjustment_color_correction = SubResource("GradientTexture1D_id76q")
+
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_ul5kf")
 InitialCameraSettings = ExtResource("2_2fdgt")
@@ -457,7 +534,24 @@ visible = false
 
 [node name="Visuals" type="Node3D" parent="."]
 
-[node name="LRSky" parent="Visuals" instance=ExtResource("3_xu6y8")]
+[node name="LRSky" parent="Visuals" instance=ExtResource("4_jkq8a")]
+
+[node name="stg060_tsky_obj_Mesh_0002" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -21.7119, 0)
+surface_material_override/0 = SubResource("StandardMaterial3D_q6mh6")
+
+[node name="stg060_tsky_obj_Mesh_0011" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="11"]
+surface_material_override/0 = SubResource("ShaderMaterial_bd1ok")
+
+[node name="stg060_tsky_obj_Mesh_0012" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="12"]
+surface_material_override/0 = SubResource("ShaderMaterial_xc0tm")
+
+[node name="stg060_tsky_obj_Mesh_0013" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="13"]
+surface_material_override/0 = SubResource("ShaderMaterial_5u6dt")
+
+[node name="stg060_tsky_obj_Mesh_0014" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="14"]
+visible = false
+surface_material_override/0 = SubResource("ShaderMaterial_ntdde")
 
 [node name="Rukh1" parent="Visuals" instance=ExtResource("2_ur2fq")]
 
@@ -469,7 +563,78 @@ visible = false
 
 [node name="Rukh5" parent="Visuals" instance=ExtResource("7_id8t7")]
 
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="PlayerLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(0.717363, 0.474869, 0.509795, -0.126533, -0.630756, 0.765595, 0.685113, -0.613715, -0.392395, 250, -37, -1213)
+layers = 1024
+light_color = Color(0.82, 1, 0.949, 1)
+light_energy = 0.6
+light_specular = 2.0
+light_cull_mask = 4293918787
+shadow_enabled = true
+
+[node name="ReflectionProbes" type="Node3D" parent="."]
+
+[node name="Tower" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -16.6427, -1375.72)
+layers = 1024
+blend_distance = 6.0
+size = Vector3(33.5205, 41.7653, 43.5601)
+interior = true
+cull_mask = 0
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(0.2232, 0.93, 0.4588, 1)
+ambient_color_energy = 10.0
+
+[node name="Tower2" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 0.986339, -1375.72)
+layers = 1024
+blend_distance = 6.0
+size = Vector3(31.1055, 26.2803, 43.5601)
+interior = true
+cull_mask = 0
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(0.4185, 0.93, 0.750975, 1)
+ambient_color_energy = 7.0
+
+[node name="TowerObjects" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -19.6635, -1375)
+layers = 1024
+blend_distance = 6.0
+size = Vector3(28.4314, 28.673, 45)
+interior = true
+cull_mask = 0
+reflection_mask = 97
+ambient_mode = 2
+ambient_color = Color(0.147602, 0.924986, 0.406798, 1)
+ambient_color_energy = 2.0
+
+[node name="TowerObjects2" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -2.53658, -1375)
+layers = 1024
+blend_distance = 6.0
+size = Vector3(28.4314, 31.5582, 45)
+interior = true
+cull_mask = 0
+reflection_mask = 97
+ambient_mode = 2
+ambient_color = Color(0.4185, 0.74245, 0.93, 1)
+
+[node name="ExteriorPlayer" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 248, -50, -1285.5)
+layers = 1024
+size = Vector3(100, 200, 500)
+cull_mask = 0
+reflection_mask = 64
+ambient_mode = 2
+ambient_color = Color(0.759333, 0.62, 1, 1)
+ambient_color_energy = 0.2
+
 [node name="Triggers" type="Node3D" parent="."]
+visible = false
 
 [node name="TowerLockout" type="Node3D" parent="Triggers"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -30, -1375)
@@ -599,23 +764,6 @@ CameraSettings = ExtResource("19_isxns")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoint2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 shape = SubResource("BoxShape3D_6v3ym")
-
-[node name="Lighting" type="Node3D" parent="."]
-
-[node name="MainLight" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(-0.866025, 1.02312e-07, 0.5, 0.482963, 0.258819, 0.836516, -0.129409, 0.965926, -0.224144, 0, 0, 0)
-layers = 1024
-light_color = Color(1, 0.771168, 0.471408, 1)
-light_energy = 1.8
-light_cull_mask = 4293918722
-shadow_enabled = true
-
-[node name="ObjectLight" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(0.939693, 0.17101, 0.296198, -0.0885213, -0.714911, 0.693589, 0.330366, -0.677981, -0.656659, 0, 0, 0)
-layers = 1024
-light_color = Color(1, 0.8, 0.415686, 1)
-light_energy = 2.5
-light_cull_mask = 4293918785
 
 [node name="Paths" type="Node3D" parent="."]
 
@@ -777,7 +925,10 @@ settings = ExtResource("36_ardp3")
 previousSettings = ExtResource("29_1ingi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SkyRoad/SkyRoad01/CorkscrewCamera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+shape = SubResource("BoxShape3D_1u8ri")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="SkyRoad/SkyRoad01/CorkscrewCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -9)
 shape = SubResource("BoxShape3D_1u8ri")
 
 [node name="AutomationTrigger3" parent="SkyRoad/SkyRoad01" instance=ExtResource("23_cuwbc")]
@@ -934,27 +1085,27 @@ shape = SubResource("BoxShape3D_ee6d1")
 
 [node name="DepthRenderer" parent="." instance=ExtResource("2_718ew")]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_o2x0g")
-
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_ur2fq")
 bus = &"BGM"
 script = ExtResource("4_xu6y8")
-loopStartPosition = 6.017
-loopEndPosition = 208.68
+loopStartPosition = 0.855
+loopEndPosition = 131.133
 isStageMusic = true
 
 [node name="DemoCamera" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 25)
 
 [node name="Camera" type="Camera3D" parent="DemoCamera"]
-cull_mask = 1086
+cull_mask = 1054
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DemoCamera"]
 libraries = {
 &"": SubResource("AnimationLibrary_5u6dt")
 }
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_id76q")
 
 [connection signal="Activated" from="Triggers/Tower2Triggers/Layer1" to="Triggers/TowerLockout" method="Activate"]
 [connection signal="Activated" from="Paths/ZiplinePath/Zipline" to="Paths/ZiplinePath/Zipline/Cam" method="Activate"]
@@ -987,3 +1138,4 @@ libraries = {
 [connection signal="JumpFinished" from="SkyRoad/SkyRoad02/JumpEndTrigger/Jump" to="SkyRoad/SkyroadLockout" method="Deactivate"]
 
 [editable path="Collision"]
+[editable path="Visuals/LRSky"]

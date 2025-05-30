@@ -102,7 +102,7 @@ public partial class EventPlayer : Node
 		AddChild(subtitles);
 
 		// Calculate the delays and display lengths
-		string[] dataPoints = subtitleData.Split(['\n'], System.StringSplitOptions.RemoveEmptyEntries);
+		string[] dataPoints = subtitleData.Split('\n', System.StringSplitOptions.RemoveEmptyEntries);
 		string[] currentData = dataPoints[0].Split('	');
 		string[] nextData = dataPoints[1].Split('	');
 		float previousSpacing = GetStartTime(currentData); // First key is an exception and uses it's start time as delay

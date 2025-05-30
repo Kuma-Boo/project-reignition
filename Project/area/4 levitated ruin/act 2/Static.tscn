@@ -1,19 +1,28 @@
-[gd_scene load_steps=69 format=3 uid="uid://bpxj0juyhbmxs"]
+[gd_scene load_steps=88 format=3 uid="uid://bpxj0juyhbmxs"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_16rgi"]
 [ext_resource type="PackedScene" uid="uid://c06ghybsci6mi" path="res://area/4 levitated ruin/data/skybox/Skybox.tscn" id="2_dq0yd"]
 [ext_resource type="PackedScene" uid="uid://01m7uv7kdr5j" path="res://area/4 levitated ruin/act 2/environment/collision/Collision.tscn" id="2_rqc87"]
 [ext_resource type="PackedScene" uid="uid://cx4ihvfopidgr" path="res://area/4 levitated ruin/act 2/environment/Rukh1.tscn" id="3_8fsym"]
-[ext_resource type="Resource" uid="uid://coec06lsmbqe0" path="res://area/4 levitated ruin/data/DialogLibrary.tres" id="3_pufbh"]
+[ext_resource type="Resource" uid="uid://coec06lsmbqe0" path="res://area/4 levitated ruin/data/DialogLibrary.tres" id="3_q7bfn"]
+[ext_resource type="PackedScene" uid="uid://1mlq23jb6byp" path="res://area/7 night palace/data/skybox/Skybox.tscn" id="4_c0tbi"]
 [ext_resource type="PackedScene" uid="uid://bajew0cci4m54" path="res://area/4 levitated ruin/act 2/environment/Rukh1LOD.tscn" id="4_qm0g2"]
+[ext_resource type="Shader" uid="uid://bmxfspe05yf2h" path="res://area/7 night palace/data/shader/SkyBackground.gdshader" id="5_ttop8"]
+[ext_resource type="Texture2D" uid="uid://caxeerv5m6p41" path="res://area/7 night palace/data/skybox/model/texture/sky moon.png" id="5_y7vf5"]
 [ext_resource type="PackedScene" uid="uid://coqvsdvf2uaop" path="res://area/4 levitated ruin/act 2/environment/Rukh2.tscn" id="5_ywrk3"]
+[ext_resource type="Texture2D" uid="uid://b7c46n5bbcypu" path="res://area/7 night palace/data/skybox/model/texture/sky background.png" id="6_qg5bm"]
 [ext_resource type="PackedScene" uid="uid://e1ogicqf6iyb" path="res://area/4 levitated ruin/act 2/environment/Rukh2LOD.tscn" id="6_yh2tw"]
+[ext_resource type="Texture2D" uid="uid://bibglli8pbfuc" path="res://area/7 night palace/data/skybox/model/texture/sky stars blorange.png" id="7_btlwi"]
 [ext_resource type="PackedScene" uid="uid://dtdg801dspc6e" path="res://area/4 levitated ruin/act 2/environment/Rukh3.tscn" id="7_t4pd1"]
 [ext_resource type="PackedScene" uid="uid://8f5qkpcg4ml5" path="res://area/4 levitated ruin/act 2/environment/Rukh3LOD.tscn" id="8_yms8o"]
 [ext_resource type="PackedScene" uid="uid://daw4ifj8lu703" path="res://area/4 levitated ruin/act 2/environment/Rukh4.tscn" id="9_ro48b"]
+[ext_resource type="Shader" uid="uid://dffdo5sycpy05" path="res://area/4 levitated ruin/data/shader/ForestScroll.tres" id="10_nwodq"]
 [ext_resource type="PackedScene" uid="uid://emgg67whvfr" path="res://area/4 levitated ruin/act 2/environment/Rukh4LOD.tscn" id="10_pfd68"]
 [ext_resource type="PackedScene" uid="uid://ytum20tuve3h" path="res://area/4 levitated ruin/act 2/environment/Rukh5.tscn" id="11_ht7o1"]
+[ext_resource type="Texture2D" uid="uid://chr51rogrw2hj" path="res://area/4 levitated ruin/data/skybox/model/texture/sky forest.png" id="11_q7bfn"]
 [ext_resource type="PackedScene" uid="uid://bvft4ug7urpq6" path="res://area/4 levitated ruin/act 2/environment/Rukh5LOD.tscn" id="12_it03k"]
+[ext_resource type="Texture2D" uid="uid://4mqne7dlw7q3" path="res://area/4 levitated ruin/data/skybox/model/texture/sky forest 2.png" id="12_tjkwn"]
+[ext_resource type="Texture2D" uid="uid://blsoicj81ejo3" path="res://area/4 levitated ruin/data/skybox/model/texture/sky forest lut.png" id="13_h61ba"]
 [ext_resource type="PackedScene" uid="uid://c0dgmelbkergu" path="res://area/4 levitated ruin/act 2/environment/Zipline.tscn" id="13_p27ay"]
 [ext_resource type="PackedScene" uid="uid://dar74l2eiux2t" path="res://effect/buffer/DepthRenderer.tscn" id="14_h17nb"]
 [ext_resource type="Curve3D" uid="uid://ceyxa8kv6wyp6" path="res://area/4 levitated ruin/act 2/environment/path/Rukh2Path.tres" id="14_pfd68"]
@@ -54,6 +63,39 @@
 [ext_resource type="Curve3D" uid="uid://rus44tcch71j" path="res://area/4 levitated ruin/act 2/environment/path/Tower4Sidle3Path.tres" id="40_vgqrq"]
 [ext_resource type="Curve3D" uid="uid://mlp38x0qybc4" path="res://area/4 levitated ruin/act 2/environment/path/Tower5SidlePath.tres" id="43_toorb"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lnv7r"]
+render_priority = -128
+shader = ExtResource("5_ttop8")
+shader_parameter/background_texture = ExtResource("6_qg5bm")
+shader_parameter/star_texture = ExtResource("7_btlwi")
+shader_parameter/star_flicker_speed = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nwodq"]
+resource_name = "Bloom"
+render_priority = -126
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rweac"]
+resource_name = "Moon"
+render_priority = -125
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.874, 0.46, 1)
+albedo_texture = ExtResource("5_y7vf5")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_flgq4"]
+render_priority = 0
+shader = ExtResource("10_nwodq")
+shader_parameter/albedo = ExtResource("11_q7bfn")
+shader_parameter/detail = ExtResource("12_tjkwn")
+shader_parameter/lut = ExtResource("13_h61ba")
+shader_parameter/tint = Color(0, 0.19, 0.3, 1)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_mwnvi"]
 size = Vector3(5, 8, 3)
 
@@ -85,21 +127,51 @@ radius = 9.5
 [sub_resource type="BoxShape3D" id="BoxShape3D_pufbh"]
 size = Vector3(8, 7, 4)
 
-[sub_resource type="Environment" id="Environment_v5nmh"]
+[sub_resource type="Gradient" id="Gradient_ttop8"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.125, 0.276515, 0.594697, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.0337223, 0.0582743, 0.101096, 1, 0.1519, 0.20987, 0.31, 1, 0.562347, 0.5568, 0.64, 1, 1, 0.990667, 0.92, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qg5bm"]
+gradient = SubResource("Gradient_ttop8")
+
+[sub_resource type="Gradient" id="Gradient_btlwi"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.539683, 1)
+colors = PackedColorArray(0, 0, 0.0588235, 1, 0.133333, 0.184314, 0.298039, 1, 0, 0, 0.0588235, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lnv7r"]
+gradient = SubResource("Gradient_btlwi")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_nwodq"]
+panorama = SubResource("GradientTexture2D_lnv7r")
+
+[sub_resource type="Sky" id="Sky_q7bfn"]
+sky_material = SubResource("PanoramaSkyMaterial_nwodq")
+
+[sub_resource type="Environment" id="Environment_h61ba"]
+sky = SubResource("Sky_q7bfn")
 ambient_light_source = 2
-ambient_light_color = Color(0.592718, 0.711016, 0.955683, 1)
+ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.2
-tonemap_mode = 2
-tonemap_exposure = 1.2
-tonemap_white = 1.2
+reflected_light_source = 2
+tonemap_white = 1.4
 ssao_enabled = true
 glow_enabled = true
-glow_intensity = 0.4
-glow_strength = 0.4
-glow_bloom = 0.15
-glow_blend_mode = 0
-glow_hdr_threshold = 1.5
+glow_levels/2 = 1.0
+glow_levels/3 = 0.5
+glow_levels/4 = 0.25
+glow_levels/5 = 0.13
+glow_normalized = true
+glow_intensity = 2.0
+glow_strength = 1.5
+glow_blend_mode = 1
+glow_hdr_threshold = 0.9
+fog_light_color = Color(0, 0, 0, 1)
+fog_density = 0.0011
 adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture1D_qg5bm")
 
 [sub_resource type="Animation" id="Animation_bam1r"]
 length = 0.001
@@ -768,7 +840,7 @@ _data = {
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_16rgi")
 InitialCameraSettings = ExtResource("21_mwnvi")
-dialogLibrary = ExtResource("3_pufbh")
+dialogLibrary = ExtResource("3_q7bfn")
 pathParent = NodePath("Paths")
 completionAnimator = NodePath("DemoCamera/AnimationPlayer")
 Environment = NodePath("WorldEnvironment")
@@ -778,7 +850,82 @@ visible = false
 
 [node name="Visuals" type="Node3D" parent="."]
 
+[node name="Skybox" parent="Visuals" instance=ExtResource("4_c0tbi")]
+transform = Transform3D(0.195415, 0, 0.980721, 0, 1, 0, -0.980721, 0, 0.195415, 0, 0, 0)
+
+[node name="SkyRoot" parent="Visuals/Skybox" index="0"]
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, -179.753, 0)
+
+[node name="BackgroundMesh" parent="Visuals/Skybox/SkyRoot/Skeleton3D" index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_lnv7r")
+
+[node name="BloomMesh" parent="Visuals/Skybox/SkyRoot/Skeleton3D" index="1"]
+visible = false
+surface_material_override/0 = SubResource("StandardMaterial3D_nwodq")
+
+[node name="MoonMesh" parent="Visuals/Skybox/SkyRoot/Skeleton3D" index="5"]
+surface_material_override/0 = SubResource("StandardMaterial3D_rweac")
+
 [node name="LRSky" parent="Visuals" instance=ExtResource("2_dq0yd")]
+
+[node name="SkyRoot" parent="Visuals/LRSky" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -466.856, 0)
+
+[node name="stg060_tsky_obj_Mesh_0000" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="0"]
+visible = false
+
+[node name="stg060_tsky_obj_Mesh_0001" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="1"]
+visible = false
+
+[node name="stg060_tsky_obj_Mesh_0002" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="2"]
+visible = false
+
+[node name="stg060_tsky_obj_Mesh_0003" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.4406, 0)
+surface_material_override/0 = SubResource("ShaderMaterial_flgq4")
+
+[node name="stg060_tsky_obj_Mesh_0004" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.4406, 0)
+surface_material_override/0 = SubResource("ShaderMaterial_flgq4")
+
+[node name="stg060_tsky_obj_Mesh_0005" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.4406, 0)
+surface_material_override/0 = SubResource("ShaderMaterial_flgq4")
+
+[node name="stg060_tsky_obj_Mesh_0006" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.4406, 0)
+surface_material_override/0 = SubResource("ShaderMaterial_flgq4")
+
+[node name="stg060_tsky_obj_Mesh_0007" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.4406, 0)
+surface_material_override/0 = SubResource("ShaderMaterial_flgq4")
+
+[node name="stg060_tsky_obj_Mesh_0008" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.4406, 0)
+surface_material_override/0 = SubResource("ShaderMaterial_flgq4")
+
+[node name="stg060_tsky_obj_Mesh_0009" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.4406, 0)
+surface_material_override/0 = SubResource("ShaderMaterial_flgq4")
+
+[node name="stg060_tsky_obj_Mesh_0010" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.4406, 0)
+surface_material_override/0 = SubResource("ShaderMaterial_flgq4")
+
+[node name="stg060_tsky_obj_Mesh_0011" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="11"]
+visible = false
+
+[node name="stg060_tsky_obj_Mesh_0012" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="12"]
+visible = false
+
+[node name="stg060_tsky_obj_Mesh_0013" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="13"]
+visible = false
+
+[node name="stg060_tsky_obj_Mesh_0014" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="14"]
+visible = false
+
+[node name="Sun" parent="Visuals/LRSky" index="2"]
+visible = false
 
 [node name="Rukh1" parent="Visuals" instance=ExtResource("3_8fsym")]
 startEnabled = true
@@ -817,19 +964,13 @@ startEnabled = true
 [node name="Sun" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(0.5, 0.75, 0.433013, 0.433013, -0.649519, 0.625, 0.75, -0.125, -0.649519, 0, 0, 0)
 layers = 2
-light_color = Color(0.96, 0.71808, 0.4224, 1)
-light_energy = 1.8
+light_color = Color(0.86, 0.897333, 1, 1)
 light_cull_mask = 4293918823
 shadow_enabled = true
 shadow_caster_mask = 4293918787
 
-[node name="Bounce" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(-0.433013, 0.649519, -0.625, 0.0580125, 0.712019, 0.699759, 0.899519, 0.266747, -0.345994, 0, 0, 0)
-layers = 2
-light_color = Color(0.3492, 0.78376, 0.97, 1)
-light_energy = 0.6
-
 [node name="ReflectionProbes" type="Node3D" parent="."]
+visible = false
 
 [node name="ExteriorEnvionmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 262.5, -5, -1160)
@@ -1719,12 +1860,12 @@ curve = ExtResource("27_f3657")
 [node name="DepthRenderer" parent="." instance=ExtResource("14_h17nb")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_v5nmh")
+environment = SubResource("Environment_h61ba")
 
 [node name="DemoCamera" type="Node3D" parent="."]
 
 [node name="Camera" type="Camera3D" parent="DemoCamera"]
-cull_mask = 1086
+cull_mask = 1054
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DemoCamera"]
 libraries = {
@@ -1746,3 +1887,5 @@ isStageMusic = true
 [connection signal="Activated" from="Triggers/Camera/Tower4Triggers/LaunchRingCull/Layer4" to="Triggers/RecenterLockout" method="Activate"]
 
 [editable path="Collision"]
+[editable path="Visuals/Skybox"]
+[editable path="Visuals/LRSky"]

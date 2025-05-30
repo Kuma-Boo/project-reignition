@@ -40,18 +40,6 @@ startEnabled = true
 [node name="Rukh5LOD" parent="Static/Visuals" index="12"]
 startEnabled = false
 
-[node name="Lock1" parent="Static/PrisonDoor" index="4"]
-transform = Transform3D(0.939693, -0.34202, 6.70552e-08, 0.321393, 0.883021, -0.342024, 0.116979, 0.321397, 0.939691, 0.516495, 1.86809, 2.10022)
-
-[node name="Lock2" parent="Static/PrisonDoor" index="5"]
-transform = Transform3D(0.965926, 0.25, -0.0669873, -0.258819, 0.933012, -0.250004, -9.2122e-07, 0.258823, 0.965925, -0.550537, 0.592514, 2.05786)
-
-[node name="Lock3" parent="Static/PrisonDoor" index="6"]
-transform = Transform3D(0.906307, 0.42262, 4.88013e-07, -0.416199, 0.892538, -0.17365, -0.0733884, 0.15738, 0.984807, -0.494125, 1.89076, 2.10291)
-
-[node name="Lock4" parent="Static/PrisonDoor" index="7"]
-transform = Transform3D(0.965926, 0.258819, 5.96046e-07, -0.23457, 0.875426, 0.422618, 0.109381, -0.408217, 0.906308, 0.493484, 0.600325, 2.08044)
-
 [node name="SpawnPosition" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -37.9, -1219)
 
@@ -563,6 +551,22 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 48,
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 3)
 shape = SubResource("BoxShape3D_isgee")
 
+[connection signal="JumpFinished" from="Static/Triggers/Object/Rukh3Jump/Jump" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="JumpFinished" from="Static/SkyRoad/SkyRoad01/Rukh4Jump/Jump" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad02/AutomationTrigger2" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="Static/SkyRoad/SkyRoad02/AutomationTrigger2" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad02/AutomationTrigger3" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="Static/SkyRoad/SkyRoad02/AutomationTrigger3" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad02/LockoutEnd" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad03/GroundLockout" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad03/AutomationTrigger1" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="Static/SkyRoad/SkyRoad03/AutomationTrigger1" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad03/AutomationTrigger2" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="Static/SkyRoad/SkyRoad03/AutomationTrigger2" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad03/LockoutEnd" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="Activated" from="Static/SkyRoad/SkyRoad04/AutomationTrigger1" to="Static/Collision/OneWayWall" method="Deactivate"]
+[connection signal="Deactivated" from="Static/SkyRoad/SkyRoad04/AutomationTrigger1" to="Static/Collision/OneWayWall" method="Activate"]
+[connection signal="JumpFinished" from="Static/SkyRoad/SkyRoad05/Rukh5Jump/Jump" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Shattered" from="Exterior/StoneGroup/Stone1" to="Exterior/StoneGroup/Stone2" method="Shatter"]
 [connection signal="Defeated" from="Exterior/Gargoyle2" to="Exterior/EnemyStone" method="IncrementCounter"]
 [connection signal="Activated" from="Interior/Spring1" to="Static/Collision/OneWayWall" method="Deactivate"]
@@ -578,3 +582,4 @@ shape = SubResource("BoxShape3D_isgee")
 
 [editable path="Static"]
 [editable path="Static/Collision"]
+[editable path="Static/Visuals/LRSky"]

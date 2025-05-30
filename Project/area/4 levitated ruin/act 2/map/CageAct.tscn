@@ -40,7 +40,6 @@
 [ext_resource type="PackedScene" uid="uid://bpuen1pddy3ps" path="res://area/4 levitated ruin/object/model/foothold/FootholdLeft.gltf" id="20_wxrhk"]
 [ext_resource type="Resource" uid="uid://npcok2qfnco4" path="res://area/4 levitated ruin/act 2/camera/Rukh3Cam.tres" id="22_hvimn"]
 [ext_resource type="PackedScene" uid="uid://dj0mvj1132k0a" path="res://area/4 levitated ruin/object/model/foothold/FootholdRight.gltf" id="22_s5d0m"]
-[ext_resource type="Script" uid="uid://bitgnn108jmaa" path="res://object/trigger/modules/DialogTrigger.cs" id="23_3als8"]
 [ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="24_7f5hg"]
 [ext_resource type="Resource" uid="uid://bs6nww33wlhi" path="res://area/4 levitated ruin/act 2/camera/TowerBaseCam.tres" id="26_nskpe"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="27_vns5j"]
@@ -74,6 +73,7 @@
 [ext_resource type="Resource" uid="uid://s0hwj5n2n5q1" path="res://area/4 levitated ruin/act 2/camera/cage/Tower4SpringCam.tres" id="61_lgrye"]
 [ext_resource type="PackedScene" uid="uid://br4bp3m6g4l8g" path="res://area/4 levitated ruin/object/SandStep.tscn" id="61_vjwve"]
 [ext_resource type="PackedScene" uid="uid://bnefjsj5g2emm" path="res://area/4 levitated ruin/object/MissileSimple.tscn" id="64_dprgk"]
+[ext_resource type="PackedScene" uid="uid://c5uhjh0ra11u6" path="res://area/4 levitated ruin/object/MissileVisualOnly.tscn" id="65_kctvq"]
 [ext_resource type="PackedScene" uid="uid://mhhtlvsxmugl" path="res://object/stage/common/Catapult.tscn" id="66_7fc5p"]
 [ext_resource type="PackedScene" uid="uid://cbpudluma1oux" path="res://object/stage/destructable/Crate.tscn" id="67_o74m7"]
 [ext_resource type="Resource" uid="uid://bd5d7khysi5en" path="res://area/4 levitated ruin/act 2/camera/cage/CatapultCam.tres" id="69_0syfd"]
@@ -86,11 +86,11 @@
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_gg5un"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_q3nif"]
-size = Vector3(5, 8, 3)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_5yb3a"]
 size = Vector3(10, 9, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q3nif"]
+size = Vector3(5, 8, 3)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g2bsq"]
 size = Vector3(10, 20, 2.5)
@@ -291,7 +291,7 @@ tracks/7/keys = {
 tracks/8/type = "method"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("../../PrisonDoor/PrisonLock1")
+tracks/8/path = NodePath("../../PrisonDoor/Lock1/PrisonLock")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -462,7 +462,7 @@ tracks/7/keys = {
 tracks/8/type = "method"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("../../PrisonDoor/PrisonLock2")
+tracks/8/path = NodePath("../../PrisonDoor/Lock2/PrisonLock")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -633,7 +633,7 @@ tracks/7/keys = {
 tracks/8/type = "method"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("../../PrisonDoor/PrisonLock3")
+tracks/8/path = NodePath("../../PrisonDoor/Lock3/PrisonLock")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -804,7 +804,7 @@ tracks/7/keys = {
 tracks/8/type = "method"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("../../PrisonDoor/PrisonLock4")
+tracks/8/path = NodePath("../../PrisonDoor/Lock4/PrisonLock")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -835,7 +835,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 10, -1391)
 metadata/_edit_lock_ = true
 
 [node name="LockoutTrigger" parent="CageAct/SpawnPosition" instance=ExtResource("6_f8ouc")]
-"Enter Mode" = 0
 
 [node name="Recenter" type="Node3D" parent="CageAct/SpawnPosition/LockoutTrigger"]
 script = ExtResource("9_t2qcg")
@@ -851,19 +850,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 10, -1391)
 script = ExtResource("5_im11i")
 startEnabled = true
 saveVisibilityOnCheckpoint = true
-
-[node name="StartDialog" parent="CageAct/MainTower" instance=ExtResource("6_f8ouc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
-"Enter Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="CageAct/MainTower/StartDialog"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.80301, 5.05, -0.0100098)
-script = ExtResource("23_3als8")
-textKeys = Array[String](["lev_rescue_sh", "lev_rescue_kn", "lev_rescue_so"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/MainTower/StartDialog"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
-shape = SubResource("BoxShape3D_q3nif")
 
 [node name="Rings1" type="Node3D" parent="CageAct/MainTower"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -7.39976, 23.6)
@@ -987,17 +973,41 @@ layers = 1024
 light_color = Color(0.671914, 0.640048, 0.993158, 1)
 light_cull_mask = 3
 
-[node name="PrisonLock1" parent="CageAct/PrisonDoor" instance=ExtResource("6_gl56w")]
+[node name="Lock1" type="BoneAttachment3D" parent="CageAct/PrisonDoor"]
 transform = Transform3D(0.939693, -0.34202, 6.70552e-08, 0.321393, 0.883021, -0.342024, 0.116979, 0.321397, 0.939691, 0.516495, 1.86809, 2.10022)
+bone_name = "lock01"
+bone_idx = 1
+use_external_skeleton = true
+external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
 
-[node name="PrisonLock2" parent="CageAct/PrisonDoor" instance=ExtResource("6_gl56w")]
+[node name="PrisonLock" parent="CageAct/PrisonDoor/Lock1" instance=ExtResource("6_gl56w")]
+
+[node name="Lock2" type="BoneAttachment3D" parent="CageAct/PrisonDoor"]
 transform = Transform3D(0.965926, 0.25, -0.0669873, -0.258819, 0.933012, -0.250004, -9.2122e-07, 0.258823, 0.965925, -0.550537, 0.592514, 2.05786)
+bone_name = "lock02"
+bone_idx = 2
+use_external_skeleton = true
+external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
 
-[node name="PrisonLock3" parent="CageAct/PrisonDoor" instance=ExtResource("6_gl56w")]
+[node name="PrisonLock" parent="CageAct/PrisonDoor/Lock2" instance=ExtResource("6_gl56w")]
+
+[node name="Lock3" type="BoneAttachment3D" parent="CageAct/PrisonDoor"]
 transform = Transform3D(0.906307, 0.42262, 4.88013e-07, -0.416199, 0.892538, -0.17365, -0.0733884, 0.15738, 0.984807, -0.494125, 1.89076, 2.10291)
+bone_name = "lock03"
+bone_idx = 3
+use_external_skeleton = true
+external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
 
-[node name="PrisonLock4" parent="CageAct/PrisonDoor" instance=ExtResource("6_gl56w")]
+[node name="PrisonLock" parent="CageAct/PrisonDoor/Lock3" instance=ExtResource("6_gl56w")]
+
+[node name="Lock4" type="BoneAttachment3D" parent="CageAct/PrisonDoor"]
 transform = Transform3D(0.965926, 0.258819, 5.96046e-07, -0.23457, 0.875426, 0.422618, 0.109381, -0.408217, 0.906308, 0.493484, 0.600325, 2.08044)
+bone_name = "lock04"
+bone_idx = 4
+use_external_skeleton = true
+external_skeleton = NodePath("../PrisonDoorRoot/Skeleton3D")
+
+[node name="PrisonLock" parent="CageAct/PrisonDoor/Lock4" instance=ExtResource("6_gl56w")]
 
 [node name="Ziplines" type="Node3D" parent="CageAct"]
 
@@ -1074,10 +1084,6 @@ transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, 
 script = ExtResource("7_qcr5r")
 jumpHeight = 2.0
 autoAlign = true
-
-[node name="Dialog" type="Node3D" parent="CageAct/Ziplines/Zipline1/End/Jump"]
-script = ExtResource("23_3als8")
-textKeys = Array[String](["common_start2_so", "common_start2_sh"])
 
 [node name="Path" type="Node3D" parent="CageAct/Ziplines/Zipline1/End" node_paths=PackedStringArray("path")]
 script = ExtResource("8_mxhyu")
@@ -1325,10 +1331,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 3.72529e-09, 0, 3.72529e-09, 1, 2.3, 1, 2
 script = ExtResource("27_vns5j")
 transitionType = 1
 settings = ExtResource("28_a4ysn")
-
-[node name="RecoveryDialog" type="Node3D" parent="CageAct/Ziplines/Zipline4/End"]
-script = ExtResource("23_3als8")
-textKeys = Array[String](["common_recovery_sh", "common_recovery_so"])
 
 [node name="Path" type="Node3D" parent="CageAct/Ziplines/Zipline4/End" node_paths=PackedStringArray("path")]
 transform = Transform3D(1, 0, 0, 0, 1, 3.72529e-09, 0, 3.72529e-09, 1, 2.3, 1, 2.7)
@@ -1689,14 +1691,6 @@ startHidden = true
 MiddleHeight = 10.0
 FinalHeight = 8.0
 Distance = 10.0
-
-[node name="TowerDialog" type="Node3D" parent="CageAct/Tower2/Spring1"]
-script = ExtResource("23_3als8")
-textKeys = Array[String](["lev_seal_sh", "lev_seal_so"])
-
-[node name="LeverDialog" type="Node3D" parent="CageAct/Tower2/Spring1"]
-script = ExtResource("23_3als8")
-textKeys = Array[String](["lev_directions_so", "lev_directions_sh"])
 
 [node name="StaticGate1" parent="CageAct/Tower2" instance=ExtResource("11_t2qcg")]
 transform = Transform3D(0.282843, 0, -0.707107, 0, 2.2, 0, 0.282843, 0, 0.707107, 5.15, 8, 5.59998)
@@ -2145,10 +2139,6 @@ MiddleHeight = 30.0
 FinalHeight = 7.5
 Distance = 2.0
 
-[node name="SpringDialog" type="Node3D" parent="CageAct/Tower2/Spring2"]
-script = ExtResource("23_3als8")
-textKeys = Array[String](["common_jump2_so", "common_jump2_sh"])
-
 [node name="Camera" type="Node3D" parent="CageAct/Tower2/Spring2"]
 script = ExtResource("27_vns5j")
 transitionTime = 1.0
@@ -2163,21 +2153,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 41, -11)
 script = ExtResource("5_im11i")
 respawnOnActivation = true
 
-[node name="MissileVisualOnly1" parent="CageAct/Tower2/MissileGroup1" instance=ExtResource("64_dprgk")]
+[node name="MissileVisualOnly1" parent="CageAct/Tower2/MissileGroup1" instance=ExtResource("65_kctvq")]
 transform = Transform3D(0.965926, 0, -0.258819, 0.24321, 0.34202, 0.907673, 0.0885213, -0.939693, 0.330366, 9, -9.76194, -2.172)
-disableHitboxes = true
 lifetime = 0.6
 moveSpeed = 40.0
 
-[node name="MissileVisualOnly2" parent="CageAct/Tower2/MissileGroup1" instance=ExtResource("64_dprgk")]
+[node name="MissileVisualOnly2" parent="CageAct/Tower2/MissileGroup1" instance=ExtResource("65_kctvq")]
 transform = Transform3D(0.965926, 0, -0.258819, 0.24321, 0.34202, 0.907673, 0.0885213, -0.939693, 0.330366, 4, -6.76193, -1.36816)
-disableHitboxes = true
 lifetime = 0.8
 moveSpeed = 40.0
 
-[node name="MissileVisualOnly3" parent="CageAct/Tower2/MissileGroup1" instance=ExtResource("64_dprgk")]
+[node name="MissileVisualOnly3" parent="CageAct/Tower2/MissileGroup1" instance=ExtResource("65_kctvq")]
 transform = Transform3D(0.965926, 0, -0.258819, 0.24321, 0.34202, 0.907673, 0.0885213, -0.939693, 0.330366, 0, -0.761932, -0.564209)
-disableHitboxes = true
 lifetime = 1.0
 moveSpeed = 40.0
 
@@ -2227,11 +2214,6 @@ moveSpeed = 40.0
 
 [node name="Lever" parent="CageAct/Tower2" instance=ExtResource("40_6dght")]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -11.5858, 40, 11.5858)
-
-[node name="LeverDialog" type="Node3D" parent="CageAct/Tower2/Lever"]
-script = ExtResource("23_3als8")
-randomize = true
-textKeys = Array[String](["lev_hint_lever1_so", "lev_hint_lever1_sh"])
 
 [node name="Cam" type="Node3D" parent="CageAct/Tower2/Lever"]
 script = ExtResource("27_vns5j")
@@ -2461,16 +2443,9 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 7, -2,
 [node name="GargoyleStaticR2" parent="CageAct/Tower3/Exterior" instance=ExtResource("49_biwra")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 7, -2, -39)
 
-[node name="EnemyDialog" parent="CageAct/Tower3/Exterior" instance=ExtResource("6_f8ouc")]
-"Enter Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="CageAct/Tower3/Exterior/EnemyDialog"]
-script = ExtResource("23_3als8")
-textKeys = Array[String](["common_enemy2_so", "common_enemy2_sh"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower3/Exterior/EnemyDialog"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
-shape = SubResource("BoxShape3D_g2bsq")
+[node name="EnemyStone" parent="CageAct/Tower3/Exterior" instance=ExtResource("9_vvs7k")]
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 0, 2.35, -62.6)
+enemyCount = 2
 
 [node name="MovingMajin1" type="Node3D" parent="CageAct/Tower3/Exterior"]
 transform = Transform3D(0.996195, 0.00152108, 0.0871424, 0, 0.999848, -0.0174524, -0.0871557, 0.017386, 0.996043, 0, -1, -17)
@@ -2487,7 +2462,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="CageAct/Tower3/Exterior/MovingMajin1" instance=ExtResource("50_kuvve")]
-transform = Transform3D(1, 1.64146e-08, 0, 0, 0.999972, -9.6485e-07, 0, 5.06639e-07, 1, 6.10352e-05, -7.62939e-06, -20.6349)
+transform = Transform3D(1, 1.55997e-08, 0, 0, 0.999973, -9.08971e-07, 0, 4.93601e-07, 1, 6.10352e-05, -7.62939e-06, -20.6349)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
@@ -2511,7 +2486,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="BlueMajin" parent="CageAct/Tower3/Exterior/MovingMajin2" instance=ExtResource("50_kuvve")]
-transform = Transform3D(1, -4.59841e-08, -4.39584e-07, -4.84288e-08, 1.00001, -8.3819e-07, 6.85453e-07, 2.34693e-07, 1.00001, 0, -7.62939e-06, -17.5)
+transform = Transform3D(1, -4.57512e-08, -4.39584e-07, -4.49363e-08, 1.00001, -7.82311e-07, 6.85453e-07, 2.34693e-07, 1.00001, 0, -7.62939e-06, -17.5)
 "Spawn Settings/Spawn Travel Time" = 0.5
 "Spawn Settings/Spawn Delay" = 0.0
 "Spawn Settings/Spawn Offset" = Vector3(20, 0, 0)
@@ -2519,10 +2494,6 @@ transform = Transform3D(1, -4.59841e-08, -4.39584e-07, -4.84288e-08, 1.00001, -8
 "Spawn Settings/Spawn Out Offset" = Vector3(0, 0, 0)
 "Attack Settings/Attack Type" = 1
 rangeOverride = 20
-
-[node name="EnemyStone" parent="CageAct/Tower3/Exterior" instance=ExtResource("9_vvs7k")]
-transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 0, 2.35, -62.6)
-enemyCount = 2
 
 [node name="Triggers" type="Node3D" parent="CageAct/Tower3"]
 
@@ -2912,6 +2883,7 @@ startHidden = true
 MiddleHeight = 15.0
 FinalHeight = 8.0
 Distance = 12.5
+sfxPlayer = NodePath("../Spring/SFX")
 
 [node name="Camera" type="Node3D" parent="CageAct/Tower3/Spring2"]
 script = ExtResource("27_vns5j")
@@ -2944,26 +2916,10 @@ IsRightLever = false
 script = ExtResource("27_vns5j")
 settings = ExtResource("41_q4org")
 
-[node name="LeverDialog" type="Node3D" parent="CageAct/Tower3/Lever"]
-script = ExtResource("23_3als8")
-randomize = true
-textKeys = Array[String](["lev_hint_lever2_so", "lev_hint_lever2_sh"])
-
 [node name="Zipline3" type="Node3D" parent="CageAct"]
 transform = Transform3D(0.812258, -0.0932362, -0.575795, 0, 0.987142, -0.159843, 0.583295, 0.129835, 0.801814, 242.259, -1.60984, -1367.02)
 script = ExtResource("5_im11i")
 saveVisibilityOnCheckpoint = true
-
-[node name="EnemyDialog" parent="CageAct/Zipline3" instance=ExtResource("6_f8ouc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50)
-"Enter Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="CageAct/Zipline3/EnemyDialog"]
-script = ExtResource("23_3als8")
-textKeys = Array[String](["common_enemy5_so"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Zipline3/EnemyDialog"]
-shape = SubResource("BoxShape3D_g2bsq")
 
 [node name="RedMajin1" parent="CageAct/Zipline3" instance=ExtResource("51_lfjem")]
 transform = Transform3D(-4.31491e-08, 6.98863e-09, -1, 0.159881, 0.987136, 0, 0.987136, -0.159881, -4.37114e-08, 4, -2.75, 160)
@@ -3252,19 +3208,6 @@ activationSpeedScale = 10.0
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0.5, -5)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 100
-
-[node name="SandflowDialog" parent="CageAct/Tower4" instance=ExtResource("6_f8ouc")]
-transform = Transform3D(0.707105, 0, -0.707105, 0, 1, 0, 0.707105, 0, 0.707105, 5.51542, 16, 5.51542)
-"Enter Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="CageAct/Tower4/SandflowDialog"]
-script = ExtResource("23_3als8")
-randomize = true
-textKeys = Array[String](["lev_sandflow_so", "lev_sandflow_so"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Tower4/SandflowDialog"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
-shape = SubResource("BoxShape3D_q3nif")
 
 [node name="Spring" parent="CageAct/Tower4" instance=ExtResource("10_mxhyu")]
 transform = Transform3D(-4.37114e-08, 0.173648, 0.984808, 0, 0.984808, -0.173648, -1, -7.5904e-09, -4.30473e-08, 0, 0.199997, 5)
@@ -3710,11 +3653,6 @@ transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107
 script = ExtResource("27_vns5j")
 settings = ExtResource("41_q4org")
 
-[node name="LeverDialog" type="Node3D" parent="CageAct/Tower4/Lever"]
-script = ExtResource("23_3als8")
-randomize = true
-textKeys = Array[String](["lev_hint_lever3_so", "lev_hint_lever3_sh"])
-
 [node name="Zipline4" type="Node3D" parent="CageAct"]
 transform = Transform3D(0.71166, -0.0621886, 0.699766, 0, 0.996074, 0.0885217, -0.702524, -0.0629974, 0.708866, 257.865, -1.36148, -1367.11)
 script = ExtResource("5_im11i")
@@ -3726,168 +3664,160 @@ transform = Transform3D(-1, 5.62503e-16, -1.50996e-07, 0, 1, 3.72529e-09, 1.5099
 [node name="MissileSimple1" parent="CageAct/Zipline4/MissileGroup1" instance=ExtResource("64_dprgk")]
 transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, -1.5, -1.5, 6.10352e-05)
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple2" parent="CageAct/Zipline4/MissileGroup1" instance=ExtResource("64_dprgk")]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 1.5, -1.5, 6.10352e-05)
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple3" parent="CageAct/Zipline4/MissileGroup1" instance=ExtResource("64_dprgk")]
 transform = Transform3D(0.996195, 0.00152107, -0.0871425, 4.81567e-09, 0.999848, 0.0174524, 0.0871557, -0.017386, 0.996043, -1.5, 1.5, 6.10128e-05)
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple4" parent="CageAct/Zipline4/MissileGroup1" instance=ExtResource("64_dprgk")]
 transform = Transform3D(0.996195, -0.00152108, 0.0871425, 2.88761e-09, 0.999848, 0.0174524, -0.0871557, -0.017386, 0.996043, 1.5, 1.5, 6.10128e-05)
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileGroup2" type="Node3D" parent="CageAct/Zipline4"]
 transform = Transform3D(-1, 5.62503e-16, -1.50996e-07, 0, 1, 3.72529e-09, 1.50996e-07, 3.72529e-09, -1, 0, 0, 120)
 
 [node name="MissileSimple1" parent="CageAct/Zipline4/MissileGroup2" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, -1.5, 0)
-activationDelay = 1.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple2" parent="CageAct/Zipline4/MissileGroup2" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -1.5, 0)
-activationDelay = 1.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple3" parent="CageAct/Zipline4/MissileGroup2" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
-activationDelay = 1.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileGroup3" type="Node3D" parent="CageAct/Zipline4"]
 transform = Transform3D(-1, 5.62503e-16, -1.50996e-07, 0, 1, 3.72529e-09, 1.50996e-07, 3.72529e-09, -1, 0, 0, 180)
 
 [node name="MissileSimple1" parent="CageAct/Zipline4/MissileGroup3" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
-activationDelay = 2.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple2" parent="CageAct/Zipline4/MissileGroup3" instance=ExtResource("64_dprgk")]
 transform = Transform3D(0.999391, 0, 0.0348995, 0, 1, 0, -0.0348995, 0, 0.999391, 0.8, -1.4, 0)
-activationDelay = 2.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple3" parent="CageAct/Zipline4/MissileGroup3" instance=ExtResource("64_dprgk")]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 1.5, -1, 0)
-activationDelay = 2.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileGroup4" type="Node3D" parent="CageAct/Zipline4"]
 transform = Transform3D(-1, 5.62503e-16, -1.50996e-07, 0, 1, 3.72529e-09, 1.50996e-07, 3.72529e-09, -1, 0, 0, 220)
 
 [node name="MissileSimple1" parent="CageAct/Zipline4/MissileGroup4" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
-activationDelay = 3.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple2" parent="CageAct/Zipline4/MissileGroup4" instance=ExtResource("64_dprgk")]
 transform = Transform3D(0.999391, 0, -0.0348995, 0, 1, 0, 0.0348995, 0, 0.999391, -0.8, -1.4, 0)
-activationDelay = 3.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple3" parent="CageAct/Zipline4/MissileGroup4" instance=ExtResource("64_dprgk")]
 transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, -1.5, -1, 0)
-activationDelay = 3.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileGroup5" type="Node3D" parent="CageAct/Zipline4"]
 transform = Transform3D(-1, 5.62503e-16, -1.50996e-07, 0, 1, 3.72529e-09, 1.50996e-07, 3.72529e-09, -1, 0, 0, 250)
 
 [node name="MissileSimple1" parent="CageAct/Zipline4/MissileGroup5" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, -1, 0)
-activationDelay = 4.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple2" parent="CageAct/Zipline4/MissileGroup5" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -1, 0)
-activationDelay = 4.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple3" parent="CageAct/Zipline4/MissileGroup5" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
-activationDelay = 4.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileGroup6" type="Node3D" parent="CageAct/Zipline4"]
 transform = Transform3D(-1, 5.62503e-16, -1.50996e-07, 0, 1, 3.72529e-09, 1.50996e-07, 3.72529e-09, -1, 0, 0, 320)
 
 [node name="MissileSimple1" parent="CageAct/Zipline4/MissileGroup6" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, -0.5, 0)
-activationDelay = 5.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple2" parent="CageAct/Zipline4/MissileGroup6" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.5, 0)
-activationDelay = 5.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple3" parent="CageAct/Zipline4/MissileGroup6" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0.5, 0)
-activationDelay = 5.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple4" parent="CageAct/Zipline4/MissileGroup6" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.5, 0)
-activationDelay = 5.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileGroup7" type="Node3D" parent="CageAct/Zipline4"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 350)
 
 [node name="MissileSimple1" parent="CageAct/Zipline4/MissileGroup7" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.06091, -1.06058, 9.15527e-05)
-activationDelay = 6.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple2" parent="CageAct/Zipline4/MissileGroup7" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -3)
-activationDelay = 6.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple3" parent="CageAct/Zipline4/MissileGroup7" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.061, 1.061, -6)
-activationDelay = 6.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple4" parent="CageAct/Zipline4/MissileGroup7" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -9)
-activationDelay = 6.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple5" parent="CageAct/Zipline4/MissileGroup7" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.061, 1.061, -12)
-activationDelay = 6.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple6" parent="CageAct/Zipline4/MissileGroup7" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -15)
-activationDelay = 6.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple7" parent="CageAct/Zipline4/MissileGroup7" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.06, -1.061, -18)
-activationDelay = 6.0
 lifetime = 50.0
+moveSpeed = 5.0
 
 [node name="MissileSimple8" parent="CageAct/Zipline4/MissileGroup7" instance=ExtResource("64_dprgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, -21)
-activationDelay = 6.0
 lifetime = 50.0
-
-[node name="DangerDialog" parent="CageAct/Zipline4" instance=ExtResource("6_f8ouc")]
-transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0, 0, 50)
-"Enter Mode" = 0
-
-[node name="Dialog" type="Node3D" parent="CageAct/Zipline4/DangerDialog"]
-script = ExtResource("23_3als8")
-textKeys = Array[String](["common_caution_so", "common_caution_sh"])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CageAct/Zipline4/DangerDialog"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
-shape = SubResource("BoxShape3D_q3nif")
+moveSpeed = 5.0
 
 [node name="Rings4" type="Node3D" parent="CageAct/Zipline4"]
 transform = Transform3D(-1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, -1, 0, -1.5, 340)
@@ -3936,29 +3866,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 400)
 script = ExtResource("5_im11i")
 respawnOnActivation = true
 
-[node name="MissileVisualOnly1" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("64_dprgk")]
+[node name="MissileVisualOnly1" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("65_kctvq")]
 transform = Transform3D(0.965926, -1.86265e-09, 0.258819, -0.257834, -0.0871558, 0.96225, 0.0225576, -0.996195, -0.084186, -8.71907, -14.0635, -29.3829)
-disableHitboxes = true
 lifetime = 3.0
 
-[node name="MissileVisualOnly2" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("64_dprgk")]
+[node name="MissileVisualOnly2" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("65_kctvq")]
 transform = Transform3D(0.996195, 0.00759615, 0.0868241, -0.086824, -0.000330403, 0.996224, 0.00759617, -0.999971, 0.000330314, -11.0071, -14.533, -24.8302)
-disableHitboxes = true
 lifetime = 3.0
 
-[node name="MissileVisualOnly3" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("64_dprgk")]
+[node name="MissileVisualOnly3" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("65_kctvq")]
 transform = Transform3D(0.996195, 3.1665e-08, 0.0871558, -0.086824, -0.0871558, 0.992404, 0.00759617, -0.996195, -0.0868241, -7.94293, -16.4324, -19.6449)
-disableHitboxes = true
 lifetime = 3.0
 
-[node name="MissileVisualOnly4" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("64_dprgk")]
+[node name="MissileVisualOnly4" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("65_kctvq")]
 transform = Transform3D(0.996195, 5.96046e-08, 0.0871558, -0.086824, -0.0871557, 0.992404, 0.00759617, -0.996195, -0.0868242, -5.65479, -16.9949, -11.9317)
-disableHitboxes = true
 lifetime = 3.0
 
-[node name="MissileVisualOnly5" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("64_dprgk")]
+[node name="MissileVisualOnly5" parent="CageAct/Zipline4/VisualMissileGroup" instance=ExtResource("65_kctvq")]
 transform = Transform3D(0.704416, -0.67858, 0.208152, -0.123022, 0.172098, 0.977368, -0.699045, -0.714081, 0.0377482, 1.14249, -25.5985, -2.36262)
-disableHitboxes = true
 lifetime = 3.0
 
 [node name="Tower5" type="Node3D" parent="CageAct"]
@@ -4549,15 +4474,10 @@ IsRightLever = false
 script = ExtResource("27_vns5j")
 settings = ExtResource("41_q4org")
 
-[node name="LeverDialog" type="Node3D" parent="CageAct/Tower5/Lever"]
-script = ExtResource("23_3als8")
-randomize = true
-textKeys = Array[String](["lev_hint_lever4_so", "lev_hint_lever4_sh"])
-
 [node name="Mirrors" type="Node3D" parent="CageAct"]
 
 [node name="LockCamera" type="Node3D" parent="CageAct/Mirrors"]
-transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 250, 12.316, -1391.88)
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 250, 15, -1385)
 script = ExtResource("27_vns5j")
 deactivationTransitionTime = 0.0
 transitionType = 1
@@ -4628,11 +4548,6 @@ UpdateEveryFrame = true
 
 [node name="Camera3D" type="Camera3D" parent="CageAct/Mirrors/MirrorEvent1/CameraRoot/CameraFollow"]
 fov = 70.0
-
-[node name="ReturnDialog" type="Node3D" parent="CageAct/Mirrors/MirrorEvent1"]
-transform = Transform3D(-0.707106, 0, -0.707106, 0, 1, 0, 0.707106, 0, -0.707106, -377.594, -40, 139.765)
-script = ExtResource("23_3als8")
-textKeys = Array[String](["lev_return_so", "lev_return_sh", "lev_fun_so", "lev_fun_sh"])
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CageAct/Mirrors/MirrorEvent1"]
 libraries = {
@@ -4729,7 +4644,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_3als8")
 }
 
-[connection signal="Shattered" from="CageAct/PrisonDoor/PrisonLock4" to="CageAct/PrisonDoor" method="Activate"]
+[connection signal="Shattered" from="CageAct/PrisonDoor/Lock4/PrisonLock" to="CageAct/PrisonDoor" method="Activate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Start" to="Static/Collision/OneWay" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Start" to="Static/Triggers/RecenterLockout" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Start" to="CageAct/Zipline1" method="Activate"]
@@ -4740,7 +4655,6 @@ libraries = {
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Camera" to="Static/Visuals/Rukh2LOD" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Camera" to="CageAct/MainTower" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline1/Camera" to="CageAct/Tower2" method="Activate"]
-[connection signal="JumpFinished" from="CageAct/Ziplines/Zipline1/End/Jump" to="CageAct/Ziplines/Zipline1/End/Jump/Dialog" method="Activate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline2/Start" to="Static/Visuals/Rukh3" method="Activate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline2/Start" to="Static/Visuals/Rukh3LOD" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Ziplines/Zipline2/Start" to="Static/Triggers/RecenterLockout" method="Deactivate"]
@@ -4782,7 +4696,6 @@ libraries = {
 [connection signal="Shattered" from="CageAct/Tower2/EnemyStone" to="CageAct/Tower2/Spring1" method="ShowLauncher"]
 [connection signal="Deactivated" from="CageAct/Tower2/Spring1" to="CageAct/Tower2/Triggers/LoopPath" method="Activate"]
 [connection signal="Deactivated" from="CageAct/Tower2/Spring1" to="CageAct/Tower2/Triggers/Lockout" method="Activate"]
-[connection signal="Deactivated" from="CageAct/Tower2/Spring1" to="CageAct/Tower2/Spring1/TowerDialog" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel1" to="CageAct/Tower2/DashPanel1/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel1" to="CageAct/Tower2/DashPanel1/AutomationTrigger" method="AttemptAutomation" flags=3]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel1/AutomationTrigger" to="CageAct/Tower2/DashPanel1/Path" method="Activate"]
@@ -4799,13 +4712,11 @@ libraries = {
 [connection signal="Activated" from="CageAct/Tower2/DashPanel3" to="CageAct/Tower2/DashPanel3/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/DashPanel3" to="CageAct/Tower2/DashPanel3/AutomationTrigger" method="AttemptAutomation" flags=3]
 [connection signal="Deactivated" from="CageAct/Tower2/DashPanel3/AutomationTrigger" to="CageAct/Tower2/Triggers/LoopPath" method="Activate"]
-[connection signal="Activated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/SpringDialog" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/Path" method="Activate"]
 [connection signal="Deactivated" from="CageAct/Tower2/Spring2" to="CageAct/Tower2/Spring2/Camera" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/CameraTrigger" to="CageAct/Tower2/MissileGroup1" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/MissileTrigger" to="CageAct/Tower2/MissileGroup2" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower2/Lever" to="CageAct/Mirrors/MirrorEvent1" method="Activate"]
-[connection signal="Started" from="CageAct/Tower2/Lever" to="CageAct/Tower2/Lever/LeverDialog" method="Activate"]
 [connection signal="Started" from="CageAct/Tower2/Lever" to="CageAct/Tower2/Lever/Cam" method="Activate"]
 [connection signal="Defeated" from="CageAct/Tower3/Exterior/MovingMajin1/BlueMajin" to="CageAct/Tower3/Exterior/EnemyStone" method="IncrementCounter"]
 [connection signal="SpinStarted" from="CageAct/Tower3/Exterior/MovingMajin1/BlueMajin" to="CageAct/Tower3/Exterior/MovingMajin1" method="Unpause"]
@@ -4825,7 +4736,6 @@ libraries = {
 [connection signal="Activated" from="CageAct/Tower3/CameraTrigger" to="CageAct/Tower2/Gate2" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower3/Lever" to="CageAct/Mirrors/MirrorEvent2" method="Activate"]
 [connection signal="Started" from="CageAct/Tower3/Lever" to="CageAct/Tower3/Lever/Cam" method="Activate"]
-[connection signal="Started" from="CageAct/Tower3/Lever" to="CageAct/Tower3/Lever/LeverDialog" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/Exterior/Switch" to="Static/Triggers/Camera/Tower4Triggers/EntranceCamera" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/Exterior/Switch" to="CageAct/Tower4/Exterior/Switch/Camera" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/Exterior/Switch" to="CageAct/Tower4/Exterior/Gate" method="Deactivate"]
@@ -4870,7 +4780,6 @@ libraries = {
 [connection signal="Deactivated" from="CageAct/Tower4/Spring5" to="CageAct/Tower4/Spring5/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower4/Lever" to="CageAct/Mirrors/MirrorEvent3" method="Activate"]
 [connection signal="Started" from="CageAct/Tower4/Lever" to="CageAct/Tower4/Lever/Cam" method="Activate"]
-[connection signal="Started" from="CageAct/Tower4/Lever" to="CageAct/Tower4/Lever/LeverDialog" method="Activate"]
 [connection signal="PlayerEntered" from="CageAct/Tower5/Exterior/Catapult" to="CageAct/Tower5/Exterior/Catapult/Camera" method="Activate"]
 [connection signal="PlayerExited" from="CageAct/Tower5/Exterior/Catapult" to="CageAct/Tower5/Exterior/Catapult/Camera" method="Deactivate"]
 [connection signal="Activated" from="CageAct/Tower5/Exterior/Switch" to="CageAct/Tower5/Exterior/Gate" method="Deactivate"]
@@ -4905,7 +4814,6 @@ libraries = {
 [connection signal="Deactivated" from="CageAct/Tower5/Layer2Culler/Spring" to="CageAct/Tower5/Layer2Culler/Spring/Path" method="Activate"]
 [connection signal="Activated" from="CageAct/Tower5/Lever" to="CageAct/Mirrors/MirrorEvent4" method="Activate"]
 [connection signal="Started" from="CageAct/Tower5/Lever" to="CageAct/Tower5/Lever/Cam" method="Activate"]
-[connection signal="Started" from="CageAct/Tower5/Lever" to="CageAct/Tower5/Lever/LeverDialog" method="Activate"]
 [connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="CageAct/MainTower" method="Activate"]
 [connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="CageAct/Tower2" method="Deactivate"]
 [connection signal="Teleport" from="CageAct/Mirrors/Teleport" to="CageAct/Tower3" method="Deactivate"]
@@ -4919,7 +4827,6 @@ libraries = {
 [connection signal="Teleport" from="CageAct/Mirrors/FinalTeleport" to="CageAct/Mirrors/FinalTeleport/Camera" method="Activate"]
 [connection signal="Activated" from="CageAct/Mirrors/MirrorEvent1" to="CageAct/Zipline1" method="Deactivate"]
 [connection signal="EventFinished" from="CageAct/Mirrors/MirrorEvent1" to="CageAct/Mirrors/Teleport" method="Activate"]
-[connection signal="EventFinished" from="CageAct/Mirrors/MirrorEvent1" to="CageAct/Mirrors/MirrorEvent1/ReturnDialog" method="Activate"]
 [connection signal="Activated" from="CageAct/Mirrors/MirrorEvent2" to="CageAct/Zipline2" method="Deactivate"]
 [connection signal="EventFinished" from="CageAct/Mirrors/MirrorEvent2" to="CageAct/Mirrors/Teleport" method="Activate"]
 [connection signal="Activated" from="CageAct/Mirrors/MirrorEvent3" to="CageAct/Zipline3" method="Deactivate"]
@@ -4930,3 +4837,5 @@ libraries = {
 
 [editable path="Static"]
 [editable path="Static/Collision"]
+[editable path="Static/Visuals/Skybox"]
+[editable path="Static/Visuals/LRSky"]
