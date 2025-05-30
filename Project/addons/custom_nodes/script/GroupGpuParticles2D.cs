@@ -4,14 +4,14 @@ using Godot.Collections;
 namespace Project.CustomNodes;
 
 /// <summary>
-/// Plays a group of GPUParticles3D together.
+/// Plays a group of GPUParticles2D together.
 /// </summary>
 [Tool]
-public partial class GroupGpuParticles3D : GpuParticles3D
+public partial class GroupGpuParticles2D : GpuParticles2D
 {
 	[Signal] public delegate void GroupRestartedEventHandler();
 
-	[Export] public Array<GpuParticles3D> subSystems;
+	[Export] public Array<GpuParticles2D> subSystems;
 	public bool IsGroupEmitting { get; private set; }
 	[ExportToolButton("Restart Group")]
 	public Callable EditorRestartGroup => Callable.From(RestartGroup);
