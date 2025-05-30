@@ -183,15 +183,15 @@ _data = {
 
 [node name="FlameShooter" type="Node3D"]
 script = ExtResource("1_srdx0")
+stateNames = Array[StringName]([&"inactive", &"active"])
+stateLengths = PackedFloat32Array(0.5, 1)
+animator = NodePath("AnimationPlayer")
+timer = NodePath("Timer")
 "Current State" = 0
 "Auto Advance" = true
 "Start Time" = 0.0
 "State Lengths/inactive" = 0.5
 "State Lengths/active" = 1.0
-stateNames = [&"inactive", &"active"]
-stateLengths = PackedFloat32Array(0.5, 1)
-animator = NodePath("AnimationPlayer")
-timer = NodePath("Timer")
 
 [node name="FlameShooter" parent="." instance=ExtResource("1_wwv3q")]
 
@@ -257,17 +257,17 @@ process_material = ExtResource("5_el5o5")
 draw_pass_1 = SubResource("QuadMesh_gcb82")
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
 stream = ExtResource("5_kt73t")
 max_db = 0.0
 max_distance = 50.0
 bus = &"GAME SFX"
-process_mode = 1
 script = ExtResource("6_76o3t")
 groupKey = &"flame_shooter"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_i4sv0")
+&"": SubResource("AnimationLibrary_i4sv0")
 }
 
 [node name="Timer" type="Timer" parent="."]

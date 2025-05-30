@@ -2,11 +2,14 @@
 
 [resource]
 code = "shader_type spatial;
-render_mode diffuse_burley, unshaded, fog_disabled;
+render_mode diffuse_burley, unshaded;
 
 uniform sampler2D albedo : source_color, hint_default_black;
 uniform sampler2D detail : source_color, hint_default_black;
 uniform sampler2D lut : source_color, hint_default_black;
+uniform vec4 tint : source_color = vec4(1);
+
+
 
 void fragment()
 {
@@ -15,6 +18,6 @@ void fragment()
 	float mix_amount = texture(lut, UV2).r;
 	col = mix(col, detail_col, mix_amount);
 	
-	ALBEDO = col.rgb * COLOR.rgb;
+	ALBEDO = col.rgb * COLOR.rgb * tint.rgb;
 }
 "
