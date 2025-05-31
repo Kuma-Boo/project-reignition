@@ -1,0 +1,35 @@
+[gd_scene load_steps=8 format=3 uid="uid://c5gxn0s3a5kh"]
+
+[ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_wmyme"]
+[ext_resource type="PackedScene" uid="uid://bap6v64qrvejk" path="res://area/5 pirate storm/act 3/environment/collision/Collision.tscn" id="2_w468r"]
+[ext_resource type="PackedScene" uid="uid://cgklr714c8xnm" path="res://area/5 pirate storm/act 3/environment/Sea.tscn" id="3_cajqf"]
+[ext_resource type="PackedScene" uid="uid://bh70fk52hk7ii" path="res://area/5 pirate storm/data/skybox/Skybox.tscn" id="3_uct67"]
+[ext_resource type="PackedScene" uid="uid://cl6krxsxig07" path="res://area/5 pirate storm/act 3/environment/PSAct3.tscn" id="4_cgsbr"]
+[ext_resource type="Curve3D" uid="uid://bql7gx4j0q52o" path="res://area/5 pirate storm/act 3/environment/path/MainPath.tres" id="6_cajqf"]
+
+[sub_resource type="Environment" id="Environment_cajqf"]
+
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
+script = ExtResource("1_wmyme")
+pathParent = NodePath("Path")
+Environment = NodePath("WorldEnvironment")
+
+[node name="Collision" parent="." instance=ExtResource("2_w468r")]
+visible = false
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="Sea" parent="Visuals" instance=ExtResource("3_cajqf")]
+
+[node name="PSAct3" parent="Visuals" instance=ExtResource("4_cgsbr")]
+
+[node name="PSSky" parent="Visuals" instance=ExtResource("3_uct67")]
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="MainPath" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 2, 475)
+curve = ExtResource("6_cajqf")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cajqf")
