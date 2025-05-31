@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cv8518l75t3ov"]
+[gd_scene load_steps=15 format=3 uid="uid://cv8518l75t3ov"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_wmyme"]
 [ext_resource type="PackedScene" uid="uid://bap6v64qrvejk" path="res://area/5 pirate storm/act 3/environment/collision/Collision.tscn" id="2_w468r"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://bh70fk52hk7ii" path="res://area/5 pirate storm/data/skybox/Skybox.tscn" id="3_uct67"]
 [ext_resource type="PackedScene" uid="uid://cl6krxsxig07" path="res://area/5 pirate storm/act 3/environment/PSAct3.tscn" id="4_cgsbr"]
 [ext_resource type="Curve3D" uid="uid://bql7gx4j0q52o" path="res://area/5 pirate storm/act 3/environment/path/MainPath.tres" id="6_cajqf"]
+[ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="7_cgsbr"]
+[ext_resource type="AudioStream" uid="uid://dpvsb186jvr2q" path="res://sound/ost/bonus disc/Pirate Storm Act 3.mp3" id="7_skabk"]
 
 [sub_resource type="Animation" id="Animation_cajqf"]
 resource_name = "RESET"
@@ -401,3 +403,11 @@ libraries = {
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_cajqf")
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_skabk")
+bus = &"BGM"
+script = ExtResource("7_cgsbr")
+loopStartPosition = 7.44
+loopEndPosition = 227.86
+isStageMusic = true
