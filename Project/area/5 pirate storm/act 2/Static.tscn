@@ -1,19 +1,23 @@
-[gd_scene load_steps=19 format=3 uid="uid://cofcpptb6ssqh"]
+[gd_scene load_steps=21 format=3 uid="uid://cofcpptb6ssqh"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_4xujv"]
 [ext_resource type="PackedScene" uid="uid://b040fwyggrp5" path="res://area/5 pirate storm/act 2/environment/collision/Collision.tscn" id="2_u02cx"]
 [ext_resource type="PackedScene" uid="uid://doeryi7qfdlkn" path="res://area/5 pirate storm/act 2/environment/PSAct2.tscn" id="3_u02cx"]
 [ext_resource type="PackedScene" uid="uid://djkb77nos27fr" path="res://area/5 pirate storm/act 2/environment/Sea.tscn" id="4_343pa"]
 [ext_resource type="PackedScene" uid="uid://bh70fk52hk7ii" path="res://area/5 pirate storm/data/skybox/Skybox.tscn" id="5_thlvq"]
-[ext_resource type="Curve3D" uid="uid://cqxhq00opewq4" path="res://area/5 pirate storm/act 2/environment/path/MainPath.tres" id="6_thlvq"]
+[ext_resource type="Curve3D" uid="uid://0e3vxaboh0ux" path="res://area/5 pirate storm/act 2/environment/path/MainPath.tres" id="6_thlvq"]
 [ext_resource type="PackedScene" uid="uid://mcdscyg16ic2" path="res://area/5 pirate storm/object/CrowGroup.tscn" id="6_w7r6t"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="7_kc6hj"]
 [ext_resource type="AudioStream" uid="uid://cmthrjjnbihvh" path="res://sound/ost/bonus disc/Pirate Storm Act 2.mp3" id="8_auaow"]
 [ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="8_euei3"]
+[ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="9_or2ge"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="9_patcr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_or2ge"]
 size = Vector3(200, 5, 200)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q3ufd"]
+size = Vector3(25, 20, 5)
 
 [sub_resource type="Animation" id="Animation_j0xf8"]
 resource_name = "RESET"
@@ -458,6 +462,68 @@ waterFxHeightOffset = 3.0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/WaterTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 240, -4, 31)
 shape = SubResource("BoxShape3D_or2ge")
+
+[node name="Checkpoint" type="Node3D" parent="Trigger"]
+
+[node name="StartCheckpoint" parent="Trigger/Checkpoint" instance=ExtResource("7_kc6hj")]
+transform = Transform3D(-0.999785, 0, -0.0207155, 0, 1, 0, 0.0207155, 0, -0.999785, 0, 8.6, 0)
+"Enter Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/StartCheckpoint"]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("9_or2ge")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/StartCheckpoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_q3ufd")
+
+[node name="Bridge1Checkpoint" parent="Trigger/Checkpoint" instance=ExtResource("7_kc6hj")]
+transform = Transform3D(-0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, -0.258819, 221.399, 11.2, -205.771)
+"Enter Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/Bridge1Checkpoint"]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("9_or2ge")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/Bridge1Checkpoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_q3ufd")
+
+[node name="Ocean1Checkpoint" parent="Trigger/Checkpoint" instance=ExtResource("7_kc6hj")]
+transform = Transform3D(0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, 0.422618, 330.835, 11.5, -79.6894)
+"Enter Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/Ocean1Checkpoint"]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("9_or2ge")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/Ocean1Checkpoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_q3ufd")
+
+[node name="Ocean2Checkpoint" parent="Trigger/Checkpoint" instance=ExtResource("7_kc6hj")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 264.843, 9.6, 72.3916)
+"Enter Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/Ocean2Checkpoint"]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("9_or2ge")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/Ocean2Checkpoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_q3ufd")
+
+[node name="Bridge2Checkpoint" parent="Trigger/Checkpoint" instance=ExtResource("7_kc6hj")]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 220.111, 12.3, 118.377)
+"Enter Mode" = 0
+
+[node name="Checkpoint" type="Node3D" parent="Trigger/Checkpoint/Bridge2Checkpoint"]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("9_or2ge")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/Checkpoint/Bridge2Checkpoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_q3ufd")
 
 [node name="Path" type="Node3D" parent="."]
 

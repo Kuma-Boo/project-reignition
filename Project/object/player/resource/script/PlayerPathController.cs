@@ -65,7 +65,7 @@ namespace Project.Gameplay
 			IsReversingPath = reversePath;
 			PreviousPath = ActivePath;
 			ActivePath = newPath;
-			Loop = ActivePath.Curve.GetPointPosition(0).IsEqualApprox(ActivePath.Curve.GetPointPosition(ActivePath.Curve.PointCount - 1));
+			Loop = ActivePath.Curve.Closed;
 			Resync();
 			return true;
 		}

@@ -118,7 +118,7 @@ public partial class ItemBox : Pickup
 	/// <summary> How high to travel. </summary>
 	private float travelHeight = 2;
 
-	private Vector3 SpawnPosition => GlobalPosition + SPAWN_OFFSET;
+	private Vector3 SpawnPosition => GlobalPosition + SpawnOffset;
 	public Vector3 EndPosition => pickupParent == null ? GlobalPosition : pickupParent.GlobalPosition;
 
 	public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(SpawnPosition, EndPosition, travelHeight);
@@ -134,12 +134,13 @@ public partial class ItemBox : Pickup
 	private readonly List<Pickup> objectPool = [];
 	private readonly List<LaunchSettings> objectLaunchSettings = [];
 
-	private readonly Vector3 SPAWN_OFFSET = Vector3.Up * .5f;
-	private readonly Vector2 PEARL_SPAWN_RADIUS = new(2.0f, 1.0f);
+	private readonly Vector3 SpawnOffset = Vector3.Up * .5f;
+	private readonly Vector2 PearlSpawnRadius = new(2f, 1f);
 
 	protected override void SetUp()
 	{
 		_animator = GetNodeOrNull<AnimationPlayer>(animator);
+		GD.Print(_animator);
 		pickupParent = GetNodeOrNull<Node3D>(pickupParentPath);
 
 		if (Engine.IsEditorHint()) return;
@@ -233,7 +234,7 @@ public partial class ItemBox : Pickup
 				{
 					Vector3 startPosition = GlobalTransform.Basis.Inverse() * (SpawnPosition - EndPosition);
 					if (objectPool[i] == pickupParent)
-						startPosition = SPAWN_OFFSET;
+						startPosition = SpawnOffset;
 					objectLaunchSettings[i] = LaunchSettings.Create(startPosition, objectPool[i].Position, travelHeight);
 				}
 
@@ -261,7 +262,7 @@ public partial class ItemBox : Pickup
 
 		if (spawnPearls)
 		{
-			Runtime.Instance.SpawnPearls(spawnAmount, GlobalPosition, PEARL_SPAWN_RADIUS, 2.0f);
+			Runtime.Instance.SpawnPearls(spawnAmount, GlobalPosition, PearlSpawnRadius, 2.0f);
 			return;
 		}
 

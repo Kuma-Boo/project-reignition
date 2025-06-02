@@ -1,61 +1,60 @@
 using Godot;
 
-namespace Project.Gameplay.Objects
+namespace Project.Gameplay.Objects;
+
+public partial class Pickup : Area3D
 {
-	public partial class Pickup : Area3D
+	[Signal]
+	public delegate void CollectedEventHandler();
+	[Signal]
+	public delegate void RespawnedEventHandler();
+	[Signal]
+	public delegate void DespawnedEventHandler();
+
+	/// <summary> Used for runtime items (Enemy Pearls, Item Box Contents, etc) to allow manual respawning. </summary>
+	public bool DisableAutoRespawning { get; set; }
+	public SpawnData SpawnData { get; set; }
+
+	protected StageSettings Stage => StageSettings.Instance;
+	protected PlayerController Player => StageSettings.Player;
+
+	public override void _Ready() => SetUp();
+
+	protected virtual void SetUp()
 	{
-		[Signal]
-		public delegate void CollectedEventHandler();
-		[Signal]
-		public delegate void RespawnedEventHandler();
-		[Signal]
-		public delegate void DespawnedEventHandler();
+		SpawnData = new(GetParent(), Transform);
 
-		/// <summary> Used for runtime items (Enemy Pearls, Item Box Contents, etc) to allow manual respawning. </summary>
-		public bool DisableAutoRespawning { get; set; }
-		public SpawnData SpawnData { get; set; }
-
-		protected StageSettings Stage => StageSettings.Instance;
-		protected PlayerController Player => StageSettings.Player;
-
-		public override void _Ready() => SetUp();
-
-		protected virtual void SetUp()
+		if (!DisableAutoRespawning) // Connect respawn triggers
 		{
-			SpawnData = new(GetParent(), Transform);
-
-			if (!DisableAutoRespawning) // Connect respawn triggers
-			{
-				Stage.Respawned += Respawn;
-				Stage.Unloaded += Unload;
-			}
+			Stage.Respawned += Respawn;
+			Stage.Unloaded += Unload;
 		}
-
-		public void OnEntered(Area3D a)
-		{
-			if (!a.IsInGroup("player detection")) return;
-			if (!Stage.IsLevelIngame) return;
-			if (Player.IsTeleporting) return; // Don't allow collections during teleport/respawn
-
-			CallDeferred(MethodName.Collect);
-		}
-
-		public virtual void Unload() => QueueFree();
-		public virtual void Respawn()
-		{
-			SpawnData.Respawn(this);
-			EmitSignal(SignalName.Respawned);
-		}
-
-		public virtual void Despawn()
-		{
-			if (!Visible) return;
-
-			Visible = false;
-			ProcessMode = ProcessModeEnum.Disabled;
-			EmitSignal(SignalName.Despawned);
-		}
-
-		protected virtual void Collect() => EmitSignal(SignalName.Collected);
 	}
+
+	public void OnEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player detection")) return;
+		if (!Stage.IsLevelIngame) return;
+		if (Player.IsTeleporting) return; // Don't allow collections during teleport/respawn
+
+		CallDeferred(MethodName.Collect);
+	}
+
+	public virtual void Unload() => QueueFree();
+	public virtual void Respawn()
+	{
+		SpawnData.Respawn(this);
+		EmitSignal(SignalName.Respawned);
+	}
+
+	public virtual void Despawn()
+	{
+		if (!Visible) return;
+
+		Visible = false;
+		ProcessMode = ProcessModeEnum.Disabled;
+		EmitSignal(SignalName.Despawned);
+	}
+
+	protected virtual void Collect() => EmitSignal(SignalName.Collected);
 }
