@@ -246,9 +246,9 @@ public partial class PlayerLockonController : Area3D
 		if (Mathf.IsZeroApprox(inputStrength))
 			return false;
 
-		float distance = target.GlobalPosition.Flatten().DistanceSquaredTo(Player.GlobalPosition.Flatten());
+		float targetProgress = Player.PathFollower.GetProgress(target.GlobalPosition);
 		bool holdingForward = Player.Controller.IsHoldingDirection(Player.Controller.GetTargetInputAngle(), Player.PathFollower.ForwardAngle);
-		return distance < DistanceFudgeAmount && holdingForward;
+		return (Player.PathFollower.Progress > targetProgress + DistanceFudgeAmount) && holdingForward;
 	}
 
 	private bool HitObstacle(Node3D target)
