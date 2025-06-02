@@ -1,20 +1,26 @@
-[gd_scene load_steps=21 format=3 uid="uid://cofcpptb6ssqh"]
+[gd_scene load_steps=25 format=3 uid="uid://d1gknocio5io1"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_4xujv"]
+[ext_resource type="Resource" uid="uid://c2qttlm1qg5ji" path="res://area/5 pirate storm/act 2/camera/CloseCam.tres" id="2_or2ge"]
 [ext_resource type="PackedScene" uid="uid://b040fwyggrp5" path="res://area/5 pirate storm/act 2/environment/collision/Collision.tscn" id="2_u02cx"]
 [ext_resource type="PackedScene" uid="uid://doeryi7qfdlkn" path="res://area/5 pirate storm/act 2/environment/PSAct2.tscn" id="3_u02cx"]
 [ext_resource type="PackedScene" uid="uid://djkb77nos27fr" path="res://area/5 pirate storm/act 2/environment/Sea.tscn" id="4_343pa"]
 [ext_resource type="PackedScene" uid="uid://bh70fk52hk7ii" path="res://area/5 pirate storm/data/skybox/Skybox.tscn" id="5_thlvq"]
-[ext_resource type="Curve3D" uid="uid://0e3vxaboh0ux" path="res://area/5 pirate storm/act 2/environment/path/MainPath.tres" id="6_thlvq"]
+[ext_resource type="Curve3D" uid="uid://c1a6d2q2hvoym" path="res://area/5 pirate storm/act 2/environment/path/MainPath.tres" id="6_thlvq"]
 [ext_resource type="PackedScene" uid="uid://mcdscyg16ic2" path="res://area/5 pirate storm/object/CrowGroup.tscn" id="6_w7r6t"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="7_kc6hj"]
 [ext_resource type="AudioStream" uid="uid://cmthrjjnbihvh" path="res://sound/ost/bonus disc/Pirate Storm Act 2.mp3" id="8_auaow"]
 [ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="8_euei3"]
 [ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="9_or2ge"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="9_patcr"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="10_q3ufd"]
+[ext_resource type="Resource" uid="uid://bsdv21422t2gf" path="res://area/5 pirate storm/act 2/camera/OverheadCam.tres" id="11_oejkb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_or2ge"]
 size = Vector3(200, 5, 200)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l6cxa"]
+size = Vector3(20, 50, 45)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q3ufd"]
 size = Vector3(25, 20, 5)
@@ -392,6 +398,7 @@ fog_density = 0.002
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_4xujv")
+InitialCameraSettings = ExtResource("2_or2ge")
 pathParent = NodePath("Path")
 completionAnimator = NodePath("DemoCamera/AnimationPlayer")
 Environment = NodePath("WorldEnvironment")
@@ -462,6 +469,19 @@ waterFxHeightOffset = 3.0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/WaterTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 240, -4, 31)
 shape = SubResource("BoxShape3D_or2ge")
+
+[node name="OverheadCameraTrigger" parent="Trigger" instance=ExtResource("7_kc6hj")]
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 244.193, 11.5, 99.2298)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="Trigger/OverheadCameraTrigger"]
+script = ExtResource("10_q3ufd")
+settings = ExtResource("11_oejkb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/OverheadCameraTrigger"]
+shape = SubResource("BoxShape3D_l6cxa")
 
 [node name="Checkpoint" type="Node3D" parent="Trigger"]
 
@@ -534,7 +554,7 @@ curve = ExtResource("6_thlvq")
 [node name="DemoCamera" type="Node3D" parent="."]
 
 [node name="Camera" type="Camera3D" parent="DemoCamera"]
-cull_mask = 1086
+cull_mask = 1054
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DemoCamera"]
 libraries = {

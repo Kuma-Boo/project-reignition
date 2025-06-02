@@ -140,7 +140,6 @@ public partial class ItemBox : Pickup
 	protected override void SetUp()
 	{
 		_animator = GetNodeOrNull<AnimationPlayer>(animator);
-		GD.Print(_animator);
 		pickupParent = GetNodeOrNull<Node3D>(pickupParentPath);
 
 		if (Engine.IsEditorHint()) return;

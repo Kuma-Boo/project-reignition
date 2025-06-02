@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://q2mhrprklf7q"]
+[gd_scene load_steps=51 format=3 uid="uid://q2mhrprklf7q"]
 
 [ext_resource type="Script" uid="uid://01bsn0f21qa0" path="res://object/stage/common/resource/script/BombMissile.cs" id="1_4asmq"]
 [ext_resource type="PackedScene" uid="uid://bmrns4285t26c" path="res://area/5 pirate storm/object/model/Bomb.gltf" id="2_ij281"]
@@ -16,7 +16,7 @@
 [ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="14_3ejdh"]
 
 [sub_resource type="Curve" id="Curve_a21m6"]
-_data = [Vector2(0, 0), 0.0, 23.0532, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.33814, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 23.0532, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0273057, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_a5ppq"]
@@ -45,8 +45,8 @@ angle_min = 1.07288e-05
 angle_max = 360.0
 direction = Vector3(0, 0, 1)
 spread = 5.0
-initial_velocity_min = 2.0
-initial_velocity_max = 4.0
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
 gravity = Vector3(0, 0, 0)
 scale_min = 3.0
 scale_max = 5.0
@@ -61,6 +61,14 @@ anim_offset_max = 1.0
 material = ExtResource("5_a5ppq")
 size = Vector2(1.5, 1)
 
+[sub_resource type="Curve" id="Curve_u3ac2"]
+_data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3ejdh"]
+width = 64
+curve = SubResource("Curve_u3ac2")
+
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_v0mmn"]
 lifetime_randomness = 0.2
 angle_min = 1.07288e-05
@@ -71,6 +79,7 @@ initial_velocity_max = 10.0
 gravity = Vector3(0, 0, 0)
 scale_min = 2.0
 scale_max = 4.0
+scale_curve = SubResource("CurveTexture_3ejdh")
 alpha_curve = SubResource("CurveTexture_a5ppq")
 
 [sub_resource type="QuadMesh" id="QuadMesh_di570"]
@@ -132,15 +141,15 @@ point_count = 2
 [sub_resource type="CurveTexture" id="CurveTexture_6fpuu"]
 curve = SubResource("Curve_v0mmn")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_di570"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_u3ac2"]
 lifetime_randomness = 0.4
 angle_min = 1.07288e-05
 angle_max = 360.0
 direction = Vector3(0, 1, 0)
-initial_velocity_min = 5.0
-initial_velocity_max = 10.0
+initial_velocity_min = 3.0
+initial_velocity_max = 5.0
 scale_min = 2.0
-scale_max = 5.0
+scale_max = 3.0
 scale_curve = SubResource("CurveTexture_6fpuu")
 color = Color(1, 0.906833, 0.57, 1)
 alpha_curve = SubResource("CurveTexture_a5ppq")
@@ -197,7 +206,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Bomb:visible")
+tracks/0/path = NodePath("Bomb/BombMesh:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -209,7 +218,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Bomb:scale")
+tracks/1/path = NodePath("Bomb/BombMesh:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -333,7 +342,7 @@ length = 0.500003
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Bomb:visible")
+tracks/0/path = NodePath("Bomb/BombMesh:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -485,7 +494,7 @@ length = 0.16667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Bomb:visible")
+tracks/0/path = NodePath("Bomb/BombMesh:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -497,7 +506,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Bomb:scale")
+tracks/1/path = NodePath("Bomb/BombMesh:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -551,7 +560,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Bomb:visible")
+tracks/0/path = NodePath("Bomb/BombMesh:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -583,6 +592,7 @@ animator = NodePath("AnimationPlayer")
 [node name="Bomb" parent="." instance=ExtResource("2_ij281")]
 
 [node name="TravelFlames" type="GPUParticles3D" parent="Bomb"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
 layers = 32
 cast_shadow = 0
 emitting = false
@@ -591,10 +601,12 @@ lifetime = 0.5
 fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-3, -3, -2, 6, 6, 20)
+local_coords = true
 process_material = SubResource("ParticleProcessMaterial_22xyj")
 draw_pass_1 = SubResource("QuadMesh_6fpuu")
 
 [node name="TravelEmbers" type="GPUParticles3D" parent="Bomb"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
 layers = 32
 cast_shadow = 0
 emitting = false
@@ -703,7 +715,7 @@ fixed_fps = 0
 interpolate = false
 visibility_aabb = AABB(-5, -1, -5, 10, 6, 10)
 local_coords = true
-process_material = SubResource("ParticleProcessMaterial_di570")
+process_material = SubResource("ParticleProcessMaterial_u3ac2")
 draw_pass_1 = SubResource("QuadMesh_wr0f1")
 
 [node name="Flash" type="GPUParticles3D" parent="ExplosionEmbers"]

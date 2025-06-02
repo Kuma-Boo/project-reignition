@@ -1,6 +1,6 @@
-[gd_scene load_steps=27 format=3 uid="uid://biwhnkxwrwumg"]
+[gd_scene load_steps=31 format=3 uid="uid://biwhnkxwrwumg"]
 
-[ext_resource type="PackedScene" uid="uid://cofcpptb6ssqh" path="res://area/5 pirate storm/act 2/Static.tscn" id="1_87yog"]
+[ext_resource type="PackedScene" uid="uid://d1gknocio5io1" path="res://area/5 pirate storm/act 2/Static.tscn" id="1_87yog"]
 [ext_resource type="Resource" uid="uid://c1x1digh80vcc" path="res://resource/level data/pirate storm/Act2Rampage.tres" id="2_6il1n"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_emooq"]
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="3_emooq"]
@@ -16,7 +16,9 @@
 [ext_resource type="PackedScene" uid="uid://bec0iv5nhvchi" path="res://area/5 pirate storm/object/platforms/BridgeLarge.tscn" id="12_reyvh"]
 [ext_resource type="PackedScene" uid="uid://diybup7aqwl4a" path="res://object/enemy/majin/data/pirate storm/GreenMajin.tscn" id="14_reyvh"]
 [ext_resource type="PackedScene" uid="uid://dlsd43s025utu" path="res://object/enemy/majin/data/pirate storm/BlueMajin.tscn" id="15_kuvre"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="17_eqkj6"]
 [ext_resource type="PackedScene" uid="uid://c4qk3uy80ub6r" path="res://area/5 pirate storm/object/platforms/BridgeSquareFalling.tscn" id="17_o486y"]
+[ext_resource type="Resource" uid="uid://cxran3rkj8op0" path="res://area/5 pirate storm/act 2/camera/PlatformingCam.tres" id="18_140hr"]
 [ext_resource type="PackedScene" uid="uid://dgq2mwyi2qr0c" path="res://area/5 pirate storm/object/platforms/BridgeThin.tscn" id="18_ry7t2"]
 [ext_resource type="PackedScene" uid="uid://ddqtfsujegqep" path="res://object/stage/common/SpikeBallSpawner.tscn" id="19_ti4w3"]
 [ext_resource type="Script" uid="uid://dpt5o0lh62p6t" path="res://object/stage/MovingObject.cs" id="20_qxh3e"]
@@ -28,6 +30,12 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_6uttv"]
 size = Vector3(20, 30, 5)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_cxpr6"]
+size = Vector3(20, 20, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_eqkj6"]
+size = Vector3(20, 12, 32)
+
 [sub_resource type="Curve" id="Curve_rj70a"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, -8.28907, 0, 0, Vector2(0.19656, -1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.80344, -1), 0.0, 0.0, 0, 0, Vector2(1, 1.49012e-08), 8.66659, 0.0, 0, 0]
@@ -37,6 +45,9 @@ point_count = 5
 
 [node name="Static" parent="." instance=ExtResource("1_87yog")]
 Data = ExtResource("2_6il1n")
+
+[node name="OverheadCameraTrigger" parent="Static/Trigger" index="1"]
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, 244.193, 11.5, 99.2298)
 
 [node name="RampageAct" type="Node3D" parent="."]
 
@@ -134,7 +145,7 @@ saveVisibilityOnCheckpoint = true
 cacheRespawnMethods = true
 
 [node name="DashPanelGroup1" type="Node3D" parent="RampageAct/Opening"]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -10)
+transform = Transform3D(-0.999546, 0, -0.0301197, 0, 1, 0, 0.0301197, 0, -0.999546, -0.2, 0, -10)
 
 [node name="DashPanelL" parent="RampageAct/Opening/DashPanelGroup1" instance=ExtResource("3_emooq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
@@ -142,8 +153,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
 [node name="DashPanelR" parent="RampageAct/Opening/DashPanelGroup1" instance=ExtResource("3_emooq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 
-[node name="RingsL" type="Node3D" parent="RampageAct/Opening"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.5, -14)
+[node name="RingsL" type="Node3D" parent="RampageAct/Opening/DashPanelGroup1"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.6, 0.5, 4)
 script = ExtResource("4_4trei")
 Source = ExtResource("5_8jhbx")
 Amount = 5
@@ -154,22 +165,22 @@ Spacing = 2.0
 "Vertical Offset" = null
 metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
 
-[node name="Child01" parent="RampageAct/Opening/RingsL" instance=ExtResource("5_8jhbx")]
+[node name="Child01" parent="RampageAct/Opening/DashPanelGroup1/RingsL" instance=ExtResource("5_8jhbx")]
 
-[node name="Child02" parent="RampageAct/Opening/RingsL" instance=ExtResource("5_8jhbx")]
+[node name="Child02" parent="RampageAct/Opening/DashPanelGroup1/RingsL" instance=ExtResource("5_8jhbx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
-[node name="Child03" parent="RampageAct/Opening/RingsL" instance=ExtResource("5_8jhbx")]
+[node name="Child03" parent="RampageAct/Opening/DashPanelGroup1/RingsL" instance=ExtResource("5_8jhbx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 
-[node name="Child04" parent="RampageAct/Opening/RingsL" instance=ExtResource("5_8jhbx")]
+[node name="Child04" parent="RampageAct/Opening/DashPanelGroup1/RingsL" instance=ExtResource("5_8jhbx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
-[node name="Child05" parent="RampageAct/Opening/RingsL" instance=ExtResource("5_8jhbx")]
+[node name="Child05" parent="RampageAct/Opening/DashPanelGroup1/RingsL" instance=ExtResource("5_8jhbx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
-[node name="RingsR" type="Node3D" parent="RampageAct/Opening"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.5, -14)
+[node name="RingsR" type="Node3D" parent="RampageAct/Opening/DashPanelGroup1"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.7, 0.5, 4)
 script = ExtResource("4_4trei")
 Source = ExtResource("5_8jhbx")
 Amount = 5
@@ -180,18 +191,18 @@ Spacing = 2.0
 "Vertical Offset" = null
 metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
 
-[node name="Child01" parent="RampageAct/Opening/RingsR" instance=ExtResource("5_8jhbx")]
+[node name="Child01" parent="RampageAct/Opening/DashPanelGroup1/RingsR" instance=ExtResource("5_8jhbx")]
 
-[node name="Child02" parent="RampageAct/Opening/RingsR" instance=ExtResource("5_8jhbx")]
+[node name="Child02" parent="RampageAct/Opening/DashPanelGroup1/RingsR" instance=ExtResource("5_8jhbx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
-[node name="Child03" parent="RampageAct/Opening/RingsR" instance=ExtResource("5_8jhbx")]
+[node name="Child03" parent="RampageAct/Opening/DashPanelGroup1/RingsR" instance=ExtResource("5_8jhbx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 
-[node name="Child04" parent="RampageAct/Opening/RingsR" instance=ExtResource("5_8jhbx")]
+[node name="Child04" parent="RampageAct/Opening/DashPanelGroup1/RingsR" instance=ExtResource("5_8jhbx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 
-[node name="Child05" parent="RampageAct/Opening/RingsR" instance=ExtResource("5_8jhbx")]
+[node name="Child05" parent="RampageAct/Opening/DashPanelGroup1/RingsR" instance=ExtResource("5_8jhbx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
 [node name="BombGroup1" type="Node3D" parent="RampageAct/Opening"]
@@ -682,6 +693,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 7.7, -5)
 "Defeat Settings/Local Transform" = true
 rangeOverride = 30
 
+[node name="CameraTrigger" parent="RampageAct/Opening/BridgeGroup" instance=ExtResource("8_6uttv")]
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Cam" type="Node3D" parent="RampageAct/Opening/BridgeGroup/CameraTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("17_eqkj6")
+settings = ExtResource("18_140hr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Opening/BridgeGroup/CameraTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_cxpr6")
+
 [node name="Middle" type="Node3D" parent="RampageAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 6.5, -215)
 script = ExtResource("10_yioli")
@@ -1029,7 +1054,7 @@ spawnInterval = 5.0
 initialVelocity = 5.0
 
 [node name="SpikeBallSpawner3" parent="RampageAct/Middle" instance=ExtResource("19_ti4w3")]
-transform = Transform3D(-0.965926, 1.84732e-08, 0.258819, 1.67838e-08, 1, -8.73709e-09, -0.258819, -4.09542e-09, -0.965926, 203.821, 41, 39.1879)
+transform = Transform3D(-0.996195, 1.84732e-08, 0.0871557, 1.8046e-08, 1, -5.68988e-09, -0.0871557, -4.09542e-09, -0.996195, 203.821, 41, 39.1879)
 maxSpawnAmount = 3
 lifetime = 10.0
 spawnInterval = 5.0
@@ -1632,6 +1657,24 @@ transform = Transform3D(-0.989786, 0, 0.14256, 0, 1, 0, -0.14256, 0, -0.989786, 
 "Spawn Interval Settings/Despawn Delay" = 1.5
 rangeOverride = 40
 
+[node name="CameraTrigger" parent="RampageAct/Ending/BridgeGroup3" instance=ExtResource("8_6uttv")]
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Cam" type="Node3D" parent="RampageAct/Ending/BridgeGroup3/CameraTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("17_eqkj6")
+settings = ExtResource("18_140hr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Ending/BridgeGroup3/CameraTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_cxpr6")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="RampageAct/Ending/BridgeGroup3/CameraTrigger"]
+transform = Transform3D(1, 0, 7.45058e-09, 0, 1, 0, -7.45058e-09, 0, 1, -0.00012207, 12, 26)
+shape = SubResource("BoxShape3D_eqkj6")
+
 [node name="ThornSpring1" parent="RampageAct/Ending" instance=ExtResource("23_yyck4")]
 transform = Transform3D(0.66262, 0, -0.748956, 0, 1, 0, 0.748956, 0, 0.66262, -113, 9, 224)
 staticTime = 0.0
@@ -1759,7 +1802,7 @@ transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 1, -7, 0, 0)
 [node name="BridgeSquareFalling" parent="RampageAct/Ending/BridgeGroup4" instance=ExtResource("17_o486y")]
 transform = Transform3D(2, 0, 0, 0, 1.25, 0, 0, 0, 0.5, 0, 0, 0)
 "Falling Platform Settings/Shake Length" = 0.0
-"Falling Platform Settings/Fall Speed" = 0.2
+"Falling Platform Settings/Fall Speed" = 0.3
 
 [node name="BridgeSquare2" parent="RampageAct/Ending/BridgeGroup4" instance=ExtResource("11_uiuws")]
 transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 1, 7, 0, 0)
@@ -1780,6 +1823,7 @@ Movement/Angle = -90.0
 "Vertical Orientation" = false
 
 [node name="ItemBoxFlying" parent="RampageAct/Ending/BridgeGroup4/MovingObject" instance=ExtResource("24_rj70a")]
+transform = Transform3D(1, 0, 5.02914e-08, 0, 1, 0, -5.02914e-08, 0, 1, 0, 0, 0)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 50
 
@@ -2102,7 +2146,7 @@ transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 1, -7, 0, 0)
 [node name="BridgeSquareFalling" parent="RampageAct/Ending/BridgeGroup6" instance=ExtResource("17_o486y")]
 transform = Transform3D(2, 0, 0, 0, 1.25, 0, 0, 0, 0.5, 0, 0, 0)
 "Falling Platform Settings/Shake Length" = 0.0
-"Falling Platform Settings/Fall Speed" = 0.2
+"Falling Platform Settings/Fall Speed" = 0.3
 
 [node name="BridgeSquare2" parent="RampageAct/Ending/BridgeGroup6" instance=ExtResource("11_uiuws")]
 transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 1, 7, 0, 0)
