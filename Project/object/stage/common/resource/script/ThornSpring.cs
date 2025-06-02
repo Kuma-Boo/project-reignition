@@ -8,7 +8,7 @@ public partial class ThornSpring : Launcher
 {
 	[ExportGroup("Behavior Settings")]
 	/// <summary> How long a rotation phase (full or half) takes in seconds. </summary>
-	[Export(PropertyHint.Range, "0,5,.1")]
+	[Export(PropertyHint.Range, "0.1,5,.1")]
 	private float rotationTime;
 	/// <summary> How long to wait between rotation phases. </summary>
 	[Export(PropertyHint.Range, "0,5,.1")]
@@ -130,6 +130,9 @@ public partial class ThornSpring : Launcher
 	{
 		if (rotationState == RotationStates.Rotating)
 			return; // Don't update times when rotating
+
+		if (Mathf.IsZeroApprox(staticTime))
+			return;
 
 		currentTime = Mathf.MoveToward(currentTime, staticTime, PhysicsManager.physicsDelta);
 		if (!Mathf.IsEqualApprox(currentTime, staticTime))

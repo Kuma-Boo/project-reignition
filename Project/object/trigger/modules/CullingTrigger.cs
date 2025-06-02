@@ -14,7 +14,10 @@ public partial class CullingTrigger : StageTriggerModule
 	[Export] private bool isStageVisuals;
 	private bool isActive;
 	private StageSettings Stage => StageSettings.Instance;
+	/// <summary> Determines whether children respawn methods should be called when activating culling trigger. </summary>
 	[Export] private bool respawnOnActivation;
+	/// <summary> Determines whether children respawn methods should be cached on startup. </summary>
+	[Export] private bool cacheRespawnMethods;
 	private readonly Array<Node> respawnableNodes = [];
 
 	public override void _EnterTree()
@@ -36,8 +39,8 @@ public partial class CullingTrigger : StageTriggerModule
 		Visible = true;
 
 		// Cache all children with a respawn method
-		if (respawnOnActivation)
-			SetUpRespawning();
+		if (respawnOnActivation || cacheRespawnMethods)
+			SetUpRespawning(this);
 
 		if (saveVisibilityOnCheckpoint)
 		{
@@ -57,10 +60,16 @@ public partial class CullingTrigger : StageTriggerModule
 	}
 
 	/// <summary> An expensive operation that automatically connects respawning methods for child nodes. </summary>
-	private void SetUpRespawning()
+	private void SetUpRespawning(Node parentNode)
 	{
-		foreach (Node child in GetChildren(true))
+		foreach (Node child in parentNode.GetChildren())
 		{
+			if (child.Name.ToString().Contains("Group")) // Cache recursively if node name contains the word "Group"
+			{
+				SetUpRespawning(child);
+				continue;
+			}
+
 			if (child.HasMethod(MethodName.SetUpRespawning))
 				child.Call(MethodName.SetUpRespawning);
 
@@ -75,13 +84,9 @@ public partial class CullingTrigger : StageTriggerModule
 	private void ProcessCheckpoint()
 	{
 		if (StageSettings.Instance.IsLevelLoading)
-		{
 			visibleOnCheckpoint = startEnabled;
-		}
 		else
-		{
 			visibleOnCheckpoint = Visible;
-		}
 	}
 
 	private void ProcessDebugCheckpoint() => visibleOnDebugCheckpoint = Visible;
@@ -107,6 +112,15 @@ public partial class CullingTrigger : StageTriggerModule
 			Deactivate();
 	}
 
+	/// <summary>
+	/// Respawns all child nodes (non-recursive). Call this from a signal to force respawn objects in a looping stage.
+	/// </summary>
+	private void RespawnChildren()
+	{
+		foreach (Node node in respawnableNodes)
+			node.CallDeferred(MethodName.Respawn);
+	}
+
 	public override void Activate()
 	{
 		isActive = true;
@@ -114,10 +128,7 @@ public partial class CullingTrigger : StageTriggerModule
 
 		// Respawn everything
 		if (respawnOnActivation)
-		{
-			foreach (Node node in respawnableNodes)
-				node.CallDeferred(MethodName.Respawn);
-		}
+			RespawnChildren();
 
 		EmitSignal(SignalName.Activated);
 	}
