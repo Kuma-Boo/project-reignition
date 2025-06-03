@@ -8,6 +8,7 @@ public partial class LaunchState : PlayerState
 {
 	[Export] private PlayerState landState;
 	[Export] private PlayerState jumpDashState;
+	[Export] private PlayerState homingAttackState;
 	[Export] private PlayerState stompState;
 	[Export] private PlayerState fallState;
 
@@ -47,7 +48,7 @@ public partial class LaunchState : PlayerState
 		Player.MoveSpeed = settings.HorizontalVelocity;
 		Player.VerticalSpeed = settings.InitialVerticalVelocity;
 
-		Player.Lockon.IsMonitoring = false; // Disable lockon monitoring while launch is active
+		Player.Lockon.IsMonitoring = settings.AllowInterruption; // Disable lockon monitoring while launch is active
 
 		if (ActiveLauncher == null || ActiveLauncher.oneshotEnemies)
 			Player.AttackState = PlayerController.AttackStates.OneShot; // Launchers typically oneshot enemies for fairness
@@ -83,7 +84,9 @@ public partial class LaunchState : PlayerState
 		}
 
 		Player.AttackState = PlayerController.AttackStates.None;
-		Player.Lockon.IsMonitoring = !Player.IsOnGround && settings.AllowJumpDash;
+
+		if (!Player.Lockon.IsMonitoring)
+			Player.Lockon.IsMonitoring = !Player.IsOnGround && settings.AllowJumpDash;
 
 		Player.Effect.StopSpinFX();
 		Player.Effect.StopTrailFX();
@@ -122,9 +125,13 @@ public partial class LaunchState : PlayerState
 
 		if (settings.AllowInterruption)
 		{
-			if (Player.Controller.IsJumpBufferActive) // Cancel into a jumpdash
+			if (Player.Controller.IsJumpBufferActive || Player.Controller.IsAttackBufferActive) // Cancel into a jumpdash
 			{
 				Player.Controller.ResetJumpBuffer();
+				Player.Controller.ResetAttackBuffer();
+				if (Player.Lockon.IsTargetAttackable)
+					return homingAttackState;
+
 				return jumpDashState;
 			}
 
