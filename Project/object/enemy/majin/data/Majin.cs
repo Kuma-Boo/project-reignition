@@ -774,7 +774,7 @@ public partial class Majin : Enemy
 		if (IsRedMajin)
 		{
 			isFlameActive = false;
-			flameTimer = (FlameAggressionRadius != 0 && isInstantFlame) ? flameInactiveTime : 0;
+			flameTimer = isInstantFlame ? flameInactiveTime : 0;
 		}
 
 		AnimationPlayer.Advance(0.0);
