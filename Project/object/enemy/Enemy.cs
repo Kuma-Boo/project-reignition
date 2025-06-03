@@ -38,6 +38,8 @@ public partial class Enemy : Node3D
 	/// <summary> Does this enemy damage the player when it is touched? </summary>
 	[Export]
 	protected bool damagePlayer;
+	[Export]
+	protected float bounceScale = 1f;
 
 	[ExportGroup("Components")]
 	[Export(PropertyHint.NodePathValidTypes, "Node3D")]
@@ -301,14 +303,14 @@ public partial class Enemy : Node3D
 
 			// If the player is trying to perform a light speed attack, only do the bounce AFTER checking the next target
 			if (!IsLightSpeedAttackValid)
-				Player.StartBounce(IsDefeated);
+				Player.StartBounce(IsDefeated, bounceScale);
 		}
 		else if ((Player.IsBouncing && !Player.IsBounceInteruptable) ||
 			(Player.IsJumping && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ArmorJump)))
 		{
 			// Bouncing off an enemy
 			UpdateLockon();
-			Player.StartBounce(IsDefeated);
+			Player.StartBounce(IsDefeated, bounceScale);
 		}
 		else if (damagePlayer && Player.AttackState == PlayerController.AttackStates.None &&
 			(!Player.IsBouncing || Player.IsBounceInteruptable))
@@ -342,7 +344,7 @@ public partial class Enemy : Node3D
 			return;
 
 		// Otherwise, do the delayed bounce
-		Player.StartBounce(IsDefeated);
+		Player.StartBounce(IsDefeated, bounceScale);
 	}
 
 	/// <summary> Current local rotation of the enemy. </summary>

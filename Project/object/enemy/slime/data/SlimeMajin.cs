@@ -314,7 +314,9 @@ public partial class SlimeMajin : Enemy
 
 	protected override void Defeat()
 	{
-		base.Defeat();
+		SetHitboxStatus(false);
 		AnimationTree.Set(StateTransition, "defeated");
+
+		base.Defeat();
 	}
 }
