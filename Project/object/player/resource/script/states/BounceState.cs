@@ -13,6 +13,8 @@ public partial class BounceState : PlayerState
 	}
 
 	private SnapMode snapMode;
+	private bool isSnapSuccessful;
+	private Vector3 snapPosition;
 	public void SetBounceSnapping(SnapMode mode) => snapMode = mode;
 
 	[Export]
@@ -63,6 +65,13 @@ public partial class BounceState : PlayerState
 
 	public override PlayerState ProcessPhysics()
 	{
+		if (isSnapSuccessful)
+		{
+			isSnapSuccessful = false;
+			Player.CenterPosition = snapPosition;
+			return null;
+		}
+
 		Player.MoveSpeed = Mathf.MoveToward(Player.MoveSpeed, 0f, Player.Stats.GroundSettings.Friction * PhysicsManager.physicsDelta);
 		Player.VerticalSpeed -= Runtime.Gravity * PhysicsManager.physicsDelta;
 		Player.ApplyMovement();
@@ -98,6 +107,8 @@ public partial class BounceState : PlayerState
 
 	private void AttemptBounceSnapping()
 	{
+		isSnapSuccessful = false;
+
 		if (snapMode == SnapMode.Disabled) // Not a snap bounce -- bounce the player backwards
 		{
 			Player.MoveSpeed = -bounceSpeed;
@@ -118,8 +129,9 @@ public partial class BounceState : PlayerState
 		// Only snap when target being hit is correct
 		Vector3 targetSnapPosition = Player.Lockon.Target.GlobalPosition;
 		if (snapMode == SnapMode.SnappingEnabledNoHeight)
-			targetSnapPosition.Y = Player.GlobalPosition.Y;
+			targetSnapPosition.Y = Player.CenterPosition.Y;
 
-		Player.GlobalPosition = targetSnapPosition;
+		isSnapSuccessful = true;
+		snapPosition = targetSnapPosition;
 	}
 }

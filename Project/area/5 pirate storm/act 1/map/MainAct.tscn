@@ -261,7 +261,7 @@ _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 7.27226, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(0.4, -1), 0.0, 0.0, 0, 0, Vector2(0.6, 1), 0.0, 0.0, 0, 0, Vector2(0.8, -1), 0.0, 0.0, 0, 0, Vector2(1, 5.96046e-08), 7.0859, 0.0, 0, 0]
 point_count = 6
 
-[node name="MainAct" type="Node"]
+[node name="Stage" type="Node"]
 
 [node name="Static" parent="." instance=ExtResource("1_8fsep")]
 Data = ExtResource("2_qkxl1")
@@ -2111,6 +2111,7 @@ launchDelay = 1.0
 
 [node name="Ships" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -129.9, 9.9, 1040)
+visible = false
 script = ExtResource("36_7jc22")
 saveVisibilityOnCheckpoint = true
 
@@ -3418,14 +3419,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.4)
 transform = Transform3D(0.173648, -0.0515409, 0.983458, 0, 0.99863, 0.0523359, -0.984807, -0.00908805, 0.17341, -135.675, -4.47501, 33.7869)
 
 [node name="Spring" parent="MainAct/Grotto" instance=ExtResource("11_q0cv5")]
-transform = Transform3D(-0.30534, 0.0519635, -0.950824, 0.00697169, 0.998605, 0.052336, 0.952217, 0.0093514, -0.305276, -158.922, -5.23176, 27.4539)
+transform = Transform3D(-0.30534, 0.0519635, -0.950824, 0.00697169, 0.998605, 0.052336, 0.952217, 0.0093514, -0.305276, -158.922, -5.23176, 27.0538)
 startHidden = true
 MiddleHeight = 8.0
 FinalHeight = 6.5
 Distance = 4.0
 
 [node name="InvisibleGrindrail" parent="MainAct/Grotto" instance=ExtResource("42_my4pc")]
-transform = Transform3D(0.387508, -0.00213414, 0.921863, 0.00695469, 0.999976, -0.000608457, -0.92184, 0.00664706, 0.387513, -162.087, 1, 26.482)
+transform = Transform3D(0.350199, -0.00244489, 0.936671, 0.00698126, 0.999976, 1.7337e-10, -0.936649, 0.00653916, 0.350207, -162.087, 1, 26.082)
 railLength = 24
 
 [node name="Pearls" type="Node3D" parent="MainAct/Grotto/InvisibleGrindrail"]
@@ -3502,7 +3503,7 @@ script = ExtResource("6_ytq25")
 Source = ExtResource("7_slh8b")
 Amount = 8
 Shape = 2
-Path = NodePath("../../../Static/Path/CavePath")
+Path = NodePath("../../../Static/Path/GrottoPath")
 "Path Progress Offset" = 0.0
 "Disable Path Y" = false
 Spacing = 4.0
@@ -3873,15 +3874,14 @@ initialVelocity = 4.0
 
 [node name="Cave" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -504, 40, 1584)
-visible = false
 script = ExtResource("36_7jc22")
 saveVisibilityOnCheckpoint = true
 
 [node name="BridgeSquareFalling1" parent="MainAct/Cave" instance=ExtResource("38_wjem1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -3, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -2.5, -1)
 
 [node name="BridgeSquareFalling2" parent="MainAct/Cave" instance=ExtResource("38_wjem1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -0.5, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -0.5)
 
 [node name="BridgeSquareFalling3" parent="MainAct/Cave" instance=ExtResource("38_wjem1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 2.5, -0.5)
@@ -4112,7 +4112,7 @@ transform = Transform3D(1.96962, 0, -0.347296, 0, 1.5, 0, 0.347296, 0, 1.96962, 
 transform = Transform3D(1.96962, 0, -0.347296, 0, 1.5, 0, 0.347296, 0, 1.96962, -61.6299, 19.6, 29.5974)
 
 [node name="SpoilsSmall2" parent="MainAct/Cave" instance=ExtResource("40_wekfv")]
-transform = Transform3D(1.16677, 0.228183, 0.203747, -0.18159, 1.14633, -0.381121, -0.213684, 0.271789, 1.4364, -51.0156, 17.9, 51.7246)
+transform = Transform3D(1.1809, 0.110608, 0.227833, -0.0790547, 1.17992, -0.254784, -0.198002, 0.188577, 1.46054, -51.7959, 18.6021, 48.8887)
 
 [node name="BladeGroup2" type="Node3D" parent="MainAct/Cave"]
 transform = Transform3D(0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866026, -49.7957, 19.6, 55.4598)
@@ -4218,7 +4218,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(0.999997, 2.35438e-06, 8.76188e-06, -4.18723e-06, 1, -4.28408e-06, 1.19209e-06, -3.65078e-07, 0.999993, 0, 0, 0)
+transform = Transform3D(0.999997, 2.35438e-06, 8.76188e-06, -4.50015e-06, 1, -4.29153e-06, 1.19209e-06, -3.65078e-07, 0.999993, 0, 0, 0)
 playSFX = false
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
@@ -4282,7 +4282,7 @@ Movement/Angle = 90.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup4/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(0.999998, 2.22045e-15, -6.10948e-07, -9.31323e-09, 1, -6.27479e-08, -5.96046e-07, -4.00469e-08, 0.999998, -0.416138, 0, 3.05176e-05)
+transform = Transform3D(0.999998, 2.22045e-15, -6.10948e-07, -9.31323e-09, 1, -6.27479e-08, -6.10948e-07, -4.00469e-08, 0.999998, -0.416138, 0, 3.05176e-05)
 playSFX = false
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup4"]

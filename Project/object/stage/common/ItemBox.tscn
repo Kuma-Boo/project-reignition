@@ -1,9 +1,12 @@
-[gd_scene load_steps=16 format=3 uid="uid://b0uekqdfkbg6h"]
+[gd_scene load_steps=27 format=3 uid="uid://b0uekqdfkbg6h"]
 
 [ext_resource type="Script" uid="uid://b4uel2yxe2ldm" path="res://object/stage/pickups/resource/script/ItemBox.cs" id="2"]
 [ext_resource type="PackedScene" uid="uid://bl0hh6rrv7hxo" path="res://object/stage/common/resource/model/ItemBox.gltf" id="3"]
 [ext_resource type="Material" uid="uid://cpvxjsa6vte37" path="res://effect/particle/material/Ember Orange.tres" id="3_8fpsp"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="4_gne53"]
 [ext_resource type="AudioStream" uid="uid://c3benwqxr66t4" path="res://sound/sfx/objects/treasure chest.wav" id="4_o2niv"]
+[ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://effect/particle/material/environment/Water Dust.tres" id="5_yt1u1"]
+[ext_resource type="Material" uid="uid://cctsu5ymh5eev" path="res://effect/particle/material/environment/Common Splatter.tres" id="6_itsro"]
 
 [sub_resource type="BoxShape3D" id="6"]
 size = Vector3(1.6, 1.4, 1.2)
@@ -40,6 +43,54 @@ scale_curve = SubResource("CurveXYZTexture_u3cay")
 material = ExtResource("3_8fpsp")
 size = Vector2(0.1, 2)
 center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="Curve" id="Curve_2skh3"]
+_data = [Vector2(0, 0), 0.0, 31.1535, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_mt7sc"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_2skh3")
+
+[sub_resource type="Curve" id="Curve_n8nxy"]
+_data = [Vector2(0, 0.1), 0.0, 2.98498, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6nhqd"]
+width = 64
+curve = SubResource("Curve_n8nxy")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dilgf"]
+lifetime_randomness = 0.4
+direction = Vector3(0, 1, 0)
+spread = 90.0
+initial_velocity_min = 2.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_6nhqd")
+alpha_curve = SubResource("CurveTexture_mt7sc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_0skij"]
+material = ExtResource("5_yt1u1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yrxy5"]
+lifetime_randomness = 0.4
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 90.0
+initial_velocity_min = 2.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_6nhqd")
+alpha_curve = SubResource("CurveTexture_mt7sc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_0e725"]
+material = ExtResource("6_itsro")
 
 [sub_resource type="Animation" id="Animation_bg4xx"]
 length = 0.001
@@ -261,7 +312,7 @@ tracks/8/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"restart"
+"method": &"RestartGroup"
 }]
 }
 
@@ -276,20 +327,16 @@ _data = {
 collision_layer = 12
 collision_mask = 2
 script = ExtResource("2")
+animator = NodePath("AnimationPlayer")
 "Spawn Settings/Spawn Pearls" = false
 "Spawn Settings/Pickup Parent" = NodePath("")
 "Spawn Settings/Travel Time" = 0.5
 "Spawn Settings/Travel Delay" = 0.0
 "Spawn Settings/Travel Delay Range" = 0.5
 "Spawn Settings/Travel Height" = 2.0
-animator = NodePath("AnimationPlayer")
 
 [node name="ItemBox" parent="." instance=ExtResource("3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-
-[node name="Skeleton3D" parent="ItemBox/ItemBoxRoot" index="0"]
-bones/1/rotation = Quaternion(0, 0, 1, 0)
-bones/2/rotation = Quaternion(0.707107, -5.0243e-15, -1.88314e-07, 0.707107)
 
 [node name="ItemBoxGlowMesh" parent="ItemBox/ItemBoxRoot/Skeleton3D" index="0"]
 visible = false
@@ -308,7 +355,7 @@ collision_mask = 0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collision"]
 shape = SubResource("6")
 
-[node name="CollectFX" type="GPUParticles3D" parent="."]
+[node name="CollectFX" type="GPUParticles3D" parent="." node_paths=PackedStringArray("subSystems")]
 layers = 32
 cast_shadow = 0
 emitting = false
@@ -321,15 +368,49 @@ local_coords = true
 transform_align = 3
 process_material = SubResource("ParticleProcessMaterial_yo4sp")
 draw_pass_1 = SubResource("QuadMesh_q26oc")
+script = ExtResource("4_gne53")
+subSystems = [NodePath("Dust"), NodePath("Splatter")]
+
+[node name="Dust" type="GPUParticles3D" parent="CollectFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 4
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.7
+randomness = 0.2
+fixed_fps = 0
+interpolate = false
+local_coords = true
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_dilgf")
+draw_pass_1 = SubResource("QuadMesh_0skij")
+
+[node name="Splatter" type="GPUParticles3D" parent="CollectFX"]
+layers = 32
+cast_shadow = 0
+emitting = false
+amount = 4
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.7
+randomness = 0.2
+fixed_fps = 0
+interpolate = false
+local_coords = true
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_yrxy5")
+draw_pass_1 = SubResource("QuadMesh_0e725")
 
 [node name="SFX" type="AudioStreamPlayer" parent="."]
+process_mode = 1
 stream = ExtResource("4_o2niv")
 bus = &"GAME SFX"
-process_mode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_c756k")
+&"": SubResource("AnimationLibrary_c756k")
 }
 
 [connection signal="area_entered" from="." to="." method="OnEntered"]

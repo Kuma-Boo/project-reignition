@@ -35,7 +35,6 @@ public partial class Pickup : Area3D
 	{
 		if (!a.IsInGroup("player detection")) return;
 		if (!Stage.IsLevelIngame) return;
-		if (Player.IsTeleporting) return; // Don't allow collections during teleport/respawn
 
 		CallDeferred(MethodName.Collect);
 	}

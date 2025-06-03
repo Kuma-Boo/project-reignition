@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 using Project.Core;
@@ -32,8 +33,6 @@ public partial class PlayerLockonController : Area3D
 	private readonly string LevelWallGroup = "level wall";
 	/// <summary> List of all possible targets. </summary>
 	private readonly List<Node3D> potentialTargets = [];
-	/// <summary> List of all possible objects the player's hitbox is currently colliding with. </summary>
-	private readonly List<Node3D> collidingObjects = [];
 
 	private bool isMonitoring;
 	/// <summary> Should the controller check for new lockonTargets? </summary>
@@ -321,6 +320,9 @@ public partial class PlayerLockonController : Area3D
 		if (Target == null)
 			return false;
 
+		List<Node3D> collidingObjects = [];
+		collidingObjects.AddRange(GetOverlappingAreas());
+		collidingObjects.AddRange(GetOverlappingBodies());
 		return collidingObjects.Contains(Target);
 	}
 
@@ -349,20 +351,4 @@ public partial class PlayerLockonController : Area3D
 		if (potentialTargets.Contains(body))
 			potentialTargets.Remove(body);
 	}
-
-	public void OnHitboxEntered(Area3D a)
-	{
-		if (!collidingObjects.Contains(a))
-			collidingObjects.Add(a);
-	}
-
-	public void OnHitboxExited(Area3D a) => collidingObjects.Remove(a);
-
-	public void OnHitboxBodyEntered(PhysicsBody3D a)
-	{
-		if (!collidingObjects.Contains(a))
-			collidingObjects.Add(a);
-	}
-
-	public void OnHitboxBodyExited(PhysicsBody3D a) => collidingObjects.Remove(a);
 }

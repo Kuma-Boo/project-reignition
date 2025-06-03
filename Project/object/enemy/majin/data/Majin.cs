@@ -222,6 +222,7 @@ public partial class Majin : Enemy
 	private AnimationNodeStateMachinePlayback spinState;
 	private AnimationNodeStateMachinePlayback fireState;
 
+	/// <summary> True when either the majin is spawning in, or despawning out from a spawn interval. </summary>
 	private bool isSpawning;
 	private float currentTravelRatio;
 	/// <summary> How long does spawn traveling take? Set to 0 to spawn instantly. </summary>
@@ -435,6 +436,9 @@ public partial class Majin : Enemy
 
 	protected override void Defeat()
 	{
+		if (isSpawning) // Prevent signals from killing majin during spawn intervals
+			return;
+
 		SetHitboxStatus(false, IsDefeatLaunchEnabled);
 
 		AnimationPlayer.Play("defeat");
@@ -789,6 +793,7 @@ public partial class Majin : Enemy
 		tweener?.Kill();
 		tweener = CreateTween().SetProcessMode(Tween.TweenProcessMode.Physics);
 
+		isSpawning = true;
 		SetHitboxStatus(false);
 		AnimationPlayer.Play("despawn");
 		AnimationTree.Set(DespawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
@@ -876,6 +881,7 @@ public partial class Majin : Enemy
 	private void FinishDespawning()
 	{
 		IsActive = false;
+		isSpawning = false;
 
 		if (SpawnIntervalEnabled)
 			timer = spawnIntervalDelay;
