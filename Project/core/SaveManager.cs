@@ -173,7 +173,7 @@ public partial class SaveManager : Node
 		// Controls
 		public float deadZone = .2f;
 		public ControllerType controllerType = ControllerType.Automatic;
-		public ControllerStyle controllerStyle = ControllerStyle.Style1;
+		public ControllerStyle controllerStyle = ControllerStyle.Style2;
 		public bool useHoldBreakMode = true;
 		public int[] partyModeDevices = [0, 0, 0, 0];
 		public Dictionary inputConfiguration = [];

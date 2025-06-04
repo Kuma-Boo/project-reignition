@@ -37,7 +37,7 @@ public partial class SkillSelect : Menu
 	private Vector2 containerVelocity;
 	private const float ScrollSmoothing = .1f;
 	/// <summary> How much to scroll per skill. </summary>
-	private readonly int ScrollInterval = 63;
+	private readonly int ScrollInterval = 62;
 	/// <summary> Number of skills on a single page. </summary>
 	private readonly int PageSize = 8;
 
