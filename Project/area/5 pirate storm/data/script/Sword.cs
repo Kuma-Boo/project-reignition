@@ -17,7 +17,12 @@ public partial class Sword : Node3D
 	private Vector3 StartPoint => launchPoint == null ? GlobalPosition : launchPoint.GlobalPosition;
 	private Vector3 EndPoint => StartPoint + GlobalBasis.Rotated(GlobalBasis.Y, Mathf.Pi * 0.5f) * endOffset;
 
-	public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(StartPoint, EndPoint, launchHeight);
+	public LaunchSettings GetLaunchSettings()
+	{
+		LaunchSettings settings = LaunchSettings.Create(StartPoint, EndPoint, launchHeight);
+		settings.AllowInterruption = true;
+		return settings;
+	}
 
 	private void Activate()
 	{
