@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://dnu5t1m7k4uaw"]
+[gd_scene load_steps=43 format=3 uid="uid://dnu5t1m7k4uaw"]
 
 [ext_resource type="PackedScene" uid="uid://cu3mc0x6pj3p" path="res://area/5 pirate storm/act 3/Static.tscn" id="1_cmo2p"]
 [ext_resource type="Resource" uid="uid://cumvjtwpfw3b4" path="res://resource/level data/pirate storm/Act3Deathless.tres" id="2_3m5bm"]
@@ -15,8 +15,11 @@
 [ext_resource type="PackedScene" uid="uid://68st06xyjgvp" path="res://object/stage/pickups/RichRing.tscn" id="13_axdgc"]
 [ext_resource type="PackedScene" uid="uid://3o2j3v8jwqtj" path="res://area/5 pirate storm/object/Sword.tscn" id="14_axdgc"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="15_4cvhb"]
+[ext_resource type="PackedScene" uid="uid://c61jp8ke67ib7" path="res://object/stage/common/SpikeBallPhysics.tscn" id="15_dkkf8"]
 [ext_resource type="PackedScene" uid="uid://cnafrkc5ywnho" path="res://area/5 pirate storm/object/grindrail/Grindrail04.tscn" id="16_34wiw"]
 [ext_resource type="PackedScene" uid="uid://b8m1x0tudbcbd" path="res://object/stage/common/Spring.tscn" id="17_76asu"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="17_ku2im"]
+[ext_resource type="Resource" uid="uid://cwd3ed8mjstvr" path="res://area/5 pirate storm/act 3/camera/Island2BridgeCam.tres" id="18_3pp3i"]
 [ext_resource type="PackedScene" uid="uid://l4u27wg4y0w4" path="res://area/5 pirate storm/object/Barrel.tscn" id="18_6w2jm"]
 [ext_resource type="PackedScene" uid="uid://bg0xslt2t0gej" path="res://area/5 pirate storm/object/grindrail/Grindrail02.tscn" id="19_76asu"]
 [ext_resource type="PackedScene" uid="uid://q2mhrprklf7q" path="res://area/5 pirate storm/object/Bomb.tscn" id="20_6w2jm"]
@@ -34,13 +37,16 @@
 [ext_resource type="PackedScene" uid="uid://wydcxl4kgcrp" path="res://area/5 pirate storm/object/platforms/CratePlatform.tscn" id="31_ha1hp"]
 [ext_resource type="PackedScene" uid="uid://b0uekqdfkbg6h" path="res://object/stage/common/ItemBox.tscn" id="32_dpblc"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_lr06k"]
+size = Vector3(20, 20, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ku2im"]
+size = Vector3(20, 20, 30)
+
 [sub_resource type="Curve" id="Curve_76asu"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 11.1251, 0, 0, Vector2(0.151631, 1), 0.0, 0.0, 0, 0, Vector2(0.4, -1), 0.0, 0.0, 0, 0, Vector2(0.6, 1), 0.0, 0.0, 0, 0, Vector2(0.861804, -1), 0.0, 0.0, 0, 0, Vector2(1, 5.96046e-08), 11.8219, 0.0, 0, 0]
 point_count = 6
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_lr06k"]
-size = Vector3(20, 20, 5)
 
 [sub_resource type="Curve" id="Curve_4a3js"]
 _limits = [0.0, 2.0, 0.0, 1.0]
@@ -62,6 +68,54 @@ point_count = 3
 [node name="Static" parent="." instance=ExtResource("1_cmo2p")]
 Data = ExtResource("2_3m5bm")
 
+[node name="PlatformingTrigger" parent="Static/Trigger" index="1"]
+transform = Transform3D(0.142784, 0, -0.989754, 0, 1, 0, 0.989754, 0, 0.142784, -24.4728, 2, 435.615)
+
+[node name="Camera" parent="Static/Trigger/PlatformingTrigger" index="0"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+
+[node name="NearTrigger" parent="Static/Trigger" index="2"]
+transform = Transform3D(0.312484, 0, -0.949923, 0, 1, 0, 0.949923, 0, 0.312484, -100.599, 2, 450.881)
+
+[node name="Camera" parent="Static/Trigger/NearTrigger" index="0"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+
+[node name="PlatformingTrigger2" parent="Static/Trigger" index="3"]
+transform = Transform3D(0.992984, 0, -0.118248, 0, 1, 0, 0.118248, 0, 0.992984, -129.383, 2, 555.826)
+
+[node name="Camera" parent="Static/Trigger/PlatformingTrigger2" index="0"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+
+[node name="NearTrigger2" parent="Static/Trigger" index="4"]
+transform = Transform3D(0.989754, 0, 0.142784, 0, 1, 0, -0.142784, 0, 0.989754, -138.171, 2, 646.45)
+
+[node name="Camera" parent="Static/Trigger/NearTrigger2" index="0"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+
+[node name="PlatformingTrigger3" parent="Static/Trigger" index="5"]
+transform = Transform3D(-0.0586095, 0, 0.998281, 0, 1, 0, -0.998281, 0, -0.0586095, -79.8855, 2, 664.342)
+
+[node name="Camera" parent="Static/Trigger/PlatformingTrigger3" index="0"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+
+[node name="NearTrigger3" parent="Static/Trigger" index="6"]
+transform = Transform3D(-0.228504, 0, 0.973543, 0, 1, 0, -0.973543, 0, -0.228504, -18.1197, 2, 655.703)
+
+[node name="Camera" parent="Static/Trigger/NearTrigger3" index="0"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+
+[node name="PlatformingTrigger4" parent="Static/Trigger" index="7"]
+transform = Transform3D(-0.979435, 0, 0.201762, 0, 1, 0, -0.201762, 0, -0.979435, 13.8737, 2, 564.968)
+
+[node name="Camera" parent="Static/Trigger/PlatformingTrigger4" index="0"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+
+[node name="NearTrigger4" parent="Static/Trigger" index="8"]
+transform = Transform3D(-0.980772, 0, 0.195159, 0, 1, 0, -0.195159, 0, -0.980772, 31.6687, 2, 488.444)
+
+[node name="Camera" parent="Static/Trigger/NearTrigger4" index="0"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 0, 0)
+
 [node name="DeathlessAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="DeathlessAct"]
@@ -70,8 +124,85 @@ metadata/_edit_lock_ = true
 
 [node name="CharacterSpawn" parent="DeathlessAct/SpawnPosition" instance=ExtResource("3_u47bw")]
 
+[node name="CullingMap" type="Node3D" parent="DeathlessAct"]
+visible = false
+
+[node name="CompletionTrigger" parent="DeathlessAct/CullingMap" instance=ExtResource("20_btyks")]
+transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 11.9004, 2, 577.991)
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/CompletionTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_lr06k")
+
+[node name="Island2-L" parent="DeathlessAct/CullingMap" instance=ExtResource("20_btyks")]
+transform = Transform3D(-0.273153, -3.58063e-08, -0.961971, 8.15011e-09, 1, -3.9536e-08, 0.961971, -1.86396e-08, -0.273153, 6.23082, 2, 435.568)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/Island2-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_lr06k")
+
+[node name="Island1-U" parent="DeathlessAct/CullingMap" instance=ExtResource("20_btyks")]
+transform = Transform3D(0.561333, -3.58063e-08, -0.82759, 3.55252e-08, 1, -1.91699e-08, 0.82759, -1.86396e-08, 0.561333, -116.212, 2, 458.288)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/Island1-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_lr06k")
+
+[node name="Island3-L" parent="DeathlessAct/CullingMap" instance=ExtResource("20_btyks")]
+transform = Transform3D(0.631326, -3.58063e-08, -0.775518, 3.70607e-08, 1, -1.60008e-08, 0.775518, -1.86396e-08, 0.631326, -123.138, 2, 463.461)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/Island3-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_lr06k")
+
+[node name="Island2-U" parent="DeathlessAct/CullingMap" instance=ExtResource("20_btyks")]
+transform = Transform3D(0.512822, -3.58063e-08, 0.858495, 2.36027e-09, 1, 4.02983e-08, -0.858495, -1.86396e-08, 0.512822, -128.803, 2, 660.11)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/Island2-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_lr06k")
+
+[node name="Island4-L" parent="DeathlessAct/CullingMap" instance=ExtResource("20_btyks")]
+transform = Transform3D(0.827591, -3.58063e-08, 0.561333, 1.91699e-08, 1, 3.55252e-08, -0.561333, -1.86396e-08, 0.827591, -135.386, 2, 653.698)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/Island4-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_lr06k")
+
+[node name="Island3-U" parent="DeathlessAct/CullingMap" instance=ExtResource("20_btyks")]
+transform = Transform3D(-0.961971, -3.58063e-08, 0.273153, -3.9536e-08, 1, -8.1501e-09, -0.273153, -1.86396e-08, -0.961971, 10.3037, 2.00001, 635.691)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/Island3-U"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_lr06k")
+
+[node name="Island1-L" parent="DeathlessAct/CullingMap" instance=ExtResource("20_btyks")]
+transform = Transform3D(-0.409095, -3.58063e-08, 0.912492, -3.16566e-08, 1, 2.50476e-08, -0.912492, -1.86396e-08, -0.409095, -6.97916, 2.00001, 652.395)
+"Trigger Mode" = 2
+"Exit Mode" = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CullingMap/Island1-L"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_lr06k")
+
 [node name="Island1" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 2, 475)
+script = ExtResource("29_76tf8")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
 
 [node name="BridgeGroup1" type="Node3D" parent="DeathlessAct/Island1"]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -1.23982, 0, -9.42166)
@@ -242,6 +373,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
 [node name="Island2" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -101, 2, 451)
+script = ExtResource("29_76tf8")
+saveVisibilityOnCheckpoint = true
 
 [node name="SlimeMajinGroup" type="Node3D" parent="DeathlessAct/Island2"]
 transform = Transform3D(-0.459998, 0, 0.88792, 0, 1, 0, -0.88792, 0, -0.459998, -10.0392, 0, 4.22097)
@@ -382,6 +515,44 @@ launchHeight = 7.0
 transform = Transform3D(-0.996195, 0, -0.0871558, 0, 1, 0, 0.0871558, 0, -0.996195, 3, 10, 4)
 endOffset = Vector3(2, 6, 1)
 launchHeight = 7.0
+
+[node name="SpikeBallTrigger" parent="DeathlessAct/Island2/BridgeGroup" instance=ExtResource("20_btyks")]
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 3.15966, 0, -23.0894)
+OneShot = true
+"Respawn Mode" = 0
+"Enter Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Island2/BridgeGroup/SpikeBallTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_lr06k")
+
+[node name="SpikeBallCull" type="Node3D" parent="DeathlessAct/Island2/BridgeGroup"]
+script = ExtResource("29_76tf8")
+
+[node name="SpikeBallPhysics1" parent="DeathlessAct/Island2/BridgeGroup/SpikeBallCull" instance=ExtResource("15_dkkf8")]
+transform = Transform3D(-1, 0, 8.19564e-08, 0, 1, 0, -8.19564e-08, 0, -1, 0.705243, 19, 1.1705)
+MaxLifetime = 7.0
+startingVelocity = Vector3(0, 0, 4)
+
+[node name="SpikeBallPhysics2" parent="DeathlessAct/Island2/BridgeGroup/SpikeBallCull" instance=ExtResource("15_dkkf8")]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -1.65414, 24, 2.78337)
+MaxLifetime = 7.0
+startingVelocity = Vector3(0, 0, 4)
+
+[node name="CameraTrigger" parent="DeathlessAct/Island2/BridgeGroup" instance=ExtResource("20_btyks")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="Camera" type="Node3D" parent="DeathlessAct/Island2/BridgeGroup/CameraTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("17_ku2im")
+settings = ExtResource("18_3pp3i")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/Island2/BridgeGroup/CameraTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+shape = SubResource("BoxShape3D_ku2im")
 
 [node name="PearlRingGroup1" type="Node3D" parent="DeathlessAct/Island2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0.4, 77)
@@ -648,6 +819,8 @@ transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 22)
 
 [node name="Island3" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -138, 2, 648)
+script = ExtResource("29_76tf8")
+saveVisibilityOnCheckpoint = true
 
 [node name="Rings1" type="Node3D" parent="DeathlessAct/Island3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.1, 0.6, 9.7)
@@ -944,6 +1117,8 @@ Distance = 15.0
 
 [node name="Island4" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 2, 655)
+script = ExtResource("29_76tf8")
+saveVisibilityOnCheckpoint = true
 
 [node name="DashGroup1" type="Node3D" parent="DeathlessAct/Island4"]
 transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 4.29138, 0, -1.31102)
@@ -1030,6 +1205,7 @@ Movement/Mode = 0
 
 [node name="DashPanel1" parent="DeathlessAct/Island4" instance=ExtResource("27_w3esf")]
 transform = Transform3D(-0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.939693, 25.9503, 0, -17.4752)
+length = 0.2
 
 [node name="SpikeBall3" parent="DeathlessAct/Island4" instance=ExtResource("23_mxo0m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 1, -26)
@@ -1107,6 +1283,8 @@ Movement/Mode = 0
 
 [node name="DashPanel2" parent="DeathlessAct/Island4" instance=ExtResource("27_w3esf")]
 transform = Transform3D(-0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.939693, 26.2128, 0, -38.6632)
+length = 0.2
+alignToPath = false
 
 [node name="SpikeBall5" parent="DeathlessAct/Island4" instance=ExtResource("23_mxo0m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 1, -43)
@@ -1253,14 +1431,6 @@ Movement/Mode = 2
 "Movement/Vertical Size" = 0.0
 Movement/Radius = 10.0
 
-[node name="CompletionTrigger" parent="DeathlessAct" instance=ExtResource("20_btyks")]
-transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 11.9004, 2, 577.991)
-"Enter Mode" = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/CompletionTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-shape = SubResource("BoxShape3D_lr06k")
-
 [node name="ReverseCullingTrigger" type="Node3D" parent="DeathlessAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 2, 480)
 script = ExtResource("29_76tf8")
@@ -1282,11 +1452,30 @@ transform = Transform3D(0.642788, 0, 0.766044, 0, 1, 0, -0.766044, 0, 0.642788, 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeathlessAct/GoalCullingTrigger/Goal"]
 shape = SubResource("BoxShape3D_lr06k")
 
+[connection signal="Activated" from="DeathlessAct/CullingMap/CompletionTrigger" to="DeathlessAct/ReverseCullingTrigger" method="Deactivate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/CompletionTrigger" to="DeathlessAct/GoalCullingTrigger" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/Island2-L" to="DeathlessAct/Island2" method="Activate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/Island2-L" to="DeathlessAct/Island2" method="Deactivate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/Island1-U" to="DeathlessAct/Island1" method="Deactivate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/Island1-U" to="DeathlessAct/Island1" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/Island3-L" to="DeathlessAct/Island3" method="Activate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/Island3-L" to="DeathlessAct/Island3" method="Deactivate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/Island2-U" to="DeathlessAct/Island2" method="Deactivate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/Island2-U" to="DeathlessAct/Island2" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/Island4-L" to="DeathlessAct/Island4" method="Activate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/Island4-L" to="DeathlessAct/Island4" method="Deactivate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/Island3-U" to="DeathlessAct/Island3" method="Deactivate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/Island3-U" to="DeathlessAct/Island3" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/CullingMap/Island1-L" to="DeathlessAct/Island1" method="Activate"]
+[connection signal="Deactivated" from="DeathlessAct/CullingMap/Island1-L" to="DeathlessAct/Island1" method="Deactivate"]
 [connection signal="Spawned" from="DeathlessAct/Island2/SlimeMajinGroup/SlimeMajin1" to="DeathlessAct/Island2/SlimeMajinGroup/SlimeMajin2" method="Spawn"]
 [connection signal="Spawned" from="DeathlessAct/Island2/SlimeMajinGroup/SlimeMajin1" to="DeathlessAct/Island2/SlimeMajinGroup/SlimeMajin3" method="Spawn"]
 [connection signal="Spawned" from="DeathlessAct/Island2/SlimeMajinGroup/SlimeMajin1" to="DeathlessAct/Island2/SlimeMajinGroup/SlimeMajin4" method="Spawn"]
 [connection signal="Collected" from="DeathlessAct/Island2/BridgeGroup/MovingItemBox/ItemBoxFlying" to="DeathlessAct/Island2/BridgeGroup/MovingItemBox" method="Pause"]
 [connection signal="Respawned" from="DeathlessAct/Island2/BridgeGroup/MovingItemBox/ItemBoxFlying" to="DeathlessAct/Island2/BridgeGroup/MovingItemBox" method="Unpause"]
+[connection signal="Activated" from="DeathlessAct/Island2/BridgeGroup/SpikeBallTrigger" to="DeathlessAct/Island2/BridgeGroup/SpikeBallCull" method="Activate"]
+[connection signal="Activated" from="DeathlessAct/Island2/BridgeGroup/SpikeBallTrigger" to="DeathlessAct/Island2/BridgeGroup/SpikeBallCull/SpikeBallPhysics1" method="Spawn"]
+[connection signal="Activated" from="DeathlessAct/Island2/BridgeGroup/SpikeBallTrigger" to="DeathlessAct/Island2/BridgeGroup/SpikeBallCull/SpikeBallPhysics2" method="Spawn"]
 [connection signal="Activated" from="DeathlessAct/Island3/BombGroup1/BombTrigger" to="DeathlessAct/Island3/BombGroup1/Bomb1" method="Launch"]
 [connection signal="Activated" from="DeathlessAct/Island3/BombGroup1/BombTrigger" to="DeathlessAct/Island3/BombGroup1/Bomb2" method="Launch"]
 [connection signal="Activated" from="DeathlessAct/Island3/BombGroup2/BombTrigger" to="DeathlessAct/Island3/BombGroup2/Bomb1" method="Launch"]
@@ -1301,8 +1490,6 @@ shape = SubResource("BoxShape3D_lr06k")
 [connection signal="Deactivated" from="DeathlessAct/Island4/Switch2" to="DeathlessAct/Island4/Switch2/RingCull" method="Deactivate"]
 [connection signal="Activated" from="DeathlessAct/Island4/Switch3" to="DeathlessAct/Island4/Switch3/RingCull" method="Activate"]
 [connection signal="Deactivated" from="DeathlessAct/Island4/Switch3" to="DeathlessAct/Island4/Switch3/RingCull" method="Deactivate"]
-[connection signal="Activated" from="DeathlessAct/CompletionTrigger" to="DeathlessAct/ReverseCullingTrigger" method="Deactivate"]
-[connection signal="Activated" from="DeathlessAct/CompletionTrigger" to="DeathlessAct/GoalCullingTrigger" method="Activate"]
 
 [editable path="Static"]
 [editable path="Static/Visuals/PSSky"]

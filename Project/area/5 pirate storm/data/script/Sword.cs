@@ -21,6 +21,7 @@ public partial class Sword : Node3D
 	{
 		LaunchSettings settings = LaunchSettings.Create(StartPoint, EndPoint, launchHeight);
 		settings.AllowInterruption = true;
+		settings.UseAutoAlign = true;
 		return settings;
 	}
 

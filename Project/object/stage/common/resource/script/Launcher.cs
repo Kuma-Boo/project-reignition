@@ -102,6 +102,15 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 	[Export] public bool AllowJumpDashing { get; set; }
 
 	[Export]
+	public LauncherAnimations LaunchAnimationType { get; private set; }
+	public enum LauncherAnimations
+	{
+		Auto,
+		Jump,
+		Launch,
+	}
+
+	[Export]
 	public LaunchDirection LauncherDirection { get; private set; }
 	public enum LaunchDirection
 	{
@@ -202,10 +211,22 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		Player.Effect.StopSpinFX();
 		Player.Effect.StopTrailFX();
 		Player.Animator.ResetState(.1f);
-		if (GetLaunchSettings().InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
+
+		if (LaunchAnimationType == LauncherAnimations.Auto)
+		{
+			if (GetLaunchSettings().InitialVelocity.AngleTo(Vector3.Up) < Mathf.Pi * .1f)
+				Player.Animator.JumpAnimation();
+			else
+				Player.Animator.LaunchAnimation();
+		}
+		else if (LaunchAnimationType == LauncherAnimations.Jump)
+		{
 			Player.Animator.JumpAnimation();
+		}
 		else
+		{
 			Player.Animator.LaunchAnimation();
+		}
 	}
 
 	[Export]

@@ -119,7 +119,17 @@ public partial class ItemBox : Pickup
 	private float travelHeight = 2;
 
 	private Vector3 SpawnPosition => GlobalPosition + SpawnOffset;
-	public Vector3 EndPosition => pickupParent == null ? GlobalPosition : pickupParent.GlobalPosition;
+	private Vector3 cachedEndPosition;
+	public Vector3 EndPosition
+	{
+		get
+		{
+			if (pickupParent == null)
+				return GlobalPosition;
+
+			return Engine.IsEditorHint() ? pickupParent.GlobalPosition : cachedEndPosition;
+		}
+	}
 
 	public LaunchSettings GetLaunchSettings() => LaunchSettings.Create(SpawnPosition, EndPosition, travelHeight);
 
@@ -146,6 +156,8 @@ public partial class ItemBox : Pickup
 
 		if (!spawnPearls && pickupParent != null)
 		{
+			cachedEndPosition = pickupParent.GlobalPosition;
+
 			// Pool objects
 			if (pickupParent is Pickup)
 			{
@@ -231,13 +243,13 @@ public partial class ItemBox : Pickup
 			{
 				if (!objectLaunchSettings[i].IsInitialized)
 				{
-					Vector3 startPosition = GlobalTransform.Basis.Inverse() * (SpawnPosition - EndPosition);
-					if (objectPool[i] == pickupParent)
-						startPosition = SpawnOffset;
-					objectLaunchSettings[i] = LaunchSettings.Create(startPosition, objectPool[i].Position, travelHeight);
+					Vector3 endPosition = EndPosition;
+					if (objectPool[i] != pickupParent)
+						endPosition = objectPool[i].Position;
+					objectLaunchSettings[i] = LaunchSettings.Create(SpawnPosition, endPosition, travelHeight);
 				}
 
-				objectPool[i].Position = objectLaunchSettings[i].InterpolatePositionRatio(currentTime);
+				objectPool[i].GlobalPosition = objectLaunchSettings[i].InterpolatePositionRatio(currentTime);
 				objectPool[i].Scale = Vector3.One * Mathf.Clamp(currentTime, 0.5f, 1f);
 			}
 		}
