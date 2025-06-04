@@ -15,6 +15,10 @@ public partial class BounceState : PlayerState
 	private SnapMode snapMode;
 	private bool isSnapSuccessful;
 	private Vector3 snapPosition;
+	private Node3D snapTarget;
+	public void SetSnapTarget(Node3D target)
+		=> snapTarget = target ?? Player.Lockon.Target;
+
 	public void SetBounceSnapping(SnapMode mode) => snapMode = mode;
 
 	[Export]
@@ -117,7 +121,7 @@ public partial class BounceState : PlayerState
 
 		Player.MoveSpeed = 0; // Reset speed
 
-		if (Player.Lockon.Target == null) // Nothing to snap to
+		if (snapTarget == null) // Nothing to snap to
 			return;
 
 		if (!Mathf.IsZeroApprox(bounceInterruptTimer)) // Player is already bouncing -- don't snap
@@ -127,7 +131,7 @@ public partial class BounceState : PlayerState
 			return;
 
 		// Only snap when target being hit is correct
-		Vector3 targetSnapPosition = Player.Lockon.Target.GlobalPosition;
+		Vector3 targetSnapPosition = snapTarget.GlobalPosition;
 		if (snapMode == SnapMode.SnappingEnabledNoHeight)
 			targetSnapPosition.Y = Player.CenterPosition.Y;
 

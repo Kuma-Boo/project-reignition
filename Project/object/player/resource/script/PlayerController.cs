@@ -765,17 +765,19 @@ public partial class PlayerController : CharacterBody3D
 	[Export] private BounceState bounceState;
 	public bool IsBouncing { get; set; }
 	public bool IsBounceInteruptable { get; set; }
-	public void StartBounce(BounceState.SnapMode bounceMode, float bounceScaleOverride = 1f)
+	public void StartBounce(BounceState.SnapMode bounceMode, float bounceScaleOverride = 1f, Node3D snapTarget = null)
 	{
 		IsBouncing = true;
 		IsBounceInteruptable = false;
 		bounceState.BounceHeightScale = bounceScaleOverride;
 		bounceState.SetBounceSnapping(bounceMode);
+		bounceState.SetSnapTarget(snapTarget);
 		StateMachine.ChangeState(bounceState);
 	}
 
 	// Overload method for standard bouncing
-	public void StartBounce(bool isUpwardBounce = false, float bounceScaleOverride = 1f) => StartBounce(isUpwardBounce ? BounceState.SnapMode.SnappingEnabled : BounceState.SnapMode.Disabled, bounceScaleOverride);
+	public void StartBounce(bool isUpwardBounce = false, float bounceScaleOverride = 1f, Node3D snapTarget = null)
+		=> StartBounce(isUpwardBounce ? BounceState.SnapMode.SnappingEnabled : BounceState.SnapMode.Disabled, bounceScaleOverride, snapTarget);
 
 	[Export] private DriftState driftState;
 	public bool IsDrifting => driftState.Trigger != null;

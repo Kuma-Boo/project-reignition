@@ -303,14 +303,14 @@ public partial class Enemy : Node3D
 
 			// If the player is trying to perform a light speed attack, only do the bounce AFTER checking the next target
 			if (!IsLightSpeedAttackValid)
-				Player.StartBounce(IsDefeated, bounceScale);
+				Player.StartBounce(IsDefeated, bounceScale, Hurtbox);
 		}
 		else if ((Player.IsBouncing && !Player.IsBounceInteruptable) ||
 			(Player.IsJumping && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.ArmorJump)))
 		{
 			// Bouncing off an enemy
 			UpdateLockon();
-			Player.StartBounce(IsDefeated, bounceScale);
+			Player.StartBounce(IsDefeated, bounceScale, Hurtbox);
 		}
 		else if (damagePlayer && Player.AttackState == PlayerController.AttackStates.None &&
 			(!Player.IsBouncing || Player.IsBounceInteruptable))
@@ -344,7 +344,7 @@ public partial class Enemy : Node3D
 			return;
 
 		// Otherwise, do the delayed bounce
-		Player.StartBounce(IsDefeated, bounceScale);
+		Player.StartBounce(IsDefeated, bounceScale, Hurtbox);
 	}
 
 	/// <summary> Current local rotation of the enemy. </summary>
