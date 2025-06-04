@@ -802,6 +802,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -10, 407)
 
 [node name="Islands" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 2, 414)
+visible = false
 script = ExtResource("36_7jc22")
 saveVisibilityOnCheckpoint = true
 
@@ -3734,6 +3735,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 [node name="MovingItemBox" type="Node3D" parent="MainAct/Grotto"]
 transform = Transform3D(0.573576, 0, 0.819152, 0, 1, 0, -0.819152, 0, 0.573576, -360.773, 26, 47.0723)
 script = ExtResource("15_s8u74")
+startPaused = true
+smoothPausing = true
 root = NodePath("ItemBoxFlying")
 animator = NodePath("")
 Movement/Mode = 1
@@ -3878,6 +3881,7 @@ initialVelocity = 4.0
 
 [node name="Cave" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -504, 40, 1584)
+visible = false
 script = ExtResource("36_7jc22")
 saveVisibilityOnCheckpoint = true
 
@@ -4222,7 +4226,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(0.999997, 2.35438e-06, 8.76188e-06, -4.61936e-06, 1, -4.28408e-06, 1.19209e-06, -3.65078e-07, 0.999993, 0, 0, 0)
+transform = Transform3D(0.999997, 2.35438e-06, 8.76188e-06, -4.64916e-06, 1, -4.28408e-06, 1.2219e-06, -3.65078e-07, 0.999993, 0, 0, 0)
 playSFX = false
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
@@ -6151,6 +6155,8 @@ shape = SubResource("BoxShape3D_6yc6x")
 [connection signal="Deactivated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="MainAct/Ships/Ship3/Throne/JumpPanel/Path" method="Activate"]
 [connection signal="Activated" from="MainAct/Grotto/Switch" to="MainAct/Grotto/Spring" method="ShowLauncher"]
 [connection signal="Shattered" from="MainAct/Grotto/Cage" to="MainAct/Grotto/GreenMajin2" method="Defeat" flags=3]
+[connection signal="Collected" from="MainAct/Grotto/MovingItemBox/ItemBoxFlying" to="MainAct/Grotto/MovingItemBox" method="Pause"]
+[connection signal="Respawned" from="MainAct/Grotto/MovingItemBox/ItemBoxFlying" to="MainAct/Grotto/MovingItemBox" method="Unpause"]
 [connection signal="Activated" from="MainAct/Cave/Sword3" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Cave/Sword3" to="Static/Collision/GrindOneWayWall" method="Activate"]
 [connection signal="Activated" from="MainAct/Cave/Sword3" to="MainAct/Cave/GrindPath/Camera" method="Activate"]

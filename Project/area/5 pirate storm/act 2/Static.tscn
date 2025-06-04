@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://d1gknocio5io1"]
+[gd_scene load_steps=26 format=3 uid="uid://d1gknocio5io1"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_4xujv"]
 [ext_resource type="Resource" uid="uid://c2qttlm1qg5ji" path="res://area/5 pirate storm/act 2/camera/CloseCam.tres" id="2_or2ge"]
@@ -15,6 +15,15 @@
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="9_patcr"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="10_q3ufd"]
 [ext_resource type="Resource" uid="uid://bsdv21422t2gf" path="res://area/5 pirate storm/act 2/camera/OverheadCam.tres" id="11_oejkb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q3ufd"]
+render_priority = -124
+blend_mode = 3
+cull_mode = 1
+shading_mode = 0
+specular_mode = 2
+disable_fog = true
+albedo_color = Color(0.589911, 0.46884, 0.759212, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_or2ge"]
 size = Vector3(200, 5, 200)
@@ -393,8 +402,9 @@ glow_enabled = true
 glow_normalized = true
 glow_blend_mode = 1
 glow_hdr_threshold = 1.2
-fog_light_color = Color(0.2244, 0.307047, 0.44, 1)
-fog_density = 0.002
+fog_enabled = true
+fog_light_color = Color(0.313728, 0.164897, 0.488441, 1)
+fog_light_energy = 0.2
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_4xujv")
@@ -417,6 +427,9 @@ visible = false
 
 [node name="PSSky" parent="Visuals" instance=ExtResource("5_thlvq")]
 
+[node name="Tint" parent="Visuals/PSSky" index="9"]
+surface_material_override/0 = SubResource("StandardMaterial3D_q3ufd")
+
 [node name="Lighting" type="Node3D" parent="Visuals"]
 
 [node name="EnvironmentLight" type="DirectionalLight3D" parent="Visuals/Lighting"]
@@ -425,6 +438,15 @@ layers = 1024
 light_color = Color(0.747167, 0.63, 1, 1)
 light_energy = 2.0
 light_cull_mask = 6
+shadow_enabled = true
+shadow_caster_mask = 65
+
+[node name="WaterLight" type="DirectionalLight3D" parent="Visuals/Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 19, 0)
+layers = 1024
+light_color = Color(0.748625, 0.63246, 1, 1)
+light_energy = 1.8
+light_cull_mask = 8
 shadow_enabled = true
 shadow_caster_mask = 65
 
@@ -573,3 +595,4 @@ loopEndPosition = 202.17
 isStageMusic = true
 
 [editable path="Collision"]
+[editable path="Visuals/PSSky"]

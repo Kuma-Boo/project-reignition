@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cu3mc0x6pj3p"]
+[gd_scene load_steps=19 format=3 uid="uid://cu3mc0x6pj3p"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_wmyme"]
 [ext_resource type="PackedScene" uid="uid://bap6v64qrvejk" path="res://area/5 pirate storm/act 3/environment/collision/Collision.tscn" id="2_w468r"]
@@ -6,7 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://bh70fk52hk7ii" path="res://area/5 pirate storm/data/skybox/Skybox.tscn" id="3_uct67"]
 [ext_resource type="PackedScene" uid="uid://cl6krxsxig07" path="res://area/5 pirate storm/act 3/environment/PSAct3.tscn" id="4_cgsbr"]
 [ext_resource type="Curve3D" uid="uid://bql7gx4j0q52o" path="res://area/5 pirate storm/act 3/environment/path/MainPath.tres" id="6_cajqf"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="6_oc3qp"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="7_cgsbr"]
+[ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="7_ivena"]
 [ext_resource type="AudioStream" uid="uid://dpvsb186jvr2q" path="res://sound/ost/bonus disc/Pirate Storm Act 3.mp3" id="7_skabk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_skabk"]
@@ -17,6 +19,9 @@ shading_mode = 0
 specular_mode = 2
 disable_fog = true
 albedo_color = Color(0.702297, 0.709534, 0.834561, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ffq3u"]
+size = Vector3(230, 5, 300)
 
 [sub_resource type="Animation" id="Animation_cajqf"]
 resource_name = "RESET"
@@ -376,9 +381,16 @@ _data = {
 }
 
 [sub_resource type="Environment" id="Environment_cajqf"]
+tonemap_mode = 2
+tonemap_exposure = 1.2
+tonemap_white = 1.2
+glow_enabled = true
+glow_normalized = true
+glow_blend_mode = 1
 fog_enabled = true
 fog_light_color = Color(0.438243, 0.560901, 0.709317, 1)
 fog_density = 0.005
+adjustment_enabled = true
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_wmyme")
@@ -401,14 +413,39 @@ visible = false
 surface_material_override/0 = SubResource("StandardMaterial3D_skabk")
 
 [node name="Lighting" type="Node3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64, 0, 550)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Visuals/Lighting"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -64, 0, 576)
+[node name="EnvironmentLighting" type="DirectionalLight3D" parent="Visuals/Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
-light_energy = 4.2
+light_color = Color(0.821954, 0.864633, 0.88585, 1)
+light_energy = 2.0
 light_cull_mask = 10
 shadow_enabled = true
 shadow_caster_mask = 65
+
+[node name="ObjectLighting" type="DirectionalLight3D" parent="Visuals/Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 1024
+light_color = Color(0.821954, 0.864633, 0.88585, 1)
+light_energy = 1.2
+light_cull_mask = 65
+shadow_enabled = true
+shadow_caster_mask = 65
+
+[node name="Trigger" type="Node3D" parent="."]
+
+[node name="WaterTrigger" parent="Trigger" instance=ExtResource("6_oc3qp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64, -5, 550)
+"Enter Mode" = 0
+
+[node name="Water" type="Node3D" parent="Trigger/WaterTrigger"]
+script = ExtResource("7_ivena")
+triggerType = 1
+waterFxHeightOffset = 3.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/WaterTrigger"]
+shape = SubResource("BoxShape3D_ffq3u")
 
 [node name="Path" type="Node3D" parent="."]
 
