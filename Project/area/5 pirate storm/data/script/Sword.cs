@@ -27,7 +27,9 @@ public partial class Sword : Node3D
 
 	private void Activate()
 	{
+		animator.Seek(0.0);
 		animator.Play("bounce");
+
 		LaunchSettings settings = GetLaunchSettings();
 		settings.AllowJumpDash = true;
 
