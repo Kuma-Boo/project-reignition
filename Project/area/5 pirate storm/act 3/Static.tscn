@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cu3mc0x6pj3p"]
+[gd_scene load_steps=16 format=3 uid="uid://cu3mc0x6pj3p"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_wmyme"]
 [ext_resource type="PackedScene" uid="uid://bap6v64qrvejk" path="res://area/5 pirate storm/act 3/environment/collision/Collision.tscn" id="2_w468r"]
@@ -8,6 +8,15 @@
 [ext_resource type="Curve3D" uid="uid://bql7gx4j0q52o" path="res://area/5 pirate storm/act 3/environment/path/MainPath.tres" id="6_cajqf"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="7_cgsbr"]
 [ext_resource type="AudioStream" uid="uid://dpvsb186jvr2q" path="res://sound/ost/bonus disc/Pirate Storm Act 3.mp3" id="7_skabk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_skabk"]
+render_priority = -124
+blend_mode = 1
+cull_mode = 1
+shading_mode = 0
+specular_mode = 2
+disable_fog = true
+albedo_color = Color(0.702297, 0.709534, 0.834561, 1)
 
 [sub_resource type="Animation" id="Animation_cajqf"]
 resource_name = "RESET"
@@ -367,6 +376,9 @@ _data = {
 }
 
 [sub_resource type="Environment" id="Environment_cajqf"]
+fog_enabled = true
+fog_light_color = Color(0.438243, 0.560901, 0.709317, 1)
+fog_density = 0.005
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_wmyme")
@@ -384,6 +396,19 @@ visible = false
 [node name="PSAct3" parent="Visuals" instance=ExtResource("4_cgsbr")]
 
 [node name="PSSky" parent="Visuals" instance=ExtResource("3_uct67")]
+
+[node name="Tint" parent="Visuals/PSSky" index="9"]
+surface_material_override/0 = SubResource("StandardMaterial3D_skabk")
+
+[node name="Lighting" type="Node3D" parent="Visuals"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Visuals/Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -64, 0, 576)
+layers = 1024
+light_energy = 4.2
+light_cull_mask = 10
+shadow_enabled = true
+shadow_caster_mask = 65
 
 [node name="Path" type="Node3D" parent="."]
 
@@ -411,3 +436,5 @@ script = ExtResource("7_cgsbr")
 loopStartPosition = 7.44
 loopEndPosition = 227.86
 isStageMusic = true
+
+[editable path="Visuals/PSSky"]
