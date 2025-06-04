@@ -4,7 +4,7 @@ using Godot.Collections;
 namespace Project.CustomNodes;
 
 /// <summary>
-/// Plays a group of GPUParticles together.
+/// Plays a group of GPUParticles3D together.
 /// </summary>
 [Tool]
 public partial class GroupGpuParticles3D : GpuParticles3D

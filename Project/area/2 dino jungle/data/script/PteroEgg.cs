@@ -25,10 +25,16 @@ public partial class PteroEgg : Area3D
 	/// <summary> Has this egg been saved at a checkpoint? </summary>
 	public bool IgnoreRespawn { get; set; }
 
+	/// <summary> The index of the egg's pattern, starting from 1. </summary>
+	private int eggPattern;
+	/// <summary> Which objective icon the egg is responsible for. </summary>
+	private int eggIndex;
+
 	private Vector3 followVelocity;
-	private readonly float MinDistance = .5f;
-	private readonly float FollowDistanceIncrement = 1.5f;
+	private readonly float FollowDistance = 2f;
 	private readonly float FollowSmoothing = 5.0f;
+	private readonly float BackflipFollowSmoothing = 2.0f;
+	private readonly float FollowRotationAmount = Mathf.DegToRad(60f);
 
 	private float returnTravelRatio;
 	private SpawnData spawnData;
@@ -41,6 +47,7 @@ public partial class PteroEgg : Area3D
 		Animator = GetNodeOrNull<AnimationPlayer>(animator);
 		spawnData = new(GetParent(), Transform);
 		StageSettings.Instance.Respawned += Respawn;
+		StageSettings.Instance.LevelStarted += InitializeHud;
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -53,20 +60,24 @@ public partial class PteroEgg : Area3D
 			ReturnToNest();
 	}
 
+	private void InitializeHud()
+		=> HeadsUpDisplay.Instance.PlayObjectiveAnimation("dino-egg", eggIndex);
+
+	/// <summary> Moves the eggs to circle around the back half of the player. </summary>
 	private void UpdateHeldPosition()
 	{
-		int eggIndex = PteroEggManager.heldEggs.IndexOf(this);
-		Vector3 referencePosition = eggIndex == 0 ? Player.GlobalPosition : PteroEggManager.heldEggs[eggIndex - 1].GlobalPosition;
-		float distanceSquared = GlobalPosition.DistanceSquaredTo(referencePosition);
+		int totalEggCount = PteroEggManager.heldEggs.Count;
 
-		float smoothing = FollowSmoothing;
-		Vector3 targetPosition = referencePosition + (Player.PathFollower.Back() * FollowDistanceIncrement);
-
-		if (distanceSquared < Mathf.Pow(MinDistance, 2.0f)) // Extra snappy when things are too close
+		float smoothing = Player.IsBackflipping ? BackflipFollowSmoothing : FollowSmoothing; // Extra snappy when moving backwards
+		Vector3 followDirection = Player.PathFollower.Back();
+		if (totalEggCount > 1)
 		{
-			smoothing = 3.0f;
-			targetPosition = GlobalPosition - (GlobalPosition.DirectionTo(referencePosition) * MinDistance);
+			float rotationFactor = PteroEggManager.heldEggs.IndexOf(this) / (totalEggCount - 1f);
+			rotationFactor = Mathf.Lerp(-1f, 1f, rotationFactor);
+			followDirection = followDirection.Rotated(Vector3.Up, FollowRotationAmount * rotationFactor);
 		}
+
+		Vector3 targetPosition = Player.GlobalPosition + followDirection * FollowDistance;
 
 		// Update position to trail player
 		GlobalPosition = GlobalPosition.SmoothDamp(targetPosition, ref followVelocity, smoothing * PhysicsManager.physicsDelta);
@@ -92,14 +103,21 @@ public partial class PteroEgg : Area3D
 	private void SaveNestStatus() => IgnoreRespawn = IsReturnedToNest;
 
 	// Called when the player takes damage or respawns
-	public void Frighten() => Animator.Play("frighten");
+	public void Frighten()
+	{
+		Animator.Play("frighten");
+		HeadsUpDisplay.Instance.PlayObjectiveAnimation("dino-egg-loss", eggIndex);
+	}
 
 	private void Respawn()
 	{
 		if (IgnoreRespawn) return; // Don't respawn if we're already at the nest. Don't force the player to redo stuff they already did.
 
 		if (IsHeld)
+		{
 			PteroEggManager.heldEggs.Remove(this);
+			HeadsUpDisplay.Instance.PlayObjectiveAnimation("dino-egg", eggIndex);
+		}
 
 		IsReturnedToNest = false;
 		followVelocity = Vector3.Zero;
@@ -107,8 +125,10 @@ public partial class PteroEgg : Area3D
 		Animator.Play("idle");
 	}
 
-	public void SetType(Node3D model) // Adds the egg model as a child
+	public void SetType(int pattern, int index, Node3D model) // Adds the egg model as a child
 	{
+		eggPattern = pattern;
+		eggIndex = index;
 		Root.AddChild(model);
 		model.GlobalTransform = GlobalTransform;
 		model.Position += Vector3.Up * .5f;
@@ -121,13 +141,17 @@ public partial class PteroEgg : Area3D
 		if (IsHeld) return;
 
 		PteroEggManager.heldEggs.Add(this);
+		HeadsUpDisplay.Instance.PlayObjectiveAnimation("dino-egg" + eggPattern, eggIndex);
 		Animator.Play("pick-up", .1f);
 	}
 
 	public void ReturnToNest(PteroNest nest)
 	{
 		if (IsHeld)
+		{
 			PteroEggManager.heldEggs.Remove(this);
+			HeadsUpDisplay.Instance.PlayObjectiveAnimation("dino-egg-return", eggIndex);
+		}
 
 		IsReturningToNest = true;
 

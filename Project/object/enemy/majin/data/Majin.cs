@@ -578,7 +578,11 @@ public partial class Majin : Enemy
 		{
 			currentRotation = ExtensionMethods.SmoothDampAngle(currentRotation, 0, ref rotationVelocity, TrackingSmoothing * PhysicsManager.physicsDelta);
 			if (OutsideFlameAggression && !isFlameActive)
+			{
 				flameTimer = flameInactiveTime;
+				ProcessRotation(Player.GlobalPosition);
+
+			}
 			return;
 		}
 

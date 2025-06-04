@@ -291,6 +291,7 @@ public partial class StageSettings : Node3D
 	{
 		CurrentObjectiveCount++;
 		CurrentObjectiveCount = Mathf.Clamp(CurrentObjectiveCount, 0, Data.MissionObjectiveCount);
+		HeadsUpDisplay.Instance.PlayObjectiveAnimation("good");
 		EmitSignal(SignalName.ObjectiveChanged);
 
 		if (Data.MissionObjectiveCount == 0) // i.e. Sand Oasis's "Don't break the jars!" mission.
@@ -307,6 +308,10 @@ public partial class StageSettings : Node3D
 	public void ResetObjective(int progress = 0)
 	{
 		CurrentObjectiveCount = progress;
+
+		if (progress == 0 && Player.IsDefeated)
+			HeadsUpDisplay.Instance.PlayObjectiveAnimation("bad");
+
 		EmitSignal(SignalName.ObjectiveReset);
 	}
 
