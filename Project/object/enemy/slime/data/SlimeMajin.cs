@@ -17,7 +17,7 @@ public partial class SlimeMajin : Enemy
 	private Vector3 initialPosition;
 	private Vector3 InitialPosition => Engine.IsEditorHint() ? GlobalPosition : initialPosition;
 	private Vector3 SpawnPosition => InitialPosition + spawnOffset * GlobalBasis.Inverse();
-	public bool IsSpawnLaunchEnabled => !spawnOffset.IsZeroApprox();
+	public bool IsSpawnLaunchEnabled => !spawnOffset.IsZeroApprox() || !Mathf.IsZeroApprox(spawnHeight);
 	private LaunchSettings spawnLaunchSettings;
 	public LaunchSettings SpawnLaunchSettings => LaunchSettings.Create(SpawnPosition, InitialPosition, spawnHeight, true);
 	private float spawnTimer;
@@ -131,12 +131,7 @@ public partial class SlimeMajin : Enemy
 		if (IsActive)
 			return;
 
-		if (spawnOffset.IsZeroApprox() && Mathf.IsZeroApprox(spawnHeight))
-		{
-			// Instant spawn
-			instantSpawnFX.RestartGroup();
-		}
-		else
+		if (IsSpawnLaunchEnabled)
 		{
 			spawnTimer = 0;
 			spawnLaunchSettings = SpawnLaunchSettings; // Cache launch settings so we don't have to keep recalculating it
@@ -144,6 +139,11 @@ public partial class SlimeMajin : Enemy
 			slimeState = SlimeState.Spawning;
 			SpawnStatePlayback.Start(SpawnStartAnimation);
 			AnimationTree.Set(SpawnTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		}
+		else
+		{
+			// Instant spawn
+			instantSpawnFX.RestartGroup();
 		}
 
 		AnimationTree.Set(StateTransition, "active");

@@ -15,7 +15,7 @@ public partial class FlyingPotState : PlayerState
 	private float flapTimer;
 	private const float MaxSpeed = 8.0f;
 	private const float MaxAngle = Mathf.Pi * .2f;
-	private const float WingAcceleration = 4f;
+	private const float WingAcceleration = 3f;
 	private const float FlapInterval = .5f; // How long is a single flap?
 	private const float FlapAccelerationLength = .4f; // How long does a flap accelerate?
 

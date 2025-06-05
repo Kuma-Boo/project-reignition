@@ -17,7 +17,7 @@ public partial class JumpState : PlayerState
 	private PlayerState homingAttackState;
 
 	[Export]
-	private float accelerationJumpSpeed = 36;
+	private float accelerationJumpSpeed = 25f;
 	[Export]
 	private float accelerationJumpHeightVelocity = 5;
 
@@ -26,6 +26,8 @@ public partial class JumpState : PlayerState
 	private bool isShortenedJump;
 	private bool isAccelerationJump;
 	private bool isAccelerationJumpQueued;
+	/// <summary> Cached acceleration jump height. Used to determine when the acceleration jump should start slowing down. </summary>
+	private float accelerationJumpHeight;
 
 	private readonly float JumpCurve = .95f;
 	/// <summary> How fast the jump button needs to be released to count as an Acceleration Jump. </summary>
@@ -51,6 +53,7 @@ public partial class JumpState : PlayerState
 		jumpTimer = 0;
 		isShortenedJump = false;
 		isAccelerationJump = false;
+		accelerationJumpHeight = Player.GlobalPosition.Y;
 		isAccelerationJumpQueued = Player.ForceAccelerationJump;
 
 		// Decide accleration jump based on jump charge
@@ -153,7 +156,7 @@ public partial class JumpState : PlayerState
 
 	protected override void Accelerate(float inputStrength)
 	{
-		if (isAccelerationJump) // Clamp acceleration jumps so they don't get out of control
+		if (jumpTimer <= AccelerationJumpLength || isAccelerationJump && Player.GlobalPosition.Y >= accelerationJumpHeight) // Clamp acceleration jumps so they don't get out of control
 		{
 			Player.MoveSpeed = Player.Stats.GroundSettings.UpdateInterpolate(Player.MoveSpeed, inputStrength);
 			return;
@@ -205,7 +208,7 @@ public partial class JumpState : PlayerState
 			Player.MovementAngle = Player.PathFollower.ForwardAngle;
 
 		// Keep acceleration jump heights consistent
-		Player.MoveSpeed = accelerationJumpSpeed;
+		Player.MoveSpeed = Mathf.Max(accelerationJumpSpeed, Player.MoveSpeed);
 		Player.VerticalSpeed = accelerationJumpHeightVelocity;
 		Player.Animator.JumpAccelAnimation();
 

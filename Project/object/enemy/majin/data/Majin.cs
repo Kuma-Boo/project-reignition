@@ -241,7 +241,7 @@ public partial class Majin : Enemy
 	private bool SeparateDespawninterval => !Mathf.IsZeroApprox(despawnIntervalDelay);
 	/// <summary> How long should spawning be delayed? </summary>
 	private float spawnIntervalDelay;
-	/// <summary> How long should spawning be delayed? </summary>
+	/// <summary> How long should despawning be delayed? </summary>
 	private float despawnIntervalDelay;
 	private bool isFinishedTraveling;
 	public bool SpawnTravelEnabled => !Mathf.IsZeroApprox(spawnTravelTime);
