@@ -53,6 +53,17 @@ public partial class Switch : Area3D
 			return;
 
 		Activate();
+		timer.Paused = true;
+	}
+
+	private void OnExited(Area3D a)
+	{
+		if (!a.IsInGroup("player detection"))
+			return;
+
+		timer.Paused = false;
+		if (!Mathf.IsZeroApprox(activationLength)) // Reset timer
+			timer.WaitTime = activationLength;
 	}
 
 	private void Activate()

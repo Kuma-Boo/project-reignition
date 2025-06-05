@@ -29,7 +29,13 @@ public partial class DashPanel : Area3D
 		Activate();
 	}
 
-	public void OnEntered(Area3D _) => isQueued = true;
+	public void OnEntered(Area3D a)
+	{
+		if (!a.IsInGroup("player detection"))
+			return;
+
+		isQueued = true;
+	}
 
 	private void Activate()
 	{
