@@ -82,7 +82,7 @@ public partial class Barrel : Launcher
 
 	private void ProcessInteraction()
 	{
-		if (Player.IsJumpDashOrHomingAttack)
+		if (Player.IsJumpDashOrHomingAttack || (Player.IsStomping && SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.StompAttack)))
 		{
 			Activate();
 			isFloating = false;

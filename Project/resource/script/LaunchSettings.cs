@@ -18,6 +18,11 @@ public struct LaunchSettings
 	/// <summary> Allow the player to launch through solid objects? </summary>
 	public bool IgnoreCollisions { get; set; }
 
+	/// <summary> Allow the player to take damage during a launch? </summary>
+	public bool AllowDamage { get; set; }
+	/// <summary> Allow the player to oneshot enemies during the launch? </summary>
+	public bool OneshotEnemies { get; set; }
+
 	public Objects.Launcher Launcher { get; set; }
 
 	// Physics settings

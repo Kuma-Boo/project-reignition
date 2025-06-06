@@ -19,15 +19,15 @@ namespace Project.Gameplay.Triggers
 
 		public override void Activate()
 		{
+			Player.Camera.IsDefeatFreezeActive = true;
+			if (triggerType == TriggerType.Water)
+				Player.Effect.PlayLandingWaterFX(waterFxHeightOffset);
+
 			if (!StageSettings.Instance.IsLevelIngame)
 				return;
 
-			Player.Camera.IsDefeatFreezeActive = true;
 			Player.StartRespawn();
 			Player.Effect.PlayVoice("fall");
-
-			if (triggerType == TriggerType.Water)
-				Player.Effect.PlayLandingWaterFX(waterFxHeightOffset);
 		}
 	}
 }

@@ -176,6 +176,7 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		settings.AllowJumpDash = AllowJumpDashing;
 		settings.UseAutoAlign = true;
 		settings.Launcher = this;
+		settings.OneshotEnemies = oneshotEnemies;
 
 		return settings;
 	}

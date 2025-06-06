@@ -12,9 +12,9 @@ public partial class LaunchState : PlayerState
 	[Export] private PlayerState stompState;
 	[Export] private PlayerState fallState;
 
+	public LaunchSettings Settings { get; private set; }
+	public Launcher ActiveLauncher => Settings.Launcher;
 	private float launcherTime;
-	private LaunchSettings settings;
-	public Launcher ActiveLauncher => settings.Launcher;
 	private RaycastHit wallHit;
 	public bool UpdateSettings(LaunchSettings settings)
 	{
@@ -25,13 +25,13 @@ public partial class LaunchState : PlayerState
 		}
 
 		if (Player.IsLaunching &&
-			this.settings.Launcher != null &&
-			this.settings.Launcher == settings.Launcher) // Already launching
+			Settings.Launcher != null &&
+			Settings.Launcher == settings.Launcher) // Already launching
 		{
 			return false;
 		}
 
-		this.settings = settings;
+		Settings = settings;
 		return true;
 	}
 
@@ -45,12 +45,12 @@ public partial class LaunchState : PlayerState
 		Player.IsMovingBackward = false;
 		Player.AllowLandingGrind = true;
 		Player.AllowLandingSkills = false;
-		Player.MoveSpeed = settings.HorizontalVelocity;
-		Player.VerticalSpeed = settings.InitialVerticalVelocity;
+		Player.MoveSpeed = Settings.HorizontalVelocity;
+		Player.VerticalSpeed = Settings.InitialVerticalVelocity;
 
-		Player.Lockon.IsMonitoring = settings.AllowInterruption; // Disable lockon monitoring while launch is active
+		Player.Lockon.IsMonitoring = Settings.AllowInterruption; // Disable lockon monitoring while launch is active
 
-		if (ActiveLauncher == null || ActiveLauncher.oneshotEnemies)
+		if (ActiveLauncher == null || Settings.OneshotEnemies)
 			Player.AttackState = PlayerController.AttackStates.OneShot; // Launchers typically oneshot enemies for fairness
 		else
 			Player.AttackState = PlayerController.AttackStates.None;
@@ -58,19 +58,19 @@ public partial class LaunchState : PlayerState
 		Player.UpDirection = Vector3.Up;
 		Player.Rotation = Vector3.Zero; // Reset rotation
 
-		if (settings.UseAutoAlign)
+		if (Settings.UseAutoAlign)
 		{
 			Player.MovementAngle = GetLaunchFacingAngle();
 			Player.Animator.SnapRotation(Player.MovementAngle);
 		}
 
-		if (settings.IsJump) // Play jump effects
+		if (Settings.IsJump) // Play jump effects
 		{
 			Player.Animator.AutoJumpAnimation();
 			Player.Effect.PlayActionSFX(Player.Effect.JumpSfx);
 		}
 
-		if (settings.IgnoreCollisions)
+		if (Settings.IgnoreCollisions)
 			Player.ChangeHitbox("disable-environment");
 	}
 
@@ -79,14 +79,14 @@ public partial class LaunchState : PlayerState
 		Player.IsLaunching = false;
 		if (!wallHit)
 		{
-			Player.MoveSpeed = settings.HorizontalVelocity * .5f; // Prevent too much movement
-			Player.VerticalSpeed = Player.IsOnGround ? 0 : settings.FinalVerticalVelocity;
+			Player.MoveSpeed = Settings.HorizontalVelocity * .5f; // Prevent too much movement
+			Player.VerticalSpeed = Player.IsOnGround ? 0 : Settings.FinalVerticalVelocity;
 		}
 
 		Player.AttackState = PlayerController.AttackStates.None;
 
 		if (!Player.Lockon.IsMonitoring)
-			Player.Lockon.IsMonitoring = !Player.IsOnGround && settings.AllowJumpDash;
+			Player.Lockon.IsMonitoring = !Player.IsOnGround && Settings.AllowJumpDash;
 
 		Player.Effect.StopSpinFX();
 		Player.Effect.StopTrailFX();
@@ -94,7 +94,7 @@ public partial class LaunchState : PlayerState
 
 		Player.ChangeHitbox("RESET");
 		Player.EmitSignal(PlayerController.SignalName.LaunchFinished);
-		settings.Launcher?.Deactivate();
+		Settings.Launcher?.Deactivate();
 	}
 
 	public override PlayerState ProcessPhysics()
@@ -102,11 +102,11 @@ public partial class LaunchState : PlayerState
 		if (IsRecenteringPlayer())
 			return null;
 
-		launcherTime = Mathf.Min(launcherTime + PhysicsManager.physicsDelta, settings.TotalTravelTime);
-		Vector3 targetPosition = settings.InterpolatePositionTime(launcherTime);
+		launcherTime = Mathf.Min(launcherTime + PhysicsManager.physicsDelta, Settings.TotalTravelTime);
+		Vector3 targetPosition = Settings.InterpolatePositionTime(launcherTime);
 		float heightDelta = Mathf.IsZeroApprox(launcherTime) ? 0 : targetPosition.Y - Player.GlobalPosition.Y;
 
-		if (!settings.IgnoreCollisions)
+		if (!Settings.IgnoreCollisions)
 		{
 			UpdateWallHit(targetPosition);
 			if (wallHit)
@@ -123,7 +123,7 @@ public partial class LaunchState : PlayerState
 			return landState;
 		}
 
-		if (settings.AllowInterruption)
+		if (Settings.AllowInterruption)
 		{
 			if (Player.Controller.IsJumpBufferActive || Player.Controller.IsAttackBufferActive) // Cancel into a jumpdash
 			{
@@ -142,7 +142,7 @@ public partial class LaunchState : PlayerState
 			}
 		}
 
-		if (settings.IsLauncherFinished(launcherTime)) // Revert to normal state
+		if (Settings.IsLauncherFinished(launcherTime)) // Revert to normal state
 			return fallState;
 
 		return null;
@@ -151,10 +151,10 @@ public partial class LaunchState : PlayerState
 	private float GetLaunchFacingAngle()
 	{
 		Vector3 launchDirection;
-		if (settings.Launcher == null)
-			launchDirection = settings.InitialVelocity.RemoveVertical();
+		if (Settings.Launcher == null)
+			launchDirection = Settings.InitialVelocity.RemoveVertical();
 		else
-			launchDirection = settings.Launcher.GetLaunchDirection().RemoveVertical();
+			launchDirection = Settings.Launcher.GetLaunchDirection().RemoveVertical();
 
 		if (launchDirection.IsEqualApprox(Vector3.Zero)) // Fallback to PathFollower's forward angle
 			return Player.PathFollower.ForwardAngle;
@@ -164,10 +164,10 @@ public partial class LaunchState : PlayerState
 
 	private bool IsRecenteringPlayer()
 	{
-		if (settings.Launcher?.IsPlayerCentered != false)
+		if (Settings.Launcher?.IsPlayerCentered != false)
 			return false;
 
-		Player.GlobalPosition = settings.Launcher.RecenterPlayer();
+		Player.GlobalPosition = Settings.Launcher.RecenterPlayer();
 		return true;
 	}
 

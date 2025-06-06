@@ -187,12 +187,6 @@ namespace Project.Gameplay.Triggers
 			if (!a.IsInGroup("player detection"))
 				return;
 
-			if (StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Failed ||
-				StageSettings.Instance.LevelState == StageSettings.LevelStateEnum.Success)
-			{
-				return;
-			}
-
 			OnEntered();
 		}
 

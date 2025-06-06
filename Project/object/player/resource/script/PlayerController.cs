@@ -625,6 +625,8 @@ public partial class PlayerController : CharacterBody3D
 	[Signal]
 	public delegate void LaunchFinishedEventHandler();
 	public bool IsLaunching { get; set; }
+	/// <summary> The currently active launch settings. Check <see cref="IsLaunching"/> first to ensure launch settings are valid. </summary>
+	public LaunchSettings ActiveLaunchSettings => launchState.Settings;
 	public Launcher ActiveLauncher => launchState.ActiveLauncher;
 	[Export] private LaunchState launchState;
 	public void StartLauncher(LaunchSettings settings)
@@ -876,7 +878,20 @@ public partial class PlayerController : CharacterBody3D
 		}
 
 		Effect.PlayVoice("hurt");
+		Stage.UpdateRingCount(CalculateDamageRingLoss(), StageSettings.MathModeEnum.Subtract);
+		Stage.IncrementDamageCount();
+		EmitSignal(SignalName.Damaged);
 
+		// Level failed
+		if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect)
+		{
+			DefeatPlayer();
+			Stage.FinishLevel(false);
+		}
+	}
+
+	private int CalculateDamageRingLoss()
+	{
 		int ringLoss = 20;
 		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.RingLossConvert)) // Don't lose ANY soul power when ring -> soul conversion skill is active
 		{
@@ -929,17 +944,7 @@ public partial class PlayerController : CharacterBody3D
 			ringLoss -= 10;
 
 		// Lose rings
-		ringLoss = Mathf.Max(ringLoss, 0);
-		Stage.UpdateRingCount(ringLoss, StageSettings.MathModeEnum.Subtract);
-		Stage.IncrementDamageCount();
-		EmitSignal(SignalName.Damaged);
-
-		// Level failed
-		if (Stage.Data.MissionType == LevelDataResource.MissionTypes.Perfect)
-		{
-			DefeatPlayer();
-			Stage.FinishLevel(false);
-		}
+		return Mathf.Max(ringLoss, 0);
 	}
 
 	public bool IsInvincible => invincibilityTimer != 0 || DisableDamage || IsTeleporting;

@@ -230,7 +230,8 @@ public partial class SlimeMajin : Enemy
 
 	private void StartAttack()
 	{
-		if (isShockEnabled && GlobalPosition.DistanceSquaredTo(Player.CenterPosition) < ShockRangeSquared)
+		if (isShockEnabled &&
+			(!isSpitEnabled || GlobalPosition.DistanceSquaredTo(Player.CenterPosition) < ShockRangeSquared))
 		{
 			StartShockAttack();
 			return;
