@@ -51,18 +51,22 @@ public partial class DashPanel : Area3D
 			Player.Effect.PlayVoice("dash panel");
 		}
 
+		// Recalculate lockout length to be consistent across different speeds
+		float normalizedSpeedRatio = Player.Stats.GroundSettings.GetSpeedRatio(Player.MoveSpeed);
+		float normalizedLockoutLength = length * speedRatio / normalizedSpeedRatio;
+
 		LockoutResource lockout = new()
 		{
 			movementMode = LockoutResource.MovementModes.Replace,
 			spaceMode = LockoutResource.SpaceModes.Local,
 			movementAngle = 0,
-			speedRatio = speedRatio,
+			speedRatio = normalizedSpeedRatio,
 			disableActionFlags = LockoutResource.ActionFlags.ActionButton + (int)LockoutResource.ActionFlags.Backflip,
 			resetFlags = LockoutResource.ResetFlags.OnJump,
 			overrideSpeed = true,
 			tractionMultiplier = -1,
 			frictionMultiplier = 0,
-			length = length,
+			length = normalizedLockoutLength,
 			priority = -1, // Not using priority
 		};
 
