@@ -611,6 +611,9 @@ public partial class Majin : Enemy
 		if (Mathf.IsEqualApprox(timer, -1)) // Spawn intervals haven't started yet
 			return;
 
+		if (!Mathf.IsZeroApprox(staggerTimer)) // Enemy is being staggered
+			return;
+
 		if (IsRedMajin && ((IsActive && IsInFlameAggressionRange()) || isFlameActive)) // Don't allow spawn intervals during a flame attack
 			return;
 
