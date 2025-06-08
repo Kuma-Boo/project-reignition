@@ -558,6 +558,8 @@ public partial class Majin : Enemy
 		DebugManager.DrawRay(GlobalPosition, castDirection, Colors.Red);
 		if (hit && hit.collidedObject.IsInGroup("wall")) // Find a new target wandering position
 			UpdateWanderingPosition();
+
+		AnimationTree.Set(MoveBlend, Vector2.Zero);
 	}
 
 	/// <summary>
