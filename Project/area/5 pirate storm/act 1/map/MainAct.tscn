@@ -1,4 +1,4 @@
-[gd_scene load_steps=120 format=3 uid="uid://bkuwj6xj81tuv"]
+[gd_scene load_steps=122 format=3 uid="uid://bkuwj6xj81tuv"]
 
 [ext_resource type="PackedScene" uid="uid://csk7y7y8vgg6l" path="res://area/5 pirate storm/act 1/Static.tscn" id="1_8fsep"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_kflh0"]
@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://unk8vyncg7mg" path="res://area/5 pirate storm/act 1/camera/ShipCloseCam.tres" id="3_8cccl"]
 [ext_resource type="PackedScene" uid="uid://cy240mxcsv0p7" path="res://object/enemy/slime/SlimeMajin.tscn" id="3_qkxl1"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="4_yyd45"]
+[ext_resource type="Script" uid="uid://bitgnn108jmaa" path="res://object/trigger/modules/DialogTrigger.cs" id="5_mrnau"]
 [ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="6_ytq25"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="7_slh8b"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="8_ytq25"]
@@ -84,6 +85,15 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_6yc6x"]
 size = Vector3(20, 20, 5)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_mrnau"]
+size = Vector3(20, 8, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6rj8d"]
+size = Vector3(50, 80, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lhec2"]
+size = Vector3(5, 10, 5)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_vmmrf"]
 size = Vector3(40, 50, 5)
 
@@ -146,14 +156,8 @@ _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, -5), -13.3193, 0.0, 0, 0]
 point_count = 2
 metadata/_snap_enabled = true
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_6rj8d"]
-size = Vector3(50, 80, 5)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_42pck"]
 size = Vector3(50, 20, 37)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_lhec2"]
-size = Vector3(5, 10, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4ojec"]
 size = Vector3(50, 20, 80)
@@ -273,6 +277,19 @@ Data = ExtResource("2_qkxl1")
 InitialCameraSettings = ExtResource("3_8cccl")
 environmentFxFactor = 1.0
 
+[node name="Dialog" type="Node3D" parent="Static/Triggers/PathAndCameraTriggers/ShipsStart" index="2"]
+transform = Transform3D(-1, -8.60942e-08, 1.51807e-08, 0, 0.173648, 0.984808, -8.74232e-08, 0.984808, -0.173648, 0, 16.2208, -5.90643)
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["pir_surf_jump2_so", "pir_cannonball_end_sh", "pir_cannonball_end_so"])
+
+[node name="Dialog" type="Node3D" parent="Static/Triggers/CannonEvent/CannonEventCull/CannonEvent" index="3"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["pir_cannon_event_so", "pir_cannon_event_sh"])
+
+[node name="Dialog" type="Node3D" parent="Static/Triggers/CannonEvent/CannonBallCull/Cannonball" index="0"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["pir_surf_jump3_so"])
+
 [node name="RainCollision" parent="Static/Rain" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 7.45058e-09, 0, -7.45058e-09, 1, -1, 7.47332e-09, 1)
 
@@ -280,6 +297,265 @@ transform = Transform3D(1, 0, 0, 0, 1, 7.45058e-09, 0, -7.45058e-09, 1, -1, 7.47
 transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871558, 0, -0.0871558, 0.996195, 0, 0, 0)
 
 [node name="MainAct" type="Node3D" parent="."]
+
+[node name="Dialog" type="Node3D" parent="MainAct"]
+
+[node name="StartDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 17)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/StartDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["common_start_so", "common_start_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/StartDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="StormySeasDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -2.1, 8.6, 107.93)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/StormySeasDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["pir_opening_sh", "pir_opening_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/StormySeasDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="OpeningEnemyDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -13.4464, 1.9, 208.13)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/OpeningEnemyDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["common_enemy5_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/OpeningEnemyDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="BarrelDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, 0.173648, -46.2428, 2, 441.376)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/BarrelDialog"]
+script = ExtResource("5_mrnau")
+randomize = true
+textKeys = Array[String](["pir_hint_barrel_so", "pir_hint_barrel_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/BarrelDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="ShockDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.993441, 4.2222e-08, -0.114348, -3.82404e-08, 1, 3.70135e-08, 0.114348, -3.23981e-08, 0.993441, -128.539, 2, 480.31)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/ShockDialog"]
+script = ExtResource("5_mrnau")
+randomize = true
+textKeys = Array[String](["pir_hint_shock_so", "pir_hint_shock_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/ShockDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="SpeedbreakDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.2, 2, 610)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/SpeedbreakDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["common_resolution_so", "common_resolution_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/SpeedbreakDialog"]
+shape = SubResource("BoxShape3D_mrnau")
+
+[node name="CloseDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.14667, 4.2222e-08, -0.989186, 2.5855e-08, 1, 4.65172e-08, 0.989186, -3.2398e-08, 0.14667, -16.694, 2, 654.24)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/CloseDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["common_recovery_sh", "common_recovery_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/CloseDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="StepDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.14667, 4.2222e-08, -0.989186, 2.5855e-08, 1, 4.65172e-08, 0.989186, -3.2398e-08, 0.14667, -39.4453, 2, 657.614)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/StepDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["pir_hint_slip_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/StepDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="ShipEnemyDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 2, 1100)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/ShipEnemyDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["common_enemy5_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/ShipEnemyDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 40, 0)
+shape = SubResource("BoxShape3D_6rj8d")
+
+[node name="ShipSlimesDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, -106.6, 10, 1264.7)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/ShipSlimesDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["common_enemy7_so", "common_enemy7_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/ShipSlimesDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="MainAct/Dialog/ShipSlimesDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="ShipTopMajinDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, -103.18, 72, 1274.1)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/ShipTopMajinDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["common_enemy2_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/ShipTopMajinDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="SwordDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65, 19, 1387)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/SwordDialog"]
+script = ExtResource("5_mrnau")
+randomize = true
+textKeys = Array[String](["pir_hint_sword_so", "pir_hint_sword_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/SwordDialog"]
+shape = SubResource("BoxShape3D_lhec2")
+
+[node name="GrottoDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(-0.173648, 0, -0.984808, 0, 1, 0, 0.984808, 0, -0.173648, -190.294, -1.99997, 1585.95)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/GrottoDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["pir_grotto_so", "pir_grotto_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/GrottoDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="CautionDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(-1.49012e-08, -3.8097e-09, -1, 1.66336e-10, 1, -3.8097e-09, 1, -1.66334e-10, -1.49012e-08, -465.409, 20.4, 1584.38)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/CautionDialog"]
+script = ExtResource("5_mrnau")
+randomize = true
+textKeys = Array[String](["common_caution2_so", "common_caution2_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/CautionDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="MISSINGDIALOG" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(-1.49012e-08, -3.8097e-09, -1, 1.66336e-10, 1, -3.8097e-09, 1, -1.66334e-10, -1.49012e-08, -498.409, 37.4, 1584.38)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/MISSINGDIALOG"]
+script = ExtResource("5_mrnau")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/MISSINGDIALOG"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+disabled = true
+
+[node name="BladesDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866026, -554.788, 56.2459, 1644.26)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/BladesDialog"]
+script = ExtResource("5_mrnau")
+randomize = true
+textKeys = Array[String](["pir_hint_blade_so", "pir_hint_blade_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/BladesDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="BladeCullingTrigger" type="Node3D" parent="MainAct/Dialog"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -518.788, 39.8459, 1670.26)
+script = ExtResource("36_7jc22")
+startEnabled = true
+saveVisibilityOnCheckpoint = true
+
+[node name="BladeEndDialog" parent="MainAct/Dialog/BladeCullingTrigger" instance=ExtResource("26_1c4me")]
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/BladeCullingTrigger/BladeEndDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["common_recovery2_sh", "common_recovery2_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/BladeCullingTrigger/BladeEndDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="TractionCullingTrigger" type="Node3D" parent="MainAct/Dialog"]
+transform = Transform3D(1, 0, 2.98023e-08, 1.2595e-08, 0.906308, -0.422618, -2.70101e-08, 0.422618, 0.906308, -518.788, 30.9459, 1707.26)
+script = ExtResource("36_7jc22")
+saveVisibilityOnCheckpoint = true
+
+[node name="TractionDialog" parent="MainAct/Dialog/TractionCullingTrigger" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 3.55271e-15, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/TractionCullingTrigger/TractionDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["pir_hint_slip_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/TractionCullingTrigger/TractionDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="SurfEndDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(1, 0, 2.98023e-08, 1.2595e-08, 0.906308, -0.422618, -2.70101e-08, 0.422618, 0.906308, -595.788, 30.6459, 2638.26)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/SurfEndDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["common_victory_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/SurfEndDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="GoalDialog" parent="MainAct/Dialog" instance=ExtResource("26_1c4me")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -665, 3, 2899)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="MainAct/Dialog/GoalDialog"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["common_goal_so", "common_concern2_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Dialog/GoalDialog"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6yc6x")
 
 [node name="SpawnPosition" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.69, 0)
@@ -1338,6 +1614,10 @@ OneShot = true
 "Respawn Mode" = 0
 "Enter Mode" = 0
 
+[node name="Dialog" type="Node3D" parent="MainAct/Islands/Island3/Bombs/BombTrigger1"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["common_caution_so", "common_caution_sh"])
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Islands/Island3/Bombs/BombTrigger1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_6yc6x")
@@ -1572,7 +1852,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = false
 
 [node name="Blade" parent="MainAct/Islands/Island4/MovingBlade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(1, -1.49012e-08, -2.66454e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
+transform = Transform3D(1, -1.49012e-08, -2.53131e-14, 0, -4.37114e-08, -1, 1.49012e-08, 1, -4.37115e-08, 0, 0, 0)
 
 [node name="MovingBlade2" type="Node3D" parent="MainAct/Islands/Island4"]
 transform = Transform3D(0.990268, 0, 0.139173, 0, 1, 0, -0.139173, 0, 0.990268, -30.323, 0.3, 6.98822)
@@ -3296,6 +3576,10 @@ settings = ExtResource("50_mt1sj")
 script = ExtResource("51_01wgf")
 path = NodePath("../../../../../../Static/Path/GrottoPath")
 
+[node name="Dialog" type="Node3D" parent="MainAct/Ships/Ship3/Throne/JumpPanel"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["common_victory3_so", "common_victory3_sh"])
+
 [node name="Grotto" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65, 2, 1550)
 visible = false
@@ -4226,7 +4510,7 @@ Movement/Angle = 0.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup3/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(0.999997, 2.35438e-06, 8.76188e-06, -4.67896e-06, 1, -4.28408e-06, 1.3411e-06, -3.65078e-07, 0.999993, 0, 0, 0)
+transform = Transform3D(0.999997, 2.35438e-06, 8.76188e-06, -4.84288e-06, 1, -4.29153e-06, 1.54972e-06, -3.65078e-07, 0.999993, 0, 0, 0)
 playSFX = false
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup3"]
@@ -4290,7 +4574,7 @@ Movement/Angle = 90.0
 "Vertical Orientation" = true
 
 [node name="Blade" parent="MainAct/Cave/BladeGroup4/Blade1" instance=ExtResource("16_scpb0")]
-transform = Transform3D(0.999998, 2.22045e-15, -6.10948e-07, -9.31323e-09, 1, -6.27479e-08, -5.96046e-07, -4.00469e-08, 0.999998, -0.416138, 0, 3.05176e-05)
+transform = Transform3D(0.999998, 2.22045e-15, -6.10948e-07, -9.31323e-09, 1, -6.27479e-08, -6.10948e-07, -4.00469e-08, 0.999998, -0.416138, 0, 3.05176e-05)
 playSFX = false
 
 [node name="Blade2" type="Node3D" parent="MainAct/Cave/BladeGroup4"]
@@ -4714,6 +4998,10 @@ transform = Transform3D(-1.5, 0, 2.26494e-07, 0, 1.5, 0, -2.26494e-07, 0, -1.5, 
 [node name="Switch" parent="MainAct/GhostShip/Throne" instance=ExtResource("35_c8avs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
 
+[node name="Dialog" type="Node3D" parent="MainAct/GhostShip/Throne/Switch"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["common_collect_so", "common_collect_sh"])
+
 [node name="RingCull" type="Node3D" parent="MainAct/GhostShip/Throne"]
 transform = Transform3D(-1, 1.16415e-08, -1.04308e-07, -1.33878e-08, 1, 9.31323e-10, 8.9407e-08, 3.25963e-09, -1, 3.05152e-05, -0.200008, 3.99988)
 script = ExtResource("36_7jc22")
@@ -4884,7 +5172,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.8)
 
 [node name="Surf" type="Node3D" parent="MainAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -497, 0, 1960)
-visible = false
 script = ExtResource("36_7jc22")
 saveVisibilityOnCheckpoint = true
 
@@ -4900,6 +5187,11 @@ script = ExtResource("27_6yc6x")
 jumpHeight = 5.0
 autoAlign = true
 
+[node name="Dialog" type="Node3D" parent="MainAct/Surf/SurfJump/Jump"]
+transform = Transform3D(0.819151, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819151, -17.1642, 7.3, -13.6448)
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["pir_surf_so", "pir_surf_sh"])
+
 [node name="Camera" type="Node3D" parent="MainAct/Surf/SurfJump"]
 transform = Transform3D(0.819152, 0, -0.573577, 0, 1, 0, 0.573577, 0, 0.819152, 6.23376, -7.3, 21.0222)
 script = ExtResource("21_1aofs")
@@ -4908,6 +5200,10 @@ settings = ExtResource("64_4ojec")
 [node name="Surfboard" parent="MainAct/Surf/SurfJump" node_paths=PackedStringArray("path") instance=ExtResource("58_giu0j")]
 transform = Transform3D(0.819151, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819151, 6.23401, -7.3, 21.0227)
 path = NodePath("../../../../Static/Path/SurfboardPath")
+
+[node name="DefeatDialog" type="Node3D" parent="MainAct/Surf/SurfJump/Surfboard"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["pir_hint_surf_respawn_sh"])
 
 [node name="NormalCamera" type="Node3D" parent="MainAct/Surf/SurfJump/Surfboard"]
 script = ExtResource("21_1aofs")
@@ -5074,6 +5370,11 @@ visibility_aabb = AABB(-60, -20, -10, 120, 40, 20)
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_0kng0")
 draw_pass_1 = SubResource("QuadMesh_dq5fv")
+
+[node name="Dialog" type="Node3D" parent="MainAct/Surf/Wave1"]
+script = ExtResource("5_mrnau")
+allowRespawn = true
+textKeys = Array[String](["pir_surf_jump1_so"])
 
 [node name="Wave1Path" type="Path3D" parent="MainAct/Surf"]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 6.642, 0, 121)
@@ -5253,6 +5554,11 @@ visibility_aabb = AABB(-60, -20, -10, 120, 40, 20)
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_0kng0")
 draw_pass_1 = SubResource("QuadMesh_dq5fv")
+
+[node name="Dialog" type="Node3D" parent="MainAct/Surf/Wave2"]
+script = ExtResource("5_mrnau")
+allowRespawn = true
+textKeys = Array[String](["pir_surf_jump2_so"])
 
 [node name="Wave2Path" type="Path3D" parent="MainAct/Surf"]
 transform = Transform3D(0.990747, 0, 0.135716, 0, 1, 0, -0.135716, 0, 0.990747, 19.03, 0, 237)
@@ -5449,6 +5755,10 @@ OneShot = true
 "Respawn Mode" = 0
 "Enter Mode" = 0
 
+[node name="Dialog" type="Node3D" parent="MainAct/Surf/Wave3Activate"]
+script = ExtResource("5_mrnau")
+textKeys = Array[String](["pir_hint_surf_speed_sh"])
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MainAct/Surf/Wave3Activate"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_jvte6")
@@ -5488,6 +5798,11 @@ visibility_aabb = AABB(-60, -20, -10, 120, 40, 20)
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_0kng0")
 draw_pass_1 = SubResource("QuadMesh_dq5fv")
+
+[node name="Dialog" type="Node3D" parent="MainAct/Surf/Wave3"]
+script = ExtResource("5_mrnau")
+allowRespawn = true
+textKeys = Array[String](["pir_surf_jump3_so"])
 
 [node name="Wave3Path" type="Path3D" parent="MainAct/Surf"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -98.6808, 0, 515)
@@ -6044,10 +6359,14 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -255, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 2)
 shape = SubResource("BoxShape3D_6yc6x")
 
+[connection signal="Activated" from="Static/Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="Static/Triggers/PathAndCameraTriggers/ShipsStart/Dialog" method="Activate"]
 [connection signal="Activated" from="Static/Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="MainAct/Ships" method="Activate"]
+[connection signal="Activated" from="Static/Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Static/Triggers/CannonEvent/CannonEventCull/CannonEvent/Dialog" method="Activate"]
 [connection signal="EventFinished" from="Static/Triggers/CannonEvent/CannonEventCull/CannonEvent" to="MainAct/Cannonball" method="Activate"]
 [connection signal="EventFinished" from="Static/Triggers/CannonEvent/CannonEventCull/CannonEvent" to="MainAct/Ships" method="Activate"]
+[connection signal="EventSkipped" from="Static/Triggers/CannonEvent/CannonEventCull/CannonEvent" to="Static/Triggers/CannonEvent/CannonEventCull/CannonEvent/Dialog" method="Deactivate"]
 [connection signal="Activated" from="Static/Triggers/CannonEvent/CannonBallCull/Cannonball" to="MainAct/Islands" method="Deactivate"]
+[connection signal="JumpFinished" from="Static/Triggers/CannonEvent/CannonBallCull/Cannonball/JumpTrigger" to="Static/Triggers/CannonEvent/CannonBallCull/Cannonball/Dialog" method="Activate"]
 [connection signal="Activated" from="MainAct/CullingMap/Islands-L" to="MainAct/Islands" method="Activate"]
 [connection signal="Deactivated" from="MainAct/CullingMap/Islands-L" to="MainAct/Islands" method="Deactivate"]
 [connection signal="Activated" from="MainAct/CullingMap/Opening-U" to="MainAct/Opening" method="Deactivate"]
@@ -6151,6 +6470,7 @@ shape = SubResource("BoxShape3D_6yc6x")
 [connection signal="Defeated" from="MainAct/Ships/Ship3/Throne/RedMajin" to="MainAct/Ships/Ship3/Throne/EnemyStone5" method="IncrementCounter"]
 [connection signal="Activated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="Static/Collision/OneWayWall" method="Deactivate"]
 [connection signal="Activated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="MainAct/Ships/Ship3/Throne/JumpPanel/Camera" method="Activate"]
+[connection signal="Activated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="MainAct/Ships/Ship3/Throne/JumpPanel/Dialog" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Deactivated" from="MainAct/Ships/Ship3/Throne/JumpPanel" to="MainAct/Ships/Ship3/Throne/JumpPanel/Path" method="Activate"]
 [connection signal="Activated" from="MainAct/Grotto/Switch" to="MainAct/Grotto/Spring" method="ShowLauncher"]
@@ -6161,6 +6481,8 @@ shape = SubResource("BoxShape3D_6yc6x")
 [connection signal="Activated" from="MainAct/Cave/Sword3" to="Static/Collision/GrindOneWayWall" method="Activate"]
 [connection signal="Activated" from="MainAct/Cave/Sword3" to="MainAct/Cave/GrindPath/Camera" method="Activate"]
 [connection signal="Activated" from="MainAct/Cave/Sword3" to="MainAct/Cave/GrindPath/Path" method="Activate"]
+[connection signal="GrindStarted" from="MainAct/Cave/GrindPath/InvisibleGrindrail" to="MainAct/Dialog/BladeCullingTrigger" method="Deactivate"]
+[connection signal="GrindStarted" from="MainAct/Cave/GrindPath/InvisibleGrindrail" to="MainAct/Dialog/TractionCullingTrigger" method="Activate"]
 [connection signal="Activated" from="MainAct/Cave/GrindInvisibleWallTrigger" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="MainAct/Cave/PathResetTrigger" to="Static/Collision/GrindOneWayWall" method="Deactivate"]
 [connection signal="Defeated" from="MainAct/GhostShip/Chair1/BlueMajin1" to="MainAct/GhostShip/Chair1/EnemyStone1" method="IncrementCounter"]
@@ -6184,8 +6506,10 @@ shape = SubResource("BoxShape3D_6yc6x")
 [connection signal="Defeated" from="MainAct/GhostShip/Throne/RedMajin" to="MainAct/GhostShip/Throne/EnemyStone3" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/GhostShip/Throne/RedMajin" to="MainAct/GhostShip/Throne/EnemyStone4" method="IncrementCounter"]
 [connection signal="Defeated" from="MainAct/GhostShip/Throne/RedMajin" to="MainAct/GhostShip/Throne/EnemyStone5" method="IncrementCounter"]
+[connection signal="Activated" from="MainAct/GhostShip/Throne/Switch" to="MainAct/GhostShip/Throne/Switch/Dialog" method="Activate"]
 [connection signal="Activated" from="MainAct/GhostShip/Throne/Switch" to="MainAct/GhostShip/Throne/RingCull" method="Activate"]
 [connection signal="Respawned" from="MainAct/GhostShip/Throne/Switch" to="MainAct/GhostShip/Throne/RingCull" method="Deactivate"]
+[connection signal="JumpFinished" from="MainAct/Surf/SurfJump/Jump" to="MainAct/Surf/SurfJump/Jump/Dialog" method="Activate"]
 [connection signal="JumpFinished" from="MainAct/Surf/SurfJump/Jump" to="MainAct/Surf/SurfJump/Surfboard" method="Activate"]
 [connection signal="Activated" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/NormalCamera" method="Activate"]
 [connection signal="Activated" from="MainAct/Surf/SurfJump/Surfboard" to="MainAct/Surf/SurfJump/Surfboard/Path" method="Activate"]
@@ -6200,12 +6524,15 @@ shape = SubResource("BoxShape3D_6yc6x")
 [connection signal="JumpFinished" from="MainAct/Surf/SurfEnd/Jump" to="Static/Collision/OneWayWall" method="Activate"]
 [connection signal="Activated" from="MainAct/Surf/Wave1Activate" to="MainAct/Surf/Wave1" method="OnWaveApproached"]
 [connection signal="JumpStarted" from="MainAct/Surf/Wave1" to="MainAct/Surf/Wave1/WaterFX" method="StopGroup"]
+[connection signal="JumpStarted" from="MainAct/Surf/Wave1" to="MainAct/Surf/Wave1/Dialog" method="Activate"]
 [connection signal="WaveEntered" from="MainAct/Surf/Wave1" to="MainAct/Surf/Wave1/WaterFX" method="RestartGroup"]
 [connection signal="Activated" from="MainAct/Surf/Wave2Activate" to="MainAct/Surf/Wave2" method="OnWaveApproached"]
 [connection signal="JumpStarted" from="MainAct/Surf/Wave2" to="MainAct/Surf/Wave2/WaterFX" method="StopGroup"]
+[connection signal="JumpStarted" from="MainAct/Surf/Wave2" to="MainAct/Surf/Wave2/Dialog" method="Activate"]
 [connection signal="WaveEntered" from="MainAct/Surf/Wave2" to="MainAct/Surf/Wave2/WaterFX" method="RestartGroup"]
 [connection signal="Activated" from="MainAct/Surf/Wave3Activate" to="MainAct/Surf/Wave3" method="OnWaveApproached"]
 [connection signal="JumpStarted" from="MainAct/Surf/Wave3" to="MainAct/Surf/Wave3/WaterFX" method="StopGroup"]
+[connection signal="JumpStarted" from="MainAct/Surf/Wave3" to="MainAct/Surf/Wave3/Dialog" method="Activate"]
 [connection signal="WaveEntered" from="MainAct/Surf/Wave3" to="MainAct/Surf/Wave3/WaterFX" method="RestartGroup"]
 [connection signal="Activated" from="MainAct/End/Gate/Switch" to="MainAct/End/Gate/BridgeSquareFalling" method="StartShaking"]
 [connection signal="Defeated" from="MainAct/End/Gate/BlueMajin" to="MainAct/End/Gate/EnemyStone" method="IncrementCounter"]
