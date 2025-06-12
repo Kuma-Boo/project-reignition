@@ -1,10 +1,11 @@
-[gd_scene load_steps=48 format=3 uid="uid://cumqwrsj6eqpd"]
+[gd_scene load_steps=49 format=3 uid="uid://cumqwrsj6eqpd"]
 
 [ext_resource type="Script" uid="uid://cb7uekm77nlag" path="res://interface/menu/level select/script/WorldSelect.cs" id="1_7vrge"]
 [ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="7_6bdak"]
 [ext_resource type="LabelSettings" uid="uid://bqrydgixkulbv" path="res://interface/font/NavigationFont.tres" id="8_gn3y1"]
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="9_scvou"]
 [ext_resource type="Texture2D" uid="uid://df4fllm7a4ue0" path="res://interface/menu/level select/texture/background.png" id="10_p8mo5"]
+[ext_resource type="Material" uid="uid://d1ar7f674pt0i" path="res://effect/material/Canvas Item Screen.tres" id="10_xuj7i"]
 [ext_resource type="Texture2D" uid="uid://dx4vxnhtgd13t" path="res://interface/menu/common/common menu atlas.png" id="11_0ayw4"]
 [ext_resource type="Texture2D" uid="uid://c0j6hn525tqn5" path="res://interface/menu/level select/texture/world text/level en.png" id="12_yu6gp"]
 [ext_resource type="Texture2D" uid="uid://bpdv8t52iadwx" path="res://interface/menu/level select/texture/world text/glow en.png" id="13_qthhn"]
@@ -2037,7 +2038,7 @@ primaryVideoPlayer = NodePath("DemoVideo/PrimaryVideoPlayer")
 secondaryVideoPlayer = NodePath("DemoVideo/SecondaryVideoPlayer")
 videoStreamPaths = Array[StringName]([&"res://video/demo/Movie Test 00.mp4", &"res://video/demo/Movie Test 01.mp4", &"res://video/demo/Movie Test 02.mp4", &"res://video/demo/Movie Test 03.mp4", &"res://video/demo/Movie Test 04.mp4", &"res://video/demo/Movie Test 05.mp4", &"res://video/demo/Movie Test 06.mp4", &"res://video/demo/Movie Test 07.mp4"])
 description = NodePath("Description")
-levelSpriteRegions = Array[Rect2]([Rect2(0, 400, 512, 60), Rect2(0, 0, 512, 60), Rect2(0, 230, 512, 60), Rect2(0, 290, 512, 50), Rect2(0, 350, 512, 50), Rect2(0, 120, 512, 50), Rect2(0, 63, 512, 50), Rect2(0, 180, 512, 50), Rect2(0, 460, 512, 50)])
+levelSpriteRegions = Array[Rect2]([Rect2(0, 800, 1024, 120), Rect2(0, 0, 1024, 120), Rect2(0, 460, 1024, 120), Rect2(0, 580, 1024, 100), Rect2(0, 700, 1024, 100), Rect2(0, 240, 1024, 100), Rect2(0, 126, 1024, 100), Rect2(0, 360, 1024, 100), Rect2(0, 920, 1024, 100)])
 levelDescriptionKeys = Array[String](["lost_prologue_description", "sand_oasis_description", "dinosaur_jungle_description", "evil_foundry_description", "levitated_ruin_description", "pirate_storm_description", "skeleton_dome_description", "night_palace_description", "sys_world_locked"])
 levelTextSprites = Array[NodePath]([NodePath("AreaSelection/Text/Top/Sprite"), NodePath("AreaSelection/Text/Center/Sprite"), NodePath("AreaSelection/Text/Bottom/Sprite"), NodePath("AreaSelection/Text/TransitionText/Sprite")])
 levelGlowSprites = Array[NodePath]([NodePath("AreaSelection/Text/Top/Sprite/Glow"), NodePath("AreaSelection/Text/Center/Sprite/Glow"), NodePath("AreaSelection/Text/Bottom/Sprite/Glow")])
@@ -2103,18 +2104,20 @@ position = Vector2(0, -144)
 scale = Vector2(1.12, 1.12)
 
 [node name="Sprite" type="Sprite2D" parent="AreaSelection/Text/Top"]
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("12_yu6gp")
 region_enabled = true
-region_rect = Rect2(0, 460, 512, 50)
+region_rect = Rect2(0, 920, 1024, 100)
 
 [node name="Glow" type="Sprite2D" parent="AreaSelection/Text/Top/Sprite"]
 modulate = Color(1, 1, 1, 0)
 material = SubResource("ShaderMaterial_2vkkl")
 texture = ExtResource("13_qthhn")
 region_enabled = true
-region_rect = Rect2(0, 460, 512, 50)
+region_rect = Rect2(0, 920, 1024, 100)
 
 [node name="Flames" parent="AreaSelection/Text/Top/Sprite/Glow" instance=ExtResource("16_hpwaj")]
+scale = Vector2(2, 2)
 
 [node name="New" type="Label" parent="AreaSelection/Text/Top"]
 self_modulate = Color(1, 1, 0, 1)
@@ -2166,15 +2169,16 @@ autoplay = "loop"
 scale = Vector2(2.25, 2.25)
 
 [node name="Sprite" type="Sprite2D" parent="AreaSelection/Text/Center"]
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("12_yu6gp")
 region_enabled = true
-region_rect = Rect2(0, 460, 512, 50)
+region_rect = Rect2(0, 1140, 1024, 100)
 
 [node name="Glow" type="Sprite2D" parent="AreaSelection/Text/Center/Sprite"]
-material = SubResource("ShaderMaterial_2vkkl")
+material = ExtResource("10_xuj7i")
 texture = ExtResource("13_qthhn")
 region_enabled = true
-region_rect = Rect2(0, 460, 512, 50)
+region_rect = Rect2(0, 920, 1024, 100)
 
 [node name="Flames" parent="AreaSelection/Text/Center/Sprite/Glow" instance=ExtResource("16_hpwaj")]
 
@@ -2229,18 +2233,20 @@ position = Vector2(0, 144)
 scale = Vector2(1.12, 1.12)
 
 [node name="Sprite" type="Sprite2D" parent="AreaSelection/Text/Bottom"]
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("12_yu6gp")
 region_enabled = true
-region_rect = Rect2(0, 460, 512, 50)
+region_rect = Rect2(0, 920, 1024, 100)
 
 [node name="Glow" type="Sprite2D" parent="AreaSelection/Text/Bottom/Sprite"]
 modulate = Color(1, 1, 1, 0)
 material = SubResource("ShaderMaterial_2vkkl")
 texture = ExtResource("13_qthhn")
 region_enabled = true
-region_rect = Rect2(0, 460, 512, 50)
+region_rect = Rect2(0, 920, 1024, 100)
 
 [node name="Flames" parent="AreaSelection/Text/Bottom/Sprite/Glow" instance=ExtResource("16_hpwaj")]
+scale = Vector2(2, 2)
 
 [node name="New" type="Label" parent="AreaSelection/Text/Bottom"]
 self_modulate = Color(1, 1, 0, 1)
@@ -2292,9 +2298,10 @@ autoplay = "loop"
 position = Vector2(0, -520)
 
 [node name="Sprite" type="Sprite2D" parent="AreaSelection/Text/TransitionText"]
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("12_yu6gp")
 region_enabled = true
-region_rect = Rect2(0, 460, 512, 50)
+region_rect = Rect2(0, 920, 1024, 100)
 
 [node name="New" type="Label" parent="AreaSelection/Text/TransitionText"]
 self_modulate = Color(1, 1, 0, 1)
