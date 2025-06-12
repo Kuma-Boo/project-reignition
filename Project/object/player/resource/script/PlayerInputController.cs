@@ -74,9 +74,9 @@ public partial class PlayerInputController : Node
 
 	public void ProcessInputs()
 	{
-		InputAxis = Input.GetVector("move_left", "move_right", "move_up", "move_down", DeadZone);
 		InputHorizontal = Input.GetAxis("move_left", "move_right");
 		InputVertical = Input.GetAxis("move_up", "move_down");
+		InputAxis = new Vector2(InputHorizontal, InputVertical);
 		if (!InputAxis.IsZeroApprox())
 			NonZeroInputAxis = InputAxis;
 
