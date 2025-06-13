@@ -107,8 +107,14 @@ public partial class MainMenu : Menu
 			return;
 		}
 
-		//Ignore unimplemented menus.
-		if (currentSelection == 1) return;
+		// Ignore unimplemented menus.
+		/*
+		NOTE: The special book is technically functional, but it's missing achievements and cutscenes.
+		It also suffers from extremely long loading times and needs to be optimized.
+		So, I'm disabling for now
+			--KUMA
+		*/
+		if (currentSelection == 1 || currentSelection == 2) return;
 		animator.Play("confirm");
 	}
 
@@ -131,15 +137,8 @@ public partial class MainMenu : Menu
 			return;
 		}
 
-		if (currentSelection <= 2)
+		if (currentSelection < 2)
 			return;
-
-		/*
-		NOTE: The special book is technically functional, but it's missing achievements and cutscenes.
-		It also suffers from extremely long loading times and needs to be optimized.
-		So, I'm disabling for now
-			--KUMA
-		*/
 
 		FadeBgm(.5f);
 		menuMemory[MemoryKeys.MainMenu] = currentSelection;
