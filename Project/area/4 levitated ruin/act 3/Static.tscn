@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=3 uid="uid://pqaytcsp2twi"]
+[gd_scene load_steps=81 format=3 uid="uid://pqaytcsp2twi"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_ul5kf"]
 [ext_resource type="Resource" uid="uid://tw5qyw6eup1u" path="res://area/4 levitated ruin/act 3/camera/TopCam.tres" id="2_2fdgt"]
@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://coec06lsmbqe0" path="res://area/4 levitated ruin/data/DialogLibrary.tres" id="3_f15ao"]
 [ext_resource type="AudioStream" uid="uid://d4flratl3ixxk" path="res://sound/ost/bonus disc/Levitated Ruin Act 3.mp3" id="3_ur2fq"]
 [ext_resource type="PackedScene" uid="uid://dart1s468mr5p" path="res://area/4 levitated ruin/act 3/environment/Rukh2.tscn" id="4_8dhk3"]
-[ext_resource type="PackedScene" path="res://area/4 levitated ruin/data/skybox/SkyboxAct3.tscn" id="4_jkq8a"]
+[ext_resource type="PackedScene" uid="uid://bl13l83yvbsj4" path="res://area/4 levitated ruin/data/skybox/SkyboxAct3.tscn" id="4_jkq8a"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="4_xu6y8"]
 [ext_resource type="Texture2D" uid="uid://dyni0wv1fddpl" path="res://area/4 levitated ruin/data/skybox/model/texture/sky new.png" id="5_5u6dt"]
 [ext_resource type="PackedScene" uid="uid://dvw3hbgtjf325" path="res://area/4 levitated ruin/act 3/environment/Rukh3.tscn" id="5_d06nc"]
@@ -95,6 +95,19 @@ shader_parameter/albedo = ExtResource("9_xc0tm")
 shader_parameter/detail = ExtResource("11_hdtum")
 shader_parameter/clip_mask = ExtResource("10_hoppa")
 shader_parameter/scroll_speed = 0.02
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_xc0tm"]
+flip_faces = true
+top_radius = 2000.0
+bottom_radius = 2000.0
+height = 1000.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hoppa"]
+render_priority = -120
+blend_mode = 1
+shading_mode = 0
+specular_mode = 2
+albedo_color = Color(0.37002, 0.2058, 0.42, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6v3ym"]
 size = Vector3(10, 8.70264, 2.5)
@@ -553,6 +566,10 @@ surface_material_override/0 = SubResource("ShaderMaterial_5u6dt")
 visible = false
 surface_material_override/0 = SubResource("ShaderMaterial_ntdde")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Visuals/LRSky/SkyRoot/Skeleton3D" index="15"]
+mesh = SubResource("CylinderMesh_xc0tm")
+surface_material_override/0 = SubResource("StandardMaterial3D_hoppa")
+
 [node name="Rukh1" parent="Visuals" instance=ExtResource("2_ur2fq")]
 
 [node name="Rukh2" parent="Visuals" instance=ExtResource("4_8dhk3")]
@@ -576,7 +593,7 @@ shadow_enabled = true
 
 [node name="ReflectionProbes" type="Node3D" parent="."]
 
-[node name="Tower" type="ReflectionProbe" parent="ReflectionProbes"]
+[node name="TowerBottom" type="ReflectionProbe" parent="ReflectionProbes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -16.6427, -1375.72)
 layers = 1024
 blend_distance = 6.0
@@ -585,10 +602,10 @@ interior = true
 cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
-ambient_color = Color(0.2232, 0.93, 0.4588, 1)
-ambient_color_energy = 10.0
+ambient_color = Color(0.368, 0.92, 0.598, 1)
+ambient_color_energy = 5.0
 
-[node name="Tower2" type="ReflectionProbe" parent="ReflectionProbes"]
+[node name="TowerTop" type="ReflectionProbe" parent="ReflectionProbes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 0.986339, -1375.72)
 layers = 1024
 blend_distance = 6.0
@@ -597,8 +614,8 @@ interior = true
 cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
-ambient_color = Color(0.4185, 0.93, 0.750975, 1)
-ambient_color_energy = 7.0
+ambient_color = Color(0.3458, 0.76895, 0.91, 1)
+ambient_color_energy = 5.0
 
 [node name="TowerObjects" type="ReflectionProbe" parent="ReflectionProbes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -19.6635, -1375)
@@ -632,6 +649,16 @@ reflection_mask = 64
 ambient_mode = 2
 ambient_color = Color(0.759333, 0.62, 1, 1)
 ambient_color_energy = 0.2
+
+[node name="ExteriorEnvironment" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 248, -50, -1285.5)
+layers = 1024
+size = Vector3(100, 200, 500)
+cull_mask = 0
+reflection_mask = 2
+ambient_mode = 2
+ambient_color = Color(0.3478, 0.400093, 0.74, 1)
+ambient_color_energy = 0.8
 
 [node name="Triggers" type="Node3D" parent="."]
 visible = false
