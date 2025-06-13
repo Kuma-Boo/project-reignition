@@ -20,15 +20,15 @@ void fragment()
 	float distance_fade = clamp(smoothstep(distance_fade_min, distance_fade_max, length(VERTEX)), 0.0, 1.0);
 	float distant_transparency = clamp(smoothstep(100.0, 50.0, length(VERTEX)), 0.0, 1.0);
 	distant_transparency = mix(abs(mod(UV.y, 0.2) - 0.1), 1.0, distant_transparency);
-	
+
 	float detail = texture(center_gradient, vec2(UV.y, 0)).r;
 	ALBEDO = COLOR.rgb * glow_intensity * distant_transparency * detail * COLOR.a;
-	
+
 	float scroll_amount = (path_ratio * path_length) - UV.x;
 	scroll_amount = clamp(scroll_amount / end_smoothing, 0.0, glow_intensity);
 	float start_blend = clamp(UV.x / start_smoothing, 0.0, 1.0);
 	ALPHA *= scroll_amount * start_blend * distance_fade;
-	
+
 	// Prevent invisible skyroads
 	vec4 vert = INV_VIEW_MATRIX * vec4(VERTEX, 1.0);
 	float glow_factor = (1.0 - distance(player_position, vert.xyz) / player_radius);
