@@ -11,8 +11,8 @@ uniform sampler2D center_gradient : hint_default_white;
 
 const float distance_fade_min = 0.1;
 const float distance_fade_max = 1.0;
-const float start_smoothing = 10.0;
-const float end_smoothing = 10.0;
+const float start_smoothing = 15.0;
+const float end_smoothing = 15.0;
 const float player_radius = 5.0;
 
 void fragment()
