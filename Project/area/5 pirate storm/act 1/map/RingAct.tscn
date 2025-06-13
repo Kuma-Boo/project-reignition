@@ -1,7 +1,8 @@
-[gd_scene load_steps=57 format=3 uid="uid://crb0160fghq2p"]
+[gd_scene load_steps=58 format=3 uid="uid://crb0160fghq2p"]
 
 [ext_resource type="PackedScene" uid="uid://csk7y7y8vgg6l" path="res://area/5 pirate storm/act 1/Static.tscn" id="1_nvfwl"]
 [ext_resource type="Resource" uid="uid://bvywxixsdmoif" path="res://resource/level data/pirate storm/Act1Ring.tres" id="2_sfk0y"]
+[ext_resource type="Script" uid="uid://bitgnn108jmaa" path="res://object/trigger/modules/DialogTrigger.cs" id="4_v80dm"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="4_vkybb"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="5_461lq"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="6_hqti2"]
@@ -47,6 +48,9 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_6yc6x"]
 size = Vector3(20, 20, 5)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_6rj8d"]
+size = Vector3(50, 80, 5)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_vmmrf"]
 size = Vector3(40, 50, 5)
 
@@ -59,9 +63,6 @@ point_count = 3
 _limits = [0.0, 2.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 7.91315, 0, 0, Vector2(0.5, 2), 0.0, 0.0, 0, 0, Vector2(1, 0), -9.38725, 0.0, 0, 0]
 point_count = 3
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_6rj8d"]
-size = Vector3(50, 80, 5)
 
 [sub_resource type="Curve" id="Curve_7jc22"]
 _limits = [-8.0, 0.0, 0.0, 1.0]
@@ -116,6 +117,10 @@ startEnabled = true
 [node name="CollisionShape3D" parent="Static/Triggers/PathAndCameraTriggers/IslandCamera4" index="1"]
 disabled = true
 
+[node name="Dialog" type="Node3D" parent="Static/Triggers/CannonEvent/CannonEventTrigger" index="0"]
+script = ExtResource("4_v80dm")
+textKeys = Array[String](["pir_cannon_start_so"])
+
 [node name="RainCollision" parent="Static/Rain" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 7.45058e-09, 0, -7.45058e-09, 1, -1, 7.47332e-09, 1)
 
@@ -135,6 +140,30 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RingAct/SpawnPosition/ReverseCollision"]
 shape = SubResource("BoxShape3D_6yc6x")
+
+[node name="Dialog" type="Node3D" parent="RingAct"]
+
+[node name="StartGroup" parent="RingAct/Dialog" instance=ExtResource("5_461lq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -129.9, 30.9, 1045)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RingAct/Dialog/StartGroup"]
+script = ExtResource("4_v80dm")
+textKeys = Array[String](["pir_treasure_so", "common_start_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RingAct/Dialog/StartGroup"]
+shape = SubResource("BoxShape3D_6rj8d")
+
+[node name="EnemyGroup" parent="RingAct/Dialog" instance=ExtResource("5_461lq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 9.9, 1105)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RingAct/Dialog/EnemyGroup"]
+script = ExtResource("4_v80dm")
+textKeys = Array[String](["common_enemy8_so", "common_enemy8_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RingAct/Dialog/EnemyGroup"]
+shape = SubResource("BoxShape3D_6rj8d")
 
 [node name="CullingMap" type="Node3D" parent="RingAct"]
 visible = false
@@ -2616,6 +2645,10 @@ shape = SubResource("BoxShape3D_6yc6x")
 
 [connection signal="Activated" from="Static/Triggers/PathAndCameraTriggers/ShipsStart/Ships" to="RingAct/Ships" method="Activate"]
 [connection signal="EventFinished" from="Static/Triggers/CannonEvent/CannonEventCull/CannonEvent" to="RingAct/Ships" method="Activate"]
+[connection signal="Activated" from="RingAct/Dialog/StartGroup" to="RingAct/Ships/Ship1/BridgeSquareRisingL" method="StartShaking"]
+[connection signal="Activated" from="RingAct/Dialog/StartGroup" to="RingAct/Ships/Ship1/BridgeSquareRisingR" method="StartShaking"]
+[connection signal="Activated" from="RingAct/Dialog/EnemyGroup" to="RingAct/Ships/Ship1/BridgeSquareRisingL" method="StartShaking"]
+[connection signal="Activated" from="RingAct/Dialog/EnemyGroup" to="RingAct/Ships/Ship1/BridgeSquareRisingR" method="StartShaking"]
 [connection signal="Activated" from="RingAct/CullingMap/Cannonball-U" to="RingAct/Cannonball" method="Deactivate"]
 [connection signal="Activated" from="RingAct/Cannonball/Bomb/BombTrigger1" to="RingAct/Cannonball/Bomb/Bomb5" method="Launch"]
 [connection signal="Activated" from="RingAct/Cannonball/Bomb/BombTrigger1" to="RingAct/Cannonball/Bomb/Bomb1" method="Launch"]

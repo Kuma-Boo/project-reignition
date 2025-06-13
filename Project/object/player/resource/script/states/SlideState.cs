@@ -15,6 +15,8 @@ public partial class SlideState : PlayerState
 	private PlayerState backflipState;
 	[Export]
 	private PlayerState fallState;
+	/// <summary> Maximum amount the player can turn when sliding. </summary>
+	private readonly float MaxTurningAdjustment = Mathf.Pi * .4f;
 
 	public override void EnterState()
 	{
@@ -171,5 +173,13 @@ public partial class SlideState : PlayerState
 		inputAmount -= Player.SlopeRatio * Player.Stats.slopeInfluence;
 		inputAmount = Mathf.Clamp(inputAmount, 0, 1);
 		Player.MoveSpeed = Player.Stats.SlideSettings.UpdateSlide(Player.MoveSpeed, inputAmount);
+	}
+
+	protected override float ProcessTargetMovementAngle(float targetMovementAngle)
+	{
+		targetMovementAngle = base.ProcessTargetMovementAngle(targetMovementAngle);
+		targetMovementAngle = ExtensionMethods.ClampAngleRange(targetMovementAngle, Player.PathFollower.ForwardAngle, MaxTurningAdjustment);
+
+		return targetMovementAngle;
 	}
 }

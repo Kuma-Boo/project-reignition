@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://biwhnkxwrwumg"]
+[gd_scene load_steps=32 format=3 uid="uid://biwhnkxwrwumg"]
 
 [ext_resource type="PackedScene" uid="uid://d1gknocio5io1" path="res://area/5 pirate storm/act 2/Static.tscn" id="1_87yog"]
 [ext_resource type="Resource" uid="uid://c1x1digh80vcc" path="res://resource/level data/pirate storm/Act2Rampage.tres" id="2_6il1n"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bhnh1as6xgpiy" path="res://object/stage/common/DashPanel.tscn" id="3_emooq"]
 [ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="4_4trei"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="5_8jhbx"]
+[ext_resource type="Script" uid="uid://bitgnn108jmaa" path="res://object/trigger/modules/DialogTrigger.cs" id="5_140hr"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="6_8jhbx"]
 [ext_resource type="PackedScene" uid="uid://q2mhrprklf7q" path="res://area/5 pirate storm/object/Bomb.tscn" id="7_i005y"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="8_6uttv"]
@@ -131,6 +132,70 @@ transform = Transform3D(-0.211956, 0, 0.977279, 0, 1, 0, -0.977279, 0, -0.211956
 "Enter Mode" = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/ObjectMap/R-Ending"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="Dialog" type="Node3D" parent="RampageAct"]
+
+[node name="CannonballTrigger" parent="RampageAct/Dialog" instance=ExtResource("8_6uttv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 7.9, -35.8)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Dialog/CannonballTrigger"]
+script = ExtResource("5_140hr")
+randomize = true
+textKeys = Array[String](["pir_hint_cannonball_so", "pir_hint_cannonball_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Dialog/CannonballTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="EnemiesTrigger" parent="RampageAct/Dialog" instance=ExtResource("8_6uttv")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 9.93, 10, -164.919)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Dialog/EnemiesTrigger"]
+script = ExtResource("5_140hr")
+textKeys = Array[String](["common_enemy8_so", "common_enemy8_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Dialog/EnemiesTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="EnemiesTrigger2" parent="RampageAct/Dialog" instance=ExtResource("8_6uttv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.3, 7.9, 12.2)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Dialog/EnemiesTrigger2"]
+script = ExtResource("5_140hr")
+textKeys = Array[String](["common_enemy5_so"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Dialog/EnemiesTrigger2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="VictoryTrigger" parent="RampageAct/Dialog" instance=ExtResource("8_6uttv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 265.3, 7.9, 45.2)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Dialog/VictoryTrigger"]
+script = ExtResource("5_140hr")
+textKeys = Array[String](["common_victory_so", "common_victory_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Dialog/VictoryTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+shape = SubResource("BoxShape3D_6uttv")
+
+[node name="PitTrigger" parent="RampageAct/Dialog" instance=ExtResource("8_6uttv")]
+transform = Transform3D(0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819152, 259.726, 7.9, 84.0191)
+"Enter Mode" = 0
+
+[node name="Dialog" type="Node3D" parent="RampageAct/Dialog/PitTrigger"]
+script = ExtResource("5_140hr")
+randomize = true
+textKeys = Array[String](["common_heights_so", "common_heights_sh"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RampageAct/Dialog/PitTrigger"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
 shape = SubResource("BoxShape3D_6uttv")
 
@@ -1821,7 +1886,7 @@ Movement/Angle = -90.0
 "Vertical Orientation" = false
 
 [node name="ItemBoxFlying" parent="RampageAct/Ending/BridgeGroup4/MovingObject" instance=ExtResource("24_rj70a")]
-transform = Transform3D(1, 0, 1.09896e-07, 0, 1, 0, -1.09896e-07, 0, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 1.13621e-07, 0, 1, 0, -1.13621e-07, 0, 1, 0, 0, 0)
 "Spawn Settings/Spawn Pearls" = true
 "Spawn Settings/Amount" = 50
 

@@ -144,7 +144,7 @@ public partial class PlayerState : Node
 		if (Player.Skills.IsTimeBreakActive)
 		{
 			// Increase turning responsiveness when time break is active
-			turnSmoothing *= 0.2f;
+			turnSmoothing *= 0.1f;
 		}
 
 		Player.MovementAngle += pathControlAmount;
