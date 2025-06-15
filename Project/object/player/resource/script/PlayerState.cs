@@ -95,18 +95,6 @@ public partial class PlayerState : Node
 			return false;
 
 		bool isHoldingBack = Player.Controller.IsHoldingDirection(inputAngle, Player.MovementAngle + Mathf.Pi);
-
-		if (SaveManager.ActiveSkillRing.IsSkillEquipped(SkillKey.Autorun))
-		{
-			if (!Player.Controller.InputAxis.IsZeroApprox())
-			{
-				isHoldingBack = isHoldingBack &&
-					Player.Controller.IsHoldingDirection(inputAngle, Player.PathFollower.BackAngle, Mathf.Pi * .2f);
-			}
-
-			return isHoldingBack;
-		}
-
 		return isHoldingBack;
 	}
 
