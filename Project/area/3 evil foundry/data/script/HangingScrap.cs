@@ -22,7 +22,7 @@ public partial class HangingScrap : DestructableObject
 
 	protected override void ProcessPlayerCollision()
 	{
-		if (Player.IsOnGround && !Player.IsJumpDashOrHomingAttack && animator.CurrentAnimation != "start-drop")
+		if (Player.IsOnGround && !Player.IsJumpDashOrHomingAttack && !isDropping)
 		{
 			QueueDrop(StandingDelaySeconds);
 			return;
