@@ -286,4 +286,7 @@ public partial class PathTraveller : Node3D
 		StopMovement();
 		EmitSignal(SignalName.Staggered);
 	}
+
+	/// <summary> Gets the end position for the player's damage launch. </summary>
+	public virtual Vector3 GetDamageEndPosition() => Player.GlobalPosition;
 }

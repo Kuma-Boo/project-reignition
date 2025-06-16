@@ -18,7 +18,7 @@ public partial class Surfboard : PathTraveller
 
 	[Export] private float initialSpeed;
 	[Export] private float initialTurnSpeed;
-	private readonly float MinimumSpeed = 2.0f;
+	private readonly float MinimumSpeed = 5.0f;
 
 	[Export] private AudioStreamPlayer3D[] waveSFX;
 
@@ -36,6 +36,7 @@ public partial class Surfboard : PathTraveller
 	private float screenshakeTimer;
 	private readonly float HighJumpCameraLength = 1.2f;
 	private readonly float MediumJumpCameraLength = 0.5f;
+	private readonly float LowJumpCameraLength = 0.4f;
 	private readonly float ScreenShakeInterval = 1f;
 	private readonly float BaseWaveFov = 90f;
 	private readonly float FocusedWaveFov = 70f;
@@ -51,10 +52,12 @@ public partial class Surfboard : PathTraveller
 			{
 				float waveRatio = currentWave.CalculateMovementRatio(GlobalPosition);
 				float speedLoss = currentWave.requiredSpeedBoosts / (currentSpeedIndex + 0.5f);
-				speed -= Mathf.Lerp(initialSpeed, speed, speedLoss) * waveRatio;
-				if (currentSpeedIndex >= currentWave.requiredSpeedBoosts)
-					speed = Mathf.Max(MinimumSpeed, speed);
+				speedLoss = Mathf.Clamp(speedLoss * waveRatio, 0f, 1f);
 
+				if (currentSpeedIndex >= currentWave.requiredSpeedBoosts)
+					speedLoss = Mathf.Min(speedLoss, 0.4f);
+
+				speed = Mathf.Lerp(speed, 0, speedLoss);
 				waveCameraSettings.targetFOV = Mathf.Lerp(BaseWaveFov, FocusedWaveFov, waveRatio);
 				waveCameraSettings.distance = Mathf.Lerp(BaseWaveDistance, FocusedWaveDistance, waveRatio);
 			}
@@ -98,7 +101,7 @@ public partial class Surfboard : PathTraveller
 			Player.Camera.StartCameraShake(new()
 			{
 				duration = ScreenShakeInterval,
-				magnitude = Vector3.One * (0.05f + 0.1f * speedFactor)
+				magnitude = Vector3.One * (0.1f + 0.1f * speedFactor)
 			});
 			screenshakeTimer = ScreenShakeInterval;
 		}
@@ -175,6 +178,7 @@ public partial class Surfboard : PathTraveller
 		else
 		{
 			Player.Animator.StartBalanceTrick("low");
+			jumpCameraTimer = LowJumpCameraLength;
 			EmitSignal(SignalName.LowJumpStarted);
 		}
 
@@ -190,7 +194,7 @@ public partial class Surfboard : PathTraveller
 
 	protected override void Stagger()
 	{
-		UpdateSpeedIndex(-1);
+		UpdateSpeedIndex(-2);
 		isCrouching = false;
 		base.Stagger();
 	}
@@ -205,5 +209,13 @@ public partial class Surfboard : PathTraveller
 		isCrouching = true;
 		CurrentSpeed = GetCurrentMaxSpeed;
 		EmitSignal(SignalName.BoostStarted);
+	}
+
+	public override Vector3 GetDamageEndPosition()
+	{
+		Vector3 endPosition = Player.GlobalPosition;
+		if (currentWave != null)
+			endPosition += Vector3.Down * currentWave.WaveHeight + Player.PathFollower.Back() * currentWave.GlobalBasis.Scale.Y * 10f;
+		return endPosition;
 	}
 }
