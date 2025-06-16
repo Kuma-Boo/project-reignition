@@ -668,8 +668,13 @@ public partial class PlayerAnimator : Node3D
 		else if (Player.IsLockoutActive && Player.ActiveLockoutData.recenterPlayer)
 			targetRotation = Player.PathFollower.ForwardAngle + Player.PathFollower.DeltaAngle * Player.Camera.ActiveSettings.pathControlInfluence;
 
-		if (Player.Skills.IsSpeedBreakActive && Player.ExternalController == null)
+		if (Player.ExternalController == null &&
+			(Player.Skills.IsSpeedBreakActive ||
+			Player.IsLockoutOverridingMovementAngle))
+		{
+			// Fix sluggish angle changes during lockout overrides
 			VisualAngle += Player.PathFollower.DeltaAngle;
+		}
 
 		VisualAngle = ExtensionMethods.ClampAngleRange(VisualAngle, Player.PathFollower.ForwardAngle, Mathf.Pi);
 		VisualAngle = ExtensionMethods.SmoothDampAngle(VisualAngle, targetRotation, ref rotationVelocity, MovementRotationSmoothing);
