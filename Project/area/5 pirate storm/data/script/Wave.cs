@@ -13,10 +13,10 @@ public partial class Wave : Node3D
 	[Export] public int Index { get; private set; }
 	[Export] private AnimationPlayer animator;
 	[Export] public Path3D Path { get; private set; }
+	[Export] public float WaveHeight { get; private set; }
 
 	private Surfboard surfboard;
 	public bool IsWaveCleared { get; private set; }
-	private readonly float BaseWaveHeight = 75f;
 
 	public override void _Ready()
 	{
@@ -33,7 +33,7 @@ public partial class Wave : Node3D
 
 	public void ClearWave() => IsWaveCleared = true;
 
-	public float CalculateMovementRatio(Vector3 surfboardPosition) => (surfboardPosition.Y - GlobalPosition.Y) / (BaseWaveHeight * GlobalBasis.Scale.Y);
+	public float CalculateMovementRatio(Vector3 surfboardPosition) => (surfboardPosition.Y - GlobalPosition.Y) / WaveHeight;
 
 	/// <summary> Call this from a StageTrigger. </summary>
 	public void OnWaveApproached() => animator.Play("show");

@@ -66,7 +66,7 @@ public partial class PathTravellerState : PlayerState
 		Traveller.Despawn();
 
 		// Bump the player off
-		LaunchSettings launchSettings = LaunchSettings.Create(Player.GlobalPosition, Player.GlobalPosition, 2);
+		LaunchSettings launchSettings = LaunchSettings.Create(Player.GlobalPosition, Traveller.GetDamageEndPosition(), 2);
 		Player.StartLauncher(launchSettings);
 		Player.Animator.ResetState(0.1f);
 		Player.Animator.StartSpin(3.0f);

@@ -753,7 +753,7 @@ public partial class PlayerCameraController : Node3D
 
 		if (Mathf.IsZeroApprox(settings.tiltLength))
 		{
-			GD.PushError("Cammera swaying is enabled, but the tilt length is 0! Disabling sway.");
+			GD.PushError("Camera swaying is enabled, but the tilt length is 0! Disabling sway.");
 			return settings.tiltAngle;
 		}
 

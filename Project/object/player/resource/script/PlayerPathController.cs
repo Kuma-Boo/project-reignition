@@ -89,8 +89,7 @@ namespace Project.Gameplay
 
 			BackAngle = ForwardAngle + Mathf.Pi;
 			LocalPlayerPositionDelta = GlobalBasis.Inverse() * (Controller.GlobalPosition - GlobalPosition);
-			if (!IsReversingPath)
-				LocalPlayerPositionDelta *= new Vector3(-1, 1, 1); // Convert to model space
+			LocalPlayerPositionDelta *= new Vector3(-1, 1, 1); // Convert to model space
 			GlobalPlayerPositionDelta = CalculateDeltaPosition(Controller.GlobalPosition);
 
 			// Update custom orientations
@@ -107,6 +106,9 @@ namespace Project.Gameplay
 				LocalHorizontalVelocity = 0;
 			else
 				LocalHorizontalVelocity = Controller.MoveSpeed * ExtensionMethods.DotAngle(Controller.MovementAngle, ForwardAngle + Mathf.Pi * .5f);
+
+			if (IsReversingPath)
+				LocalHorizontalVelocity *= -1f;
 
 			DebugManager.DrawRay(GlobalPosition, HeightAxis, Colors.Green);
 			DebugManager.DrawRay(GlobalPosition, ForwardAxis, Colors.Blue);

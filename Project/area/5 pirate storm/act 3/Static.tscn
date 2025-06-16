@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://cu3mc0x6pj3p"]
+[gd_scene load_steps=27 format=3 uid="uid://cu3mc0x6pj3p"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_wmyme"]
 [ext_resource type="PackedScene" uid="uid://bap6v64qrvejk" path="res://area/5 pirate storm/act 3/environment/collision/Collision.tscn" id="2_w468r"]
@@ -388,6 +388,13 @@ _data = {
 &"demo3": SubResource("Animation_q2d68")
 }
 
+[sub_resource type="Gradient" id="Gradient_t5ldl"]
+offsets = PackedFloat32Array(0, 0.386588, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.335713, 0.399149, 0.423177, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_j0cb7"]
+gradient = SubResource("Gradient_t5ldl")
+
 [sub_resource type="Environment" id="Environment_cajqf"]
 tonemap_mode = 2
 tonemap_exposure = 1.2
@@ -399,6 +406,7 @@ fog_enabled = true
 fog_light_color = Color(0.438243, 0.560901, 0.709317, 1)
 fog_density = 0.005
 adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture1D_j0cb7")
 
 [node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "completionAnimator", "Environment")]
 script = ExtResource("1_wmyme")
@@ -419,7 +427,7 @@ visible = false
 
 [node name="PSSky" parent="Visuals" instance=ExtResource("3_uct67")]
 
-[node name="Tint" parent="Visuals/PSSky" index="9"]
+[node name="Tint" parent="Visuals/PSSky" index="4"]
 surface_material_override/0 = SubResource("StandardMaterial3D_skabk")
 
 [node name="Lighting" type="Node3D" parent="Visuals"]

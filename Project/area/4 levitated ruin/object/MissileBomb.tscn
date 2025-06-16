@@ -365,15 +365,16 @@ _data = {
 &"fly": SubResource("Animation_rfjd0")
 }
 
-[node name="MissileBomb" node_paths=PackedStringArray("animator") instance=ExtResource("1_3nssn")]
+[node name="MissileBomb" node_paths=PackedStringArray("root", "animator") instance=ExtResource("1_3nssn")]
 script = ExtResource("2_rlbjh")
 alignModelForward = true
+root = NodePath(".")
 animator = NodePath("AnimationPlayer")
 "Launch Settings/Mode" = 0
 "Launch Settings/Target" = NodePath("")
-"Launch Settings/Middle Height" = 10.0
 "Launch Settings/Speed Tracking" = 1.0
 "Launch Settings/Spread" = 2.0
+"Launch Settings/Middle Height" = 10.0
 
 [node name="Trail" type="GPUParticles3D" parent="." index="1"]
 layers = 32
@@ -477,21 +478,25 @@ draw_pass_1 = SubResource("QuadMesh_5ln46")
 
 [node name="LaunchSFX" type="AudioStreamPlayer3D" parent="." index="4"]
 stream = ExtResource("12_24jkw")
+unit_size = 50.0
 max_db = 0.0
-max_distance = 100.0
+max_distance = 150.0
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("11_24jkw")
-groupKey = &"missile launch"
+groupKey = &"bomb missile launch"
+audioLengthOverride = 1.2
 
 [node name="ExplosionSFX" type="AudioStreamPlayer3D" parent="." index="5"]
 stream = ExtResource("10_jc8lh")
+unit_size = 20.0
 max_db = 0.0
-max_distance = 100.0
+max_distance = 50.0
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("11_24jkw")
-groupKey = &"missile explosion"
+groupKey = &"bomb missile explosion"
+audioLengthOverride = 0.8
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="6"]
 libraries = {

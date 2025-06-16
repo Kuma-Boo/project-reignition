@@ -189,6 +189,9 @@ public partial class Launcher : Node3D // Jumps between static points w/ custom 
 		if (!a.IsInGroup("player detection"))
 			return;
 
+		if (Player.IsDefeated)
+			return;
+
 		IsPlayerCentered = false;
 		Activate();
 	}

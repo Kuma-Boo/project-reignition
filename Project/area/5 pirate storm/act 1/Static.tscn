@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=3 uid="uid://csk7y7y8vgg6l"]
+[gd_scene load_steps=82 format=3 uid="uid://csk7y7y8vgg6l"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_g84th"]
 [ext_resource type="PackedScene" uid="uid://npgcl1ctbjyt" path="res://area/5 pirate storm/act 1/environment/01Opening.tscn" id="2_444mk"]
@@ -18,6 +18,7 @@
 [ext_resource type="Curve3D" uid="uid://sjr3s0lqcip7" path="res://area/5 pirate storm/act 1/environment/path/BrokenShipPath.tres" id="14_v0vsi"]
 [ext_resource type="Curve3D" uid="uid://c3fheeny7go63" path="res://area/5 pirate storm/act 1/environment/path/IslandPath.tres" id="15_4ui3u"]
 [ext_resource type="Curve3D" uid="uid://d0g7wmirjvyuh" path="res://area/5 pirate storm/act 1/environment/path/ShipPath.tres" id="17_bd1hp"]
+[ext_resource type="PackedScene" uid="uid://d3bwpl53f2wsi" path="res://area/5 pirate storm/data/skybox/SkyboxLightning.tscn" id="17_qhv7k"]
 [ext_resource type="Curve3D" uid="uid://c5j02crpfbnpp" path="res://area/5 pirate storm/act 1/environment/path/CannonballPath.tres" id="18_fqgif"]
 [ext_resource type="Curve3D" uid="uid://bviukq0alfhkb" path="res://area/5 pirate storm/act 1/environment/path/CavePath.tres" id="18_v0vsi"]
 [ext_resource type="Curve3D" uid="uid://d73fv1nlv4ds" path="res://area/5 pirate storm/act 1/environment/path/SurfboardPath.tres" id="19_4ui3u"]
@@ -121,6 +122,13 @@ anim_speed_max = 1.5
 material = ExtResource("42_q3kya")
 orientation = 1
 
+[sub_resource type="Gradient" id="Gradient_0tpv1"]
+offsets = PackedFloat32Array(0, 0.258383, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.235163, 0.234914, 0.322757, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_gulv4"]
+gradient = SubResource("Gradient_0tpv1")
+
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ypnsc"]
 sky_top_color = Color(0.1457, 0.17856, 0.31, 1)
 sky_horizon_color = Color(0.274573, 0.281921, 0.29352, 1)
@@ -135,6 +143,7 @@ sky = SubResource("Sky_qkxl1")
 ambient_light_source = 3
 ambient_light_color = Color(0.495179, 0.460054, 0.343769, 1)
 ambient_light_sky_contribution = 0.2
+ambient_light_energy = 0.5
 tonemap_mode = 2
 tonemap_exposure = 1.5
 glow_enabled = true
@@ -144,6 +153,8 @@ glow_normalized = true
 glow_strength = 0.8
 glow_blend_mode = 1
 glow_hdr_threshold = 1.5
+adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture1D_gulv4")
 
 [sub_resource type="Animation" id="Animation_djq2b"]
 length = 0.001
@@ -850,6 +861,10 @@ shape = SubResource("BoxShape3D_k720b")
 
 [node name="PSSky" parent="Visuals" instance=ExtResource("13_q3kya")]
 script = ExtResource("41_08hmi")
+
+[node name="PSSkyLightning" parent="Visuals/PSSky" instance=ExtResource("17_qhv7k")]
+minLightningInterval = 10.0
+maxLightningInterval = 15.0
 
 [node name="Path" type="Node3D" parent="."]
 
@@ -1628,8 +1643,8 @@ shape = SubResource("BoxShape3D_k720b")
 [node name="Exterior" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
-light_color = Color(0.91, 0.925, 1, 1)
-light_energy = 1.2
+light_color = Color(0.94, 0.92, 1, 1)
+light_energy = 0.8
 light_cull_mask = 4293918722
 shadow_enabled = true
 shadow_caster_mask = 4293918785
@@ -1637,7 +1652,7 @@ shadow_caster_mask = 4293918785
 [node name="Water" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 layers = 1024
-light_color = Color(0.67, 0.703, 1, 1)
+light_color = Color(0.82, 0.838, 1, 1)
 light_energy = 0.6
 light_cull_mask = 4293918728
 shadow_caster_mask = 4293918785
@@ -1656,6 +1671,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 layers = 1024
 light_color = Color(0.697159, 0.804547, 0.963584, 1)
 light_energy = 0.5
+light_specular = 5.0
 light_cull_mask = 4293918721
 
 [node name="Rain" type="Node3D" parent="."]

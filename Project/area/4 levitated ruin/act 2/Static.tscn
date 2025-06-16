@@ -82,11 +82,14 @@ vertex_color_use_as_albedo = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rweac"]
 resource_name = "Moon"
 render_priority = -125
-shading_mode = 0
 specular_mode = 2
 vertex_color_use_as_albedo = true
 albedo_color = Color(1, 0.874, 0.46, 1)
 albedo_texture = ExtResource("5_y7vf5")
+emission_enabled = true
+emission = Color(0.845805, 0.646575, 0, 1)
+emission_energy_multiplier = 0.8
+emission_texture = ExtResource("5_y7vf5")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_flgq4"]
 render_priority = 0
@@ -129,7 +132,7 @@ size = Vector3(8, 7, 4)
 
 [sub_resource type="Gradient" id="Gradient_ttop8"]
 interpolation_color_space = 2
-offsets = PackedFloat32Array(0, 0.125, 0.276515, 0.594697, 1)
+offsets = PackedFloat32Array(0, 0.163708, 0.404339, 0.706114, 1)
 colors = PackedColorArray(0, 0, 0, 1, 0.0337223, 0.0582743, 0.101096, 1, 0.1519, 0.20987, 0.31, 1, 0.562347, 0.5568, 0.64, 1, 1, 0.990667, 0.92, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_qg5bm"]
@@ -156,18 +159,18 @@ ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.2
 reflected_light_source = 2
+tonemap_mode = 2
 tonemap_white = 1.4
 ssao_enabled = true
 glow_enabled = true
-glow_levels/2 = 1.0
-glow_levels/3 = 0.5
-glow_levels/4 = 0.25
-glow_levels/5 = 0.13
+glow_levels/1 = 1.0
+glow_levels/5 = 0.5
 glow_normalized = true
-glow_intensity = 2.0
+glow_intensity = 1.2
 glow_strength = 1.5
 glow_blend_mode = 1
-glow_hdr_threshold = 0.9
+glow_hdr_threshold = 1.4
+glow_hdr_scale = 3.0
 fog_light_color = Color(0, 0, 0, 1)
 fog_density = 0.0011
 adjustment_enabled = true
@@ -856,6 +859,9 @@ transform = Transform3D(0.195415, 0, 0.980721, 0, 1, 0, -0.980721, 0, 0.195415, 
 [node name="SkyRoot" parent="Visuals/Skybox" index="0"]
 transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, 0, -179.753, 0)
 
+[node name="Skeleton3D" parent="Visuals/Skybox/SkyRoot" index="0"]
+bones/1/rotation = Quaternion(5.33851e-08, 0.707107, 0.707107, 5.33851e-08)
+
 [node name="BackgroundMesh" parent="Visuals/Skybox/SkyRoot/Skeleton3D" index="0"]
 surface_material_override/0 = SubResource("ShaderMaterial_lnv7r")
 
@@ -961,16 +967,66 @@ startEnabled = true
 
 [node name="Lighting" type="Node3D" parent="."]
 
-[node name="Sun" type="DirectionalLight3D" parent="Lighting"]
+[node name="Objects" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(0.392295, 0.886206, 0.246461, 0.821298, -0.458118, 0.339997, 0.414216, 0.0690391, -0.907556, 0, 0, 0)
+layers = 1024
+light_color = Color(0.904022, 0.923437, 0.666793, 1)
+light_energy = 0.8
+light_cull_mask = 4293918785
+shadow_caster_mask = 4293918720
+
+[node name="ObjectsFill" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(-0.521426, 0.852112, -0.0449482, -0.580882, -0.315882, 0.750197, 0.625053, 0.417282, 0.659685, 0, 0, 0)
+layers = 1024
+light_color = Color(0.86, 0.897333, 1, 1)
+light_energy = 0.6
+light_cull_mask = 4293918721
+shadow_caster_mask = 4293918720
+
+[node name="Exterior" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(0.5, 0.75, 0.433013, 0.433013, -0.649519, 0.625, 0.75, -0.125, -0.649519, 0, 0, 0)
-layers = 2
+layers = 1024
 light_color = Color(0.86, 0.897333, 1, 1)
 light_cull_mask = 4293918823
 shadow_enabled = true
-shadow_caster_mask = 4293918787
+shadow_caster_mask = 4293918785
 
 [node name="ReflectionProbes" type="Node3D" parent="."]
-visible = false
+
+[node name="Tower1" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -16.76, -1376.76)
+layers = 1024
+blend_distance = 6.0
+size = Vector3(33.5205, 34, 43.5601)
+interior = true
+cull_mask = 0
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(0.5115, 0.93, 0.713775, 1)
+ambient_color_energy = 5.0
+
+[node name="Tower1Top" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -1.65381, -1376.76)
+layers = 1024
+blend_distance = 6.0
+size = Vector3(31.1055, 31, 43.5601)
+cull_mask = 0
+reflection_mask = 4
+ambient_mode = 2
+ambient_color = Color(1, 1, 1, 1)
+ambient_color_energy = 4.0
+
+[node name="TowerObjects" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -21, -1376.04)
+layers = 1024
+blend_distance = 8.0
+size = Vector3(28.4314, 34, 45)
+interior = true
+cull_mask = 0
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.46, 0.92, 0.613333, 1)
+ambient_color_energy = 1.5
 
 [node name="ExteriorEnvionmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 262.5, -5, -1160)
@@ -980,18 +1036,6 @@ cull_mask = 0
 reflection_mask = 2
 ambient_mode = 2
 ambient_color = Color(0.496894, 0.368146, 0.704587, 1)
-ambient_color_energy = 1.5
-
-[node name="Tower1EnvionmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, -11, -1375)
-layers = 1024
-blend_distance = 2.0
-size = Vector3(30, 40, 30)
-interior = true
-cull_mask = 0
-reflection_mask = 4
-ambient_mode = 2
-ambient_color = Color(0.421448, 0.863101, 0.671989, 1)
 ambient_color_energy = 1.5
 
 [node name="Tower2EnvionmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
@@ -1004,6 +1048,18 @@ cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
 ambient_color = Color(0.421448, 0.863101, 0.671989, 1)
+ambient_color_energy = 5.0
+
+[node name="Tower2Objects" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 29, -1575.04)
+layers = 1024
+blend_distance = 5.0
+size = Vector3(30, 50, 30)
+interior = true
+cull_mask = 0
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.46, 0.92, 0.613333, 1)
 ambient_color_energy = 1.5
 
 [node name="Tower3EnvionmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
@@ -1016,6 +1072,18 @@ cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
 ambient_color = Color(0.421448, 0.863101, 0.671989, 1)
+ambient_color_energy = 5.0
+
+[node name="Tower3Objects" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 650, -51, -1525.04)
+layers = 1024
+blend_distance = 5.0
+size = Vector3(30, 50, 30)
+interior = true
+cull_mask = 0
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.46, 0.92, 0.613333, 1)
 ambient_color_energy = 1.5
 
 [node name="Tower4EnvionmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
@@ -1028,6 +1096,18 @@ cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
 ambient_color = Color(0.421448, 0.863101, 0.671989, 1)
+ambient_color_energy = 5.0
+
+[node name="Tower4Objects" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -66, -925)
+layers = 1024
+blend_distance = 5.0
+size = Vector3(30, 50, 30)
+interior = true
+cull_mask = 0
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.46, 0.92, 0.613333, 1)
 ambient_color_energy = 1.5
 
 [node name="Tower5EnvionmentProbe" type="ReflectionProbe" parent="ReflectionProbes"]
@@ -1040,6 +1120,18 @@ cull_mask = 0
 reflection_mask = 4
 ambient_mode = 2
 ambient_color = Color(0.421448, 0.863101, 0.671989, 1)
+ambient_color_energy = 5.0
+
+[node name="Tower5Objects" type="ReflectionProbe" parent="ReflectionProbes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 550, 48, -1025)
+layers = 1024
+blend_distance = 5.0
+size = Vector3(30, 50, 30)
+interior = true
+cull_mask = 0
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.46, 0.92, 0.613333, 1)
 ambient_color_energy = 1.5
 
 [node name="Triggers" type="Node3D" parent="."]

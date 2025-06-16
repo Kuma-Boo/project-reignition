@@ -6,14 +6,14 @@
 [ext_resource type="PackedScene" uid="uid://cgjdnwcl27ndq" path="res://area/3 evil foundry/object/model/scrap/HangingScrapPieces.gltf" id="4_mqh2e"]
 [ext_resource type="AudioStream" uid="uid://db7hww3ufbe68" path="res://sound/sfx/stage/evil foundry/hanging scrap attacked.wav" id="4_rerat"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_hhikk"]
+size = Vector3(4.5, 2, 4.5)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_yocea"]
 size = Vector3(1.5, 1.6, 4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_48nus"]
 size = Vector3(4, 0.8, 1.5)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_hhikk"]
-size = Vector3(4.5, 2, 4.5)
 
 [sub_resource type="Animation" id="Animation_tapwj"]
 resource_name = "RESET"
@@ -95,7 +95,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Collision/Hitbox:monitorable")
+tracks/6/path = NodePath("Hitbox:monitorable")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -107,7 +107,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Collision/Hitbox/CollisionShape3D:disabled")
+tracks/7/path = NodePath("Hitbox/CollisionShape3D:disabled")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -159,7 +159,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Collision/Hitbox/CollisionShape3D:disabled")
+tracks/3/path = NodePath("Hitbox/CollisionShape3D:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -229,7 +229,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Collision/Hitbox:monitorable")
+tracks/4/path = NodePath("Hitbox:monitorable")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -246,17 +246,26 @@ _data = {
 &"shatter": SubResource("Animation_3hncg")
 }
 
-[node name="HangingScrap" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator")]
+[node name="HangingScrap" type="Node3D" node_paths=PackedStringArray("root", "pieceRoot", "animator", "snapTransform")]
 script = ExtResource("1_cv8j3")
 pieceMass = 0.2
 shakeScreenOnShatter = false
+shatterFlags = 12
+bounceStrength = 1.0
 root = NodePath("Collision")
 pieceRoot = NodePath("HangingScrapPieces")
 animator = NodePath("AnimationPlayer")
-shatterFlags = 12
-bounceStrength = 1.0
+snapTransform = NodePath("Hitbox")
 
 [node name="ScrapClaw" parent="." instance=ExtResource("1_7go6u")]
+
+[node name="Hitbox" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.8, 0)
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+shape = SubResource("BoxShape3D_hhikk")
 
 [node name="Collision" type="StaticBody3D" parent="." groups=["floor", "wall"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10.9, 0)
@@ -273,30 +282,22 @@ shape = SubResource("BoxShape3D_yocea")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.9, 0)
 shape = SubResource("BoxShape3D_48nus")
 
-[node name="Hitbox" type="Area3D" parent="Collision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.9, 0)
-collision_layer = 4
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Collision/Hitbox"]
-shape = SubResource("BoxShape3D_hhikk")
-
 [node name="HangingScrapPieces" parent="." instance=ExtResource("4_mqh2e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10.9, 0)
 visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_uxish")
+&"": SubResource("AnimationLibrary_uxish")
 }
 
 [node name="SFX" type="AudioStreamPlayer3D" parent="."]
+process_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11, 0)
 stream = ExtResource("4_rerat")
 max_db = 0.0
 max_distance = 50.0
 bus = &"GAME SFX"
-process_mode = 1
 
-[connection signal="area_entered" from="Collision/Hitbox" to="." method="OnEntered"]
-[connection signal="area_exited" from="Collision/Hitbox" to="." method="OnExited"]
+[connection signal="area_entered" from="Hitbox" to="." method="OnEntered"]
+[connection signal="area_exited" from="Hitbox" to="." method="OnExited"]

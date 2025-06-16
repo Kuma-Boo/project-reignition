@@ -40,7 +40,7 @@ public partial class SandStep : Node3D
 			return;
 
 		if (StageSettings.Player.IsHomingAttacking)
-			StageSettings.Player.StartBounce(true, .5f);
+			StageSettings.Player.StartBounce(true, .5f, lockonTrigger);
 
 		UpdateSfx();
 	}

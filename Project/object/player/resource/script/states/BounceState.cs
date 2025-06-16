@@ -16,9 +16,7 @@ public partial class BounceState : PlayerState
 	private bool isSnapSuccessful;
 	private Vector3 snapPosition;
 	private Node3D snapTarget;
-	public void SetSnapTarget(Node3D target)
-		=> snapTarget = target ?? Player.Lockon.Target;
-
+	public void SetSnapTarget(Node3D target) => snapTarget = target;
 	public void SetBounceSnapping(SnapMode mode) => snapMode = mode;
 
 	[Export]

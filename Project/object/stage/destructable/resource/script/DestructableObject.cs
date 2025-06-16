@@ -60,6 +60,7 @@ public partial class DestructableObject : Node3D
 	/// <summary> Parent node of all the pieces. </summary>
 	[Export] protected Node3D pieceRoot;
 	[Export] protected AnimationPlayer animator;
+	[Export] protected Node3D snapTransform;
 	private readonly List<Piece> pieces = [];
 	private class Piece
 	{
@@ -273,7 +274,7 @@ public partial class DestructableObject : Node3D
 		{
 			Shatter();
 			if (!Mathf.IsZeroApprox(bounceStrength))
-				Player.StartBounce(snapMode, bounceStrength);
+				Player.StartBounce(snapMode, bounceStrength, snapTransform);
 
 			return;
 		}
