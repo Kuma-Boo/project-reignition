@@ -57,8 +57,10 @@ public partial class LightSpeedDashState : PlayerState
 		if (!target.IsInsideTree() || !target.IsVisibleInTree())
 			return false;
 
-		Vector3 direction = target.GlobalPosition - Player.CenterPosition;
-		bool isValidFacingDirection = direction.Dot(Player.Animator.Forward()) >= 0.5f && direction.Dot(Player.PathFollower.ForwardAxis) >= 0.5f;
+		Vector3 direction = (target.GlobalPosition - Player.CenterPosition).Normalized();
+		bool isValidFacingDirection = direction.Dot(Player.Animator.Forward()) >= 0.5f &&
+			direction.Dot(Player.PathFollower.ForwardAxis) >= 0.5f &&
+			Mathf.Abs(direction.Dot(Vector3.Up)) <= 0.8f;
 
 		return isValidFacingDirection;
 	}
