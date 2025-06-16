@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=3 uid="uid://csk7y7y8vgg6l"]
+[gd_scene load_steps=82 format=3 uid="uid://csk7y7y8vgg6l"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_g84th"]
 [ext_resource type="PackedScene" uid="uid://npgcl1ctbjyt" path="res://area/5 pirate storm/act 1/environment/01Opening.tscn" id="2_444mk"]
@@ -17,7 +17,6 @@
 [ext_resource type="PackedScene" uid="uid://bh70fk52hk7ii" path="res://area/5 pirate storm/data/skybox/Skybox.tscn" id="13_q3kya"]
 [ext_resource type="Curve3D" uid="uid://sjr3s0lqcip7" path="res://area/5 pirate storm/act 1/environment/path/BrokenShipPath.tres" id="14_v0vsi"]
 [ext_resource type="Curve3D" uid="uid://c3fheeny7go63" path="res://area/5 pirate storm/act 1/environment/path/IslandPath.tres" id="15_4ui3u"]
-[ext_resource type="Material" uid="uid://c63n62iy755tm" path="res://area/5 pirate storm/data/skybox/model/material/Skybox Tint.tres" id="16_tsasv"]
 [ext_resource type="Curve3D" uid="uid://d0g7wmirjvyuh" path="res://area/5 pirate storm/act 1/environment/path/ShipPath.tres" id="17_bd1hp"]
 [ext_resource type="PackedScene" uid="uid://d3bwpl53f2wsi" path="res://area/5 pirate storm/data/skybox/SkyboxLightning.tscn" id="17_qhv7k"]
 [ext_resource type="Curve3D" uid="uid://c5j02crpfbnpp" path="res://area/5 pirate storm/act 1/environment/path/CannonballPath.tres" id="18_fqgif"]
@@ -62,12 +61,6 @@ size = Vector3(25, 20, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vf6sl"]
 size = Vector3(50, 80, 5)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_qhv7k"]
-top_radius = 2500.0
-bottom_radius = 2500.0
-height = 800.0
-radial_segments = 16
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_f6rbm"]
 size = Vector3(500, 5, 500)
@@ -150,6 +143,7 @@ sky = SubResource("Sky_qkxl1")
 ambient_light_source = 3
 ambient_light_color = Color(0.495179, 0.460054, 0.343769, 1)
 ambient_light_sky_contribution = 0.2
+ambient_light_energy = 0.5
 tonemap_mode = 2
 tonemap_exposure = 1.5
 glow_enabled = true
@@ -871,13 +865,6 @@ script = ExtResource("41_08hmi")
 [node name="PSSkyLightning" parent="Visuals/PSSky" instance=ExtResource("17_qhv7k")]
 minLightningInterval = 10.0
 maxLightningInterval = 15.0
-
-[node name="Tint" type="MeshInstance3D" parent="Visuals/PSSky"]
-layers = 16
-cast_shadow = 0
-extra_cull_margin = 16384.0
-mesh = SubResource("CylinderMesh_qhv7k")
-surface_material_override/0 = ExtResource("16_tsasv")
 
 [node name="Path" type="Node3D" parent="."]
 
@@ -1684,6 +1671,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 layers = 1024
 light_color = Color(0.697159, 0.804547, 0.963584, 1)
 light_energy = 0.5
+light_specular = 5.0
 light_cull_mask = 4293918721
 
 [node name="Rain" type="Node3D" parent="."]

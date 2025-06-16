@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://d1gknocio5io1"]
+[gd_scene load_steps=39 format=3 uid="uid://d1gknocio5io1"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_4xujv"]
 [ext_resource type="Resource" uid="uid://c2qttlm1qg5ji" path="res://area/5 pirate storm/act 2/camera/CloseCam.tres" id="2_or2ge"]
@@ -12,10 +12,15 @@
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="7_kc6hj"]
 [ext_resource type="AudioStream" uid="uid://cmthrjjnbihvh" path="res://sound/ost/bonus disc/Pirate Storm Act 2.mp3" id="8_auaow"]
 [ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="8_euei3"]
+[ext_resource type="PackedScene" uid="uid://d3bwpl53f2wsi" path="res://area/5 pirate storm/data/skybox/SkyboxLightning.tscn" id="9_l6cxa"]
 [ext_resource type="Script" uid="uid://np5vcxq01ii8" path="res://object/trigger/modules/CheckpointTrigger.cs" id="9_or2ge"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="9_patcr"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="10_q3ufd"]
 [ext_resource type="Resource" uid="uid://bsdv21422t2gf" path="res://area/5 pirate storm/act 2/camera/OverheadCam.tres" id="11_oejkb"]
+[ext_resource type="Script" uid="uid://ch4pb1qqwy5al" path="res://object/stage/common/resource/script/CameraFollower.cs" id="16_83k4q"]
+[ext_resource type="Material" uid="uid://ve75fqv3qek3" path="res://area/5 pirate storm/data/material/Rain Process Material.tres" id="17_gy6uc"]
+[ext_resource type="Material" uid="uid://6q7k10n0i0bn" path="res://area/5 pirate storm/data/material/Rain Drop.tres" id="18_iqmf8"]
+[ext_resource type="Material" uid="uid://86s1me03t0lu" path="res://area/5 pirate storm/data/material/Rain Impact.tres" id="19_w543s"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q3ufd"]
 render_priority = -124
@@ -24,7 +29,7 @@ cull_mode = 1
 shading_mode = 0
 specular_mode = 2
 disable_fog = true
-albedo_color = Color(0.589911, 0.46884, 0.759212, 1)
+albedo_color = Color(0.665114, 0.558452, 0.821712, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_or2ge"]
 size = Vector3(200, 5, 200)
@@ -34,6 +39,45 @@ size = Vector3(20, 50, 45)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q3ufd"]
 size = Vector3(25, 20, 5)
+
+[sub_resource type="QuadMesh" id="QuadMesh_74w7x"]
+material = ExtResource("18_iqmf8")
+size = Vector2(0.4, 4)
+center_offset = Vector3(0, 2, 0)
+
+[sub_resource type="Curve" id="Curve_b24v3"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 0), -2.3043, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_2wlyt"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_b24v3")
+
+[sub_resource type="Curve" id="Curve_wke62"]
+_data = [Vector2(0, 0.154067), 0.0, 2.98176, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_p6wrh"]
+width = 64
+curve = SubResource("Curve_wke62")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_72cx7"]
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.2
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_p6wrh")
+alpha_curve = SubResource("CurveTexture_2wlyt")
+anim_speed_min = 1.5
+anim_speed_max = 1.5
+
+[sub_resource type="QuadMesh" id="QuadMesh_ixsht"]
+material = ExtResource("19_w543s")
+orientation = 1
 
 [sub_resource type="Animation" id="Animation_j0xf8"]
 resource_name = "RESET"
@@ -414,6 +458,7 @@ dialogLibrary = ExtResource("3_oejkb")
 pathParent = NodePath("Path")
 completionAnimator = NodePath("DemoCamera/AnimationPlayer")
 Environment = NodePath("WorldEnvironment")
+environmentFxFactor = 1.0
 
 [node name="Collision" parent="." instance=ExtResource("2_u02cx")]
 visible = false
@@ -429,8 +474,10 @@ visible = false
 
 [node name="PSSky" parent="Visuals" instance=ExtResource("5_thlvq")]
 
-[node name="Tint" parent="Visuals/PSSky" index="9"]
+[node name="Tint" parent="Visuals/PSSky" index="4"]
 surface_material_override/0 = SubResource("StandardMaterial3D_q3ufd")
+
+[node name="PSSkyLightning" parent="Visuals/PSSky" instance=ExtResource("9_l6cxa")]
 
 [node name="Lighting" type="Node3D" parent="Visuals"]
 
@@ -457,6 +504,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 19,
 layers = 1024
 light_color = Color(0.72, 0.65, 1, 1)
 light_energy = 0.8
+light_specular = 10.0
 light_cull_mask = 65
 shadow_caster_mask = 65
 
@@ -478,7 +526,7 @@ cull_mask = 0
 reflection_mask = 65
 ambient_mode = 2
 ambient_color = Color(0.645575, 0.5355, 0.85, 1)
-ambient_color_energy = 0.6
+ambient_color_energy = 0.3
 
 [node name="Trigger" type="Node3D" parent="."]
 
@@ -575,6 +623,47 @@ shape = SubResource("BoxShape3D_q3ufd")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 8.6, 0)
 curve = ExtResource("6_thlvq")
 
+[node name="Rain" type="Node3D" parent="."]
+
+[node name="RainCollision" type="GPUParticlesCollisionHeightField3D" parent="Rain"]
+layers = 32
+cull_mask = 4293918752
+size = Vector3(100, 50, 100)
+resolution = 1
+heightfield_mask = 2050
+script = ExtResource("16_83k4q")
+
+[node name="Rain" type="GPUParticles3D" parent="Rain"]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 512
+sub_emitter = NodePath("RainImpact")
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+transform_align = 2
+process_material = ExtResource("17_gy6uc")
+draw_pass_1 = SubResource("QuadMesh_74w7x")
+script = ExtResource("16_83k4q")
+followYRotation = true
+
+[node name="RainImpact" type="GPUParticles3D" parent="Rain/Rain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 256
+lifetime = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_72cx7")
+draw_pass_1 = SubResource("QuadMesh_ixsht")
+
 [node name="DemoCamera" type="Node3D" parent="."]
 
 [node name="Camera" type="Camera3D" parent="DemoCamera"]
@@ -595,6 +684,8 @@ script = ExtResource("9_patcr")
 loopStartPosition = 6.8
 loopEndPosition = 202.17
 isStageMusic = true
+
+[connection signal="LevelStarted" from="." to="Rain/Rain" method="set_emitting" binds= [true]]
 
 [editable path="Collision"]
 [editable path="Visuals/PSSky"]
