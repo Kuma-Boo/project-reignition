@@ -23,7 +23,7 @@ void fragment() {
 	vec2 scroll_amount = vec2(scroll_speed * time, 0);
 	vec4 base_col = texture(base, UV + scroll_amount) + texture(detail, UV2 + scroll_amount);
 	vec4 lightning_col = texture(lightning_base, UV + scroll_amount) + texture(lightning_detail, UV2 + scroll_amount);
-	vec4 col = mix(base_col, lightning_col, lightning_intensity * secondary_environment_fx_intensity);
+	vec4 col = base_col + (lightning_col * lightning_intensity * secondary_environment_fx_intensity);
 	col *= COLOR;
 	ALBEDO = col.rgb;
 	ALPHA = clamp(col.a, 0.0, 1.0);
