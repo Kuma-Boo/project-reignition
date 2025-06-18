@@ -1,7 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://bm47vn5goqp8d"]
+[gd_scene load_steps=17 format=3 uid="uid://bm47vn5goqp8d"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_vd2xh"]
 [ext_resource type="Resource" uid="uid://boarx5o8g73my" path="res://resource/level data/pirate storm/Boss.tres" id="2_crdxn"]
+[ext_resource type="PackedScene" uid="uid://dm8mm8evglpnx" path="res://area/5 pirate storm/boss/environment/collision/Collision.tscn" id="3_12b23"]
 [ext_resource type="PackedScene" uid="uid://dhmabb07vg2by" path="res://area/5 pirate storm/boss/environment/PSBoss.tscn" id="3_qe48x"]
 [ext_resource type="PackedScene" uid="uid://dq1or3kx5x4xt" path="res://area/5 pirate storm/boss/environment/Sea.tscn" id="4_j7qrk"]
 [ext_resource type="PackedScene" uid="uid://bh70fk52hk7ii" path="res://area/5 pirate storm/data/skybox/Skybox.tscn" id="5_qe48x"]
@@ -35,9 +36,14 @@ glow_blend_mode = 1
 glow_hdr_threshold = 1.5
 adjustment_enabled = true
 
-[node name="Static" type="Node3D"]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_vd2xh")
 Data = ExtResource("2_crdxn")
+pathParent = NodePath("Path")
+Environment = NodePath("WorldEnvironment")
+
+[node name="Collision" parent="." instance=ExtResource("3_12b23")]
+visible = false
 
 [node name="Visuals" type="Node3D" parent="."]
 
@@ -71,7 +77,6 @@ layers = 1024
 light_color = Color(0.744168, 0.667215, 0.858137, 1)
 light_energy = 1.8
 light_cull_mask = 8
-shadow_enabled = true
 shadow_caster_mask = 65
 
 [node name="ObjectLight" type="DirectionalLight3D" parent="Lighting"]
@@ -134,4 +139,5 @@ isStageMusic = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_1yslj")
 
+[editable path="Collision"]
 [editable path="Visuals/PSSky"]
