@@ -1,0 +1,137 @@
+[gd_scene load_steps=16 format=3 uid="uid://bm47vn5goqp8d"]
+
+[ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_vd2xh"]
+[ext_resource type="Resource" uid="uid://boarx5o8g73my" path="res://resource/level data/pirate storm/Boss.tres" id="2_crdxn"]
+[ext_resource type="PackedScene" uid="uid://dhmabb07vg2by" path="res://area/5 pirate storm/boss/environment/PSBoss.tscn" id="3_qe48x"]
+[ext_resource type="PackedScene" uid="uid://dq1or3kx5x4xt" path="res://area/5 pirate storm/boss/environment/Sea.tscn" id="4_j7qrk"]
+[ext_resource type="PackedScene" uid="uid://bh70fk52hk7ii" path="res://area/5 pirate storm/data/skybox/Skybox.tscn" id="5_qe48x"]
+[ext_resource type="PackedScene" uid="uid://mcdscyg16ic2" path="res://area/5 pirate storm/object/CrowGroup.tscn" id="5_xt6vc"]
+[ext_resource type="PackedScene" uid="uid://d3bwpl53f2wsi" path="res://area/5 pirate storm/data/skybox/SkyboxLightning.tscn" id="6_j7qrk"]
+[ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="7_1yslj"]
+[ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="8_06air"]
+[ext_resource type="Curve3D" uid="uid://dmixqtejadyme" path="res://area/5 pirate storm/boss/environment/path/MainPath.tres" id="9_06air"]
+[ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="11_0dpd1"]
+[ext_resource type="AudioStream" uid="uid://dd8jyg5002ho8" path="res://sound/ost/adventure disc/10 Blue on the Run.mp3" id="11_b0ysk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xt6vc"]
+render_priority = -124
+blend_mode = 3
+cull_mode = 1
+shading_mode = 0
+specular_mode = 2
+disable_fog = true
+albedo_color = Color(0.790827, 0.63607, 0.717231, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xt6vc"]
+size = Vector3(200, 5, 200)
+
+[sub_resource type="Environment" id="Environment_1yslj"]
+tonemap_mode = 2
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 1.2
+glow_strength = 1.2
+glow_blend_mode = 1
+glow_hdr_threshold = 1.5
+adjustment_enabled = true
+
+[node name="Static" type="Node3D"]
+script = ExtResource("1_vd2xh")
+Data = ExtResource("2_crdxn")
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="PSBoss" parent="Visuals" instance=ExtResource("3_qe48x")]
+
+[node name="Sea" parent="Visuals" instance=ExtResource("4_j7qrk")]
+
+[node name="CrowGroup" parent="Visuals" instance=ExtResource("5_xt6vc")]
+
+[node name="PSSky" parent="Visuals" instance=ExtResource("5_qe48x")]
+
+[node name="Tint" parent="Visuals/PSSky" index="4"]
+surface_material_override/0 = SubResource("StandardMaterial3D_xt6vc")
+
+[node name="PSSkyLightning" parent="Visuals/PSSky" instance=ExtResource("6_j7qrk")]
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="EnvironmentLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 19, 0)
+layers = 1024
+light_color = Color(0.754626, 0.684934, 0.713904, 1)
+light_energy = 2.0
+light_cull_mask = 6
+shadow_enabled = true
+shadow_caster_mask = 65
+
+[node name="WaterLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 19, 0)
+layers = 1024
+light_color = Color(0.744168, 0.667215, 0.858137, 1)
+light_energy = 1.8
+light_cull_mask = 8
+shadow_enabled = true
+shadow_caster_mask = 65
+
+[node name="ObjectLight" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 19, 0)
+layers = 1024
+light_color = Color(0.72, 0.65, 1, 1)
+light_energy = 0.8
+light_specular = 10.0
+light_cull_mask = 65
+shadow_caster_mask = 65
+
+[node name="EnvironmentProbe" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.171, 150, -65.1566)
+layers = 1024
+size = Vector3(1694.43, 300, 1573.26)
+cull_mask = 0
+reflection_mask = 6
+ambient_mode = 2
+ambient_color = Color(0.645575, 0.5355, 0.85, 1)
+ambient_color_energy = 0.6
+
+[node name="ObjectProbe" type="ReflectionProbe" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 189, 150, -22.5)
+layers = 1024
+size = Vector3(540, 300, 607)
+cull_mask = 0
+reflection_mask = 65
+ambient_mode = 2
+ambient_color = Color(0.645575, 0.5355, 0.85, 1)
+ambient_color_energy = 0.3
+
+[node name="Trigger" type="Node3D" parent="."]
+
+[node name="WaterTrigger" parent="Trigger" instance=ExtResource("7_1yslj")]
+"Enter Mode" = 0
+
+[node name="Water" type="Node3D" parent="Trigger/WaterTrigger"]
+script = ExtResource("8_06air")
+triggerType = 1
+waterFxHeightOffset = 3.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Trigger/WaterTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 240, -4, 31)
+shape = SubResource("BoxShape3D_xt6vc")
+
+[node name="Path" type="Node3D" parent="."]
+
+[node name="Main" type="Path3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 8.6, 0)
+curve = ExtResource("9_06air")
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_b0ysk")
+bus = &"BGM"
+script = ExtResource("11_0dpd1")
+loopStartPosition = 42.77
+loopEndPosition = 213.77
+isStageMusic = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1yslj")
+
+[editable path="Visuals/PSSky"]
