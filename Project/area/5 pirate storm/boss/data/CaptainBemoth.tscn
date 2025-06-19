@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dihp6asycbujt"]
+[gd_scene load_steps=28 format=3 uid="uid://dihp6asycbujt"]
 
 [ext_resource type="Script" uid="uid://lq3vcs5bircg" path="res://area/5 pirate storm/data/script/CaptainBemoth.cs" id="1_blu3m"]
 [ext_resource type="PackedScene" uid="uid://c0txr710wvj5p" path="res://area/5 pirate storm/boss/data/model/CaptainBemoth.gltf" id="1_nac7p"]
@@ -6,9 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://bisfr2ty572aw" path="res://area/5 pirate storm/boss/data/model/HornFront.gltf" id="3_wc1c5"]
 [ext_resource type="PackedScene" uid="uid://be23nycnikgem" path="res://area/5 pirate storm/boss/data/model/HornLeft.gltf" id="4_hppyi"]
 [ext_resource type="PackedScene" uid="uid://dj71abmvric1f" path="res://area/5 pirate storm/boss/data/model/HornRight.gltf" id="5_j0uyl"]
+[ext_resource type="PackedScene" uid="uid://d2j6qde5aener" path="res://area/5 pirate storm/boss/data/BombAttack.tscn" id="7_wc1c5"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6vuv4"]
-animation = &"bullet"
+animation = &"bomb"
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_n25aq"]
 mix_mode = 1
@@ -99,11 +100,11 @@ fadein_time = 0.2
 fadeout_time = 0.5
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_wc1c5"]
-graph_offset = Vector2(-1097.26, 5.43314)
-nodes/bullet_anim/node = SubResource("AnimationNodeAnimation_6vuv4")
-nodes/bullet_anim/position = Vector2(-940, 40)
-nodes/bullet_trigger/node = SubResource("AnimationNodeOneShot_n25aq")
-nodes/bullet_trigger/position = Vector2(-780, -100)
+graph_offset = Vector2(-1224.9, -107.202)
+nodes/bomb_anim/node = SubResource("AnimationNodeAnimation_6vuv4")
+nodes/bomb_anim/position = Vector2(-940, 40)
+nodes/bomb_trigger/node = SubResource("AnimationNodeOneShot_n25aq")
+nodes/bomb_trigger/position = Vector2(-780, -100)
 nodes/close_anim/node = SubResource("AnimationNodeAnimation_blu3m")
 nodes/close_anim/position = Vector2(-1800, -40)
 nodes/close_transition/node = SubResource("AnimationNodeTransition_wc1c5")
@@ -139,14 +140,15 @@ nodes/wave_transition/node = SubResource("AnimationNodeTransition_4mtnm")
 nodes/wave_transition/position = Vector2(-800, 240)
 nodes/wave_trigger/node = SubResource("AnimationNodeOneShot_r7puu")
 nodes/wave_trigger/position = Vector2(-540, -20)
-node_connections = [&"bullet_trigger", 0, &"speed_scale", &"bullet_trigger", 1, &"bullet_anim", &"close_transition", 0, &"closed_anim", &"close_transition", 1, &"open_anim", &"close_transition", 2, &"opened_anim", &"close_transition", 3, &"close_anim", &"damage_trigger", 0, &"horn_damage_trigger", &"damage_trigger", 1, &"damage_anim", &"horn_damage_trigger", 0, &"wave_trigger", &"horn_damage_trigger", 1, &"horn_damage_anim", &"output", 0, &"shock_trigger", &"shock_trigger", 0, &"damage_trigger", &"shock_trigger", 1, &"shock_anim", &"speed_scale", 0, &"close_transition", &"wave_transition", 0, &"wave_left_anim", &"wave_transition", 1, &"wave_right_anim", &"wave_transition", 2, &"wave_both_anim", &"wave_trigger", 0, &"bullet_trigger", &"wave_trigger", 1, &"wave_transition"]
+node_connections = [&"bomb_trigger", 0, &"speed_scale", &"bomb_trigger", 1, &"bomb_anim", &"close_transition", 0, &"closed_anim", &"close_transition", 1, &"open_anim", &"close_transition", 2, &"opened_anim", &"close_transition", 3, &"close_anim", &"damage_trigger", 0, &"horn_damage_trigger", &"damage_trigger", 1, &"damage_anim", &"horn_damage_trigger", 0, &"wave_trigger", &"horn_damage_trigger", 1, &"horn_damage_anim", &"output", 0, &"shock_trigger", &"shock_trigger", 0, &"damage_trigger", &"shock_trigger", 1, &"shock_anim", &"speed_scale", 0, &"close_transition", &"wave_transition", 0, &"wave_left_anim", &"wave_transition", 1, &"wave_right_anim", &"wave_transition", 2, &"wave_both_anim", &"wave_trigger", 0, &"bomb_trigger", &"wave_trigger", 1, &"wave_transition"]
 
-[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("bodyAnimationTree", "root")]
+[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("bodyAnimationTree", "root", "bombs")]
 use_model_front = true
 tilt_enabled = false
 script = ExtResource("1_blu3m")
 bodyAnimationTree = NodePath("Root/CaptainBemoth/AnimationTree")
 root = NodePath("Root")
+bombs = [NodePath("Root/RootAttachment/MissileOrigin/BombAttack1"), NodePath("Root/RootAttachment/MissileOrigin/BombAttack2"), NodePath("Root/RootAttachment/MissileOrigin/BombAttack3"), NodePath("Root/RootAttachment/MissileOrigin/BombAttack4"), NodePath("Root/RootAttachment/MissileOrigin/BombAttack5")]
 
 [node name="Root" type="Node3D" parent="."]
 
@@ -156,9 +158,9 @@ root = NodePath("Root")
 active = false
 tree_root = SubResource("AnimationNodeBlendTree_wc1c5")
 anim_player = NodePath("../AnimationPlayer")
-parameters/bullet_trigger/active = false
-parameters/bullet_trigger/internal_active = false
-parameters/bullet_trigger/request = 0
+parameters/bomb_trigger/active = false
+parameters/bomb_trigger/internal_active = false
+parameters/bomb_trigger/request = 0
 parameters/close_transition/current_state = "disabled"
 parameters/close_transition/transition_request = ""
 parameters/close_transition/current_index = 0
@@ -196,5 +198,32 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 
 [node name="HornLeft" parent="Root/RootAttachment/RootOrientation" instance=ExtResource("4_hppyi")]
 
 [node name="HornRight" parent="Root/RootAttachment/RootOrientation" instance=ExtResource("5_j0uyl")]
+
+[node name="MissileOrigin" type="Node3D" parent="Root/RootAttachment"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.300003, 0.799999)
+
+[node name="BombAttack1" parent="Root/RootAttachment/MissileOrigin" instance=ExtResource("7_wc1c5")]
+transform = Transform3D(0.866025, -0.5, 0, 0.5, 0.866025, 0, 0, 0, 1, 0, 0, 0)
+"Launch Settings/Spread" = 1.5
+"Launch Settings/Middle Height" = 5.0
+
+[node name="BombAttack2" parent="Root/RootAttachment/MissileOrigin" instance=ExtResource("7_wc1c5")]
+transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
+"Launch Settings/Spread" = 1.5
+"Launch Settings/Middle Height" = 5.0
+
+[node name="BombAttack3" parent="Root/RootAttachment/MissileOrigin" instance=ExtResource("7_wc1c5")]
+"Launch Settings/Spread" = 1.5
+"Launch Settings/Middle Height" = 5.0
+
+[node name="BombAttack4" parent="Root/RootAttachment/MissileOrigin" instance=ExtResource("7_wc1c5")]
+transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
+"Launch Settings/Spread" = 1.5
+"Launch Settings/Middle Height" = 5.0
+
+[node name="BombAttack5" parent="Root/RootAttachment/MissileOrigin" instance=ExtResource("7_wc1c5")]
+transform = Transform3D(0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0, 1, 0, 0, 0)
+"Launch Settings/Spread" = 1.5
+"Launch Settings/Middle Height" = 5.0
 
 [editable path="Root/CaptainBemoth"]

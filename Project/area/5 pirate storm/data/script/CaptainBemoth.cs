@@ -1,4 +1,3 @@
-using System.IO;
 using Godot;
 using Project.Core;
 
@@ -15,6 +14,7 @@ public partial class CaptainBemoth : PathFollow3D
 	[Export] private Node3D root;
 
 	// Attacks
+	[Export] private BossBombAttack[] bombs;
 	[Export] private BossWaveAttack waveLeft;
 	[Export] private BossWaveAttack waveRight;
 	private Path3D bossPath;
@@ -41,6 +41,7 @@ public partial class CaptainBemoth : PathFollow3D
 		bodyAnimationTree.Active = true;
 		bossPath = GetParent<Path3D>();
 
+		bombs[^1].Exploded += EnterIdleState; // Return to idle when the last bomb explodes
 		StageSettings.Instance.Respawned += Respawn;
 		// TODO Play introduction cutscene StageSettings.Instance.LevelStarted += StartIntroduction;
 		StartBattle();
@@ -94,11 +95,16 @@ public partial class CaptainBemoth : PathFollow3D
 		currentRotation = 0;
 		rotationVelocity = 0;
 
+		bombAttackCounter = 0;
+		waveAttackCounter = 0;
+
 		// Reset local position
 		root.Position = Vector3.Zero;
 		root.Basis = Basis.Identity;
 
+		bodyAnimationTree.Set(BombTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		bodyAnimationTree.Set(WaveTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+
 		waveLeft.Deactivate();
 		waveRight.Deactivate();
 	}
@@ -234,11 +240,11 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private void StartAttack()
 	{
-		EnterWaveAttackState();
-		return;
-
 		if (currentHealth == MaxHealth || GetDeltaProgress() >= BombAttackRange)
+		{
 			EnterBombAttackState();
+			return;
+		}
 
 		if (currentHealth >= 1)
 		{
@@ -253,16 +259,34 @@ public partial class CaptainBemoth : PathFollow3D
 		// EnterChargeAttackState();
 	}
 
+	private int bombAttackCounter;
 	private readonly float BombAttackRange = 30f;
 	private void EnterBombAttackState()
 	{
-
+		bombAttackCounter = 0;
+		currentState = BemothState.BombAttack;
 	}
 
 	private void ProcessBombState()
 	{
+		if (bombAttackCounter != 0) // Bomb launch interval is handled by animations
+			return;
 
+		StartBombAttack();
 	}
+
+	private readonly StringName BombTrigger = "parameters/bomb_trigger/request";
+	private void StartBombAttack()
+	{
+		bombAttackCounter++;
+		if (bombAttackCounter > bombs.Length) // All bombs have been fired
+			return;
+
+		bombs[bombAttackCounter - 1].Respawn(); // Prep the next bomb
+		bodyAnimationTree.Set(BombTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	private void EmitBomb() => bombs[bombAttackCounter - 1].StartWindup();
 
 	private int waveAttackCounter;
 	/// <summary> Direction of the wave attack. </summary>
@@ -277,7 +301,6 @@ public partial class CaptainBemoth : PathFollow3D
 		isFacingForward = true; // Turn to face the player
 		if (IsClosed)
 			Open();
-		GD.Print("Started Wave Attack.");
 	}
 
 	private void ProcessWaveState()
