@@ -1,10 +1,13 @@
-[gd_scene load_steps=23 format=3 uid="uid://k1fe04x0mind"]
+[gd_scene load_steps=27 format=3 uid="uid://k1fe04x0mind"]
 
 [ext_resource type="PackedScene" uid="uid://bm47vn5goqp8d" path="res://area/5 pirate storm/boss/Static.tscn" id="1_4en2g"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_bkvyc"]
+[ext_resource type="Curve3D" uid="uid://cqenvy3xl0dny" path="res://area/5 pirate storm/boss/environment/path/BossPath.tres" id="3_1r666"]
 [ext_resource type="PackedScene" uid="uid://87lgwwefd4g4" path="res://object/stage/common/JumpPanel.tscn" id="3_li1qa"]
 [ext_resource type="PackedScene" uid="uid://bn6wr6l8s3qyt" path="res://object/trigger/StageTrigger.tscn" id="4_0hwip"]
 [ext_resource type="Script" uid="uid://kvlmbv66orqt" path="res://object/trigger/modules/CullingTrigger.cs" id="4_f0xb3"]
+[ext_resource type="PackedScene" uid="uid://dv5r5i8xakvqn" path="res://area/5 pirate storm/boss/data/WaveAttack.tscn" id="4_k16kp"]
+[ext_resource type="PackedScene" uid="uid://dihp6asycbujt" path="res://area/5 pirate storm/boss/data/CaptainBemoth.tscn" id="4_tbv1a"]
 [ext_resource type="Script" uid="uid://dd24u7rlj0dwl" path="res://addons/custom_nodes/script/ObjectGenerator.cs" id="5_fx3pq"]
 [ext_resource type="Script" uid="uid://cwohambjl1t2u" path="res://object/trigger/modules/ItemCycleTrigger.cs" id="5_q6ujn"]
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_oef4h"]
@@ -44,6 +47,11 @@ _limits = [-1.2, 1.2, 0.0, 1.0]
 _data = [Vector2(0, -0.00142646), 0.0, -9.99223, 0, 0, Vector2(0.25144, -1.2), 0.0, 0.0, 0, 0, Vector2(0.75048, 1.2), 0.0, 0.0, 0, 0, Vector2(1, 0), -8.90011, 0.0, 0, 0]
 point_count = 4
 
+[sub_resource type="Curve" id="Curve_kynrx"]
+_limits = [-1.0, 0.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, -1.2, 0, 1, Vector2(0.5, -0.6), -1.19649, -1.19649, 0, 0, Vector2(1, -0.6), 0.37869, 0.0, 0, 0]
+point_count = 3
+
 [sub_resource type="Curve" id="Curve_1r666"]
 _limits = [-1.0, 0.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, -2.41548, 0, 0, Vector2(0.3, -0.296719), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.462538, 0.0, 0, 0]
@@ -72,18 +80,32 @@ point_count = 3
 
 [node name="Static" parent="." instance=ExtResource("1_4en2g")]
 
-[node name="EnvironmentLight" parent="Static/Lighting" index="0"]
-light_color = Color(0.754626, 0.684934, 0.713904, 1)
-
-[node name="WaterLight" parent="Static/Lighting" index="1"]
-light_color = Color(0.744168, 0.667215, 0.858137, 1)
-
 [node name="BossAct" type="Node3D" parent="."]
 
 [node name="SpawnPosition" type="Node3D" parent="BossAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.6, 0)
 
 [node name="CharacterSpawn" parent="BossAct/SpawnPosition" instance=ExtResource("2_bkvyc")]
+
+[node name="BossPath" type="Path3D" parent="BossAct"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 9.6, 0)
+curve = ExtResource("3_1r666")
+
+[node name="CaptainBemoth" parent="BossAct/BossPath" node_paths=PackedStringArray("waveLeft", "waveRight") instance=ExtResource("4_tbv1a")]
+transform = Transform3D(-0.999734, -0.000335644, -0.0201359, 0, 0.9998, -0.0166654, 0.0201387, -0.0166621, -0.999592, -0.573037, -0.344242, -29.9924)
+progress = 30.0
+waveLeft = NodePath("../WaveAttackL")
+waveRight = NodePath("../WaveAttackR")
+
+[node name="WaveAttackR" parent="BossAct/BossPath" instance=ExtResource("4_k16kp")]
+transform = Transform3D(0.999796, -0.000335663, 0.0201372, 0, 0.999857, 0.0166665, -0.02014, -0.0166631, 0.999658, -3.07253, -0.344242, -29.9421)
+progress = 30.0
+h_offset = -2.5
+
+[node name="WaveAttackL" parent="BossAct/BossPath" instance=ExtResource("4_k16kp")]
+transform = Transform3D(0.999795, -0.000335663, 0.0201372, 0, 0.999856, 0.0166665, -0.02014, -0.0166631, 0.999657, 1.92646, -0.344242, -30.0428)
+progress = 30.0
+h_offset = 2.5
 
 [node name="JumpPanelGroup1" type="Node3D" parent="BossAct"]
 transform = Transform3D(0.898794, 0, -0.438371, 0, 1, 0, 0.438371, 0, 0.898794, 288.122, 7.8, -60.4792)
@@ -353,7 +375,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.7031, 0.225346, 33.3721)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.7757, 0.198714, 35.06)
 
 [node name="RichPearls2" type="Node3D" parent="BossAct/Lap1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 262.724, 0.2, -3.577)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 262.724, 0.9, -3.577)
 script = ExtResource("5_fx3pq")
 Source = ExtResource("7_26can")
 Amount = 20
@@ -363,71 +385,71 @@ Path = NodePath("../../../Static/Path/Main")
 "Disable Path Y" = false
 Spacing = 4.0
 "Horizontal Offset" = SubResource("Curve_q6ujn")
-"Vertical Offset" = null
+"Vertical Offset" = SubResource("Curve_kynrx")
 metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
 
 [node name="Child01" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00143433, 1.04904e-05, 0.000144243)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00146484, 3.43323e-05, 0.000684738)
 
 [node name="Child02" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.718445, 0.17744, 4.02497)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.718506, 0.114351, 4.02729)
 
 [node name="Child03" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2449, 0.35882, 8.06041)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.24506, 0.232597, 8.06523)
 
 [node name="Child04" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.60098, 0.540794, 12.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.60117, 0.351419, 12.1078)
 
 [node name="Child05" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.80283, 0.720271, 16.1394)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.80295, 0.467731, 16.1505)
 
 [node name="Child06" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.86279, 0.894037, 20.176)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.86285, 0.578325, 20.1905)
 
 [node name="Child07" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75769, 1.0583, 24.2079)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75757, 0.679409, 24.226)
 
 [node name="Child08" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50446, 1.20802, 28.2337)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50421, 0.765934, 28.2554)
 
 [node name="Child09" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.14188, 1.33554, 32.2523)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.14145, 0.830221, 32.2775)
 
 [node name="Child10" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.709229, 1.42743, 36.2649)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.708679, 0.858773, 36.2934)
 
 [node name="Child11" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.223969, 1.46589, 40.3108)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.222839, 0.836615, 40.3414)
 
 [node name="Child12" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.301544, 1.46745, 44.3196)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.302887, 0.795765, 44.3503)
 
 [node name="Child13" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78595, 1.44759, 48.2997)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.787292, 0.7516, 48.3301)
 
 [node name="Child14" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.16144, 1.41554, 52.2686)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.16245, 0.710473, 52.2988)
 
 [node name="Child15" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.366, 1.37798, 56.2319)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.36646, 0.676184, 56.2621)
 
 [node name="Child16" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35217, 1.34044, 60.1849)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35193, 0.651403, 60.2151)
 
 [node name="Child17" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.11337, 1.30815, 64.1143)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.11212, 0.638483, 64.1444)
 
 [node name="Child18" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.628601, 1.28663, 67.9966)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62619, 0.640104, 68.0263)
 
 [node name="Child19" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.129578, 1.28237, 71.7953)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.133545, 0.659899, 71.8241)
 
 [node name="Child20" parent="BossAct/Lap1/RichPearls2" instance=ExtResource("7_26can")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19464, 1.30361, 75.4514)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.20032, 0.703253, 75.4783)
 
 [node name="Pearls1" type="Node3D" parent="BossAct/Lap1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 269.124, 0.2, -2.077)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 269.124, 0.9, -2.077)
 script = ExtResource("5_fx3pq")
 Source = ExtResource("8_ow4n3")
 Amount = 20
@@ -437,68 +459,68 @@ Path = NodePath("../../../Static/Path/Main")
 "Disable Path Y" = false
 Spacing = 4.0
 "Horizontal Offset" = SubResource("Curve_q6ujn")
-"Vertical Offset" = null
+"Vertical Offset" = SubResource("Curve_kynrx")
 metadata/_custom_type_script = "uid://dd24u7rlj0dwl"
 
 [node name="Child01" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00140381, -1.52588e-05, -0.000447512)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00137329, -4.00543e-05, -0.00100255)
 
 [node name="Child02" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.690826, 0.178812, 3.9035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.690918, 0.115677, 3.90515)
 
 [node name="Child03" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19696, 0.360654, 7.84108)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19702, 0.234383, 7.8455)
 
 [node name="Child04" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.53732, 0.542272, 11.7995)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.53748, 0.352846, 11.8071)
 
 [node name="Child05" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.72684, 0.72057, 15.7703)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7269, 0.467978, 15.7814)
 
 [node name="Child06" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.77686, 0.892247, 19.7485)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.77686, 0.576477, 19.7632)
 
 [node name="Child07" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6637, 1.05325, 23.7302)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.66351, 0.67429, 23.7486)
 
 [node name="Child08" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.40396, 1.19803, 27.7134)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.40369, 0.75586, 27.7356)
 
 [node name="Child09" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.03635, 1.31786, 31.6977)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.03589, 0.812428, 31.7236)
 
 [node name="Child10" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.600403, 1.39664, 35.688)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.599823, 0.827799, 35.7172)
 
 [node name="Child11" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.100098, 1.42304, 39.6176)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0988464, 0.793636, 39.648)
 
 [node name="Child12" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.43042, 1.41785, 43.5844)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.431793, 0.746061, 43.6154)
 
 [node name="Child13" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.912323, 1.39404, 47.5875)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.913635, 0.697962, 47.6186)
 
 [node name="Child14" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.27902, 1.35996, 51.6292)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.27991, 0.654819, 51.6605)
 
 [node name="Child15" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46738, 1.32189, 55.7098)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46771, 0.620037, 55.7414)
 
 [node name="Child16" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.42731, 1.28523, 59.8254)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.42685, 0.596135, 59.8574)
 
 [node name="Child17" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.14746, 1.2552, 63.9686)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.14584, 0.585491, 64.0008)
 
 [node name="Child18" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.59848, 1.23752, 68.1264)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.595398, 0.590973, 68.1588)
 
 [node name="Child19" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.261322, 1.23907, 72.279)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.266235, 0.616584, 72.3111)
 
 [node name="Child20" parent="BossAct/Lap1/Pearls1" instance=ExtResource("8_ow4n3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.49088, 1.26868, 76.3919)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.49817, 0.668335, 76.423)
 
 [node name="Rings6" type="Node3D" parent="BossAct/Lap1"]
 transform = Transform3D(-0.449319, -0.0467554, 0.892147, 0, 0.998629, 0.052336, -0.893371, 0.0235155, -0.448703, 204.843, 3.42591, 130.861)
