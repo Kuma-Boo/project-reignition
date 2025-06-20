@@ -91,6 +91,8 @@ public partial class CaptainBemoth : PathFollow3D
 		EnterIdleState();
 		currentHealth = MaxHealth;
 		Progress = StopDistance;
+		HOffset = 0;
+		trackingVelocity = 0;
 
 		currentRotation = 0;
 		rotationVelocity = 0;
@@ -138,6 +140,9 @@ public partial class CaptainBemoth : PathFollow3D
 			case BemothState.WaveAttack:
 				ProcessWaveState();
 				break;
+			case BemothState.ChargeAttack:
+				ProcessChargeAttackState();
+				break;
 			default:
 				break;
 		}
@@ -175,6 +180,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private void ProcessIdleState()
 	{
+		HOffset = ExtensionMethods.SmoothDamp(HOffset, 0, ref trackingVelocity, TrackingSmoothing * PhysicsManager.physicsDelta);
 		attackTimer -= PhysicsManager.physicsDelta;
 		if (attackTimer > 0)
 			return;
@@ -187,6 +193,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private float moveSpeedVelocity;
 	private readonly float MoveSpeedSmoothing = 10f;
 	private readonly float BaseMoveSpeed = 15f;
+	private readonly float ChargeSpeed = -60f;
 	private readonly float MinimumDistance = 2f;
 	private readonly float MinimumDistanceSmoothingStart = 10f;
 	private readonly float StopDistance = 30f;
@@ -198,7 +205,7 @@ public partial class CaptainBemoth : PathFollow3D
 	{
 		float bossProgress = Player.PathFollower.GetProgress(GlobalPosition);
 		float deltaProgress = bossProgress - Player.PathFollower.Progress;
-		if (deltaProgress < 0)
+		if (deltaProgress < -Player.PathFollower.ActivePath.Curve.GetBakedLength() * .5f)
 			deltaProgress += Player.PathFollower.ActivePath.Curve.GetBakedLength();
 		return deltaProgress;
 	}
@@ -220,6 +227,10 @@ public partial class CaptainBemoth : PathFollow3D
 			targetMoveSpeed = BaseMoveSpeed * speedRatio;
 			targetMoveSpeed += Player.MoveSpeed * (Player.IsMovingBackward ? -1f : 1f);
 		}
+		else if (currentState == BemothState.ChargeAttack)
+		{
+			targetMoveSpeed = CalculateChargingMoveSpeed(deltaProgress);
+		}
 		else if (Player.IsMovingBackward)
 		{
 			targetMoveSpeed -= Player.MoveSpeed;
@@ -235,6 +246,23 @@ public partial class CaptainBemoth : PathFollow3D
 		Progress += moveSpeed * PhysicsManager.physicsDelta;
 	}
 
+	private float CalculateChargingMoveSpeed(float deltaProgress)
+	{
+		if (isChargeAttackCharging || !IsClosed)
+		{
+			// Move to charging distance
+			return BaseMoveSpeed + Player.MoveSpeed * 1.2f * (Player.IsMovingBackward ? -1f : 1f);
+		}
+
+		if (isAttackActive)
+			return ChargeSpeed + Player.MoveSpeed * (Player.IsMovingBackward ? -1f : 1f);
+
+		if (deltaProgress < StopDistance)
+			return BaseMoveSpeed + Player.MoveSpeed * (Player.IsMovingBackward ? -1f : 1f);
+
+		return 0;
+	}
+
 	#region Attacks
 	private bool isAttackActive;
 	private float attackTimer;
@@ -242,6 +270,9 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private void StartAttack()
 	{
+		EnterChargeAttackState();
+		return;
+
 		if (currentHealth == MaxHealth || GetDeltaProgress() >= BombAttackRange)
 		{
 			EnterBombAttackState();
@@ -344,6 +375,61 @@ public partial class CaptainBemoth : PathFollow3D
 
 		if (direction != 1)
 			waveLeft.Activate(Progress);
+	}
+
+
+	private bool isChargeAttackCharging;
+	private void EnterChargeAttackState()
+	{
+		if (IsClosed)
+			Open();
+
+		isFacingForward = true;
+		isChargeAttackCharging = true;
+		currentState = BemothState.ChargeAttack;
+	}
+
+	private float trackingVelocity;
+	private readonly float TrackingSmoothing = 20f;
+	private readonly float ChargeTrackingSmoothing = 10f;
+	private void ProcessChargeAttackState()
+	{
+		float deltaProgress = GetDeltaProgress();
+		if (isChargeAttackCharging)
+		{
+			HOffset = ExtensionMethods.SmoothDamp(HOffset, -Player.PathFollower.LocalPlayerPositionDelta.X, ref trackingVelocity, ChargeTrackingSmoothing * PhysicsManager.physicsDelta);
+			if (deltaProgress >= StopDistance)
+			{
+				if (IsOpen)
+				{
+					isChargeAttackCharging = false;
+					Close();
+				}
+			}
+
+			return;
+		}
+
+		if (isAttackActive)
+		{
+			if (deltaProgress < 1f) // Stop charge
+				isAttackActive = false;
+
+			return;
+		}
+
+		if (deltaProgress >= StopDistance)
+		{
+			HOffset = ExtensionMethods.SmoothDamp(HOffset, -Player.PathFollower.LocalPlayerPositionDelta.X, ref trackingVelocity, ChargeTrackingSmoothing * PhysicsManager.physicsDelta);
+			// Wait until we're fully closed before charging
+			if (IsClosed) // Start charge
+				isAttackActive = true;
+
+			return;
+		}
+
+		if (deltaProgress > MinimumDistance)
+			EnterIdleState();
 	}
 	#endregion
 }
