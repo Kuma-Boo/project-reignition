@@ -9,11 +9,6 @@ public partial class BossBombAttack : BombMissile
 	[Export] private Node3D lockonDecalRoot;
 	private Vector3 targetPosition;
 
-	public override void Respawn()
-	{
-		base.Respawn();
-	}
-
 	public override void _PhysicsProcess(double _)
 	{
 		if (!IsActive && !IsExploded)

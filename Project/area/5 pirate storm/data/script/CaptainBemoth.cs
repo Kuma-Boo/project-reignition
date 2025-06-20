@@ -95,6 +95,7 @@ public partial class CaptainBemoth : PathFollow3D
 		currentRotation = 0;
 		rotationVelocity = 0;
 
+		isAttackActive = false;
 		bombAttackCounter = 0;
 		waveAttackCounter = 0;
 
@@ -235,6 +236,7 @@ public partial class CaptainBemoth : PathFollow3D
 	}
 
 	#region Attacks
+	private bool isAttackActive;
 	private float attackTimer;
 	private readonly float AttackTimerInterval = 3f;
 
@@ -259,6 +261,8 @@ public partial class CaptainBemoth : PathFollow3D
 		// EnterChargeAttackState();
 	}
 
+	private void FinishAttack() => isAttackActive = false;
+
 	private int bombAttackCounter;
 	private readonly float BombAttackRange = 30f;
 	private void EnterBombAttackState()
@@ -269,7 +273,10 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private void ProcessBombState()
 	{
-		if (bombAttackCounter != 0) // Bomb launch interval is handled by animations
+		if (isAttackActive)
+			return;
+
+		if (bombAttackCounter > bombs.Length)
 			return;
 
 		StartBombAttack();
@@ -279,9 +286,10 @@ public partial class CaptainBemoth : PathFollow3D
 	private void StartBombAttack()
 	{
 		bombAttackCounter++;
-		if (bombAttackCounter > bombs.Length) // All bombs have been fired
+		if (bombAttackCounter > bombs.Length)
 			return;
 
+		isAttackActive = true;
 		bombs[bombAttackCounter - 1].Respawn(); // Prep the next bomb
 		bodyAnimationTree.Set(BombTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
@@ -308,7 +316,7 @@ public partial class CaptainBemoth : PathFollow3D
 		if (!IsOpen)
 			return;
 
-		if (waveAttackCounter != 0) // Already attacking (Attack times are handled via animations)
+		if (isAttackActive) // Already attacking (Attack times are handled via animations)
 			return;
 
 		StartWaveAttack();
@@ -316,6 +324,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private void StartWaveAttack()
 	{
+		isAttackActive = true;
 		waveAttackCounter++;
 
 		if (waveAttackCounter == FinalWaveAttackCounter) // Both sides

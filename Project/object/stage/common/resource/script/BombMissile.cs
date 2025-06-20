@@ -207,6 +207,8 @@ public partial class BombMissile : Node3D
 	{
 		IsActive = false;
 		IsExploded = false;
+		launchTimer = 0;
+
 		animator.Play("RESET");
 		if (animator.HasAnimation("init"))
 		{
@@ -215,6 +217,7 @@ public partial class BombMissile : Node3D
 		}
 
 		TopLevel = false;
+		root.Transform = Transform3D.Identity;
 		spawnData.Respawn(this);
 		previousPosition = root.GlobalPosition;
 	}
