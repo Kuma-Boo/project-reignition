@@ -976,6 +976,14 @@ public partial class PlayerAnimator : Node3D
 
 	public void CancelZiplineTap() => animationTree.Set(ZiplineTapTrigger, (int)AnimationNodeOneShot.OneShotRequest.FadeOut);
 
+	private readonly StringName HornState = "horn";
+	public void StartBemothHorn()
+	{
+		SetStateXfade(.2f);
+		animationTree.Set(StateTransition, GimmickState);
+		animationTree.Set(GimmickTransition, HornState);
+	}
+
 	public void StartPetrify()
 	{
 		SetStateXfade(0f);

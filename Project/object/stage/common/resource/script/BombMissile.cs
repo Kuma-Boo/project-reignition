@@ -141,7 +141,7 @@ public partial class BombMissile : Node3D
 
 	public bool IsActive { get; private set; } // Is the missile currently traveling?
 	public bool IsExploded { get; private set; }
-	private float launchTimer;
+	protected float launchTimer;
 	private Vector3 initialPosition;
 	private Vector3 previousPosition;
 
@@ -249,16 +249,19 @@ public partial class BombMissile : Node3D
 		if (!IsActive)
 		{
 			if (launchTimer < 0)
-			{
-				launchTimer = Mathf.MoveToward(launchTimer, 0, PhysicsManager.physicsDelta);
-				if (Mathf.IsZeroApprox(launchTimer))
-					Activate();
-			}
+				ProcessLaunchTimer();
 
 			return;
 		}
 
 		UpdatePosition();
+	}
+
+	protected virtual void ProcessLaunchTimer()
+	{
+		launchTimer = Mathf.MoveToward(launchTimer, 0, PhysicsManager.physicsDelta);
+		if (Mathf.IsZeroApprox(launchTimer))
+			Activate();
 	}
 
 	private void UpdatePosition()

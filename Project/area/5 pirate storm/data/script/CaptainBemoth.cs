@@ -1,17 +1,17 @@
 using Godot;
 using Project.Core;
+using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay.Bosses;
 
 public partial class CaptainBemoth : PathFollow3D
 {
 	[ExportGroup("Components")]
-	[Export] private AnimationTree bodyAnimationTree;
-	[Export] private AnimationTree hornBackAnimationTree;
-	[Export] private AnimationTree hornFrontAnimationTree;
-	[Export] private AnimationTree hornLeftAnimationTree;
-	[Export] private AnimationTree hornRightAnimationTree;
+	[Export] private AnimationTree animator;
 	[Export] private Node3D root;
+	[Export] private JumpTrigger jumpTrigger;
+
+	[Export] private CaptainBemothHorn[] horns;
 
 	// Attacks
 	[Export] private BossBombAttack[] bombs;
@@ -38,13 +38,20 @@ public partial class CaptainBemoth : PathFollow3D
 
 	public override void _Ready()
 	{
-		bodyAnimationTree.Active = true;
+		animator.Active = true;
 		bossPath = GetParent<Path3D>();
 
 		bombs[^1].Exploded += EnterIdleState; // Return to idle when the last bomb explodes
 		StageSettings.Instance.Respawned += Respawn;
 		// TODO Play introduction cutscene StageSettings.Instance.LevelStarted += StartIntroduction;
 		StartBattle();
+
+		foreach (CaptainBemothHorn horn in horns)
+		{
+			horn.Jolted += TakeHornDamage;
+			horn.Popped += TakeDamage;
+			horn.Jumped += () => LaunchPlayer(true);
+		}
 	}
 
 	private readonly StringName IntroCutsceneID = "ps_boss_intro";
@@ -53,7 +60,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private void StartIntroduction()
 	{
 		Player.Deactivate();
-		bodyAnimationTree.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animator.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
 		// Reset positions so everything lines up in the cutscene
 		root.GlobalPosition = Vector3.Zero;
@@ -78,7 +85,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private void StartBattle()
 	{
 		TransitionManager.instance.TransitionProcess -= StartBattle;
-		bodyAnimationTree.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animator.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 		Respawn();
 
@@ -105,11 +112,16 @@ public partial class CaptainBemoth : PathFollow3D
 		root.Position = Vector3.Zero;
 		root.Basis = Basis.Identity;
 
-		bodyAnimationTree.Set(BombTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
-		bodyAnimationTree.Set(WaveTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animator.Set(BombTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animator.Set(WaveTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animator.Set(HornDamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animator.Set(DamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 		waveLeft.Deactivate();
 		waveRight.Deactivate();
+
+		foreach (CaptainBemothHorn horn in horns)
+			horn.Respawn();
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -164,18 +176,22 @@ public partial class CaptainBemoth : PathFollow3D
 		root.Rotation = Vector3.Up * currentRotation;
 	}
 
-	private bool IsOpen => ((StringName)bodyAnimationTree.Get(CloseState)).Equals("enabled");
-	private bool IsClosed => ((StringName)bodyAnimationTree.Get(CloseState)).Equals("disabled");
+	private bool IsOpen => ((StringName)animator.Get(CloseState)).Equals("enabled");
+	private bool IsClosed => ((StringName)animator.Get(CloseState)).Equals("disabled");
 	private readonly StringName CloseState = "parameters/close_transition/current_state";
 	private readonly StringName CloseTransition = "parameters/close_transition/transition_request";
-	private void Open() => bodyAnimationTree.Set(CloseTransition, "open");
-	private void Close() => bodyAnimationTree.Set(CloseTransition, "close");
+	private void Open() => animator.Set(CloseTransition, "open");
+	private void Close() => animator.Set(CloseTransition, "close");
 
 	private void EnterIdleState()
 	{
+		if (!IsClosed)
+			Close();
+
 		isFacingForward = currentHealth == 1; // Only face the player when almost dead
 		currentState = BemothState.Idle;
 		attackTimer = AttackTimerInterval;
+		EnableHornHurtboxes();
 	}
 
 	private void ProcessIdleState()
@@ -198,6 +214,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private readonly float MinimumDistanceSmoothingStart = 10f;
 	private readonly float StopDistance = 30f;
 	private readonly float StopDistanceSmoothingStart = 25f;
+	private readonly float ShockAttackSpeed = 5f;
 	private readonly float WaveAttackDistance = 20f;
 
 	/// <summary> Returns the progress difference between the player and the boss. </summary>
@@ -231,11 +248,15 @@ public partial class CaptainBemoth : PathFollow3D
 		{
 			targetMoveSpeed = CalculateChargingMoveSpeed(deltaProgress);
 		}
+		else if (currentState == BemothState.ShockAttack)
+		{
+			targetMoveSpeed = ShockAttackSpeed;
+		}
 		else if (Player.IsMovingBackward)
 		{
 			targetMoveSpeed -= Player.MoveSpeed;
 		}
-		else if (deltaProgress <= MinimumDistanceSmoothingStart)
+		else if (deltaProgress <= MinimumDistanceSmoothingStart && !Player.IsHomingAttacking)
 		{
 			float smoothingRatio = 1f - ((deltaProgress - MinimumDistance) / (MinimumDistanceSmoothingStart - MinimumDistance));
 			targetMoveSpeed += Player.MoveSpeed * smoothingRatio;
@@ -263,6 +284,45 @@ public partial class CaptainBemoth : PathFollow3D
 		return 0;
 	}
 
+	private void EnableHornHurtboxes()
+	{
+		DisableHornHurtboxes();
+
+		// Enable the correct horns
+		horns[0].EnableLockon();
+
+		if (currentHealth < MaxHealth)
+		{
+			horns[1].EnableLockon();
+			horns[2].EnableLockon();
+		}
+
+		/*
+		if (currentHealth == 1)
+			horns[3].EnableLockon();
+		*/
+	}
+
+	private void DisableHornHurtboxes()
+	{
+		foreach (CaptainBemothHorn horn in horns)
+			horn.DisableLockon();
+	}
+
+	private readonly StringName HornDamageTrigger = "parameters/horn_damage_trigger/request";
+	private void TakeHornDamage()
+	{
+		animator.Set(HornDamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
+	private readonly StringName DamageTrigger = "parameters/damage_trigger/request";
+	private void TakeDamage()
+	{
+		currentHealth--;
+		GD.Print(currentHealth);
+		animator.Set(DamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+	}
+
 	#region Attacks
 	private bool isAttackActive;
 	private float attackTimer;
@@ -270,16 +330,13 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private void StartAttack()
 	{
-		EnterChargeAttackState();
-		return;
-
 		if (currentHealth == MaxHealth || GetDeltaProgress() >= BombAttackRange)
 		{
 			EnterBombAttackState();
 			return;
 		}
 
-		if (currentHealth >= 1)
+		if (currentHealth > 1)
 		{
 			if (Runtime.randomNumberGenerator.Randf() > 0.5f)
 				EnterBombAttackState();
@@ -289,7 +346,10 @@ public partial class CaptainBemoth : PathFollow3D
 			return;
 		}
 
-		// EnterChargeAttackState();
+		if (Runtime.randomNumberGenerator.Randf() > 0.5f)
+			EnterWaveAttackState();
+		else
+			EnterChargeAttackState();
 	}
 
 	private void FinishAttack() => isAttackActive = false;
@@ -322,10 +382,16 @@ public partial class CaptainBemoth : PathFollow3D
 
 		isAttackActive = true;
 		bombs[bombAttackCounter - 1].Respawn(); // Prep the next bomb
-		bodyAnimationTree.Set(BombTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animator.Set(BombTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
-	private void EmitBomb() => bombs[bombAttackCounter - 1].StartWindup();
+	private void EmitBomb()
+	{
+		if (currentState != BemothState.BombAttack) // Canceled?
+			return;
+
+		bombs[bombAttackCounter - 1].StartWindup();
+	}
 
 	private int waveAttackCounter;
 	/// <summary> Direction of the wave attack. </summary>
@@ -340,6 +406,8 @@ public partial class CaptainBemoth : PathFollow3D
 		isFacingForward = true; // Turn to face the player
 		if (IsClosed)
 			Open();
+
+		DisableHornHurtboxes();
 	}
 
 	private void ProcessWaveState()
@@ -359,11 +427,11 @@ public partial class CaptainBemoth : PathFollow3D
 		waveAttackCounter++;
 
 		if (waveAttackCounter == FinalWaveAttackCounter) // Both sides
-			bodyAnimationTree.Set(WaveTransition, "both");
+			animator.Set(WaveTransition, "both");
 		else
-			bodyAnimationTree.Set(WaveTransition, Runtime.randomNumberGenerator.Randf() > .5f ? "left" : "right");
+			animator.Set(WaveTransition, Runtime.randomNumberGenerator.Randf() > .5f ? "left" : "right");
 
-		bodyAnimationTree.Set(WaveTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		animator.Set(WaveTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
 	/// <summary> Activate the actual wave objects. -1 => left, 1 => right, 0 => both. </summary>
@@ -377,7 +445,6 @@ public partial class CaptainBemoth : PathFollow3D
 			waveLeft.Activate(Progress);
 	}
 
-
 	private bool isChargeAttackCharging;
 	private void EnterChargeAttackState()
 	{
@@ -387,6 +454,7 @@ public partial class CaptainBemoth : PathFollow3D
 		isFacingForward = true;
 		isChargeAttackCharging = true;
 		currentState = BemothState.ChargeAttack;
+		DisableHornHurtboxes();
 	}
 
 	private float trackingVelocity;
@@ -431,5 +499,66 @@ public partial class CaptainBemoth : PathFollow3D
 		if (deltaProgress > MinimumDistance)
 			EnterIdleState();
 	}
+
+	private void EnterShockAttackState()
+	{
+		// Cancel all other attacks
+		foreach (BossBombAttack bomb in bombs)
+		{
+			if (bomb.IsActive) // Already flying
+				continue;
+
+			bomb.CancelLaunch();
+		}
+
+		attackTimer = 0;
+		currentState = BemothState.ShockAttack;
+	}
 	#endregion
+
+	private readonly float LaunchFallHeight = 8f;
+	private readonly float LaunchProgressSearchInterval = 10f;
+	private readonly float LaunchHeightCheckLength = 20f;
+
+	private void LaunchPlayer(bool isJump)
+	{
+		float initialProgress = Player.PathFollower.Progress;
+		RaycastHit hit = new();
+
+		while (!hit)
+		{
+			Player.PathFollower.Progress -= LaunchProgressSearchInterval;
+			hit = this.CastRay(Player.PathFollower.GlobalPosition + Vector3.Up * LaunchHeightCheckLength * 0.5f,
+				Vector3.Down * LaunchHeightCheckLength,
+				Runtime.Instance.environmentMask);
+		}
+
+		Player.PathFollower.Progress = initialProgress;
+		jumpTrigger.GlobalPosition = hit.point;
+		jumpTrigger.jumpHeight = isJump ? 10f : 1f;
+		if (!isJump) // Teleport to the proper location
+		{
+			Player.GlobalPosition = jumpTrigger.GlobalPosition + Vector3.Up * LaunchFallHeight;
+			Player.PathFollower.Resync();
+		}
+
+
+		jumpTrigger.Activate();
+		Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
+
+		if (isJump)
+		{
+			Player.Animator.StartSpin(3f);
+			Player.Effect.StartSpinFX();
+		}
+
+		// TODO Finish shock if it's already charged
+		EnterIdleState();
+
+		foreach (CaptainBemothHorn horn in horns)
+		{
+			if (horn.IsPopping)
+				horn.Despawn();
+		}
+	}
 }

@@ -16,7 +16,7 @@ public partial class BossWaveAttack : PathFollow3D
 		if (!StageSettings.Player.IsMovingBackward) // Slow down slightly to give players more time to react
 			Progress += StageSettings.Player.MoveSpeed * 0.5f * PhysicsManager.physicsDelta;
 
-		if (!this.CastRay(GlobalPosition, Vector3.Down, Runtime.Instance.environmentMask))
+		if (!this.CastRay(GlobalPosition + Vector3.Up * 2f, Vector3.Down * 5f, Runtime.Instance.environmentMask))
 			VOffset -= Runtime.Gravity * PhysicsManager.physicsDelta;
 	}
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://bqck0hqdn3o8r"]
+[gd_scene load_steps=70 format=3 uid="uid://bqck0hqdn3o8r"]
 
 [ext_resource type="Script" uid="uid://cy7pw3hj351lp" path="res://object/player/resource/script/PlayerController.cs" id="1_wygja"]
 [ext_resource type="Script" uid="uid://72x88nalpw8i" path="res://object/player/resource/script/PlayerStateMachine.cs" id="2_ehi1f"]
@@ -48,6 +48,7 @@
 [ext_resource type="Script" uid="uid://dx40vr65jur0y" path="res://object/player/resource/script/states/LightSpeedDashState.cs" id="40_t4xrr"]
 [ext_resource type="Script" uid="uid://chob23143e6b0" path="res://object/player/resource/script/states/LightSpeedAttackState.cs" id="41_8jpjm"]
 [ext_resource type="Script" uid="uid://cyxq45dgf674k" path="res://object/player/resource/script/states/LeverState.cs" id="42_51gfe"]
+[ext_resource type="Script" uid="uid://ijsj0mdgfygr" path="res://object/player/resource/script/states/BemothHornState.cs" id="43_wuphe"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hfii6"]
 radius = 0.3
@@ -1105,7 +1106,7 @@ point_count = 4
 _data = [Vector2(0, 0), 0.0, 2.18969, 0, 0, Vector2(0.202422, 0.501805), 2.0, 2.0, 0, 0, Vector2(0.738754, 0.935018), -1.06758, -1.09074, 0, 0, Vector2(1, 0), -6.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "reversePathState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "spinJumpState", "quickStepState", "lightSpeedDashState", "lightSpeedAttackState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "ivyState", "ziplineState", "petrifyState", "leverState", "knockbackState", "teleportState") groups=["player"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachine", "Controller", "Stats", "Skills", "Lockon", "Animator", "Effect", "PathFollower", "hitboxAnimator", "countdownState", "reversePathState", "launchState", "launchRingState", "catapultState", "flyingPotState", "pathTravellerState", "spinJumpState", "quickStepState", "lightSpeedDashState", "lightSpeedAttackState", "grindState", "sidleState", "automationState", "eventState", "bounceState", "driftState", "ivyState", "ziplineState", "petrifyState", "leverState", "hornState", "knockbackState", "teleportState") groups=["player"]]
 collision_layer = 2
 collision_mask = 9
 floor_stop_on_slope = false
@@ -1143,6 +1144,7 @@ ivyState = NodePath("StateMachine/Special/Ivy")
 ziplineState = NodePath("StateMachine/Special/Zipline")
 petrifyState = NodePath("StateMachine/Special/Petrify")
 leverState = NodePath("StateMachine/Special/Lever")
+hornState = NodePath("StateMachine/Special/BemothHorn")
 knockbackState = NodePath("StateMachine/Special/Knockback")
 teleportState = NodePath("StateMachine/Special/Teleport")
 
@@ -1433,6 +1435,9 @@ idleState = NodePath("../../Basic/Idle")
 
 [node name="Lever" type="Node" parent="StateMachine/Special"]
 script = ExtResource("42_51gfe")
+
+[node name="BemothHorn" type="Node" parent="StateMachine/Special"]
+script = ExtResource("43_wuphe")
 
 [node name="Skill" type="Node" parent="StateMachine"]
 

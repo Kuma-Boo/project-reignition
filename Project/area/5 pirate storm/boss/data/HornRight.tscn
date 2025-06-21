@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3 uid="uid://diu48uipdrlco"]
+
+[ext_resource type="PackedScene" uid="uid://dj71abmvric1f" path="res://area/5 pirate storm/boss/data/model/HornRight.gltf" id="1_gh8l1"]
+[ext_resource type="Script" uid="uid://c008fo010fo4v" path="res://area/5 pirate storm/data/script/CaptainBemothHorn.cs" id="2_gfbu0"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_glo1o"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hki7r"]
+animation = &"pop"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_glo1o"]
+xfade_time = 0.05
+input_0/name = "disabled"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "enabled"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5a73y"]
+animation = &"pull"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_rsdr4"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_nk6sn"]
+graph_offset = Vector2(-887.122, 140.613)
+nodes/normal_anim/node = SubResource("AnimationNodeAnimation_glo1o")
+nodes/normal_anim/position = Vector2(-460, 100)
+nodes/pop_anim/node = SubResource("AnimationNodeAnimation_hki7r")
+nodes/pop_anim/position = Vector2(-100, 340)
+nodes/pop_transition/node = SubResource("AnimationNodeTransition_glo1o")
+nodes/pop_transition/position = Vector2(100, 140)
+nodes/pull_anim/node = SubResource("AnimationNodeAnimation_5a73y")
+nodes/pull_anim/position = Vector2(-460, 280)
+nodes/pull_blend/node = SubResource("AnimationNodeBlend2_rsdr4")
+nodes/pull_blend/position = Vector2(-300, 100)
+node_connections = [&"output", 0, &"pop_transition", &"pop_transition", 0, &"pull_blend", &"pop_transition", 1, &"pop_anim", &"pull_blend", 0, &"normal_anim", &"pull_blend", 1, &"pull_anim"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_yck8a"]
+
+[node name="HornRight" node_paths=PackedStringArray("animator", "collider") instance=ExtResource("1_gh8l1")]
+script = ExtResource("2_gfbu0")
+animator = NodePath("AnimationTree")
+collider = NodePath("HornAttachment/Lockon/CollisionShape3D")
+maxHealth = 40
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+active = false
+tree_root = SubResource("AnimationNodeBlendTree_nk6sn")
+anim_player = NodePath("../AnimationPlayer")
+parameters/pop_transition/current_state = "disabled"
+parameters/pop_transition/transition_request = ""
+parameters/pop_transition/current_index = 0.001
+parameters/pull_blend/blend_amount = 0.0
+
+[node name="HornAttachment" type="BoneAttachment3D" parent="." index="3"]
+transform = Transform3D(0.918748, -0.390527, -0.0582218, 0.391527, 0.920145, 0.00640278, 0.051072, -0.028678, 0.998283, -0.906666, 1.16587, -0.293154)
+bone_name = "horn"
+bone_idx = 1
+use_external_skeleton = true
+external_skeleton = NodePath("../HornRRoot/Skeleton3D")
+
+[node name="Lockon" type="Area3D" parent="HornAttachment" index="0"]
+transform = Transform3D(-0.0502984, 0.201736, 0.978148, -0.236635, 0.949092, -0.207912, -0.970296, -0.241922, -4.27562e-08, 0.05, -0.2, 0.05)
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HornAttachment/Lockon" index="0"]
+shape = SubResource("SphereShape3D_yck8a")
+
+[connection signal="area_entered" from="HornAttachment/Lockon" to="." method="OnEntered"]

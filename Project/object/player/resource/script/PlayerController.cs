@@ -816,6 +816,12 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(leverState);
 	}
 
+	[Export] private BemothHornState hornState;
+	public void StartHorn(Bosses.CaptainBemothHorn horn)
+	{
+		hornState.Trigger = horn;
+		StateMachine.ChangeState(hornState);
+	}
 
 	[Signal]
 	public delegate void KnockbackEventHandler();

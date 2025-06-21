@@ -23,4 +23,10 @@ public partial class BossBombAttack : BombMissile
 		animator.Play("windup");
 		Launch(); // Queue the bomb for launch
 	}
+
+	public void CancelLaunch()
+	{
+		animator.Play("init");
+		launchTimer = 0;
+	}
 }
