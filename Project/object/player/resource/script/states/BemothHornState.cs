@@ -8,21 +8,23 @@ public partial class BemothHornState : PlayerState
 {
 	public CaptainBemothHorn Trigger { get; set; }
 
-	private float timer;
-	private readonly float PopDelay = 0.2f;
-
 	public override void EnterState()
 	{
 		Player.Lockon.IsMonitoring = false;
 
-		Player.Animator.StartBemothHorn();
-		Player.StartExternal(Trigger, Trigger.FollowObject, .5f);
+		// Prevent accidental inputs
+		Player.Controller.ResetJumpBuffer();
+		Player.Controller.ResetActionBuffer();
 
-		Trigger.JoltHorn(false);
+		Player.Animator.StartBemothHorn();
+		Player.StartExternal(Trigger, Trigger.FollowObject, 1f);
+
+		Trigger.CallDeferred(CaptainBemothHorn.MethodName.JoltHorn, false);
 	}
 
 	public override void ExitState()
 	{
+		Player.Animator.ResetState();
 		Player.StopExternal();
 	}
 
@@ -34,21 +36,19 @@ public partial class BemothHornState : PlayerState
 			return null;
 
 		if (Trigger.IsPopReady)
-		{
-			if (Mathf.IsEqualApprox(timer, PopDelay))
-				Trigger.StartPop();
-
-			timer = Mathf.MoveToward(timer, PopDelay, PhysicsManager.physicsDelta);
 			return null;
-		}
 
 		if (Player.Controller.IsJumpBufferActive)
+		{
 			Trigger.JumpOff();
+			Player.Controller.ResetJumpBuffer();
+		}
 		else if (Player.Controller.IsActionBufferActive)
+		{
 			Trigger.JoltHorn();
-
-		Player.Controller.ResetJumpBuffer();
-		Player.Controller.ResetActionBuffer();
+			Player.Camera.StartMediumCameraShake();
+			Player.Controller.ResetActionBuffer();
+		}
 
 		return null;
 	}

@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://dihp6asycbujt"]
+[gd_scene load_steps=77 format=3 uid="uid://dihp6asycbujt"]
 
 [ext_resource type="Script" uid="uid://lq3vcs5bircg" path="res://area/5 pirate storm/data/script/CaptainBemoth.cs" id="1_blu3m"]
 [ext_resource type="PackedScene" uid="uid://c0txr710wvj5p" path="res://area/5 pirate storm/boss/data/model/CaptainBemoth.gltf" id="1_nac7p"]
@@ -6,16 +6,23 @@
 [ext_resource type="PackedScene" uid="uid://bisfr2ty572aw" path="res://area/5 pirate storm/boss/data/model/HornFront.gltf" id="3_wc1c5"]
 [ext_resource type="PackedScene" uid="uid://dbwrvkfwjth4i" path="res://area/5 pirate storm/boss/data/HornLeft.tscn" id="4_hppyi"]
 [ext_resource type="PackedScene" uid="uid://diu48uipdrlco" path="res://area/5 pirate storm/boss/data/HornRight.tscn" id="5_j0uyl"]
+[ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="5_yq8h2"]
+[ext_resource type="Resource" uid="uid://cfmlbv3xujmm5" path="res://area/5 pirate storm/boss/camera/LeftHornCam.tres" id="6_74rj1"]
+[ext_resource type="Resource" uid="uid://72v85k3vrd27" path="res://area/5 pirate storm/boss/camera/MainCam.tres" id="6_h68to"]
+[ext_resource type="Resource" uid="uid://b3fqtm3b3gnt7" path="res://area/5 pirate storm/boss/camera/RightHornCam.tres" id="7_h68to"]
 [ext_resource type="Material" uid="uid://b4847susbcf6p" path="res://effect/particle/material/Ember Purple Billboard.tres" id="7_j0uyl"]
 [ext_resource type="PackedScene" uid="uid://d2j6qde5aener" path="res://area/5 pirate storm/boss/data/BombAttack.tscn" id="7_wc1c5"]
 [ext_resource type="Script" uid="uid://cciy1oeuvbh3e" path="res://object/trigger/modules/JumpTrigger.cs" id="8_hppyi"]
 [ext_resource type="Material" uid="uid://cih8b8t0vf1hh" path="res://object/player/resource/effect/material/Wind.tres" id="8_lc47c"]
+[ext_resource type="Resource" uid="uid://o33g3w82y6v3" path="res://area/5 pirate storm/boss/camera/DamageCam.tres" id="9_fyucs"]
 [ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="9_r7puu"]
 [ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="10_yn1wy"]
 [ext_resource type="Script" uid="uid://pnh70abopq8e" path="res://object/stage/common/resource/script/Hazard.cs" id="11_y7uss"]
 [ext_resource type="Material" uid="uid://cvdwcg24fogua" path="res://effect/particle/material/object/Cactus Splatter.tres" id="11_yn1wy"]
 [ext_resource type="Material" uid="uid://bdk8qnv7ytydw" path="res://effect/particle/material/environment/Common Dust Splatter Add No Billboard.tres" id="12_6vuv4"]
+[ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="12_gc8sa"]
 [ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://effect/particle/material/environment/Sand Dust.tres" id="13_n25aq"]
+[ext_resource type="Resource" uid="uid://bfkn5ysvg1urv" path="res://area/5 pirate storm/boss/camera/BackHornCam.tres" id="13_yq8h2"]
 [ext_resource type="Material" uid="uid://uyb0bithnbcs" path="res://effect/particle/material/environment/Water Splatter.tres" id="15_x05em"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6vuv4"]
@@ -63,7 +70,7 @@ animation = &"horn-damage"
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_x05em"]
 fadein_time = 0.1
-fadeout_time = 0.2
+fadeout_time = 0.1
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_r7puu"]
 animation = &"open"
@@ -110,7 +117,7 @@ fadein_time = 0.2
 fadeout_time = 0.5
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_wc1c5"]
-graph_offset = Vector2(-753.136, -32.5927)
+graph_offset = Vector2(-1189.93, -182.074)
 nodes/bomb_anim/node = SubResource("AnimationNodeAnimation_6vuv4")
 nodes/bomb_anim/position = Vector2(-940, 40)
 nodes/bomb_trigger/node = SubResource("AnimationNodeOneShot_n25aq")
@@ -325,7 +332,6 @@ curve = SubResource("Curve_2rhf6")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yq8h2"]
 lifetime_randomness = 0.6
-emission_shape_offset = Vector3(0, 0.4, 0)
 angle_min = 1.07288e-05
 angle_max = 360.0
 direction = Vector3(0, 1, 0)
@@ -337,7 +343,8 @@ angular_velocity_max = 100.0
 gravity = Vector3(0, 0, 0)
 tangential_accel_min = -50.0
 tangential_accel_max = 50.0
-scale_max = 2.0
+scale_min = 0.5
+scale_max = 1.5
 scale_curve = SubResource("CurveTexture_gc8sa")
 color_initial_ramp = SubResource("GradientTexture1D_gc8sa")
 alpha_curve = SubResource("CurveTexture_yn1wy")
@@ -347,7 +354,6 @@ material = ExtResource("15_x05em")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2rhf6"]
 lifetime_randomness = 0.4
-emission_shape_offset = Vector3(0, 0.4, 0)
 angle_min = 1.07288e-05
 angle_max = 360.0
 direction = Vector3(0, 1, 0)
@@ -381,12 +387,14 @@ alpha_curve = SubResource("CurveTexture_yn1wy")
 [sub_resource type="QuadMesh" id="QuadMesh_lc47c"]
 material = ExtResource("13_n25aq")
 
-[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("animator", "root", "jumpTrigger", "chargeAttackFx", "horns", "bombs")]
+[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("animator", "root", "jumpCameraTrigger", "mainCameraTrigger", "jumpTrigger", "chargeAttackFx", "horns", "bombs")]
 use_model_front = true
 tilt_enabled = false
 script = ExtResource("1_blu3m")
 animator = NodePath("Root/CaptainBemoth/AnimationTree")
 root = NodePath("Root")
+jumpCameraTrigger = NodePath("Root/Cameras/JumpCamera")
+mainCameraTrigger = NodePath("Root/Cameras/MainCamera")
 jumpTrigger = NodePath("Jump")
 chargeAttackFx = NodePath("Root/RootAttachment/RootOrientation/ChargeAttack")
 horns = [NodePath("Root/RootAttachment/RootOrientation/HornBack"), NodePath("Root/RootAttachment/RootOrientation/HornLeft"), NodePath("Root/RootAttachment/RootOrientation/HornRight")]
@@ -422,6 +430,48 @@ parameters/wave_transition/current_index = 0
 parameters/wave_trigger/active = false
 parameters/wave_trigger/internal_active = false
 parameters/wave_trigger/request = 0
+
+[node name="Cameras" type="Node3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 1, -3.56039e-06, 0, 3.56039e-06, 1, 0, 0, 0)
+
+[node name="JumpCamera" type="Node3D" parent="Root/Cameras"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 2.5, -4)
+script = ExtResource("12_gc8sa")
+settings = ExtResource("5_yq8h2")
+UpdateEveryFrame = true
+
+[node name="MainCamera" type="Node3D" parent="Root/Cameras"]
+script = ExtResource("12_gc8sa")
+transitionType = 1
+settings = ExtResource("6_h68to")
+
+[node name="BackCamera" type="Node3D" parent="Root/Cameras"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1, -4)
+script = ExtResource("12_gc8sa")
+transitionTime = 0.0
+settings = ExtResource("13_yq8h2")
+UpdateEveryFrame = true
+
+[node name="LeftCamera" type="Node3D" parent="Root/Cameras"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, 0)
+script = ExtResource("12_gc8sa")
+transitionTime = 0.0
+settings = ExtResource("6_74rj1")
+UpdateEveryFrame = true
+
+[node name="RightCamera" type="Node3D" parent="Root/Cameras"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, 0)
+script = ExtResource("12_gc8sa")
+transitionTime = 0.0
+settings = ExtResource("7_h68to")
+UpdateEveryFrame = true
+
+[node name="DamageCamera" type="Node3D" parent="Root/Cameras"]
+transform = Transform3D(0.996195, -4.65661e-10, 0.0871557, 0.00759612, 0.996195, -0.0868241, -0.0868241, 0.0871557, 0.992404, 1, 0, 5)
+script = ExtResource("12_gc8sa")
+transitionTime = 0.0
+settings = ExtResource("9_fyucs")
+UpdateEveryFrame = true
 
 [node name="RootAttachment" type="BoneAttachment3D" parent="Root"]
 transform = Transform3D(1, 0, 0, 0, 3.51667e-06, 1, 0, -1, 3.51667e-06, 0, 0, 0)
@@ -840,8 +890,14 @@ draw_pass_1 = SubResource("QuadMesh_lc47c")
 script = ExtResource("8_hppyi")
 
 [connection signal="HangStarted" from="Root/RootAttachment/RootOrientation/HornBack" to="." method="EnterShockAttackState"]
+[connection signal="HangStarted" from="Root/RootAttachment/RootOrientation/HornBack" to="Root/Cameras/BackCamera" method="Activate"]
+[connection signal="Popped" from="Root/RootAttachment/RootOrientation/HornBack" to="Root/Cameras/DamageCamera" method="Activate"]
 [connection signal="HangStarted" from="Root/RootAttachment/RootOrientation/HornLeft" to="." method="EnterShockAttackState"]
+[connection signal="HangStarted" from="Root/RootAttachment/RootOrientation/HornLeft" to="Root/Cameras/LeftCamera" method="Activate"]
+[connection signal="Popped" from="Root/RootAttachment/RootOrientation/HornLeft" to="Root/Cameras/DamageCamera" method="Activate"]
 [connection signal="HangStarted" from="Root/RootAttachment/RootOrientation/HornRight" to="." method="EnterShockAttackState"]
+[connection signal="HangStarted" from="Root/RootAttachment/RootOrientation/HornRight" to="Root/Cameras/RightCamera" method="Activate"]
+[connection signal="Popped" from="Root/RootAttachment/RootOrientation/HornRight" to="Root/Cameras/DamageCamera" method="Activate"]
 [connection signal="area_entered" from="Root/RootAttachment/Hitbox" to="Root/RootAttachment/Hitbox/Hitbox" method="OnEntered"]
 [connection signal="area_exited" from="Root/RootAttachment/Hitbox" to="Root/RootAttachment/Hitbox/Hitbox" method="OnExited"]
 [connection signal="DamagedPlayer" from="Root/RootAttachment/Hitbox/Hitbox" to="." method="StopChargeAttack"]

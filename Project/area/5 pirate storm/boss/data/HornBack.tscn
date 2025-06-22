@@ -1,7 +1,19 @@
-[gd_scene load_steps=10 format=3 uid="uid://0xgt5b3qhix4"]
+[gd_scene load_steps=14 format=3 uid="uid://0xgt5b3qhix4"]
 
 [ext_resource type="PackedScene" uid="uid://cqcxw2j18yuc" path="res://area/5 pirate storm/boss/data/model/HornBack.gltf" id="1_glo1o"]
 [ext_resource type="Script" uid="uid://c008fo010fo4v" path="res://area/5 pirate storm/data/script/CaptainBemothHorn.cs" id="2_hki7r"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_hki7r"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rsdr4"]
+animation = &"jolt-high"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cfg36"]
+animation = &"jolt-low"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_5a73y"]
+mix_mode = 1
+fadeout_time = 0.02
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_glo1o"]
 animation = &"RESET"
@@ -26,18 +38,27 @@ animation = &"pull"
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_rsdr4"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_hki7r"]
-graph_offset = Vector2(-887.122, 140.613)
+graph_offset = Vector2(-568.511, 162.356)
+nodes/jolt_blend/node = SubResource("AnimationNodeBlend2_hki7r")
+nodes/jolt_blend/position = Vector2(120, 260)
+nodes/jolt_high_anim/node = SubResource("AnimationNodeAnimation_rsdr4")
+nodes/jolt_high_anim/position = Vector2(-100, 540)
+nodes/jolt_low_anim/node = SubResource("AnimationNodeAnimation_cfg36")
+nodes/jolt_low_anim/position = Vector2(-100, 380)
+nodes/jolt_trigger/node = SubResource("AnimationNodeOneShot_5a73y")
+nodes/jolt_trigger/position = Vector2(300, 140)
 nodes/normal_anim/node = SubResource("AnimationNodeAnimation_glo1o")
 nodes/normal_anim/position = Vector2(-460, 100)
+nodes/output/position = Vector2(500, 140)
 nodes/pop_anim/node = SubResource("AnimationNodeAnimation_hki7r")
-nodes/pop_anim/position = Vector2(-100, 340)
+nodes/pop_anim/position = Vector2(-300, 340)
 nodes/pop_transition/node = SubResource("AnimationNodeTransition_glo1o")
-nodes/pop_transition/position = Vector2(100, 140)
+nodes/pop_transition/position = Vector2(-100, 140)
 nodes/pull_anim/node = SubResource("AnimationNodeAnimation_5a73y")
 nodes/pull_anim/position = Vector2(-460, 280)
 nodes/pull_blend/node = SubResource("AnimationNodeBlend2_rsdr4")
 nodes/pull_blend/position = Vector2(-300, 100)
-node_connections = [&"output", 0, &"pop_transition", &"pop_transition", 0, &"pull_blend", &"pop_transition", 1, &"pop_anim", &"pull_blend", 0, &"normal_anim", &"pull_blend", 1, &"pull_anim"]
+node_connections = [&"jolt_blend", 0, &"jolt_low_anim", &"jolt_blend", 1, &"jolt_high_anim", &"jolt_trigger", 0, &"pop_transition", &"jolt_trigger", 1, &"jolt_blend", &"output", 0, &"jolt_trigger", &"pop_transition", 0, &"pull_blend", &"pop_transition", 1, &"pop_anim", &"pull_blend", 0, &"normal_anim", &"pull_blend", 1, &"pull_anim"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_glo1o"]
 
@@ -51,13 +72,17 @@ maxHealth = 15
 active = false
 tree_root = SubResource("AnimationNodeBlendTree_hki7r")
 anim_player = NodePath("../AnimationPlayer")
+parameters/jolt_blend/blend_amount = 0
+parameters/jolt_trigger/active = false
+parameters/jolt_trigger/internal_active = false
+parameters/jolt_trigger/request = 0
 parameters/pop_transition/current_state = "disabled"
 parameters/pop_transition/transition_request = ""
 parameters/pop_transition/current_index = 0.001
 parameters/pull_blend/blend_amount = 0.0
 
 [node name="HornAttachment" type="BoneAttachment3D" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, 0.956306, 0.292368, 0, -0.292368, 0.956306, 2.12342e-08, 0.889876, -1.80892)
+transform = Transform3D(1, 0, 0, 0, 0.956306, 0.292368, 0, -0.292368, 0.956306, -2.35935e-08, 0.653513, -1.6288)
 bone_name = "horn"
 bone_idx = 1
 use_external_skeleton = true

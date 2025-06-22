@@ -10,6 +10,8 @@ public partial class CaptainBemoth : PathFollow3D
 	[ExportGroup("Components")]
 	[Export] private AnimationTree animator;
 	[Export] private Node3D root;
+	[Export] private CameraTrigger jumpCameraTrigger;
+	[Export] private CameraTrigger mainCameraTrigger;
 	[Export] private JumpTrigger jumpTrigger;
 	[Export] private GroupGpuParticles3D chargeAttackFx;
 
@@ -326,6 +328,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private void TakeDamage()
 	{
 		currentHealth--;
+		DisableHornHurtboxes();
 		animator.Set(DamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
@@ -361,7 +364,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private void FinishAttack() => isAttackActive = false;
 
 	private int bombAttackCounter;
-	private readonly float BombAttackRange = 30f;
+	private readonly float BombAttackRange = 15f;
 	private void EnterBombAttackState()
 	{
 		bombAttackCounter = 0;
@@ -553,22 +556,27 @@ public partial class CaptainBemoth : PathFollow3D
 
 		Player.PathFollower.Progress = initialProgress;
 		jumpTrigger.GlobalPosition = hit.point;
-		jumpTrigger.jumpHeight = isJump ? 10f : 1f;
-		if (!isJump) // Teleport to the proper location
+		jumpTrigger.jumpHeight = 0f;
+		if (isJump)
 		{
+			jumpTrigger.Position += Vector3.Up * LaunchFallHeight;
+			jumpCameraTrigger.GlobalPosition = Player.Camera.Camera.GlobalPosition; // Sync jump camera's position
+			jumpCameraTrigger.Activate();
+			jumpTrigger.JumpFinished += FinishJump;
+		}
+		else
+		{
+			// Teleport to the proper location
 			Player.GlobalPosition = jumpTrigger.GlobalPosition + Vector3.Up * LaunchFallHeight;
 			Player.PathFollower.Resync();
+			mainCameraTrigger.Activate();
 		}
-
 
 		jumpTrigger.Activate();
 		Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
 
 		if (isJump)
-		{
 			Player.Animator.StartSpin(3f);
-			Player.Effect.StartSpinFX();
-		}
 
 		// TODO Finish shock if it's already charged
 		EnterIdleState();
@@ -578,5 +586,11 @@ public partial class CaptainBemoth : PathFollow3D
 			if (horn.IsPopping)
 				horn.Despawn();
 		}
+	}
+
+	private void FinishJump()
+	{
+		jumpTrigger.JumpFinished -= FinishJump;
+		CallDeferred(MethodName.LaunchPlayer, false); // Transition back to gameplay
 	}
 }
