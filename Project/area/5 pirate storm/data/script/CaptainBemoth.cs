@@ -11,7 +11,7 @@ public partial class CaptainBemoth : PathFollow3D
 	[Export] private AnimationTree animator;
 	[Export] private Node3D root;
 	[Export] private JumpTrigger jumpTrigger;
-	[Export] private GroupGpuParticles3D chargeAttackFX;
+	[Export] private GroupGpuParticles3D chargeAttackFx;
 
 	[Export] private CaptainBemothHorn[] horns;
 
@@ -43,17 +43,18 @@ public partial class CaptainBemoth : PathFollow3D
 		animator.Active = true;
 		bossPath = GetParent<Path3D>();
 
+		for (int i = 0; i < horns.Length; i++)
+		{
+			horns[i].Jolted += TakeHornDamage;
+			horns[i].Popped += TakeDamage;
+			horns[i].Jumped += () => LaunchPlayer(true);
+		}
+
 		bombs[^1].Exploded += EnterIdleState; // Return to idle when the last bomb explodes
 		StageSettings.Instance.Respawned += Respawn;
+
 		// TODO Play introduction cutscene StageSettings.Instance.LevelStarted += StartIntroduction;
 		StartBattle();
-
-		foreach (CaptainBemothHorn horn in horns)
-		{
-			horn.Jolted += TakeHornDamage;
-			horn.Popped += TakeDamage;
-			horn.Jumped += () => LaunchPlayer(true);
-		}
 	}
 
 	private readonly StringName IntroCutsceneID = "ps_boss_intro";
@@ -109,7 +110,7 @@ public partial class CaptainBemoth : PathFollow3D
 		isAttackActive = false;
 		bombAttackCounter = 0;
 		waveAttackCounter = 0;
-		chargeAttackFX.SetEmitting(false);
+		chargeAttackFx.SetEmitting(false);
 
 		// Reset local position
 		root.Position = Vector3.Zero;
@@ -319,16 +320,12 @@ public partial class CaptainBemoth : PathFollow3D
 	}
 
 	private readonly StringName HornDamageTrigger = "parameters/horn_damage_trigger/request";
-	private void TakeHornDamage()
-	{
-		animator.Set(HornDamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
-	}
+	private void TakeHornDamage() => animator.Set(HornDamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
 	private readonly StringName DamageTrigger = "parameters/damage_trigger/request";
 	private void TakeDamage()
 	{
 		currentHealth--;
-		GD.Print(currentHealth);
 		animator.Set(DamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
@@ -339,9 +336,6 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private void StartAttack()
 	{
-		EnterChargeAttackState();
-		return;
-
 		if (currentHealth == MaxHealth || GetDeltaProgress() >= BombAttackRange)
 		{
 			EnterBombAttackState();
@@ -505,7 +499,7 @@ public partial class CaptainBemoth : PathFollow3D
 			if (IsClosed) // Start charge
 			{
 				isAttackActive = true;
-				chargeAttackFX.SetEmitting(true);
+				chargeAttackFx.SetEmitting(true);
 			}
 
 			return;
@@ -521,7 +515,7 @@ public partial class CaptainBemoth : PathFollow3D
 			return;
 
 		isAttackActive = false;
-		chargeAttackFX.SetEmitting(false);
+		chargeAttackFx.SetEmitting(false);
 	}
 
 	private void EnterShockAttackState()

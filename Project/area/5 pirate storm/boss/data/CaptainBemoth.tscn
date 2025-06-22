@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://dihp6asycbujt"]
+[gd_scene load_steps=70 format=3 uid="uid://dihp6asycbujt"]
 
 [ext_resource type="Script" uid="uid://lq3vcs5bircg" path="res://area/5 pirate storm/data/script/CaptainBemoth.cs" id="1_blu3m"]
 [ext_resource type="PackedScene" uid="uid://c0txr710wvj5p" path="res://area/5 pirate storm/boss/data/model/CaptainBemoth.gltf" id="1_nac7p"]
@@ -16,6 +16,7 @@
 [ext_resource type="Material" uid="uid://cvdwcg24fogua" path="res://effect/particle/material/object/Cactus Splatter.tres" id="11_yn1wy"]
 [ext_resource type="Material" uid="uid://bdk8qnv7ytydw" path="res://effect/particle/material/environment/Common Dust Splatter Add No Billboard.tres" id="12_6vuv4"]
 [ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://effect/particle/material/environment/Sand Dust.tres" id="13_n25aq"]
+[ext_resource type="Material" uid="uid://uyb0bithnbcs" path="res://effect/particle/material/environment/Water Splatter.tres" id="15_x05em"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6vuv4"]
 animation = &"bomb"
@@ -306,6 +307,61 @@ alpha_curve = SubResource("CurveTexture_yn1wy")
 [sub_resource type="QuadMesh" id="QuadMesh_n25aq"]
 material = ExtResource("11_yn1wy")
 
+[sub_resource type="Gradient" id="Gradient_2rhf6"]
+offsets = PackedFloat32Array(0, 0.526627, 1)
+colors = PackedColorArray(1, 0.12, 0.926667, 1, 0.633333, 0, 1, 1, 0.424333, 0, 0.67, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_gc8sa"]
+gradient = SubResource("Gradient_2rhf6")
+width = 64
+
+[sub_resource type="Curve" id="Curve_2rhf6"]
+_data = [Vector2(0, 0.3), 0.0, 1.75884, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_gc8sa"]
+width = 64
+curve = SubResource("Curve_2rhf6")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yq8h2"]
+lifetime_randomness = 0.6
+emission_shape_offset = Vector3(0, 0.4, 0)
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 5.0
+initial_velocity_max = 15.0
+angular_velocity_min = -100.0
+angular_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+tangential_accel_min = -50.0
+tangential_accel_max = 50.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_gc8sa")
+color_initial_ramp = SubResource("GradientTexture1D_gc8sa")
+alpha_curve = SubResource("CurveTexture_yn1wy")
+
+[sub_resource type="QuadMesh" id="QuadMesh_xith2"]
+material = ExtResource("15_x05em")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2rhf6"]
+lifetime_randomness = 0.4
+emission_shape_offset = Vector3(0, 0.4, 0)
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 60.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+angular_velocity_min = -100.0
+angular_velocity_max = 100.0
+scale_min = 1.5
+scale_max = 2.5
+scale_curve = SubResource("CurveTexture_gc8sa")
+color = Color(0.4599, 0.014, 0.7, 1)
+alpha_curve = SubResource("CurveTexture_yn1wy")
+
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_n25aq"]
 lifetime_randomness = 0.5
 angle_min = 1.07288e-05
@@ -325,14 +381,14 @@ alpha_curve = SubResource("CurveTexture_yn1wy")
 [sub_resource type="QuadMesh" id="QuadMesh_lc47c"]
 material = ExtResource("13_n25aq")
 
-[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("animator", "root", "jumpTrigger", "chargeAttackFX", "horns", "bombs")]
+[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("animator", "root", "jumpTrigger", "chargeAttackFx", "horns", "bombs")]
 use_model_front = true
 tilt_enabled = false
 script = ExtResource("1_blu3m")
 animator = NodePath("Root/CaptainBemoth/AnimationTree")
 root = NodePath("Root")
 jumpTrigger = NodePath("Jump")
-chargeAttackFX = NodePath("Root/RootAttachment/RootOrientation/ChargeAttack")
+chargeAttackFx = NodePath("Root/RootAttachment/RootOrientation/ChargeAttack")
 horns = [NodePath("Root/RootAttachment/RootOrientation/HornBack"), NodePath("Root/RootAttachment/RootOrientation/HornLeft"), NodePath("Root/RootAttachment/RootOrientation/HornRight")]
 bombs = [NodePath("Root/RootAttachment/BombOrigin/BombAttack1"), NodePath("Root/RootAttachment/BombOrigin/BombAttack2"), NodePath("Root/RootAttachment/BombOrigin/BombAttack3"), NodePath("Root/RootAttachment/BombOrigin/BombAttack4"), NodePath("Root/RootAttachment/BombOrigin/BombAttack5")]
 
@@ -377,13 +433,16 @@ external_skeleton = NodePath("../CaptainBemoth/BemothRoot/Skeleton3D")
 [node name="RootOrientation" type="Node3D" parent="Root/RootAttachment"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 
-[node name="HornBack" parent="Root/RootAttachment/RootOrientation" instance=ExtResource("3_hppyi")]
+[node name="HornBack" parent="Root/RootAttachment/RootOrientation" node_paths=PackedStringArray("joltFx") instance=ExtResource("3_hppyi")]
+joltFx = NodePath("../../../HornBack/Splatter")
 joltCurve = SubResource("Curve_wc1c5")
 
-[node name="HornLeft" parent="Root/RootAttachment/RootOrientation" instance=ExtResource("4_hppyi")]
+[node name="HornLeft" parent="Root/RootAttachment/RootOrientation" node_paths=PackedStringArray("joltFx") instance=ExtResource("4_hppyi")]
+joltFx = NodePath("../../../HornLeft/Splatter")
 joltCurve = SubResource("Curve_wc1c5")
 
-[node name="HornRight" parent="Root/RootAttachment/RootOrientation" instance=ExtResource("5_j0uyl")]
+[node name="HornRight" parent="Root/RootAttachment/RootOrientation" node_paths=PackedStringArray("joltFx") instance=ExtResource("5_j0uyl")]
+joltFx = NodePath("../../../HornRight/Splatter")
 joltCurve = SubResource("Curve_wc1c5")
 
 [node name="HornFront" parent="Root/RootAttachment/RootOrientation" instance=ExtResource("3_wc1c5")]
@@ -476,7 +535,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37115e-08, -1, 0, 1, -4.37115e-08, 0, 0, 
 shape = SubResource("CylinderShape3D_y7uss")
 
 [node name="WaveL" type="BoneAttachment3D" parent="Root"]
-transform = Transform3D(2.91044e-06, -0.499999, -0.866022, -0.999973, -2.95846e-06, -1.66934e-06, -1.73201e-06, 0.866022, -0.499999, 0.738409, -0.103348, 1.00079)
+transform = Transform3D(2.77479e-07, 0.707104, -0.707105, -0.999973, -2.47696e-06, -2.99791e-06, -3.79781e-06, 0.707105, 0.707104, 2.52191, -0.103347, 0.756606)
 bone_name = "l_arm05"
 bone_idx = 31
 use_external_skeleton = true
@@ -529,7 +588,7 @@ process_material = SubResource("ParticleProcessMaterial_yn1wy")
 draw_pass_1 = SubResource("QuadMesh_n25aq")
 
 [node name="WaveR" type="BoneAttachment3D" parent="Root"]
-transform = Transform3D(2.91044e-06, 0.499999, 0.866022, 0.999973, -2.95846e-06, -1.66934e-06, 1.73201e-06, 0.866022, -0.499999, -0.738409, -0.103348, 1.00079)
+transform = Transform3D(2.77479e-07, -0.707104, 0.707105, 0.999973, -2.47697e-06, -2.99791e-06, 3.79781e-06, 0.707105, 0.707104, -2.52191, -0.103347, 0.756606)
 bone_name = "r_arm05"
 bone_idx = 47
 use_external_skeleton = true
@@ -580,6 +639,178 @@ visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_yn1wy")
 draw_pass_1 = SubResource("QuadMesh_n25aq")
+
+[node name="HornBack" type="BoneAttachment3D" parent="Root"]
+transform = Transform3D(1, 3.58941e-08, 2.10373e-08, -3.58942e-08, 0.488647, 0.872482, 2.10372e-08, -0.872482, 0.488647, 0, 0.290004, -1.1)
+bone_name = "b_horn"
+bone_idx = 59
+use_external_skeleton = true
+external_skeleton = NodePath("../CaptainBemoth/BemothRoot/Skeleton3D")
+
+[node name="Splatter" type="GPUParticles3D" parent="Root/HornBack" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 0.906308, -0.422618, 0, 0.422618, 0.906308, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 64
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_yq8h2")
+draw_pass_1 = SubResource("QuadMesh_xith2")
+script = ExtResource("10_yn1wy")
+subSystems = [NodePath("Smoke")]
+
+[node name="Smoke" type="GPUParticles3D" parent="Root/HornBack/Splatter"]
+transform = Transform3D(1, -7.10543e-14, 5.68434e-14, -7.10543e-14, 1, 0, 0, 0, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_2rhf6")
+draw_pass_1 = SubResource("QuadMesh_6vuv4")
+
+[node name="HornLeft" type="BoneAttachment3D" parent="Root"]
+transform = Transform3D(-0.0449456, 0.603129, -0.796376, 0.254879, 0.777722, 0.574617, 0.965928, -0.177153, -0.18868, 0.68, 0.800001, -0.199997)
+bone_name = "l_horn"
+bone_idx = 61
+use_external_skeleton = true
+external_skeleton = NodePath("../CaptainBemoth/BemothRoot/Skeleton3D")
+
+[node name="Splatter" type="GPUParticles3D" parent="Root/HornLeft" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 0.906308, -0.422618, 0, 0.422618, 0.906308, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 64
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_yq8h2")
+draw_pass_1 = SubResource("QuadMesh_xith2")
+script = ExtResource("10_yn1wy")
+subSystems = [NodePath("Smoke")]
+
+[node name="Smoke" type="GPUParticles3D" parent="Root/HornLeft/Splatter"]
+transform = Transform3D(1, -7.10543e-14, 5.68434e-14, -7.10543e-14, 1, 0, 0, 0, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_2rhf6")
+draw_pass_1 = SubResource("QuadMesh_6vuv4")
+
+[node name="HornRight" type="BoneAttachment3D" parent="Root"]
+transform = Transform3D(-0.0449456, -0.603129, 0.796376, -0.254879, 0.777722, 0.574617, -0.965928, -0.177153, -0.18868, -0.68, 0.800001, -0.199997)
+bone_name = "r_horn"
+bone_idx = 60
+use_external_skeleton = true
+external_skeleton = NodePath("../CaptainBemoth/BemothRoot/Skeleton3D")
+
+[node name="Splatter" type="GPUParticles3D" parent="Root/HornRight" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 0.906308, -0.422618, 0, 0.422618, 0.906308, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 64
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_yq8h2")
+draw_pass_1 = SubResource("QuadMesh_xith2")
+script = ExtResource("10_yn1wy")
+subSystems = [NodePath("Smoke")]
+
+[node name="Smoke" type="GPUParticles3D" parent="Root/HornRight/Splatter"]
+transform = Transform3D(1, -7.10543e-14, 5.68434e-14, -7.10543e-14, 1, 0, 0, 0, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_2rhf6")
+draw_pass_1 = SubResource("QuadMesh_6vuv4")
+
+[node name="HornFront" type="BoneAttachment3D" parent="Root"]
+transform = Transform3D(-1, -8.09657e-07, -4.1177e-07, -7.48409e-07, 0.477506, 0.878628, -5.14765e-07, 0.878628, -0.477506, 1.00546e-07, 0.685205, 0.764614)
+bone_name = "f_horn"
+bone_idx = 62
+use_external_skeleton = true
+external_skeleton = NodePath("../CaptainBemoth/BemothRoot/Skeleton3D")
+
+[node name="Splatter" type="GPUParticles3D" parent="Root/HornFront" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 64
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_yq8h2")
+draw_pass_1 = SubResource("QuadMesh_xith2")
+script = ExtResource("10_yn1wy")
+subSystems = [NodePath("Smoke")]
+
+[node name="Smoke" type="GPUParticles3D" parent="Root/HornFront/Splatter"]
+transform = Transform3D(1, -7.10543e-14, 5.68434e-14, -7.10543e-14, 1, 0, 0, 0, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_2rhf6")
+draw_pass_1 = SubResource("QuadMesh_6vuv4")
 
 [node name="HoleAttachment" type="BoneAttachment3D" parent="Root"]
 transform = Transform3D(1, 0, 0, 0, 0.965927, 0.258816, 0, -0.258816, 0.965927, 0, 0.925842, -0.230114)

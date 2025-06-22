@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.CustomNodes;
 
 namespace Project.Gameplay.Bosses;
 
@@ -12,6 +13,7 @@ public partial class CaptainBemothHorn : Node3D
 
 	[Export] private AnimationTree animator;
 	[Export] private CollisionShape3D collider;
+	[Export] private GroupGpuParticles3D joltFx;
 	[Export] private int maxHealth;
 	// Jolt curve for pulling out horns
 	[Export] private Curve joltCurve;
@@ -98,7 +100,9 @@ public partial class CaptainBemothHorn : Node3D
 		// Start jolt
 		joltTimer = 0;
 		damageDealt += strongJolt ? 2 : 1;
-		// TODO Play FX
+
+		// TODO Play SFX
+		joltFx.RestartGroup();
 
 		if (damageDealt >= maxHealth)
 		{
