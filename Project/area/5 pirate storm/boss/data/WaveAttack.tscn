@@ -29,6 +29,7 @@ curve_z = SubResource("Curve_i0hns")
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nq682"]
 lifetime_randomness = 0.5
 particle_flag_rotate_y = true
+emission_shape_offset = Vector3(0, -0.5, 0)
 emission_shape = 3
 emission_box_extents = Vector3(3, 1, 0)
 angle_min = 1.07288e-05
@@ -185,13 +186,14 @@ process_material = SubResource("ParticleProcessMaterial_nq682")
 draw_pass_1 = SubResource("QuadMesh_jivvf")
 
 [node name="Hitbox" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("2_jivvf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_tbv1a")
 
 [node name="Timer" type="Timer" parent="."]

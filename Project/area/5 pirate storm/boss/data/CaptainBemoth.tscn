@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://dihp6asycbujt"]
+[gd_scene load_steps=62 format=3 uid="uid://dihp6asycbujt"]
 
 [ext_resource type="Script" uid="uid://lq3vcs5bircg" path="res://area/5 pirate storm/data/script/CaptainBemoth.cs" id="1_blu3m"]
 [ext_resource type="PackedScene" uid="uid://c0txr710wvj5p" path="res://area/5 pirate storm/boss/data/model/CaptainBemoth.gltf" id="1_nac7p"]
@@ -6,8 +6,16 @@
 [ext_resource type="PackedScene" uid="uid://bisfr2ty572aw" path="res://area/5 pirate storm/boss/data/model/HornFront.gltf" id="3_wc1c5"]
 [ext_resource type="PackedScene" uid="uid://dbwrvkfwjth4i" path="res://area/5 pirate storm/boss/data/HornLeft.tscn" id="4_hppyi"]
 [ext_resource type="PackedScene" uid="uid://diu48uipdrlco" path="res://area/5 pirate storm/boss/data/HornRight.tscn" id="5_j0uyl"]
+[ext_resource type="Material" uid="uid://b4847susbcf6p" path="res://effect/particle/material/Ember Purple Billboard.tres" id="7_j0uyl"]
 [ext_resource type="PackedScene" uid="uid://d2j6qde5aener" path="res://area/5 pirate storm/boss/data/BombAttack.tscn" id="7_wc1c5"]
 [ext_resource type="Script" uid="uid://cciy1oeuvbh3e" path="res://object/trigger/modules/JumpTrigger.cs" id="8_hppyi"]
+[ext_resource type="Material" uid="uid://cih8b8t0vf1hh" path="res://object/player/resource/effect/material/Wind.tres" id="8_lc47c"]
+[ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="9_r7puu"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="10_yn1wy"]
+[ext_resource type="Script" uid="uid://pnh70abopq8e" path="res://object/stage/common/resource/script/Hazard.cs" id="11_y7uss"]
+[ext_resource type="Material" uid="uid://cvdwcg24fogua" path="res://effect/particle/material/object/Cactus Splatter.tres" id="11_yn1wy"]
+[ext_resource type="Material" uid="uid://bdk8qnv7ytydw" path="res://effect/particle/material/environment/Common Dust Splatter Add No Billboard.tres" id="12_6vuv4"]
+[ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://effect/particle/material/environment/Sand Dust.tres" id="13_n25aq"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6vuv4"]
 animation = &"bomb"
@@ -147,13 +155,184 @@ node_connections = [&"bomb_trigger", 0, &"speed_scale", &"bomb_trigger", 1, &"bo
 _data = [Vector2(0, 0), 0.0, 1.70062, 0, 0, Vector2(0.703214, 1), -1.36563, -1.36563, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("animator", "root", "jumpTrigger", "horns", "bombs")]
+[sub_resource type="Curve" id="Curve_r7puu"]
+_data = [Vector2(0, 0), 0.0, 11.4364, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_yn1wy"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_r7puu")
+
+[sub_resource type="Curve" id="Curve_6vuv4"]
+_data = [Vector2(0, 0.4), 0.0, 1.8357, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_n25aq"]
+width = 64
+curve = SubResource("Curve_6vuv4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lc47c"]
+emission_shape = 2
+emission_sphere_radius = 2.0
+direction = Vector3(0, 1, 0)
+spread = 90.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -5.0
+linear_accel_max = -2.0
+radial_accel_min = 5.0
+radial_accel_max = 10.0
+tangential_accel_min = -15.0
+tangential_accel_max = 15.0
+scale_min = 0.5
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_n25aq")
+alpha_curve = SubResource("CurveTexture_yn1wy")
+
+[sub_resource type="QuadMesh" id="QuadMesh_y7uss"]
+material = ExtResource("7_j0uyl")
+
+[sub_resource type="Curve" id="Curve_lc47c"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_y7uss"]
+_data = [Vector2(0, 0.0974692), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.88153, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_x05em"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_2rhf6"]
+curve_x = SubResource("Curve_lc47c")
+curve_y = SubResource("Curve_y7uss")
+curve_z = SubResource("Curve_x05em")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_x05em"]
+lifetime_randomness = 0.4
+direction = Vector3(0, 0, -1)
+initial_velocity_min = 2.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveXYZTexture_2rhf6")
+color = Color(0.27, 0.7445, 1, 1)
+alpha_curve = SubResource("CurveTexture_yn1wy")
+
+[sub_resource type="QuadMesh" id="QuadMesh_2rhf6"]
+material = ExtResource("8_lc47c")
+size = Vector2(1, 4)
+center_offset = Vector3(0, 2, 0)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gc8sa"]
+lifetime_randomness = 0.4
+direction = Vector3(0, 0, -1)
+spread = 60.0
+initial_velocity_min = 2.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveXYZTexture_2rhf6")
+color = Color(0.27, 0.7445, 1, 1)
+alpha_curve = SubResource("CurveTexture_yn1wy")
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_y7uss"]
+height = 1.0
+radius = 2.0
+
+[sub_resource type="Curve" id="Curve_n25aq"]
+_data = [Vector2(0, 0.127608), 0.0, 2.60032, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_lc47c"]
+width = 64
+curve = SubResource("Curve_n25aq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_y7uss"]
+particle_flag_rotate_y = true
+emission_shape_offset = Vector3(0, -0.5, 0)
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 0.5
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_lc47c")
+alpha_curve = SubResource("CurveTexture_yn1wy")
+
+[sub_resource type="QuadMesh" id="QuadMesh_x05em"]
+material = ExtResource("12_6vuv4")
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6vuv4"]
+lifetime_randomness = 0.2
+angle_min = 1.07288e-05
+angle_max = 360.0
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 4.0
+color = Color(0.47, 1, 0.779167, 0.180392)
+alpha_curve = SubResource("CurveTexture_yn1wy")
+
+[sub_resource type="QuadMesh" id="QuadMesh_6vuv4"]
+material = ExtResource("9_r7puu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yn1wy"]
+lifetime_randomness = 0.5
+emission_shape = 2
+emission_sphere_radius = 1.0
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+orbit_velocity_min = -1.0
+orbit_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_n25aq")
+alpha_curve = SubResource("CurveTexture_yn1wy")
+
+[sub_resource type="QuadMesh" id="QuadMesh_n25aq"]
+material = ExtResource("11_yn1wy")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_n25aq"]
+lifetime_randomness = 0.5
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 8.0
+initial_velocity_max = 10.0
+damping_min = 3.0
+damping_max = 5.0
+scale_min = 4.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_lc47c")
+color = Color(0.08584, 0.0432, 0.24, 1)
+alpha_curve = SubResource("CurveTexture_yn1wy")
+
+[sub_resource type="QuadMesh" id="QuadMesh_lc47c"]
+material = ExtResource("13_n25aq")
+
+[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("animator", "root", "jumpTrigger", "chargeAttackFX", "horns", "bombs")]
 use_model_front = true
 tilt_enabled = false
 script = ExtResource("1_blu3m")
 animator = NodePath("Root/CaptainBemoth/AnimationTree")
 root = NodePath("Root")
 jumpTrigger = NodePath("Jump")
+chargeAttackFX = NodePath("Root/RootAttachment/RootOrientation/ChargeAttack")
 horns = [NodePath("Root/RootAttachment/RootOrientation/HornBack"), NodePath("Root/RootAttachment/RootOrientation/HornLeft"), NodePath("Root/RootAttachment/RootOrientation/HornRight")]
 bombs = [NodePath("Root/RootAttachment/BombOrigin/BombAttack1"), NodePath("Root/RootAttachment/BombOrigin/BombAttack2"), NodePath("Root/RootAttachment/BombOrigin/BombAttack3"), NodePath("Root/RootAttachment/BombOrigin/BombAttack4"), NodePath("Root/RootAttachment/BombOrigin/BombAttack5")]
 
@@ -209,6 +388,54 @@ joltCurve = SubResource("Curve_wc1c5")
 
 [node name="HornFront" parent="Root/RootAttachment/RootOrientation" instance=ExtResource("3_wc1c5")]
 
+[node name="PurpleEmbers" type="GPUParticles3D" parent="Root/RootAttachment/RootOrientation"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.7)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+process_material = SubResource("ParticleProcessMaterial_lc47c")
+draw_pass_1 = SubResource("QuadMesh_y7uss")
+
+[node name="ChargeAttack" type="GPUParticles3D" parent="Root/RootAttachment/RootOrientation" node_paths=PackedStringArray("subSystems")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.3)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.2
+explosiveness = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_x05em")
+draw_pass_1 = SubResource("QuadMesh_2rhf6")
+script = ExtResource("10_yn1wy")
+subSystems = [NodePath("ChargeAttack")]
+
+[node name="ChargeAttack" type="GPUParticles3D" parent="Root/RootAttachment/RootOrientation/ChargeAttack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_gc8sa")
+draw_pass_1 = SubResource("QuadMesh_2rhf6")
+
 [node name="BombOrigin" type="Node3D" parent="Root/RootAttachment"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.300003, 0.799999)
 
@@ -236,11 +463,156 @@ transform = Transform3D(0.707106, 0.707106, 0, -0.707106, 0.707106, 0, 0, 0, 1, 
 "Launch Settings/Spread" = 1.5
 "Launch Settings/Middle Height" = 5.0
 
+[node name="Hitbox" type="Area3D" parent="Root/RootAttachment"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Hitbox" type="Node3D" parent="Root/RootAttachment/Hitbox"]
+script = ExtResource("11_y7uss")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root/RootAttachment/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, -4.37115e-08, -1, 0, 1, -4.37115e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_y7uss")
+
+[node name="WaveL" type="BoneAttachment3D" parent="Root"]
+transform = Transform3D(2.91044e-06, -0.499999, -0.866022, -0.999973, -2.95846e-06, -1.66934e-06, -1.73201e-06, 0.866022, -0.499999, 0.738409, -0.103348, 1.00079)
+bone_name = "l_arm05"
+bone_idx = 31
+use_external_skeleton = true
+external_skeleton = NodePath("../CaptainBemoth/BemothRoot/Skeleton3D")
+
+[node name="Splash" type="GPUParticles3D" parent="Root/WaveL"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_y7uss")
+draw_pass_1 = SubResource("QuadMesh_x05em")
+
+[node name="WaveVFX" type="GPUParticles3D" parent="Root/WaveL" node_paths=PackedStringArray("subSystems")]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_6vuv4")
+draw_pass_1 = SubResource("QuadMesh_6vuv4")
+script = ExtResource("10_yn1wy")
+subSystems = [NodePath("Splatter")]
+
+[node name="Splatter" type="GPUParticles3D" parent="Root/WaveL/WaveVFX"]
+transform = Transform3D(1, 0, -2.27374e-13, 0, 1, 0, 2.27374e-13, 0, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_yn1wy")
+draw_pass_1 = SubResource("QuadMesh_n25aq")
+
+[node name="WaveR" type="BoneAttachment3D" parent="Root"]
+transform = Transform3D(2.91044e-06, 0.499999, 0.866022, 0.999973, -2.95846e-06, -1.66934e-06, 1.73201e-06, 0.866022, -0.499999, -0.738409, -0.103348, 1.00079)
+bone_name = "r_arm05"
+bone_idx = 47
+use_external_skeleton = true
+external_skeleton = NodePath("../CaptainBemoth/BemothRoot/Skeleton3D")
+
+[node name="Splash" type="GPUParticles3D" parent="Root/WaveR"]
+transform = Transform3D(-4.37114e-08, 1, -4.54747e-13, -1, -4.37114e-08, 0, -2.27374e-13, 4.54747e-13, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_y7uss")
+draw_pass_1 = SubResource("QuadMesh_x05em")
+
+[node name="WaveVFX" type="GPUParticles3D" parent="Root/WaveR" node_paths=PackedStringArray("subSystems")]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.2
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_6vuv4")
+draw_pass_1 = SubResource("QuadMesh_6vuv4")
+script = ExtResource("10_yn1wy")
+subSystems = [NodePath("Splatter")]
+
+[node name="Splatter" type="GPUParticles3D" parent="Root/WaveR/WaveVFX"]
+transform = Transform3D(1, 0, -2.27374e-13, 0, 1, 0, 2.27374e-13, 0, 1, 0, 0, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 32
+lifetime = 0.5
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_yn1wy")
+draw_pass_1 = SubResource("QuadMesh_n25aq")
+
+[node name="HoleAttachment" type="BoneAttachment3D" parent="Root"]
+transform = Transform3D(1, 0, 0, 0, 0.965927, 0.258816, 0, -0.258816, 0.965927, 0, 0.925842, -0.230114)
+bone_name = "c_hole"
+bone_idx = 63
+use_external_skeleton = true
+external_skeleton = NodePath("../CaptainBemoth/BemothRoot/Skeleton3D")
+
+[node name="Dust" type="GPUParticles3D" parent="Root/HoleAttachment"]
+transform = Transform3D(1, -2.06795e-25, -4.54747e-13, -1.03398e-25, 1, 0, 2.27374e-13, 5.42101e-20, 1, 0, 0.5, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+visibility_aabb = AABB(0, 0, 0, 0, 0, 0)
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_n25aq")
+draw_pass_1 = SubResource("QuadMesh_lc47c")
+
 [node name="Jump" type="Node3D" parent="."]
 script = ExtResource("8_hppyi")
 
 [connection signal="HangStarted" from="Root/RootAttachment/RootOrientation/HornBack" to="." method="EnterShockAttackState"]
 [connection signal="HangStarted" from="Root/RootAttachment/RootOrientation/HornLeft" to="." method="EnterShockAttackState"]
 [connection signal="HangStarted" from="Root/RootAttachment/RootOrientation/HornRight" to="." method="EnterShockAttackState"]
+[connection signal="area_entered" from="Root/RootAttachment/Hitbox" to="Root/RootAttachment/Hitbox/Hitbox" method="OnEntered"]
+[connection signal="area_exited" from="Root/RootAttachment/Hitbox" to="Root/RootAttachment/Hitbox/Hitbox" method="OnExited"]
+[connection signal="DamagedPlayer" from="Root/RootAttachment/Hitbox/Hitbox" to="." method="StopChargeAttack"]
 
 [editable path="Root/CaptainBemoth"]

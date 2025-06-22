@@ -1,5 +1,6 @@
 using Godot;
 using Project.Core;
+using Project.CustomNodes;
 using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay.Bosses;
@@ -10,6 +11,7 @@ public partial class CaptainBemoth : PathFollow3D
 	[Export] private AnimationTree animator;
 	[Export] private Node3D root;
 	[Export] private JumpTrigger jumpTrigger;
+	[Export] private GroupGpuParticles3D chargeAttackFX;
 
 	[Export] private CaptainBemothHorn[] horns;
 
@@ -107,6 +109,7 @@ public partial class CaptainBemoth : PathFollow3D
 		isAttackActive = false;
 		bombAttackCounter = 0;
 		waveAttackCounter = 0;
+		chargeAttackFX.SetEmitting(false);
 
 		// Reset local position
 		root.Position = Vector3.Zero;
@@ -247,6 +250,9 @@ public partial class CaptainBemoth : PathFollow3D
 		else if (currentState == BemothState.ChargeAttack)
 		{
 			targetMoveSpeed = CalculateChargingMoveSpeed(deltaProgress);
+
+			if (Player.IsKnockback)
+				moveSpeed = targetMoveSpeed;
 		}
 		else if (currentState == BemothState.ShockAttack)
 		{
@@ -269,6 +275,9 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private float CalculateChargingMoveSpeed(float deltaProgress)
 	{
+		if (Player.IsKnockback)
+			return 0;
+
 		if (isChargeAttackCharging || !IsClosed)
 		{
 			// Move to charging distance
@@ -330,6 +339,9 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private void StartAttack()
 	{
+		EnterChargeAttackState();
+		return;
+
 		if (currentHealth == MaxHealth || GetDeltaProgress() >= BombAttackRange)
 		{
 			EnterBombAttackState();
@@ -338,7 +350,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 		if (currentHealth > 1)
 		{
-			if (Runtime.randomNumberGenerator.Randf() > 0.5f)
+			if (Runtime.randomNumberGenerator.Randf() > 0.8f)
 				EnterBombAttackState();
 			else
 				EnterWaveAttackState();
@@ -481,7 +493,7 @@ public partial class CaptainBemoth : PathFollow3D
 		if (isAttackActive)
 		{
 			if (deltaProgress < 1f) // Stop charge
-				isAttackActive = false;
+				StopChargeAttack();
 
 			return;
 		}
@@ -491,13 +503,25 @@ public partial class CaptainBemoth : PathFollow3D
 			HOffset = ExtensionMethods.SmoothDamp(HOffset, -Player.PathFollower.LocalPlayerPositionDelta.X, ref trackingVelocity, ChargeTrackingSmoothing * PhysicsManager.physicsDelta);
 			// Wait until we're fully closed before charging
 			if (IsClosed) // Start charge
+			{
 				isAttackActive = true;
+				chargeAttackFX.SetEmitting(true);
+			}
 
 			return;
 		}
 
 		if (deltaProgress > MinimumDistance)
 			EnterIdleState();
+	}
+
+	private void StopChargeAttack()
+	{
+		if (currentState != BemothState.ChargeAttack)
+			return;
+
+		isAttackActive = false;
+		chargeAttackFX.SetEmitting(false);
 	}
 
 	private void EnterShockAttackState()

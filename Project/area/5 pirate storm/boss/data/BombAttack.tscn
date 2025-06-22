@@ -1,11 +1,16 @@
-[gd_scene load_steps=30 format=3 uid="uid://d2j6qde5aener"]
+[gd_scene load_steps=53 format=3 uid="uid://d2j6qde5aener"]
 
 [ext_resource type="Script" uid="uid://02whpr4ceeig" path="res://area/5 pirate storm/data/script/BossBombAttack.cs" id="1_xchwx"]
 [ext_resource type="Texture2D" uid="uid://c44w2mvqikuys" path="res://area/5 pirate storm/boss/data/model/texture/missile center.png" id="2_0rh84"]
 [ext_resource type="Script" uid="uid://pnh70abopq8e" path="res://object/stage/common/resource/script/Hazard.cs" id="2_uj4au"]
 [ext_resource type="Material" uid="uid://c0ul0kasu0kpi" path="res://effect/particle/material/environment/Circular Glow Add.tres" id="2_xchwx"]
 [ext_resource type="Texture2D" uid="uid://wi3x1kr1ql8y" path="res://area/5 pirate storm/boss/data/model/texture/missle middle.png" id="3_e5ly6"]
+[ext_resource type="Material" uid="uid://72qi5wpg8kme" path="res://effect/particle/material/environment/Boss Splatter Add.tres" id="4_g2e5f"]
 [ext_resource type="Texture2D" uid="uid://bxfrggp2bcfcc" path="res://area/5 pirate storm/boss/data/model/texture/missile edge.png" id="4_uj4au"]
+[ext_resource type="Material" uid="uid://bdk8qnv7ytydw" path="res://effect/particle/material/environment/Common Dust Splatter Add No Billboard.tres" id="6_c7c8l"]
+[ext_resource type="Material" uid="uid://7lvqh1a70ae4" path="res://effect/particle/material/explosion/Explosion Flame.tres" id="7_c7c8l"]
+[ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="7_umhhu"]
+[ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="8_i6jhs"]
 
 [sub_resource type="Curve" id="Curve_umhhu"]
 _data = [Vector2(0, 0), 0.0, 27.7037, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -61,6 +66,119 @@ alpha_curve = SubResource("CurveTexture_ojg08")
 emission_curve = SubResource("CurveTexture_umhhu")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xchwx"]
+
+[sub_resource type="Curve" id="Curve_i6jhs"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_jwly3"]
+width = 64
+texture_mode = 1
+curve = SubResource("Curve_i6jhs")
+
+[sub_resource type="Curve" id="Curve_wxqed"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_1lvje"]
+_data = [Vector2(0, 0), 0.0, 4.69931, 0, 0, Vector2(1, 0.5), -2.76627, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_mo8io"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_xa85y"]
+curve_x = SubResource("Curve_wxqed")
+curve_y = SubResource("Curve_1lvje")
+curve_z = SubResource("Curve_mo8io")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_l6cb0"]
+lifetime_randomness = 0.5
+particle_flag_rotate_y = true
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 40.0
+initial_velocity_min = 4.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 5.0
+scale_curve = SubResource("CurveXYZTexture_xa85y")
+alpha_curve = SubResource("CurveTexture_jwly3")
+
+[sub_resource type="QuadMesh" id="QuadMesh_8e5qk"]
+material = ExtResource("4_g2e5f")
+size = Vector2(0.5, 1)
+center_offset = Vector3(0, 0.4, 0)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_c7c8l"]
+lifetime_randomness = 0.5
+particle_flag_rotate_y = true
+emission_shape_offset = Vector3(0, 0.1, 0)
+angle_min = 1.07288e-05
+angle_max = 360.0
+spread = 180.0
+flatness = 0.8
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = 10.0
+radial_accel_max = 20.0
+tangential_accel_min = -40.0
+tangential_accel_max = 40.0
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveXYZTexture_xa85y")
+alpha_curve = SubResource("CurveTexture_jwly3")
+
+[sub_resource type="QuadMesh" id="QuadMesh_hm27i"]
+material = ExtResource("6_c7c8l")
+center_offset = Vector3(0, 0.4, 0)
+
+[sub_resource type="Curve" id="Curve_jwly3"]
+_data = [Vector2(0, 0.0869263), 0.0, 1.65586, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_wxqed"]
+width = 64
+curve = SubResource("Curve_jwly3")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1lvje"]
+angle_min = 1.07288e-05
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_wxqed")
+alpha_curve = SubResource("CurveTexture_jwly3")
+
+[sub_resource type="QuadMesh" id="QuadMesh_mo8io"]
+material = ExtResource("7_c7c8l")
+
+[sub_resource type="Gradient" id="Gradient_jwly3"]
+offsets = PackedFloat32Array(0, 0.234714, 0.74359, 1)
+colors = PackedColorArray(0.810082, 0.19127, 0, 1, 1, 0.3, 0, 1, 0.98, 0.41944, 0.2156, 1, 0.678944, 0.678944, 0.678944, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wxqed"]
+gradient = SubResource("Gradient_jwly3")
+width = 64
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mo8io"]
+emission_shape = 2
+emission_sphere_radius = 1.0
+angle_min = 1.07288e-05
+angle_max = 360.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_wxqed")
+color_initial_ramp = SubResource("GradientTexture1D_wxqed")
+alpha_curve = SubResource("CurveTexture_jwly3")
+
+[sub_resource type="QuadMesh" id="QuadMesh_xa85y"]
+material = ExtResource("8_i6jhs")
 
 [sub_resource type="Animation" id="Animation_ojg08"]
 resource_name = "RESET"
@@ -406,6 +524,20 @@ tracks/3/keys = {
 "update": 1,
 "values": [false, true]
 }
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Root/Explosion")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"RestartGroup"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_g2e5f"]
 resource_name = "fly"
@@ -588,6 +720,69 @@ ignoreSpeedbreakingCharacters = true
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Root/Hitbox"]
 shape = SubResource("SphereShape3D_xchwx")
 disabled = true
+
+[node name="Explosion" type="GPUParticles3D" parent="Root" node_paths=PackedStringArray("subSystems")]
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_l6cb0")
+draw_pass_1 = SubResource("QuadMesh_8e5qk")
+script = ExtResource("7_umhhu")
+subSystems = [NodePath("Dust"), NodePath("Flame"), NodePath("FlameDust")]
+
+[node name="Dust" type="GPUParticles3D" parent="Root/Explosion"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 16
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 0
+interpolate = false
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_c7c8l")
+draw_pass_1 = SubResource("QuadMesh_hm27i")
+
+[node name="Flame" type="GPUParticles3D" parent="Root/Explosion"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+amount = 4
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.5
+fixed_fps = 0
+interpolate = false
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_1lvje")
+draw_pass_1 = SubResource("QuadMesh_mo8io")
+
+[node name="FlameDust" type="GPUParticles3D" parent="Root/Explosion"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+layers = 32
+cast_shadow = 0
+extra_cull_margin = 16384.0
+emitting = false
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.4
+fixed_fps = 0
+interpolate = false
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_mo8io")
+draw_pass_1 = SubResource("QuadMesh_xa85y")
 
 [node name="Decals" type="Node3D" parent="."]
 
