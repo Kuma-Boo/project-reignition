@@ -110,6 +110,7 @@ public partial class CaptainBemoth : PathFollow3D
 		rotationVelocity = 0;
 
 		isAttackActive = false;
+		isAttackQueued = false;
 		bombAttackCounter = 0;
 		waveAttackCounter = 0;
 		chargeAttackFx.SetEmitting(false);
@@ -194,10 +195,19 @@ public partial class CaptainBemoth : PathFollow3D
 		if (!IsClosed)
 			Close();
 
-		isFacingForward = currentHealth == 1; // Only face the player when almost dead
 		currentState = BemothState.Idle;
-		attackTimer = AttackTimerInterval;
-		EnableHornHurtboxes();
+		isFacingForward = currentHealth == 1; // Only face the player when almost dead
+
+		if (isAttackQueued)
+		{
+			attackTimer = QueuedAttackDelay;
+			DisableHornHurtboxes();
+		}
+		else
+		{
+			attackTimer = AttackTimerInterval;
+			EnableHornHurtboxes();
+		}
 	}
 
 	private void ProcessIdleState()
@@ -328,17 +338,28 @@ public partial class CaptainBemoth : PathFollow3D
 	private void TakeDamage()
 	{
 		currentHealth--;
+		isAttackQueued = true;
 		DisableHornHurtboxes();
 		animator.Set(DamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
 	#region Attacks
+	/// <summary> Is an attack being queued directly after taking damage? </summary>
+	private bool isAttackQueued;
 	private bool isAttackActive;
 	private float attackTimer;
+	private readonly float QueuedAttackDelay = 1.2f;
 	private readonly float AttackTimerInterval = 3f;
 
 	private void StartAttack()
 	{
+		if (isAttackQueued) // Queued attacks are always waves
+		{
+			isAttackQueued = false;
+			EnterWaveAttackState();
+			return;
+		}
+
 		if (currentHealth == MaxHealth || GetDeltaProgress() >= BombAttackRange)
 		{
 			EnterBombAttackState();
