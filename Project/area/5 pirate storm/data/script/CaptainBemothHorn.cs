@@ -12,8 +12,9 @@ public partial class CaptainBemothHorn : Node3D
 	[Signal] public delegate void JumpedEventHandler();
 
 	[Export] private AnimationTree animator;
-	[Export] private CollisionShape3D collider;
+	[Export] private Area3D area;
 	[Export] private GroupGpuParticles3D joltFx;
+
 	[Export] private int maxHealth;
 	/// <summary> How long to delay the actual pop so animations have time to catch up. </summary>
 	[Export] private float popDelay = .5f;
@@ -25,7 +26,7 @@ public partial class CaptainBemothHorn : Node3D
 
 	private SpawnData spawnData;
 
-	public Node3D FollowObject => collider;
+	public Node3D FollowObject => area;
 	public bool IsPopping { get; private set; }
 	public bool IsPopReady => damageDealt == maxHealth;
 	public bool IsJoltingHorn => joltTimer >= 0;
@@ -69,8 +70,8 @@ public partial class CaptainBemothHorn : Node3D
 		ProcessMode = ProcessModeEnum.Disabled;
 	}
 
-	public void EnableLockon() => collider.Disabled = false;
-	public void DisableLockon() => collider.Disabled = true;
+	public void EnableLockon() => area.Monitorable = true;
+	public void DisableLockon() => area.Monitorable = false;
 
 	public override void _PhysicsProcess(double _)
 	{
@@ -123,11 +124,11 @@ public partial class CaptainBemothHorn : Node3D
 	}
 
 	///<summary> Pulls the horn out by a tiny bit. </summary>
-	public void JoltHorn(bool strongJolt = true)
+	public void JoltHorn(int damage)
 	{
 		// Start jolt
 		joltTimer = 0;
-		damageDealt += strongJolt ? 2 : 1;
+		damageDealt += damage;
 
 		// TODO Play SFX
 		joltFx.RestartGroup();

@@ -8,8 +8,26 @@ public partial class BemothHornState : PlayerState
 {
 	public CaptainBemothHorn Trigger { get; set; }
 
+	private int PullStrength
+	{
+		get
+		{
+			if (Mathf.IsEqualApprox(pullChargeTimer, OptimalPullChargeTiming))
+				return 4; // Max damage
+
+			if (pullChargeTimer >= OptimalPullChargeTiming * .5f)
+				return 3; // Mid damage
+
+			return 2; // Low damage
+		}
+	}
+	/// <summary> Used to mimmick the "optimal speedrun strat" in the original game. </summary>
+	private float pullChargeTimer;
+	private readonly float OptimalPullChargeTiming = .4f;
+
 	public override void EnterState()
 	{
+		pullChargeTimer = 0f;
 		Player.Lockon.IsMonitoring = false;
 
 		// Prevent accidental inputs
@@ -19,11 +37,12 @@ public partial class BemothHornState : PlayerState
 		Player.Animator.StartBemothHorn();
 		Player.StartExternal(Trigger, Trigger.FollowObject, 1f);
 
-		Trigger.CallDeferred(CaptainBemothHorn.MethodName.JoltHorn, false);
+		Trigger.CallDeferred(CaptainBemothHorn.MethodName.JoltHorn, 1);
 	}
 
 	public override void ExitState()
 	{
+		pullChargeTimer = 0f;
 		Player.Animator.ResetState();
 		Player.StopExternal();
 	}
@@ -32,10 +51,12 @@ public partial class BemothHornState : PlayerState
 	{
 		Player.CallDeferred(PlayerController.MethodName.UpdateExternalControl, true);
 
-		if (Trigger.IsJoltingHorn || Trigger.IsPopping)
+		if (Trigger.IsPopping || Trigger.IsPopReady)
 			return null;
 
-		if (Trigger.IsPopReady)
+		ProcessPullCharge();
+
+		if (Trigger.IsJoltingHorn)
 			return null;
 
 		if (Player.Controller.IsJumpBufferActive)
@@ -43,13 +64,33 @@ public partial class BemothHornState : PlayerState
 			Trigger.JumpOff();
 			Player.Controller.ResetJumpBuffer();
 		}
-		else if (Player.Controller.IsActionBufferActive)
-		{
-			Trigger.JoltHorn();
-			Player.Camera.StartMediumCameraShake();
-			Player.Controller.ResetActionBuffer();
-		}
 
 		return null;
+	}
+
+	private void ProcessPullCharge()
+	{
+		if (Input.IsActionPressed("button_action"))
+		{
+			if (Mathf.IsEqualApprox(pullChargeTimer, OptimalPullChargeTiming)) // Already charged
+				return;
+
+			pullChargeTimer = Mathf.MoveToward(pullChargeTimer, OptimalPullChargeTiming, PhysicsManager.physicsDelta);
+			return;
+		}
+
+		if (Mathf.IsZeroApprox(pullChargeTimer))
+			return;
+
+		if (!Trigger.IsJoltingHorn)
+		{
+			Trigger.JoltHorn(PullStrength);
+			pullChargeTimer = 0f;
+			Player.Camera.StartMediumCameraShake();
+			Player.Controller.ResetActionBuffer();
+			return;
+		}
+
+		pullChargeTimer = Mathf.MoveToward(pullChargeTimer, 0, PhysicsManager.physicsDelta);
 	}
 }

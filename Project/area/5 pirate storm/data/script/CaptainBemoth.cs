@@ -235,7 +235,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private readonly float StopDistance = 30f;
 	private readonly float StopDistanceSmoothingStart = 25f;
 	private readonly float ShockAttackSpeed = 5f;
-	private readonly float WaveAttackDistance = 20f;
+	private readonly float WaveAttackDistance = 15f;
 
 	/// <summary> Returns the progress difference between the player and the boss. </summary>
 	public float GetDeltaProgress()
@@ -258,32 +258,35 @@ public partial class CaptainBemoth : PathFollow3D
 		float speedRatio = 1f - Mathf.Clamp((deltaProgress - StopDistanceSmoothingStart) / (StopDistance - StopDistanceSmoothingStart), 0f, 1f);
 		float targetMoveSpeed = BaseMoveSpeed * speedRatio;
 
-		if (currentState == BemothState.WaveAttack)
+		if (!Player.IsHomingAttacking)
 		{
-			speedRatio = Mathf.Clamp((deltaProgress - StopDistanceSmoothingStart) / (WaveAttackDistance - StopDistanceSmoothingStart), 0f, 1f);
-			targetMoveSpeed = BaseMoveSpeed * speedRatio;
-			targetMoveSpeed += Player.MoveSpeed * (Player.IsMovingBackward ? -1f : 1f);
-		}
-		else if (currentState == BemothState.ChargeAttack)
-		{
-			targetMoveSpeed = CalculateChargingMoveSpeed(deltaProgress);
+			if (currentState == BemothState.WaveAttack)
+			{
+				speedRatio = Mathf.Clamp((deltaProgress - StopDistanceSmoothingStart) / (WaveAttackDistance - StopDistanceSmoothingStart), 0f, 1f);
+				targetMoveSpeed = BaseMoveSpeed * speedRatio;
+				targetMoveSpeed += Player.MoveSpeed * (Player.IsMovingBackward ? -1f : 1f);
+			}
+			else if (currentState == BemothState.ChargeAttack)
+			{
+				targetMoveSpeed = CalculateChargingMoveSpeed(deltaProgress);
 
-			if (Player.IsKnockback)
-				moveSpeed = targetMoveSpeed;
-		}
-		else if (currentState == BemothState.ShockAttack)
-		{
-			targetMoveSpeed = ShockAttackSpeed;
-		}
-		else if (Player.IsMovingBackward)
-		{
-			targetMoveSpeed -= Player.MoveSpeed;
-		}
-		else if (deltaProgress <= MinimumDistanceSmoothingStart && !Player.IsHomingAttacking)
-		{
-			float smoothingRatio = 1f - ((deltaProgress - MinimumDistance) / (MinimumDistanceSmoothingStart - MinimumDistance));
-			targetMoveSpeed += Player.MoveSpeed * smoothingRatio;
-			speedSmoothing = Mathf.Lerp(speedSmoothing, 0, smoothingRatio);
+				if (Player.IsKnockback)
+					moveSpeed = targetMoveSpeed;
+			}
+			else if (currentState == BemothState.ShockAttack)
+			{
+				targetMoveSpeed = ShockAttackSpeed;
+			}
+			else if (Player.IsMovingBackward)
+			{
+				targetMoveSpeed -= Player.MoveSpeed;
+			}
+			else if (deltaProgress <= MinimumDistanceSmoothingStart)
+			{
+				float smoothingRatio = 1f - ((deltaProgress - MinimumDistance) / (MinimumDistanceSmoothingStart - MinimumDistance));
+				targetMoveSpeed += Player.MoveSpeed * smoothingRatio;
+				speedSmoothing = Mathf.Lerp(speedSmoothing, 0, smoothingRatio);
+			}
 		}
 
 		moveSpeed = ExtensionMethods.SmoothDamp(moveSpeed, targetMoveSpeed, ref moveSpeedVelocity, speedSmoothing * PhysicsManager.physicsDelta);
@@ -312,27 +315,25 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private void EnableHornHurtboxes()
 	{
-		DisableHornHurtboxes();
-
 		// Enable the correct horns
-		horns[0].EnableLockon();
+		horns[0].CallDeferred(CaptainBemothHorn.MethodName.EnableLockon);
 
 		if (currentHealth < MaxHealth)
 		{
-			horns[1].EnableLockon();
-			horns[2].EnableLockon();
+			horns[1].CallDeferred(CaptainBemothHorn.MethodName.EnableLockon);
+			horns[2].CallDeferred(CaptainBemothHorn.MethodName.EnableLockon);
 		}
 
 		/*
 		if (currentHealth == 1)
-			horns[3].EnableLockon();
+			horns[3].CallDeferred(CaptainBemothHorn.MethodName.EnableLockon);
 		*/
 	}
 
 	private void DisableHornHurtboxes()
 	{
 		foreach (CaptainBemothHorn horn in horns)
-			horn.DisableLockon();
+			horn.CallDeferred(CaptainBemothHorn.MethodName.DisableLockon);
 	}
 
 	private readonly StringName HornDamageTrigger = "parameters/horn_damage_trigger/request";
@@ -553,6 +554,12 @@ public partial class CaptainBemoth : PathFollow3D
 
 		attackTimer = 0;
 		currentState = BemothState.ShockAttack;
+		// TODO Prevent player from 
+	}
+
+	private void ProcessShockAttack()
+	{
+
 	}
 
 	private void CancelBombAttacks()
@@ -568,7 +575,7 @@ public partial class CaptainBemoth : PathFollow3D
 	#endregion
 
 	private readonly float LaunchFallHeight = 8f;
-	private readonly float LaunchProgressSearchInterval = 10f;
+	private readonly float LaunchProgressSearchInterval = 5f;
 	private readonly float LaunchHeightCheckLength = 20f;
 
 	private void LaunchPlayer(bool isJump)
