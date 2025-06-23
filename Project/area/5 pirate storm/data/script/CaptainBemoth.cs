@@ -243,7 +243,6 @@ public partial class CaptainBemoth : PathFollow3D
 	private readonly float MinimumDistanceSmoothingStart = 10f;
 	private readonly float StopDistance = 40f;
 	private readonly float StopDistanceSmoothingStart = 25f;
-	private readonly float ShockAttackSpeed = 5f;
 	private readonly float WaveAttackDistance = 20f;
 
 	/// <summary> Returns the progress difference between the player and the boss. </summary>
@@ -284,7 +283,7 @@ public partial class CaptainBemoth : PathFollow3D
 			}
 			else if (currentState == BemothState.ShockAttack)
 			{
-				targetMoveSpeed = isShockAttackActive ? 0f : ShockAttackSpeed;
+				targetMoveSpeed = isShockAttackActive ? 0f : BaseMoveSpeed;
 			}
 			else if (Player.IsMovingBackward)
 			{
@@ -573,21 +572,24 @@ public partial class CaptainBemoth : PathFollow3D
 	private bool hasPlayerJumpedOffHorn;
 	private bool isShockAttackActive;
 	private float shockTimer;
-	private readonly float ShockAttackDelay = 6f;
+	private readonly float ShockAttackLongDelay = 3f;
+	private readonly float ShockAttackShortDelay = .5f;
+	private readonly float ShockAttackChargeLength = 5f;
 	private readonly StringName ShockTrigger = "parameters/shock_trigger/request";
 	private void EnterShockAttackState()
 	{
 		CancelBombAttacks();
 
 		attackTimer = 0;
-		shockTimer = 0;
 		isAttackActive = false;
 		isShockAttackActive = false;
 		hasPlayerJumpedOffHorn = false;
 		currentState = BemothState.ShockAttack;
 
+		// Delay shock to give time to one-cycle horns
+		shockTimer = currentHealth == MaxHealth || currentHealth == 1 ? -ShockAttackLongDelay : -ShockAttackShortDelay;
 		shockAttackFx.SetEmitting(true);
-		shockAttackRoot.Scale = Vector3.Zero;
+		shockAttackRoot.Scale = Vector3.One * 0.001f;
 	}
 
 	private void ProcessShockAttack()
@@ -595,12 +597,12 @@ public partial class CaptainBemoth : PathFollow3D
 		if (isShockAttackActive)
 			return;
 
-		shockTimer = Mathf.MoveToward(shockTimer, ShockAttackDelay, PhysicsManager.physicsDelta);
+		shockTimer = Mathf.MoveToward(shockTimer, ShockAttackChargeLength, PhysicsManager.physicsDelta);
 
-		float fxScale = Mathf.Clamp(shockTimer / ShockAttackDelay, 0f, 1f);
-		shockAttackRoot.Scale = Vector3.Zero.Lerp(Vector3.One, fxScale);
+		float fxScale = Mathf.Clamp(shockTimer / ShockAttackChargeLength, 0f, 1f);
+		shockAttackRoot.Scale = (Vector3.One * 0.001f).Lerp(Vector3.One, fxScale);
 
-		if (Mathf.IsEqualApprox(shockTimer, ShockAttackDelay))
+		if (Mathf.IsEqualApprox(shockTimer, ShockAttackChargeLength))
 		{
 			isShockAttackActive = true;
 			shockAttackFx.StopGroup(); // Momentary pause before the burst
@@ -735,15 +737,21 @@ public partial class CaptainBemoth : PathFollow3D
 		CallDeferred(MethodName.LaunchPlayer, false); // Transition back to gameplay
 	}
 
-	private void EnableAttacks()
+	private void EnableAttacks(Area3D a)
 	{
+		if (!a.IsInGroup("no attack zone"))
+			return;
+
 		isAttackDisabled = false;
 		isAttackQueued = true;
 		EnterIdleState();
 	}
 
-	private void DisableAttacks()
+	private void DisableAttacks(Area3D a)
 	{
+		if (!a.IsInGroup("no attack zone"))
+			return;
+
 		EnterIdleState();
 		CancelBombAttacks();
 		chargeAttackFx.SetEmitting(false);

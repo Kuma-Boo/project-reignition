@@ -744,7 +744,7 @@ transform = Transform3D(0.707106, 0.707106, 0, -0.707106, 0.707106, 0, 0, 0, 1, 
 
 [node name="Hitbox" type="Area3D" parent="Root/RootAttachment"]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 10
 monitorable = false
 
 [node name="Hitbox" type="Node3D" parent="Root/RootAttachment/Hitbox"]
@@ -1099,7 +1099,9 @@ script = ExtResource("8_hppyi")
 [connection signal="Popped" from="Root/RootAttachment/RootOrientation/HornLeft" to="Root/Cameras/DamageCamera" method="Activate"]
 [connection signal="HangStarted" from="Root/RootAttachment/RootOrientation/HornRight" to="Root/Cameras/RightCamera" method="Activate"]
 [connection signal="Popped" from="Root/RootAttachment/RootOrientation/HornRight" to="Root/Cameras/DamageCamera" method="Activate"]
+[connection signal="area_entered" from="Root/RootAttachment/Hitbox" to="." method="DisableAttacks"]
 [connection signal="area_entered" from="Root/RootAttachment/Hitbox" to="Root/RootAttachment/Hitbox/Hitbox" method="OnEntered"]
+[connection signal="area_exited" from="Root/RootAttachment/Hitbox" to="." method="EnableAttacks"]
 [connection signal="area_exited" from="Root/RootAttachment/Hitbox" to="Root/RootAttachment/Hitbox/Hitbox" method="OnExited"]
 [connection signal="DamagedPlayer" from="Root/RootAttachment/Hitbox/Hitbox" to="." method="StopChargeAttack"]
 

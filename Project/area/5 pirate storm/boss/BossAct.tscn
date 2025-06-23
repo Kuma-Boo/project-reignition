@@ -90,13 +90,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.6, 0)
 
 [node name="CharacterSpawn" parent="BossAct/SpawnPosition" instance=ExtResource("2_bkvyc")]
 
-[node name="StageTrigger" parent="BossAct" instance=ExtResource("4_0hwip")]
+[node name="NoAttackZone" type="Area3D" parent="BossAct" groups=["no attack zone"]]
 transform = Transform3D(0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, 0.766044, 265, 21, 30)
-"Trigger Mode" = 2
-"Enter Mode" = 0
-"Exit Mode" = 0
+collision_layer = 8
+collision_mask = 0
+monitoring = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/StageTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/NoAttackZone"]
 shape = SubResource("BoxShape3D_tbv1a")
 
 [node name="BossPath" type="Path3D" parent="BossAct"]
@@ -104,7 +104,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 9.6, 0)
 curve = ExtResource("3_1r666")
 
 [node name="CaptainBemoth" parent="BossAct/BossPath" node_paths=PackedStringArray("waveLeft", "waveRight") instance=ExtResource("4_tbv1a")]
-transform = Transform3D(-0.999712, -0.000335644, -0.0201355, 0, 0.9998, -0.0166651, 0.0201383, -0.0166621, -0.999571, -0.573037, -0.344242, -29.9924)
+transform = Transform3D(-0.999711, -0.000335644, -0.0201355, 0, 0.9998, -0.0166651, 0.0201383, -0.0166621, -0.999571, -0.573037, -0.344242, -29.9924)
 progress = 30.0
 waveLeft = NodePath("../WaveAttackL")
 waveRight = NodePath("../WaveAttackR")
@@ -1447,8 +1447,6 @@ transform = Transform3D(1, 1.01863e-10, 2.98023e-08, 1.89175e-10, 1, 1.30967e-10
 [node name="Child20" parent="BossAct/Lap2/Pearls3" instance=ExtResource("8_ow4n3")]
 transform = Transform3D(1, 1.01863e-10, 2.98023e-08, 1.89175e-10, 1, 1.30967e-10, 2.98023e-08, 1.01863e-10, 1, 72.6632, -0.108095, 16.8306)
 
-[connection signal="Activated" from="BossAct/StageTrigger" to="BossAct/BossPath/CaptainBemoth" method="DisableAttacks"]
-[connection signal="Deactivated" from="BossAct/StageTrigger" to="BossAct/BossPath/CaptainBemoth" method="EnableAttacks"]
 [connection signal="Activated" from="BossAct/LapCycle/Checkpoint" to="BossAct/LapCycle/Cycle" method="OnCheckpointActivated"]
 [connection signal="Deactivated" from="BossAct/LapCycle/Checkpoint" to="BossAct/LapCycle/Cycle" method="OnCheckpointDeactivated"]
 
