@@ -24,7 +24,7 @@ public partial class PlayerStatsController : Node
 	[Export(PropertyHint.Range, "1,2,.1f")]
 	private float groundSpeedMediumRatio = 1.3f;
 	[Export(PropertyHint.Range, "1,2,.1f")]
-	private float groundSpeedHighRatio = 1.5f;
+	private float groundSpeedHighRatio = 1.6f;
 	[Export(PropertyHint.Range, "1,5,.1f")]
 	private float tractionLowRatio = 1.2f;
 	[Export(PropertyHint.Range, "1,5,.1f")]
