@@ -47,6 +47,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 		for (int i = 0; i < horns.Length; i++)
 		{
+			horns[i].HangStarted += EnterShockAttackState;
 			horns[i].Jolted += TakeHornDamage;
 			horns[i].Popped += TakeDamage;
 			horns[i].Jumped += () => LaunchPlayer(true);
@@ -235,7 +236,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private readonly float StopDistance = 30f;
 	private readonly float StopDistanceSmoothingStart = 25f;
 	private readonly float ShockAttackSpeed = 5f;
-	private readonly float WaveAttackDistance = 15f;
+	private readonly float WaveAttackDistance = 20f;
 
 	/// <summary> Returns the progress difference between the player and the boss. </summary>
 	public float GetDeltaProgress()
@@ -255,14 +256,14 @@ public partial class CaptainBemoth : PathFollow3D
 
 		float deltaProgress = GetDeltaProgress();
 		float speedSmoothing = MoveSpeedSmoothing;
-		float speedRatio = 1f - Mathf.Clamp((deltaProgress - StopDistanceSmoothingStart) / (StopDistance - StopDistanceSmoothingStart), 0f, 1f);
+		float speedRatio = 1f - Mathf.Clamp(deltaProgress / StopDistance, 0f, 1f);
 		float targetMoveSpeed = BaseMoveSpeed * speedRatio;
 
 		if (!Player.IsHomingAttacking)
 		{
 			if (currentState == BemothState.WaveAttack)
 			{
-				speedRatio = Mathf.Clamp((deltaProgress - StopDistanceSmoothingStart) / (WaveAttackDistance - StopDistanceSmoothingStart), 0f, 1f);
+				speedRatio = 1f - Mathf.Clamp(deltaProgress / WaveAttackDistance, 0f, 1f);
 				targetMoveSpeed = BaseMoveSpeed * speedRatio;
 				targetMoveSpeed += Player.MoveSpeed * (Player.IsMovingBackward ? -1f : 1f);
 			}
@@ -382,7 +383,7 @@ public partial class CaptainBemoth : PathFollow3D
 			return;
 		}
 
-		if (Runtime.randomNumberGenerator.Randf() > 0.5f)
+		if (Runtime.randomNumberGenerator.Randf() > 0.7f)
 			EnterWaveAttackState();
 		else
 			EnterChargeAttackState();
@@ -642,6 +643,7 @@ public partial class CaptainBemoth : PathFollow3D
 	{
 		EnterIdleState();
 		CancelBombAttacks();
+		chargeAttackFx.SetEmitting(false);
 		isAttackDisabled = true;
 	}
 }
