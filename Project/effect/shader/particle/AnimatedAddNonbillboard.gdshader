@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_add, specular_disabled, unshaded;
+render_mode blend_add, specular_disabled, unshaded, cull_disabled;
 
 uniform sampler2D albedo : source_color;
 uniform int particles_anim_h_frames;

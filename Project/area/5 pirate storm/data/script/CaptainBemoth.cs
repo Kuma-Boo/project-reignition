@@ -14,6 +14,8 @@ public partial class CaptainBemoth : PathFollow3D
 	[Export] private CameraTrigger mainCameraTrigger;
 	[Export] private JumpTrigger jumpTrigger;
 	[Export] private GroupGpuParticles3D chargeAttackFx;
+	[Export] private GroupGpuParticles3D shockAttackFx;
+	[Export] private Node3D shockAttackRoot;
 
 	[Export] private CaptainBemothHorn[] horns;
 
@@ -102,6 +104,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private void Respawn()
 	{
 		EnterIdleState();
+		StopMotionBlur();
 		currentHealth = MaxHealth;
 		Progress = StopDistance;
 		HOffset = 0;
@@ -112,6 +115,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 		isAttackActive = false;
 		isAttackQueued = false;
+		isShockAttackActive = false;
 		bombAttackCounter = 0;
 		waveAttackCounter = 0;
 		chargeAttackFx.SetEmitting(false);
@@ -124,6 +128,7 @@ public partial class CaptainBemoth : PathFollow3D
 		animator.Set(WaveTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animator.Set(HornDamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 		animator.Set(DamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		animator.Set(ShockTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
 
 		waveLeft.Deactivate();
 		waveRight.Deactivate();
@@ -162,6 +167,9 @@ public partial class CaptainBemoth : PathFollow3D
 				break;
 			case BemothState.ChargeAttack:
 				ProcessChargeAttackState();
+				break;
+			case BemothState.ShockAttack:
+				ProcessShockAttack();
 				break;
 			default:
 				break;
@@ -230,10 +238,10 @@ public partial class CaptainBemoth : PathFollow3D
 	private float moveSpeedVelocity;
 	private readonly float MoveSpeedSmoothing = 10f;
 	private readonly float BaseMoveSpeed = 15f;
-	private readonly float ChargeSpeed = -60f;
+	private readonly float ChargeSpeed = -100f;
 	private readonly float MinimumDistance = 2f;
 	private readonly float MinimumDistanceSmoothingStart = 10f;
-	private readonly float StopDistance = 30f;
+	private readonly float StopDistance = 40f;
 	private readonly float StopDistanceSmoothingStart = 25f;
 	private readonly float ShockAttackSpeed = 5f;
 	private readonly float WaveAttackDistance = 20f;
@@ -276,7 +284,7 @@ public partial class CaptainBemoth : PathFollow3D
 			}
 			else if (currentState == BemothState.ShockAttack)
 			{
-				targetMoveSpeed = ShockAttackSpeed;
+				targetMoveSpeed = isShockAttackActive ? 0f : ShockAttackSpeed;
 			}
 			else if (Player.IsMovingBackward)
 			{
@@ -346,6 +354,7 @@ public partial class CaptainBemoth : PathFollow3D
 		currentHealth--;
 		isAttackQueued = true;
 		DisableHornHurtboxes();
+		CancelShockAttack();
 		animator.Set(DamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
@@ -430,6 +439,17 @@ public partial class CaptainBemoth : PathFollow3D
 		bombs[bombAttackCounter - 1].StartWindup();
 	}
 
+	private void CancelBombAttacks()
+	{
+		foreach (BossBombAttack bomb in bombs)
+		{
+			if (bomb.IsActive) // Already flying
+				continue;
+
+			bomb.CancelLaunch();
+		}
+	}
+
 	private int waveAttackCounter;
 	/// <summary> Direction of the wave attack. </summary>
 	private readonly StringName WaveTransition = "parameters/wave_transition/transition_request";
@@ -488,6 +508,7 @@ public partial class CaptainBemoth : PathFollow3D
 		if (IsClosed)
 			Open();
 
+		shockTimer = 0;
 		isFacingForward = true;
 		isChargeAttackCharging = true;
 		currentState = BemothState.ChargeAttack;
@@ -549,47 +570,120 @@ public partial class CaptainBemoth : PathFollow3D
 		chargeAttackFx.SetEmitting(false);
 	}
 
+	private bool hasPlayerJumpedOffHorn;
+	private bool isShockAttackActive;
+	private float shockTimer;
+	private readonly float ShockAttackDelay = 6f;
+	private readonly StringName ShockTrigger = "parameters/shock_trigger/request";
 	private void EnterShockAttackState()
 	{
 		CancelBombAttacks();
 
 		attackTimer = 0;
+		shockTimer = 0;
+		isAttackActive = false;
+		isShockAttackActive = false;
+		hasPlayerJumpedOffHorn = false;
 		currentState = BemothState.ShockAttack;
-		// TODO Prevent player from 
+
+		shockAttackFx.SetEmitting(true);
+		shockAttackRoot.Scale = Vector3.Zero;
 	}
 
 	private void ProcessShockAttack()
 	{
+		if (isShockAttackActive)
+			return;
 
+		shockTimer = Mathf.MoveToward(shockTimer, ShockAttackDelay, PhysicsManager.physicsDelta);
+
+		float fxScale = Mathf.Clamp(shockTimer / ShockAttackDelay, 0f, 1f);
+		shockAttackRoot.Scale = Vector3.Zero.Lerp(Vector3.One, fxScale);
+
+		if (Mathf.IsEqualApprox(shockTimer, ShockAttackDelay))
+		{
+			isShockAttackActive = true;
+			shockAttackFx.StopGroup(); // Momentary pause before the burst
+			animator.Set(ShockTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+			Player.SetHornPullable(false);
+		}
 	}
 
-	private void CancelBombAttacks()
+	private void CancelShockAttack()
 	{
-		foreach (BossBombAttack bomb in bombs)
-		{
-			if (bomb.IsActive) // Already flying
-				continue;
+		shockTimer = 0;
+		isShockAttackActive = false;
+		shockAttackFx.StopGroup();
+	}
 
-			bomb.CancelLaunch();
-		}
+	private void ActivateShockScreenShake()
+	{
+		jumpCameraTrigger.GlobalPosition = Player.Camera.Camera.GlobalPosition; // Sync jump camera's position
+		jumpCameraTrigger.Activate();
+		Player.Camera.StartCameraShake(new()
+		{
+			magnitude = Vector3.One.RemoveDepth() * 5f,
+			intensity = Vector3.One * 100.0f,
+			duration = 1f,
+		});
+	}
+
+	/// <summary> Locks the player in for damage. </summary>
+	private void LockPlayerJump() => Player.SetHornJumpable(false);
+
+	private void DamagePlayer()
+	{
+		if (hasPlayerJumpedOffHorn) // Player must have jumped off already
+			return;
+
+		Player.StartKnockback(new()
+		{
+			ignoreMovementState = true,
+			overrideKnockbackHeight = true,
+			knockbackHeight = LaunchFallHeight,
+		});
+	}
+
+	private void FinishPlayerDamage()
+	{
+		if (!hasPlayerJumpedOffHorn)
+			LaunchPlayer(false);
+
+		EnterIdleState();
+	}
+
+	private bool isRequestingMotionBlur;
+	private void StartMotionBlur()
+	{
+		isRequestingMotionBlur = true;
+		Player.Camera.RequestMotionBlur();
+	}
+
+	private void StopMotionBlur()
+	{
+		if (!isRequestingMotionBlur)
+			return;
+
+		Player.Camera.UnrequestMotionBlur();
+		isRequestingMotionBlur = false;
 	}
 	#endregion
 
 	private readonly float LaunchFallHeight = 8f;
 	private readonly float LaunchProgressSearchInterval = 5f;
+	private readonly float BaseLaunchOffset = 10f;
 	private readonly float LaunchHeightCheckLength = 20f;
 
 	private void LaunchPlayer(bool isJump)
 	{
 		float initialProgress = Player.PathFollower.Progress;
-		RaycastHit hit = new();
+		Player.PathFollower.Progress -= BaseLaunchOffset;
+		RaycastHit hit = CheckLaunchGround();
 
 		while (!hit)
 		{
 			Player.PathFollower.Progress -= LaunchProgressSearchInterval;
-			hit = this.CastRay(Player.PathFollower.GlobalPosition + Vector3.Up * LaunchHeightCheckLength * 0.5f,
-				Vector3.Down * LaunchHeightCheckLength,
-				Runtime.Instance.environmentMask);
+			hit = CheckLaunchGround();
 		}
 
 		Player.PathFollower.Progress = initialProgress;
@@ -601,6 +695,7 @@ public partial class CaptainBemoth : PathFollow3D
 			jumpCameraTrigger.GlobalPosition = Player.Camera.Camera.GlobalPosition; // Sync jump camera's position
 			jumpCameraTrigger.Activate();
 			jumpTrigger.JumpFinished += FinishJump;
+			hasPlayerJumpedOffHorn = true;
 		}
 		else
 		{
@@ -616,8 +711,12 @@ public partial class CaptainBemoth : PathFollow3D
 		if (isJump)
 			Player.Animator.StartSpin(3f);
 
-		// TODO Finish shock if it's already charged
-		EnterIdleState();
+		// Only change states when shock wasn't charged
+		if (!isShockAttackActive)
+		{
+			CancelShockAttack();
+			EnterIdleState();
+		}
 
 		foreach (CaptainBemothHorn horn in horns)
 		{
@@ -625,6 +724,10 @@ public partial class CaptainBemoth : PathFollow3D
 				horn.Despawn();
 		}
 	}
+
+	private RaycastHit CheckLaunchGround() => this.CastRay(Player.PathFollower.GlobalPosition + Vector3.Up * LaunchHeightCheckLength * 0.5f,
+		Vector3.Down * LaunchHeightCheckLength,
+		Runtime.Instance.environmentMask);
 
 	private void FinishJump()
 	{

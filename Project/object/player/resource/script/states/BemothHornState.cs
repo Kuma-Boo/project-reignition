@@ -8,6 +8,8 @@ public partial class BemothHornState : PlayerState
 {
 	public CaptainBemothHorn Trigger { get; set; }
 
+	public bool CanJump { get; set; }
+	public bool CanPullHorns { get; set; }
 	private int PullStrength
 	{
 		get
@@ -59,7 +61,7 @@ public partial class BemothHornState : PlayerState
 		if (Trigger.IsJoltingHorn)
 			return null;
 
-		if (Player.Controller.IsJumpBufferActive)
+		if (CanJump && Player.Controller.IsJumpBufferActive)
 		{
 			Trigger.JumpOff();
 			Player.Controller.ResetJumpBuffer();
@@ -70,6 +72,9 @@ public partial class BemothHornState : PlayerState
 
 	private void ProcessPullCharge()
 	{
+		if (!CanPullHorns)
+			return;
+
 		if (Input.IsActionPressed("button_action"))
 		{
 			if (Mathf.IsEqualApprox(pullChargeTimer, OptimalPullChargeTiming)) // Already charged
@@ -85,9 +90,11 @@ public partial class BemothHornState : PlayerState
 		if (!Trigger.IsJoltingHorn)
 		{
 			Trigger.JoltHorn(PullStrength);
-			pullChargeTimer = 0f;
-			Player.Camera.StartMediumCameraShake();
+			if (PullStrength > 2) // Feedback
+				Player.Camera.StartMediumCameraShake();
 			Player.Controller.ResetActionBuffer();
+
+			pullChargeTimer = 0f;
 			return;
 		}
 

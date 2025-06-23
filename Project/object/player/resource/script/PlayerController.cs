@@ -820,8 +820,15 @@ public partial class PlayerController : CharacterBody3D
 	public void StartHorn(Bosses.CaptainBemothHorn horn)
 	{
 		hornState.Trigger = horn;
+		SetHornPullable(true);
+		SetHornJumpable(true);
 		StateMachine.ChangeState(hornState);
 	}
+
+	/// <summary> Updates whether the player can pull the horns of Pirate Storm's boss. </summary>
+	public void SetHornPullable(bool isPullable) => hornState.CanPullHorns = isPullable;
+	/// <summary> Updates whether the player can jump off the horns of Pirate Storm's boss. </summary>
+	public void SetHornJumpable(bool isJumpable) => hornState.CanJump = isJumpable;
 
 	[Signal]
 	public delegate void KnockbackEventHandler();
