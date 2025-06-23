@@ -9,6 +9,7 @@ public partial class CaptainBemoth : PathFollow3D
 {
 	[ExportGroup("Components")]
 	[Export] private AnimationTree animator;
+	[Export] private AnimationPlayer eventAnimator;
 	[Export] private Node3D root;
 	[Export] private CameraTrigger jumpCameraTrigger;
 	[Export] private CameraTrigger mainCameraTrigger;
@@ -57,9 +58,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 		bombs[^1].Exploded += EnterIdleState; // Return to idle when the last bomb explodes
 		StageSettings.Instance.Respawned += Respawn;
-
-		// TODO Play introduction cutscene StageSettings.Instance.LevelStarted += StartIntroduction;
-		StartBattle();
+		StageSettings.Instance.LevelStarted += StartIntroduction;
 	}
 
 	private readonly StringName IntroCutsceneID = "ps_boss_intro";
@@ -70,9 +69,13 @@ public partial class CaptainBemoth : PathFollow3D
 		Player.Deactivate();
 		animator.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
+		CancelBombAttacks();
+		waveLeft.Deactivate();
+		waveRight.Deactivate();
+
 		// Reset positions so everything lines up in the cutscene
-		root.GlobalPosition = Vector3.Zero;
-		root.GlobalBasis = Basis.Identity;
+		root.GlobalTransform = Transform3D.Identity;
+		currentState = BemothState.Introduction;
 	}
 
 	private void FinishIntroduction()
@@ -88,12 +91,15 @@ public partial class CaptainBemoth : PathFollow3D
 
 		TransitionManager.instance.TransitionProcess += StartBattle;
 		SaveManager.ActiveGameData.AllowSkippingCutscene(IntroCutsceneID);
+		eventAnimator.Play("finish-intro");
 	}
 
 	private void StartBattle()
 	{
 		TransitionManager.instance.TransitionProcess -= StartBattle;
 		animator.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
+		eventAnimator.Play("finish-intro");
+		eventAnimator.Advance(0.0);
 
 		Respawn();
 
@@ -237,7 +243,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private float moveSpeed;
 	private float moveSpeedVelocity;
 	private readonly float MoveSpeedSmoothing = 10f;
-	private readonly float BaseMoveSpeed = 15f;
+	private readonly float BaseMoveSpeed = 20f;
 	private readonly float ChargeSpeed = -100f;
 	private readonly float MinimumDistance = 2f;
 	private readonly float MinimumDistanceSmoothingStart = 10f;
@@ -332,10 +338,8 @@ public partial class CaptainBemoth : PathFollow3D
 			horns[2].CallDeferred(CaptainBemothHorn.MethodName.EnableLockon);
 		}
 
-		/*
 		if (currentHealth == 1)
 			horns[3].CallDeferred(CaptainBemothHorn.MethodName.EnableLockon);
-		*/
 	}
 
 	private void DisableHornHurtboxes()
@@ -352,7 +356,12 @@ public partial class CaptainBemoth : PathFollow3D
 	{
 		currentHealth--;
 		isAttackQueued = true;
-		DisableHornHurtboxes();
+
+		if (isAttackDisabled) // Allow immediate followup when in no-attack zone
+			EnableHornHurtboxes();
+		else
+			DisableHornHurtboxes();
+
 		CancelShockAttack();
 		animator.Set(DamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
@@ -627,6 +636,8 @@ public partial class CaptainBemoth : PathFollow3D
 			magnitude = Vector3.One.RemoveDepth() * 5f,
 			intensity = Vector3.One * 100.0f,
 			duration = 1f,
+			origin = root.GlobalPosition,
+			maximumDistance = StopDistance,
 		});
 	}
 

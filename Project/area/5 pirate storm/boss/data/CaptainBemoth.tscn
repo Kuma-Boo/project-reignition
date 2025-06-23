@@ -1,9 +1,8 @@
-[gd_scene load_steps=100 format=3 uid="uid://dihp6asycbujt"]
+[gd_scene load_steps=112 format=3 uid="uid://dihp6asycbujt"]
 
 [ext_resource type="Script" uid="uid://lq3vcs5bircg" path="res://area/5 pirate storm/data/script/CaptainBemoth.cs" id="1_blu3m"]
 [ext_resource type="PackedScene" uid="uid://c0txr710wvj5p" path="res://area/5 pirate storm/boss/data/model/CaptainBemoth.gltf" id="1_nac7p"]
 [ext_resource type="PackedScene" uid="uid://0xgt5b3qhix4" path="res://area/5 pirate storm/boss/data/HornBack.tscn" id="3_hppyi"]
-[ext_resource type="PackedScene" uid="uid://bisfr2ty572aw" path="res://area/5 pirate storm/boss/data/model/HornFront.gltf" id="3_wc1c5"]
 [ext_resource type="PackedScene" uid="uid://dbwrvkfwjth4i" path="res://area/5 pirate storm/boss/data/HornLeft.tscn" id="4_hppyi"]
 [ext_resource type="PackedScene" uid="uid://diu48uipdrlco" path="res://area/5 pirate storm/boss/data/HornRight.tscn" id="5_j0uyl"]
 [ext_resource type="Resource" uid="uid://bku7n4ufln8ro" path="res://resource/preset/camera/common/StaticCam.tres" id="5_yq8h2"]
@@ -15,18 +14,23 @@
 [ext_resource type="Script" uid="uid://cciy1oeuvbh3e" path="res://object/trigger/modules/JumpTrigger.cs" id="8_hppyi"]
 [ext_resource type="Material" uid="uid://cih8b8t0vf1hh" path="res://object/player/resource/effect/material/Wind.tres" id="8_lc47c"]
 [ext_resource type="Resource" uid="uid://o33g3w82y6v3" path="res://area/5 pirate storm/boss/camera/DamageCam.tres" id="9_fyucs"]
+[ext_resource type="Resource" uid="uid://c312rgm82ye4q" path="res://area/5 pirate storm/boss/camera/FrontHornCam.tres" id="9_jmsyr"]
 [ext_resource type="Material" uid="uid://4batii1hel0b" path="res://effect/particle/material/explosion/Explosion Smoke.tres" id="9_r7puu"]
 [ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="10_yn1wy"]
+[ext_resource type="Script" uid="uid://bri007qdprrbf" path="res://addons/custom_nodes/script/BoneAttachment3DNoScale.cs" id="11_dyq0f"]
 [ext_resource type="Script" uid="uid://pnh70abopq8e" path="res://object/stage/common/resource/script/Hazard.cs" id="11_y7uss"]
 [ext_resource type="Material" uid="uid://cvdwcg24fogua" path="res://effect/particle/material/object/Cactus Splatter.tres" id="11_yn1wy"]
 [ext_resource type="Material" uid="uid://bdk8qnv7ytydw" path="res://effect/particle/material/environment/Common Dust Splatter Add No Billboard.tres" id="12_6vuv4"]
 [ext_resource type="Script" uid="uid://dx0a0rhyauccl" path="res://object/trigger/modules/CameraTrigger.cs" id="12_gc8sa"]
+[ext_resource type="PackedScene" uid="uid://duv45480ci8cg" path="res://area/5 pirate storm/boss/data/HornFront.tscn" id="13_d8wwx"]
 [ext_resource type="Material" uid="uid://cn2oss03xobla" path="res://effect/particle/material/environment/Sand Dust.tres" id="13_n25aq"]
 [ext_resource type="Resource" uid="uid://bfkn5ysvg1urv" path="res://area/5 pirate storm/boss/camera/BackHornCam.tres" id="13_yq8h2"]
 [ext_resource type="Material" uid="uid://uyb0bithnbcs" path="res://effect/particle/material/environment/Water Splatter.tres" id="15_x05em"]
 [ext_resource type="Material" uid="uid://c0ul0kasu0kpi" path="res://effect/particle/material/environment/Circular Glow Add.tres" id="24_rv1pp"]
 [ext_resource type="Shader" uid="uid://bf4qu1y7iievw" path="res://effect/shader/particle/AnimatedAddNonbillboard.gdshader" id="25_d8wwx"]
 [ext_resource type="Texture2D" uid="uid://b0561j1ihu3fx" path="res://area/5 pirate storm/boss/data/model/texture/lightning.png" id="26_jmsyr"]
+[ext_resource type="AudioStream" uid="uid://bnpmgrniean1n" path="res://sound/boss/captain bemoth/ev_01_stg052.ogg" id="30_dyq0f"]
+[ext_resource type="AudioStream" uid="uid://d0lpb4vym76or" path="res://sound/boss/captain bemoth/ev_02_stg052.ogg" id="31_2x0kj"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6vuv4"]
 animation = &"bomb"
@@ -68,6 +72,11 @@ animation = &"damage"
 fadein_time = 0.1
 fadeout_time = 0.1
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ciq67"]
+animation = &"defeat"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_415wh"]
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_y7uss"]
 animation = &"horn-damage"
 
@@ -75,6 +84,11 @@ animation = &"horn-damage"
 sync = true
 fadein_time = 0.1
 fadeout_time = 0.1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jmsyr"]
+animation = &"intro"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ciq67"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_r7puu"]
 animation = &"open"
@@ -121,11 +135,11 @@ fadein_time = 0.2
 fadeout_time = 0.5
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_wc1c5"]
-graph_offset = Vector2(-666.749, -28.285)
+graph_offset = Vector2(-383.128, -35.593)
 nodes/bomb_anim/node = SubResource("AnimationNodeAnimation_6vuv4")
-nodes/bomb_anim/position = Vector2(-940, 40)
+nodes/bomb_anim/position = Vector2(-1220, 0)
 nodes/bomb_trigger/node = SubResource("AnimationNodeOneShot_n25aq")
-nodes/bomb_trigger/position = Vector2(-780, -100)
+nodes/bomb_trigger/position = Vector2(-1060, -140)
 nodes/close_anim/node = SubResource("AnimationNodeAnimation_blu3m")
 nodes/close_anim/position = Vector2(-1800, -40)
 nodes/close_transition/node = SubResource("AnimationNodeTransition_wc1c5")
@@ -133,35 +147,43 @@ nodes/close_transition/position = Vector2(-1520, -260)
 nodes/closed_anim/node = SubResource("AnimationNodeAnimation_4mtnm")
 nodes/closed_anim/position = Vector2(-2000, -300)
 nodes/damage_anim/node = SubResource("AnimationNodeAnimation_n25aq")
-nodes/damage_anim/position = Vector2(-20, 260)
+nodes/damage_anim/position = Vector2(-300, 220)
 nodes/damage_trigger/node = SubResource("AnimationNodeOneShot_lc47c")
-nodes/damage_trigger/position = Vector2(140, 60)
+nodes/damage_trigger/position = Vector2(-140, 20)
+nodes/defeat_anim/node = SubResource("AnimationNodeAnimation_ciq67")
+nodes/defeat_anim/position = Vector2(360, 480)
+nodes/defeat_trigger/node = SubResource("AnimationNodeOneShot_415wh")
+nodes/defeat_trigger/position = Vector2(620, 140)
 nodes/horn_damage_anim/node = SubResource("AnimationNodeAnimation_y7uss")
-nodes/horn_damage_anim/position = Vector2(-280, 140)
+nodes/horn_damage_anim/position = Vector2(-560, 100)
 nodes/horn_damage_trigger/node = SubResource("AnimationNodeOneShot_x05em")
-nodes/horn_damage_trigger/position = Vector2(-80, -40)
+nodes/horn_damage_trigger/position = Vector2(-360, -80)
+nodes/intro_anim/node = SubResource("AnimationNodeAnimation_jmsyr")
+nodes/intro_anim/position = Vector2(80, 480)
+nodes/intro_trigger/node = SubResource("AnimationNodeOneShot_ciq67")
+nodes/intro_trigger/position = Vector2(300, 180)
 nodes/open_anim/node = SubResource("AnimationNodeAnimation_r7puu")
 nodes/open_anim/position = Vector2(-1800, -220)
 nodes/opened_anim/node = SubResource("AnimationNodeAnimation_yn1wy")
 nodes/opened_anim/position = Vector2(-2000, -120)
-nodes/output/position = Vector2(640, 0)
+nodes/output/position = Vector2(840, 140)
 nodes/shock_anim/node = SubResource("AnimationNodeAnimation_2rhf6")
-nodes/shock_anim/position = Vector2(180, 360)
+nodes/shock_anim/position = Vector2(-100, 320)
 nodes/shock_trigger/node = SubResource("AnimationNodeOneShot_gc8sa")
-nodes/shock_trigger/position = Vector2(360, 200)
+nodes/shock_trigger/position = Vector2(80, 160)
 nodes/speed_scale/node = SubResource("AnimationNodeTimeScale_6vuv4")
 nodes/speed_scale/position = Vector2(-1300, -220)
 nodes/wave_both_anim/node = SubResource("AnimationNodeAnimation_wc1c5")
-nodes/wave_both_anim/position = Vector2(-1000, 420)
+nodes/wave_both_anim/position = Vector2(-1280, 380)
 nodes/wave_left_anim/node = SubResource("AnimationNodeAnimation_hppyi")
-nodes/wave_left_anim/position = Vector2(-1000, 240)
+nodes/wave_left_anim/position = Vector2(-1280, 200)
 nodes/wave_right_anim/node = SubResource("AnimationNodeAnimation_j0uyl")
-nodes/wave_right_anim/position = Vector2(-1180, 340)
+nodes/wave_right_anim/position = Vector2(-1460, 300)
 nodes/wave_transition/node = SubResource("AnimationNodeTransition_4mtnm")
-nodes/wave_transition/position = Vector2(-800, 240)
+nodes/wave_transition/position = Vector2(-1080, 200)
 nodes/wave_trigger/node = SubResource("AnimationNodeOneShot_r7puu")
-nodes/wave_trigger/position = Vector2(-540, -20)
-node_connections = [&"bomb_trigger", 0, &"speed_scale", &"bomb_trigger", 1, &"bomb_anim", &"close_transition", 0, &"closed_anim", &"close_transition", 1, &"open_anim", &"close_transition", 2, &"opened_anim", &"close_transition", 3, &"close_anim", &"damage_trigger", 0, &"horn_damage_trigger", &"damage_trigger", 1, &"damage_anim", &"horn_damage_trigger", 0, &"wave_trigger", &"horn_damage_trigger", 1, &"horn_damage_anim", &"output", 0, &"shock_trigger", &"shock_trigger", 0, &"damage_trigger", &"shock_trigger", 1, &"shock_anim", &"speed_scale", 0, &"close_transition", &"wave_transition", 0, &"wave_left_anim", &"wave_transition", 1, &"wave_right_anim", &"wave_transition", 2, &"wave_both_anim", &"wave_trigger", 0, &"bomb_trigger", &"wave_trigger", 1, &"wave_transition"]
+nodes/wave_trigger/position = Vector2(-820, -60)
+node_connections = [&"bomb_trigger", 0, &"speed_scale", &"bomb_trigger", 1, &"bomb_anim", &"close_transition", 0, &"closed_anim", &"close_transition", 1, &"open_anim", &"close_transition", 2, &"opened_anim", &"close_transition", 3, &"close_anim", &"damage_trigger", 0, &"horn_damage_trigger", &"damage_trigger", 1, &"damage_anim", &"defeat_trigger", 0, &"intro_trigger", &"defeat_trigger", 1, &"defeat_anim", &"horn_damage_trigger", 0, &"wave_trigger", &"horn_damage_trigger", 1, &"horn_damage_anim", &"intro_trigger", 0, &"shock_trigger", &"intro_trigger", 1, &"intro_anim", &"output", 0, &"defeat_trigger", &"shock_trigger", 0, &"damage_trigger", &"shock_trigger", 1, &"shock_anim", &"speed_scale", 0, &"close_transition", &"wave_transition", 0, &"wave_left_anim", &"wave_transition", 1, &"wave_right_anim", &"wave_transition", 2, &"wave_both_anim", &"wave_trigger", 0, &"bomb_trigger", &"wave_trigger", 1, &"wave_transition"]
 
 [sub_resource type="Curve" id="Curve_wc1c5"]
 _data = [Vector2(0, 0), 0.0, 1.70062, 0, 0, Vector2(0.703214, 1), -1.36563, -1.36563, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -522,22 +544,71 @@ anim_speed_min = 1.0
 anim_speed_max = 1.0
 anim_offset_max = 1.0
 
-[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("animator", "root", "jumpCameraTrigger", "mainCameraTrigger", "jumpTrigger", "chargeAttackFx", "shockAttackFx", "shockAttackRoot", "horns", "bombs")]
+[sub_resource type="Animation" id="Animation_2x0kj"]
+resource_name = "RESET"
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_16a78"]
+resource_name = "finish-defeat"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/Defeat")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"stop"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_dyq0f"]
+resource_name = "finish-intro"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/Intro")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"stop"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2x0kj"]
+_data = {
+&"RESET": SubResource("Animation_2x0kj"),
+&"finish-defeat": SubResource("Animation_16a78"),
+&"finish-intro": SubResource("Animation_dyq0f")
+}
+
+[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("animator", "eventAnimator", "root", "jumpCameraTrigger", "mainCameraTrigger", "jumpTrigger", "chargeAttackFx", "shockAttackFx", "shockAttackRoot", "horns", "bombs")]
 use_model_front = true
 tilt_enabled = false
 script = ExtResource("1_blu3m")
 animator = NodePath("Root/CaptainBemoth/AnimationTree")
+eventAnimator = NodePath("EventAnimator")
 root = NodePath("Root")
 jumpCameraTrigger = NodePath("Root/Cameras/JumpCamera")
 mainCameraTrigger = NodePath("Root/Cameras/MainCamera")
-jumpTrigger = NodePath("Jump")
+jumpTrigger = NodePath("Root/Jump")
 chargeAttackFx = NodePath("Root/RootAttachment/RootOrientation/ChargeAttack")
 shockAttackFx = NodePath("Root/HoleAttachment/ShockCharge/Base")
 shockAttackRoot = NodePath("Root/HoleAttachment/ShockCharge")
-horns = [NodePath("Root/RootAttachment/RootOrientation/HornBack"), NodePath("Root/RootAttachment/RootOrientation/HornLeft"), NodePath("Root/RootAttachment/RootOrientation/HornRight")]
+horns = [NodePath("Root/RootAttachment/RootOrientation/HornBack"), NodePath("Root/RootAttachment/RootOrientation/HornLeft"), NodePath("Root/RootAttachment/RootOrientation/HornRight"), NodePath("Root/RootAttachment/RootOrientation/HornFront")]
 bombs = [NodePath("Root/RootAttachment/BombOrigin/BombAttack1"), NodePath("Root/RootAttachment/BombOrigin/BombAttack2"), NodePath("Root/RootAttachment/BombOrigin/BombAttack3"), NodePath("Root/RootAttachment/BombOrigin/BombAttack4"), NodePath("Root/RootAttachment/BombOrigin/BombAttack5")]
 
 [node name="Root" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="CaptainBemoth" parent="Root" instance=ExtResource("1_nac7p")]
 
@@ -554,9 +625,15 @@ parameters/close_transition/current_index = 0
 parameters/damage_trigger/active = false
 parameters/damage_trigger/internal_active = false
 parameters/damage_trigger/request = 0
+parameters/defeat_trigger/active = false
+parameters/defeat_trigger/internal_active = false
+parameters/defeat_trigger/request = 0
 parameters/horn_damage_trigger/active = false
 parameters/horn_damage_trigger/internal_active = false
 parameters/horn_damage_trigger/request = 0
+parameters/intro_trigger/active = false
+parameters/intro_trigger/internal_active = false
+parameters/intro_trigger/request = 0
 parameters/shock_trigger/active = false
 parameters/shock_trigger/internal_active = false
 parameters/shock_trigger/request = 0
@@ -603,6 +680,13 @@ transitionTime = 0.0
 settings = ExtResource("7_h68to")
 UpdateEveryFrame = true
 
+[node name="FrontCamera" type="Node3D" parent="Root/Cameras"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 3)
+script = ExtResource("12_gc8sa")
+transitionTime = 0.0
+settings = ExtResource("9_jmsyr")
+UpdateEveryFrame = true
+
 [node name="DamageCamera" type="Node3D" parent="Root/Cameras"]
 transform = Transform3D(0.996195, -4.65661e-10, 0.0871557, 0.00759612, 0.996195, -0.0868241, -0.0868241, 0.0871557, 0.992404, 1, 0, 5)
 script = ExtResource("12_gc8sa")
@@ -610,12 +694,11 @@ transitionTime = 0.0
 settings = ExtResource("9_fyucs")
 UpdateEveryFrame = true
 
-[node name="RootAttachment" type="BoneAttachment3D" parent="Root"]
-transform = Transform3D(1, 0, 0, 0, 3.51667e-06, 1, 0, -1, 3.51667e-06, 0, 0, 0)
-bone_name = "root"
-bone_idx = 0
-use_external_skeleton = true
-external_skeleton = NodePath("../CaptainBemoth/BemothRoot/Skeleton3D")
+[node name="RootAttachment" type="Node3D" parent="Root"]
+transform = Transform3D(0.999989, 0, 0, 0, -4.37112e-08, 0.99999, 0, -0.999996, -4.3711e-08, 0, 0, 0)
+script = ExtResource("11_dyq0f")
+skeleton = NodePath("../CaptainBemoth/BemothRoot/Skeleton3D")
+boneName = &"root"
 
 [node name="RootOrientation" type="Node3D" parent="Root/RootAttachment"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
@@ -632,7 +715,9 @@ joltCurve = SubResource("Curve_wc1c5")
 joltFx = NodePath("../../../HornRight/Splatter")
 joltCurve = SubResource("Curve_wc1c5")
 
-[node name="HornFront" parent="Root/RootAttachment/RootOrientation" instance=ExtResource("3_wc1c5")]
+[node name="HornFront" parent="Root/RootAttachment/RootOrientation" node_paths=PackedStringArray("joltFx") instance=ExtResource("13_d8wwx")]
+joltFx = NodePath("../../../HornFront/Splatter")
+joltCurve = SubResource("Curve_wc1c5")
 
 [node name="PurpleEmbers" type="GPUParticles3D" parent="Root/RootAttachment/RootOrientation"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.7)
@@ -861,7 +946,7 @@ process_material = SubResource("ParticleProcessMaterial_yn1wy")
 draw_pass_1 = SubResource("QuadMesh_n25aq")
 
 [node name="HornBack" type="BoneAttachment3D" parent="Root"]
-transform = Transform3D(1, 3.58941e-08, 2.10373e-08, -3.58942e-08, 0.488647, 0.872482, 2.10372e-08, -0.872482, 0.488647, 0, 0.290004, -1.1)
+transform = Transform3D(1, 3.58941e-08, 2.10373e-08, -3.58942e-08, 0.488647, 0.872482, 2.10372e-08, -0.872482, 0.488647, -4.2567e-15, 0.290004, -1.1)
 bone_name = "b_horn"
 bone_idx = 59
 use_external_skeleton = true
@@ -1060,7 +1145,7 @@ draw_pass_1 = SubResource("QuadMesh_lc47c")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="Base" type="GPUParticles3D" parent="Root/HoleAttachment/ShockCharge" node_paths=PackedStringArray("subSystems")]
-transform = Transform3D(1, 0, 0, 0, 1, -1.49012e-08, 0, 1.49012e-08, 1, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, -1.49012e-08, 0, 1.49012e-08, 1, 0, 0.8, 0)
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
@@ -1090,8 +1175,28 @@ transform_align = 2
 process_material = SubResource("ParticleProcessMaterial_d8wwx")
 draw_pass_1 = SubResource("QuadMesh_415wh")
 
-[node name="Jump" type="Node3D" parent="."]
+[node name="Jump" type="Node3D" parent="Root"]
 script = ExtResource("8_hppyi")
+
+[node name="Camera" type="Node3D" parent="Root"]
+
+[node name="CutsceneCamera" type="Camera3D" parent="Root/Camera"]
+cull_mask = 1083
+
+[node name="SFX" type="Node3D" parent="."]
+
+[node name="Intro" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("30_dyq0f")
+bus = &"GAME SFX"
+
+[node name="Defeat" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("31_2x0kj")
+bus = &"GAME SFX"
+
+[node name="EventAnimator" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_2x0kj")
+}
 
 [connection signal="HangStarted" from="Root/RootAttachment/RootOrientation/HornBack" to="Root/Cameras/BackCamera" method="Activate"]
 [connection signal="Popped" from="Root/RootAttachment/RootOrientation/HornBack" to="Root/Cameras/DamageCamera" method="Activate"]
@@ -1099,6 +1204,7 @@ script = ExtResource("8_hppyi")
 [connection signal="Popped" from="Root/RootAttachment/RootOrientation/HornLeft" to="Root/Cameras/DamageCamera" method="Activate"]
 [connection signal="HangStarted" from="Root/RootAttachment/RootOrientation/HornRight" to="Root/Cameras/RightCamera" method="Activate"]
 [connection signal="Popped" from="Root/RootAttachment/RootOrientation/HornRight" to="Root/Cameras/DamageCamera" method="Activate"]
+[connection signal="HangStarted" from="Root/RootAttachment/RootOrientation/HornFront" to="Root/Cameras/FrontCamera" method="Activate"]
 [connection signal="area_entered" from="Root/RootAttachment/Hitbox" to="." method="DisableAttacks"]
 [connection signal="area_entered" from="Root/RootAttachment/Hitbox" to="Root/RootAttachment/Hitbox/Hitbox" method="OnEntered"]
 [connection signal="area_exited" from="Root/RootAttachment/Hitbox" to="." method="EnableAttacks"]
