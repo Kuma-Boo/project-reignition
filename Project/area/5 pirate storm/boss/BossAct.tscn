@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://k1fe04x0mind"]
+[gd_scene load_steps=28 format=3 uid="uid://k1fe04x0mind"]
 
 [ext_resource type="PackedScene" uid="uid://bm47vn5goqp8d" path="res://area/5 pirate storm/boss/Static.tscn" id="1_4en2g"]
 [ext_resource type="PackedScene" uid="uid://cjupypih0myxo" path="res://object/player/CharacterSpawn.tscn" id="2_bkvyc"]
@@ -13,6 +13,9 @@
 [ext_resource type="PackedScene" uid="uid://c7l8mr7ubn848" path="res://object/stage/pickups/Ring.tscn" id="6_oef4h"]
 [ext_resource type="PackedScene" uid="uid://v2hbw6y70jr3" path="res://object/stage/pickups/RichPearl.tscn" id="7_26can"]
 [ext_resource type="PackedScene" uid="uid://d0b2gvx7s6s8u" path="res://object/stage/pickups/Pearl.tscn" id="8_ow4n3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tbv1a"]
+size = Vector3(120, 50, 190)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1r666"]
 size = Vector3(15, 20, 5)
@@ -86,6 +89,15 @@ point_count = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.6, 0)
 
 [node name="CharacterSpawn" parent="BossAct/SpawnPosition" instance=ExtResource("2_bkvyc")]
+
+[node name="StageTrigger" parent="BossAct" instance=ExtResource("4_0hwip")]
+transform = Transform3D(0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, 0.766044, 265, 21, 30)
+"Trigger Mode" = 2
+"Enter Mode" = 0
+"Exit Mode" = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossAct/StageTrigger"]
+shape = SubResource("BoxShape3D_tbv1a")
 
 [node name="BossPath" type="Path3D" parent="BossAct"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 9.6, 0)
@@ -1435,6 +1447,8 @@ transform = Transform3D(1, 1.01863e-10, 2.98023e-08, 1.89175e-10, 1, 1.30967e-10
 [node name="Child20" parent="BossAct/Lap2/Pearls3" instance=ExtResource("8_ow4n3")]
 transform = Transform3D(1, 1.01863e-10, 2.98023e-08, 1.89175e-10, 1, 1.30967e-10, 2.98023e-08, 1.01863e-10, 1, 72.6632, -0.108095, 16.8306)
 
+[connection signal="Activated" from="BossAct/StageTrigger" to="BossAct/BossPath/CaptainBemoth" method="DisableAttacks"]
+[connection signal="Deactivated" from="BossAct/StageTrigger" to="BossAct/BossPath/CaptainBemoth" method="EnableAttacks"]
 [connection signal="Activated" from="BossAct/LapCycle/Checkpoint" to="BossAct/LapCycle/Cycle" method="OnCheckpointActivated"]
 [connection signal="Deactivated" from="BossAct/LapCycle/Checkpoint" to="BossAct/LapCycle/Cycle" method="OnCheckpointDeactivated"]
 

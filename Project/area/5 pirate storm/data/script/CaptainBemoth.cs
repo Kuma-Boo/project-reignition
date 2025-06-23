@@ -213,6 +213,10 @@ public partial class CaptainBemoth : PathFollow3D
 	private void ProcessIdleState()
 	{
 		HOffset = ExtensionMethods.SmoothDamp(HOffset, 0, ref trackingVelocity, TrackingSmoothing * PhysicsManager.physicsDelta);
+
+		if (isAttackDisabled)
+			return;
+
 		attackTimer -= PhysicsManager.physicsDelta;
 		if (attackTimer > 0)
 			return;
@@ -346,6 +350,7 @@ public partial class CaptainBemoth : PathFollow3D
 	#region Attacks
 	/// <summary> Is an attack being queued directly after taking damage? </summary>
 	private bool isAttackQueued;
+	private bool isAttackDisabled;
 	private bool isAttackActive;
 	private float attackTimer;
 	private readonly float QueuedAttackDelay = 1.2f;
@@ -544,7 +549,14 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private void EnterShockAttackState()
 	{
-		// Cancel all other attacks
+		CancelBombAttacks();
+
+		attackTimer = 0;
+		currentState = BemothState.ShockAttack;
+	}
+
+	private void CancelBombAttacks()
+	{
 		foreach (BossBombAttack bomb in bombs)
 		{
 			if (bomb.IsActive) // Already flying
@@ -552,9 +564,6 @@ public partial class CaptainBemoth : PathFollow3D
 
 			bomb.CancelLaunch();
 		}
-
-		attackTimer = 0;
-		currentState = BemothState.ShockAttack;
 	}
 	#endregion
 
@@ -613,5 +622,19 @@ public partial class CaptainBemoth : PathFollow3D
 	{
 		jumpTrigger.JumpFinished -= FinishJump;
 		CallDeferred(MethodName.LaunchPlayer, false); // Transition back to gameplay
+	}
+
+	private void EnableAttacks()
+	{
+		isAttackDisabled = false;
+		isAttackQueued = true;
+		EnterIdleState();
+	}
+
+	private void DisableAttacks()
+	{
+		EnterIdleState();
+		CancelBombAttacks();
+		isAttackDisabled = true;
 	}
 }
