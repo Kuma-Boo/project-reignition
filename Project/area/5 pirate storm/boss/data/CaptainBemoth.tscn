@@ -1,4 +1,4 @@
-[gd_scene load_steps=124 format=3 uid="uid://dihp6asycbujt"]
+[gd_scene load_steps=125 format=3 uid="uid://dihp6asycbujt"]
 
 [ext_resource type="Script" uid="uid://lq3vcs5bircg" path="res://area/5 pirate storm/data/script/CaptainBemoth.cs" id="1_blu3m"]
 [ext_resource type="PackedScene" uid="uid://c0txr710wvj5p" path="res://area/5 pirate storm/boss/data/model/CaptainBemoth.gltf" id="1_nac7p"]
@@ -39,6 +39,7 @@
 [ext_resource type="AudioStream" uid="uid://chdym2aky6ux7" path="res://sound/boss/captain bemoth/horn damage.wav" id="34_5m7gr"]
 [ext_resource type="AudioStream" uid="uid://b5h4u6ow8137b" path="res://sound/boss/captain bemoth/shock.wav" id="37_i75c6"]
 [ext_resource type="AudioStream" uid="uid://d1fpueoi2rg68" path="res://sound/boss/captain bemoth/shock enable.wav" id="38_fwurm"]
+[ext_resource type="AudioStream" uid="uid://0oum8nxnureu" path="res://sound/boss/captain bemoth/shock charge.wav" id="39_cvw4u"]
 [ext_resource type="AudioStream" uid="uid://cnwlk7yaohrn3" path="res://sound/boss/captain bemoth/wave attack.wav" id="39_fwurm"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6vuv4"]
@@ -587,6 +588,18 @@ tracks/1/keys = {
 "method": &"SetEmitting"
 }]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SFX/ShockCharge:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_olynw"]
 resource_name = "charge"
@@ -715,6 +728,18 @@ tracks/1/keys = {
 "args": [true],
 "method": &"SetEmitting"
 }]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SFX/ShockCharge:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2x0kj"]
@@ -1371,12 +1396,20 @@ attenuation_filter_cutoff_hz = 20500.0
 stream = ExtResource("34_1e4jh")
 attenuation_model = 3
 max_db = 0.0
-max_distance = 50.0
+max_distance = 100.0
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
 
 [node name="Shock" type="AudioStreamPlayer3D" parent="SFX"]
 stream = ExtResource("37_i75c6")
+attenuation_model = 3
+volume_db = 6.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="ShockCharge" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("39_cvw4u")
 attenuation_model = 3
 max_db = 0.0
 max_distance = 100.0

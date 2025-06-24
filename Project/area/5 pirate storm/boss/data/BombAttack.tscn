@@ -577,7 +577,7 @@ tracks/4/keys = {
 tracks/5/type = "method"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Explosion")
+tracks/5/path = NodePath("Root/ExplosionSFX")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -716,7 +716,7 @@ tracks/3/keys = {
 tracks/4/type = "method"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Launch")
+tracks/4/path = NodePath("Root/LaunchSFX")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -848,6 +848,24 @@ transform_align = 2
 process_material = SubResource("ParticleProcessMaterial_mo8io")
 draw_pass_1 = SubResource("QuadMesh_xa85y")
 
+[node name="LaunchSFX" type="AudioStreamPlayer3D" parent="Root"]
+stream = ExtResource("12_1lvje")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="ExplosionSFX" type="AudioStreamPlayer3D" parent="Root"]
+stream = ExtResource("12_wxqed")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+script = ExtResource("13_1lvje")
+groupKey = &"bomb explosion"
+audioLengthOverride = 1.0
+
 [node name="Decals" type="Node3D" parent="."]
 
 [node name="Center" type="Decal" parent="Decals"]
@@ -876,21 +894,6 @@ libraries = {
 &"": SubResource("AnimationLibrary_ojg08")
 }
 next/windup = &"loop"
-
-[node name="Launch" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("12_1lvje")
-max_db = 0.0
-bus = &"GAME SFX"
-
-[node name="Explosion" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("12_wxqed")
-attenuation_model = 3
-max_db = 0.0
-max_distance = 50.0
-bus = &"GAME SFX"
-script = ExtResource("13_1lvje")
-groupKey = &"bomb explosion"
-audioLengthOverride = 1.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

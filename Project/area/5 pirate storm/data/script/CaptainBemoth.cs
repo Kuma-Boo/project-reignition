@@ -621,6 +621,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 		isAttackActive = false;
 		eventAnimator.Play("RESET");
+		EnableHornHurtboxes();
 	}
 
 	private bool hasPlayerJumpedOffHorn;
