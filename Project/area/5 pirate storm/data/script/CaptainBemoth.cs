@@ -695,6 +695,11 @@ public partial class CaptainBemoth : PathFollow3D
 	{
 		jumpCameraTrigger.GlobalPosition = Player.Camera.Camera.GlobalPosition; // Sync jump camera's position
 		jumpCameraTrigger.Activate();
+		ShakeScreen();
+	}
+
+	private void ShakeScreen()
+	{
 		Player.Camera.StartCameraShake(new()
 		{
 			magnitude = Vector3.One.RemoveDepth() * 5f,
@@ -781,7 +786,7 @@ public partial class CaptainBemoth : PathFollow3D
 			mainCameraTrigger.Activate();
 
 			// Play dialog
-			if (!hasPlayerJumpedOffHorn)
+			if (!hasPlayerJumpedOffHorn && !Player.IsKnockback)
 			{
 				damageDialogs[damageDialogIndex].Activate();
 				damageDialogIndex++;
