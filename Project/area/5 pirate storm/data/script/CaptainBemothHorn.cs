@@ -117,24 +117,24 @@ public partial class CaptainBemothHorn : Node3D
 		StageSettings.Instance.AddChild(this);
 		GlobalTransform = t;
 
+		IsPopping = true;
+		animator.Set(PopTransition, "enabled");
+
+		if (isPopFXDisabled)
+			return;
+
+		StageSettings.Player.Effect.PlayVoice("jump panel");
+		PlayPopFX();
+	}
+
+	private void PlayPopFX()
+	{
 		StageSettings.Player.Camera.StartCameraShake(new()
 		{
 			magnitude = Vector3.One.RemoveDepth() * 2f,
 			duration = .5f
 		});
 
-		IsPopping = true;
-		animator.Set(PopTransition, "enabled");
-
-		if (!isPopFXDisabled)
-		{
-			StageSettings.Player.Effect.PlayVoice("jump panel");
-			PlayPopFX();
-		}
-	}
-
-	private void PlayPopFX()
-	{
 		joltVfx.RestartGroup();
 		joltSfx.Play();
 		popSfx.Play();
