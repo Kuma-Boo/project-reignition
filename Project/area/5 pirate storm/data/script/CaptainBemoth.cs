@@ -206,7 +206,7 @@ public partial class CaptainBemoth : PathFollow3D
 				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
 					SaveManager.ActiveGameData.CanSkipCutscene(DefeatCutsceneID))
 				{
-					FinishDefeat();
+					animator.Set(DefeatSeek, 20f);
 				}
 				return;
 			case BemothState.Idle:
@@ -404,9 +404,6 @@ public partial class CaptainBemoth : PathFollow3D
 			DisableHornHurtboxes();
 
 		CancelShockAttack();
-
-		DefeatBoss();
-		return;
 
 		if (currentHealth == 0)
 			DefeatBoss();
