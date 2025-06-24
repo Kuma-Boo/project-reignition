@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://d2j6qde5aener"]
+[gd_scene load_steps=64 format=3 uid="uid://d2j6qde5aener"]
 
 [ext_resource type="Script" uid="uid://02whpr4ceeig" path="res://area/5 pirate storm/data/script/BossBombAttack.cs" id="1_xchwx"]
 [ext_resource type="Texture2D" uid="uid://c44w2mvqikuys" path="res://area/5 pirate storm/boss/data/model/texture/missile center.png" id="2_0rh84"]
@@ -11,6 +11,9 @@
 [ext_resource type="Material" uid="uid://7lvqh1a70ae4" path="res://effect/particle/material/explosion/Explosion Flame.tres" id="7_c7c8l"]
 [ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="7_umhhu"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="8_i6jhs"]
+[ext_resource type="AudioStream" uid="uid://cqne41aksagt4" path="res://sound/boss/captain bemoth/bomb launch.wav" id="12_1lvje"]
+[ext_resource type="AudioStream" uid="uid://ceflxvvoagwju" path="res://sound/boss/captain bemoth/bomb explosion.wav" id="12_wxqed"]
+[ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="13_1lvje"]
 
 [sub_resource type="Curve" id="Curve_umhhu"]
 _data = [Vector2(0, 0), 0.0, 27.7037, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -571,6 +574,20 @@ tracks/4/keys = {
 "method": &"RestartGroup"
 }]
 }
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Explosion")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_g2e5f"]
 resource_name = "fly"
@@ -693,6 +710,20 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [&"windup", -1, 1.0, false],
+"method": &"play"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Launch")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.0666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
 "method": &"play"
 }]
 }
@@ -845,6 +876,21 @@ libraries = {
 &"": SubResource("AnimationLibrary_ojg08")
 }
 next/windup = &"loop"
+
+[node name="Launch" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("12_1lvje")
+max_db = 0.0
+bus = &"GAME SFX"
+
+[node name="Explosion" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("12_wxqed")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+script = ExtResource("13_1lvje")
+groupKey = &"bomb explosion"
+audioLengthOverride = 1.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

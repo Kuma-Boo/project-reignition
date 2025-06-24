@@ -1,6 +1,5 @@
 using Godot;
 using Project.Core;
-using Project.CustomNodes;
 using Project.Gameplay.Triggers;
 
 namespace Project.Gameplay.Bosses;
@@ -14,8 +13,6 @@ public partial class CaptainBemoth : PathFollow3D
 	[Export] private CameraTrigger jumpCameraTrigger;
 	[Export] private CameraTrigger mainCameraTrigger;
 	[Export] private JumpTrigger jumpTrigger;
-	[Export] private GroupGpuParticles3D chargeAttackFx;
-	[Export] private GroupGpuParticles3D shockAttackFx;
 	[Export] private Node3D shockAttackRoot;
 
 	[Export] private CaptainBemothHorn[] horns;
@@ -172,7 +169,7 @@ public partial class CaptainBemoth : PathFollow3D
 		isShockAttackActive = false;
 		bombAttackCounter = 0;
 		waveAttackCounter = 0;
-		chargeAttackFx.SetEmitting(false);
+		eventAnimator.Play("RESET");
 
 		// Reset local position
 		root.Position = Vector3.Zero;
@@ -189,6 +186,8 @@ public partial class CaptainBemoth : PathFollow3D
 
 		foreach (CaptainBemothHorn horn in horns)
 			horn.Respawn();
+
+		DisableHornHurtboxes(); // Don't allow immediate attacks
 	}
 
 	public override void _PhysicsProcess(double _)
@@ -259,7 +258,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 		currentState = BemothState.Idle;
 		isFacingForward = currentHealth == 1; // Only face the player when almost dead
-		attackTimer = isAttackQueued ? QueuedAttackDelay : AttackTimerInterval;
+		attackTimer = isAttackQueued ? ShortAttackInterval : AttackTimerInterval;
 	}
 
 	private void ProcessIdleState()
@@ -417,7 +416,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private bool isAttackDisabled;
 	private bool isAttackActive;
 	private float attackTimer;
-	private readonly float QueuedAttackDelay = 0.8f;
+	private readonly float ShortAttackInterval = 0.8f;
 	private readonly float AttackTimerInterval = 3f;
 
 	private void StartAttack()
@@ -459,6 +458,7 @@ public partial class CaptainBemoth : PathFollow3D
 	{
 		bombAttackCounter = 0;
 		currentState = BemothState.BombAttack;
+		EnableHornHurtboxes();
 	}
 
 	private void ProcessBombState()
@@ -604,7 +604,7 @@ public partial class CaptainBemoth : PathFollow3D
 			if (IsClosed) // Start charge
 			{
 				isAttackActive = true;
-				chargeAttackFx.SetEmitting(true);
+				eventAnimator.Play("charge");
 			}
 
 			return;
@@ -620,7 +620,7 @@ public partial class CaptainBemoth : PathFollow3D
 			return;
 
 		isAttackActive = false;
-		chargeAttackFx.SetEmitting(false);
+		eventAnimator.Play("RESET");
 	}
 
 	private bool hasPlayerJumpedOffHorn;
@@ -643,7 +643,6 @@ public partial class CaptainBemoth : PathFollow3D
 
 		// Delay shock to give time to one-cycle horns
 		shockTimer = currentHealth == MaxHealth || currentHealth == 1 ? -ShockAttackLongDelay : -ShockAttackShortDelay;
-		shockAttackFx.SetEmitting(true);
 		shockAttackRoot.Scale = Vector3.One * 0.001f;
 	}
 
@@ -653,6 +652,8 @@ public partial class CaptainBemoth : PathFollow3D
 			return;
 
 		shockTimer = Mathf.MoveToward(shockTimer, ShockAttackChargeLength, PhysicsManager.physicsDelta);
+		if (Mathf.Abs(shockTimer) <= PhysicsManager.physicsDelta) // Play shockFX
+			eventAnimator.Play("shock");
 
 		float fxScale = Mathf.Clamp(shockTimer / ShockAttackChargeLength, 0f, 1f);
 		shockAttackRoot.Scale = (Vector3.One * 0.001f).Lerp(Vector3.One, fxScale);
@@ -660,7 +661,7 @@ public partial class CaptainBemoth : PathFollow3D
 		if (Mathf.IsEqualApprox(shockTimer, ShockAttackChargeLength))
 		{
 			isShockAttackActive = true;
-			shockAttackFx.StopGroup(); // Momentary pause before the burst
+			eventAnimator.Play("RESET"); // Momentary pause before the burst
 			animator.Set(ShockTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			Player.SetHornPullable(false);
 			isAttackQueued = true;
@@ -671,7 +672,7 @@ public partial class CaptainBemoth : PathFollow3D
 	{
 		shockTimer = 0;
 		isShockAttackActive = false;
-		shockAttackFx.StopGroup();
+		eventAnimator.Play("RESET");
 	}
 
 	private void ActivateShockScreenShake()
@@ -816,8 +817,9 @@ public partial class CaptainBemoth : PathFollow3D
 		if (currentState != BemothState.ShockAttack)
 			EnterIdleState();
 
+		EnableHornHurtboxes();
 		CancelBombAttacks();
-		chargeAttackFx.SetEmitting(false);
+		eventAnimator.Play("RESET");
 		isAttackDisabled = true;
 	}
 }

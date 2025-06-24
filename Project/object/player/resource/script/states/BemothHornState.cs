@@ -72,6 +72,7 @@ public partial class BemothHornState : PlayerState
 		if (CanJump && Player.Controller.IsJumpBufferActive)
 		{
 			Trigger.JumpOff();
+			Player.Effect.PlayVoice(CanPullHorns ? "grunt" : "sidle hurt");
 			Player.Controller.ResetJumpBuffer();
 		}
 

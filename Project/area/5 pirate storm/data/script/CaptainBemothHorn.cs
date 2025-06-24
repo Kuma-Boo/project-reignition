@@ -13,16 +13,17 @@ public partial class CaptainBemothHorn : Node3D
 
 	[Export] private AnimationTree animator;
 	[Export] private Area3D area;
-	[Export] private GroupGpuParticles3D joltFx;
+	[Export] private Curve joltCurve;
+	[Export] private AudioStreamPlayer3D joltSfx;
+	[Export] private GroupGpuParticles3D joltVfx;
 
 	[Export] private int maxHealth;
 	/// <summary> How long to delay the actual pop so animations have time to catch up. </summary>
+	[Export] private AudioStreamPlayer3D popSfx;
 	[Export] private float popDelay = .5f;
-	[Export] private bool isPopMovementDisabled;
+	[Export] private bool isPopFXDisabled;
 	private float popTimer;
 
-	// Jolt curve for pulling out horns
-	[Export] private Curve joltCurve;
 	private int damageDealt;
 
 	private SpawnData spawnData;
@@ -78,7 +79,7 @@ public partial class CaptainBemothHorn : Node3D
 	{
 		if (IsPopping)
 		{
-			if (!isPopMovementDisabled)
+			if (!isPopFXDisabled)
 				GlobalPosition += Vector3.Up * PhysicsManager.physicsDelta * PopSpeed;
 
 			return;
@@ -123,8 +124,20 @@ public partial class CaptainBemothHorn : Node3D
 		});
 
 		IsPopping = true;
-		joltFx.RestartGroup();
 		animator.Set(PopTransition, "enabled");
+
+		if (!isPopFXDisabled)
+		{
+			StageSettings.Player.Effect.PlayVoice("jump panel");
+			PlayPopFX();
+		}
+	}
+
+	private void PlayPopFX()
+	{
+		joltVfx.RestartGroup();
+		joltSfx.Play();
+		popSfx.Play();
 	}
 
 	///<summary> Pulls the horn out by a tiny bit. </summary>
@@ -134,8 +147,8 @@ public partial class CaptainBemothHorn : Node3D
 		joltTimer = 0;
 		damageDealt += damage;
 
-		// TODO Play SFX
-		joltFx.RestartGroup();
+		joltSfx.Play();
+		joltVfx.RestartGroup();
 		animator.Set(JoltTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		EmitSignal(SignalName.Jolted);
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=114 format=3 uid="uid://dihp6asycbujt"]
+[gd_scene load_steps=124 format=3 uid="uid://dihp6asycbujt"]
 
 [ext_resource type="Script" uid="uid://lq3vcs5bircg" path="res://area/5 pirate storm/data/script/CaptainBemoth.cs" id="1_blu3m"]
 [ext_resource type="PackedScene" uid="uid://c0txr710wvj5p" path="res://area/5 pirate storm/boss/data/model/CaptainBemoth.gltf" id="1_nac7p"]
@@ -32,6 +32,14 @@
 [ext_resource type="Resource" uid="uid://ukcne4um86a6" path="res://resource/preset/camera/common/CutsceneCam.tres" id="30_2x0kj"]
 [ext_resource type="AudioStream" uid="uid://bnpmgrniean1n" path="res://sound/boss/captain bemoth/ev_01_stg052.ogg" id="30_dyq0f"]
 [ext_resource type="AudioStream" uid="uid://d0lpb4vym76or" path="res://sound/boss/captain bemoth/ev_02_stg052.ogg" id="31_2x0kj"]
+[ext_resource type="AudioStream" uid="uid://cihfacx0can4a" path="res://sound/boss/captain bemoth/bomb windup.wav" id="33_16a78"]
+[ext_resource type="AudioStream" uid="uid://d4f8eewh7lp5k" path="res://sound/boss/captain bemoth/damaged.wav" id="33_kon24"]
+[ext_resource type="AudioStream" uid="uid://cke7wv5gw3wn3" path="res://sound/boss/captain bemoth/movement.wav" id="33_p7v10"]
+[ext_resource type="AudioStream" uid="uid://sb2kb3075ru5" path="res://sound/boss/captain bemoth/charge attack.wav" id="34_1e4jh"]
+[ext_resource type="AudioStream" uid="uid://chdym2aky6ux7" path="res://sound/boss/captain bemoth/horn damage.wav" id="34_5m7gr"]
+[ext_resource type="AudioStream" uid="uid://b5h4u6ow8137b" path="res://sound/boss/captain bemoth/shock.wav" id="37_i75c6"]
+[ext_resource type="AudioStream" uid="uid://d1fpueoi2rg68" path="res://sound/boss/captain bemoth/shock enable.wav" id="38_fwurm"]
+[ext_resource type="AudioStream" uid="uid://cnwlk7yaohrn3" path="res://sound/boss/captain bemoth/wave attack.wav" id="39_fwurm"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6vuv4"]
 animation = &"bomb"
@@ -138,7 +146,6 @@ fadein_time = 0.2
 fadeout_time = 0.5
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_wc1c5"]
-graph_offset = Vector2(-379.876, 31.9183)
 nodes/bomb_anim/node = SubResource("AnimationNodeAnimation_6vuv4")
 nodes/bomb_anim/position = Vector2(-1220, 0)
 nodes/bomb_trigger/node = SubResource("AnimationNodeOneShot_n25aq")
@@ -552,6 +559,66 @@ anim_offset_max = 1.0
 [sub_resource type="Animation" id="Animation_2x0kj"]
 resource_name = "RESET"
 length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Root/RootAttachment/RootOrientation/ChargeAttack")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"SetEmitting"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/HoleAttachment/ShockCharge/Base")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"SetEmitting"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_olynw"]
+resource_name = "charge"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/Charge")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/RootAttachment/RootOrientation/ChargeAttack")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"SetEmitting"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_16a78"]
 resource_name = "finish-defeat"
@@ -618,14 +685,48 @@ tracks/1/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_i75c6"]
+resource_name = "shock"
+length = 0.001
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SFX/ShockEnable")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/HoleAttachment/ShockCharge/Base")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"SetEmitting"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2x0kj"]
 _data = {
 &"RESET": SubResource("Animation_2x0kj"),
+&"charge": SubResource("Animation_olynw"),
 &"finish-defeat": SubResource("Animation_16a78"),
-&"finish-intro": SubResource("Animation_dyq0f")
+&"finish-intro": SubResource("Animation_dyq0f"),
+&"shock": SubResource("Animation_i75c6")
 }
 
-[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("animator", "eventAnimator", "root", "jumpCameraTrigger", "mainCameraTrigger", "jumpTrigger", "chargeAttackFx", "shockAttackFx", "shockAttackRoot", "horns", "bombs")]
+[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("animator", "eventAnimator", "root", "jumpCameraTrigger", "mainCameraTrigger", "jumpTrigger", "shockAttackRoot", "horns", "bombs")]
 use_model_front = true
 tilt_enabled = false
 script = ExtResource("1_blu3m")
@@ -635,8 +736,6 @@ root = NodePath("Root")
 jumpCameraTrigger = NodePath("Root/Cameras/JumpCamera")
 mainCameraTrigger = NodePath("Root/Cameras/MainCamera")
 jumpTrigger = NodePath("Root/Jump")
-chargeAttackFx = NodePath("Root/RootAttachment/RootOrientation/ChargeAttack")
-shockAttackFx = NodePath("Root/HoleAttachment/ShockCharge/Base")
 shockAttackRoot = NodePath("Root/HoleAttachment/ShockCharge")
 horns = [NodePath("Root/RootAttachment/RootOrientation/HornBack"), NodePath("Root/RootAttachment/RootOrientation/HornLeft"), NodePath("Root/RootAttachment/RootOrientation/HornRight"), NodePath("Root/RootAttachment/RootOrientation/HornFront")]
 bombs = [NodePath("Root/RootAttachment/BombOrigin/BombAttack1"), NodePath("Root/RootAttachment/BombOrigin/BombAttack2"), NodePath("Root/RootAttachment/BombOrigin/BombAttack3"), NodePath("Root/RootAttachment/BombOrigin/BombAttack4"), NodePath("Root/RootAttachment/BombOrigin/BombAttack5")]
@@ -730,7 +829,7 @@ settings = ExtResource("9_fyucs")
 UpdateEveryFrame = true
 
 [node name="RootAttachment" type="Node3D" parent="Root"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(0.999998, 0, 0, 0, -4.3711e-08, 0.999992, 0, -0.999991, -4.3711e-08, 0, 0, 0)
 script = ExtResource("11_dyq0f")
 skeleton = NodePath("../CaptainBemoth/BemothRoot/Skeleton3D")
 boneName = &"root"
@@ -738,28 +837,27 @@ boneName = &"root"
 [node name="RootOrientation" type="Node3D" parent="Root/RootAttachment"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 
-[node name="HornBack" parent="Root/RootAttachment/RootOrientation" node_paths=PackedStringArray("joltFx") instance=ExtResource("3_hppyi")]
-joltFx = NodePath("../../../HornBack/Splatter")
+[node name="HornBack" parent="Root/RootAttachment/RootOrientation" node_paths=PackedStringArray("joltVfx") instance=ExtResource("3_hppyi")]
 joltCurve = SubResource("Curve_wc1c5")
+joltVfx = NodePath("../../../HornBack/Splatter")
 
-[node name="HornLeft" parent="Root/RootAttachment/RootOrientation" node_paths=PackedStringArray("joltFx") instance=ExtResource("4_hppyi")]
-joltFx = NodePath("../../../HornLeft/Splatter")
+[node name="HornLeft" parent="Root/RootAttachment/RootOrientation" node_paths=PackedStringArray("joltVfx") instance=ExtResource("4_hppyi")]
 joltCurve = SubResource("Curve_wc1c5")
+joltVfx = NodePath("../../../HornLeft/Splatter")
 
-[node name="HornRight" parent="Root/RootAttachment/RootOrientation" node_paths=PackedStringArray("joltFx") instance=ExtResource("5_j0uyl")]
-joltFx = NodePath("../../../HornRight/Splatter")
+[node name="HornRight" parent="Root/RootAttachment/RootOrientation" node_paths=PackedStringArray("joltVfx") instance=ExtResource("5_j0uyl")]
 joltCurve = SubResource("Curve_wc1c5")
+joltVfx = NodePath("../../../HornRight/Splatter")
 
-[node name="HornFront" parent="Root/RootAttachment/RootOrientation" node_paths=PackedStringArray("joltFx") instance=ExtResource("13_d8wwx")]
-joltFx = NodePath("../../../HornFront/Splatter")
+[node name="HornFront" parent="Root/RootAttachment/RootOrientation" node_paths=PackedStringArray("joltVfx") instance=ExtResource("13_d8wwx")]
 joltCurve = SubResource("Curve_wc1c5")
+joltVfx = NodePath("../../../HornFront/Splatter")
 
 [node name="PurpleEmbers" type="GPUParticles3D" parent="Root/RootAttachment/RootOrientation"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.7)
 layers = 32
 cast_shadow = 0
 extra_cull_margin = 16384.0
-emitting = false
 amount = 16
 fixed_fps = 0
 interpolate = false
@@ -1233,6 +1331,75 @@ bus = &"GAME SFX"
 [node name="Defeat" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("31_2x0kj")
 bus = &"GAME SFX"
+
+[node name="Movement" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("33_p7v10")
+attenuation_model = 3
+unit_size = 20.0
+max_db = 0.0
+max_distance = 50.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Damage" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("33_kon24")
+attenuation_model = 3
+volume_db = 6.0
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="HornDamage" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("34_5m7gr")
+attenuation_model = 3
+volume_db = 3.0
+max_db = 0.0
+max_distance = 30.0
+bus = &"GAME SFX"
+
+[node name="BombWindup" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("33_16a78")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Charge" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("34_1e4jh")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Shock" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("37_i75c6")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 100.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="ShockEnable" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("38_fwurm")
+attenuation_model = 3
+max_db = 0.0
+max_distance = 50.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Wave" type="AudioStreamPlayer3D" parent="SFX"]
+stream = ExtResource("39_fwurm")
+attenuation_model = 3
+volume_db = 3.0
+unit_size = 20.0
+max_distance = 100.0
+max_polyphony = 2
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [node name="EventAnimator" type="AnimationPlayer" parent="."]
 libraries = {

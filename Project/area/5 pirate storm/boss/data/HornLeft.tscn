@@ -1,7 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://dbwrvkfwjth4i"]
+[gd_scene load_steps=16 format=3 uid="uid://dbwrvkfwjth4i"]
 
 [ext_resource type="PackedScene" uid="uid://be23nycnikgem" path="res://area/5 pirate storm/boss/data/model/HornLeft.gltf" id="1_ijm0y"]
 [ext_resource type="Script" uid="uid://c008fo010fo4v" path="res://area/5 pirate storm/data/script/CaptainBemothHorn.cs" id="2_pxban"]
+[ext_resource type="AudioStream" uid="uid://bgslwbtxk53dk" path="res://sound/boss/captain bemoth/horn jolt.wav" id="3_nk6sn"]
+[ext_resource type="AudioStream" uid="uid://b0hc4v6gqi5co" path="res://sound/boss/captain bemoth/horn pop.wav" id="4_yck8a"]
 
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_hki7r"]
 
@@ -62,11 +64,13 @@ node_connections = [&"jolt_blend", 0, &"jolt_low_anim", &"jolt_blend", 1, &"jolt
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_yck8a"]
 
-[node name="HornLeft" node_paths=PackedStringArray("animator", "area") instance=ExtResource("1_ijm0y")]
+[node name="HornLeft" node_paths=PackedStringArray("animator", "area", "joltSfx", "popSfx") instance=ExtResource("1_ijm0y")]
 script = ExtResource("2_pxban")
 animator = NodePath("AnimationTree")
 area = NodePath("HornAttachment/Lockon")
+joltSfx = NodePath("HornAttachment/Jolt")
 maxHealth = 40
+popSfx = NodePath("HornAttachment/Pop")
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="2"]
 active = false
@@ -95,5 +99,23 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HornAttachment/Lockon" index="0"]
 shape = SubResource("SphereShape3D_yck8a")
+
+[node name="Jolt" type="AudioStreamPlayer3D" parent="HornAttachment" index="1"]
+stream = ExtResource("3_nk6sn")
+attenuation_model = 3
+volume_db = 3.0
+unit_size = 20.0
+max_distance = 50.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Pop" type="AudioStreamPlayer3D" parent="HornAttachment" index="2"]
+stream = ExtResource("4_yck8a")
+attenuation_model = 3
+volume_db = 3.0
+unit_size = 20.0
+max_distance = 50.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
 
 [connection signal="area_entered" from="HornAttachment/Lockon" to="." method="OnEntered"]
