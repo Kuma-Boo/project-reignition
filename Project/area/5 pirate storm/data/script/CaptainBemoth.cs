@@ -14,6 +14,10 @@ public partial class CaptainBemoth : PathFollow3D
 	[Export] private CameraTrigger mainCameraTrigger;
 	[Export] private JumpTrigger jumpTrigger;
 	[Export] private Node3D shockAttackRoot;
+	private int damageDialogIndex;
+	private int hintDialogIndex = -1;
+	[Export] private DialogTrigger[] damageDialogs;
+	[Export] private DialogTrigger[] hintDialogs;
 
 	[Export] private CaptainBemothHorn[] horns;
 
@@ -163,6 +167,8 @@ public partial class CaptainBemoth : PathFollow3D
 
 		currentRotation = 0;
 		rotationVelocity = 0;
+
+		damageDialogIndex = 0;
 
 		isAttackActive = false;
 		isAttackQueued = false;
@@ -393,6 +399,8 @@ public partial class CaptainBemoth : PathFollow3D
 	private readonly StringName DamageTrigger = "parameters/damage_trigger/request";
 	private void TakeDamage()
 	{
+		hintDialogIndex = hintDialogs.Length; // Disable hint dialogs. The player figured it out
+
 		isAttackQueued = true;
 		currentHealth--;
 		currentState = BemothState.Damaged;
@@ -421,6 +429,14 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private void StartAttack()
 	{
+		if (hintDialogIndex < hintDialogs.Length && !SoundManager.instance.IsDialogActive)
+		{
+			if (hintDialogIndex >= 0) // Give some room from the start of the fight and the first hint
+				hintDialogs[hintDialogIndex].Activate();
+
+			hintDialogIndex++;
+		}
+
 		if (isAttackQueued) // Queued attacks are always waves
 		{
 			isAttackQueued = false;
@@ -764,6 +780,13 @@ public partial class CaptainBemoth : PathFollow3D
 			Player.GlobalPosition = jumpTrigger.GlobalPosition + Vector3.Up * LaunchFallHeight;
 			Player.PathFollower.Resync();
 			mainCameraTrigger.Activate();
+
+			// Play dialog
+			if (!hasPlayerJumpedOffHorn)
+			{
+				damageDialogs[damageDialogIndex].Activate();
+				damageDialogIndex++;
+			}
 		}
 
 		jumpTrigger.Activate();

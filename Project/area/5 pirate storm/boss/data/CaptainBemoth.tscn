@@ -1,4 +1,4 @@
-[gd_scene load_steps=125 format=3 uid="uid://dihp6asycbujt"]
+[gd_scene load_steps=126 format=3 uid="uid://dihp6asycbujt"]
 
 [ext_resource type="Script" uid="uid://lq3vcs5bircg" path="res://area/5 pirate storm/data/script/CaptainBemoth.cs" id="1_blu3m"]
 [ext_resource type="PackedScene" uid="uid://c0txr710wvj5p" path="res://area/5 pirate storm/boss/data/model/CaptainBemoth.gltf" id="1_nac7p"]
@@ -41,6 +41,7 @@
 [ext_resource type="AudioStream" uid="uid://d1fpueoi2rg68" path="res://sound/boss/captain bemoth/shock enable.wav" id="38_fwurm"]
 [ext_resource type="AudioStream" uid="uid://0oum8nxnureu" path="res://sound/boss/captain bemoth/shock charge.wav" id="39_cvw4u"]
 [ext_resource type="AudioStream" uid="uid://cnwlk7yaohrn3" path="res://sound/boss/captain bemoth/wave attack.wav" id="39_fwurm"]
+[ext_resource type="Script" uid="uid://bitgnn108jmaa" path="res://object/trigger/modules/DialogTrigger.cs" id="42_6rqot"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6vuv4"]
 animation = &"bomb"
@@ -751,7 +752,7 @@ _data = {
 &"shock": SubResource("Animation_i75c6")
 }
 
-[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("animator", "eventAnimator", "root", "jumpCameraTrigger", "mainCameraTrigger", "jumpTrigger", "shockAttackRoot", "horns", "bombs")]
+[node name="CaptainBemoth" type="PathFollow3D" node_paths=PackedStringArray("animator", "eventAnimator", "root", "jumpCameraTrigger", "mainCameraTrigger", "jumpTrigger", "shockAttackRoot", "damageDialogs", "hintDialogs", "horns", "bombs")]
 use_model_front = true
 tilt_enabled = false
 script = ExtResource("1_blu3m")
@@ -762,6 +763,8 @@ jumpCameraTrigger = NodePath("Root/Cameras/JumpCamera")
 mainCameraTrigger = NodePath("Root/Cameras/MainCamera")
 jumpTrigger = NodePath("Root/Jump")
 shockAttackRoot = NodePath("Root/HoleAttachment/ShockCharge")
+damageDialogs = [NodePath("Dialog/Damage1"), NodePath("Dialog/Damage2"), NodePath("Dialog/Damage3")]
+hintDialogs = [NodePath("Dialog/Hint1"), NodePath("Dialog/Hint2")]
 horns = [NodePath("Root/RootAttachment/RootOrientation/HornBack"), NodePath("Root/RootAttachment/RootOrientation/HornLeft"), NodePath("Root/RootAttachment/RootOrientation/HornRight"), NodePath("Root/RootAttachment/RootOrientation/HornFront")]
 bombs = [NodePath("Root/RootAttachment/BombOrigin/BombAttack1"), NodePath("Root/RootAttachment/BombOrigin/BombAttack2"), NodePath("Root/RootAttachment/BombOrigin/BombAttack3"), NodePath("Root/RootAttachment/BombOrigin/BombAttack4"), NodePath("Root/RootAttachment/BombOrigin/BombAttack5")]
 
@@ -854,7 +857,7 @@ settings = ExtResource("9_fyucs")
 UpdateEveryFrame = true
 
 [node name="RootAttachment" type="Node3D" parent="Root"]
-transform = Transform3D(0.999998, 0, 0, 0, -4.3711e-08, 0.999992, 0, -0.999991, -4.3711e-08, 0, 0, 0)
+transform = Transform3D(0.999985, 0, 0, 0, -4.371e-08, 0.99995, 0, -0.999967, -4.37092e-08, 0, 0, 0)
 script = ExtResource("11_dyq0f")
 skeleton = NodePath("../CaptainBemoth/BemothRoot/Skeleton3D")
 boneName = &""
@@ -1433,6 +1436,36 @@ max_distance = 100.0
 max_polyphony = 2
 bus = &"GAME SFX"
 attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Dialog" type="Node3D" parent="."]
+
+[node name="Intro" type="Node3D" parent="Dialog"]
+script = ExtResource("42_6rqot")
+textKeys = Array[String](["pir_boss_intro_so", "pir_boss_intro_sh"])
+
+[node name="Defeat" type="Node3D" parent="Dialog"]
+script = ExtResource("42_6rqot")
+textKeys = Array[String](["pir_boss_defeat_so"])
+
+[node name="Damage1" type="Node3D" parent="Dialog"]
+script = ExtResource("42_6rqot")
+textKeys = Array[String](["pir_boss_hit_so", "pir_boss_hit_sh"])
+
+[node name="Damage2" type="Node3D" parent="Dialog"]
+script = ExtResource("42_6rqot")
+textKeys = Array[String](["pir_boss_hit2_sh"])
+
+[node name="Damage3" type="Node3D" parent="Dialog"]
+script = ExtResource("42_6rqot")
+textKeys = Array[String](["pir_boss_hit3_so", "pir_boss_hit3_sh"])
+
+[node name="Hint1" type="Node3D" parent="Dialog"]
+script = ExtResource("42_6rqot")
+textKeys = Array[String](["pir_hint_damage_sh"])
+
+[node name="Hint2" type="Node3D" parent="Dialog"]
+script = ExtResource("42_6rqot")
+textKeys = Array[String](["pir_hint_damage2_sh"])
 
 [node name="EventAnimator" type="AnimationPlayer" parent="."]
 libraries = {
