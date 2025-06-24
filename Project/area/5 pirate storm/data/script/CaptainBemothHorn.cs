@@ -123,6 +123,7 @@ public partial class CaptainBemothHorn : Node3D
 		});
 
 		IsPopping = true;
+		joltFx.RestartGroup();
 		animator.Set(PopTransition, "enabled");
 	}
 
