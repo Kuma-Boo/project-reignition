@@ -111,17 +111,31 @@ public partial class CaptainBemoth : PathFollow3D
 	private readonly StringName DefeatSeek = "parameters/defeat_seek/seek_request";
 	private void DefeatBoss()
 	{
+		TransitionManager.StartTransition(new()
+		{
+			inSpeed = 0f,
+			outSpeed = .5f,
+			color = Colors.Black
+		});
+
 		root.GlobalTransform = Transform3D.Identity;
 		animator.Set(DefeatTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+
+		BonusManager.instance.QueueBonus(new(BonusType.Boss, 8000));
+		Interface.PauseMenu.AllowPausing = false;
+		HeadsUpDisplay.Instance.Visible = false;
 		currentState = BemothState.Defeated;
-		Player.Deactivate();
+
+		TransitionManager.FinishTransition();
 	}
 
 	private void FinishDefeat()
 	{
+		if (!StageSettings.Instance.IsLevelIngame)
+			return;
+
 		eventAnimator.Play("finish-defeat");
 		eventAnimator.Advance(0f);
-		animator.Set(DefeatSeek, 20);
 		CallDeferred(MethodName.FinishStage);
 	}
 
@@ -245,12 +259,6 @@ public partial class CaptainBemoth : PathFollow3D
 
 		currentState = BemothState.Idle;
 		isFacingForward = currentHealth == 1; // Only face the player when almost dead
-
-		if (isAttackDisabled || !isAttackQueued) // Allow immediate followup when in no-attack zone
-			EnableHornHurtboxes();
-		else
-			DisableHornHurtboxes();
-
 		attackTimer = isAttackQueued ? QueuedAttackDelay : AttackTimerInterval;
 	}
 
@@ -390,8 +398,15 @@ public partial class CaptainBemoth : PathFollow3D
 		currentHealth--;
 		currentState = BemothState.Damaged;
 
-		DisableHornHurtboxes();
+		if (isAttackDisabled || !isAttackQueued) // Allow immediate followup when in no-attack zone
+			EnableHornHurtboxes();
+		else
+			DisableHornHurtboxes();
+
 		CancelShockAttack();
+
+		DefeatBoss();
+		return;
 
 		if (currentHealth == 0)
 			DefeatBoss();

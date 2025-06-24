@@ -1,4 +1,4 @@
-[gd_scene load_steps=113 format=3 uid="uid://dihp6asycbujt"]
+[gd_scene load_steps=114 format=3 uid="uid://dihp6asycbujt"]
 
 [ext_resource type="Script" uid="uid://lq3vcs5bircg" path="res://area/5 pirate storm/data/script/CaptainBemoth.cs" id="1_blu3m"]
 [ext_resource type="PackedScene" uid="uid://c0txr710wvj5p" path="res://area/5 pirate storm/boss/data/model/CaptainBemoth.gltf" id="1_nac7p"]
@@ -29,6 +29,7 @@
 [ext_resource type="Material" uid="uid://c0ul0kasu0kpi" path="res://effect/particle/material/environment/Circular Glow Add.tres" id="24_rv1pp"]
 [ext_resource type="Shader" uid="uid://bf4qu1y7iievw" path="res://effect/shader/particle/AnimatedAddNonbillboard.gdshader" id="25_d8wwx"]
 [ext_resource type="Texture2D" uid="uid://b0561j1ihu3fx" path="res://area/5 pirate storm/boss/data/model/texture/lightning.png" id="26_jmsyr"]
+[ext_resource type="Resource" uid="uid://ukcne4um86a6" path="res://resource/preset/camera/common/CutsceneCam.tres" id="30_2x0kj"]
 [ext_resource type="AudioStream" uid="uid://bnpmgrniean1n" path="res://sound/boss/captain bemoth/ev_01_stg052.ogg" id="30_dyq0f"]
 [ext_resource type="AudioStream" uid="uid://d0lpb4vym76or" path="res://sound/boss/captain bemoth/ev_02_stg052.ogg" id="31_2x0kj"]
 
@@ -555,6 +556,7 @@ length = 0.001
 [sub_resource type="Animation" id="Animation_16a78"]
 resource_name = "finish-defeat"
 length = 0.001
+step = 1.0
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -567,6 +569,20 @@ tracks/0/keys = {
 "values": [{
 "args": [],
 "method": &"stop"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/Cameras/MainCamera")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
 }]
 }
 
@@ -585,6 +601,20 @@ tracks/0/keys = {
 "values": [{
 "args": [],
 "method": &"stop"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Root/Cameras/MainCamera")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Activate"
 }]
 }
 
@@ -845,7 +875,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37115e-08, -1, 0, 1, -4.37115e-08, 0, 0, 
 shape = SubResource("CylinderShape3D_y7uss")
 
 [node name="WaveL" type="BoneAttachment3D" parent="Root"]
-transform = Transform3D(2.77479e-07, 0.707104, -0.707105, -0.999973, -2.47696e-06, -2.99791e-06, -3.79781e-06, 0.707105, 0.707104, 2.52191, -0.103347, 0.756606)
+transform = Transform3D(0.0357532, -0.764419, -0.643721, -0.994494, -0.0905269, 0.0522625, -0.0982227, 0.638326, -0.763469, 83.3571, 13.7936, -283.822)
 bone_name = "l_arm05"
 bone_idx = 31
 use_external_skeleton = true
@@ -898,7 +928,7 @@ process_material = SubResource("ParticleProcessMaterial_yn1wy")
 draw_pass_1 = SubResource("QuadMesh_n25aq")
 
 [node name="WaveR" type="BoneAttachment3D" parent="Root"]
-transform = Transform3D(2.77479e-07, -0.707104, 0.707105, 0.999973, -2.47696e-06, -2.99791e-06, 3.79781e-06, 0.707105, 0.707104, -2.52191, -0.103347, 0.756606)
+transform = Transform3D(-0.0357477, 0.175271, 0.983867, 0.994494, -0.0905268, 0.0522625, 0.0982246, 0.980345, -0.171075, 81.9694, 13.7936, -284.328)
 bone_name = "r_arm05"
 bone_idx = 47
 use_external_skeleton = true
@@ -951,7 +981,7 @@ process_material = SubResource("ParticleProcessMaterial_yn1wy")
 draw_pass_1 = SubResource("QuadMesh_n25aq")
 
 [node name="HornBack" type="BoneAttachment3D" parent="Root"]
-transform = Transform3D(1, 3.58941e-08, 2.10373e-08, -3.58942e-08, 0.488647, 0.872482, 2.10372e-08, -0.872482, 0.488647, -4.2567e-15, 0.290004, -1.1)
+transform = Transform3D(0.939693, 0.279302, -0.197404, 6.80692e-09, 0.577169, 0.816625, 0.34202, -0.767376, 0.542362, 83.3638, 14.4044, -285.999)
 bone_name = "b_horn"
 bone_idx = 59
 use_external_skeleton = true
@@ -994,7 +1024,7 @@ process_material = SubResource("ParticleProcessMaterial_2rhf6")
 draw_pass_1 = SubResource("QuadMesh_6vuv4")
 
 [node name="HornLeft" type="BoneAttachment3D" parent="Root"]
-transform = Transform3D(-0.0449456, 0.603129, -0.796376, 0.254879, 0.777722, 0.574617, 0.965928, -0.177153, -0.18868, 0.68, 0.800001, -0.199997)
+transform = Transform3D(-0.379904, 0.59921, -0.704713, 0.152516, 0.791979, 0.591192, 0.912366, 0.117117, -0.392265, 83.6784, 14.8176, -284.876)
 bone_name = "l_horn"
 bone_idx = 61
 use_external_skeleton = true
@@ -1037,7 +1067,7 @@ process_material = SubResource("ParticleProcessMaterial_2rhf6")
 draw_pass_1 = SubResource("QuadMesh_6vuv4")
 
 [node name="HornRight" type="BoneAttachment3D" parent="Root"]
-transform = Transform3D(-0.0449456, -0.603129, 0.796376, -0.254879, 0.777722, 0.574617, -0.965928, -0.177153, -0.18868, -0.68, 0.800001, -0.199997)
+transform = Transform3D(0.295434, -0.534302, 0.791985, -0.152516, 0.791979, 0.591192, -0.943111, -0.295448, 0.152488, 82.4004, 14.8175, -285.341)
 bone_name = "r_horn"
 bone_idx = 60
 use_external_skeleton = true
@@ -1080,7 +1110,7 @@ process_material = SubResource("ParticleProcessMaterial_2rhf6")
 draw_pass_1 = SubResource("QuadMesh_6vuv4")
 
 [node name="HornFront" type="BoneAttachment3D" parent="Root"]
-transform = Transform3D(-1, -8.09657e-07, -4.1177e-07, -7.48409e-07, 0.477506, 0.878628, -5.14765e-07, 0.878628, -0.477506, 1.00546e-07, 0.685205, 0.764614)
+transform = Transform3D(-0.939692, -0.315934, 0.13101, -7.35205e-07, 0.383048, 0.923728, -0.342021, 0.86802, -0.359948, 82.7154, 14.6026, -284.218)
 bone_name = "f_horn"
 bone_idx = 62
 use_external_skeleton = true
@@ -1123,7 +1153,7 @@ process_material = SubResource("ParticleProcessMaterial_2rhf6")
 draw_pass_1 = SubResource("QuadMesh_6vuv4")
 
 [node name="HoleAttachment" type="BoneAttachment3D" parent="Root"]
-transform = Transform3D(1, 0, 0, 0, 0.965927, 0.258816, 0, -0.258816, 0.965927, 0, 0.925842, -0.230114)
+transform = Transform3D(0.939693, 0.0535026, -0.33781, 4.47035e-08, 0.987689, 0.156431, 0.34202, -0.146997, 0.928124, 83.0452, 14.9458, -285.124)
 bone_name = "c_hole"
 bone_idx = 63
 use_external_skeleton = true
@@ -1187,6 +1217,12 @@ script = ExtResource("8_hppyi")
 
 [node name="CutsceneCamera" type="Camera3D" parent="Root/Camera"]
 cull_mask = 1147
+current = true
+script = ExtResource("12_gc8sa")
+transitionTime = 0.0
+settings = ExtResource("30_2x0kj")
+UpdateEveryFrame = true
+followObject = NodePath(".")
 
 [node name="SFX" type="Node3D" parent="."]
 
