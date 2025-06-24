@@ -26,6 +26,8 @@ public partial class BemothHornState : PlayerState
 	/// <summary> Used to mimmick the "optimal speedrun strat" in the original game. </summary>
 	private float pullChargeTimer;
 	private readonly float OptimalPullChargeTiming = .4f;
+	private readonly StringName JumpAction = "action_jump";
+	private readonly StringName PullAction = "action_pull";
 
 	public override void EnterState()
 	{
@@ -40,6 +42,10 @@ public partial class BemothHornState : PlayerState
 		Player.StartExternal(Trigger, Trigger.FollowObject, 1f);
 
 		Trigger.CallDeferred(CaptainBemothHorn.MethodName.JoltHorn, 1);
+
+		HeadsUpDisplay.Instance.SetPrompt(PullAction, 0);
+		HeadsUpDisplay.Instance.SetPrompt(JumpAction, 1);
+		HeadsUpDisplay.Instance.ShowPrompts();
 	}
 
 	public override void ExitState()
@@ -47,6 +53,8 @@ public partial class BemothHornState : PlayerState
 		pullChargeTimer = 0f;
 		Player.Animator.ResetState();
 		Player.StopExternal();
+
+		HeadsUpDisplay.Instance.HidePrompts();
 	}
 
 	public override PlayerState ProcessPhysics()

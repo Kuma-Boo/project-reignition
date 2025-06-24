@@ -141,6 +141,7 @@ public partial class CaptainBemothHorn : Node3D
 		if (damageDealt >= maxHealth)
 		{
 			damageDealt = maxHealth;
+			HeadsUpDisplay.Instance.HidePrompts();
 			EmitSignal(SignalName.Popped); // Emit pop signal early so animations/cameras can play
 		}
 	}
