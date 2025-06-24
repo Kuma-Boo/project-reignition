@@ -840,11 +840,12 @@ public partial class CaptainBemoth : PathFollow3D
 			return;
 
 		if (currentState != BemothState.ShockAttack)
+		{
 			EnterIdleState();
+			eventAnimator.Play("RESET");
+		}
 
 		EnableHornHurtboxes();
-		CancelBombAttacks();
-		eventAnimator.Play("RESET");
 		isAttackDisabled = true;
 	}
 }
