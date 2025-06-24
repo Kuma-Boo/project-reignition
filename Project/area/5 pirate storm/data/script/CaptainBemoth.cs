@@ -27,7 +27,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 	private int currentHealth;
 	private readonly int MaxHealth = 4;
-	private BemothState currentState = BemothState.Idle;
+	private BemothState currentState;
 	private enum BemothState
 	{
 		Introduction,
@@ -66,7 +66,6 @@ public partial class CaptainBemoth : PathFollow3D
 		Player.Deactivate();
 		animator.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
-		CancelBombAttacks();
 		waveLeft.Deactivate();
 		waveRight.Deactivate();
 
@@ -102,6 +101,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 		TransitionManager.FinishTransition();
 		Player.Activate();
+		attackTimer = ShortAttackInterval;
 	}
 
 	private readonly StringName DefeatTrigger = "parameters/defeat_trigger/request";
@@ -258,7 +258,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 		currentState = BemothState.Idle;
 		isFacingForward = currentHealth == 1; // Only face the player when almost dead
-		attackTimer = isAttackQueued ? ShortAttackInterval : AttackTimerInterval;
+		attackTimer = AttackTimerInterval;
 	}
 
 	private void ProcessIdleState()
@@ -778,6 +778,7 @@ public partial class CaptainBemoth : PathFollow3D
 			EnterIdleState();
 		}
 
+		attackTimer = ShortAttackInterval;
 		DisablePoppedHorns();
 	}
 
