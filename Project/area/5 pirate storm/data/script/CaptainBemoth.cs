@@ -107,12 +107,46 @@ public partial class CaptainBemoth : PathFollow3D
 		Player.Activate();
 	}
 
+	private readonly StringName DefeatTrigger = "parameters/defeat_trigger/request";
+	private readonly StringName DefeatSeek = "parameters/defeat_seek/seek_request";
+	private void DefeatBoss()
+	{
+		root.GlobalTransform = Transform3D.Identity;
+		animator.Set(DefeatTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		currentState = BemothState.Defeated;
+		Player.Deactivate();
+	}
+
+	private void FinishDefeat()
+	{
+		eventAnimator.Play("finish-defeat");
+		eventAnimator.Advance(0f);
+		animator.Set(DefeatSeek, 20);
+		CallDeferred(MethodName.FinishStage);
+	}
+
+	private void FinishStage()
+	{
+		DisablePoppedHorns();
+
+		// Return player to starting position
+		Player.Position = Vector3.Up * LaunchFallHeight;
+		Player.PathFollower.Resync();
+		Player.Animator.SnapRotation(Player.PathFollower.ForwardAngle);
+		jumpTrigger.GlobalPosition = Player.GetParentNode3D().GlobalPosition;
+		jumpTrigger.Activate();
+
+		Player.Activate();
+		StageSettings.Instance.FinishLevel(true);
+		SaveManager.ActiveGameData.AllowSkippingCutscene(DefeatCutsceneID);
+	}
+
 	private void Respawn()
 	{
 		EnterIdleState();
 		StopMotionBlur();
 		currentHealth = MaxHealth;
-		Progress = StopDistance;
+		Progress = StopDistanceSmoothingStart;
 		HOffset = 0;
 		trackingVelocity = 0;
 
@@ -158,8 +192,7 @@ public partial class CaptainBemoth : PathFollow3D
 				if ((Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("button_jump")) &&
 					SaveManager.ActiveGameData.CanSkipCutscene(DefeatCutsceneID))
 				{
-					GD.PushError("Defeat is unimplemented!");
-					// TODO AnimationTree.Set(DefeatSeek, 20);
+					FinishDefeat();
 				}
 				return;
 			case BemothState.Idle:
@@ -213,27 +246,20 @@ public partial class CaptainBemoth : PathFollow3D
 		currentState = BemothState.Idle;
 		isFacingForward = currentHealth == 1; // Only face the player when almost dead
 
-		if (isAttackQueued)
-		{
-			attackTimer = QueuedAttackDelay;
-			DisableHornHurtboxes();
-		}
-		else
-		{
-			attackTimer = AttackTimerInterval;
+		if (isAttackDisabled || !isAttackQueued) // Allow immediate followup when in no-attack zone
 			EnableHornHurtboxes();
-		}
+		else
+			DisableHornHurtboxes();
+
+		attackTimer = isAttackQueued ? QueuedAttackDelay : AttackTimerInterval;
 	}
 
 	private void ProcessIdleState()
 	{
 		HOffset = ExtensionMethods.SmoothDamp(HOffset, 0, ref trackingVelocity, TrackingSmoothing * PhysicsManager.physicsDelta);
 
-		if (isAttackDisabled)
-			return;
-
-		attackTimer -= PhysicsManager.physicsDelta;
-		if (attackTimer > 0)
+		attackTimer = Mathf.MoveToward(attackTimer, 0, PhysicsManager.physicsDelta);
+		if (attackTimer > 0 || isAttackDisabled)
 			return;
 
 		attackTimer = 0;
@@ -243,12 +269,13 @@ public partial class CaptainBemoth : PathFollow3D
 	private float moveSpeed;
 	private float moveSpeedVelocity;
 	private readonly float MoveSpeedSmoothing = 10f;
+	private readonly float DamageSpeedSmoothing = 30f;
 	private readonly float BaseMoveSpeed = 20f;
 	private readonly float ChargeSpeed = -100f;
 	private readonly float MinimumDistance = 2f;
 	private readonly float MinimumDistanceSmoothingStart = 10f;
 	private readonly float StopDistance = 40f;
-	private readonly float StopDistanceSmoothingStart = 25f;
+	private readonly float StopDistanceSmoothingStart = 35f;
 	private readonly float WaveAttackDistance = 20f;
 
 	/// <summary> Returns the progress difference between the player and the boss. </summary>
@@ -290,6 +317,11 @@ public partial class CaptainBemoth : PathFollow3D
 			else if (currentState == BemothState.ShockAttack)
 			{
 				targetMoveSpeed = isShockAttackActive ? 0f : BaseMoveSpeed;
+			}
+			else if (currentState == BemothState.Damaged)
+			{
+				targetMoveSpeed = 0f;
+				speedSmoothing = DamageSpeedSmoothing;
 			}
 			else if (Player.IsMovingBackward)
 			{
@@ -354,16 +386,17 @@ public partial class CaptainBemoth : PathFollow3D
 	private readonly StringName DamageTrigger = "parameters/damage_trigger/request";
 	private void TakeDamage()
 	{
-		currentHealth--;
 		isAttackQueued = true;
+		currentHealth--;
+		currentState = BemothState.Damaged;
 
-		if (isAttackDisabled) // Allow immediate followup when in no-attack zone
-			EnableHornHurtboxes();
-		else
-			DisableHornHurtboxes();
-
+		DisableHornHurtboxes();
 		CancelShockAttack();
-		animator.Set(DamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+
+		if (currentHealth == 0)
+			DefeatBoss();
+		else
+			animator.Set(DamageTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 	}
 
 	#region Attacks
@@ -372,7 +405,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private bool isAttackDisabled;
 	private bool isAttackActive;
 	private float attackTimer;
-	private readonly float QueuedAttackDelay = 1.2f;
+	private readonly float QueuedAttackDelay = 0.8f;
 	private readonly float AttackTimerInterval = 3f;
 
 	private void StartAttack()
@@ -581,9 +614,9 @@ public partial class CaptainBemoth : PathFollow3D
 	private bool hasPlayerJumpedOffHorn;
 	private bool isShockAttackActive;
 	private float shockTimer;
-	private readonly float ShockAttackLongDelay = 3f;
+	private readonly float ShockAttackLongDelay = 4f;
 	private readonly float ShockAttackShortDelay = .5f;
-	private readonly float ShockAttackChargeLength = 5f;
+	private readonly float ShockAttackChargeLength = 5.5f;
 	private readonly StringName ShockTrigger = "parameters/shock_trigger/request";
 	private void EnterShockAttackState()
 	{
@@ -591,6 +624,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 		attackTimer = 0;
 		isAttackActive = false;
+		isAttackQueued = false;
 		isShockAttackActive = false;
 		hasPlayerJumpedOffHorn = false;
 		currentState = BemothState.ShockAttack;
@@ -617,6 +651,7 @@ public partial class CaptainBemoth : PathFollow3D
 			shockAttackFx.StopGroup(); // Momentary pause before the burst
 			animator.Set(ShockTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 			Player.SetHornPullable(false);
+			isAttackQueued = true;
 		}
 	}
 
@@ -701,7 +736,6 @@ public partial class CaptainBemoth : PathFollow3D
 
 		Player.PathFollower.Progress = initialProgress;
 		jumpTrigger.GlobalPosition = hit.point;
-		jumpTrigger.jumpHeight = 0f;
 		if (isJump)
 		{
 			jumpTrigger.Position += Vector3.Up * LaunchFallHeight;
@@ -731,11 +765,7 @@ public partial class CaptainBemoth : PathFollow3D
 			EnterIdleState();
 		}
 
-		foreach (CaptainBemothHorn horn in horns)
-		{
-			if (horn.IsPopping)
-				horn.Despawn();
-		}
+		DisablePoppedHorns();
 	}
 
 	private RaycastHit CheckLaunchGround() => this.CastRay(Player.PathFollower.GlobalPosition + Vector3.Up * LaunchHeightCheckLength * 0.5f,
@@ -748,6 +778,15 @@ public partial class CaptainBemoth : PathFollow3D
 		CallDeferred(MethodName.LaunchPlayer, false); // Transition back to gameplay
 	}
 
+	private void DisablePoppedHorns()
+	{
+		foreach (CaptainBemothHorn horn in horns)
+		{
+			if (horn.IsPopping)
+				horn.Despawn();
+		}
+	}
+
 	private void EnableAttacks(Area3D a)
 	{
 		if (!a.IsInGroup("no attack zone"))
@@ -755,7 +794,6 @@ public partial class CaptainBemoth : PathFollow3D
 
 		isAttackDisabled = false;
 		isAttackQueued = true;
-		EnterIdleState();
 	}
 
 	private void DisableAttacks(Area3D a)
@@ -763,7 +801,9 @@ public partial class CaptainBemoth : PathFollow3D
 		if (!a.IsInGroup("no attack zone"))
 			return;
 
-		EnterIdleState();
+		if (currentState != BemothState.ShockAttack)
+			EnterIdleState();
+
 		CancelBombAttacks();
 		chargeAttackFx.SetEmitting(false);
 		isAttackDisabled = true;

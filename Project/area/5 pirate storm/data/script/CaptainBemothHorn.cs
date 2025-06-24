@@ -18,6 +18,7 @@ public partial class CaptainBemothHorn : Node3D
 	[Export] private int maxHealth;
 	/// <summary> How long to delay the actual pop so animations have time to catch up. </summary>
 	[Export] private float popDelay = .5f;
+	[Export] private bool isPopMovementDisabled;
 	private float popTimer;
 
 	// Jolt curve for pulling out horns
@@ -77,7 +78,9 @@ public partial class CaptainBemothHorn : Node3D
 	{
 		if (IsPopping)
 		{
-			GlobalPosition += Vector3.Up * PhysicsManager.physicsDelta * PopSpeed;
+			if (!isPopMovementDisabled)
+				GlobalPosition += Vector3.Up * PhysicsManager.physicsDelta * PopSpeed;
+
 			return;
 		}
 
