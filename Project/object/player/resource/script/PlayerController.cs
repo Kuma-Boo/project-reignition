@@ -1144,6 +1144,14 @@ public partial class PlayerController : CharacterBody3D
 
 	public void Activate()
 	{
+		// Prevent immediate movements to fix janky camera backstepping issue
+		AddLockoutData(new()
+		{
+			overrideSpeed = true,
+			speedRatio = 0f,
+			length = 0.1f,
+		});
+
 		Visible = true;
 		ProcessMode = ProcessModeEnum.Inherit;
 

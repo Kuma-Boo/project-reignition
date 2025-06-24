@@ -92,14 +92,13 @@ public partial class CaptainBemoth : PathFollow3D
 		TransitionManager.instance.TransitionProcess += StartBattle;
 		SaveManager.ActiveGameData.AllowSkippingCutscene(IntroCutsceneID);
 		eventAnimator.Play("finish-intro");
+		eventAnimator.Advance(0.0);
 	}
 
 	private void StartBattle()
 	{
 		TransitionManager.instance.TransitionProcess -= StartBattle;
 		animator.Set(IntroTrigger, (int)AnimationNodeOneShot.OneShotRequest.Abort);
-		eventAnimator.Play("finish-intro");
-		eventAnimator.Advance(0.0);
 
 		Respawn();
 

@@ -11,8 +11,6 @@
 [ext_resource type="Script" uid="uid://dnrfeyqvx8aq" path="res://addons/custom_nodes/script/GroupAudioStreamPlayer3D.cs" id="8_nplt5"]
 [ext_resource type="AudioStream" uid="uid://4s8882ghxtda" path="res://sound/boss/sand scorpion/STG012_14.wav" id="9_230w5"]
 
-
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_ykuxf"]
 radius = 0.3
 
@@ -352,7 +350,7 @@ tracks/9/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_ymqqu"]
-resource_name = "launch"
+resource_name = "fly"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -480,12 +478,13 @@ tracks/9/keys = {
 _data = {
 &"RESET": SubResource("Animation_ad8ll"),
 &"explode": SubResource("Animation_3tuoq"),
-&"launch": SubResource("Animation_ymqqu")
+&"fly": SubResource("Animation_ymqqu")
 }
 
-[node name="Missile" type="Node3D" node_paths=PackedStringArray("animator")]
+[node name="Missile" type="Node3D" node_paths=PackedStringArray("root", "animator")]
 script = ExtResource("1_1rlvb")
 disableRespawning = true
+root = NodePath(".")
 animator = NodePath("AnimationPlayer")
 "Launch Settings/Mode" = 2
 
