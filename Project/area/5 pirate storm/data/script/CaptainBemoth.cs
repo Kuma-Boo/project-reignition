@@ -118,6 +118,7 @@ public partial class CaptainBemoth : PathFollow3D
 			color = Colors.Black
 		});
 
+		Progress = 0;
 		root.GlobalTransform = Transform3D.Identity;
 		animator.Set(DefeatTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
@@ -644,7 +645,7 @@ public partial class CaptainBemoth : PathFollow3D
 	private float shockTimer;
 	private readonly float ShockAttackLongDelay = 4f;
 	private readonly float ShockAttackShortDelay = .5f;
-	private readonly float ShockAttackChargeLength = 5.5f;
+	private readonly float ShockAttackChargeLength = 5f;
 	private readonly StringName ShockTrigger = "parameters/shock_trigger/request";
 	private void EnterShockAttackState()
 	{
