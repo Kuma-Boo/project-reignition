@@ -1,0 +1,123 @@
+[gd_scene load_steps=16 format=3 uid="uid://duv45480ci8cg"]
+
+[ext_resource type="PackedScene" uid="uid://bisfr2ty572aw" path="res://area/5 pirate storm/boss/data/model/HornFront.gltf" id="1_t475w"]
+[ext_resource type="Script" uid="uid://c008fo010fo4v" path="res://area/5 pirate storm/data/script/CaptainBemothHorn.cs" id="2_wj2cn"]
+[ext_resource type="AudioStream" uid="uid://bgslwbtxk53dk" path="res://sound/boss/captain bemoth/horn jolt.wav" id="3_dr4vk"]
+[ext_resource type="AudioStream" uid="uid://b0hc4v6gqi5co" path="res://sound/boss/captain bemoth/horn pop.wav" id="4_jkgrd"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_hki7r"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rsdr4"]
+animation = &"jolt-high"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cfg36"]
+animation = &"jolt-low"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_5a73y"]
+mix_mode = 1
+fadeout_time = 0.02
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_glo1o"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hki7r"]
+animation = &"pop"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_glo1o"]
+xfade_time = 0.05
+input_0/name = "disabled"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "enabled"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5a73y"]
+animation = &"pull"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_rsdr4"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_dr4vk"]
+graph_offset = Vector2(-568.511, 162.356)
+nodes/jolt_blend/node = SubResource("AnimationNodeBlend2_hki7r")
+nodes/jolt_blend/position = Vector2(120, 260)
+nodes/jolt_high_anim/node = SubResource("AnimationNodeAnimation_rsdr4")
+nodes/jolt_high_anim/position = Vector2(-100, 540)
+nodes/jolt_low_anim/node = SubResource("AnimationNodeAnimation_cfg36")
+nodes/jolt_low_anim/position = Vector2(-100, 380)
+nodes/jolt_trigger/node = SubResource("AnimationNodeOneShot_5a73y")
+nodes/jolt_trigger/position = Vector2(300, 140)
+nodes/normal_anim/node = SubResource("AnimationNodeAnimation_glo1o")
+nodes/normal_anim/position = Vector2(-460, 100)
+nodes/output/position = Vector2(500, 140)
+nodes/pop_anim/node = SubResource("AnimationNodeAnimation_hki7r")
+nodes/pop_anim/position = Vector2(-300, 340)
+nodes/pop_transition/node = SubResource("AnimationNodeTransition_glo1o")
+nodes/pop_transition/position = Vector2(-100, 140)
+nodes/pull_anim/node = SubResource("AnimationNodeAnimation_5a73y")
+nodes/pull_anim/position = Vector2(-460, 280)
+nodes/pull_blend/node = SubResource("AnimationNodeBlend2_rsdr4")
+nodes/pull_blend/position = Vector2(-300, 100)
+node_connections = [&"jolt_blend", 0, &"jolt_low_anim", &"jolt_blend", 1, &"jolt_high_anim", &"jolt_trigger", 0, &"pop_transition", &"jolt_trigger", 1, &"jolt_blend", &"output", 0, &"jolt_trigger", &"pop_transition", 0, &"pull_blend", &"pop_transition", 1, &"pop_anim", &"pull_blend", 0, &"normal_anim", &"pull_blend", 1, &"pull_anim"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jkgrd"]
+
+[node name="HornFront" node_paths=PackedStringArray("animator", "area", "joltSfx", "popSfx") instance=ExtResource("1_t475w")]
+script = ExtResource("2_wj2cn")
+animator = NodePath("AnimationTree")
+area = NodePath("HornAttachment/Lockon")
+joltSfx = NodePath("HornAttachment/Jolt")
+maxHealth = 60
+popSfx = NodePath("HornAttachment/Pop")
+popDelay = 0.0
+isPopFXDisabled = true
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+active = false
+tree_root = SubResource("AnimationNodeBlendTree_dr4vk")
+anim_player = NodePath("../AnimationPlayer")
+parameters/jolt_blend/blend_amount = 0
+parameters/jolt_trigger/active = false
+parameters/jolt_trigger/internal_active = false
+parameters/jolt_trigger/request = 0
+parameters/pop_transition/current_state = "disabled"
+parameters/pop_transition/transition_request = ""
+parameters/pop_transition/current_index = 0.001
+parameters/pull_blend/blend_amount = 0.0
+
+[node name="HornAttachment" type="BoneAttachment3D" parent="." index="3"]
+transform = Transform3D(0.999999, 1.63488e-07, 4.38062e-08, -7.94606e-08, 0.681998, -0.731354, -1.49443e-07, 0.731354, 0.681998, -5.7726e-07, 0.751631, 0.900737)
+bone_name = "horn"
+bone_idx = 1
+use_external_skeleton = true
+external_skeleton = NodePath("../HornFRoot/Skeleton3D")
+
+[node name="Lockon" type="Area3D" parent="HornAttachment" index="0"]
+transform = Transform3D(-1, 1.51808e-08, 8.60946e-08, 0, 0.984808, -0.173648, -8.74228e-08, -0.173648, -0.984808, 0, -0.2, -0.05)
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HornAttachment/Lockon" index="0"]
+shape = SubResource("SphereShape3D_jkgrd")
+
+[node name="Jolt" type="AudioStreamPlayer3D" parent="HornAttachment" index="1"]
+stream = ExtResource("3_dr4vk")
+attenuation_model = 3
+volume_db = 3.0
+unit_size = 20.0
+max_distance = 50.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="Pop" type="AudioStreamPlayer3D" parent="HornAttachment" index="2"]
+stream = ExtResource("4_jkgrd")
+attenuation_model = 3
+volume_db = 3.0
+unit_size = 20.0
+max_distance = 50.0
+bus = &"GAME SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[connection signal="area_entered" from="HornAttachment/Lockon" to="." method="OnEntered"]

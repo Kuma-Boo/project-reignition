@@ -231,8 +231,6 @@ public partial class SandScorpion : Node3D
 		rTailAnimationTree.Set(DefeatParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 		flyingEyeAnimationTree.Set(DefeatParameter, (int)AnimationNodeOneShot.OneShotRequest.Fire);
 
-		HeadsUpDisplay.Instance.Visible = false;
-
 		fightState = FightState.Defeated;
 		Player.Deactivate();
 	}

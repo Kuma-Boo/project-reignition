@@ -7,7 +7,7 @@
 [ext_resource type="Material" uid="uid://7lvqh1a70ae4" path="res://effect/particle/material/explosion/Explosion Flame.tres" id="4_rxmuh"]
 [ext_resource type="Material" uid="uid://g2ntypqb7whm" path="res://effect/particle/material/flame/Countdown Flame.tres" id="5_a5ppq"]
 [ext_resource type="Script" uid="uid://c65ffkknyq6gr" path="res://addons/custom_nodes/script/GroupGpuParticles3D.cs" id="7_v0mmn"]
-[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter.tres" id="8_6fpuu"]
+[ext_resource type="Material" uid="uid://ev5ys13lygcu" path="res://effect/particle/material/environment/Water Splatter Add.tres" id="8_6fpuu"]
 [ext_resource type="Material" uid="uid://ckyg4aygq0uan" path="res://effect/particle/material/environment/Water Dust.tres" id="9_6fpuu"]
 [ext_resource type="Material" uid="uid://c2lqqtvy2q1xp" path="res://effect/particle/material/environment/Common Dust.tres" id="9_di570"]
 [ext_resource type="AudioStream" uid="uid://bs1o7w3vv6gf8" path="res://sound/sfx/stage/pirate storm/bomb impact.wav" id="11_so543"]
@@ -278,19 +278,19 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Hitbox/FireShape:disabled")
+tracks/6/path = NodePath("Bomb/TravelFlames:emitting")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Hitbox/BombShape:disabled")
+tracks/7/path = NodePath("Bomb/TravelEmbers:emitting")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -302,7 +302,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Bomb/TravelFlames:emitting")
+tracks/8/path = NodePath("Bomb/FireSfx:playing")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -314,26 +314,26 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Bomb/TravelEmbers:emitting")
+tracks/9/path = NodePath("Bomb/BombHitbox:isDisabled")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Bomb/FireSfx:playing")
+tracks/10/path = NodePath("FireHitbox:isDisabled")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_4asmq"]
@@ -402,7 +402,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Hitbox/FireShape:disabled")
+tracks/5/path = NodePath("Bomb/TravelFlames:emitting")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -414,46 +414,22 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Hitbox/BombShape:disabled")
+tracks/6/path = NodePath("Bomb/TravelEmbers:emitting")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
-tracks/7/type = "value"
+tracks/7/type = "method"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Bomb/TravelFlames:emitting")
+tracks/7/path = NodePath("ExplosionEmbers")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("Bomb/TravelEmbers:emitting")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/9/type = "method"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("ExplosionEmbers")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
 "times": PackedFloat32Array(0.0333333),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -461,13 +437,13 @@ tracks/9/keys = {
 "method": &"RestartGroup"
 }]
 }
-tracks/10/type = "method"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("Bomb/ImpactSfx")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Bomb/ImpactSfx")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
 "times": PackedFloat32Array(0.0333333),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -475,17 +451,41 @@ tracks/10/keys = {
 "method": &"PlayInGroup"
 }]
 }
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("Bomb/FireSfx:playing")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Bomb/FireSfx:playing")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
 "times": PackedFloat32Array(0, 0.0333333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("FireHitbox:isDisabled")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.0333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Bomb/BombHitbox:isDisabled")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_a21m6"]
@@ -553,6 +553,30 @@ tracks/4/keys = {
 "method": &"PlayInGroup"
 }]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Bomb/BombHitbox:isDisabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("FireHitbox:isDisabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_wr0f1"]
 resource_name = "init"
@@ -568,6 +592,30 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Bomb/BombHitbox:isDisabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FireHitbox:isDisabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_a21m6"]
@@ -649,20 +697,28 @@ attenuation_filter_cutoff_hz = 20500.0
 script = ExtResource("14_3ejdh")
 groupKey = &"bomb travel"
 
-[node name="Hitbox" type="Area3D" parent="."]
+[node name="BombHitbox" type="Area3D" parent="Bomb"]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("3_a21m6")
+isDisabled = true
 ignoreSpeedbreakingCharacters = true
 
-[node name="BombShape" type="CollisionShape3D" parent="Hitbox"]
+[node name="BombShape" type="CollisionShape3D" parent="Bomb/BombHitbox"]
 shape = SubResource("SphereShape3D_a21m6")
 
-[node name="FireShape" type="CollisionShape3D" parent="Hitbox"]
+[node name="FireHitbox" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_a21m6")
+isDisabled = true
+ignoreSpeedbreakingCharacters = true
+
+[node name="FireShape" type="CollisionShape3D" parent="FireHitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 shape = SubResource("BoxShape3D_a21m6")
-disabled = true
 
 [node name="Flames1" type="GPUParticles3D" parent="."]
 visible = false
@@ -754,7 +810,9 @@ libraries = {
 &"": SubResource("AnimationLibrary_a21m6")
 }
 
-[connection signal="area_entered" from="Hitbox" to="Hitbox" method="OnEntered"]
-[connection signal="area_exited" from="Hitbox" to="Hitbox" method="OnExited"]
+[connection signal="area_entered" from="Bomb/BombHitbox" to="Bomb/BombHitbox" method="OnEntered"]
+[connection signal="area_exited" from="Bomb/BombHitbox" to="Bomb/BombHitbox" method="OnExited"]
+[connection signal="area_entered" from="FireHitbox" to="FireHitbox" method="OnEntered"]
+[connection signal="area_exited" from="FireHitbox" to="FireHitbox" method="OnExited"]
 
 [editable path="Bomb"]

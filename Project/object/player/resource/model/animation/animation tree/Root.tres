@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=325 format=3 uid="uid://biwe75w273iq7"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=327 format=3 uid="uid://biwe75w273iq7"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_hf2vv"]
 
@@ -667,6 +667,9 @@ nodes/right_state/node = SubResource("AnimationNodeStateMachine_ns7wx")
 nodes/right_state/position = Vector2(-240, 280)
 node_connections = [&"direction_transition", 0, &"left_state", &"direction_transition", 1, &"right_state", &"output", 0, &"direction_transition"]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2721o"]
+animation = &"GimmickLibrary/horn"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xpufo"]
 animation = &"ActionLibrary/idle"
 
@@ -760,6 +763,10 @@ input_3/name = "lever"
 input_3/auto_advance = false
 input_3/break_loop_at_end = false
 input_3/reset = true
+input_4/name = "horn"
+input_4/auto_advance = false
+input_4/break_loop_at_end = false
+input_4/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hu28u"]
 animation = &"GimmickLibrary/zipline"
@@ -804,9 +811,11 @@ fadein_time = 0.05
 fadeout_time = 0.4
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_m8twf"]
-graph_offset = Vector2(-775.036, 44.1127)
+graph_offset = Vector2(-922.506, 227.567)
+nodes/horn_anim/node = SubResource("AnimationNodeAnimation_2721o")
+nodes/horn_anim/position = Vector2(-540, 1000)
 nodes/idle_anim/node = SubResource("AnimationNodeAnimation_xpufo")
-nodes/idle_anim/position = Vector2(-960, 860)
+nodes/idle_anim/position = Vector2(-920, 700)
 nodes/ivy_blend/node = SubResource("AnimationNodeBlendSpace1D_n6eio")
 nodes/ivy_blend/position = Vector2(-920, -180)
 nodes/ivy_start_anim/node = SubResource("AnimationNodeAnimation_4fcb5")
@@ -818,11 +827,11 @@ nodes/ivy_swing_anim/position = Vector2(-1000, 20)
 nodes/ivy_swing_trigger/node = SubResource("AnimationNodeOneShot_ri8jf")
 nodes/ivy_swing_trigger/position = Vector2(-720, -180)
 nodes/lever_state/node = SubResource("AnimationNodeStateMachine_oumfq")
-nodes/lever_state/position = Vector2(-340, 900)
+nodes/lever_state/position = Vector2(-300, 740)
 nodes/petrify_recover_anim/node = SubResource("AnimationNodeAnimation_wjjju")
-nodes/petrify_recover_anim/position = Vector2(-960, 1040)
+nodes/petrify_recover_anim/position = Vector2(-920, 880)
 nodes/petrify_stop_trigger/node = SubResource("AnimationNodeOneShot_iywqm")
-nodes/petrify_stop_trigger/position = Vector2(-600, 800)
+nodes/petrify_stop_trigger/position = Vector2(-560, 640)
 nodes/state_transition/node = SubResource("AnimationNodeTransition_050f5")
 nodes/state_transition/position = Vector2(-60, 100)
 nodes/zipline_blend/node = SubResource("AnimationNodeBlendSpace1D_1mbie")
@@ -837,7 +846,7 @@ nodes/zipline_tap_speed/node = SubResource("AnimationNodeTimeScale_g25ih")
 nodes/zipline_tap_speed/position = Vector2(-700, 400)
 nodes/zipline_tap_trigger/node = SubResource("AnimationNodeOneShot_3o1j2")
 nodes/zipline_tap_trigger/position = Vector2(-480, 280)
-node_connections = [&"ivy_start_trigger", 0, &"ivy_swing_trigger", &"ivy_start_trigger", 1, &"ivy_start_anim", &"ivy_swing_trigger", 0, &"ivy_blend", &"ivy_swing_trigger", 1, &"ivy_swing_anim", &"output", 0, &"state_transition", &"petrify_stop_trigger", 0, &"idle_anim", &"petrify_stop_trigger", 1, &"petrify_recover_anim", &"state_transition", 0, &"ivy_start_trigger", &"state_transition", 1, &"zipline_tap_trigger", &"state_transition", 2, &"petrify_stop_trigger", &"state_transition", 3, &"lever_state", &"zipline_direction", 0, &"zipline_tap_left_anim", &"zipline_direction", 1, &"zipline_tap_right_anim", &"zipline_tap_speed", 0, &"zipline_direction", &"zipline_tap_trigger", 0, &"zipline_blend", &"zipline_tap_trigger", 1, &"zipline_tap_speed"]
+node_connections = [&"ivy_start_trigger", 0, &"ivy_swing_trigger", &"ivy_start_trigger", 1, &"ivy_start_anim", &"ivy_swing_trigger", 0, &"ivy_blend", &"ivy_swing_trigger", 1, &"ivy_swing_anim", &"output", 0, &"state_transition", &"petrify_stop_trigger", 0, &"idle_anim", &"petrify_stop_trigger", 1, &"petrify_recover_anim", &"state_transition", 0, &"ivy_start_trigger", &"state_transition", 1, &"zipline_tap_trigger", &"state_transition", 2, &"petrify_stop_trigger", &"state_transition", 3, &"lever_state", &"state_transition", 4, &"horn_anim", &"zipline_direction", 0, &"zipline_tap_left_anim", &"zipline_direction", 1, &"zipline_tap_right_anim", &"zipline_tap_speed", 0, &"zipline_direction", &"zipline_tap_trigger", 0, &"zipline_blend", &"zipline_tap_trigger", 1, &"zipline_tap_speed"]
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_yjaps"]
 xfade_time = 0.1
@@ -1402,15 +1411,22 @@ input_5/name = "ps_a1_cannon_event"
 input_5/auto_advance = false
 input_5/break_loop_at_end = false
 input_5/reset = true
+input_6/name = "ps_boss_defeat"
+input_6/auto_advance = false
+input_6/break_loop_at_end = false
+input_6/reset = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3o1j2"]
 animation = &"EventLibrary/ps_a1_cannon_event"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2gnci"]
+animation = &"EventLibrary/ps-boss-defeat"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d1kei"]
 animation = &"EventLibrary/so_a1_sandfall_event"
 
 [sub_resource type="AnimationNodeBlendTree" id="132"]
-graph_offset = Vector2(-545.883, 110.222)
+graph_offset = Vector2(-1882.5, 654.546)
 nodes/completion_crouch_anim/node = SubResource("AnimationNodeAnimation_y04wd")
 nodes/completion_crouch_anim/position = Vector2(-620, 280)
 nodes/completion_standing_anim/node = SubResource("AnimationNodeAnimation_c8ug4")
@@ -1426,9 +1442,11 @@ nodes/oneshot_transition/position = Vector2(-20, 140)
 nodes/output/position = Vector2(336, 144)
 nodes/ps_a1_cannon_event/node = SubResource("AnimationNodeAnimation_3o1j2")
 nodes/ps_a1_cannon_event/position = Vector2(-960, 600)
+nodes/ps_boss_defeat/node = SubResource("AnimationNodeAnimation_2gnci")
+nodes/ps_boss_defeat/position = Vector2(-400, 640)
 nodes/so_a1_sandfall_event/node = SubResource("AnimationNodeAnimation_d1kei")
 nodes/so_a1_sandfall_event/position = Vector2(-960, 380)
-node_connections = [&"oneshot_seek", 0, &"oneshot_transition", &"oneshot_transition", 0, &"countdown", &"oneshot_transition", 1, &"completion_standing_anim", &"oneshot_transition", 2, &"completion_crouch_anim", &"oneshot_transition", 3, &"so_a1_sandfall_event", &"oneshot_transition", 4, &"dj_a1_river_event", &"oneshot_transition", 5, &"ps_a1_cannon_event", &"output", 0, &"oneshot_seek"]
+node_connections = [&"oneshot_seek", 0, &"oneshot_transition", &"oneshot_transition", 0, &"countdown", &"oneshot_transition", 1, &"completion_standing_anim", &"oneshot_transition", 2, &"completion_crouch_anim", &"oneshot_transition", 3, &"so_a1_sandfall_event", &"oneshot_transition", 4, &"dj_a1_river_event", &"oneshot_transition", 5, &"ps_a1_cannon_event", &"oneshot_transition", 6, &"ps_boss_defeat", &"output", 0, &"oneshot_seek"]
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_fl47a"]
 
@@ -1679,7 +1697,7 @@ input_5/break_loop_at_end = false
 input_5/reset = true
 
 [resource]
-graph_offset = Vector2(-1271.1, 109.698)
+graph_offset = Vector2(-827.631, 37.0891)
 nodes/air_tree/node = SubResource("AnimationNodeBlendTree_2rvqt")
 nodes/air_tree/position = Vector2(-1300, 100)
 nodes/balance_tree/node = SubResource("AnimationNodeBlendTree_gi378")

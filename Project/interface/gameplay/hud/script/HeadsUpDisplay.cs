@@ -368,9 +368,22 @@ public partial class HeadsUpDisplay : Control
 			Connect(SignalName.InputPromptsChanged, new(buttons[i], Interface.NavigationButton.MethodName.Redraw));
 	}
 
+	private bool isPromptsVisible;
 	public void SetPrompt(StringName label, int index) => buttons[index].ActionKey = label;
-	public void ShowPrompts() => promptAnimator.Play(promptAnimator.CurrentAnimation == "show" ? "change" : "show");
-	public void HidePrompts() => promptAnimator.Play("hide");
+	public void ShowPrompts()
+	{
+		promptAnimator.Play(promptAnimator.CurrentAnimation == "show" ? "change" : "show");
+		isPromptsVisible = true;
+	}
+
+	public void HidePrompts()
+	{
+		if (!isPromptsVisible)
+			return;
+
+		isPromptsVisible = false;
+		promptAnimator.Play("hide");
+	}
 
 	private void RedrawPrompts()
 	{

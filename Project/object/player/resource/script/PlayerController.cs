@@ -816,6 +816,19 @@ public partial class PlayerController : CharacterBody3D
 		StateMachine.ChangeState(leverState);
 	}
 
+	[Export] private BemothHornState hornState;
+	public void StartHorn(Bosses.CaptainBemothHorn horn)
+	{
+		hornState.Trigger = horn;
+		SetHornPullable(true);
+		SetHornJumpable(true);
+		StateMachine.ChangeState(hornState);
+	}
+
+	/// <summary> Updates whether the player can pull the horns of Pirate Storm's boss. </summary>
+	public void SetHornPullable(bool isPullable) => hornState.CanPullHorns = isPullable;
+	/// <summary> Updates whether the player can jump off the horns of Pirate Storm's boss. </summary>
+	public void SetHornJumpable(bool isJumpable) => hornState.CanJump = isJumpable;
 
 	[Signal]
 	public delegate void KnockbackEventHandler();
@@ -1131,6 +1144,14 @@ public partial class PlayerController : CharacterBody3D
 
 	public void Activate()
 	{
+		// Prevent immediate movements to fix janky camera backstepping issue
+		AddLockoutData(new()
+		{
+			overrideSpeed = true,
+			speedRatio = 0f,
+			length = 0.1f,
+		});
+
 		Visible = true;
 		ProcessMode = ProcessModeEnum.Inherit;
 

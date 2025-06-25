@@ -15,7 +15,11 @@ public partial class Hazard : Node3D
 	[Signal] public delegate void DamagedPlayerEventHandler();
 	[Signal] public delegate void KnockbackFailedEventHandler();
 
+	public override void _Ready() => StageSettings.Instance.Respawned += Respawn;
+
 	public override void _PhysicsProcess(double _) => ProcessCollision();
+
+	private void Respawn() => isInteractingWithPlayer = false;
 
 	protected void ProcessCollision()
 	{
