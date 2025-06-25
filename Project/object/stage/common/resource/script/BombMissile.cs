@@ -18,8 +18,8 @@ public partial class BombMissile : Node3D
 	[Export(PropertyHint.Range, "0.1,1,0.1,or_greater")] private float travelSpeedRatio = 1f;
 	[Export] private float launchDelay;
 	[Export] private bool screenShakeEnabled;
-	[Export] private Node3D root;
-	[Export] private AnimationPlayer animator;
+	[Export] protected Node3D root;
+	[Export] protected AnimationPlayer animator;
 	private SpawnData spawnData;
 
 	public LaunchModes LaunchMode { get; private set; }
@@ -140,21 +140,22 @@ public partial class BombMissile : Node3D
 	private Node3D target;
 
 	public bool IsActive { get; private set; } // Is the missile currently traveling?
-	private float launchTimer;
+	public bool IsExploded { get; private set; }
+	protected float launchTimer;
 	private Vector3 initialPosition;
 	private Vector3 previousPosition;
 
 	private Vector3 StartPosition => EndPosition + GlobalBasis * launchOffset;
-	private Vector3 EndPosition => Engine.IsEditorHint() ? GlobalPosition : initialPosition;
+	private Vector3 EndPosition => Engine.IsEditorHint() ? root.GlobalPosition : initialPosition;
 
 	private LaunchSettings LaunchSettings { get; set; }
 	public LaunchSettings GetLaunchSettings()
 	{
 		if (LaunchMode == LaunchModes.Code)
-			return LaunchSettings.Create(GlobalPosition, GlobalPosition, 0);
+			return LaunchSettings.Create(root.GlobalPosition, GlobalPosition, 0);
 
 		if (LaunchMode == LaunchModes.Target)
-			return LaunchSettings.Create(GlobalPosition, GetTargetPosition(false), middleHeight, true);
+			return LaunchSettings.Create(root.GlobalPosition, GetTargetPosition(false), middleHeight, true);
 
 		return LaunchSettings.Create(StartPosition, EndPosition, middleHeight);
 	}
@@ -162,7 +163,7 @@ public partial class BombMissile : Node3D
 	public Vector3 GetTargetPosition(bool enableSpread, float overrideTracking = -1f)
 	{
 		if (Engine.IsEditorHint() || Player == null)
-			return (target != null) ? target.GlobalPosition : GlobalPosition;
+			return (target != null) ? target.GlobalPosition : root.GlobalPosition;
 
 		if (!Mathf.IsEqualApprox(overrideTracking, -1f))
 			speedTracking = overrideTracking;
@@ -202,9 +203,12 @@ public partial class BombMissile : Node3D
 		return targetPosition;
 	}
 
-	public void Respawn()
+	public virtual void Respawn()
 	{
 		IsActive = false;
+		IsExploded = false;
+		launchTimer = 0;
+
 		animator.Play("RESET");
 		if (animator.HasAnimation("init"))
 		{
@@ -212,8 +216,10 @@ public partial class BombMissile : Node3D
 			animator.Play("init");
 		}
 
+		TopLevel = false;
+		root.Transform = Transform3D.Identity;
 		spawnData.Respawn(this);
-		previousPosition = GlobalPosition;
+		previousPosition = root.GlobalPosition;
 	}
 
 	public override void _Ready()
@@ -226,8 +232,8 @@ public partial class BombMissile : Node3D
 
 		if (LaunchMode == LaunchModes.Manual)
 		{
-			initialPosition = GlobalPosition;
-			GlobalPosition = StartPosition;
+			initialPosition = root.GlobalPosition;
+			root.GlobalPosition = StartPosition;
 		}
 
 		spawnData = new(GetParent(), Transform);
@@ -243,12 +249,7 @@ public partial class BombMissile : Node3D
 		if (!IsActive)
 		{
 			if (launchTimer < 0)
-			{
-				launchTimer = Mathf.MoveToward(launchTimer, 0, PhysicsManager.physicsDelta);
-				if (Mathf.IsZeroApprox(launchTimer))
-					Activate();
-
-			}
+				ProcessLaunchTimer();
 
 			return;
 		}
@@ -256,16 +257,23 @@ public partial class BombMissile : Node3D
 		UpdatePosition();
 	}
 
+	protected virtual void ProcessLaunchTimer()
+	{
+		launchTimer = Mathf.MoveToward(launchTimer, 0, PhysicsManager.physicsDelta);
+		if (Mathf.IsZeroApprox(launchTimer))
+			Activate();
+	}
+
 	private void UpdatePosition()
 	{
-		previousPosition = GlobalPosition;
-		GlobalPosition = LaunchSettings.InterpolatePositionTime(launchTimer);
+		previousPosition = root.GlobalPosition;
+		root.GlobalPosition = LaunchSettings.InterpolatePositionTime(launchTimer);
 		launchTimer += PhysicsManager.physicsDelta * travelSpeedRatio;
 
 		// Reached the ground
 		if (launchTimer >= LaunchSettings.TotalTravelTime)
 		{
-			GlobalPosition = LaunchSettings.endPosition;
+			root.GlobalPosition = LaunchSettings.endPosition;
 			Explode();
 		}
 
@@ -305,6 +313,12 @@ public partial class BombMissile : Node3D
 		IsActive = true;
 		launchTimer = 0;
 		animator.Play("fly");
+
+		// Convert to global space
+		Transform3D transform = GlobalTransform;
+		TopLevel = true;
+		GlobalTransform = transform;
+
 		UpdatePosition();
 		ResetPhysicsInterpolation();
 		EmitSignal(SignalName.Launched);
@@ -313,6 +327,7 @@ public partial class BombMissile : Node3D
 	public void Explode()
 	{
 		IsActive = false;
+		IsExploded = true;
 		animator.Play("explode"); // Impact effect
 
 		if (screenShakeEnabled)

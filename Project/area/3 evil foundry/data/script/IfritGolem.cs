@@ -115,7 +115,6 @@ public partial class IfritGolem : Node3D
 		AnimationTree = GetNode<AnimationTree>(animationTree);
 		AnimationTree.Active = true;
 		EventAnimator = GetNode<AnimationPlayer>(eventAnimator);
-		EventAnimator = GetNode<AnimationPlayer>(eventAnimator);
 
 		HeadHurtbox = GetNode<Area3D>(headHurtbox);
 		DamagePath = GetNode<Node3D>(damagePath);

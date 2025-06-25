@@ -88,7 +88,16 @@ public partial class PlayerCameraController : Node3D
 		SnapFlag = true;
 	}
 
-	public override void _PhysicsProcess(double _)
+	public override void _PhysicsProcess(double _) => ProcessCamera();
+
+	public override void _Process(double _)
+	{
+		if (OS.IsDebugBuild())
+			UpdateFreeCam();
+	}
+
+	/// <summary> Called every physics tick. Can also be called to force-update the camera. </summary>
+	public void ProcessCamera()
 	{
 		if (GetTree().Paused)
 			return;
@@ -108,12 +117,6 @@ public partial class PlayerCameraController : Node3D
 		UpdateGameplayCamera();
 		UpdateScreenShake();
 		UpdateMotionBlur();
-	}
-
-	public override void _Process(double _)
-	{
-		if (OS.IsDebugBuild())
-			UpdateFreeCam();
 	}
 
 	public float ReversePathInfluence { get; set; }

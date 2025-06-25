@@ -13,9 +13,9 @@ public partial class SoundManager : Node
 	{
 		Master,
 		Bgm,
-		Sfx,
 		Voice,
 		SfxAdjustment,
+		Sfx,
 		GameSfx,
 		BreakSfx,
 		Count
