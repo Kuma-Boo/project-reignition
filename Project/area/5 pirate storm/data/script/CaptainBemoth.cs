@@ -121,6 +121,7 @@ public partial class CaptainBemoth : PathFollow3D
 		Progress = 0;
 		root.GlobalTransform = Transform3D.Identity;
 		animator.Set(DefeatTrigger, (int)AnimationNodeOneShot.OneShotRequest.Fire);
+		Player.Animator.PlayOneshotAnimation(DefeatCutsceneID);
 
 		BonusManager.instance.QueueBonus(new(BonusType.Boss, 8000));
 		Interface.PauseMenu.AllowPausing = false;
@@ -137,6 +138,7 @@ public partial class CaptainBemoth : PathFollow3D
 
 		eventAnimator.Play("finish-defeat");
 		eventAnimator.Advance(0f);
+		Player.Animator.CancelOneshot();
 		CallDeferred(MethodName.FinishStage);
 	}
 
