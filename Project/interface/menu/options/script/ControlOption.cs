@@ -266,7 +266,6 @@ public partial class ControlOption : Control
 				case Key.Alt:
 				case Key.Meta:
 				case Key.Escape:
-				case Key.Space:
 				case Key.Numlock:
 					return false;
 			}

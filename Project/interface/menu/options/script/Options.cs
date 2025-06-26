@@ -35,10 +35,10 @@ public partial class Options : Menu
 				maxSelection = 4;
 				break;
 			case Submenus.Language:
-				maxSelection = 3;
+				maxSelection = 4;
 				break;
 			case Submenus.Control:
-				maxSelection = 8;
+				maxSelection = 9;
 				break;
 			case Submenus.Mapping:
 				maxSelection = controlMappingOptions.Length;
@@ -106,11 +106,16 @@ public partial class Options : Menu
 			UpdateLabels();
 	}
 
-	protected override void ProcessMenu()
+	public override void _PhysicsProcess(double delta)
 	{
 		UpdateScrolling();
 		UpdateCursor();
 
+		base._PhysicsProcess(delta);
+	}
+
+	protected override void ProcessMenu()
+	{
 		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept") || Input.IsActionJustPressed("ui_clear"))
 			Select();
 		else
@@ -317,7 +322,9 @@ public partial class Options : Menu
 			return;
 		}
 
-		if (currentSubmenu == Submenus.ResetSettings || Mathf.IsZeroApprox(Input.GetAxis("ui_up", "ui_down")))
+		if (currentSubmenu == Submenus.ResetSettings ||
+			currentSubmenu == Submenus.ResetControls ||
+			Mathf.IsZeroApprox(Input.GetAxis("ui_up", "ui_down")))
 		{
 			UpdateHorizontalSelection();
 			return;
