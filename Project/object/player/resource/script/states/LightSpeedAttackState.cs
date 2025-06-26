@@ -70,8 +70,10 @@ public partial class LightSpeedAttackState : PlayerState
 			return null;
 		}
 
-		if (Player.Controller.IsActionBufferActive)
+		if (Player.Controller.IsActionBufferActive ||
+			(Player.Controller.IsJumpBufferActive && SaveManager.Config.useStompJumpButtonMode))
 		{
+			Player.Controller.ResetJumpBuffer();
 			Player.Controller.ResetActionBuffer();
 			return stompState;
 		}

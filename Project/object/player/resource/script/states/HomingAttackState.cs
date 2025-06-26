@@ -104,8 +104,10 @@ public partial class HomingAttackState : PlayerState
 		Player.UpdateUpDirection(true);
 		Player.PathFollower.Resync();
 
-		if (Player.Controller.IsActionBufferActive)
+		if (Player.Controller.IsActionBufferActive ||
+			(Player.Controller.IsJumpBufferActive && SaveManager.Config.useStompJumpButtonMode))
 		{
+			Player.Controller.ResetJumpBuffer();
 			Player.Controller.ResetActionBuffer();
 			return stompState;
 		}

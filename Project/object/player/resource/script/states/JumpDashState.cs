@@ -81,8 +81,10 @@ public partial class JumpDashState : PlayerState
 			Player.VerticalSpeed = Mathf.Clamp(Player.VerticalSpeed, -Mathf.Inf, 0);
 		}
 
-		if (Player.Controller.IsActionBufferActive)
+		if (Player.Controller.IsActionBufferActive ||
+			(Player.Controller.IsJumpBufferActive && SaveManager.Config.useStompJumpButtonMode))
 		{
+			Player.Controller.ResetJumpBuffer();
 			Player.Controller.ResetActionBuffer();
 			return stompState;
 		}
