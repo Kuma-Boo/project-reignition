@@ -453,6 +453,7 @@ public partial class Options : Menu
 		audioLabels[3].Text = SaveManager.Config.isVoiceMuted ? MuteString : $"{SaveManager.Config.voiceVolume}%";
 
 		languageLabels[0].Text = SaveManager.Config.isSubtitleDisabled ? DisabledString : EnabledString;
+		languageLabels[1].Text = SaveManager.Config.isDialogDisabled ? DisabledString : EnabledString;
 		languageLabels[2].Text = SaveManager.Config.voiceLanguage == SaveManager.VoiceLanguage.English ? "lang_en" : "lang_ja";
 
 		switch (SaveManager.Config.controllerType)
@@ -753,12 +754,18 @@ public partial class Options : Menu
 
 		if (VerticalSelection == 1)
 		{
+			SaveManager.Config.isDialogDisabled = !SaveManager.Config.isDialogDisabled;
+			return true;
+		}
+
+		if (VerticalSelection == 2)
+		{
 			int lang = WrapSelection((int)SaveManager.Config.textLanguage + direction, (int)SaveManager.TextLanguage.Count);
 			SaveManager.Config.textLanguage = (SaveManager.TextLanguage)lang;
 			return true;
 		}
 
-		if (VerticalSelection == 2)
+		if (VerticalSelection == 3)
 		{
 			int lang = WrapSelection((int)SaveManager.Config.voiceLanguage + direction, (int)SaveManager.VoiceLanguage.Count);
 			SaveManager.Config.voiceLanguage = (SaveManager.VoiceLanguage)lang;
