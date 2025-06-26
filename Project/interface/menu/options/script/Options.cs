@@ -452,7 +452,7 @@ public partial class Options : Menu
 		audioLabels[2].Text = SaveManager.Config.isSfxMuted ? MuteString : $"{SaveManager.Config.sfxVolume}%";
 		audioLabels[3].Text = SaveManager.Config.isVoiceMuted ? MuteString : $"{SaveManager.Config.voiceVolume}%";
 
-		languageLabels[0].Text = SaveManager.Config.subtitlesEnabled ? EnabledString : DisabledString;
+		languageLabels[0].Text = SaveManager.Config.isSubtitleDisabled ? DisabledString : EnabledString;
 		languageLabels[2].Text = SaveManager.Config.voiceLanguage == SaveManager.VoiceLanguage.English ? "lang_en" : "lang_ja";
 
 		switch (SaveManager.Config.controllerType)
@@ -747,7 +747,7 @@ public partial class Options : Menu
 	{
 		if (VerticalSelection == 0)
 		{
-			SaveManager.Config.subtitlesEnabled = !SaveManager.Config.subtitlesEnabled;
+			SaveManager.Config.isSubtitleDisabled = !SaveManager.Config.isSubtitleDisabled;
 			return true;
 		}
 

@@ -72,7 +72,7 @@ public partial class SoundManager : Node
 	private DialogTrigger currentDialog;
 	public void PlayDialog(DialogTrigger dialog)
 	{
-		if (dialog.DialogCount == 0 || DebugManager.Instance.DisableDialog) return; // No dialog
+		if (dialog.DialogCount == 0 || DebugManager.Instance.DisableDialog || SaveManager.Config.isDialogDisabled) return; // No dialog
 
 		IsSubtitlesActive = true;
 		subtitleLabel.Text = string.Empty;
@@ -128,7 +128,8 @@ public partial class SoundManager : Node
 		currentDialogIndex++;
 		if (!currentDialog.randomize && currentDialogIndex < currentDialog.DialogCount) // Start next dialog line
 		{
-			subtitleAnimator.Play("deactivate-text");
+			if (!SaveManager.Config.isSubtitleDisabled)
+				subtitleAnimator.Play("deactivate-text");
 			CallDeferred(MethodName.UpdateDialog, true);
 		}
 		else
@@ -140,7 +141,8 @@ public partial class SoundManager : Node
 	private void DisableDialog()
 	{
 		IsSubtitlesActive = false;
-		subtitleAnimator.Play("deactivate");
+		if (!SaveManager.Config.isSubtitleDisabled)
+			subtitleAnimator.Play("deactivate");
 
 		UpdateSonicDialog();
 		UpdateShahraDialog();
@@ -172,10 +174,8 @@ public partial class SoundManager : Node
 			return;
 		}
 
-		if (currentDialogIndex == 0)
-			subtitleAnimator.Play("activate");
-		else
-			subtitleAnimator.Play("activate-text");
+		if (!SaveManager.Config.isSubtitleDisabled)
+			subtitleAnimator.Play(currentDialogIndex == 0 ? "activate" : "activate-text");
 
 		string key = currentDialog.textKeys[currentDialogIndex];
 		AudioStream targetStream = null;

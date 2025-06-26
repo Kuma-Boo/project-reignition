@@ -169,6 +169,7 @@ public partial class SaveManager : Node
 		public int sfxVolume = 30;
 		public bool isVoiceMuted;
 		public int voiceVolume = 50;
+		public bool isDialogDisabled;
 
 		// Controls
 		public float deadZone = .2f;
@@ -179,7 +180,7 @@ public partial class SaveManager : Node
 		public Dictionary inputConfiguration = [];
 
 		// Language
-		public bool subtitlesEnabled = true;
+		public bool isSubtitleDisabled;
 		public TextLanguage textLanguage = AutoDetectTextLocale();
 		public VoiceLanguage voiceLanguage = AutoDetectVoiceLocale();
 
@@ -216,6 +217,7 @@ public partial class SaveManager : Node
 				{ nameof(sfxVolume), sfxVolume },
 				{ nameof(isVoiceMuted), isVoiceMuted },
 				{ nameof(voiceVolume), voiceVolume },
+				{nameof(isDialogDisabled), isDialogDisabled},
 
 				// Controls
 				{ nameof(deadZone), deadZone },
@@ -226,7 +228,7 @@ public partial class SaveManager : Node
 				{ nameof(inputConfiguration), inputConfiguration },
 
 				// Language
-				{ nameof(subtitlesEnabled), subtitlesEnabled },
+				{ nameof(isSubtitleDisabled), isSubtitleDisabled },
 				{ nameof(voiceLanguage), (int)voiceLanguage },
 				{ nameof(textLanguage), (int)textLanguage },
 			};
@@ -287,6 +289,8 @@ public partial class SaveManager : Node
 				isVoiceMuted = (bool)var;
 			if (dictionary.TryGetValue(nameof(voiceVolume), out var))
 				voiceVolume = (int)var;
+			if (dictionary.TryGetValue(nameof(isDialogDisabled), out var))
+				isDialogDisabled = (bool)var;
 
 			// Controls
 			if (dictionary.TryGetValue(nameof(deadZone), out var))
@@ -303,8 +307,8 @@ public partial class SaveManager : Node
 				inputConfiguration = (Dictionary)Json.ParseString((string)var);
 
 			// Language
-			if (dictionary.TryGetValue(nameof(subtitlesEnabled), out var))
-				subtitlesEnabled = (bool)var;
+			if (dictionary.TryGetValue(nameof(isSubtitleDisabled), out var))
+				isSubtitleDisabled = (bool)var;
 			if (dictionary.TryGetValue(nameof(voiceLanguage), out var))
 				voiceLanguage = (VoiceLanguage)(int)var;
 			if (dictionary.TryGetValue(nameof(textLanguage), out var))
