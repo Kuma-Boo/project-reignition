@@ -38,7 +38,7 @@ public partial class Options : Menu
 				maxSelection = 4;
 				break;
 			case Submenus.Control:
-				maxSelection = 9;
+				maxSelection = 10;
 				break;
 			case Submenus.Mapping:
 				maxSelection = controlMappingOptions.Length;
@@ -500,6 +500,7 @@ public partial class Options : Menu
 		controlLabels[2].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
 		controlLabels[3].Text = SaveManager.Config.useHoldBreakMode ? HoldString : ToggleString;
 		controlLabels[4].Text = SaveManager.Config.useStompJumpButtonMode ? StompString : AttackString;
+		controlLabels[5].Text = SaveManager.Config.useActionPrompts ? EnabledString : DisabledString;
 
 		partyMappingLabels[0].Text = Tr(PlayerString).Replace("0", partyPlayerIndex.ToString());
 		partyMappingLabels[1].Text = partyMappingOptions[0].GetDevice();
@@ -824,6 +825,11 @@ public partial class Options : Menu
 			SaveManager.Config.useStompJumpButtonMode = !SaveManager.Config.useStompJumpButtonMode;
 			return true;
 		}
+		else if (VerticalSelection == 5)
+		{
+			SaveManager.Config.useActionPrompts = !SaveManager.Config.useActionPrompts;
+			return true;
+		}
 
 		return false;
 	}
@@ -930,19 +936,19 @@ public partial class Options : Menu
 
 	private void ConfirmControlOption()
 	{
-		if (VerticalSelection >= 0 && VerticalSelection <= 4)
+		if (VerticalSelection >= 0 && VerticalSelection <= 5)
 		{
 			SlideControlOption(1);
 		}
-		else if (VerticalSelection == 5)
+		else if (VerticalSelection == 6)
 		{
 			FlipBook(Submenus.Mapping, false, 0);
 		}
-		else if (VerticalSelection == 6)
+		else if (VerticalSelection == 7)
 		{
 			FlipBook(Submenus.PartyMapping, false, 0);
 		}
-		else if (VerticalSelection == 7)
+		else if (VerticalSelection == 8)
 		{
 			FlipBook(Submenus.Test, false, VerticalSelection);
 		}

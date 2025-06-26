@@ -177,6 +177,7 @@ public partial class SaveManager : Node
 		public ControllerStyle controllerStyle = ControllerStyle.Style2;
 		public bool useHoldBreakMode = true;
 		public bool useStompJumpButtonMode;
+		public bool useActionPrompts = true;
 		public int[] partyModeDevices = [0, 0, 0, 0];
 		public Dictionary inputConfiguration = [];
 
@@ -227,6 +228,7 @@ public partial class SaveManager : Node
 				{ nameof(controllerStyle), (int)controllerStyle},
 				{ nameof(useHoldBreakMode), useHoldBreakMode },
 				{ nameof(useStompJumpButtonMode), useStompJumpButtonMode },
+				{ nameof(useActionPrompts), useActionPrompts },
 				{ nameof(partyModeDevices), partyModeDevices },
 				{ nameof(inputConfiguration), inputConfiguration },
 
@@ -308,6 +310,8 @@ public partial class SaveManager : Node
 				useHoldBreakMode = (bool)var;
 			if (dictionary.TryGetValue(nameof(useStompJumpButtonMode), out var))
 				useStompJumpButtonMode = (bool)var;
+			if (dictionary.TryGetValue(nameof(useActionPrompts), out var))
+				useActionPrompts = (bool)var;
 			if (dictionary.TryGetValue(nameof(partyModeDevices), out var))
 				partyModeDevices = (int[])var;
 			if (dictionary.TryGetValue(nameof(inputConfiguration), out var))

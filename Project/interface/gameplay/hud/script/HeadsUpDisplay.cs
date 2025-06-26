@@ -372,6 +372,9 @@ public partial class HeadsUpDisplay : Control
 	public void SetPrompt(StringName label, int index) => buttons[index].ActionKey = label;
 	public void ShowPrompts()
 	{
+		if (!SaveManager.Config.useActionPrompts)
+			return;
+
 		promptAnimator.Play(promptAnimator.CurrentAnimation == "show" ? "change" : "show");
 		isPromptsVisible = true;
 	}
