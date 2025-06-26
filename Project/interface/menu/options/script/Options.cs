@@ -32,7 +32,7 @@ public partial class Options : Menu
 				maxSelection = videoLabels.Length;
 				break;
 			case Submenus.Audio:
-				maxSelection = 4;
+				maxSelection = audioLabels.Length;
 				break;
 			case Submenus.Language:
 				maxSelection = 4;
@@ -410,6 +410,8 @@ public partial class Options : Menu
 	private readonly string MediumString = "option_medium";
 	private readonly string HighString = "option_high";
 	private readonly string MuteString = "option_mute";
+	private readonly string RetailMusic = "option_retail_music";
+	private readonly string RemixedMusic = "option_remix_music";
 	private readonly string FullscreenString = "option_fullscreen";
 	private readonly string FullscreenNormalString = "option_normal_fullscreen";
 	private readonly string FullscreenExclusiveString = "option_exclusive_fullscreen";
@@ -460,6 +462,7 @@ public partial class Options : Menu
 		audioLabels[1].Text = SaveManager.Config.isBgmMuted ? MuteString : $"{SaveManager.Config.bgmVolume}%";
 		audioLabels[2].Text = SaveManager.Config.isSfxMuted ? MuteString : $"{SaveManager.Config.sfxVolume}%";
 		audioLabels[3].Text = SaveManager.Config.isVoiceMuted ? MuteString : $"{SaveManager.Config.voiceVolume}%";
+		audioLabels[4].Text = SaveManager.Config.useRetailMenuMusic ? RetailMusic : RemixedMusic;
 
 		languageLabels[0].Text = SaveManager.Config.isSubtitleDisabled ? DisabledString : EnabledString;
 		languageLabels[1].Text = SaveManager.Config.isDialogDisabled ? DisabledString : EnabledString;
@@ -747,6 +750,10 @@ public partial class Options : Menu
 			SaveManager.Config.isVoiceMuted = false;
 			SaveManager.Config.voiceVolume = SlideVolume(SaveManager.Config.voiceVolume, direction);
 		}
+		else
+		{
+			SaveManager.Config.useRetailMenuMusic = !SaveManager.Config.useRetailMenuMusic;
+		}
 
 		return true;
 	}
@@ -913,8 +920,10 @@ public partial class Options : Menu
 			SaveManager.Config.isBgmMuted = !SaveManager.Config.isBgmMuted;
 		else if (VerticalSelection == 2)
 			SaveManager.Config.isSfxMuted = !SaveManager.Config.isSfxMuted;
-		else
+		else if (VerticalSelection == 3)
 			SaveManager.Config.isVoiceMuted = !SaveManager.Config.isVoiceMuted;
+		else
+			SlideAudioOption(1);
 
 		ConfirmSFX();
 	}

@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://cumqwrsj6eqpd"]
+[gd_scene load_steps=50 format=3 uid="uid://cumqwrsj6eqpd"]
 
 [ext_resource type="Script" uid="uid://cb7uekm77nlag" path="res://interface/menu/level select/script/WorldSelect.cs" id="1_7vrge"]
 [ext_resource type="FontFile" uid="uid://d1bvfghhgreq7" path="res://interface/font/otf/Rodin DB.otf" id="7_6bdak"]
@@ -30,6 +30,7 @@
 [ext_resource type="PackedScene" uid="uid://bft64s1qkqatm" path="res://interface/menu/level select/level lists/NightPalace.tscn" id="20_y3iyc"]
 [ext_resource type="AudioStream" uid="uid://cl54rftw5aiyf" path="res://sound/sfx/system/menu cancel.wav" id="21_fw6ew"]
 [ext_resource type="PackedScene" uid="uid://bgsvifk5vld4y" path="res://interface/menu/skill select/SkillPresetSelect.tscn" id="22_go238"]
+[ext_resource type="AudioStream" uid="uid://c0wfxhob4jbf6" path="res://sound/ost/adventure disc/1 Seven Rings in Hand.mp3" id="31_uucy3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2vkkl"]
 shader = ExtResource("17_uyu6q")
@@ -2028,7 +2029,7 @@ _data = {
 &"show-fade-video": SubResource("Animation_cga70")
 }
 
-[node name="WorldSelect" type="Control" node_paths=PackedStringArray("primaryVideoPlayer", "secondaryVideoPlayer", "description", "bgm", "animator")]
+[node name="WorldSelect" type="Control" node_paths=PackedStringArray("primaryVideoPlayer", "secondaryVideoPlayer", "retailBgm", "description", "bgm", "animator")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1920.0
@@ -2036,6 +2037,7 @@ offset_bottom = 1080.0
 script = ExtResource("1_7vrge")
 primaryVideoPlayer = NodePath("DemoVideo/PrimaryVideoPlayer")
 secondaryVideoPlayer = NodePath("DemoVideo/SecondaryVideoPlayer")
+retailBgm = NodePath("RetailBGM")
 videoStreamPaths = Array[StringName]([&"res://video/demo/Movie Test 00.mp4", &"res://video/demo/Movie Test 01.mp4", &"res://video/demo/Movie Test 02.mp4", &"res://video/demo/Movie Test 03.mp4", &"res://video/demo/Movie Test 04.mp4", &"res://video/demo/Movie Test 05.mp4", &"res://video/demo/Movie Test 06.mp4", &"res://video/demo/Movie Test 07.mp4"])
 description = NodePath("Description")
 levelSpriteRegions = Array[Rect2]([Rect2(0, 800, 1024, 120), Rect2(0, 0, 1024, 120), Rect2(0, 460, 1024, 120), Rect2(0, 580, 1024, 100), Rect2(0, 700, 1024, 100), Rect2(0, 240, 1024, 100), Rect2(0, 126, 1024, 100), Rect2(0, 360, 1024, 100), Rect2(0, 920, 1024, 100)])
@@ -2494,6 +2496,14 @@ bus = &"BGM"
 script = ExtResource("18_quajg")
 loopStartPosition = 0.57
 loopEndPosition = 24.525
+
+[node name="RetailBGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("31_uucy3")
+bus = &"BGM"
+script = ExtResource("18_quajg")
+startPosition = 1.2
+loopStartPosition = 24.6
+loopEndPosition = 292.25
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

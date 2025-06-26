@@ -2048,7 +2048,7 @@ resetAnimator = NodePath("ResetMenu/AnimationPlayer")
 lockNode = NodePath("World/JumpStart/JumpStart")
 scrollBar = NodePath("MenuBase/ScrollBar/ScrollPosition")
 videoLabels = [NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/DisplayLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/WindowSizeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/FullscreenLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/FPSLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/VsyncLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/RenderScaleLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ResizeModeLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/AntiAliasingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/BloomLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ShadowLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/PostProcessingLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ReflectionLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/MotionBlurLabel"), NodePath("MenuBase/ContentClip/Content/Video/RSide/Options/ScreenShakeLabel")]
-audioLabels = [NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MainLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MusicLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/SFXLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/VoiceLabel")]
+audioLabels = [NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MainLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/MusicLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/SFXLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/VoiceLabel"), NodePath("MenuBase/ContentClip/Content/Audio/RSide/Options/RetailMenuMusicLabel")]
 languageLabels = [NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/UseSubtitleLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/UseDialogLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/TextLabel"), NodePath("MenuBase/ContentClip/Content/Language/RSide/Options/VoiceLabel")]
 controlLabels = [NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/ControllerLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/StyleLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/DeadzoneLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/BreakLabel"), NodePath("MenuBase/ContentClip/Content/Control/Common/RSide/Options/JumpLabel")]
 partyMappingLabels = [NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/RSide/Options/PlayerLabel"), NodePath("MenuBase/ContentClip/Content/Control/PartyMapping/RSide/Options/DeviceLabel")]
@@ -2740,6 +2740,14 @@ label_settings = ExtResource("23_616uf")
 vertical_alignment = 1
 uppercase = true
 
+[node name="RetailMenuMusicLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/LSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "option_level_select_music"
+label_settings = ExtResource("23_616uf")
+vertical_alignment = 1
+uppercase = true
+
 [node name="RSide" type="Control" parent="MenuBase/ContentClip/Content/Audio"]
 layout_mode = 1
 anchors_preset = 11
@@ -2792,6 +2800,15 @@ uppercase = true
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "100%"
+label_settings = ExtResource("23_616uf")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="RetailMenuMusicLabel" type="Label" parent="MenuBase/ContentClip/Content/Audio/RSide/Options"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Remixed"
 label_settings = ExtResource("23_616uf")
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -3623,8 +3640,8 @@ script = ExtResource("19_agawd")
 loopStartPosition = 0.01
 loopEndPosition = 122.4
 
-[connection signal="JumpFinished" from="World/JumpStart/JumpStart" to="." method="LockPlayer"]
 [connection signal="JumpFinished" from="World/JumpStart/JumpStart" to="." method="EnableProcessing"]
+[connection signal="JumpFinished" from="World/JumpStart/JumpStart" to="." method="LockPlayer"]
 
 [editable path="World/ControlBook/Collision"]
 [editable path="World/ControlBook/ControlBook"]

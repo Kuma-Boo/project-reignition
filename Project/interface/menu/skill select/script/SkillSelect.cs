@@ -62,6 +62,9 @@ public partial class SkillSelect : Menu
 
 	protected override void SetUp()
 	{
+		if (SaveManager.Config.useRetailMenuMusic) // Disable bgm
+			bgm = null;
+
 		for (int i = 0; i < (int)SkillKey.Max; i++)
 		{
 			SkillKey key = (SkillKey)i;

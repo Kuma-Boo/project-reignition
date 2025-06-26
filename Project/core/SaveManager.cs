@@ -169,6 +169,7 @@ public partial class SaveManager : Node
 		public int sfxVolume = 50;
 		public bool isVoiceMuted;
 		public int voiceVolume = 50;
+		public bool useRetailMenuMusic;
 
 		// Controls
 		public float deadZone = .2f;
@@ -218,19 +219,20 @@ public partial class SaveManager : Node
 				{ nameof(sfxVolume), sfxVolume },
 				{ nameof(isVoiceMuted), isVoiceMuted },
 				{ nameof(voiceVolume), voiceVolume },
-				{nameof(isDialogDisabled), isDialogDisabled},
+				{ nameof(useRetailMenuMusic), useRetailMenuMusic},
 
 				// Controls
 				{ nameof(deadZone), deadZone },
 				{ nameof(controllerType), (int)controllerType },
 				{ nameof(controllerStyle), (int)controllerStyle},
 				{ nameof(useHoldBreakMode), useHoldBreakMode },
-				{nameof(useStompJumpButtonMode), useStompJumpButtonMode },
+				{ nameof(useStompJumpButtonMode), useStompJumpButtonMode },
 				{ nameof(partyModeDevices), partyModeDevices },
 				{ nameof(inputConfiguration), inputConfiguration },
 
 				// Language
 				{ nameof(isSubtitleDisabled), isSubtitleDisabled },
+				{ nameof(isDialogDisabled), isDialogDisabled},
 				{ nameof(voiceLanguage), (int)voiceLanguage },
 				{ nameof(textLanguage), (int)textLanguage },
 			};
@@ -291,8 +293,9 @@ public partial class SaveManager : Node
 				isVoiceMuted = (bool)var;
 			if (dictionary.TryGetValue(nameof(voiceVolume), out var))
 				voiceVolume = (int)var;
-			if (dictionary.TryGetValue(nameof(isDialogDisabled), out var))
-				isDialogDisabled = (bool)var;
+			if (dictionary.TryGetValue(nameof(useRetailMenuMusic), out var))
+				useRetailMenuMusic = (bool)var;
+
 
 			// Controls
 			if (dictionary.TryGetValue(nameof(deadZone), out var))
@@ -313,6 +316,8 @@ public partial class SaveManager : Node
 			// Language
 			if (dictionary.TryGetValue(nameof(isSubtitleDisabled), out var))
 				isSubtitleDisabled = (bool)var;
+			if (dictionary.TryGetValue(nameof(isDialogDisabled), out var))
+				isDialogDisabled = (bool)var;
 			if (dictionary.TryGetValue(nameof(voiceLanguage), out var))
 				voiceLanguage = (VoiceLanguage)(int)var;
 			if (dictionary.TryGetValue(nameof(textLanguage), out var))

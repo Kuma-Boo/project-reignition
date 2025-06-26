@@ -12,6 +12,8 @@ public partial class WorldSelect : Menu
 	[Export]
 	private VideoStreamPlayer secondaryVideoPlayer;
 	[Export]
+	private BGMPlayer retailBgm;
+	[Export]
 	private Array<StringName> videoStreamPaths = [];
 	private VideoStream[] videoStreams;
 	private VideoStreamPlayer ActiveVideoPlayer { get; set; }
@@ -40,6 +42,9 @@ public partial class WorldSelect : Menu
 	private readonly Array<Control> _levelNewSprites = [];
 	protected override void SetUp()
 	{
+		if (SaveManager.Config.useRetailMenuMusic)
+			bgm = retailBgm; // Swap audio track to retail version
+
 		for (int i = 0; i < levelTextSprites.Count; i++)
 			_levelTextSprites.Add(GetNode<Sprite2D>(levelTextSprites[i]));
 

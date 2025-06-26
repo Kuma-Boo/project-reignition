@@ -92,7 +92,7 @@ public partial class ReadyMenu : Menu
 		}
 	}
 
-	public void SetBgmPlayer(AudioStreamPlayer audioStreamPlayer) => bgm = audioStreamPlayer;
+	public void SetBgmPlayer(BGMPlayer audioStreamPlayer) => bgm = audioStreamPlayer;
 
 	/// <summary> Path to the level scene. </summary>
 	public string LevelPath { get; set; }

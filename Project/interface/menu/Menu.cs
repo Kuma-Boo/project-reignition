@@ -41,7 +41,7 @@ public partial class Menu : Control
 	public Array<Menu> _submenus = []; // Also ensure the order of submenus is correct in the inspector hierarchy
 
 	[Export]
-	protected AudioStreamPlayer bgm;
+	protected BGMPlayer bgm;
 	protected float bgmFadeTime;
 	[Export]
 	protected AnimationPlayer animator;
@@ -214,7 +214,7 @@ public partial class Menu : Control
 
 	public void PlayBgm()
 	{
-		if (bgm.Playing) return;
+		if (bgm == null || bgm.Playing) return;
 
 		bgmFadeTime = 0f; // Stops any active fading
 		bgm.VolumeDb = 0f; // Reset volume
