@@ -606,11 +606,15 @@ public partial class PlayerCameraController : Node3D
 			float leadAmount = PathFollower.LocalHorizontalVelocity * PhysicsManager.physicsDelta;
 			data.blendData.HallLeadSmoothDamp(leadAmount, SnapFlag);
 
-			float positionTracking = -PathFollower.LocalPlayerPositionDelta.X + data.blendData.hallLeadAmount;
+			float positionDelta = PathFollower.LocalPlayerPositionDelta.X;
+			if (PathFollower.IsReversingPath)
+				positionDelta *= -1f;
+
+			float positionTracking = -positionDelta + data.blendData.hallLeadAmount;
 			positionTracking = Mathf.Clamp(positionTracking, -settings.hallWidth, settings.hallWidth);
 			data.blendData.HallSmoothDamp(positionTracking, SnapFlag);
 
-			data.horizontalTrackingOffset = PathFollower.LocalPlayerPositionDelta.X; // Recenter
+			data.horizontalTrackingOffset = positionDelta; // Recenter
 			data.horizontalTrackingOffset += data.blendData.hallPosition; // Add clamped position tracking
 
 			if (!Mathf.IsZeroApprox(settings.hallRotationStrength) && Mathf.Abs(localDelta.X) > settings.hallWidth)

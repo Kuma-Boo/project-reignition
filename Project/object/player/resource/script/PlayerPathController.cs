@@ -89,7 +89,8 @@ namespace Project.Gameplay
 
 			BackAngle = ForwardAngle + Mathf.Pi;
 			LocalPlayerPositionDelta = GlobalBasis.Inverse() * (Controller.GlobalPosition - GlobalPosition);
-			LocalPlayerPositionDelta *= new Vector3(-1, 1, 1); // Convert to model space
+			if (!IsReversingPath)
+				LocalPlayerPositionDelta *= new Vector3(-1, 1, 1); // Convert to model space
 			GlobalPlayerPositionDelta = CalculateDeltaPosition(Controller.GlobalPosition);
 
 			// Update custom orientations
