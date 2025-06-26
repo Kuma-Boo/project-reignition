@@ -28,15 +28,21 @@ public partial class FallState : PlayerState
 		if (Player.IsOnGround)
 			return landState;
 
-		if (Player.Lockon.IsMonitoring &&
-			(Player.Controller.IsJumpBufferActive || Player.Controller.IsAttackBufferActive))
+
+		if (Player.Controller.IsJumpBufferActive)
 		{
 			Player.Controller.ResetJumpBuffer();
-			Player.Controller.ResetAttackBuffer();
-			if (Player.Lockon.IsTargetAttackable)
-				return homingAttackState;
+			if (SaveManager.Config.useStompJumpButtonMode)
+				return stompState;
 
-			return jumpDashState;
+			if (Player.Lockon.Monitoring)
+				return Player.Lockon.IsTargetAttackable ? homingAttackState : jumpDashState;
+		}
+
+		if (Player.Lockon.Monitoring && Player.Controller.IsAttackBufferActive)
+		{
+			Player.Controller.ResetAttackBuffer();
+			return Player.Lockon.IsTargetAttackable ? homingAttackState : jumpDashState;
 		}
 
 		if (Player.Controller.IsActionBufferActive)

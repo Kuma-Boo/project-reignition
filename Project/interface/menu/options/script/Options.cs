@@ -397,6 +397,8 @@ public partial class Options : Menu
 	private readonly string DisabledString = "option_disable";
 	private readonly string HoldString = "option_hold";
 	private readonly string ToggleString = "option_toggle";
+	private readonly string AttackString = "option_attack";
+	private readonly string StompString = "option_stomp";
 	private readonly string LowString = "option_low";
 	private readonly string MediumString = "option_medium";
 	private readonly string HighString = "option_high";
@@ -487,6 +489,7 @@ public partial class Options : Menu
 
 		controlLabels[2].Text = $"{Mathf.RoundToInt(SaveManager.Config.deadZone * 100)}%";
 		controlLabels[3].Text = SaveManager.Config.useHoldBreakMode ? HoldString : ToggleString;
+		controlLabels[4].Text = SaveManager.Config.useStompJumpButtonMode ? StompString : AttackString;
 
 		partyMappingLabels[0].Text = Tr(PlayerString).Replace("0", partyPlayerIndex.ToString());
 		partyMappingLabels[1].Text = partyMappingOptions[0].GetDevice();
@@ -802,6 +805,11 @@ public partial class Options : Menu
 			SaveManager.Config.useHoldBreakMode = !SaveManager.Config.useHoldBreakMode;
 			return true;
 		}
+		else if (VerticalSelection == 4)
+		{
+			SaveManager.Config.useStompJumpButtonMode = !SaveManager.Config.useStompJumpButtonMode;
+			return true;
+		}
 
 		return false;
 	}
@@ -906,19 +914,19 @@ public partial class Options : Menu
 
 	private void ConfirmControlOption()
 	{
-		if (VerticalSelection >= 0 && VerticalSelection <= 3)
+		if (VerticalSelection >= 0 && VerticalSelection <= 4)
 		{
 			SlideControlOption(1);
 		}
-		else if (VerticalSelection == 4)
+		else if (VerticalSelection == 5)
 		{
 			FlipBook(Submenus.Mapping, false, 0);
 		}
-		else if (VerticalSelection == 5)
+		else if (VerticalSelection == 6)
 		{
 			FlipBook(Submenus.PartyMapping, false, 0);
 		}
-		else if (VerticalSelection == 6)
+		else if (VerticalSelection == 7)
 		{
 			FlipBook(Submenus.Test, false, VerticalSelection);
 		}

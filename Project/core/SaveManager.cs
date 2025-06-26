@@ -166,21 +166,22 @@ public partial class SaveManager : Node
 		public bool isBgmMuted;
 		public int bgmVolume = 50;
 		public bool isSfxMuted;
-		public int sfxVolume = 30;
+		public int sfxVolume = 50;
 		public bool isVoiceMuted;
 		public int voiceVolume = 50;
-		public bool isDialogDisabled;
 
 		// Controls
 		public float deadZone = .2f;
 		public ControllerType controllerType = ControllerType.Automatic;
 		public ControllerStyle controllerStyle = ControllerStyle.Style2;
 		public bool useHoldBreakMode = true;
+		public bool useStompJumpButtonMode;
 		public int[] partyModeDevices = [0, 0, 0, 0];
 		public Dictionary inputConfiguration = [];
 
 		// Language
 		public bool isSubtitleDisabled;
+		public bool isDialogDisabled;
 		public TextLanguage textLanguage = AutoDetectTextLocale();
 		public VoiceLanguage voiceLanguage = AutoDetectVoiceLocale();
 
@@ -224,6 +225,7 @@ public partial class SaveManager : Node
 				{ nameof(controllerType), (int)controllerType },
 				{ nameof(controllerStyle), (int)controllerStyle},
 				{ nameof(useHoldBreakMode), useHoldBreakMode },
+				{nameof(useStompJumpButtonMode), useStompJumpButtonMode },
 				{ nameof(partyModeDevices), partyModeDevices },
 				{ nameof(inputConfiguration), inputConfiguration },
 
@@ -301,6 +303,8 @@ public partial class SaveManager : Node
 				controllerStyle = (ControllerStyle)(int)var;
 			if (dictionary.TryGetValue(nameof(useHoldBreakMode), out var))
 				useHoldBreakMode = (bool)var;
+			if (dictionary.TryGetValue(nameof(useStompJumpButtonMode), out var))
+				useStompJumpButtonMode = (bool)var;
 			if (dictionary.TryGetValue(nameof(partyModeDevices), out var))
 				partyModeDevices = (int[])var;
 			if (dictionary.TryGetValue(nameof(inputConfiguration), out var))
