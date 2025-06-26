@@ -101,6 +101,7 @@ public partial class Options : Menu
 		animator.Play(flipRight ? "flip-right" : "flip-left");
 		animator.Seek(0.0, true);
 		VerticalSelection = selection;
+		disableCursorProcessing = true;
 
 		if (submenu == Submenus.PartyMapping)
 			UpdateLabels();
@@ -109,13 +110,14 @@ public partial class Options : Menu
 	public override void _PhysicsProcess(double delta)
 	{
 		UpdateScrolling();
-		UpdateCursor();
 
 		base._PhysicsProcess(delta);
 	}
 
 	protected override void ProcessMenu()
 	{
+		UpdateCursor();
+
 		if (Input.IsActionJustPressed("button_pause") || Input.IsActionJustPressed("ui_accept") || Input.IsActionJustPressed("ui_clear"))
 			Select();
 		else
@@ -376,8 +378,12 @@ public partial class Options : Menu
 		}
 	}
 
+	private bool disableCursorProcessing;
 	private void UpdateCursor()
 	{
+		if (disableCursorProcessing)
+			return;
+
 		int offset = VerticalSelection - scrollOffset;
 		contentContainer.Position = Vector2.Up * scrollOffset * CursorOptionSeparation;
 		cursor.Position = new(cursor.Position.X, cursorBasePosition + (offset * CursorOptionSeparation));
@@ -389,6 +395,7 @@ public partial class Options : Menu
 		CalculateMaxSelection();
 		animator.Play(currentSubmenu.ToString().ToLower());
 		animator.Advance(0.0);
+		disableCursorProcessing = false;
 
 		CallDeferred(MethodName.UpdateScrolling, true);
 		CallDeferred(MethodName.UpdateCursor);
