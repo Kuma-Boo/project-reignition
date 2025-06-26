@@ -466,7 +466,7 @@ public partial class Options : Menu
 
 		languageLabels[0].Text = SaveManager.Config.isSubtitleDisabled ? DisabledString : EnabledString;
 		languageLabels[1].Text = SaveManager.Config.isDialogDisabled ? DisabledString : EnabledString;
-		languageLabels[2].Text = SaveManager.Config.voiceLanguage == SaveManager.VoiceLanguage.English ? "lang_en" : "lang_ja";
+		languageLabels[3].Text = SaveManager.Config.voiceLanguage == SaveManager.VoiceLanguage.English ? "lang_en" : "lang_ja";
 
 		switch (SaveManager.Config.controllerType)
 		{
