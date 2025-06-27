@@ -7,7 +7,7 @@ namespace Project.Core;
 public partial class SoundManager : Node
 {
 	public static SoundManager instance;
-	public static int LanguageIndex => SaveManager.UseEnglishVoices ? 0 : 1;
+	public static int LanguageIndex => (int)SaveManager.Config.voiceLanguage;
 
 	public enum AudioBuses
 	{

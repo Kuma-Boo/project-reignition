@@ -537,6 +537,7 @@ public partial class SaveManager : Node
 				TranslationServer.SetLocale("zh");
 				break;
 			default:
+				// Prefer the retranslation for all languages except when using the voiceover
 				TranslationServer.SetLocale(UseEnglishVoices ? "en" : "en_US");
 				break;
 		}
