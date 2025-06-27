@@ -1,10 +1,10 @@
-[gd_scene load_steps=25 format=3 uid="uid://dy0oxfmu7ahxi"]
+[gd_scene load_steps=24 format=3 uid="uid://dy0oxfmu7ahxi"]
 
 [ext_resource type="Texture2D" uid="uid://c0j6hn525tqn5" path="res://interface/menu/level select/texture/world text/level en.png" id="1_fuqut"]
 [ext_resource type="Script" uid="uid://c5txxmax7ey8k" path="res://interface/menu/level select/script/LevelSelect.cs" id="1_p6dn7"]
 [ext_resource type="Texture2D" uid="uid://bpdv8t52iadwx" path="res://interface/menu/level select/texture/world text/glow en.png" id="2_pxpor"]
 [ext_resource type="Texture2D" uid="uid://dx4vxnhtgd13t" path="res://interface/menu/common/common menu atlas.png" id="3_c1sgp"]
-[ext_resource type="Shader" uid="uid://dj2vtehay1fej" path="res://effect/shader/interface/InterfaceFlashAdd.gdshader" id="3_ybchm"]
+[ext_resource type="Material" uid="uid://d1ar7f674pt0i" path="res://effect/material/Canvas Item Screen.tres" id="3_nye5y"]
 [ext_resource type="AudioStream" uid="uid://l2e1do1wwkg" path="res://sound/sfx/system/menu confirm.wav" id="5_2qjo6"]
 [ext_resource type="AudioStream" uid="uid://cl54rftw5aiyf" path="res://sound/sfx/system/menu cancel.wav" id="5_6pmlb"]
 [ext_resource type="Material" uid="uid://bhbsafmnnhtdb" path="res://effect/material/Canvas Item Add.tres" id="5_kmrew"]
@@ -13,10 +13,6 @@
 [ext_resource type="SpriteFrames" uid="uid://btjml6xghvlgt" path="res://effect/particle/sprite frames/Flame Menu Tall.tres" id="5_yw72e"]
 [ext_resource type="PackedScene" uid="uid://crwawg2ivy3xd" path="res://interface/menu/NavigationButton.tscn" id="8_38k76"]
 [ext_resource type="Script" uid="uid://cj76gvi7tbku6" path="res://sound/script/BGMPlayer.cs" id="14_f6v0v"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2vkkl"]
-shader = ExtResource("3_ybchm")
-shader_parameter/flash_amount = 1.0
 
 [sub_resource type="Animation" id="Animation_8efxu"]
 length = 0.001
@@ -162,7 +158,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("WorldText:modulate")
+tracks/7/path = NodePath("WorldText/Text:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -361,7 +357,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("WorldText:modulate")
+tracks/9/path = NodePath("WorldText/Text:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -589,7 +585,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("WorldText:modulate")
+tracks/11/path = NodePath("WorldText/Text:modulate")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -744,7 +740,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("WorldText:modulate")
+tracks/7/path = NodePath("WorldText/Text:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -884,22 +880,25 @@ animator = NodePath("AnimationPlayer")
 metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
 
-[node name="WorldText" type="Sprite2D" parent="."]
+[node name="WorldText" type="Node2D" parent="."]
 position = Vector2(960, 120)
-scale = Vector2(1.12, 1.12)
+
+[node name="Text" type="Sprite2D" parent="WorldText"]
+position = Vector2(0, -1.43051e-06)
+scale = Vector2(0.675, 0.675)
 texture = ExtResource("1_fuqut")
 region_enabled = true
-region_rect = Rect2(0, 460, 512, 50)
+region_rect = Rect2(0, 920, 1024, 100)
 
-[node name="Glow" type="Sprite2D" parent="WorldText"]
-material = SubResource("ShaderMaterial_2vkkl")
+[node name="Glow" type="Sprite2D" parent="WorldText/Text"]
+material = ExtResource("3_nye5y")
 texture = ExtResource("2_pxpor")
 region_enabled = true
-region_rect = Rect2(0, 460, 512, 50)
+region_rect = Rect2(0, 920, 1024, 100)
 
 [node name="Flames" type="Node2D" parent="WorldText"]
 material = ExtResource("5_kmrew")
-position = Vector2(0, 20)
+position = Vector2(0, 22.4)
 
 [node name="FlameShort1" type="AnimatedSprite2D" parent="WorldText/Flames"]
 use_parent_material = true
