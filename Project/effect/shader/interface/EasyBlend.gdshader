@@ -10,11 +10,11 @@ void fragment() {
 	vec4 color = texture(TEXTURE, UV);
 	vec4 blendColor;
 	vec4 output = vec4(1,1,1,1);
-	
+
 	background_color = texture(screen_texture, SCREEN_UV);
-	
+
 	output.a = color.a;
-	
+
 	blendColor = texture(blend_texture, vec2(background_color.r, color.r));
 	output.r = blendColor.r;
 	blendColor = texture(blend_texture, vec2(background_color.g, color.g));
