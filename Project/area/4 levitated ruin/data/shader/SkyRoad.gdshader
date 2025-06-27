@@ -34,4 +34,5 @@ void fragment()
 	scroll_amount = clamp(scroll_amount / end_smoothing, 0.0, glow_intensity);
 	float start_blend = clamp(UV.x / start_smoothing, 0.0, 1.0);
 	ALPHA *= scroll_amount * start_blend * distance_fade + max(glow_factor, 0.0);
+	ALPHA = clamp(ALPHA, 0.0, 1.0);
 }
