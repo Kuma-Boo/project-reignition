@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Project.Core;
 using Project.Gameplay;
@@ -454,14 +455,14 @@ public partial class Options : Menu
 				videoLabels[7].Text = "8x MSAA";
 				break;
 		}
-		videoLabels[8].Text = CalculateQualityString(SaveManager.Config.bloomMode);
+		videoLabels[8].Text = GetQualityString(SaveManager.Config.bloomMode);
 
 		if (SaveManager.Config.softShadowQuality == SaveManager.QualitySetting.Disabled)
 			videoLabels[9].Text = "option_hard_shadows";
 		else
-			videoLabels[9].Text = CalculateQualityString(SaveManager.Config.softShadowQuality);
-		videoLabels[10].Text = CalculateQualityString(SaveManager.Config.postProcessingQuality);
-		videoLabels[11].Text = CalculateQualityString(SaveManager.Config.reflectionQuality);
+			videoLabels[9].Text = GetQualityString(SaveManager.Config.softShadowQuality);
+		videoLabels[10].Text = GetQualityString(SaveManager.Config.postProcessingQuality);
+		videoLabels[11].Text = GetQualityString(SaveManager.Config.reflectionQuality);
 		videoLabels[12].Text = SaveManager.Config.useMotionBlur ? EnabledString : DisabledString;
 		videoLabels[13].Text = SaveManager.Config.useScreenShake ? $"{SaveManager.Config.screenShake}%" : DisabledString;
 
@@ -473,7 +474,7 @@ public partial class Options : Menu
 
 		languageLabels[0].Text = SaveManager.Config.isSubtitleDisabled ? DisabledString : EnabledString;
 		languageLabels[1].Text = SaveManager.Config.isDialogDisabled ? DisabledString : EnabledString;
-		languageLabels[3].Text = SaveManager.Config.voiceLanguage == SaveManager.VoiceLanguage.English ? "lang_en" : "lang_ja";
+		languageLabels[3].Text = GetVoiceLanguageKey(SaveManager.Config.voiceLanguage);
 
 		switch (SaveManager.Config.controllerType)
 		{
@@ -513,7 +514,17 @@ public partial class Options : Menu
 		partyMappingLabels[1].Text = partyMappingOptions[0].GetDevice();
 	}
 
-	private string CalculateQualityString(SaveManager.QualitySetting setting)
+	private string GetVoiceLanguageKey(SaveManager.VoiceLanguage voiceLanguage)
+	{
+		return voiceLanguage switch
+		{
+			SaveManager.VoiceLanguage.Japanese => "lang_ja",
+			SaveManager.VoiceLanguage.Spanish => "lang_es",
+			_ => "lang_en",
+		};
+	}
+
+	private string GetQualityString(SaveManager.QualitySetting setting)
 	{
 		return setting switch
 		{
