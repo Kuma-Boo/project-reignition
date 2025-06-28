@@ -1,9 +1,11 @@
-[gd_scene load_steps=20 format=3 uid="uid://dax0mun2bjm1v"]
+[gd_scene load_steps=22 format=3 uid="uid://dax0mun2bjm1v"]
 
 [ext_resource type="Script" uid="uid://dtkbvehtmy3em" path="res://object/stage/StageSettings.cs" id="1_inrdn"]
 [ext_resource type="PackedScene" uid="uid://bdqp0wj6evtuh" path="res://area/0 lost prologue/act/environment/collision/Collision.tscn" id="1_qgh10"]
+[ext_resource type="Resource" uid="uid://bmc5r7uecj7vi" path="res://resource/level data/Options.tres" id="2_d5koe"]
 [ext_resource type="Environment" uid="uid://b7gnee7sx8akg" path="res://area/0 lost prologue/data/Environment.tres" id="2_ooith"]
 [ext_resource type="PackedScene" uid="uid://wrt8a28kdwx6" path="res://area/0 lost prologue/act/environment/01Opening.tscn" id="3_gpjv8"]
+[ext_resource type="Resource" uid="uid://b6ynjki0mxqdh" path="res://area/0 lost prologue/act/camera/CloseCamera.tres" id="3_jiiep"]
 [ext_resource type="PackedScene" uid="uid://bwgaut0rsj6w8" path="res://area/0 lost prologue/act/environment/02Hall.tscn" id="4_ut2gb"]
 [ext_resource type="PackedScene" uid="uid://cb8os380cjjmj" path="res://area/0 lost prologue/act/environment/03Tightrope.tscn" id="5_tqcp0"]
 [ext_resource type="PackedScene" uid="uid://bg1h13oawkf6e" path="res://area/0 lost prologue/act/environment/04Ribbon.tscn" id="6_8fneh"]
@@ -16,7 +18,7 @@
 [ext_resource type="Resource" uid="uid://38s0wkpi5mlf" path="res://resource/preset/lockout/run/RecenterLockout.tres" id="13_nr4fr"]
 [ext_resource type="Script" uid="uid://bvmyay4bo83qu" path="res://object/trigger/modules/DeathTrigger.cs" id="14_4p6kh"]
 [ext_resource type="PackedScene" uid="uid://dnuq2m5qvsyrl" path="res://area/0 lost prologue/data/BGM.tscn" id="15_cd8jc"]
-[ext_resource type="PackedScene" uid="uid://dpdmwi0k3jhd1" path="res://area/0 lost prologue/object/wonder/WonderBlock1.tscn" id="17_ok1rv"]
+[ext_resource type="PackedScene" uid="uid://c1qim6x2gc38r" path="res://effect/buffer/MultiplicativeBloomRenderer.tscn" id="15_d5koe"]
 
 [sub_resource type="BoxShape3D" id="12"]
 size = Vector3(90, 20, 10)
@@ -24,8 +26,10 @@ size = Vector3(90, 20, 10)
 [sub_resource type="BoxShape3D" id="13"]
 size = Vector3(153.4, 20, 251.8)
 
-[node name="Static" type="Node3D"]
+[node name="Static" type="Node3D" node_paths=PackedStringArray("pathParent", "Environment")]
 script = ExtResource("1_inrdn")
+Data = ExtResource("2_d5koe")
+InitialCameraSettings = ExtResource("3_jiiep")
 pathParent = NodePath("Path")
 Environment = NodePath("WorldEnvironment")
 
@@ -53,10 +57,11 @@ visible = false
 [node name="MainLight" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, 0.0348995, 0.999391, 0, -0.999391, 0.0348995, 0, 0, 0)
 layers = 1024
-light_color = Color(0.99, 0.8316, 0.6732, 1)
+light_color = Color(0.99, 0.90585, 0.8217, 1)
 light_energy = 0.6
 light_cull_mask = 4293918723
 shadow_enabled = true
+shadow_caster_mask = 67
 directional_shadow_max_distance = 50.0
 
 [node name="Path" type="Node3D" parent="."]
@@ -97,8 +102,4 @@ bus = &"BGM"
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("2_ooith")
 
-[node name="WonderBlock1" parent="." instance=ExtResource("17_ok1rv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
-
-[node name="WonderBlock2" parent="." instance=ExtResource("17_ok1rv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 4)
+[node name="MultiplicativeBloomRenderer" parent="." instance=ExtResource("15_d5koe")]
