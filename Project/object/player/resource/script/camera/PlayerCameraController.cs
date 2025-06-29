@@ -430,7 +430,7 @@ public partial class PlayerCameraController : Node3D
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Up, data.yawTracking);
 
 		// Calculate xform angle before applying pitch tracking
-		UpdateInputXForm(ExtensionMethods.ModAngle(data.blendData.yawAngle + Mathf.Pi));
+		UpdateInputXForm(ExtensionMethods.ModAngle(cameraTransform.Basis.GetEuler().Y));
 
 		// Apply pitch tracking
 		cameraTransform = cameraTransform.RotatedLocal(Vector3.Right, data.pitchTracking);
