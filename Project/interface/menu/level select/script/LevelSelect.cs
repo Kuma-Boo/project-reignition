@@ -103,13 +103,13 @@ public partial class LevelSelect : Menu
 			parentMenu.FadeBgm(.5f);
 			FadeBgm(.5f, true, .5f); // Fade in bgm
 			CurrentBgmTime = parentMenu.CurrentBgmTime; // Sync bgm
-
 			readyMenu.SetBgmPlayer(bgm); // Update readymenu's bgm player
 		}
 		else if (!canPlayBgm)
 		{
 			// As a fallback, play the parent menu's bgm (won't do anything if parent bgm is already playing)
 			parentMenu.PlayBgm();
+			readyMenu.SetBgmPlayer(parentMenu.bgm);
 		}
 	}
 

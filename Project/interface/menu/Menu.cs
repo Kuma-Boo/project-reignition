@@ -41,7 +41,7 @@ public partial class Menu : Control
 	public Array<Menu> _submenus = []; // Also ensure the order of submenus is correct in the inspector hierarchy
 
 	[Export]
-	protected BGMPlayer bgm;
+	public BGMPlayer bgm;
 	protected float bgmFadeTime;
 	[Export]
 	protected AnimationPlayer animator;
@@ -222,7 +222,7 @@ public partial class Menu : Control
 	}
 
 	/// <summary> Call this function to stop bgm instantly. </summary>
-	public void StopBgm() => bgm.Stop();
+	public void StopBgm() => bgm?.Stop();
 
 	// Overload for animation players
 	public void FadeBgm(float fadetime) => FadeBgm(fadetime, false);
