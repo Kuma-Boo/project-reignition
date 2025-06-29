@@ -417,7 +417,7 @@ public partial class SaveManager : Node
 
 		if (DisplayServer.WindowGetMode() != targetMode)
 			DisplayServer.WindowSetMode(targetMode);
-		if (!Config.useFullscreen)
+		if (!Config.useFullscreen && Config.windowSize != -1)
 			DisplayServer.WindowSetSize(WindowSizes[Config.windowSize]);
 
 		Engine.MaxFps = FrameRates[Config.framerate];
