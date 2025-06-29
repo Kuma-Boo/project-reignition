@@ -27,6 +27,7 @@ public partial class LandState : PlayerState
 		Player.UpdateOrientation();
 		Player.SnapToGround();
 		Player.DisableAccelerationJump = false;
+		Player.CanJumpDash = false;
 		Player.Lockon.IsMonitoring = false;
 
 		if (Player.IsKnockback)
