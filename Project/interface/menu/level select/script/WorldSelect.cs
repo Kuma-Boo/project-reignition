@@ -8,14 +8,9 @@ public partial class WorldSelect : Menu
 {
 	[ExportGroup("Media Settings")]
 	[Export]
-	private VideoStreamPlayer primaryVideoPlayer;
-	[Export]
-	private VideoStreamPlayer secondaryVideoPlayer;
-	[Export]
 	private BGMPlayer retailBgm;
 	[Export]
-	private Array<StringName> videoStreamPaths = [];
-	private VideoStream[] videoStreams;
+	private VideoStreamPlayer[] videoPlayers;
 	private VideoStreamPlayer ActiveVideoPlayer { get; set; }
 	private VideoStreamPlayer PreviousVideoPlayer { get; set; }
 
@@ -55,8 +50,7 @@ public partial class WorldSelect : Menu
 			_levelNewSprites.Add(GetNode<Control>(levelNewSprites[i]));
 
 		VerticalSelection = menuMemory[MemoryKeys.WorldSelect];
-		videoStreams = new VideoStream[videoStreamPaths.Count];
-		CallDeferred(MethodName.LoadVideos);
+		ActiveVideoPlayer = videoPlayers[VerticalSelection];
 
 		if (menuMemory[MemoryKeys.ActiveMenu] == (int)MemoryKeys.LevelSelect) // Activate the correct submenu
 		{
@@ -88,7 +82,7 @@ public partial class WorldSelect : Menu
 			menuMemory[MemoryKeys.ActiveMenu] != (int)MemoryKeys.LevelSelect &&
 			menuMemory[MemoryKeys.ActiveMenu] != (int)MemoryKeys.WorldSelect)
 		{
-			ActiveVideoPlayer.Stream = videoStreams[VerticalSelection];
+			ActiveVideoPlayer = videoPlayers[VerticalSelection];
 		}
 
 		if (animator.AssignedAnimation == "init" || animator.AssignedAnimation == "cancel")
@@ -99,26 +93,9 @@ public partial class WorldSelect : Menu
 		menuMemory[MemoryKeys.ActiveMenu] = (int)MemoryKeys.WorldSelect;
 	}
 
-	/// <summary>
-	/// Load videos a frame after scene is set up to prevent crashing
-	/// </summary>
-	private void LoadVideos()
-	{
-		for (int i = 0; i < videoStreams.Length; i++)
-		{
-			if (ResourceLoader.Exists(videoStreamPaths[i], "VideoStream"))
-			{
-				videoStreams[i] = ResourceLoader.Load<VideoStream>(videoStreamPaths[i]);
-				continue;
-			}
-
-			GD.PushWarning($"Couldn't find video {videoStreams[i]}!");
-		}
-	}
-
 	public override void _Process(double _)
 	{
-		if (primaryVideoPlayer.IsVisibleInTree())
+		if (ActiveVideoPlayer.IsVisibleInTree())
 		{
 			UpdateVideo();
 
@@ -185,7 +162,7 @@ public partial class WorldSelect : Menu
 	private void UpdateVideo()
 	{
 		// Don't change video?
-		if (ActiveVideoPlayer != null && ActiveVideoPlayer.Stream == videoStreams[VerticalSelection]) return;
+		if (ActiveVideoPlayer != null && ActiveVideoPlayer == videoPlayers[VerticalSelection]) return;
 		if (!SaveManager.ActiveGameData.IsWorldUnlocked((SaveManager.WorldEnum)VerticalSelection)) return; // World is locked
 		if (!Mathf.IsZeroApprox(Input.GetAxis("ui_up", "ui_down"))) return; // Still scrolling
 
@@ -198,8 +175,7 @@ public partial class WorldSelect : Menu
 			PreviousVideoPlayer.Paused = true;
 		}
 
-		ActiveVideoPlayer = ActiveVideoPlayer == secondaryVideoPlayer ? primaryVideoPlayer : secondaryVideoPlayer;
-		ActiveVideoPlayer.Stream = videoStreams[VerticalSelection];
+		ActiveVideoPlayer = videoPlayers[VerticalSelection];
 		ActiveVideoPlayer.Paused = false;
 	}
 
